@@ -1,0 +1,35 @@
+<menu>
+  <div class="menu--content">
+    <div class="menu--logo">
+      {{#link-to "home"}}
+        <img src="/assets/logo.svg" alt="Vlaamse overheid Logo">
+      {{/link-to}}
+
+    </div>
+    <ul>
+      <li>
+        {{#link-to "files" }}
+          <span>DOSSIERS</span>
+          <div class="menu-item-active-border"/>
+        {{/link-to}}
+      </li>
+      <li>
+        {{#link-to "agenda"}}
+          <span>AGENDERING</span>
+          <div class="menu-item-active-border"/>
+        {{/link-to}}
+      </li>
+      <li>{{#link-to "settings"}}<img src="/assets/setting.svg" alt="Settings">{{/link-to}}</li>
+      <li>
+        <div class="menu--notifications">
+        <img src="/assets/notification.svg" alt="Notifications">
+        {{#if true}}
+          <span>5</span>
+          {{else}}
+          <span>0</span>
+        {{/if}}
+        </div>
+      </li>
+    </ul>
+  </div>
+</menu>
