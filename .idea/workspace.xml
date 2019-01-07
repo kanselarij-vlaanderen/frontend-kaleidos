@@ -2,21 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1071010b-bdf6-435d-8fe3-e8de3036699e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/components/brandbook/m-header/styles.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/styles/app.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/notification.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/search.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/setting.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/settings.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/styles/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/jsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/application.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/application.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/components/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ember-cli-build.js" beforeDir="false" afterPath="$PROJECT_DIR$/ember-cli-build.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/down-arrow.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/styles/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/app/styles/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/files.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/files.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/setting.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/setting.svg" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -40,6 +31,7 @@
     <session id="392296882">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -47,24 +39,25 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="ember-cli" value="1" />
-          <entry key="hbs" value="23" />
+          <entry key="gitignore" value="1" />
+          <entry key="hbs" value="24" />
           <entry key="html" value="1" />
           <entry key="js" value="29" />
           <entry key="json" value="5" />
           <entry key="scss" value="8" />
-          <entry key="svg" value="8" />
+          <entry key="svg" value="9" />
           <entry key="watchmanconfig" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="HTML" value="1" />
-          <entry key="Handlebars/Mustache" value="23" />
+          <entry key="Handlebars/Mustache" value="24" />
           <entry key="JSON" value="5" />
           <entry key="JavaScript" value="29" />
-          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="PLAIN_TEXT" value="3" />
           <entry key="SCSS" value="8" />
-          <entry key="SVG" value="8" />
+          <entry key="SVG" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
@@ -74,19 +67,21 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="hbs" value="1484" />
+          <entry key="gitignore" value="18" />
+          <entry key="hbs" value="1818" />
           <entry key="js" value="236" />
           <entry key="json" value="2" />
-          <entry key="scss" value="1860" />
+          <entry key="scss" value="2341" />
           <entry key="svg" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Handlebars/Mustache" value="1484" />
+          <entry key="Handlebars/Mustache" value="1818" />
           <entry key="JSON" value="2" />
           <entry key="JavaScript" value="236" />
-          <entry key="SCSS" value="1860" />
+          <entry key="PLAIN_TEXT" value="18" />
+          <entry key="SCSS" value="2341" />
           <entry key="SVG" value="10" />
         </counts>
       </usages-collector>
@@ -103,22 +98,36 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/files.hbs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+            <state relative-caret-position="-2">
+              <caret line="20" column="10" lean-forward="true" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/styles/app.scss">
+        <entry file="file://$PROJECT_DIR$/app/components/brandbook/m-header/template.hbs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="192" column="17" selection-start-line="192" selection-start-column="17" selection-end-line="192" selection-end-column="17" />
+            <state relative-caret-position="315">
+              <caret line="21" column="38" selection-start-line="21" selection-start-column="38" selection-end-line="21" selection-end-column="78" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/styles/app.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="458">
+              <caret line="97" column="18" lean-forward="true" selection-start-line="97" selection-start-column="18" selection-end-line="97" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/assets/setting.svg">
+          <provider selected="true" editor-type-id="images" />
         </entry>
       </file>
     </leaf>
@@ -159,11 +168,12 @@
         <option value="$PROJECT_DIR$/public/assets/notification.svg" />
         <option value="$PROJECT_DIR$/public/assets/logo.svg" />
         <option value="$PROJECT_DIR$/public/assets/settings.svg" />
-        <option value="$PROJECT_DIR$/public/assets/setting.svg" />
         <option value="$PROJECT_DIR$/app/components/brandbook/m-header/component.js" />
         <option value="$PROJECT_DIR$/app/components/brandbook/m-header/template.hbs" />
-        <option value="$PROJECT_DIR$/app/styles/app.scss" />
+        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/app/templates/files.hbs" />
+        <option value="$PROJECT_DIR$/public/assets/setting.svg" />
+        <option value="$PROJECT_DIR$/app/styles/app.scss" />
       </list>
     </option>
   </component>
@@ -258,11 +268,6 @@
               <item name="public" type="462c0819:PsiDirectoryNode" />
               <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="fe-redpencil" type="b2602c69:ProjectViewProjectNode" />
-              <item name="fe-redpencil" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -325,17 +330,17 @@
       <option name="presentableId" value="Default" />
       <updated>1546521917877</updated>
       <workItem from="1546521919526" duration="15000" />
-      <workItem from="1546521992905" duration="20919000" />
+      <workItem from="1546521992905" duration="23299000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20934000" />
+    <option name="totallyTimeSpent" value="23314000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25274727" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25274727" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -349,7 +354,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Bucklescript" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32857144" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32857144" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="ReactNative" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -552,13 +557,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/components/brandbook/m-header/template.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="20" lean-forward="true" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/components/brandbook/m-header/component.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -579,9 +577,6 @@
     <entry file="file://$PROJECT_DIR$/public/assets/notification.svg">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/assets/setting.svg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/assets/logo.svg">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -592,17 +587,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/styles/app.scss">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="192" column="17" selection-start-line="192" selection-start-column="17" selection-end-line="192" selection-end-column="17" />
+        <state relative-caret-position="375">
+          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/components/brandbook/m-header/template.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="38" selection-start-line="21" selection-start-column="38" selection-end-line="21" selection-end-column="78" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/files.hbs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+        <state relative-caret-position="-2">
+          <caret line="20" column="10" lean-forward="true" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/assets/setting.svg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/styles/app.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="458">
+          <caret line="97" column="18" lean-forward="true" selection-start-line="97" selection-start-column="18" selection-end-line="97" selection-end-column="18" />
         </state>
       </provider>
     </entry>
