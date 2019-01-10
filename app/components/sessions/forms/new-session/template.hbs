@@ -1,13 +1,19 @@
-<form {{action "createNewSession" on="submit"}} class="new-session-form">
+<form class="new-session-form" {{action "createNewSession" on="submit"}}>
   <div class="form-group">
     <label>
       Start datum
-      {{pikaday-input theme="pikaday-session" onSelection=(action "selectStartDate")}}
+      {{pikaday-input
+        theme="pikaday-session"
+        onSelection=(action "selectStartDate")
+      }}
     </label>
   </div>
-  <div>
+  <div class="submit-container">
     <button type="submit">
       Toevoegen
+    </button>
+    <button type="button" {{action "cancelForm"}}>
+      Cancel
     </button>
   </div>
 </form>

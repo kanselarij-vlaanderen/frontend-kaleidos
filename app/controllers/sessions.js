@@ -1,18 +1,9 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
   creatingNewSession: false,
-  selectedDate: computed('selectedDate', function () {
-    const sessions = this.get('model');
-    if (!sessions) {
-      return null;
-    }
-    return sessions.find(x => x.id === this.get('session.number'));
-  }),
-
   sessions: alias('model'),
 
   searchTask: task(function* (searchValue) {
@@ -25,8 +16,12 @@ export default Controller.extend({
   }),
 
   actions: {
-    chooseSession(session) {
+    async chooseSession(session) {
       this.set('selectedDate', session);
+      this.set("currentSession", await this.store.findRecord('session',session.id, {
+        include:"agendas"
+      }));
+
     },
 
     resetValue(param) {
@@ -37,7 +32,19 @@ export default Controller.extend({
 
     createNewSession() {
       this.set('creatingNewSession', true);
+    },
+
+    cancelNewSessionForm() {
+      this.set('creatingNewSession', false);
+    },
+
+     addAgendaToSelectedSession() {
+      let newAgenda = this.store.createRecord('agenda', {
+        name:"testAgendaName",
+        session:this.get('currentSession')
+      });
+      
+      newAgenda.save()
     }
   },
-
 });

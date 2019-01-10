@@ -9,17 +9,22 @@ export default Component.extend({
 	classNames: ['new-session-form-container'],
 
 	actions: {
-		createNewSession() {
+		async createNewSession() {
 			let session = EmberObject.create({
-					plannedstart: this.get('startDate'),
-					number: "5"
+				plannedstart: this.get('startDate'),
+				number: "5"
 			})
 
-			let newSession = this.store.createRecord('session',session)
-			newSession.save();
+			let newSession = this.store.createRecord('session', session)
+			await newSession.save();
+			this.cancelForm();
 		},
 		selectStartDate(val) {
 			this.set('startDate', val);
+		},
+
+		cancelForm(event) {
+			this.cancelForm(event)
 		}
 	}
 });

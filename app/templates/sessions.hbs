@@ -14,7 +14,9 @@
         oninput=(action "resetValue")
         onchange=(action "chooseSession") as |session|
       }}
+        {{#if session.plannedstart}}
         {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
+        {{/if}}
       {{/power-select}}
       <button {{action "createNewSession"}}>
         Nieuwe zitting
@@ -28,10 +30,11 @@
   </div>
   <div class="files--header-tile files--sub-file-header">
     {{#if creatingNewSession}}
-      {{sessions/forms/new-session}}
+      {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
     {{/if}}
   </div>
 </div>
+{{#if (await currentSession.agendas)}}
 <div class="files--content">
   <div class="files--content-tile">
     <div class="files--decree">
@@ -39,7 +42,7 @@
         <div class="files--decree-content-label"></div>
         <div class="files--decree-content-expand">
           <img src="/assets/down-arrow.svg" />
-          <span></span>
+          <span>{{await currentSession.agendas.length}}</span>
         </div>
       </div>
       <div class="files--decree-options">
@@ -58,3 +61,6 @@
   </div>
   <div class="files--content-tile"></div>
 </div>
+{{else}}
+  <button {{action "addAgendaToSelectedSession"}}>Create agenda</button>
+{{/if}}

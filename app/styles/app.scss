@@ -343,16 +343,32 @@ menu {
   }
 }
 
-form.new-session-form {
+.new-session-form-container {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+}
+
+.new-session-form {
+  width:100%;
+  .submit-container {
+    text-align: center;
+
+    button {
+      margin-right: 1em;
+    }
+  }
+
   .form-group {
+    padding:1em;
 
     .pikaday-session {
       font-size: 2em;
-  
     }
 
+    
     label {
-      // margin-right:5em;
       font-size:2em;
       display:flex;
       justify-content: space-evenly;
@@ -362,5 +378,8 @@ form.new-session-form {
         font-size:0.7em;
       }
     }
+
+
+
   }
 }
