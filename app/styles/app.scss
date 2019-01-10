@@ -1,3 +1,5 @@
+@import "ember-power-select";
+
 :root {
   --brown: #423939;
   --blue: #306cc0;
@@ -181,10 +183,8 @@ menu {
   }
 
   .files--search-submit {
-
     margin-left: auto;
     border-left: 1px solid var(--light-grey);
-
 
     button {
       background-color: transparent;
@@ -198,14 +198,37 @@ menu {
         height: 15px;
       }
     }
-
   }
 
+  .session-header {
+    display:flex;
+    justify-content: center;
+    align-items:center;
+  }
 
+  .sessions-subtitle {
+    font-size: 0.8em;
+    padding: 0;
+    margin-top: 0.1em;
+  }
+
+  .sessions-title {
+    font-size: 2em;
+  }
+
+  .session-title-container {
+    width: 45%;
+    float:left;
+  }
+
+  .ember-power-select-trigger {
+    width:50%;
+    float:left;
+    display:block;
+  }
 }
 
 .files--content {
-
   width: 100%;
   border-bottom: 1px solid var(--light-grey);
   display: flex;
@@ -311,3 +334,5 @@ menu {
 
 
 }
+
+@import "ember-power-select";

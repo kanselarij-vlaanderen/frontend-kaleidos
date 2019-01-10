@@ -9,8 +9,9 @@ const Router = EmberRouter.extend({
 Router.map(function() {
   this.route('agenda');
   this.route('files', { path : '/dossiers' });
-  this.route('home', { path: "/" });
+  this.route('home', { path: '/' });
   this.route('settings');
+  this.route('sessions', {path: '/zittingen'});
 });
 
 export default Router;
