@@ -1,0 +1,35 @@
+<div class="cases--new">
+  <form onsubmit={{action "createDossier"}}>
+    <div class="cases--new-item">
+      <label>KORTE TITEL</label>
+      {{input
+        type="text"
+        id="shortTitle"
+        value=shortTitle
+      }}
+    </div>
+    <div class="cases--new-item">
+      <label>LANGE TITEL</label>
+      {{textarea
+        id="title"
+        value=title
+      }}
+    </div>
+    <div class="cases--new-item">
+      <label>TOELICHTING BEHANDELINGSSTATUS</label>
+      {{input
+        type="text"
+        id="remark"
+        value=remark
+      }}
+    </div>
+
+    <button
+      type="submit"
+      class="rr-action-button"
+      data-test-rr="sign-up-button"
+    >
+      Volgende stap
+    </button>
+  </form>
+</div>

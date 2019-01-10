@@ -1,0 +1,70 @@
+<div class="files--header">
+
+  <div class="files--header-tile files--search">
+
+    <div>
+      <label>Zoeken</label>
+      <div class="files--search-content">
+        <form>
+          <input placeholder="search" />
+          <div class="files--search-submit">
+            <button>
+              <img src="/assets/search.svg" />
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="">
+      {{#link-to "cases.create" }}
+        <span>nieuw dossier</span>
+      {{/link-to}}
+      <button>Show filters</button>
+    </div>
+
+  </div>
+
+  <div class="files--header-tile files--sub-file-header">
+    <h2>DEELDOSSIERS</h2>
+    <button>+ nieuw deeldossier</button>
+  </div>
+
+</div>
+
+
+
+<div class="files--content">
+
+  <div class="files--content-tile">
+
+    {{#each model as |case|}}
+
+      <div class="files--decree">
+        <div class="files--decree-content">
+          <h4>1. {{case.title}}</h4>
+          <div class="files--decree-content-label">minister-president van de vlaamse regering</div>
+          <div class="files--decree-content-expand"><img src="/assets/down-arrow.svg" /> <span>meer weergeven</span></div>
+        </div>
+
+        <div class="files--decree-options">
+          <div><span>decreet</span></div>
+          <div class="files--decree-options-settings">
+            <img src="/assets/setting.svg" alt="Settings" />
+          </div>
+          <div>
+            <div>Formeel niet ok</div>
+            <div>Niet Akkoord</div>
+          </div>
+        </div>
+      </div>
+
+    {{/each}}
+
+  </div>
+
+  <div class="files--content-tile">
+    {{outlet}}
+  </div>
+
+</div>
