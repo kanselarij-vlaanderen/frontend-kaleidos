@@ -308,6 +308,29 @@ menu {
 
   }
 
+}
 
+.cases--new {
+  padding: 50px;
+
+  form {
+    .cases--new-item {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-weight: bolder;
+        margin-bottom: 15px;
+        font-size: 0.9em;
+      }
+
+      input, textarea {
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        padding: 10px 15px;
+        margin-bottom: 25px;
+      }
+    }
+  }
 
 }
