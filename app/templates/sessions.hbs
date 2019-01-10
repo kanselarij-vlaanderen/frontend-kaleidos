@@ -5,9 +5,6 @@
         <strong class="sessions-title">
           Agenda van
         </strong>
-        <p class="sessions-subtitle">
-          62 agendapunten, 12 mededelingen
-        </p>
       </div>
       {{#power-select
         options=sessions
@@ -19,9 +16,21 @@
       }}
         {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
       {{/power-select}}
+      <button {{action "createNewSession"}}>
+        Nieuwe zitting
+      </button>
+    </div>
+    <div>
+      <p class="sessions-subtitle">
+        62 agendapunten, 12 mededelingen
+      </p>
     </div>
   </div>
-  <div class="files--header-tile files--sub-file-header"></div>
+  <div class="files--header-tile files--sub-file-header">
+    {{#if creatingNewSession}}
+      {{sessions/forms/new-session}}
+    {{/if}}
+  </div>
 </div>
 <div class="files--content">
   <div class="files--content-tile">
@@ -45,7 +54,6 @@
           <div></div>
         </div>
       </div>
-      {{!-- {{/each}} --}}
     </div>
   </div>
   <div class="files--content-tile"></div>

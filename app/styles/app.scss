@@ -141,7 +141,7 @@ menu {
 
   .files--header-tile {
 
-    padding: 50px;
+    padding: 1.5em;
     flex: 1;
 
     &:first-child {
@@ -202,8 +202,16 @@ menu {
 
   .session-header {
     display:flex;
-    justify-content: center;
     align-items:center;
+
+    button {
+      margin-left: 0.5em;
+      background-color: var(--blue);
+      padding: 0.5em;
+      border: 0;
+      color: #fff;
+      font-size: 0.9em;
+    }
   }
 
   .sessions-subtitle {
@@ -213,16 +221,19 @@ menu {
   }
 
   .sessions-title {
-    font-size: 2em;
+    font-size: 1.5em;
+    margin-left:0;
   }
 
   .session-title-container {
-    width: 45%;
+    width: 30%;
+   
     float:left;
+    display:block;
   }
 
   .ember-power-select-trigger {
-    width:50%;
+    width:45%;
     float:left;
     display:block;
   }
@@ -330,9 +341,26 @@ menu {
     }
 
   }
-
-
-
 }
 
-@import "ember-power-select";
+form.new-session-form {
+  .form-group {
+
+    .pikaday-session {
+      font-size: 2em;
+  
+    }
+
+    label {
+      // margin-right:5em;
+      font-size:2em;
+      display:flex;
+      justify-content: space-evenly;
+      align-items: center;
+
+      input {
+        font-size:0.7em;
+      }
+    }
+  }
+}

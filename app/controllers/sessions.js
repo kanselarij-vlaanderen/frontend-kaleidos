@@ -4,6 +4,7 @@ import { task, timeout } from 'ember-concurrency';
 import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
+  creatingNewSession: false,
   selectedDate: computed('selectedDate', function () {
     const sessions = this.get('model');
     if (!sessions) {
@@ -33,6 +34,10 @@ export default Controller.extend({
         this.set('sessions', this.store.findAll('session'))
       }
     },
+
+    createNewSession() {
+      this.set('creatingNewSession', true);
+    }
   },
 
 });
