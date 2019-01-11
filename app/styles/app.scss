@@ -132,6 +132,32 @@ menu {
   }
 }
 
+.agenda-navigation-banner {
+  width:25%;
+  float:left;
+}
+
+.table-container {
+  width:75%;
+  float:right;
+
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    width:25%;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+}
 
 .files--header, .files--content {
 

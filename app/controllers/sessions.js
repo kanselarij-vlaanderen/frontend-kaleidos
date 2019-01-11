@@ -1,50 +1,35 @@
 import Controller from '@ember/controller';
-import { task, timeout } from 'ember-concurrency';
-import { alias } from '@ember/object/computed';
+import { computed } from '@ember/object';
+import moment from 'moment';
 
 export default Controller.extend({
   creatingNewSession: false,
-  sessions: alias('model'),
+  selectedAgenda: null,
 
-  searchTask: task(function* (searchValue) {
-    yield timeout(300);
-    return this.store.query('session', {
-      filter: {
-        plannedstart: searchValue
-      }
-    });
+  currentSession: computed('model', function() {
+    let foundSession = this.get('model').find(session => moment(session.plannedstart) > moment(new Date()));
+    return foundSession;
   }),
 
   actions: {
-    async chooseSession(session) {
-      this.set('selectedDate', session);
-      this.set("currentSession", await this.store.findRecord('session',session.id, {
-        include:"agendas"
-      }));
-
-    },
-
-    resetValue(param) {
-      if (param == "") {
-        this.set('sessions', this.store.findAll('session'))
-      }
-    },
-
-    createNewSession() {
-      this.set('creatingNewSession', true);
-    },
-
     cancelNewSessionForm() {
       this.set('creatingNewSession', false);
     },
 
-     addAgendaToSelectedSession() {
+    addAgendaToSelectedSession() {
       let newAgenda = this.store.createRecord('agenda', {
-        name:"testAgendaName",
-        session:this.get('currentSession')
+        name: "OntwerpAgenda",
+        dateSent: new Date()
       });
-      
-      newAgenda.save()
+
+      newAgenda.save().then(agenda => {
+        agenda.set('session', this.get('currentSession'));
+        return agenda.save();
+      });
+    },
+
+    selectAgenda(agenda) {
+      this.set('selectedAgenda', agenda);
     }
   },
 });
