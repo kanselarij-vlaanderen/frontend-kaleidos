@@ -1,3 +1,9 @@
+<div>
+  <div class="cases--header-tile cases--sub-file-header">
+    <h2>DOSSIERS {{'<'}} NEW</h2>
+  </div>
+</div>
+
 <div class="cases--new">
   <form onsubmit={{action "createDossier"}}>
     <div class="cases--new-item">
@@ -5,6 +11,7 @@
       {{input
         type="text"
         id="shortTitle"
+        class="cases--new-item-input"
         value=shortTitle
       }}
     </div>
@@ -12,17 +19,36 @@
       <label>LANGE TITEL</label>
       {{textarea
         id="title"
+        class="cases--new-item-input"
         value=title
       }}
     </div>
     <div class="cases--new-item">
       <label>TOELICHTING BEHANDELINGSSTATUS</label>
       {{input
+        class="cases--new-item-input"
         type="text"
         id="remark"
         value=remark
       }}
     </div>
+
+    <div class="cases--new-item">
+      <label>THEMA'S</label>
+      {{#power-select-multiple
+        options=themes
+        class="cases--new-item-input"
+        selected=selectedThemes
+        searchField="naam"
+        search=(perform searchTheme)
+        oninput=(action "resetValue")
+        onchange=(action "chooseTheme") as |theme|
+      }}
+        {{theme.naam}}
+      {{/power-select-multiple}}
+    </div>
+
+
 
     <button
       type="submit"

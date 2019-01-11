@@ -133,14 +133,13 @@ menu {
 }
 
 
-.files--header, .files--content {
+.cases--header, .cases--content {
 
   width: 100%;
-  border-bottom: 1px solid var(--light-grey);
   display: flex;
 
-  .files--header-tile {
-
+  .cases--header-tile {
+    border-bottom: 1px solid var(--light-grey);
     padding: 1.5em;
     flex: 1;
 
@@ -151,9 +150,9 @@ menu {
 
 }
 
-.files--search {
+.cases--search {
 
-  .files--search-content {
+  .cases--search-content {
     border: 1px solid var(--light-grey);
   }
 
@@ -182,7 +181,7 @@ menu {
     }
   }
 
-  .files--search-submit {
+  .cases--search-submit {
     margin-left: auto;
     border-left: 1px solid var(--light-grey);
 
@@ -239,12 +238,12 @@ menu {
   }
 }
 
-.files--content {
+.cases--content {
   width: 100%;
   border-bottom: 1px solid var(--light-grey);
   display: flex;
 
-  .files--content-tile {
+  .cases--content-tile {
 
     flex: 1;
 
@@ -255,10 +254,15 @@ menu {
 
 }
 
-.files--sub-file-header {
+.cases--content-50 {
+  flex: 1;
+}
+
+.cases--sub-file-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  border-bottom: 1px solid #ccc;
 
   h2 {
     margin: 0;
@@ -275,13 +279,21 @@ menu {
   }
 }
 
-.files--decree {
-  background-color: var(--light-grey);
+.cases--decree {
+  background-color: #f4f5fa;
   padding: 25px;
   display: flex;
   justify-content: space-between;
+  color: #212121;
+  text-decoration: none;
+  border-bottom: 1px solid #e7e7e7;
 
-  .files--decree-content {
+  &:hover {
+    background-color: #525354;
+    color: #fff;
+  }
+
+  .cases--decree-content {
 
     display: flex;
     flex-direction: column;
@@ -291,7 +303,7 @@ menu {
       padding: 0;
     }
 
-    .files--decree-content-label {
+    .cases--decree-content-label {
       background-color: var(--yellow);
       padding: 4px 8px;
       border-radius: 15px;
@@ -299,7 +311,7 @@ menu {
       font-size: 0.8em;
     }
 
-    .files--decree-content-expand {
+    .cases--decree-content-expand {
       display: flex;
       align-items: center;
       margin-top: auto;
@@ -317,11 +329,11 @@ menu {
 
   }
 
-  .files--decree-options {
+  .cases--decree-options {
 
 
 
-    .files--decree-options-settings {
+    .cases--decree-options-settings {
 
       background-color: #fff;
       width: 30px;
@@ -379,13 +391,30 @@ form.new-session-form {
         font-size: 0.9em;
       }
 
-      input, textarea {
+      .cases--new-item-input, textarea {
         border: 1px solid #e5e5e5;
         border-radius: 5px;
         padding: 10px 15px;
         margin-bottom: 25px;
       }
+
+
     }
+
   }
 
+}
+
+.cases--subcases {
+  padding: 25px;
+
+
+}
+
+button {
+  padding: 10px 25px;
+  background-color: var(--blue);
+  color: #fff;
+  margin-top: 25px;
+  border: 0;
 }

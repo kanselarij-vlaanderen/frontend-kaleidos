@@ -1,0 +1,30 @@
+<div class="cases--new">
+  <form onsubmit={{action "createSubCase"}}>
+    <div class="cases--new-item">
+      <label>NAAM DEELDOSSIER</label>
+      {{input
+        type="text"
+        id="title"
+        class="cases--new-item-input"
+        value=shortTitle
+      }}
+    </div>
+
+    <div class="cases--new-item">
+      <label>OPENBAAR?</label>
+      {{input
+        id="public"
+        class="cases--new-item-input"
+        value=remark
+      }}
+    </div>
+
+    <button
+      type="submit"
+      class="rr-action-button"
+      data-test-rr="sign-up-button"
+    >
+      Volgende stap
+    </button>
+  </form>
+</div>

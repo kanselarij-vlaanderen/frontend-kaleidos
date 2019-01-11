@@ -1,0 +1,12 @@
+{{#if model}}
+  {{#each model as |subcase|}}
+    <div>
+      <span>{{subcase.title}}</span>
+    </div>
+  {{/each}}
+
+{{else}}
+  <div>
+    <p>Er zijn nog geen deeldossiers</p>
+  </div>
+{{/if}}

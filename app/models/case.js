@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 
-const { Model, attr } = DS;
+const { Model, attr, hasMany } = DS;
 
 export default Model.extend({
   public: attr('boolean'),
@@ -9,5 +9,7 @@ export default Model.extend({
   shortTitle: attr('string'),
   number: attr('string'),
   remark: attr('string'),
-  title: attr('string')
+  title: attr('string'),
+  themes: hasMany('theme'),
+  subcases: hasMany('subcase')
 });

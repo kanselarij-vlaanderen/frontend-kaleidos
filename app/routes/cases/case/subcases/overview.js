@@ -5,6 +5,6 @@ export default Route.extend({
     this._super(...arguments);
   },
   model() {
-    return this.store.findAll('theme');
-  },
+    return this.modelFor('cases.case').get('subcases');
+  }
 });

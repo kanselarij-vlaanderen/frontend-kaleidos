@@ -8,8 +8,14 @@ const Router = EmberRouter.extend({
 
 Router.map(function() {
   this.route('agenda');
-  this.route('cases', { path : '/dossiers' }, function () {
+  this.route('cases', { path : '/dossiers' },  function () {
     this.route('create');
+    this.route('case', { path: ':id' }, function ()  {
+      this.route('subcases', { path: '/deeldossiers' }, function() {
+        this.route('create');
+        this.route('overview');
+      });
+    });
   });
   this.route('home', { path: "/" });
   this.route('settings');
