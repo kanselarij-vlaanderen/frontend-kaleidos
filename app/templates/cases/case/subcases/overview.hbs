@@ -1,18 +1,22 @@
-{{#if model}}
-  {{#each model as |subcase|}}
-    <div class="cases--subcases-item">
-      <div class="cases--subcases-item-arrow">
-        <img src="/assets/right-arrow.svg" />
-      </div>
-      <div class="cases--subcases-item-content">
-        <h4>{{subcase.title}}</h4>
-        <span>{{moment-format subcase.created "dd. DD-MM-YYYY"}}</span>
-      </div>
-    </div>
-  {{/each}}
+<div class="cases--subcases-overview">
 
-{{else}}
-  <div>
-    <p>Er zijn nog geen deeldossiers</p>
-  </div>
-{{/if}}
+  {{#if model}}
+    {{#each model as |subcase|}}
+      <div class="cases--subcases-item">
+        <div class="cases--subcases-item-arrow">
+          <img src="/assets/right-arrow.svg" />
+        </div>
+        <div class="cases--subcases-item-content">
+          <h4>{{subcase.title}}</h4>
+          <span>{{moment-format subcase.created "dd. DD-MM-YYYY"}}</span>
+        </div>
+      </div>
+    {{/each}}
+
+  {{else}}
+    <div>
+      <p>Er zijn nog geen deeldossiers</p>
+    </div>
+  {{/if}}
+
+</div>

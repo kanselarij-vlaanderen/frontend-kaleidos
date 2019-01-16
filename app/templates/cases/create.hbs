@@ -5,7 +5,7 @@
 </div>
 
 <div class="cases--new">
-  <form onsubmit={{action "createDossier"}}>
+  <form onsubmit={{action "createCase"}}>
 
     {{#if isPartOne}}
 
@@ -28,17 +28,17 @@
 
       <div class="cases--new-item">
         <label>CONTACTPERSOON</label>
-        {{#power-select-multiple
-          options=themes
+        {{#power-select
+          options=contacts
           class="cases--new-item-input"
-          selected=selectedThemes
-          searchField="naam"
-          search=(perform searchTheme)
+          selected=contact
+          searchField="label"
+          search=(perform searchContact)
           oninput=(action "resetValue")
-          onchange=(action "chooseTheme") as |theme|
+          onchange=(action "chooseContact") as |capacity|
         }}
-          {{theme.naam}}
-        {{/power-select-multiple}}
+          {{capacity.label}}
+        {{/power-select}}
       </div>
 
       <div class="cases--new-item">
