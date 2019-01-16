@@ -1,0 +1,32 @@
+{{#each model as |agendaitem|}}
+<div class="cases--decree">
+	{{#link-to "cases.case" agendaitem.id class="cases--decree-content" tagName="div" }}
+		<h4>1. {{agendaitem.title}}</h4>
+		<div class="cases--decree-content-label">minister-president van de vlaamse regering</div>
+			<div class="cases--decree-content-expand">
+				<span>meer weergeven</span>
+			</div>
+{{/link-to}}
+	
+		<div class="cases--decree-options">
+			<div class="settings-container">
+			<div><span>decreet</span></div>
+			<div class="cases--decree-options-settings" onclick={{action "showOptions"}}>
+				<img src="/assets/setting.svg" alt="Settings" />
+			</div>
+			</div>
+
+			{{#if (not isShowingOptions)}}
+			<div>
+				{{!-- <div>Formeel niet ok</div>
+				<div>Niet Akkoord</div> --}}
+			</div>
+			{{else}}
+				<div class="buttons">
+					<button {{action "extendItem" agendaitem}}>Uitstellen</button>
+					<button {{action "deleteItem" agendaitem}}>Verwijderen</button>
+				</div>
+			{{/if}}
+		</div>
+</div>
+{{/each}}

@@ -5,9 +5,9 @@ export default Route.extend({
 		let date = new Date();
 		date.setHours(0,0,0,0);
 		return this.store.query('session', {
-			filter: {
-				':gte:plannedstart': date.toISOString()
-			}
+			// filter: {
+			// 	':gt:plannedstart': date.toISOString()
+			// }
 		});
 	}
 });

@@ -8,9 +8,19 @@ export default Controller.extend({
   currentSession: computed('model', function () {
     let dateTimeOfToday = new Date();
     dateTimeOfToday.setHours(0, 0, 0, 0);
-    let sessionOfThisWeek = this.get('model')
-      .find(session => new Date(session.plannedstart) >= dateTimeOfToday);
-    return sessionOfThisWeek;
+    
+    let closestDate = new Date();
+    closestDate.setDate(closestDate.getDate() + 30)
+    let closestSession;
+    this.get('model').forEach(session => {
+      let sessionDate = new Date(session.plannedstart);
+      if (sessionDate >= dateTimeOfToday && sessionDate < closestDate) {
+        closestDate = sessionDate;
+        closestSession = session;
+      }
+    });
+
+    return closestSession;
   }),
 
   actions: {
