@@ -7,14 +7,24 @@ export default Component.extend({
 	classNames: ["cases--header-tile", "cases--search"],
 	tagName: "div",
 	currentCase: null,
+	showFilters: false,
+	cases: null,
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
-		return this.store.query('case', {
-			filter: {
-				title: `${searchValue}`
-			}
-		});
+		if (this.get('cases')) {
+			this.set('cases', this.store.query('case', {
+				filter: {
+					title: `${searchValue}`
+				}
+			}))
+		} else {
+			return this.store.query('case', {
+				filter: {
+					title: `${searchValue}`
+				}
+			})
+		}
 	}),
 
 	actions: {

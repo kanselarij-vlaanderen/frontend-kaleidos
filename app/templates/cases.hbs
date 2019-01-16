@@ -1,39 +1,11 @@
-
 <div class="cases--content">
-
   <div class="cases--content-50">
-
     <div class="cases--header">
-
-      <div class="cases--header-tile cases--search">
-
-        <div>
-          <label>Zoeken</label>
-          <div class="cases--search-content">
-            <form>
-              <input placeholder="search" />
-              <div class="cases--search-submit">
-                <button>
-                  <img src="/assets/search.svg" />
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="">
-          <button>Show filters</button>
-        </div>
-
-      </div>
+      {{cases/cases-search cases=model showFilters="true"}}
     </div>
-
     {{cases/case-item model=model}}
   </div>
-
-
   <div class="cases--content-50">
     {{outlet}}
   </div>
-
 </div>
