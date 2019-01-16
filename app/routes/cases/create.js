@@ -5,6 +5,7 @@ export default Route.extend({
     this._super(...arguments);
   },
   model() {
-    return this.store.findAll('theme');
+    return this.store.findAll('capacity');
   },
 });
+

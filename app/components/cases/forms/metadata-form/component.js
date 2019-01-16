@@ -7,7 +7,7 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   store: inject(),
-  themes: alias('model'),
+  themes: null,
   selectedThemes: A([]),
   types: A(["mr","overlegcomite", "ministrieel", "persbericht"]),
   actions: {
@@ -50,4 +50,11 @@ export default Component.extend({
       }
     });
   }),
+  getThemes (){
+    this.set('themes', this.store.findAll('theme'));
+  },
+  didInsertElement: async function () {
+    this._super(...arguments);
+    return await this.getThemes();
+  },
 });

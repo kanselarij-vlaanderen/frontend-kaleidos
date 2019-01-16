@@ -2,6 +2,29 @@
   <form onsubmit={{action "createSubCase"}}>
 
   {{#if isPartOne }}
+
+    <div>
+      <h3>metadata controleren</h3>
+    </div>
+
+    {{cases/forms/metadata-form
+      themes=themes
+      step=(action "nextStep")
+      chooseTheme=(action "chooseTheme")
+      chooseType=(action "chooseType")
+      shortTitleChange=(action "shortTitleChange")
+      titleChange=(action "titleChange")
+      statusChange=(action "statusChange")
+      selectedThemes=selectedThemes
+      shortTitle=shortTitle
+      title=title
+      status=status
+      type=selectedType
+    }}
+
+  {{else }}
+
+
     <div class="cases--new-item">
       <label>NAAM DEELDOSSIER</label>
       {{input
@@ -21,36 +44,11 @@
       }}
     </div>
 
-
-  <button {{action "nextStep"}}>
-    Volgende Stap
-  </button>
-
-
-  {{else}}
-
-    <div>
-      <h3>metadata controleren</h3>
+    <div class="cases--new-item">
+      <label>OPENBAAR?</label>
+      {{input type="checkbox" checked=public}}
     </div>
 
-    {{cases/forms/metadata-form
-      themes=themes
-      nextStep=(action "nextStep")
-      chooseTheme=(action "chooseTheme")
-      chooseType=(action "chooseType")
-      shortTitleChange=(action "shortTitleChange")
-      titleChange=(action "titleChange")
-      statusChange=(action "statusChange")
-      selectedThemes=selectedThemes
-      shortTitle=shortTitle
-      title=title
-      status=status
-      type=selectedType
-    }}
-
-    <button {{action "previousStep"}}>
-      Vorige Stap
-    </button>
 
     <button
       type="submit"
@@ -59,7 +57,6 @@
     >
       Dossier aanmaken
     </button>
-
 
   {{/if}}
   </form>

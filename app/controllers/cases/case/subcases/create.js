@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 
 export default Controller.extend({
-  part: 2,
+  part: 1,
   isPartOne : computed('part', function() {
     return this.get('part') === 1;
   }),
@@ -24,9 +24,9 @@ export default Controller.extend({
   actions: {
     async createSubCase(event) {
       event.preventDefault();
-      const { title, shortTitle, remark } = this;
+      const { title, shortTitle, remark, isPublic } = this;
       const caze = this.store.peekRecord('case', this.model.id);
-      let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: new Date() });
+      let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: new Date(), public: isPublic });
 
       const createdSubCase = await subcase.save();
       await caze.get('subcases').pushObject(createdSubCase);
