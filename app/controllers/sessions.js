@@ -1,14 +1,16 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
-import moment from 'moment';
 
 export default Controller.extend({
   creatingNewSession: false,
   selectedAgenda: null,
 
-  currentSession: computed('model', function() {
-    let foundSession = this.get('model').find(session => moment(session.plannedstart) > moment(new Date()));
-    return foundSession;
+  currentSession: computed('model', function () {
+    let dateTimeOfToday = new Date();
+    dateTimeOfToday.setHours(0, 0, 0, 0);
+    let sessionOfThisWeek = this.get('model')
+      .find(session => new Date(session.plannedstart) >= dateTimeOfToday);
+    return sessionOfThisWeek;
   }),
 
   actions: {

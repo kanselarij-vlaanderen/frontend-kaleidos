@@ -23,7 +23,7 @@ export default Component.extend({
 
 	chooseSession: async function (session) {
 		let currentSession = await this.store.findRecord('session', session.id, {
-			include: "agendas"
+			include: "agendas",
 		});
 		this.set("currentSession", currentSession);
 		return await this.setCurrentAgenda();
@@ -32,6 +32,11 @@ export default Component.extend({
 	async setCurrentAgenda() {
 		let agendas = await this.get('currentSession.agendas');
 		this.set('selectedAgenda', agendas.get('firstObject'));
+		let agendaID = this.get('selectedAgenda.id');
+		this.set('selectedAgendaItems', this.store.findRecord('agendaitem', agendaID , {
+			filter: {
+				include:"comments"
+		}}))
 	},
 
 	didInsertElement: async function () {
@@ -46,7 +51,11 @@ export default Component.extend({
 
 		resetValue(param) {
 			if (param == "") {
-				this.set('sessions', this.store.findAll('session'))
+				this.set('sessions',  this.store.query('session',{ query: {
+					filter: {
+						':gte:plannedstart': new Date().toISOString()
+					}
+				}}));
 			}
 		},
 
