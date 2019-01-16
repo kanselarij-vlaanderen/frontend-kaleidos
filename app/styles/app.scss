@@ -388,10 +388,11 @@ form.new-session-form {
       label {
         font-weight: bolder;
         margin-bottom: 15px;
-        font-size: 0.9em;
+        font-size: 0.85em;
+        color: #333;
       }
 
-      .cases--new-item-input, textarea {
+      .cases--new-item-input, textarea, .ember-power-select-trigger {
         border: 1px solid #e5e5e5;
         border-radius: 5px;
         padding: 10px 15px;
@@ -406,7 +407,52 @@ form.new-session-form {
 }
 
 .cases--subcases {
+
   padding: 25px;
+
+  .cases--subcases-item {
+    box-shadow: 0 1px 2px rgba(25, 25, 25, 0.2);
+    margin-bottom: 15px;
+    display: flex;
+  }
+
+  .cases--subcases-item-arrow {
+    background-color: var(--blue);
+    padding: 5px;
+    width: 50px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 20px;
+      height: 15px;
+    }
+  }
+
+  .cases--subcases-item-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: calc(100% - 40px);
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 0.9em;
+
+    h4 {
+      color: var(--blue);
+      margin: 0;
+      padding: 0;
+      font-weight: bolder;
+    }
+
+    span {
+      color: #aaa;
+    }
+  }
+
 
 
 }

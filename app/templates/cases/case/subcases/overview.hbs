@@ -1,7 +1,13 @@
 {{#if model}}
   {{#each model as |subcase|}}
-    <div>
-      <span>{{subcase.title}}</span>
+    <div class="cases--subcases-item">
+      <div class="cases--subcases-item-arrow">
+        <img src="/assets/right-arrow.svg" />
+      </div>
+      <div class="cases--subcases-item-content">
+        <h4>{{subcase.title}}</h4>
+        <span>{{moment-format subcase.created "dd. DD-MM-YYYY"}}</span>
+      </div>
     </div>
   {{/each}}
 

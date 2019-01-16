@@ -1,0 +1,62 @@
+<div class="cases--new-item">
+  <label>KORTE TITEL</label>
+  {{input
+    type="text"
+    id="shortTitle"
+    class="cases--new-item-input"
+    input=(action "shortTitleChange")
+    value=shortTitle
+  }}
+</div>
+
+<div class="cases--new-item">
+  <label>LANGE TITEL</label>
+  {{textarea
+    id="title"
+    class="cases--new-item-input"
+    key-down=(action "titleChange")
+    value=title
+  }}
+</div>
+
+<div class="cases--new-item">
+  <label>TOELICHTING BEHANDELINGSSTATUS</label>
+  {{input
+    class="cases--new-item-input"
+    type="text"
+    id="remark"
+    onChange=(action "statusChange")
+    value=status
+  }}
+</div>
+
+<div class="cases--new-item">
+  <label>THEMA'S</label>
+  {{#power-select-multiple
+    options=themes
+    class="cases--new-item-input"
+    selected=selectedThemes
+    searchField="naam"
+    search=(perform searchTheme)
+    oninput=(action "resetValue")
+    onchange=(action "chooseTheme") as |theme|
+  }}
+    {{theme.naam}}
+  {{/power-select-multiple}}
+</div>
+
+<div class="cases--new-item">
+  <label>MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT</label>
+  {{#power-select
+    options=types
+    selected=selectedType
+    class="cases--new-item-input"
+    onchange=(action "chooseType") as |type|
+  }}
+    {{type}}
+  {{/power-select}}
+</div>
+
+<button {{action "step"}}>
+  Volgende Stap
+</button>

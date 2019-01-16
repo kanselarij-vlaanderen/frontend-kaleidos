@@ -1,17 +1,15 @@
-import Controller from '@ember/controller';
+import Component from '@ember/component';
+
 import { A } from '@ember/array';
 import { task, timeout } from 'ember-concurrency';
 import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
-export default Controller.extend({
+export default Component.extend({
+  store: inject(),
   themes: alias('model'),
   selectedThemes: A([]),
   types: A(["mr","overlegcomite", "ministrieel", "persbericht"]),
-  part: 1,
-  isPartOne : computed('part', function() {
-    return this.get('part') === 1;
-  }),
   actions: {
     async createDossier(event) {
       event.preventDefault();
@@ -25,27 +23,24 @@ export default Controller.extend({
         this.set('themes', this.store.findAll('theme'));
       }
     },
-    chooseTheme(theme) {
-      this.set('selectedThemes', theme);
+    async chooseTheme(theme) {
+      return await this.chooseTheme(theme);
     },
-    chooseType(type) {
-      this.set('selectedType', type);
+    async shortTitleChange(event) {
+      return await this.shortTitleChange(event.target.value);
     },
-    titleChange(title) {
-      this.set('title', title);
+    async titleChange(longTitle) {
+      return await this.titleChange(longTitle);
     },
-    shortTitleChange(shortTitle) {
-      this.set('shortTitle', shortTitle);
+    async statusChange(status) {
+      return await this.statusChange(status);
     },
-    statusChange(status) {
-      this.set('status', status);
+    async chooseType(type) {
+      return await this.chooseType(type);
     },
-    nextStep() {
-      this.set('part', 2);
-    },
-    previousStep() {
-      this.set('part', 1);
-    },
+    async step(){
+      return await this.step();
+    }
   },
   searchTheme : task(function* (searchValue) {
     yield timeout(300);

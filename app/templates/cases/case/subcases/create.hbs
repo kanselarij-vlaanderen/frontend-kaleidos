@@ -1,17 +1,19 @@
 <div class="cases--new">
   <form onsubmit={{action "createSubCase"}}>
+
+  {{#if isPartOne }}
     <div class="cases--new-item">
       <label>NAAM DEELDOSSIER</label>
       {{input
         type="text"
         id="title"
         class="cases--new-item-input"
-        value=shortTitle
+        value=title
       }}
     </div>
 
     <div class="cases--new-item">
-      <label>OPENBAAR?</label>
+      <label>AANVRAAG AGENDERING</label>
       {{input
         id="public"
         class="cases--new-item-input"
@@ -19,12 +21,46 @@
       }}
     </div>
 
+
+  <button {{action "nextStep"}}>
+    Volgende Stap
+  </button>
+
+
+  {{else}}
+
+    <div>
+      <h3>metadata controleren</h3>
+    </div>
+
+    {{cases/forms/metadata-form
+      themes=themes
+      nextStep=(action "nextStep")
+      chooseTheme=(action "chooseTheme")
+      chooseType=(action "chooseType")
+      shortTitleChange=(action "shortTitleChange")
+      titleChange=(action "titleChange")
+      statusChange=(action "statusChange")
+      selectedThemes=selectedThemes
+      shortTitle=shortTitle
+      title=title
+      status=status
+      type=selectedType
+    }}
+
+    <button {{action "previousStep"}}>
+      Vorige Stap
+    </button>
+
     <button
       type="submit"
       class="rr-action-button"
       data-test-rr="sign-up-button"
     >
-      Volgende stap
+      Dossier aanmaken
     </button>
+
+
+  {{/if}}
   </form>
 </div>

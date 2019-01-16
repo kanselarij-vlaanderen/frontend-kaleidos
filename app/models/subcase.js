@@ -7,5 +7,6 @@ export default Model.extend({
   shortTitle: attr('string'),
   remark: attr('string'),
   title: attr('string'),
-  case: belongsTo('case')
+  case: belongsTo('case'),
+  type: attr('string')
 });

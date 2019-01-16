@@ -1,61 +1,73 @@
 <div>
   <div class="cases--header-tile cases--sub-file-header">
-    <h2>DOSSIERS {{'<'}} NEW</h2>
+    <h2>NIEUW DOSSIER</h2>
   </div>
 </div>
 
 <div class="cases--new">
   <form onsubmit={{action "createDossier"}}>
-    <div class="cases--new-item">
-      <label>KORTE TITEL</label>
-      {{input
-        type="text"
-        id="shortTitle"
-        class="cases--new-item-input"
-        value=shortTitle
-      }}
-    </div>
-    <div class="cases--new-item">
-      <label>LANGE TITEL</label>
-      {{textarea
-        id="title"
-        class="cases--new-item-input"
-        value=title
-      }}
-    </div>
-    <div class="cases--new-item">
-      <label>TOELICHTING BEHANDELINGSSTATUS</label>
-      {{input
-        class="cases--new-item-input"
-        type="text"
-        id="remark"
-        value=remark
-      }}
-    </div>
 
-    <div class="cases--new-item">
-      <label>THEMA'S</label>
-      {{#power-select-multiple
-        options=themes
-        class="cases--new-item-input"
-        selected=selectedThemes
-        searchField="naam"
-        search=(perform searchTheme)
-        oninput=(action "resetValue")
-        onchange=(action "chooseTheme") as |theme|
+    {{#if isPartOne}}
+
+      {{cases/forms/metadata-form
+        themes=themes
+        step=(action "nextStep")
+        chooseTheme=(action "chooseTheme")
+        chooseType=(action "chooseType")
+        shortTitleChange=(action "shortTitleChange")
+        titleChange=(action "titleChange")
+        statusChange=(action "statusChange")
+        selectedThemes=selectedThemes
+        shortTitle=shortTitle
+        title=title
+        status=status
+        selectedType=selectedType
       }}
-        {{theme.naam}}
-      {{/power-select-multiple}}
-    </div>
+
+    {{else}}
+
+      <div class="cases--new-item">
+        <label>CONTACTPERSOON</label>
+        {{#power-select-multiple
+          options=themes
+          class="cases--new-item-input"
+          selected=selectedThemes
+          searchField="naam"
+          search=(perform searchTheme)
+          oninput=(action "resetValue")
+          onchange=(action "chooseTheme") as |theme|
+        }}
+          {{theme.naam}}
+        {{/power-select-multiple}}
+      </div>
+
+      <div class="cases--new-item">
+        <label>GERELATEERDE DOSSIERS</label>
+        {{input
+          class="cases--new-item-input"
+          type="text"
+          id="related-cases"
+          value=related_cases
+        }}
+      </div>
+
+      <button {{action "previousStep"}}>
+        Vorige Stap
+      </button>
+
+      <button
+        type="submit"
+        class="rr-action-button"
+        data-test-rr="sign-up-button"
+      >
+        Dossier aanmaken
+      </button>
+
+
+    {{/if}}
 
 
 
-    <button
-      type="submit"
-      class="rr-action-button"
-      data-test-rr="sign-up-button"
-    >
-      Volgende stap
-    </button>
+
   </form>
 </div>
