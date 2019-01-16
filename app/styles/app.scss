@@ -551,6 +551,10 @@ button {
 
     padding: 1.5em;
     flex: 1;
+    
+    .ember-power-select-trigger {
+      width:100%;
+    }
 
     &:first-child {
       border-right: 1px solid var(--light-grey);

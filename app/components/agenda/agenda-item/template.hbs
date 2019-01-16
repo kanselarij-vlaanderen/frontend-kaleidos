@@ -1,7 +1,7 @@
 {{#each model as |agendaitem|}}
 <div class="cases--decree">
 	{{#link-to "cases.case" agendaitem.id class="cases--decree-content" tagName="div" }}
-		<h4>1. {{agendaitem.title}}</h4>
+		<h4>{{agendaitem.priority}}. uitgesteld: {{agendaitem.extended}}</h4>
 		<div class="cases--decree-content-label">minister-president van de vlaamse regering</div>
 			<div class="cases--decree-content-expand">
 				<span>meer weergeven</span>
@@ -11,19 +11,19 @@
 		<div class="cases--decree-options">
 			<div class="settings-container">
 			<div><span>decreet</span></div>
-			<div class="cases--decree-options-settings" onclick={{action "showOptions"}}>
+			<div class="cases--decree-options-settings" onclick={{action "showOptions" agendaitem}}>
 				<img src="/assets/setting.svg" alt="Settings" />
 			</div>
 			</div>
 
-			{{#if (not isShowingOptions)}}
+			{{#if (not-eq agendaitemToShowOptionsFor.id agendaitem.id)}}
 			<div>
 				{{!-- <div>Formeel niet ok</div>
 				<div>Niet Akkoord</div> --}}
 			</div>
 			{{else}}
 				<div class="buttons">
-					<button {{action "extendItem" agendaitem}}>Uitstellen</button>
+					<button {{action "changeExtendedValue" agendaitem}}>{{extend-button-text agendaitem.extended}}</button>
 					<button {{action "deleteItem" agendaitem}}>Verwijderen</button>
 				</div>
 			{{/if}}

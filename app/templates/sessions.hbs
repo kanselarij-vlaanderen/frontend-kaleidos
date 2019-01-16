@@ -8,6 +8,8 @@
   <div class="files--header-tile files--sub-file-header">
     {{#if creatingNewSession}}
       {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
+    {{else}}
+      {{cases/cases-search cases=cases}}
     {{/if}}
   </div>
 </div>

@@ -6,30 +6,35 @@ export default Component.extend({
 	classNames: ["cases--content-tile"],
 	tagName: "div",
 	isShowingDetail: false,
-	isShowingOptions: false,
-
+	agendaitemToShowOptionsFor: null,
 
 	actions: {
 		showDetail() {
 			this.set('isShowingDetail', !this.get('isShowingDetail'))
 		},
 
-		showOptions() {
-			this.set('isShowingOptions', !this.get('isShowingOptions'))
-
+		showOptions(agendaitem) {
+			let itemToShowOptionsFor = this.get('agendaitemToShowOptionsFor');
+			if (itemToShowOptionsFor && itemToShowOptionsFor.id === agendaitem.id) {
+				this.set('agendaitemToShowOptionsFor', null);
+			} else {
+				this.set('agendaitemToShowOptionsFor', agendaitem);
+			}
 		},
 
-		extendItem(agendaitem) {
-			
+		changeExtendedValue(agendaitem) {
+			agendaitem.set('extended', !agendaitem.extended);
+			agendaitem.save();
 		},
 
-		async deleteItem(agendaitem) {
-		this.store.findRecord('agendaitem', agendaitem.id, { backgroundReload: false })
-		.then(foundItem => {
-			foundItem.deleteRecord();
-			foundItem.get('isDeleted');
-			foundItem.save();
-		});
+		deleteItem(agendaitem) {
+
+			this.store.findRecord('agendaitem', agendaitem.id)
+				.then(async foundItem => {
+					foundItem.deleteRecord();
+					foundItem.get('isDeleted');
+					await foundItem.save();
+				});
 		}
 	}
 });

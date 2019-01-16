@@ -26,5 +26,6 @@
     <p class="sessions-subtitle">
       {{await selectedAgenda.agendaitems.length}} agendapunten 
     </p>
+    <button {{action "createAgendaItem" selectedAgenda}}>Create agendaitem</button>
   {{/if}}
 </div>
