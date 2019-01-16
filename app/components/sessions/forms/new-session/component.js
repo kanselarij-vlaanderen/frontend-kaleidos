@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import EmberObject from '@ember/object';
 import moment from 'moment';
 
 export default Component.extend({
@@ -10,16 +9,27 @@ export default Component.extend({
 
 	actions: {
 		createNewSession() {
-			let session = EmberObject.create({
-					plannedstart: this.get('startDate'),
-					number: "5"
-			})
+			let generatedNumber = Math.floor(Math.random() * Math.floor(2147000));
+			let newSession = this.store.createRecord('session', {
+				plannedstart: this.get('startDate'),
+				number: generatedNumber,
+			});
 
-			let newSession = this.store.createRecord('session',session)
-			newSession.save();
+			newSession.save().then(session => {
+				let agenda = this.store.createRecord('agenda', {
+					name: "Ontwerpagenda",
+					session: session
+				});
+				return agenda.save();
+			});
+			this.cancelForm();
 		},
 		selectStartDate(val) {
 			this.set('startDate', val);
+		},
+
+		cancelForm(event) {
+			this.cancelForm(event)
 		}
 	}
 });

@@ -132,6 +132,32 @@ menu {
   }
 }
 
+.agenda-navigation-banner {
+  width:50%;
+  float:left;
+}
+
+.table-container {
+  width:50%;
+  float:right;
+
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    width:25%;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+}
 
 .files--header, .files--content {
 
@@ -343,16 +369,36 @@ menu {
   }
 }
 
-form.new-session-form {
+.new-session-form-container {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+}
+
+.new-session-form {
+  width:100%;
+  .submit-container {
+    text-align: center;
+
+    button {
+      margin-right: 1em;
+    }
+  }
+
   .form-group {
+    padding:1em;
 
     .pikaday-session {
       font-size: 2em;
+<<<<<<< HEAD
 
+=======
+>>>>>>> zitting
     }
 
+    
     label {
-      // margin-right:5em;
       font-size:2em;
       display:flex;
       justify-content: space-evenly;
@@ -362,6 +408,9 @@ form.new-session-form {
         font-size:0.7em;
       }
     }
+
+
+
   }
 }
 

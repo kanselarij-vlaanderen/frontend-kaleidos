@@ -1,60 +1,86 @@
 <div class="files--header">
-  <div class="files--header-tile files--search">
-    <div class="session-header">
-      <div class="session-title-container">
-        <strong class="sessions-title">
-          Agenda van
-        </strong>
-      </div>
-      {{#power-select
-        options=sessions
-        selected=selectedDate
-        searchField="plannedstart"
-        search=(perform searchTask)
-        oninput=(action "resetValue")
-        onchange=(action "chooseSession") as |session|
-      }}
-        {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
-      {{/power-select}}
-      <button {{action "createNewSession"}}>
-        Nieuwe zitting
-      </button>
-    </div>
-    <div>
-      <p class="sessions-subtitle">
-        62 agendapunten, 12 mededelingen
-      </p>
-    </div>
-  </div>
+  {{sessions/sessions-selector
+    sessions=model
+    currentSession=currentSession
+    selectedAgenda=selectedAgenda
+    creatingNewSession=creatingNewSession
+  }}
   <div class="files--header-tile files--sub-file-header">
     {{#if creatingNewSession}}
-      {{sessions/forms/new-session}}
+      {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
     {{/if}}
   </div>
 </div>
-<div class="files--content">
-  <div class="files--content-tile">
-    <div class="files--decree">
-      <div class="files--decree-content">
-        <div class="files--decree-content-label"></div>
-        <div class="files--decree-content-expand">
-          <img src="/assets/down-arrow.svg" />
-          <span></span>
+{{#if (and currentSession (not (is-pending currentSession.agendas)))}}
+  <div class="agenda-navigation-banner">
+    <div class="files--content-tile">
+      {{#each (await currentSession.agendas) as |agenda|}}
+        <div class="files--decree" {{action "selectAgenda" agenda}}>
+          <div class="files--decree-content">
+            <div class="files--decree-content-label">
+              {{agenda.name}}
+            </div>
+          </div>
+          <div class="files--decree-options">
+            <div>
+              <span></span>
+            </div>
+            <div class="files--decree-options-settings">
+              <img src="/assets/setting.svg" alt="Settings" />
+            </div>
+            <div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="files--decree-options">
-        <div>
-          <span></span>
-        </div>
-        <div class="files--decree-options-settings">
-          <img src="/assets/setting.svg" alt="Settings" />
-        </div>
-        <div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
+      {{/each}}
     </div>
   </div>
-  <div class="files--content-tile"></div>
-</div>
+  <div class="table-container">
+  {{#if (await selectedAgenda.agendaitems)}}
+      <table>
+        <tr>
+          <th>
+            id
+          </th>
+          <th>
+            prioriteit
+          </th>
+          <th>
+            volgorde
+          </th>
+          <th>
+            datum
+          </th>
+          <th>
+            opmerkingen
+          </th>
+        </tr>
+        {{#each (await selectedAgenda.agendaitems) as |agendaitem|}}
+          <tr>
+            <td>
+              {{agendaitem.id}}
+            </td>
+            <td>
+              {{agendaitem.priority}}
+            </td>
+            <td>
+              {{agendaitem.orderAdded}}
+            </td>
+            <td>
+              {{moment-format agendaitem.dateAdded 'DD/MM/YYYY'}}
+            </td>
+            <td>
+              {{await agendaitem.comments.length}}
+            </td>
+          </tr>
+        {{/each}}
+      </table>
+  {{/if}}
+  </div>
+{{else}}
+  <button {{action "addAgendaToSelectedSession"}}>
+    Create agenda
+  </button>
+{{/if}}

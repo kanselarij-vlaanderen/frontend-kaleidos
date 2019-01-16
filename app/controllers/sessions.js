@@ -1,43 +1,37 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
-import { task, timeout } from 'ember-concurrency';
-import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
   creatingNewSession: false,
-  selectedDate: computed('selectedDate', function () {
-    const sessions = this.get('model');
-    if (!sessions) {
-      return null;
-    }
-    return sessions.find(x => x.id === this.get('session.number'));
-  }),
+  selectedAgenda: null,
 
-  sessions: alias('model'),
-
-  searchTask: task(function* (searchValue) {
-    yield timeout(300);
-    return this.store.query('session', {
-      filter: {
-        plannedstart: searchValue
-      }
-    });
+  currentSession: computed('model', function () {
+    let dateTimeOfToday = new Date();
+    dateTimeOfToday.setHours(0, 0, 0, 0);
+    let sessionOfThisWeek = this.get('model')
+      .find(session => new Date(session.plannedstart) >= dateTimeOfToday);
+    return sessionOfThisWeek;
   }),
 
   actions: {
-    chooseSession(session) {
-      this.set('selectedDate', session);
+    cancelNewSessionForm() {
+      this.set('creatingNewSession', false);
     },
 
-    resetValue(param) {
-      if (param == "") {
-        this.set('sessions', this.store.findAll('session'))
-      }
+    addAgendaToSelectedSession() {
+      let newAgenda = this.store.createRecord('agenda', {
+        name: "OntwerpAgenda",
+        dateSent: new Date()
+      });
+
+      newAgenda.save().then(agenda => {
+        agenda.set('session', this.get('currentSession'));
+        return agenda.save();
+      });
     },
 
-    createNewSession() {
-      this.set('creatingNewSession', true);
+    selectAgenda(agenda) {
+      this.set('selectedAgenda', agenda);
     }
   },
-
 });
