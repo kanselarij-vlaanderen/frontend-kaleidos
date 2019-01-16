@@ -1,0 +1,23 @@
+{{#each model as |case|}}
+	{{#link-to "cases.case" case.id class="cases--decree"}}
+		<div class="cases--decree-content">
+			<h4>1. {{case.title}}</h4>
+			<div class="cases--decree-content-label">minister-president van de vlaamse regering</div>
+			{{#each case.themes as |theme|}}
+				<span>{{theme.naam}}</span>
+			{{/each}}
+			<div class="cases--decree-content-expand"><img src="/assets/down-arrow.svg" /> <span>meer weergeven</span></div>
+		</div>
+
+		<div class="cases--decree-options">
+			<div><span>decreet</span></div>
+			<div class="cases--decree-options-settings">
+				<img src="/assets/setting.svg" alt="Settings" />
+			</div>
+			<div>
+				<div>Formeel niet ok</div>
+				<div>Niet Akkoord</div>
+			</div>
+		</div>
+	{{/link-to}}
+{{/each}}
