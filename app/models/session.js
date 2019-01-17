@@ -6,6 +6,6 @@ export default Model.extend({
 	plannedstart: attr("date"),
 	startedAtTime: attr("date"),
 	endedAtTime: attr('date'),
-	number: attr('string'),
+	number: attr('number'),
 	agendas: hasMany('agenda')
 });

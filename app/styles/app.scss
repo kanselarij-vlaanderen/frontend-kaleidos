@@ -356,8 +356,29 @@ menu {
   }
 
   .cases--decree-options {
+    // margin-left: 1em;
+    display:flex;
+    flex-direction: column;
+    align-items: baseline;
 
+    .settings-container {
+      display:flex;
+      flex-direction: column;
+      width:100%;
+      align-items: center;
+    }
 
+    .buttons {
+      display:flex;
+      text-align:center;
+      justify-content: right;
+
+      button {
+        color: var(--white);
+        margin-left: 0.5em;
+
+      }
+    }
 
     .cases--decree-options-settings {
 
@@ -374,7 +395,6 @@ menu {
         height: 20px;
         fill: #000;
       }
-
 
     }
 
@@ -511,4 +531,269 @@ button {
   color: #fff;
   margin-top: 25px;
   border: 0;
+}
+
+.agenda-navigation-banner {
+  width:50%;
+  float:left;
+}
+
+.table-container {
+  width:50%;
+  float:right;
+}
+
+.files--header, .files--content {
+
+  width: 100%;
+  border-bottom: 1px solid var(--light-grey);
+  display: flex;
+
+  .files--header-tile {
+
+    padding: 1.5em;
+    flex: 1;
+    
+    .ember-power-select-trigger {
+      width:100%;
+    }
+
+    &:first-child {
+      border-right: 1px solid var(--light-grey);
+    }
+  }
+
+}
+
+.files--search {
+
+  .files--search-content {
+    border: 1px solid var(--light-grey);
+  }
+
+  label {
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.8em;
+  }
+
+  form {
+    display: flex;
+    align-items: center;
+  }
+
+  input {
+    border: 0;
+    padding: 10px;
+    width: calc(100% - 50px);
+    height: 100%;
+    font-size: 0.8em;
+
+    &:focus {
+      outline: none;
+      background-color: var(--light-grey);
+    }
+  }
+
+  .files--search-submit {
+    margin-left: auto;
+    border-left: 1px solid var(--light-grey);
+
+    button {
+      background-color: transparent;
+      border: 0;
+      padding: 0;
+      margin-left: 25px;
+      margin-right: 25px;
+
+      img {
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
+
+  .session-header {
+    display:flex;
+    align-items:center;
+
+    button {
+      margin-left: 0.5em;
+      background-color: var(--blue);
+      padding: 0.5em;
+      border: 0;
+      color: #fff;
+      font-size: 0.9em;
+    }
+  }
+
+  .sessions-subtitle {
+    font-size: 0.8em;
+    padding: 0;
+    margin-top: 0.1em;
+  }
+
+  .sessions-title {
+    font-size: 1.5em;
+    margin-left:0;
+  }
+
+  .session-title-container {
+    width: 30%;
+   
+    float:left;
+    display:block;
+  }
+
+  .ember-power-select-trigger {
+    width:45%;
+    float:left;
+    display:block;
+  }
+}
+
+.files--content {
+  width: 100%;
+  border-bottom: 1px solid var(--light-grey);
+  display: flex;
+
+  .files--content-tile {
+
+    flex: 1;
+
+    &:first-child {
+      border-right: 1px solid var(--light-grey);
+    }
+  }
+
+}
+
+.files--sub-file-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.25em;
+  }
+
+  button {
+    background-color: var(--blue);
+    padding: 12px 25px;
+    border: 0;
+    color: #fff;
+    font-size: 0.9em;
+  }
+}
+
+.files--decree {
+  background-color: var(--light-grey);
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+
+  .files--decree-content {
+
+    display: flex;
+    flex-direction: column;
+
+    h4 {
+      margin: 0 0 10px;
+      padding: 0;
+    }
+
+    .files--decree-content-label {
+      background-color: var(--yellow);
+      padding: 4px 8px;
+      border-radius: 15px;
+      color: var(--brown);
+      font-size: 0.8em;
+    }
+
+    .files--decree-content-expand {
+      display: flex;
+      align-items: center;
+      margin-top: auto;
+
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+      }
+
+      span {
+        font-size: 0.75em;
+      }
+    }
+
+  }
+
+  .files--decree-options {
+
+
+
+    .files--decree-options-settings {
+
+      background-color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 20px;
+        height: 20px;
+        fill: #000;
+      }
+
+
+    }
+
+  }
+}
+
+.new-session-form-container {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+}
+
+.new-session-form {
+  width:100%;
+  .submit-container {
+    text-align: center;
+
+    button {
+      margin-right: 1em;
+    }
+  }
+
+  .form-group {
+    padding:1em;
+
+    .pikaday-session {
+      font-size: 2em;
+    }
+
+    
+    label {
+      font-size:2em;
+      display:flex;
+      justify-content: space-evenly;
+      align-items: center;
+
+      input {
+        font-size:0.7em;
+      }
+    }
+
+
+
+  }
 }

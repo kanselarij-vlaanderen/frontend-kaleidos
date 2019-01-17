@@ -1,0 +1,19 @@
+{{#power-select
+  placeholder="document titel"
+  selected=currentCase
+  searchField="title"
+  search=(perform searchTask)
+  oninput=(action "resetValue")
+  onchange=(action "chooseCase") as |case|
+}}
+  <strong>
+    {{case.title}}
+  </strong>
+{{/power-select}}
+{{#if showFilters}}
+<div class="">
+  <button>
+    Show filters
+  </button>
+</div>
+{{/if}}

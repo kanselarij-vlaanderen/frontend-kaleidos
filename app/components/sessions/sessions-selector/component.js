@@ -62,5 +62,18 @@ export default Component.extend({
 		createNewSession() {
 			this.set('creatingNewSession', true);
 		},
+
+		async createAgendaItem(agenda) {
+			let agendaItem = {
+				priority: 2,
+				orderAdded: 3,
+				extended: true,
+				dateAdded: new Date().toISOString(),
+				agenda: agenda
+			};
+
+			let item = this.store.createRecord('agendaitem', agendaItem);
+			await item.save();
+		}
 	}
 });
