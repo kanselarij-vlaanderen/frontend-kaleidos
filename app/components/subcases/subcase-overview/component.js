@@ -8,11 +8,6 @@ export default Component.extend(DefaultQueryParamsMixin, {
 	modelName: 'subcase',
 	sort:"title",
 
-	async didInsertElement() {
-		this._super(...arguments);
-		this.set('subcases', await this.store.findAll('subcase'))
-	},
-
 	actions: {
 		selectSubCase() {
 

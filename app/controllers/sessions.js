@@ -14,18 +14,6 @@ export default Controller.extend({
     chooseSession(session) {
       this.set('currentSession', session);
       this.transitionToRoute('sessions.session.agendas', session.id);
-    },
-
-    addAgendaToSelectedSession() {
-      let newAgenda = this.store.createRecord('agenda', {
-        name: "OntwerpAgenda",
-        dateSent: new Date()
-      });
-
-      newAgenda.save().then(agenda => {
-        agenda.set('session', this.get('currentSession'));
-        return agenda.save();
-      });
-    },
-  },
+    }
+  }
 });

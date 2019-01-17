@@ -12,25 +12,16 @@ export default Component.extend({
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
-		if (this.get('cases')) {
-			this.set('cases', this.store.query('case', {
-				filter: {
-					title: `${searchValue}`
-				}
-			}))
-		} else {
-			return this.store.query('case', {
-				filter: {
-					title: `${searchValue}`
-				}
-			})
-		}
+		this.set('cases', this.store.query('case', {
+			filter: {
+				title: `${searchValue}`
+			}
+		}))
 	}),
 
 	actions: {
 		async chooseCase(caseItem) {
-			let currentCase = await this.store.findRecord('case', caseItem.id, {});
-			this.set("currentCase", currentCase);
+			this.set("currentCase", caseItem);
 		},
 
 		resetValue(param) {
