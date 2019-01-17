@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
+
 	model() {
 		let date = new Date();
 		date.setHours(0,0,0,0);
@@ -9,5 +10,7 @@ export default Route.extend({
 			// 	':gt:plannedstart': date.toISOString()
 			// }
 		});
-	}
+		
+	},
+
 });

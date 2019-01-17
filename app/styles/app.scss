@@ -1,3 +1,4 @@
+@import 'ember-data-table';
 @import "ember-power-select";
 
 :root {
@@ -17,7 +18,6 @@ body, html {
   margin : 0;
   font-family: sans-serif;
 }
-
 
 menu {
 
@@ -129,33 +129,6 @@ menu {
       font-weight: bold;
     }
 
-  }
-}
-
-.agenda-navigation-banner {
-  width:50%;
-  float:left;
-}
-
-.table-container {
-  width:50%;
-  float:right;
-
-  table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  td, th {
-    width:25%;
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #dddddd;
   }
 }
 
@@ -521,8 +494,6 @@ menu {
     }
   }
 
-
-
 }
 
 button {
@@ -534,7 +505,7 @@ button {
 }
 
 .agenda-navigation-banner {
-  width:50%;
+  width:calc(100% - 250px);
   float:left;
 }
 
@@ -797,3 +768,45 @@ button {
 
   }
 }
+
+.side--menu-container {
+  // width:50%;
+  display:block;
+  width:250px;
+  float:left;
+  background-color: rgb(226,230,233); 
+
+  .title-container {
+    padding:1em;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .side--menu--content-container {
+      height:100%;
+      width: 250px; /* Set the width of the sidebar */ /* Fixed Sidebar (stay in place on scroll) */
+      top: 0; /* Stay at the top */
+      left: 0;
+      overflow-x: hidden; /* Disable horizontal scroll */
+    
+    /* The navigation menu links */
+
+    a {
+      padding: 6px 8px 6px 16px;
+      text-decoration: none;
+      font-size: 25px;
+      color: var(--blue);
+      display: block;
+    }
+    
+    /* When you mouse over the navigation links, change their color */
+     a:hover {
+      color: #f1f1f1;
+    }
+    
+    
+  }
+}
+
+
