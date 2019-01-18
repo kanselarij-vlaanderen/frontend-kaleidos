@@ -8,5 +8,6 @@ export default Model.extend({
 	extended: attr('boolean'),
 	dateAdded: attr('date'),
 	agenda: belongsTo('agenda'),
-	comments: hasMany('comment')
+	comments: hasMany('comment'),
+	subcase: belongsTo('subcase')
 });

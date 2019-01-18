@@ -19,6 +19,24 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 				subCase.set('selected', !allSelected);
 			});
 			this.set('allSubCasesSelected', !allSelected);
+		},
+
+		async addSubcasesToAgenda() {
+			let selectedAgenda = this.get('selectedAgenda');
+			this.get('model').forEach(subCase => {
+				if (subCase.selected) {
+					// Selected property added to show in the view
+					// Removed cause it should not be send to the backend
+					delete subCase.selected; 
+					let agendaitem = this.store.createRecord('agendaitem', {
+						extended: false,
+						dateAdded: new Date(),
+						subcase: subCase,
+						agenda: selectedAgenda
+					})
+					agendaitem.save()
+				}
+			});
 		}
 	}
 });

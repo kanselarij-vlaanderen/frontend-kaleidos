@@ -1,3 +1,4 @@
+{{#if (not addingAgendaItems)}}
 {{#power-select
   options=subcases
   placeholder="Zoek op naam..."
@@ -13,3 +14,6 @@
   {{fa-icon "plus"}}
   Dossier toevoegen
 </button>
+{{else}}
+  <div id="agendaitems-control-container"></div>
+{{/if}}

@@ -8,5 +8,6 @@ export default Model.extend({
   remark: attr('string'),
   title: attr('string'),
   case: belongsTo('case'),
-  session: belongsTo('session')
+  session: belongsTo('session'),
+  agendaitem: belongsTo('agendaitem')
 });
