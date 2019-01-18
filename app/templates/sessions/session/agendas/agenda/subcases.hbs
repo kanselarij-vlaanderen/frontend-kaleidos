@@ -1,8 +1,33 @@
-{{data-table
-  content=model
-  fields="title shortTitle"
-  isLoading=isLoadingModel
-  filter=filter
-  page=page
-  size=size
-}}
+<div class="data-table-container" >
+  {{#data-table
+    content=model
+    fields="title shortTitle"
+    isLoading=isLoadingModel
+    filter=filter
+    page=page
+    size=size
+    sort=sort 
+    onClickRow=(action "selectSubCase")
+    as |t|
+  }}
+    {{#t.content as |c|}}
+      {{#c.header}}
+        <th>{{input type="checkbox" checked=allSubCasesSelected click=(action "selectAllSubCases")}} Select all</th>
+        {{th-sortable field="title" currentSorting=sort label="Title"}}
+        {{th-sortable field="shortTitle" currentSorting=sort label="Short title"
+        }}
+      {{/c.header}}
+      {{#c.body as |subCase|}}
+        <td>
+            <input type="checkbox" checked={{subCase.selected}}>
+        </td>
+        <td>
+          {{subCase.title}}
+        </td>
+        <td>
+          {{subCase.shortTitle}}
+        </td>
+      {{/c.body}}
+    {{/t.content}}
+  {{/data-table}}
+</div>

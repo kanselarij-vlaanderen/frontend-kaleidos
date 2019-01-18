@@ -1,3 +1,8 @@
+{{#if (is-empty model)}}
+	<div class="no-data-container">
+		Geen agendapunten.
+	</div>
+{{/if}}
 {{#each model as |agendaitem|}}
   <div class="cases--decree">
     {{#link-to

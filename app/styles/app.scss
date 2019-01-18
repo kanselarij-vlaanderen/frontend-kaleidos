@@ -734,9 +734,6 @@ button {
   }
 
   .files--decree-options {
-
-
-
     .files--decree-options-settings {
 
       background-color: #fff;
@@ -934,11 +931,23 @@ button.invert-color {
   }
 }
 
-
 .agenda-items-container {
   background-color:#F6F6F6;
   float:left;
   padding:2em;
   width: calc(100% - 250px - 4px);
   height:100vh;
+
+  .no-data-container {
+    margin: 0 auto;
+    background-color: #F6F6F6;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+  }
+}
+
+.data-table-container {
+  float:left;
+  width:100%;
 }

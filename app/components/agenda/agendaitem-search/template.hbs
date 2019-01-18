@@ -9,10 +9,7 @@
 }}
   {{agendaitem.title}}
 {{/power-select}}
-{{!-- {{#link-to "sessions.session.subcases" currentSession.id class="invert-color" tagName="button" }}
-		{{fa-icon "plus" }} Dossier toevoegen
-{{/link-to}} --}}
-
-<button {{action "navigateToSubCases"}} class="invert-color">
-	{{fa-icon "plus" }} Dossier toevoegen
+<button class="invert-color" {{action "navigateToSubCases"}}>
+  {{fa-icon "plus"}}
+  Dossier toevoegen
 </button>

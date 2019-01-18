@@ -9,9 +9,7 @@ export default Component.extend({
 
 	sessions: null,
 	currentSession: null,
-	selectedAgenda: null,
 	creatingNewSession: null,
-	addingSubCasesToAgenda: null,
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
@@ -27,18 +25,18 @@ export default Component.extend({
 			this.chooseSession(session);
 		},
 
-		async createAgendaItem(agenda) {
-			let agendaItem = {
-				priority: 2,
-				orderAdded: 3,
-				extended: true,
-				dateAdded: new Date().toISOString(),
-				agenda: agenda
-			};
+		// async createAgendaItem(agenda) {
+		// 	let agendaItem = {
+		// 		priority: 2,
+		// 		orderAdded: 3,
+		// 		extended: true,
+		// 		dateAdded: new Date().toISOString(),
+		// 		agenda: agenda
+		// 	};
 
-			let item = this.store.createRecord('agendaitem', agendaItem);
-			await item.save();
-		},
+		// 	let item = this.store.createRecord('agendaitem', agendaItem);
+		// 	await item.save();
+		// },
 
 		resetValue(param) {
 			if (param == "") {
@@ -54,8 +52,8 @@ export default Component.extend({
 			this.set('creatingNewSession', true);
 		},
 
-		addSubCasesToAgenda() {
-			this.set('addingSubCasesToAgenda', true);
-		}
+		// addSubCasesToAgenda() {
+		// 	this.set('addingSubCasesToAgenda', true);
+		// }
 	}
 });
