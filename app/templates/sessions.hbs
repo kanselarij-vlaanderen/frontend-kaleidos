@@ -4,21 +4,13 @@
     currentSession=currentSession
     selectedAgenda=selectedAgenda
     creatingNewSession=creatingNewSession
+    addingSubCasesToAgenda=addingSubCasesToAgenda
+    chooseSession=(action 'chooseSession')
   }}
   <div class="files--header-tile files--sub-file-header">
     {{#if creatingNewSession}}
       {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
-    {{else}}
-      {{cases/cases-search}}
     {{/if}}
   </div>
 </div>
-{{#if (and currentSession (not (is-pending currentSession.agendas)))}}
-  <div class="agenda-navigation-banner">
-    {{agenda/agenda-item model=(await selectedAgenda.agendaitems)}}
-  </div>
-{{else}}
-  <button {{action "addAgendaToSelectedSession"}}>
-    Create agenda
-  </button>
-{{/if}}
+{{outlet}}

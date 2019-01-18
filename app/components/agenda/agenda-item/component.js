@@ -15,7 +15,8 @@ export default Component.extend({
 
 		showOptions(agendaitem) {
 			let itemToShowOptionsFor = this.get('agendaitemToShowOptionsFor');
-			if (itemToShowOptionsFor && itemToShowOptionsFor.id === agendaitem.id) {
+			let deSelectCurrentlySelected = itemToShowOptionsFor && itemToShowOptionsFor.id === agendaitem.id;
+			if (deSelectCurrentlySelected) {
 				this.set('agendaitemToShowOptionsFor', null);
 			} else {
 				this.set('agendaitemToShowOptionsFor', agendaitem);
@@ -28,12 +29,9 @@ export default Component.extend({
 		},
 
 		deleteItem(agendaitem) {
-
 			this.store.findRecord('agendaitem', agendaitem.id)
 				.then(async foundItem => {
-					foundItem.deleteRecord();
-					foundItem.get('isDeleted');
-					await foundItem.save();
+					await foundItem.destroyRecord();
 				});
 		}
 	}

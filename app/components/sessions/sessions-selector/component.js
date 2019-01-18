@@ -11,6 +11,7 @@ export default Component.extend({
 	currentSession: null,
 	selectedAgenda: null,
 	creatingNewSession: null,
+	addingSubCasesToAgenda: null,
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
@@ -21,32 +22,22 @@ export default Component.extend({
 		});
 	}),
 
-	chooseSession: async function (session) {
-		let currentSession = await this.store.findRecord('session', session.id, {
-			include: "agendas",
-		});
-		this.set("currentSession", currentSession);
-		return await this.setCurrentAgenda();
-	},
-
-	async setCurrentAgenda() {
-		let agendas = await this.get('currentSession.agendas');
-		this.set('selectedAgenda', agendas.get('firstObject'));
-		let agendaID = this.get('selectedAgenda.id');
-		this.set('selectedAgendaItems', this.store.findRecord('agendaitem', agendaID , {
-			filter: {
-				include:"comments"
-		}}))
-	},
-
-	didInsertElement: async function () {
-		this._super(...arguments);
-		return await this.setCurrentAgenda();
-	},
-
 	actions: {
-		async chooseSession(session) {
-			return await this.chooseSession(session);
+		chooseSession(session) {
+			this.chooseSession(session);
+		},
+
+		async createAgendaItem(agenda) {
+			let agendaItem = {
+				priority: 2,
+				orderAdded: 3,
+				extended: true,
+				dateAdded: new Date().toISOString(),
+				agenda: agenda
+			};
+
+			let item = this.store.createRecord('agendaitem', agendaItem);
+			await item.save();
 		},
 
 		resetValue(param) {
@@ -63,17 +54,8 @@ export default Component.extend({
 			this.set('creatingNewSession', true);
 		},
 
-		async createAgendaItem(agenda) {
-			let agendaItem = {
-				priority: 2,
-				orderAdded: 3,
-				extended: true,
-				dateAdded: new Date().toISOString(),
-				agenda: agenda
-			};
-
-			let item = this.store.createRecord('agendaitem', agendaItem);
-			await item.save();
+		addSubCasesToAgenda() {
+			this.set('addingSubCasesToAgenda', true);
 		}
 	}
 });

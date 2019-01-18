@@ -1,0 +1,29 @@
+<div class="side--menu-container">
+  <div class="title-container">
+    <strong>
+      Historiek
+    </strong>
+    <button>
+      Vergelijk agendas
+    </button>
+  </div>
+  <div class="side--menu--content-container">
+    {{#each model as |agenda|}}
+      <span>
+        <a>
+          {{agenda.name}}
+        </a>
+      </span>
+      <div class="menu-item-active-border"></div>
+    {{/each}}
+    <span>
+      <a>
+        testagenda
+      </a>
+    </span>
+    <div class="menu-item-active-border"></div>
+  </div>
+</div>
+<div>
+  {{outlet}}
+</div>
