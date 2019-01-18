@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | subcases/subcase-overview', function(hooks) {
+module('Integration | Component | agenda/agendaitem-search', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{subcases/subcase-overview}}`);
+    await render(hbs`{{agenda/agendaitem-search}}`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      {{#subcases/subcase-overview}}
+      {{#agenda/agendaitem-search}}
         template block text
-      {{/subcases/subcase-overview}}
+      {{/agenda/agendaitem-search}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

@@ -31,6 +31,7 @@
     "ember-cli-htmlbars-inline-precompile": "^1.0.3",
     "ember-cli-inject-live-reload": "^1.8.2",
     "ember-cli-moment-shim": "^3.7.1",
+    "ember-cli-shims": "^1.2.0",
     "ember-cli-sass": "^8.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-template-lint": "^1.0.0-beta.1",
@@ -52,7 +53,14 @@
     "eslint-plugin-ember": "^5.2.0",
     "loader.js": "^4.7.0",
     "qunit-dom": "^0.8.0",
-    "sass": "^1.15.2"
+    "sass": "^1.15.2",
+    "ember-rdfa-helpers": "^0.2.1",
+    "@lblod/ember-vo-webuniversum": "^0.19.3",
+    "@lblod/ember-vo-webuniversum-data-table": "^0.2.10",
+    "ember-changeset": "^1.6.0",
+    "ember-datetimepicker": "^3.0.0",
+    "ember-mu-application-generator": "git+https://github.com/mu-semtech/ember-mu-application-generator.git",
+    "jquery-datetimepicker": "^2.5.20"
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"

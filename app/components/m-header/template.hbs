@@ -9,7 +9,7 @@
     <ul>
       <li>
         {{#link-to "cases" }}
-          <span>DOSSIERS</span>
+          <span>Dossiers</span>
           <div class="menu-item-active-border"/>
         {{/link-to}}
       </li>
@@ -19,16 +19,22 @@
           <div class="menu-item-active-border"/>
         {{/link-to}}
       </li>
-      <li>{{#link-to "settings"}}<img src="/assets/setting.svg" alt="Settings">{{/link-to}}</li>
       <li>
-        <div class="menu--notifications">
+        {{#link-to "settings"}}
+        <span>Settings</span>
+        <div class="menu-item-active-border"/>
+        {{!-- <img src="/assets/setting.svg" alt="Settings"> --}}
+        {{/link-to}}
+        </li>
+      <li>
+        {{!-- <div class="menu--notifications">
         <img src="/assets/notification.svg" alt="Notifications">
         {{#if true}}
           <span>5</span>
           {{else}}
           <span>0</span>
         {{/if}}
-        </div>
+        </div> --}}
       </li>
     </ul>
   </div>

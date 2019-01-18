@@ -1,29 +1,29 @@
 <div class="side--menu-container">
   <div class="title-container">
     <strong>
+      {{fa-icon "history"}}
       Historiek
     </strong>
     <button>
+      {{fa-icon "arrows-alt"}}
       Vergelijk agendas
     </button>
   </div>
   <div class="side--menu--content-container">
     {{#each model as |agenda|}}
-      <span>
-        <a>
+      {{#link-to "sessions.session.agendas.agenda" agenda.id}}
+        <p>
           {{agenda.name}}
-        </a>
-      </span>
-      <div class="menu-item-active-border"></div>
+        </p>
+        {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
+        <div class="menu-item-active-border"></div>
+      {{/link-to}}
     {{/each}}
-    <span>
-      <a>
-        testagenda
-      </a>
-    </span>
-    <div class="menu-item-active-border"></div>
   </div>
 </div>
-<div>
-  {{outlet}}
+<div class="agenda-items-container">
+    {{agenda/agendaitem-search selectedAgenda=model navigateToSubCases=(action "navigateToSubCases")}}
+  <div>
+    {{outlet}}
+  </div>
 </div>
