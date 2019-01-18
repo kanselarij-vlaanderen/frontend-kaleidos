@@ -1,4 +1,3 @@
-@import 'ember-data-table';
 @import "ember-power-select";
 html, body {margin: 0; height: 100%; overflow: hidden}
 
@@ -130,6 +129,33 @@ menu {
       font-weight: bold;
     }
 
+  }
+}
+
+.agenda-navigation-banner {
+  width:50%;
+  float:left;
+}
+
+.table-container {
+  width:50%;
+  float:right;
+
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    width:25%;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
   }
 }
 
@@ -770,6 +796,28 @@ button {
   }
 }
 
+.cases--subcase {
+
+  padding: 25px;
+
+  .cases--subcase-header {
+
+    h4 {
+      color: #999;
+      margin: 0;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 0;
+
+      font-size: 1.3em;
+    }
+
+  }
+
+}
+
 .side--menu-container {
   display:block;
   width:250px;
@@ -812,7 +860,7 @@ button {
       border: 2px solid var(--blue);
     }
   }
-  
+
   .side--menu--content-container {
       height:100%;
       width: 250px;

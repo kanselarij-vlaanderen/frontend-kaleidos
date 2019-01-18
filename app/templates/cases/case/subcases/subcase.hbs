@@ -1,0 +1,34 @@
+<div class="cases--subcase">
+
+{{#if model}}
+
+  <div class="cases--subcase-header">
+    <h4>DEELDOSSIER</h4>
+    <h1>{{model.title}}</h1>
+
+    {{#if session}}
+      {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
+    {{else}}
+
+      {{#power-select
+        options=sessions
+        class="cases--new-item-input"
+        selected=session
+        searchField="plannedstart"
+        search=(perform searchSession)
+        oninput=(action "resetValue")
+        onchange=(action "chooseSession") as |session|
+      }}
+        {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
+      {{/power-select}}
+
+
+    {{/if}}
+
+  </div>
+
+{{else}}
+    <p>Er is iets misgelopen..</p>
+{{/if}}
+
+</div>

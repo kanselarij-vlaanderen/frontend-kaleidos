@@ -12,10 +12,11 @@ Router.map(function() {
     this.route('case', { path: ':id' }, function ()  {
       this.route('subcases', { path: '/deeldossiers' }, function() {
         this.route('create');
-        this.route('overview');
+        this.route('overview', { path: '' });
+        this.route('subcase', { path: ':id' });
       });
     });
-    this.route('overview', { path: '/' });
+    this.route('overview', { path: '' });
   });
   this.route('home', { path: "/" });
   this.route('settings');

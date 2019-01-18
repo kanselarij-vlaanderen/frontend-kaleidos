@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-  redirect() {
-    this.transitionTo('cases.case.subcases.overview');
+  model(params) {
+    return this.store.findRecord('subcase', params.id);
   }
 });
