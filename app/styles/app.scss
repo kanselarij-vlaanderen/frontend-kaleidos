@@ -797,3 +797,26 @@ button {
 
   }
 }
+
+.cases--subcase {
+
+  padding: 25px;
+
+  .cases--subcase-header {
+
+    h4 {
+      color: #999;
+      margin: 0;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 0;
+
+      font-size: 1.3em;
+    }
+
+  }
+
+}
+

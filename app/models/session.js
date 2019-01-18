@@ -7,5 +7,6 @@ export default Model.extend({
 	startedAtTime: attr("date"),
 	endedAtTime: attr('date'),
 	number: attr('number'),
-	agendas: hasMany('agenda')
+	agendas: hasMany('agenda'),
+	subcases: hasMany('subcase')
 });
