@@ -7,14 +7,22 @@ export default Controller.extend({
   addingSubCasesToAgenda: false,
   creatingNewSession: false,
 
-  currentSession: computed('model', function() {
+  currentSession: computed('model', function () {
     let session = this.model.get('firstObject');
     return session;
   }),
 
   actions: {
     cancelNewSessionForm() {
+      let date = new Date();
+      date.setHours(0, 0, 0, 0);
       this.set('creatingNewSession', false);
+
+      this.set('model', this.store.query('session', {
+        filter: {
+          ':gte:plannedstart': date.toISOString()
+        }
+      }))
     },
 
     chooseSession(session) {

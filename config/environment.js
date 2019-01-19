@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   let ENV = {
+    
     modulePrefix: 'fe-redpencil',
     environment,
     rootURL: '/',
@@ -24,6 +25,12 @@ module.exports = function(environment) {
 
     moment: {
       includeLocales: ['nl', 'be']
+    },
+
+    fontawesome: {
+      icons: {
+        'free-solid-svg-icons': 'all'
+      }
     }
   };
 

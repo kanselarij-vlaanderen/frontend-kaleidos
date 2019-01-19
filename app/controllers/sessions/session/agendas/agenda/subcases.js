@@ -21,6 +21,10 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 			this.set('allSubCasesSelected', !allSelected);
 		},
 
+		navigateBackToAgenda() {
+			this.transitionToRoute('sessions.session.agendas.agenda.agendaitems');
+		},
+
 		async addSubcasesToAgenda() {
 			let selectedAgenda = this.get('selectedAgenda');
 			this.get('model').forEach(subCase => {

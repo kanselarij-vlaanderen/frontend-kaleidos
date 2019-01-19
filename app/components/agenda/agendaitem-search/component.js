@@ -6,7 +6,6 @@ export default Component.extend({
 	tagName:'div',
 	classNames: ['agendaitem-search'],
 	store: inject(),
-	addingAgendaItems: false,
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);

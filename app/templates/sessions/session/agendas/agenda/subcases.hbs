@@ -1,4 +1,4 @@
-<div class="data-table-container" >
+<div class="data-table-container">
   {{#data-table
     content=model
     fields="title shortTitle"
@@ -6,20 +6,26 @@
     filter=filter
     page=page
     size=size
-    sort=sort 
-    onClickRow=(action "selectSubCase")
-    as |t|
+    sort=sort
+    onClickRow=(action "selectSubCase") as |t|
   }}
     {{#t.content as |c|}}
       {{#c.header}}
-        <th>{{input type="checkbox" checked=allSubCasesSelected click=(action "selectAllSubCases")}} Select all</th>
+        <th>
+          {{input
+            type="checkbox"
+            checked=allSubCasesSelected
+            click=(action "selectAllSubCases")
+          }}
+          Select all
+        </th>
         {{th-sortable field="title" currentSorting=sort label="Title"}}
         {{th-sortable field="shortTitle" currentSorting=sort label="Short title"
         }}
       {{/c.header}}
       {{#c.body as |subCase|}}
         <td>
-            <input type="checkbox" checked={{subCase.selected}}>
+          <input type="checkbox" checked={{subCase.selected}} />
         </td>
         <td>
           {{subCase.title}}
@@ -31,8 +37,10 @@
     {{/t.content}}
   {{/data-table}}
 </div>
-
 {{#ember-wormhole to="agendaitems-control-container"}}
+  <button class="invert-color" {{action "navigateBackToAgenda"}}>
+    {{fa-icon "arrow-left"}} terug naar agenda
+  </button>
   <button class="invert-color" {{action "addSubcasesToAgenda"}}>
     Toevoegen aan agenda
   </button>

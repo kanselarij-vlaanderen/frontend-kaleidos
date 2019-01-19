@@ -40,11 +40,11 @@ export default Component.extend({
 
 		resetValue(param) {
 			if (param == "") {
-				this.set('sessions',  this.store.query('session',{ query: {
+				this.set('sessions', this.store.query('session', {
 					filter: {
 						':gte:plannedstart': new Date().toISOString()
 					}
-				}}));
+				}));
 			}
 		},
 
