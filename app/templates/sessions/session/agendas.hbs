@@ -1,28 +1,40 @@
-<div class="side--menu-container">
-  <div class="title-container">
-    <strong>
-      {{fa-icon "history"}}
-      Historiek
-    </strong>
-    <button>
-      {{fa-icon "arrows-alt"}}
-      Vergelijk agendas
-    </button>
+{{#if agendaMenuOpened}}
+  <div class="side--menu-container">
+    <div class="side-menu-collapse" onclick={{action "collapseSideMenu"}}>
+      {{fa-icon "chevron-left" size="lg"}}
+    </div>
+    <div class="title-container">
+      <strong>
+        {{fa-icon "history"}}
+        Historiek
+      </strong>
+      <button {{action "compareAgendas"}}>
+        {{fa-icon "arrows-alt"}}
+        Vergelijk agendas
+      </button>
+    </div>
+    <div class="side--menu--content-container">
+      {{#each model as |agenda|}}
+        {{#link-to "sessions.session.agendas.agenda" agenda.id}}
+          <p>
+            {{agenda.name}}
+          </p>
+          {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
+          <div class="menu-item-active-border"></div>
+        {{/link-to}}
+      {{/each}}
+    </div>
   </div>
-  <div class="side--menu--content-container">
-    {{#each model as |agenda|}}
-      {{#link-to "sessions.session.agendas.agenda" agenda.id}}
-        <p>
-          {{agenda.name}}
-        </p>
-        {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
-        <div class="menu-item-active-border"></div>
-      {{/link-to}}
-    {{/each}}
+{{else}}
+  <div onclick={{action "collapseSideMenu"}}>
+    {{fa-icon "chevron-right"}}
   </div>
-</div>
+{{/if}}
 <div class="agenda-items-container">
-    {{agenda/agendaitem-search selectedAgenda=model navigateToSubCases=(action "navigateToSubCases")}}
+  {{agenda/agendaitem-search
+    selectedAgenda=model
+    navigateToSubCases=(action "navigateToSubCases")
+  }}
   <div>
     {{outlet}}
   </div>

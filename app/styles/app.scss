@@ -856,7 +856,7 @@ button {
         color: var(--blue);
         margin-right: 0.1em;
       }
-      
+
       background-color: var(--white-back); 
       color: var(--blue);
       border: 2px solid var(--blue);
@@ -956,4 +956,9 @@ button.invert-color {
 .data-table-container {
   float:left;
   width:100%;
+}
+
+.side-menu-collapse {
+  text-align: right;
+  color: var(--blue);
 }
