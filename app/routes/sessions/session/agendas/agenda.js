@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-	model() {
-		let agendas = this.modelFor('sessions.session.agendas');
-		return agendas.get('firstObject');
+	model(params) {
+		let agenda = this.store.findRecord('agenda', params.agendaid);
+		return agenda;
 	},
 	redirect() {
 		this.transitionTo('sessions.session.agendas.agenda.agendaitems');

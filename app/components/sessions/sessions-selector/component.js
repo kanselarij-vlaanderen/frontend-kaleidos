@@ -25,18 +25,14 @@ export default Component.extend({
 			this.chooseSession(session);
 		},
 
-		// async createAgendaItem(agenda) {
-		// 	let agendaItem = {
-		// 		priority: 2,
-		// 		orderAdded: 3,
-		// 		extended: true,
-		// 		dateAdded: new Date().toISOString(),
-		// 		agenda: agenda
-		// 	};
-
-		// 	let item = this.store.createRecord('agendaitem', agendaItem);
-		// 	await item.save();
-		// },
+		async addAgendaToSession(currentSession) {
+			let agendaLength = currentSession.agendas.length;
+			let agenda = this.store.createRecord('agenda', {
+				name: "Ontwerp agenda " + (agendaLength + 1),
+				session: currentSession
+			})
+			await	agenda.save();
+		},
 
 		resetValue(param) {
 			if (param == "") {
@@ -51,9 +47,5 @@ export default Component.extend({
 		createNewSession() {
 			this.set('creatingNewSession', true);
 		},
-
-		// addSubCasesToAgenda() {
-		// 	this.set('addingSubCasesToAgenda', true);
-		// }
 	}
 });

@@ -15,7 +15,7 @@
     </div>
     <div class="side--menu--content-container">
       {{#each model as |agenda|}}
-        {{#link-to "sessions.session.agendas.agenda" agenda.id}}
+        {{#link-to "sessions.session.agendas.agenda.agendaitems" agenda.id}}
           <p>
             {{agenda.name}}
           </p>

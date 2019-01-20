@@ -11,6 +11,7 @@ export default Controller.extend({
 		compareAgendas() {
 			
 		},
+		
 		collapseSideMenu() {
 			this.set('agendaMenuOpened', !this.get('agendaMenuOpened'));
 		}
