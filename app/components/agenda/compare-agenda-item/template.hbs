@@ -1,0 +1,19 @@
+{{#if classType}}
+  <div class={{classType}}>
+    <h4>
+      {{model.subcase.title}}
+    </h4>
+    <p>
+      {{model.subcase.shortTitle}}
+    </p>
+  </div>
+{{else}}
+  <div class="normal-agenda-item">
+    <h4>
+      {{model.subcase.title}}
+    </h4>
+    <p>
+      {{model.subcase.shortTitle}}
+    </p>
+  </div>
+{{/if}}
