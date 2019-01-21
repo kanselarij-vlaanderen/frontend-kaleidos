@@ -1,4 +1,6 @@
-<div>
-  {{agenda/compare-agenda-item agendas=(await model.agendas) currentAgenda=firstAgenda}}
-  {{agenda/compare-agenda-item agendas=(await model.agendas) currentAgenda=secondAgenda}}
+<div class="compare-agenda-container">
+  {{agenda/compare-agenda agendas=(await model.agendas) currentAgenda=firstAgenda}}
+</div>
+<div class="compare-agenda-container">
+  {{agenda/compare-agenda agendas=(await model.agendas) currentAgenda=secondAgenda agendaToCompare=firstAgenda}}
 </div>

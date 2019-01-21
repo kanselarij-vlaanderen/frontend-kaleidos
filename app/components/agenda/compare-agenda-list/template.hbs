@@ -1,0 +1,13 @@
+{{#if (and agendaToCompare currentAgenda)}}
+	{{#each agendaToCompareAgendaItems as |agendaitem|}}
+		compare: {{agendaitem.id}}
+	{{/each}}
+
+	{{#each currentAgendaItems as |agendaItem|}}
+		currentAgenda: {{agendaItem.id}}
+	{{/each}}
+
+	{{#each comparedItems as |item|}}
+		{{item.name}} {{item.comparisonType}}
+	{{/each}}
+{{/if}}

@@ -964,7 +964,7 @@ button.invert-color {
 }
 
 .agenda--search {
-  width:50%;
+  width:100%;
   float:left;
   display:flex;
   justify-content: center;
@@ -972,16 +972,21 @@ button.invert-color {
   padding:1em;
 
   .ember-power-select-trigger {
-    width: 50%;
   }
 }
 
-.compare-agenda-item-container{
+.compare-agenda-container {
+  float:left;
+  padding:1em;
   width:50%;
+}
+
+.compare-agendaitem-container {
+  width:100%;
   float:left;
 
   .cases--content-tile {
-    width:50%;
+    width:100%;
     float:left;
   }
 }
