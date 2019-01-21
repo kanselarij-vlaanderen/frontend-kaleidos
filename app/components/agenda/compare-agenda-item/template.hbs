@@ -1,0 +1,4 @@
+{{agenda/agenda-search agendas=(await agendas) currentAgenda=currentAgenda}}
+<div class="compare-agendaitem-container">
+{{agenda/agenda-item model=(await currentAgenda.agendaitems)}}
+</div>

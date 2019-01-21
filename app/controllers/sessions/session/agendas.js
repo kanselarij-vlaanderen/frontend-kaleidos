@@ -9,9 +9,9 @@ export default Controller.extend({
 		},
 
 		compareAgendas() {
-			
+			this.transitionToRoute('sessions.session.comparison');
 		},
-		
+
 		collapseSideMenu() {
 			this.set('agendaMenuOpened', !this.get('agendaMenuOpened'));
 		}

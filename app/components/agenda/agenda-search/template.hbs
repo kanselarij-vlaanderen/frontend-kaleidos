@@ -1,0 +1,11 @@
+{{#power-select
+  placeholder="agenda name"
+  selected=currentAgenda
+	options=agendas
+  searchField="name"
+  onchange=(action "chooseAgenda") as |agenda|
+}}
+  <strong>
+    {{agenda.name}}
+  </strong>
+{{/power-select}}

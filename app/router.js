@@ -28,6 +28,7 @@ Router.map(function() {
           this.route('subcases');
         });
       });
+      this.route('comparison');
     });
   });
 });

@@ -962,3 +962,26 @@ button.invert-color {
   text-align: right;
   color: var(--blue);
 }
+
+.agenda--search {
+  width:50%;
+  float:left;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding:1em;
+
+  .ember-power-select-trigger {
+    width: 50%;
+  }
+}
+
+.compare-agenda-item-container{
+  width:50%;
+  float:left;
+
+  .cases--content-tile {
+    width:50%;
+    float:left;
+  }
+}
