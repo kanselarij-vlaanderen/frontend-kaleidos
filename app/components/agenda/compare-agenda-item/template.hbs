@@ -1,19 +1,12 @@
-{{#if classType}}
-  <div class={{classType}}>
-    <h4>
-      {{model.subcase.title}}
-    </h4>
-    <p>
-      {{model.subcase.shortTitle}}
-    </p>
-  </div>
-{{else}}
-  <div class="normal-agenda-item">
-    <h4>
-      {{model.subcase.title}}
-    </h4>
-    <p>
-      {{model.subcase.shortTitle}}
-    </p>
-  </div>
-{{/if}}
+<div class="previous-agenda-item">
+	previous
+  {{changedSet.previous.id}}
+  {{changedSet.previous.subcase.id}}
+  {{changedSet.previous.subcase.title}}
+</div>
+<div class="current-agenda-item">
+	current
+  {{changedSet.current.id}}
+  {{changedSet.current.subcase.id}}
+  {{changedSet.current.subcase.title}}
+</div>

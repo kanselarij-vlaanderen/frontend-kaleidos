@@ -5,7 +5,8 @@ export default Route.extend({
 		let session = this.modelFor('sessions.session');
 		return session.get('agendas');
 	},
+	
 	redirect(model) {
-			this.transitionTo('sessions.session.agendas.agenda', model.get('firstObject').id);
+			this.transitionTo('sessions.session.agendas.agenda', model.get('lastObject').id);
 	}
 });

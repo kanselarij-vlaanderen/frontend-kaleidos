@@ -963,7 +963,7 @@ button.invert-color {
 }
 
 .agenda--search {
-  width:100%;
+  width:50%;
   float:left;
   display:flex;
   justify-content: center;
@@ -971,7 +971,7 @@ button.invert-color {
   padding:1em;
 
   .ember-power-select-trigger {
-    width:75%;
+    width:45%;
   }
 }
 
@@ -979,17 +979,6 @@ button.invert-color {
   float:left;
   padding:1em;
   width:50%;
-}
-
-.compare-agendaitem-container {
-  width:100%;
-  float:left;
-
-  .agenda-item-compare {
-    height:100px;
-    padding:1em;
-    border: 1px grey solid;
-  }
 }
 
 .deleted {
@@ -1006,4 +995,16 @@ button.invert-color {
 
 .added {
   background-color: green,
+}
+
+.previous-agenda-item {
+  float:left;
+  height:100px;
+  width:50%;
+}
+
+.current-agenda-item {
+  float:left;
+  height:100px;
+  width:50%;
 }

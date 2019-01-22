@@ -1,9 +1,5 @@
-{{#if (and agendaToCompare currentAgenda)}}
-    {{#each comparedItems as |item|}}
-			{{agenda/compare-agenda-item model=item classType=item.comparisonType}}
-    {{/each}}
-{{else}}
-    {{#each currentAgendaItems as |agendaItem|}}
-			{{agenda/compare-agenda-item model=agendaItem}}
-    {{/each}}
-{{/if}}
+{{currentAgenda.id}} - {{agendaToCompare.id}}
+
+{{#each changedItems as |changedSet|}}
+	{{agenda/compare-agenda-item changedSet=changedSet}}
+{{/each}}
