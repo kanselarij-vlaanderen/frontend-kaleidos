@@ -33,6 +33,13 @@ export default Component.extend({
 				.then(async foundItem => {
 					await foundItem.destroyRecord();
 				});
-		}
+		},
+
+    toggleShowMore(agendaitem) {
+      if(agendaitem.showDetails){
+        agendaitem.save();
+      }
+      agendaitem.toggleProperty("showDetails");
+    }
 	}
 });

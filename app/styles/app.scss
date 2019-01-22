@@ -146,14 +146,14 @@ menu {
     border-collapse: collapse;
     width: 100%;
   }
-  
+
   td, th {
     width:25%;
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
   }
-  
+
   tr:nth-child(even) {
     background-color: #dddddd;
   }
@@ -311,7 +311,6 @@ menu {
 
 .cases--decree {
   padding: 25px;
-  display: flex;
   justify-content: space-between;
   color: #212121;
   text-decoration: none;
@@ -321,7 +320,10 @@ menu {
     background-color: var(--white-back);
     color: #fff;
   }
-
+  .cases--decree-head  {
+    display: flex;
+    justify-content: space-between;
+  }
   .cases--decree-content {
 
     display: flex;
@@ -429,7 +431,7 @@ menu {
 
     }
 
-    
+
     label {
       font-size:2em;
       display:flex;
@@ -555,7 +557,7 @@ button {
 
     padding: 1.5em;
     flex: 1;
-    
+
     .ember-power-select-trigger {
       width:100%;
     }
@@ -643,7 +645,7 @@ button {
 
   .session-title-container {
     width: 30%;
-   
+
     float:left;
     display:block;
   }
@@ -820,7 +822,7 @@ button {
   width:250px;
   height:100vh;
   float:left;
-  background-color: var(--white-back) ; 
+  background-color: var(--white-back) ;
   border:1px solid var(--light-grey);
   border-top:none;
 
@@ -838,7 +840,7 @@ button {
       display:flex;
       justify-content: center;
       align-items:center;
-      
+
       i {
         margin-right: 0.5em;
       }
@@ -857,7 +859,7 @@ button {
         margin-right: 0.1em;
       }
 
-      background-color: var(--white-back); 
+      background-color: var(--white-back);
       color: var(--blue);
       border: 2px solid var(--blue);
     }
@@ -866,10 +868,10 @@ button {
   .side--menu--content-container {
       height:100%;
       width: 250px;
-      top: 0; 
+      top: 0;
       left: 0;
       overflow-x: hidden;
-  
+
 
     a {
       display:flex;
@@ -880,7 +882,7 @@ button {
       text-decoration: none;
       display: block;
       border:0px 1px 1px 0px solid var(--light-grey);
-      
+
       p {
         margin:0;
         padding-bottom:0.5em;
@@ -888,7 +890,7 @@ button {
         font-size:1.5em;
       }
     }
-    
+
      a:hover {
       background-color: #f1f1f1;
     }
@@ -942,7 +944,7 @@ button.invert-color {
   float:left;
   padding:2em;
   width: calc(100% - 250px - 4px);
-  height:100vh;
+  height: calc(100vh - 222px);
 
   .no-data-container {
     margin: 0 auto;
@@ -983,5 +985,20 @@ button.invert-color {
   .cases--content-tile {
     width:50%;
     float:left;
+  }
+}
+
+.properties {
+  .label {
+    font-size: 0.8em;
+  }
+
+  textarea, input {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .x-toggle-component {
+    justify-content: left;
   }
 }

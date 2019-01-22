@@ -1,0 +1,41 @@
+<form autocomplete="off" class="edit-news-item-form">
+  <div class="properties">
+    <div class="property">
+      <div class="label">
+        Titel
+      </div>
+      {{input value=newsItem.title}}
+    </div>
+    <div class="property">
+      <div class="label">
+        Ondertitel
+      </div>
+      {{input value=newsItem.subtitle autocomplete="off"}}
+    </div>
+    <div class="property">
+      <div class="label">
+        Inhoud
+      </div>
+      {{textarea value=newsItem.content}}
+    </div>
+    <div class="property">
+      <div class="label">
+        Datum van publicatie
+      </div>
+      {{pikaday-input
+        theme="pikaday-session"
+        useUTC=true
+        value=newsItem.publicationDate
+        onSelection=(action "updatePublicationDate")
+      }}
+    </div>
+    <div class="property">
+      <div class="label">
+        Themas
+      </div>
+      {{utils/theme-list chooseTheme=(action "chooseTheme") selectedThemes=newsItem.themes}}
+    </div>
+  </div>
+</form>
+
+{{yield}}
