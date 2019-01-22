@@ -5,7 +5,10 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 	allSubCasesSelected: false,
 
 	actions: {
-		selectSubCase(subcase) {
+		selectSubCase(subcase, event) {
+      if(event){
+        event.stopPropagation();
+      }
 			if (subcase.selected) {
 				subcase.set('selected', false);
 			} else {
@@ -31,7 +34,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 				if (subCase.selected) {
 					// Selected property added to show in the view
 					// Removed cause it should not be send to the backend
-					delete subCase.selected; 
+					delete subCase.selected;
 					let agendaitem = this.store.createRecord('agendaitem', {
 						extended: false,
 						dateAdded: new Date(),

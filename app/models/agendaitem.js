@@ -7,7 +7,26 @@ export default Model.extend({
 	orderAdded: attr('number'),
 	extended: attr('boolean'),
 	dateAdded: attr('date'),
+  record: attr('string'),
+  formallyOk: attr('boolean'),
+  forPress: attr('boolean'),
 	agenda: belongsTo('agenda'),
 	comments: hasMany('comment'),
-	subcase: belongsTo('subcase')
+	subcase: belongsTo('subcase'),
+  decision: belongsTo('decision'),
+  newsItem: belongsTo('news-item'),
+
+  save: async function(){
+    let news = await this.get('newsItem');
+    if(news) {
+      news = await news.save();
+      this.set('newsItem', news);
+    }
+    let decision = await this.get('decision');
+    if(decision) {
+      decision = await decision.save();
+      this.set('decision', decision);
+    }
+    return this._super(...arguments);
+  }
 });
