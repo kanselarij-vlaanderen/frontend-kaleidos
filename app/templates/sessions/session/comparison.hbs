@@ -1,7 +1,14 @@
-{{agenda/agenda-search agendas=(await model.agendas) currentAgenda=currentAgenda}}
-{{agenda/agenda-search agendas=(await model.agendas) currentAgenda=agendaToCompare}}
-
+<div class="side-nav-small">
+	<div class="title-container">
+		Agendas
+	</div>
+	{{#each (await model) as |agenda|}}
+	<button {{action "selectAgenda" agenda}}>{{agenda.name}}</button>
+	{{/each}}
+</div>
+<div class="comparison-container">
 {{agenda/compare-agenda-list
   currentAgenda=currentAgenda
   agendaToCompare=agendaToCompare
 }}
+</div>

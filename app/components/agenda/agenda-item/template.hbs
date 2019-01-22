@@ -12,12 +12,13 @@
       tagName="div"
     }}
       <h4>
-        {{agendaitem.priority}}
-        . uitgesteld:
-        {{agendaitem.extended}}
+        {{agendaitem.subcase.shortTitle}}
       </h4>
+      <p>{{agendaitem.subcase.title}}</p>
       <div class="cases--decree-content-label">
-        minister-president van de vlaamse regering
+        {{#if agendaitem.extended}}
+        <p>uitgesteld</p>
+        {{/if}}
       </div>
       <div class="cases--decree-content-expand">
         <span>

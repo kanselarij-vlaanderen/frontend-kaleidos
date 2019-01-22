@@ -45,5 +45,5 @@ export default Component.extend({
 		return Object.keys(subcaseLookup).map((key) => {
 			return subcaseLookup[key];
 		});
-	})
+	}),
 })

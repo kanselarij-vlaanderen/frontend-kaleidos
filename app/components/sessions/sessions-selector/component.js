@@ -2,6 +2,8 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 
+const alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+
 export default Component.extend({
 	store: inject(),
 	classNames: ["files--header-tile", "files--search"],
@@ -28,7 +30,7 @@ export default Component.extend({
 		async addAgendaToSession(currentSession) {
 			let agendaLength = currentSession.agendas.length;
 			let agenda = this.store.createRecord('agenda', {
-				name: "Ontwerp agenda " + (agendaLength + 1),
+				name: "Ontwerpagenda " + alphabet[agendaLength].toUpperCase(),
 				session: currentSession
 			})
 			await	agenda.save();
