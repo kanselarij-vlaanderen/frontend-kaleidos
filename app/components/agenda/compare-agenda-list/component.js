@@ -1,13 +1,14 @@
 import Component from '@ember/component';
 import { observer, computed } from '@ember/object';
 import { inject } from '@ember/service';
+import { on } from '@ember/object/evented';
 
 export default Component.extend({
 	store: inject(),
 	agendaToCompare: null,
 	currentAgenda: null,
 
-	currentAgendaItemsObserver: observer('currentAgenda', async function () {
+	currentAgendaItemsObserver: on('init', observer('currentAgenda', async function () {
 		let agendaItems = await this.store.query('agendaitem', {
 			filter: {
 				'agenda': { id: this.currentAgenda.id }
@@ -16,9 +17,9 @@ export default Component.extend({
 		});
 
 		this.set('currentAgendaItems', agendaItems);
-	}),
+	})),
 
-	agendaToCompareAgendaItemsObserver: observer('agendaToCompare', async function () {
+	agendaToCompareAgendaItemsObserver: on('init', observer('agendaToCompare', async function () {
 		let agendaItems = await this.store.query('agendaitem', {
 			filter: {
 				'agenda': { id: this.agendaToCompare.id }
@@ -26,7 +27,7 @@ export default Component.extend({
 			include: 'subcase'
 		})
 		this.set('agendaToCompareAgendaItems', agendaItems);
-	}),
+	})),
 
 	changedItems: computed('currentAgendaItems.@each', 'agendaToCompareAgendaItems.@each', function () {
 		let subcaseLookup = {};
