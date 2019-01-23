@@ -15,7 +15,9 @@ export default Route.extend({
 
 	afterModel(model) {
 		let session = model.get('firstObject');
+		if(session && session.id) {
 		this.transitionTo('sessions.session', session.id);
+		}
 	}
 
 });

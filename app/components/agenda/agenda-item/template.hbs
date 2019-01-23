@@ -5,53 +5,62 @@
 {{/if}}
 {{#each model as |agendaitem|}}
   <div class="cases--decree">
-    {{#link-to
-      "cases.case"
-      agendaitem.id
-      class="cases--decree-content"
-      tagName="div"
-    }}
-      <h4>
+    <div class="cases--decree-head">
+      {{#link-to
+        "cases.case"
+        agendaitem.id
+        class="cases--decree-content"
+        tagName="div"
+      }}
+        <h4>
         {{agendaitem.subcase.shortTitle}}
       </h4>
       <p>{{agendaitem.subcase.title}}</p>
-      <div class="cases--decree-content-label">
-        {{#if agendaitem.extended}}
+        <div class="cases--decree-content-label">
+          {{#if agendaitem.extended}}
         <p>uitgesteld</p>
-        {{/if}}
-      </div>
-      <div class="cases--decree-content-expand">
-        <span>
-          meer weergeven
+        {{/if}}        
+        </div>
+        <div class="cases--decree-content-expand">
+          <span {{action "toggleShowMore" agendaitem bubbles=false}}>
+          {{#if agendaitem.showDetails}}
+            v minder weergeven
+          {{else}}
+            > meer weergeven
+          {{/if}}
         </span>
-      </div>
-    {{/link-to}}
-    <div class="cases--decree-options">
-      <div class="settings-container">
-        <div>
+        </div>
+      {{/link-to}}
+      <div class="cases--decree-options">
+        <div class="settings-container">
+          <div>
           <span>
             decreet
           </span>
+          </div>
+          <div
+            class="cases--decree-options-settings"
+            onclick={{action "showOptions" agendaitem}}
+          >
+            <img src="/assets/setting.svg" alt="Settings" />
+          </div>
         </div>
-        <div
-          class="cases--decree-options-settings"
-          onclick={{action "showOptions" agendaitem}}
-        >
-          <img src="/assets/setting.svg" alt="Settings" />
-        </div>
-      </div>
-      {{#if (not-eq agendaitemToShowOptionsFor.id agendaitem.id)}}
+        {{#if (not-eq agendaitemToShowOptionsFor.id agendaitem.id)}}
 
-      {{else}}
-        <div class="buttons">
-          <button {{action "changeExtendedValue" agendaitem}}>
-            {{extend-button-text agendaitem.extended}}
-          </button>
-          <button {{action "deleteItem" agendaitem}}>
-            Verwijderen
-          </button>
-        </div>
-      {{/if}}
+        {{else}}
+          <div class="buttons">
+            <button {{action "changeExtendedValue" agendaitem}}>
+              {{extend-button-text agendaitem.extended}}
+            </button>
+            <button {{action "deleteItem" agendaitem}}>
+              Verwijderen
+            </button>
+          </div>
+        {{/if}}
+      </div>
     </div>
+    {{#if agendaitem.showDetails}}
+      {{agenda/agendaitem-details agendaitem=agendaitem}}
+    {{/if}}
   </div>
 {{/each}}

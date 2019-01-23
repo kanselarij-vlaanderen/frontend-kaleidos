@@ -1,0 +1,17 @@
+<div class="properties">
+  <div class="property">
+    <div class="label">
+      Goedgekeurd
+    </div>
+    {{x-toggle value=decision.approved
+               onToggle=(action (mut decision.approved))}}
+  </div>
+  <div class="property">
+    <div class="label">
+      Tekst beslissing
+    </div>
+    {{textarea value=decision.text}}
+  </div>
+</div>
+
+{{yield}}

@@ -30,6 +30,13 @@ export default Component.extend({
 
 		async deleteItem(agendaitem) {
 			await agendaitem.destroyRecord();
+		},
+
+		toggleShowMore(agendaitem) {
+			if (agendaitem.showDetails) {
+				agendaitem.save();
+			}
+			agendaitem.toggleProperty("showDetails");
 		}
 	}
 });
