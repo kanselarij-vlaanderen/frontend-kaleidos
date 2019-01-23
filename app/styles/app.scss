@@ -168,9 +168,10 @@ menu {
     border-bottom: 1px solid var(--light-grey);
     padding: 1.5em;
     flex: 1;
+    height:100px;
 
     &:first-child {
-      border-right: 1px solid var(--light-grey);
+      // border-right: 1px solid var(--light-grey);
     }
   }
 
@@ -285,6 +286,20 @@ menu {
 .cases--content-50 {
   flex: 1;
   border-right: 1px solid var(--white-back);
+  .cases--decree--container {
+    .cases--decree {
+      width:100%;
+      display:flex;
+
+      .cases--decree-content {
+        width:75%
+      }
+
+      .cases--decree-options {
+        width:25%;
+      }
+    }
+  }
 }
 
 .cases--sub-file-header {

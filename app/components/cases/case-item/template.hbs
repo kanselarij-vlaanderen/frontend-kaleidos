@@ -1,4 +1,5 @@
 {{#each model as |case|}}
+<div class="cases--decree--container">
 	{{#link-to "cases.case" case.id class="cases--decree"}}
 		<div class="cases--decree-content">
 			<h4>1. {{case.title}}</h4>
@@ -17,4 +18,5 @@
 			</div>
 		</div>
 	{{/link-to}}
+</div>
 {{/each}}
