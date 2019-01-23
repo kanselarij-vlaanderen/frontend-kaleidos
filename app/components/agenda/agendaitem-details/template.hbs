@@ -25,7 +25,7 @@
     {{decision/edit-decision decision=agendaitem.decision}}
   {{else}}
     Nog geen beslissing.
-    <button class="add-item" {{action "addDecision"}}>voeg beslissing toe</button>
+    <button class="invert-color" {{action "addDecision"}}>voeg beslissing toe</button>
   {{/if}}
 </div>
 
@@ -35,11 +35,11 @@
     {{news-item/edit-item newsItem=(await agendaitem.newsItem)}}
   {{else}}
     Nog geen kort bestek.
-    <button class="add-item" {{action "addNewsItem"}}>voeg kort bestek toe</button>
+    <button class="invert-color" {{action "addNewsItem"}}>voeg kort bestek toe</button>
   {{/if}}
 </div>
 
 <div class="controls">
-  <button class="save" {{action "saveItem"}}>save</button>
+  <button class="invert-color" {{action "saveItem"}}>save</button>
 </div>
 {{yield}}
