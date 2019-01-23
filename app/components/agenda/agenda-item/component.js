@@ -28,11 +28,8 @@ export default Component.extend({
 			agendaitem.save();
 		},
 
-		deleteItem(agendaitem) {
-			this.store.findRecord('agendaitem', agendaitem.id)
-				.then(async foundItem => {
-					await foundItem.destroyRecord();
-				});
+		async deleteItem(agendaitem) {
+			await agendaitem.destroyRecord();
 		}
 	}
 });
