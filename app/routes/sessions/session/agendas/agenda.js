@@ -5,7 +5,15 @@ export default Route.extend({
 		let agenda = this.store.findRecord('agenda', params.agendaid);
 		return agenda;
 	},
+
 	redirect() {
 		this.transitionTo('sessions.session.agendas.agenda.agendaitems');
+	},
+
+	actions : {
+		lockAgenda(agenda) {
+			agenda.set('locked', !agenda.locked);
+			agenda.save();
+		}
 	}
 });

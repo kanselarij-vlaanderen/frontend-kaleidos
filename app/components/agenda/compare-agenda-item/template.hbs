@@ -1,12 +1,56 @@
 <div class="previous-agenda-item">
-	previous
-  {{changedSet.previous.id}}
-  {{changedSet.previous.subcase.id}}
-  {{changedSet.previous.subcase.title}}
+  {{#if changedSet.previous.id}}
+    <div class="cases--decree">
+      <div class="cases--decree-head">
+        {{#link-to
+          "cases.case"
+          changedSet.previous.id
+          class="cases--decree-content"
+          tagName="div"
+        }}
+          <h4>
+            {{changedSet.previous.subcase.shortTitle}}
+          </h4>
+          <p>
+            {{changedSet.previous.subcase.title}}
+          </p>
+          <div class="cases--decree-content-label">
+            {{#if changedSet.previous.extended}}
+              <p>
+                uitgesteld
+              </p>
+            {{/if}}
+          </div>
+        {{/link-to}}
+      </div>
+    </div>
+  {{/if}}
 </div>
 <div class="current-agenda-item">
-	current
-  {{changedSet.current.id}}
-  {{changedSet.current.subcase.id}}
-  {{changedSet.current.subcase.title}}
+  {{#if changedSet.current.id}}
+    <div class="cases--decree">
+      <div class="cases--decree-head">
+        {{#link-to
+          "cases.case"
+          changedSet.current.id
+          class="cases--decree-content"
+          tagName="div"
+        }}
+          <h4>
+            {{changedSet.current.subcase.shortTitle}}
+          </h4>
+          <p>
+            {{changedSet.current.subcase.title}}
+          </p>
+          <div class="cases--decree-content-label">
+            {{#if changedSet.current.extended}}
+              <p>
+                uitgesteld
+              </p>
+            {{/if}}
+          </div>
+        {{/link-to}}
+      </div>
+    </div>
+  {{/if}}
 </div>

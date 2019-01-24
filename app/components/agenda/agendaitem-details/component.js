@@ -3,9 +3,8 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   classNameBindings: [":cases--decree-body"],
-
   store: inject('store'),
-
+  editable: null,
   agendaitem: null,
 
   actions: {

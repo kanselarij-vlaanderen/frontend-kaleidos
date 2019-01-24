@@ -22,5 +22,4 @@ export default Route.extend({
 			this.refresh()
 		}
 	}
-
 });

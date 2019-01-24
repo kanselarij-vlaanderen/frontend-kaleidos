@@ -25,13 +25,13 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 
 		navigateBackToAgenda() {
-			this.transitionToRoute('sessions.session.agendas.agenda.agendaitems');
+			this.navigateBack();
 		},
 
 		addSubcasesToAgenda() {
 			let selectedAgenda = this.get('selectedAgenda');
 			let itemsToAdd = this.get('model');
-			itemsToAdd.forEach(async subCase => {
+			let promise = Promise.all(itemsToAdd.map(async subCase => {
 				if (subCase.selected) {
 					let agendaitem = this.store.createRecord('agendaitem', {
 						extended: false,
@@ -39,9 +39,16 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 						subcase: subCase,
 						agenda: selectedAgenda
 					})
-					await agendaitem.save()
+					return await agendaitem.save();
 				}
-			});
+			}));
+			promise.then(() => {
+				this.navigateBack();
+			})
 		}
+	},
+
+	navigateBack() {
+		this.transitionToRoute('sessions.session.agendas.agenda.agendaitems');
 	}
 });

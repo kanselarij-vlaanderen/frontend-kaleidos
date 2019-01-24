@@ -325,6 +325,7 @@ menu {
 }
 
 .cases--decree {
+  width:100%;
   padding: 25px;
   justify-content: space-between;
   color: #212121;
@@ -1099,4 +1100,10 @@ button.invert-color {
   .x-toggle-component {
     justify-content: left;
   }
+}
+
+.agenda-container {
+  display:flex;
+  justify-content: center;
+  align-items:center;
 }

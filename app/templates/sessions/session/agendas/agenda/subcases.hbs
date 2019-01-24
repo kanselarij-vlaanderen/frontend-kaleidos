@@ -1,3 +1,9 @@
+ <button class="invert-color" {{action "navigateBackToAgenda"}}>
+    {{fa-icon "arrow-left"}} terug naar agenda
+  </button>
+  <button class="invert-color" {{action "addSubcasesToAgenda"}}>
+    Toevoegen aan agenda
+  </button>
 <div class="data-table-container">
   {{#data-table
     content=model
@@ -37,11 +43,3 @@
     {{/t.content}}
   {{/data-table}}
 </div>
-{{#ember-wormhole to="agendaitems-control-container"}}
-  <button class="invert-color" {{action "navigateBackToAgenda"}}>
-    {{fa-icon "arrow-left"}} terug naar agenda
-  </button>
-  <button class="invert-color" {{action "addSubcasesToAgenda"}}>
-    Toevoegen aan agenda
-  </button>
-{{/ember-wormhole}}

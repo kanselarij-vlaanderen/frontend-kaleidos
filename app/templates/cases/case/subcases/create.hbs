@@ -2,11 +2,9 @@
   <form onsubmit={{action "createSubCase"}}>
 
   {{#if isPartOne }}
-
     <div>
       <h3>metadata controleren</h3>
     </div>
-
     {{cases/forms/metadata-form
       themes=themes
       step=(action "nextStep")
@@ -21,10 +19,7 @@
       status=status
       type=selectedType
     }}
-
   {{else }}
-
-
     <div class="cases--new-item">
       <label>NAAM DEELDOSSIER</label>
       {{input
@@ -34,7 +29,6 @@
         value=title
       }}
     </div>
-
     <div class="cases--new-item">
       <label>AANVRAAG AGENDERING</label>
       {{input
@@ -43,13 +37,10 @@
         value=remark
       }}
     </div>
-
     <div class="cases--new-item">
       <label>OPENBAAR?</label>
       {{input type="checkbox" checked=public}}
     </div>
-
-
     <button
       type="submit"
       class="rr-action-button"
@@ -57,7 +48,6 @@
     >
       Dossier aanmaken
     </button>
-
   {{/if}}
   </form>
 </div>

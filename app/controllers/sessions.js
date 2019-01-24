@@ -14,24 +14,30 @@ export default Controller.extend({
 
   actions: {
     cancelNewSessionForm() {
-      let date = new Date();
-      date.setHours(0, 0, 0, 0);
       this.set('creatingNewSession', false);
-      this.set('model', this.store.query('session', {
-        filter: {
-          // ':gte:plannedstart': date.toISOString()
-        }
-      }))
+      this.fetchNewModel();
     },
 
-    navigateBack() {
-      let session = this.get('currentSession');
-      this.transitionToRoute('sessions.session.agendas', session.id);
+     navigateBack(sessionId) {
+      this.fetchNewModel();
+      this.transitionToRoute('sessions.session', sessionId);
     },
 
     chooseSession(session) {
       this.set('currentSession', session);
-      this.transitionToRoute('sessions.session.agendas', session.id);
+      this.transitionToRoute('sessions.session', session.id);
     }
+  },
+
+     fetchNewModel() {
+    let sessions = this.store.query('session', {
+			filter: {
+        ':gt:plannedstart': ""
+			},
+			sort: "number"
+    });
+
+    this.set('model', sessions);
+    this.set('currentSession', sessions.get('firstObject'));
   }
 });

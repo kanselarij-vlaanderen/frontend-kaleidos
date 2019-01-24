@@ -31,6 +31,7 @@
         </span>
         </div>
       {{/link-to}}
+      {{#if (not agendaitem.agenda.locked)}}
       <div class="cases--decree-options">
         <div class="settings-container">
           <div>
@@ -58,6 +59,7 @@
           </div>
         {{/if}}
       </div>
+    {{/if}}
     </div>
     {{#if agendaitem.showDetails}}
       {{agenda/agendaitem-details agendaitem=agendaitem}}

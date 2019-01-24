@@ -41,7 +41,7 @@ export default Component.extend({
 			agendaToLock.save().then(async () => {
 			this.addAgendaToSession(session, agendaToLock).then(result => {
 				if(result) {
-					this.navigateBack();
+					this.navigateBack(session.id);
 				} else {
 					// TODO: ERROR handling
 				}
