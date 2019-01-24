@@ -16,17 +16,19 @@ export default Model.extend({
   decision: belongsTo('decision'),
   newsItem: belongsTo('news-item'),
 
-  save: async function(){
-    let news = await this.get('newsItem');
-    if(news) {
-      news = await news.save();
-      this.set('newsItem', news);
-    }
-    let decision = await this.get('decision');
-    if(decision) {
-      decision = await decision.save();
-      this.set('decision', decision);
-    }
-    return this._super(...arguments);
-  }
+
+  // Karel fix your shit :p 
+  // save: async function(){
+  //   let news = await this.get('newsItem');
+  //   if(news) {
+  //     news = await news.save();
+  //     this.set('newsItem', news);
+  //   }
+  //   let decision = await this.get('decision');
+  //   if(decision) {
+  //     decision = await decision.save();
+  //     this.set('decision', decision);
+  //   }
+  //   return this._super(...arguments);
+  // }
 });

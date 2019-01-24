@@ -3,6 +3,17 @@ import Route from '@ember/routing/route';
 export default Route.extend({
 	model() {
 		let agenda = this.modelFor('sessions.session.agendas.agenda');
-		return agenda.agendaitems;
+		return this.store.query('agendaitem', {
+			filter: {
+				agenda: { id: agenda.id }
+			},
+			include: 'subcase'
+		})
+	},
+
+	actions: {
+		refresh() {
+			this.refresh();
+		}
 	}
 });

@@ -5,9 +5,7 @@ export default Route.extend({
 		return this.store.findRecord('session', params.id);
 	},
 
-	async afterModel(model) {
-		let agendas = await model.agendas;
-		let agenda = agendas.get('firstObject');
-		this.transitionTo('sessions.session.agendas.agenda', agenda.id);
+	redirect() {
+		this.transitionTo('sessions.session.agendas');
 }
 });

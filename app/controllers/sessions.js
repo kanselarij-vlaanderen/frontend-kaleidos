@@ -17,12 +17,16 @@ export default Controller.extend({
       let date = new Date();
       date.setHours(0, 0, 0, 0);
       this.set('creatingNewSession', false);
-
       this.set('model', this.store.query('session', {
         filter: {
-          ':gte:plannedstart': date.toISOString()
+          // ':gte:plannedstart': date.toISOString()
         }
       }))
+    },
+
+    navigateBack() {
+      let session = this.get('currentSession');
+      this.transitionToRoute('sessions.session.agendas', session.id);
     },
 
     chooseSession(session) {

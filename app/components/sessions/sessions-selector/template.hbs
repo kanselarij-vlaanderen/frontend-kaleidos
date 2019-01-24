@@ -10,7 +10,7 @@
     selected=currentSession
     searchField="plannedstart"
     search=(perform searchTask)
-    oninput=(action "resetValue")
+    oninput=(action "resetValueIfEmpty")
     onchange=(action "chooseSession") as |session|
   }}
     {{#if session.plannedstart}}

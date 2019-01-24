@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
+import $ from 'jquery';
 
 const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
@@ -38,15 +39,21 @@ export default Component.extend({
 			agendaToLock.set('locked', true);
 
 			agendaToLock.save().then(async () => {
-				return await this.addAgendaToSession(session, agendaToLock);
+			this.addAgendaToSession(session, agendaToLock).then(result => {
+				if(result) {
+					this.navigateBack();
+				} else {
+					// TODO: ERROR handling
+				}
+			});
 			})
 		},
 
-		resetValue(param) {
+		resetValueIfEmpty(param) {
 			if (param == "") {
 				this.set('sessions', this.store.query('session', {
 					filter: {
-						':gte:plannedstart': new Date().toISOString()
+						// ':gte:plannedstart': new Date().toISOString()
 					}
 				}));
 			}
@@ -57,24 +64,29 @@ export default Component.extend({
 		}
 	},
 
-	addAgendaToSession(currentSession, agenda) {
-		let agendaItems = agenda.get('agendaitems');
+	addAgendaToSession(currentSession, oldAgenda) {
 		let agendaLength = currentSession.agendas.length;
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda " + alphabet[agendaLength].toUpperCase(),
 			session: currentSession
 		})
-		newAgenda.save().then(agenda => {
-			agendaItems.forEach(async agendaitem => {
-				let agendaItemToSave = this.store.createRecord('agendaitem', {
-					priority: agendaitem.priority,
-					extended: agendaitem.extended,
-					dateAdded: agendaitem.dateAdded,
-					subcase: agendaitem.get('subcase'),
-					agenda: agenda
-				});
-				agendaItemToSave.save();
+		return new Promise((resolve, reject) => {
+			newAgenda.save().then(agenda => {
+				$.ajax(
+					{
+						method: "POST",
+						url: 'http://localhost/agenda-approve/approveAgenda',
+						data: {
+							newAgendaId: agenda.id,
+							oldAgendaId: oldAgenda.id
+						}
+					}
+				).then(result => {
+					resolve(result);
+				}).catch(error => {
+					reject(error);
+				})
 			});
-		});
+		})
 	},
 });
