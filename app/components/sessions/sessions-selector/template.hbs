@@ -1,7 +1,7 @@
 <div class="session-header">
   <div class="session-title-container">
     <strong class="sessions-title">
-      Agenda van
+        {{t 'sessions-selector.agenda-of'}}
     </strong>
   </div>
   {{#power-select
@@ -18,10 +18,10 @@
     {{/if}}
   {{/power-select}}
   <button {{action "createNewSession"}}>
-    Nieuwe zitting
+    {{t 'buttons.new-session'}}
   </button>
   <button {{action "lockAgenda" currentSession}}>
-    Goedkeuren agenda
+    {{t 'buttons.agenda-approve'}}
   </button>
 </div>
   <div id="sessions-subtitle-count" class="sessions-subtitle"></div>

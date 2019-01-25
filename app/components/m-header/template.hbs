@@ -4,37 +4,29 @@
       {{#link-to "home"}}
         <img src="/assets/logo.svg" alt="Vlaamse overheid Logo">
       {{/link-to}}
-
     </div>
     <ul>
       <li>
         {{#link-to "cases" }}
-          <span>Dossiers</span>
+          <span>{{t 'navigation.cases' }}</span>
           <div class="menu-item-active-border"/>
         {{/link-to}}
       </li>
       <li>
         {{#link-to "sessions"}}
-          <span>Zittingen</span>
+          <span>{{t 'navigation.sessions' }}</span>
           <div class="menu-item-active-border"/>
         {{/link-to}}
       </li>
       <li>
         {{#link-to "settings"}}
-        <span>Settings</span>
+        <span>{{t 'navigation.settings' }}</span>
         <div class="menu-item-active-border"/>
-        {{!-- <img src="/assets/setting.svg" alt="Settings"> --}}
         {{/link-to}}
         </li>
       <li>
-        {{!-- <div class="menu--notifications">
-        <img src="/assets/notification.svg" alt="Notifications">
-        {{#if true}}
-          <span>5</span>
-          {{else}}
-          <span>0</span>
-        {{/if}}
-        </div> --}}
+        <span>{{t 'navigation.notifications' }}</span>
+        <div class="menu-item-active-border"/>
       </li>
     </ul>
   </div>

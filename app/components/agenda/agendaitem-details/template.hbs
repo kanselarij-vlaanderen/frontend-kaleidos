@@ -1,45 +1,52 @@
 <div class="properties">
   <div class="property">
     <div class="label">
-      Persagenda
+      {{t "agendaitem-details.agenda"}}
     </div>
     {{input type="checkbox" checked=agendaitem.forPress}}
   </div>
   <div class="property">
     <div class="label">
-      Formeel Ok
+      {{t "agendaitem-details.formal-ok"}}
     </div>
     {{input type="checkbox" checked=agendaitem.formallyOk}}
   </div>
   <div class="property">
     <div class="label">
-      Notulen
+      {{t "agendaitem-details.notes"}}
     </div>
     {{textarea value=agendaitem.record}}
   </div>
 </div>
-
 <div class="agendaitem--detail--besluit">
-  <h2>Beslissing</h2>
+  <h2>
+    {{t "agendaitem-details.decision-title"}}
+  </h2>
   {{#if (await agendaitem.decision)}}
     {{decision/edit-decision decision=agendaitem.decision}}
   {{else}}
-    Nog geen beslissing.
-    <button class="invert-color" {{action "addDecision"}}>voeg beslissing toe</button>
+    {{t "agendaitem-details.no-decision"}}
+    <button class="invert-color" {{action "addDecision"}}>
+      {{t "agendaitem-details.add-decision"}}
+    </button>
   {{/if}}
 </div>
-
 <div class="agendaitem--detail--news-item">
-  <h2>Kort bestek</h2>
+  <h2>
+    {{t "agendaitem-details.news-item-title"}}
+  </h2>
   {{#if (await agendaitem.newsItem)}}
     {{news-item/edit-item newsItem=(await agendaitem.newsItem)}}
   {{else}}
-    Nog geen kort bestek.
-    <button class="invert-color" {{action "addNewsItem"}}>voeg kort bestek toe</button>
+    {{t "agendaitem-details.no-news-item"}}
+    <button class="invert-color" {{action "addNewsItem"}}>
+      {{t "agendaitem-details.add-news-item"}}
+    </button>
   {{/if}}
 </div>
-
 <div class="controls">
-  <button class="invert-color" {{action "saveItem"}}>save</button>
+  <button class="invert-color" {{action "saveItem"}}>
+    {{t "buttons.save"}}
+  </button>
 </div>
 {{yield}}

@@ -5,11 +5,11 @@
   }}
 	{{#if (not model.locked)}}
   <button class="invert-color" {{action "lockAgenda" model}}>
-    Agenda afsluiten
+    {{t 'buttons.agenda-lock'}}
   </button>
 	{{else}}
 	<button class="invert-color" {{action "lockAgenda" model}}>
-    Agenda unlocken
+    {{t 'buttons.agenda-unlock'}}
   </button>
 	{{/if}}
 </div>

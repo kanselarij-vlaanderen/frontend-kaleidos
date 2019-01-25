@@ -1,5 +1,5 @@
 <div class="cases--new-item">
-  <label>KORTE TITEL</label>
+  <label>{{t 'metadata-form.short-title'}}</label>
   {{input
     type="text"
     id="shortTitle"
@@ -10,7 +10,7 @@
 </div>
 
 <div class="cases--new-item">
-  <label>LANGE TITEL</label>
+  <label>{{t 'metadata-form.title'}}</label>
   {{textarea
     id="title"
     class="cases--new-item-input"
@@ -20,7 +20,7 @@
 </div>
 
 <div class="cases--new-item">
-  <label>TOELICHTING BEHANDELINGSSTATUS</label>
+  <label>{{t 'metadata-form.status'}}</label>
   {{input
     class="cases--new-item-input"
     type="text"
@@ -31,7 +31,7 @@
 </div>
 
 <div class="cases--new-item">
-  <label>THEMA'S</label>
+  <label>{{t 'metadata-form.themes'}}</label>
   {{#power-select-multiple
     options=themes
     class="cases--new-item-input"
@@ -46,7 +46,7 @@
 </div>
 
 <div class="cases--new-item">
-  <label>MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT</label>
+  <label>{{t 'metadata-form.news-item-label'}}</label>
   {{#power-select
     options=types
     selected=selectedType
@@ -58,5 +58,5 @@
 </div>
 
 <button {{action "step"}}>
-  Volgende Stap
+  {{t 'buttons.next-step'}}
 </button>

@@ -2,25 +2,25 @@
   <div class="properties">
     <div class="property">
       <div class="label">
-        Titel
+        {{t 'edit-item.title'}}
       </div>
       {{input value=newsItem.title}}
     </div>
     <div class="property">
       <div class="label">
-        Ondertitel
+        {{t 'edit-item.sub-title'}}
       </div>
       {{input value=newsItem.subtitle autocomplete="off"}}
     </div>
     <div class="property">
       <div class="label">
-        Inhoud
+        {{t 'edit-item.content'}}
       </div>
       {{textarea value=newsItem.content}}
     </div>
     <div class="property">
       <div class="label">
-        Datum van publicatie
+        {{t 'edit-item.date-publication'}}
       </div>
       {{pikaday-input
         theme="pikaday-session"
@@ -31,7 +31,7 @@
     </div>
     <div class="property">
       <div class="label">
-        Themas
+        {{t 'edit-item.themes'}}
       </div>
       {{utils/theme-list chooseTheme=(action "chooseTheme") selectedThemes=newsItem.themes}}
     </div>

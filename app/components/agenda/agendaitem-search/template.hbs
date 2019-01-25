@@ -1,7 +1,6 @@
-
 {{#power-select
   options=subcases
-  placeholder="Zoek op naam..."
+  placeholder=(t 'agendaitem-search.search-placeholder')
   selected=currentSession
   searchField="plannedstart"
   search=(perform searchTask)
@@ -12,5 +11,5 @@
 {{/power-select}}
 <button class="invert-color" {{action "navigateToSubCases"}}>
   {{fa-icon "plus"}}
-  Dossier toevoegen
+  {{t "buttons.add-case"}}
 </button>

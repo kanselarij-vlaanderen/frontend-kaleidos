@@ -1,6 +1,6 @@
 {{#if (is-empty model)}}
 	<div class="no-data-container">
-		Geen agendapunten.
+		{{t 'agenda-item.no-agendaitems'}}
 	</div>
 {{/if}}
 {{#each model as |agendaitem|}}
@@ -18,15 +18,15 @@
       <p>{{agendaitem.subcase.title}}</p>
         <div class="cases--decree-content-label">
           {{#if agendaitem.extended}}
-        <p>uitgesteld</p>
+        <p>{{t 'agenda-item.extended'}}</p>
         {{/if}}        
         </div>
         <div class="cases--decree-content-expand">
           <span {{action "toggleShowMore" agendaitem bubbles=false}}>
           {{#if agendaitem.showDetails}}
-            v minder weergeven
+            v {{t 'agenda-item.collapse'}}
           {{else}}
-            > meer weergeven
+            > {{t 'agenda-item.expand'}}
           {{/if}}
         </span>
         </div>
@@ -36,7 +36,7 @@
         <div class="settings-container">
           <div>
           <span>
-            decreet
+            {{t 'agenda-item.decree'}}
           </span>
           </div>
           <div
@@ -54,7 +54,7 @@
               {{extend-button-text agendaitem.extended}}
             </button>
             <button {{action "deleteItem" agendaitem}}>
-              Verwijderen
+              {{t 'buttons.delete'}}
             </button>
           </div>
         {{/if}}

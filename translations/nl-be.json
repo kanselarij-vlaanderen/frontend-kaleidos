@@ -1,0 +1,88 @@
+{
+	"agenda": {
+		"agendaitems": "agendapunten"
+	},
+	"agenda-item": {
+		"collapse": "meer weergeven",
+		"decree": "decreet",
+		"expand": "minder weergeven",
+		"extended": "uitgesteld",
+		"no-agendaitems": "Geen agendapunten."
+	},
+	"agendaitem-details": {
+		"agenda": "Persagenda",
+		"decision-title": "Beslissing",
+		"formal-nok": "Formeel niet ok",
+		"formal-ok": "Formeel ok",
+		"news-item-title": "Kort bestek",
+		"no-decision": "Nog geen beslissing",
+		"no-news-item": "Nog geen kort bestek",
+		"notes": "Notulen"
+	},
+	"agendaitem-search": {
+		"search-placeholder": "Zoek op naam..."
+	},
+	"agendas": {
+		"nav-title": "Historiek"
+	},
+	"buttons": {
+		"add": "Toevoegen",
+		"add-case": "Dossier toevoegen",
+		"add-decision": "Voeg beslissing toe",
+		"add-news-item": "Voeg kort bestek toe",
+		"add-to-agenda": "Toevoegen aan agenda",
+		"agenda-approve": "Agenda goedkeuren",
+		"agenda-back": "Terug naar agenda",
+		"agenda-compare": "Vergelijk agendas",
+		"agenda-lock": "Agenda afsluiten",
+		"agenda-unlock": "Agenda unlocken",
+		"cancel": "Annuleren",
+		"delete": "Verwijderen",
+		"new-session": "Nieuwe zitting",
+		"next-step": "Volgende Stap",
+		"save": "Opslaan"
+	},
+	"case-item": {
+		"not-agreed": "Niet Akkoord"
+	},
+	"cases-search": {
+		"search-placeholder": "Zoek op document titel.."
+	},
+	"comparison": {
+		"nav-title": "Agendas"
+	},
+	"edit-decision": {
+		"approved": "Goedgekeurd",
+		"decision-text": "Tekst beslissing"
+	},
+	"edit-item": {
+		"content": "Inhoud",
+		"date-publication": "Datum van publicatie",
+		"sub-title": "Ondertitel",
+		"themes": "Themas",
+		"title": "Titel"
+	},
+	"metadata-form": {
+		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
+		"short-title": "KORTE TITEL",
+		"status": "TOELICHTING BEHANDELINGSSTATUS",
+		"themes": "THEMAS",
+		"title": "LANGE TITEL"
+	},
+	"navigation": {
+		"agendas": "agendas",
+		"cases": "Dossiers",
+		"notifications": "Notificaties",
+		"sessions": "Zittingen",
+		"settings": "Instellingen"
+	},
+	"new-session": {
+		"start-date": "Start datum"
+	},
+	"sessions-selector": {
+		"agenda-of": "Agenda van"
+	},
+	"subcases": {
+		"th-select-all": "Selecteer alles"
+	}
+}

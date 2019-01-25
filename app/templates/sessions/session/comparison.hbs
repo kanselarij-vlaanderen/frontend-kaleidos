@@ -1,6 +1,6 @@
 <div class="side-nav-small">
 	<div class="title-container">
-		Agendas
+		{{t 'comparison.nav-title'}}
 	</div>
 	{{#each (await model) as |agenda|}}
 	<button {{action "selectAgenda" agenda}}>{{agenda.name}}</button>
