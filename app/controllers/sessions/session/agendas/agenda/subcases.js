@@ -37,8 +37,9 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 						extended: false,
 						dateAdded: new Date(),
 						subcase: subCase,
-						agenda: selectedAgenda
-					})
+						agenda: selectedAgenda,
+            priority: 0
+					});
 					return await agendaitem.save();
 				}
 			}));
