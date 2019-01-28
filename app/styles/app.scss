@@ -1107,3 +1107,16 @@ button.invert-color {
   justify-content: center;
   align-items:center;
 }
+
+.file-upload-container {
+  width:250px;
+  cursor:pointer;
+  margin: 0 auto;
+
+  .files-zone {
+    border: 2px dashed #0087F7;
+    border-radius: 5px;
+    background: white;
+    height:100px;
+  }
+}
