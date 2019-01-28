@@ -62,6 +62,13 @@
 		"themes": "Themas",
 		"title": "Titel"
 	},
+	"file-uploader": {
+    "drop-text": "Drop to upload",
+    "dropzone-text": "Drag and drop files onto this area to upload them or click here",
+    "files": "files",
+    "invalid-type": "Invalid file type",
+    "uploading": "Uploading"
+},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
 		"short-title": "KORTE TITEL",
