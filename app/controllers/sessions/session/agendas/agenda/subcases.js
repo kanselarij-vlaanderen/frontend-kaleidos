@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
+import $ from 'jquery';
 
 export default Controller.extend(DefaultQueryParamsMixin, {
 	allSubCasesSelected: false,
@@ -40,7 +41,22 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 						agenda: selectedAgenda,
             priority: 0
 					});
-					return await agendaitem.save();
+          return new Promise((resolve, reject) => {
+            agendaitem.save().then(agendaitem => {
+              $.ajax(
+                {
+                  method: "POST",
+                  url: `http://localhost/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
+                  data: {
+                  }
+                }
+              ).then(result => {
+                resolve(agendaitem);
+              }).catch(error => {
+                reject(error);
+              })
+            });
+          })
 				}
 			}));
 			promise.then(() => {
