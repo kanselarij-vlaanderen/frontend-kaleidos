@@ -325,6 +325,7 @@ menu {
   border-bottom: 1px solid #e7e7e7;
   text-decoration: none;
   color: #212121;
+  background-color:white;
 
   strong {
     font-weight: bold;
@@ -339,6 +340,7 @@ menu {
    }
 
    .agenda-item-link {
+     width:100%;
      padding: 2em;
    }
 
@@ -1156,7 +1158,7 @@ button.invert-color {
 }
 
 .agenda-item-detail-container {
-  min-width: calc(100vw - 250px - 300px);
+  min-width: calc(100vw - 250px - 400px);
   background-color:white;
 }
 

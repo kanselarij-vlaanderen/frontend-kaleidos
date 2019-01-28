@@ -7,7 +7,7 @@ export default Controller.extend({
 	currentSession: null, 
 	currentAgendaItem: null,
 	selectedAgendaItem:null,
-	
+
 	model: computed('currentSession', function() {
 		if(!this.currentSession) return [];
 		return this.store.query('agenda', {
@@ -48,6 +48,11 @@ export default Controller.extend({
 
 		navigateBack(sessionId) {
       this.transitionToRoute('agendas.agenda', sessionId);
+		},
+
+		lockAgenda(agenda) {
+			agenda.set('locked', !agenda.locked);
+			agenda.save();
 		}
 	}
 });
