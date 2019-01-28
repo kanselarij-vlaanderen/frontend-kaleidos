@@ -7,6 +7,7 @@ export default Route.extend({
 			filter: {
 				agenda: { id: agenda.id }
 			},
+      sort: 'priority',
 			include: 'subcase'
 		})
 	},
