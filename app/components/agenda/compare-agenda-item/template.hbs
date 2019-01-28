@@ -1,56 +1,6 @@
 <div class="previous-agenda-item">
-  {{#if changedSet.previous.id}}
-    <div class="cases--decree">
-      <div class="cases--decree-head">
-        {{#link-to
-          "cases.case"
-          changedSet.previous.id
-          class="cases--decree-content"
-          tagName="div"
-        }}
-          <h4>
-            {{changedSet.previous.subcase.shortTitle}}
-          </h4>
-          <p>
-            {{changedSet.previous.subcase.title}}
-          </p>
-          <div class="cases--decree-content-label">
-            {{#if changedSet.previous.extended}}
-              <p>
-                {{t 'agendaitem.extended'}}
-              </p>
-            {{/if}}
-          </div>
-        {{/link-to}}
-      </div>
-    </div>
-  {{/if}}
+  {{agenda/agenda-item agendaitem=changedSet.previous}}
 </div>
 <div class="current-agenda-item">
-  {{#if changedSet.current.id}}
-    <div class="cases--decree">
-      <div class="cases--decree-head">
-        {{#link-to
-          "cases.case"
-          changedSet.current.id
-          class="cases--decree-content"
-          tagName="div"
-        }}
-          <h4>
-            {{changedSet.current.subcase.shortTitle}}
-          </h4>
-          <p>
-            {{changedSet.current.subcase.title}}
-          </p>
-          <div class="cases--decree-content-label">
-            {{#if changedSet.current.extended}}
-              <p>
-                {{t 'agendaitem.extended'}}
-              </p>
-            {{/if}}
-          </div>
-        {{/link-to}}
-      </div>
-    </div>
-  {{/if}}
+  {{agenda/agenda-item agendaitem=changedSet.current}}
 </div>

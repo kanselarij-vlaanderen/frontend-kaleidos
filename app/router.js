@@ -21,13 +21,7 @@ Router.map(function () {
   this.route('home', { path: "/" });
   this.route('settings');
 
-  this.route('agendas', function () {
-    this.route('agenda', { path: ":agendaid" }, function () {
-      this.route('agendaitems');
-      this.route('subcases');
-    });
-  });
-
+  this.route('agendas');
   this.route('comparison', { path: ":sessionid"} );
 });
 

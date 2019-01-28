@@ -3,7 +3,6 @@
     currentSession=currentSession
     creatingNewSession=creatingNewSession
     navigateBack=(action "navigateBack")
-    chooseSession=(action 'chooseSession')
   }}
   <div class="files--header-tile files--sub-file-header">
     {{#if creatingNewSession}}
@@ -12,38 +11,42 @@
   </div>
 </div>
 
-{{#if agendaMenuOpened}}
-  <div class="side--menu-container">
-    <div class="side-menu-collapse" onclick={{action "collapseSideMenu"}}>
-      {{fa-icon "chevron-left" size="lg"}}
-    </div>
-    <div class="title-container">
-      <strong>
-        {{fa-icon "history"}}
-        {{t 'agendas.nav-title'}}
-      </strong>
-      <button {{action "compareAgendas"}}>
-        {{fa-icon "arrows-alt"}}
-        {{t 'buttons.agenda-compare'}}
-      </button>
-    </div>
-    <div class="side--menu--content-container">
-      {{#each agendas as |agenda|}}
-        {{#link-to "agendas.agenda.agendaitems" agenda.id}}
-          <p>
-            {{agenda.name}}
-          </p>
-          {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
-          <div class="menu-item-active-border"></div>
-        {{/link-to}}
-      {{/each}}
-    </div>
-  </div>
-{{else}}
-  <div onclick={{action "collapseSideMenu"}}>
-    {{fa-icon "chevron-right"}}
-  </div>
-{{/if}}
+{{agenda/side-nav agendas=model 
+  currentAgenda=currentAgenda 
+  agendaMenuOpened=agendaMenuOpened
+}}
+
+{{#ember-wormhole to="sessions-subtitle-count"}}
+  {{currentAgendaItems.length}} {{t 'agenda.agendaitems'}}
+{{/ember-wormhole}}
+
 <div class="agenda-items-container">
-  {{outlet}}
+  <div class="left-side-container">
+  <div class="agenda-container">
+    {{agenda/agendaitem-search
+      selectedAgenda=currentAgenda
+      navigateToSubCases=(action "navigateToSubCases")
+   }}
+	  {{#if (not currentAgenda.locked)}}
+      <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
+        {{t 'buttons.agenda-lock'}}
+      </button>
+	    {{else}}
+	    <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
+        {{t 'buttons.agenda-unlock'}}
+      </button>
+	  {{/if}}
+  </div>
+  <div class="agenda-item-list-container">
+    {{agenda/agenda-item-list agendaitems=currentAgendaItems selectedAgendaItem=selectedAgendaItem}}
+  </div>
+  </div>
+  {{#if selectedAgendaItem}}
+  <div class="right-side-container">
+    <div class="agenda-item-detail-container">
+        {{agenda/agenda-item-detail agendaitem=selectedAgendaItem}}
+    </div>
+  </div>
+  {{/if}}
 </div>
+

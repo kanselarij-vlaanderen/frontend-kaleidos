@@ -1,16 +1,4 @@
-<div class="agenda-container">
-  {{agenda/agendaitem-search
-    selectedAgenda=model
-    navigateToSubCases=(action "navigateToSubCases")
-  }}
-	{{#if (not model.locked)}}
-  <button class="invert-color" {{action "lockAgenda" model}}>
-    {{t 'buttons.agenda-lock'}}
-  </button>
-	{{else}}
-	<button class="invert-color" {{action "lockAgenda" model}}>
-    {{t 'buttons.agenda-unlock'}}
-  </button>
-	{{/if}}
+
+<div class="agenda-items-flex-container">
+  {{outlet}}
 </div>
-{{outlet}}

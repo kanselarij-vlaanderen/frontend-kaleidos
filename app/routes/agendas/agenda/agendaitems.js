@@ -9,11 +9,5 @@ export default Route.extend({
 			},
 			include: 'subcase'
 		})
-	},
-
-	actions: {
-		refresh() {
-			this.refresh();
-		}
 	}
 });

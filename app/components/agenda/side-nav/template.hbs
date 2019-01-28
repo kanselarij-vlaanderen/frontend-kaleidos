@@ -1,0 +1,30 @@
+{{#if agendaMenuOpened}}
+  <div class="side-menu-collapse" onclick={{action "collapseSideMenu"}}>
+    {{fa-icon "chevron-left" size="lg"}}
+  </div>
+  <div class="title-container">
+    <strong>
+      {{fa-icon "history"}}
+      {{t "agendas.nav-title"}}
+    </strong>
+    <button {{action "compareAgendas"}}>
+      {{fa-icon "arrows-alt"}}
+      {{t "buttons.agenda-compare"}}
+    </button>
+  </div>
+  <div class="side--menu--content-container">
+    {{#each agendas as |agenda|}}
+			<a {{action "setCurrentAgenda" agenda}} >
+        <p>
+          {{agenda.name}}
+        </p>
+        {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
+        <div class="menu-item-active-border"></div>
+			</a>
+    {{/each}}
+  </div>
+{{else}}
+  <div onclick={{action "collapseSideMenu"}}>
+    {{fa-icon "chevron-right"}}
+  </div>
+{{/if}}

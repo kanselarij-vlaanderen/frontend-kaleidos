@@ -1,8 +1,6 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-	classNames: ["cases--content-tile"],
-	tagName: "div",
-	selectedAgendaItem: null
+	classNames:["agenda-item-container"],
 
 });

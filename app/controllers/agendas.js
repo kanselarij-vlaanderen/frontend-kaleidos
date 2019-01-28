@@ -1,12 +1,14 @@
 import Controller from '@ember/controller';
-import { computed, observer } from '@ember/object';
+import { computed } from '@ember/object';
 
 export default Controller.extend({
 	agendaMenuOpened: true,
 	creatingNewSession: false,
 	currentSession: null, 
-
-	agendas: computed('currentSession', function() {
+	currentAgendaItem: null,
+	selectedAgendaItem:null,
+	
+	model: computed('currentSession', function() {
 		if(!this.currentSession) return [];
 		return this.store.query('agenda', {
 					filter: {
@@ -16,42 +18,36 @@ export default Controller.extend({
 				});
 	}),
 
-	modelObserver: observer('agendas', async function() {
-		let agendas = await this.get('agendas');
+	currentAgenda: computed('model', function() {
+		let agendas = this.get('agendas');
 		if(agendas && agendas.length > 0) {
-			this.transitionToRoute('agendas.agenda', agendas.get('firstObject').id)
+			let agendaIdToQuery = agendas.get('firstObject').id;
+			return this.store.query('agenda', {
+				filter: {
+					id: agendaIdToQuery
+				}
+			})
+		}
+	}),
+
+	currentAgendaItems: computed('currentAgenda', function() {
+		if(this.currentAgenda) {
+			return this.store.query('agendaitem', {
+				filter: {
+					agenda:{id: this.currentAgenda.id }
+				},
+				include:'subcase'
+			})
 		}
 	}),
 
 	actions: {
-		chooseSession(session) {
-			this.set('currentSession', session);
-		},
-
-		compareAgendas() {
-			this.transitionToRoute('comparison', this.get('currentSession').id);
-		},
-
-		collapseSideMenu() {
-			this.set('agendaMenuOpened', !this.get('agendaMenuOpened'));
+		navigateToSubCases() {
+			this.transitionToRoute('agendas.agenda.subcases');
 		},
 
 		navigateBack(sessionId) {
-      this.fetchNewModel();
       this.transitionToRoute('agendas.agenda', sessionId);
-		},
-		
-		fetchNewModel() {
-			let sessions = this.store.query('session', {
-				filter: {
-					':gt:plannedstart': ""
-				},
-				sort: "number"
-			});
-	
-			this.set('model', sessions);
-			this.set('currentSession', sessions.get('firstObject'));
 		}
-
 	}
 });

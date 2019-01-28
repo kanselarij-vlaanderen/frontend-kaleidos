@@ -320,6 +320,42 @@ menu {
   }
 }
 
+.agenda-item-container {
+  width:100%;
+  border-bottom: 1px solid #e7e7e7;
+  text-decoration: none;
+  color: #212121;
+
+  strong {
+    font-weight: bold;
+   }
+   .active {
+    background-color:var(--blue);
+    color:white;
+
+    .formal-nok {
+     color: white;
+   }
+   }
+
+   .agenda-item-link {
+     padding: 2em;
+   }
+
+   .agenda-sub-options {
+     display:flex;
+     justify-content: space-between;
+   }
+
+   .formal-ok {
+     color: #00E500;
+   }
+
+   .formal-nok {
+     color:grey;
+   }
+}
+
 .cases--decree {
   width:100%;
   padding: 25px;
@@ -823,12 +859,11 @@ button {
     }
 
   }
-
 }
 
 .side--menu-container {
   display:block;
-  width:250px;
+  width:25px;
   height:100vh;
   float:left;
   background-color: var(--white-back) ;
@@ -912,6 +947,16 @@ button {
   }
 }
 
+.opened {
+  display:block;
+  width:250px;
+  height:100vh;
+  float:left;
+  background-color: var(--white-back) ;
+  border:1px solid var(--light-grey);
+  border-top:none;
+}
+
 .agendaitem-search {
   background-color:#F6F6F6;
   padding:1em;
@@ -949,9 +994,16 @@ button.invert-color {
 .agenda-items-container {
   overflow-y:scroll;
   background-color:#F6F6F6;
-  float:left;
-  width: calc(100% - 250px);
   height: calc(100vh - 222px);
+  display:flex;
+
+  .left-side-container {
+    width:100%;
+  }
+
+  .right-side-container {
+    width:60%;
+  }
 
   .no-data-container {
     margin: 0 auto;
@@ -1008,18 +1060,14 @@ button.invert-color {
 }
 
 .previous-agenda-item {
+  width:40%;
   background-color: var(--white-back);
   float:left;
-  height:200px;
-  width:40%;
-  text-align:center;
 }
 
 .current-agenda-item {
-  float:left;
-  height:200px;
   width:40%;
-  text-align:center;
+  float:left;
 }
 
 .side-nav-small {
@@ -1103,7 +1151,13 @@ button.invert-color {
   justify-content: center;
   align-items:center;
   padding:1em;
+  width:100%;
   border-bottom: 1px solid var(--light-grey);
+}
+
+.agenda-item-detail-container {
+  min-width: calc(100vw - 250px - 300px);
+  background-color:white;
 }
 
 .file-upload-container {

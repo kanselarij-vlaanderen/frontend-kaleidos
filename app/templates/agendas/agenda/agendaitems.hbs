@@ -2,6 +2,6 @@
     {{agenda/agenda-item-list agendaitems=model}}
 </div>
 
-{{#ember-wormhole to="sessions-subtitle-count"}}
-  {{model.length}} {{t 'agenda.agendaitems'}}
-{{/ember-wormhole}}
+<div class="agenda-item-detail-container">
+  {{outlet}}
+</div>
