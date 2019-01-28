@@ -5,7 +5,7 @@ export default Route.extend(DataTableRouteMixin, {
 	modelName: 'subcase',
 
 	setupController(controller) {
-		controller.set('selectedAgenda', this.modelFor('sessions.session.agendas.agenda'));
+		controller.set('selectedAgenda', this.modelFor('agendas.agenda'));
 		this._super(...arguments);
 	}
 });

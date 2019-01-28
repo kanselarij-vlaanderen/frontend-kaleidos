@@ -3,7 +3,6 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
 	store: inject(),
-	classNames: ["cases--content-tile"],
 	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,

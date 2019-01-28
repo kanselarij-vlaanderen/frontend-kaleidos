@@ -9,9 +9,6 @@ export default Component.extend({
 	store: inject(),
 	classNames: ["files--header-tile", "files--search"],
 	tagName: "div",
-
-	sessions: null,
-	currentSession: null,
 	creatingNewSession: null,
 
 	searchTask: task(function* (searchValue) {
@@ -89,4 +86,16 @@ export default Component.extend({
 			});
 		})
 	},
+
+	async didInsertElement() {
+		this._super(...arguments);
+		let sessions = await this.store.query('session', { 
+			filter: {
+				':gt:plannedstart': "",
+			},
+			sort: "number"
+		});
+		this.set('sessions', sessions);
+		this.set('currentSession', sessions.get('firstObject'));
+	}
 });

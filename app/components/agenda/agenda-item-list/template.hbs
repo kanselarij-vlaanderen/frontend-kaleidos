@@ -1,0 +1,8 @@
+{{#if (is-empty agendaitems)}}
+	<div class="no-data-container">
+		{{t 'agenda-item.no-agendaitems'}}
+	</div>
+{{/if}}
+{{#each agendaitems as |agendaitem|}}
+  {{agenda/agenda-item agendaitem=agendaitem}}
+{{/each}}

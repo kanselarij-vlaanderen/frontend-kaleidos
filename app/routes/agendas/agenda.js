@@ -7,7 +7,7 @@ export default Route.extend({
 	},
 
 	redirect() {
-		this.transitionTo('sessions.session.agendas.agenda.agendaitems');
+		this.transitionTo('agendas.agenda.agendaitems');
 	},
 
 	actions : {

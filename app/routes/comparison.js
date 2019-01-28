@@ -1,11 +1,10 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-	model() {
-		let session = this.modelFor('sessions.session');
+	model(params) {
 		return this.store.query('agenda', {
 			filter: {
-				session: { id: session.id }
+				session: { id: params.sessionid }
 			},
 			sort: '-name'
 		})

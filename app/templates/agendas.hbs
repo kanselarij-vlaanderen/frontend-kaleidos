@@ -1,3 +1,17 @@
+<div class="files--header">
+  {{sessions/sessions-selector
+    currentSession=currentSession
+    creatingNewSession=creatingNewSession
+    navigateBack=(action "navigateBack")
+    chooseSession=(action 'chooseSession')
+  }}
+  <div class="files--header-tile files--sub-file-header">
+    {{#if creatingNewSession}}
+      {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
+    {{/if}}
+  </div>
+</div>
+
 {{#if agendaMenuOpened}}
   <div class="side--menu-container">
     <div class="side-menu-collapse" onclick={{action "collapseSideMenu"}}>
@@ -14,8 +28,8 @@
       </button>
     </div>
     <div class="side--menu--content-container">
-      {{#each model as |agenda|}}
-        {{#link-to "sessions.session.agendas.agenda.agendaitems" agenda.id}}
+      {{#each agendas as |agenda|}}
+        {{#link-to "agendas.agenda.agendaitems" agenda.id}}
           <p>
             {{agenda.name}}
           </p>

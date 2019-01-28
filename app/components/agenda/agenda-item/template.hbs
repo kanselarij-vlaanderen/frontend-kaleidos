@@ -1,10 +1,4 @@
-{{#if (is-empty model)}}
-	<div class="no-data-container">
-		{{t 'agenda-item.no-agendaitems'}}
-	</div>
-{{/if}}
-{{#each model as |agendaitem|}}
-  <div class="cases--decree">
+<div class="cases--decree">
     <div class="cases--decree-head">
       {{#link-to
         "cases.case"
@@ -13,9 +7,9 @@
         tagName="div"
       }}
         <h4>
-        {{agendaitem.subcase.shortTitle}}
-      </h4>
-      <p>{{agendaitem.subcase.title}}</p>
+        {{agendaitem.priority}}. {{agendaitem.subcase.shortTitle}}
+        </h4>
+        <p>{{agendaitem.subcase.title}}</p>
         <div class="cases--decree-content-label">
           {{#if agendaitem.extended}}
         <p>{{t 'agenda-item.extended'}}</p>
@@ -65,4 +59,3 @@
       {{agenda/agendaitem-details agendaitem=agendaitem}}
     {{/if}}
   </div>
-{{/each}}

@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
 	model() {
-		let agenda = this.modelFor('sessions.session.agendas.agenda');
+		let agenda = this.modelFor('agendas.agenda');
 		return this.store.query('agendaitem', {
 			filter: {
 				agenda: { id: agenda.id }

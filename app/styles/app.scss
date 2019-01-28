@@ -341,6 +341,7 @@ menu {
     flex-direction: column;
 
     h4 {
+      font-weight:bold;
       margin: 0 0 10px;
       padding: 0;
     }
@@ -949,8 +950,7 @@ button.invert-color {
   overflow-y:scroll;
   background-color:#F6F6F6;
   float:left;
-  padding:2em;
-  width: calc(100% - 250px - 4px);
+  width: calc(100% - 250px);
   height: calc(100vh - 222px);
 
   .no-data-container {
@@ -1102,6 +1102,8 @@ button.invert-color {
   display:flex;
   justify-content: center;
   align-items:center;
+  padding:1em;
+  border-bottom: 1px solid var(--light-grey);
 }
 
 .file-upload-container {

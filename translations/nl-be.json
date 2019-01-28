@@ -77,10 +77,9 @@
 		"title": "LANGE TITEL"
 	},
 	"navigation": {
-		"agendas": "agendas",
+		"agendas": "Agendas",
 		"cases": "Dossiers",
 		"notifications": "Notificaties",
-		"sessions": "Zittingen",
 		"settings": "Instellingen"
 	},
 	"new-session": {

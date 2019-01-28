@@ -35,10 +35,10 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 				if (subCase.selected) {
 					let agendaitem = this.store.createRecord('agendaitem', {
 						extended: false,
+						priority:-1,
 						dateAdded: new Date(),
 						subcase: subCase,
 						agenda: selectedAgenda,
-            priority: 0
 					});
 					return await agendaitem.save();
 				}
@@ -50,6 +50,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 	},
 
 	navigateBack() {
-		this.transitionToRoute('sessions.session.agendas.agenda.agendaitems');
+		this.transitionToRoute('agendas.agenda.agendaitems');
 	}
 });

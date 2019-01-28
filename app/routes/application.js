@@ -6,7 +6,6 @@ export default Route.extend({
   intl: inject(),
 
   beforeModel() {
-    // this.get('moment').setTimeZone('be');
     this.intl.setLocale('nl-be');
   }
 });
