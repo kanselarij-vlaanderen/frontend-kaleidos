@@ -49,7 +49,6 @@ menu {
   }
 
   ul {
-
     margin-left: auto;
     display: flex;
     align-items: center;
@@ -63,7 +62,6 @@ menu {
       font-size: 0.9em;
       display: flex;
       align-items: center;
-
 
       a {
 
@@ -88,9 +86,7 @@ menu {
             left: 12.5%;
             background-color: var(--blue); overflow: hidden;
           }
-
         }
-
       }
 
       img {
@@ -1112,11 +1108,22 @@ button.invert-color {
   width:250px;
   cursor:pointer;
   margin: 0 auto;
+  border: 2px dashed #0087F7;
+  border-radius: 5px;
+  background: white;
+  height:100px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 
-  .files-zone {
-    border: 2px dashed #0087F7;
-    border-radius: 5px;
-    background: white;
-    height:100px;
+  .progress-container {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
   }
+
+  a {
+    text-decoration: none;
+  }
+
 }
