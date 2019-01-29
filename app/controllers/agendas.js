@@ -57,6 +57,12 @@ export default Controller.extend({
 
 		compareAgendas() {
 			this.transitionToRoute('comparison', { queryParams: { sessionId: this.get('currentSession').id } });
+		},
+
+		cancelNewSessionForm(event) {
+			this.set('creatingNewSession', false);
+			
 		}
+
 	}
 });

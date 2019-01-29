@@ -1,33 +1,40 @@
-<div class="session-header">
-  <div class="session-title-container">
-    <strong class="sessions-title">
-        {{t 'sessions-selector.agenda-of'}}
-    </strong>
+<div>
+  <div class="session-header">
+    <div class="session-title-container">
+      <strong class="sessions-title">
+        {{t "sessions-selector.agenda-of"}}
+      </strong>
+    </div>
+    {{#power-select
+      options=sessions
+      placeholder="2019-01-21"
+      selected=currentSession
+      searchField="plannedstart"
+      search=(perform searchTask)
+      oninput=(action "resetValueIfEmpty")
+      onchange=(action "chooseSession") as |session|
+    }}
+      {{#if session.plannedstart}}
+        {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
+      {{/if}}
+    {{/power-select}}
+    <button {{action "createNewSession"}}>
+      {{t "buttons.new-session"}}
+    </button>
+    <button {{action "lockAgenda" currentSession}}>
+      {{t "buttons.agenda-approve"}}
+    </button>
   </div>
-  {{#power-select
-    options=sessions
-    placeholder="2019-01-21"
-    selected=currentSession
-    searchField="plannedstart"
-    search=(perform searchTask)
-    oninput=(action "resetValueIfEmpty")
-    onchange=(action "chooseSession") as |session|
-  }}
-    {{#if session.plannedstart}}
-      {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
-    {{/if}}
-  {{/power-select}}
-  <button {{action "createNewSession"}}>
-    {{t 'buttons.new-session'}}
-  </button>
-  <button {{action "lockAgenda" currentSession}}>
-    {{t 'buttons.agenda-approve'}}
-  </button>
-</div>
   <div class="sessions-subtitle">
     {{#if currentAgendaItems}}
-      {{currentAgendaItems.length }} {{t 'agenda.agendaitems'}}
+      {{currentAgendaItems.length}} {{t "agenda.agendaitems"}}
     {{else}}
-      0 {{t 'agenda.agendaitems'}}
+      0 {{t "agenda.agendaitems"}}
     {{/if}}
   </div>
+</div>
+<div class="files--header-tile files--sub-file-header">
+  {{#if creatingNewSession}}
+    {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
+  {{/if}}
+</div>

@@ -40,7 +40,6 @@ export default Component.extend({
 			agendaToLock.save().then(async () => {
 			this.addAgendaToSession(session, agendaToLock).then(result => {
 				if(result) {
-
 					this.navigateBack(session.id);
 				} else {
 					// TODO: ERROR handling
@@ -61,21 +60,13 @@ export default Component.extend({
 
 		createNewSession() {
 			this.set('creatingNewSession', true);
+		},
+
+		async cancelNewSessionForm() {
+			this.set('creatingNewSession', false);
+			await this.loadSessions();
 		}
 	},
-
-	// Might be needed to reset sessions after approval of an agenda.
-	// fetchNewModel() {
-	// 	let sessions = this.store.query('session', {
-	// 		filter: {
-	// 			':gt:plannedstart': ""
-	// 		},
-	// 		sort: "number"
-	// 	});
-
-	// 	this.set('model', sessions);
-	// 	this.set('currentSession', sessions.get('firstObject'));
-	// }
 
 	addAgendaToSession(currentSession, oldAgenda) {
 		let agendaLength = currentSession.agendas.length;
@@ -103,8 +94,7 @@ export default Component.extend({
 		})
 	},
 
-	async didInsertElement() {
-		this._super(...arguments);
+	async loadSessions() {
 		let sessions = await this.store.query('session', { 
 			filter: {
 				':gt:plannedstart': "",
@@ -113,5 +103,10 @@ export default Component.extend({
 		});
 		this.set('sessions', sessions);
 		this.set('currentSession', sessions.get('firstObject'));
+	},
+
+	async didInsertElement() {
+		this._super(...arguments);
+		await this.loadSessions();
 	}
 });

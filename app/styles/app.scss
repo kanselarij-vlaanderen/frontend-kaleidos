@@ -1,4 +1,7 @@
 @import "ember-power-select";
+@import "ember-modal-dialog/ember-modal-structure";
+@import "ember-modal-dialog/ember-modal-appearance";
+
 html, body {margin: 0; height: 100%; overflow: hidden}
 
 :root {
@@ -601,16 +604,10 @@ button {
   display: flex;
 
   .files--header-tile {
-
     padding: 1.5em;
-    flex: 1;
 
     .ember-power-select-trigger {
       width:100%;
-    }
-
-    &:first-child {
-      border-right: 1px solid var(--light-grey);
     }
   }
 

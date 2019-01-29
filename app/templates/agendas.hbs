@@ -5,11 +5,6 @@
     creatingNewSession=creatingNewSession
     navigateBack=(action "navigateBack")
   }}
-  <div class="files--header-tile files--sub-file-header">
-    {{#if creatingNewSession}}
-      {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
-    {{/if}}
-  </div>
 </div>
 
 {{agenda/side-nav 
