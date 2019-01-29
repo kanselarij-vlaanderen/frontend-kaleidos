@@ -1,4 +1,4 @@
-<div class="agenda-item-link {{agenda-item-container-type (await agendaitem) (await selectedAgendaItem)}}" {{action "selectAgendaItem" agendaitem}}>
+<div class="agenda-item-link {{active-class (await agendaitem) (await selectedAgendaItem)}}" {{action "selectAgendaItem" agendaitem}}>
   <strong>
     {{agendaitem.priority}}. {{agendaitem.subcase.shortTitle}}
   </strong>
@@ -11,7 +11,7 @@
       {{t "agenda-item.extended"}}
     {{/if}}
     </p>
-    {{#if agendaitem.formal-ok}}
+    {{#if agendaitem.formallyOk}}
       <p class="formal-ok">
         {{fa-icon "check"}} 
         {{t 'agendaitem-details.formal-ok'}}

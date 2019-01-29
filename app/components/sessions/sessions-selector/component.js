@@ -10,6 +10,8 @@ export default Component.extend({
 	classNames: ["files--header-tile", "files--search"],
 	tagName: "div",
 	creatingNewSession: null,
+	currentAgendaItems:null,
+	currentSession:null,
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);

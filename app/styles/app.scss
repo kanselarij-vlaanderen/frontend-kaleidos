@@ -412,41 +412,40 @@ menu {
   .cases--decree-options {
     display:flex;
     flex-direction: column;
-    align-items: baseline;
 
     .settings-container {
-      display:flex;
-      flex-direction: column;
       width:100%;
-      align-items: center;
+      display:flex;
+      justify-content: flex-end;
     }
 
     .buttons {
       display:flex;
-      text-align:center;
-      justify-content: right;
+      flex-direction: column;
+      float:right;
 
       button {
         color: var(--white);
-        margin-left: 0.5em;
-
+        width:25%;
+        margin-bottom: 0.5em;
       }
     }
 
     .cases--decree-options-settings {
-
+      color: var(--blue);
       background-color: #fff;
-      width: 30px;
-      height: 30px;
-      border-radius: 30px;
+      border: 2px solid var(--blue);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size:1.5em;
+      padding-left:0.1em;
+      padding-right:0.1em;
+      width:40px;
+      text-align:right;
 
       img {
-        width: 20px;
-        height: 20px;
-        fill: #000;
+        size:1em;
       }
     }
   }

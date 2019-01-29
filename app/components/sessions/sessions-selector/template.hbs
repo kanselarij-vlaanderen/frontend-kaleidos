@@ -24,4 +24,10 @@
     {{t 'buttons.agenda-approve'}}
   </button>
 </div>
-  <div id="sessions-subtitle-count" class="sessions-subtitle"></div>
+  <div class="sessions-subtitle">
+    {{#if currentAgendaItems}}
+      {{currentAgendaItems.length }} {{t 'agenda.agendaitems'}}
+    {{else}}
+      0 {{t 'agenda.agendaitems'}}
+    {{/if}}
+  </div>

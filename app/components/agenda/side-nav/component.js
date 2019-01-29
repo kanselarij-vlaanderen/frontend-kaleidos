@@ -3,6 +3,10 @@ import Component from '@ember/component';
 export default Component.extend({
 	classNames: ['side--menu-container'],
 	classNameBindings: ['agendaMenuOpened:opened'],
+	currentAgenda:null,
+	currentSession:null,
+	selectedAgendaItem:null,
+	agendaMenuOpened:null,
 
 	actions: {
 		collapseSideMenu() {
@@ -10,10 +14,11 @@ export default Component.extend({
 		},
 
 		compareAgendas() {
-			this.transitionToRoute('comparison', this.get('currentSession').id);
+			this.compareAgendas();
 		},
 
 		setCurrentAgenda(agenda) {
+			this.set('selectedAgendaItem', null);
 			this.set('currentAgenda', agenda);
 		}
 	}

@@ -18,9 +18,6 @@
       	{{#if dropzone.supported}}
 					{{t 'dropzone-text'}}      	
 				{{/if}}
-			{{#if queue.files.length}}
-				{{ember-progress-bar progress=queue.progress useDefaultStep=true}}
- 			{{/if}}
   	{{/if}}
 	{{/file-dropzone}}
 {{/file-upload}}

@@ -1,6 +1,7 @@
 <div class="files--header">
   {{sessions/sessions-selector
     currentSession=currentSession
+    currentAgendaItems=currentAgendaItems
     creatingNewSession=creatingNewSession
     navigateBack=(action "navigateBack")
   }}
@@ -12,13 +13,12 @@
 </div>
 
 {{agenda/side-nav agendas=model 
-  currentAgenda=currentAgenda 
+  currentAgenda=currentAgenda
+  currentSession=currentSession
+  selectedAgendaItem=selectedAgendaItem
   agendaMenuOpened=agendaMenuOpened
+  compareAgendas=(action 'compareAgendas')
 }}
-
-{{#ember-wormhole to="sessions-subtitle-count"}}
-  {{currentAgendaItems.length}} {{t 'agenda.agendaitems'}}
-{{/ember-wormhole}}
 
 <div class="agenda-items-container">
   <div class="left-side-container">
