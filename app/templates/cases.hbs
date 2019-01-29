@@ -1,11 +1,19 @@
-<div class="cases--content">
-  <div class="cases--content-50">
-    <div class="cases--header">
-      {{cases/cases-search cases=model showFilters="true"}}
-    </div>
-    {{cases/case-item model=model}}
+<div class="cases--header">
+
+  <div class="cases--info">
+    <h1>Dossiers</h1>
+    <p>32.000 dossiers</p>
   </div>
-  <div class="cases--content-50">
-    {{outlet}}
+
+  <div >
+    {{#link-to "cases.create"}}
+      <button>+ Nieuw dossier aanmaken</button>
+    {{/link-to}}
   </div>
+
 </div>
+
+<div class="cases--content">
+  {{outlet}}
+</div>
+

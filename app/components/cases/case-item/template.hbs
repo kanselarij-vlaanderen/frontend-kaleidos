@@ -1,37 +1,21 @@
 {{#each model as |case|}}
-  <div class="cases--decree--container">
-    {{#link-to "cases.case" case.id class="cases--decree"}}
-      <div class="cases--decree-content">
-        <h4>1. {{case.title}}</h4>
-        <div class="cases--decree-content-label">
-					{{!-- SHOULD BE REPLACED BY `Hoedanigheid` --}}
-          minister-president van de vlaamse regering
+  <div class="cases--list">
+    {{#link-to "cases.case" case.id class="cases-list-item"}}
+        <div class="cases-list-item-column">
+          {{input type="checkbox"  }}
         </div>
-        <div class="cases--decree-content-expand">
-          <img src="/assets/down-arrow.svg" />
-          <span>
-            {{t "agenda-item.expand"}}
-          </span>
+        <div class="cases-list-item-column">
+          <h4>{{case.title}}</h4>
         </div>
-      </div>
-      <div class="cases--decree-options">
-        <div>
-          <span>
-						{{t "agenda-item.decree"}}
-          </span>
+        <div class="cases-list-item-column">
+          <p>{{case.status}}</p>
         </div>
-        <div class="cases--decree-options-settings">
-          <img src="/assets/setting.svg" alt="Settings" />
+        <div class="cases-list-item-column">
+          {{moment-format case.created "dddd DD-MM-YYYY"}}
         </div>
-        <div>
-          <div>
-						{{t "agendaitem-details.formal-nok"}}
-          </div>
-          <div>
-            {{t "case-item.not-agreed"}}
-          </div>
+        <div class="cases-list-item-column">
+          options
         </div>
-      </div>
     {{/link-to}}
   </div>
 {{/each}}
