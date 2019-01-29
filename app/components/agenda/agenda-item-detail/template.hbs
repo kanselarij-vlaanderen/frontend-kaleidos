@@ -1,0 +1,45 @@
+<div class="cases--decree">
+  <div class="cases--decree-options">
+    <div class="settings-container">
+      <div class="cases--decree-options-settings"
+        onclick={{action "showOptions" agendaitem}}>
+					{{fa-icon 'ellipsis-h' 'large'}}
+      </div>
+    </div>
+    {{#if (not-eq agendaitemToShowOptionsFor.id agendaitem.id)}}
+
+    {{else}}
+      <div class="buttons">
+        <button {{action "changeExtendedValue" agendaitem}}>
+          {{extend-button-text agendaitem.extended}}
+        </button>
+        <button {{action "deleteItem" agendaitem}}>
+          {{t "buttons.delete"}}
+        </button>
+      </div>
+    {{/if}}
+  </div>
+  <div class="cases--decree-head">
+    {{#link-to
+      "cases.case"
+      agendaitem.id
+      class="cases--decree-content"
+      tagName="div"
+    }}
+      <h4>
+        {{agendaitem.subcase.shortTitle}}
+      </h4>
+      <p>
+        {{agendaitem.subcase.title}}
+      </p>
+      <div class="cases--decree-content-label">
+        {{#if agendaitem.extended}}
+          <p>
+            {{t "agenda-item.extended"}}
+          </p>
+        {{/if}}
+      </div>
+    {{/link-to}}
+  </div>
+  {{agenda/agendaitem-details agendaitem=agendaitem}}
+</div>

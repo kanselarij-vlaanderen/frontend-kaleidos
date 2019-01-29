@@ -6,11 +6,12 @@ const Router = EmberRouter.extend({
   rootURL: config.rootURL
 });
 
-Router.map(function() {
-  this.route('cases', { path : '/dossiers' },  function () {
+Router.map(function () {
+  this.route('agendas');
+  this.route('cases', { path: '/dossiers' }, function () {
     this.route('create');
-    this.route('case', { path: ':id' }, function ()  {
-      this.route('subcases', { path: '/deeldossiers' }, function() {
+    this.route('case', { path: ':id' }, function () {
+      this.route('subcases', { path: '/deeldossiers' }, function () {
         this.route('create');
         this.route('overview', { path: '' });
         this.route('subcase', { path: ':id' });
@@ -18,19 +19,10 @@ Router.map(function() {
     });
     this.route('overview', { path: '' });
   });
+  this.route('comparison');
   this.route('home', { path: "/" });
   this.route('settings');
-  this.route('sessions', {path: '/zittingen'}, function() {
-    this.route('session', { path: ":id"}, function() {
-      this.route('agendas', function() {
-        this.route('agenda',{ path: ":agendaid" }, function() {
-          this.route('agendaitems');
-          this.route('subcases');
-        });
-      });
-      this.route('comparison');
-    });
-  });
+  this.route('subcases');
 });
 
 export default Router;

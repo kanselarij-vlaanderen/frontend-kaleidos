@@ -9,10 +9,9 @@ export default Component.extend({
 	store: inject(),
 	classNames: ["files--header-tile", "files--search"],
 	tagName: "div",
-
-	sessions: null,
-	currentSession: null,
 	creatingNewSession: null,
+	currentAgendaItems:null,
+	currentSession:null,
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
@@ -25,7 +24,7 @@ export default Component.extend({
 
 	actions: {
 		chooseSession(session) {
-			this.chooseSession(session);
+			this.set('currentSession', session);
 		},
 
 		async lockAgenda(session) {
@@ -41,6 +40,7 @@ export default Component.extend({
 			agendaToLock.save().then(async () => {
 			this.addAgendaToSession(session, agendaToLock).then(result => {
 				if(result) {
+
 					this.navigateBack(session.id);
 				} else {
 					// TODO: ERROR handling
@@ -63,6 +63,19 @@ export default Component.extend({
 			this.set('creatingNewSession', true);
 		}
 	},
+
+	// Might be needed to reset sessions after approval of an agenda.
+	// fetchNewModel() {
+	// 	let sessions = this.store.query('session', {
+	// 		filter: {
+	// 			':gt:plannedstart': ""
+	// 		},
+	// 		sort: "number"
+	// 	});
+
+	// 	this.set('model', sessions);
+	// 	this.set('currentSession', sessions.get('firstObject'));
+	// }
 
 	addAgendaToSession(currentSession, oldAgenda) {
 		let agendaLength = currentSession.agendas.length;
@@ -89,4 +102,16 @@ export default Component.extend({
 			});
 		})
 	},
+
+	async didInsertElement() {
+		this._super(...arguments);
+		let sessions = await this.store.query('session', { 
+			filter: {
+				':gt:plannedstart': "",
+			},
+			sort: "number"
+		});
+		this.set('sessions', sessions);
+		this.set('currentSession', sessions.get('firstObject'));
+	}
 });

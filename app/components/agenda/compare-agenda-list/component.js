@@ -9,9 +9,11 @@ export default Component.extend({
 	currentAgenda: null,
 
 	currentAgendaItemsObserver: on('init', observer('currentAgenda', async function () {
+		let currentAgenda = await this.get('currentAgenda');
+		if(!currentAgenda) return;
 		let agendaItems = await this.store.query('agendaitem', {
 			filter: {
-				'agenda': { id: this.currentAgenda.id }
+				'agenda': { id: currentAgenda.id }
 			},
 			include: 'subcase'
 		});
@@ -20,9 +22,11 @@ export default Component.extend({
 	})),
 
 	agendaToCompareAgendaItemsObserver: on('init', observer('agendaToCompare', async function () {
+		let agendaToCompare = await this.get('agendaToCompare');
+		if(!agendaToCompare) return;
 		let agendaItems = await this.store.query('agendaitem', {
 			filter: {
-				'agenda': { id: this.agendaToCompare.id }
+				'agenda': { id: agendaToCompare.id }
 			},
 			include: 'subcase'
 		})

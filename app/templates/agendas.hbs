@@ -1,0 +1,52 @@
+<div class="files--header">
+  {{sessions/sessions-selector
+    currentSession=currentSession
+    currentAgendaItems=currentAgendaItems
+    creatingNewSession=creatingNewSession
+    navigateBack=(action "navigateBack")
+  }}
+  <div class="files--header-tile files--sub-file-header">
+    {{#if creatingNewSession}}
+      {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
+    {{/if}}
+  </div>
+</div>
+
+{{agenda/side-nav agendas=model 
+  currentAgenda=currentAgenda
+  currentSession=currentSession
+  selectedAgendaItem=selectedAgendaItem
+  agendaMenuOpened=agendaMenuOpened
+  compareAgendas=(action 'compareAgendas')
+}}
+
+<div class="agenda-items-container">
+  <div class="left-side-container">
+  <div class="agenda-container">
+    {{agenda/agendaitem-search
+      selectedAgenda=currentAgenda
+      navigateToSubCases=(action "navigateToSubCases")
+   }}
+	  {{#if (not currentAgenda.locked)}}
+      <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
+        {{t 'buttons.agenda-lock'}}
+      </button>
+	    {{else}}
+	    <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
+        {{t 'buttons.agenda-unlock'}}
+      </button>
+	  {{/if}}
+  </div>
+  <div class="agenda-item-list-container">
+    {{agenda/agenda-item-list agendaitems=currentAgendaItems selectedAgendaItem=selectedAgendaItem}}
+  </div>
+  </div>
+  {{#if selectedAgendaItem}}
+  <div class="right-side-container">
+    <div class="agenda-item-detail-container">
+        {{agenda/agenda-item-detail agendaitem=selectedAgendaItem}}
+    </div>
+  </div>
+  {{/if}}
+</div>
+

@@ -1,9 +1,16 @@
 import Controller from '@ember/controller';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import $ from 'jquery';
+import { computed } from '@ember/object';
 
 export default Controller.extend(DefaultQueryParamsMixin, {
+	queryParams: ['agendaId'],
 	allSubCasesSelected: false,
+
+	selectedAgenda: computed('agendaId', function () {
+		let agendaId = this.get('agendaId');
+		return this.store.findRecord('agenda', agendaId, { reload: true });
+	}),
 
 	actions: {
 		selectSubCase(subcase, event) {
@@ -29,17 +36,18 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 			this.navigateBack();
 		},
 
-		addSubcasesToAgenda() {
-			let selectedAgenda = this.get('selectedAgenda');
-			let itemsToAdd = this.get('model');
+		async addSubcasesToAgenda() {
+			let selectedAgenda = await this.get('selectedAgenda');
+			let itemsToAdd = await this.get('model');
 			let promise = Promise.all(itemsToAdd.map(async subCase => {
 				if (subCase.selected) {
 					let agendaitem = this.store.createRecord('agendaitem', {
 						extended: false,
+						priority: 100,
+						formallyOk:false,
 						dateAdded: new Date(),
 						subcase: subCase,
 						agenda: selectedAgenda,
-            priority: 0
 					});
           return new Promise((resolve, reject) => {
             agendaitem.save().then(agendaitem => {
@@ -66,6 +74,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 	},
 
 	navigateBack() {
-		this.transitionToRoute('sessions.session.agendas.agenda.agendaitems');
+		this.transitionToRoute('agendas');
 	}
 });

@@ -1,68 +1,28 @@
-{{#if (is-empty model)}}
-	<div class="no-data-container">
-		{{t 'agenda-item.no-agendaitems'}}
-	</div>
-{{/if}}
-{{#each model as |agendaitem|}}
-  <div class="cases--decree">
-    <div class="cases--decree-head">
-      {{#link-to
-        "cases.case"
-        agendaitem.id
-        class="cases--decree-content"
-        tagName="div"
-      }}
-        <h4>
-        {{agendaitem.subcase.shortTitle}}
-      </h4>
-      <p>{{agendaitem.subcase.title}}</p>
-        <div class="cases--decree-content-label">
-          {{#if agendaitem.extended}}
-        <p>{{t 'agenda-item.extended'}}</p>
-        {{/if}}        
-        </div>
-        <div class="cases--decree-content-expand">
-          <span {{action "toggleShowMore" agendaitem bubbles=false}}>
-          {{#if agendaitem.showDetails}}
-            v {{t 'agenda-item.collapse'}}
-          {{else}}
-            > {{t 'agenda-item.expand'}}
-          {{/if}}
-        </span>
-        </div>
-      {{/link-to}}
-      {{#if (not agendaitem.agenda.locked)}}
-      <div class="cases--decree-options">
-        <div class="settings-container">
-          <div>
-          <span>
-            {{t 'agenda-item.decree'}}
-          </span>
-          </div>
-          <div
-            class="cases--decree-options-settings"
-            onclick={{action "showOptions" agendaitem}}
-          >
-            <img src="/assets/setting.svg" alt="Settings" />
-          </div>
-        </div>
-        {{#if (not-eq agendaitemToShowOptionsFor.id agendaitem.id)}}
+<div class="agenda-item-link {{active-class (await agendaitem) (await selectedAgendaItem)}}" {{action "selectAgendaItem" agendaitem}}>
+  <strong>
+    {{agendaitem.priority}}. {{agendaitem.subcase.shortTitle}}
+  </strong>
+  <p>
+    {{agendaitem.subcase.title}}
+  </p>
+  <div class="agenda-sub-options">
+    <p>
+    {{#if agendaitem.extended}}
+      {{t "agenda-item.extended"}}
+    {{/if}}
+    </p>
+    {{#if agendaitem.formallyOk}}
+      <p class="formal-ok">
+        {{fa-icon "check"}} 
+        {{t 'agendaitem-details.formal-ok'}}
+      </p>
+    {{else}}
+      <p class="formal-nok">
+        {{fa-icon "check"}} 
+        {{t 'agendaitem-details.formal-ok'}}
+      </p>
+    {{/if}}
+  </div>  
+</div>
 
-        {{else}}
-          <div class="buttons">
-            <button {{action "changeExtendedValue" agendaitem}}>
-              {{extend-button-text agendaitem.extended}}
-            </button>
-            <button {{action "deleteItem" agendaitem}}>
-              {{t 'buttons.delete'}}
-            </button>
-          </div>
-        {{/if}}
-      </div>
-    {{/if}}
-    </div>
-    {{#if agendaitem.showDetails}}
-      {{agenda/agendaitem-details agendaitem=agendaitem}}
-    {{/if}}
-  </div>
-{{/each}}
+
