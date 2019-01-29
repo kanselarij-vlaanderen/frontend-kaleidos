@@ -42,11 +42,19 @@
 		"next-step": "Volgende Stap",
 		"save": "Opslaan"
 	},
+  "cases" : {
+    "title" : "Dossier"
+  },
 	"case-item": {
 		"not-agreed": "Niet Akkoord"
 	},
 	"cases-search": {
-		"search-placeholder": "Zoek op document titel.."
+    "cases-number": "Nummer Dossier",
+    "document-number": "Nummer Document",
+    "date": "Datum Ministerraad",
+		"search-placeholder": "Zoek op document titel..",
+    "keyword": "Trefwoord",
+    "title-document" : "Document titel"
 	},
 	"comparison": {
 		"nav-title": "Agendas"
