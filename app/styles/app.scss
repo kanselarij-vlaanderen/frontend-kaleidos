@@ -322,6 +322,7 @@ menu {
 
 .agenda-item-container {
   width:100%;
+  border-left: 1px solid #e7e7e7;
   border-bottom: 1px solid #e7e7e7;
   text-decoration: none;
   color: #212121;
@@ -1038,42 +1039,9 @@ button.invert-color {
   }
 }
 
-.compare-agenda-container {
-  float:left;
-  padding:1em;
-  width:50%;
-}
-
-.deleted {
-  background-color: red;
-}
-
-.extended {
-  background-color:yellow;
-}
-
-.normal-agenda-item, .unchanged {
-  background-color: var(--white-back);
-}
-
-.added {
-  background-color: green,
-}
-
-.previous-agenda-item {
-  width:40%;
-  background-color: var(--white-back);
-  float:left;
-}
-
-.current-agenda-item {
-  width:40%;
-  float:left;
-}
-
 .side-nav-small {
   display:block;
-  width:100px;
+  width:150px;
   height:100vh;
   float:left;
   background-color: var(--white-back) ; 
@@ -1100,18 +1068,18 @@ button.invert-color {
       }
     }
   }
+  
 
   button {
-    font-stretch: expanded;
     width:100%;
     display:flex;
     flex-direction: column;
-    background-color: var(--grey);
+    background-color: var(--white-back) ; 
     font-size: 0.8em;
+    color: black;
     padding: 1em;
     text-decoration: none;
     display: block;
-    border:0px 1px 1px 0px solid var(--light-grey);
     
     p {
       margin:0;
@@ -1184,3 +1152,57 @@ button.invert-color {
   }
 
 }
+
+.comparison-container {
+  width: calc(100% - 150px);
+  float:left;
+
+  .compare-title {
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px solid var(--light-grey);
+
+    h2 {
+      font-size:1.5em;
+      font-weight: bold;
+    }
+  }
+
+  .compare-agenda-list-container {
+    display:flex;
+    width:100%;
+    flex-direction: column;
+  
+    .compare-item-container {
+      width:100%;
+      height:200px;
+
+      .previous-agenda-item {
+        width:50%;
+        float:left;
+        
+        .agenda-item-link {
+          height:200px;
+          border-right: 1px solid var(--light-grey);
+          border-bottom: 1px solid var(--light-grey);
+        }
+      }
+      
+      .current-agenda-item {
+        width:50%;
+        float:left;
+
+        .agenda-item-link {
+          height:200px;
+          border-bottom: 1px solid var(--light-grey);
+        }
+      }
+    }
+  }
+
+
+}
+
+
+
