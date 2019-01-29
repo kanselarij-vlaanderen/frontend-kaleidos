@@ -9,7 +9,7 @@ export default Controller.extend({
 	selectedAgendaItem: null,
 	currentAgenda: null,
 
-	model: computed('currentSession', function () {
+	agendas: computed('currentSession', function () {
 		if (!this.currentSession) return [];
 		return this.store.query('agenda', {
 			filter: {
@@ -19,11 +19,10 @@ export default Controller.extend({
 		});
 	}),
 
-	currentAgendaObserver: observer('model', async function () {
-		let agendas = await this.get('model');
+	currentAgendaObserver: observer('agendas', async function () {
+		let agendas = await this.get('agendas');
 		if (agendas && agendas.length > 0) {
 			let agendaIdToQuery = agendas.get('firstObject').id;
-			// add reload:true to force refresh
 			let currentAgenda = await this.store.findRecord('agenda', agendaIdToQuery, { reload: true });
 			this.set('currentAgenda', currentAgenda);
 		}
@@ -46,8 +45,8 @@ export default Controller.extend({
 			this.transitionToRoute('subcases', { queryParams: { agendaId: this.get('currentAgenda.id') } });
 		},
 
-		navigateBack(sessionId) {
-			this.transitionToRoute('agendas.agenda', sessionId);
+		navigateBack() {
+			// this.transitionToRoute('agendas', sessionId);
 		},
 
 		lockAgenda(agenda) {
@@ -59,10 +58,8 @@ export default Controller.extend({
 			this.transitionToRoute('comparison', { queryParams: { sessionId: this.get('currentSession').id } });
 		},
 
-		cancelNewSessionForm(event) {
+		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
-			
 		}
-
 	}
 });

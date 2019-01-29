@@ -1,6 +1,5 @@
-<div class="cases--header-tile cases--sub-file-header">
-  <h2>DOSSIERS</h2>
-  {{#link-to "cases.create"}}
-    <button>+ nieuw dossier</button>
-  {{/link-to}}
+{{cases/cases-search cases=model showFilters="true"}}
+
+<div class="cases-overview">
+  {{cases/case-item model=model}}
 </div>

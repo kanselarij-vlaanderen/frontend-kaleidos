@@ -1,6 +1,8 @@
 <div class="files--header">
   {{sessions/sessions-selector
+    sessions=model
     currentSession=currentSession
+    currentAgenda=currentAgenda
     currentAgendaItems=currentAgendaItems
     creatingNewSession=creatingNewSession
     navigateBack=(action "navigateBack")
@@ -8,7 +10,7 @@
 </div>
 
 {{agenda/side-nav 
-  agendas=model
+  agendas=agendas
   currentAgenda=currentAgenda
   currentSession=currentSession
   selectedAgendaItem=selectedAgendaItem

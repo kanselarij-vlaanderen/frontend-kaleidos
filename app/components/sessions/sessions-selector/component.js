@@ -1,17 +1,19 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
-import $ from 'jquery';
 
-const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
 export default Component.extend({
 	store: inject(),
+	agendaService: inject(),
 	classNames: ["files--header-tile", "files--search"],
 	tagName: "div",
 	creatingNewSession: null,
-	currentAgendaItems:null,
-	currentSession:null,
+	currentAgendaItems: null,
+	currentSession: null,
+	currentAgenda: null,
+	sessions:null,
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
@@ -32,29 +34,37 @@ export default Component.extend({
 				filter: {
 					session: { id: session.id }
 				},
-				sort: '-name'
+				sort: 'name'
 			});
+
 			let agendaToLock = agendas.get('firstObject');
+
+			let definiteAgendas = agendas.filter(agenda => agenda.name != "Ontwerpagenda")
+			let lastDefiniteAgenda = definiteAgendas.get('firstObject');
+
+			if (!lastDefiniteAgenda) {
+				agendaToLock.set('name', alphabet[0]);
+			} else {
+				agendaToLock.set('name', alphabet[definiteAgendas.length])
+			}
+
 			agendaToLock.set('locked', true);
 
 			agendaToLock.save().then(async () => {
-			this.addAgendaToSession(session, agendaToLock).then(result => {
-				if(result) {
-					this.navigateBack(session.id);
-				} else {
-					// TODO: ERROR handling
-				}
-			});
+				this.get('agendaService').addAgendaToSession(session, agendaToLock).then(async newAgenda => {
+					if (newAgenda) {
+						await this.loadSessions().then(() => {
+							this.set('currentSession', session);
+							this.notifyPropertyChange('currentSession');
+						});
+					}
+				});
 			})
 		},
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				this.set('sessions', this.store.query('session', {
-					filter: {
-						// ':gte:plannedstart': new Date().toISOString()
-					}
-				}));
+				this.set('sessions', this.store.query('session'));
 			}
 		},
 
@@ -68,45 +78,19 @@ export default Component.extend({
 		}
 	},
 
-	addAgendaToSession(currentSession, oldAgenda) {
-		let agendaLength = currentSession.agendas.length;
-		let newAgenda = this.store.createRecord('agenda', {
-			name: "Ontwerpagenda " + alphabet[agendaLength].toUpperCase(),
-			session: currentSession
-		})
-		return new Promise((resolve, reject) => {
-			newAgenda.save().then(agenda => {
-				$.ajax(
-					{
-						method: "POST",
-						url: 'http://localhost/agenda-approve/approveAgenda',
-						data: {
-							newAgendaId: agenda.id,
-							oldAgendaId: oldAgenda.id
-						}
-					}
-				).then(result => {
-					resolve(result);
-				}).catch(error => {
-					reject(error);
-				})
-			});
-		})
-	},
-
 	async loadSessions() {
-		let sessions = await this.store.query('session', { 
+		let sessions = await this.store.query('session', {
 			filter: {
 				':gt:plannedstart': "",
 			},
 			sort: "number"
 		});
 		this.set('sessions', sessions);
-		this.set('currentSession', sessions.get('firstObject'));
+		this.set('currentSession', this.get('sessions').get('firstObject'));
 	},
 
 	async didInsertElement() {
 		this._super(...arguments);
-		await this.loadSessions();
+		this.set('currentSession', this.get('sessions').get('firstObject'));
 	}
 });
