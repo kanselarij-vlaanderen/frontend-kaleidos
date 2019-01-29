@@ -4,5 +4,4 @@ export default Component.extend({
 	classNames: ["cases--content-tile"],
 	tagName: "div",
 	selectedAgendaItem: null
-
 });

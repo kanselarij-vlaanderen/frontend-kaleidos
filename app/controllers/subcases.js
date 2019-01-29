@@ -58,7 +58,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
                   data: {
                   }
                 }
-              ).then(result => {
+              ).then(() => {
                 resolve(agendaitem);
               }).catch(error => {
                 reject(error);
