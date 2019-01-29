@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 
 export default Controller.extend({
 	agendaMenuOpened: true,
@@ -7,6 +7,7 @@ export default Controller.extend({
 	currentSession: null,
 	currentAgendaItem: null,
 	selectedAgendaItem: null,
+	currentAgenda: null,
 
 	model: computed('currentSession', function () {
 		if (!this.currentSession) return [];
@@ -18,20 +19,18 @@ export default Controller.extend({
 		});
 	}),
 
-	// currentAgenda: computed('model', async function () {
-	// 	let agendas = await this.get('model');
-	// 	if (agendas && agendas.length > 0) {
-	// 		let agendaIdToQuery = agendas.get('firstObject').id;
-	// 		return this.store.query('agenda', {
-	// 			filter: {
-	// 				id: agendaIdToQuery
-	// 			}
-	// 		})
-	// 	}
-	// }),
+	currentAgendaObserver: observer('model', async function () {
+		let agendas = await this.get('model');
+		if (agendas && agendas.length > 0) {
+			let agendaIdToQuery = agendas.get('firstObject').id;
+			// add reload:true to force refresh
+			let currentAgenda = await this.store.findRecord('agenda', agendaIdToQuery, { reload: true });
+			this.set('currentAgenda', currentAgenda);
+		}
+	}),
 
-	currentAgendaItems: computed('currentAgenda', async function () {
-		let currentAgenda = await this.get('currentAgenda');
+	currentAgendaItems: computed('currentAgenda', function () {
+		let currentAgenda = this.get('currentAgenda');
 		if (currentAgenda) {
 			return this.store.query('agendaitem', {
 				filter: {

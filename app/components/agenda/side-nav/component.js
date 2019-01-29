@@ -21,5 +21,5 @@ export default Component.extend({
 			this.set('selectedAgendaItem', null);
 			this.set('currentAgenda', agenda);
 		}
-	}
+	},
 });

@@ -1,4 +1,5 @@
 <div class="agenda-item-link {{active-class (await agendaitem) (await selectedAgendaItem)}}" {{action "selectAgendaItem" agendaitem}}>
+  {{#if agendaitem.id}}
   <strong>
     {{agendaitem.priority}}. {{agendaitem.subcase.shortTitle}}
   </strong>
@@ -23,6 +24,7 @@
       </p>
     {{/if}}
   </div>  
+  {{/if}}
 </div>
 
 

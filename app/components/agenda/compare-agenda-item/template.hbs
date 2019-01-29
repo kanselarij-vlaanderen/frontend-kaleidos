@@ -1,6 +1,32 @@
 <div class="previous-agenda-item">
-  {{agenda/agenda-item agendaitem=changedSet.previous}}
+  <div class="agenda-item-container">
+    <div class="agenda-item-link">
+      {{#if changedSet.previous.id}}
+        <strong>
+          {{changedSet.previous.priority}}
+          .
+          {{changedSet.previous.subcase.shortTitle}}
+        </strong>
+        <p>
+          {{changedSet.previous.subcase.title}}
+        </p>
+      {{/if}}
+    </div>
+  </div>
 </div>
 <div class="current-agenda-item">
-  {{agenda/agenda-item agendaitem=changedSet.current}}
+  <div class="agenda-item-container" >
+    <div class="agenda-item-link">
+      {{#if changedSet.current.id}}
+        <strong>
+          {{changedSet.current.priority}}
+          .
+          {{changedSet.current.subcase.shortTitle}}
+        </strong>
+        <p>
+          {{changedSet.current.subcase.title}}
+        </p>
+      {{/if}}
+    </div>
+  </div>
 </div>

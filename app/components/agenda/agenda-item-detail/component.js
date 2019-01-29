@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-	classNames:["agenda-item-container"],
+	classNames: ["agenda-item-container"],
 	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
@@ -26,8 +26,10 @@ export default Component.extend({
 			agendaitem.save();
 		},
 
-		async deleteItem(agendaitem) {
-			await agendaitem.destroyRecord();
+		deleteItem(agendaitem) {
+			agendaitem.destroyRecord().then(() => {
+				this.set('agendaitem', null);
+			});
 		},
 
 		toggleShowMore(agendaitem) {

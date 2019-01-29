@@ -5,6 +5,7 @@ import { on } from '@ember/object/evented';
 
 export default Component.extend({
 	store: inject(),
+	classNames:['comparison-container'],
 	agendaToCompare: null,
 	currentAgenda: null,
 
@@ -15,7 +16,6 @@ export default Component.extend({
 			filter: {
 				'agenda': { id: currentAgenda.id }
 			},
-			include: 'subcase'
 		});
 
 		this.set('currentAgendaItems', agendaItems);

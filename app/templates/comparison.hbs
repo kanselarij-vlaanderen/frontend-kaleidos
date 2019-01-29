@@ -6,9 +6,7 @@
 	<button {{action "selectAgenda" agenda}}>{{agenda.name}}</button>
 	{{/each}}
 </div>
-<div class="comparison-container">
 {{agenda/compare-agenda-list
   currentAgenda=(await currentAgenda)
   agendaToCompare=(await agendaToCompare)
 }}
-</div>
