@@ -15,6 +15,9 @@ export default Route.extend({
 	actions: {
 		refresh() {
 			this.refresh();
-		}
+		},
+    addComment(){
+      this.set("selectedAgendaItem", null);
+    }
 	}
 });

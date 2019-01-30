@@ -27,10 +27,12 @@ export default Component.extend({
 				}}));
 			}
 		},
-
 		navigateToSubCases() {
 			this.set('addingAgendaItems', true);
 			this.navigateToSubCases();
+		},
+    addComment() {
+			this.addComment();
 		}
 	}
 });

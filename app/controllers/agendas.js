@@ -8,6 +8,7 @@ export default Controller.extend({
 	currentAgendaItem: null,
 	selectedAgendaItem: null,
 	currentAgenda: null,
+  addComment: false,
 
 	model: computed('currentSession', function () {
 		if (!this.currentSession) return [];
@@ -54,7 +55,6 @@ export default Controller.extend({
 			agenda.set('locked', !agenda.locked);
 			agenda.save();
 		},
-
 		compareAgendas() {
 			this.transitionToRoute('comparison', { queryParams: { sessionId: this.get('currentSession').id } });
 		}

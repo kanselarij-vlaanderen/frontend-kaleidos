@@ -26,6 +26,7 @@
   <div class="agenda-container">
     {{agenda/agendaitem-search
       selectedAgenda=currentAgenda
+      addComment=(action "addComment")
       navigateToSubCases=(action "navigateToSubCases")
    }}
 	  {{#if (not currentAgenda.locked)}}
@@ -47,6 +48,11 @@
     <div class="agenda-item-detail-container">
         {{agenda/agenda-item-detail agendaitem=selectedAgendaItem}}
     </div>
+  </div>
+  {{/if}}
+  {{#if addComment}}
+  <div class="right-side-container">
+    {{agenda/new-comment agenda=currentAgenda}}
   </div>
   {{/if}}
 </div>
