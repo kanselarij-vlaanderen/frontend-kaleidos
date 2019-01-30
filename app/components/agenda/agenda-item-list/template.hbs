@@ -3,7 +3,7 @@
 		{{t 'agenda-item.no-agendaitems'}}
 	</div>
 {{else}}
-{{#each (await agendaitems) as |agendaitem|}}
-  {{agenda/agenda-item agendaitem=agendaitem selectedAgendaItem=selectedAgendaItem}}
+{{#each (await agendaitems) as |agendaitem index|}}
+  {{agenda/agenda-item agendaitem=agendaitem index=index selectedAgendaItem=selectedAgendaItem}}
 {{/each}}
 {{/if}}

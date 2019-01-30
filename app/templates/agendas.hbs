@@ -1,19 +1,15 @@
 <div class="files--header">
-  {{sessions/sessions-selector
+  {{agenda/agenda-header
+    sessions=model
     currentSession=currentSession
-    currentAgendaItems=currentAgendaItems
+    currentAgenda=currentAgenda
+    currentAgendaItems=(await currentAgendaItems)
     creatingNewSession=creatingNewSession
-    navigateBack=(action "navigateBack")
   }}
-  <div class="files--header-tile files--sub-file-header">
-    {{#if creatingNewSession}}
-      {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
-    {{/if}}
-  </div>
 </div>
 
 {{agenda/side-nav 
-  agendas=model
+  agendas=agendas
   currentAgenda=currentAgenda
   currentSession=currentSession
   selectedAgendaItem=selectedAgendaItem
@@ -39,7 +35,7 @@
 	  {{/if}}
   </div>
   <div class="agenda-item-list-container">
-    {{agenda/agenda-item-list agendaitems=currentAgendaItems selectedAgendaItem=selectedAgendaItem}}
+    {{agenda/agenda-item-list agendaitems=(await currentAgendaItems) selectedAgendaItem=selectedAgendaItem}}
   </div>
   </div>
   {{#if selectedAgendaItem}}

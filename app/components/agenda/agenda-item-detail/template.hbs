@@ -1,16 +1,16 @@
 <div class="cases--list-item">
   <div class="cases--decree-options">
     <div class="settings-container">
-      <div class="cases--decree-options-settings"
-        onclick={{action "showOptions" agendaitem}}>
-					{{fa-icon 'ellipsis-h' 'large'}}
+      <div
+        class="cases--decree-options-settings"
+        onclick={{action "showOptions" agendaitem}}
+      >
+        {{fa-icon "ellipsis-h"}}
       </div>
     </div>
-    {{#if (not-eq agendaitemToShowOptionsFor.id agendaitem.id)}}
-
-    {{else}}
+    {{#if (eq agendaitemToShowOptionsFor.id agendaitem.id)}}
       <div class="buttons">
-        <button {{action "changeExtendedValue" agendaitem}}>
+        <button {{action "toggleModal" agendaitem}}>
           {{extend-button-text agendaitem.extended}}
         </button>
         <button {{action "deleteItem" agendaitem}}>
@@ -43,3 +43,26 @@
   </div>
   {{agenda/agendaitem-details agendaitem=agendaitem}}
 </div>
+{{#if isShowingExtendModal}}
+  {{#modal-dialog
+    onClose=(action "toggleModal")
+    targetAttachment="center"
+    translucentOverlay=true
+  }}
+    <h1>
+      {{currentAgendaItem.subcase.title}}
+    </h1>
+    <div class="modal--sessions-selector-container">
+      <label>Uitstellen tot</label>
+      {{sessions/sessions-selector }}
+    </div>
+		<div class="buttons">
+			<button {{action "extendAgendaItem" currentAgendaItem}}>
+				Uitstellen
+			</button>
+			<button {{action "toggleModal"}}>
+				Cancel
+			</button>
+		</div>
+  {{/modal-dialog}}
+{{/if}}
