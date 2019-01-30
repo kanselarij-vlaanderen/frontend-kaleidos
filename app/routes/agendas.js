@@ -1,6 +1,11 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
+	queryParams: {
+    sessionId: { refreshModel: true },
+    agendaId: { refreshModel: true }
+	},
+	
 	model() {
 		return this.store.query('session', {
 			filter: {
@@ -8,5 +13,11 @@ export default Route.extend({
 			},
 			sort: "number"
 		});
+	},
+
+	actions: {
+		refresh() {
+			this.refresh();
+		}
 	}
 });

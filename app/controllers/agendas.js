@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { computed, observer } from '@ember/object';
 
 export default Controller.extend({
+	queryParams:['sessionId', 'agendaId'],
 	agendaMenuOpened: true,
 	creatingNewSession: false,
 	currentSession: null,
@@ -9,22 +10,43 @@ export default Controller.extend({
 	selectedAgendaItem: null,
 	currentAgenda: null,
 
-	agendas: computed('currentSession', function () {
-		if (!this.currentSession) return [];
-		return this.store.query('agenda', {
+	currentSessionTest: observer('sessionId', async function() {
+		let sessionId = await this.get('sessionId');
+		if(sessionId) {
+			let session = await this.store.findRecord('session', sessionId, { reload: true });
+			this.set('currentSession', session);
+			this.notifyPropertyChange('currentSession');
+		} 
+	}),
+
+	agendasObserver: observer('currentSession', async function () {
+		let currentSession = this.get('currentSession');
+		if (!currentSession) return [];
+		let agendas = await this.store.query('agenda', {
 			filter: {
-				session: { id: this.currentSession.id }
+				session: { id: currentSession.id }
 			},
-			sort: '-name'
+			sort: 'name'
 		});
+		this.set('agendas', agendas);
 	}),
 
 	currentAgendaObserver: observer('agendas', async function () {
 		let agendas = await this.get('agendas');
+		let agendaQueryParam = this.get('agendaId');
 		if (agendas && agendas.length > 0) {
-			let agendaIdToQuery = agendas.get('firstObject').id;
+			let agendaIdToQuery = null;
+
+			if(agendaQueryParam) {
+				agendaIdToQuery = agendaQueryParam;
+			} else {
+				agendaIdToQuery = agendas.get('firstObject').id;
+			}
+
 			let currentAgenda = await this.store.findRecord('agenda', agendaIdToQuery, { reload: true });
+
 			this.set('currentAgenda', currentAgenda);
+			this.notifyPropertyChange('currentAgenda');
 		}
 	}),
 
@@ -43,10 +65,6 @@ export default Controller.extend({
 	actions: {
 		navigateToSubCases() {
 			this.transitionToRoute('subcases', { queryParams: { agendaId: this.get('currentAgenda.id') } });
-		},
-
-		navigateBack() {
-			// this.transitionToRoute('agendas', sessionId);
 		},
 
 		lockAgenda(agenda) {

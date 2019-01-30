@@ -57,6 +57,4 @@ export default Service.extend({
 			});
 		})
 	}
-
-
 });

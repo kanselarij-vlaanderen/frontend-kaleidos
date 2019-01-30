@@ -34,6 +34,8 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 
 		navigateBackToAgenda() {
+			// set model null to refresh the model at navigation.
+			this.set('model', null);
 			this.navigateBack();
 		},
 
@@ -51,7 +53,14 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		}
 	},
 
-	navigateBack() {
-		this.transitionToRoute('agendas');
+	async navigateBack() {
+		let agenda = await this.store.findRecord('agenda', this.get('agendaId'));
+		let session = await agenda.get('session');
+		this.transitionToRoute('agendas', {
+			queryParams: {
+				agendaId: this.get('agendaId'),
+				sessionId: session.id
+			}
+		});
 	}
 });

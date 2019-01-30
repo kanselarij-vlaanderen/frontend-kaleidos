@@ -246,11 +246,7 @@ menu {
     margin-top: 0.1em;
   }
 
-  .sessions-title {
-    font-size: 1.5em;
-    margin-left:0;
-  }
-
+  
   .session-title-container {
     float:left;
     display:block;
@@ -545,7 +541,7 @@ button {
   border-bottom: 1px solid var(--light-grey);
 
   .files--header-tile {
-    padding: 1.5em;
+    padding: 1em;
 
     .ember-power-select-trigger {
       width:100%;
@@ -621,7 +617,6 @@ button {
     display:flex;
     justify-content:center;
     align-items:center;
-    width:40%;
   }
 
   .sessions-subtitle {
@@ -630,13 +625,7 @@ button {
     margin-top: 0.1em;
   }
 
-  .sessions-title {
-    font-size: 1.5em;
-    margin-left:0;
-  }
-
   .session-title-container {
-    width:100%;
     float:left;
     display:block;
   }
@@ -1211,4 +1200,50 @@ button.invert-color {
 
 }
 
+.sessions-title {
+  font-size: 1.5em;
+  margin-left:0;
+}
 
+  .modal--sessions-selector-container {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top:1em;
+    padding-bottom: 1em;
+
+    .label {
+      font-weight: bold;
+      width:40%
+    }
+
+    .files--header-tile {
+      width:60%;
+      .ember-power-select-trigger {
+        width:100%;
+      }
+    }
+  }
+
+.ember-modal-dialog {
+  width:400px;
+  height:200px;
+  display:flex;
+  flex-direction: column;
+  padding:1em;
+
+  h1 {
+    font-weight: bold;
+    font-size:0.9em;
+    padding-top:1em;
+    padding-bottom: 1em;
+    }
+
+  .buttons {
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top:1em;
+    padding-bottom: 1em;
+    }
+}
