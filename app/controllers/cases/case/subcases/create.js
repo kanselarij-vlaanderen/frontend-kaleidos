@@ -25,10 +25,10 @@ export default Controller.extend({
   actions: {
     async createSubCase(event) {
       event.preventDefault();
-      const { title, shortTitle, remark, isPublic } = this;
+      const { title, shortTitle, remark, confidential } = this;
       const caze = this.store.peekRecord('case', this.model.id);
       const date = new Date();
-      let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: date, modified: date, public: isPublic });
+      let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: date, modified: date, confidential });
 
       const createdSubCase = await subcase.save();
       await caze.get('subcases').pushObject(createdSubCase);
