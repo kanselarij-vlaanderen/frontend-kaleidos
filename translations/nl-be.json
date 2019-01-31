@@ -42,7 +42,13 @@
 		"new-session": "Nieuwe zitting",
 		"next-step": "Volgende Stap",
 		"save": "Opslaan",
-    "create-comment": "Opmerking aanmaken"
+    "create-comment": "Opmerking aanmaken",
+    "agendaitem-case" : "Dossier",
+    "agendaitem-comment" : "Opmerkingen",
+    "agendaitem-decision" : "Beslissing",
+    "agendaitem-notes" : "Notule",
+    "agendaitem-bestek" : "Kort bestek",
+    "agendaitem-news-item" : "Persagenda"
 	},
   "cases" : {
     "title" : "Dossier"

@@ -5,10 +5,18 @@ export default Component.extend({
 	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
+	isShowingExtendModal: false,
+	currentAgendaItem:null,
+  activeAgendaItemSection: 'details',
 
 	actions: {
 		showDetail() {
 			this.set('isShowingDetail', !this.get('isShowingDetail'))
+		},
+
+		toggleModal(agendaitem) {
+			this.set('currentAgendaItem', agendaitem);
+			this.toggleProperty('isShowingExtendModal');
 		},
 
 		showOptions(agendaitem) {
@@ -21,7 +29,7 @@ export default Component.extend({
 			}
 		},
 
-		changeExtendedValue(agendaitem) {
+		extendAgendaItem(agendaitem) {
 			agendaitem.set('extended', !agendaitem.extended);
 			agendaitem.save();
 		},
@@ -37,6 +45,9 @@ export default Component.extend({
 				agendaitem.save();
 			}
 			agendaitem.toggleProperty("showDetails");
-		}
+		},
+    setAgendaItemSection (section){
+		  this.set("activeAgendaItemSection", section);
+    }
 	}
 });

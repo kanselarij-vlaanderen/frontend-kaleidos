@@ -7,5 +7,4 @@ export default Model.extend({
 	text: attr('string'),
 	createdAt: attr('date'),
 	agendaitem: belongsTo('agendaitem'),
-
 });

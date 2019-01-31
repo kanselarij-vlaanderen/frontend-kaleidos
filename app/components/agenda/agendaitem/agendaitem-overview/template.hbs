@@ -1,0 +1,73 @@
+<div class="cases--list-item">
+  <div class="cases--list-item-header">
+    <a {{action "setAgendaItemSection" "details"}}>
+      <span>{{t "buttons.agendaitem-case"}}</span>
+    </a>
+    <a  {{action "setAgendaItemSection" "comments"}}>
+      <span>{{t "buttons.agendaitem-comment"}}</span>
+    </a>
+    <a {{action "setAgendaItemSection" "decision"}}>
+      <span>{{t "buttons.agendaitem-decision"}}</span>
+    </a>
+    <a {{action "setAgendaItemSection" "notes"}}>
+      <span>{{t "buttons.agendaitem-notes"}}</span>
+    </a>
+    <a {{action "setAgendaItemSection" "bestek"}}>
+      <span>{{t "buttons.agendaitem-bestek"}}</span>
+    </a>
+    <a {{action "setAgendaItemSection" "news-item"}}>
+      <span>{{t "buttons.agendaitem-news-item"}}</span>
+    </a>
+  </div>
+  <div class="cases--decree-options">
+    <div class="settings-container">
+      <div
+        class="cases--decree-options-settings"
+        onclick={{action "showOptions" agendaitem}}
+      >
+        {{fa-icon "ellipsis-h"}}
+      </div>
+    </div>
+    {{#if (eq agendaitemToShowOptionsFor.id agendaitem.id)}}
+      <div class="buttons">
+        <button {{action "toggleModal" agendaitem}}>
+          {{extend-button-text agendaitem.extended}}
+        </button>
+        <button {{action "deleteItem" agendaitem}}>
+          {{t "buttons.delete"}}
+        </button>
+      </div>
+    {{/if}}
+  </div>
+
+  {{#if (eq activeAgendaItemSection "details")}}
+    {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+  {{else if (eq activeAgendaItemSection "comments") }}
+    {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
+  {{/if}}
+
+</div>
+
+{{#if isShowingExtendModal}}
+  {{#modal-dialog
+    onClose=(action "toggleModal")
+    targetAttachment="center"
+    translucentOverlay=true
+  }}
+    <h1>
+      {{currentAgendaItem.subcase.title}}
+    </h1>
+    <div class="modal--sessions-selector-container">
+      <label>Uitstellen tot</label>
+      {{sessions/sessions-selector }}
+    </div>
+		<div class="buttons">
+			<button {{action "extendAgendaItem" currentAgendaItem}}>
+				Uitstellen
+			</button>
+			<button {{action "toggleModal"}}>
+				Cancel
+			</button>
+		</div>
+  {{/modal-dialog}}
+{{/if}}

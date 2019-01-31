@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { computed, observer } from '@ember/object';
 
 export default Controller.extend({
+	queryParams:['sessionId', 'agendaId'],
 	agendaMenuOpened: true,
 	creatingNewSession: false,
 	currentSession: null,
@@ -10,23 +11,43 @@ export default Controller.extend({
 	currentAgenda: null,
   addComment: false,
 
-	model: computed('currentSession', function () {
-		if (!this.currentSession) return [];
-		return this.store.query('agenda', {
-			filter: {
-				session: { id: this.currentSession.id }
-			},
-			sort: '-name'
-		});
+	currentSessionTest: observer('sessionId', async function() {
+		let sessionId = await this.get('sessionId');
+		if(sessionId) {
+			let session = await this.store.findRecord('session', sessionId, { reload: true });
+			this.set('currentSession', session);
+			this.notifyPropertyChange('currentSession');
+		} 
 	}),
 
-	currentAgendaObserver: observer('model', async function () {
-		let agendas = await this.get('model');
+	agendasObserver: observer('currentSession', async function () {
+		let currentSession = this.get('currentSession');
+		if (!currentSession) return [];
+		let agendas = await this.store.query('agenda', {
+			filter: {
+				session: { id: currentSession.id }
+			},
+			sort: 'name'
+		});
+		this.set('agendas', agendas);
+	}),
+
+	currentAgendaObserver: observer('agendas', async function () {
+		let agendas = await this.get('agendas');
+		let agendaQueryParam = this.get('agendaId');
 		if (agendas && agendas.length > 0) {
-			let agendaIdToQuery = agendas.get('firstObject').id;
-			// add reload:true to force refresh
+			let agendaIdToQuery = null;
+
+			if(agendaQueryParam) {
+				agendaIdToQuery = agendaQueryParam;
+			} else {
+				agendaIdToQuery = agendas.get('firstObject').id;
+			}
+
 			let currentAgenda = await this.store.findRecord('agenda', agendaIdToQuery, { reload: true });
+
 			this.set('currentAgenda', currentAgenda);
+			this.notifyPropertyChange('currentAgenda');
 		}
 	}),
 
@@ -47,16 +68,19 @@ export default Controller.extend({
 			this.transitionToRoute('subcases', { queryParams: { agendaId: this.get('currentAgenda.id') } });
 		},
 
-		navigateBack(sessionId) {
-			this.transitionToRoute('agendas.agenda', sessionId);
-		},
-
 		lockAgenda(agenda) {
 			agenda.set('locked', !agenda.locked);
 			agenda.save();
 		},
 		compareAgendas() {
 			this.transitionToRoute('comparison', { queryParams: { sessionId: this.get('currentSession').id } });
-		}
+		},
+
+		cancelNewSessionForm() {
+			this.set('creatingNewSession', false);
+		},
+    addComment(){
+
+    }
 	}
 });
