@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 export default Service.extend({
 	store: inject(),
 
-	addAgendaToSession(currentSession, oldAgenda) {
+	approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
 			session: currentSession
@@ -16,14 +16,14 @@ export default Service.extend({
 				$.ajax(
 					{
 						method: "POST",
-						url: 'http://localhost/agenda-approve/approveAgenda',
+						url: '/agenda-approve/approveAgenda',
 						data: {
 							newAgendaId: agenda.id,
 							oldAgendaId: oldAgenda.id
 						}
 					}
 				).then(() => {
-					resolve(newAgenda);
+					resolve(agenda);
 				}).catch(error => {
 					reject(error);
 				})
@@ -35,7 +35,7 @@ export default Service.extend({
 		let agendaitem = this.store.createRecord('agendaitem', {
 			extended: false,
 			priority: 100,
-			formallyOk:false,
+			formallyOk: false,
 			dateAdded: new Date(),
 			subcase: subCase,
 			agenda: selectedAgenda,
@@ -45,16 +45,19 @@ export default Service.extend({
 				$.ajax(
 					{
 						method: "POST",
-						url: `http://localhost/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
+						url: `/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
 						data: {
 						}
 					}
 				).then(() => {
+					// eslint-disable-next-line ember/jquery-ember-run
+					selectedAgenda.notifyPropertyChange('agendaitems');
 					resolve(agendaitem);
 				}).catch(error => {
 					reject(error);
 				})
 			});
 		})
-	}
+	},
+
 });

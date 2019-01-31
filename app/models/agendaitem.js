@@ -15,6 +15,7 @@ export default Model.extend({
 	subcase: belongsTo('subcase'),
   decision: belongsTo('decision'),
   newsItem: belongsTo('news-item'),
+  postPonedToSession: belongsTo('session')
 
 
   // Karel fix your shit :p 

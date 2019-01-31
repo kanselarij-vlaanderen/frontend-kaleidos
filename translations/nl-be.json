@@ -6,8 +6,10 @@
 		"collapse": "meer weergeven",
 		"decree": "decreet",
 		"expand": "minder weergeven",
-		"extended": "uitgesteld",
-		"no-agendaitems": "Geen agendapunten."
+		"extended": "stilgezet",
+		"extended-until": "Uitgesteld, aanvraag voor zitting de op ",
+		"no-agendaitems": "Geen agendapunten.",
+		"postpone-until": "Uitstellen tot"
 	},
 	"agendaitem-details": {
 		"agenda": "Persagenda",
@@ -48,7 +50,9 @@
     "agendaitem-decision" : "Beslissing",
     "agendaitem-notes" : "Notule",
     "agendaitem-bestek" : "Kort bestek",
-    "agendaitem-news-item" : "Persagenda"
+		"agendaitem-news-item" : "Persagenda",
+		"postpone":"Uitstellen",
+		"not-postpone":"On-uitstellen"
 	},
   "cases" : {
     "title" : "Dossier"

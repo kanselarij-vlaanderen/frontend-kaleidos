@@ -6,8 +6,7 @@ export default Component.extend({
 	store: inject(),
 	classNames: ["files--header-tile", "files--search"],
 	tagName: "div",
-	currentSession: null,
-	sessions:null,
+	currentSession: null, 	
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
@@ -20,7 +19,7 @@ export default Component.extend({
 
 	actions: {
 		chooseSession(session) {
-			this.set('currentSession', session);
+			this.chooseSession(session);
 		},
 
 		resetValueIfEmpty(param) {
@@ -28,6 +27,11 @@ export default Component.extend({
 				this.set('sessions', this.store.query('session'));
 			}
 		},
+	},
+
+	async didInsertElement() {
+		this._super(...arguments);
+		await this.loadSessions();
 	},
 
 	async loadSessions() {

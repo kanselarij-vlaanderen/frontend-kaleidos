@@ -7,10 +7,7 @@ export default Route.extend({
   model(params) {
     return this.store.findRecord('case', params.id, { reload: true });
   },
-  redirect(model) {
+  redirect() {
     this.transitionTo('cases.case.subcases');
-    if (model.get('length') === 1) {
-
-    }
   }
 });

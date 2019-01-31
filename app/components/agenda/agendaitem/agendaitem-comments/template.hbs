@@ -1,3 +1,4 @@
+{{#if (or (not agendaitem.extended) (not agendaitem.postPonedToSession))}}
 <h3>Opmerkingen</h3>
 
 <div>
@@ -8,3 +9,4 @@
 {{#each comments as |comment|}}
   <p>{{ comment.text }}</p>
 {{/each}}
+{{/if}}
