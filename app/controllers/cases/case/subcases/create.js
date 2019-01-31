@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
+import moment from 'moment';
 
 export default Controller.extend({
   part: 1,
@@ -26,7 +27,8 @@ export default Controller.extend({
       event.preventDefault();
       const { title, shortTitle, remark, isPublic } = this;
       const caze = this.store.peekRecord('case', this.model.id);
-      let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: new Date(), public: isPublic });
+      const date = new Date();
+      let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: date, modified: date, public: isPublic });
 
       const createdSubCase = await subcase.save();
       await caze.get('subcases').pushObject(createdSubCase);

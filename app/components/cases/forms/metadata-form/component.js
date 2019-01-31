@@ -9,13 +9,6 @@ export default Component.extend({
   selectedThemes: A([]),
   types: A(["mr", "overlegcomite", "ministrieel", "persbericht"]),
   actions: {
-    async createDossier(event) {
-      event.preventDefault();
-      const { title, shortTitle, remark, selectedThemes, selectedType } = this;
-      let cases = this.store.createRecord('case', { title, shortTitle, remark, themes: selectedThemes, type: selectedType });
-      await cases.save();
-      this.transitionToRoute('cases');
-    },
     async resetValue(param) {
       if (param === "") {
         this.set('themes', this.store.findAll('theme'));

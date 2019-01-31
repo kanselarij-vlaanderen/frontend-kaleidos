@@ -15,7 +15,7 @@ export default Component.extend({
     async addComment(){
       const { text } = this;
       const agendaitem = await this.get('agendaitem');
-      let comment = this.store.createRecord("comment", { text, date_created: moment.now(), agendaitem  });
+      let comment = this.store.createRecord("comment", { text, date_created: new Date(), agendaitem  });
       await comment.save();
     }
   }

@@ -18,10 +18,13 @@ export default Component.extend({
 			});
 
 			newSession.save().then(async (session) => {
+        const date = new Date();
 				let agenda = this.store.createRecord('agenda', {
 					name: "Ontwerpagenda",
-					session: session
-				});
+					session: session,
+          created: date,
+          modified: date
+        });
 
 				await agenda.save();
 				await $.get('http://localhost/session-service/assignNewSessionNumbers');
