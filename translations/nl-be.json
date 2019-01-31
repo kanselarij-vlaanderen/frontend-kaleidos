@@ -28,6 +28,7 @@
 	"buttons": {
 		"add": "Toevoegen",
 		"add-case": "Dossier toevoegen",
+		"add-comment": "Mededeling toevoegen",
 		"add-decision": "Voeg beslissing toe",
 		"add-news-item": "Voeg kort bestek toe",
 		"add-to-agenda": "Toevoegen aan agenda",
@@ -40,7 +41,14 @@
 		"delete": "Verwijderen",
 		"new-session": "Nieuwe zitting",
 		"next-step": "Volgende Stap",
-		"save": "Opslaan"
+		"save": "Opslaan",
+    "create-comment": "Opmerking aanmaken",
+    "agendaitem-case" : "Dossier",
+    "agendaitem-comment" : "Opmerkingen",
+    "agendaitem-decision" : "Beslissing",
+    "agendaitem-notes" : "Notule",
+    "agendaitem-bestek" : "Kort bestek",
+    "agendaitem-news-item" : "Persagenda"
 	},
   "cases" : {
     "title" : "Dossier"

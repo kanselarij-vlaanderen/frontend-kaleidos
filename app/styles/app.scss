@@ -337,6 +337,19 @@ menu {
   }
 }
 
+.cases--list-item-header {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  border-bottom: 1px solid #efefef;
+
+  a {
+    line-height: 40px;
+    font-size: 0.9em;
+  }
+
+}
+
 .cases--decree {
   .cases--decree-head {
     display: flex;
@@ -1032,13 +1045,8 @@ button.invert-color {
 }
 
 .agenda-item-detail-container {
-  min-width: calc(100vw - 250px - 400px);
-  background-color: white;
-  padding: 1em;
-
-  .agenda-item-container {
-    border: none;
-  }
+  width: 50vw;
+  background-color:white;
 }
 
 .file-upload-container {

@@ -12,17 +12,18 @@ export default Component.extend({
 	agendaitemToShowOptionsFor: null,
 	isShowingExtendModal: false,
 	currentAgendaItem: null,
+	activeAgendaItemSection: 'details',
 
-	isPostPonable: computed('sessionService.agendas',  function() {
+	isPostPonable: computed('sessionService.agendas', function () {
 		let agendas = this.get('sessionService.agendas')
-		if(agendas && agendas.length > 1) {
+		if (agendas && agendas.length > 1) {
 			return true;
 		} else {
 			return false;
 		}
 	}),
 
-	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function() {
+	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function () {
 		return this.get('sessionService.definiteAgendas.firstObject');
 	}),
 
@@ -57,6 +58,17 @@ export default Component.extend({
 			agendaitem.destroyRecord().then(() => {
 				this.set('agendaitem', null);
 			});
+		},
+
+		toggleShowMore(agendaitem) {
+			if (agendaitem.showDetails) {
+				agendaitem.save();
+			}
+			agendaitem.toggleProperty("showDetails");
+		},
+
+		setAgendaItemSection(section) {
+			this.set("activeAgendaItemSection", section);
 		}
 	}
 });

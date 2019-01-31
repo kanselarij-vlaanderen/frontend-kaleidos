@@ -12,6 +12,7 @@
     <div class="agenda-container">
       {{agenda/agendaitem-search
         selectedAgenda=currentAgenda
+        addComment=(action "addComment")
         navigateToSubCases=(action "navigateToSubCases")
       }}
       {{#if (not currentAgenda.locked)}}
@@ -25,8 +26,8 @@
       {{/if}}
     </div>
     <div class="agenda-item-list-container">
-      {{agenda/agenda-item-list
-        agendaitems=currentAgendaItems
+      {{agenda/agenda-list
+        agendaitems=(await currentAgendaItems)
         selectedAgendaItem=selectedAgendaItem
       }}
     </div>
@@ -34,7 +35,7 @@
   {{#if selectedAgendaItem}}
     <div class="right-side-container">
       <div class="agenda-item-detail-container">
-        {{agenda/agenda-item-detail agendaitem=selectedAgendaItem}}
+        {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
       </div>
     </div>
   {{/if}}

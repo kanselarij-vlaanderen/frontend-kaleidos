@@ -1,5 +1,27 @@
 <div class="properties">
   <div class="property">
+    {{#link-to
+      "cases.case"
+      agendaitem.id
+      class="cases--decree-content"
+      tagName="div"
+    }}
+      <h4>
+        {{agendaitem.subcase.shortTitle}}
+      </h4>
+      <p>
+        {{agendaitem.subcase.title}}
+      </p>
+      <div class="cases--decree-content-label">
+        {{#if agendaitem.extended}}
+          <p>
+            {{t "agenda-item.extended"}}
+          </p>
+        {{/if}}
+      </div>
+    {{/link-to}}
+  </div>
+  <div class="property">
     <div class="label">
       {{t "agendaitem-details.agenda"}}
     </div>

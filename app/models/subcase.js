@@ -9,5 +9,6 @@ export default Model.extend({
   title: attr('string'),
   case: belongsTo('case'),
   session: belongsTo('session'),
-  agendaitem: belongsTo('agendaitem')
+  agendaitem: belongsTo('agendaitem'),
+  showAsComment: attr('boolean')
 });

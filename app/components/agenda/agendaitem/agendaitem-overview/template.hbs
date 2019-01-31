@@ -1,5 +1,24 @@
 <div class="cases--list-item">
-  {{#if (not currentAgenda.locked)}}
+  <div class="cases--list-item-header">
+    <a {{action "setAgendaItemSection" "details"}}>
+      <span>{{t "buttons.agendaitem-case"}}</span>
+    </a>
+    <a  {{action "setAgendaItemSection" "comments"}}>
+      <span>{{t "buttons.agendaitem-comment"}}</span>
+    </a>
+    <a {{action "setAgendaItemSection" "decision"}}>
+      <span>{{t "buttons.agendaitem-decision"}}</span>
+    </a>
+    <a {{action "setAgendaItemSection" "notes"}}>
+      <span>{{t "buttons.agendaitem-notes"}}</span>
+    </a>
+    <a {{action "setAgendaItemSection" "bestek"}}>
+      <span>{{t "buttons.agendaitem-bestek"}}</span>
+    </a>
+    <a {{action "setAgendaItemSection" "news-item"}}>
+      <span>{{t "buttons.agendaitem-news-item"}}</span>
+    </a>
+  </div>
   <div class="cases--decree-options">
       <div class="settings-container">
         <div class="cases--decree-options-settings">
@@ -20,31 +39,15 @@
       {{/if}}
     </div>
   </div>
+
+  {{#if (eq activeAgendaItemSection "details")}}
+    {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+  {{else if (eq activeAgendaItemSection "comments") }}
+    {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
   {{/if}}
-  <div class="cases--decree-head">
-    {{#link-to
-      "cases.case"
-      agendaitem.id
-      class="cases--decree-content"
-      tagName="div"
-    }}
-      <h4>
-        {{agendaitem.subcase.shortTitle}}
-      </h4>
-      <p>
-        {{agendaitem.subcase.title}}
-      </p>
-      <div class="cases--decree-content-label">
-        {{#if agendaitem.extended}}
-          <p>
-            {{t "agenda-item.extended"}}
-          </p>
-        {{/if}}
-      </div>
-    {{/link-to}}
-  </div>
-  {{agenda/agendaitem-details agendaitem=agendaitem}}
+
 </div>
+
 {{#if isShowingExtendModal}}
   {{#modal-dialog
     onClose=(action "toggleModal")

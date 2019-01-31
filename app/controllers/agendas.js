@@ -6,6 +6,7 @@ export default Controller.extend({
 	sessionService: inject(),
 	creatingNewSession: false,
 	selectedAgendaItem: null,
+  addComment: false,
 
 	currentSession: alias('sessionService.currentSession'),
 	agendas: alias('sessionService.agendas'),
@@ -21,13 +22,16 @@ export default Controller.extend({
 			agenda.set('locked', !agenda.locked);
 			agenda.save();
 		},
-
 		compareAgendas() {
 			this.transitionToRoute('comparison');
 		},
 
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
-		}
-	},
+		},
+		
+    addComment(){
+
+    }
+	}
 });
