@@ -6,16 +6,18 @@
           {{t "sessions-selector.agenda-of"}}
         </strong>
       </div>
-      {{sessions/sessions-selector currentSession=currentSession sessions=sessions}}
+      {{sessions/sessions-selector 
+				currentSession=currentSession
+				chooseSession=(action "chooseSession")}}
     </div>
     <div class="session-agenda-right-container">
         <button {{action "createNewSession"}}>
           {{t "buttons.new-session"}}
         </button>
         {{#if (not currentAgenda.locked)}}
-        <button {{action "lockAgenda" currentSession}}>
-          {{t "buttons.agenda-approve"}}
-        </button>
+        	<button {{action "lockAgenda" currentSession}}>
+          	{{t "buttons.agenda-approve"}}
+        	</button>
         {{/if}}
         <button>
           {{fa-icon 'ellipsis-h'}}
@@ -31,7 +33,7 @@
   </div>
 </div>
 {{#if creatingNewSession}}
-<div class="files--header-tile files--sub-file-header">
+	<div class="files--header-tile files--sub-file-header">
     {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
-</div>
+	</div>
 {{/if}}

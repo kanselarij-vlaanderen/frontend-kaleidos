@@ -6,44 +6,38 @@ export default Component.extend({
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
 	isShowingExtendModal: false,
-	currentAgendaItem:null,
+	currentAgendaItem: null,
 
 	actions: {
 		showDetail() {
 			this.set('isShowingDetail', !this.get('isShowingDetail'))
 		},
-
+		
 		toggleModal(agendaitem) {
 			this.set('currentAgendaItem', agendaitem);
 			this.toggleProperty('isShowingExtendModal');
 		},
 
-		showOptions(agendaitem) {
-			let itemToShowOptionsFor = this.get('agendaitemToShowOptionsFor');
-			let deSelectCurrentlySelected = itemToShowOptionsFor && itemToShowOptionsFor.id === agendaitem.id;
-			if (deSelectCurrentlySelected) {
-				this.set('agendaitemToShowOptionsFor', null);
+		extendAgendaItem(agendaitem) {
+			let currentSession = this.get('currentSession');
+			if (currentSession) {
+				agendaitem.set('postPonedToSession', currentSession);
 			} else {
-				this.set('agendaitemToShowOptionsFor', agendaitem);
+				agendaitem.set('extended', !agendaitem.extended);
 			}
+			agendaitem.save().then(() => {
+				this.set('currentSession', null);
+			});
 		},
 
-		extendAgendaItem(agendaitem) {
-			agendaitem.set('extended', !agendaitem.extended);
-			agendaitem.save();
+		chooseSession(session) {
+			this.set('currentSession', session);
 		},
 
 		deleteItem(agendaitem) {
 			agendaitem.destroyRecord().then(() => {
 				this.set('agendaitem', null);
 			});
-		},
-
-		toggleShowMore(agendaitem) {
-			if (agendaitem.showDetails) {
-				agendaitem.save();
-			}
-			agendaitem.toggleProperty("showDetails");
 		}
 	}
 });

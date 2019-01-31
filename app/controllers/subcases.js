@@ -1,17 +1,14 @@
 import Controller from '@ember/controller';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
-import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default Controller.extend(DefaultQueryParamsMixin, {
 	agendaService: inject(),
-	queryParams: ['agendaId'],
+	sessionService: inject(),
 	allSubCasesSelected: false,
 
-	selectedAgenda: computed('agendaId', function () {
-		let agendaId = this.get('agendaId');
-		return this.store.findRecord('agenda', agendaId, { reload: true });
-	}),
+	selectedAgenda: alias('sessionService.currentAgenda'),
 
 	actions: {
 		selectSubCase(subcase, event) {
@@ -26,11 +23,10 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 
 		selectAllSubCases() {
-			let allSelected = this.get('allSubCasesSelected');
 			this.get('model').forEach(subCase => {
-				subCase.set('selected', !allSelected);
+				subCase.toggleProperty('selected');
 			});
-			this.set('allSubCasesSelected', !allSelected);
+			this.toggleProperty('allSubCasesSelected');
 		},
 
 		navigateBackToAgenda() {
@@ -54,13 +50,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 	},
 
 	async navigateBack() {
-		let agenda = await this.store.findRecord('agenda', this.get('agendaId'));
-		let session = await agenda.get('session');
-		this.transitionToRoute('agendas', {
-			queryParams: {
-				agendaId: this.get('agendaId'),
-				sessionId: session.id
-			}
-		});
+		this.transitionToRoute('agendas');
 	}
 });

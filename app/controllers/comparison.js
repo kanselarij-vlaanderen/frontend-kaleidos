@@ -1,22 +1,15 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
-	queryParams: ['sessionId'],
+	sessionService: inject(),
 
-	agendas: computed('sessionId', function() {
-		return this.store.query('agenda', {
-			filter: {
-				session: { id: this.sessionId }
-			},
-			sort: '-name'
-		})
-	}),
+	// TODO SORT ON DATE FRONTENDSIDE REMOVE ALL CODE!!!
 
-	currentAgenda: computed('agendas', async function () {
-		let agendas = await this.get('agendas');
-		return agendas.get('firstObject');
-	}),
+	agendas: alias('sessionService.agendas'),
+	currentAgenda: alias('sessionService.currentAgenda'),
 
 	agendaToCompare: computed('currentAgenda', async function () {
 		let agendas = await this.get('agendas');

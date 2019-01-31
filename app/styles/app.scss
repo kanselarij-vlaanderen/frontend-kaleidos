@@ -1064,12 +1064,16 @@ button.invert-color {
   align-items:center;
   padding:1em;
   width:100%;
-  border-bottom: 1px solid var(--light-grey);
 }
 
 .agenda-item-detail-container {
   min-width: calc(100vw - 250px - 400px);
   background-color:white;
+  padding:1em;
+
+  .agenda-item-container {
+    border:none;
+  }
 }
 
 .file-upload-container {

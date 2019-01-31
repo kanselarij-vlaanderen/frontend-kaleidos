@@ -16,13 +16,13 @@ export default Service.extend({
 				$.ajax(
 					{
 						method: "POST",
-						url: 'http://localhost/agenda-approve/approveAgenda',
+						url: '/agenda-approve/approveAgenda',
 						data: {
 							newAgendaId: agenda.id,
 							oldAgendaId: oldAgenda.id
 						}
 					}
-				).then(() => {
+				).then(result => {
 					resolve(newAgenda);
 				}).catch(error => {
 					reject(error);
@@ -45,7 +45,7 @@ export default Service.extend({
 				$.ajax(
 					{
 						method: "POST",
-						url: `http://localhost/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
+						url: `/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
 						data: {
 						}
 					}

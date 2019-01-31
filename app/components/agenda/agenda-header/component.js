@@ -1,18 +1,22 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
 export default Component.extend({
 	store: inject(),
+	sessionService: inject(),
 	agendaService: inject(),
 	classNames: ["files--header-tile", "files--search"],
 	tagName: "div",
+
 	creatingNewSession: null,
-	currentAgendaItems: null,
-	currentSession: null,
-	currentAgenda: null,
 	sessions:null,
+
+	currentAgendaItems: alias('sessionService.currentAgendaItems'),
+	currentSession: alias('sessionService.currentSession'),
+	currentAgenda: alias('sessionService.currentAgenda'),
 
 	actions: {
 		async lockAgenda(session) {
@@ -36,32 +40,33 @@ export default Component.extend({
 
 			agendaToLock.set('locked', true);
 
-			agendaToLock.save().then(async () => {
-				this.get('agendaService').addAgendaToSession(session, agendaToLock).then(async newAgenda => {
-					if (newAgenda) {
-						await this.loadSessions().then(() => {
-							this.set('currentSession', session);
-							this.notifyPropertyChange('currentSession');
-						});
-					}
+			agendaToLock.save().then(() => {
+				this.get('agendaService').addAgendaToSession(session, agendaToLock).then(newAgenda => {
+					this.set('sessionService.currentSession', session);
+					this.notifyPropertyChange('sessionService.currentSession');
+					this.set('sessionService.currentAgenda', newAgenda);
+					this.notifyPropertyChange('sessionService.currentAgenda');
 				});
 			})
+		},
+
+		chooseSession(session) {
+			this.set('sessionService.currentSession', session);
 		},
 		
 		createNewSession() {
 			this.set('creatingNewSession', true);
 		},
 
-		async cancelNewSessionForm() {
+		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
-			await this.loadSessions();
 		}
 	},
 
 	async didInsertElement() {
 		this._super(...arguments);
 		if(!this.get('currentSession')) {
-			this.set('currentSession', this.get('sessions').get('firstObject'));
+			this.set('sessionService.currentSession', this.get('sessions.firstObject'));
 		}
 	}
 });

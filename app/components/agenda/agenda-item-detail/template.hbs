@@ -1,14 +1,10 @@
 <div class="cases--list-item">
   <div class="cases--decree-options">
     <div class="settings-container">
-      <div
-        class="cases--decree-options-settings"
-        onclick={{action "showOptions" agendaitem}}
-      >
+      <div class="cases--decree-options-settings">
         {{fa-icon "ellipsis-h"}}
       </div>
     </div>
-    {{#if (eq agendaitemToShowOptionsFor.id agendaitem.id)}}
       <div class="buttons">
         <button {{action "toggleModal" agendaitem}}>
           {{extend-button-text agendaitem.extended}}
@@ -17,7 +13,6 @@
           {{t "buttons.delete"}}
         </button>
       </div>
-    {{/if}}
   </div>
   <div class="cases--decree-head">
     {{#link-to
@@ -54,7 +49,8 @@
     </h1>
     <div class="modal--sessions-selector-container">
       <label>Uitstellen tot</label>
-      {{sessions/sessions-selector }}
+      {{sessions/sessions-selector 
+				chooseSession=(action "chooseSession")}}
     </div>
 		<div class="buttons">
 			<button {{action "extendAgendaItem" currentAgendaItem}}>

@@ -1,19 +1,14 @@
 <div class="files--header">
   {{agenda/agenda-header
     sessions=model
-    currentSession=currentSession
-    currentAgenda=currentAgenda
-    currentAgendaItems=(await currentAgendaItems)
     creatingNewSession=creatingNewSession
   }}
 </div>
 
 {{agenda/side-nav 
   agendas=agendas
-  currentAgenda=currentAgenda
-  currentSession=currentSession
   selectedAgendaItem=selectedAgendaItem
-  agendaMenuOpened=agendaMenuOpened
+  currentAgenda=currentAgenda
   compareAgendas=(action 'compareAgendas')
 }}
 
@@ -35,7 +30,10 @@
 	  {{/if}}
   </div>
   <div class="agenda-item-list-container">
-    {{agenda/agenda-item-list agendaitems=(await currentAgendaItems) selectedAgendaItem=selectedAgendaItem}}
+    {{agenda/agenda-item-list 
+      agendaitems=currentAgendaItems
+      selectedAgendaItem=selectedAgendaItem
+    }}
   </div>
   </div>
   {{#if selectedAgendaItem}}

@@ -1,12 +1,17 @@
 import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default Component.extend({
+	sessionService: inject(),
 	classNames: ['side--menu-container'],
 	classNameBindings: ['agendaMenuOpened:opened'],
-	currentAgenda:null,
-	currentSession:null,
+
 	selectedAgendaItem:null,
-	agendaMenuOpened:null,
+	agendaMenuOpened:true,
+	
+	currentAgenda: alias('sessionService.currentAgenda'),
+	currentSession: alias('sessionService.currentSession'),
 
 	actions: {
 		collapseSideMenu() {
@@ -19,7 +24,7 @@ export default Component.extend({
 
 		setCurrentAgenda(agenda) {
 			this.set('selectedAgendaItem', null);
-			this.set('currentAgenda', agenda);
+			this.set('sessionService.currentAgenda', agenda);
 		}
 	},
 });
