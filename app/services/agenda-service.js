@@ -22,8 +22,8 @@ export default Service.extend({
 							oldAgendaId: oldAgenda.id
 						}
 					}
-				).then(result => {
-					resolve(newAgenda);
+				).then(() => {
+					resolve(agenda);
 				}).catch(error => {
 					reject(error);
 				})
@@ -50,6 +50,8 @@ export default Service.extend({
 						}
 					}
 				).then(() => {
+					// eslint-disable-next-line ember/jquery-ember-run
+					selectedAgenda.notifyPropertyChange('agendaitems');
 					resolve(agendaitem);
 				}).catch(error => {
 					reject(error);

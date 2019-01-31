@@ -4,6 +4,9 @@
 	</div>
 {{else}}
 {{#each (await agendaitems) as |agendaitem index|}}
-  {{agenda/agenda-item agendaitem=agendaitem index=index selectedAgendaItem=selectedAgendaItem}}
+  {{agenda/agenda-item 
+		agendaitem=agendaitem 
+		index=index 
+		selectedAgendaItem=selectedAgendaItem}}
 {{/each}}
 {{/if}}

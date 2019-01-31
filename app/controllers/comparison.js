@@ -11,9 +11,9 @@ export default Controller.extend({
 	agendas: alias('sessionService.agendas'),
 	currentAgenda: alias('sessionService.currentAgenda'),
 
-	agendaToCompare: computed('currentAgenda', async function () {
-		let agendas = await this.get('agendas');
-		let currentAgenda = await this.get('currentAgenda');
+	agendaToCompare: computed('currentAgenda', function () {
+		let agendas =  this.get('agendas');
+		let currentAgenda = this.get('currentAgenda');
 		let index = agendas.lastIndexOf(currentAgenda);
 		if (index >= 0) {
 			return agendas.objectAt(index + 1);

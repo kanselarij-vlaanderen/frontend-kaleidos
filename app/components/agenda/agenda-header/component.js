@@ -17,16 +17,10 @@ export default Component.extend({
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 	currentSession: alias('sessionService.currentSession'),
 	currentAgenda: alias('sessionService.currentAgenda'),
-
+	agendas: alias('sessionService.agendas'),
 	actions: {
 		async lockAgenda(session) {
-			let agendas = await this.store.query('agenda', {
-				filter: {
-					session: { id: session.id }
-				},
-				sort: 'name'
-			});
-
+			let agendas = await this.get('agendas');
 			let agendaToLock = agendas.get('firstObject');
 
 			let definiteAgendas = agendas.filter(agenda => agenda.name != "Ontwerpagenda")
@@ -35,17 +29,15 @@ export default Component.extend({
 			if (!lastDefiniteAgenda) {
 				agendaToLock.set('name', alphabet[0]);
 			} else {
-				agendaToLock.set('name', alphabet[definiteAgendas.length])
+				agendaToLock.set('name', alphabet[definiteAgendas.length] || definiteAgendas.length);
 			}
 
 			agendaToLock.set('locked', true);
 
 			agendaToLock.save().then(() => {
 				this.get('agendaService').addAgendaToSession(session, agendaToLock).then(newAgenda => {
-					this.set('sessionService.currentSession', session);
-					this.notifyPropertyChange('sessionService.currentSession');
+					session.notifyPropertyChange('agendas');
 					this.set('sessionService.currentAgenda', newAgenda);
-					this.notifyPropertyChange('sessionService.currentAgenda');
 				});
 			})
 		},

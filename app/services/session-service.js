@@ -6,7 +6,7 @@ export default Service.extend({
 	store:inject(),
 	currentSession: null,
 
-	agendas: computed('currentSession', function() {
+	agendas: computed('currentSession.agendas.@each', function() {
 		let currentSession = this.get('currentSession');
 		if(currentSession) {
 			return this.store.query('agenda', {
@@ -29,7 +29,7 @@ export default Service.extend({
 		}
 	}),
 	
-	currentAgendaItems: computed('currentAgenda', function() {
+	currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
 		if(currentAgenda) {
 			let agendaitems = this.store.query('agendaitem', {
