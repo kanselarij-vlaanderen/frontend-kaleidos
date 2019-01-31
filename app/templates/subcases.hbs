@@ -1,10 +1,10 @@
- 
- <button class="invert-color" {{action "navigateBackToAgenda"}}>
-    {{fa-icon "arrow-left"}} {{t 'buttons.agenda-back'}}
-  </button>
-  <button class="invert-color" {{action "addSubcasesToAgenda"}}>
-    {{t 'buttons.add-to-agenda'}}
-  </button>
+<button class="invert-color" {{action "navigateBackToAgenda"}}>
+  {{fa-icon "arrow-left"}}
+  {{t "buttons.agenda-back"}}
+</button>
+<button class="invert-color" {{action "addSubcasesToAgenda"}}>
+  {{t "buttons.add-to-agenda"}}
+</button>
 <div class="data-table-container">
   {{#data-table
     content=model
@@ -32,7 +32,11 @@
       {{/c.header}}
       {{#c.body as |subCase|}}
         <td>
-          {{input type="checkbox" checked=subCase.selected click=(action "selectSubCase" subCase)}}
+          {{input
+            type="checkbox"
+            checked=subCase.selected
+            click=(action "selectSubCase" subCase)
+          }}
         </td>
         <td>
           {{subCase.title}}

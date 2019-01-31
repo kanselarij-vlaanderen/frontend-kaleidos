@@ -1,6 +1,11 @@
 import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 
 export default Component.extend({
+	sessionService: inject(),
+	currentAgenda: alias('sessionService.currentAgenda'),
 	classNames: ["agenda-item-container"],
 	tagName: "div",
 	isShowingDetail: false,
@@ -8,12 +13,26 @@ export default Component.extend({
 	isShowingExtendModal: false,
 	currentAgendaItem: null,
 
+	isPostPonable: computed('sessionService.agendas',  function() {
+		let agendas = this.get('sessionService.agendas')
+		if(agendas && agendas.length > 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}),
+
+	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function() {
+		return this.get('sessionService.definiteAgendas.firstObject');
+	}),
+
 	actions: {
 		showDetail() {
 			this.set('isShowingDetail', !this.get('isShowingDetail'))
 		},
-		
+
 		toggleModal(agendaitem) {
+			this.checkIfAgendaItemIsInPreviousAgenda(agendaitem, this.get('sessionService.definiteAgendas').get('firstObject'))
 			this.set('currentAgendaItem', agendaitem);
 			this.toggleProperty('isShowingExtendModal');
 		},

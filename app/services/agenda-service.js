@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 export default Service.extend({
 	store: inject(),
 
-	addAgendaToSession(currentSession, oldAgenda) {
+	approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
 			session: currentSession
@@ -35,7 +35,7 @@ export default Service.extend({
 		let agendaitem = this.store.createRecord('agendaitem', {
 			extended: false,
 			priority: 100,
-			formallyOk:false,
+			formallyOk: false,
 			dateAdded: new Date(),
 			subcase: subCase,
 			agenda: selectedAgenda,
@@ -58,5 +58,6 @@ export default Service.extend({
 				})
 			});
 		})
-	}
+	},
+
 });

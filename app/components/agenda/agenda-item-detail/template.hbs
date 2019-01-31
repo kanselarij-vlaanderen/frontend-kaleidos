@@ -1,19 +1,26 @@
 <div class="cases--list-item">
+  {{#if (not currentAgenda.locked)}}
   <div class="cases--decree-options">
-    <div class="settings-container">
-      <div class="cases--decree-options-settings">
-        {{fa-icon "ellipsis-h"}}
+      <div class="settings-container">
+        <div class="cases--decree-options-settings">
+          {{fa-icon "ellipsis-h"}}
+        </div>
       </div>
-    </div>
-      <div class="buttons">
+    <div class="buttons">
+      {{#if isPostPonable}}
         <button {{action "toggleModal" agendaitem}}>
           {{extend-button-text agendaitem.extended}}
         </button>
+      {{/if}}
+      {{#if (await (allow-delete-agendaitem agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda))
+      }}
         <button {{action "deleteItem" agendaitem}}>
           {{t "buttons.delete"}}
         </button>
-      </div>
+      {{/if}}
+    </div>
   </div>
+  {{/if}}
   <div class="cases--decree-head">
     {{#link-to
       "cases.case"
@@ -48,17 +55,18 @@
       {{currentAgendaItem.subcase.title}}
     </h1>
     <div class="modal--sessions-selector-container">
-      <label>Uitstellen tot</label>
-      {{sessions/sessions-selector 
-				chooseSession=(action "chooseSession")}}
+      <label>
+        Uitstellen tot
+      </label>
+      {{sessions/sessions-selector chooseSession=(action "chooseSession")}}
     </div>
-		<div class="buttons">
-			<button {{action "extendAgendaItem" currentAgendaItem}}>
-				Uitstellen
-			</button>
-			<button {{action "toggleModal"}}>
-				Cancel
-			</button>
-		</div>
+    <div class="buttons">
+      <button {{action "extendAgendaItem" currentAgendaItem}}>
+        Uitstellen
+      </button>
+      <button {{action "toggleModal"}}>
+        Cancel
+      </button>
+    </div>
   {{/modal-dialog}}
 {{/if}}

@@ -45,4 +45,7 @@ export default Service.extend({
 		}
 	}),
 	
+	definiteAgendas: computed('agendas', function() {
+		return this.get('agendas').filter(agenda => agenda.name != "Ontwerpagenda")
+	})
 });

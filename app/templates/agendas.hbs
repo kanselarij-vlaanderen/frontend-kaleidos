@@ -1,47 +1,41 @@
 <div class="files--header">
-  {{agenda/agenda-header
-    sessions=model
-    creatingNewSession=creatingNewSession
-  }}
+  {{agenda/agenda-header sessions=model creatingNewSession=creatingNewSession}}
 </div>
-
-{{agenda/side-nav 
+{{agenda/side-nav
   agendas=agendas
   selectedAgendaItem=selectedAgendaItem
   currentAgenda=currentAgenda
-  compareAgendas=(action 'compareAgendas')
+  compareAgendas=(action "compareAgendas")
 }}
-
 <div class="agenda-items-container">
   <div class="left-side-container">
-  <div class="agenda-container">
-    {{agenda/agendaitem-search
-      selectedAgenda=currentAgenda
-      navigateToSubCases=(action "navigateToSubCases")
-   }}
-	  {{#if (not currentAgenda.locked)}}
-      <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
-        {{t 'buttons.agenda-lock'}}
-      </button>
-	    {{else}}
-	    <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
-        {{t 'buttons.agenda-unlock'}}
-      </button>
-	  {{/if}}
-  </div>
-  <div class="agenda-item-list-container">
-    {{agenda/agenda-item-list 
-      agendaitems=currentAgendaItems
-      selectedAgendaItem=selectedAgendaItem
-    }}
-  </div>
-  </div>
-  {{#if selectedAgendaItem}}
-  <div class="right-side-container">
-    <div class="agenda-item-detail-container">
-        {{agenda/agenda-item-detail agendaitem=selectedAgendaItem}}
+    <div class="agenda-container">
+      {{agenda/agendaitem-search
+        selectedAgenda=currentAgenda
+        navigateToSubCases=(action "navigateToSubCases")
+      }}
+      {{#if (not currentAgenda.locked)}}
+        <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
+          {{t "buttons.agenda-lock"}}
+        </button>
+      {{else}}
+        <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
+          {{t "buttons.agenda-unlock"}}
+        </button>
+      {{/if}}
+    </div>
+    <div class="agenda-item-list-container">
+      {{agenda/agenda-item-list
+        agendaitems=currentAgendaItems
+        selectedAgendaItem=selectedAgendaItem
+      }}
     </div>
   </div>
+  {{#if selectedAgendaItem}}
+    <div class="right-side-container">
+      <div class="agenda-item-detail-container">
+        {{agenda/agenda-item-detail agendaitem=selectedAgendaItem}}
+      </div>
+    </div>
   {{/if}}
 </div>
-

@@ -18,12 +18,13 @@ export default Component.extend({
 	currentSession: alias('sessionService.currentSession'),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	agendas: alias('sessionService.agendas'),
+	definiteAgendas: alias('sessionService.definiteAgendas'),
+
 	actions: {
 		async lockAgenda(session) {
 			let agendas = await this.get('agendas');
 			let agendaToLock = agendas.get('firstObject');
-
-			let definiteAgendas = agendas.filter(agenda => agenda.name != "Ontwerpagenda")
+			let definiteAgendas = this.get('definiteAgendas');
 			let lastDefiniteAgenda = definiteAgendas.get('firstObject');
 
 			if (!lastDefiniteAgenda) {
@@ -35,7 +36,7 @@ export default Component.extend({
 			agendaToLock.set('locked', true);
 
 			agendaToLock.save().then(() => {
-				this.get('agendaService').addAgendaToSession(session, agendaToLock).then(newAgenda => {
+				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {
 					session.notifyPropertyChange('agendas');
 					this.set('sessionService.currentAgenda', newAgenda);
 				});
