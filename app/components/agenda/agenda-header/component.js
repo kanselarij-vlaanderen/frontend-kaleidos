@@ -44,6 +44,7 @@ export default Component.extend({
 		},
 
 		chooseSession(session) {
+			this.set('sessionService.currentAgenda', null);
 			this.set('sessionService.currentSession', session);
 		},
 		
@@ -60,8 +61,6 @@ export default Component.extend({
 		this._super(...arguments);
 		if(!this.get('currentSession')) {
 			this.set('sessionService.currentSession', this.get('sessions.firstObject'));
-			this.notifyPropertyChange('sessionService.currentSession');
-			
 		}
 	}
 });
