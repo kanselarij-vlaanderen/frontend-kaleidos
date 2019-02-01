@@ -1,15 +1,18 @@
 <div class="agenda-item-link {{active-class (await agendaitem) (await selectedAgendaItem)}}" {{action "selectAgendaItem" agendaitem}}>
   {{#if agendaitem.id}}
   <strong>
-    {{agendaitem.priority}}. {{agendaitem.subcase.shortTitle}}
+    {{number}}. {{agendaitem.subcase.shortTitle}}
   </strong>
   <p>
     {{agendaitem.subcase.title}}
   </p>
   <div class="agenda-sub-options">
-    <p>
+    <p class="agenda-extended-option">
     {{#if agendaitem.extended}}
       {{t "agenda-item.extended"}}
+    {{/if}}
+    {{#if (await agendaitem.postPonedToSession) as | sess| }}
+      {{t "agenda-item.extended-until"}} {{moment-format sess.plannedstart "dddd DD-MM-YYYY"}}
     {{/if}}
     </p>
     {{#if agendaitem.formallyOk}}

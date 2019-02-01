@@ -1,0 +1,91 @@
+<div class="cases--list-item">
+  <div class="cases--list-item-header">
+    <a {{action "setAgendaItemSection" "details"}}>
+      <span>
+        {{t "buttons.agendaitem-case"}}
+      </span>
+    </a>
+    <a {{action "setAgendaItemSection" "comments"}}>
+      <span>
+        {{t "buttons.agendaitem-comment"}}
+      </span>
+    </a>
+    {{#if (or (not agendaitem.extended) (not agendaitem.postPonedToSession))}}
+    <a {{action "setAgendaItemSection" "decision"}}>
+      <span>
+        {{t "buttons.agendaitem-decision"}}
+      </span>
+    </a>
+    <a {{action "setAgendaItemSection" "notes"}}>
+      <span>
+        {{t "buttons.agendaitem-notes"}}
+      </span>
+    </a>
+    <a {{action "setAgendaItemSection" "bestek"}}>
+      <span>
+        {{t "buttons.agendaitem-bestek"}}
+      </span>
+    </a>
+    {{/if}}
+    <a {{action "setAgendaItemSection" "news-item"}}>
+      <span>
+        {{t "buttons.agendaitem-news-item"}}
+      </span>
+    </a>
+  </div>
+  {{#if (not currentAgenda.locked)}}
+    <div class="cases--decree-options">
+      <div class="settings-container">
+        <div class="cases--decree-options-settings">
+          {{fa-icon "ellipsis-h"}}
+        </div>
+      </div>
+      <div class="buttons">
+        {{#if isPostPonable}}
+          <button {{action "toggleModal" agendaitem}}>
+            {{#if (or agendaitem.extended (await agendaitem.postPonedToSession))}}
+              {{t 'buttons.not-postpone'}}
+            {{else}}
+              {{t 'buttons.postpone'}}
+            {{/if}}
+          </button>
+        {{/if}}
+        {{#if (await (allow-delete-agendaitem agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda))}}
+          <button {{action "deleteItem" agendaitem}}>
+            {{t "buttons.delete"}}
+          </button>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
+  {{#if (eq activeAgendaItemSection "details")}}
+    {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+  {{else if (eq activeAgendaItemSection "comments")}}
+    {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
+  {{/if}}
+</div>
+{{#if isShowingExtendModal}}
+  {{#modal-dialog
+    onClose=(action "toggleModal")
+    targetAttachment="center"
+    translucentOverlay=true
+  }}
+    <h1>
+      {{currentAgendaItem.subcase.title}}
+    </h1>
+    <div class="modal--sessions-selector-container">
+      <label>
+        {{t 'agenda-item.postpone-until'}}
+      </label>
+      {{sessions/sessions-selector currentSession=currentSession chooseSession=(action "chooseSession")}}
+    </div>
+    <div class="buttons">
+      <button {{action "extendAgendaItem" currentAgendaItem}}>
+        {{t 'buttons.postpone'}}
+      </button>
+      <button {{action "toggleModal"}}>
+        {{t 'buttons.cancel'}}
+      </button>
+    </div>
+  {{/modal-dialog}}
+{{/if}}

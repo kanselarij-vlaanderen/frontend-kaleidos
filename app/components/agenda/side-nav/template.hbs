@@ -13,10 +13,10 @@
     </button>
   </div>
   <div class="side--menu--content-container">
-    {{#each agendas as |agenda|}}
+    {{#each (await agendas) as |agenda|}}
 			<a {{action "setCurrentAgenda" agenda}} class={{active-class agenda currentAgenda}}>
         <p>
-          {{agenda.name}}
+          {{agenda.agendaName}}
         </p>
         {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
         <div class="menu-item-active-border"></div>
@@ -24,7 +24,7 @@
     {{/each}}
   </div>
 {{else}}
-  <div onclick={{action "collapseSideMenu"}}>
+  <div class="collapsed-side-menu" onclick={{action "collapseSideMenu"}}>
     {{fa-icon "chevron-right"}}
   </div>
 {{/if}}

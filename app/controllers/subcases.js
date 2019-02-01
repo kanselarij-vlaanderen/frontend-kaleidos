@@ -1,16 +1,14 @@
 import Controller from '@ember/controller';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
-import $ from 'jquery';
-import { computed } from '@ember/object';
+import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default Controller.extend(DefaultQueryParamsMixin, {
-	queryParams: ['agendaId'],
+	agendaService: inject(),
+	sessionService: inject(),
 	allSubCasesSelected: false,
 
-	selectedAgenda: computed('agendaId', function () {
-		let agendaId = this.get('agendaId');
-		return this.store.findRecord('agenda', agendaId, { reload: true });
-	}),
+	selectedAgenda: alias('sessionService.currentAgenda'),
 
 	actions: {
 		selectSubCase(subcase, event) {
@@ -25,14 +23,15 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 
 		selectAllSubCases() {
-			let allSelected = this.get('allSubCasesSelected');
 			this.get('model').forEach(subCase => {
-				subCase.set('selected', !allSelected);
+				subCase.toggleProperty('selected');
 			});
-			this.set('allSubCasesSelected', !allSelected);
+			this.toggleProperty('allSubCasesSelected');
 		},
 
 		navigateBackToAgenda() {
+			// set model null to refresh the model at navigation.
+			this.set('model', null);
 			this.navigateBack();
 		},
 
@@ -41,30 +40,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 			let itemsToAdd = await this.get('model');
 			let promise = Promise.all(itemsToAdd.map(async subCase => {
 				if (subCase.selected) {
-					let agendaitem = this.store.createRecord('agendaitem', {
-						extended: false,
-						priority: 100,
-						formallyOk:false,
-						dateAdded: new Date(),
-						subcase: subCase,
-						agenda: selectedAgenda,
-					});
-          return new Promise((resolve, reject) => {
-            agendaitem.save().then(agendaitem => {
-              $.ajax(
-                {
-                  method: "POST",
-                  url: `http://localhost/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
-                  data: {
-                  }
-                }
-              ).then(() => {
-                resolve(agendaitem);
-              }).catch(error => {
-                reject(error);
-              })
-            });
-          })
+					await this.get('agendaService').createNewAgendaItem(selectedAgenda, subCase);
 				}
 			}));
 			promise.then(() => {
@@ -73,7 +49,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		}
 	},
 
-	navigateBack() {
+	async navigateBack() {
 		this.transitionToRoute('agendas');
 	}
 });

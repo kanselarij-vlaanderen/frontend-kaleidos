@@ -3,14 +3,14 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Helper | extend-button-text', function(hooks) {
+module('Integration | Helper | allow-delete-agendaitem', function(hooks) {
   setupRenderingTest(hooks);
 
   // Replace this with your real tests.
   test('it renders', async function(assert) {
     this.set('inputValue', '1234');
 
-    await render(hbs`{{extend-button-text inputValue}}`);
+    await render(hbs`{{allow-delete-agendaitem inputValue}}`);
 
     assert.equal(this.element.textContent.trim(), '1234');
   });

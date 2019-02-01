@@ -4,7 +4,8 @@ const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
   public: attr('boolean'),
-  created: attr('string'),
+  created: attr('date'),
+  modified: attr('date'),
   archived: attr('boolean'),
   shortTitle: attr('string'),
   number: attr('string'),

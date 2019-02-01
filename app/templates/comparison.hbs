@@ -3,10 +3,10 @@
 		{{t 'comparison.nav-title'}}
 	</div>
 	{{#each agendas as |agenda|}}
-	<button {{action "selectAgenda" agenda}}>{{agenda.name}}</button>
+	<button {{action "selectAgenda" agenda}}>{{agenda.agendaName}}</button>
 	{{/each}}
 </div>
 {{agenda/compare-agenda-list
-  currentAgenda=(await currentAgenda)
-  agendaToCompare=(await agendaToCompare)
+  currentAgenda=currentAgenda
+  agendaToCompare=agendaToCompare
 }}

@@ -6,8 +6,10 @@
 		"collapse": "meer weergeven",
 		"decree": "decreet",
 		"expand": "minder weergeven",
-		"extended": "uitgesteld",
-		"no-agendaitems": "Geen agendapunten."
+		"extended": "stilgezet",
+		"extended-until": "Uitgesteld, aanvraag voor zitting de op ",
+		"no-agendaitems": "Geen agendapunten.",
+		"postpone-until": "Uitstellen tot"
 	},
 	"agendaitem-details": {
 		"agenda": "Persagenda",
@@ -28,6 +30,7 @@
 	"buttons": {
 		"add": "Toevoegen",
 		"add-case": "Dossier toevoegen",
+		"add-comment": "Mededeling toevoegen",
 		"add-decision": "Voeg beslissing toe",
 		"add-news-item": "Voeg kort bestek toe",
 		"add-to-agenda": "Toevoegen aan agenda",
@@ -37,13 +40,31 @@
 		"agenda-lock": "Agenda afsluiten",
 		"agenda-unlock": "Agenda unlocken",
 		"cancel": "Annuleren",
+		"create-case":"Dossier aanmaken",
+		"create-subcase":"Nieuw deeldossier",
 		"delete": "Verwijderen",
 		"new-session": "Nieuwe zitting",
+		"previous-step":"Vorige Stap",
 		"next-step": "Volgende Stap",
-		"save": "Opslaan"
+		"save": "Opslaan",
+    "create-comment": "Opmerking aanmaken",
+    "agendaitem-case" : "Dossier",
+    "agendaitem-comment" : "Opmerkingen",
+    "agendaitem-decision" : "Beslissing",
+    "agendaitem-notes" : "Notule",
+    "agendaitem-bestek" : "Kort bestek",
+		"agendaitem-news-item" : "Persagenda",
+		"postpone":"Uitstellen",
+		"not-postpone":"On-uitstellen"
 	},
   "cases" : {
-    "title" : "Dossier"
+		"title" : "Dossier",
+		"cases": "dossiers",
+		"new-case":"NIEUW DOSSIER",
+		"contact-person": "CONTACTPERSOON",
+		"related-cases":"GERELATEERDE DOSSIERS",
+		"subcases":"DEELDOSSIERS",
+		"upload-file":"Files uploaden"
   },
 	"case-item": {
 		"not-agreed": "Niet Akkoord"
@@ -71,11 +92,11 @@
 		"title": "Titel"
 	},
 	"file-uploader": {
-    "drop-text": "Drop to upload",
-    "dropzone-text": "Drag and drop files onto this area to upload them or click here",
-    "files": "files",
-    "invalid-type": "Invalid file type",
-    "uploading": "Uploading"
+    "drop-text": "Laat los om het bestand te uploaden",
+    "dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
+    "files": "bestanden",
+    "invalid-type": "Fout bestandstype.",
+    "uploading": "Uploaden"
 },
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",

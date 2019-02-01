@@ -1,0 +1,12 @@
+{{#if (or (not agendaitem.extended) (not agendaitem.postPonedToSession))}}
+<h3>Opmerkingen</h3>
+
+<div>
+  {{input placeholder="Type hier je opmerking" value=text}}
+  <button  type="button" {{action "addComment"}}>Opmerking maken</button>
+</div>
+
+{{#each comments as |comment|}}
+  <p>{{ comment.text }}</p>
+{{/each}}
+{{/if}}

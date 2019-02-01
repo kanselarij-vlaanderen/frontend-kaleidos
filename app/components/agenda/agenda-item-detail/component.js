@@ -1,42 +1,61 @@
 import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 
 export default Component.extend({
+	sessionService: inject(),
+	currentAgenda: alias('sessionService.currentAgenda'),
 	classNames: ["agenda-item-container"],
 	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
+	isShowingExtendModal: false,
+	currentAgendaItem: null,
+
+	isPostPonable: computed('sessionService.agendas',  function() {
+		let agendas = this.get('sessionService.agendas')
+		if(agendas && agendas.length > 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}),
+
+	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function() {
+		return this.get('sessionService.definiteAgendas.firstObject');
+	}),
 
 	actions: {
 		showDetail() {
 			this.set('isShowingDetail', !this.get('isShowingDetail'))
 		},
 
-		showOptions(agendaitem) {
-			let itemToShowOptionsFor = this.get('agendaitemToShowOptionsFor');
-			let deSelectCurrentlySelected = itemToShowOptionsFor && itemToShowOptionsFor.id === agendaitem.id;
-			if (deSelectCurrentlySelected) {
-				this.set('agendaitemToShowOptionsFor', null);
-			} else {
-				this.set('agendaitemToShowOptionsFor', agendaitem);
-			}
+		toggleModal(agendaitem) {
+			this.set('currentAgendaItem', agendaitem);
+			this.toggleProperty('isShowingExtendModal');
 		},
 
-		changeExtendedValue(agendaitem) {
-			agendaitem.set('extended', !agendaitem.extended);
-			agendaitem.save();
+		extendAgendaItem(agendaitem) {
+			let currentSession = this.get('currentSession');
+			if (currentSession) {
+				agendaitem.set('postPonedToSession', currentSession);
+			} else {
+				agendaitem.set('extended', !agendaitem.extended);
+			}
+			agendaitem.save().then(() => {
+				this.set('currentSession', null);
+			});
+		},
+
+		chooseSession(session) {
+			this.set('currentSession', session);
 		},
 
 		deleteItem(agendaitem) {
 			agendaitem.destroyRecord().then(() => {
 				this.set('agendaitem', null);
 			});
-		},
-
-		toggleShowMore(agendaitem) {
-			if (agendaitem.showDetails) {
-				agendaitem.save();
-			}
-			agendaitem.toggleProperty("showDetails");
 		}
 	}
 });

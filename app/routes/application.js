@@ -8,6 +8,7 @@ export default Route.extend(ApplicationRouteMixin, {
 
   beforeModel() {
     this.intl.setLocale('nl-be');
+    this.get('moment').setTimeZone('Europe/Brussels');
   }
 
 });
