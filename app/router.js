@@ -23,6 +23,7 @@ Router.map(function () {
   this.route('home', { path: "/" });
   this.route('settings');
   this.route('subcases');
+  this.route('mock-login');
 });
 
 export default Router;

@@ -20,6 +20,8 @@
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
     "@ember/optional-features": "^0.6.3",
+    "@lblod/ember-acmidm-login": "github:lblod/ember-acmidm-login",
+    "@lblod/ember-mock-login": "github:lblod/ember-mock-login",
     "@lblod/ember-vo-webuniversum": "^0.19.3",
     "@lblod/ember-vo-webuniversum-data-table": "^0.2.10",
     "broccoli-asset-rev": "^2.7.0",
@@ -55,6 +57,7 @@
     "ember-rdfa-helpers": "^0.2.1",
     "ember-resolver": "^5.0.1",
     "ember-route-action-helper": "^2.0.6",
+    "ember-simple-auth": "^1.8.1",
     "ember-source": "~3.6.0",
     "ember-toggle": "^5.3.2",
     "ember-welcome-page": "^3.2.0",
