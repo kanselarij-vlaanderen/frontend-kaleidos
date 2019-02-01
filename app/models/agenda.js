@@ -10,6 +10,7 @@ export default Model.extend({
 	locked:attr("boolean"),
 	session: belongsTo('session'),
 	agendaitems: hasMany('agendaitem'),
+  announcements: hasMany('announcement'),
 
 	agendaName: computed('name', function() {
 		if(this.name.length <= 2) {

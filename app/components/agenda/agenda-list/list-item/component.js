@@ -19,7 +19,6 @@ export default Component.extend(FileSaverMixin, {
 	actions: {
 		selectAgendaItem(agendaitem) {
 			this.set('selectedAgendaItem', agendaitem);
-      this.set("addComment", false);
 		},
 
 		async downloadFile(documentVersion) {

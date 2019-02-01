@@ -6,10 +6,10 @@ export default Controller.extend({
 	sessionService: inject(),
 	creatingNewSession: false,
 	selectedAgendaItem: null,
-  addComment: false,
-
+  createAnnouncement: false,
 	currentSession: alias('sessionService.currentSession'),
 	agendas: alias('sessionService.agendas'),
+  announcements: alias('sessionService.announcements'),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 
@@ -18,6 +18,10 @@ export default Controller.extend({
 			this.transitionToRoute('subcases');
 		},
 
+    navigateToCreateAnnouncement() {
+      this.set("createAnnouncement", true);
+      this.set("selectedAgendaItem", null);
+    },
 		lockAgenda(agenda) {
 			agenda.set('locked', !agenda.locked);
 			agenda.save();
@@ -28,10 +32,6 @@ export default Controller.extend({
 
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
-		},
-		
-    addComment(){
-
-    }
+		}
 	}
 });

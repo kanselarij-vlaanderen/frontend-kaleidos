@@ -25,12 +25,20 @@
 		"search-placeholder": "Zoek op naam..."
 	},
 	"agendas": {
-		"nav-title": "Historiek"
+		"nav-title": "Historiek",
+    "announcements-subtitle" : "Mededelingen",
+    "agendaitems-subtitle" : "Agenda items"
 	},
+  "announcement" : {
+    "title": "titel",
+    "text": "mededeling",
+    "no-announcements" : "Geen mededelingen"
+  },
 	"buttons": {
 		"add": "Toevoegen",
 		"add-case": "Dossier toevoegen",
-		"add-comment": "Mededeling toevoegen",
+		"add-comment": "Opmerking toevoegen",
+		"create-announcement": "Mededeling toevoegen",
 		"add-decision": "Voeg beslissing toe",
 		"add-news-item": "Voeg kort bestek toe",
 		"add-to-agenda": "Toevoegen aan agenda",

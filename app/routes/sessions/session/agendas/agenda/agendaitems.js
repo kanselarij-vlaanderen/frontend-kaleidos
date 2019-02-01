@@ -16,7 +16,7 @@ export default Route.extend({
 		refresh() {
 			this.refresh();
 		},
-    addComment(){
+    navigateToCreateAnnouncement(){
       this.set("selectedAgendaItem", null);
     }
 	}
