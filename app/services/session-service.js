@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import { inject } from '@ember/service';
 
 export default Service.extend({
@@ -15,17 +15,14 @@ export default Service.extend({
 				},
 				sort: 'name'
 			});	
-		} else {
-			return [];
 		}
 	}),
 
-	currentAgenda: computed('agendas', function() {
-		let agendas = this.get('agendas');
+	currentAgendaInitialiser: observer('currentSession.agendas', async function() {
+		if(this.get('currentAgenda')) return;
+		let agendas = await this.get('agendas');
 		if(agendas) {
-			return agendas.get('firstObject');
-		}	else {
-			return {};
+			this.set('currentAgenda', agendas.get('firstObject'));
 		}
 	}),
 	
