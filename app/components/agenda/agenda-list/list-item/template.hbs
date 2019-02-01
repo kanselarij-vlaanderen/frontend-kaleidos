@@ -37,11 +37,10 @@
     <div class="documents-container">
       {{#if (await agendaitem.subcase.documentVersions)}}
         <div class="document">
-          {{#each
-            (await agendaitem.subcase.documentVersions) as |documentVersion|}}
+          {{#each (await agendaitem.subcase.documentVersions) as |documentVersion|}}
             <a {{action "downloadFile" documentVersion}}>
               {{fa-icon "file"}}
-              {{documentVersion.file.filename}}
+              {{await documentVersion.chosenFileName}}
             </a>
           {{/each}}
         </div>

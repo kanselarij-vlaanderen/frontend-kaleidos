@@ -61,7 +61,6 @@ export default Component.extend({
 				this.set('currentSession', null);
 				this.set('isShowingExtendModal', false);
 			});
-
 		},
 
 		chooseSession(session) {

@@ -280,6 +280,23 @@ menu {
   strong {
     font-weight: bold;
   }
+
+  .agenda-item-link {
+    width: 100%;
+    padding: 2em;
+
+    .documents-container {
+
+      .document {
+        a {
+          text-decoration: none;
+          cursor:pointer;
+          color:var(--blue);
+        }
+      }
+    }
+  }
+
   .active {
     background-color: var(--blue);
     color: white;
@@ -287,11 +304,14 @@ menu {
     .formal-nok {
       color: white;
     }
-  }
 
-  .agenda-item-link {
-    width: 100%;
-    padding: 2em;
+    .documents-container {
+      .document {
+        a {
+          color:white;
+        }
+      }
+    }
   }
 
   .agenda-sub-options {

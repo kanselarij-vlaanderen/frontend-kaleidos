@@ -31,10 +31,13 @@ export default Controller.extend({
       let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: date, modified: date, confidential });
 
       let createdSubCase = await subcase.save();
+      let uploadedFile = await this.get('uploadedFile');
       let documentVersion = this.store.createRecord('document-version', {
         subcase: createdSubCase,
-        file: this.get('uploadedFile'),
-        versionNumber: 1
+        file: uploadedFile,
+        created: new Date(),
+        versionNumber: 1,
+        chosenFileName: uploadedFile.get('name')
       });
       await documentVersion.save();
       await caze.get('subcases').pushObject(createdSubCase);
