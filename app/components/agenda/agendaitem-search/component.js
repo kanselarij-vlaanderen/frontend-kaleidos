@@ -31,8 +31,9 @@ export default Component.extend({
 			this.set('addingAgendaItems', true);
 			this.navigateToSubCases();
 		},
-    addComment() {
-			this.addComment();
+    navigateToCreateAnnouncement() {
+			this.set('addingAnnouncement', true);
+			this.navigateToCreateAnnouncement();
 		}
 	}
 });

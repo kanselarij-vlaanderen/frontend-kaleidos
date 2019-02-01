@@ -3,6 +3,7 @@
     {{t 'agenda-item.no-agendaitems'}}
   </div>
 {{else}}
+  <h3>{{t "agendas.agendaitems-subtitle"}}</h3>
   {{#each (await agendaitems) as |agendaitem index|}}
     {{agenda/agenda-list/list-item agendaitem=agendaitem index=index selectedAgendaItem=selectedAgendaItem}}
   {{/each}}
