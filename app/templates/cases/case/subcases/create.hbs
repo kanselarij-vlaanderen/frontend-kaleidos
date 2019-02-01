@@ -38,6 +38,10 @@
       }}
     </div>
     <div class="cases--new-item">
+      <label>{{t 'cases.upload-file'}}</label>
+      {{file-uploader uploadedFile=(action "uploadedFile")}}
+    </div>
+    <div class="cases--new-item">
       <label>OPENBAAR?</label>
       {{input type="checkbox" checked=public}}
     </div>

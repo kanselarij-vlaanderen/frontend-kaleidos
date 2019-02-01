@@ -2,23 +2,24 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 
 export default Controller.extend({
+  uploadedFile: null,
   part: 1,
-  isPartOne : computed('part', function() {
+  isPartOne: computed('part', function () {
     return this.get('part') === 1;
   }),
-  title : computed('model', function() {
+  title: computed('model', function () {
     return this.get('model').title;
   }),
-  shortTitle : computed('model', function() {
+  shortTitle: computed('model', function () {
     return this.get('model').shortTitle;
   }),
-  selectedThemes : computed('model', function() {
+  selectedThemes: computed('model', function () {
     return this.get('model').themes;
   }),
-  status : computed('model', function() {
+  status: computed('model', function () {
     return this.get('model').status;
   }),
-  selectedType : computed('model', function() {
+  selectedType: computed('model', function () {
     return this.get('model').type;
   }),
   actions: {
@@ -26,9 +27,15 @@ export default Controller.extend({
       event.preventDefault();
       const { title, shortTitle, remark, isPublic } = this;
       const caze = this.store.peekRecord('case', this.model.id);
-      let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: new Date(), public: isPublic });
+      let subcase = await this.store.createRecord('subcase', { title, shortTitle, remark, case: caze, created: new Date(), public: isPublic });
 
-      const createdSubCase = await subcase.save();
+      let createdSubCase = await subcase.save();
+      let documentVersion = this.store.createRecord('document-version', {
+        subcase: createdSubCase,
+        file: this.get('uploadedFile'),
+        versionNumber: 1
+      });
+      await documentVersion.save();
       await caze.get('subcases').pushObject(createdSubCase);
 
       caze.save();
@@ -54,6 +61,9 @@ export default Controller.extend({
     },
     statusChange(status) {
       this.set('status', status);
+    },
+    uploadedFile(uploadedFile) {
+      this.set('uploadedFile', uploadedFile);
     }
   }
 });

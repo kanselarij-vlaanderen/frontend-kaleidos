@@ -1,11 +1,11 @@
 <div class="cases--header">
   <div class="cases--info">
-    <h1>Dossiers</h1>
-    <p>32.000 dossiers</p>
+    <h1>{{t 'navigation.cases'}} </h1>
+    <p>{{await model.length}} {{t 'cases.cases'}}</p>
   </div>
   <div >
     {{#link-to "cases.create"}}
-      <button>+ Nieuw dossier aanmaken</button>
+      <button>{{t 'buttons.add-case'}}</button>
     {{/link-to}}
   </div>
 </div>
