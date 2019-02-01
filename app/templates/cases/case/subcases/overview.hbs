@@ -1,5 +1,4 @@
 <div class="cases--subcases-overview">
-
   {{#if model}}
     {{#each model as |subcase|}}
       <div class="cases--subcases-item">
@@ -8,20 +7,21 @@
         </div>
         <div class="cases--subcases-item-content">
           {{#link-to "cases.case.subcases.subcase" subcase.id}}
-              <h4>{{subcase.title}}</h4>
+            <h4>
+              {{subcase.title}}
+            </h4>
           {{/link-to}}
-
-          <span>{{moment-format subcase.created "dd. DD-MM-YYYY"}}</span>
+          <span>
+            {{moment-format subcase.created "dd. DD-MM-YYYY"}}
+          </span>
         </div>
       </div>
     {{/each}}
-
   {{else}}
-
     <div>
-      <p>Er zijn nog geen deeldossiers</p>
+      <p>
+        Er zijn nog geen deeldossiers
+      </p>
     </div>
-
   {{/if}}
-
 </div>
