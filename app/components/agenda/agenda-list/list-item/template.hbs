@@ -1,33 +1,51 @@
-<div class="agenda-item-link {{active-class (await agendaitem) (await selectedAgendaItem)}}" {{action "selectAgendaItem" agendaitem}}>
+<div
+  class="agenda-item-link
+    {{active-class (await agendaitem) (await selectedAgendaItem)}}"
+  {{action "selectAgendaItem" agendaitem}}
+>
   {{#if agendaitem.id}}
-  <strong>
-    {{number}}. {{agendaitem.subcase.shortTitle}}
-  </strong>
-  <p>
-    {{agendaitem.subcase.title}}
-  </p>
-  <div class="agenda-sub-options">
-    <p class="agenda-extended-option">
-    {{#if agendaitem.extended}}
-      {{t "agenda-item.extended"}}
-    {{/if}}
-    {{#if (await agendaitem.postPonedToSession) as | sess| }}
-      {{t "agenda-item.extended-until"}} {{moment-format sess.plannedstart "dddd DD-MM-YYYY"}}
-    {{/if}}
+    <strong>
+      {{number}}
+      .
+      {{agendaitem.subcase.shortTitle}}
+    </strong>
+    <p>
+      {{agendaitem.subcase.title}}
     </p>
-    {{#if agendaitem.formallyOk}}
-      <p class="formal-ok">
-        {{fa-icon "check"}} 
-        {{t 'agendaitem-details.formal-ok'}}
+    <div class="agenda-sub-options">
+      <p class="agenda-extended-option">
+        {{#if agendaitem.extended}}
+          {{t "agenda-item.extended"}}
+        {{/if}}
+        {{#if (await agendaitem.postPonedToSession) as |sess|}}
+          {{t "agenda-item.extended-until"}}
+          {{moment-format sess.plannedstart "dddd DD-MM-YYYY"}}
+        {{/if}}
       </p>
-    {{else}}
-      <p class="formal-nok">
-        {{fa-icon "check"}} 
-        {{t 'agendaitem-details.formal-ok'}}
-      </p>
-    {{/if}}
-  </div>  
+      {{#if agendaitem.formallyOk}}
+        <p class="formal-ok">
+          {{fa-icon "check"}}
+          {{t "agendaitem-details.formal-ok"}}
+        </p>
+      {{else}}
+        <p class="formal-nok">
+          {{fa-icon "check"}}
+          {{t "agendaitem-details.formal-ok"}}
+        </p>
+      {{/if}}
+    </div>
+    <div class="documents-container">
+      {{#if (await agendaitem.subcase.documentVersions)}}
+        <div class="document">
+          {{#each
+            (await agendaitem.subcase.documentVersions) as |documentVersion|}}
+            <a {{action "downloadFile" documentVersion}}>
+              {{fa-icon "file"}}
+              {{documentVersion.file.filename}}
+            </a>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
   {{/if}}
 </div>
-
-
