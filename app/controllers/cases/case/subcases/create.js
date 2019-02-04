@@ -35,6 +35,7 @@ export default Controller.extend({
       let documentVersion = this.store.createRecord('document-version', {
         subcase: createdSubCase,
         file: uploadedFile,
+        identificationNumber: Math.floor(Math.random() * Math.floor(1000)),
         created: new Date(),
         versionNumber: 1,
         chosenFileName: uploadedFile.get('name')

@@ -950,8 +950,12 @@ button.invert-color {
 }
 
 .data-table-container {
-  float: left;
-  width: 100%;
+  padding:1em;
+}
+
+.data-table-button-container {
+  padding:1em;
+  padding-bottom:0;
 }
 
 .side-menu-collapse {

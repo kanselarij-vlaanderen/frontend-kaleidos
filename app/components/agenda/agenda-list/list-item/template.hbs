@@ -1,8 +1,5 @@
-<div
-  class="agenda-item-link
-    {{active-class (await agendaitem) (await selectedAgendaItem)}}"
-  {{action "selectAgendaItem" agendaitem}}
->
+<div class="agenda-item-link {{active-class (await agendaitem) (await selectedAgendaItem)}}"
+    {{action "selectAgendaItem" agendaitem}}>
   {{#if agendaitem.id}}
     <strong>
       {{number}}
@@ -40,7 +37,7 @@
           {{#each (await agendaitem.subcase.documentVersions) as |documentVersion|}}
             <a {{action "downloadFile" documentVersion}}>
               {{fa-icon "file"}}
-              {{await documentVersion.chosenFileName}}
+              {{await documentVersion.nameToDisplay}}
             </a>
           {{/each}}
         </div>

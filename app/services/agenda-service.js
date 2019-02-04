@@ -13,13 +13,19 @@ export default Service.extend({
 
 		return new Promise((resolve, reject) => {
 			newAgenda.save().then(agenda => {
+				// Check if the agenda is `A` if true => serial numbers will be assigned.
+				let renameDocuments = false;
+				if(oldAgenda.name == "A") {
+					renameDocuments = true;
+				}
 				$.ajax(
 					{
 						method: "POST",
 						url: '/agenda-approve/approveAgenda',
 						data: {
 							newAgendaId: agenda.id,
-							oldAgendaId: oldAgenda.id
+							oldAgendaId: oldAgenda.id,
+							renameDocuments: renameDocuments
 						}
 					}
 				).then(() => {
