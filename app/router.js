@@ -24,6 +24,7 @@ Router.map(function () {
   this.route('settings');
   this.route('subcases');
   this.route('mock-login');
+  this.route('login');
 });
 
 export default Router;

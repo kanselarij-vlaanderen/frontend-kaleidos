@@ -27,12 +27,14 @@
     </div>
     {{input type="checkbox" checked=agendaitem.forPress}}
   </div>
-  <div class="property">
-    <div class="label">
-      {{t "agendaitem-details.formal-ok"}}
+  {{#if currentSession.isAdmin}}
+    <div class="property">
+      <div class="label">
+        {{t "agendaitem-details.formal-ok"}}
+      </div>
+      {{input type="checkbox" checked=agendaitem.formallyOk}}
     </div>
-    {{input type="checkbox" checked=agendaitem.formallyOk}}
-  </div>
+  {{/if}}
   <div class="property">
     <div class="label">
       {{t "agendaitem-details.notes"}}

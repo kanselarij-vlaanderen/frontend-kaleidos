@@ -1,2 +1,4 @@
-{{m-header}}
+{{#if session.isAuthenticated}}
+  {{m-header}}
+{{/if}}
 {{outlet}}
