@@ -9,12 +9,11 @@ export default Model.extend({
 	identificationNumber: attr('string'),
 	serialNumber: attr('string'),
 	versionNumber: attr('number'),
-	subcase: belongsTo('subcase'),
 	file: belongsTo('file'),
+	document: belongsTo('document'),
 
 	nameToDisplay: computed('chosenFileName','serialNumber', function() {
 		let serialNumber = this.get('serialNumber');
-
 		if(serialNumber) {
 			return serialNumber;
 		} else {

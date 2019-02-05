@@ -111,7 +111,8 @@
 		"short-title": "KORTE TITEL",
 		"status": "TOELICHTING BEHANDELINGSSTATUS",
 		"themes": "THEMAS",
-		"title": "LANGE TITEL"
+		"title": "LANGE TITEL",
+		"public": "Openbaar"
 	},
 	"navigation": {
 		"agendas": "Agendas",

@@ -1084,6 +1084,7 @@ button.invert-color {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom:1em;
 
   .progress-container {
     display: flex;
@@ -1258,6 +1259,7 @@ button.invert-color {
 
   textarea {
     width:100%;
+    font-size:0.9em;
     background-color: var(--light-grey);
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -1269,3 +1271,30 @@ button.invert-color {
   }
 
 }
+
+.uploaded-files {
+  display:flex;
+
+  .document {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding:1em;
+    font-size:0.9em;
+
+    i {
+      font-size:3em;
+    }
+    
+    .fa-remove {
+      font-size:1em;
+    }
+  }
+
+  .delete-file {
+    display:flex;
+    width:100%;
+    justify-content: flex-end;
+  }
+} 
