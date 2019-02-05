@@ -29,13 +29,13 @@ export default Controller.extend({
       const caze = this.store.peekRecord('case', this.model.id);
       const date = new Date();
       let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: date, modified: date, confidential });
-
+      
       let createdSubCase = await subcase.save();
       let uploadedFile = await this.get('uploadedFile');
       let documentVersion = this.store.createRecord('document-version', {
         subcase: createdSubCase,
         file: uploadedFile,
-        identificationNumber: Math.floor(Math.random() * Math.floor(1000)),
+        identificationNumber: Math.floor(Math.random() * Math.floor(9999)),
         created: new Date(),
         versionNumber: 1,
         chosenFileName: uploadedFile.get('name')

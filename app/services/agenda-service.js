@@ -13,11 +13,6 @@ export default Service.extend({
 
 		return new Promise((resolve, reject) => {
 			newAgenda.save().then(agenda => {
-				// Check if the agenda is `A` if true => serial numbers will be assigned.
-				let renameDocuments = false;
-				if(oldAgenda.name == "A") {
-					renameDocuments = true;
-				}
 				$.ajax(
 					{
 						method: "POST",
@@ -25,10 +20,12 @@ export default Service.extend({
 						data: {
 							newAgendaId: agenda.id,
 							oldAgendaId: oldAgenda.id,
-							renameDocuments: renameDocuments
+							currentSessionDate: currentSession.plannedstart,
 						}
 					}
 				).then(() => {
+					// eslint-disable-next-line ember/jquery-ember-run
+					agenda.notifyPropertyChange('agendaitems');
 					resolve(agenda);
 				}).catch(error => {
 					reject(error);
@@ -40,7 +37,6 @@ export default Service.extend({
 	createNewAgendaItem(selectedAgenda, subCase) {
 		let agendaitem = this.store.createRecord('agendaitem', {
 			extended: false,
-			priority: 100,
 			formallyOk: false,
 			dateAdded: new Date(),
 			subcase: subCase,
@@ -52,8 +48,7 @@ export default Service.extend({
 					{
 						method: "POST",
 						url: `/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
-						data: {
-						}
+						data: { }
 					}
 				).then(() => {
 					// eslint-disable-next-line ember/jquery-ember-run

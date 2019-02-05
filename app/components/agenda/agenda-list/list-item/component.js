@@ -28,7 +28,7 @@ export default Component.extend(FileSaverMixin, {
 					dataType: 'arraybuffer', // or 'blob'
 					processData: false
 				})
-				.then((content) => this.saveFileAs(documentVersion.chosenFileName, content, this.get('contentType')));
+				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
 		}
 	}
 });
