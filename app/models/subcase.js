@@ -12,5 +12,5 @@ export default Model.extend({
   agendaitem: belongsTo('agendaitem'),
   showAsComment: attr('boolean'),
   confidential: attr('boolean'),
-  documentVersions: hasMany('document-version')
+  documents: hasMany('document')
 });
