@@ -1,20 +1,20 @@
 <form class="new-session-form" {{action "createNewSession" on="submit"}}>
   <div class="form-group">
     <label>
-      {{t 'new-session.start-date'}}
+      {{t "new-session.start-date"}}
       {{pikaday-input
         theme="pikaday-session"
-        useUTC=true
+        minDate=today
         onSelection=(action "selectStartDate")
       }}
     </label>
   </div>
   <div class="submit-container">
     <button type="submit">
-      {{t 'buttons.add'}}
+      {{t "buttons.add"}}
     </button>
     <button type="button" {{action "cancelForm"}}>
-      {{t 'buttons.cancel'}}
+      {{t "buttons.cancel"}}
     </button>
   </div>
 </form>

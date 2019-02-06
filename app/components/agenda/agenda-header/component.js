@@ -13,6 +13,7 @@ export default Component.extend({
 
 	creatingNewSession: null,
 	sessions:null,
+	selectedAgendaItem:null,
 
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 	currentSession: alias('sessionService.currentSession'),
@@ -39,6 +40,8 @@ export default Component.extend({
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {
 					session.notifyPropertyChange('agendas');
 					this.set('sessionService.currentAgenda', newAgenda);
+					session.notifyPropertyChange('sessionService.agendas');
+					this.set('selectedAgendaItem', null);
 				});
 			})
 		},

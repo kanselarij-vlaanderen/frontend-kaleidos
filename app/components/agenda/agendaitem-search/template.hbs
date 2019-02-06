@@ -1,6 +1,6 @@
 {{#power-select
   options=subcases
-  placeholder=(t 'agendaitem-search.search-placeholder')
+  placeholder=(t "agendaitem-search.search-placeholder")
   selected=currentSession
   searchField="plannedstart"
   search=(perform searchTask)
@@ -13,7 +13,6 @@
   {{fa-icon "plus"}}
   {{t "buttons.add-case"}}
 </button>
-
 <button class="invert-color" {{action "navigateToCreateAnnouncement"}}>
   {{fa-icon "plus"}}
   {{t "buttons.create-announcement"}}

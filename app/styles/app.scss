@@ -280,6 +280,23 @@ menu {
   strong {
     font-weight: bold;
   }
+
+  .agenda-item-link {
+    width: 100%;
+    padding: 2em;
+
+    .documents-container {
+
+      .document {
+        a {
+          text-decoration: none;
+          cursor:pointer;
+          color:var(--blue);
+        }
+      }
+    }
+  }
+
   .active {
     background-color: var(--blue);
     color: white;
@@ -287,11 +304,14 @@ menu {
     .formal-nok {
       color: white;
     }
-  }
 
-  .agenda-item-link {
-    width: 100%;
-    padding: 2em;
+    .documents-container {
+      .document {
+        a {
+          color:white;
+        }
+      }
+    }
   }
 
   .agenda-sub-options {
@@ -828,7 +848,7 @@ button {
 
   .side--menu--content-container {
     height: 100%;
-    width: 250px;
+    width: 200px;
     top: 0;
     left: 0;
     overflow-x: hidden;
@@ -864,7 +884,7 @@ button {
 
 .opened {
   display: block;
-  width: 250px;
+  width: 200px;
   height: 100vh;
   float: left;
   background-color: var(--white-back);
@@ -930,8 +950,12 @@ button.invert-color {
 }
 
 .data-table-container {
-  float: left;
-  width: 100%;
+  padding:1em;
+}
+
+.data-table-button-container {
+  padding:1em;
+  padding-bottom:0;
 }
 
 .side-menu-collapse {
@@ -1060,6 +1084,7 @@ button.invert-color {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom:1em;
 
   .progress-container {
     display: flex;
@@ -1222,3 +1247,54 @@ button.invert-color {
   font-size:0.8em;
   color:var(--light-grey);
 }
+
+.press-agenda-container {
+  padding:1em;
+  width:100%;
+
+  .edit-press-agenda {
+    display:flex;
+    justify-content: flex-end;
+  }
+
+  textarea {
+    width:100%;
+    font-size:0.9em;
+    background-color: var(--light-grey);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: none;
+    overflow: auto;
+    outline: none;
+    resize: none;
+  }
+
+}
+
+.uploaded-files {
+  display:flex;
+
+  .document {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding:1em;
+    font-size:0.9em;
+
+    i {
+      font-size:3em;
+    }
+    
+    .fa-remove {
+      font-size:1em;
+    }
+  }
+
+  .delete-file {
+    display:flex;
+    width:100%;
+    justify-content: flex-end;
+  }
+} 

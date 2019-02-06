@@ -1,10 +1,12 @@
-<button class="invert-color" {{action "navigateBackToAgenda"}}>
-  {{fa-icon "arrow-left"}}
-  {{t "buttons.agenda-back"}}
-</button>
-<button class="invert-color" {{action "addSubcasesToAgenda"}}>
-  {{t "buttons.add-to-agenda"}}
-</button>
+<div class="data-table-button-container">
+  <button class="invert-color" {{action "navigateBackToAgenda"}}>
+    {{fa-icon "arrow-left"}}
+    {{t "buttons.agenda-back"}}
+  </button>
+  <button class="invert-color" {{action "addSubcasesToAgenda"}}>
+    {{t "buttons.add-to-agenda"}}
+  </button>
+</div>
 <div class="data-table-container">
   {{#data-table
     content=model

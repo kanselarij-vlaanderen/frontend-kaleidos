@@ -61,7 +61,7 @@
     "agendaitem-decision" : "Beslissing",
     "agendaitem-notes" : "Notule",
     "agendaitem-bestek" : "Kort bestek",
-		"agendaitem-news-item" : "Persagenda",
+		"agendaitem-press-agenda" : "Persagenda",
 		"postpone":"Uitstellen",
 		"not-postpone":"On-uitstellen"
 	},
@@ -111,7 +111,8 @@
 		"short-title": "KORTE TITEL",
 		"status": "TOELICHTING BEHANDELINGSSTATUS",
 		"themes": "THEMAS",
-		"title": "LANGE TITEL"
+		"title": "LANGE TITEL",
+		"public": "Openbaar"
 	},
 	"navigation": {
 		"agendas": "Agendas",

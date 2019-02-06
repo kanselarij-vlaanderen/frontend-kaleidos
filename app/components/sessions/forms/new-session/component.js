@@ -1,11 +1,10 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import moment from 'moment';
 import $ from 'jquery';
 
 export default Component.extend({
 	store: inject(),
-	today: moment.now(),
+	today: new Date(), 
 	classNames: ['new-session-form-container'],
 
 	actions: {
@@ -38,6 +37,6 @@ export default Component.extend({
 
 		cancelForm(event) {
 			this.cancelForm(event)
-		}
+		},
 	}
 });

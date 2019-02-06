@@ -13,7 +13,7 @@ export default Component.extend({
 	isShowingExtendModal: false,
 	currentAgendaItem: null,
 
-	isPostPonable: computed('sessionService.agendas',  function() {
+	isPostPonable: computed('sessionService.agendas.@each',  function() {
 		let agendas = this.get('sessionService.agendas')
 		if(agendas && agendas.length > 1) {
 			return true;
@@ -22,7 +22,7 @@ export default Component.extend({
 		}
 	}),
 
-	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function() {
+	lastDefiniteAgenda: computed('sessionService.definiteAgendas.@each', function() {
 		return this.get('sessionService.definiteAgendas.firstObject');
 	}),
 

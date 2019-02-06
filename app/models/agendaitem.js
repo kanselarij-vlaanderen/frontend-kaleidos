@@ -15,8 +15,8 @@ export default Model.extend({
 	subcase: belongsTo('subcase'),
   decision: belongsTo('decision'),
   newsItem: belongsTo('news-item'),
-  postPonedToSession: belongsTo('session')
-
+  postPonedToSession: belongsTo('session'),
+  pressAgenda: attr('string')
 
   // Karel fix your shit :p 
   // save: async function(){

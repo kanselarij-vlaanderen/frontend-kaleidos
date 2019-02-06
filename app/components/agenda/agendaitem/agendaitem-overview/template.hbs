@@ -11,25 +11,25 @@
       </span>
     </a>
     {{#if (or (not agendaitem.extended) (not agendaitem.postPonedToSession))}}
-    <a {{action "setAgendaItemSection" "decision"}}>
-      <span>
-        {{t "buttons.agendaitem-decision"}}
-      </span>
-    </a>
-    <a {{action "setAgendaItemSection" "notes"}}>
-      <span>
-        {{t "buttons.agendaitem-notes"}}
-      </span>
-    </a>
-    <a {{action "setAgendaItemSection" "bestek"}}>
-      <span>
-        {{t "buttons.agendaitem-bestek"}}
-      </span>
-    </a>
+      <a {{action "setAgendaItemSection" "decision"}}>
+        <span>
+          {{t "buttons.agendaitem-decision"}}
+        </span>
+      </a>
+      <a {{action "setAgendaItemSection" "notes"}}>
+        <span>
+          {{t "buttons.agendaitem-notes"}}
+        </span>
+      </a>
+      <a {{action "setAgendaItemSection" "bestek"}}>
+        <span>
+          {{t "buttons.agendaitem-bestek"}}
+        </span>
+      </a>
     {{/if}}
-    <a {{action "setAgendaItemSection" "news-item"}}>
+    <a {{action "setAgendaItemSection" "press-agenda"}}>
       <span>
-        {{t "buttons.agendaitem-news-item"}}
+        {{t "buttons.agendaitem-press-agenda"}}
       </span>
     </a>
   </div>
@@ -44,13 +44,19 @@
         {{#if isPostPonable}}
           <button {{action "toggleModal" agendaitem}}>
             {{#if (or agendaitem.extended (await agendaitem.postPonedToSession))}}
-              {{t 'buttons.not-postpone'}}
+              {{t "buttons.not-postpone"}}
             {{else}}
-              {{t 'buttons.postpone'}}
+              {{t "buttons.postpone"}}
             {{/if}}
           </button>
         {{/if}}
-        {{#if (await (allow-delete-agendaitem agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda))}}
+        {{#if
+          (await
+            (allow-delete-agendaitem
+              agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda
+            )
+          )
+        }}
           <button {{action "deleteItem" agendaitem}}>
             {{t "buttons.delete"}}
           </button>
@@ -62,6 +68,8 @@
     {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
   {{else if (eq activeAgendaItemSection "comments")}}
     {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
+  {{else if (eq activeAgendaItemSection "press-agenda")}}
+    {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
   {{/if}}
 </div>
 {{#if isShowingExtendModal}}
@@ -75,16 +83,19 @@
     </h1>
     <div class="modal--sessions-selector-container">
       <label>
-        {{t 'agenda-item.postpone-until'}}
+        {{t "agenda-item.postpone-until"}}
       </label>
-      {{sessions/sessions-selector currentSession=currentSession chooseSession=(action "chooseSession")}}
+      {{sessions/sessions-selector
+        currentSession=currentSession
+        chooseSession=(action "chooseSession")
+      }}
     </div>
     <div class="buttons">
       <button {{action "extendAgendaItem" currentAgendaItem}}>
-        {{t 'buttons.postpone'}}
+        {{t "buttons.postpone"}}
       </button>
       <button {{action "toggleModal"}}>
-        {{t 'buttons.cancel'}}
+        {{t "buttons.cancel"}}
       </button>
     </div>
   {{/modal-dialog}}

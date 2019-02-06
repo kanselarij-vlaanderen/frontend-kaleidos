@@ -8,9 +8,10 @@ import { helper } from '@ember/component/helper';
 export async function allowDeleteAgendaitem(params, items) {
   let agendaitem = items.agendaitem;
   let lastDefiniteAgenda = items.lastDefiniteAgenda;
+  if(!lastDefiniteAgenda) return true;
   let agendaitems = await lastDefiniteAgenda.get('agendaitems');
   let agendaitemNotInDefiniteAgenda = true;
-
+  
   await agendaitems.map(item => {
     if(agendaitem.get('subcase').get('id') === item.get('subcase').get('id')) {
       agendaitemNotInDefiniteAgenda = false;

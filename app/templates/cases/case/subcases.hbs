@@ -1,10 +1,13 @@
 <div class="cases--header-tile cases--sub-file-header">
-  <h2>{{t 'cases.subcases'}}</h2>
+  <h2>
+    {{t "cases.subcases"}}
+  </h2>
   {{#link-to "cases.case.subcases.create"}}
-    <button>{{t 'buttons.create-subcase'}}</button>
+    <button>
+      {{t "buttons.create-subcase"}}
+    </button>
   {{/link-to}}
 </div>
-
 <div class="cases--subcases">
   {{outlet}}
 </div>

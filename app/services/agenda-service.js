@@ -19,10 +19,13 @@ export default Service.extend({
 						url: '/agenda-approve/approveAgenda',
 						data: {
 							newAgendaId: agenda.id,
-							oldAgendaId: oldAgenda.id
+							oldAgendaId: oldAgenda.id,
+							currentSessionDate: currentSession.plannedstart,
 						}
 					}
 				).then(() => {
+					// eslint-disable-next-line ember/jquery-ember-run
+					agenda.notifyPropertyChange('agendaitems');
 					resolve(agenda);
 				}).catch(error => {
 					reject(error);
@@ -34,7 +37,6 @@ export default Service.extend({
 	createNewAgendaItem(selectedAgenda, subCase) {
 		let agendaitem = this.store.createRecord('agendaitem', {
 			extended: false,
-			priority: 100,
 			formallyOk: false,
 			dateAdded: new Date(),
 			subcase: subCase,
@@ -46,8 +48,7 @@ export default Service.extend({
 					{
 						method: "POST",
 						url: `/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
-						data: {
-						}
+						data: { }
 					}
 				).then(() => {
 					// eslint-disable-next-line ember/jquery-ember-run

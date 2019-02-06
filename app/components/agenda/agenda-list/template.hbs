@@ -1,10 +1,16 @@
-{{#if (is-empty (await agendaitems)) }}
+{{#if (is-empty (await agendaitems))}}
   <div class="no-data-container">
-    {{t 'agenda-item.no-agendaitems'}}
+    {{t "agenda-item.no-agendaitems"}}
   </div>
 {{else}}
-  <h3>{{t "agendas.agendaitems-subtitle"}}</h3>
+  <h3>
+    {{t "agendas.agendaitems-subtitle"}}
+  </h3>
   {{#each (await agendaitems) as |agendaitem index|}}
-    {{agenda/agenda-list/list-item agendaitem=agendaitem index=index selectedAgendaItem=selectedAgendaItem}}
+    {{agenda/agenda-list/list-item
+      agendaitem=agendaitem
+      index=index
+      selectedAgendaItem=selectedAgendaItem
+    }}
   {{/each}}
 {{/if}}

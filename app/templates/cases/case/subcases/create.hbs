@@ -1,57 +1,74 @@
 <div class="cases--new">
   <form onsubmit={{action "createSubCase"}}>
-
-  {{#if isPartOne }}
-    <div>
-      <h3>metadata controleren</h3>
-    </div>
-    {{cases/forms/metadata-form
-      themes=themes
-      step=(action "nextStep")
-      chooseTheme=(action "chooseTheme")
-      chooseType=(action "chooseType")
-      shortTitleChange=(action "shortTitleChange")
-      titleChange=(action "titleChange")
-      statusChange=(action "statusChange")
-      selectedThemes=selectedThemes
-      shortTitle=shortTitle
-      title=title
-      status=status
-      type=selectedType
-    }}
-  {{else }}
-    <div class="cases--new-item">
-      <label>NAAM DEELDOSSIER</label>
-      {{input
-        type="text"
-        id="title"
-        class="cases--new-item-input"
-        value=title
+    {{#if isPartOne}}
+      <div>
+        <h3>
+          metadata controleren
+        </h3>
+      </div>
+      {{cases/forms/metadata-form
+        themes=themes
+        step=(action "nextStep")
+        chooseTheme=(action "chooseTheme")
+        chooseType=(action "chooseType")
+        shortTitleChange=(action "shortTitleChange")
+        titleChange=(action "titleChange")
+        statusChange=(action "statusChange")
+        selectedThemes=selectedThemes
+        shortTitle=shortTitle
+        title=title
+        status=status
+        type=selectedType
       }}
-    </div>
-    <div class="cases--new-item">
-      <label>AANVRAAG AGENDERING</label>
-      {{input
-        id="public"
-        class="cases--new-item-input"
-        value=remark
-      }}
-    </div>
-    <div class="cases--new-item">
-      <label>{{t 'cases.upload-file'}}</label>
-      {{file-uploader uploadedFile=(action "uploadedFile")}}
-    </div>
-    <div class="cases--new-item">
-      <label>OPENBAAR?</label>
-      {{input type="checkbox" checked=confidential}}
-    </div>
-    <button
-      type="submit"
-      class="rr-action-button"
-      data-test-rr="sign-up-button"
-    >
-      Dossier aanmaken
-    </button>
-  {{/if}}
+    {{else}}
+      <div class="cases--new-item">
+        <label>
+          NAAM DEELDOSSIER
+        </label>
+        {{input type="text" id="title" class="cases--new-item-input" value=title}}
+      </div>
+      <div class="cases--new-item">
+        <label>
+          AANVRAAG AGENDERING
+        </label>
+        {{input id="public" class="cases--new-item-input" value=remark}}
+      </div>
+      <div class="cases--new-item">
+        <label>
+          {{t "cases.upload-file"}}
+        </label>
+        {{file-uploader uploadedFile=(action "uploadedFile")}}
+        <div class="uploaded-files">
+          {{#each uploadedFiles as |uploadedFile|}}
+            <div class="document">
+              <div class="delete-file">
+                <a href="#" {{action "removeFile" uploadedFile}}>
+                  {{fa-icon "remove"}}
+                </a>
+              </div>
+              {{fa-icon "file"}}
+              {{await uploadedFile.name}}
+              <div>
+                {{t "metadata-form.public"}}
+                {{input type="checkbox" checked=uploadedFile.public}}
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      {{!-- <div class="cases--new-item">
+        <label>
+          {{t "metadata-form.public"}}
+        </label>
+        {{input type="checkbox" checked=confidential}}
+      </div> --}}
+      <button
+        type="submit"
+        class="rr-action-button"
+        data-test-rr="sign-up-button"
+      >
+        {{t "buttons.create-case"}}
+      </button>
+    {{/if}}
   </form>
 </div>

@@ -1,0 +1,12 @@
+<div class="edit-press-agenda">
+  {{#if isReadOnly}}
+    <a href="#" {{action "editPressAgenda"}}>
+      {{fa-icon "pencil"}}
+    </a>
+  {{else}}
+    <a href="#" {{action "updatePressAgenda" agendaitem}}>
+      {{fa-icon "save"}}
+    </a>
+  {{/if}}
+</div>
+{{textarea rows="6" readonly=isReadOnly value=agendaitem.press-agenda}}

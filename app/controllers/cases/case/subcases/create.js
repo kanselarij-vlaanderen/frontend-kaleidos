@@ -1,8 +1,9 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
+import $ from 'jquery';
 
 export default Controller.extend({
-  uploadedFile: null,
+  uploadedFiles: [],
   part: 1,
   isPartOne: computed('part', function () {
     return this.get('part') === 1;
@@ -28,15 +29,15 @@ export default Controller.extend({
       const { title, shortTitle, remark, confidential } = this;
       const caze = this.store.peekRecord('case', this.model.id);
       const date = new Date();
-      let subcase = await this.store.createRecord('subcase', {  title, shortTitle, remark, case: caze, created: date, modified: date, confidential });
+      let subcase = await this.store.createRecord('subcase', { title, shortTitle, remark, case: caze, created: date, modified: date, confidential });
 
       let createdSubCase = await subcase.save();
-      let documentVersion = this.store.createRecord('document-version', {
-        subcase: createdSubCase,
-        file: this.get('uploadedFile'),
-        versionNumber: 1
-      });
-      await documentVersion.save();
+      let uploadedFiles = this.get('uploadedFiles');
+
+      Promise.all(uploadedFiles.map(uploadedFile => {
+        return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile);
+      }));
+
       await caze.get('subcases').pushObject(createdSubCase);
 
       caze.save();
@@ -64,7 +65,37 @@ export default Controller.extend({
       this.set('status', status);
     },
     uploadedFile(uploadedFile) {
-      this.set('uploadedFile', uploadedFile);
+      uploadedFile.set('public', true);
+      this.get('uploadedFiles').pushObject(uploadedFile);
+    },
+
+    removeFile(file) {
+      $.ajax({
+        method: "DELETE",
+        url: '/files/' + file.id
+      }).then(() => {
+        this.get('uploadedFiles').removeObject(file);
+      })
     }
+  },
+
+  async createNewDocumentWithDocumentVersion(subcase, file) {
+    let document = await this.store.createRecord('document', {
+      subcase: subcase,
+      created: new Date(),
+      public: file.public
+    });
+    document.save().then(async(createdDocument) => {
+      delete file.public;
+      let documentVersion = await this.store.createRecord('document-version', {
+        document: createdDocument,
+        created: new Date(),
+        versionNumber: 1,
+        file:file,
+        chosenFileName: file.get('name')
+      });
+      documentVersion.save();
+    });
   }
+
 });

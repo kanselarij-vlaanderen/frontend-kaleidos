@@ -8,5 +8,6 @@ export default Model.extend({
 	format: attr('string'),
 	size: attr('number'),
 	extension: attr('string'),
-	created: attr('date')
+	created: attr('date'),
+	name: attr('string')
 });
