@@ -5,6 +5,7 @@ import { alias } from '@ember/object/computed';
 
 export default Component.extend({
 	sessionService: inject(),
+	store: inject(),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentSession: null,
 	classNames: ["agenda-item-container"],
@@ -40,32 +41,31 @@ export default Component.extend({
 
 		async toggleModal(agendaitem) {
 			if (agendaitem) {
-				let postponedToSession = await agendaitem.get('postPonedToSession');
+				let postponedToSession = await agendaitem.get('postponedToSession');
 				if (agendaitem.extended) {
 					agendaitem.set('extended', false);
 					agendaitem.save();
 				} else if (postponedToSession) {
-					agendaitem.set('postPonedToSession', null);
+					agendaitem.set('postponedToSession', null);
 					agendaitem.save();
 				} else {
-					this.set('currentAgendaItem', agendaitem);
 					this.toggleProperty('isShowingExtendModal');
 				}
 			}
 		},
 
 		async extendAgendaItem(agendaitem) {
-			let currentSession = this.get('currentSession');
+			let currentSession = await this.get('currentSession');
+			
 			if (currentSession) {
-				agendaitem.set('postPonedToSession', currentSession);
+				agendaitem.set('postponedToSession', currentSession);
 			} else {
 				agendaitem.set('extended', true);
 			}
+			await agendaitem.save();
 
-			agendaitem.save().then(() => {
-				this.set('currentSession', null);
-				this.set('isShowingExtendModal', false);
-			});
+			this.set('currentSession', null);
+			this.set('isShowingExtendModal', false);
 		},
 
 		chooseSession(session) {

@@ -16,7 +16,7 @@
         {{#if agendaitem.extended}}
           {{t "agenda-item.extended"}}
         {{/if}}
-        {{#if (await agendaitem.postPonedToSession) as |sess|}}
+        {{#if (await agendaitem.postponedToSession) as |sess|}}
           {{t "agenda-item.extended-until"}}
           {{moment-format sess.plannedstart "dddd DD-MM-YYYY"}}
         {{/if}}

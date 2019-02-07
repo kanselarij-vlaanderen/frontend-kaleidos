@@ -9,5 +9,5 @@ export default Model.extend({
 	number: attr('number'),
 	agendas: hasMany('agenda'),
 	subcases: hasMany('subcase'),
-	postPonedAgendaItems: hasMany('agendaitem')
+	postponedAgendaitems: hasMany('agendaitem')
 });

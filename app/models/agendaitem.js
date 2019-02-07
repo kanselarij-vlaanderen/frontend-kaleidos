@@ -12,10 +12,10 @@ export default Model.extend({
   forPress: attr('boolean'),
 	agenda: belongsTo('agenda'),
 	comments: hasMany('comment'),
-	subcase: belongsTo('subcase'),
-  decision: belongsTo('decision'),
-  newsItem: belongsTo('news-item'),
-  postPonedToSession: belongsTo('session'),
+	subcase: belongsTo('subcase', {inverse:null}),
+  decision: belongsTo('decision', {inverse:null}),
+  newsItem: belongsTo('news-item', {inverse:null}),
+  postponedToSession: belongsTo('session'),
   pressAgenda: attr('string')
 
   // Karel fix your shit :p 

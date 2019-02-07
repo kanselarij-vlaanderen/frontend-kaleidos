@@ -37,6 +37,7 @@ export default Component.extend({
 		},
 
 		extendAgendaItem(agendaitem) {
+			
 			let currentSession = this.get('currentSession');
 			if (currentSession) {
 				agendaitem.set('postPonedToSession', currentSession);

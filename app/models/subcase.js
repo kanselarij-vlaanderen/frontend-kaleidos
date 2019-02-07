@@ -9,7 +9,7 @@ export default Model.extend({
   title: attr('string'),
   case: belongsTo('case'),
   session: belongsTo('session'),
-  agendaitem: belongsTo('agendaitem'),
+  agendaitem: belongsTo('agendaitem', {inverse:null}),
   showAsComment: attr('boolean'),
   confidential: attr('boolean'),
   documents: hasMany('document')
