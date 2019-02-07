@@ -1,6 +1,6 @@
 def CONTAINER_NAME="kaleidos-frontend"
 def CONTAINER_TAG="latest"
-def HTTP_PORT="8081"
+def HTTP_PORT="80"
 
 node {
 
