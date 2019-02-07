@@ -7,7 +7,7 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function () {
-  this.route('agendas');
+  this.route('agendas', { path: "/" });
   this.route('cases', { path: '/dossiers' }, function () {
     this.route('create');
     this.route('case', { path: ':id' }, function () {
@@ -20,7 +20,6 @@ Router.map(function () {
     this.route('overview', { path: '' });
   });
   this.route('comparison');
-  this.route('home', { path: "/" });
   this.route('settings');
   this.route('subcases');
 });

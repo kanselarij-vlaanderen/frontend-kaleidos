@@ -14,6 +14,7 @@ export default Component.extend({
 	isShowingExtendModal: false,
 	currentAgendaItem: null,
 	activeAgendaItemSection: 'details',
+	showOptions:false,
 
 	isPostPonable: computed('sessionService.agendas', function () {
 		let agendas = this.get('sessionService.agendas')
@@ -30,7 +31,11 @@ export default Component.extend({
 
 	actions: {
 		showDetail() {
-			this.set('isShowingDetail', !this.get('isShowingDetail'))
+			this.toggleProperty('isShowingDetail');
+		},
+
+		showOptions() {
+			this.toggleProperty('showOptions');
 		},
 
 		async toggleModal(agendaitem) {

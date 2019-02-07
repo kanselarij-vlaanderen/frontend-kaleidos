@@ -1,13 +1,14 @@
 {
 	"agenda": {
-		"agendaitems": "agendapunten"
+		"agendaitems": "agendapunten",
+		"announcements":"opmerkingen"
 	},
 	"agenda-item": {
 		"collapse": "meer weergeven",
 		"decree": "decreet",
 		"expand": "minder weergeven",
 		"extended": "stilgezet",
-		"extended-until": "Uitgesteld, aanvraag voor zitting de op ",
+		"extended-until": "Uitgesteld, aanvraag voor de zitting op ",
 		"no-agendaitems": "Geen agendapunten.",
 		"postpone-until": "Uitstellen tot"
 	},

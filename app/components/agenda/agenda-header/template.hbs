@@ -32,6 +32,13 @@
       0 {{t "agenda.agendaitems"}}
     {{/if}}
   </div>
+  <div class="sessions-subtitle">
+    {{#if (await currentAgenda.announcements)}}
+      {{await currentAgenda.announcements.length}} {{t "agenda.announcements"}}
+    {{else}}
+      0 {{t "agenda.announcements"}}
+    {{/if}}
+  </div>
 </div>
 {{#if creatingNewSession}}
   <div class="files--header-tile files--sub-file-header">

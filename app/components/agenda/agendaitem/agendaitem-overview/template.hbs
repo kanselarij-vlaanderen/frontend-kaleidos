@@ -1,33 +1,33 @@
 <div class="cases--list-item">
   <div class="cases--list-item-header">
-    <a {{action "setAgendaItemSection" "details"}}>
+    <a href="#" {{action "setAgendaItemSection" "details"}}>
       <span>
         {{t "buttons.agendaitem-case"}}
       </span>
     </a>
-    <a {{action "setAgendaItemSection" "comments"}}>
+    <a href="#" {{action "setAgendaItemSection" "comments"}}>
       <span>
         {{t "buttons.agendaitem-comment"}}
       </span>
     </a>
     {{#if (or (not agendaitem.extended) (not agendaitem.postPonedToSession))}}
-      <a {{action "setAgendaItemSection" "decision"}}>
+      <a href="#" {{action "setAgendaItemSection" "decision"}}>
         <span>
           {{t "buttons.agendaitem-decision"}}
         </span>
       </a>
-      <a {{action "setAgendaItemSection" "notes"}}>
+      <a href="#" {{action "setAgendaItemSection" "notes"}}>
         <span>
           {{t "buttons.agendaitem-notes"}}
         </span>
       </a>
-      <a {{action "setAgendaItemSection" "bestek"}}>
+      <a href="#" {{action "setAgendaItemSection" "bestek"}}>
         <span>
           {{t "buttons.agendaitem-bestek"}}
         </span>
       </a>
     {{/if}}
-    <a {{action "setAgendaItemSection" "press-agenda"}}>
+    <a href="#" {{action "setAgendaItemSection" "press-agenda"}}>
       <span>
         {{t "buttons.agendaitem-press-agenda"}}
       </span>
@@ -36,11 +36,13 @@
   {{#if (not currentAgenda.locked)}}
     <div class="cases--decree-options">
       <div class="settings-container">
-        <div class="cases--decree-options-settings">
+        <a href="#" {{action "showOptions"}}>
           {{fa-icon "ellipsis-h"}}
-        </div>
+        </a>
       </div>
-      <div class="buttons">
+    </div>
+    {{#if showOptions}}
+      <div class="buttons-agenda-item">
         {{#if isPostPonable}}
           <button {{action "toggleModal" agendaitem}}>
             {{#if (or agendaitem.extended (await agendaitem.postPonedToSession))}}
@@ -62,7 +64,7 @@
           </button>
         {{/if}}
       </div>
-    </div>
+    {{/if}}
   {{/if}}
   {{#if (eq activeAgendaItemSection "details")}}
     {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}

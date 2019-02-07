@@ -262,6 +262,12 @@ menu {
   margin: auto;
 }
 
+.cases--content-tile {
+  h3 {
+    text-align:center;
+  }
+}
+
 .cases-overview {
   width: 100%;
   background-color: #fff;
@@ -1298,3 +1304,46 @@ button.invert-color {
     justify-content: flex-end;
   }
 } 
+
+.cases--decree-options {
+  display:flex;
+  justify-content: flex-end;
+
+  .settings-container {
+    display:flex;
+    flex-direction:column ;
+    padding:0.2em;
+
+    a {
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      width:1.2em;
+      font-size:1.2em;
+      background-color: #f6f6f6;
+      border: 2px solid var(--blue);
+      color: var(--blue);
+      margin-bottom: 0.2em;
+      text-decoration: none;
+    }
+  }
+}
+
+.buttons-agenda-item {
+  display:flex;
+  justify-content: flex-end;
+  flex-direction: column;
+
+  button {
+    width: 25%;
+    margin:0.1em;
+  }
+}
+
+.cases--list-item-header {
+  font-size: 1.4rem;
+
+  a {
+    text-decoration: none;
+  }
+}
