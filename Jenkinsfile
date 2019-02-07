@@ -9,7 +9,6 @@ node {
 
   stage('Initialize'){
     def dockerHome = tool 'myDocker'
-    env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
   }
 
   stage('Checkout') {
