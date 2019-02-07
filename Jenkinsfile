@@ -9,6 +9,7 @@ node {
 
   stage('Initialize'){
     def dockerHome = tool 'myDocker'
+    def nodeJSHome = tool 'myNodeJS'
   }
 
   stage('Checkout') {
@@ -17,8 +18,12 @@ node {
 
   try {
 
+    stage('Setup container'){
+      sh "npm install"
+    }
+
     stage('Build'){
-      sh "ember build --environment=production"
+      sh "npm run build"
     }
 
     stage("Image Prune"){
