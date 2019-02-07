@@ -9,7 +9,7 @@ node {
 
   stage('Initialize'){
     def dockerHome = tool 'myDocker'
-    def nodeJSHome = tool 'myNodeJS'
+    tools {nodejs "node"}
   }
 
   stage('Checkout') {
