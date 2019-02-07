@@ -12,7 +12,7 @@
       {{t "buttons.agenda-compare"}}
     </button>
   </div>
-  <div class="side--menu--content-container">
+  <nav class="side--menu--content-container">
     {{#each (await agendas) as |agenda|}}
 			<a {{action "setCurrentAgenda" agenda}} class={{active-class agenda currentAgenda}}>
         <p>
@@ -22,7 +22,7 @@
         <div class="menu-item-active-border"></div>
 			</a>
     {{/each}}
-  </div>
+  </nav>
 {{else}}
   <div class="collapsed-side-menu" onclick={{action "collapseSideMenu"}}>
     {{fa-icon "chevron-right"}}

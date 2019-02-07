@@ -35,7 +35,9 @@ export default Controller.extend({
       let uploadedFiles = this.get('uploadedFiles');
 
       Promise.all(uploadedFiles.map(uploadedFile => {
-        return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile);
+        if(uploadedFile.id) {
+          return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile);
+        }
       }));
 
       await caze.get('subcases').pushObject(createdSubCase);
@@ -94,7 +96,7 @@ export default Controller.extend({
         file:file,
         chosenFileName: file.get('name')
       });
-      documentVersion.save();
+      await documentVersion.save();
     });
   }
 
