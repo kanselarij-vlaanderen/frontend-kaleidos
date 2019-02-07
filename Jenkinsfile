@@ -36,7 +36,7 @@ node {
     }
 
     stage('Run App'){
-      runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, HTTP_PORT)
+      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT)
     }
   } catch (err) {
     currentBuild.result = 'FAILED'
@@ -57,8 +57,8 @@ def imageBuild(containerName, tag){
     echo "Image build complete"
 }
 
-def runApp(containerName, tag, dockerHubUser, httpPort){
-    sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
+def runApp(containerName, tag, httpPort){
+    sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
 }
 
