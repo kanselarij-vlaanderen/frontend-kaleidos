@@ -10,8 +10,17 @@
 </li>
 {{#if (or (not agendaitem.extended) (not agendaitem.postponedToSession))}}
   <li class="vl-tab">
-    <a href="#" class="vl-tab__link" {{action "setAgendaItemSection" "decision"}}>
+    <a
+      href="#"
+      class="vl-tab__link"
+      {{action "setAgendaItemSection" "decision"}}
+    >
       {{t "buttons.agendaitem-decision"}}
+    </a>
+  </li>
+  <li class="vl-tab">
+    <a href="#" class="vl-tab__link" {{action "setAgendaItemSection" "notule"}}>
+      {{t "buttons.agendaitem-notes"}}
     </a>
   </li>
   <li class="vl-tab">
@@ -20,7 +29,11 @@
     </a>
   </li>
   <li class="vl-tab">
-    <a href="#" class="vl-tab__link" {{action "setAgendaItemSection" "press-agenda"}}>
+    <a
+      href="#"
+      class="vl-tab__link"
+      {{action "setAgendaItemSection" "press-agenda"}}
+    >
       {{t "buttons.agendaitem-press-agenda"}}
     </a>
   </li>

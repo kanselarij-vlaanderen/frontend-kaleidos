@@ -84,19 +84,7 @@
     {{textarea value=agendaitem.record}}
   </div>
 
-<div class="agendaitem--detail--besluit">
-  <h2>
-    {{t "agendaitem-details.decision-title"}}
-  </h2>
-  {{#if (await agendaitem.decision)}}
-    {{decision/edit-decision decision=agendaitem.decision}}
-  {{else}}
-    {{t "agendaitem-details.no-decision"}}
-    <button class="invert-color" {{action "addDecision"}}>
-      {{t "buttons.add-decision"}}
-    </button>
-  {{/if}}
-</div>
+
 <div class="agendaitem--detail--news-item">
   <h2>
     {{t "agendaitem-details.news-item-title"}}
