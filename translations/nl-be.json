@@ -7,8 +7,8 @@
 		"collapse": "meer weergeven",
 		"decree": "decreet",
 		"expand": "minder weergeven",
-		"extended": "stilgezet",
-		"extended-until": "Uitgesteld, aanvraag voor de zitting op ",
+		"postponed": "stilgezet",
+		"postponed-until": "Uitgesteld, aanvraag voor de zitting op ",
 		"no-agendaitems": "Geen agendapunten.",
 		"postpone-until": "Uitstellen tot"
 	},

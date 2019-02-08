@@ -12,12 +12,12 @@
       {{agendaitem.subcase.title}}
     </p>
     <div class="agenda-sub-options">
-      <p class="agenda-extended-option">
-        {{#if agendaitem.extended}}
-          {{t "agenda-item.extended"}}
+      <p class="agenda-postponed-option">
+        {{#if agendaitem.postponed}}
+          {{t "agenda-item.postponed"}}
         {{/if}}
         {{#if (await agendaitem.postponedToSession) as |sess|}}
-          {{t "agenda-item.extended-until"}}
+          {{t "agenda-item.postponed-until"}}
           {{moment-format sess.plannedstart "dddd DD-MM-YYYY"}}
         {{/if}}
       </p>
