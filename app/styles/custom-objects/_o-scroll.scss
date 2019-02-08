@@ -1,0 +1,16 @@
+/* ==========================================================================
+   Utility: scroll
+  ========================================================================== */
+
+.o-scroll-wrapper {
+  display: flex;
+  flex-direction: column;
+  // Height minus top nav bars
+  height: calc(100vh - 12.5rem);
+}
+
+.o-scroll {
+  overflow: auto;
+  // Height minus non scrollable part (happens to be equal across all panels but maybe this needs a safer approach)
+  height: calc(100% - 6.8rem);
+}

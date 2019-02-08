@@ -1,15 +1,61 @@
-<div class="properties">
-  <div class="property">
-    {{#link-to
-      "cases.case"
-      agendaitem.id
-      class="cases--decree-content"
-      tagName="div"
-    }}
-      <h4>
-        {{agendaitem.subcase.shortTitle}}
+<div class="vl-u-spacer">
+  <div class="vl-u-spacer--small">
+    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <h7 class="vl-title vl-title--h7">
+        Besluit
+      </h7>
+      <div class="u-spacer-left">
+        <a class="vl-link" href="#">
+          Wijzigen
+        </a>
+      </div>
+    </div>
+  </div>
+  <h3 class="vl-title vl-title--h3">
+    {{agendaitem.subcase.shortTitle}}
+  </h3>
+  <p>
+    {{agendaitem.subcase.title}}
+  </p>
+</div>
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <span class="vl-agenda-item__meta">
+      2de principiële goedkeuring
+    </span>
+    <div class="vl-u-display-flex default">
+      <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+      <span class="vl-agenda-item__meta">
+        {{#if agendaitem.formallyOk}}
+          formeel ok
+        {{else}}
+          formeel nok
+        {{/if}}
+      </span>
+    </div>
+  </div>
+</div>
+<div class="vl-u-spacer">
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <h4 class="vl-title vl-title--h4">
+        Thema's
       </h4>
-      <p>
+      <div class="u-spacer-left">
+        <a class="vl-link" href="#">
+          Wijzigen
+        </a>
+      </div>
+    </div>
+  </div>
+  {{await agendaitem.subcase.case.themes.length}}
+  {{#each (await agendaitem.subcase.case.themes) as |theme|}}
+    <span class="vl-pill u-spacer-right-s">
+      {{theme.naam}}
+    </span>
+  {{/each}}
+</div>
+{{!-- <p>
         {{agendaitem.subcase.title}}
       </p>
       <div class="cases--decree-content-label">
@@ -19,8 +65,6 @@
           </p>
         {{/if}}
       </div>
-    {{/link-to}}
-  </div>
   <div class="property">
     <div class="label">
       {{t "agendaitem-details.agenda"}}
@@ -39,7 +83,7 @@
     </div>
     {{textarea value=agendaitem.record}}
   </div>
-</div>
+
 <div class="agendaitem--detail--besluit">
   <h2>
     {{t "agendaitem-details.decision-title"}}
@@ -70,5 +114,4 @@
   <button class="invert-color" {{action "saveItem"}}>
     {{t "buttons.save"}}
   </button>
-</div>
-{{yield}}
+</div> --}}

@@ -1,12 +1,36 @@
-<div class="edit-press-agenda">
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <h3 class="vl-title vl-title--h3">
+      Voorbereidende tekst voor de persagenda
+    </h3>
+    {{#if isReadOnly}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        href="#"
+        {{action "editPressAgenda"}}>
+        {{fa-icon "pencil"}}
+      </button>
+    {{else}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        href="#"
+        {{action "updatePressAgenda" agendaitem}}>
+        {{fa-icon "save"}}
+      </button>
+    {{/if}}
+  </div>
+</div>
+<div class="vl-typography">
   {{#if isReadOnly}}
-    <a href="#" {{action "editPressAgenda"}}>
-      {{fa-icon "pencil"}}
-    </a>
+    <p>
+      {{agendaitem.press-agenda}}
+    </p>
   {{else}}
-    <a href="#" {{action "updatePressAgenda" agendaitem}}>
-      {{fa-icon "save"}}
-    </a>
+    {{textarea
+      rows="6"
+      column="80"
+      readonly=isReadOnly
+      value=agendaitem.press-agenda
+    }}
   {{/if}}
 </div>
-{{textarea rows="6" readonly=isReadOnly value=agendaitem.press-agenda}}

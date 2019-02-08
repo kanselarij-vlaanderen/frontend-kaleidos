@@ -8,7 +8,7 @@ export default Component.extend({
 	store: inject(),
 	sessionService: inject(),
 	agendaService: inject(),
-	classNames: ["files--header-tile", "files--search"],
+	classNames: ["c-page-header"],
 	tagName: "div",
 
 	creatingNewSession: null,
@@ -57,7 +57,11 @@ export default Component.extend({
 
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
-		}
+		},
+
+		compareAgendas() {
+			this.compareAgendas();
+		},
 	},
 
 	async didInsertElement() {

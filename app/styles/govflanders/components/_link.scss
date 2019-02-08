@@ -1,0 +1,71 @@
+// Link <button>
+[type="submit"] {
+  &.vl-link {
+    &.vl-link--icon {
+      padding-left: 1.8rem;
+    }
+  }
+}
+
+.vl-link {
+  @include reset-button;
+  display: inline-flex;
+  align-items: center;
+  text-align: left;
+  font-family: inherit;
+  font-size: inherit;
+  color: $action-text-color;
+  font-weight: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover {
+    color: $action-text-hover-color;
+  }
+
+  &:focus {
+    color: $action-text-active-color;
+  }
+
+  &__icon {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    font-size: 0.75em;
+    color: $text-color;
+    flex: 0 0 auto;
+    margin-bottom: -0.4rem;
+
+    &::before,
+    &::after {
+      display: inline-block;
+    }
+
+    &--before {
+      padding-right: 0.2rem;
+    }
+
+    &--after {
+      padding-left: 0.2rem;
+    }
+
+    &--light {
+      color: $placeholder-color;
+    }
+
+    .vl-link--block & {
+      margin-top: 0.2rem;
+    }
+
+    &.vl-vi-external {
+      font-size: 1em;
+    }
+  }
+}
+
+// Block modifier
+.vl-link--block {
+  display: flex;
+  align-items: flex-start;
+}

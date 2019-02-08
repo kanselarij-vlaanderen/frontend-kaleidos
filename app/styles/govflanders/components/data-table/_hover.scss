@@ -1,0 +1,11 @@
+.vl-data-table--hover {
+  tbody {
+    tr {
+      transition: background 0.2s ease-in-out;
+
+      &:hover {
+        background: $porcelain;
+      }
+    }
+  }
+}

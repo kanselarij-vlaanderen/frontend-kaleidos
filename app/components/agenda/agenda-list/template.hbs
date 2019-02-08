@@ -3,9 +3,9 @@
     {{t "agenda-item.no-agendaitems"}}
   </div>
 {{else}}
-  <h3>
+  <h5 class="vl-title vl-title--h5 vl-u-spacer">
     {{t "agendas.agendaitems-subtitle"}}
-  </h3>
+  </h5>
   {{#each (await agendaitems) as |agendaitem index|}}
     {{agenda/agenda-list/list-item
       agendaitem=agendaitem

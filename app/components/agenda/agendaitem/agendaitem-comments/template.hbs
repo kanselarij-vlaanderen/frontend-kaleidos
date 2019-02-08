@@ -1,12 +1,32 @@
 {{#if (or (not agendaitem.extended) (not agendaitem.postPonedToSession))}}
-<h3>Opmerkingen</h3>
-
-<div>
-  {{input placeholder="Type hier je opmerking" value=text}}
-  <button  type="button" {{action "addComment"}}>Opmerking maken</button>
-</div>
-
-{{#each comments as |comment|}}
-  <p>{{ comment.text }}</p>
-{{/each}}
+  <div class="vl-comments">
+    <h3 class="vl-title vl-title--h3">
+      Opmerkingen
+    </h3>
+    <div class="vl-comments-input">
+      {{input class="vl-input-field" placeholder="Type hier je opmerking" value=text}}
+      <button class="vl-button vl-button--tertiary vl-button--icon" {{action "addComment"}}>
+        {{fa-icon 'paper-plane'}}
+      </button>
+    </div>
+    {{#each comments as |comment|}}
+      <div class="vl-comments-comment">
+        <div class="vl-comments-comment-content">
+          <div class="vl-comments-comment-content__header">
+            <h6 class="vl-title vl-title--h6">
+              USERNAME
+            </h6>
+            <div class="vl-comments-comment-content__meta">
+              {{moment-format comment.createdAt "DD MMMM YYYY - h:mm"}}
+            </div>
+          </div>
+          <div class="vl-typography">
+            <p>
+              {{comment.text}}
+            </p>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
 {{/if}}

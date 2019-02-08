@@ -1,1107 +1,196 @@
 @import "ember-power-select";
 @import "ember-modal-dialog/ember-modal-structure";
 @import "ember-modal-dialog/ember-modal-appearance";
+@import "./colors.scss";
+// Start your CSS here
 
-html,
-body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden;
-}
+$icon-font-location: "/fonts/";
 
-:root {
-  --brown: #423939;
-  --blue: #306cc0;
-  --yellow: #f5c45a;
-  --white: #fff;
-  --near-white: #fafafa;
-  --light-grey: #dbd7d7;
-  --grey: #969699;
-  --near-black: #333;
-  --black: #000;
-  --white-back: rgb(226, 230, 233);
-}
+// Core (loaded from node_modules)
+// @import "node_modules/@govflanders/vl-ui-core/src/scss/_setting.scss";
+// @import "node_modules/@govflanders/vl-ui-core/src/scss/_tool.scss";
+// @import "node_modules/@govflanders/vl-ui-core/src/scss/_core.scss";
+// @import "node_modules/@govflanders/vl-ui-core/src/scss/_generic.scss";
+// @import "node_modules/@govflanders/vl-ui-core/src/scss/_element.scss";
+// @import "node_modules/@govflanders/vl-ui-core/src/scss/_object.scss";
 
-body,
-html {
-  padding: 0;
-  margin: 0;
-  font-family: sans-serif;
-  background-color: #fafafa;
-}
+// Components (loaded locally to easily read source)
+@import "govflanders/core/_setting.scss";
+@import "govflanders/core/_tool.scss";
+@import "govflanders/core/_generic.scss";
+@import "govflanders/core/_element.scss";
+@import "govflanders/core/_object.scss";
 
-menu {
-  display: flex;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  height: 64px;
-  background-color: var(--white-back);
-  color: var(--blue);
+// Components (loaded from node_modules)
+// @import "node_modules/@govflanders/vl-ui-action-group/src/scss/_action-group.scss";
+// @import "node_modules/@govflanders/vl-ui-alert/src/scss/_alert";
+// @import "node_modules/@govflanders/vl-ui-badge/src/scss/_badge";
+// @import "node_modules/@govflanders/vl-ui-button/src/scss/_button.scss";
+// @import "node_modules/@govflanders/vl-ui-description-data/src/scss/_description-data";
+// @import "node_modules/@govflanders/vl-ui-document/src/scss/_document.scss";
+// @import "node_modules/@govflanders/vl-ui-form-message/src/scss/_form-message.scss";
+// @import "node_modules/@govflanders/vl-ui-form-structure/src/scss/_form-structure.scss";
+// @import "node_modules/@govflanders/vl-ui-icon/src/scss/_icon.scss";
+// @import "node_modules/@govflanders/vl-ui-input-field/src/scss/_input-field.scss";
+// @import "node_modules/@govflanders/vl-ui-link-list/src/scss/link-list";
+// @import "node_modules/@govflanders/vl-ui-link/src/scss/_link.scss";
+// @import "node_modules/@govflanders/vl-ui-loader/src/scss/_loader.scss";
+// @import "node_modules/@govflanders/vl-ui-modal/src/scss/_modal";
+// @import "node_modules/@govflanders/vl-ui-pager/src/scss/_pager";
+// @import "node_modules/@govflanders/vl-ui-search/src/scss/_search;
+// @import "node_modules/@govflanders/vl-ui-tabs/src/scss/_tabs";
+// @import "node_modules/@govflanders/vl-ui-titles/src/scss/_titles";
+// @import "node_modules/@govflanders/vl-ui-typography/src/scss/_typography";
+// @import "node_modules/@govflanders/vl-ui-upload/src/scss/_upload";
 
-  .menu--content {
-    width: 95%;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    height: 64px;
-  }
+// Components (loaded locally to easily read source)
+@import "govflanders/components/_action-group";
+@import "govflanders/components/_alert";
+@import "govflanders/components/_badge";
+@import "govflanders/components/_button";
+@import "govflanders/components/_data-table";
+@import "govflanders/components/_description-data";
+@import "govflanders/components/_document";
+@import "govflanders/components/_form-message";
+@import "govflanders/components/_form-structure";
+@import "govflanders/components/_icon";
+@import "govflanders/components/_info-tile";
+@import "govflanders/components/_input-field";
+@import "govflanders/components/_link-list";
+@import "govflanders/components/_link";
+@import "govflanders/components/_loader";
+@import "govflanders/components/_modal";
+@import "govflanders/components/_pager";
+@import "govflanders/components/_popover";
+@import "govflanders/components/_search";
+@import "govflanders/components/_tabs";
+@import "govflanders/components/_titles";
+@import "govflanders/components/_typography";
+@import "govflanders/components/_upload";
 
-  ul {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    list-style-type: none;
-    height: 64px;
+// Interdependent components (loaded from node_modules)
+// @import "node_modules/@govflanders/vl-ui-select/src/scss/_select";
+// @import "node_modules/@govflanders/vl-ui-select/src/scss/_js-select";
 
-    li {
-      padding: 0;
-      margin: 0 0 0 25px;
-      font-size: 0.9em;
-      display: flex;
-      align-items: center;
+// Interdependent components - These are source order dependent
+@import "govflanders/components/_select";
+@import "govflanders/components/_js-select";
 
-      a {
-        display: flex;
-        align-items: center;
-        height: 64px;
-        color: var(--blue);
-        text-decoration: none;
-        position: relative;
+// Additions to existing components
+@import "govflanders/additions/_button";
+@import "govflanders/additions/_typography";
+@import "govflanders/additions/_data-table";
 
-        &:hover {
-          text-decoration: none;
-        }
+// Custom components
+@import "custom-components/c-agenda-item";
+@import "custom-components/c-block-list";
+@import "custom-components/c-comments";
+@import "custom-components/c-layout-agenda";
+@import "custom-components/c-page-header";
+@import "custom-components/c-section-header";
+@import "custom-components/c-side-nav";
+@import "custom-components/c-view-switch";
+@import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
+@import "custom-components/c-scrollable-container";
 
-        &.active {
-          color: var(--blue) !important;
+// Imports utilities (loaded from node_modules)
+// @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
 
-          .menu-item-active-border {
-            height: 4px;
-            bottom: 0px;
-            position: absolute;
-            width: 75%;
-            left: 12.5%;
-            background-color: var(--blue);
-            overflow: hidden;
-          }
-        }
-      }
+// Utilities (loaded locally to easily read source)
+@import "govflanders/util/_util";
 
-      img {
-        width: 25px;
-        height: 25px;
-        fill: var(--blue);
-        color: var(--blue);
-        svg {
-          fill: var(--blue);
-        }
-      }
-    }
-  }
+// Fixes to the framework
+@import "fixes/fix-pre"; // See https://github.com/mono-company/digikan/issues/24
+@import "fixes/fix-typography"; // See https://github.com/mono-company/digikan/issues/23
+@import "fixes/fix-flex-utils"; // related to https://github.com/mono-company/digikan/issues/37
 
-  .menu--notifications {
-    position: relative;
-    padding: 5px;
 
-    span {
-      position: absolute;
-      top: 0;
-      right: 0;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      // background-color: var(--white-back);
-      color: var(--blue);
-      font-size: 0.7em;
-      height: 15px;
-      width: 15px;
-      border-radius: 50%;
-      font-weight: bold;
-    }
-  }
-}
-
-.agenda-navigation-banner {
-  width: 50%;
-  float: left;
-}
-
-.table-container {
-  width: 50%;
-  float: right;
-
-  table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  td,
-  th {
-    width: 25%;
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-  }
-
-  tr:nth-child(even) {
-    background-color: #dddddd;
-  }
-}
-
-.cases--header {
-  width: 99%;
-  background-color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: auto;
-  padding: 25px;
-  box-shadow: 0 1px 2px rgba(25, 25, 25, 0.2);
-
-  .cases--info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  h1 {
-    font-size: 2em;
-    margin: 0;
-  }
-}
-
-.cases--search {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: 25px;
-  width: 99%;
-  margin: auto;
-
-  .search--input {
-    display: flex;
-    flex-direction: column;
-    width: 15%;
-  }
-
-  label {
-    display: inline-block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 0.8em;
-  }
-
-  form {
-    display: flex;
-    align-items: center;
-  }
-
-  input {
-    padding: 10px;
-    width: 100%;
-    font-size: 0.8em;
-    border: 1px solid #ccc;
-  }
-
-  .cases--search-submit {
-    margin-left: auto;
-    border-left: 1px solid var(--light-grey);
-
-    button {
-      background-color: transparent;
-      border: 0;
-      padding: 0;
-      margin: 0;
-      margin-left: 25px;
-      margin-right: 25px;
-
-      img {
-        width: 15px;
-        height: 15px;
-      }
-    }
-  }
-
-  .session-header {
-    display: flex;
-    align-items: center;
-
-    button {
-      margin-left: 0.5em;
-      background-color: var(--blue);
-      padding: 0.5em;
-      border: 0;
-      margin: 0;
-      color: #fff;
-      font-size: 0.9em;
-    }
-  }
-
-  .sessions-subtitle {
-    font-size: 0.8em;
-    padding: 0;
-    margin-top: 0.1em;
-  }
-
-  .session-title-container {
-    float: left;
-    display: block;
-  }
-
-  .ember-power-select-trigger {
-    width: 45%;
-    float: left;
-    display: block;
-  }
-}
-
-.cases--content {
-  width: 99%;
-  margin: auto;
-}
-
-.cases--content-tile {
-  h3 {
-    text-align:center;
-  }
-}
-
-.cases-overview {
-  width: 100%;
-  background-color: #fff;
-  box-shadow: 0 1px 2px rgba(25, 25, 25, 0.2);
-  padding: 25px;
-}
-
-.agenda-item-container {
-  width: 100%;
-  border-left: 1px solid #e7e7e7;
-  border-bottom: 1px solid #e7e7e7;
-  text-decoration: none;
-  color: #212121;
-  background-color: white;
-
-  strong {
-    font-weight: bold;
-  }
-
-  .agenda-item-link {
-    width: 100%;
-    padding: 2em;
-
-    .documents-container {
-
-      .document {
-        a {
-          text-decoration: none;
-          cursor:pointer;
-          color:var(--blue);
-        }
-      }
-    }
-  }
-
-  .active {
-    background-color: var(--blue);
-    color: white;
-
-    .formal-nok {
-      color: white;
-    }
-
-    .documents-container {
-      .document {
-        a {
-          color:white;
-        }
-      }
-    }
-  }
-
-  .agenda-sub-options {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .formal-ok {
-    color: #00e500;
-  }
-
-  .formal-nok {
-    color: grey;
-  }
-}
-
-.cases-list {
-  display: flex;
+.vl-title--container {
+  display:flex;
   flex-direction: column;
+  padding-bottom: 1rem;
 }
 
-.cases-list-item {
+.compare-agenda-list-container {
   display: flex;
+  width: 100%;
+  flex-direction: column;
+
+  .compare-item-container {
+    width: 100%;
+    height: 200px;
+
+    .previous-agenda-item {
+      width: 50%;
+      float: left;
+
+      .agenda-item-link {
+        height: 200px;
+        border-right: 1px solid var(--light-grey);
+        border-bottom: 1px solid var(--light-grey);
+      }
+    }
+
+    .current-agenda-item {
+      width: 50%;
+      float: left;
+
+      .agenda-item-link {
+        height: 200px;
+        border-bottom: 1px solid var(--light-grey);
+      }
+    }
+  }
+}
+
+.comparison-container {
+width: calc(100% - 150px);
+float: left;
+
+.compare-title {
+  display: flex;
+  justify-content: space-evenly;
   align-items: center;
-  width: 100%;
-  font-size: 0.95em;
-  color: #212121;
-  text-decoration: none;
-  padding: 15px;
-  border-bottom: 1px solid #efefef;
-
-  .cases-list-item-column {
-    width: 25%;
-  }
-
-  &:hover {
-    background-color: #efefef;
-  }
-
-  h4 {
-    margin: 0;
-    padding: 0;
-  }
-}
-
-.cases--list-item-header {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  border-bottom: 1px solid #efefef;
-
-  a {
-    line-height: 40px;
-    font-size: 0.9em;
-  }
-
-}
-
-.cases--decree {
-  .cases--decree-head {
-    display: flex;
-    justify-content: space-between;
-  }
-  .cases--decree-head {
-    display: flex;
-    justify-content: space-between;
-  }
-  .cases--decree-content {
-    display: flex;
-    flex-direction: column;
-
-    h4 {
-      font-weight: bold;
-      margin: 0 0 10px;
-      padding: 0;
-    }
-
-    .cases--decree-content-label {
-      padding: 4px 8px;
-      border-radius: 15px;
-      color: var(--grey);
-      font-size: 0.8em;
-    }
-
-    .cases--decree-content-expand {
-      display: flex;
-      align-items: center;
-      margin-top: auto;
-
-      img {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-      }
-
-      span {
-        font-size: 0.75em;
-      }
-    }
-  }
-}
-
-.new-session-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.new-session-form {
-  width: 100%;
-  .submit-container {
-    text-align: center;
-
-    button {
-      margin: 0;
-      margin-right: 1em;
-    }
-  }
-
-  .form-group {
-    padding: 1em;
-
-    .pikaday-session {
-      font-size: 2em;
-    }
-
-    label {
-      font-size: 2em;
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-
-      input {
-        font-size: 0.7em;
-      }
-    }
-  }
-}
-
-.cases--new {
-  padding: 50px;
-
-  form {
-    .cases--new-item {
-      display: flex;
-      flex-direction: column;
-
-      label {
-        font-weight: bolder;
-        margin-bottom: 15px;
-        font-size: 0.85em;
-        color: #333;
-      }
-
-      .cases--new-item-input,
-      textarea,
-      .ember-power-select-trigger {
-        border: 1px solid #e5e5e5;
-        border-radius: 5px;
-        padding: 10px 15px;
-        margin-bottom: 25px;
-      }
-    }
-  }
-}
-
-.cases--subcases {
-  .cases--subcases-overview {
-    padding: 25px;
-  }
-
-  .cases--subcases-item {
-    box-shadow: 0 1px 2px rgba(25, 25, 25, 0.2);
-    margin-bottom: 15px;
-    display: flex;
-  }
-
-  .cases--subcases-item-arrow {
-    background-color: var(--blue);
-    padding: 5px;
-    width: 50px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-      width: 20px;
-      height: 15px;
-    }
-  }
-
-  .cases--subcases-item-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    width: calc(100% - 40px);
-    padding-left: 25px;
-    padding-right: 25px;
-    font-size: 0.9em;
-
-    h4 {
-      color: var(--blue);
-      margin: 0;
-      padding: 0;
-      font-weight: bolder;
-    }
-
-    span {
-      color: #aaa;
-    }
-  }
-}
-
-button {
-  margin: 0;
-  padding: 10px 25px;
-  background-color: var(--blue);
-  color: #fff;
-  border: 0;
-}
-
-.agenda-navigation-banner {
-  width: calc(100%);
-  float: left;
-  background-color: white;
-}
-
-.table-container {
-  width: 50%;
-  float: right;
-}
-
-.files--header,
-.files--content {
-  width: 100%;
   border-bottom: 1px solid var(--light-grey);
-
-  .files--header-tile {
-    padding: 1em;
-
-    .ember-power-select-trigger {
-      width: 100%;
-    }
-  }
-}
-
-.files--search {
-  .files--search-content {
-    border: 1px solid var(--light-grey);
-  }
-
-  label {
-    display: inline-block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 0.8em;
-  }
-
-  form {
-    display: flex;
-    align-items: center;
-  }
-
-  input {
-    border: 0;
-    padding: 10px;
-    width: calc(100% - 50px);
-    height: 100%;
-    font-size: 0.8em;
-
-    &:focus {
-      outline: none;
-      background-color: var(--light-grey);
-    }
-  }
-
-  .files--search-submit {
-    margin-left: auto;
-    border-left: 1px solid var(--light-grey);
-
-    button {
-      background-color: transparent;
-      border: 0;
-      padding: 0;
-      margin-left: 25px;
-      margin-right: 25px;
-
-      img {
-        width: 15px;
-        height: 15px;
-      }
-    }
-  }
-
-  .session-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    button {
-      margin-left: 0.5em;
-      background-color: var(--blue);
-      padding: 0.5em;
-      border: 0;
-      color: #fff;
-      font-size: 0.9em;
-    }
-  }
-
-  .session-agenda-left-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .sessions-subtitle {
-    font-size: 0.8em;
-    padding: 0;
-    margin-top: 0.1em;
-  }
-
-  .session-title-container {
-    float: left;
-    display: block;
-  }
-
-  .ember-power-select-trigger {
-    width: 45%;
-    float: left;
-    display: block;
-  }
-}
-
-.files--content {
-  width: 100%;
-  border-bottom: 1px solid var(--light-grey);
-  display: flex;
-
-  .files--content-tile {
-    flex: 1;
-
-    &:first-child {
-      border-right: 1px solid var(--light-grey);
-    }
-  }
-}
-
-.files--sub-file-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
 
   h2 {
-    margin: 0;
-    padding: 0;
-    font-size: 1.25em;
-  }
-
-  button {
-    background-color: var(--blue);
-    padding: 12px 25px;
-    border: 0;
-    color: #fff;
-    font-size: 0.9em;
+    font-size: 1.5em;
+    font-weight: bold;
   }
 }
 
-.files--decree {
-  background-color: var(--light-grey);
-  padding: 25px;
+.compare-agenda-list-container {
   display: flex;
-  justify-content: space-between;
-
-  .files--decree-content {
-    display: flex;
-    flex-direction: column;
-
-    h4 {
-      margin: 0 0 10px;
-      padding: 0;
-    }
-
-    .files--decree-content-label {
-      background-color: var(--yellow);
-      padding: 4px 8px;
-      border-radius: 15px;
-      color: var(--white-back);
-      font-size: 0.8em;
-    }
-
-    .files--decree-content-expand {
-      display: flex;
-      align-items: center;
-      margin-top: auto;
-
-      img {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-      }
-
-      span {
-        font-size: 0.75em;
-      }
-    }
-  }
-
-  .files--decree-options {
-    .files--decree-options-settings {
-      background-color: #fff;
-      width: 30px;
-      height: 30px;
-      border-radius: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      img {
-        width: 20px;
-        height: 20px;
-        fill: #000;
-      }
-    }
-  }
-}
-
-.new-session-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
-}
+  flex-direction: column;
 
-.new-session-form {
-  width: 100%;
-  .submit-container {
-    text-align: center;
-
-    button {
-      margin-right: 1em;
-    }
-  }
-
-  .form-group {
-    padding: 1em;
-
-    .pikaday-session {
-      font-size: 2em;
-    }
-
-    label {
-      font-size: 2em;
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-
-      input {
-        font-size: 0.7em;
-      }
-    }
-  }
-}
-
-.cases--subcase {
-  padding: 25px;
-
-  .cases--subcase-header {
-    h4 {
-      color: #999;
-      margin: 0;
-    }
-
-    h1 {
-      margin: 0;
-      padding: 0;
-
-      font-size: 1.3em;
-    }
-  }
-}
-
-.side--menu-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 25px;
-  height: 100vh;
-  float: left;
-  background-color: var(--white-back);
-  border: 1px solid var(--light-grey);
-  border-top: none;
-
-  .title-container {
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid var(--light-grey);
-    border-top: none;
-    border-right: none;
-
-    strong {
-      font-size: 1.5em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      i {
-        margin-right: 0.5em;
-      }
-    }
-
-    button {
-      font-size: 1em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 1em;
-      padding: 0.5em;
-
-      i {
-        color: var(--blue);
-        margin-right: 0.1em;
-      }
-
-      background-color: var(--white-back);
-      color: var(--blue);
-      border: 2px solid var(--blue);
-    }
-  }
-
-  .side--menu--content-container {
-    height: 100%;
-    width: 200px;
-    top: 0;
-    left: 0;
-    overflow-x: hidden;
-
-    a {
-      display: flex;
-      flex-direction: column;
-      color: var(--grey);
-      font-size: 0.8em;
-      padding: 1em;
-      text-decoration: none;
-      display: block;
-      border: 0px 1px 1px 0px solid var(--light-grey);
-
-      p {
-        margin: 0;
-        padding-bottom: 0.5em;
-        color: black;
-        font-size: 1.5em;
-      }
-    }
-
-    a:hover {
-      background-color: #f1f1f1;
-    }
-
-    a.active {
-      border-left: 5px solid var(--blue);
-      background-color: #f1f1f1;
-    }
-  }
-}
-
-.opened {
-  display: block;
-  width: 200px;
-  height: 100vh;
-  float: left;
-  background-color: var(--white-back);
-  border: 1px solid var(--light-grey);
-  border-top: none;
-}
-
-.agendaitem-search {
-  background-color: #f6f6f6;
-  padding: 1em;
-  float: left;
-  width: calc(100% - 2em);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  .ember-power-select-trigger {
-    width: 75%;
-    padding-top: 0.3em;
-    padding-bottom: 0.3em;
-    border: 1px solid gray;
-    border-radius: 0;
-    .ember-power-select-status-icon {
-      visibility: hidden;
-    }
-  }
-}
-
-button.invert-color {
-  background-color: #f6f6f6;
-  padding: 1em;
-  margin: 0;
-  border: 2px solid var(--blue);
-  color: var(--blue);
-  font-size: 0.7em;
-
-  i {
-    margin-right: 0.5em;
-  }
-}
-
-.agenda-items-container {
-  overflow-y: scroll;
-  background-color: #f6f6f6;
-  height: calc(100vh - 222px);
-  display: flex;
-
-  .left-side-container {
+  .compare-item-container {
     width: 100%;
-  }
+    height: 200px;
 
-  .right-side-container {
-    width: 60%;
-  }
+    .previous-agenda-item {
+      width: 50%;
+      float: left;
 
-  .no-data-container {
-    margin: 0 auto;
-    background-color: #f6f6f6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-}
+      .agenda-item-link {
+        height: 200px;
+        border-right: 1px solid var(--light-grey);
+        border-bottom: 1px solid var(--light-grey);
+      }
+    }
 
-.data-table-container {
-  padding:1em;
-}
+    .current-agenda-item {
+      width: 50%;
+      float: left;
 
-.data-table-button-container {
-  padding:1em;
-  padding-bottom:0;
-}
-
-.side-menu-collapse {
-  text-align: right;
-  color: var(--blue);
-}
-
-.collapsed-side-menu {
-  cursor: pointer;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.agenda--search {
-  width: 50%;
-  float: left;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1em;
-
-  .ember-power-select-trigger {
-    width: 45%;
-  }
-}
-
-.side-nav-small {
-  display: block;
-  width: 150px;
-  height: 100vh;
-  float: left;
-  background-color: var(--white-back);
-  border: 1px solid var(--light-grey);
-  border-top: none;
-
-  .title-container {
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid var(--light-grey);
-    border-top: none;
-    border-right: none;
-
-    strong {
-      font-size: 1.5em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      i {
-        margin-right: 0.5em;
+      .agenda-item-link {
+        height: 200px;
+        border-bottom: 1px solid var(--light-grey);
       }
     }
   }
-
-  button {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--white-back);
-    font-size: 0.8em;
-    color: black;
-    padding: 1em;
-    text-decoration: none;
-    display: block;
-
-    p {
-      margin: 0;
-      padding-bottom: 0.5em;
-      color: black;
-      font-size: 1.5em;
-    }
-  }
-
-  button:hover {
-    background-color: #f1f1f1;
-  }
-
-  button.active {
-    border-left: 5px solid var(--blue);
-    background-color: #f1f1f1;
-  }
 }
 
-.properties {
-  background-color: var(--white);
-  .label {
-    font-size: 0.8em;
-  }
-
-  textarea,
-  input {
-    width: 100%;
-    padding: 5px;
-  }
-
-  .x-toggle-component {
-    justify-content: left;
-  }
-}
-
-.agenda-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1em;
-  width: 100%;
-}
-
-.agenda-item-detail-container {
-  width: 50vw;
-  background-color:white;
-}
-
-.file-upload-container {
-  width:100%;
-  cursor: pointer;
-  margin: 0 auto;
-  border: 2px dashed #0087f7;
-  border-radius: 5px;
-  background: white;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom:1em;
-
-  .progress-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  a {
-    text-decoration: none;
-  }
-}
 
 .comparison-container {
   width: calc(100% - 150px);
@@ -1118,232 +207,5 @@ button.invert-color {
       font-weight: bold;
     }
   }
-
-  .compare-agenda-list-container {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-    .compare-item-container {
-      width: 100%;
-      height: 200px;
-
-      .previous-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-          border-right: 1px solid var(--light-grey);
-          border-bottom: 1px solid var(--light-grey);
-        }
-      }
-
-      .current-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-          border-bottom: 1px solid var(--light-grey);
-        }
-      }
-    }
-  }
 }
-
-.comparison-container {
-  width: calc(100% - 150px);
-  float: left;
-
-  .compare-title {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    border-bottom: 1px solid var(--light-grey);
-
-    h2 {
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-  }
-
-  .compare-agenda-list-container {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-    .compare-item-container {
-      width: 100%;
-      height: 200px;
-
-      .previous-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-          border-right: 1px solid var(--light-grey);
-          border-bottom: 1px solid var(--light-grey);
-        }
-      }
-
-      .current-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-          border-bottom: 1px solid var(--light-grey);
-        }
-      }
-    }
-  }
-}
-
-.sessions-title {
-  font-size: 1.5em;
-  margin-left: 0;
-}
-
-.modal--sessions-selector-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 1em;
-  padding-bottom: 1em;
-
-  .label {
-    font-weight: bold;
-    width: 40%;
-  }
-
-  .files--header-tile {
-    width: 60%;
-    .ember-power-select-trigger {
-      width: 100%;
-    }
-  }
-}
-
-.ember-modal-dialog {
-  width: 400px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  padding: 1em;
-
-  h1 {
-    font-weight: bold;
-    font-size: 0.9em;
-    padding-top: 1em;
-    padding-bottom: 1em;
-  }
-
-  .buttons {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    padding-top: 1em;
-    padding-bottom: 1em;
-  }
-}
-
-.agenda-extended-option {
-  font-size:0.8em;
-  color:var(--light-grey);
-}
-
-.press-agenda-container {
-  padding:1em;
-  width:100%;
-
-  .edit-press-agenda {
-    display:flex;
-    justify-content: flex-end;
-  }
-
-  textarea {
-    width:100%;
-    font-size:0.9em;
-    background-color: var(--light-grey);
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    border: none;
-    overflow: auto;
-    outline: none;
-    resize: none;
-  }
-
-}
-
-.uploaded-files {
-  display:flex;
-
-  .document {
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding:1em;
-    font-size:0.9em;
-
-    i {
-      font-size:3em;
-    }
-    
-    .fa-remove {
-      font-size:1em;
-    }
-  }
-
-  .delete-file {
-    display:flex;
-    width:100%;
-    justify-content: flex-end;
-  }
-} 
-
-.cases--decree-options {
-  display:flex;
-  justify-content: flex-end;
-
-  .settings-container {
-    display:flex;
-    flex-direction:column ;
-    padding:0.2em;
-
-    a {
-      display:flex;
-      justify-content: center;
-      align-items: center;
-      width:1.2em;
-      font-size:1.2em;
-      background-color: #f6f6f6;
-      border: 2px solid var(--blue);
-      color: var(--blue);
-      margin-bottom: 0.2em;
-      text-decoration: none;
-    }
-  }
-}
-
-.buttons-agenda-item {
-  display:flex;
-  justify-content: flex-end;
-  flex-direction: column;
-
-  button {
-    width: 25%;
-    margin:0.1em;
-  }
-}
-
-.cases--list-item-header {
-  font-size: 1.4rem;
-
-  a {
-    text-decoration: none;
-  }
 }

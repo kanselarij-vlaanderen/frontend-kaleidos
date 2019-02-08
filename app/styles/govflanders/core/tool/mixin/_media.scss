@@ -1,0 +1,48 @@
+// responsiveness
+@mixin respond-to($media) {
+  @if $media == xsmall {
+    @media screen and (max-width: $bp-xsmall) {
+      @content;
+    }
+  } @else if $media == small {
+    @media screen and (max-width: $bp-small) {
+      @content;
+    }
+  } @else if $media == medium {
+    @media screen and (max-width: $bp-medium) {
+      @content;
+    }
+  } @else if $media == medium-up {
+    @media screen and (min-width: $bp-small + 0.1) {
+      @content;
+    }
+  } @else if $media == large {
+    @media screen and (min-width: $bp-medium + 0.1) {
+      @content;
+    }
+  } @else if $media == large_wide {
+    @media screen and (min-width: $page-max-width-wide + 0.1) {
+      @content;
+    }
+  } @else if $media == xlarge {
+    @media screen and (min-width: $bp-large + 0.1) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// set the size to full width on mobile, asuming it is on a 6-col a-grid base
+@mixin mobile-full-width {
+  @include respond-to(small) {
+    padding-left: $grd-gutter-width;
+    padding-right: $grd-gutter-width;
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+}

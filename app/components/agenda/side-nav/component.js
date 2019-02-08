@@ -4,11 +4,10 @@ import { alias } from '@ember/object/computed';
 
 export default Component.extend({
 	sessionService: inject(),
-	classNames: ['side--menu-container'],
-	classNameBindings: ['agendaMenuOpened:opened'],
-
+	classNames: ['c-layout-agenda__sidebar'],
+	classNameBindings: ['agendaMenuOpened:vl-layout-agenda__sidebar--collapsed'],
 	selectedAgendaItem:null,
-	agendaMenuOpened:true,
+	agendaMenuOpened:false,
 	
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentSession: alias('sessionService.currentSession'),

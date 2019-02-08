@@ -1,0 +1,51 @@
+// Wave animation used in the loader component
+@mixin waveanim ($c, $name) {
+  animation: $name infinite 1s linear;
+
+  @keyframes #{$name} {
+    0% {
+      box-shadow: 10px -0px $c, 20px -0px $c, 30px 0px $c;
+    }
+
+    10% {
+      box-shadow: 10px -3px $c, 20px -0px $c, 30px -0px $c;
+    }
+
+    20% {
+      box-shadow: 10px -6px $c, 20px -3px $c, 30px -0px $c;
+    }
+
+    30% {
+      box-shadow: 10px -3px $c, 20px -6px $c, 30px -3px $c;
+    }
+
+    40% {
+      box-shadow: 10px -0px $c, 20px -3px $c, 30px -6px $c;
+    }
+
+    50% {
+      box-shadow: 10px -0px $c, 20px -0px $c, 30px -3px $c;
+    }
+
+    60% {
+      box-shadow: 10px -0px $c, 20px -0px $c, 30px -0px $c;
+    }
+
+    100% {
+      box-shadow: 10px -0px $c, 20px -0px $c, 30px -0px $c;
+    }
+  }
+}
+
+@mixin bounce {
+  animation: bounce 1s linear;
+}
+
+// Waving shadow and variants
+@mixin waving-shadow {
+  @include waveanim($white, "waving-light");
+}
+
+@mixin waving-shadow-dark {
+  @include waveanim($disabled-color, "waving-dark");
+}

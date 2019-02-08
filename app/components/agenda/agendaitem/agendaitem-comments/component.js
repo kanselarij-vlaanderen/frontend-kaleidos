@@ -1,9 +1,9 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import moment from 'moment';
 import { computed } from '@ember/object';
 
 export default Component.extend({
+  classNames: ['o-scroll'],
   store: inject('store'),
   comments: computed('comments', function () {
     let agendaitem = this.get('agendaitem');

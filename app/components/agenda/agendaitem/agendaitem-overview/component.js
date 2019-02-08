@@ -8,7 +8,7 @@ export default Component.extend({
 	store: inject(),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentSession: null,
-	classNames: ["agenda-item-container"],
+	classNames: ["vl-layout-agenda__detail"],
 	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,

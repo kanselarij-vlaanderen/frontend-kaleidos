@@ -1,0 +1,46 @@
+// To be moved to the alert component
+$badge-colors: (
+  positive: (
+    fg: $success-fg-color,
+    bg: $success-color,
+    hoverfg: $success-fg-color,
+    hoverbg: $success-hover-color
+  ),
+  action: (
+    fg: $action-fg-color,
+    bg: $action-color,
+    hoverfg: $action-fg-color,
+    hoverbg: $action-hover-color
+  ),
+  negative: (
+    fg: $error-fg-color,
+    bg: $error-color,
+    hoverfg: $error-fg-color,
+    hoverbg: $error-hover-color
+  ),
+  warning: (
+    fg: $warning-fg-color,
+    bg: $warning-color
+  ),
+  neutral: (
+    fg: $text-color,
+    bg: $alt-bg,
+    hoverfg: $action-fg-color,
+    hoverbg: $action-color
+  ),
+  light: (
+    fg: $text-color,
+    bg: $page-bg,
+    hoverfg: $action-fg-color,
+    hoverbg: $action-color
+  )
+);
+
+// Note: xxsmall badge size used for icons that use the full width of their viewport (eg: vi-check)
+$badge-sizes: (
+  xxsmall: (size: 1.8rem, font: 0.8rem, respsize: 1.5rem, respfont: 0.7rem),
+  xsmall: (size: 1.8rem, font: 1.3rem, respsize: 1.5rem, respfont: 1.1rem),
+  small: (size: 2.6rem, font: 1.3rem, respsize: 2.2rem, respfont: 1.2rem),
+  medium: (size: 4rem, font: 2rem, respsize: 3rem, respfont: 1.5rem),
+  large: (size: 5rem, font: 2.5rem, respsize: 4rem, respfont: 2rem)
+);

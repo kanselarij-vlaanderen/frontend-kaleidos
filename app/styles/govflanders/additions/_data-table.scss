@@ -1,0 +1,22 @@
+// Additions to data-table
+
+
+.vl-data-table {
+  th.vl-data-table-header-sortable {
+    a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .vl-vi-icon {
+      margin-left: 1.6rem;
+      color: $mine-shaft
+    }
+  }
+
+  th.vl-data-table-header-sortable--active {
+    .vl-vi-icon {
+      color: $primary-blue;
+    }
+  }
+}
