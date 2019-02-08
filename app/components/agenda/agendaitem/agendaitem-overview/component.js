@@ -7,24 +7,15 @@ export default Component.extend({
 	sessionService: inject(),
 	store: inject(),
 	currentAgenda: alias('sessionService.currentAgenda'),
-	currentSession: null,
+	postponeTargetSession: null,
 	classNames: ["vl-layout-agenda__detail"],
 	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
-	isShowingExtendModal: false,
+	isShowingPostponeModal: false,
 	currentAgendaItem: null,
 	activeAgendaItemSection: 'details',
 	showOptions:false,
-
-	isPostPonable: computed('sessionService.agendas', function () {
-		let agendas = this.get('sessionService.agendas')
-		if (agendas && agendas.length > 1) {
-			return true;
-		} else {
-			return false;
-		}
-	}),
 
 	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function () {
 		return this.get('sessionService.definiteAgendas.firstObject');
@@ -39,37 +30,35 @@ export default Component.extend({
 			this.toggleProperty('showOptions');
 		},
 
-		async toggleModal(agendaitem) {
+		async togglePostponed(agendaitem) {
 			if (agendaitem) {
-				let postponedToSession = await agendaitem.get('postponedToSession');
-				if (agendaitem.extended) {
-					agendaitem.set('extended', false);
-					agendaitem.save();
-				} else if (postponedToSession) {
-					agendaitem.set('postponedToSession', null);
-					agendaitem.save();
+        let isPostponed = await agendaitem.get('isPostponed');
+				if (isPostponed) {
+					agendaitem.set('postponed', false);
+          agendaitem.set('postponedToSession', null);
+          agendaitem.save();
 				} else {
-					this.toggleProperty('isShowingExtendModal');
+					this.toggleProperty('isShowingPostponeModal');
 				}
 			}
 		},
 
-		async extendAgendaItem(agendaitem) {
-			let currentSession = await this.get('currentSession');
-			
-			if (currentSession) {
-				agendaitem.set('postponedToSession', currentSession);
-			} else {
-				agendaitem.set('extended', true);
+		async postponeAgendaItem(agendaitem) {
+			let target = await this.get('postponeTargetSession');
+
+			if (target) {
+				agendaitem.set('postponedToSession', target);
 			}
+      agendaitem.set('postponed', true);
+
 			await agendaitem.save();
 
-			this.set('currentSession', null);
-			this.set('isShowingExtendModal', false);
+			this.set('postponeTargetSession', null);
+			this.set('isShowingPostponeModal', false);
 		},
 
 		chooseSession(session) {
-			this.set('currentSession', session);
+			this.set('postponeTargetSession', session);
 		},
 
 		deleteItem(agendaitem) {

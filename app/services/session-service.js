@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { computed, observer } from '@ember/object';
+import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 export default Service.extend({
@@ -7,25 +7,19 @@ export default Service.extend({
 	currentSession: null,
 
 	agendas: computed('currentSession.agendas.@each', function() {
-		let currentSession = this.get('currentSession');
-		if(currentSession) {
-			return this.store.query('agenda', {
-				filter: {
-					session: { id: currentSession.id }
-				},
-				sort: 'name'
-			});	
-		}
+    if(!this.get('currentSession')){
+      return [];
+    }
+		return this.get('currentSession.agendas').then((agendas) => {
+      return agendas.sortBy('name');
+    });
 	}),
 
-	currentAgendaInitialiser: observer('currentSession.agendas', async function() {
-		if(this.get('currentAgenda')) return;
-		let agendas = await this.get('agendas');
-		if(agendas) {
-			this.set('currentAgenda', agendas.get('firstObject'));
-		}
-	}),
-	
+  currentAgenda: computed('agendas.@each', function(){
+    return this.get('agendas').objectAt(0);
+  }),
+
+
 	currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
 		if(currentAgenda) {
@@ -35,7 +29,7 @@ export default Service.extend({
 				},
 				include:['subcase', 'documents'],
 				sort: 'priority'
-			});	
+			});
 			return agendaitems;
 		} else {
 			return [];
@@ -54,8 +48,10 @@ export default Service.extend({
 			return [];
 		}
 	}),
-	
+
 	definiteAgendas: computed('agendas', function() {
-		return this.get('agendas').filter(agenda => agenda.name != "Ontwerpagenda")
+		return this.get('agendas').then((agendas) => {
+      return agendas.filter(agenda => agenda.name != "Ontwerpagenda");
+    });
 	})
 });

@@ -1,46 +1,40 @@
-<div class="agendaitem--detail--besluit">
-  <h2>
-    {{t "agendaitem-details.decision-title"}}
-  </h2>
-  {{#if (await agendaitem.decision)}}
-    {{decision/edit-decision decision=agendaitem.decision}}
-  {{else}}
-    {{t "agendaitem-details.no-decision"}}
-    <button class="invert-color" {{action "addDecision"}}>
-      {{t "buttons.add-decision"}}
-    </button>
-  {{/if}}
-</div>
 <div class="vl-u-spacer">
   <div class="vl-u-display-flex vl-u-flex-space-between">
     <h3 class="vl-title vl-title--h3">
-      Voorbereidende tekst voor de beslissing
+      {{t "agendaitem-details.decision-title"}}
     </h3>
-    <button class="vl-button vl-button--tertiary vl-button--icon">
-      <div
-        class="vl-vi vl-vi-nav-show-more-horizontal"
-        aria-hidden="true"
-      ></div>
-      <div class="vl-u-visually-hidden">
-        Meer
-      </div>
-    </button>
+    {{#if (await agendaitem.decision)}}
+      {{#if (not isEditing)}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "toggleIsEditing"}}
+        >
+          <i class="vl-vi vl-vi-edit"></i>
+        </button>
+      {{else}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "saveChanges"}}
+        >
+          <i class="vl-vi vl-vi-save"></i>
+        </button>
+      {{/if}}
+    {{else}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        {{action "addDecision" agendaitem}}
+      >
+        <i class="vl-vi vl-vi-add"></i>
+      </button>
+    {{/if}}
   </div>
 </div>
 <div class="vl-typography">
-  <p>
-    Mits voldaan wordt aan de voorwaarde, geformuleerd in het akkoord van 16 juli 2018 van de Vlaamse minister, bevoegd voor de begroting, beslist de Vlaamse Regering:
-  </p>
-  <ol>
-    <li>
-      haar principiële goedkeuring te hechten aan bovengenoemd voorontwerp van besluit
-    </li>
-    <li>
-      de Vlaamse minister, bevoegd voor het algemeen regeringsbeleid, te gelasten over voornoemd
-    </li>
-  </ol>
-  <p>
-    voorontwerp van besluit het advies in te winnen van de Raad van State, met verzoek het advies mee te delen binnen een termijn van dertig dagen, zoals bepaald in artikel 84, § 1, eerste lid, 2°, van de gecoördineerde wetten op de
-                            Raad van State.
-  </p>
+  {{#if (and (await agendaitem.decision) isEditing)}}
+    {{decision/edit-decision decision=agendaitem.decision}}
+  {{else}}
+    <p>
+      {{await agendaitem.decision.text}}
+    </p>
+  {{/if}}
 </div>

@@ -13,8 +13,7 @@
           {{#if isPostPonable}}
             <button
               class="vl-button vl-button--tertiary vl-button--narrow"
-              {{action "toggleModal" agendaitem}}
-            >
+              {{action "toggleModal" agendaitem}}>
               {{#if
                 (or agendaitem.extended (await agendaitem.postPonedToSession))
               }}
@@ -56,13 +55,13 @@
     {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
   {{else if (eq activeAgendaItemSection "decision")}}
     {{agenda/agendaitem/agendaitem-decision agendaitem=agendaitem}}
-  {{else if (eq activeAgendaItemSection "notes")}}
-    {{agenda/agendaitem/agendaitem-notes agendaitem=agendaitem}}
+  {{else if (eq activeAgendaItemSection "news-item")}}
+    {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
   {{/if}}
 </div>
-{{#if isShowingExtendModal}}
+{{#if isShowingPostponeModal}}
   {{#modal-dialog
-    onClose=(action "toggleModal")
+    onClose=(action "togglePostponed")
     targetAttachment="center"
     translucentOverlay=true
   }}
@@ -74,15 +73,15 @@
         {{t "agenda-item.postpone-until"}}
       </label>
       {{sessions/sessions-selector
-        currentSession=currentSession
+        currentSession=postponeTargetSession
         chooseSession=(action "chooseSession")
       }}
     </div>
     <div class="buttons">
-      <button {{action "extendAgendaItem" agendaitem}}>
+      <button {{action "postponeAgendaItem" agendaitem}}>
         {{t "buttons.postpone"}}
       </button>
-      <button {{action "toggleModal"}}>
+      <button {{action "togglePostponed"}}>
         {{t "buttons.cancel"}}
       </button>
     </div>

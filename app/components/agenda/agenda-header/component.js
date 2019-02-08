@@ -25,7 +25,7 @@ export default Component.extend({
 		async lockAgenda(session) {
 			let agendas = await this.get('agendas');
 			let agendaToLock = agendas.get('firstObject');
-			let definiteAgendas = this.get('definiteAgendas');
+			let definiteAgendas = await this.get('definiteAgendas');
 			let lastDefiniteAgenda = definiteAgendas.get('firstObject');
 
 			if (!lastDefiniteAgenda) {
@@ -50,7 +50,7 @@ export default Component.extend({
 			this.set('sessionService.currentAgenda', null);
 			this.set('sessionService.currentSession', session);
 		},
-		
+
 		createNewSession() {
 			this.set('creatingNewSession', true);
 		},

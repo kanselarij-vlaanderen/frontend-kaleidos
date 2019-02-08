@@ -1,0 +1,18 @@
+<div class="agendaitem--detail--news-item">
+  <h2>
+    {{t "agendaitem-details.news-item-title"}}
+  </h2>
+  {{#if (await agendaitem.newsItem)}}
+    {{news-item/edit-item newsItem=(await agendaitem.newsItem)}}
+  {{else}}
+    {{t "agendaitem-details.no-news-item"}}
+    <button class="invert-color" {{action "addNewsItem" agendaitem}}>
+      {{t "buttons.add-news-item"}}
+    </button>
+  {{/if}}
+</div>
+<div class="controls">
+  <button class="invert-color" {{action "saveItem"}}>
+    {{t "buttons.save"}}
+  </button>
+</div> 
