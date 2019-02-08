@@ -10,7 +10,7 @@
     <div class="vl-action-group vl-action-group--align-right">
       {{#if (not currentAgenda.locked)}}
         {{#if showOptions}}
-          {{#if isPostPonable}}
+          {{!-- {{#if isPostPonable}} --}}
             <button
               class="vl-button vl-button--tertiary vl-button--narrow"
               {{action "toggleModal" agendaitem}}>
@@ -22,7 +22,7 @@
                 {{t "buttons.postpone"}}
               {{/if}}
             </button>
-          {{/if}}
+          {{!-- {{/if}} --}}
           {{#if
             (await
               (allow-delete-agendaitem

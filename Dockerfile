@@ -1,6 +1,7 @@
 FROM nginx:1.9.12
 
 ARG EMBER_ENV=development
+ENV VIRTUAL_HOST=kaleidos-dev.kanselarij-dev.s.redpencil.io
 
 RUN apt-get update \
 	&& apt-get install -y curl git bzip2 libfontconfig1-dev xz-utils
