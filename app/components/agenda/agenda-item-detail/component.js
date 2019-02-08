@@ -10,17 +10,8 @@ export default Component.extend({
 	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
-	isShowingExtendModal: false,
+	isShowingPostponeModal: false,
 	currentAgendaItem: null,
-
-	isPostPonable: computed('sessionService.agendas.@each',  function() {
-		let agendas = this.get('sessionService.agendas')
-		if(agendas && agendas.length > 1) {
-			return true;
-		} else {
-			return false;
-		}
-	}),
 
 	lastDefiniteAgenda: computed('sessionService.definiteAgendas.@each', function() {
 		return this.get('sessionService.definiteAgendas.firstObject');
@@ -31,18 +22,18 @@ export default Component.extend({
 			this.set('isShowingDetail', !this.get('isShowingDetail'))
 		},
 
-		toggleModal(agendaitem) {
+		togglePostponeModal(agendaitem) {
 			this.set('currentAgendaItem', agendaitem);
-			this.toggleProperty('isShowingExtendModal');
+			this.toggleProperty('isShowingPostponeModal');
 		},
 
-		extendAgendaItem(agendaitem) {
-			
+		postponeAgendaItem(agendaitem) {
+
 			let currentSession = this.get('currentSession');
 			if (currentSession) {
-				agendaitem.set('postPonedToSession', currentSession);
+				agendaitem.set('postponedToSession', currentSession);
 			} else {
-				agendaitem.set('extended', !agendaitem.extended);
+				agendaitem.set('postponed', !agendaitem.postponed);
 			}
 			agendaitem.save().then(() => {
 				this.set('currentSession', null);
