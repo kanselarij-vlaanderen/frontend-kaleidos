@@ -10,7 +10,7 @@
         {{t "buttons.agendaitem-comment"}}
       </span>
     </a>
-    {{#if (or (not agendaitem.extended) (not agendaitem.postponedToSession))}}
+    {{#if (not (await agendaitem.isPostponed))}}
       <a href="#" {{action "setAgendaItemSection" "decision"}}>
         <span>
           {{t "buttons.agendaitem-decision"}}
@@ -43,22 +43,15 @@
     </div>
     {{#if showOptions}}
       <div class="buttons-agenda-item">
-        {{!-- {{#if isPostPonable}} --}}
-          <button {{action "toggleModal" agendaitem}}>
-            {{#if (or agendaitem.extended (await agendaitem.postPonedToSession))}}
-              {{t "buttons.not-postpone"}}
-            {{else}}
-              {{t "buttons.postpone"}}
-            {{/if}}
-          </button>
-        {{!-- {{/if}} --}}
-        {{#if
-          (await
-            (allow-delete-agendaitem
-              agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda
-            )
-          )
-        }}
+        <button {{action "togglePostponed" agendaitem}}>
+          {{#if (await agendaitem.isPostponed)}}
+            {{t "buttons.not-postpone"}}
+          {{else}}
+            {{t "buttons.postpone"}}
+          {{/if}}
+        </button>
+        {{#if (await (allow-delete-agendaitem agendaitem=agendaitem
+                                    lastDefiniteAgenda=lastDefiniteAgenda))}}
           <button {{action "deleteItem" agendaitem}}>
             {{t "buttons.delete"}}
           </button>
@@ -74,9 +67,9 @@
     {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
   {{/if}}
 </div>
-{{#if isShowingExtendModal}}
+{{#if isShowingPostponeModal}}
   {{#modal-dialog
-    onClose=(action "toggleModal")
+    onClose=(action "togglePostponed")
     targetAttachment="center"
     translucentOverlay=true
   }}
@@ -88,15 +81,15 @@
         {{t "agenda-item.postpone-until"}}
       </label>
       {{sessions/sessions-selector
-        currentSession=currentSession
+        currentSession=postponeTargetSession
         chooseSession=(action "chooseSession")
       }}
     </div>
     <div class="buttons">
-      <button {{action "extendAgendaItem" agendaitem}}>
+      <button {{action "postponeAgendaItem" agendaitem}}>
         {{t "buttons.postpone"}}
       </button>
-      <button {{action "toggleModal"}}>
+      <button {{action "togglePostponed"}}>
         {{t "buttons.cancel"}}
       </button>
     </div>

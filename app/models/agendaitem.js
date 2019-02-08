@@ -1,11 +1,13 @@
 import DS from 'ember-data';
+import { computed } from '@ember/object';
 
 let { Model, attr, belongsTo, hasMany } = DS;
+
 
 export default Model.extend({
 	priority: attr('number'),
 	orderAdded: attr('number'),
-	extended: attr('boolean'),
+	postponed: attr('boolean'),
 	dateAdded: attr('date'),
   record: attr('string'),
   formallyOk: attr('boolean'),
@@ -16,9 +18,14 @@ export default Model.extend({
   decision: belongsTo('decision', {inverse:null}),
   newsItem: belongsTo('news-item', {inverse:null}),
   postponedToSession: belongsTo('session'),
-  pressAgenda: attr('string')
+  pressAgenda: attr('string'),
 
-  // Karel fix your shit :p 
+  isPostponed: computed('postponed', 'postponedToSession', function(){
+    return this.get('postponedToSession').then((session) => {
+      return session || this.get('postponed');
+    });
+  })
+  // Karel fix your shit :p
   // save: async function(){
   //   let news = await this.get('newsItem');
   //   if(news) {
