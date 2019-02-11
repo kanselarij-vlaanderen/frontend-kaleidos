@@ -19,14 +19,6 @@ node {
 
   try {
 
-    stage('Setup container'){
-      sh "npm install"
-    }
-
-    stage('Build'){
-      sh "npm run build"
-    }
-
     stage("Image Prune"){
       imagePrune(CONTAINER_NAME)
     }
