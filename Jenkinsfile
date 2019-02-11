@@ -50,7 +50,7 @@ def imageBuild(containerName, tag){
 }
 
 def runApp(containerName, tag, httpPort){
-    sh "docker run -d --rm -p $httpPort:80 --expose=$httpPort --name $containerName $containerName:$tag"
+    sh "docker run -d --rm -p $httpPort:80 --name $containerName $containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
 }
 

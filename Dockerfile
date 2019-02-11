@@ -1,7 +1,7 @@
 FROM nginx:1.9.12
 
 ARG EMBER_ENV=development
-ENV VIRTUAL_HOST=kaleidos-dev.kanselarij-dev.s.redpencil.io
+ENV VIRTUAL_HOST=kaleidos-frontend.kanselarij-dev.s.redpencil.io
 ENV VIRTUAL_PORT=8081
 
 RUN apt-get update \
