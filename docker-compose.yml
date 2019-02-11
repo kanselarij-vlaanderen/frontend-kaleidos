@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  kaleidos-frontend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: kaleidos-frontend
+    ports:
+    - '8081:80'
+    expose:
+    - '8081'
+    environment:
+    - EMBER_ENV=development
+    - VIRTUAL_HOST=kaleidos-frontend.kanselarij-dev.s.redpencil.io
+    - VIRTUAL_PORT=8081
+    networks:
+    - proxy
+    - default
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./jenkins_home:/var/jenkins_home
+    restart: always
+
+networks:
+  proxy:
+    external:
+      name: letsencrypt_default

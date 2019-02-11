@@ -1,4 +1,4 @@
-def CONTAINER_NAME="kaleidos-frontend"
+def CONTAINER_NAME=""
 def CONTAINER_TAG="latest"
 def HTTP_PORT="8081"
 
@@ -40,17 +40,17 @@ node {
 def imagePrune(containerName){
     try {
         sh "docker image prune -f"
-        sh "docker stop $containerName"
+        sh "docker-compose stop"
     } catch(error){}
 }
 
 def imageBuild(containerName, tag){
-    sh "docker build -t $containerName:$tag  -t $containerName --no-cache ."
+    sh "docker-compose build"
     echo "Image build complete"
 }
 
 def runApp(containerName, tag, httpPort){
-    sh "docker run -d --rm -p $httpPort:80 --name $containerName $containerName:$tag"
+    sh "docker-compose up -d"
     echo "Application started on port: ${httpPort} (http)"
 }
 
