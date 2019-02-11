@@ -1,63 +1,51 @@
-<div class="cases--list-item">
-  <div class="cases--list-item-header">
-    <a href="#" {{action "setAgendaItemSection" "details"}}>
-      <span>
-        {{t "buttons.agendaitem-case"}}
-      </span>
-    </a>
-    <a href="#" {{action "setAgendaItemSection" "comments"}}>
-      <span>
-        {{t "buttons.agendaitem-comment"}}
-      </span>
-    </a>
-    {{#if (not (await agendaitem.isPostponed))}}
-      <a href="#" {{action "setAgendaItemSection" "decision"}}>
-        <span>
-          {{t "buttons.agendaitem-decision"}}
-        </span>
-      </a>
-      <a href="#" {{action "setAgendaItemSection" "notes"}}>
-        <span>
-          {{t "buttons.agendaitem-notes"}}
-        </span>
-      </a>
-      <a href="#" {{action "setAgendaItemSection" "bestek"}}>
-        <span>
-          {{t "buttons.agendaitem-bestek"}}
-        </span>
-      </a>
-    {{/if}}
-    <a href="#" {{action "setAgendaItemSection" "press-agenda"}}>
-      <span>
-        {{t "buttons.agendaitem-press-agenda"}}
-      </span>
-    </a>
-  </div>
-  {{#if (not currentAgenda.locked)}}
-    <div class="cases--decree-options">
-      <div class="settings-container">
-        <a href="#" {{action "showOptions"}}>
-          {{fa-icon "ellipsis-h"}}
-        </a>
-      </div>
-    </div>
-    {{#if showOptions}}
-      <div class="buttons-agenda-item">
-        <button {{action "togglePostponed" agendaitem}}>
-          {{#if (await agendaitem.isPostponed)}}
-            {{t "buttons.not-postpone"}}
-          {{else}}
-            {{t "buttons.postpone"}}
+<div data-vl-tabs-responsive-label="Navigatie" class="vl-tabs__wrapper">
+  {{agenda/agendaitem/agendaitem-nav
+    agendaitem=agendaitem
+    activeAgendaItemSection=activeAgendaItemSection
+    setAgendaItemSection=(action "setAgendaItemSection")
+  }}
+</div>
+<div class="c-scrollable-container">
+  {{#if (eq activeAgendaItemSection "details")}}
+    <div class="vl-action-group vl-action-group--align-right">
+      {{#if (not currentAgenda.locked)}}
+        {{#if showOptions}}
+          {{!-- {{#if isPostPonable}} --}}
+            <button
+              class="vl-button vl-button--tertiary vl-button--narrow"
+              {{action "toggleModal" agendaitem}}>
+              {{#if
+                (or agendaitem.extended (await agendaitem.postPonedToSession))
+              }}
+                {{t "buttons.not-postpone"}}
+              {{else}}
+                {{t "buttons.postpone"}}
+              {{/if}}
+            </button>
+          {{!-- {{/if}} --}}
+          {{#if
+            (await
+              (allow-delete-agendaitem
+                agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda
+              )
+            )
+          }}
+            <button
+              class="vl-button vl-button--tertiary vl-button--narrow"
+              {{action "deleteItem" agendaitem}}
+            >
+              {{t "buttons.delete"}}
+            </button>
           {{/if}}
-        </button>
-        {{#if (await (allow-delete-agendaitem agendaitem=agendaitem
-                                    lastDefiniteAgenda=lastDefiniteAgenda))}}
-          <button {{action "deleteItem" agendaitem}}>
-            {{t "buttons.delete"}}
-          </button>
         {{/if}}
-      </div>
-    {{/if}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "showOptions"}}
+        >
+          <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
+        </button>
+      {{/if}}
+    </div>
   {{/if}}
   {{#if (eq activeAgendaItemSection "details")}}
     {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
@@ -65,6 +53,10 @@
     {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
   {{else if (eq activeAgendaItemSection "press-agenda")}}
     {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
+  {{else if (eq activeAgendaItemSection "decision")}}
+    {{agenda/agendaitem/agendaitem-decision agendaitem=agendaitem}}
+  {{else if (eq activeAgendaItemSection "news-item")}}
+    {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
   {{/if}}
 </div>
 {{#if isShowingPostponeModal}}

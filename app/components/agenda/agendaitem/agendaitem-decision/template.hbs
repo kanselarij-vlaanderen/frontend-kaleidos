@@ -1,0 +1,40 @@
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <h3 class="vl-title vl-title--h3">
+      {{t "agendaitem-details.decision-title"}}
+    </h3>
+    {{#if (await agendaitem.decision)}}
+      {{#if (not isEditing)}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "toggleIsEditing"}}
+        >
+          <i class="vl-vi vl-vi-edit"></i>
+        </button>
+      {{else}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "saveChanges" (await agendaitem)}}
+        >
+          <i class="vl-vi vl-vi-save"></i>
+        </button>
+      {{/if}}
+    {{else}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        {{action "addDecision" agendaitem}}
+      >
+        <i class="vl-vi vl-vi-add"></i>
+      </button>
+    {{/if}}
+  </div>
+</div>
+<div class="vl-typography">
+  {{#if (and (await agendaitem.decision) isEditing)}}
+    {{decision/edit-decision decision=agendaitem.decision}}
+  {{else}}
+    <p>
+      {{await agendaitem.decision.text}}
+    </p>
+  {{/if}}
+</div>

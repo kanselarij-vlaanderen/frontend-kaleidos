@@ -1,74 +1,57 @@
-<div class="properties">
-  <div class="property">
-    {{#link-to
-      "cases.case"
-      agendaitem.id
-      class="cases--decree-content"
-      tagName="div"
-    }}
-      <h4>
-        {{agendaitem.subcase.shortTitle}}
-      </h4>
-      <p>
-        {{agendaitem.subcase.title}}
-      </p>
-      <div class="cases--decree-content-label">
-        {{#if agendaitem.postponed}}
-          <p>
-            {{t "agenda-item.postponed"}}
-          </p>
-        {{/if}}
+<div class="vl-u-spacer">
+  <div class="vl-u-spacer--small">
+    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <h7 class="vl-title vl-title--h7">
+        Besluit
+      </h7>
+      <div class="u-spacer-left">
+        <a class="vl-link" href="#">
+          Wijzigen
+        </a>
       </div>
-    {{/link-to}}
-  </div>
-  <div class="property">
-    <div class="label">
-      {{t "agendaitem-details.agenda"}}
     </div>
-    {{input type="checkbox" checked=agendaitem.forPress}}
   </div>
-  <div class="property">
-    <div class="label">
-      {{t "agendaitem-details.formal-ok"}}
+  <h3 class="vl-title vl-title--h3">
+    {{agendaitem.subcase.shortTitle}}
+  </h3>
+  <p>
+    {{agendaitem.subcase.title}}
+  </p>
+</div>
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <span class="vl-agenda-item__meta">
+      2de principiële goedkeuring
+    </span>
+    <div class="vl-u-display-flex default">
+      <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+      <span class="vl-agenda-item__meta">
+        {{#if agendaitem.formallyOk}}
+          formeel ok
+        {{else}}
+          formeel nok
+        {{/if}}
+      </span>
     </div>
-    {{input type="checkbox" checked=agendaitem.formallyOk}}
   </div>
-  <div class="property">
-    <div class="label">
-      {{t "agendaitem-details.notes"}}
+</div>
+<div class="vl-u-spacer">
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <h4 class="vl-title vl-title--h4">
+        Thema's
+      </h4>
+      <div class="u-spacer-left">
+        <a class="vl-link" href="#">
+          Wijzigen
+        </a>
+      </div>
     </div>
-    {{textarea value=agendaitem.record}}
   </div>
+  {{await agendaitem.subcase.case.themes.length}}
+  {{#each (await agendaitem.subcase.case.themes) as |theme|}}
+    <span class="vl-pill u-spacer-right-s">
+      {{theme.naam}}
+    </span>
+  {{/each}}
 </div>
-<div class="agendaitem--detail--besluit">
-  <h2>
-    {{t "agendaitem-details.decision-title"}}
-  </h2>
-  {{#if (await agendaitem.decision)}}
-    {{decision/edit-decision decision=agendaitem.decision}}
-  {{else}}
-    {{t "agendaitem-details.no-decision"}}
-    <button class="invert-color" {{action "addDecision"}}>
-      {{t "buttons.add-decision"}}
-    </button>
-  {{/if}}
-</div>
-<div class="agendaitem--detail--news-item">
-  <h2>
-    {{t "agendaitem-details.news-item-title"}}
-  </h2>
-  {{#if (await agendaitem.newsItem)}}
-    {{news-item/edit-item newsItem=(await agendaitem.newsItem)}}
-  {{else}}
-    {{t "agendaitem-details.no-news-item"}}
-    <button class="invert-color" {{action "addNewsItem"}}>
-      {{t "buttons.add-news-item"}}
-    </button>
-  {{/if}}
-</div>
-<div class="controls">
-  <button class="invert-color" {{action "saveItem"}}>
-    {{t "buttons.save"}}
-  </button>
-</div>
-{{yield}}

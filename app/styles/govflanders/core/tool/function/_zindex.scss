@@ -1,0 +1,8 @@
+// get z-index by var
+@function z($layer) {
+  @if not map-has-key($z-layers, $layer) {
+    @warn "No layer found for `#{$layer}` in $z-layers map. Property omitted."; // sass-lint:disable-line no-warn max-line-length
+  }
+
+  @return map-get($z-layers, $layer);
+}

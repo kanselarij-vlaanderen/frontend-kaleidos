@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-	classNames:["press-agenda-container"],
+	classNames:["o-scroll"],
 	agendaitem:null,
 	isReadOnly: true,
 

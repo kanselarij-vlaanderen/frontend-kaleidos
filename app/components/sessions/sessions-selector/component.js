@@ -4,8 +4,6 @@ import { task, timeout } from 'ember-concurrency';
 
 export default Component.extend({
 	store: inject(),
-	classNames: ["files--header-tile", "files--search"],
-	tagName: "div",
 	currentSession: null, 	
 
 	searchTask: task(function* (searchValue) {

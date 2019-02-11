@@ -1,0 +1,171 @@
+// Variables
+$alert-padding: 2rem;
+$alert-padding-small: 1.5rem;
+$alert-padding-large: 5rem 5.5rem;
+
+// Alert
+.vl-alert {
+  display: flex;
+  position: relative;
+  background-color: $alt-bg;
+  font-size: 1.6rem;
+  line-height: 1.4;
+  border: 0.1rem solid $alt-bg;
+  padding: $alert-padding;
+  margin-bottom: $spacing-small;
+
+  @include respond-to(small) {
+    font-size: 1.4rem;
+    padding: $alert-padding-small;
+  }
+
+  // Alert close
+  &__close {
+    display: flex;
+    position: absolute;
+    border: 0;
+    cursor: pointer;
+    transform-origin: center;
+    transition: transform 0.2s;
+    top: 0.3rem;
+    right: 0.3rem;
+    padding: 0.5rem;
+    overflow: hidden;
+
+    &:hover,
+    &:focus {
+      color: $action-color;
+      transform: rotate(90deg);
+    }
+
+    > .vl-vi {
+      display: inline-flex;
+    }
+  }
+
+  &__content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  // Alert icon
+  &__icon {
+    @include vi-u-badge;
+    @include vi-u-badge--size("medium");
+    flex: 0 0 auto;
+    background: $white;
+    margin-right: $alert-padding;
+
+    @include respond-to(small) {
+      margin-right: $alert-padding-small;
+    }
+
+    .vl-vi {
+      position: relative;
+      top: -0.1rem;
+    }
+  }
+
+  &__icon + &__content {
+    min-height: 4rem;
+
+    @include respond-to(small) {
+      min-height: 3rem;
+    }
+  }
+
+  // Alert title
+  &__title {
+    font-weight: 500;
+  }
+
+  // Alert actions
+  &__actions {
+    margin-top: 1.5rem;
+  }
+
+  // Cta modifier
+  &--cta {
+    border: 0;
+    border-top: 0.3rem solid $action-color;
+  }
+
+  // Error modifier
+  &--error {
+    background-color: $error-secondary-color;
+
+    .vl-alert__icon {
+      @include vi-u-badge--color("negative");
+    }
+  }
+
+  // Warning modifier
+  &--warning {
+    background-color: $warning-secondary-color;
+
+    .vl-alert__icon {
+      @include vi-u-badge--color("warning");
+    }
+  }
+
+  // Success modifier
+  &--success {
+    background-color: $success-secondary-color;
+
+    .vl-alert__icon {
+      // @include vi-check;
+      @include vi-u-badge--color("positive");
+
+      .vl-vi {
+        font-size: 1.5rem;
+        top: 0;
+
+        @include respond-to(small) {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  // Small modifier
+  &--small {
+    font-size: 1.4rem;
+    line-height: 1.2;
+    padding: 1rem;
+
+    .vl-alert__icon {
+      width: 2rem;
+      height: 2rem;
+      line-height: 2rem;
+      margin-right: 0.8rem;
+
+      .vl-vi {
+        font-size: 1rem;
+      }
+    }
+
+    .vl-alert__icon + .vl-alert__content {
+      min-height: auto;
+    }
+
+    .vl-alert__actions {
+      margin-top: 1rem;
+    }
+  }
+
+  // Large
+  &--large {
+    padding: $alert-padding-large;
+
+    .vl-alert__title {
+      font-size: 2.2rem;
+    }
+  }
+}
+
+.vl-alert__image {
+  width: 8rem;
+  height: auto;
+  margin-right: 4rem;
+}

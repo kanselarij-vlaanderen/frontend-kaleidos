@@ -1,17 +1,13 @@
-<div class="properties">
-  <div class="property">
-    <div class="label">
-      {{t 'edit-decision.approved'}}
-    </div>
-    {{x-toggle value=decision.approved
-               onToggle=(action (mut decision.approved))}}
+<p>
+  <div class="label">
+    {{t "edit-decision.approved"}}
   </div>
-  <div class="property">
-    <div class="label">
-       {{t 'edit-decision.decision-text'}}
-    </div>
-    {{textarea value=decision.text}}
+  {{x-toggle value=decision.approved onToggle=(action (mut decision.approved))}}
+</p>
+<p>
+  <div class="label">
+    {{t "edit-decision.decision-text"}}
   </div>
-</div>
-
+  {{textarea value=decision.text}}
+</p>
 {{yield}}

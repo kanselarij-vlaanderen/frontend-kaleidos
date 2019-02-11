@@ -1,0 +1,9 @@
+.vl-data-table--zebra {
+  tbody {
+    tr {
+      &:nth-child(odd) {
+        background-color: $porcelain;
+      }
+    }
+  }
+}

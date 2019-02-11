@@ -1,14 +1,16 @@
 <div
-  class="agenda-item-link
-    {{active-class (await agendaitem) (await selectedAgendaItem)}}"
+  class="c-agenda-item
+    {{active-class (await agendaitem) (await selectedAgendaItem) class="c-agenda-item"}}"
   {{action "selectAgendaItem" agendaitem}}>
   {{#if agendaitem.id}}
-    <strong>
+    <h6 class="vl-title vl-title--h6">
       {{number}}
       .
+    </h6>
+    <h5 class="vl-title vl-title--h5">
       {{agendaitem.subcase.shortTitle}}
-    </strong>
-    <p>
+    </h5>
+    <p class="c-long-title">
       {{agendaitem.subcase.title}}
     </p>
     <div class="agenda-sub-options">
@@ -21,29 +23,41 @@
           {{moment-format sess.plannedstart "dddd DD-MM-YYYY"}}
         {{/if}}
       </p>
-      {{#if agendaitem.formallyOk}}
-        <p class="formal-ok">
-          {{fa-icon "check"}}
-          {{t "agendaitem-details.formal-ok"}}
-        </p>
-      {{else}}
-        <p class="formal-nok">
-          {{fa-icon "check"}}
-          {{t "agendaitem-details.formal-ok"}}
-        </p>
-      {{/if}}
     </div>
-    <div class="documents-container">
+    <div class="vl-u-display-flex c-attachments">
       {{#each (await agendaitem.subcase.documents) as |document|}}
         {{#if (await document.documentVersions.lastObject.nameToDisplay)}}
-          <div class="document">
-            <a href="#" {{action "downloadFile" document.documentVersions.lastObject}}>
-              {{fa-icon "file"}}
-              {{await document.documentVersions.lastObject.nameToDisplay}}
-            </a>
+          <div
+            class="vl-u-display-flex vl-u-flex-align-center c-attachment"
+            {{action "downloadFile" document.documentVersions.lastObject}}>
+            <div class="vl-badge vl-badge--icon vl-badge--small vl-badge--alt c-document-badge">
+              <i class="vl-badge__icon vl-vi vl-vi-file"></i>
+            </div>
+            <p>
+              {{capitalize
+                (await document.documentVersions.lastObject.nameToDisplay)
+              }}
+            </p>
           </div>
         {{/if}}
       {{/each}}
+    </div>
+    <div class="vl-u-display-flex vl-u-flex-space-between">
+      <span class="c-agenda-item__meta">
+        2de principiele goedkeuring
+      </span>
+      <div class="vl-u-display-flex default">
+        <i class="vl-vi vl-vi-check-small"></i>
+        {{#if agendaitem.formallyOk}}
+          <span class="c-agenda-item__meta">
+            {{t "agendaitem-details.formal-ok"}}
+          </span>
+        {{else}}
+          <span class="c-agenda-item__meta">
+            {{t "agendaitem-details.formal-ok"}}
+          </span>
+        {{/if}}
+      </div>
     </div>
   {{/if}}
 </div>
