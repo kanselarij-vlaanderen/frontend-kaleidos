@@ -1,6 +1,6 @@
 def CONTAINER_NAME="kaleidos-frontend"
 def CONTAINER_TAG="latest"
-def HTTP_PORT="80"
+def HTTP_PORT="8081"
 
 node {
 
@@ -18,14 +18,6 @@ node {
   }
 
   try {
-
-    stage('Setup container'){
-      sh "npm install"
-    }
-
-    stage('Build'){
-      sh "npm run build"
-    }
 
     stage("Image Prune"){
       imagePrune(CONTAINER_NAME)
@@ -58,7 +50,7 @@ def imageBuild(containerName, tag){
 }
 
 def runApp(containerName, tag, httpPort){
-    sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $containerName:$tag"
+    sh "docker run -d --rm -p $httpPort:80 --expose=$httpPort --name $containerName $containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
 }
 
