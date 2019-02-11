@@ -71,6 +71,10 @@ export default Controller.extend({
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
 
+    chooseDocumentType(uploadedFile, type) {
+      uploadedFile.set('documentType', type.name || type.description);
+    },
+
     removeFile(file) {
       $.ajax({
         method: "DELETE",
@@ -85,7 +89,8 @@ export default Controller.extend({
     let document = await this.store.createRecord('document', {
       subcase: subcase,
       created: new Date(),
-      public: file.public
+      public: file.public,
+      documentType: file.get('documentType')
     });
     document.save().then(async(createdDocument) => {
       delete file.public;

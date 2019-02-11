@@ -53,7 +53,10 @@
                 {{input type="checkbox" checked=uploadedFile.public}}
               </div>
               <div>
-                type: {{input type="text" }}
+                {{t "subcases.document-type"}}:
+                {{ document-type-selector 
+                  chooseDocumentType=(action "chooseDocumentType" uploadedFile) 
+                }}
               </div>
             </div>
           {{/each}}

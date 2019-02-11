@@ -1,0 +1,12 @@
+{{#power-select
+  options=documentTypes
+  selected=selectedDocumentType
+  searchField="description"
+  onchange=(action "chooseDocumentType") as |documentType|
+}}
+  {{#if documentType.name}}
+    {{documentType.name}}
+  {{else}}
+    {{documentType.description}}
+  {{/if}}
+{{/power-select}}

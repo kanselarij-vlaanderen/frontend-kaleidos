@@ -104,7 +104,7 @@
     "drop-text": "Laat los om het bestand te uploaden",
     "dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
     "files": "bestanden",
-    "invalid-type": "Fout bestandstype.",
+		"invalid-type": "Fout bestandstype.",
     "uploading": "Uploaden"
 },
 	"metadata-form": {
@@ -128,6 +128,7 @@
 		"agenda-of": "Agenda van"
 	},
 	"subcases": {
-		"th-select-all": "Selecteer alles"
+		"th-select-all": "Selecteer alles",
+		"document-type": "Document type"
 	}
 }
