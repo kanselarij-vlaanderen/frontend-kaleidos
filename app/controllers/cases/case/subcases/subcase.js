@@ -1,35 +1,71 @@
 import Controller from '@ember/controller';
-import { task, timeout } from 'ember-concurrency';
-import { A } from '@ember/array';
+import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+import $ from 'jquery';
+import { inject } from '@ember/service';
 
-export default Controller.extend({
-  sessions: A([]),
-  session: null,
+export default Controller.extend(FileSaverMixin, {
+  isUploadingNewVersion: false,
+  uploadedFile: null,
+  fileName: null,
+  store:inject(),
+  documentToUploadNewVersionOf:null,
+
   actions: {
-    async resetValue(param) {
-      if (param === '') {
-        this.set('contacts', this.store.findAll('capacity'));
+    openUploadDialog(document) {
+      if(document && document.id) {
+        this.set('documentToUploadNewVersionOf', document);
       }
+      const uploadedFile = this.get('uploadedFile')
+      if(uploadedFile && uploadedFile.id) {
+        this.deleteFile(uploadedFile.id);
+      }
+      this.toggleProperty('isUploadingNewVersion');
     },
-    async chooseSession(session) {
-      const subcase = this.get('model');
-      subcase.set('session', session);
-      subcase.save();
+
+    async getUploadedFile(file) {
+      this.set('fileName', file.filename)
+      this.set('uploadedFile', file);
     },
+
+    removeFile() {
+      this.deleteFile(this.get('uploadedFile.id'));
+    },
+
+    async downloadFile(documentVersion) {
+      let file = await documentVersion.get('file');
+      $.ajax(`/files/${file.id}?download=${file.filename}`, {
+        method: 'GET',
+        dataType: 'arraybuffer', // or 'blob'
+        processData: false
+      })
+        .then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
+    },
+
+    async uploadNewVersion() {
+      const document = await this.get('documentToUploadNewVersionOf');
+      const documentVersions = await document.get('documentVersions');
+      const file = this.get('uploadedFile');
+      let newDocumentVersion = this.store.createRecord('document-version',
+      {
+        file: file,
+        versionNumber: documentVersions.length + 1 ,
+        document: document,
+        chosenFileName: this.get('fileName') || file.fileName,
+        created: new Date()
+      });
+      await newDocumentVersion.save();
+      this.set('uploadedFile', null);
+      this.set('documentToUploadNewVersionOf', null);
+      this.set('fileName', null);
+    }
   },
-  searchSession: task(function*(searchValue) {
-    yield timeout(300);
-    return this.store.query('session', {
-      filter: {
-        plannedstart: searchValue,
-      },
-    });
-  }),
-  didInsertElement: async function() {
-    this._super(...arguments);
-    return await this.getRelatedSession();
-  },
-  getRelatedSession() {
-    this.set('session', this.get('model').get('session'));
+
+  deleteFile(id) {
+    $.ajax({
+      method: "DELETE",
+      url: '/files/' + id
+    }).then(() => {
+      this.set('uploadedFile', null);
+    })
   },
 });

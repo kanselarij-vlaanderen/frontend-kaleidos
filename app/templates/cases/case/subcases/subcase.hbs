@@ -4,28 +4,107 @@
       <h4>
         DEELDOSSIERS
       </h4>
-      <h1>
-        {{model.title}}
-      </h1>
-      {{#if session}}
-        {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
-      {{else}}
-        {{#power-select
-          options=sessions
-          class="cases--new-item-input"
-          selected=session
-          searchField="plannedstart"
-          search=(perform searchSession)
-          oninput=(action "resetValue")
-          onchange=(action "chooseSession") as |session|
-        }}
-          {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
-        {{/power-select}}
-      {{/if}}
+      <h5>
+        {{model.shortTitle}}
+      </h5>
+      <h6>
+        {{model.shortTitle}}
+      </h6>
+      {{model.documents.length}}
+      documents
     </div>
+    {{! TODO: REFACTOR }}
+    <table class="vl-data-table">
+      <thead>
+        <tr>
+          <th>
+            Versie
+          </th>
+          <th>
+            Naam
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      {{#each (await model.documents) as |document|}}
+        {{#each (await document.sortedDocuments) as |documentVersion|}}
+          <tr>
+            <td>
+              {{documentVersion.versionNumber}}
+            </td>
+            <td>
+              {{documentVersion.nameToDisplay}}
+            </td>
+            <td class="align-right">
+              <div
+                class="vl-file-overview"
+                {{action "downloadFile" documentVersion}}
+              >
+                <i class="vl-icon vl-vi vl-vi-file-download"></i>
+              </div>
+            </td>
+          </tr>
+        {{/each}}
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="align-right">
+            <button
+              class="vl-button vl-button--tertiary"
+              {{action "openUploadDialog" document}}
+            >
+              Upload nieuwe versie
+            </button>
+          </td>
+        </tr>
+      {{/each}}
+    </table>
   {{else}}
     <p>
       Er is iets misgelopen..
     </p>
   {{/if}}
 </div>
+{{#if isUploadingNewVersion}}
+  {{#modal-dialog
+    class="vl-custom"
+    onClose=(action "openUploadDialog")
+    targetAttachment="center"
+    translucentOverlay=true
+  }}
+    {{input
+      class="vl-input-field vl-input-field__input"
+      value=fileName
+      placeholder="FileName"
+      autocomplete="off"
+    }}
+    {{#if (not uploadedFile)}}
+      {{file-uploader
+        multipleFiles=false
+        uploadedFile=(action "getUploadedFile")
+      }}
+    {{else}}
+      <div class="document">
+        {{fa-icon "file"}}
+        {{await uploadedFile.name}}
+        <a href="#" {{action "removeFile"}}>
+          {{fa-icon "remove"}}
+        </a>
+      </div>
+    {{/if}}
+    <div class="buttons">
+      <button
+        class="vl-button vl-button--tertiary"
+        {{action "uploadNewVersion"}}
+      >
+        Upload
+      </button>
+      <button
+        class="vl-button vl-button--tertiary"
+        {{action "openUploadDialog"}}
+      >
+        {{t "buttons.cancel"}}
+      </button>
+    </div>
+  {{/modal-dialog}}
+{{/if}}
