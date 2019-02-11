@@ -7,7 +7,8 @@ export default Component.extend({
   store:inject(),
   classNames:["file-upload-container"],
   files: null,
-
+  multipleFiles: true,
+  
 	uploadFile: task(function * (file) {		
     try {
       // let newFile = this.store.createRecords
