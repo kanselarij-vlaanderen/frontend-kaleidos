@@ -1,0 +1,10 @@
+.vl-data-table--lined {
+  td,
+  th {
+    padding: $pad;
+
+    &:not(:first-child) {
+      border-left: 0.1rem solid $border-color;
+    }
+  }
+}

@@ -16,7 +16,7 @@ export default Model.extend({
 	comments: hasMany('comment'),
 	subcase: belongsTo('subcase', {inverse:null}),
   decision: belongsTo('decision', {inverse:null}),
-  newsItem: belongsTo('news-item', {inverse:null}),
+  newsItem: belongsTo('news-item'),
   postponedToSession: belongsTo('session'),
   pressAgenda: attr('string'),
 

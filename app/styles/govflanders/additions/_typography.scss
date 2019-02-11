@@ -1,0 +1,9 @@
+// Additions to typography
+
+.vl-typography {
+  code,
+  kdb,
+  samp {
+    font-family: monospace; // Fix bug. "monospace" is not a font family.
+  }
+}

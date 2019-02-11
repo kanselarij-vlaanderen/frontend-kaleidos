@@ -1,41 +1,43 @@
 <form autocomplete="off" class="edit-news-item-form">
-  <div class="properties">
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.title'}}
-      </div>
-      {{input value=newsItem.title}}
+  <p>
+    <div class="label">
+      {{t "edit-item.title"}}
     </div>
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.sub-title'}}
-      </div>
-      {{input value=newsItem.subtitle autocomplete="off"}}
+    {{input class="vl-input-field vl-input-field__input" value=newsItem.title}}
+  </p>
+  <p>
+    <div class="label">
+      {{t "edit-item.sub-title"}}
     </div>
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.content'}}
-      </div>
-      {{textarea value=newsItem.content}}
+    {{input
+      class="vl-input-field vl-input-field__input"
+      value=newsItem.subtitle
+      autocomplete="off"
+    }}
+  </p>
+  {{! TODO FIX THIS ERROR }}
+  {{!-- {{t "edit-item.content"}}
+  {{textarea class="vl-input-field vl-input-field__input" value=newsItem.content}} --}}
+  <p>
+    <div class="label">
+      {{t "edit-item.date-publication"}}
     </div>
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.date-publication'}}
-      </div>
-      {{pikaday-input
-        theme="pikaday-session"
-        useUTC=true
-        value=newsItem.publicationDate
-        onSelection=(action "updatePublicationDate")
-      }}
+    {{pikaday-input
+      theme="pikaday-session"
+      class="vl-input-field vl-input-field__input"
+      useUTC=true
+      value=newsItem.publicationDate
+      onSelection=(action "updatePublicationDate")
+    }}
+  </p>
+  <p>
+    <div class="label">
+      {{t "edit-item.themes"}}
     </div>
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.themes'}}
-      </div>
-      {{utils/theme-list chooseTheme=(action "chooseTheme") selectedThemes=newsItem.themes}}
-    </div>
-  </div>
+    {{utils/theme-list
+      chooseTheme=(action "chooseTheme")
+      selectedThemes=newsItem.themes
+    }}
+  </p>
 </form>
-
 {{yield}}

@@ -4,7 +4,7 @@ import { task, timeout } from 'ember-concurrency';
 
 export default Component.extend({
 	tagName:'div',
-	classNames: ['agendaitem-search'],
+	classNames: ['vl-u-spacer'],
 	store: inject(),
 
 	searchTask: task(function* (searchValue) {

@@ -6,7 +6,7 @@ import { alias } from '@ember/object/computed';
 export default Component.extend({
 	sessionService: inject(),
 	currentAgenda: alias('sessionService.currentAgenda'),
-	classNames: ["agenda-item-container"],
+	classNames: ["c-agenda-item"],
 	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,

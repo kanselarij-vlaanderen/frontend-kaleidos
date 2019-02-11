@@ -1,0 +1,40 @@
+<li class="vl-tab">
+  <a href="#" class="vl-tab__link" {{action "setAgendaItemSection" "details"}}>
+    {{t "buttons.agendaitem-case"}}
+  </a>
+</li>
+<li class="vl-tab">
+  <a href="#" class="vl-tab__link" {{action "setAgendaItemSection" "comments"}}>
+    {{t "buttons.agendaitem-comment"}}
+  </a>
+</li>
+{{#if (or (not agendaitem.extended) (not agendaitem.postponedToSession))}}
+  <li class="vl-tab">
+    <a
+      href="#"
+      class="vl-tab__link"
+      {{action "setAgendaItemSection" "decision"}}
+    >
+      {{t "buttons.agendaitem-decision"}}
+    </a>
+  </li>
+  <li class="vl-tab">
+    <a href="#" class="vl-tab__link" {{action "setAgendaItemSection" "notes"}}>
+      {{t "buttons.agendaitem-notes"}}
+    </a>
+  </li>
+  <li class="vl-tab">
+    <a href="#" class="vl-tab__link" {{action "setAgendaItemSection" "news-item"}}>
+      {{t "buttons.agendaitem-bestek"}}
+    </a>
+  </li>
+  <li class="vl-tab">
+    <a
+      href="#"
+      class="vl-tab__link"
+      {{action "setAgendaItemSection" "press-agenda"}}
+    >
+      {{t "buttons.agendaitem-press-agenda"}}
+    </a>
+  </li>
+{{/if}}

@@ -1,0 +1,9 @@
+// sass-lint:disable no-vendor-prefixes no-color-literals
+
+::selection {
+  background: rgba($accent-color, .3);
+}
+
+::-moz-selection {
+  background: rgba($accent-color, .3);
+}

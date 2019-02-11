@@ -1,35 +1,22 @@
-<div class="files--header">
-  {{agenda/agenda-header 
-    sessions=model 
-    creatingNewSession=creatingNewSession
-    selectedAgendaItem=selectedAgendaItem
-  }}
-</div>
-{{agenda/side-nav
-  agendas=agendas
+{{agenda/agenda-header
+  sessions=model
+  creatingNewSession=creatingNewSession
   selectedAgendaItem=selectedAgendaItem
-  currentAgenda=currentAgenda
   compareAgendas=(action "compareAgendas")
 }}
-<div class="agenda-items-container">
-  <div class="left-side-container">
-    <div class="agenda-container">
-      {{agenda/agendaitem-search
-        selectedAgenda=currentAgenda
-        navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
-        navigateToSubCases=(action "navigateToSubCases")
-      }}
-      {{#if (not currentAgenda.locked)}}
-        <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
-          {{t "buttons.agenda-lock"}}
-        </button>
-      {{else}}
-        <button class="invert-color" {{action "lockAgenda" currentAgenda}}>
-          {{t "buttons.agenda-unlock"}}
-        </button>
-      {{/if}}
-    </div>
-    <div class="agenda-item-list-container">
+<div class="vl-layout-agenda">
+  {{agenda/side-nav
+    agendas=agendas
+    selectedAgendaItem=selectedAgendaItem
+    currentAgenda=currentAgenda
+  }}
+  <div class="vl-layout-agenda__master">
+    {{agenda/agendaitem-search
+      selectedAgenda=currentAgenda
+      navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
+      navigateToSubCases=(action "navigateToSubCases")
+    }}
+    <div class="c-scrollable-container">
       {{agenda/agenda-list
         agendaitems=(await currentAgendaItems)
         selectedAgendaItem=selectedAgendaItem
@@ -38,16 +25,8 @@
     </div>
   </div>
   {{#if selectedAgendaItem}}
-    <div class="right-side-container">
-      <div class="agenda-item-detail-container">
-        {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
-      </div>
-    </div>
+    {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
   {{else if createAnnouncement}}
-    <div class="right-side-container">
-      <div class="agenda-item-detail-container">
-        {{agenda/create-announcement currentAgenda=currentAgenda}}
-      </div>
-    </div>
+    {{agenda/create-announcement currentAgenda=currentAgenda}}
   {{/if}}
 </div>

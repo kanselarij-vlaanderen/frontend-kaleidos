@@ -31,6 +31,10 @@ module.exports = function(environment) {
       icons: {
         'free-solid-svg-icons': 'all'
       }
+    },
+    // This will make the dependency only import the capitalise helper.
+    'ember-cli-string-helpers': {
+      only: ['capitalize']
     }
   };
 

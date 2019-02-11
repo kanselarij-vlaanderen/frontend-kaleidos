@@ -1,0 +1,53 @@
+// Typography
+.vl-u-text--ellipse {
+  @include vl-u-text--ellipse;
+}
+
+.vl-u-text--uppercase {
+  @include vl-u-text--uppercase;
+}
+
+.vl-u-text--lowercase {
+  @include vl-u-text--lowercase;
+}
+
+.vl-u-text--capitalize {
+  @include vl-u-text--capitalize;
+}
+
+.vl-u-text--success {
+  @include vl-u-text--success;
+}
+
+.vl-u-text--warning {
+  @include vl-u-text--warning;
+}
+
+.vl-u-text--error {
+  @include vl-u-text--error;
+}
+
+.vl-u-text--bold {
+  @include vl-u-text--bold;
+}
+
+.vl-u-text--italic {
+  @include vl-u-text--italic;
+}
+
+.vl-u-text--small {
+  @include vl-u-text--small;
+}
+
+.vl-u-text--xsmall {
+  @include vl-u-text--xsmall;
+}
+
+.vl-u-text--xxsmall {
+  @include vl-u-text--xxsmall;
+}
+
+mark,
+.vl-u-text--marked {
+  @include vl-u-text--marked;
+}

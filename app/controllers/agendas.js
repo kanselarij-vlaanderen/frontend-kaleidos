@@ -21,11 +21,8 @@ export default Controller.extend({
     navigateToCreateAnnouncement() {
       this.set("createAnnouncement", true);
       this.set("selectedAgendaItem", null);
-    },
-		lockAgenda(agenda) {
-			agenda.set('locked', !agenda.locked);
-			agenda.save();
 		},
+		
 		compareAgendas() {
 			this.transitionToRoute('comparison');
 		},

@@ -1,0 +1,99 @@
+$modal-width: 60rem;
+$modal-padding: 3rem;
+$modal-padding-small: 1.5rem;
+$modal-content-padding: 1.5rem;
+
+.vl-modal {
+  .vl-action-group {
+    margin-top: 1.5rem;
+  }
+
+  .backdrop,
+  .vl-modal__backdrop {
+    @include backdrop;
+  }
+}
+
+.vl-modal-dialog {
+  display: none;
+  position: fixed;
+  width: $modal-width;
+  max-width: 95vw;
+  max-height: 95vh;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  padding: 3rem;
+  transform: translate(-50%, -50%);
+  background-color: $white;
+  border: 0;
+  box-shadow: $base-box-shadow;
+  overflow: auto;
+  z-index: z("modal");
+
+  &::backdrop {
+    @include backdrop;
+  }
+
+  &[open] {
+    display: block;
+
+    &:focus {
+      outline: auto $outline-color 3px;
+    }
+  }
+
+  &--static {
+    position: static;
+    transform: none;
+  }
+
+  @include respond-to(small) {
+    padding: $modal-padding-small;
+  }
+}
+
+.vl-modal-dialog__title {
+  font-weight: 500;
+  font-family: $accent-font;
+  font-size: 2rem;
+  margin-bottom: $modal-content-padding;
+}
+
+.vl-modal-dialog__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  padding: 1rem;
+  border: 0;
+  background: none;
+  line-height: 1;
+  overflow: hidden;
+
+  &:hover &,
+  &:focus & {
+    &__icon {
+      color: $action-color;
+    }
+  }
+
+  @include respond-to(small) {
+    top: 0;
+    right: 0;
+  }
+
+  &__icon {
+    @include vi;
+    @include vi-cross;
+    display: flex;
+    font-size: 1.4rem;
+    line-height: 1;
+
+    &.vl-icon {
+      margin-right: 0;
+    }
+  }
+}

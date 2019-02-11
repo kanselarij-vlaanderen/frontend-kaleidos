@@ -1,0 +1,30 @@
+@media print {
+  // Helper classes
+  .vl-u-hide-on-print {
+    display: none;
+  }
+
+  .vl-u-show-on-print {
+    display: block;
+  }
+
+  // Generic removals
+  header,
+  footer {
+    display: none;
+
+    .vl-main-content &,
+    [role="main"] &,
+    main & {
+      display: block;
+    }
+  }
+
+  // Global header/footer ignore
+  .iwgh3,
+  .iwgh2,
+  .iwgf3,
+  .iwgf2 {
+    display: none;
+  }
+}

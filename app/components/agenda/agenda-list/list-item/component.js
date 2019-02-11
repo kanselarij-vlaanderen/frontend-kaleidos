@@ -4,8 +4,6 @@ import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import $ from 'jquery';
 
 export default Component.extend(FileSaverMixin, {
-
-	classNames: ["agenda-item-container"],
 	tagName: "div",
 	selectedAgendaItem: null,
 	index:null,

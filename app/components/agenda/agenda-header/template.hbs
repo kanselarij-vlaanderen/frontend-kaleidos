@@ -1,47 +1,80 @@
-<div>
-  <div class="session-header">
-    <div class="session-agenda-left-container">
-      <div class="session-title-container">
-        <strong class="sessions-title">
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between vl-u-flex-align-center">
+    <div>
+      <div class="vl-title--container">
+        <h1 class="vl-title vl-title--h1">
           {{t "sessions-selector.agenda-of"}}
-        </strong>
+        </h1>
+        {{sessions/sessions-selector
+          currentSession=currentSession
+          chooseSession=(action "chooseSession")
+        }}
       </div>
-      {{sessions/sessions-selector
-        currentSession=currentSession
-        chooseSession=(action "chooseSession")
-      }}
+      <div class="vl-u-display-flex">
+        <p>
+          {{#if currentAgendaItems}}
+            {{currentAgendaItems.length}}
+            {{t "agenda.agendaitems"}}
+          {{else}}
+            0
+            {{t "agenda.agendaitems"}}
+          {{/if}}
+          ,
+          {{#if (await currentAgenda.announcements)}}
+            {{await currentAgenda.announcements.length}}
+            {{t "agenda.announcements"}}
+          {{else}}
+            0
+            {{t "agenda.announcements"}}
+          {{/if}}
+        </p>
+      </div>
     </div>
-    <div class="session-agenda-right-container">
-      <button {{action "createNewSession"}}>
-        {{t "buttons.new-session"}}
-      </button>
-      {{#if (not currentAgenda.locked)}}
-        <button {{action "lockAgenda" currentSession}}>
-          {{t "buttons.agenda-approve"}}
-        </button>
-      {{/if}}
-      <button>
-        {{fa-icon "ellipsis-h"}}
-      </button>
+    <div>
+      <div class="vl-u-display-flex vl-u-flex-align-center">
+        {{sessions/session-agenda-nav
+          compareAgendas=(action "compareAgendas")
+        }}
+        <div class="vl-action-group">
+          <button
+            class="vl-button vl-button--narrow"
+            {{action "createNewSession"}}
+          >
+            {{t "buttons.new-session"}}
+          </button>
+          {{#if (not currentAgenda.locked)}}
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "lockAgenda" currentSession}}
+            >
+              {{t "buttons.agenda-approve"}}
+            </button>
+          {{/if}}
+          {{#if (not currentAgenda.locked)}}
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "lockAgenda" currentAgenda}}
+            >
+              {{t "buttons.agenda-lock"}}
+            </button>
+          {{else}}
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "lockAgenda" currentAgenda}}
+            >
+              {{t "buttons.agenda-unlock"}}
+            </button>
+          {{/if}}
+          <button class="vl-button vl-button--secondary vl-button--icon">
+            <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="sessions-subtitle">
-    {{#if currentAgendaItems}}
-      {{currentAgendaItems.length}} {{t "agenda.agendaitems"}}
-    {{else}}
-      0 {{t "agenda.agendaitems"}}
-    {{/if}}
-  </div>
-  <div class="sessions-subtitle">
-    {{#if (await currentAgenda.announcements)}}
-      {{await currentAgenda.announcements.length}} {{t "agenda.announcements"}}
-    {{else}}
-      0 {{t "agenda.announcements"}}
-    {{/if}}
   </div>
 </div>
-{{#if creatingNewSession}}
+{{!-- {{#if creatingNewSession}}
   <div class="files--header-tile files--sub-file-header">
     {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
   </div>
-{{/if}}
+{{/if}} --}}
