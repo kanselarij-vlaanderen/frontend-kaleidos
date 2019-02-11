@@ -1,18 +1,47 @@
-<div class="agendaitem--detail--news-item">
-  <h2>
-    {{t "agendaitem-details.news-item-title"}}
-  </h2>
-  {{#if (await agendaitem.newsItem)}}
-    {{news-item/edit-item newsItem=(await agendaitem.newsItem)}}
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <h3 class="vl-title vl-title--h3">
+      {{t "agendaitem-details.news-item-title"}}
+    </h3>
+    {{#if (await agendaitem.newsItem)}}
+      {{#if (not isEditing)}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "toggleIsEditing"}}
+        >
+          <i class="vl-vi vl-vi-edit"></i>
+        </button>
+      {{else}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "saveChanges" agendaitem}}
+        >
+          <i class="vl-vi vl-vi-save"></i>
+        </button>
+      {{/if}}
+    {{else}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        {{action "addNewsItem" agendaitem}}
+      >
+        <i class="vl-vi vl-vi-add"></i>
+      </button>
+    {{/if}}
+  </div>
+</div>
+<div class="vl-typography">
+  {{#if (and (await agendaitem.newsItem) isEditing)}}
+    {{!-- TODO FIX CONTENT OF NEWSITEM --}}
+    {{news-item/edit-item newsItem=agendaitem.newsItem}}
   {{else}}
-    {{t "agendaitem-details.no-news-item"}}
-    <button class="invert-color" {{action "addNewsItem" agendaitem}}>
-      {{t "buttons.add-news-item"}}
-    </button>
+    <p>Kort bestek - {{moment-format agendaitem.newsItem.publicationDate "DD MMMM YYYY"}}</p>
+    <h6>
+      {{agendaitem.newsItem.title}}
+    </h6>
+    <h5>
+      {{agendaitem.newsItem.subtitle}}
+    </h5>
+    <p>
+    </p>
   {{/if}}
 </div>
-<div class="controls">
-  <button class="invert-color" {{action "saveItem"}}>
-    {{t "buttons.save"}}
-  </button>
-</div> 

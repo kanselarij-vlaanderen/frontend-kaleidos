@@ -14,7 +14,7 @@
       {{else}}
         <button
           class="vl-button vl-button--tertiary vl-button--icon"
-          {{action "saveChanges"}}
+          {{action "saveChanges" (await agendaitem)}}
         >
           <i class="vl-vi vl-vi-save"></i>
         </button>

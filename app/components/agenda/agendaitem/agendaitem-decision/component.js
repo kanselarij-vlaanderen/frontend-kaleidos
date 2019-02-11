@@ -5,6 +5,7 @@ export default Component.extend({
 	classNames: ["o-scroll"],
 	store: inject(),
 	isEditing: false,
+	agendaitem:null,
 
 	actions: {
 		async addDecision(agendaitem){
@@ -20,8 +21,9 @@ export default Component.extend({
 			this.toggleProperty('isEditing');
 		},
 
-		saveChanges(agendaitem) {
-			agendaitem.save().then(() => {
+		async saveChanges(agendaitem) {
+			let decision = await agendaitem.get('decision');
+			decision.save().then(() => {
 				this.toggleProperty('isEditing');
 			})
 		}

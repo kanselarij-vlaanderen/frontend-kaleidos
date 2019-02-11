@@ -5,6 +5,7 @@ export default Component.extend({
 	classNames:['o-scroll'],
 	store: inject(),
 	agendaitem:null,
+	isEditing:false,
 
 	actions: {
 		async addNewsItem(agendaitem){
@@ -14,6 +15,17 @@ export default Component.extend({
       news.save().then(newAgendaitem => {
 				agendaitem.set('news-item',newAgendaitem);
 			});
-    },
+		},
+
+		toggleIsEditing() {
+			this.toggleProperty('isEditing');
+		},
+
+		async saveChanges(agendaitem) {
+			let newsItem = await agendaitem.get('newsItem');
+			newsItem.save().then(() => {
+				this.toggleProperty('isEditing');
+			})
+		}
 	}
 });
