@@ -114,6 +114,11 @@ $icon-font-location: "/fonts/";
 @import "ember-modal-dialog/ember-modal-structure";
 @import "ember-modal-dialog/ember-modal-appearance";
 
+.document {
+  display:flex;
+  justify-content:space-evenly;
+  align-items:center; 
+}
 menu {
   display: flex;
   align-items: center;
@@ -1250,4 +1255,14 @@ menu {
   a {
     text-decoration: none;
   }
+}
+
+.vl-file-overview {
+  cursor: pointer;
+}
+
+.align-right {
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
 }

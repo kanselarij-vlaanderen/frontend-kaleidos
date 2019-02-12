@@ -1,7 +1,7 @@
 {{#file-upload
   name="files"
   for="upload-photo"
-  multiple=true
+  multiple=multipleFiles
   onfileadd=(action "uploadFile")
 }}
   {{#file-dropzone name="files" tagName="a" as |dropzone queue|}}
