@@ -24,7 +24,7 @@
       }}
     {{else}}
       <div class="cases--new-item">
-        <label>
+        <label class="vl-form__label">
           {{t "cases.contact-person"}}
         </label>
         {{#power-select
@@ -41,11 +41,11 @@
         {{/power-select}}
       </div>
       <div class="cases--new-item">
-        <label>
+        <label class="vl-form__label">
           {{t "cases.related-cases"}}
         </label>
         {{input
-          class="cases--new-item-input"
+          class="vl-input-field"
           type="text"
           id="related-cases"
           value=related_cases

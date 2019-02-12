@@ -62,6 +62,7 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_loader";
 @import "govflanders/components/_modal";
 @import "govflanders/components/_pager";
+@import "govflanders/components/_textarea";
 @import "govflanders/components/_popover";
 @import "govflanders/components/_search";
 @import "govflanders/components/_tabs";
@@ -272,23 +273,9 @@ menu {
     width: 15%;
   }
 
-  label {
-    display: inline-block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 0.8em;
-  }
-
   form {
     display: flex;
     align-items: center;
-  }
-
-  input {
-    padding: 10px;
-    width: 100%;
-    font-size: 0.8em;
-    border: 1px solid #ccc;
   }
 
   .cases--search-submit {
@@ -456,12 +443,12 @@ menu {
       padding: 0;
     }
 
-    .cases--decree-content-label {
-      padding: 4px 8px;
-      border-radius: 15px;
-      color: var(--grey);
-      font-size: 0.8em;
-    }
+    // .cases--decree-content-label {
+    //   padding: 4px 8px;
+    //   border-radius: 15px;
+    //   color: var(--grey);
+    //   font-size: 0.8em;
+    // }
 
     .cases--decree-content-expand {
       display: flex;
@@ -500,17 +487,6 @@ menu {
     .pikaday-session {
       font-size: 2em;
     }
-
-    label {
-      font-size: 2em;
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-
-      input {
-        font-size: 0.7em;
-      }
-    }
   }
 }
 
@@ -521,16 +497,8 @@ menu {
     .cases--new-item {
       display: flex;
       flex-direction: column;
+      padding-bottom:1em;
 
-      label {
-        font-weight: bolder;
-        margin-bottom: 15px;
-        font-size: 0.85em;
-        color: #333;
-      }
-
-      .cases--new-item-input,
-      textarea,
       .ember-power-select-trigger {
         border: 1px solid #e5e5e5;
         border-radius: 5px;
@@ -613,29 +581,9 @@ menu {
 }
 
 .files--search {
-
-  label {
-    display: inline-block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 0.8em;
-  }
-
   form {
     display: flex;
     align-items: center;
-  }
-
-  input {
-    border: 0;
-    padding: 10px;
-    width: calc(100% - 50px);
-    height: 100%;
-    font-size: 0.8em;
-
-    &:focus {
-      outline: none;
-    }
   }
 
   .files--search-submit {
@@ -768,17 +716,6 @@ menu {
 
     .pikaday-session {
       font-size: 2em;
-    }
-
-    label {
-      font-size: 2em;
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-
-      input {
-        font-size: 0.7em;
-      }
     }
   }
 }
@@ -978,16 +915,6 @@ menu {
 }
 
 .properties {
-  .label {
-    font-size: 0.8em;
-  }
-
-  textarea,
-  input {
-    width: 100%;
-    padding: 5px;
-  }
-
   .x-toggle-component {
     justify-content: left;
   }
@@ -1132,11 +1059,6 @@ menu {
   padding-top: 1em;
   padding-bottom: 1em;
 
-  .label {
-    font-weight: bold;
-    width: 40%;
-  }
-
   .files--header-tile {
     width: 60%;
     .ember-power-select-trigger {
@@ -1179,18 +1101,6 @@ menu {
   .edit-press-agenda {
     display:flex;
     justify-content: flex-end;
-  }
-
-  textarea {
-    width:100%;
-    font-size:0.9em;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    border: none;
-    overflow: auto;
-    outline: none;
-    resize: none;
   }
 
 }

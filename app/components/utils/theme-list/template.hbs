@@ -5,7 +5,8 @@
   searchField="naam"
   search=(perform searchTheme)
   oninput=(action "resetValueIfEmpty")
-  onchange=(action "chooseTheme") as |theme|
+  onchange=(action "chooseTheme") 
+as |theme|
 }}
   {{theme.naam}}
 {{/power-select-multiple}}

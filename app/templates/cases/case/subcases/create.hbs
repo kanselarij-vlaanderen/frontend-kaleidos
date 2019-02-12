@@ -22,19 +22,19 @@
       }}
     {{else}}
       <div class="cases--new-item">
-        <label>
+        <label class="vl-form__label">
           NAAM DEELDOSSIER
         </label>
-        {{input type="text" id="title" class="cases--new-item-input" value=title}}
+        {{input type="text" id="title" class="vl-input-field" value=title}}
       </div>
       <div class="cases--new-item">
-        <label>
+        <label class="vl-form__label">
           AANVRAAG AGENDERING
         </label>
-        {{input id="public" class="cases--new-item-input" value=remark}}
+        {{input id="public" class="vl-input-field" value=remark}}
       </div>
       <div class="cases--new-item">
-        <label>
+        <label class="vl-form__label">
           {{t "cases.upload-file"}}
         </label>
         {{file-uploader uploadedFile=(action "uploadedFile")}}

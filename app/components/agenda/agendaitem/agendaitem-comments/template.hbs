@@ -4,9 +4,16 @@
       Opmerkingen
     </h3>
     <div class="vl-comments-input">
-      {{input class="vl-input-field" placeholder="Type hier je opmerking" value=text}}
-      <button class="vl-button vl-button--tertiary vl-button--icon" {{action "addComment"}}>
-        {{fa-icon 'paper-plane'}}
+      {{input
+        class="vl-input-field"
+        placeholder="Type hier je opmerking"
+        value=text
+      }}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        {{action "addComment"}}
+      >
+        {{fa-icon "paper-plane"}}
       </button>
     </div>
     {{#each comments as |comment|}}
