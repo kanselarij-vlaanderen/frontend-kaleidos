@@ -15,7 +15,7 @@ export default Component.extend({
 	isShowingPostponeModal: false,
 	currentAgendaItem: null,
 	activeAgendaItemSection: 'details',
-	showOptions:false,
+	showOptions: false,
 
 	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function () {
 		return this.get('sessionService.definiteAgendas.firstObject');
@@ -32,11 +32,11 @@ export default Component.extend({
 
 		async togglePostponed(agendaitem) {
 			if (agendaitem) {
-        let isPostponed = await agendaitem.get('isPostponed');
+				let isPostponed = await agendaitem.get('isPostponed');
 				if (isPostponed) {
 					agendaitem.set('postponed', false);
-          agendaitem.set('postponedToSession', null);
-          agendaitem.save();
+					agendaitem.set('postponedToSession', null);
+					agendaitem.save();
 				} else {
 					this.toggleProperty('isShowingPostponeModal');
 				}
@@ -49,7 +49,7 @@ export default Component.extend({
 			if (target) {
 				agendaitem.set('postponedToSession', target);
 			}
-      agendaitem.set('postponed', true);
+			agendaitem.set('postponed', true);
 
 			await agendaitem.save();
 

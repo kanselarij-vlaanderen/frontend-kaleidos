@@ -34,7 +34,8 @@
           searchField="label"
           search=(perform searchContact)
           oninput=(action "resetValue")
-          onchange=(action "chooseContact") as |capacity|
+          onchange=(action "chooseContact") 
+        as |capacity|
         }}
           {{capacity.label}}
         {{/power-select}}

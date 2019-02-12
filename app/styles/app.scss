@@ -1,7 +1,8 @@
 @import "ember-power-select";
-@import "ember-modal-dialog/ember-modal-structure";
-@import "ember-modal-dialog/ember-modal-appearance";
+// @import "ember-modal-dialog/ember-modal-structure";
+// @import "ember-modal-dialog/ember-modal-appearance";
 @import "./colors.scss";
+
 // Start your CSS here
 
 $icon-font-location: "/fonts/";
@@ -111,8 +112,8 @@ $icon-font-location: "/fonts/";
 }
 
 @import "ember-power-select";
-@import "ember-modal-dialog/ember-modal-structure";
-@import "ember-modal-dialog/ember-modal-appearance";
+// @import "ember-modal-dialog/ember-modal-structure";
+// @import "ember-modal-dialog/ember-modal-appearance";
 
 .document {
   display:flex;
@@ -1196,6 +1197,7 @@ menu {
 
 .uploaded-files {
   display:flex;
+  flex-wrap: wrap;
 
   .document {
     display:flex;
@@ -1208,16 +1210,6 @@ menu {
     i {
       font-size:3em;
     }
-
-    .fa-remove {
-      font-size:1em;
-    }
-  }
-
-  .delete-file {
-    display:flex;
-    width:100%;
-    justify-content: flex-end;
   }
 }
 
@@ -1265,4 +1257,14 @@ menu {
   display:flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.uploaded-file-container {
+  width:calc(100% / 3);
+  padding:1em;
+}
+
+.remove-file {
+  display:flex;
+  justify-content: flex-end;
 }

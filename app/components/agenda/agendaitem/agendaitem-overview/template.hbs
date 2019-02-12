@@ -11,17 +11,16 @@
       {{#if (not currentAgenda.locked)}}
         {{#if showOptions}}
           {{!-- {{#if isPostPonable}} --}}
-            <button
-              class="vl-button vl-button--tertiary vl-button--narrow"
-              {{action "toggleModal" agendaitem}}>
-              {{#if
-                (or agendaitem.extended (await agendaitem.postPonedToSession))
-              }}
-                {{t "buttons.not-postpone"}}
-              {{else}}
-                {{t "buttons.postpone"}}
-              {{/if}}
-            </button>
+          <button
+            class="vl-button vl-button--tertiary vl-button--narrow"
+            {{action "togglePostponed" agendaitem}}
+          >
+            {{#if (or agendaitem.extended (await agendaitem.postPonedToSession))}}
+              {{t "buttons.not-postpone"}}
+            {{else}}
+              {{t "buttons.postpone"}}
+            {{/if}}
+          </button>
           {{!-- {{/if}} --}}
           {{#if
             (await
@@ -60,10 +59,9 @@
   {{/if}}
 </div>
 {{#if isShowingPostponeModal}}
-  {{#modal-dialog
-    onClose=(action "togglePostponed")
-    targetAttachment="center"
-    translucentOverlay=true
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "togglePostponed")
   }}
     <h1>
       {{currentAgendaItem.subcase.title}}
@@ -85,5 +83,5 @@
         {{t "buttons.cancel"}}
       </button>
     </div>
-  {{/modal-dialog}}
+  {{/web-components/vl-modal}}
 {{/if}}
