@@ -6,22 +6,15 @@ services:
       context: ./
       dockerfile: Dockerfile
     container_name: kaleidos-frontend
-
     ports:
     - '8081:80'
-    expose:
-    - '8081'
     environment:
     - EMBER_ENV=development
     - VIRTUAL_HOST=kaleidos-frontend.kanselarij-dev.s.redpencil.io
     - VIRTUAL_PORT=8081
-    - DOCKER_HOST=127.0.0.1
     networks:
     - proxy
     - default
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - ./jenkins_home:/var/jenkins_home
     restart: always
 
 networks:
