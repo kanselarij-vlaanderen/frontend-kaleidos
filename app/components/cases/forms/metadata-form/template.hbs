@@ -1,62 +1,69 @@
 <div class="cases--new-item">
-  <label>{{t 'metadata-form.short-title'}}</label>
+  <label class="vl-form__label">
+    {{t "metadata-form.short-title"}}
+  </label>
   {{input
     type="text"
     id="shortTitle"
-    class="cases--new-item-input"
+    class="vl-input-field"
     input=(action "shortTitleChange")
     value=shortTitle
   }}
 </div>
-
 <div class="cases--new-item">
-  <label>{{t 'metadata-form.title'}}</label>
+  <label class="vl-form__label">
+    {{t "metadata-form.title"}}
+  </label>
   {{textarea
     id="title"
-    class="cases--new-item-input"
+    class="vl-textarea"
     key-down=(action "titleChange")
     value=title
   }}
 </div>
-
 <div class="cases--new-item">
-  <label>{{t 'metadata-form.status'}}</label>
+  <label class="vl-form__label">
+    {{t "metadata-form.status"}}
+  </label>
   {{input
-    class="cases--new-item-input"
+    class="vl-input-field"
     type="text"
     id="remark"
     onChange=(action "statusChange")
     value=status
   }}
 </div>
-
 <div class="cases--new-item">
-  <label>{{t 'metadata-form.themes'}}</label>
+  <label class="vl-form__label">
+    {{t "metadata-form.themes"}}
+  </label>
   {{#power-select-multiple
     options=themes
-    class="cases--new-item-input"
+    class="vl-input-field"
     selected=selectedThemes
     searchField="naam"
     search=(perform searchTheme)
     oninput=(action "resetValue")
-    onchange=(action "chooseTheme") as |theme|
+    onchange=(action "chooseTheme") 
+  as |theme|
   }}
     {{theme.naam}}
   {{/power-select-multiple}}
 </div>
-
 <div class="cases--new-item">
-  <label>{{t 'metadata-form.news-item-label'}}</label>
+  <label class="vl-form__label">
+    {{t "metadata-form.news-item-label"}}
+  </label>
   {{#power-select
     options=types
     selected=selectedType
-    class="cases--new-item-input"
-    onchange=(action "chooseType") as |type|
+    class="vl-input-field"
+    onchange=(action "chooseType") 
+  as |type|
   }}
     {{type}}
   {{/power-select}}
 </div>
-
 <button class="vl-button vl-button--tertiary" {{action "step"}}>
-  {{t 'buttons.next-step'}}
+  {{t "buttons.next-step"}}
 </button>

@@ -1,13 +1,9 @@
 <div class="cases--new-item">
-  <label>{{t 'metadata-form.short-title'}}</label>
-  {{input
-    type="text"
-    id="record"
-    class="cases--new-item-input"
-    value=record
-  }}
+  <label class="vl-form__label">
+    {{t "metadata-form.short-title"}}
+  </label>
+  {{input type="text" id="record" class="vl-input-field" value=record}}
 </div>
-
 <button {{action "createComment"}}>
-  {{t 'buttons.create-comment'}}
+  {{t "buttons.create-comment"}}
 </button>

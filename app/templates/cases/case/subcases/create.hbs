@@ -22,52 +22,41 @@
       }}
     {{else}}
       <div class="cases--new-item">
-        <label>
+        <label class="vl-form__label">
           NAAM DEELDOSSIER
         </label>
-        {{input type="text" id="title" class="cases--new-item-input" value=title}}
+        {{input type="text" id="title" class="vl-input-field" value=title}}
       </div>
       <div class="cases--new-item">
-        <label>
+        <label class="vl-form__label">
           AANVRAAG AGENDERING
         </label>
-        {{input id="public" class="cases--new-item-input" value=remark}}
+        {{input id="public" class="vl-input-field" value=remark}}
       </div>
       <div class="cases--new-item">
-        <label>
+        <label class="vl-form__label">
           {{t "cases.upload-file"}}
         </label>
         {{file-uploader uploadedFile=(action "uploadedFile")}}
         <div class="uploaded-files">
           {{#each uploadedFiles as |uploadedFile|}}
-            <div class="document">
-              <div class="delete-file">
-                <a href="#" {{action "removeFile" uploadedFile}}>
-                  {{fa-icon "remove"}}
-                </a>
-              </div>
-              {{fa-icon "file"}}
-              {{await uploadedFile.name}}
+            <div class="uploaded-file-container">
+              <a class="remove-file" href="#" {{action "removeFile" uploadedFile}}>
+                <i class="vl-vi vl-vi-cross"></i>
+              </a>
+              {{web-components/vl-document file=uploadedFile}}
               <div>
                 {{t "metadata-form.public"}}
                 {{input type="checkbox" checked=uploadedFile.public}}
               </div>
-              <div>
-                {{t "subcases.document-type"}}:
-                {{ document-type-selector 
-                  chooseDocumentType=(action "chooseDocumentType" uploadedFile) 
-                }}
-              </div>
+              {{t "subcases.document-type"}}:
+              {{document-type-selector
+                chooseDocumentType=(action "chooseDocumentType" uploadedFile)
+              }}
             </div>
           {{/each}}
         </div>
       </div>
-      {{!-- <div class="cases--new-item">
-        <label>
-          {{t "metadata-form.public"}}
-        </label>
-        {{input type="checkbox" checked=confidential}}
-      </div> --}}
       <button
         type="submit"
         class="vl-button vl-button--tertiary"

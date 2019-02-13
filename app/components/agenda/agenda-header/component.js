@@ -24,9 +24,9 @@ export default Component.extend({
 	actions: {
 		async lockAgenda(session) {
 			let agendas = await this.get('agendas');
-			let agendaToLock = agendas.get('firstObject');
+			let agendaToLock = await agendas.find(agenda => agenda.name == "Ontwerpagenda");
 			let definiteAgendas = await this.get('definiteAgendas');
-			let lastDefiniteAgenda = definiteAgendas.get('firstObject');
+			let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
 			if (!lastDefiniteAgenda) {
 				agendaToLock.set('name', alphabet[0]);
