@@ -1,32 +1,19 @@
-
-
-
 <div class="cases--new">
-
   <form>
-  <div class="cases--new-item">
-    <label>{{t 'announcement.title'}}</label>
-    {{input
-      type="text"
-      id="title"
-      class="cases--new-item-input"
-      value=title
-    }}
-  </div>
-
-  <div class="cases--new-item">
-    <label>{{t 'announcement.text'}}</label>
-    {{textarea
-      id="text"
-      class="cases--new-item-input"
-      value=text
-    }}
-  </div>
-
-  <button {{action "createAnnouncement"}}>
-    {{t 'buttons.create-announcement'}}
-  </button>
-
+    <div class="cases--new-item">
+      <label class="vl-form__label">
+        {{t "announcement.title"}}
+      </label>
+      {{input type="text" id="title" class="vl-input-field" value=title}}
+    </div>
+    <div class="cases--new-item">
+      <label class="vl-form__label">
+        {{t "announcement.text"}}
+      </label>
+      {{textarea class="vl-textarea" id="text" value=text}}
+    </div>
+    <button {{action "createAnnouncement"}}>
+      {{t "buttons.create-announcement"}}
+    </button>
   </form>
-
 </div>

@@ -1,6 +1,6 @@
 <form class="new-session-form" {{action "createNewSession" on="submit"}}>
   <div class="form-group">
-    <label>
+    <label class="vl-form__label">
       {{t "new-session.start-date"}}
       {{pikaday-input
         theme="pikaday-session"
@@ -13,7 +13,11 @@
     <button class="vl-button vl-button--tertiary" type="submit">
       {{t "buttons.add"}}
     </button>
-    <button class="vl-button vl-button--tertiary" type="button" {{action "cancelForm"}}>
+    <button
+      class="vl-button vl-button--tertiary"
+      type="button"
+      {{action "cancelForm"}}
+    >
       {{t "buttons.cancel"}}
     </button>
   </div>

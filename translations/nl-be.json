@@ -1,7 +1,7 @@
 {
 	"agenda": {
 		"agendaitems": "agendapunten",
-		"announcements":"opmerkingen"
+		"announcements": "opmerkingen"
 	},
 	"agenda-item": {
 		"collapse": "meer weergeven",
@@ -27,14 +27,14 @@
 	},
 	"agendas": {
 		"nav-title": "Historiek",
-    "announcements-subtitle" : "Mededelingen",
-    "agendaitems-subtitle" : "Agenda items"
+		"announcements-subtitle": "Mededelingen",
+		"agendaitems-subtitle": "Agenda items"
 	},
-  "announcement" : {
-    "title": "titel",
-    "text": "mededeling",
-    "no-announcements" : "Geen mededelingen"
-  },
+	"announcement": {
+		"title": "titel",
+		"text": "mededeling",
+		"no-announcements": "Geen mededelingen"
+	},
 	"buttons": {
 		"add": "Toevoegen",
 		"add-case": "Dossier toevoegen",
@@ -49,42 +49,42 @@
 		"agenda-lock": "Agenda afsluiten",
 		"agenda-unlock": "Agenda unlocken",
 		"cancel": "Annuleren",
-		"create-case":"Dossier aanmaken",
-		"create-subcase":"Nieuw deeldossier",
+		"create-case": "Dossier aanmaken",
+		"create-subcase": "Nieuw deeldossier",
 		"delete": "Verwijderen",
 		"new-session": "Nieuwe zitting",
-		"previous-step":"Vorige Stap",
+		"previous-step": "Vorige Stap",
 		"next-step": "Volgende Stap",
 		"save": "Opslaan",
-    "create-comment": "Opmerking aanmaken",
-    "agendaitem-case" : "Dossier",
-    "agendaitem-comment" : "Opmerkingen",
-    "agendaitem-decision" : "Beslissing",
-    "agendaitem-notes" : "Notule",
-    "agendaitem-bestek" : "Kort bestek",
-		"agendaitem-press-agenda" : "Persagenda",
-		"postpone":"Uitstellen",
-		"not-postpone":"On-uitstellen"
+		"create-comment": "Opmerking aanmaken",
+		"agendaitem-case": "Dossier",
+		"agendaitem-comment": "Opmerkingen",
+		"agendaitem-decision": "Beslissing",
+		"agendaitem-notes": "Notule",
+		"agendaitem-bestek": "Kort bestek",
+		"agendaitem-press-agenda": "Persagenda",
+		"postpone": "Uitstellen",
+		"not-postpone": "On-uitstellen"
 	},
-  "cases" : {
-		"title" : "Dossier",
+	"cases": {
+		"title": "Dossier",
 		"cases": "dossiers",
-		"new-case":"NIEUW DOSSIER",
+		"new-case": "NIEUW DOSSIER",
 		"contact-person": "CONTACTPERSOON",
-		"related-cases":"GERELATEERDE DOSSIERS",
-		"subcases":"DEELDOSSIERS",
-		"upload-file":"Files uploaden"
-  },
+		"related-cases": "GERELATEERDE DOSSIERS",
+		"subcases": "DEELDOSSIERS",
+		"upload-file": "Files uploaden"
+	},
 	"case-item": {
 		"not-agreed": "Niet Akkoord"
 	},
 	"cases-search": {
-    "cases-number": "Nummer Dossier",
-    "document-number": "Nummer Document",
-    "date": "Datum Ministerraad",
+		"cases-number": "Nummer Dossier",
+		"document-number": "Nummer Document",
+		"date": "Datum Ministerraad",
 		"search-placeholder": "Zoek op document titel..",
-    "keyword": "Trefwoord",
-    "title-document" : "Document titel"
+		"keyword": "Trefwoord",
+		"title-document": "Document titel"
 	},
 	"comparison": {
 		"nav-title": "Agendas"
@@ -101,12 +101,12 @@
 		"title": "Titel"
 	},
 	"file-uploader": {
-    "drop-text": "Laat los om het bestand te uploaden",
-    "dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
-    "files": "bestanden",
+		"drop-text": "Laat los om het bestand te uploaden",
+		"dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
+		"files": "bestanden",
 		"invalid-type": "Fout bestandstype.",
-    "uploading": "Uploaden"
-},
+		"uploading": "Uploaden"
+	},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
 		"short-title": "KORTE TITEL",
@@ -130,5 +130,10 @@
 	"subcases": {
 		"th-select-all": "Selecteer alles",
 		"document-type": "Document type"
+	},
+	"web-components": {
+		"loading-text": "Pagina is aan het laden",
+		"document-type":"PDF",
+		"close-modal":"Venster sluiten"
 	}
 }

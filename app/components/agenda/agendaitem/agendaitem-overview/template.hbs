@@ -10,19 +10,18 @@
     <div class="vl-action-group vl-action-group--align-right">
       {{#if (not currentAgenda.locked)}}
         {{#if showOptions}}
-          {{!-- {{#if isPostPonable}} --}}
-            <button
-              class="vl-button vl-button--tertiary vl-button--narrow"
-              {{action "toggleModal" agendaitem}}>
-              {{#if
-                (or agendaitem.extended (await agendaitem.postPonedToSession))
-              }}
-                {{t "buttons.not-postpone"}}
-              {{else}}
-                {{t "buttons.postpone"}}
-              {{/if}}
-            </button>
-          {{!-- {{/if}} --}}
+          {{#if isPostPonable}}
+          <button
+            class="vl-button vl-button--tertiary vl-button--narrow"
+            {{action "togglePostponed" agendaitem}}
+          >
+            {{#if (or agendaitem.extended (await agendaitem.postPonedToSession))}}
+              {{t "buttons.not-postpone"}}
+            {{else}}
+              {{t "buttons.postpone"}}
+            {{/if}}
+          </button>
+          {{/if}}
           {{#if
             (await
               (allow-delete-agendaitem
@@ -60,16 +59,15 @@
   {{/if}}
 </div>
 {{#if isShowingPostponeModal}}
-  {{#modal-dialog
-    onClose=(action "togglePostponed")
-    targetAttachment="center"
-    translucentOverlay=true
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "togglePostponed")
   }}
     <h1>
       {{currentAgendaItem.subcase.title}}
     </h1>
     <div class="modal--sessions-selector-container">
-      <label>
+      <label class="vl-form__label">
         {{t "agenda-item.postpone-until"}}
       </label>
       {{sessions/sessions-selector
@@ -85,5 +83,5 @@
         {{t "buttons.cancel"}}
       </button>
     </div>
-  {{/modal-dialog}}
+  {{/web-components/vl-modal}}
 {{/if}}
