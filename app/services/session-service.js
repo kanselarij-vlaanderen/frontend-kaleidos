@@ -12,7 +12,7 @@ export default Service.extend({
       return [];
     }
 		return this.get('currentSession.agendas').then((agendas) => {
-      return agendas.sortBy('name');
+			return agendas.sortBy('agendaName').reverse();
     });
 	}),
 
@@ -64,7 +64,7 @@ export default Service.extend({
 
 	definiteAgendas: computed('agendas', function() {
 		return this.get('agendas').then((agendas) => {
-      return agendas.filter(agenda => agenda.name != "Ontwerpagenda");
+      return agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('name');
     });
 	})
 });

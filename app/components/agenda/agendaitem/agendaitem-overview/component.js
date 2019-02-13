@@ -17,8 +17,19 @@ export default Component.extend({
 	activeAgendaItemSection: 'details',
 	showOptions: false,
 
-	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function () {
-		return this.get('sessionService.definiteAgendas.firstObject');
+	isPostPonable: computed('sessionService.agendas.@each', function () {
+		return this.get('sessionService.agendas').then(agendas => {
+			if (agendas && agendas.length > 1) {
+				return true;
+			} else {
+				return false;
+			}
+		})
+	}),
+
+	lastDefiniteAgenda: computed('sessionService.definiteAgendas.firstObject', async function () {
+		const definiteAgendas = await this.get('sessionService.definiteAgendas');
+		return definiteAgendas.get('lastObject');
 	}),
 
 	actions: {
