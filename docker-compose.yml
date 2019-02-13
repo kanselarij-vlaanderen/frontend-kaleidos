@@ -14,16 +14,7 @@ services:
       - EMBER_ENV=development
       - VIRTUAL_HOST=kaleidos-frontend.kanselarij-dev.s.redpencil.io
       - VIRTUAL_PORT=80
-    networks:
-      - proxy
-      - default
-      - backend
     restart: always
 
-networks:
-  proxy:
-    external:
-      name: letsencrypt_default
-  backend:
-    external: true
+
 
