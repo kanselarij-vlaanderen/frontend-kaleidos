@@ -42,7 +42,7 @@
           >
             {{t "buttons.new-session"}}
           </button>
-          {{#if (not currentAgenda.locked)}}
+          {{#if (not currentAgenda.isFinal)}}
             <button
               class="vl-button vl-button--narrow"
               {{action "lockAgenda" currentSession}}
@@ -50,7 +50,7 @@
               {{t "buttons.agenda-approve"}}
             </button>
           {{/if}}
-          {{#if (not currentAgenda.locked)}}
+          {{#if (not currentAgenda.isFinal)}}
             <button
               class="vl-button vl-button--narrow"
               {{action "lockAgenda" currentAgenda}}

@@ -7,10 +7,11 @@ export default Model.extend({
 	created: attr('date'),
 	chosenFileName: attr('string'),
 	identificationNumber: attr('string'),
-	serialNumber: attr('string'),
 	versionNumber: attr('number'),
-	file: belongsTo('file'),
+	serialNumber: attr('string'),
+
 	document: belongsTo('document'),
+	file: belongsTo('file'),
 
 	nameToDisplay: computed('chosenFileName','serialNumber', function() {
 		let serialNumber = this.get('serialNumber');

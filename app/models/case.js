@@ -3,15 +3,21 @@ import DS from 'ember-data';
 const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
-  public: attr('boolean'),
+  
   created: attr('date'),
-  modified: attr('date'),
-  archived: attr('boolean'),
+  title: attr('string'),
   shortTitle: attr('string'),
   number: attr('string'),
-  remark: attr('string'),
-  title: attr('string'),
+
+  caseType: belongsTo('case-type'),
+  mandatees: hasMany('mandatee'),
+  remark: hasMany('remark'),
   themes: hasMany('theme'),
   subcases: hasMany('subcase'),
-  contact: belongsTo('capacity')
+  related: hasMany('case'),
+  creators: hasMany('person')
+  // public: attr('boolean'),
+  // modified: attr('date'),
+  // archived: attr('boolean'),
+  // contact: belongsTo('capacity')
 });

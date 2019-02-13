@@ -5,20 +5,22 @@ let { Model, attr, belongsTo, hasMany } = DS;
 
 
 export default Model.extend({
-	priority: attr('number'),
-	orderAdded: attr('number'),
-	postponed: attr('boolean'),
-	dateAdded: attr('date'),
+  priority: attr('number'),
+  created: attr('date'),
+  postponed: attr('boolean'),
   record: attr('string'),
   formallyOk: attr('boolean'),
-  forPress: attr('boolean'),
-	agenda: belongsTo('agenda'),
-	comments: hasMany('comment'),
-	subcase: belongsTo('subcase', {inverse:null}),
+  titlePress: attr('string'),
+  retracted: attr('boolean'),
+
+  postponedTo: belongsTo('meeting'),
+  agenda: belongsTo('agenda'),
   decision: belongsTo('decision', {inverse:null}),
-  newsItem: belongsTo('news-item'),
-  postponedToSession: belongsTo('session'),
-  pressAgenda: attr('string'),
+	subcase: belongsTo('subcase', {inverse:null}),
+  remarks: hasMany('remark'),
+  attendees: hasMany('mandatee'),
+
+  // newsItem: belongsTo('news-item'),
 
   isPostponed: computed('postponed', 'postponedToSession', function(){
     return this.get('postponedToSession').then((session) => {

@@ -5,12 +5,16 @@ const { attr, Model, hasMany, belongsTo } = DS;
 export default Model.extend({
   created: attr('string'),
   shortTitle: attr('string'),
-  remark: attr('string'),
   title: attr('string'),
+  confidentiality: attr('string'),
+  showAsRemark: attr('boolean'),
+
   case: belongsTo('case'),
-  session: belongsTo('session'),
-  agendaitem: belongsTo('agendaitem', {inverse:null}),
-  showAsComment: attr('boolean'),
-  confidential: attr('boolean'),
+  relatedTo: hasMany('subcase'),
+  meeting: belongsTo('meeting'),
+  phase: belongsTo('subcase-phase'),
+  consulationRequests: hasMany('consulation-request'),
+  agendaitem: hasMany('agendaitem'),
+  remarks: hasMany('remark'),
   documents: hasMany('document')
 });

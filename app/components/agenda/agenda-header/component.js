@@ -34,7 +34,7 @@ export default Component.extend({
 				agendaToLock.set('name', alphabet[definiteAgendas.length] || definiteAgendas.length);
 			}
 
-			agendaToLock.set('locked', true);
+			agendaToLock.set('isFinal', true);
 
 			agendaToLock.save().then(() => {
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {

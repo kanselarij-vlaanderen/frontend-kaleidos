@@ -8,7 +8,7 @@
 <div class="c-scrollable-container">
   {{#if (eq activeAgendaItemSection "details")}}
     <div class="vl-action-group vl-action-group--align-right">
-      {{#if (not currentAgenda.locked)}}
+      {{#if (not currentAgenda.isFinal)}}
         {{#if showOptions}}
           {{#if isPostPonable}}
           <button
