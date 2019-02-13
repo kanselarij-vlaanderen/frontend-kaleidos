@@ -17,9 +17,13 @@ services:
     networks:
       - proxy
       - default
+      - backend
     restart: always
 
 networks:
   proxy:
     external:
       name: letsencrypt_default
+  backend:
+    external: true
+

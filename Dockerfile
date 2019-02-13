@@ -23,5 +23,4 @@ ADD . /tmp/client
 RUN cd /tmp/client && ember build --environment=${EMBER_ENV} && mv dist/* /usr/share/nginx/html/ && rm -rf /tmp/client
 ADD nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 8081
 CMD /bin/bash -c "nginx -g 'daemon off;'"
