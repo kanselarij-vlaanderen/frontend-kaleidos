@@ -10,7 +10,7 @@ services:
       - '9002:80'
     environment:
       - EMBER_ENV=development
-      - VIRTUAL_HOST=jenkins.kanselarij-dev.s.redpencil.io
+      - VIRTUAL_HOST=kaleidos-frontend.kanselarij-dev.s.redpencil.io
       - VIRTUAL_PORT=9002
     networks:
       - proxy
