@@ -22,7 +22,7 @@ export default Component.extend({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				this.set('sessions', this.store.query('meeting'));
+				this.set('sessions', this.store.query('meeting', {}));
 			}
 		},
 	},

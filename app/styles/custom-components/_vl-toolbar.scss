@@ -1,0 +1,130 @@
+/* ==========================================================================
+  Component: Toolbar
+  ---
+  Component for aligning multiple sub components on a horizontal axis
+   ========================================================================== */
+
+/* Variables
+   ========================================================================== */
+
+$c-toolbar-item-spacing: 1.6rem !default;
+$c-toolbar-main-border-color: $ghost;
+$c-toolbar-size-regular: 7.5rem;
+$c-toolbar-size-medium: 5rem;
+$c-toolbar-z: 21;
+$c-toolbar-middle-z: 20;
+
+/* Component
+  ========================================================================== */
+
+.vl-toolbar {
+  width: 100%;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-around;
+  height: $c-toolbar-size-regular;
+}
+
+.vl-toolbar--medium {
+  height: $c-toolbar-size-medium;
+}
+
+.vl-toolbar--spaced {
+  padding: 0 2.4rem;
+}
+
+.vl-toolbar--auto {
+  height: auto;
+}
+
+.vl-toolbar__left {
+  z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
+  justify-content: flex-start;
+  .vl-toolbar__item {
+    margin-right: $c-toolbar-item-spacing;
+    &:only-child {
+      margin: 0;
+    }
+  }
+}
+
+.vl-toolbar__right {
+  z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
+  justify-content: flex-end;
+  .vl-toolbar__item {
+    margin-left: $c-toolbar-item-spacing;
+    &:only-child {
+      margin: 0;
+    }
+  }
+}
+
+.vl-toolbar__left,
+.vl-toolbar__right {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.vl-toolbar__item {
+  position: relative;
+}
+
+.vl-toolbar__center {
+  position: absolute;
+  margin-left: 50%;
+  left: 0;
+}
+
+.vl-toolbar__center-inner {
+  margin-left: -50%;
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  .vl-toolbar__item {
+    margin: 0 $c-toolbar-item-spacing/2;
+    &:only-child {
+      margin: 0;
+    }
+  }
+}
+
+.vl-toolbar__center--interactive {
+  z-index: $c-toolbar-middle-z; // If our middle element is interactive (rare) we can specifiy this
+}
+
+// For some cases you need to set -100% to actually center the item
+.vl-toolbar__center-inner--alt {
+  margin-left: -100%;
+}
+
+/* Specific children
+  ========================================================================== */
+
+.vl-toolbar__title {
+  font-weight: 500;
+  font-size: 2rem; // Same as h4
+}
+
+/* Justified toolbar
+  ========================================================================== */
+
+.vl-toolbar__justified {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  .vl-toolbar__item {
+    margin-right: $c-toolbar-item-spacing;
+  }
+}
+
+.vl-toolbar__item--stretch {
+  flex: 1;
+}
+
+.vl-toolbar__justified {
+  .vl-toolbar__item:last-child {
+    margin: 0;
+  }
+}

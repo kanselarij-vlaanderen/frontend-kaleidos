@@ -1,0 +1,27 @@
+<div class="vl-toolbar">
+  <div class="vl-toolbar__left">
+    <div class="vl-toolbar__item">
+      <h1 class="vl-page-header__title vl-page-header__title--bordered">
+        {{t "navigation.cases"}}
+      </h1>
+      <div class="vl-page-header__sub">
+        <p class="vl-u-text--small vl-u-text--muted">
+          {{cases.length}} {{t "navigation.cases"}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="vl-toolbar__right">
+    <div class="vl-toolbar__item">
+      <div class="vl-action-group">
+        {{#link-to
+          "cases.create"
+          class="vl-button vl-button--narrow vl-button--icon-before"
+        }}
+          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add" aria-hidden="true"></i>
+          {{t "buttons.add-case"}}
+        {{/link-to}}
+      </div>
+    </div>
+  </div>
+</div>
