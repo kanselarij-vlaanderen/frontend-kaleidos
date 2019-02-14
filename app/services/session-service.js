@@ -39,8 +39,8 @@ export default Service.extend({
 				filter: {
 					agenda: { id: currentAgenda.id }
 				},
-				include:['subcase', 'documents'],
-				sort: 'priority'
+				include:['subcase'],
+				// sort: 'priority'
 			});
 			return agendaitems;
 		} else {

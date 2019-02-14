@@ -16,8 +16,4 @@ export default Model.extend({
   subcases: hasMany('subcase'),
   related: hasMany('case'),
   creators: hasMany('person')
-  // public: attr('boolean'),
-  // modified: attr('date'),
-  // archived: attr('boolean'),
-  // contact: belongsTo('capacity')
 });

@@ -13,7 +13,7 @@ export default Model.extend({
   titlePress: attr('string'),
   retracted: attr('boolean'),
 
-  postponedTo: belongsTo('meeting'),
+  // postponedTo: belongsTo('meeting'),
   agenda: belongsTo('agenda'),
   decision: belongsTo('decision', {inverse:null}),
 	subcase: belongsTo('subcase', {inverse:null}),

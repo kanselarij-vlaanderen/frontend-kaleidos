@@ -11,7 +11,6 @@ export default Component.extend({
   
 	uploadFile: task(function * (file) {		
     try {
-      // let newFile = this.store.createRecords
       file.readAsDataURL().then(() => {});
       // yield is being used to pause the execution of the promise behind it
       let response = yield file.upload('/files');

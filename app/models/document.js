@@ -11,7 +11,7 @@ export default Model.extend({
 	documentVersions: hasMany('document-version'),
 	remarks: hasMany('remark'),
 
-	subcase: belongsTo('subcase'),
+	// subcase: belongsTo('subcase'),
 	decision: belongsTo('decision'),
 	documentType: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),

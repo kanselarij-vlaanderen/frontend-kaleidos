@@ -11,6 +11,7 @@ export default Model.extend({
 	serialNumber: attr('string'),
 
 	document: belongsTo('document'),
+	subcase: belongsTo('subcase'),
 	file: belongsTo('file'),
 
 	nameToDisplay: computed('chosenFileName','serialNumber', function() {

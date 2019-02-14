@@ -7,9 +7,9 @@ export default Model.extend({
 	name: attr("string"),
 	dateSent: attr("date"),
 	isFinal:attr("boolean"),
-	meeting: belongsTo('meeting'), 
 	createdFor: belongsTo('meeting'), 
 	agendaitems: hasMany('agendaitem'),
+	created: attr('date'),
 
 	// announcements: hasMany('announcement'),
 	

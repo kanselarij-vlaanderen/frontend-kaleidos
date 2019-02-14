@@ -8,7 +8,8 @@ export default Service.extend({
 	approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
-			session: currentSession
+			createdFor: currentSession,
+			created: new Date()
 		});
 
 		return new Promise((resolve, reject) => {
@@ -20,7 +21,7 @@ export default Service.extend({
 						data: {
 							newAgendaId: agenda.id,
 							oldAgendaId: oldAgenda.id,
-							currentSessionDate: currentSession.plannedstart,
+							currentSessionDate: currentSession.plannedStart,
 						}
 					}
 				).then(() => {
@@ -36,11 +37,13 @@ export default Service.extend({
 
 	createNewAgendaItem(selectedAgenda, subCase) {
 		let agendaitem = this.store.createRecord('agendaitem', {
-			extended: false,
+			retracted: false,
+			postPoned: false,
 			formallyOk: false,
-			dateAdded: new Date(),
+			created: new Date(),
 			subcase: subCase,
 			agenda: selectedAgenda,
+			priority: -1
 		});
 		return new Promise((resolve, reject) => {
 			agendaitem.save().then(agendaitem => {

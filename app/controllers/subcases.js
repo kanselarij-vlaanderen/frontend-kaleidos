@@ -30,7 +30,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 
 		navigateBackToAgenda() {
-			// set model null to refresh the model at navigation.
 			this.set('model', null);
 			this.navigateBack();
 		},

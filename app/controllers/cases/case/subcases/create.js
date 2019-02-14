@@ -26,10 +26,18 @@ export default Controller.extend({
   actions: {
     async createSubCase(event) {
       event.preventDefault();
-      const { title, shortTitle, remark, confidential } = this;
+      const { title, shortTitle, confidential } = this;
       const caze = this.store.peekRecord('case', this.model.id);
-      const date = new Date();
-      let subcase = await this.store.createRecord('subcase', { title, shortTitle, remark, case: caze, created: date, modified: date, confidential });
+      let subcase = await this.store.createRecord('subcase', 
+      { 
+        title:title, 
+        shortTitle: shortTitle, 
+        showAsRemark: false, 
+        case: caze, 
+        created: new Date(), 
+        modified: new Date(), 
+        // confidentiality: confidential 
+      });
 
       let createdSubCase = await subcase.save();
       let uploadedFiles = this.get('uploadedFiles');
@@ -87,15 +95,15 @@ export default Controller.extend({
 
   async createNewDocumentWithDocumentVersion(subcase, file) {
     let document = await this.store.createRecord('document', {
-      subcase: subcase,
       created: new Date(),
       public: file.public,
-      documentType: file.get('documentType')
+      // documentType: file.get('documentType')
     });
     document.save().then(async(createdDocument) => {
       delete file.public;
       let documentVersion = await this.store.createRecord('document-version', {
         document: createdDocument,
+        subcase: subcase,
         created: new Date(),
         versionNumber: 1,
         file:file,

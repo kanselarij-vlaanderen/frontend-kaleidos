@@ -8,9 +8,9 @@ export default Component.extend({
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
-		return this.store.query('session', {
+		return this.store.query('meeting', {
 			filter: {
-				plannedstart: `${searchValue}`
+				plannedStart: `${searchValue}`
 			}
 		});
 	}),
@@ -22,7 +22,7 @@ export default Component.extend({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				this.set('sessions', this.store.query('session'));
+				this.set('sessions', this.store.query('meeting'));
 			}
 		},
 	},
@@ -33,10 +33,10 @@ export default Component.extend({
 	},
 
 	async loadSessions() {
-		let sessions = await this.store.query('session', {
-			filter: {
-				':gt:plannedstart': "",
-			},
+		let sessions = await this.store.query('meeting', {
+			// filter: {
+			// 	':gt:plannedStart': "",
+			// },
 			sort: "number"
 		});
 		this.set('sessions', sessions);

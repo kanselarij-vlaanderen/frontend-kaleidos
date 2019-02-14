@@ -5,12 +5,12 @@
         DEELDOSSIERS
       </h4>
       <h5>
-        {{model.shortTitle}}
+        {{model.title}}
       </h5>
       <h6>
         {{model.shortTitle}}
       </h6>
-      {{model.documents.length}}
+      {{model.documentVersions.length}}
       documents
     </div>
     {{! TODO: REFACTOR }}
@@ -26,7 +26,7 @@
           <th></th>
         </tr>
       </thead>
-      {{#each (await model.documents) as |document|}}
+      {{#each (await model.documentVersions) as |document|}}
         {{#each (await document.sortedDocuments) as |documentVersion|}}
           <tr>
             <td>

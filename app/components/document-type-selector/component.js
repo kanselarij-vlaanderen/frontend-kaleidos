@@ -17,7 +17,7 @@ export default Component.extend({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				this.set('sessions', this.store.query('session'));
+				this.set('sessions', this.store.query('meeting'));
 			}
 		},
 	},
