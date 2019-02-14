@@ -1,20 +1,32 @@
-{{#data-table content=model fields="title created" as |t|}}
-  {{#t.content as |c|}}
-    {{#c.header}}
-      {{th-sortable field="title" label="Dossiernaam"}}
-      {{th-sortable field="number" label="Status"}}
-      {{th-sortable field="created" label="Created"}}
-    {{/c.header}}
-    {{#c.body as |row|}}
-      <td>
-        {{row.title}}
-      </td>
-      <td>
-        {{row.shortTitle}} 
-      </td>
-      <td>
-        {{moment-format row.created "DD-MM-YYYY h:mm"}}
-      </td>
-    {{/c.body}}
-  {{/t.content}}
-{{/data-table}}
+{{cases/cases-filter}}
+<div class="vl-u-spacer-extended-l">
+  {{#data-table content=model fields="title created" as |t|}}
+    {{#t.content as |c|}}
+      {{#c.header}}
+        {{th-sortable field="title" label="Dossiernaam"}}
+        {{th-sortable field="number" label="Status"}}
+        {{th-sortable field="created" label="Created"}}
+        <th></th>
+      {{/c.header}}
+      {{#c.body as |row|}}
+        <td>
+          {{row.title}}
+        </td>
+        <td>
+          {{!-- {{row.shortTitle}}  --}}
+        </td>
+        <td>
+          {{moment-format row.created "DD-MM-YYYY h:mm"}}
+        </td>
+        <td class="vl-u-align-right">
+          {{#link-to "cases.case" row.id}}
+            <i
+              class="vl-button__icon vl-vi vl-vi-arrow-right"
+              aria-hidden="true"
+            ></i>
+          {{/link-to}}
+        </td>
+      {{/c.body}}
+    {{/t.content}}
+  {{/data-table}}
+</div>

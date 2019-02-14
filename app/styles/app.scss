@@ -168,15 +168,15 @@ $icon-font-location: "/fonts/";
 .file-upload-container {
   width:100%;
   cursor: pointer;
-  margin: 0 auto;
   border: 2px dashed #0087f7;
-  border-radius: 5px;
+  border-radius: 0;
   background: white;
   height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom:1em;
+  margin-left:1em;
 
   .progress-container {
     display: flex;
