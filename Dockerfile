@@ -19,6 +19,7 @@ RUN \
 COPY ember-proxy-service.sh /
 ADD package.json /tmp/client/
 
+
 RUN cd /tmp/client && npm install 
 ADD . /tmp/client
 RUN cd /tmp/client && ember build --environment=${EMBER_ENV} && mv dist/* /usr/share/nginx/html/ && rm -rf /tmp/client
