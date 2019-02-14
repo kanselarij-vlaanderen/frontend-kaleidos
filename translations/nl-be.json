@@ -76,7 +76,8 @@
 		"upload-file": "Files uploaden"
 	},
 	"case-item": {
-		"not-agreed": "Niet Akkoord"
+		"not-agreed": "Niet Akkoord",
+		"my-cases": "Mijn dossiers"
 	},
 	"cases-search": {
 		"cases-number": "Nummer Dossier",
@@ -91,7 +92,8 @@
 	},
 	"edit-decision": {
 		"approved": "Goedgekeurd",
-		"decision-text": "Tekst beslissing"
+		"decision-text": "Tekst beslissing",
+		"short-title": "Korte titel"
 	},
 	"edit-item": {
 		"content": "Inhoud",

@@ -1,13 +1,12 @@
 <p>
-  <div class="label">
-    {{t "edit-decision.approved"}}
-  </div>
+  {{web-components/vl-form-label value=(t "edit-decision.approved")}}
   {{x-toggle value=decision.approved onToggle=(action (mut decision.approved))}}
 </p>
 <p>
-  <div class="label">
-    {{t "edit-decision.decision-text"}}
-  </div>
-  {{textarea class="vl-textarea" value=decision.text}}
+  {{web-components/vl-form-label value=(t "edit-decision.decision-text")}}
+  {{textarea class="vl-textarea" value=decision.description}}
 </p>
-{{yield}}
+<p>
+  {{web-components/vl-form-label value=(t "edit-decision.short-title")}}
+  {{web-components/vl-form-input value=decision.shortTitle}}
+</p>

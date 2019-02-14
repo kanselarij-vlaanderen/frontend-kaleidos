@@ -5,17 +5,20 @@ import { computed } from '@ember/object';
 export default Component.extend({
   classNames: ['o-scroll'],
   store: inject('store'),
-  comments: computed('comments', function () {
+
+  remarks: computed('remarks', function () {
     let agendaitem = this.get('agendaitem');
     if (agendaitem) {
-      return agendaitem.get('comments');
+      return agendaitem.get('remarks');
     }
   }),
+
   actions: {
     async addComment(){
       const { text } = this;
       const agendaitem = await this.get('agendaitem');
-      let comment = this.store.createRecord("comment", { text, date_created: new Date(), agendaitem  });
+
+      let comment = this.store.createRecord('remark', { text:text, created: new Date(), agendaitem: agendaitem });
       await comment.save();
     }
   }
