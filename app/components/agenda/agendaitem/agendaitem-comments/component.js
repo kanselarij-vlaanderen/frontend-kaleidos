@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-  classNames: ['o-scroll'],
+  classNames: ['vl-u-spacer'],
   store: inject('store'),
 
   remarks: computed('remarks', function () {

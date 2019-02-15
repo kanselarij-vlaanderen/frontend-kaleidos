@@ -3,7 +3,6 @@ import { computed } from '@ember/object';
 
 let { Model, attr, belongsTo, hasMany } = DS;
 
-
 export default Model.extend({
   priority: attr('number'),
   created: attr('date'),
@@ -19,8 +18,7 @@ export default Model.extend({
 	subcase: belongsTo('subcase', {inverse:null}),
   remarks: hasMany('remark'),
   attendees: hasMany('mandatee'),
-
-  // newsItem: belongsTo('news-item'),
+  newsletterInfo: belongsTo('newsletter-info'),
 
   isPostponed: computed('postponed', 'postponedToSession', function(){
     return this.get('postponedToSession').then((session) => {

@@ -9,5 +9,6 @@ export default Model.extend({
 	publicationDate: attr('date'),
 	remarks: hasMany('remark'),
 	themes: hasMany('theme'),
-	decision: belongsTo('decision')
+	decision: belongsTo('decision'),
+	agendaitem: belongsTo('agendaitem')
 });
