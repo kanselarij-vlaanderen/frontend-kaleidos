@@ -6,6 +6,7 @@
           {{t "sessions-selector.agenda-of"}}
         </h1>
         {{sessions/sessions-selector
+          sessions=sessions
           currentSession=currentSession
           chooseSession=(action "chooseSession")
         }}

@@ -57,6 +57,7 @@ export default Component.extend({
 
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
+			this.set('sessions', this.store.query('meeting', {}))
 		},
 
 		compareAgendas() {

@@ -2,7 +2,9 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
+  classNames: ["vl-layout-agenda__detail"],
   store: inject(),
+
   actions : {
     async createAnnouncement (){
       const { title, text } = this;

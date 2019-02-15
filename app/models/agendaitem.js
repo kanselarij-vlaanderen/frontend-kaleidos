@@ -6,16 +6,16 @@ let { Model, attr, belongsTo, hasMany } = DS;
 export default Model.extend({
   priority: attr('number'),
   created: attr('date'),
-  postponed: attr('boolean'),
   record: attr('string'),
   formallyOk: attr('boolean'),
   titlePress: attr('string'),
   retracted: attr('boolean'),
+  textPress: attr('string'),
 
   // postponedTo: belongsTo('meeting'),
   agenda: belongsTo('agenda'),
   decision: belongsTo('decision'),
-	subcase: belongsTo('subcase', {inverse:null}),
+	subcase: belongsTo('subcase'),
   remarks: hasMany('remark'),
   attendees: hasMany('mandatee'),
   newsletterInfo: belongsTo('newsletter-info'),
@@ -25,18 +25,4 @@ export default Model.extend({
       return session || this.get('postponed');
     });
   })
-  // Karel fix your shit :p
-  // save: async function(){
-  //   let news = await this.get('newsItem');
-  //   if(news) {
-  //     news = await news.save();
-  //     this.set('newsItem', news);
-  //   }
-  //   let decision = await this.get('decision');
-  //   if(decision) {
-  //     decision = await decision.save();
-  //     this.set('decision', decision);
-  //   }
-  //   return this._super(...arguments);
-  // }
 });

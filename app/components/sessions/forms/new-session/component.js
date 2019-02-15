@@ -17,12 +17,11 @@ export default Component.extend({
 			});
 
 			newMeeting.save().then(async (meeting) => {
-        const date = new Date();
 				let agenda = this.store.createRecord('agenda', {
 					name: "Ontwerpagenda",
 					isFinal: false,
 					createdFor: meeting,
-          created: date
+          created: new Date()
         });
 
 				await agenda.save();
@@ -36,7 +35,7 @@ export default Component.extend({
 		},
 
 		cancelForm(event) {
-			this.cancelForm(event)
+			this.cancelForm(event);
 		},
 	}
 });
