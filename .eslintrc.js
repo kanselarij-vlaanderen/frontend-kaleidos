@@ -16,8 +16,9 @@ module.exports = {
   },
   rules: {
     'ember/no-on-calls-in-components': 'off',
-    "attribute-indentation": false,
-    "block-indentation": false
+    "attribute-indentation": 'off',
+    "block-indentation": 'off',
+    "no-invalid-interactive": 'off'
   },
   overrides: [
     // node files
@@ -38,7 +39,13 @@ module.exports = {
       env: {
         browser: false,
         node: true
-      }
+      },
+      rules: {
+        'ember/no-on-calls-in-components': 'off',
+        "attribute-indentation": 'off',
+        "block-indentation": 'off',
+        "no-invalid-interactive": 'off'
+      },
     }
   ]
 };
