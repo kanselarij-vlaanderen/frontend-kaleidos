@@ -1,28 +1,43 @@
-{{#file-upload
-  name="files"
-  for="upload-photo"
-  multiple=multipleFiles
-  onfileadd=(action "uploadFile")
-}}
-  {{#file-dropzone name="files" tagName="a" as |dropzone queue|}}
-    {{#if dropzone.active}}
-      {{#if dropzone.valid}}
-        {{t "file-uploader.drop-text"}}
-      {{else}}
-        {{t "file-uploader.invalid-type"}}
+<div class="vl-upload__element">
+  {{#file-upload
+    name="files"
+    for="upload-photo"
+    class="vl-upload__element__label"
+    multiple=multipleFiles
+    onfileadd=(action "uploadFile")
+  }}
+    <i class="vl-vi vl-vi-paperclip" aria-hidden="true"></i>
+    <span>
+      {{t "file-uploader.add-attachements"}}
+    </span>
+    {{#file-dropzone
+      name="files"
+      class="vl-upload__element__button__container"
+      tagName="a" as |dropzone queue|
+    }}
+      {{#if dropzone.active}}
+        {{#if dropzone.valid}}
+          <p>
+            {{t "file-uploader.drop-text"}}
+          </p>
+        {{else}}
+          <p>
+            {{t "file-uploader.invalid-type"}}
+          </p>
+        {{/if}}
+      {{else if queue.files.length}}
+        <div class="progress-container">
+          {{t "file-uploader.uploading"}}
+          {{queue.files.length}}
+          {{t "file-uploader.files"}}
+          . (
+          {{queue.progress}}
+          %)
+          <progress max="100" value={{queue.progress}}></progress>
+        </div>
+      {{else if dropzone.supported}}
+        {{t "file-uploader.dropzone-text"}}
       {{/if}}
-    {{else if queue.files.length}}
-      <div class="progress-container">
-        {{t "file-uploader.uploading"}}
-        {{queue.files.length}}
-        {{t "files"}}
-        . (
-        {{queue.progress}}
-        %)
-        <progress max="100" value={{queue.progress}}></progress>
-      </div>
-    {{else if dropzone.supported}}
-      {{t "file-uploader.dropzone-text"}}
-    {{/if}}
-  {{/file-dropzone}}
-{{/file-upload}}
+    {{/file-dropzone}}
+  {{/file-upload}}
+</div>

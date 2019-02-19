@@ -8,7 +8,7 @@ export default Model.extend({
   shortTitle: attr('string'),
   number: attr('string'),
 
-  caseType: belongsTo('case-type'),
+  type: belongsTo('case-type'),
   mandatees: hasMany('mandatee'),
   remark: hasMany('remark'),
   themes: hasMany('theme'),

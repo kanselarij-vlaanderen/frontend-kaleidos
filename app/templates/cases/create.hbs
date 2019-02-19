@@ -5,11 +5,11 @@
     </h3>
     <form class="vl-form" onsubmit={{action "createCase"}}>
       {{#if isPartOne}}
+        {{cases/case-types typeChanged=(action "chooseType")}}
         {{cases/forms/metadata-form
           themes=themes
           step=(action "nextStep")
           chooseTheme=(action "chooseTheme")
-          chooseType=(action "chooseType")
           shortTitleChange=(action "shortTitleChange")
           titleChange=(action "titleChange")
           statusChange=(action "statusChange")

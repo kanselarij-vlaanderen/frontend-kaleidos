@@ -17,6 +17,37 @@
     "start": "ember serve --proxy=http://localhost",
     "test": "ember test"
   },
+  "dependencies": {
+    "@govflanders/vl-ui-accordion": "^3.7.2",
+    "@govflanders/vl-ui-action-group": "^3.7.2",
+    "@govflanders/vl-ui-alert": "^3.7.2",
+    "@govflanders/vl-ui-badge": "^3.7.2",
+    "@govflanders/vl-ui-button": "^3.7.2",
+    "@govflanders/vl-ui-checkbox": "^3.7.2",
+    "@govflanders/vl-ui-core": "^3.7.2",
+    "@govflanders/vl-ui-data-table": "^3.7.2",
+    "@govflanders/vl-ui-datepicker": "^3.7.2",
+    "@govflanders/vl-ui-description-data": "^3.7.2",
+    "@govflanders/vl-ui-document": "^3.7.2",
+    "@govflanders/vl-ui-icon": "^3.7.2",
+    "@govflanders/vl-ui-info-tile": "^3.7.2",
+    "@govflanders/vl-ui-input-addon": "^3.7.2",
+    "@govflanders/vl-ui-input-field": "^3.7.2",
+    "@govflanders/vl-ui-input-group": "^3.7.2",
+    "@govflanders/vl-ui-link": "^3.7.2",
+    "@govflanders/vl-ui-link-list": "^3.7.2",
+    "@govflanders/vl-ui-loader": "^3.7.2",
+    "@govflanders/vl-ui-modal": "^3.7.2",
+    "@govflanders/vl-ui-pager": "^3.7.2",
+    "@govflanders/vl-ui-pill": "^3.7.2",
+    "@govflanders/vl-ui-pill-input": "^3.7.2",
+    "@govflanders/vl-ui-radio": "^3.7.2",
+    "@govflanders/vl-ui-tabs": "^3.7.2",
+    "@govflanders/vl-ui-textarea": "^3.7.2",
+    "@govflanders/vl-ui-typography": "^3.7.2",
+    "@govflanders/vl-ui-upload": "^3.7.2",
+    "@govflanders/vl-ui-util": "^3.7.2"
+  },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
     "@ember/optional-features": "^0.6.3",
@@ -70,6 +101,5 @@
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
-  },
-  "dependencies": {}
+  }
 }

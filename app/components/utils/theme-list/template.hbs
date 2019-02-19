@@ -2,11 +2,11 @@
   options=themes
   class="cases--new-item-input"
   selected=selectedThemes
-  searchField="naam"
+  searchField="label"
   search=(perform searchTheme)
   oninput=(action "resetValueIfEmpty")
   onchange=(action "chooseTheme") 
 as |theme|
 }}
-  {{theme.naam}}
+  {{theme.label}}
 {{/power-select-multiple}}

@@ -7,7 +7,7 @@ export default Component.extend({
   store: inject(),
   themes: null,
   selectedThemes: A([]),
-  types: A(["mr", "overlegcomite", "ministrieel", "persbericht"]),
+  
   actions: {
     async resetValue(param) {
       if (param === "") {

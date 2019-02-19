@@ -12,9 +12,9 @@ export default Controller.extend({
   actions: {
     async createCase(event) {
       event.preventDefault();
-      const { title, shortTitle, remark, selectedThemes, selectedType, contact } = this;
+      const { title, shortTitle, selectedType, remark, selectedThemes, contact } = this;
       const date = new Date();
-      let cases = this.store.createRecord('case', { title:title, shortTitle: shortTitle, created:date }); //remark, themes: selectedThemes, type: selectedType, created: date, modified: date
+      let cases = this.store.createRecord('case', { title, shortTitle, created:date, type:selectedType }); //remark, themes: selectedThemes, type: selectedType, created: date, modified: date
       await cases.save();
       await this.transitionToRoute('cases');
     },
@@ -27,7 +27,8 @@ export default Controller.extend({
       this.set('selectedThemes', theme);
     },
     chooseType(type) {
-      this.set('selectedType', type);
+      const typeModel = this.store.peekRecord('case-type', type);
+      this.set('selectedType', typeModel);
     },
     chooseContact(capacity) {
       this.set('contact', capacity);

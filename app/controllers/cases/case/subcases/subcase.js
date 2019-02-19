@@ -35,7 +35,7 @@ export default Controller.extend(FileSaverMixin, {
       let file = await documentVersion.get('file');
       $.ajax(`/files/${file.id}?download=${file.filename}`, {
         method: 'GET',
-        dataType: 'arraybuffer', // or 'blob'
+        dataType: 'arraybuffer', 
         processData: false
       })
         .then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));

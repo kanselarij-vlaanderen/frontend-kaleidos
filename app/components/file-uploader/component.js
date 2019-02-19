@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   store:inject(),
-  classNames:["file-upload-container"],
+  tagName: "span",
   files: null,
   multipleFiles: true,
   

@@ -16,5 +16,6 @@ export default Model.extend({
   consulationRequests: hasMany('consulation-request'),
   agendaitem: hasMany('agendaitem'),
   remarks: hasMany('remark'),
-  documentVersions: hasMany('document-version')
+  documentVersions: hasMany('document-version'),
+  themes: hasMany('theme')
 });

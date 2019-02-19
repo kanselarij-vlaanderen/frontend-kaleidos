@@ -1,27 +1,34 @@
-<div class="cases--subcases-overview">
-  {{#if model}}
-    {{#each model as |subcase|}}
-      <div class="cases--subcases-item">
-        <div class="cases--subcases-item-arrow">
-          <img src="/assets/right-arrow.svg" />
-        </div>
-        <div class="cases--subcases-item-content">
-          {{#link-to "cases.case.subcases.subcase" subcase.id}}
-            <h4>
-              {{subcase.title}}
-            </h4>
-          {{/link-to}}
-          <span>
-            {{moment-format subcase.created "dd. DD-MM-YYYY"}}
-          </span>
-        </div>
-      </div>
-    {{/each}}
-  {{else}}
-    <div>
-      <p>
-        Er zijn nog geen deeldossiers
-      </p>
-    </div>
-  {{/if}}
-</div>
+{{!-- <h2 class="vl-title vl-title--h3">
+  {{t "cases.subcases"}}
+</h2> --}}
+{{#data-table content=(await model) fields="title created" as |t|}}
+  {{#t.content as |c|}}
+    {{#c.header}}
+      {{th-sortable field="title" label="Dossiernaam"}}
+      {{th-sortable field="shortTitle" label="shortTitle"}}
+      {{th-sortable field="created" label="Created"}}
+      <th></th>
+    {{/c.header}}
+    {{#c.body as |row|}}
+      <td>
+        {{row.title}}
+      </td>
+      <td>
+        {{row.shortTitle}}
+      </td>
+      <td>
+        {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+      </td>
+      <td class="vl-u-align-right">
+        {{#link-to
+          "cases.case"
+          row.id
+          tagName="button"
+          class="vl-button vl-button--link vl-button--icon"
+        }}
+          <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
+        {{/link-to}}
+      </td>
+    {{/c.body}}
+  {{/t.content}}
+{{/data-table}}

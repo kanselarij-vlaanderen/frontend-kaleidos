@@ -69,6 +69,7 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_titles";
 @import "govflanders/components/_typography";
 @import "govflanders/components/_upload";
+@import "govflanders/components/_radio";
 @import "custom-components/vl-page-header";
 @import "custom-components/vl-toolbar";
 
@@ -164,30 +165,11 @@ $icon-font-location: "/fonts/";
   }
 }
 
-
-.file-upload-container {
-  width:100%;
-  cursor: pointer;
-  border: 2px dashed #0087f7;
-  border-radius: 0;
-  background: white;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom:1em;
-  margin-left:1em;
-
   .progress-container {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-
-  a {
-    text-decoration: none;
-  }
-}
 
 .comparison-container {
   width: calc(100% - 150px);
@@ -301,4 +283,18 @@ $icon-font-location: "/fonts/";
 
 .vl-u-spacer {
   margin-top: 3em;
+}
+
+.vl-upload__element__label {
+  text-decoration: none;
+  a {
+    text-decoration: none;
+  }
+    p {
+    font-size: 1.2rem;
+    color: #333332;
+    text-decoration: none;
+    text-align: center;
+  }
+  
 }

@@ -8,9 +8,8 @@ export default Component.extend({
   actions : {
     async createAnnouncement (){
       const { title, text } = this;
-      const agenda = this.get('currentAgenda');
-      const date = new Date();
-      const announcement = this.store.createRecord('announcement', { title, text, created: date, modified: date, agenda });
+      const agenda = await this.get('currentAgenda');
+      const announcement = this.store.createRecord('announcement', { title, text, created: new Date(), modified: new Date(), agenda });
       await announcement.save();
       agenda.notifyPropertyChange('announcements');
     }

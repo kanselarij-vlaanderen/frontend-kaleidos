@@ -5,7 +5,7 @@ export default Route.extend({
     this._super(...arguments);
   },
   // model() {
-  //   return this.store.findAll('capacity');
+  //   return this.store.findAll('case-type');
   // },
 });
 

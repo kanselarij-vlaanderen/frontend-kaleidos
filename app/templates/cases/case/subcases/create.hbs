@@ -21,43 +21,45 @@
     {{else}}
       <div class="vl-form-grid vl-form-grid--is-stacked">
         {{web-components/vl-form-label value="NAAM DEELDOSSIER"}}
-        {{web-components/vl-form-input id="title" value=title}}
+        {{web-components/vl-form-input value=title}}
         {{web-components/vl-form-label value="AANVRAAG AGENDERING"}}
-        {{web-components/vl-form-input id="public" value=remark}}
-        {{web-components/vl-form-label value=(t "cases.upload-file")}}
-        {{file-uploader uploadedFile=(action "uploadedFile")}}
-      </div>
-      <div class="uploaded-files">
-        {{#each uploadedFiles as |uploadedFile|}}
-          <div class="uploaded-file-container">
-            <a
-              class="remove-file"
-              href="#"
-              {{action "removeFile" uploadedFile}}
-            >
-              <i class="vl-vi vl-vi-cross"></i>
-            </a>
-            {{web-components/vl-document file=uploadedFile}}
-            <div>
-              {{t "metadata-form.public"}}
-              {{input type="checkbox" checked=uploadedFile.public}}
+        {{web-components/vl-form-input value=remark}}
+        <div class="vl-col--4-4">
+          {{web-components/vl-form-label value=(t "cases.upload-file")}}
+          {{file-uploader uploadedFile=(action "uploadedFile")}}
+        </div>
+        <div class="vl-col--4-4">
+          {{#each uploadedFiles as |uploadedFile|}}
+            <div class="uploaded-file-container">
+              <a
+                class="remove-file"
+                href="#"
+                {{action "removeFile" uploadedFile}}
+              >
+                <i class="vl-vi vl-vi-cross"></i>
+              </a>
+              {{web-components/vl-document file=uploadedFile}}
+              <div>
+                {{t "metadata-form.public"}}
+                {{input type="checkbox" checked=uploadedFile.public}}
+              </div>
+              {{t "subcases.document-type"}}
+              :
+              {{document-type-selector
+                chooseDocumentType=(action "chooseDocumentType" uploadedFile)
+              }}
             </div>
-            {{t "subcases.document-type"}}
-            :
-            {{document-type-selector
-              chooseDocumentType=(action "chooseDocumentType" uploadedFile)
-            }}
-          </div>
-        {{/each}}
-      </div>
-      <div class="vl-col--3-4 vl-push--3-3">
-        <button
-          type="submit"
-          class="vl-button vl-button--tertiary"
-          data-test-rr="sign-up-button"
-        >
-          {{t "buttons.create-case"}}
-        </button>
+          {{/each}}
+        </div>
+        <div class="vl-col--4-4">
+          <button
+            type="submit"
+            class="vl-button vl-button--tertiary"
+            data-test-rr="sign-up-button"
+          >
+            {{t "buttons.create-case"}}
+          </button>
+        </div>
       </div>
     {{/if}}
   </form>

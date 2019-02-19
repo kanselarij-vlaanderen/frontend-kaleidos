@@ -30,8 +30,8 @@ export default Controller.extend({
       const caze = this.store.peekRecord('case', this.model.id);
       let subcase = await this.store.createRecord('subcase', 
       { 
-        title:title, 
-        shortTitle: shortTitle, 
+        title, 
+        shortTitle, 
         showAsRemark: false, 
         case: caze, 
         created: new Date(), 
@@ -48,9 +48,6 @@ export default Controller.extend({
         }
       }));
 
-      await caze.get('subcases').pushObject(createdSubCase);
-
-      caze.save();
       this.transitionToRoute('cases.case.subcases.overview');
     },
     nextStep() {

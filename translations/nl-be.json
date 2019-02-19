@@ -73,7 +73,7 @@
 		"new-case": "NIEUW DOSSIER",
 		"contact-person": "CONTACTPERSOON",
 		"related-cases": "GERELATEERDE DOSSIERS",
-		"subcases": "DEELDOSSIERS",
+		"subcases": "Deeldossiers",
 		"upload-file": "Files uploaden"
 	},
 	"case-item": {
@@ -108,7 +108,8 @@
 		"dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
 		"files": "bestanden",
 		"invalid-type": "Fout bestandstype.",
-		"uploading": "Uploaden"
+		"uploading": "Uploaden",
+		"add-attachements": "Bijlage toevoegen"
 	},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
