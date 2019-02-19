@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import $ from 'jquery';
 
 export default Controller.extend({
-  uploadedFiles: [],
+  uploadedFiles: Array([]),
   part: 1,
   isPartOne: computed('part', function () {
     return this.get('part') === 1;
@@ -26,7 +26,7 @@ export default Controller.extend({
   actions: {
     async createSubCase(event) {
       event.preventDefault();
-      const { title, shortTitle, confidential } = this;
+      const { title, shortTitle } = this; //confidential
       const caze = this.store.peekRecord('case', this.model.id);
       let subcase = await this.store.createRecord('subcase', 
       { 
@@ -84,7 +84,7 @@ export default Controller.extend({
       $.ajax({
         method: "DELETE",
         url: '/files/' + file.id
-      }).then(() => {
+      }).then(function() {
         this.get('uploadedFiles').removeObject(file);
       })
     }

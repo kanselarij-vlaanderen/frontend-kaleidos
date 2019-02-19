@@ -7,16 +7,16 @@ export default Controller.extend(FileSaverMixin, {
   isUploadingNewVersion: false,
   uploadedFile: null,
   fileName: null,
-  store:inject(),
-  documentToUploadNewVersionOf:null,
+  store: inject(),
+  documentToUploadNewVersionOf: null,
 
   actions: {
     openUploadDialog(document) {
-      if(document && document.id) {
+      if (document && document.id) {
         this.set('documentToUploadNewVersionOf', document);
       }
       const uploadedFile = this.get('uploadedFile')
-      if(uploadedFile && uploadedFile.id) {
+      if (uploadedFile && uploadedFile.id) {
         this.deleteFile(uploadedFile.id);
       }
       this.toggleProperty('isUploadingNewVersion');
@@ -35,7 +35,7 @@ export default Controller.extend(FileSaverMixin, {
       let file = await documentVersion.get('file');
       $.ajax(`/files/${file.id}?download=${file.filename}`, {
         method: 'GET',
-        dataType: 'arraybuffer', 
+        dataType: 'arraybuffer',
         processData: false
       })
         .then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
@@ -46,13 +46,13 @@ export default Controller.extend(FileSaverMixin, {
       const documentVersions = await document.get('documentVersions');
       const file = this.get('uploadedFile');
       let newDocumentVersion = this.store.createRecord('document-version',
-      {
-        file: file,
-        versionNumber: documentVersions.length + 1 ,
-        document: document,
-        chosenFileName: this.get('fileName') || file.fileName,
-        created: new Date()
-      });
+        {
+          file: file,
+          versionNumber: documentVersions.length + 1,
+          document: document,
+          chosenFileName: this.get('fileName') || file.fileName,
+          created: new Date()
+        });
       await newDocumentVersion.save();
       this.set('uploadedFile', null);
       this.set('documentToUploadNewVersionOf', null);
@@ -64,7 +64,7 @@ export default Controller.extend(FileSaverMixin, {
     $.ajax({
       method: "DELETE",
       url: '/files/' + id
-    }).then(() => {
+    }).then(function () {
       this.set('uploadedFile', null);
     })
   },

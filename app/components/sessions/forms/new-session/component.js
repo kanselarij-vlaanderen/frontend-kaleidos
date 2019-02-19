@@ -1,9 +1,10 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 export default Component.extend({
 	store: inject(),
+  // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
 	today: new Date(), 
 	classNames: ['new-session-form-container'],
 

@@ -15,7 +15,9 @@ module.exports = {
     browser: true
   },
   rules: {
-    'ember/no-on-calls-in-components': 'off'
+    'ember/no-on-calls-in-components': 'off',
+    "attribute-indentation": false,
+    "block-indentation": false
   },
   overrides: [
     // node files

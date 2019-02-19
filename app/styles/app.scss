@@ -287,14 +287,16 @@ $icon-font-location: "/fonts/";
 
 .vl-upload__element__label {
   text-decoration: none;
+
+  em {
+    display:block;
+  }
+
   a {
     text-decoration: none;
-  }
-    p {
     font-size: 1.2rem;
     color: #333332;
     text-decoration: none;
     text-align: center;
   }
-  
 }

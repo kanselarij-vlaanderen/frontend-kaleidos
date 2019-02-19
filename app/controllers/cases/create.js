@@ -12,7 +12,7 @@ export default Controller.extend({
   actions: {
     async createCase(event) {
       event.preventDefault();
-      const { title, shortTitle, selectedType, remark, selectedThemes, contact } = this;
+      const { title, shortTitle, selectedType } = this;
       const date = new Date();
       let cases = this.store.createRecord('case', { title, shortTitle, created:date, type:selectedType }); //remark, themes: selectedThemes, type: selectedType, created: date, modified: date
       await cases.save();
