@@ -4,6 +4,7 @@ import $ from 'jquery';
 
 export default Controller.extend({
   uploadedFiles: [],
+  selectedMandatees: [],
   part: 1,
   isPartOne: computed('part', function () {
     return this.get('part') === 1;
@@ -26,7 +27,7 @@ export default Controller.extend({
   actions: {
     async createSubCase(event) {
       event.preventDefault();
-      const { title, shortTitle } = this; //confidential
+      const { title, shortTitle } = this;
       const caze = this.store.peekRecord('case', this.model.id);
       let subcase = await this.store.createRecord('subcase', 
       { 
@@ -35,8 +36,7 @@ export default Controller.extend({
         showAsRemark: false, 
         case: caze, 
         created: new Date(), 
-        modified: new Date(), 
-        // confidentiality: confidential 
+        mandatees: this.get('selectedMandatees')
       });
 
       let createdSubCase = await subcase.save();
@@ -75,7 +75,7 @@ export default Controller.extend({
       uploadedFile.set('public', true);
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
-    chooseMandates(mandatees) {
+    selectMandatees(mandatees) {
       this.set('selectedMandatees', mandatees);
     },
     chooseDocumentType(uploadedFile, type) {
@@ -110,7 +110,6 @@ export default Controller.extend({
       });
       await documentVersion.save();
     });
-
   }
 
 });

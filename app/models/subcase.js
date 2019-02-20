@@ -3,7 +3,7 @@ import DS from 'ember-data';
 const { attr, Model, hasMany, belongsTo } = DS;
 
 export default Model.extend({
-  created: attr('string'),
+  created: attr('date'),
   shortTitle: attr('string'),
   title: attr('string'),
   confidentiality: attr('string'),
@@ -17,5 +17,6 @@ export default Model.extend({
   agendaitem: hasMany('agendaitem'),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
-  themes: hasMany('theme')
+  themes: hasMany('theme'),
+  mandatees: hasMany('mandatee')
 });
