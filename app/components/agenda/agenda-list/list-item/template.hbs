@@ -9,11 +9,16 @@
   {{#if agendaitem.id}}
     <h6 class="vl-title vl-title--h6">
       {{number}}
-      . {{await agendaitem.subcase.case.type.label}}
+      . {{#each (await agendaitem.subcase.mandatees) as |mandatee|}}
+          <span>{{mandatee.title}}</span>
+        {{/each}}
     </h6>
     <h5 class="vl-title vl-title--h5">
       {{agendaitem.subcase.shortTitle}}
     </h5>
+     <h6 class="vl-title vl-title--h6">
+      Hoedanigheid: {{await agendaitem.subcase.case.type.label}}
+    </h6>
     <p class="c-long-title">
       {{agendaitem.subcase.title}}
     </p>

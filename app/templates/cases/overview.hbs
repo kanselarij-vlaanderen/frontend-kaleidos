@@ -16,10 +16,10 @@
     {{#t.content as |c|}}
       {{#c.header}}
         {{th-sortable currentSorting=sort field="title" label="Dossiernaam"}}
-        <th>
+        <th class="data-table__header-title--sortable">
           Status
         </th>
-        {{th-sortable currentSorting=sort field="created" label="Created"}}
+        {{th-sortable currentSorting=sort field="created" label="Aangemaakt op"}}
         <th></th>
       {{/c.header}}
       {{#c.body as |row|}}
@@ -27,7 +27,7 @@
           {{row.title}}
         </td>
         <td>
-          {{row.shortTitle}}
+          {{await row.latestSubcase.title}}
         </td>
         <td>
           {{moment-format row.created "DD-MM-YYYY HH:mm"}}
