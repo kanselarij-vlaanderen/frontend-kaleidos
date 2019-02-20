@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import $ from 'jquery';
 
 export default Controller.extend({
-  uploadedFiles: Array([]),
+  uploadedFiles: [],
   part: 1,
   isPartOne: computed('part', function () {
     return this.get('part') === 1;
@@ -47,7 +47,7 @@ export default Controller.extend({
           return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile);
         }
       }));
-
+      this.set('uploadedFiles', []);
       this.transitionToRoute('cases.case.subcases.overview');
     },
     nextStep() {
@@ -75,7 +75,9 @@ export default Controller.extend({
       uploadedFile.set('public', true);
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
-
+    chooseMandates(mandatees) {
+      this.set('selectedMandatees', mandatees);
+    },
     chooseDocumentType(uploadedFile, type) {
       uploadedFile.set('documentType', type.name || type.description);
     },
@@ -108,6 +110,7 @@ export default Controller.extend({
       });
       await documentVersion.save();
     });
+
   }
 
 });
