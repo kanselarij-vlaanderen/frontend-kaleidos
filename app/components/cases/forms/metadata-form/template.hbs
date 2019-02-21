@@ -17,7 +17,8 @@
       value=title
     }}
   </div>
-  {{web-components/vl-form-label value=(t "metadata-form.status")}}
+  {{! TODO: SELECT current subcase (not in designs yet) }}
+  {{!-- {{web-components/vl-form-label value=(t "metadata-form.status")}}
   <div class="vl-col--3-4 vl-col--1-1--s">
     {{input
       class="vl-input-field vl-input-field--block"
@@ -26,24 +27,12 @@
       onChange=(action "statusChange")
       value=status
     }}
-  </div>
-  {{web-components/vl-form-label value=(t "metadata-form.themes")}}
-  <div class="vl-col--3-4 vl-col--1-1--s">
-    {{#power-select-multiple
-      options=themes
-      class="vl-input-field vl-input-field--block"
-      selected=selectedThemes
-      searchField="label"
-      search=(perform searchTheme)
-      oninput=(action "resetValue")
-      onchange=(action "chooseTheme") as |theme|
-    }}
-      {{theme.label}}
-    {{/power-select-multiple}}
-  </div>
-  <div class="vl-col--3-4 vl-push--3-3">
-    <button class="vl-button vl-button--tertiary" {{action "step"}}>
-      {{t "buttons.next-step"}}
-    </button>
-  </div>
+  </div> --}}
+  {{#if multipleSteps}}
+    <div class="vl-col--3-4 vl-push--3-3">
+      <button class="vl-button vl-button--tertiary" {{action "step"}}>
+        {{t "buttons.next-step"}}
+      </button>
+    </div>
+  {{/if}}
 </div>

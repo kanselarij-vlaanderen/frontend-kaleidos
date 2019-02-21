@@ -28,7 +28,7 @@ $modal-content-padding: 1.5rem;
   border: 0;
   box-shadow: $base-box-shadow;
   overflow: auto;
-  z-index: z("modal");
+  z-index: 4;
 
   &::backdrop {
     @include backdrop;

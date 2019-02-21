@@ -4,6 +4,7 @@ import $ from 'jquery';
 
 export default Controller.extend({
   uploadedFiles: [],
+  selectedMandatees: [],
   part: 1,
   isPartOne: computed('part', function () {
     return this.get('part') === 1;
@@ -26,7 +27,7 @@ export default Controller.extend({
   actions: {
     async createSubCase(event) {
       event.preventDefault();
-      const { title, shortTitle, confidential } = this;
+      const { title, shortTitle } = this;
       const caze = this.store.peekRecord('case', this.model.id);
       let subcase = await this.store.createRecord('subcase', 
       { 
@@ -35,8 +36,7 @@ export default Controller.extend({
         showAsRemark: false, 
         case: caze, 
         created: new Date(), 
-        modified: new Date(), 
-        // confidentiality: confidential 
+        mandatees: this.get('selectedMandatees')
       });
 
       let createdSubCase = await subcase.save();
@@ -47,7 +47,7 @@ export default Controller.extend({
           return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile);
         }
       }));
-
+      this.set('uploadedFiles', []);
       this.transitionToRoute('cases.case.subcases.overview');
     },
     nextStep() {
@@ -75,7 +75,9 @@ export default Controller.extend({
       uploadedFile.set('public', true);
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
-
+    selectMandatees(mandatees) {
+      this.set('selectedMandatees', mandatees);
+    },
     chooseDocumentType(uploadedFile, type) {
       uploadedFile.set('documentType', type.name || type.description);
     },
@@ -84,7 +86,7 @@ export default Controller.extend({
       $.ajax({
         method: "DELETE",
         url: '/files/' + file.id
-      }).then(() => {
+      }).then(function() {
         this.get('uploadedFiles').removeObject(file);
       })
     }

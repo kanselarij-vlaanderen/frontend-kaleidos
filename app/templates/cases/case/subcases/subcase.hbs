@@ -26,38 +26,40 @@
           <th></th>
         </tr>
       </thead>
-      {{#each (await model.documentVersions) as |document|}}
-        {{#each (await document.sortedDocuments) as |documentVersion|}}
+      <tbody>
+        {{#each (await model.documentVersions) as |document|}}
+          {{#each (await document.sortedDocuments) as |documentVersion|}}
+            <tr>
+              <td>
+                {{documentVersion.versionNumber}}
+              </td>
+              <td>
+                {{documentVersion.nameToDisplay}}
+              </td>
+              <td class="align-right">
+                <div
+                  class="vl-file-overview"
+                  {{action "downloadFile" documentVersion}}
+                >
+                  <i class="vl-icon vl-vi vl-vi-file-download"></i>
+                </div>
+              </td>
+            </tr>
+          {{/each}}
           <tr>
-            <td>
-              {{documentVersion.versionNumber}}
-            </td>
-            <td>
-              {{documentVersion.nameToDisplay}}
-            </td>
+            <td></td>
+            <td></td>
             <td class="align-right">
-              <div
-                class="vl-file-overview"
-                {{action "downloadFile" documentVersion}}
+              <button
+                class="vl-button vl-button--tertiary"
+                {{action "openUploadDialog" document}}
               >
-                <i class="vl-icon vl-vi vl-vi-file-download"></i>
-              </div>
+                Upload nieuwe versie
+              </button>
             </td>
           </tr>
         {{/each}}
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="align-right">
-            <button
-              class="vl-button vl-button--tertiary"
-              {{action "openUploadDialog" document}}
-            >
-              Upload nieuwe versie
-            </button>
-          </td>
-        </tr>
-      {{/each}}
+      </tbody>
     </table>
   {{else}}
     <p>

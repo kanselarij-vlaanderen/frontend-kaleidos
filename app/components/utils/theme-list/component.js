@@ -26,7 +26,11 @@ export default Component.extend({
       if (param === "") {
         this.set('themes', this.store.findAll('theme'));
       }
-    },
+    }
+  },
 
+  async didInsertElement() {
+    this._super(...arguments);
+    this.set('themes', this.store.findAll('theme'));
   }
 });

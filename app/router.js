@@ -14,7 +14,7 @@ Router.map(function () {
       this.route('subcases', { path: '/deeldossiers' }, function () {
         this.route('create');
         this.route('overview', { path: '' });
-        this.route('subcase', { path: ':subcaseId' });
+        this.route('subcase', { path: ':subcase_id' });
       });
     });
     this.route('overview', { path: '' });

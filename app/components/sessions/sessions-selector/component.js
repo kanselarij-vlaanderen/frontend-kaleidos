@@ -44,9 +44,6 @@ export default Component.extend({
 
 	async loadSessions() {
 		let sessions = await this.store.query('meeting', {
-			// filter: {
-			// 	':gt:plannedStart': "",
-			// },
 			sort: "number"
 		});
 		this.set('sessions', sessions);

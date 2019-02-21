@@ -9,11 +9,16 @@
   {{#if agendaitem.id}}
     <h6 class="vl-title vl-title--h6">
       {{number}}
-      .
+      . {{#each (await agendaitem.subcase.mandatees) as |mandatee|}}
+          <span>{{mandatee.title}}</span>
+        {{/each}}
     </h6>
     <h5 class="vl-title vl-title--h5">
       {{agendaitem.subcase.shortTitle}}
     </h5>
+     <h6 class="vl-title vl-title--h6">
+      Hoedanigheid: {{await agendaitem.subcase.case.type.label}}
+    </h6>
     <p class="c-long-title">
       {{agendaitem.subcase.title}}
     </p>
@@ -30,7 +35,6 @@
     </div>
     <div class="vl-u-display-flex c-attachments">
       {{#each (await agendaitem.subcase.documentVersions) as |documentVersion|}}
-        {{!-- {{#if (await document.documentVersions.lastObject.nameToDisplay)}} --}}
         <div
           class="vl-u-display-flex vl-u-flex-align-center c-attachment"
           {{action "downloadFile" documentVersion}}
@@ -41,10 +45,9 @@
             <i class="vl-badge__icon vl-vi vl-vi-file"></i>
           </div>
           <p>
-            {{capitalize documentVersion.nameToDisplay}}
+            {{documentVersion.nameToDisplay}}
           </p>
         </div>
-        {{!-- {{/if}} --}}
       {{/each}}
     </div>
     <div class="vl-u-display-flex vl-u-flex-space-between">

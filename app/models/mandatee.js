@@ -3,6 +3,7 @@ import DS from 'ember-data';
 const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
+	title: attr('string'),
 	priority: attr('string'),
 	start: attr('date'),
 	end: attr('date'),
@@ -14,5 +15,5 @@ export default Model.extend({
 	cases: hasMany('case'),
 	holds: belongsTo('mandate'),
 	person: belongsTo('person'),
-	state: belongsTo('mandatee-status')
+	// state: belongsTo('mandatee-status')
 });

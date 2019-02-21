@@ -1,7 +1,7 @@
 <div class="vl-form__group">
   <form class="vl-form" onsubmit={{action "createSubCase"}}>
     <h3 class="vl-title vl-title--h3">
-      Metadata controleren
+      {{t "buttons.create-subcase"}}
     </h3>
     {{#if isPartOne}}
       {{cases/forms/metadata-form
@@ -20,10 +20,12 @@
       }}
     {{else}}
       <div class="vl-form-grid vl-form-grid--is-stacked">
-        {{web-components/vl-form-label value="NAAM DEELDOSSIER"}}
+        {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
         {{web-components/vl-form-input value=title}}
-        {{web-components/vl-form-label value="AANVRAAG AGENDERING"}}
-        {{web-components/vl-form-input value=remark}}
+        {{!-- {{web-components/vl-form-label value="Aanvraag agendering"}}
+        {{web-components/vl-form-input value=remark}} --}}
+        {{web-components/vl-form-label value=(t "subcases.mandatee")}}
+        {{utils/mandate-selector chooseMandatee=(action "selectMandatees")}}
         <div class="vl-col--4-4">
           {{web-components/vl-form-label value=(t "cases.upload-file")}}
           {{file-uploader uploadedFile=(action "uploadedFile")}}

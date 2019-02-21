@@ -11,16 +11,16 @@
       {{#if (not currentAgenda.isFinal)}}
         {{#if showOptions}}
           {{#if isPostPonable}}
-          <button
-            class="vl-button vl-button--tertiary vl-button--narrow"
-            {{action "togglePostponed" agendaitem}}
-          >
-            {{#if (or agendaitem.extended (await agendaitem.postPonedToSession))}}
-              {{t "buttons.not-postpone"}}
-            {{else}}
-              {{t "buttons.postpone"}}
-            {{/if}}
-          </button>
+            <button
+              class="vl-button vl-button--tertiary vl-button--narrow"
+              {{action "togglePostponed" agendaitem}}
+            >
+              {{#if (or agendaitem.retracted (await agendaitem.postponedTo))}}
+                {{t "buttons.not-postpone"}}
+              {{else}}
+                {{t "buttons.postpone"}}
+              {{/if}}
+            </button>
           {{/if}}
           {{#if
             (await
@@ -66,7 +66,7 @@
     <h1>
       {{currentAgendaItem.subcase.title}}
     </h1>
-    <div class="modal--sessions-selector-container">
+    <div>
       <label class="vl-form__label">
         {{t "agenda-item.postpone-until"}}
       </label>
@@ -75,11 +75,14 @@
         chooseSession=(action "chooseSession")
       }}
     </div>
-    <div class="buttons">
-      <button {{action "postponeAgendaItem" agendaitem}}>
+    <div class="vl-action-group vl-action-group--align-center">
+      <button
+        class="vl-button vl-button--narrow"
+        {{action "postponeAgendaItem" agendaitem}}
+      >
         {{t "buttons.postpone"}}
       </button>
-      <button {{action "togglePostponed"}}>
+      <button class="vl-button vl-button--narrow" {{action "togglePostponed"}}>
         {{t "buttons.cancel"}}
       </button>
     </div>

@@ -28,12 +28,11 @@ export default Component.extend({
 		},
 
 		postponeAgendaItem(agendaitem) {
-
 			let currentSession = this.get('currentSession');
 			if (currentSession) {
 				agendaitem.set('postponedToSession', currentSession);
 			} else {
-				agendaitem.set('postponed', !agendaitem.postponed);
+				agendaitem.set('retracted', !agendaitem.retracted);
 			}
 			agendaitem.save().then(() => {
 				this.set('currentSession', null);

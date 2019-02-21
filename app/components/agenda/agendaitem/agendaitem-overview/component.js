@@ -9,7 +9,6 @@ export default Component.extend({
 	currentAgenda: alias('sessionService.currentAgenda'),
 	postponeTargetSession: null,
 	classNames: ["vl-layout-agenda__detail"],
-	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
 	isShowingPostponeModal: false,

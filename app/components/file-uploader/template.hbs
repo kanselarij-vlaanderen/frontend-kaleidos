@@ -6,14 +6,17 @@
     multiple=multipleFiles
     onfileadd=(action "uploadFile")
   }}
-    <i class="vl-vi vl-vi-paperclip" aria-hidden="true"></i>
-    <span>
-      {{t "file-uploader.add-attachements"}}
-    </span>
+    <em>
+      <i class="vl-vi vl-vi-paperclip" aria-hidden="true"></i>
+      <span>
+        {{t "file-uploader.add-attachements"}}
+      </span>
+    </em>
     {{#file-dropzone
       name="files"
       class="vl-upload__element__button__container"
-      tagName="a" as |dropzone queue|
+      tagName="a" 
+    as |dropzone queue|
     }}
       {{#if dropzone.active}}
         {{#if dropzone.valid}}

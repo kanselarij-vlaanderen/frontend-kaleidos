@@ -281,20 +281,26 @@ $icon-font-location: "/fonts/";
   justify-content: flex-end;
 }
 
-.vl-u-spacer {
-  margin-top: 3em;
+.vl-tabs__wrapper { 
+  margin-bottom:1em;
 }
 
 .vl-upload__element__label {
   text-decoration: none;
+
+  em {
+    display:block;
+  }
+
   a {
     text-decoration: none;
-  }
-    p {
     font-size: 1.2rem;
     color: #333332;
     text-decoration: none;
     text-align: center;
   }
-  
+}
+
+.mandatee-container {
+  width:75%;
 }

@@ -1,3 +1,48 @@
-<div class="cases-overview">
-  {{cases/case-item model=model}}
+{{cases/cases-filter}}
+<div class="vl-u-spacer-extended-l">
+  <h2 class="vl-title vl-title--h3">
+    {{t "case-item.my-cases"}}
+  </h2>
+  {{#data-table
+    content=(await model)
+    page=page
+    size=size
+    sort=sort
+    filter=filter
+    isLoading=isLoadingModel
+    fields="title created" 
+  as |t|
+  }}
+    {{#t.content as |c|}}
+      {{#c.header}}
+        {{th-sortable currentSorting=sort field="title" label="Dossiernaam"}}
+        <th class="data-table__header-title--sortable">
+          Status
+        </th>
+        {{th-sortable currentSorting=sort field="created" label="Aangemaakt op"}}
+        <th></th>
+      {{/c.header}}
+      {{#c.body as |row|}}
+        <td>
+          {{row.title}}
+        </td>
+        <td>
+          {{await row.latestSubcase.title}}
+        </td>
+        <td>
+          {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+        </td>
+        <td class="vl-u-align-right">
+          {{#link-to
+            "cases.case"
+            row.id
+            tagName="button"
+            class="vl-button vl-button--link vl-button--icon"
+          }}
+            <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
+          {{/link-to}}
+        </td>
+      {{/c.body}}
+    {{/t.content}}
+  {{/data-table}}
 </div>
