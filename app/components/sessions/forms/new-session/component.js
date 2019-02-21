@@ -26,7 +26,7 @@ export default Component.extend({
         });
 
 				await agenda.save();
-				// await $.get('http://localhost/session-service/assignNewSessionNumbers');
+				await $.get('/session-service/assignNewSessionNumbers');
 				this.cancelForm();
 			});
 		},
