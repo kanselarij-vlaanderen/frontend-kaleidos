@@ -26,8 +26,8 @@ export default Service.extend({
 			);
 		}).then(() => {
 			// eslint-disable-next-line ember/jquery-ember-run
-			agenda.notifyPropertyChange('agendaitems');
-			return agenda;
+			newAgenda.notifyPropertyChange('agendaitems');
+			return newAgenda;
 		});			
 	},
 
