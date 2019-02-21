@@ -1,19 +1,17 @@
 <div class="cases--subcase">
   {{#if model}}
     <div class="cases--subcase-header">
-      <h4>
-        DEELDOSSIERS
-      </h4>
+      <h4></h4>
       <h5>
         {{model.title}}
       </h5>
       <h6>
         {{model.shortTitle}}
       </h6>
-      {{model.documentVersions.length}}
-      documents
     </div>
-    {{! TODO: REFACTOR }}
+    <h3 class="vl-title vl-title--h3">
+      Documenten van de procedurestap
+    </h3>
     <table class="vl-data-table">
       <thead>
         <tr>
@@ -28,7 +26,7 @@
       </thead>
       <tbody>
         {{#each (await model.documentVersions) as |document|}}
-          {{#each (await document.sortedDocuments) as |documentVersion|}}
+          {{#each (await document.document.sortedDocuments) as |documentVersion|}}
             <tr>
               <td>
                 {{documentVersion.versionNumber}}
@@ -68,38 +66,35 @@
   {{/if}}
 </div>
 {{#if isUploadingNewVersion}}
-  {{#modal-dialog
-    class="vl-custom"
-    onClose=(action "openUploadDialog")
-    targetAttachment="center"
-    translucentOverlay=true
+  {{#web-components/vl-modal
+    closeModal=(action "openUploadDialog")
+    isOverlay=true
   }}
-    {{input
-      class="vl-input-field vl-input-field__input"
-      value=fileName
-      placeholder="FileName"
-      autocomplete="off"
-    }}
-    {{#if (not uploadedFile)}}
-      {{file-uploader
-        multipleFiles=false
-        uploadedFile=(action "getUploadedFile")
-      }}
-    {{else}}
-      <div class="document">
-        {{fa-icon "file"}}
-        {{await uploadedFile.name}}
-        <a href="#" {{action "removeFile"}}>
-          {{fa-icon "remove"}}
-        </a>
-      </div>
-    {{/if}}
-    <div class="buttons">
+    {{web-components/vl-form-label value="Naam van bestand"}}
+    {{web-components/vl-form-input width="4" value=fileName}}
+    <div class="vl-col--4-4">
+      {{web-components/vl-form-label value="Bijlagen"}}
+      {{#if (not uploadedFile)}}
+        {{file-uploader
+          multipleFiles=false
+          uploadedFile=(action "getUploadedFile")
+        }}
+      {{else}}
+        <div class="document">
+          {{fa-icon "file"}}
+          {{await uploadedFile.name}}
+          <a href="#" {{action "removeFile" uploadedFile}}>
+            {{fa-icon "remove"}}
+          </a>
+        </div>
+      {{/if}}
+    </div>
+    <div class="vl-action-group vl-action-group--align-center">
       <button
         class="vl-button vl-button--tertiary"
         {{action "uploadNewVersion"}}
       >
-        Upload
+        {{t "file-uploader.uploading"}}
       </button>
       <button
         class="vl-button vl-button--tertiary"
@@ -108,5 +103,5 @@
         {{t "buttons.cancel"}}
       </button>
     </div>
-  {{/modal-dialog}}
+  {{/web-components/vl-modal}}
 {{/if}}

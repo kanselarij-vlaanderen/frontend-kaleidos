@@ -5,7 +5,8 @@
       (await selectedAgendaItem)
       class="c-agenda-item"
     }}"
-  {{action "selectAgendaItem" agendaitem}}>
+  {{action "selectAgendaItem" agendaitem}}
+>
   {{#if agendaitem.id}}
     <h6 class="vl-title vl-title--h6">
       {{number}}
@@ -25,10 +26,10 @@
     </p>
     <div class="agenda-sub-options">
       <p class="agenda-postponed-option">
-        {{#if agendaitem.postponed}}
+        {{#if agendaitem.retracted}}
           {{t "agenda-item.postponed"}}
         {{/if}}
-        {{#if (await agendaitem.postponedToSession) as |sess|}}
+        {{#if (await agendaitem.postponed) as |sess|}}
           {{t "agenda-item.postponed-until"}}
           {{moment-format sess.plannedStart "dddd DD-MM-YYYY"}}
         {{/if}}
@@ -53,7 +54,7 @@
     </div>
     <div class="vl-u-display-flex vl-u-flex-space-between">
       <span class="c-agenda-item__meta">
-        2de principiele goedkeuring
+        {{!-- 2de principiele goedkeuring --}}
       </span>
       <div class="vl-u-display-flex default">
         <i class="vl-vi vl-vi-check-small"></i>
