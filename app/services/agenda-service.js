@@ -51,7 +51,7 @@ export default Service.extend({
 			created: new Date(),
 			subcase: subCase,
 			agenda: selectedAgenda,
-			priority: -1
+			priority: null
 		});
 		return agendaitem.save().then(agendaitem => {
 			selectedAgenda.notifyPropertyChange('agendaitems');
