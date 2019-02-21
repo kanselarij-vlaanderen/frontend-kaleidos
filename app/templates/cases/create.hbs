@@ -1,66 +1,42 @@
-<div>
-  <div class="cases--header-tile cases--sub-file-header">
-    <h2>
+<div class="vl-u-spacer-extended-l">
+  <div class="vl-form__group">
+    <h3 class="vl-title vl-title--h3">
       {{t "cases.new-case"}}
-    </h2>
-  </div>
-</div>
-<div class="cases--new">
-  <form onsubmit={{action "createCase"}}>
-    {{#if isPartOne}}
+    </h3>
+    <form class="vl-form" onsubmit={{action "createCase"}}>
+      {{!-- {{#if isPartOne}} --}}
+      {{cases/case-types typeChanged=(action "chooseType")}}
       {{cases/forms/metadata-form
         themes=themes
         step=(action "nextStep")
-        chooseTheme=(action "chooseTheme")
-        chooseType=(action "chooseType")
         shortTitleChange=(action "shortTitleChange")
         titleChange=(action "titleChange")
         statusChange=(action "statusChange")
-        selectedThemes=selectedThemes
         shortTitle=shortTitle
         title=title
         status=status
-        selectedType=selectedType
+        multipleSteps=false
       }}
-    {{else}}
-      <div class="cases--new-item">
-        <label class="vl-form__label">
-          {{t "cases.contact-person"}}
-        </label>
-        {{#power-select
-          options=contacts
-          class="cases--new-item-input"
-          selected=contact
-          searchField="label"
-          search=(perform searchContact)
-          oninput=(action "resetValue")
-          onchange=(action "chooseContact") 
-        as |capacity|
-        }}
-          {{capacity.label}}
-        {{/power-select}}
+      {{!-- {{else}} --}}
+      <div class="vl-form-grid vl-form-grid--is-stacked">
+        <div class="vl-col--2-4 vl-push--4-4">
+          {{!-- <button
+            type="button"
+            class="vl-button vl-button--tertiary"
+            {{action "previousStep"}}
+          >
+            {{t "buttons.previous-step"}}
+          </button> --}}
+          <button
+            type="submit"
+            class="vl-button vl-button--tertiary"
+            data-test-rr="sign-up-button"
+          >
+            {{t "buttons.create-case"}}
+          </button>
+        </div>
       </div>
-      <div class="cases--new-item">
-        <label class="vl-form__label">
-          {{t "cases.related-cases"}}
-        </label>
-        {{input
-          class="vl-input-field"
-          type="text"
-          id="related-cases"
-          value=related_cases
-        }}
-      </div>
-      <button class="vl-button vl-button--tertiary" {{action "previousStep"}}>
-        {{t "buttons.previous-step"}}
-      </button>
-      <button
-        type="submit"
-        class="vl-button vl-button--tertiary"
-        data-test-rr="sign-up-button"
-      >
-        {{t "buttons.create-case"}}
-      </button>
-    {{/if}}
-  </form>
+      {{!-- {{/if}} --}}
+    </form>
+  </div>
 </div>

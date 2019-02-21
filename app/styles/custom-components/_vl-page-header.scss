@@ -1,0 +1,32 @@
+/* ==========================================================================
+  vl-page-header
+  ========================================================================== */
+
+.vl-page-header {
+  padding: 1.5rem 4rem;
+  border-bottom: 1px solid $ghost;
+
+  .vl-page-header__title {
+    font-family: flanders-serif, serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+  }
+
+  .vl-page-header__title--bordered {
+    border-bottom: 1px solid $ghost;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .vl-page-header__sub {
+    display: flex;
+    align-items: center;
+
+    .vl-view-switch {
+      border-left: 1px solid $ghost;
+    }
+  }
+}
+

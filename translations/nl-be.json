@@ -20,6 +20,7 @@
 		"news-item-title": "Kort bestek",
 		"no-decision": "Nog geen beslissing",
 		"no-news-item": "Nog geen kort bestek",
+		"preparation-text": "Voorbereidende tekst voor de persagenda",
 		"notes": "Notulen"
 	},
 	"agendaitem-search": {
@@ -28,7 +29,7 @@
 	"agendas": {
 		"nav-title": "Historiek",
 		"announcements-subtitle": "Mededelingen",
-		"agendaitems-subtitle": "Agenda items"
+		"agendaitems-subtitle": "Agendapunten"
 	},
 	"announcement": {
 		"title": "titel",
@@ -37,6 +38,7 @@
 	},
 	"buttons": {
 		"add": "Toevoegen",
+		"next":"Volgende",
 		"add-case": "Dossier toevoegen",
 		"add-comment": "Opmerking toevoegen",
 		"create-announcement": "Mededeling toevoegen",
@@ -50,7 +52,7 @@
 		"agenda-unlock": "Agenda unlocken",
 		"cancel": "Annuleren",
 		"create-case": "Dossier aanmaken",
-		"create-subcase": "Nieuw deeldossier",
+		"create-subcase": "Nieuwe procedurestap",
 		"delete": "Verwijderen",
 		"new-session": "Nieuwe zitting",
 		"previous-step": "Vorige Stap",
@@ -69,14 +71,15 @@
 	"cases": {
 		"title": "Dossier",
 		"cases": "dossiers",
-		"new-case": "NIEUW DOSSIER",
+		"new-case": "Nieuw dossier",
 		"contact-person": "CONTACTPERSOON",
 		"related-cases": "GERELATEERDE DOSSIERS",
-		"subcases": "DEELDOSSIERS",
+		"subcases": "Procedurestappen",
 		"upload-file": "Files uploaden"
 	},
 	"case-item": {
-		"not-agreed": "Niet Akkoord"
+		"not-agreed": "Niet Akkoord",
+		"my-cases": "Mijn dossiers"
 	},
 	"cases-search": {
 		"cases-number": "Nummer Dossier",
@@ -91,7 +94,8 @@
 	},
 	"edit-decision": {
 		"approved": "Goedgekeurd",
-		"decision-text": "Tekst beslissing"
+		"decision-text": "Tekst beslissing",
+		"short-title": "Korte titel"
 	},
 	"edit-item": {
 		"content": "Inhoud",
@@ -105,12 +109,13 @@
 		"dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
 		"files": "bestanden",
 		"invalid-type": "Fout bestandstype.",
-		"uploading": "Uploaden"
+		"uploading": "Uploaden",
+		"add-attachements": "Bijlage toevoegen"
 	},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
 		"short-title": "KORTE TITEL",
-		"status": "TOELICHTING BEHANDELINGSSTATUS",
+		"status": "Hoedanigheid",
 		"themes": "THEMAS",
 		"title": "LANGE TITEL",
 		"public": "Openbaar"
@@ -129,7 +134,9 @@
 	},
 	"subcases": {
 		"th-select-all": "Selecteer alles",
-		"document-type": "Document type"
+		"document-type": "Document type",
+		"mandatee": "Hoedanigheid",
+		"name-subcase": "Naam procedurestap"
 	},
 	"web-components": {
 		"loading-text": "Pagina is aan het laden",

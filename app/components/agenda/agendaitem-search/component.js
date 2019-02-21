@@ -23,7 +23,7 @@ export default Component.extend({
 
 		resetValue(param) {
 			if (param == "") {
-				this.set('subcases',  this.store.query('subcase',{ query: {
+				this.set('subcases', this.store.query('subcase',{ query: {
 				}}));
 			}
 		},

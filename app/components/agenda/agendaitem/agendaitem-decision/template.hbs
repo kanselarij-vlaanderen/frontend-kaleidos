@@ -14,7 +14,7 @@
       {{else}}
         <button
           class="vl-button vl-button--tertiary vl-button--icon"
-          {{action "saveChanges" (await agendaitem)}}
+          {{action "saveChanges" agendaitem}}
         >
           <i class="vl-vi vl-vi-save"></i>
         </button>
@@ -33,8 +33,9 @@
   {{#if (and (await agendaitem.decision) isEditing)}}
     {{decision/edit-decision decision=agendaitem.decision}}
   {{else}}
+    <h5>{{await agendaitem.decision.shortTitle}}</h5>
     <p>
-      {{await agendaitem.decision.text}}
+      {{await agendaitem.decision.description}}
     </p>
   {{/if}}
 </div>

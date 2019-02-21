@@ -6,6 +6,7 @@
           {{t "sessions-selector.agenda-of"}}
         </h1>
         {{sessions/sessions-selector
+          sessions=sessions
           currentSession=currentSession
           chooseSession=(action "chooseSession")
         }}
@@ -14,12 +15,11 @@
         <p>
           {{#if currentAgendaItems}}
             {{currentAgendaItems.length}}
-            {{t "agenda.agendaitems"}}
+            {{t "agenda.agendaitems"}},
           {{else}}
             0
-            {{t "agenda.agendaitems"}}
+            {{t "agenda.agendaitems"}},
           {{/if}}
-          ,
           {{#if (await currentAgenda.announcements)}}
             {{await currentAgenda.announcements.length}}
             {{t "agenda.announcements"}}
@@ -42,7 +42,7 @@
           >
             {{t "buttons.new-session"}}
           </button>
-          {{#if (not currentAgenda.locked)}}
+          {{#if (not currentAgenda.isFinal)}}
             <button
               class="vl-button vl-button--narrow"
               {{action "lockAgenda" currentSession}}
@@ -50,7 +50,7 @@
               {{t "buttons.agenda-approve"}}
             </button>
           {{/if}}
-          {{#if (not currentAgenda.locked)}}
+          {{#if (not currentAgenda.isFinal)}}
             <button
               class="vl-button vl-button--narrow"
               {{action "lockAgenda" currentAgenda}}
@@ -73,8 +73,8 @@
     </div>
   </div>
 </div>
-{{!-- {{#if creatingNewSession}}
+{{#if creatingNewSession}}
   <div class="files--header-tile files--sub-file-header">
     {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
   </div>
-{{/if}} --}}
+{{/if}}

@@ -1,0 +1,10 @@
+{{#power-select-multiple
+  options=mandatees
+  selected=selectedMandatees
+  search=(perform searchTheme)
+  oninput=(action "resetValueIfEmpty")
+  onchange=(action "chooseMandatee") 
+as |mandatee|
+}}
+  {{mandatee.title}}
+{{/power-select-multiple}}

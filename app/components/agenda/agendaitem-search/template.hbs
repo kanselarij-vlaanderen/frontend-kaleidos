@@ -1,21 +1,28 @@
 <div class="vl-u-display-flex vl-u-flex-space-between">
-  {{#power-select
+  {{!-- {{#power-select
     options=subcases
     placeholder=(t "agendaitem-search.search-placeholder")
     selected=currentSession
-    searchField="plannedstart"
+    searchField="plannedStart"
     search=(perform searchTask)
     oninput=(action "resetValue")
-    onchange=(action "chooseItem") as |agendaitem|
+    onchange=(action "chooseItem") 
+  as |agendaitem|
   }}
     {{agendaitem.title}}
-  {{/power-select}}
+  {{/power-select}} --}}
   <div class="vl-action-group">
-    <button class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow" {{action "navigateToSubCases"}}>
+    <button
+      class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+      {{action "navigateToSubCases"}}
+    >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
       {{t "buttons.add-case"}}
     </button>
-    <button class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow" {{action "navigateToCreateAnnouncement"}}>
+    <button
+      class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+      {{action "navigateToCreateAnnouncement"}}
+    >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
       {{t "buttons.create-announcement"}}
     </button>

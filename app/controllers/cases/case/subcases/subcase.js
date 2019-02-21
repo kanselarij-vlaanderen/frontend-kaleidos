@@ -7,16 +7,16 @@ export default Controller.extend(FileSaverMixin, {
   isUploadingNewVersion: false,
   uploadedFile: null,
   fileName: null,
-  store:inject(),
-  documentToUploadNewVersionOf:null,
+  store: inject(),
+  documentVersionToUse: null,
+  isEditingMandatees: false,
+  mandatees:null,
 
   actions: {
-    openUploadDialog(document) {
-      if(document && document.id) {
-        this.set('documentToUploadNewVersionOf', document);
-      }
+    async openUploadDialog(documentVersion) {
+      this.set('documentVersionToUse', documentVersion);
       const uploadedFile = this.get('uploadedFile')
-      if(uploadedFile && uploadedFile.id) {
+      if (uploadedFile && uploadedFile.id) {
         this.deleteFile(uploadedFile.id);
       }
       this.toggleProperty('isUploadingNewVersion');
@@ -28,44 +28,46 @@ export default Controller.extend(FileSaverMixin, {
     },
 
     removeFile() {
-      this.deleteFile(this.get('uploadedFile.id'));
+      $.ajax({
+        method: "DELETE",
+        url: '/files/' + this.get('uploadedFile.id')
+      });
+      this.set('uploadedFile', null);
     },
 
     async downloadFile(documentVersion) {
       let file = await documentVersion.get('file');
       $.ajax(`/files/${file.id}?download=${file.filename}`, {
         method: 'GET',
-        dataType: 'arraybuffer', // or 'blob'
+        dataType: 'arraybuffer',
         processData: false
       })
         .then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
     },
 
     async uploadNewVersion() {
-      const document = await this.get('documentToUploadNewVersionOf');
-      const documentVersions = await document.get('documentVersions');
+      const documentVersion = await this.get('documentVersionToUse');
+      const document = await documentVersion.get('document');
+      const documentVersions = await this.store.query('document-version', {
+        filter: {
+          document: {id: document.id}
+        }
+      })
       const file = this.get('uploadedFile');
       let newDocumentVersion = this.store.createRecord('document-version',
-      {
-        file: file,
-        versionNumber: documentVersions.length + 1 ,
-        document: document,
-        chosenFileName: this.get('fileName') || file.fileName,
-        created: new Date()
-      });
+        {
+          file: file,
+          versionNumber: documentVersions.length + 1,
+          document: document,
+          chosenFileName: this.get('fileName') || file.fileName || file.name,
+          created: new Date()
+        });
       await newDocumentVersion.save();
       this.set('uploadedFile', null);
-      this.set('documentToUploadNewVersionOf', null);
+      this.set('documentVersionToUse', null);
       this.set('fileName', null);
+      this.set('isUploadingNewVersion', false);
+      document.hasMany('documentVersions').reload();
     }
-  },
-
-  deleteFile(id) {
-    $.ajax({
-      method: "DELETE",
-      url: '/files/' + id
-    }).then(() => {
-      this.set('uploadedFile', null);
-    })
-  },
+  }
 });

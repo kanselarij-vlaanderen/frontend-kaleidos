@@ -9,11 +9,12 @@ export default Component.extend({
 
 	actions: {
 		async addNewsItem(agendaitem){
-      let news = this.store.createRecord("news-item", {
-        agendaItem: agendaitem
+      let news = this.store.createRecord("newsletter-info", {
+				agendaitem: agendaitem,
+				created: new Date()
       });
-      news.save().then(newAgendaitem => {
-				agendaitem.set('news-item',newAgendaitem);
+      news.save().then(newsLetter => {
+				agendaitem.set('newsletterInfo',newsLetter);
 			});
 		},
 
@@ -22,7 +23,7 @@ export default Component.extend({
 		},
 
 		async saveChanges(agendaitem) {
-			let newsItem = await agendaitem.get('newsItem');
+			let newsItem = await agendaitem.get('newsletterInfo');
 			newsItem.save().then(() => {
 				this.toggleProperty('isEditing');
 			})

@@ -4,12 +4,11 @@ import { computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
 export default Component.extend({
+	classNames: ["vl-layout-agenda__detail"],
+	currentAgenda: alias('sessionService.currentAgenda'),
 	sessionService: inject(),
 	store: inject(),
-	currentAgenda: alias('sessionService.currentAgenda'),
 	postponeTargetSession: null,
-	classNames: ["vl-layout-agenda__detail"],
-	tagName: "div",
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
 	isShowingPostponeModal: false,
@@ -41,12 +40,12 @@ export default Component.extend({
 			this.toggleProperty('showOptions');
 		},
 
-		async togglePostponed(agendaitem) {
+		togglePostponed(agendaitem) {
 			if (agendaitem) {
-				let isPostponed = await agendaitem.get('isPostponed');
+				let isPostponed = agendaitem.get('isPostponed');
 				if (isPostponed) {
-					agendaitem.set('postponed', false);
-					agendaitem.set('postponedToSession', null);
+					agendaitem.set('retracted', false);
+					agendaitem.set('postponed', null);
 					agendaitem.save();
 				} else {
 					this.toggleProperty('isShowingPostponeModal');
@@ -54,18 +53,23 @@ export default Component.extend({
 			}
 		},
 
-		async postponeAgendaItem(agendaitem) {
-			let target = await this.get('postponeTargetSession');
-
-			if (target) {
-				agendaitem.set('postponedToSession', target);
+		postponeAgendaItem(agendaitem) {
+			let currentSession = this.get('postponeTargetSession');
+			if (currentSession) {
+				const postPonedObject = this.store.createRecord('postponed', {
+					meeting: currentSession,
+					agendaitem: agendaitem
+				});
+				postPonedObject.save().then(postponedTo => {
+					agendaitem.set('postponed', postponedTo);
+				})
+			} else {
+				agendaitem.set('retracted', !agendaitem.retracted);
 			}
-			agendaitem.set('postponed', true);
-
-			await agendaitem.save();
-
-			this.set('postponeTargetSession', null);
-			this.set('isShowingPostponeModal', false);
+			agendaitem.save().then(() => {
+				this.set('postponeTargetSession', null);
+				this.toggleProperty('isShowingPostponeModal')
+			});
 		},
 
 		chooseSession(session) {

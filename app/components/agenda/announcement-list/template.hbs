@@ -1,9 +1,11 @@
-{{#if (is-empty (await announcements)) }}
+{{#if (is-empty (await announcements))}}
   <div class="no-data-container">
-    {{t 'announcement.no-announcements'}}
+    {{t "announcement.no-announcements"}}
   </div>
 {{else}}
-  <h3>{{t "agendas.announcements-subtitle"}}</h3>
+  <h5 class="vl-title vl-title--h5 vl-u-spacer">
+    {{t "agendas.announcements-subtitle"}}
+  </h5>
   {{#each (await announcements) as |announcement|}}
     {{agenda/announcement-list/list-item announcement=announcement}}
   {{/each}}

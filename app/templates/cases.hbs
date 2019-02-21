@@ -1,21 +1,2 @@
-<div class="cases--header">
-  <div class="cases--info">
-    <h1>
-      {{t "navigation.cases"}}
-    </h1>
-    <p>
-      {{await model.length}}
-      {{t "cases.cases"}}
-    </p>
-  </div>
-  <div>
-    {{#link-to "cases.create"}}
-      <button class="vl-button vl-button--tertiary">
-        {{t "buttons.add-case"}}
-      </button>
-    {{/link-to}}
-  </div>
-</div>
-<div class="cases--content">
-  {{outlet}}
-</div>
+{{cases/cases-header cases=model}}
+{{outlet}}

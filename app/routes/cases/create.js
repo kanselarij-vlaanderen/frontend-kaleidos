@@ -4,8 +4,8 @@ export default Route.extend({
   beforeModel() {
     this._super(...arguments);
   },
-  model() {
-    return this.store.findAll('capacity');
-  },
+  // model() {
+  //   return this.store.findAll('case-type');
+  // },
 });
 

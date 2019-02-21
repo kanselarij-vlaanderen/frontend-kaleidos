@@ -1,13 +1,27 @@
-<div class="cases--header-tile cases--sub-file-header">
-  <h2>
-    {{t "cases.subcases"}}
-  </h2>
-  {{#link-to "cases.case.subcases.create"}}
-    <button class="vl-button vl-button--tertiary">
-      {{t "buttons.create-subcase"}}
-    </button>
-  {{/link-to}}
+<div
+  class="vl-u-spacer-extended-left-l vl-u-spacer-extended-right-l vl-u-spacer-extended-top-s"
+>
+  <div class="vl-toolbar">
+    <div class="vl-toolbar__left">
+      <div class="vl-toolbar__item">
+        <h3 class="vl-title vl-title--h3">
+          {{t "cases.subcases"}}
+        </h3>
+      </div>
+    </div>
+    <div class="vl-toolbar__right">
+      {{#link-to "cases.case.subcases.create"}}
+        <button class="vl-button vl-button--narrow vl-button--icon-before">
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            aria-hidden="true"
+          ></i>
+          {{t "buttons.create-subcase"}}
+        </button>
+      {{/link-to}}
+    </div>
+  </div>
 </div>
-<div class="cases--subcases">
+<div class="vl-u-spacer-extended-l">
   {{outlet}}
 </div>

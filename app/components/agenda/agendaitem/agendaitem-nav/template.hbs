@@ -8,7 +8,7 @@
     {{t "buttons.agendaitem-comment"}}
   </a>
 </li>
-{{#if (or (not agendaitem.extended) (not agendaitem.postponedToSession))}}
+{{#if (or (not agendaitem.retracted) (not agendaitem.postponed))}}
   <li class="vl-tab">
     <a
       href="#"

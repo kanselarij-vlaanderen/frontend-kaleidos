@@ -117,7 +117,7 @@ $custom-easing: cubic-bezier(1, .1, 0, 0.9);
   &--active {
     @include respond-to(small) {
       opacity: 1;
-      z-index: z("overlay");
+      z-index: 5;
     }
   }
 }
@@ -129,7 +129,7 @@ $custom-easing: cubic-bezier(1, .1, 0, 0.9);
   min-width: 23rem;
   max-width: 90vw;
   max-height: 300px;
-  z-index: z("dropdown");
+  z-index: 5;
 
   @include respond-to(small) {
     max-height: 65vh;
@@ -140,7 +140,7 @@ $custom-easing: cubic-bezier(1, .1, 0, 0.9);
     bottom: 0;
     left: 0;
     display: none;
-    z-index: z("popover");
+    z-index: 5;
     transform: translateY(120%);
   }
 

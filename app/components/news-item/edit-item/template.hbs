@@ -1,43 +1,29 @@
-<form autocomplete="off" class="edit-news-item-form">
-  <p>
-    <div class="label">
-      {{t "edit-item.title"}}
+<form autocomplete="off" class="vl-form__group">
+  <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right">
+    {{web-components/vl-form-label value=(t "edit-item.title")}}
+    {{web-components/vl-form-input value=newsItem.title}}
+    {{web-components/vl-form-label value=(t "edit-item.sub-title")}}
+    {{web-components/vl-form-input value=newsItem.subtitle}}
+    {{web-components/vl-form-label value=(t "edit-item.content")}}
+    <div class="vl-col--3-4 vl-col--1-1--s">
+      {{textarea class="vl-textarea vl-textarea--block" value=newsItem.text}}
     </div>
-    {{input class="vl-input-field vl-input-field__input" value=newsItem.title}}
-  </p>
-  <p>
-    <div class="label">
-      {{t "edit-item.sub-title"}}
+    {{web-components/vl-form-label value=(t "edit-item.date-publication")}}
+    <div class="vl-col--3-4 vl-col--1-1--s">
+      {{pikaday-input
+        theme="pikaday-session"
+        class="vl-input-field vl-input-field__input"
+        useUTC=true
+        value=newsItem.publicationDate
+        onSelection=(action "updatePublicationDate")
+      }}
     </div>
-    {{input
-      class="vl-input-field vl-input-field__input"
-      value=newsItem.subtitle
-      autocomplete="off"
-    }}
-  </p>
-  {{! TODO FIX THIS ERROR }}
-  {{!-- {{t "edit-item.content"}}
-  {{textarea class="vl-input-field vl-input-field__input" value=newsItem.content}} --}}
-  <p>
-    <div class="label">
-      {{t "edit-item.date-publication"}}
+    {{web-components/vl-form-label value=(t "edit-item.themes")}}
+    <div class="vl-col--3-4 vl-col--1-1--s">
+      {{utils/theme-list
+        chooseTheme=(action "chooseTheme")
+        selectedThemes=newsItem.themes
+      }}
     </div>
-    {{pikaday-input
-      theme="pikaday-session"
-      class="vl-input-field vl-input-field__input"
-      useUTC=true
-      value=newsItem.publicationDate
-      onSelection=(action "updatePublicationDate")
-    }}
-  </p>
-  <p>
-    <div class="label">
-      {{t "edit-item.themes"}}
-    </div>
-    {{utils/theme-list
-      chooseTheme=(action "chooseTheme")
-      selectedThemes=newsItem.themes
-    }}
-  </p>
+  </div>
 </form>
-{{yield}}

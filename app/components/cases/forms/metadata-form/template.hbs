@@ -1,69 +1,38 @@
-<div class="cases--new-item">
-  <label class="vl-form__label">
-    {{t "metadata-form.short-title"}}
-  </label>
-  {{input
-    type="text"
-    id="shortTitle"
-    class="vl-input-field"
-    input=(action "shortTitleChange")
-    value=shortTitle
-  }}
+<div class="vl-form-grid vl-form-grid--is-stacked">
+  {{web-components/vl-form-label value=(t "metadata-form.short-title")}}
+  <div class="vl-col--3-4 vl-col--1-1--s">
+    {{input
+      type="text"
+      id="shortTitle"
+      class="vl-input-field vl-input-field--block"
+      input=(action "shortTitleChange")
+      value=shortTitle
+    }}
+  </div>
+  {{web-components/vl-form-label value=(t "metadata-form.title")}}
+  <div class="vl-col--3-4 vl-col--1-1--s">
+    {{textarea
+      class="vl-textarea vl-textarea--block"
+      key-down=(action "titleChange")
+      value=title
+    }}
+  </div>
+  {{! TODO: SELECT current subcase (not in designs yet) }}
+  {{!-- {{web-components/vl-form-label value=(t "metadata-form.status")}}
+  <div class="vl-col--3-4 vl-col--1-1--s">
+    {{input
+      class="vl-input-field vl-input-field--block"
+      type="text"
+      id="remark"
+      onChange=(action "statusChange")
+      value=status
+    }}
+  </div> --}}
+  {{#if multipleSteps}}
+    <div class="vl-col--3-4 vl-push--3-3">
+      <button class="vl-button vl-button--tertiary" {{action "step"}}>
+        {{t "buttons.next-step"}}
+      </button>
+    </div>
+  {{/if}}
 </div>
-<div class="cases--new-item">
-  <label class="vl-form__label">
-    {{t "metadata-form.title"}}
-  </label>
-  {{textarea
-    id="title"
-    class="vl-textarea"
-    key-down=(action "titleChange")
-    value=title
-  }}
-</div>
-<div class="cases--new-item">
-  <label class="vl-form__label">
-    {{t "metadata-form.status"}}
-  </label>
-  {{input
-    class="vl-input-field"
-    type="text"
-    id="remark"
-    onChange=(action "statusChange")
-    value=status
-  }}
-</div>
-<div class="cases--new-item">
-  <label class="vl-form__label">
-    {{t "metadata-form.themes"}}
-  </label>
-  {{#power-select-multiple
-    options=themes
-    class="vl-input-field"
-    selected=selectedThemes
-    searchField="naam"
-    search=(perform searchTheme)
-    oninput=(action "resetValue")
-    onchange=(action "chooseTheme") 
-  as |theme|
-  }}
-    {{theme.naam}}
-  {{/power-select-multiple}}
-</div>
-<div class="cases--new-item">
-  <label class="vl-form__label">
-    {{t "metadata-form.news-item-label"}}
-  </label>
-  {{#power-select
-    options=types
-    selected=selectedType
-    class="vl-input-field"
-    onchange=(action "chooseType") 
-  as |type|
-  }}
-    {{type}}
-  {{/power-select}}
-</div>
-<button class="vl-button vl-button--tertiary" {{action "step"}}>
-  {{t "buttons.next-step"}}
-</button>

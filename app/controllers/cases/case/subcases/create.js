@@ -4,6 +4,7 @@ import $ from 'jquery';
 
 export default Controller.extend({
   uploadedFiles: [],
+  selectedMandatees: [],
   part: 1,
   isPartOne: computed('part', function () {
     return this.get('part') === 1;
@@ -26,10 +27,17 @@ export default Controller.extend({
   actions: {
     async createSubCase(event) {
       event.preventDefault();
-      const { title, shortTitle, remark, confidential } = this;
+      const { title, shortTitle } = this;
       const caze = this.store.peekRecord('case', this.model.id);
-      const date = new Date();
-      let subcase = await this.store.createRecord('subcase', { title, shortTitle, remark, case: caze, created: date, modified: date, confidential });
+      let subcase = await this.store.createRecord('subcase', 
+      { 
+        title, 
+        shortTitle, 
+        showAsRemark: false, 
+        case: caze, 
+        created: new Date(), 
+        mandatees: this.get('selectedMandatees')
+      });
 
       let createdSubCase = await subcase.save();
       let uploadedFiles = this.get('uploadedFiles');
@@ -39,10 +47,7 @@ export default Controller.extend({
           return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile);
         }
       }));
-
-      await caze.get('subcases').pushObject(createdSubCase);
-
-      caze.save();
+      this.set('uploadedFiles', []);
       this.transitionToRoute('cases.case.subcases.overview');
     },
     nextStep() {
@@ -70,7 +75,9 @@ export default Controller.extend({
       uploadedFile.set('public', true);
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
-
+    selectMandatees(mandatees) {
+      this.set('selectedMandatees', mandatees);
+    },
     chooseDocumentType(uploadedFile, type) {
       uploadedFile.set('documentType', type.name || type.description);
     },
@@ -79,7 +86,7 @@ export default Controller.extend({
       $.ajax({
         method: "DELETE",
         url: '/files/' + file.id
-      }).then(() => {
+      }).then(function() {
         this.get('uploadedFiles').removeObject(file);
       })
     }
@@ -87,15 +94,15 @@ export default Controller.extend({
 
   async createNewDocumentWithDocumentVersion(subcase, file) {
     let document = await this.store.createRecord('document', {
-      subcase: subcase,
       created: new Date(),
       public: file.public,
-      documentType: file.get('documentType')
+      // documentType: file.get('documentType')
     });
     document.save().then(async(createdDocument) => {
       delete file.public;
       let documentVersion = await this.store.createRecord('document-version', {
         document: createdDocument,
+        subcase: subcase,
         created: new Date(),
         versionNumber: 1,
         file:file,
