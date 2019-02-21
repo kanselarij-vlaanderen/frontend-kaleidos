@@ -12,27 +12,35 @@ export default Service.extend({
 			created: new Date()
 		});
 
-		return new Promise((resolve, reject) => {
-			newAgenda.save().then(agenda => {
-				$.ajax(
-					{
-						method: "POST",
-						url: '/agenda-approve/approveAgenda',
-						data: {
-							newAgendaId: agenda.id,
-							oldAgendaId: oldAgenda.id,
-							currentSessionDate: currentSession.plannedStart,
-						}
+		return newAgenda.save().then(agenda => {
+			return $.ajax(
+				{
+					method: "POST",
+					url: '/agenda-approve/approveAgenda',
+					data: {
+						newAgendaId: agenda.id,
+						oldAgendaId: oldAgenda.id,
+						currentSessionDate: currentSession.plannedStart,
 					}
-				).then(() => {
-					// eslint-disable-next-line ember/jquery-ember-run
-					agenda.notifyPropertyChange('agendaitems');
-					resolve(agenda);
-				}).catch(error => {
-					reject(error);
-				})
-			});
-		})
+				}
+			);
+		}).then(() => {
+			// eslint-disable-next-line ember/jquery-ember-run
+			agenda.notifyPropertyChange('agendaitems');
+			return agenda;
+		});			
+	},
+
+	sortAgendaItems(selectedAgenda) {
+		return $.ajax(
+			{
+				method: "POST",
+				url: `/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
+				data: { }
+			}
+		).then(() => {
+			selectedAgenda.notifyPropertyChange('agendaitems');
+		});
 	},
 
 	createNewAgendaItem(selectedAgenda, subCase) {
@@ -45,23 +53,10 @@ export default Service.extend({
 			agenda: selectedAgenda,
 			priority: -1
 		});
-		return new Promise((resolve, reject) => {
-			agendaitem.save().then(agendaitem => {
-				$.ajax(
-					{
-						method: "POST",
-						url: `/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
-						data: { }
-					}
-				).then(() => {
-					// eslint-disable-next-line ember/jquery-ember-run
-					selectedAgenda.notifyPropertyChange('agendaitems');
-					resolve(agendaitem);
-				}).catch(error => {
-					reject(error);
-				})
-			});
-		})
+		return agendaitem.save().then(agendaitem => {
+			selectedAgenda.notifyPropertyChange('agendaitems');
+			return agendaitem;
+		});
 	},
 
 });
