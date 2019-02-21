@@ -9,6 +9,8 @@ export default Controller.extend(FileSaverMixin, {
   fileName: null,
   store: inject(),
   documentVersionToUse: null,
+  isEditingMandatees: false,
+  mandatees:null,
 
   actions: {
     async openUploadDialog(documentVersion) {

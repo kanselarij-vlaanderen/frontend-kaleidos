@@ -2,16 +2,49 @@
   {{#if model}}
     <div class="cases--subcase-header">
       <h4></h4>
-      <h5>
+      <h3 class="vl-title vl-title--h3">
         {{model.title}}
-      </h5>
-      <h6>
+      </h3>
+      <h3 class="vl-title vl-title--h3">
         {{model.shortTitle}}
-      </h6>
+      </h3>
     </div>
-    <h3 class="vl-title vl-title--h3">
+    <h5 class="vl-title vl-title--h5">
       Documenten van de procedurestap
-    </h3>
+    </h5>
+    <div class="vl-action-group vl-action-group--align-right">
+      {{#if (not isEditingMandatees)}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          href="#"
+          {{action "editMandatee" (await model.mandatees)}}
+        >
+          {{fa-icon "pencil"}}
+        </button>
+      {{else}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          href="#"
+          {{action "updateMandatees" model}}
+        >
+          {{fa-icon "save"}}
+        </button>
+      {{/if}}
+    </div>
+    {{#if (not isEditingMandatees)}}
+      <div class="vl-custom">
+        {{#each (await model.mandatees) as |mandatee|}}
+          <p class="vl-pill">
+            {{mandatee.title}}
+          </p>
+        {{/each}}
+      </div>
+    {{else}}
+      {{utils/mandate-selector
+        chooseMandatee=(action "selectMandatees")
+        mandateesToSelect=mandatees
+      }}
+    {{/if}}
     <table class="vl-data-table">
       <thead>
         <tr>

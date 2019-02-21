@@ -6,7 +6,7 @@ import { computed } from '@ember/object';
 export default Component.extend({
 	store: inject(),
 	classNames: ["mandatee-container"],
-	selectedMandatee: null,
+	selectedMandatees: null,
 
 	searchMandatee: task(function* (searchValue) {
 		yield timeout(300);
@@ -23,7 +23,7 @@ export default Component.extend({
 
 	actions: {
 		async chooseMandatee(mandatees) {
-			this.set('selectedMandatee', mandatees)
+			this.set('selectedMandatees', mandatees)
 			this.chooseMandatee(mandatees);
 		},
 		async resetValueIfEmpty(param) {
