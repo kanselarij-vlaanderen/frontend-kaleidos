@@ -37,14 +37,17 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		async addSubcasesToAgenda() {
 			let selectedAgenda = await this.get('selectedAgenda');
 			let itemsToAdd = await this.get('model');
+			let agendaService = this.get('agendaService');
 			let promise = Promise.all(itemsToAdd.map(async subCase => {
 				if (subCase.selected) {
-					await this.get('agendaService').createNewAgendaItem(selectedAgenda, subCase);
+					 return agendaService.createNewAgendaItem(selectedAgenda, subCase);
 				}
 			}));
 			promise.then(() => {
+				return agendaService.sortAgendaItems(selectedAgenda);
+			}).then(() => {
 				this.navigateBack();
-			})
+			});
 		}
 	},
 

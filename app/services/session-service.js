@@ -40,7 +40,7 @@ export default Service.extend({
 					agenda: { id: currentAgenda.id }
 				},
 				include:['subcase'],
-				// sort: 'priority'
+				sort: 'priority'
 			});
 			return agendaitems;
 		} else {
