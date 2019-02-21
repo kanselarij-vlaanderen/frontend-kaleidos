@@ -17,9 +17,7 @@
     "start": "ember serve --proxy=http://localhost",
     "test": "ember test"
   },
-  "dependencies": {
-    "html2canvas": "^1.0.0-alpha.12"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
     "@ember/optional-features": "^0.6.3",
