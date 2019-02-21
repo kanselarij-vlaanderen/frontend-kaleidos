@@ -15,7 +15,7 @@
               class="vl-button vl-button--tertiary vl-button--narrow"
               {{action "togglePostponed" agendaitem}}
             >
-              {{#if (or agendaitem.retracted (await agendaitem.postponedTo))}}
+              {{#if (or agendaitem.retracted (await agendaitem.postponed))}}
                 {{t "buttons.not-postpone"}}
               {{else}}
                 {{t "buttons.postpone"}}

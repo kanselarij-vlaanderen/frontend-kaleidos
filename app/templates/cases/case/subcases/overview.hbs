@@ -1,4 +1,4 @@
-{{#data-table content=(await model) fields="title created" as |t|}}
+{{!-- {{#data-table content=(await model) fields="title created" as |t|}}
   {{#t.content as |c|}}
     {{#c.header}}
       {{th-sortable field="title" label="Dossiernaam"}}
@@ -17,4 +17,63 @@
       </td>
     {{/c.body}}
   {{/t.content}}
-{{/data-table}}
+{{/data-table}} --}}
+{{#each (await model) as |subcase|}}
+  <div class="vlc-procedure-step">
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <div class="vl-title--h6">
+            {{subcase.title}}
+          </div>
+          <ul class="vlc-status-timeline">
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--in-progress"
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                {{await subcase.phase.label}}
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          {{#link-to
+            "cases.case.subcases.subcase"
+            subcase.id
+            tagName="button"
+            class="vl-button vl-button--tertiary vl-button--icon"
+          }}
+            <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+          {{/link-to}}
+        </div>
+      </div>
+    </div>
+    <hr class="vlc-hr" />
+    <div class="vlc-procedure-step__badge-wrapper">
+      <p class="vl-u-text--uppercase">
+        Besluit
+      </p>
+      <h6 class="vl-title--h6">
+      Hoedanigheid
+    </h6>
+    </div>
+    {{! <div class="vl-title--h5">
+      Wijziging van het Onroerenderfgoedbesluit naar aanleiding van de conceptnota ‘Aanpassing Onroerenderfgoeddecreet naar aanleiding van de ex-post evaluatie’
+    </div> }}
+    
+    <div class="pill-container">
+              <div class="vl-custom">
+
+      {{#each (await subcase.mandatees) as |mandatee|}}
+          <p class="vl-pill">
+            {{mandatee.title}}
+          </p>
+      {{/each}}
+              </div>
+
+    </div>
+  </div>
+{{/each}}

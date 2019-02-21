@@ -1,0 +1,52 @@
+/* ==========================================================================
+  .vlc-status-timeline
+   ========================================================================== */
+
+.vlc-status-timeline__item {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  position: relative;
+}
+
+.vlc-status-timeline__item + .vlc-status-timeline__item {
+  &:before {
+    content: " ";
+    background: $border-color;
+    height: 100%;
+    width: 1px;
+    position: absolute;
+    left: 0.5rem; // What is the middle of 12?
+    top: -0.7rem;
+    z-index: -1;
+  }
+}
+
+.vlc-status-timeline__text {
+  font-size: 1.2rem;
+  .vlc-status-timeline__item--positive & {
+    color: #8CAE2C; // Not $green
+  }
+  .vlc-status-timeline__item--neutral & {
+    color: $blue-gray-dark;
+  }
+  .vlc-status-timeline__item--in-progress & {
+    color: $curious-blue;
+  }
+}
+
+.vlc-status-timeline__dot {
+  height: 1.1rem;
+  width: 1.1rem;
+  border-radius: 100%;
+  margin-right: 0.5rem;
+  .vlc-status-timeline__item--positive & {
+    background: #8CAE2C;// Not $green
+  }
+  .vlc-status-timeline__item--neutral & {
+    background: $blue-gray-light;
+  }
+  .vlc-status-timeline__item--in-progress & {
+    background: $curious-blue;
+  }
+}

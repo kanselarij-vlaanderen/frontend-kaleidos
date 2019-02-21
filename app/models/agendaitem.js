@@ -12,7 +12,7 @@ export default Model.extend({
   retracted: attr('boolean'),
   textPress: attr('string'),
 
-  postponedTo: belongsTo('postponed'),
+  postponed: belongsTo('postponed'),
   agenda: belongsTo('agenda'),
   decision: belongsTo('decision'),
 	subcase: belongsTo('subcase', {inverse:null}),
@@ -20,8 +20,8 @@ export default Model.extend({
   attendees: hasMany('mandatee'),
   newsletterInfo: belongsTo('newsletter-info'),
 
-  isPostponed: computed('retracted', 'postponedTo', function(){
-    return this.get('postponedTo').then((session) => {
+  isPostponed: computed('retracted', 'postponed', function(){
+    return this.get('postponed').then((session) => {
       return session || this.get('retracted');
     });
   })

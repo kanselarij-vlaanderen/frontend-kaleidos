@@ -102,6 +102,9 @@ $icon-font-location: "/fonts/";
 @import "custom-components/c-view-switch";
 @import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
 @import "custom-components/c-scrollable-container";
+@import "custom-components/vlc-procedure-step";
+@import "custom-components/vlc-status-timeline";
+@import "custom-components/vlc-toolbar";
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -304,3 +307,40 @@ $icon-font-location: "/fonts/";
 .mandatee-container {
   width:75%;
 }
+
+/* ==========================================================================
+  Addition:
+    * custom pill
+   ========================================================================== */
+
+   .vl-custom {
+    vertical-align: middle;
+
+    .vl-pill {
+      font-size: 1.4rem;
+      line-height: 2rem;
+      padding: 0 0.5rem;
+      background: $porcelain;
+      border: none;
+      font-weight: 400;
+      border-radius: 0;
+      color: $text-color;
+      padding: 1rem;
+      height: 2.7rem;
+      width:50%;
+    }
+  
+    .vl-pill--success {
+      color: $success-text-color;
+      font-weight: bold;
+      border: 1px solid $border-color;
+      border-right: 3px solid $success-text-color;
+      border-radius: 0;
+  
+    }
+  }
+
+  .pill-container {
+    margin-top: 1em;
+
+  }

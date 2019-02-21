@@ -38,6 +38,7 @@
 	},
 	"buttons": {
 		"add": "Toevoegen",
+		"next":"Volgende",
 		"add-case": "Dossier toevoegen",
 		"add-comment": "Opmerking toevoegen",
 		"create-announcement": "Mededeling toevoegen",

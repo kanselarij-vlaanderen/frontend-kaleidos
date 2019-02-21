@@ -8,13 +8,11 @@ export default Controller.extend(FileSaverMixin, {
   uploadedFile: null,
   fileName: null,
   store: inject(),
-  documentToUploadNewVersionOf: null,
+  documentVersionToUse: null,
 
   actions: {
-    openUploadDialog(document) {
-      if (document && document.id) {
-        this.set('documentToUploadNewVersionOf', document);
-      }
+    async openUploadDialog(documentVersion) {
+      this.set('documentVersionToUse', documentVersion);
       const uploadedFile = this.get('uploadedFile')
       if (uploadedFile && uploadedFile.id) {
         this.deleteFile(uploadedFile.id);
@@ -28,7 +26,11 @@ export default Controller.extend(FileSaverMixin, {
     },
 
     removeFile() {
-      this.deleteFile(this.get('uploadedFile.id'));
+      $.ajax({
+        method: "DELETE",
+        url: '/files/' + this.get('uploadedFile.id')
+      });
+      this.set('uploadedFile', null);
     },
 
     async downloadFile(documentVersion) {
@@ -42,8 +44,13 @@ export default Controller.extend(FileSaverMixin, {
     },
 
     async uploadNewVersion() {
-      const document = await this.get('documentToUploadNewVersionOf');
-      const documentVersions = await document.get('documentVersions');
+      const documentVersion = await this.get('documentVersionToUse');
+      const document = await documentVersion.get('document');
+      const documentVersions = await this.store.query('document-version', {
+        filter: {
+          document: {id: document.id}
+        }
+      })
       const file = this.get('uploadedFile');
       let newDocumentVersion = this.store.createRecord('document-version',
         {
@@ -55,17 +62,8 @@ export default Controller.extend(FileSaverMixin, {
         });
       await newDocumentVersion.save();
       this.set('uploadedFile', null);
-      this.set('documentToUploadNewVersionOf', null);
+      this.set('documentVersionToUse', null);
       this.set('fileName', null);
     }
-  },
-
-  deleteFile(id) {
-    $.ajax({
-      method: "DELETE",
-      url: '/files/' + id
-    }).then(function () {
-      this.set('uploadedFile', null);
-    })
-  },
+  }
 });
