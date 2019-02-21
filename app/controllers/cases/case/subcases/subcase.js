@@ -57,13 +57,15 @@ export default Controller.extend(FileSaverMixin, {
           file: file,
           versionNumber: documentVersions.length + 1,
           document: document,
-          chosenFileName: this.get('fileName') || file.fileName,
+          chosenFileName: this.get('fileName') || file.fileName || file.name,
           created: new Date()
         });
       await newDocumentVersion.save();
       this.set('uploadedFile', null);
       this.set('documentVersionToUse', null);
       this.set('fileName', null);
+      this.set('isUploadingNewVersion', false);
+      document.hasMany('documentVersions').reload();
     }
   }
 });

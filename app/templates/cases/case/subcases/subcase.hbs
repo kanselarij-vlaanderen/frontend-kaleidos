@@ -25,8 +25,8 @@
         </tr>
       </thead>
       <tbody>
-        {{#each (await model.documentVersions) as |document|}}
-          {{#each (await document.document.sortedDocuments) as |documentVersion|}}
+        {{#each (await model.documentVersions) as |currentVersion|}}
+          {{#each (await currentVersion.document.sortedDocuments) as |documentVersion|}}
             <tr>
               <td>
                 {{documentVersion.versionNumber}}
@@ -50,7 +50,7 @@
             <td class="align-right">
               <button
                 class="vl-button vl-button--tertiary"
-                {{action "openUploadDialog" document}}
+                {{action "openUploadDialog" currentVersion}}
               >
                 Upload nieuwe versie
               </button>

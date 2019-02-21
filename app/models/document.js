@@ -8,7 +8,7 @@ export default Model.extend({
 	title: attr('string'),
 	numberVp: attr('string'),
 	numberVr: attr('string'),
-	documentVersions: hasMany('document-version'),
+	documentVersions: hasMany('document-version', {inverse: null}),
 	remarks: hasMany('remark'),
 
 	// subcase: belongsTo('subcase'),
