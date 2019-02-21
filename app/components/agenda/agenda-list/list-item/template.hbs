@@ -12,12 +12,13 @@
       . {{#each (await agendaitem.subcase.mandatees) as |mandatee|}}
           <span>{{mandatee.title}}</span>
         {{/each}}
+        <span class="priority">({{agendaitem.priority}})</span>
     </h6>
     <h5 class="vl-title vl-title--h5">
       {{agendaitem.subcase.shortTitle}}
     </h5>
      <h6 class="vl-title vl-title--h6">
-      Hoedanigheid: {{await agendaitem.subcase.case.type.label}}
+      Type: {{await agendaitem.subcase.case.type.label}}
     </h6>
     <p class="c-long-title">
       {{agendaitem.subcase.title}}
