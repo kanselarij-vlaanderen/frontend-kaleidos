@@ -345,3 +345,12 @@ $icon-font-location: "/fonts/";
     margin-top: 1em;
 
   }
+
+  .ember-attacher-popper {
+    display: flex;
+    flex-direction: column;
+    padding:1em;
+    button {
+      margin:0.2em;
+    }
+  }

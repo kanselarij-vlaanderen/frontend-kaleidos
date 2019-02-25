@@ -14,59 +14,86 @@
       <div class="vl-u-display-flex">
         <p>
           {{#if currentAgendaItems}}
-            {{currentAgendaItems.length}}
-            {{t "agenda.agendaitems"}},
+            {{currentAgendaItems.length}} {{t "agenda.agendaitems"}},
           {{else}}
-            0
-            {{t "agenda.agendaitems"}},
+            0 {{t "agenda.agendaitems"}},
           {{/if}}
           {{#if (await currentAgenda.announcements)}}
             {{await currentAgenda.announcements.length}}
             {{t "agenda.announcements"}}
           {{else}}
-            0
-            {{t "agenda.announcements"}}
+            0 {{t "agenda.announcements"}}
           {{/if}}
         </p>
       </div>
     </div>
     <div>
       <div class="vl-u-display-flex vl-u-flex-align-center">
-        {{sessions/session-agenda-nav
-          compareAgendas=(action "compareAgendas")
-        }}
+        {{sessions/session-agenda-nav compareAgendas=(action "compareAgendas")}}
         <div class="vl-action-group">
-          <button
-            class="vl-button vl-button--narrow"
-            {{action "createNewSession"}}
-          >
-            {{t "buttons.new-session"}}
-          </button>
-          {{#if (not currentAgenda.isFinal)}}
+          {{#if (eq currentAgenda.name "Ontwerpagenda")}}
             <button
               class="vl-button vl-button--narrow"
-              {{action "lockAgenda" currentSession}}
+              {{action "approveAgenda" currentSession}}
             >
               {{t "buttons.agenda-approve"}}
             </button>
           {{/if}}
-          {{#if (not currentAgenda.isFinal)}}
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "lockAgenda" currentAgenda}}
-            >
-              {{t "buttons.agenda-lock"}}
-            </button>
-          {{else}}
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "lockAgenda" currentAgenda}}
-            >
-              {{t "buttons.agenda-unlock"}}
-            </button>
-          {{/if}}
-          <button class="vl-button vl-button--secondary vl-button--icon">
+          <button
+            class="vl-button vl-button--secondary vl-button--icon"
+            {{action "showMultipleOptions"}}
+          >
             <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
+            {{#attach-popover
+              class="ember-attacher-popper"
+              hideOn="click"
+              showOn="click"
+              animation="shift"
+              placement="bottom"
+            as |attacher|
+            }}
+              <button
+                class="vl-button vl-button--narrow"
+                {{action "createNewSession"}}
+                {{action attacher.hide}}
+              >
+                {{t "buttons.new-session"}}
+              </button>
+              {{#if (not currentAgenda.isFinal)}}
+                <button
+                  class="vl-button vl-button--narrow"
+                  {{action "lockAgenda" currentAgenda}}
+                  {{action attacher.hide}}
+                >
+                  {{t "buttons.agenda-lock"}}
+                </button>
+              {{else}}
+                <button
+                  class="vl-button vl-button--narrow"
+                  {{action "lockAgenda" currentAgenda}}
+                  {{action attacher.hide}}
+                >
+                  {{t "buttons.agenda-unlock"}}
+                </button>
+              {{/if}}
+              {{#if (and (eq currentAgenda.name "Ontwerpagenda") (not designAgendaPresent))}}
+                <button
+                  class="vl-button vl-button--narrow"
+                  {{action "deleteDesignAgenda" currentAgenda}}
+                  {{action attacher.hide}}
+                >
+                  {{t "buttons.agenda-delete"}}
+                </button>
+              {{else}}
+               <button
+                  class="vl-button vl-button--narrow"
+                  {{action "createNewDesignAgenda" currentSession}}
+                  {{action attacher.hide}}
+                >
+                  Nieuwe ontwerpagenda aanmaken
+                </button>
+              {{/if}}
+            {{/attach-popover}}
           </button>
         </div>
       </div>

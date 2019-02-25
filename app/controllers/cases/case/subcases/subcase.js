@@ -68,6 +68,24 @@ export default Controller.extend(FileSaverMixin, {
       this.set('fileName', null);
       this.set('isUploadingNewVersion', false);
       document.hasMany('documentVersions').reload();
+    },
+
+    async editMandatee(subcase) {
+      const mandatees = await subcase.get('mandatees');
+      this.set('mandatees', mandatees);
+      this.toggleProperty('isEditingMandatees');
+    }, 
+
+    selectMandatees(mandatees) {
+      this.set('mandatees', mandatees);
+    },
+
+    updateMandatees(subcase) {
+      subcase.set('mandatees', []);
+      subcase.set('mandatees', this.get('mandatees'));
+      subcase.save().then(() => {
+        this.toggleProperty('isEditingMandatees');
+      });
     }
   }
 });

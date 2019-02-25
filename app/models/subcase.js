@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import { computed } from '@ember/object';
 
 const { attr, Model, hasMany, belongsTo } = DS;
 
@@ -6,7 +7,6 @@ export default Model.extend({
   created: attr('date'),
   shortTitle: attr('string'),
   title: attr('string'),
-  confidentiality: attr('string'),
   showAsRemark: attr('boolean'),
 
   case: belongsTo('case'),

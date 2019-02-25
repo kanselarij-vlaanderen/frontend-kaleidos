@@ -10,12 +10,12 @@ export default Model.extend({
   number: attr('string'),
 
   type: belongsTo('case-type'),
-  mandatees: hasMany('mandatee'),
   remark: hasMany('remark'),
   themes: hasMany('theme'),
   subcases: hasMany('subcase'),
   related: hasMany('case'),
   creators: hasMany('person'),
+  mandatees: hasMany('mandatee'),
 
   latestSubcase: computed('subcases', function() {
     const subcases = this.get('subcases');
@@ -24,6 +24,16 @@ export default Model.extend({
       return currentSubcase;
     } else {
       return {title:"Nog geen procedurestap."}
+    }
+  }),
+
+  mandateesOfSubcase: computed('subcases', function() {
+    const subcases = this.get('subcases');
+    if(subcases && subcases.length > 0) {
+      const currentSubcase = subcases.sortBy('created').get('lastObject');
+      return currentSubcase.get('mandatees');
+    } else {
+      return [];
     }
   })
 });

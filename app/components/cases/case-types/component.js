@@ -15,7 +15,7 @@ export default Component.extend({
 		const caseTypes = await this.store.findAll('case-type');
 		this.set('caseTypes', caseTypes);
 		if(caseTypes && caseTypes.length > 0) {
-			this.typeChanged(caseTypes.get('firstObject.id'));
+			this.typeChanged(caseTypes.get('firstObject').id);
 		}
 	}
 });

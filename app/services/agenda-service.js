@@ -13,22 +13,29 @@ export default Service.extend({
 		});
 
 		return newAgenda.save().then(agenda => {
-			return $.ajax(
-				{
-					method: "POST",
-					url: '/agenda-approve/approveAgenda',
-					data: {
-						newAgendaId: agenda.id,
-						oldAgendaId: oldAgenda.id,
-						currentSessionDate: currentSession.plannedStart,
+			if(oldAgenda) {
+				return $.ajax(
+					{
+						method: "POST",
+						url: '/agenda-approve/approveAgenda',
+						data: {
+							newAgendaId: agenda.id,
+							oldAgendaId: oldAgenda.id,
+							currentSessionDate: currentSession.plannedStart,
+						}
 					}
-				}
-			);
-		}).then(() => {
-			// eslint-disable-next-line ember/jquery-ember-run
-			newAgenda.notifyPropertyChange('agendaitems');
-			return newAgenda;
-		});			
+				);
+			} else {
+				newAgenda.notifyPropertyChange('agendaitems');
+				return newAgenda;
+			}
+			}).then(() => {
+				// eslint-disable-next-line ember/jquery-ember-run
+				newAgenda.notifyPropertyChange('agendaitems');
+				return newAgenda;
+			});			
+		
+			
 	},
 
 	sortAgendaItems(selectedAgenda) {
