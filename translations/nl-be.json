@@ -74,7 +74,7 @@
 	"cases": {
 		"title": "Dossier",
 		"cases": "dossiers",
-		"new-case": "Nieuw dossier",
+		"new-case": "Dossier aanmaken",
 		"contact-person": "CONTACTPERSOON",
 		"related-cases": "GERELATEERDE DOSSIERS",
 		"subcases": "Procedurestappen",
@@ -118,10 +118,10 @@
 	},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
-		"short-title": "KORTE TITEL",
+		"short-title": "Korte titel",
 		"status": "Hoedanigheid",
-		"themes": "THEMAS",
-		"title": "LANGE TITEL",
+		"themes": "Themas",
+		"title": "Lange titel",
 		"public": "Openbaar"
 	},
 	"navigation": {

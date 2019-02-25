@@ -6,7 +6,8 @@
       </h1>
       <div class="vl-page-header__sub">
         <p class="vl-u-text--small vl-u-text--muted">
-          {{await cases.length}} {{t "navigation.cases"}}
+          {{await cases.length}}
+          {{t "navigation.cases"}}
         </p>
       </div>
     </div>
@@ -14,14 +15,25 @@
   <div class="vl-toolbar__right">
     <div class="vl-toolbar__item">
       <div class="vl-action-group">
-        {{#link-to
-          "cases.create"
+        <button
           class="vl-button vl-button--narrow vl-button--icon-before"
-        }}
-          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add" aria-hidden="true"></i>
+          {{action "toggleAddingCase"}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            aria-hidden="true"
+          ></i>
           {{t "buttons.add-case"}}
-        {{/link-to}}
+        </button>
       </div>
     </div>
   </div>
 </div>
+{{#if isAddingCase}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "toggleAddingCase")
+  }}
+    {{cases/new-case}}
+  {{/web-components/vl-modal}}
+{{/if}}

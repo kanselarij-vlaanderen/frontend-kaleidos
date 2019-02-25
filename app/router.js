@@ -9,7 +9,6 @@ const Router = EmberRouter.extend({
 Router.map(function () {
   this.route('agendas', { path: "/" });
   this.route('cases', { path: '/dossiers' }, function () {
-    this.route('create');
     this.route('case', { path: ':id' }, function () {
       this.route('subcases', { path: '/deeldossiers' }, function () {
         this.route('create');

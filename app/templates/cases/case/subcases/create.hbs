@@ -22,8 +22,6 @@
       <div class="vl-form-grid vl-form-grid--is-stacked">
         {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
         {{web-components/vl-form-input value=title}}
-        {{!-- {{web-components/vl-form-label value="Aanvraag agendering"}}
-        {{web-components/vl-form-input value=remark}} --}}
         {{web-components/vl-form-label value=(t "subcases.mandatee")}}
         {{utils/mandate-selector chooseMandatee=(action "selectMandatees")}}
         <div class="vl-col--4-4">
