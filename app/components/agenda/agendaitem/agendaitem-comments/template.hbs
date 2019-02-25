@@ -16,7 +16,7 @@
         {{fa-icon "paper-plane"}}
       </button>
     </div>
-    {{#each remarks as |comment|}}
+    {{#each (await agendaitem.remarks) as |comment|}}
       <div class="vl-comments-comment">
         <div class="vl-comments-comment-content">
           <div class="vl-comments-comment-content__header">
