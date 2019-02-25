@@ -10,7 +10,6 @@ export default Component.extend({
 	sessionService: inject(),
 	agendaService: inject(),
 	classNames: ["c-page-header"],
-	tagName: "div",
 
 	creatingNewSession: null,
 	sessions: null,

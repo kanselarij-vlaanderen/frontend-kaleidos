@@ -1,3 +1,4 @@
+{{#if (not isAddingCase)}}
 <div class="vl-toolbar">
   <div class="vl-toolbar__left">
     <div class="vl-toolbar__item">
@@ -29,7 +30,7 @@
     </div>
   </div>
 </div>
-{{#if isAddingCase}}
+{{else}}
   {{#web-components/vl-modal
     isOverlay=true
     closeModal=(action "toggleAddingCase")
