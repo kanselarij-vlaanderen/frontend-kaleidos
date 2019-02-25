@@ -7,12 +7,14 @@
   </div>
   <div class="vl-document__content">
     <div class="vl-document__title vl-link" data-vl-clamp="2">
-      {{file.name}}
+      {{file.name}} {{file.title}}
     </div>
-    <div class="vl-document__metadata">
-      {{file.extension}}
-      -
-      {{file.size}} KB
-    </div>
+    {{#if file.extension}}
+      <div class="vl-document__metadata">
+        {{file.extension}}
+        -
+        {{file.size}} KB
+      </div>
+    {{/if}}
   </div>
 </a>

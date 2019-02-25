@@ -14,15 +14,15 @@
       <div class="vl-u-display-flex">
         <p>
           {{#if currentAgendaItems}}
-            {{currentAgendaItems.length}} {{t "agenda.agendaitems"}},
+            {{currentAgendaItems.length}}{{t "agenda.agendaitems"}},
           {{else}}
-            0 {{t "agenda.agendaitems"}},
+            0{{t "agenda.agendaitems"}},
           {{/if}}
           {{#if (await currentAgenda.announcements)}}
             {{await currentAgenda.announcements.length}}
             {{t "agenda.announcements"}}
           {{else}}
-            0 {{t "agenda.announcements"}}
+            0{{t "agenda.announcements"}}
           {{/if}}
         </p>
       </div>
@@ -49,8 +49,7 @@
               hideOn="click"
               showOn="click"
               animation="shift"
-              placement="bottom"
-            as |attacher|
+              placement="bottom" as |attacher|
             }}
               <button
                 class="vl-button vl-button--narrow"
@@ -76,7 +75,12 @@
                   {{t "buttons.agenda-unlock"}}
                 </button>
               {{/if}}
-              {{#if (and (eq currentAgenda.name "Ontwerpagenda") (not designAgendaPresent))}}
+              {{#if
+                (and
+                  (eq currentAgenda.name "Ontwerpagenda")
+                  (not designAgendaPresent)
+                )
+              }}
                 <button
                   class="vl-button vl-button--narrow"
                   {{action "deleteDesignAgenda" currentAgenda}}
@@ -85,12 +89,12 @@
                   {{t "buttons.agenda-delete"}}
                 </button>
               {{else}}
-               <button
+                <button
                   class="vl-button vl-button--narrow"
                   {{action "createNewDesignAgenda" currentSession}}
                   {{action attacher.hide}}
                 >
-                  Nieuwe ontwerpagenda aanmaken
+                  {{t "buttons.agenda-add"}}
                 </button>
               {{/if}}
             {{/attach-popover}}

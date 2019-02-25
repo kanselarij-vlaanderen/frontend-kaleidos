@@ -51,10 +51,12 @@
 		"agenda-lock": "Agenda afsluiten",
 		"agenda-unlock": "Agenda unlocken",
 		"agenda-delete": "Ontwerpagenda verwijderen",
+		"agenda-add":"Nieuwe ontwerpagenda aanmaken",
 		"cancel": "Annuleren",
 		"create-case": "Dossier aanmaken",
 		"create-subcase": "Nieuwe procedurestap",
 		"delete": "Verwijderen",
+		"document-add":"Document toevoegen",
 		"new-session": "Nieuwe zitting",
 		"previous-step": "Vorige Stap",
 		"next-step": "Volgende Stap",
@@ -76,7 +78,8 @@
 		"contact-person": "CONTACTPERSOON",
 		"related-cases": "GERELATEERDE DOSSIERS",
 		"subcases": "Procedurestappen",
-		"upload-file": "Files uploaden"
+		"upload-file": "Bestanden uploaden",
+		"non-digital-file":"Niet-digitaal document toevoegen"
 	},
 	"case-item": {
 		"not-agreed": "Niet Akkoord",

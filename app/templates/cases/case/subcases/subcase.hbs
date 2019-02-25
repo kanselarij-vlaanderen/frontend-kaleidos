@@ -9,9 +9,7 @@
         {{model.shortTitle}}
       </h3>
     </div>
-    <h5 class="vl-title vl-title--h5">
-      Documenten van de procedurestap
-    </h5>
+    
     <div class="vl-action-group vl-action-group--align-right">
       {{#if (not isEditingMandatees)}}
         <button
@@ -45,6 +43,9 @@
         mandateesToSelect=mandatees
       }}
     {{/if}}
+   <h5 class="vl-title vl-title--h5">
+      Documenten van de procedurestap
+    </h5>
     <table class="vl-data-table">
       <thead>
         <tr>

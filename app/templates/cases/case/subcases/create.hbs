@@ -31,6 +31,11 @@
           {{file-uploader uploadedFile=(action "uploadedFile")}}
         </div>
         <div class="vl-col--4-4">
+          {{#if (not uploadedFiles.length eq "0")}}
+            <h4 class="vl-title vl-title--h4">
+              Bijlagen
+            </h4>
+          {{/if}}
           {{#each uploadedFiles as |uploadedFile|}}
             <div class="uploaded-file-container">
               <a
@@ -52,13 +57,30 @@
               }}
             </div>
           {{/each}}
+          {{#if (not nonDigitalDocuments.length eq "0")}}
+            <h4 class="vl-title vl-title--h4">
+              Niet-digitale bijlagen
+            </h4>
+          {{/if}}
+          {{#each nonDigitalDocuments as |nonDigitalDocument|}}
+            {{utils/non-digital-document
+              nonDigitalDocument=nonDigitalDocument
+              removeDocument=(action "removeDocument")
+            }}
+          {{/each}}
         </div>
-        <div class="vl-col--4-4">
+        <div class="vl-action-group vl-action-group--align-left">
           <button
-            type="submit"
-            class="vl-button vl-button--tertiary"
-            data-test-rr="sign-up-button"
+            class="vl-button vl-button--tertiary vl-button--icon-before"
+            type="button"
+            {{action "toggleAddNonDigitalDocument"}}
           >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            ></i>
+            {{t "cases.non-digital-file"}}
+          </button>
+          <button type="submit" class="vl-button vl-button--tertiary">
             {{t "buttons.create-case"}}
           </button>
         </div>
@@ -66,3 +88,43 @@
     {{/if}}
   </form>
 </div>
+{{#if isAddingNonDigitalDocument}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "toggleAddNonDigitalDocument")
+  }}
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <h4 class="vlc-toolbar__title">
+            {{t "cases.non-digital-file"}}
+          </h4>
+        </div>
+      </div>
+    </div>
+    <div>
+      {{web-components/vl-form-label value=(t "cases-search.title-document")}}
+      {{web-components/vl-form-input width="4" value=documentTitle}}
+      {{#each nonDigitalDocuments as |nonDigitalDocument|}}
+        {{utils/non-digital-document
+          nonDigitalDocument=nonDigitalDocument
+          removeDocument=(action "removeDocument")
+        }}
+      {{/each}}
+    </div>
+    <div class="vl-action-group vl-action-group--align-center">
+      <button
+        class="vl-button vl-button--narrow"
+        {{action "createNonDigitalDocument"}}
+      >
+        {{t "buttons.document-add"}}
+      </button>
+      <button
+        class="vl-button vl-button--narrow"
+        {{action "toggleAddNonDigitalDocument"}}
+      >
+        {{t "buttons.cancel"}}
+      </button>
+    </div>
+  {{/web-components/vl-modal}}
+{{/if}}
