@@ -1,7 +1,6 @@
 <div class="cases--subcase">
   {{#if model}}
     <div class="cases--subcase-header">
-      <h4></h4>
       <h3 class="vl-title vl-title--h3">
         {{model.title}}
       </h3>
@@ -9,7 +8,6 @@
         {{model.shortTitle}}
       </h3>
     </div>
-    
     <div class="vl-action-group vl-action-group--align-right">
       {{#if (not isEditingMandatees)}}
         <button
@@ -17,7 +15,7 @@
           href="#"
           {{action "editMandatee" model}}
         >
-          {{fa-icon "pencil"}}
+          <i class="vl-vi vl-vi-pencil"></i>
         </button>
       {{else}}
         <button
@@ -25,7 +23,7 @@
           href="#"
           {{action "updateMandatees" model}}
         >
-          {{fa-icon "save"}}
+          <i class="vl-vi vl-vi-edit"></i>
         </button>
       {{/if}}
     </div>
@@ -43,99 +41,10 @@
         mandateesToSelect=mandatees
       }}
     {{/if}}
-   <h5 class="vl-title vl-title--h5">
-      Documenten van de procedurestap
-    </h5>
-    <table class="vl-data-table">
-      <thead>
-        <tr>
-          <th>
-            Versie
-          </th>
-          <th>
-            Naam
-          </th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each (await model.documentVersions) as |currentVersion|}}
-          {{#each (await currentVersion.document.sortedDocuments) as |documentVersion|}}
-            <tr>
-              <td>
-                {{documentVersion.versionNumber}}
-              </td>
-              <td>
-                {{documentVersion.nameToDisplay}}
-              </td>
-              <td class="align-right">
-                <div
-                  class="vl-file-overview"
-                  {{action "downloadFile" documentVersion}}
-                >
-                  <i class="vl-icon vl-vi vl-vi-file-download"></i>
-                </div>
-              </td>
-            </tr>
-          {{/each}}
-          <tr>
-            <td></td>
-            <td></td>
-            <td class="align-right">
-              <button
-                class="vl-button vl-button--tertiary"
-                {{action "openUploadDialog" currentVersion}}
-              >
-                Upload nieuwe versie
-              </button>
-            </td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
+    {{cases/subcase-documents subcase=model}}
   {{else}}
     <p>
       Er is iets misgelopen..
     </p>
   {{/if}}
 </div>
-{{#if isUploadingNewVersion}}
-  {{#web-components/vl-modal
-    closeModal=(action "openUploadDialog")
-    isOverlay=true
-  }}
-    {{web-components/vl-form-label value="Naam van bestand"}}
-    {{web-components/vl-form-input width="4" value=fileName}}
-    <div class="vl-col--4-4">
-      {{web-components/vl-form-label value="Bijlagen"}}
-      {{#if (not uploadedFile)}}
-        {{file-uploader
-          multipleFiles=false
-          uploadedFile=(action "getUploadedFile")
-        }}
-      {{else}}
-        <div class="document">
-          {{fa-icon "file"}}
-          {{await uploadedFile.name}}
-          <a href="#" {{action "removeFile" uploadedFile}}>
-            {{fa-icon "remove"}}
-          </a>
-        </div>
-      {{/if}}
-    </div>
-    <div class="vl-action-group vl-action-group--align-center">
-      <button
-        class="vl-button vl-button--tertiary"
-        {{action "uploadNewVersion"}}
-      >
-        {{t "file-uploader.uploading"}}
-      </button>
-      <button
-        class="vl-button vl-button--tertiary"
-        {{action "openUploadDialog"}}
-      >
-        {{t "buttons.cancel"}}
-      </button>
-    </div>
-  {{/web-components/vl-modal}}
-{{/if}}

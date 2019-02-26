@@ -11,16 +11,21 @@
       {{#if (not currentAgenda.isFinal)}}
         {{#if showOptions}}
           {{#if isPostPonable}}
-            <button
-              class="vl-button vl-button--tertiary vl-button--narrow"
-              {{action "togglePostponed" agendaitem}}
-            >
-              {{#if (or agendaitem.retracted (await agendaitem.postponed))}}
+            {{#if (or agendaitem.retracted (await agendaitem.postponed))}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow"
+                {{action "advanceAgendaitem"}}
+              >
                 {{t "buttons.not-postpone"}}
-              {{else}}
+              </button>
+            {{else}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow"
+                {{action "togglePostponed"}}
+              >
                 {{t "buttons.postpone"}}
-              {{/if}}
-            </button>
+              </button>
+            {{/if}}
           {{/if}}
           {{#if
             (await
