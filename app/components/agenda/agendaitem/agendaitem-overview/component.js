@@ -48,11 +48,11 @@ export default Component.extend({
 			if(agendaitem && agendaitem.retracted) {
 				agendaitem.set('retracted', false);
 			}
-			if(agendaitem && agendaitem.postponed) {
-				const postponedObject = await agendaitem.get('postponed');
+			if(agendaitem && agendaitem.postponedTo) {
+				const postponedObject = await agendaitem.get('postponedTo');
 				postponedObject.destroyRecord();
 				await postponedObject.save();
-				agendaitem.set('postponed', undefined);
+				agendaitem.set('postponedTo', undefined);
 			}
 			agendaitem.save();
 		},
@@ -65,7 +65,7 @@ export default Component.extend({
 					agendaitem: agendaitem
 				});
 				postPonedObject.save().then(postponedTo => {
-					agendaitem.set('postponed', postponedTo);
+					agendaitem.set('postponedTo', postponedTo);
 				})
 			} else {
 				agendaitem.set('retracted', !agendaitem.retracted);
