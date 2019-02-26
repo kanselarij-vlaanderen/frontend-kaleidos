@@ -14,15 +14,18 @@
       <div class="vl-u-display-flex">
         <p>
           {{#if currentAgendaItems}}
-            {{currentAgendaItems.length}}{{t "agenda.agendaitems"}},
+            {{currentAgendaItems.length}}
+            {{t "agenda.agendaitems"}},
           {{else}}
-            0{{t "agenda.agendaitems"}},
+            0
+            {{t "agenda.agendaitems"}},
           {{/if}}
           {{#if (await currentAgenda.announcements)}}
             {{await currentAgenda.announcements.length}}
             {{t "agenda.announcements"}}
           {{else}}
-            0{{t "agenda.announcements"}}
+            0
+            {{t "agenda.announcements"}}
           {{/if}}
         </p>
       </div>

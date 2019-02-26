@@ -8,7 +8,7 @@
   </h5>
   {{#each agendaitems as |agendaitem index|}}
     {{agenda/agenda-list/list-item
-      agendaitem=agendaitem
+      agendaitem=(await agendaitem)
       index=index
       selectedAgendaItem=selectedAgendaItem
     }}
