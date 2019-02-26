@@ -6,18 +6,26 @@ import { helper } from '@ember/component/helper';
  * @param [agendaitem:{},lastDefiniteAgenda:{}] items ()
  */
 export async function allowDeleteAgendaitem(params, items) {
-  let agendaitem = items.agendaitem;
-  let lastDefiniteAgenda = await items.lastDefiniteAgenda;
-  if(!lastDefiniteAgenda) return true;
-  let agendaitems = await lastDefiniteAgenda.get('agendaitems');
+  const agendaitem = await items.agendaitem;
+  const lastDefiniteAgenda = await items.lastDefiniteAgenda;
+  if(!lastDefiniteAgenda) {
+    return true;
+  } 
+  const agendaitems = await lastDefiniteAgenda.get('agendaitems');
   let agendaitemNotInDefiniteAgenda = true;
-  
-  await agendaitems.map(item => { 
-    if(agendaitem.get('subcase.id') == item.get('subcase').get('id')) {
-      agendaitemNotInDefiniteAgenda = false;
-    }
-    return item;
-  });
+
+  const agendaitemSubcase = await agendaitem.get('subcase');
+
+  await Promise.all(agendaitems.map(item => { 
+    return item.get('subcase').then((subcase) => {
+      if(!subcase || !agendaitemSubcase) {
+        return;
+      }
+      if(agendaitemSubcase.id == subcase.id) {
+        agendaitemNotInDefiniteAgenda = false;
+      }
+    })
+  }));
   
   return agendaitemNotInDefiniteAgenda;
 }

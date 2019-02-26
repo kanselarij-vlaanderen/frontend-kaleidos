@@ -15,6 +15,7 @@ export default Component.extend({
       });
       news.save().then(newsLetter => {
 				agendaitem.set('newsletterInfo',newsLetter);
+				this.toggleProperty('isEditing')
 			});
 		},
 

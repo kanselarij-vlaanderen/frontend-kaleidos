@@ -1,0 +1,28 @@
+<h3 class="vl-title vl-title--h3">
+  {{t "cases.new-case"}}
+</h3>
+<form class="vl-form" onsubmit={{action "createCase"}}>
+  {{cases/case-types typeChanged=(action "chooseType")}}
+  {{cases/forms/metadata-form
+    themes=themes
+    step=(action "nextStep")
+    shortTitleChange=(action "shortTitleChange")
+    titleChange=(action "titleChange")
+    statusChange=(action "statusChange")
+    shortTitle=shortTitle
+    title=title
+    status=status
+    multipleSteps=false
+  }}
+  <div class="vl-u-display-flex align-right">
+    <div class="vl-action-group">
+      <button
+        type="submit"
+        class="vl-button vl-button--narrow"
+        data-test-rr="sign-up-button"
+      >
+        {{t "buttons.create-case"}}
+      </button>
+    </div>
+  </div>
+</form>

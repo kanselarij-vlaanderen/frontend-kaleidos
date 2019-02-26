@@ -4,32 +4,33 @@ import $ from 'jquery';
 
 export default Controller.extend({
   uploadedFiles: [],
+  nonDigitalDocuments: [],
   selectedMandatees: [],
-  part: 1,
-  isPartOne: computed('part', function () {
-    return this.get('part') === 1;
-  }),
+  isAddingNonDigitalDocument: false,
+  
   title: computed('model', function () {
     return this.get('model').title;
   }),
+
   shortTitle: computed('model', function () {
     return this.get('model').shortTitle;
   }),
-  selectedThemes: computed('model', function () {
-    return this.get('model').themes;
-  }),
-  status: computed('model', function () {
-    return this.get('model').status;
-  }),
-  selectedType: computed('model', function () {
-    return this.get('model').type;
-  }),
+
+  clearProperties() {
+    this.set('uploadedFiles', []);
+    this.set('nonDigitalDocuments', []);
+    this.set('selectedMandatees', []);
+    this.set('title', undefined);
+    this.set('shortTitle', undefined);
+    this.set('isAddingNonDigitalDocument', false);
+  },
+
   actions: {
     async createSubCase(event) {
       event.preventDefault();
       const { title, shortTitle } = this;
       const caze = this.store.peekRecord('case', this.model.id);
-      let subcase = await this.store.createRecord('subcase', 
+      const subcase = await this.store.createRecord('subcase', 
       { 
         title, 
         shortTitle, 
@@ -39,45 +40,39 @@ export default Controller.extend({
         mandatees: this.get('selectedMandatees')
       });
 
-      let createdSubCase = await subcase.save();
-      let uploadedFiles = this.get('uploadedFiles');
+      const createdSubCase = await subcase.save();
+      const uploadedFiles = this.get('uploadedFiles');
 
       Promise.all(uploadedFiles.map(uploadedFile => {
         if(uploadedFile.id) {
-          return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile);
+          return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile, uploadedFile.get('name'));
         }
       }));
-      this.set('uploadedFiles', []);
-      this.transitionToRoute('cases.case.subcases.overview');
+      const nonDigitalDocuments = this.get('nonDigitalDocuments');
+
+      Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
+        if(nonDigitalDocument.title) {
+          return this.createNewDocumentWithDocumentVersion(createdSubCase, null, nonDigitalDocument.title);
+        }
+      }));
+
+      this.clearProperties();
+      this.transitionToRoute('cases.case.subcases.overview')
     },
-    nextStep() {
-      this.set('part', 2);
-    },
-    previousStep() {
-      this.set('part', 1);
-    },
-    chooseTheme(theme) {
-      this.set('selectedThemes', theme);
-    },
+
     chooseType(type) {
       this.set('selectedType', type);
     },
-    titleChange(title) {
-      this.set('title', title);
-    },
-    shortTitleChange(shortTitle) {
-      this.set('shortTitle', shortTitle);
-    },
-    statusChange(status) {
-      this.set('status', status);
-    },
+
     uploadedFile(uploadedFile) {
       uploadedFile.set('public', true);
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
+
     selectMandatees(mandatees) {
       this.set('selectedMandatees', mandatees);
     },
+
     chooseDocumentType(uploadedFile, type) {
       uploadedFile.set('documentType', type.name || type.description);
     },
@@ -86,30 +81,53 @@ export default Controller.extend({
       $.ajax({
         method: "DELETE",
         url: '/files/' + file.id
-      }).then(function() {
-        this.get('uploadedFiles').removeObject(file);
       })
+      this.get('uploadedFiles').removeObject(file);
+    },
+
+    removeDocument(document) {
+      this.get('nonDigitalDocuments').removeObject(document);
+    },
+
+    createNonDigitalDocument() {
+      this.nonDigitalDocuments.push({title: this.get('documentTitle')});
+      this.notifyPropertyChange('nonDigitalDocuments');
+      this.set('documentTitle', null);
+    },
+  
+    toggleAddNonDigitalDocument() {
+      this.toggleProperty('isAddingNonDigitalDocument')
     }
   },
 
-  async createNewDocumentWithDocumentVersion(subcase, file) {
+  async createNewDocumentWithDocumentVersion(subcase, file, documentTitle) {
     let document = await this.store.createRecord('document', {
       created: new Date(),
-      public: file.public,
+      title: documentTitle
       // documentType: file.get('documentType')
     });
     document.save().then(async(createdDocument) => {
-      delete file.public;
-      let documentVersion = await this.store.createRecord('document-version', {
-        document: createdDocument,
-        subcase: subcase,
-        created: new Date(),
-        versionNumber: 1,
-        file:file,
-        chosenFileName: file.get('name')
-      });
-      await documentVersion.save();
+      if(file) {
+        delete file.public;
+        const documentVersion = await this.store.createRecord('document-version', {
+          document: createdDocument,
+          subcase: subcase,
+          created: new Date(),
+          versionNumber: 1,
+          file:file,
+          chosenFileName: file.get('name')
+        });
+        await documentVersion.save();
+      } else {
+        const documentVersion = await this.store.createRecord('document-version', {
+          document: createdDocument,
+          subcase: subcase,
+          created: new Date(),
+          versionNumber: 1,
+          chosenFileName: documentTitle
+        });
+        await documentVersion.save();
+      }
     });
   }
-
 });

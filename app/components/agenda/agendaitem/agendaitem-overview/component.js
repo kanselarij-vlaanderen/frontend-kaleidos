@@ -40,17 +40,21 @@ export default Component.extend({
 			this.toggleProperty('showOptions');
 		},
 
-		togglePostponed(agendaitem) {
-			if (agendaitem) {
-				let isPostponed = agendaitem.get('isPostponed');
-				if (isPostponed) {
-					agendaitem.set('retracted', false);
-					agendaitem.set('postponed', null);
-					agendaitem.save();
-				} else {
-					this.toggleProperty('isShowingPostponeModal');
-				}
+		togglePostponed() {
+			this.toggleProperty('isShowingPostponeModal');
+			},
+
+		async advanceAgendaitem(agendaitem) {
+			if(agendaitem && agendaitem.retracted) {
+				agendaitem.set('retracted', false);
 			}
+			if(agendaitem && agendaitem.postponedTo) {
+				const postponedObject = await agendaitem.get('postponedTo');
+				postponedObject.destroyRecord();
+				await postponedObject.save();
+				agendaitem.set('postponedTo', undefined);
+			}
+			agendaitem.save();
 		},
 
 		postponeAgendaItem(agendaitem) {
@@ -61,7 +65,7 @@ export default Component.extend({
 					agendaitem: agendaitem
 				});
 				postPonedObject.save().then(postponedTo => {
-					agendaitem.set('postponed', postponedTo);
+					agendaitem.set('postponedTo', postponedTo);
 				})
 			} else {
 				agendaitem.set('retracted', !agendaitem.retracted);
