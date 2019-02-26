@@ -7,25 +7,24 @@ export default Controller.extend({
   nonDigitalDocuments: [],
   selectedMandatees: [],
   isAddingNonDigitalDocument: false,
-  part: 1,
-  isPartOne: computed('part', function () {
-    return this.get('part') === 1;
-  }),
+  
   title: computed('model', function () {
     return this.get('model').title;
   }),
+
   shortTitle: computed('model', function () {
     return this.get('model').shortTitle;
   }),
-  selectedThemes: computed('model', function () {
-    return this.get('model').themes;
-  }),
-  status: computed('model', function () {
-    return this.get('model').status;
-  }),
-  selectedType: computed('model', function () {
-    return this.get('model').type;
-  }),
+
+  clearProperties() {
+    this.set('uploadedFiles', []);
+    this.set('nonDigitalDocuments', []);
+    this.set('selectedMandatees', []);
+    this.set('title', undefined);
+    this.set('shortTitle', undefined);
+    this.set('isAddingNonDigitalDocument', false);
+  },
+
   actions: {
     async createSubCase(event) {
       event.preventDefault();
@@ -57,39 +56,23 @@ export default Controller.extend({
         }
       }));
 
-      this.set('uploadedFiles', []);
-      this.set('nonDigitalDocuments', []);
-      this.set('selectedMandatees', []);
+      this.clearProperties();
       this.transitionToRoute('cases.case.subcases.overview')
     },
-    nextStep() {
-      this.set('part', 2);
-    },
-    previousStep() {
-      this.set('part', 1);
-    },
-    chooseTheme(theme) {
-      this.set('selectedThemes', theme);
-    },
+
     chooseType(type) {
       this.set('selectedType', type);
     },
-    titleChange(title) {
-      this.set('title', title);
-    },
-    shortTitleChange(shortTitle) {
-      this.set('shortTitle', shortTitle);
-    },
-    statusChange(status) {
-      this.set('status', status);
-    },
+
     uploadedFile(uploadedFile) {
       uploadedFile.set('public', true);
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
+
     selectMandatees(mandatees) {
       this.set('selectedMandatees', mandatees);
     },
+
     chooseDocumentType(uploadedFile, type) {
       uploadedFile.set('documentType', type.name || type.description);
     },
@@ -147,5 +130,4 @@ export default Controller.extend({
       }
     });
   }
-
 });

@@ -12,9 +12,6 @@ export default Component.extend({
     async titleChange(longTitle) {
       return await this.titleChange(longTitle);
     },
-    async chooseType(type) {
-      return await this.chooseType(type);
-    },
     async step() {
       return await this.step();
     }

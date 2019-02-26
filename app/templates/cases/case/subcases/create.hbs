@@ -3,87 +3,72 @@
     <h3 class="vl-title vl-title--h3">
       {{t "buttons.create-subcase"}}
     </h3>
-    {{#if isPartOne}}
-      {{cases/forms/metadata-form
-        themes=themes
-        step=(action "nextStep")
-        chooseTheme=(action "chooseTheme")
-        chooseType=(action "chooseType")
-        shortTitleChange=(action "shortTitleChange")
-        titleChange=(action "titleChange")
-        statusChange=(action "statusChange")
-        selectedThemes=selectedThemes
-        shortTitle=shortTitle
-        title=title
-        status=status
-        type=selectedType
-      }}
-    {{else}}
-      <div class="vl-form-grid vl-form-grid--is-stacked">
-        {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
-        {{web-components/vl-form-input value=title}}
-        {{web-components/vl-form-label value=(t "subcases.mandatee")}}
-        {{utils/mandate-selector chooseMandatee=(action "selectMandatees")}}
-        <div class="vl-col--4-4">
-          {{web-components/vl-form-label value=(t "cases.upload-file")}}
-          {{file-uploader uploadedFile=(action "uploadedFile")}}
-        </div>
-        <div class="vl-col--4-4">
-          {{#if (not uploadedFiles.length eq "0")}}
-            <h4 class="vl-title vl-title--h4">
-              Bijlagen
-            </h4>
-          {{/if}}
-          {{#each uploadedFiles as |uploadedFile|}}
-            <div class="uploaded-file-container">
-              <a
-                class="remove-file"
-                href="#"
-                {{action "removeFile" uploadedFile}}
-              >
-                <i class="vl-vi vl-vi-cross"></i>
-              </a>
-              {{web-components/vl-document file=uploadedFile}}
-              <div>
-                {{t "metadata-form.public"}}
-                {{input type="checkbox" checked=uploadedFile.public}}
-              </div>
-              {{t "subcases.document-type"}}
-              :
-              {{document-type-selector
-                chooseDocumentType=(action "chooseDocumentType" uploadedFile)
-              }}
-            </div>
-          {{/each}}
-          {{#if (not nonDigitalDocuments.length eq "0")}}
-            <h4 class="vl-title vl-title--h4">
-              Niet-digitale bijlagen
-            </h4>
-          {{/if}}
-          {{#each nonDigitalDocuments as |nonDigitalDocument|}}
-            {{utils/non-digital-document
-              nonDigitalDocument=nonDigitalDocument
-              removeDocument=(action "removeDocument")
-            }}
-          {{/each}}
-        </div>
-        <div class="vl-action-group vl-action-group--align-left">
-          <button
-            class="vl-button vl-button--tertiary vl-button--icon-before"
-            type="button"
-            {{action "toggleAddNonDigitalDocument"}}
-          >
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-            ></i>
-            {{t "cases.non-digital-file"}}
-          </button>
-          <button type="submit" class="vl-button vl-button--tertiary">
-            {{t "buttons.create-case"}}
-          </button>
-        </div>
+    <div class="vl-form-grid vl-form-grid--is-stacked">
+      {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
+      {{web-components/vl-form-input value=shortTitle}}
+      {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
+      {{web-components/vl-form-input value=title}}
+      {{web-components/vl-form-label value=(t "subcases.mandatee")}}
+      {{utils/mandate-selector chooseMandatee=(action "selectMandatees")}}
+      <div class="vl-col--4-4">
+        {{web-components/vl-form-label value=(t "cases.upload-file")}}
+        {{file-uploader uploadedFile=(action "uploadedFile")}}
       </div>
-    {{/if}}
+      <div class="vl-col--4-4">
+        {{#if (not uploadedFiles.length eq "0")}}
+          <h4 class="vl-title vl-title--h4">
+            Bijlagen
+          </h4>
+        {{/if}}
+        {{#each uploadedFiles as |uploadedFile|}}
+          <div class="uploaded-file-container">
+            <a
+              class="remove-file"
+              href="#"
+              {{action "removeFile" uploadedFile}}
+            >
+              <i class="vl-vi vl-vi-cross"></i>
+            </a>
+            {{web-components/vl-document file=uploadedFile}}
+            <div>
+              {{t "metadata-form.public"}}
+              {{input type="checkbox" checked=uploadedFile.public}}
+            </div>
+            {{t "subcases.document-type"}}
+            :
+            {{document-type-selector
+              chooseDocumentType=(action "chooseDocumentType" uploadedFile)
+            }}
+          </div>
+        {{/each}}
+        {{#if (not nonDigitalDocuments.length eq "0")}}
+          <h4 class="vl-title vl-title--h4">
+            Niet-digitale bijlagen
+          </h4>
+        {{/if}}
+        {{#each nonDigitalDocuments as |nonDigitalDocument|}}
+          {{utils/non-digital-document
+            nonDigitalDocument=nonDigitalDocument
+            removeDocument=(action "removeDocument")
+          }}
+        {{/each}}
+      </div>
+      <div class="vl-action-group vl-action-group--align-left">
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon-before"
+          type="button"
+          {{action "toggleAddNonDigitalDocument"}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+          ></i>
+          {{t "cases.non-digital-file"}}
+        </button>
+        <button type="submit" class="vl-button vl-button--tertiary">
+          {{t "buttons.create-case"}}
+        </button>
+      </div>
+    </div>
   </form>
 </div>
 {{#if isAddingNonDigitalDocument}}

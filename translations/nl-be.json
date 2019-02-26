@@ -140,7 +140,8 @@
 		"th-select-all": "Selecteer alles",
 		"document-type": "Document type",
 		"mandatee": "Hoedanigheid",
-		"name-subcase": "Naam procedurestap"
+		"name-subcase": "Naam procedurestap",
+		"title-subcase":"Titel procedurestap"
 	},
 	"web-components": {
 		"loading-text": "Pagina is aan het laden",
