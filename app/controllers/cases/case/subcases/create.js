@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import $ from 'jquery';
+import { notifyPropertyChange } from '@ember/object';
 
 export default Controller.extend({
   uploadedFiles: [],
@@ -91,7 +92,7 @@ export default Controller.extend({
 
     createNonDigitalDocument() {
       this.nonDigitalDocuments.push({title: this.get('documentTitle')});
-      this.notifyPropertyChange('nonDigitalDocuments');
+      notifyPropertyChange(this, 'nonDigitalDocuments');
       this.set('documentTitle', null);
     },
   

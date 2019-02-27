@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import $ from 'jquery';
 import { inject } from '@ember/service';
+import { notifyPropertyChange } from '@ember/object';
 
 export default Service.extend({
 	store: inject(),
@@ -26,12 +27,11 @@ export default Service.extend({
 					}
 				);
 			} else {
-				newAgenda.notifyPropertyChange('agendaitems');
+				notifyPropertyChange(newAgenda, 'agendaitems');
 				return newAgenda;
 			}
 			}).then(() => {
-				// eslint-disable-next-line ember/jquery-ember-run
-				newAgenda.notifyPropertyChange('agendaitems');
+				notifyPropertyChange(newAgenda, 'agendaitems');
 				return newAgenda;
 			});			
 		
@@ -43,10 +43,10 @@ export default Service.extend({
 			{
 				method: "POST",
 				url: `/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
-				data: { }
+				data: {}
 			}
 		).then(() => {
-			selectedAgenda.notifyPropertyChange('agendaitems');
+			notifyPropertyChange(selectedAgenda, 'agendaitems');
 		});
 	},
 
@@ -62,7 +62,7 @@ export default Service.extend({
 			priority: null
 		});
 		return agendaitem.save().then(agendaitem => {
-			selectedAgenda.notifyPropertyChange('agendaitems');
+			notifyPropertyChange(selectedAgenda, 'agendaitems');
 			return agendaitem;
 		});
 	},
