@@ -5,9 +5,9 @@
     </h3>
     <div class="vl-form-grid vl-form-grid--is-stacked">
       {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
-      {{web-components/vl-form-input value=shortTitle}}
+      {{web-components/vl-form-input width="4" value=shortTitle}}
       {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
-      {{web-components/vl-form-input value=title}}
+      {{web-components/vl-form-input width="4" value=title}}
       {{web-components/vl-form-label value=(t "subcases.mandatee")}}
       {{utils/mandate-selector chooseMandatee=(action "selectMandatees")}}
       <div class="vl-col--4-4">
@@ -53,7 +53,8 @@
           }}
         {{/each}}
       </div>
-      <div class="vl-action-group vl-action-group--align-left">
+    </div>
+    <div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
         <button
           class="vl-button vl-button--tertiary vl-button--icon-before"
           type="button"
@@ -68,7 +69,6 @@
           {{t "buttons.create-case"}}
         </button>
       </div>
-    </div>
   </form>
 </div>
 {{#if isAddingNonDigitalDocument}}

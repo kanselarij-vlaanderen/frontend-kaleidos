@@ -1,2 +1,6 @@
-{{cases/cases-header cases=model}}
-{{outlet}}
+{{cases/cases-header cases=model isAddingCase=isAddingCase}}
+{{#if (not isAddingCase)}}
+  <div>
+    {{outlet}}
+  </div>
+{{/if}}

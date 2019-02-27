@@ -1,28 +1,28 @@
 <label class="vl-form__label vl-u-display-block">
-  Type dossier
+  {{t "case-item.case-level"}}
 </label>
-{{#each (await caseTypes) as |caseType index|}}
+{{#each policyLevels as |policyLevel index|}}
   <label class="vl-radio">
     {{#if (is-equal index 0)}}
       <input
         class="vl-radio__toggle"
-        value={{caseType.id}}
+        value={{policyLevel}}
         type="radio"
         name="typeId"
         checked=""
-        onchange={{action "typeChanged"}}
+        onchange={{action "policyLevelChanged"}}
        />
     {{else}}
       <input
         class="vl-radio__toggle"
-        value={{caseType.id}}
+        value={{policyLevel}}
         type="radio"
         name="typeId"
-        onchange={{action "typeChanged"}}
+        onchange={{action "policyLevelChanged"}}
        />
     {{/if}}
     <div class="vl-radio__label">
-      {{caseType.label}}
+      {{policyLevel}}
     </div>
   </label>
 {{/each}}

@@ -2,7 +2,7 @@
   <div class="vl-typography">
     <h3>
       Persagenda van
-      {{await currentAgenda.meeting.plannedStart}}
+      {{moment-format currentSession.plannedStart "dddd DD-MM-YYYY"}}
     </h3>
     {{#each pressAgendaItems as |pressItem index|}}
       <h4>
