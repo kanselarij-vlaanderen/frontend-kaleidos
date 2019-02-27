@@ -1,0 +1,16 @@
+{{#web-components/vl-modal isOverlay=true closeModal=(action "close")}}
+  <div class="vl-typography">
+    <h3>
+      Persagenda van
+      {{await currentAgenda.meeting.plannedStart}}
+    </h3>
+    {{#each pressAgendaItems as |pressItem index|}}
+      <h4>
+        {{pressItem.title}}
+      </h4>
+      <p>
+        {{pressItem.content}}
+      </p>
+    {{/each}}
+  </div>
+{{/web-components/vl-modal}}

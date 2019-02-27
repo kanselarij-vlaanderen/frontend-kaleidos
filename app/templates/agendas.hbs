@@ -1,32 +1,39 @@
 {{agenda/agenda-header
-  sessions=model 
+  sessions=model
   creatingNewSession=creatingNewSession
   selectedAgendaItem=selectedAgendaItem
   compareAgendas=(action "compareAgendas")
+  loading=(action "loadingAgendaitems")
 }}
-<div class="vl-layout-agenda">
-  {{agenda/side-nav
-    agendas=agendas
-    selectedAgendaItem=selectedAgendaItem
-    currentAgenda=currentAgenda
-  }}
-  <div class="vl-layout-agenda__master">
-    {{agenda/agendaitem-search
-      selectedAgenda=currentAgenda
-      navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
-      navigateToSubCases=(action "navigateToSubCases")
+{{#if (not isLoading)}}
+  <div class="vl-layout-agenda">
+    {{agenda/side-nav
+      agendas=agendas
+      selectedAgendaItem=selectedAgendaItem
+      currentAgenda=currentAgenda
     }}
-    <div class="c-scrollable-container">
-      {{agenda/agenda-list
-        agendaitems=(await currentAgendaItems)
-        selectedAgendaItem=selectedAgendaItem
+    <div class="vl-layout-agenda__master">
+      {{agenda/agendaitem-search
+        selectedAgenda=currentAgenda
+        navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
+        navigateToSubCases=(action "navigateToSubCases")
       }}
-      {{agenda/announcement-list announcements=(await announcements)}}
+      <div class="c-scrollable-container">
+        {{agenda/agenda-list
+          agendaitems=currentAgendaItems
+          selectedAgendaItem=selectedAgendaItem
+        }}
+        {{agenda/announcement-list announcements=(await announcements)}}
+      </div>
     </div>
+    {{#if selectedAgendaItem}}
+      {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
+    {{else if createAnnouncement}}
+      {{agenda/create-announcement currentAgenda=currentAgenda}}
+    {{/if}}
   </div>
-  {{#if selectedAgendaItem}}
-    {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
-  {{else if createAnnouncement}}
-    {{agenda/create-announcement currentAgenda=currentAgenda}}
-  {{/if}}
-</div>
+{{else}}
+  {{web-components/vl-loader 
+    text="De agenda wordt goedgekeurd. Even geduld aub.."
+  }}
+{{/if}}

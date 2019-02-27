@@ -55,6 +55,7 @@ export default Service.extend({
 			retracted: false,
 			postPoned: false,
 			formallyOk: false,
+			titlePress: subCase.shortTitle || subCase.title,
 			created: new Date(),
 			subcase: subCase,
 			agenda: selectedAgenda,
