@@ -10,7 +10,6 @@ export default Component.extend({
 	sessionService: inject(),
 	agendaService: inject(),
 	classNames: ["c-page-header"],
-	tagName: "div",
 
 	creatingNewSession: null,
 	sessions: null,
@@ -44,8 +43,6 @@ export default Component.extend({
 			} else {
 				agendaToLock.set('name', alphabet[definiteAgendas.length] || definiteAgendas.length);
 			}
-
-			agendaToLock.set('isFinal', true);
 
 			agendaToLock.save().then(() => {
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {

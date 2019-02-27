@@ -14,6 +14,7 @@ export default Component.extend({
 			});
 			decision.save().then(decision => {
 				agendaitem.set('decision', decision);
+				this.toggleProperty('isEditing');
 			});
 		},
 		

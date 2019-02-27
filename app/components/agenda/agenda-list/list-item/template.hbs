@@ -29,7 +29,7 @@
         {{#if agendaitem.retracted}}
           {{t "agenda-item.postponed"}}
         {{/if}}
-        {{#if (await agendaitem.postponed) as |sess|}}
+        {{#if (await agendaitem.postponedTo) as |sess|}}
           {{t "agenda-item.postponed-until"}}
           {{moment-format sess.plannedStart "dddd DD-MM-YYYY"}}
         {{/if}}

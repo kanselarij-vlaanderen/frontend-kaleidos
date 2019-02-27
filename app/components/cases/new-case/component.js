@@ -1,22 +1,14 @@
-import Controller from '@ember/controller';
-import { task, timeout } from 'ember-concurrency';
-import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
 
-export default Controller.extend({
-  contacts: alias('model'),
-  part: 1,
-  isPartOne : computed('part', function() {
-    return this.get('part') === 1;
-  }),
-  actions: {
+export default Component.extend({
+	store: inject(),
+	actions: {
     async createCase(event) {
-      event.preventDefault();
       const { title, shortTitle, selectedType } = this;
       const date = new Date();
       let cases = this.store.createRecord('case', { title, shortTitle, created:date, type:selectedType }); //remark, themes: selectedThemes, type: selectedType, created: date, modified: date
       await cases.save();
-      await this.transitionToRoute('cases');
     },
     async resetValue(param) {
       if (param === "") {
@@ -48,13 +40,6 @@ export default Controller.extend({
     previousStep() {
       this.set('part', 1);
     },
-  },
-  searchContact : task(function* (searchValue) {
-    yield timeout(300);
-    return this.store.query('capacity', {
-      filter: {
-        label: searchValue
-      }
-    });
-  }),
+	}
+	
 });

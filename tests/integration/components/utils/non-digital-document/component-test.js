@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | agenda/agenda-search', function(hooks) {
+module('Integration | Component | utils/non-digital-document', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{agenda/agenda-search}}`);
+    await render(hbs`{{utils/non-digital-document}}`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      {{#agenda/agenda-search}}
+      {{#utils/non-digital-document}}
         template block text
-      {{/agenda/agenda-search}}
+      {{/utils/non-digital-document}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

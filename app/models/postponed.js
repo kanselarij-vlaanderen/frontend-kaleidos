@@ -1,9 +1,9 @@
 import DS from 'ember-data';
 
-let { Model, attr, hasMany, belongsTo } = DS;
+let { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
 	postponed: attr('boolean'),
-	agendaitems: hasMany('agendaitem'),
+	agendaitem: belongsTo('agendaitem'),
 	meeting: belongsTo('meeting')
 });

@@ -354,3 +354,12 @@ $icon-font-location: "/fonts/";
       margin:0.2em;
     }
   }
+
+  .non-digital-document {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width:50%;
+    float:left;
+  }
+  

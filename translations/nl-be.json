@@ -51,10 +51,12 @@
 		"agenda-lock": "Agenda afsluiten",
 		"agenda-unlock": "Agenda unlocken",
 		"agenda-delete": "Ontwerpagenda verwijderen",
+		"agenda-add":"Nieuwe ontwerpagenda aanmaken",
 		"cancel": "Annuleren",
 		"create-case": "Dossier aanmaken",
 		"create-subcase": "Nieuwe procedurestap",
 		"delete": "Verwijderen",
+		"document-add":"Document toevoegen",
 		"new-session": "Nieuwe zitting",
 		"previous-step": "Vorige Stap",
 		"next-step": "Volgende Stap",
@@ -72,11 +74,12 @@
 	"cases": {
 		"title": "Dossier",
 		"cases": "dossiers",
-		"new-case": "Nieuw dossier",
-		"contact-person": "CONTACTPERSOON",
-		"related-cases": "GERELATEERDE DOSSIERS",
+		"new-case": "Dossier aanmaken",
+		"contact-person": "Contactpersoon",
+		"related-cases": "Gerelateerde dossiers",
 		"subcases": "Procedurestappen",
-		"upload-file": "Files uploaden"
+		"upload-file": "Bestanden uploaden",
+		"non-digital-file":"Niet-digitaal document toevoegen"
 	},
 	"case-item": {
 		"not-agreed": "Niet Akkoord",
@@ -115,10 +118,10 @@
 	},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
-		"short-title": "KORTE TITEL",
+		"short-title": "Korte titel",
 		"status": "Hoedanigheid",
-		"themes": "THEMAS",
-		"title": "LANGE TITEL",
+		"themes": "Themas",
+		"title": "Lange titel",
 		"public": "Openbaar"
 	},
 	"navigation": {
@@ -137,7 +140,8 @@
 		"th-select-all": "Selecteer alles",
 		"document-type": "Document type",
 		"mandatee": "Hoedanigheid",
-		"name-subcase": "Naam procedurestap"
+		"name-subcase": "Naam procedurestap",
+		"title-subcase":"Titel procedurestap"
 	},
 	"web-components": {
 		"loading-text": "Pagina is aan het laden",

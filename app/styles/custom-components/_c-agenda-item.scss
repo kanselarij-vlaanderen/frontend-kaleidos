@@ -67,4 +67,8 @@
     }
   }
 
+  &--active {
+    border-left: 3px solid $primary-blue;
+  }
 }
+
