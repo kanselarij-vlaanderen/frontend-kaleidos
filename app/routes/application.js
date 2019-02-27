@@ -7,6 +7,5 @@ export default Route.extend({
 
   beforeModel() {
     this.intl.setLocale('nl-be');
-    this.get('moment').setTimeZone('Europe/Brussels');
   }
 });

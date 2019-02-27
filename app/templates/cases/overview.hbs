@@ -16,9 +16,7 @@
     {{#t.content as |c|}}
       {{#c.header}}
         {{th-sortable currentSorting=sort field="title" label="Dossiernaam"}}
-        <th class="data-table__header-title--sortable">
-          Status
-        </th>
+        {{th-sortable field="status" label="Status"}}        
         {{th-sortable currentSorting=sort field="created" label="Aangemaakt op"}}
         <th></th>
       {{/c.header}}

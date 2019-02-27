@@ -1,23 +1,21 @@
 <h5 class="vl-title vl-title--h5">
-  Documenten van de procedurestap
+  {{t "documents-subcase"}}
 </h5>
 <table class="vl-data-table">
   <thead>
     <tr>
       <th>
-        Versie
+        {{t "version"}}
       </th>
       <th>
-        Naam
+        {{t "name"}}
       </th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     {{#each (await subcase.documentVersions) as |currentVersion|}}
-      {{#each
-        (await currentVersion.document.sortedDocuments) as |documentVersion|
-      }}
+      {{#each (await currentVersion.document.sortedDocuments) as |documentVersion|}}
         <tr>
           <td>
             {{documentVersion.versionNumber}}
@@ -26,12 +24,13 @@
             {{documentVersion.nameToDisplay}}
           </td>
           <td class="align-right">
-            <div
+            <a
+              href="#"
               class="vl-file-overview"
               {{action "downloadFile" documentVersion}}
             >
               <i class="vl-icon vl-vi vl-vi-file-download"></i>
-            </div>
+            </a>
           </td>
         </tr>
       {{/each}}
@@ -43,14 +42,13 @@
             class="vl-button vl-button--tertiary"
             {{action "openUploadDialog" currentVersion}}
           >
-            Upload nieuwe versie
+            {{t "file-uploader.new-version"}}
           </button>
         </td>
       </tr>
     {{/each}}
   </tbody>
 </table>
-
 {{#if isUploadingNewVersion}}
   {{#web-components/vl-modal
     closeModal=(action "openUploadDialog")

@@ -1,10 +1,10 @@
 {{#web-components/vl-modal isOverlay=true closeModal=(action "close")}}
   <div class="vl-typography">
     <h3>
-      Persagenda van
+      {{t "press-agenda"}}
       {{moment-format currentSession.plannedStart "dddd DD-MM-YYYY"}}
     </h3>
-    {{#each pressAgendaItems as |pressItem index|}}
+    {{#each pressAgendaItems as |pressItem|}}
       <h4>
         {{pressItem.title}}
       </h4>

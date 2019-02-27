@@ -17,7 +17,7 @@
       <div class="vl-col--4-4">
         {{#if (not uploadedFiles.length eq "0")}}
           <h4 class="vl-title vl-title--h4">
-            Bijlagen
+            {{t "attachements"}}
           </h4>
         {{/if}}
         {{#each uploadedFiles as |uploadedFile|}}
@@ -43,7 +43,7 @@
         {{/each}}
         {{#if (not nonDigitalDocuments.length eq "0")}}
           <h4 class="vl-title vl-title--h4">
-            Niet-digitale bijlagen
+            {{t "non-digital-attachements"}}
           </h4>
         {{/if}}
         {{#each nonDigitalDocuments as |nonDigitalDocument|}}

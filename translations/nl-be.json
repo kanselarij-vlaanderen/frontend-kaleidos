@@ -1,7 +1,8 @@
 {
 	"agenda": {
 		"agendaitems": "agendapunten",
-		"announcements": "opmerkingen"
+		"announcements": "opmerkingen",
+		"header-zero": "0"
 	},
 	"agenda-item": {
 		"collapse": "meer weergeven",
@@ -70,7 +71,8 @@
 		"agendaitem-bestek": "Kort bestek",
 		"agendaitem-press-agenda": "Persagenda",
 		"postpone": "Uitstellen",
-		"not-postpone": "On-uitstellen"
+		"not-postpone": "On-uitstellen",
+		"edit":"Wijzigen"
 	},
 	"cases": {
 		"title": "Dossier",
@@ -86,6 +88,7 @@
 		"not-agreed": "Niet Akkoord",
 		"my-cases": "Mijn dossiers",
 		"case-type":"Type dossier",
+		"case-type-agendaitem":"Type dossier: ",
 		"case-level":"Beleidsniveau",
 		"current-subcase":"Huidige procedurestap"
 	},
@@ -118,7 +121,9 @@
 		"files": "bestanden",
 		"invalid-type": "Fout bestandstype.",
 		"uploading": "Uploaden",
-		"add-attachements": "Bijlage toevoegen"
+		"add-attachements": "Bijlage toevoegen",
+		"new-version":"Nieuwe versie uploaden",
+		"size-extension":"KB"
 	},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
@@ -151,5 +156,20 @@
 		"loading-text": "Pagina is aan het laden",
 		"document-type":"PDF",
 		"close-modal":"Venster sluiten"
-	}
+	},
+	"minister":"Minister",
+	"mandatee":"Bevoegdheid",
+	"filter":"Filter",
+	"example-subcase":"In voorbereiding",
+	"version":"Versie nummer",
+	"name":"Naam",
+	"press-agenda":"Persagenda van",
+	"documents-subcase":"Documenten van de procedurestap",
+	"overview":"Overzicht",
+	"detail":"Detail",
+	"compare":"Vergelijk",
+	"attachements":"Bijlagen",
+	"non-digital-attachements":"Niet-digitale bijlagen",
+	"status":"Status",
+	"error":"Er is iets misgelopen.."
 }

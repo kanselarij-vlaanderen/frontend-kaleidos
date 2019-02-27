@@ -24,7 +24,7 @@ module.exports = function(environment) {
     },
 
     moment: {
-      includeLocales: ['nl', 'be']
+      includeLocales: ['nl-be', 'be', 'nl'],
     },
 
     fontawesome: {

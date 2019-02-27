@@ -16,13 +16,13 @@
           {{#if currentAgendaItems}}
             {{currentAgendaItems.length}} {{t "agenda.agendaitems"}},
           {{else}}
-            0 {{t "agenda.agendaitems"}},
+            {{t "agenda.header-zero"}} {{t "agenda.agendaitems"}},
           {{/if}}
           {{#if (await currentAgenda.announcements)}}
             {{await currentAgenda.announcements.length}}
             {{t "agenda.announcements"}}
           {{else}}
-            0 {{t "agenda.announcements"}}
+            {{t "agenda.header-zero"}} {{t "agenda.announcements"}}
           {{/if}}
         </p>
       </div>
