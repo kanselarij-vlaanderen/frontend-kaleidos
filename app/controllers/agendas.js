@@ -6,7 +6,8 @@ export default Controller.extend({
 	sessionService: inject(),
 	creatingNewSession: false,
 	selectedAgendaItem: null,
-  createAnnouncement: false,
+	createAnnouncement: false,
+	isLoading:false,
 	currentSession: alias('sessionService.currentSession'),
 	agendas: alias('sessionService.agendas'),
   announcements: alias('sessionService.announcements'),
@@ -29,6 +30,10 @@ export default Controller.extend({
 
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
+		},
+
+		loadingAgendaitems() {
+			this.toggleProperty('isLoading');
 		}
 	}
 });

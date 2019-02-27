@@ -1,40 +1,40 @@
 {{#if (not isAddingCase)}}
-<div class="vl-toolbar">
-  <div class="vl-toolbar__left">
-    <div class="vl-toolbar__item">
-      <h1 class="vl-page-header__title vl-page-header__title--bordered">
-        {{t "navigation.cases"}}
-      </h1>
-      <div class="vl-page-header__sub">
-        <p class="vl-u-text--small vl-u-text--muted">
-          {{await cases.length}}
+  <div class="vl-toolbar">
+    <div class="vl-toolbar__left">
+      <div class="vl-toolbar__item">
+        <h1 class="vl-page-header__title vl-page-header__title--bordered">
           {{t "navigation.cases"}}
-        </p>
+        </h1>
+        <div class="vl-page-header__sub">
+          <p class="vl-u-text--small vl-u-text--muted">
+            {{await cases.length}}
+            {{t "navigation.cases"}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="vl-toolbar__right">
+      <div class="vl-toolbar__item">
+        <div class="vl-action-group">
+          <button
+            class="vl-button vl-button--narrow vl-button--icon-before"
+            {{action "toggleAddingCase"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              aria-hidden="true"
+            ></i>
+            {{t "buttons.add-case"}}
+          </button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="vl-toolbar__right">
-    <div class="vl-toolbar__item">
-      <div class="vl-action-group">
-        <button
-          class="vl-button vl-button--narrow vl-button--icon-before"
-          {{action "toggleAddingCase"}}
-        >
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-            aria-hidden="true"
-          ></i>
-          {{t "buttons.add-case"}}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 {{else}}
   {{#web-components/vl-modal
     isOverlay=true
     closeModal=(action "toggleAddingCase")
   }}
-    {{cases/new-case}}
+    {{cases/new-case close=(action "toggleAddingCase")}}
   {{/web-components/vl-modal}}
 {{/if}}

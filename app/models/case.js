@@ -8,7 +8,7 @@ export default Model.extend({
   title: attr('string'),
   shortTitle: attr('string'),
   number: attr('string'),
-
+  policyLevel: attr('string'),
   type: belongsTo('case-type'),
   remark: hasMany('remark'),
   themes: hasMany('theme'),
@@ -17,19 +17,19 @@ export default Model.extend({
   creators: hasMany('person'),
   mandatees: hasMany('mandatee'),
 
-  latestSubcase: computed('subcases', function() {
+  latestSubcase: computed('subcases', function () {
     const subcases = this.get('subcases');
-    if(subcases && subcases.length > 0) {
+    if (subcases && subcases.length > 0) {
       const currentSubcase = subcases.sortBy('created').get('lastObject');
       return currentSubcase;
     } else {
-      return {title:"Nog geen procedurestap."}
+      return { title: "In voorbereiding." }
     }
   }),
 
-  mandateesOfSubcase: computed('subcases', function() {
+  mandateesOfSubcase: computed('subcases', function () {
     const subcases = this.get('subcases');
-    if(subcases && subcases.length > 0) {
+    if (subcases && subcases.length > 0) {
       const currentSubcase = subcases.sortBy('created').get('lastObject');
       return currentSubcase.get('mandatees');
     } else {

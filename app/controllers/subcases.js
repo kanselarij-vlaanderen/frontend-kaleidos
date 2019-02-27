@@ -40,7 +40,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 			let agendaService = this.get('agendaService');
 			let promise = Promise.all(itemsToAdd.map(async subCase => {
 				if (subCase.selected) {
-					 return agendaService.createNewAgendaItem(selectedAgenda, subCase);
+					return agendaService.createNewAgendaItem(selectedAgenda, subCase);
 				}
 			}));
 			promise.then(() => {

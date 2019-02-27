@@ -14,18 +14,15 @@
       <div class="vl-u-display-flex">
         <p>
           {{#if currentAgendaItems}}
-            {{currentAgendaItems.length}}
-            {{t "agenda.agendaitems"}},
+            {{currentAgendaItems.length}} {{t "agenda.agendaitems"}},
           {{else}}
-            0
-            {{t "agenda.agendaitems"}},
+            0 {{t "agenda.agendaitems"}},
           {{/if}}
           {{#if (await currentAgenda.announcements)}}
             {{await currentAgenda.announcements.length}}
             {{t "agenda.announcements"}}
           {{else}}
-            0
-            {{t "agenda.announcements"}}
+            0 {{t "agenda.announcements"}}
           {{/if}}
         </p>
       </div>
@@ -100,6 +97,13 @@
                   {{t "buttons.agenda-add"}}
                 </button>
               {{/if}}
+              <button
+                class="vl-button vl-button--narrow"
+                {{action "createPressAgenda"}}
+                {{action attacher.hide}}
+              >
+                {{t "buttons.printable-press-agenda"}}
+              </button>
             {{/attach-popover}}
           </button>
         </div>
@@ -111,4 +115,11 @@
   <div class="files--header-tile files--sub-file-header">
     {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
   </div>
+{{/if}}
+{{#if showPressModal}}
+  {{agenda/press-agenda
+    pressAgendaItems=pressItems
+    currentSession=currentSession
+    closeModal=(action "closePressAgenda")
+  }}
 {{/if}}

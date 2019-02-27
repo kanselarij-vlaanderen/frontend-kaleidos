@@ -33,6 +33,7 @@ export default Component.extend({
 
 	actions: {
 		async approveAgenda(session) {
+			this.changeLoading();
 			let agendas = await this.get('agendas');
 			let agendaToLock = await agendas.find(agenda => agenda.name == "Ontwerpagenda");
 			let definiteAgendas = await this.get('definiteAgendas');
@@ -50,6 +51,7 @@ export default Component.extend({
 					this.set('sessionService.currentAgenda', newAgenda);
 					session.notifyPropertyChange('sessionService.agendas');
 					this.set('selectedAgendaItem', null);
+					this.changeLoading();
 				});
 			})
 		},
@@ -94,6 +96,7 @@ export default Component.extend({
 		},
 
 		async createNewDesignAgenda() {
+			this.changeLoading();
 			const session = this.get('currentSession');
 			const definiteAgendas = await this.get('definiteAgendas');
 			const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
@@ -103,8 +106,26 @@ export default Component.extend({
 				this.set('sessionService.currentAgenda', newAgenda);
 				session.notifyPropertyChange('sessionService.agendas');
 				this.set('selectedAgendaItem', null);
+				this.changeLoading();
 			});
+		},
+
+		createPressAgenda() {
+			const currentAgendaitems = this.get('currentAgendaItems');
+			const pressItems = currentAgendaitems.map(item => {
+				return {title: item.titlePress, content: item.textPress}
+			});
+			this.set('pressItems', pressItems);
+			this.set('showPressModal', true);
+		},
+
+		closePressAgenda() {
+			this.set('showPressModal', false);
 		}
+	},
+
+	changeLoading() {
+		this.loading();
 	},
 
 	async didInsertElement() {

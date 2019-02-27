@@ -58,6 +58,7 @@
 		"delete": "Verwijderen",
 		"document-add":"Document toevoegen",
 		"new-session": "Nieuwe zitting",
+		"printable-press-agenda":"Persagenda aanmaken",
 		"previous-step": "Vorige Stap",
 		"next-step": "Volgende Stap",
 		"save": "Opslaan",
@@ -83,7 +84,10 @@
 	},
 	"case-item": {
 		"not-agreed": "Niet Akkoord",
-		"my-cases": "Mijn dossiers"
+		"my-cases": "Mijn dossiers",
+		"case-type":"Type dossier",
+		"case-level":"Beleidsniveau",
+		"current-subcase":"Huidige procedurestap"
 	},
 	"cases-search": {
 		"cases-number": "Nummer Dossier",
@@ -118,10 +122,10 @@
 	},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
-		"short-title": "Korte titel",
+		"short-title": "Korte titel dossier",
 		"status": "Hoedanigheid",
 		"themes": "Themas",
-		"title": "Lange titel",
+		"title": "Lange titel dossier",
 		"public": "Openbaar"
 	},
 	"navigation": {
