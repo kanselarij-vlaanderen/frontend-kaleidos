@@ -41,6 +41,7 @@ def imagePrune(containerName){
     try {
         sh "docker image prune -f"
         sh "docker-compose stop"
+        sh "docker-compose rm -f"
     } catch(error){}
 }
 

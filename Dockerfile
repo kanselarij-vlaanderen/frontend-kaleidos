@@ -1,6 +1,6 @@
 FROM nginx:1.9.12
 
-ARG EMBER_ENV=development
+ARG EMBER_ENV=production
 
 RUN apt-get update \
 	&& apt-get install -y curl git bzip2 libfontconfig1-dev xz-utils
