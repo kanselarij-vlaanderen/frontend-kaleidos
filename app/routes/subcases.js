@@ -9,4 +9,10 @@ export default Route.extend(DataTableRouteMixin, {
 			refreshModel: true
 		}
 	},
+  mergeQueryOptions() {
+    return {
+      included: 'agendaitems',
+      'filter[:has:agendaitems]': false
+    };
+  }
 });
