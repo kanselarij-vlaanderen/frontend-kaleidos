@@ -1,14 +1,21 @@
 {{#if (is-pending agendaitems)}}
   {{web-components/vl-loader}}
 {{else}}
-  <h5 class="vl-title vl-title--h5 vl-u-spacer">
-    {{t "agendas.agendaitems-subtitle"}}
-  </h5>
-  {{#each (await agendaitems) as |agendaitem index|}}
-    {{agenda/agenda-list/list-item
-      agendaitem=agendaitem
-      index=index
-      selectedAgendaItem=selectedAgendaItem
-    }}
-  {{/each}}
+  <div class="vlc-agenda-items vlc-agenda-items--small">
+    <div class="vlc-agenda-items__header">
+      <h5 class="vl-title vl-title--h5">
+        {{t "agendas.agendaitems-subtitle"}}
+      </h5>
+    </div>
+    <div class="vl-u-spacer">
+      {{#each agendaitems as |agendaitem index|}}
+        {{agenda/agenda-list/list-item
+          agendaitem=agendaitem
+          index=index
+          selectedAgendaItem=selectedAgendaItem
+          selectAgendaItem=(action "selectAgendaItem")
+        }}
+      {{/each}}
+    </div>
+  </div>
 {{/if}}

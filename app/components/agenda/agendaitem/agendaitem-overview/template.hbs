@@ -1,67 +1,81 @@
-<div data-vl-tabs-responsive-label="Navigatie" class="vl-tabs__wrapper">
-  {{agenda/agendaitem/agendaitem-nav
-    agendaitem=agendaitem
-    activeAgendaItemSection=activeAgendaItemSection
-    setAgendaItemSection=(action "setAgendaItemSection")
-  }}
+<div class="vlc-scroll-wrapper__header">
+  <div class="vlc-navbar vlc-navbar--bordered-bottom">
+    <div class="vlc-toolbar vlc-toolbar--justified">
+      <div
+        class="vl-u-spacer-extended-top vl-u-spacer-extended-left-l vl-u-spacer-extended-right-l"
+      >
+        {{agenda/agendaitem/agendaitem-nav
+          agendaitem=agendaitem
+          activeAgendaItemSection=activeAgendaItemSection
+          setAgendaItemSection=(action "setAgendaItemSection")
+        }}
+      </div>
+    </div>
+  </div>
 </div>
-<div class="vl-u-spacer">
-  {{#if (eq activeAgendaItemSection "details")}}
-    <div class="vl-action-group vl-action-group--align-right">
-      {{#if (not currentAgenda.isFinal)}}
-        {{#if showOptions}}
-          {{#if isPostPonable}}
-            {{#if (or agendaitem.retracted (await agendaitem.postponed))}}
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "advanceAgendaitem"}}
-              >
-                {{t "buttons.not-postpone"}}
-              </button>
-            {{else}}
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "togglePostponed"}}
-              >
-                {{t "buttons.postpone"}}
-              </button>
+<div class="vlc-scroll-wrapper__body">
+  <div class="vlc-container">
+    <div class="vl-u-spacer-extended-l">
+      {{#if (eq activeAgendaItemSection "details")}}
+        <div class="vl-action-group vl-action-group--align-right">
+          {{#if (not currentAgenda.isFinal)}}
+            {{#if showOptions}}
+              {{#if isPostPonable}}
+                {{#if (or agendaitem.retracted (await agendaitem.postponed))}}
+                  <button
+                    class="vl-button vl-button--tertiary vl-button--narrow"
+                    {{action "advanceAgendaitem"}}
+                  >
+                    {{t "buttons.not-postpone"}}
+                  </button>
+                {{else}}
+                  <button
+                    class="vl-button vl-button--tertiary vl-button--narrow"
+                    {{action "togglePostponed"}}
+                  >
+                    {{t "buttons.postpone"}}
+                  </button>
+                {{/if}}
+              {{/if}}
+              {{#if
+                (await
+                  (allow-delete-agendaitem
+                    agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda
+                  )
+                )
+              }}
+                <button
+                  class="vl-button vl-button--tertiary vl-button--narrow"
+                  {{action "deleteItem" agendaitem}}
+                >
+                  {{t "buttons.delete"}}
+                </button>
+              {{/if}}
             {{/if}}
-          {{/if}}
-          {{#if
-            (await
-              (allow-delete-agendaitem
-                agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda
-              )
-            )
-          }}
             <button
-              class="vl-button vl-button--tertiary vl-button--narrow"
-              {{action "deleteItem" agendaitem}}
+              class="vl-button vl-button--tertiary vl-button--icon"
+              {{action "showOptions"}}
             >
-              {{t "buttons.delete"}}
+              <i
+                class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+              ></i>
             </button>
           {{/if}}
-        {{/if}}
-        <button
-          class="vl-button vl-button--tertiary vl-button--icon"
-          {{action "showOptions"}}
-        >
-          <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
-        </button>
+        </div>
+      {{/if}}
+      {{#if (eq activeAgendaItemSection "details")}}
+        {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+      {{else if (eq activeAgendaItemSection "comments")}}
+        {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
+      {{else if (eq activeAgendaItemSection "press-agenda")}}
+        {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
+      {{else if (eq activeAgendaItemSection "decision")}}
+        {{agenda/agendaitem/agendaitem-decision agendaitem=agendaitem}}
+      {{else if (eq activeAgendaItemSection "news-item")}}
+        {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
       {{/if}}
     </div>
-  {{/if}}
-  {{#if (eq activeAgendaItemSection "details")}}
-    {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
-  {{else if (eq activeAgendaItemSection "comments")}}
-    {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
-  {{else if (eq activeAgendaItemSection "press-agenda")}}
-    {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
-  {{else if (eq activeAgendaItemSection "decision")}}
-    {{agenda/agendaitem/agendaitem-decision agendaitem=agendaitem}}
-  {{else if (eq activeAgendaItemSection "news-item")}}
-    {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
-  {{/if}}
+  </div>
 </div>
 {{#if isShowingPostponeModal}}
   {{#web-components/vl-modal

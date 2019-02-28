@@ -1,0 +1,95 @@
+/* ==========================================================================
+   vl-side-nav
+   ========================================================================== */
+
+.vlc-side-nav {
+  background: $blue-gray-lighter;
+  border-right: 1px solid $ghost;
+  height: 100%;
+
+  .vl-title {
+    display: flex;
+    align-items: center;
+
+    .vl-icon {
+      font-size: 2rem;
+      margin-right: 1rem;
+      height: 2.4rem;
+    }
+  }
+
+  .vl-button.collapsed {
+    display: none;
+  }
+
+  .vlc-side-nav-item {
+    padding: 0.8rem 1.6rem;
+    border-bottom: 1px solid $ghost;
+    border-left: 3px solid rgba(0,0,0,0);
+    a {
+      text-decoration: none;
+    }
+    .vlc-side-nav-item__label {
+      margin-bottom: 0.4rem;
+      color: $black;
+    }
+
+    .vlc-side-nav-item__meta {
+      font-size: 1.3rem;
+      color: $blue-gray-dark;
+    }
+
+    .vlc-side-nav-item__meta--small {
+      display: none;
+      font-size: 1.3rem;
+      color: $blue-gray-dark;
+    }
+  }
+
+  .vlc-side-nav-item--active {
+    background: $white;
+    border-left-color: $primary-blue;
+    .vlc-side-nav-item__label {
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+  }
+
+  .vlc-side-nav-item:hover {
+    background: $white;
+    border-left-color: $primary-blue;
+  }
+}
+
+/* Collapsed state menu
+   ========================================================================== */
+
+.vlc-panel-layout__agenda-history.vlc-panel-layout__agenda-history--collapsed {
+  flex: 1 0 95px;
+
+  .vlc-side-nav-item__label span {
+    display: none;
+  }
+
+  .vl-title span {
+    display: none;
+  }
+
+  .vl-button.collapsed {
+    display: block;
+  }
+
+  .vl-button.default {
+    display: none;
+  }
+
+  .vlc-side-nav-item__meta--small {
+    display: block;
+    font-size: 1.3rem;
+    color: $blue-gray-dark;
+  }
+
+  .vlc-side-nav-item__meta {
+    display: none;
+  }
+}

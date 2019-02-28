@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 
 export default Component.extend({
-  classNames: ["vl-layout-agenda__detail"],
+  classNames: ["vlc-panel-layout__main-content"],
   store: inject(),
 
   actions : {

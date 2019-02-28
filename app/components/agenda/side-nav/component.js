@@ -4,8 +4,8 @@ import { alias } from '@ember/object/computed';
 
 export default Component.extend({
 	sessionService: inject(),
-	classNames: ['c-layout-agenda__sidebar'],
-	classNameBindings: ['agendaMenuOpened:vl-layout-agenda__sidebar--collapsed'],
+	classNames: ['vlc-panel-layout__agenda-history'],
+	// classNameBindings: ['agendaMenuOpened:vl-layout-agenda__sidebar--collapsed'],
 	selectedAgendaItem:null,
 	agendaMenuOpened:false,
 	

@@ -6,6 +6,17 @@ import { notifyPropertyChange } from '@ember/object';
 export default Service.extend({
 	store: inject(),
 
+	getSortedAgendaItems(agenda) {
+		return $.ajax(
+			{
+				method: "GET",
+				url: `/agenda-sort?agendaId=${agenda.get('id')}`,
+			}
+		).then(result => {
+			return result.body.items;
+		})
+	},
+
 	approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
@@ -14,7 +25,7 @@ export default Service.extend({
 		});
 
 		return newAgenda.save().then(agenda => {
-			if(oldAgenda) {
+			if (oldAgenda) {
 				return $.ajax(
 					{
 						method: "POST",
@@ -22,7 +33,6 @@ export default Service.extend({
 						data: {
 							newAgendaId: agenda.id,
 							oldAgendaId: oldAgenda.id,
-							currentSessionDate: currentSession.plannedStart,
 						}
 					}
 				);
@@ -30,12 +40,10 @@ export default Service.extend({
 				notifyPropertyChange(newAgenda, 'agendaitems');
 				return newAgenda;
 			}
-			}).then(() => {
-				notifyPropertyChange(newAgenda, 'agendaitems');
-				return newAgenda;
-			});			
-		
-			
+		}).then(() => {
+			notifyPropertyChange(newAgenda, 'agendaitems');
+			return newAgenda;
+		});
 	},
 
 	sortAgendaItems(selectedAgenda) {
