@@ -1,7 +1,5 @@
 <form>
   <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right">
-    {{web-components/vl-form-label value=(t "edit-item.title")}}
-    {{web-components/vl-form-input value=newsItem.title}}
     {{web-components/vl-form-label value=(t "edit-item.sub-title")}}
     {{web-components/vl-form-input value=newsItem.subtitle}}
     {{web-components/vl-form-label value=(t "edit-item.content")}}
@@ -16,13 +14,6 @@
         useUTC=true
         value=newsItem.publicationDate
         onSelection=(action "updatePublicationDate")
-      }}
-    </div>
-    {{web-components/vl-form-label value=(t "edit-item.themes")}}
-    <div class="vl-col--3-4 vl-col--1-1--s">
-      {{utils/theme-list
-        chooseTheme=(action "chooseTheme")
-        selectedThemes=newsItem.themes
       }}
     </div>
   </div>

@@ -4,13 +4,25 @@
       {{t "press-agenda"}}
       {{moment-format currentSession.plannedStart "dddd DD-MM-YYYY"}}
     </h3>
+    <hr class="vlc-hr" />
     {{#each pressAgendaItems as |pressItem|}}
-      <h4>
-        {{pressItem.title}}
-      </h4>
-      <p>
-        {{pressItem.content}}
-      </p>
+      <div class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
+        <div class="vl-u-spacer-extended-bottom">
+          <em>
+            {{pressItem.mandatees}}
+          </em>
+        </div>
+        {{#each pressItem.agendaitems as |agendaitem|}}
+          <div class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
+            <h6>
+              {{agendaitem.title}}
+            </h6>
+            <p>
+              {{agendaitem.content}}
+            </p>
+          </div>
+        {{/each}}
+      </div>
     {{/each}}
   </div>
 {{/web-components/vl-modal}}

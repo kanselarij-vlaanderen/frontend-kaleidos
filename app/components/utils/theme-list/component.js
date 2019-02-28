@@ -1,25 +1,23 @@
 import Component from '@ember/component';
 import { task, timeout } from 'ember-concurrency';
 import { inject } from '@ember/service';
-import { computed } from '@ember/object';
 
 export default Component.extend({
   store: inject(),
+  selectedThemes:null,
 
   searchTheme: task(function* (searchValue) {
     yield timeout(300);
     return this.store.query('theme', {
       filter: {
-        naam: searchValue
+        label: searchValue
       }
     });
   }),
-  themes: computed("store", function(){
-    return this.store.findAll('theme');
-  }),
 
   actions: {
-    async chooseTheme(themes) {
+    chooseTheme(themes) {
+      this.set('selectedThemes', themes);
       this.chooseTheme(themes);
     },
     async resetValueIfEmpty(param) {

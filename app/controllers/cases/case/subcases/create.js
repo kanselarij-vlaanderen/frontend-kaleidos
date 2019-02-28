@@ -1,13 +1,15 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import $ from 'jquery';
+import { notifyPropertyChange } from '@ember/object';
 
 export default Controller.extend({
   uploadedFiles: [],
   nonDigitalDocuments: [],
   selectedMandatees: [],
+  themes: [],
   isAddingNonDigitalDocument: false,
-  
+
   title: computed('model', function () {
     return this.get('model').title;
   }),
@@ -37,7 +39,8 @@ export default Controller.extend({
         showAsRemark: false, 
         case: caze, 
         created: new Date(), 
-        mandatees: this.get('selectedMandatees')
+        mandatees: this.get('selectedMandatees'),
+        themes:this.get('themes')
       });
 
       const createdSubCase = await subcase.save();
@@ -62,6 +65,10 @@ export default Controller.extend({
 
     chooseType(type) {
       this.set('selectedType', type);
+    },
+
+    chooseTheme(themes){
+      this.set('themes', themes);
     },
 
     uploadedFile(uploadedFile) {
@@ -91,7 +98,7 @@ export default Controller.extend({
 
     createNonDigitalDocument() {
       this.nonDigitalDocuments.push({title: this.get('documentTitle')});
-      this.notifyPropertyChange('nonDigitalDocuments');
+      notifyPropertyChange(this, 'nonDigitalDocuments');
       this.set('documentTitle', null);
     },
   

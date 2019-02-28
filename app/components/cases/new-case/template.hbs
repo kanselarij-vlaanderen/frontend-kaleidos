@@ -1,6 +1,7 @@
 <h3 class="vl-title vl-title--h3">
   {{t "cases.new-case"}}
 </h3>
+<hr class="vlc-hr">
 <form class="vl-form" onsubmit={{action "createCase"}}>
   {{cases/case-levels policyLevelChanged=(action "policyLevelChanged")}}
   {{cases/forms/metadata-form

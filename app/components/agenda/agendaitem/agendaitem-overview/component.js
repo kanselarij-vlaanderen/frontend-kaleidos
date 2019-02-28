@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
 export default Component.extend({
-	classNames: ["vl-layout-agenda__detail"],
+	classNames: ["vlc-panel-layout__main-content"],
 	currentAgenda: alias('sessionService.currentAgenda'),
 	sessionService: inject(),
 	store: inject(),
@@ -40,21 +40,17 @@ export default Component.extend({
 			this.toggleProperty('showOptions');
 		},
 
-		togglePostponed() {
-			this.toggleProperty('isShowingPostponeModal');
-			},
-
-		async advanceAgendaitem(agendaitem) {
-			if(agendaitem && agendaitem.retracted) {
-				agendaitem.set('retracted', false);
+		togglePostponed(agendaitem) {
+			if (agendaitem) {
+				let isPostponed = agendaitem.get('isPostponed');
+				if (isPostponed) {
+					agendaitem.set('retracted', false);
+					agendaitem.set('postponed', null);
+					agendaitem.save();
+				} else {
+					this.toggleProperty('isShowingPostponeModal');
+				}
 			}
-			if(agendaitem && agendaitem.postponedTo) {
-				const postponedObject = await agendaitem.get('postponedTo');
-				postponedObject.destroyRecord();
-				await postponedObject.save();
-				agendaitem.set('postponedTo', undefined);
-			}
-			agendaitem.save();
 		},
 
 		postponeAgendaItem(agendaitem) {
@@ -65,7 +61,7 @@ export default Component.extend({
 					agendaitem: agendaitem
 				});
 				postPonedObject.save().then(postponedTo => {
-					agendaitem.set('postponedTo', postponedTo);
+					agendaitem.set('postponed', postponedTo);
 				})
 			} else {
 				agendaitem.set('retracted', !agendaitem.retracted);

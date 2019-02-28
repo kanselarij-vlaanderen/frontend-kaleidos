@@ -10,7 +10,7 @@
 		"expand": "minder weergeven",
 		"postponed": "stilgezet",
 		"postponed-until": "Uitgesteld, aanvraag voor de zitting op ",
-		"no-agendaitems": "Geen agendapunten.",
+		"no-agendaitems": "Geen agendapunten",
 		"postpone-until": "Uitstellen tot"
 	},
 	"agendaitem-details": {
@@ -30,7 +30,7 @@
 	"agendas": {
 		"nav-title": "Historiek",
 		"announcements-subtitle": "Mededelingen",
-		"agendaitems-subtitle": "Agendapunten"
+		"agendaitems-subtitle": "Agenda overzicht"
 	},
 	"announcement": {
 		"title": "titel",
