@@ -7,8 +7,9 @@ export default Controller.extend({
   uploadedFiles: [],
   nonDigitalDocuments: [],
   selectedMandatees: [],
+  themes: [],
   isAddingNonDigitalDocument: false,
-  
+
   title: computed('model', function () {
     return this.get('model').title;
   }),
@@ -66,7 +67,7 @@ export default Controller.extend({
       this.set('selectedType', type);
     },
 
-    async chooseTheme(themes){
+    chooseTheme(themes){
       this.set('themes', themes);
     },
 
