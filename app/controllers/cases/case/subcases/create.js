@@ -38,7 +38,8 @@ export default Controller.extend({
         showAsRemark: false, 
         case: caze, 
         created: new Date(), 
-        mandatees: this.get('selectedMandatees')
+        mandatees: this.get('selectedMandatees'),
+        themes:this.get('themes')
       });
 
       const createdSubCase = await subcase.save();
@@ -63,6 +64,10 @@ export default Controller.extend({
 
     chooseType(type) {
       this.set('selectedType', type);
+    },
+
+    async chooseTheme(themes){
+      this.set('themes', themes);
     },
 
     uploadedFile(uploadedFile) {
