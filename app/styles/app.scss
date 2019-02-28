@@ -92,19 +92,19 @@ $icon-font-location: "/fonts/";
 @import "govflanders/additions/_data-table";
 
 // Custom components
-@import "custom-components/c-agenda-item";
-@import "custom-components/c-block-list";
-@import "custom-components/c-comments";
-@import "custom-components/c-layout-agenda";
-@import "custom-components/c-page-header";
-@import "custom-components/c-section-header";
-@import "custom-components/c-side-nav";
-@import "custom-components/c-view-switch";
-@import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
-@import "custom-components/c-scrollable-container";
+@import "custom-components/vlc-agenda-item";
+@import "custom-components/vlc-container";
+@import "custom-components/vlc-page-header";
+@import "custom-components/vlc-panel-layout";
+@import "custom-components/vlc-side-nav";
+@import "custom-components/vlc-scroll-wrapper";
+@import "custom-components/vlc-navbar";
 @import "custom-components/vlc-procedure-step";
 @import "custom-components/vlc-status-timeline";
 @import "custom-components/vlc-toolbar";
+
+@import "custom-components/c-page-header";
+@import "custom-components/c-view-switch";
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -116,6 +116,10 @@ $icon-font-location: "/fonts/";
 @import "fixes/fix-pre"; // See https://github.com/mono-company/digikan/issues/24
 @import "fixes/fix-typography"; // See https://github.com/mono-company/digikan/issues/23
 @import "fixes/fix-flex-utils"; // related to https://github.com/mono-company/digikan/issues/37
+
+.application-container {
+  height: 100vh;
+}
 
 .vl-title--container {
   display:flex;
@@ -389,4 +393,75 @@ $icon-font-location: "/fonts/";
   .no-js &[multiple] {
     height: auto;
 }
+}
+
+.ember-power-select-search-input {
+  display: inline-block;
+  background: $page-bg;
+  font-family: $base-font;
+  font-size: $form-font-size;
+  color: $text-color;
+  max-width: 100%;
+  height: $form-input-height;
+  line-height: $form-input-height;
+  border-radius: 0;
+  border: 0.1rem solid $border-color;
+  -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+  padding: 0 1rem;
+
+  @include respond-to(small) {
+    font-size: 1.6rem;
+  }
+
+  &:hover {
+    box-shadow: none;
+  }
+
+  &:focus,
+  &--focus {
+    outline: none;
+    border-color: $outline-color;
+    box-shadow: inset 0 0 0 0.1rem $outline-color;
+  }
+
+  &::placeholder {
+    color: $placeholder-color;
+  }
+
+  &::-webkit-search-cancel-button { // sass-lint:disable-line no-vendor-prefixes
+    -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+  }
+
+  // Input field block modifier
+  &--block {
+    display: block;
+    width: 100%;
+  }
+
+  // Input field small modifier
+  &--small {
+    max-width: 6rem;
+    padding: 0 0.8rem;
+  }
+
+}
+
+.vlc-side-nav-title {
+  padding: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid $ghost;
+
+  .vl-title {
+    display: flex;
+    align-items: center;
+    margin-right: 0.4rem;
+
+    .vl-icon {
+      padding-right: 0.8rem;
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+  }
 }

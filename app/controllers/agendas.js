@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
+import { computed } from '@ember/object';
 
 export default Controller.extend({
 	sessionService: inject(),
@@ -13,6 +14,14 @@ export default Controller.extend({
   announcements: alias('sessionService.announcements'),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
+
+	agendaitemsClass: computed('selectedAgendaItem', function() {
+		if(this.get('selectedAgendaItem')) {
+			return "vlc-panel-layout__agenda-items vl-u-bg-porcelain";
+		} else {
+			return "vl-u-bg-porcelain";
+		}
+	}),
 
 	actions: {
 		navigateToSubCases() {

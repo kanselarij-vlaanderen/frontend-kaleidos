@@ -1,9 +1,15 @@
 <div class="data-table-button-container">
-  <button class="vl-button vl-button--tertiary" {{action "navigateBackToAgenda"}}>
+  <button
+    class="vl-button vl-button--tertiary"
+    {{action "navigateBackToAgenda"}}
+  >
     {{fa-icon "arrow-left"}}
     {{t "buttons.agenda-back"}}
   </button>
-  <button class="vl-button vl-button--tertiary" {{action "addSubcasesToAgenda"}}>
+  <button
+    class="vl-button vl-button--tertiary"
+    {{action "addSubcasesToAgenda"}}
+  >
     {{t "buttons.add-to-agenda"}}
   </button>
 </div>
@@ -16,8 +22,7 @@
     page=page
     size=size
     sort=sort
-    onClickRow=(action "selectSubCase") 
-  as |t|
+    onClickRow=(action "selectSubCase") as |t|
   }}
     {{#t.content as |c|}}
       {{#c.header}}
@@ -27,10 +32,22 @@
             checked=allSubCasesSelected
             click=(action "selectAllSubCases" bubbles=false)
           }}
+<<<<<<< HEAD
           Select all
+=======
+          {{!-- {{t "select-all"}} --}}
+>>>>>>> development
         </th>
-        {{!-- {{th-sortable field="title" currentSorting=sort label="Title"}} --}}
-        {{th-sortable field="shortTitle" currentSorting=sort label="Short title"}}
+        {{th-sortable
+          field="title"
+          currentSorting=sort
+          label="Titel van de procedurestap"
+        }}
+        {{th-sortable
+          field="shortTitle"
+          currentSorting=sort
+          label="Naam van de procedurestap"
+        }}
       {{/c.header}}
       {{#c.body as |subCase|}}
         <td>

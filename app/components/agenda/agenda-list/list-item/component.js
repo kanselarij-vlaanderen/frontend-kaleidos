@@ -1,31 +1,25 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-import $ from 'jquery';
 
-export default Component.extend(FileSaverMixin, {
-	selectedAgendaItem: null,
+export default Component.extend({
+	classNames: ["vlc-agenda-item"],
+	classNameBindings: ["getClassNames"],
+	tagName: 'a',
 	index:null,
+
+	getClassNames: computed('agendaitem', 'selectedAgendaItem', function() {
+		if(this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
+			return 'vlc-agenda-item--active';
+		}
+	}),
+
+	click(event) {
+		this.selectAgendaItem(this.get('agendaitem'));
+	},
 
 	number: computed('index', function() {
 		if(this.index >=0) {
 			return (this.index + 1);
 		} 
-	}),
-
-	actions: {
-		selectAgendaItem(agendaitem) {
-			this.set('selectedAgendaItem', agendaitem);
-		},
-
-		async downloadFile(documentVersion) {
-			let file = await documentVersion.get('file');
-				$.ajax(`/files/${file.id}?download=${file.filename}`, {
-					method: 'GET',
-					dataType: 'arraybuffer', // or 'blob'
-					processData: false
-				})
-				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
-		}
-	}
+	})
 });

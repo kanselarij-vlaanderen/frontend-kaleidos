@@ -14,7 +14,7 @@
   <h3 class="vl-title vl-title--h3">
     {{agendaitem.subcase.shortTitle}}
   </h3>
-  <p>
+  <p class="vl-long-title">
     {{agendaitem.subcase.title}}
   </p>
 </div>
@@ -32,6 +32,32 @@
       </span>
     </div>
   </div>
+</div>
+<div class="pill-container vl-u-spacer--small">
+  <div class="vl-custom">
+    {{#each (await agendaitem.subcase.mandatees) as |mandatee|}}
+      <p class="vl-pill">
+        {{mandatee.title}}
+      </p>
+    {{/each}}
+  </div>
+</div>
+<div class="vl-attachments vl-u-spacer--small">
+  {{#each (await agendaitem.subcase.documentVersions) as |documentVersion|}}
+    <div
+      class="vl-attachment vl-u-display-flex vl-u-display-inline-flex vl-u-flex-align-center"
+      {{action "downloadFile" documentVersion}}
+    >
+      <div
+        class="vl-badge vl-badge--icon vl-badge--small vl-badge--alt c-document-badge"
+      >
+        <i class="vl-badge__icon vl-vi vl-vi-file"></i>
+      </div>
+      <p>
+        {{documentVersion.nameToDisplay}}
+      </p>
+    </div>
+  {{/each}}
 </div>
 <div class="vl-u-spacer">
   <div class="vl-u-spacer">

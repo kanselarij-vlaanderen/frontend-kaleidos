@@ -1,5 +1,5 @@
-<nav class="c-side-nav">
-  <div class="c-side-nav-title">
+<nav class="vlc-side-nav">
+  <div class="vlc-side-nav-title">
     <h4 class="vl-title vl-title--h4">
       <i class="vl-icon vl-vi vl-vi-timeline"></i>
       <span>
@@ -13,14 +13,14 @@
   <div class="c-scrollable-container">
     <ul>
       {{#each (await agendas) as |agenda|}}
-        <li class="c-side-nav-item {{active-class agenda currentAgenda class="c-side-nav-item"}}">
+        <li class="vlc-side-nav-item {{active-class agenda currentAgenda class="vlc-side-nav-item"}}">
           <a href="#" {{action "setCurrentAgenda" agenda}}>
-            <div class="c-side-nav-item__label">
+            <div class="vlc-side-nav-item__label">
               <span>
                 {{agenda.agendaName}}
               </span>
             </div>
-            <div class="c-side-nav-item__meta">
+            <div class="vlc-side-nav-item__meta">
               {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
             </div>
           </a>

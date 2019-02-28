@@ -6,19 +6,19 @@
   loading=(action "loadingAgendaitems")
 }}
 {{#if (not isLoading)}}
-  <div class="vl-layout-agenda">
+  <div class="vlc-panel-layout">
     {{agenda/side-nav
       agendas=agendas
       selectedAgendaItem=selectedAgendaItem
       currentAgenda=currentAgenda
     }}
-    <div class="vl-layout-agenda__master">
-      {{agenda/agendaitem-search
-        selectedAgenda=currentAgenda
-        navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
-        navigateToSubCases=(action "navigateToSubCases")
-      }}
-      <div class="c-scrollable-container">
+    <div class={{agendaitemsClass}}>
+      <div class="vlc-scroll-wrapper">
+        {{agenda/agendaitem-search
+          selectedAgenda=currentAgenda
+          navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
+          navigateToSubCases=(action "navigateToSubCases")
+        }}
         {{agenda/agenda-list
           agendaitems=currentAgendaItems
           selectedAgendaItem=selectedAgendaItem
@@ -27,13 +27,19 @@
       </div>
     </div>
     {{#if selectedAgendaItem}}
-      {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
+      <div class="vlc-panel-layout__main-content">
+        <div class="vlc-scroll-wrapper">
+          {{agenda/agendaitem/agendaitem-overview 
+            agendaitem=selectedAgendaItem
+          }}
+        </div>
+      </div>
     {{else if createAnnouncement}}
       {{agenda/create-announcement currentAgenda=currentAgenda}}
     {{/if}}
   </div>
 {{else}}
-  {{web-components/vl-loader 
+  {{web-components/vl-loader
     text="De agenda wordt goedgekeurd. Even geduld aub.."
   }}
 {{/if}}
