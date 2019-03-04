@@ -9,7 +9,7 @@ export default Model.extend({
   showAsRemark: attr('boolean'),
 
   case: belongsTo('case'),
-  relatedTo: hasMany('subcase'),
+  relatedTo: hasMany('subcase', { inverse: null }),
   meeting: belongsTo('meeting'),
   phase: belongsTo('subcase-phase'),
   consulationRequests: hasMany('consulation-request'),

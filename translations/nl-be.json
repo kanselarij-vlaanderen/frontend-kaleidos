@@ -150,7 +150,9 @@
 		"document-type": "Document type",
 		"mandatee": "Hoedanigheid",
 		"name-subcase": "Naam procedurestap",
-		"title-subcase":"Titel procedurestap"
+		"title-subcase":"Titel procedurestap",
+		"title-postponed-subcases":"Uitgestelde procedurestappen",
+		"title-available-subcases":"Beschikbare procedurestappen"
 	},
 	"web-components": {
 		"loading-text": "Pagina is aan het laden",
