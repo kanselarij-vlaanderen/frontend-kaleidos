@@ -1,0 +1,60 @@
+<div class="vl-u-spacer--large">
+  <h4 class="vl-title vl-title--h4">
+    {{t "manage-ministers-title"}}
+  </h4>
+  <form class="vl-form">
+    <div class="vl-form__group vl-u-bg-porcelain">
+      <div class="vl-u-spacer">
+        <table class="vl-data-table vl-data-table--align-middle">
+          <thead>
+            <tr>
+              <th class="vl-data-table-col-6">
+                {{t "minister"}}
+              </th>
+              <th class="vl-data-table-col-5">
+                {{t "mandatees"}}
+              </th>
+              <th class="vl-data-table-col-1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>
+                {{utils/domains-selector}}
+              </td>
+              <td class="vl-u-align-right">
+                <button class="vl-button vl-button--link vl-button--icon">
+                  <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <button
+            class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              aria-hidden="true"
+            ></i>
+            {{t "buttons.add-minister"}}
+          </button>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vl-action-group vl-action-group--align-right">
+            <a class="vl-link" href="detail-detail.html">
+              {{t "buttons.cancel"}}
+            </a>
+            <button class="vl-button vl-button--narrow">
+              {{t "buttons.save"}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

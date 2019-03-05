@@ -67,6 +67,7 @@ export default Component.extend({
 
 		chooseSession(session) {
 			this.set('sessionService.currentAgenda', null);
+			this.set('selectedAgendaItem', null);
 			this.set('sessionService.currentSession', session);
 		},
 

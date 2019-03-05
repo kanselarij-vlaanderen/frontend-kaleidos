@@ -39,6 +39,7 @@
 	},
 	"buttons": {
 		"add": "Toevoegen",
+		"add-minister":"Minister toevoegen",
 		"next":"Volgende",
 		"add-case": "Dossier toevoegen",
 		"add-comment": "Opmerking toevoegen",
@@ -51,7 +52,7 @@
 		"agenda-compare": "Vergelijk agendas",
 		"agenda-lock": "Agenda afsluiten",
 		"agenda-unlock": "Agenda unlocken",
-		"agenda-delete": "Ontwerpagenda verwijderen",
+		"agenda-delete": "Ontwerpagenda vperwijderen",
 		"agenda-add":"Nieuwe ontwerpagenda aanmaken",
 		"cancel": "Annuleren",
 		"create-case": "Dossier aanmaken",
@@ -157,7 +158,9 @@
 		"document-type":"PDF",
 		"close-modal":"Venster sluiten"
 	},
+	"manage-ministers-title":"Ministers en bevoegdheden",
 	"minister":"Minister",
+	"mandatees":"Bevoegdheden",
 	"mandatee":"Bevoegdheid",
 	"filter":"Filter",
 	"example-subcase":"In voorbereiding",
