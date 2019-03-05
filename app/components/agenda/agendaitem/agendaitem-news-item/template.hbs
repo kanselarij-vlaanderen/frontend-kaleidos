@@ -33,7 +33,7 @@
   {{#if (and (await agendaitem.newsletterInfo) isEditing)}}
     {{news-item/edit-item newsItem=(await agendaitem.newsletterInfo)}}
   {{else}}
-    <p>{{t "buttons.agendaitem-bestek"}} {{moment-format agendaitem.newsletterInfo.publicationDate "DD MMMM YYYY"}}</p>
+    <p>{{t "buttons.agendaitem-bestek"}} {{moment-format agendaitem.newsletterInfo.publicationDate "DD MMMM YYYY HH:mm"}}</p>
     <h6>
       {{await agendaitem.newsletterInfo.title}}
     </h6>

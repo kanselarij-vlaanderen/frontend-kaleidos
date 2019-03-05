@@ -6,15 +6,5 @@
     <div class="vl-col--3-4 vl-col--1-1--s">
       {{textarea class="vl-textarea vl-textarea--block" value=newsItem.text}}
     </div>
-    {{web-components/vl-form-label value=(t "edit-item.date-publication")}}
-    <div class="vl-col--3-4 vl-col--1-1--s">
-      {{pikaday-input
-        theme="pikaday-session"
-        class="vl-input-field vl-input-field__input"
-        useUTC=true
-        value=newsItem.publicationDate
-        onSelection=(action "updatePublicationDate")
-      }}
-    </div>
   </div>
 </form>

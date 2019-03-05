@@ -1,8 +1,9 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
+
 import { notifyPropertyChange } from '@ember/object';
+import { filter } from '@ember/object/computed';
 
 const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
@@ -23,13 +24,8 @@ export default Component.extend({
 	agendas: alias('sessionService.agendas'),
 	definiteAgendas: alias('sessionService.definiteAgendas'),
 
-	designAgendaPresent: computed('agendas', function () {
-		const agendas = this.get('agendas')
-		if (agendas && agendas.length >= 0) {
-			return agendas.find(agenda => agenda.name == "Ontwerpagenda");
-		} else {
-			return false;
-		}
+	designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {
+		return agenda.get('name') === "Ontwerpagenda";
 	}),
 
 	actions: {
@@ -43,7 +39,7 @@ export default Component.extend({
 			if (!lastDefiniteAgenda) {
 				agendaToLock.set('name', alphabet[0]);
 			} else {
-				agendaToLock.set('name', alphabet[definiteAgendas.length] || definiteAgendas.length);
+				agendaToLock.set('name', alphabet[definiteAgendas.length]);
 			}
 
 			agendaToLock.save().then(() => {
@@ -63,6 +59,7 @@ export default Component.extend({
 			} else {
 				agenda.set('isFinal', true);
 			}
+			agenda.save();
 		},
 
 		chooseSession(session) {

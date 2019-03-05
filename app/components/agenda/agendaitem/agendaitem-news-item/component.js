@@ -25,6 +25,7 @@ export default Component.extend({
 
 		async saveChanges(agendaitem) {
 			let newsItem = await agendaitem.get('newsletterInfo');
+			newsItem.set('publicationDate', new Date());
 			newsItem.save().then(() => {
 				this.toggleProperty('isEditing');
 			})
