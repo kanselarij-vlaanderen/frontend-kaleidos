@@ -4,6 +4,7 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
 export default Component.extend({
+	classNames: ["mandatee-selector-container"],
 	store: inject(),
 	selectedMandatees: null,
 	singleSelect:false,

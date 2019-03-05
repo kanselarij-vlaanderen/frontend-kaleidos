@@ -2,11 +2,21 @@ import Component from '@ember/component';
 
 export default Component.extend({
 	isAddingNewMinister:false,
+	isAddingMandate:false,
 	selectedMandatee:null,
 
 	actions: {
-		showModal() {
+		showAddingMinisterForm() {
 			this.toggleProperty('isAddingNewMinister');
+		},
+
+		showAddingMandateForm() {
+			this.toggleProperty('isAddingMandate');
+		},
+
+		clearSelections() {
+			this.set('selectedMandatee', null);
+			this.set('selectedDomains', null);
 		},
 
 		async mandateeSelected(mandatee) {

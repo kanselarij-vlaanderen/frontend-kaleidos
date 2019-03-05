@@ -1,74 +1,104 @@
-{{#if (not isAddingNewMinister)}}
-  <div class="vl-u-spacer--large">
-    <h4 class="vl-title vl-title--h4">
-      {{t "manage-ministers-title"}}
-    </h4>
-    <form class="vl-form">
-      <div class="vl-form__group vl-u-bg-porcelain">
-        <div class="vl-u-spacer">
-          <table class="vl-data-table vl-data-table--align-middle">
-            <thead>
-              <tr>
-                <th class="vl-data-table-col-6">
-                  {{t "minister"}}
-                </th>
-                <th class="vl-data-table-col-5">
-                  {{t "mandatees"}}
-                </th>
-                <th class="vl-data-table-col-1"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  {{utils/mandatee-selector
-                    singleSelect=true
-                    chooseMandatee=(action "mandateeSelected")
-                  }}
-                </td>
-                <td>
-                  {{utils/domains-selector
-                    selectedDomains=selectedDomains
-                    chooseDomain=(action "domainsChanged")
-                  }}
-                </td>
-                <td class="vl-u-align-right">
-                  <button class="vl-button vl-button--link vl-button--icon">
-                    <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="vlc-toolbar">
-          <div class="vlc-toolbar__left">
+<div class="vl-u-spacer-extended-l">
+  <h4 class="vl-title vl-title--h4">
+    {{t "manage-ministers-title"}}
+  </h4>
+  <form class="vl-form">
+    <div class="vl-form__group vl-u-bg-porcelain">
+      <div class="vl-u-spacer">
+        <table class="vl-data-table vl-data-table--align-middle">
+          <thead>
+            <tr>
+              <th class="vl-data-table-col-6">
+                {{t "minister"}}
+              </th>
+              <th class="vl-data-table-col-6">
+                {{t "mandatees"}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {{utils/mandatee-selector
+                  singleSelect=true
+                  selectedMandatees=selectedMandatee
+                  chooseMandatee=(action "mandateeSelected")
+                }}
+              </td>
+              <td>
+                {{utils/domains-selector
+                  selectedDomains=selectedDomains
+                  chooseDomain=(action "domainsChanged")
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="vlc-toolbar">
+        <div
+          class="vlc-toolbar__left vl-action-group vl-action-group--space-between"
+        >
+          {{#if selectedMandatee}}
             <button
               class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
               {{action "showModal"}}
             >
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
               ></i>
-              {{t "buttons.add-minister"}}
+              {{t "buttons.edit-minister"}}
             </button>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vl-action-group vl-action-group--align-right">
-              <a class="vl-link" href="detail-detail.html">
-                {{t "buttons.cancel"}}
-              </a>
-              <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-                {{t "buttons.save"}}
-              </button>
-            </div>
+          {{/if}}
+          <button
+            class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+            {{action "showAddingMinisterForm"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            ></i>
+            {{t "buttons.add-minister"}}
+          </button>
+          <button
+            class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+            {{action "showAddingMandateForm"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+            ></i>
+            {{t "manage-mandates"}}
+          </button>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vl-action-group vl-action-group--space-between">
+            <a class="vl-link" {{action "clearSelections"}}>
+              {{t "buttons.cancel"}}
+            </a>
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "saveChanges"}}
+            >
+              {{t "buttons.save"}}
+            </button>
           </div>
         </div>
       </div>
-    </form>
-  </div>
-{{else}}
-  {{#web-components/vl-modal isOverlay=true closeModal=(action "showModal")}}
-    {{utils/create-mandatee closeModal=(action "showModal")}}
+    </div>
+  </form>
+</div>
+{{#if isAddingNewMinister}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "showAddingMinisterForm")
+  }}
+    {{utils/create-mandatee closeModal=(action "showAddingMinisterForm")}}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isAddingMandate}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "showAddingMandateForm")
+  }}
+    {{utils/add-mandate closeModal=(action "showAddingMandateForm")}}
   {{/web-components/vl-modal}}
 {{/if}}

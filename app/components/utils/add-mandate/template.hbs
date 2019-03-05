@@ -1,0 +1,42 @@
+<h3 class="vl-title vl-title--h3">
+  {{t "manage-mandates"}}
+</h3>
+{{#if (not isAdding)}}
+  <div class="vl-input-group">
+    {{utils/domains-selector
+      selectedDomains=selectedDomain
+      chooseDomain=(action "selectDomain")
+      singleSelect=true
+    }}
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow"
+      {{action "toggleIsAdding"}}
+    >
+      <i class="vl-button__icon vl-vi vl-vi-add"></i>
+    </button>
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow"
+      {{action "removeMandate"}}
+    >
+      <i class="vl-button__icon vl-vi vl-vi-trash"></i>
+    </button>
+  </div>
+  <div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
+    <button class="vl-button vl-button--narrow" {{action "closeModal"}}>
+      {{t "buttons.cancel"}}
+    </button>
+  </div>
+{{else}}
+  <div>
+    {{web-components/vl-form-label value=(t "name")}}
+    {{web-components/vl-form-input width="4" value=title}}
+  </div>
+  <div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
+    <button class="vl-button vl-button--narrow" {{action "toggleIsAdding"}}>
+      {{t "buttons.cancel"}}
+    </button>
+    <button class="vl-button vl-button--narrow" {{action "createMandate"}}>
+      {{t "buttons.save"}}
+    </button>
+  </div>
+{{/if}}

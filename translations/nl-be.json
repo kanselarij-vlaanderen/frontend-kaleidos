@@ -40,6 +40,7 @@
 	"buttons": {
 		"add": "Toevoegen",
 		"add-minister":"Minister toevoegen",
+		"edit-minister":"Minister aanpassen",
 		"next":"Volgende",
 		"add-case": "Dossier toevoegen",
 		"add-comment": "Opmerking toevoegen",
@@ -180,5 +181,6 @@
 	"status":"Status",
 	"error":"Er is iets misgelopen..",
 	"create-mandatee":"Minister toevoegen",
-	"add-people":"Bevoegde persoon toevoegen"
+	"add-people":"Bevoegde persoon toevoegen",
+	"manage-mandates":"Bevoegdheden beheren"
 }

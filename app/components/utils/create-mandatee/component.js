@@ -3,6 +3,7 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
 	store: inject(),
+	mandateeToEdit: null,
 	selectedPerson: null,
 	selectedDomains: [],
 	today: new Date(),
@@ -23,6 +24,10 @@ export default Component.extend({
 
 		chooseDomain(domains) {
 			this.set('selectedDomains', domains);
+		},
+
+		closeModal() {
+			this.closeModal();
 		},
 
 		async createMandatee() {

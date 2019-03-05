@@ -352,6 +352,7 @@ $icon-font-location: "/fonts/";
   @include select-default;
   display: block;
   width: 100%;
+  min-height:3.5rem;
 
   .ember-power-select-status-icon {
     display: none;
@@ -381,10 +382,11 @@ $icon-font-location: "/fonts/";
 
 .ember-basic-dropdown-trigger {
   height:auto;
-  max-height:12rem;
+  max-height:10rem;
 }
 
 .ember-power-select-search-input {
+  width:100%;
   display: inline-block;
   background: $page-bg;
   font-family: $base-font;
@@ -397,6 +399,7 @@ $icon-font-location: "/fonts/";
   border: 0.1rem solid $border-color;
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
   padding: 0 1rem;
+
 
   @include respond-to(small) {
     font-size: 1.6rem;
@@ -461,4 +464,15 @@ $icon-font-location: "/fonts/";
   display: block;
   z-index: 40;
   width: 80rem;
+}
+
+.vl-modal {
+  .vl-modal__backdrop {
+    z-index:52;
+  }
+}
+
+.mandate-selector-container,
+.domains-selector-container {
+  width:100%;
 }
