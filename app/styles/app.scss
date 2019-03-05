@@ -330,10 +330,6 @@ $icon-font-location: "/fonts/";
   }
 }
 
-.mandatee-container {
-  width: 100%;
-}
-
 .ember-attacher-popper {
   display: flex;
   flex-direction: column;
@@ -356,7 +352,6 @@ $icon-font-location: "/fonts/";
   @include select-default;
   display: block;
   width: 100%;
-  height: auto;
 
   .ember-power-select-status-icon {
     display: none;
@@ -379,9 +374,14 @@ $icon-font-location: "/fonts/";
     box-shadow: inset 0 0 0 0.1rem $outline-color;
   }
 
-  .no-js &[multiple] {
+   &[multiple] {
     height: auto;
   }
+}
+
+.ember-basic-dropdown-trigger {
+  height:auto;
+  max-height:12rem;
 }
 
 .ember-power-select-search-input {
@@ -433,6 +433,8 @@ $icon-font-location: "/fonts/";
     max-width: 6rem;
     padding: 0 0.8rem;
   }
+  line-height:3.5rem !important;
+
 }
 
 .vlc-side-nav-title {

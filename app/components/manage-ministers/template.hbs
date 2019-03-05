@@ -20,9 +20,17 @@
             </thead>
             <tbody>
               <tr>
-                <td></td>
                 <td>
-                  {{utils/domains-selector}}
+                  {{utils/mandatee-selector
+                    singleSelect=true
+                    chooseMandatee=(action "mandateeSelected")
+                  }}
+                </td>
+                <td>
+                  {{utils/domains-selector
+                    selectedDomains=selectedDomains
+                    chooseDomain=(action "domainsChanged")
+                  }}
                 </td>
                 <td class="vl-u-align-right">
                   <button class="vl-button vl-button--link vl-button--icon">
@@ -50,7 +58,7 @@
               <a class="vl-link" href="detail-detail.html">
                 {{t "buttons.cancel"}}
               </a>
-              <button class="vl-button vl-button--narrow">
+              <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
                 {{t "buttons.save"}}
               </button>
             </div>

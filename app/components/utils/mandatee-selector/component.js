@@ -5,8 +5,8 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
 	store: inject(),
-	classNames: ["mandatee-container"],
 	selectedMandatees: null,
+	singleSelect:false,
 
 	searchMandatee: task(function* (searchValue) {
 		yield timeout(300);
