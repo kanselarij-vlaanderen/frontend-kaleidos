@@ -1,9 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { alias } from '@ember/object/computed';
-
+import { alias, filter } from '@ember/object/computed';
 import { notifyPropertyChange } from '@ember/object';
-import { filter } from '@ember/object/computed';
 
 const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 

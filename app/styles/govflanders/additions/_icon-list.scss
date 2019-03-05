@@ -1,8 +1,11 @@
 /* ==========================================================================
   Addition:
-    * Add utility for muted/secondary text
+    * add modifier for bordered icon list
    ========================================================================== */
 
-.vl-u-text--muted {
-  color: $blue-gray-dark
+.vl-icon-list--bordered {
+  .vl-icon-list__item {
+    padding: 1rem;
+    border-bottom: 1px solid $blue-gray-lighter;
+  }
 }

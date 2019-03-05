@@ -1,0 +1,13 @@
+{{ember-flatpickr
+  classNames="vl-input-field vl-input-field--block"
+  locale="nl/be"
+  onChange=(action "dateChanged")
+  getFlatpickrRef=(action (mut flatpickrRef))
+}}
+<button
+  class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"
+  type="button"
+  {{action "toggleCalendar"}}
+>
+  <i class="vl-vi vl-vi-calendar" aria-hidden="true"></i>
+</button>

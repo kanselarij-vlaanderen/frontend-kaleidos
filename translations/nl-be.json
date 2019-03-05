@@ -158,6 +158,10 @@
 		"document-type":"PDF",
 		"close-modal":"Venster sluiten"
 	},
+	"mandatee-form": {
+		"start-date":"Begin datum",
+		"end-date":"Eind datum"
+	},
 	"manage-ministers-title":"Ministers en bevoegdheden",
 	"minister":"Minister",
 	"mandatees":"Bevoegdheden",
@@ -174,5 +178,7 @@
 	"attachements":"Bijlagen",
 	"non-digital-attachements":"Niet-digitale bijlagen",
 	"status":"Status",
-	"error":"Er is iets misgelopen.."
+	"error":"Er is iets misgelopen..",
+	"create-mandatee":"Minister toevoegen",
+	"add-people":"Bevoegde persoon toevoegen"
 }

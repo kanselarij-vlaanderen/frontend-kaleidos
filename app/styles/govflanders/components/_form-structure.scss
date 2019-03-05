@@ -9,6 +9,7 @@
   &__group {
     background-color: $alt-bg;
     padding: 2rem 1.5rem;
+    margin: 2rem 0 0;
 
     @include respond-to(small) {
       padding: 1.5rem 1rem;
