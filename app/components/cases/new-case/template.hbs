@@ -1,16 +1,18 @@
 <h3 class="vl-title vl-title--h3">
   {{t "cases.new-case"}}
 </h3>
-<hr class="vlc-hr">
-<form class="vl-form" onsubmit={{action "createCase"}}>
-  {{cases/case-levels policyLevelChanged=(action "policyLevelChanged")}}
-  {{cases/forms/metadata-form
-    shortTitleChange=(action "shortTitleChange")
-    titleChange=(action "titleChange")
-    typeChanged=(action "typeChanged")
-    shortTitle=shortTitle
-    title=title
-  }}
+<hr class="vlc-hr" />
+<form onsubmit={{action "createCase"}}>
+  <div class="vl-modal-dialog__content">
+    {{cases/case-levels policyLevelChanged=(action "policyLevelChanged")}}
+    {{cases/forms/metadata-form
+      shortTitleChange=(action "shortTitleChange")
+      titleChange=(action "titleChange")
+      typeChanged=(action "typeChanged")
+      shortTitle=shortTitle
+      title=title
+    }}
+  </div>
   <div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
     <button
       type="button"

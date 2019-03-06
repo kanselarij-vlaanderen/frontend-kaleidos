@@ -1,0 +1,11 @@
+/* ==========================================================================
+  Addition:
+    * add modifier for bordered icon list
+   ========================================================================== */
+
+.vl-icon-list--bordered {
+  .vl-icon-list__item {
+    padding: 1rem;
+    border-bottom: 1px solid $blue-gray-lighter;
+  }
+}

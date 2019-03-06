@@ -1,0 +1,254 @@
+// This overrides some styling properties of the "Light" flatpickr theme
+
+// sass-lint:disable class-name-format
+// sass-lint:disable no-important
+// sass-lint:disable no-important
+// sass-lint:disable force-element-nesting
+
+.flatpickr-calendar {
+  $gray-shadow: rgba(0, 0, 0, .3);
+  background: $white;
+  border-radius: 0;
+  box-shadow: 0 0 2.1rem 0 $gray-shadow;
+
+  &.arrowTop,
+  &.arrowTop,
+  &.arrowBottom,
+  &.arrowBottom {
+    &::before,
+    &::after {
+      margin-left: -9px;
+    }
+  }
+
+  &.arrowTop,
+  &.arrowTop, {
+    &::before,
+    &::after {
+      border-bottom-color: $white;
+    }
+  }
+
+  &.arrowBottom,
+  &.arrowBottom {
+    &::before,
+    &::after {
+      border-top-color: $white;
+    }
+  }
+
+  &::before,
+  &::after {
+    left: 20px;
+  }
+
+  &.rightMost,
+  &.rightMost {
+    &::before,
+    &::after {
+      right: 20px;
+    }
+  }
+}
+
+.flatpickr-innerContainer {
+  border-bottom: 0;
+}
+
+.flatpickr-days {
+  border: 0;
+}
+
+.flatpickr-day {
+  font-size: 16px;
+  line-height: 37px;
+  height: 40px;
+
+  &.today {
+    border: 0;
+  }
+
+  &.selected { // reset all styles for theme
+    &,
+    &.prevMonthDay,
+    &.nextMonthDay {
+      background: 0;
+      color: $science-blue;
+      border-color: transparent;
+      font-weight: 500;
+
+      &:hover,
+      &:focus {
+        background: $accent-color;
+        color: $text-color;
+        border-color: transparent;
+      }
+    }
+
+    &.startRange,
+    &.endRange {
+      background: $accent-color;
+      border-color: $accent-color;
+      color: $text-color;
+    }
+  }
+
+  &.selected,
+  &.startRange,
+  &.endRange {
+    background-color: $accent-color;
+    border-color: $accent-color;
+
+    &.prevMonthDay,
+    &.nextMonthDay {
+      background-color: $accent-color;
+      border-color: $accent-color;
+    }
+
+    &.startRange {
+      & + .endRange {
+        box-shadow: -10px 0 0 $accent-color;
+      }
+    }
+  }
+
+  &.inRange,
+  &.nextMonthDay.inRange,
+  &.prevMonthDay.inRange {
+    background: $athens-gray;
+    box-shadow: -5px 0 0 $athens-gray, 5px 0 0 $athens-gray;
+    border-color: $athens-gray;
+  }
+
+  &.startRange,
+  &.endRange {
+    &.inRange {
+      background: $accent-color;
+      border-color: $accent-color;
+      color: $text-color;
+    }
+  }
+
+  &:hover,
+  &:focus { // reset all styles for theme
+    color: $curious-blue !important;
+    background: $athens-gray !important;
+    border-color: transparent !important;
+    font-weight: 500;
+  }
+
+  &.selected.startRange + .endRange:not(:nth-child(7n+1)),
+  &.startRange.startRange + .endRange:not(:nth-child(7n+1)),
+  &.endRange.startRange + .endRange:not(:nth-child(7n+1)) {
+    box-shadow: -10px 0 0 $athens-gray;
+  }
+}
+
+.flatpickr-months {
+  position: relative;
+
+  .flatpickr-month {
+    border-radius: 0;
+    background: 0;
+    border-bottom: 1px solid $ghost;
+    height: 45px;
+  }
+}
+
+.flatpickr-weekdays {
+  background: 0;
+
+  span {
+    &.flatpickr-weekday {
+      background: 0;
+      color: inherit;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.flatpickr-current-month {
+  font-size: 120%;
+  color: $text-color;
+  padding-top: 12px;
+
+  span,
+  input {
+    &.cur-month,
+    &.cur-year {
+      font-weight: 500;
+    }
+
+    &.cur-month {
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
+    &.cur-year {
+      color: $science-blue;
+      text-decoration: underline;
+    }
+  }
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  .flatpickr-months & {
+    background: $athens-gray;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    svg {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      right: 0;
+      margin: auto;
+      fill: $text-color;
+      stroke: $text-color;
+      stroke-width: 2px;
+      width: 10px;
+      height: 10px;
+    }
+
+    &:hover,
+    &:focus {
+      background: $action-color;
+
+      svg {
+        fill: $white;
+        stroke: $white;
+      }
+    }
+  }
+}
+
+.flatpickr-prev-month { // flatpickr theme override, avoiding !important
+  &.flatpickr-prev-month {
+    .flatpickr-months & {
+      left: 1rem;
+    }
+  }
+}
+
+.flatpickr-next-month { // flatpickr theme override, avoiding !important
+  &.flatpickr-next-month {
+    .flatpickr-months & {
+      right: 1rem;
+    }
+  }
+}
+
+// hide mobile date picker field, will get focus on mobile devices to show native picker
+.flatpickr-mobile {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}

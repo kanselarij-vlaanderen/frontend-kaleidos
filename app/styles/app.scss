@@ -45,33 +45,50 @@ $icon-font-location: "/fonts/";
 // @import "node_modules/@govflanders/vl-ui-upload/src/scss/_upload";
 
 // Components (loaded locally to easily read source)
+@import "govflanders/components/_accordion";
 @import "govflanders/components/_action-group";
 @import "govflanders/components/_alert";
 @import "govflanders/components/_badge";
 @import "govflanders/components/_button";
+@import "govflanders/components/_checkbox";
 @import "govflanders/components/_data-table";
+@import "govflanders/components/_datepicker";
 @import "govflanders/components/_description-data";
 @import "govflanders/components/_document";
 @import "govflanders/components/_form-message";
 @import "govflanders/components/_form-structure";
 @import "govflanders/components/_icon";
 @import "govflanders/components/_info-tile";
+@import "govflanders/components/_input-addon";
 @import "govflanders/components/_input-field";
+@import "govflanders/components/_input-group";
 @import "govflanders/components/_link-list";
 @import "govflanders/components/_link";
 @import "govflanders/components/_loader";
 @import "govflanders/components/_modal";
 @import "govflanders/components/_pager";
+@import "govflanders/components/_pill-input";
+@import "govflanders/components/_pill";
 @import "govflanders/components/_textarea";
+
 @import "govflanders/components/_popover";
+@import "govflanders/components/_radio";
 @import "govflanders/components/_search";
 @import "govflanders/components/_tabs";
+@import "govflanders/components/_textarea";
 @import "govflanders/components/_titles";
 @import "govflanders/components/_typography";
 @import "govflanders/components/_upload";
 @import "govflanders/components/_radio";
 @import "custom-components/vl-page-header";
 @import "custom-components/vl-toolbar";
+// Interdependent components (loaded from node_modules)
+// @import "node_modules/@govflanders/vl-ui-select/src/scss/_select";
+// @import "node_modules/@govflanders/vl-ui-select/src/scss/_js-select";
+
+// Interdependent components - These are source order dependent
+@import "govflanders/components/_select";
+@import "govflanders/components/_js-select";
 
 @import "custom-utilities/_u-spacer.scss";
 @import "custom-utilities/_reset.scss";
@@ -82,13 +99,22 @@ $icon-font-location: "/fonts/";
 // @import "node_modules/@govflanders/vl-ui-select/src/scss/_select";
 // @import "node_modules/@govflanders/vl-ui-select/src/scss/_js-select";
 
-// Interdependent components - These are source order dependent
-@import "govflanders/components/_select";
-@import "govflanders/components/_js-select";
-
-// Additions to existing components
+@import "govflanders/additions/_accordion";
+@import "govflanders/additions/_badge";
 @import "govflanders/additions/_button";
+@import "govflanders/additions/_data-table";
+@import "govflanders/additions/_icon-list";
+@import "govflanders/additions/_info-tile";
+@import "govflanders/additions/_link-list";
+@import "govflanders/additions/_modal";
+@import "govflanders/additions/_pill-input";
+@import "govflanders/additions/_pill";
+@import "govflanders/additions/_tabs";
+
+// Additions to existing utilities
+@import "govflanders/additions/_background";
 @import "govflanders/additions/_typography";
+@import "govflanders/additions/_button";
 @import "govflanders/additions/_data-table";
 
 // Custom components
@@ -102,6 +128,7 @@ $icon-font-location: "/fonts/";
 @import "custom-components/vlc-procedure-step";
 @import "custom-components/vlc-status-timeline";
 @import "custom-components/vlc-toolbar";
+@import "custom-components/vlc-input-field-block";
 
 @import "custom-components/c-page-header";
 @import "custom-components/c-view-switch";
@@ -122,15 +149,15 @@ $icon-font-location: "/fonts/";
 }
 
 .vl-title--container {
-  display:flex;
+  display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
 }
 
 .document {
-  display:flex;
-  justify-content:space-evenly;
-  align-items:center; 
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .new-session-form-container {
@@ -168,11 +195,11 @@ $icon-font-location: "/fonts/";
   }
 }
 
-  .progress-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .comparison-container {
   width: calc(100% - 150px);
@@ -269,30 +296,30 @@ $icon-font-location: "/fonts/";
 }
 
 .align-right {
-  display:flex;
+  display: flex;
   justify-content: flex-end;
   align-items: center;
 }
 
 .uploaded-file-container {
-  width:calc(100% / 3);
-  padding:1em;
+  width: calc(100% / 3);
+  padding: 1em;
 }
 
 .remove-file {
-  display:flex;
+  display: flex;
   justify-content: flex-end;
 }
 
-.vl-tabs__wrapper { 
-  margin-bottom:1em;
+.vl-tabs__wrapper {
+  margin-bottom: 1em;
 }
 
 .vl-upload__element__label {
   text-decoration: none;
 
   em {
-    display:block;
+    display: block;
   }
 
   a {
@@ -304,76 +331,35 @@ $icon-font-location: "/fonts/";
   }
 }
 
-.mandatee-container {
-  width:100%;
+.ember-attacher-popper {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  button {
+    margin: 0.2em;
+  }
 }
 
-/* ==========================================================================
-  Addition:
-    * custom pill
-   ========================================================================== */
+.non-digital-document {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  float: left;
+}
 
-   .vl-custom {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
-    align-items: center;
-    .vl-pill {
-      line-height: 2rem;
-      padding: 0 0.5rem;
-      background: $porcelain;
-      border: none;
-      font-weight: 400;
-      border-radius: 0;
-      color: $text-color;
-      height: 2.7rem;
-      font-size: 1.2rem;
-      margin:0.1em;
-    }
-  
-    .vl-pill--success {
-      color: $success-text-color;
-      font-weight: bold;
-      border: 1px solid $border-color;
-      border-right: 3px solid $success-text-color;
-      border-radius: 0;
-  
-    }
-  }
-
-  .pill-container {
-    margin-top: 1em;
-
-  }
-
-  .ember-attacher-popper {
-    display: flex;
-    flex-direction: column;
-    padding:1em;
-    button {
-      margin:0.2em;
-    }
-  }
-
-  .non-digital-document {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    width:50%;
-    float:left;
-  }
-  
-
-.ember-power-select-trigger, .ember-basic-dropdown-trigger {
+.ember-power-select-trigger,
+.ember-basic-dropdown-trigger {
   @include select-default;
   display: block;
   width: 100%;
-  height: auto;
-  
+  min-height:3.5rem;
+
   .ember-power-select-status-icon {
-    display:none;
+    display: none;
   }
-  &::-ms-expand {  // sass-lint:disable-line no-vendor-prefixes
+  &::-ms-expand {
+    // sass-lint:disable-line no-vendor-prefixes
     display: none;
   }
 
@@ -390,12 +376,18 @@ $icon-font-location: "/fonts/";
     box-shadow: inset 0 0 0 0.1rem $outline-color;
   }
 
-  .no-js &[multiple] {
+   &[multiple] {
     height: auto;
+  }
 }
+
+.ember-basic-dropdown-trigger {
+  height:auto;
+  max-height:10rem;
 }
 
 .ember-power-select-search-input {
+  width:100%;
   display: inline-block;
   background: $page-bg;
   font-family: $base-font;
@@ -408,6 +400,7 @@ $icon-font-location: "/fonts/";
   border: 0.1rem solid $border-color;
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
   padding: 0 1rem;
+
 
   @include respond-to(small) {
     font-size: 1.6rem;
@@ -428,7 +421,8 @@ $icon-font-location: "/fonts/";
     color: $placeholder-color;
   }
 
-  &::-webkit-search-cancel-button { // sass-lint:disable-line no-vendor-prefixes
+  &::-webkit-search-cancel-button {
+    // sass-lint:disable-line no-vendor-prefixes
     -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
   }
 
@@ -443,6 +437,7 @@ $icon-font-location: "/fonts/";
     max-width: 6rem;
     padding: 0 0.8rem;
   }
+  line-height:3.5rem !important;
 
 }
 
@@ -464,4 +459,29 @@ $icon-font-location: "/fonts/";
       height: 2.4rem;
     }
   }
+}
+
+.vl-modal-dialog {
+  display: block;
+  z-index: 40;
+  width: 80rem;
+}
+
+.vl-modal {
+  .vl-modal__backdrop {
+    z-index:52;
+  }
+}
+
+.mandatee-selector-container,
+.domains-selector-container {
+  width:100%;
+}
+
+.people-selector-container {
+  width:100%;
+}
+
+.vl-modal-dialog__content {
+  padding: 2rem 0;
 }

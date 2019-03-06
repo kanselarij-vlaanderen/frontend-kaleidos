@@ -75,12 +75,7 @@
                   {{t "buttons.agenda-unlock"}}
                 </button>
               {{/if}}
-              {{#if
-                (and
-                  (eq currentAgenda.name "Ontwerpagenda")
-                  (not designAgendaPresent)
-                )
-              }}
+              {{#if (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))}}
                 <button
                   class="vl-button vl-button--narrow"
                   {{action "deleteDesignAgenda" currentAgenda}}
@@ -89,6 +84,7 @@
                   {{t "buttons.agenda-delete"}}
                 </button>
               {{else}}
+                {{#if (not designAgendaPresent)}}
                 <button
                   class="vl-button vl-button--narrow"
                   {{action "createNewDesignAgenda" currentSession}}
@@ -96,6 +92,7 @@
                 >
                   {{t "buttons.agenda-add"}}
                 </button>
+                {{/if}}
               {{/if}}
               <button
                 class="vl-button vl-button--narrow"

@@ -1,0 +1,23 @@
+{{#if (not singleSelect)}}
+  {{#power-select-multiple
+    options=domains
+    selected=selectedDomains
+    search=(perform searchDomain)
+    oninput=(action "resetValueIfEmpty")
+    onchange=(action "chooseDomain") 
+		as |domain|
+  }}
+    {{domain.label}}
+  {{/power-select-multiple}}
+{{else}}
+  {{#power-select
+    options=domains
+    selected=selectedDomains
+    search=(perform searchDomain)
+    oninput=(action "resetValueIfEmpty")
+    onchange=(action "chooseDomain") 
+		as |domain|
+  }}
+    {{domain.label}}
+  {{/power-select}}
+{{/if}}

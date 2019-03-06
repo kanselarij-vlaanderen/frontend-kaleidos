@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | utils/mandate-selector', function(hooks) {
+module('Integration | Component | utils/mandatee-selector', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{utils/mandate-selector}}`);
+    await render(hbs`{{utils/mandatee-selector}}`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      {{#utils/mandate-selector}}
+      {{#utils/mandatee-selector}}
         template block text
-      {{/utils/mandate-selector}}
+      {{/utils/mandatee-selector}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

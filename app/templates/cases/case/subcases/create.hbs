@@ -3,24 +3,28 @@
     <h3 class="vl-title vl-title--h3">
       {{t "buttons.create-subcase"}}
     </h3>
-    <div class="vl-form-grid vl-form-grid--is-stacked">
-      {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
-      {{web-components/vl-form-input width="4" value=shortTitle}}
-      {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
-      {{web-components/vl-form-input width="4" value=title}}
-      {{web-components/vl-form-label value=(t "subcases.mandatee")}}
-      {{utils/mandate-selector chooseMandatee=(action "selectMandatees")}}
-      <div class="vl-col--4-4">
-        {{web-components/vl-form-label value=(t "edit-item.themes")}}
-        {{utils/theme-list
-          chooseTheme=(action "chooseTheme")
-        }}
+    <div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
+        {{web-components/vl-form-input width="4" value=shortTitle}}
       </div>
-      <div class="vl-col--4-4">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
+        {{web-components/vl-form-input width="4" value=title}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.mandatee")}}
+        {{utils/mandatee-selector chooseMandatee=(action "selectMandatees")}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "edit-item.themes")}}
+        {{utils/theme-list chooseTheme=(action "chooseTheme")}}
+      </div>
+      <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "cases.upload-file")}}
         {{file-uploader uploadedFile=(action "uploadedFile")}}
       </div>
-      <div class="vl-col--4-4">
+      <div class="vlc-input-field-block">
         {{#if (not uploadedFiles.length eq "0")}}
           <h4 class="vl-title vl-title--h4">
             {{t "attachements"}}
@@ -89,7 +93,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="vl-modal-dialog__content">
       {{web-components/vl-form-label value=(t "cases-search.title-document")}}
       {{web-components/vl-form-input width="4" value=documentTitle}}
       {{#each nonDigitalDocuments as |nonDigitalDocument|}}

@@ -40,9 +40,9 @@ export default Component.extend({
 			this.toggleProperty('showOptions');
 		},
 
-		togglePostponed(agendaitem) {
+		async togglePostponed(agendaitem) {
 			if (agendaitem) {
-				let isPostponed = agendaitem.get('isPostponed');
+				let isPostponed = await agendaitem.get('isPostponed');
 				if (isPostponed) {
 					agendaitem.set('retracted', false);
 					agendaitem.set('postponed', null);
@@ -50,6 +50,8 @@ export default Component.extend({
 				} else {
 					this.toggleProperty('isShowingPostponeModal');
 				}
+			} else {
+				this.toggleProperty('isShowingPostponeModal');
 			}
 		},
 

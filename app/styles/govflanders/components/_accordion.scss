@@ -1,0 +1,36 @@
+.js-vl-accordion {
+  position: relative;
+
+  &--flex-reverse {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
+
+.vl-accordion__content {
+  .js & {
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0, 1.05, 0, 1), overflow 0s 0s;
+  }
+
+  .js-vl-accordion--open > & {
+    .js & {
+      visibility: visible;
+      max-height: 1000vh;
+      overflow: visible;
+      transition: max-height 0.3s, overflow 0s 0.3s;
+    }
+  }
+}
+
+.js-vl-accordion__toggle,
+.vl-toggle,
+[data-vl-accordion-toggle] {
+  .js-vl-accordion--open & {
+    & > .vl-vi {
+      @include vi-u-90deg;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+/* ==========================================================================
+  Addition:
+  * add active state
+  * custom link list
+   ========================================================================== */
+
+.vl-link-list {
+  &__item--active {
+    color: #000;
+  }
+}
+
+.vl-custom {
+  .vl-link-list--custom {
+
+    .vl-link-list__item {
+      button:focus {
+        outline: none;
+      }
+
+      .vl-link {
+        width: 100%;
+        display: flex;
+        text-decoration: none;
+        color: $text-color;
+      }
+
+      .vl-link__icon--after {
+        margin-left: auto;
+      }
+    }
+
+    .vl-accordion__content {
+      ul {
+        list-style-type: disc;
+        margin-left: 7rem;
+        font-size: 1.4rem;
+        color: $gray;
+      }
+    }
+  }
+}
