@@ -9,9 +9,9 @@ export default Model.extend({
 	identificationNumber: attr('string'),
 	versionNumber: attr('number'),
 	serialNumber: attr('string'),
-
 	document: belongsTo('document', {inverse: null}),
 	subcase: belongsTo('subcase'),
+  announcement: belongsTo('announcement'),
 	file: belongsTo('file'),
 
 	nameToDisplay: computed('chosenFileName','serialNumber', function() {

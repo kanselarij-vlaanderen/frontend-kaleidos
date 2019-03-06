@@ -7,7 +7,7 @@ export default Component.extend({
 
 	actions: {
 		selectAgendaItem(agendaitem) {
-			this.set('selectedAgendaItem', agendaitem);
+			this.selectAgendaItem(agendaitem);
 		}
 	}
 });

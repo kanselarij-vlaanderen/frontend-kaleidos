@@ -1,0 +1,50 @@
+<div class="vlc-scroll-wrapper__body">
+  <div class="vlc-container">
+    <div class="vl-u-spacer-extended-l vl-u-spacer-extended-bottom-l">
+      <div class="vl-action-group vl-action-group--align-right">
+      {{#if (not currentAgenda.isFinal)}}
+        {{#if
+          (await
+            (allow-delete-agendaitem
+              announcement=announcement lastDefiniteAgenda=lastDefiniteAgenda
+            )
+          )
+        }}
+          <button
+            class="vl-button vl-button--tertiary vl-button--narrow"
+            {{action "deleteAnnouncement" announcement}}>
+            {{t "buttons.delete"}}
+          </button>
+          {{#if (not isEditing)}}
+            <button
+              class="vl-button vl-button--tertiary vl-button--icon"
+              {{action "toggleIsEditing"}}
+            >
+              <i class="vl-vi vl-vi-edit"></i>
+            </button>
+          {{else}}
+            <button
+              class="vl-button vl-button--tertiary vl-button--icon"
+              {{action "save" announcement}}
+            >
+              <i class="vl-vi vl-vi-save"></i>
+            </button>
+          {{/if}}
+        {{/if}}
+      {{/if}}
+      </div>
+    </div>
+    {{#if (and (await announcement) isEditing)}}
+      {{announcement-overview/edit-item announcement=(await announcement)}}
+    {{else}}
+      <div class="vl-u-spacer">
+        <h2 class="vl-title vl-title--h3">
+          {{await announcement.title}}
+        </h2>
+        <h4>
+          {{await announcement.text}}
+        </h4>
+      </div>
+    {{/if}}
+  </div>
+</div>

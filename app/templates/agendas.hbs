@@ -21,22 +21,42 @@
         }}
         {{agenda/agenda-list
           agendaitems=currentAgendaItems
+          selectAgendaItem=(action "selectAgendaItem")
           selectedAgendaItem=selectedAgendaItem
         }}
-        {{agenda/announcement-list announcements=(await announcements)}}
+        {{agenda/announcement-list
+          announcements=(await announcements)
+          selectAnnouncement=(action "selectAnnouncement")
+          selectedAnnouncement=selectedAnnouncement
+        }}
       </div>
     </div>
-    {{#if selectedAgendaItem}}
-      <div class="vlc-panel-layout__main-content">
-        <div class="vlc-scroll-wrapper">
-          {{agenda/agendaitem/agendaitem-overview 
+
+    <div class="vlc-panel-layout__main-content">
+      <div class="vlc-scroll-wrapper">
+
+        {{#if selectedAgendaItem}}
+
+          {{agenda/agendaitem/agendaitem-overview
             agendaitem=selectedAgendaItem
           }}
-        </div>
+        {{else if createAnnouncement}}
+
+          {{agenda/create-announcement
+            currentAgenda=currentAgenda
+          }}
+
+        {{else if selectedAnnouncement}}
+
+          {{agenda/announcement-overview
+            announcement=selectedAnnouncement
+          }}
+        {{/if}}
+
       </div>
-    {{else if createAnnouncement}}
-      {{agenda/create-announcement currentAgenda=currentAgenda}}
-    {{/if}}
+    </div>
+
+
   </div>
 {{else}}
   {{web-components/vl-loader

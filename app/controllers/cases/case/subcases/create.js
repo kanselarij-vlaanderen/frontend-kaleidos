@@ -71,14 +71,15 @@ export default Controller.extend({
       this.set('themes', themes);
     },
 
+    selectMandatees(mandatees) {
+      this.set('selectedMandatees', mandatees);
+    },
+
     uploadedFile(uploadedFile) {
       uploadedFile.set('public', true);
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
 
-    selectMandatees(mandatees) {
-      this.set('selectedMandatees', mandatees);
-    },
 
     chooseDocumentType(uploadedFile, type) {
       uploadedFile.set('documentType', type.name || type.description);

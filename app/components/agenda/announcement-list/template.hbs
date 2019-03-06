@@ -1,14 +1,16 @@
-{{#if (is-empty (await announcements))}}
+<div class="vlc-agenda-items vlc-agenda-items--small">
   <div class="vlc-agenda-items__header">
     <h5 class="vl-title vl-title--h5">
-      {{t "announcement.no-announcements"}}
+      {{t "agendas.announcements-subtitle"}}
     </h5>
   </div>
-{{else}}
-  <h5 class="vl-title vl-title--h5 vl-u-spacer">
-    {{t "agendas.announcements-subtitle"}}
-  </h5>
-  {{#each (await announcements) as |announcement|}}
-    {{agenda/announcement-list/list-item announcement=announcement}}
-  {{/each}}
-{{/if}}
+  <div class="vl-u-spacer">
+    {{#each (await announcements) as |announcement|}}
+      {{agenda/announcement-list/list-item
+        announcement=announcement
+        selectedAnnouncement=selectedAnnouncement
+        selectAnnouncement=(action "selectAnnouncement")
+      }}
+    {{/each}}
+  </div>
+</div>
