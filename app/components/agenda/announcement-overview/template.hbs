@@ -15,21 +15,6 @@
             {{action "deleteAnnouncement" announcement}}>
             {{t "buttons.delete"}}
           </button>
-          {{#if (not isEditing)}}
-            <button
-              class="vl-button vl-button--tertiary vl-button--icon"
-              {{action "toggleIsEditing"}}
-            >
-              <i class="vl-vi vl-vi-edit"></i>
-            </button>
-          {{else}}
-            <button
-              class="vl-button vl-button--tertiary vl-button--icon"
-              {{action "save" announcement}}
-            >
-              <i class="vl-vi vl-vi-save"></i>
-            </button>
-          {{/if}}
         {{/if}}
       {{/if}}
       </div>
@@ -37,14 +22,20 @@
     {{#if (and (await announcement) isEditing)}}
       {{announcement-overview/edit-item announcement=(await announcement)}}
     {{else}}
-      <div class="vl-u-spacer">
+      <div class="vl-u-spacer vl-u-spacer-extended-bottom-l">
         <h2 class="vl-title vl-title--h3">
           {{await announcement.title}}
         </h2>
-        <h4>
+        <h4 class="vl-col--4-4 vl-u-spacer-extended-bottom-l">
           {{await announcement.text}}
         </h4>
       </div>
+
+      {{documents/documents-overview
+        documents=(await announcement.documentVersions)
+      }}
+
+
     {{/if}}
   </div>
 </div>

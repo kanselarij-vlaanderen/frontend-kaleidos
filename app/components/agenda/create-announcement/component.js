@@ -32,8 +32,7 @@ export default Component.extend({
       }));
 
 
-      this.clearProperties();
-      this.transitionToRoute('agendas')
+      this.navigateToNewAnnouncement(announcement);
       notifyPropertyChange(agenda, 'announcements');
     },
 

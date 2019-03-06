@@ -43,6 +43,7 @@
         {{else if createAnnouncement}}
 
           {{agenda/create-announcement
+            navigateToNewAnnouncement=(action "navigateToNewAnnouncement")
             currentAgenda=currentAgenda
           }}
 

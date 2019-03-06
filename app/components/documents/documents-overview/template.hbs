@@ -1,0 +1,80 @@
+<h5 class="vl-title vl-title--h5 vl-u-spacer-extended-bottom-s">
+  {{t "documents-title"}}
+</h5>
+<table class="vl-data-table">
+  <thead>
+    <tr>
+      <th>
+        {{t "version"}}
+      </th>
+      <th>
+        {{t "name"}}
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each (await documents) as |currentVersion|}}
+      {{#each (await currentVersion.document.sortedDocuments) as |documentVersion|}}
+        <tr>
+          <td>
+            {{documentVersion.versionNumber}}
+          </td>
+          <td>
+            {{documentVersion.nameToDisplay}}
+          </td>
+          <td class="align-right">
+            <a
+              href="#"
+              class="vl-file-overview"
+              {{action "downloadFile" documentVersion}}
+            >
+              <i class="vl-icon vl-vi vl-vi-file-download"></i>
+            </a>
+          </td>
+        </tr>
+      {{/each}}
+
+    {{/each}}
+  </tbody>
+</table>
+{{#if isUploadingNewVersion}}
+  {{#web-components/vl-modal
+    closeModal=(action "openUploadDialog")
+    isOverlay=true
+  }}
+    {{web-components/vl-form-label value="Naam van bestand"}}
+    {{web-components/vl-form-input width="4" value=fileName}}
+    <div class="vl-col--4-4">
+      {{web-components/vl-form-label value="Bijlagen"}}
+      {{#if (not uploadedFile)}}
+        {{file-uploader
+          multipleFiles=false
+          uploadedFile=(action "getUploadedFile")
+        }}
+      {{else}}
+        <div class="document">
+          {{fa-icon "file"}}
+          {{await uploadedFile.name}}
+          <a href="#" {{action "removeFile" uploadedFile}}>
+            {{fa-icon "remove"}}
+          </a>
+        </div>
+      {{/if}}
+    </div>
+    <div class="vl-action-group vl-action-group--align-center">
+      <button
+        class="vl-button vl-button--tertiary"
+        {{action "uploadNewVersion"}}
+      >
+        {{t "file-uploader.uploading"}}
+      </button>
+      <button
+        class="vl-button vl-button--tertiary"
+        {{action "openUploadDialog"}}
+      >
+        {{t "buttons.cancel"}}
+      </button>
+    </div>
+  {{/web-components/vl-modal}}
+{{/if}}

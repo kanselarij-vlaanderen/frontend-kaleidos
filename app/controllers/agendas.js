@@ -29,6 +29,12 @@ export default Controller.extend({
 			this.transitionToRoute('subcases');
 		},
 
+    navigateToNewAnnouncement(announcement) {
+      this.set("createAnnouncement", false);
+      this.set("selectedAgendaItem", null);
+      this.set("selectedAnnouncement", announcement);
+		},
+
     navigateToCreateAnnouncement() {
       this.set("createAnnouncement", true);
       this.set("selectedAgendaItem", null);
