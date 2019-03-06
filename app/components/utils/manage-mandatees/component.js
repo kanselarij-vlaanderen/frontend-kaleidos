@@ -25,8 +25,48 @@ export default Component.extend({
 			this.toggleProperty('isEditing');
 		},
 
+		toggleIsResigning() {
+			this.toggleProperty('isResigning');
+		},
+
+		selectEndDate(date) {
+			this.set('selectedEndDate', date);
+		},
+
+		selectNewStartDate(date) {
+			this.set('selectedStartDate', date)
+		},
+
+		personSelected(person) {
+			this.set('selectedPerson', person);
+		},
+
 		resignMandatee(mandateeToEdit) {
 			this.set('mandateeToResign', mandateeToEdit);
+			this.toggleProperty('isResigning');
+		},
+
+		async saveResignation() {
+			let oldMandatee = this.get('selectedMandatee');
+			let domains = await oldMandatee.get('governmentDomains');
+			let holds = await oldMandatee.get('holds');
+			
+			oldMandatee.set('end', this.get('selectedEndDate'));
+			oldMandatee.save().then(() => {
+				const newMandatee = this.store.createRecord('mandatee', {
+					title: oldMandatee.get('title'),
+					start: this.get('selectedStartDate'),
+					end: null,
+					person: this.get('selectedPerson'),
+					holds: holds,
+					governmentDomains: domains,
+					priority: oldMandatee.get('priority')
+				});
+
+				newMandatee.save().then(() => {
+					this.closeModal();
+				});
+			});
 		}
 	}
 });

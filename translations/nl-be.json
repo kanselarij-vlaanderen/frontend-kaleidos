@@ -184,5 +184,7 @@
 	"create-mandatee":"Minister toevoegen",
 	"edit-mandatee":"Minister aanpassen",
 	"add-people":"Bevoegde persoon toevoegen",
-	"manage-mandates":"Bevoegdheden beheren"
+	"manage-mandates":"Bevoegdheden beheren",
+	"new-person":"Nieuwe bevoegde persoon toekennen",
+	"save-resignation":"Mandataris aanpassen"
 }

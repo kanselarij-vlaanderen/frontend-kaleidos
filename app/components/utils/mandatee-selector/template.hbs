@@ -1,6 +1,6 @@
 {{#if (not singleSelect)}}
   {{#power-select-multiple
-    options=mandatees
+    options=filteredMandatees
     selected=selectedMandatees
     search=(perform searchTheme)
     oninput=(action "resetValueIfEmpty")
@@ -11,7 +11,7 @@
   {{/power-select-multiple}}
 {{else}}
   {{#power-select
-    options=mandatees
+    options=filteredMandatees
     selected=selectedMandatees
     search=(perform searchTheme)
     oninput=(action "resetValueIfEmpty")
