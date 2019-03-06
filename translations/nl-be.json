@@ -40,7 +40,7 @@
 	"buttons": {
 		"add": "Toevoegen",
 		"add-minister":"Minister toevoegen",
-		"edit-minister":"Minister aanpassen",
+		"manage-ministers":"Ministerbeheer",
 		"next":"Volgende",
 		"add-case": "Dossier toevoegen",
 		"add-comment": "Opmerking toevoegen",
@@ -74,7 +74,8 @@
 		"agendaitem-press-agenda": "Persagenda",
 		"postpone": "Uitstellen",
 		"not-postpone": "On-uitstellen",
-		"edit":"Wijzigen"
+		"edit":"Wijzigen",
+		"resign":"Mandaat beëindigen"
 	},
 	"cases": {
 		"title": "Dossier",
@@ -181,6 +182,7 @@
 	"status":"Status",
 	"error":"Er is iets misgelopen..",
 	"create-mandatee":"Minister toevoegen",
+	"edit-mandatee":"Minister aanpassen",
 	"add-people":"Bevoegde persoon toevoegen",
 	"manage-mandates":"Bevoegdheden beheren"
 }

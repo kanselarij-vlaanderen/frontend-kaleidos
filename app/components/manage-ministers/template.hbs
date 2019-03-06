@@ -39,25 +39,14 @@
         <div
           class="vlc-toolbar__left vl-action-group vl-action-group--space-between"
         >
-          {{#if selectedMandatee}}
-            <button
-              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-              {{action "showModal"}}
-            >
-              <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
-              ></i>
-              {{t "buttons.edit-minister"}}
-            </button>
-          {{/if}}
           <button
             class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-            {{action "showAddingMinisterForm"}}
+            {{action "showEditingMandateeForm"}}
           >
             <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
             ></i>
-            {{t "buttons.add-minister"}}
+            {{t "buttons.manage-ministers"}}
           </button>
           <button
             class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
@@ -71,7 +60,7 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vl-action-group vl-action-group--space-between">
-            <a class="vl-link" {{action "clearSelections"}}>
+            <a class="vl-link" href="#" {{action "clearSelections"}}>
               {{t "buttons.cancel"}}
             </a>
             <button
@@ -86,19 +75,3 @@
     </div>
   </form>
 </div>
-{{#if isAddingNewMinister}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    closeModal=(action "showAddingMinisterForm")
-  }}
-    {{utils/create-mandatee closeModal=(action "showAddingMinisterForm")}}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isAddingMandate}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    closeModal=(action "showAddingMandateForm")
-  }}
-    {{utils/add-mandate closeModal=(action "showAddingMandateForm")}}
-  {{/web-components/vl-modal}}
-{{/if}}

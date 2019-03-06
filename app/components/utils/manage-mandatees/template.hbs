@@ -1,0 +1,50 @@
+{{#if (not isAdding)}}
+  <h3 class="vl-title vl-title--h3">
+    {{t "buttons.manage-ministers"}}
+  </h3>
+  {{utils/mandatee-selector
+    singleSelect=true
+    chooseMandatee=(action "selectMandatee")
+  }}
+  {{#if isEditing}}
+    {{utils/edit-mandatee
+      mandateeToEdit=selectedMandatee
+      closeModal=(action "toggleIsEditing")
+    }}
+  {{else}}
+    <div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
+      <button class="vl-button vl-button--tertiary" {{action "closeModal"}}>
+        {{t "buttons.cancel"}}
+      </button>
+      {{#if selectedMandatee}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          {{action "toggleIsEditing"}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+          ></i>
+          {{t "edit-mandatee"}}
+        </button>
+        <button
+          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          {{action "resignMandatee" mandateeToEdit}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-cog"
+          ></i>
+          {{t "buttons.resign"}}
+        </button>
+      {{/if}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+        {{action "toggleIsAdding"}}
+      >
+        <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+        {{t "create-mandatee"}}
+      </button>
+    </div>
+  {{/if}}
+{{else}}
+  {{utils/create-mandatee closeModal=(action "toggleIsAdding")}}
+{{/if}}

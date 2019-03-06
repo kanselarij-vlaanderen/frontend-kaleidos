@@ -3,7 +3,6 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
 	store: inject(),
-	mandateeToEdit: null,
 	selectedPerson: null,
 	selectedDomains: [],
 	today: new Date(),
@@ -18,10 +17,6 @@ export default Component.extend({
 			this.set('startDate', val);
 		},
 
-		selectEndDate(val) {
-			this.set('endDate', val);
-		},
-
 		chooseDomain(domains) {
 			this.set('selectedDomains', domains);
 		},
@@ -34,7 +29,6 @@ export default Component.extend({
 			const newMandatee = this.store.createRecord('mandatee', {
 				title: this.get('title'),
 				start: new Date(this.get('startDate')),
-				end: new Date(this.get('endDate')),
 				governmentDomains: this.get('selectedDomains'),
 				person: this.get('selectedPerson'),
 			});

@@ -128,6 +128,7 @@ $icon-font-location: "/fonts/";
 @import "custom-components/vlc-procedure-step";
 @import "custom-components/vlc-status-timeline";
 @import "custom-components/vlc-toolbar";
+@import "custom-components/vlc-input-field-block";
 
 @import "custom-components/c-page-header";
 @import "custom-components/c-view-switch";
@@ -472,7 +473,15 @@ $icon-font-location: "/fonts/";
   }
 }
 
-.mandate-selector-container,
+.mandatee-selector-container,
 .domains-selector-container {
   width:100%;
+}
+
+.people-selector-container {
+  width:100%;
+}
+
+.vl-modal-dialog__content {
+  padding: 2rem 0;
 }

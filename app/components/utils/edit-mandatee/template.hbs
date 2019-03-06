@@ -1,24 +1,44 @@
-<h3 class="vl-title vl-title--h3">
-  {{t "create-mandatee"}}
-</h3>
-<hr class="vlc-hr">
-<div>
-  {{web-components/vl-form-label value=(t "name")}}
-  {{web-components/vl-form-input width="4" value=title}}
-  {{web-components/vl-form-label value=(t "add-people")}}
-  {{utils/people-selector choosePerson=(action "personSelected")}}
-  {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}
-  {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
-  {{web-components/vl-form-label value=(t "mandatee-form.end-date")}}
-  {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
-  {{web-components/vl-form-label value=(t "mandatees")}}
-  {{utils/domains-selector chooseDomain=(action "chooseDomain")}}
-</div>
-<div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
-  <button class="vl-button vl-button--narrow" {{action "closeModal"}}>
-    {{t "buttons.cancel"}}
-  </button>
-  <button class="vl-button vl-button--narrow" {{action "createMandatee"}}>
-    {{t "create-mandatee"}}
-  </button>
-</div>
+{{#if (not mandateeToResign)}}
+  <div class="vl-modal-dialog__content">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "name")}}
+      {{web-components/vl-form-input width="4" value=title}}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "add-people")}}
+      <div class="vl-input-group">
+        {{utils/people-selector
+          readOnly=true
+          selectedPerson=mandateeToEdit.person
+        }}
+      </div>
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}
+      {{web-components/vl-datepicker
+        date=startDate
+        dateChanged=(action "selectStartDate")
+      }}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "mandatees")}}
+      {{utils/domains-selector
+        selectedDomains=mandateeToEdit.governmentDomains
+        chooseDomain=(action "chooseDomain")
+      }}
+    </div>
+  </div>
+  <div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
+    <button class="vl-button vl-button--tertiary" {{action "closeModal"}}>
+      {{t "buttons.cancel"}}
+    </button>
+    <button
+      class="vl-button vl-button--tertiary"
+      {{action "saveChanges" mandateeToEdit}}
+    >
+      {{t "buttons.save"}}
+    </button>
+  </div>
+{{else}}
+  {{mandateeToEdit.id}}
+{{/if}}

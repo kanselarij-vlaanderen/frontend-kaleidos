@@ -21,9 +21,11 @@ export default Component.extend({
 
 		removeMandate() {
 			const domainToDelete = this.get('selectedDomain');
+			if(!domainToDelete) {
+				return;
+			}
 			domainToDelete.destroyRecord();
 			this.set('selectedDomain', null);
-
 		},
 
 		createMandate() {

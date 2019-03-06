@@ -3,6 +3,7 @@ import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 
 export default Component.extend({
+	classNames:["people-selector-container"],
 	store: inject(),
 	selectedPerson: null, 	
 
