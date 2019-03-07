@@ -1,4 +1,3 @@
-{{! BEGIN HEADER }}
 <div class="vl-u-bg-alt">
   <div class="vlc-page-header">
     <div class="vlc-toolbar vlc-toolbar--auto">
@@ -11,7 +10,10 @@
       </div>
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
-          <button class="vl-button vl-button--narrow vl-button--icon-before">
+          <button
+            class="vl-button vl-button--narmeeting vl-button--icon-before"
+            {{action "createNewSession"}}
+          >
             <i
               class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
             ></i>
@@ -22,8 +24,6 @@
     </div>
   </div>
 </div>
-{{! END HEADER }}
-{{! BEGIN BODY }}
 <div class="vlc-scroll-wrapper">
   <div class="vlc-scroll-wrapper__body">
     <div class="vl-u-spacer-extended-l">
@@ -33,7 +33,9 @@
             <div
               class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
             >
-              <div class="vlc-input-field-group vlc-input-field-group--grow">
+              <div
+                class="vlc-input-field-group vlc-input-field-group--gmeeting"
+              >
                 <input
                   class="vl-input-field"
                   type="search"
@@ -98,24 +100,24 @@
             }}
             <th class="vl-data-table-col-1"></th>
           {{/c.header}}
-          {{#c.body as |row|}}
+          {{#c.body as |meeting|}}
             <td>
               Agenda voor
-              {{moment-format row.plannedStart "DD.MM.YYYY"}}
+              {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
             </td>
             <td>
-              {{await row.latestAgendaName}}
+              {{await meeting.latestAgendaName}}
             </td>
             <td>
-              {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+              {{moment-format meeting.created "DD-MM-YYYY HH:mm"}}
             </td>
             <td class="vl-u-align-right">
-              {{#link-to
-                "agendas"
+              <a
                 class="vl-button vl-button--link vl-button--icon"
-              }}
+                {{action "selectAgenda" meeting}}
+              >
                 <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-              {{/link-to}}
+              </a>
             </td>
           {{/c.body}}
         {{/t.content}}
@@ -123,3 +125,12 @@
     </div>
   </div>
 </div>
+{{#if creatingNewSession}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "new-agenda")
+    closeModal=(action "cancelNewSessionForm")
+  }}
+    {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
+  {{/web-components/vl-modal}}
+{{/if}}

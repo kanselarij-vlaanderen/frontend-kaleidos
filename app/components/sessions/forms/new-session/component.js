@@ -5,7 +5,6 @@ import $ from 'jquery';
 export default Component.extend({
 	store: inject(),
 	today: new Date(), 
-	classNames: ['new-session-form-container'],
 
 	actions: {
 		async createNewSession() {

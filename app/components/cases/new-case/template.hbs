@@ -1,7 +1,3 @@
-<h3 class="vl-title vl-title--h3">
-  {{t "cases.new-case"}}
-</h3>
-<hr class="vlc-hr" />
 <form onsubmit={{action "createCase"}}>
   <div class="vl-modal-dialog__content">
     {{cases/case-levels policyLevelChanged=(action "policyLevelChanged")}}
@@ -13,21 +9,30 @@
       title=title
     }}
   </div>
-  <div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
-    <button
-      type="button"
-      class="vl-button vl-button--narrow"
-      data-test-rr="sign-up-button"
-      {{action "close"}}
-    >
-      {{t "buttons.cancel"}}
-    </button>
-    <button
-      type="submit"
-      class="vl-button vl-button--narrow"
-      data-test-rr="sign-up-button"
-    >
-      {{t "buttons.create-case"}}
-    </button>
+  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <button
+            type="button"
+            class="vl-button vl-button--link vl-button--narrow"
+            {{action "close"}}
+          >
+            {{t "buttons.cancel"}}
+          </button>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--narrow"
+            type="submit"
+            {{action "postponeAgendaItem" agendaitem}}
+          >
+            {{t "buttons.create-case"}}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </form>

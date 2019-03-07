@@ -3,11 +3,7 @@
     <div class="vlc-toolbar__item">
       <h1 class="vlc-page-header__title vlc-page-header__title--bordered">
         {{t "sessions-selector.agenda-of"}}
-        {{sessions/sessions-selector
-          sessions=sessions
-          currentSession=currentSession
-          chooseSession=(action "chooseSession")
-        }}
+        {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
       </h1>
       <div class="vlc-page-header__sub">
         {{#link-to "agenda" class="vl-link vl-link--bold"}}
@@ -43,13 +39,6 @@
             animation="shift"
             placement="bottom" as |attacher|
           }}
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "createNewSession"}}
-              {{action attacher.hide}}
-            >
-              {{t "buttons.new-session"}}
-            </button>
             {{#if (not currentAgenda.isFinal)}}
               <button
                 class="vl-button vl-button--narrow"
@@ -97,11 +86,6 @@
     </div>
   </div>
 </div>
-{{#if creatingNewSession}}
-  <div class="files--header-tile files--sub-file-header">
-    {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
-  </div>
-{{/if}}
 {{#if showPressModal}}
   {{agenda/press-agenda
     pressAgendaItems=pressItems

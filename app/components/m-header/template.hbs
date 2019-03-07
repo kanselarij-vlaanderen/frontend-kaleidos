@@ -8,19 +8,24 @@
           {{/link-to}}
         </li>
         <li class="vl-tab">
-          {{#link-to "agendas" class="vl-tab__link"}}
-            {{t "navigation.agendas"}}
-          {{/link-to}}
-        </li>
-        <li class="vl-tab">
           {{#link-to "cases" class="vl-tab__link"}}
             {{t "navigation.cases"}}
           {{/link-to}}
         </li>
         <li class="vl-tab">
+          <a class="vl-tab__link" role="tab" aria-selected="true">
+            Nieuwsbrief
+          </a>
+        </li>
+        <li class="vl-tab">
           {{#link-to "settings" class="vl-tab__link"}}
             {{t "navigation.settings"}}
           {{/link-to}}
+        </li>
+        <li class="vl-tab">
+          <a class="vl-tab__link" role="tab" aria-selected="true">
+            Notificaties
+          </a>
         </li>
       </ul>
     </div>
@@ -30,7 +35,7 @@
       <div class="vlc-user__username">
         Hilde Crevits
       </div>
-      <a class="vlc-user__action" href="#">
+      <a class="vlc-user__action">
         Afmelden
       </a>
     </div>

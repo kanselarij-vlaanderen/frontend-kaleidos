@@ -1,20 +1,14 @@
 {{#if (not isAddingCase)}}
-  <div class="vl-toolbar">
-    <div class="vl-toolbar__left">
-      <div class="vl-toolbar__item">
-        <h1 class="vl-page-header__title vl-page-header__title--bordered">
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <h1 class="vlc-page-header__title">
           {{t "navigation.cases"}}
         </h1>
-        <div class="vl-page-header__sub">
-          <p class="vl-u-text--small vl-u-text--muted">
-            {{await cases.length}}
-            {{t "navigation.cases"}}
-          </p>
-        </div>
       </div>
     </div>
-    <div class="vl-toolbar__right">
-      <div class="vl-toolbar__item">
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           <button
             class="vl-button vl-button--narrow vl-button--icon-before"
@@ -34,6 +28,7 @@
   {{#web-components/vl-modal
     isOverlay=true
     closeModal=(action "toggleAddingCase")
+    title=(t "cases.new-case")
   }}
     {{cases/new-case close=(action "toggleAddingCase")}}
   {{/web-components/vl-modal}}

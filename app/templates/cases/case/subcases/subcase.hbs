@@ -12,7 +12,6 @@
       {{#if (not isEditingMandatees)}}
         <button
           class="vl-button vl-button--tertiary vl-button--icon"
-          href="#"
           {{action "editMandatee" model}}
         >
           <i class="vl-vi vl-vi-pencil"></i>
@@ -20,7 +19,6 @@
       {{else}}
         <button
           class="vl-button vl-button--tertiary vl-button--icon"
-          href="#"
           {{action "updateMandatees" model}}
         >
           <i class="vl-vi vl-vi-edit"></i>

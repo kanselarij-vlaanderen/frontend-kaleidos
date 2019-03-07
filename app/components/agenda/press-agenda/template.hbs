@@ -1,10 +1,9 @@
-{{#web-components/vl-modal isOverlay=true closeModal=(action "close")}}
+{{#web-components/vl-modal
+  isOverlay=true
+  title=title
+  closeModal=(action "close")
+}}
   <div class="vl-typography">
-    <h3>
-      {{t "press-agenda"}}
-      {{moment-format currentSession.plannedStart "dddd DD-MM-YYYY"}}
-    </h3>
-    <hr class="vlc-hr" />
     {{#each pressAgendaItems as |pressItem|}}
       <div class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
         <div class="vl-u-spacer-extended-bottom">
@@ -13,7 +12,9 @@
           </em>
         </div>
         {{#each pressItem.agendaitems as |agendaitem|}}
-          <div class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
+          <div
+            class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
+          >
             <h6>
               {{agendaitem.title}}
             </h6>
