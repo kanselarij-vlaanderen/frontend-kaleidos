@@ -40,6 +40,7 @@
 	"buttons": {
 		"add": "Toevoegen",
 		"add-minister":"Minister toevoegen",
+		"back":"Terug",
 		"manage-ministers":"Ministerbeheer",
 		"next":"Volgende",
 		"add-case": "Dossier toevoegen",
@@ -137,6 +138,7 @@
 		"public": "Openbaar"
 	},
 	"navigation": {
+		"agenda":"Agenda",
 		"agendas": "Agendas",
 		"cases": "Dossiers",
 		"notifications": "Notificaties",
@@ -186,5 +188,7 @@
 	"add-people":"Bevoegde persoon toevoegen",
 	"manage-mandates":"Bevoegdheden beheren",
 	"new-person":"Nieuwe bevoegde persoon toekennen",
-	"save-resignation":"Mandataris aanpassen"
+	"save-resignation":"Mandataris aanpassen",
+	"new-agenda":"Nieuwe agenda aanmaken",
+	"agenda-title":"Agenda's"
 }

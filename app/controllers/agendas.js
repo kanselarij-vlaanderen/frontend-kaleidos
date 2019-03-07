@@ -19,7 +19,7 @@ export default Controller.extend({
 		if(this.get('selectedAgendaItem')) {
 			return "vlc-panel-layout__agenda-items vl-u-bg-porcelain";
 		} else {
-			return "vl-u-bg-porcelain";
+			return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
 		}
 	}),
 

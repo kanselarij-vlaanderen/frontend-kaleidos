@@ -1,9 +1,7 @@
 @import "ember-power-select";
 // @import "ember-modal-dialog/ember-modal-structure";
 // @import "ember-modal-dialog/ember-modal-appearance";
-@import "./colors.scss";
-
-// Start your CSS here
+@import "_colors";
 
 $icon-font-location: "/fonts/";
 
@@ -23,31 +21,45 @@ $icon-font-location: "/fonts/";
 @import "govflanders/core/_object.scss";
 
 // Components (loaded from node_modules)
+// @import "node_modules/@govflanders/vl-ui-accordion/src/scss/_accordion";
 // @import "node_modules/@govflanders/vl-ui-action-group/src/scss/_action-group.scss";
 // @import "node_modules/@govflanders/vl-ui-alert/src/scss/_alert";
+// @import "node_modules/@govflanders/vl-ui-autocomplete/src/scss/_autocomplete";
 // @import "node_modules/@govflanders/vl-ui-badge/src/scss/_badge";
 // @import "node_modules/@govflanders/vl-ui-button/src/scss/_button.scss";
+// @import "node_modules/@govflanders/vl-ui-checkbox/src/scss/_checkbox";
+// @import "node_modules/@govflanders/vl-ui-data-table/src/scss/_data-table";
+// @import "node_modules/@govflanders/vl-ui-datepicker/src/scss/_datepicker";
 // @import "node_modules/@govflanders/vl-ui-description-data/src/scss/_description-data";
 // @import "node_modules/@govflanders/vl-ui-document/src/scss/_document.scss";
 // @import "node_modules/@govflanders/vl-ui-form-message/src/scss/_form-message.scss";
 // @import "node_modules/@govflanders/vl-ui-form-structure/src/scss/_form-structure.scss";
 // @import "node_modules/@govflanders/vl-ui-icon/src/scss/_icon.scss";
+// @import "node_modules/@govflanders/vl-ui-info-tile/src/scss/_info-tile.scss";
+// @import "node_modules/@govflanders/vl-ui-input-addon/src/scss/_input-addon.scss";
 // @import "node_modules/@govflanders/vl-ui-input-field/src/scss/_input-field.scss";
 // @import "node_modules/@govflanders/vl-ui-link-list/src/scss/link-list";
 // @import "node_modules/@govflanders/vl-ui-link/src/scss/_link.scss";
 // @import "node_modules/@govflanders/vl-ui-loader/src/scss/_loader.scss";
 // @import "node_modules/@govflanders/vl-ui-modal/src/scss/_modal";
 // @import "node_modules/@govflanders/vl-ui-pager/src/scss/_pager";
+// @import "node_modules/@govflanders/vl-ui-pill-input/src/scss/_pill-input";
+// @import "node_modules/@govflanders/vl-ui-pill/src/scss/_pill";
+// @import "node_modules/@govflanders/vl-ui-popover/src/scss/_popover";
+// @import "node_modules/@govflanders/vl-ui-radio/src/scss/_radio";
 // @import "node_modules/@govflanders/vl-ui-search/src/scss/_search;
 // @import "node_modules/@govflanders/vl-ui-tabs/src/scss/_tabs";
+// @import "node_modules/@govflanders/vl-ui-textarea/src/scss/_textarea";
 // @import "node_modules/@govflanders/vl-ui-titles/src/scss/_titles";
 // @import "node_modules/@govflanders/vl-ui-typography/src/scss/_typography";
 // @import "node_modules/@govflanders/vl-ui-upload/src/scss/_upload";
+// @import "node_modules/@govflanders/vl-ui-input-group/src/scss/_input-group";
 
 // Components (loaded locally to easily read source)
 @import "govflanders/components/_accordion";
 @import "govflanders/components/_action-group";
 @import "govflanders/components/_alert";
+// @import "govflanders/components/_autocomplete";
 @import "govflanders/components/_badge";
 @import "govflanders/components/_button";
 @import "govflanders/components/_checkbox";
@@ -69,8 +81,6 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_pager";
 @import "govflanders/components/_pill-input";
 @import "govflanders/components/_pill";
-@import "govflanders/components/_textarea";
-
 @import "govflanders/components/_popover";
 @import "govflanders/components/_radio";
 @import "govflanders/components/_search";
@@ -79,9 +89,7 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_titles";
 @import "govflanders/components/_typography";
 @import "govflanders/components/_upload";
-@import "govflanders/components/_radio";
-@import "custom-components/vl-page-header";
-@import "custom-components/vl-toolbar";
+
 // Interdependent components (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-select/src/scss/_select";
 // @import "node_modules/@govflanders/vl-ui-select/src/scss/_js-select";
@@ -90,15 +98,11 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_select";
 @import "govflanders/components/_js-select";
 
-@import "custom-utilities/_u-spacer.scss";
-@import "custom-utilities/_reset.scss";
-@import "custom-utilities/_extended-spacer.scss";
-@import "custom-utilities/_box-model.scss";
 
-// Interdependent components (loaded from node_modules)
-// @import "node_modules/@govflanders/vl-ui-select/src/scss/_select";
-// @import "node_modules/@govflanders/vl-ui-select/src/scss/_js-select";
+/* Unofficial code
+   ========================================================================== */
 
+// Additions to existing components
 @import "govflanders/additions/_accordion";
 @import "govflanders/additions/_badge";
 @import "govflanders/additions/_button";
@@ -114,24 +118,26 @@ $icon-font-location: "/fonts/";
 // Additions to existing utilities
 @import "govflanders/additions/_background";
 @import "govflanders/additions/_typography";
-@import "govflanders/additions/_button";
-@import "govflanders/additions/_data-table";
 
 // Custom components
+@import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
 @import "custom-components/vlc-agenda-item";
+@import "custom-components/vlc-comments";
+@import "custom-components/vlc-document-list";
+@import "custom-components/vlc-hr";
 @import "custom-components/vlc-container";
-@import "custom-components/vlc-page-header";
-@import "custom-components/vlc-panel-layout";
-@import "custom-components/vlc-side-nav";
-@import "custom-components/vlc-scroll-wrapper";
-@import "custom-components/vlc-navbar";
-@import "custom-components/vlc-procedure-step";
-@import "custom-components/vlc-status-timeline";
-@import "custom-components/vlc-toolbar";
 @import "custom-components/vlc-input-field-block";
-
-@import "custom-components/c-page-header";
-@import "custom-components/c-view-switch";
+@import "custom-components/vlc-navbar";
+@import "custom-components/vlc-page-header";
+@import "custom-components/vlc-radio-inline";
+@import "custom-components/vlc-panel-layout";
+@import "custom-components/vlc-procedure-step";
+@import "custom-components/vlc-scroll-wrapper";
+@import "custom-components/vlc-side-nav";
+@import "custom-components/vlc-toolbar";
+@import "custom-components/vlc-user";
+@import "custom-components/vlc-view-switch";
+@import "custom-components/vlc-status-timeline";
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -140,18 +146,19 @@ $icon-font-location: "/fonts/";
 @import "govflanders/util/_util";
 
 // Fixes to the framework
-@import "fixes/fix-pre"; // See https://github.com/mono-company/digikan/issues/24
-@import "fixes/fix-typography"; // See https://github.com/mono-company/digikan/issues/23
-@import "fixes/fix-flex-utils"; // related to https://github.com/mono-company/digikan/issues/37
+@import "fixes/fix-pre";
+@import "fixes/fix-flex-utils";
+@import "fixes/fix-badge-avatars";
+
+// Custom utilities
+@import "custom-utilities/_reset";
+@import "custom-utilities/_extended-spacer";
+@import "custom-utilities/_scroll";
+@import "custom-utilities/_box-model";
+
 
 .application-container {
   height: 100vh;
-}
-
-.vl-title--container {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 1rem;
 }
 
 .document {
@@ -311,10 +318,6 @@ $icon-font-location: "/fonts/";
   justify-content: flex-end;
 }
 
-.vl-tabs__wrapper {
-  margin-bottom: 1em;
-}
-
 .vl-upload__element__label {
   text-decoration: none;
 
@@ -441,26 +444,6 @@ $icon-font-location: "/fonts/";
 
 }
 
-.vlc-side-nav-title {
-  padding: 1.6rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid $ghost;
-
-  .vl-title {
-    display: flex;
-    align-items: center;
-    margin-right: 0.4rem;
-
-    .vl-icon {
-      padding-right: 0.8rem;
-      width: 2.4rem;
-      height: 2.4rem;
-    }
-  }
-}
-
 .vl-modal-dialog {
   display: block;
   z-index: 40;
@@ -484,4 +467,8 @@ $icon-font-location: "/fonts/";
 
 .vl-modal-dialog__content {
   padding: 2rem 0;
+}
+
+.vlc-panel-layout-agenda__detail {
+  width:100%;
 }

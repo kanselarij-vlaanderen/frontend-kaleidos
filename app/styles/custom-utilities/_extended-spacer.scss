@@ -23,6 +23,37 @@ $vl-u-spacer-extended-unit: 1rem !default;
   margin: $vl-u-spacer-extended-unit * 4 !important;
 }
 
+/* Top
+   ========================================================================== */
+
+.vl-u-spacer-extended-top-s {
+  margin-top: $vl-u-spacer-extended-unit !important;
+}
+
+.vl-u-spacer-extended-top {
+  margin-top: $vl-u-spacer-extended-unit * 2 !important;
+}
+
+.vl-u-spacer-extended-top-l {
+  margin-top: $vl-u-spacer-extended-unit * 4 !important;
+}
+
+/* Bottom
+   ========================================================================== */
+
+.vl-u-spacer-extended-bottom-s {
+  margin-bottom: $vl-u-spacer-extended-unit !important;
+}
+
+.vl-u-spacer-extended-bottom {
+  margin-bottom: $vl-u-spacer-extended-unit * 2 !important;
+}
+
+.vl-u-spacer-extended-bottom-l {
+  margin-bottom: $vl-u-spacer-extended-unit * 4 !important;
+}
+
+
 /* Left
    ========================================================================== */
 
@@ -53,32 +84,3 @@ $vl-u-spacer-extended-unit: 1rem !default;
   margin-right: $vl-u-spacer-extended-unit * 4 !important;
 }
 
-/* Top
-   ========================================================================== */
-
-.vl-u-spacer-extended-top-s {
-  margin-top: $vl-u-spacer-extended-unit !important;
-}
-
-.vl-u-spacer-extended-top {
-  margin-top: $vl-u-spacer-extended-unit * 2 !important;
-}
-
-.vl-u-spacer-extended-top-l {
-  margin-top: $vl-u-spacer-extended-unit * 4 !important;
-}
-
-/* Bottom
-   ========================================================================== */
-
-.vl-u-spacer-extended-bottom-s {
-  margin-bottom: $vl-u-spacer-extended-unit !important;
-}
-
-.vl-u-spacer-extended-bottom {
-  margin-bottom: $vl-u-spacer-extended-unit * 2 !important;
-}
-
-.vl-u-spacer-extended-bottom-l {
-  margin-bottom: $vl-u-spacer-extended-unit * 4 !important;
-}

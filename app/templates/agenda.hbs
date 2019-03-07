@@ -1,0 +1,125 @@
+{{! BEGIN HEADER }}
+<div class="vl-u-bg-alt">
+  <div class="vlc-page-header">
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <h1 class="vlc-page-header__title">
+            {{t "agenda-title"}}
+          </h1>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          <button class="vl-button vl-button--narrow vl-button--icon-before">
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            ></i>
+            {{t "new-agenda"}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{! END HEADER }}
+{{! BEGIN BODY }}
+<div class="vlc-scroll-wrapper">
+  <div class="vlc-scroll-wrapper__body">
+    <div class="vl-u-spacer-extended-l">
+      <div class="vl-grid">
+        <div class="vl-col--2-4">
+          <div class="vl-u-spacer--medium">
+            <div
+              class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
+            >
+              <div class="vlc-input-field-group vlc-input-field-group--grow">
+                <input
+                  class="vl-input-field"
+                  type="search"
+                  placeholder="Zoeken"
+                 />
+
+              </div>
+              <div class="vlc-input-field-group">
+                <button
+                  class="vl-button vl-button--secondary vl-button--icon"
+                  type="submit"
+                >
+                  <i class="vl-vi vl-vi-magnifier" aria-hidden="true"></i>
+                  <span class="vl-u-visually-hidden">
+                    Zoeken
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vl-u-spacer--large">
+        <h2 class="vl-title vl-title--h3">
+          Toekomstige agenda’s
+        </h2>
+      </div>
+      <div class="vl-u-spacer--large">
+        <h2 class="vl-title vl-title--h3">
+          Actieve agenda
+        </h2>
+      </div>
+      <h2 class="vl-title vl-title--h3">
+        Historiek
+      </h2>
+      {{#data-table
+        content=model
+        page=page
+        size=size
+        sort=sort
+        filter=filter
+        isLoading=isLoadingModel as |t|
+      }}
+        {{#t.content as |c|}}
+          {{#c.header}}
+            {{th-sortable
+              class="vl-data-table-col-5 vl-data-table__header-title"
+              currentSorting=sort
+              field="plannedStart"
+              label="Agenda"
+            }}
+            {{th-sortable
+              class="vl-data-table-col-3 vl-data-table__header-title"
+              field="agendas"
+              label="Agenda Versie"
+            }}
+            {{th-sortable
+              class="vl-data-table-col-3 vl-data-table__header-title"
+              currentSorting=sort
+              field="created"
+              label="Laatst gewijzigd"
+            }}
+            <th class="vl-data-table-col-1"></th>
+          {{/c.header}}
+          {{#c.body as |row|}}
+            <td>
+              Agenda voor
+              {{moment-format row.plannedStart "DD.MM.YYYY"}}
+            </td>
+            <td>
+              {{await row.latestAgendaName}}
+            </td>
+            <td>
+              {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+            </td>
+            <td class="vl-u-align-right">
+              {{#link-to
+                "agendas"
+                class="vl-button vl-button--link vl-button--icon"
+              }}
+                <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+              {{/link-to}}
+            </td>
+          {{/c.body}}
+        {{/t.content}}
+      {{/data-table}}
+    </div>
+  </div>
+</div>

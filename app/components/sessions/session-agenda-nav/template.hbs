@@ -1,5 +1,5 @@
-<li class="c-view-switch__item">
-  <a href="#">
+<li class="vlc-view-switch__item vlc-view-switch__item--active">
+  <a href="agenda">
     <div class="o-svg-icon o-svg-icon-view-overview">
       <svg
         width="24"
@@ -20,9 +20,9 @@
     </span>
   </a>
 </li>
-<li class="c-view-switch__item">
+<li class="vlc-view-switch__item">
   <a href="#">
-    <div class="o-svg-icon o-svg-icon-view-overview">
+    <div class="o-svg-icon o-svg-icon-view-detail">
       <svg
         width="24"
         height="24"
@@ -37,12 +37,14 @@
         ></path>
       </svg>
     </div>
-    {{t "detail"}}
+    <span>
+      {{t "detail"}}
+    </span>
   </a>
 </li>
-<li class="c-view-switch__item">
+<li class="vlc-view-switch__item">
   <a href="#" {{action "compareAgendas"}}>
-    <div class="o-svg-icon o-svg-icon-view-overview">
+    <div class="o-svg-icon o-svg-icon-view-compare">
       <svg
         width="24"
         height="24"
@@ -57,6 +59,8 @@
         ></path>
       </svg>
     </div>
-    {{t "compare"}}
+    <span>
+      {{t "compare"}}
+    </span>
   </a>
 </li>

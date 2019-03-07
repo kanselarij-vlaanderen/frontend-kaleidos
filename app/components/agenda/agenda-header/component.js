@@ -9,7 +9,7 @@ export default Component.extend({
 	store: inject(),
 	sessionService: inject(),
 	agendaService: inject(),
-	classNames: ["c-page-header"],
+	classNames: ["vlc-page-header"],
 
 	creatingNewSession: null,
 	sessions: null,

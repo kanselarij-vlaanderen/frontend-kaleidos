@@ -10,15 +10,28 @@
     sort=sort
     filter=filter
     isLoading=isLoadingModel
-    fields="title created" 
-  as |t|
+    fields="shortTitle created" as |t|
   }}
     {{#t.content as |c|}}
       {{#c.header}}
-        {{th-sortable currentSorting=sort field="title" label="Dossiernaam"}}
-        {{th-sortable field="status" label="Status"}}        
-        {{th-sortable currentSorting=sort field="created" label="Aangemaakt op"}}
-        <th></th>
+        {{th-sortable
+          class="vl-data-table-col-5 vl-data-table__header-title"
+          currentSorting=sort
+          field="shortTitle"
+          label="Dossiernaam"
+        }}
+        {{th-sortable
+          class="vl-data-table-col-4 vl-data-table__header-title"
+          field="status"
+          label="Status"
+        }}
+        {{th-sortable
+          class="vl-data-table-col-2 vl-data-table__header-title"
+          currentSorting=sort
+          field="created"
+          label="Aangemaakt op"
+        }}
+        <th class="vl-data-table-col-1"></th>
       {{/c.header}}
       {{#c.body as |row|}}
         <td>
@@ -34,8 +47,7 @@
           {{#link-to
             "cases.case"
             row.id
-            tagName="button"
-            class="vl-button vl-button--tertiary vl-button--icon"
+            class="vl-button vl-button--link vl-button--icon"
           }}
             <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
           {{/link-to}}
