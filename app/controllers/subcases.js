@@ -11,6 +11,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   availableSubcases: A([]),
   postponedSubcases: A([]),
 	selectedAgenda: alias('sessionService.currentAgenda'),
+  agendas: alias('sessionService.agendas'),
 
 	actions: {
     async selectSubcase(subcase, destination, event) {
@@ -75,8 +76,11 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 					return agendaService.createNewAgendaItem(selectedAgenda, subCase);
 				}
 			}));
-			promise.then(() => {
-				return agendaService.sortAgendaItems(selectedAgenda);
+			promise.then(async () => {
+			  const agendas = await this.get('agendas');
+			  if (agendas.length === 1){
+          return agendaService.sortAgendaItems(selectedAgenda);
+        }
 			}).then(() => {
 				this.navigateBack();
 			});

@@ -1,0 +1,12 @@
+{{#power-select
+  options=people
+	selected=selectedPerson
+	disabled=readOnly
+  searchField="firstName lastName"
+  search=(perform searchTask)
+  oninput=(action "resetValueIfEmpty")
+  onchange=(action "choosePerson") 
+as |person|
+}}
+  {{person.fullName}}
+{{/power-select}}

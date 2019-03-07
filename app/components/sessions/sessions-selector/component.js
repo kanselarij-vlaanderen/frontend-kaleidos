@@ -43,7 +43,7 @@ export default Component.extend({
 	},
 
 	async loadSessions() {
-		let sessions = await this.store.query('meeting', {
+		const sessions = await this.store.query('meeting', {
 			sort: "number"
 		});
 		this.set('sessions', sessions);

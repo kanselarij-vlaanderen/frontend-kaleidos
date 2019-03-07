@@ -39,6 +39,8 @@
 	},
 	"buttons": {
 		"add": "Toevoegen",
+		"add-minister":"Minister toevoegen",
+		"manage-ministers":"Ministerbeheer",
 		"next":"Volgende",
 		"add-case": "Dossier toevoegen",
 		"add-comment": "Opmerking toevoegen",
@@ -72,7 +74,8 @@
 		"agendaitem-press-agenda": "Persagenda",
 		"postpone": "Uitstellen",
 		"not-postpone": "On-uitstellen",
-		"edit":"Wijzigen"
+		"edit":"Wijzigen",
+		"resign":"Mandaat beëindigen"
 	},
 	"cases": {
 		"title": "Dossier",
@@ -159,7 +162,13 @@
 		"document-type":"PDF",
 		"close-modal":"Venster sluiten"
 	},
+	"mandatee-form": {
+		"start-date":"Begin datum",
+		"end-date":"Eind datum"
+	},
+	"manage-ministers-title":"Ministers en bevoegdheden",
 	"minister":"Minister",
+	"mandatees":"Bevoegdheden",
 	"mandatee":"Bevoegdheid",
 	"filter":"Filter",
 	"example-subcase":"In voorbereiding",
@@ -167,11 +176,18 @@
 	"name":"Naam",
 	"press-agenda":"Persagenda van",
 	"documents-subcase":"Documenten van de procedurestap",
+	"documents-title":"Documenten",
 	"overview":"Overzicht",
 	"detail":"Detail",
 	"compare":"Vergelijk",
 	"attachements":"Bijlagen",
 	"non-digital-attachements":"Niet-digitale bijlagen",
 	"status":"Status",
-	"error":"Er is iets misgelopen.."
+	"error":"Er is iets misgelopen..",
+	"create-mandatee":"Minister toevoegen",
+	"edit-mandatee":"Minister aanpassen",
+	"add-people":"Bevoegde persoon toevoegen",
+	"manage-mandates":"Bevoegdheden beheren",
+	"new-person":"Nieuwe bevoegde persoon toekennen",
+	"save-resignation":"Mandataris aanpassen"
 }

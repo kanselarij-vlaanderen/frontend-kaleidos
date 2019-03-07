@@ -1,0 +1,23 @@
+/* ==========================================================================
+  Addition:
+    * add custom info tile
+    * add active modifier
+   ========================================================================== */
+
+.vl-custom {
+  .vl-info-tile--custom {
+    .vl-info-tile__header__wrapper {
+      width: 100%;
+    }
+
+    .vl-info-tile__footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid $blue-gray-lighter;
+    }
+  }
+}
+
+.vl-info-tile--active {
+    border: 1px solid $science-blue;
+}

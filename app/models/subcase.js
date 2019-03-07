@@ -13,6 +13,7 @@ export default Model.extend({
   meeting: belongsTo('meeting'),
   phase: belongsTo('subcase-phase'),
   consulationRequests: hasMany('consulation-request'),
+  governmentDomains: hasMany('government-domain'),
   agendaitem: hasMany('agendaitem'),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),

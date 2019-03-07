@@ -1,0 +1,9 @@
+.vl-input-group {
+  display: flex;
+  align-items: stretch;
+
+  .vl-input-field +.vl-input-addon,
+  .vl-input-addon +.vl-input-field {
+    border-left: 0;
+  }
+}

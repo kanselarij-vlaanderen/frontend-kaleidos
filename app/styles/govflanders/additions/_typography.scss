@@ -1,9 +1,8 @@
-// Additions to typography
+/* ==========================================================================
+  Addition:
+    * Add utility for muted/secondary text
+   ========================================================================== */
 
-.vl-typography {
-  code,
-  kdb,
-  samp {
-    font-family: monospace; // Fix bug. "monospace" is not a font family.
-  }
+.vl-u-text--muted {
+  color: $blue-gray-dark
 }

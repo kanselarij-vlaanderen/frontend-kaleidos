@@ -72,10 +72,13 @@
       </div>
     </div>
   </div>
-  {{await agendaitem.subcase.case.themes.length}}
-  {{#each (await agendaitem.subcase.case.themes) as |theme|}}
-    <span class="vl-pill u-spacer-right-s">
-      {{theme.label}}
-    </span>
-  {{/each}}
+  <div class="pill-container vl-u-spacer--small">
+    <div class="vl-custom">
+      {{#each (await agendaitem.subcase.themes) as |theme|}}
+        <span class="vl-pill u-spacer-right-s">
+          {{theme.label}}
+        </span>
+      {{/each}}
+    </div>
+  </div>
 </div>

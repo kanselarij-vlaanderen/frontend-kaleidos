@@ -7,6 +7,7 @@ export default Controller.extend({
 	sessionService: inject(),
 	creatingNewSession: false,
 	selectedAgendaItem: null,
+  selectedAnnouncement: null,
 	createAnnouncement: false,
 	isLoading:false,
 	currentSession: alias('sessionService.currentSession'),
@@ -15,8 +16,8 @@ export default Controller.extend({
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 
-	agendaitemsClass: computed('selectedAgendaItem', function() {
-		if(this.get('selectedAgendaItem')) {
+	agendaitemsClass: computed('selectedAgendaItem', 'selectedAnnouncement', 'createAnnouncement', function() {
+		if(this.get('selectedAgendaItem') || this.get('selectedAnnouncement') || this.get('createAnnouncement')) {
 			return "vlc-panel-layout__agenda-items vl-u-bg-porcelain";
 		} else {
 			return "vl-u-bg-porcelain";
@@ -28,11 +29,30 @@ export default Controller.extend({
 			this.transitionToRoute('subcases');
 		},
 
+    navigateToNewAnnouncement(announcement) {
+      this.set("createAnnouncement", false);
+      this.set("selectedAgendaItem", null);
+      this.set("selectedAnnouncement", announcement);
+		},
+
     navigateToCreateAnnouncement() {
       this.set("createAnnouncement", true);
       this.set("selectedAgendaItem", null);
+      this.set("selectedAnnouncement", null);
 		},
-		
+
+    selectAgendaItem(agendaitem) {
+      this.set("createAnnouncement", false);
+      this.set("selectedAgendaItem", agendaitem);
+      this.set("selectedAnnouncement", null);
+		},
+
+    selectAnnouncement(announcement) {
+      this.set("createAnnouncement", false);
+      this.set("selectedAgendaItem", null);
+      this.set("selectedAnnouncement", announcement);
+		},
+
 		compareAgendas() {
 			this.transitionToRoute('comparison');
 		},
