@@ -1,11 +1,11 @@
 <div class="vl-u-bg-alt">
-{{agenda/agenda-header
-  sessions=model
-  creatingNewSession=creatingNewSession
-  selectedAgendaItem=selectedAgendaItem
-  compareAgendas=(action "compareAgendas")
-  loading=(action "loadingAgendaitems")
-}}
+  {{agenda/agenda-header
+    sessions=model
+    creatingNewSession=creatingNewSession
+    selectedAgendaItem=selectedAgendaItem
+    compareAgendas=(action "compareAgendas")
+    loading=(action "loadingAgendaitems")
+  }}
 </div>
 {{#if (not isLoading)}}
   <div class="vlc-panel-layout">
@@ -30,11 +30,9 @@
     </div>
     {{#if selectedAgendaItem}}
       <div class="vlc-panel-layout__main-content">
-        <div class="vlc-scroll-wrapper">
-          {{agenda/agendaitem/agendaitem-overview 
-            agendaitem=selectedAgendaItem
-          }}
-        </div>
+        {{agenda/agendaitem/agendaitem-overview
+          agendaitem=selectedAgendaItem
+        }}
       </div>
     {{else if createAnnouncement}}
       {{agenda/create-announcement currentAgenda=currentAgenda}}

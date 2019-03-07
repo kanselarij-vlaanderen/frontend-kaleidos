@@ -64,7 +64,9 @@
         </div>
       {{/if}}
       {{#if (eq activeAgendaItemSection "details")}}
-        {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+        {{agenda/agendaitem/agendaitem-case
+          agendaitem=agendaitem
+        }}
       {{else if (eq activeAgendaItemSection "comments")}}
         {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
       {{else if (eq activeAgendaItemSection "press-agenda")}}

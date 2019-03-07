@@ -177,6 +177,7 @@
 	"name":"Naam",
 	"press-agenda":"Persagenda van",
 	"documents-subcase":"Documenten van de procedurestap",
+	"documents":"Documenten",
 	"overview":"Overzicht",
 	"detail":"Detail",
 	"compare":"Vergelijk",
@@ -191,5 +192,6 @@
 	"new-person":"Nieuwe bevoegde persoon toekennen",
 	"save-resignation":"Mandataris aanpassen",
 	"new-agenda":"Nieuwe agenda aanmaken",
-	"agenda-title":"Agenda's"
+	"agenda-title":"Agenda's",
+	"to-subcase":"Naar procedurestap"
 }

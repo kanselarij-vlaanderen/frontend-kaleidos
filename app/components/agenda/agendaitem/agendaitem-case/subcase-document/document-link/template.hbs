@@ -1,0 +1,110 @@
+<div class="vl-custom">
+  <div class="vl-info-tile vl-info-tile--custom">
+    <header class="vl-info-tile__header">
+      <div class="vl-info-tile__header__wrapper">
+        <div class="vlc-toolbar vl-u-flex-align-left">
+          <div class="vlc-toolbar__left">
+            <div class="vl-u-spacer-extended-right">
+              <div class="vl-custom">
+                <div class="vl-badge vl-badge--custom vl-badge--icon">
+                  <i class="vl-badge__icon vl-vi vl-vi-file"></i>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h5 class="vl-u-text--uppercase vl-u-text--bold vl-u-text--small">
+                {{!-- Decreet --}}
+              </h5>
+              <p>
+                {{document.title}}
+              </p>
+              <p class="vl-info-tile__header__subtitle">
+                Geupload op 24.12.2018 om 15:03
+              </p>
+            </div>
+          </div>
+          <div class="vlc-toolbar__right">
+            <div class="vl-action-group">
+              <div class="vl-u-spacer-extended-right-s">
+                <div class="vl-custom">
+                  <span class="vl-pill vl-pill--success">
+                    Actief openbaar
+                  </span>
+                </div>
+              </div>
+              <div class="vl-u-spacer-extended-right-s vl-u-text--muted">
+                <span
+                  class="vl-icon vl-vi vl-vi-lock-unlock"
+                  aria-hidden="true"
+                ></span>
+                <span class="vl-u-visually-hidden">
+                  Openbaar
+                </span>
+              </div>
+              <button class="vl-button vl-button--link vl-button--icon">
+                <i
+                  class="vl-vi vl-vi-nav-show-more-horizontal"
+                  aria-hidden="true"
+                ></i>
+                <span class="vl-u-visually-hidden">
+                  Meer opties
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <footer>
+      <div class="vl-custom">
+        <div class="js-vl-accordion js-vl-accordion--open">
+          <button class="vl-toggle vl-link" {{action "showVersions"}}>
+            <i
+              class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-right-fat"
+            ></i>
+            Toon vorige versies
+          </button>
+          {{#if isShowingVersions}}
+            <div class="vl-accordion__content js-vl-accordion__content">
+              <div
+                class="vl-accordion__panel vl-accordion__panel--custom vl-u-bg-porcelain"
+              >
+                <div class="vl-custom">
+                  <ul class="vl-link-list vl-link-list--bordered">
+                    {{#each
+                      (await document.sortedDocuments) as |documentVersion|
+                    }}
+                      <li class="vl-link-list__item">
+                        <div class="vl-u-spacer">
+                          <div class="vl-u-display-flex vl-u-flex-align-center">
+                            <p>
+                              {{documentVersion.nameToDisplay}}
+                            </p>
+                            <button
+                              class="vl-button vl-button--link vl-button--icon"
+                              {{action "downloadFile" documentVersion}}
+                            >
+                              <i
+                                class="vl-button__icon vl-vi vl-vi-move-down"
+                              ></i>
+                              <span class="vl-u-visually-hidden">
+                                Actie label
+                              </span>
+                            </button>
+                          </div>
+                          <p class="vl-u-text--small vl-u-text--muted">
+                            21 december 2018 - 12:30, voor 1ste principiële goedkeuring
+                          </p>
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

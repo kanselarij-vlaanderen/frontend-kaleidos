@@ -11,7 +11,6 @@ export default Model.extend({
 	documentVersions: hasMany('document-version', {inverse: null}),
 	remarks: hasMany('remark'),
 
-	// subcase: belongsTo('subcase'),
 	decision: belongsTo('decision'),
 	documentType: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),
@@ -23,5 +22,9 @@ export default Model.extend({
       return -1;
     }
     return 0;
+	}),
+
+	lastDocumentVersion: computed('sortedDocuments', function() {
+		return this.get('sortedDocuments').get('lastObject');
 	})
 });

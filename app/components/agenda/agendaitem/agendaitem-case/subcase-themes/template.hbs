@@ -1,0 +1,21 @@
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-display-flex-align-center">
+    <h4 class="vl-title vl-title--h4">
+      {{t "edit-item.themes"}}
+    </h4>
+    <div class="vl-u-spacer-extended-left-s">
+      <a class="vl-link">
+        {{t "buttons.edit"}}
+      </a>
+    </div>
+  </div>
+</div>
+<div class="vl-custom">
+  <ul>
+    {{#each (await agendaitem.subcase.themes) as |theme|}}
+      <li class="vl-pill vl-u-spacer-extended-right-s">
+        {{theme.label}}
+      </li>
+    {{/each}}
+  </ul>
+</div>

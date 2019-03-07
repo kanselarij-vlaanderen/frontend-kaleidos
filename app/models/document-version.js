@@ -10,13 +10,13 @@ export default Model.extend({
 	versionNumber: attr('number'),
 	serialNumber: attr('string'),
 
-	document: belongsTo('document', {inverse: null}),
+	document: belongsTo('document', { inverse: null }),
 	subcase: belongsTo('subcase'),
 	file: belongsTo('file'),
 
-	nameToDisplay: computed('chosenFileName','serialNumber', function() {
+	nameToDisplay: computed('chosenFileName', 'serialNumber', function () {
 		let serialNumber = this.get('serialNumber');
-		if(serialNumber) {
+		if (serialNumber) {
 			return serialNumber;
 		} else {
 			return this.get('chosenFileName');
