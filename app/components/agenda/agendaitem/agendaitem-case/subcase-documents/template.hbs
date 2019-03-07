@@ -14,6 +14,7 @@
   {{#each (await agendaitem.subcase.documents) as |document|}}
     {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
       document=document
+      agendaitem=agendaitem
     }}
   {{/each}}
   <div class="vl-u-spacer">
@@ -21,7 +22,7 @@
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-      Document toevoegen
+      {{buttons.document-add}}
     </button>
   </div>
 </div>
