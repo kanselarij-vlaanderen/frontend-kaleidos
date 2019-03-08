@@ -66,6 +66,13 @@ export default Component.extend({
 					agendaitem.set('postponed', postponedTo);
 				})
 			} else {
+        const postPonedObject = this.store.createRecord('postponed', {
+          meeting: null,
+          agendaitem: agendaitem
+        });
+        postPonedObject.save().then(postponedTo => {
+          agendaitem.set('postponed', postponedTo);
+        });
 				agendaitem.set('retracted', !agendaitem.retracted);
 			}
 			agendaitem.save().then(() => {

@@ -14,7 +14,7 @@ export default Model.extend({
   phase: belongsTo('subcase-phase'),
   consulationRequests: hasMany('consulation-request'),
   governmentDomains: hasMany('government-domain'),
-  agendaitem: hasMany('agendaitem'),
+  agendaitems: hasMany('agendaitem'),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   themes: hasMany('theme'),

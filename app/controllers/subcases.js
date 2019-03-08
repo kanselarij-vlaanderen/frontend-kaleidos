@@ -68,6 +68,13 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 			let selectedAgenda = await this.get('selectedAgenda');
       const postponed = await this.get('postponedSubcases');
       const available = await this.get('availableSubcases');
+
+      await postponed.map(item => {
+        item.get('postponedTo').destroyRecord().then(() => {
+          item.set('postponedTo', null);
+        });
+      })
+
       const itemsToAdd = [...postponed, ...available];
 
 			let agendaService = this.get('agendaService');
