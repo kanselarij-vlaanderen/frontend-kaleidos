@@ -11,7 +11,8 @@
 		"postponed": "stilgezet",
 		"postponed-until": "Uitgesteld, aanvraag voor de zitting op ",
 		"no-agendaitems": "Geen agendapunten",
-		"postpone-until": "Uitstellen tot"
+		"postpone-until": "Uitstellen tot",
+		"postpone-item":"Agendapunt uitstellen"
 	},
 	"agendaitem-details": {
 		"agenda": "Persagenda",
@@ -40,20 +41,21 @@
 	"buttons": {
 		"add": "Toevoegen",
 		"add-minister":"Minister toevoegen",
+		"back":"Terug",
 		"manage-ministers":"Ministerbeheer",
 		"next":"Volgende",
-		"add-case": "Dossier toevoegen",
+		"add-case": "Nieuw dossier aanmaken",
 		"add-comment": "Opmerking toevoegen",
 		"create-announcement": "Mededeling toevoegen",
 		"add-decision": "Voeg beslissing toe",
 		"add-news-item": "Voeg kort bestek toe",
-		"add-to-agenda": "Toevoegen aan agenda",
+		"add-to-agenda": "Agendapunt toevoegen",
 		"agenda-approve": "Agenda goedkeuren",
 		"agenda-back": "Terug naar agenda",
 		"agenda-compare": "Vergelijk agendas",
 		"agenda-lock": "Agenda afsluiten",
 		"agenda-unlock": "Agenda unlocken",
-		"agenda-delete": "Ontwerpagenda verwijderen",
+		"agenda-delete": "Agenda verwijderen",
 		"agenda-add":"Nieuwe ontwerpagenda aanmaken",
 		"cancel": "Annuleren",
 		"create-case": "Dossier aanmaken",
@@ -115,7 +117,7 @@
 		"content": "Inhoud",
 		"date-publication": "Datum van publicatie",
 		"sub-title": "Ondertitel",
-		"themes": "Themas",
+		"themes": "Thema's",
 		"title": "Titel"
 	},
 	"file-uploader": {
@@ -137,6 +139,7 @@
 		"public": "Openbaar"
 	},
 	"navigation": {
+		"agenda":"Agenda",
 		"agendas": "Agendas",
 		"cases": "Dossiers",
 		"notifications": "Notificaties",
@@ -174,7 +177,7 @@
 	"name":"Naam",
 	"press-agenda":"Persagenda van",
 	"documents-subcase":"Documenten van de procedurestap",
-	"documents-title":"Documenten",
+	"documents":"Documenten",
 	"overview":"Overzicht",
 	"detail":"Detail",
 	"compare":"Vergelijk",
@@ -187,5 +190,13 @@
 	"add-people":"Bevoegde persoon toevoegen",
 	"manage-mandates":"Bevoegdheden beheren",
 	"new-person":"Nieuwe bevoegde persoon toekennen",
-	"save-resignation":"Mandataris aanpassen"
+	"save-resignation":"Mandataris aanpassen",
+	"new-agenda":"Nieuwe agenda aanmaken",
+	"agenda-title":"Agenda's",
+	"to-subcase":"Naar procedurestap",
+	"show-versions":"Toon vorige versies",
+	"history":"Historiek",
+	"future-agendas":"Toekomstige agenda's",
+	"active-agenda":"Actieve agenda",
+	"actions":"Acties"
 }

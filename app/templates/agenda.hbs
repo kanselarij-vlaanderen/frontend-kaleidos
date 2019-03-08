@@ -1,0 +1,126 @@
+{{log date}}
+{{log date2}}
+<div class="vl-u-bg-alt">
+  <div class="vlc-page-header">
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <h1 class="vlc-page-header__title">
+            {{t "agenda-title"}}
+          </h1>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--narmeeting vl-button--icon-before"
+            {{action "createNewSession"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            ></i>
+            {{t "new-agenda"}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vlc-scroll-wrapper">
+  <div class="vlc-scroll-wrapper__body">
+    <div class="vl-u-spacer-extended-l">
+      <div class="vl-grid">
+        <div class="vl-col--2-4">
+          <div class="vl-u-spacer--medium">
+            <div
+              class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
+            >
+              <div
+                class="vlc-input-field-group vlc-input-field-group--gmeeting"
+              >
+                <input
+                  class="vl-input-field"
+                  type="search"
+                  placeholder="Zoeken"
+                 />
+
+              </div>
+              <div class="vlc-input-field-group">
+                <button
+                  class="vl-button vl-button--secondary vl-button--icon"
+                  type="submit"
+                >
+                  <i class="vl-vi vl-vi-magnifier"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{agenda/future-agendas}}
+      {{agenda/active-agendas nearestMeeting=nearestMeeting}}
+      <h2 class="vl-title vl-title--h3">
+        {{t "history"}}
+      </h2>
+      {{#data-table
+        content=model
+        page=page
+        size=size
+        sort=sort
+        isLoading=isLoadingModel as |t|
+      }}
+        {{#t.content as |c|}}
+          {{#c.header}}
+            {{th-sortable
+              class="vl-data-table-col-5 vl-data-table__header-title"
+              currentSorting=sort
+              field="planned-start"
+              label="Agenda"
+            }}
+            {{th-sortable
+              class="vl-data-table-col-3 vl-data-table__header-title"
+              field="agendas"
+              label="Agenda Versie"
+            }}
+            {{th-sortable
+              class="vl-data-table-col-3 vl-data-table__header-title"
+              currentSorting=sort
+              field="created"
+              label="Laatst gewijzigd"
+            }}
+            <th class="vl-data-table-col-1"></th>
+          {{/c.header}}
+          {{#c.body as |meeting|}}
+            <td>
+              Agenda voor
+              {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
+            </td>
+            <td>
+              {{await meeting.latestAgendaName}}
+            </td>
+            <td>
+              {{moment-format meeting.created "DD-MM-YYYY HH:mm"}}
+            </td>
+            <td class="vl-u-align-right">
+              <a
+                class="vl-button vl-button--link vl-button--icon"
+                {{action "selectAgenda" meeting}}
+              >
+                <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+              </a>
+            </td>
+          {{/c.body}}
+        {{/t.content}}
+      {{/data-table}}
+    </div>
+  </div>
+</div>
+{{#if creatingNewSession}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "new-agenda")
+    closeModal=(action "cancelNewSessionForm")
+  }}
+    {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
+  {{/web-components/vl-modal}}
+{{/if}}

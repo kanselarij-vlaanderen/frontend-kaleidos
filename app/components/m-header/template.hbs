@@ -1,19 +1,43 @@
-<div class="vl-tabs__wrapper">
-  <ul class="vl-tabs">
-    <li class="vl-tab">
-      {{#link-to "agendas" class="vl-tab__link"}}
-        {{t "navigation.agendas"}}
-      {{/link-to}}
-    </li>
-    <li class="vl-tab">
-      {{#link-to "cases" class="vl-tab__link"}}
-        {{t "navigation.cases"}}
-      {{/link-to}}
-    </li>
-    <li class="vl-tab">
-      {{#link-to "settings" class="vl-tab__link"}}
-        {{t "navigation.settings"}}
-      {{/link-to}}
-    </li>
-  </ul>
+<div class="vlc-toolbar vlc-toolbar--auto">
+  <div class="vlc-toolbar__left">
+    <div class="vlc-toolbar__item">
+      <ul class="vl-tabs vl-u-reset-margin">
+        <li class="vl-tab">
+          {{#link-to "agenda" class="vl-tab__link"}}
+            {{t "navigation.agenda"}}
+          {{/link-to}}
+        </li>
+        <li class="vl-tab">
+          {{#link-to "cases" class="vl-tab__link"}}
+            {{t "navigation.cases"}}
+          {{/link-to}}
+        </li>
+        <li class="vl-tab">
+          <a class="vl-tab__link" role="tab" aria-selected="true">
+            Nieuwsbrief
+          </a>
+        </li>
+        <li class="vl-tab">
+          {{#link-to "settings" class="vl-tab__link"}}
+            {{t "navigation.settings"}}
+          {{/link-to}}
+        </li>
+        <li class="vl-tab">
+          <a class="vl-tab__link" role="tab" aria-selected="true">
+            Notificaties
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="vlc-toolbar__right">
+    <div class="vlc-user">
+      <div class="vlc-user__username">
+        Hilde Crevits
+      </div>
+      <a class="vlc-user__action">
+        Afmelden
+      </a>
+    </div>
+  </div>
 </div>

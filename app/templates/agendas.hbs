@@ -1,10 +1,12 @@
-{{agenda/agenda-header
-  sessions=model
-  creatingNewSession=creatingNewSession
-  selectedAgendaItem=selectedAgendaItem
-  compareAgendas=(action "compareAgendas")
-  loading=(action "loadingAgendaitems")
-}}
+<div class="vl-u-bg-alt">
+  {{agenda/agenda-header
+    sessions=model
+    creatingNewSession=creatingNewSession
+    selectedAgendaItem=selectedAgendaItem
+    compareAgendas=(action "compareAgendas")
+    loading=(action "loadingAgendaitems")
+  }}
+</div>
 {{#if (not isLoading)}}
   <div class="vlc-panel-layout">
     {{agenda/side-nav
@@ -31,33 +33,21 @@
         }}
       </div>
     </div>
-
     <div class="vlc-panel-layout__main-content">
       <div class="vlc-scroll-wrapper">
-
         {{#if selectedAgendaItem}}
-
-          {{agenda/agendaitem/agendaitem-overview
-            agendaitem=selectedAgendaItem
+          {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem
           }}
         {{else if createAnnouncement}}
-
           {{agenda/create-announcement
             navigateToNewAnnouncement=(action "navigateToNewAnnouncement")
             currentAgenda=currentAgenda
           }}
-
         {{else if selectedAnnouncement}}
-
-          {{agenda/announcement-overview
-            announcement=selectedAnnouncement
-          }}
+          {{agenda/announcement-overview announcement=selectedAnnouncement}}
         {{/if}}
-
       </div>
     </div>
-
-
   </div>
 {{else}}
   {{web-components/vl-loader

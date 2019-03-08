@@ -1,18 +1,19 @@
-<div
-  class="vl-action-group vl-action-group--space-between vl-u-spacer-extended-s"
->
-  <button
-    class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-    {{action "navigateToSubCases"}}
-  >
-    <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-    {{t "buttons.add-case"}}
-  </button>
-  <button
-    class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-    {{action "navigateToCreateAnnouncement"}}
-  >
-    <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-    {{t "buttons.create-announcement"}}
-  </button>
+<div class="vlc-navbar vlc-navbar--bordered-bottom">
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__justified">
+      <div class="vlc-toolbar__item">
+        <div class="vl-input-field--inline">
+          <input
+            class="vl-input-field vl-input-field__input"
+            type="search"
+            placeholder="Zoeken"
+           />
+
+          <button class="vl-input-field__submit vl-button" type="submit">
+            <i class="vl-vi vl-vi-magnifier"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

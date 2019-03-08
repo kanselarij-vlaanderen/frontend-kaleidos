@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
 export default Component.extend({
-	classNames: ["vlc-panel-layout__main-content"],
+	classNames: ["vlc-scroll-wrapper"],
 	currentAgenda: alias('sessionService.currentAgenda'),
 	sessionService: inject(),
 	store: inject(),

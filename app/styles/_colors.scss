@@ -1,0 +1,139 @@
+/* ==========================================================================
+  Colors
+  Only define colors here. Don't use sass color functions, stick to hex values,
+  or the color component in styleguide won't regenerate automatically anymore.
+ ========================================================================== */
+
+/* From designs: Simple Gray
+ ========================================================================== */
+
+$gray-dark: #333333;
+$gray: #666666;
+$gray-light: #B2B2B2;
+$gray-lighter: #CCCCCC;
+$gray-lightest: #DDDDDD;
+
+/* From designs: Blue Gray
+ ========================================================================== */
+
+$blue-gray-dark: #79838F;
+$blue-gray: #A5B3C2;
+$blue-gray-light: #C6CDD3;
+$blue-gray-lighter: #E8EBEE;
+$blue-gray-lightest: #F3F5F6;
+
+/* From designs:Base colors
+ ========================================================================== */
+
+$black: #000;
+$primary-yellow: #FEE539;
+$primary-blue: #0055CC;
+$blue-dark: #003BB0;
+$white: #FFFFFF;
+
+/* From designs: Alert colors
+ ========================================================================== */
+
+$red: #DB3434;
+$red-light: #FF3333;
+$green: #8BAE00;
+$green-light: #B3E000;
+$orange: #FFC515;
+$orange-light: #FEE85C;
+
+/* From designs: Pastels
+ ========================================================================== */
+
+$pastel-red: #FAE6E6;
+$pastel-green: #F7FAE6;
+$pastel-yellow: #FEF9E6;
+
+
+/* From raw colors SCSS: Black/white
+ ========================================================================== */
+
+$white: #FFF;
+$black: #000;
+
+/* From raw colors SCSS: Gray shaded
+ ========================================================================== */
+
+$ship-gray: #3B3B3C;
+$mine-shaft: #333332;
+$fuscous-gray: #434342;
+$storm-dust: #5F6364;
+$dove-gray: #666;
+$friar-gray: #80807D;
+$gray: #8C8C8C;
+$regent-gray: #8695A8;
+$gray-chateau: #9FA4AA;
+$silver-chalice: #B2B2B2;
+$geyser: #D3D9E0;
+$loblolly: #C6CDD3;
+$ghost: #CBD2DA;
+$cararra: #E5E5E1;
+$athens-gray: #E8EBEE;
+$athens-gray-light: #F1F2F4;
+$porcelain: #F3F5F6;
+
+/* From raw colors SCSS: Brown shaded
+ ========================================================================== */
+
+$brown: #966729;
+$frensh-beige: #A67F59;
+$bon-jour: #E0D7D1;
+
+/* From raw colors SCSS: Blue shades
+ ========================================================================== */
+
+$regal-blue: #003A72;
+$curious-blue: #003BB0;
+$science-blue: #05C;
+$kashmir-blue: #557797;
+$endeavour: #004099;
+$blue-bayoux: #607284;
+$allports: #00789B;
+
+/* From raw colors SCSS: Yellow shades
+ ========================================================================== */
+
+$amber: #FFC515;
+$yellow: #FFE615;
+$off-yellow: #FEF9E5;
+$school-bus-yellow: #FEDD00;
+
+/* From raw colors SCSS: Red shades
+ ========================================================================== */
+
+$tall-poppy: #AF2929;
+$punch: #DB3434;
+$linen: #FBEAEA;
+$bahia: #A6CF00;
+$azalea: #F8D6D6;
+$persian-red: #C92C2C;
+
+/* From raw colors SCSS: Green shades
+ ========================================================================== */
+
+$napier-green: #238000;
+
+/* From raw colors SCSS: State shades
+ ========================================================================== */
+
+$limeade: #8bae00;
+$pistachio: #A3CC00;
+$rum-swizzle: #F7FAE5;
+$map-background: #E5E3DF;
+$green: #A3CC00;
+$background-green: #F6FAE5;
+$background-red: #FBEAEA;
+$background-yellow: #FEF9E5;
+$pink: #D53E5E;
+
+/* From raw colors SCSS: Sharing colors
+ ========================================================================== */
+
+$facebook-color: #36609F;
+$twitter-color: #2CAAE1;
+$linkedin-color: #0A6C9B;
+$googleplus-color: #DC5442;

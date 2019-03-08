@@ -8,20 +8,23 @@ export default Model.extend({
 	title: attr('string'),
 	numberVp: attr('string'),
 	numberVr: attr('string'),
-	documentVersions: hasMany('document-version', {inverse: null}),
+	documentVersions: hasMany('document-version', { inverse: null }),
 	remarks: hasMany('remark'),
 
-	// subcase: belongsTo('subcase'),
 	decision: belongsTo('decision'),
 	documentType: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),
 
-	sortedDocuments: computed.sort('documentVersions', function(a, b) {
+	sortedDocuments: computed.sort('documentVersions', function (a, b) {
 		if (a.versionNumber > b.versionNumber) {
-      return 1;
-    } else if (a.versionNumber < b.versionNumber) {
-      return -1;
-    }
-    return 0;
+			return 1;
+		} else if (a.versionNumber < b.versionNumber) {
+			return -1;
+		}
+		return 0;
+	}),
+
+	lastDocumentVersion: computed('sortedDocuments', function () {
+		return this.get('sortedDocuments').get('lastObject');
 	})
 });

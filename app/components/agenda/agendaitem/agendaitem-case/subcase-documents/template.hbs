@@ -1,0 +1,28 @@
+<div class="vl-u-spacer--large">
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <h4 class="vl-title vl-title--h4">
+        {{t "documents"}}
+      </h4>
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link">
+          {{t "buttons.edit"}}
+        </a>
+      </div>
+    </div>
+  </div>
+  {{#each (await agendaitem.subcase.documents) as |document|}}
+    {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+      document=document
+      agendaitem=agendaitem
+    }}
+  {{/each}}
+  <div class="vl-u-spacer">
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+      {{buttons.document-add}}
+    </button>
+  </div>
+</div>

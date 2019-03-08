@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-	classNames:["vl-page-header"],
+	classNames:["vlc-page-header"],
 	isAddingCase: false,
 	actions: {
 		toggleAddingCase() {

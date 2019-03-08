@@ -1,31 +1,44 @@
 <nav class="vlc-side-nav">
-  <div class="vlc-side-nav-title">
-    <h4 class="vl-title vl-title--h4">
-      <i class="vl-icon vl-vi vl-vi-timeline"></i>
-      <span>
-        {{t "agendas.nav-title"}}
-      </span>
-    </h4>
-    <button class="vl-button vl-button--tertiary vl-button--icon default" {{action "collapseSideMenu"}}>
-      <i class="vl-vi vl-vi-arrow-left-fat"></i>
-    </button>
+  <div class="vlc-navbar vlc-navbar--bordered-bottom">
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <h2 class="vl-title vl-title--h4">
+          <i class="vl-icon vl-vi vl-vi-timeline"></i>
+          <span>
+            {{t "agendas.nav-title"}}
+          </span>
+        </h2>
+      </div>
+      <div class="vlc-toolbar__right">
+        <button
+          class="vl-button vl-button--link vl-button--icon default"
+          {{action "collapseSideMenu"}}
+        >
+          <i class="vl-vi vl-vi-arrow-left-fat"></i>
+          <span class="vl-u-visually-hidden">
+            Toggle
+          </span>
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="c-scrollable-container">
-    <ul>
-      {{#each (await agendas) as |agenda|}}
-        <li class="vlc-side-nav-item {{active-class agenda currentAgenda class="vlc-side-nav-item"}}">
-          <a href="#" {{action "setCurrentAgenda" agenda}}>
-            <div class="vlc-side-nav-item__label">
-              <span>
-                {{agenda.agendaName}}
-              </span>
-            </div>
-            <div class="vlc-side-nav-item__meta">
-              {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
-            </div>
-          </a>
-        </li>
-      {{/each}}
-    </ul>
-  </div>
+  <ul>
+    {{#each (await agendas) as |agenda|}}
+      <li
+        class="vlc-side-nav-item
+          {{active-class agenda currentAgenda class="vlc-side-nav-item"}}"
+      >
+        <a {{action "setCurrentAgenda" agenda}}>
+          <div class="vlc-side-nav-item__label">
+            <span>
+              {{agenda.agendaName}}
+            </span>
+          </div>
+          <div class="vlc-side-nav-item__meta">
+            {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
+          </div>
+        </a>
+      </li>
+    {{/each}}
+  </ul>
 </nav>

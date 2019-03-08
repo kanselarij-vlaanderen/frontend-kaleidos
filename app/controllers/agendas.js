@@ -9,10 +9,10 @@ export default Controller.extend({
 	selectedAgendaItem: null,
   selectedAnnouncement: null,
 	createAnnouncement: false,
-	isLoading:false,
+	isLoading: false,
 	currentSession: alias('sessionService.currentSession'),
 	agendas: alias('sessionService.agendas'),
-  announcements: alias('sessionService.announcements'),
+	announcements: alias('sessionService.announcements'),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 
@@ -20,7 +20,7 @@ export default Controller.extend({
 		if(this.get('selectedAgendaItem') || this.get('selectedAnnouncement') || this.get('createAnnouncement')) {
 			return "vlc-panel-layout__agenda-items vl-u-bg-porcelain";
 		} else {
-			return "vl-u-bg-porcelain";
+			return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
 		}
 	}),
 

@@ -64,7 +64,9 @@
         </div>
       {{/if}}
       {{#if (eq activeAgendaItemSection "details")}}
-        {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+        {{agenda/agendaitem/agendaitem-case
+          agendaitem=agendaitem
+        }}
       {{else if (eq activeAgendaItemSection "comments")}}
         {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
       {{else if (eq activeAgendaItemSection "press-agenda")}}
@@ -80,11 +82,9 @@
 {{#if isShowingPostponeModal}}
   {{#web-components/vl-modal
     isOverlay=true
+    title=(t "agenda-item.postpone-item")
     closeModal=(action "togglePostponed")
   }}
-    <h1>
-      {{currentAgendaItem.subcase.title}}
-    </h1>
     <div class="vl-modal-dialog__content">
       <label class="vl-form__label">
         {{t "agenda-item.postpone-until"}}
@@ -94,16 +94,29 @@
         chooseSession=(action "chooseSession")
       }}
     </div>
-    <div class="vl-action-group vl-action-group--align-center">
-      <button
-        class="vl-button vl-button--narrow"
-        {{action "postponeAgendaItem" agendaitem}}
-      >
-        {{t "buttons.postpone"}}
-      </button>
-      <button class="vl-button vl-button--narrow" {{action "togglePostponed"}}>
-        {{t "buttons.cancel"}}
-      </button>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "togglePostponed"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "postponeAgendaItem" agendaitem}}
+            >
+              {{t "buttons.postpone"}}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   {{/web-components/vl-modal}}
 {{/if}}
