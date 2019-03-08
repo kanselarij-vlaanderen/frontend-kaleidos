@@ -1,3 +1,9 @@
+/* ==========================================================================
+  Bugfix - Fix flex utils
+  related to https://github.com/mono-company/digikan/issues/37
+   ========================================================================== */
+
+
 .vl-u-flex-space-between {
-  justify-content: space-between !important; 
+  justify-content: space-between !important;
 }

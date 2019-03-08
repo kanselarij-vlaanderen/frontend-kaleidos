@@ -3,44 +3,58 @@
   <h2 class="vl-title vl-title--h3">
     {{t "case-item.my-cases"}}
   </h2>
-  {{#data-table
-    content=(await model)
-    page=page
-    size=size
-    sort=sort
-    filter=filter
-    isLoading=isLoadingModel
-    fields="title created" 
-  as |t|
-  }}
-    {{#t.content as |c|}}
-      {{#c.header}}
-        {{th-sortable currentSorting=sort field="title" label="Dossiernaam"}}
-        {{th-sortable field="status" label="Status"}}        
-        {{th-sortable currentSorting=sort field="created" label="Aangemaakt op"}}
-        <th></th>
-      {{/c.header}}
-      {{#c.body as |row|}}
-        <td>
-          {{row.title}}
-        </td>
-        <td>
-          {{await row.latestSubcase.title}}
-        </td>
-        <td>
-          {{moment-format row.created "DD-MM-YYYY HH:mm"}}
-        </td>
-        <td class="vl-u-align-right">
-          {{#link-to
-            "cases.case"
-            row.id
-            tagName="button"
-            class="vl-button vl-button--tertiary vl-button--icon"
+  {{#if (not isLoadingModel)}}
+    {{#data-table
+      content=(await model)
+      page=page
+      size=size
+      sort=sort
+      isLoading=isLoadingModel as |t|
+    }}
+      {{#t.content as |c|}}
+        {{#c.header}}
+          {{th-sortable
+            class="vl-data-table-col-5 vl-data-table__header-title"
+            currentSorting=sort
+            field="shortTitle"
+            label="Dossiernaam"
           }}
-            <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-          {{/link-to}}
-        </td>
-      {{/c.body}}
-    {{/t.content}}
-  {{/data-table}}
+          {{th-sortable
+            class="vl-data-table-col-4 vl-data-table__header-title"
+            field="status"
+            label="Status"
+          }}
+          {{th-sortable
+            class="vl-data-table-col-2 vl-data-table__header-title"
+            currentSorting=sort
+            field="created"
+            label="Aangemaakt op"
+          }}
+          <th class="vl-data-table-col-1"></th>
+        {{/c.header}}
+        {{#c.body as |row|}}
+          <td>
+            {{row.shortTitle}}
+          </td>
+          <td>
+            {{await row.latestSubcase.shortTitle}}
+          </td>
+          <td>
+            {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+          </td>
+          <td class="vl-u-align-right">
+            {{#link-to
+              "cases.case"
+              row.id
+              class="vl-button vl-button--link vl-button--icon"
+            }}
+              <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+            {{/link-to}}
+          </td>
+        {{/c.body}}
+      {{/t.content}}
+    {{/data-table}}
+  {{else}}
+    {{web-components/vl-loader}}
+  {{/if}}
 </div>

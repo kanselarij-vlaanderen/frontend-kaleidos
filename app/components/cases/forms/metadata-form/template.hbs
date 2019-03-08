@@ -4,20 +4,11 @@
 </div>
 <div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "metadata-form.short-title")}}
-  {{textarea
-    class="vl-textarea vl-textarea--block"
-    id="shortTitle"
-    input=(action "shortTitleChange")
-    value=shortTitle
-  }}
+  {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
 </div>
 <div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "metadata-form.title")}}
-  {{textarea
-    class="vl-textarea vl-textarea--block"
-    key-down=(action "titleChange")
-    value=title
-  }}
+  {{textarea class="vl-textarea vl-textarea--block" rows="4" value=title}}
 </div>
 <div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "case-item.current-subcase")}}

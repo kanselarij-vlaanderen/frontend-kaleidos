@@ -21,6 +21,7 @@ Router.map(function () {
   this.route('comparison');
   this.route('settings');
   this.route('subcases');
+  this.route('agenda');
 });
 
 export default Router;

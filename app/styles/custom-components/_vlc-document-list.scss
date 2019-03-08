@@ -1,0 +1,36 @@
+/* ==========================================================================
+  .vlc-document-list
+   ========================================================================== */
+
+.vlc-document-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.vlc-document-list__item {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  a {
+    display: flex;
+    align-items: center;
+    color: $gray-dark;
+    text-decoration: none;
+    padding-right: 1rem;
+    &:hover,
+    &:active {
+      background: $blue-gray-lightest;
+      border-radius: 1.5rem;
+    }
+    &:focus {
+      color: $science-blue;
+    }
+  }
+  .vl-badge {
+    display: block;
+    margin-right: 1rem;
+  }
+  &:last-child {
+    margin: 0;
+  }
+}

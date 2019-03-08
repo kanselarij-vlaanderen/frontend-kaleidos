@@ -1,0 +1,65 @@
+/* ==========================================================================
+  vl-comments
+    consisting of:
+    * vl-comments-input
+    * vl-comments-comment
+   ========================================================================== */
+
+/* ==========================================================================
+   vl-comments-input
+   ========================================================================== */
+
+.vlc-comments-input {
+  display: flex;
+  margin: 1.6rem 0 3.2rem;
+  .vl-textarea {
+    width: 100%;
+  }
+  .vl-badge {
+    margin-right: 0.8rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    max-width: 3.2rem;
+    flex: 1 0 auto;
+  }
+}
+
+/* ==========================================================================
+   vl-comments-comment
+   ========================================================================== */
+
+.vlc-comments-comment {
+  display: flex;
+  margin-top: 1.6rem;
+  + .vlc-comments-comment {
+   margin-top: 0.4rem; 
+  }
+  .vl-badge {
+    margin-right: 0.8rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    flex: 1 0 auto;
+  }
+}
+
+.vlc-comments-comment-content__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vlc-comments-comment-content__meta {
+  margin-left: auto;
+  font-size: 1.3rem;
+}
+
+.vlc-comments-comment--response {
+  margin-left: 4rem;
+  background: $blue-gray-lightest;
+  padding: 1.6rem;
+}
+.vlc-comments-input--response {
+  margin-left: 4rem;
+  margin-top: 0.4rem;
+  background: $blue-gray-lightest;
+  padding: 1.6rem;
+}

@@ -1,26 +1,34 @@
-<div class="vl-u-spacer">
-  <div class="vl-u-spacer--small">
-    <div class="vl-u-display-flex vl-u-display-flex-align-center">
-      <h3 class="vl-title vl-title--h3">
-        {{await agendaitem.subcase.case.type.label}}
-      </h3>
-      <div class="u-spacer-left">
-        <a class="vl-link" href="#">
-          {{t "buttons.edit"}}
-        </a>
+<div class="vl-u-spacer--large vl-u-spacer-extended-top-l">
+  <div class="vl-u-spacer">
+    <div class="vl-u-spacer--small">
+      <div class="vl-u-display-flex vl-u-display-flex-align-center">
+        <h2 class="vl-u-text--uppercase vl-u-text--bold">
+          {{await agendaitem.subcase.case.type.label}}
+        </h2>
+      </div>
+      <div class="vl-u-spacer-extended-left-s">
+        {{#link-to
+          "cases.case"
+          (await agendaitem.subcase.case.id)
+          class="vl-link"
+        }}
+          {{t "to-subcase"}}
+        {{/link-to}}
       </div>
     </div>
+    <h3 class="vl-title vl-title--h3">
+      {{agendaitem.subcase.shortTitle}}
+    </h3>
+    <p class="vl-long-title">
+      {{agendaitem.subcase.title}}
+    </p>
   </div>
-  <h3 class="vl-title vl-title--h3">
-    {{agendaitem.subcase.shortTitle}}
-  </h3>
-  <p class="vl-long-title">
-    {{agendaitem.subcase.title}}
-  </p>
 </div>
 <div class="vl-u-spacer">
   <div class="vl-u-display-flex vl-u-flex-space-between">
-    <span class="vl-agenda-item__meta"></span>
+    <span class="vl-u-text--small vl-u-text--muted">
+      {{agendaitem.subcase.shortTitle}}
+    </span>
     <div class="vl-u-display-flex default">
       <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
       <span class="vl-agenda-item__meta">
@@ -33,52 +41,6 @@
     </div>
   </div>
 </div>
-<div class="pill-container vl-u-spacer--small">
-  <div class="vl-custom">
-    {{#each (await agendaitem.subcase.mandatees) as |mandatee|}}
-      <p class="vl-pill">
-        {{mandatee.title}}
-      </p>
-    {{/each}}
-  </div>
-</div>
-<div class="vl-attachments vl-u-spacer--small">
-  {{#each (await agendaitem.subcase.documentVersions) as |documentVersion|}}
-    <div
-      class="vl-attachment vl-u-display-flex vl-u-display-inline-flex vl-u-flex-align-center"
-      {{action "downloadFile" documentVersion}}
-    >
-      <div
-        class="vl-badge vl-badge--icon vl-badge--small vl-badge--alt c-document-badge"
-      >
-        <i class="vl-badge__icon vl-vi vl-vi-file"></i>
-      </div>
-      <p>
-        {{documentVersion.nameToDisplay}}
-      </p>
-    </div>
-  {{/each}}
-</div>
-<div class="vl-u-spacer">
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-display-flex-align-center">
-      <h4 class="vl-title vl-title--h4">
-        {{t "edit-item.themes"}}
-      </h4>
-      <div class="u-spacer-left">
-        <a class="vl-link" href="#">
-          {{t "buttons.edit"}}
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="pill-container vl-u-spacer--small">
-    <div class="vl-custom">
-      {{#each (await agendaitem.subcase.themes) as |theme|}}
-        <span class="vl-pill u-spacer-right-s">
-          {{theme.label}}
-        </span>
-      {{/each}}
-    </div>
-  </div>
-</div>
+{{agenda/agendaitem/agendaitem-case/subcase-themes agendaitem=agendaitem}}
+{{agenda/agendaitem/agendaitem-case/subcase-mandatees agendaitem=agendaitem}}
+{{agenda/agendaitem/agendaitem-case/subcase-documents agendaitem=agendaitem}}

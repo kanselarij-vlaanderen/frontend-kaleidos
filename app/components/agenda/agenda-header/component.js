@@ -9,10 +9,8 @@ export default Component.extend({
 	store: inject(),
 	sessionService: inject(),
 	agendaService: inject(),
-	classNames: ["c-page-header"],
+	classNames: ["vlc-page-header"],
 
-	creatingNewSession: null,
-	sessions: null,
 	selectedAgendaItem: null,
 	isShowingOptions: false,
 
@@ -60,27 +58,21 @@ export default Component.extend({
 			agenda.save();
 		},
 
-		chooseSession(session) {
-			this.set('sessionService.currentAgenda', null);
-			this.set('selectedAgendaItem', null);
-			this.set('sessionService.currentSession', session);
-		},
-
 		showMultipleOptions() {
-			this.toggleProperty('isShowingOptions')
-		},
-
-		createNewSession() {
-			this.set('creatingNewSession', true);
-		},
-
-		cancelNewSessionForm() {
-			this.set('creatingNewSession', false);
-			this.set('sessions', this.store.query('meeting', {}))
+			this.toggleProperty('isShowingOptions');
 		},
 
 		compareAgendas() {
 			this.compareAgendas();
+		},
+
+		navigateToSubCases() {
+			this.set('addingAgendaItems', true);
+			this.navigateToSubCases();
+		},
+    navigateToCreateAnnouncement() {
+			this.set('addingAnnouncement', true);
+			this.navigateToCreateAnnouncement();
 		},
 
 		async deleteDesignAgenda(agenda) {

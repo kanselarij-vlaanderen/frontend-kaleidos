@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-	tagName: 'nav',
-	classNames: ['vl-u-bg-alt']
+	classNames: ['vlc-navbar','vlc-navbar--bordered-bottom', 'vlc-navbar--no-padding', 'vlc-navbar--bg-alt', 'vlc-navbar--auto']
 });

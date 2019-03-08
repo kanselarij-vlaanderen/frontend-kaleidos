@@ -1,0 +1,15 @@
+<div class="vl-alert__icon">
+  <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
+</div>
+<div class="vl-alert__content">
+  {{#if (not is-empty title)}}
+    <p class="vl-alert__title">
+      {{title}}
+    </p>
+  {{/if}}
+  <div class="vl-alert__message">
+    <p>
+      {{message}}
+    </p>
+  </div>
+</div>

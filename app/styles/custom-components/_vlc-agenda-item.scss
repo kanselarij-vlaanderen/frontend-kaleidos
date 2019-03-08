@@ -39,9 +39,7 @@
 
   .vl-attachments {
     flex-wrap: wrap;
-    
     .vl-attachment {
-
       .vl-badge {
         margin-right: $spacing-xxsmall;
       }
@@ -55,7 +53,7 @@
    ========================================================================== */
 
 .vlc-agenda-items--small {
-  height:100%;
+
   a.vlc-agenda-item {
     text-decoration: none;
     display: block;
@@ -63,11 +61,10 @@
   }
 
   .vlc-agenda-item--active {
-    // background: $primary-blue;
-    // * {
-    //   color: white;
-    // }
-    border-left: 3px solid $primary-blue;
+    background: $primary-blue;
+    * {
+      color: white;
+    }
   }
 
   .vlc-agenda-items__header {

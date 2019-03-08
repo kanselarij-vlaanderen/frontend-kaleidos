@@ -19,5 +19,6 @@ export default Component.extend({
 		});
 		this.set('caseTypes', caseTypes);
 		this.set('selectedCaseType', caseTypes.get('firstObject'))
+		this.chooseCaseType(caseTypes.get('firstObject'));
 	},
 });

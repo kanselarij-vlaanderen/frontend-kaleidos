@@ -12,10 +12,10 @@
   <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
   {{t "manage-mandates"}}
 </button>
-
 {{#if isAddingMandate}}
   {{#web-components/vl-modal
     isOverlay=true
+    title=(t "manage-mandates")
     closeModal=(action "showAddingMandateForm")
   }}
     {{utils/manage-domains closeModal=(action "showAddingMandateForm")}}
@@ -24,6 +24,7 @@
 {{#if isEditingMandatee}}
   {{#web-components/vl-modal
     isOverlay=true
+    title=(t "buttons.manage-ministers")
     closeModal=(action "showEditingMandateeForm")
   }}
     {{utils/manage-mandatees closeModal=(action "showEditingMandateeForm")}}

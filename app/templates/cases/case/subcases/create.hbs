@@ -32,11 +32,7 @@
         {{/if}}
         {{#each uploadedFiles as |uploadedFile|}}
           <div class="uploaded-file-container">
-            <a
-              class="remove-file"
-              href="#"
-              {{action "removeFile" uploadedFile}}
-            >
+            <a class="remove-file" {{action "removeFile" uploadedFile}}>
               <i class="vl-vi vl-vi-cross"></i>
             </a>
             {{web-components/vl-document file=uploadedFile}}
@@ -82,17 +78,9 @@
 {{#if isAddingNonDigitalDocument}}
   {{#web-components/vl-modal
     isOverlay=true
+    title=(t "cases.non-digital-file")
     closeModal=(action "toggleAddNonDigitalDocument")
   }}
-    <div class="vlc-toolbar">
-      <div class="vlc-toolbar__left">
-        <div class="vlc-toolbar__item">
-          <h4 class="vlc-toolbar__title">
-            {{t "cases.non-digital-file"}}
-          </h4>
-        </div>
-      </div>
-    </div>
     <div class="vl-modal-dialog__content">
       {{web-components/vl-form-label value=(t "cases-search.title-document")}}
       {{web-components/vl-form-input width="4" value=documentTitle}}
@@ -103,19 +91,29 @@
         }}
       {{/each}}
     </div>
-    <div class="vl-action-group vl-action-group--align-center">
-      <button
-        class="vl-button vl-button--narrow"
-        {{action "createNonDigitalDocument"}}
-      >
-        {{t "buttons.document-add"}}
-      </button>
-      <button
-        class="vl-button vl-button--narrow"
-        {{action "toggleAddNonDigitalDocument"}}
-      >
-        {{t "buttons.cancel"}}
-      </button>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "toggleAddNonDigitalDocument"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "createNonDigitalDocument"}}
+            >
+              {{t "buttons.document-add"}}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   {{/web-components/vl-modal}}
 {{/if}}
