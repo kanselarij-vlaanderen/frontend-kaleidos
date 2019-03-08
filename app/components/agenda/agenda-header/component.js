@@ -59,11 +59,20 @@ export default Component.extend({
 		},
 
 		showMultipleOptions() {
-			this.toggleProperty('isShowingOptions')
+			this.toggleProperty('isShowingOptions');
 		},
 
 		compareAgendas() {
 			this.compareAgendas();
+		},
+
+		navigateToSubCases() {
+			this.set('addingAgendaItems', true);
+			this.navigateToSubCases();
+		},
+    navigateToCreateAnnouncement() {
+			this.set('addingAnnouncement', true);
+			this.navigateToCreateAnnouncement();
 		},
 
 		async deleteDesignAgenda(agenda) {

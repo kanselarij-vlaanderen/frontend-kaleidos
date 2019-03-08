@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 
 export default Component.extend({
-	classNames: ['vlc-scroll-wrapper__header', 'vlc-navbar--bordered-bottom'],
+	classNames: ['vlc-scroll-wrapper__header'],
 	store: inject(),
 
 	searchTask: task(function* (searchValue) {

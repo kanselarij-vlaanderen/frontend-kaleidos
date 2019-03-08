@@ -31,69 +31,94 @@
           class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
           {{action "showMultipleOptions"}}
         >
-          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-nav-show-more-horizontal"></i>
+          {{#if (not isShowingOptions)}}
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+            ></i>
+          {{else}}
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+            ></i>
+          {{/if}}
           {{t "actions"}}
         </button>
-          {{#attach-popover
-            class="ember-attacher-popper"
-            hideOn="click"
-            showOn="click"
-            animation="shift"
-            placement="bottom" as |attacher|
-          }}
-            <ul class="vl-popover__link-list">
-              <li class="vl-popover__link-list__item">
-                {{#if (not currentAgenda.isFinal)}}
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action "lockAgenda" currentAgenda}}
-                    {{action attacher.hide}}
-                  >
-                    {{t "buttons.agenda-lock"}}
-                  </a>
-                {{else}}
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action "lockAgenda" currentAgenda}}
-                    {{action attacher.hide}}
-                  >
-                    {{t "buttons.agenda-unlock"}}
-                  </a>
-                {{/if}}
-              </li>
-              <li class="vl-popover__link-list__item">
-                {{#if
-                  (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
-                }}
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action "deleteDesignAgenda" currentAgenda}}
-                    {{action attacher.hide}}
-                  >
-                    {{t "buttons.agenda-delete"}}
-                  </a>
-                {{else if (not designAgendaPresent)}}
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action "createNewDesignAgenda" currentSession}}
-                    {{action attacher.hide}}
-                  >
-                    {{t "buttons.agenda-add"}}
-                  </a>
-                {{/if}}
-              </li>
-              <li class="vl-popover__link-list__item">
+        {{#attach-popover
+          class="ember-attacher-popper"
+          hideOn="click"
+          showOn="click"
+          animation="shift"
+          placement="bottom" as |attacher|
+        }}
+          <ul class="vl-popover__link-list">
+            <li class="vl-popover__link-list__item">
+              {{#if (not currentAgenda.isFinal)}}
                 <a
                   class="vl-link vl-link--block"
-                  {{action "createPressAgenda"}}
+                  {{action "lockAgenda" currentAgenda}}
                   {{action attacher.hide}}
                 >
-                  {{t "buttons.printable-press-agenda"}}
+                  {{t "buttons.agenda-lock"}}
                 </a>
-              </li>
-              <li class="vl-popover__link-list__item"></li>
-            </ul>
-          {{/attach-popover}}
+              {{else}}
+                <a
+                  class="vl-link vl-link--block"
+                  {{action "lockAgenda" currentAgenda}}
+                  {{action attacher.hide}}
+                >
+                  {{t "buttons.agenda-unlock"}}
+                </a>
+              {{/if}}
+            </li>
+            <li class="vl-popover__link-list__item">
+              <a
+                class="vl-link vl-link--block"
+                {{action attacher.hide}}
+                {{action "addSubcasesToAgenda"}}
+              >
+                {{t "buttons.add-to-agenda"}}
+              </a>
+            </li>
+            <li class="vl-popover__link-list__item">
+              <a
+                class="vl-link vl-link--block"
+                {{action attacher.hide}}
+                {{action "addAnnouncementsToAgenda"}}
+              >
+                {{t "buttons.create-announcement"}}
+              </a>
+            </li>
+            <li class="vl-popover__link-list__item">
+              <a
+                class="vl-link vl-link--block"
+                {{action "createPressAgenda"}}
+                {{action attacher.hide}}
+              >
+                {{t "buttons.printable-press-agenda"}}
+              </a>
+            </li>
+            <li class="vl-popover__link-list__item">
+              {{#if (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
+              }}
+                <a
+                  class="vl-link vl-link--block color-red"
+                  {{action "deleteDesignAgenda" currentAgenda}}
+                  {{action attacher.hide}}
+                >
+                  {{t "buttons.agenda-delete"}}
+                </a>
+              {{else if (not designAgendaPresent)}}
+                <a
+                  class="vl-link vl-link--block"
+                  {{action "createNewDesignAgenda" currentSession}}
+                  {{action attacher.hide}}
+                >
+                  {{t "buttons.agenda-add"}}
+                </a>
+              {{/if}}
+            </li>
+            <li class="vl-popover__link-list__item"></li>
+          </ul>
+        {{/attach-popover}}
       </div>
     </div>
   </div>

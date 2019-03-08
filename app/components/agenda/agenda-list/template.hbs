@@ -2,18 +2,20 @@
   {{web-components/vl-loader}}
 {{else}}
   <div class="vlc-agenda-items vlc-agenda-items--small">
-    <div class="vlc-agenda-items__header">
-      <h5 class="vl-title vl-title--h5">
-        {{t "agendas.agendaitems-subtitle"}}
-      </h5>
-      {{#if (eq agendaitems.length 0)}}
-        <div class="vl-u-spacer-extended-top-s">
-          {{web-components/vl-alert
-            message="Er zijn nog geen agendapunten in deze agenda."
-          }}
-        </div>
-      {{/if}}
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__left">
+        <h2 class="vl-title vl-title--h3 vl-u-spacer-extended-s" >
+          {{t "agendas.agendaitems-subtitle"}}
+        </h2>
+      </div>
     </div>
+    {{#if (eq agendaitems.length 0)}}
+      <div class="vl-u-spacer-extended-top-s">
+        {{web-components/vl-alert
+          message="Er zijn nog geen agendapunten in deze agenda."
+        }}
+      </div>
+    {{/if}}
     <div class="vl-u-spacer">
       {{#each agendaitems as |agendaitem index|}}
         {{agenda/agenda-list/list-item

@@ -2,11 +2,9 @@
   <div class="vl-modal-dialog__content">
     {{cases/case-levels policyLevelChanged=(action "policyLevelChanged")}}
     {{cases/forms/metadata-form
-      shortTitleChange=(action "shortTitleChange")
-      titleChange=(action "titleChange")
       typeChanged=(action "typeChanged")
-      shortTitle=shortTitle
       title=title
+      shortTitle=shortTitle
     }}
   </div>
   <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
@@ -24,11 +22,7 @@
       </div>
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--narrow"
-            type="submit"
-            {{action "postponeAgendaItem" agendaitem}}
-          >
+          <button class="vl-button vl-button--narrow">
             {{t "buttons.create-case"}}
           </button>
         </div>

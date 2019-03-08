@@ -2,19 +2,19 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
+  title: "",
+  shortTitle: "",
   store: inject(),
   actions: {
     async createCase() {
-      const { title, shortTitle, type } = this;
-      const date = new Date();
-      let cases = this.store.createRecord('case', 
-      { 
-        title, 
-        shortTitle, 
-        type,
-        created: date, 
-        policyLevel: this.get('selectedPolicyLevel') 
-      });
+      let cases = this.store.createRecord('case',
+        {
+          title: this.get('title'),
+          shortTitle: this.get('shortTitle'),
+          type: this.get('type'),
+          created: new Date(),
+          policyLevel: this.get('selectedPolicyLevel')
+        });
       await cases.save();
     },
 
@@ -28,14 +28,6 @@ export default Component.extend({
 
     typeChanged(type) {
       this.set('type', type);
-    },
-
-    titleChange(title) {
-      this.set('title', title);
-    },
-
-    shortTitleChange(shortTitle) {
-      this.set('shortTitle', shortTitle);
     },
 
     statusChange(status) {
