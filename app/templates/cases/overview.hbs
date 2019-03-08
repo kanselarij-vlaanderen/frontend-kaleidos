@@ -8,9 +8,8 @@
     page=page
     size=size
     sort=sort
-    filter=filter
-    isLoading=isLoadingModel
-    fields="shortTitle created" as |t|
+    search=false
+    isLoading=isLoadingModel as |t|
   }}
     {{#t.content as |c|}}
       {{#c.header}}

@@ -335,12 +335,51 @@ $icon-font-location: "/fonts/";
 }
 
 .ember-attacher-popper {
-  display: flex;
-  flex-direction: column;
-  padding: 1em;
-  button {
-    margin: 0.2em;
+  background-color: $page-bg;
+  box-shadow: 0 3px 17px rgba(#000, 0.15); // sass-lint:disable-line no-color-literals
+  width: 23rem;
+  min-width: 23rem;
+  max-width: 90vw;
+  max-height: 300px;
+  z-index: z("dropdown");
+
+  @include respond-to(small) {
+    max-height: 65vh;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: none;
+    z-index: z("popover");
+    transform: translateY(120%);
   }
+  
+  &::before {
+    display: block;
+    content: "";
+    position: absolute;
+    right: 12px;
+    top: -10px;
+    border: 12px solid transparent;
+    border-bottom-color: $page-bg;
+    border-top-width: 0;
+  }
+
+  &[x-placement="top-end"] {
+    &::before {
+      @include arrow-bottom;
+    }
+
+    &::after {
+      bottom: -0.7rem;
+    } 
+  }
+}
+
+.ember-attacher {
+  top: 4px !important; 
 }
 
 .non-digital-document {
@@ -471,10 +510,4 @@ $icon-font-location: "/fonts/";
 
 .vlc-panel-layout-agenda__detail {
   width:100%;
-}
-
-.active {
-  color: $text-color;
-  border-bottom: $tabs-stroke-height solid $text-color;
-  background-color: transparent;
 }

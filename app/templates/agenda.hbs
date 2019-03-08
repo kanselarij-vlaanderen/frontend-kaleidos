@@ -1,3 +1,5 @@
+{{log date}}
+{{log date2}}
 <div class="vl-u-bg-alt">
   <div class="vlc-page-header">
     <div class="vlc-toolbar vlc-toolbar--auto">
@@ -48,35 +50,23 @@
                   class="vl-button vl-button--secondary vl-button--icon"
                   type="submit"
                 >
-                  <i class="vl-vi vl-vi-magnifier" aria-hidden="true"></i>
-                  <span class="vl-u-visually-hidden">
-                    Zoeken
-                  </span>
+                  <i class="vl-vi vl-vi-magnifier"></i>
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="vl-u-spacer--large">
-        <h2 class="vl-title vl-title--h3">
-          Toekomstige agenda’s
-        </h2>
-      </div>
-      <div class="vl-u-spacer--large">
-        <h2 class="vl-title vl-title--h3">
-          Actieve agenda
-        </h2>
-      </div>
+      {{agenda/future-agendas}}
+      {{agenda/active-agendas nearestMeeting=nearestMeeting}}
       <h2 class="vl-title vl-title--h3">
-        Historiek
+        {{t "history"}}
       </h2>
       {{#data-table
         content=model
         page=page
         size=size
         sort=sort
-        filter=filter
         isLoading=isLoadingModel as |t|
       }}
         {{#t.content as |c|}}
@@ -84,7 +74,7 @@
             {{th-sortable
               class="vl-data-table-col-5 vl-data-table__header-title"
               currentSorting=sort
-              field="plannedStart"
+              field="planned-start"
               label="Agenda"
             }}
             {{th-sortable

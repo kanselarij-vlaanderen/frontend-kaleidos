@@ -117,7 +117,7 @@
 		"content": "Inhoud",
 		"date-publication": "Datum van publicatie",
 		"sub-title": "Ondertitel",
-		"themes": "Themas",
+		"themes": "Thema's",
 		"title": "Titel"
 	},
 	"file-uploader": {
@@ -194,5 +194,9 @@
 	"new-agenda":"Nieuwe agenda aanmaken",
 	"agenda-title":"Agenda's",
 	"to-subcase":"Naar procedurestap",
-	"show-versions":"Toon vorige versies"
+	"show-versions":"Toon vorige versies",
+	"history":"Historiek",
+	"future-agendas":"Toekomstige agenda's",
+	"active-agenda":"Actieve agenda",
+	"actions":"Acties"
 }
