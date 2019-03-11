@@ -15,7 +15,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 	nearestMeeting: computed('model', function() {
 		const meetings = this.get('model');
 		const sortedMeetings = meetings.sortBy('plannedStart');
-		console.log(sortedMeetings);
 		return sortedMeetings;
 	}),
 

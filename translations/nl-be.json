@@ -59,7 +59,7 @@
 		"agenda-add":"Nieuwe ontwerpagenda aanmaken",
 		"cancel": "Annuleren",
 		"create-case": "Dossier aanmaken",
-		"create-subcase": "Nieuwe procedurestap",
+		"create-subcase": "Procedurestap toevoegen",
 		"delete": "Verwijderen",
 		"document-add":"Document toevoegen",
 		"new-session": "Nieuwe zitting",
@@ -156,7 +156,7 @@
 		"document-type": "Document type",
 		"mandatee": "Hoedanigheid",
 		"name-subcase": "Naam procedurestap",
-		"title-subcase":"Titel procedurestap"
+		"title-subcase":"Dossiernaam"
 	},
 	"web-components": {
 		"loading-text": "Pagina is aan het laden",

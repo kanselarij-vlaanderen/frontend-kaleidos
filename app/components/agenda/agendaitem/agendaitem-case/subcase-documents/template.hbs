@@ -11,10 +11,10 @@
       </div>
     </div>
   </div>
-  {{#each (await agendaitem.subcase.documents) as |document|}}
+  {{#each (await subcase.documents) as |document|}}
     {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
       document=document
-      agendaitem=agendaitem
+      subcase=subcase
     }}
   {{/each}}
   <div class="vl-u-spacer">

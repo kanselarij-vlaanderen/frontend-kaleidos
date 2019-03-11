@@ -13,7 +13,7 @@
   </div>
   <div class="vl-custom">
     <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
-      {{#each (await agendaitem.subcase.mandatees) as |mandatee|}}
+      {{#each (await subcase.mandatees) as |mandatee|}}
         {{web-components/vl-mandatee-link mandatee=mandatee}}
       {{/each}}
     </ul>

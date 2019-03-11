@@ -11,10 +11,6 @@ export default Controller.extend({
   isAddingNonDigitalDocument: false,
 
   title: computed('model', function () {
-    return this.get('model').title;
-  }),
-
-  shortTitle: computed('model', function () {
     return this.get('model').shortTitle;
   }),
 
@@ -32,7 +28,7 @@ export default Controller.extend({
       event.preventDefault();
       const { title, shortTitle } = this;
       const caze = this.store.peekRecord('case', this.model.id);
-      const subcase = await this.store.createRecord('subcase', 
+      const subcase = this.store.createRecord('subcase', 
       { 
         title, 
         shortTitle, 
