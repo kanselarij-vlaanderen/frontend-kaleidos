@@ -9,7 +9,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 	creatingNewSession: false,
 	sort: 'planned-start',
 
-
 	nearestMeeting: computed('model', function () {
 		const meetings = this.get('model');
 		const sortedMeetings = meetings.sortBy('plannedStart');

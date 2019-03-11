@@ -11,7 +11,7 @@
         >
           <div class="vl-u-display-flex vl-u-flex-align-center">
             <span>
-              Agenda
+               {{t "navigation.agenda"}}
             </span>
           </div>
         </a>
@@ -20,7 +20,7 @@
         <a class="vl-data-table__header-title--sortable" href="#" title="sort">
           <div class="vl-u-display-flex vl-u-flex-align-center">
             <span>
-              Agenda Versie
+              {{t "agenda-version"}}
             </span>
           </div>
         </a>
@@ -33,7 +33,7 @@
         <a class="vl-data-table__header-title--sortable" href="#">
           <div class="vl-u-display-flex vl-u-flex-align-center">
             <span>
-              Laatst gewijzigd
+              {{t "latest-modified"}}
             </span>
           </div>
         </a>
@@ -44,7 +44,7 @@
   <tbody>
     <tr>
       <td>
-        Agenda voor
+        {{t "agenda-for"}}
         {{moment-format nearestMeeting.plannedStart "DD.MM.YYYY"}}
       </td>
       <td>

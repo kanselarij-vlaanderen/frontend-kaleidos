@@ -11,7 +11,6 @@ Router.map(function () {
   this.route('cases', { path: '/dossiers' }, function () {
     this.route('case', { path: ':id' }, function () {
       this.route('subcases', { path: '/deeldossiers' }, function () {
-        this.route('create');
         this.route('overview', { path: '' });
         this.route('subcase', { path: ':subcase_id' });
       });

@@ -2,6 +2,7 @@ import Component from '@ember/component';
 
 export default Component.extend({
 	selectedMandatee:null,
+	classNames:["vlc-input-field-block"],
 
 	actions: {
 		clearSelections() {

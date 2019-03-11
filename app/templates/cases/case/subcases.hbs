@@ -10,18 +10,25 @@
       </div>
     </div>
     <div class="vl-toolbar__right">
-      {{#link-to "cases.case.subcases.create"}}
-        <button class="vl-button vl-button--narrow vl-button--icon-before">
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-            aria-hidden="true"
-          ></i>
-          {{t "buttons.create-subcase"}}
-        </button>
-      {{/link-to}}
+      <button
+        class="vl-button vl-button--narrow vl-button--icon-before"
+        {{action "toggleIsAddingSubcase"}}
+      >
+        <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+        {{t "buttons.create-subcase"}}
+      </button>
     </div>
   </div>
 </div>
 <div class="vl-u-spacer-extended-l">
   {{outlet}}
 </div>
+{{#if isAddingSubcase}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "close")
+    title=(t "buttons.create-subcase")
+  }}
+    {{cases/new-subcase model=model closeModal=(action "close")}}
+  {{/web-components/vl-modal}}
+{{/if}}

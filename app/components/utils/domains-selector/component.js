@@ -7,18 +7,23 @@ export default Component.extend({
 	classNames: ["domains-selector-container"],
 	store: inject(),
 	selectedDomains: null,
+	selectedDomainsOnly: false, // property to disable all fetch/search functionality.
 
 	searchDomain: task(function* (searchValue) {
-		yield timeout(300);
-		return this.store.query('government-domain', {
-			filter: {
-				label: searchValue 
-			}
-		});
+		if (!this.get('selectedDomainsOnly')) {
+			yield timeout(300);
+			return this.store.query('government-domain', {
+				filter: {
+					label: searchValue
+				}
+			});
+		}
 	}),
 
 	domains: computed("store", function () {
-		return this.store.findAll('government-domain');
+		if (!this.get('selectedDomainsOnly')) {
+			return this.store.findAll('government-domain');
+		}
 	}),
 
 	actions: {
@@ -27,8 +32,12 @@ export default Component.extend({
 			this.chooseDomain(domains);
 		},
 		async resetValueIfEmpty(param) {
-			if (param === "") {
-				this.set('domains', this.store.findAll('government-domain'));
+			if (!this.get('selectedDomainsOnly')) {
+				if (param === "") {
+					this.set('domains', this.store.findAll('government-domain'));
+				}
+			} else {
+				return this.set('domains', this.get('selectedDomains'));
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import moment from 'moment';
 
 export default Component.extend({
 	classNames:['o-scroll'],
