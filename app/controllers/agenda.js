@@ -7,15 +7,51 @@ import moment from 'moment';
 export default Controller.extend(DefaultQueryParamsMixin, {
 	sessionService: inject(),
 	creatingNewSession: false,
-	sort:'planned-start',
+	sort: 'planned-start',
 
-	date: moment().toISOString(),
-	date2: new Date().toISOString(),
 
-	nearestMeeting: computed('model', function() {
+	nearestMeeting: computed('model', function () {
 		const meetings = this.get('model');
 		const sortedMeetings = meetings.sortBy('plannedStart');
-		return sortedMeetings;
+
+		let closest = sortedMeetings.get('lastObject');
+		const now = moment().format();
+		sortedMeetings.map(function (meeting) {
+			let date = moment(meeting.plannedStart).format();
+			let closestDate = moment(closest.plannedStart).format();
+			if (date >= now && date < closestDate) {
+				closest = meeting;
+			}
+		});
+		sortedMeetings.removeObject(closest);
+		return closest;
+	}),
+
+	futureMeetings: computed('model', 'nearestMeeting', function () {
+		const meetings = this.get('model');
+		const nearestMeetingDate = moment(this.get('nearestMeeting.plannedStart')).format();
+		return meetings.filter(meeting => {
+			let date = moment(meeting.plannedStart).format();
+
+			if (date > nearestMeetingDate) {
+				return meeting;
+			}
+		})
+	}),
+
+	filteredMeetings: computed('nearestMeeting', 'model', function () {
+		const meetings = this.get('model');
+		const nearestMeeting = this.get('nearestMeeting');
+		const now = moment().format();
+
+		let filteredMeetings = meetings.filter(meeting => meeting.id != nearestMeeting.id);
+		return filteredMeetings.filter(meeting => {
+			const date = moment(meeting.plannedStart).format();
+
+			if (date < now) {
+				return meeting;
+			}
+		});
 	}),
 
 	actions: {
@@ -25,7 +61,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 		createNewSession() {
 			this.toggleProperty('creatingNewSession');
-		}, 
+		},
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
 			this.refresh();

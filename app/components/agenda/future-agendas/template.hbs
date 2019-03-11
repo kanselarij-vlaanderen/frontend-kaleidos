@@ -1,3 +1,68 @@
 <h2 class="vl-title vl-title--h3">
-          {{t "future-agendas"}}
-        </h2>
+  {{t "future-agendas"}}
+</h2>
+<table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
+  <thead>
+    <tr>
+      <th class="vl-data-table-col-5 vl-data-table__header-title">
+        <a
+          class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+          href="#"
+        >
+          <div class="vl-u-display-flex vl-u-flex-align-center">
+            <span>
+              Agenda
+            </span>
+          </div>
+        </a>
+      </th>
+      <th class="vl-data-table-col-3 vl-data-table__header-title">
+        <a class="vl-data-table__header-title--sortable" href="#" title="sort">
+          <div class="vl-u-display-flex vl-u-flex-align-center">
+            <span>
+              Agenda Versie
+            </span>
+          </div>
+        </a>
+      </th>
+      <th class="vl-data-table-col-3 vl-data-table__header-title">
+        <a
+          class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+          href="#"
+        ></a>
+        <a class="vl-data-table__header-title--sortable" href="#">
+          <div class="vl-u-display-flex vl-u-flex-align-center">
+            <span>
+              Laatst gewijzigd
+            </span>
+          </div>
+        </a>
+      </th>
+      <th class="vl-data-table-col-1"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each (await futureMeetings) as |futureMeeting|}}
+      <tr>
+        <td>
+          Agenda voor
+          {{moment-format futureMeeting.plannedStart "DD.MM.YYYY"}}
+        </td>
+        <td>
+          {{await futureMeeting.latestAgendaName}}
+        </td>
+        <td>
+          {{moment-format futureMeeting.created "DD-MM-YYYY HH:mm"}}
+        </td>
+        <td class="vl-u-align-right">
+          <a
+            class="vl-button vl-button--link vl-button--icon"
+            {{action "selectAgenda" futureMeeting}}
+          >
+            <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+          </a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

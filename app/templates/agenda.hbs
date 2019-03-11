@@ -1,5 +1,3 @@
-{{log date}}
-{{log date2}}
 <div class="vl-u-bg-alt">
   <div class="vlc-page-header">
     <div class="vlc-toolbar vlc-toolbar--auto">
@@ -57,13 +55,13 @@
           </div>
         </div>
       </div>
-      {{agenda/future-agendas}}
-      {{agenda/active-agendas nearestMeeting=nearestMeeting}}
+      {{agenda/future-agendas futureMeetings=futureMeetings selectAgenda=(action "selectAgenda")}}
+      {{agenda/active-agendas nearestMeeting=nearestMeeting selectAgenda=(action "selectAgenda")}}
       <h2 class="vl-title vl-title--h3">
         {{t "history"}}
       </h2>
       {{#data-table
-        content=model
+        content=filteredMeetings
         page=page
         size=size
         sort=sort
