@@ -16,12 +16,15 @@ export default Component.extend(DefaultQueryParamsMixin, {
   async didInsertElement() {
     this._super(...arguments);
     const ids = await this.get('subcasesService').getPostPonedSubcaseIds();
-    const subcases = await this.store.query('subcase', {
-      filter: {
-        "id": ids.toString()
+    let subcases = [];
 
-      }
-    });
+    if (ids && ids.length > 0) {
+      subcases = await this.store.query('subcase', {
+        filter: {
+          "id": ids.toString()
+        }
+      });
+    }
     this.set('subcases', subcases);
   }
 });
