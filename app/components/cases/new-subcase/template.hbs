@@ -53,7 +53,9 @@
         {{/each}}
       </div>
     {{else if (eq step 2)}}
-      {{cases/subcase-mandatees mandateeRowsChanged=(action "mandateeRowsChanged")}}
+      {{cases/subcase-mandatees
+        mandateeRowsChanged=(action "mandateeRowsChanged")
+      }}
     {{/if}}
   </div>
   <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
@@ -66,16 +68,18 @@
           >
             {{t "buttons.cancel"}}
           </button>
-          <button
-            class="vl-button vl-button--tertiary vl-button--icon-before"
-            type="button"
-            {{action "toggleAddNonDigitalDocument"}}
-          >
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-            ></i>
-            {{t "cases.non-digital-file"}}
-          </button>
+          {{#if (eq step 1)}}
+            <button
+              class="vl-button vl-button--tertiary vl-button--icon-before"
+              type="button"
+              {{action "toggleAddNonDigitalDocument"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              {{t "cases.non-digital-file"}}
+            </button>
+          {{/if}}
         </div>
       </div>
       <div class="vlc-toolbar__right">
