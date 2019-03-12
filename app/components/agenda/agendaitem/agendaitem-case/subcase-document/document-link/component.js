@@ -35,23 +35,35 @@ export default Component.extend(FileSaverMixin,{
       this.toggleProperty('isUploadingNewVersion');
 		},
 
-		async uploadNewVersion() {
-			const document = this.get('document');
-			const versionNumber = document.get('lastDocumentVersion.versionNumber') + 1;
-      const file = this.get('uploadedFile');
-      let newDocumentVersion = this.store.createRecord('document-version',
-        {
-          file: file,
-          versionNumber: versionNumber,
-          document: document,
-          chosenFileName: this.get('fileName') || file.fileName || file.name,
-          created: new Date()
-        });
-      await newDocumentVersion.save();
-      this.set('uploadedFile', null);
-      this.set('fileName', null);
-      this.set('isUploadingNewVersion', false);
-      document.hasMany('documentVersions').reload();
+		async createNewDocumentWithDocumentVersion(subcase, file, documentTitle) {
+			let document = await this.store.createRecord('document', {
+				created: new Date(),
+				title: documentTitle
+				// documentType: file.get('documentType')
+			});
+			document.save().then(async (createdDocument) => {
+				if (file) {
+					delete file.public;
+					const documentVersion = await this.store.createRecord('document-version', {
+						document: createdDocument,
+						subcase: subcase,
+						created: new Date(),
+						versionNumber: 1,
+						file: file,
+						chosenFileName: file.get('name')
+					});
+					await documentVersion.save();
+				} else {
+					const documentVersion = await this.store.createRecord('document-version', {
+						document: createdDocument,
+						subcase: subcase,
+						created: new Date(),
+						versionNumber: 1,
+						chosenFileName: documentTitle
+					});
+					await documentVersion.save();
+				}
+			});
 		},
 		
     async getUploadedFile(file) {
