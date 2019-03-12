@@ -1,0 +1,44 @@
+<table class="vl-data-table vl-data-table--align-middle">
+  <thead>
+    <tr>
+      <th class="vl-data-table-col-6">
+				{{web-components/vl-form-label value=(t "minister")}}
+      </th>
+      <th class="vl-data-table-col-6">
+				{{web-components/vl-form-label value=(t "mandatees")}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+		{{#each mandateeRows as |mandateeRow|}}
+    <tr>
+      <td>
+        {{utils/mandatee-selector
+          singleSelect=true
+          selectedMandatees=mandateeRow.mandatee
+          chooseMandatee=(action "mandateeSelected" mandateeRow)
+        }}
+      </td>
+      <td>
+        {{utils/domains-selector
+          selectedDomains=mandateeRow.selectedDomains
+					domains=mandateeRow.domains
+					selectedDomainsOnly=true
+          chooseDomain=(action "domainsChanged" mandateeRow)
+        }}
+      </td>
+    </tr>
+		{{/each}}
+  </tbody>
+</table>
+<div class="vlc-toolbar">
+  <div class="vlc-toolbar__left vl-action-group vl-action-group--space-between">
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+      {{action "addRow"}}
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+      {{t "buttons.add-minister"}}
+    </button>
+  </div>
+</div>

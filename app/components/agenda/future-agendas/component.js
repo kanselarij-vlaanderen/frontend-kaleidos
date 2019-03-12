@@ -1,13 +1,11 @@
 import Component from '@ember/component';
-// import { inject } from '@ember/service';
 
 export default Component.extend({
-	classNames:["vl-u-spacer-large"]
-
-	// store:inject(),
+	classNames:["vl-u-spacer--large"],
 	
-	// async didInsertElement() {
-	// 	this._super(...arguments);
-	// 	this.set('agendas', )
-	// }
+	actions: {
+		selectAgenda(meeting) {
+			this.selectAgenda(meeting);
+		}
+	}
 });

@@ -21,9 +21,12 @@ export default Model.extend({
     const subcases = this.get('subcases');
     if (subcases && subcases.length > 0) {
       const currentSubcase = subcases.sortBy('created').get('lastObject');
+      if(!currentSubcase.shortTitle) {
+        return { shortTitle: "In voorbereiding." };
+      }
       return currentSubcase;
     } else {
-      return { title: "In voorbereiding." }
+      return { shortTitle: "In voorbereiding." }
     }
   }),
 

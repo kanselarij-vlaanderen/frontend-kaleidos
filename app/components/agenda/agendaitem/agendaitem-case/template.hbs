@@ -1,3 +1,5 @@
+
+{{#if agendaitem}}
 <div class="vl-u-spacer--large vl-u-spacer-extended-top-l">
   <div class="vl-u-spacer">
     <div class="vl-u-spacer--small">
@@ -41,6 +43,35 @@
     </div>
   </div>
 </div>
-{{agenda/agendaitem/agendaitem-case/subcase-themes agendaitem=agendaitem}}
-{{agenda/agendaitem/agendaitem-case/subcase-mandatees agendaitem=agendaitem}}
-{{agenda/agendaitem/agendaitem-case/subcase-documents agendaitem=agendaitem}}
+{{agenda/agendaitem/agendaitem-case/subcase-themes subcase=(await agendaitem.subcase)}}
+{{agenda/agendaitem/agendaitem-case/subcase-mandatees subcase=(await agendaitem.subcase)}}
+{{agenda/agendaitem/agendaitem-case/subcase-documents subcase=(await agendaitem.subcase)}}
+{{else}}
+  <div class="vl-u-spacer--large vl-u-spacer-extended-top-l">
+  <div class="vl-u-spacer">
+    <div class="vl-u-spacer--small">
+      <div class="vl-u-display-flex vl-u-display-flex-align-center">
+        <h2 class="vl-u-text--uppercase vl-u-text--bold">
+          {{await subcase.case.type.label}}
+        </h2>
+      </div>
+    </div>
+    <h3 class="vl-title vl-title--h3">
+      {{subcase.shortTitle}}
+    </h3>
+    <p class="vl-long-title">
+      {{subcase.title}}
+    </p>
+  </div>
+</div>
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <span class="vl-u-text--small vl-u-text--muted">
+      {{subcase.shortTitle}}
+    </span>
+  </div>
+</div>
+{{agenda/agendaitem/agendaitem-case/subcase-themes subcase=subcase}}
+{{agenda/agendaitem/agendaitem-case/subcase-mandatees subcase=subcase}}
+{{agenda/agendaitem/agendaitem-case/subcase-documents subcase=subcase}}
+{{/if}}

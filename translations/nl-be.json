@@ -59,7 +59,7 @@
 		"agenda-add":"Nieuwe ontwerpagenda aanmaken",
 		"cancel": "Annuleren",
 		"create-case": "Dossier aanmaken",
-		"create-subcase": "Nieuwe procedurestap",
+		"create-subcase": "Procedurestap toevoegen",
 		"delete": "Verwijderen",
 		"document-add":"Document toevoegen",
 		"new-session": "Nieuwe zitting",
@@ -82,7 +82,7 @@
 	"cases": {
 		"title": "Dossier",
 		"cases": "dossiers",
-		"new-case": "Dossier aanmaken",
+		"new-case": "Procedurestap aanmaken",
 		"contact-person": "Contactpersoon",
 		"related-cases": "Gerelateerde dossiers",
 		"subcases": "Procedurestappen",
@@ -200,5 +200,9 @@
 	"history":"Historiek",
 	"future-agendas":"Toekomstige agenda's",
 	"active-agenda":"Actieve agenda",
-	"actions":"Acties"
+	"actions":"Acties",
+	"agenda-version":"Agenda versie",
+	"latest-modified":"Laatst gewijzigd",
+	"agenda-for":"Agenda voor",
+	"new-document-version":"Nieuwe documentversie uploaden"
 }

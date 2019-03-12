@@ -41,6 +41,25 @@
               <button class="vl-button vl-button--link vl-button--icon">
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
               </button>
+              {{#attach-popover
+                class="ember-attacher-popper"
+                hideOn="click"
+                showOn="click"
+                animation="shift"
+                placement="bottom" as |attacher|
+              }}
+                <ul class="vl-popover__link-list">
+                  <li class="vl-popover__link-list__item">
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "openUploadDialog" document}}
+                    >
+                      {{t "file-uploader.new-version"}}
+                    </a>
+                  </li>
+                </ul>
+              {{/attach-popover}}
             </div>
           </div>
         </div>
@@ -66,34 +85,39 @@
                       {{#each
                         (await document.sortedDocuments) as |documentVersion|
                       }}
-											{{#if (not-eq documentVersion.id document.lastDocumentVersion.id)}}
-                        <li class="vl-link-list__item">
-                          <div class="vl-u-spacer">
-                            <div
-                              class="vl-u-display-flex vl-u-flex-align-center"
-                            >
-                              <p>
-                                {{documentVersion.nameToDisplay}}
-                              </p>
-                              <button
-                                class="vl-button vl-button--link vl-button--icon"
-                                {{action "downloadFile" documentVersion}}
+                        {{#if
+                          (not-eq
+                            documentVersion.id document.lastDocumentVersion.id
+                          )
+                        }}
+                          <li class="vl-link-list__item">
+                            <div class="vl-u-spacer">
+                              <div
+                                class="vl-u-display-flex vl-u-flex-align-center"
                               >
-                                <i
-                                  class="vl-button__icon vl-vi vl-vi-move-down"
-                                ></i>
-                              </button>
+                                <p>
+                                  {{documentVersion.nameToDisplay}}
+                                </p>
+                                <button
+                                  class="vl-button vl-button--link vl-button--icon"
+                                  {{action "downloadFile" documentVersion}}
+                                >
+                                  <i
+                                    class="vl-button__icon vl-vi vl-vi-move-down"
+                                  ></i>
+                                </button>
+                              </div>
+                              <p class="vl-u-text--small vl-u-text--muted">
+                                {{moment-format document.created "DD MMMM YYYY"
+                                }}
+                                -
+                                {{moment-format document.created "HH:mm"}}
+                                ,
+                                {{subcase.shortTitle}}
+                              </p>
                             </div>
-                            <p class="vl-u-text--small vl-u-text--muted">
-                              {{moment-format document.created "DD MMMM YYYY"}}
-                              -
-                              {{moment-format document.created "HH:mm"}}
-                              ,
-                              {{agendaitem.subcase.shortTitle}}
-                            </p>
-                          </div>
-                        </li>
-												{{/if}}
+                          </li>
+                        {{/if}}
                       {{/each}}
                     </ul>
                   </div>
@@ -106,3 +130,58 @@
     {{/if}}
   </div>
 </div>
+{{#if isUploadingNewVersion}}
+  {{#web-components/vl-modal
+    closeModal=(action "openUploadDialog")
+    isOverlay=true
+    title=(t "new-document-version")
+  }}
+    <div class="vl-modal-dialog__content">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value="Naam van bestand"}}
+        {{web-components/vl-form-input width="4" value=fileName}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value="Bijlagen"}}
+        {{#if (not uploadedFile)}}
+          {{file-uploader
+            multipleFiles=false
+            uploadedFile=(action "getUploadedFile")
+          }}
+        {{else}}
+          <div class="document">
+            {{fa-icon "file"}}
+            {{await uploadedFile.name}}
+            <a {{action "removeFile" uploadedFile}}>
+              {{fa-icon "remove"}}
+            </a>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "openUploadDialog"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "uploadNewVersion"}}
+            >
+              {{t "file-uploader.uploading"}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/web-components/vl-modal}}
+{{/if}}

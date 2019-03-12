@@ -29,10 +29,12 @@
     <div class="vl-accordion__content js-vl-accordion__content">
       <div class="vl-accordion__panel">
         <ul class="vl-u-text--small">
-          {{#each (await mandatee.governmentDomains) as |domain|}}
-            <li>
-              {{domain.label}}
-            </li>
+          {{#each domains as |domain|}}
+            {{#if (check-mandatees-of-domain domainMandatees=domain.mandatees mandatee=mandatee)}}
+              <li>
+                {{domain.label}}
+              </li>
+            {{/if}}
           {{/each}}
         </ul>
       </div>

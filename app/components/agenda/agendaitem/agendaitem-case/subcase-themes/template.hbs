@@ -12,7 +12,7 @@
 </div>
 <div class="vl-custom">
   <ul>
-    {{#each (await agendaitem.subcase.themes) as |theme|}}
+    {{#each (await subcase.themes) as |theme|}}
       <li class="vl-pill vl-u-spacer-extended-right-s">
         {{theme.label}}
       </li>

@@ -1,9 +1,6 @@
-<div>
-  <form class="vl-form" onsubmit={{action "createSubCase"}}>
-    <h3 class="vl-title vl-title--h3">
-      {{t "buttons.create-subcase"}}
-    </h3>
-    <div>
+<form class="vl-form" onsubmit={{action "createSubCase"}}>
+  <div class="vl-modal-dialog__content">
+    {{#if (eq step 1)}}
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
         {{web-components/vl-form-input width="4" value=shortTitle}}
@@ -11,10 +8,6 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
         {{web-components/vl-form-input width="4" value=title}}
-      </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcases.mandatee")}}
-        {{utils/mandatee-selector chooseMandatee=(action "selectMandatees")}}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "edit-item.themes")}}
@@ -59,22 +52,59 @@
           }}
         {{/each}}
       </div>
+    {{else if (eq step 2)}}
+      {{cases/subcase-mandatees mandateeRowsChanged=(action "mandateeRowsChanged")}}
+    {{/if}}
+  </div>
+  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--link vl-button--narrow"
+            {{action "closeModal"}}
+          >
+            {{t "buttons.cancel"}}
+          </button>
+          <button
+            class="vl-button vl-button--tertiary vl-button--icon-before"
+            type="button"
+            {{action "toggleAddNonDigitalDocument"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            ></i>
+            {{t "cases.non-digital-file"}}
+          </button>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          {{#if (eq step 2)}}
+            <button
+              type="button"
+              class="vl-button vl-button--tertiary"
+              {{action "previousStep"}}
+            >
+              {{t "buttons.previous-step"}}
+            </button>
+            <button type="submit" class="vl-button vl-button--tertiary">
+              {{t "cases.new-case"}}
+            </button>
+          {{else if (eq step 1)}}
+            <button
+              type="button"
+              class="vl-button vl-button--tertiary"
+              {{action "nextStep"}}
+            >
+              {{t "buttons.next-step"}}
+            </button>
+          {{/if}}
+        </div>
+      </div>
     </div>
-    <div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
-      <button
-        class="vl-button vl-button--tertiary vl-button--icon-before"
-        type="button"
-        {{action "toggleAddNonDigitalDocument"}}
-      >
-        <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-        {{t "cases.non-digital-file"}}
-      </button>
-      <button type="submit" class="vl-button vl-button--tertiary">
-        {{t "buttons.create-case"}}
-      </button>
-    </div>
-  </form>
-</div>
+  </div>
+</form>
 {{#if isAddingNonDigitalDocument}}
   {{#web-components/vl-modal
     isOverlay=true
