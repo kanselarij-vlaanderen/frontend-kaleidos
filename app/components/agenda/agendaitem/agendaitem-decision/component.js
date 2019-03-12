@@ -11,7 +11,7 @@ export default Component.extend({
 		async addDecision(agendaitem){
       let decision = this.store.createRecord("decision", {
 				agendaItem: agendaitem,
-				shortTitle: agendaitem.subcase.get('shortTitle')
+				shortTitle: agendaitem.subcase.get('shortTitle'),
 			});
 			decision.save().then(decision => {
 				agendaitem.set('decision', decision);

@@ -92,7 +92,7 @@ export default Component.extend({
 		},
 
 		uploadedFile(uploadedFile) {
-			uploadedFile.set('public', true);
+			uploadedFile.set('public', false);
 			this.get('uploadedFiles').pushObject(uploadedFile);
 		},
 
@@ -113,7 +113,7 @@ export default Component.extend({
 		},
 
 		createNonDigitalDocument() {
-			this.nonDigitalDocuments.push({ title: this.get('documentTitle') });
+			this.nonDigitalDocuments.push({ title: this.get('documentTitle'), description: this.get('documentDescription') });
 			notifyPropertyChange(this, 'nonDigitalDocuments');
 			this.set('documentTitle', null);
 		},

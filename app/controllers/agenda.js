@@ -63,7 +63,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
-			this.refresh();
 		}
 	}
 });

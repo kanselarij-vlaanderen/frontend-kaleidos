@@ -1,41 +1,41 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="vlc-container">
-    <div class="vl-u-spacer-extended-l vl-u-spacer-extended-bottom-l">
+    <div class="vl-u-spacer-extended-l">
       <div class="vl-action-group vl-action-group--align-right">
-      {{#if (not currentAgenda.isFinal)}}
-        {{#if
-          (await
-            (allow-delete-agendaitem
-              announcement=announcement lastDefiniteAgenda=lastDefiniteAgenda
+        {{#if (not currentAgenda.isFinal)}}
+          {{#if
+            (await
+              (allow-delete-agendaitem
+                announcement=announcement lastDefiniteAgenda=lastDefiniteAgenda
+              )
             )
-          )
-        }}
-          <button
-            class="vl-button vl-button--tertiary vl-button--narrow"
-            {{action "deleteAnnouncement" announcement}}>
-            {{t "buttons.delete"}}
-          </button>
+          }}
+            <button
+              class="vl-button vl-button--tertiary vl-button--narrow"
+              {{action "deleteAnnouncement" announcement}}
+            >
+              {{t "buttons.delete"}}
+            </button>
+          {{/if}}
         {{/if}}
-      {{/if}}
       </div>
     </div>
     {{#if (and (await announcement) isEditing)}}
       {{announcement-overview/edit-item announcement=(await announcement)}}
     {{else}}
-      <div class="vl-u-spacer vl-u-spacer-extended-bottom-l">
+      <div class="vl-u-spacer vl-u-spacer-extended-l">
         <h2 class="vl-title vl-title--h3">
           {{await announcement.title}}
         </h2>
         <h4 class="vl-col--4-4 vl-u-spacer-extended-bottom-l">
           {{await announcement.text}}
         </h4>
+        {{#each (await announcement.documents) as |document|}}
+        {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+          document=document
+        }}
+      {{/each}}
       </div>
-
-      {{documents/documents-overview
-        documents=(await announcement.documentVersions)
-      }}
-
-
     {{/if}}
   </div>
 </div>

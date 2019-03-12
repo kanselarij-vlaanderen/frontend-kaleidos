@@ -116,8 +116,18 @@
     closeModal=(action "toggleAddNonDigitalDocument")
   }}
     <div class="vl-modal-dialog__content">
-      {{web-components/vl-form-label value=(t "cases-search.title-document")}}
-      {{web-components/vl-form-input width="4" value=documentTitle}}
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "cases-search.title-document")}}
+        {{web-components/vl-form-input width="4" value=documentTitle}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "cases-search.title-document")}}
+        {{textarea
+          rows="3"
+          class="vl-textarea vl-textarea--block"
+          value=documentDescription
+        }}
+      </div>
       {{#each nonDigitalDocuments as |nonDigitalDocument|}}
         {{utils/non-digital-document
           nonDigitalDocument=nonDigitalDocument

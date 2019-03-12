@@ -6,6 +6,7 @@ export default Component.extend({
   classNameBindings: ["getClassNames"],
   tagName: 'a',
   index:null,
+  
   getClassNames: computed('announcement', 'selectedAnnouncement', function() {
     if(this.get('announcement.id') == this.get('selectedAnnouncement.id')) {
       return 'vlc-agenda-item--active';

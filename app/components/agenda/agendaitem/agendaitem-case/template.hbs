@@ -10,8 +10,8 @@
       </div>
       <div class="vl-u-spacer-extended-left-s">
         {{#link-to
-          "cases.case"
-          (await agendaitem.subcase.case.id)
+          "cases.case.subcases"
+          agendaitem.subcase.case.id
           class="vl-link"
         }}
           {{t "to-subcase"}}

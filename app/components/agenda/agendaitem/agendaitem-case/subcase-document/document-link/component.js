@@ -17,6 +17,26 @@ export default Component.extend(FileSaverMixin,{
 			this.toggleProperty('isShowingVersions');
 		},
 
+		async uploadNewVersion() {
+			const document = await this.get('document');
+			const newVersion = await document.get('lastDocumentVersion');
+      const file = this.get('uploadedFile');
+      let newDocumentVersion = this.store.createRecord('document-version',
+        {
+          file: file,
+          versionNumber: newVersion.get('versionNumber') + 1,
+          document: document,
+          chosenFileName: this.get('fileName') || file.fileName || file.name,
+          created: new Date()
+        });
+      await newDocumentVersion.save();
+      this.set('uploadedFile', null);
+      this.set('documentVersionToUse', null);
+      this.set('fileName', null);
+      this.set('isUploadingNewVersion', false);
+      document.hasMany('documentVersions').reload();
+		},
+		
 		async downloadFile(documentVersion) {
 			let file = await documentVersion.get('file');
 				$.ajax(`/files/${file.id}?download=${file.filename}`, {

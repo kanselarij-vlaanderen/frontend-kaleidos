@@ -9,7 +9,7 @@ export default Component.extend({
 	sessionService: inject(),
 	store: inject(),
 	currentAgendaItem: null,
-  isEditing: false,
+	isEditing: false,
 
 	lastDefiniteAgenda: computed('sessionService.definiteAgendas.firstObject', async function () {
 		const definiteAgendas = await this.get('sessionService.definiteAgendas');
@@ -17,16 +17,15 @@ export default Component.extend({
 	}),
 
 	actions: {
+		save(announcement) {
 
-    save (announcement){
-
-    },
-    toggleIsEditing() {
-      this.toggleProperty('isEditing');
-    },
+		},
+		toggleIsEditing() {
+			this.toggleProperty('isEditing');
+		},
 
 		deleteAnnouncement(announcement) {
-      announcement.destroyRecord().then(() => {
+			announcement.destroyRecord().then(() => {
 				this.set('announcement', null);
 			});
 		},
