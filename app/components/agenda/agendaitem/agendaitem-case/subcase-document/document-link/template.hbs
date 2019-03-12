@@ -16,13 +16,13 @@
                 {{! Decreet }}
               </h5>
               <p>
-                {{document.title}}
+                {{document.lastDocumentVersion.nameToDisplay}}
               </p>
               <p class="vl-info-tile__header__subtitle">
                 Geupload op
-                {{moment-format document.created "DD.MM.YYYY"}}
+                {{moment-format document.lastDocumentVersion.created "DD.MM.YYYY"}}
                 om
-                {{moment-format document.created "HH:mm"}}
+                {{moment-format document.lastDocumentVersion.created "HH:mm"}}
               </p>
             </div>
           </div>
@@ -112,8 +112,6 @@
                                 }}
                                 -
                                 {{moment-format document.created "HH:mm"}}
-                                ,
-                                {{subcase.shortTitle}}
                               </p>
                             </div>
                           </li>

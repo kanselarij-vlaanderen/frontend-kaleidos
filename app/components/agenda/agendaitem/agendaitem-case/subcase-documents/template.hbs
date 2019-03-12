@@ -30,7 +30,7 @@
 
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
-    closeModal=(action "openUploadDialog")
+    closeModal=(action "toggleIsAddingNewDocument")
     isOverlay=true
     title=(t "document-add")
   }}

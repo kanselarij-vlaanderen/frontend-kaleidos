@@ -18,19 +18,19 @@
     }}
     <div class={{agendaitemsClass}}>
       <div class="vlc-scroll-wrapper">
-        {{agenda/agendaitem-search
-          selectedAgenda=currentAgenda
-        }}
-        {{agenda/agenda-list
-          agendaitems=currentAgendaItems
-          selectAgendaItem=(action "selectAgendaItem")
-          selectedAgendaItem=selectedAgendaItem
-        }}
-        {{agenda/announcement-list
-          announcements=(await announcements)
-          selectAnnouncement=(action "selectAnnouncement")
-          selectedAnnouncement=selectedAnnouncement
-        }}
+        {{agenda/agendaitem-search selectedAgenda=currentAgenda}}
+        <div class="vlc-scroll-wrapper__body">
+          {{agenda/agenda-list
+            agendaitems=currentAgendaItems
+            selectAgendaItem=(action "selectAgendaItem")
+            selectedAgendaItem=selectedAgendaItem
+          }}
+          {{agenda/announcement-list
+            announcements=(await announcements)
+            selectAnnouncement=(action "selectAnnouncement")
+            selectedAnnouncement=selectedAnnouncement
+          }}
+        </div>
       </div>
     </div>
     <div class="vlc-panel-layout__main-content">

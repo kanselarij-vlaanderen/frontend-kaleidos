@@ -34,7 +34,11 @@ export default Component.extend(FileSaverMixin,{
       this.set('documentVersionToUse', null);
       this.set('fileName', null);
       this.set('isUploadingNewVersion', false);
-      document.hasMany('documentVersions').reload();
+			document.hasMany('documentVersions').reload();
+			document.notifyPropertyChange('documentVersions');
+			if(this.get('subcase')) {
+			this.get('subcase').notifyPropertyChange('documents');
+			}
 		},
 		
 		async downloadFile(documentVersion) {
