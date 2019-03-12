@@ -5,6 +5,7 @@
     selectedAgendaItem=selectedAgendaItem
     compareAgendas=(action "compareAgendas")
     navigateToSubCases=(action "navigateToSubCases")
+    printDecisions=(action "printDecisions")
     loading=(action "loadingAgendaitems")
   }}
 </div>
@@ -54,4 +55,18 @@
   {{web-components/vl-loader
     text="De agenda wordt goedgekeurd. Even geduld aub.."
   }}
+{{/if}}
+
+{{#if isPrintingDecisions}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "manage-mandates")
+    closeModal=(action "printDecisions")
+  }}
+
+    {{agenda/agenda-decisions
+      decisions=printedDecisions
+    }}
+
+  {{/web-components/vl-modal}}
 {{/if}}

@@ -71,6 +71,10 @@ export default Component.extend({
 			this.navigateToSubCases();
 		},
 
+    printDecisions() {
+			this.printDecisions();
+		},
+
     navigateToCreateAnnouncement() {
 			this.set('addingAnnouncement', true);
 			this.navigateToCreateAnnouncement();

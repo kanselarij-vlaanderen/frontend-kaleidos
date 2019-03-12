@@ -90,8 +90,13 @@ export default Controller.extend(DefaultQueryParamsMixin, {
           if (idx !== -1){
             const postponed_obj = await agendaitem.get('postponedTo');
             if (postponed_obj){
+              await postponed_obj.set('agendaitem', null);
               await postponed_obj.destroyRecord();
-              agendaitem.set('postponedTo', null);
+              await agendaitem.set('retracted', false);
+              await agendaitem.set('postponedTo', null);
+              await agendaitem.save();
+            }else {
+              console.log('i never get here')
             }
           }
 
@@ -107,13 +112,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
           if (subCase.selected) {
             return agendaService.createNewAgendaItem(selectedAgenda, subCase);
           }
-        } else if (agendaitems.length > 0){
-          agendaitems.map(async (agendaitem) => {
-            const idx = await alreadySelected.indexOf(agendaitem);
-            if (idx !== -1){
-            }
-
-          });
         }
 			}));
 			promise.then(async () => {

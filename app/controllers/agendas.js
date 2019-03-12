@@ -10,6 +10,7 @@ export default Controller.extend({
   selectedAnnouncement: null,
 	createAnnouncement: false,
 	isLoading: false,
+  isPrintingDecisions: false,
 	currentSession: alias('sessionService.currentSession'),
 	agendas: alias('sessionService.agendas'),
 	announcements: alias('sessionService.announcements'),
@@ -39,6 +40,21 @@ export default Controller.extend({
       this.set("createAnnouncement", true);
       this.set("selectedAgendaItem", null);
       this.set("selectedAnnouncement", null);
+		},
+
+    async printDecisions() {
+		  const isPrintingDecisions = this.get('isPrintingDecisions');
+
+		  if (!isPrintingDecisions){
+        const currentAgendaitems = await this.get('currentAgendaItems');
+        const decisions = await Promise.all(currentAgendaitems.map(async item => {
+          const decision = await this.store.peekRecord('agendaitem', item.id).get('decision');
+          return { id: decision.id, shortTitle: decision.shortTitle, description: item.description }
+        }));
+        this.set('printedDecisions', decisions);
+      }
+
+      this.toggleProperty('isPrintingDecisions');
 		},
 
     selectAgendaItem(agendaitem) {
