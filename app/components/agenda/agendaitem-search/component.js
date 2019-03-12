@@ -26,10 +26,7 @@ export default Component.extend({
 				}}));
 			}
 		},
-		navigateToSubCases() {
-			this.set('addingAgendaItems', true);
-			this.navigateToSubCases();
-		},
+	
     navigateToCreateAnnouncement() {
 			this.set('addingAnnouncement', true);
 			this.navigateToCreateAnnouncement();

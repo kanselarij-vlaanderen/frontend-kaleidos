@@ -58,21 +58,25 @@ export default Component.extend({
 
 			const createdSubCase = await subcase.save();
 			const uploadedFiles = this.get('uploadedFiles');
+			if(uploadedFiles) {
+				Promise.all(uploadedFiles.map(uploadedFile => {
+					if (uploadedFile.id) {
+						return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile, uploadedFile.get('name'));
+					}
+				}));
+			}
 
-			Promise.all(uploadedFiles.map(uploadedFile => {
-				if (uploadedFile.id) {
-					return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile, uploadedFile.get('name'));
-				}
-			}));
 			const nonDigitalDocuments = this.get('nonDigitalDocuments');
-
-			Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
-				if (nonDigitalDocument.title) {
-					return this.createNewDocumentWithDocumentVersion(createdSubCase, null, nonDigitalDocument.title);
-				}
-			}));
-
+			if(nonDigitalDocuments) {
+				Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
+					if (nonDigitalDocument.title) {
+						return this.createNewDocumentWithDocumentVersion(createdSubCase, null, nonDigitalDocument.title);
+					}
+				}));
+			}
+			
 			this.clearProperties();
+			caze.notifyPropertyChange('subcases');
 			this.closeModal();
 		},
 
@@ -159,15 +163,17 @@ export default Component.extend({
 		const mandateeRows = this.get('mandateeRows');
 		const mandatees = [];
 		const selectedDomains = [];
-
-		mandateeRows.map(row => {
-			mandatees.push(row.get('mandatee'));
-			const domains = row.get('selectedDomains')
-			domains.map(domain => {
-				selectedDomains.push(domain);
+		if(mandateeRows && mandateeRows.get('length') > 0) {
+			mandateeRows.map(row => {
+				mandatees.push(row.get('mandatee'));
+				const domains = row.get('selectedDomains')
+				domains.map(domain => {
+					selectedDomains.push(domain);
+				})
 			})
-		})
+		}
 		this.set('selectedMandatees', mandatees);
 		this.set('selectedDomains', selectedDomains);
+		
 	}
 })

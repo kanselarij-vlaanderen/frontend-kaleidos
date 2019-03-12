@@ -4,18 +4,21 @@
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <h6 class="vl-title vl-title--h6 max-width">
-            {{subcase.title}}
+            {{subcase.shortTitle}}
           </h6>
-          <ul class="vlc-status-timeline">
+          <p>
+            {{subcase.title}}
+          </p>
+          {{!-- <ul class="vlc-status-timeline">
             <li
               class="vlc-status-timeline__item vlc-status-timeline__item--in-progress"
             >
-              {{! <div class="vlc-status-timeline__dot"></div> }}
+               <div class="vlc-status-timeline__dot"></div>
               <div class="vlc-status-timeline__text">
                 {{await subcase.phase.label}}
               </div>
             </li>
-          </ul>
+          </ul> --}}
         </div>
       </div>
       <div class="vlc-toolbar__right">
@@ -31,8 +34,8 @@
         </div>
       </div>
     </div>
-    <hr class="vlc-hr" />
-    <div class="vlc-procedure-step__badge-wrapper">
+    {{!-- <hr class="vlc-hr" /> --}}
+    {{!-- <div class="vlc-procedure-step__badge-wrapper">
       <p class="vl-u-text--uppercase">
         {{await subcase.case.type.label}}
       </p>
@@ -42,6 +45,6 @@
     </div>
     <p>
       {{await subcase.title}}
-    </p>
+    </p> --}}
   </div>
 {{/each}}
