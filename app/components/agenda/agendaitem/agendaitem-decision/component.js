@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-	classNames: ["o-scroll"],
+	classNames: ["vl-u-spacer-extended-l"],
 	store: inject(),
 	isEditing: false,
 	agendaitem:null,
@@ -10,7 +10,8 @@ export default Component.extend({
 	actions: {
 		async addDecision(agendaitem){
       let decision = this.store.createRecord("decision", {
-        agendaItem: agendaitem
+				agendaItem: agendaitem,
+				shortTitle: agendaitem.subcase.get('shortTitle')
 			});
 			decision.save().then(decision => {
 				agendaitem.set('decision', decision);

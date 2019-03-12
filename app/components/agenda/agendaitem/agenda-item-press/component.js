@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-	classNames:["o-scroll"],
+	classNames:["vl-u-spacer-extended-l"],
 	agendaitem:null,
 	isReadOnly: true,
 

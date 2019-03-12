@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-	classNames:['o-scroll'],
+	classNames:['vl-u-spacer-extended-l'],
 	store: inject(),
 	agendaitem:null,
 	isEditing:false,

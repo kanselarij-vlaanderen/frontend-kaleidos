@@ -1,16 +1,12 @@
-<div class="vl-u-spacer-extended-left vl-u-spacer-extended-right">
-  <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right">
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "edit-item.title")}}
-      {{web-components/vl-form-input width="4" value=agendaitem.titlePress}}
-    </div>
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value="Inhoud"}}
-      {{textarea
-        class="vl-textarea vl-textarea--block"
-        rows="6"
-        value=agendaitem.textPress
-      }}
-    </div>
-  </div>
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "edit-item.title")}}
+  {{web-components/vl-form-input width="4" value=agendaitem.titlePress}}
+</div>
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value="Inhoud"}}
+  {{textarea
+    class="vl-textarea vl-textarea--block"
+    rows="6"
+    value=agendaitem.textPress
+  }}
 </div>

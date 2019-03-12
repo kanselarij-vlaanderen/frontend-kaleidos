@@ -16,7 +16,7 @@
 	},
 	"agendaitem-details": {
 		"agenda": "Persagenda",
-		"decision-title": "Beslissing",
+		"decision-title": "Voorbereidende tekst voor de beslissing",
 		"formal-nok": "Formeel niet ok",
 		"formal-ok": "Formeel ok",
 		"news-item-title": "Kort bestek",
@@ -109,7 +109,7 @@
 		"nav-title": "Agendas"
 	},
 	"edit-decision": {
-		"approved": "Goedgekeurd",
+		"approved": "Beslist",
 		"decision-text": "Tekst beslissing",
 		"short-title": "Korte titel"
 	},
