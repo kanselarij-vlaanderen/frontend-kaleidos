@@ -5,7 +5,7 @@ export default Component.extend({
   store: inject(),
   actions : {
     selectAvailableSubcase(subcase) {
-      this.selectSubcase(subcase, "available");
+      this.selectSubcase(subcase);
     }
   },
   async didInsertElement() {

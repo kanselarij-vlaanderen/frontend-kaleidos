@@ -70,6 +70,7 @@ export default Component.extend({
 			this.set('addingAgendaItems', true);
 			this.navigateToSubCases();
 		},
+
     navigateToCreateAnnouncement() {
 			this.set('addingAnnouncement', true);
 			this.navigateToCreateAnnouncement();

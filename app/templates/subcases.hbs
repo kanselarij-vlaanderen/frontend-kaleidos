@@ -1,4 +1,6 @@
-<div class="data-table-button-container">
+<div class="vl-u-spacer-extended-l">
+
+<div class="data-table-button-container vl-u-spacer--large">
   <button
     class="vl-button vl-button--tertiary"
     {{action "navigateBackToAgenda"}}
@@ -18,12 +20,13 @@
 <div class="data-table-container">
 
   <h2 class="vl-title vl-title--h3">
-    {{t "subcases.title-available-subcases"}}
+    {{t "subcases.title-postponed-subcases"}}
   </h2>
 
-  {{subcases/available-subcases
-    selectSubcase=(action "selectSubcase")
+  {{subcases/postponed-subcases
+    selectSubcase=(action "selectPostponed" )
   }}
+
 </div>
 
 
@@ -34,6 +37,8 @@
   </h2>
 
   {{subcases/available-subcases
-    selectSubcase=(action "selectSubcase")
+    selectSubcase=(action "selectAvailableSubcase")
   }}
+</div>
+
 </div>

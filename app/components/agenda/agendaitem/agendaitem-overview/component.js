@@ -91,6 +91,18 @@ export default Component.extend({
 			});
 		},
 
+    async advanceAgendaitem(agendaitem) {
+      if(agendaitem && agendaitem.retracted) {
+        agendaitem.set('retracted', false);
+      }
+      const postponedTo = await agendaitem.get('postponedTo');
+      if(agendaitem && postponedTo) {
+        await postponedTo.destroyRecord();
+        await agendaitem.set('postponedTo', undefined);
+      }
+      agendaitem.save();
+    },
+
 		toggleShowMore(agendaitem) {
 			if (agendaitem.showDetails) {
 				agendaitem.save();

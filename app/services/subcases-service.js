@@ -5,14 +5,17 @@ import { inject } from '@ember/service';
 export default Service.extend({
   store: inject(),
 
-  getPostPonedSubcases() {
+  getPostPonedSubcaseIds() {
     return $.ajax(
       {
+        headers: {
+          'Content-Type': 'application/vnd.api+json'
+        },
         method: "GET",
         url: `/custom-subcases`,
       }
-    ).then(result => {
-      return result.body.items;
+    ).then(({ data }) => {
+      return data;
     })
   }
 

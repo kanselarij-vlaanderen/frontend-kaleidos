@@ -24,7 +24,7 @@
                 {{#if (or agendaitem.retracted (await agendaitem.postponed))}}
                   <button
                     class="vl-button vl-button--tertiary vl-button--narrow"
-                    {{action "advanceAgendaitem"}}
+                    {{action "advanceAgendaitem" agendaitem}}
                   >
                     {{t "buttons.not-postpone"}}
                   </button>

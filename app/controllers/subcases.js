@@ -14,7 +14,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   agendas: alias('sessionService.agendas'),
 
 	actions: {
-    async selectSubcase(subcase, destination, event) {
+    async selectPostponed(subcase, event) {
 			if (event) {
 				event.stopPropagation();
 			}
@@ -27,29 +27,42 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 				subcase.set('selected', true);
         action = 'add';
 			}
-
 			const postponed = await this.get('postponedSubcases');
-			const available = await this.get('availableSubcases');
 
 			if (action === 'add'){
-        if (destination === 'postponed'){
-          postponed.pushObject(subcase)
-        }else if (destination === 'available'){
-          available.pushObject(subcase)
-        }
+        postponed.pushObject(subcase)
       }else if (action === 'remove'){
-        if (destination === 'postponed'){
-          const index = postponed.indexOf(subcase);
-          if (index > -1) {
-            postponed.splice(index, 1);
-          }
-        }else if (destination === 'available'){
+        const index = postponed.indexOf(subcase);
+        if (index > -1) {
+          postponed.splice(index, 1);
+        }
+      }
+
+		},
+    async selectAvailableSubcase(subcase, destination, event) {
+        if (event) {
+          event.stopPropagation();
+        }
+
+        let action = 'add';
+        if (subcase.selected) {
+          subcase.set('selected', false);
+          action = 'remove';
+        } else {
+          subcase.set('selected', true);
+          action = 'add';
+        }
+
+        const available = await this.get('availableSubcases');
+
+        if (action === 'add'){
+          available.pushObject(subcase)
+        }else if (action === 'remove'){
           const index = available.indexOf(subcase);
           if (index > -1) {
             available.splice(index, 1);
           }
         }
-      }
 
 		},
 
@@ -68,17 +81,34 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 			let selectedAgenda = await this.get('selectedAgenda');
       const postponed = await this.get('postponedSubcases');
       const available = await this.get('availableSubcases');
+      const alreadySelected = await selectedAgenda.get('agendaitems');
 
-      await postponed.map(item => {
-        item.get('postponedTo').destroyRecord().then(() => {
-          item.set('postponedTo', null);
+      await Promise.all(postponed.map(async (item) => {
+        const agendaitems = await item.get('agendaitems');
+        agendaitems.map(async (agendaitem) => {
+          const idx = await alreadySelected.indexOf(agendaitem);
+          if (idx !== -1){
+            const postponed_obj = await agendaitem.get('postponedTo');
+            if (postponed_obj){
+              await postponed_obj.destroyRecord();
+              agendaitem.set('postponedTo', null);
+            }
+          }
+
         });
-      })
+      }));
 
       const itemsToAdd = [...postponed, ...available];
 
 			let agendaService = this.get('agendaService');
-			let promise = Promise.all(itemsToAdd.map(async subCase => {
+			let promise = Promise.all(itemsToAdd.map(async (subCase) => {
+        const agendaitems = await subCase.get('agendaitems');
+        agendaitems.map(async (agendaitem) => {
+          const idx = await alreadySelected.indexOf(agendaitem);
+          if (idx !== -1){
+          }
+
+        });
 				if (subCase.selected) {
 					return agendaService.createNewAgendaItem(selectedAgenda, subCase);
 				}
