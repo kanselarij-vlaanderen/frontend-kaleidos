@@ -103,15 +103,18 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 			let agendaService = this.get('agendaService');
 			let promise = Promise.all(itemsToAdd.map(async (subCase) => {
         const agendaitems = await subCase.get('agendaitems');
-        agendaitems.map(async (agendaitem) => {
-          const idx = await alreadySelected.indexOf(agendaitem);
-          if (idx !== -1){
+        if (agendaitems.length === 0){
+          if (subCase.selected) {
+            return agendaService.createNewAgendaItem(selectedAgenda, subCase);
           }
+        } else if (agendaitems.length > 0){
+          agendaitems.map(async (agendaitem) => {
+            const idx = await alreadySelected.indexOf(agendaitem);
+            if (idx !== -1){
+            }
 
-        });
-				if (subCase.selected) {
-					return agendaService.createNewAgendaItem(selectedAgenda, subCase);
-				}
+          });
+        }
 			}));
 			promise.then(async () => {
 			  const agendas = await this.get('agendas');
