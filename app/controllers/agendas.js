@@ -36,9 +36,9 @@ export default Controller.extend({
 		},
 
     navigateToCreateAnnouncement() {
-      this.set("createAnnouncement", true);
+			this.set("createAnnouncement", true);
       this.set("selectedAgendaItem", null);
-      this.set("selectedAnnouncement", null);
+			this.set("selectedAnnouncement", null);
 		},
 
     selectAgendaItem(agendaitem) {

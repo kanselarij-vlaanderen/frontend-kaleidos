@@ -76,7 +76,6 @@ export default Component.extend({
 			}
 			
 			this.clearProperties();
-			caze.notifyPropertyChange('subcases');
 			this.closeModal();
 		},
 

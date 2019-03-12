@@ -5,6 +5,7 @@
     selectedAgendaItem=selectedAgendaItem
     compareAgendas=(action "compareAgendas")
     navigateToSubCases=(action "navigateToSubCases")
+    navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
     loading=(action "loadingAgendaitems")
   }}
 </div>
@@ -19,8 +20,6 @@
       <div class="vlc-scroll-wrapper">
         {{agenda/agendaitem-search
           selectedAgenda=currentAgenda
-          navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
-          navigateToSubCases=(action "navigateToSubCases")
         }}
         {{agenda/agenda-list
           agendaitems=currentAgendaItems
