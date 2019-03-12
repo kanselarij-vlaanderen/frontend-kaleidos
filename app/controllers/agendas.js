@@ -37,9 +37,9 @@ export default Controller.extend({
 		},
 
     navigateToCreateAnnouncement() {
-      this.set("createAnnouncement", true);
+			this.set("createAnnouncement", true);
       this.set("selectedAgendaItem", null);
-      this.set("selectedAnnouncement", null);
+			this.set("selectedAnnouncement", null);
 		},
 
     async printDecisions() {
@@ -47,10 +47,10 @@ export default Controller.extend({
 
 		  if (!isPrintingDecisions){
         const currentAgendaitems = await this.get('currentAgendaItems');
-        const decisions = await Promise.all(currentAgendaitems.map(async item => {
-          const decision = await this.store.peekRecord('agendaitem', item.id).get('decision');
-          return { id: decision.id, shortTitle: decision.shortTitle, description: item.description }
+        let decisions = await Promise.all(currentAgendaitems.map(async item => {
+          return await this.store.peekRecord('agendaitem', item.id).get('decision');
         }));
+        decisions = decisions.filter(item => !!item);
         this.set('printedDecisions', decisions);
       }
 

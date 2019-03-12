@@ -2,10 +2,10 @@
   <h3 class="vl-title vl-u-text--uppercase vl-u-text--bold">
     {{number}}
     .
-    {{await agendaitem.subcase.case.type.label}}
+    {{await agendaitem.subcase.shortTitle}}
   </h3>
   <h4 class="vl-title vl-title--h6">
-    {{agendaitem.subcase.title}}
+    {{await agendaitem.subcase.case.shortTitle}} 
   </h4>
   <div class="agenda-sub-options">
     <p class="agenda-postponed-option">
@@ -20,9 +20,9 @@
   </div>
   <div class="vl-u-display-flex vl-u-flex-space-between">
     <span class="c-agenda-item__meta">
-      {{agendaitem.subcase.shortTitle}}
+      {{await agendaitem.subcase.title}}
     </span>
-    <div class="vl-u-display-flex default">
+    {{!-- <div class="vl-u-display-flex default">
       <i class="vl-vi vl-vi-check-small"></i>
       {{#if agendaitem.formallyOk}}
         <span class="c-agenda-item__meta">
@@ -33,6 +33,6 @@
           {{t "agendaitem-details.formal-ok"}}
         </span>
       {{/if}}
-    </div>
+    </div> --}}
   </div>
 </div>

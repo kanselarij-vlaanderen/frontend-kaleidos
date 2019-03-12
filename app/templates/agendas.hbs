@@ -6,6 +6,7 @@
     compareAgendas=(action "compareAgendas")
     navigateToSubCases=(action "navigateToSubCases")
     printDecisions=(action "printDecisions")
+    navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
     loading=(action "loadingAgendaitems")
   }}
 </div>
@@ -20,8 +21,6 @@
       <div class="vlc-scroll-wrapper">
         {{agenda/agendaitem-search
           selectedAgenda=currentAgenda
-          navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
-          navigateToSubCases=(action "navigateToSubCases")
         }}
         {{agenda/agenda-list
           agendaitems=currentAgendaItems
@@ -60,7 +59,7 @@
 {{#if isPrintingDecisions}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "manage-mandates")
+    title=(t "printable-decisions-title")
     closeModal=(action "printDecisions")
   }}
 

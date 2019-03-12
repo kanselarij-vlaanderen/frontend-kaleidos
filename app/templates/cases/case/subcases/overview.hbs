@@ -1,15 +1,38 @@
-{{#each (await model) as |subcase|}}
-  <div class="vlc-procedure-step">
-    <div class="vlc-toolbar vlc-toolbar--auto">
-      <div class="vlc-toolbar__left">
-        <div class="vlc-toolbar__item">
-          <h6 class="vl-title vl-title--h6 max-width">
-            {{subcase.shortTitle}}
-          </h6>
-          <p>
-            {{subcase.title}}
-          </p>
-          {{!-- <ul class="vlc-status-timeline">
+<div
+  class="vl-u-spacer-extended-left-l vl-u-spacer-extended-right-l vl-u-spacer-extended-top-s"
+>
+  <div class="vl-toolbar">
+    <div class="vl-toolbar__left">
+      <div class="vl-toolbar__item">
+        <h3 class="vl-title vl-title--h3">
+          {{t "cases.subcases"}}
+        </h3>
+      </div>
+    </div>
+    <div class="vl-toolbar__right">
+      <button
+        class="vl-button vl-button--narrow vl-button--icon-before"
+        {{action "toggleIsAddingSubcase"}}
+      >
+        <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+        {{t "buttons.create-subcase"}}
+      </button>
+    </div>
+  </div>
+</div>
+<div class="vl-u-spacer-extended-l">
+  {{#each (await model.subcases) as |subcase|}}
+    <div class="vlc-procedure-step">
+      <div class="vlc-toolbar vlc-toolbar--auto">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <h6 class="vl-title vl-title--h6 max-width">
+              {{subcase.shortTitle}}
+            </h6>
+            <p>
+              {{subcase.title}}
+            </p>
+            {{!-- <ul class="vlc-status-timeline">
             <li
               class="vlc-status-timeline__item vlc-status-timeline__item--in-progress"
             >
@@ -19,23 +42,23 @@
               </div>
             </li>
           </ul> --}}
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            {{#link-to
+              "cases.case.subcases.subcase"
+              subcase.id
+              tagName="button"
+              class="vl-button vl-button--tertiary vl-button--icon"
+            }}
+              <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+            {{/link-to}}
+          </div>
         </div>
       </div>
-      <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__item">
-          {{#link-to
-            "cases.case.subcases.subcase"
-            subcase.id
-            tagName="button"
-            class="vl-button vl-button--tertiary vl-button--icon"
-          }}
-            <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-          {{/link-to}}
-        </div>
-      </div>
-    </div>
-    {{!-- <hr class="vlc-hr" /> --}}
-    {{!-- <div class="vlc-procedure-step__badge-wrapper">
+      {{! <hr class="vlc-hr" /> }}
+      {{!-- <div class="vlc-procedure-step__badge-wrapper">
       <p class="vl-u-text--uppercase">
         {{await subcase.case.type.label}}
       </p>
@@ -46,5 +69,15 @@
     <p>
       {{await subcase.title}}
     </p> --}}
-  </div>
-{{/each}}
+    </div>
+  {{/each}}
+</div>
+{{#if isAddingSubcase}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "close")
+    title=(t "buttons.create-subcase")
+  }}
+    {{cases/new-subcase model=model closeModal=(action "close")}}
+  {{/web-components/vl-modal}}
+{{/if}}
