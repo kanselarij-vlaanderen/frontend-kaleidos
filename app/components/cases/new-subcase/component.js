@@ -58,22 +58,18 @@ export default Component.extend({
 
 			const createdSubCase = await subcase.save();
 			const uploadedFiles = this.get('uploadedFiles');
-			if(uploadedFiles) {
 				Promise.all(uploadedFiles.map(uploadedFile => {
 					if (uploadedFile.id) {
 						return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile, uploadedFile.get('name'));
 					}
 				}));
-			}
 
 			const nonDigitalDocuments = this.get('nonDigitalDocuments');
-			if(nonDigitalDocuments) {
 				Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
 					if (nonDigitalDocument.title) {
 						return this.createNewDocumentWithDocumentVersion(createdSubCase, null, nonDigitalDocument.title);
 					}
 				}));
-			}
 			
 			this.clearProperties();
 			this.closeModal();
