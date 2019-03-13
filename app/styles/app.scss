@@ -534,7 +534,10 @@ $icon-font-location: "/fonts/";
 }
 
 .max-width {
+  text-overflow: ellipsis;
   max-width: 900px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .vl-tab__link {

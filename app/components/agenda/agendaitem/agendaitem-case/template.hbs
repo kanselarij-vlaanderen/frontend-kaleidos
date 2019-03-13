@@ -5,8 +5,9 @@
         {{#if (await agendaitem.subcase.case.id)}}
           <div class="vl-u-spacer-extended-left-s">
             {{#link-to
-              "cases.case.subcases"
+              "cases.case.subcases.subcase"
               (await agendaitem.subcase.case.id)
+              (await agendaitem.subcase.id)
               class="vl-link"
             }}
               {{t "to-subcase"}}
