@@ -98,7 +98,6 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_select";
 @import "govflanders/components/_js-select";
 
-
 /* Unofficial code
    ========================================================================== */
 
@@ -155,7 +154,6 @@ $icon-font-location: "/fonts/";
 @import "custom-utilities/_extended-spacer";
 @import "custom-utilities/_scroll";
 @import "custom-utilities/_box-model";
-
 
 .document {
   display: flex;
@@ -350,7 +348,7 @@ $icon-font-location: "/fonts/";
     z-index: z("popover");
     transform: translateY(120%);
   }
-  
+
   &::before {
     display: block;
     content: "";
@@ -369,12 +367,12 @@ $icon-font-location: "/fonts/";
 
     &::after {
       bottom: -0.7rem;
-    } 
+    }
   }
 }
 
 .ember-attacher {
-  top: 4px !important; 
+  top: 4px !important;
 }
 
 .non-digital-document {
@@ -390,7 +388,7 @@ $icon-font-location: "/fonts/";
   @include select-default;
   display: block;
   width: 100%;
-  min-height:3.5rem;
+  min-height: 3.5rem;
 
   .ember-power-select-status-icon {
     display: none;
@@ -413,18 +411,18 @@ $icon-font-location: "/fonts/";
     box-shadow: inset 0 0 0 0.1rem $outline-color;
   }
 
-   &[multiple] {
+  &[multiple] {
     height: auto;
   }
 }
 
 .ember-basic-dropdown-trigger {
-  height:auto;
-  max-height:10rem;
+  height: auto;
+  max-height: 10rem;
 }
 
 .ember-power-select-search-input {
-  width:100%;
+  width: 100%;
   display: inline-block;
   background: $page-bg;
   font-family: $base-font;
@@ -437,7 +435,6 @@ $icon-font-location: "/fonts/";
   border: 0.1rem solid $border-color;
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
   padding: 0 1rem;
-
 
   @include respond-to(small) {
     font-size: 1.6rem;
@@ -474,9 +471,34 @@ $icon-font-location: "/fonts/";
     max-width: 6rem;
     padding: 0 0.8rem;
   }
-  line-height:3.5rem !important;
-
+  line-height: 3.5rem !important;
 }
+
+// .ember-power-select-multiple-option {
+//   margin: 0.5rem;
+//   background: $porcelain;
+//   border: none;
+//   font-weight: 400;
+//   border-radius: 0;
+//   color: $text-color;
+//   padding: 1rem;
+//   height: 3.3rem;
+//   display: flex;
+//   flex-direction: row-reverse;
+//   align-items: center;
+
+//   .ember-power-select-multiple-remove-btn {
+//     display:flex;
+//     justify-content: center;
+//     align-items: center;
+//     margin-left:0.4em;
+//     display: inline-block;
+//     font-size: 3rem;
+//     // line-height: 1;
+//     border: none;
+//     color: $gray-light;
+//   }
+// }
 
 .vl-modal-dialog {
   display: block;
@@ -486,17 +508,17 @@ $icon-font-location: "/fonts/";
 
 .vl-modal {
   .vl-modal__backdrop {
-    z-index:52;
+    z-index: 52;
   }
 }
 
 .mandatee-selector-container,
 .domains-selector-container {
-  width:100%;
+  width: 100%;
 }
 
 .people-selector-container {
-  width:100%;
+  width: 100%;
 }
 
 .vl-modal-dialog__content {
@@ -504,7 +526,7 @@ $icon-font-location: "/fonts/";
 }
 
 .vlc-panel-layout-agenda__detail {
-  width:100%;
+  width: 100%;
 }
 
 .color-red {
@@ -512,27 +534,27 @@ $icon-font-location: "/fonts/";
 }
 
 .max-width {
-  max-width:900px;
+  max-width: 900px;
 }
 
 .vl-tab__link {
   &.active {
     color: $text-color;
-      border-bottom: $tabs-stroke-height solid $text-color;
-      background-color: transparent;
+    border-bottom: $tabs-stroke-height solid $text-color;
+    background-color: transparent;
 
-      @include respond-to(small) {
-        [data-vl-tabs] & {
-          border: 0;
-        }
+    @include respond-to(small) {
+      [data-vl-tabs] & {
+        border: 0;
       }
+    }
   }
 }
 
 .vlc-side-nav {
-  height:auto;
+  height: auto;
 }
 
 .vlc-panel-layout {
-  min-height:calc(100vh - 106px - 50px - 44px);
+  min-height: calc(100vh - 106px - 50px - 44px);
 }

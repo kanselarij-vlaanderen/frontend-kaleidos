@@ -11,14 +11,14 @@
       </div> --}}
     </div>
   </div>
-  {{#if (gt (await subcase.documents.length) 0)}}
+  {{#if (gt (await subcase.documentsLength) 0)}}
     {{#each (await subcase.documents) as |document|}}
       {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
         document=document
         subcase=subcase
       }}
     {{/each}}
-  {{else}}
+   {{else}}
     <div class="vl-u-spacer-extended-top-s">
       {{web-components/vl-alert
         message=(t "no-documents-yet")

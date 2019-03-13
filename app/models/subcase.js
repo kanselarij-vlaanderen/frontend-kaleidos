@@ -27,5 +27,12 @@ export default Model.extend({
       return documentVersion.get('document');
     }));
     return documents.uniqBy('id');
+  }),
+
+  documentsLength: computed('documents', function() {
+    return this.get('documents').then((documents) => {
+      return documents.get('length');
+    });
   })
+
 });
