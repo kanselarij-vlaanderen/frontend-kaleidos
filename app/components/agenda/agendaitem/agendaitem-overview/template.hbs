@@ -21,7 +21,7 @@
           {{#if (not currentAgenda.isFinal)}}
             {{#if showOptions}}
               {{#if isPostPonable}}
-                {{#if (or agendaitem.retracted (await agendaitem.postponed))}}
+                {{#if (or (await agendaitem.retracted) (await agendaitem.postponedTo))}}
                   <button
                     class="vl-button vl-button--tertiary vl-button--narrow"
                     {{action "advanceAgendaitem" agendaitem}}

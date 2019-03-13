@@ -82,6 +82,15 @@
               <a
                 class="vl-link vl-link--block"
                 {{action attacher.hide}}
+                {{action "printDecisions"}}
+              >
+                {{t "buttons.print-decisions"}}
+              </a>
+            </li>
+            <li class="vl-popover__link-list__item">
+              <a
+                class="vl-link vl-link--block"
+                {{action attacher.hide}}
                 {{action "navigateToCreateAnnouncement"}}
               >
                 {{t "buttons.create-announcement"}}

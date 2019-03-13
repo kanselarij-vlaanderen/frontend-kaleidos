@@ -5,6 +5,7 @@
     selectedAgendaItem=selectedAgendaItem
     compareAgendas=(action "compareAgendas")
     navigateToSubCases=(action "navigateToSubCases")
+    printDecisions=(action "printDecisions")
     navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
     loading=(action "loadingAgendaitems")
   }}
@@ -53,4 +54,18 @@
   {{web-components/vl-loader
     text="De agenda wordt goedgekeurd. Even geduld aub.."
   }}
+{{/if}}
+
+{{#if isPrintingDecisions}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "printable-decisions-title")
+    closeModal=(action "printDecisions")
+  }}
+
+    {{agenda/agenda-decisions
+      decisions=printedDecisions
+    }}
+
+  {{/web-components/vl-modal}}
 {{/if}}
