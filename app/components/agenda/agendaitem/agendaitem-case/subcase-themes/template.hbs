@@ -3,19 +3,27 @@
     <h4 class="vl-title vl-title--h4">
       {{t "edit-item.themes"}}
     </h4>
-    <div class="vl-u-spacer-extended-left-s">
+    {{!-- <div class="vl-u-spacer-extended-left-s">
       <a class="vl-link">
         {{t "buttons.edit"}}
       </a>
-    </div>
+    </div> --}}
   </div>
 </div>
-<div class="vl-custom">
-  <ul>
-    {{#each (await subcase.themes) as |theme|}}
-      <li class="vl-pill vl-u-spacer-extended-right-s">
-        {{theme.label}}
-      </li>
-    {{/each}}
-  </ul>
-</div>
+{{#if (gt (await subcase.themes.length) 0)}}
+  <div class="vl-custom">
+    <ul>
+      {{#each (await subcase.themes) as |theme|}}
+        <li class="vl-pill vl-u-spacer-extended-right-s">
+          {{theme.label}}
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+{{else}}
+  <div class="vl-u-spacer-extended-top-s">
+    {{web-components/vl-alert
+      message=(t "no-themes-yet")
+    }}
+  </div>
+{{/if}}

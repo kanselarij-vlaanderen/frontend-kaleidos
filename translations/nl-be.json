@@ -204,5 +204,10 @@
 	"agenda-version":"Agenda versie",
 	"latest-modified":"Laatst gewijzigd",
 	"agenda-for":"Agenda voor",
-	"new-document-version":"Nieuwe documentversie uploaden"
+	"new-document-version":"Nieuwe documentversie uploaden",
+	"no-agendaitems-yet": "Er zijn nog geen agendapunten in deze agenda.",
+	"no-announcements-yet": "Er zijn nog geen mededelingen in deze agenda.",
+	"no-themes-yet":"Er zijn nog geen thema's toegevoegd.",
+	"no-documents-yet":"Er zijn nog geen documenten toegevoegd.",
+	"no-domains-yet": "Er zijn nog geen bevoegdheden toegevoegd."
 }

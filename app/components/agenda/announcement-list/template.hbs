@@ -7,12 +7,16 @@
     </div>
   </div>
   <div class="vl-u-spacer">
-    {{#each (await announcements) as |announcement|}}
-      {{agenda/announcement-list/list-item
-        announcement=announcement
-        selectedAnnouncement=selectedAnnouncement
-        selectAnnouncement=(action "selectAnnouncement")
-      }}
-    {{/each}}
+    {{#if (gt (await announcements.length) 0)}}
+      {{#each (await announcements) as |announcement|}}
+        {{agenda/announcement-list/list-item
+          announcement=announcement
+          selectedAnnouncement=selectedAnnouncement
+          selectAnnouncement=(action "selectAnnouncement")
+        }}
+      {{/each}}
+    {{else}}
+      {{web-components/vl-alert message=(t "no-announcements-yet")}}
+    {{/if}}
   </div>
 </div>

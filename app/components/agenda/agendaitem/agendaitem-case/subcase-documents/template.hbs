@@ -4,20 +4,28 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      <div class="vl-u-spacer-extended-left-s">
+      {{!-- <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link">
           {{t "buttons.edit"}}
         </a>
-      </div>
+      </div> --}}
     </div>
   </div>
-  {{#each (await subcase.documents) as |document|}}
-    {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-      document=document
-      subcase=subcase
-    }}
-  {{/each}}
-  <div class="vl-u-spacer">
+  {{#if (gt (await subcase.documents.length) 0)}}
+    {{#each (await subcase.documents) as |document|}}
+      {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+        document=document
+        subcase=subcase
+      }}
+    {{/each}}
+  {{else}}
+    <div class="vl-u-spacer-extended-top-s">
+      {{web-components/vl-alert
+        message=(t "no-documents-yet")
+      }}
+    </div>
+  {{/if}}
+  {{!-- <div class="vl-u-spacer">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
       {{action "toggleIsAddingNewDocument"}}
@@ -25,9 +33,8 @@
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
       {{t "buttons.document-add"}}
     </button>
-  </div>
+  </div> --}}
 </div>
-
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
     closeModal=(action "toggleIsAddingNewDocument")

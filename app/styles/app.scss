@@ -157,10 +157,6 @@ $icon-font-location: "/fonts/";
 @import "custom-utilities/_box-model";
 
 
-.application-container {
-  height: 100vh;
-}
-
 .document {
   display: flex;
   justify-content: space-evenly;
@@ -177,7 +173,6 @@ $icon-font-location: "/fonts/";
 .side-nav-small {
   display: block;
   width: 150px;
-  height: 100vh;
   float: left;
   border-top: none;
 
@@ -532,4 +527,12 @@ $icon-font-location: "/fonts/";
         }
       }
   }
+}
+
+.vlc-side-nav {
+  height:auto;
+}
+
+.vlc-panel-layout {
+  min-height:calc(100vh - 106px - 50px - 44px);
 }
