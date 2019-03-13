@@ -13,6 +13,7 @@ Router.map(function () {
       this.route('subcases', { path: '/deeldossiers' }, function () {
         this.route('overview', { path: '' });
         this.route('subcase', { path: ':subcase_id' });
+        this.route('loading');
       });
     });
     this.route('overview', { path: '' });
