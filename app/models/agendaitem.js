@@ -8,9 +8,11 @@ export default Model.extend({
   created: attr('date'),
   record: attr('string'),
   formallyOk: attr('boolean'),
-  titlePress: attr('string'),
   retracted: attr('boolean'),
+  
+  titlePress: attr('string'),
   textPress: attr('string'),
+  forPress: attr('boolean'),
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda'),
