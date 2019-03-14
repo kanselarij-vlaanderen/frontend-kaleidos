@@ -13,16 +13,16 @@ export default Component.extend({
 	isAddingNonDigitalDocument: false,
 	step: 1,
 
-	title: computed('model', function () {
-		return this.get('model').shortTitle;
+	title: computed('case', function () {
+		return this.get('case').shortTitle;
 	}),
 
 	clearProperties() {
 		this.set('uploadedFiles', []);
 		this.set('nonDigitalDocuments', []);
 		this.set('selectedMandatees', []);
-		this.set('title', undefined);
-		this.set('shortTitle', undefined);
+		this.set('title', null);
+		this.set('shortTitle', null);
 		this.set('isAddingNonDigitalDocument', false);
 		this.set('step', 1);
 	},

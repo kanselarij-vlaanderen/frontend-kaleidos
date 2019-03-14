@@ -8,7 +8,7 @@ export default Model.extend({
   shortTitle: attr('string'),
   title: attr('string'),
   showAsRemark: attr('boolean'),
-
+  
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
   meeting: belongsTo('meeting'),

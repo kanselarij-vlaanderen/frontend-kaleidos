@@ -1,6 +1,3 @@
-<h3 class="vl-title vl-title--h3">
-  {{t "create-mandatee"}}
-</h3>
 <div class="vl-modal-dialog__content">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "name")}}
@@ -19,11 +16,24 @@
     {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
   </div>
 </div>
-<div class="vl-u-display-flex vl-u-flex-space-between vl-action-group">
-  <button class="vl-button vl-button--tertiary" {{action "closeModal"}}>
-    {{t "buttons.cancel"}}
-  </button>
-  <button class="vl-button vl-button--tertiary" {{action "createMandatee"}}>
-    {{t "create-mandatee"}}
-  </button>
+<div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <button class="vl-button vl-button--link vl-button--narrow" {{action "closeModal"}}>
+          {{t "buttons.cancel"}}
+        </button>
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--tertiary"
+          {{action "createMandatee"}}
+        >
+          {{t "create-mandatee"}}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

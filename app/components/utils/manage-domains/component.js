@@ -1,10 +1,20 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import { computed } from '@ember/object';
 
 export default Component.extend({
-	store:inject(),
-	title:null,
-	isAdding:false,
+	classNames: ["vl-u-spacer"],
+	store: inject(),
+	title: computed('selectedDomain', function () {
+		const domain = this.get('selectedDomain');
+		if (domain) {
+			return domain.get('label');
+		} else {
+			return null;
+		}
+	}),
+	isAdding: false,
+	isEditing: false,
 
 	actions: {
 		closeModal() {
@@ -19,13 +29,26 @@ export default Component.extend({
 			this.toggleProperty('isAdding');
 		},
 
+		toggleIsEditing() {
+			this.toggleProperty('isEditing');
+		},
+
 		removeMandate() {
 			const domainToDelete = this.get('selectedDomain');
-			if(!domainToDelete) {
+			if (!domainToDelete) {
 				return;
 			}
 			domainToDelete.destroyRecord();
 			this.set('selectedDomain', null);
+		},
+
+		editMandatee() {
+			const domain = this.get('selectedDomain');
+			domain.set('label', this.get('title'));
+			domain.save().then(() => {
+				this.set('title', null);
+				this.toggleProperty('isEditing');
+			});
 		},
 
 		createMandate() {

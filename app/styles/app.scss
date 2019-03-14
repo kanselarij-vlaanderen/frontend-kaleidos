@@ -416,6 +416,37 @@ $icon-font-location: "/fonts/";
   }
 }
 
+.ember-basic-dropdown-content--left.ember-basic-dropdown-content--below.ember-basic-dropdown--transitioned-in {
+  display: block;
+  top: 100%;
+  width: 100%;
+  transform: translateY(-1px);
+  border: 1px $ghost solid;
+  border-radius: 0;
+  background-color: $white;
+}
+
+.ember-power-select-option {
+  border-top: 1px solid $ghost;
+  display: block;
+      position: relative;
+      width: 100%;
+      padding: 0.7rem 0 0.5rem 3.2rem;
+      color: $black;
+      font-size: 1.6rem;
+      font-weight: normal;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        position: relative;
+        background-color: $athens-gray;
+        color: $action-text-color;
+        // text-decoration: underline;
+      }
+}
+
 .ember-basic-dropdown-trigger {
   height: auto;
   max-height: 10rem;
@@ -474,31 +505,28 @@ $icon-font-location: "/fonts/";
   line-height: 3.5rem !important;
 }
 
-// .ember-power-select-multiple-option {
-//   margin: 0.5rem;
-//   background: $porcelain;
-//   border: none;
-//   font-weight: 400;
-//   border-radius: 0;
-//   color: $text-color;
-//   padding: 1rem;
-//   height: 3.3rem;
-//   display: flex;
-//   flex-direction: row-reverse;
-//   align-items: center;
+.ember-power-select-multiple-option {
+  margin: 0.5rem;
+  background: $porcelain;
+  font-weight: 400;
+  color: $text-color;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  border: none;
+  border-radius:0;
 
-//   .ember-power-select-multiple-remove-btn {
-//     display:flex;
-//     justify-content: center;
-//     align-items: center;
-//     margin-left:0.4em;
-//     display: inline-block;
-//     font-size: 3rem;
-//     // line-height: 1;
-//     border: none;
-//     color: $gray-light;
-//   }
-// }
+  .ember-power-select-multiple-remove-btn {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-left:0.4em;
+    font-size: 2rem;
+    border: none;
+    color: $gray-light;
+  }
+}
 
 .vl-modal-dialog {
   display: block;
@@ -558,7 +586,9 @@ $icon-font-location: "/fonts/";
   height: auto;
 }
 
-.vlc-panel-layout, .vlc-panel-layout__agenda-items, .vlc-scroll-wrapper {
+.vlc-panel-layout,
+.vlc-panel-layout__agenda-items,
+.vlc-scroll-wrapper {
   height: auto;
   min-height: calc(100vh - 106px - 50px - 44px);
 }

@@ -31,6 +31,7 @@ export default Component.extend({
 				start: new Date(this.get('startDate')),
 				governmentDomains: this.get('selectedDomains'),
 				person: this.get('selectedPerson'),
+				end:null
 			});
 			newMandatee.save().then(() => {
 				this.clearValues();

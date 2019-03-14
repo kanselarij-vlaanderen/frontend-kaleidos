@@ -24,9 +24,9 @@ export default Component.extend({
 		},
 
 		saveChanges(mandateeToEdit) {
-			mandateeToEdit.set('title', this.get('title'));
 			mandateeToEdit.set('end', null);
 			mandateeToEdit.set('start', this.get('startDate'));
+			
 			mandateeToEdit.save().then(() => {
 				this.closeModal();
 			});
