@@ -9,11 +9,12 @@ export default Model.extend({
 	end: attr('date'),
 	dateSwornIn: attr('date'),
 	dateDecree: attr('date'),
-	temporaryReplacements: hasMany('mandatee'),
+	// temporaryReplacements: hasMany('mandatee'),
 	governmentDomains: hasMany('government-domains'),
 	decisions: hasMany('decision'),
 	cases: hasMany('case'),
 	holds: belongsTo('mandate'),
-	person: belongsTo('person')
+	person: belongsTo('mandatee'),
+	meetingsAttended: hasMany('meeting-record')
 	// state: belongsTo('mandatee-status')
 });

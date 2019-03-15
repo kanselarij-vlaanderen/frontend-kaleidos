@@ -21,7 +21,8 @@ export default Model.extend({
   remarks: hasMany('remark'),
   attendees: hasMany('mandatee'),
   newsletterInfo: belongsTo('newsletter-info'),
-
+  meetingRecord: belongsTo('meeting-record'),
+  
   isPostponed: computed('retracted', 'postponedTo', function(){
     return this.get('postponedTo').then((session) => {
       return session || this.get('retracted');

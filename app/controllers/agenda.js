@@ -63,6 +63,14 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
+		},
+		addNotesToMeeting(meeting) {
+			this.set('selectedMeeting', meeting);
+			this.toggleProperty('isAddingNotes');
+		},
+		close() {
+			this.set('selectedMeeting', null);
+			this.toggleProperty('isAddingNotes');
 		}
 	}
 });

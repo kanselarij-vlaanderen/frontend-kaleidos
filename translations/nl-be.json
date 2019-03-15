@@ -213,5 +213,12 @@
 	"no-announcements-yet": "Er zijn nog geen mededelingen in deze agenda.",
 	"no-themes-yet":"Er zijn nog geen thema's toegevoegd.",
 	"no-documents-yet":"Er zijn nog geen documenten toegevoegd.",
-	"no-domains-yet": "Er zijn nog geen bevoegdheden toegevoegd."
+	"no-domains-yet": "Er zijn nog geen bevoegdheden toegevoegd.",
+	"prepared-text-minutes":"Voorbereidende tekst voor de notule",
+	"add-notes":"Notulen toevoegen",
+	"edit-notes":"Notulen aanpassen",
+	"notes-for":"Notulen voor",
+	"date":"Datum",
+	"others":"Varia",
+	"attendees":"Aanwezigen"
 }

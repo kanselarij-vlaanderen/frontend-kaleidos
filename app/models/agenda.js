@@ -10,7 +10,7 @@ export default Model.extend({
 	createdFor: belongsTo('meeting'), 
 	agendaitems: hasMany('agendaitem'),
 	created: attr('date'),
-
+	isAccepted: attr('boolean'),
 	// announcements: hasMany('announcement'),
 	
 	agendaName: computed('name', function() {

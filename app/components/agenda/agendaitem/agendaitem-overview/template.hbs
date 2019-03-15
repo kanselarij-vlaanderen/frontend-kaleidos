@@ -75,6 +75,8 @@
         {{agenda/agendaitem/agendaitem-decision agendaitem=agendaitem}}
       {{else if (eq activeAgendaItemSection "news-item")}}
         {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
+      {{else if (eq activeAgendaItemSection "minutes")}}
+        {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
       {{/if}}
     </div>
   </div>

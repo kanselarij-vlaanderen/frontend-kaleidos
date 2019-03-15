@@ -12,7 +12,11 @@
           ></i>
           {{t "buttons.back"}}
         {{/link-to}}
-        {{sessions/session-agenda-nav compareAgendas=(action "compareAgendas")}}
+        {{sessions/session-agenda-nav
+          selectedAgendaItem=selectedAgendaItem
+          compareAgendas=(action "compareAgendas")
+          clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
+        }}
       </div>
     </div>
   </div>
@@ -69,15 +73,17 @@
                 </a>
               {{/if}}
             </li>
-            <li class="vl-popover__link-list__item">
-              <a
-                class="vl-link vl-link--block"
-                {{action attacher.hide}}
-                {{action "navigateToSubCases"}}
-              >
-                {{t "buttons.add-to-agenda"}}
-              </a>
-            </li>
+            {{#if (eq currentAgenda.name "Ontwerpagenda")}}
+              <li class="vl-popover__link-list__item">
+                <a
+                  class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "navigateToSubCases"}}
+                >
+                  {{t "buttons.add-to-agenda"}}
+                </a>
+              </li>
+            {{/if}}
             <li class="vl-popover__link-list__item">
               <a
                 class="vl-link vl-link--block"
@@ -87,15 +93,17 @@
                 {{t "buttons.print-decisions"}}
               </a>
             </li>
-            <li class="vl-popover__link-list__item">
-              <a
-                class="vl-link vl-link--block"
-                {{action attacher.hide}}
-                {{action "navigateToCreateAnnouncement"}}
-              >
-                {{t "buttons.create-announcement"}}
-              </a>
-            </li>
+            {{#if (eq currentAgenda.name "Ontwerpagenda")}}
+              <li class="vl-popover__link-list__item">
+                <a
+                  class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "navigateToCreateAnnouncement"}}
+                >
+                  {{t "buttons.create-announcement"}}
+                </a>
+              </li>
+            {{/if}}
             <li class="vl-popover__link-list__item">
               <a
                 class="vl-link vl-link--block"

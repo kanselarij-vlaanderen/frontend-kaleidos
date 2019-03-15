@@ -1,35 +1,35 @@
 <li class="vl-tab">
-  <a class="vl-tab__link" {{action "setAgendaItemSection" "details"}}>
+  <a class="vl-tab__link {{active-class activeAgendaItemSection "details" class="active"}}" {{action "setAgendaItemSection" "details"}}>
     {{t "buttons.agendaitem-case"}}
   </a>
 </li>
 <li class="vl-tab">
-  <a class="vl-tab__link" {{action "setAgendaItemSection" "comments"}}>
+  <a class="vl-tab__link {{active-class activeAgendaItemSection "comments" class="active"}}" {{action "setAgendaItemSection" "comments"}}>
     {{t "buttons.agendaitem-comment"}}
   </a>
 </li>
 {{#if (or (not agendaitem.retracted) (not agendaitem.postponedTo))}}
   <li class="vl-tab">
     <a
-      class="vl-tab__link"
+      class="vl-tab__link {{active-class activeAgendaItemSection "decision" class="active"}}"
       {{action "setAgendaItemSection" "decision"}}
     >
       {{t "buttons.agendaitem-decision"}}
     </a>
   </li>
   <li class="vl-tab">
-    <a class="vl-tab__link" {{action "setAgendaItemSection" "notes"}}>
+    <a class="vl-tab__link {{active-class activeAgendaItemSection "minutes" class="active"}}" {{action "setAgendaItemSection" "minutes"}}>
       {{t "buttons.agendaitem-notes"}}
     </a>
   </li>
   <li class="vl-tab">
-    <a class="vl-tab__link" {{action "setAgendaItemSection" "news-item"}}>
+    <a class="vl-tab__link {{active-class activeAgendaItemSection "news-item" class="active"}}" {{action "setAgendaItemSection" "news-item"}}>
       {{t "buttons.agendaitem-bestek"}}
     </a>
   </li>
   <li class="vl-tab">
     <a
-      class="vl-tab__link"
+      class="vl-tab__link {{active-class activeAgendaItemSection "press-agenda" class="active"}}"
       {{action "setAgendaItemSection" "press-agenda"}}
     >
       {{t "buttons.agendaitem-press-agenda"}}

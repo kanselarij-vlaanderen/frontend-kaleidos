@@ -25,6 +25,10 @@ export default Component.extend({
 	}),
 
 	actions: {
+		clearSelectedAgendaItem() {
+			this.clearSelectedAgendaItem();
+		},
+		
 		async approveAgenda(session) {
 			this.changeLoading();
 			let agendas = await this.get('agendas');
@@ -38,6 +42,7 @@ export default Component.extend({
 				agendaToLock.set('name', alphabet[definiteAgendas.length]);
 			}
 
+			agendaToLock.set('isAccepted', true);
 			agendaToLock.save().then(() => {
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {
 					notifyPropertyChange(session, 'agendas');

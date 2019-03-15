@@ -1,0 +1,48 @@
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+export default Component.extend({
+	store: inject(),
+	meeting: null,
+	startDate: null,
+	announcements: null,
+	others: null,
+	peopleSelected: [],
+
+	actions: {
+		close() {
+			this.close();
+		},
+
+		createMeetingNotes(meeting) {
+			const { selectedMandatees, startDate, announcements, others } = this;
+			const meetingRecord = this.store.createRecord('meeting-record',
+				{
+					attendees: selectedMandatees,
+					created: startDate || new Date(),
+					modified: startDate || new Date(),
+					announcements: announcements,
+					others: others,
+					description: "",
+					meeting: meeting
+				});
+			meetingRecord.save().then(() => {
+				this.close();
+			})
+		},
+
+		selectStartDate(val) {
+			this.set('startDate', val);
+		},
+
+		peopleSelected(mandatees) {
+			this.set('selectedMandatees', mandatees);
+		},
+
+		saveChanges(notes) {
+			const notesToSave = this.store.peekRecord('meeting-record', notes.get('id'));
+			notesToSave.save().then(() => {
+				this.close();
+			});
+		}
+	}
+});

@@ -8,6 +8,7 @@
     printDecisions=(action "printDecisions")
     navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
     loading=(action "loadingAgendaitems")
+    clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
   }}
 </div>
 {{#if (not isLoading)}}
@@ -55,17 +56,12 @@
     text="De agenda wordt goedgekeurd. Even geduld aub.."
   }}
 {{/if}}
-
 {{#if isPrintingDecisions}}
   {{#web-components/vl-modal
     isOverlay=true
     title=(t "printable-decisions-title")
     closeModal=(action "printDecisions")
   }}
-
-    {{agenda/agenda-decisions
-      decisions=printedDecisions
-    }}
-
+    {{agenda/agenda-decisions decisions=printedDecisions}}
   {{/web-components/vl-modal}}
 {{/if}}
