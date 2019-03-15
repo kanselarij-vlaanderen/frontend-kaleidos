@@ -11,18 +11,7 @@
     {{web-components/vl-form-label value=(t "attendees")}}
     {{utils/mandatee-selector chooseMandatee=(action "peopleSelected")}}
   </div>
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "agendas.announcements-subtitle")}}
-    {{textarea rows="6" class="vl-textarea vl-textarea--block" value=announcements}}
-  </div>
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "others")}}
-    {{textarea
-      rows="6"
-      class="vl-textarea vl-textarea--block"
-      value=others
-    }}
-  </div>
+  {{utils/text-template label="Notulen" rows="10" text=text searchField="name"}}
 </div>
 <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
   <div class="vlc-toolbar">
@@ -50,9 +39,7 @@
 </div>
 {{else}}
 <div class="vl-modal-dialog__content">
-
   <div class="vlc-input-field-block">
-
     {{web-components/vl-form-label value=(t "date")}}
     {{web-components/vl-datepicker
       value=meeting.notes.plannedStart
@@ -63,18 +50,7 @@
     {{web-components/vl-form-label value=(t "attendees")}}
     {{utils/mandatee-selector selectedMandatees=meeting.notes.attendees chooseMandatee=(action "peopleSelected")}}
   </div>
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "agendas.announcements-subtitle")}}
-    {{textarea rows="6" class="vl-textarea vl-textarea--block" value=meeting.notes.announcements}}
-  </div>
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "others")}}
-    {{textarea
-      rows="6"
-      class="vl-textarea vl-textarea--block"
-      value=meeting.notes.others
-    }}
-  </div>
+   {{utils/text-template label="Notulen" rows="10" text=text searchField="name"}}
 </div>
 <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
   <div class="vlc-toolbar">
@@ -101,5 +77,3 @@
   </div>
 </div>
 {{/if}}
-
-{{nextMeeting.plannedStart}}

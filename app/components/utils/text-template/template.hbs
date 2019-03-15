@@ -2,20 +2,14 @@
   {{web-components/vl-form-label value="Tekst templates"}}
   {{#power-select
     options=items
-    selected=selectedItems
     searchField=searchField
-    search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "selectModel") as |session|
+    onchange=(action "selectModel") as |model|
   }}
-    {{session.plannedStart}}
+    {{model.name}}
   {{/power-select}}
 </div>
 <div class="vlc-input-field vlc-input-field-block">
-  {{web-components/vl-form-label value="Tekst templates"}}
-  <textarea
-    rows={{rows}}
-    class="vl-textarea vl-textarea--block"
-    value={{text}}
-	></textarea>
+  {{web-components/vl-form-label value=label}}
+  {{textarea id="toFocus" rows=rows class="vl-textarea vl-textarea--block" value=text}}
 </div>
