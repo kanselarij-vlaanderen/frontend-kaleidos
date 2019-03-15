@@ -50,7 +50,7 @@
     {{web-components/vl-form-label value=(t "attendees")}}
     {{utils/mandatee-selector selectedMandatees=meeting.notes.attendees chooseMandatee=(action "peopleSelected")}}
   </div>
-   {{utils/text-template label="Notulen" rows="10" text=text searchField="name"}}
+   {{utils/text-template label="Notulen" rows="10" text=meeting.notes.description searchField="name"}}
 </div>
 <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
   <div class="vlc-toolbar">
