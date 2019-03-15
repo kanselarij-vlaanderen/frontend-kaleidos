@@ -8,9 +8,11 @@ export default Model.extend({
   created: attr('date'),
   record: attr('string'),
   formallyOk: attr('boolean'),
-  titlePress: attr('string'),
   retracted: attr('boolean'),
+  
+  titlePress: attr('string'),
   textPress: attr('string'),
+  forPress: attr('boolean'),
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda'),
@@ -19,7 +21,8 @@ export default Model.extend({
   remarks: hasMany('remark'),
   attendees: hasMany('mandatee'),
   newsletterInfo: belongsTo('newsletter-info'),
-
+  meetingRecord: belongsTo('meeting-record'),
+  
   isPostponed: computed('retracted', 'postponedTo', function(){
     return this.get('postponedTo').then((session) => {
       return session || this.get('retracted');

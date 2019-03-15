@@ -4,13 +4,14 @@
       <h4 class="vl-title vl-title--h4">
         {{t "manage-ministers-title"}}
       </h4>
-      <div class="vl-u-spacer-extended-left-s">
+      {{!-- <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link">
           {{t "buttons.edit"}}
         </a>
-      </div>
+      </div> --}}
     </div>
   </div>
+  {{#if (gt (await subcase.mandatees.length) 0)}}
   <div class="vl-custom">
     <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
       {{#each (await subcase.mandatees) as |mandatee|}}
@@ -18,4 +19,11 @@
       {{/each}}
     </ul>
   </div>
+  {{else}}
+   <div class="vl-u-spacer-extended-top-s">
+      {{web-components/vl-alert
+        message=(t "no-domains-yet")
+      }}
+    </div>
+  {{/if}}
 </div>

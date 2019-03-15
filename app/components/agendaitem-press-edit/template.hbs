@@ -10,3 +10,10 @@
     value=agendaitem.textPress
   }}
 </div>
+<div class="vlc-input-field vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "for-press")}}
+  {{x-toggle
+    value=agendaitem.forPress
+    onToggle=(action (mut agendaitem.forPress))
+  }}
+</div>

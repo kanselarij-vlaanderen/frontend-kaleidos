@@ -11,7 +11,7 @@
         >
           <div class="vl-u-display-flex vl-u-flex-align-center">
             <span>
-               {{t "navigation.agenda"}}
+              {{t "navigation.agenda"}}
             </span>
           </div>
         </a>
@@ -53,14 +53,49 @@
       <td>
         {{moment-format nearestMeeting.created "DD-MM-YYYY HH:mm"}}
       </td>
-      <td class="vl-u-align-right">
-        <a
+      <td>
+        <button class="vl-button vl-button--link vl-button--icon">
+          <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
+        </button>
+        {{#attach-popover
+          class="ember-attacher-popper"
+          hideOn="clickout"
+          showOn="click"
+          animation="shift"
+          placement="bottom" as |attacher|
+        }}
+          <ul class="vl-popover__link-list">
+            <li class="vl-popover__link-list__item">
+              <a
+                class="vl-link vl-link--block"
+                {{action attacher.hide}}
+                {{action "addNotesToMeeting" nearestMeeting}}
+              >
+                {{#if (not await nearestMeeting.notes)}}
+                  {{t "add-notes"}}
+                {{else}}
+                  {{t "edit-notes"}}
+                {{/if}}
+              </a>
+            </li>
+          </ul>
+        {{/attach-popover}}
+        <button
           class="vl-button vl-button--link vl-button--icon"
           {{action "selectAgenda" nearestMeeting}}
         >
-          <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-        </a>
+          <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
+        </button>
       </td>
     </tr>
   </tbody>
 </table>
+{{#if isAddingNotes}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "close")
+    title="Algemene notulen"
+  }}
+    {{sessions/session-notes meeting=selectedMeeting close=(action "close")}}
+  {{/web-components/vl-modal}}
+{{/if}}

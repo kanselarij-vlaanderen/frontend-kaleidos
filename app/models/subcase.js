@@ -8,7 +8,7 @@ export default Model.extend({
   shortTitle: attr('string'),
   title: attr('string'),
   showAsRemark: attr('boolean'),
-
+  
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
   meeting: belongsTo('meeting'),
@@ -27,5 +27,12 @@ export default Model.extend({
       return documentVersion.get('document');
     }));
     return documents.uniqBy('id');
+  }),
+
+  documentsLength: computed('documents', function() {
+    return this.get('documents').then((documents) => {
+      return documents.get('length');
+    });
   })
+
 });

@@ -1,3 +1,4 @@
+{{#if (not multiSelect)}}
 {{#power-select
   options=people
 	selected=selectedPerson
@@ -10,3 +11,16 @@ as |person|
 }}
   {{person.fullName}}
 {{/power-select}}
+{{else}}
+{{#power-select-multiple
+  options=people
+  selected=selectedPerson
+  searchField="firstName lastName"
+  search=(perform searchTask)
+  oninput=(action "resetValueIfEmpty")
+  onchange=(action "choosePerson") 
+as |person|
+}}
+  {{person.fullName}}
+{{/power-select-multiple}}
+{{/if}}

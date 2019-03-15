@@ -64,7 +64,7 @@ export default Service.extend({
 
 	definiteAgendas: computed('agendas', function() {
 		return this.get('agendas').then((agendas) => {
-      return agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('name');
+      return agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('-name');
     });
 	})
 });

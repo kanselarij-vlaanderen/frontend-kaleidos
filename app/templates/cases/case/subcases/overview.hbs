@@ -30,7 +30,7 @@
               {{subcase.shortTitle}}
             </h6>
             {{#each (await subcase.phases) as |phase|}}
-              <p>
+              <p class="max-width">
                 {{phase.label}}
               </p>
             {{/each}}
@@ -54,7 +54,7 @@
               tagName="button"
               class="vl-button vl-button--tertiary vl-button--icon"
             }}
-              <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+              <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
             {{/link-to}}
           </div>
         </div>
@@ -80,6 +80,6 @@
     closeModal=(action "close")
     title=(t "buttons.create-subcase")
   }}
-    {{cases/new-subcase model=model closeModal=(action "close")}}
+    {{cases/new-subcase case=model closeModal=(action "close")}}
   {{/web-components/vl-modal}}
 {{/if}}

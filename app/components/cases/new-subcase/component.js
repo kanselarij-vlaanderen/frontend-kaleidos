@@ -12,17 +12,17 @@ export default Component.extend({
 	themes: [],
 	isAddingNonDigitalDocument: false,
 	step: 1,
-  phases: [],
-	title: computed('model', function () {
-		return this.get('model').shortTitle;
+
+	title: computed('case', function () {
+		return this.get('case').shortTitle;
 	}),
 
 	clearProperties() {
 		this.set('uploadedFiles', []);
 		this.set('nonDigitalDocuments', []);
 		this.set('selectedMandatees', []);
-		this.set('title', undefined);
-		this.set('shortTitle', undefined);
+		this.set('title', null);
+		this.set('shortTitle', null);
 		this.set('isAddingNonDigitalDocument', false);
 		this.set('step', 1);
 	},
@@ -43,7 +43,7 @@ export default Component.extend({
 		async createSubCase(event) {
 			event.preventDefault();
 			this.parseDomainsAndMandatees();
-			const caze = this.store.peekRecord('case', this.model.id);
+			const caze = this.store.peekRecord('case', this.case.id);
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: this.get('title'),
@@ -59,22 +59,18 @@ export default Component.extend({
 
 			const createdSubCase = await subcase.save();
 			const uploadedFiles = this.get('uploadedFiles');
-			if(uploadedFiles) {
 				Promise.all(uploadedFiles.map(uploadedFile => {
 					if (uploadedFile.id) {
 						return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile, uploadedFile.get('name'));
 					}
 				}));
-			}
 
 			const nonDigitalDocuments = this.get('nonDigitalDocuments');
-			if(nonDigitalDocuments) {
 				Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
 					if (nonDigitalDocument.title) {
 						return this.createNewDocumentWithDocumentVersion(createdSubCase, null, nonDigitalDocument.title);
 					}
 				}));
-			}
 			
 			this.clearProperties();
 			this.closeModal();

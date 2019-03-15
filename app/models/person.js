@@ -12,8 +12,7 @@ export default Model.extend({
 	// identifier: belongsTo('identifier'),
 	gender: belongsTo('gender'),
 
-
 	fullName: computed('firstName', 'lastName', function() {
-		return this.get('firstName') || "" + " " + this.get('lastName');
+		return this.get('firstName') + " " + this.get('lastName');
 	})
 });

@@ -14,8 +14,7 @@ export default Component.extend({
 		yield timeout(300);
 		return this.store.query('mandatee', {
 			filter: {
-				title: searchValue,
-				end: null
+				title: searchValue
 			}
 		});
 	}),

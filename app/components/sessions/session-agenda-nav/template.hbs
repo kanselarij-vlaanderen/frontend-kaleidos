@@ -1,5 +1,5 @@
-<li class="vlc-view-switch__item vlc-view-switch__item--active">
-  <a href="agenda">
+<li class="vlc-view-switch__item {{selectedOverviewClass}}">
+  <a {{action "clearSelectedItem"}}>
     <div class="o-svg-icon o-svg-icon-view-overview">
       <svg
         width="24"
@@ -20,7 +20,7 @@
     </span>
   </a>
 </li>
-<li class="vlc-view-switch__item">
+<li class="vlc-view-switch__item {{selectedAgendaitemClass}}">
   <a>
     <div class="o-svg-icon o-svg-icon-view-detail">
       <svg

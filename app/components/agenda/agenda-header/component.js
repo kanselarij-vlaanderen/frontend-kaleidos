@@ -25,6 +25,10 @@ export default Component.extend({
 	}),
 
 	actions: {
+		clearSelectedAgendaItem() {
+			this.clearSelectedAgendaItem();
+		},
+		
 		async approveAgenda(session) {
 			this.changeLoading();
 			let agendas = await this.get('agendas');
@@ -38,6 +42,7 @@ export default Component.extend({
 				agendaToLock.set('name', alphabet[definiteAgendas.length]);
 			}
 
+			agendaToLock.set('isAccepted', true);
 			agendaToLock.save().then(() => {
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {
 					notifyPropertyChange(session, 'agendas');
@@ -71,11 +76,11 @@ export default Component.extend({
 			this.navigateToSubCases();
 		},
 
-    printDecisions() {
+		printDecisions() {
 			this.printDecisions();
 		},
 
-    navigateToCreateAnnouncement() {
+		navigateToCreateAnnouncement() {
 			this.set('addingAnnouncement', true);
 			this.navigateToCreateAnnouncement();
 		},
@@ -108,10 +113,12 @@ export default Component.extend({
 			const currentAgendaitems = await this.get('currentAgendaItems');
 			const pressItems = await Promise.all(currentAgendaitems.map(async item => {
 				const mandatees = await this.store.peekRecord('agendaitem', item.id).get('subcase').get('mandatees');
-				return { id: item.id, title: item.titlePress, content: item.textPress, mandatees: mandatees }
+				if (item.forPress) {
+					return { id: item.id, title: item.titlePress, content: item.textPress, mandatees: mandatees }
+				}
 			}));
 			const prioritisedItems = await this.reduceGroups(pressItems);
-			
+
 			this.set('pressItems', prioritisedItems);
 			this.set('showPressModal', true);
 		},
@@ -124,13 +131,16 @@ export default Component.extend({
 	async reduceGroups(pressItems) {
 		const agenda = this.get('currentAgenda');
 		const sortedAgendaItems = await this.get('agendaService').getSortedAgendaItems(agenda);
-		const pressAgendaItems = pressItems.map(pressItem => {
-			let foundItem = sortedAgendaItems.find(item => item.uuid === pressItem.id);
-			if (foundItem) {
-				pressItem.priority = foundItem.priority;
-				pressItem.mandatePriority = foundItem.mandatePriority;
+		const pressAgendaItems = pressItems.filter(pressItem => {
+			if (pressItem && pressItem.id) {
+				let foundItem = sortedAgendaItems.find(item => item.uuid === pressItem.id);
+				if (foundItem) {
+					pressItem.priority = foundItem.priority;
+					pressItem.mandatePriority = foundItem.mandatePriority;
+					return pressItem;
+				}
 			}
-			return pressItem;
+
 		});
 
 		return pressAgendaItems.reduce((items, agendaitem) => {
