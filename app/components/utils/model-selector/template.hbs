@@ -1,0 +1,11 @@
+
+  {{#power-select
+    options=items
+    selected=selectedItems
+    searchField=searchField
+    search=(perform searchTask)
+    oninput=(action "resetValueIfEmpty")
+    onchange=(action "selectModel") as |model|
+  }}
+		{{model-property-to-show model propertyToShow}}
+  {{/power-select}}
