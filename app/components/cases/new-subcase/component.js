@@ -44,10 +44,16 @@ export default Component.extend({
 			event.preventDefault();
 			this.parseDomainsAndMandatees();
 			const caze = this.store.peekRecord('case', this.case.id);
+			let phase = await this.get('phase');
+			if (!phase){
+			  phase = [];
+      }else {
+			  phase = [phase];
+      }
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: this.get('title'),
-          phases: [this.get('phase')],
+          phases: phase,
 					shortTitle: this.get('shortTitle'),
 					showAsRemark: false,
 					governmentDomains: this.get('selectedDomains'),
