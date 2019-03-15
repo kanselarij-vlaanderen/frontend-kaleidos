@@ -29,9 +29,11 @@
             <h6 class="vl-title vl-title--h6 max-width">
               {{subcase.shortTitle}}
             </h6>
-            <p>
-              {{subcase.title}}
-            </p>
+            {{#each (await subcase.phases) as |phase|}}
+              <p>
+                {{phase.label}}
+              </p>
+            {{/each}}
             {{!-- <ul class="vlc-status-timeline">
             <li
               class="vlc-status-timeline__item vlc-status-timeline__item--in-progress"

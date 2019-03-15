@@ -157,6 +157,7 @@
 		"document-type": "Document type",
 		"mandatee": "Hoedanigheid",
 		"name-subcase": "Naam procedurestap",
+		"subcase-phase": "Fase",
 		"title-subcase":"Titel procedurestap",
 		"title-postponed-subcases":"Uitgestelde procedurestappen",
 		"title-available-subcases":"Beschikbare procedurestappen"

@@ -4,6 +4,7 @@ const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
 	remark: attr('string'),
+  label: attr('string'),
 	date: attr('date'),
 	subcases: hasMany('subcase'),
 	code: belongsTo('subcase-phase-code')

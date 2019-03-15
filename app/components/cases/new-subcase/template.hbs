@@ -6,6 +6,19 @@
         {{web-components/vl-form-input width="4" value=shortTitle}}
       </div>
       <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.subcase-phase")}}
+        {{#power-select
+          class="vl-select vl-select--block"
+          options=phases
+          selected=phase
+          searchEnabled=false
+          onchange=(action "selectPhase")
+        as |phase|
+        }}
+          {{phase.label}}
+        {{/power-select}}
+      </div>
+      <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
         {{web-components/vl-form-input width="4" value=title}}
       </div>

@@ -12,7 +12,7 @@ export default Component.extend({
 	themes: [],
 	isAddingNonDigitalDocument: false,
 	step: 1,
-
+  phases: [],
 	title: computed('model', function () {
 		return this.get('model').shortTitle;
 	}),
@@ -47,6 +47,7 @@ export default Component.extend({
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: this.get('title'),
+          phases: [this.get('phase')],
 					shortTitle: this.get('shortTitle'),
 					showAsRemark: false,
 					governmentDomains: this.get('selectedDomains'),
@@ -81,6 +82,10 @@ export default Component.extend({
 
 		chooseType(type) {
 			this.set('selectedType', type);
+		},
+
+    selectPhase(phase) {
+			this.set('phase', phase);
 		},
 
 		chooseTheme(themes) {
@@ -165,7 +170,7 @@ export default Component.extend({
 		if(mandateeRows && mandateeRows.get('length') > 0) {
 			mandateeRows.map(row => {
 				mandatees.push(row.get('mandatee'));
-				const domains = row.get('selectedDomains')
+				const domains = row.get('selectedDomains');
 				domains.map(domain => {
 					selectedDomains.push(domain);
 				})
@@ -173,6 +178,9 @@ export default Component.extend({
 		}
 		this.set('selectedMandatees', mandatees);
 		this.set('selectedDomains', selectedDomains);
-		
-	}
+	},
+  async didInsertElement() {
+    this._super(...arguments);
+    this.set('phases', this.store.findAll('subcase-phase'));
+  }
 })
