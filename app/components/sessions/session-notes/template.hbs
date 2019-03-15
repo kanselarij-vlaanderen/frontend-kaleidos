@@ -50,7 +50,9 @@
 </div>
 {{else}}
 <div class="vl-modal-dialog__content">
+
   <div class="vlc-input-field-block">
+
     {{web-components/vl-form-label value=(t "date")}}
     {{web-components/vl-datepicker
       value=meeting.notes.plannedStart
@@ -99,3 +101,5 @@
   </div>
 </div>
 {{/if}}
+
+{{nextMeeting.plannedStart}}

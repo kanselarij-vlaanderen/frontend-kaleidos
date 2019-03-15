@@ -53,7 +53,7 @@
       <td>
         {{moment-format nearestMeeting.created "DD-MM-YYYY HH:mm"}}
       </td>
-      <td>
+      <td class="vl-u-align-center">
         <button class="vl-button vl-button--link vl-button--icon">
           <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
         </button>
@@ -66,7 +66,7 @@
         }}
           <ul class="vl-popover__link-list">
             <li class="vl-popover__link-list__item">
-              <a
+              <button class="vl-button vl-button--link vl-button--icon"
                 class="vl-link vl-link--block"
                 {{action attacher.hide}}
                 {{action "addNotesToMeeting" nearestMeeting}}
@@ -76,7 +76,7 @@
                 {{else}}
                   {{t "edit-notes"}}
                 {{/if}}
-              </a>
+              </button>
             </li>
           </ul>
         {{/attach-popover}}
