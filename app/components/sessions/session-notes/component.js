@@ -1,5 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import { computed } from '@ember/object';
+
 export default Component.extend({
 	store: inject(),
 	meeting: null,
@@ -7,6 +9,13 @@ export default Component.extend({
 	announcements: null,
 	others: null,
 	peopleSelected: [],
+	text:"",
+
+	nextMeeting: computed('meeting.notes', function() {
+		return this.get('meeting.notes').then((notes) => {
+			return notes.get('nextMeeting');
+		})
+	}),
 
 	actions: {
 		close() {
@@ -14,7 +23,7 @@ export default Component.extend({
 		},
 
 		createMeetingNotes(meeting) {
-			const { selectedMandatees, startDate, announcements, others } = this;
+			const { selectedMandatees, startDate, announcements, others, text } = this;
 			const meetingRecord = this.store.createRecord('meeting-record',
 				{
 					attendees: selectedMandatees,
@@ -22,7 +31,7 @@ export default Component.extend({
 					modified: startDate || new Date(),
 					announcements: announcements,
 					others: others,
-					description: "",
+					description: text,
 					meeting: meeting
 				});
 			meetingRecord.save().then(() => {
