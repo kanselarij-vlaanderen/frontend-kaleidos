@@ -14,12 +14,12 @@ export default Model.extend({
 	agendaitem: belongsTo('agendaitem'),
 	meeting: belongsTo('meeting'),
 
-	nextMeeting: computed('meeting', async function() {
+	nextMeeting: computed('meeting', function () {
 		const currentMeeting = this.get('meeting');
-		const meetings = await this.store.query('meeting', {
-			filter: {':gt:planned-start': moment(currentMeeting.get('plannedStart')).format()}
+		return this.store.query('meeting', {
+			filter: { ':gt:planned-start': moment(currentMeeting.get('plannedStart')).format() }
+		}).then((meetings) => {
+			return meetings.get('firstObject');
 		});
-		
-		return meetings.get('firstObject');
 	})
 });
