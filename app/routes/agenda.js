@@ -5,11 +5,11 @@ export default Route.extend({
 	sessionService: inject(),
 
 	queryParams: {
-    selectedAgenda: {
-      refreshModel: true
-    }
+		selectedAgenda: {
+			refreshModel: true
+		}
 	},
-	
+
 	model(params) {
 		const id = params.id;
 		return this.store.findRecord('meeting', id, { include: 'agendas' }).then((meeting) => {
@@ -21,9 +21,9 @@ export default Route.extend({
 	afterModel(model, transition) {
 		const selectedAgendaId = transition.queryParams.selectedAgenda;
 		return this.get('sessionService.agendas').then(agendas => {
-			if(selectedAgendaId) {
+			if (selectedAgendaId) {
 				const selectedAgenda = agendas.find((agenda) => agenda.id === selectedAgendaId);
-				if(selectedAgenda) {
+				if (selectedAgenda) {
 					this.set('sessionService.currentAgenda', selectedAgenda);
 				}
 			} else {
