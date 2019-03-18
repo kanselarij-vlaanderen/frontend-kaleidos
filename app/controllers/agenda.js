@@ -29,6 +29,9 @@ export default Controller.extend({
 
 	actions: {
 		selectAgenda(agenda) {
+			this.set('selectedAgendaItem', null);
+			this.set("createAnnouncement", false);
+			this.set("selectedAnnouncement", null);
 			this.set('selectedAgenda', agenda.id);
 		},
 

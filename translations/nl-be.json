@@ -222,5 +222,7 @@
 	"date": "Datum",
 	"date-next-meeting":"Datum volgende vergadering",
 	"others": "Varia",
-	"attendees": "Aanwezigen"
+	"attendees": "Aanwezigen",
+	"notes-of-session":"Notulen van de zitting",
+	"notes-of-agendaitem":"Notulen van agendapunt"
 }
