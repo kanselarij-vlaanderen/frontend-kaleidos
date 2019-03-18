@@ -42,7 +42,8 @@ def imagePrune(containerName){
         sh "docker image prune -f"
         sh "docker-compose stop"
         sh "docker-compose rm -f"
-    } catch(error){}
+    } catch(error){
+    }
 }
 
 def imageBuild(containerName, tag){
@@ -51,7 +52,11 @@ def imageBuild(containerName, tag){
 }
 
 def runApp(containerName, tag, httpPort){
-    sh "docker-compose up -d"
+    def branch = getGitBranchName()
+    sh "ENVIRONMENT=${branch}  docker-compose up -d"
     echo "Application started on port: ${httpPort} (http)"
 }
 
+def getGitBranchName() {
+    return scm.branches[0].name
+}
