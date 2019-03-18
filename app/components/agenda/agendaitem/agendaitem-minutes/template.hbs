@@ -4,56 +4,90 @@
       <h2 class="vl-title vl-title--h3">
         {{t "prepared-text-minutes"}}
       </h2>
-      <button class="vl-button vl-button--tertiary vl-button--icon">
-        <div class="vl-vi vl-vi-nav-show-more-horizontal vl-button__icon"></div>
-      </button>
+      {{#if (not isEditing)}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "toggleIsEditing"}}
+        >
+          <div
+            class="vl-vi vl-vi-nav-show-more-horizontal vl-button__icon"
+          ></div>
+        </button>
+      {{else}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "saveChanges" agendaitem.meetingRecord}}
+        >
+          <div
+            class="vl-vi vl-vi-nav-show-more-horizontal vl-button__icon"
+          ></div>
+        </button>
+      {{/if}}
     </div>
   </div>
-  <div class="vl-u-spacer">
-    <h3 class="vl-title vl-title--h6">
-      {{t "attendees"}}
-    </h3>
-    {{#each (await agendaitem.agenda.createdFor.notes.attendees) as |attendee|}}
-      <div class="vl-u-spacer">
-        <p>
-          {{attendee.title}}
-        </p>
-        <p>
-          {{await attendee.person.alternativeName}}
-        </p>
-      </div>
-    {{/each}}
-  </div>
-  <div class="vl-u-spacer">
-    <h3 class="vl-title vl-title--h6">
-      {{t "date"}}
-    </h3>
-    <p>
-      {{moment-format
-        (await agendaitem.agenda.createdFor.date)
-        "DD MMMM YYYY"
+  {{#if (not isEditing)}}
+    <div class="vl-u-spacer">
+      <h3 class="vl-title vl-title--h6">
+        {{t "attendees"}}
+      </h3>
+      {{#each currentSession.notes.attendees as |attendee|
       }}
-    </p>
-  </div>
-  <div class="vl-u-spacer">
-    <h3 class="vl-title vl-title--h6">
-      {{t "date-next-meeting"}}
-    </h3>
-    <p>
-			{{!-- TODO fix --}}
-      {{!-- {{moment-format
+        <div class="vl-u-spacer">
+          <p>
+            {{attendee.title}}
+          </p>
+          <p>
+            {{await attendee.person.alternativeName}}
+          </p>
+        </div>
+      {{/each}}
+    </div>
+    <div class="vl-u-spacer">
+      <h3 class="vl-title vl-title--h6">
+        {{t "date"}}
+      </h3>
+      <p>
+        {{moment-format currentSession.plannedStart "DD MMMM YYYY"
+        }}
+      </p>
+    </div>
+    <div class="vl-u-spacer">
+      <h3 class="vl-title vl-title--h6">
+        {{t "notes-of-session"}}
+      </h3>
+      <p>
+        {{await currentSession.notes.description}}
+      </p>
+    </div>
+    {{!-- <div class="vl-u-spacer">
+      <h3 class="vl-title vl-title--h6">
+        {{t "date-next-meeting"}}
+      </h3>
+      <p>
+        {{! TODO fix }}
+        {{moment-format
         (await	agendaitem.agenda.createdFor.notes.nextMeeting.plannedStart)
         "DD MMMM YYYY"
-      }} --}}
-			{{!-- {{await	agendaitem.agenda.createdFor.notes.nextMeeting.id}} --}}
-    </p>
-  </div>
-  <div class="vl-u-spacer">
-    <h3 class="vl-title vl-title--h6">
-      {{t "agendas.announcements-subtitle"}}
-    </h3>
-    <p>
-      {{await agendaitem.agenda.createdFor.notes.description}}
-    </p>
-  </div>
+      }} 
+        {{{await	agendaitem.agenda.createdFor.notes.nextMeeting.id}}
+      </p>
+    </div> --}}
+    <div class="vl-u-spacer">
+      <h3 class="vl-title vl-title--h6">
+        {{t "notes-of-agendaitem"}}
+      </h3>
+      <p>
+        {{await agendaitem.meetingRecord.description}}
+      </p>
+    </div>
+  {{else}}
+    <div class="vlc-input-field-block">
+      {{utils/text-template
+        label="Notulen van agendapunt"
+        rows="20"
+        text=agendaitem.meetingRecord.description
+        searchField="name"
+      }}
+    </div>
+  {{/if}}
 </div>

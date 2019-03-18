@@ -153,12 +153,5 @@ export default Component.extend({
 
 	changeLoading() {
 		this.loading();
-	},
-
-	async didInsertElement() {
-		this._super(...arguments);
-		if (!this.get('currentSession')) {
-			this.set('sessionService.currentSession', this.get('sessions.firstObject'));
-		}
 	}
 });
