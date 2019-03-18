@@ -7,7 +7,6 @@ export default Component.extend({
 	classNames: ['vlc-side-nav'],
 
 	// classNameBindings: ['agendaMenuOpened:vl-layout-agenda__sidebar--collapsed'],
-	selectedAgendaItem:null,
 	agendaMenuOpened:false,
 	
 	currentAgenda: alias('sessionService.currentAgenda'),
@@ -23,8 +22,7 @@ export default Component.extend({
 		},
 
 		setCurrentAgenda(agenda) {
-			this.set('selectedAgendaItem', null);
-			this.set('sessionService.currentAgenda', agenda);
+			this.selectAgenda(agenda);
 		}
 	},
 });

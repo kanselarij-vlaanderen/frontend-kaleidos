@@ -590,4 +590,9 @@ $icon-font-location: "/fonts/";
 .vlc-panel-layout__agenda-items,
 .vlc-scroll-wrapper {
   height: auto;
+
+}
+
+.vlc-scroll-wrapper {
+  min-height: calc(100vh - 44px - 50px - 106px);
 }
