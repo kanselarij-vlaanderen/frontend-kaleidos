@@ -67,7 +67,7 @@
         {{t "history"}}
       </h2>
       {{#data-table
-        content=filteredMeetings
+        content=model
         class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
         page=page
         size=size
@@ -155,7 +155,7 @@
     title=(t "new-agenda")
     closeModal=(action "cancelNewSessionForm")
   }}
-    {{sessions/forms/new-session cancelForm=(action "cancelNewSessionForm")}}
+    {{sessions/forms/new-session successfullyAdded=(action "successfullyAdded") cancelForm=(action "cancelNewSessionForm")}}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isAddingNotes}}

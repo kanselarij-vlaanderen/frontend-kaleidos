@@ -5,6 +5,12 @@ export default Route.extend(DataTableRouteMixin, {
 	modelName: 'meeting',
 
 	mergeQueryOptions() {
-    return { include: 'agendas' };
+		return { include: 'agendas' };
+	},
+
+	actions: {
+		refresh() {
+			this.refresh();
+		}
 	}
 });

@@ -87,10 +87,6 @@ export default Controller.extend({
 			this.transitionToRoute('comparison');
 		},
 
-		cancelNewSessionForm() {
-			this.set('creatingNewSession', false);
-		},
-
 		loadingAgendaitems() {
 			this.toggleProperty('isLoading');
 		}

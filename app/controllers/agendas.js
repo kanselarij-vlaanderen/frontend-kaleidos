@@ -7,7 +7,8 @@ import moment from 'moment';
 export default Controller.extend(DefaultQueryParamsMixin, {
 	sessionService: inject(),
 	creatingNewSession: false,
-	sort: 'planned-start',
+	sort: '-planned-start',
+	size:10,
 
 	nearestMeeting: computed('model', function () {
 		const meetings = this.get('model');
@@ -35,7 +36,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 			if (date > nearestMeetingDate) {
 				return meeting;
 			}
-		})
+		}).sortBy('plannedStart');
 	}),
 
 	filteredMeetings: computed('nearestMeeting', 'model', function () {
@@ -63,6 +64,10 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		},
 		cancelNewSessionForm() {
 			this.set('creatingNewSession', false);
+		},
+		successfullyAdded() {
+			this.set('creatingNewSession', false);
+			this.send('refresh');
 		},
 		addNotesToMeeting(meeting) {
 			this.set('selectedMeeting', meeting);
