@@ -53,7 +53,7 @@ def imageBuild(containerName, tag){
 
 def runApp(containerName, tag, httpPort){
     def branch = getGitBranchName()
-    sh "ENVIRONMENT=${branch}  docker-compose up -d"
+    sh "env $(cat .env.${branch})   docker-compose up -d"
     echo "Application started on port: ${httpPort} (http)"
 }
 
