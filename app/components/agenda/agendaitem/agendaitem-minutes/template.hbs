@@ -5,94 +5,55 @@
         {{t "prepared-text-minutes"}}
       </h2>
       <button class="vl-button vl-button--tertiary vl-button--icon">
-        <div
-          class="vl-vi vl-vi-nav-show-more-horizontal vl-button__icon"
-        ></div>
+        <div class="vl-vi vl-vi-nav-show-more-horizontal vl-button__icon"></div>
       </button>
     </div>
   </div>
   <div class="vl-u-spacer">
     <h3 class="vl-title vl-title--h6">
-      Aanwezig
+      {{t "attendees"}}
     </h3>
-    <div class="vl-u-spacer">
-      <p>
-        De minister-president
-      </p>
-      <p>
-        Geert Bourgeois
-      </p>
-    </div>
-    <div class="vl-u-spacer">
-      <p>
-        De viceministers-presidenten
-      </p>
-      <ul>
-        <li>
-          Hilde Crevits
-        </li>
-        <li>
-          Bart Tommelein
-        </li>
-        <li>
-          Liesbeth Homans
-        </li>
-      </ul>
-    </div>
-    <div class="vl-u-spacer">
-      <p>
-        De Vlaamse ministers
-      </p>
-      <ul>
-        <li>
-          Ben Weyts
-        </li>
-        <li>
-          Jo Vandeurzen
-        </li>
-        <li>
-          Philippe Muyters
-        </li>
-        <li>
-          Joke Schauvliege
-        </li>
-        <li>
-          Sven Gatz
-        </li>
-      </ul>
-    </div>
-    <div class="vl-u-spacer">
-      <p>
-        De secretaris
-      </p>
-      <p>
-        Mark Andries
-      </p>
-    </div>
+    {{#each (await agendaitem.agenda.createdFor.notes.attendees) as |attendee|}}
+      <div class="vl-u-spacer">
+        <p>
+          {{attendee.title}}
+        </p>
+        <p>
+          {{await attendee.person.alternativeName}}
+        </p>
+      </div>
+    {{/each}}
   </div>
   <div class="vl-u-spacer">
     <h3 class="vl-title vl-title--h6">
-      Datum
+      {{t "date"}}
     </h3>
     <p>
-      1 januari 2019
+      {{moment-format
+        (await agendaitem.agenda.createdFor.date)
+        "DD MMMM YYYY"
+      }}
     </p>
   </div>
   <div class="vl-u-spacer">
     <h3 class="vl-title vl-title--h6">
-      Datum volgende vergadering
+      {{t "date-next-meeting"}}
     </h3>
     <p>
-      4 januari 2019
+			{{!-- TODO fix --}}
+      {{!-- {{moment-format
+        (await	agendaitem.agenda.createdFor.notes.nextMeeting.plannedStart)
+        "DD MMMM YYYY"
+      }} --}}
+			{{!-- {{await	agendaitem.agenda.createdFor.notes.nextMeeting.id}} --}}
     </p>
   </div>
   <div class="vl-u-spacer">
     <h3 class="vl-title vl-title--h6">
-      Mededelingen
+      {{t "agendas.announcements-subtitle"}}
     </h3>
     <p>
-      Suspendisse in dapibus enim. Duis imperdiet gravida diam, eu malesuada metus efficitur et. Mauris volutpat arcu tempus tincidunt ultricies. Fusce auctor nisl sed metus semper fermentum. Curabitur egestas urna ut arcu maximus
-                                    sagittis. Nam nec aliquet magna. Etiam imperdiet ultrices nibh elementum posuere. Integer molestie efficitur volutpat.
+      {{await agendaitem.agenda.createdFor.notes.description}}
     </p>
   </div>
 </div>
