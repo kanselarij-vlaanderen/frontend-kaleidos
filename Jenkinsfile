@@ -16,13 +16,9 @@ node {
   }
 
   stage('Checkout') {
-    checkout scm
+    def scmVars checkout scm
+    echo 'vars: ${scmVars}'
   }
-
-  def environment = env.getEnvironment()
-  def branch = scm.branches.first().getExpandedName(environment)
-  echo "environment: ${environment}"
-  echo "branch: ${branch}"
 
   try {
 
