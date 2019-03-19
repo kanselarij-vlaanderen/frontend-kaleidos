@@ -12,7 +12,7 @@ export default Model.extend({
 	remarks: hasMany('remark'),
 
 	decision: belongsTo('decision'),
-	documentType: belongsTo('document-type'),
+	type: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),
 
 	sortedDocuments: computed.sort('documentVersions', function (a, b) {

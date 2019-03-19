@@ -1,12 +1,9 @@
 {{#power-select
   options=documentTypes
+  searchField="label"
   selected=selectedDocumentType
   searchField="description"
   onchange=(action "chooseDocumentType") as |documentType|
 }}
-  {{#if documentType.name}}
-    {{documentType.name}}
-  {{else}}
-    {{documentType.description}}
-  {{/if}}
+  {{documentType.label}}
 {{/power-select}}

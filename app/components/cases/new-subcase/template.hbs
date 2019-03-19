@@ -50,7 +50,6 @@
               {{input type="checkbox" checked=uploadedFile.public}}
             </div>
             {{t "subcases.document-type"}}
-            :
             {{document-type-selector
               chooseDocumentType=(action "chooseDocumentType" uploadedFile)
             }}
@@ -128,7 +127,7 @@
 {{#if isAddingNonDigitalDocument}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "cases.non-digital-file")
+    title=(t "cases.non-digital-file") 
     closeModal=(action "toggleAddNonDigitalDocument")
   }}
     <div class="vl-modal-dialog__content">

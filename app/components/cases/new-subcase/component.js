@@ -143,8 +143,8 @@ export default Component.extend({
 	async createNewDocumentWithDocumentVersion(subcase, file, documentTitle) {
 		let document = await this.store.createRecord('document', {
 			created: new Date(),
-			title: documentTitle
-			// documentType: file.get('documentType')
+			title: documentTitle,
+			documentType: file.get('documentType')
 		});
 		document.save().then(async (createdDocument) => {
 			if (file) {
