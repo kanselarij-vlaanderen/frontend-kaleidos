@@ -224,5 +224,7 @@
 	"others": "Varia",
 	"attendees": "Aanwezigen",
 	"notes-of-session":"Notulen van de zitting",
-	"notes-of-agendaitem":"Notulen van agendapunt"
+	"notes-of-agendaitem":"Notulen van agendapunt",
+	"print-notes":"Notulen agenda",
+	"no-notes":"Geen notulen voor dit agendapunt."
 }
