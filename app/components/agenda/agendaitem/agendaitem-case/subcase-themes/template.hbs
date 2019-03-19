@@ -13,7 +13,7 @@
 {{#if (gt (await subcase.themes.length) 0)}}
   <div class="vl-custom">
     <ul>
-      {{#each (await subcase.themes) as |theme|}}
+      {{#each (await subcase.sortedThemes) as |theme|}}
         <li class="vl-pill vl-u-spacer-extended-right-s">
           {{theme.label}}
         </li>

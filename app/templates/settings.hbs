@@ -1,18 +1,19 @@
-
-<button
-  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-  {{action "showEditingMandateeForm"}}
->
-  <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-  {{t "buttons.manage-ministers"}}
-</button>
-<button
-  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-  {{action "showAddingMandateForm"}}
->
-  <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-  {{t "manage-mandates"}}
-</button>
+<div class="vl-u-spacer-extended-l">
+  <button
+    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+    {{action "showEditingMandateeForm"}}
+  >
+    <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+    {{t "buttons.manage-ministers"}}
+  </button>
+  <button
+    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+    {{action "showAddingMandateForm"}}
+  >
+    <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+    {{t "manage-mandates"}}
+  </button>
+</div>
 {{#if isAddingMandate}}
   {{#web-components/vl-modal
     isOverlay=true

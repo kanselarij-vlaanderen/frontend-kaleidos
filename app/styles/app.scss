@@ -563,7 +563,14 @@ $icon-font-location: "/fonts/";
 
 .max-width {
   text-overflow: ellipsis;
-  max-width: 900px;
+  max-width: 800px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.max-width-title {
+  text-overflow: ellipsis;
+  max-width: 500px;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -590,5 +597,9 @@ $icon-font-location: "/fonts/";
 .vlc-panel-layout__agenda-items,
 .vlc-scroll-wrapper {
   height: auto;
-  min-height: calc(100vh - 106px - 50px - 44px);
+
+}
+
+.vlc-scroll-wrapper {
+  min-height: calc(100vh - 44px - 50px - 106px);
 }

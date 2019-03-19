@@ -1,7 +1,9 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Component.extend({
+	store:inject(),
 	classNames: ["vlc-agenda-item"],
 	classNameBindings: ["getClassNames"],
 	tagName: 'a',
@@ -14,7 +16,8 @@ export default Component.extend({
 	}),
 
 	click(event) {
-		this.selectAgendaItem(this.get('agendaitem'));
+		const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'))
+		this.selectAgendaItem(agendaitem);
 	},
 
 	number: computed('index', function() {

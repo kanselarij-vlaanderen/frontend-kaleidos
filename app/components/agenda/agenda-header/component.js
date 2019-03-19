@@ -13,6 +13,7 @@ export default Component.extend({
 
 	selectedAgendaItem: null,
 	isShowingOptions: false,
+	isPrintingNotes: false,
 
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 	currentSession: alias('sessionService.currentSession'),
@@ -67,6 +68,10 @@ export default Component.extend({
 			this.toggleProperty('isShowingOptions');
 		},
 
+		toggleIsPrintingNotes() {
+			this.toggleProperty('isPrintingNotes');
+		},
+
 		compareAgendas() {
 			this.compareAgendas();
 		},
@@ -78,6 +83,10 @@ export default Component.extend({
 
 		printDecisions() {
 			this.printDecisions();
+		},
+
+		printNotes() {
+			this.toggleProperty('isPrintingNotes');
 		},
 
 		navigateToCreateAnnouncement() {
@@ -129,8 +138,8 @@ export default Component.extend({
 	},
 
 	async reduceGroups(pressItems) {
-		const agenda = this.get('currentAgenda');
-		const sortedAgendaItems = await this.get('agendaService').getSortedAgendaItems(agenda);
+		const {currentAgenda, agendaService } = this;
+		const sortedAgendaItems = await agendaService.getSortedAgendaItems(currentAgenda);
 		const pressAgendaItems = pressItems.filter(pressItem => {
 			if (pressItem && pressItem.id) {
 				let foundItem = sortedAgendaItems.find(item => item.uuid === pressItem.id);
@@ -140,7 +149,6 @@ export default Component.extend({
 					return pressItem;
 				}
 			}
-
 		});
 
 		return pressAgendaItems.reduce((items, agendaitem) => {
@@ -153,12 +161,5 @@ export default Component.extend({
 
 	changeLoading() {
 		this.loading();
-	},
-
-	async didInsertElement() {
-		this._super(...arguments);
-		if (!this.get('currentSession')) {
-			this.set('sessionService.currentSession', this.get('sessions.firstObject'));
-		}
 	}
 });

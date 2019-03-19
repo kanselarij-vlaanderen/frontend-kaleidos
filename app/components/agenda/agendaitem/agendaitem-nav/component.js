@@ -7,7 +7,6 @@ export default Component.extend({
 	
 	actions: {
 		setAgendaItemSection(value) {
-			this.set('activeAgendaItemSection', value);
 			this.setAgendaItemSection(value);
 		}
 	}

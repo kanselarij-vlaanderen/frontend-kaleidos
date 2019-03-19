@@ -1,7 +1,6 @@
 import Service from '@ember/service';
-import { computed, observer } from '@ember/object';
+import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import { on } from '@ember/object/evented';
 
 export default Service.extend({
 	store:inject(),
@@ -16,22 +15,6 @@ export default Service.extend({
     });
 	}),
 
-  currentAgendaInitializer: on('init', observer('currentSession', 'agendas.@each', function(){
-    if(!this.get('currentSession')){
-      this.set('currentAgenda', null);
-      return;
-    }
-    this.get('agendas').then((agendas) => {
-      if(agendas.length <= 0){
-        this.set('currentAgenda', null);
-        return;
-      }
-      if(!this.get('currentAgenda')){
-        this.set('currentAgenda', agendas.objectAt(0));
-      }
-    });
-  })),
-
 	currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
 		if(currentAgenda) {
@@ -39,7 +22,7 @@ export default Service.extend({
 				filter: {
 					agenda: { id: currentAgenda.id }
 				},
-				include:['subcase'],
+				include:['subcase,subcase.case'],
 				sort: 'priority'
 			});
 			return agendaitems;

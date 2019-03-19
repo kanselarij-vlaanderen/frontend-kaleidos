@@ -27,7 +27,7 @@ export default Component.extend({
 
 				await agenda.save();
 				await $.get('/session-service/assignNewSessionNumbers');
-				this.cancelForm();
+				this.successfullyAdded();
 			});
 		},
 
@@ -38,5 +38,9 @@ export default Component.extend({
 		cancelForm(event) {
 			this.cancelForm(event);
 		},
+
+		successfullyAdded() {
+			
+		}
 	}
 });

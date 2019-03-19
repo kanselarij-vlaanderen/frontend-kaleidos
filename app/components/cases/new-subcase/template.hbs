@@ -3,15 +3,31 @@
     {{#if (eq step 1)}}
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
-        {{web-components/vl-form-input width="4" value=shortTitle}}
+        {{textarea
+          rows="2"
+          class="vl-textarea vl-textarea--block"
+          value=shortTitle
+        }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
-        {{web-components/vl-form-input width="4" value=title}}
+        {{textarea rows="2" class="vl-textarea vl-textarea--block" value=title}}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "edit-item.themes")}}
         {{utils/theme-list chooseTheme=(action "chooseTheme")}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.subcase-phase")}}
+        {{#power-select
+          class="vl-select vl-select--block"
+          options=phases
+          selected=phase
+          searchEnabled=false
+          onchange=(action "selectPhase") as |phase|
+        }}
+          {{phase.label}}
+        {{/power-select}}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "cases.upload-file")}}
@@ -34,7 +50,6 @@
               {{input type="checkbox" checked=uploadedFile.public}}
             </div>
             {{t "subcases.document-type"}}
-            :
             {{document-type-selector
               chooseDocumentType=(action "chooseDocumentType" uploadedFile)
             }}
@@ -112,7 +127,7 @@
 {{#if isAddingNonDigitalDocument}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "cases.non-digital-file")
+    title=(t "cases.non-digital-file") 
     closeModal=(action "toggleAddNonDigitalDocument")
   }}
     <div class="vl-modal-dialog__content">

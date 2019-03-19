@@ -1,67 +1,169 @@
 <div class="vl-u-bg-alt">
-  {{agenda/agenda-header
-    sessions=model
-    creatingNewSession=creatingNewSession
-    selectedAgendaItem=selectedAgendaItem
-    compareAgendas=(action "compareAgendas")
-    navigateToSubCases=(action "navigateToSubCases")
-    printDecisions=(action "printDecisions")
-    navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
-    loading=(action "loadingAgendaitems")
-    clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
-  }}
-</div>
-{{#if (not isLoading)}}
-  <div class="vlc-panel-layout">
-    {{agenda/side-nav
-      agendas=agendas
-      selectedAgendaItem=selectedAgendaItem
-      currentAgenda=currentAgenda
-    }}
-    <div class={{agendaitemsClass}}>
-      <div class="vlc-scroll-wrapper">
-        {{agenda/agendaitem-search selectedAgenda=currentAgenda}}
-        <div class="vlc-scroll-wrapper__body">
-          {{agenda/agenda-list
-            agendaitems=currentAgendaItems
-            selectAgendaItem=(action "selectAgendaItem")
-            selectedAgendaItem=selectedAgendaItem
-          }}
-          {{agenda/announcement-list
-            announcements=(await announcements)
-            selectAnnouncement=(action "selectAnnouncement")
-            selectedAnnouncement=selectedAnnouncement
-          }}
+  <div class="vlc-page-header">
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <h1 class="vlc-page-header__title">
+            {{t "agenda-title"}}
+          </h1>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--narmeeting vl-button--icon-before"
+            {{action "createNewSession"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            ></i>
+            {{t "new-agenda"}}
+          </button>
         </div>
       </div>
     </div>
-    <div class="vlc-panel-layout__main-content">
-      <div class="vlc-scroll-wrapper">
-        {{#if selectedAgendaItem}}
-          {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem
-          }}
-        {{else if createAnnouncement}}
-          {{agenda/create-announcement
-            navigateToNewAnnouncement=(action "navigateToNewAnnouncement")
-            currentAgenda=currentAgenda
-          }}
-        {{else if selectedAnnouncement}}
-          {{agenda/announcement-overview announcement=selectedAnnouncement}}
-        {{/if}}
+  </div>
+</div>
+<div class="vlc-scroll-wrapper">
+  <div class="vlc-scroll-wrapper__body">
+    <div class="vl-u-spacer-extended-l">
+      <div class="vl-grid">
+        <div class="vl-col--2-4">
+          <div class="vl-u-spacer--medium">
+            <div
+              class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
+            >
+              <div
+                class="vlc-input-field-group vlc-input-field-group--gmeeting"
+              >
+                <input
+                  class="vl-input-field"
+                  type="search"
+                  placeholder="Zoeken"
+                 />
+
+              </div>
+              <div class="vlc-input-field-group">
+                <button
+                  class="vl-button vl-button--secondary vl-button--icon"
+                  type="submit"
+                >
+                  <i class="vl-vi vl-vi-magnifier"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      {{agenda/future-agendas
+        futureMeetings=futureMeetings
+        selectAgenda=(action "selectAgenda")
+      }}
+      {{agenda/active-agendas
+        nearestMeeting=nearestMeeting
+        selectAgenda=(action "selectAgenda")
+      }}
+      <h2 class="vl-title vl-title--h3">
+        {{t "history"}}
+      </h2>
+      {{#data-table
+        content=model
+        class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+        page=page
+        size=size
+        sort=sort
+        isLoading=isLoadingModel as |t|
+      }}
+        {{#t.content as |c|}}
+          {{#c.header}}
+            {{th-sortable
+              class="vl-data-table-col-5 vl-data-table__header-title"
+              currentSorting=sort
+              field="planned-start"
+              label="Agenda"
+            }}
+            {{th-sortable
+              class="vl-data-table-col-3 vl-data-table__header-title"
+              field="agendas"
+              label="Agenda Versie"
+            }}
+            {{th-sortable
+              class="vl-data-table-col-3 vl-data-table__header-title"
+              currentSorting=sort
+              field="created"
+              label="Laatst gewijzigd"
+            }}
+            <th class="vl-data-table-col-1"></th>
+          {{/c.header}}
+          {{#c.body as |meeting|}}
+            <td>
+              Agenda voor
+              {{! Translate not possible in the data table }}
+              {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
+            </td>
+            <td>
+              {{await meeting.latestAgendaName}}
+            </td>
+            <td>
+              {{moment-format meeting.created "DD-MM-YYYY HH:mm"}}
+            </td>
+            <td class="vl-u-align-center">
+              <button class="vl-button vl-button--link vl-button--icon">
+                <i
+                  class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                ></i>
+              </button>
+              {{#attach-popover
+                class="ember-attacher-popper"
+                hideOn="clickout"
+                showOn="click"
+                animation="shift"
+                placement="bottom" as |attacher|
+              }}
+                <ul class="vl-popover__link-list">
+                  <li class="vl-popover__link-list__item">
+                    <button
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "addNotesToMeeting" meeting}}
+                    >
+                      {{#if (not await futureMeeting.notes)}}
+                        Notulen toevoegen
+                      {{else}}
+                        Notulen aanpassen
+                      {{/if}}
+                    </button>
+                  </li>
+                </ul>
+              {{/attach-popover}}
+              <button
+                class="vl-button vl-button--link vl-button--icon"
+                {{action "selectAgenda" meeting}}
+              >
+                <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
+              </button>
+            </td>
+          {{/c.body}}
+        {{/t.content}}
+      {{/data-table}}
     </div>
   </div>
-{{else}}
-  {{web-components/vl-loader
-    text="De agenda wordt goedgekeurd. Even geduld aub.."
-  }}
-{{/if}}
-{{#if isPrintingDecisions}}
+</div>
+{{#if creatingNewSession}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "printable-decisions-title")
-    closeModal=(action "printDecisions")
+    title=(t "new-agenda")
+    closeModal=(action "cancelNewSessionForm")
   }}
-    {{agenda/agenda-decisions decisions=printedDecisions}}
+    {{sessions/forms/new-session successfullyAdded=(action "successfullyAdded") cancelForm=(action "cancelNewSessionForm")}}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isAddingNotes}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "close")
+    title="Algemene notulen"
+  }}
+    {{sessions/session-notes meeting=selectedMeeting close=(action "close")}}
   {{/web-components/vl-modal}}
 {{/if}}

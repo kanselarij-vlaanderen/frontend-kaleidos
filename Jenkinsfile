@@ -9,12 +9,21 @@ node {
   currentBuild.result = 'SUCCESS'
   boolean skipBuild = false
 
+
+
   stage('Initialize'){
     def dockerHome = tool 'myDocker'
   }
 
+  def branch = 'master'
+
   stage('Checkout') {
-    checkout scm
+    def scmVars = checkout scm
+    def git_branch = scmVars.GIT_BRANCH
+
+    if (git_branch == 'origin/development'){
+      branch = 'development'
+    }
   }
 
   try {
@@ -24,11 +33,11 @@ node {
     }
 
     stage('Image Build'){
-      imageBuild(CONTAINER_NAME, CONTAINER_TAG)
+      imageBuild(CONTAINER_NAME, CONTAINER_TAG, branch)
     }
 
     stage('Run App'){
-      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT)
+      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT, branch)
     }
   } catch (err) {
     currentBuild.result = 'FAILED'
@@ -42,16 +51,16 @@ def imagePrune(containerName){
         sh "docker image prune -f"
         sh "docker-compose stop"
         sh "docker-compose rm -f"
-    } catch(error){}
+    } catch(error){
+    }
 }
 
-def imageBuild(containerName, tag){
-    sh "docker-compose build"
+def imageBuild(containerName, tag, branch){
+    sh "env \$(cat .env.${branch}) docker-compose build"
     echo "Image build complete"
 }
 
-def runApp(containerName, tag, httpPort){
-    sh "docker-compose up -d"
+def runApp(containerName, tag, httpPort, branch){
+    sh "env \$(cat .env.${branch}) docker-compose up -d"
     echo "Application started on port: ${httpPort} (http)"
 }
-

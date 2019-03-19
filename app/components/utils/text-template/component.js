@@ -1,44 +1,60 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
-import { computed } from '@ember/object';
-
+import { later } from '@ember/runloop';
+// import { task, timeout } from 'ember-concurrency';
+// import { computed } from '@ember/object';
+import $ from 'jquery';
+/**
+ * LEAVE THE COMMENTS IN THIS CODE TO SPEED UP THE NEXT TICKETS 
+ */
 export default Component.extend({
+	classNames: ["vlc-input-field-block"],
 	store: inject(),
-	modelName:null,
-	searchField:null,
-	selectedItems: null,
+	searchField: null,
 	propertyToShow: null,
 	rows: "5",
-	text:null,
+	text: null,
+	label: null,
 
-	items: computed('modelName', function() {
-		const modelName = this.get('modelName');
-		return this.store.findAll(modelName);
-	}), 
+	// items: computed('modelName', function () {
+	// 	const modelName = this.get('modelName');
+	// 	return this.store.findAll(modelName);
+	// }),
 
-	searchTask: task(function* (searchValue) {
-		yield timeout(300);
-		return this.store.query('meeting', {
-			filter: {
-				'plannedStart': `${searchValue}`
-			}
-		});
-	}),
+	// dirty but it works.
+	focusTextarea() {
+		later(this, function () {
+			document.getElementById('toFocus').focus();
+		}, 250);
+	},
 
 	actions: {
 		selectModel(items) {
 			const text = this.get('text');
-			const textToAdd = items[this.get('searchField')];
-			const newText = text + " " + textToAdd;
-			this.set('text', newText)
+			const textToAdd = items.description;
+			let newText;
+			if(text != "") {
+				newText = text + " " + textToAdd;
+			} else {
+				newText = textToAdd;
+			}
+			this.set('text', newText);
+			this.focusTextarea();
 		},
 
-		resetValueIfEmpty(param) {
+		async resetValueIfEmpty(param) {
 			if (param == "") {
-				const modelName = this.get('modelName');
-				this.set('items', this.store.findAll(modelName));
+				// const modelName = this.get('modelName');
+				// this.set('items', this.store.findAll(modelName));
+				let textTemplates = await $.getJSON("/utils/text-templates.json");
+				this.set('items', textTemplates.textTemplates);
 			}
 		},
 	},
+
+	async didInsertElement() {
+		this._super(...arguments);
+		let textTemplates = await $.getJSON("/utils/text-templates.json");
+		this.set('items', textTemplates.textTemplates);
+	}
 });

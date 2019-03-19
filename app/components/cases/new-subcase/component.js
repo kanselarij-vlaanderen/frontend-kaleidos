@@ -14,6 +14,10 @@ export default Component.extend({
 	step: 1,
 
 	title: computed('case', function () {
+		return this.get('case').title;
+	}),
+
+	shortTitle: computed('case', function () {
 		return this.get('case').shortTitle;
 	}),
 
@@ -43,40 +47,53 @@ export default Component.extend({
 		async createSubCase(event) {
 			event.preventDefault();
 			this.parseDomainsAndMandatees();
-			const caze = this.store.peekRecord('case', this.model.id);
+			const caze = this.store.peekRecord('case', this.case.id);
+			let phase = await this.get('phase');
+			if (!phase) {
+				phase = [];
+			} else {
+				phase = [phase];
+			}
+
+			const { title, shortTitle, selectedDomains, selectedMandatees, themes } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
-					title: this.get('title'),
-					shortTitle: this.get('shortTitle'),
+					title: title,
+					phases: phase,
+					shortTitle: shortTitle,
 					showAsRemark: false,
-					governmentDomains: this.get('selectedDomains'),
+					governmentDomains: selectedDomains,
 					case: caze,
 					created: new Date(),
-					mandatees: this.get('selectedMandatees'),
-					themes: this.get('themes')
+					mandatees: selectedMandatees,
+					themes: themes
 				});
 
 			const createdSubCase = await subcase.save();
 			const uploadedFiles = this.get('uploadedFiles');
-				Promise.all(uploadedFiles.map(uploadedFile => {
-					if (uploadedFile.id) {
-						return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile, uploadedFile.get('name'));
-					}
-				}));
+			Promise.all(uploadedFiles.map(uploadedFile => {
+				if (uploadedFile.id) {
+					return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile, uploadedFile.get('name'));
+				}
+			}));
 
 			const nonDigitalDocuments = this.get('nonDigitalDocuments');
-				Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
-					if (nonDigitalDocument.title) {
-						return this.createNewDocumentWithDocumentVersion(createdSubCase, null, nonDigitalDocument.title);
-					}
-				}));
-			
+			Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
+				if (nonDigitalDocument.title) {
+					return this.createNewDocumentWithDocumentVersion(createdSubCase, null, nonDigitalDocument.title);
+				}
+			}));
+
 			this.clearProperties();
 			this.closeModal();
 		},
 
 		chooseType(type) {
 			this.set('selectedType', type);
+		},
+
+		selectPhase(phase) {
+			this.set('phase', phase);
 		},
 
 		chooseTheme(themes) {
@@ -126,8 +143,8 @@ export default Component.extend({
 	async createNewDocumentWithDocumentVersion(subcase, file, documentTitle) {
 		let document = await this.store.createRecord('document', {
 			created: new Date(),
-			title: documentTitle
-			// documentType: file.get('documentType')
+			title: documentTitle,
+			documentType: file.get('documentType')
 		});
 		document.save().then(async (createdDocument) => {
 			if (file) {
@@ -158,10 +175,10 @@ export default Component.extend({
 		const mandateeRows = this.get('mandateeRows');
 		const mandatees = [];
 		const selectedDomains = [];
-		if(mandateeRows && mandateeRows.get('length') > 0) {
+		if (mandateeRows && mandateeRows.get('length') > 0) {
 			mandateeRows.map(row => {
 				mandatees.push(row.get('mandatee'));
-				const domains = row.get('selectedDomains')
+				const domains = row.get('selectedDomains');
 				domains.map(domain => {
 					selectedDomains.push(domain);
 				})
@@ -169,6 +186,10 @@ export default Component.extend({
 		}
 		this.set('selectedMandatees', mandatees);
 		this.set('selectedDomains', selectedDomains);
-		
+	},
+	
+	async didInsertElement() {
+		this._super(...arguments);
+		this.set('phases', this.store.findAll('subcase-phase'));
 	}
 })

@@ -12,7 +12,7 @@ export default Model.extend({
 	endedOn: attr('date'),
 	location: attr('string'),
 	number: attr('number'),
-	agendas: hasMany('agenda'),
+	agendas: hasMany('agenda', {inverse:null}),
 	subcases: hasMany('subcase'),
 	postponeds: hasMany('postponed'),
 	notes: belongsTo('meeting-record'),
