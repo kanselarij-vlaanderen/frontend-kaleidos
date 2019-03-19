@@ -19,8 +19,6 @@ node {
     checkout scm
   }
 
-  echo "${branch}"
-
   try {
 
     stage("Image Prune"){
@@ -32,7 +30,7 @@ node {
     }
 
     stage('Run App'){
-      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT, env.BRANCH_NAME)
+      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT)
     }
   } catch (err) {
     currentBuild.result = 'FAILED'
