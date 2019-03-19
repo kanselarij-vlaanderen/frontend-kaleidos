@@ -8,20 +8,20 @@ export default Model.extend({
   shortTitle: attr('string'),
   title: attr('string'),
   showAsRemark: attr('boolean'),
-  
+
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
   meeting: belongsTo('meeting'),
   phases: hasMany('subcase-phase'),
   consulationRequests: hasMany('consulation-request'),
-  governmentDomains: hasMany('government-domain'),
+  governmentDomains: hasMany('government-domain', {inverse:null}),
   agendaitems: hasMany('agendaitem'),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
 
-  documents: computed('documentVersions', async function() {
+  documents: computed('documentVersions', async function () {
     const documentVersions = await this.get('documentVersions');
     const documents = await Promise.all(documentVersions.map(documentVersion => {
       return documentVersion.get('document');
@@ -29,10 +29,18 @@ export default Model.extend({
     return documents.uniqBy('id');
   }),
 
-  documentsLength: computed('documents', function() {
+  documentsLength: computed('documents', function () {
     return this.get('documents').then((documents) => {
       return documents.get('length');
     });
+  }),
+
+  sortedMandatees: computed('mandatees', function () {
+    return this.get('mandatees').sortBy('priority');
+  }),
+
+  sortedThemes: computed('themes', function () {
+    return this.get('themes').sortBy('label');
   })
 
 });

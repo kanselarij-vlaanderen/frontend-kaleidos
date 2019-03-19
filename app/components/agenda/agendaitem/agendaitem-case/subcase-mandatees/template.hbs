@@ -12,18 +12,19 @@
     </div>
   </div>
   {{#if (gt (await subcase.mandatees.length) 0)}}
-  <div class="vl-custom">
-    <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
-      {{#each (await subcase.mandatees) as |mandatee|}}
-        {{web-components/vl-mandatee-link mandatee=mandatee domains=(await subcase.governmentDomains)}}
-      {{/each}}
-    </ul>
-  </div>
+    <div class="vl-custom">
+      <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
+        {{#each (await subcase.sortedMandatees) as |mandatee|}}
+          {{web-components/vl-mandatee-link
+            mandatee=mandatee
+            domains=(await subcase.governmentDomains)
+          }}
+        {{/each}}
+      </ul>
+    </div>
   {{else}}
-   <div class="vl-u-spacer-extended-top-s">
-      {{web-components/vl-alert
-        message=(t "no-domains-yet")
-      }}
+    <div class="vl-u-spacer-extended-top-s">
+      {{web-components/vl-alert message=(t "no-domains-yet")}}
     </div>
   {{/if}}
 </div>

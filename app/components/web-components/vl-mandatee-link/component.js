@@ -5,10 +5,6 @@ export default Component.extend({
 	classNames: ["vl-link-list__item"],
 	showDetails:false,
 
-	testFunction() {
-		console.log('hey')
-	},
-
 	actions: {
 		toggleShowDetails() {
 			this.toggleProperty('showDetails');

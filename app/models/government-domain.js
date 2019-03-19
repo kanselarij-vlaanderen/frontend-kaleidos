@@ -5,5 +5,5 @@ const { Model, attr, hasMany } = DS;
 export default Model.extend({
 	label: attr('string'),
 	scopeNote: attr('string'),
-	mandatees: hasMany('mandatee')
+	mandatees: hasMany('mandatee', {inverse:null})
 });
