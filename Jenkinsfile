@@ -52,10 +52,8 @@ def imageBuild(containerName, tag){
 }
 
 def runApp(containerName, tag, httpPort){
-    sh "env \$(cat .env.${env.BRANCH_NAME}) docker-compose up -d"
+    withEnv(["GIT_BRANCH=$BRANCH_NAME"]) {
+       sh "env \$(cat .env.${GIT_BRANCH}) docker-compose up -d"
+    }
     echo "Application started on port: ${httpPort} (http)"
-}
-
-def getGitBranchName() {
-    return scm.branches[0].name
 }
