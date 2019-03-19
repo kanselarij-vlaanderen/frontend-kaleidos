@@ -19,10 +19,10 @@ node {
     checkout scm
   }
 
-  sh 'scm | sort'
-  sh 'pipeline | sort'
-  sh 'params | sort'
-  sh 'currentBuild | sort'
+  def environment = env.getEnvironment()
+  def branch = scm.branches.first().getExpandedName(environment)
+  echo "environment: ${environment}"
+  echo "branch: ${branch}"
 
   try {
 
