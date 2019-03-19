@@ -9,9 +9,13 @@ node {
   currentBuild.result = 'SUCCESS'
   boolean skipBuild = false
 
+
+
   stage('Initialize'){
     def dockerHome = tool 'myDocker'
   }
+
+  echo "${env.BRANCH_NAME}"
 
   stage('Checkout') {
     checkout scm
@@ -28,7 +32,7 @@ node {
     }
 
     stage('Run App'){
-      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT)
+      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT, env.BRANCH_NAME)
     }
   } catch (err) {
     currentBuild.result = 'FAILED'
@@ -51,9 +55,7 @@ def imageBuild(containerName, tag){
     echo "Image build complete"
 }
 
-def runApp(containerName, tag, httpPort){
-    withEnv(["GIT_BRANCH=$BRANCH_NAME"]) {
-       sh "env \$(cat .env.${GIT_BRANCH}) docker-compose up -d"
-    }
+def runApp(containerName, tag, httpPort, branch){
+    sh "env \$(cat .env.${branch}) docker-compose up -d"
     echo "Application started on port: ${httpPort} (http)"
 }
