@@ -563,7 +563,14 @@ $icon-font-location: "/fonts/";
 
 .max-width {
   text-overflow: ellipsis;
-  max-width: 900px;
+  max-width: 800px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.max-width-title {
+  text-overflow: ellipsis;
+  max-width: 500px;
   overflow: hidden;
   white-space: nowrap;
 }

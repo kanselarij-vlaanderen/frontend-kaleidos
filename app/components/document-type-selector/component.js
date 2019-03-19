@@ -1,13 +1,14 @@
 import Component from '@ember/component';
-import $ from 'jquery';
+import { inject } from '@ember/service';
 
 export default Component.extend({
+	store: inject(),
 	selectedDocumentType: null,
 	documentTypes: null,
 
 	async didInsertElement() {
-		let documentTypes = await $.getJSON("/utils/document-types.json");
-		this.set('documentTypes', documentTypes.documentTypes);
+		const documentTypes = this.store.findAll('document-type', {sort:'label'});
+		this.set('documentTypes', documentTypes);
 	},
 
 	actions: {
@@ -18,8 +19,9 @@ export default Component.extend({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				this.set('sessions', this.store.query('meeting', {}));
+				const documentTypes = this.store.findAll('document-type', {sort:'label'});
+				this.set('documentTypes', documentTypes);
 			}
-		},
+		}
 	},
 });

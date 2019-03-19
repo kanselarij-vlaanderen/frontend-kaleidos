@@ -6,6 +6,6 @@ export default Model.extend({
 	label: attr('string'),
 	scopeNote: attr('string'),
 	documents: hasMany('document'),
-	subtypes: hasMany('document-type'),
-	superType: belongsTo('document-type')
+	subtypes: hasMany('document-type', {inverse:null}),
+	superType: belongsTo('document-type', {inverse:null})
 });
