@@ -17,6 +17,8 @@ node {
 
   echo "${env.BRANCH_NAME}"
 
+  sh 'env | sort'
+
   stage('Checkout') {
     checkout scm
   }
