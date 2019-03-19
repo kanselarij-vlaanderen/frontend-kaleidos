@@ -15,9 +15,15 @@ node {
     def dockerHome = tool 'myDocker'
   }
 
+  def branch = 'master'
+
   stage('Checkout') {
     def scmVars = checkout scm
-    echo "vars: ${scmVars}"
+    def git_branch = scmVars.GIT_BRANCH
+
+    if (git_branch == 'origin/development'){
+      branch = 'development'
+    }
   }
 
   try {
@@ -31,7 +37,7 @@ node {
     }
 
     stage('Run App'){
-      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT)
+      runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT, branch)
     }
   } catch (err) {
     currentBuild.result = 'FAILED'
@@ -54,20 +60,7 @@ def imageBuild(containerName, tag){
     echo "Image build complete"
 }
 
-def runApp(containerName, tag, httpPort){
-
-    when {
-      branch 'master'  //only run these steps on the master branch
-    }
-    steps {
-        sh "env \$(cat .env.${branch}) docker-compose up -d"
-        echo "Application started on port: ${httpPort} (http)"
-    }
-
-    when {
-      branch 'development'  //only run these steps on the master branch
-    }
-    steps {
-      echo "hello development branch"
-    }
+def runApp(containerName, tag, httpPort, branch){
+    sh "env \$(cat .env.${branch}) docker-compose up -d"
+    echo "Application started on port: ${httpPort} (http)"
 }
