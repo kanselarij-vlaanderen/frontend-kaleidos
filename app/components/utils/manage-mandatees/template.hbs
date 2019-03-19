@@ -72,7 +72,14 @@
     </div>
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "new-person")}}
-      {{utils/people-selector choosePerson=(action "personSelected")}}
+      {{utils/model-selector
+        modelName="person"
+        searchField="alternative-name"
+        propertyToShow="alternativeName"
+        sortField="alternative-name"
+        selectedItems=selectedPerson
+        selectModel=(action "personSelected")
+      }}
     </div>
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}

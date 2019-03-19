@@ -7,9 +7,11 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "add-people")}}
       <div class="vl-input-group">
-        {{utils/people-selector
+        {{utils/model-selector
+          modelName="person"
           readOnly=true
-          selectedPerson=mandateeToEdit.person
+          propertyToShow="alternativeName"
+          selectedItems=mandateeToEdit.person
         }}
       </div>
     </div>

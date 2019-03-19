@@ -15,19 +15,27 @@
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "edit-item.themes")}}
-        {{utils/theme-list chooseTheme=(action "chooseTheme")}}
+        {{utils/model-selector
+          modelName="theme"
+          searchField="label"
+          propertyToShow="label"
+          placeholder="Type hier op te zoeken op thema's..."
+          multiSelect=true
+          sortField="label"
+          selectedItems=themes
+          selectModel=(action "chooseTheme")
+        }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcases.subcase-phase")}}
-        {{#power-select
-          class="vl-select vl-select--block"
-          options=phases
-          selected=phase
-          searchEnabled=false
-          onchange=(action "selectPhase") as |phase|
+        {{utils/model-selector
+          modelName="subcase-phase"
+          searchField="label"
+          sortField="label"
+          propertyToShow="label"
+          selectedItems=phase
+          selectModel=(action "selectPhase")
         }}
-          {{phase.label}}
-        {{/power-select}}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "cases.upload-file")}}
@@ -127,7 +135,7 @@
 {{#if isAddingNonDigitalDocument}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "cases.non-digital-file") 
+    title=(t "cases.non-digital-file")
     closeModal=(action "toggleAddNonDigitalDocument")
   }}
     <div class="vl-modal-dialog__content">

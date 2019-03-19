@@ -5,7 +5,14 @@
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "add-people")}}
-    {{utils/people-selector choosePerson=(action "personSelected")}}
+    {{utils/model-selector
+      modelName="person"
+      searchField="alternative-name"
+      propertyToShow="alternativeName"
+      sortField="alternative-name"
+      selectedItems=selectedPerson
+      selectModel=(action "personSelected")
+    }}
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "mandatees")}}
@@ -20,7 +27,10 @@
   <div class="vlc-toolbar">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
-        <button class="vl-button vl-button--link vl-button--narrow" {{action "closeModal"}}>
+        <button
+          class="vl-button vl-button--link vl-button--narrow"
+          {{action "closeModal"}}
+        >
           {{t "buttons.cancel"}}
         </button>
       </div>

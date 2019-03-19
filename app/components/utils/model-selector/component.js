@@ -9,6 +9,8 @@ export default Component.extend({
 	searchField:null,
 	selectedItems: null,
 	propertyToShow: null,
+	placeholder:null,
+	sortField: null,
 
 	items: computed('modelName', function() {
 		const modelName = this.get('modelName');
@@ -17,10 +19,13 @@ export default Component.extend({
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
-		return this.store.query('meeting', {
-			filter: {
-				'plannedStart': `${searchValue}`
-			}
+		const filter = {};
+		const { searchField, sortField } = this;
+
+		filter[searchField] = searchValue; 
+		return this.store.query(this.get('modelName'), {
+			filter: filter,
+			sort: sortField
 		});
 	}),
 

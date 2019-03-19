@@ -1,11 +1,27 @@
-
+{{#if (not multiSelect)}}
   {{#power-select
     options=items
     selected=selectedItems
+    disabled=readOnly
     searchField=searchField
+    placeholder=placeholder
     search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
     onchange=(action "selectModel") as |model|
   }}
-		{{model-property-to-show model propertyToShow}}
+    {{model-property-to-show model propertyToShow}}
   {{/power-select}}
+{{else}}
+  {{#power-select-multiple
+    options=items
+    selected=selectedItems
+    disabled=readOnly
+    searchField=searchField
+    placeholder=placeholder
+    search=(perform searchTask)
+    oninput=(action "resetValueIfEmpty")
+    onchange=(action "selectModel") as |model|
+  }}
+    {{model-property-to-show model propertyToShow}}
+  {{/power-select-multiple}}
+{{/if}}
