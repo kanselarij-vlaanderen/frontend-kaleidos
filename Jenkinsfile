@@ -19,7 +19,7 @@ node {
     checkout scm
   }
 
-    sh 'env | sort'
+  echo "${branch}"
 
   try {
 
@@ -55,7 +55,20 @@ def imageBuild(containerName, tag){
     echo "Image build complete"
 }
 
-def runApp(containerName, tag, httpPort, branch){
-    sh "env \$(cat .env.${branch}) docker-compose up -d"
-    echo "Application started on port: ${httpPort} (http)"
+def runApp(containerName, tag, httpPort){
+
+    when {
+      branch 'master'  //only run these steps on the master branch
+    }
+    steps {
+        sh "env \$(cat .env.${branch}) docker-compose up -d"
+        echo "Application started on port: ${httpPort} (http)"
+    }
+
+    when {
+      branch 'development'  //only run these steps on the master branch
+    }
+    steps {
+      echo "hello development branch"
+    }
 }
