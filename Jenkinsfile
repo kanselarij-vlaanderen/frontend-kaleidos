@@ -19,6 +19,11 @@ node {
     checkout scm
   }
 
+  sh 'scm | sort'
+  sh 'pipeline | sort'
+  sh 'params | sort'
+  sh 'currentBuild | sort'
+
   try {
 
     stage("Image Prune"){
