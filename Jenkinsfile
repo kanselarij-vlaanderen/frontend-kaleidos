@@ -33,7 +33,7 @@ node {
     }
 
     stage('Image Build'){
-      imageBuild(CONTAINER_NAME, CONTAINER_TAG)
+      imageBuild(CONTAINER_NAME, CONTAINER_TAG, branch)
     }
 
     stage('Run App'){
@@ -55,8 +55,8 @@ def imagePrune(containerName){
     }
 }
 
-def imageBuild(containerName, tag){
-    sh "docker-compose build"
+def imageBuild(containerName, tag, branch){
+    sh "env \$(cat .env.${branch}) docker-compose build"
     echo "Image build complete"
 }
 
