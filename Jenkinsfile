@@ -17,7 +17,7 @@ node {
 
   stage('Checkout') {
     def scmVars = checkout scm
-    echo 'vars: ${scmVars}'
+    echo "vars: ${scmVars}"
   }
 
   try {
