@@ -15,13 +15,11 @@ node {
     def dockerHome = tool 'myDocker'
   }
 
-  echo "${env.BRANCH_NAME}"
-
-  sh 'env | sort'
-
   stage('Checkout') {
     checkout scm
   }
+
+    sh 'env | sort'
 
   try {
 
