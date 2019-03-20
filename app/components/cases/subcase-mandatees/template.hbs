@@ -1,34 +1,46 @@
 <table class="vl-data-table vl-data-table--align-middle">
   <thead>
     <tr>
-      <th class="vl-data-table-col-6">
-				{{web-components/vl-form-label value=(t "minister")}}
+      <th class="vl-data-table-col-5">
+        {{web-components/vl-form-label value=(t "minister")}}
       </th>
       <th class="vl-data-table-col-6">
-				{{web-components/vl-form-label value=(t "mandatees")}}
+        {{web-components/vl-form-label value=(t "mandatees")}}
       </th>
+      <th class="vl-data-table-col-1"></th>
     </tr>
   </thead>
   <tbody>
-		{{#each mandateeRows as |mandateeRow|}}
-    <tr>
-      <td>
-        {{utils/mandatee-selector
-          singleSelect=true
-          selectedMandatees=mandateeRow.mandatee
-          chooseMandatee=(action "mandateeSelected" mandateeRow)
-        }}
-      </td>
-      <td>
-        {{utils/domains-selector
-          selectedDomains=mandateeRow.selectedDomains
-					domains=mandateeRow.domains
-					selectedDomainsOnly=true
-          chooseDomain=(action "domainsChanged" mandateeRow)
-        }}
-      </td>
-    </tr>
-		{{/each}}
+    {{#each mandateeRows as |mandateeRow|}}
+      <tr>
+        <td>
+          {{utils/mandatee-selector
+            singleSelect=true
+            selectedMandatees=mandateeRow.mandatee
+            chooseMandatee=(action "mandateeSelected" mandateeRow)
+          }}
+        </td>
+        <td>
+          {{utils/domains-selector
+            selectedDomains=mandateeRow.selectedDomains
+            domains=mandateeRow.domains
+            selectedDomainsOnly=true
+            chooseDomain=(action "domainsChanged" mandateeRow)
+          }}
+        </td>
+        <td class="vl-u-align-right">
+          <button
+            class="vl-button vl-button--link vl-button--icon"
+            {{action "deleteRow" mandateeRow}}
+          >
+            <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
+            <span class="vl-u-visually-hidden">
+              Verwijder
+            </span>
+          </button>
+        </td>
+      </tr>
+    {{/each}}
   </tbody>
 </table>
 <div class="vlc-toolbar">
