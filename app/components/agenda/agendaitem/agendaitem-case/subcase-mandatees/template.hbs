@@ -1,30 +1,52 @@
-<div class="vl-u-spacer--large">
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-display-flex-align-center">
-      <h4 class="vl-title vl-title--h4">
-        {{t "manage-ministers-title"}}
-      </h4>
-      {{!-- <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link">
-          {{t "buttons.edit"}}
-        </a>
-      </div> --}}
+{{#if (not isEditing)}}
+  <div class="vl-u-spacer--large">
+    <div class="vl-u-spacer">
+      <div class="vl-u-display-flex vl-u-display-flex-align-center">
+        <h4 class="vl-title vl-title--h4">
+          {{t "manage-ministers-title"}}
+        </h4>
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "buttons.edit"}}
+          </a>
+        </div>
+      </div>
+    </div>
+    {{#if (gt (await subcase.mandatees.length) 0)}}
+      <div class="vl-custom">
+        <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
+          {{#each (await subcase.sortedMandatees) as |mandatee|}}
+            {{web-components/vl-mandatee-link
+              mandatee=mandatee
+              domains=(await subcase.governmentDomains)
+            }}
+          {{/each}}
+        </ul>
+      </div>
+    {{else}}
+      <div class="vl-u-spacer-extended-top-s">
+        {{web-components/vl-alert message=(t "no-domains-yet")}}
+      </div>
+    {{/if}}
+  </div>
+{{else}}
+  <div class="vl-form__group vl-u-bg-porcelain">
+    <div class="vl-u-spacer">
+      {{cases/subcase-mandatees
+        mandateeRows=mandateeRows
+        mandateeRowsChanged=(action "mandateeRowsChanged")
+      }}
+    </div>
+    <div class="vl-action-group vl-action-group--align-right">
+      <a class="vl-link" {{action "cancelEditing"}}>
+        {{t "buttons.cancel"}}
+      </a>
+      <button
+        class="vl-button vl-button--narrow"
+        {{action "saveChanges" subcase}}
+      >
+        {{t "buttons.save"}}
+      </button>
     </div>
   </div>
-  {{#if (gt (await subcase.mandatees.length) 0)}}
-    <div class="vl-custom">
-      <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
-        {{#each (await subcase.sortedMandatees) as |mandatee|}}
-          {{web-components/vl-mandatee-link
-            mandatee=mandatee
-            domains=(await subcase.governmentDomains)
-          }}
-        {{/each}}
-      </ul>
-    </div>
-  {{else}}
-    <div class="vl-u-spacer-extended-top-s">
-      {{web-components/vl-alert message=(t "no-domains-yet")}}
-    </div>
-  {{/if}}
-</div>
+{{/if}}
