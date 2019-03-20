@@ -170,7 +170,7 @@ $icon-font-location: "/fonts/";
 
 .side-nav-small {
   display: block;
-  width: 150px;
+  // width: 150px;
   float: left;
   border-top: none;
 
@@ -589,30 +589,23 @@ $icon-font-location: "/fonts/";
   height: auto;
 }
 
-// .vlc-panel-layout,
-// .vlc-panel-layout__agenda-items,
-// .vlc-scroll-wrapper {
-//   height: auto;
-
-// }
-
-// .vlc-scroll-wrapper {
-//   min-height: calc(100vh - 44px - 50px - 106px);
-// }
-
 a.vlc-agenda-item {
   text-decoration: none;
   display: block;
   color: inherit;
 }
 
-.vlc-agenda-item--active {
+a.vlc-agenda-item--active {
   background: $primary-blue;
   * {
     color: white;
   }
 }
 
-.vlc-agenda-items__header {
+a.vlc-agenda-items__header {
   padding: 3rem 1.5rem 1.5rem;
+}
+
+.vlc-panel-layout__main-content {
+  max-width: 50%;
 }

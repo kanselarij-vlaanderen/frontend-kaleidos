@@ -1,48 +1,48 @@
 {{#if agendaitem}}
-  <div class="vl-u-spacer--large vl-u-spacer-extended-top-l">
-    <div class="vl-u-spacer">
-      <div class="vl-u-spacer--small">
-        {{#if (await agendaitem.subcase.case.id)}}
-          <div class="vl-u-spacer-extended-left-s">
-            {{#link-to
-              "cases.case.subcases.subcase"
-              (await agendaitem.subcase.case.id)
-              (await agendaitem.subcase.id)
-              class="vl-link"
-            }}
-              {{t "to-subcase"}}
-            {{/link-to}}
-          </div>
-        {{/if}}
-        <div class="vl-u-display-flex vl-u-display-flex-align-center">
-          <h2 class="vl-u-text--uppercase vl-u-text--bold">
-            {{!-- {{await agendaitem.subcase.case.type.label}} --}}
-          </h2>
-        </div>
+  <div class="vl-u-spacer">
+    <div class="vl-u-spacer--small">
+      {{#if (await agendaitem.subcase.case.id)}}
+        {{#link-to
+          "cases.case.subcases.subcase"
+          (await agendaitem.subcase.case.id)
+          (await agendaitem.subcase.id)
+          class="vl-link"
+        }}
+          {{t "to-subcase"}}
+        {{/link-to}}
+      {{/if}}
+      <div class="vl-u-display-flex vl-u-display-flex-align-center">
+        <h2 class="vl-u-text--uppercase vl-u-text--bold">
+          {{!-- {{await agendaitem.subcase.case.type.label}} --}}
+        </h2>
       </div>
-      <h3 class="vl-title vl-title--h3">
-        {{agendaitem.subcase.shortTitle}}
-      </h3>
-      <p class="vl-long-title">
-        {{agendaitem.subcase.title}}
-      </p>
     </div>
+    <h3 class="vl-title vl-title--h3">
+      {{agendaitem.subcase.shortTitle}}
+    </h3>
+    <p>
+      {{agendaitem.subcase.title}}
+    </p>
   </div>
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-space-between">
       <span class="vl-u-text--small vl-u-text--muted">
-        {{agendaitem.subcase.shortTitle}}
+        {{!-- {{agendaitem.subcase.shortTitle}} TODO PHASE --}}
       </span>
-      <div class="vl-u-display-flex default">
-        <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-        <span class="vl-agenda-item__meta">
-          {{#if agendaitem.formallyOk}}
-            {{t "agenndaitem-details.formal-ok"}}
-          {{else}}
+      {{#if agendaitem.formallyOk}}
+        <div class="vl-u-display-flex vl-u-text--success">
+          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+          <span class="vl-u-text--small">
+            {{t "agendaitem-details.formal-ok"}}
+          </span>
+        </div>
+      {{else}}
+        <div class="vl-u-display-flex vl-u-text--muted">
+          <span class="vl-u-text--small">
             {{t "agendaitem-details.formal-nok"}}
-          {{/if}}
-        </span>
-      </div>
+          </span>
+        </div>
+      {{/if}}
     </div>
   </div>
   {{agenda/agendaitem/agendaitem-case/subcase-themes

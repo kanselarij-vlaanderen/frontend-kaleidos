@@ -18,25 +18,26 @@
       selectAgenda=(action "selectAgenda")
     }}
     <div class="vl-u-bg-porcelain">
-    <div class={{agendaitemsClass}}>
-      <div class="vlc-scroll-wrapper">
-        {{!-- {{#if (not await selectedAgendaItem)}}
+      <div class={{agendaitemsClass}}>
+        <div class="vlc-scroll-wrapper">
+          {{!-- {{#if (not await selectedAgendaItem)}}
+          TODO implement
           {{agenda/agendaitem-search selectedAgenda=currentAgenda}}
         {{/if}} --}}
-        <div class="vlc-scroll-wrapper__body">
-          {{agenda/agenda-list
-            agendaitems=currentAgendaItems
-            selectAgendaItem=(action "selectAgendaItem")
-            selectedAgendaItem=selectedAgendaItem
-          }}
-          {{agenda/announcement-list
-            announcements=(await announcements)
-            selectAnnouncement=(action "selectAnnouncement")
-            selectedAnnouncement=selectedAnnouncement
-          }}
+          <div class="vlc-scroll-wrapper__body">
+            {{agenda/agenda-list
+              agendaitems=currentAgendaItems
+              selectAgendaItem=(action "selectAgendaItem")
+              selectedAgendaItem=selectedAgendaItem
+            }}
+            {{agenda/announcement-list
+              announcements=(await announcements)
+              selectAnnouncement=(action "selectAnnouncement")
+              selectedAnnouncement=selectedAnnouncement
+            }}
+          </div>
         </div>
       </div>
-    </div>
     </div>
     {{#if selectedAgendaItem}}
       {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
