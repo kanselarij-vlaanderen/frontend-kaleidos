@@ -1,4 +1,4 @@
-FROM nginx:1.9.12
+FROM danday74/nginx-lua
 
 ARG EMBER_ENV=production
 
