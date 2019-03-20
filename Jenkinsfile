@@ -48,18 +48,18 @@ node {
 
 def imagePrune(containerName, branch){
     try {
-        sh "env \$(cat .env.${branch}) BRANCH_NAME=${branch} docker-compose stop"
-        sh "env \$(cat .env.${branch}) BRANCH_NAME=${branch} docker-compose rm -f"
+        sh "env \$(cat .env.${branch}) docker-compose -f docker-compose.${branch}.yml stop"
+        sh "env \$(cat .env.${branch}) docker-compose -f docker-compose.${branch}.yml rm -f"
     } catch(error){
     }
 }
 
 def imageBuild(containerName, tag, branch){
-    sh "env \$(cat .env.${branch}) BRANCH_NAME=${branch} docker-compose build"
+    sh "env \$(cat .env.${branch}) docker-compose -f docker-compose.${branch}.yml build"
     echo "Image build complete"
 }
 
 def runApp(containerName, tag, httpPort, branch){
-    sh "env \$(cat .env.${branch}) BRANCH_NAME=${branch} docker-compose up -d"
+    sh "env \$(cat .env.${branch}) docker-compose -f docker-compose.${branch}.yml up -d"
     echo "Application started on port: ${httpPort} (http)"
 }
