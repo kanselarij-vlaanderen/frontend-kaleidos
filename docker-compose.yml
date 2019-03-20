@@ -1,5 +1,5 @@
 version: '3'
-
+prefix: ${BRANCH_NAME}
 services:
   kaleidos-frontend:
     build:
