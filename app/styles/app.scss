@@ -585,8 +585,21 @@ $icon-font-location: "/fonts/";
   }
 }
 
+.vlc-panel-layout,
+.vlc-panel-layout__agenda-items,
+.vlc-scroll-wrapper {
+  height: auto;
+}
+
+.vlc-scroll-wrapper {
+  min-height: calc(100vh - 44px - 50px - 106px);
+}
 .vlc-side-nav {
   height: auto;
+}
+
+.vl-u-bg-porcelain {
+  width:100%;
 }
 
 a.vlc-agenda-item {
