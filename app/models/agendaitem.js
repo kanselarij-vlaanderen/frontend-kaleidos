@@ -15,7 +15,7 @@ export default Model.extend({
   forPress: attr('boolean'),
 
   postponedTo: belongsTo('postponed'),
-  agenda: belongsTo('agenda'),
+  agenda: belongsTo('agenda', {inverse: null}),
   decision: belongsTo('decision'),
 	subcase: belongsTo('subcase', {inverse:null}),
   remarks: hasMany('remark'),
