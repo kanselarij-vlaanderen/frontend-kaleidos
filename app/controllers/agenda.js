@@ -38,7 +38,7 @@ export default Controller.extend({
 		navigateToSubCases() {
 			this.transitionToRoute('subcases');
 		},
-
+		
 		clearSelectedAgendaItem() {
 			this.set("selectedAgendaItem", null);
 			this.set("selectedAnnouncement", null);
