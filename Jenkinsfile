@@ -29,7 +29,7 @@ node {
   try {
 
     stage("Image Prune"){
-      imagePrune(CONTAINER_NAME)
+      imagePrune(CONTAINER_NAME, branch)
     }
 
     stage('Image Build'){
@@ -46,21 +46,20 @@ node {
 
 }
 
-def imagePrune(containerName){
+def imagePrune(containerName, branch){
     try {
-        sh "docker image prune -f"
-        sh "docker-compose stop"
-        sh "docker-compose rm -f"
+        sh "env \$(cat .env.${branch}) docker-compose -f docker-compose.${branch}.yml stop"
+        sh "env \$(cat .env.${branch}) docker-compose -f docker-compose.${branch}.yml rm -f"
     } catch(error){
     }
 }
 
 def imageBuild(containerName, tag, branch){
-    sh "env \$(cat .env.${branch}) docker-compose build"
+    sh "env \$(cat .env.${branch}) docker-compose -f docker-compose.${branch}.yml build"
     echo "Image build complete"
 }
 
 def runApp(containerName, tag, httpPort, branch){
-    sh "env \$(cat .env.${branch}) docker-compose up -d"
+    sh "env \$(cat .env.${branch}) docker-compose -f docker-compose.${branch}.yml up -d"
     echo "Application started on port: ${httpPort} (http)"
 }

@@ -1,7 +1,6 @@
 version: '3'
-
 services:
-  kaleidos-frontend:
+  development-kaleidos-frontend:
     build:
       context: ./
       dockerfile: Dockerfile

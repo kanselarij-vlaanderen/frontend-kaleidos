@@ -7,20 +7,25 @@ export default Component.extend({
 	selectedMandatee: null,
 	classNames: ["vlc-input-field-block"],
 
-	mandateeRows:null,
+	mandateeRows: null,
 
-	async didInsertElement() {
+	didInsertElement() {
 		this._super(...arguments);
-		this.set('mandateeRows', [Object.create({id: 1})]);
+		if (!this.get('mandateeRows')) {
+			this.set('mandateeRows', [Object.create({ id: 1 })]);
+		}
 	},
 
 	actions: {
 		addRow() {
 			const newNumber = this.get('mandateeRows.lastObject.id') + 1;
 			const mandateeRows = this.get('mandateeRows');
-			mandateeRows.push(Object.create({ id: newNumber }));
-			this.set('mandateeRows', mandateeRows);
-			this.notifyPropertyChange('mandateeRows');
+			mandateeRows.addObject(Object.create({ id: newNumber }))
+		},
+
+		deleteRow(mandateeRow) {
+			let mandateeRows = this.get('mandateeRows');
+			mandateeRows.removeObject(mandateeRow);
 		},
 
 		async mandateeSelected(mandateeRow, mandatee) {
@@ -41,8 +46,4 @@ export default Component.extend({
 			this.mandateeRowsChanged(this.get('mandateeRows'))
 		}
 	},
-
-	
-
-
 });
