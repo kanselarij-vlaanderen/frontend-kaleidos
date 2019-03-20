@@ -1,7 +1,6 @@
 {{#if (is-pending agendaitems)}}
   {{web-components/vl-loader}}
 {{else}}
-  <div class="vlc-agenda-items vlc-agenda-items--small">
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__left">
         <h2 class="vl-title vl-title--h3 vl-u-spacer-extended-s" >
@@ -16,7 +15,7 @@
         }}
       </div>
     {{/if}}
-    <div class="vl-u-spacer">
+      <div class="vl-u-spacer">
       {{#each agendaitems as |agendaitem index|}}
         {{agenda/agenda-list/list-item
           agendaitem=agendaitem
@@ -25,6 +24,5 @@
           selectAgendaItem=(action "selectAgendaItem")
         }}
       {{/each}}
-    </div>
-  </div>
+      </div>
 {{/if}}

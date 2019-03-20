@@ -553,10 +553,6 @@ $icon-font-location: "/fonts/";
   padding: 2rem 0;
 }
 
-.vlc-panel-layout-agenda__detail {
-  width: 100%;
-}
-
 .color-red {
   color: $red;
 }
@@ -593,13 +589,30 @@ $icon-font-location: "/fonts/";
   height: auto;
 }
 
-.vlc-panel-layout,
-.vlc-panel-layout__agenda-items,
-.vlc-scroll-wrapper {
-  height: auto;
+// .vlc-panel-layout,
+// .vlc-panel-layout__agenda-items,
+// .vlc-scroll-wrapper {
+//   height: auto;
 
+// }
+
+// .vlc-scroll-wrapper {
+//   min-height: calc(100vh - 44px - 50px - 106px);
+// }
+
+a.vlc-agenda-item {
+  text-decoration: none;
+  display: block;
+  color: inherit;
 }
 
-.vlc-scroll-wrapper {
-  min-height: calc(100vh - 44px - 50px - 106px);
+.vlc-agenda-item--active {
+  background: $primary-blue;
+  * {
+    color: white;
+  }
+}
+
+.vlc-agenda-items__header {
+  padding: 3rem 1.5rem 1.5rem;
 }
