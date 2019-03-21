@@ -1,50 +1,15 @@
 {{#if agendaitem}}
-  <div class="vl-u-spacer">
-    <div class="vl-u-spacer--small">
-      {{#if (await agendaitem.subcase.case.id)}}
-        {{#link-to
-          "cases.case.subcases.subcase"
-          (await agendaitem.subcase.case.id)
-          (await agendaitem.subcase.id)
-          class="vl-link"
-        }}
-          {{t "to-subcase"}}
-        {{/link-to}}
-      {{/if}}
-      <div class="vl-u-display-flex vl-u-display-flex-align-center">
-        <h2 class="vl-u-text--uppercase vl-u-text--bold">
-          {{!-- {{await agendaitem.subcase.case.type.label}} --}}
-        </h2>
-      </div>
-    </div>
-    <h3 class="vl-title vl-title--h3">
-      {{agendaitem.subcase.shortTitle}}
-    </h3>
-    <p>
-      {{agendaitem.subcase.title}}
-    </p>
-  </div>
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-flex-space-between">
-      <span class="vl-u-text--small vl-u-text--muted">
-        {{!-- {{agendaitem.subcase.shortTitle}} TODO PHASE --}}
-      </span>
-      {{#if agendaitem.formallyOk}}
-        <div class="vl-u-display-flex vl-u-text--success">
-          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-          <span class="vl-u-text--small">
-            {{t "agendaitem-details.formal-ok"}}
-          </span>
-        </div>
-      {{else}}
-        <div class="vl-u-display-flex vl-u-text--muted">
-          <span class="vl-u-text--small">
-            {{t "agendaitem-details.formal-nok"}}
-          </span>
-        </div>
-      {{/if}}
-    </div>
-  </div>
+  {{#if (not isEditing)}}
+    {{agenda/agendaitem/agendaitem-case/subcase-titles
+      agendaitem=agendaitem
+      toggleIsEditing=(action "toggleIsEditing")
+    }}
+  {{else}}
+    {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
+      agendaitem=agendaitem
+      toggleIsEditing=(action "toggleIsEditing")
+    }}
+  {{/if}}
   {{agenda/agendaitem/agendaitem-case/subcase-themes
     subcase=(await agendaitem.subcase)
   }}
@@ -56,26 +21,18 @@
     subcase=(await agendaitem.subcase)
   }}
 {{else}}
-  <div class="vl-u-spacer--large vl-u-spacer-extended-top-l">
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h3">
-        {{subcase.shortTitle}}
-      </h3>
-      <p class="vl-long-title">
-        {{subcase.title}}
-      </p>
-    </div>
-  </div>
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-flex-space-between">
-      <span class="vl-u-text--small vl-u-text--muted">
-        {{subcase.shortTitle}}
-      </span>
-    </div>
-  </div>
+  {{#if (not isEditing)}}
+    {{agenda/agendaitem/agendaitem-case/subcase-titles
+      subcase=subcase
+      toggleIsEditing=(action "toggleIsEditing")
+    }}
+  {{else}}
+    {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
+      subcase=subcase
+      toggleIsEditing=(action "toggleIsEditing")
+    }}
+  {{/if}}
   {{agenda/agendaitem/agendaitem-case/subcase-themes subcase=subcase}}
   {{agenda/agendaitem/agendaitem-case/subcase-mandatees subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-documents 
-    subcase=subcase
-  }}
+  {{agenda/agendaitem/agendaitem-case/subcase-documents subcase=subcase}}
 {{/if}}

@@ -230,5 +230,6 @@
 	"no-notes":"Geen notulen voor dit agendapunt.",
 	"other-agenda":"Andere agenda",
 	"undo-propose":"Niet ingediend",
-	"propose-for":"Aanvragen voor"
+	"propose-for":"Aanvragen voor",
+	"agendaitem-title":"Type dossiers & titels"
 }
