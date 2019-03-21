@@ -15,16 +15,12 @@ export default Model.extend({
 	type: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),
 
-	sortedDocuments: computed.sort('documentVersions', function (a, b) {
-		if (a.versionNumber > b.versionNumber) {
-			return 1;
-		} else if (a.versionNumber < b.versionNumber) {
-			return -1;
-		}
-		return 0;
+	sortedDocuments: computed('documentVersions', async function(){
+		let versions = await this.get('documentVersions'); 
+		return versions.sortBy('versionNumber');
 	}),
 
-	lastDocumentVersion: computed('sortedDocuments', function () {
-		return this.get('sortedDocuments').get('lastObject');
+	lastDocumentVersion: computed('sortedDocuments', async function () {
+		return (await this.get('sortedDocuments')).get('lastObject');
 	})
 });
