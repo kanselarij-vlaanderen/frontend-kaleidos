@@ -14,8 +14,9 @@ export default Component.extend({
 
 	actions: {
 		async addDecision(agendaitem){
+			const agendaitemModel = this.store.peekRecord('agendaitem', agendaitem.get('id'));
       let decision = this.store.createRecord("decision", {
-				agendaItem: agendaitem,
+				agendaitem: agendaitemModel,
 				shortTitle: agendaitem.subcase.get('shortTitle'),
 			});
 			decision.save().then(decision => {
@@ -29,7 +30,7 @@ export default Component.extend({
 		},
 
 		async saveChanges(agendaitem) {
-			let decision = await agendaitem.get('decision');
+			const decision = await agendaitem.get('decision');
 			decision.set('title', this.get('title'));
 			decision.save().then(() => {
 				this.set('title', null);

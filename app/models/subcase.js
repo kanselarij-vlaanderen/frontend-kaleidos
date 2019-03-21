@@ -11,7 +11,7 @@ export default Model.extend({
 
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
-  meeting: belongsTo('meeting'),
+  requestedForMeeting: belongsTo('meeting'),
   phases: hasMany('subcase-phase'),
   consulationRequests: hasMany('consulation-request'),
   governmentDomains: hasMany('government-domain', {inverse:null}),
@@ -41,6 +41,9 @@ export default Model.extend({
 
   sortedThemes: computed('themes', function () {
     return this.get('themes').sortBy('label');
-  })
+  }),
 
+  hasAgendaItem: computed('agendaitems', function() {
+    return this.get('agendaitems');
+  })
 });

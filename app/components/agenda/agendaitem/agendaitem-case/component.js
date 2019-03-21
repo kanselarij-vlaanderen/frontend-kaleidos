@@ -8,5 +8,15 @@ export default Component.extend({
   sessionService: inject(),
   currentSession: alias('sessionService.currentSession'),
   editable: null,
-  agendaitem: null
+  agendaitem: null,
+
+  actions: {
+    toggleIsEditing() {
+			this.toggleProperty('isEditing');
+		},
+
+		cancelEditing() {
+			this.toggleProperty('isEditing');
+		},
+  }
 });

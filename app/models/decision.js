@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 
-let { Model, attr, belongsTo  } = DS;
+let { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
   description: attr("string"),
@@ -11,8 +11,8 @@ export default Model.extend({
   numberVp: attr('string'),
   numberVr: attr('string'),
 
-  agendaitem: belongsTo('agendaitem'),
-  subcase: belongsTo('subcase'),
+  agendaitem: belongsTo('agendaitem', { inverse: null }),
+  subcase: belongsTo('subcase', { inverse: null }),
   publication: belongsTo('publication'),
   newsletterInfo: belongsTo('newsletter-info'),
   documentType: belongsTo('document-type'),

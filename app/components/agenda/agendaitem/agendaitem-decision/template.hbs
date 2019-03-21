@@ -3,7 +3,7 @@
     <h3 class="vl-title vl-title--h3">
       {{t "agendaitem-details.decision-title"}}
     </h3>
-    {{#if (await agendaitem.decision)}}
+    {{#if agendaitem.decision}}
       {{#if (not isEditing)}}
         <button
           class="vl-button vl-button--tertiary vl-button--icon"
@@ -30,7 +30,7 @@
   </div>
 </div>
 <div class="vl-typography">
-  {{#if (and (await agendaitem.decision) isEditing)}}
+  {{#if (and agendaitem.decision isEditing)}}
     <div class="vlc-input-field vlc-input-field-block">
       {{web-components/vl-form-label value=(t "edit-item.title")}}
       {{web-components/vl-form-input width="4" value=title}}
@@ -52,10 +52,10 @@
     </div>
   {{else}}
     <h5>
-      {{await agendaitem.decision.shortTitle}}
+      {{agendaitem.decision.shortTitle}}
     </h5>
     <p>
-      {{await agendaitem.decision.description}}
+      {{agendaitem.decision.description}}
     </p>
   {{/if}}
 </div>
