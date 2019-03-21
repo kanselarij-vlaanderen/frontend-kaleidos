@@ -510,7 +510,7 @@ $icon-font-location: "/fonts/";
   background: $porcelain;
   font-weight: 400;
   color: $text-color;
-  padding: 1rem;
+  padding: 0 1rem;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -623,4 +623,8 @@ a.vlc-agenda-items__header {
 .vlc-panel-layout__main-content {
   min-width:50%;
   width: 50%;
+}
+
+.vlc-hr-small {
+  margin: 1rem 0;
 }

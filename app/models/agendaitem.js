@@ -16,7 +16,7 @@ export default Model.extend({
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', {inverse: null}),
-  decision: belongsTo('decision'),
+  decision: belongsTo('decision', {inverse: null}),
 	subcase: belongsTo('subcase', {inverse:null}),
   remarks: hasMany('remark'),
   attendees: hasMany('mandatee'),

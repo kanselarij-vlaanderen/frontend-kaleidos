@@ -1,14 +1,32 @@
-{{ember-flatpickr
-  classNames="vl-input-field vl-input-field--block"
-  locale="be"
-  date=selectedDate
-  onChange=(action "dateChanged")
-  getFlatpickrRef=(action (mut flatpickrRef))
-}}
-<button
-  class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"
-  type="button"
-  {{action "toggleCalendar"}}
->
-  <i class="vl-vi vl-vi-calendar" aria-hidden="true"></i>
-</button>
+{{#if (not await dateObjectsToEnable)}}
+  {{ember-flatpickr
+    classNames="vl-input-field vl-input-field--block"
+    locale="be"
+    date=selectedDate
+    onChange=(action "dateChanged")
+    getFlatpickrRef=(action (mut flatpickrRef))
+  }}
+  <button
+    class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"
+    type="button"
+    {{action "toggleCalendar"}}
+  >
+    <i class="vl-vi vl-vi-calendar" aria-hidden="true"></i>
+  </button>
+{{else}}
+  {{ember-flatpickr
+    classNames="vl-input-field vl-input-field--block"
+    locale="be"
+    enable=datesToEnable
+    date=selectedDate
+    onChange=(action "dateChanged")
+    getFlatpickrRef=(action (mut flatpickrRef))
+  }}
+  <button
+    class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"
+    type="button"
+    {{action "toggleCalendar"}}
+  >
+    <i class="vl-vi vl-vi-calendar" aria-hidden="true"></i>
+  </button>
+{{/if}}
