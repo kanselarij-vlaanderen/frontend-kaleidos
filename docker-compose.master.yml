@@ -4,7 +4,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name:
+    container_name: kaleidos-frontend
     ports:
       - "8081:80"
     expose:
