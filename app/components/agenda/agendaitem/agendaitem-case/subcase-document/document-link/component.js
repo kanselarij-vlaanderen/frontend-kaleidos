@@ -53,7 +53,7 @@ export default Component.extend(FileSaverMixin,{
 		// TODO when case can be accouncement, fix hardcoded DOC
 		// TODO fix agendaitem number
 		let version = this.versionNames.createVersionName(identifier.versionNumber);
-		title = `VR ${moment(meeting.plannedStart).format("YYYY MMDD")} DOC ${paddedAgendaNumber}/${identifier.serialNumber}`;
+		title = `VR ${moment(meeting.plannedStart).format("YYYY MMDD")} DOC.${meeting.get("number")}/${paddedAgendaNumber}/${identifier.serialNumber}`;
 		if(version.length > 0){
 			title += ` ${version}`;
 		}
