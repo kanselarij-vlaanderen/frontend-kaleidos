@@ -26,4 +26,3 @@ networks:
       name: letsencrypt_default
   backend:
     external: true
-
