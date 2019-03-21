@@ -1,39 +1,86 @@
-<div class="vl-u-spacer">
-  {{!-- vl-u-text--uppercase --}}
-  <h3 class="vl-title vl-u-text--bold"> 
+{{! vl-u-text--uppercase }}
+{{#if selectedAgendaItem}}
+  <div class="vl-u-spacer">
+    <h3 class="vl-title vl-u-text--uppercase vl-u-text--bold">
+      {{number}}
+      .
+      {{await agendaitem.subcase.shortTitle}}
+    </h3>
+    <h4 class="vl-title vl-title--h6">
+      {{await agendaitem.subcase.shortTitle}}
+    </h4>
+    {{!-- <div class="agenda-sub-options">
+      <p class="agenda-postponed-option">
+        {{#if agendaitem.retracted}}
+          {{t "agenda-item.postponed"}}
+        {{/if}}
+        {{#if (await agendaitem.postponedTo) as |sess|}}
+          {{t "agenda-item.postponed-until"}}
+          {{moment-format sess.plannedStart "dddd DD-MM-YYYY"}}
+        {{/if}}
+      </p>
+    </div> --}}
+    <div class="vl-u-display-flex vl-u-flex-space-between">
+      <span class="vlc-agenda-item__meta">
+        {{!-- {{await agendaitem.subcase.shortTitle}}  Phase todo --}}
+      </span>
+      {{#if agendaitem.formallyOk}}
+        <div class="vl-u-display-flex active">
+          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+          <span class="vlc-agenda-item__meta">
+            {{t "agendaitem-details.formal-ok"}}
+          </span>
+        </div>
+      {{else}}
+        <div class="vl-u-display-flex default">
+          <span class="vlc-agenda-item__meta">
+            {{t "agendaitem-details.formal-nok"}}
+          </span>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+{{else}}
+  <h3 class="vl-title vl-title--h6">
     {{number}}
     .
     {{await agendaitem.subcase.shortTitle}}
   </h3>
-  <h4 class="vl-title vl-title--h6">
-    {{await agendaitem.subcase.case.shortTitle}} 
-  </h4>
-  <div class="agenda-sub-options">
-    <p class="agenda-postponed-option">
-      {{#if agendaitem.retracted}}
-        {{t "agenda-item.postponed"}}
-      {{/if}}
-      {{#if (await agendaitem.postponedTo) as |sess|}}
-        {{t "agenda-item.postponed-until"}}
-        {{moment-format sess.plannedStart "dddd DD-MM-YYYY"}}
-      {{/if}}
-    </p>
+  {{!-- <h4 class="vl-title vl-title--h5">{{await agendaitem.subcase.shortTitle}} </h4> --}}
+  <p class="vl-long-title">
+    {{await agendaitem.subcase.title}}
+  </p>
+  <div class="vl-u-display-flex vl-attachments">
+    {{#each (await agendaitem.subcase.documents) as |document|}}
+      <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">
+        <div
+          class="vl-badge vl-badge--icon vl-badge--small vl-badge--alt vl-document-badge"
+        >
+          <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
+        </div>
+        <p>
+          {{document.lastDocumentVersion.nameToDisplay}}
+        </p>
+      </div>
+    {{/each}}
   </div>
   <div class="vl-u-display-flex vl-u-flex-space-between">
-    <span class="c-agenda-item__meta">
-      {{await agendaitem.subcase.title}}
+    <span class="vlc-agenda-item__meta">
+      2de principiele goedkeuring
     </span>
-    <div class="vl-u-display-flex default">
-      <i class="vl-vi vl-vi-check-small"></i>
-      {{#if agendaitem.formallyOk}}
-        <span class="c-agenda-item__meta">
+    {{#if agendaitem.formallyOk}}
+      <div class="vl-u-display-flex active">
+        <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+        <span class="vlc-agenda-item__meta">
           {{t "agendaitem-details.formal-ok"}}
         </span>
-      {{else}}
-        <span class="c-agenda-item__meta">
-          {{t "agendaitem-details.formal-ok"}}
+      </div>
+    {{else}}
+      <div class="vl-u-display-flex default">
+        <span class="vlc-agenda-item__meta">
+          {{t "agendaitem-details.formal-nok"}}
         </span>
-      {{/if}}
-    </div>
+      </div>
+    {{/if}}
   </div>
-</div>
+{{/if}}

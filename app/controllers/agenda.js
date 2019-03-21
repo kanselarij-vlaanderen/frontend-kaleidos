@@ -8,9 +8,9 @@ export default Controller.extend({
 	queryParams: ['selectedAgenda'],
 	selectedAgenda:null,
 	creatingNewSession: false,
-	selectedAgendaItem: null,
 	selectedAnnouncement: null,
 	createAnnouncement: false,
+	selectedAgendaItem: null,
 	isLoading: false,
 	isPrintingDecisions: false,
 	currentSession: alias('sessionService.currentSession'),
@@ -21,9 +21,9 @@ export default Controller.extend({
 
 	agendaitemsClass: computed('selectedAgendaItem', 'selectedAnnouncement', 'createAnnouncement', function () {
 		if (this.get('selectedAgendaItem') || this.get('selectedAnnouncement') || this.get('createAnnouncement')) {
-			return "vlc-panel-layout__agenda-items vl-u-bg-porcelain";
+			return "vlc-panel-layout__agenda-items";
 		} else {
-			return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
+			return "vlc-panel-layout-agenda__detail vl-u-spacer-extended";
 		}
 	}),
 
@@ -38,7 +38,7 @@ export default Controller.extend({
 		navigateToSubCases() {
 			this.transitionToRoute('subcases');
 		},
-
+		
 		clearSelectedAgendaItem() {
 			this.set("selectedAgendaItem", null);
 			this.set("selectedAnnouncement", null);

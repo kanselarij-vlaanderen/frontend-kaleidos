@@ -23,7 +23,8 @@ ADD package.json /tmp/client/
 RUN cd /tmp/client && npm install 
 ADD . /tmp/client
 RUN cd /tmp/client && ember build --environment=${EMBER_ENV} && mv dist/* /usr/share/nginx/html/ && rm -rf /tmp/client
-ADD nginx.conf /etc/nginx/conf.d/default.conf
+ADD nginx.conf /etc/nginx/conf.d/nginx.temp
 EXPOSE ${APP_PORT}
 
-CMD ["/bin/bash", "/ember-proxy-service.sh"]
+CMD /bin/bash -c "envsubst '\$BACKEND' < /etc/nginx/conf.d/nginx.temp > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+

@@ -17,38 +17,39 @@
       currentAgenda=currentAgenda
       selectAgenda=(action "selectAgenda")
     }}
-    <div class={{agendaitemsClass}}>
-      <div class="vlc-scroll-wrapper">
-        {{agenda/agendaitem-search selectedAgenda=currentAgenda}}
-        <div class="vlc-scroll-wrapper__body">
-          {{agenda/agenda-list
-            agendaitems=currentAgendaItems
-            selectAgendaItem=(action "selectAgendaItem")
-            selectedAgendaItem=selectedAgendaItem
-          }}
-          {{agenda/announcement-list
-            announcements=(await announcements)
-            selectAnnouncement=(action "selectAnnouncement")
-            selectedAnnouncement=selectedAnnouncement
-          }}
+    <div class="vl-u-bg-porcelain">
+      <div class={{agendaitemsClass}}>
+        <div class="vlc-scroll-wrapper">
+          {{!-- {{#if (not await selectedAgendaItem)}}
+          TODO implement
+          {{agenda/agendaitem-search selectedAgenda=currentAgenda}}
+        {{/if}} --}}
+          <div class="vlc-scroll-wrapper__body">
+            {{agenda/agenda-list
+              agendaitems=currentAgendaItems
+              selectAgendaItem=(action "selectAgendaItem")
+              selectedAgendaItem=selectedAgendaItem
+            }}
+            {{agenda/announcement-list
+              announcements=(await announcements)
+              selectAnnouncement=(action "selectAnnouncement")
+              selectedAnnouncement=selectedAnnouncement
+            }}
+          </div>
         </div>
       </div>
     </div>
-    <div class="vlc-panel-layout__main-content">
-      <div class="vlc-scroll-wrapper">
-        {{#if selectedAgendaItem}}
-          {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem
-          }}
-        {{else if createAnnouncement}}
-          {{agenda/create-announcement
-            navigateToNewAnnouncement=(action "navigateToNewAnnouncement")
-            currentAgenda=currentAgenda
-          }}
-        {{else if selectedAnnouncement}}
-          {{agenda/announcement-overview announcement=selectedAnnouncement}}
-        {{/if}}
-      </div>
-    </div>
+    {{log selectedAgendaItem}}
+    {{#if selectedAgendaItem}}
+      {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
+    {{else if createAnnouncement}}
+      {{agenda/create-announcement
+        navigateToNewAnnouncement=(action "navigateToNewAnnouncement")
+        currentAgenda=currentAgenda
+      }}
+    {{else if selectedAnnouncement}}
+      {{agenda/announcement-overview announcement=selectedAnnouncement}}
+    {{/if}}
   </div>
 {{else}}
   {{web-components/vl-loader
