@@ -50,6 +50,7 @@
   <p class="vl-long-title">
     {{await agendaitem.subcase.title}}
   </p>
+
   <div class="vl-u-display-flex vl-attachments">
     {{#each (await agendaitem.subcase.documents) as |document|}}
       <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">
@@ -58,9 +59,7 @@
         >
           <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
         </div>
-        <p>
-          {{document.lastDocumentVersion.nameToDisplay}}
-        </p>
+        {{document-name document=document agendaitem=agendaitem}}
       </div>
     {{/each}}
   </div>
