@@ -39,6 +39,7 @@
 		"no-announcements": "Geen mededelingen"
 	},
 	"buttons": {
+		"propose-for-agenda":"Indienen voor agendering",
 		"add": "Toevoegen",
 		"add-minister": "Minister toevoegen",
 		"back": "Terug",
@@ -226,5 +227,9 @@
 	"notes-of-session":"Notulen van de zitting",
 	"notes-of-agendaitem":"Notulen van agendapunt",
 	"print-notes":"Notulen agenda",
-	"no-notes":"Geen notulen voor dit agendapunt."
+	"no-notes":"Geen notulen voor dit agendapunt.",
+	"other-agenda":"Andere agenda",
+	"undo-propose":"Niet ingediend",
+	"propose-for":"Aanvragen voor",
+	"agendaitem-title":"Type dossiers & titels"
 }

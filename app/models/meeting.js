@@ -13,7 +13,7 @@ export default Model.extend({
 	location: attr('string'),
 	number: attr('number'),
 	agendas: hasMany('agenda', {inverse:null}),
-	subcases: hasMany('subcase'),
+	requestedSubcases: hasMany('subcase'),
 	postponeds: hasMany('postponed'),
 	notes: belongsTo('meeting-record'),
 
