@@ -28,7 +28,10 @@ export default Component.extend(FileSaverMixin,{
           chosenFileName: this.get('fileName') || file.fileName || file.name,
           created: new Date()
         });
-      await newDocumentVersion.save();
+			await newDocumentVersion.save();
+			if(this.agendaitem){
+				await document.createNextAgendaVersionIdentifier(this.agendaitem,newDocumentVersion);
+			}
       this.set('uploadedFile', null);
       this.set('fileName', null);
       this.set('isUploadingNewVersion', false);

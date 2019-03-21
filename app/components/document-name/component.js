@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import moment from 'moment';
-import RSVP from 'rsvp';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
@@ -22,32 +21,12 @@ export default Component.extend({
 		if(!this.agendaitem){
       return this.get('fallbackDocumentName');
 		}
-		let subcase = await this.agendaitem.get('subcase');
-		let promises = await RSVP.hash({
-			voCase: subcase.get('case'),
-			agenda: this.agendaitem.get('agenda')
-		});
-		let agenda = promises.agenda;
-		let meeting = await agenda.get('createdFor')
-    let lastDocumentVersion = await this.document.get('lastDocumentVersion');
+		let lastDocumentVersion = await this.document.get('lastDocumentVersion');
     if(!lastDocumentVersion){
       return "";
     }
-		let identifier = await this.store.query('document-vo-identifier', {
-			filter: {
-				subcase: {
-					id: subcase.get('id')
-				},
-				meeting: {
-					id: meeting.get('id')
-				},
-				"document-version": {
-					id: lastDocumentVersion.get('id')
-				}
-			}
-    });
-    identifier = identifier.objectAt(0);
-    if(!identifier){
+    let identifier = await this.document.getDocumentIdentifierForVersion(this.agendaitem);
+		if(!identifier){
       return this.get('fallbackDocumentName');
     }
 		let title = identifier.get('title');
@@ -60,7 +39,8 @@ export default Component.extend({
 		}
 		// TODO when case can be accouncement, fix hardcoded DOC
 		// TODO fix agendaitem number
-		let version = this.versionNames.createVersionName(identifier.versionNumber);
+    let version = this.versionNames.createVersionName(identifier.versionNumber);
+    let meeting = await identifier.get('meeting');
 		title = `VR ${moment(meeting.plannedStart).format("YYYY MMDD")} DOC.${meeting.get("number")}/${paddedAgendaNumber}/${identifier.serialNumber}`;
 		if(version.length > 0){
 			title += ` ${version}`;
