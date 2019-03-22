@@ -6,7 +6,7 @@ import { computed } from '@ember/object';
 export default Controller.extend({
 	sessionService: inject(),
 	queryParams: ['selectedAgenda'],
-	selectedAgenda:null,
+	selectedAgenda: null,
 	creatingNewSession: false,
 	selectedAnnouncement: null,
 	createAnnouncement: false,
@@ -38,7 +38,13 @@ export default Controller.extend({
 		navigateToSubCases() {
 			this.transitionToRoute('subcases');
 		},
-		
+
+		reloadRouteWithNewAgenda(selectedAgendaId) {
+			const { currentSession } = this;
+			this.transitionToRoute('agenda', currentSession.id, { queryParams: { selectedAgenda: selectedAgendaId } });
+			this.send('refresh');
+		},
+
 		clearSelectedAgendaItem() {
 			this.set("selectedAgendaItem", null);
 			this.set("selectedAnnouncement", null);

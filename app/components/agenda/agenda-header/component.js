@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
-import { notifyPropertyChange } from '@ember/object';
 
 const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
@@ -29,7 +28,7 @@ export default Component.extend({
 		clearSelectedAgendaItem() {
 			this.clearSelectedAgendaItem();
 		},
-		
+
 		async approveAgenda(session) {
 			this.changeLoading();
 			let agendas = await this.get('agendas');
@@ -40,17 +39,26 @@ export default Component.extend({
 			if (!lastDefiniteAgenda) {
 				agendaToLock.set('name', alphabet[0]);
 			} else {
-				agendaToLock.set('name', alphabet[definiteAgendas.length]);
+				if (definiteAgendas) {
+					const agendaLength = definiteAgendas.length;
+					if (agendaLength && alphabet[agendaLength]) {
+						if (agendaLength < alphabet.length - 1) {
+							agendaToLock.set('name', alphabet[agendaLength]);
+						}
+					} else {
+						agendaToLock.set('name', agendaLength + 1);
+					}
+				} else {
+					agendaToLock.set('name', agendas.get('length') + 1);
+				}
 			}
 
 			agendaToLock.set('isAccepted', true);
 			agendaToLock.save().then(() => {
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {
-					notifyPropertyChange(session, 'agendas');
-					this.set('sessionService.currentAgenda', newAgenda);
-					notifyPropertyChange(session, 'sessionService.agendas');
-					this.set('selectedAgendaItem', null);
 					this.changeLoading();
+					this.set('sessionService.currentAgenda', newAgenda)
+					this.reloadRoute(newAgenda.get('id'));
 				});
 			})
 		},
@@ -110,11 +118,9 @@ export default Component.extend({
 			const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
 			this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda).then(newAgenda => {
-				notifyPropertyChange(session, 'agendas');
-				this.set('sessionService.currentAgenda', newAgenda);
-				notifyPropertyChange(session, 'sessionService.agendas');
-				this.set('selectedAgendaItem', null);
 				this.changeLoading();
+				this.set('sessionService.currentAgenda', newAgenda)
+				this.reloadRoute(newAgenda.get('id'));
 			});
 		},
 
@@ -138,7 +144,7 @@ export default Component.extend({
 	},
 
 	async reduceGroups(pressItems) {
-		const {currentAgenda, agendaService } = this;
+		const { currentAgenda, agendaService } = this;
 		const sortedAgendaItems = await agendaService.getSortedAgendaItems(currentAgenda);
 		const pressAgendaItems = pressItems.filter(pressItem => {
 			if (pressItem && pressItem.id) {
@@ -161,5 +167,9 @@ export default Component.extend({
 
 	changeLoading() {
 		this.loading();
+	},
+
+	reloadRoute(id) {
+		this.reloadRouteWithNewAgenda(id);
 	}
 });
