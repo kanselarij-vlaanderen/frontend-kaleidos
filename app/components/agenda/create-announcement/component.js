@@ -41,10 +41,9 @@ export default Component.extend({
       this.get('uploadedFiles').pushObject(uploadedFile);
     },
 
-
     chooseDocumentType(uploadedFile, type) {
-      uploadedFile.set('documentType', type.name || type.description);
-    },
+			uploadedFile.set('documentType',type);
+		},
 
     removeFile(file) {
       $.ajax({
@@ -71,8 +70,8 @@ export default Component.extend({
     async createNewDocumentWithDocumentVersion(announcement, file, documentTitle) {
       let document = await this.store.createRecord('document', {
         created: new Date(),
-        title: documentTitle
-        // documentType: file.get('documentType')
+        title: documentTitle,
+        type: file.get('documentType')
       });
       document.save().then(async (createdDocument) => {
         if(file) {

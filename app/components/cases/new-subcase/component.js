@@ -90,10 +90,6 @@ export default Component.extend({
 			this.closeModal();
 		},
 
-		chooseType(type) {
-			this.set('selectedType', type);
-		},
-
 		selectPhase(phase) {
 			this.set('phase', phase);
 		},
@@ -112,7 +108,7 @@ export default Component.extend({
 		},
 
 		chooseDocumentType(uploadedFile, type) {
-			uploadedFile.set('documentType', type.name || type.description);
+			uploadedFile.set('documentType',type);
 		},
 
 		removeFile(file) {
@@ -146,7 +142,7 @@ export default Component.extend({
 		let document = await this.store.createRecord('document', {
 			created: new Date(),
 			title: documentTitle,
-			documentType: file.get('documentType')
+			type: file.get('documentType')
 		});
 		document.save().then(async (createdDocument) => {
 			if (file) {
