@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { notifyPropertyChange } from '@ember/object';
 import { inject } from '@ember/service';
 
+
 export default Component.extend({
 	store: inject(),
 	uploadedFiles: [],
@@ -47,19 +48,23 @@ export default Component.extend({
 		async createSubCase(event) {
 			event.preventDefault();
 			this.parseDomainsAndMandatees();
+
 			const caze = this.store.peekRecord('case', this.case.id);
 			let phase = await this.get('phase');
-			if (!phase) {
-				phase = [];
-			} else {
-				phase = [phase];
-			}
+
+      const subcasePhase = this.store.createRecord('subcase-phase',
+        {
+          date: new Date(),
+          code: phase
+        });
+
+      const createdSubphase = await subcasePhase.save();
 
 			const { title, shortTitle, selectedDomains, selectedMandatees, themes } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
-					phases: phase,
+          phases: [createdSubphase],
 					shortTitle: shortTitle,
 					showAsRemark: false,
 					governmentDomains: selectedDomains,
@@ -70,6 +75,10 @@ export default Component.extend({
 				});
 
 			const createdSubCase = await subcase.save();
+
+			createdSubphase.set('subcase', createdSubCase);
+			createdSubphase.save();
+
 			const uploadedFiles = this.get('uploadedFiles');
 			Promise.all(uploadedFiles.map(uploadedFile => {
 				if (uploadedFile.id) {
@@ -187,9 +196,5 @@ export default Component.extend({
 		this.set('selectedMandatees', mandatees);
 		this.set('selectedDomains', selectedDomains);
 	},
-	
-	async didInsertElement() {
-		this._super(...arguments);
-		this.set('phases', this.store.findAll('subcase-phase'));
-	}
+
 })
