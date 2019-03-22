@@ -2,6 +2,19 @@
   <div class="vl-modal-dialog__content">
     {{#if (eq step 1)}}
       <div class="vlc-input-field-block">
+        <label class="vl-checkbox">
+          {{input
+            class="vl-checkbox__toggle"
+            type="checkbox"
+            checked=showAsRemark
+          }}
+          <div class="vl-checkbox__label">
+            <i class="vl-checkbox__box"></i>
+            {{t "show-as-remark"}}
+          </div>
+        </label>
+      </div>
+      <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
         {{textarea
           rows="2"
@@ -27,17 +40,6 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcases.subcase-phase")}}
-        {{utils/model-selector
-          modelName="subcase-phase"
-          searchField="label"
-          sortField="label"
-          propertyToShow="label"
-          selectedItems=phase
-          selectModel=(action "selectPhase")
-        }}
-      </div>
-      <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "cases.upload-file")}}
         {{file-uploader uploadedFile=(action "uploadedFile")}}
       </div>
@@ -47,22 +49,24 @@
             {{t "attachements"}}
           </h4>
         {{/if}}
-        {{#each uploadedFiles as |uploadedFile|}}
-          <div class="uploaded-file-container">
-            <a class="remove-file" {{action "removeFile" uploadedFile}}>
-              <i class="vl-vi vl-vi-cross"></i>
-            </a>
-            {{web-components/vl-document file=uploadedFile}}
-            <div>
-              {{t "metadata-form.public"}}
-              {{input type="checkbox" checked=uploadedFile.public}}
+        <div class="attachements">
+          {{#each uploadedFiles as |uploadedFile|}}
+            <div class="uploaded-file-container">
+              <a class="remove-file" {{action "removeFile" uploadedFile}}>
+                <i class="vl-vi vl-vi-cross"></i>
+              </a>
+              {{web-components/vl-document file=uploadedFile}}
+              <div>
+                {{t "metadata-form.public"}}
+                {{input type="checkbox" checked=uploadedFile.public}}
+              </div>
+              {{t "subcases.document-type"}}
+              {{document-type-selector
+                chooseDocumentType=(action "chooseDocumentType" uploadedFile)
+              }}
             </div>
-            {{t "subcases.document-type"}}
-            {{document-type-selector
-              chooseDocumentType=(action "chooseDocumentType" uploadedFile)
-            }}
-          </div>
-        {{/each}}
+          {{/each}}
+        </div>
         {{#if (not nonDigitalDocuments.length eq "0")}}
           <h4 class="vl-title vl-title--h4">
             {{t "non-digital-attachements"}}
@@ -76,6 +80,17 @@
         {{/each}}
       </div>
     {{else if (eq step 2)}}
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.subcase-phase")}}
+        {{utils/model-selector
+          modelName="subcase-phase"
+          searchField="label"
+          sortField="label"
+          propertyToShow="label"
+          selectedItems=phase
+          selectModel=(action "selectPhase")
+        }}
+      </div>
       {{cases/subcase-mandatees
         mandateeRowsChanged=(action "mandateeRowsChanged")
       }}

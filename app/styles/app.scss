@@ -304,6 +304,12 @@ $icon-font-location: "/fonts/";
 .uploaded-file-container {
   width: calc(100% / 3);
   padding: 1em;
+  float:left;
+}
+
+.attachements {
+  display:flex;
+  flex:wrap;
 }
 
 .remove-file {

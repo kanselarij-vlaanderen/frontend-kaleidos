@@ -13,12 +13,12 @@
         <i class="vl-button__icon vl-vi vl-vi-add"></i>
       </button>
       {{#if selectedDomain}}
-      <button
-        class="vl-button vl-button--tertiary vl-button--narrow"
-        {{action "toggleIsEditing"}}
-      >
-        <i class="vl-button__icon vl-vi vl-vi-edit"></i>
-      </button>
+        <button
+          class="vl-button vl-button--tertiary vl-button--narrow"
+          {{action "toggleIsEditing"}}
+        >
+          <i class="vl-button__icon vl-vi vl-vi-edit"></i>
+        </button>
       {{/if}}
       <button
         class="vl-button vl-button--tertiary vl-button--narrow"
@@ -76,13 +76,13 @@
   </div>
 {{/if}}
 {{#if isEditing}}
-<div class="vl-modal-dialog__content">
+  <div class="vl-modal-dialog__content">
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "name")}}
       {{web-components/vl-form-input width="4" value=title}}
     </div>
   </div>
-   <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
