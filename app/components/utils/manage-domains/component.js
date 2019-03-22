@@ -5,14 +5,21 @@ import { computed } from '@ember/object';
 export default Component.extend({
 	classNames: ["vl-u-spacer"],
 	store: inject(),
-	title: computed('selectedDomain', function () {
-		const domain = this.get('selectedDomain');
-		if (domain) {
-			return domain.get('label');
-		} else {
-			return null;
+	
+	title: computed('selectedDomain', {
+		get() {
+			const domain = this.get('selectedDomain');
+			if (domain) {
+				return domain.get('label');
+			} else {
+				return null;
+			}
+		},
+		set(key, value) {
+			return value;
 		}
 	}),
+
 	isAdding: false,
 	isEditing: false,
 

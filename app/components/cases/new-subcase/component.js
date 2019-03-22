@@ -11,6 +11,7 @@ export default Component.extend({
 	selectedMandatees: [],
 	themes: [],
 	isAddingNonDigitalDocument: false,
+	showAsRemark: false,
 	step: 1,
 
 	title: computed('case', function () {
@@ -28,6 +29,7 @@ export default Component.extend({
 		this.set('title', null);
 		this.set('shortTitle', null);
 		this.set('isAddingNonDigitalDocument', false);
+		this.set('showAsRemark', false);
 		this.set('step', 1);
 	},
 
@@ -55,13 +57,13 @@ export default Component.extend({
 				phase = [phase];
 			}
 
-			const { title, shortTitle, selectedDomains, selectedMandatees, themes } = this;
+			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
 					phases: phase,
 					shortTitle: shortTitle,
-					showAsRemark: false,
+					showAsRemark: showAsRemark,
 					governmentDomains: selectedDomains,
 					case: caze,
 					created: new Date(),

@@ -8,6 +8,7 @@ export default Model.extend({
   created: attr('date'),
   record: attr('string'),
   formallyOk: attr('boolean'),
+  showAsRemark: attr('boolean'),
   retracted: attr('boolean'),
   
   titlePress: attr('string'),

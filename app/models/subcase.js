@@ -44,6 +44,10 @@ export default Model.extend({
   }),
 
   hasAgendaItem: computed('agendaitems', function() {
-    return this.get('agendaitems');
+    this.get('agendaitems').then((agendaitems) => {
+      const sortedAgendaItems = agendaitems.sortBy('created');
+      console.log(sortedAgendaItems);
+    });
+    
   })
 });
