@@ -1,41 +1,9 @@
-<form autocomplete="off" class="edit-news-item-form">
-  <div class="properties">
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.title'}}
-      </div>
-      {{input value=newsItem.title}}
-    </div>
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.sub-title'}}
-      </div>
-      {{input value=newsItem.subtitle autocomplete="off"}}
-    </div>
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.content'}}
-      </div>
-      {{textarea value=newsItem.content}}
-    </div>
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.date-publication'}}
-      </div>
-      {{pikaday-input
-        theme="pikaday-session"
-        useUTC=true
-        value=newsItem.publicationDate
-        onSelection=(action "updatePublicationDate")
-      }}
-    </div>
-    <div class="property">
-      <div class="label">
-        {{t 'edit-item.themes'}}
-      </div>
-      {{utils/theme-list chooseTheme=(action "chooseTheme") selectedThemes=newsItem.themes}}
-    </div>
-  </div>
-</form>
-
-{{yield}}
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "edit-item.sub-title")}}
+  {{web-components/vl-form-input width="4" value=newsItem.subtitle}}
+</div>
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "edit-item.content")}}
+  {{textarea rows="5" class="vl-textarea vl-textarea--block" value=newsItem.text
+  }}
+</div>

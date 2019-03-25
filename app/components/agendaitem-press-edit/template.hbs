@@ -1,0 +1,19 @@
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "edit-item.title")}}
+  {{web-components/vl-form-input width="4" value=agendaitem.titlePress}}
+</div>
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value="Inhoud"}}
+  {{textarea
+    class="vl-textarea vl-textarea--block"
+    rows="6"
+    value=agendaitem.textPress
+  }}
+</div>
+<div class="vlc-input-field vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "for-press")}}
+  {{x-toggle
+    value=agendaitem.forPress
+    onToggle=(action (mut agendaitem.forPress))
+  }}
+</div>

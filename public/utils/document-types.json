@@ -1,0 +1,136 @@
+	{
+		"documentTypes": [
+			{
+				"name": "ABestuur",
+				"description": "Akkoord Bestuurszaken"
+			},
+			{
+				"name": "Advies",
+				"description": "Advies"
+			},
+			{
+				"name": "Arrest",
+				"description": "Arrest"
+			},
+			{
+				"name": "BA",
+				"description": "Begrotingsakkoord van de minister va begroting"
+			},
+			{
+				"name": "Beleidsbrief",
+				"description": "Beleidsbrief"
+			},
+			{
+				"name": "Beleidsnota",
+				"description": "Beleidsnota"
+			},
+			{
+				"name": "Bericht",
+				"description": ""
+			},
+			{
+				"name": "Besluit",
+				"description": "Besluit van de Vlaamse Regering"
+			},
+			{
+				"name": "Besluit AG",
+				"description": "Besluit van een administrateur-generaal"
+			},
+			{
+				"name": "Besluit AH",
+				"description": "Besluit Afdelingshoofd"
+			},
+			{
+				"name": "Besluit HD",
+				"description": "Besluit HoofdDepartement"
+			},
+			{
+				"name": "Besluit RVB",
+				"description": "Besluit Raad van Bestuur"
+			},
+			{
+				"name": "Besluit SG",
+				"description": "Besluit van een secretaris-generaal"
+			},
+			{
+				"name": "Bijlage",
+				"description": "Bijlage(n) ter informatie"
+			},
+			{
+				"name": "Decreet",
+				"description": "Te bekrachtigen decreet"
+			},
+			{
+				"name": "Errat",
+				"description": "Erratum"
+			},
+			{
+				"name": "Groenboek",
+				"description": "Groenboek"
+			},
+			{
+				"name": "IF",
+				"description": "Advies van Inspectie Financiën"
+			},
+			{
+				"name": "Mededeling",
+				"description": "Mededeling"
+			},
+			{
+				"name": "Memo",
+				"description": "Memorie van toelichting"
+			},
+			{
+				"name": "MinB",
+				"description": "Ministerieel besluit"
+			},
+			{
+				"name": "nota",
+				"description": "Nota aan de Vlaamse Regering"
+			},
+			{
+				"name": "Omzendbr.",
+				"description": "Omzendbrief"
+			},
+			{
+				"name": "OntwerpDecreet",
+				"description": "Ontwerpdecreet van Vlaamse Regering"
+			},
+			{
+				"name": "RVS",
+				"description": "Advies Raad van State"
+			},
+			{
+				"name": "SamenAkk.",
+				"description": "Samenwerkingsakkoord"
+			},
+			{
+				"name": "Verslag",
+				"description": "Verslag aan de Regering"
+			},
+			{
+				"name": "Visienota",
+				"description": "Visienota"
+			},
+			{
+				"name": "Witboek",
+				"description": "Witboek"
+			},
+			{
+				"name": "",
+				"description": "Ter goedkeuring"
+			},
+			{
+				"name": "",
+				"description": "Adviezen"
+			},
+			{
+				"name": "",
+				"description": "Conceptnota's"
+			},
+			{
+				"name": "",
+				"description": "Bijkomende types ifv Publicatie"
+			}
+		]
+	}

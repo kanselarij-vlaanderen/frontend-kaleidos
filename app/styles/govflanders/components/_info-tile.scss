@@ -1,0 +1,228 @@
+$info-tile: (
+  "icon-size": 3rem,
+  "padding-small": 1.7rem,
+  "padding-small--s": 1rem,
+  "padding-medium": 2.5rem,
+  "padding-medium--s": 2rem,
+  "padding-large": 4.5rem,
+  "padding-large--s": 2rem,
+  "header-title-font-size": 1.8rem,
+  "header-title-font-size--s": 1.5rem,
+  "header-subtitle-font-size": 1.4rem
+);
+
+.vl-info-tile {
+  display: block;
+  position: relative;
+  border: 1px solid $border-color;
+  padding: map-get($info-tile, "padding-small");
+
+  @include respond-to(small) {
+    padding: map-get($info-tile, "padding-small--s");
+  }
+
+  // Darker variant
+  &--alt {
+    background-color: $alt-bg;
+  }
+
+  // Info tile with action
+  &--clickable {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+    appearance: none;
+    border-radius: 0;
+
+    &:hover,
+    &:focus {
+      color: inherit;
+      background-color: $alt-bg;
+
+      .vl-info-tile__header__title {
+        text-decoration: underline;
+      }
+
+      &.vl-info-tile--date {
+        .vl-info-tile__date {
+          background: $action-text-hover-color;
+        }
+      }
+    }
+
+    .vl-info-tile__header__title {
+      color: $action-text-color;
+    }
+
+    &.vl-info-tile--date {
+      .vl-info-tile__date {
+        background: $action-text-hover-color;
+      }
+    }
+  }
+
+  // Medium padding
+  &--m {
+    padding: map-get($info-tile, "padding-medium");
+    @include respond-to (small) {
+      padding: map-get($info-tile, "padding-medium--s");
+    }
+  }
+
+  // Large padding
+  &--l {
+    padding: map-get($info-tile, "padding-large");
+    @include respond-to (small) {
+      padding: map-get($info-tile, "padding-large--s");
+    }
+  }
+
+  // Centered content in the component
+  &--center {
+    text-align: center;
+  }
+
+  &--center & {
+    &__header {
+      display: block;
+      margin-bottom: 1.6rem;
+
+      &__wrapper {
+        width: 100%;
+      }
+
+      &__icon {
+        &:not(.vl-badge) {
+          color: $border-color;
+          font-size: map-get($info-tile, "icon-size");
+          line-height: 1;
+          display: inline-block;
+        }
+      }
+    }
+
+    &__footer {
+      margin-top: 2rem;
+    }
+  }
+
+  // V-cCentered content in the component
+  &--v-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &.vl-js-equal-height {
+    height: 100%;
+  }
+
+  // Modifier with colored date bar at the left
+  &--date {
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+
+    &[href] {
+      .vl-info-tile {
+        &__date {
+          color: $white;
+        }
+      }
+    }
+  }
+
+  &--date & {
+    &__date {
+      background-color: $alt-bg;
+      padding: map-get($info-tile, "padding-small");
+      @include respond-to (small) {
+        padding: map-get($info-tile, "padding-small--s");
+      }
+
+      &__main {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      &__sub {
+        text-align: center;
+        font-size: 1.4rem;
+      }
+
+      &__wrapper {
+        padding: map-get($info-tile, "padding-small");
+        flex: 1;
+        @include respond-to (small) {
+          padding: map-get($info-tile, "padding-small--s");
+        }
+      }
+    }
+  }
+
+  // Badges at the bottom right corner
+  &--badge-bottom & {
+    &__content {
+      display: flex;
+    }
+  }
+
+  &__badges {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    margin-left: map-get($info-tile, "padding-small");
+
+    &__badge {
+      &:not(:first-of-type) {
+        margin-top: 0.5rem;
+      }
+    }
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex: 1;
+
+    .vl-info-tile__badge__wrapper {
+      margin-right: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    &__title {
+      font-weight: 500;
+      line-height: (20 / 16);
+      font-family: $base-font;
+      font-size: map-get($info-tile, "header-title-font-size");
+
+      @include respond-to (small) {
+        font-size: map-get($info-tile, "header-title-font-size--s");
+      }
+    }
+
+    &__subtitle {
+      color: $alt-text-color;
+      line-height: 1.3;
+      font-family: $base-font;
+      font-size: map-get($info-tile, "header-subtitle-font-size");
+      margin-top: 0.3rem;
+    }
+  }
+
+  &__content {
+    font-size: 1.6rem;
+    margin-top: 1rem;
+    flex: 1;
+    @include respond-to (small) {
+      font-size: 1.5rem;
+    }
+
+    &__wrapper {
+      flex: 1;
+    }
+  }
+}

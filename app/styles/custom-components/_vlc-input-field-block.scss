@@ -1,0 +1,40 @@
+/* ==========================================================================
+  Input field block
+  Provide a wrapper for each form field to be able to handle layout at that level
+   ========================================================================== */
+
+.vlc-input-field-block {
+  label, .vl-form__label {
+    margin-bottom: 1rem;
+    display: block;
+  }
+  + .vlc-input-field-block {
+    margin-top: 2rem;
+  }
+  // @tofix Erroneous BEM, but error in initial framework 3.7.2 as well
+  .vl-form__annotation,
+  .vl-form__error,
+  .vl-form__success {
+    margin-top: .5rem;
+  }
+}
+
+/* ==========================================================================
+  Input field inline
+  Provide a wrapper for each form field to be able to handle layout at that level
+   ========================================================================== */
+
+.vlc-input-field-group-wrapper--inline {
+  display: flex;
+  .vlc-input-field-group {
+    margin-right: 1rem;
+    flex: 0 1 auto;
+  }
+  .vlc-input-field-group--grow {
+    flex: 1 0 auto;
+    .vl-input-field {
+      width: 100%; // Why is this not a default?
+    }
+  }
+
+}

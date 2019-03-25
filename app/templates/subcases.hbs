@@ -1,50 +1,44 @@
-<button class="invert-color" {{action "navigateBackToAgenda"}}>
-  {{fa-icon "arrow-left"}}
-  {{t "buttons.agenda-back"}}
-</button>
-<button class="invert-color" {{action "addSubcasesToAgenda"}}>
-  {{t "buttons.add-to-agenda"}}
-</button>
+<div class="vl-u-spacer-extended-l">
+
+<div class="data-table-button-container vl-u-spacer--large">
+  <button
+    class="vl-button vl-button--tertiary"
+    {{action "navigateBackToAgenda"}}
+  >
+    {{fa-icon "arrow-left"}}
+    {{t "buttons.agenda-back"}}
+  </button>
+  <button
+    class="vl-button vl-button--tertiary"
+    {{action "addSubcasesToAgenda"}}
+  >
+    {{t "buttons.add-to-agenda"}}
+  </button>
+</div>
+
+
 <div class="data-table-container">
-  {{#data-table
-    content=model
-    fields="title shortTitle"
-    isLoading=isLoadingModel
-    filter=filter
-    page=page
-    size=size
-    sort=sort
-    onClickRow=(action "selectSubCase") as |t|
+
+  <h2 class="vl-title vl-title--h3">
+    {{t "subcases.title-postponed-subcases"}}
+  </h2>
+
+  {{subcases/postponed-subcases
+    selectSubcase=(action "selectPostponed" )
   }}
-    {{#t.content as |c|}}
-      {{#c.header}}
-        <th>
-          {{input
-            type="checkbox"
-            checked=allSubCasesSelected
-            click=(action "selectAllSubCases" bubbles=false)
-          }}
-          Select all
-        </th>
-        {{th-sortable field="title" currentSorting=sort label="Title"}}
-        {{th-sortable field="shortTitle" currentSorting=sort label="Short title"
-        }}
-      {{/c.header}}
-      {{#c.body as |subCase|}}
-        <td>
-          {{input
-            type="checkbox"
-            checked=subCase.selected
-            click=(action "selectSubCase" subCase)
-          }}
-        </td>
-        <td>
-          {{subCase.title}}
-        </td>
-        <td>
-          {{subCase.shortTitle}}
-        </td>
-      {{/c.body}}
-    {{/t.content}}
-  {{/data-table}}
+
+</div>
+
+
+<div class="data-table-container">
+
+  <h2 class="vl-title vl-title--h3">
+    {{t "subcases.title-available-subcases"}}
+  </h2>
+
+  {{subcases/available-subcases
+    selectSubcase=(action "selectAvailableSubcase")
+  }}
+</div>
+
 </div>

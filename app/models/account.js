@@ -1,11 +1,9 @@
-import Model from 'ember-data/model';
-import attr from 'ember-data/attr';
-import { belongsTo } from 'ember-data/relationships';
+import DS from 'ember-data';
+
+const { Model, belongsTo } = DS;
 import { alias } from '@ember/object/computed';
 
 export default Model.extend({
-  voId: attr(),
-  provider: attr(),
-  user: belongsTo('user', { inverse: null}),
-  gebruiker: alias('user')
+	user: belongsTo('person'),
+	gebruiker: alias('user')
 });

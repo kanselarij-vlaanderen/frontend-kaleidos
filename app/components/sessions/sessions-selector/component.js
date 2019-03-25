@@ -1,18 +1,26 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
+import { computed } from '@ember/object';
 
 export default Component.extend({
 	store: inject(),
-	classNames: ["files--header-tile", "files--search"],
-	tagName: "div",
 	currentSession: null, 	
+
+	sortedSessions: computed.sort('sessions', function(a, b) {
+		if (a.plannedStart > b.plannedStart) {
+      return 1;
+    } else if (a.plannedStart < b.plannedStart) {
+      return -1;
+    }
+    return 0;
+	}),
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
-		return this.store.query('session', {
+		return this.store.query('meeting', {
 			filter: {
-				plannedstart: `${searchValue}`
+				plannedStart: `${searchValue}`
 			}
 		});
 	}),
@@ -24,7 +32,7 @@ export default Component.extend({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				this.set('sessions', this.store.query('session'));
+				this.set('sessions', this.store.query('meeting', {}));
 			}
 		},
 	},
@@ -35,10 +43,7 @@ export default Component.extend({
 	},
 
 	async loadSessions() {
-		let sessions = await this.store.query('session', {
-			filter: {
-				':gt:plannedstart': "",
-			},
+		const sessions = await this.store.query('meeting', {
 			sort: "number"
 		});
 		this.set('sessions', sessions);

@@ -1,0 +1,9 @@
+.vl-data-table--matrix {
+  tr {
+    th {
+      &:first-child {
+        border-right: 0.3rem $border-color solid;
+      }
+    }
+  }
+}

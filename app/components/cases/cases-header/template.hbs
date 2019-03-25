@@ -1,0 +1,35 @@
+{{#if (not isAddingCase)}}
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <h1 class="vlc-page-header__title">
+          {{t "navigation.cases"}}
+        </h1>
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <div class="vl-action-group">
+          <button
+            class="vl-button vl-button--narrow vl-button--icon-before"
+            {{action "toggleAddingCase"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              aria-hidden="true"
+            ></i>
+            {{t "buttons.add-case"}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{else}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "toggleAddingCase")
+    title=(t "cases.new-case")
+  }}
+    {{cases/new-case close=(action "toggleAddingCase")}}
+  {{/web-components/vl-modal}}
+{{/if}}

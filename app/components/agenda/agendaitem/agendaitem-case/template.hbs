@@ -1,76 +1,38 @@
-<div class="properties">
-  <div class="property">
-    {{#link-to
-      "cases.case"
-      agendaitem.id
-      class="cases--decree-content"
-      tagName="div"
+{{#if agendaitem}}
+  {{#if (not isEditing)}}
+    {{agenda/agendaitem/agendaitem-case/subcase-titles
+      agendaitem=agendaitem
+      toggleIsEditing=(action "toggleIsEditing")
     }}
-      <h4>
-        {{agendaitem.subcase.shortTitle}}
-      </h4>
-      <p>
-        {{agendaitem.subcase.title}}
-      </p>
-      <div class="cases--decree-content-label">
-        {{#if agendaitem.extended}}
-          <p>
-            {{t "agenda-item.extended"}}
-          </p>
-        {{/if}}
-      </div>
-    {{/link-to}}
-  </div>
-  <div class="property">
-    <div class="label">
-      {{t "agendaitem-details.agenda"}}
-    </div>
-    {{input type="checkbox" checked=agendaitem.forPress}}
-  </div>
-  {{#if currentSession.isAdmin}}
-    <div class="property">
-      <div class="label">
-        {{t "agendaitem-details.formal-ok"}}
-      </div>
-      {{input type="checkbox" checked=agendaitem.formallyOk}}
-    </div>
-  {{/if}}
-  <div class="property">
-    <div class="label">
-      {{t "agendaitem-details.notes"}}
-    </div>
-    {{textarea value=agendaitem.record}}
-  </div>
-</div>
-<div class="agendaitem--detail--besluit">
-  <h2>
-    {{t "agendaitem-details.decision-title"}}
-  </h2>
-  {{#if (await agendaitem.decision)}}
-    {{decision/edit-decision decision=agendaitem.decision}}
   {{else}}
-    {{t "agendaitem-details.no-decision"}}
-    <button class="invert-color" {{action "addDecision"}}>
-      {{t "buttons.add-decision"}}
-    </button>
+    {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
+      agendaitem=agendaitem
+      toggleIsEditing=(action "toggleIsEditing")
+    }}
   {{/if}}
-</div>
-<div class="agendaitem--detail--news-item">
-  <h2>
-    {{t "agendaitem-details.news-item-title"}}
-  </h2>
-  {{#if (await agendaitem.newsItem)}}
-    {{news-item/edit-item newsItem=(await agendaitem.newsItem)}}
+  {{agenda/agendaitem/agendaitem-case/subcase-themes
+    subcase=(await agendaitem.subcase)
+  }}
+  {{agenda/agendaitem/agendaitem-case/subcase-mandatees
+    subcase=(await agendaitem.subcase)
+  }}
+  {{agenda/agendaitem/agendaitem-case/subcase-documents
+    agendaitem=agendaitem
+    subcase=(await agendaitem.subcase)
+  }}
+{{else}}
+  {{#if (not isEditing)}}
+    {{agenda/agendaitem/agendaitem-case/subcase-titles
+      subcase=subcase
+      toggleIsEditing=(action "toggleIsEditing")
+    }}
   {{else}}
-    {{t "agendaitem-details.no-news-item"}}
-    <button class="invert-color" {{action "addNewsItem"}}>
-      {{t "buttons.add-news-item"}}
-    </button>
+    {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
+      subcase=subcase
+      toggleIsEditing=(action "toggleIsEditing")
+    }}
   {{/if}}
-</div>
-<div class="controls">
-  <button class="invert-color" {{action "saveItem"}}>
-    {{t "buttons.save"}}
-  </button>
-</div>
-{{yield}}
+  {{agenda/agendaitem/agendaitem-case/subcase-themes subcase=subcase}}
+  {{agenda/agendaitem/agendaitem-case/subcase-mandatees subcase=subcase}}
+  {{agenda/agendaitem/agendaitem-case/subcase-documents subcase=subcase}}
+{{/if}}

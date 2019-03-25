@@ -1,0 +1,79 @@
+{{#if (not await meeting.notes)}}
+<div class="vl-modal-dialog__content">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "date")}}
+    {{web-components/vl-datepicker
+      value=meeting.plannedStart
+      dateChanged=(action "selectStartDate")
+    }}
+  </div>
+	<div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "attendees")}}
+    {{utils/mandatee-selector chooseMandatee=(action "peopleSelected")}}
+  </div>
+  {{utils/text-template label="Notulen" rows="10" text=text searchField="name"}}
+</div>
+<div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--link vl-button--narrow"
+          {{action "close"}}
+        >
+          {{t "buttons.cancel"}}
+        </button>
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--narrow"
+          {{action "createMeetingNotes" meeting}}
+        >
+          {{t "buttons.add"}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{{else}}
+<div class="vl-modal-dialog__content">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "date")}}
+    {{web-components/vl-datepicker
+      value=meeting.notes.plannedStart
+      dateChanged=(action "selectStartDate")
+    }}
+  </div>
+	<div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "attendees")}}
+    {{utils/mandatee-selector selectedMandatees=meeting.notes.attendees chooseMandatee=(action "peopleSelected")}}
+  </div>
+   {{utils/text-template label="Notulen" rows="10" text=meeting.notes.description searchField="name"}}
+</div>
+<div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--link vl-button--narrow"
+          {{action "close"}}
+        >
+          {{t "buttons.cancel"}}
+        </button>
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--narrow"
+          {{action "saveChanges" meeting.notes}}
+        >
+          {{t "buttons.save"}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}

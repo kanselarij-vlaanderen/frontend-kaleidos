@@ -1,30 +1,44 @@
-{{#if agendaMenuOpened}}
-  <div class="side-menu-collapse" onclick={{action "collapseSideMenu"}}>
-    {{fa-icon "chevron-left" size="lg"}}
+<nav class="vlc-side-nav">
+  <div class="vlc-navbar vlc-navbar--bordered-bottom">
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <h2 class="vl-title vl-title--h4">
+          <i class="vl-icon vl-vi vl-vi-timeline"></i>
+          <span>
+            {{t "agendas.nav-title"}}
+          </span>
+        </h2>
+      </div>
+      <div class="vlc-toolbar__right">
+        <button
+          class="vl-button vl-button--link vl-button--icon default"
+          {{action "collapseSideMenu"}}
+        >
+          <i class="vl-vi vl-vi-arrow-left-fat"></i>
+          <span class="vl-u-visually-hidden">
+            Toggle
+          </span>
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="title-container">
-    <strong>
-      {{fa-icon "history"}}
-      {{t "agendas.nav-title"}}
-    </strong>
-    <button {{action "compareAgendas"}}>
-      {{fa-icon "arrows-alt"}}
-      {{t "buttons.agenda-compare"}}
-    </button>
-  </div>
-  <div class="side--menu--content-container">
+  <ul>
     {{#each (await agendas) as |agenda|}}
-			<a {{action "setCurrentAgenda" agenda}} class={{active-class agenda currentAgenda}}>
-        <p>
-          {{agenda.agendaName}}
-        </p>
-        {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
-        <div class="menu-item-active-border"></div>
-			</a>
+      <li
+        class="vlc-side-nav-item
+          {{active-class agenda currentAgenda class="vlc-side-nav-item--active"}}"
+      >
+        <a {{action "setCurrentAgenda" agenda}}>
+          <div class="vlc-side-nav-item__label">
+            <span>
+              {{agenda.agendaName}}
+            </span>
+          </div>
+          <div class="vlc-side-nav-item__meta">
+            {{moment-format "12/12/2019" "dddd DD/MM/YYYY"}}
+          </div>
+        </a>
+      </li>
     {{/each}}
-  </div>
-{{else}}
-  <div class="collapsed-side-menu" onclick={{action "collapseSideMenu"}}>
-    {{fa-icon "chevron-right"}}
-  </div>
-{{/if}}
+  </ul>
+</nav>

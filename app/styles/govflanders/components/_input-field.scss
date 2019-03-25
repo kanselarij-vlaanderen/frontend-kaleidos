@@ -1,0 +1,165 @@
+.vl-input-field {
+  display: inline-block;
+  background: $page-bg;
+  font-family: $base-font;
+  font-size: $form-font-size;
+  color: $text-color;
+  max-width: 100%;
+  height: $form-input-height;
+  line-height: $form-input-height;
+  border-radius: 0;
+  border: 0.1rem solid $border-color;
+  -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+  padding: 0 1rem;
+
+  @include respond-to(small) {
+    font-size: 1.6rem;
+  }
+
+  &:hover {
+    box-shadow: none;
+  }
+
+  &:focus,
+  &--focus {
+    outline: none;
+    border-color: $outline-color;
+    box-shadow: inset 0 0 0 0.1rem $outline-color;
+  }
+
+  &::placeholder {
+    color: $placeholder-color;
+  }
+
+  &::-webkit-search-cancel-button { // sass-lint:disable-line no-vendor-prefixes
+    -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+  }
+
+  // Input field block modifier
+  &--block {
+    display: block;
+    width: 100%;
+  }
+
+  // Input field small modifier
+  &--small {
+    max-width: 6rem;
+    padding: 0 0.8rem;
+  }
+
+  &.invalid.validated,
+  &--error {
+    @include form-input-error;
+    display: inline;
+
+    .vl-select {
+      @include form-input-error;
+    }
+
+    .js-vl-select {
+      &[data-type*="select-one"],
+      &[data-type*="select-multiple"] {
+        @include form-input-error;
+
+        .vl-select__inner {
+          @include form-input-error;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  &.valid.validated,
+  &--success {
+    @include form-input-success;
+    display: inline;
+
+    .vl-select {
+      @include form-input-success;
+    }
+
+    .js-vl-select {
+      &[data-type*="select-one"],
+      &[data-type*="select-multiple"] {
+        @include form-input-success;
+
+        .vl-select__inner {
+          @include form-input-success;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+
+  // Input field disabled modifier
+  &--disabled,
+  &[disabled] {
+    background-color: $disabled-bg-color;
+  }
+
+  // Input field inline modifier
+  &--inline {
+    position: relative;
+    display: block;
+    max-width: 100%;
+
+    @include respond-to(small) {
+      display: block;
+      width: auto;
+    }
+  }
+
+  &--inline & {
+    &__submit {
+      position: absolute;
+      display: block;
+      color: $white;
+      width: 4.3rem;
+      height: 3.5rem;
+      opacity: 0;
+      padding: 0;
+      margin-bottom: -2rem;
+      transform: translateX(100%);
+      top: 0;
+      right: 0;
+      z-index: -1;
+
+      &:focus {
+        transform: translateX(0%);
+        transition: opacity 0.2s, transform 0.2s;
+        opacity: 1;
+        z-index: 1;
+      }
+
+      &::before {
+        position: absolute;
+        font-size: 1.7rem;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+      }
+    }
+
+    &__input {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding-right: 5rem;
+
+      &:focus,
+      &--focus {
+        width: calc(100% - 4.7rem);
+        padding-right: 0;
+        transition: width 0.2s;
+
+        + .vl-input-field__submit {
+          transform: translateX(0%);
+          transition: opacity 0.2s, transform 0.2s;
+          opacity: 1;
+          z-index: 1;
+        }
+      }
+    }
+  }
+}

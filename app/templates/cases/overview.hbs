@@ -1,5 +1,61 @@
-{{cases/cases-search cases=model showFilters="true"}}
-
-<div class="cases-overview">
-  {{cases/case-item model=model}}
+{{cases/cases-header isAddingCase=isAddingCase}}
+{{cases/cases-filter}}
+<div class="vl-u-spacer-extended-l">
+  <h2 class="vl-title vl-title--h3">
+    {{t "case-item.my-cases"}}
+  </h2>
+  {{#if (not isLoadingModel)}}
+    {{#data-table
+      content=(await model)
+      page=page
+      size=size
+      sort=sort
+      isLoading=isLoadingModel as |t|
+    }}
+      {{#t.content as |c|}}
+        {{#c.header}}
+          {{th-sortable
+            class="vl-data-table-col-5 vl-data-table__header-title"
+            currentSorting=sort
+            field="shortTitle"
+            label="Dossiernaam"
+          }}
+          {{th-sortable
+            class="vl-data-table-col-4 vl-data-table__header-title"
+            field="status"
+            label="Status"
+          }}
+          {{th-sortable
+            class="vl-data-table-col-2 vl-data-table__header-title"
+            currentSorting=sort
+            field="created"
+            label="Aangemaakt op"
+          }}
+          <th class="vl-data-table-col-1"></th>
+        {{/c.header}}
+        {{#c.body as |row|}}
+          <td>
+            {{row.shortTitle}}
+          </td>
+          <td>
+            {{row.latestSubcase.shortTitle}}
+          </td>
+          <td>
+            {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+          </td>
+          <td class="vl-u-align-right">
+            {{#link-to
+              "cases.case.subcases"
+              row.id
+              class="vl-button vl-button--link vl-button--icon"
+            }}
+              <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+            {{/link-to}}
+          </td>
+        {{/c.body}}
+      {{/t.content}}
+    {{/data-table}}
+  {{else}}
+    {{web-components/vl-loader}}
+  {{/if}}
 </div>

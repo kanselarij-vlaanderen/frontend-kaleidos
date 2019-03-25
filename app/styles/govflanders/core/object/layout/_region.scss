@@ -1,0 +1,72 @@
+// sass-lint:disable force-pseudo-nesting no-important
+.vl-region {
+  margin: 0 auto;
+  padding: $spacing-medium 0 $spacing-large;
+
+  @include respond-to(small) {
+    padding: $spacing-medium 0;
+  }
+
+  &.vl-region--no-space {
+    padding: 0;
+  }
+
+  &.vl-region--no-space-bottom {
+    padding-bottom: 0;
+  }
+
+  &.vl-region--no-space-top {
+    padding-top: 0;
+  }
+}
+
+.vl-region:not(.vl-region--alt) + .vl-region:not(.vl-region--alt) {
+  padding-top: 0;
+}
+
+// color variants
+.vl-region--alt {
+  background-color: $alt-region-bg;
+}
+
+// two consequent different regions
+.vl-region:not(.vl-region--alt) + .vl-region--alt,
+.vl-region--alt + .vl-region:not(.vl-region--alt) {
+  padding-top: $spacing-large;
+
+  @include respond-to(small) {
+    padding-top: $spacing-medium;
+  }
+}
+
+.vl-region:first-child {
+  padding-top: $spacing-large;
+
+  @include respond-to(small) {
+    padding-top: $spacing-normal;
+  }
+}
+
+.vl-region--small {
+  padding: $spacing-small 0;
+
+  @include respond-to(small) {
+    padding: $spacing-normal 0;
+  }
+}
+
+.vl-region--medium {
+  padding: $spacing-medium 0;
+
+  @include respond-to(small) {
+    padding: $spacing-normal 0;
+  }
+}
+
+.vl-region--bordered + .vl-region--bordered {
+  border-top: 1px solid $alt-region-bg;
+
+  &.vl-region--alt {
+    border-top-color: $white;
+  }
+}

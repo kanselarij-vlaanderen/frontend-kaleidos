@@ -2,13 +2,12 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
+  classNames: ["vlc-panel-layout__main-content"],
   store: inject(),
   actions : {
     async createComment() {
-      const { agenda, text } = this;
-
-      let comment = this.store.createRecord('comment', { agenda });
-      //await statement.save();
+      const { agenda } = this;
+      await this.store.createRecord('comment', { agenda });
     },
   }
 });

@@ -1,13 +1,14 @@
 {{#power-select
-  options=sessions
+  options=sortedSessions
   placeholder="2019-01-21"
   selected=currentSession
   searchField="plannedstart"
   search=(perform searchTask)
   oninput=(action "resetValueIfEmpty")
-  onchange=(action "chooseSession") as |session|
+  onchange=(action "chooseSession") 
+as |session|
 }}
-  {{#if session.plannedstart}}
-    {{moment-format session.plannedstart "dddd DD-MM-YYYY"}}
+  {{#if session.plannedStart}}
+    {{moment-format session.plannedStart "dddd DD-MM-YYYY"}}
   {{/if}}
 {{/power-select}}

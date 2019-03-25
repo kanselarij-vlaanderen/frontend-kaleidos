@@ -1,91 +1,125 @@
-<div class="cases--list-item">
-  <div class="cases--list-item-header">
-    <a {{action "setAgendaItemSection" "details"}}>
-      <span>
-        {{t "buttons.agendaitem-case"}}
-      </span>
-    </a>
-    <a {{action "setAgendaItemSection" "comments"}}>
-      <span>
-        {{t "buttons.agendaitem-comment"}}
-      </span>
-    </a>
-    {{#if (or (not agendaitem.extended) (not agendaitem.postPonedToSession))}}
-    <a {{action "setAgendaItemSection" "decision"}}>
-      <span>
-        {{t "buttons.agendaitem-decision"}}
-      </span>
-    </a>
-    <a {{action "setAgendaItemSection" "notes"}}>
-      <span>
-        {{t "buttons.agendaitem-notes"}}
-      </span>
-    </a>
-    <a {{action "setAgendaItemSection" "bestek"}}>
-      <span>
-        {{t "buttons.agendaitem-bestek"}}
-      </span>
-    </a>
-    {{/if}}
-    <a {{action "setAgendaItemSection" "news-item"}}>
-      <span>
-        {{t "buttons.agendaitem-news-item"}}
-      </span>
-    </a>
-  </div>
-  {{#if (not currentAgenda.locked)}}
-    <div class="cases--decree-options">
-      <div class="settings-container">
-        <div class="cases--decree-options-settings">
-          {{fa-icon "ellipsis-h"}}
+<div class="vlc-scroll-wrapper">
+  <div class="vlc-scroll-wrapper__header">
+    <div class="vl-u-spacer-extended-top vl-u-spacer-extended-left-l vl-u-spacer-extended-right-l">
+      <div class="vl-tabs__wrapper">
+          {{agenda/agendaitem/agendaitem-nav
+            agendaitem=agendaitem
+            activeAgendaItemSection=activeAgendaItemSection
+            setAgendaItemSection=(action "setAgendaItemSection")
+          }}
         </div>
       </div>
-      <div class="buttons">
-        {{#if isPostPonable}}
-          <button {{action "toggleModal" agendaitem}}>
-            {{#if (or agendaitem.extended (await agendaitem.postPonedToSession))}}
-              {{t 'buttons.not-postpone'}}
-            {{else}}
-              {{t 'buttons.postpone'}}
+    </div>
+  </div>
+  <div class="vlc-scroll-wrapper__body">
+    <div class="vl-u-spacer-extended-l">
+        {{#if (eq activeAgendaItemSection "details")}}
+          <div class="vl-action-group vl-action-group--align-right">
+            {{#if (not currentAgenda.isFinal)}}
+              {{#if showOptions}}
+                {{#if isPostPonable}}
+                  {{#if
+                    (or
+                      (await agendaitem.retracted)
+                      (await agendaitem.postponedTo)
+                    )
+                  }}
+                    <button
+                      class="vl-button vl-button--tertiary vl-button--narrow"
+                      {{action "advanceAgendaitem" agendaitem}}
+                    >
+                      {{t "buttons.not-postpone"}}
+                    </button>
+                  {{else}}
+                    <button
+                      class="vl-button vl-button--tertiary vl-button--narrow"
+                      {{action "togglePostponed" agendaitem}}
+                    >
+                      {{t "buttons.postpone"}}
+                    </button>
+                  {{/if}}
+                {{/if}}
+                {{#if
+                  (await
+                    (allow-delete-agendaitem
+                      agendaitem=agendaitem
+                      lastDefiniteAgenda=lastDefiniteAgenda
+                    )
+                  )
+                }}
+                  <button
+                    class="vl-button vl-button--tertiary vl-button--narrow"
+                    {{action "deleteItem" agendaitem}}
+                  >
+                    {{t "buttons.delete"}}
+                  </button>
+                {{/if}}
+              {{/if}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--icon"
+                {{action "showOptions"}}
+              >
+                <i
+                  class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                ></i>
+              </button>
             {{/if}}
-          </button>
+          </div>
         {{/if}}
-        {{#if (await (allow-delete-agendaitem agendaitem=agendaitem lastDefiniteAgenda=lastDefiniteAgenda))}}
-          <button {{action "deleteItem" agendaitem}}>
-            {{t "buttons.delete"}}
-          </button>
+        {{#if (eq activeAgendaItemSection "details")}}
+          {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+        {{else if (eq activeAgendaItemSection "comments")}}
+          {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
+        {{else if (eq activeAgendaItemSection "press-agenda")}}
+          {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
+        {{else if (eq activeAgendaItemSection "decision")}}
+          {{agenda/agendaitem/agendaitem-decision agendaitem=agendaitem}}
+        {{else if (eq activeAgendaItemSection "news-item")}}
+          {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
+        {{else if (eq activeAgendaItemSection "minutes")}}
+          {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
         {{/if}}
+
+    </div>
+  </div>
+{{#if isShowingPostponeModal}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "agenda-item.postpone-item")
+    closeModal=(action "togglePostponed")
+  }}
+    <div class="vl-modal-dialog__content">
+      <label class="vl-form__label">
+        {{t "agenda-item.postpone-until"}}
+      </label>
+      {{sessions/sessions-selector
+        currentSession=postponeTargetSession
+        chooseSession=(action "chooseSession")
+      }}
+    </div>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "togglePostponed"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "postponeAgendaItem" agendaitem}}
+            >
+              {{t "buttons.postpone"}}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  {{/if}}
-  {{#if (eq activeAgendaItemSection "details")}}
-    {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
-  {{else if (eq activeAgendaItemSection "comments")}}
-    {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
-  {{/if}}
-</div>
-{{#if isShowingExtendModal}}
-  {{#modal-dialog
-    onClose=(action "toggleModal")
-    targetAttachment="center"
-    translucentOverlay=true
-  }}
-    <h1>
-      {{currentAgendaItem.subcase.title}}
-    </h1>
-    <div class="modal--sessions-selector-container">
-      <label>
-        {{t 'agenda-item.postpone-until'}}
-      </label>
-      {{sessions/sessions-selector currentSession=currentSession chooseSession=(action "chooseSession")}}
-    </div>
-    <div class="buttons">
-      <button {{action "extendAgendaItem" currentAgendaItem}}>
-        {{t 'buttons.postpone'}}
-      </button>
-      <button {{action "toggleModal"}}>
-        {{t 'buttons.cancel'}}
-      </button>
-    </div>
-  {{/modal-dialog}}
+  {{/web-components/vl-modal}}
 {{/if}}

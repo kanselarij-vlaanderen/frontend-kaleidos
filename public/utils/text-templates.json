@@ -1,0 +1,64 @@
+{
+	"textTemplates": [
+		{
+			"name": "vervangt",
+			"description": "Deze beslissingsfiche vervangt en vernietigt de beslissing VR PV 2014/  - punt  die u eerder werd overgezonden"
+		},
+		{
+			"name": "vervangtnot",
+			"description": "De notificatie VR PV 2014/   - punt  wordt ingevolge de beslissing van de Vlaamse Regering van  2014 (zie VR PV 2014/   - punt ) vervangen door de volgende tekst:"
+		},
+		{
+			"name": "VR",
+			"description": "Vlaamse Regering"
+		},
+		{
+			"name": "BAbep",
+			"description": "Rekening houdend met het bepaalde, geformuleerd in het akkoord van 2014 van de Vlaamse minister, bevoegd voor de begroting, beslist de Vlaamse Regering:"
+		},
+		{
+			"name": "BAvw",
+			"description": "Mits voldaan wordt aan de voorwaarde, geformuleerd in het akkoord van 2014 van de Vlaamse minister, bevoegd voor de begroting, beslist de Vlaamse Regering:"
+		},
+		{
+			"name": "BAvwn",
+			"description": "Mits voldaan wordt aan de voorwaarden, geformuleerd in het akkoord van 2014 van de Vlaamse minister, bevoegd voor de begroting, beslist de Vlaamse Regering:\nNiettegenstaande het bepaalde geformuleerd in het schrijven van 28 juni 2016 van de Vlaamse minister, bevoegd voor de begroting, beslist de Vlaamse Regering:\nMits het doorvoeren van een technisch nazicht"
+		},
+		{
+			"name": "mina",
+			"description": "de Milieu- en Natuurraad van Vlaanderen (Minaraad)"
+		},
+		{
+			"name": "salv",
+			"description": "de Strategische Adviesraad voor Landbouw en Visserij (SALV)"
+		},
+		{
+			"name": "Besluit AG",
+			"description": "Besluit van een administrateur-generaal"
+		},
+		{
+			"name": "Besluit AH",
+			"description": "Besluit Afdelingshoofd"
+		},
+		{
+			"name": "Besluit HD",
+			"description": "Besluit HoofdDepartement"
+		},
+		{
+			"name": "Besluit RVB",
+			"description": "Besluit Raad van Bestuur"
+		},
+		{
+			"name": "Besluit SG",
+			"description": "Besluit van een secretaris-generaal"
+		},
+		{
+			"name": "SAR WGG",
+			"description": "de Strategische Adviesraad Welzijn, Gezondheid, Gezin (SAR WGG)"
+		},
+		{
+			"name": "sarc",
+			"description": "Strategische AdviesRaad voor Cultuur, Jeugd, Sport en Media (SARC)"
+		}
+	]
+}

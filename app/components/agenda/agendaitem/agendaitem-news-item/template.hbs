@@ -1,0 +1,47 @@
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <h3 class="vl-title vl-title--h3">
+      {{t "agendaitem-details.news-item-title"}}
+    </h3>
+    {{#if (await agendaitem.newsletterInfo)}}
+      {{#if (not isEditing)}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "toggleIsEditing"}}
+        >
+          <i class="vl-vi vl-vi-edit"></i>
+        </button>
+      {{else}}
+        <button
+          class="vl-button vl-button--tertiary vl-button--icon"
+          {{action "saveChanges" agendaitem}}
+        >
+          <i class="vl-vi vl-vi-save"></i>
+        </button>
+      {{/if}}
+    {{else}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        {{action "addNewsItem" agendaitem}}
+      >
+        <i class="vl-vi vl-vi-add"></i>
+      </button>
+    {{/if}}
+  </div>
+</div>
+<div class="vl-typography">
+  {{#if (and (await agendaitem.newsletterInfo) isEditing)}}
+    {{news-item/edit-item newsItem=(await agendaitem.newsletterInfo)}}
+  {{else}}
+    <p>{{t "buttons.agendaitem-bestek"}} {{moment-format agendaitem.newsletterInfo.publicationDate "DD MMMM YYYY HH:mm"}}</p>
+    <h6>
+      {{await agendaitem.newsletterInfo.title}}
+    </h6>
+    <h5>
+      {{await agendaitem.newsletterInfo.subtitle}}
+    </h5>
+    <p>
+      {{await agendaitem.newsletterInfo.text}}
+    </p>
+  {{/if}}
+</div>

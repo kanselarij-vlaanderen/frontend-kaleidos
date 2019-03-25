@@ -1,0 +1,36 @@
+<div class="vl-modal">
+  <div class={{backdropClass}}>
+    <div class="vl-modal-dialog" tabindex="-1" role="dialog">
+      <div
+        class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-bottom"
+      >
+        <div class="vlc-toolbar">
+          <div class="vlc-toolbar__left">
+            <div class="vlc-toolbar__item">
+              <h4 class="vlc-toolbar__title">
+                {{title}}
+              </h4>
+            </div>
+          </div>
+          <div class="vlc-toolbar__right">
+            <div class="vlc-toolbar__item">
+              <button
+                class="vl-button vl-button--link-muted vl-button--icon"
+                {{action "close"}}
+              >
+                <i
+                  class="vl-button__icon vl-vi vl-vi-close-light"
+                  aria-hidden="true"
+                ></i>
+                <span class="vl-u-visually-hidden">
+                  {{t "web-components.close-modal"}}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{yield}}
+    </div>
+  </div>
+</div>

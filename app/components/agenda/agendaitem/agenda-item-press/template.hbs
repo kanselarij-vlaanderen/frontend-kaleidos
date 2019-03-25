@@ -1,0 +1,34 @@
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <h3 class="vl-title vl-title--h3">
+      {{t "agendaitem-details.preparation-text"}}
+    </h3>
+    {{#if isReadOnly}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        {{action "editPressAgenda"}}
+      >
+        <i class="vl-vi vl-vi-edit"></i>
+      </button>
+    {{else}}
+      <button
+        class="vl-button vl-button--tertiary vl-button--icon"
+        {{action "updatePressAgenda" agendaitem}}
+      >
+        <i class="vl-vi vl-vi-save"></i>
+      </button>
+    {{/if}}
+  </div>
+</div>
+<div class="vl-typography">
+  {{#if isReadOnly}}
+    <h3 class="vl-title vl-title--h3">
+      {{agendaitem.titlePress}}
+    </h3>
+    <p>
+      {{agendaitem.textPress}}
+    </p>
+  {{else}}
+    {{agendaitem-press-edit agendaitem=agendaitem}}
+  {{/if}}
+</div>

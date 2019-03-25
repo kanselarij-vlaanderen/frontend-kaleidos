@@ -24,12 +24,24 @@ module.exports = function(environment) {
     },
 
     moment: {
-      includeLocales: ['nl', 'be']
+      includeLocales: ['nl-be', 'be', 'nl'],
     },
 
     fontawesome: {
       icons: {
         'free-solid-svg-icons': 'all'
+      }
+    },
+    torii: {
+      disableRedirectInitializer: true,
+      providers: {
+        'acmidm-oauth2': {
+          apiKey: 'your-key',
+          baseUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/auth',
+          scope: 'vo profile dkb-kaleidos',
+          redirectUri: 'kaleidos-dev.vlaanderen.be/authorization/callback',
+          logoutUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/logout'
+        }
       }
     }
   };

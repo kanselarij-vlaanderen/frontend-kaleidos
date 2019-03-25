@@ -1,0 +1,56 @@
+<table class="vl-data-table vl-u-spacer--large">
+  <thead>
+  <tr>
+    <th>
+      {{input
+        type="checkbox"
+        class="vl-u-spacer-extended-right-s"
+        checked=allSubCasesSelected
+        click=(action "selectAllSubCases")
+      }}
+      Select all
+    </th>
+    <th class="vl-data-table__header-title">
+      <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active" href="#" title="sort">
+        <div class="vl-u-display-flex vl-u-flex-align-center">
+          <span>{{"Titel"}}</span>
+          <span class="vl-u-visually-hidden">Aflopend sorteren</span>
+          <div class="vl-u-spacer-extended-left-s">
+            <i class="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"></i>
+          </div>
+        </div>
+      </a>
+    </th>
+    <th class="vl-data-table__header-title">
+      <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active" href="#" title="sort">
+        <div class="vl-u-display-flex vl-u-flex-align-center">
+          <span>{{"Naam"}}</span>
+          <span class="vl-u-visually-hidden">Aflopend sorteren</span>
+          <div class="vl-u-spacer-extended-left-s">
+            <i class="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"></i>
+          </div>
+        </div>
+      </a>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  {{#each (await model) as |subcase|}}
+  <tr>
+    <td>
+      {{input
+        type="checkbox"
+        checked=subcase.selected
+        click=(action "selectSubcase" subcase)
+      }}
+    </td>
+    <td>
+      {{subcase.title}}
+    </td>
+    <td>
+      {{subCase.shortTitle}}
+    </td>
+  </tr>
+  {{/each}}
+  </tbody>
+</table>

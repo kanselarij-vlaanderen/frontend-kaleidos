@@ -1,62 +1,20 @@
-<div class="cases--new-item">
-  <label>{{t 'metadata-form.short-title'}}</label>
-  {{input
-    type="text"
-    id="shortTitle"
-    class="cases--new-item-input"
-    input=(action "shortTitleChange")
-    value=shortTitle
-  }}
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "case-item.case-type")}}
+  {{utils/case-type-selector chooseCaseType=(action "typeChanged")}}
 </div>
-
-<div class="cases--new-item">
-  <label>{{t 'metadata-form.title'}}</label>
-  {{textarea
-    id="title"
-    class="cases--new-item-input"
-    key-down=(action "titleChange")
-    value=title
-  }}
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "metadata-form.short-title")}}
+  {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
 </div>
-
-<div class="cases--new-item">
-  <label>{{t 'metadata-form.status'}}</label>
-  {{input
-    class="cases--new-item-input"
-    type="text"
-    id="remark"
-    onChange=(action "statusChange")
-    value=status
-  }}
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "metadata-form.title")}}
+  {{textarea class="vl-textarea vl-textarea--block" rows="4" value=title}}
 </div>
-
-<div class="cases--new-item">
-  <label>{{t 'metadata-form.themes'}}</label>
-  {{#power-select-multiple
-    options=themes
-    class="cases--new-item-input"
-    selected=selectedThemes
-    searchField="naam"
-    search=(perform searchTheme)
-    oninput=(action "resetValue")
-    onchange=(action "chooseTheme") as |theme|
-  }}
-    {{theme.naam}}
-  {{/power-select-multiple}}
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "case-item.current-subcase")}}
+  <select class="vl-select vl-select--block vl-select__list--dropdown">
+    <option class="vl-select__item">
+      {{t "example-subcase"}}
+    </option>
+  </select>
 </div>
-
-<div class="cases--new-item">
-  <label>{{t 'metadata-form.news-item-label'}}</label>
-  {{#power-select
-    options=types
-    selected=selectedType
-    class="cases--new-item-input"
-    onchange=(action "chooseType") as |type|
-  }}
-    {{type}}
-  {{/power-select}}
-</div>
-
-<button {{action "step"}}>
-  {{t 'buttons.next-step'}}
-</button>

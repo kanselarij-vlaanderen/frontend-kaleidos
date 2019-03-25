@@ -1,20 +1,30 @@
-<form class="new-session-form" {{action "createNewSession" on="submit"}}>
-  <div class="form-group">
-    <label>
-      {{t 'new-session.start-date'}}
-      {{pikaday-input
-        theme="pikaday-session"
-        useUTC=true
-        onSelection=(action "selectStartDate")
-      }}
-    </label>
+<div class="vl-modal-dialog__content">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "new-session.start-date")}}
+    {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
   </div>
-  <div class="submit-container">
-    <button type="submit">
-      {{t 'buttons.add'}}
-    </button>
-    <button type="button" {{action "cancelForm"}}>
-      {{t 'buttons.cancel'}}
-    </button>
+</div>
+<div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--link vl-button--narrow"
+          {{action "cancelForm"}}
+        >
+          {{t "buttons.cancel"}}
+        </button>
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--narrow"
+          {{action "createNewSession"}}
+        >
+          {{t "buttons.add"}}
+        </button>
+      </div>
+    </div>
   </div>
-</form>
+</div>

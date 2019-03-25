@@ -1,0 +1,113 @@
+{{#if (not isAdding)}}
+  {{#if (not isResigning)}}
+    <div class="vl-modal-dialog__content">
+      {{utils/mandatee-selector
+        singleSelect=true
+        chooseMandatee=(action "selectMandatee")
+      }}
+    </div>
+  {{/if}}
+  {{#if isEditing}}
+    {{utils/edit-mandatee
+      mandateeToEdit=selectedMandatee
+      closeModal=(action "toggleIsEditing")
+    }}
+  {{else if (not isResigning)}}
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "closeModal"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+          <div class="vlc-toolbar__right">
+            <div class="vlc-toolbar__item">
+              {{#if selectedMandatee}}
+                <button
+                  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                  {{action "resignMandatee" mandateeToEdit}}
+                >
+                  <i
+                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-cog"
+                  ></i>
+                  {{t "buttons.resign"}}
+                </button>
+                <button
+                  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                  {{action "toggleIsEditing"}}
+                >
+                  <i
+                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                  ></i>
+                  {{t "edit-mandatee"}}
+                </button>
+              {{/if}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                {{action "toggleIsAdding"}}
+              >
+                <i
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                ></i>
+                {{t "create-mandatee"}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+{{else}}
+  {{utils/create-mandatee closeModal=(action "toggleIsAdding")}}
+{{/if}}
+{{#if isResigning}}
+  <div class="vl-modal-dialog__content">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "mandatee-form.end-date")}}
+      {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "new-person")}}
+      {{utils/model-selector
+        modelName="person"
+        searchField="alternative-name"
+        propertyToShow="alternativeName"
+        sortField="alternative-name"
+        selectedItems=selectedPerson
+        selectModel=(action "personSelected")
+      }}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}
+      {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
+    </div>
+  </div>
+  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--link vl-button--narrow"
+            {{action "toggleIsResigning"}}
+          >
+            {{t "buttons.cancel"}}
+          </button>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--tertiary"
+            {{action "saveResignation"}}
+          >
+            {{t "save-resignation"}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/if}}

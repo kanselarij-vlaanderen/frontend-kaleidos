@@ -1,5 +1,10 @@
-import Route from '@ember/ronuting/route';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
-export default Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(DataTableRouteMixin, {
+	modelName: "case",
+
+	mergeQueryOptions() {
+    return { include: 'subcases' };
+  }
 });

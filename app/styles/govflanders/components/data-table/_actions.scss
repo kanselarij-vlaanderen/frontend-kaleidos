@@ -1,0 +1,90 @@
+.vl-data-table {
+  // Data table actions
+  &__actions {
+    // Data table actions top modifier
+    &--top {
+      margin: 0 0 2rem;
+    }
+
+    // Data table actions bottom modifier
+    &--bottom {
+      margin: 2rem 0 0;
+
+      .vl-data-table__actions__list {
+        @include respond-to(xsmall) {
+          margin: 0 0 1rem;
+        }
+      }
+    }
+
+    // Data table actions list
+    &__list {
+      .vl-data-table__action {
+        &:not(:last-child) {
+          margin-right: 0.6rem;
+        }
+      }
+    }
+  }
+
+  // Data table action
+  &__action {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0.6rem;
+
+    // Data table action toggle
+    &__toggle {
+      display: flex;
+      align-items: center;
+      background: none;
+      font-family: $base-font;
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 1;
+      color: $mine-shaft;
+      border: 0.1rem $ghost solid;
+      text-decoration: none;
+      text-align: left;
+      cursor: pointer;
+      padding: 0.9rem 1.5rem 0.8rem;
+
+      @include respond-to(small) {
+        font-size: 1.5rem;
+      }
+
+      [data-vl-disable="true"] & {
+        color: $disabled-color;
+        cursor: default;
+      }
+
+      // Data table action toggle arrow modifier
+      &__icon {
+        font-size: 1.2rem;
+
+        &:first-child {
+          margin-right: 0.5rem;
+        }
+
+        &:last-child {
+          margin-left: 0.5rem;
+        }
+      }
+
+      // Data table action toggle contract xs modifier
+      &--contract-xs {
+        @include respond-to(xsmall) {
+          span {
+            display: none;
+          }
+
+          .vl-vi {
+            &::before {
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

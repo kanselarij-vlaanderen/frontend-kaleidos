@@ -4,11 +4,10 @@ import { alias } from '@ember/object/computed';
 
 export default Component.extend({
 	sessionService: inject(),
-	classNames: ['side--menu-container'],
-	classNameBindings: ['agendaMenuOpened:opened'],
+	classNames: ['vlc-side-nav'],
 
-	selectedAgendaItem:null,
-	agendaMenuOpened:true,
+	// classNameBindings: ['agendaMenuOpened:vl-layout-agenda__sidebar--collapsed'],
+	agendaMenuOpened:false,
 	
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentSession: alias('sessionService.currentSession'),
@@ -23,8 +22,7 @@ export default Component.extend({
 		},
 
 		setCurrentAgenda(agenda) {
-			this.set('selectedAgendaItem', null);
-			this.set('sessionService.currentAgenda', agenda);
+			this.selectAgenda(agenda);
 		}
 	},
 });

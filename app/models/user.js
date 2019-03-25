@@ -1,18 +1,11 @@
-import Model from 'ember-data/model';
-import { computed } from '@ember/object';
-import attr from 'ember-data/attr';
-import { hasMany } from 'ember-data/relationships';
+import DS from 'ember-data';
+
+const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
-  firstName: attr(),
-  lastName: attr(),
-  rijksregisterNummer: attr(),
-  account: hasMany('account', { inverse: null}),
-  groups: hasMany('account-group'),
-  group: computed('groups', function () {
-    return this.get('groups.firstObject');
-  }), // used for mock login
-  fullName: computed('firstName', 'lastName', function() {
-    return `${this.voornaam} ${this.achternaam}`.trim();
-  })
+	firstName: attr('string'),
+	lastName: attr('string'),
+	rijksregisterNummer: attr('string'), // TODO: translate
+	accounts: hasMany('account'),
+	group: belongsTo('account-group')
 });

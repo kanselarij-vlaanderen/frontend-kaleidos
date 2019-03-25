@@ -1,0 +1,66 @@
+<div class="vl-u-bg-alt">
+  {{agenda/agenda-header
+    selectedAgendaItem=selectedAgendaItem
+    compareAgendas=(action "compareAgendas")
+    navigateToSubCases=(action "navigateToSubCases")
+    printDecisions=(action "printDecisions")
+    navigateToCreateAnnouncement=(action "navigateToCreateAnnouncement")
+    loading=(action "loadingAgendaitems")
+    clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
+  }}
+</div>
+{{#if (not isLoading)}}
+  <div class="vlc-panel-layout">
+    {{agenda/side-nav
+      agendas=agendas
+      selectedAgendaItem=selectedAgendaItem
+      currentAgenda=currentAgenda
+      selectAgenda=(action "selectAgenda")
+    }}
+    <div class="vl-u-bg-porcelain">
+      <div class={{agendaitemsClass}}>
+        <div class="vlc-scroll-wrapper">
+          {{!-- {{#if (not await selectedAgendaItem)}}
+          TODO implement
+          {{agenda/agendaitem-search selectedAgenda=currentAgenda}}
+        {{/if}} --}}
+          <div class="vlc-scroll-wrapper__body">
+            {{agenda/agenda-list
+              agendaitems=currentAgendaItems
+              selectAgendaItem=(action "selectAgendaItem")
+              selectedAgendaItem=selectedAgendaItem
+            }}
+            {{agenda/announcement-list
+              announcements=(await announcements)
+              selectAnnouncement=(action "selectAnnouncement")
+              selectedAnnouncement=selectedAnnouncement
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+    {{#if selectedAgendaItem}}
+      {{agenda/agendaitem/agendaitem-overview agendaitem=selectedAgendaItem}}
+    {{else if createAnnouncement}}
+      {{agenda/create-announcement
+        navigateToNewAnnouncement=(action "navigateToNewAnnouncement")
+        currentAgenda=currentAgenda
+      }}
+    {{else if selectedAnnouncement}}
+      {{agenda/announcement-overview announcement=selectedAnnouncement}}
+    {{/if}}
+  </div>
+{{else}}
+  {{web-components/vl-loader
+    text="De agenda wordt goedgekeurd. Even geduld aub.."
+  }}
+{{/if}}
+{{#if isPrintingDecisions}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "printable-decisions-title")
+    closeModal=(action "printDecisions")
+  }}
+    {{agenda/agenda-decisions decisions=printedDecisions}}
+  {{/web-components/vl-modal}}
+{{/if}}

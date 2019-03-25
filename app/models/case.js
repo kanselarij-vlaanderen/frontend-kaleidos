@@ -1,17 +1,42 @@
 import DS from 'ember-data';
+import { computed } from '@ember/object';
 
 const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
-  public: attr('boolean'),
   created: attr('date'),
-  modified: attr('date'),
-  archived: attr('boolean'),
+  title: attr('string'),
   shortTitle: attr('string'),
   number: attr('string'),
-  remark: attr('string'),
-  title: attr('string'),
+  policyLevel: attr('string'),
+  type: belongsTo('case-type'),
+  remark: hasMany('remark'),
   themes: hasMany('theme'),
   subcases: hasMany('subcase'),
-  contact: belongsTo('capacity')
+  related: hasMany('case'),
+  creators: hasMany('person'),
+  mandatees: hasMany('mandatee'),
+
+  latestSubcase: computed('subcases', function () {
+    const subcases = this.get('subcases');
+    if (subcases && subcases.length > 0) {
+      const currentSubcase = subcases.sortBy('created').get('lastObject');
+      if(!currentSubcase.shortTitle) {
+        return { shortTitle: "In voorbereiding." };
+      }
+      return currentSubcase;
+    } else {
+      return { shortTitle: "In voorbereiding." }
+    }
+  }),
+
+  mandateesOfSubcase: computed('subcases', function () {
+    const subcases = this.get('subcases');
+    if (subcases && subcases.length > 0) {
+      const currentSubcase = subcases.sortBy('created').get('lastObject');
+      return currentSubcase.get('mandatees');
+    } else {
+      return [];
+    }
+  })
 });

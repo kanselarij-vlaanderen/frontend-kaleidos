@@ -1,0 +1,87 @@
+<div class="vlc-toolbar">
+  <div class="vlc-toolbar__left">
+    <div class="vlc-toolbar__item">
+      <h1
+        class="vlc-page-header__title vlc-page-header__title--bordered max-width"
+      >
+        {{#if subcase.shortTitle}}
+          {{subcase.shortTitle}}
+        {{else if subcase.title}}
+          {{subcase.title}}
+        {{/if}}
+      </h1>
+      <div class="vlc-page-header__sub">
+        {{#link-to "cases.case.subcases" class="vl-link vl-link--bold"}}
+          <i
+            class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
+          ></i>
+          {{t "buttons.back"}}
+        {{/link-to}}
+        {{#if (await subcase.requestedForMeeting)}}
+        <div class="vlc-page-header__status">
+          <span>Ingediend voor de agenda van {{moment-format subcase.requestedForMeeting.plannedStart "DD MMMM YYYY"}}</span>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        {{#if (not await subcase.requestedForMeeting)}}
+          <button class="vl-button vl-button--narrow">
+            {{t "buttons.propose-for-agenda"}}
+          </button>
+          {{#attach-popover
+            class="ember-attacher-popper"
+            hideOn="clickout click"
+            showOn="click"
+            animation="shift"
+            placement="bottom" as |attacher|
+          }}
+            <ul class="vl-popover__link-list">
+              {{#each meetings as |meeting|}}
+                <li class="vl-popover__link-list__item">
+                  <button
+                    class="vl-button vl-button--link vl-button--icon"
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "proposeForAgenda" subcase meeting}}
+                  >
+                    {{t "agenda-for"}}
+                    {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                  </button>
+                </li>
+              {{/each}}
+              <hr class="vlc-hr vlc-hr-small" />
+              <li class="vl-popover__link-list__item">
+                <button
+                  class="vl-button vl-button--link vl-button--icon"
+                  class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "proposeForOtherAgenda" subcase}}
+                >
+                  {{t "other-agenda"}}
+                </button>
+              </li>
+            </ul>
+          {{/attach-popover}}
+        {{else}}
+          <button
+            class="vl-button vl-button--narrow"
+            {{action "unPropose" subcase}}
+          >
+            {{t "undo-propose"}}
+          </button>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+{{#if isAssigningToAgenda}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "new-agenda")
+    closeModal=(action "cancel")
+  }}
+  {{subcases/assign-to-meeting-form subcase=selectedSubcase cancel=(action "cancel")}}
+  {{/web-components/vl-modal}}
+{{/if}}

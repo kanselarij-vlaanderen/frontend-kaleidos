@@ -1,0 +1,31 @@
+// sass-lint:disable no-important
+// Hide element
+@mixin u-hidden {
+  position: absolute !important; // sass-lint:disable-line no-important
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+@mixin u-hidden-off {
+  position: static !important; // sass-lint:disable-line no-important
+  clip: auto;
+  height: auto;
+  width: auto;
+  overflow: visible;
+}
+
+// Visually hide element
+@mixin u-visually-hidden {
+  position: absolute !important; // sass-lint:disable-line no-important
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}

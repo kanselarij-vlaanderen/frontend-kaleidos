@@ -3,8 +3,7 @@ import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 
 export default Component.extend({
-	tagName:'div',
-	classNames: ['agendaitem-search'],
+	classNames: ['vlc-scroll-wrapper__header'],
 	store: inject(),
 
 	searchTask: task(function* (searchValue) {
@@ -23,16 +22,14 @@ export default Component.extend({
 
 		resetValue(param) {
 			if (param == "") {
-				this.set('subcases',  this.store.query('subcase',{ query: {
+				this.set('subcases', this.store.query('subcase',{ query: {
 				}}));
 			}
 		},
-		navigateToSubCases() {
-			this.set('addingAgendaItems', true);
-			this.navigateToSubCases();
-		},
-    addComment() {
-			this.addComment();
+	
+    navigateToCreateAnnouncement() {
+			this.set('addingAnnouncement', true);
+			this.navigateToCreateAnnouncement();
 		}
 	}
 });

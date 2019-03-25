@@ -1,0 +1,201 @@
+<form class="vl-form" onsubmit={{action "createSubCase"}}>
+  <div class="vl-modal-dialog__content">
+    {{#if (eq step 1)}}
+      <div class="vlc-input-field-block">
+        <label class="vl-checkbox">
+          {{input
+            class="vl-checkbox__toggle"
+            type="checkbox"
+            checked=showAsRemark
+          }}
+          <div class="vl-checkbox__label">
+            <i class="vl-checkbox__box"></i>
+            {{t "show-as-remark"}}
+          </div>
+        </label>
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
+        {{textarea
+          rows="2"
+          class="vl-textarea vl-textarea--block"
+          value=shortTitle
+        }}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
+        {{textarea rows="2" class="vl-textarea vl-textarea--block" value=title}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "edit-item.themes")}}
+        {{utils/model-selector
+          modelName="theme"
+          searchField="label"
+          propertyToShow="label"
+          placeholder="Type hier op te zoeken op thema's..."
+          multiSelect=true
+          sortField="label"
+          selectedItems=themes
+          selectModel=(action "chooseTheme")
+        }}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "cases.upload-file")}}
+        {{file-uploader uploadedFile=(action "uploadedFile")}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{#if (not uploadedFiles.length eq "0")}}
+          <h4 class="vl-title vl-title--h4">
+            {{t "attachements"}}
+          </h4>
+        {{/if}}
+        <div class="attachements">
+          {{#each uploadedFiles as |uploadedFile|}}
+            <div class="uploaded-file-container">
+              <a class="remove-file" {{action "removeFile" uploadedFile}}>
+                <i class="vl-vi vl-vi-cross"></i>
+              </a>
+              {{web-components/vl-document file=uploadedFile}}
+              <div>
+                {{t "metadata-form.public"}}
+                {{input type="checkbox" checked=uploadedFile.public}}
+              </div>
+              {{t "subcases.document-type"}}
+              {{document-type-selector
+                chooseDocumentType=(action "chooseDocumentType" uploadedFile)
+              }}
+            </div>
+          {{/each}}
+        </div>
+        {{#if (not nonDigitalDocuments.length eq "0")}}
+          <h4 class="vl-title vl-title--h4">
+            {{t "non-digital-attachements"}}
+          </h4>
+        {{/if}}
+        {{#each nonDigitalDocuments as |nonDigitalDocument|}}
+          {{utils/non-digital-document
+            nonDigitalDocument=nonDigitalDocument
+            removeDocument=(action "removeDocument")
+          }}
+        {{/each}}
+      </div>
+    {{else if (eq step 2)}}
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcases.subcase-phase")}}
+        {{utils/model-selector
+          modelName="subcase-phase"
+          searchField="label"
+          sortField="label"
+          propertyToShow="label"
+          selectedItems=phase
+          selectModel=(action "selectPhase")
+        }}
+      </div>
+      {{cases/subcase-mandatees
+        mandateeRowsChanged=(action "mandateeRowsChanged")
+      }}
+    {{/if}}
+  </div>
+  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--link vl-button--narrow"
+            {{action "closeModal"}}
+          >
+            {{t "buttons.cancel"}}
+          </button>
+          {{#if (eq step 1)}}
+            <button
+              class="vl-button vl-button--tertiary vl-button--icon-before"
+              type="button"
+              {{action "toggleAddNonDigitalDocument"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              {{t "cases.non-digital-file"}}
+            </button>
+          {{/if}}
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          {{#if (eq step 2)}}
+            <button
+              type="button"
+              class="vl-button vl-button--tertiary"
+              {{action "previousStep"}}
+            >
+              {{t "buttons.previous-step"}}
+            </button>
+            <button type="submit" class="vl-button vl-button--tertiary">
+              {{t "cases.new-subcase"}}
+            </button>
+          {{else if (eq step 1)}}
+            <button
+              type="button"
+              class="vl-button vl-button--tertiary"
+              {{action "nextStep"}}
+            >
+              {{t "buttons.next-step"}}
+            </button>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{{#if isAddingNonDigitalDocument}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "cases.non-digital-file")
+    closeModal=(action "toggleAddNonDigitalDocument")
+  }}
+    <div class="vl-modal-dialog__content">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "cases-search.title-document")}}
+        {{web-components/vl-form-input width="4" value=documentTitle}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "cases-search.title-document")}}
+        {{textarea
+          rows="3"
+          class="vl-textarea vl-textarea--block"
+          value=documentDescription
+        }}
+      </div>
+      {{#each nonDigitalDocuments as |nonDigitalDocument|}}
+        {{utils/non-digital-document
+          nonDigitalDocument=nonDigitalDocument
+          removeDocument=(action "removeDocument")
+        }}
+      {{/each}}
+    </div>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "toggleAddNonDigitalDocument"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "createNonDigitalDocument"}}
+            >
+              {{t "buttons.document-add"}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/web-components/vl-modal}}
+{{/if}}

@@ -5,13 +5,12 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   store:inject(),
-  classNames:["file-upload-container"],
-
+  tagName: "span",
   files: null,
-
+  multipleFiles: true,
+  
 	uploadFile: task(function * (file) {		
     try {
-      // let newFile = this.store.createRecords
       file.readAsDataURL().then(() => {});
       // yield is being used to pause the execution of the promise behind it
       let response = yield file.upload('/files');

@@ -1,0 +1,76 @@
+// sass-lint:disable no-important
+
+// Floating
+.vl-u-float-right {
+  float: right !important;
+}
+
+.vl-u-float-left {
+  float: left !important;
+}
+
+.vl-u-float-none {
+  float: none !important;
+}
+
+// Displaying
+.vl-u-display-block {
+  display: block !important;
+}
+
+.vl-u-display-inline-block {
+  display: inline-block !important;
+}
+
+.vl-u-display-flex {
+  display: flex !important;
+}
+
+.vl-u-display-inline-flex {
+  display: inline-flex !important;
+}
+
+// Clearing
+.vl-u-clearfix {
+  @include clearfix;
+}
+
+.vl-u-no-overflow {
+  overflow: hidden;
+}
+
+// Positioning classes -- use sparely
+.vl-u-position-relative {
+  position: relative;
+}
+
+// Named anchor
+.vl-u-named-target, // Deprecated. Use vl-u-offset instead
+.vl-u-offset {
+  &::before {
+    content: "";
+    display: block;
+    height: 90px;
+    margin: -90px 0 0;
+    z-index: -1;
+    position: relative;
+  }
+}
+
+.vl-u-named-target-wrapper { // Deprecated. Use vl-u-position-relative instead
+  position: relative;
+}
+
+.vl-u-named-target-dummy, // Deprecated. Use vl-u-offset-dummy instead
+.vl-u-offset-dummy {
+  &:empty {
+    display: block;
+    position: absolute;
+    top: 0;
+    margin-top: -90px;
+    height: 1px;
+    width: 1px;
+    visibility: hidden;
+    opacity: 0;
+  }
+}

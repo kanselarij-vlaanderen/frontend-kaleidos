@@ -4,68 +4,85 @@ import { computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
 export default Component.extend({
-	sessionService: inject(),
+	classNames: ["vlc-panel-layout__main-content"],
 	currentAgenda: alias('sessionService.currentAgenda'),
-	currentSession: null,
-	classNames: ["agenda-item-container"],
-	tagName: "div",
+	sessionService: inject(),
+	store: inject(),
+	postponeTargetSession: null,
 	isShowingDetail: false,
 	agendaitemToShowOptionsFor: null,
-	isShowingExtendModal: false,
+	isShowingPostponeModal: false,
 	currentAgendaItem: null,
 	activeAgendaItemSection: 'details',
+	showOptions: false,
 
-	isPostPonable: computed('sessionService.agendas', function () {
-		let agendas = this.get('sessionService.agendas')
-		if (agendas && agendas.length > 1) {
-			return true;
-		} else {
-			return false;
-		}
+	isPostPonable: computed('sessionService.agendas.@each', function () {
+		return this.get('sessionService.agendas').then(agendas => {
+			if (agendas && agendas.length > 1) {
+				return true;
+			} else {
+				return false;
+			}
+		})
 	}),
 
-	lastDefiniteAgenda: computed('sessionService.definiteAgendas', function () {
-		return this.get('sessionService.definiteAgendas.firstObject');
+	lastDefiniteAgenda: computed('sessionService.definiteAgendas.firstObject', async function () {
+		const definiteAgendas = await this.get('sessionService.definiteAgendas');
+		return definiteAgendas.get('lastObject');
 	}),
 
 	actions: {
 		showDetail() {
-			this.set('isShowingDetail', !this.get('isShowingDetail'))
+			this.toggleProperty('isShowingDetail');
 		},
 
-		async toggleModal(agendaitem) {
+		showOptions() {
+			this.toggleProperty('showOptions');
+		},
+
+		async togglePostponed(agendaitem) {
 			if (agendaitem) {
-				let postponedToSession = await agendaitem.get('postPonedToSession');
-				if (agendaitem.extended) {
-					agendaitem.set('extended', false);
-					agendaitem.save();
-				} else if (postponedToSession) {
-					agendaitem.set('postPonedToSession', null);
+				let isPostponed = await agendaitem.get('isPostponed');
+				if (isPostponed) {
+					agendaitem.set('retracted', false);
+					agendaitem.set('postponed', null);
 					agendaitem.save();
 				} else {
-					this.set('currentAgendaItem', agendaitem);
-					this.toggleProperty('isShowingExtendModal');
+					this.toggleProperty('isShowingPostponeModal');
 				}
+			} else {
+				this.toggleProperty('isShowingPostponeModal');
 			}
 		},
 
-		async extendAgendaItem(agendaitem) {
-			let currentSession = this.get('currentSession');
+		postponeAgendaItem(agendaitem) {
+			let currentSession = this.get('postponeTargetSession');
 			if (currentSession) {
-				agendaitem.set('postPonedToSession', currentSession);
+				const postPonedObject = this.store.createRecord('postponed', {
+					meeting: currentSession,
+					agendaitem: agendaitem
+				});
+				postPonedObject.save().then(postponedTo => {
+					agendaitem.set('postponed', postponedTo);
+				})
 			} else {
-				agendaitem.set('extended', true);
+        const postPonedObject = this.store.createRecord('postponed', {
+          meeting: null,
+          agendaitem: agendaitem
+        });
+        postPonedObject.save().then(postponedTo => {
+          agendaitem.set('postponed', postponedTo);
+        });
+				agendaitem.set('retracted', !agendaitem.retracted);
 			}
-
 			agendaitem.save().then(() => {
-				this.set('currentSession', null);
-				this.set('isShowingExtendModal', false);
+				this.set('postponeTargetSession', null);
+				this.toggleProperty('isShowingPostponeModal')
 			});
-
 		},
 
 		chooseSession(session) {
-			this.set('currentSession', session);
+			this.set('postponeTargetSession', session);
 		},
 
 		deleteItem(agendaitem) {
@@ -73,6 +90,18 @@ export default Component.extend({
 				this.set('agendaitem', null);
 			});
 		},
+
+    async advanceAgendaitem(agendaitem) {
+      if(agendaitem && agendaitem.retracted) {
+        agendaitem.set('retracted', false);
+      }
+      const postponedTo = await agendaitem.get('postponedTo');
+      if(agendaitem && postponedTo) {
+        await postponedTo.destroyRecord();
+        await agendaitem.set('postponedTo', undefined);
+      }
+      agendaitem.save();
+    },
 
 		toggleShowMore(agendaitem) {
 			if (agendaitem.showDetails) {

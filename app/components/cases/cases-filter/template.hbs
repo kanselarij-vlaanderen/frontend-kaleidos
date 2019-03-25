@@ -1,0 +1,39 @@
+<div class="vl-form__group vl-u-reset-margin">
+  <div class="vl-u-spacer-extended-left vl-u-spacer-extended-right">
+    <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right">
+      <div class="vl-col--5-12 vl-col--1-1--s">
+        <label class="vl-form__label" for="dossierId">
+          {{t "buttons.agendaitem-case"}}
+        </label>
+        {{input
+          class="vl-input-field vl-input-field--block"
+          type="text"
+          id="dossierId"
+        }}
+      </div>
+      <div class="vl-col--3-12 vl-col--1-1--s">
+        <label class="vl-form__label" for="ministerId">
+          {{t "minister"}}
+        </label>
+        {{input
+          class="vl-input-field vl-input-field--block"
+          type="text"
+          id="ministerId"
+        }}
+      </div>
+      <div class="vl-col--1-12 vl-col--1-1--s">
+        <button
+          class="vl-button vl-button--tertiary vl-button--block"
+          type="button"
+        >
+          {{t "filter"}}
+        </button>
+      </div>
+      <div class="vl-col--3-12 vl-col--1-1--s">
+        <button class="vl-button vl-button--link" href="#">
+          Geavanceerd zoeken
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

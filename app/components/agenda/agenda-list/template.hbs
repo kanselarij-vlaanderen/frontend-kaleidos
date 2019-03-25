@@ -1,9 +1,28 @@
-{{#if (is-empty (await agendaitems)) }}
-  <div class="no-data-container">
-    {{t 'agenda-item.no-agendaitems'}}
-  </div>
+{{#if (is-pending agendaitems)}}
+  {{web-components/vl-loader}}
 {{else}}
-  {{#each (await agendaitems) as |agendaitem index|}}
-    {{agenda/agenda-list/list-item agendaitem=agendaitem index=index selectedAgendaItem=selectedAgendaItem}}
-  {{/each}}
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__left">
+        <h2 class="vl-title vl-title--h3 vl-u-spacer-extended-s" >
+          {{t "agendas.agendaitems-subtitle"}}
+        </h2>
+      </div>
+    </div>
+    {{#if (eq agendaitems.length 0)}}
+      <div class="vl-u-spacer-extended-top-s">
+        {{web-components/vl-alert
+          message=(t "no-agendaitems-yet")
+        }}
+      </div>
+    {{/if}}
+      <div class="vl-u-spacer">
+      {{#each agendaitems as |agendaitem index|}}
+        {{agenda/agenda-list/list-item
+          agendaitem=agendaitem
+          index=index
+          selectedAgendaItem=selectedAgendaItem
+          selectAgendaItem=(action "selectAgendaItem")
+        }}
+      {{/each}}
+      </div>
 {{/if}}

@@ -1,0 +1,22 @@
+<div class="vlc-agenda-items vlc-agenda-items--small">
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__left">
+      <h2 class="vl-title vl-title--h3 vl-u-spacer-extended-s">
+        {{t "agendas.announcements-subtitle"}}
+      </h2>
+    </div>
+  </div>
+  <div class="vl-u-spacer">
+    {{#if (gt (await announcements.length) 0)}}
+      {{#each (await announcements) as |announcement|}}
+        {{agenda/announcement-list/list-item
+          announcement=announcement
+          selectedAnnouncement=selectedAnnouncement
+          selectAnnouncement=(action "selectAnnouncement")
+        }}
+      {{/each}}
+    {{else}}
+      {{web-components/vl-alert message=(t "no-announcements-yet")}}
+    {{/if}}
+  </div>
+</div>

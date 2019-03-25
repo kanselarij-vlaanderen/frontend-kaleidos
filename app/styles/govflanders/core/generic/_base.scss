@@ -1,0 +1,60 @@
+// Basic styling for general elements
+* {
+  box-sizing: border-box;
+
+  &::before,
+  &::after {
+    box-sizing: inherit;
+  }
+}
+
+html {
+  min-height: 100%;
+  font-family: $base-font;
+  font-size: 62.5%;
+}
+
+body {
+  // sass-lint:disable-block no-vendor-prefixes
+
+  width: 100%;
+  min-height: 100%;
+  background: $page-bg;
+  color: $text-color;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: none;
+
+  @include respond-to(small) {
+    font-size: $base-mobile-font-size;
+    line-height: $base-mobile-line-height;
+  }
+
+  // transfer breakpoints to JS
+  &::before {
+    display: none;
+    content: "large";
+
+    @include respond-to(medium) {
+      content: "medium";
+    }
+
+    @include respond-to(medium-up) {
+      content: "medium-up";
+    }
+
+    @include respond-to(small) {
+      content: "small";
+    }
+
+    @include respond-to(xsmall) {
+      content: "xsmall";
+    }
+
+    @include respond-to(xlarge) {
+      content: "xlarge";
+    }
+  }
+}

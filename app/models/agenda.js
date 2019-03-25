@@ -5,12 +5,14 @@ let { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
 	name: attr("string"),
-	dateSent: attr("date"),
-	final:attr("boolean"),
-	locked:attr("boolean"),
-	session: belongsTo('session'),
+	issued: attr("date"),
+	isFinal:attr("boolean"),
+	createdFor: belongsTo('meeting', {inverse:null}), 
 	agendaitems: hasMany('agendaitem'),
-
+	created: attr('date'),
+	isAccepted: attr('boolean'),
+	// announcements: hasMany('announcement'),
+	
 	agendaName: computed('name', function() {
 		if(this.name.length <= 2) {
 			return 'Agenda ' + this.name;

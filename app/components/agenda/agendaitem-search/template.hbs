@@ -1,15 +1,19 @@
-{{#power-select
-  options=subcases
-  placeholder=(t 'agendaitem-search.search-placeholder')
-  selected=currentSession
-  searchField="plannedstart"
-  search=(perform searchTask)
-  oninput=(action "resetValue")
-  onchange=(action "chooseItem") as |agendaitem|
-}}
-  {{agendaitem.title}}
-{{/power-select}}
-<button class="invert-color" {{action "navigateToSubCases"}}>
-  {{fa-icon "plus"}}
-  {{t "buttons.add-case"}}
-</button>
+<div class="vlc-navbar vlc-navbar--bordered-bottom">
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__justified">
+      <div class="vlc-toolbar__item">
+        <div class="vl-input-field--inline">
+          <input
+            class="vl-input-field vl-input-field__input"
+            type="search"
+            placeholder="Zoeken"
+           />
+
+          <button class="vl-input-field__submit vl-button" type="submit">
+            <i class="vl-vi vl-vi-magnifier"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

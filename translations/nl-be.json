@@ -1,111 +1,148 @@
 {
 	"agenda": {
-		"agendaitems": "agendapunten"
+		"agendaitems": "agendapunten",
+		"announcements": "opmerkingen",
+		"header-zero": "0"
 	},
 	"agenda-item": {
 		"collapse": "meer weergeven",
 		"decree": "decreet",
 		"expand": "minder weergeven",
-		"extended": "stilgezet",
-		"extended-until": "Uitgesteld, aanvraag voor zitting de op ",
-		"no-agendaitems": "Geen agendapunten.",
-		"postpone-until": "Uitstellen tot"
+		"postponed": "stilgezet",
+		"postponed-until": "Uitgesteld, aanvraag voor de zitting op ",
+		"no-agendaitems": "Geen agendapunten",
+		"postpone-until": "Uitstellen tot",
+		"postpone-item": "Agendapunt uitstellen"
 	},
 	"agendaitem-details": {
 		"agenda": "Persagenda",
-		"decision-title": "Beslissing",
+		"decision-title": "Voorbereidende tekst voor de beslissing",
 		"formal-nok": "Formeel niet ok",
 		"formal-ok": "Formeel ok",
 		"news-item-title": "Kort bestek",
 		"no-decision": "Nog geen beslissing",
 		"no-news-item": "Nog geen kort bestek",
+		"preparation-text": "Voorbereidende tekst voor de persagenda",
 		"notes": "Notulen"
 	},
 	"agendaitem-search": {
 		"search-placeholder": "Zoek op naam..."
 	},
 	"agendas": {
-		"nav-title": "Historiek"
+		"nav-title": "Historiek",
+		"announcements-subtitle": "Mededelingen",
+		"agendaitems-subtitle": "Agenda overzicht"
+	},
+	"announcement": {
+		"title": "titel",
+		"text": "mededeling",
+		"no-announcements": "Geen mededelingen"
 	},
 	"buttons": {
+		"propose-for-agenda":"Indienen voor agendering",
 		"add": "Toevoegen",
-		"add-case": "Dossier toevoegen",
-		"add-comment": "Mededeling toevoegen",
+		"add-minister": "Minister toevoegen",
+		"back": "Terug",
+		"manage-ministers": "Ministerbeheer",
+		"next": "Volgende",
+		"add-case": "Nieuw dossier aanmaken",
+		"add-comment": "Opmerking toevoegen",
+		"create-announcement": "Mededeling toevoegen",
 		"add-decision": "Voeg beslissing toe",
 		"add-news-item": "Voeg kort bestek toe",
-		"add-to-agenda": "Toevoegen aan agenda",
+		"add-to-agenda": "Agendapunt toevoegen",
+		"print-decisions": "Beslissingen afdrukken",
 		"agenda-approve": "Agenda goedkeuren",
 		"agenda-back": "Terug naar agenda",
 		"agenda-compare": "Vergelijk agendas",
 		"agenda-lock": "Agenda afsluiten",
 		"agenda-unlock": "Agenda unlocken",
+		"agenda-delete": "Agenda verwijderen",
+		"agenda-add": "Nieuwe ontwerpagenda aanmaken",
 		"cancel": "Annuleren",
-		"create-case":"Dossier aanmaken",
-		"create-subcase":"Nieuw deeldossier",
+		"create-case": "Dossier aanmaken",
+		"create-subcase": "Procedurestap toevoegen",
 		"delete": "Verwijderen",
+		"document-add": "Document toevoegen",
 		"new-session": "Nieuwe zitting",
-		"previous-step":"Vorige Stap",
+		"printable-press-agenda": "Persagenda aanmaken",
+		"previous-step": "Vorige Stap",
 		"next-step": "Volgende Stap",
 		"save": "Opslaan",
-    "create-comment": "Opmerking aanmaken",
-    "agendaitem-case" : "Dossier",
-    "agendaitem-comment" : "Opmerkingen",
-    "agendaitem-decision" : "Beslissing",
-    "agendaitem-notes" : "Notule",
-    "agendaitem-bestek" : "Kort bestek",
-		"agendaitem-news-item" : "Persagenda",
-		"postpone":"Uitstellen",
-		"not-postpone":"On-uitstellen"
+		"create-comment": "Opmerking aanmaken",
+		"agendaitem-case": "Dossier",
+		"agendaitem-comment": "Opmerkingen",
+		"agendaitem-decision": "Beslissing",
+		"agendaitem-notes": "Notule",
+		"agendaitem-bestek": "Kort bestek",
+		"agendaitem-press-agenda": "Persagenda",
+		"postpone": "Uitstellen",
+		"not-postpone": "On-uitstellen",
+		"edit": "Wijzigen",
+		"resign": "Mandaat beëindigen"
 	},
-  "cases" : {
-		"title" : "Dossier",
+	"cases": {
+		"title": "Dossier",
 		"cases": "dossiers",
-		"new-case":"NIEUW DOSSIER",
-		"contact-person": "CONTACTPERSOON",
-		"related-cases":"GERELATEERDE DOSSIERS",
-		"subcases":"DEELDOSSIERS",
-		"upload-file":"Files uploaden"
-  },
+		"new-case": "Dossier aanmaken",
+		"new-subcase": "Procedurestap aanmaken",
+		"contact-person": "Contactpersoon",
+		"related-cases": "Gerelateerde dossiers",
+		"subcases": "Procedurestappen",
+		"upload-file": "Bestanden uploaden",
+		"non-digital-file": "Niet-digitaal document toevoegen"
+	},
 	"case-item": {
-		"not-agreed": "Niet Akkoord"
+		"not-agreed": "Niet Akkoord",
+		"my-cases": "Mijn dossiers",
+		"case-type": "Type dossier",
+		"case-type-agendaitem": "Type dossier: ",
+		"case-level": "Beleidsniveau",
+		"current-subcase": "Huidige procedurestap"
 	},
 	"cases-search": {
-    "cases-number": "Nummer Dossier",
-    "document-number": "Nummer Document",
-    "date": "Datum Ministerraad",
+		"cases-number": "Nummer Dossier",
+		"document-number": "Nummer Document",
+		"date": "Datum Ministerraad",
 		"search-placeholder": "Zoek op document titel..",
-    "keyword": "Trefwoord",
-    "title-document" : "Document titel"
+		"keyword": "Trefwoord",
+		"title-document": "Document titel"
 	},
 	"comparison": {
 		"nav-title": "Agendas"
 	},
 	"edit-decision": {
-		"approved": "Goedgekeurd",
-		"decision-text": "Tekst beslissing"
+		"approved": "Beslist",
+		"decision-text": "Tekst beslissing",
+		"short-title": "Korte titel"
 	},
 	"edit-item": {
 		"content": "Inhoud",
 		"date-publication": "Datum van publicatie",
 		"sub-title": "Ondertitel",
-		"themes": "Themas",
+		"themes": "Thema's",
 		"title": "Titel"
 	},
 	"file-uploader": {
-    "drop-text": "Laat los om het bestand te uploaden",
-    "dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
-    "files": "bestanden",
-    "invalid-type": "Fout bestandstype.",
-    "uploading": "Uploaden"
-},
+		"drop-text": "Laat los om het bestand te uploaden",
+		"dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
+		"files": "bestanden",
+		"invalid-type": "Fout bestandstype.",
+		"uploading": "Uploaden",
+		"add-attachements": "Bijlage toevoegen",
+		"new-version": "Nieuwe versie uploaden",
+		"size-extension": "KB"
+	},
 	"metadata-form": {
 		"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
-		"short-title": "KORTE TITEL",
-		"status": "TOELICHTING BEHANDELINGSSTATUS",
-		"themes": "THEMAS",
-		"title": "LANGE TITEL"
+		"short-title": "Korte titel dossier",
+		"status": "Hoedanigheid",
+		"themes": "Themas",
+		"title": "Lange titel dossier",
+		"public": "Vertrouwelijk"
 	},
 	"navigation": {
+		"agenda": "Agenda",
 		"agendas": "Agendas",
 		"cases": "Dossiers",
 		"notifications": "Notificaties",
@@ -118,6 +155,82 @@
 		"agenda-of": "Agenda van"
 	},
 	"subcases": {
-		"th-select-all": "Selecteer alles"
-	}
+		"th-select-all": "Selecteer alles",
+		"document-type": "Document type",
+		"mandatee": "Hoedanigheid",
+		"name-subcase": "Korte titel",
+		"subcase-phase": "Fase",
+		"title-subcase": "Lange titel",
+		"title-postponed-subcases": "Uitgestelde procedurestappen",
+		"title-available-subcases": "Beschikbare procedurestappen"
+	},
+	"web-components": {
+		"loading-text": "Pagina is aan het laden",
+		"document-type": "PDF",
+		"close-modal": "Venster sluiten"
+	},
+	"mandatee-form": {
+		"start-date": "Begin datum",
+		"end-date": "Eind datum"
+	},
+	"manage-ministers-title": "Ministers en bevoegdheden",
+	"minister": "Minister",
+	"mandatees": "Bevoegdheden",
+	"mandatee": "Bevoegdheid",
+	"filter": "Filter",
+	"example-subcase": "In voorbereiding",
+	"version": "Versie nummer",
+	"name": "Naam",
+	"press-agenda": "Persagenda van",
+	"for-press": "Publiek",
+	"documents-subcase": "Documenten van de procedurestap",
+	"documents": "Documenten",
+	"overview": "Overzicht",
+	"detail": "Detail",
+	"compare": "Vergelijk",
+	"attachements": "Bijlagen",
+	"non-digital-attachements": "Niet-digitale bijlagen",
+	"status": "Status",
+	"error": "Er is iets misgelopen..",
+	"create-mandatee": "Minister toevoegen",
+	"edit-mandatee": "Minister aanpassen",
+	"add-people": "Bevoegde persoon toevoegen",
+	"manage-mandates": "Bevoegdheden beheren",
+	"printable-decisions-title": "Printbare beslissingen",
+	"new-person": "Nieuwe bevoegde persoon toekennen",
+	"save-resignation": "Mandataris aanpassen",
+	"new-agenda": "Nieuwe agenda aanmaken",
+	"agenda-title": "Agenda's",
+	"to-subcase": "Naar procedurestap",
+	"show-versions": "Toon versies",
+	"history": "Historiek",
+	"future-agendas": "Toekomstige agenda's",
+	"active-agenda": "Actieve agenda",
+	"actions": "Acties",
+	"agenda-version": "Agenda versie",
+	"latest-modified": "Laatst gewijzigd",
+	"agenda-for": "Agenda voor",
+	"new-document-version": "Nieuwe documentversie uploaden",
+	"no-agendaitems-yet": "Er zijn nog geen agendapunten in deze agenda.",
+	"no-announcements-yet": "Er zijn nog geen mededelingen in deze agenda.",
+	"no-themes-yet": "Er zijn nog geen thema's toegevoegd.",
+	"no-documents-yet": "Er zijn nog geen documenten toegevoegd.",
+	"no-domains-yet": "Er zijn nog geen bevoegdheden toegevoegd.",
+	"prepared-text-minutes": "Voorbereidende tekst voor de notule",
+	"add-notes": "Notulen toevoegen",
+	"edit-notes": "Notulen aanpassen",
+	"notes-for": "Notulen voor",
+	"date": "Datum",
+	"date-next-meeting":"Datum volgende vergadering",
+	"others": "Varia",
+	"attendees": "Aanwezigen",
+	"notes-of-session":"Notulen van de zitting",
+	"notes-of-agendaitem":"Notulen van agendapunt",
+	"print-notes":"Notulen agenda",
+	"no-notes":"Geen notulen voor dit agendapunt.",
+	"other-agenda":"Andere agenda",
+	"undo-propose":"Niet ingediend",
+	"propose-for":"Aanvragen voor",
+	"agendaitem-title":"Type dossiers & titels",
+	"show-as-remark":"Dit is een mededeling"
 }

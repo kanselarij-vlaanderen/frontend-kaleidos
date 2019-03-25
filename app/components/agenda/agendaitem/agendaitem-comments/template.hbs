@@ -1,12 +1,43 @@
-{{#if (or (not agendaitem.extended) (not agendaitem.postPonedToSession))}}
-<h3>Opmerkingen</h3>
+{{#if (or (not agendaitem.retracted) (not agendaitem.postponedTo))}}
+  <h2 class="vl-title vl-title--h3">
+    {{t "buttons.agendaitem-comment"}}
+  </h2>
+  <div class="vlc-comments-input">
+    <div class="vl-badge">
+      <img class="vl-badge__img" src="/assets/icons/avatar-hilde-crevits.jpg" />
+    </div>
+    {{utils/custom-textarea
+      rows="2"
+      class="vl-textarea vl-textarea--block"
+      value=text
+      placeholder="Type hier jouw opmerking..."
+      enter=(action "addComment")
+    }}
+  </div>
+  {{#each (await agendaitem.remarks) as |comment|}}
+    <div class="vlc-comments-comment">
+      <div class="vl-badge">
+        <img
+          class="vl-badge__img"
+          src="/assets/icons/avatar-hilde-crevits.jpg"
+         />
 
-<div>
-  {{input placeholder="Type hier je opmerking" value=text}}
-  <button  type="button" {{action "addComment"}}>Opmerking maken</button>
-</div>
-
-{{#each comments as |comment|}}
-  <p>{{ comment.text }}</p>
-{{/each}}
+      </div>
+      <div class="vlc-comments-comment-content">
+        <div class="vlc-comments-comment-content__header">
+          <h4 class="vl-title vl-title--h6">
+            Naam placeholder
+          </h4>
+          <div class="vlc-comments-comment-content__meta">
+            {{moment-format comment.createdAt "DD MMMM YYYY - h:mm"}}
+          </div>
+        </div>
+        <div class="vl-typography">
+          <p>
+            {{comment.text}}
+          </p>
+        </div>
+      </div>
+    </div>
+  {{/each}}
 {{/if}}

@@ -1,0 +1,28 @@
+<label class="vl-form__label vl-u-display-block">
+  {{t "case-item.case-level"}}
+</label>
+{{#each policyLevels as |policyLevel index|}}
+  <label class="vl-radio">
+    {{#if (is-equal index 0)}}
+      <input
+        class="vl-radio__toggle"
+        value={{policyLevel}}
+        type="radio"
+        name="typeId"
+        checked=""
+        onchange={{action "policyLevelChanged"}}
+       />
+    {{else}}
+      <input
+        class="vl-radio__toggle"
+        value={{policyLevel}}
+        type="radio"
+        name="typeId"
+        onchange={{action "policyLevelChanged"}}
+      />
+    {{/if}}
+    <div class="vl-radio__label">
+      {{policyLevel}}
+    </div>
+  </label>
+{{/each}}

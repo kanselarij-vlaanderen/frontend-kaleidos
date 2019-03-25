@@ -1,0 +1,159 @@
+$custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
+
+// Radio
+.vl-radio {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.2rem;
+  margin-right: 5rem;
+
+  &:not(.vl-radio--block) {
+    &:not(:last-of-type) {
+      margin-right: 1.5rem;
+    }
+  }
+
+  // Radio label
+  &__label {
+    padding: 0 0 0 2.4rem;
+
+    &::before {
+      position: absolute;
+      display: block;
+      background: $white;
+      content: "";
+      height: 0.6rem;
+      width: 0.6rem;
+      border-radius: 100%;
+      transform: translateZ(0) translate(-50%, -50%) scale(0);
+      transition: all 0.3s $custom-easing 0.05s;
+      top: 0.9rem;
+      left: 0.5rem;
+      z-index: 2;
+
+      @include respond-to(small) {
+        top: 0.6rem;
+      }
+    }
+
+    &::after {
+      position: absolute;
+      display: inline-block;
+      content: "";
+      background: $white;
+      width: 1.6rem;
+      height: 1.6rem;
+      border: 0.1rem solid $border-color;
+      border-radius: 100%;
+      text-indent: -99rem;
+      cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: all 0.3s $custom-easing;
+      top: 0.4rem;
+      left: 0;
+      z-index: 1;
+
+      @include respond-to(small) {
+        top: 0.1rem;
+      }
+    }
+  }
+
+  // Radio toggle
+  &__toggle {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    width: 0.1rem;
+    height: 0.1rem;
+    padding: 0;
+    margin: -0.1rem;
+
+    &:focus {
+      + .vl-radio__label {
+        &::after {
+          border-color: $outline-color;
+          box-shadow: 0 0 0 0.2rem $outline-color;
+        }
+      }
+    }
+
+    &:checked {
+      + .vl-radio__label {
+        &::before {
+          transform: scale(1);
+        }
+
+        &::after {
+          background: $action-color;
+          color: $action-color;
+          border: 0.1rem $action-color solid;
+        }
+      }
+    }
+  }
+
+  // Radio block modifier
+  &--block {
+    display: block;
+    margin: 0;
+  }
+
+  // Radio disabled modifier
+  &--disabled {
+
+    .vl-radio__label {
+      &::after {
+        background-color: $disabled-bg-color;
+        border-color: $disabled-color;
+      }
+    }
+
+    .vl-radio__toggle {
+      &:checked {
+        + .vl-radio__label {
+          &::after {
+            background: $ghost;
+            color: $ghost;
+            border: 0.1rem $ghost solid;
+          }
+        }
+      }
+    }
+  }
+
+  // Radio single modifier
+  &--single {
+    margin: 0;
+
+    .vl-radio__label {
+      padding: 0;
+
+      &::before {
+        top: 0.6rem;
+      }
+
+      &::after {
+        position: relative;
+        top: auto;
+        left: auto;
+      }
+    }
+  }
+
+  // Radio error modifier
+  &.invalid.validated,
+  &--error {
+    .vl-radio__label {
+      &::before {
+        background-color: transparent;
+      }
+
+      &::after {
+        background-color: $error-secondary-color;
+        border-color: $error-color;
+      }
+    }
+  }
+}

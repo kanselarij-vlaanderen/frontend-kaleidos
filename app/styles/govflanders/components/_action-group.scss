@@ -1,0 +1,73 @@
+.vl-action-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  a,
+  button,
+  .vl-button {
+    margin-right: 1.4rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &--align-right {
+    justify-content: flex-end;
+  }
+
+  &--align-center {
+    justify-content: center;
+  }
+
+  &--space-between {
+    justify-content: space-between;
+  }
+
+  .vl-link {
+    white-space: nowrap;
+  }
+
+  &--bordered {
+    .vl-link,
+    .vl-link--icon {
+      padding-right: 1.4rem;
+      border-right: 1px solid $border-color;
+
+      &:last-child {
+        border: 0;
+      }
+    }
+
+    .vl-link {
+      &:not(:last-child) {
+        margin-right: 1.4rem;
+      }
+    }
+  }
+
+  @each $name, $align in $bp-list {
+    @include respond-to(map-get($align, media)) {
+      &--collapse--#{$name} {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .vl-button {
+          &:not(:last-of-type) {
+            margin-bottom: 1rem;
+          }
+        }
+
+        .vl-link {
+          border-right: 0;
+          display: block;
+          padding-right: 0;
+          text-align: left;
+          flex: 1 0 100%;
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+}

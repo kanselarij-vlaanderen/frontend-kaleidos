@@ -1,0 +1,17 @@
+/* ==========================================================================
+  Component: User
+  ---
+  Signed in user on the top right (desktop)
+   ========================================================================== */
+
+.vlc-user {
+  display: flex;
+  background: $blue-gray-light;
+  height: 4.4rem;
+  padding: 0 1rem;
+  align-items: center;
+}
+
+.vlc-user__username {
+  margin-right: 0.5rem;
+}

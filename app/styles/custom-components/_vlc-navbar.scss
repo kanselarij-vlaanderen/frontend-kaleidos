@@ -1,0 +1,50 @@
+/* ==========================================================================
+  Component: navbar
+  ---
+  A container for navigational elements
+   ========================================================================== */
+
+/* Variables
+   ========================================================================== */
+
+$vl-bar-size-padding: 2rem !default;
+$vl-bar-size-regular: 6.6rem !default;
+
+/* Component
+   ========================================================================== */
+
+.vlc-navbar {
+  padding: 0 $vl-bar-size-padding;
+  height: $vl-bar-size-regular;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+
+.vlc-navbar--no-padding {
+  padding: 0;
+}
+
+.vlc-navbar--auto {
+  height: auto;
+}
+
+.vlc-navbar--white {
+  background: #FFF;
+}
+
+.vlc-navbar--bg-alt {
+  background: $athens-gray;
+}
+
+/* Bordered equivalents
+   ========================================================================== */
+
+.vlc-navbar--bordered-top {
+  border-top: 0.1rem solid $ghost;
+}
+
+.vlc-navbar--bordered-bottom {
+  border-bottom: 0.1rem solid $ghost;
+}

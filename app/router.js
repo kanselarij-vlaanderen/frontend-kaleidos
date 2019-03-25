@@ -7,22 +7,22 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function () {
-  this.route('agendas');
+  this.route('agendas', { path: "/agendas" });
+  this.route('agenda', {path: '/agenda/:id'});
   this.route('cases', { path: '/dossiers' }, function () {
-    this.route('create');
     this.route('case', { path: ':id' }, function () {
       this.route('subcases', { path: '/deeldossiers' }, function () {
-        this.route('create');
         this.route('overview', { path: '' });
-        this.route('subcase', { path: ':subcaseId' });
+        this.route('subcase', { path: ':subcase_id' });
+        this.route('loading');
       });
     });
     this.route('overview', { path: '' });
   });
   this.route('comparison');
-  this.route('home', { path: "/" });
   this.route('settings');
   this.route('subcases');
+  this.route('loading');
   this.route('mock-login');
   this.route('login');
 });

@@ -1,0 +1,46 @@
+// sass-lint:disable class-name-format max-line-length
+
+@mixin icon-font-base($size: 16px) {
+  font-family: "vlaanderen-icon" !important; // sass-lint:disable-line no-important
+  -webkit-font-smoothing: antialiased; // sass-lint:disable-line no-vendor-prefixes
+  -moz-osx-font-smoothing: grayscale; // sass-lint:disable-line no-vendor-prefixes
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+}
+
+@mixin vi-icon($icon) {
+  &::before {
+    content: "\E001"; //map get icon
+  }
+}
+
+@mixin vi-icon-after($icon) {
+  &::after {
+    content: "\E001"; //map get icon
+  }
+}
+
+@mixin vi {
+  &::before,
+  &::after {
+    @include icon-font-base;
+  }
+}
+
+.vl-vi {
+  &::before,
+  &::after {
+    @include icon-font-base;
+    display: inline-block;
+  }
+
+  &.vl-vi-u-180deg {
+    &::before {
+      display: inline-block;
+      transform: rotate(180deg);
+    }
+  }
+}

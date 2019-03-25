@@ -15,10 +15,11 @@ export default Route.extend({
   },
   model(params) {
     const filter = { provider: 'https://github.com/lblod/mock-login-service' };
-    if (params.role)
+    if (params.role){
       filter.user = { 'last-name': params.role};
+    }
     return this.store.query('account', {
-      include: 'user,user.groups',
+      include: 'user,user.group',
       filter: filter,
       page: { size: 10, number: params.page },
       sort: 'user.last-name'

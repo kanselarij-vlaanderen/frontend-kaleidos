@@ -1,0 +1,14 @@
+<div class="vl-region">
+  <div class="vl-u-align-center">
+    <div class="vl-loader" role="alert" aria-busy="true"></div>
+    {{#if (not text)}}
+      <p>
+        {{t "web-components.loading-text"}}
+      </p>
+    {{else}}
+      <p>
+        {{text}}
+      </p>
+    {{/if}}
+  </div>
+</div>

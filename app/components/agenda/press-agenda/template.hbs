@@ -1,0 +1,29 @@
+{{#web-components/vl-modal
+  isOverlay=true
+  title=title
+  closeModal=(action "close")
+}}
+  <div class="vl-typography">
+    {{#each pressAgendaItems as |pressItem|}}
+      <div class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
+        <div class="vl-u-spacer-extended-bottom">
+          <em>
+            {{pressItem.mandatees}}
+          </em>
+        </div>
+        {{#each pressItem.agendaitems as |agendaitem|}}
+          <div
+            class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
+          >
+            <h6>
+              {{agendaitem.title}}
+            </h6>
+            <p>
+              {{agendaitem.content}}
+            </p>
+          </div>
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
+{{/web-components/vl-modal}}
