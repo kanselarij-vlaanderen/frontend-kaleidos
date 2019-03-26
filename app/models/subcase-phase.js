@@ -6,6 +6,6 @@ export default Model.extend({
 	remark: attr('string'),
   label: attr('string'),
 	date: attr('date'),
-	subcase: belongsTo('subcase'),
-	code: belongsTo('subcase-phase-code')
+	subcase: belongsTo('subcase', {inverse : null }),
+	code: belongsTo('subcase-phase-code', {inverse : null })
 });

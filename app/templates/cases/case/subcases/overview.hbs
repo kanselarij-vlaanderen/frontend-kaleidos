@@ -39,7 +39,7 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <h6 class="vl-title vl-title--h6 max-width">
-              {{subcase.phaseLabel}}
+              {{await subcase.phaseLabel}}
             </h6>
             <ul class="vlc-status-timeline">
               {{#each (await subcase.codes) as |code|}}
@@ -48,7 +48,7 @@
                 >
                   <div class="vlc-status-timeline__dot"></div>
                   <div class="vlc-status-timeline__text">
-                    {{await code }}
+                    {{ await code }}
                   </div>
                 </li>
               {{/each}}

@@ -13,6 +13,9 @@
   {{agenda/agendaitem/agendaitem-case/subcase-themes
     subcase=(await agendaitem.subcase)
   }}
+  {{agenda/agendaitem/agendaitem-case/subcase-phases
+    subcase=(await agendaitem.subcase)
+  }}
   {{agenda/agendaitem/agendaitem-case/subcase-mandatees
     subcase=(await agendaitem.subcase)
   }}
@@ -33,6 +36,7 @@
     }}
   {{/if}}
   {{agenda/agendaitem/agendaitem-case/subcase-themes subcase=subcase}}
+  {{agenda/agendaitem/agendaitem-case/subcase-phases subcase=subcase}}
   {{agenda/agendaitem/agendaitem-case/subcase-mandatees subcase=subcase}}
   {{agenda/agendaitem/agendaitem-case/subcase-documents subcase=subcase}}
 {{/if}}
