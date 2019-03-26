@@ -23,6 +23,10 @@ Router.map(function () {
   this.route('settings');
   this.route('subcases');
   this.route('loading');
+
+  this.route('route-not-found', {
+    path: '/*wildcard'
+  });
 });
 
 export default Router;

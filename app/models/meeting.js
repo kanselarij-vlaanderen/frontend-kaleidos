@@ -21,7 +21,11 @@ export default Model.extend({
 		return this.get('agendas').then((agendas) => {
 			const agendaNamePosition = agendas.length - 1;
 			if(agendaNamePosition >= 0) {
-				return "Ontwerpagenda " + alphabet[agendaNamePosition];
+				if(alphabet[agendaNamePosition]) {
+					return "Ontwerpagenda " + alphabet[agendaNamePosition];
+				} else {
+					return "Ontwerpagenda " + agendaNamePosition
+				} 
 			} else {
 				return "Geen versie beschikbaar";
 			}

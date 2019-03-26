@@ -6,6 +6,6 @@ export default Model.extend({
 	label: attr('string'),
 	scopeNote: attr('string'),
 	subcasePhases: hasMany('subcase-phase', { inverse: null }),
-  subphaseCodes: hasMany('subcase-phase-code'),
+  subphaseCodes: hasMany('subcase-phase-code', {inverse:null}),
 	superphase: belongsTo('subcase-phase-code', { inverse: null })
 });

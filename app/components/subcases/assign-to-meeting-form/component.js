@@ -28,7 +28,8 @@ export default Component.extend({
 			const selectedSubcase = this.store.peekRecord('subcase', subcase.get('id'));
 			if (selectedSubcase && meetingToAssignTo) {
 				selectedSubcase.set('requestedForMeeting', meetingToAssignTo);
-				selectedSubcase.save().then(() => {
+				selectedSubcase.save().then(subcase => {
+					this.assignSubcasePhase(subcase);
 					this.cancel();
 				});
 			}
@@ -36,6 +37,19 @@ export default Component.extend({
 
 		cancel() {
 			this.cancel();
+		}
+	},
+
+	async assignSubcasePhase(subcase) {
+		const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
+		const phaseCode = phasesCodes.get('firstObject');
+		if (phaseCode) {
+			const phase = this.store.createRecord('subcase-phase', {
+				date: new Date(),
+				code: phaseCode,
+				subcase: subcase
+			});
+			phase.save();
 		}
 	}
 });
