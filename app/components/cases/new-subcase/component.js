@@ -77,7 +77,6 @@ export default Component.extend({
 				});
 
 			const createdSubCase = await subcase.save();
-
 			createdSubphase.set('subcase', createdSubCase);
 			createdSubphase.save();
 

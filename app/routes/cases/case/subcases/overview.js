@@ -7,7 +7,8 @@ export default Route.extend({
     return hash({
       subcases: this.store.query('subcase', {
         filter: {
-          case: { id: caze.get('id') }
+          case: { id: caze.get('id') },
+          // sort: 'created'
         },
         include: "case.type,phases"
       }),

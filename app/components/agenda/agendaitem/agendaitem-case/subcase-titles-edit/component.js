@@ -1,7 +1,8 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-
+import { inject } from '@ember/service';
 export default Component.extend({
+	store: inject(),
 	classNames: ["vl-form__group", "vl-u-bg-porcelain"],
 	agendaitem: null,
 	subcase: null,
@@ -38,7 +39,8 @@ export default Component.extend({
 					this.toggleIsEditing();
 				});
 			} else {
-				const subcaseToEdit = agendaitem.get('subcase');
+				const subcase = agendaitem.get('subcase');
+				const subcaseToEdit = this.store.peekRecord('subcase', subcase.get('id'))
 				subcaseToEdit.set('title', title);
 				subcaseToEdit.set('shortTitle', shortTitle);
 				subcaseToEdit.save().then(() => {

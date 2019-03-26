@@ -1,19 +1,19 @@
 <table class="vl-data-table vl-u-spacer--large">
   <thead>
   <tr>
-    <th>
-      {{input
+    <th class="vl-data-table-col-1 vl-data-table__header-title">
+      {{!-- {{input
         type="checkbox"
         class="vl-u-spacer-extended-right-s"
         checked=allSubCasesSelected
         click=(action "selectAllSubCases")
-      }}
-      Select all
+      }} --}}
+      {{!-- Select all --}}
     </th>
-    <th class="vl-data-table__header-title">
+    <th class="vl-data-table-col-6 vl-data-table__header-title">
       <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active" href="#" title="sort">
         <div class="vl-u-display-flex vl-u-flex-align-center">
-          <span>{{"Titel"}}</span>
+          <span>{{"Korte titel"}}</span>
           <span class="vl-u-visually-hidden">Aflopend sorteren</span>
           <div class="vl-u-spacer-extended-left-s">
             <i class="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"></i>
@@ -21,10 +21,10 @@
         </div>
       </a>
     </th>
-    <th class="vl-data-table__header-title">
+    <th class="vl-data-table-col-5 vl-data-table__header-title">
       <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active" href="#" title="sort">
         <div class="vl-u-display-flex vl-u-flex-align-center">
-          <span>{{"Naam"}}</span>
+          <span>{{"Titel"}}</span>
           <span class="vl-u-visually-hidden">Aflopend sorteren</span>
           <div class="vl-u-spacer-extended-left-s">
             <i class="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"></i>
@@ -45,10 +45,10 @@
       }}
     </td>
     <td>
-      {{subcase.title}}
+      {{await subcase.shortTitle}}
     </td>
     <td>
-      {{subCase.shortTitle}}
+      {{await subcase.title}}
     </td>
   </tr>
   {{/each}}

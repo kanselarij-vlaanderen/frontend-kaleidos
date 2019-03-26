@@ -14,6 +14,15 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   selectedAgenda: alias('sessionService.currentAgenda'),
   agendas: alias('sessionService.agendas'),
 
+  navigateBack() {
+    const { currentSession, selectedAgenda } = this;
+    if (currentSession && selectedAgenda) {
+      const agendaId = currentSession.get('id');
+      const selectedAgendaId = selectedAgenda.get('id');
+      this.transitionToRoute('agenda', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
+    }
+  },
+
   actions: {
     async selectPostponed(subcase, event) {
       if (event) {
@@ -64,7 +73,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
           available.splice(index, 1);
         }
       }
-
     },
 
     selectAllSubCases() {
@@ -100,7 +108,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
               console.log('i never get here')
             }
           }
-
         });
       }));
 
@@ -124,11 +131,5 @@ export default Controller.extend(DefaultQueryParamsMixin, {
         this.navigateBack();
       });
     }
-  },
-
-  navigateBack() {
-    const agendaId = this.get('currentSession').get('id');
-    const selectedAgendaId = this.get('selectedAgenda').get('id');
-    this.transitionToRoute('agenda', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
   }
 });
