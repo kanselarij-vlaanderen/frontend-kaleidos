@@ -44,6 +44,30 @@
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="vl-u-align-right">
+            <button class="vl-button vl-button--link vl-button--icon">
+              <i
+                class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+              ></i>
+            </button>
+            {{#attach-popover
+              class="ember-attacher-popper"
+              hideOn="clickout"
+              showOn="click"
+              animation="shift"
+              placement="bottom" as |attacher|
+            }}
+              <ul class="vl-popover__link-list">
+                <li class="vl-popover__link-list__item">
+                  <button
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "editRow" row}}
+                  >
+                    Dossier aanpassen
+                  </button>
+                </li>
+              </ul>
+            {{/attach-popover}}
             {{#link-to
               "cases.case.subcases"
               row.id
@@ -59,3 +83,12 @@
     {{web-components/vl-loader}}
   {{/if}}
 </div>
+{{#if isEditingRow}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "edit-case")
+    closeModal=(action "cancelEditing")
+  }}
+  {{cases/edit-case caseToEdit=caseToEdit cancelEditing=(action "cancelEditing")}}
+  {{/web-components/vl-modal}}
+{{/if}}

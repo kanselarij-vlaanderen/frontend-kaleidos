@@ -233,5 +233,7 @@
 	"undo-propose":"Niet ingediend",
 	"propose-for":"Aanvragen voor",
 	"agendaitem-title":"Type dossiers & titels",
-	"show-as-remark":"Dit is een mededeling"
+	"show-as-remark":"Dit is een mededeling",
+	"no-meetings": "Er zijn nog geen agenda's aangemaakt.",
+	"edit-case":"Dossier aanpassen"
 }

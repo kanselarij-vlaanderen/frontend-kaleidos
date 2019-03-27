@@ -1,0 +1,50 @@
+{{#if caseToEdit}}
+<div class="vl-modal-dialog__content">
+  <div class="vl-u-spacer">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
+      {{textarea
+        rows="2"
+        class="vl-textarea vl-textarea--block"
+        value=shortTitle
+      }}
+    </div>
+  </div>
+  <div class="vl-u-spacer">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
+      {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
+    </div>
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value="Dossiertype"}}
+    {{utils/model-selector
+      modelName="case-type"
+      searchField="label"
+      propertyToShow="label"
+      multiSelect=false
+      sortField="label"
+      selectedItems=type
+      selectModel=(action "selectType")
+    }}
+  </div>
+</div>
+<div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <a class="vl-link" {{action "toggleIsEditing"}}>
+          {{t "buttons.cancel"}}
+        </a>
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
+          {{t "buttons.save"}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
