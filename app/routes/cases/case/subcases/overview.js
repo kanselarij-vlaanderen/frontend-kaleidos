@@ -40,38 +40,42 @@ export default Route.extend({
         if (phases){
 
           const phase = await phases.objectAt(0);
-          const code = (await phase.get('code')).toJSON();
 
-          if (code){
+          if (phase){
+            const code = (await phase.get('code')).toJSON();
 
-            let foundCode = await phasesCodes.filter(item => item.label === code.label );
+            if (code){
 
-            if (foundCode.length === 1) {
+              let foundCode = await phasesCodes.filter(item => item.label === code.label );
 
-              foundCode = foundCode[0];
-              const label = foundCode.label;
+              if (foundCode.length === 1) {
 
-              if (frequencies[label]) {
-                frequencies[label] = frequencies[label] + 1;
-                subcasePhaseLabel += `${frequencies[label]}de ${label}`
-              } else {
-                frequencies[label] = 1;
-                subcasePhaseLabel += `${frequencies[label]}ste ${label}`
+                foundCode = foundCode[0];
+                const label = foundCode.label;
+
+                if (frequencies[label]) {
+                  frequencies[label] = frequencies[label] + 1;
+                  subcasePhaseLabel += `${frequencies[label]}de ${label}`
+                } else {
+                  frequencies[label] = 1;
+                  subcasePhaseLabel += `${frequencies[label]}ste ${label}`
+                }
+
+              }else {
+                subcasePhaseLabel += `${code.label}`
               }
 
-            }else {
-              subcasePhaseLabel += `${code.label}`
-            }
+              let codes = [];
+              for (let x = 0; x < phases.length; x++){
+                const current_phase = await phases.objectAt(x);
+                const code = (await current_phase.get('code')).toJSON();
+                codes.push(code.label);
+              }
 
-            let codes = [];
-            for (let x = 0; x < phases.length; x++){
-              const current_phase = await phases.objectAt(x);
-              const code = (await current_phase.get('code')).toJSON();
-              codes.push(code.label);
-            }
+              subcase.set('phaseLabel', subcasePhaseLabel);
+              subcase.set('codes', codes);
 
-            subcase.set('phaseLabel', subcasePhaseLabel);
-            subcase.set('codes', codes);
+            }
 
           }
 
