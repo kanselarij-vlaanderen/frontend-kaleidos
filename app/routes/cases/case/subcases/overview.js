@@ -21,6 +21,13 @@ export default Route.extend({
 
     let frequencies = {};
 
+    if (!subcases){
+      return hash({
+        subcases: [],
+        case: caze
+      });
+    }
+
     for (let i = 0; i < subcases.length; i++){
 
       const subcase = await subcases.objectAt(i);
@@ -70,11 +77,7 @@ export default Route.extend({
 
         }
 
-
       }
-
-
-
 
     }
 
