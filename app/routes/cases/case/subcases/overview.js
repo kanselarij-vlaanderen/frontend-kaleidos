@@ -3,7 +3,7 @@ import {hash} from 'rsvp';
 
 const phasesCodes = [
   {
-    label : "principiële goedkeuring"
+    label : "principële goedkeuring"
   }
 ];
 
@@ -21,43 +21,66 @@ export default Route.extend({
 
     let frequencies = {};
 
+    if (!subcases){
+      return hash({
+        subcases: [],
+        case: caze
+      });
+    }
+
     for (let i = 0; i < subcases.length; i++){
 
-      const subcase = subcases.objectAt(i);
+      const subcase = await subcases.objectAt(i);
       let subcasePhaseLabel = 'In functie van ';
 
-      const phases = await subcase.get('phases');
-      const phase = await phases.objectAt(0);
+      if (subcase){
 
-      const code = (await phase.get('code')).toJSON();
+        const phases = await subcase.get('phases');
 
-      if (code){
+        if (phases){
 
-        let foundCode = await phasesCodes.filter(item => item.label.includes( code.label ));
-        if (foundCode.length === 1) {
+          const phase = await phases.objectAt(0);
 
-          foundCode = foundCode[0];
-          const label = foundCode.label;
+          if (phase){
+            const code = (await phase.get('code')).toJSON();
 
-          if (frequencies[label]) {
-            frequencies[label] = frequencies[label] + 1;
-            subcasePhaseLabel += `${frequencies[label]}de ${label}`
-          } else {
-            frequencies[label] = 1;
-            subcasePhaseLabel += `${frequencies[label]}ste ${label}`
+            if (code){
+
+              let foundCode = await phasesCodes.filter(item => item.label === code.label );
+
+              if (foundCode.length === 1) {
+
+                foundCode = foundCode[0];
+                const label = foundCode.label;
+
+                if (frequencies[label]) {
+                  frequencies[label] = frequencies[label] + 1;
+                  subcasePhaseLabel += `${frequencies[label]}de ${label}`
+                } else {
+                  frequencies[label] = 1;
+                  subcasePhaseLabel += `${frequencies[label]}ste ${label}`
+                }
+
+              }else {
+                subcasePhaseLabel += `${code.label}`
+              }
+
+              let codes = [];
+              for (let x = 0; x < phases.length; x++){
+                const current_phase = await phases.objectAt(x);
+                const code = (await current_phase.get('code')).toJSON();
+                codes.push(code.label);
+              }
+
+              subcase.set('phaseLabel', subcasePhaseLabel);
+              subcase.set('codes', codes);
+
+            }
+
           }
 
         }
 
-        let codes = [];
-        for (let x = 0; x < phases.length; x++){
-          const current_phase = await phases.objectAt(x);
-          const code = (await current_phase.get('code')).toJSON();
-          codes.push(code.label);
-        }
-
-        subcase.set('phaseLabel', subcasePhaseLabel);
-        subcase.set('codes', codes);
       }
 
     }
