@@ -36,6 +36,16 @@ export default Component.extend({
 			this.toggleProperty('isShowingDetail');
 		},
 
+		toggleFormallyOk(agendaitem) {
+			const formallyOk = agendaitem.get('formallyOk');
+			if(!formallyOk) {
+				agendaitem.set('formallyOk', true);
+			} else {
+				agendaitem.set('formallyOk', false);
+			}
+			agendaitem.save();
+		},
+
 		showOptions() {
 			this.toggleProperty('showOptions');
 		},

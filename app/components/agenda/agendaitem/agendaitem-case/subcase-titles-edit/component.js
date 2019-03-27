@@ -30,7 +30,7 @@ export default Component.extend({
 			this.toggleIsEditing();
 		},
 
-		saveChanges() {
+		async saveChanges() {
 			const { subcase, agendaitem, title, shortTitle } = this;
 			if (subcase) {
 				subcase.set('title', title);
@@ -40,7 +40,7 @@ export default Component.extend({
 				});
 			} else {
 				const subcase = agendaitem.get('subcase');
-				const subcaseToEdit = this.store.peekRecord('subcase', subcase.get('id'))
+				const subcaseToEdit = this.store.peekRecord('subcase', subcase.get('id'));
 				subcaseToEdit.set('title', title);
 				subcaseToEdit.set('shortTitle', shortTitle);
 				subcaseToEdit.save().then(() => {

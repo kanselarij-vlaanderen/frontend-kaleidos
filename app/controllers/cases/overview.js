@@ -7,7 +7,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 
   actions: {
     editRow(caze) {
-      console.log(caze)
       this.set('caseToEdit', caze);
       this.toggleProperty('isEditingRow');
     },
