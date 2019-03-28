@@ -24,7 +24,7 @@ export default Component.extend({
 		},
 
 		deleteRow(mandateeRow) {
-			let mandateeRows = this.get('mandateeRows');
+			const mandateeRows = this.get('mandateeRows');
 			mandateeRows.removeObject(mandateeRow);
 		},
 

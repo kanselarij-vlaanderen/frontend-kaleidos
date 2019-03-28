@@ -12,6 +12,7 @@ export default Controller.extend(FileSaverMixin,{
 
 		close() {
 			this.toggleProperty('isAddingSubcase');
+			this.send('refresh');
 		},
 
 		async downloadFile(documentVersion) {

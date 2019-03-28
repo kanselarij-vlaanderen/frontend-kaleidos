@@ -9,12 +9,12 @@ export default Component.extend({
 
 	actions: {
 		async addNewsItem(agendaitem){
-      let news = this.store.createRecord("newsletter-info", {
+      const news = this.store.createRecord("newsletter-info", {
 				agendaitem: agendaitem,
-				created: new Date()
+				created: new Date(),
+				subtitle: await agendaitem.get('subcase.title')
       });
-      news.save().then(newsLetter => {
-				agendaitem.set('newsletterInfo',newsLetter);
+      news.save().then(() => {
 				this.toggleProperty('isEditing')
 			});
 		},

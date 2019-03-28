@@ -18,14 +18,13 @@ export default Service.extend({
 	currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
 		if(currentAgenda) {
-			let agendaitems = this.store.query('agendaitem', {
+			return this.store.query('agendaitem', {
 				filter: {
 					agenda: { id: currentAgenda.id }
 				},
 				include:['subcase,subcase.case'],
 				sort: 'priority'
 			});
-			return agendaitems;
 		} else {
 			return [];
 		}

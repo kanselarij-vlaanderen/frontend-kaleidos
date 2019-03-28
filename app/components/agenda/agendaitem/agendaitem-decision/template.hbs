@@ -33,7 +33,7 @@
   {{#if (and agendaitem.decision isEditing)}}
     <div class="vlc-input-field vlc-input-field-block">
       {{web-components/vl-form-label value=(t "edit-item.title")}}
-      {{web-components/vl-form-input width="4" value=title}}
+      {{web-components/vl-form-input width="4" value=(await title)}}
     </div>
     <div class="vlc-input-field vlc-input-field-block">
       {{web-components/vl-form-label value=(t "edit-decision.decision-text")}}

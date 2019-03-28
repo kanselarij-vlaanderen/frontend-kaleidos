@@ -302,12 +302,6 @@ $icon-font-location: "/fonts/";
   align-items: center;
 }
 
-.uploaded-file-container {
-  width: calc(100% / 3);
-  padding: 1em;
-  float:left;
-}
-
 .attachements {
   display:flex;
   flex:wrap;
@@ -634,4 +628,8 @@ a.vlc-agenda-items__header {
 
 .vlc-hr-small {
   margin: 1rem 0;
+}
+
+.vl-modal-dialog--large {
+  width: 88rem;
 }

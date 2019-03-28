@@ -42,10 +42,9 @@ export default Route.extend({
           const phase = await phases.objectAt(0);
 
           if (phase){
-            const code = (await phase.get('code')).toJSON();
-
+            let code = (await phase.get('code'));
             if (code){
-
+              code = code.toJSON();
               let foundCode = await phasesCodes.filter(item => item.label === code.label );
 
               if (foundCode.length === 1) {
@@ -68,13 +67,15 @@ export default Route.extend({
               let codes = [];
               for (let x = 0; x < phases.length; x++){
                 const current_phase = await phases.objectAt(x);
-                const code = (await current_phase.get('code')).toJSON();
-                codes.push(code.label);
+                let code = (await current_phase.get('code'));
+                if(code) {
+                  code = code.toJSON()
+                  codes.push(code.label);
+                }
               }
 
               subcase.set('phaseLabel', subcasePhaseLabel);
               subcase.set('codes', codes);
-
             }
 
           }
@@ -89,6 +90,12 @@ export default Route.extend({
       subcases: subcases.toArray().reverse(),
       case: caze
     });
-  }
+  },
+
+  actions: {
+		refresh() {
+			this.refresh();
+		}
+	}
 
 });

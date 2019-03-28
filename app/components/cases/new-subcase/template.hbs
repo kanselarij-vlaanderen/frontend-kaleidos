@@ -49,29 +49,7 @@
             {{t "attachements"}}
           </h4>
         {{/if}}
-        <div class="attachements">
-          {{#each uploadedFiles as |uploadedFile|}}
-            <div class="uploaded-file-container">
-              <a class="remove-file" {{action "removeFile" uploadedFile}}>
-                <i class="vl-vi vl-vi-cross"></i>
-              </a>
-              {{web-components/vl-document file=uploadedFile}}
-              <div>
-                {{t "metadata-form.public"}}
-                {{input type="checkbox" checked=uploadedFile.public}}
-              </div>
-              {{t "subcases.document-type"}}
-              {{utils/model-selector
-                modelName="document-type"
-                searchField="label"
-                propertyToShow="label"
-                sortField="label"
-                selectedItems=(await uploadedFile.documentType)
-                selectModel=(action "chooseDocumentType" uploadedFile)
-              }}
-            </div>
-          {{/each}}
-        </div>
+        {{subcases/edit-documents uploadedFiles=uploadedFiles}}
         {{#if (not nonDigitalDocuments.length eq "0")}}
           <h4 class="vl-title vl-title--h4">
             {{t "non-digital-attachements"}}

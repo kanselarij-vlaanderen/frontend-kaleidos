@@ -1,12 +1,12 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import $ from 'jquery';
 import { notifyPropertyChange } from '@ember/object';
 import { inject } from '@ember/service';
 
 
 export default Component.extend({
 	store: inject(),
+	classNames:["vl-custom"],
 	uploadedFiles: [],
 	nonDigitalDocuments: [],
 	selectedMandatees: [],
@@ -27,11 +27,14 @@ export default Component.extend({
 		this.set('uploadedFiles', []);
 		this.set('nonDigitalDocuments', []);
 		this.set('selectedMandatees', []);
-		this.set('title', null);
-		this.set('shortTitle', null);
 		this.set('isAddingNonDigitalDocument', false);
 		this.set('showAsRemark', false);
 		this.set('step', 1);
+	},
+
+	didInsertElement() {
+		this._super(...arguments);
+		this.clearProperties();
 	},
 
 	actions: {
@@ -94,7 +97,6 @@ export default Component.extend({
 				}
 			}));
 
-			this.clearProperties();
 			this.closeModal();
 		},
 
@@ -113,18 +115,6 @@ export default Component.extend({
 		uploadedFile(uploadedFile) {
 			uploadedFile.set('public', false);
 			this.get('uploadedFiles').pushObject(uploadedFile);
-		},
-
-		chooseDocumentType(uploadedFile, type) {
-			uploadedFile.set('documentType',type);
-		},
-
-		removeFile(file) {
-			$.ajax({
-				method: "DELETE",
-				url: '/files/' + file.id
-			})
-			this.get('uploadedFiles').removeObject(file);
 		},
 
 		removeDocument(document) {

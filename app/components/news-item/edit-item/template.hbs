@@ -1,9 +1,10 @@
 <div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "edit-item.sub-title")}}
-  {{web-components/vl-form-input width="4" value=newsItem.subtitle}}
+  {{textarea rows="2" class="vl-textarea vl-textarea--block" value=newsItem.subtitle}}
+
 </div>
 <div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "edit-item.content")}}
-  {{textarea rows="5" class="vl-textarea vl-textarea--block" value=newsItem.text
+  {{textarea rows="10" class="vl-textarea vl-textarea--block" value=newsItem.text
   }}
 </div>

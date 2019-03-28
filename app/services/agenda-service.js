@@ -9,6 +9,7 @@ export default Service.extend({
 	getSortedAgendaItems(agenda) {
 		return $.ajax(
 			{
+				
 				method: "GET",
 				url: `/agenda-sort?agendaId=${agenda.get('id')}`,
 			}

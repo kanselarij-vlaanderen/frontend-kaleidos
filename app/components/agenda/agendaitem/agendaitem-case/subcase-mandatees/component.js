@@ -51,30 +51,30 @@ export default Component.extend({
 		this.set('selectedDomains', selectedDomains);
 	},
 
-	constructMandateeRows() {
+	async constructMandateeRows() {
 		const subcase = this.get('subcase');
-		const mandatees = subcase.get('mandatees');
-		const domains = subcase.get('governmentDomains');
+		const mandatees = await subcase.get('mandatees');
+		const domains = await subcase.get('governmentDomains');
 		let i = 0;
 
-		let rowsToReturn = mandatees.map((mandatee) => {
+		let rowsToReturn = await Promise.all(mandatees.map(async (mandatee) => {
 			i++;
 			return Object.create({
 				id: i,
 				mandatee: mandatee,
-				domains: mandatee.get('governmentDomains'),
+				domains: await mandatee.get('governmentDomains'),
 				selectedDomains: []
 			})
-		})
+		}));
 
 		domains.map((domain) => {
-			rowsToReturn.forEach(row => {
+			return rowsToReturn.map(row => {
 				const index = row.domains.indexOf(domain);
 				if (index != -1) {
 					row.selectedDomains.push(domain);
 				}
 			});
-			return domain;
+			
 		});
 		return rowsToReturn;
 	}

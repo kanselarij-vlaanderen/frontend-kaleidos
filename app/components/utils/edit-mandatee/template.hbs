@@ -4,15 +4,26 @@
       {{web-components/vl-form-label value=(t "name")}}
       {{web-components/vl-form-input width="4" value=mandateeToEdit.title}}
     </div>
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "add-people")}}
-      <div class="vl-input-group">
-        {{utils/model-selector
-          modelName="person"
-          readOnly=true
-          propertyToShow="alternativeName"
-          selectedItems=mandateeToEdit.person
-        }}
+    <div class="vl-u-display-flex vl-u-flex-space-between vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
+      <div class="vl-col--2-4 vl-col--1-1--s">
+        <div class="vlc-input-field-block">
+          {{web-components/vl-form-label value=(t "add-people")}}
+          <div class="vl-input-group">
+            {{utils/model-selector
+              modelName="person"
+              readOnly=true
+              propertyToShow="alternativeName"
+              selectedItems=mandateeToEdit.person
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="vl-col--2-4 vl-col--1-1--s">
+        <div class="vlc-input-field-block">
+          {{web-components/vl-form-label value=(t "priority")}}
+          {{web-components/vl-form-input width="4" value=mandateeToEdit.priority
+          }}
+        </div>
       </div>
     </div>
     <div class="vlc-input-field-block">

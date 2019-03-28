@@ -70,9 +70,15 @@
       </div>
       <hr class="vlc-hr" />
       <div class="vlc-procedure-step__badge-wrapper">
-        <p class="vl-u-text--uppercase">
-          {{await subcase.case.type.label}}
-        </p>
+        <div class="vlc-procedure-step__badge-wrapper">
+            <p class="vl-u-text--uppercase">{{await subcase.case.type.label}}</p>
+            <div class="vl-badge vl-badge--icon vlc-procedure-step__badge vl-badge--success vl-badge--medium vl-badge--small-medium">
+              <i class="vl-badge__icon vl-vi vl-vi-sitemap" aria-hidden="true"></i>
+            </div>
+            <div class="vl-badge vl-badge--icon vl-badge--icon-light vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-badge--action">
+              <i class="vl-badge__icon vl-vi vl-vi-sitemap" aria-hidden="true"></i>
+            </div>
+          </div>
       </div>
       <div class="vl-title--h5">
         {{subcase.shortTitle}}
@@ -107,6 +113,7 @@
 {{#if isAddingSubcase}}
   {{#web-components/vl-modal
     isOverlay=true
+    large=true
     closeModal=(action "close")
     title=(t "buttons.create-subcase")
   }}

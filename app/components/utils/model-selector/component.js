@@ -14,7 +14,7 @@ export default Component.extend({
 
 	items: computed('modelName', function () {
 		const { modelName, searchField } = this;
-		return this.store.query(modelName, { sort: searchField });
+		return this.store.query(modelName, { sort: searchField, page:{size:50 }});
 	}),
 
 	searchTask: task(function* (searchValue) {
@@ -39,6 +39,6 @@ export default Component.extend({
 				const modelName = this.get('modelName');
 				this.set('items', this.store.findAll(modelName));
 			}
-		},
+		}
 	},
 });

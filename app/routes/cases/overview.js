@@ -6,5 +6,5 @@ export default Route.extend(DataTableRouteMixin, {
 
 	mergeQueryOptions() {
     return { include: 'subcases' };
-  }
+	}
 });

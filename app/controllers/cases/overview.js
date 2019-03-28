@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
 export default Controller.extend(DefaultQueryParamsMixin, {
-  sort:'short-title',
+  sort:'-created',
   isEditingRow: false,
 
   actions: {
@@ -13,9 +13,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 
     cancelEditing() {
       this.toggleProperty('isEditingRow');
-    },
-
-
+    }
   }
     
 });

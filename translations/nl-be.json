@@ -235,5 +235,10 @@
 	"agendaitem-title":"Type dossiers & titels",
 	"show-as-remark":"Dit is een mededeling",
 	"no-meetings": "Er zijn nog geen agenda's aangemaakt.",
-	"edit-case":"Dossier aanpassen"
+	"edit-case":"Dossier aanpassen",
+	"priority": "Prioriteit",
+	"file-name": "Document naam",
+	"alt-file-name": "Alternatieve document naam",
+	"file-type":"Document type"
+
 }
