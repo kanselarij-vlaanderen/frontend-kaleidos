@@ -33,7 +33,7 @@ export default Component.extend({
 
 	actions: {
 		async chooseMandatee(mandatees) {
-			this.set('selectedMandatees', mandatees)
+			this.set('selectedMandatees', mandatees);
 			this.chooseMandatee(mandatees);
 		},
 		async resetValueIfEmpty(param) {

@@ -6,7 +6,6 @@ export default Component.extend({
 	isAdding:false,
 	isResigning:false,
 	isEditing: false, 
-	selectedMandatee:null,
 
 	actions: {
 		closeModal() {

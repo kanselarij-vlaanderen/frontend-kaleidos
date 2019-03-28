@@ -1,15 +1,19 @@
 {{#if (not isAdding)}}
   {{#if (not isResigning)}}
     <div class="vl-modal-dialog__content">
-      {{utils/mandatee-selector
-        singleSelect=true
-        chooseMandatee=(action "selectMandatee")
+      {{utils/model-selector
+        modelName="mandatee"
+        searchField="title"
+        propertyToShow="title"
+        sortField="priority"
+        selectedItems=(await selectedMandatee)
+        selectModel=(action "selectMandatee")
       }}
     </div>
   {{/if}}
   {{#if isEditing}}
     {{utils/edit-mandatee
-      mandateeToEdit=selectedMandatee
+      mandateeToEdit=(await selectedMandatee)
       closeModal=(action "toggleIsEditing")
     }}
   {{else if (not isResigning)}}
