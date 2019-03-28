@@ -68,7 +68,6 @@ export default Component.extend(FileSaverMixin,{
 			});
 			document.save().then(async (createdDocument) => {
 				if (file) {
-					delete file.public;
 					const documentVersion = await this.store.createRecord('document-version', {
 						document: createdDocument,
 						subcase: subcase,

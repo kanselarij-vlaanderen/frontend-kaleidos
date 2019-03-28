@@ -113,7 +113,6 @@ export default Component.extend({
 		},
 
 		uploadedFile(uploadedFile) {
-			uploadedFile.set('public', false);
 			this.get('uploadedFiles').pushObject(uploadedFile);
 		},
 
@@ -140,18 +139,19 @@ export default Component.extend({
 		let document = await this.store.createRecord('document', {
 			created: new Date(),
 			title: documentTitle,
-			type: file.get('documentType')
+			type: file.get('documentType'),
+			confidentiality: file.get('confidentiality')
 		});
+		
 		document.save().then(async (createdDocument) => {
 			if (file) {
-				delete file.public;
 				const documentVersion = await this.store.createRecord('document-version', {
 					document: createdDocument,
 					subcase: subcase,
 					created: new Date(),
 					versionNumber: 1,
 					file: file,
-					chosenFileName: file.get('name')
+					chosenFileName: file.get('chosenFileName') 
 				});
 				await documentVersion.save();
 			} else {

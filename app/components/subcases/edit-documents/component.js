@@ -9,7 +9,7 @@ export default Component.extend({
 		const { uploadedFiles } = this;
 		if (uploadedFiles) {
 			return uploadedFiles.map((uploadedFile) => {
-				return Object.create({ file: uploadedFile, type: null, public: null })
+				return Object.create({ file: uploadedFile, type: null })
 			})
 		} else {
 			return null;
@@ -41,8 +41,11 @@ export default Component.extend({
 			documentRow.file.set('documentType', type);
 		},
 
+		chooseDocumentConfidentiality(documentRow, confidentiality) {
+			documentRow.file.set('confidentiality', confidentiality);
+		},
+
 		uploadedFile(uploadedFile) {
-			uploadedFile.set('public', false);
 			this.get('uploadedFiles').pushObject(uploadedFile);
 		},
 	},

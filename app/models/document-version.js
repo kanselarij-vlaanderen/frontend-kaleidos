@@ -15,9 +15,9 @@ export default Model.extend({
 	file: belongsTo('file'),
 
 	nameToDisplay: computed('chosenFileName', 'serialNumber', function () {
-		let serialNumber = this.get('serialNumber');
-		if (serialNumber) {
-			return serialNumber;
+		let title = this.get('document.title');
+		if (title) {
+			return title;
 		} else {
 			return this.get('chosenFileName');
 		}

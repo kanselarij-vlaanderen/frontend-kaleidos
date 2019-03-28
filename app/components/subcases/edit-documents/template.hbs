@@ -27,7 +27,7 @@
 				<p>{{documentRow.file.name}}</p>
 			</td>
       <td>
-				{{web-components/vl-form-input width="4" value=name}}
+				{{web-components/vl-form-input width="4" value=documentRow.file.chosenFileName}}
 			</td>
       <td>
         {{utils/model-selector
@@ -40,7 +40,14 @@
         }}
       </td>
       <td>
-
+{{utils/model-selector
+          modelName="confidentiality"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=(await documentRow.file.confidentiality)
+          selectModel=(action "chooseDocumentConfidentiality" documentRow)
+        }}
 			</td>
       <td class="vl-u-align-right">
         <button
@@ -57,15 +64,4 @@
 		{{/each}}
   </tbody>
 </table>
-{{!-- <div class="vlc-toolbar">
-  <div class="vlc-toolbar__left vl-action-group vl-action-group--space-between">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "addRow"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-      {{t "buttons.document-add"}}
-    </button>
-  </div>
-</div> --}}
 {{/if}}
