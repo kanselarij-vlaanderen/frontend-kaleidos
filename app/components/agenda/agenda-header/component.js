@@ -10,7 +10,6 @@ export default Component.extend({
 	agendaService: inject(),
 	classNames: ["vlc-page-header"],
 
-	selectedAgendaItem: null,
 	isShowingOptions: false,
 	isPrintingNotes: false,
 
@@ -18,6 +17,7 @@ export default Component.extend({
 	currentSession: alias('sessionService.currentSession'),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	agendas: alias('sessionService.agendas'),
+	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	definiteAgendas: alias('sessionService.definiteAgendas'),
 
 	designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {

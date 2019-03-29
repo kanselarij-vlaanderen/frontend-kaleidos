@@ -5,6 +5,7 @@ import { inject } from '@ember/service';
 export default Service.extend({
 	store:inject(),
 	currentSession: null,
+	selectedAgendaItem: null,
 
 	agendas: computed('currentSession.agendas.@each', function() {
     if(!this.get('currentSession')){
