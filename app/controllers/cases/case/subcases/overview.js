@@ -17,7 +17,7 @@ export default Controller.extend(FileSaverMixin,{
 
 		async downloadFile(documentVersion) {
 			let file = await documentVersion.get('file');
-				$.ajax(`/files/${file.id}?download=${file.filename}`, {
+				$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
 					method: 'GET',
 					dataType: 'arraybuffer', // or 'blob'
 					processData: false
