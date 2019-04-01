@@ -38,7 +38,7 @@ export default Route.extend({
 		});
 
 		const filteredAgendaGroupList = filteredAgendaItems.reduce((items, agendaitem) => {
-			const mandatees = agendaitem.get('subcase').get('mandatees');
+			const mandatees = agendaitem.get('subcase').get('mandatees').sortBy('priority');
 			let titles = mandatees.map((mandatee) => mandatee.title);
 				
 			if (titles && titles != []) {
