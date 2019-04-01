@@ -24,6 +24,7 @@
   </h2>
 
   {{subcases/postponed-subcases
+    subcases=(await model.postPonedSubcases)
     selectSubcase=(action "selectPostponed" )
   }}
 
@@ -37,6 +38,7 @@
   </h2>
 
   {{subcases/available-subcases
+    subcases=(await model.subcases)
     selectSubcase=(action "selectAvailableSubcase")
   }}
 </div>

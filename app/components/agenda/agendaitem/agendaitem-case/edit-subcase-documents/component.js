@@ -22,7 +22,6 @@ export default Component.extend({
 			await Promise.all(
 				documents.map((document) => {
 				if(document.get('deleted')) {
-					console.log('true');
 					return document.destroyRecord();
 				} else {
 					return document.save();

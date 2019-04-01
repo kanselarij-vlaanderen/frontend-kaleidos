@@ -608,12 +608,11 @@ a.vlc-agenda-item {
   text-decoration: none;
   display: block;
   color: inherit;
-}
-
-a.vlc-agenda-item--active {
-  background: $primary-blue;
-  * {
-    color: white;
+  &:active {
+    background: $primary-blue;
+    * {
+      color: white;
+    }
   }
 }
 
@@ -633,3 +632,4 @@ a.vlc-agenda-items__header {
 .vl-modal-dialog--large {
   width: 88rem;
 }
+

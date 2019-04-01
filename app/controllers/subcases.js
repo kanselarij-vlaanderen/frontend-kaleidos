@@ -1,13 +1,11 @@
 import Controller from '@ember/controller';
-import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 
-export default Controller.extend(DefaultQueryParamsMixin, {
+export default Controller.extend({
   agendaService: inject(),
   sessionService: inject(),
-  allSubCasesSelected: false,
   availableSubcases: A([]),
   postponedSubcases: A([]),
   currentSession: alias('sessionService.currentSession'),
@@ -15,11 +13,13 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   agendas: alias('sessionService.agendas'),
 
   navigateBack() {
-    const { currentSession, selectedAgenda } = this;
+    const { currentSession, selectedAgenda  } = this;
     if (currentSession && selectedAgenda) {
+      this.set('postponedSubcases', []);
+      this.set('availableSubcases', []);
       const agendaId = currentSession.get('id');
       const selectedAgendaId = selectedAgenda.get('id');
-      this.transitionToRoute('agenda', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
+      this.transitionToRoute('agenda.agendaitems', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
     }
   },
 
@@ -75,24 +75,15 @@ export default Controller.extend(DefaultQueryParamsMixin, {
       }
     },
 
-    selectAllSubCases() {
-      this.get('model').forEach(subCase => {
-        subCase.toggleProperty('selected');
-      });
-      this.toggleProperty('allSubCasesSelected');
-    },
     navigateBackToAgenda() {
-      this.set('model', null);
       this.navigateBack();
     },
 
     async addSubcasesToAgenda() {
-      let selectedAgenda = await this.get('selectedAgenda');
-      const postponed = await this.get('postponedSubcases');
-      const available = await this.get('availableSubcases');
+      const {selectedAgenda, postponedSubcases, availableSubcases, agendaService} = this;
       const alreadySelected = await selectedAgenda.get('agendaitems');
 
-      await Promise.all(postponed.map(async (item) => {
+      await Promise.all(postponedSubcases.map(async (item) => {
         const agendaitems = await item.get('agendaitems');
         agendaitems.map(async (agendaitem) => {
           const idx = await alreadySelected.indexOf(agendaitem);
@@ -111,9 +102,8 @@ export default Controller.extend(DefaultQueryParamsMixin, {
         });
       }));
 
-      const itemsToAdd = [...postponed, ...available];
-
-      let agendaService = this.get('agendaService');
+      const itemsToAdd = [...postponedSubcases, ...availableSubcases];
+      
       let promise = Promise.all(itemsToAdd.map(async (subCase) => {
         const agendaitems = await subCase.get('agendaitems');
         if (agendaitems.length === 0) {
@@ -131,5 +121,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
         this.navigateBack();
       });
     }
-  }
+  },
+
+  
 });
