@@ -7,6 +7,32 @@ export default Component.extend({
 	isEditing: false,
 	classNames: ["vl-u-spacer--large"],
 
+	async createMissingApprovals(mandatees, mandateesAlreadyAdded, subcase) {
+		const date = new Date();
+		return Promise.all(mandatees.map(async (mandatee) => {
+			const indexOf = mandateesAlreadyAdded.indexOf(mandatee);
+			if (indexOf == -1) {
+				const approvalToCreate = this.store.createRecord('approval', {
+					mandatee: mandatee,
+					subcase: subcase,
+					created: date,
+					modified: date,
+				})
+				return await approvalToCreate.save();
+			}
+		}))
+	},
+
+	async deleteApprovals(mandateesAlreadyAdded, mandatees, approvals) {
+		return Promise.all(mandateesAlreadyAdded.map(async mandateeAdded => {
+			const foundMandatee = await mandatees.find(mandatee => mandateeAdded.get('id') === mandatee.get('id'));
+			if (!foundMandatee) {
+				const approvalToDelete = await approvals.find((approval) => approval.get('mandatee.id') == mandateeAdded.get('id'));
+				approvalToDelete.destroyRecord();
+			}
+		}))
+	},
+
 	actions: {
 		async saveChanges() {
 			const { subcase } = this;
@@ -28,22 +54,17 @@ export default Component.extend({
 		async toggleIsEditing() {
 			const { subcase } = this;
 			const approvals = await subcase.get('approvals');
-			if (approvals && approvals.get('length') > 0) {
-				this.toggleProperty('isEditing');
+			const mandatees = await subcase.get('mandatees');
+			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
+			const approvalsLength = mandateesAlreadyAdded.get('length');
+			const mandateeLength = mandatees.get('length');
+
+			if (mandateeLength > approvalsLength) {
+				await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, subcase);
 			} else {
-				const mandatees = await subcase.get('mandatees');
-				const date = new Date();
-				await Promise.all(mandatees.map(async (mandatee) => {
-					const approvalToCreate = this.store.createRecord('approval', {
-						mandatee: mandatee,
-						subcase: subcase,
-						created: date,
-						modified: date,
-					})
-					return await approvalToCreate.save();
-				}))
-				this.toggleProperty('isEditing');
+				await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
 			}
+			this.toggleProperty('isEditing');
 		}
 	}
 });
