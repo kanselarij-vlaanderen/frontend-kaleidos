@@ -9,8 +9,8 @@ export default Component.extend({
 
 	actions: {
 		async saveChanges() {
-			const { approvals } = this;
-			await Promise.all(approvals.map(async (approval) => {
+			const { subcase } = this;
+			await Promise.all(subcase.get('approvals').map(async (approval) => {
 				return await approval.save();
 			}));
 			this.toggleProperty('isEditing');
