@@ -239,6 +239,10 @@
 	"priority": "Prioriteit",
 	"file-name": "Document naam",
 	"alt-file-name": "Alternatieve document naam",
-	"file-type":"Document type"
-
+	"file-type":"Document type",
+	"mandatee-approval":"Goedkeuring co-agendering",
+	"name-mandatee":"Naam minister",
+	"function-mandatee":"Functie",
+	"approval-mandatee":"Akkoord",
+	"approve":"Goedkeuren"
 }

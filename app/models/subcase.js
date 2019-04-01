@@ -20,6 +20,7 @@ export default Model.extend({
   documentVersions: hasMany('document-version'),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
+  approvals: hasMany('approval'),
 
   documents: computed('documentVersions', async function () {
     const documentVersions = await this.get('documentVersions');
