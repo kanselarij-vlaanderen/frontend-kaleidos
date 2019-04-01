@@ -43,6 +43,7 @@ export default Component.extend(FileSaverMixin,{
 		},
 		
 		async downloadFile(documentVersion) {
+			console.log(documentVersion);
 			let file = await documentVersion.get('file');
 			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
 				method: 'GET',

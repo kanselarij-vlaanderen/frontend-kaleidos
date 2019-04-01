@@ -64,9 +64,7 @@ export default Model.extend({
 		});
 	}),
 
-	lastDocumentVersion: computed('sortedDocuments', function () {
-		return this.get('sortedDocuments').then((documents) => {
-			return documents.get('lastObject');
-		});
+	lastDocumentVersion: computed('sortedDocuments', async function () {
+		return (await this.get('sortedDocuments')).get('lastObject');
 	})
 });
