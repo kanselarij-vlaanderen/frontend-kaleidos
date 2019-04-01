@@ -103,7 +103,7 @@ export default Controller.extend({
       }));
 
       const itemsToAdd = [...postponedSubcases, ...availableSubcases];
-      console.log(itemsToAdd);
+      
       let promise = Promise.all(itemsToAdd.map(async (subCase) => {
         const agendaitems = await subCase.get('agendaitems');
         if (agendaitems.length === 0) {

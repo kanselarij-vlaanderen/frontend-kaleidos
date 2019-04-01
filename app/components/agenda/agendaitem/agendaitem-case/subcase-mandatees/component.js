@@ -47,7 +47,6 @@ export default Component.extend({
 				})
 			})
 		}
-		console.log(mandatees, selectedDomains)
 		this.set('selectedMandatees', mandatees);
 		this.set('selectedDomains', selectedDomains);
 	},
