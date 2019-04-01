@@ -56,14 +56,9 @@ export default Component.extend({
 			const approvals = await subcase.get('approvals');
 			const mandatees = await subcase.get('mandatees');
 			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
-			const approvalsLength = mandateesAlreadyAdded.get('length');
-			const mandateeLength = mandatees.get('length');
 
-			if (mandateeLength > approvalsLength) {
-				await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, subcase);
-			} else {
-				await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
-			}
+			await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, subcase);
+			await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
 			this.toggleProperty('isEditing');
 		}
 	}
