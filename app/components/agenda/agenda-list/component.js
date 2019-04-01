@@ -1,9 +1,13 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
+import { inject } from '@ember/service';
+
 export default Component.extend({
+	sessionService:inject(),
 	classNames:"vlc-agenda-items",
 	classNameBindings: ['getClassNames'],
-	selectedAgendaItem: null,
+	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	agendaitems:null,
 
 	getClassNames: computed('selectedAgendaItem', function() {

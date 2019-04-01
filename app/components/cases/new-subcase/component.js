@@ -167,8 +167,8 @@ export default Component.extend({
 		});
 	},
 
-	parseDomainsAndMandatees() {
-		const mandateeRows = this.get('mandateeRows');
+	async parseDomainsAndMandatees() {
+		const mandateeRows = await this.get('mandateeRows');
 		const mandatees = [];
 		const selectedDomains = [];
 		if (mandateeRows && mandateeRows.get('length') > 0) {

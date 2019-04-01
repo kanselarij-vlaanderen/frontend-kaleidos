@@ -8,7 +8,11 @@ const Router = EmberRouter.extend({
 
 Router.map(function () {
   this.route('agendas', { path: "/agendas" });
-  this.route('agenda', {path: '/agenda/:id'});
+  this.route('agenda', {path: '/agenda/:id'}, function() {
+    this.route('agendaitems', function() {
+      this.route('agendaitem', {path: '/:agendaitem_id'});
+    });
+  });
   this.route('cases', { path: '/dossiers' }, function () {
     this.route('case', { path: ':id' }, function () {
       this.route('subcases', { path: '/deeldossiers' }, function () {
