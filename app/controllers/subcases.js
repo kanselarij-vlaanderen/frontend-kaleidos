@@ -19,7 +19,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     if (currentSession && selectedAgenda) {
       const agendaId = currentSession.get('id');
       const selectedAgendaId = selectedAgenda.get('id');
-      this.transitionToRoute('agenda', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
+      this.transitionToRoute('agenda.agendaitems', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
     }
   },
 
