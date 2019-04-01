@@ -36,10 +36,10 @@ module.exports = function(environment) {
       disableRedirectInitializer: true,
       providers: {
         'acmidm-oauth2': {
-          apiKey: 'your-key',
+          apiKey: 'b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d',
           baseUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/auth',
-          scope: 'vo profile dkb-kaleidos',
-          redirectUri: 'kaleidos-dev.vlaanderen.be/authorization/callback',
+          scope: 'vo profile',
+          redirectUri: 'https://kaleidos-test.vlaanderen.be/authorization/callback',
           logoutUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/logout'
         }
       }
