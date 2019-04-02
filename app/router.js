@@ -31,6 +31,8 @@ Router.map(function () {
   this.route('route-not-found', {
     path: '/*wildcard'
   });
+  this.route('newsletters');
+  this.route('newsletters-overview', { path: ':meeting_id'});
 });
 
 export default Router;

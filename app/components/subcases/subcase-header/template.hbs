@@ -26,8 +26,6 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-    
-
         {{#if (and (not (await subcase.requestedForMeeting)) (not (await subcase.hasAgendaItem)))}}
           <button class="vl-button vl-button--narrow">
             {{t "buttons.propose-for-agenda"}}

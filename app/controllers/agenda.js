@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-// import { computed } from '@ember/object';
 
 export default Controller.extend({
 	sessionService: inject(),

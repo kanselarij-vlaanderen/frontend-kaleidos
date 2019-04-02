@@ -1,0 +1,93 @@
+<div class="vl-u-spacer--xsmall">
+  <div class="vl-u-display-flex vl-u-display-flex-align-center">
+    <h4 class="vl-title vl-title--h6 vl-u-text--capitalize">
+      {{await agendaitem.newsletterInfo.subtitle}}
+    </h4>
+    {{! <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" data-ember-action="" data-ember-action-776="776">
+            Wijzigen
+          </a>
+        </div> }}
+  </div>
+	<div class="vl-u-text vl-u-text--small vl-u-text--muted">
+		{{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}},
+		op voorstel van ---
+	</div>
+</div>
+<div class="vl-u-spacer">
+<div class="vl-u-text">
+	<p>
+		{{await agendaitem.newsletterInfo.text}}
+	</p>
+</div>
+</div>
+<div class="vl-u-spacer">
+  <div class="vl-custom">
+    <ul>
+      {{#each (await agendaitem.subcase.sortedThemes) as |theme|}}
+        <li class="vl-pill vl-u-spacer-extended-right-s">
+          {{theme.label}}
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+	<hr class="vlc-hr">
+	<div class="vl-u-spacer vl-u-spacer-extended-bottom-l">
+      <footer>
+        <div class="vl-custom">
+          <div class="js-vl-accordion js-vl-accordion--open">
+            <button class="vl-toggle vl-link" {{action "showDocuments"}}>
+              <i
+                class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-right-fat"
+              ></i>
+							{{t "documents"}}
+            </button>
+            {{#if isShowingVersions}}
+						{{agenda/agendaitem/agendaitem-case/subcase-documents
+    agendaitem=agendaitem
+    subcase=(await agendaitem.subcase)
+  }}
+              {{!-- <div class="vl-accordion__content js-vl-accordion__content">
+                <div
+                  class="vl-accordion__panel vl-accordion__panel--custom vl-u-bg-porcelain"
+                >
+                  <div class="vl-custom">
+                    <ul class="vl-link-list vl-link-list--bordered">
+                      {{#each
+                        (await agendaitem.subcase.documents) as |document|
+                      }}
+                          <li class="vl-link-list__item">
+                            <div class="vl-u-spacer">
+                              <div
+                                class="vl-u-display-flex vl-u-flex-align-center"
+                              >
+                                <p>
+                                  {{await document.lastDocumentVersion.nameToDisplay}}
+                                </p>
+                                <button
+                                  class="vl-button vl-button--link vl-button--icon"
+                                >
+                                  <i
+                                    class="vl-button__icon vl-vi vl-vi-move-down"
+                                  ></i>
+                                </button>
+                              </div>
+                              <p class="vl-u-text--small vl-u-text--muted">
+                                {{moment-format document.created "DD MMMM YYYY"
+                                }}
+                                -
+                                {{moment-format document.created "HH:mm"}}
+                              </p>
+                            </div>
+                          </li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+              </div> --}}
+            {{/if}}
+          </div>
+        </div>
+      </footer>
+	</div>
+</div>

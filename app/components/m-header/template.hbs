@@ -13,9 +13,9 @@
           {{/link-to}}
         </li>
         <li class="vl-tab">
-          <a class="vl-tab__link" role="tab" aria-selected="true">
-            Nieuwsbrief
-          </a>
+          {{#link-to "newsletters" class="vl-tab__link"}}
+            {{t "navigation.newsletter"}}
+          {{/link-to}}
         </li>
         <li class="vl-tab">
           {{#link-to "settings" class="vl-tab__link"}}
