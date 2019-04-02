@@ -4,7 +4,7 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 export default Controller.extend(DefaultQueryParamsMixin, {
   sort:'-created',
   isEditingRow: false,
-
+  filter: 'created',
   actions: {
     editRow(caze) {
       this.set('caseToEdit', caze);

@@ -23,9 +23,9 @@
       <span class="vlc-agenda-item__meta">
         {{!-- {{await agendaitem.subcase.shortTitle}}  Phase todo --}}
       </span>
-      {{#if agendaitem.formallyOk}}
+      {{#if (await agendaitem.subcase.formallyOk)}}
         <div class="vl-u-display-flex active">
-          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+          <i class="vl-vi vl-vi-check-small--success" aria-hidden="true"></i>
           <span class="vlc-agenda-item__meta">
             {{t "agendaitem-details.formal-ok"}}
           </span>
@@ -49,7 +49,6 @@
   <p class="vl-long-title">
     {{await agendaitem.subcase.title}}
   </p>
-
   <div class="vl-u-display-flex vl-attachments">
     {{#each (await agendaitem.subcase.documents) as |document|}}
       <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">
@@ -66,7 +65,7 @@
     <span class="vlc-agenda-item__meta">
       2de principiele goedkeuring
     </span>
-    {{#if agendaitem.formallyOk}}
+    {{#if (await agendaitem.subcase.formallyOk)}}
       <div class="vl-u-display-flex active">
         <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
         <span class="vlc-agenda-item__meta">

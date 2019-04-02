@@ -17,21 +17,6 @@
           <div class="vl-action-group vl-action-group--align-right">
             {{#if (not currentAgenda.isFinal)}}
               {{#if showOptions}}
-              {{#if agendaitem.formallyOk}}
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "toggleFormallyOk" agendaitem}}
-              >
-                Formeel niet ok verklaren
-              </button>
-              {{else}}
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "toggleFormallyOk" agendaitem}}
-              >
-                Formeel ok verklaren
-              </button>
-              {{/if}}
                 {{#if isPostPonable}}
                   {{#if
                     (or

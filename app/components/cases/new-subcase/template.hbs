@@ -74,6 +74,17 @@
           selectModel=(action "selectPhase")
         }}
       </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "metadata-form.public")}}
+        {{utils/model-selector
+          modelName="confidentiality"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=confidentiality
+          selectModel=(action "selectConfidentiality")
+        }}
+      </div>
       {{cases/subcase-mandatees
         mandateeRowsChanged=(action "mandateeRowsChanged")
       }}

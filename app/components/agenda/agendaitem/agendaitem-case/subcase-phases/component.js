@@ -8,7 +8,7 @@ export default Component.extend({
 	isEditing: false,
 	subcase: null,
 
-	selectedPhase: computed('subcase', function() {
+	selectedPhase: computed('subcase', function () {
 		return this.get('subcase.phases');
 	}),
 
@@ -21,25 +21,24 @@ export default Component.extend({
 			this.toggleProperty('isEditing');
 		},
 
-    choosePhase(phase) {
+		choosePhase(phase) {
 			this.set('selectedPhase', phase);
 		},
 
 		async saveChanges(subcase) {
-		  const phase = this.get('selectedPhase');
+			const phase = this.get('selectedPhase');
 			const subcaseModel = this.store.peekRecord('subcase', subcase.get('id'));
 
-      const subcasePhase = this.store.createRecord('subcase-phase',
-        {
-          date: new Date(),
-          code: phase,
-          subcase: subcaseModel
-        });
+			const subcasePhase = this.store.createRecord('subcase-phase',
+				{
+					date: new Date(),
+					code: phase,
+					subcase: subcaseModel
+				});
 
-      subcasePhase.save().then(() => {
-        this.toggleProperty('isEditing');
-
-      });
+			subcasePhase.save().then(() => {
+				this.toggleProperty('isEditing');
+			});
 		}
 	}
 });

@@ -11,6 +11,7 @@ export default Component.extend({
 	nonDigitalDocuments: [],
 	selectedMandatees: [],
 	themes: [],
+	confidentiality: null,
 	isAddingNonDigitalDocument: false,
 	showAsRemark: false,
 	step: 1,
@@ -42,6 +43,10 @@ export default Component.extend({
 			this.decrementProperty('step');
 		},
 
+		selectConfidentiality(confidentiality) {
+			this.set('confidentiality', confidentiality);
+		},
+
 		nextStep() {
 			this.incrementProperty('step');
 		},
@@ -65,18 +70,20 @@ export default Component.extend({
 
       const createdSubphase = await subcasePhase.save();
 
-			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark } = this;
+			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark, confidentiality } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
           phases: [createdSubphase],
 					shortTitle: shortTitle,
+					formallyOk:false,
 					showAsRemark: showAsRemark,
 					governmentDomains: selectedDomains,
 					case: caze,
 					created: new Date(),
 					mandatees: selectedMandatees,
-					themes: themes
+					themes: themes,
+					confidentiality: confidentiality
 				});
 
 			const createdSubCase = await subcase.save();

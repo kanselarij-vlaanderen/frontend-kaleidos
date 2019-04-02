@@ -12,7 +12,6 @@ export default Route.extend({
 	},
 
 	afterModel(model, trans) {
-		console.log(model)
 		this.set('sessionService.selectedAgendaItem', model);
 	}
 });

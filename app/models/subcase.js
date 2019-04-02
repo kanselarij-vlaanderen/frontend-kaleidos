@@ -8,6 +8,7 @@ export default Model.extend({
   shortTitle: attr('string'),
   title: attr('string'),
   showAsRemark: attr('boolean'),
+  formallyOk: attr('boolean'),
 
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
@@ -21,6 +22,7 @@ export default Model.extend({
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
+  confidentiality: belongsTo('confidentiality'),
 
   documents: computed('documentVersions', async function () {
     const documentVersions = await this.get('documentVersions');

@@ -9,7 +9,6 @@ export default Service.extend({
 	getSortedAgendaItems(agenda) {
 		return $.ajax(
 			{
-				
 				method: "GET",
 				url: `/agenda-sort?agendaId=${agenda.get('id')}`,
 			}
@@ -63,7 +62,6 @@ export default Service.extend({
 		let agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
 			postPoned: false,
-			formallyOk: false,
 			titlePress: subCase.shortTitle,
 			created: new Date(),
 			subcase: subCase,

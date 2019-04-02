@@ -7,7 +7,6 @@ export default Model.extend({
   priority: attr('number'),
   created: attr('date'),
   record: attr('string'),
-  formallyOk: attr('boolean'),
   // showAsRemark: attr('boolean'),
   retracted: attr('boolean'),
 
@@ -17,12 +16,12 @@ export default Model.extend({
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
-  decision: belongsTo('decision', { inverse: null }),
+  decision: belongsTo('decision'),
   subcase: belongsTo('subcase', { inverse: null }),
-  remarks: hasMany('remark', { inverse: null }),
+  remarks: hasMany('remark'),
   attendees: hasMany('mandatee', { inverse: null }),
   newsletterInfo: belongsTo('newsletter-info', { inverse: null }),
-  meetingRecord: belongsTo('meeting-record', { inverse: null }),
+  meetingRecord: belongsTo('meeting-record'),
 
   isPostponed: computed('retracted', 'postponedTo', function () {
     return this.get('postponedTo').then((session) => {
