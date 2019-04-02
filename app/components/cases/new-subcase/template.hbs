@@ -13,6 +13,11 @@
             {{t "show-as-remark"}}
           </div>
         </label>
+
+        {{web-components/vl-checkbox
+          value=showAsRemark
+          label=(t "show-as-remark")
+        }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
