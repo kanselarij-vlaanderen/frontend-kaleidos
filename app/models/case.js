@@ -9,6 +9,7 @@ export default Model.extend({
   shortTitle: attr('string'),
   number: attr('string'),
   policyLevel: attr('string'),
+  isArchived: attr('boolean'),
   type: belongsTo('case-type'),
   remark: hasMany('remark'),
   themes: hasMany('theme'),

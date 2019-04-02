@@ -11,6 +11,7 @@ export default Component.extend({
         {
           title: this.get('title'),
           shortTitle: this.get('shortTitle'),
+          isArchived: false,
           type: this.get('type'),
           created: new Date(),
           policyLevel: this.get('selectedPolicyLevel')
