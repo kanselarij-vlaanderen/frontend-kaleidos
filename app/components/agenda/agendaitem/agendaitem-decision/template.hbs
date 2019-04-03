@@ -1,61 +1,29 @@
-<div class="vl-u-spacer">
-  <div class="vl-u-display-flex vl-u-flex-space-between">
-    <h3 class="vl-title vl-title--h3">
-      {{t "agendaitem-details.decision-title"}}
-    </h3>
-    {{#if agendaitem.decision}}
-      {{#if (not isEditing)}}
-        <button
-          class="vl-button vl-button--tertiary vl-button--icon"
-          {{action "toggleIsEditing"}}
-        >
-          <i class="vl-vi vl-vi-edit"></i>
-        </button>
-      {{else}}
-        <button
-          class="vl-button vl-button--tertiary vl-button--icon"
-          {{action "saveChanges" agendaitem}}
-        >
-          <i class="vl-vi vl-vi-save"></i>
-        </button>
-      {{/if}}
-    {{else}}
-      <button
-        class="vl-button vl-button--tertiary vl-button--icon"
-        {{action "addDecision" agendaitem}}
-      >
-        <i class="vl-vi vl-vi-add"></i>
-      </button>
-    {{/if}}
+{{#if (not isEditing)}}
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vl-u-flex-space-between">
+      <h3 class="vl-title vl-title--h3">
+        {{t "agendaitem-details.decision-title"}}
+      </h3>
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link" {{action "toggleIsEditing"}}>
+          {{t "buttons.edit"}}
+        </a>
+      </div>
+    </div>
   </div>
-</div>
-<div class="vl-typography">
-  {{#if (and agendaitem.decision isEditing)}}
-    <div class="vlc-input-field vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "edit-item.title")}}
-      {{web-components/vl-form-input width="4" value=(await title)}}
+  <div class="vl-u-spacer">
+    <div class="vl-u-spacer--xsmall">
+      <h4 class="vl-title vl-title--h6">
+        {{await agendaitem.decision.shortTitle}}
+      </h4>
     </div>
-    <div class="vlc-input-field vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "edit-decision.decision-text")}}
-      {{textarea
-        rows="5"
-        class="vl-textarea vl-textarea--block"
-        value=agendaitem.decision.description
-      }}
-    </div>
-    <div class="vlc-input-field vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "edit-decision.approved")}}
-      {{x-toggle
-        value=agendaitem.decision.approved
-        onToggle=(action (mut agendaitem.decision.approved))
-      }}
-    </div>
-  {{else}}
-    <h5>
-      {{agendaitem.decision.shortTitle}}
-    </h5>
     <p>
-      {{agendaitem.decision.description}}
+      {{await agendaitem.decision.description}}
     </p>
-  {{/if}}
-</div>
+  </div>
+{{else}}
+  {{agenda/agendaitem/agendaitem-decision-edit
+    isEditing=isEditing
+    agendaitem=agendaitem
+  }}
+{{/if}}

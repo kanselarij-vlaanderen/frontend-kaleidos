@@ -7,19 +7,22 @@ export default Component.extend({
 	agendaitem:null,
 	isEditing:false,
 
-	actions: {
-		async addNewsItem(agendaitem){
-      const news = this.store.createRecord("newsletter-info", {
-				agendaitem: agendaitem,
-				created: new Date(),
-				subtitle: await agendaitem.get('subcase.title')
-      });
-      news.save().then(() => {
-				this.toggleProperty('isEditing')
-			});
-		},
+	async addNewsItem(agendaitem){
+		const news = this.store.createRecord("newsletter-info", {
+			agendaitem: agendaitem,
+			created: new Date(),
+			subtitle: await agendaitem.get('subcase.title')
+		});
+		await news.save();
+	},
 
-		toggleIsEditing() {
+	actions: {
+		async toggleIsEditing() {
+			const { agendaitem } = this;
+			const newsletter = await agendaitem.get('newsletterInfo');
+			if (!newsletter) {
+				await this.addNewsItem(agendaitem);
+			}
 			this.toggleProperty('isEditing');
 		},
 

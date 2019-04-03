@@ -2,26 +2,23 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
+	classNames:["vl-form__group vl-u-bg-porcelain"],
 	store:inject(),
-	classNames:['vl-u-spacer'],
-	isShowingVersions:false, 
 	isEditing:false,
 
 	actions: {
-		showDocuments() {
-			this.toggleProperty('isShowingVersions');
-		},
 		toggleIsEditing() {
 			this.toggleProperty('isEditing');
 		},
 		async saveChanges(agendaitem) {
-			const newsletterToEdit = await this.store.peekRecord('newsletter-info', agendaitem.get('newsletterInfo.id'));
-			await newsletterToEdit.save();
+			const decisionToEdit = await agendaitem.get('decision');
+			await decisionToEdit.save();
+			agendaitem.belongsTo('decision').reload();
 			this.toggleProperty('isEditing');
 		},
 		async cancelEditing(agendaitem) {
-			const newsletter = await agendaitem.get('newsletterInfo')
-			newsletter.rollbackAttributes();
+			const decision = await agendaitem.get('decision')
+			decision.rollbackAttributes();
 			this.toggleProperty('isEditing');
 		}
 	}

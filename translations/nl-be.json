@@ -255,5 +255,7 @@
 	"approve":"Goedkeuren",
 	"newsletter-of":"Nieuwsbrief voor de agenda van",
 	"send-newsletter":"Nieuwsbrief versturen",
-	"amount-showed":"Dossiers per rij"
+	"amount-showed":"Dossiers per rij",
+	"title-newsletter":"Titel nieuwsbrief",
+	"newsletter":"Nieuwsbrief"
 }

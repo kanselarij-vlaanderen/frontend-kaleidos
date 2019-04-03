@@ -43,7 +43,6 @@ export default Component.extend(FileSaverMixin,{
 		},
 		
 		async downloadFile(documentVersion) {
-			console.log(documentVersion);
 			let file = await documentVersion.get('file');
 			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
 				method: 'GET',
@@ -64,8 +63,8 @@ export default Component.extend(FileSaverMixin,{
 		async createNewDocumentWithDocumentVersion(subcase, file, documentTitle) {
 			let document = await this.store.createRecord('document', {
 				created: new Date(),
-				title: documentTitle
-				// documentType: file.get('documentType')
+				title: documentTitle,
+				type: file.get('documentType')
 			});
 			document.save().then(async (createdDocument) => {
 				if (file) {
