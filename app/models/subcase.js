@@ -9,7 +9,7 @@ export default Model.extend({
   title: attr('string'),
   showAsRemark: attr('boolean'),
   formallyOk: attr('boolean'),
-
+  isArchived: attr('boolean'),
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', {inverse:null}),

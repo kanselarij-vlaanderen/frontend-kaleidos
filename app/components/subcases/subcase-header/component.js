@@ -7,6 +7,7 @@ export default Component.extend({
 	store: inject(),
 	classNames: ["vlc-page-header"],
 	isAssigningToAgenda: false,
+  isShowingOptions: false,
 
 	meetings: computed('store', function () {
 		const dateOfToday = moment().format();
@@ -22,6 +23,9 @@ export default Component.extend({
 	}),
 
 	actions: {
+    showMultipleOptions() {
+      this.toggleProperty('isShowingOptions');
+    },
 		proposeForAgenda(subcase, meeting) {
 			subcase.set('requestedForMeeting', meeting);
 			subcase.save().then(subcase => {
@@ -32,7 +36,7 @@ export default Component.extend({
 			this.toggleProperty('isAssigningToAgenda');
 			this.set('selectedSubcase', subcase);
 		},
-		
+
 		async unPropose(subcase) {
 			subcase.set('requestedForMeeting', null);
 			const phases = await subcase.get('phases');
@@ -51,6 +55,22 @@ export default Component.extend({
 			this.toggleProperty('isAssigningToAgenda');
 			this.set('selectedSubcase', null);
 		},
+
+    archiveSubcase(subcase) {
+      subcase.set('isArchived', true);
+      this.set('isArchivingSubcase', false);
+      subcase.save();
+    },
+    unarchiveSubcase(subcase) {
+      subcase.set('isArchived', false);
+      subcase.save();
+    },
+    requestArchiveSubcase() {
+      this.set('isArchivingSubcase', true);
+    },
+    cancelArchiveSubcase() {
+      this.set('isArchivingSubcase', false);
+    }
 	},
 
 	async assignSubcasePhase(subcase) {
