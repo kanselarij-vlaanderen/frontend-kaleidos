@@ -1,0 +1,31 @@
+<div class="vl-modal-dialog__content">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "title-newsletter")}}
+    {{textarea rows="5" class="vl-textarea vl-textarea--block" value=title
+    }}
+  </div>
+</div>
+<div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--link vl-button--narrow"
+          {{action "close"}}
+        >
+          {{t "buttons.cancel"}}
+        </button>
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--narrow"
+          {{action "createSingleNewsLetter"}}
+        >
+          {{t "buttons.create"}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
