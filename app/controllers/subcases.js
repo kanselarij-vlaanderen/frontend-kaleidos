@@ -19,6 +19,7 @@ export default Controller.extend({
       this.set('availableSubcases', []);
       const agendaId = currentSession.get('id');
       const selectedAgendaId = selectedAgenda.get('id');
+      this.set('sessionService.selectedAgendaItem', null);
       this.transitionToRoute('agenda.agendaitems', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
     }
   },

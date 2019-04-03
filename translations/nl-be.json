@@ -149,6 +149,7 @@
 		"agenda": "Agenda",
 		"agendas": "Agendas",
 		"cases": "Dossiers",
+		"newsletter":"Nieuwsbrief",
 		"notifications": "Notificaties",
 		"settings": "Instellingen"
 	},
@@ -251,5 +252,7 @@
 	"name-mandatee":"Naam minister",
 	"function-mandatee":"Functie",
 	"approval-mandatee":"Akkoord",
-	"approve":"Goedkeuren"
+	"approve":"Goedkeuren",
+	"newsletter-of":"Nieuwsbrief voor de agenda van",
+	"send-newsletter":"Nieuwsbrief versturen"
 }
