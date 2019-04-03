@@ -1,0 +1,21 @@
+<div class="vl-u-spacer">
+  <div class="vlc-input-field-block">
+    {{utils/text-template
+      label="Notulen van agendapunt"
+      rows="20"
+      text=agendaitem.meetingRecord.description
+      searchField="name"
+    }}
+  </div>
+</div>
+<div class="vl-action-group vl-action-group--align-right">
+  <a class="vl-link" {{action "cancelEditing" agendaitem}}>
+    {{t "buttons.cancel"}}
+  </a>
+  <button
+    class="vl-button vl-button--narrow"
+    {{action "saveChanges" agendaitem}}
+  >
+    {{t "buttons.save"}}
+  </button>
+</div>
