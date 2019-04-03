@@ -1,9 +1,15 @@
+{{#if (await model)}}
 {{newsletter/newsletter-header
   agenda=(await model.agenda)
-  agendaitems=(await model.agendaitems)
+  amountOfItems=(await model.amountOfItems)
 }}
 <div class="vl-u-spacer-extended-l">
   {{#each (await model.agendaitems) as |agendaitem|}}
-    {{newsletter/newsletter-item agenda=(await model.agenda) agendaitem=(await agendaitem)}}
+    {{newsletter/newsletter-item
+      agenda=(await model.agenda)
+      agendaitem=(await agendaitem)
+    }}
   {{/each}}
 </div>
+{{web-components/vl-pagination page=page size=size links=(await links) nbOfItems=nbOfItems total=total}}
+{{/if}}

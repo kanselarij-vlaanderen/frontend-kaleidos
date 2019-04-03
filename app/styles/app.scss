@@ -637,3 +637,8 @@ a.vlc-agenda-items__header {
   padding: 2rem 1.5rem 1.5rem !important;
 }
 
+a.disabled {
+  text-decoration: none;
+  pointer-events: none;
+  cursor: default;
+}

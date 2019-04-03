@@ -13,7 +13,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 		navigateToNewsLetter(meeting) {
 			const { currentSession } = this;
 			this.set('sessionService.currentSession', currentSession);
-			this.transitionToRoute('newsletters-overview', {'meeting_id': meeting.get('id')});
+			this.transitionToRoute('newsletters-overview', meeting.get('id'));
 		}
 	}
 });
