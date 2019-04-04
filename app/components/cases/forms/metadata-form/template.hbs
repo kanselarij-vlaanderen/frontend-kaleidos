@@ -1,6 +1,14 @@
 <div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "case-item.case-type")}}
-  {{utils/case-type-selector chooseCaseType=(action "typeChanged")}}
+  {{utils/model-selector
+    modelName="case-type"
+    searchField="label"
+    propertyToShow="label"
+    multiSelect=false
+    sortField="label"
+    selectedItems=type
+    selectModel=(action "typeChanged")
+  }}
 </div>
 <div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "metadata-form.short-title")}}
