@@ -8,7 +8,8 @@ export default Route.extend({
 	async model() {
 		const subcases = await this.store.query('subcase', {
 			filter: {
-				":has-no:agendaitems": "yes"
+				":has-no:agendaitems": "yes",
+        "is-archived" : false
 			},
 			include: ['agendaitems']
 		});
@@ -25,7 +26,6 @@ export default Route.extend({
 				}
 			});
 		}
-
 		return hash({ subcases: subcases, postPonedSubcases: postPonedSubcases })
 	}
 });

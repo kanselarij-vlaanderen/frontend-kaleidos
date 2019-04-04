@@ -56,10 +56,13 @@ export default Component.extend({
 			this.set('selectedSubcase', null);
 		},
 
-    archiveSubcase(subcase) {
-      subcase.set('isArchived', true);
+    async archiveSubcase(subcase) {
+      const agendaitems = await subcase.get('agendaitems');
+      if (!agendaitems){
+        subcase.set('isArchived', true);
+        subcase.save();
+      }
       this.set('isArchivingSubcase', false);
-      subcase.save();
     },
     unarchiveSubcase(subcase) {
       subcase.set('isArchived', false);
