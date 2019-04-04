@@ -1,0 +1,93 @@
+{{#if (not isEditing)}}
+  <div class="vl-u-spacer--xsmall">
+    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <h4 class="vl-title vl-title--h6 vl-u-text--capitalize">
+        {{await agendaitem.newsletterInfo.subtitle}}
+      </h4>
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link" {{action "toggleIsEditing"}}>
+          {{t "buttons.edit"}}
+        </a>
+      </div>
+    </div>
+    <div class="vl-u-text vl-u-text--small vl-u-text--muted">
+      {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
+      ,
+		op voorstel van ---
+    </div>
+  </div>
+  <div class="vl-u-spacer">
+    <div class="vl-u-text">
+      <p>
+        {{await agendaitem.newsletterInfo.text}}
+      </p>
+    </div>
+  </div>
+  <div class="vl-u-spacer">
+    <div class="vl-custom">
+      <ul>
+        {{#each (await agendaitem.subcase.sortedThemes) as |theme|}}
+          <li class="vl-pill vl-u-spacer-extended-right-s">
+            {{theme.label}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+    <hr class="vlc-hr" />
+    <div class="vl-u-spacer vl-u-spacer-extended-bottom-l">
+      <footer>
+        <div class="vl-custom">
+          <div class="js-vl-accordion js-vl-accordion--open">
+            <button class="vl-toggle vl-link" {{action "showDocuments"}}>
+              <i
+                class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-right-fat"
+              ></i>
+              {{t "documents"}}
+            </button>
+            {{#if isShowingVersions}}
+              {{#each (await agendaitem.subcase.documents) as |document|}}
+                {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+                  document=document
+                  subcase=subcase
+                  agendaitem=agendaitem
+                }}
+              {{/each}}
+            {{/if}}
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+{{else}}
+  <div class="vl-form__group vl-u-bg-porcelain">
+    <div class="vl-u-spacer">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "title-newsletter")}}
+        {{textarea
+          rows="4"
+          class="vl-textarea vl-textarea--block"
+          value=agendaitem.newsletterInfo.subtitle
+        }}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "newsletter")}}
+        {{textarea
+          rows="10"
+          class="vl-textarea vl-textarea--block"
+          value=agendaitem.newsletterInfo.text
+        }}
+      </div>
+    </div>
+    <div class="vl-action-group vl-action-group--align-right">
+      <a class="vl-link" {{action "cancelEditing" agendaitem}}>
+        {{t "buttons.cancel"}}
+      </a>
+      <button
+        class="vl-button vl-button--narrow"
+        {{action "saveChanges" agendaitem}}
+      >
+        {{t "buttons.save"}}
+      </button>
+    </div>
+  </div>
+{{/if}}

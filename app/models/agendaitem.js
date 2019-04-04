@@ -20,7 +20,7 @@ export default Model.extend({
   subcase: belongsTo('subcase', { inverse: null }),
   remarks: hasMany('remark'),
   attendees: hasMany('mandatee', { inverse: null }),
-  newsletterInfo: belongsTo('newsletter-info', { inverse: null }),
+  newsletterInfo: belongsTo('newsletter-info'),
   meetingRecord: belongsTo('meeting-record'),
 
   isPostponed: computed('retracted', 'postponedTo', function () {

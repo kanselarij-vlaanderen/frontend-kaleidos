@@ -3,13 +3,14 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 import { computed } from '@ember/object';
 
 export default Controller.extend(DefaultQueryParamsMixin, {
-  sort:'-created',
+  sort: '-created',
   isEditingRow: false,
   isNotArchived: false,
 
-  filter : computed('isNotArchived', function() {
+  filter: computed('isNotArchived', function () {
     return this.isNotArchived;
   }),
+
   actions: {
     editRow(caze) {
       this.set('caseToEdit', caze);
@@ -18,7 +19,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     cancelEditing() {
       this.toggleProperty('isEditingRow');
     },
-    toggleArchived(value){
+    toggleArchived(value) {
       this.set("filter", value)
     }
   }
