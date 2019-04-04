@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
 	store:inject(),
-	classNames:['vl-u-spacer'],
+	classNames:['vl-u-spacer vl-col--3-4'],
 	isShowingVersions:false, 
 	isEditing:false,
 

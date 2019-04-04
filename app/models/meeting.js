@@ -16,6 +16,7 @@ export default Model.extend({
 	requestedSubcases: hasMany('subcase'),
 	postponeds: hasMany('postponed'),
 	notes: belongsTo('meeting-record'),
+	newsletter: belongsTo('newsletter-info'),
 
 	latestAgendaName: computed('agendas', function() {
 		return this.get('agendas').then((agendas) => {
