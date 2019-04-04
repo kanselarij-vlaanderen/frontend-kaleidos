@@ -66,10 +66,6 @@ export default Model.extend({
         return false;
       }
     })
-  }),
-
-  lastPhaseCreated: computed('phases', function () {
-
   })
 
 });
