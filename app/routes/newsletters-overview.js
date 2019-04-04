@@ -6,10 +6,10 @@ export default Route.extend({
 	sessionService: inject(),
 
 	queryParams: {
-		page : {
+		page: {
 			refreshModel: true
 		},
-		size : {
+		size: {
 			refreshModel: true
 		}
 	},
@@ -25,9 +25,15 @@ export default Route.extend({
 					agenda: { id: lastAgenda.get('id') }
 				},
 				sort: "priority",
-				page: {number: params.page, size: params.size}
+				page: { number: params.page, size: params.size }
 			});
-			console.log(agendaitems.get('meta.pagination'))
-		return hash({agendaitems: agendaitems, agenda:lastAgenda,amountShowed: agendaitems.get('length'), amountOfItems: agendaitems.get('meta.count'), links: agendaitems.get('meta.pagination')});
+		return hash({
+			agendaitems: agendaitems,
+			agenda: lastAgenda,
+			amountShowed: agendaitems.get('length'),
+			amountOfItems: agendaitems.get('meta.count'),
+			links: agendaitems.get('meta.pagination'),
+			meeting: meeting
+		});
 	}
 });

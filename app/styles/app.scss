@@ -2,7 +2,7 @@
 // @import "ember-modal-dialog/ember-modal-structure";
 // @import "ember-modal-dialog/ember-modal-appearance";
 @import "_colors";
-@import 'ember-vo-webuniversum-data-table';
+@import "ember-vo-webuniversum-data-table";
 
 $icon-font-location: "/fonts/";
 
@@ -156,6 +156,9 @@ $icon-font-location: "/fonts/";
 @import "custom-utilities/_scroll";
 @import "custom-utilities/_box-model";
 
+//print css
+@import "print/agendaitem-print";
+
 .document {
   display: flex;
   justify-content: space-evenly;
@@ -303,8 +306,8 @@ $icon-font-location: "/fonts/";
 }
 
 .attachements {
-  display:flex;
-  flex:wrap;
+  display: flex;
+  flex: wrap;
 }
 
 .remove-file {
@@ -430,22 +433,22 @@ $icon-font-location: "/fonts/";
 .ember-power-select-option {
   border-top: 1px solid $ghost;
   display: block;
-      position: relative;
-      width: 100%;
-      padding: 0.7rem 0 0.5rem 3.2rem;
-      color: $black;
-      font-size: 1.6rem;
-      font-weight: normal;
-      text-align: left;
-      text-decoration: none;
-      cursor: pointer;
+  position: relative;
+  width: 100%;
+  padding: 0.7rem 0 0.5rem 3.2rem;
+  color: $black;
+  font-size: 1.6rem;
+  font-weight: normal;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
 
-      &:hover {
-        position: relative;
-        background-color: $athens-gray;
-        color: $action-text-color;
-        // text-decoration: underline;
-      }
+  &:hover {
+    position: relative;
+    background-color: $athens-gray;
+    color: $action-text-color;
+    // text-decoration: underline;
+  }
 }
 
 .ember-basic-dropdown-trigger {
@@ -516,13 +519,13 @@ $icon-font-location: "/fonts/";
   flex-direction: row-reverse;
   align-items: center;
   border: none;
-  border-radius:0;
+  border-radius: 0;
 
   .ember-power-select-multiple-remove-btn {
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
-    margin-left:0.4em;
+    margin-left: 0.4em;
     font-size: 2rem;
     border: none;
     color: $gray-light;
@@ -592,16 +595,16 @@ $icon-font-location: "/fonts/";
 }
 
 .vlc-panel-layout__agenda-items {
-  height:100%;
+  height: 100%;
 }
 
 .vlc-side-nav {
   min-height: calc(100vh - 44px - 50px - 106px);
-  height:auto;
+  height: auto;
 }
 
 .vl-u-bg-porcelain {
-  width:100%;
+  width: 100%;
 }
 
 a.vlc-agenda-item {
@@ -621,7 +624,7 @@ a.vlc-agenda-items__header {
 }
 
 .vlc-panel-layout__main-content {
-  min-width:50%;
+  min-width: 50%;
   width: 50%;
 }
 

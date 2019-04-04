@@ -1,0 +1,48 @@
+@media print {
+  html {
+    font-size: 50%;
+  }
+
+  .vlc-u-box-model-maximize-height {
+    height: auto !important;
+  }
+
+  .vl-u-spacer-extended-l {
+    margin: 1rem !important;
+  }
+
+  // Hide top nav and side nav
+  #c-main-nav {
+    display: none;
+  }
+
+  .vlc-side-nav {
+    display: none;
+  }
+
+  // Remove backgrounds
+  .vl-u-bg-alt,
+  .vlc-navbar--bg-alt,
+  .vl-u-bg-porcelain {
+    background: #fff;
+  }
+
+  // Hide elements in page header & simplify page header
+
+  .vlc-page-header {
+    padding: 1rem;
+    background: none;
+  }
+
+  .vlc-page-header__sub {
+    display: none !important;
+  }
+
+  .vlc-toolbar__right {
+    display: none;
+  }
+
+  .vlc-page-header .vlc-page-header__title--bordered {
+    border: none;
+  }
+}

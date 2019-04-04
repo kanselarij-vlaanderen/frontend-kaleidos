@@ -98,15 +98,15 @@
               <th class="vl-data-table-col-1"></th>
             {{/c.header}}
             {{#c.body as |meeting|}}
-              <td>
+              <td {{action "selectAgenda" meeting}}>
                 Agenda voor
                 {{! Translate not possible in the data table }}
                 {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
               </td>
-              <td>
+              <td {{action "selectAgenda" meeting}}>
                 {{await meeting.latestAgendaName}}
               </td>
-              <td>
+              <td {{action "selectAgenda" meeting}}>
                 {{moment-format meeting.created "DD-MM-YYYY HH:mm"}}
               </td>
               <td class="vl-u-align-center">
