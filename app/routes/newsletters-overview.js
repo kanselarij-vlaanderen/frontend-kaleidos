@@ -27,7 +27,6 @@ export default Route.extend({
 				sort: "priority",
 				page: {number: params.page, size: params.size}
 			});
-			console.log(agendaitems.get('meta.pagination'))
 		return hash({agendaitems: agendaitems, agenda:lastAgenda,amountShowed: agendaitems.get('length'), amountOfItems: agendaitems.get('meta.count'), links: agendaitems.get('meta.pagination')});
 	}
 });

@@ -1,4 +1,4 @@
-{{newsletter/newsletter-header }}
+{{newsletter/newsletter-header}}
 {{#if (gt model.length 0)}}
   <div class="vlc-scroll-wrapper">
     <div class="vlc-scroll-wrapper__body">
@@ -51,8 +51,8 @@
                     class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
                   ></i>
                 </button>
-                {{!-- {{#attach-popover
-                  class="ember-attacher-popper"
+                {{#attach-popover
+                  class="ember-attacher-popper vl-popover"
                   hideOn="clickout click"
                   showOn="click"
                   animation="shift"
@@ -60,20 +60,26 @@
                 }}
                   <ul class="vl-popover__link-list">
                     <li class="vl-popover__link-list__item">
-                      <button
-                        class="vl-link vl-link--block"
-                        {{action attacher.hide}}
-                        {{action "addNotesToMeeting" meeting}}
-                      >
-                        {{#if (not await futureMeeting.notes)}}
-                          Notulen toevoegen
-                        {{else}}
-                          Notulen aanpassen
-                        {{/if}}
-                      </button>
+                      {{#if (not await meeting.newsletter)}}
+                        <button
+                          class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "addNewsletterToMeeting" meeting}}
+                        >
+                          Nieuwsbrief toevoegen
+                        </button>
+                      {{else}}
+                        <button
+                          class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "editNewsletterOfMeeting" meeting}}
+                        >
+                          Nieuwsbrief aanpassen
+                        </button>
+                      {{/if}}
                     </li>
                   </ul>
-                {{/attach-popover}} --}}
+                {{/attach-popover}}
                 <button
                   class="vl-button vl-button--link vl-button--icon"
                   {{action "navigateToNewsLetter" meeting}}
@@ -92,4 +98,27 @@
     {{web-components/vl-alert message=(t "no-meetings")}}
   </div>
 {{/if}}
-{{outlet}}
+{{#if isAdding}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "close")
+    title=(t "create-single-newsletter")
+  }}
+    {{newsletter/create-newsletter
+      selectedMeeting=selectedMeeting
+      close=(action "close")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isEditing}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "close")
+    title=(t "create-single-newsletter")
+  }}
+    {{newsletter/edit-newsletter
+      selectedMeeting=selectedMeeting
+      close=(action "close")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}

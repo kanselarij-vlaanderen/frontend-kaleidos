@@ -7,44 +7,7 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <button
-          class="vl-button vl-button--narrow vl-button--icon-before vl-button--narrow"
-        >
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
-          ></i>
-          {{t "create-newsletter"}}
-        </button>
-        {{#attach-popover
-          class="ember-attacher-popper"
-          hideOn="clickout click"
-          showOn="click"
-          animation="shift"
-          placement="bottom" as |attacher|
-        }}
-          <ul class="vl-popover__link-list">
-            <li class="vl-popover__link-list__item">
-              <button
-                class="vl-button vl-button--link vl-button--icon"
-                class="vl-link vl-link--block"
-                {{action attacher.hide}}
-                {{action "toggleIsAddingSingleNewsLetter"}}
-              >
-                {{t "single-newsletter"}}
-              </button>
-            </li>
-          </ul>
-        {{/attach-popover}}
       </div>
     </div>
   </div>
 </div>
-{{#if isAddingSingleNewsLetter}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    closeModal=(action "close")
-    title=(t "create-single-newsletter")
-  }}
-    {{newsletter/create-newsletter cancel=(action "close")}}
-  {{/web-components/vl-modal}}
-{{/if}}

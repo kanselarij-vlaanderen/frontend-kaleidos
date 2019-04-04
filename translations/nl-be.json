@@ -257,8 +257,10 @@
 	"send-newsletter": "Nieuwsbrief versturen",
 	"amount-showed": "Dossiers per rij",
 	"title-newsletter": "Titel nieuwsbrief",
+	"subtitle-newsletter":"Ondertitel nieuwsbrief",
 	"newsletter": "Nieuwsbrief",
 	"create-newsletter": "Nieuwsbrief opstellen",
 	"single-newsletter": "Losstaande nieuwsbrief",
-	"create-single-newsletter": "Losstaande nieuwsbrief aanmaken"
+	"create-single-newsletter": "Losstaande nieuwsbrief aanmaken",
+	"newsletter-doc-date":"Datum van beschikbaarheid van de documenten"
 }
