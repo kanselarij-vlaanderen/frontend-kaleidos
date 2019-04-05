@@ -44,7 +44,7 @@ export default Route.extend({
 			if (titles && titles != []) {
 				titles = titles.join(', ');
 				if(agendaitem.get('foundPriority') === maxInt) {
-					titles = "Achteraf toegevoegd";
+					titles = "Toegevoegd";
 				}
 				items[titles] = items[titles] || { groupName: titles, agendaitems: [], foundPriority: agendaitem.foundPriority };
 				items[titles].foundPriority = Math.min(items[titles].foundPriority, agendaitem.foundPriority);

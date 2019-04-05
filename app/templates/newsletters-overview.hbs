@@ -3,6 +3,7 @@
     agenda=(await model.agenda)
     amountOfItems=(await model.amountOfItems)
   }}
+  <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
     {{#if (await model.meeting.newsletter)}}
       {{newsletter/newsletter-meeting meeting=(await model.meeting)}}
@@ -23,4 +24,5 @@
       total=total
     }}
   {{/if}}
+  </div>  
 {{/if}}
