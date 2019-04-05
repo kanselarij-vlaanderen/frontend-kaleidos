@@ -53,6 +53,7 @@
           placement="bottom" as |attacher|
         }}
           <ul class="vl-popover__link-list">
+            {{#if (gt (await currentSession.agendas.length) 0)}}
             <li class="vl-popover__link-list__item">
               {{#if (not currentAgenda.isFinal)}}
                 <a
@@ -65,13 +66,14 @@
               {{else}}
                 <a
                   class="vl-link vl-link--block"
-                  {{action "lockAgenda" currentAgenda}}
+                  {{action "unlockAgenda"}}
                   {{action attacher.hide}}
                 >
                   {{t "buttons.agenda-unlock"}}
                 </a>
               {{/if}}
             </li>
+            {{/if}}
             {{#if (eq currentAgenda.name "Ontwerpagenda")}}
               <li class="vl-popover__link-list__item">
                 <a

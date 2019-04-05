@@ -9,7 +9,7 @@ export default Route.extend({
 		const subcases = await this.store.query('subcase', {
 			filter: {
 				":has-no:agendaitems": "yes",
-        // "is-archived" : false
+        "is-archived" : false
 			},
 			include: ['agendaitems']
 		});
