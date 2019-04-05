@@ -657,3 +657,15 @@ body > .ember-view {
   flex-direction: column;
   overflow: hidden !important;
 }
+
+.ember-attacher-popper-wide {
+  width:600px;
+  padding:1em;
+  &::before {
+    display:none;
+  }
+}
+
+.data-table__actions, .data-table__actions--top {
+  
+}

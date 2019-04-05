@@ -164,3 +164,8 @@
     closeModal=(action "toggleIsPrintingNotes")
   }}
 {{/if}}
+{{#if isAddingAgendaitems}}
+  {{agenda/agendaitem/create-agendaitem 
+    isAddingAgendaitems=isAddingAgendaitems
+    reloadRoute=(action "reloadRoute")}}
+{{/if}}

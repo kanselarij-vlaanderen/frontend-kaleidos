@@ -12,6 +12,7 @@ export default Component.extend({
 
 	isShowingOptions: false,
 	isPrintingNotes: false,
+	isAddingAgendaitems:false,
 
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 	currentSession: alias('sessionService.currentSession'),
@@ -81,7 +82,6 @@ export default Component.extend({
 			const definiteAgenda = agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('-name').get('lastObject');
 			definiteAgenda.set('isFinal', true);
 			definiteAgenda.save().then(newAgenda => {
-				console.log(newAgenda);
 				agenda.destroyRecord().then(() => {
 					this.reloadRoute(newAgenda.get('id'));
 				});
@@ -105,8 +105,7 @@ export default Component.extend({
 		},
 
 		navigateToSubCases() {
-			this.set('addingAgendaItems', true);
-			this.navigateToSubCases();
+			this.set('isAddingAgendaitems', true);
 		},
 
 		printDecisions() {
@@ -151,6 +150,10 @@ export default Component.extend({
 
 		closePressAgenda() {
 			this.set('showPressModal', false);
+		},
+		
+		reloadRoute(id) {
+			this.reloadRoute(id);
 		}
 	},
 

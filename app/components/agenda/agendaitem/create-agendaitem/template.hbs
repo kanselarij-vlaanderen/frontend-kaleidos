@@ -1,0 +1,60 @@
+{{#web-components/vl-modal
+  isOverlay=true
+  large=true
+  closeModal=(action "close")
+  title="Agendapunten toevoegen"
+}}
+  <div class="vl-modal-dialog__content">
+    <div class="vl-u-spacer">
+      {{#data-table
+        content=model
+        sort=sort
+        page=page
+        size=size
+        filter=filter as |t|
+      }}
+        {{#t.menu as |menu|}}
+          {{#menu.selected
+            class="vl-action-group vl-action-group--align-right" as |selection table|
+          }}
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "addSubcasesToAgenda" selection table}}
+            >
+              Toevoegen aan agenda
+            </button>
+          {{/menu.selected}}
+        {{/t.menu}}
+        {{#t.content as |c|}}
+          {{#c.header}}
+            {{th-sortable
+              field="shortTitle"
+              currentSorting=sort
+              label="Korte titel van het dossier"
+            }}
+          {{/c.header}}
+          {{#c.body as |row|}}
+            <td class="vl-data-table-col-11">
+              {{row.shortTitle}}
+              {{#attach-popover
+                placement="left"
+                class="ember-attacher-popper ember-attacher-popper-wide"
+              }}
+                {{row.title}}
+              {{/attach-popover}}
+            </td>
+          {{/c.body}}
+        {{/t.content}}
+      {{/data-table}}
+    </div>
+    <div class="data-table-container">
+      <h2 class="vl-title vl-title--h3">
+        {{t "subcases.title-postponed-subcases"}}
+      </h2>
+      {{subcases/postponed-subcases
+        subcases=(await postPonedSubcases)
+        selectSubcase=(action "selectPostponed")
+      }}
+    </div>
+  </div>
+{{/web-components/vl-modal}}

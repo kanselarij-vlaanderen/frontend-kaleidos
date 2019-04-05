@@ -1,31 +1,67 @@
-import Controller from '@ember/controller';
+import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
+import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
-export default Controller.extend({
-  agendaService: inject(),
-  sessionService: inject(),
-  availableSubcases: A([]),
+import { computed } from '@ember/object';
+
+export default Component.extend(DefaultQueryParamsMixin, {
   postponedSubcases: A([]),
   currentSession: alias('sessionService.currentSession'),
   selectedAgenda: alias('sessionService.currentAgenda'),
-  agendas: alias('sessionService.agendas'),
+	agendas: alias('sessionService.agendas'),
+	
+	store: inject(),
+	subcasesService: inject(),
+	agendaService: inject(),
+	sessionService: inject(),
+	
+	size:5,
+	sort:'short-title',
 
-  navigateBack() {
-    const { currentSession, selectedAgenda  } = this;
-    if (currentSession && selectedAgenda) {
-      this.set('postponedSubcases', []);
-      this.set('availableSubcases', []);
-      const agendaId = currentSession.get('id');
-      const selectedAgendaId = selectedAgenda.get('id');
-      this.set('sessionService.selectedAgendaItem', null);
-      this.transitionToRoute('agenda.agendaitems', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
+	model: computed('store', 'sort', 'page', 'filter', 'size', function () {
+    const { store, page, filter, size, sort } = this;
+    const options = {
+      sort: sort,
+      page: {
+        number: page,
+        size: size
+      },
+      filter: {
+        ':has-no:agendaitems': 'yes'
+      }
+    };
+    if (filter) {
+    options['filter'] = {
+      ':has-no:agendaitems': 'yes',
+      'short-title': filter,
+    };
     }
-  },
+    return store.query('subcase', options);
+	}),
+	
+	async didInsertElement() {
+		this._super(...arguments);
+		const ids = await this.get('subcasesService').getPostPonedSubcaseIds();
+		let postPonedSubcases = [];
 
-  actions: {
-    async selectPostponed(subcase, event) {
+		if (ids && ids.length > 0) {
+			postPonedSubcases = await this.store.query('subcase', {
+				filter: {
+					"id": ids.toString()
+				}
+			});
+		}
+		this.set('postPonedSubcases', postPonedSubcases);
+	},
+
+	actions: {
+		close() {
+			this.set('isAddingAgendaitems', false);
+		},
+
+		async selectPostponed(subcase, event) {
       if (event) {
         event.stopPropagation();
       }
@@ -48,40 +84,20 @@ export default Controller.extend({
           postponed.splice(index, 1);
         }
       }
+		},
+		
+		reloadRoute(id) {
+			this.reloadRoute(id);
+		},
 
-    },
-    async selectAvailableSubcase(subcase, destination, event) {
-      if (event) {
-        event.stopPropagation();
-      }
+    async addSubcasesToAgenda(selection, datatable) {
+			datatable.clearSelection();
+			
+      selection.forEach(function (item) {
+        item.set('selected', true);
+			});
 
-      let action = 'add';
-      if (subcase.selected) {
-        subcase.set('selected', false);
-        action = 'remove';
-      } else {
-        subcase.set('selected', true);
-        action = 'add';
-      }
-
-      const available = await this.get('availableSubcases');
-
-      if (action === 'add') {
-        available.pushObject(subcase)
-      } else if (action === 'remove') {
-        const index = available.indexOf(subcase);
-        if (index > -1) {
-          available.splice(index, 1);
-        }
-      }
-    },
-
-    navigateBackToAgenda() {
-      this.navigateBack();
-    },
-
-    async addSubcasesToAgenda() {
-      const {selectedAgenda, postponedSubcases, availableSubcases, agendaService} = this;
+      const {selectedAgenda, postponedSubcases, agendaService} = this;
       const alreadySelected = await selectedAgenda.get('agendaitems');
 
       await Promise.all(postponedSubcases.map(async (item) => {
@@ -103,7 +119,7 @@ export default Controller.extend({
         });
       }));
 
-      const itemsToAdd = [...postponedSubcases, ...availableSubcases];
+      const itemsToAdd = [...postponedSubcases, ...selection];
       
       let promise = Promise.all(itemsToAdd.map(async (subCase) => {
         const agendaitems = await subCase.get('agendaitems');
@@ -119,10 +135,9 @@ export default Controller.extend({
           return agendaService.sortAgendaItems(selectedAgenda);
         }
       }).then(() => {
-        this.navigateBack();
-      });
-    }
-  },
-
-  
+				this.set('isAddingAgendaitems', false);
+				this.reloadRoute(selectedAgenda.get('id'));
+			});
+		}
+  }
 });
