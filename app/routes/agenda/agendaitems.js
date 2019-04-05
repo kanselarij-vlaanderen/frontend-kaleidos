@@ -5,7 +5,6 @@ import { hash } from 'rsvp';
 export default Route.extend({
 	sessionService: inject(),
 	agendaService: inject(),
-	maxInt: Number.MAX_SAFE_INTEGER,
 
 	async model() {
 		const agenda = this.get('sessionService.currentAgenda');
@@ -14,13 +13,14 @@ export default Route.extend({
 			include: 'subcase.phases.code,agenda,subcase,subcase.case,subcase.themes,subcase.mandatees,postponed-to,subcase.phases'
 		})
 
-		const groupedItems = await this.reduceGroups(agendaitems, agenda);
-		return hash({ agendaitems: agendaitems, groups:groupedItems.sortBy('foundPriority') , addedAfterwards: agendaitems.filter(item => !!item.priority) });
+		const groups = await this.reduceGroups(agendaitems, agenda);
+		return hash({ agendaitems: agendaitems, groups:groups , addedAfterwards: agendaitems.filter(item => !!item.priority) });
 	},
 
 	async reduceGroups(agendaitems, agenda) {
-		const { agendaService, maxInt } = this;
+		const { agendaService } = this;
 		const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
+		const itemsAddedAfterwards = []
 
 		const filteredAgendaItems = agendaitems.filter(agendaitem => {
 			if (agendaitem && agendaitem.id) {
@@ -31,28 +31,40 @@ export default Route.extend({
 						return agendaitem;
 					}
 				} else {
-					agendaitem.foundPriority = maxInt;
-					return agendaitem;
+					itemsAddedAfterwards.push(agendaitem);
 				}
 			}
 		});
-
 		const filteredAgendaGroupList = filteredAgendaItems.reduce((items, agendaitem) => {
 			const mandatees = agendaitem.get('subcase').get('mandatees').sortBy('priority');
 			let titles = mandatees.map((mandatee) => mandatee.title);
 				
 			if (titles && titles != []) {
-				titles = titles.join(', ');
-				if(agendaitem.get('foundPriority') === maxInt) {
-					titles = "Toegevoegd na goedkeuring";
-				}
-				items[titles] = items[titles] || { groupName: titles, agendaitems: [], foundPriority: agendaitem.foundPriority };
+				titles = titles.join(',');
+				items[titles] = items[titles] || { groupName: titles, mandatees:mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };
 				items[titles].foundPriority = Math.min(items[titles].foundPriority, agendaitem.foundPriority);
 				items[titles].agendaitems.push(agendaitem);
 				return items;
 			}
 		}, {});
+
+		const filteredAgendaGroupListAddedAfterwards = itemsAddedAfterwards.reduce((items, agendaitem) => {
+			const mandatees = agendaitem.get('subcase').get('mandatees').sortBy('priority');
+			let titles = mandatees.map((mandatee) => mandatee.title);
+				
+			if (titles && titles != []) {
+				titles = titles.join(',');
+				items[titles] = items[titles] || { groupName: titles, mandatees:mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };
+				items[titles].foundPriority = Math.min(items[titles].foundPriority, agendaitem.foundPriority);
+				items[titles].agendaitems.push(agendaitem);
+				return items;
+			}
+		}, {});
+
 		
-		return Object.values(filteredAgendaGroupList);
+		return [
+			Object.values(filteredAgendaGroupList).sortBy('foundPriority'),
+			Object.values(filteredAgendaGroupListAddedAfterwards).sortBy('foundPriority')
+		];
 	},
 });
