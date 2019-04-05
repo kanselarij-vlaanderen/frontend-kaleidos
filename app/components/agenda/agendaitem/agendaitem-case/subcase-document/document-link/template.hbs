@@ -13,12 +13,15 @@
             </div>
             <div>
               <h5 class="vl-u-text--uppercase vl-u-text--bold vl-u-text--small">
-                {{ document.type.label }}
+                {{await document.type.label}}
               </h5>
-              {{document-name document=document agendaitem=agendaitem}}
+              {{document-name document=(await document) agendaitem=agendaitem}}
               <p class="vl-info-tile__header__subtitle">
                 Geupload op
-                {{moment-format document.lastDocumentVersion.created "DD.MM.YYYY"}}
+                {{moment-format
+                  document.lastDocumentVersion.created
+                  "DD.MM.YYYY"
+                }}
                 om
                 {{moment-format document.lastDocumentVersion.created "HH:mm"}}
               </p>
@@ -63,7 +66,7 @@
         </div>
       </div>
     </header>
-    {{#if (gt (await document.sortedDocuments.length) 1)}}
+    {{#if (await filteredDocumentVersions)}}
       <footer>
         <div class="vl-custom">
           <div class="js-vl-accordion js-vl-accordion--open">
@@ -81,39 +84,36 @@
                   <div class="vl-custom">
                     <ul class="vl-link-list vl-link-list--bordered">
                       {{#each
-                        (await document.sortedDocuments) as |documentVersion|
+                        (await filteredDocumentVersions) as |documentVersion|
                       }}
-                        {{#if
-                          (not-eq
-                            documentVersion.id document.lastDocumentVersion.id
-                          )
-                        }}
-                          <li class="vl-link-list__item">
-                            <div class="vl-u-spacer">
-                              <div
-                                class="vl-u-display-flex vl-u-flex-align-center"
-                              >
-                                <p>
-                                  {{documentVersion.nameToDisplay}}
-                                </p>
-                                <button
-                                  class="vl-button vl-button--link vl-button--icon"
-                                  {{action "downloadFile" documentVersion}}
-                                >
-                                  <i
-                                    class="vl-button__icon vl-vi vl-vi-move-down"
-                                  ></i>
-                                </button>
-                              </div>
-                              <p class="vl-u-text--small vl-u-text--muted">
-                                {{moment-format document.created "DD MMMM YYYY"
-                                }}
-                                -
-                                {{moment-format document.created "HH:mm"}}
+                        <li class="vl-link-list__item">
+                          <div class="vl-u-spacer">
+                            <div
+                              class="vl-u-display-flex vl-u-flex-align-center"
+                            >
+                              <p>
+                                {{documentVersion.versionNumber}}. {{documentVersion.nameToDisplay}}
                               </p>
+                              <button
+                                class="vl-button vl-button--link vl-button--icon"
+                                {{action "downloadFile" documentVersion}}
+                              >
+                                <i
+                                  class="vl-button__icon vl-vi vl-vi-move-down"
+                                ></i>
+                              </button>
                             </div>
-                          </li>
-                        {{/if}}
+                            <p class="vl-u-text--small vl-u-text--muted">
+                              Geupload op
+                              {{moment-format
+                                documentVersion.created
+                                "DD.MM.YYYY"
+                              }}
+                              om
+                              {{moment-format documentVersion.created "HH:mm"}}
+                            </p>
+                          </div>
+                        </li>
                       {{/each}}
                     </ul>
                   </div>

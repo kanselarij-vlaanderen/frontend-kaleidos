@@ -603,9 +603,9 @@ $icon-font-location: "/fonts/";
   height: auto;
 }
 
-.vl-u-bg-porcelain {
-  width: 100%;
-}
+// .vl-u-bg-porcelain {
+//   width: 100%;
+// }
 
 a.vlc-agenda-item {
   text-decoration: none;
@@ -644,4 +644,16 @@ a.disabled {
   text-decoration: none;
   pointer-events: none;
   cursor: default;
+}
+
+.vl-u-bg-width {
+  width:100%;
+} 
+
+
+body > .ember-view {
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden !important;
 }

@@ -24,6 +24,19 @@ export default Component.extend({
 		return agenda.get('name') === "Ontwerpagenda";
 	}),
 
+	async createDesignAgenda() {
+		this.changeLoading();
+		const session = this.get('currentSession');
+		const definiteAgendas = await this.get('definiteAgendas');
+		const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
+
+		this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda).then(newAgenda => {
+			this.changeLoading();
+			this.set('sessionService.currentAgenda', newAgenda)
+			this.reloadRoute(newAgenda.get('id'));
+		});
+	},
+
 	actions: {
 		clearSelectedAgendaItem() {
 			this.clearSelectedAgendaItem();
@@ -64,12 +77,19 @@ export default Component.extend({
 		},
 
 		async lockAgenda(agenda) {
-			if (agenda.isFinal) {
-				agenda.set('isFinal', false);
-			} else {
-				agenda.set('isFinal', true);
-			}
-			agenda.save();
+			const agendas = await this.get('agendas');
+			const definiteAgenda = agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('-name').get('lastObject');
+			definiteAgenda.set('isFinal', true);
+			definiteAgenda.save().then(newAgenda => {
+				console.log(newAgenda);
+				agenda.destroyRecord().then(() => {
+					this.reloadRoute(newAgenda.get('id'));
+				});
+			});
+		},
+
+		async unlockAgenda() {
+			await this.createDesignAgenda();
 		},
 
 		showMultipleOptions() {
@@ -112,16 +132,7 @@ export default Component.extend({
 		},
 
 		async createNewDesignAgenda() {
-			this.changeLoading();
-			const session = this.get('currentSession');
-			const definiteAgendas = await this.get('definiteAgendas');
-			const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
-
-			this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda).then(newAgenda => {
-				this.changeLoading();
-				this.set('sessionService.currentAgenda', newAgenda)
-				this.reloadRoute(newAgenda.get('id'));
-			});
+			await this.createDesignAgenda();
 		},
 
 		async createPressAgenda() {

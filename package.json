@@ -17,7 +17,6 @@
     "start": "ember serve --proxy=http://localhost:8082",
     "test": "ember test"
   },
-  "dependencies": {},
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
     "@ember/optional-features": "^0.6.3",

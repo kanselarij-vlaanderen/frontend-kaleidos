@@ -1,5 +1,6 @@
 {{cases/cases-header isAddingCase=isAddingCase}}
 {{cases/cases-filter size=size}}
+<div class="vlc-scroll-wrapper__body">
 <div class="vl-u-spacer-extended-l">
   <div class="vl-u-spacer">
     <h2 class="vl-title vl-title--h3">
@@ -84,6 +85,7 @@
       {{/c.body}}
     {{/t.content}}
   {{/data-table}}
+</div>
 </div>
 {{#if isEditingRow}}
   {{#web-components/vl-modal
