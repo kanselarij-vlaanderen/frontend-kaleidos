@@ -9,17 +9,17 @@ export default Model.extend({
 	identificationNumber: attr('string'),
 	versionNumber: attr('number'),
 	serialNumber: attr('string'),
-	document: belongsTo('document', {inverse: null}),
+	document: belongsTo('document', {inverse:null}),
 	subcase: belongsTo('subcase'),
   announcement: belongsTo('announcement'),
 	file: belongsTo('file'),
 
 	nameToDisplay: computed('chosenFileName', 'serialNumber', function () {
-		let title = this.get('document.title');
-		if (title) {
-			return title;
+		let fileName = this.get('chosenFileName');
+		if (fileName) {
+			return fileName;
 		} else {
-			return this.get('chosenFileName');
+			return this.get('document.title');
 		}
 	})
 });
