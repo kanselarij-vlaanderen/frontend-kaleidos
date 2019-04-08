@@ -10,6 +10,13 @@ export default Component.extend({
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	agendaitems:null,
 
+	spacerClass: computed('agendaitemGroups', function() {
+		const { agendaitemGroups } = this;
+		if(agendaitemGroups && agendaitemGroups.get('firstObject').length > 1) {
+			return 'u-spacer--large';
+		}
+	}),
+
 	getClassNames: computed('selectedAgendaItem', function() {
 		if(this.get('selectedAgendaItem')) {
 			return "vlc-agenda-items vlc-agenda-items--small";
