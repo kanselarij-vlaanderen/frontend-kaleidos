@@ -1,14 +1,24 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import $ from 'jquery';
+import { inject } from '@ember/service';
 
 export default Component.extend({
+	store:inject(),
 	classNames: ["vlc-input-field-block"],
 
-	documentRows: computed('uploadedFiles.@each', function () {
+	defaultConfidentiality: computed('store', function() {
+		return this.store.query('confidentiality', {
+			filter: {label: 'Vertrouwelijk'}
+		})
+	}),
+
+	documentRows: computed('uploadedFiles.@each', async function () {
 		const { uploadedFiles } = this;
+		const defaultConfidentiality = await this.get('defaultConfidentiality')
 		if (uploadedFiles) {
 			return uploadedFiles.map((uploadedFile) => {
+				uploadedFile.set('confidentiality', defaultConfidentiality.get('firstObject'));
 				return Object.create({ file: uploadedFile, type: null })
 			})
 		} else {

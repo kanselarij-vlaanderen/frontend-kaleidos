@@ -1,4 +1,4 @@
-{{#if documentRows}}
+{{#if (await documentRows)}}
 <table class="vl-data-table vl-data-table--align-middle">
   <thead>
     <tr>
@@ -18,7 +18,7 @@
     </tr>
   </thead>
   <tbody>
-		{{#each documentRows as |documentRow|}}
+		{{#each (await documentRows) as |documentRow|}}
     <tr>
       <td class="vl-u-display-flex vlc-document-list__item">
 				<div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt">
@@ -35,7 +35,7 @@
           searchField="label"
           propertyToShow="label"
           sortField="label"
-          selectedItems=(await documentRow.file.documentType)
+          selectedItems=documentRow.file.documentType
           selectModel=(action "chooseDocumentType" documentRow)
         }}
       </td>
@@ -45,7 +45,7 @@
           searchField="label"
           propertyToShow="label"
           sortField="label"
-          selectedItems=(await documentRow.file.confidentiality)
+          selectedItems=documentRow.file.confidentiality
           selectModel=(action "chooseDocumentConfidentiality" documentRow)
         }}
 			</td>

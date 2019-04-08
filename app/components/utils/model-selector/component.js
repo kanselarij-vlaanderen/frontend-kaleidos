@@ -7,10 +7,11 @@ export default Component.extend({
 	store: inject(),
 	modelName: null,
 	searchField: null,
-	selectedItems: null,
 	propertyToShow: null,
 	placeholder: null,
 	sortField: null,
+	defaultSelected:null,
+	selectedItems: null,
 
 	items: computed('modelName', function () {
 		const { modelName, searchField } = this;
