@@ -31,7 +31,18 @@ Router.map(function () {
     path: '/*wildcard'
   });
   this.route('newsletters');
-  this.route('newsletters-overview', { path: ':meeting_id'});
+  this.route('newsletters-overview', {path: ':meeting_id'});
+  this.route('print-overviews', function() {
+    this.route('notes', function() {
+      this.route('overview', {path: '/:meeting_id'});
+    });
+    this.route('decisions', function() {
+      this.route('overview');
+    });
+    this.route('press-agenda', function() {
+      this.route('overview');
+    });
+  });
 });
 
 export default Router;

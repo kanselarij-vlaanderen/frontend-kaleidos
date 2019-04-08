@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
+import { computed } from '@ember/object';
 
 const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
@@ -12,7 +13,7 @@ export default Component.extend({
 
 	isShowingOptions: false,
 	isPrintingNotes: false,
-	isAddingAgendaitems:false,
+	isAddingAgendaitems: false,
 
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 	currentSession: alias('sessionService.currentSession'),
@@ -39,6 +40,10 @@ export default Component.extend({
 	},
 
 	actions: {
+		navigateToNotes() {
+			const { currentSession, currentAgenda } = this;
+			this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
+		},
 		clearSelectedAgendaItem() {
 			this.clearSelectedAgendaItem();
 		},
@@ -112,10 +117,6 @@ export default Component.extend({
 			this.printDecisions();
 		},
 
-		printNotes() {
-			this.toggleProperty('isPrintingNotes');
-		},
-
 		navigateToCreateAnnouncement() {
 			this.set('addingAnnouncement', true);
 			this.navigateToCreateAnnouncement();
@@ -151,7 +152,7 @@ export default Component.extend({
 		closePressAgenda() {
 			this.set('showPressModal', false);
 		},
-		
+
 		reloadRoute(id) {
 			this.reloadRoute(id);
 		}

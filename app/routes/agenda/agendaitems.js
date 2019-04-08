@@ -35,33 +35,9 @@ export default Route.extend({
 				}
 			}
 		});
-		const filteredAgendaGroupList = filteredAgendaItems.reduce((items, agendaitem) => {
-			const mandatees = agendaitem.get('subcase').get('mandatees').sortBy('priority');
-			let titles = mandatees.map((mandatee) => mandatee.title);
-				
-			if (titles && titles != []) {
-				titles = titles.join(',');
-				items[titles] = items[titles] || { groupName: titles, mandatees:mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };
-				items[titles].foundPriority = Math.min(items[titles].foundPriority, agendaitem.foundPriority);
-				items[titles].agendaitems.push(agendaitem);
-				return items;
-			}
-		}, {});
+		const filteredAgendaGroupList = await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems);
+		const filteredAgendaGroupListAddedAfterwards = await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards);
 
-		const filteredAgendaGroupListAddedAfterwards = itemsAddedAfterwards.reduce((items, agendaitem) => {
-			const mandatees = agendaitem.get('subcase').get('mandatees').sortBy('priority');
-			let titles = mandatees.map((mandatee) => mandatee.title);
-				
-			if (titles && titles != []) {
-				titles = titles.join(',');
-				items[titles] = items[titles] || { groupName: titles, mandatees:mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };
-				items[titles].foundPriority = Math.min(items[titles].foundPriority, agendaitem.foundPriority);
-				items[titles].agendaitems.push(agendaitem);
-				return items;
-			}
-		}, {});
-
-		
 		return [
 			Object.values(filteredAgendaGroupList).sortBy('foundPriority'),
 			Object.values(filteredAgendaGroupListAddedAfterwards).sortBy('foundPriority')

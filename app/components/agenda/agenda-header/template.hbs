@@ -95,11 +95,7 @@
               </a>
             </li>
             <li class="vl-popover__link-list__item">
-              <a
-                class="vl-link vl-link--block"
-                {{action attacher.hide}}
-                {{action "printNotes"}}
-              >
+              <a class="vl-link vl-link--block" {{action "navigateToNotes"}}>
                 {{t "print-notes"}}
               </a>
             </li>
@@ -155,13 +151,6 @@
     pressAgendaItems=pressItems
     currentSession=currentSession
     closeModal=(action "closePressAgenda")
-  }}
-{{/if}}
-{{#if isPrintingNotes}}
-  {{agenda/agenda-minutes
-    currentSession=currentSession
-    currentAgenda=currentAgenda
-    closeModal=(action "toggleIsPrintingNotes")
   }}
 {{/if}}
 {{#if isAddingAgendaitems}}
