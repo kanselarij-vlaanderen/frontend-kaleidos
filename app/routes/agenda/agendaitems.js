@@ -27,7 +27,7 @@ export default Route.extend({
 				if(agendaitem.priority){
 					const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
 					if (foundItem) {
-						agendaitem.foundPriority = foundItem.priority;
+						agendaitem.set('foundPriority', foundItem.priority);
 						return agendaitem;
 					}
 				} else {

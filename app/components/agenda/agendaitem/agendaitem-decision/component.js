@@ -14,7 +14,7 @@ export default Component.extend({
 			shortTitle: await agendaitem.get('subcase.shortTitle'),
 		});
 		await decision.save();
-		agendaitem.belongsTo('decision').reload();
+		await agendaitem.belongsTo('decision').reload();
 	},
 
 	actions: {

@@ -16,7 +16,6 @@ export default Route.extend({
 		const sortedAgendaItemIds = await this.get('agendaService').getSortedAgendaItems(currentAgenda);
 		const sortedAgendaItems = await Promise.all(sortedAgendaItemIds.map(async(item) => {
 			if(item.uuid){
-
 			const agendaitem = await this.store.findRecord('agendaitem', item.uuid, {include: 'subcase,subcase.mandatees'});
 			agendaitem.set('foundPriority', item.priority);
 			return agendaitem;

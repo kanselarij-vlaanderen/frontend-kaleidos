@@ -1,1 +1,20 @@
-{{outlet}}
+<div class="vlc-page-header">
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <h1 class="vlc-page-header__title">
+          {{await title}}
+        </h1>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vlc-scroll-wrapper__body">
+  {{agenda/press-agenda
+    currentSession=(await model.currentSession)
+    agendaitemGroups=(await model.agendaitemGroups)
+  }}
+</div>

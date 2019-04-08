@@ -37,10 +37,10 @@ Router.map(function () {
       this.route('overview', {path: '/:meeting_id'});
     });
     this.route('decisions', function() {
-      this.route('overview');
+      this.route('overview', {path: '/:meeting_id'});
     });
     this.route('press-agenda', function() {
-      this.route('overview');
+      this.route('overview', {path: '/:meeting_id'});
     });
   });
 });

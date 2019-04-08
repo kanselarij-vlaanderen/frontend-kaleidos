@@ -65,21 +65,6 @@ export default Controller.extend({
 			this.set("selectedAnnouncement", null);
 		},
 
-		async printDecisions() {
-			const isPrintingDecisions = this.get('isPrintingDecisions');
-
-			if (!isPrintingDecisions) {
-				const currentAgendaitems = await this.get('currentAgendaItems');
-				let decisions = await Promise.all(currentAgendaitems.map(async item => {
-					return await this.store.peekRecord('agendaitem', item.id).get('decision');
-				}));
-				decisions = decisions.filter(item => !!item);
-				this.set('printedDecisions', decisions);
-			}
-
-			this.toggleProperty('isPrintingDecisions');
-		},
-
 		// selectAnnouncement(announcement) {
 		// 	this.set("createAnnouncement", false);
 		// 	this.set("selectedAgendaItem", null);
