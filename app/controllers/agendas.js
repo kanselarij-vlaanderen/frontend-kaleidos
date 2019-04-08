@@ -57,6 +57,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 
 	actions: {
 		selectAgenda(meeting) {
+			this.set('sessionService.selectedAgendaItem', null);
 			this.set('sessionService.currentSession', meeting);
 			this.transitionToRoute('agenda.agendaitems', meeting.id);
 		},
