@@ -14,7 +14,7 @@
       enter=(action "addComment")
     }}
   </div>
-  {{#each (await agendaitem.remarks) as |comment|}}
+  {{#each (await sortedRemarks) as |comment|}}
     <div class="vlc-comments-comment">
       <div class="vl-badge">
         <img
@@ -29,13 +29,56 @@
             Naam placeholder
           </h4>
           <div class="vlc-comments-comment-content__meta">
-            {{moment-format comment.createdAt "DD MMMM YYYY - h:mm"}}
+            {{moment-format comment.created "DD MMMM YYYY - HH:mm"}}
           </div>
         </div>
         <div class="vl-typography">
           <p>
             {{comment.text}}
           </p>
+        </div>
+        {{#if (await comment.answers)}}            
+        {{#each (await comment.answers) as |answer|}}
+          <div class="vlc-comments-comment vlc-comments-comment--response">
+            <div class="vl-badge">
+              <img
+                class="vl-badge__img"
+                src="/assets/icons/avatar-hilde-crevits.jpg"
+               />
+
+            </div>
+              <div class="vlc-comments-comment-content">
+                <div class="vlc-comments-comment-content__header">
+                  <h4 class="vl-title vl-title--h6">
+                    Naam placeholder
+                  </h4>
+                  <div class="vlc-comments-comment-content__meta">
+                    {{moment-format answer.created "DD MMMM YYYY - HH:mm"}}
+                  </div>
+                </div>
+                <div class="vl-typography">
+                  <p>
+                    {{answer.text}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            {{/each}}
+        {{/if}}
+        <div class="vlc-comments-input vlc-comments-input--response">
+          <div class="vl-badge">
+            <img
+              class="vl-badge__img"
+              src="/assets/icons/avatar-hilde-crevits.jpg"
+             />
+          </div>
+          {{utils/custom-textarea
+            rows="2"
+            class="vl-textarea vl-textarea--block"
+            value=comment.answer
+            placeholder="Type hier jouw opmerking..."
+            enter=(action "addAnswer" comment)
+          }}
         </div>
       </div>
     </div>
