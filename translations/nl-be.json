@@ -272,5 +272,6 @@
 	"agenda-notes":"Notulen van",
 	"decisions-of":"Beslissingen van",
 	"manage-alerts":"Systeemberichten beheer",
-	"message":"Systeembericht"
+	"message":"Systeembericht",
+	"severity":"Strengheid"
 }

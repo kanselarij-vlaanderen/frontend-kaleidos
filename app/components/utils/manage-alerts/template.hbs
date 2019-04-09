@@ -85,6 +85,16 @@
         {{web-components/vl-form-label value=(t "message")}}
         {{web-components/vl-form-input width="4" value=message}}
       </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "severity")}}
+        {{utils/model-selector
+          modelName="alert-type"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectModel=(action "selectType")
+        }}
+      </div>
     </div>
     <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
       <div class="vlc-toolbar">
@@ -115,11 +125,17 @@
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}
-        {{web-components/vl-datepicker date=beginDate dateChanged=(action "selectBeginDate")}}
+        {{web-components/vl-datepicker
+          date=beginDate
+          dateChanged=(action "selectBeginDate")
+        }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "mandatee-form.end-date")}}
-        {{web-components/vl-datepicker date=endDate dateChanged=(action "selectEndDate")}}
+        {{web-components/vl-datepicker
+          date=endDate
+          dateChanged=(action "selectEndDate")
+        }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "announcement.title")}}
@@ -128,6 +144,17 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "message")}}
         {{web-components/vl-form-input width="4" value=message}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "severity")}}
+        {{utils/model-selector
+          modelName="alert-type"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+					selectedItems=type
+          selectModel=(action "selectType")
+        }}
       </div>
     </div>
     <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">

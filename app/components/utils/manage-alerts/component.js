@@ -64,11 +64,26 @@ export default Component.extend({
 		}
 	}),
 
+	type: computed('selectedAlert', {
+		get() {
+			const alert = this.get('selectedAlert');
+			if (alert) {
+				return alert.get('type');
+			} else {
+				return null;
+			}
+		},
+		set(key, value) {
+			return value;
+		}
+	}),
+
 	clearProperties() {
 		this.set('title', null);
 		this.set('message', null);
 		this.set('beginDate', null);
 		this.set('endDate', null);
+		this.set('type', null);
 	},
 
 	actions: {
@@ -82,6 +97,10 @@ export default Component.extend({
 
 		selectEndDate(date) {
 			this.set('endDate', date);
+		},
+
+		selectType(type) {
+			this.set('type', type);
 		},
 
 		selectAlert(alert) {
@@ -106,13 +125,13 @@ export default Component.extend({
 		},
 
 		editAlert() {
-			const { selectedAlert, beginDate, endDate, title, message } = this;
+			const { selectedAlert, beginDate, endDate, title, message, type } = this;
 			const alertToSave = this.store.peekRecord('alert', selectedAlert.get('id'));
 			alertToSave.set('beginDate',beginDate );
 			alertToSave.set('endDate', endDate);
 			alertToSave.set('title', title);
 			alertToSave.set('message', message);
-
+			alertToSave.set('type', type);
 			alertToSave.save().then(() => {
 				this.toggleProperty('isEditing');
 				alertToSave.reload();
@@ -120,13 +139,14 @@ export default Component.extend({
 		},
 
 		createAlert() {
-			const { title, message, beginDate, endDate } = this;
+			const { title,type, message, beginDate, endDate } = this;
 
 			const alert = this.store.createRecord('alert', {
 				title: title,
 				message: message,
 				beginDate: beginDate,
-				endDate: endDate
+				endDate: endDate,
+				type:type
 			});
 			alert.save().then(() => {
 				this.clearProperties();
