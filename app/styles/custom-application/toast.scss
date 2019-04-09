@@ -1,22 +1,13 @@
-.toast-top-full-width {
-  width: 50%;
-  margin: 0;
-  top: 60px;
-  right: 20%;
-  left: 20%;
+.vl-alert-relative {
+  position:fixed;
+  z-index: 100;
+  left:20%;
+  right:20%;
+  width:60%;
+  top:60px;
+  opacity:0.85;
 
-  .toast-warning {
-    background-color: #ffc515;
-    padding: 15px 15px 15px 60px !important;
-    width: 60%;
-
-    .toast-title {
-      font-weight: 500;
-    }
-  }
-
-  div {
-    color: rgb(51, 51, 50);
-    width: 100%;
+  &:hover{
+    opacity:1;
   }
 }
