@@ -111,7 +111,12 @@ export default Component.extend({
 			this.toggleProperty('isAdding');
 		},
 
-		toggleIsEditing() {
+		async toggleIsEditing() {
+			const { selectedAlert } = this;
+			if(selectedAlert) {
+				const alert = this.store.peekRecord('alert', selectedAlert.get('id'));
+				await alert.rollbackAttributes();
+			}
 			this.toggleProperty('isEditing');
 		},
 
@@ -125,16 +130,15 @@ export default Component.extend({
 		},
 
 		editAlert() {
-			const { selectedAlert, beginDate, endDate, title, message, type } = this;
+			const { selectedAlert, beginDate, endDate, type } = this;
 			const alertToSave = this.store.peekRecord('alert', selectedAlert.get('id'));
 			alertToSave.set('beginDate',beginDate );
 			alertToSave.set('endDate', endDate);
-			alertToSave.set('title', title);
-			alertToSave.set('message', message);
 			alertToSave.set('type', type);
 			alertToSave.save().then(() => {
-				this.toggleProperty('isEditing');
 				alertToSave.reload();
+				this.toggleProperty('isEditing');
+				this.clearProperties();
 			});
 		},
 
