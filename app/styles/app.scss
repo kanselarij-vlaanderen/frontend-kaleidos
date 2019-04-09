@@ -159,6 +159,9 @@ $icon-font-location: "/fonts/";
 //print css
 @import "print/agendaitem-print";
 
+//custom css added
+@import "custom-application/toast";
+
 .document {
   display: flex;
   justify-content: space-evenly;

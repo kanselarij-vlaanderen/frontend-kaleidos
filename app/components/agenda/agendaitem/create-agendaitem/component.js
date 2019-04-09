@@ -16,7 +16,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
 	store: inject(),
 	subcasesService: inject(),
 	agendaService: inject(),
-	sessionService: inject(),
+  sessionService: inject(),
 	
 	size:5,
 	sort:'short-title',
@@ -43,7 +43,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
 	}),
 	
 	async didInsertElement() {
-		this._super(...arguments);
+    this._super(...arguments);
 		this.set('postponedSubcases', []);
 		this.set('availableSubcases', []);
 		const ids = await this.get('subcasesService').getPostPonedSubcaseIds();

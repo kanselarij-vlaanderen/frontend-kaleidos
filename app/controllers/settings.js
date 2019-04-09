@@ -4,7 +4,8 @@ export default Controller.extend({
 	isAddingNewMinister:false,
 	isAddingMandate:false,
 	isEditingMandatee: false,
-	
+	isManagingAlerts: false,
+
 	actions: {
 		showAddingMandateForm() {
 			this.toggleProperty('isAddingMandate');
@@ -12,6 +13,10 @@ export default Controller.extend({
 
 		showEditingMandateeForm() {
 			this.toggleProperty('isEditingMandatee');
+		},
+
+		showAlertManagementForm() {
+			this.toggleProperty('isManagingAlerts');
 		}
 	}
 });
