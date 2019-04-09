@@ -672,3 +672,19 @@ body > .ember-view {
 .vlc-comments-comment-content {
   width:100%;
 }
+
+.line {
+  border-bottom: dashed 4px gold;
+  margin-bottom: 2em;
+  position: relative;
+}
+
+span.label {
+  position: absolute;
+  top: 0;
+  left: 410px;
+  margin-top: -1.7em;
+  background: #f2f5f6;
+  padding: 1em;
+  font-weight: bold;
+}
