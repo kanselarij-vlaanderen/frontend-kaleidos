@@ -78,8 +78,7 @@
 </div>
 
 {{#if (gt (await model.subcases.length) 0)}}
-
-  <div class="vl-u-spacer-extended-l">
+  <div class="vl-u-spacer-extended-l vlc-scroll-wrapper__body">
     {{#each (await model.subcases) as |subcase|}}
       <div class="vlc-procedure-step">
         <div class="vlc-toolbar vlc-toolbar--auto">
