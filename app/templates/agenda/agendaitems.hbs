@@ -1,22 +1,23 @@
 <div class="vl-u-bg-porcelain vl-u-bg-width">
   <div class={{agendaitemsClass}}>
     <div class="vlc-scroll-wrapper">
-      {{!-- {{#if (not await selectedAgendaItem)}}
-          TODO implement
-          {{agenda/agendaitem-search selectedAgenda=currentAgenda}}
-        {{/if}} --}}
       <div class="vlc-scroll-wrapper__body">
+        {{!-- {{#if selectedAgendaItem}}
+          {{agenda/agendaitem-search selectedAgenda=currentAgenda search=(action "searchAgendaItems")}}
+        {{/if}} --}}
         {{agenda/agenda-list
           agendaitems=(await model.agendaitems)
-					agendaitemGroups=(await model.groups)
+          agendaitemGroups=(await model.groups)
           selectAgendaItem=(action "selectAgendaItem")
           selectedAgendaItem=selectedAgendaItem
         }}
-        {{!-- {{agenda/announcement-list
-          announcements=(await announcements)
-          selectAnnouncement=(action "selectAnnouncement")
-          selectedAnnouncement=selectedAnnouncement
-        }} --}}
+        {{!-- <div class="vl-u-spacer-extended-bottom-l">
+          {{agenda/announcement-list
+            announcements=(await model.announcements)
+            selectedAnnouncement=selectedAnnouncement
+          }}
+          {{! selectAnnouncement=(action "selectAnnouncement") }}
+        </div> --}}
       </div>
     </div>
   </div>

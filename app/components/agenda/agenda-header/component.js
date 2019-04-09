@@ -12,6 +12,7 @@ export default Component.extend({
 
 	isShowingOptions: false,
 	isPrintingNotes: false,
+	isAddingAnnouncement: false,
 	isAddingAgendaitems: false,
 
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
@@ -117,6 +118,10 @@ export default Component.extend({
 
 		navigateToSubCases() {
 			this.set('isAddingAgendaitems', true);
+		},
+
+		toggleIsAddingAnnouncement() {
+			this.toggleProperty('isAddingAnnouncement');
 		},
 
 		navigateToCreateAnnouncement() {

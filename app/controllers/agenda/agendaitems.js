@@ -21,6 +21,9 @@ export default Controller.extend({
 		selectAgendaItem(agendaitem) {
 			this.set('sessionService.selectedAgendaItem', agendaitem);
 			this.transitionToRoute('agenda.agendaitems.agendaitem', agendaitem.get('id'));
+		},
+		searchAgendaItems(value) {
+			this.set('filter', value);
 		}
 	}
 });

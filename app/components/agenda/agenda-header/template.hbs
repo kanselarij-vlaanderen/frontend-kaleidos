@@ -54,25 +54,25 @@
         }}
           <ul class="vl-popover__link-list">
             {{#if (gt (await currentSession.agendas.length) 0)}}
-            <li class="vl-popover__link-list__item">
-              {{#if (not currentAgenda.isFinal)}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action "lockAgenda" currentAgenda}}
-                  {{action attacher.hide}}
-                >
-                  {{t "buttons.agenda-lock"}}
-                </a>
-              {{else}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action "unlockAgenda"}}
-                  {{action attacher.hide}}
-                >
-                  {{t "buttons.agenda-unlock"}}
-                </a>
-              {{/if}}
-            </li>
+              <li class="vl-popover__link-list__item">
+                {{#if (not currentAgenda.isFinal)}}
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action "lockAgenda" currentAgenda}}
+                    {{action attacher.hide}}
+                  >
+                    {{t "buttons.agenda-lock"}}
+                  </a>
+                {{else}}
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action "unlockAgenda"}}
+                    {{action attacher.hide}}
+                  >
+                    {{t "buttons.agenda-unlock"}}
+                  </a>
+                {{/if}}
+              </li>
             {{/if}}
             {{#if (eq currentAgenda.name "Ontwerpagenda")}}
               <li class="vl-popover__link-list__item">
@@ -104,7 +104,7 @@
                 <a
                   class="vl-link vl-link--block"
                   {{action attacher.hide}}
-                  {{action "navigateToCreateAnnouncement"}}
+                  {{action "toggleIsAddingAnnouncement"}}
                 >
                   {{t "buttons.create-announcement"}}
                 </a>
@@ -147,7 +147,14 @@
   </div>
 </div>
 {{#if isAddingAgendaitems}}
-  {{agenda/agendaitem/create-agendaitem 
+  {{agenda/agendaitem/create-agendaitem
     isAddingAgendaitems=isAddingAgendaitems
-    reloadRoute=(action "reloadRoute")}}
+    reloadRoute=(action "reloadRoute")
+  }}
+{{/if}}
+{{#if isAddingAnnouncement}}
+  {{agenda/create-announcement
+    isAddingAnnouncement=isAddingAnnouncement
+    currentAgenda=currentAgenda
+  }}
 {{/if}}
