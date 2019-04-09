@@ -5,6 +5,7 @@ export default Controller.extend({
 	isAddingMandate:false,
 	isEditingMandatee: false,
 	isManagingAlerts: false,
+	isManagingDocumentTypes: false,
 
 	actions: {
 		showAddingMandateForm() {
@@ -17,6 +18,11 @@ export default Controller.extend({
 
 		showAlertManagementForm() {
 			this.toggleProperty('isManagingAlerts');
+		},
+
+		showDocumentTypesManagementForm() {
+			this.toggleProperty('isManagingDocumentTypes');
 		}
+
 	}
 });
