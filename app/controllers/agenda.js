@@ -72,7 +72,7 @@ export default Controller.extend({
 		// },
 
 		compareAgendas() {
-			this.transitionToRoute('comparison');
+			this.transitionToRoute('agenda.compare');
 		},
 
 		loadingAgendaitems() {

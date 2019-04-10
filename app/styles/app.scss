@@ -232,21 +232,24 @@ $icon-font-location: "/fonts/";
       height: 200px;
 
       .previous-agenda-item {
+        position:relative;
         width: 50%;
         float: left;
-
-        .agenda-item-link {
-          height: 200px;
-        }
+        height:250px;
+        // .agenda-item-link {
+        //   height: 200px;
+        // }
       }
 
       .current-agenda-item {
         width: 50%;
         float: left;
+        position:relative;
+        height:250px;
 
-        .agenda-item-link {
-          height: 200px;
-        }
+        // .agenda-item-link {
+        //   height: 200px;
+        // }
       }
     }
   }

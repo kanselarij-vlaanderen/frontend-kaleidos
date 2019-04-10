@@ -5,7 +5,7 @@ import { on } from '@ember/object/evented';
 
 export default Component.extend({
 	store: inject(),
-	classNames:['comparison-container'],
+	classNames:['comparison-container', 'vlc-scroll-wrapper__body'],
 	agendaToCompare: null,
 	currentAgenda: null,
 

@@ -19,6 +19,15 @@
             Toggle
           </span>
         </button>
+        <button
+          class="vl-button vl-button--link vl-button--icon collapsed"
+          {{action "collapseSideMenu"}}
+        >
+          <i class="vl-vi vl-vi-arrow-right-fat"></i>
+          <span class="vl-u-visually-hidden">
+            Toggle
+          </span>
+        </button>
       </div>
     </div>
   </div>
@@ -26,7 +35,8 @@
     {{#each (await agendas) as |agenda|}}
       <li
         class="vlc-side-nav-item
-          {{active-class agenda currentAgenda class="vlc-side-nav-item--active"}}"
+          {{active-class agenda currentAgenda class="vlc-side-nav-item--active"
+          }}"
       >
         <a {{action "setCurrentAgenda" agenda}}>
           <div class="vlc-side-nav-item__label">
@@ -36,6 +46,16 @@
           </div>
           <div class="vlc-side-nav-item__meta">
             {{moment-format agenda.created "dddd DD/MM/YYYY"}}
+          </div>
+          <div class="vlc-side-nav-item__meta--small">
+            <h3 class="vl-title vl-title--h6">
+              {{#if (not-eq agenda.name "Ontwerpagenda")}}
+                {{agenda.name}}
+              {{else}}
+                On..
+              {{/if}}
+            </h3>
+            {{moment-format agenda.created "DD/MM"}}
           </div>
         </a>
       </li>
