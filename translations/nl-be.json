@@ -1,4 +1,3 @@
-
 {
 	"agenda": {
 		"agendaitems": "agendapunten",
@@ -273,5 +272,6 @@
 	"decisions-of":"Beslissingen van",
 	"manage-alerts":"Systeemberichten beheer",
 	"message":"Systeembericht",
-	"severity":"Strengheid"
+	"severity":"Strengheid",
+	"manage-document-types":"Document-types beheer"
 }
