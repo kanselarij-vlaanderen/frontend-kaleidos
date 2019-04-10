@@ -177,7 +177,6 @@ $icon-font-location: "/fonts/";
 
 .side-nav-small {
   display: block;
-  // width: 150px;
   float: left;
   border-top: none;
 
@@ -606,10 +605,6 @@ $icon-font-location: "/fonts/";
   height: auto;
 }
 
-// .vl-u-bg-porcelain {
-//   width: 100%;
-// }
-
 a.vlc-agenda-item {
   text-decoration: none;
   display: block;
@@ -650,9 +645,8 @@ a.disabled {
 }
 
 .vl-u-bg-width {
-  width:100%;
-} 
-
+  width: 100%;
+}
 
 body > .ember-view {
   height: 100% !important;
@@ -662,15 +656,15 @@ body > .ember-view {
 }
 
 .ember-attacher-popper-wide {
-  width:600px;
-  padding:1em;
+  width: 600px;
+  padding: 1em;
   &::before {
-    display:none;
+    display: none;
   }
 }
 
 .vlc-comments-comment-content {
-  width:100%;
+  width: 100%;
 }
 
 .line {
@@ -687,4 +681,8 @@ span.label {
   background: #f2f5f6;
   padding: 1em;
   font-weight: bold;
+}
+
+.vlc-padding-bottom--large {
+  padding-bottom: 6rem;
 }

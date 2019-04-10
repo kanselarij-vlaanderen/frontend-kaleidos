@@ -6,6 +6,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   sort: '-created',
   isEditingRow: false,
   isNotArchived: false,
+  isArchivingCase: false,
 
   filter: computed('isNotArchived', function () {
     return this.isNotArchived;
@@ -21,6 +22,22 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     },
     toggleArchived(value) {
       this.set("filter", value)
+    },
+    archiveCase(caze) {
+      caze.set('isArchived', true);
+      this.set('isArchivingCase', false);
+      caze.save();
+    },
+    unarchiveCase(caze) {
+      caze.set('isArchived', false);
+      caze.save();
+    },
+    requestArchiveCase(caze) {
+      this.set('selectedCase', caze)
+      this.set('isArchivingCase', true);
+    },
+    cancelArchiveCase() {
+      this.set('isArchivingCase', false);
     }
   }
 
