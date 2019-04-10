@@ -208,9 +208,6 @@ $icon-font-location: "/fonts/";
 }
 
 .comparison-container {
-  width: calc(100% - 150px);
-  float: left;
-
   .compare-title {
     display: flex;
     justify-content: space-evenly;
@@ -224,41 +221,31 @@ $icon-font-location: "/fonts/";
 
   .compare-agenda-list-container {
     display: flex;
-    width: 100%;
     flex-direction: column;
 
     .compare-item-container {
-      width: 100%;
-      height: 200px;
+      display:flex;
+      justify-content: stretch;
 
       .previous-agenda-item {
-        position:relative;
         width: 50%;
         float: left;
-        height:250px;
-        // .agenda-item-link {
-        //   height: 200px;
-        // }
+      }
+
+      .deleted-agenda-item {
+        opacity:0.5;
+        background-color:$gray-lighter;
       }
 
       .current-agenda-item {
         width: 50%;
         float: left;
-        position:relative;
-        height:250px;
-
-        // .agenda-item-link {
-        //   height: 200px;
-        // }
       }
     }
   }
 }
 
 .comparison-container {
-  width: calc(100% - 150px);
-  float: left;
-
   .compare-title {
     display: flex;
     justify-content: space-evenly;
@@ -267,35 +254,6 @@ $icon-font-location: "/fonts/";
     h2 {
       font-size: 1.5em;
       font-weight: bold;
-    }
-  }
-
-  .compare-agenda-list-container {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-    .compare-item-container {
-      width: 100%;
-      height: 200px;
-
-      .previous-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-        }
-      }
-
-      .current-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-        }
-      }
     }
   }
 }

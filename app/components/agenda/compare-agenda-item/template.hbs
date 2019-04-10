@@ -1,5 +1,4 @@
 <div class="previous-agenda-item vlc-agenda-item">
-  {{await changedSet.previous.id}}
   {{#if (await changedSet.previous.id)}}
     <h3 class="vl-title vl-u-text--small">
       {{await changedSet.previous.priority}}
@@ -51,12 +50,9 @@
         </div>
       {{/if}}
     </div>
-  {{else}}
-    lol
   {{/if}}
 </div>
 <div class="current-agenda-item vlc-agenda-item">
-  {{await changedSet.current.id}}
   {{#if (await changedSet.current.id)}}
     <h3 class="vl-title vl-u-text--small">
       {{await changedSet.current.priority}}
@@ -109,6 +105,36 @@
       {{/if}}
     </div>
   {{else}}
-    lol2
+     <h3 class="vl-title vl-u-text--small">
+      {{await changedSet.previous.priority}}
+      .
+      {{await changedSet.previous.subcase.case.type.label}}
+    </h3>
+    <h4 class="vl-title vl-title--h5">
+      {{await changedSet.previous.subcase.shortTitle}}
+    </h4>
+    <p class="vl-long-title">
+      {{await changedSet.previous.subcase.title}}
+    </p>
+    {{#if (await changedSet.previous.subcase.documents)}}
+      <hr class="vlc-hr" />
+      <div class="vl-u-display-flex vl-attachments">
+        {{#each (await changedSet.previous.subcase.documents) as |document|}}
+          <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">
+            <div
+              class="vl-badge vl-badge--icon vl-badge--small vl-badge--alt vl-document-badge"
+            >
+              <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
+            </div>
+            <p class="vl-u-text--bold">
+              {{document-name
+                document=document
+                agendaitem=(await changedSet.previous)
+              }}
+            </p>
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
   {{/if}}
 </div>
