@@ -31,6 +31,7 @@ export default Service.extend({
 		}
 	}),
 
+
 	announcements: computed('currentAgenda.announcements.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
 		if(currentAgenda) {
