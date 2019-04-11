@@ -40,5 +40,21 @@ export default Model.extend({
     return this.get('postponedTo').then((session) => {
       return session || this.get('retracted');
     });
-  })
+  }),
+
+  documents: computed('documentVersions', async function () {
+    const documentVersions = await this.get('documentVersions');
+    const documents = await Promise.all(documentVersions.map(documentVersion => {
+      return documentVersion.get('document');
+    }));
+    return documents.uniqBy('id');
+  }),
+
+  sortedMandatees: computed('mandatees', function () {
+    return this.get('mandatees').sortBy('priority');
+  }),
+
+  sortedThemes: computed('themes', function () {
+    return this.get('themes').sortBy('label');
+  }),
 });

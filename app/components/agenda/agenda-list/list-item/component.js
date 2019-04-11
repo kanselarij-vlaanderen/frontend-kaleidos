@@ -6,7 +6,7 @@ import { alias } from '@ember/object/computed';
 export default Component.extend({
 	store:inject(),
 	sessionService:inject(),
-	classNames: ["vlc-agenda-item"],
+	classNames: ["vlc-agenda-items-new__sub-item"],
 	classNameBindings: ["getClassNames"],
 	tagName: 'a',
 	index:null,
@@ -14,7 +14,7 @@ export default Component.extend({
 
 	getClassNames: computed('agendaitem', 'selectedAgendaItem', function() {
 		if(this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
-			return 'vlc-agenda-item--active';
+			return 'vlc-agenda-items-new__sub-item--active';
 		}
 	}),
 

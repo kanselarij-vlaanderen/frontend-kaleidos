@@ -21,11 +21,20 @@
           }}
         </td>
         <td>
+          {{#if (not showSelected)}}
           {{utils/domains-selector
             domains=mandateeRow.domains
             selectedDomainsOnly=true
             chooseDomain=(action "domainsChanged" mandateeRow)
           }}
+          {{else}}
+          {{utils/domains-selector
+            domains=mandateeRow.domains
+            selectedDomainsOnly=true
+            selectedDomains=mandateeRow.selectedDomains
+            chooseDomain=(action "domainsChanged" mandateeRow)
+          }}
+          {{/if}}
         </td>
         <td class="vl-u-align-right">
           <button

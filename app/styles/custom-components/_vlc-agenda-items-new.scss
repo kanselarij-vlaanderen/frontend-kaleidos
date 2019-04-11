@@ -1,0 +1,60 @@
+/* ==========================================================================
+  Agenda items new
+   ========================================================================== */
+
+.vlc-agenda-items-new__sub-item a { // a
+  display: block;
+  position: relative;
+  padding: 2.5rem 1.5rem 2.5rem 3.5rem;
+  font-size: 1.3rem;
+  text-decoration: none;
+  color: $black;
+  background: #FFF;
+  &:hover,
+  &:focus {
+    background: $porcelain;
+  }
+}
+
+.vlc-agenda-items-new__overline,
+.vlc-agenda-items-new__times-passed {
+  opacity: 0.65;
+}
+
+// Subject: the “title”
+.vlc-agenda-items-new__subject {
+  font-size: 1.6rem;
+  line-height: 1.1;
+  margin: 0.6rem 0;
+  font-weight: 500;
+}
+
+.vlc-agenda-items-new__sub-item--active a,
+.vlc-agenda-items-new__sub-item--active a:hover,
+.vlc-agenda-items-new__sub-item--active a:active {
+  background: $science-blue;
+  color: #FFF;
+  .vlc-agenda-items-new__status--positive {
+    color: #FFF;
+  }
+}
+
+.vlc-agenda-items-new__sub-item--active a:focus {
+  background: darken($science-blue, 5%);
+}
+
+.vlc-agenda-items-new__numbering {
+  position: absolute;
+  left: 1.5rem;
+}
+
+.vlc-agenda-items-new__status {
+  display: flex;
+  opacity: 0.65;
+}
+
+.vlc-agenda-items-new__status--positive {
+  font-weight: 500;
+  opacity: 1;
+  color: $napier-green;
+}

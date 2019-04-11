@@ -53,6 +53,7 @@ export default Component.extend({
 
 	async constructMandateeRows() {
 		const subcase = await this.get('subcase');
+		
 		const mandatees = await subcase.get('mandatees');
 		const domains = await subcase.get('governmentDomains');
 		let i = 0;

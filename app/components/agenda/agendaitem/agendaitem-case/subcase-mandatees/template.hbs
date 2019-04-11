@@ -33,6 +33,7 @@
   <div class="vl-form__group vl-u-bg-porcelain">
     <div class="vl-u-spacer">
       {{cases/subcase-mandatees
+        showSelected=true
         mandateeRows=(await mandateeRows)
         mandateeRowsChanged=(action "mandateeRowsChanged")
       }}

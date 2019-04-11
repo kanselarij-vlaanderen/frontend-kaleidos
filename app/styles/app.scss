@@ -122,23 +122,28 @@ $icon-font-location: "/fonts/";
 // Custom components
 @import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
 @import "custom-components/vlc-agenda-item";
+@import "custom-components/vlc-agenda-items-new";
+@import "custom-components/vlc-backlink";
+@import "custom-components/vlc-box";
 @import "custom-components/vlc-comments";
+@import "custom-components/vlc-container";
+@import "custom-components/vlc-date-range";
 @import "custom-components/vlc-document-list";
 @import "custom-components/vlc-hr";
-@import "custom-components/vlc-container";
 @import "custom-components/vlc-input-field-block";
+@import "custom-components/vlc-list-section-header";
 @import "custom-components/vlc-navbar";
 @import "custom-components/vlc-page-header";
-@import "custom-components/vlc-radio-inline";
+@import "custom-components/vlc-pill";
 @import "custom-components/vlc-panel-layout";
 @import "custom-components/vlc-procedure-step";
+@import "custom-components/vlc-radio-inline";
 @import "custom-components/vlc-scroll-wrapper";
 @import "custom-components/vlc-side-nav";
-@import "custom-components/vlc-toolbar";
-@import "custom-components/vlc-user";
-@import "custom-components/vlc-view-switch";
 @import "custom-components/vlc-status-timeline";
 @import "custom-components/vlc-tabs-reverse";
+@import "custom-components/vlc-toolbar";
+@import "custom-components/vlc-user";
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -163,6 +168,29 @@ $icon-font-location: "/fonts/";
 //custom css added
 @import "custom-application/toast";
 
+a.vlc-agenda-items-new__sub-item {
+  display: block;
+  position: relative;
+  font-size: 1.3rem;
+  text-decoration: none;
+  color: $black;
+  background: #fff;
+}
+
+a.vlc-agenda-items-new__sub-item--active,
+a.vlc-agenda-items-new__sub-item--active:hover,
+a.vlc-agenda-items-new__sub-item--active:active {
+  background: $science-blue;
+  color: #FFF;
+  .vlc-agenda-items-new__status--positive {
+    color: #FFF;
+  }
+  
+}
+
+a.vlc-agenda-items-new__sub-item--active:focus  {
+  background: darken($science-blue, 5%);
+}
 
 .document {
   display: flex;
@@ -171,7 +199,7 @@ $icon-font-location: "/fonts/";
 }
 
 .vlc-scroll-wrapper {
-  height:100% !important;
+  height: 100% !important;
 }
 
 .progress-container {
@@ -564,18 +592,6 @@ $icon-font-location: "/fonts/";
   }
 }
 
-a.vlc-agenda-item {
-  text-decoration: none;
-  display: block;
-  color: inherit;
-  &:active {
-    background: $primary-blue;
-    * {
-      color: white;
-    }
-  }
-}
-
 a.vlc-agenda-items__header {
   padding: 3rem 1.5rem 1.5rem;
 }
@@ -639,5 +655,5 @@ span.label {
 
 // fix for spacer
 .vlc-panel-layout__main-content {
-  flex:3 1;
+  flex: 3 1;
 }
