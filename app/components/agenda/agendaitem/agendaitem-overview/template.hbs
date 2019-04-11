@@ -13,7 +13,8 @@
     </div>
   </div>
   <div class="vlc-scroll-wrapper__body">
-    <div class="vl-u-spacer-extended-l">
+    <div class="vlc-container">
+      <div class="vl-u-spacer-extended-l">
       {{#if (eq activeAgendaItemSection "details")}}
         <div class="vl-action-group vl-action-group--align-right">
           {{#if (not currentAgenda.isFinal)}}
@@ -78,6 +79,7 @@
       {{else if (eq activeAgendaItemSection "minutes")}}
         {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
       {{/if}}
+    </div>
     </div>
   </div>
 </div>

@@ -19,9 +19,9 @@ export default Component.extend({
 
 	getClassNames: computed('selectedAgendaItem', function() {
 		if(this.get('selectedAgendaItem')) {
-			return "vlc-agenda-items vlc-agenda-items--small";
+			return "vlc-agenda-items  vlc-agenda-items--small";
 		} else {
-			return "vlc-agenda-items";
+			return "vlc-agenda-items vl-u-spacer-extended-l";
 		}
 	}),
 

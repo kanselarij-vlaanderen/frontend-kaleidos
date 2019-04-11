@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 import { sort } from '@ember/object/computed';
 
 export default Component.extend({
-  classNames: ['vl-u-spacer-extended-l','vlc-padding-bottom--large'],
+  classNames: ['vlc-padding-bottom--large'],
   store: inject('store'),
 
   sortedRemarks: sort('agendaitem.remarks', function(a, b) {
