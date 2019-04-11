@@ -91,9 +91,7 @@ export default Service.extend({
 			governmentDomains: await subcase.get('governmentDomains'),
 			approvals: await subcase.get('approvals')
 		});
-		return agendaitem.save().then(agendaitem => {
-			return agendaitem;
-		});
+		return agendaitem.save();
 	},
 
 });
