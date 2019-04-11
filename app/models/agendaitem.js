@@ -56,5 +56,5 @@ export default Model.extend({
 
   sortedThemes: computed('themes', function () {
     return this.get('themes').sortBy('label');
-  }),
+  })
 });

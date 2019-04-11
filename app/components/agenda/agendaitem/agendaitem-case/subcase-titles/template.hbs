@@ -30,39 +30,61 @@
       </div>
     </div>
     <h3 class="vl-title vl-title--h3">
-      {{agendaitem.shortTitle}}
+      {{#if (eq (await agenda) "Ontwerpagenda")}}
+        {{await agendaitem.subcase.shortTitle}}
+      {{else}}
+        {{await agendaitem.shortTitle}}
+      {{/if}}
     </h3>
     <p>
-      {{agendaitem.title}}
+      {{#if (eq (await agenda) "Ontwerpagenda")}}
+        {{await agendaitem.subcase.title}}
+      {{else}}
+        {{await agendaitem.title}}
+      {{/if}}
     </p>
   </div>
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-space-between">
-      {{#if (await agendaitem.confidentiality)}}
-      <div class="vl-custom">
-        <span class="vl-pill vl-pill--success">
-          {{await agendaitem.confidentiality.label}}
-        </span>
-      </div>
-      {{/if}}
-      {{#if (await agendaitem.formallyOk)}}
-        <div
-          class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--bold vl-u-text--success"
-        >
-          <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
-          <span class="vl-annotation">
-            {{t "agendaitem-details.formal-ok"}}
+      {{#if (eq (await agenda) "Ontwerpagenda")}}
+        {{#if (await agendaitem.confidentiality)}}
+          <div class="vl-custom">
+            <span class="vl-pill vl-pill--success">
+              {{await agendaitem.subcase.confidentiality.label}}
+            </span>
+          </div>
+        {{/if}}
+      {{else if (await agendaitem.confidentiality)}}
+        <div class="vl-custom">
+          <span class="vl-pill vl-pill--success">
+            {{await agendaitem.confidentiality.label}}
           </span>
         </div>
-      {{else}}
-        <div
-          class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--muted"
-        >
-          <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
-          <span class="vl-annotation">
+      {{/if}}
+      {{#if (eq (await agenda) "Ontwerpagenda")}}
+        {{#if (await agendaitem.subcase.formallyOk)}}
+          <p
+            class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
+          >
+            {{t "agendaitem-details.formal-ok"}}
+            <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+          </p>
+        {{else}}
+          <span class="vlc-agenda-items-new__status">
             {{t "agendaitem-details.formal-nok"}}
           </span>
-        </div>
+        {{/if}}
+      {{else if agendaitem.formallyOk}}
+        <p
+          class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
+        >
+          {{t "agendaitem-details.formal-ok"}}
+          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+        </p>
+      {{else}}
+        <span class="vlc-agenda-items-new__status">
+          {{t "agendaitem-details.formal-nok"}}
+        </span>
       {{/if}}
     </div>
   </div>
@@ -90,11 +112,11 @@
     </div>
     <div class="vl-u-display-flex vl-u-flex-space-between">
       {{#if (await subcase.confidentiality.label)}}
-      <div class="vl-custom">
-        <span class="vl-pill vl-pill--success">
-          {{await subcase.confidentiality.label}}
-        </span>
-      </div>
+        <div class="vl-custom">
+          <span class="vl-pill vl-pill--success">
+            {{await subcase.confidentiality.label}}
+          </span>
+        </div>
       {{/if}}
       {{#if (await subcase.formallyOk)}}
         <div
@@ -115,13 +137,6 @@
           </span>
         </div>
       {{/if}}
-    </div>
-  </div>
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-flex-space-between">
-      <span class="vl-u-text--small vl-u-text--muted">
-        {{subcase.shortTitle}}
-      </span>
     </div>
   </div>
 {{/if}}

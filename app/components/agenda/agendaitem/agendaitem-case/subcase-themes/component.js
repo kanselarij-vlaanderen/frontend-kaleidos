@@ -46,12 +46,7 @@ export default Component.extend({
 				subcaseModel.save().then(() => {
 					this.toggleProperty('isEditing');
 				});
-				const agendaitemsOnDesignAgendaToEdit = await this.store.query('agendaitem', {
-					filter: {
-						subcase: {id : subcase.get('id')},
-						agenda: {name: "Ontwerpagenda"}
-					}
-				});
+				const agendaitemsOnDesignAgendaToEdit = await subcase.get('agendaitemsOnDesignAgendaToEdit');
 				if(agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0){
 					agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
 						agendaitem.set('themes', this.get('selectedThemes'));

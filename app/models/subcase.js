@@ -66,6 +66,15 @@ export default Model.extend({
         return false;
       }
     })
-  })
+  }),
+
+  agendaitemsOnDesignAgendaToEdit : computed('id', function() {
+    return this.store.query('agendaitem', {
+      filter: {
+        subcase: {id : this.get('id')},
+        agenda: {name: "Ontwerpagenda"}
+      }
+    })
+  }) 
 
 });

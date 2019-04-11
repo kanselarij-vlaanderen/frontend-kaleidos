@@ -53,26 +53,40 @@ export default Component.extend({
 		},
 
 		async saveChanges() {
-			const { subcase, agendaitem, title, shortTitle, formallyOk, confidentiality } = this;
-			if (subcase) {
-				subcase.set('title', title);
-				subcase.set('shortTitle', shortTitle);
-				subcase.set('formallyOk', formallyOk);
-				subcase.set('confidentiality', confidentiality);
-				subcase.save().then(() => {
+			const { subcase, agendaitem } = this;
+			if (agendaitem) {
+				const isDesignAgenda = await agendaitem.get('agenda.name');
+				if (isDesignAgenda) {
+					const subcase = await agendaitem.get('subcase');
+					await this.setNewPropertiesToModel(subcase);
+				}
+				const subcaseModel = await this.store.peekRecord('agendaitem', agendaitem.get('id'));
+				this.setNewPropertiesToModel(subcaseModel).then(() => {
 					this.toggleIsEditing();
 				});
 			} else {
-				const subcase = agendaitem.get('subcase');
-				const subcaseToEdit = this.store.peekRecord('subcase', subcase.get('id'));
-				subcaseToEdit.set('title', title);
-				subcaseToEdit.set('shortTitle', shortTitle);
-				subcaseToEdit.set('formallyOk', formallyOk);
-				subcaseToEdit.set('confidentiality', confidentiality);
-				subcaseToEdit.save().then(() => {
-					this.toggleIsEditing();
-				});
+				const subcaseModel = await this.store.peekRecord('subcase', subcase.get('id'));
+				await this.setNewPropertiesToModel(subcaseModel);
+
+				const agendaitemsOnDesignAgendaToEdit = await subcase.get('agendaitemsOnDesignAgendaToEdit');
+				if(agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0){
+					agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
+						this.setNewPropertiesToModel(agendaitem).then(() => {
+							this.toggleIsEditing();
+						});
+					})
+				}
 			}
 		}
+	},
+
+	async setNewPropertiesToModel(model) {
+		const { title, shortTitle, formallyOk, confidentiality } = this;
+		model.set('title', title);
+		model.set('shortTitle', shortTitle);
+		model.set('formallyOk', formallyOk);
+		model.set('confidentiality', confidentiality);
+		return model.save();
 	}
+
 });
