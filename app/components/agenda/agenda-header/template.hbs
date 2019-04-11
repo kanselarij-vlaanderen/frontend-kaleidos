@@ -55,10 +55,10 @@
           <ul class="vl-popover__link-list">
             {{#if (gt (await currentSession.agendas.length) 0)}}
             <li class="vl-popover__link-list__item">
-              {{#if (not currentAgenda.isFinal)}}
+              {{#if (not await currentSession.isFinal)}}
                 <a
                   class="vl-link vl-link--block"
-                  {{action "lockAgenda" currentAgenda}}
+                  {{action "lockAgenda" currentSession}}
                   {{action attacher.hide}}
                 >
                   {{t "buttons.agenda-lock"}}
@@ -133,7 +133,7 @@
                 >
                   {{t "buttons.agenda-delete"}}
                 </a>
-              {{else if (not designAgendaPresent)}}
+              {{else if (and  (not designAgendaPresent) (not await currentSession.isFinal) )}}
                 <a
                   class="vl-link vl-link--block"
                   {{action "createNewDesignAgenda" currentSession}}

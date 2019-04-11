@@ -15,7 +15,7 @@
     <div class="vl-u-spacer-extended-l">
         {{#if (eq activeAgendaItemSection "details")}}
           <div class="vl-action-group vl-action-group--align-right">
-            {{#if (not currentAgenda.isFinal)}}
+            {{#if (not currentSession.isFinal)}}
               {{#if showOptions}}
                 {{#if isPostPonable}}
                   {{#if

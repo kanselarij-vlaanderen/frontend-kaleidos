@@ -10,6 +10,7 @@ export default Model.extend({
   showAsRemark: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
+  concluded: attr('boolean'),
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', {inverse:null}),

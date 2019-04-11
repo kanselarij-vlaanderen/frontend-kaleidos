@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import $ from 'jquery';
 
 export default Service.extend({
 	store:inject(),
@@ -31,12 +32,18 @@ export default Service.extend({
 		}
 	}),
 
+
+
+	lockMeeting (agendaId) {
+	  console.log('lockAgenda', agendaId);
+    return agendaId;
+	},
 	announcements: computed('currentAgenda.announcements.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
 		if(currentAgenda) {
 			let announcements = this.store.query('announcement', {
 				filter: {
-					agenda: { id: currentAgenda.id }
+					agenda: { id: currentAgenda.id
 				},
 			});
 			return announcements;
@@ -48,6 +55,12 @@ export default Service.extend({
 	definiteAgendas: computed('agendas', function() {
 		return this.get('agendas').then((agendas) => {
       return agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('-name');
+    });
+	}),
+
+	latestDefiniteAgendas: computed('agendas', function() {
+		return this.get('agendas').then((agendas) => {
+      return agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('-name').get('firstObject');
     });
 	})
 });
