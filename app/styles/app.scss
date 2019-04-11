@@ -655,12 +655,12 @@ a.disabled {
   width: 100%;
 }
 
-body > .ember-view {
-  height: 100% !important;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden !important;
-}
+// body > .ember-view {
+//   height: 100% !important;
+//   display: flex;
+//   flex-direction: column;
+//   overflow: hidden !important;
+// }
 
 .ember-attacher-popper-wide {
   width: 600px;
