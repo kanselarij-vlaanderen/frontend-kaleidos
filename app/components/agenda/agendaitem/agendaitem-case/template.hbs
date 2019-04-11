@@ -1,5 +1,4 @@
 {{#if agendaitem}}
-  {{#if (eq (await agendaitem.agenda.name) "Ontwerpagenda")}}
   {{#if (not isEditing)}}
     {{agenda/agendaitem/agendaitem-case/subcase-titles
       agendaitem=agendaitem
@@ -12,27 +11,25 @@
     }}
   {{/if}}
   {{agenda/agendaitem/agendaitem-case/subcase-themes
-    subcase=agendaitem.subcase
+    subcase=agendaitem
     agendaitem=agendaitem
   }}
   {{agenda/agendaitem/agendaitem-case/subcase-phases
-    subcase=agendaitem.subcase
+    subcase=agendaitem
     agendaitem=agendaitem
   }}
   {{agenda/agendaitem/agendaitem-case/subcase-mandatees
-    subcase=agendaitem.subcase
+    subcase=agendaitem
     agendaitem=agendaitem
   }}
   {{agenda/agendaitem/agendaitem-case/subcase-actions
-    subcase=agendaitem.subcase
+    subcase=agendaitem
     agendaitem=agendaitem
   }}
   {{agenda/agendaitem/agendaitem-case/subcase-documents
-    subcase=agendaitem.subcase
+    subcase=agendaitem
     subcase=agendaitem
   }}
-  {{else}}
-  {{/if}}
 {{else}}
   {{#if (not isEditing)}}
     {{agenda/agendaitem/agendaitem-case/subcase-titles

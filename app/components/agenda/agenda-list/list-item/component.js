@@ -18,6 +18,10 @@ export default Component.extend({
 		}
 	}),
 
+	agenda: computed('agendaitem', function() {
+		return this.get('agendaitem.agenda.name');
+	}),
+
 	click(event) {
 		const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'));
 		this.selectAgendaItem(agendaitem);
@@ -27,5 +31,5 @@ export default Component.extend({
 		if(this.index >=0) {
 			return (this.index + 1);
 		} 
-	})
+	}),
 });
