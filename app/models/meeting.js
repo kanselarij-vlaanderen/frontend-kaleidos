@@ -31,5 +31,5 @@ export default Model.extend({
 				return "Geen versie beschikbaar";
 			}
 		})
-	}),
+	})
 });

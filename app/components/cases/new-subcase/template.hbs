@@ -2,21 +2,10 @@
   <div class="vl-modal-dialog__content">
     {{#if (eq step 1)}}
       <div class="vlc-input-field-block">
-        <label class="vl-checkbox">
-          {{input
-            class="vl-checkbox__toggle"
-            type="checkbox"
-            checked=showAsRemark
-          }}
-          <div class="vl-checkbox__label">
-            <i class="vl-checkbox__box"></i>
-            {{t "show-as-remark"}}
-          </div>
-        </label>
-
         {{web-components/vl-checkbox
           value=showAsRemark
           label=(t "show-as-remark")
+          toggle=(action "toggleIsRemark")
         }}
       </div>
       <div class="vlc-input-field-block">

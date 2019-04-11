@@ -136,6 +136,10 @@ export default Component.extend({
 		toggleAddNonDigitalDocument() {
 			this.toggleProperty('isAddingNonDigitalDocument')
 		},
+		
+		toggleIsRemark() {
+
+		},
 
 		mandateeRowsChanged(mandateeRows) {
 			this.set('mandateeRows', mandateeRows);

@@ -4,8 +4,8 @@ import $ from 'jquery';
 
 export default Controller.extend(FileSaverMixin,{
 	isAddingSubcase:false,
-  isShowingOptions: false,
-  isArchivingCase: false,
+	isShowingOptions: false,
+	
 	actions: {
 		toggleIsAddingSubcase() {
 			this.toggleProperty('isAddingSubcase');
@@ -28,20 +28,5 @@ export default Controller.extend(FileSaverMixin,{
     showMultipleOptions() {
       this.toggleProperty('isShowingOptions');
     },
-    archiveCase(caze) {
-      caze.set('isArchived', true);
-      this.set('isArchivingCase', false);
-      caze.save();
-    },
-    unarchiveCase(caze) {
-      caze.set('isArchived', false);
-      caze.save();
-    },
-    requestArchiveCase() {
-		  this.set('isArchivingCase', true);
-    },
-    cancelArchiveCase() {
-		  this.set('isArchivingCase', false);
-    }
 	}
 });

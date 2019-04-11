@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-	classNames:['vl-u-spacer-extended-l'],
+  classNames: ['vlc-padding-bottom--large'],
 	store: inject(),
 	agendaitem:null,
 	isEditing:false,

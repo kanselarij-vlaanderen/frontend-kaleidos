@@ -9,7 +9,7 @@ export default Model.extend({
 	title: attr('string'),
 	numberVp: attr('string'),
 	numberVr: attr('string'),
-	documentVersions: hasMany('document-version', { inverse: null }),
+	documentVersions: hasMany('document-version', {inverse:null}),
 	remarks: hasMany('remark'),
 
 	decision: belongsTo('decision'),

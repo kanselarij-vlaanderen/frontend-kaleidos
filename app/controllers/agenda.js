@@ -31,6 +31,18 @@ export default Controller.extend({
 			this.transitionToRoute('agenda.agendaitems', currentSession.id, { queryParams: { selectedAgenda: this.get('sessionService.currentAgenda').id } });
 		},
 
+		navigateToNotes(currentSessionId, currentAgendaId) {
+			this.transitionToRoute('print-overviews.notes.overview', currentSessionId, {queryParams: {selectedAgenda_id: currentAgendaId}} )
+		},
+
+		navigateToDecisions(currentSessionId, currentAgendaId) {
+			this.transitionToRoute('print-overviews.decisions.overview', currentSessionId, {queryParams: {selectedAgenda_id: currentAgendaId}} )
+		},
+
+		navigateToPressAgenda(currentSessionId, currentAgendaId) {
+			this.transitionToRoute('print-overviews.press-agenda.overview', currentSessionId, {queryParams: {selectedAgenda_id: currentAgendaId}} )
+		},
+
 		navigateToSubCases() {
 			this.transitionToRoute('subcases');
 		},
@@ -51,21 +63,6 @@ export default Controller.extend({
 			this.set("createAnnouncement", true);
 			// this.set("selectedAgendaItem", null);
 			this.set("selectedAnnouncement", null);
-		},
-
-		async printDecisions() {
-			const isPrintingDecisions = this.get('isPrintingDecisions');
-
-			if (!isPrintingDecisions) {
-				const currentAgendaitems = await this.get('currentAgendaItems');
-				let decisions = await Promise.all(currentAgendaitems.map(async item => {
-					return await this.store.peekRecord('agendaitem', item.id).get('decision');
-				}));
-				decisions = decisions.filter(item => !!item);
-				this.set('printedDecisions', decisions);
-			}
-
-			this.toggleProperty('isPrintingDecisions');
 		},
 
 		// selectAnnouncement(announcement) {

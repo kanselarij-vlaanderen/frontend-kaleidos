@@ -1,56 +1,70 @@
-import Controller from '@ember/controller';
+import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
+import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
-export default Controller.extend({
-  agendaService: inject(),
-  sessionService: inject(),
-  availableSubcases: A([]),
-  postponedSubcases: A([]),
+import { computed } from '@ember/object';
+
+export default Component.extend(DefaultQueryParamsMixin, {
+	postponedSubcases: A([]),
+	availableSubcases: A([]),
   currentSession: alias('sessionService.currentSession'),
   selectedAgenda: alias('sessionService.currentAgenda'),
-  agendas: alias('sessionService.agendas'),
+	agendas: alias('sessionService.agendas'),
+	
+	store: inject(),
+	subcasesService: inject(),
+	agendaService: inject(),
+  sessionService: inject(),
+	
+	size:5,
+	sort:'short-title',
 
-  navigateBack() {
-    const { currentSession, selectedAgenda  } = this;
-    if (currentSession && selectedAgenda) {
-      this.set('postponedSubcases', []);
-      this.set('availableSubcases', []);
-      const agendaId = currentSession.get('id');
-      const selectedAgendaId = selectedAgenda.get('id');
-      this.set('sessionService.selectedAgendaItem', null);
-      this.transitionToRoute('agenda.agendaitems', agendaId, { queryParams: { selectedAgenda: selectedAgendaId } });
+	model: computed('store', 'sort', 'page', 'filter', 'size', function () {
+    const { store, page, filter, size, sort } = this;
+    const options = {
+      sort: sort,
+      page: {
+        number: page,
+        size: size
+      },
+      filter: {
+        ':has-no:agendaitems': 'yes'
+      }
+    };
+    if (filter) {
+    options['filter'] = {
+      ':has-no:agendaitems': 'yes',
+      'short-title': filter,
+    };
     }
-  },
+    return store.query('subcase', options);
+	}),
+	
+	async didInsertElement() {
+    this._super(...arguments);
+		this.set('postponedSubcases', []);
+		this.set('availableSubcases', []);
+		const ids = await this.get('subcasesService').getPostPonedSubcaseIds();
+		let postPonedSubcases = [];
 
-  actions: {
-    async selectPostponed(subcase, event) {
-      if (event) {
-        event.stopPropagation();
-      }
+		if (ids && ids.length > 0) {
+			postPonedSubcases = await this.store.query('subcase', {
+				filter: {
+					"id": ids.toString()
+				}
+			});
+		}
+		this.set('postPonedSubcases', postPonedSubcases);
+	},
 
-      let action = 'add';
-      if (subcase.selected) {
-        subcase.set('selected', false);
-        action = 'remove';
-      } else {
-        subcase.set('selected', true);
-        action = 'add';
-      }
-      const postponed = await this.get('postponedSubcases');
+	actions: {
+		close() {
+			this.set('isAddingAgendaitems', false);
+		},
 
-      if (action === 'add') {
-        postponed.pushObject(subcase)
-      } else if (action === 'remove') {
-        const index = postponed.indexOf(subcase);
-        if (index > -1) {
-          postponed.splice(index, 1);
-        }
-      }
-
-    },
-    async selectAvailableSubcase(subcase, destination, event) {
+		async selectAvailableSubcase(subcase, destination, event) {
       if (event) {
         event.stopPropagation();
       }
@@ -76,12 +90,37 @@ export default Controller.extend({
       }
     },
 
-    navigateBackToAgenda() {
-      this.navigateBack();
-    },
+		async selectPostponed(subcase, event) {
+      if (event) {
+        event.stopPropagation();
+      }
+
+      let action = 'add';
+      if (subcase.selected) {
+        subcase.set('selected', false);
+        action = 'remove';
+      } else {
+        subcase.set('selected', true);
+        action = 'add';
+      }
+      const postponed = await this.get('postponedSubcases');
+
+      if (action === 'add') {
+        postponed.pushObject(subcase)
+      } else if (action === 'remove') {
+        const index = postponed.indexOf(subcase);
+        if (index > -1) {
+          postponed.splice(index, 1);
+        }
+      }
+		},
+		
+		reloadRoute(id) {
+			this.reloadRoute(id);
+		},
 
     async addSubcasesToAgenda() {
-      const {selectedAgenda, postponedSubcases, availableSubcases, agendaService} = this;
+      const {selectedAgenda,availableSubcases, postponedSubcases, agendaService} = this;
       const alreadySelected = await selectedAgenda.get('agendaitems');
 
       await Promise.all(postponedSubcases.map(async (item) => {
@@ -119,10 +158,9 @@ export default Controller.extend({
           return agendaService.sortAgendaItems(selectedAgenda);
         }
       }).then(() => {
-        this.navigateBack();
-      });
-    }
-  },
-
-  
+				this.set('isAddingAgendaitems', false);
+				this.reloadRoute(selectedAgenda.get('id'));
+			});
+		}
+  }
 });

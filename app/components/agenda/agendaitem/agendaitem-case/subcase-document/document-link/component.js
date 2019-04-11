@@ -11,10 +11,12 @@ export default Component.extend(FileSaverMixin, {
 	uploadedFile: null,
 	fileName: null,
 
-	filteredDocumentVersions: computed('document.documentVersions', function () {
-		return this.get('document.documentVersions').then((versions) => {
-			return versions.filter((version) => version.get('versionNumber') != 1).sortBy('versionNumber');
-		})
+	filteredDocumentVersions: computed('document.documentVersions.@each', async function () {
+		let documentVersions = await this.store.query('document-version', {
+			filter: { document: { id: await this.get('document.id') } },
+			sort: '-version-number'
+		});
+		return documentVersions;
 	}),
 
 	filteredDocumentVersionsLength: computed('filteredDocumentVersions', function () {
@@ -33,9 +35,9 @@ export default Component.extend(FileSaverMixin, {
 			let newDocumentVersion = this.store.createRecord('document-version',
 				{
 					file: file,
-					versionNumber: newVersion.get('versionNumber') + 1,
+					versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
 					document: document,
-					subcase: this.get('subcase'),
+					subcase: await this.get('subcase'),
 					chosenFileName: this.get('fileName') || file.fileName || file.name,
 					created: new Date()
 				});

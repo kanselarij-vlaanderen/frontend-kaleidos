@@ -12,6 +12,8 @@ export default Component.extend({
 
 	isShowingOptions: false,
 	isPrintingNotes: false,
+	isAddingAnnouncement: false,
+	isAddingAgendaitems: false,
 
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 	currentSession: alias('sessionService.currentSession'),
@@ -38,6 +40,21 @@ export default Component.extend({
 	},
 
 	actions: {
+		navigateToNotes() {
+			const { currentSession, currentAgenda } = this;
+			this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
+		},
+
+		navigateToPressAgenda() {
+			const { currentSession, currentAgenda } = this;
+			this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
+		},
+
+		navigateToDecisions() {
+			const { currentSession, currentAgenda } = this;
+			this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
+		},
+
 		clearSelectedAgendaItem() {
 			this.clearSelectedAgendaItem();
 		},
@@ -81,7 +98,6 @@ export default Component.extend({
 			const definiteAgenda = agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('-name').get('lastObject');
 			definiteAgenda.set('isFinal', true);
 			definiteAgenda.save().then(newAgenda => {
-				console.log(newAgenda);
 				agenda.destroyRecord().then(() => {
 					this.reloadRoute(newAgenda.get('id'));
 				});
@@ -96,25 +112,16 @@ export default Component.extend({
 			this.toggleProperty('isShowingOptions');
 		},
 
-		toggleIsPrintingNotes() {
-			this.toggleProperty('isPrintingNotes');
-		},
-
 		compareAgendas() {
 			this.compareAgendas();
 		},
 
 		navigateToSubCases() {
-			this.set('addingAgendaItems', true);
-			this.navigateToSubCases();
+			this.set('isAddingAgendaitems', true);
 		},
 
-		printDecisions() {
-			this.printDecisions();
-		},
-
-		printNotes() {
-			this.toggleProperty('isPrintingNotes');
+		toggleIsAddingAnnouncement() {
+			this.toggleProperty('isAddingAnnouncement');
 		},
 
 		navigateToCreateAnnouncement() {
@@ -135,45 +142,9 @@ export default Component.extend({
 			await this.createDesignAgenda();
 		},
 
-		async createPressAgenda() {
-			const currentAgendaitems = await this.get('currentAgendaItems');
-			const pressItems = await Promise.all(currentAgendaitems.map(async item => {
-				const mandatees = await this.store.peekRecord('agendaitem', item.id).get('subcase').get('mandatees');
-				if (item.forPress) {
-					return { id: item.id, title: item.titlePress, content: item.textPress, mandatees: mandatees }
-				}
-			}));
-			const prioritisedItems = await this.reduceGroups(pressItems);
-
-			this.set('pressItems', prioritisedItems);
-			this.set('showPressModal', true);
-		},
-
-		closePressAgenda() {
-			this.set('showPressModal', false);
+		reloadRoute(id) {
+			this.reloadRoute(id);
 		}
-	},
-
-	async reduceGroups(pressItems) {
-		const { currentAgenda, agendaService } = this;
-		const sortedAgendaItems = await agendaService.getSortedAgendaItems(currentAgenda);
-		const pressAgendaItems = pressItems.filter(pressItem => {
-			if (pressItem && pressItem.id) {
-				let foundItem = sortedAgendaItems.find(item => item.uuid === pressItem.id);
-				if (foundItem) {
-					pressItem.priority = foundItem.priority;
-					pressItem.mandatePriority = foundItem.mandatePriority;
-					return pressItem;
-				}
-			}
-		});
-
-		return pressAgendaItems.reduce((items, agendaitem) => {
-			const mandatees = agendaitem.mandatees.map(item => item.title);
-			items[agendaitem.mandatePriority] = items[agendaitem.mandatePriority] || { mandatees: mandatees, agendaitems: [] };
-			items[agendaitem.mandatePriority].agendaitems.push(agendaitem);
-			return items;
-		}, []);
 	},
 
 	changeLoading() {

@@ -7,11 +7,26 @@ export default Component.extend({
 	isShowingVersions:false, 
 	isEditing:false,
 
+	async addNewsItem(agendaitem){
+		const news = this.store.createRecord("newsletter-info", {
+			agendaitem: agendaitem,
+			created: new Date(),
+			subtitle: await agendaitem.get('subcase.title')
+		});
+		await news.save();
+	},
+
 	actions: {
 		showDocuments() {
 			this.toggleProperty('isShowingVersions');
 		},
-		toggleIsEditing() {
+		async toggleIsEditing() {
+			const { agendaitem } = this;
+			const newsletter = await agendaitem.get('newsletterInfo');
+			if (!newsletter) {
+				await this.addNewsItem(agendaitem);
+			}
+			
 			this.toggleProperty('isEditing');
 		},
 		async saveChanges(agendaitem) {

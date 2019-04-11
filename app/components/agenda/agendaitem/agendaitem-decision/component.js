@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-	classNames: ["vl-u-spacer-extended-l"],
+  classNames: ['vlc-padding-bottom--large'],
 	store: inject(),
 	isEditing: false,
 	agendaitem: null,
@@ -14,7 +14,7 @@ export default Component.extend({
 			shortTitle: await agendaitem.get('subcase.shortTitle'),
 		});
 		await decision.save();
-		agendaitem.belongsTo('decision').reload();
+		await agendaitem.belongsTo('decision').reload();
 	},
 
 	actions: {

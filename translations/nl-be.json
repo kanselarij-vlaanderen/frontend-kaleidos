@@ -34,8 +34,8 @@
 		"agendaitems-subtitle": "Agenda overzicht"
 	},
 	"announcement": {
-		"title": "titel",
-		"text": "mededeling",
+		"title": "Titel",
+		"text": "Mededeling",
 		"no-announcements": "Geen mededelingen"
 	},
 	"buttons": {
@@ -267,5 +267,11 @@
 	"single-newsletter": "Losstaande nieuwsbrief",
 	"create-single-newsletter": "Losstaande nieuwsbrief aanmaken",
 	"newsletter-doc-date":"Datum van beschikbaarheid van de documenten",
-	"general-newsletter":"Algemene nieuwsbrief"
+	"general-newsletter":"Algemene nieuwsbrief",
+	"agenda-notes":"Notulen van",
+	"decisions-of":"Beslissingen van",
+	"manage-alerts":"Systeemberichten beheer",
+	"message":"Systeembericht",
+	"severity":"Strengheid",
+	"manage-document-types":"Document-types beheer"
 }

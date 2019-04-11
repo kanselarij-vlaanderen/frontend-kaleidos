@@ -8,8 +8,12 @@ export default Component.extend({
   store: inject(),
   uploadedFiles: [],
   nonDigitalDocuments: [],
+  isAddingAnnouncement:null,
 
-  actions : {
+  actions: {
+    closeDialog() {
+      this.toggleProperty('isAddingAnnouncement');
+    },
     async createAnnouncement (){
       const { title, text } = this;
       const agenda = await this.get('currentAgenda');
@@ -30,7 +34,6 @@ export default Component.extend({
           return this.createNewDocumentWithDocumentVersion(announcement, null, nonDigitalDocument.title);
         }
       }));
-
 
       this.navigateToNewAnnouncement(announcement);
       notifyPropertyChange(agenda, 'announcements');

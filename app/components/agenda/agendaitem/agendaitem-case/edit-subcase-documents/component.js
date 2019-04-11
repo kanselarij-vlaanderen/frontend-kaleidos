@@ -1,7 +1,8 @@
 import Component from '@ember/component';
 import $ from 'jquery';
+import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 
-export default Component.extend({
+export default Component.extend(FileSaverMixin, {
 	classNames:["vl-form__group vl-u-bg-porcelain"],
 
 	actions: {
@@ -32,7 +33,17 @@ export default Component.extend({
 
 		cancelEditing() {
 			this.cancelForm();
-		}
+		},
+
+		async downloadFile(documentVersion) {
+			let file = await documentVersion.get('file');
+			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
+				method: 'GET',
+				dataType: 'arraybuffer', // or 'blob'
+				processData: false
+			})
+				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
+		},
 	},
 
 	removeFile(file) {

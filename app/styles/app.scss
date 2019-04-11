@@ -138,6 +138,7 @@ $icon-font-location: "/fonts/";
 @import "custom-components/vlc-user";
 @import "custom-components/vlc-view-switch";
 @import "custom-components/vlc-status-timeline";
+@import "custom-components/vlc-tabs-reverse";
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -159,44 +160,18 @@ $icon-font-location: "/fonts/";
 //print css
 @import "print/agendaitem-print";
 
+//custom css added
+@import "custom-application/toast";
+
+
 .document {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
-.new-session-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.side-nav-small {
-  display: block;
-  // width: 150px;
-  float: left;
-  border-top: none;
-
-  .title-container {
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-top: none;
-    border-right: none;
-
-    strong {
-      font-size: 1.5em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      i {
-        margin-right: 0.5em;
-      }
-    }
-  }
+.vlc-scroll-wrapper {
+  height:100% !important;
 }
 
 .progress-container {
@@ -589,24 +564,6 @@ $icon-font-location: "/fonts/";
   }
 }
 
-.vlc-panel-layout,
-.vlc-scroll-wrapper {
-  height: auto;
-}
-
-.vlc-panel-layout__agenda-items {
-  height: 100%;
-}
-
-.vlc-side-nav {
-  min-height: calc(100vh - 44px - 50px - 106px);
-  height: auto;
-}
-
-// .vl-u-bg-porcelain {
-//   width: 100%;
-// }
-
 a.vlc-agenda-item {
   text-decoration: none;
   display: block;
@@ -625,7 +582,6 @@ a.vlc-agenda-items__header {
 
 .vlc-panel-layout__main-content {
   min-width: 50%;
-  width: 50%;
 }
 
 .vlc-hr-small {
@@ -646,14 +602,42 @@ a.disabled {
   cursor: default;
 }
 
-.vl-u-bg-width {
-  width:100%;
-} 
-
-
 body > .ember-view {
   height: 100% !important;
   display: flex;
   flex-direction: column;
   overflow: hidden !important;
+}
+
+.ember-attacher-popper-wide {
+  width: 600px;
+  padding: 1em;
+  &::before {
+    display: none;
+  }
+}
+
+.line {
+  border-bottom: dashed 4px gold;
+  margin-bottom: 2em;
+  position: relative;
+}
+
+span.label {
+  position: absolute;
+  top: 0;
+  left: 410px;
+  margin-top: -1.7em;
+  background: #f2f5f6;
+  padding: 1em;
+  font-weight: bold;
+}
+
+.vlc-padding-bottom--large {
+  padding-bottom: 6rem;
+}
+
+// fix for spacer
+.vlc-panel-layout__main-content {
+  flex:3 1;
 }
