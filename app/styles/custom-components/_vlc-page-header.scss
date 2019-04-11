@@ -2,46 +2,44 @@
   vl-page-header
   ========================================================================== */
 
-.vlc-page-header {
-  padding: 1.5rem 4rem;
-  border-bottom: 1px solid $ghost;
+  .vlc-page-header {
 
-  .vlc-page-header__title {
+    padding: 1.5rem;
+    border-bottom: 1px solid $ghost;
+  
+    .vlc-page-header__title {
+      font-family: flanders-serif, serif;
+      font-size: 2rem;
+      font-weight: 500;
+      margin: 0;
+      padding: 0;
+    }
+  
+    .vlc-page-header__title--bordered {
+      border-bottom: 1px solid $ghost;
+      padding-bottom: 1rem;
+    }
+  
+    .vlc-page-header__sub {
+      display: flex;
+      align-items: center;
+    }
+  
+  }
+  
+  .vlc-page-header__status {
+    border-left: 1px solid $ghost;
+    margin-left: 1rem;
+    padding-left: 1rem;
+  }
+  
+  
+  // Same as .vlc-page-header__title - refactor
+  .vlc-toolbar__title {
     font-family: flanders-serif, serif;
     font-size: 2.4rem;
     font-weight: 500;
     margin: 0;
     padding: 0;
   }
-
-  .vlc-page-header__title--bordered {
-    border-bottom: 1px solid $ghost;
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .vlc-page-header__sub {
-    display: flex;
-    align-items: center;
-
-    .vlc-view-switch {
-      border-left: 1px solid $ghost;
-    }
-  }
-}
-
-.vlc-page-header__status {
-  border-left: 1px solid $ghost;
-  margin-left: 1rem;
-  padding-left: 1rem;
-}
-
-
-// Same as .vlc-page-header__title - refactor
-.vlc-toolbar__title {
-  font-family: flanders-serif, serif;
-  font-size: 2.4rem;
-  font-weight: 500;
-  margin: 0;
-  padding: 0;
-}
+  

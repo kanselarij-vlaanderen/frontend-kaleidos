@@ -6,6 +6,10 @@
 
 $icon-font-location: "/fonts/";
 
+@import "_colors";
+
+$icon-font-location: "/fonts/";
+
 // Core (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-core/src/scss/_setting.scss";
 // @import "node_modules/@govflanders/vl-ui-core/src/scss/_tool.scss";
@@ -60,7 +64,7 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_accordion";
 @import "govflanders/components/_action-group";
 @import "govflanders/components/_alert";
-// @import "govflanders/components/_autocomplete";
+
 @import "govflanders/components/_badge";
 @import "govflanders/components/_button";
 @import "govflanders/components/_checkbox";
@@ -99,6 +103,7 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_select";
 @import "govflanders/components/_js-select";
 
+
 /* Unofficial code
    ========================================================================== */
 
@@ -120,11 +125,13 @@ $icon-font-location: "/fonts/";
 @import "govflanders/additions/_typography";
 
 // Custom components
+@import "custom-components/vlc-tabs-reverse";
 @import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
 @import "custom-components/vlc-agenda-item";
 @import "custom-components/vlc-comments";
 @import "custom-components/vlc-document-list";
 @import "custom-components/vlc-hr";
+@import "custom-components/vlc-box";
 @import "custom-components/vlc-container";
 @import "custom-components/vlc-input-field-block";
 @import "custom-components/vlc-navbar";
@@ -134,9 +141,9 @@ $icon-font-location: "/fonts/";
 @import "custom-components/vlc-procedure-step";
 @import "custom-components/vlc-scroll-wrapper";
 @import "custom-components/vlc-side-nav";
+@import "custom-components/vlc-date-range";
 @import "custom-components/vlc-toolbar";
 @import "custom-components/vlc-user";
-@import "custom-components/vlc-view-switch";
 @import "custom-components/vlc-status-timeline";
 
 // Imports utilities (loaded from node_modules)
