@@ -1,6 +1,11 @@
 <div>
-  Concluded: {{ agendaitem.subcase.concluded }}
+  Concluded: {{ await agendaitem.subcase.concluded }}
+</div>
+<div>
   Retracted: {{ agendaitem.retracted }}
+</div>
+<div>
+  Retracted: {{ await agendaitem.decision.approved }}
 </div>
 
 {{#if agendaitem}}

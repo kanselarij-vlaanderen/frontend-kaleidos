@@ -35,16 +35,22 @@ export default Service.extend({
 
 
 	lockMeeting (agendaId) {
-	  console.log('lockAgenda', agendaId);
-    return agendaId;
+    return $.ajax(
+      {
+        method: "POST",
+        url: `/close-meeting?agendaId=${agendaId}`,
+      }
+    ).then(result => {
+      return result.body;
+    })
 	},
 	announcements: computed('currentAgenda.announcements.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
 		if(currentAgenda) {
 			let announcements = this.store.query('announcement', {
 				filter: {
-					agenda: { id: currentAgenda.id
-				},
+					agenda: { id: currentAgenda.id },
+        }
 			});
 			return announcements;
 		} else {

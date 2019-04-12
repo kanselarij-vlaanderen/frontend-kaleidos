@@ -79,15 +79,17 @@ export default Component.extend({
 		},
 
 		async lockAgenda(session) {
-			const agendas = await this.get('agendas');
-			const draft = agendas.filter(agenda => agenda.name === "Ontwerpagenda").sortBy('-name').get('firstObject');
-			const lastAgenda = agendas.filter(agenda => agenda.name !== "Ontwerpagenda").sortBy('-name').get('firstObject');
+
+      const agendas = await this.get('agendas');
+      const draft = agendas.filter(agenda => agenda.name === "Ontwerpagenda").sortBy('-name').get('firstObject');
+      const lastAgenda = agendas.filter(agenda => agenda.name !== "Ontwerpagenda").sortBy('-name').get('firstObject');
+
 			if (draft){
         await draft.destroyRecord();
+        await this.sessionService.lockMeeting(lastAgenda.get('id'));
+        this.set('sessionService.currentAgenda', lastAgenda);
+        this.reloadRoute();
 
-        await this.get('sessionService').lockAgenda(lastAgenda.get('id'));
-        //this.set('sessionService.currentSession', newSession);
-        this.reloadRoute(lastAgenda.get('id'));
       }
 		},
 
