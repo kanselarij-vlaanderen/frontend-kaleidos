@@ -1,3 +1,13 @@
+<div>
+  Concluded: {{ await agendaitem.subcase.concluded }}
+</div>
+<div>
+  Retracted: {{ agendaitem.retracted }}
+</div>
+<div>
+  Retracted: {{ await agendaitem.decision.approved }}
+</div>
+
 {{#if agendaitem}}
   {{#if (not isEditing)}}
     {{agenda/agendaitem/agendaitem-case/subcase-titles

@@ -7,13 +7,10 @@ export default Model.extend({
   priority: attr('number'),
   created: attr('date'),
   record: attr('string'),
-  // showAsRemark: attr('boolean'),
   retracted: attr('boolean'),
-
   titlePress: attr('string'),
   textPress: attr('string'),
   forPress: attr('boolean'),
-
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
   decision: belongsTo('decision'),

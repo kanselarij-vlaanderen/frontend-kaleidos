@@ -55,6 +55,7 @@
 		"print-decisions": "Beslissingen afdrukken",
 		"archive-case": "Dossier archiveren",
 		"archive-subcase": "Procedurestap archiveren",
+		"close-subcase": "Procedurestap afsluiten",
 		"unarchive-case": "Dossier onarchiveren",
 		"unarchive-subcase": "Procedurestap onarchiveren",
 		"agenda-approve": "Agenda goedkeuren",

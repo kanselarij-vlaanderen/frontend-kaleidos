@@ -7,7 +7,6 @@ let { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
 	plannedStart: attr("date"),
-	created: attr('date'),
 	startedOn: attr("date"),
 	endedOn: attr('date'),
 	location: attr('string'),
@@ -17,7 +16,7 @@ export default Model.extend({
 	postponeds: hasMany('postponed'),
 	notes: belongsTo('meeting-record'),
 	newsletter: belongsTo('newsletter-info'),
-
+  isFinal: attr("boolean"),
 	latestAgendaName: computed('agendas', function() {
 		return this.get('agendas').then((agendas) => {
 			const agendaNamePosition = agendas.length - 1;
@@ -26,7 +25,7 @@ export default Model.extend({
 					return "Ontwerpagenda " + alphabet[agendaNamePosition];
 				} else {
 					return "Ontwerpagenda " + agendaNamePosition
-				} 
+				}
 			} else {
 				return "Geen versie beschikbaar";
 			}
