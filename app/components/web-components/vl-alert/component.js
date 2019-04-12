@@ -3,11 +3,20 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
 	classNames:['vl-alert'],
-	classNamesBindings: ['getClassNames'],
+  classNameBindings: ['getClassNames'],
+  type: null,
+	getClassNames: computed('type', function() {
+	  const type = this.type;
+		if(type === 'danger') {
+			return "vl-alert--error";
+		} else if(type === 'warning') {
+      return 'vl-alert--warning';
+    } else if( type === 'success' ) {
+      return 'vl-alert--success';
+    }
+	}),
 
-	getClassNames: computed('small', function() {
-		if(this.get('small')) {
-			return "vl-alert--small";
-		}
+  iconClass: computed('small', function() {
+		return "vl-vi vl-vi-alert-circle";
 	})
 });

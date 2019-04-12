@@ -1,31 +1,25 @@
-<div class="vlc-scroll-wrapper__body">
-  <div class="vlc-container">
-    <div class="vl-u-spacer-extended-l">
-
-      <div class="vl-u-spacer">
-        <h2 class="vl-title vl-title--h3">
-          {{t "buttons.create-announcement"}}
-        </h2>
-      </div>
-
-      <form >
-
-        <div class="vl-u-spacer-extended-bottom-s">
+{{#web-components/vl-modal
+  closeModal=(action "closeDialog")
+  isOverlay=true
+  title=(t "buttons.create-announcement")
+}}
+  <div class="vl-modal-dialog__content">
+    <div class="vlc-scroll-wrapper__body">
+      <form>
+        <div class="vlc-input-field-block">
           {{web-components/vl-form-label value=(t "announcement.title")}}
           {{web-components/vl-form-input width="4" value=title}}
         </div>
-
-        <div class="vl-u-spacer-extended-bottom-s">
+        <div class="vlc-input-field-block">
           {{web-components/vl-form-label value=(t "announcement.text")}}
-          {{textarea  class="vl-textarea vl-textarea--block" rows="6" value=text}}
+          {{textarea class="vl-textarea vl-textarea--block" rows="6" value=text
+          }}
         </div>
-
-        <div class="vl-col--4-4 vl-u-spacer-extended-bottom-s">
+        <div class="vlc-input-field-block">
           {{web-components/vl-form-label value=(t "cases.upload-file")}}
           {{file-uploader uploadedFile=(action "uploadedFile")}}
         </div>
-
-        <div class="vl-col--4-4">
+        <div class="vlc-input-field-block">
           {{#if (not uploadedFiles.length eq "0")}}
             <h4 class="vl-title vl-title--h4">
               {{t "attachements"}}
@@ -47,8 +41,13 @@
               </div>
               {{t "subcases.document-type"}}
               :
-              {{document-type-selector
-                chooseDocumentType=(action "chooseDocumentType" uploadedFile)
+              {{utils/model-selector
+                modelName="document-type"
+                searchField="label"
+                propertyToShow="label"
+                sortField="label"
+                selectedItems=(await uploadedFile.documentType)
+                selectModel=(action "chooseDocumentType" uploadedFile)
               }}
             </div>
           {{/each}}
@@ -64,13 +63,31 @@
             }}
           {{/each}}
         </div>
-
       </form>
-
-      <button class="vl-button" {{action "createAnnouncement"}}>
-        {{t "buttons.create-announcement"}}
-      </button>
-
     </div>
   </div>
-</div>
+  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--link vl-button--narrow"
+            {{action "closeDialog"}}
+          >
+            {{t "buttons.cancel"}}
+          </button>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--narrow"
+            {{action "createAnnouncement"}}
+          >
+            {{t "buttons.create-announcement"}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/web-components/vl-modal}}

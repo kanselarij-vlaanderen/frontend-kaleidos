@@ -4,14 +4,14 @@ import { alias } from '@ember/object/computed';
 export default Component.extend({
 	store: inject(),
 	sessionService: inject(),
-	classNames: ["vlc-container"],
+  classNames: ['vlc-padding-bottom--large'],
 	isEditing: false,
 
 	currentSession: alias('sessionService.currentSession'),
 
 	actions: {
 		async toggleIsEditing() {
-			const agendaitemNotes = this.get('agendaitem').get('notes');
+			const agendaitemNotes = await this.get('agendaitem.meetingRecord');
 
 			if (!agendaitemNotes) {
 				const meetingRecord = this.store.createRecord('meeting-record', {
@@ -21,7 +21,7 @@ export default Component.extend({
 					others: null,
 					description: "",
 					attendees: [],
-					agendaitem: this.get('agendaitem'),
+					agendaitem: await this.get('agendaitem'),
 					meeting: null
 				})
 				await meetingRecord.save()

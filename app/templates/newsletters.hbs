@@ -1,0 +1,124 @@
+{{newsletter/newsletter-header}}
+{{#if (gt model.length 0)}}
+  <div class="vlc-scroll-wrapper">
+    <div class="vlc-scroll-wrapper__body">
+      <div class="vl-u-spacer-extended-l">
+        {{#data-table
+          content=model
+          class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+          page=page
+          size=size
+          sort=sort
+          enableSizes=true
+          isLoading=isLoadingModel as |t|
+        }}
+          {{#t.content as |c|}}
+            {{#c.header}}
+              {{th-sortable
+                class="vl-data-table-col-5 vl-data-table__header-title"
+                currentSorting=sort
+                field="planned-start"
+                label="Nieuwsbrief"
+              }}
+              {{th-sortable
+                class="vl-data-table-col-3 vl-data-table__header-title"
+                field="agendas"
+                label="Nieuwsbrief verstuurd op"
+              }}
+              {{th-sortable
+                class="vl-data-table-col-3 vl-data-table__header-title"
+                currentSorting=sort
+                field="created"
+                label="Laatst gewijzigd"
+              }}
+              <th class="vl-data-table-col-1"></th>
+            {{/c.header}}
+            {{#c.body as |meeting|}}
+              <td>
+                Agenda voor
+                {{! Translate not possible in the data table }}
+                {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
+              </td>
+              <td>
+                -
+              </td>
+              <td>
+                {{moment-format meeting.created "DD-MM-YYYY HH:mm"}}
+              </td>
+              <td class="vl-u-align-center">
+                <button class="vl-button vl-button--link vl-button--icon">
+                  <i
+                    class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                  ></i>
+                </button>
+                {{#attach-popover
+                  class="ember-attacher-popper vl-popover"
+                  hideOn="clickout click"
+                  showOn="click"
+                  animation="shift"
+                  placement="bottom" as |attacher|
+                }}
+                  <ul class="vl-popover__link-list">
+                    <li class="vl-popover__link-list__item">
+                      {{#if (not await meeting.newsletter)}}
+                        <button
+                          class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "addNewsletterToMeeting" meeting}}
+                        >
+                          Nieuwsbrief toevoegen
+                        </button>
+                      {{else}}
+                        <button
+                          class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "editNewsletterOfMeeting" meeting}}
+                        >
+                          Nieuwsbrief aanpassen
+                        </button>
+                      {{/if}}
+                    </li>
+                  </ul>
+                {{/attach-popover}}
+                <button
+                  class="vl-button vl-button--link vl-button--icon"
+                  {{action "navigateToNewsLetter" meeting}}
+                >
+                  <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
+                </button>
+              </td>
+            {{/c.body}}
+          {{/t.content}}
+        {{/data-table}}
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="vl-u-spacer-extended-l">
+    {{web-components/vl-alert message=(t "no-meetings")}}
+  </div>
+{{/if}}
+{{#if isAdding}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "close")
+    title=(t "create-newsletter")
+  }}
+    {{newsletter/create-newsletter
+      selectedMeeting=selectedMeeting
+      close=(action "close")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isEditing}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    closeModal=(action "close")
+    title=editTitle
+  }}
+    {{newsletter/edit-newsletter
+      selectedMeeting=selectedMeeting
+      close=(action "close")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}

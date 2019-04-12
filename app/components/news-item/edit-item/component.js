@@ -1,11 +1,24 @@
 import Component from '@ember/component';
-import moment from 'moment';
+import { inject } from '@ember/service';
 
 export default Component.extend({
-  newsItem: null,
-  actions: {
-    async updatePublicationDate(date){
-      this.newsItem.set('publicationDate', moment(date).toDate());
-    }
-  }
+  store:inject(),
+  classNames:["vl-form__group vl-u-bg-porcelain"],
+  isEditing:false,
+
+	actions: {
+		toggleIsEditing() {
+			this.toggleProperty('isEditing');
+		},
+		async saveChanges(agendaitem) {
+      const newsletterToEdit = await agendaitem.get('newsletterInfo');
+			await newsletterToEdit.save();
+			this.toggleProperty('isEditing');
+		},
+		async cancelEditing(agendaitem) {
+			const newsletter = await agendaitem.get('newsletterInfo');
+			newsletter.rollbackAttributes();
+			this.toggleProperty('isEditing');
+		}
+	}
 });

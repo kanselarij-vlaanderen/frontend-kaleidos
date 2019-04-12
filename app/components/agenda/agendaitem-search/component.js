@@ -6,30 +6,14 @@ export default Component.extend({
 	classNames: ['vlc-scroll-wrapper__header'],
 	store: inject(),
 
-	searchTask: task(function* (searchValue) {
-		yield timeout(300);
-		return this.store.query('subcase', {
-			filter: {
-				title: `${searchValue}`
-			}
-		});
+	searchTask: task(function* () {
+		yield timeout(600);
+		this.search(this.get('value'));
 	}),
 
 	actions: {
-		chooseItem(agendaItem) {
-			this.chooseItem(agendaItem);
-		},
-
-		resetValue(param) {
-			if (param == "") {
-				this.set('subcases', this.store.query('subcase',{ query: {
-				}}));
-			}
-		},
-	
-    navigateToCreateAnnouncement() {
-			this.set('addingAnnouncement', true);
-			this.navigateToCreateAnnouncement();
+		search(value){
+			this.search(value);
 		}
 	}
 });

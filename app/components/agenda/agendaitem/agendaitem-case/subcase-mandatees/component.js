@@ -23,8 +23,8 @@ export default Component.extend({
 			this.set('mandateeRows', mandateeRows);
 		},
 
-		saveChanges(subcase) {
-			this.parseDomainsAndMandatees();
+		async saveChanges(subcase) {
+			await this.parseDomainsAndMandatees();
 			const { selectedMandatees, selectedDomains } = this;
 			subcase.set('mandatees', selectedMandatees);
 			subcase.set('governmentDomains', selectedDomains);
@@ -34,8 +34,8 @@ export default Component.extend({
 		}
 	},
 
-	parseDomainsAndMandatees() {
-		const mandateeRows = this.get('mandateeRows');
+	async parseDomainsAndMandatees() {
+		const mandateeRows = await this.get('mandateeRows');
 		const mandatees = [];
 		const selectedDomains = [];
 		if (mandateeRows && mandateeRows.get('length') > 0) {
@@ -51,30 +51,30 @@ export default Component.extend({
 		this.set('selectedDomains', selectedDomains);
 	},
 
-	constructMandateeRows() {
-		const subcase = this.get('subcase');
-		const mandatees = subcase.get('mandatees');
-		const domains = subcase.get('governmentDomains');
+	async constructMandateeRows() {
+		const subcase = await this.get('subcase');
+		const mandatees = await subcase.get('mandatees');
+		const domains = await subcase.get('governmentDomains');
 		let i = 0;
 
-		let rowsToReturn = mandatees.map((mandatee) => {
+		let rowsToReturn = await Promise.all(mandatees.map(async (mandatee) => {
 			i++;
 			return Object.create({
 				id: i,
 				mandatee: mandatee,
-				domains: mandatee.get('governmentDomains'),
+				domains: await mandatee.get('governmentDomains'),
 				selectedDomains: []
 			})
-		})
+		}));
 
-		domains.map((domain) => {
-			rowsToReturn.forEach(row => {
+		await domains.map((domain) => {
+			return rowsToReturn.map(row => {
 				const index = row.domains.indexOf(domain);
 				if (index != -1) {
 					row.selectedDomains.push(domain);
 				}
 			});
-			return domain;
+			
 		});
 		return rowsToReturn;
 	}

@@ -30,5 +30,11 @@ export default Route.extend({
 				this.set('sessionService.currentAgenda', agendas.get('firstObject'));
 			}
 		});
+	},
+
+	actions: {
+		refresh() {
+			this.refresh();
+		}
 	}
 });

@@ -1,0 +1,120 @@
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-display-flex-align-center">
+    <h4 class="vl-title vl-title--h4">
+      {{t "actions"}}
+    </h4>
+    <div class="vl-u-spacer-extended-left-s">
+      <a class="vl-link" {{action "toggleIsEditing"}}>
+        {{t "buttons.edit"}}
+      </a>
+    </div>
+  </div>
+</div>
+<div class="vl-u-spacer">
+  <h4 class="vl-title vl-title--h6">
+    {{t "mandatee-approval"}}
+  </h4>
+</div>
+<div class="vl-u-spacer">
+  <table class="vl-data-table vl-data-table--align-middle">
+    <thead>
+      <tr>
+        <th class="vl-data-table-col-3">
+          {{web-components/vl-form-label value=(t "name-mandatee")}}
+        </th>
+        <th class="vl-data-table-col-6">
+          {{web-components/vl-form-label value=(t "function-mandatee")}}
+        </th>
+        <th class="vl-data-table-col-3">
+          {{web-components/vl-form-label value=(t "approval-mandatee")}}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#if (not (await subcase.approvals))}}
+        {{#each (await subcase.mandatees) as |mandatee|}}
+          <tr>
+            <td class="vl-u-text--bold">
+              {{mandatee.person.alternativeName}}
+            </td>
+            <td>
+              {{mandatee.title}}
+            </td>
+            <td>
+              <div
+                class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--muted"
+              >
+                <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
+                <span class="vl-annotation">
+                  Nog niet akkoord
+                </span>
+              </div>
+            </td>
+          </tr>
+        {{/each}}
+      {{else}}
+        {{#each (await subcase.approvals) as |approval|}}
+          <tr>
+            <td class="vl-u-text--bold">
+              {{await approval.mandatee.person.alternativeName}}
+            </td>
+            <td>
+              {{await approval.mandatee.title}}
+            </td>
+            <td>
+              {{#if (not isEditing)}}
+                {{#if approval.approved}}
+                  <div
+                    class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--bold vl-u-text--success"
+                  >
+                    <i
+                      class="vl-icon vl-icon--before vl-vi vl-vi-check-small"
+                    ></i>
+                    <span class="vl-annotation">
+                      Akkoord
+                    </span>
+                  </div>
+                {{else}}
+                  <div
+                    class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--muted"
+                  >
+                    <i
+                      class="vl-icon vl-icon--before vl-vi vl-vi-check-small"
+                    ></i>
+                    <span class="vl-annotation">
+                      Nog niet akkoord
+                    </span>
+                  </div>
+                {{/if}}
+              {{else}}
+                <div class="vlc-input-field-block">
+                  <label class="vl-checkbox vl-checkbox__box">
+                    {{input
+                      class="vl-checkbox__toggle"
+                      type="checkbox"
+                      checked=approval.approved
+                    }}
+                    <div class="vl-checkbox__label">
+                      <i class="vl-checkbox__box"></i>
+                      <span class="vl-annotation">{{t "approve"}}</span>
+                    </div>
+                  </label>
+                </div>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      {{/if}}
+    </tbody>
+  </table>
+</div>
+{{#if isEditing}}
+<div class="vl-action-group vl-action-group--align-right">
+  <a class="vl-link" {{action "cancelEditing"}}>
+    {{t "buttons.cancel"}}
+  </a>
+  <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
+    {{t "buttons.save"}}
+  </button>
+</div>
+{{/if}}

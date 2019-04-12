@@ -1,3 +1,4 @@
+{{#if nearestMeeting}}
 <h2 class="vl-title vl-title--h3">
   {{t "active-agenda"}}
 </h2>
@@ -90,6 +91,7 @@
     </tr>
   </tbody>
 </table>
+{{/if}}
 {{#if isAddingNotes}}
   {{#web-components/vl-modal
     isOverlay=true

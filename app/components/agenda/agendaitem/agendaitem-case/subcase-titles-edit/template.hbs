@@ -1,20 +1,16 @@
-{{! <div class="vl-u-spacer">
-  <label class="vl-form__label vl-u-display-block">
-    Type dossier
-  </label>
-  <label class="vl-radio">
-    <input class="vl-radio__toggle" type="radio" name="typeId" checked="" />
-    <div class="vl-radio__label">
-      Besluit
-    </div>
-  </label>
-  <label class="vl-radio">
-    <input class="vl-radio__toggle" type="radio" name="typeId" />
-    <div class="vl-radio__label">
-      Decreet
-    </div>
-  </label>
-</div> }}
+<div class="vl-u-spacer">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "metadata-form.public")}}
+    {{utils/model-selector
+      modelName="confidentiality"
+      searchField="label"
+      propertyToShow="label"
+      sortField="label"
+      selectedItems=(await confidentiality)
+      selectModel=(action "selectConfidentiality")
+    }}
+  </div>
+</div>
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
@@ -26,6 +22,19 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
     {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
+  </div>
+</div>
+<div class="vl-u-spacer">
+  <div class="vlc-input-field-block">
+    <label class="vl-checkbox vl-checkbox__box">
+      {{input class="vl-checkbox__toggle" type="checkbox" checked=formallyOk}}
+      <div class="vl-checkbox__label">
+        <i class="vl-checkbox__box"></i>
+        <span class="vl-annotation">
+          {{t "agendaitem-details.formal-ok"}}
+        </span>
+      </div>
+    </label>
   </div>
 </div>
 <div class="vl-action-group vl-action-group--align-right">

@@ -17,6 +17,20 @@ export default Service.extend({
 		})
 	},
 
+	reduceAgendaitemsByMandatees(agendaitems) {
+		return agendaitems.reduce((items, agendaitem) => {
+			const mandatees = agendaitem.get('subcase').get('mandatees').sortBy('priority');
+			let titles = mandatees.map((mandatee) => mandatee.title);
+			if (titles && titles != []) {
+				titles = titles.join(',');
+				items[titles] = items[titles] || { groupName: titles, mandatees:mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };
+				items[titles].foundPriority = Math.min(items[titles].foundPriority, agendaitem.foundPriority);
+				items[titles].agendaitems.push(agendaitem);
+				return items;
+			}
+		}, {});
+	},
+
 	approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
@@ -62,8 +76,7 @@ export default Service.extend({
 		let agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
 			postPoned: false,
-			formallyOk: false,
-			titlePress: subCase.shortTitle || subCase.title,
+			titlePress: subCase.shortTitle,
 			created: new Date(),
 			subcase: subCase,
 			agenda: selectedAgenda,

@@ -38,19 +38,28 @@
   </div>
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-space-between">
-      <span class="vl-u-text--small vl-u-text--muted">
-        {{!-- {{agendaitem.subcase.shortTitle}} TODO PHASE --}}
-      </span>
-      {{#if agendaitem.formallyOk}}
-        <div class="vl-u-display-flex vl-u-text--success">
-          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-          <span class="vl-u-text--small">
+      {{#if (await agendaitem.subcase.confidentiality)}}
+      <div class="vl-custom">
+        <span class="vl-pill vl-pill--success">
+          {{await agendaitem.subcase.confidentiality.label}}
+        </span>
+      </div>
+      {{/if}}
+      {{#if (await agendaitem.subcase.formallyOk)}}
+        <div
+          class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--bold vl-u-text--success"
+        >
+          <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
+          <span class="vl-annotation">
             {{t "agendaitem-details.formal-ok"}}
           </span>
         </div>
       {{else}}
-        <div class="vl-u-display-flex vl-u-text--muted">
-          <span class="vl-u-text--small">
+        <div
+          class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--muted"
+        >
+          <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
+          <span class="vl-annotation">
             {{t "agendaitem-details.formal-nok"}}
           </span>
         </div>
@@ -78,6 +87,34 @@
       <p class="vl-long-title">
         {{subcase.title}}
       </p>
+    </div>
+    <div class="vl-u-display-flex vl-u-flex-space-between">
+      {{#if (await subcase.confidentiality.label)}}
+      <div class="vl-custom">
+        <span class="vl-pill vl-pill--success">
+          {{await subcase.confidentiality.label}}
+        </span>
+      </div>
+      {{/if}}
+      {{#if (await subcase.formallyOk)}}
+        <div
+          class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--bold vl-u-text--success"
+        >
+          <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
+          <span class="vl-annotation">
+            {{t "agendaitem-details.formal-ok"}}
+          </span>
+        </div>
+      {{else}}
+        <div
+          class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--muted"
+        >
+          <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
+          <span class="vl-annotation">
+            {{t "agendaitem-details.formal-nok"}}
+          </span>
+        </div>
+      {{/if}}
     </div>
   </div>
   <div class="vl-u-spacer">

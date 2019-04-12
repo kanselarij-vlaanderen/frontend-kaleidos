@@ -1,0 +1,16 @@
+.vl-alert-relative {
+  opacity: 0.85;
+  position: fixed;
+  z-index: 100;
+
+  &--center {
+    left: 20%;
+    top: 60px;
+    right: 20%;
+    width: 60%;
+  }
+  
+  &:hover {
+    opacity: 1;
+  }
+}

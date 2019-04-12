@@ -1,6 +1,5 @@
 import Component from '@ember/component';
-import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
-export default Component.extend(DefaultQueryParamsMixin, {
+export default Component.extend({
 	classNames: ["cases--content-tile"]
 });

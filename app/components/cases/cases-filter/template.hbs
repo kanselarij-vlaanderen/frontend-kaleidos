@@ -1,6 +1,8 @@
 <div class="vl-form__group vl-u-reset-margin">
   <div class="vl-u-spacer-extended-left vl-u-spacer-extended-right">
-    <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right">
+    <div
+      class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+    >
       <div class="vl-col--5-12 vl-col--1-1--s">
         <label class="vl-form__label" for="dossierId">
           {{t "buttons.agendaitem-case"}}
@@ -29,10 +31,23 @@
           {{t "filter"}}
         </button>
       </div>
-      <div class="vl-col--3-12 vl-col--1-1--s">
-        <button class="vl-button vl-button--link" href="#">
+      <div class="vl-col--2-12 vl-col--1-1--s">
+        <button class="vl-button vl-button--link vl-button--narrow" href="#">
           Geavanceerd zoeken
         </button>
+      </div>
+      <div class="vl-col--1-12 vl-col--1-1--s">
+        <label class="vl-form__label" for="dossierId">
+          {{t "amount-showed"}}
+        </label>
+        {{#power-select
+          options=sizeOptions
+          selected=size
+          searchEnabled=false
+          onchange=(action "selectSize") as |sizeValue|
+        }}
+          {{sizeValue}}
+        {{/power-select}}
       </div>
     </div>
   </div>

@@ -1,30 +1,35 @@
-<div class="vl-u-spacer--large">
+<div class="vl-u-spacer--large vlc-padding-bottom--large">
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-display-flex-align-center">
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      {{!-- <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link">
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link" {{action "toggleIsEditing"}}>
           {{t "buttons.edit"}}
         </a>
-      </div> --}}
+      </div>
     </div>
   </div>
-  {{#if (gt (await subcase.documentsLength) 0)}}
-    {{#each (await subcase.documents) as |document|}}
-      {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-        document=document
-        subcase=subcase
-        agendaitem=agendaitem
-      }}
-    {{/each}}
-   {{else}}
-    <div class="vl-u-spacer-extended-top-s">
-      {{web-components/vl-alert
-        message=(t "no-documents-yet")
-      }}
-    </div>
+  {{#if (not isEditing)}}
+    {{#if (gt (await subcase.documentsLength) 0)}}
+      {{#each (await subcase.documents) as |document|}}
+        {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+          document=(await document)
+          subcase=subcase
+          agendaitem=agendaitem
+        }}
+      {{/each}}
+    {{else}}
+      <div class="vl-u-spacer-extended-top-s">
+        {{web-components/vl-alert message=(t "no-documents-yet")}}
+      </div>
+    {{/if}}
+  {{else}}
+    {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
+      documents=(await subcase.documents)
+      cancelForm=(action "cancelEditing")
+    }}
   {{/if}}
   {{!-- <div class="vl-u-spacer">
     <button

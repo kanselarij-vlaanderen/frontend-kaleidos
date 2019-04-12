@@ -32,14 +32,18 @@
   display: flex;
   margin-top: 1.6rem;
   + .vlc-comments-comment {
-   margin-top: 0.4rem; 
+   margin-top: 0.4rem;
   }
   .vl-badge {
     margin-right: 0.8rem;
     width: 3.2rem;
     height: 3.2rem;
-    flex: 1 0 auto;
+    flex: 0 0 3.2rem;
   }
+}
+
+.vlc-comments-comment-content {
+  flex: 1 1 auto;
 }
 
 .vlc-comments-comment-content__header {

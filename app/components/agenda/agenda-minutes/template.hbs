@@ -1,9 +1,4 @@
-{{#web-components/vl-modal
-  isOverlay=true
-  title=title
-  closeModal=(action "closeModal")
-}}
-  <div class="vlc-container vl-u-spacer-extended">
+  <div class="vlc-container">
     <div class="vl-u-spacer">
       <h3 class="vl-title vl-title--h6">
         {{t "attendees"}}
@@ -49,36 +44,43 @@
       </p>
     </div> --}}
     <div class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
-      {{#each (await sortedAgendaItems) as |item index|}}
-			 <div
-          class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
-        >
-			{{#if item.meetingRecord}}
-          <div class="vl-u-spacer">
-            <h3 class="vl-title vl-title--h6">
-              {{item.priority}}
-              .
-              {{await item.subcase.shortTitle}}
-            </h3>
-            <p>
-              {{await item.meetingRecord.description}}
-            </p>
+      {{#each (await agendaitemGroups) as |agendaitemGroup|}}
+      <div class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom vlc-navbar--bordered-top">
+        {{#each agendaitemGroup.mandatees as |mandatee|}}
+          <h2 class="vl-title vl-title--h5">
+            {{mandatee.title}}
+          </h2>
+        {{/each}}
+      </div>
+        {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+          <div
+            class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
+          >
+            {{#if agendaitem.meetingRecord}}
+              <div class="vl-u-spacer">
+                <h3 class="vl-title vl-title--h6">
+                  {{agendaitem.foundPriority}}
+                  .
+                  {{await agendaitem.subcase.shortTitle}}
+                </h3>
+                <p>
+                  {{await agendaitem.meetingRecord.description}}
+                </p>
+              </div>
+            {{else}}
+              <div class="vl-u-spacer">
+                <h3 class="vl-title vl-title--h6">
+                  {{agendaitem.foundPriority}}
+                  .
+                  {{await agendaitem.subcase.shortTitle}}
+                </h3>
+                <p>
+                  {{t "no-notes"}}
+                </p>
+              </div>
+            {{/if}}
           </div>
-				{{else}}
-				<div class="vl-u-spacer">
-            <h3 class="vl-title vl-title--h6">
-              {{item.priority}}
-              .
-              {{await item.subcase.shortTitle}}
-            </h3>
-            <p>
-              {{t "no-notes"}}
-            </p>
-          </div>
-				{{/if}}
-				        </div>
-
+        {{/each}}
       {{/each}}
     </div>
   </div>
-{{/web-components/vl-modal}}

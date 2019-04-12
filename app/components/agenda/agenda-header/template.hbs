@@ -6,17 +6,22 @@
         {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
       </h1>
       <div class="vlc-page-header__sub">
-        {{#link-to "agendas" class="vl-link vl-link--bold"}}
-          <i
-            class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
-          ></i>
-          {{t "buttons.back"}}
-        {{/link-to}}
-        {{sessions/session-agenda-nav
-          selectedAgendaItem=selectedAgendaItem
-          compareAgendas=(action "compareAgendas")
-          clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
-        }}
+        <div class="vlc-toolbar vlc-toolbar--auto">
+          <div class="vlc-toolbar__left">
+            <div class="vlc-toolbar__item">
+              {{#link-to "agendas" class="vlc-backlink vl-link vl-link--bold"}}
+                <i
+                  class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
+                ></i>
+                {{t "buttons.back"}}
+              {{/link-to}}
+            </div>
+            {{sessions/session-agenda-nav
+              compareAgendas=(action "compareAgendas")
+              clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
+            }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -54,25 +59,27 @@
           placement="bottom" as |attacher|
         }}
           <ul class="vl-popover__link-list">
-            <li class="vl-popover__link-list__item">
-              {{#if (not currentAgenda.isFinal)}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action "lockAgenda" currentAgenda}}
-                  {{action attacher.hide}}
-                >
-                  {{t "buttons.agenda-lock"}}
-                </a>
-              {{else}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action "lockAgenda" currentAgenda}}
-                  {{action attacher.hide}}
-                >
-                  {{t "buttons.agenda-unlock"}}
-                </a>
-              {{/if}}
-            </li>
+            {{#if (gt (await currentSession.agendas.length) 0)}}
+              <li class="vl-popover__link-list__item">
+                {{#if (not currentAgenda.isFinal)}}
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action "lockAgenda" currentAgenda}}
+                    {{action attacher.hide}}
+                  >
+                    {{t "buttons.agenda-lock"}}
+                  </a>
+                {{else}}
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action "unlockAgenda"}}
+                    {{action attacher.hide}}
+                  >
+                    {{t "buttons.agenda-unlock"}}
+                  </a>
+                {{/if}}
+              </li>
+            {{/if}}
             {{#if (eq currentAgenda.name "Ontwerpagenda")}}
               <li class="vl-popover__link-list__item">
                 <a
@@ -88,17 +95,13 @@
               <a
                 class="vl-link vl-link--block"
                 {{action attacher.hide}}
-                {{action "printDecisions"}}
+                {{action "navigateToDecisions"}}
               >
                 {{t "buttons.print-decisions"}}
               </a>
             </li>
             <li class="vl-popover__link-list__item">
-              <a
-                class="vl-link vl-link--block"
-                {{action attacher.hide}}
-                {{action "printNotes"}}
-              >
+              <a class="vl-link vl-link--block" {{action "navigateToNotes"}}>
                 {{t "print-notes"}}
               </a>
             </li>
@@ -107,7 +110,7 @@
                 <a
                   class="vl-link vl-link--block"
                   {{action attacher.hide}}
-                  {{action "navigateToCreateAnnouncement"}}
+                  {{action "toggleIsAddingAnnouncement"}}
                 >
                   {{t "buttons.create-announcement"}}
                 </a>
@@ -116,7 +119,7 @@
             <li class="vl-popover__link-list__item">
               <a
                 class="vl-link vl-link--block"
-                {{action "createPressAgenda"}}
+                {{action "navigateToPressAgenda"}}
                 {{action attacher.hide}}
               >
                 {{t "buttons.printable-press-agenda"}}
@@ -149,17 +152,15 @@
     </div>
   </div>
 </div>
-{{#if showPressModal}}
-  {{agenda/press-agenda
-    pressAgendaItems=pressItems
-    currentSession=currentSession
-    closeModal=(action "closePressAgenda")
+{{#if isAddingAgendaitems}}
+  {{agenda/agendaitem/create-agendaitem
+    isAddingAgendaitems=isAddingAgendaitems
+    reloadRoute=(action "reloadRoute")
   }}
 {{/if}}
-{{#if isPrintingNotes}}
-  {{agenda/agenda-minutes
-    currentSession=currentSession
+{{#if isAddingAnnouncement}}
+  {{agenda/create-announcement
+    isAddingAnnouncement=isAddingAnnouncement
     currentAgenda=currentAgenda
-    closeModal=(action "toggleIsPrintingNotes")
   }}
 {{/if}}

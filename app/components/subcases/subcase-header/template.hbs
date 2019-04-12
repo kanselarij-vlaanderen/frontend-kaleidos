@@ -26,7 +26,8 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        {{#if (not await subcase.requestedForMeeting)}}
+
+        {{#if (and (not (await subcase.requestedForMeeting)) (not (await subcase.hasAgendaItem)))}}
           <button class="vl-button vl-button--narrow">
             {{t "buttons.propose-for-agenda"}}
           </button>
@@ -64,7 +65,7 @@
               </li>
             </ul>
           {{/attach-popover}}
-        {{else}}
+        {{else if (await subcase.requestedForMeeting)}}
           <button
             class="vl-button vl-button--narrow"
             {{action "unPropose" subcase}}
@@ -73,9 +74,57 @@
           </button>
         {{/if}}
       </div>
+      <div class="vlc-toolbar__item">
+      <button
+        class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+        {{action "showMultipleOptions"}}
+      >
+        {{#if (not isShowingOptions)}}
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+          ></i>
+        {{else}}
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+          ></i>
+        {{/if}}
+        {{t "actions"}}
+      </button>
+      {{#attach-popover
+        class="ember-attacher-popper"
+        hideOn="clickout click"
+        showOn="click"
+        animation="shift"
+        placement="bottom" as |attacher|
+      }}
+        <ul class="vl-popover__link-list">
+          <li class="vl-popover__link-list__item">
+            {{#if (not await subcase.isArchived)}}
+              <a
+                class="vl-link vl-link--block"
+                {{action attacher.hide}}
+                {{action "requestArchiveSubcase"}}
+              >
+                {{t "buttons.archive-subcase"}}
+              </a>
+            {{else}}
+              <a
+                class="vl-link vl-link--block"
+                {{action attacher.hide}}
+                {{action "unarchiveSubcase" subcase}}
+              >
+                {{t "buttons.unarchive-subcase"}}
+              </a>
+            {{/if}}
+          </li>
+        </ul>
+      {{/attach-popover}}
+      </div>
+
     </div>
   </div>
 </div>
+
 {{#if isAssigningToAgenda}}
   {{#web-components/vl-modal
     isOverlay=true
@@ -83,5 +132,24 @@
     closeModal=(action "cancel")
   }}
   {{subcases/assign-to-meeting-form subcase=selectedSubcase cancel=(action "cancel")}}
+  {{/web-components/vl-modal}}
+{{/if}}
+
+{{#if isArchivingSubcase}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "archive-subcase")
+    closeModal=(action "cancelArchiveSubcase")
+  }}
+    <div class="vl-spacer-box vl-u-spacer-extended-top-l vl-u-spacer-extended-bottom-l">
+      {{web-components/vl-alert
+        title="Opgelet!"
+        message=(t "archive-subcase-confirmation")
+        type="danger"
+      }}
+    </div>
+    <button class="vl-button" {{action "archiveSubcase" subcase}}>
+      {{t "buttons.archive-subcase"}}
+    </button>
   {{/web-components/vl-modal}}
 {{/if}}

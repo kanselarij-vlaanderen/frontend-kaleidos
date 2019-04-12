@@ -5,6 +5,7 @@ import { inject } from '@ember/service';
 export default Service.extend({
 	store:inject(),
 	currentSession: null,
+	selectedAgendaItem: null,
 
 	agendas: computed('currentSession.agendas.@each', function() {
     if(!this.get('currentSession')){
@@ -18,18 +19,18 @@ export default Service.extend({
 	currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
 		if(currentAgenda) {
-			let agendaitems = this.store.query('agendaitem', {
+			return this.store.query('agendaitem', {
 				filter: {
 					agenda: { id: currentAgenda.id }
 				},
 				include:['subcase,subcase.case'],
 				sort: 'priority'
 			});
-			return agendaitems;
 		} else {
 			return [];
 		}
 	}),
+
 
 	announcements: computed('currentAgenda.announcements.@each', function() {
 		let currentAgenda = this.get('currentAgenda');
@@ -51,3 +52,4 @@ export default Service.extend({
     });
 	})
 });
+

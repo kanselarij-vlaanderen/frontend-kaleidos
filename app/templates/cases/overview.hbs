@@ -1,10 +1,17 @@
 {{cases/cases-header isAddingCase=isAddingCase}}
-{{cases/cases-filter}}
-<div class="vl-u-spacer-extended-l">
-  <h2 class="vl-title vl-title--h3">
-    {{t "case-item.my-cases"}}
-  </h2>
-  {{#if (not isLoadingModel)}}
+{{cases/cases-filter size=size}}
+<div class="vlc-scroll-wrapper__body">
+  <div class="vl-u-spacer-extended-l">
+    <div class="vl-u-spacer">
+      <h2 class="vl-title vl-title--h3">
+        {{t "case-item.my-cases"}}
+      </h2>
+      {{web-components/vl-checkbox
+        value=isNotArchived
+        label=(t "show-archived")
+        toggle=(action "toggleArchived")
+      }}
+    </div>
     {{#data-table
       content=(await model)
       page=page
@@ -44,6 +51,49 @@
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="vl-u-align-right">
+            <button class="vl-button vl-button--link vl-button--icon">
+              <i
+                class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+              ></i>
+            </button>
+            {{#attach-popover
+              class="ember-attacher-popper"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom" as |attacher|
+            }}
+              <ul class="vl-popover__link-list">
+                <li class="vl-popover__link-list__item">
+                  <button
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "editRow" row}}
+                  >
+                    Dossier aanpassen
+                  </button>
+                </li>
+                <li class="vl-popover__link-list__item">
+                  {{#if (not row.isArchived)}}
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "requestArchiveCase" row}}
+                    >
+                      Dossier archiveren
+                    </a>
+                  {{else}}
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "unarchiveCase" row}}
+                    >
+                      Dossier onarchiveren
+                    </a>
+                  {{/if}}
+                </li>
+              </ul>
+            {{/attach-popover}}
             {{#link-to
               "cases.case.subcases"
               row.id
@@ -55,7 +105,37 @@
         {{/c.body}}
       {{/t.content}}
     {{/data-table}}
-  {{else}}
-    {{web-components/vl-loader}}
-  {{/if}}
+  </div>
 </div>
+{{#if isEditingRow}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "edit-case")
+    closeModal=(action "cancelEditing")
+  }}
+    {{cases/edit-case
+      caseToEdit=caseToEdit
+      cancelEditing=(action "cancelEditing")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isArchivingCase}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "archive-case")
+    closeModal=(action "cancelArchiveCase")
+  }}
+    <div
+      class="vl-spacer-box vl-u-spacer-extended-top-l vl-u-spacer-extended-bottom-l"
+    >
+      {{web-components/vl-alert
+        title="Opgelet!"
+        message=(t "archive-case-confirmation")
+        type="danger"
+      }}
+    </div>
+    <button class="vl-button" {{action "archiveCase" selectedCase}}>
+      {{t "buttons.archive-case"}}
+    </button>
+  {{/web-components/vl-modal}}
+{{/if}}

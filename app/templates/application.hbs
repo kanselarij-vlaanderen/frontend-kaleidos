@@ -1,4 +1,31 @@
-<div class="application-container">
-  {{m-header}}
-  {{outlet}}
-</div>
+{{#if (await model)}}
+  <div class="vl-alert vl-alert-relative vl-alert-relative--center {{await type}}" role="alert">
+    <div class="vl-alert__icon">
+      <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
+    </div>
+    <button class="vl-alert__close" type="button">
+      <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
+      <span class="vl-u-visually-hidden">
+        Sluiten
+      </span>
+    </button>
+    <div class="vl-alert__content">
+      <p class="vl-alert__title">
+        {{await model.title}}
+      </p>
+      <div class="vl-alert__message">
+        <p>
+          {{await model.message}}
+        </p>
+      </div>
+    </div>
+    <button class="vl-alert__close" type="button" {{action "close"}}>
+      <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
+      <span class="vl-u-visually-hidden">
+        Sluiten
+      </span>
+    </button>
+  </div>
+{{/if}}
+{{m-header}}
+{{outlet}}

@@ -1,0 +1,131 @@
+{{#web-components/vl-modal
+  isOverlay=true
+  title=modalTitle
+  closeModal=(action "close")
+}}
+  {{#if (and (not isAdding) (not isEditing))}}
+    <div class="vl-modal-dialog__content">
+      <div class="vlc-input-field-block">
+        {{utils/model-selector
+          modelName=modelName
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=selectedModel
+          selectModel=(action "selectModel")
+        }}
+      </div>
+    </div>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "close"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              {{action "toggleIsAdding"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              {{t "buttons.add"}}
+            </button>
+            {{#if selectedModel}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                {{action "toggleIsEditing"}}
+              >
+                <i
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                ></i>
+                {{t "buttons.edit"}}
+              </button>
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                {{action "removeModel"}}
+              >
+                <i
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
+                ></i>
+                {{t "buttons.delete"}}
+              </button>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  {{#if isAdding}}
+    <div class="vl-modal-dialog__content">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "announcement.title")}}
+        {{web-components/vl-form-input width="4" value=title}}
+      </div>
+    </div>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "toggleIsAdding"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+          <div class="vlc-toolbar__right">
+            <div class="vlc-toolbar__item">
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow"
+                {{action "createModel"}}
+              >
+                {{t "buttons.add"}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  {{#if isEditing}}
+    <div class="vl-modal-dialog__content">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "announcement.title")}}
+        {{web-components/vl-form-input width="4" value=title}}
+      </div>
+    </div>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "toggleIsEditing"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+          <div class="vlc-toolbar__right">
+            <div class="vlc-toolbar__item">
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow"
+                {{action "editModel"}}
+              >
+                {{t "buttons.save"}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+{{/web-components/vl-modal}}

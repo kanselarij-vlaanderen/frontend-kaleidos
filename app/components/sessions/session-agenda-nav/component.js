@@ -1,29 +1,33 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Component.extend({
-	tagName:'ul',
-	classNames: ['vlc-view-switch'],
-
-	selectedAgendaitemClass: computed('selectedAgendaItem', function() {
-		if(this.get('selectedAgendaItem')) {
-			return "vlc-view-switch__item--active";
-		}	
+	routing: inject('-routing'),
+	sessionService: inject(),
+	tagName: 'ul',
+	classNames: ['vlc-toolbar__item'],
+	
+	selectedAgendaitemClass: computed('routing.currentRouteName', function () {
+		const { routing } = this;
+		if (routing.get('currentRouteName') === "agenda.agendaitems.agendaitem") {
+			return "vlc-tabs-reverse__link--active";
+		}
 	}),
 
-	selectedOverviewClass: computed('selectedAgendaItem', function() {
-		if(!this.get('selectedAgendaItem')) {
-			return "vlc-view-switch__item--active";
-		}	
+	selectedOverviewClass: computed('routing.currentRouteName', function () {
+		const { routing } = this;
+		if (routing.get('currentRouteName') === "agenda.agendaitems.index") {
+			return "vlc-tabs-reverse__link--active";
+		}
 	}),
-
 
 	actions: {
 		compareAgendas() {
 			this.compareAgendas();
 		},
 
-		clearSelectedItem() {
+		goToOverview() {
 			this.clearSelectedAgendaItem();
 		}
 	}

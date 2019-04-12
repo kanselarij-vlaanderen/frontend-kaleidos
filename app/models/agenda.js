@@ -8,7 +8,7 @@ export default Model.extend({
 	issued: attr("date"),
 	isFinal:attr("boolean"),
 	createdFor: belongsTo('meeting', {inverse:null}), 
-	agendaitems: hasMany('agendaitem'),
+	agendaitems: hasMany('agendaitem', {inverse: null, serialize: false}),
 	created: attr('date'),
 	isAccepted: attr('boolean'),
 	// announcements: hasMany('announcement'),

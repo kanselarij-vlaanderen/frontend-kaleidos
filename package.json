@@ -17,14 +17,13 @@
     "start": "ember serve --proxy=http://localhost:8082",
     "test": "ember test"
   },
-  "dependencies": {},
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
     "@ember/optional-features": "^0.6.3",
     "@lblod/ember-acmidm-login": "github:lblod/ember-acmidm-login",
     "@lblod/ember-mock-login": "github:lblod/ember-mock-login",
-    "@lblod/ember-vo-webuniversum": "^0.19.3",
-    "@lblod/ember-vo-webuniversum-data-table": "^0.2.10",
+    "@lblod/ember-vo-webuniversum": "^0.19.12",
+    "@lblod/ember-vo-webuniversum-data-table": "^0.2.11",
     "broccoli-asset-rev": "^2.7.0",
     "ember-ajax": "^3.1.0",
     "ember-attacher": "^0.13.10",
@@ -70,5 +69,6 @@
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
-  }
+  },
+  "dependencies": {}
 }

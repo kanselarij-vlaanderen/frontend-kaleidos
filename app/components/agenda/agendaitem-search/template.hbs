@@ -3,13 +3,8 @@
     <div class="vlc-toolbar__justified">
       <div class="vlc-toolbar__item">
         <div class="vl-input-field--inline">
-          <input
-            class="vl-input-field vl-input-field__input"
-            type="search"
-            placeholder="Zoeken"
-           />
-
-          <button class="vl-input-field__submit vl-button" type="submit">
+          {{input value=value key-press=(perform searchTask) class="vl-input-field vl-input-field__input"}}
+          <button class="vl-input-field__submit vl-button" {{action "search" value}}>
             <i class="vl-vi vl-vi-magnifier"></i>
           </button>
         </div>

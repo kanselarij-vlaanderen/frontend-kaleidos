@@ -1,0 +1,69 @@
+{{#if (await documentRows)}}
+<table class="vl-data-table vl-data-table--align-middle">
+  <thead>
+    <tr>
+      <th class="vl-data-table-col-4">
+        {{web-components/vl-form-label value=(t "file-name")}}
+      </th>
+      <th class="vl-data-table-col-2">
+        {{web-components/vl-form-label value=(t "alt-file-name")}}
+      </th>
+      <th class="vl-data-table-col-3">
+        {{web-components/vl-form-label value=(t "file-type")}}
+      </th>
+      <th class="vl-data-table-col-2">
+        {{web-components/vl-form-label value=(t "metadata-form.public")}}
+      </th>
+      <th class="vl-data-table-col-1"></th>
+    </tr>
+  </thead>
+  <tbody>
+		{{#each (await documentRows) as |documentRow|}}
+    <tr>
+      <td class="vl-u-display-flex vlc-document-list__item" >
+        <a {{action "downloadFile" documentRow.file}}>
+				<div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt" >
+          <i class="vl-badge__icon vl-vi vl-vi-document" aria-hidden="true"></i>
+        </div>
+				<p>{{documentRow.file.name}}</p>
+        </a>
+			</td>
+      <td>
+				{{web-components/vl-form-input width="4" value=documentRow.file.chosenFileName}}
+			</td>
+      <td>
+        {{utils/model-selector
+          modelName="document-type"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=documentRow.file.documentType
+          selectModel=(action "chooseDocumentType" documentRow)
+        }}
+      </td>
+      <td>
+					{{utils/model-selector
+          modelName="confidentiality"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=documentRow.file.confidentiality
+          selectModel=(action "chooseDocumentConfidentiality" documentRow)
+        }}
+			</td>
+      <td class="vl-u-align-right">
+        <button
+          class="vl-button vl-button--link vl-button--icon"
+          {{action "deleteRow" documentRow}}
+        >
+          <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
+          <span class="vl-u-visually-hidden">
+            Verwijder
+          </span>
+        </button>
+      </td>
+    </tr>
+		{{/each}}
+  </tbody>
+</table>
+{{/if}}

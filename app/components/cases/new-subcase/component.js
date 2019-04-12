@@ -1,15 +1,17 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import $ from 'jquery';
 import { notifyPropertyChange } from '@ember/object';
 import { inject } from '@ember/service';
 
+
 export default Component.extend({
 	store: inject(),
+	classNames:["vl-custom"],
 	uploadedFiles: [],
 	nonDigitalDocuments: [],
 	selectedMandatees: [],
 	themes: [],
+	confidentiality: null,
 	isAddingNonDigitalDocument: false,
 	showAsRemark: false,
 	step: 1,
@@ -26,16 +28,23 @@ export default Component.extend({
 		this.set('uploadedFiles', []);
 		this.set('nonDigitalDocuments', []);
 		this.set('selectedMandatees', []);
-		this.set('title', null);
-		this.set('shortTitle', null);
 		this.set('isAddingNonDigitalDocument', false);
 		this.set('showAsRemark', false);
 		this.set('step', 1);
 	},
 
+	didInsertElement() {
+		this._super(...arguments);
+		this.clearProperties();
+	},
+
 	actions: {
 		previousStep() {
 			this.decrementProperty('step');
+		},
+
+		selectConfidentiality(confidentiality) {
+			this.set('confidentiality', confidentiality);
 		},
 
 		nextStep() {
@@ -49,29 +58,38 @@ export default Component.extend({
 		async createSubCase(event) {
 			event.preventDefault();
 			this.parseDomainsAndMandatees();
+
 			const caze = this.store.peekRecord('case', this.case.id);
 			let phase = await this.get('phase');
-			if (!phase) {
-				phase = [];
-			} else {
-				phase = [phase];
-			}
 
-			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark } = this;
+      const subcasePhase = this.store.createRecord('subcase-phase',
+        {
+          date: new Date(),
+          code: phase
+        });
+
+      const createdSubphase = await subcasePhase.save();
+
+			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark, confidentiality } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
-					phases: phase,
+          phases: [createdSubphase],
 					shortTitle: shortTitle,
+					formallyOk:false,
 					showAsRemark: showAsRemark,
 					governmentDomains: selectedDomains,
 					case: caze,
 					created: new Date(),
 					mandatees: selectedMandatees,
-					themes: themes
+					themes: themes,
+					confidentiality: confidentiality
 				});
 
 			const createdSubCase = await subcase.save();
+			createdSubphase.set('subcase', createdSubCase);
+			createdSubphase.save();
+
 			const uploadedFiles = this.get('uploadedFiles');
 			Promise.all(uploadedFiles.map(uploadedFile => {
 				if (uploadedFile.id) {
@@ -86,12 +104,7 @@ export default Component.extend({
 				}
 			}));
 
-			this.clearProperties();
 			this.closeModal();
-		},
-
-		chooseType(type) {
-			this.set('selectedType', type);
 		},
 
 		selectPhase(phase) {
@@ -107,20 +120,7 @@ export default Component.extend({
 		},
 
 		uploadedFile(uploadedFile) {
-			uploadedFile.set('public', false);
 			this.get('uploadedFiles').pushObject(uploadedFile);
-		},
-
-		chooseDocumentType(uploadedFile, type) {
-			uploadedFile.set('documentType', type.name || type.description);
-		},
-
-		removeFile(file) {
-			$.ajax({
-				method: "DELETE",
-				url: '/files/' + file.id
-			})
-			this.get('uploadedFiles').removeObject(file);
 		},
 
 		removeDocument(document) {
@@ -136,6 +136,10 @@ export default Component.extend({
 		toggleAddNonDigitalDocument() {
 			this.toggleProperty('isAddingNonDigitalDocument')
 		},
+		
+		toggleIsRemark() {
+
+		},
 
 		mandateeRowsChanged(mandateeRows) {
 			this.set('mandateeRows', mandateeRows);
@@ -146,18 +150,19 @@ export default Component.extend({
 		let document = await this.store.createRecord('document', {
 			created: new Date(),
 			title: documentTitle,
-			documentType: file.get('documentType')
+			type: file.get('documentType'),
+			confidentiality: file.get('confidentiality')
 		});
+		
 		document.save().then(async (createdDocument) => {
 			if (file) {
-				delete file.public;
 				const documentVersion = await this.store.createRecord('document-version', {
 					document: createdDocument,
 					subcase: subcase,
 					created: new Date(),
 					versionNumber: 1,
 					file: file,
-					chosenFileName: file.get('name')
+					chosenFileName: file.get('chosenFileName') 
 				});
 				await documentVersion.save();
 			} else {
@@ -173,8 +178,8 @@ export default Component.extend({
 		});
 	},
 
-	parseDomainsAndMandatees() {
-		const mandateeRows = this.get('mandateeRows');
+	async parseDomainsAndMandatees() {
+		const mandateeRows = await this.get('mandateeRows');
 		const mandatees = [];
 		const selectedDomains = [];
 		if (mandateeRows && mandateeRows.get('length') > 0) {
@@ -189,9 +194,5 @@ export default Component.extend({
 		this.set('selectedMandatees', mandatees);
 		this.set('selectedDomains', selectedDomains);
 	},
-	
-	async didInsertElement() {
-		this._super(...arguments);
-		this.set('phases', this.store.findAll('subcase-phase'));
-	}
+
 })
