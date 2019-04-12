@@ -38,8 +38,8 @@ module.exports = function(environment) {
         'acmidm-oauth2': {
           apiKey: 'b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d',
           baseUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/auth',
-          scope: 'vo profile',
-          redirectUri: 'https://kaleidos-test.vlaanderen.be/authorization/callback',
+          scope: 'vo profile openid',
+          redirectUri: 'https://kaleidos-dev.vlaanderen.be/authorization/callback',
           logoutUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/logout'
         }
       }
