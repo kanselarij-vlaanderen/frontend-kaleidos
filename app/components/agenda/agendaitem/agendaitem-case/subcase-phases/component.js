@@ -7,9 +7,20 @@ export default Component.extend({
 	classNames: ["vl-u-spacer--large"],
 	isEditing: false,
 	subcase: null,
+	agendaitem: null,
 
-	selectedPhase: computed('subcase', function () {
-		return this.get('subcase.phases');
+	selectedPhases: computed('subcase.phases','agendaitem.phases', {
+		get() {
+			const { agendaitem, subcase } = this;
+			if (agendaitem) {
+				return agendaitem.get('phasesToShow');
+			} else {
+				return subcase.get('phases');
+			}
+		},
+		set: function (key, value) {
+			return value;
+		}
 	}),
 
 	actions: {
@@ -18,6 +29,14 @@ export default Component.extend({
 		},
 
 		cancelEditing() {
+			const { agendaitem, subcase } = this;
+			if(agendaitem) {
+				const model = this.store.peekRecord('agendaitem', agendaitem.get('id'));
+				model.hasMany('phases').reload();
+			} else if (subcase){
+				const model = this.store.peekRecord('subcase', subcase.get('id'));
+				model.hasMany('phases').reload();
+			}
 			this.toggleProperty('isEditing');
 		},
 
@@ -25,20 +44,55 @@ export default Component.extend({
 			this.set('selectedPhase', phase);
 		},
 
-		async saveChanges(subcase) {
-			const phase = this.get('selectedPhase');
-			const subcaseModel = this.store.peekRecord('subcase', subcase.get('id'));
-
-			const subcasePhase = this.store.createRecord('subcase-phase',
-				{
-					date: new Date(),
-					code: phase,
-					subcase: subcaseModel
+		async saveChanges() {
+			const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'));
+			if(agendaitem) {
+				const isDesignAgenda = await agendaitem.get('isDesignAgenda');
+				if (isDesignAgenda) {
+					const subcase = await agendaitem.get('subcase');
+					this.addSubcasePhaseToModel(subcase, 'subcase').then(() => {
+						subcase.hasMany('phases').reload();
+					});
+				}
+				this.addSubcasePhaseToModel(agendaitem, 'agendaitem').then(() => {
+					agendaitem.hasMany('phases').reload();
+					this.toggleProperty('isEditing');
 				});
+			} else {
+				const subcase = await this.store.peekRecord('subcase', subcase.get('id'));
+				this.addSubcasePhaseToModel(subcase, 'subcase').save().then(() => {
+					subcase.hasMany('phases').reload();
+				});
+				const agendaitemsOnDesignAgendaToEdit = await subcase.get('agendaitemsOnDesignAgendaToEdit');
+				if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
+					agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
+						this.addSubcasePhaseToModel(agendaitem,'agendaitem').then(() => {
+							agendaitem.hasMany('phases').reload();
+							this.toggleProperty('isEditing');
+						});
+					})
+				}
+			}
 
-			subcasePhase.save().then(() => {
-				this.toggleProperty('isEditing');
+		}
+	},
+
+	async addSubcasePhaseToModel(model, type) {
+		const selectedPhase = this.get('selectedPhase');
+		if(type === "agendaitem") {
+			const modelPhase = this.store.createRecord('subcase-phase', {
+				date: new Date(),
+				code: selectedPhase,
+				agendaitem:model
 			});
+			return modelPhase.save();
+		} else {
+			const modelPhase = this.store.createRecord('subcase-phase', {
+				date: new Date(),
+				code: selectedPhase,
+				subcase:model
+			});
+			return modelPhase.save();
 		}
 	}
 });

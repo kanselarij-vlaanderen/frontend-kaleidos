@@ -8,8 +8,18 @@ export default Component.extend({
 	isEditing: false,
 	subcase: null,
 
-	selectedThemes: computed('subcase', function () {
-		return this.get('subcase.themes');
+	selectedThemes: computed('subcase.themes', 'agendaitem.themes', {
+		get() {
+			const { agendaitem, subcase } = this;
+			if (agendaitem) {
+				return agendaitem.get('sortedThemes');
+			} else {
+				return subcase.get('sortedThemes');
+			}
+		},
+		set: function (key, value) {
+			return value;
+		}
 	}),
 
 	actions: {
@@ -18,7 +28,14 @@ export default Component.extend({
 		},
 
 		cancelEditing() {
-			this.set('selectedThemes', this.get('subcase.themes'));
+			const { agendaitem, subcase } = this;
+			if(agendaitem) {
+				const model = this.store.peekRecord('agendaitem', agendaitem.get('id'));
+				model.hasMany('themes').reload();
+			} else if (subcase){
+				const model = this.store.peekRecord('subcase', subcase.get('id'));
+				model.hasMany('themes').reload();
+			}
 			this.toggleProperty('isEditing');
 		},
 
@@ -27,32 +44,31 @@ export default Component.extend({
 		},
 
 		async saveChanges(subcase) {
-			const { agendaitem } = this;
+			const { agendaitem, selectedThemes } = this;
 			if (agendaitem) {
-				const isDesignAgenda = await agendaitem.get('agenda.name');
+				const isDesignAgenda = await agendaitem.get('isDesignAgenda');
 				if (isDesignAgenda) {
 					const subcase = await agendaitem.get('subcase');
-					subcase.set('themes', this.get('selectedThemes'));
+					subcase.set('themes', selectedThemes);
 					await subcase.save();
 				}
-				const subcaseModel = this.store.peekRecord('agendaitem', subcase.get('id'));
-				subcaseModel.set('themes', this.get('selectedThemes'));
+				const subcaseModel = this.store.peekRecord('agendaitem', agendaitem.get('id'));
+				subcaseModel.set('themes', selectedThemes);
 				subcaseModel.save().then(() => {
 					this.toggleProperty('isEditing');
 				});
 			} else {
 				const subcaseModel = await this.store.peekRecord('subcase', subcase.get('id'));
-				subcaseModel.set('themes', this.get('selectedThemes'));
-				subcaseModel.save().then(() => {
-					this.toggleProperty('isEditing');
-				});
+				subcaseModel.set('themes', selectedThemes);
+				subcaseModel.save();
 				const agendaitemsOnDesignAgendaToEdit = await subcase.get('agendaitemsOnDesignAgendaToEdit');
-				if(agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0){
-					agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
-						agendaitem.set('themes', this.get('selectedThemes'));
+				if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
+					await agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
+						agendaitem.set('themes', selectedThemes);
 						agendaitem.save();
 					})
 				}
+				this.toggleProperty('isEditing');
 			}
 		}
 	}

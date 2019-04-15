@@ -1,45 +1,61 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+
 export default Component.extend({
 	store: inject(),
 	classNames: ["vl-form__group", "vl-u-bg-porcelain"],
 	agendaitem: null,
 	subcase: null,
 
-	title: computed('agendaitem', 'subcase', function () {
-		const { agendaitem, subcase } = this;
-		if (subcase) {
-			return subcase.get('title');
-		} else {
-			return agendaitem.get('subcase').get('title');
+	title: computed('agendaitem', 'subcase', {
+		get() {
+			const { agendaitem, subcase } = this;
+			if (agendaitem) {
+				return agendaitem.get('titleToShow');
+			} else {
+				return subcase.get('title');
+			}
+		},
+		set: function (key, value) {
+			return value;
 		}
 	}),
 
-	shortTitle: computed('agendaitem', 'subcase', function () {
-		const { agendaitem, subcase } = this;
-		if (subcase) {
-			return subcase.get('shortTitle');
-		} else {
-			return agendaitem.get('subcase').get('shortTitle');
+	shortTitle: computed('agendaitem', 'subcase', {
+		get() {
+			const { agendaitem, subcase } = this;
+			if (agendaitem) {
+				return agendaitem.get('shortTitleToShow');
+			} else {
+				return subcase.get('shortTitle');
+			}
+		},
+		set: function (key, value) {
+			return value;
 		}
 	}),
 
-	formallyOk: computed('agendaitem', 'subcase', function () {
-		const { agendaitem, subcase } = this;
-		if (subcase) {
-			return subcase.get('formallyOk');
-		} else {
-			return agendaitem.get('subcase.formallyOk');
+	formallyOk: computed('agendaitem', 'subcase', {
+		get() {
+			const { agendaitem, subcase } = this;
+			if (agendaitem) {
+				return agendaitem.get('formallyOkToShow');
+			} else {
+				return subcase.get('formallyOk');
+			}
+		},
+		set: function (key, value) {
+			return value;
 		}
 	}),
 
 	confidentiality: computed('agendaitem', 'subcase', function () {
 		const { agendaitem, subcase } = this;
-		if (subcase) {
-			return subcase.get('confidentiality');
+		if (agendaitem) {
+			return agendaitem.get('confidentialityToShow');
 		} else {
-			return agendaitem.get('subcase.confidentiality');
+			return subcase.get('confidentiality');
 		}
 	}),
 
@@ -53,9 +69,8 @@ export default Component.extend({
 		},
 
 		async saveChanges() {
-			const { subcase, agendaitem } = this;
+			const { subcase, agendaitem, isDesignAgenda } = this;
 			if (agendaitem) {
-				const isDesignAgenda = await agendaitem.get('agenda.name');
 				if (isDesignAgenda) {
 					const subcase = await agendaitem.get('subcase');
 					await this.setNewPropertiesToModel(subcase);
@@ -69,7 +84,7 @@ export default Component.extend({
 				await this.setNewPropertiesToModel(subcaseModel);
 
 				const agendaitemsOnDesignAgendaToEdit = await subcase.get('agendaitemsOnDesignAgendaToEdit');
-				if(agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0){
+				if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
 					agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
 						this.setNewPropertiesToModel(agendaitem).then(() => {
 							this.toggleIsEditing();
@@ -82,6 +97,7 @@ export default Component.extend({
 
 	async setNewPropertiesToModel(model) {
 		const { title, shortTitle, formallyOk, confidentiality } = this;
+
 		model.set('title', title);
 		model.set('shortTitle', shortTitle);
 		model.set('formallyOk', formallyOk);

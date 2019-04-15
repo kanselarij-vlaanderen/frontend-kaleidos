@@ -30,51 +30,22 @@
       </div>
     </div>
     <h3 class="vl-title vl-title--h3">
-      {{#if (eq (await agenda) "Ontwerpagenda")}}
-        {{await agendaitem.subcase.shortTitle}}
-      {{else}}
-        {{await agendaitem.shortTitle}}
-      {{/if}}
+      {{await agendaitem.shortTitleToShow}}
     </h3>
     <p>
-      {{#if (eq (await agenda) "Ontwerpagenda")}}
-        {{await agendaitem.subcase.title}}
-      {{else}}
-        {{await agendaitem.title}}
-      {{/if}}
+      {{await agendaitem.titleToShow}}
     </p>
   </div>
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-space-between">
-      {{#if (eq (await agenda) "Ontwerpagenda")}}
-        {{#if (await agendaitem.confidentiality)}}
-          <div class="vl-custom">
-            <span class="vl-pill vl-pill--success">
-              {{await agendaitem.subcase.confidentiality.label}}
-            </span>
-          </div>
-        {{/if}}
-      {{else if (await agendaitem.confidentiality)}}
+      {{#if (await agendaitem.confidentiality)}}
         <div class="vl-custom">
           <span class="vl-pill vl-pill--success">
-            {{await agendaitem.confidentiality.label}}
+            {{await agendaitem.confidentialityToShow.label}}
           </span>
         </div>
       {{/if}}
-      {{#if (eq (await agenda) "Ontwerpagenda")}}
-        {{#if (await agendaitem.subcase.formallyOk)}}
-          <p
-            class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
-          >
-            {{t "agendaitem-details.formal-ok"}}
-            <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-          </p>
-        {{else}}
-          <span class="vlc-agenda-items-new__status">
-            {{t "agendaitem-details.formal-nok"}}
-          </span>
-        {{/if}}
-      {{else if agendaitem.formallyOk}}
+      {{#if (await agendaitem.formallyOkToShow)}}
         <p
           class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
         >
@@ -104,10 +75,10 @@
     </div>
     <div class="vl-u-spacer">
       <h3 class="vl-title vl-title--h3">
-        {{subcase.shortTitle}}
+        {{await subcase.shortTitle}}
       </h3>
       <p class="vl-long-title">
-        {{subcase.title}}
+        {{await subcase.title}}
       </p>
     </div>
     <div class="vl-u-display-flex vl-u-flex-space-between">

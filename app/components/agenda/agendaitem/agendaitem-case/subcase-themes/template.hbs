@@ -12,10 +12,10 @@
       </div>
     </div>
   </div>
-  {{#if (gt (await subcase.themes.length) 0)}}
+  {{#if (gt (await selectedThemes.length) 0)}}
     <div class="vl-custom">
       <ul>
-        {{#each (await subcase.sortedThemes) as |theme|}}
+        {{#each (await selectedThemes) as |theme|}}
           <li class="vl-pill vl-u-spacer-extended-right-s">
             {{theme.label}}
           </li>
