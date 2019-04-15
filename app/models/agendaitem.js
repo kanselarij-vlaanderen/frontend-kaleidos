@@ -67,8 +67,14 @@ export default Model.extend({
     return documents.uniqBy('id');
   }),
 
-  sortedMandatees: computed('mandatees', function () {
+  documentsLength: computed('documents', function () {
+    return this.get('documents').then((documents) => {
+      return documents.get('length');
+    });
+  }),
 
+  sortedMandatees: computed('mandatees', function () {
     return this.get('mandatees').sortBy('priority');
   })
+
 });

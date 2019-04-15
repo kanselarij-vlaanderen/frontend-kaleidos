@@ -12,12 +12,11 @@
     </div>
   </div>
   {{#if (not isEditing)}}
-    {{#if (gt (await subcase.documentsLength) 0)}}
-      {{#each (await subcase.documents) as |document|}}
+    {{#if (gt (await item.documentsLength) 0)}}
+      {{#each (await item.documents) as |document|}}
         {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
           document=(await document)
-          subcase=subcase
-          agendaitem=agendaitem
+          item=item
         }}
       {{/each}}
     {{else}}
@@ -27,7 +26,7 @@
     {{/if}}
   {{else}}
     {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
-      documents=(await subcase.documents)
+      documents=(await item.documents)
       cancelForm=(action "cancelEditing")
     }}
   {{/if}}

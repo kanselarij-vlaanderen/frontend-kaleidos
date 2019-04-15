@@ -11,6 +11,12 @@ export default Component.extend(FileSaverMixin, {
 	uploadedFile: null,
 	fileName: null,
 
+	isAgendaItem: computed('item', function () {
+		const { item } = this;
+		const modelName = item.get('constructor.modelName')
+		return modelName === 'agendaitem';
+	}),
+
 	filteredDocumentVersions: computed('document.documentVersions.@each', async function () {
 		let documentVersions = await this.store.query('document-version', {
 			filter: { document: { id: await this.get('document.id') } },
@@ -23,6 +29,34 @@ export default Component.extend(FileSaverMixin, {
 		return this.get('filteredDocumentVersions.length');
 	}),
 
+	async createNewDocumentVersion(document, newVersion) {			
+		const { item, uploadedFile, isAgendaItem} = this;
+		let newDocumentVersion ;
+		if(isAgendaItem) {
+			newDocumentVersion = this.store.createRecord('document-version',
+			{
+				file: uploadedFile,
+				versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
+				document: document,
+				agendaitem: item,
+				chosenFileName: this.get('fileName') || uploadedFile.fileName || uploadedFile.name,
+				created: new Date()
+			});
+		} else {
+			newDocumentVersion = this.store.createRecord('document-version',
+			{
+				file: uploadedFile,
+				versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
+				document: document,
+				subcase: item,
+				chosenFileName: this.get('fileName') || uploadedFile.fileName || uploadedFile.name,
+				created: new Date()
+			});
+		}
+		
+		return newDocumentVersion.save();
+	},
+
 	actions: {
 		showVersions() {
 			this.toggleProperty('isShowingVersions');
@@ -31,28 +65,16 @@ export default Component.extend(FileSaverMixin, {
 		async uploadNewVersion() {
 			const document = await this.get('document');
 			const newVersion = await document.get('lastDocumentVersion');
-			const file = this.get('uploadedFile');
-			let newDocumentVersion = this.store.createRecord('document-version',
-				{
-					file: file,
-					versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
-					document: document,
-					subcase: await this.get('subcase'),
-					chosenFileName: this.get('fileName') || file.fileName || file.name,
-					created: new Date()
-				});
-			await newDocumentVersion.save();
+			const newDocumentVersion = await this.createNewDocumentVersion(document, newVersion)
+
 			document.set('lastDocumentVersion', newDocumentVersion);
 
-			if (this.get('agendaitem')) {
-				await document.createNextAgendaVersionIdentifier(this.get('agendaitem'), newDocumentVersion);
+			if(this.get('isAgendaItem')) {
+				await document.createNextAgendaVersionIdentifier(this.get('item'), newDocumentVersion);
 			}
 			document.hasMany('documentVersions').reload();
-			document.notifyPropertyChange('documentVersions');
-			if (this.get('subcase')) {
-				this.get('subcase').notifyPropertyChange('documents');
-			}
-			// this.set('isUploadingNewVersion', false);
+			this.get('item').reload();
+			this.set('isUploadingNewVersion', false);
 		},
 
 		async downloadFile(documentVersion) {
