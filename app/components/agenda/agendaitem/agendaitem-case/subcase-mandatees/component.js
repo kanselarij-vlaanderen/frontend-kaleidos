@@ -1,31 +1,29 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import Object from '@ember/object';
+import { inject } from '@ember/service';
+import { EditAgendaitemOrSubcase } from '../../../../../mixins/edit-agendaitem-or-subcase';
 
-export default Component.extend({
-	isEditing: false,
+export default Component.extend(EditAgendaitemOrSubcase, {
+	store: inject(),
+	classNames: ["vl-u-spacer--large"],
+	item:null,
+	propertiesToSet: ['mandatees', 'governmentDomains'],
 
-	mandatees: computed('agendaitem.mandatees', 'subcase.mandatees', function () {
-		const { agendaitem, subcase } = this;
-		if (agendaitem) {
-			return agendaitem.get('sortedMandatees');
-		} else {
-			return subcase.get('sortedMandatees');
-		}
+	mandateeRows: computed('item', function () {
+		return this.constructMandateeRows().then((mandateeRows) => {
+			return mandateeRows;
+		});
 	}),
 
-	governmentDomains: computed('agendaitem.governmentDomains', 'subcase.governmentDomains', function () {
-		const { agendaitem, subcase } = this;
-		if (agendaitem) {
-			return agendaitem.get('governmentDomainsToShow');
-		} else {
-			return subcase.get('governmentDomains');
-		}
-	}),
+	async constructMandateeRows() {
+		const {item} = this;
+		const mandatees = await item.get('mandatees');
+		const governmentDomains = await item.get('governmentDomains');
 
-	mandateeRows: computed('agendaitem.mandatees', 'subcase.mandatees', function () {
-		return this.constructMandateeRows();
-	}),
+		let rowsToReturn = await this.createRows(mandatees);
+		await this.setDomainsOfRows(governmentDomains, rowsToReturn);
+		return rowsToReturn;
+	},
 
 	async createRows(mandatees) {
 		return await Promise.all(mandatees.map(async (mandatee) => {
@@ -43,7 +41,7 @@ export default Component.extend({
 			return rowsToReturn.map(async (row) => {
 				const foundMandatee = await domainMandatees.find(domainMandatee => domainMandatee.get('id') === row.mandatee.get('id'));
 				if (foundMandatee) {
-					row.selectedDomains.push(domain);
+					row.selectedDomains.addObject(domain);
 				}
 			});
 		}))
@@ -54,42 +52,17 @@ export default Component.extend({
 			this.toggleProperty('isEditing');
 		},
 
-		cancelEditing() {
-			this.set('mandateeRows', this.constructMandateeRows());
+		async cancelEditing() {
 			this.toggleProperty('isEditing');
 		},
 
 		mandateeRowsChanged(mandateeRows) {
 			this.set('mandateeRows', mandateeRows);
-		},
-
-		async saveChanges() {
-			await this.parseDomainsAndMandatees();
-			const { agendaitem, subcase } = this;
-
-			if (agendaitem) {
-				const isDesignAgenda = await agendaitem.get('isDesignAgenda');
-				if (isDesignAgenda) {
-					const subcaseToEdit = await agendaitem.get('subcase');
-					await this.setNewPropertiesToModel(subcaseToEdit);
-					this.setNewPropertiesToModel(agendaitem).then(() => {
-						this.toggleProperty('isEditing');
-					});
-				}
-			} else {
-				await this.setNewPropertiesToModel(subcase);
-				const agendaitemsOnDesignAgendaToEdit = await subcase.get('agendaitemsOnDesignAgendaToEdit');
-				if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
-					await agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
-						this.setNewPropertiesToModel(agendaitem);
-					})
-				}
-				this.toggleProperty('isEditing');
-			}
 		}
 	},
 
 	async setNewPropertiesToModel(model) {
+		await this.parseDomainsAndMandatees();
 		const { selectedMandatees, selectedDomains } = this;
 		model.set('mandatees', selectedMandatees);
 		model.set('governmentDomains', selectedDomains);
@@ -102,22 +75,14 @@ export default Component.extend({
 		const selectedDomains = [];
 		if (mandateeRows && mandateeRows.get('length') > 0) {
 			mandateeRows.map(row => {
-				mandatees.push(row.get('mandatee'));
-				const domains = row.get('selectedDomains');
+				mandatees.push(row.mandatee);
+				const domains = row.selectedDomains;
 				domains.map(domain => {
-					selectedDomains.push(domain);
+					selectedDomains.addObject(domain);
 				})
 			})
 		}
 		this.set('selectedMandatees', mandatees);
 		this.set('selectedDomains', selectedDomains);
-	},
-
-	async constructMandateeRows() {
-		const { mandatees, governmentDomains } = this
-
-		let rowsToReturn = await this.createRows(mandatees);
-		await this.setDomainsOfRows(governmentDomains, rowsToReturn);
-		return rowsToReturn;
 	}
 });

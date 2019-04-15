@@ -64,6 +64,7 @@
           </div>
         {{/if}}
         {{#if (eq activeAgendaItemSection "details")}}
+        {{agendaitem.id}}
           {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
         {{else if (eq activeAgendaItemSection "comments")}}
           {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}

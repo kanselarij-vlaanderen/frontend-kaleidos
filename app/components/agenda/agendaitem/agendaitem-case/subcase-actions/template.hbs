@@ -15,45 +15,24 @@
     {{t "mandatee-approval"}}
   </h4>
 </div>
-<div class="vl-u-spacer">
-  <table class="vl-data-table vl-data-table--align-middle">
-    <thead>
-      <tr>
-        <th class="vl-data-table-col-3">
-          {{web-components/vl-form-label value=(t "name-mandatee")}}
-        </th>
-        <th class="vl-data-table-col-6">
-          {{web-components/vl-form-label value=(t "function-mandatee")}}
-        </th>
-        <th class="vl-data-table-col-3">
-          {{web-components/vl-form-label value=(t "approval-mandatee")}}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#if (not (await subcase.approvals))}}
-        {{#each (await subcase.mandatees) as |mandatee|}}
-          <tr>
-            <td class="vl-u-text--bold">
-              {{mandatee.person.alternativeName}}
-            </td>
-            <td>
-              {{mandatee.title}}
-            </td>
-            <td>
-              <div
-                class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--muted"
-              >
-                <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
-                <span class="vl-annotation">
-                  Nog niet akkoord
-                </span>
-              </div>
-            </td>
-          </tr>
-        {{/each}}
-      {{else}}
-        {{#each (await subcase.approvals) as |approval|}}
+{{#if (await approvals)}}
+  <div class="vl-u-spacer">
+    <table class="vl-data-table vl-data-table--align-middle">
+      <thead>
+        <tr>
+          <th class="vl-data-table-col-3">
+            {{web-components/vl-form-label value=(t "name-mandatee")}}
+          </th>
+          <th class="vl-data-table-col-6">
+            {{web-components/vl-form-label value=(t "function-mandatee")}}
+          </th>
+          <th class="vl-data-table-col-3">
+            {{web-components/vl-form-label value=(t "approval-mandatee")}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each (await approvals) as |approval|}}
           <tr>
             <td class="vl-u-text--bold">
               {{await approval.mandatee.person.alternativeName}}
@@ -96,7 +75,9 @@
                     }}
                     <div class="vl-checkbox__label">
                       <i class="vl-checkbox__box"></i>
-                      <span class="vl-annotation">{{t "approve"}}</span>
+                      <span class="vl-annotation">
+                        {{t "approve"}}
+                      </span>
                     </div>
                   </label>
                 </div>
@@ -104,17 +85,17 @@
             </td>
           </tr>
         {{/each}}
-      {{/if}}
-    </tbody>
-  </table>
-</div>
+      </tbody>
+    </table>
+  </div>
+{{/if}}
 {{#if isEditing}}
-<div class="vl-action-group vl-action-group--align-right">
-  <a class="vl-link" {{action "cancelEditing"}}>
-    {{t "buttons.cancel"}}
-  </a>
-  <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-    {{t "buttons.save"}}
-  </button>
-</div>
+  <div class="vl-action-group vl-action-group--align-right">
+    <a class="vl-link" {{action "cancelEditing"}}>
+      {{t "buttons.cancel"}}
+    </a>
+    <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
+      {{t "buttons.save"}}
+    </button>
+  </div>
 {{/if}}

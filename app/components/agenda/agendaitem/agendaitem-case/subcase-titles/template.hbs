@@ -1,113 +1,60 @@
-{{#if agendaitem}}
-  {{#if (await agendaitem.subcase.case.id)}}
-    <div class="vl-u-spacer">
-      {{#link-to
-        "cases.case.subcases.subcase"
-        (await agendaitem.subcase.case.id)
-        (await agendaitem.subcase.id)
-        class="vl-link"
-      }}
-        {{t "to-subcase"}}
-      {{/link-to}}
-    </div>
-  {{/if}}
+{{#if (await item.subcase.case.id)}}
   <div class="vl-u-spacer">
-    <div class="vl-u-spacer">
-      <div class="vl-u-display-flex vl-u-display-flex-align-center">
-        <h4 class="vl-title vl-title--h4">
-          {{t "agendaitem-title"}}
-        </h4>
-        <div class="vl-u-spacer-extended-left-s">
-          <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "buttons.edit"}}
-          </a>
-        </div>
-      </div>
-      <div class="vl-u-display-flex vl-u-display-flex-align-center">
-        <h2 class="vl-u-text--uppercase vl-u-text--bold">
-          {{!-- {{await agendaitem.subcase.case.type.label}} --}}
-        </h2>
-      </div>
-    </div>
-    <h3 class="vl-title vl-title--h3">
-      {{await agendaitem.shortTitleToShow}}
-    </h3>
-    <p>
-      {{await agendaitem.titleToShow}}
-    </p>
-  </div>
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-flex-space-between">
-      {{#if (await agendaitem.confidentiality)}}
-        <div class="vl-custom">
-          <span class="vl-pill vl-pill--success">
-            {{await agendaitem.confidentialityToShow.label}}
-          </span>
-        </div>
-      {{/if}}
-      {{#if (await agendaitem.formallyOkToShow)}}
-        <p
-          class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
-        >
-          {{t "agendaitem-details.formal-ok"}}
-          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-        </p>
-      {{else}}
-        <span class="vlc-agenda-items-new__status">
-          {{t "agendaitem-details.formal-nok"}}
-        </span>
-      {{/if}}
-    </div>
-  </div>
-{{else}}
-  <div class="vl-u-spacer--large vl-u-spacer-extended-top-l">
-    <div class="vl-u-spacer">
-      <div class="vl-u-display-flex vl-u-display-flex-align-center">
-        <h4 class="vl-title vl-title--h4">
-          {{t "agendaitem-title"}}
-        </h4>
-        <div class="vl-u-spacer-extended-left-s">
-          <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "buttons.edit"}}
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h3">
-        {{await subcase.shortTitle}}
-      </h3>
-      <p class="vl-long-title">
-        {{await subcase.title}}
-      </p>
-    </div>
-    <div class="vl-u-display-flex vl-u-flex-space-between">
-      {{#if (await subcase.confidentiality.label)}}
-        <div class="vl-custom">
-          <span class="vl-pill vl-pill--success">
-            {{await subcase.confidentiality.label}}
-          </span>
-        </div>
-      {{/if}}
-      {{#if (await subcase.formallyOk)}}
-        <div
-          class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--bold vl-u-text--success"
-        >
-          <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
-          <span class="vl-annotation">
-            {{t "agendaitem-details.formal-ok"}}
-          </span>
-        </div>
-      {{else}}
-        <div
-          class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--muted"
-        >
-          <i class="vl-icon vl-icon--before vl-vi vl-vi-check-small"></i>
-          <span class="vl-annotation">
-            {{t "agendaitem-details.formal-nok"}}
-          </span>
-        </div>
-      {{/if}}
-    </div>
+    {{#link-to
+      "cases.case.subcases.subcase"
+      (await item.subcase.case.id)
+      (await item.subcase.id)
+      class="vl-link"
+    }}
+      {{t "to-subcase"}}
+    {{/link-to}}
   </div>
 {{/if}}
+<div class="vl-u-spacer">
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <h4 class="vl-title vl-title--h4">
+        {{t "agendaitem-title"}}
+      </h4>
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link" {{action "toggleIsEditing"}}>
+          {{t "buttons.edit"}}
+        </a>
+      </div>
+    </div>
+    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <h2 class="vl-u-text--uppercase vl-u-text--bold">
+        {{!-- {{await agendaitem.subcase.case.type.label}} --}}
+      </h2>
+    </div>
+  </div>
+  <h3 class="vl-title vl-title--h3">
+    {{await item.shortTitle}}
+  </h3>
+  <p>
+    {{await item.title}}
+  </p>
+</div>
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    {{#if (await item.confidentiality)}}
+      <div class="vl-custom">
+        <span class="vl-pill vl-pill--success">
+          {{await item.confidentiality.label}}
+        </span>
+      </div>
+    {{/if}}
+    {{#if (await item.formallyOk)}}
+      <p
+        class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
+      >
+        {{t "agendaitem-details.formal-ok"}}
+        <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+      </p>
+    {{else}}
+      <span class="vlc-agenda-items-new__status">
+        {{t "agendaitem-details.formal-nok"}}
+      </span>
+    {{/if}}
+  </div>
+</div>

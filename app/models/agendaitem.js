@@ -13,47 +13,13 @@ export default Model.extend({
   showAsRemark: attr('boolean'),
 
   titlePress: attr('string'),
-  titlePressToShow: computed('isDesignAgenda', function() {
-    const { subcase, isDesignAgenda} = this;
-    if(isDesignAgenda) {
-      return subcase.get('titlePress');
-    } else {
-      return this.get('titlePress');
-    }
-  }),
-
   textPress: attr('string'),
   forPress: attr('boolean'),
 
   shortTitle: attr('string'),
-  shortTitleToShow: computed('isDesignAgenda', 'subcase.shortTitle', 'shortTitle', function() {
-    const { isDesignAgenda } = this;
-    if(isDesignAgenda) {
-      return this.get('subcase.shortTitle');
-    } else {
-      return this.get('shortTitle');
-    }
-  }), 
-
   title: attr('string'),
-  titleToShow: computed('isDesignAgenda', 'subcase.title', 'title', function() {
-    const { subcase, isDesignAgenda} = this;
-    if(isDesignAgenda) {
-      return subcase.get('title');
-    } else {
-      return this.get('title');
-    }
-  }),
 
   formallyOk: attr('boolean'),
-  formallyOkToShow: computed('isDesignAgenda', 'subcase.formallyOk', 'formallyOk', function() {
-    const { isDesignAgenda } = this;
-    if(isDesignAgenda) {
-      return this.get('subcase.formallyOk');
-    } else {
-      return this.get('formallyOk');
-    }
-  }), 
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
@@ -61,15 +27,6 @@ export default Model.extend({
   subcase: belongsTo('subcase', { inverse: null }),
 
   confidentiality: belongsTo('confidentiality', { inverse: null }),
-  confidentialityToShow: computed('isDesignAgenda', 'subcase.confidentiality', 'confidentiality', function() {
-    const { isDesignAgenda } = this;
-    if(isDesignAgenda) {
-      return this.get('subcase.confidentiality');
-    } else {
-      return this.get('confidentiality');
-    }
-  }), 
-
   newsletterInfo: belongsTo('newsletter-info'),
   meetingRecord: belongsTo('meeting-record'),
 
@@ -80,34 +37,12 @@ export default Model.extend({
   documentVersions: hasMany('document-version'),
 
   themes: hasMany('theme'),
-  sortedThemes: computed('isDesignAgenda', 'subcase.themes', 'themes', function() {
-    const { isDesignAgenda } = this;
-    if(isDesignAgenda) {
-      return this.get('subcase.themes').sortBy('label');
-    } else {
-      return this.get('themes').sortBy('label');
-    }
-  }), 
+  sortedThemes: computed('themes', function () {
+    return this.get('themes').sortBy('label');
+  }),
 
   governmentDomains: hasMany('government-domain', { inverse: null }),
-  governmentDomainsToShow: computed('isDesignAgenda', 'subcase.governmentDomains', 'governmentDomains', function() {
-    const { isDesignAgenda } = this;
-    if(isDesignAgenda) {
-      return this.get('subcase.governmentDomains');
-    } else {
-      return this.get('governmentDomains');
-    }
-  }), 
-
   phases: hasMany('subcase-phase'),
-  phasesToShow: computed('isDesignAgenda', 'subcase.phases', 'phases', function() {
-    const { isDesignAgenda } = this;
-    if(isDesignAgenda) {
-      return this.get('subcase.phases');
-    } else {
-      return this.get('phases');
-    }
-  }), 
 
   isPostponed: computed('retracted', 'postponedTo', function () {
     return this.get('postponedTo').then((session) => {
@@ -132,12 +67,8 @@ export default Model.extend({
     return documents.uniqBy('id');
   }),
 
-  sortedMandatees: computed('isDesignAgenda','mandatees', function () {
-    const { isDesignAgenda } = this;
-    if(isDesignAgenda) {
-      return this.get('subcase.mandatees').sortBy('priority');
-    } else {
-      return this.get('mandatees').sortBy('priority');
-    }
+  sortedMandatees: computed('mandatees', function () {
+
+    return this.get('mandatees').sortBy('priority');
   })
 });

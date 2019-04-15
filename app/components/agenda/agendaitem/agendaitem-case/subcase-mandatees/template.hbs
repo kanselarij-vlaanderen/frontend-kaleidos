@@ -12,13 +12,13 @@
         </div>
       </div>
     </div>
-    {{#if (gt (await mandatees.length) 0)}}
+    {{#if (gt (await item.mandatees.length) 0)}}
       <div class="vl-custom">
         <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
-          {{#each (await mandatees) as |mandatee|}}
+          {{#each (await item.mandatees) as |mandatee|}}
             {{web-components/vl-mandatee-link
               mandatee=mandatee
-              domains=(await governmentDomains)
+              domains=(await item.governmentDomains)
             }}
           {{/each}}
         </ul>

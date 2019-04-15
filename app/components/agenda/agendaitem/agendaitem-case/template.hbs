@@ -1,46 +1,16 @@
-{{#if agendaitem}}
-  {{#if (not isEditing)}}
-    {{agenda/agendaitem/agendaitem-case/subcase-titles
-      agendaitem=agendaitem
-      toggleIsEditing=(action "toggleIsEditing")
-    }}
-  {{else}}
-    {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
-      agendaitem=agendaitem
-      toggleIsEditing=(action "toggleIsEditing")
-    }}
-  {{/if}}
-  {{agenda/agendaitem/agendaitem-case/subcase-themes
-    agendaitem=agendaitem
-  }}
-  {{agenda/agendaitem/agendaitem-case/subcase-phases
-    agendaitem=agendaitem
-  }}
-  {{agenda/agendaitem/agendaitem-case/subcase-mandatees
-    agendaitem=agendaitem
-  }}
-  {{agenda/agendaitem/agendaitem-case/subcase-actions
-    subcase=agendaitem
-    agendaitem=agendaitem
-  }}
-  {{agenda/agendaitem/agendaitem-case/subcase-documents
-    agendaitem=agendaitem
+{{#if (not isEditing)}}
+  {{agenda/agendaitem/agendaitem-case/subcase-titles
+    item=item
+    toggleIsEditing=(action "toggleIsEditing")
   }}
 {{else}}
-  {{#if (not isEditing)}}
-    {{agenda/agendaitem/agendaitem-case/subcase-titles
-      subcase=subcase
-      toggleIsEditing=(action "toggleIsEditing")
-    }}
-  {{else}}
-    {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
-      subcase=subcase
-      toggleIsEditing=(action "toggleIsEditing")
-    }}
-  {{/if}}
-  {{agenda/agendaitem/agendaitem-case/subcase-themes subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-phases subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-mandatees subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-actions subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-documents subcase=subcase}}
+  {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
+    item=item
+    toggleIsEditing=(action "toggleIsEditing")
+  }}
 {{/if}}
+{{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
+{{agenda/agendaitem/agendaitem-case/subcase-phases item=item}}
+{{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
+{{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
+{{!-- {{agenda/agendaitem/agendaitem-case/subcase-documents item=item}} --}}

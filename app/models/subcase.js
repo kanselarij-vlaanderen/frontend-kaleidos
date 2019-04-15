@@ -13,7 +13,7 @@ export default Model.extend({
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', {inverse:null}),
-  phases: hasMany('subcase-phase', { inverse: null }),
+  phases: hasMany('subcase-phase'),
   consulationRequests: hasMany('consulation-request', {inverse:null}),
   governmentDomains: hasMany('government-domain', { inverse: null }),
   agendaitems: hasMany('agendaitem', {inverse:null}),

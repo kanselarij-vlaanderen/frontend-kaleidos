@@ -1,24 +1,41 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import { EditAgendaitemOrSubcase, getCachedProperty } from '../../../../../mixins/edit-agendaitem-or-subcase';
 
-export default Component.extend({
+export default Component.extend(EditAgendaitemOrSubcase, {
 	store: inject(),
-	subcase: null,
-	isEditing: false,
 	classNames: ["vl-u-spacer--large"],
+	propertiesToSet: ['approvals'],
 
-	async createMissingApprovals(mandatees, mandateesAlreadyAdded, subcase) {
+	approvals: getCachedProperty('approvals'),
+
+	modelIsAgendaItem(model) {
+		const modelName = model.get('constructor.modelName')
+		return modelName === 'agendaitem';
+	},
+
+	async createMissingApprovals(mandatees, mandateesAlreadyAdded, item) {
 		const date = new Date();
 		return Promise.all(mandatees.map(async (mandatee) => {
 			const indexOf = mandateesAlreadyAdded.indexOf(mandatee);
 			if (indexOf == -1) {
-				const approvalToCreate = this.store.createRecord('approval', {
-					mandatee: mandatee,
-					subcase: subcase,
-					created: date,
-					modified: date,
-				})
-				return await approvalToCreate.save();
+				if (this.modelIsAgendaItem(item)) {
+					const approvalToCreate = this.store.createRecord('approval', {
+						mandatee: mandatee,
+						agendaitem: item,
+						created: date,
+						modified: date,
+					})
+					return approvalToCreate.save();
+				} else {
+					const approvalToCreate = this.store.createRecord('approval', {
+						mandatee: mandatee,
+						subcase: item,
+						created: date,
+						modified: date,
+					})
+					return approvalToCreate.save();
+				}
 			}
 		}))
 	},
@@ -35,16 +52,16 @@ export default Component.extend({
 
 	actions: {
 		async saveChanges() {
-			const { subcase } = this;
-			await Promise.all(subcase.get('approvals').map(async (approval) => {
+			const { item } = this;
+			await Promise.all(item.get('approvals').map(async (approval) => {
 				return await approval.save();
 			}));
 			this.toggleProperty('isEditing');
 		},
 
 		async cancelEditing() {
-			const { subcase } = this;
-			const approvals = await subcase.get('approvals');
+			const { item } = this;
+			const approvals = await item.get('approvals');
 			approvals.map((approval) => {
 				approval.rollbackAttributes();
 			});
@@ -52,12 +69,12 @@ export default Component.extend({
 		},
 
 		async toggleIsEditing() {
-			const { subcase } = this;
-			const approvals = await subcase.get('approvals');
-			const mandatees = await subcase.get('mandatees');
+			const { item } = this;
+			const approvals = await item.get('approvals');
+			const mandatees = await item.get('mandatees');
 			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
 
-			await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, subcase);
+			await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, item);
 			await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
 			this.toggleProperty('isEditing');
 		}
