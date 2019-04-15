@@ -7,7 +7,7 @@ export default Route.extend({
 	model(params) {
 		const agendaitem_id = params.agendaitem_id;
 		return this.store.findRecord('agendaitem', agendaitem_id, {
-			include: 'agenda,subcase,subcase.mandatees,subcase.government-domains,subcase.phases,subcase.case,subcase.document-versions,subcase.document-versions.document,subcase.document-versions.document.type'
+			include: 'subcase.themes,government-domains,agenda,subcase,subcase.mandatees,subcase.government-domains,subcase.phases,subcase.case,subcase.document-versions,subcase.document-versions.document,subcase.document-versions.document.type'
 		});
 	},
 

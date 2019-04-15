@@ -132,7 +132,12 @@ export default Model.extend({
     return documents.uniqBy('id');
   }),
 
-  sortedMandatees: computed('mandatees', function () {
-    return this.get('mandatees').sortBy('priority');
+  sortedMandatees: computed('isDesignAgenda','mandatees', function () {
+    const { isDesignAgenda } = this;
+    if(isDesignAgenda) {
+      return this.get('subcase.mandatees').sortBy('priority');
+    } else {
+      return this.get('mandatees').sortBy('priority');
+    }
   })
 });

@@ -15,7 +15,7 @@ export default Route.extend({
 
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
-			include: 'subcase.phases.code,agenda,subcase,subcase.case,subcase.themes,subcase.mandatees,postponed-to,subcase.phases'
+			include: 'subcase.mandatees,subcase,subcase.case,postponed-to'
 		}
 		if(params.filter) {
 			filterOptions['filter']['subcase'] = {'short-title':params.filter};

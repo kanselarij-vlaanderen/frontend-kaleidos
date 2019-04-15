@@ -5,9 +5,49 @@ import Object from '@ember/object';
 export default Component.extend({
 	isEditing: false,
 
-	mandateeRows: computed('subcase', function () {
+	mandatees: computed('agendaitem.mandatees', 'subcase.mandatees', function () {
+		const { agendaitem, subcase } = this;
+		if (agendaitem) {
+			return agendaitem.get('sortedMandatees');
+		} else {
+			return subcase.get('sortedMandatees');
+		}
+	}),
+
+	governmentDomains: computed('agendaitem.governmentDomains', 'subcase.governmentDomains', function () {
+		const { agendaitem, subcase } = this;
+		if (agendaitem) {
+			return agendaitem.get('governmentDomainsToShow');
+		} else {
+			return subcase.get('governmentDomains');
+		}
+	}),
+
+	mandateeRows: computed('agendaitem.mandatees', 'subcase.mandatees', function () {
 		return this.constructMandateeRows();
 	}),
+
+	async createRows(mandatees) {
+		return await Promise.all(mandatees.map(async (mandatee) => {
+			return Object.create({
+				mandatee: mandatee,
+				domains: await mandatee.get('governmentDomains'),
+				selectedDomains: []
+			})
+		}));
+	},
+
+	async setDomainsOfRows(domains, rowsToReturn) {
+		return Promise.all(domains.map(async (domain) => {
+			const domainMandatees = await domain.get('mandatees');
+			return rowsToReturn.map(async (row) => {
+				const foundMandatee = await domainMandatees.find(domainMandatee => domainMandatee.get('id') === row.mandatee.get('id'));
+				if (foundMandatee) {
+					row.selectedDomains.push(domain);
+				}
+			});
+		}))
+	},
 
 	actions: {
 		toggleIsEditing() {
@@ -23,15 +63,37 @@ export default Component.extend({
 			this.set('mandateeRows', mandateeRows);
 		},
 
-		async saveChanges(subcase) {
+		async saveChanges() {
 			await this.parseDomainsAndMandatees();
-			const { selectedMandatees, selectedDomains } = this;
-			subcase.set('mandatees', selectedMandatees);
-			subcase.set('governmentDomains', selectedDomains);
-			subcase.save().then(() => {
+			const { agendaitem, subcase } = this;
+
+			if (agendaitem) {
+				const isDesignAgenda = await agendaitem.get('isDesignAgenda');
+				if (isDesignAgenda) {
+					const subcaseToEdit = await agendaitem.get('subcase');
+					await this.setNewPropertiesToModel(subcaseToEdit);
+					this.setNewPropertiesToModel(agendaitem).then(() => {
+						this.toggleProperty('isEditing');
+					});
+				}
+			} else {
+				await this.setNewPropertiesToModel(subcase);
+				const agendaitemsOnDesignAgendaToEdit = await subcase.get('agendaitemsOnDesignAgendaToEdit');
+				if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
+					await agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
+						this.setNewPropertiesToModel(agendaitem);
+					})
+				}
 				this.toggleProperty('isEditing');
-			});
+			}
 		}
+	},
+
+	async setNewPropertiesToModel(model) {
+		const { selectedMandatees, selectedDomains } = this;
+		model.set('mandatees', selectedMandatees);
+		model.set('governmentDomains', selectedDomains);
+		return model.save();
 	},
 
 	async parseDomainsAndMandatees() {
@@ -52,31 +114,10 @@ export default Component.extend({
 	},
 
 	async constructMandateeRows() {
-		const subcase = await this.get('subcase');
-		
-		const mandatees = await subcase.get('mandatees');
-		const domains = await subcase.get('governmentDomains');
-		let i = 0;
+		const { mandatees, governmentDomains } = this
 
-		let rowsToReturn = await Promise.all(mandatees.map(async (mandatee) => {
-			i++;
-			return Object.create({
-				id: i,
-				mandatee: mandatee,
-				domains: await mandatee.get('governmentDomains'),
-				selectedDomains: []
-			})
-		}));
-
-		await domains.map((domain) => {
-			return rowsToReturn.map(row => {
-				const index = row.domains.indexOf(domain);
-				if (index != -1) {
-					row.selectedDomains.push(domain);
-				}
-			});
-			
-		});
+		let rowsToReturn = await this.createRows(mandatees);
+		await this.setDomainsOfRows(governmentDomains, rowsToReturn);
 		return rowsToReturn;
 	}
 });
