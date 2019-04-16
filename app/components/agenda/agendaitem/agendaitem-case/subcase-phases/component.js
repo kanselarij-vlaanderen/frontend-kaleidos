@@ -1,14 +1,12 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { EditAgendaitemOrSubcase, getCachedProperty } from '../../../../../mixins/edit-agendaitem-or-subcase';
+import { EditAgendaitemOrSubcase } from '../../../../../mixins/edit-agendaitem-or-subcase';
 
 export default Component.extend(EditAgendaitemOrSubcase, {
 	store: inject(),
 	classNames: ["vl-u-spacer--large"],
 	item:null,
 	propertiesToSet: ['phases'],
-
-	phases: getCachedProperty('phases'),
 
 	modelIsAgendaItem(model) {
 		const modelName = model.get('constructor.modelName')

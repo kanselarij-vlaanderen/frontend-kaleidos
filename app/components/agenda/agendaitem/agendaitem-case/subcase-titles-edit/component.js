@@ -13,10 +13,6 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 	confidentiality: getCachedProperty('confidentiality'),
 
 	actions: {
-		toggleIsEditing() {
-			this.toggleIsEditing();
-		},
-
 		selectConfidentiality(confidentiality) {
 			this.set('confidentiality', confidentiality)
 		}

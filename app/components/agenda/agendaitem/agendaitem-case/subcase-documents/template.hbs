@@ -27,6 +27,7 @@
   {{else}}
     {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
       documents=(await item.documents)
+      item=item
       cancelForm=(action "cancelEditing")
     }}
   {{/if}}

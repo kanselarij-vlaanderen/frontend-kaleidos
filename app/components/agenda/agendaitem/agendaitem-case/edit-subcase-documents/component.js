@@ -1,9 +1,11 @@
 import Component from '@ember/component';
 import $ from 'jquery';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+import { inject } from '@ember/service';
 
 export default Component.extend(FileSaverMixin, {
-	classNames:["vl-form__group vl-u-bg-porcelain"],
+	store: inject(),
+	classNames: ["vl-form__group vl-u-bg-porcelain"],
 
 	actions: {
 		deleteRow(document) {
@@ -22,12 +24,12 @@ export default Component.extend(FileSaverMixin, {
 			const { documents } = this;
 			await Promise.all(
 				documents.map((document) => {
-				if(document.get('deleted')) {
-					return document.destroyRecord();
-				} else {
-					return document.save();
-				}
-			}))
+					if (document.get('deleted')) {
+						return document.destroyRecord();
+					} else {
+						return document.save();
+					}
+				}))
 			this.cancelForm();
 		},
 
@@ -35,14 +37,19 @@ export default Component.extend(FileSaverMixin, {
 			this.cancelForm();
 		},
 
-		async downloadFile(documentVersion) {
-			let file = await documentVersion.get('file');
-			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
-				method: 'GET',
-				dataType: 'arraybuffer', // or 'blob'
-				processData: false
-			})
-				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
+		downloadFile(documentVersion) {
+			if (!documentVersion) {
+				return;
+			}
+			return documentVersion.get('file').then((file) => {
+				return $.ajax(`/files/${file.id}/download?name=${file.filename}`, {
+					method: 'GET',
+					dataType: 'arraybuffer', // or 'blob'
+					processData: false
+				})
+					.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
+			});
+
 		},
 	},
 

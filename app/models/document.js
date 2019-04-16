@@ -21,8 +21,8 @@ export default Model.extend({
 		});
 	}),
 
-	lastDocumentVersion: computed('sortedDocuments', async function () {
-		return (await this.get('sortedDocuments')).get('lastObject');
+	lastDocumentVersion: computed('documentVersions.@each', async function () {
+		return (await (await this.get('documentVersions')).sortBy('versionNumber')).get('lastObject');
 	}),
 
 	async getDocumentVersionsOfItem(item) {
