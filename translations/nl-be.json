@@ -274,5 +274,6 @@
 	"manage-alerts":"Systeemberichten beheer",
 	"message":"Systeembericht",
 	"severity":"Strengheid",
-	"manage-document-types":"Document-types beheer"
+	"manage-document-types":"Document-types beheer",
+	"selected-mandatees":"Geselecteerde ministers"
 }

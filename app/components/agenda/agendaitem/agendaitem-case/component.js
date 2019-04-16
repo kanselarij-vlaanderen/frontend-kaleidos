@@ -2,19 +2,14 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
+import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 
-export default Component.extend({
+export default Component.extend(EditAgendaitemOrSubcase, {
   store: inject('store'),
   sessionService: inject(),
   currentSession: alias('sessionService.currentSession'),
   editable: null,
   agendaitem: null,
-
-  isAgendaItem: computed('item', function () {
-		const { item } = this;
-		const modelName = item.get('constructor.modelName')
-		return modelName === 'agendaitem';
-	}),
 
   item: computed('agendaitem', 'subcase', function() {
     const { agendaitem, subcase} = this;
@@ -26,10 +21,6 @@ export default Component.extend({
   }),
 
   actions: {
-    toggleIsEditing() {
-			this.toggleProperty('isEditing');
-		},
-
 		cancelEditing() {
 			this.toggleProperty('isEditing');
 		},

@@ -7,6 +7,12 @@ module.exports = function(defaults) {
     sassOptions: {
       extension: 'scss'
     },
+    flatpickr: {
+      locales: ['nl']
+    },
+    moment: {
+      includeLocales: ['nl'],
+    },
     autoImport: {
       exclude: ['moment-timezone', 'moment', 'ember-moment', 'ember-cli-moment-shim']
     }

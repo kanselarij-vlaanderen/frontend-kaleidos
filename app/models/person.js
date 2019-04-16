@@ -9,6 +9,7 @@ export default Model.extend({
 	firstName: attr('string'),
 	mandatees: hasMany('mandatee'),
 	birth: belongsTo('birth'),
+	mandatee: belongsTo('mandatee'),
 	// identifier: belongsTo('identifier'),
 	gender: belongsTo('gender'),
 

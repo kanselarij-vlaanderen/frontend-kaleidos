@@ -6,7 +6,10 @@ export default Controller.extend({
   isEditingMandatees: false,
   mandatees:null,
 
-  actions: {
+  actions: {	
+    refresh() {
+    this.send('refresh');
+  },
     async editMandatee(subcase) {
       const mandatees = await subcase.get('mandatees');
       this.set('mandatees', mandatees);

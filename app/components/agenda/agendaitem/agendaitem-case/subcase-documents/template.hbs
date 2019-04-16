@@ -31,7 +31,7 @@
       cancelForm=(action "cancelEditing")
     }}
   {{/if}}
-  {{!-- <div class="vl-u-spacer">
+  <div class="vl-u-spacer">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
       {{action "toggleIsAddingNewDocument"}}
@@ -39,34 +39,22 @@
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
       {{t "buttons.document-add"}}
     </button>
-  </div> --}}
+  </div>
 </div>
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
     closeModal=(action "toggleIsAddingNewDocument")
     isOverlay=true
-    title=(t "document-add")
+    large=true
+    title=(t "buttons.document-add")
   }}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value="Naam van bestand"}}
-        {{web-components/vl-form-input width="4" value=fileName}}
-      </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value="Bijlagen"}}
-        {{#if (not uploadedFile)}}
-          {{file-uploader
-            multipleFiles=false
-            uploadedFile=(action "getUploadedFile")
-          }}
+        {{#if (not (gt uploadedFiles.length 0))}}
+          {{web-components/vl-form-label value="Bijlagen"}}
+          {{file-uploader multipleFiles=false uploadedFile=(action "getUploadedFile")}}
         {{else}}
-          <div class="document">
-            {{fa-icon "file"}}
-            {{await uploadedFile.name}}
-            <a {{action "removeFile" uploadedFile}}>
-              {{fa-icon "remove"}}
-            </a>
-          </div>
+          {{subcases/edit-documents uploadedFiles=uploadedFiles}}
         {{/if}}
       </div>
     </div>
@@ -88,7 +76,7 @@
               class="vl-button vl-button--narrow"
               {{action "uploadNewDocument"}}
             >
-              {{t "file-uploader.uploading"}}
+              {{t "buttons.document-add"}}
             </button>
           </div>
         </div>

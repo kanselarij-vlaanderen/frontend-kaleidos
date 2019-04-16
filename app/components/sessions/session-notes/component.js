@@ -8,7 +8,6 @@ export default Component.extend({
 	startDate: null,
 	announcements: null,
 	others: null,
-	peopleSelected: [],
 	text:"",
 
 	nextMeeting: computed('meeting.notes', function() {

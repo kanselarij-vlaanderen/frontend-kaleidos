@@ -38,7 +38,7 @@ export default Model.extend({
     return foundIndex;
   },
 
-  documents: computed('documentVersions', async function () {
+  documents: computed('documentVersions.@each', async function () {
     const documentVersions = await this.get('documentVersions');
     const documents = await Promise.all(documentVersions.map(documentVersion => {
       return documentVersion.get('document');
