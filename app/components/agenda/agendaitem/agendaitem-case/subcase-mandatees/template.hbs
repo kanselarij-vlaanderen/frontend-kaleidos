@@ -12,13 +12,13 @@
         </div>
       </div>
     </div>
-    {{#if (gt (await subcase.mandatees.length) 0)}}
+    {{#if (gt (await item.mandatees.length) 0)}}
       <div class="vl-custom">
         <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
-          {{#each (await subcase.sortedMandatees) as |mandatee|}}
+          {{#each (await item.mandatees) as |mandatee|}}
             {{web-components/vl-mandatee-link
               mandatee=mandatee
-              domains=(await subcase.governmentDomains)
+              domains=(await item.governmentDomains)
             }}
           {{/each}}
         </ul>
@@ -33,6 +33,7 @@
   <div class="vl-form__group vl-u-bg-porcelain">
     <div class="vl-u-spacer">
       {{cases/subcase-mandatees
+        showSelected=true
         mandateeRows=(await mandateeRows)
         mandateeRowsChanged=(action "mandateeRowsChanged")
       }}
@@ -43,7 +44,7 @@
       </a>
       <button
         class="vl-button vl-button--narrow"
-        {{action "saveChanges" subcase}}
+        {{action "saveChanges"}}
       >
         {{t "buttons.save"}}
       </button>

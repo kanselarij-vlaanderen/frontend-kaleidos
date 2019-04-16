@@ -19,7 +19,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
   sessionService: inject(),
 	
 	size:5,
-	sort:'short-title',
+  sort:'short-title',
 
 	model: computed('store', 'sort', 'page', 'filter', 'size', function () {
     const { store, page, filter, size, sort } = this;
@@ -31,7 +31,8 @@ export default Component.extend(DefaultQueryParamsMixin, {
       },
       filter: {
         ':has-no:agendaitems': 'yes'
-      }
+      },
+      include: 'mandatees,document-versions,themes,government-domains,approvals'
     };
     if (filter) {
     options['filter'] = {
@@ -56,7 +57,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
 				}
 			});
 		}
-		this.set('postPonedSubcases', postPonedSubcases);
+    this.set('postPonedSubcases', postPonedSubcases);
 	},
 
 	actions: {
@@ -120,6 +121,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
 		},
 
     async addSubcasesToAgenda() {
+      this.set('loading', true);
       const {selectedAgenda,availableSubcases, postponedSubcases, agendaService} = this;
       const alreadySelected = await selectedAgenda.get('agendaitems');
 
@@ -157,8 +159,9 @@ export default Component.extend(DefaultQueryParamsMixin, {
         if (agendas.length === 1) {
           return agendaService.sortAgendaItems(selectedAgenda);
         }
-      }).then(() => {
-				this.set('isAddingAgendaitems', false);
+      }).then(() => {        
+        this.set('loading', false);
+        this.set('isAddingAgendaitems', false);
 				this.reloadRoute(selectedAgenda.get('id'));
 			});
 		}

@@ -12,10 +12,10 @@
       </div>
     </div>
   </div>
-  {{#if (gt (await subcase.themes.length) 0)}}
+  {{#if (gt (await item.themes.length) 0)}}
     <div class="vl-custom">
       <ul>
-        {{#each (await subcase.sortedThemes) as |theme|}}
+        {{#each (await item.themes) as |theme|}}
           <li class="vl-pill vl-u-spacer-extended-right-s">
             {{theme.label}}
           </li>
@@ -38,7 +38,7 @@
           propertyToShow="label"
           multiSelect=true
           sortField="label"
-          selectedItems=selectedThemes
+          selectedItems=themes
           selectModel=(action "chooseTheme")
         }}
       </div>
@@ -47,7 +47,7 @@
       <a class="vl-link" {{action "cancelEditing"}}>
         {{t "buttons.cancel"}}
       </a>
-      <button class="vl-button vl-button--narrow" {{action "saveChanges" subcase}}>
+      <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
         {{t "buttons.save"}}
       </button>
     </div>

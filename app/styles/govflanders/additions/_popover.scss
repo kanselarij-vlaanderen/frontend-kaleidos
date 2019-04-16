@@ -1,5 +1,11 @@
 /* ==========================================================================
   Addition:
-    * custom pill
+    * red color for popover link list option
    ========================================================================== */
 
+.vl-popover__link-list__item--action-danger .vl-link {
+  color: $red;
+  &:hover {
+    color: $red;
+  }
+}

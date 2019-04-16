@@ -1,57 +1,28 @@
 <div>
-  Concluded: {{ await agendaitem.subcase.concluded }}
+  Concluded:
+  {{await item.subcase.concluded}}
 </div>
 <div>
-  Retracted: {{ agendaitem.retracted }}
+  Retracted:
+  {{item.retracted}}
 </div>
 <div>
-  Retracted: {{ await agendaitem.decision.approved }}
+  Retracted:
+  {{await item.decision.approved}}
 </div>
-
-{{#if agendaitem}}
-  {{#if (not isEditing)}}
-    {{agenda/agendaitem/agendaitem-case/subcase-titles
-      agendaitem=agendaitem
-      toggleIsEditing=(action "toggleIsEditing")
-    }}
-  {{else}}
-    {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
-      agendaitem=agendaitem
-      toggleIsEditing=(action "toggleIsEditing")
-    }}
-  {{/if}}
-  {{agenda/agendaitem/agendaitem-case/subcase-themes
-    subcase=(await agendaitem.subcase)
-  }}
-  {{agenda/agendaitem/agendaitem-case/subcase-phases
-    subcase=(await agendaitem.subcase)
-  }}
-  {{agenda/agendaitem/agendaitem-case/subcase-mandatees
-    subcase=(await agendaitem.subcase)
-  }}
-  {{agenda/agendaitem/agendaitem-case/subcase-actions
-    subcase=(await agendaitem.subcase)
-    agendaitem=agendaitem
-  }}
-  {{agenda/agendaitem/agendaitem-case/subcase-documents
-    agendaitem=agendaitem
-    subcase=(await agendaitem.subcase)
+{{#if (not isEditing)}}
+  {{agenda/agendaitem/agendaitem-case/subcase-titles
+    item=item
+    toggleIsEditing=(action "toggleIsEditing")
   }}
 {{else}}
-  {{#if (not isEditing)}}
-    {{agenda/agendaitem/agendaitem-case/subcase-titles
-      subcase=subcase
-      toggleIsEditing=(action "toggleIsEditing")
-    }}
-  {{else}}
-    {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
-      subcase=subcase
-      toggleIsEditing=(action "toggleIsEditing")
-    }}
-  {{/if}}
-  {{agenda/agendaitem/agendaitem-case/subcase-themes subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-phases subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-mandatees subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-actions subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/subcase-documents subcase=subcase}}
+  {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
+    item=item
+    isEditing=isEditing
+  }}
 {{/if}}
+{{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
+{{agenda/agendaitem/agendaitem-case/subcase-phases item=item}}
+{{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
+{{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
+{{agenda/agendaitem/agendaitem-case/subcase-documents item=item}}

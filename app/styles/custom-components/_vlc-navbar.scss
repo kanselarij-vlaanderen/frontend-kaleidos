@@ -9,6 +9,7 @@
 
 $vl-bar-size-padding: 2rem !default;
 $vl-bar-size-regular: 6.5rem !default;
+$vl-bar-size-large: 9.5rem !default;
 
 /* Component
    ========================================================================== */
@@ -21,6 +22,9 @@ $vl-bar-size-regular: 6.5rem !default;
   align-items: center;
 }
 
+.vlc-navbar--large {
+  height: $vl-bar-size-large;
+}
 
 .vlc-navbar--no-padding {
   padding: 0;

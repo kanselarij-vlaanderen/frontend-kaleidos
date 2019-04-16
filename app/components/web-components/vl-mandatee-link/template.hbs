@@ -29,7 +29,7 @@
     <div class="vl-accordion__content js-vl-accordion__content">
       <div class="vl-accordion__panel">
         <ul class="vl-u-text--small">
-          {{#each domains as |domain|}}
+          {{#each (await domains) as |domain|}}
             {{#if (check-mandatees-of-domain domainMandatees=domain.mandatees mandatee=mandatee)}}
               <li>
                 {{domain.label}}

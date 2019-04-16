@@ -1,3 +1,7 @@
+/* ==========================================================================
+   vlc-agenda-item-big
+   ========================================================================== */
+
 .vlc-agenda-item-big {
   border-bottom: 1px solid $ghost;
   padding: 2rem 1.6rem;
@@ -5,7 +9,7 @@
 }
 
 /* ==========================================================================
-   vl-agenda-items
+   vlc-agenda-item
    ========================================================================== */
 
 .vlc-agenda-item {
@@ -37,15 +41,6 @@
   }
 }
 
-// Yellow headers
-.vlc-agenda-items__header {
-  background: $orange-light;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.33;
-  padding: 1.3rem;
-  color: $mine-shaft;
-}
 
 // Attachments - documents
 .vl-attachments {
@@ -66,28 +61,4 @@
   i {
     color: $blue-gray-dark;
   }
-}
-
-/* Modifier for scrollable panel with agenda items
-   ========================================================================== */
-
-.vlc-agenda-items--small {
-
-  a.vlc-agenda-item {
-    text-decoration: none;
-    display: block;
-    color: inherit;
-  }
-
-  .vlc-agenda-item--active {
-    background: $primary-blue;
-    * {
-      color: white;
-    }
-  }
-
-  .vlc-agenda-items__header {
-    padding: 3rem 1.5rem 1.5rem;
-  }
-
 }

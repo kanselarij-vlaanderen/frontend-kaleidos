@@ -7,125 +7,124 @@
 /* Variables
    ========================================================================== */
 
-   $c-toolbar-item-spacing: 1.6rem !default;
-   $c-toolbar-main-border-color: $ghost;
-   $c-toolbar-size-regular: 7.5rem;
-   $c-toolbar-size-medium: 5rem;
-   $c-toolbar-z: 21;
-   $c-toolbar-middle-z: 20;
-   
-   /* Component
-     ========================================================================== */
-   
-   .vlc-toolbar {
-     width: 100%;
-     display: flex;
-     flex-shrink: 0;
-     align-items: center;
-     justify-content: space-around;
-     height: $c-toolbar-size-regular;
-   }
-   
-   .vlc-toolbar--medium {
-     height: $c-toolbar-size-medium;
-   }
-   
-   .vlc-toolbar--spaced {
-     padding: 0 2.4rem;
-   }
-   
-   .vlc-toolbar--auto {
-     height: auto;
-   }
-   
-   .vlc-toolbar__left {
-     z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
-     justify-content: flex-start;
-     .vlc-toolbar__item {
-       margin-right: $c-toolbar-item-spacing;
-       &:only-child {
-         margin: 0;
-       }
-     }
-   }
-   
-   .vlc-toolbar__right {
-     z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
-     justify-content: flex-end;
-     .vlc-toolbar__item {
-       margin-left: $c-toolbar-item-spacing;
-       &:only-child {
-         margin: 0;
-       }
-     }
-   }
-   
-   .vlc-toolbar__left,
-   .vlc-toolbar__right {
-     flex: 1 0 auto;
-     display: flex;
-     align-items: center;
-   }
-   
-   .vlc-toolbar__item {
-     position: relative;
-   }
-   
-   .vlc-toolbar__center {
-     position: absolute;
-     margin-left: 50%;
-     left: 0;
-   }
-   
-   .vlc-toolbar__center-inner {
-     margin-left: -50%;
-     display: flex;
-     flex: 1 0 auto;
-     align-items: center;
-     .vlc-toolbar__item {
-       margin: 0 $c-toolbar-item-spacing/2;
-       &:only-child {
-         margin: 0;
-       }
-     }
-   }
-   
-   .vlc-toolbar__center--interactive {
-     z-index: $c-toolbar-middle-z; // If our middle element is interactive (rare) we can specifiy this
-   }
-   
-   // For some cases you need to set -100% to actually center the item
-   .vlc-toolbar__center-inner--alt {
-     margin-left: -100%;
-   }
-   
-   /* Specific children
-     ========================================================================== */
-   
-   .vlc-toolbar__title {
-     font-weight: 500;
-     font-size: 2rem; // Same as h4
-   }
-   
-   /* Justified toolbar
-     ========================================================================== */
-   
-   .vlc-toolbar__justified {
-     flex: 1 0 auto;
-     display: flex;
-     align-items: center;
-     .vlc-toolbar__item {
-       margin-right: $c-toolbar-item-spacing;
-     }
-   }
-   
-   .vlc-toolbar__item--stretch {
-     flex: 1;
-   }
-   
-   .vlc-toolbar__justified {
-     .vlc-toolbar__item:last-child {
-       margin: 0;
-     }
-   }
-   
+$c-toolbar-item-spacing: 1.6rem !default;
+$c-toolbar-main-border-color: $ghost;
+$c-toolbar-size-regular: 6.5rem;
+$c-toolbar-size-medium: 5rem;
+$c-toolbar-z: 21;
+$c-toolbar-middle-z: 20;
+
+/* Component
+  ========================================================================== */
+
+.vlc-toolbar {
+  width: 100%;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-around;
+  height: $c-toolbar-size-regular;
+}
+
+.vlc-toolbar--medium {
+  height: $c-toolbar-size-medium;
+}
+
+.vlc-toolbar--spaced {
+  padding: 0 2.4rem;
+}
+
+.vlc-toolbar--auto {
+  height: auto;
+}
+
+.vlc-toolbar__left {
+  z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
+  justify-content: flex-start;
+  .vlc-toolbar__item {
+    margin-right: $c-toolbar-item-spacing;
+    &:only-child {
+      margin: 0;
+    }
+  }
+}
+
+.vlc-toolbar__right {
+  z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
+  justify-content: flex-end;
+  .vlc-toolbar__item {
+    margin-left: $c-toolbar-item-spacing;
+    &:only-child {
+      margin: 0;
+    }
+  }
+}
+
+.vlc-toolbar__left,
+.vlc-toolbar__right {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.vlc-toolbar__item {
+  position: relative;
+}
+
+.vlc-toolbar__center {
+  position: absolute;
+  margin-left: 50%;
+  left: 0;
+}
+
+.vlc-toolbar__center-inner {
+  margin-left: -50%;
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  .vlc-toolbar__item {
+    margin: 0 $c-toolbar-item-spacing/2;
+    &:only-child {
+      margin: 0;
+    }
+  }
+}
+
+.vlc-toolbar__center--interactive {
+  z-index: $c-toolbar-middle-z; // If our middle element is interactive (rare) we can specifiy this
+}
+
+// For some cases you need to set -100% to actually center the item
+.vlc-toolbar__center-inner--alt {
+  margin-left: -100%;
+}
+
+/* Specific children
+  ========================================================================== */
+
+.vlc-toolbar__title {
+  font-weight: 500;
+  font-size: 2rem; // Same as h4
+}
+
+/* Justified toolbar
+  ========================================================================== */
+
+.vlc-toolbar__justified {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  .vlc-toolbar__item {
+    margin-right: $c-toolbar-item-spacing;
+  }
+}
+
+.vlc-toolbar__item--stretch {
+  flex: 1;
+}
+
+.vlc-toolbar__justified {
+  .vlc-toolbar__item:last-child {
+    margin: 0;
+  }
+}

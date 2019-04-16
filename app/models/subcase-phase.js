@@ -7,5 +7,6 @@ export default Model.extend({
   label: attr('string'),
 	date: attr('date'),
 	subcase: belongsTo('subcase', {inverse : null }),
+	agendaitem: belongsTo('agendaitem', {inverse: null}),
 	code: belongsTo('subcase-phase-code', {inverse : null })
 });
