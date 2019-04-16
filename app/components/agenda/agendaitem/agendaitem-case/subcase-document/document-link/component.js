@@ -3,6 +3,7 @@ import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import $ from 'jquery';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
+
 export default Component.extend(FileSaverMixin, {
 	classNames: ["vl-u-spacer"],
 	isShowingVersions: false,
@@ -17,16 +18,12 @@ export default Component.extend(FileSaverMixin, {
 		return modelName === 'agendaitem';
 	}),
 
-	filteredDocumentVersions: computed('document.documentVersions.@each', async function () {
-		let documentVersions = await this.store.query('document-version', {
-			filter: { document: { id: await this.get('document.id') } },
-			sort: '-version-number'
-		});
-		return documentVersions;
+	filteredDocumentVersions: computed('document','document.documentVersions','item','item.documents.@each', function() {
+		return this.get('document').getDocumentVersionsOfItem(this.get('item'));
 	}),
 
-	filteredDocumentVersionsLength: computed('filteredDocumentVersions', function () {
-		return this.get('filteredDocumentVersions.length');
+	lastDocumentVersion: computed('filteredDocumentVersions.@each', async function() {
+		return (await this.get('filteredDocumentVersions') || []).objectAt(0) ;
 	}),
 
 	async createNewDocumentVersion(document, newVersion) {			
@@ -63,17 +60,18 @@ export default Component.extend(FileSaverMixin, {
 		},
 
 		async uploadNewVersion() {
+			const { item, isAgendaItem } = this;
 			const document = await this.get('document');
 			const newVersion = await document.get('lastDocumentVersion');
 			const newDocumentVersion = await this.createNewDocumentVersion(document, newVersion)
 
 			document.set('lastDocumentVersion', newDocumentVersion);
-
-			if(this.get('isAgendaItem')) {
-				await document.createNextAgendaVersionIdentifier(this.get('item'), newDocumentVersion);
+			if(isAgendaItem) {
+				item.get('documentVersions').addObject(newDocumentVersion);
+				await item.save();
 			}
 			document.hasMany('documentVersions').reload();
-			this.get('item').reload();
+			item.reload();
 			this.set('isUploadingNewVersion', false);
 		},
 

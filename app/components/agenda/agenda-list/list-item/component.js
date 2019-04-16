@@ -22,6 +22,24 @@ export default Component.extend({
 		return this.get('agendaitem.agenda.name');
 	}),
 
+	documents: computed('agendaitem.documentVersions.@each', function() {
+		return this.get('agendaitem.documents');
+	}),
+
+	filteredDocumentVersions: computed('documents.@each', async function() {
+		const documents = await this.get('documents');
+		return Promise.all((documents).map(async (document) => {
+			return await document.getDocumentVersionsOfItem(this.get('agendaitem'));
+		}))
+	}),
+
+	lastVersions: computed('filteredDocumentVersions.@each', async function() {
+		const filteredDocumentVersions = await this.get('filteredDocumentVersions');
+		return filteredDocumentVersions.map((documents) => {
+			return documents.get('firstObject');
+		})
+	}),
+
 	click(event) {
 		const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'));
 		this.selectAgendaItem(agendaitem);
