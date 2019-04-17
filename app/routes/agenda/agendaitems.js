@@ -19,9 +19,9 @@ export default Route.extend({
 		}
 		if(params.filter) {
 			filterOptions['filter']['subcase'] = {'short-title':params.filter};
-		} 
+		}
 
-		const agendaitems = await this.store.query('agendaitem', filterOptions)
+		const agendaitems = await this.store.query('agendaitem', filterOptions);
 		const groups = await this.reduceGroups(agendaitems, agenda);
 		return hash({
 			agendaitems: agendaitems,

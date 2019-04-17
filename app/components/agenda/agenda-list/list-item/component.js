@@ -11,11 +11,17 @@ export default Component.extend({
 	tagName: 'a',
 	index:null,
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  isClickable: true,
 
-	getClassNames: computed('agendaitem', 'selectedAgendaItem', function() {
+	getClassNames: computed('agendaitem', 'selectedAgendaItem', 'isClickable', function() {
+    let clazz = '';
 		if(this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
-			return 'vlc-agenda-item--active';
+      clazz += 'vlc-agenda-item--active';
 		}
+		if (!this.get('isClickable')){
+      clazz += ' not-clickable'
+    }
+		return clazz;
 	}),
 
 	click(event) {
@@ -26,6 +32,6 @@ export default Component.extend({
 	number: computed('index', function() {
 		if(this.index >=0) {
 			return (this.index + 1);
-		} 
+		}
 	})
 });

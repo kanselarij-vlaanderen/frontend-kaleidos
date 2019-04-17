@@ -1,6 +1,15 @@
 import Component from '@ember/component';
+import { computed } from '@ember/object';
 
 export default Component.extend({
-	classNames:["compare-item-container"],
 	changedSet: null,
+
+  hasSecondAgenda: computed('changedSet', function () {
+    return !!this.changedSet && !!this.changedSet.previous;
+  }),
+
+  hasFirstAgenda: computed('changedSet', function () {
+    return !!this.changedSet && !!this.changedSet.current;
+  }),
+
 });

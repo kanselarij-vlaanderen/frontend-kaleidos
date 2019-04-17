@@ -1,13 +1,29 @@
-<div class="compare-title">
-  <h2>
-    {{agendaToCompare.agendaName}}
-  </h2>
-  <h2>
-    {{currentAgenda.agendaName}}
-  </h2>
-</div>
-<div class="compare-agenda-list-container">
-  {{#each changedItems as |changedSet|}}
+
+  <div class="vl-grid vl-grid--is-stacked vl-u-spacer-extended-bottom-l">
+    <div class="compare-left-column">
+      {{utils/agenda-selector
+        searchField="name"
+        propertyToShow="name"
+        placeholder="Selecteer een agenda"
+        multiSelect=false
+        sortField="label"
+        selectedItems=agendaOne
+        selectModel=(action "chooseAgendaOne")
+      }}
+    </div>
+    <div class="compare-right-column">
+      {{utils/agenda-selector
+        searchField="name"
+        propertyToShow="name"
+        placeholder="Selecteer een agenda"
+        multiSelect=false
+        sortField="label"
+        selectedItems=agendaTwo
+        selectModel=(action "chooseAgendaTwo")
+      }}
+    </div>
+  </div>
+
+  {{#each changedGroups as |changedSet|}}
     {{agenda/compare-agenda-item changedSet=changedSet}}
   {{/each}}
-</div>

@@ -115,7 +115,8 @@
 		"title-document": "Document titel"
 	},
 	"comparison": {
-		"nav-title": "Agendas"
+		"nav-title": "Agendas",
+    "compare-title": "Vergelijk Agenda's"
 	},
 	"edit-decision": {
 		"approved": "Beslist",
