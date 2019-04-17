@@ -90,6 +90,7 @@ export default Component.extend({
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {
 					this.changeLoading();
 					this.set('sessionService.currentAgenda', newAgenda);
+					this.set('sessionService.selectedAgendaItem', null);
 					this.reloadRoute(newAgenda.get('id'));
 				});
 			})

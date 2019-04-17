@@ -162,6 +162,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
       }).then(() => {        
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
+        this.set('sessionService.selectedAgendaItem', null);
 				this.reloadRoute(selectedAgenda.get('id'));
 			});
 		}

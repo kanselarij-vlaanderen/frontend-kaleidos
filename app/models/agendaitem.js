@@ -34,7 +34,7 @@ export default Model.extend({
   attendees: hasMany('mandatee', { inverse: null }),
   mandatees: hasMany('mandatee', { inverse: null }),
   approvals: hasMany('approval'),
-  documentVersions: hasMany('document-version', {inverse:null}),
+  documentVersions: hasMany('document-version', { inverse: null }),
 
   themes: hasMany('theme'),
   sortedThemes: computed('themes', function () {
