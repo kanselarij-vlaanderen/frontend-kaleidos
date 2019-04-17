@@ -45,14 +45,9 @@
       </div>
     {{/if}}
     {{#if (await item.formallyOk)}}
-      <p
-        class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
-      >
-        {{t "agendaitem-details.formal-ok"}}
-        <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-      </p>
+      <span class="vlc-pill vlc-pill--success">{{t "agendaitem-details.formal-ok"}}</span>
     {{else}}
-      <span class="vlc-agenda-items-new__status">
+      <span class="vlc-pill vlc-pill--warning">
         {{t "agendaitem-details.formal-nok"}}
       </span>
     {{/if}}

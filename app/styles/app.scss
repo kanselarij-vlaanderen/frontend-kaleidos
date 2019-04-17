@@ -181,14 +181,13 @@ a.vlc-agenda-items-new__sub-item--active,
 a.vlc-agenda-items-new__sub-item--active:hover,
 a.vlc-agenda-items-new__sub-item--active:active {
   background: $science-blue;
-  color: #FFF;
+  color: #fff;
   .vlc-agenda-items-new__status--positive {
-    color: #FFF;
+    color: #fff;
   }
-  
 }
 
-a.vlc-agenda-items-new__sub-item--active:focus  {
+a.vlc-agenda-items-new__sub-item--active:focus {
   background: darken($science-blue, 5%);
 }
 
@@ -656,4 +655,8 @@ span.label {
 // fix for spacer
 .vlc-panel-layout__main-content {
   flex: 3 1;
+}
+
+.x-toggle-component {
+  justify-content: right;
 }
