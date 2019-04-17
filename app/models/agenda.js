@@ -6,7 +6,7 @@ let { Model, attr, belongsTo, hasMany } = DS;
 export default Model.extend({
 	name: attr("string"),
 	issued: attr("date"),
-	createdFor: belongsTo('meeting', {inverse:null}),
+	createdFor: belongsTo('meeting'),
 	agendaitems: hasMany('agendaitem', {inverse: null, serialize: false}),
 	created: attr('date'),
 	isAccepted: attr('boolean'),
