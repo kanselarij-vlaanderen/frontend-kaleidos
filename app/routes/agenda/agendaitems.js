@@ -55,10 +55,24 @@ export default Route.extend({
 
 		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
 		const filteredAgendaGroupListAddedAfterwards = Object.values(await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards));
-		console.log(filteredAgendaItems, filteredAgendaGroupList, filteredAgendaGroupListAddedAfterwards)
+		let sortedAgendaGroupList = [];
+		let sortedAgendaGroupListAddedAfterwards = [];
+
+		if(filteredAgendaGroupList) {
+			sortedAgendaGroupList = filteredAgendaGroupList.sortBy('foundPriority')
+		} else {
+			sortedAgendaGroupList = filteredAgendaGroupList;
+		}
+
+		if(filteredAgendaGroupList) {
+			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards.sortBy('foundPriority')
+		} else {
+			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards;
+		}
+
 		return [
-			filteredAgendaGroupList.sortBy('foundPriority'),
-			filteredAgendaGroupListAddedAfterwards.sortBy('foundPriority')
+			sortedAgendaGroupList,
+			sortedAgendaGroupListAddedAfterwards
 		];
 	},
 });
