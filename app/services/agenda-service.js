@@ -17,9 +17,12 @@ export default Service.extend({
 		})
 	},
 
-	reduceAgendaitemsByMandatees(agendaitems) {
+	async reduceAgendaitemsByMandatees(agendaitems) {
 		return agendaitems.reduce((items, agendaitem) => {
-			const mandatees = agendaitem.get('subcase').get('mandatees').sortBy('priority');
+			let mandatees = agendaitem.get('subcase').get('mandatees');
+			if (mandatees) {
+				mandatees = mandatees.sortBy('priority')
+			}
 			let titles = mandatees.map((mandatee) => mandatee.title);
 			if (titles && titles != []) {
 				titles = titles.join(',');
@@ -72,20 +75,26 @@ export default Service.extend({
 		});
 	},
 
-	createNewAgendaItem(selectedAgenda, subCase) {
+	async createNewAgendaItem(selectedAgenda, subcase) {
 		let agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
 			postPoned: false,
-			titlePress: subCase.shortTitle,
+			titlePress: subcase.get('shortTitle'),
 			created: new Date(),
-			subcase: subCase,
+			subcase: subcase,
 			agenda: selectedAgenda,
-			priority: null
+			priority: null,
+			title: subcase.get('title'),
+			shortTitle: subcase.get('shortTitle'),
+			formallyOk: subcase.get('formallyOk'),
+			showAsRemark: subcase.get('showAsRemark'),
+			mandatees: await subcase.get('mandatees'),
+			documentVersions: await subcase.get('documentVersions'),
+			themes: await subcase.get('themes'),
+			governmentDomains: await subcase.get('governmentDomains'),
+			approvals: await subcase.get('approvals')
 		});
-		return agendaitem.save().then(agendaitem => {
-			notifyPropertyChange(selectedAgenda, 'agendaitems');
-			return agendaitem;
-		});
+		return agendaitem.save();
 	},
 
 });

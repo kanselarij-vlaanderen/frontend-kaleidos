@@ -26,10 +26,13 @@
 
 .vlc-input-field-group-wrapper--inline {
   display: flex;
+  width: 100%;
+
   .vlc-input-field-group {
     margin-right: 1rem;
     flex: 0 1 auto;
   }
+
   .vlc-input-field-group--grow {
     flex: 1 0 auto;
     .vl-input-field {

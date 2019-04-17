@@ -1,43 +1,43 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import { EditAgendaitemOrSubcase } from '../../../../../mixins/edit-agendaitem-or-subcase';
 
-export default Component.extend({
+export default Component.extend(EditAgendaitemOrSubcase, {
 	store: inject(),
 	classNames: ["vl-u-spacer--large"],
-	isEditing: false,
-	subcase: null,
+	item:null,
+	propertiesToSet: ['phases'],
 
-	selectedPhase: computed('subcase', function () {
-		return this.get('subcase.phases');
-	}),
+	modelIsAgendaItem(model) {
+		const modelName = model.get('constructor.modelName')
+		return modelName === 'agendaitem';
+	},
 
 	actions: {
-		toggleIsEditing() {
-			this.toggleProperty('isEditing');
-		},
-
-		cancelEditing() {
-			this.toggleProperty('isEditing');
-		},
-
 		choosePhase(phase) {
 			this.set('selectedPhase', phase);
-		},
+		}
+	},
 
-		async saveChanges(subcase) {
-			const phase = this.get('selectedPhase');
-			const subcaseModel = this.store.peekRecord('subcase', subcase.get('id'));
-
-			const subcasePhase = this.store.createRecord('subcase-phase',
-				{
-					date: new Date(),
-					code: phase,
-					subcase: subcaseModel
-				});
-
-			subcasePhase.save().then(() => {
-				this.toggleProperty('isEditing');
+	async setNewPropertiesToModel(model) {
+		const { selectedPhase} = this;
+		if(this.modelIsAgendaItem(model)) {
+			const modelPhase = this.store.createRecord('subcase-phase', {
+				date: new Date(),
+				code: selectedPhase,
+				agendaitem: model
+			});
+			return modelPhase.save().then(() => {
+				return model.hasMany('phases').reload();
+			});
+		} else {
+			const modelPhase = this.store.createRecord('subcase-phase', {
+				date: new Date(),
+				code: selectedPhase,
+				subcase: model
+			});
+			return modelPhase.save().then(() => {
+				return model.hasMany('phases').reload();
 			});
 		}
 	}

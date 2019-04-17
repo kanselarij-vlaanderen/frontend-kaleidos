@@ -1,0 +1,28 @@
+/* ==========================================================================
+  vlc-pill
+  Pill with fixed a11y for colors
+   ========================================================================== */
+
+.vlc-pill {
+  background: #CCC;
+  border-radius: 0.5rem;
+  color: $mine-shaft;
+  display: inline-block;
+  padding: 0 0.6rem;
+  font-weight: 500;
+}
+
+.vlc-pill--success {
+  background: $napier-green;
+  color: #FFF;
+}
+
+.vlc-pill--warning {
+  background: $amber;
+}
+
+.vlc-pill--error {
+  // background: $tall-poppy;
+  background: #DB3434;
+  color: #FFF;
+}

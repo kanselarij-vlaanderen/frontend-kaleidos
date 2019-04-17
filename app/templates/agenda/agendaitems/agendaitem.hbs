@@ -1,5 +1,5 @@
 {{!-- {{#if selectedAgendaItem}} --}}
-  {{agenda/agendaitem/agendaitem-overview agendaitem=model}}
+  {{agenda/agendaitem/agendaitem-overview agendaitem=(await model)}}
 {{!-- {{else if selectedAnnouncement}} --}}
   {{!-- {{agenda/announcement-overview announcement=selectedAnnouncement}} --}}
 {{!-- {{/if}} --}}

@@ -1,4 +1,4 @@
-{{#if documents}}
+{{#if (await documents)}}
 <div class="vl-u-spacer">
   <table class="vl-data-table vl-data-table--align-middle">
     <thead>
@@ -16,10 +16,11 @@
       </tr>
     </thead>
     <tbody>
-      {{#each documents as |document|}}
-			{{#if (not document.deleted)}}
+      {{#each (await documents) as |document|}}
+			{{#if (and (not document.deleted) (await document.lastDocumentVersion))}}
         <tr>
           <td class="vl-u-display-flex vlc-document-list__item">
+            <a {{action "downloadFile" (await document.lastDocumentVersion)}}>
             <div
               class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
             >
@@ -29,8 +30,9 @@
               ></i>
             </div>
             <p>
-              {{document-name document=document}}
+              {{document-name documentVersion=(await document.lastDocumentVersion) item=(await item)}}
             </p>
+            </a>
           </td>
           <td>
             {{utils/model-selector

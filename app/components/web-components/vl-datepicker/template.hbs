@@ -1,7 +1,7 @@
 {{#if (not await dateObjectsToEnable)}}
   {{ember-flatpickr
     classNames="vl-input-field vl-input-field--block"
-    locale="be"
+    locale="nl"
     date=selectedDate
     onChange=(action "dateChanged")
     getFlatpickrRef=(action (mut flatpickrRef))
@@ -16,7 +16,7 @@
 {{else}}
   {{ember-flatpickr
     classNames="vl-input-field vl-input-field--block"
-    locale="be"
+    locale="nl"
     enable=datesToEnable
     date=selectedDate
     onChange=(action "dateChanged")
