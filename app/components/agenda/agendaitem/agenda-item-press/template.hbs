@@ -11,7 +11,7 @@
       </div>
     </div>
   </div>
-  <div class="vl-u-spacer">
+  <div class="vl-u-spacer vl-typography">
     <h3 class="vl-title vl-title--h3">
       {{agendaitem.titlePress}}
     </h3>
@@ -19,6 +19,18 @@
       {{agendaitem.textPress}}
     </p>
   </div>
+  <hr />
+    <div class="vl-u-spacer-extended-top-s">
+      {{#if agendaitem.forPress}}
+        <div class="vlc-pill vlc-pill--success">
+          {{t "public-press"}}
+        </div>
+      {{else}}
+        <div class="vlc-pill vlc-pill--warning">
+          {{t "not-public-press"}}
+        </div>
+      {{/if}}
+    </div>
 {{else}}
   {{agendaitem-press-edit agendaitem=agendaitem isEditing=isEditing}}
 {{/if}}

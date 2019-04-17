@@ -25,6 +25,7 @@
     {{await agendaitem.subcase.concluded}}
   </p>
   {{#if (eq (await agenda) "Ontwerpagenda")}}
+    <div class="vlc-hr"></div>
     <div class="vl-u-display-flex vl-attachments">
       {{#each (await lastVersions) as |documentVersion|}}
         <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">
@@ -40,6 +41,7 @@
       {{/each}}
     </div>
   {{else if (await agendaitem.documents)}}
+  <div class="vlc-hr"></div>
     <div class="vl-u-display-flex vl-attachments">
       {{#each (await lastVersions) as |documentVersion|}}
         <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">

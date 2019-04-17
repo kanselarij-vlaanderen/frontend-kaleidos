@@ -275,5 +275,9 @@
 	"message":"Systeembericht",
 	"severity":"Strengheid",
 	"manage-document-types":"Document-types beheer",
-	"selected-mandatees":"Geselecteerde ministers"
+	"selected-mandatees":"Geselecteerde ministers",
+	"decided":"Beslist",
+	"not-decided":"Niet beslist",
+	"public-press":"Publiek",
+	"not-public-press":"Niet publiek"
 }
