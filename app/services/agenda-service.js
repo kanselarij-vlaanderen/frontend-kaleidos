@@ -17,9 +17,12 @@ export default Service.extend({
 		})
 	},
 
-	reduceAgendaitemsByMandatees(agendaitems) {
+	async reduceAgendaitemsByMandatees(agendaitems) {
 		return agendaitems.reduce((items, agendaitem) => {
-			const mandatees = agendaitem.get('subcase').get('mandatees').sortBy('priority');
+			let mandatees = agendaitem.get('subcase').get('mandatees');
+			if (mandatees) {
+				mandatees = mandatees.sortBy('priority')
+			}
 			let titles = mandatees.map((mandatee) => mandatee.title);
 			if (titles && titles != []) {
 				titles = titles.join(',');
