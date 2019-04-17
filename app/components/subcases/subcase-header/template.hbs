@@ -117,6 +117,17 @@
               </a>
             {{/if}}
           </li>
+          <li class="vl-popover__link-list__item">
+            {{#if (not await subcase.concluded)}}
+              <a
+                class="vl-link vl-link--block"
+                {{action attacher.hide}}
+                {{action "closeSubcase" subcase}}
+              >
+                {{t "buttons.close-subcase"}}
+              </a>
+            {{/if}}
+          </li>
         </ul>
       {{/attach-popover}}
       </div>

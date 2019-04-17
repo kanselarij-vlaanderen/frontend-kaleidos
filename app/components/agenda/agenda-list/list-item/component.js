@@ -6,7 +6,7 @@ import { alias } from '@ember/object/computed';
 export default Component.extend({
 	store:inject(),
 	sessionService:inject(),
-	classNames: ["vlc-agenda-item"],
+	classNames: ["vlc-agenda-items-new__sub-item"],
 	classNameBindings: ["getClassNames"],
 	tagName: 'a',
 	index:null,
@@ -14,8 +14,30 @@ export default Component.extend({
 
 	getClassNames: computed('agendaitem', 'selectedAgendaItem', function() {
 		if(this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
-			return 'vlc-agenda-item--active';
+			return 'vlc-agenda-items-new__sub-item--active';
 		}
+	}),
+
+	agenda: computed('agendaitem', function() {
+		return this.get('agendaitem.agenda.name');
+	}),
+
+	documents: computed('agendaitem.documentVersions.@each', function() {
+		return this.get('agendaitem.documents');
+	}),
+
+	filteredDocumentVersions: computed('documents.@each', async function() {
+		const documents = await this.get('documents');
+		return Promise.all((documents).map(async (document) => {
+			return await document.getDocumentVersionsOfItem(this.get('agendaitem'));
+		}))
+	}),
+
+	lastVersions: computed('filteredDocumentVersions.@each', async function() {
+		const filteredDocumentVersions = await this.get('filteredDocumentVersions');
+		return filteredDocumentVersions.map((documents) => {
+			return documents.get('firstObject');
+		})
 	}),
 
 	click(event) {
@@ -27,5 +49,5 @@ export default Component.extend({
 		if(this.index >=0) {
 			return (this.index + 1);
 		} 
-	})
+	}),
 });

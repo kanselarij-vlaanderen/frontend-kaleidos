@@ -102,7 +102,7 @@
                     ></i>
                   </div>
                   <p>
-                    {{document-name document=document}}
+                    {{document-name documentVersion=(await document.lastDocumentVersion) item=(await subcase)}}
                   </p>
                 </a>
               </li>

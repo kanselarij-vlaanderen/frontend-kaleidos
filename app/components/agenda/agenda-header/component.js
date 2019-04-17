@@ -29,12 +29,14 @@ export default Component.extend({
 	async createDesignAgenda() {
 		this.changeLoading();
 		const session = this.get('currentSession');
+		session.set('isFinal', false);
+		session.save();
 		const definiteAgendas = await this.get('definiteAgendas');
 		const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
 		this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda).then(newAgenda => {
 			this.changeLoading();
-			this.set('sessionService.currentAgenda', newAgenda)
+			this.set('sessionService.currentAgenda', newAgenda);
 			this.reloadRoute(newAgenda.get('id'));
 		});
 	},
@@ -87,21 +89,26 @@ export default Component.extend({
 			agendaToLock.save().then(() => {
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {
 					this.changeLoading();
-					this.set('sessionService.currentAgenda', newAgenda)
+					this.set('sessionService.currentAgenda', newAgenda);
+					this.set('sessionService.selectedAgendaItem', null);
 					this.reloadRoute(newAgenda.get('id'));
 				});
 			})
 		},
 
-		async lockAgenda(agenda) {
-			const agendas = await this.get('agendas');
-			const definiteAgenda = agendas.filter(agenda => agenda.name != "Ontwerpagenda").sortBy('-name').get('lastObject');
-			definiteAgenda.set('isFinal', true);
-			definiteAgenda.save().then(newAgenda => {
-				agenda.destroyRecord().then(() => {
-					this.reloadRoute(newAgenda.get('id'));
-				});
-			});
+		async lockAgenda(session) {
+
+      const agendas = await this.get('agendas');
+      const draft = agendas.filter(agenda => agenda.name === "Ontwerpagenda").sortBy('-name').get('firstObject');
+      const lastAgenda = agendas.filter(agenda => agenda.name !== "Ontwerpagenda").sortBy('-name').get('firstObject');
+
+			if (draft){
+        await draft.destroyRecord();
+        await this.sessionService.lockMeeting(lastAgenda.get('id'));
+        this.set('sessionService.currentAgenda', lastAgenda);
+        this.reloadRoute();
+
+      }
 		},
 
 		async unlockAgenda() {

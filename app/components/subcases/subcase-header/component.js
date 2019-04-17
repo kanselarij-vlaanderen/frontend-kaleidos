@@ -68,6 +68,11 @@ export default Component.extend({
       subcase.set('isArchived', false);
       subcase.save();
     },
+    closeSubcase(subcase) {
+      const concluded = subcase.get('concluded');
+      subcase.set('concluded', !concluded);
+      subcase.save();
+    },
     requestArchiveSubcase() {
       this.set('isArchivingSubcase', true);
     },

@@ -37,8 +37,7 @@ export default Component.extend({
 			this.mandateeRowsChanged(this.get('mandateeRows'))
 		},
 
-		async domainsChanged(mandateeRow, domains) {
-			mandateeRow.set('selectedDomains', domains);
+		domainsChanged() {
 			this.mandateeRowsChanged(this.get('mandateeRows'))
 		},
 

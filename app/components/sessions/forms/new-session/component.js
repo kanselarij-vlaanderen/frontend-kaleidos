@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 export default Component.extend({
 	store: inject(),
-	today: new Date(), 
+	today: new Date(),
 
 	actions: {
 		async createNewSession() {
@@ -17,7 +17,6 @@ export default Component.extend({
 			newMeeting.save().then(async (meeting) => {
 				let agenda = this.store.createRecord('agenda', {
 					name: "Ontwerpagenda",
-					isFinal: false,
 					createdFor: meeting,
           created: new Date()
         });
