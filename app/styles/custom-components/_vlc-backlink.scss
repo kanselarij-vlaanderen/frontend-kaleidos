@@ -1,0 +1,14 @@
+/* ==========================================================================
+   vlc-backlink
+   Back button (item in toolbar)
+   ========================================================================== */
+
+.vlc-backlink {
+  display: flex;
+  padding: 0.8rem 0.2rem;
+  display: inline-block;
+  i {
+    position: relative;
+    top: 0.2rem;
+  }
+}

@@ -15,7 +15,7 @@ export default Route.extend({
 
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
-			include: 'subcase.phases.code,agenda,subcase,subcase.case,subcase.themes,subcase.mandatees,postponed-to,subcase.phases'
+			include: 'subcase.mandatees,subcase,subcase.case,postponed-to'
 		}
 		if(params.filter) {
 			filterOptions['filter']['subcase'] = {'short-title':params.filter};
@@ -23,6 +23,7 @@ export default Route.extend({
 
 		const agendaitems = await this.store.query('agendaitem', filterOptions)
 		const groups = await this.reduceGroups(agendaitems, agenda);
+
 		return hash({
 			agendaitems: agendaitems,
 			groups: groups,
@@ -37,7 +38,7 @@ export default Route.extend({
 		const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
 		const itemsAddedAfterwards = []
 
-		const filteredAgendaItems = agendaitems.filter(agendaitem => {
+		const filteredAgendaItems = await agendaitems.filter(agendaitem => {
 			if (agendaitem && agendaitem.id) {
 				if (agendaitem.priority) {
 					const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
@@ -50,12 +51,14 @@ export default Route.extend({
 				}
 			}
 		});
-		const filteredAgendaGroupList = await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems);
-		const filteredAgendaGroupListAddedAfterwards = await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards);
 
+
+		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
+		const filteredAgendaGroupListAddedAfterwards = Object.values(await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards));
+		console.log(filteredAgendaItems, filteredAgendaGroupList, filteredAgendaGroupListAddedAfterwards)
 		return [
-			Object.values(filteredAgendaGroupList).sortBy('foundPriority'),
-			Object.values(filteredAgendaGroupListAddedAfterwards).sortBy('foundPriority')
+			filteredAgendaGroupList.sortBy('foundPriority'),
+			filteredAgendaGroupListAddedAfterwards.sortBy('foundPriority')
 		];
 	},
 });

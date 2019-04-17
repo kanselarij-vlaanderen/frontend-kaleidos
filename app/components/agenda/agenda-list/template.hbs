@@ -26,11 +26,13 @@
           {{/each}}
         </div>
         {{#each (await agendaitemGroup.agendaitems) as |agendaitem index|}}
+          <div class="vlc-agenda-items-new__sub-item">
           {{agenda/agenda-list/list-item
             agendaitem=agendaitem
             index=index
             selectAgendaItem=(action "selectAgendaItem")
-          }}
+          }} 
+          </div>
         {{/each}}
       {{/each}}
     </div>
@@ -50,11 +52,13 @@
         </div>
         <div class="vl-u-spacer">
           {{#each (await agendaitemGroup.agendaitems) as |agendaitem index|}}
+          <div class="vlc-agenda-item-big">
             {{agenda/agenda-list/list-item
               agendaitem=agendaitem
               index=index
               selectAgendaItem=(action "selectAgendaItem")
             }}
+          </div>
           {{/each}}
         </div>
       {{/each}}

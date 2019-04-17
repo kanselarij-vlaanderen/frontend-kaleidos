@@ -3,6 +3,7 @@ import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import $ from 'jquery';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
+
 export default Component.extend(FileSaverMixin, {
 	classNames: ["vl-u-spacer"],
 	isShowingVersions: false,
@@ -11,17 +12,47 @@ export default Component.extend(FileSaverMixin, {
 	uploadedFile: null,
 	fileName: null,
 
-	filteredDocumentVersions: computed('document.documentVersions.@each', async function () {
-		let documentVersions = await this.store.query('document-version', {
-			filter: { document: { id: await this.get('document.id') } },
-			sort: '-version-number'
-		});
-		return documentVersions;
+	isAgendaItem: computed('item', function () {
+		const { item } = this;
+		const modelName = item.get('constructor.modelName')
+		return modelName === 'agendaitem';
 	}),
 
-	filteredDocumentVersionsLength: computed('filteredDocumentVersions', function () {
-		return this.get('filteredDocumentVersions.length');
+	filteredDocumentVersions: computed('document','document.documentVersions','item','item.documents.@each', function() {
+		return this.get('document').getDocumentVersionsOfItem(this.get('item'));
 	}),
+
+	lastDocumentVersion: computed('filteredDocumentVersions.@each', async function() {
+		return (await this.get('filteredDocumentVersions') || []).objectAt(0) ;
+	}),
+
+	async createNewDocumentVersion(document, newVersion) {			
+		const { item, uploadedFile, isAgendaItem} = this;
+		let newDocumentVersion ;
+		if(isAgendaItem) {
+			newDocumentVersion = this.store.createRecord('document-version',
+			{
+				file: uploadedFile,
+				versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
+				document: document,
+				agendaitem: item,
+				chosenFileName: this.get('fileName') || uploadedFile.fileName || uploadedFile.name,
+				created: new Date()
+			});
+		} else {
+			newDocumentVersion = this.store.createRecord('document-version',
+			{
+				file: uploadedFile,
+				versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
+				document: document,
+				subcase: item,
+				chosenFileName: this.get('fileName') || uploadedFile.fileName || uploadedFile.name,
+				created: new Date()
+			});
+		}
+		
+		return newDocumentVersion.save();
+	},
 
 	actions: {
 		showVersions() {
@@ -29,30 +60,19 @@ export default Component.extend(FileSaverMixin, {
 		},
 
 		async uploadNewVersion() {
+			const { item, isAgendaItem } = this;
 			const document = await this.get('document');
 			const newVersion = await document.get('lastDocumentVersion');
-			const file = this.get('uploadedFile');
-			let newDocumentVersion = this.store.createRecord('document-version',
-				{
-					file: file,
-					versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
-					document: document,
-					subcase: await this.get('subcase'),
-					chosenFileName: this.get('fileName') || file.fileName || file.name,
-					created: new Date()
-				});
-			await newDocumentVersion.save();
-			document.set('lastDocumentVersion', newDocumentVersion);
+			const newDocumentVersion = await this.createNewDocumentVersion(document, newVersion)
 
-			if (this.get('agendaitem')) {
-				await document.createNextAgendaVersionIdentifier(this.get('agendaitem'), newDocumentVersion);
+			document.set('lastDocumentVersion', newDocumentVersion);
+			if(isAgendaItem) {
+				item.get('documentVersions').addObject(newDocumentVersion);
+				await item.save();
 			}
 			document.hasMany('documentVersions').reload();
-			document.notifyPropertyChange('documentVersions');
-			if (this.get('subcase')) {
-				this.get('subcase').notifyPropertyChange('documents');
-			}
-			// this.set('isUploadingNewVersion', false);
+			item.reload();
+			this.set('isUploadingNewVersion', false);
 		},
 
 		async downloadFile(documentVersion) {

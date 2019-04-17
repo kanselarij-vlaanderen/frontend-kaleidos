@@ -16,6 +16,8 @@ export default Model.extend({
 	holds: belongsTo('mandate'),
 	person: belongsTo('mandatee', { inverse: null }),
 	meetingsAttended: hasMany('meeting-record'),
-	approvals: hasMany('approval')
+	approvals: hasMany('approval'),
+	subcases: hasMany('subcase'),
+	agendaitems: hasMany('agendaitem')
 	// state: belongsTo('mandatee-status')
 });
