@@ -3,13 +3,13 @@
     <div
       class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom vlc-navbar--bordered-bottom"
     >
-      {{#each agendaitemGroup.mandatees as |mandatee|}}
+      {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
         <h2 class="vl-title vl-title--h5">
           {{mandatee.title}}
         </h2>
       {{/each}}
     </div>
-    {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+    {{#each (await agendaitemGroup.agendaitems) as |agendaitem|}}
       <div
         class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
       >

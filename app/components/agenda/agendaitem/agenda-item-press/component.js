@@ -8,6 +8,7 @@ export default Component.extend({
 	title: computed('agendaitem', function() {
 		return this.agendaitem.get('subcase.title');
 	}),
+	
 
 	actions: {
 		toggleIsEditing() {
