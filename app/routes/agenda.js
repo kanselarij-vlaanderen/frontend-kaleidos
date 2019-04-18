@@ -3,6 +3,7 @@ import { inject } from '@ember/service';
 
 export default Route.extend({
 	sessionService: inject(),
+	router: inject(),
 
 	queryParams: {
 		selectedAgenda: {

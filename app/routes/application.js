@@ -1,17 +1,22 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
 import moment from 'moment';
-
 export default Route.extend({
   moment: inject(),
   intl: inject(),
 
   beforeModel() {
+    this.get('moment').setLocale('en');
+    this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
   },
 
   async model() {
-    const dateOfToday = moment().format();
+    return await this.checkAlerts();    
+  },
+
+  async checkAlerts() {    const dateOfToday = moment().format();
+
     const alerts = await this.store.query('alert', {
       filter: {
         ':gte:end-date': dateOfToday,
