@@ -16,8 +16,9 @@ export default Model.extend({
 	postponeds: hasMany('postponed'),
 	notes: belongsTo('meeting-record'),
 	newsletter: belongsTo('newsletter-info'),
-  isFinal: attr("boolean"),
-	latestAgendaName: computed('agendas', function() {
+	isFinal: attr("boolean"),
+	
+	latestAgendaName: computed('agendas.@each', function() {
 		return this.get('agendas').then((agendas) => {
 			const agendaNamePosition = agendas.length - 1;
 			if(agendaNamePosition >= 0) {
@@ -29,6 +30,12 @@ export default Model.extend({
 			} else {
 				return "Geen versie beschikbaar";
 			}
+		})
+	}),
+
+	latestAgenda: computed('agendas.@each', function() {
+		return this.get('agendas').then((agendas) => {
+			return agendas.get('firstObject');
 		})
 	})
 });
