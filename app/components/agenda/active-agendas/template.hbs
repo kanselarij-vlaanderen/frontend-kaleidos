@@ -55,6 +55,7 @@
         {{moment-format nearestMeeting.created "DD-MM-YYYY HH:mm"}}
       </td>
       <td class="vl-u-align-center">
+        {{#if isAdmin}}
         <button class="vl-button vl-button--link vl-button--icon">
           <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
         </button>
@@ -67,8 +68,7 @@
         }}
           <ul class="vl-popover__link-list">
             <li class="vl-popover__link-list__item">
-              <button class="vl-button vl-button--link vl-button--icon"
-                class="vl-link vl-link--block"
+              <button class="vl-link vl-link--block vl-button vl-button--link vl-button--icon"
                 {{action attacher.hide}}
                 {{action "addNotesToMeeting" nearestMeeting}}
               >
@@ -81,6 +81,7 @@
             </li>
           </ul>
         {{/attach-popover}}
+        {{/if}}
         <button
           class="vl-button vl-button--link vl-button--icon"
           {{action "selectAgenda" nearestMeeting}}

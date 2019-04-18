@@ -1,7 +1,8 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend({
+export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-padding-bottom--large'],
 	store: inject(),
 	agendaitem:null,

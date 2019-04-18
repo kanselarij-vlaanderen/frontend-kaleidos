@@ -1,100 +1,107 @@
 {{#if (await futureMeetings)}}
-<h2 class="vl-title vl-title--h3">
-  {{t "future-agendas"}}
-</h2>
-<table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
-  <thead>
-    <tr>
-      <th class="vl-data-table-col-5 vl-data-table__header-title">
-        <a
-          class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
-          href="#"
-        >
-          <div class="vl-u-display-flex vl-u-flex-align-center">
-            <span>
-              {{t "navigation.agenda"}}
-            </span>
-          </div>
-        </a>
-      </th>
-      <th class="vl-data-table-col-3 vl-data-table__header-title">
-        <a class="vl-data-table__header-title--sortable" href="#" title="sort">
-          <div class="vl-u-display-flex vl-u-flex-align-center">
-            <span>
-              {{t "agenda-version"}}
-            </span>
-          </div>
-        </a>
-      </th>
-      <th class="vl-data-table-col-3 vl-data-table__header-title">
-        <a
-          class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
-          href="#"
-        ></a>
-        <a class="vl-data-table__header-title--sortable" href="#">
-          <div class="vl-u-display-flex vl-u-flex-align-center">
-            <span>
-              {{t "latest-modified"}}
-            </span>
-          </div>
-        </a>
-      </th>
-      <th class="vl-data-table-col-1"></th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each (await futureMeetings) as |futureMeeting|}}
+  <h2 class="vl-title vl-title--h3">
+    {{t "future-agendas"}}
+  </h2>
+  <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
+    <thead>
       <tr>
-        <td>
-          {{t "agenda-for"}}
-          {{moment-format futureMeeting.plannedStart "DD.MM.YYYY"}}
-        </td>
-        <td>
-          {{await futureMeeting.latestAgendaName}}
-        </td>
-        <td>
-          {{moment-format futureMeeting.created "DD-MM-YYYY HH:mm"}}
-        </td>
-        <td class="vl-u-align-center">
-          <button class="vl-button vl-button--link vl-button--icon">
-            <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
-          </button>
-          {{#attach-popover
-            class="ember-attacher-popper"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom" as |attacher|
-          }}
-            <ul class="vl-popover__link-list">
-              <li class="vl-popover__link-list__item">
-                <button class="vl-button vl-button--link vl-button--icon"
-                  class="vl-link vl-link--block"
-                  {{action attacher.hide}}
-                  {{action "addNotesToMeeting" futureMeeting}}
-                >
-                  {{#if (not await futureMeeting.notes)}}
-                    {{t "add-notes"}}
-                  {{else}}
-                    {{t "edit-notes"}}
-                  {{/if}}
-                </button>
-              </li>
-            </ul>
-          {{/attach-popover}}
-          <button
-            class="vl-button vl-button--link vl-button--icon"
-            {{action "selectAgenda" futureMeeting}}
+        <th class="vl-data-table-col-5 vl-data-table__header-title">
+          <a
+            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+            href="#"
           >
-            <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
-          </button>
-        </td>
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "navigation.agenda"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col-3 vl-data-table__header-title">
+          <a
+            class="vl-data-table__header-title--sortable"
+            href="#"
+            title="sort"
+          >
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "agenda-version"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col-3 vl-data-table__header-title">
+          <a
+            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+            href="#"
+          ></a>
+          <a class="vl-data-table__header-title--sortable" href="#">
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "latest-modified"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col-1"></th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {{#each (await futureMeetings) as |futureMeeting|}}
+        <tr>
+          <td>
+            {{t "agenda-for"}}
+            {{moment-format futureMeeting.plannedStart "DD.MM.YYYY"}}
+          </td>
+          <td>
+            {{await futureMeeting.latestAgendaName}}
+          </td>
+          <td>
+            {{moment-format futureMeeting.created "DD-MM-YYYY HH:mm"}}
+          </td>
+          <td class="vl-u-align-center">
+            {{#if isAdmin}}
+              <button class="vl-button vl-button--link vl-button--icon">
+                <i
+                  class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                ></i>
+              </button>
+              {{#attach-popover
+                class="ember-attacher-popper"
+                hideOn="clickout click"
+                showOn="click"
+                animation="shift"
+                placement="bottom" as |attacher|
+              }}
+                <ul class="vl-popover__link-list">
+                  <li class="vl-popover__link-list__item">
+                    <button
+                      class="vl-link vl-link--block vl-button vl-button--link vl-button--icon"
+                      {{action attacher.hide}}
+                      {{action "addNotesToMeeting" futureMeeting}}
+                    >
+                      {{#if (not await futureMeeting.notes)}}
+                        {{t "add-notes"}}
+                      {{else}}
+                        {{t "edit-notes"}}
+                      {{/if}}
+                    </button>
+                  </li>
+                </ul>
+              {{/attach-popover}}
+            {{/if}}
+            <button
+              class="vl-button vl-button--link vl-button--icon"
+              {{action "selectAgenda" futureMeeting}}
+            >
+              <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
+            </button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
 {{/if}}
-
 {{#if isAddingNotes}}
   {{#web-components/vl-modal
     isOverlay=true

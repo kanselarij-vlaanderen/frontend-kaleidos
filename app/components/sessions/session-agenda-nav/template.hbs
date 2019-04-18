@@ -12,9 +12,11 @@
       {{t "detail"}}
     </a>
   </li>
-  <li class="vlc-tabs-reverse__item">
-    <a class="vlc-tabs-reverse__link" {{action "compareAgendas"}}>
-      {{t "compare"}}
-    </a>
-  </li>
+  {{#if isAdmin}}
+    <li class="vlc-tabs-reverse__item">
+      <a class="vlc-tabs-reverse__link" {{action "compareAgendas"}}>
+        {{t "compare"}}
+      </a>
+    </li>
+  {{/if}}
 </ul>

@@ -4,11 +4,13 @@
       <h3 class="vl-title vl-title--h3">
         {{t "agendaitem-details.decision-title"}}
       </h3>
+      {{#if isAdmin}}
       <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link" {{action "toggleIsEditing"}}>
           {{t "buttons.edit"}}
         </a>
       </div>
+      {{/if}}
     </div>
   </div>
   <div class="vl-u-spacer">

@@ -3,8 +3,9 @@ import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import $ from 'jquery';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(FileSaverMixin, {
+export default Component.extend(FileSaverMixin, isAuthenticatedMixin, {
 	classNames: ["vl-u-spacer"],
 	isShowingVersions: false,
 	store: inject(),

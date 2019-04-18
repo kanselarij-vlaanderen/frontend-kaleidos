@@ -1,10 +1,11 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
-export default Component.extend({
+export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
 	sessionService: inject(),
 	agendaService: inject(),

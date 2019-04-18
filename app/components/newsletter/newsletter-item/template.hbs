@@ -4,11 +4,13 @@
       <h4 class="vl-title vl-title--h6 vl-u-text--capitalize">
         {{await agendaitem.newsletterInfo.subtitle}}
       </h4>
+      {{#if isAdmin}}
       <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link" {{action "toggleIsEditing"}}>
           {{t "buttons.edit"}}
         </a>
       </div>
+      {{/if}}
     </div>
     <div class="vl-u-text vl-u-text--small vl-u-text--muted">
       {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
