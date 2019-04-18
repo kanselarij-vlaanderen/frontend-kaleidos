@@ -14,6 +14,9 @@ export default Component.extend({
   agendaToCompareGroups: null,
   agendaOne: null,
   agendaTwo: null,
+  hasChangedSet: computed('changedGroups', function () {
+    return !!this.changedGroups && Object.keys(this.changedGroups).length > 0;
+  }),
 
 	currentAgendaItemsObserver: on('init', observer('agendaOne', async function () {
 
@@ -48,13 +51,13 @@ export default Component.extend({
 
 		(this.currentAgendaGroups || []).flat().map(item => {
 			let groupName = item.groupName;
-      groups[groupName] = { current: item };
+      groups[groupName] = { left: item };
 		});
 
 		(this.agendaToCompareGroups || []).flat().map(item => {
       let groupName = item.groupName;
       groups[groupName] = groups[groupName] || {};
-      groups[groupName].previous = item;
+      groups[groupName].right = item;
 		});
 
 		return Object.keys(groups).map((key) => {

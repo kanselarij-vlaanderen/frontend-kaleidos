@@ -2,23 +2,24 @@
 
 
       <div class="compare-left-column">
-        {{#if hasFirstAgenda }}
+        {{#if hasLeftAgenda }}
           <div
             class="vlc-agenda-items__header vlc-agenda-items__header--small vl-u-text--marked"
           >
-            {{#each changedSet.current.mandatees as |mandatee|}}
+            {{#each left.mandatees as |mandatee|}}
               <h2 class="vl-title vl-title--h6">
                 {{mandatee.title}}
               </h2>
             {{/each}}
           </div>
-          {{#each (await changedSet.current.agendaitems) as |agendaitem index|}}
-            {{agenda/agenda-list/list-item
-              agendaitem=agendaitem
-              index=index
-              isClickable=false
-            }}
-          {{/each}}
+            {{#each (await left.agendaitems) as |agendaitem index|}}
+              {{agenda/agenda-list/list-item
+                agendaitem=agendaitem
+                index=index
+                isClickable=false
+              }}
+            {{/each}}
+
           {{/if}}
       </div>
 
@@ -29,15 +30,15 @@
 
   <div class="compare-right-column">
 
-      {{#if hasSecondAgenda }}
+      {{#if hasRightAgenda }}
         <div class="vlc-agenda-items__header vlc-agenda-items__header--small vl-u-text--marked">
-          {{#each changedSet.previous.mandatees as |mandatee|}}
+          {{#each right.mandatees as |mandatee|}}
             <h2 class="vl-title vl-title--h6">
               {{mandatee.title}}
             </h2>
           {{/each}}
         </div>
-        {{#each (await changedSet.previous.agendaitems) as |agendaitem index|}}
+        {{#each (await right.agendaitems) as |agendaitem index|}}
           {{agenda/agenda-list/list-item
             agendaitem=agendaitem
             index=index

@@ -24,6 +24,16 @@
     </div>
   </div>
 
+  {{#if hasChangedSet}}
+
   {{#each changedGroups as |changedSet|}}
     {{agenda/compare-agenda-item changedSet=changedSet}}
   {{/each}}
+
+  {{else}}
+
+    <div class="vl-u-spacer-extended-top-s">
+      {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
+    </div>
+
+  {{/if}}
