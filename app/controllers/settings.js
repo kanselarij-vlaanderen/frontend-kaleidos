@@ -22,6 +22,10 @@ export default Controller.extend({
 
 		showDocumentTypesManagementForm() {
 			this.toggleProperty('isManagingDocumentTypes');
+		},
+
+		showCaseTypesManagementForm() {
+			this.toggleProperty('isManagingCaseTypes');
 		}
 
 	}
