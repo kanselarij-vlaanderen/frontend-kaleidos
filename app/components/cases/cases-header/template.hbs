@@ -10,6 +10,7 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
+          {{#if isAdmin}}
           <button
             class="vl-button vl-button--narrow vl-button--icon-before"
             {{action "toggleAddingCase"}}
@@ -20,6 +21,7 @@
             ></i>
             {{t "buttons.add-case"}}
           </button>
+          {{/if}}
         </div>
       </div>
     </div>

@@ -5,7 +5,11 @@
         <h1
           class="vlc-page-header__title vlc-page-header__title--bordered max-width-title"
         >
-          {{model.case.shortTitle}}
+          {{#if (await model.case.shortTitle)}}
+            {{await model.case.shortTitle}}
+          {{else}}
+            {{await model.case.title}}
+          {{/if}}
         </h1>
         <div class="vlc-page-header__sub">
           {{#link-to "cases.overview" class="vl-link vl-link--bold"}}
@@ -18,21 +22,22 @@
       </div>
     </div>
     <div class="vlc-toolbar__right">
-      <div class="vlc-toolbar__item">
-        <button
-          class="vl-button vl-button--narrow vl-button--icon-before"
-          {{action "toggleIsAddingSubcase"}}
-        >
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-          ></i>
-          {{t "buttons.create-subcase"}}
-        </button>
-      </div>
+      {{#if isAdmin}}
+        <div class="vlc-toolbar__item">
+          <button
+            class="vl-button vl-button--narrow vl-button--icon-before"
+            {{action "toggleIsAddingSubcase"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            ></i>
+            {{t "buttons.create-subcase"}}
+          </button>
+        </div>
+      {{/if}}
     </div>
   </div>
 </div>
-
 {{#if (gt (await model.subcases.length) 0)}}
   <div class="vl-u-spacer-extended-l vlc-scroll-wrapper__body">
     {{#each (await model.subcases) as |subcase|}}
@@ -50,7 +55,7 @@
                   >
                     <div class="vlc-status-timeline__dot"></div>
                     <div class="vlc-status-timeline__text">
-                      {{ await code }}
+                      {{await code}}
                     </div>
                   </li>
                 {{/each}}
@@ -59,26 +64,40 @@
           </div>
           <div class="vlc-toolbar__right">
             <div class="vlc-toolbar__item">
-              {{#link-to
-                "cases.case.subcases.subcase"
-                subcase.id
-                tagName="button"
-                class="vl-button vl-button--tertiary vl-button--icon"
-              }}
-                <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
-              {{/link-to}}
+              {{#if isAdmin}}
+                {{#link-to
+                  "cases.case.subcases.subcase"
+                  subcase.id
+                  tagName="button"
+                  class="vl-button vl-button--tertiary vl-button--icon"
+                }}
+                  <i class="vl-button__icon vl-vi vl-vi-arrow-right"></i>
+                {{/link-to}}
+              {{/if}}
             </div>
           </div>
         </div>
         <hr class="vlc-hr" />
         <div class="vlc-procedure-step__badge-wrapper">
           <div class="vlc-procedure-step__badge-wrapper">
-            <p class="vl-u-text--uppercase">{{await subcase.case.type.label}}</p>
-            <div class="vl-badge vl-badge--icon vlc-procedure-step__badge vl-badge--success vl-badge--medium vl-badge--small-medium">
-              <i class="vl-badge__icon vl-vi vl-vi-sitemap" aria-hidden="true"></i>
+            <p class="vl-u-text--uppercase">
+              {{await subcase.case.type.label}}
+            </p>
+            <div
+              class="vl-badge vl-badge--icon vlc-procedure-step__badge vl-badge--success vl-badge--medium vl-badge--small-medium"
+            >
+              <i
+                class="vl-badge__icon vl-vi vl-vi-sitemap"
+                aria-hidden="true"
+              ></i>
             </div>
-            <div class="vl-badge vl-badge--icon vl-badge--icon-light vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-badge--action">
-              <i class="vl-badge__icon vl-vi vl-vi-sitemap" aria-hidden="true"></i>
+            <div
+              class="vl-badge vl-badge--icon vl-badge--icon-light vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-badge--action"
+            >
+              <i
+                class="vl-badge__icon vl-vi vl-vi-sitemap"
+                aria-hidden="true"
+              ></i>
             </div>
           </div>
         </div>
@@ -92,7 +111,9 @@
           <ul class="vlc-document-list">
             {{#each (await subcase.documents) as |document|}}
               <li class="vlc-document-list__item">
-                <a {{action "downloadFile" (await document.lastDocumentVersion)}}>
+                <a
+                  {{action "downloadFile" (await document.lastDocumentVersion)}}
+                >
                   <div
                     class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
                   >
@@ -102,7 +123,10 @@
                     ></i>
                   </div>
                   <p>
-                    {{document-name documentVersion=(await document.lastDocumentVersion) item=(await subcase)}}
+                    {{document-name
+                      documentVersion=(await document.lastDocumentVersion)
+                      item=(await subcase)
+                    }}
                   </p>
                 </a>
               </li>
@@ -112,14 +136,11 @@
       </div>
     {{/each}}
   </div>
-
-
 {{else}}
-<div class="vl-u-spacer-extended-l">
-  {{web-components/vl-alert message=(t "no-subcases")}}
-</div>
+  <div class="vl-u-spacer-extended-l">
+    {{web-components/vl-alert message=(t "no-subcases")}}
+  </div>
 {{/if}}
-
 {{#if isAddingSubcase}}
   {{#web-components/vl-modal
     isOverlay=true
@@ -130,4 +151,3 @@
     {{cases/new-subcase case=model.case closeModal=(action "close")}}
   {{/web-components/vl-modal}}
 {{/if}}
-

@@ -52,6 +52,7 @@
                   </button>
                 {{/if}}
               {{/if}}
+              {{#if isAdmin}}
               <button
                 class="vl-button vl-button--tertiary vl-button--icon"
                 {{action "showOptions"}}
@@ -60,6 +61,7 @@
                   class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
                 ></i>
               </button>
+            {{/if}}
             {{/if}}
           </div>
         {{/if}}

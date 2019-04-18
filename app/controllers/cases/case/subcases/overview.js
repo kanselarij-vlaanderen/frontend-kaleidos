@@ -1,8 +1,9 @@
 import Controller from '@ember/controller';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import $ from 'jquery';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend(FileSaverMixin,{
+export default Controller.extend(FileSaverMixin, isAuthenticatedMixin, {
 	isAddingSubcase:false,
 	isShowingOptions: false,
 	

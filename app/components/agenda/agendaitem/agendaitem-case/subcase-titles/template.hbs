@@ -1,4 +1,4 @@
-{{#if (await item.subcase.case.id)}}
+{{#if (and (await item.subcase.case.id) isAdmin)}}
   <div class="vl-u-spacer">
     {{#link-to
       "cases.case.subcases.subcase"
@@ -17,9 +17,11 @@
         {{t "agendaitem-title"}}
       </h4>
       <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "buttons.edit"}}
-        </a>
+        {{#if isAdmin}}
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "buttons.edit"}}
+          </a>
+        {{/if}}
       </div>
     </div>
     <div class="vl-u-display-flex vl-u-display-flex-align-center">
@@ -35,21 +37,25 @@
     {{await item.title}}
   </p>
 </div>
-<div class="vl-u-spacer">
-  <div class="vl-u-display-flex vl-u-flex-space-between">
-    {{#if (await item.confidentiality)}}
-      <div class="vl-custom">
-        <span class="vl-pill vl-pill--success">
-          {{await item.confidentiality.label}}
+{{#if isAdmin}}
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vl-u-flex-space-between">
+      {{#if (await item.confidentiality)}}
+        <div class="vl-custom">
+          <span class="vl-pill vl-pill--success">
+            {{await item.confidentiality.label}}
+          </span>
+        </div>
+      {{/if}}
+      {{#if (await item.formallyOk)}}
+        <span class="vlc-pill vlc-pill--success">
+          {{t "agendaitem-details.formal-ok"}}
         </span>
-      </div>
-    {{/if}}
-    {{#if (await item.formallyOk)}}
-      <span class="vlc-pill vlc-pill--success">{{t "agendaitem-details.formal-ok"}}</span>
-    {{else}}
-      <span class="vlc-pill vlc-pill--warning">
-        {{t "agendaitem-details.formal-nok"}}
-      </span>
-    {{/if}}
+      {{else}}
+        <span class="vlc-pill vlc-pill--warning">
+          {{t "agendaitem-details.formal-nok"}}
+        </span>
+      {{/if}}
+    </div>
   </div>
-</div>
+{{/if}}

@@ -6,6 +6,7 @@ import { task, waitForProperty } from 'ember-concurrency';
 export default Service.extend({
   session: service('session'),
   store: service('store'),
+
   async load() {
     if (this.get('session.isAuthenticated')) {
       const session = this.session;
@@ -27,8 +28,7 @@ export default Service.extend({
         groupContent: group
       });
 
-      this.set('canAccessAgendaSecrets', this.canAccess('Kanselarij-Admin'));
-      this.set('isAdmin', this.canAccess('Kanselarij-admin'));
+      this.set('isAdmin', this.canAccess('admin'));
     }
   },
   canAccess(role) {

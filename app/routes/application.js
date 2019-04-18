@@ -10,9 +10,27 @@ export default Route.extend(ApplicationRouteMixin, {
   routeAfterAuthentication: "agendas",
 
   beforeModel() {
+    // this.moment.setTimeZone('Europe/Brussels');
+    // this.moment.setLocale('nl');
     this.get('moment').setLocale('en');
     this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
+    return this._loadCurrentSession();
+
+  },
+
+  sessionAuthenticated() {
+    this._super(...arguments);
+    this._loadCurrentSession();
+  },
+
+  sessionInvalidated() {
+    // const logoutUrl = ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'];
+    // window.location.replace(logoutUrl);
+  },
+
+  _loadCurrentSession() {
+    return this.currentSession.load().catch(() => this.session.invalidate());
   },
 
   async model() {
