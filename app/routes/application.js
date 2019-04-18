@@ -16,7 +16,6 @@ export default Route.extend(ApplicationRouteMixin, {
     this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
     return this._loadCurrentSession();
-
   },
 
   sessionAuthenticated() {
