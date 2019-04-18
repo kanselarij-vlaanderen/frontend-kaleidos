@@ -10,11 +10,17 @@ export default Route.extend(ApplicationRouteMixin, {
   routeAfterAuthentication: "agendas",
 
   beforeModel() {
+    this.get('moment').setLocale('en');
+    this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
   },
 
   async model() {
-    const dateOfToday = moment().format();
+    return await this.checkAlerts();    
+  },
+
+  async checkAlerts() {    const dateOfToday = moment().format();
+
     const alerts = await this.store.query('alert', {
       filter: {
         ':gte:end-date': dateOfToday,

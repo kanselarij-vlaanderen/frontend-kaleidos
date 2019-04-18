@@ -11,7 +11,7 @@ module.exports = function(defaults) {
       locales: ['nl']
     },
     moment: {
-      includeLocales: ['nl'],
+      includeLocales: true
     },
     autoImport: {
       exclude: ['moment-timezone', 'moment', 'ember-moment', 'ember-cli-moment-shim']

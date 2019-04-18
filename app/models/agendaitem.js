@@ -31,7 +31,7 @@ export default Model.extend({
   meetingRecord: belongsTo('meeting-record'),
 
   remarks: hasMany('remark'),
-  attendees: hasMany('mandatee', { inverse: null }),
+  // attendees: hasMany('mandatee', { inverse: null }),
   mandatees: hasMany('mandatee', { inverse: null }),
   approvals: hasMany('approval'),
   documentVersions: hasMany('document-version', { inverse: null }),

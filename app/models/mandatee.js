@@ -13,7 +13,7 @@ export default Model.extend({
 	governmentDomains: hasMany('government-domains', {inverse:null}),
 	decisions: hasMany('decision'),
 	cases: hasMany('case'),
-	holds: belongsTo('mandate'),
+	holds: belongsTo('mandate', { inverse: null }),
 	person: belongsTo('mandatee', { inverse: null }),
 	meetingsAttended: hasMany('meeting-record'),
 	approvals: hasMany('approval'),

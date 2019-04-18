@@ -12,7 +12,7 @@ export default Model.extend({
   isArchived: attr('boolean'),
   concluded: attr('boolean'),
   case: belongsTo('case'),
-  relatedTo: hasMany('subcase', { inverse: null }),
+  // relatedTo: hasMany('subcase', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
   phases: hasMany('subcase-phase', { inverse:null }),
   consulationRequests: hasMany('consulation-request', { inverse: null }),
