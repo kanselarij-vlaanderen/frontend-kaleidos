@@ -26,7 +26,7 @@ export default Service.extend({
 			let titles = mandatees.map((mandatee) => mandatee.title);
 			if (titles && titles != []) {
 				titles = titles.join(',');
-				items[titles] = items[titles] || { groupName: titles, mandatees:mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };
+				items[titles] = items[titles] || { groupName: titles, mandatees: mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };
 				items[titles].foundPriority = Math.min(items[titles].foundPriority, agendaitem.foundPriority);
 				items[titles].agendaitems.push(agendaitem);
 				return items;
@@ -76,10 +76,15 @@ export default Service.extend({
 	},
 
 	async createNewAgendaItem(selectedAgenda, subcase) {
+		const mandatees = await subcase.get('mandatees');
+		const titles = mandatees.map((mandatee) => mandatee.get('title'));
+		const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`
+		
 		let agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
 			postPoned: false,
 			titlePress: subcase.get('shortTitle'),
+			textPress: pressText,
 			created: new Date(),
 			subcase: subcase,
 			agenda: selectedAgenda,
@@ -88,7 +93,7 @@ export default Service.extend({
 			shortTitle: subcase.get('shortTitle'),
 			formallyOk: subcase.get('formallyOk'),
 			showAsRemark: subcase.get('showAsRemark'),
-			mandatees: await subcase.get('mandatees'),
+			mandatees: mandatees,
 			documentVersions: await subcase.get('documentVersions'),
 			themes: await subcase.get('themes'),
 			governmentDomains: await subcase.get('governmentDomains'),
