@@ -12,22 +12,26 @@ export default Route.extend({
   },
 
   async model() {
-    return await this.checkAlerts();    
+    return await this.checkAlerts();
   },
 
-  async checkAlerts() {    const dateOfToday = moment().format();
-
-    const alerts = await this.store.query('alert', {
-      filter: {
-        ':gte:end-date': dateOfToday,
-        ':lte:begin-date': dateOfToday
-      },
-      include: 'type'
-    })
-    if (alerts.get('length') > 0) {
-      const alertToShow = alerts.get('firstObject');
-      return alertToShow;
+  async checkAlerts() {
+    const dateOfToday = moment().format();
+    try {
+      const alerts = await this.store.query('alert', {
+        filter: {
+          ':gte:end-date': dateOfToday,
+          ':lte:begin-date': dateOfToday
+        },
+        include: 'type'
+      })
+      if (alerts.get('length') > 0) {
+        const alertToShow = alerts.get('firstObject');
+        return alertToShow;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 });
