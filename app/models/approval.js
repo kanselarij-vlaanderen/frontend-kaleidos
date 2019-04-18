@@ -7,6 +7,6 @@ export default Model.extend({
 	modified: attr('date'),
 	approved: attr('boolean'),
 	mandatee: belongsTo('mandatee', {inverse:null}),
-	subcase: belongsTo('subcase'),
-	agendaitem: belongsTo('agendaitem')
+	subcase: belongsTo('subcase', { inverse: null }),
+	agendaitem: belongsTo('agendaitem', { inverse: null })
 });
