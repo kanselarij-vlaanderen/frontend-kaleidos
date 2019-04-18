@@ -107,7 +107,7 @@
                 {{await meeting.latestAgendaName}}
               </td>
               <td {{action "selectAgenda" meeting}}>
-                {{await meeting.latestAgenda}}
+                {{!-- {{await meeting.latestAgenda}} --}}
                 {{moment-format (await meeting.latestAgenda.created) "DD-MM-YYYY HH:mm"}}
               </td>
               <td class="vl-u-align-center">
