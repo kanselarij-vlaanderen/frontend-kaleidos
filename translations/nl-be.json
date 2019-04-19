@@ -56,6 +56,7 @@
 		"print-decisions": "Beslissingen afdrukken",
 		"archive-case": "Dossier archiveren",
 		"archive-subcase": "Procedurestap archiveren",
+		"close-subcase": "Procedurestap afsluiten",
 		"unarchive-case": "Dossier onarchiveren",
 		"unarchive-subcase": "Procedurestap onarchiveren",
 		"agenda-approve": "Agenda goedkeuren",
@@ -274,5 +275,11 @@
 	"decisions-of":"Beslissingen van",
 	"manage-alerts":"Systeemberichten beheer",
 	"message":"Systeembericht",
-	"severity":"Strengheid"
+	"severity":"Strengheid",
+	"manage-document-types":"Document-types beheer",
+	"selected-mandatees":"Geselecteerde ministers",
+	"decided":"Beslist",
+	"not-decided":"Niet beslist",
+	"public-press":"Publiek",
+	"not-public-press":"Niet publiek"
 }

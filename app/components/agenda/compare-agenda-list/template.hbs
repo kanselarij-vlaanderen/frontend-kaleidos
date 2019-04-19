@@ -1,5 +1,5 @@
 
-  <div class="vl-grid vl-grid--is-stacked vl-u-spacer-extended-bottom-l">
+  <div class="vl-grid vl-grid--is-stacked vl-u-spacer-extended-bottom-l compare-container">
     <div class="compare-left-column">
       {{utils/agenda-selector
         searchField="name"
@@ -24,11 +24,18 @@
     </div>
   </div>
 
+
   {{#if hasChangedSet}}
 
-  {{#each changedGroups as |changedSet|}}
-    {{agenda/compare-agenda-item changedSet=changedSet}}
-  {{/each}}
+    <div class="u-spacer--large">
+
+      {{#each changedGroups as |changedSet|}}
+        <div class="{{spacerClass}}">
+          {{agenda/compare-agenda-item changedSet=changedSet}}
+        </div>
+      {{/each}}
+
+    </div>
 
   {{else}}
 

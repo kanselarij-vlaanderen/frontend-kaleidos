@@ -13,23 +13,13 @@ export default Component.extend({
   }),
 
   left: computed('changedSet', function () {
-    const { left, right } = this.changedSet;
-
-    if (right){
-
-    }
-
+    const { left = {} } = this.changedSet;
     return left;
   }),
 
 
   right: computed('changedSet', function () {
-    const { left, right } = this.changedSet;
-
-    if (left){
-
-    }
-
+    const { right  = {} } = this.changedSet;
     return right;
   }),
 

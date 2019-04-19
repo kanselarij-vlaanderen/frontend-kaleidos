@@ -2,7 +2,7 @@
   <div class="vlc-container">
     <div class="vl-u-spacer-extended-l">
       <div class="vl-action-group vl-action-group--align-right">
-        {{#if (not currentAgenda.isFinal)}}
+        {{#if (not currentSession.isFinal)}}
           {{#if
             (await
               (allow-delete-agendaitem

@@ -1,5 +1,15 @@
 /* ==========================================================================
-   vl-agenda-items
+   vlc-agenda-item-big
+   ========================================================================== */
+
+.vlc-agenda-item-big {
+  border-bottom: 1px solid $ghost;
+  padding: 2rem 1.6rem;
+  background-color: $white;
+}
+
+/* ==========================================================================
+   vlc-agenda-item
    ========================================================================== */
 
 .vlc-agenda-item {
@@ -15,60 +25,40 @@
     padding-bottom: $spacing-small;
   }
 
-  .vlc-agenda-item__meta {
-    font-size: 1.3rem;
-    display: flex;
-    align-items: center;
-  }
+}
 
-  .active {
-    color: $limeade;
-  }
+.vlc-agenda-item__meta {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+}
 
-  .default {
-    color: $gray-light
-  }
-
-  .vl-document-badge {
-    background-color: $porcelain;
-
-    i {
-      color: $science-blue;
-    }
-  }
-
-  .vl-attachments {
-    flex-wrap: wrap;
-    .vl-attachment {
-      .vl-badge {
-        margin-right: $spacing-xxsmall;
-      }
-      margin-bottom: $spacing-small;
-      margin-right: $spacing-small;
-    }
+.vlc-agenda-item__meta--positive {
+  font-weight: 500;
+  color: $napier-green;
+  & + i {
+    color: $napier-green;
   }
 }
 
-/* Modifier for scrollable panel with agenda items
-   ========================================================================== */
 
-.vlc-agenda-items--small {
-
-  a.vlc-agenda-item {
-    text-decoration: none;
-    display: block;
-    color: inherit;
-  }
-
-  .vlc-agenda-item--active {
-    background: $primary-blue;
-    * {
-      color: white;
+// Attachments - documents
+.vl-attachments {
+  flex-wrap: wrap;
+  font-weight: 500;
+  .vl-attachment {
+    .vl-badge {
+      margin-right: $spacing-xxsmall;
     }
+    margin-bottom: $spacing-small;
+    margin-right: $spacing-small;
   }
+}
 
-  .vlc-agenda-items__header {
-    padding: 3rem 1.5rem 1.5rem;
+.vl-document-badge {
+  background-color: $porcelain;
+  font-weight: 500;
+  i {
+    color: $blue-gray-dark;
   }
-
 }

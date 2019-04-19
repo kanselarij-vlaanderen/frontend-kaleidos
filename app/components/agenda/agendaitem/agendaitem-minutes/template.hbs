@@ -1,56 +1,54 @@
 {{#if (not isEditing)}}
-  <div class="vl-u-spacer-extended-l">
-    <div class="vl-u-spacer">
-      <div class="vl-u-display-flex vl-u-flex-space-between">
-        <h2 class="vl-title vl-title--h3">
-          {{t "prepared-text-minutes"}}
-        </h2>
-        <div class="vl-u-spacer-extended-left-s">
-          <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "buttons.edit"}}
-          </a>
-        </div>
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vl-u-flex-space-between">
+      <h2 class="vl-title vl-title--h3">
+        {{t "prepared-text-minutes"}}
+      </h2>
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link" {{action "toggleIsEditing"}}>
+          {{t "buttons.edit"}}
+        </a>
       </div>
     </div>
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h6">
-        {{t "attendees"}}
-      </h3>
-      {{#each currentSession.notes.attendees as |attendee|}}
-        <div class="vl-u-spacer">
-          <p>
-            {{attendee.title}}
-          </p>
-          <p>
-            {{await attendee.person.alternativeName}}
-          </p>
-        </div>
-      {{/each}}
-    </div>
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h6">
-        {{t "date"}}
-      </h3>
-      <p>
-        {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
-      </p>
-    </div>
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h6">
-        {{t "notes-of-session"}}
-      </h3>
-      <p>
-        {{await currentSession.notes.description}}
-      </p>
-    </div>
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h6">
-        {{t "notes-of-agendaitem"}}
-      </h3>
-      <p>
-        {{await agendaitem.meetingRecord.description}}
-      </p>
-    </div>
+  </div>
+  <div class="vl-u-spacer">
+    <h3 class="vl-title vl-title--h6">
+      {{t "attendees"}}
+    </h3>
+    {{#each currentSession.notes.attendees as |attendee|}}
+      <div class="vl-u-spacer">
+        <p>
+          {{attendee.title}}
+        </p>
+        <p>
+          {{await attendee.person.alternativeName}}
+        </p>
+      </div>
+    {{/each}}
+  </div>
+  <div class="vl-u-spacer">
+    <h3 class="vl-title vl-title--h6">
+      {{t "date"}}
+    </h3>
+    <p>
+      {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
+    </p>
+  </div>
+  <div class="vl-u-spacer">
+    <h3 class="vl-title vl-title--h6">
+      {{t "notes-of-session"}}
+    </h3>
+    <p>
+      {{await currentSession.notes.description}}
+    </p>
+  </div>
+  <div class="vl-u-spacer">
+    <h3 class="vl-title vl-title--h6">
+      {{t "notes-of-agendaitem"}}
+    </h3>
+    <p>
+      {{await agendaitem.meetingRecord.description}}
+    </p>
   </div>
 {{else}}
   {{agenda/agendaitem/agendaitem-minutes-edit

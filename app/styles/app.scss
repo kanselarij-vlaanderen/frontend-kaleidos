@@ -122,22 +122,28 @@ $icon-font-location: "/fonts/";
 // Custom components
 @import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
 @import "custom-components/vlc-agenda-item";
+@import "custom-components/vlc-agenda-items-new";
+@import "custom-components/vlc-backlink";
+@import "custom-components/vlc-box";
 @import "custom-components/vlc-comments";
+@import "custom-components/vlc-container";
+@import "custom-components/vlc-date-range";
 @import "custom-components/vlc-document-list";
 @import "custom-components/vlc-hr";
-@import "custom-components/vlc-container";
 @import "custom-components/vlc-input-field-block";
+@import "custom-components/vlc-list-section-header";
 @import "custom-components/vlc-navbar";
 @import "custom-components/vlc-page-header";
-@import "custom-components/vlc-radio-inline";
+@import "custom-components/vlc-pill";
 @import "custom-components/vlc-panel-layout";
 @import "custom-components/vlc-procedure-step";
+@import "custom-components/vlc-radio-inline";
 @import "custom-components/vlc-scroll-wrapper";
 @import "custom-components/vlc-side-nav";
+@import "custom-components/vlc-status-timeline";
+@import "custom-components/vlc-tabs-reverse";
 @import "custom-components/vlc-toolbar";
 @import "custom-components/vlc-user";
-@import "custom-components/vlc-view-switch";
-@import "custom-components/vlc-status-timeline";
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -162,43 +168,37 @@ $icon-font-location: "/fonts/";
 //custom css added
 @import "custom-application/toast";
 
+a.vlc-agenda-items-new__sub-item {
+  display: block;
+  position: relative;
+  font-size: 1.3rem;
+  text-decoration: none;
+  color: $black;
+  background: #fff;
+}
+
+a.vlc-agenda-items-new__sub-item--active,
+a.vlc-agenda-items-new__sub-item--active:hover,
+a.vlc-agenda-items-new__sub-item--active:active {
+  background: $science-blue;
+  color: #fff;
+  .vlc-agenda-items-new__status--positive {
+    color: #fff;
+  }
+}
+
+a.vlc-agenda-items-new__sub-item--active:focus {
+  background: darken($science-blue, 5%);
+}
+
 .document {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
-.new-session-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.side-nav-small {
-  display: block;
-  float: left;
-  border-top: none;
-
-  .title-container {
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-top: none;
-    border-right: none;
-
-    strong {
-      font-size: 1.5em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      i {
-        margin-right: 0.5em;
-      }
-    }
-  }
+.vlc-scroll-wrapper {
+  height: 100% !important;
 }
 
 .progress-container {
@@ -208,34 +208,94 @@ $icon-font-location: "/fonts/";
 }
 
 .comparison-container {
+  width: calc(100% - 150px);
+  float: left;
 
+  .compare-title {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    h2 {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+  }
 
   .compare-agenda-list-container {
     display: flex;
+    width: 100%;
     flex-direction: column;
 
     .compare-item-container {
-      display:flex;
-      justify-content: stretch;
+      width: 100%;
+      height: 200px;
 
       .previous-agenda-item {
         width: 50%;
         float: left;
-      }
 
-      .deleted-agenda-item {
-        opacity:0.5;
-        background-color:$gray-lighter;
+        .agenda-item-link {
+          height: 200px;
+        }
       }
 
       .current-agenda-item {
         width: 50%;
         float: left;
+
+        .agenda-item-link {
+          height: 200px;
+        }
       }
     }
   }
 }
 
+.comparison-container {
+  width: calc(100% - 150px);
+  float: left;
+
+  .compare-title {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    h2 {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+  }
+
+  .compare-agenda-list-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+
+    .compare-item-container {
+      width: 100%;
+      height: 200px;
+
+      .previous-agenda-item {
+        width: 50%;
+        float: left;
+
+        .agenda-item-link {
+          height: 200px;
+        }
+      }
+
+      .current-agenda-item {
+        width: 50%;
+        float: left;
+
+        .agenda-item-link {
+          height: 200px;
+        }
+      }
+    }
+  }
+}
 
 .vl-file-overview {
   cursor: pointer;
@@ -531,39 +591,12 @@ $icon-font-location: "/fonts/";
   }
 }
 
-.vlc-panel-layout,
-.vlc-scroll-wrapper {
-  height: auto;
-}
-
-.vlc-panel-layout__agenda-items {
-  height: 100%;
-}
-
-.vlc-side-nav {
-  min-height: calc(100vh - 44px - 50px - 106px);
-  height: auto;
-}
-
-a.vlc-agenda-item {
-  text-decoration: none;
-  display: block;
-  color: inherit;
-  &:active {
-    background: $primary-blue;
-    * {
-      color: white;
-    }
-  }
-}
-
 a.vlc-agenda-items__header {
   padding: 3rem 1.5rem 1.5rem;
 }
 
 .vlc-panel-layout__main-content {
   min-width: 50%;
-  width: 50%;
 }
 
 .vlc-hr-small {
@@ -584,10 +617,6 @@ a.disabled {
   cursor: default;
 }
 
-.vl-u-bg-width {
-  width: 100%;
-}
-
 body > .ember-view {
   height: 100% !important;
   display: flex;
@@ -601,10 +630,6 @@ body > .ember-view {
   &::before {
     display: none;
   }
-}
-
-.vlc-comments-comment-content {
-  width: 100%;
 }
 
 .line {
@@ -674,11 +699,28 @@ span.label {
 
 }
 
+.compare-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .compare-left-column {
   width: calc(49% - 15px);
 }
 
 .compare-right-column {
-  width: 50%;
+  width: 49%;
 }
 
+// fix for spacer
+.vlc-panel-layout__main-content {
+  flex: 3 1;
+}
+
+.x-toggle-component {
+  justify-content: right;
+}
+
+.transparant {
+  opacity: 0.5 !important;
+}

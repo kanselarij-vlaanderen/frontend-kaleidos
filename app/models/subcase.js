@@ -10,13 +10,14 @@ export default Model.extend({
   showAsRemark: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
+  concluded: attr('boolean'),
   case: belongsTo('case'),
   relatedTo: hasMany('subcase', { inverse: null }),
-  requestedForMeeting: belongsTo('meeting', {inverse:null}),
-  phases: hasMany('subcase-phase', { inverse: null }),
-  consulationRequests: hasMany('consulation-request', {inverse:null}),
+  requestedForMeeting: belongsTo('meeting', { inverse: null }),
+  phases: hasMany('subcase-phase', { inverse:null }),
+  consulationRequests: hasMany('consulation-request', { inverse: null }),
   governmentDomains: hasMany('government-domain', { inverse: null }),
-  agendaitems: hasMany('agendaitem', {inverse:null}),
+  agendaitems: hasMany('agendaitem', { inverse: null }),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   themes: hasMany('theme'),
@@ -24,7 +25,20 @@ export default Model.extend({
   approvals: hasMany('approval'),
   confidentiality: belongsTo('confidentiality'),
 
-  documents: computed('documentVersions', async function () {
+  async documentNumberOfVersion(version) {
+    const documents = await this.get('documents');
+    const sortedDocuments = documents.sortBy('created');
+    const targetDocument = await version.get('document');
+    let foundIndex;
+    sortedDocuments.map((document, index) => {
+      if(document == targetDocument) {
+        foundIndex=index;
+      }
+    })
+    return foundIndex;
+  },
+
+  documents: computed('documentVersions.@each', async function () {
     const documentVersions = await this.get('documentVersions');
     const documents = await Promise.all(documentVersions.map(documentVersion => {
       return documentVersion.get('document');
@@ -64,6 +78,15 @@ export default Model.extend({
         });
       } else {
         return false;
+      }
+    })
+  }),
+
+  agendaitemsOnDesignAgendaToEdit: computed('id', function () {
+    return this.store.query('agendaitem', {
+      filter: {
+        subcase: { id: this.get('id') },
+        agenda: { name: "Ontwerpagenda" }
       }
     })
   })

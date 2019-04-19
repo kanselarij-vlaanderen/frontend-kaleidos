@@ -9,6 +9,10 @@
   min-height: 0;
 }
 
+.vlc-panel-layout-agenda__detail {
+  width: 100%; // Fix a flexbox issue
+}
+
 .vlc-panel-layout__agenda-history {
   flex: 1 0 184px;
   height: 100%;
@@ -16,7 +20,7 @@
 
 .vlc-panel-layout__agenda-items {
   background: $porcelain;
-  flex: 1 0 416px;
+  flex: 0 1 416px;
   border-right: 1px solid $ghost;
   height: 100%;
 }
@@ -24,8 +28,4 @@
 .vlc-panel-layout__main-content {
   height: 100%;
   flex: 3 1 auto;
-}
-
-.vlc-panel-layout-agenda__detail {
-  // width: 100%; // Fix a flexbox issue
 }

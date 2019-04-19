@@ -4,7 +4,7 @@ import { alias } from '@ember/object/computed';
 export default Component.extend({
 	store: inject(),
 	sessionService: inject(),
-	classNames: ["vlc-container"],
+  classNames: ['vlc-padding-bottom--large'],
 	isEditing: false,
 
 	currentSession: alias('sessionService.currentSession'),

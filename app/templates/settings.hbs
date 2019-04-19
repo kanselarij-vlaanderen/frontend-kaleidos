@@ -20,15 +20,27 @@
     <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
     {{t "manage-alerts"}}
   </button>
+  <button
+    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+    {{action "showDocumentTypesManagementForm"}}
+  >
+    <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+    {{t "manage-document-types"}}
+  </button>
 </div>
 {{#if isAddingMandate}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "manage-mandates")
-    closeModasl=(action "showAddingMandateForm")
+  {{utils/model-manager
+    modalTitle=(t "manage-mandates")
+    modelName="government-domain"
+    close=(action "showAddingMandateForm")
   }}
-    {{utils/manage-domains closeModal=(action "showAddingMandateForm")}}
-  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isManagingDocumentTypes}}
+  {{utils/model-manager
+    modalTitle=(t "manage-mandates")
+    modelName="document-type"
+    close=(action "showDocumentTypesManagementForm")
+  }}
 {{/if}}
 {{#if isEditingMandatee}}
   {{#web-components/vl-modal

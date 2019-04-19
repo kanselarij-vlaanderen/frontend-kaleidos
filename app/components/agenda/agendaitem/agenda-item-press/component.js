@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-	classNames:["vl-u-spacer-extended-l"],
 	agendaitem:null,
 	isEditing:false,
 

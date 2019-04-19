@@ -16,20 +16,11 @@ module.exports = function (environment) {
         Date: false
       }
     },
+    
 
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    },
-
-    moment: {
-      includeLocales: ['nl-be', 'be', 'nl'],
-    },
-
-    fontawesome: {
-      icons: {
-        'free-solid-svg-icons': 'all'
-      }
     },
   };
 

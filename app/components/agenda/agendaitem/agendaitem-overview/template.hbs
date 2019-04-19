@@ -1,29 +1,26 @@
 <div class="vlc-scroll-wrapper">
   <div class="vlc-scroll-wrapper__header">
-    <div class="vl-u-spacer-extended-top vl-u-spacer-extended-left-l vl-u-spacer-extended-right-l">
+    <div
+      class="vl-u-spacer-extended-top vl-u-spacer-extended-left-l vl-u-spacer-extended-right-l"
+    >
       <div class="vl-tabs__wrapper">
-          {{agenda/agendaitem/agendaitem-nav
-            agendaitem=agendaitem
-            activeAgendaItemSection=activeAgendaItemSection
-            setAgendaItemSection=(action "setAgendaItemSection")
-          }}
-        </div>
+        {{agenda/agendaitem/agendaitem-nav
+          agendaitem=agendaitem
+          activeAgendaItemSection=activeAgendaItemSection
+          setAgendaItemSection=(action "setAgendaItemSection")
+        }}
       </div>
     </div>
   </div>
   <div class="vlc-scroll-wrapper__body">
-    <div class="vl-u-spacer-extended-l">
+    <div class="vlc-container">
+      <div class="vl-u-spacer-extended-l">
         {{#if (eq activeAgendaItemSection "details")}}
           <div class="vl-action-group vl-action-group--align-right">
             {{#if (not currentAgenda.isFinal)}}
               {{#if showOptions}}
                 {{#if isPostPonable}}
-                  {{#if
-                    (or
-                      (await agendaitem.retracted)
-                      (await agendaitem.postponedTo)
-                    )
-                  }}
+                  {{#if (or agendaitem.retracted (await agendaitem.postponedTo))}}
                     <button
                       class="vl-button vl-button--tertiary vl-button--narrow"
                       {{action "advanceAgendaitem" agendaitem}}
@@ -79,9 +76,10 @@
         {{else if (eq activeAgendaItemSection "minutes")}}
           {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
         {{/if}}
-
+      </div>
     </div>
   </div>
+</div>
 {{#if isShowingPostponeModal}}
   {{#web-components/vl-modal
     isOverlay=true

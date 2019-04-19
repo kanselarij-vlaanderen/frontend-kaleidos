@@ -11,9 +11,9 @@ export default Controller.extend({
 	agendaitemsClass: computed('routing.currentRouteName', function () {
 		const { routing } = this;
 		if(routing.get('currentRouteName') === "agenda.agendaitems.agendaitem") {
-			return "vlc-panel-layout__agenda-items vlc-scroll-wrapper__body";
+			return "vlc-panel-layout__agenda-items";
 		} else {
-			return "vlc-panel-layout-agenda__detail vlc-scroll-wrapper__body vl-u-spacer-extended";
+			return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
 		}
 	}),
 

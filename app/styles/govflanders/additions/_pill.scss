@@ -3,21 +3,3 @@
     * custom pill
    ========================================================================== */
 
-.vl-custom {
-  .vl-pill {
-    background: $porcelain;
-    font-weight: 400;
-    color: $text-color;
-    padding: 1rem;
-    height: 2.7rem;
-  }
-
-  .vl-pill--success {
-    color: $success-text-color;
-    font-weight: bold;
-    border: 1px solid $border-color;
-    border-right: 3px solid $success-text-color;
-    border-radius: 0;
-
-  }
-}

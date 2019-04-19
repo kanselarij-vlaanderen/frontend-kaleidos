@@ -7,5 +7,11 @@ export default Route.extend({
       reload: true, 
       include: "confidentiality,case,government-domains,document-versions,document-versions.document,themes,mandatees.government-domains" 
     });
+  },
+
+  actions: {
+    refresh() {
+      this.refresh();
+    }
   }
 });

@@ -10,7 +10,8 @@ export default Model.extend({
 	versionNumber: attr('number'),
 	serialNumber: attr('string'),
 	document: belongsTo('document', {inverse:null}),
-	subcase: belongsTo('subcase'),
+	subcase: belongsTo('subcase', { inverse: null }),
+	agendaitem: belongsTo('agendaitem', { inverse: null }),
   announcement: belongsTo('announcement'),
 	file: belongsTo('file'),
 
