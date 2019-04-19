@@ -281,5 +281,7 @@
 	"decided":"Beslist",
 	"not-decided":"Niet beslist",
 	"public-press":"Publiek",
-	"not-public-press":"Niet publiek"
+	"not-public-press":"Niet publiek",
+	"print":"Afdrukken",
+	"manage-case-types":"Dossier-types beheer"
 }

@@ -20,9 +20,9 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 				if (this.modelIsAgendaItem(item)) {
 					const approvalToCreate = this.store.createRecord('approval', {
 						mandatee: mandatee,
-						agendaitem: item,
 						created: date,
 						modified: date,
+						agendaitem: item
 					})
 					return approvalToCreate.save();
 				} else {
@@ -39,11 +39,23 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 	},
 
 	async deleteApprovals(mandateesAlreadyAdded, mandatees, approvals) {
-		return Promise.all(mandateesAlreadyAdded.map(async mandateeAdded => {
-			const foundMandatee = await mandatees.find(mandatee => mandateeAdded.get('id') === mandatee.get('id'));
-			if (!foundMandatee) {
-				const approvalToDelete = await approvals.find((approval) => approval.get('mandatee.id') == mandateeAdded.get('id'));
-				approvalToDelete.destroyRecord();
+		let mandateesProcessed = [];
+		await Promise.all(approvals.map(async (approval) => {
+			const mandatee = await approval.get('mandatee');
+			if (!mandatee) {
+				approval.destroyRecord();
+			}
+		}));
+		return await Promise.all(mandateesAlreadyAdded.map(mandateeAdded => {
+			if (mandateeAdded) {
+				const foundMandatee = mandatees.find(mandatee => mandateeAdded.get('id') === mandatee.get('id'));
+				// const foundMandateeOnce = mandateesProcessed.find((mandatee) =>  mandateeAdded.get('id') === mandatee.get('id'))
+				if (!foundMandatee) {
+					const approvalToDelete = approvals.find((approval) => approval.get('mandatee.id') == mandateeAdded.get('id'));
+					approvalToDelete.destroyRecord();
+				} else {
+					mandateesProcessed.push(foundMandatee);
+				}
 			}
 		}))
 	},
@@ -71,7 +83,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 			const approvals = await item.get('approvals');
 			const mandatees = await item.get('mandatees');
 			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
-
+			
 			await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, item);
 			await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
 			this.toggleProperty('isEditing');

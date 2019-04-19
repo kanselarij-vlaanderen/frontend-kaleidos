@@ -12,6 +12,7 @@ export default Route.extend({
 
 	async model(params) {
 		const agenda = await this.get('sessionService.currentAgenda');
+		this.set('sessionService.selectedAgendaItem', null);
 
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
@@ -55,10 +56,24 @@ export default Route.extend({
 
 		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
 		const filteredAgendaGroupListAddedAfterwards = Object.values(await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards));
-		console.log(filteredAgendaItems, filteredAgendaGroupList, filteredAgendaGroupListAddedAfterwards)
+		let sortedAgendaGroupList = [];
+		let sortedAgendaGroupListAddedAfterwards = [];
+
+		if(filteredAgendaGroupList) {
+			sortedAgendaGroupList = filteredAgendaGroupList.sortBy('foundPriority')
+		} else {
+			sortedAgendaGroupList = filteredAgendaGroupList;
+		}
+
+		if(filteredAgendaGroupList) {
+			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards.sortBy('foundPriority')
+		} else {
+			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards;
+		}
+
 		return [
-			filteredAgendaGroupList.sortBy('foundPriority'),
-			filteredAgendaGroupListAddedAfterwards.sortBy('foundPriority')
+			sortedAgendaGroupList,
+			sortedAgendaGroupListAddedAfterwards
 		];
 	},
 });

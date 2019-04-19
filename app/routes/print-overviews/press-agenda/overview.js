@@ -21,7 +21,7 @@ export default Route.extend({
 			return agendaitem;
 			}
 		}));
-		const agendaitemGroups = await Object.values(this.get('agendaService').reduceAgendaitemsByMandatees(sortedAgendaItems));
+		const agendaitemGroups = Object.values(await this.get('agendaService').reduceAgendaitemsByMandatees(sortedAgendaItems));
 
 		return hash({ agendaitemGroups: agendaitemGroups, currentSession: currentSession });
 	}

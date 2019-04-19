@@ -16,8 +16,9 @@ module.exports = function (environment) {
         Date: false
       }
     },
-    
-
+    moment: {
+      allowEmpty: true // default: false
+    },
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
