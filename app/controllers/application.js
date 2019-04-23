@@ -2,8 +2,9 @@ import Controller from '@ember/controller';
 import { computed,observer } from '@ember/object';
 import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend({
+export default Controller.extend(isAuthenticatedMixin, {
 	currentSession: inject(),
 	router:inject(),
 
