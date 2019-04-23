@@ -23,6 +23,18 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+    torii: {
+      disableRedirectInitializer: true,
+      providers: {
+        'acmidm-oauth2': {
+          apiKey: 'b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d',
+          baseUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/auth',
+          scope: 'vo profile openid dkbkaleidos',
+          redirectUri: 'https://kaleidos-dev.vlaanderen.be/authorization/callback',
+          logoutUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/logout'
+        }
+      }
+    }
   };
 
   if (environment === 'development') {
