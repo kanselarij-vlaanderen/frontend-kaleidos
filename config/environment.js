@@ -6,6 +6,9 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'auto',
+    moment: {
+      includeLocales: ['nl']
+    },
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -15,9 +18,6 @@ module.exports = function (environment) {
         // Prevent Ember Data from overriding Date.parse.
         Date: false
       }
-    },
-    moment: {
-      allowEmpty: true // default: false
     },
     APP: {
       // Here you can pass flags/options to your application instance

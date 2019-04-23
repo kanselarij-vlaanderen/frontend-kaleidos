@@ -7,9 +7,9 @@ import moment from 'moment';
 export default Controller.extend({
 	intl: inject(),
 	
-	title: computed('currentSession', function() {
-		moment.locale('nl')
-		const date = this.get('currentSession.plannedStart');
+	title: computed('model.currentSession', function() {
+		const date = this.get('model.currentSession.plannedStart');
+		console.log(moment())
 		return `${this.get('intl').t('decisions-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
 	}),
 

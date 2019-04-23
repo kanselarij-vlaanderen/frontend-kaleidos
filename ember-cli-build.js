@@ -10,13 +10,12 @@ module.exports = function(defaults) {
     flatpickr: {
       locales: ['nl']
     },
-    moment: {
-      locales: ['nl'],
-      includeLocales: true
-    },
-    autoImport: {
-      exclude: ['moment-timezone', 'moment', 'ember-moment', 'ember-cli-moment-shim']
-    }
+    // moment: {
+    //   locales: ['nl']
+    // },
+    // autoImport: {
+    //   exclude: ['moment-timezone', 'moment', 'ember-moment', 'ember-cli-moment-shim']
+    // }
   });
   return app.toTree();
 };
