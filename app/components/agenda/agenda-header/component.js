@@ -97,8 +97,7 @@ export default Component.extend(isAuthenticatedMixin, {
 			})
 		},
 
-		async lockAgenda(session) {
-
+		async lockAgenda() {
       const agendas = await this.get('agendas');
       const draft = agendas.filter(agenda => agenda.name === "Ontwerpagenda").sortBy('-name').get('firstObject');
       const lastAgenda = agendas.filter(agenda => agenda.name !== "Ontwerpagenda").sortBy('-name').get('firstObject');
@@ -108,7 +107,6 @@ export default Component.extend(isAuthenticatedMixin, {
         await this.sessionService.lockMeeting(lastAgenda.get('id'));
         this.set('sessionService.currentAgenda', lastAgenda);
         this.reloadRoute();
-
       }
 		},
 
