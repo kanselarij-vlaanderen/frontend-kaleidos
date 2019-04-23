@@ -1,5 +1,8 @@
 {{#if (await model)}}
-  <div class="vl-alert vl-alert-relative vl-alert-relative--center {{await type}}" role="alert">
+  <div
+    class="vl-alert vl-alert-relative vl-alert-relative--center {{await type}}"
+    role="alert"
+  >
     <div class="vl-alert__icon">
       <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
     </div>
@@ -27,5 +30,9 @@
     </button>
   </div>
 {{/if}}
-{{m-header}}
+{{#if (and role (not-eq role ""))}}
+{{m-header
+  navigateToMockLogin=(action "navigateToMockLogin")
+}}
+{{/if}}
 {{outlet}}

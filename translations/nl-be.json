@@ -289,5 +289,6 @@
 	"manage-user-roles":"Gebruikersbeheer",
 	"edit-user":"Gebruiker aanpassen",
 	"user":"Gebruiker",
-	"user-role":"Gebruikersrol"
+	"user-role":"Gebruikersrol",
+	"remove-roles":"Verwijder alle rechten"
 }

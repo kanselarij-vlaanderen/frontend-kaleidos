@@ -24,6 +24,11 @@ export default Component.extend({
 			this.get('selectedUser').save().then(() => {
 				this.close();
 			});
+		},
+
+		removeUserRoles() {
+			const user = this.get('selectedUser');
+			user.set('group', null);
 		}
 
 	}
