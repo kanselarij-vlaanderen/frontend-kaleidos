@@ -54,24 +54,6 @@ export default Controller.extend(isAuthenticatedMixin, {
 			this.send('refresh');
 		},
 
-		navigateToNewAnnouncement(announcement) {
-			this.set("createAnnouncement", false);
-			// this.set("selectedAgendaItem", null);
-			this.set("selectedAnnouncement", announcement);
-		},
-
-		navigateToCreateAnnouncement() {
-			this.set("createAnnouncement", true);
-			// this.set("selectedAgendaItem", null);
-			this.set("selectedAnnouncement", null);
-		},
-
-		// selectAnnouncement(announcement) {
-		// 	this.set("createAnnouncement", false);
-		// 	this.set("selectedAgendaItem", null);
-		// 	this.set("selectedAnnouncement", announcement);
-		// },
-
 		compareAgendas() {
 			this.transitionToRoute('agenda.compare');
 		},

@@ -132,7 +132,6 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		navigateToCreateAnnouncement() {
 			this.set('addingAnnouncement', true);
-			this.navigateToCreateAnnouncement();
 		},
 
 		async deleteDesignAgenda(agenda) {

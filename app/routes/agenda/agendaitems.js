@@ -28,8 +28,9 @@ export default Route.extend({
 		return hash({
 			agendaitems: agendaitems,
 			groups: groups,
-			announcements: this.store.query('announcement', {
-				filter: { agenda: { id: agenda.get('id') } }
+			announcements: await this.store.query('announcement', {
+				filter: { agenda: { id: agenda.get('id') } },
+				include: 'document-versions'
 			})
 		});
 	},

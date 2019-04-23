@@ -34,9 +34,7 @@ export default Component.extend({
           return this.createNewDocumentWithDocumentVersion(announcement, null, nonDigitalDocument.title);
         }
       }));
-
-      this.navigateToNewAnnouncement(announcement);
-      notifyPropertyChange(agenda, 'announcements');
+      this.reloadRoute(agenda.get('id'))
     },
 
     uploadedFile(uploadedFile) {

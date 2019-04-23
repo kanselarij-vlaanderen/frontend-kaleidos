@@ -729,3 +729,8 @@ span.label {
   display:flex;
   flex-wrap:wrap;
 }
+
+p {
+  word-break: break-all;
+  white-space: normal;
+}

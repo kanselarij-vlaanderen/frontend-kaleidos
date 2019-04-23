@@ -1,12 +1,25 @@
-<div class="vl-u-spacer">
-  <div class="agenda-item-link">
-    {{#if announcement.id}}
-      <h4>
-        {{announcement.title}}
-      </h4>
-      <p>
-        {{announcement.text}}
-      </p>
-    {{/if}}
+{{#if announcement.id}}
+  <h4 class="vl-title vl-title--h5">
+    {{announcement.title}}
+  </h4>
+  <p class="vl-long-title">
+    {{announcement.text}}
+  </p>
+{{/if}}
+{{#if (await announcement.documents)}}
+  <div class="vlc-hr"></div>
+  <div class="vl-u-display-flex vl-attachments">
+    {{#each (await announcement.documents) as |document|}}
+      <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">
+        <div
+          class="vl-badge vl-badge--icon vl-badge--small vl-badge--alt vl-document-badge"
+        >
+          <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
+        </div>
+        <p class="vl-u-text--bold">
+          {{document.title}}
+        </p>
+      </div>
+    {{/each}}
   </div>
-</div>
+{{/if}}

@@ -11,11 +11,11 @@ export default Model.extend({
   agenda: belongsTo('agenda'),
   documentVersions: hasMany('document-version'),
 
-  documents: computed('documentVersions', async function() {
+  documents: computed('documentVersions', async function () {
     const documentVersions = await this.get('documentVersions');
     const documents = await Promise.all(documentVersions.map(documentVersion => {
       return documentVersion.get('document');
     }));
     return documents.uniqBy('id');
-  })
+  }),
 });
