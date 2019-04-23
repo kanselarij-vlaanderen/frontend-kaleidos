@@ -18,7 +18,6 @@ export default Service.extend({
       this.set('_user', user);
       this.set('_roles', roles);
       this.set('_group', group);
-      console.log(user, group, roles)
       // The naming is off, but account,user,roles are taken for the
       // promises in a currently public API.
       this.setProperties({
@@ -28,8 +27,7 @@ export default Service.extend({
         groupContent: group
       });
 
-      const mainRole = [...new Set(roles)];
-      this.set('userRole', mainRole.get('firstObject'));
+      this.set('userRole', group.get('name'));
 
       this.set('isAdmin', this.canAccess('admin'));
     }

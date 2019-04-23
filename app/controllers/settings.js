@@ -6,6 +6,7 @@ export default Controller.extend({
 	isEditingMandatee: false,
 	isManagingAlerts: false,
 	isManagingDocumentTypes: false,
+	isManagingUsers: false,
 
 	actions: {
 		showAddingMandateForm() {
@@ -26,7 +27,10 @@ export default Controller.extend({
 
 		showCaseTypesManagementForm() {
 			this.toggleProperty('isManagingCaseTypes');
-		}
+		},
 
+		showUserManagementInterface() {
+			this.toggleProperty('isManagingUsers');
+		}
 	}
 });

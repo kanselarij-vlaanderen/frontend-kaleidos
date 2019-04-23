@@ -724,3 +724,8 @@ span.label {
 .transparant {
   opacity: 0.5 !important;
 }
+
+.settings-container {
+  display:flex;
+  flex-wrap:wrap;
+}

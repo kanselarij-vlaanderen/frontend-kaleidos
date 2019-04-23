@@ -285,5 +285,9 @@
 	"print":"Afdrukken",
 	"manage-case-types":"Dossier-types beheer",
 	"sign-out":"Afmelden",
-	"login":"Aanmelden"
+	"login":"Aanmelden",
+	"manage-user-roles":"Gebruikersbeheer",
+	"edit-user":"Gebruiker aanpassen",
+	"user":"Gebruiker",
+	"user-role":"Gebruikersrol"
 }
