@@ -1,20 +1,28 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
+import { computed } from '@ember/object';
 
 export default Component.extend({
 	sessionService: inject(),
 	classNames: ['vlc-side-nav'],
 
-	// classNameBindings: ['agendaMenuOpened:vl-layout-agenda__sidebar--collapsed'],
-	agendaMenuOpened:false,
-	
+	classNameBindings: ['getClassNames'],
+
+	getClassNames: computed('agendaMenuOpened', function () {
+		if (this.get('agendaMenuOpened')) {
+			return "vlc-panel-layout__agenda-history vlc-panel-layout__agenda-history--collapsed"
+		}
+	}),
+
+	agendaMenuOpened: false,
+
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentSession: alias('sessionService.currentSession'),
 
 	actions: {
 		collapseSideMenu() {
-			this.set('agendaMenuOpened', !this.get('agendaMenuOpened'));
+			this.toggleProperty('agendaMenuOpened');
 		},
 
 		compareAgendas() {

@@ -1,22 +1,36 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
+import { on } from '@ember/object/evented';
 
 export default Component.extend({
 	store:inject(),
 	sessionService:inject(),
 	classNames: ["vlc-agenda-items-new__sub-item"],
-	classNameBindings: ["getClassNames"],
+	classNameBindings: ["extraAgendaItemClass"],
 	tagName: 'a',
 	index:null,
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  isClickable: true,
 
-	getClassNames: computed('agendaitem', 'selectedAgendaItem', function() {
-		if(this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
-			return 'vlc-agenda-items-new__sub-item--active';
-		}
-	}),
+  extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'isClickable', async function () {
+    let clazz = '';
+    if (this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
+      clazz += 'vlc-agenda-items-new__sub-item--active ';
+    }
+    if (!this.get('isClickable')) {
+      clazz += ' not-clickable '
+    }
+    const postponed = (await this.get('agendaitem.postponedTo'));
+    const retracted = this.get('agendaitem.retracted');
+
+    if (postponed || retracted) {
+      clazz += ' transparant';
+    }
+    this.set('extraAgendaItemClass', clazz);
+
+  })),
 
 	agenda: computed('agendaitem', function() {
 		return this.get('agendaitem.agenda.name');
@@ -48,6 +62,6 @@ export default Component.extend({
 	number: computed('index', function() {
 		if(this.index >=0) {
 			return (this.index + 1);
-		} 
-	}),
+		}
+	})
 });

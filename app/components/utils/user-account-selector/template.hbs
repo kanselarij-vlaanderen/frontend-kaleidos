@@ -1,0 +1,12 @@
+{{#power-select
+    options=items
+    selected=selectedItems
+    disabled=readOnly
+    searchField=searchField
+    placeholder=placeholder
+    search=(perform searchTask)
+    oninput=(action "resetValueIfEmpty")
+    onchange=(action "selectModel") as |user|
+  }}
+    {{user.firstName}} {{user.lastName}}
+  {{/power-select}}

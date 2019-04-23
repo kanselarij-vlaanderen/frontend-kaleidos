@@ -1,32 +1,51 @@
-<div class="previous-agenda-item">
-  <div class="agenda-item-container">
-    <div class="agenda-item-link">
-      {{#if changedSet.previous.id}}
-        <strong>
-          {{changedSet.previous.priority}}
-          .
-          {{changedSet.previous.subcase.shortTitle}}
-        </strong>
-        <p>
-          {{changedSet.previous.subcase.title}}
-        </p>
-      {{/if}}
-    </div>
+<div class="vl-grid compare-container">
+
+  <div class="compare-left-column">
+    {{#if hasLeftAgenda }}
+      <div
+        class="vlc-agenda-items__header vlc-agenda-items__header--small vl-u-text--marked"
+      >
+        {{#each left.mandatees as |mandatee|}}
+          <h2 class="vl-title vl-title--h6">
+            {{mandatee.title}}
+          </h2>
+        {{/each}}
+      </div>
+      {{#each (await left.agendaitems) as |agendaitem index|}}
+        <div class="vlc-agenda-items-new__sub-item">
+          {{agenda/agenda-list/list-item
+            agendaitem=agendaitem
+            index=index
+            isClickable=false
+          }}
+        </div>
+      {{/each}}
+    {{/if}}
   </div>
-</div>
-<div class="current-agenda-item">
-  <div class="agenda-item-container" >
-    <div class="agenda-item-link">
-      {{#if changedSet.current.id}}
-        <strong>
-          {{changedSet.current.priority}}
-          .
-          {{changedSet.current.subcase.shortTitle}}
-        </strong>
-        <p>
-          {{changedSet.current.subcase.title}}
-        </p>
-      {{/if}}
-    </div>
+
+  <div class="horizontal-line-wrap">
+    <div class="horizontal-line"></div>
   </div>
+
+  <div class="compare-right-column">
+    {{#if hasRightAgenda }}
+      <div class="vlc-agenda-items__header vlc-agenda-items__header--small vl-u-text--marked">
+        {{#each right.mandatees as |mandatee|}}
+          <h2 class="vl-title vl-title--h6">
+            {{mandatee.title}}
+          </h2>
+        {{/each}}
+      </div>
+      {{#each (await right.agendaitems) as |agendaitem index|}}
+        <div class="vlc-agenda-items-new__sub-item">
+          {{agenda/agenda-list/list-item
+            agendaitem=agendaitem
+            index=index
+            isClickable=false
+          }}
+        </div>
+      {{/each}}
+    {{/if}}
+  </div>
+
 </div>

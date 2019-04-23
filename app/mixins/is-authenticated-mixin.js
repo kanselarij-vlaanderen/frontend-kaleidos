@@ -3,7 +3,9 @@ import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 
 export default Mixin.create({
-	currentSession: inject(),
+	currentAuthenticatedSession: inject('current-session'),
 	store:inject(),
-	isAdmin: alias('currentSession.isAdmin')
+	isAdmin: alias('currentAuthenticatedSession.isAdmin'),
+	user: alias('currentAuthenticatedSession.userContent'),
+	role: alias('currentAuthenticatedSession.userRole'),
 });

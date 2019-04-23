@@ -9,6 +9,7 @@
         </div>
       </div>
       <div class="vlc-toolbar__right">
+        {{#if isAdmin}}
         <div class="vlc-toolbar__item">
           <button
             class="vl-button vl-button--narmeeting vl-button--icon-before"
@@ -20,6 +21,7 @@
             {{t "new-agenda"}}
           </button>
         </div>
+        {{/if}}
       </div>
     </div>
   </div>
@@ -40,9 +42,8 @@
                   <input
                     class="vl-input-field"
                     type="search"
-                    placeholder="Zoeken"
+                    placeholder="Zoeken.."
                    />
-
                 </div>
                 <div class="vlc-input-field-group">
                   <button
@@ -107,10 +108,11 @@
                 {{await meeting.latestAgendaName}}
               </td>
               <td {{action "selectAgenda" meeting}}>
-                {{await meeting.latestAgenda}}
+                {{!-- {{await meeting.latestAgenda}} --}}
                 {{moment-format (await meeting.latestAgenda.created) "DD-MM-YYYY HH:mm"}}
               </td>
               <td class="vl-u-align-center">
+                {{#if isAdmin}}
                 <button class="vl-button vl-button--link vl-button--icon">
                   <i
                     class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
@@ -139,6 +141,7 @@
                     </li>
                   </ul>
                 {{/attach-popover}}
+                {{/if}}
                 <button
                   class="vl-button vl-button--link vl-button--icon"
                   {{action "selectAgenda" meeting}}

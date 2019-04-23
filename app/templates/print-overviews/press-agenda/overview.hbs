@@ -5,16 +5,28 @@
         <h1 class="vlc-page-header__title">
           {{await title}}
         </h1>
+        <div class="vlc-page-header__sub">
+          <a class="vl-link vl-link--bold" {{action "navigateBackToAgenda"}}>
+            <i
+              class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
+            ></i>
+            {{t "buttons.back"}}
+          </a>
+        </div>
       </div>
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
-          <div class="vlc-page-header__sub">
-            <a class="vl-link vl-link--bold" {{action "navigateBackToAgenda"}}>
+          <div class="vl-action-group">
+            <button
+              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+              {{action "print"}}
+            >
               <i
-                class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+                aria-hidden="true"
               ></i>
-              {{t "buttons.back"}}
-            </a>
+              {{t "print"}}
+            </button>
           </div>
         </div>
       </div>

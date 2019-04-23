@@ -1,0 +1,56 @@
+{{#web-components/vl-modal
+  isOverlay=true
+  title=(t "manage-user-roles")
+  closeModal=(action "close")
+}}
+  {{#if (and (not isAdding) (not isEditing))}}
+    <div class="vl-modal-dialog__content">
+      <div class="vlc-input-field-block">
+				{{web-components/vl-form-label value=(t "user")}}
+        {{utils/user-account-selector
+          selectedItems=selectedUser
+          selectModel=(action "selectUser")
+        }}
+      </div>
+			{{#if selectedUser}}
+      <div class="vlc-input-field-block">
+				{{web-components/vl-form-label value=(t "user-role")}}
+        {{utils/model-selector
+          modelName="account-group"
+          searchField="name"
+          propertyToShow="name"
+          sortField="name"
+          selectedItems=(await selectedUser.group)
+          selectModel=(action "chooseAccountGroup")
+        }}
+      </div>
+			{{/if}}
+    </div>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "close"}}
+            >
+              {{t "buttons.cancel"}}
+            </button>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            {{#if selectedUser}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow"
+                {{action "saveChanges"}}
+              >
+                {{t "edit-user"}}
+              </button>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+{{/web-components/vl-modal}}

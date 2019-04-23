@@ -12,6 +12,7 @@ Router.map(function () {
     this.route('agendaitems', function() {
       this.route('agendaitem', {path: '/:agendaitem_id'});
     });
+    this.route('compare');
   });
   this.route('cases', { path: '/dossiers' }, function () {
     this.route('case', { path: ':id' }, function () {

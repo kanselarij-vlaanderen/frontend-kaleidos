@@ -1,3 +1,4 @@
+
 {
 	"agenda": {
 		"agendaitems": "agendapunten",
@@ -115,7 +116,8 @@
 		"title-document": "Document titel"
 	},
 	"comparison": {
-		"nav-title": "Agendas"
+		"nav-title": "Agendas",
+    "compare-title": "Vergelijk Agenda's"
 	},
 	"edit-decision": {
 		"approved": "Beslist",
@@ -270,7 +272,7 @@
 	"newsletter-doc-date":"Datum van beschikbaarheid van de documenten",
 	"general-newsletter":"Algemene nieuwsbrief",
 	"agenda-notes":"Notulen van",
-	"decisions-of":"Beslissingen van",
+	"decisions-of":"Beslissingen van de Vlaamse regering - ministerraad van ",
 	"manage-alerts":"Systeemberichten beheer",
 	"message":"Systeembericht",
 	"severity":"Strengheid",
@@ -279,5 +281,13 @@
 	"decided":"Beslist",
 	"not-decided":"Niet beslist",
 	"public-press":"Publiek",
-	"not-public-press":"Niet publiek"
+	"not-public-press":"Niet publiek",
+	"print":"Afdrukken",
+	"manage-case-types":"Dossier-types beheer",
+	"sign-out":"Afmelden",
+	"login":"Aanmelden",
+	"manage-user-roles":"Gebruikersbeheer",
+	"edit-user":"Gebruiker aanpassen",
+	"user":"Gebruiker",
+	"user-role":"Gebruikersrol"
 }

@@ -3,7 +3,11 @@
     <div class="vlc-toolbar__item">
       <ul class="vl-tabs vl-u-reset-margin">
         <li class="vl-tab">
-          {{#link-to "agendas" class="vl-tab__link"}}
+          {{#link-to
+            "agendas"
+            class="vl-tab__link"
+            current-when="agendas agenda"
+          }}
             {{t "navigation.agenda"}}
           {{/link-to}}
         </li>
@@ -13,18 +17,24 @@
           {{/link-to}}
         </li>
         <li class="vl-tab">
-          {{#link-to "newsletters" class="vl-tab__link"}}
+          {{#link-to
+            "newsletters"
+            class="vl-tab__link"
+            current-when="newsletters-overview"
+          }}
             {{t "navigation.newsletter"}}
           {{/link-to}}
         </li>
-        <li class="vl-tab">
-          {{#link-to "settings" class="vl-tab__link"}}
-            {{t "navigation.settings"}}
-          {{/link-to}}
-        </li>
+        {{#if isAdmin}}
+          <li class="vl-tab">
+            {{#link-to "settings" class="vl-tab__link"}}
+              {{t "navigation.settings"}}
+            {{/link-to}}
+          </li>
+        {{/if}}
         <li class="vl-tab">
           <a class="vl-tab__link" role="tab" aria-selected="true">
-            Notificaties
+            {{t "navigation.notifications"}}
           </a>
         </li>
       </ul>
@@ -32,14 +42,27 @@
   </div>
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
-      <div class="vlc-user">
-        <div class="vlc-user__username">
-          Hilde Crevits
+      {{#if user}}
+        <div class="vlc-user">
+          <div class="vlc-user__username">
+            {{user.firstName}}
+            {{user.lastName}}
+            (
+            {{role}}
+            )
+          </div>
+          <a class="vlc-user__action">
+            {{t "sign-out"}}
+          </a>
         </div>
-        <a class="vlc-user__action">
-          Afmelden
-        </a>
-      </div>
+      {{else}}
+        <div class="vlc-user">
+          <div class="vlc-user__username"></div>
+          {{#link-to "mock-login" class="vlc-user__action"}}
+            {{t "login"}}
+          {{/link-to}}
+        </div>
+      {{/if}}
     </div>
   </div>
 </div>

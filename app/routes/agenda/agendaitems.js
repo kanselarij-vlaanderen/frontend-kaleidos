@@ -12,6 +12,7 @@ export default Route.extend({
 
 	async model(params) {
 		const agenda = await this.get('sessionService.currentAgenda');
+		this.set('sessionService.selectedAgendaItem', null);
 
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
@@ -19,9 +20,9 @@ export default Route.extend({
 		}
 		if(params.filter) {
 			filterOptions['filter']['subcase'] = {'short-title':params.filter};
-		} 
+		}
 
-		const agendaitems = await this.store.query('agendaitem', filterOptions)
+		const agendaitems = await this.store.query('agendaitem', filterOptions);
 		const groups = await this.reduceGroups(agendaitems, agenda);
 
 		return hash({

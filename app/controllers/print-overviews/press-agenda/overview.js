@@ -16,6 +16,10 @@ export default Controller.extend({
 			const currentSessionId = await this.get('model.currentSession.id');
 			const selectedAgendaid = this.get('selectedAgenda_id');
 			this.transitionToRoute('agenda.agendaitems', currentSessionId, { queryParams: { selectedAgenda: selectedAgendaid } })
+		},
+
+		print(){
+			window.print();
 		}
 	}
 });
