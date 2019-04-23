@@ -24,16 +24,15 @@ export default Service.extend({
         accountContent: account,
         userContent: user,
         rolesContent: roles,
+        userRole:group.get('name'),
         groupContent: group
       });
-
-      this.set('userRole', group.get('name'));
 
       this.set('isAdmin', this.canAccess('admin'));
     }
   },
   canAccess(role) {
-    return this._roles.includes(role);
+    return this.userRole.includes(role);
   },
   // constructs a task which resolves in the promise
   makePropertyPromise: task(function* (property) {
