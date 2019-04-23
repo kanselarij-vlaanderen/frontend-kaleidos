@@ -4,11 +4,13 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "buttons.edit"}}
-        </a>
-      </div>
+      {{#if isAdmin}}
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "buttons.edit"}}
+          </a>
+        </div>
+      {{/if}}
     </div>
   </div>
   {{#if (not isEditing)}}
@@ -31,15 +33,17 @@
       cancelForm=(action "cancelEditing")
     }}
   {{/if}}
-  <div class="vl-u-spacer">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleIsAddingNewDocument"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-      {{t "buttons.document-add"}}
-    </button>
-  </div>
+  {{#if isAdmin}}
+    <div class="vl-u-spacer">
+      <button
+        class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+        {{action "toggleIsAddingNewDocument"}}
+      >
+        <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+        {{t "buttons.document-add"}}
+      </button>
+    </div>
+  {{/if}}
 </div>
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
@@ -52,7 +56,10 @@
       <div class="vlc-input-field-block">
         {{#if (not (gt uploadedFiles.length 0))}}
           {{web-components/vl-form-label value="Bijlagen"}}
-          {{file-uploader multipleFiles=false uploadedFile=(action "getUploadedFile")}}
+          {{file-uploader
+            multipleFiles=false
+            uploadedFile=(action "getUploadedFile")
+          }}
         {{else}}
           {{subcases/edit-documents uploadedFiles=uploadedFiles}}
         {{/if}}

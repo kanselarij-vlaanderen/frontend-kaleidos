@@ -3,8 +3,9 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend(DefaultQueryParamsMixin, {
+export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
 	sessionService: inject(),
 	creatingNewSession: false,
 	sort: '-planned-start',

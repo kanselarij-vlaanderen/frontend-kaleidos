@@ -1,10 +1,11 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
-export default Component.extend({
+export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
 	sessionService: inject(),
 	agendaService: inject(),
@@ -96,8 +97,7 @@ export default Component.extend({
 			})
 		},
 
-		async lockAgenda(session) {
-
+		async lockAgenda() {
       const agendas = await this.get('agendas');
       const draft = agendas.filter(agenda => agenda.name === "Ontwerpagenda").sortBy('-name').get('firstObject');
       const lastAgenda = agendas.filter(agenda => agenda.name !== "Ontwerpagenda").sortBy('-name').get('firstObject');
@@ -107,7 +107,6 @@ export default Component.extend({
         await this.sessionService.lockMeeting(lastAgenda.get('id'));
         this.set('sessionService.currentAgenda', lastAgenda);
         this.reloadRoute();
-
       }
 		},
 

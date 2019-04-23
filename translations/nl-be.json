@@ -283,5 +283,7 @@
 	"public-press":"Publiek",
 	"not-public-press":"Niet publiek",
 	"print":"Afdrukken",
-	"manage-case-types":"Dossier-types beheer"
+	"manage-case-types":"Dossier-types beheer",
+	"sign-out":"Afmelden",
+	"login":"Aanmelden"
 }

@@ -32,14 +32,23 @@
   </div>
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
-      <div class="vlc-user">
-        <div class="vlc-user__username">
-          Hilde Crevits
+      {{#if isAdmin}}
+        <div class="vlc-user">
+          <div class="vlc-user__username">
+            Hilde Crevits (Admin)
+          </div>
+          <a class="vlc-user__action">
+            {{t "sign-out"}}
+          </a>
         </div>
-        <a class="vlc-user__action">
-          Afmelden
-        </a>
-      </div>
+      {{else}}
+        <div class="vlc-user">
+          <div class="vlc-user__username"></div>
+          {{#link-to "mock-login" class="vlc-user__action"}}
+            {{t "login"}}
+          {{/link-to}}
+        </div>
+      {{/if}}
     </div>
   </div>
 </div>

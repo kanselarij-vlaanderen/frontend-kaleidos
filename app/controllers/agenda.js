@@ -1,8 +1,9 @@
 import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend({
+export default Controller.extend(isAuthenticatedMixin, {
 	sessionService: inject(),
 	queryParams: ['selectedAgenda'],
 	selectedAgenda: null,

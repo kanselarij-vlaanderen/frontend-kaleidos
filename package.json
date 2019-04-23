@@ -20,6 +20,8 @@
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
     "@ember/optional-features": "^0.6.3",
+    "@lblod/ember-acmidm-login": "github:lblod/ember-acmidm-login",
+    "@lblod/ember-mock-login": "github:lblod/ember-mock-login",
     "@lblod/ember-vo-webuniversum": "^0.19.12",
     "@lblod/ember-vo-webuniversum-data-table": "^0.2.11",
     "broccoli-asset-rev": "^2.7.0",

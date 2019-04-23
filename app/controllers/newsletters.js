@@ -4,8 +4,9 @@ import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import moment from 'moment';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend(DefaultQueryParamsMixin, {
+export default Controller.extend(DefaultQueryParamsMixin,isAuthenticatedMixin, {
 	intl: inject(),
 	sessionService: inject(),
 

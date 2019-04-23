@@ -22,7 +22,7 @@
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
       <div class="vl-action-group">
-        {{#if (eq currentAgenda.name "Ontwerpagenda")}}
+        {{#if (and (eq currentAgenda.name "Ontwerpagenda") isAdmin)}}
           <button
             class="vl-button vl-button--narrow"
             {{action "approveAgenda" currentSession}}
@@ -53,7 +53,8 @@
           placement="bottom" as |attacher|
         }}
           <ul class="vl-popover__link-list">
-            {{#if (gt (await currentSession.agendas.length) 0)}}
+            {{#if isAdmin}}
+            {{#if (gt (await currentSession.agendas.length) 0)}}        
               <li class="vl-popover__link-list__item">
                 {{#if (not currentAgenda.isFinal)}}
                   <a
@@ -104,6 +105,7 @@
                 </a>
               </li>
             {{/if}}
+            {{/if}}
             <li class="vl-popover__link-list__item">
               <a
                 class="vl-link vl-link--block"
@@ -118,7 +120,7 @@
                 {{t "print-notes"}}
               </a>
             </li>
-            {{#if (eq currentAgenda.name "Ontwerpagenda")}}
+            {{#if (and isAdmin (eq currentAgenda.name "Ontwerpagenda"))}}
               <li class="vl-popover__link-list__item">
                 <a
                   class="vl-link vl-link--block"
@@ -139,6 +141,7 @@
               </a>
             </li>
             <li class="vl-popover__link-list__item">
+              {{#if isAdmin}}
               {{#if (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
               }}
                 <a
@@ -156,6 +159,7 @@
                 >
                   {{t "buttons.agenda-add"}}
                 </a>
+              {{/if}}
               {{/if}}
             </li>
             <li class="vl-popover__link-list__item"></li>

@@ -1,7 +1,8 @@
 import Component from '@ember/component';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(EditAgendaitemOrSubcase, {
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	classNames: ['vl-u-spacer--large'],
 	isAddingNewDocument: false,
 	isEditing: false,

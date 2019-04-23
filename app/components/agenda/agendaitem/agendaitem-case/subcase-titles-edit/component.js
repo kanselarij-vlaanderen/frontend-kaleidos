@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { EditAgendaitemOrSubcase, getCachedProperty } from '../../../../../mixins/edit-agendaitem-or-subcase';
+import { EditAgendaitemOrSubcase, getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 
 export default Component.extend(EditAgendaitemOrSubcase, {
 	store: inject(),

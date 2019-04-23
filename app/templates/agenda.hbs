@@ -14,11 +14,11 @@
 {{#if (not isLoading)}}
   <div class="vlc-panel-layout">
     {{#if isAdmin}}
-      {{agenda/side-nav
-        agendas=agendas
-        currentAgenda=currentAgenda
-        selectAgenda=(action "selectAgenda")
-      }}
+    {{agenda/side-nav
+      agendas=agendas
+      currentAgenda=currentAgenda
+      selectAgenda=(action "selectAgenda")
+    }}
     {{/if}}
     {{outlet}}
   </div>

@@ -1,11 +1,12 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { EditAgendaitemOrSubcase } from '../../../../../mixins/edit-agendaitem-or-subcase';
+import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(EditAgendaitemOrSubcase, {
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	store: inject(),
 	classNames: ["vl-u-spacer--large"],
-	item:null,
+	item: null,
 	propertiesToSet: ['phases'],
 
 	modelIsAgendaItem(model) {
@@ -20,8 +21,8 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 	},
 
 	async setNewPropertiesToModel(model) {
-		const { selectedPhase} = this;
-		if(this.modelIsAgendaItem(model)) {
+		const { selectedPhase } = this;
+		if (this.modelIsAgendaItem(model)) {
 			const modelPhase = this.store.createRecord('subcase-phase', {
 				date: new Date(),
 				code: selectedPhase,
