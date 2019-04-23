@@ -9,7 +9,9 @@ export default Component.extend({
 
 		close() {
 			const user = this.get('selectedUser');
-			user.belongsTo('group').reload();
+			if(user) {
+				user.belongsTo('group').reload();
+			}
 			this.close();
 		},
 
