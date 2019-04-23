@@ -2,8 +2,12 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <ul class="vl-tabs vl-u-reset-margin">
-         <li class="vl-tab">
-          {{#link-to "agendas" class="vl-tab__link" current-when="agendas agenda"}}
+        <li class="vl-tab">
+          {{#link-to
+            "agendas"
+            class="vl-tab__link"
+            current-when="agendas agenda"
+          }}
             {{t "navigation.agenda"}}
           {{/link-to}}
         </li>
@@ -13,15 +17,21 @@
           {{/link-to}}
         </li>
         <li class="vl-tab">
-          {{#link-to "newsletters" class="vl-tab__link" current-when="newsletters-overview"}}
+          {{#link-to
+            "newsletters"
+            class="vl-tab__link"
+            current-when="newsletters-overview"
+          }}
             {{t "navigation.newsletter"}}
           {{/link-to}}
         </li>
-        <li class="vl-tab">
-          {{#link-to "settings" class="vl-tab__link"}}
-            {{t "navigation.settings"}}
-          {{/link-to}}
-        </li>
+        {{#if isAdmin}}
+          <li class="vl-tab">
+            {{#link-to "settings" class="vl-tab__link"}}
+              {{t "navigation.settings"}}
+            {{/link-to}}
+          </li>
+        {{/if}}
         <li class="vl-tab">
           <a class="vl-tab__link" role="tab" aria-selected="true">
             {{t "navigation.notifications"}}
@@ -32,10 +42,14 @@
   </div>
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
-      {{#if isAdmin}}
+      {{#if user}}
         <div class="vlc-user">
           <div class="vlc-user__username">
-            Hilde Crevits (Admin)
+            {{user.firstName}}
+            {{user.lastName}}
+            (
+            {{role}}
+            )
           </div>
           <a class="vlc-user__action">
             {{t "sign-out"}}

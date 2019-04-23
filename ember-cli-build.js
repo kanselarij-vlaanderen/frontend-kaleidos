@@ -11,6 +11,7 @@ module.exports = function(defaults) {
       locales: ['nl']
     },
     moment: {
+      locales: ['nl'],
       includeLocales: true
     },
     autoImport: {

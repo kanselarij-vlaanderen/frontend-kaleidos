@@ -18,7 +18,7 @@ export default Service.extend({
       this.set('_user', user);
       this.set('_roles', roles);
       this.set('_group', group);
-
+      console.log(user, group, roles)
       // The naming is off, but account,user,roles are taken for the
       // promises in a currently public API.
       this.setProperties({
@@ -28,6 +28,9 @@ export default Service.extend({
         groupContent: group
       });
 
+      const mainRole = [...new Set(roles)];
+      this.set('userRole', mainRole.get('firstObject'));
+
       this.set('isAdmin', this.canAccess('admin'));
     }
   },
@@ -35,20 +38,20 @@ export default Service.extend({
     return this._roles.includes(role);
   },
   // constructs a task which resolves in the promise
-  makePropertyPromise: task(function * (property) {
+  makePropertyPromise: task(function* (property) {
     yield waitForProperty(this, property);
     return this.get(property);
   }),
   // this is a promise
-  account: computed('_account', function() {
+  account: computed('_account', function () {
     return this.makePropertyPromise.perform('_account');
   }),
   // this contains a promise
-  user: computed('_user', function() {
+  user: computed('_user', function () {
     return this.makePropertyPromise.perform('_user');
   }),
   // this contains a promise
-  group: computed('_group', function() {
+  group: computed('_group', function () {
     return this.makePropertyPromise.perform('_group');
   })
 });
