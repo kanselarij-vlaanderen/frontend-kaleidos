@@ -9,6 +9,7 @@ export default Service.extend({
 
   logout() {
     // TODO implement logout
+    
   },
 
   async load() {
@@ -28,9 +29,14 @@ export default Service.extend({
         accountContent: account,
         userContent: user,
         rolesContent: roles,
-        userRole:group.get('name'),
         groupContent: group
       });
+
+      if(group && group.get('name')) {
+        this.set('userRole', group.get('name'));
+      } else {
+        this.set('userRole', null);
+      }
 
       this.set('isAdmin', this.canAccess('admin'));
     }
