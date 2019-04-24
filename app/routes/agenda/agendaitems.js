@@ -18,13 +18,13 @@ export default Route.extend({
 			filter: { agenda: { id: agenda.get('id') } },
 			include: 'subcase.mandatees,subcase,subcase.case,postponed-to'
 		}
-		if(params.filter) {
-			filterOptions['filter']['subcase'] = {'short-title':params.filter};
+		if (params.filter) {
+			filterOptions['filter']['subcase'] = { 'short-title': params.filter };
 		}
 
 		const agendaitems = await this.store.query('agendaitem', filterOptions);
 		const announcements = agendaitems.filter((item) => item.showAsRemark);
-		
+
 		const groups = await this.reduceGroups(agendaitems, agenda);
 
 		return hash({
@@ -39,7 +39,7 @@ export default Route.extend({
 		const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
 		const itemsAddedAfterwards = []
 
-		const filteredAgendaItems = await agendaitems.filter(agendaitem => {
+		let filteredAgendaItems = await agendaitems.filter(agendaitem => {
 			if (agendaitem && agendaitem.id && !agendaitem.showAsRemark) {
 				if (agendaitem.priority) {
 					const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
@@ -53,19 +53,20 @@ export default Route.extend({
 			}
 		});
 
-
+		filteredAgendaItems = filteredAgendaItems.sortBy('created');
 		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
+
 		const filteredAgendaGroupListAddedAfterwards = Object.values(await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards));
 		let sortedAgendaGroupList = [];
 		let sortedAgendaGroupListAddedAfterwards = [];
 
-		if(filteredAgendaGroupList) {
+		if (filteredAgendaGroupList) {
 			sortedAgendaGroupList = filteredAgendaGroupList.sortBy('foundPriority')
 		} else {
 			sortedAgendaGroupList = filteredAgendaGroupList;
 		}
 
-		if(filteredAgendaGroupList) {
+		if (filteredAgendaGroupList) {
 			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards.sortBy('foundPriority')
 		} else {
 			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards;
