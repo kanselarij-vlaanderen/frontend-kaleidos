@@ -9,7 +9,7 @@ export default Service.extend({
 
   logout() {
     // TODO implement logout
-    
+    localStorage.clear(); //not working
   },
 
   async load() {
