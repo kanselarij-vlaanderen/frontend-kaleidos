@@ -3,13 +3,15 @@
     <div
       class="vl-u-spacer-extended-top vl-u-spacer-extended-left-l vl-u-spacer-extended-right-l"
     >
-      <div class="vl-tabs__wrapper">
-        {{agenda/agendaitem/agendaitem-nav
-          agendaitem=agendaitem
-          activeAgendaItemSection=activeAgendaItemSection
-          setAgendaItemSection=(action "setAgendaItemSection")
-        }}
-      </div>
+      {{#if (not agendaitem.showAsRemark)}}
+        <div class="vl-tabs__wrapper">
+          {{agenda/agendaitem/agendaitem-nav
+            agendaitem=agendaitem
+            activeAgendaItemSection=activeAgendaItemSection
+            setAgendaItemSection=(action "setAgendaItemSection")
+          }}
+        </div>
+      {{/if}}
     </div>
   </div>
   <div class="vlc-scroll-wrapper__body">
@@ -20,7 +22,8 @@
             {{#if (not currentAgenda.isFinal)}}
               {{#if showOptions}}
                 {{#if isPostPonable}}
-                  {{#if (or agendaitem.retracted (await agendaitem.postponedTo))}}
+                  {{#if (or agendaitem.retracted (await agendaitem.postponedTo))
+                  }}
                     <button
                       class="vl-button vl-button--tertiary vl-button--narrow"
                       {{action "advanceAgendaitem" agendaitem}}
@@ -53,15 +56,15 @@
                 {{/if}}
               {{/if}}
               {{#if isAdmin}}
-              <button
-                class="vl-button vl-button--tertiary vl-button--icon"
-                {{action "showOptions"}}
-              >
-                <i
-                  class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
-                ></i>
-              </button>
-            {{/if}}
+                <button
+                  class="vl-button vl-button--tertiary vl-button--icon"
+                  {{action "showOptions"}}
+                >
+                  <i
+                    class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                  ></i>
+                </button>
+              {{/if}}
             {{/if}}
           </div>
         {{/if}}

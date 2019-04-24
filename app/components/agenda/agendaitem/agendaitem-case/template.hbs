@@ -21,8 +21,10 @@
     isEditing=isEditing
   }}
 {{/if}}
-{{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
-{{agenda/agendaitem/agendaitem-case/subcase-phases item=item}}
-{{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
-{{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
+{{#if (not item.showAsRemark)}}
+  {{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
+  {{agenda/agendaitem/agendaitem-case/subcase-phases item=item}}
+  {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
+  {{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
+{{/if}}
 {{agenda/agendaitem/agendaitem-case/subcase-documents item=item}}

@@ -1,4 +1,5 @@
 {{#if selectedAgendaItem}}
+  {{#if (not agendaitem.showAsRemark)}}
   <p class="vlc-agenda-items-new__overline">
     <span class="vlc-agenda-items-new__numbering">
       {{number}}
@@ -9,7 +10,20 @@
   <h4 class="vlc-agenda-items-new__subject">
     {{await agendaitem.shortTitle}}
   </h4>
+  {{else}}
+  <p class="vlc-agenda-items-new__overline">
+    <span class="vlc-agenda-items-new__numbering">
+      {{number}}
+      .
+    </span>
+    {{agendaitem.shortTitle}}
+  </p>
+  <h4 class="vlc-agenda-items-new__subject">
+    {{await agendaitem.title}}
+  </h4>
+  {{/if}}
 {{else}}
+  {{#if (not agendaitem.showAsRemark)}}
   <h3 class="vl-title vl-u-text--small">
     {{number}}
     .
@@ -24,6 +38,16 @@
     <p class="vl-long-title">
     {{await agendaitem.subcase.concluded}}
   </p>
+  {{else}}
+  <h3 class="vl-title vl-u-text--small">
+    {{number}}
+    .
+    {{await agendaitem.shortTitle}}
+  </h3>
+  <p class="vl-long-title">
+    {{await agendaitem.title}}
+  </p>
+  {{/if}}
   {{#if (eq (await agenda) "Ontwerpagenda")}}
     <div class="vlc-hr"></div>
     <div class="vl-u-display-flex vl-attachments">
@@ -57,6 +81,7 @@
       {{/each}}
     </div>
   {{/if}}
+  {{#if (not agendaitem.showAsRemark)}}
   <div class="vl-u-display-flex vl-u-flex-space-between">
     <span class="vlc-agenda-items-new__times-passed">
       {{!-- {{await agendaitem.subcase.shortTitle}}  Phase todo --}}
@@ -87,6 +112,7 @@
       </span>
     {{/if}}
   </div>
+{{/if}}
 {{/if}}
 {{!-- <div class="agenda-sub-options">
       <p class="agenda-postponed-option">

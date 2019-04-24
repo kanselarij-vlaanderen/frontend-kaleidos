@@ -6,7 +6,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 	store: inject(),
 	classNames: ["vl-form__group", "vl-u-bg-porcelain"],
 	propertiesToSet: ['title', 'shortTitle', 'formallyOk', 'confidentiality'],
-
+	
 	title: getCachedProperty('title'),
 	shortTitle: getCachedProperty('shortTitle'),
 	formallyOk: getCachedProperty('formallyOk'),

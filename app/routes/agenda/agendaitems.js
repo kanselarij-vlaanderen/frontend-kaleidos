@@ -23,15 +23,14 @@ export default Route.extend({
 		}
 
 		const agendaitems = await this.store.query('agendaitem', filterOptions);
+		const announcements = agendaitems.filter((item) => item.showAsRemark);
+		
 		const groups = await this.reduceGroups(agendaitems, agenda);
 
 		return hash({
 			agendaitems: agendaitems,
 			groups: groups,
-			announcements: await this.store.query('announcement', {
-				filter: { agenda: { id: agenda.get('id') } },
-				include: 'document-versions'
-			})
+			announcements: announcements
 		});
 	},
 
@@ -41,7 +40,7 @@ export default Route.extend({
 		const itemsAddedAfterwards = []
 
 		const filteredAgendaItems = await agendaitems.filter(agendaitem => {
-			if (agendaitem && agendaitem.id) {
+			if (agendaitem && agendaitem.id && !agendaitem.showAsRemark) {
 				if (agendaitem.priority) {
 					const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
 					if (foundItem) {

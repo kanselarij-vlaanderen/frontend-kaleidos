@@ -27,11 +27,11 @@
         </div>
         {{#each (await agendaitemGroup.agendaitems) as |agendaitem index|}}
           <div class="vlc-agenda-items-new__sub-item">
-          {{agenda/agenda-list/list-item
-            agendaitem=agendaitem
-            index=index
-            selectAgendaItem=(action "selectAgendaItem")
-          }} 
+            {{agenda/agenda-list/list-item
+              agendaitem=agendaitem
+              index=index
+              selectAgendaItem=(action "selectAgendaItem")
+            }}
           </div>
         {{/each}}
       {{/each}}
@@ -52,25 +52,38 @@
         </div>
         <div class="vl-u-spacer">
           {{#each (await agendaitemGroup.agendaitems) as |agendaitem index|}}
-          <div class="vlc-agenda-item-big">
-            {{agenda/agenda-list/list-item
-              agendaitem=agendaitem
-              index=index
-              selectAgendaItem=(action "selectAgendaItem")
-            }}
-          </div>
+            <div class="vlc-agenda-item-big">
+              {{agenda/agenda-list/list-item
+                agendaitem=agendaitem
+                index=index
+                selectAgendaItem=(action "selectAgendaItem")
+              }}
+            </div>
           {{/each}}
         </div>
       {{/each}}
     </div>
   {{/each}}
 {{/if}}
-{{!-- <div class="vl-u-spacer">
-      {{#each agendaitems as |agendaitem index|}}
+<div class="vlc-toolbar vlc-toolbar--auto">
+  <div class="vlc-toolbar__left">
+    <h2 class="vl-title vl-title--h3 vl-u-spacer-extended-s">
+      {{t "agendas.announcements-subtitle"}}
+    </h2>
+  </div>
+</div>
+<div class="vl-u-spacer">
+  {{#if (gt (await announcements.length) 0)}}
+    {{#each (await announcements) as |announcement index|}}
+      <div class="vlc-agenda-items-new__sub-item">
         {{agenda/agenda-list/list-item
-          agendaitem=agendaitem
+          agendaitem=announcement
           index=index
           selectAgendaItem=(action "selectAgendaItem")
         }}
-      {{/each}}
-      </div> --}}
+      </div>
+    {{/each}}
+  {{else}}
+    {{web-components/vl-alert message=(t "no-announcements-yet")}}
+  {{/if}}
+</div>
