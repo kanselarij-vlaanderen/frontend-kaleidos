@@ -10,8 +10,9 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 	shouldNavigateObserver: on('init', observer('router.currentRouteName', 'currentSession.userRole', async function () {
 		const router = this.get('router');
-    const role = await this.get('currentSession.userRole');
-		if (router && !role ) {
+		const role = await this.get('currentSession.userRole');
+		const user = await this.get('currentSession.user');
+		if (router && user && !role ) {
 			this.transitionToRoute('accountless-users');
 		}
   })),
