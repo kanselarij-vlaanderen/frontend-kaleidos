@@ -15,28 +15,32 @@ export default Component.extend({
       this.toggleProperty('isAddingAnnouncement');
     },
     async createAnnouncement (){
-      const { title, text } = this;
-      const agenda = await this.get('currentAgenda');
-      const announcement = this.store.createRecord('announcement', { title, text, created: new Date(), modified: new Date(), agenda });
-      await announcement.save();
+      const { title, text, currentAgenda } = this;
+      const date = new Date();
+      const agendaitem = this.store.createRecord('agendaitem', 
+      { shortTitle: title,
+        title: text,
+        agenda: currentAgenda,
+        showAsRemark:true,
+        created: date
+      });
+      await agendaitem.save();
 
       const uploadedFiles = this.get('uploadedFiles');
 
       Promise.all(uploadedFiles.map(uploadedFile => {
         if(uploadedFile.id) {
-          return this.createNewDocumentWithDocumentVersion(announcement, uploadedFile, uploadedFile.get('name'));
+          return this.createNewDocumentWithDocumentVersion(agendaitem, uploadedFile, uploadedFile.get('name'));
         }
       }));
       const nonDigitalDocuments = this.get('nonDigitalDocuments');
 
       Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
         if(nonDigitalDocument.title) {
-          return this.createNewDocumentWithDocumentVersion(announcement, null, nonDigitalDocument.title);
+          return this.createNewDocumentWithDocumentVersion(agendaitem, null, nonDigitalDocument.title);
         }
       }));
-
-      this.navigateToNewAnnouncement(announcement);
-      notifyPropertyChange(agenda, 'announcements');
+      this.reloadRoute(currentAgenda.get('id'))
     },
 
     uploadedFile(uploadedFile) {
@@ -70,7 +74,7 @@ export default Component.extend({
       this.toggleProperty('isAddingNonDigitalDocument')
     },
   },
-    async createNewDocumentWithDocumentVersion(announcement, file, documentTitle) {
+    async createNewDocumentWithDocumentVersion(agendaitem, file, documentTitle) {
       let document = await this.store.createRecord('document', {
         created: new Date(),
         title: documentTitle,
@@ -81,7 +85,7 @@ export default Component.extend({
           delete file.public;
           const documentVersion = await this.store.createRecord('document-version', {
             document: createdDocument,
-            announcement: announcement,
+            agendaitem: agendaitem,
             created: new Date(),
             versionNumber: 1,
             file:file,
@@ -91,7 +95,7 @@ export default Component.extend({
         } else {
           const documentVersion = await this.store.createRecord('document-version', {
             document: createdDocument,
-            announcement: announcement,
+            agendaitem: agendaitem,
             created: new Date(),
             versionNumber: 1,
             chosenFileName: documentTitle

@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
+import moment from 'moment';
+
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 
 export default Route.extend(ApplicationRouteMixin, {
@@ -9,9 +11,7 @@ export default Route.extend(ApplicationRouteMixin, {
   routeAfterAuthentication: "agendas",
 
   beforeModel() {
-    this.get('moment').setTimeZone('Europe/Brussels');
     this.get('moment').setLocale('nl');
-    // this.get('moment').setLocale('en');
     this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
     return this._loadCurrentSession();

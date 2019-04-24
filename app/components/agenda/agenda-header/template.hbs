@@ -53,48 +53,7 @@
           placement="bottom" as |attacher|
         }}
           <ul class="vl-popover__link-list">
-            {{#if isAdmin}}
-            {{#if (gt (await currentSession.agendas.length) 0)}}        
-              <li class="vl-popover__link-list__item">
-                {{#if (not currentAgenda.isFinal)}}
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action "lockAgenda" currentAgenda}}
-                    {{action attacher.hide}}
-                  >
-                    {{t "buttons.agenda-lock"}}
-                  </a>
-                {{else}}
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action "unlockAgenda"}}
-                    {{action attacher.hide}}
-                  >
-                    {{t "buttons.agenda-unlock"}}
-                  </a>
-                {{/if}}
-              </li>
-            <li class="vl-popover__link-list__item">
-              {{#if (not await currentSession.isFinal)}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action "lockAgenda" currentSession}}
-                  {{action attacher.hide}}
-                >
-                  {{t "buttons.agenda-lock"}}
-                </a>
-              {{else}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action "unlockAgenda"}}
-                  {{action attacher.hide}}
-                >
-                  {{t "buttons.agenda-unlock"}}
-                </a>
-              {{/if}}
-            </li>
-            {{/if}}
-            {{#if (eq currentAgenda.name "Ontwerpagenda")}}
+            {{#if (and isAdmin (eq currentAgenda.name "Ontwerpagenda"))}}
               <li class="vl-popover__link-list__item">
                 <a
                   class="vl-link vl-link--block"
@@ -104,7 +63,16 @@
                   {{t "buttons.add-to-agenda"}}
                 </a>
               </li>
-            {{/if}}
+              <li class="vl-popover__link-list__item">
+                <a
+                  class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "toggleIsAddingAnnouncement"}}
+                >
+                  {{t "buttons.create-announcement"}}
+                </a>
+              </li>
+              <li class="vl-popover__link-list__separator" role="none"></li>
             {{/if}}
             <li class="vl-popover__link-list__item">
               <a
@@ -120,17 +88,6 @@
                 {{t "print-notes"}}
               </a>
             </li>
-            {{#if (and isAdmin (eq currentAgenda.name "Ontwerpagenda"))}}
-              <li class="vl-popover__link-list__item">
-                <a
-                  class="vl-link vl-link--block"
-                  {{action attacher.hide}}
-                  {{action "toggleIsAddingAnnouncement"}}
-                >
-                  {{t "buttons.create-announcement"}}
-                </a>
-              </li>
-            {{/if}}
             <li class="vl-popover__link-list__item">
               <a
                 class="vl-link vl-link--block"
@@ -140,29 +97,56 @@
                 {{t "buttons.printable-press-agenda"}}
               </a>
             </li>
-            <li class="vl-popover__link-list__item">
-              {{#if isAdmin}}
-              {{#if (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
-              }}
-                <a
-                  class="vl-link vl-link--block color-red"
-                  {{action "deleteDesignAgenda" currentAgenda}}
-                  {{action attacher.hide}}
-                >
-                  {{t "buttons.agenda-delete"}}
-                </a>
-              {{else if (and  (not designAgendaPresent) (not await currentSession.isFinal) )}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action "createNewDesignAgenda" currentSession}}
-                  {{action attacher.hide}}
-                >
-                  {{t "buttons.agenda-add"}}
-                </a>
+            {{#if isAdmin}}
+              <li class="vl-popover__link-list__separator" role="none"></li>
+              {{#if (gt (await currentSession.agendas.length) 1)}}
+                <li class="vl-popover__link-list__item">
+                  {{#if (not currentAgenda.isFinal)}}
+                    <a
+                      class="vl-link vl-link--block color-red"
+                      {{action "lockAgenda" currentAgenda}}
+                      {{action attacher.hide}}
+                    >
+                      {{t "buttons.agenda-lock"}}
+                    </a>
+                  {{else}}
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action "unlockAgenda"}}
+                      {{action attacher.hide}}
+                    >
+                      {{t "buttons.agenda-unlock"}}
+                    </a>
+                  {{/if}}
+                </li>
               {{/if}}
-              {{/if}}
-            </li>
-            <li class="vl-popover__link-list__item"></li>
+              <li
+                class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
+              >
+                {{#if
+                  (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
+                }}
+                  <a
+                    class="vl-link vl-link--block color-red"
+                    {{action "deleteDesignAgenda" currentAgenda}}
+                    {{action attacher.hide}}
+                  >
+                    {{t "buttons.agenda-delete"}}
+                  </a>
+                {{else if
+                  (and
+                    (not designAgendaPresent) (not await currentSession.isFinal)
+                  )}}
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action "createNewDesignAgenda" currentSession}}
+                    {{action attacher.hide}}
+                  >
+                    {{t "buttons.agenda-add"}}
+                  </a>
+                {{/if}}
+              </li>
+            {{/if}}
           </ul>
         {{/attach-popover}}
       </div>
@@ -179,5 +163,6 @@
   {{agenda/create-announcement
     isAddingAnnouncement=isAddingAnnouncement
     currentAgenda=currentAgenda
+    reloadRoute=(action "reloadRoute")
   }}
 {{/if}}

@@ -8,4 +8,10 @@ export default Mixin.create({
 	isAdmin: alias('currentAuthenticatedSession.isAdmin'),
 	user: alias('currentAuthenticatedSession.userContent'),
 	role: alias('currentAuthenticatedSession.userRole'),
+
+	actions: {
+		logoutUser() {
+			this.currentAuthenticatedSession.logout();
+		}
+	}
 });

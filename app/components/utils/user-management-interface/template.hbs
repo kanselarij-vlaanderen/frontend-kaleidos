@@ -5,26 +5,41 @@
 }}
   {{#if (and (not isAdding) (not isEditing))}}
     <div class="vl-modal-dialog__content">
-      <div class="vlc-input-field-block">
-				{{web-components/vl-form-label value=(t "user")}}
-        {{utils/user-account-selector
-          selectedItems=selectedUser
-          selectModel=(action "selectUser")
-        }}
+      <div
+        class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+      >
+				 <div class="vl-col--2-4 vl-col--1-1--s">
+          {{web-components/vl-form-label value=(t "user")}}
+          {{utils/user-account-selector
+            selectedItems=selectedUser
+            selectModel=(action "selectUser")
+          }}
+        </div>
+     
+        {{#if selectedUser}}
+				 <div class="vl-col--2-4 vl-col--1-1--s">
+          <button
+            class="vl-button vl-button--link vl-button--narrow"
+            {{action "removeUserRoles"}}
+          >
+            {{t "remove-roles"}}
+          </button>
+					</div>
+        {{/if}}
       </div>
-			{{#if selectedUser}}
-      <div class="vlc-input-field-block">
-				{{web-components/vl-form-label value=(t "user-role")}}
-        {{utils/model-selector
-          modelName="account-group"
-          searchField="name"
-          propertyToShow="name"
-          sortField="name"
-          selectedItems=(await selectedUser.group)
-          selectModel=(action "chooseAccountGroup")
-        }}
-      </div>
-			{{/if}}
+      {{#if selectedUser}}
+        <div class="vlc-input-field-block">
+          {{web-components/vl-form-label value=(t "user-role")}}
+          {{utils/model-selector
+            modelName="account-group"
+            searchField="name"
+            propertyToShow="name"
+            sortField="name"
+            selectedItems=(await selectedUser.group)
+            selectModel=(action "chooseAccountGroup")
+          }}
+        </div>
+      {{/if}}
     </div>
     <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
       <div class="vlc-toolbar">

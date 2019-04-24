@@ -7,11 +7,16 @@ export default Route.extend({
       refreshModel: true
     }
   },
+  currentSession: service(),
   session: service(),
   store: service(),
   beforeModel() {
-    if (this.session.isAuthenticated)
+    if(this.currentSession.userRole == "") {
+      this.transitionTo('accountless-users');
+    }
+    if (this.session.isAuthenticated) {
       this.transitionTo('agendas');
+    }
   },
   model(params) {
     const filter = { provider: 'https://github.com/lblod/mock-login-service' };

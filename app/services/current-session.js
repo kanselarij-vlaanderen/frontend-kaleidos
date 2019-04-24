@@ -7,6 +7,10 @@ export default Service.extend({
   session: service('session'),
   store: service('store'),
 
+  logout() {
+    // TODO implement logout
+  },
+
   async load() {
     if (this.get('session.isAuthenticated')) {
       const session = this.session;

@@ -52,7 +52,7 @@ const EditAgendaitemOrSubcase = Mixin.create({
 
 		async saveChanges() {
 			const { item, isAgendaItem } = this;
-			if (isAgendaItem) {
+			if (isAgendaItem && !item.showAsRemark) {
 				const isDesignAgenda = await item.get('isDesignAgenda');
 				if (isDesignAgenda) {
 					const agendaitemSubcase = await item.get('subcase');
@@ -72,6 +72,9 @@ const EditAgendaitemOrSubcase = Mixin.create({
 						});
 					})
 				}
+			}
+			if(item.showAsRemark) {
+				this.toggleProperty('isEditing');
 			}
 		}
 	}

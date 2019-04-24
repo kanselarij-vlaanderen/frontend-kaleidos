@@ -46,6 +46,7 @@ Router.map(function () {
       this.route('overview', {path: '/:meeting_id'});
     });
   });
+  this.route('accountless-users');
 });
 
 export default Router;

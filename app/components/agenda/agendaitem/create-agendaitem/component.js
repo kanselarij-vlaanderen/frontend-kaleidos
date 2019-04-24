@@ -138,7 +138,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
               await agendaitem.set('postponedTo', null);
               await agendaitem.save();
             } else {
-              console.log('i never get here')
+              // Never reached this
             }
           }
         });

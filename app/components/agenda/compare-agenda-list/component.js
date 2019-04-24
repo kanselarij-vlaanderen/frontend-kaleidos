@@ -70,7 +70,7 @@ export default Component.extend({
     const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
     const itemsAddedAfterwards = [];
 
-    const filteredAgendaItems = agendaitems.filter(agendaitem => {
+    let filteredAgendaItems = agendaitems.filter(agendaitem => {
       if (agendaitem && agendaitem.id) {
         if (agendaitem.priority) {
           const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
@@ -83,9 +83,9 @@ export default Component.extend({
         }
       }
     });
+    filteredAgendaItems = filteredAgendaItems.sortBy('created');
     const filteredAgendaGroupList = await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems);
     const filteredAgendaGroupListAddedAfterwards = await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards);
-
     return [
       Object.values(filteredAgendaGroupList).sortBy('foundPriority'),
       Object.values(filteredAgendaGroupListAddedAfterwards).sortBy('foundPriority')

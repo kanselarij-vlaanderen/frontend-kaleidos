@@ -11,12 +11,11 @@ module.exports = function(defaults) {
       locales: ['nl']
     },
     moment: {
-      locales: ['nl'],
-      includeLocales: true
+      allowEmpty: true
     },
-    autoImport: {
-      exclude: ['moment-timezone', 'moment', 'ember-moment', 'ember-cli-moment-shim']
-    }
+    // autoImport: {
+    //   exclude: ['moment-timezone', 'moment', 'ember-moment', 'ember-cli-moment-shim']
+    // }
   });
   return app.toTree();
 };

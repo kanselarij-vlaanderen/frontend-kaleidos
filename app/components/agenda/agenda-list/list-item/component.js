@@ -27,9 +27,10 @@ export default Component.extend({
 
     if (postponed || retracted) {
       clazz += ' transparant';
-    }
-    this.set('extraAgendaItemClass', clazz);
-
+		}
+		if(!this.get('isDestroyed')) {
+			this.set('extraAgendaItemClass', clazz);
+		}
   })),
 
 	agenda: computed('agendaitem', function() {
@@ -54,7 +55,7 @@ export default Component.extend({
 		})
 	}),
 
-	click(event) {
+	click() {
 		const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'));
 		this.selectAgendaItem(agendaitem);
 	},

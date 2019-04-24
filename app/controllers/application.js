@@ -1,7 +1,20 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
+import { computed,observer } from '@ember/object';
+import { on } from '@ember/object/evented';
+import { inject } from '@ember/service';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend({
+export default Controller.extend(isAuthenticatedMixin, {
+	currentSession: inject(),
+	router:inject(),
+
+	shouldNavigateObserver: on('init', observer('router.currentRouteName', 'currentSession.userRole', async function () {
+		const router = this.get('router');
+    const role = await this.get('currentSession.userRole');
+		if (router && role && role == "") {
+			this.transitionToRoute('accountless-users');
+		}
+  })),
 	
 	type: computed('model', async function() {
 		const { model } = this;
@@ -19,6 +32,10 @@ export default Controller.extend({
 	actions: {
 		close() {
 			this.set('model', null);
+		},
+
+		navigateToMockLogin() {
+			this.transitionToRoute('mock-login');
 		}
 	}
 });
