@@ -9,7 +9,6 @@ export default Controller.extend({
 	
 	title: computed('model.currentSession', function() {
 		const date = this.get('model.currentSession.plannedStart');
-		console.log(moment())
 		return `${this.get('intl').t('decisions-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
 	}),
 

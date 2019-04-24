@@ -55,7 +55,7 @@ export default Component.extend({
 		})
 	}),
 
-	click(event) {
+	click() {
 		const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'));
 		this.selectAgendaItem(agendaitem);
 	},

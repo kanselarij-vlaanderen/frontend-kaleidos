@@ -10,7 +10,6 @@ export default Controller.extend({
 	actions: {
 		refresh() {
 			const { currentAgenda, currentSession } = this;
-			console.log('hey')
 			this.transitionToRoute('agenda.agendaitems', currentSession.id, { queryParams: { selectedAgenda: currentAgenda.id } });
 		}
 	}
