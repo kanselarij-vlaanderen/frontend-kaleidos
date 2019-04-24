@@ -10,9 +10,9 @@ module.exports = function(defaults) {
     flatpickr: {
       locales: ['nl']
     },
-    // moment: {
-    //   locales: ['nl']
-    // },
+    moment: {
+      allowEmpty: true
+    },
     // autoImport: {
     //   exclude: ['moment-timezone', 'moment', 'ember-moment', 'ember-cli-moment-shim']
     // }

@@ -27,9 +27,10 @@ export default Component.extend({
 
     if (postponed || retracted) {
       clazz += ' transparant';
-    }
-    this.set('extraAgendaItemClass', clazz);
-
+		}
+		if(!this.get('isDestroyed')) {
+			this.set('extraAgendaItemClass', clazz);
+		}
   })),
 
 	agenda: computed('agendaitem', function() {

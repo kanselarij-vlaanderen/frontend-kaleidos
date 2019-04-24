@@ -30,7 +30,7 @@ export default Route.extend({
 		return hash({
 			agendaitems: agendaitems,
 			groups: groups,
-			announcements: announcements
+			announcements: announcements.sortBy('created')
 		});
 	},
 
