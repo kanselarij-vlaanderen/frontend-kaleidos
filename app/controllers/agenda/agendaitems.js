@@ -25,8 +25,5 @@ export default Controller.extend({
 		searchAgendaItems(value) {
 			this.set('filter', value);
 		},
-		selectAnnouncement() {
-			
-		}
 	}
 });

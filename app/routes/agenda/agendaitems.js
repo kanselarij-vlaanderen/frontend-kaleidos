@@ -7,7 +7,8 @@ export default Route.extend({
 	agendaService: inject(),
 
 	queryParams: {
-		filter: { refreshModel: true }
+		filter: { refreshModel: true },
+		refresh: { refreshModel: true }
 	},
 
 	async model(params) {
@@ -77,4 +78,11 @@ export default Route.extend({
 			sortedAgendaGroupListAddedAfterwards
 		];
 	},
+
+	actions: {
+		refresh() {
+			this._super(...arguments);
+			this.refresh();
+		}
+	}
 });

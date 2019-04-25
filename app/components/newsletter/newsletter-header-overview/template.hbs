@@ -24,9 +24,20 @@
     <div class="vlc-toolbar__right">
       {{#if isAdmin}}
       <div class="vlc-toolbar__item">
-        <button class="vl-button vl-button--narrow">
-          {{t "send-newsletter"}}
-        </button>
+         <div class="vlc-toolbar__item">
+          <div class="vl-action-group">
+            <button
+              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+              {{action "print"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+                aria-hidden="true"
+              ></i>
+              {{t "print"}}
+            </button>
+          </div>
+        </div>
       </div>
       {{/if}}
     </div>

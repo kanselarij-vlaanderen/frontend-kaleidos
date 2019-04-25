@@ -41,10 +41,6 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.toggleProperty('showOptions');
 		},
 
-		refreshRoute() {
-			this.refreshRoute();
-		},
-
 		async togglePostponed(agendaitem) {
 			if (agendaitem) {
 				let isPostponed = await agendaitem.get('isPostponed');
@@ -92,7 +88,8 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		deleteItem(agendaitem) {
 			agendaitem.destroyRecord().then(() => {
-				this.refreshRoute();
+				this.set('sessionService.selectedAgendaItem', null);
+				this.refreshRoute(agendaitem.id);
 			});
 		},
 

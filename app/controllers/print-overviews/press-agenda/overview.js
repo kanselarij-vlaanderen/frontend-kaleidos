@@ -6,7 +6,7 @@ import moment from 'moment';
 export default Controller.extend({
 	intl: inject(),
 
-	title: computed('currentSession', function() {
+	title: computed('currentSession', function () {
 		const date = this.get('currentSession.plannedStart');
 		return `${this.get('intl').t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
 	}),
@@ -18,8 +18,11 @@ export default Controller.extend({
 			this.transitionToRoute('agenda.agendaitems', currentSessionId, { queryParams: { selectedAgenda: selectedAgendaid } })
 		},
 
-		print(){
+		print() {
+			var tempTitle = window.document.title;
+			window.document.title = `${this.get('intl').t('press-agenda-pdf-name')}${moment(this.get('currentSession.plannenStart')).format('YYYYMMDD')}`;
 			window.print();
+			window.document.title = tempTitle;
 		}
 	}
 });

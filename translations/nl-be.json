@@ -297,5 +297,9 @@
 	"no-rights-message":"Je account heeft nog geen rechten om deze applicatie te gebruiken.",
 	"kanselarij":"Kanselarij",
 	"row":"Rij",
-	"of":"van"
+	"of":"van",
+	"decisions-pdf-name":"BeslissingenVlaamseRegering_",
+	"press-agenda-pdf-name": "PersagendaVlaamseRegering_",
+	"newsletter-pdf-name":"NieuwsbriefVlaamseRegering_",
+	"newsletter-overview-pdf-name":"KortBestekBeslissingenVlaamseRegering_"
 }
