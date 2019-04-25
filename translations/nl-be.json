@@ -301,5 +301,7 @@
 	"decisions-pdf-name":"BeslissingenVlaamseRegering_",
 	"press-agenda-pdf-name": "PersagendaVlaamseRegering_",
 	"newsletter-pdf-name":"NieuwsbriefVlaamseRegering_",
-	"newsletter-overview-pdf-name":"KortBestekBeslissingenVlaamseRegering_"
+	"newsletter-overview-pdf-name":"KortBestekBeslissingenVlaamseRegering_",
+	"select":"Selecteer",
+	"documents-attached-to":"Bijbehorende publieke documenten"
 }

@@ -1,0 +1,54 @@
+{{#if (await item.documents)}}
+<div class="vl-u-spacer">
+	<h2 class="vl-title vl-title--h3">
+    {{title}}
+  </h2>
+  <table class="vl-data-table vl-data-table--align-middle">
+    <thead>
+      <tr>
+        <th class="vl-data-table-col-6">
+          {{web-components/vl-form-label value=(t "file-name")}}
+        </th>
+        <th class="vl-data-table-col-4">
+          {{web-components/vl-form-label value=(t "file-type")}}
+        </th>
+        <th class="vl-data-table-col-2">
+					{{web-components/vl-form-label value=(t "select")}}
+				</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each (await documents) as |document|}}
+			{{#if (not document.deleted)}}
+        <tr>
+          <td class="vl-u-display-flex vlc-document-list__item">
+            <a {{action "downloadFile" (await document.lastDocumentVersion)}}>
+            <div
+              class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
+            >
+              <i
+                class="vl-badge__icon vl-vi vl-vi-document"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <p>
+              {{document-name documentVersion=(await document.lastDocumentVersion) item=item}}
+            </p>
+            </a>
+          </td>
+          <td>
+						{{await document.type.label}}
+          </td>
+          <td>
+            {{web-components/vl-checkbox
+              value=document.selected
+              toggle=(action "selectForPublication")
+            }}
+          </td>
+        </tr>
+				{{/if}}
+      {{/each}}
+    </tbody>
+  </table>
+	</div>
+{{/if}}

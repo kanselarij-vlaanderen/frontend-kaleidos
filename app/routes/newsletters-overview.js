@@ -24,7 +24,8 @@ export default Route.extend(AuthenticatedRouteMixin, {
 		const agendaitems = await this.store.query('agendaitem',
 			{
 				filter: {
-					agenda: { id: lastAgenda.get('id') }
+					agenda: { id: lastAgenda.get('id') },
+					'show-as-remark': false
 				},
 				sort: "priority",
 				page: { number: params.page, size: params.size }
