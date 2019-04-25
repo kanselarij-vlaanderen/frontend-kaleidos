@@ -19,7 +19,7 @@
     {{utils/documents-selector-of-agendaitem
       item=agendaitem
       title=(t "documents-attached-to")
-      newsletter=(await agendaitem.newsletterInfo)
+      itemWithDocuments=(await agendaitem.newsletterInfo)
       selectDocument=(action "selectDocument")
     }}
   </div>

@@ -13,7 +13,7 @@
       {{/if}}
     </div>
     <div class="vl-u-text vl-u-text--small vl-u-text--muted">
-      {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
+      {{moment-format (await agenda.createdFor.plannedStart) "DD MMMM YYYY"}}
       ,
 		op voorstel van ---
     </div>
@@ -44,35 +44,5 @@
     </div>
   </div>
 {{else}}
-  <div class="vl-form__group vl-u-bg-porcelain">
-    <div class="vl-u-spacer">
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title-newsletter")}}
-        {{textarea
-          rows="4"
-          class="vl-textarea vl-textarea--block"
-          value=agendaitem.newsletterInfo.subtitle
-        }}
-      </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "newsletter")}}
-        {{textarea
-          rows="10"
-          class="vl-textarea vl-textarea--block"
-          value=agendaitem.newsletterInfo.text
-        }}
-      </div>
-    </div>
-    <div class="vl-action-group vl-action-group--align-right">
-      <a class="vl-link" {{action "cancelEditing" agendaitem}}>
-        {{t "buttons.cancel"}}
-      </a>
-      <button
-        class="vl-button vl-button--narrow"
-        {{action "saveChanges" agendaitem}}
-      >
-        {{t "buttons.save"}}
-      </button>
-    </div>
-  </div>
+  {{news-item/edit-item agendaitem=agendaitem isEditing=isEditing}}
 {{/if}}

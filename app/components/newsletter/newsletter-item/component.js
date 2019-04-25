@@ -4,7 +4,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(isAuthenticatedMixin, {
 	store:inject(),
-	classNames:['vl-u-spacer vl-col--3-4'],
+	classNames:['vl-u-spacer vl-col--4-4'],
 	isShowingVersions:false, 
 	isEditing:false,
 
@@ -27,17 +27,6 @@ export default Component.extend(isAuthenticatedMixin, {
 			if (!newsletter) {
 				await this.addNewsItem(agendaitem);
 			}
-			
-			this.toggleProperty('isEditing');
-		},
-		async saveChanges(agendaitem) {
-			const newsletterToEdit = await this.store.peekRecord('newsletter-info', agendaitem.get('newsletterInfo.id'));
-			await newsletterToEdit.save();
-			this.toggleProperty('isEditing');
-		},
-		async cancelEditing(agendaitem) {
-			const newsletter = await agendaitem.get('newsletterInfo')
-			newsletter.rollbackAttributes();
 			this.toggleProperty('isEditing');
 		}
 	}

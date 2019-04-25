@@ -4,7 +4,7 @@ import { hash } from 'rsvp';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Route.extend(AuthenticatedRouteMixin, {
-	authenticationRoute:'mock-login',
+	authenticationRoute: 'mock-login',
 	sessionService: inject(),
 
 	queryParams: {
@@ -27,6 +27,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 					agenda: { id: lastAgenda.get('id') },
 					'show-as-remark': false
 				},
+				include: 'newsletter-info,newsletter-info.documents',
 				sort: "priority",
 				page: { number: params.page, size: params.size }
 			});

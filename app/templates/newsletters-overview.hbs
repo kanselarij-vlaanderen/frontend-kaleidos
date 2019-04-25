@@ -11,7 +11,7 @@
     {{#each (await model.agendaitems) as |agendaitem|}}
       {{newsletter/newsletter-item
         agenda=(await model.agenda)
-        agendaitem=(await agendaitem)
+        agendaitem=agendaitem
       }}
     {{/each}}
   </div>
