@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="vlc-toolbar__right">
-          {{#if (or isAdmin isEditor)}}
+      {{#if (or isAdmin isEditor)}}
         <div class="vlc-toolbar__item">
           <button
             class="vl-button vl-button--narrow vl-button--icon-before"
@@ -64,7 +64,7 @@
           </div>
           <div class="vlc-toolbar__right">
             <div class="vlc-toolbar__item">
-          {{#if (or isAdmin isEditor)}}
+              {{#if (or isAdmin isEditor)}}
                 {{#link-to
                   "cases.case.subcases.subcase"
                   subcase.id
@@ -108,33 +108,7 @@
           {{subcase.title}}
         </p>
         <div class="vl-u-spacer-extended-top-s">
-          <ul class="vlc-document-list">
-            {{#each (await subcase.documents) as |document|}}
-              <li class="vlc-document-list__item">
-                {{#if (await document.lastDocumentVersion)}}
-                  <a
-                    {{action "downloadFile" (await document.lastDocumentVersion)
-                    }}
-                  >
-                    <div
-                      class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
-                    >
-                      <i
-                        class="vl-badge__icon vl-vi vl-vi-document"
-                        aria-hidden="true"
-                      ></i>
-                    </div>
-                    <p>
-                      {{document-name
-                        documentVersion=(await document.lastDocumentVersion)
-                        item=(await subcase)
-                      }}
-                    </p>
-                  </a>
-                {{/if}}
-              </li>
-            {{/each}}
-          </ul>
+          {{utils/documents-list-for-item item=subcase agendaitem=subcase}}
         </div>
       </div>
     {{/each}}

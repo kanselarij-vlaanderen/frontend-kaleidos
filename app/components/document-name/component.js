@@ -11,14 +11,14 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 	tagName: "p",
 	versionNames: inject(),
 
-	fallbackDocumentName: computed('documentVersion.nameToDisplay', async function () {
+	fallbackDocumentName: computed('documentVersion.nameToDisplay', function () {
 		return this.get('documentVersion.nameToDisplay');
 	}),
 
 	documentName: computed('documentVersion', 'fallbackDocumentName', 'item', async function () {
 		const { item, documentVersion } = this;
 		if (!this.get('isAgendaItem') || !documentVersion) {
-			return this.get('fallbackDocumentName');
+			return await this.get('fallbackDocumentName');
 		}
 		const subcase = await item.get('subcase');
 		const numberInSubcase = await subcase.documentNumberOfVersion(documentVersion);

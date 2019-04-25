@@ -36,27 +36,11 @@
       </ul>
     </div>
     <hr class="vlc-hr" />
-    <div class="vl-u-spacer vl-u-spacer-extended-bottom-l">
-      <footer>
-        <div class="vl-custom">
-          <div class="js-vl-accordion js-vl-accordion--open">
-            <button class="vl-toggle vl-link" {{action "showDocuments"}}>
-              <i
-                class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-right-fat"
-              ></i>
-              {{t "documents"}}
-            </button>
-            {{#if isShowingVersions}}
-              {{#each (await agendaitem.documents) as |document|}}
-                {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-                  document=document
-                  item=agendaitem
-                }}
-              {{/each}}
-            {{/if}}
-          </div>
-        </div>
-      </footer>
+    <div class="vl-u-spacer-extended-top-s">
+      {{utils/documents-list-for-item
+        item=(await agendaitem.newsletterInfo)
+        agendaitem=agendaitem
+      }}
     </div>
   </div>
 {{else}}
