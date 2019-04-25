@@ -55,7 +55,7 @@
                   </button>
                 {{/if}}
               {{/if}}
-              {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
                 <button
                   class="vl-button vl-button--tertiary vl-button--icon"
                   {{action "showOptions"}}

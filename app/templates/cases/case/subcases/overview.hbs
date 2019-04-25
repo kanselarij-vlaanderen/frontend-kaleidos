@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="vlc-toolbar__right">
-      {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
         <div class="vlc-toolbar__item">
           <button
             class="vl-button vl-button--narrow vl-button--icon-before"
@@ -64,7 +64,7 @@
           </div>
           <div class="vlc-toolbar__right">
             <div class="vlc-toolbar__item">
-              {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
                 {{#link-to
                   "cases.case.subcases.subcase"
                   subcase.id

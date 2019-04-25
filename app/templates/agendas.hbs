@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="vlc-toolbar__right">
-        {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
         <div class="vlc-toolbar__item">
           <button
             class="vl-button vl-button--narmeeting vl-button--icon-before"
@@ -111,7 +111,7 @@
                 {{moment-format (await meeting.latestAgenda.created) "DD-MM-YYYY HH:mm"}}
               </td>
               <td class="vl-u-align-center">
-                {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
                 <button class="vl-button vl-button--link vl-button--icon">
                   <i
                     class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"

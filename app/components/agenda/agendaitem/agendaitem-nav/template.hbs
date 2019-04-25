@@ -7,7 +7,7 @@
     {{t "buttons.agendaitem-case"}}
   </a>
 </li>
-{{#if isAdmin}}
+  {{#if (or isAdmin isEditor)}}
   <li class="vl-tab">
     <a
       class="vl-tab__link

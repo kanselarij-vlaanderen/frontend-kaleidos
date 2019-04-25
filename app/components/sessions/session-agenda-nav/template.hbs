@@ -12,7 +12,7 @@
       {{t "detail"}}
     </a>
   </li>
-  {{#if isAdmin}}
+  {{#if (or isAdmin isEditor)}}
     <li class="vlc-tabs-reverse__item">
       <a class="vlc-tabs-reverse__link" {{action "compareAgendas"}}>
         {{t "compare"}}

@@ -46,7 +46,7 @@
                 {{moment-format meeting.created "DD-MM-YYYY HH:mm"}}
               </td>
               <td class="vl-u-align-center">
-                {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
                 <button class="vl-button vl-button--link vl-button--icon">
                   <i
                     class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"

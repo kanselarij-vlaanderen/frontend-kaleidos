@@ -37,7 +37,8 @@ export default Service.extend({
       } else {
         this.set('userRole', null);
       }
-
+      
+      this.set('isEditor', this.canAccess('kanselarij'))
       this.set('isAdmin', this.canAccess('admin'));
     }
   },

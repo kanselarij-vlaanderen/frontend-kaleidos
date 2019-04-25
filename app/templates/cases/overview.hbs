@@ -6,7 +6,7 @@
       <h2 class="vl-title vl-title--h3">
         {{t "case-item.my-cases"}}
       </h2>
-      {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
         {{web-components/vl-checkbox
           value=isNotArchived
           label=(t "show-archived")
@@ -53,7 +53,7 @@
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="vl-u-align-right">
-      {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
             <button class="vl-button vl-button--link vl-button--icon">
               <i
                 class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"

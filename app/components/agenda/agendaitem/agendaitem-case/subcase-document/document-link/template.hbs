@@ -37,7 +37,7 @@
                   </span>
                 </div>
               </div>
-              {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
                 <div class="vl-u-spacer-extended-right-s vl-u-text--muted">
                   <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
                 </div>
