@@ -20,7 +20,7 @@ const EditAgendaitemOrSubcase = Mixin.create({
 	store:inject(),
 	item: null,
 	isEditing:false,
-	propertiesToSet: ['title', 'shortTitle', 'formallyOk', 'confidentiality'],
+	// propertiesToSet: ['title', 'shortTitle', 'formallyOk', 'confidentiality'],
 
 	isAgendaItem: computed('item', function () {
 		const { item } = this;

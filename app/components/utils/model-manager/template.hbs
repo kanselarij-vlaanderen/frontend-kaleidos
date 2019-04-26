@@ -24,7 +24,7 @@
               class="vl-button vl-button--link vl-button--narrow"
               {{action "close"}}
             >
-              {{t "buttons.cancel"}}
+              {{t "cancel"}}
             </button>
           </div>
         </div>
@@ -37,7 +37,7 @@
               <i
                 class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
-              {{t "buttons.add"}}
+              {{t "add"}}
             </button>
             {{#if selectedModel}}
               <button
@@ -47,7 +47,7 @@
                 <i
                   class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
-                {{t "buttons.edit"}}
+                {{t "edit"}}
               </button>
               <button
                 class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
@@ -56,7 +56,7 @@
                 <i
                   class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
                 ></i>
-                {{t "buttons.delete"}}
+                {{t "delete"}}
               </button>
             {{/if}}
           </div>
@@ -67,7 +67,7 @@
   {{#if isAdding}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "announcement.title")}}
+        {{web-components/vl-form-label value=(t "title")}}
         {{web-components/vl-form-input width="4" value=title}}
       </div>
     </div>
@@ -79,7 +79,7 @@
               class="vl-button vl-button--link vl-button--narrow"
               {{action "toggleIsAdding"}}
             >
-              {{t "buttons.cancel"}}
+              {{t "cancel"}}
             </button>
           </div>
           <div class="vlc-toolbar__right">
@@ -88,7 +88,7 @@
                 class="vl-button vl-button--tertiary vl-button--narrow"
                 {{action "createModel"}}
               >
-                {{t "buttons.add"}}
+                {{t "add"}}
               </button>
             </div>
           </div>
@@ -99,7 +99,7 @@
   {{#if isEditing}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "announcement.title")}}
+        {{web-components/vl-form-label value=(t "title")}}
         {{web-components/vl-form-input width="4" value=title}}
       </div>
     </div>
@@ -111,7 +111,7 @@
               class="vl-button vl-button--link vl-button--narrow"
               {{action "toggleIsEditing"}}
             >
-              {{t "buttons.cancel"}}
+              {{t "cancel"}}
             </button>
           </div>
           <div class="vlc-toolbar__right">
@@ -120,7 +120,7 @@
                 class="vl-button vl-button--tertiary vl-button--narrow"
                 {{action "editModel"}}
               >
-                {{t "buttons.save"}}
+                {{t "save"}}
               </button>
             </div>
           </div>

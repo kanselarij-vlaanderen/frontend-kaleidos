@@ -27,7 +27,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 					agenda: { id: lastAgenda.get('id') },
 					'show-as-remark': false
 				},
-				include: 'newsletter-info,newsletter-info.documents',
+				include: 'newsletter-info,newsletter-info.document-versions',
 				sort: "priority",
 				page: { number: params.page, size: params.size }
 			});

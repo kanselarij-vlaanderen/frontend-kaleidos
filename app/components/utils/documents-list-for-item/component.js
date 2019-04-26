@@ -11,13 +11,14 @@ export default Component.extend(FileSaverMixin, {
 			if (!documentVersion) {
 				return;
 			}
-			const file = await documentVersion.get('file')
+			const file = await documentVersion.get('file');
+			if(!file) { return; }
 			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
 				method: 'GET',
 				dataType: 'arraybuffer',
 				processData: false
 			})
-				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
+			.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')))
 		},
 	}
 });

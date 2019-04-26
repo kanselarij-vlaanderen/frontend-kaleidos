@@ -1,12 +1,12 @@
-{{#each (await item.documents) as |document|}}
+{{#each (await item.documentVersions) as |documentVersion|}}
   <li class="vlc-document-list__item">
-    <a {{action "downloadFile" (await document.lastDocumentVersion)}}>
+    <a {{action "downloadFile" documentVersion}}>
       <div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt">
         <i class="vl-badge__icon vl-vi vl-vi-document" aria-hidden="true"></i>
       </div>
       <p>
         {{document-name
-          documentVersion=(await document.lastDocumentVersion)
+          documentVersion=documentVersion
           item=agendaitem
         }}
       </p>

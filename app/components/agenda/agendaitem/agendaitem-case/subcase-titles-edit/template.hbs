@@ -1,7 +1,7 @@
 {{#if (not item.showAsRemark)}}
   <div class="vl-u-spacer">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "metadata-form.public")}}
+      {{web-components/vl-form-label value=(t "public")}}
       {{utils/model-selector
         modelName="confidentiality"
         searchField="label"
@@ -15,14 +15,14 @@
 {{/if}}
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
+    {{web-components/vl-form-label value=(t "name-subcase")}}
     {{textarea rows="2" class="vl-textarea vl-textarea--block" value=shortTitle
     }}
   </div>
 </div>
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
+    {{web-components/vl-form-label value=(t "title-subcase")}}
     {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
   </div>
 </div>
@@ -34,7 +34,7 @@
         <div class="vl-checkbox__label">
           <i class="vl-checkbox__box"></i>
           <span class="vl-annotation">
-            {{t "agendaitem-details.formal-ok"}}
+            {{t "formal-ok"}}
           </span>
         </div>
       </label>
@@ -43,9 +43,9 @@
 {{/if}}
 <div class="vl-action-group vl-action-group--align-right">
   <a class="vl-link" {{action "toggleIsEditing"}}>
-    {{t "buttons.cancel"}}
+    {{t "cancel"}}
   </a>
   <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-    {{t "buttons.save"}}
+    {{t "save"}}
   </button>
 </div>

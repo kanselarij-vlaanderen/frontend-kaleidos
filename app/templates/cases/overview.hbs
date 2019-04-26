@@ -4,7 +4,7 @@
     {{cases/cases-filter size=size}}
     <div class="vl-u-spacer">
       <h2 class="vl-title vl-title--h3">
-        {{t "case-item.my-cases"}}
+        {{t "my-cases"}}
       </h2>
           {{#if (or isAdmin isEditor)}}
         {{web-components/vl-checkbox
@@ -139,7 +139,7 @@
       }}
     </div>
     <button class="vl-button" {{action "archiveCase" selectedCase}}>
-      {{t "buttons.archive-case"}}
+      {{t "archive-case"}}
     </button>
   {{/web-components/vl-modal}}
 {{/if}}

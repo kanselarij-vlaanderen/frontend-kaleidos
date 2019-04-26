@@ -9,7 +9,7 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
+        {{web-components/vl-form-label value=(t "name-subcase")}}
         {{textarea
           rows="2"
           class="vl-textarea vl-textarea--block"
@@ -17,11 +17,11 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
+        {{web-components/vl-form-label value=(t "title-subcase")}}
         {{textarea rows="2" class="vl-textarea vl-textarea--block" value=title}}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "edit-item.themes")}}
+        {{web-components/vl-form-label value=(t "themes")}}
         {{utils/model-selector
           modelName="theme"
           searchField="label"
@@ -34,7 +34,7 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "cases.upload-file")}}
+        {{web-components/vl-form-label value=(t "upload-file")}}
         {{file-uploader uploadedFile=(action "uploadedFile")}}
       </div>
       <div class="vlc-input-field-block">
@@ -58,7 +58,7 @@
       </div>
     {{else if (eq step 2)}}
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcases.subcase-phase")}}
+        {{web-components/vl-form-label value=(t "subcase-phase")}}
         {{utils/model-selector
           modelName="subcase-phase-code"
           searchField="label"
@@ -69,7 +69,7 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "metadata-form.public")}}
+        {{web-components/vl-form-label value=(t "public")}}
         {{utils/model-selector
           modelName="confidentiality"
           searchField="label"
@@ -92,7 +92,7 @@
             class="vl-button vl-button--link vl-button--narrow"
             {{action "closeModal"}}
           >
-            {{t "buttons.cancel"}}
+            {{t "cancel"}}
           </button>
           {{#if (eq step 1)}}
             <button
@@ -103,7 +103,7 @@
               <i
                 class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
-              {{t "cases.non-digital-file"}}
+              {{t "non-digital-file"}}
             </button>
           {{/if}}
         </div>
@@ -116,10 +116,10 @@
               class="vl-button vl-button--tertiary"
               {{action "previousStep"}}
             >
-              {{t "buttons.previous-step"}}
+              {{t "previous-step"}}
             </button>
             <button type="submit" class="vl-button vl-button--tertiary">
-              {{t "cases.new-subcase"}}
+              {{t "new-subcase"}}
             </button>
           {{else if (eq step 1)}}
             <button
@@ -127,7 +127,7 @@
               class="vl-button vl-button--tertiary"
               {{action "nextStep"}}
             >
-              {{t "buttons.next-step"}}
+              {{t "next-step"}}
             </button>
           {{/if}}
         </div>
@@ -138,16 +138,16 @@
 {{#if isAddingNonDigitalDocument}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "cases.non-digital-file")
+    title=(t "non-digital-file")
     closeModal=(action "toggleAddNonDigitalDocument")
   }}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "cases-search.title-document")}}
+        {{web-components/vl-form-label value=(t "title-document")}}
         {{web-components/vl-form-input width="4" value=documentTitle}}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "cases-search.title-document")}}
+        {{web-components/vl-form-label value=(t "title-document")}}
         {{textarea
           rows="3"
           class="vl-textarea vl-textarea--block"
@@ -169,7 +169,7 @@
               class="vl-button vl-button--link vl-button--narrow"
               {{action "toggleAddNonDigitalDocument"}}
             >
-              {{t "buttons.cancel"}}
+              {{t "cancel"}}
             </button>
           </div>
         </div>
@@ -179,7 +179,7 @@
               class="vl-button vl-button--narrow"
               {{action "createNonDigitalDocument"}}
             >
-              {{t "buttons.document-add"}}
+              {{t "document-add"}}
             </button>
           </div>
         </div>

@@ -2,7 +2,7 @@
 <div class="vl-modal-dialog__content">
   <div class="vl-u-spacer">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "subcases.name-subcase")}}
+      {{web-components/vl-form-label value=(t "name-subcase")}}
       {{textarea
         rows="2"
         class="vl-textarea vl-textarea--block"
@@ -12,7 +12,7 @@
   </div>
   <div class="vl-u-spacer">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "subcases.title-subcase")}}
+      {{web-components/vl-form-label value=(t "title-subcase")}}
       {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
     </div>
   </div>
@@ -34,14 +34,14 @@
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "buttons.cancel"}}
+          {{t "cancel"}}
         </a>
       </div>
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-          {{t "buttons.save"}}
+          {{t "save"}}
         </button>
       </div>
     </div>

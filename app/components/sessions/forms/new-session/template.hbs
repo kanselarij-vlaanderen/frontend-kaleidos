@@ -1,6 +1,6 @@
 <div class="vl-modal-dialog__content">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "new-session.start-date")}}
+    {{web-components/vl-form-label value=(t "start-date")}}
     {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
   </div>
 </div>
@@ -12,7 +12,7 @@
           class="vl-button vl-button--link vl-button--narrow"
           {{action "cancelForm"}}
         >
-          {{t "buttons.cancel"}}
+          {{t "cancel"}}
         </button>
       </div>
     </div>
@@ -22,7 +22,7 @@
           class="vl-button vl-button--narrow"
           {{action "createNewSession"}}
         >
-          {{t "buttons.add"}}
+          {{t "add"}}
         </button>
       </div>
     </div>

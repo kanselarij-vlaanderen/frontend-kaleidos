@@ -11,10 +11,8 @@ export default Model.extend({
 	documentVersions: hasMany('document-version', { inverse: null }),
 	remarks: hasMany('remark'),
 
-	decision: belongsTo('decision'),
 	type: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),
-	newsletter: belongsTo('newsletter-info'),
 
 	sortedDocuments: computed('documentVersions', function () {
 		return this.get('documentVersions').then(versions => {

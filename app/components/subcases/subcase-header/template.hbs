@@ -15,7 +15,7 @@
           <i
             class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
           ></i>
-          {{t "buttons.back"}}
+          {{t "back"}}
         {{/link-to}}
         {{#if (await subcase.requestedForMeeting)}}
         <div class="vlc-page-header__status">
@@ -29,7 +29,7 @@
 
         {{#if (and (not (await subcase.requestedForMeeting)) (not (await subcase.hasAgendaItem)))}}
           <button class="vl-button vl-button--narrow">
-            {{t "buttons.propose-for-agenda"}}
+            {{t "propose-for-agenda"}}
           </button>
           {{#attach-popover
             class="ember-attacher-popper"
@@ -105,7 +105,7 @@
                 {{action attacher.hide}}
                 {{action "requestArchiveSubcase"}}
               >
-                {{t "buttons.archive-subcase"}}
+                {{t "archive-subcase"}}
               </a>
             {{else}}
               <a
@@ -113,7 +113,7 @@
                 {{action attacher.hide}}
                 {{action "unarchiveSubcase" subcase}}
               >
-                {{t "buttons.unarchive-subcase"}}
+                {{t "unarchive-subcase"}}
               </a>
             {{/if}}
           </li>
@@ -124,7 +124,7 @@
                 {{action attacher.hide}}
                 {{action "closeSubcase" subcase}}
               >
-                {{t "buttons.close-subcase"}}
+                {{t "close-subcase"}}
               </a>
             {{/if}}
           </li>
@@ -160,7 +160,7 @@
       }}
     </div>
     <button class="vl-button" {{action "archiveSubcase" subcase}}>
-      {{t "buttons.archive-subcase"}}
+      {{t "archive-subcase"}}
     </button>
   {{/web-components/vl-modal}}
 {{/if}}

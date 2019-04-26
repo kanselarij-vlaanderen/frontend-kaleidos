@@ -1,5 +1,5 @@
 <div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "case-item.case-type")}}
+  {{web-components/vl-form-label value=(t "case-type")}}
   {{utils/model-selector
     modelName="case-type"
     searchField="label"
@@ -11,15 +11,15 @@
   }}
 </div>
 <div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "metadata-form.short-title")}}
+  {{web-components/vl-form-label value=(t "short-title-case")}}
   {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
 </div>
 <div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "metadata-form.title")}}
+  {{web-components/vl-form-label value=(t "title-case")}}
   {{textarea class="vl-textarea vl-textarea--block" rows="4" value=title}}
 </div>
 <div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "case-item.current-subcase")}}
+  {{web-components/vl-form-label value=(t "current-subcase")}}
   <select class="vl-select vl-select--block vl-select__list--dropdown">
     <option class="vl-select__item">
       {{t "example-subcase"}}

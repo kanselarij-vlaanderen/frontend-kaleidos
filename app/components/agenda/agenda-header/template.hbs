@@ -2,7 +2,7 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <h1 class="vlc-page-header__title vlc-page-header__title--bordered">
-        {{t "sessions-selector.agenda-of"}}
+        {{t "agenda-of"}}
         {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
       </h1>
       <div class="vlc-page-header__sub">
@@ -13,7 +13,7 @@
                 <i
                   class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
                 ></i>
-                {{t "buttons.back"}}
+                {{t "back"}}
               {{/link-to}}
             </div>
             {{sessions/session-agenda-nav
@@ -35,7 +35,7 @@
             class="vl-button vl-button--narrow"
             {{action "approveAgenda" currentSession}}
           >
-            {{t "buttons.agenda-approve"}}
+            {{t "agenda-approve"}}
           </button>
         {{/if}}
         <button
@@ -72,7 +72,7 @@
                   {{action attacher.hide}}
                   {{action "navigateToSubCases"}}
                 >
-                  {{t "buttons.add-to-agenda"}}
+                  {{t "add-to-agenda"}}
                 </a>
               </li>
               <li class="vl-popover__link-list__item">
@@ -81,7 +81,7 @@
                   {{action attacher.hide}}
                   {{action "toggleIsAddingAnnouncement"}}
                 >
-                  {{t "buttons.create-announcement"}}
+                  {{t "create-announcement"}}
                 </a>
               </li>
               <li class="vl-popover__link-list__separator" role="none"></li>
@@ -92,7 +92,7 @@
                 {{action attacher.hide}}
                 {{action "navigateToDecisions"}}
               >
-                {{t "buttons.print-decisions"}}
+                {{t "print-decisions"}}
               </a>
             </li>
             <li class="vl-popover__link-list__item">
@@ -106,7 +106,7 @@
                 {{action "navigateToPressAgenda"}}
                 {{action attacher.hide}}
               >
-                {{t "buttons.printable-press-agenda"}}
+                {{t "printable-press-agenda"}}
               </a>
             </li>
             {{#if (or isAdmin isEditor)}}
@@ -119,7 +119,7 @@
                       {{action "lockAgenda" currentAgenda}}
                       {{action attacher.hide}}
                     >
-                      {{t "buttons.agenda-lock"}}
+                      {{t "agenda-lock"}}
                     </a>
                   {{else}}
                     <a
@@ -127,7 +127,7 @@
                       {{action "unlockAgenda"}}
                       {{action attacher.hide}}
                     >
-                      {{t "buttons.agenda-unlock"}}
+                      {{t "agenda-unlock"}}
                     </a>
                   {{/if}}
                 </li>
@@ -142,7 +142,7 @@
                       {{action "deleteDesignAgenda" currentAgenda}}
                       {{action attacher.hide}}
                     >
-                      {{t "buttons.agenda-delete"}}
+                      {{t "agenda-delete"}}
                     </a>
                   {{else if
                     (and
@@ -154,7 +154,7 @@
                       {{action "createNewDesignAgenda" currentSession}}
                       {{action attacher.hide}}
                     >
-                      {{t "buttons.agenda-add"}}
+                      {{t "agenda-add"}}
                     </a>
                   {{/if}}
                 </li>

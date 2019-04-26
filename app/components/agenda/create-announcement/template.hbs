@@ -1,22 +1,22 @@
 {{#web-components/vl-modal
   closeModal=(action "closeDialog")
   isOverlay=true
-  title=(t "buttons.create-announcement")
+  title=(t "create-announcement")
 }}
   <div class="vl-modal-dialog__content">
     <div class="vlc-scroll-wrapper__body">
       <form>
         <div class="vlc-input-field-block">
-          {{web-components/vl-form-label value=(t "announcement.title")}}
+          {{web-components/vl-form-label value=(t "title")}}
           {{web-components/vl-form-input width="4" value=title}}
         </div>
         <div class="vlc-input-field-block">
-          {{web-components/vl-form-label value=(t "announcement.text")}}
+          {{web-components/vl-form-label value=(t "text")}}
           {{textarea class="vl-textarea vl-textarea--block" rows="6" value=text
           }}
         </div>
         <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "cases.upload-file")}}
+        {{web-components/vl-form-label value=(t "upload-file")}}
         {{file-uploader uploadedFile=(action "uploadedFile")}}
       </div>
       <div class="vlc-input-field-block">
@@ -43,7 +43,7 @@
             class="vl-button vl-button--link vl-button--narrow"
             {{action "closeDialog"}}
           >
-            {{t "buttons.cancel"}}
+            {{t "cancel"}}
           </button>
         </div>
       </div>
@@ -53,7 +53,7 @@
             class="vl-button vl-button--narrow"
             {{action "createAnnouncement"}}
           >
-            {{t "buttons.create-announcement"}}
+            {{t "create-announcement"}}
           </button>
         </div>
       </div>

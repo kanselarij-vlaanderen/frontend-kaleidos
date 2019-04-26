@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 
-let { Model, attr, belongsTo } = DS;
+let { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
   description: attr("string"),
@@ -16,5 +16,6 @@ export default Model.extend({
   publication: belongsTo('publication'),
   newsletterInfo: belongsTo('newsletter-info'),
   documentType: belongsTo('document-type'),
-  confidentiality: belongsTo('confidentiality')
+  confidentiality: belongsTo('confidentiality'),
+  documentVersions: hasMany('document-version', {inverse:null})
 });

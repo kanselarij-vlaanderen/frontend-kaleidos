@@ -28,14 +28,14 @@
                       class="vl-button vl-button--tertiary vl-button--narrow"
                       {{action "advanceAgendaitem" agendaitem}}
                     >
-                      {{t "buttons.not-postpone"}}
+                      {{t "not-postpone"}}
                     </button>
                   {{else}}
                     <button
                       class="vl-button vl-button--tertiary vl-button--narrow"
                       {{action "togglePostponed" agendaitem}}
                     >
-                      {{t "buttons.postpone"}}
+                      {{t "postpone"}}
                     </button>
                   {{/if}}
                 {{/if}}
@@ -51,7 +51,7 @@
                     class="vl-button vl-button--tertiary vl-button--narrow"
                     {{action "deleteItem" agendaitem}}
                   >
-                    {{t "buttons.delete"}}
+                    {{t "delete"}}
                   </button>
                 {{/if}}
               {{/if}}
@@ -88,12 +88,12 @@
 {{#if isShowingPostponeModal}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "agenda-item.postpone-item")
+    title=(t "postpone-item")
     closeModal=(action "togglePostponed")
   }}
     <div class="vl-modal-dialog__content">
       <label class="vl-form__label">
-        {{t "agenda-item.postpone-until"}}
+        {{t "postpone-until"}}
       </label>
       {{sessions/sessions-selector
         currentSession=postponeTargetSession
@@ -108,7 +108,7 @@
               class="vl-button vl-button--link vl-button--narrow"
               {{action "togglePostponed"}}
             >
-              {{t "buttons.cancel"}}
+              {{t "cancel"}}
             </button>
           </div>
         </div>
@@ -118,7 +118,7 @@
               class="vl-button vl-button--narrow"
               {{action "postponeAgendaItem" agendaitem}}
             >
-              {{t "buttons.postpone"}}
+              {{t "postpone"}}
             </button>
           </div>
         </div>

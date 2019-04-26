@@ -1,6 +1,6 @@
 <div class="vl-modal-dialog__content">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "edit-item.date-publication")}}
+    {{web-components/vl-form-label value=(t "date-publication")}}
     {{web-components/vl-datepicker dateChanged=(action "selectDate")}}
   </div>
   <div class="vlc-input-field-block">
@@ -24,7 +24,7 @@
           class="vl-button vl-button--link vl-button--narrow"
           {{action "close"}}
         >
-          {{t "buttons.cancel"}}
+          {{t "cancel"}}
         </button>
       </div>
     </div>
@@ -34,7 +34,7 @@
           class="vl-button vl-button--narrow"
           {{action "createSingleNewsLetter"}}
         >
-          {{t "buttons.create"}}
+          {{t "create"}}
         </button>
       </div>
     </div>

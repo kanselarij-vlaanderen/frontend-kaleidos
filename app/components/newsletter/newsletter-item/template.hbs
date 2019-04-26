@@ -7,7 +7,7 @@
       {{#if (or isAdmin isEditor)}}
         <div class="vl-u-spacer-extended-left-s">
           <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "buttons.edit"}}
+            {{t "edit"}}
           </a>
         </div>
       {{/if}}
@@ -44,5 +44,5 @@
     </div>
   </div>
 {{else}}
-  {{news-item/edit-item agendaitem=agendaitem isEditing=isEditing}}
+  {{news-item/edit-item agendaitem=agendaitem item=agendaitem.newsletterInfo isEditing=isEditing}}
 {{/if}}

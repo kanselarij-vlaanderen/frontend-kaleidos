@@ -16,7 +16,7 @@
             <i
               class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
             ></i>
-            {{t "buttons.back"}}
+            {{t "back"}}
           {{/link-to}}
         </div>
       </div>
@@ -31,7 +31,7 @@
             <i
               class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
             ></i>
-            {{t "buttons.create-subcase"}}
+            {{t "create-subcase"}}
           </button>
         </div>
       {{/if}}
@@ -123,7 +123,7 @@
     isOverlay=true
     large=true
     closeModal=(action "close")
-    title=(t "buttons.create-subcase")
+    title=(t "create-subcase")
   }}
     {{cases/new-subcase case=model.case closeModal=(action "close")}}
   {{/web-components/vl-modal}}

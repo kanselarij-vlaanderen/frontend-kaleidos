@@ -3,7 +3,7 @@
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <h1 class="vlc-page-header__title">
-          {{t "navigation.cases"}}
+          {{t "cases"}}
         </h1>
       </div>
     </div>
@@ -19,7 +19,7 @@
               class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               aria-hidden="true"
             ></i>
-            {{t "buttons.add-case"}}
+            {{t "add-case"}}
           </button>
           {{/if}}
         </div>
@@ -30,7 +30,7 @@
   {{#web-components/vl-modal
     isOverlay=true
     closeModal=(action "toggleAddingCase")
-    title=(t "cases.new-case")
+    title=(t "new-case")
   }}
     {{cases/new-case close=(action "toggleAddingCase")}}
   {{/web-components/vl-modal}}

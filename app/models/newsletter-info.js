@@ -14,5 +14,5 @@ export default Model.extend({
 	decision: belongsTo('decision'),
 	agendaitem: belongsTo('agendaitem'),
 	meeting: belongsTo('meeting'),
-	documents: hasMany('document', {inverse:null})
+	documentVersions: hasMany('document-version', {inverse:null})
 });

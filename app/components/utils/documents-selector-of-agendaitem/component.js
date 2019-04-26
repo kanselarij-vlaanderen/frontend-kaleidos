@@ -3,25 +3,29 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-	item: null,	
+	item: null,
 	itemWithDocuments: null,
-	store:inject(),
+	store: inject(),
 
-	documents: computed('item.documentsVersions.@each','itemWithDocuments.documents.@each', async function() {
-		const documents = await this.get('item.documents');
-		const documentsAlreadyAdded = await this.get('itemWithDocuments.documents');
-		return Promise.all(documents.map((document) => {
-			const foundDocument = documentsAlreadyAdded.find((documentToSearch) => documentToSearch.get('id') == document.get('id'));
-			if(foundDocument) {
-				document.set('selected', true);
-			}
-			return document;
-		}))
-	}),
+	lastDocumentVersions: computed('item.documents.@each', 'itemWithDocuments.documentVersions.@each',async function () {
+			const { itemWithDocuments, item } = this;
+
+			const documents = await item.get('documents');
+			const documentVersionsAddedAlready = await itemWithDocuments.get('documentVersions');
+
+			return Promise.all(documents.map(async (document) => {
+				const lastDocumentVersion = await document.get('lastDocumentVersion');
+				const foundDocument = documentVersionsAddedAlready.find((documentVersionToSearch) => documentVersionToSearch.get('id') == lastDocumentVersion.get('id'));
+				if (foundDocument) {
+					lastDocumentVersion.set('selected', true);
+				}
+				return lastDocumentVersion;
+			}));
+		}),
 
 	actions: {
 		async selectForPublication() {
-			this.selectDocument(await this.get('documents'));
+			this.selectDocument(await this.get('lastDocumentVersions'));
 		},
 	}
 });

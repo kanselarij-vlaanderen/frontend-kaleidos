@@ -2,12 +2,12 @@
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-space-between">
       <h3 class="vl-title vl-title--h3">
-        {{t "agendaitem-details.decision-title"}}
+        {{t "decision-title"}}
       </h3>
       {{#if (or isAdmin isEditor)}}
         <div class="vl-u-spacer-extended-left-s">
           <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "buttons.edit"}}
+            {{t "edit"}}
           </a>
         </div>
       {{/if}}
@@ -35,7 +35,12 @@
       </div>
     {{/if}}
   </div>
-  {{#if (gt (await agendaitem.newsletterInfo.documents.length) 0)}}
+  {{#if
+    (and
+      (gt (await agendaitem.newsletterInfo.documentVersions.length) 0)
+      (await agendaitem.newsletterInfo.finished)
+    )
+  }}
     <div class="vl-u-spacer">
       <h4 class="vl-title vl-title--h6">
         {{t "documents-attached-to"}}
@@ -49,5 +54,9 @@
     </div>
   {{/if}}
 {{else}}
-  {{news-item/edit-item agendaitem=agendaitem isEditing=isEditing}}
+  {{news-item/edit-item
+    agendaitem=agendaitem
+    item=agendaitem.newsletterInfo
+    isEditing=isEditing
+  }}
 {{/if}}

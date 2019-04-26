@@ -7,7 +7,7 @@
           {{#if (or isAdmin isEditor)}}
         <div class="vl-u-spacer-extended-left-s">
           <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "buttons.edit"}}
+            {{t "edit"}}
           </a>
         </div>
       {{/if}}
@@ -40,7 +40,7 @@
         {{action "toggleIsAddingNewDocument"}}
       >
         <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-        {{t "buttons.document-add"}}
+        {{t "document-add"}}
       </button>
     </div>
   {{/if}}
@@ -50,7 +50,7 @@
     closeModal=(action "toggleIsAddingNewDocument")
     isOverlay=true
     large=true
-    title=(t "buttons.document-add")
+    title=(t "document-add")
   }}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
@@ -73,7 +73,7 @@
               class="vl-button vl-button--link vl-button--narrow"
               {{action "openUploadDialog"}}
             >
-              {{t "buttons.cancel"}}
+              {{t "cancel"}}
             </button>
           </div>
         </div>
@@ -83,7 +83,7 @@
               class="vl-button vl-button--narrow"
               {{action "uploadNewDocument"}}
             >
-              {{t "buttons.document-add"}}
+              {{t "document-add"}}
             </button>
           </div>
         </div>
