@@ -39,10 +39,7 @@
                 <div
                   class="vlc-input-field-group vlc-input-field-group--gmeeting"
                 >
-                  <input
-                    class="vl-input-field"
-                    type="search"
-                   />
+                  <input class="vl-input-field" type="search" />
                 </div>
                 <div class="vlc-input-field-group">
                   <button
@@ -108,7 +105,10 @@
               </td>
               <td {{action "selectAgenda" meeting}}>
                 {{!-- {{await meeting.latestAgenda}} --}}
-                {{moment-format (await meeting.latestAgenda.created) "DD-MM-YYYY HH:mm"}}
+                {{moment-format
+                  (await meeting.latestAgenda.created)
+                  "DD-MM-YYYY HH:mm"
+                }}
               </td>
               <td class="vl-u-align-center">
           {{#if (or isAdmin isEditor)}}
