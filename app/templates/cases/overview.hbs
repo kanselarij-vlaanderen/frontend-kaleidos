@@ -1,7 +1,7 @@
 {{cases/cases-header isAddingCase=isAddingCase}}
-{{cases/cases-filter size=size}}
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
+    {{cases/cases-filter size=size}}
     <div class="vl-u-spacer">
       <h2 class="vl-title vl-title--h3">
         {{t "case-item.my-cases"}}
@@ -69,7 +69,7 @@
               <ul class="vl-popover__link-list">
                 <li class="vl-popover__link-list__item">
                   <button
-                    class="vl-link vl-link--block"
+                    class="vl-link"
                     {{action attacher.hide}}
                     {{action "editRow" row}}
                   >
