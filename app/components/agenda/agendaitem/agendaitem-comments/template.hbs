@@ -26,7 +26,7 @@
       <div class="vlc-comments-comment-content">
         <div class="vlc-comments-comment-content__header">
           <h4 class="vl-title vl-title--h6">
-            Naam placeholder
+            {{await comment.author.firstName}} {{await comment.author.lastName}}
           </h4>
           <div class="vlc-comments-comment-content__meta">
             {{moment-format comment.created "DD MMMM YYYY - HH:mm"}}
@@ -52,7 +52,7 @@
           <div class="vlc-comments-comment-content">
             <div class="vlc-comments-comment-content__header">
               <h4 class="vl-title vl-title--h6">
-                Naam placeholder
+                {{await answer.author.firstName}} {{await answer.author.lastName}}
               </h4>
               <div class="vlc-comments-comment-content__meta">
                 {{moment-format answer.created "DD MMMM YYYY - HH:mm"}}
@@ -73,7 +73,6 @@
           class="vl-badge__img"
           src="/assets/icons/avatar-hilde-crevits.jpg"
          />
-
       </div>
       {{utils/custom-textarea
         rows="2"

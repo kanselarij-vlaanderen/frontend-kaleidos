@@ -1,34 +1,48 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { sort } from '@ember/object/computed';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend({
+export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-padding-bottom--large'],
   store: inject('store'),
 
-  sortedRemarks: sort('agendaitem.remarks', function(a, b) {
-      if (a.created < b.created) {
-        return 1;
-      } else if (a.created > b.created) {
-        return -1;
-      }
-      return 0;
-    }),
+  sortedRemarks: sort('agendaitem.remarks', function (a, b) {
+    if (a.created < b.created) {
+      return 1;
+    } else if (a.created > b.created) {
+      return -1;
+    }
+    return 0;
+  }),
 
   actions: {
-    async addComment(event){
+    async addComment(event) {
       const agendaitem = await this.get('agendaitem');
-
-      const comment = this.store.createRecord('remark', { text:event, created: new Date(), agendaitem: agendaitem });
+      const user = await this.get('user');
+      const comment = this.store.createRecord('remark',
+        {
+          text: event,
+          created: new Date(),
+          agendaitem: agendaitem,
+          author: user
+        });
       comment.save().then(() => {
         this.set('text', "");
       });
     },
 
     async addAnswer(comment) {
-      const newComment = this.store.createRecord('remark', { text:comment.get('answer'), created: new Date()});
+      const user = await this.get('user');
+      const newComment = this.store.createRecord('remark', 
+      { 
+        text: comment.get('answer'), 
+        created: new Date(),
+        author: user
+      });
       newComment.save().then(savedComment => {
         comment.get('answers').addObject(savedComment);
+        comment.set('answer', "");
         comment.save();
       });
     }
