@@ -3,7 +3,10 @@
   related to https://github.com/mono-company/digikan/issues/37
    ========================================================================== */
 
-
 .vl-u-flex-space-between {
   justify-content: space-between !important;
+}
+
+.vl-u-flex-align-baseline {
+  align-items: baseline !important;
 }

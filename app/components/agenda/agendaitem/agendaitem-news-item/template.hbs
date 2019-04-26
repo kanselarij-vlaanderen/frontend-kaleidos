@@ -23,15 +23,31 @@
       {{await agendaitem.newsletterInfo.text}}
     </p>
   </div>
-  <div class="vl-u-spacer">
-    {{t "documents-attached-to"}}
-    <div class="vl-u-spacer-extended-top-s">
-      {{utils/documents-list-for-item
-        item=(await agendaitem.newsletterInfo)
-        agendaitem=agendaitem
-      }}
-    </div>
+  <hr />
+  <div class="vl-u-spacer vl-u-spacer-extended-top-s">
+    {{#if (await agendaitem.newsletterInfo.finished)}}
+      <div class="vlc-pill vlc-pill--success">
+        {{t "finished"}}
+      </div>
+    {{else}}
+      <div class="vlc-pill vlc-pill--warning">
+        {{t "not-finished"}}
+      </div>
+    {{/if}}
   </div>
+  {{#if (gt (await agendaitem.newsletterInfo.documents.length) 0)}}
+    <div class="vl-u-spacer">
+      <h4 class="vl-title vl-title--h6">
+        {{t "documents-attached-to"}}
+      </h4>
+      <div class="vl-u-spacer-extended-top-s">
+        {{utils/documents-list-for-item
+          item=(await agendaitem.newsletterInfo)
+          agendaitem=agendaitem
+        }}
+      </div>
+    </div>
+  {{/if}}
 {{else}}
   {{news-item/edit-item agendaitem=agendaitem isEditing=isEditing}}
 {{/if}}

@@ -11,12 +11,16 @@
 .vlc-document-list__item {
   margin-right: 1rem;
   margin-bottom: 1rem;
-  a {
+  a,
+  span {
     display: flex;
     align-items: center;
     color: $gray-dark;
-    text-decoration: none;
+    font-weight: 500;
     padding-right: 1rem;
+  }
+  a {
+    text-decoration: none;
     &:hover,
     &:active {
       background: $blue-gray-lightest;

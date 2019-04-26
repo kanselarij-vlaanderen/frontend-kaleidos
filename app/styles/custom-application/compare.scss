@@ -1,0 +1,54 @@
+.horizontal-line-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .horizontal-line {
+    border-right: 1px solid $border-color;
+    height: 100%;
+    justify-self: stretch;
+    align-self: stretch;
+    background-color: #000;
+    padding-top: 25px;
+  }
+}
+
+.not-clickable:active {
+  background: #fff !important;
+  cursor: default !important;
+
+  *:not(.vlc-agenda-item__meta) {
+    color: unset !important;
+    cursor: default;
+  }
+
+  .vlc-agenda-item__meta {
+    color: $silver-chalice;
+  }
+
+  .active {
+    color: unset;
+  }
+}
+
+.not-clickable:hover {
+  background: #fff !important;
+  cursor: default !important;
+
+  * {
+    cursor: default;
+  }
+}
+
+.compare-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.compare-left-column {
+  width: calc(49% - 15px);
+}
+
+.compare-right-column {
+  width: 49%;
+}

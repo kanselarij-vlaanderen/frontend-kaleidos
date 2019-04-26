@@ -16,6 +16,13 @@
     }}
   </div>
   <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "finished")}}
+      {{x-toggle
+        value=(await finished)
+        onToggle=(action (mut finished))
+      }}
+    </div>
+  <div class="vlc-input-field-block">
     {{utils/documents-selector-of-agendaitem
       item=agendaitem
       title=(t "documents-attached-to")
