@@ -17,7 +17,12 @@ export default Service.extend({
       const session = this.session;
       const account = await this.store.find('account', get(session, 'data.authenticated.relationships.account.data.id'));
       const user = await account.get('user');
-      const group = await this.store.find('account-group', get(session, 'data.authenticated.relationships.group.data.id'));
+
+      let group = null;
+      let groupId = get(session, 'data.authenticated.relationships.group.data.id');
+      if(groupId){
+        group = await this.store.find('account-group', groupId);
+      } 
       const roles = await get(session, 'data.authenticated.data.attributes.roles');
       this.set('_account', account);
       this.set('_user', user);
@@ -35,7 +40,7 @@ export default Service.extend({
       if(group && group.get('name')) {
         this.set('userRole', group.get('name'));
       } else {
-        this.set('userRole', null);
+        this.set('userRole', "no-access");
       }
 
       this.set('isAdmin', this.canAccess('admin'));

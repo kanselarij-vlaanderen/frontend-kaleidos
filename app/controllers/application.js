@@ -13,7 +13,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 		const router = this.get('router');
 		const role = await this.get('currentSession.userRole');
 		const user = await this.get('session.isAuthenticated');
-		if (router && user && !role ) {
+		if (router && user && role == "no-access" ) {
 			this.transitionToRoute('accountless-users');
 		}
   })),
