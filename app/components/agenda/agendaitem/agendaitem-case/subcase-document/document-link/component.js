@@ -4,8 +4,9 @@ import $ from 'jquery';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
-export default Component.extend(FileSaverMixin, isAuthenticatedMixin, {
+export default Component.extend(FileSaverMixin, isAuthenticatedMixin, UploadDocumentMixin, {
 	classNames: ["vl-u-spacer"],
 	isShowingVersions: false,
 	store: inject(),
@@ -19,39 +20,29 @@ export default Component.extend(FileSaverMixin, isAuthenticatedMixin, {
 		return modelName === 'agendaitem';
 	}),
 
-	filteredDocumentVersions: computed('document','document.documentVersions','item','item.documents.@each', function() {
+	filteredDocumentVersions: computed('document', 'document.documentVersions', 'item', 'item.documents.@each', function () {
 		return this.get('document').getDocumentVersionsOfItem(this.get('item'));
 	}),
 
-	lastDocumentVersion: computed('filteredDocumentVersions.@each', async function() {
-		return (await this.get('filteredDocumentVersions') || []).objectAt(0) ;
+	lastDocumentVersion: computed('filteredDocumentVersions.@each', async function () {
+		return (await this.get('filteredDocumentVersions') || []).objectAt(0);
 	}),
 
-	async createNewDocumentVersion(document, newVersion) {			
-		const { item, uploadedFile, isAgendaItem} = this;
-		let newDocumentVersion ;
-		if(isAgendaItem) {
-			newDocumentVersion = this.store.createRecord('document-version',
+	async createNewDocumentVersion(document, newVersion) {
+		const { item, uploadedFile, isAgendaItem } = this;
+		let newDocumentVersion = this.store.createRecord('document-version',
 			{
 				file: uploadedFile,
 				versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
 				document: document,
-				agendaitem: item,
 				chosenFileName: this.get('fileName') || uploadedFile.fileName || uploadedFile.name,
 				created: new Date()
 			});
+		if (isAgendaItem) {
+			newDocumentVersion.set('agendaitem', item);
 		} else {
-			newDocumentVersion = this.store.createRecord('document-version',
-			{
-				file: uploadedFile,
-				versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
-				document: document,
-				subcase: item,
-				chosenFileName: this.get('fileName') || uploadedFile.fileName || uploadedFile.name,
-				created: new Date()
-			});
+			newDocumentVersion.set('subcase', item);
 		}
-		
 		return newDocumentVersion.save();
 	},
 
@@ -67,13 +58,14 @@ export default Component.extend(FileSaverMixin, isAuthenticatedMixin, {
 			const newDocumentVersion = await this.createNewDocumentVersion(document, newVersion)
 
 			document.set('lastDocumentVersion', newDocumentVersion);
-			if(isAgendaItem) {
+			if (isAgendaItem) {
 				item.get('documentVersions').addObject(newDocumentVersion);
 				await item.save();
 			}
-			document.hasMany('documentVersions').reload();
-			item.reload();
-			this.set('isUploadingNewVersion', false);
+			await item.hasMany('documentVersions').reload();
+			if(!this.get('isDestroyed')) {
+				this.set('isUploadingNewVersion', false);
+			}
 		},
 
 		async downloadFile(documentVersion) {
@@ -92,36 +84,6 @@ export default Component.extend(FileSaverMixin, isAuthenticatedMixin, {
 				this.deleteFile(uploadedFile.id);
 			}
 			this.toggleProperty('isUploadingNewVersion');
-		},
-
-		async createNewDocumentWithDocumentVersion(subcase, file, documentTitle) {
-			let document = await this.store.createRecord('document', {
-				created: new Date(),
-				title: documentTitle,
-				type: file.get('documentType')
-			});
-			document.save().then(async (createdDocument) => {
-				if (file) {
-					const documentVersion = await this.store.createRecord('document-version', {
-						document: createdDocument,
-						subcase: subcase,
-						created: new Date(),
-						versionNumber: 1,
-						file: file,
-						chosenFileName: file.get('name')
-					});
-					await documentVersion.save();
-				} else {
-					const documentVersion = await this.store.createRecord('document-version', {
-						document: createdDocument,
-						subcase: subcase,
-						created: new Date(),
-						versionNumber: 1,
-						chosenFileName: documentTitle
-					});
-					await documentVersion.save();
-				}
-			});
 		},
 
 		async getUploadedFile(file) {

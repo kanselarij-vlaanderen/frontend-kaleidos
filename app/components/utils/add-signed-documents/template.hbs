@@ -1,0 +1,56 @@
+<button
+  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+>
+  <i
+    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+    aria-hidden="true"
+  ></i>
+  {{t "document-add"}}
+</button>
+
+{{#if isAddingNewDocument}}
+  {{#web-components/vl-modal
+    closeModal=(action "toggleIsAddingNewDocument")
+    isOverlay=true
+    large=true
+    title=(t "document-add")
+  }}
+    <div class="vl-modal-dialog__content">
+      <div class="vlc-input-field-block">
+        {{#if (not (gt uploadedFiles.length 0))}}
+          {{web-components/vl-form-label value="Bijlagen"}}
+          {{file-uploader
+            multipleFiles=false
+            uploadedFile=(action "getUploadedFile")
+          }}
+        {{else}}
+          {{subcases/edit-documents uploadedFiles=uploadedFiles}}
+        {{/if}}
+      </div>
+    </div>
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "openUploadDialog"}}
+            >
+              {{t "cancel"}}
+            </button>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "uploadNewDocument"}}
+            >
+              {{t "document-add"}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/web-components/vl-modal}}
+{{/if}}
