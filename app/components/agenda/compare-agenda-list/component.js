@@ -19,14 +19,14 @@ export default Component.extend({
   }),
 
 	currentAgendaItemsObserver: on('init', observer('agendaOne', async function () {
-
     let agenda = await this.get('agendaOne');
 		if(!agenda) return;
 		let agendaItems = await this.store.query('agendaitem', {
 			filter: {
-				'agenda': { id: agenda.id },
+        'agenda': { id: agenda.id },
+        'show-as-remark':false
 			},
-      include: 'subcase.phases.code,agenda,subcase,subcase.case,subcase.themes,subcase.mandatees,postponed-to,subcase.phases'
+      include: 'subcase.phases.code,subcase,subcase.themes,subcase.mandatees,postponed-to,subcase.phases'
 		});
 
     const groups = await this.reduceGroups(agendaItems, agenda);
@@ -38,7 +38,8 @@ export default Component.extend({
 		if(!agenda) return;
 		let agendaItems = await this.store.query('agendaitem', {
 			filter: {
-				'agenda': { id: agenda.id }
+        'agenda': { id: agenda.id },
+        'show-as-remark':false
 			},
       include: 'subcase.phases.code,agenda,subcase,subcase.case,subcase.themes,subcase.mandatees,postponed-to,subcase.phases'
 		});

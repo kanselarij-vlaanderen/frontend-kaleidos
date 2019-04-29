@@ -23,7 +23,7 @@ export default Service.extend({
 			if (mandatees) {
 				mandatees = mandatees.sortBy('priority')
 			}
-			let titles = mandatees.map((mandatee) => mandatee.title);
+			let titles = (mandatees || []).map((mandatee) => mandatee.title);
 			if (titles && titles != []) {
 				titles = titles.join(',');
 				items[titles] = items[titles] || { groupName: titles, mandatees: mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };

@@ -1,8 +1,13 @@
 @import "ember-power-select";
-// @import "ember-modal-dialog/ember-modal-structure";
-// @import "ember-modal-dialog/ember-modal-appearance";
-@import "_colors";
 @import "ember-vo-webuniversum-data-table";
+/* ==========================================================================
+   CSS file for Digikan
+   ========================================================================== */
+
+/* Official code
+   ========================================================================== */
+
+@import "_colors";
 
 $icon-font-location: "/fonts/";
 
@@ -60,7 +65,7 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_accordion";
 @import "govflanders/components/_action-group";
 @import "govflanders/components/_alert";
-// @import "govflanders/components/_autocomplete";
+@import "govflanders/components/_autocomplete";
 @import "govflanders/components/_badge";
 @import "govflanders/components/_button";
 @import "govflanders/components/_checkbox";
@@ -100,19 +105,20 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_js-select";
 
 /* Unofficial code
-   ========================================================================== */
+      ========================================================================== */
 
 // Additions to existing components
 @import "govflanders/additions/_accordion";
 @import "govflanders/additions/_badge";
 @import "govflanders/additions/_button";
+@import "govflanders/additions/_checkbox";
 @import "govflanders/additions/_data-table";
 @import "govflanders/additions/_icon-list";
 @import "govflanders/additions/_info-tile";
 @import "govflanders/additions/_link-list";
 @import "govflanders/additions/_modal";
 @import "govflanders/additions/_pill-input";
-@import "govflanders/additions/_pill";
+@import "govflanders/additions/_popover";
 @import "govflanders/additions/_tabs";
 
 // Additions to existing utilities
@@ -162,8 +168,7 @@ $icon-font-location: "/fonts/";
 @import "custom-utilities/_scroll";
 @import "custom-utilities/_box-model";
 
-//print css
-@import "print/agendaitem-print";
+@import "print/print";
 
 //custom css added
 @import "custom-application/toast";
@@ -518,12 +523,8 @@ body > .ember-view {
   padding-bottom: 6rem;
 }
 
-.x-toggle-component {
-  justify-content: right;
-}
-
 .transparant {
-  opacity: 0.5 !important;
+  opacity: 0.30 !important;
 }
 
 .settings-container {

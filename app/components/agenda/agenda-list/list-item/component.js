@@ -25,7 +25,7 @@ export default Component.extend({
     const postponed = (await this.get('agendaitem.postponedTo'));
     const retracted = this.get('agendaitem.retracted');
 
-    if (postponed || retracted) {
+    if ((postponed || retracted)) {
       clazz += ' transparant';
 		}
 		if(!this.get('isDestroyed')) {

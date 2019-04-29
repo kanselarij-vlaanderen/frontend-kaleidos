@@ -4,7 +4,7 @@
   </h2>
   <div class="vlc-comments-input">
     <div class="vl-badge">
-      <img class="vl-badge__img" src="/assets/icons/avatar-hilde-crevits.jpg" />
+      {{!-- <img class="vl-badge__img" src="/assets/icons/avatar-hilde-crevits.jpg" /> --}}
     </div>
     {{utils/custom-textarea
       rows="2"
@@ -17,16 +17,17 @@
   {{#each (await sortedRemarks) as |comment|}}
     <div class="vlc-comments-comment">
       <div class="vl-badge">
-        <img
+        {{!-- <img
           class="vl-badge__img"
           src="/assets/icons/avatar-hilde-crevits.jpg"
-         />
+         /> --}}
 
       </div>
       <div class="vlc-comments-comment-content">
         <div class="vlc-comments-comment-content__header">
           <h4 class="vl-title vl-title--h6">
-            {{await comment.author.firstName}} {{await comment.author.lastName}}
+            {{await comment.author.firstName}}
+            {{await comment.author.lastName}}
           </h4>
           <div class="vlc-comments-comment-content__meta">
             {{moment-format comment.created "DD MMMM YYYY - HH:mm"}}
@@ -52,7 +53,8 @@
           <div class="vlc-comments-comment-content">
             <div class="vlc-comments-comment-content__header">
               <h4 class="vl-title vl-title--h6">
-                {{await answer.author.firstName}} {{await answer.author.lastName}}
+                {{await answer.author.firstName}}
+                {{await answer.author.lastName}}
               </h4>
               <div class="vlc-comments-comment-content__meta">
                 {{moment-format answer.created "DD MMMM YYYY - HH:mm"}}
@@ -73,6 +75,7 @@
           class="vl-badge__img"
           src="/assets/icons/avatar-hilde-crevits.jpg"
          />
+
       </div>
       {{utils/custom-textarea
         rows="2"
