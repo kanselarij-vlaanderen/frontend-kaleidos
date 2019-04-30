@@ -12,7 +12,7 @@ export default Component.extend(isAuthenticatedMixin, {
 		const news = this.store.createRecord("newsletter-info", {
 			agendaitem: agendaitem,
 			created: new Date(),
-			subtitle: await agendaitem.get('subcase.title')
+			title: await agendaitem.get('agendaitem.shortTitle'),
 		});
 		await news.save();
 	},
@@ -23,6 +23,11 @@ export default Component.extend(isAuthenticatedMixin, {
 			const newsletter = await agendaitem.get('newsletterInfo');
 			if (!newsletter) {
 				await this.addNewsItem(agendaitem);
+			} else {
+				if(!newsletter.get('title')) {
+					newsletter.set('title', agendaitem.get('shortTitle'));
+					await newsletter.save();
+				}
 			}
 			this.toggleProperty('isEditing');
 		},

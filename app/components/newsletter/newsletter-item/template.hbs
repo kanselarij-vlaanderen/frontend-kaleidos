@@ -2,7 +2,7 @@
   <div class="vl-u-spacer--xsmall">
     <div class="vl-u-display-flex vl-u-display-flex-align-center">
       <h4 class="vl-title vl-title--h6 vl-u-text--capitalize">
-        {{await agendaitem.newsletterInfo.subtitle}}
+        {{await agendaitem.newsletterInfo.title}}
       </h4>
       {{#if (or isAdmin isEditor)}}
         <div class="vl-u-spacer-extended-left-s">
@@ -12,10 +12,10 @@
         </div>
       {{/if}}
     </div>
-    <div class="vl-u-text vl-u-text--small vl-u-text--muted">
-      {{moment-format (await agenda.createdFor.plannedStart) "DD MMMM YYYY"}}
-      ,
-		op voorstel van ---
+    <div class="vl-u-text vl-u-text--small">
+      <p class="vl-long-title">
+        {{await agendaitem.newsletterInfo.subtitle}}
+      </p>
     </div>
   </div>
   <div class="vl-u-spacer">
@@ -26,15 +26,6 @@
     </div>
   </div>
   <div class="vl-u-spacer">
-    <div class="vl-custom">
-      <ul>
-        {{#each (await agendaitem.sortedThemes) as |theme|}}
-          <li class="vl-pill vl-u-spacer-extended-right-s">
-            {{theme.label}}
-          </li>
-        {{/each}}
-      </ul>
-    </div>
     <hr class="vlc-hr" />
     <div class="vl-u-spacer-extended-top-s">
       {{utils/documents-list-for-item
@@ -44,5 +35,9 @@
     </div>
   </div>
 {{else}}
-  {{news-item/edit-item agendaitem=agendaitem item=agendaitem.newsletterInfo isEditing=isEditing}}
+  {{news-item/edit-item
+    agendaitem=agendaitem
+    item=agendaitem.newsletterInfo
+    isEditing=isEditing
+  }}
 {{/if}}

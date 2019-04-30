@@ -7,6 +7,7 @@ export default Component.extend({
 	classNames:['vl-u-spacer-extended-bottom-l', 'vl-col--3-4'],
 	isEditing:false,
 	intl: inject(),
+	store:inject(),
 
 	editTitle: computed('meeting', function() {
 		const date = this.get('meeting.plannedStart');
@@ -14,7 +15,15 @@ export default Component.extend({
 	}),
 
 	actions: {
-		toggleIsEditing() {
+		async toggleIsEditing() {
+			const meeting = await this.get('meeting');
+			const newsletter = await meeting.get('newsletter');
+			if(!newsletter) {
+				const newsletter = this.store.createRecord('newsletter-info', {
+					meeting: meeting
+				})
+				await newsletter.save();
+			}
 			this.toggleProperty('isEditing');
 		},
 		close() {

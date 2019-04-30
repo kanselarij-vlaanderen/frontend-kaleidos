@@ -60,7 +60,7 @@
 	"compare": "Vergelijk",
 	"compare-title": "Vergelijk Agenda's",
 	"contact-person": "Contactpersoon",
-	"content": "Inhoud",
+	"content": "Kort Bestek",
 	"create": "Aanmaken",
 	"create-announcement": "Mededeling toevoegen",
 	"create-case": "Dossier aanmaken",
@@ -243,5 +243,6 @@
 	"uploading": "Uploaden",
 	"user": "Gebruiker",
 	"user-role": "Gebruikersrol",
-	"version": "Versie nummer"
+	"version": "Versie nummer",
+	"subtitle":"Ondertitel"
 }

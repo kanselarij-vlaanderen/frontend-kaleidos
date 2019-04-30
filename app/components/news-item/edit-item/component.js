@@ -4,9 +4,10 @@ import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcas
 
 export default Component.extend(DocumentsSelectorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
-	propertiesToSet: ['finished', 'title', 'text'],
+	propertiesToSet: ['finished', 'title', 'text', 'subtitle'],
 
 	subtitle: getCachedProperty('subtitle'),
 	text: getCachedProperty('text'),
+	title: getCachedProperty('title'),
 	finished: getCachedProperty('finished'),
 });
