@@ -106,41 +106,11 @@
               <td {{action "selectAgenda" meeting}}>
                 {{!-- {{await meeting.latestAgenda}} --}}
                 {{moment-format
-                  (await meeting.latestAgenda.created)
+                  (await meeting.latestAgenda.modified)
                   "DD-MM-YYYY HH:mm"
                 }}
               </td>
               <td class="vl-u-align-center">
-          {{#if (or isAdmin isEditor)}}
-                <button class="vl-button vl-button--link vl-button--icon">
-                  <i
-                    class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
-                  ></i>
-                </button>
-                {{#attach-popover
-                  class="ember-attacher-popper"
-                  hideOn="clickout click"
-                  showOn="click"
-                  animation="shift"
-                  placement="bottom" as |attacher|
-                }}
-                  <ul class="vl-popover__link-list">
-                    <li class="vl-popover__link-list__item">
-                      <button
-                        class="vl-link"
-                        {{action attacher.hide}}
-                        {{action "addNotesToMeeting" meeting}}
-                      >
-                        {{#if (not await futureMeeting.notes)}}
-                          Notulen toevoegen
-                        {{else}}
-                          Notulen aanpassen
-                        {{/if}}
-                      </button>
-                    </li>
-                  </ul>
-                {{/attach-popover}}
-                {{/if}}
                 <button
                   class="vl-button vl-button--link vl-button--icon"
                   {{action "selectAgenda" meeting}}
@@ -169,14 +139,5 @@
       successfullyAdded=(action "successfullyAdded")
       cancelForm=(action "cancelNewSessionForm")
     }}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isAddingNotes}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    closeModal=(action "close")
-    title="Algemene notulen"
-  }}
-    {{sessions/session-notes meeting=selectedMeeting close=(action "close")}}
   {{/web-components/vl-modal}}
 {{/if}}

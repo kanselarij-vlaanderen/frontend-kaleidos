@@ -2,10 +2,16 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { sort } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-padding-bottom--large'],
   store: inject('store'),
+
+  initials: computed('user', function() {
+    const user = this.get('user');
+    return user.get('firstName').charAt(0) + user.get('lastName').charAt(0);
+  }),
 
   sortedRemarks: sort('agendaitem.remarks', function (a, b) {
     if (a.created < b.created) {

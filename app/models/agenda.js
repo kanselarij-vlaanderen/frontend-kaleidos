@@ -13,10 +13,10 @@ export default Model.extend({
 	// announcements: hasMany('announcement'),
 
 	agendaName: computed('name', function() {
-		if(this.name.length <= 2) {
-			return 'Agenda ' + this.name;
-		} else {
+		if(this.get('name.length') > 2) {
 			return this.name;
+		} else {
+			return 'Agenda ' + this.name;
 		}
 	})
 });

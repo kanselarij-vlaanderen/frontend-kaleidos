@@ -4,7 +4,7 @@
   </h2>
   <div class="vlc-comments-input">
     <div class="vl-badge">
-      {{!-- <img class="vl-badge__img" src="/assets/icons/avatar-hilde-crevits.jpg" /> --}}
+      {{initials}}
     </div>
     {{utils/custom-textarea
       rows="2"
@@ -17,11 +17,7 @@
   {{#each (await sortedRemarks) as |comment|}}
     <div class="vlc-comments-comment">
       <div class="vl-badge">
-        {{!-- <img
-          class="vl-badge__img"
-          src="/assets/icons/avatar-hilde-crevits.jpg"
-         /> --}}
-
+        {{!-- {{initials}} --}}
       </div>
       <div class="vlc-comments-comment-content">
         <div class="vlc-comments-comment-content__header">
@@ -44,11 +40,7 @@
       {{#each (await comment.answers) as |answer|}}
         <div class="vlc-comments-comment vlc-comments-comment--response">
           <div class="vl-badge">
-            <img
-              class="vl-badge__img"
-              src="/assets/icons/avatar-hilde-crevits.jpg"
-             />
-
+            {{!-- TODO: Initials --}}
           </div>
           <div class="vlc-comments-comment-content">
             <div class="vlc-comments-comment-content__header">
@@ -71,11 +63,7 @@
     {{/if}}
     <div class="vlc-comments-input vlc-comments-input--response">
       <div class="vl-badge">
-        <img
-          class="vl-badge__img"
-          src="/assets/icons/avatar-hilde-crevits.jpg"
-         />
-
+        {{initials}}
       </div>
       {{utils/custom-textarea
         rows="2"

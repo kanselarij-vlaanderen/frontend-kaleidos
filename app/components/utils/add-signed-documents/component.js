@@ -1,29 +1,22 @@
 import Component from '@ember/component';
+import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
+import { inject } from '@ember/service';
 
-export default Component.extend({
+export default Component.extend(UploadDocumentMixin, {
 	classNames:["vl-u-spacer"],
 	isAddingDocument: false,
+	store: inject(),
+	modelToAddDocumentVersionTo: 'meeting-record',
 
 	actions: {
 		toggleIsAddingNewDocument() {
 			this.toggleProperty('isAddingNewDocument');
 		},
 
-		getUploadedFile(file) {
-			if(!this.get('uploadedFiles')) {
-				this.set('uploadedFiles', []);
-			}
-			this.get('uploadedFiles').pushObject(file);
-		},
-
 		async uploadNewDocument() {
-			const uploadedFiles = this.get('uploadedFiles');
-			Promise.all(uploadedFiles.map(uploadedFile => {
-				if (uploadedFile.id) {
-					return this.createNewDocumentWithDocumentVersion(this.get('item'), uploadedFile, uploadedFile.get('name'));
-				}
-			})).then(() => {
-				this.get('item').hasMany('documentVersions').reload();
+			const item = await this.get('item');
+			this.uploadFiles(item).then(() => {
+				item.hasMany('documentVersions').reload();
 				this.toggleProperty('isAddingNewDocument');
 			});
 		}

@@ -42,6 +42,25 @@ export default Mixin.create({
 		});
 	},
 
+	async uploadFiles(model) {
+		const { uploadedFiles, nonDigitalDocuments } = this;
+		if (uploadedFiles) {
+			await Promise.all(uploadedFiles.map(uploadedFile => {
+				if (uploadedFile.id) {
+					return this.createNewDocumentWithDocumentVersion(model, uploadedFile, uploadedFile.get('name'));
+				}
+			}));
+		}
+
+		if (nonDigitalDocuments) {
+			await Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
+				if (nonDigitalDocument.title) {
+					return this.createNewDocumentWithDocumentVersion(model, null, nonDigitalDocument.title);
+				}
+			}));
+		}
+	},
+
 	actions: {
 		uploadedFile(uploadedFile) {
 			const { uploadedFiles } = this;

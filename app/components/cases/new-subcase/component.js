@@ -3,6 +3,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
+
 export default Component.extend(UploadDocumentMixin, {
 	store: inject(),
 	classNames: ["vl-custom"],
@@ -69,7 +70,7 @@ export default Component.extend(UploadDocumentMixin, {
 
 			const createdSubphase = await subcasePhase.save();
 
-			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark, confidentiality, uploadedFiles, nonDigitalDocuments } = this;
+			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark, confidentiality } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
@@ -86,22 +87,7 @@ export default Component.extend(UploadDocumentMixin, {
 				});
 
 			const newSubcase = await subcase.save();
-
-			if (uploadedFiles) {
-				Promise.all(uploadedFiles.map(uploadedFile => {
-					if (uploadedFile.id) {
-						return this.createNewDocumentWithDocumentVersion(newSubcase, uploadedFile, uploadedFile.get('name'));
-					}
-				}));
-			}
-
-			if (nonDigitalDocuments) {
-				Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
-					if (nonDigitalDocument.title) {
-						return this.createNewDocumentWithDocumentVersion(newSubcase, null, nonDigitalDocument.title);
-					}
-				}));
-			}
+			await this.uploadFiles(newSubcase);
 
 			this.closeModal();
 		},

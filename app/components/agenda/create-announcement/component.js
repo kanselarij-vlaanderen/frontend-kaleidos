@@ -12,8 +12,9 @@ export default Component.extend(UploadDocumentMixin,{
     closeDialog() {
       this.toggleProperty('isAddingAnnouncement');
     },
+    
     async createAnnouncement() {
-      const { title, text, currentAgenda, uploadedFiles, nonDigitalDocuments } = this;
+      const { title, text, currentAgenda } = this;
       const date = new Date();
       const agendaitem = this.store.createRecord('agendaitem',
         {
@@ -25,21 +26,7 @@ export default Component.extend(UploadDocumentMixin,{
         });
       await agendaitem.save();
 
-      if (uploadedFiles) {
-        await Promise.all(uploadedFiles.map(uploadedFile => {
-          if (uploadedFile.id) {
-            return this.createNewDocumentWithDocumentVersion(agendaitem, uploadedFile, uploadedFile.get('name'));
-          }
-        }));
-      }
-
-      if (nonDigitalDocuments) {
-        await Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
-          if (nonDigitalDocument.title) {
-            return this.createNewDocumentWithDocumentVersion(agendaitem, null, nonDigitalDocument.title);
-          }
-        }));
-      }
+      await this.uploadFiles(agendaitem);
 
       this.toggleProperty('isAddingAnnouncement');
       this.reloadRoute(currentAgenda.get('id'));

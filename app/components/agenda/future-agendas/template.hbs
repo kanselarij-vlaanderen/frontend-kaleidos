@@ -56,39 +56,9 @@
             {{await futureMeeting.latestAgendaName}}
           </td>
           <td>
-            {{moment-format futureMeeting.created "DD-MM-YYYY HH:mm"}}
+            {{moment-format futureMeeting.modified "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="vl-u-align-center">
-          {{#if (or isAdmin isEditor)}}
-              <button class="vl-button vl-button--link vl-button--icon">
-                <i
-                  class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
-                ></i>
-              </button>
-              {{#attach-popover
-                class="ember-attacher-popper"
-                hideOn="clickout click"
-                showOn="click"
-                animation="shift"
-                placement="bottom" as |attacher|
-              }}
-                <ul class="vl-popover__link-list">
-                  <li class="vl-popover__link-list__item">
-                    <button
-                      class="vl-link"
-                      {{action attacher.hide}}
-                      {{action "addNotesToMeeting" futureMeeting}}
-                    >
-                      {{#if (not await futureMeeting.notes)}}
-                        {{t "add-notes"}}
-                      {{else}}
-                        {{t "edit-notes"}}
-                      {{/if}}
-                    </button>
-                  </li>
-                </ul>
-              {{/attach-popover}}
-            {{/if}}
             <button
               class="vl-button vl-button--link vl-button--icon"
               {{action "selectAgenda" futureMeeting}}
@@ -101,12 +71,5 @@
     </tbody>
   </table>
 {{/if}}
-{{#if isAddingNotes}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    closeModal=(action "close")
-    title="Algemene notulen"
-  }}
-    {{sessions/session-notes meeting=selectedMeeting close=(action "close")}}
-  {{/web-components/vl-modal}}
-{{/if}}
+
+
