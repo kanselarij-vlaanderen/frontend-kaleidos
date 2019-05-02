@@ -14,6 +14,7 @@ export default Component.extend(FileSaverMixin, isAuthenticatedMixin, UploadDocu
 	uploadedFile: null,
 	fileName: null,
 
+
 	isAgendaItem: computed('item', function () {
 		const { item } = this;
 		const modelName = item.get('constructor.modelName')
@@ -52,18 +53,17 @@ export default Component.extend(FileSaverMixin, isAuthenticatedMixin, UploadDocu
 		},
 
 		async uploadNewVersion() {
-			const { item, isAgendaItem } = this;
+			const { item } = this;
 			const document = await this.get('document');
 			const newVersion = await document.get('lastDocumentVersion');
 			const newDocumentVersion = await this.createNewDocumentVersion(document, newVersion)
 
 			document.set('lastDocumentVersion', newDocumentVersion);
-			if (isAgendaItem) {
-				item.get('documentVersions').addObject(newDocumentVersion);
-				await item.save();
-			}
+			item.get('documentVersions').addObject(newDocumentVersion);
+			await item.save();
+
 			await item.hasMany('documentVersions').reload();
-			if(!this.get('isDestroyed')) {
+			if (!this.get('isDestroyed')) {
 				this.set('isUploadingNewVersion', false);
 			}
 		},

@@ -16,15 +16,15 @@
   <div class="vl-u-spacer vl-typography">
     <div class="vl-u-spacer--xsmall">
       <h4 class="vl-title vl-title--h6">
-        {{await agendaitem.decision.shortTitle}}
+        {{await subcase.decision.shortTitle}}
       </h4>
     </div>
     <p>
-      {{await agendaitem.decision.description}}
+      {{await subcase.decision.description}}
     </p>
     <hr />
     <div class="vl-u-spacer-extended-top-s">
-      {{#if (await agendaitem.decision.approved)}}
+      {{#if subcase.decision.approved}}
         <div class="vlc-pill vlc-pill--success">
           {{t "decided"}}
         </div>
@@ -35,15 +35,15 @@
       {{/if}}
     </div>
   </div>
-  {{#if (gt (await agendaitem.decision.documentVersions.length) 0)}}
+  {{#if (gt (await subcase.documentVersions.length) 0)}}
     <div class="vl-u-spacer">
       <h4 class="vl-title vl-title--h6">
         {{t "documents-attached-to"}}
       </h4>
       <div class="vl-u-spacer-extended-top-s">
         {{utils/documents-list-for-item
-          item=(await agendaitem.decision)
-          agendaitem=agendaitem
+          item=(await subcase.decision)
+          agendaitem=subcase
         }}
       </div>
     </div>
@@ -51,7 +51,7 @@
 {{else}}
   {{agenda/agendaitem/agendaitem-decision-edit
     isEditing=isEditing
-    item=agendaitem.decision
+    item=subcase.decision
     agendaitem=agendaitem
   }}
 {{/if}}

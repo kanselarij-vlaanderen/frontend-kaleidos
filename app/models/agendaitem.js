@@ -23,7 +23,6 @@ export default Model.extend({
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
-  decision: belongsTo('decision'),
   subcase: belongsTo('subcase', { inverse: null }),
 
   confidentiality: belongsTo('confidentiality', { inverse: null }),

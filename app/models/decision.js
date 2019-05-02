@@ -11,8 +11,7 @@ export default Model.extend({
   numberVp: attr('string'),
   numberVr: attr('string'),
 
-  agendaitem: belongsTo('agendaitem', { inverse: null }),
-  subcase: belongsTo('subcase', { inverse: null }),
+  subcase: belongsTo('subcase'),
   publication: belongsTo('publication'),
   newsletterInfo: belongsTo('newsletter-info'),
   documentType: belongsTo('document-type'),

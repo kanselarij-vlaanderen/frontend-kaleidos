@@ -15,10 +15,13 @@ export default Component.extend(UploadDocumentMixin, {
 
 		async uploadNewDocument() {
 			const item = await this.get('item');
-			this.uploadFiles(item).then(() => {
-				item.hasMany('documentVersions').reload();
-				this.toggleProperty('isAddingNewDocument');
-			});
+			const document = await item.get('document')
+			if(!document) {
+				this.uploadFiles(item).then(() => {
+					item.hasMany('documentVersions').reload();
+					this.toggleProperty('isAddingNewDocument');
+				});
+			}
 		}
 	}
 });

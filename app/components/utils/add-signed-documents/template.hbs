@@ -1,12 +1,20 @@
-<button
-  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
- {{action "toggleIsAddingNewDocument"}}>
-  <i
-    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-    aria-hidden="true"
-  ></i>
-  {{t "document-add"}}
-</button>
+{{#if (not await item.document)}}
+  <button
+    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+    {{action "toggleIsAddingNewDocument"}}
+  >
+    <i
+      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+      aria-hidden="true"
+    ></i>
+    {{t "document-add"}}
+  </button>
+{{else}}
+  {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+    document=(await item.document)
+    item=item
+  }}
+{{/if}}
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
     closeModal=(action "toggleIsAddingNewDocument")
