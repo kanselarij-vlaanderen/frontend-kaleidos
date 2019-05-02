@@ -244,5 +244,6 @@
 	"uploading": "Uploaden",
 	"user": "Gebruiker",
 	"user-role": "Gebruikersrol",
-	"version": "Versie nummer"
+	"version": "Versie nummer",
+	"signed-document-version-add":"Getekend document uploaden"
 }

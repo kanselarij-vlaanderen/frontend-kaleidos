@@ -14,7 +14,6 @@ export default Component.extend(FileSaverMixin, isAuthenticatedMixin, UploadDocu
 	uploadedFile: null,
 	fileName: null,
 
-
 	isAgendaItem: computed('item', function () {
 		const { item } = this;
 		const modelName = item.get('constructor.modelName')

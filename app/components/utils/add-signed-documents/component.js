@@ -6,7 +6,7 @@ export default Component.extend(UploadDocumentMixin, {
 	classNames:["vl-u-spacer"],
 	isAddingDocument: false,
 	store: inject(),
-	modelToAddDocumentVersionTo: 'meeting-record',
+	modelToAddDocumentVersionTo: 'meetingRecord',
 
 	actions: {
 		toggleIsAddingNewDocument() {
@@ -15,7 +15,7 @@ export default Component.extend(UploadDocumentMixin, {
 
 		async uploadNewDocument() {
 			const item = await this.get('item');
-			const document = await item.get('document')
+			const document = await item.get('documentVersions')
 			if(!document) {
 				this.uploadFiles(item).then(() => {
 					item.hasMany('documentVersions').reload();

@@ -26,15 +26,19 @@ export default Mixin.create({
 			type: type,
 			confidentiality: confidentiality
 		});
+		const modelName = model.get('constructor.modelName');
+		
+		if(modelName == "meeting-record" || modelName == "decision") {
+			document.set(modelToAddDocumentVersionTo, model);
+		}
 
 		document.save().then(async (createdDocument) => {
 			const documentVersion = await this.store.createRecord('document-version', {
 				document: createdDocument,
-				model: model,
 				created: creationDate,
 				file: file,
 				versionNumber: 1,
-				chosenFileName: chosenFileName // Static because it's a new document.
+				chosenFileName: chosenFileName 
 			});
 			documentVersion.set(modelToAddDocumentVersionTo, model);
 

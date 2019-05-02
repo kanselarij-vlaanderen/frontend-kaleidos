@@ -16,6 +16,7 @@ export default Model.extend({
 	file: belongsTo('file'),
 
 	newsletter: belongsTo('newsletter-info'),
+	meetingRecord: belongsTo('meeting-record'),
 	decision: belongsTo('decision'),
 
 	nameToDisplay: computed('chosenFileName', 'document.title', function () {

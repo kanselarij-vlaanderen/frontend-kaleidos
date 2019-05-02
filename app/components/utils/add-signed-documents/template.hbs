@@ -1,4 +1,4 @@
-{{#if (not await item.document)}}
+{{#if (gt (await item.documentVersions.length) 0)}}
   <button
     class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
     {{action "toggleIsAddingNewDocument"}}
@@ -7,13 +7,13 @@
       class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
       aria-hidden="true"
     ></i>
-    {{t "document-add"}}
+    {{t "signed-document-version-add"}}
   </button>
 {{else}}
-  {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=(await item.document)
-    item=item
-  }}
+  {{!-- {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+    document=item.document
+    item=agendaitem
+  }} --}}
 {{/if}}
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
