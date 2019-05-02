@@ -10,8 +10,9 @@ export default Model.extend({
 	agendaitems: hasMany('agendaitem', {inverse: null, serialize: false}),
 	created: attr('date'),
 	isAccepted: attr('boolean'),
+	modified: attr('date'),
 	// announcements: hasMany('announcement'),
-
+	
 	agendaName: computed('name', function() {
 		if(this.get('name.length') > 2) {
 			return this.name;

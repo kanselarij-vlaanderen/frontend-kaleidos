@@ -9,18 +9,18 @@
         </div>
       </div>
       <div class="vlc-toolbar__right">
-          {{#if (or isAdmin isEditor)}}
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--narmeeting vl-button--icon-before"
-            {{action "createNewSession"}}
-          >
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-            ></i>
-            {{t "new-agenda"}}
-          </button>
-        </div>
+        {{#if (or isAdmin isEditor)}}
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--narmeeting vl-button--icon-before"
+              {{action "createNewSession"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              {{t "new-agenda"}}
+            </button>
+          </div>
         {{/if}}
       </div>
     </div>
@@ -89,7 +89,7 @@
               {{th-sortable
                 class="vl-data-table-col-3 vl-data-table__header-title"
                 currentSorting=sort
-                field="created"
+                field="modified"
                 label="Laatst gewijzigd"
               }}
               <th class="vl-data-table-col-1"></th>
@@ -105,9 +105,7 @@
               </td>
               <td {{action "selectAgenda" meeting}}>
                 {{!-- {{await meeting.latestAgenda}} --}}
-                {{moment-format
-                  (await meeting.latestAgenda.modified)
-                  "DD-MM-YYYY HH:mm"
+                {{moment-format meeting.latestAgenda.modified "DD-MM-YYYY HH:mm"
                 }}
               </td>
               <td class="vl-u-align-center">

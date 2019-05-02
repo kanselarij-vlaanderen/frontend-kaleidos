@@ -67,6 +67,8 @@ export default Mixin.create(FileSaverMixin, {
 				}
 			}));
 		}
+		this.set('uploadedFiles', null);
+		this.set('nonDigitalDocuments', null);
 	},
 
 	async createNewDocumentVersion(uploadedFile, document, versionNumber) {
