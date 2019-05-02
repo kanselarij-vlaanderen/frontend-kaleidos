@@ -75,7 +75,6 @@ export default Mixin.create(FileSaverMixin, {
 		const { item, modelToAddDocumentVersionTo } = this;
 		const latestDocumentVersion = versionNumber || 0;
 		const newDocumentVersion = await this.createVersion(uploadedFile, latestDocumentVersion);
-		console.log(modelToAddDocumentVersionTo, (await item));
 		newDocumentVersion.set(modelToAddDocumentVersionTo, (await item));
 
 		if (document) {
@@ -90,7 +89,7 @@ export default Mixin.create(FileSaverMixin, {
 			{
 				file: uploadedFile,
 				versionNumber: latestVersionNumber + 1,
-				chosenFileName: uploadedFile.get('fileName') || uploadedFile.get('name'),
+				chosenFileName: uploadedFile.get('chosenFileName') || uploadedFile.get('fileName'),
 				created: new Date()
 			});
 	},

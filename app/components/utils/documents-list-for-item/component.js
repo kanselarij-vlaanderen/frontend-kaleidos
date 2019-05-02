@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import $ from 'jquery';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
 export default Component.extend(UploadDocumentMixin, {

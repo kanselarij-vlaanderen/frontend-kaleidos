@@ -22,7 +22,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 			confidentiality: file.get('confidentiality')
 		});
 
-		document.save().then(async (createdDocument) => {
+		await document.save().then(async (createdDocument) => {
 			const documentVersion = await this.store.createRecord('document-version', {
 				document: createdDocument,
 				agendaitem: item,
@@ -61,8 +61,9 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 		},
 
 		async uploadNewDocument() {
-			this.uploadFiles(this.get('item')).then(() => {
+			this.uploadFiles(await this.get('item')).then(() => {
 				this.get('item').hasMany('documentVersions').reload();
+				this.get('item').reload();
 				this.toggleProperty('isAddingNewDocument');
 			});
 		}
