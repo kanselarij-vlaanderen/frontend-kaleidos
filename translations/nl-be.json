@@ -245,5 +245,8 @@
 	"user": "Gebruiker",
 	"user-role": "Gebruikersrol",
 	"version": "Versie nummer",
-	"signed-document-version-add":"Getekend document uploaden"
+	"signed-decision-add":"Beslissingsfiche uploaden",
+	"signed-notes-add":"Getekende notulen uploaden",
+	"uploaded-at":"Geupload op",
+	"at":"om"
 }

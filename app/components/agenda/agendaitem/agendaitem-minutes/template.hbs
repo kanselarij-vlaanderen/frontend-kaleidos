@@ -22,7 +22,10 @@
     </p>
   </div>
   <div class="vlc-hr"></div>
-    {{utils/add-signed-documents item=agendaitem.meetingRecord agendaitem=agendaitem}}
+  {{utils/add-signed-documents
+    item=agendaitem.meetingRecord
+    title=(t "signed-notes-add")
+  }}
 {{else}}
   {{agenda/agendaitem/agendaitem-minutes-edit
     isEditing=isEditing

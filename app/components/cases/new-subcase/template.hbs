@@ -158,29 +158,11 @@
         }}
       {{/each}}
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "toggleAddNonDigitalDocument"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-        </div>
-        <div class="vlc-toolbar__right">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "createNonDigitalDocument"}}
-            >
-              {{t "document-add"}}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "document-add")
+      cancelAction=(action "toggleAddNonDigitalDocument")
+      saveAction=(action "createNonDigitalDocument")
+    }}
   {{/web-components/vl-modal}}
 {{/if}}

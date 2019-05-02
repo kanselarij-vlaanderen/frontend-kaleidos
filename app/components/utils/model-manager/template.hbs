@@ -71,30 +71,12 @@
         {{web-components/vl-form-input width="4" value=title}}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "toggleIsAdding"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "createModel"}}
-              >
-                {{t "add"}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add")
+      cancelAction=(action "toggleIsAddinng")
+      saveAction=(action "createModel")
+    }}
   {{/if}}
   {{#if isEditing}}
     <div class="vl-modal-dialog__content">
@@ -103,29 +85,11 @@
         {{web-components/vl-form-input width="4" value=title}}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "toggleIsEditing"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "editModel"}}
-              >
-                {{t "save"}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "save")
+      cancelAction=(action "toggleIsEditing")
+      saveAction=(action "editModel")
+    }}
   {{/if}}
 {{/web-components/vl-modal}}

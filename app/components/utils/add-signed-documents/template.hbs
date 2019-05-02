@@ -1,38 +1,14 @@
+{{#if (await item.latestDocumentVersion)}}
+  {{web-components/vl-document
+    documentVersion=(await item.latestDocumentVersion)
+  }}
+{{/if}}
 <button
-  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+  class="vl-button vl-button--tertiary vl-button--narrow"
   {{action "toggleIsAddingNewDocument"}}
 >
-  <i
-    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-    aria-hidden="true"
-  ></i>
-  {{t "signed-document-version-add"}}
+  {{title}}
 </button>
-<div class="vl-u-spacer">
-  <div class="vl-u-display-flex vl-u-flex-align-center">
-    <p>
-      {{await item.latestDocumentVersion.versionNumber}}
-      .
-      {{await item.latestDocumentVersion.nameToDisplay}}
-    </p>
-    <button
-      class="vl-button vl-button--link vl-button--icon"
-      {{action "downloadFile" (await item.latestDocumentVersion)}}
-    >
-      <i class="vl-button__icon vl-vi vl-vi-move-down"></i>
-    </button>
-  </div>
-  <p class="vl-u-text--small vl-u-text--muted">
-    Geupload op
-    {{moment-format (await item.latestDocumentVersion.created) "DD.MM.YYYY"}}
-    om
-    {{moment-format (await item.latestDocumentVersion.created) "HH:mm"}}
-  </p>
-</div>
-{{!-- {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=item.document
-    item=agendaitem
-  }} --}}
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
     closeModal=(action "toggleIsAddingNewDocument")
@@ -53,29 +29,11 @@
         {{/if}}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "toggleIsAddingNewDocument"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-        </div>
-        <div class="vlc-toolbar__right">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "uploadNewDocument"}}
-            >
-              {{t "document-add"}}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "document-add")
+      cancelAction=(action "toggleIsAddingNewDocument")
+      saveAction=(action "uploadNewDocument")
+    }}
   {{/web-components/vl-modal}}
 {{/if}}

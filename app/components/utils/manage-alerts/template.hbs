@@ -103,30 +103,12 @@
         }}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "toggleIsAdding"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "createAlert"}}
-              >
-                {{t "add"}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add")
+      cancelAction=(action "toggleIsAdding")
+      saveAction=(action "createAlert")
+    }}
   {{/if}}
   {{#if isEditing}}
     <div class="vl-modal-dialog__content">
@@ -169,29 +151,11 @@
         }}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "toggleIsEditing"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "editAlert"}}
-              >
-                {{t "save"}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "save")
+      cancelAction=(action "toggleIsEditing")
+      saveAction=(action "editAlert")
+    }}
   {{/if}}
 {{/web-components/vl-modal}}

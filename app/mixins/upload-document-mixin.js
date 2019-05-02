@@ -75,8 +75,8 @@ export default Mixin.create(FileSaverMixin, {
 		const { item, modelToAddDocumentVersionTo } = this;
 		const latestDocumentVersion = versionNumber || 0;
 		const newDocumentVersion = await this.createVersion(uploadedFile, latestDocumentVersion);
-
-		newDocumentVersion.set(modelToAddDocumentVersionTo, item);
+		console.log(modelToAddDocumentVersionTo, (await item));
+		newDocumentVersion.set(modelToAddDocumentVersionTo, (await item));
 
 		if (document) {
 			newDocumentVersion.set('document', document);

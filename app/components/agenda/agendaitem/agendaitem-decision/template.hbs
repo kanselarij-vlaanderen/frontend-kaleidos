@@ -1,15 +1,16 @@
+{{#if (not (is-pending (await item)))}}
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-space-between">
       <h3 class="vl-title vl-title--h3">
         {{t "decision-title"}}
       </h3>
-          {{#if (or isAdmin isEditor)}}
-      <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "edit"}}
-        </a>
-      </div>
+      {{#if (or isAdmin isEditor)}}
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "edit"}}
+          </a>
+        </div>
       {{/if}}
     </div>
   </div>
@@ -24,7 +25,7 @@
     </p>
     <hr />
     <div class="vl-u-spacer-extended-top-s">
-      {{#if subcase.decision.approved}}
+      {{#if (await subcase.decision.approved)}}
         <div class="vlc-pill vlc-pill--success">
           {{t "decided"}}
         </div>
@@ -35,23 +36,30 @@
       {{/if}}
     </div>
   </div>
-  {{#if (gt (await subcase.documentVersions.length) 0)}}
+  {{#if (gt (await subcase.decision.documentVersions.length) 0)}}
     <div class="vl-u-spacer">
       <h4 class="vl-title vl-title--h6">
         {{t "documents-attached-to"}}
       </h4>
       <div class="vl-u-spacer-extended-top-s">
         {{utils/documents-list-for-item
-          item=(await subcase.decision)
+          item=item
           agendaitem=subcase
         }}
       </div>
     </div>
   {{/if}}
+  <div class="vlc-hr"></div>
+  {{utils/add-signed-documents
+    item=subcase.decision
+    modelToAddDocumentVersionTo='signedDecision'
+    title=(t "signed-decision-add")
+  }}
 {{else}}
   {{agenda/agendaitem/agendaitem-decision-edit
     isEditing=isEditing
     item=subcase.decision
     agendaitem=agendaitem
   }}
+{{/if}}
 {{/if}}

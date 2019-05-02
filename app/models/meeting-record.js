@@ -11,9 +11,9 @@ export default Model.extend({
 	attendees: hasMany('mandatee'),
 	agendaitem: belongsTo('agendaitem'),
 	meeting: belongsTo('meeting'),
-	documentVersions: hasMany('document-version'),
+	signedDocumentVersions: hasMany('document-version'),
 
-	sortedDocumentVersions: computed.sort('documentVersions', function(a,b) {
+	sortedDocumentVersions: computed.sort('signedDocumentVersions', function(a,b) {
 		if(a.versionNumber > b.versionNumber) {
 			return 1;
 		} else if (a.versionNumber < b.versionNumber){

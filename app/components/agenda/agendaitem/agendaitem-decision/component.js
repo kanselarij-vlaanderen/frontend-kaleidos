@@ -1,6 +1,9 @@
 import Component from '@ember/component';
+
+
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import {computed} from '@ember/object'
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-padding-bottom--large'],
@@ -8,6 +11,10 @@ export default Component.extend(isAuthenticatedMixin, {
 	isEditing: false,
 	agendaitem: null,
 	subcase:null,
+
+	item: computed('subcase.decision', function() {
+		return this.get('subcase.decision');
+	}),
 
 	async addDecision(subcase) {
 		const { agendaitem } = this;

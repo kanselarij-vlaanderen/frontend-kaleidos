@@ -17,6 +17,12 @@ export default Component.extend(isAuthenticatedMixin, {
 	activeAgendaItemSection: 'details',
 	showOptions: false,
 
+	subcase: computed('agendaitem.subcase', function() {
+		return this.get('agendaitem.subcase').then((subcase) => {
+			return subcase;
+		})
+	}),
+
 	isPostPonable: computed('sessionService.agendas.@each', function () {
 		return this.get('sessionService.agendas').then(agendas => {
 			if (agendas && agendas.length > 1) {
