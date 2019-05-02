@@ -1,13 +1,17 @@
 import Mixin from '@ember/object/mixin';
+import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { notifyPropertyChange } from '@ember/object';
 import $ from 'jquery';
+import { inject } from '@ember/service';
+
 /**
  * @param modelToAddDocumentVersionTo:String Is the model where the relation of document-version should be set to.
  */
-export default Mixin.create({
+export default Mixin.create(FileSaverMixin, {
 	modelToAddDocumentVersionTo: null,
 	uploadedFiles: null,
 	nonDigitalDocuments: null,
+	store: inject(),
 
 	async createNewDocumentWithDocumentVersion(model, file, documentTitle) {
 		const { modelToAddDocumentVersionTo } = this;
@@ -27,8 +31,8 @@ export default Mixin.create({
 			confidentiality: confidentiality
 		});
 		const modelName = model.get('constructor.modelName');
-		
-		if(modelName == "meeting-record" || modelName == "decision") {
+
+		if (modelName == "meeting-record" || modelName == "decision") {
 			document.set(modelToAddDocumentVersionTo, model);
 		}
 
@@ -38,7 +42,7 @@ export default Mixin.create({
 				created: creationDate,
 				file: file,
 				versionNumber: 1,
-				chosenFileName: chosenFileName 
+				chosenFileName: chosenFileName
 			});
 			documentVersion.set(modelToAddDocumentVersionTo, model);
 
@@ -65,6 +69,30 @@ export default Mixin.create({
 		}
 	},
 
+	async createNewDocumentVersion(uploadedFile, document, versionNumber) {
+		const { item, modelToAddDocumentVersionTo } = this;
+		const latestDocumentVersion = versionNumber || 0;
+		const newDocumentVersion = await this.createVersion(uploadedFile, latestDocumentVersion);
+
+		newDocumentVersion.set(modelToAddDocumentVersionTo, item);
+
+		if (document) {
+			newDocumentVersion.set('document', document);
+		}
+
+		return newDocumentVersion.save();
+	},
+
+	createVersion(uploadedFile, latestVersionNumber) {
+		return this.store.createRecord('document-version',
+			{
+				file: uploadedFile,
+				versionNumber: latestVersionNumber + 1,
+				chosenFileName: uploadedFile.get('fileName') || uploadedFile.get('name'),
+				created: new Date()
+			});
+	},
+
 	actions: {
 		uploadedFile(uploadedFile) {
 			const { uploadedFiles } = this;
@@ -73,6 +101,16 @@ export default Mixin.create({
 			} else {
 				this.set('uploadedFiles', [uploadedFile]);
 			}
+		},
+
+		async downloadFile(documentVersion) {
+			let file = await documentVersion.get('file');
+			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
+				method: 'GET',
+				dataType: 'arraybuffer', // or 'blob'
+				processData: false
+			})
+				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
 		},
 
 		removeDocument(document) {

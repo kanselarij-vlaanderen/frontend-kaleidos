@@ -1,20 +1,38 @@
-{{#if (gt (await item.documentVersions.length) 0)}}
-  <button
-    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-    {{action "toggleIsAddingNewDocument"}}
-  >
-    <i
-      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-      aria-hidden="true"
-    ></i>
-    {{t "signed-document-version-add"}}
-  </button>
-{{else}}
-  {{!-- {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+<button
+  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+  {{action "toggleIsAddingNewDocument"}}
+>
+  <i
+    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+    aria-hidden="true"
+  ></i>
+  {{t "signed-document-version-add"}}
+</button>
+<div class="vl-u-spacer">
+  <div class="vl-u-display-flex vl-u-flex-align-center">
+    <p>
+      {{await item.latestDocumentVersion.versionNumber}}
+      .
+      {{await item.latestDocumentVersion.nameToDisplay}}
+    </p>
+    <button
+      class="vl-button vl-button--link vl-button--icon"
+      {{action "downloadFile" (await item.latestDocumentVersion)}}
+    >
+      <i class="vl-button__icon vl-vi vl-vi-move-down"></i>
+    </button>
+  </div>
+  <p class="vl-u-text--small vl-u-text--muted">
+    Geupload op
+    {{moment-format (await item.latestDocumentVersion.created) "DD.MM.YYYY"}}
+    om
+    {{moment-format (await item.latestDocumentVersion.created) "HH:mm"}}
+  </p>
+</div>
+{{!-- {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
     document=item.document
     item=agendaitem
   }} --}}
-{{/if}}
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
     closeModal=(action "toggleIsAddingNewDocument")

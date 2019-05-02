@@ -1,5 +1,5 @@
 import DS from 'ember-data';
-
+import { computed } from '@ember/object';
 const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
@@ -11,5 +11,18 @@ export default Model.extend({
 	attendees: hasMany('mandatee'),
 	agendaitem: belongsTo('agendaitem'),
 	meeting: belongsTo('meeting'),
-	documentVersions: hasMany('document-version')
+	documentVersions: hasMany('document-version'),
+
+	sortedDocumentVersions: computed.sort('documentVersions', function(a,b) {
+		if(a.versionNumber > b.versionNumber) {
+			return 1;
+		} else if (a.versionNumber < b.versionNumber){
+			return -1;
+		}
+		return 0;
+	}),
+
+	latestDocumentVersion: computed('sortedDocumentVersions', function() {
+		return this.get('sortedDocumentVersions.lastObject');
+	})
 });

@@ -1,11 +1,9 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import $ from 'jquery';
-import { inject } from '@ember/service';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
-export default Component.extend(FileSaverMixin, {
-	store:inject(),
+export default Component.extend(UploadDocumentMixin, {
 	classNames: ["vlc-input-field-block"],
 
 	defaultConfidentiality: computed('store', function() {
@@ -59,16 +57,7 @@ export default Component.extend(FileSaverMixin, {
 
 		uploadedFile(uploadedFile) {
 			this.get('uploadedFiles').pushObject(uploadedFile);
-		},
-
-		async downloadFile(file) {
-			$.ajax(`/files/${file.get('id')}/download?name=${file.get('name')}`, {
-				method: 'GET',
-				dataType: 'arraybuffer', // or 'blob'
-				processData: false
-			})
-				.then((content) => this.saveFileAs(file.get('name'), content, this.get('contentType')));
-		},
+		}
 	},
 
 	removeFile(file) {
