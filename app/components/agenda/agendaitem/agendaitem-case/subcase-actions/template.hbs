@@ -17,7 +17,7 @@
     {{t "mandatee-approval"}}
   </h4>
 </div>
-{{#if (await item.approvals)}}
+{{#if item.approvals}}
   <div class="vl-u-spacer">
     <table class="vl-data-table vl-data-table--align-middle">
       <thead>
@@ -34,7 +34,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each (await item.approvals) as |approval|}}
+        {{#each item.approvals as |approval|}}
           <tr>
             <td class="vl-u-text--bold">
               {{await approval.mandatee.person.alternativeName}}

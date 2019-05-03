@@ -12,6 +12,7 @@ export default Component.extend(isAuthenticatedMixin, {
 		const news = this.store.createRecord("newsletter-info", {
 			agendaitem: agendaitem,
 			created: new Date(),
+			finished:false,
 			subtitle: await agendaitem.get('subcase.title')
 		});
 		await news.save();

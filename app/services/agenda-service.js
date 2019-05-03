@@ -38,7 +38,8 @@ export default Service.extend({
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
 			createdFor: currentSession,
-			created: new Date()
+			created: new Date(),
+			modified: new Date()
 		});
 
 		return newAgenda.save().then(agenda => {
@@ -54,8 +55,8 @@ export default Service.extend({
 					}
 				);
 			} else {
-				notifyPropertyChange(newAgenda, 'agendaitems');
-				return newAgenda;
+				notifyPropertyChange(agenda, 'agendaitems');
+				return agenda;
 			}
 		}).then(() => {
 			notifyPropertyChange(newAgenda, 'agendaitems');

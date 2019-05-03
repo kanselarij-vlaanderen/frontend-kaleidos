@@ -39,7 +39,7 @@ export default Service.extend({
         url: `/close-meeting?agendaId=${agendaId}`,
       }
     ).then(result => {
-      return result.body;
+			return result.body;
     })
 	},
 	announcements: computed('currentAgenda.announcements.@each', function() {

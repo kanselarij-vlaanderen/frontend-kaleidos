@@ -80,13 +80,14 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin,{
 		},
 
 		async toggleIsEditing() {
-			const { item } = this;
+			const item = await this.get('item');
 			const approvals = await item.get('approvals');
 			const mandatees = await item.get('mandatees');
 			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
-			
+
 			await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, item);
 			await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
+			await item.hasMany('approvals').reload();
 			this.toggleProperty('isEditing');
 		}
 	}

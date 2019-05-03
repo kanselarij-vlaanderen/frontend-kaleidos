@@ -11,7 +11,7 @@ export default Mixin.create({
 		propertiesToSet.map((property) => {
 			model.set(property, this.get(property));
 		})
-		return model.save();
+		return await model.save();
 	},
 
 	actions: {
@@ -30,8 +30,8 @@ export default Mixin.create({
 		},
 
 		async saveChanges() {
-			
-			const item = await this.get('item');
+			const itemToFetch = await this.get('item');
+			const item = await this.store.findRecord(itemToFetch.get('constructor.modelName'), itemToFetch.get('id'));
 			const documentVersionsSelected = this.get('documentVersionsSelected');
 			const itemDocumentsToEdit = await item.get('documentVersions');
 
@@ -45,15 +45,12 @@ export default Mixin.create({
 							item.get('documentVersions').removeObject(documentVersion);
 						}
 					}
-					await item.save();
 				}))
 			}
-			const model = await this.setNewPropertiesToModel(item);
-			model.reload();
-
-			// await this.get('agendaitem').belongsTo('subcase').reload();
-			// await item.hasMany('documentVersions').reload();
-			this.toggleProperty('isEditing');
-		},
+			this.setNewPropertiesToModel(item).then((newModel) => {
+				newModel.reload();
+				this.toggleProperty('isEditing');
+			});
+		}
 	}
 });

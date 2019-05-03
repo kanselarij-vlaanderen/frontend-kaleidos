@@ -4,7 +4,7 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-          {{#if (or isAdmin isEditor)}}
+      {{#if (or isAdmin isEditor)}}
         <div class="vl-u-spacer-extended-left-s">
           <a class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
@@ -54,15 +54,9 @@
   }}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{#if (not (gt uploadedFiles.length 0))}}
-          {{web-components/vl-form-label value="Bijlagen"}}
-          {{file-uploader
-            multipleFiles=false
-            uploadedFile=(action "getUploadedFile")
-          }}
-        {{else}}
-          {{subcases/edit-documents uploadedFiles=uploadedFiles}}
-        {{/if}}
+        {{web-components/vl-form-label value="Bijlagen"}}
+        {{file-uploader uploadedFile=(action "uploadedFile")}}
+        {{subcases/edit-documents uploadedFiles=uploadedFiles}}
       </div>
     </div>
     {{web-components/vl-modal-footer
