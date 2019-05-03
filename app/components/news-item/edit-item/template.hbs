@@ -15,7 +15,7 @@
     {{web-components/vl-form-label value=(t "finished")}}
     {{web-components/vl-toggle value=finished}}
   </div>
-  {{#if (await finished)}}
+  {{#if finished}}
     <div class="vlc-input-field-block">
       {{utils/documents-selector-of-agendaitem
         item=agendaitem

@@ -1,16 +1,15 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import { notifyPropertyChange } from '@ember/object';
 import { inject } from '@ember/service';
+import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
 
-export default Component.extend({
+export default Component.extend(UploadDocumentMixin, {
 	store: inject(),
-	classNames:["vl-custom"],
-	uploadedFiles: [],
-	nonDigitalDocuments: [],
-	selectedMandatees: [],
-	themes: [],
+	classNames: ["vl-custom"],
+	modelToAddDocumentVersionTo: 'subcase',
+	selectedMandatees: null,
+	themes: null,
 	confidentiality: null,
 	isAddingNonDigitalDocument: false,
 	showAsRemark: false,
@@ -25,9 +24,10 @@ export default Component.extend({
 	}),
 
 	clearProperties() {
-		this.set('uploadedFiles', []);
-		this.set('nonDigitalDocuments', []);
+		this.set('uploadedFiles', null);
+		this.set('nonDigitalDocuments', null);
 		this.set('selectedMandatees', []);
+		this.set('themes', []);
 		this.set('isAddingNonDigitalDocument', false);
 		this.set('showAsRemark', false);
 		this.set('step', 1);
@@ -62,21 +62,21 @@ export default Component.extend({
 			const caze = this.store.peekRecord('case', this.case.id);
 			let phase = await this.get('phase');
 
-      const subcasePhase = this.store.createRecord('subcase-phase',
-        {
-          date: new Date(),
-          code: phase
-        });
+			const subcasePhase = this.store.createRecord('subcase-phase',
+				{
+					date: new Date(),
+					code: phase
+				});
 
-      const createdSubphase = await subcasePhase.save();
+			const createdSubphase = await subcasePhase.save();
 
 			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark, confidentiality } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
-          phases: [createdSubphase],
+					phases: [createdSubphase],
 					shortTitle: shortTitle,
-					formallyOk:false,
+					formallyOk: false,
 					showAsRemark: showAsRemark,
 					governmentDomains: selectedDomains,
 					case: caze,
@@ -86,23 +86,8 @@ export default Component.extend({
 					confidentiality: confidentiality
 				});
 
-			const createdSubCase = await subcase.save();
-			createdSubphase.set('subcase', createdSubCase);
-			createdSubphase.save();
-
-			const uploadedFiles = this.get('uploadedFiles');
-			Promise.all(uploadedFiles.map(uploadedFile => {
-				if (uploadedFile.id) {
-					return this.createNewDocumentWithDocumentVersion(createdSubCase, uploadedFile, uploadedFile.get('name'));
-				}
-			}));
-
-			const nonDigitalDocuments = this.get('nonDigitalDocuments');
-			Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
-				if (nonDigitalDocument.title) {
-					return this.createNewDocumentWithDocumentVersion(createdSubCase, null, nonDigitalDocument.title);
-				}
-			}));
+			const newSubcase = await subcase.save();
+			await this.uploadFiles(newSubcase);
 
 			this.closeModal();
 		},
@@ -119,63 +104,9 @@ export default Component.extend({
 			this.set('selectedMandatees', mandatees);
 		},
 
-		uploadedFile(uploadedFile) {
-			this.get('uploadedFiles').pushObject(uploadedFile);
-		},
-
-		removeDocument(document) {
-			this.get('nonDigitalDocuments').removeObject(document);
-		},
-
-		createNonDigitalDocument() {
-			this.nonDigitalDocuments.push({ title: this.get('documentTitle'), description: this.get('documentDescription') });
-			notifyPropertyChange(this, 'nonDigitalDocuments');
-			this.set('documentTitle', null);
-		},
-
-		toggleAddNonDigitalDocument() {
-			this.toggleProperty('isAddingNonDigitalDocument')
-		},
-		
-		toggleIsRemark() {
-
-		},
-
 		mandateeRowsChanged(mandateeRows) {
 			this.set('mandateeRows', mandateeRows);
 		}
-	},
-
-	async createNewDocumentWithDocumentVersion(subcase, file, documentTitle) {
-		let document = await this.store.createRecord('document', {
-			created: new Date(),
-			title: documentTitle,
-			type: file.get('documentType'),
-			confidentiality: file.get('confidentiality')
-		});
-		
-		document.save().then(async (createdDocument) => {
-			if (file) {
-				const documentVersion = await this.store.createRecord('document-version', {
-					document: createdDocument,
-					subcase: subcase,
-					created: new Date(),
-					versionNumber: 1,
-					file: file,
-					chosenFileName: file.get('chosenFileName') 
-				});
-				await documentVersion.save();
-			} else {
-				const documentVersion = await this.store.createRecord('document-version', {
-					document: createdDocument,
-					subcase: subcase,
-					created: new Date(),
-					versionNumber: 1,
-					chosenFileName: documentTitle
-				});
-				await documentVersion.save();
-			}
-		});
 	},
 
 	async parseDomainsAndMandatees() {

@@ -71,14 +71,6 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 		successfullyAdded() {
 			this.set('creatingNewSession', false);
 			this.send('refresh');
-		},
-		addNotesToMeeting(meeting) {
-			this.set('selectedMeeting', meeting);
-			this.toggleProperty('isAddingNotes');
-		},
-		close() {
-			this.set('selectedMeeting', null);
-			this.toggleProperty('isAddingNotes');
 		}
 	}
 });

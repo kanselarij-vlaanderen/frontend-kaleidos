@@ -24,6 +24,7 @@ export default Model.extend({
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   confidentiality: belongsTo('confidentiality'),
+  decision: belongsTo('decision'),
 
   async documentNumberOfVersion(version) {
     const documents = await this.get('documents');

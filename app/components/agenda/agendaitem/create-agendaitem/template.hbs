@@ -74,29 +74,11 @@
         }}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "close"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-        </div>
-        <div class="vlc-toolbar__right">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "addSubcasesToAgenda"}}
-            >
-              {{t "add-to-agenda"}}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add-to-agenda")
+      cancelAction=(action "close")
+      saveAction=(action "addSubcasesToAgenda")
+    }}
   {{/if}}
 {{/web-components/vl-modal}}

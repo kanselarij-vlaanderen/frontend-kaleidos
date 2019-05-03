@@ -16,47 +16,29 @@
           }}
         </div>
         <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "upload-file")}}
-        {{file-uploader uploadedFile=(action "uploadedFile")}}
-      </div>
-      <div class="vlc-input-field-block">
-        {{#if (not uploadedFiles.length eq "0")}}
-          <h4 class="vl-title vl-title--h4">
-            {{t "attachements"}}
-          </h4>
-        {{/if}}
-        {{subcases/edit-documents uploadedFiles=uploadedFiles}}
-        {{#if (not nonDigitalDocuments.length eq "0")}}
-          <h4 class="vl-title vl-title--h4">
-            {{t "non-digital-attachements"}}
-          </h4>
-        {{/if}}
+          {{web-components/vl-form-label value=(t "upload-file")}}
+          {{file-uploader uploadedFile=(action "uploadedFile")}}
+        </div>
+        <div class="vlc-input-field-block">
+          {{#if (not uploadedFiles.length eq "0")}}
+            <h4 class="vl-title vl-title--h4">
+              {{t "attachements"}}
+            </h4>
+          {{/if}}
+          {{subcases/edit-documents uploadedFiles=uploadedFiles}}
+          {{#if (not nonDigitalDocuments.length eq "0")}}
+            <h4 class="vl-title vl-title--h4">
+              {{t "non-digital-attachements"}}
+            </h4>
+          {{/if}}
         </div>
       </form>
     </div>
   </div>
-  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-    <div class="vlc-toolbar">
-      <div class="vlc-toolbar__left">
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--link vl-button--narrow"
-            {{action "closeDialog"}}
-          >
-            {{t "cancel"}}
-          </button>
-        </div>
-      </div>
-      <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--narrow"
-            {{action "createAnnouncement"}}
-          >
-            {{t "create-announcement"}}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  {{web-components/vl-modal-footer
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "create-announcement")
+    cancelAction=(action "closeDialog")
+    saveAction=(action "createAnnouncement")
+  }}
 {{/web-components/vl-modal}}

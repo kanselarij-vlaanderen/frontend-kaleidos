@@ -1,0 +1,39 @@
+{{#if (await item.latestDocumentVersion)}}
+  {{web-components/vl-document
+    documentVersion=(await item.latestDocumentVersion)
+  }}
+{{/if}}
+<button
+  class="vl-button vl-button--tertiary vl-button--narrow"
+  {{action "toggleIsAddingNewDocument"}}
+>
+  {{title}}
+</button>
+{{#if isAddingNewDocument}}
+  {{#web-components/vl-modal
+    closeModal=(action "toggleIsAddingNewDocument")
+    isOverlay=true
+    large=true
+    title=(t "document-add")
+  }}
+    <div class="vl-modal-dialog__content">
+      <div class="vlc-input-field-block">
+        {{#if (not (gt uploadedFiles.length 0))}}
+          {{web-components/vl-form-label value="Bijlagen"}}
+          {{file-uploader
+            multipleFiles=false
+            uploadedFile=(action "uploadedFile")
+          }}
+        {{else}}
+          {{subcases/edit-documents uploadedFiles=uploadedFiles}}
+        {{/if}}
+      </div>
+    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "document-add")
+      cancelAction=(action "toggleIsAddingNewDocument")
+      saveAction=(action "uploadNewDocument")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}

@@ -1,46 +1,15 @@
 import Component from '@ember/component';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
+import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
+import { computed } from '@ember/object';
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, UploadDocumentMixin, {
 	classNames: ['vl-u-spacer--large'],
 	isAddingNewDocument: false,
 	isEditing: false,
-
-	async createNewDocumentWithDocumentVersion(item, file, documentTitle) {
-		let document = await this.store.createRecord('document', {
-			created: new Date(),
-			title: documentTitle,
-			type: file.get('documentType'),
-			confidentiality: file.get('confidentiality')
-		});
-		if(this.get('isAgendaItem')) {
-			document.save().then(async (createdDocument) => {
-				const documentVersion = await this.store.createRecord('document-version', {
-					document: createdDocument,
-					agendaitem: item,
-					created: new Date(),
-					versionNumber: 1,
-					file: file,
-					chosenFileName: file.get('chosenFileName') 
-				});
-				await documentVersion.save();
-			});
-		} else {
-			document.save().then(async (createdDocument) => {
-				const documentVersion = await this.store.createRecord('document-version', {
-					document: createdDocument,
-					subcase: item,
-					created: new Date(),
-					versionNumber: 1,
-					file: file,
-					chosenFileName: file.get('chosenFileName') 
-				});
-				await documentVersion.save();
-		});
-		}
-		
-	},
+	modelToAddDocumentVersionTo: computed('item.constructor', function() {
+		return this.get('item.constructor.modelName');
+	}),
 
 	actions: {
 		toggleIsAddingNewDocument() {
@@ -55,21 +24,10 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 			this.toggleProperty('isEditing');
 		},
 
-		getUploadedFile(file) {
-			if(!this.get('uploadedFiles')) {
-				this.set('uploadedFiles', []);
-			}
-			this.get('uploadedFiles').pushObject(file);
-		},
-
 		async uploadNewDocument() {
-			const uploadedFiles = this.get('uploadedFiles');
-			Promise.all(uploadedFiles.map(uploadedFile => {
-				if (uploadedFile.id) {
-					return this.createNewDocumentWithDocumentVersion(this.get('item'), uploadedFile, uploadedFile.get('name'));
-				}
-			})).then(() => {
+			this.uploadFiles(await this.get('item')).then(() => {
 				this.get('item').hasMany('documentVersions').reload();
+				this.get('item').reload();
 				this.toggleProperty('isAddingNewDocument');
 			});
 		}

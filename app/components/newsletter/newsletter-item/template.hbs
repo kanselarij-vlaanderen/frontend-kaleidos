@@ -12,10 +12,8 @@
         </div>
       {{/if}}
     </div>
-    <div class="vl-u-text vl-u-text--small">
-      <p class="vl-long-title">
-        {{await agendaitem.newsletterInfo.subtitle}}
-      </p>
+    <div class="vl-u-text vl-u-text--small vl-u-text--muted">
+      {{moment-format (await agenda.createdFor.plannedStart) "DD MMMM YYYY"}}
     </div>
   </div>
   <div class="vl-u-spacer">

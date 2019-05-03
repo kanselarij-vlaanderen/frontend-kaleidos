@@ -1,77 +1,53 @@
-{{#if (not await meeting.notes)}}
-  <div class="vl-modal-dialog__content">
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "date")}}
-      {{web-components/vl-datepicker
-        value=meeting.plannedStart
-        dateChanged=(action "selectStartDate")
-      }}
-    </div>
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "attendees")}}
-      {{utils/mandatee-selector chooseMandatee=(action "peopleSelected")}}
-    </div>
-    <div class="vlc-input-field-block">
-      {{#if selectedMandatees}}
-        <h5 class="vl-title vl-title--h5">
-          {{t "selected-mandatees"}}
-        </h5>
-        {{#each selectedMandatees as |mandatee|}}
-          <p class="vl-u-text">
-            <span class="vl-u-text vl-u-text--bold">{{await mandatee.person.alternativeName}}</span>
-            ,
-            {{mandatee.title}}
-          </p>
-        {{/each}}
-      {{/if}}
-    </div>
-    {{utils/text-template label="Notulen" rows="10" text=text searchField="name"
-    }}
+{{#if (not isEditing)}}
+  <div class="vl-u-spacer">
+    <h3 class="vl-title vl-title--h6">
+      {{t "attendees"}}
+    </h3>
   </div>
-  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-    <div class="vlc-toolbar">
-      <div class="vlc-toolbar__left">
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--link vl-button--narrow"
-            {{action "close"}}
-          >
-            {{t "cancel"}}
-          </button>
-        </div>
-      </div>
-      <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--narrow"
-            {{action "createMeetingNotes" meeting}}
-          >
-            {{t "add"}}
-          </button>
-        </div>
-      </div>
-    </div>
+  <div class="vl-u-spacer">
+  {{#each (await currentSession.notes.attendees) as |attendee|}}
+    <p>
+      {{await attendee.person.alternativeName}},
+      {{attendee.title}}
+    </p>
+  {{/each}}
+  </div>
+  <div class="vl-u-spacer">
+    <h3 class="vl-title vl-title--h6">
+      {{t "date-session"}}
+    </h3>
+    <p>
+      {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
+    </p>
+  </div>
+  <div class="vl-u-spacer">
+    <h3 class="vl-title vl-title--h6">
+      {{t "notes-of-session"}}
+    </h3>
+    <p>
+      {{await currentSession.notes.description}}
+    </p>
   </div>
 {{else}}
-  <div class="vl-modal-dialog__content">
+  <div class="vl-u-spacer">
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "date")}}
       {{web-components/vl-datepicker
-        value=meeting.notes.plannedStart
+        value=currentSession.notes.startDate
         dateChanged=(action "selectStartDate")
       }}
     </div>
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "attendees")}}
       {{utils/mandatee-selector
-        selectedMandatees=meeting.notes.attendees
+        selectedMandatees=currentSession.notes.attendees
         chooseMandatee=(action "peopleSelected")
       }}
     </div>
     {{utils/text-template
       label="Notulen"
       rows="10"
-      text=meeting.notes.description
+      text=currentSession.notes.description
       searchField="name"
     }}
   </div>
@@ -81,7 +57,7 @@
         <div class="vlc-toolbar__item">
           <button
             class="vl-button vl-button--link vl-button--narrow"
-            {{action "close"}}
+            {{action "cancel" currentSession.notes}}
           >
             {{t "cancel"}}
           </button>
@@ -91,7 +67,7 @@
         <div class="vlc-toolbar__item">
           <button
             class="vl-button vl-button--narrow"
-            {{action "saveChanges" meeting.notes}}
+            {{action "saveChanges" currentSession.notes}}
           >
             {{t "save"}}
           </button>

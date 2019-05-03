@@ -1,9 +1,6 @@
 import Mixin from '@ember/object/mixin';
 import { inject } from '@ember/service';
 
-/**
- * 
- */
 export default Mixin.create({
 	store: inject(),
 	documentVersionsSelected: null,
@@ -14,8 +11,7 @@ export default Mixin.create({
 		propertiesToSet.map((property) => {
 			model.set(property, this.get(property));
 		})
-
-		return model.save();
+		return await model.save();
 	},
 
 	actions: {
@@ -34,7 +30,8 @@ export default Mixin.create({
 		},
 
 		async saveChanges() {
-			const item = await this.get('item');
+			const itemToFetch = await this.get('item');
+			const item = await this.store.findRecord(itemToFetch.get('constructor.modelName'), itemToFetch.get('id'));
 			const documentVersionsSelected = this.get('documentVersionsSelected');
 			const itemDocumentsToEdit = await item.get('documentVersions');
 
@@ -48,14 +45,12 @@ export default Mixin.create({
 							item.get('documentVersions').removeObject(documentVersion);
 						}
 					}
-					await item.save();
 				}))
 			}
-			this.setNewPropertiesToModel(item).then((newItem) => {
-				newItem.hasMany('documentVersions').reload();
-				newItem.reload();
+			this.setNewPropertiesToModel(item).then((newModel) => {
+				newModel.reload();
 				this.toggleProperty('isEditing');
 			});
-		},
+		}
 	}
 });

@@ -111,9 +111,8 @@
             </li>
             {{#if (or isAdmin isEditor)}}
               <li class="vl-popover__link-list__separator" role="none"></li>
-              {{#if (gt (await currentSession.agendas.length) 1)}}
                 <li class="vl-popover__link-list__item">
-                  {{#if (not currentAgenda.isFinal)}}
+                  {{#if (not currentSession.isFinal)}}
                     <a
                       class="vl-link vl-link--block color-red"
                       {{action "lockAgenda" currentAgenda}}
@@ -158,7 +157,6 @@
                     </a>
                   {{/if}}
                 </li>
-              {{/if}}
             {{/if}}
           </ul>
         {{/attach-popover}}

@@ -1,43 +1,12 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { computed } from '@ember/object';
 
 export default Component.extend({
+	classNames: ["vl-u-spacer-extended-bottom-l"],
 	store: inject(),
-	meeting: null,
-	startDate: null,
-	announcements: null,
-	others: null,
-	text:"",
-
-	nextMeeting: computed('meeting.notes', function() {
-		return this.get('meeting.notes').then((notes) => {
-			return notes.get('nextMeeting');
-		})
-	}),
+	session: inject(),
 
 	actions: {
-		close() {
-			this.close();
-		},
-
-		createMeetingNotes(meeting) {
-			const { selectedMandatees, startDate, announcements, others, text } = this;
-			const meetingRecord = this.store.createRecord('meeting-record',
-				{
-					attendees: selectedMandatees,
-					created: startDate || new Date(),
-					modified: startDate || new Date(),
-					announcements: announcements,
-					others: others,
-					description: text,
-					meeting: meeting
-				});
-			meetingRecord.save().then(() => {
-				this.close();
-			})
-		},
-
 		selectStartDate(val) {
 			this.set('startDate', val);
 		},
@@ -46,10 +15,21 @@ export default Component.extend({
 			this.set('selectedMandatees', mandatees);
 		},
 
+		cancel(notes) {
+			const notesToEdit = this.store.peekRecord('meeting-record', notes.get('id'));
+			notesToEdit.rollbackAttributes().then(() => {
+				this.toggleProperty('isEditing');
+			});
+		},
+
 		saveChanges(notes) {
 			const notesToSave = this.store.peekRecord('meeting-record', notes.get('id'));
+			const selectedMandatees = this.get('selectedMandatees');
+			if (selectedMandatees) {
+				notesToSave.set('attendees', selectedMandatees);
+			}
 			notesToSave.save().then(() => {
-				this.close();
+				this.toggleProperty('isEditing');
 			});
 		}
 	}

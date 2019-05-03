@@ -4,45 +4,14 @@
       <h2 class="vl-title vl-title--h3">
         {{t "prepared-text-minutes"}}
       </h2>
-          {{#if (or isAdmin isEditor)}}
-      <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "edit"}}
-        </a>
-      </div>
+      {{#if (or isAdmin isEditor)}}
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "edit"}}
+          </a>
+        </div>
       {{/if}}
     </div>
-  </div>
-  <div class="vl-u-spacer">
-    <h3 class="vl-title vl-title--h6">
-      {{t "attendees"}}
-    </h3>
-    {{#each currentSession.notes.attendees as |attendee|}}
-      <div class="vl-u-spacer">
-        <p>
-          {{attendee.title}}
-        </p>
-        <p>
-          {{await attendee.person.alternativeName}}
-        </p>
-      </div>
-    {{/each}}
-  </div>
-  <div class="vl-u-spacer">
-    <h3 class="vl-title vl-title--h6">
-      {{t "date-session"}}
-    </h3>
-    <p>
-      {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
-    </p>
-  </div>
-  <div class="vl-u-spacer">
-    <h3 class="vl-title vl-title--h6">
-      {{t "notes-of-session"}}
-    </h3>
-    <p>
-      {{await currentSession.notes.description}}
-    </p>
   </div>
   <div class="vl-u-spacer">
     <h3 class="vl-title vl-title--h6">
@@ -52,6 +21,11 @@
       {{await agendaitem.meetingRecord.description}}
     </p>
   </div>
+  <div class="vlc-hr"></div>
+  {{utils/add-signed-documents
+    item=agendaitem.meetingRecord
+    title=(t "signed-notes-add")
+  }}
 {{else}}
   {{agenda/agendaitem/agendaitem-minutes-edit
     isEditing=isEditing

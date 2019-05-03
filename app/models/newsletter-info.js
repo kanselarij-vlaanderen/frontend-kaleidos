@@ -11,7 +11,6 @@ export default Model.extend({
 	publicationDocDate: attr('date'),
 	remarks: hasMany('remark'),
 	themes: hasMany('theme'),
-	decision: belongsTo('decision'),
 	agendaitem: belongsTo('agendaitem'),
 	meeting: belongsTo('meeting'),
 	documentVersions: hasMany('document-version', {inverse:null})

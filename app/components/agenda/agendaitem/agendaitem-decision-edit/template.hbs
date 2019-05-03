@@ -15,7 +15,7 @@
   {{web-components/vl-form-label value=(t "approved")}}
   {{web-components/vl-toggle value=approved}}
 </div>
-{{#if (await approved)}}
+{{#if approved}}
   <div class="vlc-input-field-block">
     {{utils/documents-selector-of-agendaitem
       item=agendaitem

@@ -39,6 +39,7 @@
 	"amount-showed": "Dossiers per rij",
 	"announcements-subtitle": "Mededelingen",
 	"approval-mandatee": "Akkoord",
+	"not-yet-approval-mandatee":"Nog niet akkoord",
 	"approve": "Goedkeuren",
 	"approved": "Beslist",
 	"archive-case": "Dossier archiveren",
@@ -104,7 +105,7 @@
 	"filter": "Filter",
 	"finished": "Afgewerkt",
 	"for-press": "Publiek",
-	"formal-nok": "Formeel niet ok",
+	"formal-nok": "Nog niet formeel ok",
 	"formal-ok": "Formeel ok",
 	"function-mandatee": "Functie",
 	"future-agendas": "Toekomstige agenda's",
@@ -143,6 +144,7 @@
 	"new-version": "Nieuwe versie uploaden",
 	"news-item-label": "MR/OVERLEGCOMITE/MINISTRIEEL/PERSBERICHT",
 	"news-item-title": "Kort bestek",
+	"newsletter-title":"Voorbereidende tekst voor het kort bestek",
 	"newsletter": "Nieuwsbrief",
 	"newsletter-doc-date": "Datum van beschikbaarheid van de documenten",
 	"newsletter-of": "Nieuwsbrief voor de agenda van",
@@ -244,5 +246,9 @@
 	"user": "Gebruiker",
 	"user-role": "Gebruikersrol",
 	"version": "Versie nummer",
-	"subtitle":"Ondertitel"
+	"subtitle":"Ondertitel",
+	"signed-decision-add":"Beslissingsfiche uploaden",
+	"signed-notes-add":"Getekende notulen uploaden",
+	"uploaded-at":"Geupload op",
+	"at":"om"
 }

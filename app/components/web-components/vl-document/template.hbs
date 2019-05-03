@@ -1,20 +1,19 @@
-<a class="vl-document" {{action "downloadFile"}}>
-  <div class="vl-document__type">
-    <i class="vl-vi vl-vi-document" aria-hidden="true"></i>
-    <span class="vl-document__type__text">
-      {{t "document-type-pdf"}}
-    </span>
-  </div>
-  <div class="vl-document__content">
-    <div class="vl-document__title vl-link" data-vl-clamp="2">
-      {{file.name}} {{file.title}}
-    </div>
-    {{#if file.extension}}
-      <div class="vl-document__metadata">
-        {{file.extension}}
-        -
-        {{file.size}} {{t "size-extension"}}
-      </div>
-    {{/if}}
-  </div>
-</a>
+<div class="vl-u-display-flex vl-u-flex-align-center">
+  <p>
+    {{documentVersion.versionNumber}}
+    .
+    {{documentVersion.nameToDisplay}}
+  </p>
+  <button
+    class="vl-button vl-button--link vl-button--icon"
+    {{action "downloadFile" documentVersion}}
+  >
+    <i class="vl-button__icon vl-vi vl-vi-move-down"></i>
+  </button>
+</div>
+<p class="vl-u-text--small vl-u-text--muted">
+  {{t "uploaded-at"}}
+  {{moment-format documentVersion.created "DD.MM.YYYY"}}
+  {{t "at"}}
+  {{moment-format documentVersion.created "HH:mm"}}
+</p>

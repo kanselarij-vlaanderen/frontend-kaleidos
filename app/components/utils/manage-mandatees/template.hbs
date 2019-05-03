@@ -90,28 +90,10 @@
       {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
     </div>
   </div>
-  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-    <div class="vlc-toolbar">
-      <div class="vlc-toolbar__left">
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--link vl-button--narrow"
-            {{action "toggleIsResigning"}}
-          >
-            {{t "cancel"}}
-          </button>
-        </div>
-      </div>
-      <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--tertiary"
-            {{action "saveResignation"}}
-          >
-            {{t "save-resignation"}}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "save-resignation")
+      cancelAction=(action "toggleIsResigning")
+      saveAction=(action "saveResignation")
+    }}
 {{/if}}
