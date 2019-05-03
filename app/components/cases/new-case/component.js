@@ -2,21 +2,37 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-  title: "",
-  shortTitle: "",
+  title: null,
+  shortTitle: null,
   store: inject(),
+
   actions: {
-    async createCase() {
+    createCase($event) {
+      $event.preventDefault();
+      const { title, shortTitle, type, selectedPolicyLevel } = this;
+      const newDate = new Date();
       let cases = this.store.createRecord('case',
         {
-          title: this.get('title'),
-          shortTitle: this.get('shortTitle'),
+          title: title,
+          shortTitle: shortTitle,
           isArchived: false,
-          type: this.get('type'),
-          created: new Date(),
-          policyLevel: this.get('selectedPolicyLevel')
+          type: type,
+          created: newDate,
+          policyLevel: selectedPolicyLevel
         });
-      await cases.save();
+       cases.save().then((newCase) => {
+        const subcase = this.store.createRecord('subcase', {
+          case: newCase,
+          shortTitle: shortTitle,
+          title:title,
+          created: newDate,
+          formallyOk: false,
+          showAsRemark:false,
+        });
+        subcase.save().then(() => {
+          this.close(newCase);
+        })
+      });
     },
 
     chooseTheme(theme) {

@@ -59,7 +59,7 @@ const EditAgendaitemOrSubcase = Mixin.create({
 					await this.setNewPropertiesToModel(agendaitemSubcase);
 				}
 				this.setNewPropertiesToModel(item).then(() => {
-					this.toggleProperty('isEditing');
+					item.reload();
 				});
 			} else {
 				await this.setNewPropertiesToModel(item);
@@ -68,14 +68,14 @@ const EditAgendaitemOrSubcase = Mixin.create({
 				if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
 					agendaitemsOnDesignAgendaToEdit.map((agendaitem) => {
 						this.setNewPropertiesToModel(agendaitem).then(() => {
-							this.toggleProperty('isEditing');
+							item.reload();
 						});
 					})
 				}
 			}
-			if(item.showAsRemark) {
 				this.toggleProperty('isEditing');
-			}
+				// item.reload();
+				
 		}
 	}
 })

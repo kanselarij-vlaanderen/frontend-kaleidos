@@ -7,6 +7,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 	classNames: ['vl-u-spacer--large'],
 	isAddingNewDocument: false,
 	isEditing: false,
+
 	modelToAddDocumentVersionTo: computed('item.constructor', function() {
 		return this.get('item.constructor.modelName');
 	}),
@@ -25,9 +26,9 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 		},
 
 		async uploadNewDocument() {
-			this.uploadFiles(await this.get('item')).then(() => {
-				this.get('item').hasMany('documentVersions').reload();
-				this.get('item').reload();
+			const item = await this.get('item');
+			await this.uploadFiles(item).then(() => {
+				item.hasMany('documentVersions').reload();
 				this.toggleProperty('isAddingNewDocument');
 			});
 		}

@@ -9,5 +9,11 @@ export default Route.extend(DataTableRouteMixin, {
       include: 'subcases',
       filter: { 'is-archived': params.filter }
     };
+  },
+
+  actions: {
+    refreshModel() {
+      this.refresh();
+    }
   }
 });

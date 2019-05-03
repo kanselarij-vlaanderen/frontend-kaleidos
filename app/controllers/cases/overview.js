@@ -39,6 +39,10 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     },
     cancelArchiveCase() {
       this.set('isArchivingCase', false);
+    },
+
+    close(caze) {
+      this.transitionToRoute('cases.case.subcases', caze.id);
     }
   }
 

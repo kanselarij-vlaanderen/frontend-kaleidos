@@ -36,7 +36,7 @@ export default Mixin.create(FileSaverMixin, {
 			document.set(modelToAddDocumentVersionTo, model);
 		}
 
-		document.save().then(async (createdDocument) => {
+		await document.save().then(async (createdDocument) => {
 			const documentVersion = await this.store.createRecord('document-version', {
 				document: createdDocument,
 				created: creationDate,
@@ -81,7 +81,9 @@ export default Mixin.create(FileSaverMixin, {
 			newDocumentVersion.set('document', document);
 		}
 
-		return newDocumentVersion.save();
+		await newDocumentVersion.save();
+		return item.reload();
+
 	},
 
 	createVersion(uploadedFile, latestVersionNumber) {
@@ -105,6 +107,9 @@ export default Mixin.create(FileSaverMixin, {
 		},
 
 		async downloadFile(documentVersion) {
+			if(!(await documentVersion)) {
+				return;
+			}
 			let file = await documentVersion.get('file');
 			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
 				method: 'GET',

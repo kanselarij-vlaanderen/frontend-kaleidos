@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 
-const { attr, Model, hasMany, belongsTo } = DS;
+const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
   created: attr('date'),
@@ -14,12 +14,12 @@ export default Model.extend({
   case: belongsTo('case'),
   // relatedTo: hasMany('subcase', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
-  phases: hasMany('subcase-phase', { inverse:null }),
+  phases: hasMany('subcase-phase', { inverse: null }),
   consulationRequests: hasMany('consulation-request', { inverse: null }),
   governmentDomains: hasMany('government-domain', { inverse: null }),
   agendaitems: hasMany('agendaitem', { inverse: null }),
   remarks: hasMany('remark'),
-  documentVersions: hasMany('document-version'),
+  documentVersions: hasMany('document-version', { inverse: null }),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
@@ -32,24 +32,28 @@ export default Model.extend({
     const targetDocument = await version.get('document');
     let foundIndex;
     sortedDocuments.map((document, index) => {
-      if(document == targetDocument) {
-        foundIndex=index;
+      if (document == targetDocument) {
+        foundIndex = index;
       }
     })
     return foundIndex;
   },
 
-  documents: computed('documentVersions.@each', async function () {
-    const documentVersions = await this.get('documentVersions');
-    const documents = await Promise.all(documentVersions.map(documentVersion => {
-      return documentVersion.get('document');
-    }));
-    return documents.uniqBy('id');
+  documents: computed('documentVersions.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('documentVersions').then((documentVersions) => {
+        return Promise.all(documentVersions.map(documentVersion => {
+          return documentVersion.get('document');
+        })).then((documents) => {return documents.uniqBy('id')})
+      })
+    });
   }),
 
-  documentsLength: computed('documents', function () {
-    return this.get('documents').then((documents) => {
-      return documents.get('length');
+  documentsLength: computed('documents.@each', function () {
+    return PromiseObject.create({
+      promise: this.get('documents').then((documents) => {
+        return documents.get('length');
+      })
     });
   }),
 
