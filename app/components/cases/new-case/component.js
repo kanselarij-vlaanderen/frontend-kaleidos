@@ -7,10 +7,18 @@ export default Component.extend({
   store: inject(),
 
   actions: {
-    createCase($event) {
+    async createCase($event) {
       $event.preventDefault();
-      const { title, shortTitle, type, selectedPolicyLevel } = this;
+      const { title, shortTitle, type, selectedPolicyLevel, phase } = this;
       const newDate = new Date();
+
+      const subcasePhase = this.store.createRecord('subcase-phase',
+        {
+          date: new Date(),
+          code: phase
+        });
+
+      const createdSubphase = await subcasePhase.save();
       let cases = this.store.createRecord('case',
         {
           title: title,
@@ -20,14 +28,15 @@ export default Component.extend({
           created: newDate,
           policyLevel: selectedPolicyLevel
         });
-       cases.save().then((newCase) => {
+      cases.save().then((newCase) => {
         const subcase = this.store.createRecord('subcase', {
           case: newCase,
           shortTitle: shortTitle,
-          title:title,
+          title: title,
           created: newDate,
+          phases: [createdSubphase],
           formallyOk: false,
-          showAsRemark:false,
+          showAsRemark: false,
         });
         subcase.save().then(() => {
           this.close(newCase);
@@ -45,6 +54,10 @@ export default Component.extend({
 
     typeChanged(type) {
       this.set('type', type);
+    },
+
+    phaseChanged(phase) {
+      this.set('phase', phase);
     },
 
     statusChange(status) {

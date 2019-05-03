@@ -39,17 +39,6 @@ export default Component.extend(UploadDocumentMixin, {
 	},
 
 	actions: {
-		previousStep() {
-			this.decrementProperty('step');
-		},
-
-		selectConfidentiality(confidentiality) {
-			this.set('confidentiality', confidentiality);
-		},
-
-		nextStep() {
-			this.incrementProperty('step');
-		},
 
 		closeModal() {
 			this.closeModal();
@@ -57,7 +46,6 @@ export default Component.extend(UploadDocumentMixin, {
 
 		async createSubCase(event) {
 			event.preventDefault();
-			this.parseDomainsAndMandatees();
 
 			const caze = this.store.peekRecord('case', this.case.id);
 			let phase = await this.get('phase');
@@ -70,7 +58,7 @@ export default Component.extend(UploadDocumentMixin, {
 
 			const createdSubphase = await subcasePhase.save();
 
-			const { title, shortTitle, selectedDomains, selectedMandatees, themes, showAsRemark, confidentiality } = this;
+			const { title, shortTitle, showAsRemark } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
@@ -78,12 +66,8 @@ export default Component.extend(UploadDocumentMixin, {
 					shortTitle: shortTitle,
 					formallyOk: false,
 					showAsRemark: showAsRemark,
-					governmentDomains: selectedDomains,
 					case: caze,
 					created: new Date(),
-					mandatees: selectedMandatees,
-					themes: themes,
-					confidentiality: confidentiality
 				});
 
 			const newSubcase = await subcase.save();
@@ -94,36 +78,6 @@ export default Component.extend(UploadDocumentMixin, {
 
 		selectPhase(phase) {
 			this.set('phase', phase);
-		},
-
-		chooseTheme(themes) {
-			this.set('themes', themes);
-		},
-
-		selectMandatees(mandatees) {
-			this.set('selectedMandatees', mandatees);
-		},
-
-		mandateeRowsChanged(mandateeRows) {
-			this.set('mandateeRows', mandateeRows);
 		}
 	},
-
-	async parseDomainsAndMandatees() {
-		const mandateeRows = await this.get('mandateeRows');
-		const mandatees = [];
-		const selectedDomains = [];
-		if (mandateeRows && mandateeRows.get('length') > 0) {
-			mandateeRows.map(row => {
-				mandatees.push(row.get('mandatee'));
-				const domains = row.get('selectedDomains');
-				domains.map(domain => {
-					selectedDomains.push(domain);
-				})
-			})
-		}
-		this.set('selectedMandatees', mandatees);
-		this.set('selectedDomains', selectedDomains);
-	},
-
 })
