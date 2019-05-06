@@ -5,10 +5,9 @@ import { EditAgendaitemOrSubcase, getCachedProperty } from 'fe-redpencil/mixins/
 export default Component.extend(EditAgendaitemOrSubcase, {
 	store: inject(),
 	classNames: ["vl-form__group", "vl-u-bg-porcelain"],
-	propertiesToSet: ['title', 'shortTitle', 'subcaseName', 'formallyOk', 'confidentiality'],
+	propertiesToSet: ['title', 'shortTitle', 'formallyOk', 'confidentiality'],
 	
 	title: getCachedProperty('title'),
-	subcaseName: getCachedProperty('subcaseName'),
 	shortTitle: getCachedProperty('shortTitle'),
 	formallyOk: getCachedProperty('formallyOk'),
 	confidentiality: getCachedProperty('confidentiality'),
