@@ -46,19 +46,31 @@
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
               <h6 class="vl-title vl-title--h6 max-width">
-                {{await subcase.phaseLabel}}
+                {{t "in-function-of"}}
+                {{await subcase.subcaseName}}
               </h6>
               <ul class="vlc-status-timeline">
-                {{#each (await subcase.codes) as |code|}}
+                {{#if (not-eq (await subcase.phases.length) 0)}}
+                  {{#each (await subcase.phases) as |phase|}}
+                    <li
+                      class="vlc-status-timeline__item vlc-status-timeline__item--in-progress"
+                    >
+                      <div class="vlc-status-timeline__dot"></div>
+                      <div class="vlc-status-timeline__text">
+                        {{await phase.code.label}}
+                      </div>
+                    </li>
+                  {{/each}}
+                {{else}}
                   <li
                     class="vlc-status-timeline__item vlc-status-timeline__item--in-progress"
                   >
                     <div class="vlc-status-timeline__dot"></div>
                     <div class="vlc-status-timeline__text">
-                      {{await code}}
+                      In voorbereiding
                     </div>
                   </li>
-                {{/each}}
+                {{/if}}
               </ul>
             </div>
           </div>
@@ -109,26 +121,28 @@
         </p>
         <div class="vl-u-spacer-extended-top-s">
           <ul class="vlc-document-list">
-          {{#each (await subcase.documents) as |document|}}
-            <li class="vlc-document-list__item">
-              <a {{action "downloadFile" (await document.lastDocumentVersion)}}>
-                <div
-                  class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
+            {{#each (await subcase.documents) as |document|}}
+              <li class="vlc-document-list__item">
+                <a
+                  {{action "downloadFile" (await document.lastDocumentVersion)}}
                 >
-                  <i
-                    class="vl-badge__icon vl-vi vl-vi-document"
-                    aria-hidden="true"
-                  ></i>
-                </div>
-                <p>
-                  {{document-name
-                    documentVersion=(await document.lastDocumentVersion)
-                    item=subcase
-                  }}
-                </p>
-              </a>
-            </li>
-          {{/each}}
+                  <div
+                    class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
+                  >
+                    <i
+                      class="vl-badge__icon vl-vi vl-vi-document"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                  <p>
+                    {{document-name
+                      documentVersion=(await document.lastDocumentVersion)
+                      item=subcase
+                    }}
+                  </p>
+                </a>
+              </li>
+            {{/each}}
           </ul>
         </div>
       </div>

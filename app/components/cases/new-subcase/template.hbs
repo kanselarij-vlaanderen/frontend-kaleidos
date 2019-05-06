@@ -17,14 +17,14 @@
       {{textarea rows="2" class="vl-textarea vl-textarea--block" value=title}}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "subcase-phase")}}
+      {{web-components/vl-form-label value=(t "subcase-type")}}
       {{utils/model-selector
-        modelName="subcase-phase-code"
+        modelName="subcase-type"
         searchField="label"
         sortField="label"
         propertyToShow="label"
-        selectedItems=phase
-        selectModel=(action "selectPhase")
+        selectedItems=type
+        selectModel=(action "selectType")
       }}
     </div>
   </div>

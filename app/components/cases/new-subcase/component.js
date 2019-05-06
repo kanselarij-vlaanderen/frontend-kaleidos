@@ -3,7 +3,6 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
-
 export default Component.extend(UploadDocumentMixin, {
 	store: inject(),
 	classNames: ["vl-custom"],
@@ -46,29 +45,32 @@ export default Component.extend(UploadDocumentMixin, {
 
 		async createSubCase(event) {
 			event.preventDefault();
-
-			const caze = this.store.peekRecord('case', this.case.id);
-			let phase = await this.get('phase');
-
-			const subcasePhase = this.store.createRecord('subcase-phase',
-				{
-					date: new Date(),
-					code: phase
-				});
-
-			const createdSubphase = await subcasePhase.save();
-
-			const { title, shortTitle, showAsRemark } = this;
+			const caze = await this.store.peekRecord('case', this.case.id);
+			const { title, shortTitle, showAsRemark, type } = this;
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
-					phases: [createdSubphase],
 					shortTitle: shortTitle,
 					formallyOk: false,
 					showAsRemark: showAsRemark,
 					case: caze,
+					type:type,
 					created: new Date(),
 				});
+
+				const name = await caze.getNameForNextSubcase(subcase, type);
+				subcase.set('subcaseName', name);
+
+				let phase = await this.get('phase');
+				if(phase) {
+					const subcasePhase = this.store.createRecord('subcase-phase',
+					{
+						date: new Date(),
+						code: phase
+					});
+					const createdSubphase = await subcasePhase.save();
+					subcase.set('phases', [createdSubphase]);
+				}
 
 			const newSubcase = await subcase.save();
 			await this.uploadFiles(newSubcase);
@@ -78,6 +80,10 @@ export default Component.extend(UploadDocumentMixin, {
 
 		selectPhase(phase) {
 			this.set('phase', phase);
+		},
+
+		selectType(type) {
+			this.set('type', type);
 		}
 	},
 })

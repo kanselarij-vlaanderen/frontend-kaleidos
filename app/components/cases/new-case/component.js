@@ -11,14 +11,10 @@ export default Component.extend({
       $event.preventDefault();
       const { title, shortTitle, type, selectedPolicyLevel, phase } = this;
       const newDate = new Date();
-
-      const subcasePhase = this.store.createRecord('subcase-phase',
-        {
-          date: new Date(),
-          code: phase
-        });
-
-      const createdSubphase = await subcasePhase.save();
+      let subcaseName = phase.label;
+      if(phase.label == "principiële goedkeuring") {
+        subcaseName = "1ste principiële goedkeuring"
+      }
       let cases = this.store.createRecord('case',
         {
           title: title,
@@ -34,7 +30,8 @@ export default Component.extend({
           shortTitle: shortTitle,
           title: title,
           created: newDate,
-          phases: [createdSubphase],
+          phases: [],
+          subcaseName: subcaseName,
           formallyOk: false,
           showAsRemark: false,
         });

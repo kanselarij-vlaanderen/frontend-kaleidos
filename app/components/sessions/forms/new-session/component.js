@@ -18,7 +18,8 @@ export default Component.extend({
 				let agenda = this.store.createRecord('agenda', {
 					name: "Ontwerpagenda",
 					createdFor: meeting,
-          created: new Date()
+					created: new Date(),
+					modified: new Date()
         });
 
 				await agenda.save();

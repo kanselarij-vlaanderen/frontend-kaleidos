@@ -168,6 +168,7 @@ $icon-font-location: "/fonts/";
 @import "custom-utilities/_scroll";
 @import "custom-utilities/_box-model";
 
+// Print
 @import "print/print";
 
 //custom css added
@@ -524,7 +525,7 @@ body > .ember-view {
 }
 
 .transparant {
-  opacity: 0.30 !important;
+  opacity: 0.3 !important;
 }
 
 .settings-container {

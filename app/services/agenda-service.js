@@ -80,7 +80,7 @@ export default Service.extend({
 		const mandatees = await subcase.get('mandatees');
 		const titles = mandatees.map((mandatee) => mandatee.get('title'));
 		const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`
-		
+
 		let agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
 			postPoned: false,
@@ -101,6 +101,5 @@ export default Service.extend({
 			approvals: await subcase.get('approvals')
 		});
 		return agendaitem.save();
-	},
-
+	}
 });

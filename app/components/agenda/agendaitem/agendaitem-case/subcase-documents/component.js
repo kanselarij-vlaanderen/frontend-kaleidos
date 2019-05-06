@@ -2,8 +2,10 @@ import Component from '@ember/component';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
+import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import { computed } from '@ember/object';
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, UploadDocumentMixin, {
+
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, UploadDocumentMixin, ModifiedMixin, {
 	classNames: ['vl-u-spacer--large'],
 	isAddingNewDocument: false,
 	isEditing: false,
@@ -26,8 +28,12 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 		},
 
 		async uploadNewDocument() {
+			const modelName = await this.get('modelToAddDocumentVersionTo');
 			const item = await this.get('item');
-			await this.uploadFiles(item).then(() => {
+			await this.uploadFiles(item).then(async() => {
+				if(modelName === 'agendaitem') {
+					await this.updateModifiedProperty(await item.get('agenda'));
+				}
 				item.hasMany('documentVersions').reload();
 				this.toggleProperty('isAddingNewDocument');
 			});

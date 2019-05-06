@@ -21,12 +21,12 @@
 <div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "current-subcase")}}
   {{utils/model-selector
-    modelName="subcase-phase-code"
+    modelName="subcase-type"
     searchField="label"
     propertyToShow="label"
     multiSelect=false
     sortField="label"
     selectedItems=phase
-    selectModel=(action "choosePhase")
+    selectModel=(action "chooseType")
   }}
 </div>

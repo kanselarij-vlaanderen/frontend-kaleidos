@@ -31,8 +31,8 @@
           }}
           {{th-sortable
             class="vl-data-table-col-4 vl-data-table__header-title"
-            field="status"
-            label="Status"
+            field="type"
+            label="Dossiertype"
           }}
           {{th-sortable
             class="vl-data-table-col-2 vl-data-table__header-title"
@@ -47,7 +47,7 @@
             {{row.shortTitle}}
           </td>
           <td>
-            {{row.latestSubcase.shortTitle}}
+            {{await row.type.label}}
           </td>
           <td>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}

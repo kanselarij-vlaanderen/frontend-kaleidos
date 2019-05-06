@@ -2,8 +2,9 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { sort } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   classNames: ['vlc-padding-bottom--large'],
   store: inject('store'),
 
@@ -19,6 +20,7 @@ export default Component.extend(isAuthenticatedMixin, {
   actions: {
     async addComment(event) {
       const agendaitem = await this.get('agendaitem');
+      const agenda = await this.get('agendaitem.agenda');
       const user = await this.get('user');
       const comment = this.store.createRecord('remark',
         {
@@ -29,11 +31,13 @@ export default Component.extend(isAuthenticatedMixin, {
         });
       comment.save().then(() => {
         this.set('text', "");
+        this.updateModifiedProperty(agenda);
       });
     },
 
     async addAnswer(comment) {
       const user = await this.get('user');
+      const agenda = await this.get('agendaitem.agenda');
       const newComment = this.store.createRecord('remark', 
       { 
         text: comment.get('answer'), 
@@ -43,6 +47,7 @@ export default Component.extend(isAuthenticatedMixin, {
       newComment.save().then(savedComment => {
         comment.get('answers').addObject(savedComment);
         comment.set('answer', "");
+        this.updateModifiedProperty(agenda);
         comment.save();
       });
     }

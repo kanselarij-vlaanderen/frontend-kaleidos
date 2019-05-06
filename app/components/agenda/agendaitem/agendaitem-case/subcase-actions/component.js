@@ -67,6 +67,11 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin,{
 			await Promise.all(item.get('approvals').map(async (approval) => {
 				return await approval.save();
 			}));
+			const agenda = await item.get('agenda');
+			if(agenda) {
+				await this.updateModifiedProperty(agenda);
+			}
+		
 			this.toggleProperty('isEditing');
 		},
 

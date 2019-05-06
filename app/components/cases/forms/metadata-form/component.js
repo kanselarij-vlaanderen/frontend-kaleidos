@@ -6,8 +6,8 @@ export default Component.extend({
       this.typeChanged(type);
     },
 
-    choosePhase(phase) {
-      this.phaseChanged(phase);
+    chooseType(type) {
+      this.phaseChanged(type);
     }
   }
 });

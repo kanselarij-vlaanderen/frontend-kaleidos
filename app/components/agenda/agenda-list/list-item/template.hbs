@@ -35,9 +35,6 @@
   <p class="vl-long-title">
     {{await agendaitem.title}}
   </p>
-    <p class="vl-long-title">
-    {{await agendaitem.subcase.concluded}}
-  </p>
   {{else}}
   <h3 class="vl-title vl-u-text--small">
     {{number}}
@@ -64,7 +61,7 @@
   {{#if (not agendaitem.showAsRemark)}}
   <div class="vl-u-display-flex vl-u-flex-space-between">
     <span class="vlc-agenda-items-new__times-passed">
-      {{!-- {{await agendaitem.subcase.shortTitle}}  Phase todo --}}
+      {{await agendaitem.subcase.subcaseName}}
     </span>
     {{#if (eq (await agenda) "Ontwerpagenda")}}
       {{#if (await agendaitem.formallyOk)}}

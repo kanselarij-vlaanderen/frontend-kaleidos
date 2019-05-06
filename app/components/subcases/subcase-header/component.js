@@ -2,16 +2,18 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
+import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 
-export default Component.extend({
+export default Component.extend(ModifiedMixin, {
 	store: inject(),
+	agendaService: inject(),
 	classNames: ["vlc-page-header"],
 	isAssigningToAgenda: false,
-  isShowingOptions: false,
+	isShowingOptions: false,
 
 	meetings: computed('store', function () {
 		const dateOfToday = moment().format();
-		const dateInTwoWeeks = moment().add(2, 'weeks').format();
+		const dateInTwoWeeks = moment().add(6, 'weeks').format();
 
 		return this.store.query('meeting', {
 			filter: {
@@ -23,11 +25,16 @@ export default Component.extend({
 	}),
 
 	actions: {
-    showMultipleOptions() {
-      this.toggleProperty('isShowingOptions');
-    },
-		proposeForAgenda(subcase, meeting) {
+		showMultipleOptions() {
+			this.toggleProperty('isShowingOptions');
+		},
+		async proposeForAgenda(subcase, meeting) {
 			subcase.set('requestedForMeeting', meeting);
+			const designAgenda = await meeting.get('latestAgenda');
+			if (designAgenda.get('name') === "Ontwerpagenda") {
+				await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
+				await this.updateModifiedProperty(designAgenda);
+			}
 			subcase.save().then(subcase => {
 				this.assignSubcasePhase(subcase);
 			});
@@ -43,12 +50,14 @@ export default Component.extend({
 
 			await Promise.all(phases.filter(async phase => {
 				const code = await phase.get('code');
-				if(!code || code.get('label') == "Ingediend voor agendering") {
+				if (!code || code.get('label') == "Ingediend voor agendering") {
 					await phase.destroyRecord();
 				} else {
 					return phase;
 				}
 			}))
+			const agendaitems = await subcase.get('agendaitems');
+			await Promise.all(agendaitems.map((item) => { return item.destroyRecord(); }))
 			subcase.save();
 		},
 		cancel() {
@@ -56,29 +65,29 @@ export default Component.extend({
 			this.set('selectedSubcase', null);
 		},
 
-    async archiveSubcase(subcase) {
-      const agendaitems = await subcase.get('agendaitems');
-      if (!agendaitems){
-        subcase.set('isArchived', true);
-        subcase.save();
-      }
-      this.set('isArchivingSubcase', false);
-    },
-    unarchiveSubcase(subcase) {
-      subcase.set('isArchived', false);
-      subcase.save();
-    },
-    closeSubcase(subcase) {
-      const concluded = subcase.get('concluded');
-      subcase.set('concluded', !concluded);
-      subcase.save();
-    },
-    requestArchiveSubcase() {
-      this.set('isArchivingSubcase', true);
-    },
-    cancelArchiveSubcase() {
-      this.set('isArchivingSubcase', false);
-    }
+		async archiveSubcase(subcase) {
+			const agendaitems = await subcase.get('agendaitems');
+			if (!agendaitems) {
+				subcase.set('isArchived', true);
+				subcase.save();
+			}
+			this.set('isArchivingSubcase', false);
+		},
+		unarchiveSubcase(subcase) {
+			subcase.set('isArchived', false);
+			subcase.save();
+		},
+		closeSubcase(subcase) {
+			const concluded = subcase.get('concluded');
+			subcase.set('concluded', !concluded);
+			subcase.save();
+		},
+		requestArchiveSubcase() {
+			this.set('isArchivingSubcase', true);
+		},
+		cancelArchiveSubcase() {
+			this.set('isArchivingSubcase', false);
+		}
 	},
 
 	async assignSubcasePhase(subcase) {
