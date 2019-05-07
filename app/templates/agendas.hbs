@@ -105,7 +105,7 @@
               </td>
               <td {{action "selectAgenda" meeting}}>
                 {{!-- {{await meeting.latestAgenda}} --}}
-                {{moment-format meeting.latestAgenda.modified "DD-MM-YYYY HH:mm"
+                {{moment-format (await meeting.latestAgenda.modified) "DD-MM-YYYY HH:mm"
                 }}
               </td>
               <td class="vl-u-align-center">
