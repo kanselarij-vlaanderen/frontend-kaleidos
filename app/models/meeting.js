@@ -36,7 +36,8 @@ export default Model.extend({
 	latestAgenda: computed('agendas.@each', function () {
 		return DS.PromiseObject.create({
 			promise: this.get('agendas').then((agendas) => {
-				return agendas.get('firstObject');
+				const sortedAgendas = agendas.sortBy('agendaName').reverse();
+				return sortedAgendas.get('firstObject');
 			})
 		})
 	})
