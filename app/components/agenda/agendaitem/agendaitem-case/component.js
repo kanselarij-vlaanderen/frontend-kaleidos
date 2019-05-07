@@ -8,6 +8,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
   store: inject('store'),
   sessionService: inject(),
   currentSession: alias('sessionService.currentSession'),
+  authentication: inject('currentSession'),
   editable: null,
   agendaitem: null,
 
@@ -23,6 +24,12 @@ export default Component.extend(EditAgendaitemOrSubcase, {
   actions: {
 		cancelEditing() {
 			this.toggleProperty('isEditing');
-		},
+    },
+    toggleConfidential(value) {
+      this.set("item.confidential", value);
+    },
+    chooseConfidentiality(confidentiality) {
+			this.get('item').set('confidentiality', confidentiality);
+		}		
   }
 });

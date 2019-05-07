@@ -10,6 +10,27 @@
   Retracted:
   {{await item.decision.approved}}
 </div>
+{{#if (and subcase authentication.isAdmin)}}
+  <div class="confidentialities">
+    <div class="confidential">
+        {{web-components/vl-checkbox
+          value=item.confidential
+          label=(t "confidential")
+          toggle=(action "toggleConfidential")
+        }}
+    </div>
+    <div class="confidentiality-type">
+      {{utils/model-selector
+              modelName="confidentiality"
+              searchField="label"
+              propertyToShow="label"
+              sortField="label"
+              selectedItems=(await item.confidentiality)
+              selectModel=(action "chooseConfidentiality")
+      }}
+    </div>
+  </div>
+{{/if}}
 {{#if (not isEditing)}}
   {{agenda/agendaitem/agendaitem-case/subcase-titles
     item=item

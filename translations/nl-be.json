@@ -296,6 +296,7 @@
 	"no-rights":"Geen rechten",
 	"no-rights-message":"Je account heeft nog geen rechten om deze applicatie te gebruiken.",
 	"kanselarij":"Kanselarij",
+	"confidential": "Vertrouwelijk",
 	"row":"Rij",
 	"of":"van"
 }
