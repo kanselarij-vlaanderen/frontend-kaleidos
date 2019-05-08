@@ -26,11 +26,12 @@ export default Component.extend({
 		},
 
 		async createMandatee() {
+
 			const newMandatee = this.store.createRecord('mandatee', {
 				title: this.get('title'),
 				start: new Date(this.get('startDate')),
 				governmentDomains: this.get('selectedDomains'),
-				person: this.get('selectedPerson'),
+				// person: await this.get('selectedPerson'),
 				end:null
 			});
 			newMandatee.save().then(() => {

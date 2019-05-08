@@ -5,8 +5,23 @@ import { computed } from '@ember/object';
 export default Component.extend({
 	classNames: ["vl-u-spacer"],
 	store: inject(),
-	modelName:null,
-	
+	modelName: null,
+
+	codes: computed('selectedModel', {
+		get() {
+			const model = this.get('selectedModel');
+			if (model) {
+				return model.get('codes');
+			} else {
+				return null;
+			}
+		},
+
+		set(key, value) {
+			return value;
+		}
+	}),
+
 	title: computed('selectedModel', {
 		get() {
 			const model = this.get('selectedModel');
@@ -33,6 +48,10 @@ export default Component.extend({
 			this.set('selectedModel', model);
 		},
 
+		chooseCode(codes) {
+			this.set('codes', codes);
+		},
+
 		toggleIsAdding() {
 			this.toggleProperty('isAdding');
 		},
@@ -48,6 +67,7 @@ export default Component.extend({
 		editModel() {
 			const model = this.get('selectedModel');
 			model.set('label', this.get('title'));
+			model.set('codes', this.get('codes'));
 			model.save().then(() => {
 				this.set('title', null);
 				this.set('isEditing', false);
@@ -64,4 +84,4 @@ export default Component.extend({
 			});
 		}
 	}
-});
+})
