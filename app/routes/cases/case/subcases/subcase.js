@@ -5,7 +5,7 @@ export default Route.extend({
     return this.store.findRecord('subcase', params.subcase_id, 
     { 
       reload: true, 
-      include: "confidentiality,case,government-domains,document-versions,document-versions.document,themes,mandatees.government-domains" 
+      include: "confidentiality,case,document-versions,document-versions.document,themes,mandatees.government-domains" 
     });
   },
 

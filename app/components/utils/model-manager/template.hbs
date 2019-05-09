@@ -70,6 +70,20 @@
         {{web-components/vl-form-label value=(t "title")}}
         {{web-components/vl-form-input width="4" value=title}}
       </div>
+      {{#if (eq modelName "government-domain")}}
+        <div class="vlc-input-field-block">
+          {{web-components/vl-form-label value=(t "ise-code")}}
+          {{utils/model-selector
+            modelName="ise-code"
+            searchField="name"
+            propertyToShow="name"
+            multiSelect=true
+            sortField="name"
+            selectedItems=codes
+            selectModel=(action "chooseCode")
+          }}
+        </div>
+      {{/if}}
     </div>
     {{web-components/vl-modal-footer
       cancelButtonText=(t "cancel")
@@ -84,6 +98,19 @@
         {{web-components/vl-form-label value=(t "title")}}
         {{web-components/vl-form-input width="4" value=title}}
       </div>
+      {{#if (eq modelName "government-domain")}}
+        <div class="vlc-input-field-block">
+          {{utils/model-selector
+            modelName="ise-code"
+            searchField="name"
+            propertyToShow="name"
+            multiSelect=true
+            sortField="name"
+            selectedItems=(await codes)
+            selectModel=(action "chooseCode")
+          }}
+        </div>
+      {{/if}}
     </div>
     {{web-components/vl-modal-footer
       cancelButtonText=(t "cancel")

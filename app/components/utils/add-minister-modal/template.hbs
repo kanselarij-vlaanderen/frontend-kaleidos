@@ -1,0 +1,45 @@
+{{#web-components/vl-modal
+  closeModal=(action "cancel")
+  isOverlay=true
+  title=(t "add-minister")
+}}
+  <div class="vl-modal-dialog__content">
+    <div class="vl-u-spacer-extended-bottom-l">
+      {{utils/mandatee-selector
+        singleSelect=true
+        selectedMandatees=selectedMandatee
+        chooseMandatee=(action "mandateeSelected")
+      }}
+    </div>
+    {{#each selectedDomains as |domain|}}
+      <ul class="vlc-checkbox-tree">
+        <li>
+          {{web-components/vl-checkbox
+            value=domain.selected
+            label=domain.label
+            toggle=(action "selectDomain" domain)
+          }}
+          <ul>
+            {{#each domain.codes as |code|}}
+              <li>
+                {{web-components/vl-checkbox
+                  value=code.selected
+                  label=code.name
+                  toggle=(action "selectCode" code domain)
+                }}
+              </li>
+            {{/each}}
+          </ul>
+          <div class="vlc-hr"></div>
+        </li>
+      </ul>
+    {{/each}}
+  </div>
+  {{web-components/vl-modal-footer
+    nonBordered=true
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "add")
+    cancelAction=(action "cancel")
+    saveAction=(action "addMandatee")
+  }}
+{{/web-components/vl-modal}}

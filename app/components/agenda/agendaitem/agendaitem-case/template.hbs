@@ -43,8 +43,9 @@
   }}
 {{/if}}
 {{#if (not item.showAsRemark)}}
+  {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item}}
   {{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
-  {{agenda/agendaitem/agendaitem-case/subcase-phases item=item}}
+  {{!-- {{agenda/agendaitem/agendaitem-case/subcase-phases item=item}} --}}
   {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
   {{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
 {{/if}}

@@ -20,7 +20,7 @@
         {{#if (await subcase.requestedForMeeting)}}
           <div class="vlc-page-header__status">
             <span>
-              Ingediend voor de agenda van
+              {{t "requested-for-agenda"}}
               {{moment-format
                 subcase.requestedForMeeting.plannedStart
                 "DD MMMM YYYY"

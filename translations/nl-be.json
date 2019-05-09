@@ -44,6 +44,8 @@
 	"approved": "Beslist",
 	"archive-case": "Dossier archiveren",
 	"archive-case-confirmation": "Ben je zeker dat je het dossier wilt archiveren?",
+	"ise-code":"Inhoudelijk structuurelementen",
+	"no-ise-codes-yet":"Er zijn nog geen geselecteerde inhoudelijk structuurelementen.",
 	"archive-subcase": "Procedurestap archiveren",
 	"archive-subcase-confirmation": "Ben je zeker dat je de procedurestap wilt archiveren?",
 	"attachements": "Bijlagen",
@@ -255,5 +257,6 @@
 	"signed-notes-add":"Getekende notulen uploaden",
 	"uploaded-at":"Geupload op",
 	"at":"om",
-	"toggle":"aan-uit"
+	"toggle":"aan-uit",
+	"requested-for-agenda":"Ingediend voor de agenda van"
 }
