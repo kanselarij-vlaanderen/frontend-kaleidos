@@ -22,7 +22,7 @@
                     {{t "back"}}
                   </a>
                   <p class="vlc-page-header__status">
-                    {{t "agenda"}}
+                    {{t "agendaitem-press-agenda"}}
                   </p>
                 </div>
               </div>
@@ -51,7 +51,7 @@
 </div>
 <div class="vlc-scroll-wrapper__body">
   {{agenda/press-agenda
-    title=(await title)
+    title=(await pageTitle)
     currentSession=(await model.currentSession)
     agendaitemGroups=(await model.agendaitemGroups)
   }}
