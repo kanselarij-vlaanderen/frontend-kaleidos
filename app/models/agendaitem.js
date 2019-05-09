@@ -39,7 +39,6 @@ export default Model.extend({
     return this.get('themes').sortBy('label');
   }),
 
-  governmentDomains: hasMany('government-domain', { inverse: null }),
   phases: hasMany('subcase-phase'),
 
   isPostponed: computed('retracted', 'postponedTo', function () {
