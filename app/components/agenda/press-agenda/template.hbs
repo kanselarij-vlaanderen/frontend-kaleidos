@@ -1,27 +1,33 @@
-<div class="vlc-container vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
-  {{#each (await agendaitemGroups) as |agendaitemGroup|}}
-    <div
-      class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom vlc-navbar--bordered-bottom"
-    >
-      {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
-        <h2 class="vl-title vl-title--h5">
-          {{mandatee.title}}
-        </h2>
-      {{/each}}
-    </div>
-    {{#each (await agendaitemGroup.agendaitems) as |agendaitem|}}
-      <div
-        class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
-      >
-        <div class="vl-u-spacer">
-          <h3 class="vl-title vl-title--h6">
-            {{agendaitem.foundPriority}}. {{agendaitem.titlePress}}
-          </h3>
-          <p>
-            {{agendaitem.textPress}}
-          </p>
-        </div>
+<div class="vlc-container">
+  <div class="vl-u-spacer-extended-bottom-l">
+    <h1 class="vl-title vl-title--h2">
+      {{title}}
+      <br />
+    </h1>
+  </div>
+  <div class="vl-u-spacer-extended-bottom">
+    {{#each (await agendaitemGroups) as |agendaitemGroup|}}
+      <div class="vl-u-spacer-extended-bottom">
+        {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
+          <h2 class="vl-title vl-title--h4">
+            {{mandatee.title}}
+          </h2>
+        {{/each}}
+      </div>
+      <div class="vl-u-spacer-extended-bottom-l">
+        {{#each (await agendaitemGroup.agendaitems) as |agendaitem|}}
+          <div class="vl-u-spacer-extended-bottom-s">
+            <h3 class="vl-title vl-title--h5">
+              {{agendaitem.titlePress}}
+            </h3>
+          </div>
+          <div class="vl-typography">
+            <p>
+              {{agendaitem.textPress}}
+            </p>
+          </div>
+        {{/each}}
       </div>
     {{/each}}
-  {{/each}}
+  </div>
 </div>

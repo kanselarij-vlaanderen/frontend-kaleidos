@@ -6,9 +6,9 @@ export default Component.extend(isAuthenticatedMixin, {
 	elementId: 'c-main-nav',
 
 	actions: {
-		logoutUser() {
-			this.currentAuthenticatedSession.logout()
-			this.navigateToMockLogin();
+		navigateToMockLogin() {
+			// this.currentAuthenticatedSession.logout()
+			// this.navigateToMockLogin();
 		}
 	}
 });

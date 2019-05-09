@@ -16,13 +16,13 @@
             <i
               class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
             ></i>
-            {{t "buttons.back"}}
+            {{t "back"}}
           {{/link-to}}
         </div>
       </div>
     </div>
     <div class="vlc-toolbar__right">
-      {{#if isAdmin}}
+      {{#if (or isAdmin isEditor)}}
         <div class="vlc-toolbar__item">
           <button
             class="vl-button vl-button--narrow vl-button--icon-before"
@@ -31,7 +31,7 @@
             <i
               class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
             ></i>
-            {{t "buttons.create-subcase"}}
+            {{t "create-subcase"}}
           </button>
         </div>
       {{/if}}
@@ -46,25 +46,37 @@
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
               <h6 class="vl-title vl-title--h6 max-width">
-                {{await subcase.phaseLabel}}
+                {{t "in-function-of"}}
+                {{await subcase.subcaseName}}
               </h6>
               <ul class="vlc-status-timeline">
-                {{#each (await subcase.codes) as |code|}}
+                {{#if (not-eq (await subcase.phases.length) 0)}}
+                  {{#each (await subcase.phases) as |phase|}}
+                    <li
+                      class="vlc-status-timeline__item vlc-status-timeline__item--in-progress"
+                    >
+                      <div class="vlc-status-timeline__dot"></div>
+                      <div class="vlc-status-timeline__text">
+                        {{await phase.code.label}}
+                      </div>
+                    </li>
+                  {{/each}}
+                {{else}}
                   <li
                     class="vlc-status-timeline__item vlc-status-timeline__item--in-progress"
                   >
                     <div class="vlc-status-timeline__dot"></div>
                     <div class="vlc-status-timeline__text">
-                      {{await code}}
+                      In voorbereiding
                     </div>
                   </li>
-                {{/each}}
+                {{/if}}
               </ul>
             </div>
           </div>
           <div class="vlc-toolbar__right">
             <div class="vlc-toolbar__item">
-              {{#if isAdmin}}
+              {{#if (or isAdmin isEditor)}}
                 {{#link-to
                   "cases.case.subcases.subcase"
                   subcase.id
@@ -125,7 +137,7 @@
                   <p>
                     {{document-name
                       documentVersion=(await document.lastDocumentVersion)
-                      item=(await subcase)
+                      item=subcase
                     }}
                   </p>
                 </a>
@@ -146,7 +158,7 @@
     isOverlay=true
     large=true
     closeModal=(action "close")
-    title=(t "buttons.create-subcase")
+    title=(t "create-subcase")
   }}
     {{cases/new-subcase case=model.case closeModal=(action "close")}}
   {{/web-components/vl-modal}}

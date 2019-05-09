@@ -1,29 +1,36 @@
 <div class="vl-u-spacer">
-<div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "edit-item.sub-title")}}
-  {{textarea
-    rows="4"
-    class="vl-textarea vl-textarea--block"
-    value=agendaitem.newsletterInfo.subtitle
-  }}
-</div>
-<div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "edit-item.content")}}
-  {{textarea
-    rows="10"
-    class="vl-textarea vl-textarea--block"
-    value=agendaitem.newsletterInfo.text
-  }}
-</div>
+   <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "short-title")}}
+    {{textarea rows="2" class="vl-textarea vl-textarea--block" value=title}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "subtitle")}}
+    {{textarea rows="4" class="vl-textarea vl-textarea--block" value=subtitle}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "content")}}
+    {{textarea rows="10" class="vl-textarea vl-textarea--block" value=text}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "finished")}}
+    {{web-components/vl-toggle value=finished}}
+  </div>
+  {{#if finished}}
+    <div class="vlc-input-field-block">
+      {{utils/documents-selector-of-agendaitem
+        item=agendaitem
+        title=(t "documents-attached-to")
+        itemWithDocuments=(await item)
+        selectDocument=(action "selectDocument")
+      }}
+    </div>
+  {{/if}}
 </div>
 <div class="vl-action-group vl-action-group--align-right">
-  <a class="vl-link" {{action "cancelEditing" agendaitem}}>
-    {{t "buttons.cancel"}}
+  <a class="vl-link" {{action "cancelEditing"}}>
+    {{t "cancel"}}
   </a>
-  <button
-    class="vl-button vl-button--narrow"
-    {{action "saveChanges" agendaitem}}
-  >
-    {{t "buttons.save"}}
+  <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
+    {{t "save"}}
   </button>
 </div>

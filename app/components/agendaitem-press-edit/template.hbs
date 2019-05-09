@@ -1,6 +1,6 @@
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "edit-item.title")}}
+    {{web-components/vl-form-label value=(t "title")}}
     {{web-components/vl-form-input width="4" value=agendaitem.titlePress}}
   </div>
   <div class="vlc-input-field-block">
@@ -13,20 +13,17 @@
   </div>
   <div class="vlc-input-field vlc-input-field-block">
     {{web-components/vl-form-label value=(t "for-press")}}
-    {{x-toggle
-      value=agendaitem.forPress
-      onToggle=(action (mut agendaitem.forPress))
-    }}
+    {{web-components/vl-toggle value=agendaitem.forPress}}
   </div>
 </div>
 <div class="vl-action-group vl-action-group--align-right">
   <a class="vl-link" {{action "cancelEditing" agendaitem}}>
-    {{t "buttons.cancel"}}
+    {{t "cancel"}}
   </a>
   <button
     class="vl-button vl-button--narrow"
     {{action "saveChanges" agendaitem}}
   >
-    {{t "buttons.save"}}
+    {{t "save"}}
   </button>
 </div>

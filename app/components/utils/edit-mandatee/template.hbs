@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}
+      {{web-components/vl-form-label value=(t "start-date")}}
       {{web-components/vl-datepicker
         date=startDate
         dateChanged=(action "selectStartDate")
@@ -49,7 +49,7 @@
             class="vl-button vl-button--link vl-button--narrow"
             {{action "closeModal"}}
           >
-            {{t "buttons.cancel"}}
+            {{t "cancel"}}
           </button>
         </div>
       </div>
@@ -59,7 +59,7 @@
             class="vl-button vl-button--tertiary"
             {{action "saveChanges" mandateeToEdit}}
           >
-            {{t "buttons.save"}}
+            {{t "save"}}
           </button>
         </div>
       </div>

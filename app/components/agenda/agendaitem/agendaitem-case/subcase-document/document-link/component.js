@@ -1,59 +1,26 @@
 import Component from '@ember/component';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import $ from 'jquery';
-import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
-export default Component.extend(FileSaverMixin, isAuthenticatedMixin, {
+export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	classNames: ["vl-u-spacer"],
 	isShowingVersions: false,
-	store: inject(),
 	isUploadingNewVersion: false,
 	uploadedFile: null,
 	fileName: null,
-
-	isAgendaItem: computed('item', function () {
-		const { item } = this;
-		const modelName = item.get('constructor.modelName')
-		return modelName === 'agendaitem';
+	modelToAddDocumentVersionTo: computed('item', function() {
+		return this.get('item.constructor.modelName');
 	}),
 
-	filteredDocumentVersions: computed('document','document.documentVersions','item','item.documents.@each', function() {
+	filteredDocumentVersions: computed('document', 'document.documentVersions', 'item', 'item.documents.@each', function () {
 		return this.get('document').getDocumentVersionsOfItem(this.get('item'));
 	}),
 
-	lastDocumentVersion: computed('filteredDocumentVersions.@each', async function() {
-		return (await this.get('filteredDocumentVersions') || []).objectAt(0) ;
+	lastDocumentVersion: computed('filteredDocumentVersions.@each', async function () {
+		return (await this.get('filteredDocumentVersions') || []).objectAt(0);
 	}),
-
-	async createNewDocumentVersion(document, newVersion) {			
-		const { item, uploadedFile, isAgendaItem} = this;
-		let newDocumentVersion ;
-		if(isAgendaItem) {
-			newDocumentVersion = this.store.createRecord('document-version',
-			{
-				file: uploadedFile,
-				versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
-				document: document,
-				agendaitem: item,
-				chosenFileName: this.get('fileName') || uploadedFile.fileName || uploadedFile.name,
-				created: new Date()
-			});
-		} else {
-			newDocumentVersion = this.store.createRecord('document-version',
-			{
-				file: uploadedFile,
-				versionNumber: parseInt(await newVersion.get('versionNumber') + 1),
-				document: document,
-				subcase: item,
-				chosenFileName: this.get('fileName') || uploadedFile.fileName || uploadedFile.name,
-				created: new Date()
-			});
-		}
-		
-		return newDocumentVersion.save();
-	},
 
 	actions: {
 		showVersions() {
@@ -61,29 +28,19 @@ export default Component.extend(FileSaverMixin, isAuthenticatedMixin, {
 		},
 
 		async uploadNewVersion() {
-			const { item, isAgendaItem } = this;
+			const { item, uploadedFile, fileName } = this;
 			const document = await this.get('document');
 			const newVersion = await document.get('lastDocumentVersion');
-			const newDocumentVersion = await this.createNewDocumentVersion(document, newVersion)
+			uploadedFile.set('fileName', fileName);
+			const newDocumentVersion = await this.createNewDocumentVersion(uploadedFile, document, newVersion.get('versionNumber'));
 
 			document.set('lastDocumentVersion', newDocumentVersion);
-			if(isAgendaItem) {
-				item.get('documentVersions').addObject(newDocumentVersion);
-				await item.save();
-			}
-			document.hasMany('documentVersions').reload();
-			item.reload();
-			this.set('isUploadingNewVersion', false);
-		},
+			item.get('documentVersions').addObject(newDocumentVersion);
+			await item.save();
 
-		async downloadFile(documentVersion) {
-			let file = await documentVersion.get('file');
-			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
-				method: 'GET',
-				dataType: 'arraybuffer', // or 'blob'
-				processData: false
-			})
-				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
+			if (!this.get('isDestroyed')) {
+				this.set('isUploadingNewVersion', false);
+			}
 		},
 
 		async openUploadDialog() {
@@ -92,36 +49,6 @@ export default Component.extend(FileSaverMixin, isAuthenticatedMixin, {
 				this.deleteFile(uploadedFile.id);
 			}
 			this.toggleProperty('isUploadingNewVersion');
-		},
-
-		async createNewDocumentWithDocumentVersion(subcase, file, documentTitle) {
-			let document = await this.store.createRecord('document', {
-				created: new Date(),
-				title: documentTitle,
-				type: file.get('documentType')
-			});
-			document.save().then(async (createdDocument) => {
-				if (file) {
-					const documentVersion = await this.store.createRecord('document-version', {
-						document: createdDocument,
-						subcase: subcase,
-						created: new Date(),
-						versionNumber: 1,
-						file: file,
-						chosenFileName: file.get('name')
-					});
-					await documentVersion.save();
-				} else {
-					const documentVersion = await this.store.createRecord('document-version', {
-						document: createdDocument,
-						subcase: subcase,
-						created: new Date(),
-						versionNumber: 1,
-						chosenFileName: documentTitle
-					});
-					await documentVersion.save();
-				}
-			});
 		},
 
 		async getUploadedFile(file) {

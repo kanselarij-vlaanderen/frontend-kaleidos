@@ -25,7 +25,7 @@ export default Component.extend({
     const postponed = (await this.get('agendaitem.postponedTo'));
     const retracted = this.get('agendaitem.retracted');
 
-    if (postponed || retracted) {
+    if ((postponed || retracted)) {
       clazz += ' transparant';
 		}
 		if(!this.get('isDestroyed')) {
@@ -53,6 +53,16 @@ export default Component.extend({
 		return filteredDocumentVersions.map((documents) => {
 			return documents.get('firstObject');
 		})
+	}),
+
+	phaseToDisplay: computed('agendaitem.subcase.case',async function() {
+		const subcase = await this.get('agendaitem.subcase');
+		return await subcase.get('case').then(async (caze) => {
+			return caze.getPhaseOfSubcaseInCase(subcase).then((phase) => {
+				return phase;
+			});
+		});
+		
 	}),
 
 	click() {

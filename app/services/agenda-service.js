@@ -23,7 +23,7 @@ export default Service.extend({
 			if (mandatees) {
 				mandatees = mandatees.sortBy('priority')
 			}
-			let titles = mandatees.map((mandatee) => mandatee.title);
+			let titles = (mandatees || []).map((mandatee) => mandatee.title);
 			if (titles && titles != []) {
 				titles = titles.join(',');
 				items[titles] = items[titles] || { groupName: titles, mandatees: mandatees, agendaitems: [], foundPriority: agendaitem.foundPriority };
@@ -38,7 +38,8 @@ export default Service.extend({
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
 			createdFor: currentSession,
-			created: new Date()
+			created: new Date(),
+			modified: new Date()
 		});
 
 		return newAgenda.save().then(agenda => {
@@ -54,8 +55,8 @@ export default Service.extend({
 					}
 				);
 			} else {
-				notifyPropertyChange(newAgenda, 'agendaitems');
-				return newAgenda;
+				notifyPropertyChange(agenda, 'agendaitems');
+				return agenda;
 			}
 		}).then(() => {
 			notifyPropertyChange(newAgenda, 'agendaitems');
@@ -79,7 +80,7 @@ export default Service.extend({
 		const mandatees = await subcase.get('mandatees');
 		const titles = mandatees.map((mandatee) => mandatee.get('title'));
 		const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`
-		
+
 		let agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
 			postPoned: false,
@@ -100,6 +101,5 @@ export default Service.extend({
 			approvals: await subcase.get('approvals')
 		});
 		return agendaitem.save();
-	},
-
+	}
 });

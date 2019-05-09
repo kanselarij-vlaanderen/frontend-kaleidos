@@ -24,7 +24,7 @@
               class="vl-button vl-button--link vl-button--narrow"
               {{action "close"}}
             >
-              {{t "buttons.cancel"}}
+              {{t "cancel"}}
             </button>
           </div>
         </div>
@@ -38,7 +38,7 @@
                 class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
               {{t "message"}}
-              {{t "buttons.add"}}
+              {{t "add"}}
             </button>
             {{#if selectedAlert}}
               <button
@@ -49,7 +49,7 @@
                   class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "message"}}
-                {{t "buttons.edit"}}
+                {{t "edit"}}
               </button>
               <button
                 class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
@@ -59,7 +59,7 @@
                   class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
                 ></i>
                 {{t "message"}}
-                {{t "buttons.delete"}}
+                {{t "delete"}}
               </button>
             {{/if}}
           </div>
@@ -73,17 +73,17 @@
         class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
       >
         <div class="vlc-input-field-block vl-col--2-4">
-          {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}
+          {{web-components/vl-form-label value=(t "start-date")}}
           {{web-components/vl-datepicker dateChanged=(action "selectBeginDate")
           }}
         </div>
         <div class="vlc-input-field-block vl-col--2-4">
-          {{web-components/vl-form-label value=(t "mandatee-form.end-date")}}
+          {{web-components/vl-form-label value=(t "end-date")}}
           {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
         </div>
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "announcement.title")}}
+        {{web-components/vl-form-label value=(t "title")}}
         {{web-components/vl-form-input width="4" value=title}}
       </div>
       <div class="vlc-input-field-block">
@@ -103,30 +103,12 @@
         }}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "toggleIsAdding"}}
-            >
-              {{t "buttons.cancel"}}
-            </button>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "createAlert"}}
-              >
-                {{t "buttons.add"}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add")
+      cancelAction=(action "toggleIsAdding")
+      saveAction=(action "createAlert")
+    }}
   {{/if}}
   {{#if isEditing}}
     <div class="vl-modal-dialog__content">
@@ -134,14 +116,14 @@
         class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
       >
         <div class="vlc-input-field-block vl-col--2-4">
-          {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}
+          {{web-components/vl-form-label value=(t "start-date")}}
           {{web-components/vl-datepicker
             date=selectedAlert.beginDate
             dateChanged=(action "selectBeginDate")
           }}
         </div>
         <div class="vlc-input-field-block vl-col--2-4">
-          {{web-components/vl-form-label value=(t "mandatee-form.end-date")}}
+          {{web-components/vl-form-label value=(t "end-date")}}
           {{web-components/vl-datepicker
             date=selectedAlert.endDate
             dateChanged=(action "selectEndDate")
@@ -149,7 +131,7 @@
         </div>
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "announcement.title")}}
+        {{web-components/vl-form-label value=(t "title")}}
         {{web-components/vl-form-input width="4" value=selectedAlert.title}}
       </div>
       <div class="vlc-input-field-block">
@@ -169,29 +151,11 @@
         }}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "toggleIsEditing"}}
-            >
-              {{t "buttons.cancel"}}
-            </button>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "editAlert"}}
-              >
-                {{t "buttons.save"}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "save")
+      cancelAction=(action "toggleIsEditing")
+      saveAction=(action "editAlert")
+    }}
   {{/if}}
 {{/web-components/vl-modal}}

@@ -5,7 +5,7 @@
         <h2 class="vl-title vl-title--h4">
           <i class="vl-icon vl-vi vl-vi-timeline"></i>
           <span>
-            {{t "agendas.nav-title"}}
+            {{t "nav-title"}}
           </span>
         </h2>
       </div>
@@ -16,7 +16,7 @@
         >
           <i class="vl-vi vl-vi-arrow-left-fat"></i>
           <span class="vl-u-visually-hidden">
-            Toggle
+            {{t "toggle"}}
           </span>
         </button>
         <button
@@ -25,7 +25,7 @@
         >
           <i class="vl-vi vl-vi-arrow-right-fat"></i>
           <span class="vl-u-visually-hidden">
-            Toggle
+            {{t "toggle"}}
           </span>
         </button>
       </div>
@@ -45,17 +45,17 @@
             </span>
           </div>
           <div class="vlc-side-nav-item__meta">
-            {{moment-format agenda.created "dddd DD/MM/YYYY"}}
+            {{moment-format agenda.modified "dddd DD/MM/YYYY"}}
           </div>
           <div class="vlc-side-nav-item__meta--small">
             <h3 class="vl-title vl-title--h6">
               {{#if (not-eq agenda.name "Ontwerpagenda")}}
                 {{agenda.name}}
               {{else}}
-                On..
+                *
               {{/if}}
             </h3>
-            {{moment-format agenda.created "DD/MM"}}
+            {{moment-format agenda.modified "DD/MM"}}
           </div>
         </a>
       </li>

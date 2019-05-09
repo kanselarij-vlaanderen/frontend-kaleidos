@@ -66,7 +66,7 @@
       </div>
       <div class="data-table-container">
         <h2 class="vl-title vl-title--h3">
-          {{t "subcases.title-postponed-subcases"}}
+          {{t "title-postponed-subcases"}}
         </h2>
         {{subcases/postponed-subcases
           subcases=(await postPonedSubcases)
@@ -74,29 +74,11 @@
         }}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "close"}}
-            >
-              {{t "buttons.cancel"}}
-            </button>
-          </div>
-        </div>
-        <div class="vlc-toolbar__right">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "addSubcasesToAgenda"}}
-            >
-              {{t "buttons.add-to-agenda"}}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add-to-agenda")
+      cancelAction=(action "close")
+      saveAction=(action "addSubcasesToAgenda")
+    }}
   {{/if}}
 {{/web-components/vl-modal}}

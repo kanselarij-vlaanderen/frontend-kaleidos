@@ -40,25 +40,3 @@
     color: $napier-green;
   }
 }
-
-
-// Attachments - documents
-.vl-attachments {
-  flex-wrap: wrap;
-  font-weight: 500;
-  .vl-attachment {
-    .vl-badge {
-      margin-right: $spacing-xxsmall;
-    }
-    margin-bottom: $spacing-small;
-    margin-right: $spacing-small;
-  }
-}
-
-.vl-document-badge {
-  background-color: $porcelain;
-  font-weight: 500;
-  i {
-    color: $blue-gray-dark;
-  }
-}

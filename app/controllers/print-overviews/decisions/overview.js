@@ -19,7 +19,10 @@ export default Controller.extend({
 			this.transitionToRoute('agenda.agendaitems', currentSessionId, { queryParams: { selectedAgenda: selectedAgendaid } })
 		},
 		print() {
-			window.print();
+				var tempTitle = window.document.title;
+				window.document.title = `${this.get('intl').t('decisions-pdf-name')}${moment(this.get('currentSession.plannenStart')).format('YYYYMMDD')}`;
+				window.print();
+				window.document.title = tempTitle;
 		}
 	}
 });

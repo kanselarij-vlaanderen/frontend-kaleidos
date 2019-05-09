@@ -1,8 +1,13 @@
 @import "ember-power-select";
-// @import "ember-modal-dialog/ember-modal-structure";
-// @import "ember-modal-dialog/ember-modal-appearance";
-@import "_colors";
 @import "ember-vo-webuniversum-data-table";
+/* ==========================================================================
+   CSS file for Digikan
+   ========================================================================== */
+
+/* Official code
+   ========================================================================== */
+
+@import "_colors";
 
 $icon-font-location: "/fonts/";
 
@@ -60,7 +65,7 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_accordion";
 @import "govflanders/components/_action-group";
 @import "govflanders/components/_alert";
-// @import "govflanders/components/_autocomplete";
+@import "govflanders/components/_autocomplete";
 @import "govflanders/components/_badge";
 @import "govflanders/components/_button";
 @import "govflanders/components/_checkbox";
@@ -100,19 +105,20 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_js-select";
 
 /* Unofficial code
-   ========================================================================== */
+      ========================================================================== */
 
 // Additions to existing components
 @import "govflanders/additions/_accordion";
 @import "govflanders/additions/_badge";
 @import "govflanders/additions/_button";
+@import "govflanders/additions/_checkbox";
 @import "govflanders/additions/_data-table";
 @import "govflanders/additions/_icon-list";
 @import "govflanders/additions/_info-tile";
 @import "govflanders/additions/_link-list";
 @import "govflanders/additions/_modal";
 @import "govflanders/additions/_pill-input";
-@import "govflanders/additions/_pill";
+@import "govflanders/additions/_popover";
 @import "govflanders/additions/_tabs";
 
 // Additions to existing utilities
@@ -162,11 +168,12 @@ $icon-font-location: "/fonts/";
 @import "custom-utilities/_scroll";
 @import "custom-utilities/_box-model";
 
-//print css
-@import "print/agendaitem-print";
+// Print
+@import "print/print";
 
 //custom css added
 @import "custom-application/toast";
+@import "custom-application/compare";
 
 a.vlc-agenda-items-new__sub-item {
   display: block;
@@ -191,12 +198,6 @@ a.vlc-agenda-items-new__sub-item--active:focus {
   background: darken($science-blue, 5%);
 }
 
-.document {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
 .vlc-scroll-wrapper {
   height: 100% !important;
 }
@@ -207,114 +208,10 @@ a.vlc-agenda-items-new__sub-item--active:focus {
   align-items: center;
 }
 
-.comparison-container {
-  width: calc(100% - 150px);
-  float: left;
-
-  .compare-title {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-
-    h2 {
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-  }
-
-  .compare-agenda-list-container {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-    .compare-item-container {
-      width: 100%;
-      height: 200px;
-
-      .previous-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-        }
-      }
-
-      .current-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-        }
-      }
-    }
-  }
-}
-
-.comparison-container {
-  width: calc(100% - 150px);
-  float: left;
-
-  .compare-title {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-
-    h2 {
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-  }
-
-  .compare-agenda-list-container {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-    .compare-item-container {
-      width: 100%;
-      height: 200px;
-
-      .previous-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-        }
-      }
-
-      .current-agenda-item {
-        width: 50%;
-        float: left;
-
-        .agenda-item-link {
-          height: 200px;
-        }
-      }
-    }
-  }
-}
-
-.vl-file-overview {
-  cursor: pointer;
-}
-
 .align-right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
-
-.attachements {
-  display: flex;
-  flex: wrap;
-}
-
-.remove-file {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .vl-upload__element__label {
@@ -547,10 +444,7 @@ a.vlc-agenda-items-new__sub-item--active:focus {
 }
 
 .mandatee-selector-container,
-.domains-selector-container {
-  width: 100%;
-}
-
+.domains-selector-container,
 .people-selector-container {
   width: 100%;
 }
@@ -591,16 +485,10 @@ a.vlc-agenda-items-new__sub-item--active:focus {
   }
 }
 
-a.vlc-agenda-items__header {
-  padding: 3rem 1.5rem 1.5rem;
-}
-
-.vlc-panel-layout__main-content {
-  min-width: 50%;
-}
-
-.vlc-hr-small {
-  margin: 1rem 0;
+.vlc-document-list {
+  a {
+    padding: 0;
+  }
 }
 
 .vl-modal-dialog--large {
@@ -632,102 +520,17 @@ body > .ember-view {
   }
 }
 
-.line {
-  border-bottom: dashed 4px gold;
-  margin-bottom: 2em;
-  position: relative;
-}
-
-span.label {
-  position: absolute;
-  top: 0;
-  left: 410px;
-  margin-top: -1.7em;
-  background: #f2f5f6;
-  padding: 1em;
-  font-weight: bold;
-}
-
 .vlc-padding-bottom--large {
   padding-bottom: 6rem;
 }
 
-.horizontal-line-wrap {
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .horizontal-line {
-    border-right: 1px solid $border-color;
-    height: 100%;
-    justify-self: stretch;
-    align-self: stretch;
-    background-color: #000;
-    padding-top: 25px;
-  }
-}
-
-.not-clickable:active {
-
-  background: #fff !important;
-  cursor: default  !important;
-
-  *:not(.vlc-agenda-item__meta) {
-    color: unset !important;
-    cursor: default;
-  }
-
-  .vlc-agenda-item__meta {
-    color: $silver-chalice;
-  }
-
-  .active {
-    color: unset;
-  }
-
-}
-
-.not-clickable:hover {
-
-  background: #fff !important;
-  cursor: default  !important;
-
-  * {
-    cursor: default;
-  }
-
-}
-
-.compare-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.compare-left-column {
-  width: calc(49% - 15px);
-}
-
-.compare-right-column {
-  width: 49%;
-}
-
-// fix for spacer
-.vlc-panel-layout__main-content {
-  flex: 3 1;
-}
-
-.x-toggle-component {
-  justify-content: right;
-}
-
 .transparant {
-  opacity: 0.5 !important;
+  opacity: 0.3 !important;
 }
 
 .settings-container {
-  display:flex;
-  flex-wrap:wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 p {

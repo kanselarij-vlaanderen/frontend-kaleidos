@@ -3,12 +3,12 @@
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-display-flex-align-center">
       <h4 class="vl-title vl-title--h4">
-        {{t "edit-item.themes"}}
+        {{t "themes"}}
       </h4>
-      {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
       <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "buttons.edit"}}
+          {{t "edit"}}
         </a>
       </div>
       {{/if}}
@@ -33,7 +33,7 @@
   <div class="vl-form__group vl-u-bg-porcelain">
     <div class="vl-u-spacer">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "edit-item.themes")}}
+        {{web-components/vl-form-label value=(t "themes")}}
         {{utils/model-selector
           modelName="theme"
           searchField="label"
@@ -47,10 +47,10 @@
     </div>
     <div class="vl-action-group vl-action-group--align-right">
       <a class="vl-link" {{action "cancelEditing"}}>
-        {{t "buttons.cancel"}}
+        {{t "cancel"}}
       </a>
       <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-        {{t "buttons.save"}}
+        {{t "save"}}
       </button>
     </div>
   </div>

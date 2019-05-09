@@ -20,10 +20,10 @@
                 item=item
               }}
               <p class="vl-info-tile__header__subtitle">
-                Laatst geupload op
+                {{t "uploaded-at"}}
                 {{moment-format (await lastDocumentVersion.created) "DD.MM.YYYY"
                 }}
-                om
+                {{t "at"}}
                 {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
               </p>
             </div>
@@ -37,7 +37,7 @@
                   </span>
                 </div>
               </div>
-              {{#if isAdmin}}
+              {{#if (or isAdmin isEditor)}}
                 <div class="vl-u-spacer-extended-right-s vl-u-text--muted">
                   <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
                 </div>
@@ -58,7 +58,7 @@
                         {{action attacher.hide}}
                         {{action "openUploadDialog" document}}
                       >
-                        {{t "file-uploader.new-version"}}
+                        {{t "new-version"}}
                       </a>
                     </li>
                   </ul>
@@ -90,34 +90,9 @@
                         (await filteredDocumentVersions) as |documentVersion|
                       }}
                         <li class="vl-link-list__item">
-                          <div class="vl-u-spacer">
-                            <div
-                              class="vl-u-display-flex vl-u-flex-align-center"
-                            >
-                              <p>
-                                {{documentVersion.versionNumber}}
-                                .
-                                {{documentVersion.nameToDisplay}}
-                              </p>
-                              <button
-                                class="vl-button vl-button--link vl-button--icon"
-                                {{action "downloadFile" documentVersion}}
-                              >
-                                <i
-                                  class="vl-button__icon vl-vi vl-vi-move-down"
-                                ></i>
-                              </button>
-                            </div>
-                            <p class="vl-u-text--small vl-u-text--muted">
-                              Geupload op
-                              {{moment-format
-                                documentVersion.created
-                                "DD.MM.YYYY"
-                              }}
-                              om
-                              {{moment-format documentVersion.created "HH:mm"}}
-                            </p>
-                          </div>
+                          {{web-components/vl-document
+                            documentVersion=documentVersion
+                          }}
                         </li>
                       {{/each}}
                     </ul>
@@ -160,29 +135,11 @@
         {{/if}}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "openUploadDialog"}}
-            >
-              {{t "buttons.cancel"}}
-            </button>
-          </div>
-        </div>
-        <div class="vlc-toolbar__right">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "uploadNewVersion"}}
-            >
-              {{t "file-uploader.uploading"}}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "uploading")
+      cancelAction=(action "openUploadDialog")
+      saveAction=(action "uploadNewVersion")
+    }}
   {{/web-components/vl-modal}}
 {{/if}}

@@ -7,6 +7,10 @@ export default Component.extend(isAuthenticatedMixin, {
 	actions: {
 		toggleAddingCase() {
 			this.toggleProperty('isAddingCase');
+		}, 
+		close(caze) {
+			this.toggleProperty('isAddingCase');
+			this.close(caze);
 		}
 	}
 });

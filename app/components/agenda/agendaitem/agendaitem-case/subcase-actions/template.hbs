@@ -3,10 +3,10 @@
     <h4 class="vl-title vl-title--h4">
       {{t "actions"}}
     </h4>
-    {{#if isAdmin}}
+  {{#if (or isAdmin isEditor)}}
     <div class="vl-u-spacer-extended-left-s">
       <a class="vl-link" {{action "toggleIsEditing"}}>
-        {{t "buttons.edit"}}
+        {{t "edit"}}
       </a>
     </div>
     {{/if}}
@@ -17,7 +17,7 @@
     {{t "mandatee-approval"}}
   </h4>
 </div>
-{{#if (await item.approvals)}}
+{{#if item.approvals}}
   <div class="vl-u-spacer">
     <table class="vl-data-table vl-data-table--align-middle">
       <thead>
@@ -34,7 +34,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each (await item.approvals) as |approval|}}
+        {{#each item.approvals as |approval|}}
           <tr>
             <td class="vl-u-text--bold">
               {{await approval.mandatee.person.alternativeName}}
@@ -52,7 +52,7 @@
                       class="vl-icon vl-icon--before vl-vi vl-vi-check-small"
                     ></i>
                     <span class="vl-annotation">
-                      Akkoord
+                      {{t "approval-mandatee"}}
                     </span>
                   </div>
                 {{else}}
@@ -63,7 +63,7 @@
                       class="vl-icon vl-icon--before vl-vi vl-vi-check-small"
                     ></i>
                     <span class="vl-annotation">
-                      Nog niet akkoord
+                      {{t "not-yet-approval-mandatee"}}
                     </span>
                   </div>
                 {{/if}}
@@ -78,7 +78,7 @@
                     <div class="vl-checkbox__label">
                       <i class="vl-checkbox__box"></i>
                       <span class="vl-annotation">
-                        {{t "approve"}}
+                        {{t "approval-mandatee"}}
                       </span>
                     </div>
                   </label>
@@ -94,10 +94,10 @@
 {{#if isEditing}}
   <div class="vl-action-group vl-action-group--align-right">
     <a class="vl-link" {{action "cancelEditing"}}>
-      {{t "buttons.cancel"}}
+      {{t "cancel"}}
     </a>
     <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-      {{t "buttons.save"}}
+      {{t "save"}}
     </button>
   </div>
 {{/if}}

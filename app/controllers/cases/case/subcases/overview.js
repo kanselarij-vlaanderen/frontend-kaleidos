@@ -1,9 +1,8 @@
 import Controller from '@ember/controller';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-import $ from 'jquery';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
-export default Controller.extend(FileSaverMixin, isAuthenticatedMixin, {
+export default Controller.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	isAddingSubcase:false,
 	isShowingOptions: false,
 	
@@ -11,21 +10,12 @@ export default Controller.extend(FileSaverMixin, isAuthenticatedMixin, {
 		toggleIsAddingSubcase() {
 			this.toggleProperty('isAddingSubcase');
 		},
+
 		close() {
 			this.toggleProperty('isAddingSubcase');
 			this.send('refresh');
 		},
 
-		async downloadFile(documentVersion) {
-			const version = await documentVersion;
-			const file = await version.get('file');
-				$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
-					method: 'GET',
-					dataType: 'arraybuffer', // or 'blob'
-					processData: false
-				})
-				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
-		},
     showMultipleOptions() {
       this.toggleProperty('isShowingOptions');
     },

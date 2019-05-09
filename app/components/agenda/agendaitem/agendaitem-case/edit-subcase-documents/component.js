@@ -1,10 +1,7 @@
 import Component from '@ember/component';
-import $ from 'jquery';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-import { inject } from '@ember/service';
+import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
-export default Component.extend(FileSaverMixin, {
-	store: inject(),
+export default Component.extend(UploadDocumentMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
 
 	actions: {
@@ -36,27 +33,5 @@ export default Component.extend(FileSaverMixin, {
 		cancelEditing() {
 			this.cancelForm();
 		},
-
-		downloadFile(documentVersion) {
-			if (!documentVersion) {
-				return;
-			}
-			return documentVersion.get('file').then((file) => {
-				return $.ajax(`/files/${file.id}/download?name=${file.filename}`, {
-					method: 'GET',
-					dataType: 'arraybuffer', // or 'blob'
-					processData: false
-				})
-					.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
-			});
-
-		},
-	},
-
-	removeFile(file) {
-		$.ajax({
-			method: "DELETE",
-			url: '/files/' + file.id
-		})
-	},
+	}
 });

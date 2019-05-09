@@ -9,7 +9,7 @@ export default Service.extend({
 
   logout() {
     // TODO implement logout
-    
+    localStorage.clear(); //not working
   },
 
   async load() {
@@ -42,7 +42,8 @@ export default Service.extend({
       } else {
         this.set('userRole', "no-access");
       }
-
+      
+      this.set('isEditor', this.canAccess('kanselarij'))
       this.set('isAdmin', this.canAccess('admin'));
     }
   },

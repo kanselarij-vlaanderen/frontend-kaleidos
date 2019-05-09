@@ -17,9 +17,9 @@
         {{t "agendaitem-title"}}
       </h4>
       <div class="vl-u-spacer-extended-left-s">
-        {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
           <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "buttons.edit"}}
+            {{t "edit"}}
           </a>
         {{/if}}
       </div>
@@ -37,7 +37,7 @@
     {{await item.title}}
   </p>
 </div>
-{{#if (and isAdmin (not item.showAsRemark))}}
+{{#if (and (or isEditor isAdmin) (not item.showAsRemark))}}
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-space-between">
       {{#if (await item.confidentiality)}}
@@ -49,11 +49,11 @@
       {{/if}}
       {{#if (await item.formallyOk)}}
         <span class="vlc-pill vlc-pill--success">
-          {{t "agendaitem-details.formal-ok"}}
+          {{t "formal-ok"}}
         </span>
       {{else}}
         <span class="vlc-pill vlc-pill--warning">
-          {{t "agendaitem-details.formal-nok"}}
+          {{t "formal-nok"}}
         </span>
       {{/if}}
     </div>

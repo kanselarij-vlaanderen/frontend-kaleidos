@@ -25,7 +25,7 @@
               class="vl-button vl-button--link vl-button--narrow"
               {{action "closeModal"}}
             >
-              {{t "buttons.cancel"}}
+              {{t "cancel"}}
             </button>
           </div>
           <div class="vlc-toolbar__right">
@@ -38,7 +38,7 @@
                   <i
                     class="vl-button__icon vl-button__icon--before vl-vi vl-vi-cog"
                   ></i>
-                  {{t "buttons.resign"}}
+                  {{t "resign"}}
                 </button>
                 <button
                   class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
@@ -71,7 +71,7 @@
 {{#if isResigning}}
   <div class="vl-modal-dialog__content">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "mandatee-form.end-date")}}
+      {{web-components/vl-form-label value=(t "end-date")}}
       {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
     </div>
     <div class="vlc-input-field-block">
@@ -86,32 +86,14 @@
       }}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "mandatee-form.start-date")}}
+      {{web-components/vl-form-label value=(t "start-date")}}
       {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
     </div>
   </div>
-  <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-    <div class="vlc-toolbar">
-      <div class="vlc-toolbar__left">
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--link vl-button--narrow"
-            {{action "toggleIsResigning"}}
-          >
-            {{t "buttons.cancel"}}
-          </button>
-        </div>
-      </div>
-      <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--tertiary"
-            {{action "saveResignation"}}
-          >
-            {{t "save-resignation"}}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "save-resignation")
+      cancelAction=(action "toggleIsResigning")
+      saveAction=(action "saveResignation")
+    }}
 {{/if}}

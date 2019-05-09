@@ -66,6 +66,9 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.changeLoading();
 			let agendas = await this.get('agendas');
 			let agendaToLock = await agendas.find(agenda => agenda.name == "Ontwerpagenda");
+			if(agendaToLock) {
+				agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
+			}
 			let definiteAgendas = await this.get('definiteAgendas');
 			let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
@@ -74,8 +77,9 @@ export default Component.extend(isAuthenticatedMixin, {
 			} else {
 				if (definiteAgendas) {
 					const agendaLength = definiteAgendas.length;
+
 					if (agendaLength && alphabet[agendaLength]) {
-						if (agendaLength < alphabet.length - 1) {
+						if (agendaLength < (alphabet.get('length') - 1)) {
 							agendaToLock.set('name', alphabet[agendaLength]);
 						}
 					} else {
@@ -87,8 +91,9 @@ export default Component.extend(isAuthenticatedMixin, {
 			}
 
 			agendaToLock.set('isAccepted', true);
-			agendaToLock.save().then(() => {
-				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToLock).then(newAgenda => {
+			agendaToLock.set('modified', new Date());
+			agendaToLock.save().then((agendaToApprove) => {
+				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToApprove).then(newAgenda => {
 					this.changeLoading();
 					this.set('sessionService.currentAgenda', newAgenda);
 					this.set('sessionService.selectedAgendaItem', null);
@@ -104,7 +109,10 @@ export default Component.extend(isAuthenticatedMixin, {
 
 			if (draft){
         await draft.destroyRecord();
-        await this.sessionService.lockMeeting(lastAgenda.get('id'));
+				await this.sessionService.lockMeeting(lastAgenda.get('id'));
+				const session = await lastAgenda.get('createdFor');
+				session.set('isFinal', true);
+				await session.save();
         this.set('sessionService.currentAgenda', lastAgenda);
         this.reloadRoute();
       }

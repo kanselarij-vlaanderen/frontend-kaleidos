@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
-import {hash} from 'rsvp';
+import { hash } from 'rsvp';
 
 const phasesCodes = [
   {
-    label : "principële goedkeuring"
+    label: "principële goedkeuring"
   }
 ];
 
@@ -20,71 +20,33 @@ export default Route.extend({
       sort: 'created'
     });
 
-    let frequencies = {};
-
-    if (!subcases){
+    if (!subcases) {
       return hash({
         subcases: [],
         case: caze
       });
     }
-
-    for (let i = 0; i < subcases.length; i++){
+    let counter = 0;
+    for (let i = 0; i < subcases.length; i++) {
 
       const subcase = await subcases.objectAt(i);
+
       let subcasePhaseLabel = 'In functie van ';
 
-      if (subcase){
-
-        const phases = await subcase.get('phases');
-
-        if (phases){
-
-          const phase = await phases.objectAt(0);
-
-          if (phase){
-            let code = (await phase.get('code'));
-            if (code){
-              code = code.toJSON();
-              let foundCode = await phasesCodes.filter(item => item.label === code.label );
-
-              if (foundCode.length === 1) {
-
-                foundCode = foundCode[0];
-                const label = foundCode.label;
-
-                if (frequencies[label]) {
-                  frequencies[label] = frequencies[label] + 1;
-                  subcasePhaseLabel += `${frequencies[label]}de ${label}`
-                } else {
-                  frequencies[label] = 1;
-                  subcasePhaseLabel += `${frequencies[label]}ste ${label}`
-                }
-
-              }else {
-                subcasePhaseLabel += `${code.label}`
-              }
-
-              let codes = [];
-              for (let x = 0; x < phases.length; x++){
-                const current_phase = await phases.objectAt(x);
-                let code = (await current_phase.get('code'));
-                if(code) {
-                  code = code.toJSON()
-                  codes.push(code.label);
-                }
-              }
-
-              subcase.set('phaseLabel', subcasePhaseLabel);
-              subcase.set('codes', codes);
-            }
-
+      const subcaseTypeLabel = await subcase.get('type');
+      if(subcaseTypeLabel){
+        if (subcaseTypeLabel.get('label') === phasesCodes[0].label) {
+          if (counter === 0) {
+            counter++;
+            subcase.set('phaseLabel', `${subcasePhaseLabel} ${counter}ste ${subcaseTypeLabel.label}`)
+          } else if (counter > 0) {
+            counter++;
+            subcase.set('phaseLabel', `${subcasePhaseLabel} ${counter}de ${subcaseTypeLabel.label}`)
           }
-
+        } else {
+          subcase.set('phaseLabel', `${subcasePhaseLabel} ${subcaseTypeLabel.label}`)
         }
-
       }
-
     }
 
     return hash({
@@ -94,9 +56,9 @@ export default Route.extend({
   },
 
   actions: {
-		refresh() {
-			this.refresh();
-		}
-	}
+    refresh() {
+      this.refresh();
+    }
+  }
 
 });

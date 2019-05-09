@@ -3,14 +3,14 @@
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <h1 class="vlc-page-header__title">
-          {{t "navigation.cases"}}
+          {{t "cases"}}
         </h1>
       </div>
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          {{#if isAdmin}}
+          {{#if (or isAdmin isEditor)}}
           <button
             class="vl-button vl-button--narrow vl-button--icon-before"
             {{action "toggleAddingCase"}}
@@ -19,7 +19,7 @@
               class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               aria-hidden="true"
             ></i>
-            {{t "buttons.add-case"}}
+            {{t "add-case"}}
           </button>
           {{/if}}
         </div>
@@ -30,8 +30,8 @@
   {{#web-components/vl-modal
     isOverlay=true
     closeModal=(action "toggleAddingCase")
-    title=(t "cases.new-case")
+    title=(t "new-case")
   }}
-    {{cases/new-case close=(action "toggleAddingCase")}}
+    {{cases/new-case close=(action "close")}}
   {{/web-components/vl-modal}}
 {{/if}}

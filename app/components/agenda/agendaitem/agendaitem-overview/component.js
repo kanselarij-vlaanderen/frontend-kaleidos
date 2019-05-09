@@ -17,6 +17,12 @@ export default Component.extend(isAuthenticatedMixin, {
 	activeAgendaItemSection: 'details',
 	showOptions: false,
 
+	subcase: computed('agendaitem.subcase', function () {
+		return this.get('agendaitem.subcase').then((subcase) => {
+			return subcase;
+		})
+	}),
+
 	isPostPonable: computed('sessionService.agendas.@each', function () {
 		return this.get('sessionService.agendas').then(agendas => {
 			if (agendas && agendas.length > 1) {
@@ -39,10 +45,6 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		showOptions() {
 			this.toggleProperty('showOptions');
-		},
-
-		refreshRoute() {
-			this.refreshRoute();
 		},
 
 		async togglePostponed(agendaitem) {
@@ -71,13 +73,13 @@ export default Component.extend(isAuthenticatedMixin, {
 					agendaitem.set('postponed', postponedTo);
 				})
 			} else {
-        const postPonedObject = this.store.createRecord('postponed', {
-          meeting: null,
-          agendaitem: agendaitem
-        });
-        postPonedObject.save().then(postponedTo => {
-          agendaitem.set('postponed', postponedTo);
-        });
+				const postPonedObject = this.store.createRecord('postponed', {
+					meeting: null,
+					agendaitem: agendaitem
+				});
+				postPonedObject.save().then(postponedTo => {
+					agendaitem.set('postponed', postponedTo);
+				});
 				agendaitem.set('retracted', !agendaitem.retracted);
 			}
 			agendaitem.save().then(() => {
@@ -90,23 +92,40 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.set('postponeTargetSession', session);
 		},
 
-		deleteItem(agendaitem) {
-			agendaitem.destroyRecord().then(() => {
-				this.refreshRoute();
+		async deleteItem(agendaitem) {
+			const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'));
+			const subcase = await this.get('subcase');
+			if (subcase) {
+				const phases = await subcase.get('phases');
+				await Promise.all(phases.filter(async phase => {
+					const code = await phase.get('code');
+					if (!code || code.get('label') == "Ingediend voor agendering") {
+						await phase.destroyRecord();
+					} else {
+						return phase;
+					}
+				}))
+				subcase.set('requestedForMeeting', null);
+				subcase.save();
+			}
+
+			itemToDelete.destroyRecord().then(() => {
+				this.set('sessionService.selectedAgendaItem', null);
+				this.refreshRoute(agendaitem.id);
 			});
 		},
 
-    async advanceAgendaitem(agendaitem) {
-      if(agendaitem && agendaitem.retracted) {
-        agendaitem.set('retracted', false);
-      }
-      const postponedTo = await agendaitem.get('postponedTo');
-      if(agendaitem && postponedTo) {
-        await postponedTo.destroyRecord();
-        await agendaitem.set('postponedTo', undefined);
-      }
-      agendaitem.save();
-    },
+		async advanceAgendaitem(agendaitem) {
+			if (agendaitem && agendaitem.retracted) {
+				agendaitem.set('retracted', false);
+			}
+			const postponedTo = await agendaitem.get('postponedTo');
+			if (agendaitem && postponedTo) {
+				await postponedTo.destroyRecord();
+				await agendaitem.set('postponedTo', undefined);
+			}
+			agendaitem.save();
+		},
 
 		toggleShowMore(agendaitem) {
 			if (agendaitem.showDetails) {

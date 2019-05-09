@@ -42,12 +42,7 @@ export default Component.extend({
 		},
 
 		removeModel() {
-			const modelToDelete = this.get('selectedModel');
-			if (!modelToDelete) {
-				return;
-			}
-			modelToDelete.destroyRecord();
-			this.set('selectedModel', null);
+			alert('This action is not allowed. Please contact the system administrator.');
 		},
 
 		editModel() {

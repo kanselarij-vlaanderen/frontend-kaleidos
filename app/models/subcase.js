@@ -1,29 +1,43 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
-const { attr, Model, hasMany, belongsTo } = DS;
+const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
+  store: inject(),
   created: attr('date'),
   shortTitle: attr('string'),
   title: attr('string'),
   showAsRemark: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
+  confidential: attr('boolean'),
   concluded: attr('boolean'),
   case: belongsTo('case'),
   // relatedTo: hasMany('subcase', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
-  phases: hasMany('subcase-phase', { inverse:null }),
+  phases: hasMany('subcase-phase', { inverse: null }),
   consulationRequests: hasMany('consulation-request', { inverse: null }),
   governmentDomains: hasMany('government-domain', { inverse: null }),
   agendaitems: hasMany('agendaitem', { inverse: null }),
   remarks: hasMany('remark'),
-  documentVersions: hasMany('document-version'),
+  documentVersions: hasMany('document-version', { inverse: null }),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   confidentiality: belongsTo('confidentiality'),
+  decision: belongsTo('decision'),
+  type: belongsTo('subcase-type'),
+  subcaseName: attr('string'),
+
+  firstPhase: computed('phases', function () {
+    return PromiseObject.create({
+      promise: this.store.query('subcase-phase', { filter: { subcase: { id: this.get('id') } }, sort: 'date', include: 'code' }).then((subcasePhases) => {
+        return subcasePhases.get('firstObject');
+      })
+    });
+  }),
 
   async documentNumberOfVersion(version) {
     const documents = await this.get('documents');
@@ -31,24 +45,28 @@ export default Model.extend({
     const targetDocument = await version.get('document');
     let foundIndex;
     sortedDocuments.map((document, index) => {
-      if(document == targetDocument) {
-        foundIndex=index;
+      if (document == targetDocument) {
+        foundIndex = index;
       }
     })
     return foundIndex;
   },
 
-  documents: computed('documentVersions.@each', async function () {
-    const documentVersions = await this.get('documentVersions');
-    const documents = await Promise.all(documentVersions.map(documentVersion => {
-      return documentVersion.get('document');
-    }));
-    return documents.uniqBy('id');
+  documents: computed('documentVersions.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('documentVersions').then((documentVersions) => {
+        return Promise.all(documentVersions.map(documentVersion => {
+          return documentVersion.get('document');
+        })).then((documents) => { return documents.uniqBy('id') })
+      })
+    });
   }),
 
-  documentsLength: computed('documents', function () {
-    return this.get('documents').then((documents) => {
-      return documents.get('length');
+  documentsLength: computed('documents.@each', function () {
+    return PromiseObject.create({
+      promise: this.get('documents').then((documents) => {
+        return documents.get('length');
+      })
     });
   }),
 
@@ -60,25 +78,27 @@ export default Model.extend({
     return this.get('themes').sortBy('label');
   }),
 
-  hasAgendaItem: computed('agendaitems', function () {
+  hasAgendaItem: computed('agendaitems.@each', function () {
     const { id, store } = this;
-    return store.query('agendaitem', {
-      filter: { subcase: { id: id } },
-      sort: 'created'
-    }).then((agendaitems) => {
-      const lastAgendaItem = agendaitems.get('firstObject');
-      if (lastAgendaItem) {
-        return lastAgendaItem.get('postponedTo').then((postPoned) => {
-          const retracted = lastAgendaItem.get('retracted');
-          if (!postPoned && !retracted) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-      } else {
-        return false;
-      }
+    return PromiseObject.create({
+      promise: store.query('agendaitem', {
+        filter: { subcase: { id: id } },
+        sort: 'created'
+      }).then((agendaitems) => {
+        const lastAgendaItem = agendaitems.get('firstObject');
+        if (lastAgendaItem) {
+          return lastAgendaItem.get('postponedTo').then((postPoned) => {
+            const retracted = lastAgendaItem.get('retracted');
+            if (!postPoned && !retracted) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+        } else {
+          return false;
+        }
+      })
     })
   }),
 
@@ -90,5 +110,4 @@ export default Model.extend({
       }
     })
   })
-
 });

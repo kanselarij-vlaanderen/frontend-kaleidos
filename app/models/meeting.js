@@ -11,21 +11,21 @@ export default Model.extend({
 	endedOn: attr('date'),
 	location: attr('string'),
 	number: attr('number'),
-	agendas: hasMany('agenda', {inverse:null}),
+	agendas: hasMany('agenda', { inverse: null }),
 	requestedSubcases: hasMany('subcase'),
 	postponeds: hasMany('postponed'),
 	notes: belongsTo('meeting-record'),
 	newsletter: belongsTo('newsletter-info'),
 	isFinal: attr("boolean"),
-	
-	latestAgendaName: computed('agendas.@each', function() {
+
+	latestAgendaName: computed('agendas.@each', function () {
 		return this.get('agendas').then((agendas) => {
 			const agendaNamePosition = agendas.length - 1;
-			if(agendaNamePosition >= 0) {
-				if(alphabet[agendaNamePosition]) {
+			if (agendaNamePosition >= 0) {
+				if (alphabet[agendaNamePosition]) {
 					return "Ontwerpagenda " + alphabet[agendaNamePosition];
 				} else {
-					return "Ontwerpagenda " + agendaNamePosition
+					return "Ontwerpagenda " + agendaNamePosition;
 				}
 			} else {
 				return "Geen versie beschikbaar";
@@ -33,9 +33,12 @@ export default Model.extend({
 		})
 	}),
 
-	latestAgenda: computed('agendas.@each', function() {
-		return this.get('agendas').then((agendas) => {
-			return agendas.get('firstObject');
+	latestAgenda: computed('agendas.@each', function () {
+		return DS.PromiseObject.create({
+			promise: this.get('agendas').then((agendas) => {
+				const sortedAgendas = agendas.sortBy('agendaName').reverse();
+				return sortedAgendas.get('firstObject');
+			})
 		})
 	})
 });

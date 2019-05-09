@@ -1,86 +1,47 @@
-  <div class="vlc-container">
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h6">
-        {{t "attendees"}}
-      </h3>
-      {{#each currentSession.notes.attendees as |attendee|}}
-        <div class="vl-u-spacer">
-          <p>
-            {{attendee.title}}
-          </p>
-          <p>
-            {{await attendee.person.alternativeName}}
-          </p>
-        </div>
-      {{/each}}
-    </div>
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h6">
-        {{t "date"}}
-      </h3>
-      <p>
-        {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
-      </p>
-    </div>
-    <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h6">
-        {{t "notes-of-session"}}
-      </h3>
-      <p>
-        {{await currentSession.notes.description}}
-      </p>
-    </div>
-    {{!-- <div class="vl-u-spacer">
-      <h3 class="vl-title vl-title--h6">
-        {{t "date-next-meeting"}}
-      </h3>
-      <p>
-        {{! TODO fix }}
-        {{moment-format
-        (await	agendaitem.agenda.createdFor.notes.nextMeeting.plannedStart)
-        "DD MMMM YYYY"
-      }} 
-        {{{await	agendaitem.agenda.createdFor.notes.nextMeeting.id}}
-      </p>
-    </div> --}}
-    <div class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
-      {{#each (await agendaitemGroups) as |agendaitemGroup|}}
-      <div class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom vlc-navbar--bordered-top">
-        {{#each agendaitemGroup.mandatees as |mandatee|}}
-          <h2 class="vl-title vl-title--h5">
-            {{mandatee.title}}
-          </h2>
-        {{/each}}
-      </div>
-        {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-          <div
-            class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
-          >
-            {{#if agendaitem.meetingRecord}}
-              <div class="vl-u-spacer">
-                <h3 class="vl-title vl-title--h6">
-                  {{agendaitem.foundPriority}}
-                  .
-                  {{await agendaitem.shortTitle}}
-                </h3>
-                <p>
-                  {{await agendaitem.meetingRecord.description}}
-                </p>
-              </div>
-            {{else}}
-              <div class="vl-u-spacer">
-                <h3 class="vl-title vl-title--h6">
-                  {{agendaitem.foundPriority}}
-                  .
-                  {{await agendaitem.shortTitle}}
-                </h3>
-                <p>
-                  {{t "no-notes"}}
-                </p>
-              </div>
-            {{/if}}
-          </div>
-        {{/each}}
-      {{/each}}
+<div class="vlc-container">
+  <div class="vl-u-display-flex vl-u-flex-align-baseline">
+    <h3 class="vl-title vl-title--h3">
+      {{t "notes"}}
+    </h3>
+    <div class="vl-u-spacer-extended-left-s">
+      <a class="vl-link" {{action "toggleIsEditing"}}>
+        {{t "edit"}}
+      </a>
     </div>
   </div>
+  {{sessions/session-notes currentSession=currentSession isEditing=isEditing}}
+  <div class="vl-u-spacer-extended-bottom">
+    {{#each (await agendaitemGroups) as |agendaitemGroup|}}
+      <div class="vl-u-spacer-extended-bottom">
+        <h2 class="vl-title vl-title--h4">
+          {{#each agendaitemGroup.mandatees as |mandatee|}}
+            {{mandatee.title}}<br />
+          {{/each}}
+        </h2>
+      </div>
+      {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+        <div class="vl-u-spacer-extended-bottom-s">
+          <h3 class="vl-title vl-title--h5">
+            {{agendaitem.foundPriority}}
+            .
+            {{await agendaitem.shortTitle}}
+          </h3>
+        </div>
+        <div class="vl-u-spacer-extended-bottom-s">
+          <div class="vl-typography">
+            {{#if agendaitem.meetingRecord.description}}
+              <p>
+                {{await agendaitem.meetingRecord.description}}
+              </p>
+            {{else}}
+              <p class="vl-u-text--muted">
+                {{t "no-notes"}}
+              </p>
+            {{/if}}
+          </div>
+        </div>
+      {{/each}}
+      <div class="vlc-hr"></div>
+    {{/each}}
+  </div>
+</div>

@@ -9,11 +9,16 @@ export default Model.extend({
 	identificationNumber: attr('string'),
 	versionNumber: attr('number'),
 	serialNumber: attr('string'),
-	document: belongsTo('document', {inverse:null}),
+	document: belongsTo('document'),
 	subcase: belongsTo('subcase', { inverse: null }),
 	agendaitem: belongsTo('agendaitem', { inverse: null }),
   announcement: belongsTo('announcement'),
 	file: belongsTo('file'),
+
+	newsletter: belongsTo('newsletter-info'),
+	meetingRecord: belongsTo('meeting-record'),
+	decision: belongsTo('decision'),
+	signedDecision: belongsTo('decision'),
 
 	nameToDisplay: computed('chosenFileName', 'document.title', function () {
 		let fileName = this.get('chosenFileName');

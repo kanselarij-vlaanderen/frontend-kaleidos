@@ -22,14 +22,14 @@ export default Component.extend(EditAgendaitemOrSubcase, {
   }),
 
   actions: {
-		cancelEditing() {
-			this.toggleProperty('isEditing');
+	cancelEditing() {
+	  this.toggleProperty('isEditing');
     },
     toggleConfidential(value) {
       this.set("item.confidential", value);
     },
     chooseConfidentiality(confidentiality) {
-			this.get('item').set('confidentiality', confidentiality);
-		}		
+	  this.get('item').set('confidentiality', confidentiality);
+	}		
   }
 });

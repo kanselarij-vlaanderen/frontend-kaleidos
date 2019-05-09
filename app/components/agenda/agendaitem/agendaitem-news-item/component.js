@@ -1,20 +1,23 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 
-export default Component.extend(isAuthenticatedMixin, {
-  classNames: ['vlc-padding-bottom--large'],
+export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
+	classNames: ['vlc-padding-bottom--large'],
 	store: inject(),
-	agendaitem:null,
-	isEditing:false,
+	agendaitem: null,
+	isEditing: false,
 
-	async addNewsItem(agendaitem){
+	async addNewsItem(agendaitem) {
 		const news = this.store.createRecord("newsletter-info", {
 			agendaitem: agendaitem,
 			created: new Date(),
+			finished: false,
 			subtitle: await agendaitem.get('subcase.title')
 		});
 		await news.save();
+		await this.updateModifiedProperty(await agendaitem.get('agenda'));
 	},
 
 	actions: {
@@ -23,14 +26,22 @@ export default Component.extend(isAuthenticatedMixin, {
 			const newsletter = await agendaitem.get('newsletterInfo');
 			if (!newsletter) {
 				await this.addNewsItem(agendaitem);
+			} else {
+				if (!newsletter.get('title')) {
+					newsletter.set('title', agendaitem.get('shortTitle'));
+					await newsletter.save();
+					await this.updateModifiedProperty(await agendaitem.get('agenda'));
+				}
 			}
 			this.toggleProperty('isEditing');
 		},
 
 		async saveChanges(agendaitem) {
-			let newsItem = await agendaitem.get('newsletterInfo');
+			const newsItem = await agendaitem.get('newsletterInfo');
 			newsItem.set('publicationDate', new Date());
-			newsItem.save().then(() => {
+
+			await newsItem.save().then(async () => {
+				await this.updateModifiedProperty(await agendaitem.get('agenda'));
 				this.toggleProperty('isEditing');
 			})
 		}

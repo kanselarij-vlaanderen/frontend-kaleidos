@@ -35,9 +35,6 @@
   <p class="vl-long-title">
     {{await agendaitem.title}}
   </p>
-    <p class="vl-long-title">
-    {{await agendaitem.subcase.concluded}}
-  </p>
   {{else}}
   <h3 class="vl-title vl-u-text--small">
     {{number}}
@@ -50,78 +47,47 @@
   {{/if}}
   {{#if (eq (await agenda) "Ontwerpagenda")}}
     <div class="vlc-hr"></div>
-    <div class="vl-u-display-flex vl-attachments">
-      {{#each (await lastVersions) as |documentVersion|}}
-        <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">
-          <div
-            class="vl-badge vl-badge--icon vl-badge--small vl-badge--alt vl-document-badge"
-          >
-            <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
-          </div>
-          <p class="vl-u-text--bold">
-            {{document-name documentVersion=documentVersion item=agendaitem}}
-          </p>
-        </div>
-      {{/each}}
-    </div>
+    {{utils/documents-list-for-item
+        item=(await agendaitem.subcase)
+        agendaitem=agendaitem
+      }}
   {{else if (await agendaitem.documents)}}
   <div class="vlc-hr"></div>
-    <div class="vl-u-display-flex vl-attachments">
-      {{#each (await lastVersions) as |documentVersion|}}
-        <div class="vl-u-display-flex vl-u-flex-align-center vl-attachment">
-          <div
-            class="vl-badge vl-badge--icon vl-badge--small vl-badge--alt vl-document-badge"
-          >
-            <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
-          </div>
-          <p class="vl-u-text--bold">
-            {{document-name documentVersion=documentVersion item=agendaitem}}
-          </p>
-        </div>
-      {{/each}}
-    </div>
+    {{utils/documents-list-for-item
+        item=agendaitem
+        agendaitem=agendaitem
+      }}
   {{/if}}
   {{#if (not agendaitem.showAsRemark)}}
   <div class="vl-u-display-flex vl-u-flex-space-between">
     <span class="vlc-agenda-items-new__times-passed">
-      {{!-- {{await agendaitem.subcase.shortTitle}}  Phase todo --}}
+      {{await agendaitem.subcase.subcaseName}}
     </span>
     {{#if (eq (await agenda) "Ontwerpagenda")}}
       {{#if (await agendaitem.formallyOk)}}
         <p
           class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
         >
-          {{t "agendaitem-details.formal-ok"}}
+          {{t "formal-ok"}}
           <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
         </p>
       {{else}}
         <span class="vlc-agenda-items-new__status">
-          {{t "agendaitem-details.formal-nok"}}
+          {{t "formal-nok"}}
         </span>
       {{/if}}
     {{else if agendaitem.formallyOk}}
       <p
         class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
       >
-        {{t "agendaitem-details.formal-ok"}}
+        {{t "formal-ok"}}
         <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
       </p>
     {{else}}
       <span class="vlc-agenda-items-new__status">
-        {{t "agendaitem-details.formal-nok"}}
+        {{t "formal-nok"}}
       </span>
     {{/if}}
   </div>
 {{/if}}
 {{/if}}
-{{!-- <div class="agenda-sub-options">
-      <p class="agenda-postponed-option">
-        {{#if agendaitem.retracted}}
-          {{t "agenda-item.postponed"}}
-        {{/if}}
-        {{#if (await agendaitem.postponedTo) as |sess|}}
-          {{t "agenda-item.postponed-until"}}
-          {{moment-format sess.plannedStart "dddd DD-MM-YYYY"}}
-        {{/if}}
-      </p>
-    </div> --}}

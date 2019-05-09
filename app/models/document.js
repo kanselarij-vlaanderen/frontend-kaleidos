@@ -11,7 +11,6 @@ export default Model.extend({
 	documentVersions: hasMany('document-version', { inverse: null }),
 	remarks: hasMany('remark'),
 
-	decision: belongsTo('decision'),
 	type: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),
 
@@ -21,7 +20,7 @@ export default Model.extend({
 		});
 	}),
 
-	lastDocumentVersion: computed('documentVersions.@each', async function () {
+	lastDocumentVersion: computed('documentVersions', async function () {
 		return (await (await this.get('documentVersions')).sortBy('versionNumber')).get('lastObject');
 	}),
 

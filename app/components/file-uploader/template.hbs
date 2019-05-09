@@ -9,7 +9,7 @@
     <em>
       <i class="vl-vi vl-vi-paperclip" aria-hidden="true"></i>
       <span>
-        {{t "file-uploader.add-attachements"}}
+        {{t "add-attachements"}}
       </span>
     </em>
     {{#file-dropzone
@@ -21,25 +21,25 @@
       {{#if dropzone.active}}
         {{#if dropzone.valid}}
           <p>
-            {{t "file-uploader.drop-text"}}
+            {{t "drop-text"}}
           </p>
         {{else}}
           <p>
-            {{t "file-uploader.invalid-type"}}
+            {{t "invalid-type"}}
           </p>
         {{/if}}
       {{else if queue.files.length}}
         <div class="progress-container">
-          {{t "file-uploader.uploading"}}
+          {{t "uploading"}}
           {{queue.files.length}}
-          {{t "file-uploader.files"}}
+          {{t "files"}}
           . (
           {{queue.progress}}
           %)
           <progress max="100" value={{queue.progress}}></progress>
         </div>
       {{else if dropzone.supported}}
-        {{t "file-uploader.dropzone-text"}}
+        {{t "dropzone-text"}}
       {{/if}}
     {{/file-dropzone}}
   {{/file-upload}}

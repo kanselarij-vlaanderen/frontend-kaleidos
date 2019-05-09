@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import { computed } from '@ember/object';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
@@ -13,6 +14,15 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 		const modelName = model.get('constructor.modelName')
 		return modelName === 'agendaitem';
 	},
+
+	phasesToShow: computed('item', function() {
+		const { modelIsAgendaItem, item } = this;
+		if(modelIsAgendaItem) {
+			return item.get('subcase.phases');
+		} else {
+			return item.get('phases');
+		}
+	}),
 
 	actions: {
 		choosePhase(phase) {

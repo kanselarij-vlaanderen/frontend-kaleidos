@@ -1,10 +1,14 @@
 {{#if (or (not agendaitem.retracted) (not agendaitem.postponedTo))}}
   <h2 class="vl-title vl-title--h3">
-    {{t "buttons.agendaitem-comment"}}
+    {{t "agendaitem-comment"}}
   </h2>
   <div class="vlc-comments-input">
     <div class="vl-badge">
-      <img class="vl-badge__img" src="/assets/icons/avatar-hilde-crevits.jpg" />
+      <div class="vl-badge vl-badge--initials vl-badge--accent">
+        <span>
+            {{user-initials user=(await user)}}
+        </span>
+      </div>
     </div>
     {{utils/custom-textarea
       rows="2"
@@ -17,16 +21,17 @@
   {{#each (await sortedRemarks) as |comment|}}
     <div class="vlc-comments-comment">
       <div class="vl-badge">
-        <img
-          class="vl-badge__img"
-          src="/assets/icons/avatar-hilde-crevits.jpg"
-         />
-
+        <div class="vl-badge vl-badge--initials vl-badge--action">
+          <span>
+            {{user-initials user=(await comment.author)}}
+          </span>
+        </div>
       </div>
       <div class="vlc-comments-comment-content">
         <div class="vlc-comments-comment-content__header">
           <h4 class="vl-title vl-title--h6">
-            Naam placeholder
+            {{await comment.author.firstName}}
+            {{await comment.author.lastName}}
           </h4>
           <div class="vlc-comments-comment-content__meta">
             {{moment-format comment.created "DD MMMM YYYY - HH:mm"}}
@@ -43,16 +48,17 @@
       {{#each (await comment.answers) as |answer|}}
         <div class="vlc-comments-comment vlc-comments-comment--response">
           <div class="vl-badge">
-            <img
-              class="vl-badge__img"
-              src="/assets/icons/avatar-hilde-crevits.jpg"
-             />
-
+            <div class="vl-badge vl-badge--initials vl-badge--action">
+              <span>
+                {{user-initials user=(await answer.author)}}
+              </span>
+            </div>
           </div>
           <div class="vlc-comments-comment-content">
             <div class="vlc-comments-comment-content__header">
               <h4 class="vl-title vl-title--h6">
-                Naam placeholder
+                {{await answer.author.firstName}}
+                {{await answer.author.lastName}}
               </h4>
               <div class="vlc-comments-comment-content__meta">
                 {{moment-format answer.created "DD MMMM YYYY - HH:mm"}}
@@ -69,11 +75,11 @@
     {{/if}}
     <div class="vlc-comments-input vlc-comments-input--response">
       <div class="vl-badge">
-        <img
-          class="vl-badge__img"
-          src="/assets/icons/avatar-hilde-crevits.jpg"
-         />
-
+        <div class="vl-badge vl-badge--initials vl-badge--accent">
+          <span>
+            {{user-initials user=(await user)}}
+          </span>
+        </div>
       </div>
       {{utils/custom-textarea
         rows="2"

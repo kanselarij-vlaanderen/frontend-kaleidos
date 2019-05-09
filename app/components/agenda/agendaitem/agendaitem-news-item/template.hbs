@@ -2,27 +2,66 @@
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-space-between">
       <h3 class="vl-title vl-title--h3">
-        {{t "agendaitem-details.decision-title"}}
+        {{t "newsletter-title"}}
       </h3>
-      {{#if isAdmin}}
-      <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "buttons.edit"}}
-        </a>
-      </div>
+      {{#if (or isAdmin isEditor)}}
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "edit"}}
+          </a>
+        </div>
       {{/if}}
     </div>
   </div>
   <div class="vl-u-spacer">
     <div class="vl-u-spacer--xsmall">
       <h4 class="vl-title vl-title--h6">
-        {{await agendaitem.newsletterInfo.subtitle}}
+        {{await agendaitem.newsletterInfo.title}}
       </h4>
     </div>
-      <p>
-        {{await agendaitem.newsletterInfo.text}}
+    <div class="vl-u-text vl-u-text--small">
+      <p class="vl-long-title">
+        {{await agendaitem.newsletterInfo.subtitle}}
       </p>
+    </div>
+    <p>
+      {{await agendaitem.newsletterInfo.text}}
+    </p>
   </div>
+  <hr />
+  <div class="vl-u-spacer vl-u-spacer-extended-top-s">
+    {{#if (await agendaitem.newsletterInfo.finished)}}
+      <div class="vlc-pill vlc-pill--success">
+        {{t "finished"}}
+      </div>
+    {{else}}
+      <div class="vlc-pill vlc-pill--warning">
+        {{t "not-finished"}}
+      </div>
+    {{/if}}
+  </div>
+  {{#if
+    (and
+      (gt (await agendaitem.newsletterInfo.documentVersions.length) 0)
+      (await agendaitem.newsletterInfo.finished)
+    )
+  }}
+    <div class="vl-u-spacer">
+      <h4 class="vl-title vl-title--h6">
+        {{t "documents-attached-to"}}
+      </h4>
+      <div class="vl-u-spacer-extended-top-s">
+        {{utils/documents-list-for-item
+          item=(await agendaitem.newsletterInfo)
+          agendaitem=agendaitem
+        }}
+      </div>
+    </div>
+  {{/if}}
 {{else}}
-  {{news-item/edit-item agendaitem=agendaitem isEditing=isEditing}}
+  {{news-item/edit-item
+    agendaitem=agendaitem
+    item=agendaitem.newsletterInfo
+    isEditing=isEditing
+  }}
 {{/if}}

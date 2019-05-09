@@ -12,14 +12,15 @@
     align-items: center;
 
     .vl-icon {
-      font-size: 2rem;
-      margin-right: 1rem;
+      font-size: 2.4rem;
+      color: $primary-blue;
+      margin-right: 0.5rem;
       height: 2.4rem;
     }
   }
 
   .vl-button.collapsed {
-    display: none ;
+    display: none;
   }
 
   .vlc-side-nav-item {
@@ -46,17 +47,9 @@
     }
   }
 
-  .vlc-side-nav-item--active {
-    background: $white;
-    border-left-color: $primary-blue;
-    .vlc-side-nav-item__label {
-      font-weight: 500;
-      margin-bottom: 0;
-    }
-  }
-
+  .vlc-side-nav-item--active,
   .vlc-side-nav-item:hover {
-    background: $white;
+    background: $ghost;
     border-left-color: $primary-blue;
   }
 }
@@ -75,11 +68,11 @@
     display: none;
   }
 
-  .vl-button.collapsed {
+  .vlc-side-nav-toggle.collapsed {
     display: block;
   }
 
-  .vl-button.default {
+  .vlc-side-nav-toggle.default {
     display: none;
   }
 

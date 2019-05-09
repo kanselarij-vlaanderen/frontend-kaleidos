@@ -1,8 +1,9 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(EditAgendaitemOrSubcase, {
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin,{
 	store: inject(),
 	classNames: ["vl-u-spacer--large"],
 	propertiesToSet: ['approvals'],
@@ -66,6 +67,11 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 			await Promise.all(item.get('approvals').map(async (approval) => {
 				return await approval.save();
 			}));
+			const agenda = await item.get('agenda');
+			if(agenda) {
+				await this.updateModifiedProperty(agenda);
+			}
+		
 			this.toggleProperty('isEditing');
 		},
 
@@ -79,13 +85,14 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 		},
 
 		async toggleIsEditing() {
-			const { item } = this;
+			const item = await this.get('item');
 			const approvals = await item.get('approvals');
 			const mandatees = await item.get('mandatees');
 			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
-			
+
 			await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, item);
 			await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
+			await item.hasMany('approvals').reload();
 			this.toggleProperty('isEditing');
 		}
 	}

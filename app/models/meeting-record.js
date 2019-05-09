@@ -1,7 +1,5 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import moment from 'moment';
-
 const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
@@ -13,13 +11,18 @@ export default Model.extend({
 	attendees: hasMany('mandatee'),
 	agendaitem: belongsTo('agendaitem'),
 	meeting: belongsTo('meeting'),
+	signedDocumentVersions: hasMany('document-version'),
 
-	nextMeeting: computed('meeting', function () {
-		const currentMeeting = this.get('meeting');
-		return this.store.query('meeting', {
-			filter: { ':gt:planned-start': moment(currentMeeting.get('plannedStart')).format() }
-		}).then((meetings) => {
-			return meetings.get('firstObject');
-		});
+	sortedDocumentVersions: computed.sort('signedDocumentVersions', function(a,b) {
+		if(a.versionNumber > b.versionNumber) {
+			return 1;
+		} else if (a.versionNumber < b.versionNumber){
+			return -1;
+		}
+		return 0;
+	}),
+
+	latestDocumentVersion: computed('sortedDocumentVersions', function() {
+		return this.get('sortedDocumentVersions.lastObject');
 	})
 });

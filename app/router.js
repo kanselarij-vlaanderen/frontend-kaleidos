@@ -24,7 +24,6 @@ Router.map(function () {
     });
     this.route('overview', { path: '' });
   });
-  this.route('comparison');
   this.route('settings');
   this.route('loading');
   this.route('mock-login');

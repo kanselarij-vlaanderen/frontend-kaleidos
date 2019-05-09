@@ -8,12 +8,12 @@
             class="vl-tab__link"
             current-when="agendas agenda"
           }}
-            {{t "navigation.agenda"}}
+            {{t "agenda"}}
           {{/link-to}}
         </li>
         <li class="vl-tab">
           {{#link-to "cases" class="vl-tab__link"}}
-            {{t "navigation.cases"}}
+            {{t "cases"}}
           {{/link-to}}
         </li>
         <li class="vl-tab">
@@ -22,19 +22,19 @@
             class="vl-tab__link"
             current-when="newsletters-overview"
           }}
-            {{t "navigation.newsletter"}}
+            {{t "newsletter"}}
           {{/link-to}}
         </li>
-        {{#if isAdmin}}
+          {{#if isAdmin}}
           <li class="vl-tab">
             {{#link-to "settings" class="vl-tab__link"}}
-              {{t "navigation.settings"}}
+              {{t "settings"}}
             {{/link-to}}
           </li>
         {{/if}}
         <li class="vl-tab">
           <a class="vl-tab__link" role="tab" aria-selected="true">
-            {{t "navigation.notifications"}}
+            {{t "notifications"}}
           </a>
         </li>
       </ul>
@@ -51,7 +51,7 @@
             {{role}}
             )
           </div>
-          <a class="vlc-user__action" {{action "logoutUser"}}>
+          <a class="vlc-user__action" {{action "navigateToMockLogin"}}>
             {{t "sign-out"}}
           </a>
         </div>

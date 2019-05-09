@@ -1,25 +1,12 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
+import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 
-export default Component.extend({
+export default Component.extend(DocumentsSelectorMixin, {
 	classNames:["vl-form__group vl-u-bg-porcelain"],
-	store:inject(),
-	isEditing:false,
+	propertiesToSet: ['approved', 'description', 'shortTitle'],
 
-	actions: {
-		toggleIsEditing() {
-			this.toggleProperty('isEditing');
-		},
-		async saveChanges(agendaitem) {
-			const decisionToEdit = await agendaitem.get('decision');
-			await decisionToEdit.save();
-			agendaitem.belongsTo('decision').reload();
-			this.toggleProperty('isEditing');
-		},
-		async cancelEditing(agendaitem) {
-			const decision = await agendaitem.get('decision')
-			decision.rollbackAttributes();
-			this.toggleProperty('isEditing');
-		}
-	}
+	description: getCachedProperty('description'),
+	shortTitle: getCachedProperty('shortTitle'),
+	approved: getCachedProperty('approved'),
 });

@@ -1,0 +1,19 @@
+{
+	"subcasePhases": [
+		{
+			"11a3de2c-f6b6-4efc-a166-8d60646af096": {
+				"label": "Ingediend voor agendering"
+			}
+		},
+		{
+			"3e6dba4f-5c3c-439a-993e-92348ec73642": {
+				"label": "Geagendeerd"
+			}
+		},
+		{
+			"529fb149-925d-4c38-9a58-99be349d05aa": {
+				"label": "In behandeling"
+			}
+		}
+	]
+}

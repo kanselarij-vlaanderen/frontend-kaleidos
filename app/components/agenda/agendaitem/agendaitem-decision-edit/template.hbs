@@ -1,30 +1,38 @@
-    <div class="vlc-input-field vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "edit-item.title")}}
-      {{web-components/vl-form-input width="4" value=agendaitem.decision.shortTitle}}
-    </div>
-    <div class="vlc-input-field vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "edit-decision.decision-text")}}
-      {{textarea
-        rows="5"
-        class="vl-textarea vl-textarea--block"
-        value=agendaitem.decision.description
-      }}
-    </div>
-    <div class="vlc-input-field vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "edit-decision.approved")}}
-      {{x-toggle
-        value=agendaitem.decision.approved
-        onToggle=(action (mut agendaitem.decision.approved))
-      }}
-    </div>
-     <div class="vl-action-group vl-action-group--align-right">
-      <a class="vl-link" {{action "cancelEditing" agendaitem}}>
-        {{t "buttons.cancel"}}
-      </a>
-      <button
-        class="vl-button vl-button--narrow"
-        {{action "saveChanges" agendaitem}}
-      >
-        {{t "buttons.save"}}
-      </button>
-    </div>
+<div class="vlc-input-field vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "title")}}
+  {{web-components/vl-form-input width="4" value=shortTitle
+  }}
+</div>
+<div class="vlc-input-field vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "decision-text")}}
+  {{textarea
+    rows="5"
+    class="vl-textarea vl-textarea--block"
+    value=description
+  }}
+</div>
+<div class="vlc-input-field vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "approved")}}
+  {{web-components/vl-toggle value=approved}}
+</div>
+{{#if approved}}
+  <div class="vlc-input-field-block">
+    {{utils/documents-selector-of-agendaitem
+      item=agendaitem
+      title=(t "documents-attached-to")
+      itemWithDocuments=(await item)
+      selectDocument=(action "selectDocument")
+    }}
+  </div>
+{{/if}}
+<div class="vl-action-group vl-action-group--align-right">
+  <a class="vl-link" {{action "cancelEditing"}}>
+    {{t "cancel"}}
+  </a>
+  <button
+    class="vl-button vl-button--narrow"
+    {{action "saveChanges"}}
+  >
+    {{t "save"}}
+  </button>
+</div>
