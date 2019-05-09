@@ -56,7 +56,7 @@
             {{await futureMeeting.latestAgendaName}}
           </td>
           <td>
-            {{moment-format futureMeeting.latestAgenda.modified "DD-MM-YYYY HH:mm"}}
+            {{moment-format (await futureMeeting.latestAgenda.modified) "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="vl-u-align-center">
             <button

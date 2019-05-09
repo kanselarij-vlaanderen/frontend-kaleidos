@@ -23,6 +23,6 @@ export default Component.extend(EditAgendaitemOrSubcase, {
   actions: {
 		cancelEditing() {
 			this.toggleProperty('isEditing');
-		},
+    }
   }
 });

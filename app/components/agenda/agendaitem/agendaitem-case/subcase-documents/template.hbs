@@ -17,7 +17,7 @@
     {{#if (gt (await item.documentsLength) 0)}}
       {{#each (await item.documents) as |document|}}
         {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-          document=(await document)
+          document=document
           item=item
         }}
       {{/each}}

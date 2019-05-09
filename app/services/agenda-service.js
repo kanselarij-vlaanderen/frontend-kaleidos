@@ -109,6 +109,5 @@ export default Service.extend({
 			approvals: await subcase.get('approvals')
 		});
 		return agendaitem.save();
-	},
-
+	}
 });

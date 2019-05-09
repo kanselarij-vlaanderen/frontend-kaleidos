@@ -65,7 +65,7 @@
 }
 
 @mixin vl-u-text--marked {
-  background: $orange-light;
+  background: $marker-bg-color;
   font-weight: 500;
   color: $marker-fg-color;
 }

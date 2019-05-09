@@ -18,27 +18,40 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       this.set('caseToEdit', caze);
       this.toggleProperty('isEditingRow');
     },
+    
     cancelEditing() {
       this.toggleProperty('isEditingRow');
     },
+
     toggleArchived(value) {
       this.set("filter", value)
     },
+
     archiveCase(caze) {
       caze.set('isArchived', true);
       this.set('isArchivingCase', false);
       caze.save();
     },
+
     unarchiveCase(caze) {
       caze.set('isArchived', false);
       caze.save();
     },
+
     requestArchiveCase(caze) {
       this.set('selectedCase', caze)
       this.set('isArchivingCase', true);
     },
+
     cancelArchiveCase() {
       this.set('isArchivingCase', false);
+    },
+
+    close(caze) {
+      if(!caze) {
+        return;
+      }
+      this.transitionToRoute('cases.case.subcases', caze.id);
     }
   }
 

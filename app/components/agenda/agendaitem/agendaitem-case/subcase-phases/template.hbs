@@ -13,10 +13,10 @@
       {{/if}}
     </div>
   </div>
-  {{#if (gt (await item.phases.length) 0)}}
+  {{#if (gt (await phasesToShow.length) 0)}}
     <div class="vl-custom">
       <ul>
-        {{#each (await item.phases) as |phase|}}
+        {{#each (await phasesToShow) as |phase|}}
           <li class="vl-pill vl-u-spacer-extended-right-s">
             {{await phase.code.label}}
           </li>

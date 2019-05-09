@@ -55,6 +55,16 @@ export default Component.extend({
 		})
 	}),
 
+	phaseToDisplay: computed('agendaitem.subcase.case',async function() {
+		const subcase = await this.get('agendaitem.subcase');
+		return await subcase.get('case').then(async (caze) => {
+			return caze.getPhaseOfSubcaseInCase(subcase).then((phase) => {
+				return phase;
+			});
+		});
+		
+	}),
+
 	click() {
 		const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'));
 		this.selectAgendaItem(agendaitem);

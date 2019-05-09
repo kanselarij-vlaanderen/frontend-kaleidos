@@ -7,6 +7,7 @@ export default Controller.extend({
 	isManagingAlerts: false,
 	isManagingDocumentTypes: false,
 	isManagingUsers: false,
+	isManagingSubcaseTypes: false,
 
 	actions: {
 		showAddingMandateForm() {
@@ -31,6 +32,10 @@ export default Controller.extend({
 
 		showUserManagementInterface() {
 			this.toggleProperty('isManagingUsers');
+		},
+
+		showSubcaseTypesManagementForm() {
+			this.toggleProperty('isManagingSubcaseTypes');
 		}
 	}
 });

@@ -25,7 +25,6 @@ export default Model.extend({
   agenda: belongsTo('agenda', { inverse: null }),
   subcase: belongsTo('subcase', { inverse: null }),
 
-  confidentiality: belongsTo('confidentiality', { inverse: null }),
   newsletterInfo: belongsTo('newsletter-info'),
   meetingRecord: belongsTo('meeting-record'),
 

@@ -53,6 +53,15 @@
       {{t "manage-user-roles"}}
     </button>
   </div>
+  <div class="vl-u-spacer-extended-s">
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+      {{action "showSubcaseTypesManagementForm"}}
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-subcase-types"}}
+    </button>
+  </div>
 </div>
 {{#if isAddingMandate}}
   {{utils/model-manager
@@ -91,5 +100,13 @@
   {{utils/user-management-interface
     modalTitle=(t "manage-user-roles")
     close=(action "showUserManagementInterface")
+  }}
+{{/if}}
+
+{{#if isManagingSubcaseTypes}}
+  {{utils/model-manager
+    modalTitle=(t "manage-subcase-types")
+    modelName="subcase-type"
+    close=(action "showSubcaseTypesManagementForm")
   }}
 {{/if}}
