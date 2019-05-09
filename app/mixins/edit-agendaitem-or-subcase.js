@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 
 const getCachedProperty = function (property) {
-	return computed(property, {
+	return computed(`item.${property}`, {
 		get() {
 			const { item } = this;
 			return item.get(property);
