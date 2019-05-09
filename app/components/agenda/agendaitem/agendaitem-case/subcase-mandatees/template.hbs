@@ -16,14 +16,12 @@
     </div>
     {{#if (gt (await item.mandatees.length) 0)}}
       {{#each (await mandateeRows) as |mandateeRow|}}
-        <div class="vl-custom">
-          <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
-            {{web-components/vl-mandatee-link
-              mandatee=mandateeRow.mandatee
-              domains=mandateeRow.selectedDomains
-            }}
-          </ul>
-        </div>
+        <ul class="vlc-minister-list">
+          {{web-components/vl-mandatee-link
+            mandatee=mandateeRow.mandatee
+            domains=mandateeRow.selectedDomains
+          }}
+        </ul>
       {{/each}}
     {{else}}
       <div class="vl-u-spacer-extended-top-s">

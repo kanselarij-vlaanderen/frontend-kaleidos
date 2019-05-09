@@ -19,8 +19,9 @@
     }
   }
 
-  .vl-button.collapsed {
-    display: none;
+  // Small fix to center icon in toggle
+  .vlc-side-nav-toggle {
+    justify-content: center;
   }
 
   .vlc-side-nav-item {
@@ -68,12 +69,10 @@
     display: none;
   }
 
-  .vlc-side-nav-toggle.collapsed {
-    display: block;
-  }
-
-  .vlc-side-nav-toggle.default {
-    display: none;
+  .vlc-side-nav-toggle{
+    .vl-vi {
+      @include vi-nav-right;
+    }
   }
 
   .vlc-side-nav-item__meta--small {

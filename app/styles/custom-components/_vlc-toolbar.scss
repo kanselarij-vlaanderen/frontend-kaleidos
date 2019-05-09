@@ -128,3 +128,10 @@ $c-toolbar-middle-z: 20;
     margin: 0;
   }
 }
+
+/* Toolbar aligned top
+  ========================================================================== */
+
+.vlc-toolbar--align-top {
+  align-items: flex-start;
+}

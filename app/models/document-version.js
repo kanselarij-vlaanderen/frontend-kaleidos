@@ -20,12 +20,13 @@ export default Model.extend({
 	decision: belongsTo('decision'),
 	signedDecision: belongsTo('decision'),
 
-	nameToDisplay: computed('chosenFileName', 'document.title', function () {
+	nameToDisplay: computed('chosenFileName', 'document.description', function () {
+		console.log(this.get('chosenFileName'), this.get('document.description'))
 		let fileName = this.get('chosenFileName');
 		if (fileName) {
 			return fileName;
 		} else {
-			return this.get('document.title');
+			return this.get('document.description');
 		}
 	})
 });

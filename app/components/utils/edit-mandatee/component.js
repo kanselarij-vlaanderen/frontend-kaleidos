@@ -3,10 +3,25 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-	store:inject(),
+	store: inject(),
 
-	startDate: computed('mandateeToEdit', function() {
+	startDate: computed('mandateeToEdit', function () {
 		return this.get('mandateeToEdit.start');
+	}),
+
+
+	selectedFields: computed('mandateeToEdit', {
+		get() {
+			const mandatee = this.get('mandateeToEdit');
+			if (mandatee) {
+				return mandatee.get('governmentFunctions');
+			} else {
+				return null;
+			}
+		},
+		set(key, value) {
+			return value;
+		}
 	}),
 
 	priority: computed('mandateeToEdit', {
@@ -56,8 +71,8 @@ export default Component.extend({
 			this.set('startDate', val);
 		},
 
-		chooseDomain(domains) {
-			this.set('selectedDomains', domains);
+		chooseDomain(fields) {
+			this.set('selectedFields', fields);
 		},
 
 		closeModal() {
@@ -65,12 +80,13 @@ export default Component.extend({
 		},
 
 		saveChanges() {
-			const { startDate, title, shortTitle, priority, mandateeToEdit } = this;
+			const { startDate, title, shortTitle, priority, mandateeToEdit, selectedFields } = this;
 			const mandatee = this.store.peekRecord('mandatee', mandateeToEdit.get('id'));
 			mandatee.set('end', null);
 			mandatee.set('title', title);
 			mandatee.set('shortTitle', shortTitle);
 			mandatee.set('priority', priority);
+			mandatee.set('governmentFields', selectedFields)
 			mandatee.set('start', startDate);
 			mandatee.save().then(() => {
 				this.closeModal();

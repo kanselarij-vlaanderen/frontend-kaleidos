@@ -90,6 +90,7 @@ $icon-font-location: "/fonts/";
 @import "govflanders/components/_popover";
 @import "govflanders/components/_radio";
 @import "govflanders/components/_search";
+@import "govflanders/components/_side-navigation";
 @import "govflanders/components/_tabs";
 @import "govflanders/components/_textarea";
 @import "govflanders/components/_titles";
@@ -108,13 +109,11 @@ $icon-font-location: "/fonts/";
       ========================================================================== */
 
 // Additions to existing components
-@import "govflanders/additions/_accordion";
 @import "govflanders/additions/_badge";
 @import "govflanders/additions/_button";
 @import "govflanders/additions/_checkbox";
 @import "govflanders/additions/_data-table";
 @import "govflanders/additions/_icon-list";
-@import "govflanders/additions/_info-tile";
 @import "govflanders/additions/_link-list";
 @import "govflanders/additions/_modal";
 @import "govflanders/additions/_pill-input";
@@ -131,26 +130,28 @@ $icon-font-location: "/fonts/";
 @import "custom-components/vlc-agenda-items-new";
 @import "custom-components/vlc-backlink";
 @import "custom-components/vlc-box";
-@import "custom-components/vlc-comments";
+@import "custom-components/vlc-comment";
 @import "custom-components/vlc-container";
 @import "custom-components/vlc-date-range";
+@import "custom-components/vlc-document-card";
 @import "custom-components/vlc-document-list";
 @import "custom-components/vlc-hr";
 @import "custom-components/vlc-input-field-block";
 @import "custom-components/vlc-list-section-header";
+@import "custom-components/vlc-minister";
 @import "custom-components/vlc-navbar";
 @import "custom-components/vlc-page-header";
-@import "custom-components/vlc-pill";
 @import "custom-components/vlc-panel-layout";
+@import "custom-components/vlc-pill";
 @import "custom-components/vlc-procedure-step";
 @import "custom-components/vlc-radio-inline";
 @import "custom-components/vlc-scroll-wrapper";
 @import "custom-components/vlc-side-nav";
 @import "custom-components/vlc-status-timeline";
+@import "custom-components/vlc-subline";
 @import "custom-components/vlc-tabs-reverse";
 @import "custom-components/vlc-toolbar";
 @import "custom-components/vlc-user";
-
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
 

@@ -12,16 +12,12 @@
       {{#each (await mandateeRows) as |mandateeRow|}}
         <tr>
           <td>
-            <div class="vl-custom">
-              <ul
-                class="vl-link-list vl-link-list--custom vl-link-list--bordered"
-              >
-                {{web-components/vl-mandatee-link
-                  mandatee=mandateeRow.mandatee
-                  domains=mandateeRow.selectedDomains
-                }}
-              </ul>
-            </div>
+            <ul class="vlc-minister-list">
+              {{web-components/vl-mandatee-link
+                mandatee=mandateeRow.mandatee
+                domains=mandateeRow.selectedDomains
+              }}
+            </ul>
           </td>
           <td class="vl-u-align-right vl-u-flex-align-center">
             <button class="vl-button vl-button--link vl-button--icon">
@@ -30,7 +26,10 @@
                 Verwijder
               </span>
             </button>
-            <button class="vl-button vl-button--link vl-button--icon" {{action "deleteRow" mandateeRow}}>
+            <button
+              class="vl-button vl-button--link vl-button--icon"
+              {{action "deleteRow" mandateeRow}}
+            >
               <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
               <span class="vl-u-visually-hidden">
                 Verwijder

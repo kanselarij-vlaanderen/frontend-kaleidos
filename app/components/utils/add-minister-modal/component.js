@@ -4,12 +4,15 @@ export default Component.extend({
 	selectedMandatee: null,
 
 	async refreshData(mandatee) {
-		const domains = await mandatee.get('governmentDomains');
-		await Promise.all(domains.map(async (domain) => {
-			domain.set('selected', false)
-			const codes = await domain.get('codes');
-			await codes.map((code) => code.set('selected', false));
+		const fields = await mandatee.get('governmentFields');
+		let domains = [];
+		await Promise.all(fields.map(async (field) => {
+			const domain = await field.get('domain');
+			if (!(domains.find((item) => item.get('id') === domain.get('id')))) {
+				domains.push(domain);
+			}
 		}));
+		return domains;
 	},
 
 	actions: {
@@ -18,40 +21,39 @@ export default Component.extend({
 		},
 
 		async mandateeSelected(mandatee) {
-			await this.refreshData(mandatee);
-
 			this.set('selectedMandatee', mandatee);
-			const domains = await mandatee.get('governmentDomains');
-
-			this.set('selectedDomains', domains);
+			this.set('selectedDomains', await this.refreshData(mandatee));
 		},
 
-		addMandatee() {
+		async addMandatee() {
 			const { selectedMandatee, selectedDomains } = this;
-			const domainsToAdd = selectedDomains.filter((domain) => domain.selected);
-			const iseCodes = domainsToAdd.map((domain) => domain.codes.filter((code) => code.selected))
+
+			const domains = selectedDomains.filter((domain) => domain.selected);
+
+			const codesSelected = await Promise.all(fieldsSelected.filter((field) => field.selected))
 			const combinedIseCodes = [];
-			iseCodes.map((isecodes) => combinedIseCodes.push(...isecodes));
-			this.addMandatee(selectedMandatee, domainsToAdd, combinedIseCodes);
+
+			await codesSelected.map((isecodes) => combinedIseCodes.push(...isecodes));
+			// this.addMandatee(selectedMandatee, fieldsToAdd, combinedIseCodes);
 			this.cancel();
 		},
 
 		selectDomain(domain, value) {
-			const codes = domain.get('codes');
-			codes.map((code) => code.set('selected', value));
+			const fields = domain.get('governmentFields');
+			fields.map((field) => field.set('selected', value));
 		},
 
-		async selectCode(code, domain, value) {
+		async selectField(field, domain, value) {
 			const foundDomain = this.get('selectedDomains').find((item) => item.id == domain.id);
-			const codes = domain.get('codes');
-			const selectedCodes = codes.filter((code) => code.selected);
-			if(value) {
+			const fields = await domain.get('governmentFields');
+			const selectedFields = fields.filter((field) => field.selected);
+			if (value) {
 				foundDomain.set('selected', value);
 			} else {
-				if(selectedCodes.length === 1) {
+				if (selectedFields.length === 1) {
 					foundDomain.set('selected', value);
 				}
-			} 
+			}
 		}
 	}
 });

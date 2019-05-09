@@ -14,10 +14,10 @@ export default Route.extend({
     let subcases = await this.store.query('subcase', {
       filter: {
         case: { id: caze.get('id') },
-        "is-archived": false,
+        // "is-archived": false,
       },
       include: "phases",
-      sort: 'created'
+      // sort: 'created'
     });
 
     if (!subcases) {
@@ -34,7 +34,7 @@ export default Route.extend({
       let subcasePhaseLabel = 'In functie van ';
 
       const subcaseTypeLabel = await subcase.get('type');
-      if(subcaseTypeLabel){
+      if (subcaseTypeLabel) {
         if (subcaseTypeLabel.get('label') === phasesCodes[0].label) {
           if (counter === 0) {
             counter++;

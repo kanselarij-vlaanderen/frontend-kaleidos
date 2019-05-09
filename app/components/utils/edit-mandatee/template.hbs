@@ -4,7 +4,9 @@
       {{web-components/vl-form-label value=(t "name")}}
       {{web-components/vl-form-input width="4" value=title}}
     </div>
-    <div class="vl-u-display-flex vl-u-flex-space-between vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
+    <div
+      class="vl-u-display-flex vl-u-flex-space-between vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
+    >
       <div class="vl-col--2-4 vl-col--1-1--s">
         <div class="vlc-input-field-block">
           {{web-components/vl-form-label value=(t "add-people")}}
@@ -21,8 +23,7 @@
       <div class="vl-col--2-4 vl-col--1-1--s">
         <div class="vlc-input-field-block">
           {{web-components/vl-form-label value=(t "priority")}}
-          {{web-components/vl-form-input width="4" value=priority
-          }}
+          {{web-components/vl-form-input width="4" value=priority}}
         </div>
       </div>
     </div>
@@ -35,9 +36,14 @@
     </div>
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "mandatees")}}
-      {{utils/domains-selector
-        selectedDomains=mandateeToEdit.governmentDomains
-        chooseDomain=(action "chooseDomain")
+      {{utils/model-selector
+        modelName="government-field"
+        searchField="label"
+        propertyToShow="label"
+        sortField="label"
+        multiSelect=true
+        selectedItems=selectedFields
+        selectModel=(action "chooseDomain")
       }}
     </div>
   </div>

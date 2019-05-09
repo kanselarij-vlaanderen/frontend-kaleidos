@@ -10,7 +10,7 @@ export default Model.extend({
 	dateSwornIn: attr('date'),
 	dateDecree: attr('date'),
 	// temporaryReplacements: hasMany('mandatee'),
-	governmentDomains: hasMany('government-domain', {inverse:null}),
+	governmentFields: hasMany('government-field', { inverse: null }),
 	decisions: hasMany('decision'),
 	cases: hasMany('case'),
 	holds: belongsTo('mandate', { inverse: null }),

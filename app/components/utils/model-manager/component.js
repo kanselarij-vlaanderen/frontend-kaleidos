@@ -48,10 +48,6 @@ export default Component.extend({
 			this.set('selectedModel', model);
 		},
 
-		chooseCode(codes) {
-			this.set('codes', codes);
-		},
-
 		toggleIsAdding() {
 			this.toggleProperty('isAdding');
 		},
@@ -64,10 +60,9 @@ export default Component.extend({
 			alert('This action is not allowed. Please contact the system administrator.');
 		},
 
-		editModel() {
-			const model = this.get('selectedModel');
+		async editModel() {
+			const model = await this.get('selectedModel');
 			model.set('label', this.get('title'));
-			model.set('codes', this.get('codes'));
 			model.save().then(() => {
 				this.set('title', null);
 				this.set('isEditing', false);

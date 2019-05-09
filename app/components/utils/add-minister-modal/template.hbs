@@ -20,13 +20,14 @@
             toggle=(action "selectDomain" domain)
           }}
           <ul>
-            {{#each domain.codes as |code|}}
+            {{#each (await domain.governmentFields) as |field|}}
               <li>
                 {{web-components/vl-checkbox
-                  value=code.selected
-                  label=code.name
-                  toggle=(action "selectCode" code domain)
+                  value=field.selected
+                  label=field.label
+                  toggle=(action "selectField" field domain)
                 }}
+                {{field.name}}
               </li>
             {{/each}}
           </ul>

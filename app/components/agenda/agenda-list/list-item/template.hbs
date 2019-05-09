@@ -1,29 +1,34 @@
 {{#if selectedAgendaItem}}
   {{#if (not agendaitem.showAsRemark)}}
-  <p class="vlc-agenda-items-new__overline">
-    <span class="vlc-agenda-items-new__numbering">
-      {{number}}
-      .
-    </span>
-    {{await agendaitem.subcase.case.type.label}}
-  </p>
-  <h4 class="vlc-agenda-items-new__subject">
-    {{await agendaitem.shortTitle}}
-  </h4>
+    {{#if (await agendaitem.subcase.case.type.label)}}
+      <p class="vlc-agenda-items-new__overline">
+        <span class="vlc-agenda-items-new__numbering">
+          {{number}}
+          .
+        </span>
+        {{await agendaitem.subcase.case.type.label}}
+      </p>
+    {{/if}}
+    <h4 class="vlc-agenda-items-new__subject">
+      {{#if (await agendaitem.shortTitle)}}
+        {{await agendaitem.shortTitle}}
+      {{else}}
+        {{await agendaitem.title}}
+      {{/if}}
+    </h4>
   {{else}}
-  <p class="vlc-agenda-items-new__overline">
-    <span class="vlc-agenda-items-new__numbering">
-      {{number}}
-      .
-    </span>
-    {{agendaitem.shortTitle}}
-  </p>
-  <h4 class="vlc-agenda-items-new__subject">
-    {{await agendaitem.title}}
-  </h4>
+    <p class="vlc-agenda-items-new__overline">
+      <span class="vlc-agenda-items-new__numbering">
+        {{number}}
+        .
+      </span>
+      {{agendaitem.shortTitle}}
+    </p>
+    <h4 class="vlc-agenda-items-new__subject">
+      {{await agendaitem.title}}
+    </h4>
   {{/if}}
-{{else}}
-  {{#if (not agendaitem.showAsRemark)}}
+{{else if (not agendaitem.showAsRemark)}}
   <h3 class="vl-title vl-u-text--small">
     {{number}}
     .
@@ -35,7 +40,7 @@
   <p class="vl-long-title">
     {{await agendaitem.title}}
   </p>
-  {{else}}
+{{else}}
   <h3 class="vl-title vl-u-text--small">
     {{number}}
     .
@@ -44,21 +49,21 @@
   <p class="vl-long-title">
     {{await agendaitem.title}}
   </p>
-  {{/if}}
-  {{#if (eq (await agenda) "Ontwerpagenda")}}
-    <div class="vlc-hr"></div>
-    {{utils/documents-list-for-item
-        item=(await agendaitem.subcase)
-        agendaitem=agendaitem
-      }}
-  {{else if (await agendaitem.documents)}}
+{{#if (eq (await agenda) "Ontwerpagenda")}}
   <div class="vlc-hr"></div>
-    {{utils/documents-list-for-item
-        item=agendaitem
-        agendaitem=agendaitem
-      }}
-  {{/if}}
-  {{#if (not agendaitem.showAsRemark)}}
+  {{utils/documents-list-for-item
+    item=(await agendaitem.subcase)
+    agendaitem=agendaitem
+  }}
+{{else if (await agendaitem.documents)}}
+  <div class="vlc-hr"></div>
+  {{utils/documents-list-for-item item=agendaitem agendaitem=agendaitem}}
+  {{else if (await agendaitem.subcase.documents)}}
+  
+  <div class="vlc-hr"></div>
+  {{utils/documents-list-for-item item=(await agendaitem.subcase)agendaitem=(await agendaitem.subcase)}}
+{{/if}}
+{{#if (not agendaitem.showAsRemark)}}
   <div class="vl-u-display-flex vl-u-flex-space-between">
     <span class="vlc-agenda-items-new__times-passed">
       {{await agendaitem.subcase.subcaseName}}
@@ -91,3 +96,6 @@
   </div>
 {{/if}}
 {{/if}}
+
+
+{{log }}

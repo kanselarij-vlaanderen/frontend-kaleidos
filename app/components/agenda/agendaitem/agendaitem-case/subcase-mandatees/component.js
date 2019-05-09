@@ -63,7 +63,12 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 
 	async setNewPropertiesToModel(model) {
 		await this.parseDomainsAndMandatees();
-		const { selectedMandatees, selectedIseCodes } = this;
+		const { selectedMandatees, selectedIseCodes, isAgendaItem } = this;
+		if(isAgendaItem) {
+			model = await this.get('item.subcase');
+		} else {
+			model = await this.get('item');
+		}
 		model.set('mandatees', selectedMandatees);
 		model.set('iseCodes', selectedIseCodes);
 		return model.save();
@@ -77,8 +82,8 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 			await Promise.all(mandateeRows.map(async row => {
 				mandatees.push(await row.get('mandatee'));
 				const iseCodes = await row.get('iseCodes');
-				console.log(iseCodes)
-				selectedIseCodes.push(...iseCodes);
+				// console.log(iseCodes)
+				// selectedIseCodes.push(...iseCodes);
 			}))
 		}
 		this.set('selectedMandatees', mandatees);
