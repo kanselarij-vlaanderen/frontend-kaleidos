@@ -3,10 +3,10 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import EmberObject from '@ember/object';
-
+import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, ApprovalsEditMixin, {
 	store: inject(),
 	classNames: ["vl-u-spacer-extended-bottom"],
 	item: null,
@@ -76,7 +76,9 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 		}
 		model.set('mandatees', selectedMandatees);
 		model.set('iseCodes', selectedIseCodes);
-		return model.save();
+		return model.save().then((model) => {
+			return this.checkForActionChanges(model);
+		});
 	},
 
 	async parseDomainsAndMandatees() {

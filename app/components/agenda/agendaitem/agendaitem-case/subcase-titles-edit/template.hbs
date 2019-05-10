@@ -41,11 +41,18 @@
     </div>
   </div>
 {{/if}}
-<div class="vl-action-group vl-action-group--align-right">
-  <a class="vl-link" {{action "toggleIsEditing"}}>
-    {{t "cancel"}}
-  </a>
-  <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-    {{t "save"}}
-  </button>
+<div class="vlc-toolbar vlc-toolbar--auto">
+  <div class="vlc-toolbar__right">
+    <div class="vl-action-group">
+      <a
+        class="vl-button vl-button--tertiary vl-button--narrow"
+        {{action "cancelEditing"}}
+      >
+        {{t "cancel"}}
+      </a>
+      <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
+        {{t "save"}}
+      </button>
+    </div>
+  </div>
 </div>

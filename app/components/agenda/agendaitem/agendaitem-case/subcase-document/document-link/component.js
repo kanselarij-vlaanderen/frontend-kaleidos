@@ -5,12 +5,19 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
-	classNames: ["vl-u-spacer"],
+	classNames: ["vl-u-spacer-extended-bottom-s"],
 	isShowingVersions: false,
 	isUploadingNewVersion: false,
 	uploadedFile: null,
 	fileName: null,
-	modelToAddDocumentVersionTo: computed('item', function() {
+
+	openClass: computed('isShowingVersions', function () {
+		if (this.get('isShowingVersions')) {
+			return "js-vl-accordion--open";
+		}
+	}),
+
+	modelToAddDocumentVersionTo: computed('item', function () {
 		return this.get('item.constructor.modelName');
 	}),
 

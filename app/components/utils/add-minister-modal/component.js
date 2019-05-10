@@ -21,7 +21,6 @@ export default Component.extend({
 
 	actions: {
 		cancel() {
-
 			this.cancel();
 		},
 
