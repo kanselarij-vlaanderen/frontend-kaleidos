@@ -5,6 +5,9 @@ export default Component.extend({
 	classNames: ["vlc-minister-item"],
 	showDetails: false,
 
+	subcaseIseCodes: null,
+	codesToShow: null,
+
 	actions: {
 		toggleShowDetails() {
 			this.toggleProperty('showDetails');

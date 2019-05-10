@@ -8,18 +8,36 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	store: inject(),
-	classNames: ["vl-u-spacer--large"],
+	classNames: ["vl-u-spacer-extended-bottom"],
 	item: null,
 	propertiesToSet: ['mandatees', 'governmentDomains'],
 
-	mandateeRows: computed('item', function () {
+	mandateeRows: computed('item', 'item.subcase', function () {
 		return this.constructMandateeRows();
 	}),
 
+	async createMandateeRow(mandatee, iseCodes) {
+		const fields = [...new Set(await Promise.all(iseCodes.map((iseCode) => iseCode.get('field'))))];
+		const domains = [...new Set(await Promise.all(fields.map((field) => field.get('domain'))))];
+
+		const domainsToShow = domains.map((domain) => domain.get('label')).join(', ');
+		const fieldsToShow = fields.map((field) => field.get('label')).join(', ');
+
+		return EmberObject.create(
+			{
+				fieldsToShow,
+				domainsToShow,
+				mandatee: mandatee,
+				domains: domains,
+				fields: fields,
+				iseCodes: iseCodes,
+			})
+	},
+
 	async constructMandateeRows() {
-		const {  isAgendaItem } = this;
+		const { isAgendaItem } = this;
 		let item;
-		if(isAgendaItem) {
+		if (isAgendaItem) {
 			item = await this.get('item.subcase');
 		} else {
 			item = await this.get('item');
@@ -28,26 +46,9 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 		const iseCodes = await item.get('iseCodes');
 		const mandatees = await item.get('mandatees');
 
-		const domainsBasedOfIseCodes = await Promise.all(iseCodes.map(async (iseCode) => {
-			return await iseCode.get('domain');
-		}));
-
-		return await Promise.all(mandatees.map(async (mandatee) => {
-			const domains = await mandatee.get('governmentDomains');
-			let row = EmberObject.create({
-				mandatee: mandatee,
-				selectedDomains: [],
-				domains: domains,
-				iseCodes: iseCodes
-			});
-			await domains.map((domain) => {
-				const foundDomain = domainsBasedOfIseCodes.find((domainToCheck) => domainToCheck.get('id') === domain.get('id'));
-				if(foundDomain) {
-					row.selectedDomains.push(foundDomain);
-				}
-			});
-			return row;
-		}));
+		return Promise.all(mandatees.map((mandatee) => {
+			return this.createMandateeRow(mandatee, iseCodes);
+		}))
 	},
 
 	actions: {
@@ -59,12 +60,16 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 			this.set('mandateeRows', await this.constructMandateeRows());
 			this.toggleProperty('isEditing');
 		},
+
+		addRow() {
+			this.toggleProperty('isAdding');
+		}
 	},
 
 	async setNewPropertiesToModel(model) {
 		await this.parseDomainsAndMandatees();
 		const { selectedMandatees, selectedIseCodes, isAgendaItem } = this;
-		if(isAgendaItem) {
+		if (isAgendaItem) {
 			model = await this.get('item.subcase');
 		} else {
 			model = await this.get('item');
@@ -77,16 +82,18 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	async parseDomainsAndMandatees() {
 		const mandateeRows = await this.get('mandateeRows');
 		const mandatees = [];
-		const selectedIseCodes = [];
+		let selectedIseCodes = [];
+
 		if (mandateeRows && mandateeRows.get('length') > 0) {
-			await Promise.all(mandateeRows.map(async row => {
-				mandatees.push(await row.get('mandatee'));
-				const iseCodes = await row.get('iseCodes');
-				// console.log(iseCodes)
-				// selectedIseCodes.push(...iseCodes);
-			}))
+			mandateeRows.map(row => {
+				mandatees.push(row.get('mandatee'));
+				const iseCodes = row.get('iseCodes');
+				iseCodes.map((code) => {
+					selectedIseCodes.push(code);
+				})
+			})
 		}
 		this.set('selectedMandatees', mandatees);
-		this.set('selectedIseCodes', [...new Set(selectedIseCodes)]);
+		this.set('selectedIseCodes', selectedIseCodes);
 	}
 });

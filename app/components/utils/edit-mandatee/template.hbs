@@ -37,12 +37,12 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "mandatees")}}
       {{utils/model-selector
-        modelName="government-field"
-        searchField="label"
-        propertyToShow="label"
-        sortField="label"
+        modelName="ise-code"
+        searchField="name"
+        propertyToShow="name"
+        sortField="name"
         multiSelect=true
-        selectedItems=selectedFields
+        selectedItems=iseCodes
         selectModel=(action "chooseDomain")
       }}
     </div>

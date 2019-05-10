@@ -10,11 +10,11 @@ export default Component.extend({
 	}),
 
 
-	selectedFields: computed('mandateeToEdit', {
+	iseCodes: computed('mandateeToEdit', {
 		get() {
 			const mandatee = this.get('mandateeToEdit');
 			if (mandatee) {
-				return mandatee.get('governmentFunctions');
+				return mandatee.get('iseCodes');
 			} else {
 				return null;
 			}
@@ -71,8 +71,8 @@ export default Component.extend({
 			this.set('startDate', val);
 		},
 
-		chooseDomain(fields) {
-			this.set('selectedFields', fields);
+		chooseDomain(iseCodes) {
+			this.set('iseCodes', iseCodes);
 		},
 
 		closeModal() {
@@ -80,13 +80,13 @@ export default Component.extend({
 		},
 
 		saveChanges() {
-			const { startDate, title, shortTitle, priority, mandateeToEdit, selectedFields } = this;
+			const { startDate, title, shortTitle, priority, mandateeToEdit, iseCodes } = this;
 			const mandatee = this.store.peekRecord('mandatee', mandateeToEdit.get('id'));
 			mandatee.set('end', null);
 			mandatee.set('title', title);
 			mandatee.set('shortTitle', shortTitle);
 			mandatee.set('priority', priority);
-			mandatee.set('governmentFields', selectedFields)
+			mandatee.set('iseCodes', iseCodes)
 			mandatee.set('start', startDate);
 			mandatee.save().then(() => {
 				this.closeModal();

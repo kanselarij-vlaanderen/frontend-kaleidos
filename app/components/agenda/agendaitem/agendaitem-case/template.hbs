@@ -1,15 +1,3 @@
-<div>
-  Concluded:
-  {{await item.subcase.concluded}}
-</div>
-<div>
-  Retracted:
-  {{item.retracted}}
-</div>
-<div>
-  Retracted:
-  {{await item.decision.approved}}
-</div>
 {{#if (not isEditing)}}
   {{agenda/agendaitem/agendaitem-case/subcase-titles
     item=item
@@ -22,10 +10,14 @@
   }}
 {{/if}}
 {{#if (not item.showAsRemark)}}
-  {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item}}
   {{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
-  {{!-- {{agenda/agendaitem/agendaitem-case/subcase-phases item=item}} --}}
-  {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
+  {{#if (await item.subcase)}}
+    {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item.subcase}}
+    {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item.subcase}}
+  {{else}}
+    {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
+    {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item}}
+  {{/if}}
   {{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
 {{/if}}
 {{agenda/agendaitem/agendaitem-case/subcase-documents item=item}}

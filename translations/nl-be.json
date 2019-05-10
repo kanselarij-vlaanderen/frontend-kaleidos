@@ -14,6 +14,7 @@
 	"advanced-search": "Geavanceerd zoeken",
 	"agenda": "Agenda",
 	"agenda-add": "Nieuwe ontwerpagenda aanmaken",
+	"divider": ", ",
 	"agenda-approve": "Agenda goedkeuren",
 	"agenda-back": "Terug naar agenda",
 	"agenda-compare": "Vergelijk agendas",
@@ -257,5 +258,7 @@
 	"uploaded-at": "Geupload op",
 	"at": "om",
 	"toggle": "aan-uit",
-	"requested-for-agenda": "Ingediend voor de agenda van"
+	"requested-for-agenda": "Ingediend voor de agenda van",
+	"government-domain": "Beleidsdomein",
+	"government-field": "Beleidsveld"
 }

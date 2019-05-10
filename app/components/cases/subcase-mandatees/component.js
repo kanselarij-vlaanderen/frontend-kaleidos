@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
 
-
 export default Component.extend({
 	store: inject(),
 	selectedMandatee: null,
@@ -10,18 +9,20 @@ export default Component.extend({
 	isAdding: false,
 
 	actions: {
-		async createMandateeRow(selectedMandatee, selectedDomains, codes) {
+		async createMandateeRow(selectedMandatee, domains, fields, codes) {
 			const mandateeRows = await this.get('mandateeRows');
+
+			const domainsToShow = domains.map((domain) => domain.get('label')).join(', ');
+			const fieldsToShow = fields.map((field) => field.get('label')).join(', ');
 			mandateeRows.addObject(EmberObject.create(
 				{
+					fieldsToShow,
+					domainsToShow,
 					mandatee: selectedMandatee,
-					selectedDomains: selectedDomains,
-					iseCodes: codes
+					domains: domains,
+					fields: fields,
+					iseCodes: codes,
 				}))
-		},
-
-		addRow() {
-			this.toggleProperty('isAdding');
 		},
 
 		cancel() {
