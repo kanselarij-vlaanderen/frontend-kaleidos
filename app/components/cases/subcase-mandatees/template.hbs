@@ -1,64 +1,51 @@
-<table class="vl-data-table vl-data-table--align-middle">
-  <thead>
-    <tr>
-      <th class="vl-data-table-col-6">
-        {{web-components/vl-form-label value=(t "minister")}}
-      </th>
-      <th class="vl-data-table-col-5">
-        {{web-components/vl-form-label value=(t "mandatees")}}
-      </th>
-      <th class="vl-data-table-col-1"></th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each mandateeRows as |mandateeRow|}}
-      <tr>
-        <td>
-          {{utils/mandatee-selector
-            singleSelect=true
-            selectedMandatees=mandateeRow.mandatee
-            chooseMandatee=(action "mandateeSelected" mandateeRow)
-          }}
-        </td>
-        <td>
-          {{#if (not showSelected)}}
-            {{utils/domains-selector
-              domains=mandateeRow.domains
-              selectedDomainsOnly=true
-              chooseDomain=(action "domainsChanged" mandateeRow)
-            }}
-          {{else}}
-            {{utils/domains-selector
-              domains=mandateeRow.domains
-              selectedDomainsOnly=true
-              selectedDomains=mandateeRow.selectedDomains
-              chooseDomain=(action "domainsChanged" mandateeRow)
-            }}
-          {{/if}}
-        </td>
-        <td class="vl-u-align-right">
-          <button
-            class="vl-button vl-button--link vl-button--icon"
-            {{action "deleteRow" mandateeRow}}
-          >
-            <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
-            <span class="vl-u-visually-hidden">
-              {{t "delete"}}
-            </span>
-          </button>
-        </td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
-<div class="vlc-toolbar">
-  <div class="vlc-toolbar__left vl-action-group vl-action-group--space-between">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "addRow"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-      {{t "add-minister"}}
-    </button>
+{{#if (not isAdding)}}
+  <div class="vl-u-spacer-extended-bottom-l">
+    <table class="vl-data-table vl-data-table--align-middle">
+      <thead>
+        <tr>
+          <th class="vl-data-table-col-2">
+            {{t "minister"}}
+          </th>
+          <th class="vl-data-table-col-3">
+            {{t "government-domain"}}
+          </th>
+          <th class="vl-data-table-col-5">
+            {{t "government-field"}}
+          </th>
+          <th class="vl-data-table-col-1"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each (await mandateeRows) as |mandateeRow|}}
+          <tr>
+            <td>
+              {{await mandateeRow.mandatee.person.alternativeName}}
+            </td>
+            <td>
+              {{mandateeRow.domainsToShow}}
+            </td>
+            <td>
+              {{mandateeRow.fieldsToShow}}
+            </td>
+            <td class="vl-u-align-right vl-u-flex-align-center">
+              <button
+                class="vl-button vl-button--link vl-button--icon"
+                {{action "deleteRow" mandateeRow}}
+              >
+                <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
+                <span class="vl-u-visually-hidden">
+                  {{t "delete"}}
+                </span>
+              </button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
-</div>
+{{else}}
+  {{utils/add-minister-modal
+    cancel=(action "cancel")
+    addMandatee=(action "createMandateeRow")
+  }}
+{{/if}}

@@ -6,3 +6,10 @@
     padding: 2.3rem 2.1rem 1.7rem 2.2rem;
   }
 }
+
+// Spacing in case of a clickable pill in tab item
+.vl-tab {
+  .vl-pill {
+    margin-left: 0.7rem;
+  }
+}

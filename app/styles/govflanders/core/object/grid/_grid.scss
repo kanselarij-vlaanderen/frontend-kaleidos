@@ -66,10 +66,10 @@
       @content;
     }
   }
-  @else if ($min == null and $max == null) {
+  @elseif ($min == null and $max == null) {
     @content;
   }
-  @else if ($max != null and $min == null) {
+  @elseif ($max != null and $min == null) {
     @media screen and (max-width: $max) {
       @content;
     }

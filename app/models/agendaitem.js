@@ -39,7 +39,7 @@ export default Model.extend({
     return this.get('themes').sortBy('label');
   }),
 
-  governmentDomains: hasMany('government-domain', { inverse: null }),
+  // governmentDomains: hasMany('government-domain', { inverse: null }),
   phases: hasMany('subcase-phase'),
 
   isPostponed: computed('retracted', 'postponedTo', function () {
@@ -57,7 +57,7 @@ export default Model.extend({
     }
   }),
 
-  documents: computed('documentVersions', async function () {
+  documents: computed('documentVersions.@each', async function () {
     const documentVersions = await this.get('documentVersions');
     const documents = await Promise.all(documentVersions.map(documentVersion => {
       return documentVersion.get('document');
@@ -65,7 +65,7 @@ export default Model.extend({
     return documents.uniqBy('id');
   }),
 
-  documentsLength: computed('documents', function () {
+  documentsLength: computed('documents.@each', function () {
     return this.get('documents').then((documents) => {
       return documents.get('length');
     });

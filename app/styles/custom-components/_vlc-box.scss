@@ -5,6 +5,10 @@
 
 .vlc-box {
   background: $porcelain;
-  padding: 0 2rem;
+  padding: 2rem;
   margin: 0 0 4rem;
+}
+
+.vlc-box--padding-sides-only {
+  padding: 0 2rem;
 }

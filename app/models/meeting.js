@@ -18,21 +18,6 @@ export default Model.extend({
 	newsletter: belongsTo('newsletter-info'),
 	isFinal: attr("boolean"),
 
-	latestAgendaName: computed('agendas.@each', function () {
-		return this.get('agendas').then((agendas) => {
-			const agendaNamePosition = agendas.length - 1;
-			if (agendaNamePosition >= 0) {
-				if (alphabet[agendaNamePosition]) {
-					return "Ontwerpagenda " + alphabet[agendaNamePosition];
-				} else {
-					return "Ontwerpagenda " + agendaNamePosition;
-				}
-			} else {
-				return "Geen versie beschikbaar";
-			}
-		})
-	}),
-
 	latestAgenda: computed('agendas.@each', function () {
 		return DS.PromiseObject.create({
 			promise: this.get('agendas').then((agendas) => {
@@ -40,5 +25,17 @@ export default Model.extend({
 				return sortedAgendas.get('firstObject');
 			})
 		})
-	})
+	}),
+
+	latestAgendaName: computed('latestAgenda', 'agendas', function () {
+		return this.get('latestAgenda').then((agenda) => {
+			const agendaLength = this.get('agendas.length');
+			const agendaName = agenda.name;
+			if (agendaName !== "Ontwerpagenda") {
+				return `Agenda ${agendaName}`;
+			} else {
+				return `${agendaName} ${alphabet[agendaLength - 1]}`;
+			}
+		})
+	}),
 });

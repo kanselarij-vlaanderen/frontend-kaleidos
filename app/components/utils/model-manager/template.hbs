@@ -11,7 +11,7 @@
           searchField="label"
           propertyToShow="label"
           sortField="label"
-          selectedItems=selectedModel
+          selectedItems=item
           selectModel=(action "selectModel")
         }}
       </div>
@@ -39,7 +39,7 @@
               ></i>
               {{t "add"}}
             </button>
-            {{#if selectedModel}}
+            {{#if item}}
               <button
                 class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "toggleIsEditing"}}

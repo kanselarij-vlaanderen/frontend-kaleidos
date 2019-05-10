@@ -1,110 +1,89 @@
-<div class="vl-custom">
-  <div class="vl-info-tile vl-info-tile--custom">
-    <header class="vl-info-tile__header">
-      <div class="vl-info-tile__header__wrapper">
-        <div class="vlc-toolbar vl-u-flex-align-left">
-          <div class="vlc-toolbar__left">
-            <div class="vl-u-spacer-extended-right">
-              <div class="vl-custom">
-                <div class="vl-badge vl-badge--custom vl-badge--icon">
-                  <i class="vl-badge__icon vl-vi vl-vi-file"></i>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h5 class="vl-u-text--uppercase vl-u-text--bold vl-u-text--small">
-                {{await document.type.label}}
-              </h5>
-              {{document-name
-                documentVersion=(await lastDocumentVersion)
-                item=item
-              }}
-              <p class="vl-info-tile__header__subtitle">
-                {{t "uploaded-at"}}
-                {{moment-format (await lastDocumentVersion.created) "DD.MM.YYYY"
-                }}
-                {{t "at"}}
-                {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
-              </p>
-            </div>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vl-action-group">
-              <div class="vl-u-spacer-extended-right-s">
-                <div class="vl-custom">
-                  <span class="vl-pill vl-pill--success">
-                    {{await document.confidentiality.label}}
-                  </span>
-                </div>
-              </div>
-              {{#if (or isAdmin isEditor)}}
-                <div class="vl-u-spacer-extended-right-s vl-u-text--muted">
-                  <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
-                </div>
-                <button class="vl-button vl-button--link vl-button--icon">
-                  <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
-                </button>
-                {{#attach-popover
-                  class="ember-attacher-popper"
-                  hideOn="clickout click"
-                  showOn="click"
-                  animation="shift"
-                  placement="bottom" as |attacher|
-                }}
-                  <ul class="vl-popover__link-list">
-                    <li class="vl-popover__link-list__item">
-                      <a
-                        class="vl-link vl-link--block"
-                        {{action attacher.hide}}
-                        {{action "openUploadDialog" document}}
-                      >
-                        {{t "new-version"}}
-                      </a>
-                    </li>
-                  </ul>
-                {{/attach-popover}}
-              {{/if}}
-            </div>
+<div class="vlc-document-card">
+  <div class="vlc-toolbar vlc-toolbar--align-top vlc-toolbar--auto">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <div class="vlc-document-card-badge">
+          <div
+            class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
+          >
+            <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
           </div>
         </div>
       </div>
-    </header>
-    {{#if (await filteredDocumentVersions)}}
-      <footer>
-        <div class="vl-custom">
-          <div class="js-vl-accordion js-vl-accordion--open">
-            <button class="vl-toggle vl-link" {{action "showVersions"}}>
-              <i
-                class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-right-fat"
-              ></i>
-              {{t "show-versions"}}
-            </button>
-            {{#if isShowingVersions}}
-              <div class="vl-accordion__content js-vl-accordion__content">
-                <div
-                  class="vl-accordion__panel vl-accordion__panel--custom vl-u-bg-porcelain"
-                >
-                  <div class="vl-custom">
-                    <ul class="vl-link-list vl-link-list--bordered">
-                      {{#each
-                        (await filteredDocumentVersions) as |documentVersion|
-                      }}
-                        <li class="vl-link-list__item">
-                          {{web-components/vl-document
-                            documentVersion=documentVersion
-                          }}
-                        </li>
-                      {{/each}}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            {{/if}}
+      <div class="vlc-toolbar__item">
+        <div class="vlc-document-card-content">
+          <p class="vlc-subline">
+            {{await document.type.label}}
+          </p>
+          <h6 class="vl-title vl-title--h6">
+            {{document-name
+              documentVersion=(await lastDocumentVersion)
+              item=item
+            }}
+          </h6>
+          <div class="vlc-document-card-content__meta">
+            {{t "uploaded-at"}}
+            {{moment-format (await lastDocumentVersion.created) "DD.MM.YYYY"}}
+            {{t "at"}}
+            {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
           </div>
         </div>
-      </footer>
-    {{/if}}
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vl-u-spacer-extended-right-s">
+        <span class="vlc-pill vlc-pill--success">
+          {{await document.confidentiality.label}}
+        </span>
+      </div>
+      <div class="vl-u-spacer-extended-right-s">
+        {{#if (or isAdmin isEditor)}}
+          <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+          <button class="vl-button vl-button--link vl-button--icon">
+            <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
+          </button>
+          {{#attach-popover
+            class="ember-attacher-popper"
+            hideOn="clickout click"
+            showOn="click"
+            animation="shift"
+            placement="bottom" as |attacher|
+          }}
+            <ul class="vl-popover__link-list">
+              <li class="vl-popover__link-list__item">
+                <a
+                  class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "openUploadDialog" document}}
+                >
+                  {{t "new-version"}}
+                </a>
+              </li>
+            </ul>
+          {{/attach-popover}}
+        {{/if}}
+      </div>
+    </div>
   </div>
+  {{#if (await filteredDocumentVersions)}}
+    <div class="js-vl-accordion {{openClass}}">
+      <button class="vl-toggle vl-link vl-link--bold" {{action "showVersions"}}>
+        <i
+          class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
+        ></i>
+        {{t "show-versions"}}
+      </button>
+      {{#if isShowingVersions}}
+        <div class="vl-accordion__content js-vl-accordion__content">
+          <div class="vl-accordion__panel">
+            {{#each (await filteredDocumentVersions) as |documentVersion|}}
+              {{web-components/vl-document documentVersion=documentVersion}}
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
 </div>
 {{#if isUploadingNewVersion}}
   {{#web-components/vl-modal
@@ -135,11 +114,5 @@
         {{/if}}
       </div>
     </div>
-    {{web-components/vl-modal-footer
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "uploading")
-      cancelAction=(action "openUploadDialog")
-      saveAction=(action "uploadNewVersion")
-    }}
   {{/web-components/vl-modal}}
 {{/if}}

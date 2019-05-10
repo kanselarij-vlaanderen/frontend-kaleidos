@@ -4,7 +4,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: 5;
+  z-index: z("overlay");
   background-color: $overlay-bg;
   backdrop-filter: blur(2px);
 }

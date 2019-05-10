@@ -1,52 +1,16 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import ModelManageMixin from 'fe-redpencil/mixins/model-manage-mixin';
 
-export default Component.extend({
+export default Component.extend(ModelManageMixin, {
 	classNames: ["vl-u-spacer"],
-	store: inject(),
-	modelName:null,
-	
-	title: computed('selectedModel', {
-		get() {
-			const model = this.get('selectedModel');
-			if (model) {
-				return model.get('label');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
+	modelName: null,
 
-	isAdding: false,
-	isEditing: false,
+	title: getCachedProperty('label'),
 
 	actions: {
-		close() {
-			this.close();
-		},
-
-		selectModel(model) {
-			this.set('selectedModel', model);
-		},
-
-		toggleIsAdding() {
-			this.toggleProperty('isAdding');
-		},
-
-		toggleIsEditing() {
-			this.toggleProperty('isEditing');
-		},
-
-		removeModel() {
-			alert('This action is not allowed. Please contact the system administrator.');
-		},
-
-		editModel() {
-			const model = this.get('selectedModel');
+		async editModel() {
+			const model = await this.get('item');
 			model.set('label', this.get('title'));
 			model.save().then(() => {
 				this.set('title', null);
@@ -64,4 +28,4 @@ export default Component.extend({
 			});
 		}
 	}
-});
+})

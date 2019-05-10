@@ -2,49 +2,52 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import EmberObject from '@ember/object';
+import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, ApprovalsEditMixin, {
 	store: inject(),
-	classNames: ["vl-u-spacer--large"],
-	item:null,
+	classNames: ["vl-u-spacer-extended-bottom"],
+	item: null,
 	propertiesToSet: ['mandatees', 'governmentDomains'],
 
-	mandateeRows: computed('item', function () {
-		return this.constructMandateeRows().then((mandateeRows) => {
-			return mandateeRows;
-		});
+	mandateeRows: computed('item', 'item.subcase', function () {
+		return this.constructMandateeRows();
 	}),
 
-	async constructMandateeRows() {
-		const {item} = this;
-		const mandatees = await item.get('mandatees');
-		const governmentDomains = await item.get('governmentDomains');
+	async createMandateeRow(mandatee, iseCodes) {
+		const fields = [...new Set(await Promise.all(iseCodes.map((iseCode) => iseCode.get('field'))))];
+		const domains = [...new Set(await Promise.all(fields.map((field) => field.get('domain'))))];
 
-		let rowsToReturn = await this.createRows(mandatees);
-		await this.setDomainsOfRows(governmentDomains, rowsToReturn);
-		return rowsToReturn;
-	},
+		const domainsToShow = domains.map((domain) => domain.get('label')).join(', ');
+		const fieldsToShow = fields.map((field) => field.get('label')).join(', ');
 
-	async createRows(mandatees) {
-		return await Promise.all(mandatees.map(async (mandatee) => {
-			return Object.create({
+		return EmberObject.create(
+			{
+				fieldsToShow,
+				domainsToShow,
 				mandatee: mandatee,
-				domains: await mandatee.get('governmentDomains'),
-				selectedDomains: []
+				domains: domains,
+				fields: fields,
+				iseCodes: iseCodes,
 			})
-		}));
 	},
 
-	async setDomainsOfRows(domains, rowsToReturn) {
-		return Promise.all(domains.map(async (domain) => {
-			const domainMandatees = await domain.get('mandatees');
-			return rowsToReturn.map(async (row) => {
-				const foundMandatee = await domainMandatees.find(domainMandatee => domainMandatee.get('id') === row.mandatee.get('id'));
-				if (foundMandatee) {
-					row.selectedDomains.addObject(domain);
-				}
-			});
+	async constructMandateeRows() {
+		const { isAgendaItem } = this;
+		let item;
+		if (isAgendaItem) {
+			item = await this.get('item.subcase');
+		} else {
+			item = await this.get('item');
+		}
+
+		const iseCodes = await item.get('iseCodes');
+		const mandatees = await item.get('mandatees');
+
+		return Promise.all(mandatees.map((mandatee) => {
+			return this.createMandateeRow(mandatee, iseCodes);
 		}))
 	},
 
@@ -54,36 +57,45 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 		},
 
 		async cancelEditing() {
+			this.set('mandateeRows', await this.constructMandateeRows());
 			this.toggleProperty('isEditing');
 		},
 
-		mandateeRowsChanged(mandateeRows) {
-			this.set('mandateeRows', mandateeRows);
+		addRow() {
+			this.toggleProperty('isAdding');
 		}
 	},
 
 	async setNewPropertiesToModel(model) {
 		await this.parseDomainsAndMandatees();
-		const { selectedMandatees, selectedDomains } = this;
+		const { selectedMandatees, selectedIseCodes, isAgendaItem } = this;
+		if (isAgendaItem) {
+			model = await this.get('item.subcase');
+		} else {
+			model = await this.get('item');
+		}
 		model.set('mandatees', selectedMandatees);
-		model.set('governmentDomains', selectedDomains);
-		return model.save();
+		model.set('iseCodes', selectedIseCodes);
+		return model.save().then((model) => {
+			return this.checkForActionChanges(model);
+		});
 	},
 
 	async parseDomainsAndMandatees() {
 		const mandateeRows = await this.get('mandateeRows');
 		const mandatees = [];
-		const selectedDomains = [];
+		let selectedIseCodes = [];
+
 		if (mandateeRows && mandateeRows.get('length') > 0) {
 			mandateeRows.map(row => {
-				mandatees.push(row.mandatee);
-				const domains = row.selectedDomains;
-				domains.map(domain => {
-					selectedDomains.addObject(domain);
+				mandatees.push(row.get('mandatee'));
+				const iseCodes = row.get('iseCodes');
+				iseCodes.map((code) => {
+					selectedIseCodes.push(code);
 				})
 			})
 		}
 		this.set('selectedMandatees', mandatees);
-		this.set('selectedDomains', selectedDomains);
+		this.set('selectedIseCodes', selectedIseCodes);
 	}
 });

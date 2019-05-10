@@ -19,7 +19,7 @@ export default Model.extend({
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
   phases: hasMany('subcase-phase', { inverse: null }),
   consulationRequests: hasMany('consulation-request', { inverse: null }),
-  governmentDomains: hasMany('government-domain', { inverse: null }),
+  iseCodes: hasMany('ise-code'),
   agendaitems: hasMany('agendaitem', { inverse: null }),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version', { inverse: null }),

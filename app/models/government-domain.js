@@ -5,5 +5,6 @@ const { Model, attr, hasMany } = DS;
 export default Model.extend({
 	label: attr('string'),
 	scopeNote: attr('string'),
-	mandatees: hasMany('mandatee', {inverse:null})
+	altLabel: attr('string'),
+	governmentFields: hasMany('government-field', { inverse: null })
 });

@@ -28,7 +28,7 @@
     color: #8CAE2C; // Not $green
   }
   .vlc-status-timeline__item--neutral & {
-    color: $blue-gray-dark;
+    color: $dove-gray;
   }
   .vlc-status-timeline__item--in-progress & {
     color: $curious-blue;
@@ -36,6 +36,7 @@
 }
 
 .vlc-status-timeline__dot {
+  flex: 0 0 auto;
   height: 1.1rem;
   width: 1.1rem;
   border-radius: 100%;
@@ -44,7 +45,7 @@
     background: #8CAE2C;// Not $green
   }
   .vlc-status-timeline__item--neutral & {
-    background: $blue-gray-light;
+    background: $dove-gray;
   }
   .vlc-status-timeline__item--in-progress & {
     background: $curious-blue;

@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 
 export default Controller.extend({
 	page: 0,
-	size: 6,
+	size: 30,
 
 	links: computed('model.links', function () {
 		return this.get('model.links')

@@ -4,10 +4,9 @@
     selected=selectedMandatees
     search=(perform searchTheme)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "chooseMandatee") 
-  as |mandatee|
+    onchange=(action "chooseMandatee") as |mandatee|
   }}
-    {{mandatee.title}}
+    {{await mandatee.person.alternativeName}}{{mandatee.title}}
   {{/power-select-multiple}}
 {{else}}
   {{#power-select
@@ -15,9 +14,8 @@
     selected=selectedMandatees
     search=(perform searchTheme)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "chooseMandatee") 
-  as |mandatee|
+    onchange=(action "chooseMandatee") as |mandatee|
   }}
-    {{mandatee.title}}
+    {{await mandatee.person.alternativeName}}{{mandatee.title}}
   {{/power-select}}
 {{/if}}
