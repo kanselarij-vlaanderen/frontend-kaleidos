@@ -7,10 +7,10 @@
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
         {{utils/model-selector
-          modelName="ise-code"
-          searchField="name"
-          propertyToShow="name"
-          sortField="name"
+          modelName="government-field"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
           selectedItems=item
           selectModel=(action "selectModel")
         }}
@@ -67,22 +67,29 @@
   {{#if isAdding}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "ise-code")}}
-        {{web-components/vl-form-input width="4" value=name}}
-      </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "ISE-code")}}
-        {{web-components/vl-form-input width="4" value=code}}
-      </div>
-      <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "government-field")}}
+        {{web-components/vl-form-input width="4" value=label}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "government-domain")}}
         {{utils/model-selector
-          modelName="government-field"
+          modelName="government-domain"
           searchField="label"
           propertyToShow="label"
           sortField="label"
-          selectedItems=field
-          selectModel=(action "chooseField")
+          selectedItems=domain
+          selectModel=(action "chooseDomain")
+        }}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "ise-code")}}
+        {{utils/model-selector
+          modelName="ise-code"
+          searchField="name"
+          propertyToShow="name"
+          sortField="name"
+          selectedItems=iseCode
+          selectModel=(action "chooseIseCode")
         }}
       </div>
     </div>
@@ -96,22 +103,29 @@
   {{#if isEditing}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "ise-code")}}
-        {{web-components/vl-form-input width="4" value=name}}
-      </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "ISE-code")}}
-        {{web-components/vl-form-input width="4" value=code}}
-      </div>
-      <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "government-field")}}
+        {{web-components/vl-form-input width="4" value=label}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "government-domain")}}
         {{utils/model-selector
-          modelName="government-field"
+          modelName="government-domain"
           searchField="label"
           propertyToShow="label"
           sortField="label"
-          selectedItems=field
-          selectModel=(action "chooseField")
+          selectedItems=domain
+          selectModel=(action "chooseDomain")
+        }}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "ise-code")}}
+        {{utils/model-selector
+          modelName="ise-code"
+          searchField="name"
+          propertyToShow="name"
+          sortField="name"
+          selectedItems=iseCode
+          selectModel=(action "chooseIseCode")
         }}
       </div>
     </div>

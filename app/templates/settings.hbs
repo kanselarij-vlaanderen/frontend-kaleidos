@@ -88,6 +88,12 @@
     close=(action "showAddingMandateForm")
   }}
 {{/if}}
+{{#if isManagingFunctions}}
+  {{utils/manage-government-fields
+    modalTitle=(t "manage-government-fields")
+    close=(action "showFunctionsManagement")
+  }}
+{{/if}}
 {{#if isManagingIseCodes}}
   {{utils/manage-ise-code
     modalTitle=(t "manage-ise-codes")

@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-	
+
 	actions: {
 		selectUser(user) {
 			this.set('selectedUser', user);
@@ -9,7 +9,7 @@ export default Component.extend({
 
 		close() {
 			const user = this.get('selectedUser');
-			if(user) {
+			if (user) {
 				user.belongsTo('group').reload();
 			}
 			this.close();
@@ -30,6 +30,5 @@ export default Component.extend({
 			const user = this.get('selectedUser');
 			user.set('group', null);
 		}
-
 	}
 });
