@@ -1,13 +1,15 @@
 import Controller from '@ember/controller';
 
 export default Controller.extend({
-	isAddingNewMinister:false,
-	isAddingMandate:false,
+	isAddingNewMinister: false,
+	isAddingMandate: false,
 	isEditingMandatee: false,
 	isManagingAlerts: false,
 	isManagingDocumentTypes: false,
 	isManagingUsers: false,
 	isManagingSubcaseTypes: false,
+	isManagingIseCodes: false,
+	isManagingFunctions: false,
 
 	actions: {
 		showAddingMandateForm() {
@@ -36,6 +38,15 @@ export default Controller.extend({
 
 		showSubcaseTypesManagementForm() {
 			this.toggleProperty('isManagingSubcaseTypes');
+		},
+
+		showIseCodeManagement() {
+			this.toggleProperty('isManagingIseCodes');
+		},
+
+		showFunctionsManagement() {
+			this.toggleProperty('isManagingFunctions');
+
 		}
 	}
 });

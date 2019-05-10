@@ -7,10 +7,10 @@
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
         {{utils/model-selector
-          modelName=modelName
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
+          modelName="ise-code"
+          searchField="name"
+          propertyToShow="name"
+          sortField="name"
           selectedItems=item
           selectModel=(action "selectModel")
         }}
@@ -67,8 +67,12 @@
   {{#if isAdding}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title")}}
-        {{web-components/vl-form-input width="4" value=title}}
+        {{web-components/vl-form-label value=(t "ise-code")}}
+        {{web-components/vl-form-input width="4" value=name}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "ISE-code")}}
+        {{web-components/vl-form-input width="4" value=code}}
       </div>
     </div>
     {{web-components/vl-modal-footer
@@ -81,8 +85,12 @@
   {{#if isEditing}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title")}}
-        {{web-components/vl-form-input width="4" value=title}}
+        {{web-components/vl-form-label value=(t "ise-code")}}
+        {{web-components/vl-form-input width="4" value=name}}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "ISE-code")}}
+        {{web-components/vl-form-input width="4" value=code}}
       </div>
     </div>
     {{web-components/vl-modal-footer

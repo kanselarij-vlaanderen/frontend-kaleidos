@@ -1,70 +1,23 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 
 export default Component.extend({
 	store: inject(),
+
+	item: computed('mandateeToEdit', function () {
+		return this.get('caseToEdit');
+	}),
 
 	startDate: computed('mandateeToEdit', function () {
 		return this.get('mandateeToEdit.start');
 	}),
 
-
-	iseCodes: computed('mandateeToEdit', {
-		get() {
-			const mandatee = this.get('mandateeToEdit');
-			if (mandatee) {
-				return mandatee.get('iseCodes');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
-
-	priority: computed('mandateeToEdit', {
-		get() {
-			const mandatee = this.get('mandateeToEdit');
-			if (mandatee) {
-				return mandatee.get('priority');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
-
-	title: computed('mandateeToEdit', {
-		get() {
-			const mandatee = this.get('mandateeToEdit');
-			if (mandatee) {
-				return mandatee.get('title');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
-
-	shortTitle: computed('mandateeToEdit', {
-		get() {
-			const mandatee = this.get('mandateeToEdit');
-			if (mandatee) {
-				return mandatee.get('shortTitle');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
+	iseCodes: getCachedProperty('iseCodes'),
+	priority: getCachedProperty('priority'),
+	title: getCachedProperty('title'),
+	shortTitle: getCachedProperty('shortTitle'),
 
 	actions: {
 		selectStartDate(val) {

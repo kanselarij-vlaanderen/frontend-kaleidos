@@ -123,7 +123,8 @@
 	"manage-alerts": "Systeemberichten beheer",
 	"manage-case-types": "Dossier-types beheer",
 	"manage-document-types": "Document-types beheer",
-	"manage-mandates": "Bevoegdheden beheren",
+	"manage-government-domains": "Beleidsdomeinen beheren",
+	"manage-government-fields": "Beleidsvelden beheren",
 	"manage-ministers": "Ministerbeheer",
 	"manage-ministers-title": "Ministers en bevoegdheden",
 	"manage-user-roles": "Gebruikersbeheer",
@@ -259,5 +260,7 @@
 	"toggle": "aan-uit",
 	"requested-for-agenda": "Ingediend voor de agenda van",
 	"government-domain": "Beleidsdomein",
-	"government-field": "Beleidsveld"
+	"government-field": "Beleidsveld",
+	"manage-ise-codes": "Beheer ISE-codes",
+	"ISE-code": "Code"
 }

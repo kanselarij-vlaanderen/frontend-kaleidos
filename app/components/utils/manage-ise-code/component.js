@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { computed } from '@ember/object';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 
 export default Component.extend({
@@ -8,7 +7,8 @@ export default Component.extend({
 	store: inject(),
 	modelName: null,
 
-	title: getCachedProperty('label'),
+	name: getCachedProperty('name'),
+	code: getCachedProperty('code'),
 
 	isAdding: false,
 	isEditing: false,
@@ -23,6 +23,8 @@ export default Component.extend({
 		},
 
 		toggleIsAdding() {
+			this.set('code', null);
+			this.set('name', null);
 			this.toggleProperty('isAdding');
 		},
 
@@ -36,19 +38,23 @@ export default Component.extend({
 
 		async editModel() {
 			const model = await this.get('item');
-			model.set('label', this.get('title'));
+			model.set('name', this.get('name'));
+			model.set('code', this.get('code'));
 			model.save().then(() => {
-				this.set('title', null);
+				this.set('code', null);
+				this.set('name', null);
 				this.set('isEditing', false);
 			});
 		},
 
 		createModel() {
-			const governmentDomain = this.store.createRecord(this.get('modelName'), {
-				label: this.get('title')
+			const governmentDomain = this.store.createRecord('ise-code', {
+				name: this.get('name'),
+				code: this.get('code')
 			});
 			governmentDomain.save().then(() => {
-				this.set('title', null);
+				this.set('code', null);
+				this.set('name', null);
 				this.set('isAdding', false);
 			});
 		}
