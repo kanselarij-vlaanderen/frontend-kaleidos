@@ -88,6 +88,14 @@ export default Model.extend({
     return this.get('themes').sortBy('label');
   }),
 
+  sortedPhases: computed('phases.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('phases').then((phases) => {
+        return phases.sortBy('date');
+      })
+    });
+  }),
+
   hasAgendaItem: computed('agendaitems.@each', function () {
     const { id, store } = this;
     return PromiseObject.create({
