@@ -1,9 +1,22 @@
 import Component from '@ember/component';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, {
 	classNames: ["vl-u-bg-alt"],
 	isAddingSubcase: false,
+
+	activeProcess: computed('isShowingProcess', function () {
+		if (this.get('isShowingProcess')) {
+			return 'vlc-tabs-reverse__link--active';
+		}
+	}),
+
+	activeOverview: computed('isShowingOverview', function () {
+		if (this.get('isShowingOverview')) {
+			return 'vlc-tabs-reverse__link--active';
+		}
+	}),
 
 	actions: {
 		toggleIsAddingSubcase() {
@@ -12,17 +25,17 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		close() {
 			this.toggleProperty('isAddingSubcase');
-			this.send('refresh');
+			this.refresh();
 		},
 
 		toggleIsShowingProcess() {
-			this.toggleProperty('isShowingOverview');
-			this.toggleProperty('isShowingProcess');
+			this.set('isShowingProcess', true);
+			this.set('isShowingOverview', false);
 		},
 
 		toggleIsShowingOverview() {
-			this.toggleProperty('isShowingProcess');
-			this.toggleProperty('isShowingOverview');
+			this.set('isShowingProcess', false);
+			this.set('isShowingOverview', true);
 		},
 	}
 });

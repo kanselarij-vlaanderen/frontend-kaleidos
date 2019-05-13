@@ -2,6 +2,7 @@
   model=model
   isShowingOverview=isShowingOverview
   isShowingProcess=isShowingProcess
+  refresh=(action "refresh")
 }}
 {{#if (gt (await model.subcases.length) 0)}}
   {{#if isShowingProcess}}

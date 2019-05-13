@@ -6,6 +6,8 @@ const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
   store: inject(),
+  intl: inject(),
+
   created: attr('date'),
   modified: attr('date'),
   shortTitle: attr('string'),
@@ -15,29 +17,38 @@ export default Model.extend({
   isArchived: attr('boolean'),
   confidential: attr('boolean'),
   concluded: attr('boolean'),
-  case: belongsTo('case'),
-  // relatedTo: hasMany('subcase', { inverse: null }),
-  requestedForMeeting: belongsTo('meeting', { inverse: null }),
+  subcaseName: attr('string'),
+
   phases: hasMany('subcase-phase', { inverse: null }),
   consulationRequests: hasMany('consulation-request', { inverse: null }),
-  iseCodes: hasMany('ise-code', { serialize: false }),
+  iseCodes: hasMany('ise-code'),
   agendaitems: hasMany('agendaitem', { inverse: null }),
-  remarks: hasMany('remark', { serialize: false }),
+  remarks: hasMany('remark'),
   documentVersions: hasMany('document-version', { inverse: null }),
   themes: hasMany('theme'),
-  mandatees: hasMany('mandatee', { serialize: false }),
-  approvals: hasMany('approval', { serialize: false }),
+  mandatees: hasMany('mandatee'),
+  approvals: hasMany('approval'),
+  // relatedTo: hasMany('subcase', { inverse: null }),
+
   confidentiality: belongsTo('confidentiality'),
   decision: belongsTo('decision'),
   type: belongsTo('subcase-type'),
-  subcaseName: attr('string'),
+  case: belongsTo('case', { inverse: null }),
+  requestedForMeeting: belongsTo('meeting', { inverse: null }),
 
-  firstPhase: computed('phases', function () {
+  firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({
       promise: this.store.query('subcase-phase', { filter: { subcase: { id: this.get('id') } }, sort: 'date', include: 'code' }).then((subcasePhases) => {
         return subcasePhases.get('firstObject');
       })
     });
+  }),
+
+
+  nameToShow: computed('subcaseName', function () {
+    const subcaseName = this.get('subcaseName');
+    if (subcaseName)
+      return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
   }),
 
   async documentNumberOfVersion(version) {

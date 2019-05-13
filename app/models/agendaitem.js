@@ -11,7 +11,7 @@ export default Model.extend({
   record: attr('string'),
   retracted: attr('boolean'),
   showAsRemark: attr('boolean'),
-
+  modified: attr('date'),
   titlePress: attr('string'),
   textPress: attr('string'),
   forPress: attr('boolean'),
@@ -30,7 +30,7 @@ export default Model.extend({
 
   remarks: hasMany('remark'),
   // attendees: hasMany('mandatee', { inverse: null }),
-  mandatees: hasMany('mandatee', { inverse: null }),
+  mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   documentVersions: hasMany('document-version', { inverse: null }),
 

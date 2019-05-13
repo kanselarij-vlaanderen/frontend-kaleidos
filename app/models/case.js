@@ -49,7 +49,7 @@ export default Model.extend({
     const subcases = await this.store.query('subcase', {
       filter: {
         case: { id: this.get('id') },
-        "is-archived": false,
+        // "is-archived": false,
       },
       include: "phases,phases.code,type",
       sort: 'created'
