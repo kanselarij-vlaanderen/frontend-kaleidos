@@ -1,43 +1,52 @@
-<div class="js-vl-accordion js-vl-accordion--open">
-  <button class="vl-toggle vl-link" {{action "toggleShowDetails"}}>
-    <div class="vl-custom vl-u-spacer-extended-right-s">
-      <div class="vl-badge vl-badge--custom vl-badge--icon">
-        <div class="o-svg-icon o-svg-icon-user">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7 7.875C9.17383 7.875 10.9375 6.11133 10.9375 3.9375C10.9375 1.76367 9.17383 0 7 0C4.82617 0 3.0625 1.76367 3.0625 3.9375C3.0625 6.11133 4.82617 7.875 7 7.875ZM10.5 8.75H8.99336C8.38633 9.02891 7.71094 9.1875 7 9.1875C6.28906 9.1875 5.61641 9.02891 5.00664 8.75H3.5C1.5668 8.75 0 10.3168 0 12.25V12.6875C0 13.4121 0.587891 14 1.3125 14H12.6875C13.4121 14 14 13.4121 14 12.6875V12.25C14 10.3168 12.4332 8.75 10.5 8.75Z"
-              fill="#0055CC"
-            ></path>
-          </svg>
+<div class="vl-u-spacer-extended-right-s">
+  <div
+    class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
+  >
+    <i class="vl-badge__icon vl-vi vl-vi-user" aria-hidden="true"></i>
+  </div>
+</div>
+<div>
+  <div class="vlc-minister-item__title">
+    <h6 class="vl-title vl-title--h6">
+      <p>
+        {{await mandatee.person.alternativeName}}
+        ,
+        {{mandatee.title}}
+      </p>
+    </h6>
+  </div>
+  <div class="js-vl-accordion js-vl-accordion--open">
+    <button
+      class="vl-toggle vl-link vl-link--bold"
+      {{action "toggleShowDetails"}}
+    >
+      <i
+        class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
+        aria-hidden="true"
+      ></i>
+      {{t "collapse"}}
+    </button>
+    {{#if showDetails}}
+      <div class="vl-accordion__content js-vl-accordion__content">
+        <div class="vl-accordion__panel">
+          <div class="vl-typography">
+            <ul>
+              {{log (await fields)}}
+              {{#each fields as |field|}}
+                {{!-- {{#if
+                  (check-mandatees-of-domain
+                    domainMandatees=domain.mandatees mandatee=mandatee
+                  )
+                }} --}}
+                <li>
+                  {{field.label}}
+                </li>
+                {{!-- {{/if}} --}}
+              {{/each}}
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-    <p>
-      {{await mandatee.person.alternativeName}}, {{mandatee.title}}
-    </p>
-    <i
-      class="vl-link__icon vl-link__icon--after vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
-    ></i>
-  </button>
-  {{#if showDetails}}
-    <div class="vl-accordion__content js-vl-accordion__content">
-      <div class="vl-accordion__panel">
-        <ul class="vl-u-text--small">
-          {{#each (await domains) as |domain|}}
-            {{#if (check-mandatees-of-domain domainMandatees=domain.mandatees mandatee=mandatee)}}
-              <li>
-                {{domain.label}}
-              </li>
-            {{/if}}
-          {{/each}}
-        </ul>
-      </div>
-    </div>
-  {{/if}}
+    {{/if}}
+  </div>
 </div>

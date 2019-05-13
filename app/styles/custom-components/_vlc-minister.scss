@@ -1,0 +1,22 @@
+/* ==========================================================================
+  Component: Minister list with authorities
+   ========================================================================== */
+
+.vlc-minister-list {
+  .vlc-minister-item {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: flex-start;
+      padding: 1.8rem 0;
+      &:not(:last-child) {
+          border-bottom: 1px solid $border-color;
+      }
+  }
+
+  .vlc-minister-item__title {
+      margin-bottom: 1rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+  }
+}

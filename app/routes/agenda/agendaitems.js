@@ -17,7 +17,8 @@ export default Route.extend({
 
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
-			include: 'subcase.mandatees,subcase,subcase.case,postponed-to'
+			include: 'subcase.document-versions,subcase.mandatees,subcase,subcase.case,postponed-to',
+			page: {'size':300}
 		}
 		if (params.filter) {
 			filterOptions['filter']['subcase'] = { 'short-title': params.filter };

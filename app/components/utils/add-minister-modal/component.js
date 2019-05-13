@@ -1,15 +1,22 @@
 import Component from '@ember/component';
+import EmberObject from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Component.extend({
+	store: inject(),
 	selectedMandatee: null,
 
 	async refreshData(mandatee) {
-		const domains = await mandatee.get('governmentDomains');
-		await Promise.all(domains.map(async (domain) => {
-			domain.set('selected', false)
-			const codes = await domain.get('codes');
-			await codes.map((code) => code.set('selected', false));
-		}));
+		const iseCodes = await mandatee.get('iseCodes');
+		const fields = await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')));
+		const domains = await Promise.all(fields.map((field) => field.get('domain')));
+
+		const rowToShow = EmberObject.create({
+			domains: [...new Set(domains)],
+			fields: [...new Set(fields)],
+		});
+
+		return rowToShow;
 	},
 
 	actions: {
@@ -18,40 +25,51 @@ export default Component.extend({
 		},
 
 		async mandateeSelected(mandatee) {
-			await this.refreshData(mandatee);
-
+			const rowToShow = await this.get('rowToShow')
+			if (rowToShow) {
+				rowToShow.domains.map((domain) => {
+					const domainToClear = this.store.peekRecord('government-domain', domain.id);
+					domainToClear.set('selected', false)
+				});
+				rowToShow.fields.map((field) => {
+					const fieldToClear = this.store.peekRecord('government-field', field.id);
+					fieldToClear.set('selected', false)
+				});
+			}
 			this.set('selectedMandatee', mandatee);
-			const domains = await mandatee.get('governmentDomains');
 
-			this.set('selectedDomains', domains);
+			this.set('rowToShow', await this.refreshData(mandatee));
 		},
 
-		addMandatee() {
-			const { selectedMandatee, selectedDomains } = this;
-			const domainsToAdd = selectedDomains.filter((domain) => domain.selected);
-			const iseCodes = domainsToAdd.map((domain) => domain.codes.filter((code) => code.selected))
-			const combinedIseCodes = [];
-			iseCodes.map((isecodes) => combinedIseCodes.push(...isecodes));
-			this.addMandatee(selectedMandatee, domainsToAdd, combinedIseCodes);
+		async addMandatee() {
+			const { selectedMandatee, rowToShow } = this;
+			const fields = rowToShow.get('fields');
+			const selectedDomains = [...new Set(rowToShow.get('domains').filter((domain) => domain.selected))];
+			const selectedFields = fields.filter((field) => field.selected);
+			const selectedIseCodeLists = await Promise.all(selectedFields.map((field) => field.get('iseCode')));
+
+			this.addMandatee(selectedMandatee, selectedDomains, selectedFields, selectedIseCodeLists)
+
 			this.cancel();
 		},
 
-		selectDomain(domain, value) {
-			const codes = domain.get('codes');
-			codes.map((code) => code.set('selected', value));
+		async selectDomain(domain, value) {
+			const fields = await this.get('rowToShow.fields').filter((field) => field.get('domain.id') === domain.id);
+			fields.map((field) => field.set('selected', value));
 		},
 
-		async selectCode(code, domain, value) {
-			const foundDomain = this.get('selectedDomains').find((item) => item.id == domain.id);
-			const codes = domain.get('codes');
-			const selectedCodes = codes.filter((code) => code.selected);
-			if(value) {
+		async selectField(domain, value) {
+			const foundDomain = this.get('rowToShow.domains').find((item) => item.id == domain.id);
+			const fields = await domain.get('governmentFields');
+			const selectedFields = fields.filter((field) => field.selected);
+
+			if (value) {
 				foundDomain.set('selected', value);
 			} else {
-				if(selectedCodes.length === 1) {
+				if (selectedFields.length === 1) {
 					foundDomain.set('selected', value);
 				}
-			} 
+			}
 		}
 	}
 });

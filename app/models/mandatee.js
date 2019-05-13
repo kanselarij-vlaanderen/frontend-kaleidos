@@ -10,7 +10,7 @@ export default Model.extend({
 	dateSwornIn: attr('date'),
 	dateDecree: attr('date'),
 	// temporaryReplacements: hasMany('mandatee'),
-	governmentDomains: hasMany('government-domain', {inverse:null}),
+	iseCodes: hasMany('ise-code', { inverse: null }),
 	decisions: hasMany('decision'),
 	cases: hasMany('case'),
 	holds: belongsTo('mandate', { inverse: null }),
@@ -18,6 +18,6 @@ export default Model.extend({
 	meetingsAttended: hasMany('meeting-record'),
 	approvals: hasMany('approval'),
 	subcases: hasMany('subcase'),
-	agendaitems: hasMany('agendaitem')
+	agendaitems: hasMany('agendaitem'),
 	// state: belongsTo('mandatee-status')
 });

@@ -5,7 +5,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	store: inject(),
-	classNames: ["vl-u-spacer--large"],
+	classNames: ["vl-u-spacer-extended-bottom-l"],
 	item: null,
 	propertiesToSet: ['themes'],
 

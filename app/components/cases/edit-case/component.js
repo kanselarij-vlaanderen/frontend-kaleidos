@@ -1,47 +1,24 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+
 export default Component.extend({
 	store: inject(),
 
-	title: computed('caseToEdit', {
-		get() {
-			const caze = this.get('caseToEdit');
-			if (caze) {
-				return caze.get('title');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
+	item: computed('caseToEdit', function () {
+		return this.get('caseToEdit');
 	}),
 
-	shortTitle: computed('caseToEdit', {
-		get() {
-			const caze = this.get('caseToEdit');
-			if (caze) {
-				return caze.get('shortTitle');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
-
-	type: computed('caseToEdit', function() {
-		const caze = this.get('caseToEdit');
-		return caze.get('type');
-	}),
+	title: getCachedProperty('title'),
+	shortTitle: getCachedProperty('shortTitle'),
+	type: getCachedProperty('type'),
 
 	actions: {
 		toggleIsEditing() {
 			this.cancelEditing();
 		},
-		
+
 		selectType(type) {
 			this.set('type', type);
 		},

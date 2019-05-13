@@ -1,52 +1,64 @@
-{{#if (not isEditing)}}
-  <div class="vl-u-spacer--large">
-    <div class="vl-u-spacer">
-      <div class="vl-u-display-flex vl-u-display-flex-align-center">
-        <h4 class="vl-title vl-title--h4">
-          {{t "manage-ministers-title"}}
-        </h4>
-        {{#if (or isAdmin isEditor)}}
-          <div class="vl-u-spacer-extended-left-s">
-            <a class="vl-link" {{action "toggleIsEditing"}}>
-              {{t "edit"}}
-            </a>
-          </div>
-        {{/if}}
-      </div>
-    </div>
-    {{#if (gt (await item.mandatees.length) 0)}}
-      {{#each (await mandateeRows) as |mandateeRow|}}
-        <div class="vl-custom">
-          <ul class="vl-link-list vl-link-list--custom vl-link-list--bordered">
-            {{web-components/vl-mandatee-link
-              mandatee=mandateeRow.mandatee
-              domains=mandateeRow.selectedDomains
-            }}
-          </ul>
-        </div>
-      {{/each}}
-    {{else}}
-      <div class="vl-u-spacer-extended-top-s">
-        {{web-components/vl-alert message=(t "no-domains-yet")}}
+<div class="vl-u-spacer-extended-bottom-s">
+  <div class="vl-u-display-flex vl-u-display-flex-align-center">
+    <h4 class="vl-title vl-title--h4">
+      {{t "manage-ministers-title"}}
+    </h4>
+    {{#if (and (or isAdmin isEditor) (not isEditing))}}
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link" {{action "toggleIsEditing"}}>
+          {{t "edit"}}
+        </a>
       </div>
     {{/if}}
   </div>
+</div>
+{{#if (not isEditing)}}
+  {{#if (gt (await item.mandatees.length) 0)}}
+    {{#each (await mandateeRows) as |mandateeRow|}}
+      <ul class="vlc-minister-list">
+        {{web-components/vl-mandatee-link
+          mandatee=mandateeRow.mandatee
+          fields=mandateeRow.fields
+        }}
+      </ul>
+    {{/each}}
+  {{else}}
+    {{web-components/vl-alert message=(t "no-domains-yet")}}
+  {{/if}}
 {{else}}
-  <div class="vl-form__group vl-u-bg-porcelain">
-    <div class="vl-u-spacer">
-      {{cases/subcase-mandatees
-        showSelected=true
-        mandateeRows=(await mandateeRows)
-        isEditing=isEditing
-      }}
-    </div>
-    <div class="vl-action-group vl-action-group--align-right">
-      <a class="vl-link" {{action "cancelEditing"}}>
-        {{t "cancel"}}
-      </a>
-      <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-        {{t "save"}}
-      </button>
+  <div class="vlc-box">
+    {{cases/subcase-mandatees
+      showSelected=true
+      mandateeRows=(await mandateeRows)
+      isEditing=isEditing
+      isAdding=isAdding
+    }}
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__left">
+        <a
+          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          {{action "addRow"}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            aria-hidden="true"
+          ></i>
+          {{t "add-minister"}}
+        </a>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vl-action-group vl-action-group--align-right">
+          <a
+            class="vl-button vl-button--tertiary vl-button--narrow"
+            {{action "cancelEditing"}}
+          >
+            {{t "cancel"}}
+          </a>
+          <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
+            {{t "save"}}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 {{/if}}

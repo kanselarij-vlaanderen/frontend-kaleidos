@@ -8,6 +8,11 @@ export default Controller.extend({
 
 	title: computed('currentSession', function () {
 		const date = this.get('currentSession.plannedStart');
+		return `${this.get('intl').t('agenda-for')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+	}),
+
+	pageTitle: computed('currentSession', function () {
+		const date = this.get('currentSession.plannedStart');
 		return `${this.get('intl').t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
 	}),
 

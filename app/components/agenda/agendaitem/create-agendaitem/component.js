@@ -7,21 +7,21 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 import { computed } from '@ember/object';
 
 export default Component.extend(DefaultQueryParamsMixin, {
-	postponedSubcases: A([]),
-	availableSubcases: A([]),
+  postponedSubcases: A([]),
+  availableSubcases: A([]),
   currentSession: alias('sessionService.currentSession'),
   selectedAgenda: alias('sessionService.currentAgenda'),
-	agendas: alias('sessionService.agendas'),
-	
-	store: inject(),
-	subcasesService: inject(),
-	agendaService: inject(),
-  sessionService: inject(),
-	
-	size:5,
-  sort:'short-title',
+  agendas: alias('sessionService.agendas'),
 
-	model: computed('store', 'sort', 'page', 'filter', 'size', function () {
+  store: inject(),
+  subcasesService: inject(),
+  agendaService: inject(),
+  sessionService: inject(),
+
+  size: 5,
+  sort: 'short-title',
+
+  model: computed('store', 'sort', 'page', 'filter', 'size', function () {
     const { store, page, filter, size, sort } = this;
     const options = {
       sort: sort,
@@ -32,40 +32,40 @@ export default Component.extend(DefaultQueryParamsMixin, {
       filter: {
         ':has-no:agendaitems': 'yes'
       },
-      include: 'mandatees,document-versions,themes,government-domains,approvals'
+      // include: 'mandatees,document-versions,themes,government-domains,approvals'
     };
     if (filter) {
-    options['filter'] = {
-      ':has-no:agendaitems': 'yes',
-      'short-title': filter,
-    };
+      options['filter'] = {
+        ':has-no:agendaitems': 'yes',
+        'short-title': filter,
+      };
     }
     return store.query('subcase', options);
-	}),
-	
-	async didInsertElement() {
+  }),
+
+  async didInsertElement() {
     this._super(...arguments);
-		this.set('postponedSubcases', []);
-		this.set('availableSubcases', []);
-		const ids = await this.get('subcasesService').getPostPonedSubcaseIds();
-		let postPonedSubcases = [];
+    this.set('postponedSubcases', []);
+    this.set('availableSubcases', []);
+    const ids = await this.get('subcasesService').getPostPonedSubcaseIds();
+    let postPonedSubcases = [];
 
-		if (ids && ids.length > 0) {
-			postPonedSubcases = await this.store.query('subcase', {
-				filter: {
-					"id": ids.toString()
-				}
-			});
-		}
+    if (ids && ids.length > 0) {
+      postPonedSubcases = await this.store.query('subcase', {
+        filter: {
+          "id": ids.toString()
+        }
+      });
+    }
     this.set('postPonedSubcases', postPonedSubcases);
-	},
+  },
 
-	actions: {
-		close() {
-			this.set('isAddingAgendaitems', false);
-		},
+  actions: {
+    close() {
+      this.set('isAddingAgendaitems', false);
+    },
 
-		async selectAvailableSubcase(subcase, destination, event) {
+    async selectAvailableSubcase(subcase, destination, event) {
       if (event) {
         event.stopPropagation();
       }
@@ -91,7 +91,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
       }
     },
 
-		async selectPostponed(subcase, event) {
+    async selectPostponed(subcase, event) {
       if (event) {
         event.stopPropagation();
       }
@@ -114,15 +114,15 @@ export default Component.extend(DefaultQueryParamsMixin, {
           postponed.splice(index, 1);
         }
       }
-		},
-		
-		reloadRoute(id) {
-			this.reloadRoute(id);
-		},
+    },
+
+    reloadRoute(id) {
+      this.reloadRoute(id);
+    },
 
     async addSubcasesToAgenda() {
       this.set('loading', true);
-      const {selectedAgenda,availableSubcases, postponedSubcases, agendaService} = this;
+      const { selectedAgenda, availableSubcases, postponedSubcases, agendaService } = this;
       const alreadySelected = await selectedAgenda.get('agendaitems');
 
       await Promise.all(postponedSubcases.map(async (item) => {
@@ -145,7 +145,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
       }));
 
       const itemsToAdd = [...postponedSubcases, ...availableSubcases];
-      
+
       let promise = Promise.all(itemsToAdd.map(async (subCase) => {
         const agendaitems = await subCase.get('agendaitems');
         if (agendaitems.length === 0) {
@@ -159,12 +159,12 @@ export default Component.extend(DefaultQueryParamsMixin, {
         if (agendas.length === 1) {
           return agendaService.sortAgendaItems(selectedAgenda);
         }
-      }).then(() => {        
+      }).then(() => {
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
         this.set('sessionService.selectedAgendaItem', null);
-				this.reloadRoute(selectedAgenda.get('id'));
-			});
-		}
+        this.reloadRoute(selectedAgenda.get('id'));
+      });
+    }
   }
 });

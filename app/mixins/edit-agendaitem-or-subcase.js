@@ -8,7 +8,8 @@ const getCachedProperty = function (property) {
 	return computed(`item.${property}`, {
 		get() {
 			const { item } = this;
-			return item.get(property);
+			if (item)
+				return item.get(property);
 		},
 		set: function (key, value) {
 			return value;
@@ -21,7 +22,6 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 	store: inject(),
 	item: null,
 	isEditing: false,
-	// propertiesToSet: ['title', 'shortTitle', 'formallyOk', 'confidentiality'],
 
 	isAgendaItem: computed('item', function () {
 		const { item } = this;

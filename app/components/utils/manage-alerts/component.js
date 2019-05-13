@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
+import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 
 export default Component.extend({
 	store: inject(),
@@ -8,75 +9,15 @@ export default Component.extend({
 	isAdding: false,
 	isEditing: false,
 
-	title: computed('selectedAlert', {
-		get() {
-			const alert = this.get('selectedAlert');
-			if (alert) {
-				return alert.get('title');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
+	item: computed('selectedAlert', function () {
+		return this.get('selectedAlert')
 	}),
 
-	message: computed('selectedAlert', {
-		get() {
-			const alert = this.get('selectedAlert');
-			if (alert) {
-				return alert.get('message');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
-
-	beginDate: computed('selectedAlert', {
-		get() {
-			const alert = this.get('selectedAlert');
-			if (alert) {
-				return alert.get('beginDate');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
-
-	endDate: computed('selectedAlert', {
-		get() {
-			const alert = this.get('selectedAlert');
-			if (alert) {
-				return alert.get('endDate');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
-
-	type: computed('selectedAlert', {
-		get() {
-			const alert = this.get('selectedAlert');
-			if (alert) {
-				return alert.get('type');
-			} else {
-				return null;
-			}
-		},
-		set(key, value) {
-			return value;
-		}
-	}),
+	title: getCachedProperty('title'),
+	message: getCachedProperty('message'),
+	beginDate: getCachedProperty('beginDate'),
+	endDate: getCachedProperty('endDate'),
+	type: getCachedProperty('type'),
 
 	clearProperties() {
 		this.set('title', null);
@@ -113,7 +54,7 @@ export default Component.extend({
 
 		async toggleIsEditing() {
 			const { selectedAlert } = this;
-			if(selectedAlert) {
+			if (selectedAlert) {
 				const alert = this.store.peekRecord('alert', selectedAlert.get('id'));
 				await alert.rollbackAttributes();
 			}
@@ -130,9 +71,11 @@ export default Component.extend({
 		},
 
 		editAlert() {
-			const { selectedAlert, beginDate, endDate, type } = this;
+			const { selectedAlert, beginDate, title, message, endDate, type } = this;
 			const alertToSave = this.store.peekRecord('alert', selectedAlert.get('id'));
-			alertToSave.set('beginDate',beginDate );
+			alertToSave.set('beginDate', beginDate);
+			alertToSave.set('title', title);
+			alertToSave.set('message', message);
 			alertToSave.set('endDate', endDate);
 			alertToSave.set('type', type);
 			alertToSave.save().then(() => {
@@ -143,14 +86,10 @@ export default Component.extend({
 		},
 
 		createAlert() {
-			const { title,type, message, beginDate, endDate } = this;
+			const { title, type, message, beginDate, endDate } = this;
 
 			const alert = this.store.createRecord('alert', {
-				title: title,
-				message: message,
-				beginDate: beginDate,
-				endDate: endDate,
-				type:type
+				title, message, beginDate, endDate, type
 			});
 			alert.save().then(() => {
 				this.clearProperties();

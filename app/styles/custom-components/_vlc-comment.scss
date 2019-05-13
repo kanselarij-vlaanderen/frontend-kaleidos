@@ -1,20 +1,17 @@
 /* ==========================================================================
-  vl-comments
+  vlc-comment
     consisting of:
-    * vl-comments-input
-    * vl-comments-comment
+    * vlc-comment-input
+    * vlc-comment
    ========================================================================== */
 
 /* ==========================================================================
-   vl-comments-input
+   vlc-comment-input
    ========================================================================== */
 
-.vlc-comments-input {
+.vlc-comment-input {
   display: flex;
   margin: 1.6rem 0 3.2rem;
-  .vl-textarea {
-    width: 100%;
-  }
   .vl-badge {
     margin-right: 0.8rem;
     width: 3.2rem;
@@ -25,16 +22,15 @@
 }
 
 /* ==========================================================================
-   vl-comments-comment
+   vlc-comment
    ========================================================================== */
 
-.vlc-comments-comment {
+.vlc-comment {
   display: flex;
-  margin-top: 1.6rem;
-  + .vlc-comments-comment {
-   margin-top: 0.4rem;
-  }
+  margin-top: 3.2rem;
+
   .vl-badge {
+    margin-top: 1.5rem;
     margin-right: 0.8rem;
     width: 3.2rem;
     height: 3.2rem;
@@ -42,28 +38,36 @@
   }
 }
 
-.vlc-comments-comment-content {
+.vlc-comment-content {
   flex: 1 1 auto;
+  background: $blue-gray-lightest;
+  padding: 1.5rem;
 }
 
-.vlc-comments-comment-content__header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.vlc-comments-comment-content__meta {
-  margin-left: auto;
+.vlc-comment-content__meta {
+  margin-top: 1rem;
   font-size: 1.3rem;
+  color: $gray
 }
 
-.vlc-comments-comment--response {
-  margin-left: 4rem;
-  background: $blue-gray-lightest;
-  padding: 1.6rem;
+.vlc-comment-content__header {
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
 }
-.vlc-comments-input--response {
-  margin-left: 4rem;
-  margin-top: 0.4rem;
-  background: $blue-gray-lightest;
-  padding: 1.6rem;
+
+/* Response
+  ========================================================================== */
+
+.vlc-comment--response {
+  margin-left: 5.6rem;
+  margin-top: 1.5rem;
+  .vlc-comment-content {
+    background: $porcelain;
+  }
+}
+
+.vlc-comment-input--response {
+  margin-left: 5.6rem;
+  margin-top: 1.5rem;
 }

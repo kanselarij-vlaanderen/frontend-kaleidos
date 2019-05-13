@@ -16,6 +16,14 @@ export default Service.extend({
 			return result.body.items;
 		})
 	},
+	sendNewsletter(agenda) {
+		return $.ajax(
+			{
+				method: "GET",
+				url: `/send-newsletter?agendaId=${agenda.get('id')}`,
+			}
+		);
+	},
 
 	async reduceAgendaitemsByMandatees(agendaitems) {
 		return agendaitems.reduce((items, agendaitem) => {

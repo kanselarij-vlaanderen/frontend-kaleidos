@@ -1,65 +1,11 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
 
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin,{
-	store: inject(),
-	classNames: ["vl-u-spacer--large"],
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, ApprovalsEditMixin, {
+	classNames: ["vl-u-spacer-extended-bottom-l"],
 	propertiesToSet: ['approvals'],
-
-	modelIsAgendaItem(model) {
-		const modelName = model.get('constructor.modelName')
-		return modelName === 'agendaitem';
-	},
-
-	async createMissingApprovals(mandatees, mandateesAlreadyAdded, item) {
-		const date = new Date();
-		return Promise.all(mandatees.map(async (mandatee) => {
-			const indexOf = mandateesAlreadyAdded.indexOf(mandatee);
-			if (indexOf == -1) {
-				if (this.modelIsAgendaItem(item)) {
-					const approvalToCreate = this.store.createRecord('approval', {
-						mandatee: mandatee,
-						created: date,
-						modified: date,
-						agendaitem: item
-					})
-					return approvalToCreate.save();
-				} else {
-					const approvalToCreate = this.store.createRecord('approval', {
-						mandatee: mandatee,
-						subcase: item,
-						created: date,
-						modified: date,
-					})
-					return approvalToCreate.save();
-				}
-			}
-		}))
-	},
-
-	async deleteApprovals(mandateesAlreadyAdded, mandatees, approvals) {
-		let mandateesProcessed = [];
-		await Promise.all(approvals.map(async (approval) => {
-			const mandatee = await approval.get('mandatee');
-			if (!mandatee) {
-				approval.destroyRecord();
-			}
-		}));
-		return await Promise.all(mandateesAlreadyAdded.map(mandateeAdded => {
-			if (mandateeAdded) {
-				const foundMandatee = mandatees.find(mandatee => mandateeAdded.get('id') === mandatee.get('id'));
-				// const foundMandateeOnce = mandateesProcessed.find((mandatee) =>  mandateeAdded.get('id') === mandatee.get('id'))
-				if (!foundMandatee) {
-					const approvalToDelete = approvals.find((approval) => approval.get('mandatee.id') == mandateeAdded.get('id'));
-					approvalToDelete.destroyRecord();
-				} else {
-					mandateesProcessed.push(foundMandatee);
-				}
-			}
-		}))
-	},
 
 	actions: {
 		async saveChanges() {
@@ -68,10 +14,10 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin,{
 				return await approval.save();
 			}));
 			const agenda = await item.get('agenda');
-			if(agenda) {
+			if (agenda) {
 				await this.updateModifiedProperty(agenda);
 			}
-		
+
 			this.toggleProperty('isEditing');
 		},
 
@@ -85,14 +31,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin,{
 		},
 
 		async toggleIsEditing() {
-			const item = await this.get('item');
-			const approvals = await item.get('approvals');
-			const mandatees = await item.get('mandatees');
-			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
-
-			await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, item);
-			await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
-			await item.hasMany('approvals').reload();
+			await this.checkForActionChanges();
 			this.toggleProperty('isEditing');
 		}
 	}

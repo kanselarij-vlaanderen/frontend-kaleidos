@@ -1,43 +1,45 @@
-<div class="vl-u-spacer">
-  <div class="vl-u-display-flex vl-u-display-flex-align-center">
+<div class="vl-u-spacer-extended-bottom-s">
+  <div class="vl-u-display-flex vl-u-flex-align-baseline">
     <h4 class="vl-title vl-title--h4">
       {{t "actions"}}
     </h4>
-  {{#if (or isAdmin isEditor)}}
-    <div class="vl-u-spacer-extended-left-s">
-      <a class="vl-link" {{action "toggleIsEditing"}}>
-        {{t "edit"}}
-      </a>
-    </div>
+    {{#if (or isAdmin isEditor)}}
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link" {{action "toggleIsEditing"}}>
+          {{t "edit"}}
+        </a>
+      </div>
     {{/if}}
   </div>
 </div>
-<div class="vl-u-spacer">
-  <h4 class="vl-title vl-title--h6">
+<div class="vl-u-spacer-extended-bottom-s">
+  <h5 class="vl-title vl-title--h6">
     {{t "mandatee-approval"}}
-  </h4>
+  </h5>
 </div>
 {{#if item.approvals}}
   <div class="vl-u-spacer">
-    <table class="vl-data-table vl-data-table--align-middle">
+    <table class="vl-data-table">
       <thead>
         <tr>
-          <th class="vl-data-table-col-3">
-            {{web-components/vl-form-label value=(t "name-mandatee")}}
+          <th>
+            {{t "name"}}
           </th>
-          <th class="vl-data-table-col-6">
-            {{web-components/vl-form-label value=(t "function-mandatee")}}
+          <th>
+            {{t "function-mandatee"}}
           </th>
-          <th class="vl-data-table-col-3">
-            {{web-components/vl-form-label value=(t "approval-mandatee")}}
+          <th>
+            {{t "approval-mandatee"}}
           </th>
         </tr>
       </thead>
       <tbody>
         {{#each item.approvals as |approval|}}
           <tr>
-            <td class="vl-u-text--bold">
-              {{await approval.mandatee.person.alternativeName}}
+            <td>
+              <h6 class="vl-title vl-title--h6">
+                {{await approval.mandatee.person.alternativeName}}
+              </h6>
             </td>
             <td>
               {{await approval.mandatee.title}}
@@ -45,27 +47,25 @@
             <td>
               {{#if (not isEditing)}}
                 {{#if approval.approved}}
-                  <div
-                    class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--bold vl-u-text--success"
-                  >
-                    <i
-                      class="vl-icon vl-icon--before vl-vi vl-vi-check-small"
-                    ></i>
+                  <p class="vl-icon-wrapper vl-u-text--success">
+                    <span
+                      class="vl-icon vl-icon--before vl-vi vl-vi-check"
+                      aria-hidden="true"
+                    ></span>
                     <span class="vl-annotation">
                       {{t "approval-mandatee"}}
                     </span>
-                  </div>
+                  </p>
                 {{else}}
-                  <div
-                    class="vl-icon-wrapper vl-u-text vl-u-text--small vl-u-text--muted"
-                  >
-                    <i
-                      class="vl-icon vl-icon--before vl-vi vl-vi-check-small"
-                    ></i>
-                    <span class="vl-annotation">
+                  <p class="vl-icon-wrapper vl-u-text--muted">
+                    <span
+                      class="vl-icon vl-icon--before vl-vi vl-vi-minus"
+                      aria-hidden="true"
+                    ></span>
+                    <span>
                       {{t "not-yet-approval-mandatee"}}
                     </span>
-                  </div>
+                  </p>
                 {{/if}}
               {{else}}
                 <div class="vlc-input-field-block">
@@ -92,12 +92,19 @@
   </div>
 {{/if}}
 {{#if isEditing}}
-  <div class="vl-action-group vl-action-group--align-right">
-    <a class="vl-link" {{action "cancelEditing"}}>
-      {{t "cancel"}}
-    </a>
-    <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-      {{t "save"}}
-    </button>
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__right">
+      <div class="vl-action-group">
+        <a
+          class="vl-button vl-button--tertiary vl-button--narrow"
+          {{action "cancelEditing"}}
+        >
+          {{t "cancel"}}
+        </a>
+        <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
+          {{t "save"}}
+        </button>
+      </div>
+    </div>
   </div>
 {{/if}}

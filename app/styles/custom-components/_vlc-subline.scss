@@ -1,5 +1,11 @@
 /* ==========================================================================
-  Addition:
-    * custom pill
+  subline component
    ========================================================================== */
 
+.vlc-subline {
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  color: $gray;
+}

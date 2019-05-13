@@ -14,7 +14,25 @@
       {{action "showAddingMandateForm"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-mandates"}}
+      {{t "manage-government-domains"}}
+    </button>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+      {{action "showFunctionsManagement"}}
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-government-fields"}}
+    </button>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+      {{action "showIseCodeManagement"}}
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-ise-codes"}}
     </button>
   </div>
   <div class="vl-u-spacer-extended-s">
@@ -65,9 +83,21 @@
 </div>
 {{#if isAddingMandate}}
   {{utils/model-manager
-    modalTitle=(t "manage-mandates")
+    modalTitle=(t "manage-government-domains")
     modelName="government-domain"
     close=(action "showAddingMandateForm")
+  }}
+{{/if}}
+{{#if isManagingFunctions}}
+  {{utils/manage-government-fields
+    modalTitle=(t "manage-government-fields")
+    close=(action "showFunctionsManagement")
+  }}
+{{/if}}
+{{#if isManagingIseCodes}}
+  {{utils/manage-ise-code
+    modalTitle=(t "manage-ise-codes")
+    close=(action "showIseCodeManagement")
   }}
 {{/if}}
 {{#if isManagingDocumentTypes}}
@@ -102,7 +132,6 @@
     close=(action "showUserManagementInterface")
   }}
 {{/if}}
-
 {{#if isManagingSubcaseTypes}}
   {{utils/model-manager
     modalTitle=(t "manage-subcase-types")

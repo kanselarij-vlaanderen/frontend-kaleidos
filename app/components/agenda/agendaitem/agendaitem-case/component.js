@@ -12,13 +12,13 @@ export default Component.extend(EditAgendaitemOrSubcase, {
   editable: null,
   agendaitem: null,
 
-  item: computed('agendaitem', 'subcase', function() {
-    const { agendaitem, subcase} = this;
-    if(agendaitem) {
+  item: computed('agendaitem', 'subcase', function () {
+    const { agendaitem, subcase } = this;
+    if (agendaitem) {
       return agendaitem;
     } else {
       return subcase;
-    } 
+    }
   }),
 
   actions: {
