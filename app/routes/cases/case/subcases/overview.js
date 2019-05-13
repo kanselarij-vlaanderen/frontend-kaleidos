@@ -8,6 +8,11 @@ const phasesCodes = [
 ];
 
 export default Route.extend({
+  queryParams: {
+    refresh: {
+      refreshModel: true
+    }
+  },
   async model() {
     const caze = this.modelFor('cases.case');
 
@@ -57,6 +62,7 @@ export default Route.extend({
 
   actions: {
     refresh() {
+      this._super(...arguments);
       this.refresh();
     }
   }

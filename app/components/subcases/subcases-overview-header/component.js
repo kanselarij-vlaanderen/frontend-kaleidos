@@ -23,9 +23,12 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.toggleProperty('isAddingSubcase');
 		},
 
+		refresh() {
+			this.refresh();
+		},
+
 		close() {
 			this.toggleProperty('isAddingSubcase');
-			this.refresh();
 		},
 
 		toggleIsShowingProcess() {

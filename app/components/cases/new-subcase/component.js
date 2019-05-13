@@ -88,7 +88,8 @@ export default Component.extend(ApprovalsEditMixin, {
 				});
 			await decision.save();
 			await this.checkForActionChanges();
-			this.closeModal();
+			this.refresh();
+			// this.closeModal();
 		},
 
 		selectPhase(phase) {

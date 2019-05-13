@@ -28,7 +28,6 @@ export default Model.extend({
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
-  // relatedTo: hasMany('subcase', { inverse: null }),
 
   confidentiality: belongsTo('confidentiality'),
   decision: belongsTo('decision'),
@@ -43,7 +42,6 @@ export default Model.extend({
       })
     });
   }),
-
 
   nameToShow: computed('subcaseName', function () {
     const subcaseName = this.get('subcaseName');

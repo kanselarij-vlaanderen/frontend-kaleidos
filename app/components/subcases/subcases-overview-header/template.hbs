@@ -76,6 +76,10 @@
     closeModal=(action "close")
     title=(t "create-subcase")
   }}
-    {{cases/new-subcase case=model.case closeModal=(action "close")}}
+    {{cases/new-subcase
+      case=(await model.case)
+      closeModal=(action "close")
+      refresh=(action "refresh")
+    }}
   {{/web-components/vl-modal}}
 {{/if}}
