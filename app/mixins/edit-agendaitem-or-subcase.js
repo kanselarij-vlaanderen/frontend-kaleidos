@@ -52,7 +52,8 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 		},
 
 		async saveChanges() {
-			const { item, isAgendaItem } = this;
+			const { isAgendaItem } = this;
+			const item = await this.get('item');
 			if (isAgendaItem && !item.showAsRemark) {
 				const isDesignAgenda = await item.get('isDesignAgenda');
 				if (isDesignAgenda) {

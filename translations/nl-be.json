@@ -111,7 +111,7 @@
 	"formal-nok": "Nog niet formeel ok",
 	"formal-ok": "Formeel ok",
 	"function-mandatee": "Formele titel",
-	"future-agendas": "Toekomstige agenda's",
+	"future-agendas": "Toekomstige agenda‘s",
 	"general-newsletter": "Algemene nieuwsbrief",
 	"history": "Historiek",
 	"invalid-type": "Fout bestandstype.",
@@ -262,5 +262,6 @@
 	"government-domain": "Beleidsdomein",
 	"government-field": "Beleidsveld",
 	"manage-ise-codes": "Beheer ISE-codes",
-	"ISE-code": "Code"
+	"ISE-code": "Code",
+	"process": "Verloop"
 }

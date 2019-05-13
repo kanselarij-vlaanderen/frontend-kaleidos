@@ -47,6 +47,7 @@ export default Component.extend(UploadDocumentMixin, {
 			event.preventDefault();
 			const caze = await this.store.peekRecord('case', this.case.id);
 			const { title, shortTitle, showAsRemark, type } = this;
+			const date = new Date();
 			const subcase = this.store.createRecord('subcase',
 				{
 					title: title,
@@ -54,23 +55,24 @@ export default Component.extend(UploadDocumentMixin, {
 					formallyOk: false,
 					showAsRemark: showAsRemark,
 					case: caze,
-					type:type,
-					created: new Date(),
+					type: type,
+					created: date,
+					modified: date
 				});
 
-				const name = await caze.getNameForNextSubcase(subcase, type);
-				subcase.set('subcaseName', name);
+			const name = await caze.getNameForNextSubcase(subcase, type);
+			subcase.set('subcaseName', name);
 
-				let phase = await this.get('phase');
-				if(phase) {
-					const subcasePhase = this.store.createRecord('subcase-phase',
+			let phase = await this.get('phase');
+			if (phase) {
+				const subcasePhase = this.store.createRecord('subcase-phase',
 					{
 						date: new Date(),
 						code: phase
 					});
-					const createdSubphase = await subcasePhase.save();
-					subcase.set('phases', [createdSubphase]);
-				}
+				const createdSubphase = await subcasePhase.save();
+				subcase.set('phases', [createdSubphase]);
+			}
 
 			const newSubcase = await subcase.save();
 			await this.uploadFiles(newSubcase);

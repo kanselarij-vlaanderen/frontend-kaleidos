@@ -8,10 +8,10 @@ export default Controller.extend({
   page: 0,
   size: 10,
 
-  queryStore: task(function * () {
+  queryStore: task(function* () {
     const filter = { provider: 'https://github.com/lblod/mock-login-service' };
     if (this.role)
-      filter.user = { 'last-name': this.role};
+      filter.user = { 'last-name': this.role };
     const accounts = yield this.store.query('account', {
       include: 'user,user.groups',
       filter: filter,
@@ -20,9 +20,9 @@ export default Controller.extend({
     });
     return accounts;
   }),
-  updateSearch: task(function * (value) {
+  updateSearch: task(function* (value) {
     yield timeout(500);
-    this.set('page',0);
+    this.set('page', 0);
     this.set('role', value);
     const model = yield this.queryStore.perform();
     this.set('model', model);

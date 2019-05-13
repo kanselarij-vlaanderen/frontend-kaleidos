@@ -16,8 +16,8 @@ export default Route.extend({
         case: { id: caze.get('id') },
         // "is-archived": false,
       },
-      include: "phases",
-      // sort: 'created'
+      include: "phases,document-versions",
+      sort: 'created'
     });
 
     if (!subcases) {
