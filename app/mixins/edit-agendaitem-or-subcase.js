@@ -45,8 +45,8 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 			this.toggleProperty('isEditing');
 		},
 
-		cancelEditing() {
-			const { item } = this;
+		async cancelEditing() {
+			const item = await this.get('item');
 			item.reload();
 			this.toggleProperty('isEditing');
 		},
