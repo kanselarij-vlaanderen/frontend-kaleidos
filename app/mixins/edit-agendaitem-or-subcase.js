@@ -45,23 +45,29 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 			this.toggleProperty('isEditing');
 		},
 
-		cancelEditing() {
-			const { item } = this;
+		async cancelEditing() {
+			const item = await this.get('item');
 			item.reload();
 			this.toggleProperty('isEditing');
 		},
 
 		async saveChanges() {
-			const { item, isAgendaItem } = this;
+			const { isAgendaItem } = this;
+			const item = await this.get('item');
+			item.set('modified', new Date());
 			if (isAgendaItem && !item.showAsRemark) {
 				const isDesignAgenda = await item.get('isDesignAgenda');
 				if (isDesignAgenda) {
 					const agendaitemSubcase = await item.get('subcase');
+					agendaitemSubcase.set('modified', new Date());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
 				}
+
 				await this.setNewPropertiesToModel(item).then(async () => {
 					const agenda = await item.get('agenda');
-					this.updateModifiedProperty(agenda);
+					if (agenda) {
+						await this.updateModifiedProperty(agenda);
+					}
 					item.reload();
 				});
 			} else {
@@ -72,9 +78,9 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 					await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
 						await this.setNewPropertiesToModel(agendaitem).then(async () => {
 							const agenda = await item.get('agenda');
-							this.updateModifiedProperty(agenda).then((agenda) => {
-								agenda.reload();
-							});
+							if (agenda) {
+								await this.updateModifiedProperty(agenda);
+							}
 							item.reload();
 						});
 					}));

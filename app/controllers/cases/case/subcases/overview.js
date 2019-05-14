@@ -1,23 +1,16 @@
 import Controller from '@ember/controller';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
-export default Controller.extend(isAuthenticatedMixin, UploadDocumentMixin, {
-	isAddingSubcase:false,
+export default Controller.extend({
+	queryParams: ['refresh'],
+
 	isShowingOptions: false,
-	
+	isShowingOverview: true,
+	isShowingProcess: false,
+	refresh: false,
+
 	actions: {
-		toggleIsAddingSubcase() {
-			this.toggleProperty('isAddingSubcase');
+		refresh() {
+			this.toggleProperty('refresh')
 		},
-
-		close() {
-			this.toggleProperty('isAddingSubcase');
-			this.send('refresh');
-		},
-
-    showMultipleOptions() {
-      this.toggleProperty('isShowingOptions');
-    },
 	}
 });

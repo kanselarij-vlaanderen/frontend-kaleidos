@@ -12,7 +12,7 @@ export default Component.extend({
       const { title, shortTitle, type, selectedPolicyLevel, phase } = this;
       const newDate = new Date();
       let subcaseName = phase.label;
-      if(phase.label == "principiële goedkeuring") {
+      if (phase.label == "principiële goedkeuring") {
         subcaseName = "1ste principiële goedkeuring"
       }
       let cases = this.store.createRecord('case',
@@ -27,10 +27,14 @@ export default Component.extend({
       cases.save().then((newCase) => {
         const subcase = this.store.createRecord('subcase', {
           case: newCase,
+          created: newDate,
+          modified: newDate,
+          confidential: false,
           shortTitle: shortTitle,
           title: title,
-          created: newDate,
+          type: phase,
           phases: [],
+          isArchived: false,
           subcaseName: subcaseName,
           formallyOk: false,
           showAsRemark: false,

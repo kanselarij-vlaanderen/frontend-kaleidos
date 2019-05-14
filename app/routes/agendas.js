@@ -13,6 +13,7 @@ export default Route.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
 
 	actions: {
 		refresh() {
+			this._super(...arguments);
 			this.refresh();
 		}
 	}

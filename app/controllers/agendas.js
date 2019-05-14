@@ -8,9 +8,9 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
 	sessionService: inject(),
 	creatingNewSession: false,
-	// sort: '-planned-start',
-	size:10,
-	sizes: [10,20,50,100,200],
+	sort: '-planned-start',
+	size: 10,
+	sizes: [10, 20, 50, 100, 200],
 
 	nearestMeeting: computed('model', function () {
 		const meetings = this.get('model');

@@ -4,17 +4,14 @@ import { inject } from '@ember/service';
 export default Controller.extend({
   store: inject(),
   isEditingMandatees: false,
-  mandatees:null,
+  mandatees: null,
 
-  actions: {	
-    refresh() {
-    this.send('refresh');
-  },
+  actions: {
     async editMandatee(subcase) {
       const mandatees = await subcase.get('mandatees');
       this.set('mandatees', mandatees);
       this.toggleProperty('isEditingMandatees');
-    }, 
+    },
 
     selectMandatees(mandatees) {
       this.set('mandatees', mandatees);

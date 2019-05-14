@@ -2,44 +2,37 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 
 let { Model, attr, belongsTo, hasMany } = DS;
-/* 
-  propertyToShow is used in the agenda to display the right values based on the agendaName.
-**/
+
 export default Model.extend({
   priority: attr('number'),
   created: attr('date'),
   record: attr('string'),
   retracted: attr('boolean'),
   showAsRemark: attr('boolean'),
-
+  modified: attr('date'),
   titlePress: attr('string'),
   textPress: attr('string'),
   forPress: attr('boolean'),
-
   shortTitle: attr('string'),
   title: attr('string'),
-
   formallyOk: attr('boolean'),
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
   subcase: belongsTo('subcase', { inverse: null }),
-
   newsletterInfo: belongsTo('newsletter-info'),
   meetingRecord: belongsTo('meeting-record'),
 
   remarks: hasMany('remark'),
-  // attendees: hasMany('mandatee', { inverse: null }),
-  mandatees: hasMany('mandatee', { inverse: null }),
+  mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   documentVersions: hasMany('document-version', { inverse: null }),
-
+  phases: hasMany('subcase-phase'),
   themes: hasMany('theme'),
+
   sortedThemes: computed('themes', function () {
     return this.get('themes').sortBy('label');
   }),
-
-  phases: hasMany('subcase-phase'),
 
   isPostponed: computed('retracted', 'postponedTo', function () {
     return this.get('postponedTo').then((session) => {
@@ -73,5 +66,4 @@ export default Model.extend({
   sortedMandatees: computed('mandatees', function () {
     return this.get('mandatees').sortBy('priority');
   })
-
 });

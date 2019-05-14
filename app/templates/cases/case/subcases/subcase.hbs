@@ -1,8 +1,12 @@
-{{subcases/subcase-header subcase=model}}
+<div class="vl-u-bg-alt">
+  {{subcases/subcase-header subcase=model}}
+</div>
 <div class="vl-u-spacer-extended-l vlc-scroll-wrapper__body">
   {{#if model}}
-    {{agenda/agendaitem/agendaitem-case
-      item=model
-    }}
+    {{subcases/subcase-description subcase=model}}
+    <div class="vl-u-spacer-extended-bottom-l">
+      <div class="vlc-hr"></div>
+    </div>
+    {{agenda/agendaitem/agendaitem-case item=model}}
   {{/if}}
 </div>

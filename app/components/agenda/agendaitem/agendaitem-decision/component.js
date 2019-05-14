@@ -3,16 +3,16 @@ import Component from '@ember/component';
 
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import {computed} from '@ember/object'
+import { computed } from '@ember/object'
 
 export default Component.extend(isAuthenticatedMixin, {
-  classNames: ['vlc-padding-bottom--large'],
+	classNames: ['vlc-padding-bottom--large'],
 	store: inject(),
 	isEditing: false,
 	agendaitem: null,
-	subcase:null,
+	subcase: null,
 
-	item: computed('subcase.decision', function() {
+	item: computed('subcase.decision', function () {
 		return this.get('subcase.decision');
 	}),
 
@@ -21,7 +21,7 @@ export default Component.extend(isAuthenticatedMixin, {
 		let decision = this.store.createRecord("decision", {
 			subcase: await subcase,
 			shortTitle: await subcase.get('shortTitle'),
-			approved:false
+			approved: false
 		});
 		await decision.save()
 		await agendaitem.belongsTo('subcase').reload();
@@ -36,6 +36,6 @@ export default Component.extend(isAuthenticatedMixin, {
 				await this.addDecision(subcase);
 			}
 			this.toggleProperty('isEditing');
-		}
+		},
 	}
 });

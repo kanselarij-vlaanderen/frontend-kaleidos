@@ -17,9 +17,14 @@
           ></i>
           {{t "back"}}
         {{/link-to}}
-        {{#if (await subcase.requestedForMeeting)}}
+        {{!-- {{#if (await subcase.hasOnAgendaStatus)}}
+          <span>
+            hey
+          </span>
+        {{else if (await subcase.requestedForMeeting)}}
           <div class="vlc-page-header__status">
             <span>
+              {{await subcase.hasOnAgendaStatus.id}}
               {{t "requested-for-agenda"}}
               {{moment-format
                 subcase.requestedForMeeting.plannedStart
@@ -27,7 +32,7 @@
               }}
             </span>
           </div>
-        {{/if}}
+        {{/if}} --}}
       </div>
     </div>
     <div class="vlc-toolbar__right">
@@ -62,7 +67,7 @@
                 </li>
               {{/each}}
               {{#if (gt (await meetings.length) 0)}}
-              <li class="vl-popover__link-list__separator" role="none"></li>
+                <li class="vl-popover__link-list__separator" role="none"></li>
               {{/if}}
               <li class="vl-popover__link-list__item">
                 <button
