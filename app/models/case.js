@@ -55,7 +55,9 @@ export default Model.extend({
       sort: 'created'
     });
 
-    if (subcases.length === 0) {
+    const filteredSubcases = subcases.filter((subcase) => subcase.get('id') !== givenSubcase.get('id'))
+
+    if (filteredSubcases.length === 0) {
       const label = type.get('label');
       if (givenSubcase && label === phasesCodes[0].label) {
         return "1ste principiële goedkeuring";
@@ -65,8 +67,8 @@ export default Model.extend({
     } else {
       let counter = 0;
 
-      for (let i = 0; i < subcases.length; i++) {
-        const subcase = subcases.objectAt(i);
+      for (let i = 0; i < filteredSubcases.length; i++) {
+        const subcase = filteredSubcases.objectAt(i);
         const subcaseTypeLabel = await subcase.type;
         if (subcaseTypeLabel) {
           if (subcaseTypeLabel.get('label') === phasesCodes[0].label) {
