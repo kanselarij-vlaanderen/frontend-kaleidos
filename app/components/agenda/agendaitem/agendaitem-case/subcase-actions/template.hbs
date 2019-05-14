@@ -12,12 +12,12 @@
     {{/if}}
   </div>
 </div>
-<div class="vl-u-spacer-extended-bottom-s">
-  <h5 class="vl-title vl-title--h6">
-    {{t "mandatee-approval"}}
-  </h5>
-</div>
-{{#if item.approvals}}
+{{#if (gt (await item.approvals.length) 0)}}
+  <div class="vl-u-spacer-extended-bottom-s">
+    <h5 class="vl-title vl-title--h6">
+      {{t "mandatee-approval"}}
+    </h5>
+  </div>
   <div class="vl-u-spacer">
     <table class="vl-data-table">
       <thead>
@@ -89,6 +89,10 @@
         {{/each}}
       </tbody>
     </table>
+  </div>
+{{else}}
+  <div class="vl-u-spacer-extended-top-s">
+    {{web-components/vl-alert message=(t "no-approvals-yet")}}
   </div>
 {{/if}}
 {{#if isEditing}}

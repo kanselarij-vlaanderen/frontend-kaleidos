@@ -37,6 +37,12 @@
           {{t "latest-modified"}}
           {{moment-format (await subcase.modified) "DD.MM.YYYY"}}
         </p>
+        {{#if (await subcase.onAgendaInfo)}}
+          <p>
+            {{t "on-agenda"}}
+            {{moment-format (await subcase.onAgendaInfo) "DD.MM.YYYY"}}
+          </p>
+        {{/if}}
       </div>
       <ul class="vlc-status-timeline">
         {{#each (await subcase.sortedPhases) as |phase|}}

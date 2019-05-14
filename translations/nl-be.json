@@ -169,6 +169,7 @@
 	"no-rights-message": "Je account heeft nog geen rechten om deze applicatie te gebruiken.",
 	"no-subcases": "Er zijn nog geen producurestappen aangemaakt.",
 	"no-themes-yet": "Er zijn nog geen thema's toegevoegd.",
+	"no-approvals-yet": "Er zijn nog geen acties beschikbaar.",
 	"non-digital-attachements": "Niet-digitale bijlagen",
 	"non-digital-file": "Niet-digitaal document toevoegen",
 	"not-agreed": "Niet Akkoord",
@@ -274,5 +275,7 @@
 	"annotation-on-agenda": "Annotatie bij agendering: ",
 	"not-yet-on-agenda": "Nog niet geagendeerd",
 	"date-last-edited": "Datum laatste wijziging",
-	"requested-for-session": "Aangevraagd voor Ministerraad:"
+	"requested-for-session": "Aangevraagd voor Ministerraad:",
+	"decided-on": "Beslist op:",
+	"not-yet-decided": "Nog niet beslist"
 }

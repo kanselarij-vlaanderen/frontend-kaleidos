@@ -32,6 +32,7 @@ export default Component.extend({
           confidential: false,
           shortTitle: shortTitle,
           title: title,
+          type: phase,
           phases: [],
           isArchived: false,
           subcaseName: subcaseName,

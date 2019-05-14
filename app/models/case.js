@@ -3,6 +3,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 const { Model, attr, hasMany, belongsTo, PromiseObject } = DS;
+
 const phasesCodes = [
   {
     label: "principiële goedkeuring"

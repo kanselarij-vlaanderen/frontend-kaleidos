@@ -79,15 +79,14 @@ export default Component.extend(ApprovalsEditMixin, {
 			this.set('item', subcase);
 			const decision = this.store.createRecord('decision',
 				{
-					title: latestSubcase.get('title'),
-					shortTitle: latestSubcase.get('shortTitle'),
+					title: subcase.get('title'),
+					shortTitle: subcase.get('shortTitle'),
 					approved: false,
 					subcase: subcase
 				});
 			await decision.save();
 			await this.checkForActionChanges();
 			this.refresh();
-			// this.closeModal();
 		},
 
 		selectPhase(phase) {

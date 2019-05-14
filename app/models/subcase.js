@@ -3,6 +3,8 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 const onAgendaCodeId = "3e6dba4f-5c3c-439a-993e-92348ec73642";
+const decidedCodeId = "4ea2c010-06c0-4594-966b-2cb9ed1e07b7";
+
 const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
@@ -130,18 +132,27 @@ export default Model.extend({
     })
   }),
 
-  hasOnAgendaStatus: computed('phases.@each', function () {
-    PromiseObject.create({
-      promise: this.get('phases').then((phases) => {
-        const codes = Promise.all(phases.map((phase) => phase.get('code')));
-        return codes.then((codes) => {
-          const filteredCodes = codes.filter((item) => item);
-          const foundCode = filteredCodes.find((code) => code.get('id') === "3e6dba4f-5c3c-439a-993e-92348ec73642");
-          console.log(foundCode.get('id'))
-          return foundCode;
-        })
-      })
-    })
+  onAgendaInfo: computed('phases.@each', function () {
+    return this.findPhaseDateByCodeId(onAgendaCodeId).then((date) => {
+      return date;
+    });
   }),
+
+  decidedInfo: computed('phases.@each', function () {
+    return this.findPhaseDateByCodeId(decidedCodeId).then((date) => {
+      return date;
+    });
+  }),
+
+  async findPhaseDateByCodeId(codeId) {
+    const subcasePhases = await this.get('phases');
+    return subcasePhases.find(async (phase) => {
+      const code = await phase.get('code');
+      const id = code.get('id');
+      if (id && id === codeId) {
+        return phase.get('date');
+      }
+    });
+  }
 
 });

@@ -11,18 +11,5 @@ export default Component.extend(isAuthenticatedMixin, {
 		if (isMinimal) {
 			return 'vlc-procedure-step--minimal';
 		}
-	}),
-
-	onAgendaInfo: computed('subcase.phases.@each', async function () {
-		const { subcase } = this;
-		const subcasePhases = await subcase.get('phases');
-		return subcasePhases.find(async (phase) => {
-			const code = await phase.get('code');
-			const label = code.get('label');
-			if (label && label.toLowerCase() == "geagendeerd") {
-				console.log('reached', label, phase)
-				return phase;
-			}
-		});
 	})
 });
