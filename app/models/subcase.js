@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
+const onAgendaCodeId = "3e6dba4f-5c3c-439a-993e-92348ec73642";
 const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
@@ -127,5 +128,20 @@ export default Model.extend({
         agenda: { name: "Ontwerpagenda" }
       }
     })
-  })
+  }),
+
+  hasOnAgendaStatus: computed('phases.@each', function () {
+    PromiseObject.create({
+      promise: this.get('phases').then((phases) => {
+        const codes = Promise.all(phases.map((phase) => phase.get('code')));
+        return codes.then((codes) => {
+          const filteredCodes = codes.filter((item) => item);
+          const foundCode = filteredCodes.find((code) => code.get('id') === "3e6dba4f-5c3c-439a-993e-92348ec73642");
+          console.log(foundCode.get('id'))
+          return foundCode;
+        })
+      })
+    })
+  }),
+
 });

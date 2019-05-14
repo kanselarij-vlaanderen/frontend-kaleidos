@@ -62,9 +62,12 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 					agendaitemSubcase.set('modified', new Date());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
 				}
+
 				await this.setNewPropertiesToModel(item).then(async () => {
 					const agenda = await item.get('agenda');
-					this.updateModifiedProperty(agenda);
+					if (agenda) {
+						await this.updateModifiedProperty(agenda);
+					}
 					item.reload();
 				});
 			} else {
@@ -75,9 +78,9 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 					await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
 						await this.setNewPropertiesToModel(agendaitem).then(async () => {
 							const agenda = await item.get('agenda');
-							this.updateModifiedProperty(agenda).then((agenda) => {
-								agenda.reload();
-							});
+							if (agenda) {
+								await this.updateModifiedProperty(agenda);
+							}
 							item.reload();
 						});
 					}));

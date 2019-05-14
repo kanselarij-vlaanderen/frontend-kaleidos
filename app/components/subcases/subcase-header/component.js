@@ -28,6 +28,7 @@ export default Component.extend(ModifiedMixin, {
 		showMultipleOptions() {
 			this.toggleProperty('isShowingOptions');
 		},
+
 		async proposeForAgenda(subcase, meeting) {
 			subcase.set('requestedForMeeting', meeting);
 			const designAgenda = await meeting.get('latestAgenda');
@@ -45,7 +46,6 @@ export default Component.extend(ModifiedMixin, {
 		},
 
 		async unPropose(subcase) {
-			subcase.set('requestedForMeeting', null);
 			const phases = await subcase.get('phases');
 
 			await Promise.all(phases.filter(async phase => {
@@ -56,8 +56,16 @@ export default Component.extend(ModifiedMixin, {
 					return phase;
 				}
 			}))
-			const agendaitems = await subcase.get('agendaitems');
-			await Promise.all(agendaitems.map((item) => { return item.destroyRecord(); }))
+			const meeting = await subcase.get('requestedForMeeting');
+			const latestAgenda = await meeting.get('latestAgenda');
+			const agendaitems = await latestAgenda.get('agendaitems');
+
+
+
+			// const agendaitems = await subcase.get('agendaitems');
+			// await Promise.all(agendaitems.map((item) => { return item.destroyRecord(); }))
+			subcase.set('requestedForMeeting', null);
+
 			subcase.save();
 		},
 		cancel() {

@@ -264,5 +264,14 @@
 	"manage-ise-codes": "Beheer ISE-codes",
 	"ISE-code": "Code",
 	"process": "Verloop",
-	"on-agenda": "Geagendeerd"
+	"on-agenda": "Geagendeerd",
+	"no-number-yet": "Nog geen nummer",
+	"on-agenda-for": "Geagendeerd voor:",
+	"number-session": "Nummer vergadering: ",
+	"subcase": "Procedurestap",
+	"not-yet-requested": "Nog niet aangevraagd",
+	"annotation-on-agenda": "Annotatie bij agendering: ",
+	"not-yet-on-agenda": "Nog niet geagendeerd",
+	"date-last-edited": "Datum laatste wijziging",
+	"requested-for-session": "Aangevraagd voor Ministerraad:"
 }
