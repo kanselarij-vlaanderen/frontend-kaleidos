@@ -8,7 +8,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, ApprovalsEditMixin, {
 	store: inject(),
-	classNames: ["vl-u-spacer-extended-bottom"],
+	classNames: ["vl-u-spacer-extended-bottom-l"],
 	item: null,
 	propertiesToSet: ['mandatees', 'governmentDomains'],
 

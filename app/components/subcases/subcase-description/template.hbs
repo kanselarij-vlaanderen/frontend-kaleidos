@@ -28,15 +28,17 @@
       <span class="vl-description-data__label">
         {{t "requested-for-session"}}
       </span>
-      {{#if (await subcase.requestedForMeeting)}}
-        <span class="vl-description-data__value">
+      <span class="vl-description-data__value">
+        {{#if (await subcase.requestedForMeeting)}}
           {{t "requested-for-agenda"}}
           {{moment-format
             subcase.requestedForMeeting.plannedStart
             "DD MMMM YYYY"
           }}
-        </span>
-      {{/if}}
+        {{else}}
+          {{t "not-yet-requested"}}
+        {{/if}}
+      </span>
     </div>
     <div class="vl-col--1-3 vl-col--1-2--xs">
       <span class="vl-description-data__label">

@@ -41,8 +41,6 @@ export default Component.extend(ApprovalsEditMixin, {
 		const mandatees = await latestSubcase.get('mandatees');
 		const iseCodes = await latestSubcase.get('iseCodes');
 		const themes = await latestSubcase.get('themes');
-		const title = latestSubcase.get('title');
-		const shortTitle = latestSubcase.get('shortTitle')
 
 		const subcase = this.store.createRecord('subcase',
 			{
