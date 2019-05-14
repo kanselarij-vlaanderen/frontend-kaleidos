@@ -62,14 +62,14 @@
       </div>
       <div class="vl-col--1-3 vl-col--1-2--xs">
         <span class="vl-description-data__label">
-          {{t "annotation-on-agenda"}}
-          <span class="vl-description-data__value">
-            {{#if (await subcase.onAgendaInfo)}}
-              {{moment-format (await subcase.onAgendaInfo) "DD.MM.YYYY"}}
-            {{else}}
-              {{t "not-yet-on-agenda"}}
-            {{/if}}
-          </span>
+          {{t "is-on-agenda"}}
+        </span>
+        <span class="vl-description-data__value">
+          {{#if (await subcase.onAgendaInfo)}}
+            {{moment-format (await subcase.onAgendaInfo) "DD.MM.YYYY"}}
+          {{else}}
+            {{t "not-yet-on-agenda"}}
+          {{/if}}
         </span>
       </div>
       <div class="vl-col--1-3 vl-col--1-2--xs">

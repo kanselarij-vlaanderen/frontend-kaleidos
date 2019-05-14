@@ -133,25 +133,24 @@ export default Model.extend({
   }),
 
   onAgendaInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(onAgendaCodeId).then((date) => {
-      return date;
-    });
+    return this.findPhaseDateByCodeId(onAgendaCodeId);
   }),
 
   decidedInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(decidedCodeId).then((date) => {
-      return date;
-    });
+    return this.findPhaseDateByCodeId(decidedCodeId);
   }),
 
   async findPhaseDateByCodeId(codeId) {
     const subcasePhases = await this.get('phases');
     return subcasePhases.find(async (phase) => {
       const code = await phase.get('code');
-      const id = code.get('id');
-      if (id && id === codeId) {
-        return phase.get('date');
+      if (code) {
+        const id = code.get('id');
+        if (id && id === codeId) {
+          return phase.get('date');
+        }
       }
+      return false;
     });
   }
 

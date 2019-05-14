@@ -277,5 +277,6 @@
 	"date-last-edited": "Datum laatste wijziging",
 	"requested-for-session": "Aangevraagd voor Ministerraad:",
 	"decided-on": "Beslist op:",
-	"not-yet-decided": "Nog niet beslist"
+	"not-yet-decided": "Nog niet beslist",
+	"is-on-agenda": "Geagendeerd op: "
 }
