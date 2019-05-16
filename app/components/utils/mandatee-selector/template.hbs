@@ -6,7 +6,8 @@
     oninput=(action "resetValueIfEmpty")
     onchange=(action "chooseMandatee") as |mandatee|
   }}
-    {{await mandatee.person.alternativeName}}{{mandatee.title}}
+    {{await mandatee.person.alternativeName}},
+    {{mandatee.title}}
   {{/power-select-multiple}}
 {{else}}
   {{#power-select
@@ -16,6 +17,7 @@
     oninput=(action "resetValueIfEmpty")
     onchange=(action "chooseMandatee") as |mandatee|
   }}
-    {{await mandatee.person.alternativeName}}{{mandatee.title}}
+    {{await mandatee.person.alternativeName}},
+    {{mandatee.title}}
   {{/power-select}}
 {{/if}}

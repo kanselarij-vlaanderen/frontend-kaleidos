@@ -6,7 +6,7 @@
       <h2 class="vl-title vl-title--h3">
         {{t "my-cases"}}
       </h2>
-          {{#if (or isAdmin isEditor)}}
+      {{#if (or isAdmin isEditor)}}
         {{web-components/vl-checkbox
           value=isNotArchived
           label=(t "show-archived")
@@ -44,7 +44,11 @@
         {{/c.header}}
         {{#c.body as |row|}}
           <td>
-            {{row.shortTitle}}
+            {{#if row.shortTitle}}
+              {{row.shortTitle}}
+            {{else}}
+              {{row.title}}
+            {{/if}}
           </td>
           <td>
             {{await row.type.label}}
@@ -53,50 +57,50 @@
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="vl-u-align-right">
-          {{#if (or isAdmin isEditor)}}
-            <button class="vl-button vl-button--link vl-button--icon">
-              <i
-                class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
-              ></i>
-            </button>
-            {{#attach-popover
-              class="ember-attacher-popper"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom" as |attacher|
-            }}
-              <ul class="vl-popover__link-list">
-                <li class="vl-popover__link-list__item">
-                  <button
-                    class="vl-link"
-                    {{action attacher.hide}}
-                    {{action "editRow" row}}
-                  >
-                    Dossier aanpassen
-                  </button>
-                </li>
-                <li class="vl-popover__link-list__item">
-                  {{#if (not row.isArchived)}}
-                    <a
-                      class="vl-link vl-link--block"
+            {{#if (or isAdmin isEditor)}}
+              <button class="vl-button vl-button--link vl-button--icon">
+                <i
+                  class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                ></i>
+              </button>
+              {{#attach-popover
+                class="ember-attacher-popper"
+                hideOn="clickout click"
+                showOn="click"
+                animation="shift"
+                placement="bottom" as |attacher|
+              }}
+                <ul class="vl-popover__link-list">
+                  <li class="vl-popover__link-list__item">
+                    <button
+                      class="vl-link"
                       {{action attacher.hide}}
-                      {{action "requestArchiveCase" row}}
+                      {{action "editRow" row}}
                     >
-                      Dossier archiveren
-                    </a>
-                  {{else}}
-                    <a
-                      class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "unarchiveCase" row}}
-                    >
-                      Dossier onarchiveren
-                    </a>
-                  {{/if}}
-                </li>
-              </ul>
-            {{/attach-popover}}
+                      Dossier aanpassen
+                    </button>
+                  </li>
+                  <li class="vl-popover__link-list__item">
+                    {{#if (not row.isArchived)}}
+                      <a
+                        class="vl-link vl-link--block"
+                        {{action attacher.hide}}
+                        {{action "requestArchiveCase" row}}
+                      >
+                        Dossier archiveren
+                      </a>
+                    {{else}}
+                      <a
+                        class="vl-link vl-link--block"
+                        {{action attacher.hide}}
+                        {{action "unarchiveCase" row}}
+                      >
+                        Dossier onarchiveren
+                      </a>
+                    {{/if}}
+                  </li>
+                </ul>
+              {{/attach-popover}}
             {{/if}}
             {{#link-to
               "cases.case.subcases"

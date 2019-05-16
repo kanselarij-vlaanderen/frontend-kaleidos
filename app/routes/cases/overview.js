@@ -6,7 +6,7 @@ export default Route.extend(DataTableRouteMixin, {
 
   mergeQueryOptions(params) {
     return {
-      include: 'subcases',
+      // include: 'subcases',
       // filter: { 'is-archived': params.filter }
     };
   },

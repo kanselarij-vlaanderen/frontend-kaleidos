@@ -1,5 +1,5 @@
 {{#if (and (await item.subcase.case.id) isAdmin)}}
-  <div class="vl-u-spacer">
+  <div class="vl-u-spacer-extended-bottom-s">
     {{#link-to
       "cases.case.subcases.subcase"
       (await item.subcase.case.id)
@@ -10,24 +10,26 @@
     {{/link-to}}
   </div>
 {{/if}}
-<div class="vl-u-spacer">
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-display-flex-align-center">
-      <h4 class="vl-title vl-title--h4">
-        {{t "agendaitem-title"}}
-      </h4>
-      <div class="vl-u-spacer-extended-left-s">
-        {{#if (or isAdmin isEditor)}}
-          <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "edit"}}
-          </a>
-        {{/if}}
-      </div>
+<div class="vl-u-spacer-extended-bottom-s">
+  <div class="vl-u-display-flex vl-u-display-flex-align-center">
+    <div class="vlc-subline">
+      {{await case.type.label}}
+    </div>
+    <div class="vl-u-spacer-extended-left-s">
+      {{#if (or isAdmin isEditor)}}
+        <a class="vl-link" {{action "toggleIsEditing"}}>
+          {{t "edit"}}
+        </a>
+      {{/if}}
     </div>
   </div>
-  <h3 class="vl-title vl-title--h3">
+</div>
+<div class="vl-u-spacer-extended-bottom-s">
+  <h4 class="vl-title vl-title--h4">
     {{await item.shortTitle}}
-  </h3>
+  </h4>
+</div>
+<div class="vl-u-spacer-extended-bottom-s">
   <p>
     {{await item.title}}
   </p>

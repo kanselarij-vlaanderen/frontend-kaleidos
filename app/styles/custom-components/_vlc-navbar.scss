@@ -52,3 +52,14 @@ $vl-bar-size-large: 9.5rem !default;
 .vlc-navbar--bordered-bottom {
   border-bottom: 0.1rem solid $ghost;
 }
+
+/* With tabs
+   ========================================================================== */
+
+.vlc-navbar--tabs {
+  white-space: nowrap;
+}
+
+.vlc-navbar--tabs-bottom {
+  align-items: flex-end;
+}

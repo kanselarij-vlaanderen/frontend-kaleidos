@@ -5,7 +5,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 
 export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
-  classNames: ['vlc-padding-bottom--large'],
+  classNames: ['vl-grid'],
   store: inject('store'),
 
   sortedRemarks: sort('agendaitem.remarks', function (a, b) {
@@ -38,12 +38,12 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
     async addAnswer(comment) {
       const user = await this.get('user');
       const agenda = await this.get('agendaitem.agenda');
-      const newComment = this.store.createRecord('remark', 
-      { 
-        text: comment.get('answer'), 
-        created: new Date(),
-        author: user
-      });
+      const newComment = this.store.createRecord('remark',
+        {
+          text: comment.get('answer'),
+          created: new Date(),
+          author: user
+        });
       newComment.save().then(savedComment => {
         comment.get('answers').addObject(savedComment);
         comment.set('answer', "");

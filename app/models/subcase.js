@@ -47,9 +47,16 @@ export default Model.extend({
   }),
 
   nameToShow: computed('subcaseName', function () {
-    const subcaseName = this.get('subcaseName');
-    if (subcaseName)
+    const { subcaseName, title, shortTitle } = this;
+    if (subcaseName) {
       return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
+    } else if (shortTitle) {
+      return shortTitle;
+    } else if (title) {
+      return title;
+    } else {
+      return `No name found.`
+    }
   }),
 
   async documentNumberOfVersion(version) {
