@@ -5,7 +5,7 @@ export default Component.extend({
 	store:inject(),
 	isAdding:false,
 	isResigning:false,
-	isEditing: false, 
+	isEditing: false,
 
 	actions: {
 		closeModal() {
@@ -43,13 +43,14 @@ export default Component.extend({
 		resignMandatee(mandateeToEdit) {
 			this.set('mandateeToResign', mandateeToEdit);
 			this.toggleProperty('isResigning');
+
 		},
 
 		async saveResignation() {
 			let oldMandatee = this.get('selectedMandatee');
 			let domains = await oldMandatee.get('governmentDomains');
 			let holds = await oldMandatee.get('holds');
-			
+
 			oldMandatee.set('end', this.get('selectedEndDate'));
 			oldMandatee.save().then(() => {
 				const newMandatee = this.store.createRecord('mandatee', {

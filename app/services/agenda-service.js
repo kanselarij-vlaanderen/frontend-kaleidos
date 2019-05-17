@@ -20,7 +20,7 @@ export default Service.extend({
 		return $.ajax(
 			{
 				method: "GET",
-				url: `/send-newsletter?agendaId=${agenda.get('id')}`,
+				url: `/newsletter/mails?agendaId=${agenda.get('id')}`,
 			}
 		);
 	},
