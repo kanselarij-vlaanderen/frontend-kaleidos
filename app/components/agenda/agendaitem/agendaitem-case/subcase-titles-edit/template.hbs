@@ -21,8 +21,8 @@
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "public")}}
-      {{web-components/vl-toggle value=confidential}}
-    </div>    
+    {{web-components/vl-toggle value=confidential}}
+  </div>
 </div>
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
@@ -45,18 +45,14 @@
     </div>
   </div>
 {{/if}}
-<div class="vlc-toolbar vlc-toolbar--auto">
-  <div class="vlc-toolbar__right">
-    <div class="vl-action-group">
-      <a
-        class="vl-button vl-button--tertiary vl-button--narrow"
-        {{action "cancelEditing"}}
-      >
-        {{t "cancel"}}
-      </a>
-      <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-        {{t "save"}}
-      </button>
-    </div>
-  </div>
+<div class="vl-action-group vl-action-group--align-right">
+  <a
+    class="vl-button vl-button--tertiary vl-button--narrow"
+    {{action "cancelEditing"}}
+  >
+    {{t "cancel"}}
+  </a>
+  <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
+    {{t "save"}}
+  </button>
 </div>

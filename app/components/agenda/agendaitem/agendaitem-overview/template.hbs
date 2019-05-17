@@ -1,7 +1,7 @@
 <div class="vlc-scroll-wrapper">
   <div class="vlc-scroll-wrapper__header">
     <div
-      class="vl-u-spacer-extended-top vl-u-spacer-extended-left-l vl-u-spacer-extended-right-l"
+      class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom"
     >
       {{#if (not agendaitem.showAsRemark)}}
         <div class="vl-tabs__wrapper">
@@ -15,75 +15,76 @@
     </div>
   </div>
   <div class="vlc-scroll-wrapper__body">
-    <div class="vlc-container">
-      <div class="vl-u-spacer-extended-l">
-        {{#if (eq activeAgendaItemSection "details")}}
-          <div class="vl-action-group vl-action-group--align-right">
-            {{#if (not currentAgenda.isFinal)}}
-              {{#if showOptions}}
-                {{#if isPostPonable}}
-                  {{#if (or agendaitem.retracted (await agendaitem.postponedTo))
+    <div class="vl-u-spacer-extended">
+      <div class="vlc-container">
+        <div class="vl-u-spacer--small">
+          {{#if (eq activeAgendaItemSection "details")}}
+            <div class="vl-action-group vl-action-group--align-right">
+              {{#if (or isAdmin isEditor)}}
+                {{#if (not currentAgenda.isFinal)}}
+                  {{#if isPostPonable}}
+                    {{#if
+                      (or agendaitem.retracted (await agendaitem.postponedTo))
+                    }}
+                      <button
+                        class="vl-button vl-button--tertiary vl-button--narrow"
+                        {{action "advanceAgendaitem" agendaitem}}
+                      >
+                        {{t "not-postpone"}}
+                      </button>
+                    {{else}}
+                      <button
+                        class="vl-button vl-button--tertiary vl-button--narrow"
+                        {{action "togglePostponed" agendaitem}}
+                      >
+                        {{t "postpone"}}
+                      </button>
+                    {{/if}}
+                  {{/if}}
+                  {{#if
+                    (await
+                      (allow-delete-agendaitem
+                        agendaitem=agendaitem
+                        lastDefiniteAgenda=lastDefiniteAgenda
+                      )
+                    )
                   }}
                     <button
                       class="vl-button vl-button--tertiary vl-button--narrow"
-                      {{action "advanceAgendaitem" agendaitem}}
+                      {{action "deleteItem" agendaitem}}
                     >
-                      {{t "not-postpone"}}
-                    </button>
-                  {{else}}
-                    <button
-                      class="vl-button vl-button--tertiary vl-button--narrow"
-                      {{action "togglePostponed" agendaitem}}
-                    >
-                      {{t "postpone"}}
+                      {{t "delete"}}
                     </button>
                   {{/if}}
-                {{/if}}
-                {{#if
-                  (await
-                    (allow-delete-agendaitem
-                      agendaitem=agendaitem
-                      lastDefiniteAgenda=lastDefiniteAgenda
-                    )
-                  )
-                }}
                   <button
-                    class="vl-button vl-button--tertiary vl-button--narrow"
-                    {{action "deleteItem" agendaitem}}
+                    class="vl-button vl-button--tertiary vl-button--icon"
+                    {{action "showOptions"}}
                   >
-                    {{t "delete"}}
+                    <i
+                      class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                    ></i>
                   </button>
                 {{/if}}
               {{/if}}
-              {{#if (or isAdmin isEditor)}}
-                <button
-                  class="vl-button vl-button--tertiary vl-button--icon"
-                  {{action "showOptions"}}
-                >
-                  <i
-                    class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
-                  ></i>
-                </button>
-              {{/if}}
-            {{/if}}
-          </div>
-        {{/if}}
-        {{#if (eq activeAgendaItemSection "details")}}
-          {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
-        {{else if (eq activeAgendaItemSection "comments")}}
-          {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
-        {{else if (eq activeAgendaItemSection "press-agenda")}}
-          {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
-        {{else if (eq activeAgendaItemSection "decision")}}
-          {{agenda/agendaitem/agendaitem-decision
-            subcase=(await subcase)
-            agendaitem=agendaitem
-          }}
-        {{else if (eq activeAgendaItemSection "news-item")}}
-          {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
-        {{else if (eq activeAgendaItemSection "minutes")}}
-          {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
-        {{/if}}
+            </div>
+          {{/if}}
+          {{#if (eq activeAgendaItemSection "details")}}
+            {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+          {{else if (eq activeAgendaItemSection "comments")}}
+            {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
+          {{else if (eq activeAgendaItemSection "press-agenda")}}
+            {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
+          {{else if (eq activeAgendaItemSection "decision")}}
+            {{agenda/agendaitem/agendaitem-decision
+              subcase=(await subcase)
+              agendaitem=agendaitem
+            }}
+          {{else if (eq activeAgendaItemSection "news-item")}}
+            {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
+          {{else if (eq activeAgendaItemSection "minutes")}}
+            {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
+          {{/if}}
+        </div>
       </div>
     </div>
   </div>

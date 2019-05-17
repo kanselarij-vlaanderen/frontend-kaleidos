@@ -7,7 +7,7 @@
     {{t "agendaitem-case"}}
   </a>
 </li>
-  {{#if (or isAdmin isEditor)}}
+{{#if (or isAdmin isEditor)}}
   <li class="vl-tab">
     <a
       class="vl-tab__link
@@ -15,6 +15,9 @@
       {{action "setAgendaItemSection" "comments"}}
     >
       {{t "agendaitem-comment"}}
+      <button class="vl-pill vl-pill--clickable" type="button">
+        {{await agendaitem.remarks.length}}
+      </button>
     </a>
   </li>
 {{/if}}

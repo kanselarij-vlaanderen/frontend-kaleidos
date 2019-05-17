@@ -1,6 +1,6 @@
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-flex-space-between">
+    <div class="vl-u-display-flex vl-u-flex-align-baseline">
       <h3 class="vl-title vl-title--h3">
         {{t "newsletter-title"}}
       </h3>
@@ -13,17 +13,15 @@
       {{/if}}
     </div>
   </div>
-  <div class="vl-u-spacer">
-    <div class="vl-u-spacer--xsmall">
-      <h4 class="vl-title vl-title--h6">
-        {{await agendaitem.newsletterInfo.title}}
-      </h4>
-    </div>
-    <div class="vl-u-text vl-u-text--small">
-      <p class="vl-long-title">
-        {{await agendaitem.newsletterInfo.subtitle}}
-      </p>
-    </div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <h3 class="vl-title vl-title--h6">
+      {{await agendaitem.newsletterInfo.title}}
+    </h3>
+  </div>
+  <div class="vl-typography">
+    <p>
+      {{await agendaitem.newsletterInfo.subtitle}}
+    </p>
     <p>
       {{await agendaitem.newsletterInfo.text}}
     </p>

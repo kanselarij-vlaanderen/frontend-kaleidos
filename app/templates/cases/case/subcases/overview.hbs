@@ -4,14 +4,16 @@
   isShowingProcess=isShowingProcess
   refresh=(action "refresh")
 }}
-{{#if (gt (await model.subcases.length) 0)}}
-  {{#if isShowingProcess}}
-    {{subcases/subcases-process subcases=(await model.subcases)}}
-  {{else if isShowingOverview}}
-    {{subcases/subcases-overview subcases=(await model.subcases)}}
+<div class="vlc-scroll-wrapper__body">
+  {{#if (gt (await model.subcases.length) 0)}}
+    {{#if isShowingProcess}}
+      {{subcases/subcases-process subcases=(await model.subcases)}}
+    {{else if isShowingOverview}}
+      {{subcases/subcases-overview subcases=(await model.subcases)}}
+    {{/if}}
+  {{else}}
+    <div class="vl-u-spacer-extended-l">
+      {{web-components/vl-alert message=(t "no-subcases")}}
+    </div>
   {{/if}}
-{{else}}
-  <div class="vl-u-spacer-extended-l">
-    {{web-components/vl-alert message=(t "no-subcases")}}
-  </div>
-{{/if}}
+</div>

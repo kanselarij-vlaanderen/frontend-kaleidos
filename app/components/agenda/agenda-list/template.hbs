@@ -1,12 +1,3 @@
-{{#if (not selectedAgendaItem)}}
-  <div class="vlc-toolbar vlc-toolbar--auto">
-    <div class="vlc-toolbar__left">
-      <h2 class="vl-title vl-title--h3">
-        {{t "agendaitems-subtitle"}}
-      </h2>
-    </div>
-  </div>
-{{/if}}
 {{#if (eq agendaitems.length 0)}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
@@ -16,9 +7,7 @@
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
       {{#each group as |agendaitemGroup|}}
-        <div
-          class="vlc-agenda-items__header vlc-agenda-items__header--small vl-u-text--marked"
-        >
+        <div class="vlc-list-section-header">
           {{#each agendaitemGroup.mandatees as |mandatee|}}
             <h2 class="vl-title vl-title--h6">
               {{mandatee.title}}
@@ -40,19 +29,17 @@
 {{else}}
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
-      {{#each group as |agendaitemGroup|}}
-        <div
-          class="vlc-agenda-items__header vlc-agenda-items__header--small vl-u-text--marked"
-        >
-          {{#each agendaitemGroup.mandatees as |mandatee|}}
-            <h2 class="vl-title vl-title--h6">
-              {{mandatee.title}}
-            </h2>
-          {{/each}}
-        </div>
-        <div class="vl-u-spacer">
+      <div class="vl-u-spacer-extended-bottom">
+        {{#each group as |agendaitemGroup|}}
+          <div class="vlc-list-section-header">
+            {{#each agendaitemGroup.mandatees as |mandatee|}}
+              <h2 class="vl-title vl-title--h6">
+                {{mandatee.title}}
+              </h2>
+            {{/each}}
+          </div>
           {{#each (await agendaitemGroup.agendaitems) as |agendaitem index|}}
-            <div class="vlc-agenda-item-big">
+            <div class="vlc-agenda-items-new__sub-item">
               {{agenda/agenda-list/list-item
                 agendaitem=agendaitem
                 index=index
@@ -60,12 +47,12 @@
               }}
             </div>
           {{/each}}
-        </div>
-      {{/each}}
+        {{/each}}
+      </div>
     </div>
   {{/each}}
 {{/if}}
-<div class="vlc-toolbar vlc-toolbar--auto">
+{{!-- <div class="vlc-toolbar vlc-toolbar--auto">
   <div class="vlc-toolbar__left">
     <h2 class="vl-title vl-title--h3 vl-u-spacer-extended-s">
       {{t "announcements-subtitle"}}
@@ -86,4 +73,4 @@
   {{else}}
     {{web-components/vl-alert message=(t "no-announcements-yet")}}
   {{/if}}
-</div>
+</div> --}}

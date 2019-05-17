@@ -8,5 +8,5 @@ export default Model.extend({
 	code: attr("string"),
 	field: belongsTo('government-field', { inverse: null }),
 	mandatees: hasMany('mandatee', { inverse: null }),
-	subcase: hasMany('subcase')
+	subcase: hasMany('subcase', { inverse: null })
 });

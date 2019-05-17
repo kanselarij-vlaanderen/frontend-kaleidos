@@ -30,7 +30,7 @@ export default Model.extend({
   documentVersions: hasMany('document-version', { inverse: null }),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
-  approvals: hasMany('approval'),
+  approvals: hasMany('approval', { serialize: false }),
 
   confidentiality: belongsTo('confidentiality'),
   decision: belongsTo('decision'),
@@ -47,9 +47,16 @@ export default Model.extend({
   }),
 
   nameToShow: computed('subcaseName', function () {
-    const subcaseName = this.get('subcaseName');
-    if (subcaseName)
+    const { subcaseName, title, shortTitle } = this;
+    if (subcaseName) {
       return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
+    } else if (shortTitle) {
+      return shortTitle;
+    } else if (title) {
+      return title;
+    } else {
+      return `No name found.`
+    }
   }),
 
   async documentNumberOfVersion(version) {
@@ -133,25 +140,24 @@ export default Model.extend({
   }),
 
   onAgendaInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(onAgendaCodeId).then((date) => {
-      return date;
-    });
+    return this.findPhaseDateByCodeId(onAgendaCodeId);
   }),
 
   decidedInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(decidedCodeId).then((date) => {
-      return date;
-    });
+    return this.findPhaseDateByCodeId(decidedCodeId);
   }),
 
   async findPhaseDateByCodeId(codeId) {
     const subcasePhases = await this.get('phases');
     return subcasePhases.find(async (phase) => {
       const code = await phase.get('code');
-      const id = code.get('id');
-      if (id && id === codeId) {
-        return phase.get('date');
+      if (code) {
+        const id = code.get('id');
+        if (id && id === codeId) {
+          return phase.get('date');
+        }
       }
+      return false;
     });
   }
 

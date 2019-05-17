@@ -12,23 +12,23 @@ export default Model.extend({
   numberVp: attr('string'),
   numberVr: attr('string'),
 
-  subcase: belongsTo('subcase'),
+  subcase: belongsTo('subcase', { inverse: null }),
   publication: belongsTo('publication'),
   documentType: belongsTo('document-type'),
   confidentiality: belongsTo('confidentiality'),
-  documentVersions: hasMany('document-version', {inverse:null}),
-  signedDocumentVersions: hasMany('document-version', {inverse:null}),
+  documentVersions: hasMany('document-version', { inverse: null }),
+  signedDocumentVersions: hasMany('document-version', { inverse: null }),
 
-  sortedDocumentVersions: computed.sort('signedDocumentVersions', function(a,b) {
-		if(a.versionNumber > b.versionNumber) {
-			return 1;
-		} else if (a.versionNumber < b.versionNumber){
-			return -1;
-		}
-		return 0;
-	}),
+  sortedDocumentVersions: computed.sort('signedDocumentVersions', function (a, b) {
+    if (a.versionNumber > b.versionNumber) {
+      return 1;
+    } else if (a.versionNumber < b.versionNumber) {
+      return -1;
+    }
+    return 0;
+  }),
 
-	latestDocumentVersion: computed('sortedDocumentVersions', function() {
-		return this.get('sortedDocumentVersions.lastObject');
-	})
+  latestDocumentVersion: computed('sortedDocumentVersions', function () {
+    return this.get('sortedDocumentVersions.lastObject');
+  })
 });

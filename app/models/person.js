@@ -1,5 +1,4 @@
 import DS from 'ember-data';
-import { computed } from '@ember/object';
 
 const { Model, attr, hasMany, belongsTo } = DS;
 
@@ -7,13 +6,8 @@ export default Model.extend({
 	lastName: attr('string'),
 	alternativeName: attr('string'),
 	firstName: attr('string'),
-	mandatees: hasMany('mandatee'),
+	mandatees: hasMany('mandatee', { inverse: null }),
 	birth: belongsTo('birth'),
-	mandatee: belongsTo('mandatee'),
-	// identifier: belongsTo('identifier'),
-	gender: belongsTo('gender'),
-
-	fullName: computed('firstName', 'lastName', function() {
-		return this.get('firstName') + " " + this.get('lastName');
-	}) 
+	mandatee: belongsTo('mandatee', { inverse: null }),
+	gender: belongsTo('gender')
 });

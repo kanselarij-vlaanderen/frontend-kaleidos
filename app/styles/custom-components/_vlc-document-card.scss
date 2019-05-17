@@ -2,10 +2,10 @@
    vlc-document-card
    ========================================================================== */
 
-   .vlc-document-card {
-    display: block;
-    border: 1px solid $border-color;
-    padding: 1.8rem;
+ .vlc-document-card {
+  display: block;
+  border: 1px solid $border-color;
+  padding: 1.8rem;
 
     .js-vl-accordion .vl-toggle {
         margin: 0.8rem 4.6rem 0;
@@ -13,22 +13,8 @@
 
     .vl-title {
         margin: 0.5rem 0;
-    }
-
-    .vlc-document-card-actions {
-        margin-left: auto;
-    }
-
-    .vlc-document-card-item__icon {
-        position: absolute;
-        left: -4rem;
-        top: 0.3rem;
-        color: $primary-blue;
-    }
-
-    .vlc-document-card-content__meta {
-        font-size: 1.4rem;
-        color: $dove-gray;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .vl-accordion__panel {
@@ -42,6 +28,39 @@
         margin-bottom: 4rem;
     }
 }
+
+  .vlc-document-card__badge {
+    margin-right: 16px;
+  }
+
+  .vlc-document-card__summary {
+    display: flex;
+    align-items: center;
+  }
+
+  .vlc-document-card__badge {
+  }
+
+  .vlc-document-card__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+    .vlc-document-card-content__meta {
+      font-size: 1.4rem;
+      color: $dove-gray;
+    }
+
+  .vlc-document-card__actions {
+      margin-left: auto;
+  }
+
+  .vlc-document-card-item__icon {
+      position: absolute;
+      left: -4rem;
+      top: 0.3rem;
+      color: $primary-blue;
+  }
 
 
 /* ==========================================================================

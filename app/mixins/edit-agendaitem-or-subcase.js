@@ -33,9 +33,9 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
 	async setNewPropertiesToModel(model) {
 		const { propertiesToSet } = this;
-		propertiesToSet.map((property) => {
-			model.set(property, this.get(property));
-		})
+		await Promise.all(propertiesToSet.map(async (property) => {
+			model.set(property, await this.get(property));
+		}))
 
 		return model.save();
 	},

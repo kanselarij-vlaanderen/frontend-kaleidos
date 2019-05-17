@@ -1,93 +1,130 @@
-{{#if (or (not agendaitem.retracted) (not agendaitem.postponedTo))}}
+<div class="vl-col--3-4">
   <h2 class="vl-title vl-title--h3">
     {{t "agendaitem-comment"}}
   </h2>
-  <div class="vlc-comments-input">
-    <div class="vl-badge">
-      <div class="vl-badge vl-badge--initials vl-badge--accent">
+  {{#if (or (not agendaitem.retracted) (not agendaitem.postponedTo))}}
+    <div class="vlc-comment-input">
+      <div class="vl-badge vl-badge--initials vl-badge--action">
         <span>
-            {{user-initials user=(await user)}}
+          {{user-initials user=(await user)}}
         </span>
-      </div>
-    </div>
-    {{utils/custom-textarea
-      rows="2"
-      class="vl-textarea vl-textarea--block"
-      value=text
-      placeholder="Type hier jouw opmerking..."
-      enter=(action "addComment")
-    }}
-  </div>
-  {{#each (await sortedRemarks) as |comment|}}
-    <div class="vlc-comments-comment">
-      <div class="vl-badge">
-        <div class="vl-badge vl-badge--initials vl-badge--action">
-          <span>
-            {{user-initials user=(await comment.author)}}
-          </span>
-        </div>
-      </div>
-      <div class="vlc-comments-comment-content">
-        <div class="vlc-comments-comment-content__header">
-          <h4 class="vl-title vl-title--h6">
-            {{await comment.author.firstName}}
-            {{await comment.author.lastName}}
-          </h4>
-          <div class="vlc-comments-comment-content__meta">
-            {{moment-format comment.created "DD MMMM YYYY - HH:mm"}}
-          </div>
-        </div>
-        <div class="vl-typography">
-          <p>
-            {{comment.text}}
-          </p>
-        </div>
-      </div>
-    </div>
-    {{#if (await comment.answers)}}
-      {{#each (await comment.answers) as |answer|}}
-        <div class="vlc-comments-comment vlc-comments-comment--response">
-          <div class="vl-badge">
-            <div class="vl-badge vl-badge--initials vl-badge--action">
-              <span>
-                {{user-initials user=(await answer.author)}}
-              </span>
-            </div>
-          </div>
-          <div class="vlc-comments-comment-content">
-            <div class="vlc-comments-comment-content__header">
-              <h4 class="vl-title vl-title--h6">
-                {{await answer.author.firstName}}
-                {{await answer.author.lastName}}
-              </h4>
-              <div class="vlc-comments-comment-content__meta">
-                {{moment-format answer.created "DD MMMM YYYY - HH:mm"}}
-              </div>
-            </div>
-            <div class="vl-typography">
-              <p>
-                {{answer.text}}
-              </p>
-            </div>
-          </div>
-        </div>
-      {{/each}}
-    {{/if}}
-    <div class="vlc-comments-input vlc-comments-input--response">
-      <div class="vl-badge">
-        <div class="vl-badge vl-badge--initials vl-badge--accent">
-          <span>
-            {{user-initials user=(await user)}}
-          </span>
-        </div>
       </div>
       {{utils/custom-textarea
         rows="2"
-        class="vl-textarea vl-textarea--block"
-        value=comment.answer
+        class="vl-input-field vl-input-field--block"
+        value=text
         placeholder="Type hier jouw opmerking..."
-        enter=(action "addAnswer" comment)
+        enter=(action "addComment")
       }}
     </div>
-  {{/each}}
-{{/if}}
+    {{#each (await sortedRemarks) as |comment|}}
+      <div class="vlc-comment">
+        {{#if (eq await comment.author.id await user.id)}}
+          <div class="vl-badge vl-badge--initials vl-badge--action">
+            <span>
+              {{user-initials user=(await comment.author)}}
+            </span>
+          </div>
+        {{else}}
+          <div class="vl-badge vl-badge--initials vl-badge--accent">
+            <span>
+              {{user-initials user=(await comment.author)}}
+            </span>
+          </div>
+        {{/if}}
+        <div class="vlc-comment-content">
+          <div class="vlc-comment-content__header">
+            <div class="vlc-toolbar">
+              <div class="vlc-toolbar__left">
+                <h4 class="vl-title vl-title--h6">
+                  {{await comment.author.firstName}}
+                  {{await comment.author.lastName}}
+                </h4>
+              </div>
+              <div class="vlc-toolbar__right">
+                {{#if (eq await comment.author.id await user.id)}}
+                  <button
+                    class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle vl-popover__toggle"
+                  >
+                    <i
+                      class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                    ></i>
+                    <span class="vl-u-visually-hidden">
+                      {{t "more-options"}}
+                    </span>
+                  </button>
+                  {{! TODO: Ember attacher to delete a comment }}
+                {{/if}}
+              </div>
+            </div>
+          </div>
+          <div class="vl-typography">
+            <p>
+              {{comment.text}}
+            </p>
+          </div>
+          <div class="vlc-comment-content__meta">
+            {{moment-format comment.created "DD MMMM YYYY - HH:mm"}}
+          </div>
+        </div>
+      </div>
+      {{#if (await comment.answers)}}
+        {{#each (await comment.answers) as |answer|}}
+          <div class="vlc-comment vlc-comment--response">
+            {{#if (eq await comment.author.id await user.id)}}
+              <div class="vl-badge vl-badge--initials vl-badge--action">
+                <span>
+                  {{user-initials user=(await comment.author)}}
+                </span>
+              </div>
+            {{else}}
+              <div class="vl-badge vl-badge--initials vl-badge--accent">
+                <span>
+                  {{user-initials user=(await comment.author)}}
+                </span>
+              </div>
+            {{/if}}
+            <div class="vlc-comment-content">
+              <div class="vlc-comment-content__header">
+                <h4 class="vl-title vl-title--h6">
+                  {{await answer.author.firstName}}
+                  {{await answer.author.lastName}}
+                </h4>
+              </div>
+              <div class="vl-typography">
+                <p>
+                  {{answer.text}}
+                </p>
+              </div>
+              <div class="vlc-comment-content__meta">
+                {{moment-format answer.created "DD MMMM YYYY - HH:mm"}}
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      {{/if}}
+      <div class="vlc-comment-input vlc-comment-input--response">
+        {{#if (eq await comment.author.id await user.id)}}
+          <div class="vl-badge vl-badge--initials vl-badge--action">
+            <span>
+              {{user-initials user=(await comment.author)}}
+            </span>
+          </div>
+        {{else}}
+          <div class="vl-badge vl-badge--initials vl-badge--accent">
+            <span>
+              {{user-initials user=(await comment.author)}}
+            </span>
+          </div>
+        {{/if}}
+        {{utils/custom-textarea
+          rows="2"
+          class="vl-input-field vl-input-field--block"
+          value=comment.answer
+          placeholder="Type hier jouw opmerking..."
+          enter=(action "addAnswer" comment)
+        }}
+      </div>
+    {{/each}}
+  {{/if}}
+</div>

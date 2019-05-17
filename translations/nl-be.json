@@ -60,7 +60,7 @@
 	"cases-number": "Nummer Dossier",
 	"close-modal": "Venster sluiten",
 	"close-subcase": "Procedurestap afsluiten",
-	"collapse": "Bekijk bevoegdheden",
+	"collapse": "Bekijk beleidsvelden",
 	"compare": "Vergelijk",
 	"compare-title": "Vergelijk Agenda's",
 	"contact-person": "Contactpersoon",
@@ -126,7 +126,7 @@
 	"manage-government-domains": "Beleidsdomeinen beheren",
 	"manage-government-fields": "Beleidsvelden beheren",
 	"manage-ministers": "Ministerbeheer",
-	"manage-ministers-title": "Ministers en bevoegdheden",
+	"manage-ministers-title": "Ministers en beleidsvelden",
 	"manage-user-roles": "Gebruikersbeheer",
 	"manage-subcase-types": "Procedurestap types beheer",
 	"mandate": "Bevoegdheid",
@@ -161,7 +161,7 @@
 	"no-announcements-yet": "Er zijn nog geen mededelingen in deze agenda.",
 	"no-decision": "Nog geen beslissing",
 	"no-documents-yet": "Er zijn nog geen documenten toegevoegd.",
-	"no-domains-yet": "Er zijn nog geen bevoegdheden toegevoegd.",
+	"no-domains-yet": "Er zijn nog geen beleidsvelden toegevoegd.",
 	"no-meetings": "Er zijn nog geen agenda's aangemaakt.",
 	"no-news-item": "Nog geen kort bestek",
 	"no-notes": "Geen notulen voor dit agendapunt.",
@@ -277,5 +277,7 @@
 	"date-last-edited": "Datum laatste wijziging",
 	"requested-for-session": "Aangevraagd voor Ministerraad:",
 	"decided-on": "Beslist op:",
-	"not-yet-decided": "Nog niet beslist"
+	"not-yet-decided": "Nog niet beslist",
+	"is-on-agenda": "Geagendeerd op: ",
+	"more-options": "Meer opties"
 }

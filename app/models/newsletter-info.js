@@ -6,12 +6,14 @@ export default Model.extend({
 	text: attr('string'),
 	subtitle: attr('string'),
 	title: attr('string'),
-	finished:attr('boolean'),
+	richtext: attr('string'),
+	finished: attr('boolean'),
 	publicationDate: attr('date'),
 	publicationDocDate: attr('date'),
-	remarks: hasMany('remark'),
-	themes: hasMany('theme'),
+
+	remarks: hasMany('remark', { inverse: null }),
+	// themes: hasMany('theme'),
 	agendaitem: belongsTo('agendaitem'),
-	meeting: belongsTo('meeting'),
-	documentVersions: hasMany('document-version', {inverse:null})
+	meeting: belongsTo('meeting', { inverse: null }),
+	documentVersions: hasMany('document-version', { inverse: null })
 });
