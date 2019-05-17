@@ -30,7 +30,7 @@ export default Model.extend({
   documentVersions: hasMany('document-version', { inverse: null }),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
-  approvals: hasMany('approval'),
+  approvals: hasMany('approval', { serialize: false }),
 
   confidentiality: belongsTo('confidentiality'),
   decision: belongsTo('decision'),

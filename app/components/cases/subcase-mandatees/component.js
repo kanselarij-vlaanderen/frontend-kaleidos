@@ -7,7 +7,6 @@ export default Component.extend({
 	selectedMandatee: null,
 	classNames: ["vlc-input-field-block"],
 	isAdding: false,
-
 	actions: {
 		async createMandateeRow(selectedMandatee, domains, fields, codes) {
 			const mandateeRows = await this.get('mandateeRows');
