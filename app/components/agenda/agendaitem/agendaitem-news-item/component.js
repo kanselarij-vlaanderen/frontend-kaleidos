@@ -14,10 +14,9 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 			agendaitem: agendaitem,
 			created: new Date(),
 			finished: false,
-			subtitle: await agendaitem.get('subcase.title')
+			title: await agendaitem.get('subcase.title')
 		});
-		await news.save();
-		await this.updateModifiedProperty(await agendaitem.get('agenda'));
+		agendaitem.set('newsletterInfo', news);
 	},
 
 	actions: {
@@ -28,8 +27,8 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 				await this.addNewsItem(agendaitem);
 			} else {
 				if (!newsletter.get('title')) {
-					newsletter.set('title', agendaitem.get('shortTitle'));
-					await newsletter.save();
+					newsletter.set('title', agendaitem.get('title'));
+					// await newsletter.save();
 					await this.updateModifiedProperty(await agendaitem.get('agenda'));
 				}
 			}

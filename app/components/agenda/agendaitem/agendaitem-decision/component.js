@@ -17,15 +17,12 @@ export default Component.extend(isAuthenticatedMixin, {
 	}),
 
 	async addDecision(subcase) {
-		const { agendaitem } = this;
 		let decision = this.store.createRecord("decision", {
 			subcase: await subcase,
-			shortTitle: await subcase.get('shortTitle'),
+			shortTitle: await subcase.get('title'),
 			approved: false
 		});
-		await decision.save()
-		await agendaitem.belongsTo('subcase').reload();
-		await subcase.belongsTo('decision').reload();
+		subcase.set('decision', decision);
 	},
 
 	actions: {
@@ -34,6 +31,8 @@ export default Component.extend(isAuthenticatedMixin, {
 			const decision = await subcase.get('decision');
 			if (!decision) {
 				await this.addDecision(subcase);
+			} else if (!decision.get('shortTitle')) {
+				decision.set('shortTitle', subcase.get('title'));
 			}
 			this.toggleProperty('isEditing');
 		},
