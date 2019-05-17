@@ -94,27 +94,32 @@
     title=(t "new-document-version")
   }}
     <div class="vl-modal-dialog__content">
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value="Naam van bestand"}}
-        {{web-components/vl-form-input width="4" value=fileName}}
+      <div class="vl-u-spacer-extended-bottom-s">
+        <div class="vlc-input-field-block">
+          {{web-components/vl-form-label value="Naam van bestand"}}
+          {{web-components/vl-form-input width="4" value=fileName}}
+        </div>
       </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value="Bijlagen"}}
-        {{#if (not uploadedFile)}}
-          {{file-uploader
-            multipleFiles=false
-            uploadedFile=(action "getUploadedFile")
-          }}
-        {{else}}
-          <div class="document">
-            {{fa-icon "file"}}
-            {{await uploadedFile.name}}
-            <a {{action "removeFile" uploadedFile}}>
-              {{fa-icon "remove"}}
-            </a>
-          </div>
-        {{/if}}
-      </div>
+      {{#if (not uploadedFile)}}
+        {{file-uploader
+          multipleFiles=false
+          uploadedFile=(action "getUploadedFile")
+        }}
+      {{else}}
+        <div class="document">
+          {{fa-icon "file"}}
+          {{await uploadedFile.name}}
+          <a {{action "removeFile" uploadedFile}}>
+            {{fa-icon "remove"}}
+          </a>
+        </div>
+      {{/if}}
     </div>
+    {{web-components/vl-modal-footer
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add")
+      cancelAction=(action "openUploadDialog")
+      saveAction=(action "uploadNewVersion")
+    }}
   {{/web-components/vl-modal}}
 {{/if}}

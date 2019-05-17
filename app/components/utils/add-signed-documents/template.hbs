@@ -17,17 +17,18 @@
     title=(t "document-add")
   }}
     <div class="vl-modal-dialog__content">
-      <div class="vlc-input-field-block">
-        {{#if (not (gt uploadedFiles.length 0))}}
-          {{web-components/vl-form-label value="Bijlagen"}}
-          {{file-uploader
+      {{file-uploader isLoading=isLoading uploadedFile=(action "uploadedFile")}}
+      {{#if (not isLoading)}}
+        {{#each uploadedFiles as |uploadedFile|}}
+          {{web-components/vl-uploaded-document
             multipleFiles=false
-            uploadedFile=(action "uploadedFile")
+            file=uploadedFile
+            uploadedFiles=uploadedFiles
           }}
-        {{else}}
-          {{subcases/edit-documents uploadedFiles=uploadedFiles}}
-        {{/if}}
-      </div>
+        {{/each}}
+      {{else}}
+        {{web-components/vl-loader text="De documenten worden opgeladen.."}}
+      {{/if}}
     </div>
     {{web-components/vl-modal-footer
       cancelButtonText=(t "cancel")

@@ -208,6 +208,11 @@ a.vlc-agenda-items-new__sub-item--active:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+
+  progress {
+    width: 100%;
+  }
 }
 
 .align-right {
@@ -218,6 +223,7 @@ a.vlc-agenda-items-new__sub-item--active:focus {
 
 .vl-upload__element__label {
   text-decoration: none;
+  margin: 0;
 
   em {
     display: block;
@@ -538,4 +544,27 @@ body > .ember-view {
 p {
   word-break: break-all;
   white-space: normal;
+}
+
+.vl-uploaded-document {
+  padding: 2rem;
+
+  .metadata-container {
+    margin-left: 4rem;
+  }
+
+  &__title-container {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    .title {
+      display: flex;
+      align-items: center;
+    }
+    .metadata {
+      margin: 0;
+    }
+  }
+  &__title {
+    display: flex;
+  }
 }

@@ -42,7 +42,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			const newDocumentVersion = await this.createNewDocumentVersion(uploadedFile, document, newVersion.get('versionNumber'));
 
 			document.set('lastDocumentVersion', newDocumentVersion);
-			item.get('documentVersions').addObject(newDocumentVersion);
+			await item.hasMany('documentVersions').reload();
 			await item.save();
 
 			if (!this.get('isDestroyed')) {
@@ -53,7 +53,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		async openUploadDialog() {
 			const uploadedFile = this.get('uploadedFile');
 			if (uploadedFile && uploadedFile.id) {
-				this.deleteFile(uploadedFile.id);
+				this.removeFile(uploadedFile.id);
 			}
 			this.toggleProperty('isUploadingNewVersion');
 		},
@@ -63,12 +63,13 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			this.set('uploadedFile', file);
 		},
 
-		removeFile() {
-			$.ajax({
-				method: "DELETE",
-				url: '/files/' + this.get('uploadedFile.id')
-			});
-			this.set('uploadedFile', null);
-		}
+	},
+
+	removeFile() {
+		$.ajax({
+			method: "DELETE",
+			url: '/files/' + this.get('uploadedFile.id')
+		});
+		this.set('uploadedFile', null);
 	}
 });
