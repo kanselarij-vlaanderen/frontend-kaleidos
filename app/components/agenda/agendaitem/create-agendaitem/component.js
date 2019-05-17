@@ -31,8 +31,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
       },
       filter: {
         ':has-no:agendaitems': 'yes'
-      },
-      // include: 'mandatees,document-versions,themes,government-domains,approvals'
+      }
     };
     if (filter) {
       options['filter'] = {

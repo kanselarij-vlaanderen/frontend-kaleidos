@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 
-const { Model, attr, hasMany, belongsTo } = DS;
+const { Model, attr, hasMany, belongsTo, PromiseArray } = DS;
 
 export default Model.extend({
 	created: attr('date'),
@@ -20,24 +20,30 @@ export default Model.extend({
 		});
 	}),
 
-	lastDocumentVersion: computed('documentVersions', async function () {
+	lastDocumentVersion: computed('documentVersions.@each', async function () {
 		return (await (await this.get('documentVersions')).sortBy('versionNumber')).get('lastObject');
 	}),
 
-	async getDocumentVersionsOfItem(item) {
-		const modelName = item.get('constructor.modelName')
-		if (modelName === 'agendaitem') {
-			let documentVersions = await this.store.query('document-version', {
-				filter: { document: { id: await this.get('id') }, agendaitem: { id: item.get('id') } },
-				sort: '-version-number'
-			});
-			return documentVersions;
-		} else {
-			let documentVersions = await this.store.query('document-version', {
-				filter: { document: { id: await this.get('id') }, subcase: { id: item.get('id') } },
-				sort: '-version-number'
-			});
-			return documentVersions;
+	filteredDocumentVersions: computed('documentVersions.@each', 'item.documents.@each', function () {
+		return this.get('documentVersions')
+	}),
+
+	getDocumentVersionsOfItem(item) {
+		const modelName = item.get('constructor.modelName');
+		const filter = {
+			document: { id: this.get('id') }
+		};
+		if (!modelName) {
+			return [];
 		}
+		filter[modelName] = { id: item.get('id') };
+		return PromiseArray.create({
+			promise: this.store.query('document-version', {
+				filter,
+				sort: '-version-number'
+			}).then((documentVersions) => {
+				return documentVersions;
+			})
+		});
 	}
 });

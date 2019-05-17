@@ -21,12 +21,12 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		return this.get('item.constructor.modelName');
 	}),
 
-	filteredDocumentVersions: computed('document', 'document.documentVersions', 'item', 'item.documents.@each', function () {
+	filteredDocumentVersions: computed('document.documentVersions.@each', 'item.documentVersions.@each', function () {
 		return this.get('document').getDocumentVersionsOfItem(this.get('item'));
 	}),
 
-	lastDocumentVersion: computed('filteredDocumentVersions.@each', async function () {
-		return (await this.get('filteredDocumentVersions') || []).objectAt(0);
+	lastDocumentVersion: computed('filteredDocumentVersions.@each', function () {
+		return (this.get('filteredDocumentVersions') || []).objectAt(0);
 	}),
 
 	actions: {
