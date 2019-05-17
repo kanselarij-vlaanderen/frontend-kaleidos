@@ -48,8 +48,8 @@
       searchField="label"
       propertyToShow="label"
       sortField="label"
-      selectedItems=(await document.type)
-      selectModel=(action "chooseDocumentType" document)
+      selectedItems=file.documentType
+      selectModel=(action "chooseDocumentType")
     }}
   </div>
   <div class="vlc-input-field-block">
@@ -59,8 +59,8 @@
       searchField="label"
       propertyToShow="label"
       sortField="label"
-      selectedItems=(await document.confidentiality)
-      selectModel=(action "chooseDocumentConfidentiality" document)
+      selectedItems=file.confidentiality
+      selectModel=(action "chooseDocumentConfidentiality")
     }}
   </div>
 </div>

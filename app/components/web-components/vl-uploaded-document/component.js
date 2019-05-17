@@ -22,11 +22,11 @@ export default Component.extend(UploadDocumentMixin, {
 	},
 
 	actions: {
-		chooseDocumentType() {
-
+		chooseDocumentType(type) {
+			this.file.set('documentType', type);
 		},
-		chooseDocumentConfidentiality() {
-
+		chooseDocumentConfidentiality(confidentiality) {
+			this.file.set('confidentiality', confidentiality);
 		},
 
 		async downloadFile(file) {
@@ -35,7 +35,7 @@ export default Component.extend(UploadDocumentMixin, {
 				dataType: 'arraybuffer', // or 'blob'
 				processData: false
 			})
-				.then((content) => this.saveFileAs(file.name, content, this.get('contentType')));
+				.then((content) => this.saveFileAs(file.name, content, file.get('contentType')));
 		}
 	}
 });

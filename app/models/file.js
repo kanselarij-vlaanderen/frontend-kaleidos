@@ -9,5 +9,6 @@ export default Model.extend({
 	size: attr('number'),
 	extension: attr('string'),
 	created: attr('date'),
+	contentType: attr('contentType'),
 	name: attr('string')
 });
