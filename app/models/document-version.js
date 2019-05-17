@@ -21,12 +21,9 @@ export default Model.extend({
 	signedDecision: belongsTo('decision'),
 
 	nameToDisplay: computed('chosenFileName', 'document', 'file', function () {
-		const fileName = this.get('document.numberVr');
 		const chosenFileName = this.get('chosenFileName');
 		const name = this.get('file.filename');
-		if (fileName) {
-			return fileName;
-		} else if (chosenFileName) {
+		if (chosenFileName) {
 			return chosenFileName;
 		} else if (name) {
 			return name;
