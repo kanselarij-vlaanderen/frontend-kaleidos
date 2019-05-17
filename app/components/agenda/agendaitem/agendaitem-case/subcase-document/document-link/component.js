@@ -10,6 +10,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	isUploadingNewVersion: false,
 	uploadedFile: null,
 	fileName: null,
+	isEditing: false,
+
+	numberVr: computed('document.numberVr', function () {
+		return this.get('document.numberVr')
+	}),
 
 	openClass: computed('isShowingVersions', function () {
 		if (this.get('isShowingVersions')) {
@@ -63,6 +68,21 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			this.set('uploadedFile', file);
 		},
 
+		toggleIsEditing() {
+			if (!this.get('document.numberVr')) {
+				return;
+			}
+			this.get('document').rollbackAttributes();
+			this.toggleProperty('isEditing');
+		},
+
+		saveChanges() {
+			const document = this.get('document');
+			document.set('numberVr', this.get('numberVr'))
+			document.save().then(() => {
+				this.toggleProperty('isEditing');
+			});
+		}
 	},
 
 	removeFile() {
