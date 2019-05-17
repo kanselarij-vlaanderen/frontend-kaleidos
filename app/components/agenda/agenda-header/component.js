@@ -109,7 +109,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
 			if (draft){
         await draft.destroyRecord();
-				await this.sessionService.lockMeeting(lastAgenda.get('id'));
+
 				const session = await lastAgenda.get('createdFor');
 				session.set('isFinal', true);
 				await session.save();
