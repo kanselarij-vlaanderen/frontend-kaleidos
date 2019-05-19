@@ -66,6 +66,7 @@
       {{/if}}
     </div>
     {{web-components/vl-modal-footer
+      isLoading=isCreatingDocuments
       cancelButtonText=(t "cancel")
       saveButtonText=(t "document-add")
       cancelAction=(action "toggleIsAddingNewDocument")

@@ -2,7 +2,7 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <button
-				type="button"
+        type="button"
         class="vl-button vl-button--link vl-button--narrow"
         {{action "cancelAction"}}
       >
@@ -12,9 +12,18 @@
   </div>
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
-      <button class="vl-button vl-button--narrow" {{action "saveAction"}}>
-        {{saveButtonText}}
-      </button>
+      {{#if (not isLoading)}}
+        <button class="vl-button vl-button--narrow" {{action "saveAction"}}>
+          {{saveButtonText}}
+        </button>
+      {{else}}
+        <button
+          class="vl-button vl-button--loading vl-button--narrow"
+          disabled="true"
+        >
+          {{loadingText}}
+        </button>
+      {{/if}}
     </div>
   </div>
 </div>
