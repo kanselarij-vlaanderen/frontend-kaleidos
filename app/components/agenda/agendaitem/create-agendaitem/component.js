@@ -38,7 +38,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
     if (filter) {
       options['filter'] = {
         ':has-no:agendaitems': 'yes',
-        'short-title': filter,
+        // 'short-title': filter,
       };
     }
     return store.query('subcase', options);
