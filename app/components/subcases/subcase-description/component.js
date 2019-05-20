@@ -22,8 +22,5 @@ export default Component.extend(isAuthenticatedMixin, EditAgendaitemOrSubcase, {
 			this.set('type', type);
 			this.set('subcaseName', subcaseName);
 		}
-	},
-
-
-
+	}
 });

@@ -8,9 +8,9 @@ const Router = EmberRouter.extend({
 
 Router.map(function () {
   this.route('agendas', { path: "/" });
-  this.route('agenda', {path: '/agenda/:id'}, function() {
-    this.route('agendaitems', function() {
-      this.route('agendaitem', {path: '/:agendaitem_id'});
+  this.route('agenda', { path: '/agenda/:id' }, function () {
+    this.route('agendaitems', function () {
+      this.route('agendaitem', { path: '/:agendaitem_id' });
     });
     this.route('compare');
   });
@@ -33,16 +33,16 @@ Router.map(function () {
     path: '/*wildcard'
   });
   this.route('newsletters');
-  this.route('newsletters-overview', {path: ':meeting_id'});
-  this.route('print-overviews', function() {
-    this.route('notes', function() {
-      this.route('overview', {path: '/:meeting_id'});
+  this.route('newsletters-overview', { path: ':meeting_id' });
+  this.route('print-overviews', function () {
+    this.route('notes', function () {
+      this.route('overview', { path: '/:meeting_id' });
     });
-    this.route('decisions', function() {
-      this.route('overview', {path: '/:meeting_id'});
+    this.route('decisions', function () {
+      this.route('overview', { path: '/:meeting_id' });
     });
-    this.route('press-agenda', function() {
-      this.route('overview', {path: '/:meeting_id'});
+    this.route('press-agenda', function () {
+      this.route('overview', { path: '/:meeting_id' });
     });
   });
   this.route('accountless-users');

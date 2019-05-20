@@ -62,49 +62,50 @@
                 <i
                   class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
                 ></i>
+                {{#attach-popover
+                  class="ember-attacher-popper"
+                  hideOn="clickout click"
+                  showOn="click"
+                  animation="shift"
+                  placement="bottom" as |attacher|
+                }}
+                  <ul class="vl-popover__link-list">
+                    <li class="vl-popover__link-list__item">
+                      <button
+                        class="vl-link"
+                        {{action attacher.hide}}
+                        {{action "editRow" row}}
+                      >
+                        Dossier aanpassen
+                      </button>
+                    </li>
+                    <li class="vl-popover__link-list__item">
+                      {{#if (not row.isArchived)}}
+                        <a
+                          class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "requestArchiveCase" row}}
+                        >
+                          Dossier archiveren
+                        </a>
+                      {{else}}
+                        <a
+                          class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "unarchiveCase" row}}
+                        >
+                          Dossier onarchiveren
+                        </a>
+                      {{/if}}
+                    </li>
+                  </ul>
+                {{/attach-popover}}
               </button>
-              {{#attach-popover
-                class="ember-attacher-popper"
-                hideOn="clickout click"
-                showOn="click"
-                animation="shift"
-                placement="bottom" as |attacher|
-              }}
-                <ul class="vl-popover__link-list">
-                  <li class="vl-popover__link-list__item">
-                    <button
-                      class="vl-link"
-                      {{action attacher.hide}}
-                      {{action "editRow" row}}
-                    >
-                      Dossier aanpassen
-                    </button>
-                  </li>
-                  <li class="vl-popover__link-list__item">
-                    {{#if (not row.isArchived)}}
-                      <a
-                        class="vl-link vl-link--block"
-                        {{action attacher.hide}}
-                        {{action "requestArchiveCase" row}}
-                      >
-                        Dossier archiveren
-                      </a>
-                    {{else}}
-                      <a
-                        class="vl-link vl-link--block"
-                        {{action attacher.hide}}
-                        {{action "unarchiveCase" row}}
-                      >
-                        Dossier onarchiveren
-                      </a>
-                    {{/if}}
-                  </li>
-                </ul>
-              {{/attach-popover}}
             {{/if}}
             {{#link-to
               "cases.case.subcases"
               row.id
+              tagName="button"
               class="vl-button vl-button--link vl-button--icon"
             }}
               <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
