@@ -1,14 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import CONFIG from 'fe-redpencil/utils/config';
 
 const { Model, attr, hasMany, belongsTo, PromiseObject } = DS;
-
-const phasesCodes = [
-  {
-    label: "principiële goedkeuring"
-  }
-];
 
 export default Model.extend({
   store: inject(),
@@ -16,9 +11,13 @@ export default Model.extend({
   title: attr('string'),
   shortTitle: attr('string'),
   number: attr('string'),
-  policyLevel: attr('string'),
   isArchived: attr('boolean'),
+  confidential: attr('boolean'),
+
   type: belongsTo('case-type'),
+  policyLevel: belongsTo('policy-level'),
+  relatedMeeting: belongsTo('meeting'),
+
   remark: hasMany('remark'),
   themes: hasMany('theme'),
   subcases: hasMany('subcase'),
@@ -60,8 +59,8 @@ export default Model.extend({
 
     if (filteredSubcases.length === 0) {
       const label = type.get('label');
-      if (givenSubcase && label === phasesCodes[0].label) {
-        return "1ste principiële goedkeuring";
+      if (givenSubcase && label === CONFIG.phasesCodes[0].label) {
+        return CONFIG.resultSubcaseName;
       } else {
         return label;
       }
@@ -72,12 +71,12 @@ export default Model.extend({
         const subcase = filteredSubcases.objectAt(i);
         const subcaseTypeLabel = await subcase.type;
         if (subcaseTypeLabel) {
-          if (subcaseTypeLabel.get('label') === phasesCodes[0].label) {
+          if (subcaseTypeLabel.get('label') === CONFIG.phasesCodes[0].label) {
             counter++;
           }
         }
       }
-      if (type.label === phasesCodes[0].label) {
+      if (type.label === CONFIG.phasesCodes[0].label) {
         if (counter === 0) {
           counter++;
           return `${counter}ste ${type.label}`;

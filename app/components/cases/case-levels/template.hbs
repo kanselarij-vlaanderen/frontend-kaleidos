@@ -6,23 +6,25 @@
     {{#if (is-equal index 0)}}
       <input
         class="vl-radio__toggle"
-        value={{policyLevel}}
+        value={{policyLevel.id}}
         type="radio"
         name="typeId"
         checked=""
         onchange={{action "policyLevelChanged"}}
        />
+
     {{else}}
       <input
         class="vl-radio__toggle"
-        value={{policyLevel}}
+        value={{policyLevel.id}}
         type="radio"
         name="typeId"
         onchange={{action "policyLevelChanged"}}
-      />
+       />
+
     {{/if}}
     <div class="vl-radio__label">
-      {{policyLevel}}
+      {{policyLevel.label}}
     </div>
   </label>
 {{/each}}

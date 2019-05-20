@@ -11,12 +11,15 @@ export default Model.extend({
 	endedOn: attr('date'),
 	location: attr('string'),
 	number: attr('number'),
+	isFinal: attr("boolean"),
+
 	agendas: hasMany('agenda', { inverse: null, serialize: false }),
 	requestedSubcases: hasMany('subcase'),
 	postponeds: hasMany('postponed'),
+	relatedCases: hasMany('case'),
+
 	notes: belongsTo('meeting-record'),
 	newsletter: belongsTo('newsletter-info'),
-	isFinal: attr("boolean"),
 
 	latestAgenda: computed('agendas.@each', function () {
 		return DS.PromiseObject.create({

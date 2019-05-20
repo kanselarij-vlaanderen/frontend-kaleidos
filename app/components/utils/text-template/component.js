@@ -16,12 +16,6 @@ export default Component.extend({
 	text: null,
 	label: null,
 
-	// items: computed('modelName', function () {
-	// 	const modelName = this.get('modelName');
-	// 	return this.store.findAll(modelName);
-	// }),
-
-	// dirty but it works.
 	focusTextarea() {
 		later(this, function () {
 			document.getElementById('toFocus').focus();
@@ -33,7 +27,7 @@ export default Component.extend({
 			const text = this.get('text');
 			const textToAdd = items.description;
 			let newText;
-			if(text != "") {
+			if (text != "") {
 				newText = text + " " + textToAdd;
 			} else {
 				newText = textToAdd;
@@ -44,8 +38,6 @@ export default Component.extend({
 
 		async resetValueIfEmpty(param) {
 			if (param == "") {
-				// const modelName = this.get('modelName');
-				// this.set('items', this.store.findAll(modelName));
 				let textTemplates = await $.getJSON("/utils/text-templates.json");
 				this.set('items', textTemplates.textTemplates);
 			}

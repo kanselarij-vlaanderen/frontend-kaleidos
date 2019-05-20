@@ -1,8 +1,13 @@
 import Component from '@ember/component';
-import $ from 'jquery';
-
+import { inject } from '@ember/service';
+import { computed } from '@ember/object';
 export default Component.extend({
+	store: inject(),
 	classNames: ["vl-u-spacer"],
+
+	policyLevels: computed('store', function () {
+		return this.store.findAll('policy-level');
+	}),
 
 	actions: {
 		policyLevelChanged(event) {
@@ -11,9 +16,8 @@ export default Component.extend({
 	},
 
 	async didInsertElement() {
-		let policyLevels = await $.getJSON("/utils/policy-levels.json");
-		this.set('policyLevels', policyLevels.policyLevels);
-		if(policyLevels && policyLevels.length > 0) {
+		const policyLevels = await this.policyLevels;
+		if (policyLevels && policyLevels.length > 0) {
 			this.policyLevelChanged(policyLevels.get('firstObject'));
 		}
 	},

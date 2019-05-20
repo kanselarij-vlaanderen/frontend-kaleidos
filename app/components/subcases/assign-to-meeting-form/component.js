@@ -7,10 +7,7 @@ export default Component.extend({
 	store: inject(),
 
 	dateObjectsToEnable: computed('store', function () {
-		const dateOfToday = moment().format();
-		return this.store.query('meeting', {
-			filter: { ':gte:planned-start': dateOfToday }
-		});
+		return this.store.query('meeting', {});
 	}),
 
 	actions: {
