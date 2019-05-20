@@ -3,6 +3,7 @@ import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
+import CONFIG from 'fe-redpencil/utils/config';
 
 import { computed } from '@ember/object';
 
@@ -30,7 +31,8 @@ export default Component.extend(DefaultQueryParamsMixin, {
         size: size
       },
       filter: {
-        ':has-no:agendaitems': 'yes'
+        ':has-no:agendaitems': 'yes',
+        'case': { 'policy-level': { id: CONFIG.VRCaseTypeID } }
       }
     };
     if (filter) {
