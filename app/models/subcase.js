@@ -1,9 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-
-const onAgendaCodeId = "3e6dba4f-5c3c-439a-993e-92348ec73642";
-const decidedCodeId = "4ea2c010-06c0-4594-966b-2cb9ed1e07b7";
+import CONFIG from 'fe-redpencil/utils/config';
 
 const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
@@ -140,11 +138,11 @@ export default Model.extend({
   }),
 
   onAgendaInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(onAgendaCodeId);
+    return this.findPhaseDateByCodeId(CONFIG.onAgendaCodeId);
   }),
 
   decidedInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(decidedCodeId);
+    return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
   }),
 
   async findPhaseDateByCodeId(codeId) {
@@ -159,6 +157,24 @@ export default Model.extend({
       }
       return false;
     });
-  }
+  },
+
+  isOC: computed('case.policyLevel', function () {
+    return this.get('case').then((caze) => {
+      return caze.get('policyLevel').then((policyLevel) => {
+        return policyLevel.get('id') === CONFIG.OCCaseTypeID;
+      })
+    });
+  }),
+
+  submitter: computed('case.submitter', function () {
+    return PromiseObject.create({
+      promise: this.get('case').then((caze) => {
+        return caze.get('submitter').then((submitter) => {
+          return submitter;
+        });
+      })
+    });
+  }),
 
 });

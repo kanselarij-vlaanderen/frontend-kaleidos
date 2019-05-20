@@ -34,28 +34,30 @@
     {{await item.title}}
   </p>
 </div>
-{{#if (not item.showAsRemark)}}
-  <div class="vl-u-spacer-extended-bottom-s">
-    <span class="vl-pill vl-pill--warning">
-      {{#if (await item.subcase)}}
-        {{await item.subcase.subcaseName}}
-      {{else}}
-        {{await item.subcaseName}}
-      {{/if}}
-    </span>
-    {{#if (await item.confidentiality)}}
+{{#if (not (await item.isOC))}}
+  {{#if (not item.showAsRemark)}}
+    <div class="vl-u-spacer-extended-bottom-s">
       <span class="vl-pill vl-pill--warning">
-        {{await item.confidentiality.label}}
+        {{#if (await item.subcase)}}
+          {{await item.subcase.subcaseName}}
+        {{else}}
+          {{await item.subcaseName}}
+        {{/if}}
       </span>
-    {{/if}}
-    {{#if (and (or isEditor isAdmin) (await item.formallyOk))}}
-      <span class="vlc-pill vlc-pill--success">
-        {{t "formal-ok"}}
-      </span>
-    {{else}}
-      <span class="vl-pill">
-        {{t "formal-nok"}}
-      </span>
-    {{/if}}
-  </div>
+      {{#if (await item.confidentiality)}}
+        <span class="vl-pill vl-pill--warning">
+          {{await item.confidentiality.label}}
+        </span>
+      {{/if}}
+      {{#if (and (or isEditor isAdmin) (await item.formallyOk))}}
+        <span class="vlc-pill vlc-pill--success">
+          {{t "formal-ok"}}
+        </span>
+      {{else}}
+        <span class="vl-pill">
+          {{t "formal-nok"}}
+        </span>
+      {{/if}}
+    </div>
+  {{/if}}
 {{/if}}

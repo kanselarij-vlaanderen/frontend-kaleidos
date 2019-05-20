@@ -284,5 +284,7 @@
 	"publicity": "Openbaarheid",
 	"document-title-edit": "Bestandsnaam wijzigen",
 	"creating-subcase": "Procedurestap aanmaken",
-	"select-meeting": "Selecteer de vergadering"
+	"select-meeting": "Selecteer de vergadering",
+	"submitter": "Indiener",
+	"submitter-title": "Indiener: "
 }

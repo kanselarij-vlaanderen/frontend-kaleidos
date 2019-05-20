@@ -3,7 +3,7 @@
     <h3 class="vl-title vl-title--h3">
       {{t "subcase"}}
     </h3>
-    {{#if (or isEditor isAdmin)}}
+    {{#if (and (not (await subcase.isOC) (or isEditor isAdmin)))}}
       <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
@@ -41,37 +41,53 @@
           {{t "number-session"}}
         </span>
         <span class="vl-description-data__value">
-          {{t "no-number-yet"}}
-        </span>
-      </div>
-      <div class="vl-col--1-3 vl-col--1-2--xs">
-        <span class="vl-description-data__label">
-          {{t "requested-for-session"}}
-        </span>
-        <span class="vl-description-data__value">
-          {{#if (await subcase.requestedForMeeting)}}
-            {{t "requested-for-agenda"}}
-            {{moment-format
-              subcase.requestedForMeeting.plannedStart
-              "DD MMMM YYYY"
-            }}
+          {{#if (not (await subcase.isOC))}}
+            {{t "no-number-yet"}}
           {{else}}
-            {{t "not-yet-requested"}}
+            {{await subcase.case.OCMeetingNumber}}
           {{/if}}
         </span>
       </div>
-      <div class="vl-col--1-3 vl-col--1-2--xs">
-        <span class="vl-description-data__label">
-          {{t "is-on-agenda"}}
-        </span>
-        <span class="vl-description-data__value">
-          {{#if (await subcase.onAgendaInfo)}}
-            {{moment-format (await subcase.onAgendaInfo) "DD.MM.YYYY"}}
-          {{else}}
-            {{t "not-yet-on-agenda"}}
-          {{/if}}
-        </span>
-      </div>
+      {{#if (await subcase.isOC)}}
+        <div class="vl-col--1-3 vl-col--1-2--xs">
+          <span class="vl-description-data__label">
+            {{t "submitter-title"}}
+          </span>
+          <span class="vl-description-data__value">
+            {{await subcase.submitter.label}}
+          </span>
+        </div>
+      {{/if}}
+      {{#if (not (await subcase.isOC))}}
+        <div class="vl-col--1-3 vl-col--1-2--xs">
+          <span class="vl-description-data__label">
+            {{t "requested-for-session"}}
+          </span>
+          <span class="vl-description-data__value">
+            {{#if (await subcase.requestedForMeeting)}}
+              {{t "requested-for-agenda"}}
+              {{moment-format
+                subcase.requestedForMeeting.plannedStart
+                "DD MMMM YYYY"
+              }}
+            {{else}}
+              {{t "not-yet-requested"}}
+            {{/if}}
+          </span>
+        </div>
+        <div class="vl-col--1-3 vl-col--1-2--xs">
+          <span class="vl-description-data__label">
+            {{t "is-on-agenda"}}
+          </span>
+          <span class="vl-description-data__value">
+            {{#if (await subcase.onAgendaInfo)}}
+              {{moment-format (await subcase.onAgendaInfo) "DD.MM.YYYY"}}
+            {{else}}
+              {{t "not-yet-on-agenda"}}
+            {{/if}}
+          </span>
+        </div>
+      {{/if}}
       <div class="vl-col--1-3 vl-col--1-2--xs">
         <span class="vl-description-data__label">
           {{t "date-last-edited"}}
@@ -80,18 +96,20 @@
           {{moment-format subcase.modified "DD MMMM YYYY"}}
         </span>
       </div>
-      <div class="vl-col--1-3 vl-col--1-2--xs">
-        <span class="vl-description-data__label">
-          {{t "decided-on"}}
-        </span>
-        <span class="vl-description-data__value">
-          {{#if (await subcase.decision.approved)}}
-            {{moment-format (await subcase.decidedInfo) "DD.MM.YYYY"}}
-          {{else}}
-            {{t "not-yet-decided"}}
-          {{/if}}
-        </span>
-      </div>
+      {{#if (not (await subcase.isOC))}}
+        <div class="vl-col--1-3 vl-col--1-2--xs">
+          <span class="vl-description-data__label">
+            {{t "decided-on"}}
+          </span>
+          <span class="vl-description-data__value">
+            {{#if (await subcase.decision.approved)}}
+              {{moment-format (await subcase.decidedInfo) "DD.MM.YYYY"}}
+            {{else}}
+              {{t "not-yet-decided"}}
+            {{/if}}
+          </span>
+        </div>
+      {{/if}}
     </div>
   </div>
 {{else}}

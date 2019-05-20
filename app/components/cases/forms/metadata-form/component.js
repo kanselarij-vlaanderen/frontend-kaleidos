@@ -31,12 +31,16 @@ export default Component.extend({
     },
 
     async selectMeeting(date) {
-
       const meetings = await this.get('dateObjectsToEnable');
-
+      const dateToCheck = moment(date).format();
       const meetingToAssignTo = meetings.find(meeting =>
-        moment(meeting.get('plannedStart')).format() == moment(date).format());
-      console.log(meetingToAssignTo);
+        moment(meeting.get('plannedStart')).format() == dateToCheck);
+
+      this.selectedMeetingChanged(meetingToAssignTo);
+    },
+
+    chooseSubmitter(submitter) {
+      this.submitterChanged(submitter);
     }
   }
 });

@@ -22,15 +22,14 @@ export default Component.extend({
   },
 
   createCase(newDate) {
-    const { title, shortTitle, type, selectedPolicyLevel } = this;
+    const { title, shortTitle, type, selectedPolicyLevel, selectedMeeting, submitter } = this;
     return this.store.createRecord('case',
       {
-        title: title,
-        shortTitle: shortTitle,
+        title, shortTitle, submitter, type,
         isArchived: false,
-        type: type,
         created: newDate,
-        policyLevel: selectedPolicyLevel
+        policyLevel: selectedPolicyLevel,
+        relatedMeeting: selectedMeeting
       });
   },
 
@@ -87,6 +86,14 @@ export default Component.extend({
 
     statusChange(status) {
       this.set('status', status);
+    },
+
+    submitterChanged(submitter) {
+      this.set('submitter', submitter);
+    },
+
+    selectedMeetingChanged(meeting) {
+      this.set('selectedMeeting', meeting);
     },
 
     close() {

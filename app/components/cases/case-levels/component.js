@@ -6,7 +6,7 @@ export default Component.extend({
 	classNames: ["vl-u-spacer"],
 
 	policyLevels: computed('store', function () {
-		return this.store.findAll('policy-level');
+		return this.store.findAll('policy-level', { sort: '-label' });
 	}),
 
 	actions: {
