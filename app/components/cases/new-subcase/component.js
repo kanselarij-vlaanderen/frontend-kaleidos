@@ -65,6 +65,21 @@ export default Component.extend(ApprovalsEditMixin, {
 		return subcase.save()
 	},
 
+	async copyDecisions(subcase, decisions) {
+		return Promise.all(decisions.map((decision) => {
+			const newDecision = this.store.createRecord('decision',
+				{
+					title: decision.get('title'),
+					shortTitle: decision.get('shortTitle'),
+					approved: false,
+					description: decision.get('description'),
+					subcase
+				});
+			return newDecision.save();
+		}))
+
+	},
+
 	actions: {
 
 		closeModal() {
@@ -78,14 +93,8 @@ export default Component.extend(ApprovalsEditMixin, {
 			const latestSubcase = await caze.get('latestSubcase');
 			const subcase = await this.copySubcaseProperties(latestSubcase, caze);
 			this.set('item', subcase);
-			const decision = this.store.createRecord('decision',
-				{
-					title: subcase.get('title'),
-					shortTitle: subcase.get('shortTitle'),
-					approved: false,
-					subcase: subcase
-				});
-			await decision.save();
+
+			await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
 			await this.checkForActionChanges();
 			this.set('isLoading', false);
 			this.refresh();

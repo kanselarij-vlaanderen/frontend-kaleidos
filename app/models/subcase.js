@@ -30,7 +30,7 @@ export default Model.extend({
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval', { serialize: false }),
-  decisions: hasMany('decision'),
+  decisions: hasMany('decision', { inverse: null }),
 
   confidentiality: belongsTo('confidentiality'),
   type: belongsTo('subcase-type'),
@@ -193,7 +193,7 @@ export default Model.extend({
         if (approvedDecisions && approvedDecisions.length === 0) {
           return false;
         }
-        const foundNonApprovedDecision = approvedDecisions.find((item) => !item.approved);
+        const foundNonApprovedDecision = approvedDecisions.includes(false);
         if (foundNonApprovedDecision) {
           return false;
         } else {
