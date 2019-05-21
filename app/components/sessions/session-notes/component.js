@@ -29,6 +29,7 @@ export default Component.extend({
 				notesToSave.set('attendees', selectedMandatees);
 			}
 			notesToSave.save().then(() => {
+				notesToSave.hasMany('attendees').reload();
 				this.toggleProperty('isEditing');
 			});
 		}

@@ -5,12 +5,13 @@
     </h3>
   </div>
   <div class="vl-u-spacer">
-  {{#each (await currentSession.notes.attendees) as |attendee|}}
-    <p>
-      {{await attendee.person.alternativeName}},
-      {{attendee.title}}
-    </p>
-  {{/each}}
+    {{#each (await currentSession.notes.sortedAttendees) as |attendee|}}
+      <p>
+        {{await attendee.person.alternativeName}}
+        {{t "divider"}}
+        {{attendee.title}}
+      </p>
+    {{/each}}
   </div>
   <div class="vl-u-spacer">
     <h3 class="vl-title vl-title--h6">
