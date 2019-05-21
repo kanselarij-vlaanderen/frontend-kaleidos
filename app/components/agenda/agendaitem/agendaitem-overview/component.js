@@ -47,6 +47,15 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.toggleProperty('showOptions');
 		},
 
+		async addDecision() {
+			const subcase = await this.get('subcase');
+			const newDecision = this.store.createRecord('decision', {
+				approved: false, subcase
+			})
+			await newDecision.save();
+			await subcase.get('decisions').addObject(newDecision);
+		},
+
 		async togglePostponed(agendaitem) {
 			if (agendaitem) {
 				let isPostponed = await agendaitem.get('isPostponed');

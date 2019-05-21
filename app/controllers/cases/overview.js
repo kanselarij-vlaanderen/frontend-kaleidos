@@ -5,6 +5,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
   sort: '-created',
+  oc: false,
   isEditingRow: false,
   isNotArchived: false,
   isArchivingCase: false,

@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 
-let { Model, attr, belongsTo, hasMany } = DS;
+let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
 
 export default Model.extend({
   priority: attr('number'),
@@ -38,6 +38,16 @@ export default Model.extend({
     return this.get('postponedTo').then((session) => {
       return session || this.get('retracted');
     });
+  }),
+
+  decisions: computed('subcase.decisions.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('subcase').then((subcase) => {
+        return subcase.get('decisions').then((decisions) => {
+          return decisions;
+        })
+      })
+    })
   }),
 
   isDesignAgenda: computed('agenda', function () {

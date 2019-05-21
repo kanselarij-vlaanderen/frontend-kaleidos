@@ -6,7 +6,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed } from '@ember/object'
 
 export default Component.extend(isAuthenticatedMixin, {
-	classNames: ['vlc-padding-bottom--large'],
+	classNames: ['vl-u-spacer'],
 	store: inject(),
 	isEditing: false,
 	agendaitem: null,

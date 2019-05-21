@@ -13,6 +13,7 @@ export default Model.extend({
   modified: attr('date'),
   shortTitle: attr('string'),
   title: attr('string'),
+  subcaseIdentifier: attr('string'),
   showAsRemark: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
@@ -29,9 +30,9 @@ export default Model.extend({
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval', { serialize: false }),
+  decisions: hasMany('decision'),
 
   confidentiality: belongsTo('confidentiality'),
-  decision: belongsTo('decision'),
   type: belongsTo('subcase-type'),
   case: belongsTo('case', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
@@ -183,6 +184,22 @@ export default Model.extend({
         return { 'is-oc': value };
       })
     });
-  })
+  }),
 
+  approved: computed('decisions.@each', function () {
+    return PromiseObject.create({
+      promise: this.get('decisions').then((decisions) => {
+        const approvedDecisions = decisions.map((decision) => decision.get('approved'));
+        if (approvedDecisions && approvedDecisions.length === 0) {
+          return false;
+        }
+        const foundNonApprovedDecision = approvedDecisions.find((item) => !item.approved);
+        if (foundNonApprovedDecision) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+    })
+  })
 });
