@@ -11,20 +11,20 @@
   {{/if}}
 </div>
 <div class="vl-u-spacer">
-  <h3 class="vl-title vl-title--h6">
-    {{t "title-newsletter"}}
-  </h3>
-  <h3 class="vl-u-text--capitalize">
-    {{await meeting.newsletter.title}}
-  </h3>
-</div>
-<div class="vl-u-spacer">
-  <h3 class="vl-title vl-title--h6">
-    {{t "subtitle-newsletter"}}
-  </h3>
-  <h3 class="vl-u-text--capitalize">
-    {{await meeting.newsletter.subtitle}}
-  </h3>
+  <div class="vl-typography">
+    <h4 class="vl-title vl-title--h6">
+      {{t "title-newsletter"}}
+    </h4>
+    <p class="vl-u-text--capitalize">
+      {{await meeting.newsletter.title}}
+    </p>
+    <h4 class="vl-title vl-title--h6">
+      {{t "subtitle-newsletter"}}
+    </h4>
+    <p class="vl-u-text--capitalize">
+      {{await meeting.newsletter.subtitle}}
+    </p>
+  </div>
 </div>
 <div class="vl-u-spacer vl-u-display-flex vl-u-flex-space-between">
   <div class="vl-u-text">
@@ -61,3 +61,4 @@
     }}
   {{/web-components/vl-modal}}
 {{/if}}
+<hr class="vlc-hr" />

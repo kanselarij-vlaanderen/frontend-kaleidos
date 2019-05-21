@@ -5,7 +5,7 @@ import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(isAuthenticatedMixin, {
-	classNames: ['vl-u-spacer-extended-bottom-l', 'vl-col--3-4'],
+	classNames: ['vl-u-spacer-extended-bottom-l'],
 	isEditing: false,
 	intl: inject(),
 	store: inject(),
