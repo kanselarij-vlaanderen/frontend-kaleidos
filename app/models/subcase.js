@@ -177,4 +177,12 @@ export default Model.extend({
     });
   }),
 
+  documentTypeFilter: computed('isOC', function () {
+    return PromiseObject.create({
+      promise: this.get('isOC').then((value) => {
+        return { 'is-oc': value };
+      })
+    });
+  })
+
 });

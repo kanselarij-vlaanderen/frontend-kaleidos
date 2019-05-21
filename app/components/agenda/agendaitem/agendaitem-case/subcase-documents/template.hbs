@@ -58,6 +58,7 @@
         {{#each uploadedFiles as |uploadedFile|}}
           {{web-components/vl-uploaded-document
             file=uploadedFile
+            defaultFilter=item.documentTypeFilter
             uploadedFiles=uploadedFiles
           }}
         {{/each}}
