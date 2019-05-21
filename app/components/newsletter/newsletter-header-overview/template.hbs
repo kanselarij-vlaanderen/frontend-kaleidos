@@ -16,36 +16,37 @@
         {{/link-to}}
         <div class="vlc-page-header__status">
           <span>
-            {{amountOfItems}} {{t "agendaitems"}}
+            {{amountOfItems}}
+            {{t "agendaitems"}}
           </span>
         </div>
       </div>
     </div>
-    <div class="vlc-toolbar__right">
+  </div>
+  <div class="vlc-toolbar__right">
+    <div class="vlc-toolbar__item">
       <div class="vlc-toolbar__item">
-         <div class="vlc-toolbar__item">
-          <div class="vl-action-group">
-            <button
-              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-              {{action "print"}}
-            >
-              <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-                aria-hidden="true"
-              ></i>
-              {{t "print"}}
-            </button>
-            <button
-              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-              {{action "sendNewsletter"}}
-            >
-              <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-                aria-hidden="true"
-              ></i>
-              {{t "send-newsletter"}}
-            </button>
-          </div>
+        <div class="vl-action-group">
+          <button
+            class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+            {{action "print"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+              aria-hidden="true"
+            ></i>
+            {{t "print"}}
+          </button>
+          <button
+            class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+            {{action "sendNewsletter"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+              aria-hidden="true"
+            ></i>
+            {{t "send-newsletter"}}
+          </button>
         </div>
       </div>
     </div>

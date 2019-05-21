@@ -2,7 +2,7 @@
   <h4 class="vl-title vl-title--h3 vl-u-text--capitalize">
     {{t "general-newsletter"}}
   </h4>
-  {{#if (or isAdmin isEditor)}}
+  {{#if (or isEditor isAdmin)}}
     <div class="vl-u-spacer-extended-left-s">
       <a class="vl-link" {{action "toggleIsEditing"}}>
         {{t "edit"}}
@@ -54,7 +54,10 @@
     closeModal=(action "close")
     title=editTitle
   }}
-    {{newsletter/edit-newsletter selectedMeeting=meeting close=(action "close")
+    {{newsletter/edit-newsletter
+      newsletter=(await meeting.newsletter)
+      selectedMeeting=meeting
+      close=(action "close")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
