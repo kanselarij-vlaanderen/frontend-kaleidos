@@ -10,6 +10,15 @@ export default Component.extend(UploadDocumentMixin, {
 		return this.bytesToSize(this.get('file.size'));
 	}),
 
+	filteredItems: computed('subcase', async function () {
+		return this.store.query('document-type',
+			{
+				filter: await this.get('subcase.documentTypeFilter'),
+				sort: "label",
+				page: { size: 50 }
+			});
+	}),
+
 	fileName: computed('file', function () {
 		return this.get('file.name');
 	}),

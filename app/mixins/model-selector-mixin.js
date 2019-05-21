@@ -10,15 +10,15 @@ export default Mixin.create({
 	propertyToShow: null,
 	placeholder: null,
 	sortField: null,
-	defaultFilter: null,
+	loadingMessage: "Even geduld aub..",
+	noMatchesMessage: "Geen zoekresultaten gevonden",
 	defaultSelected: null,
 	selectedItems: null,
 
 	items: computed('modelName', async function () {
-		const { modelName, searchField, defaultFilter } = this;
+		const { modelName, searchField } = this;
 		return this.store.query(modelName,
 			{
-				filter: await defaultFilter,
 				sort: searchField,
 				page: { size: 50 }
 			});
@@ -26,8 +26,8 @@ export default Mixin.create({
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
-		const { searchField, sortField, defaultFilter, modelName } = this;
-		let filter = defaultFilter;
+		const { searchField, sortField, modelName } = this;
+		let filter = {};
 
 		filter[searchField] = searchValue;
 		return this.store.query(modelName, {

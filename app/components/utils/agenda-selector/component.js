@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
-import ModelSelectorMixin from 'fe-redpencil/mixin/model-selector-mixin';
+import ModelSelectorMixin from 'fe-redpencil/mixins/model-selector-mixin';
 
 export default Component.extend(ModelSelectorMixin, {
 	sessionService: inject(),

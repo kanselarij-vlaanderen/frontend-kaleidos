@@ -47,7 +47,7 @@
       modelName="document-type"
       searchField="label"
       propertyToShow="label"
-      defaultFilter=(await defaultFilter)
+      items=(await filteredItems)
       sortField="label"
       selectedItems=file.documentType
       selectModel=(action "chooseDocumentType")
