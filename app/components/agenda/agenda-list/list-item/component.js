@@ -77,11 +77,5 @@ export default Component.extend({
 	click() {
 		const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'));
 		this.selectAgendaItem(agendaitem);
-	},
-
-	number: computed('index', function () {
-		if (this.index >= 0) {
-			return (this.index + 1);
-		}
-	})
+	}
 });

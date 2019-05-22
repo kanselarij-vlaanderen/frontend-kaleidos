@@ -68,12 +68,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 
 	async setNewPropertiesToModel(model) {
 		await this.parseDomainsAndMandatees();
-		const { selectedMandatees, selectedIseCodes, isAgendaItem } = this;
-		if (isAgendaItem) {
-			model = await this.get('item.subcase');
-		} else {
-			model = await this.get('item');
-		}
+		const { selectedMandatees, selectedIseCodes } = this;
 		model.set('formallyOk', false);
 		model.set('mandatees', selectedMandatees);
 		model.set('iseCodes', selectedIseCodes);

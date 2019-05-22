@@ -6,6 +6,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 export default Component.extend({
   title: null,
   shortTitle: null,
+  confidential: false,
   store: inject(),
 
   subcaseType: computed('store', function () {
@@ -22,10 +23,10 @@ export default Component.extend({
   },
 
   createCase(newDate) {
-    const { title, shortTitle, type, selectedPolicyLevel, selectedMeeting, submitter } = this;
+    const { title, shortTitle, type, selectedPolicyLevel, selectedMeeting, submitter, confidential } = this;
     return this.store.createRecord('case',
       {
-        title, shortTitle, submitter, type,
+        title, shortTitle, submitter, type, confidential,
         isArchived: false,
         created: newDate,
         policyLevel: selectedPolicyLevel,
@@ -34,7 +35,7 @@ export default Component.extend({
   },
 
   createSubcase(newCase, newDate) {
-    const { title, shortTitle, subcaseType } = this;
+    const { title, shortTitle, subcaseType, confidential } = this;
     const subcaseName = this.getSubcaseName(subcaseType);
 
     return this.store.createRecord('subcase', {
@@ -49,7 +50,7 @@ export default Component.extend({
       phases: [],
       formallyOk: false,
       showAsRemark: false,
-      confidential: false,
+      confidential: confidential,
     });
   },
 

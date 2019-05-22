@@ -287,5 +287,7 @@
 	"select-meeting": "Selecteer de vergadering",
 	"submitter": "Indiener",
 	"submitter-title": "Indiener: ",
-	"cases-oc": "Overlegcomité"
+	"cases-oc": "Overlegcomité",
+	"newsletter-for-meeting-of": "Nieuwsbrief voor de ministerraad van",
+	"dash": "-"
 }
