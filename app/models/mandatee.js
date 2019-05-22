@@ -4,7 +4,7 @@ const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
 	title: attr('string'),
-	priority: attr('string'),
+	priority: attr('number'),
 	start: attr('date'),
 	end: attr('date'),
 	dateSwornIn: attr('date'),

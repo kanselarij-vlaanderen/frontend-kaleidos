@@ -6,13 +6,13 @@ import moment from 'moment';
 export default Controller.extend({
 	intl: inject(),
 
-	title: computed('currentSession', function () {
-		const date = this.get('currentSession.plannedStart');
+	title: computed('model.currentSession', function () {
+		const date = this.get('model.currentSession.plannedStart');
 		return `${this.get('intl').t('agenda-for')} ${moment(date).format('dddd DD-MM-YYYY')}`;
 	}),
 
-	pageTitle: computed('currentSession', function () {
-		const date = this.get('currentSession.plannedStart');
+	pageTitle: computed('model.currentSession', function () {
+		const date = this.get('model.currentSession.plannedStart');
 		return `${this.get('intl').t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
 	}),
 

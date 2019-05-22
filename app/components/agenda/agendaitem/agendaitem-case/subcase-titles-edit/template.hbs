@@ -30,22 +30,27 @@
     {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
   </div>
 </div>
-{{#if (not (await item.isOC))}}
-  {{#if (not item.showAsRemark)}}
-    <div class="vl-u-spacer">
-      <div class="vlc-input-field-block">
-        <label class="vl-checkbox vl-checkbox__box">
-          {{input class="vl-checkbox__toggle" type="checkbox" checked=formallyOk
-          }}
-          <div class="vl-checkbox__label">
-            <i class="vl-checkbox__box"></i>
-            <span class="vl-annotation">
-              {{t "formal-ok"}}
-            </span>
-          </div>
-        </label>
+{{#if isAgendaItem}}
+  {{#if (not (await item.isOC))}}
+    {{#if (not item.showAsRemark)}}
+      <div class="vl-u-spacer">
+        <div class="vlc-input-field-block">
+          <label class="vl-checkbox vl-checkbox__box">
+            {{input
+              class="vl-checkbox__toggle"
+              type="checkbox"
+              checked=formallyOk
+            }}
+            <div class="vl-checkbox__label">
+              <i class="vl-checkbox__box"></i>
+              <span class="vl-annotation">
+                {{t "formal-ok"}}
+              </span>
+            </div>
+          </label>
+        </div>
       </div>
-    </div>
+    {{/if}}
   {{/if}}
 {{/if}}
 <div class="vl-action-group vl-action-group--align-right">

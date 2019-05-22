@@ -9,6 +9,10 @@ export default Component.extend(isAuthenticatedMixin, {
 		return this.get('item.agenda.name');
 	}),
 
+	isAgendaItem: computed('item.constructor.modelName', function () {
+		return "agendaitem" === this.get('item.constructor.modelName');
+	}),
+
 	case: computed('item', function () {
 		const item = this.get('item');
 		const caze = item.get('case');

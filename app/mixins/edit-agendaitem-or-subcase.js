@@ -31,12 +31,18 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
 	isSubcase: not('isAgendaItem'),
 
+	changeFormallyOkPropertyIfNotSetOnTrue(subcase) {
+		subcase.set('formallyOk', false);
+	},
+
 	async setNewPropertiesToModel(model) {
-		const { propertiesToSet } = this;
+		const { propertiesToSet, isSubcase } = this;
 		await Promise.all(propertiesToSet.map(async (property) => {
 			model.set(property, await this.get(property));
 		}))
-
+		if (isSubcase) {
+			this.changeFormallyOkPropertyIfNotSetOnTrue(model);
+		}
 		return model.save();
 	},
 

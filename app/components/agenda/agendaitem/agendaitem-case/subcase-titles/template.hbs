@@ -53,14 +53,16 @@
           {{await item.confidentiality.label}}
         </span>
       {{/if}}
-      {{#if (and (or isEditor isAdmin) (await item.formallyOk))}}
-        <span class="vlc-pill vlc-pill--success">
-          {{t "formal-ok"}}
-        </span>
-      {{else}}
-        <span class="vl-pill">
-          {{t "formal-nok"}}
-        </span>
+      {{#if isAgendaItem}}
+        {{#if (and (or isEditor isAdmin) (await item.formallyOk))}}
+          <span class="vlc-pill vlc-pill--success">
+            {{t "formal-ok"}}
+          </span>
+        {{else}}
+          <span class="vl-pill">
+            {{t "formal-nok"}}
+          </span>
+        {{/if}}
       {{/if}}
     </div>
   {{/if}}

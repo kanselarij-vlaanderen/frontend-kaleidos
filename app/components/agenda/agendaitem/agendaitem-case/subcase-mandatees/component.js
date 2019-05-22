@@ -74,6 +74,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		} else {
 			model = await this.get('item');
 		}
+		model.set('formallyOk', false);
 		model.set('mandatees', selectedMandatees);
 		model.set('iseCodes', selectedIseCodes);
 		return model.save().then((model) => {

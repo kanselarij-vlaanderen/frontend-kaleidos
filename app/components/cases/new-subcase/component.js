@@ -29,7 +29,7 @@ export default Component.extend(ApprovalsEditMixin, {
 	},
 
 	async copySubcaseProperties(latestSubcase, caze) {
-		const { type, phase } = this;
+		const { type, phase, title, shortTitle } = this;
 		const date = new Date();
 		const name = await caze.getNameForNextSubcase(latestSubcase, type);
 		const subcasePhase = this.store.createRecord('subcase-phase',
@@ -46,9 +46,9 @@ export default Component.extend(ApprovalsEditMixin, {
 			{
 				concluded: false,
 				confidential: latestSubcase.get('confidential'),
-				title: latestSubcase.get('title'),
-				shortTitle: latestSubcase.get('shortTitle'),
-				formallyOk: latestSubcase.get('formallyOk'),
+				title: title,
+				shortTitle: shortTitle,
+				formallyOk: false,
 				showAsRemark: latestSubcase.get('showAsRemark'),
 				isArchived: latestSubcase.get('isArchived'),
 				subcaseName: name,
