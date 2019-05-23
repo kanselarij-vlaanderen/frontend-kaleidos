@@ -52,6 +52,10 @@
         <span class="vl-pill vl-pill--warning">
           {{t "public"}}
         </span>
+      {{else if (await item.subcase.confidential)}}
+        <span class="vl-pill vl-pill--warning">
+          {{t "public"}}
+        </span>
       {{/if}}
       {{#if isAgendaItem}}
         {{#if (and (or isEditor isAdmin) (await item.formallyOk))}}

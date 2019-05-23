@@ -27,6 +27,11 @@
     </div>
   {{/each}}
 {{else}}
+  <div class="vl-u-align-left">
+    <h4 class="vl-title vl-title--h3">
+      {{t "agendaitems-subtitle"}}
+    </h4>
+  </div>
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
       <div class="vl-u-spacer-extended-bottom">
@@ -53,12 +58,10 @@
     </div>
   {{/each}}
 {{/if}}
-{{!-- <div class="vlc-toolbar vlc-toolbar--auto">
-  <div class="vlc-toolbar__left">
-    <h2 class="vl-title vl-title--h3 vl-u-spacer-extended-s">
-      {{t "announcements-subtitle"}}
-    </h2>
-  </div>
+<div class="vl-u-align-left">
+  <h4 class="vl-title vl-title--h3">
+    {{t "announcements-subtitle"}}
+  </h4>
 </div>
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
@@ -66,7 +69,7 @@
       <div class="vlc-agenda-items-new__sub-item">
         {{agenda/agenda-list/list-item
           agendaitem=announcement
-          index=index
+          index=(add 1 index)
           selectAgendaItem=(action "selectAgendaItem")
         }}
       </div>
@@ -74,4 +77,4 @@
   {{else}}
     {{web-components/vl-alert message=(t "no-announcements-yet")}}
   {{/if}}
-</div> --}}
+</div>

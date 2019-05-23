@@ -22,6 +22,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 			return value;
 		}
 	}),
+
 	formallyOk: getCachedProperty('formallyOk'),
 	confidentiality: getCachedProperty('confidentiality'),
 

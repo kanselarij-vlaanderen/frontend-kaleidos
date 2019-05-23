@@ -39,7 +39,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 		let filteredAgendaItems = await agendaitems.filter(agendaitem => {
 			if (agendaitem && agendaitem.id && !agendaitem.showAsRemark) {
 				const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
-				if (foundItem) {
+				if (foundItem && !foundItem.confidential) {
 					agendaitem.set('foundPriority', foundItem.priority);
 					return agendaitem;
 				}

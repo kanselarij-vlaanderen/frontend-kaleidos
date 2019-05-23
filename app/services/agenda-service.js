@@ -27,7 +27,7 @@ export default Service.extend({
 
 	async reduceAgendaitemsByMandatees(agendaitems) {
 		return agendaitems.reduce((items, agendaitem) => {
-			let mandatees = agendaitem.get('subcase').get('mandatees');
+			let mandatees = agendaitem.get('subcase.mandatees');
 			if (mandatees) {
 				mandatees = mandatees.sortBy('priority')
 			}
