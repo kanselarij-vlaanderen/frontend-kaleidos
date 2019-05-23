@@ -9,8 +9,9 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 	classNames: ['vl-u-spacer--large'],
 	isAddingNewDocument: false,
 	isEditing: false,
+	isLoading: false,
 
-	modelToAddDocumentVersionTo: computed('item.constructor', function() {
+	modelToAddDocumentVersionTo: computed('item.constructor', function () {
 		return this.get('item.constructor.modelName');
 	}),
 
@@ -30,11 +31,13 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 		async uploadNewDocument() {
 			const modelName = await this.get('modelToAddDocumentVersionTo');
 			const item = await this.get('item');
-			await this.uploadFiles(item).then(async() => {
-				if(modelName === 'agendaitem') {
+			this.set('isCreatingDocuments', true);
+			await this.uploadFiles(item).then(async () => {
+				if (modelName === 'agendaitem') {
 					await this.updateModifiedProperty(await item.get('agenda'));
 				}
 				item.hasMany('documentVersions').reload();
+				this.set('isCreatingDocuments', false);
 				this.toggleProperty('isAddingNewDocument');
 			});
 		}

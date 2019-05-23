@@ -29,7 +29,7 @@ export default Component.extend(ApprovalsEditMixin, {
 	},
 
 	async copySubcaseProperties(latestSubcase, caze) {
-		const { type, phase } = this;
+		const { type, phase, title, shortTitle } = this;
 		const date = new Date();
 		const name = await caze.getNameForNextSubcase(latestSubcase, type);
 		const subcasePhase = this.store.createRecord('subcase-phase',
@@ -46,9 +46,9 @@ export default Component.extend(ApprovalsEditMixin, {
 			{
 				concluded: false,
 				confidential: latestSubcase.get('confidential'),
-				title: latestSubcase.get('title'),
-				shortTitle: latestSubcase.get('shortTitle'),
-				formallyOk: latestSubcase.get('formallyOk'),
+				title: title,
+				shortTitle: shortTitle,
+				formallyOk: false,
 				showAsRemark: latestSubcase.get('showAsRemark'),
 				isArchived: latestSubcase.get('isArchived'),
 				subcaseName: name,
@@ -65,6 +65,21 @@ export default Component.extend(ApprovalsEditMixin, {
 		return subcase.save()
 	},
 
+	async copyDecisions(subcase, decisions) {
+		return Promise.all(decisions.map((decision) => {
+			const newDecision = this.store.createRecord('decision',
+				{
+					title: decision.get('title'),
+					shortTitle: decision.get('shortTitle'),
+					approved: false,
+					description: decision.get('description'),
+					subcase
+				});
+			return newDecision.save();
+		}))
+
+	},
+
 	actions: {
 
 		closeModal() {
@@ -73,19 +88,15 @@ export default Component.extend(ApprovalsEditMixin, {
 
 		async createSubCase(event) {
 			event.preventDefault();
+			this.set('isLoading', true);
 			const caze = await this.store.peekRecord('case', this.case.id);
 			const latestSubcase = await caze.get('latestSubcase');
 			const subcase = await this.copySubcaseProperties(latestSubcase, caze);
 			this.set('item', subcase);
-			const decision = this.store.createRecord('decision',
-				{
-					title: subcase.get('title'),
-					shortTitle: subcase.get('shortTitle'),
-					approved: false,
-					subcase: subcase
-				});
-			await decision.save();
+
+			await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
 			await this.checkForActionChanges();
+			this.set('isLoading', false);
 			this.refresh();
 		},
 

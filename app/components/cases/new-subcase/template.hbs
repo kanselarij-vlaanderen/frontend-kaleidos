@@ -5,7 +5,7 @@
       {{web-components/vl-toggle value=showAsRemark}}
     </div>
     <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "public")}}
+      {{web-components/vl-form-label value=(t "public")}}
       {{web-components/vl-toggle value=confidential}}
     </div>
     <div class="vlc-input-field-block">
@@ -46,45 +46,20 @@
       </div>
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
-          <button type="submit" class="vl-button vl-button--tertiary">
-            {{t "new-subcase"}}
-          </button>
+          {{#if (not isLoading)}}
+            <button type="submit" class="vl-button vl-button--tertiary">
+              {{t "new-subcase"}}
+            </button>
+          {{else}}
+            <button
+              class="vl-button vl-button--loading vl-button--narrow"
+              disabled="true"
+            >
+              {{t "creating-subcase"}}
+            </button>
+          {{/if}}
         </div>
       </div>
     </div>
   </div>
 </form>
-{{!-- {{#if isAddingNonDigitalDocument}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "non-digital-file")
-    closeModal=(action "toggleAddNonDigitalDocument")
-  }}
-    <div class="vl-modal-dialog__content">
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title-document")}}
-        {{web-components/vl-form-input width="4" value=documentTitle}}
-      </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title-document")}}
-        {{textarea
-          rows="3"
-          class="vl-textarea vl-textarea--block"
-          value=documentDescription
-        }}
-      </div>
-      {{#each nonDigitalDocuments as |nonDigitalDocument|}}
-        {{utils/non-digital-document
-          nonDigitalDocument=nonDigitalDocument
-          removeDocument=(action "removeDocument")
-        }}
-      {{/each}}
-    </div>
-    {{web-components/vl-modal-footer
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "document-add")
-      cancelAction=(action "toggleAddNonDigitalDocument")
-      saveAction=(action "createNonDigitalDocument")
-    }}
-  {{/web-components/vl-modal}}
-{{/if}} --}}

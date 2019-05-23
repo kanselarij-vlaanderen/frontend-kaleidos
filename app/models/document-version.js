@@ -12,7 +12,7 @@ export default Model.extend({
 	document: belongsTo('document'),
 	subcase: belongsTo('subcase', { inverse: null }),
 	agendaitem: belongsTo('agendaitem', { inverse: null }),
-  announcement: belongsTo('announcement'),
+	announcement: belongsTo('announcement'),
 	file: belongsTo('file'),
 
 	newsletter: belongsTo('newsletter-info'),
@@ -20,13 +20,15 @@ export default Model.extend({
 	decision: belongsTo('decision'),
 	signedDecision: belongsTo('decision'),
 
-	nameToDisplay: computed('chosenFileName', 'document.description', function () {
-		console.log(this.get('chosenFileName'), this.get('document.description'))
-		let fileName = this.get('chosenFileName');
-		if (fileName) {
-			return fileName;
+	nameToDisplay: computed('chosenFileName', 'document', 'file', function () {
+		const chosenFileName = this.get('chosenFileName');
+		const name = this.get('file.filename');
+		if (chosenFileName) {
+			return chosenFileName;
+		} else if (name) {
+			return name;
 		} else {
-			return this.get('document.description');
+			return this.get('file.name')
 		}
 	})
 });

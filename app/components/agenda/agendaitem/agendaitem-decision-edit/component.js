@@ -9,7 +9,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 	propertiesToSet: ['approved', 'description', 'shortTitle'],
 
 	description: getCachedProperty('description'),
-	shortTitle: getCachedProperty('shortTitle'),
+	title: getCachedProperty('title'),
 	approved: getCachedProperty('approved'),
 
 	async setDecisionPhaseToSubcase() {

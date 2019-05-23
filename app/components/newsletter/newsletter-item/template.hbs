@@ -1,7 +1,9 @@
 {{#if (not isEditing)}}
   <div class="vl-u-spacer--xsmall">
-    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+    <div class="vl-u-display-flex vl-u-flex-space-between">
       <h4 class="vl-title vl-title--h6 vl-u-text--capitalize">
+        {{agendaitem.foundPriority}}
+        .
         {{await agendaitem.newsletterInfo.title}}
       </h4>
       {{#if (or isAdmin isEditor)}}
@@ -16,14 +18,50 @@
       {{moment-format (await agenda.createdFor.plannedStart) "DD MMMM YYYY"}}
     </div>
   </div>
-  <div class="vl-u-spacer">
+  <div class="vl-u-spacer--xsmall">
     <div class="vl-u-text">
       <p>
         {{await agendaitem.newsletterInfo.text}}
       </p>
     </div>
   </div>
-  <div class="vl-u-spacer">
+  {{#if (gt (await agendaitem.themes.length) 0)}}
+    <div class="vl-u-spacer--xsmall">
+      <div class="vl-u-spacer--xsmall">
+        <h4 class="vl-title vl-title--h6 vl-u-text--capitalize">
+          {{t "themes"}}
+        </h4>
+      </div>
+      <div class="vl-u-spacer-extended-top-s">
+        <ul>
+          {{#each (await agendaitem.themes) as |theme|}}
+            <li class="vl-pill vl-u-spacer-extended-right-s">
+              {{theme.label}}
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  {{/if}}
+  {{#if (gt (await agendaitem.subcase.iseCodes.length) 0)}}
+    <div class="vl-u-spacer--xsmall">
+      <div class="vl-u-spacer--xsmall">
+        <h4 class="vl-title vl-title--h6">
+          {{t "ise-code"}}
+        </h4>
+      </div>
+      <div class="vl-u-spacer-extended-top-s">
+        <ul>
+          {{#each (await agendaitem.subcase.iseCodes) as |code|}}
+            <li class="vl-pill vl-u-spacer-extended-right-s">
+              {{code.name}}
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  {{/if}}
+  <div class="vl-u-spacer--xsmall">
     <hr class="vlc-hr" />
     <div class="vl-u-spacer-extended-top-s">
       {{utils/documents-list-for-item

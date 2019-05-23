@@ -1,32 +1,13 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
 import { computed } from '@ember/object';
+import ModelSelectorMixin from 'fe-redpencil/mixins/model-selector-mixin';
 
-export default Component.extend({
-	store: inject(),
-  sessionService: inject(),
-	searchField: null,
-	propertyToShow: null,
-	placeholder: null,
-	sortField: null,
-	defaultSelected:null,
-	selectedItems: null,
+export default Component.extend(ModelSelectorMixin, {
+	sessionService: inject(),
 
 	items: computed('sessionService.agendas', function () {
 		return this.sessionService.get('agendas');
-	}),
-
-	searchTask: task(function* (searchValue) {
-		yield timeout(300);
-		const filter = {};
-		const { searchField, sortField } = this;
-
-		filter[searchField] = searchValue;
-		return this.store.query(this.get('modelName'), {
-			filter: filter,
-			sort: sortField
-		});
 	}),
 
 	actions: {

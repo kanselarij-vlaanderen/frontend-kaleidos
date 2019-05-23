@@ -14,12 +14,16 @@ export default Service.extend({
     10: "decies"
   },
 
-  createVersionName: function(number){
-    let name = this.names[number];
-    if(typeof name === "undefined"){
+  createVersionName: function (number) {
+    let prefix = "";
+    if (number > 1) {
+      prefix = " ";
+    }
+    let name = prefix + this.names[number];
+    if (typeof name === "undefined") {
       return `${number || ""}`;
-    }else{
-      return name;
+    } else {
+      return name.toUpperCase();
     }
   }
 });

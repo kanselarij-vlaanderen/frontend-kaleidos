@@ -30,8 +30,7 @@ export default Mixin.create({
 		},
 
 		async saveChanges() {
-			const itemToFetch = await this.get('item');
-			const item = await this.store.findRecord(itemToFetch.get('constructor.modelName'), itemToFetch.get('id'));
+			const item = await this.get('item');
 			const documentVersionsSelected = this.get('documentVersionsSelected');
 			const itemDocumentsToEdit = await item.get('documentVersions');
 

@@ -3,8 +3,9 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin,  {
+export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
   sort: '-created',
+  oc: false,
   isEditingRow: false,
   isNotArchived: false,
   isArchivingCase: false,
@@ -18,7 +19,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       this.set('caseToEdit', caze);
       this.toggleProperty('isEditingRow');
     },
-    
+
     cancelEditing() {
       this.toggleProperty('isEditingRow');
     },
@@ -48,7 +49,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     },
 
     close(caze) {
-      if(!caze) {
+      if (!caze) {
         return;
       }
       this.transitionToRoute('cases.case.subcases', caze.id);

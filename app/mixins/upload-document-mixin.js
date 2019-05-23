@@ -18,7 +18,7 @@ export default Mixin.create(FileSaverMixin, {
 		const creationDate = new Date();
 		let type, confidentiality, chosenFileName;
 		if (file) { //If no file, the file is not digitally available, should asked at the `archive`
-			chosenFileName = file.get('chosenFileName');
+			chosenFileName = file.get('chosenFileName') || file.get('filename') || file.get('name');
 			type = file.get('documentType');
 			confidentiality = file.get('confidentiality');
 		} else {
@@ -107,7 +107,7 @@ export default Mixin.create(FileSaverMixin, {
 		},
 
 		async downloadFile(documentVersion) {
-			if(!(await documentVersion)) {
+			if (!(await documentVersion)) {
 				return;
 			}
 			let file = await documentVersion.get('file');
@@ -116,7 +116,7 @@ export default Mixin.create(FileSaverMixin, {
 				dataType: 'arraybuffer', // or 'blob'
 				processData: false
 			})
-				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, this.get('contentType')));
+				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, file.get('contentType')));
 		},
 
 		removeDocument(document) {

@@ -2,12 +2,18 @@
   <div class="vl-modal-dialog__content">
     {{cases/case-levels policyLevelChanged=(action "policyLevelChanged")}}
     {{cases/forms/metadata-form
-      typeChanged=(action "typeChanged")
-      phaseChanged=(action "phaseChanged")
+      selectedPolicyLevel=selectedPolicyLevel
       type=type
-      phase=phase
+      submitter=submitter
+      meeting=meeting
+      subcaseType=subcaseType
       title=title
       shortTitle=shortTitle
+      confidential=confidential
+      typeChanged=(action "typeChanged")
+      subcaseTypeChanged=(action "subcaseTypeChanged")
+      selectedMeetingChanged=(action "selectedMeetingChanged")
+      submitterChanged=(action "submitterChanged")
     }}
   </div>
   <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">

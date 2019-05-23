@@ -1,9 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-
-const onAgendaCodeId = "3e6dba4f-5c3c-439a-993e-92348ec73642";
-const decidedCodeId = "4ea2c010-06c0-4594-966b-2cb9ed1e07b7";
+import CONFIG from 'fe-redpencil/utils/config';
 
 const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
@@ -15,6 +13,7 @@ export default Model.extend({
   modified: attr('date'),
   shortTitle: attr('string'),
   title: attr('string'),
+  subcaseIdentifier: attr('string'),
   showAsRemark: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
@@ -31,9 +30,9 @@ export default Model.extend({
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval', { serialize: false }),
+  decisions: hasMany('decision', { inverse: null }),
 
   confidentiality: belongsTo('confidentiality'),
-  decision: belongsTo('decision'),
   type: belongsTo('subcase-type'),
   case: belongsTo('case', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
@@ -140,11 +139,11 @@ export default Model.extend({
   }),
 
   onAgendaInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(onAgendaCodeId);
+    return this.findPhaseDateByCodeId(CONFIG.onAgendaCodeId);
   }),
 
   decidedInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(decidedCodeId);
+    return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
   }),
 
   async findPhaseDateByCodeId(codeId) {
@@ -159,6 +158,48 @@ export default Model.extend({
       }
       return false;
     });
-  }
+  },
 
+  isOC: computed('case.policyLevel', function () {
+    return this.get('case').then((caze) => {
+      return caze.get('policyLevel').then((policyLevel) => {
+        return policyLevel.get('id') === CONFIG.OCCaseTypeID;
+      })
+    });
+  }),
+
+  submitter: computed('case.submitter', function () {
+    return PromiseObject.create({
+      promise: this.get('case').then((caze) => {
+        return caze.get('submitter').then((submitter) => {
+          return submitter;
+        });
+      })
+    });
+  }),
+
+  documentTypeFilter: computed('isOC', function () {
+    return PromiseObject.create({
+      promise: this.get('isOC').then((value) => {
+        return { 'is-oc': value };
+      })
+    });
+  }),
+
+  approved: computed('decisions.@each', function () {
+    return PromiseObject.create({
+      promise: this.get('decisions').then((decisions) => {
+        const approvedDecisions = decisions.map((decision) => decision.get('approved'));
+        if (approvedDecisions && approvedDecisions.length === 0) {
+          return false;
+        }
+        const foundNonApprovedDecision = approvedDecisions.includes(false);
+        if (foundNonApprovedDecision) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+    })
+  })
 });

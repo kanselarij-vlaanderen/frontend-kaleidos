@@ -1,16 +1,4 @@
 <div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "case-type")}}
-  {{utils/model-selector
-    modelName="case-type"
-    searchField="label"
-    propertyToShow="label"
-    multiSelect=false
-    sortField="label"
-    selectedItems=type
-    selectModel=(action "typeChanged")
-  }}
-</div>
-<div class="vlc-input-field-block">
   {{web-components/vl-form-label value=(t "short-title-case")}}
   {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
 </div>
@@ -18,15 +6,67 @@
   {{web-components/vl-form-label value=(t "title-case")}}
   {{textarea class="vl-textarea vl-textarea--block" rows="4" value=title}}
 </div>
+{{#if (not isOC)}}
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "case-type")}}
+    {{utils/model-selector
+      modelName="case-type"
+      searchField="label"
+      propertyToShow="label"
+      multiSelect=false
+      sortField="label"
+      selectedItems=type
+      selectModel=(action "typeChanged")
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "current-subcase")}}
+    {{utils/model-selector
+      modelName="subcase-type"
+      searchField="label"
+      propertyToShow="label"
+      multiSelect=false
+      sortField="label"
+      selectedItems=subcaseType
+      selectModel=(action "chooseType")
+    }}
+  </div>
+{{else}}
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "current-subcase")}}
+    {{utils/model-selector
+      modelName="subcase-type"
+      searchField="label"
+      propertyToShow="label"
+      readOnly=true
+      multiSelect=false
+      sortField="label"
+      selectedItems=subcaseType
+      selectModel=(action "chooseType")
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "select-meeting")}}
+    {{web-components/vl-datepicker
+      dateObjectsToEnable=(await dateObjectsToEnable)
+      datePropertyToUse="plannedStart"
+      dateChanged=(action "selectMeeting")
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "submitter")}}
+    {{utils/model-selector
+      modelName="submitter"
+      searchField="label"
+      propertyToShow="label"
+      multiSelect=false
+      sortField="label"
+      selectedItems=submitter
+      selectModel=(action "chooseSubmitter")
+    }}
+  </div>
+{{/if}}
 <div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "current-subcase")}}
-  {{utils/model-selector
-    modelName="subcase-type"
-    searchField="label"
-    propertyToShow="label"
-    multiSelect=false
-    sortField="label"
-    selectedItems=phase
-    selectModel=(action "chooseType")
-  }}
+  {{web-components/vl-form-label value=(t "public")}}
+  {{web-components/vl-toggle value=confidential}}
 </div>

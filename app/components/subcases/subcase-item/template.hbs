@@ -1,5 +1,11 @@
 <div class="vlc-procedure-step__badge-wrapper">
-  {{#if (await subcase.decision.approved)}}
+  {{#if (await subcase.isOC)}}
+    <div
+      class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
+    >
+      <i class="vl-badge__icon vl-vi vl-vi-sitemap" aria-hidden="true"></i>
+    </div>
+  {{else if (await subcase.approved)}}
     <div
       class="vl-badge vl-badge--icon vl-badge--success vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
     >
@@ -23,7 +29,7 @@
             subcase.id
             class="vl-title vl-title--h6 max-width"
           }}
-            {{subcase.nameToShow}} 
+            {{subcase.nameToShow}}
           {{/link-to}}
         {{else}}
           <h6 class="vl-title vl-title--h6 max-width">

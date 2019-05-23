@@ -1,31 +1,22 @@
 {{#if (not (is-pending (await item)))}}
   {{#if (not isEditing)}}
-    <div class="vl-u-spacer">
+    <div class="vl-u-spacer vl-typography vl-form__group vl-u-bg-porcelain">
       <div class="vl-u-display-flex vl-u-flex-space-between">
-        <h3 class="vl-title vl-title--h3">
-          {{t "decision-title"}}
-        </h3>
+        <h4 class="vl-title vl-title--h6">
+          {{await decision.title}}
+        </h4>
         {{#if (or isAdmin isEditor)}}
-          <div class="vl-u-spacer-extended-left-s">
-            <a class="vl-link" {{action "toggleIsEditing"}}>
-              {{t "edit"}}
-            </a>
-          </div>
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "edit"}}
+          </a>
         {{/if}}
       </div>
-    </div>
-    <div class="vl-u-spacer vl-typography">
-      <div class="vl-u-spacer--xsmall">
-        <h4 class="vl-title vl-title--h6">
-          {{await subcase.decision.shortTitle}}
-        </h4>
-      </div>
       <p>
-        {{await subcase.decision.description}}
+        {{await decision.description}}
       </p>
       <hr />
       <div class="vl-u-spacer-extended-top-s">
-        {{#if (await subcase.decision.approved)}}
+        {{#if (await decision.approved)}}
           <div class="vlc-pill vlc-pill--success">
             {{t "decided"}}
           </div>
@@ -36,7 +27,7 @@
         {{/if}}
       </div>
     </div>
-    {{#if (gt (await subcase.decision.documentVersions.length) 0)}}
+    {{!-- {{#if (gt (await decision.documentVersions.length) 0)}}
       <div class="vl-u-spacer">
         <h4 class="vl-title vl-title--h6">
           {{t "documents-attached-to"}}
@@ -48,14 +39,14 @@
     {{/if}}
     <div class="vlc-hr"></div>
     {{utils/add-signed-documents
-      item=subcase.decision
+      item=decision
       modelToAddDocumentVersionTo="signedDecision"
       title=(t "signed-decision-add")
-    }}
+    }} --}}
   {{else}}
     {{agenda/agendaitem/agendaitem-decision-edit
       isEditing=isEditing
-      item=subcase.decision
+      item=decision
       subcase=subcase
       agendaitem=agendaitem
     }}

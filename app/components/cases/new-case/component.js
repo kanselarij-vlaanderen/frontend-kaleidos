@@ -1,44 +1,67 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import { computed } from '@ember/object';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend({
   title: null,
   shortTitle: null,
+  confidential: false,
   store: inject(),
+
+  subcaseType: computed('store', function () {
+    return this.store.findRecord('subcase-type', CONFIG.preparationSubcaseTypeId)
+  }),
+
+  getSubcaseName(subcaseType) {
+    let subcaseName = subcaseType.get('label');
+    if (subcaseType.get('id') === CONFIG.approvalSubcaseTypeId) {
+      subcaseName = CONFIG.resultSubcaseName;
+    }
+
+    return subcaseName;
+  },
+
+  createCase(newDate) {
+    const { title, shortTitle, type, selectedPolicyLevel, selectedMeeting, submitter, confidential } = this;
+    return this.store.createRecord('case',
+      {
+        title, shortTitle, submitter, type, confidential,
+        isArchived: false,
+        created: newDate,
+        policyLevel: selectedPolicyLevel,
+        relatedMeeting: selectedMeeting
+      });
+  },
+
+  createSubcase(newCase, newDate) {
+    const { title, shortTitle, subcaseType, confidential } = this;
+    const subcaseName = this.getSubcaseName(subcaseType);
+
+    return this.store.createRecord('subcase', {
+      case: newCase,
+      created: newDate,
+      modified: newDate,
+      shortTitle: shortTitle,
+      title: title,
+      type: subcaseType,
+      subcaseName: subcaseName,
+      isArchived: false,
+      phases: [],
+      formallyOk: false,
+      showAsRemark: false,
+      confidential: confidential,
+    });
+  },
 
   actions: {
     async createCase($event) {
       $event.preventDefault();
-      const { title, shortTitle, type, selectedPolicyLevel, phase } = this;
       const newDate = new Date();
-      let subcaseName = phase.label;
-      if (phase.label == "principiële goedkeuring") {
-        subcaseName = "1ste principiële goedkeuring"
-      }
-      let cases = this.store.createRecord('case',
-        {
-          title: title,
-          shortTitle: shortTitle,
-          isArchived: false,
-          type: type,
-          created: newDate,
-          policyLevel: selectedPolicyLevel
-        });
-      cases.save().then((newCase) => {
-        const subcase = this.store.createRecord('subcase', {
-          case: newCase,
-          created: newDate,
-          modified: newDate,
-          confidential: false,
-          shortTitle: shortTitle,
-          title: title,
-          type: phase,
-          phases: [],
-          isArchived: false,
-          subcaseName: subcaseName,
-          formallyOk: false,
-          showAsRemark: false,
-        });
+      const caze = this.createCase(newDate);
+
+      caze.save().then((newCase) => {
+        const subcase = this.createSubcase(newCase, newDate);
         subcase.save().then(() => {
           this.close(newCase);
         })
@@ -49,7 +72,8 @@ export default Component.extend({
       this.set('selectedThemes', theme);
     },
 
-    policyLevelChanged(policyLevel) {
+    policyLevelChanged(id) {
+      const policyLevel = this.store.peekRecord('policy-level', id)
       this.set('selectedPolicyLevel', policyLevel);
     },
 
@@ -57,12 +81,20 @@ export default Component.extend({
       this.set('type', type);
     },
 
-    phaseChanged(phase) {
-      this.set('phase', phase);
+    subcaseTypeChanged(subcaseType) {
+      this.set('subcaseType', subcaseType);
     },
 
     statusChange(status) {
       this.set('status', status);
+    },
+
+    submitterChanged(submitter) {
+      this.set('submitter', submitter);
+    },
+
+    selectedMeetingChanged(meeting) {
+      this.set('selectedMeeting', meeting);
     },
 
     close() {

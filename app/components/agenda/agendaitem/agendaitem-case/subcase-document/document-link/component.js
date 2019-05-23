@@ -10,6 +10,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	isUploadingNewVersion: false,
 	uploadedFile: null,
 	fileName: null,
+	isEditing: false,
+
+	numberVr: computed('document.numberVr', function () {
+		return this.get('document.numberVr')
+	}),
 
 	openClass: computed('isShowingVersions', function () {
 		if (this.get('isShowingVersions')) {
@@ -21,12 +26,12 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		return this.get('item.constructor.modelName');
 	}),
 
-	filteredDocumentVersions: computed('document', 'document.documentVersions', 'item', 'item.documents.@each', function () {
+	filteredDocumentVersions: computed('document.documentVersions.@each', 'item.documentVersions.@each', function () {
 		return this.get('document').getDocumentVersionsOfItem(this.get('item'));
 	}),
 
-	lastDocumentVersion: computed('filteredDocumentVersions.@each', async function () {
-		return (await this.get('filteredDocumentVersions') || []).objectAt(0);
+	lastDocumentVersion: computed('filteredDocumentVersions.@each', function () {
+		return (this.get('filteredDocumentVersions') || []).objectAt(0);
 	}),
 
 	actions: {
@@ -42,7 +47,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			const newDocumentVersion = await this.createNewDocumentVersion(uploadedFile, document, newVersion.get('versionNumber'));
 
 			document.set('lastDocumentVersion', newDocumentVersion);
-			item.get('documentVersions').addObject(newDocumentVersion);
+			await item.hasMany('documentVersions').reload();
 			await item.save();
 
 			if (!this.get('isDestroyed')) {
@@ -53,7 +58,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		async openUploadDialog() {
 			const uploadedFile = this.get('uploadedFile');
 			if (uploadedFile && uploadedFile.id) {
-				this.deleteFile(uploadedFile.id);
+				this.removeFile(uploadedFile.id);
 			}
 			this.toggleProperty('isUploadingNewVersion');
 		},
@@ -63,12 +68,28 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			this.set('uploadedFile', file);
 		},
 
-		removeFile() {
-			$.ajax({
-				method: "DELETE",
-				url: '/files/' + this.get('uploadedFile.id')
+		toggleIsEditing() {
+			if (!this.get('document.numberVr')) {
+				return;
+			}
+			this.get('document').rollbackAttributes();
+			this.toggleProperty('isEditing');
+		},
+
+		saveChanges() {
+			const document = this.get('document');
+			document.set('numberVr', this.get('numberVr'))
+			document.save().then(() => {
+				this.toggleProperty('isEditing');
 			});
-			this.set('uploadedFile', null);
 		}
+	},
+
+	removeFile() {
+		$.ajax({
+			method: "DELETE",
+			url: '/files/' + this.get('uploadedFile.id')
+		});
+		this.set('uploadedFile', null);
 	}
 });

@@ -6,6 +6,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 export default Route.extend(AuthenticatedRouteMixin, {
 	authenticationRoute: 'mock-login',
 	sessionService: inject(),
+	agendaService: inject(),
 
 	queryParams: {
 		page: {
@@ -17,6 +18,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 	},
 
 	async model(params) {
+		const { agendaService } = this;
 		const meeting = await this.store.findRecord('meeting', params.meeting_id);
 		const agendas = await meeting.get('agendas');
 		const lastAgenda = agendas.sortBy('name').get('lastObject');
@@ -27,12 +29,33 @@ export default Route.extend(AuthenticatedRouteMixin, {
 					agenda: { id: lastAgenda.get('id') },
 					'show-as-remark': false
 				},
-				include: 'newsletter-info,newsletter-info.document-versions',
+				include: 'newsletter-info',
 				sort: "priority",
 				page: { number: params.page, size: params.size }
 			});
+
+		const sortedAgendaItems = await agendaService.getSortedAgendaItems(lastAgenda);
+
+		let filteredAgendaItems = await agendaitems.filter(agendaitem => {
+			if (agendaitem && agendaitem.id && !agendaitem.showAsRemark) {
+				const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
+				if (foundItem) {
+					agendaitem.set('foundPriority', foundItem.priority);
+					return agendaitem;
+				}
+			}
+		});
+
+		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
+
+		let newItems = [];
+
+		filteredAgendaGroupList.map((item) => {
+			newItems.push(...item.agendaitems);
+		});
+
 		return hash({
-			agendaitems: agendaitems,
+			agendaitems: newItems.sortBy('foundPriority'),
 			agenda: lastAgenda,
 			amountShowed: agendaitems.get('length'),
 			amountOfItems: agendaitems.get('meta.count'),

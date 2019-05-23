@@ -35,15 +35,17 @@
             {{/c.header}}
             {{#c.body as |meeting|}}
               <td>
-                Nieuwsbrief voor de ministerraad van
-                {{! Translate not possible in the data table }}
+                {{translatedPrefix}}
                 {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
               </td>
               <td>
-                -
+                {{emptyValue}}
               </td>
               <td>
-                {{moment-format meeting.created "DD-MM-YYYY HH:mm"}}
+                {{moment-format
+                  (await meeting.latestAgenda.modified)
+                  "DD.MM.YYYY HH:mm"
+                }}
               </td>
               <td class="vl-u-align-center">
                 <button

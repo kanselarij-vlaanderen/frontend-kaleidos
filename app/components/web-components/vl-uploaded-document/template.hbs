@@ -1,0 +1,67 @@
+<div class="vl-uploaded-document__title">
+  <div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt">
+    <i class="vl-badge__icon vl-vi vl-vi-document" aria-hidden="true"></i>
+  </div>
+  <div class="vl-uploaded-document__title-container">
+    <div class="title">
+      <h6 class="vl-title vl-title--h6">
+        {{file.name}}
+      </h6>
+      <button
+        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "downloadFile" file}}
+      >
+        <i
+          class="vl-vi vl-vi-download-harddisk vl-button__icon"
+          aria-hidden="true"
+        ></i>
+        <span class="vl-u-visually-hidden">
+          {{t "download"}}
+        </span>
+      </button>
+      <button
+        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "removeFile" file}}
+      >
+        <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "delete"}}
+        </span>
+      </button>
+    </div>
+    <div class="vl-document__metadata metadata">
+      {{file.extension}}
+      -
+      {{sizeToShow}}
+    </div>
+  </div>
+</div>
+<div class="metadata-container">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "alt-file-name")}}
+    {{web-components/vl-form-input width="4" value=fileName}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "document-type")}}
+    {{utils/model-selector
+      modelName="document-type"
+      searchField="label"
+      propertyToShow="label"
+      items=(await filteredItems)
+      sortField="label"
+      selectedItems=file.documentType
+      selectModel=(action "chooseDocumentType")
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "publicity")}}
+    {{utils/model-selector
+      modelName="confidentiality"
+      searchField="label"
+      propertyToShow="label"
+      sortField="label"
+      selectedItems=file.confidentiality
+      selectModel=(action "chooseDocumentConfidentiality")
+    }}
+  </div>
+</div>
