@@ -10,8 +10,12 @@ export default Component.extend({
   store: inject(),
 
   subcaseType: computed('store', function () {
-    return this.store.findRecord('subcase-type', CONFIG.preparationSubcaseTypeId)
+    return this.store.findRecord('subcase-type', CONFIG.preparationSubcaseTypeId);
   }),
+
+  selectedPolicyLevel() {
+    return this.store.findRecord('policy-level', CONFIG.VRCaseTypeID);
+  },
 
   getSubcaseName(subcaseType) {
     let subcaseName = subcaseType.get('label');
