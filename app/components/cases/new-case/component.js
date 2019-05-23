@@ -13,9 +13,9 @@ export default Component.extend({
     return this.store.findRecord('subcase-type', CONFIG.preparationSubcaseTypeId);
   }),
 
-  selectedPolicyLevel() {
+  selectedPolicyLevel: computed('store', function () {
     return this.store.findRecord('policy-level', CONFIG.VRCaseTypeID);
-  },
+  }),
 
   getSubcaseName(subcaseType) {
     let subcaseName = subcaseType.get('label');

@@ -15,10 +15,13 @@ export default Route.extend(DataTableRouteMixin, {
     let filter = {};
     let oc = params.oc;
 
-    if (oc === "true") {
+    if (oc === true) {
       filter["policy-level"] = { id: CONFIG.OCCaseTypeID };
+    } else if (oc === false) {
+      filter["policy-level"] = { id: CONFIG.VRCaseTypeID };
     } else {
       filter["policy-level"] = { id: CONFIG.VRCaseTypeID };
+
     }
     return {
       // include: 'subcases',

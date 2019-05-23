@@ -54,9 +54,17 @@
                   {{agenda.agendaName}}
                 </span>
               </div>
-              {{!-- <div class="vlc-side-nav-item__meta">
-                {{moment-format agenda.modified "dddd DD/MM/YYYY"}}
-              </div> --}}
+              <div class="vlc-side-nav-item__meta">
+                {{#if (not-eq agenda.name "Ontwerpagenda")}}
+                  {{t "created-on"}}
+                  <br />
+                  {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
+                {{else}}
+                  {{t "latest-modified"}}
+                  <br />
+                  {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
+                {{/if}}
+              </div>
               <div class="vlc-side-nav-item__meta--small">
                 <h3 class="vl-title vl-title--h6">
                   {{#if (not-eq agenda.name "Ontwerpagenda")}}
@@ -65,7 +73,6 @@
                     *
                   {{/if}}
                 </h3>
-                {{!-- {{moment-format agenda.modified "DD/MM"}} --}}
               </div>
             </a>
           </li>

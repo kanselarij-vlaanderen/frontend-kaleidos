@@ -13,12 +13,6 @@ export default Component.extend({
 		policyLevelChanged(event) {
 			this.policyLevelChanged(event.target.value);
 		}
-	},
+	}
 
-	async didInsertElement() {
-		const policyLevels = await this.policyLevels;
-		if (policyLevels && policyLevels.length > 0) {
-			this.policyLevelChanged(policyLevels.get('firstObject'));
-		}
-	},
 });

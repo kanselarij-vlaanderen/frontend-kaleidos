@@ -1,8 +1,10 @@
 <form onsubmit={{action "createCase"}}>
   <div class="vl-modal-dialog__content">
-    {{cases/case-levels policyLevelChanged=(action "policyLevelChanged")}}
-    {{cases/forms/metadata-form
+    {{cases/case-levels
       selectedPolicyLevel=selectedPolicyLevel
+      policyLevelChanged=(action "policyLevelChanged")
+    }}
+    {{cases/forms/metadata-form
       type=type
       submitter=submitter
       meeting=meeting
