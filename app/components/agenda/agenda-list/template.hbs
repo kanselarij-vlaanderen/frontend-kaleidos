@@ -36,7 +36,7 @@
         {{#each group as |agendaitemGroup index|}}
           <div class="vlc-list-section-header">
             {{#each agendaitemGroup.mandatees as |mandatee|}}
-              {{mandatee.title}}<br />
+              {{mandatee.title}}({{mandatee.priority}})<br />
             {{/each}}
           </div>
           {{#each (await agendaitemGroup.agendaitems) as |agendaitem indexItem|

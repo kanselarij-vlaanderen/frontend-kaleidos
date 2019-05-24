@@ -13,7 +13,7 @@ export default Component.extend({
 	spacerClass: computed('agendaitemGroups', function () {
 		const { agendaitemGroups } = this;
 		if (agendaitemGroups && agendaitemGroups.get('firstObject').length > 1) {
-			return 'u-spacer--large';
+			// return 'u-spacer--large';
 		}
 	}),
 

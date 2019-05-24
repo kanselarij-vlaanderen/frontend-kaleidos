@@ -66,7 +66,7 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.changeLoading();
 			let agendas = await this.get('agendas');
 			let agendaToLock = await agendas.find(agenda => agenda.name == "Ontwerpagenda");
-			if(agendaToLock) {
+			if (agendaToLock) {
 				agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
 			}
 			let definiteAgendas = await this.get('definiteAgendas');
@@ -95,6 +95,7 @@ export default Component.extend(isAuthenticatedMixin, {
 			agendaToLock.save().then((agendaToApprove) => {
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToApprove).then(newAgenda => {
 					this.changeLoading();
+					this.get('agendaService').sortAgendaItems(newAgenda);
 					this.set('sessionService.currentAgenda', newAgenda);
 					this.set('sessionService.selectedAgendaItem', null);
 					this.reloadRoute(newAgenda.get('id'));
@@ -103,19 +104,19 @@ export default Component.extend(isAuthenticatedMixin, {
 		},
 
 		async lockAgenda() {
-      const agendas = await this.get('agendas');
-      const draft = agendas.filter(agenda => agenda.name === "Ontwerpagenda").sortBy('-name').get('firstObject');
-      const lastAgenda = agendas.filter(agenda => agenda.name !== "Ontwerpagenda").sortBy('-name').get('firstObject');
+			const agendas = await this.get('agendas');
+			const draft = agendas.filter(agenda => agenda.name === "Ontwerpagenda").sortBy('-name').get('firstObject');
+			const lastAgenda = agendas.filter(agenda => agenda.name !== "Ontwerpagenda").sortBy('-name').get('firstObject');
 
-			if (draft){
-        await draft.destroyRecord();
+			if (draft) {
+				await draft.destroyRecord();
 
 				const session = await lastAgenda.get('createdFor');
 				session.set('isFinal', true);
 				await session.save();
-        this.set('sessionService.currentAgenda', lastAgenda);
-        this.reloadRoute();
-      }
+				this.set('sessionService.currentAgenda', lastAgenda);
+				this.reloadRoute();
+			}
 		},
 
 		async unlockAgenda() {

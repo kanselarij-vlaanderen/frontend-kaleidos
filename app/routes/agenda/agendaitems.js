@@ -17,7 +17,7 @@ export default Route.extend({
 
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
-			include: 'subcase.mandatees,subcase,subcase.case',
+			include: 'subcase.mandatees,subcase',
 			page: { 'size': 300 }
 		}
 		if (params.filter) {
@@ -28,7 +28,7 @@ export default Route.extend({
 		const announcements = agendaitems.filter((item) => item.showAsRemark);
 
 		const groups = await this.reduceGroups(agendaitems, agenda);
-		const announcementGroups = await this.reduceGroups(announcements, agenda);
+
 		return hash({
 			agendaitems: agendaitems,
 			groups: groups,
@@ -38,19 +38,19 @@ export default Route.extend({
 
 	async reduceGroups(agendaitems, agenda) {
 		const { agendaService } = this;
-		const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
-		const itemsAddedAfterwards = []
+		// const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
+		const itemsAddedAfterwards = [];
 
 		let filteredAgendaItems = await agendaitems.filter(agendaitem => {
 			if (agendaitem && agendaitem.id) {
 
 				if (!agendaitem.showAsRemark) {
 					if (agendaitem.priority) {
-						const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
-						if (foundItem) {
-							agendaitem.set('foundPriority', foundItem.priority);
-							return agendaitem;
-						}
+						// const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
+						// if (foundItem) {
+
+						agendaitem.set('foundPriority', agendaitem.priority);
+						return agendaitem;
 					} else {
 						itemsAddedAfterwards.push(agendaitem);
 					}
@@ -58,8 +58,6 @@ export default Route.extend({
 
 			}
 		});
-
-		// filteredAgendaItems = filteredAgendaItems.sortBy('created');
 
 		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
 
