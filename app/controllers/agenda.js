@@ -12,7 +12,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 	createAnnouncement: false,
 	isLoading: false,
 	isPrintingDecisions: false,
-	
+
 	currentSession: alias('sessionService.currentSession'),
 	agendas: alias('sessionService.agendas'),
 	announcements: alias('sessionService.announcements'),
@@ -33,15 +33,15 @@ export default Controller.extend(isAuthenticatedMixin, {
 		},
 
 		navigateToNotes(currentSessionId, currentAgendaId) {
-			this.transitionToRoute('print-overviews.notes.overview', currentSessionId, {queryParams: {selectedAgenda_id: currentAgendaId}} )
+			this.transitionToRoute('print-overviews.notes.overview', currentSessionId, { queryParams: { selectedAgenda_id: currentAgendaId } })
 		},
 
 		navigateToDecisions(currentSessionId, currentAgendaId) {
-			this.transitionToRoute('print-overviews.decisions.overview', currentSessionId, {queryParams: {selectedAgenda_id: currentAgendaId}} )
+			this.transitionToRoute('print-overviews.decisions.overview', currentSessionId, { queryParams: { selectedAgenda_id: currentAgendaId } })
 		},
 
 		navigateToPressAgenda(currentSessionId, currentAgendaId) {
-			this.transitionToRoute('print-overviews.press-agenda.overview', currentSessionId, {queryParams: {selectedAgenda_id: currentAgendaId}} )
+			this.transitionToRoute('print-overviews.press-agenda.overview', currentSessionId, { queryParams: { selectedAgenda_id: currentAgendaId } })
 		},
 
 		navigateToSubCases() {

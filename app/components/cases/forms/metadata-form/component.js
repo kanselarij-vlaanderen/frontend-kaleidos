@@ -11,7 +11,7 @@ export default Component.extend({
     return this.store.query('meeting', {});
   }),
 
-  isOC: computed('selectedPolicyLevel.id', function () {
+  isOC: computed('selectedPolicyLevel', function () {
     const { selectedPolicyLevel } = this;
     if (selectedPolicyLevel) {
       return CONFIG.OCCaseTypeID === selectedPolicyLevel.get('id');

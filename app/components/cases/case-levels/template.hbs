@@ -1,30 +1,38 @@
-<label class="vl-form__label vl-u-display-block">
-  {{t "case-level"}}
-</label>
-{{#each policyLevels as |policyLevel index|}}
-  <label class="vl-radio">
-    {{#if (is-equal index 0)}}
-      <input
-        class="vl-radio__toggle"
-        value={{policyLevel.id}}
-        type="radio"
-        name="typeId"
-        checked=""
-        onchange={{action "policyLevelChanged"}}
-       />
-
-    {{else}}
-      <input
-        class="vl-radio__toggle"
-        value={{policyLevel.id}}
-        type="radio"
-        name="typeId"
-        onchange={{action "policyLevelChanged"}}
-       />
-
-    {{/if}}
-    <div class="vl-radio__label">
-      {{policyLevel.label}}
-    </div>
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "public")}}
+  {{web-components/vl-toggle value=confidential}}
+</div>
+<div class="vlc-input-field-block">
+  <label class="vl-form__label vl-u-display-block">
+    {{t "case-level"}}
   </label>
-{{/each}}
+  <div class="vlc-radio-inline">
+    {{#each policyLevels as |policyLevel index|}}
+      <label class="vl-radio">
+        {{#if (is-equal index 0)}}
+          <input
+            class="vl-radio__toggle"
+            value={{policyLevel.id}}
+            type="radio"
+            name="typeId"
+            checked=""
+            onchange={{action "policyLevelChanged"}}
+           />
+
+        {{else}}
+          <input
+            class="vl-radio__toggle"
+            value={{policyLevel.id}}
+            type="radio"
+            name="typeId"
+            onchange={{action "policyLevelChanged"}}
+           />
+
+        {{/if}}
+        <div class="vl-radio__label">
+          {{policyLevel.label}}
+        </div>
+      </label>
+    {{/each}}
+  </div>
+</div>

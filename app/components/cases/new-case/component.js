@@ -9,22 +9,9 @@ export default Component.extend({
   confidential: false,
   store: inject(),
 
-  subcaseType: computed('store', function () {
-    return this.store.findRecord('subcase-type', CONFIG.preparationSubcaseTypeId);
-  }),
-
   selectedPolicyLevel: computed('store', function () {
     return this.store.findRecord('policy-level', CONFIG.VRCaseTypeID);
   }),
-
-  getSubcaseName(subcaseType) {
-    let subcaseName = subcaseType.get('label');
-    if (subcaseType.get('id') === CONFIG.approvalSubcaseTypeId) {
-      subcaseName = CONFIG.resultSubcaseName;
-    }
-
-    return subcaseName;
-  },
 
   createCase(newDate) {
     const { title, shortTitle, type, selectedPolicyLevel, selectedMeeting, submitter, confidential } = this;
@@ -38,26 +25,6 @@ export default Component.extend({
       });
   },
 
-  createSubcase(newCase, newDate) {
-    const { title, shortTitle, subcaseType, confidential } = this;
-    const subcaseName = this.getSubcaseName(subcaseType);
-
-    return this.store.createRecord('subcase', {
-      case: newCase,
-      created: newDate,
-      modified: newDate,
-      shortTitle: shortTitle,
-      title: title,
-      type: subcaseType,
-      subcaseName: subcaseName,
-      isArchived: false,
-      phases: [],
-      formallyOk: false,
-      showAsRemark: false,
-      confidential: confidential,
-    });
-  },
-
   actions: {
     async createCase($event) {
       $event.preventDefault();
@@ -65,10 +32,7 @@ export default Component.extend({
       const caze = this.createCase(newDate);
 
       caze.save().then((newCase) => {
-        const subcase = this.createSubcase(newCase, newDate);
-        subcase.save().then(() => {
-          this.close(newCase);
-        })
+        this.close(newCase);
       });
     },
 
@@ -76,7 +40,7 @@ export default Component.extend({
       this.set('selectedThemes', theme);
     },
 
-    policyLevelChanged(id) {
+    async policyLevelChanged(id) {
       const policyLevel = this.store.peekRecord('policy-level', id)
       this.set('selectedPolicyLevel', policyLevel);
     },

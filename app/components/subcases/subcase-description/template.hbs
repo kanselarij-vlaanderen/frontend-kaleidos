@@ -3,12 +3,14 @@
     <h3 class="vl-title vl-title--h3">
       {{t "subcase"}}
     </h3>
-    {{#if (and (not (await subcase.isOC) (or isEditor isAdmin)))}}
-      <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "edit"}}
-        </a>
-      </div>
+    {{#if (not (await subcase.isOC))}}
+      {{#if (or isEditor isAdmin)}}
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "edit"}}
+          </a>
+        </div>
+      {{/if}}
     {{/if}}
   </div>
   <div class="vl-u-spacer-extended-bottom">

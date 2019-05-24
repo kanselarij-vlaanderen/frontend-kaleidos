@@ -2,18 +2,16 @@
   <div class="vl-modal-dialog__content">
     {{cases/case-levels
       selectedPolicyLevel=selectedPolicyLevel
+      confidential=confidential
       policyLevelChanged=(action "policyLevelChanged")
     }}
     {{cases/forms/metadata-form
       type=type
       submitter=submitter
       meeting=meeting
-      subcaseType=subcaseType
-      title=title
       shortTitle=shortTitle
-      confidential=confidential
+      selectedPolicyLevel=selectedPolicyLevel
       typeChanged=(action "typeChanged")
-      subcaseTypeChanged=(action "subcaseTypeChanged")
       selectedMeetingChanged=(action "selectedMeetingChanged")
       submitterChanged=(action "submitterChanged")
     }}
