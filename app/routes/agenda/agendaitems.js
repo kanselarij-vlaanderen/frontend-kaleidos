@@ -28,7 +28,7 @@ export default Route.extend({
 		const announcements = agendaitems.filter((item) => item.showAsRemark);
 
 		const groups = await this.reduceGroups(agendaitems, agenda);
-		const announcementGroups = await this.reduceGroups(announcements, agenda);
+
 		return hash({
 			agendaitems: agendaitems,
 			groups: groups,
