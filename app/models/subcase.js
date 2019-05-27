@@ -201,5 +201,15 @@ export default Model.extend({
         }
       })
     })
+  }),
+
+  subcasesFromCase: computed('case.subcases.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('case').then((caze) => {
+        return caze.get('subcases').then((subcases) => {
+          return subcases;
+        });
+      })
+    })
   })
 });

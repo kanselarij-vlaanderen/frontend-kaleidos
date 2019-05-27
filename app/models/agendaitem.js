@@ -75,5 +75,15 @@ export default Model.extend({
 
   sortedMandatees: computed('mandatees', function () {
     return this.get('mandatees').sortBy('priority');
+  }),
+
+  subcasesFromCase: computed('subcase', function () {
+    return PromiseArray.create({
+      promise: this.get('subcase').then((subcase) => {
+        return subcase.get('case.subcases').then((subcases) => {
+          return subcases;
+        });
+      })
+    })
   })
 });
