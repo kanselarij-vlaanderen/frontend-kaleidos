@@ -21,6 +21,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 		const version = await this.versionNames.createVersionName(documentVersion.get('versionNumber'));
 
 		let title = await documentVersion.get('document.numberVr') + version;
+
 		if (title !== "undefined") {
 			return title;
 		} else {

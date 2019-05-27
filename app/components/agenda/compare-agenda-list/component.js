@@ -4,12 +4,12 @@ import { inject } from '@ember/service';
 import { on } from '@ember/object/evented';
 
 export default Component.extend({
-	store: inject(),
+  store: inject(),
   sessionService: inject(),
   agendaService: inject(),
-	classNames:['vlc-scroll-wrapper__body'],
-	agendaToCompare: null,
-	currentAgenda: null,
+  classNames: ['vlc-scroll-wrapper__body'],
+  agendaToCompare: null,
+  currentAgenda: null,
   currentAgendaGroups: null,
   agendaToCompareGroups: null,
   agendaOne: null,
@@ -18,53 +18,53 @@ export default Component.extend({
     return !!this.changedGroups && Object.keys(this.changedGroups).length > 0;
   }),
 
-	currentAgendaItemsObserver: on('init', observer('agendaOne', async function () {
+  currentAgendaItemsObserver: on('init', observer('agendaOne', async function () {
     let agenda = await this.get('agendaOne');
-		if(!agenda) return;
-		let agendaItems = await this.store.query('agendaitem', {
-			filter: {
+    if (!agenda) return;
+    let agendaItems = await this.store.query('agendaitem', {
+      filter: {
         'agenda': { id: agenda.id },
-        'show-as-remark':false
-			},
-      include: 'subcase.phases.code,subcase,subcase.themes,subcase.mandatees,postponed-to,subcase.phases'
-		});
+        'show-as-remark': false
+      },
+      include: 'subcase,subcase.mandatees,postponed-to'
+    });
 
     const groups = await this.reduceGroups(agendaItems, agenda);
-		this.set('currentAgendaGroups', groups);
-	})),
+    this.set('currentAgendaGroups', groups);
+  })),
 
-	agendaToCompareAgendaItemsObserver: on('init', observer('agendaTwo', async function () {
-		let agenda = await this.get('agendaTwo');
-		if(!agenda) return;
-		let agendaItems = await this.store.query('agendaitem', {
-			filter: {
+  agendaToCompareAgendaItemsObserver: on('init', observer('agendaTwo', async function () {
+    let agenda = await this.get('agendaTwo');
+    if (!agenda) return;
+    let agendaItems = await this.store.query('agendaitem', {
+      filter: {
         'agenda': { id: agenda.id },
-        'show-as-remark':false
-			},
-      include: 'subcase.phases.code,agenda,subcase,subcase.case,subcase.themes,subcase.mandatees,postponed-to,subcase.phases'
-		});
+        'show-as-remark': false
+      },
+      include: 'agenda,subcase,subcase.mandatees'
+    });
     const groups = await this.reduceGroups(agendaItems, agenda);
-		this.set('agendaToCompareGroups', groups);
-	})),
+    this.set('agendaToCompareGroups', groups);
+  })),
 
   changedGroups: computed('currentAgendaGroups.@each', 'agendaToCompareGroups.@each', function () {
-		let groups = {};
+    let groups = {};
 
-		(this.currentAgendaGroups || []).flat().map(item => {
-			let groupName = item.groupName;
+    (this.currentAgendaGroups || []).flat().map(item => {
+      let groupName = item.groupName;
       groups[groupName] = { left: item };
-		});
+    });
 
-		(this.agendaToCompareGroups || []).flat().map(item => {
+    (this.agendaToCompareGroups || []).flat().map(item => {
       let groupName = item.groupName;
       groups[groupName] = groups[groupName] || {};
       groups[groupName].right = item;
-		});
+    });
 
-		return Object.keys(groups).map((key) => {
-			return groups[key];
-		});
-	}),
+    return Object.keys(groups).map((key) => {
+      return groups[key];
+    });
+  }),
 
   async reduceGroups(agendaitems, agenda) {
     const { agendaService } = this;
@@ -93,11 +93,11 @@ export default Component.extend({
     ];
   },
 
-  actions : {
-    chooseAgendaOne (agenda){
+  actions: {
+    chooseAgendaOne(agenda) {
       this.set('agendaOne', agenda);
     },
-    chooseAgendaTwo (agenda){
+    chooseAgendaTwo(agenda) {
       this.set('agendaTwo', agenda);
     }
   }

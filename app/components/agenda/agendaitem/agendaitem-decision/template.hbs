@@ -27,22 +27,24 @@
         {{/if}}
       </div>
     </div>
-    {{!-- {{#if (gt (await decision.documentVersions.length) 0)}}
-      <div class="vl-u-spacer">
-        <h4 class="vl-title vl-title--h6">
-          {{t "documents-attached-to"}}
-        </h4>
-        <div class="vl-u-spacer-extended-top-s">
-          {{utils/documents-list-for-item item=item agendaitem=subcase}}
+    {{#if (or isEditor isAdmin)}}
+      {{#if (gt (await decision.documentVersions.length) 0)}}
+        <div class="vl-u-spacer">
+          <h4 class="vl-title vl-title--h6">
+            {{t "documents-attached-to"}}
+          </h4>
+          <div class="vl-u-spacer-extended-top-s">
+            {{utils/documents-list-for-item item=item agendaitem=subcase}}
+          </div>
         </div>
-      </div>
+      {{/if}}
+      <div class="vlc-hr"></div>
+      {{utils/add-signed-documents
+        item=decision
+        modelToAddDocumentVersionTo="signedDecision"
+        title=(t "signed-decision-add")
+      }}
     {{/if}}
-    <div class="vlc-hr"></div>
-    {{utils/add-signed-documents
-      item=decision
-      modelToAddDocumentVersionTo="signedDecision"
-      title=(t "signed-decision-add")
-    }} --}}
   {{else}}
     {{agenda/agendaitem/agendaitem-decision-edit
       isEditing=isEditing

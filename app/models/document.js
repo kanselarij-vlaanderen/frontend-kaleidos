@@ -13,6 +13,7 @@ export default Model.extend({
 	description: attr('string'),
 	type: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),
+	signedDecision: belongsTo('decision'),
 
 	sortedDocuments: computed('documentVersions', function () {
 		return this.get('documentVersions').then(versions => {

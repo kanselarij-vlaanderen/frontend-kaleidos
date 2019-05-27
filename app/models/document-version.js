@@ -9,26 +9,27 @@ export default Model.extend({
 	identificationNumber: attr('string'),
 	versionNumber: attr('number'),
 	serialNumber: attr('string'),
+
 	document: belongsTo('document'),
 	subcase: belongsTo('subcase', { inverse: null }),
 	agendaitem: belongsTo('agendaitem', { inverse: null }),
 	announcement: belongsTo('announcement'),
 	file: belongsTo('file'),
-
 	newsletter: belongsTo('newsletter-info'),
 	meetingRecord: belongsTo('meeting-record'),
-	decision: belongsTo('decision'),
-	signedDecision: belongsTo('decision'),
 
 	nameToDisplay: computed('chosenFileName', 'document', 'file', function () {
 		const chosenFileName = this.get('chosenFileName');
 		const name = this.get('file.filename');
+		const title = this.get('document.title');
 		if (chosenFileName) {
 			return chosenFileName;
 		} else if (name) {
 			return name;
+		} else if (title) {
+			return title;
 		} else {
-			return this.get('file.name')
+			return this.get('file.name');
 		}
 	})
 });

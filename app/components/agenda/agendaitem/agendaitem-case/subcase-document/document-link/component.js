@@ -27,7 +27,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	}),
 
 	filteredDocumentVersions: computed('document.documentVersions.@each', 'item.documentVersions.@each', function () {
-		return this.get('document').getDocumentVersionsOfItem(this.get('item'));
+		const document = this.get('document');
+		if (!document) {
+			return [];
+		}
+		return document.getDocumentVersionsOfItem(this.get('item'));
 	}),
 
 	lastDocumentVersion: computed('filteredDocumentVersions.@each', function () {
