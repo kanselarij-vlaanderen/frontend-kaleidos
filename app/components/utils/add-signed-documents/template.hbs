@@ -1,14 +1,16 @@
-{{#if (await item.latestDocumentVersion)}}
-  {{web-components/vl-document
-    documentVersion=(await item.latestDocumentVersion)
+{{#if (await item.signedDocument)}}
+  {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+    document=(await item.signedDocument)
+    item=(await item.signedDocument)
   }}
+{{else}}
+  <button
+    class="vl-button vl-button--tertiary vl-button--narrow"
+    {{action "toggleIsAddingNewDocument"}}
+  >
+    {{title}}
+  </button>
 {{/if}}
-<button
-  class="vl-button vl-button--tertiary vl-button--narrow"
-  {{action "toggleIsAddingNewDocument"}}
->
-  {{title}}
-</button>
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
     closeModal=(action "toggleIsAddingNewDocument")
@@ -23,7 +25,7 @@
           {{web-components/vl-uploaded-document
             multipleFiles=false
             file=uploadedFile
-            subcase=item
+            subcase=(await item)
             uploadedFiles=uploadedFiles
           }}
         {{/each}}

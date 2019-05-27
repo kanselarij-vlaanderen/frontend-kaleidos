@@ -42,20 +42,25 @@ export default Route.extend({
 		const itemsAddedAfterwards = []
 
 		let filteredAgendaItems = await agendaitems.filter(agendaitem => {
-			if (agendaitem && agendaitem.id && !agendaitem.showAsRemark) {
-				if (agendaitem.priority) {
-					const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
-					if (foundItem) {
-						agendaitem.set('foundPriority', foundItem.priority);
-						return agendaitem;
+			if (agendaitem && agendaitem.id) {
+
+				if (!agendaitem.showAsRemark) {
+					if (agendaitem.priority) {
+						const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
+						if (foundItem) {
+							agendaitem.set('foundPriority', foundItem.priority);
+							return agendaitem;
+						}
+					} else {
+						itemsAddedAfterwards.push(agendaitem);
 					}
-				} else {
-					itemsAddedAfterwards.push(agendaitem);
 				}
+
 			}
 		});
 
-		filteredAgendaItems = filteredAgendaItems.sortBy('created');
+		// filteredAgendaItems = filteredAgendaItems.sortBy('created');
+
 		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
 
 		const filteredAgendaGroupListAddedAfterwards = Object.values(await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards));

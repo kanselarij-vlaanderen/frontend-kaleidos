@@ -15,6 +15,9 @@
       </span>
     </h1>
   </div>
+  <div class="vl-u-spacer-extended-bottom-l">
+    <hr class="vlc-hr" />
+  </div>
   <div class="vl-u-spacer-extended-bottom">
     {{#each (await agendaitemGroups) as |agendaitemGroup|}}
       <div class="vl-u-spacer-extended-bottom">
@@ -32,11 +35,17 @@
             </h3>
           </div>
           <div class="vl-typography">
-            <p>
-              {{agendaitem.textPress}}
-            </p>
+            <ul>
+              <li>
+                {{agendaitem.textPress}}
+              </li>
+            </ul>
+            <p></p>
           </div>
         {{/each}}
+        <div class="vl-u-spacer-extended-bottom-l">
+          <hr class="vlc-hr" />
+        </div>
       </div>
     {{/each}}
   </div>

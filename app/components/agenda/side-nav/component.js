@@ -5,7 +5,7 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
 	sessionService: inject(),
-	classNames: ['vlc-side-nav'],
+	classNames: ["vlc-panel-layout__agenda-history"],
 
 	classNameBindings: ['getClassNames'],
 

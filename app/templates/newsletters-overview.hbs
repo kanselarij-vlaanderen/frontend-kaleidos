@@ -7,9 +7,10 @@
     <div class="vl-u-spacer-extended-l">
       <div class="vlc-container">
         {{newsletter/newsletter-meeting meeting=(await model.meeting)}}
-        {{#each (await model.agendaitems) as |agendaitem|}}
+        {{#each (await model.agendaitems) as |agendaitem index|}}
           {{newsletter/newsletter-item
             agenda=(await model.agenda)
+            index=(add index 1)
             agendaitem=agendaitem
           }}
         {{/each}}

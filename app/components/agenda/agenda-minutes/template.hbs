@@ -1,4 +1,23 @@
 <div class="vlc-container">
+  <div class="vl-u-display-flex vl-u-flex-justify-center">
+    <img
+      style="margin:-75px 0px -50px 0px; height:250px"
+      src="/assets/logo_vlaamse_regering.svg"
+     />
+
+  </div>
+  <div class="vl-u-spacer-extended-bottom-l">
+    <h1 class="vl-title vl-title--h2">
+      {{await title}}
+      <br />
+      <span class="vl-u-spacer-extended-top-s vl-u-text--muted">
+        {{t "agenda"}}
+      </span>
+    </h1>
+  </div>
+  <div class="vl-u-spacer-extended-bottom-l">
+    <hr class="vlc-hr" />
+  </div>
   <div class="vl-u-display-flex vl-u-flex-align-baseline">
     <h3 class="vl-title vl-title--h3">
       {{t "notes"}}
@@ -13,35 +32,45 @@
   <div class="vl-u-spacer-extended-bottom">
     {{#each (await agendaitemGroups) as |agendaitemGroup|}}
       <div class="vl-u-spacer-extended-bottom">
-        <h2 class="vl-title vl-title--h4">
-          {{#each agendaitemGroup.mandatees as |mandatee|}}
-            {{mandatee.title}}<br />
-          {{/each}}
-        </h2>
+        {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
+          <h2 class="vl-title vl-title--h4">
+            {{mandatee.title}}
+          </h2>
+        {{/each}}
       </div>
-      {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-        <div class="vl-u-spacer-extended-bottom-s">
-          <h3 class="vl-title vl-title--h5">
-            {{agendaitem.foundPriority}}
-            .
-            {{await agendaitem.title}}
-          </h3>
-        </div>
-        <div class="vl-u-spacer-extended-bottom-s">
-          <div class="vl-typography">
-            {{#if agendaitem.meetingRecord.description}}
-              <p>
-                {{await agendaitem.meetingRecord.description}}
-              </p>
-            {{else}}
-              <p class="vl-u-text--muted">
-                {{t "no-notes"}}
-              </p>
-            {{/if}}
+      <div class="vl-u-spacer-extended-bottom-l">
+        {{#each (await agendaitemGroup.agendaitems) as |agendaitem|}}
+          <div class="vl-u-spacer-extended-bottom-s">
+            <h3 class="vl-title vl-title--h5">
+              {{agendaitem.shortTitle}}
+            </h3>
+            <p>
+              {{agendaitem.title}}
+            </p>
           </div>
+          <div class="vl-typography">
+            <ul>
+              <li>
+                {{#if agendaitem.meetingRecord.description}}
+                  <p>
+                    {{await agendaitem.meetingRecord.description}}
+                  </p>
+                {{else}}
+                  <p class="vl-u-text--muted">
+                    {{t "no-notes"}}
+                  </p>
+                {{/if}}
+              </li>
+            </ul>
+            <p>
+              {{agendaitem.subcase.subcaseName}}
+            </p>
+          </div>
+        {{/each}}
+        <div class="vl-u-spacer-extended-bottom-l">
+          <hr class="vlc-hr" />
         </div>
-      {{/each}}
-      <div class="vlc-hr"></div>
+      </div>
     {{/each}}
   </div>
 </div>

@@ -10,16 +10,14 @@
   {{web-components/vl-form-label value=(t "approved")}}
   {{web-components/vl-toggle value=approved}}
 </div>
-{{#if approved}}
-  <div class="vlc-input-field-block">
-    {{utils/documents-selector-of-agendaitem
-      item=agendaitem
-      title=(t "documents-attached-to")
-      itemWithDocuments=(await item)
-      selectDocument=(action "selectDocument")
-    }}
-  </div>
-{{/if}}
+<div class="vlc-input-field-block">
+  {{utils/documents-selector-of-agendaitem
+    item=agendaitem
+    title=(t "documents-attached-to")
+    itemWithDocuments=(await item)
+    selectDocument=(action "selectDocument")
+  }}
+</div>
 <div class="vl-action-group vl-action-group--align-right">
   <a class="vl-link" {{action "cancelEditing"}}>
     {{t "cancel"}}

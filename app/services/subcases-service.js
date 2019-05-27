@@ -17,6 +17,21 @@ export default Service.extend({
     ).then(({ data }) => {
       return data;
     })
+  },
+
+  setNewMandateeToRelatedOpenSubcases(old_mandatee, new_mandatee) {
+    return $.ajax(
+      {
+        method: "POST",
+        url: `/minister-jurisdiction-service/transfer/procedures`,
+        data: {
+          old_mandatee: old_mandatee,
+          new_mandatee: new_mandatee
+        }
+      }
+    ).then(({ data }) => {
+      return data;
+    })
   }
 
 });

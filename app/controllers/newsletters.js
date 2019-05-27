@@ -6,7 +6,7 @@ import { computed } from '@ember/object';
 import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend(DefaultQueryParamsMixin,isAuthenticatedMixin, {
+export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
 	intl: inject(),
 	sessionService: inject(),
 
@@ -15,9 +15,17 @@ export default Controller.extend(DefaultQueryParamsMixin,isAuthenticatedMixin, {
 	isEditing: false,
 	currentSession: alias('sessionService.currentSession'),
 
-	editTitle: computed('selectedMeeting', function() {
+	editTitle: computed('selectedMeeting', function () {
 		const date = this.get('selectedMeeting.plannedStart');
 		return `${this.get('intl').t('newsletter-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+	}),
+
+	translatedPrefix: computed('intl', function () {
+		return this.get('intl').t('newsletter-for-meeting-of');
+	}),
+
+	emptyValue: computed('intl', function () {
+		return this.get('intl').t('dash');
 	}),
 
 	actions: {

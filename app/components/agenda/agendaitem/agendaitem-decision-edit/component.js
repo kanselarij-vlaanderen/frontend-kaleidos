@@ -6,7 +6,7 @@ const decidedID = "4ea2c010-06c0-4594-966b-2cb9ed1e07b7"
 
 export default Component.extend(DocumentsSelectorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
-	propertiesToSet: ['approved', 'description', 'shortTitle'],
+	propertiesToSet: ['approved', 'description', 'title'],
 
 	description: getCachedProperty('description'),
 	title: getCachedProperty('title'),

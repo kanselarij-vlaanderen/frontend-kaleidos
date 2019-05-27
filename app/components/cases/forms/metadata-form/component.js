@@ -2,10 +2,7 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import moment from 'moment';
-
-const levels = {
-  oc: "6f771654-a8be-43e6-9fe5-7e17fed1cb9a"
-};
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend({
   store: inject(),
@@ -14,10 +11,10 @@ export default Component.extend({
     return this.store.query('meeting', {});
   }),
 
-  isOC: computed('selectedPolicyLevel.id', function () {
+  isOC: computed('selectedPolicyLevel', function () {
     const { selectedPolicyLevel } = this;
     if (selectedPolicyLevel) {
-      return levels.oc === selectedPolicyLevel.get('id');
+      return CONFIG.OCCaseTypeID === selectedPolicyLevel.get('id');
     }
   }),
 

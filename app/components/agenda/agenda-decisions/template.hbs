@@ -1,31 +1,56 @@
-<div class="vlc-container vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
-  {{#each (await agendaitemGroups) as |agendaitemGroup|}}
-    <div
-      class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom vlc-navbar--bordered-bottom"
-    >
-      {{#each agendaitemGroup.mandatees as |mandatee|}}
-        <h2 class="vl-title vl-title--h5">
-          {{mandatee.title}}
-        </h2>
-      {{/each}}
-    </div>
-<div class="vl-typography">
-  {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-    <div class="vl-u-spacer-extended-top vl-u-spacer-extended-bottom">
+<div class="vlc-container">
+  <div class="vl-u-display-flex vl-u-flex-justify-center">
+    <img
+      style="margin:-75px 0px -50px 0px; height:250px"
+      src="/assets/logo_vlaamse_regering.svg"
+     />
+
+  </div>
+  <div class="vl-u-spacer-extended-bottom-l">
+    <h1 class="vl-title vl-title--h2">
+      {{title}}
+      <br />
+    </h1>
+  </div>
+  <div class="vl-u-spacer-extended-bottom-l">
+    <hr class="vlc-hr" />
+  </div>
+  <div class="vl-u-spacer-extended-bottom">
+    {{#each (await agendaitemGroups) as |agendaitemGroup|}}
       <div class="vl-u-spacer-extended-bottom">
-        <div
-          class="vlc-comments-comment-content vl-u-spacer-extended-top vl-u-spacer-extended-bottom"
-        >
-          <h6>
-            {{await agendaitem.decision.shortTitle}}
-          </h6>
-          <p>
-            {{await agendaitem.decision.description}}
-          </p>
+        {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
+          <h2 class="vl-title vl-title--h4">
+            {{mandatee.title}}
+          </h2>
+        {{/each}}
+      </div>
+      <div class="vl-u-spacer-extended-bottom-l">
+        {{#each (await agendaitemGroup.agendaitems) as |agendaitem|}}
+          <div class="vl-u-spacer-extended-bottom-s">
+            <h3 class="vl-title vl-title--h5">
+              {{agendaitem.shortTitle}}
+            </h3>
+            <p>
+              {{agendaitem.title}}
+            </p>
+          </div>
+          <div class="vl-typography">
+            <ul>
+              {{#each (await agendaitem.decisions) as |decision|}}
+                <li>
+                  {{decision.description}}
+                </li>
+              {{/each}}
+            </ul>
+            <p>
+              {{agendaitem.subcase.subcaseName}}
+            </p>
+          </div>
+        {{/each}}
+        <div class="vl-u-spacer-extended-bottom-l">
+          <hr class="vlc-hr" />
         </div>
       </div>
-    </div>
-  {{/each}}
-</div>
-  {{/each}}
+    {{/each}}
+  </div>
 </div>

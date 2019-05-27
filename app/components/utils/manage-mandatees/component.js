@@ -3,9 +3,12 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
 	store:inject(),
+  subcasesService:inject(),
 	isAdding:false,
 	isResigning:false,
 	isEditing: false,
+  selectedStartDate: null,
+  selectedEndDate: null,
 
 	actions: {
 		closeModal() {
@@ -62,8 +65,8 @@ export default Component.extend({
 					governmentDomains: domains,
 					priority: oldMandatee.get('priority')
 				});
-
 				newMandatee.save().then(() => {
+          this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
 					this.closeModal();
 				});
 			});

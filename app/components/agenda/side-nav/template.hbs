@@ -1,67 +1,83 @@
 <nav class="vlc-side-nav">
-  <div class="vlc-navbar vlc-navbar--bordered-bottom">
-    <div class="vlc-toolbar">
-      <div class="vlc-toolbar__left">
-        <h2 class="vl-title vl-title--h4">
-          <i class="vl-icon vl-vi vl-vi-timeline"></i>
-          <span>
-            {{t "nav-title"}}
-          </span>
-        </h2>
-      </div>
-      <div class="vlc-toolbar__right">
-        {{#if agendaMenuOpened}}
-          <button
-            class="vl-button vl-button--link vl-button--icon default"
-            {{action "collapseSideMenu"}}
-          >
-            <i class="vl-vi vl-vi-arrow-right-fat"></i>
-            <span class="vl-u-visually-hidden">
-              {{t "toggle"}}
-            </span>
-          </button>
-        {{else}}
-          <button
-            class="vl-button vl-button--link vl-button--icon collapsed"
-            {{action "collapseSideMenu"}}
-          >
-            <i class="vl-vi vl-vi-arrow-left-fat"></i>
-            <span class="vl-u-visually-hidden">
-              {{t "toggle"}}
-            </span>
-          </button>
-        {{/if}}
+  <div class="vlc-scroll-wrapper">
+    <div class="vlc-scroll-wrapper__header">
+      <div class="vlc-navbar vlc-navbar--bordered-bottom">
+        <div class="vlc-toolbar">
+          <div class="vlc-toolbar__left">
+            <h2 class="vl-title vl-title--h6">
+              <i class="vl-icon vl-vi vl-vi-timeline" aria-hidden="true"></i>
+              <span>
+                {{t "nav-title"}}
+              </span>
+            </h2>
+          </div>
+          <div class="vlc-toolbar__right">
+            {{#if agendaMenuOpened}}
+              <button
+                class="vl-button vl-button--link vl-button--icon default"
+                {{action "collapseSideMenu"}}
+              >
+                <i class="vl-vi vl-vi-arrow-right-fat"></i>
+                <span class="vl-u-visually-hidden">
+                  {{t "toggle"}}
+                </span>
+              </button>
+            {{else}}
+              <button
+                class="vl-button vl-button--link vl-button--icon collapsed"
+                {{action "collapseSideMenu"}}
+              >
+                <i class="vl-vi vl-vi-arrow-left-fat"></i>
+                <span class="vl-u-visually-hidden">
+                  {{t "toggle"}}
+                </span>
+              </button>
+            {{/if}}
+          </div>
+        </div>
       </div>
     </div>
+    <div class="vlc-scroll-wrapper__body">
+      <ul>
+        {{#each (await agendas) as |agenda|}}
+          <li
+            class="vlc-side-nav-item
+              {{active-class
+                agenda
+                currentAgenda
+                class="vlc-side-nav-item--active"
+              }}"
+          >
+            <a {{action "setCurrentAgenda" agenda}}>
+              <div class="vlc-side-nav-item__label">
+                <span>
+                  {{agenda.agendaName}}
+                </span>
+              </div>
+              <div class="vlc-side-nav-item__meta">
+                {{#if (not-eq agenda.name "Ontwerpagenda")}}
+                  {{t "created-on"}}
+                  <br />
+                  {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
+                {{else}}
+                  {{t "latest-modified"}}
+                  <br />
+                  {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
+                {{/if}}
+              </div>
+              <div class="vlc-side-nav-item__meta--small">
+                <h3 class="vl-title vl-title--h6">
+                  {{#if (not-eq agenda.name "Ontwerpagenda")}}
+                    {{agenda.name}}
+                  {{else}}
+                    *
+                  {{/if}}
+                </h3>
+              </div>
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
   </div>
-  <ul>
-    {{#each (await agendas) as |agenda|}}
-      <li
-        class="vlc-side-nav-item
-          {{active-class agenda currentAgenda class="vlc-side-nav-item--active"
-          }}"
-      >
-        <a {{action "setCurrentAgenda" agenda}}>
-          <div class="vlc-side-nav-item__label">
-            <span>
-              {{agenda.agendaName}}
-            </span>
-          </div>
-          <div class="vlc-side-nav-item__meta">
-            {{moment-format agenda.modified "dddd DD/MM/YYYY"}}
-          </div>
-          <div class="vlc-side-nav-item__meta--small">
-            <h3 class="vl-title vl-title--h6">
-              {{#if (not-eq agenda.name "Ontwerpagenda")}}
-                {{agenda.name}}
-              {{else}}
-                *
-              {{/if}}
-            </h3>
-            {{moment-format agenda.modified "DD/MM"}}
-          </div>
-        </a>
-      </li>
-    {{/each}}
-  </ul>
 </nav>

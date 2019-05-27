@@ -7,7 +7,7 @@ export default Component.extend({
 	store: inject(),
 
 	item: computed('mandateeToEdit', function () {
-		return this.get('caseToEdit');
+		return this.get('mandateeToEdit');
 	}),
 
 	startDate: computed('mandateeToEdit', function () {

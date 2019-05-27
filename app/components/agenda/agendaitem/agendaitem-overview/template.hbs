@@ -3,15 +3,13 @@
     <div
       class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom"
     >
-      {{#if (not agendaitem.showAsRemark)}}
-        <div class="vl-tabs__wrapper">
-          {{agenda/agendaitem/agendaitem-nav
-            agendaitem=agendaitem
-            activeAgendaItemSection=activeAgendaItemSection
-            setAgendaItemSection=(action "setAgendaItemSection")
-          }}
-        </div>
-      {{/if}}
+      <div class="vl-tabs__wrapper">
+        {{agenda/agendaitem/agendaitem-nav
+          agendaitem=agendaitem
+          activeAgendaItemSection=activeAgendaItemSection
+          setAgendaItemSection=(action "setAgendaItemSection")
+        }}
+      </div>
     </div>
   </div>
   <div class="vlc-scroll-wrapper__body">
@@ -75,26 +73,28 @@
           {{else if (eq activeAgendaItemSection "press-agenda")}}
             {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "decision")}}
-            <div class="vl-u-display-flex vl-u-flex-space-between">
-              <h3 class="vl-title vl-title--h3">
-                {{t "decision-title"}}
-              </h3>
-            </div>
-            <div class="vl-action-group vl-action-group--align-left">
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow"
-                {{action "addDecision"}}
-              >
-                {{t "add-decision"}}
-              </button>
-            </div>
-            {{#each (await agendaitem.decisions) as |decision|}}
-              {{agenda/agendaitem/agendaitem-decision
-                subcase=(await subcase)
-                decision=decision
-                agendaitem=agendaitem
-              }}
-            {{/each}}
+            {{#if (or isEditor isAdmin)}}
+              <div class="vl-u-display-flex vl-u-flex-space-between">
+                <h3 class="vl-title vl-title--h3">
+                  {{t "decision-title"}}
+                </h3>
+              </div>
+              <div class="vl-action-group vl-action-group--align-left">
+                <button
+                  class="vl-button vl-button--tertiary vl-button--narrow"
+                  {{action "addDecision"}}
+                >
+                  {{t "add-decision"}}
+                </button>
+              </div>
+              {{#each (await agendaitem.decisions) as |decision|}}
+                {{agenda/agendaitem/agendaitem-decision
+                  subcase=(await subcase)
+                  decision=decision
+                  agendaitem=agendaitem
+                }}
+              {{/each}}
+            {{/if}}
           {{else if (eq activeAgendaItemSection "news-item")}}
             {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "minutes")}}
