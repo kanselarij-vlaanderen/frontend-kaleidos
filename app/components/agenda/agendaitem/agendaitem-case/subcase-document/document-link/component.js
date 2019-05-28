@@ -11,6 +11,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	uploadedFile: null,
 	fileName: null,
 	isEditing: false,
+	isShowingDocumentVersionViewer: false,
 
 	numberVr: computed('document.numberVr', function () {
 		return this.get('document.numberVr')
@@ -86,6 +87,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			document.save().then(() => {
 				this.toggleProperty('isEditing');
 			});
+		},
+
+		showDocumentVersionViewer(documentVersion) {
+			this.set('documentVersionToShow', documentVersion)
+			this.toggleProperty('isShowingDocumentVersionViewer');
 		}
 	},
 

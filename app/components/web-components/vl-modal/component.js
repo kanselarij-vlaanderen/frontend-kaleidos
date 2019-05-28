@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 export default Component.extend({
 	isOverlay: null,
 	large: false,
+	isDocumentViewer: null,
 
 	backdropClass: computed('isOverlay', function() {
 		const { isOverlay} = this;
@@ -12,10 +13,13 @@ export default Component.extend({
 		}
 	}),
 
-	sizeClass: computed('large', function() {
-		const { large } = this;
+	sizeClass: computed('large', 'isDocumentViewer', function() {
+		const { large,isDocumentViewer } = this;
 		if(large) {
 			return "vl-modal-dialog--large";
+		}
+		if(isDocumentViewer) {
+			return "vl-modal-dialog full-height";
 		}
 	}),
 
