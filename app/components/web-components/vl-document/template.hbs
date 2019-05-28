@@ -16,6 +16,15 @@
       {{t "download"}}
     </span>
   </button>
+  <button
+    class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+    {{action "showDocumentVersionViewer" documentVersion}}
+  >
+    <i class="vl-vi vl-vi-file-copy vl-button__icon" aria-hidden="true"></i>
+    <span class="vl-u-visually-hidden">
+      {{t "download"}}
+    </span>
+  </button>
 </div>
 <div class="vlc-document-card-item__meta">
   {{t "uploaded-at"}}
@@ -29,3 +38,15 @@
     aria-hidden="true"
   ></span>
 </div>
+{{#if isShowingDocumentVersionViewer}}
+  {{#web-components/vl-modal
+    closeModal=(action "showDocumentVersionViewer")
+    isOverlay=true
+    isDocumentViewer=true
+    title=(await documentVersionToShow.nameToDisplay)
+  }}
+    <div class="vl-modal-dialog__content full-height">
+      {{kaleidos-viewer documentVersion=(await documentVersionToShow)}}
+    </div>
+  {{/web-components/vl-modal}}
+{{/if}}

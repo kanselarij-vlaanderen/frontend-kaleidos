@@ -445,6 +445,16 @@ a.vlc-agenda-items-new__sub-item--active:focus {
   width: 80rem;
 }
 
+.vl-modal-dialog__content.full-height {
+  > .ember-view {
+    height: 100% !important;
+  }
+}
+
+.full-height {
+  height: 95% !important;
+}
+
 .vl-modal {
   .vl-modal__backdrop {
     z-index: 52;
