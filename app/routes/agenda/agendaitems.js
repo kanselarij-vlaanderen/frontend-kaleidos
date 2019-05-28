@@ -18,7 +18,7 @@ export default Route.extend({
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
 			include: 'subcase.mandatees,subcase',
-			page: { 'size': 300 }
+			page: { 'size': 250 }
 		}
 		if (params.filter) {
 			filterOptions['filter']['subcase'] = { 'short-title': params.filter };
@@ -27,7 +27,7 @@ export default Route.extend({
 		const agendaitems = await this.store.query('agendaitem', filterOptions);
 		const announcements = agendaitems.filter((item) => item.showAsRemark);
 
-		const groups = await this.reduceGroups(agendaitems, agenda);
+		const groups = await this.reduceGroups(agendaitems, agenda.get('id'));
 
 		return hash({
 			agendaitems: agendaitems,
@@ -36,51 +36,36 @@ export default Route.extend({
 		});
 	},
 
-	async reduceGroups(agendaitems, agenda) {
+	async reduceGroups(agendaitems, currentAgendaID) {
 		const { agendaService } = this;
-		// const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
-		const itemsAddedAfterwards = [];
+		const session = this.modelFor('agenda');
+		const agendaitemsFilteredPerAgenda = await this.agendaService.newSorting(session, currentAgendaID);
 
-		let filteredAgendaItems = await agendaitems.filter(agendaitem => {
+		const filteredAgendaItems = await agendaitems.filter(agendaitem => {
 			if (agendaitem && agendaitem.id) {
-
-				if (!agendaitem.showAsRemark) {
-					if (agendaitem.priority) {
-						// const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
-						// if (foundItem) {
-
+				const foundItem = agendaitemsFilteredPerAgenda.find(item => item.subcaseId === agendaitem.get('subcase.id'));
+				if (foundItem) {
+					if (!agendaitem.showAsRemark) {
+						agendaitem.set('agendaName', foundItem.agendaName);
 						agendaitem.set('foundPriority', agendaitem.priority);
 						return agendaitem;
-					} else {
-						itemsAddedAfterwards.push(agendaitem);
 					}
 				}
-
 			}
 		});
 
-		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
+		const agendaitemsPerAgenda = filteredAgendaItems.reduce((items, item) => {
+			items[item.agendaName] = items[item.agendaName] || { agendaitems: [] };
+			items[item.agendaName].agendaitems.push(item);
+			return items;
+		}, {})
 
-		const filteredAgendaGroupListAddedAfterwards = Object.values(await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards));
-		let sortedAgendaGroupList = [];
-		let sortedAgendaGroupListAddedAfterwards = [];
+		const keys = Object.keys(agendaitemsPerAgenda);
+		const result = await Promise.all(keys.map(async (agenda) => {
+			return Object.values(await agendaService.reduceAgendaitemsByMandatees(agendaitemsPerAgenda[agenda].agendaitems.sortBy('priority')));
+		}));
 
-		if (filteredAgendaGroupList) {
-			sortedAgendaGroupList = filteredAgendaGroupList.sortBy('foundPriority')
-		} else {
-			sortedAgendaGroupList = filteredAgendaGroupList;
-		}
-
-		if (filteredAgendaGroupList) {
-			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards.sortBy('foundPriority')
-		} else {
-			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards;
-		}
-
-		return [
-			sortedAgendaGroupList,
-			sortedAgendaGroupListAddedAfterwards
-		];
+		return result;
 	},
 
 	actions: {
