@@ -84,15 +84,14 @@ export default Service.extend({
 		});
 	},
 
-	newSorting(sessionId) {
+	newSorting(sessionId, currentAgendaID) {
 		return $.ajax(
 			{
 				method: "GET",
-				url: `/agenda-sort/new-filtering?sessionId=${sessionId.get('id')}`,
+				url: `/agenda-sort/new-filtering?sessionId=${sessionId.get('id')}&selectedAgenda=${currentAgendaID}`,
 				data: {}
 			}
 		).then((result) => {
-			console.log(result)
 			return result;
 		});
 	},
