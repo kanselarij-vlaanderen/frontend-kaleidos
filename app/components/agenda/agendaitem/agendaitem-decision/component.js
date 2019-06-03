@@ -9,6 +9,8 @@ export default Component.extend(isAuthenticatedMixin, {
 	isEditing: false,
 	agendaitem: null,
 	subcase: null,
+	isVerifyingDelete: null,
+	decisionToDelete: null,
 
 	item: computed('subcase.decision', function () {
 		return this.get('subcase.decision');
@@ -35,5 +37,21 @@ export default Component.extend(isAuthenticatedMixin, {
 			}
 			this.toggleProperty('isEditing');
 		},
+
+		async deleteDecision(decision) {
+			this.set('decisionToDelete', await decision);
+			this.set('isVerifyingDelete', true);
+		},
+
+		async verify() {
+			await this.decisionToDelete.destroyRecord();
+			this.set('isVerifyingDelete', true);
+		},
+
+		cancel() {
+			this.set('decisionToDelete', null);
+			this.set('isVerifyingDelete', false);
+
+		}
 	}
 });
