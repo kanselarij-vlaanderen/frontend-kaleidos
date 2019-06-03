@@ -36,6 +36,7 @@ export default Component.extend({
 					fieldToClear.set('selected', false)
 				});
 			}
+
 			this.set('selectedMandatee', mandatee);
 
 			this.set('rowToShow', await this.refreshData(mandatee));

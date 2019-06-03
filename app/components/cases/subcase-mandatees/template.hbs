@@ -1,4 +1,4 @@
-{{#if (not isAdding)}}
+{{#if (and (not isEditingMandateeRow) (not isAdding))}}
   <div class="vl-u-spacer-extended-bottom-l">
     <table class="vl-data-table vl-data-table--align-middle">
       <thead>
@@ -30,6 +30,15 @@
             <td class="vl-u-align-right vl-u-flex-align-center">
               <button
                 class="vl-button vl-button--link vl-button--icon"
+                {{action "editRow" mandateeRow}}
+              >
+                <i class="vl-vi vl-vi-pencil" aria-hidden="true"></i>
+                <span class="vl-u-visually-hidden">
+                  {{t "edit"}}
+                </span>
+              </button>
+              <button
+                class="vl-button vl-button--link vl-button--icon"
                 {{action "deleteRow" mandateeRow}}
               >
                 <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
@@ -43,8 +52,16 @@
       </tbody>
     </table>
   </div>
-{{else}}
+{{else if isAdding}}
   {{utils/add-minister-modal
+    cancel=(action "cancel")
+    addMandatee=(action "createMandateeRow")
+  }}
+{{else if isEditingMandateeRow}}
+  {{utils/edit-minister-modal
+    isEditingMandateeRow=isEditingMandateeRow
+    rowToShow=selectedMandateeRow
+    selectedMandatee=(await selectedMandateeRow.mandatee)
     cancel=(action "cancel")
     addMandatee=(action "createMandateeRow")
   }}

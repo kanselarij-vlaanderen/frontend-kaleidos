@@ -17,7 +17,7 @@ export default Mixin.create({
 
 	items: computed('modelName', async function () {
 		const { modelName, searchField } = this;
-		return this.store.query(modelName,
+		return this.store.findAll(modelName,
 			{
 				sort: searchField,
 				page: { size: 50 }
@@ -44,7 +44,7 @@ export default Mixin.create({
 		resetValueIfEmpty(param) {
 			if (param == "") {
 				const modelName = this.get('modelName');
-				this.set('items', this.store.peekAll(modelName));
+				this.set('items', this.store.findAll(modelName));
 			}
 		}
 	},

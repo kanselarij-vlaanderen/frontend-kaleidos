@@ -7,6 +7,8 @@ export default Component.extend({
 	selectedMandatee: null,
 	classNames: ["vlc-input-field-block"],
 	isAdding: false,
+	isEditingMandateeRow: false,
+
 	actions: {
 		async createMandateeRow(selectedMandatee, domains, fields, codes) {
 			const mandateeRows = await this.get('mandateeRows');
@@ -15,11 +17,8 @@ export default Component.extend({
 			const fieldsToShow = fields.map((field) => field.get('label')).join(', ');
 			mandateeRows.addObject(EmberObject.create(
 				{
-					fieldsToShow,
-					domainsToShow,
+					fieldsToShow, domainsToShow, domains, fields,
 					mandatee: selectedMandatee,
-					domains: domains,
-					fields: fields,
 					iseCodes: codes,
 				}))
 		},
@@ -31,6 +30,11 @@ export default Component.extend({
 		async deleteRow(mandateeRow) {
 			const mandateeRows = await this.get('mandateeRows');
 			mandateeRows.removeObject(mandateeRow);
+		},
+
+		async editRow(mandateeRow) {
+			this.set('selectedMandateeRow', await mandateeRow);
+			this.set('isEditingMandateeRow', true);
 		},
 	},
 });
