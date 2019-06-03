@@ -23,7 +23,6 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <div class="vl-u-spacer-extended-bottom-s">
-        {{log (await subcase)}}
         {{#if (not (is-pending subcase))}}
           {{#if (or isAdmin isEditor)}}
             {{#link-to

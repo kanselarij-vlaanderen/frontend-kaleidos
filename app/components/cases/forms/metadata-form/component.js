@@ -19,10 +19,6 @@ export default Component.extend({
   }),
 
   actions: {
-    typeChanged(type) {
-      this.typeChanged(type);
-    },
-
     chooseType(type) {
       this.subcaseTypeChanged(type);
     },

@@ -31,17 +31,10 @@
         <div class="vl-accordion__panel">
           <div class="vl-typography">
             <ul>
-              {{log (await fields)}}
               {{#each fields as |field|}}
-                {{!-- {{#if
-                  (check-mandatees-of-domain
-                    domainMandatees=domain.mandatees mandatee=mandatee
-                  )
-                }} --}}
                 <li>
                   {{field.label}}
                 </li>
-                {{!-- {{/if}} --}}
               {{/each}}
             </ul>
           </div>

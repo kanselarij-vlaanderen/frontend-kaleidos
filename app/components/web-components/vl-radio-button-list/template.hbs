@@ -1,36 +1,32 @@
 <div class="vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "public")}}
-  {{web-components/vl-toggle value=confidential}}
-</div>
-<div class="vlc-input-field-block">
   <label class="vl-form__label vl-u-display-block">
-    {{t "case-level"}}
+    {{title}}
   </label>
   <div class="vlc-radio-inline">
-    {{#each policyLevels as |policyLevel index|}}
+    {{#each model as |item index|}}
       <label class="vl-radio">
         {{#if (is-equal index 0)}}
           <input
             class="vl-radio__toggle"
-            value={{policyLevel.id}}
+            value={{item.id}}
             type="radio"
-            name="typeId"
+            name={{title}}
             checked=""
-            onchange={{action "policyLevelChanged"}}
+            onchange={{action "modelChanged"}}
            />
 
         {{else}}
           <input
             class="vl-radio__toggle"
-            value={{policyLevel.id}}
+            value={{item.id}}
             type="radio"
-            name="typeId"
-            onchange={{action "policyLevelChanged"}}
+            name={{title}}
+            onchange={{action "modelChanged"}}
            />
 
         {{/if}}
         <div class="vl-radio__label">
-          {{policyLevel.label}}
+          {{item.label}}
         </div>
       </label>
     {{/each}}

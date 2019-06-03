@@ -24,7 +24,7 @@
 	"agenda-notes": "Notulen van",
 	"agenda-of": "Agenda van",
 	"agenda-title": "Agenda's",
-	"agenda-unlock": "Agenda unlocken",
+	"agenda-unlock": "Agenda heropenen",
 	"agenda-version": "Agenda versie",
 	"agendaitem-bestek": "Kort bestek",
 	"agendaitem-case": "Dossier",
@@ -293,5 +293,6 @@
 	"cases-oc": "Overlegcomité",
 	"newsletter-for-meeting-of": "Nieuwsbrief voor de ministerraad van",
 	"dash": "-",
-	"show-document-version": "Viewer"
+	"show-document-version": "Viewer",
+	"status": "Status"
 }

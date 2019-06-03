@@ -1,7 +1,5 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { computed } from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend({
   title: null,
@@ -9,12 +7,9 @@ export default Component.extend({
   confidential: false,
   store: inject(),
 
-  selectedPolicyLevel: computed('store', function () {
-    return this.store.findRecord('policy-level', CONFIG.VRCaseTypeID);
-  }),
-
   createCase(newDate) {
     const { title, shortTitle, type, selectedPolicyLevel, selectedMeeting, submitter, confidential } = this;
+
     return this.store.createRecord('case',
       {
         title, shortTitle, submitter, type, confidential,
@@ -40,17 +35,14 @@ export default Component.extend({
       this.set('selectedThemes', theme);
     },
 
-    async policyLevelChanged(id) {
-      const policyLevel = this.store.peekRecord('policy-level', id)
+    policyLevelChanged(id) {
+      const policyLevel = this.store.peekRecord('policy-level', id);
       this.set('selectedPolicyLevel', policyLevel);
     },
 
-    typeChanged(type) {
+    typeChanged(id) {
+      const type = this.store.peekRecord('case-type', id);
       this.set('type', type);
-    },
-
-    subcaseTypeChanged(subcaseType) {
-      this.set('subcaseType', subcaseType);
     },
 
     statusChange(status) {

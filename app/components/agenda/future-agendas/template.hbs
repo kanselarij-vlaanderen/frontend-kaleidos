@@ -5,7 +5,7 @@
   <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
     <thead>
       <tr>
-        <th class="vl-data-table-col-5 vl-data-table__header-title">
+        <th class="vl-data-table-col-4 vl-data-table__header-title">
           <a
             class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
             href="#"
@@ -17,11 +17,20 @@
             </div>
           </a>
         </th>
-        <th class="vl-data-table-col-3 vl-data-table__header-title">
+        <th class="vl-data-table-col-2 vl-data-table__header-title">
           <a
-            class="vl-data-table__header-title--sortable"
+            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
             href="#"
           >
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "status"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col-3 vl-data-table__header-title">
+          <a class="vl-data-table__header-title--sortable" href="#">
             <div class="vl-u-display-flex vl-u-flex-align-center">
               <span>
                 {{t "agenda-version"}}
@@ -53,10 +62,20 @@
             {{moment-format futureMeeting.plannedStart "DD.MM.YYYY"}}
           </td>
           <td>
+            {{#if futureMeeting.isFinal}}
+              Afgesloten
+            {{else}}
+              Geopend
+            {{/if}}
+          </td>
+          <td>
             {{await futureMeeting.latestAgendaName}}
           </td>
           <td>
-            {{moment-format (await futureMeeting.latestAgenda.modified) "DD-MM-YYYY HH:mm"}}
+            {{moment-format
+              (await futureMeeting.latestAgenda.modified)
+              "DD-MM-YYYY HH:mm"
+            }}
           </td>
           <td class="vl-u-align-center">
             <button
@@ -71,5 +90,3 @@
     </tbody>
   </table>
 {{/if}}
-
-

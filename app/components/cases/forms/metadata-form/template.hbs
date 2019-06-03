@@ -2,20 +2,7 @@
   {{web-components/vl-form-label value=(t "short-title-case")}}
   {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
 </div>
-{{#if (not isOC)}}
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "case-type")}}
-    {{utils/model-selector
-      modelName="case-type"
-      searchField="label"
-      propertyToShow="label"
-      multiSelect=false
-      sortField="label"
-      selectedItems=type
-      selectModel=(action "typeChanged")
-    }}
-  </div>
-{{else}}
+{{#if isOC}}
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "select-meeting")}}
     {{web-components/vl-datepicker
