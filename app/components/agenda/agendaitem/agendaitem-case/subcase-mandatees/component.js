@@ -34,6 +34,19 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 			})
 	},
 
+	async getIseCodesOfMandatee(iseCodes, mandatee) {
+		const iseCodesOfMandatee = await mandatee.get('iseCodes');
+		return iseCodes.filter((iseCodeOfMandatee) => {
+			const foundIseCode = iseCodesOfMandatee.find((iseCode) => iseCode.get('id') === iseCodeOfMandatee.get('id'));
+
+			if (foundIseCode) {
+				return true;
+			} else {
+				return false
+			}
+		})
+	},
+
 	async constructMandateeRows() {
 		const { isAgendaItem } = this;
 		let item;
@@ -46,8 +59,9 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		const iseCodes = await item.get('iseCodes');
 		const mandatees = await item.get('mandatees');
 
-		return Promise.all(mandatees.map((mandatee) => {
-			return this.createMandateeRow(mandatee, iseCodes);
+		return Promise.all(mandatees.map(async (mandatee) => {
+			const filteredIseCodes = await this.getIseCodesOfMandatee(iseCodes, mandatee);
+			return this.createMandateeRow(mandatee, filteredIseCodes);
 		}))
 	},
 

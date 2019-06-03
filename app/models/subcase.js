@@ -28,7 +28,7 @@ export default Model.extend({
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version', { inverse: null }),
   themes: hasMany('theme'),
-  mandatees: hasMany('mandatee'),
+  mandatees: hasMany('mandatee', { inverse: null }),
   approvals: hasMany('approval', { serialize: false }),
   decisions: hasMany('decision', { inverse: null }),
 

@@ -22,10 +22,10 @@
               {{await mandateeRow.mandatee.person.alternativeName}}
             </td>
             <td>
-              {{mandateeRow.domainsToShow}}
+              {{await mandateeRow.domainsToShow}}
             </td>
             <td>
-              {{mandateeRow.fieldsToShow}}
+              {{await mandateeRow.fieldsToShow}}
             </td>
             <td class="vl-u-align-right vl-u-flex-align-center">
               <button
@@ -55,14 +55,13 @@
 {{else if isAdding}}
   {{utils/add-minister-modal
     cancel=(action "cancel")
-    addMandatee=(action "createMandateeRow")
+    saveChanges=(action "saveChanges")
   }}
 {{else if isEditingMandateeRow}}
   {{utils/edit-minister-modal
-    isEditingMandateeRow=isEditingMandateeRow
-    rowToShow=selectedMandateeRow
-    selectedMandatee=(await selectedMandateeRow.mandatee)
+    rowToShow=rowToShow
+    selectedMandatee=rowToShow.mandatee
     cancel=(action "cancel")
-    addMandatee=(action "createMandateeRow")
+    saveChanges=(action "saveChanges")
   }}
 {{/if}}

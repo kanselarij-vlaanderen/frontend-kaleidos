@@ -2,6 +2,7 @@
   {{#power-select-multiple
     options=filteredMandatees
     selected=selectedMandatees
+    disabled=readOnly
     search=(perform searchTheme)
     oninput=(action "resetValueIfEmpty")
     onchange=(action "chooseMandatee") as |mandatee|
@@ -12,6 +13,7 @@
   {{#power-select
     options=filteredMandatees
     selected=selectedMandatees
+    disabled=readOnly
     search=(perform searchTheme)
     oninput=(action "resetValueIfEmpty")
     onchange=(action "chooseMandatee") as |mandatee|

@@ -7,11 +7,12 @@
     <div class="vl-u-spacer-extended-bottom-l">
       {{utils/mandatee-selector
         singleSelect=true
+        readOnly=true
         selectedMandatees=selectedMandatee
         chooseMandatee=(action "mandateeSelected")
       }}
     </div>
-    {{#each rowToShow.domains as |domain|}}
+    {{#each (await rowToShow.domains) as |domain|}}
       <ul class="vlc-checkbox-tree">
         <li>
           {{web-components/vl-checkbox
@@ -20,7 +21,7 @@
             toggle=(action "selectDomain" domain)
           }}
           <ul>
-            {{#each rowToShow.fields as |field|}}
+            {{#each (await rowToShow.fields) as |field|}}
               {{#if (eq (await field.domain.id) domain.id)}}
                 <li>
                   {{web-components/vl-checkbox
@@ -41,8 +42,8 @@
   {{web-components/vl-modal-footer
     nonBordered=true
     cancelButtonText=(t "cancel")
-    saveButtonText=(t "add")
+    saveButtonText=(t "edit")
     cancelAction=(action "cancel")
-    saveAction=(action "addMandatee")
+    saveAction=(action "saveChanges")
   }}
 {{/web-components/vl-modal}}
