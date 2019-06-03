@@ -5,15 +5,15 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
 	store: inject(),
-	currentSession: null, 	
+	currentSession: null,
 
-	sortedSessions: computed.sort('sessions', function(a, b) {
+	sortedSessions: computed.sort('sessions', function (a, b) {
 		if (a.plannedStart > b.plannedStart) {
-      return 1;
-    } else if (a.plannedStart < b.plannedStart) {
-      return -1;
-    }
-    return 0;
+			return 1;
+		} else if (a.plannedStart < b.plannedStart) {
+			return -1;
+		}
+		return 0;
 	}),
 
 	searchTask: task(function* (searchValue) {
@@ -32,7 +32,7 @@ export default Component.extend({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				this.set('sessions', this.store.query('meeting', {}));
+				this.set('sessions', this.store.findAll('meeting', {}));
 			}
 		},
 	},
@@ -43,7 +43,7 @@ export default Component.extend({
 	},
 
 	async loadSessions() {
-		const sessions = await this.store.query('meeting', {
+		const sessions = await this.store.findAll('meeting', {
 			sort: "number"
 		});
 		this.set('sessions', sessions);

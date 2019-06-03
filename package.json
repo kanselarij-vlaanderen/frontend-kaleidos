@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
+    "kaleidos-viewer": "git+https://github.com/kanselarij-vlaanderen/kaleidos-viewer.git",
     "@ember/optional-features": "^0.6.3",
     "@lblod/ember-acmidm-login": "github:lblod/ember-acmidm-login",
     "@lblod/ember-mock-login": "github:lblod/ember-mock-login",

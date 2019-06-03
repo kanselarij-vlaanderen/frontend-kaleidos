@@ -1,4 +1,4 @@
-{{#if (not isAdding)}}
+{{#if (and (not isEditingMandateeRow) (not isAdding))}}
   <div class="vl-u-spacer-extended-bottom-l">
     <table class="vl-data-table vl-data-table--align-middle">
       <thead>
@@ -22,12 +22,21 @@
               {{await mandateeRow.mandatee.person.alternativeName}}
             </td>
             <td>
-              {{mandateeRow.domainsToShow}}
+              {{await mandateeRow.domainsToShow}}
             </td>
             <td>
-              {{mandateeRow.fieldsToShow}}
+              {{await mandateeRow.fieldsToShow}}
             </td>
             <td class="vl-u-align-right vl-u-flex-align-center">
+              <button
+                class="vl-button vl-button--link vl-button--icon"
+                {{action "editRow" mandateeRow}}
+              >
+                <i class="vl-vi vl-vi-pencil" aria-hidden="true"></i>
+                <span class="vl-u-visually-hidden">
+                  {{t "edit"}}
+                </span>
+              </button>
               <button
                 class="vl-button vl-button--link vl-button--icon"
                 {{action "deleteRow" mandateeRow}}
@@ -43,9 +52,16 @@
       </tbody>
     </table>
   </div>
-{{else}}
+{{else if isAdding}}
   {{utils/add-minister-modal
     cancel=(action "cancel")
-    addMandatee=(action "createMandateeRow")
+    saveChanges=(action "saveChanges")
+  }}
+{{else if isEditingMandateeRow}}
+  {{utils/edit-minister-modal
+    rowToShow=rowToShow
+    selectedMandatee=rowToShow.mandatee
+    cancel=(action "cancel")
+    saveChanges=(action "saveChanges")
   }}
 {{/if}}

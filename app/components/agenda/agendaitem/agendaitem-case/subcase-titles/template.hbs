@@ -41,13 +41,25 @@
 {{#if (not (await item.isOC))}}
   {{#if (not item.showAsRemark)}}
     <div class="vl-u-spacer-extended-bottom-s">
-      <span class="vl-pill vl-pill--warning">
-        {{#if (await item.subcase)}}
-          {{await item.subcase.subcaseName}}
+      {{#if (await item.subcase)}}
+        {{#if (await item.subcase.approved)}}
+          <span class="vl-pill vl-pill--success">
+            {{await item.subcase.subcaseName}}
+          </span>
         {{else}}
-          {{await item.subcaseName}}
+          <span class="vl-pill vl-pill--warning">
+            {{await item.subcase.subcaseName}}
+          </span>
         {{/if}}
-      </span>
+      {{else if (await item.approved)}}
+        <span class="vl-pill vl-pill--success">
+          {{await item.subcaseName}}
+        </span>
+      {{else}}
+        <span class="vl-pill vl-pill--warning">
+          {{await item.subcaseName}}
+        </span>
+      {{/if}}
       {{#if item.confidential}}
         <span class="vl-pill vl-pill--warning">
           {{t "public"}}

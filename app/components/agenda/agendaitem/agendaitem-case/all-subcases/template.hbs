@@ -1,0 +1,39 @@
+<div class="vl-u-spacer-extended-bottom-s">
+  <div class="vl-u-display-flex vl-u-flex-align-baseline">
+    <h4 class="vl-title vl-title--h4">
+      {{t "subcases"}}
+    </h4>
+  </div>
+</div>
+{{#each subcases as |subcase|}}
+  {{#subcases/subcase-item subcase=(await subcase)}}
+    <hr class="vlc-hr" />
+    <div class="vl-u-spacer-extended-bottom">
+      <p>
+        {{subcase.title}}
+      </p>
+    </div>
+    <ul class="vlc-document-list">
+      {{#each (await subcase.documents) as |document|}}
+        <li class="vlc-document-list__item">
+          <a {{action "downloadFile" (await document.lastDocumentVersion)}}>
+            <div
+              class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
+            >
+              <i
+                class="vl-badge__icon vl-vi vl-vi-document"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <p>
+              {{document-name
+                documentVersion=(await document.lastDocumentVersion)
+                item=subcase
+              }}
+            </p>
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  {{/subcases/subcase-item}}
+{{/each}}

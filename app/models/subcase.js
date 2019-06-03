@@ -28,7 +28,7 @@ export default Model.extend({
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version', { inverse: null }),
   themes: hasMany('theme'),
-  mandatees: hasMany('mandatee'),
+  mandatees: hasMany('mandatee', { inverse: null }),
   approvals: hasMany('approval', { serialize: false }),
   decisions: hasMany('decision', { inverse: null }),
 
@@ -199,6 +199,16 @@ export default Model.extend({
         } else {
           return true;
         }
+      })
+    })
+  }),
+
+  subcasesFromCase: computed('case.subcases.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('case').then((caze) => {
+        return caze.get('subcases').then((subcases) => {
+          return subcases;
+        });
       })
     })
   })

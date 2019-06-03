@@ -1,5 +1,5 @@
 import DS from 'ember-data';
-
+import { computed } from '@ember/object';
 const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
@@ -9,5 +9,14 @@ export default Model.extend({
 	mandatees: hasMany('mandatee', { inverse: null }),
 	birth: belongsTo('birth'),
 	mandatee: belongsTo('mandatee', { inverse: null }),
-	gender: belongsTo('gender')
+	gender: belongsTo('gender'),
+
+	nameToDisplay: computed('alternativeName', 'firstName', 'lastName', function () {
+		const { alternativeName, firstName, lastName } = this;
+		if (alternativeName) {
+			return alternativeName;
+		} else {
+			return firstName + " " + lastName;
+		}
+	})
 });

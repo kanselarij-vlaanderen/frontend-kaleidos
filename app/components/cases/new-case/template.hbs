@@ -1,17 +1,28 @@
 <form onsubmit={{action "createCase"}}>
   <div class="vl-modal-dialog__content">
-    {{cases/case-levels
-      selectedPolicyLevel=selectedPolicyLevel
-      confidential=confidential
-      policyLevelChanged=(action "policyLevelChanged")
+    <div class="vl-u-spacer">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "public")}}
+        {{web-components/vl-toggle value=confidential}}
+      </div>
+    </div>
+    {{web-components/vl-radio-button-list
+      title=(t "case-level")
+      modelName="policy-level"
+      selectedModel=selectedPolicyLevel
+      modelChanged=(action "policyLevelChanged")
+    }}
+    {{web-components/vl-radio-button-list
+      title=(t "case-type")
+      modelName="case-type"
+      selectedModel=type
+      modelChanged=(action "typeChanged")
     }}
     {{cases/forms/metadata-form
-      type=type
       submitter=submitter
       meeting=meeting
       shortTitle=shortTitle
       selectedPolicyLevel=selectedPolicyLevel
-      typeChanged=(action "typeChanged")
       selectedMeetingChanged=(action "selectedMeetingChanged")
       submitterChanged=(action "submitterChanged")
     }}

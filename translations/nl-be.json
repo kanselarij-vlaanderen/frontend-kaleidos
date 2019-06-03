@@ -7,6 +7,7 @@
 	"add-comment": "Opmerking toevoegen",
 	"add-decision": "Voeg beslissing toe",
 	"add-minister": "Minister toevoegen",
+	"edit-minister": "Minister aanpassen",
 	"add-news-item": "Voeg kort bestek toe",
 	"add-notes": "Notulen toevoegen",
 	"add-people": "Bevoegde persoon toevoegen",
@@ -24,7 +25,7 @@
 	"agenda-notes": "Notulen van",
 	"agenda-of": "Agenda van",
 	"agenda-title": "Agenda's",
-	"agenda-unlock": "Agenda unlocken",
+	"agenda-unlock": "Agenda heropenen",
 	"agenda-version": "Agenda versie",
 	"agendaitem-bestek": "Kort bestek",
 	"agendaitem-case": "Dossier",
@@ -84,6 +85,8 @@
 	"decisions-of": "Beslissingen van de Vlaamse Regering - ministerraad van ",
 	"decisions-pdf-name": "BeslissingenVlaamseRegering_",
 	"delete": "Verwijderen",
+	"delete-decision": "Beslissing verwijderen",
+	"delete-decision-message": "Bent u zeker dat u de beslissing wil verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
 	"detail": "Detail",
 	"document-add": "Documenten toevoegen",
 	"document-number": "Nummer Document",
@@ -290,5 +293,7 @@
 	"submitter-title": "Indiener: ",
 	"cases-oc": "Overlegcomité",
 	"newsletter-for-meeting-of": "Nieuwsbrief voor de ministerraad van",
-	"dash": "-"
+	"dash": "-",
+	"show-document-version": "Viewer",
+	"status": "Status"
 }

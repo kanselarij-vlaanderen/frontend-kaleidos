@@ -138,6 +138,15 @@
     </div>
   {{/if}}
 </div>
+{{#if isShowingDocumentVersionViewer}}
+  {{#web-components/vl-modal
+    closeModal=(action "closeModal")
+    isOverlay=true
+    title=(t "new-document-version")
+  }}
+    {{kaleidos-viewer documentVersion=documentVersionToShow}}
+  {{/web-components/vl-modal}}
+{{/if}}
 {{#if isUploadingNewVersion}}
   {{#web-components/vl-modal
     closeModal=(action "openUploadDialog")

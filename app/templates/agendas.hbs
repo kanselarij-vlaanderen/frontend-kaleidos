@@ -76,10 +76,16 @@
           {{#t.content as |c|}}
             {{#c.header}}
               {{th-sortable
-                class="vl-data-table-col-5 vl-data-table__header-title"
+                class="vl-data-table-col-4 vl-data-table__header-title"
                 currentSorting=sort
                 field="planned-start"
                 label="Agenda"
+              }}
+              {{th-sortable
+                class="vl-data-table-col-2 vl-data-table__header-title"
+                currentSorting=sort
+                field="is-final"
+                label="Status"
               }}
               {{th-sortable
                 class="vl-data-table-col-3 vl-data-table__header-title"
@@ -100,12 +106,20 @@
                 {{! Translate not possible in the data table }}
                 {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
               </td>
+              <td>
+                {{#if meeting.isFinal}}
+                  Afgesloten
+                {{else}}
+                  Geopend
+                {{/if}}
+              </td>
               <td {{action "selectAgenda" meeting}}>
                 {{await meeting.latestAgendaName}}
               </td>
               <td {{action "selectAgenda" meeting}}>
-                {{!-- {{await meeting.latestAgenda}} --}}
-                {{moment-format (await meeting.latestAgenda.modified) "DD-MM-YYYY HH:mm"
+                {{moment-format
+                  (await meeting.latestAgenda.modified)
+                  "DD-MM-YYYY HH:mm"
                 }}
               </td>
               <td class="vl-u-align-center">

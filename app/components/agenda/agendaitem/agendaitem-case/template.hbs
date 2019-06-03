@@ -41,4 +41,7 @@
   {{/if}}
   {{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
 {{/if}}
+{{#if (gt (await subcases.length) 1)}}
+  {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
+{{/if}}
 {{agenda/agendaitem/agendaitem-case/subcase-documents item=item}}

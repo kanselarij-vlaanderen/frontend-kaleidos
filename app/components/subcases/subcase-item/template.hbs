@@ -23,19 +23,22 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <div class="vl-u-spacer-extended-bottom-s">
-        {{#if (or isAdmin isEditor)}}
-          {{#link-to
-            "cases.case.subcases.subcase"
-            subcase.id
-            class="vl-title vl-title--h6 max-width"
-          }}
-            {{subcase.nameToShow}}
-          {{/link-to}}
-        {{else}}
-          <h6 class="vl-title vl-title--h6 max-width">
-            {{t "in-function-of"}}
-            {{await subcase.subcaseName}}
-          </h6>
+        {{#if (not (is-pending subcase))}}
+          {{#if (or isAdmin isEditor)}}
+            {{#link-to
+              "cases.case.subcases.subcase"
+              (await subcase.case.id)
+              (await subcase.id)
+              class="vl-title vl-title--h6 max-width"
+            }}
+              {{await subcase.nameToShow}}
+            {{/link-to}}
+          {{else}}
+            <h6 class="vl-title vl-title--h6 max-width">
+              {{t "in-function-of"}}
+              {{await subcase.subcaseName}}
+            </h6>
+          {{/if}}
         {{/if}}
       </div>
       <div class="vlc-procedure-step__meta">

@@ -19,11 +19,10 @@ export default Component.extend(UploadDocumentMixin, {
 
 		async uploadNewDocument() {
 			const item = await this.get('item');
-			const latestVersion = await item.get('latestDocumentVersion.versionNumber');
-			const file = await this.get('uploadedFiles.lastObject');
-			this.createNewDocumentVersion(file, null, latestVersion).then(() => {
-				item.hasMany('signedDocumentVersions').reload();
-				this.set('uploadedFiles', null);
+			this.set('isCreatingDocuments', true);
+			await this.uploadFiles(item).then(async () => {
+				// item.belongsTo('document').reload();
+				this.set('isCreatingDocuments', false);
 				this.toggleProperty('isAddingNewDocument');
 			});
 		}

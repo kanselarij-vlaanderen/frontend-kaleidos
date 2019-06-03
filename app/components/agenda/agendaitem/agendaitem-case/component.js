@@ -21,6 +21,10 @@ export default Component.extend(EditAgendaitemOrSubcase, {
     }
   }),
 
+  subcases: computed('item', function () {
+    return this.get('item.subcasesFromCase');
+  }),
+
   actions: {
     cancelEditing() {
       this.toggleProperty('isEditing');

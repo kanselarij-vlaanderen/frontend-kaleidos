@@ -1,7 +1,7 @@
 {{#if (not (is-pending (await item)))}}
   {{#if (not isEditing)}}
     <div class="vl-u-spacer vl-typography vl-form__group vl-u-bg-porcelain">
-      <div class="vl-u-display-flex vl-u-flex-space-between">
+      <div class="vl-u-display-flex align-right">
         <h4 class="vl-title vl-title--h6">
           {{await decision.title}}
         </h4>
@@ -9,6 +9,28 @@
           <a class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
+          <button class="vl-button vl-button--link vl-button--icon">
+            <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
+            {{#attach-popover
+              class="ember-attacher-popper"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom" as |attacher|
+            }}
+              <ul class="vl-popover__link-list">
+                <li class="vl-popover__link-list__item">
+                  <button
+                    class="vl-link color-red"
+                    {{action attacher.hide}}
+                    {{action "deleteDecision" decision}}
+                  >
+                    {{t "delete-decision"}}
+                  </button>
+                </li>
+              </ul>
+            {{/attach-popover}}
+          </button>
         {{/if}}
       </div>
       <p>
@@ -27,22 +49,24 @@
         {{/if}}
       </div>
     </div>
-    {{!-- {{#if (gt (await decision.documentVersions.length) 0)}}
-      <div class="vl-u-spacer">
-        <h4 class="vl-title vl-title--h6">
-          {{t "documents-attached-to"}}
-        </h4>
-        <div class="vl-u-spacer-extended-top-s">
-          {{utils/documents-list-for-item item=item agendaitem=subcase}}
+    {{#if (or isEditor isAdmin)}}
+      {{#if (gt (await decision.documentVersions.length) 0)}}
+        <div class="vl-u-spacer">
+          <h4 class="vl-title vl-title--h6">
+            {{t "documents-attached-to"}}
+          </h4>
+          <div class="vl-u-spacer-extended-top-s">
+            {{utils/documents-list-for-item item=item agendaitem=subcase}}
+          </div>
         </div>
-      </div>
+      {{/if}}
+      <div class="vlc-hr"></div>
+      {{utils/add-signed-documents
+        item=decision
+        modelToAddDocumentVersionTo="signedDecision"
+        title=(t "signed-decision-add")
+      }}
     {{/if}}
-    <div class="vlc-hr"></div>
-    {{utils/add-signed-documents
-      item=decision
-      modelToAddDocumentVersionTo="signedDecision"
-      title=(t "signed-decision-add")
-    }} --}}
   {{else}}
     {{agenda/agendaitem/agendaitem-decision-edit
       isEditing=isEditing
@@ -51,4 +75,12 @@
       agendaitem=agendaitem
     }}
   {{/if}}
+{{/if}}
+{{#if isVerifyingDelete}}
+  {{web-components/vl-modal-verify
+    title=(t "delete-decision")
+    message=(t "delete-decision-message")
+    cancel=(action "cancel")
+    verify=(action "verify")
+  }}
 {{/if}}

@@ -11,6 +11,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	uploadedFile: null,
 	fileName: null,
 	isEditing: false,
+	isShowingDocumentVersionViewer: false,
 
 	numberVr: computed('document.numberVr', function () {
 		return this.get('document.numberVr')
@@ -27,7 +28,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	}),
 
 	filteredDocumentVersions: computed('document.documentVersions.@each', 'item.documentVersions.@each', function () {
-		return this.get('document').getDocumentVersionsOfItem(this.get('item'));
+		const document = this.get('document');
+		if (!document) {
+			return [];
+		}
+		return document.getDocumentVersionsOfItem(this.get('item'));
 	}),
 
 	lastDocumentVersion: computed('filteredDocumentVersions.@each', function () {
@@ -82,6 +87,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			document.save().then(() => {
 				this.toggleProperty('isEditing');
 			});
+		},
+
+		showDocumentVersionViewer(documentVersion) {
+			this.set('documentVersionToShow', documentVersion)
+			this.toggleProperty('isShowingDocumentVersionViewer');
 		}
 	},
 

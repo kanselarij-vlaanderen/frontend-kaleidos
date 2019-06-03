@@ -8,7 +8,7 @@ export default Component.extend({
   store: inject(),
 
   dateObjectsToEnable: computed('store', function () {
-    return this.store.query('meeting', {});
+    return this.store.findAll('meeting', {});
   }),
 
   isOC: computed('selectedPolicyLevel', function () {
@@ -19,10 +19,6 @@ export default Component.extend({
   }),
 
   actions: {
-    typeChanged(type) {
-      this.typeChanged(type);
-    },
-
     chooseType(type) {
       this.subcaseTypeChanged(type);
     },
