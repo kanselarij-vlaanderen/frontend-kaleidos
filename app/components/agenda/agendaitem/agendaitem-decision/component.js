@@ -51,7 +51,6 @@ export default Component.extend(isAuthenticatedMixin, {
 		cancel() {
 			this.set('decisionToDelete', null);
 			this.set('isVerifyingDelete', false);
-
 		}
 	}
 });

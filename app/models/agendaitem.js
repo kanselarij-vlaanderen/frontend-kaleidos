@@ -1,9 +1,12 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
 
 export default Model.extend({
+  store: inject(),
+
   priority: attr('number'),
   created: attr('date'),
   record: attr('string'),
@@ -42,13 +45,16 @@ export default Model.extend({
 
   decisions: computed('subcase.decisions.@each', function () {
     return PromiseArray.create({
-      promise: this.get('subcase').then((subcase) => {
-        return subcase.get('decisions').then((decisions) => {
-          return decisions;
+      promise: this.store.query('decision',
+        {
+          filter: {
+            subcase: { id: this.subcase.get('id') },
+          },
+          sort: "approved"
         })
-      })
     })
   }),
+
 
   isDesignAgenda: computed('agenda', function () {
     const agendaName = this.get('agenda.name');

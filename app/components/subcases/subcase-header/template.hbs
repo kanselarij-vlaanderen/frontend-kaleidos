@@ -4,11 +4,7 @@
       <h1
         class="vlc-page-header__title vlc-page-header__title--bordered max-width"
       >
-        {{#if subcase.shortTitle}}
-          {{subcase.shortTitle}}
-        {{else if subcase.title}}
-          {{subcase.title}}
-        {{/if}}
+        {{subcase.subcaseName}}
       </h1>
       <div class="vlc-page-header__sub">
         {{#link-to
@@ -87,47 +83,47 @@
           ></i>
         {{/if}}
         {{t "actions"}}
+        {{#attach-popover
+          class="ember-attacher-popper"
+          hideOn="clickout click"
+          showOn="click"
+          animation="shift"
+          placement="bottom" as |attacher|
+        }}
+          <ul class="vl-popover__link-list">
+            <li class="vl-popover__link-list__item">
+              {{#if (not await subcase.isArchived)}}
+                <a
+                  class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "requestArchiveSubcase"}}
+                >
+                  {{t "archive-subcase"}}
+                </a>
+              {{else}}
+                <a
+                  class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "unarchiveSubcase" subcase}}
+                >
+                  {{t "unarchive-subcase"}}
+                </a>
+              {{/if}}
+            </li>
+            <li class="vl-popover__link-list__item">
+              {{#if (not await subcase.concluded)}}
+                <a
+                  class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "closeSubcase" subcase}}
+                >
+                  {{t "close-subcase"}}
+                </a>
+              {{/if}}
+            </li>
+          </ul>
+        {{/attach-popover}}
       </button>
-      {{#attach-popover
-        class="ember-attacher-popper"
-        hideOn="clickout click"
-        showOn="click"
-        animation="shift"
-        placement="bottom" as |attacher|
-      }}
-        <ul class="vl-popover__link-list">
-          <li class="vl-popover__link-list__item">
-            {{#if (not await subcase.isArchived)}}
-              <a
-                class="vl-link vl-link--block"
-                {{action attacher.hide}}
-                {{action "requestArchiveSubcase"}}
-              >
-                {{t "archive-subcase"}}
-              </a>
-            {{else}}
-              <a
-                class="vl-link vl-link--block"
-                {{action attacher.hide}}
-                {{action "unarchiveSubcase" subcase}}
-              >
-                {{t "unarchive-subcase"}}
-              </a>
-            {{/if}}
-          </li>
-          <li class="vl-popover__link-list__item">
-            {{#if (not await subcase.concluded)}}
-              <a
-                class="vl-link vl-link--block"
-                {{action attacher.hide}}
-                {{action "closeSubcase" subcase}}
-              >
-                {{t "close-subcase"}}
-              </a>
-            {{/if}}
-          </li>
-        </ul>
-      {{/attach-popover}}
     </div>
   </div>
 </div>
