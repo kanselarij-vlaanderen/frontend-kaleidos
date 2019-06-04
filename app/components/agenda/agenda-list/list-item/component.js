@@ -14,9 +14,10 @@ export default Component.extend({
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	isClickable: true,
 
-	extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'isClickable', async function () {
+	extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'isClickable', 'id', async function () {
 		let clazz = '';
-		if (this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
+
+		if (this.get('agendaitem.id') && (this.get('agendaitem.id') == this.get('selectedAgendaItem.id'))) {
 			clazz += 'vlc-agenda-items-new__sub-item--active ';
 		}
 		if (!this.get('isClickable')) {

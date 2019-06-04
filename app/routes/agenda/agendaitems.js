@@ -32,17 +32,8 @@ export default Route.extend({
 
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
 
-		// groups.map((group) => {
-		// 	group.groups.map((mandateeGroups) => {
-		// 		mandateeGroups.agendaitems.map((agendaitem) => {
-		// 			console.log(agendaitem.agendaitem_id)
-		// 		})
-		// 	})
-		// })
-		console.log(groups);
 		return hash({
 			currentAgenda: agenda,
-			// agendaitems: agendaitems,
 			groups: groups,
 			// announcements: announcements.sortBy('created')
 		});
