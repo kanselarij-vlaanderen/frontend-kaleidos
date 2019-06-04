@@ -64,12 +64,22 @@ export default Model.extend({
     }
   }),
 
-  documents: computed('documentVersions.@each', async function () {
-    const documentVersions = await this.get('documentVersions');
-    const documents = await Promise.all(documentVersions.map(documentVersion => {
-      return documentVersion.get('document');
-    }));
-    return documents.uniqBy('id');
+  documents: computed('documentVersions', function () {
+    return PromiseArray.create({
+      promise: this.get('documentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            sort: 'type.priority,document-versions.version-number',
+            include: 'type,document-versions',
+          })
+        }
+      })
+    });
   }),
 
   documentsLength: computed('documents.@each', function () {
