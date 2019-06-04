@@ -33,6 +33,10 @@ export default Component.extend({
 		}
 	})),
 
+	agendaitem: computed('id', function () {
+		return this.store.findRecord('agendaitem', this.get('id'));
+	}),
+
 	agenda: computed('agendaitem', function () {
 		return this.get('agendaitem.agenda.name');
 	}),
@@ -74,8 +78,8 @@ export default Component.extend({
 
 	}),
 
-	click() {
-		const agendaitem = this.store.peekRecord('agendaitem', this.get('agendaitem').get('id'));
+	async click() {
+		const agendaitem = await this.store.findRecord('agendaitem', this.get('id'));
 		this.selectAgendaItem(agendaitem);
 	}
 });

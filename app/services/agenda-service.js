@@ -88,7 +88,7 @@ export default Service.extend({
 		return $.ajax(
 			{
 				method: "GET",
-				url: `/agenda-sort/new-filtering?sessionId=${sessionId.get('id')}&selectedAgenda=${currentAgendaID}`,
+				url: `/agenda-sort/sortedAgenda?sessionId=${sessionId.get('id')}&selectedAgenda=${currentAgendaID}`,
 				data: {}
 			}
 		).then((result) => {
