@@ -84,6 +84,18 @@ export default Service.extend({
 		});
 	},
 
+	newSorting(sessionId, currentAgendaID) {
+		return $.ajax(
+			{
+				method: "GET",
+				url: `/agenda-sort/sortedAgenda?sessionId=${sessionId.get('id')}&selectedAgenda=${currentAgendaID}`,
+				data: {}
+			}
+		).then((result) => {
+			return result;
+		});
+	},
+
 	async createNewAgendaItem(selectedAgenda, subcase) {
 		const mandatees = await subcase.get('mandatees');
 		const titles = mandatees.map((mandatee) => mandatee.get('title'));

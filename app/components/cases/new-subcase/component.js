@@ -79,7 +79,7 @@ export default Component.extend(ApprovalsEditMixin, {
 		async createSubCase(event) {
 			event.preventDefault();
 			this.set('isLoading', true);
-			const caze = await this.store.peekRecord('case', this.case.id);
+			const caze = await this.store.findRecord('case', this.case.id);
 			const latestSubcase = await caze.get('latestSubcase');
 			const date = new Date();
 			let subcase = this.createSubcaseObject(caze, date);
