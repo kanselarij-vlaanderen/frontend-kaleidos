@@ -55,7 +55,6 @@ export default Model.extend({
     })
   }),
 
-
   isDesignAgenda: computed('agenda', function () {
     const agendaName = this.get('agenda.name');
     if (agendaName === "Ontwerpagenda") {

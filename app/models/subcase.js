@@ -60,6 +60,7 @@ export default Model.extend({
 
   async documentNumberOfVersion(version) {
     const documents = await this.get('documents');
+
     const sortedDocuments = documents.sortBy('created');
     const targetDocument = await version.get('document');
     let foundIndex;
@@ -71,17 +72,25 @@ export default Model.extend({
     return foundIndex;
   },
 
-  documents: computed('documentVersions.@each', function () {
+  documents: computed('documentVersions', function () {
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
-        return Promise.all(documentVersions.map(documentVersion => {
-          return documentVersion.get('document');
-        })).then((documents) => { return documents.uniqBy('id') })
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            sort: 'type.priority,document-versions.version-number',
+            include: 'type,document-versions',
+          })
+        }
       })
     });
   }),
 
-  documentsLength: computed('documents.@each', function () {
+  documentsLength: computed('documents', function () {
     return PromiseObject.create({
       promise: this.get('documents').then((documents) => {
         return documents.get('length');

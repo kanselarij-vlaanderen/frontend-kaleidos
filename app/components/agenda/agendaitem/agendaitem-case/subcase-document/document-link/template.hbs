@@ -113,7 +113,7 @@
       </div>
     </div>
   </div>
-  {{#if (await filteredDocumentVersions)}}
+  {{#if (gt (await filteredDocumentVersions.length) 0)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
         <button
