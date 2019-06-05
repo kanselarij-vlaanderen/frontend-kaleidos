@@ -1,5 +1,5 @@
 <div class="vl-u-spacer">
-   <div class="vlc-input-field-block">
+  <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "short-title")}}
     {{textarea rows="2" class="vl-textarea vl-textarea--block" value=title}}
   </div>
@@ -18,7 +18,7 @@
   {{#if finished}}
     <div class="vlc-input-field-block">
       {{utils/documents-selector-of-agendaitem
-        item=agendaitem
+        item=subcase
         title=(t "documents-attached-to")
         itemWithDocuments=(await item)
         selectDocument=(action "selectDocument")

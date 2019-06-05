@@ -15,8 +15,7 @@
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
           <div class="vlc-agenda-items-new__sub-item">
             {{agenda/agenda-list/list-item
-              sortedAgendaitemDetails=agendaitem
-              id=agendaitem.id
+              agendaitem=agendaitem
               selectAgendaItem=(action "selectAgendaItem")
             }}
           </div>
@@ -41,10 +40,8 @@
           </div>
           {{#each agendaitemGroup.agendaitems as |agendaitem|}}
             <div class="vlc-agenda-items-new__sub-item">
-              {{agendaitem.foundPrio}}
               {{agenda/agenda-list/list-item
-                sortedAgendaitemDetails=agendaitem
-                id=agendaitem.id
+                agendaitem=agendaitem
                 selectAgendaItem=(action "selectAgendaItem")
               }}
             </div>

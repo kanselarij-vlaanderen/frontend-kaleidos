@@ -96,7 +96,10 @@
               {{/each}}
             {{/if}}
           {{else if (eq activeAgendaItemSection "news-item")}}
-            {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
+            {{agenda/agendaitem/agendaitem-news-item
+              agendaitem=agendaitem
+              subcase=(await subcase)
+            }}
           {{else if (eq activeAgendaItemSection "minutes")}}
             {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
           {{/if}}

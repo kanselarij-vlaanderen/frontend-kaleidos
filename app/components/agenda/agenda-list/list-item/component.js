@@ -12,29 +12,30 @@ export default Component.extend({
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	isClickable: true,
 
-	extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'id', 'isClickable', async function () {
+	extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'agendaitem', 'isClickable', async function () {
 		let clazz = '';
-		if (this.get('id') == this.get('selectedAgendaItem.id')) {
+		if (this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
 			clazz += 'vlc-agenda-items-new__sub-item--active ';
 		}
 
 		if (!this.get('isClickable')) {
 			clazz += ' not-clickable '
 		}
-		const postponed = (await this.get('agendaitem.postponedTo'));
-		const retracted = this.get('agendaitem.retracted');
 
-		if ((postponed || retracted)) {
-			clazz += ' transparant';
-		}
+		// const postponed = (await this.get('agendaitem.postponedTo'));
+		// const retracted = this.get('agendaitem.retracted');
+
+		// if ((postponed || retracted)) {
+		// 	clazz += ' transparant';
+		// }
 		if (!this.get('isDestroyed')) {
 			this.set('extraAgendaItemClass', clazz);
 		}
 	})),
 
-	agendaitem: computed('id', function () {
-		return this.store.findRecord('agendaitem', this.get('id'));
-	}),
+	// agendaitem: computed('id', function () {
+	// 	return this.store.findRecord('agendaitem', this.get('id'));
+	// }),
 
 	agenda: computed('agendaitem', function () {
 		return this.get('agendaitem.agenda.name');
@@ -48,7 +49,7 @@ export default Component.extend({
 	}),
 
 	async click() {
-		const agendaitem = await this.store.findRecord('agendaitem', this.get('id'));
+		const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
 		this.selectAgendaItem(agendaitem);
 	}
 });

@@ -15,9 +15,10 @@ export default Route.extend({
 		const agenda = await this.get('sessionService.currentAgenda');
 		this.set('sessionService.selectedAgendaItem', null);
 		const session = this.modelFor('agenda');
+
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
-			include: 'subcase',
+			include: 'subcase,subcase.case',
 			page: { 'size': 250 }
 		}
 
@@ -25,16 +26,29 @@ export default Route.extend({
 			filterOptions['filter']['subcase'] = { 'short-title': params.filter };
 		}
 
-		// const agendaitems = await this.store.query('agendaitem', filterOptions);
+		const agendaitems = await this.store.query('agendaitem', filterOptions);
 		// const announcements = agendaitems.filter((item) => item.showAsRemark);
 
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
-
+		await this.parseGroups(groups, agendaitems);
 		return hash({
 			currentAgenda: agenda,
 			groups: groups,
 			// announcements: announcements.sortBy('created')
 		});
+	},
+
+
+	parseGroups(groups, agendaitems) {
+		groups.map((agenda) => {
+			agenda.groups.map((group) => {
+				const test = group.agendaitems.map((item) => {
+					return agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
+				})
+				group.agendaitems = test;
+				return test;
+			})
+		})
 	},
 
 	actions: {

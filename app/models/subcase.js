@@ -36,6 +36,7 @@ export default Model.extend({
   type: belongsTo('subcase-type'),
   case: belongsTo('case', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
+  newsletterInfo: belongsTo('newsletter-info'),
 
   firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({
