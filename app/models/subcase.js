@@ -30,7 +30,7 @@ export default Model.extend({
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval', { serialize: false }),
-  decisions: hasMany('decision', { inverse: null }),
+  decisions: hasMany('decision'),
 
   confidentiality: belongsTo('confidentiality'),
   type: belongsTo('subcase-type'),
@@ -40,7 +40,13 @@ export default Model.extend({
 
   firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({
-      promise: this.store.query('subcase-phase', { filter: { subcase: { id: this.get('id') } }, sort: 'date', include: 'code' }).then((subcasePhases) => {
+      promise: this.store.query('subcase-phase', {
+        filter: {
+          subcase: { id: this.get('id') }
+        },
+        sort: 'date',
+        include: 'code'
+      }).then((subcasePhases) => {
         return subcasePhases.get('firstObject');
       })
     });

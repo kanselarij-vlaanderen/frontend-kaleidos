@@ -42,11 +42,12 @@ export default Route.extend({
 	parseGroups(groups, agendaitems) {
 		groups.map((agenda) => {
 			agenda.groups.map((group) => {
-				const test = group.agendaitems.map((item) => {
-					return agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
+				const newAgendaitems = group.agendaitems.map((item) => {
+					const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
+					console.log(item.priority)
+					return foundItem;
 				})
-				group.agendaitems = test;
-				return test;
+				group.agendaitems = newAgendaitems.map((item) => item).sortBy('priority');
 			})
 		})
 	},
