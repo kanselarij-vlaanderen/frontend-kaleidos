@@ -94,10 +94,12 @@ export default Model.extend({
 
   subcasesFromCase: computed('subcase', function () {
     return PromiseArray.create({
-      promise: this.get('subcase').then((subcase) => {
-        return subcase.get('case.subcases').then((subcases) => {
-          return subcases;
-        });
+      promise: this.subcase.get('case').then((caze) => {
+        if (caze) {
+          return caze.get('subcases').then((subcases) => {
+            return subcases;
+          });
+        }
       })
     })
   })

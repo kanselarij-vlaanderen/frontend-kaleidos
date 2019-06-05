@@ -1,25 +1,17 @@
-{{#if (await agendaitem.subcase.case.type.label)}}
-  <p class="vlc-agenda-items-new__overline">
-    <span class="vlc-agenda-items-new__numbering">
-      {{agendaitem.priority}}
-      .
-    </span>
-    {{await agendaitem.subcase.case.type.label}}
-  </p>
-  {{id}}
-{{/if}}
+<p class="vlc-agenda-items-new__overline">
+  <span class="vlc-agenda-items-new__numbering">
+    {{agendaitem.priority}}
+    .
+  </span>
+  {{await agendaitem.subcase.case.type.label}}
+</p>
+{{id}}
 <h4 class="vlc-agenda-items-new__subject">
   {{#if (await agendaitem.shortTitle)}}
     {{await agendaitem.shortTitle}}
   {{else}}
     {{await agendaitem.title}}
   {{/if}}
-  <br />
-  Fprio:
-  {{await agendaitem.foundPriority}}
-  <br />
-  Prio:
-  {{await agendaitem.priority}}
 </h4>
 {{#if (not selectedAgendaItem)}}
   {{#if (await agendaitem.documents)}}
