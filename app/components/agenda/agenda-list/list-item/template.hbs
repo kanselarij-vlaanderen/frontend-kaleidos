@@ -1,13 +1,11 @@
-{{#if (await agendaitem.subcase.case.type.label)}}
-  <p class="vlc-agenda-items-new__overline">
-    <span class="vlc-agenda-items-new__numbering">
-      {{agendaitem.priority}}
-      .
-    </span>
-    {{await agendaitem.subcase.case.type.label}}
-  </p>
-  {{id}}
-{{/if}}
+<p class="vlc-agenda-items-new__overline">
+  <span class="vlc-agenda-items-new__numbering">
+    {{agendaitem.priority}}
+    .
+  </span>
+  {{await agendaitem.subcase.case.type.label}}
+</p>
+{{id}}
 <h4 class="vlc-agenda-items-new__subject">
   {{#if (await agendaitem.shortTitle)}}
     {{await agendaitem.shortTitle}}

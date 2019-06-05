@@ -12,17 +12,15 @@ export default Route.extend({
 	},
 
 	async model(params) {
-
 		const agenda = await this.get('sessionService.currentAgenda');
 		this.set('sessionService.selectedAgendaItem', null);
-
 		const session = this.modelFor('agenda');
-
 		const filterOptions = {
 			filter: { agenda: { id: agenda.get('id') } },
 			include: 'subcase',
 			page: { 'size': 250 }
 		}
+
 		if (params.filter) {
 			filterOptions['filter']['subcase'] = { 'short-title': params.filter };
 		}

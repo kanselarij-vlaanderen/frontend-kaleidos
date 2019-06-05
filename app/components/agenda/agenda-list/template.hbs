@@ -6,18 +6,17 @@
 {{#if selectedAgendaItem}}
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
-      {{#each group.groups as |agendaitemGroup index|}}
+      {{#each group.groups as |agendaitemGroup|}}
         <div class="vlc-list-section-header">
-          {{agendaitemGroup.title}}
+          {{#each agendaitemGroup.mandatees as |mandatee|}}
+            {{mandatee.title}}<br />
+          {{/each}}
         </div>
-        {{#each agendaitemGroup.agendaitems as |agendaitem indexItem|}}
+        {{#each agendaitemGroup.agendaitems as |agendaitem|}}
           <div class="vlc-agenda-items-new__sub-item">
             {{agenda/agenda-list/list-item
-              agendaitem=agendaitem
               sortedAgendaitemDetails=agendaitem
-              agendaitemPrio=agendaitem.agendaitemPrio
               id=agendaitem.id
-              index=(mult (add index 1) (add 1 indexItem))
               selectAgendaItem=(action "selectAgendaItem")
             }}
           </div>
@@ -34,17 +33,18 @@
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
       <div class="vl-u-spacer-extended-bottom">
-        {{#each group.groups as |agendaitemGroup index|}}
+        {{#each group.groups as |agendaitemGroup|}}
           <div class="vlc-list-section-header">
-            {{agendaitemGroup.title}}
+            {{#each agendaitemGroup.mandatees as |mandatee|}}
+              {{mandatee.title}}<br />
+            {{/each}}
           </div>
-          {{#each agendaitemGroup.agendaitems as |agendaitem indexItem|}}
+          {{#each agendaitemGroup.agendaitems as |agendaitem|}}
             <div class="vlc-agenda-items-new__sub-item">
+              {{agendaitem.foundPrio}}
               {{agenda/agenda-list/list-item
                 sortedAgendaitemDetails=agendaitem
-                agendaitemPrio=agendaitem.agendaitemPrio
                 id=agendaitem.id
-                index=(mult (add index 1) (add 1 indexItem))
                 selectAgendaItem=(action "selectAgendaItem")
               }}
             </div>
@@ -61,11 +61,10 @@
 </div>
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
-    {{#each (await announcements) as |announcement index|}}
+    {{#each (await announcements) as |announcement|}}
       <div class="vlc-agenda-items-new__sub-item">
         {{agenda/agenda-list/list-item
           agendaitem=announcement
-          index=(add 1 index)
           selectAgendaItem=(action "selectAgendaItem")
         }}
       </div>
