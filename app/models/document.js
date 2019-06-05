@@ -10,14 +10,14 @@ export default Model.extend({
 	title: attr('string'),
 	numberVp: attr('string'),
 	numberVr: attr('string'),
-	documentVersions: hasMany('document-version'),
+	documentVersions: hasMany('document-version', { inverse: null }),
 	remarks: hasMany('remark'),
 	description: attr('string'),
 	type: belongsTo('document-type'),
 	confidentiality: belongsTo('confidentiality'),
 	signedDecision: belongsTo('decision'),
 
-	sortedDocuments: computed('documentVersions', function () {
+	sortedDocumentVersions: computed('documentVersions', function () {
 		return PromiseArray.create({
 			promise: this.get('documentVersions').then(versions => {
 				return versions.sortBy('versionNumber');
@@ -25,33 +25,19 @@ export default Model.extend({
 		});
 	}),
 
-	lastDocumentVersion: computed('documentVersions.@each', function () {
+	lastDocumentVersion: computed('sortedDocumentVersions.@each', function () {
 		return PromiseObject.create({
-			promise: this.store.query('document-version', {
-				filter: { document: { id: this.get('id') } },
-				sort: 'version-number'
-			}).then((documentVersions) => {
-				return documentVersions.get('lastObject')
+			promise: this.get('sortedDocumentVersions').then((documentVersions) => {
+				return documentVersions.get('lastObject');
 			})
 		})
 	}),
 
-	getDocumentVersionsOfItem(item) {
-		const modelName = item.get('constructor.modelName');
-		const filter = {
-			document: { id: this.get('id') }
-		};
-		if (!modelName) {
-			return [];
-		}
-		filter[modelName] = { id: item.get('id') };
+	reverseSortedDocumentVersions: computed('sortedDocumentVersions', function () {
 		return PromiseArray.create({
-			promise: this.store.query('document-version', {
-				filter,
-				sort: '-version-number'
-			}).then((documentVersions) => {
-				return documentVersions;
+			promise: this.get('sortedDocumentVersions').then((documentVersions) => {
+				return documentVersions.reverse();
 			})
-		});
-	}
+		})
+	})
 });

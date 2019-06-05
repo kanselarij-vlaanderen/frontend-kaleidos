@@ -28,7 +28,7 @@ export default Model.extend({
   remarks: hasMany('remark'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
-  documentVersions: hasMany('document-version', { inverse: null }),
+  documentVersions: hasMany('document-version'),
   phases: hasMany('subcase-phase'),
   themes: hasMany('theme'),
 
@@ -73,7 +73,7 @@ export default Model.extend({
             filter: {
               'document-versions': { id: documentVersionIds },
             },
-            sort: 'type.priority,document-versions.version-number',
+            sort: 'type.priority',
             include: 'type,document-versions',
           })
         }

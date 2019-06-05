@@ -64,7 +64,7 @@
         {{#if (not isEditing)}}
           <span {{action "toggleIsEditing"}}>
             {{document-name
-              documentVersion=(await lastDocumentVersion)
+              documentVersion=(await document.lastDocumentVersion)
               item=item
             }}
           </span>
@@ -107,13 +107,16 @@
       </h6>
       <div class="vlc-document-card-content__meta">
         {{t "uploaded-at"}}
-        {{moment-format (await lastDocumentVersion.created) "DD.MM.YYYY"}}
+        {{moment-format
+          (await document.lastDocumentVersion.created)
+          "DD.MM.YYYY"
+        }}
         {{t "at"}}
-        {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
+        {{moment-format (await document.lastDocumentVersion.created) "HH:mm"}}
       </div>
     </div>
   </div>
-  {{#if (gt (await filteredDocumentVersions.length) 0)}}
+  {{#if (gt (await document.reverseSortedDocumentVersions.length) 0)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
         <button
@@ -128,7 +131,11 @@
         {{#if isShowingVersions}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
-              {{#each (await filteredDocumentVersions) as |documentVersion|}}
+              {{#each
+                (await
+                  document.reverseSortedDocumentVersions
+                ) as |documentVersion|
+              }}
                 {{web-components/vl-document documentVersion=documentVersion}}
               {{/each}}
             </div>

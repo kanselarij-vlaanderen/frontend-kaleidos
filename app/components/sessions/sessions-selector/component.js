@@ -32,7 +32,7 @@ export default Component.extend({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				this.set('sessions', this.store.findAll('meeting', {}));
+				this.set('sessions', this.store.findAll('meeting'));
 			}
 		},
 	},
@@ -43,9 +43,7 @@ export default Component.extend({
 	},
 
 	async loadSessions() {
-		const sessions = await this.store.findAll('meeting', {
-			sort: "number"
-		});
+		const sessions = await this.store.findAll('meeting');
 		this.set('sessions', sessions);
 	},
 });

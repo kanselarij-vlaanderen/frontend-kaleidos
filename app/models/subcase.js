@@ -26,9 +26,9 @@ export default Model.extend({
   iseCodes: hasMany('ise-code'),
   agendaitems: hasMany('agendaitem', { inverse: null }),
   remarks: hasMany('remark'),
-  documentVersions: hasMany('document-version', { inverse: null }),
+  documentVersions: hasMany('document-version'),
   themes: hasMany('theme'),
-  mandatees: hasMany('mandatee', { inverse: null }),
+  mandatees: hasMany('mandatee'),
   approvals: hasMany('approval', { serialize: false }),
   decisions: hasMany('decision', { inverse: null }),
 
@@ -78,12 +78,11 @@ export default Model.extend({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
           const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
-
           return this.store.query('document', {
             filter: {
               'document-versions': { id: documentVersionIds },
             },
-            sort: 'type.priority,document-versions.version-number',
+            sort: 'type.priority',
             include: 'type,document-versions',
           })
         }
