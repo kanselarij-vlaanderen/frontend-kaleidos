@@ -87,6 +87,8 @@
 	"delete": "Verwijderen",
 	"delete-decision": "Beslissing verwijderen",
 	"delete-decision-message": "Bent u zeker dat u de beslissing wil verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
+	"delete-comment-message": "Bent u zeker dat u het bericht wil verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
+	"delete-comment": "Bericht verwijderen",
 	"detail": "Detail",
 	"document-add": "Documenten toevoegen",
 	"document-number": "Nummer Document",

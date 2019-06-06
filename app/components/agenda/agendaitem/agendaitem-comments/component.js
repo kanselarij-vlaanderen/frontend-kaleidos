@@ -50,6 +50,21 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
         this.updateModifiedProperty(agenda);
         comment.save();
       });
+    },
+
+    async deleteComment(comment) {
+      this.set('commentToDelete', await comment);
+      this.set('isVerifyingDelete', true);
+    },
+
+    async verify() {
+      await this.commentToDelete.destroyRecord();
+      this.set('isVerifyingDelete', false);
+    },
+
+    cancel() {
+      this.set('commentToDelete', null);
+      this.set('isVerifyingDelete', false);
     }
   }
 });

@@ -45,7 +45,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		async verify() {
 			await this.decisionToDelete.destroyRecord();
-			this.set('isVerifyingDelete', true);
+			this.set('isVerifyingDelete', false);
 		},
 
 		cancel() {
