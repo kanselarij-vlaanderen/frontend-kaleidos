@@ -34,20 +34,23 @@ export default Route.extend({
 		return hash({
 			currentAgenda: agenda,
 			groups: groups,
-			// announcements: announcements.sortBy('created')
 		});
 	},
-
 
 	parseGroups(groups, agendaitems) {
 		groups.map((agenda) => {
 			agenda.groups.map((group) => {
 				const newAgendaitems = group.agendaitems.map((item) => {
 					const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
-					console.log(item.priority)
+
 					return foundItem;
 				})
-				group.agendaitems = newAgendaitems.map((item) => item).sortBy('priority');
+
+				group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
+
+				if (group.agendaitems.get('length') < 1) {
+					agenda.groups = null;
+				}
 			})
 		})
 	},

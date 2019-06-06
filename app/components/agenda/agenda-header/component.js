@@ -96,6 +96,7 @@ export default Component.extend(isAuthenticatedMixin, {
 				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToApprove).then(newAgenda => {
 					this.changeLoading();
 					this.get('agendaService').sortAgendaItems(newAgenda);
+					this.get('agendaService').sortAgendaItems(agendaToLock);
 					this.set('sessionService.currentAgenda', newAgenda);
 					this.set('sessionService.selectedAgendaItem', null);
 					this.reloadRoute(newAgenda.get('id'));
