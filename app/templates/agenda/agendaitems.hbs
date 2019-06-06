@@ -6,6 +6,8 @@
         {{/if}} --}}
       {{agenda/agenda-list
         agendaitemGroups=(await model.groups)
+        announcements=(await model.announcements)
+        lastPrio=(await model.lastPrio)
         currentAgendaId=(await model.currentAgenda.id)
         selectedAgendaItem=selectedAgendaItem
         selectAgendaItem=(action "selectAgendaItem")

@@ -1,11 +1,13 @@
 <p class="vlc-agenda-items-new__overline">
   <span class="vlc-agenda-items-new__numbering">
-    {{agendaitem.priority}}
-    .
+    {{#if agendaitem.priority}}
+      {{agendaitem.priority}}.
+    {{else}}
+      {{add index 1}}.
+    {{/if}}
   </span>
   {{await agendaitem.subcase.case.type.label}}
 </p>
-{{id}}
 <h4 class="vlc-agenda-items-new__subject">
   {{#if (await agendaitem.shortTitle)}}
     {{await agendaitem.shortTitle}}
@@ -14,7 +16,8 @@
   {{/if}}
 </h4>
 {{#if (not selectedAgendaItem)}}
-  {{#if (await agendaitem.documents)}}
+  {{! TODO: Fix amount of requests made for the versions and the documents }}
+  {{!-- {{#if (await agendaitem.documents)}}
     <div class="vlc-hr"></div>
     {{utils/documents-list-for-item
       isNotClickable=true
@@ -28,7 +31,7 @@
       item=(await agendaitem.subcase)
       agendaitem=(await agendaitem.subcase)
     }}
-  {{/if}}
+  {{/if}} --}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
   <span class="vlc-agenda-items-new__times-passed">

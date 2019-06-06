@@ -68,17 +68,16 @@ export default Component.extend(ApprovalsEditMixin, {
 	},
 
 	createSubcaseObject(newCase, newDate) {
-		const { type, title, shortTitle, confidential } = this;
+		const { type, title, shortTitle, confidential, showAsRemark } = this;
 		const subcaseName = this.getSubcaseName(type);
 		return this.store.createRecord('subcase', {
-			type, subcaseName, shortTitle, title, confidential,
+			type, subcaseName, shortTitle, title, confidential, showAsRemark,
 			case: newCase,
 			created: newDate,
 			modified: newDate,
 			isArchived: false,
 			phases: [],
 			formallyOk: false,
-			showAsRemark: false,
 		})
 	},
 

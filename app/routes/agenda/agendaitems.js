@@ -27,22 +27,34 @@ export default Route.extend({
 		}
 
 		const agendaitems = await this.store.query('agendaitem', filterOptions);
-		// const announcements = agendaitems.filter((item) => item.showAsRemark);
+		const announcements = agendaitems.filter((item) => item.get('subcase.showAsRemark'));
 
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
-		await this.parseGroups(groups, agendaitems);
+		const { lastPrio } = await this.parseGroups(groups, agendaitems);
 		return hash({
 			currentAgenda: agenda,
 			groups: groups,
+			announcements,
+			lastPrio
 		});
 	},
 
 	parseGroups(groups, agendaitems) {
+		let lastPrio = 0;
+		let firstAgendaItem;
 		groups.map((agenda) => {
 			agenda.groups.map((group) => {
 				const newAgendaitems = group.agendaitems.map((item) => {
 					const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
-
+					if (!firstAgendaItem) {
+						firstAgendaItem = foundItem;
+						this.set('sessionService.firstAgendaItemOfAgenda', foundItem);
+					}
+					if (foundItem.get('priority')) {
+						lastPrio = foundItem.priority;
+					} else {
+						foundItem.set('priority', parseInt(lastPrio) + 1)
+					}
 					return foundItem;
 				})
 
@@ -52,7 +64,9 @@ export default Route.extend({
 					agenda.groups = null;
 				}
 			})
-		})
+		});
+		return lastPrio;
+
 	},
 
 	actions: {
