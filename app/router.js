@@ -36,17 +36,17 @@ Router.map(function () {
   this.route('newsletters');
   this.route('newsletters-overview', { path: ':meeting_id' });
   this.route('print-overviews', { path: "/overzicht/:meeting_id" }, function () {
-    this.route('notes', { path: "/notulen" }, function () {
-      this.route('overview');
-      this.route('agendaitems');
-    });
-    this.route('decisions', { path: "/beslissingen/:agenda_id" }, function () {
-      this.route('overview');
+    this.route('notes', { path: "/notulen/:agenda_id" }, function () {
+      this.route('overview', { path: "/klad" });
       this.route('agendaitems', { path: '/agendapunten' });
     });
-    this.route('press-agenda', { path: "/persagenda" }, function () {
-      this.route('overview', { path: '/:meeting_id' });
-      this.route('agendaitems', { path: '/:meeting_id' });
+    this.route('decisions', { path: "/beslissingen/:agenda_id" }, function () {
+      this.route('overview', { path: "/klad" });
+      this.route('agendaitems', { path: '/agendapunten' });
+    });
+    this.route('press-agenda', { path: "/persagenda/:agenda_id" }, function () {
+      this.route('overview', { path: "/klad" });
+      this.route('agendaitems', { path: '/agendapunten' });
     });
 
   });

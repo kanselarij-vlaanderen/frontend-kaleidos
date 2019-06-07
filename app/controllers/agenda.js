@@ -33,7 +33,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 		},
 
 		navigateToNotes(currentSessionId, currentAgendaId) {
-			this.transitionToRoute('print-overviews.notes.agendaitems', currentSessionId, { queryParams: { selectedAgenda_id: currentAgendaId } })
+			this.transitionToRoute('print-overviews.notes.agendaitems', currentSessionId, currentAgendaId)
 		},
 
 		navigateToDecisions(currentSessionId, currentAgendaId) {
@@ -41,7 +41,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 		},
 
 		navigateToPressAgenda(currentSessionId, currentAgendaId) {
-			this.transitionToRoute('print-overviews.press-agenda.agendaitems', currentSessionId, { queryParams: { selectedAgenda_id: currentAgendaId } })
+			this.transitionToRoute('print-overviews.press-agenda.agendaitems', currentSessionId, currentAgendaId)
 		},
 
 		navigateToSubCases() {

@@ -1,1 +1,10 @@
-{{outlet}}
+{{utils/print-overviews-header
+  title=(await title)
+  model=(await model)
+  routeModelPrefix=routeModel
+  print=(action "print")
+  navigateBackToAgenda=(action "navigateBackToAgenda")
+}}
+<div class="vlc-scroll-wrapper__body">
+  {{outlet}}
+</div>

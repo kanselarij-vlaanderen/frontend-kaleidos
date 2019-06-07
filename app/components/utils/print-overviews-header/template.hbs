@@ -1,0 +1,78 @@
+<div class="vlc-page-header">
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left">
+      <div class="vlc-toolbar__item">
+        <h1 class="vlc-page-header__title">
+          {{await title}}
+        </h1>
+        <div class="vlc-page-header__sub">
+          <div class="vlc-toolbar vlc-toolbar--auto">
+            <div class="vlc-toolbar__left">
+              <div class="vlc-toolbar__item">
+                <a
+                  class="vlc-backlink vl-link vl-link--bold"
+                  {{action "navigateBackToAgenda"}}
+                >
+                  <i
+                    class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
+                  ></i>
+                  {{t "back"}}
+                </a>
+              </div>
+              <div class="vlc-toolbar__item">
+                <ul class="vlc-tabs-reverse" role="tablist">
+                  <li class="vlc-tabs-reverse__item">
+                    {{#link-to
+                      routeModelAgendaitems
+                      (await model.id)
+                      class="border-left vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
+                    }}
+                      {{t "overview"}}
+                    {{/link-to}}
+                  </li>
+                  <li class="vlc-tabs-reverse__item">
+                    {{#link-to
+                      routeModelOverview
+                      (await model.id)
+                      class="border-left vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
+                    }}
+                      {{t "design"}}
+                    {{/link-to}}
+                  </li>
+                  <li class="vlc-tabs-reverse__item">
+                    {{#link-to
+                      "agenda.agendaitems.agendaitem"
+                      firstAgendaItemOfAgenda.id
+                      class="vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
+                    }}
+                      {{t "definite"}}
+                    {{/link-to}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <div class="vl-action-group">
+          <button
+            class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+            {{action "print"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+              aria-hidden="true"
+            ></i>
+            {{t "print"}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
