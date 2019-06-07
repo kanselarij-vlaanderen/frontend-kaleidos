@@ -159,7 +159,7 @@
         {{/each}}
       {{/if}}
       <div class="vlc-comment-input vlc-comment-input--response">
-        {{#if (eq await comment.author.id await user.id)}}
+        {{#if (eq (await comment.author.id) (await user.id))}}
           <div class="vl-badge vl-badge--initials vl-badge--action">
             <span>
               {{user-initials user=(await comment.author)}}

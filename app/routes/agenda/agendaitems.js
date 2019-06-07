@@ -30,43 +30,15 @@ export default Route.extend({
 		const announcements = agendaitems.filter((item) => item.get('subcase.showAsRemark'));
 
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
-		const { lastPrio } = await this.parseGroups(groups, agendaitems);
+		const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(groups, agendaitems);
+		this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
+
 		return hash({
 			currentAgenda: agenda,
 			groups: groups,
 			announcements,
 			lastPrio
 		});
-	},
-
-	parseGroups(groups, agendaitems) {
-		let lastPrio = 0;
-		let firstAgendaItem;
-		groups.map((agenda) => {
-			agenda.groups.map((group) => {
-				const newAgendaitems = group.agendaitems.map((item) => {
-					const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
-					if (!firstAgendaItem) {
-						firstAgendaItem = foundItem;
-						this.set('sessionService.firstAgendaItemOfAgenda', foundItem);
-					}
-					if (foundItem.get('priority')) {
-						lastPrio = foundItem.priority;
-					} else {
-						foundItem.set('priority', parseInt(lastPrio) + 1)
-					}
-					return foundItem;
-				})
-
-				group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
-
-				if (group.agendaitems.get('length') < 1) {
-					agenda.groups = null;
-				}
-			})
-		});
-		return lastPrio;
-
 	},
 
 	actions: {

@@ -6,7 +6,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
 	sessionService: inject(),
-  classNames: ['vlc-padding-bottom--large'],
+	classNames: ['vlc-padding-bottom--large'],
 	isEditing: false,
 
 	currentSession: alias('sessionService.currentSession'),

@@ -1,0 +1,83 @@
+{{#data-table
+  content=model
+  sort=sort
+  page=page
+  size=size
+  class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+  isLoading=isLoadingModel as |t|
+}}
+  {{#t.content as |c|}}
+    {{#c.header}}
+      {{th-sortable
+        class=" vl-data-table__header-title"
+        currentSorting=sort
+        field="priority"
+        label="#"
+      }}
+      {{th-sortable
+        class="vl-data-table-col-5 vl-data-table__header-title"
+        currentSorting=sort
+        field="title"
+        label="Titel en inhoud"
+      }}
+      {{th-sortable
+        class="vl-data-table-col-2 vl-data-table__header-title"
+        currentSorting=sort
+        field="mandatees"
+        label="Minister"
+      }}
+      <th class="vl-data-table-col-2 vl-data-table__header-title sortable">
+        <a class="data-table__header-title--sortable">
+          In kort bestek
+        </a>
+      </th>
+      {{th-sortable
+        class="vl-data-table-col-2 vl-data-table__header-title"
+        currentSorting=sort
+        field="modified"
+        label="Laatst gewijzigd"
+      }}
+      <th class=""></th>
+    {{/c.header}}
+    {{#c.body as |row|}}
+      <td>
+        {{row.priority}}
+      </td>
+      <td class="vl-data-table-col-5">
+        {{row.shortTitle}}
+        {{row.title}}
+      </td>
+      <td class="vl-data-table-col-2">
+        {{#each (await row.sortedMandatees) as |mandatee index|}}
+          {{await mandatee.person.nameToDisplay}}<br />
+        {{/each}}
+      </td>
+      <td class="vl-data-table-col-2">
+        {{web-components/vl-toggle value=row.test}}
+      </td>
+      <td class="vl-data-table-col-2">
+        {{moment-format row.modified "DD.MM.YYYY-HH:mm"}}
+      </td>
+      <td class="vl-u-flex-space-between">
+        <button
+          class="vl-button vl-button--link vl-button--icon"
+          {{action "navigateToNewsLetter" meeting}}
+        >
+          <i class="vl-button__icon vl-vi vl-vi-pencil"></i>
+        </button>
+        <button
+          class="vl-button vl-button--link vl-button--icon"
+          {{action "navigateToNewsLetter" meeting}}
+        >
+          <i class="vl-button__icon vl-vi vl-vi-document"></i>
+        </button>
+        <button
+          class="vl-button vl-button--link vl-button--icon"
+          {{action "navigateToNewsLetter" meeting}}
+        >
+          <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+        </button>
+      </td>
+    {{/c.body}}
+  {{/t.content}}
+{{/data-table}}

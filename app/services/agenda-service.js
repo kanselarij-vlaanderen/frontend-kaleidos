@@ -121,5 +121,35 @@ export default Service.extend({
 			approvals: await subcase.get('approvals')
 		});
 		return agendaitem.save();
-	}
+	},
+
+	parseGroups(groups, agendaitems) {
+		let lastPrio = 0;
+		let firstAgendaItem;
+		groups.map((agenda) => {
+			agenda.groups.map((group) => {
+				const newAgendaitems = group.agendaitems.map((item) => {
+					const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
+					if (!firstAgendaItem) {
+						firstAgendaItem = foundItem;
+					}
+					if (foundItem && foundItem.get('priority')) {
+						lastPrio = foundItem.priority;
+					} else {
+						if (foundItem) {
+							foundItem.set('priority', parseInt(lastPrio) + 1)
+						}
+					}
+					return foundItem;
+				})
+
+				group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
+
+				if (group.agendaitems.get('length') < 1) {
+					agenda.groups = null;
+				}
+			})
+		});
+		return { lastPrio, firstAgendaItem };
+	},
 });
