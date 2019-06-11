@@ -16,41 +16,49 @@
     <hr class="vlc-hr" />
   </div>
   <div class="vl-u-spacer-extended-bottom">
-    {{#each (await agendaitemGroups) as |agendaitemGroup|}}
-      <div class="vl-u-spacer-extended-bottom">
-        {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
-          <h2 class="vl-title vl-title--h4">
-            {{mandatee.title}}
-          </h2>
-        {{/each}}
-      </div>
-      <div class="vl-u-spacer-extended-bottom-l">
-        {{#each (await agendaitemGroup.agendaitems) as |agendaitem|}}
-          <div class="vl-u-spacer-extended-bottom-s">
+    {{#each (await agendaitemGroups) as |group|}}
+      {{#each group.groups as |agendaitemGroup|}}
+        <div class="vl-u-spacer-extended-bottom">
+          {{#each agendaitemGroup.mandatees as |mandatee|}}
             <h3 class="vl-title vl-title--h5">
-              {{agendaitem.shortTitle}}
+              {{mandatee.title}}
             </h3>
-            <p>
-              {{agendaitem.title}}
-            </p>
-          </div>
-          <div class="vl-typography">
-            <ul>
-              {{#each (await agendaitem.decisions) as |decision|}}
-                <li>
-                  {{decision.description}}
-                </li>
-              {{/each}}
-            </ul>
-            <p>
-              {{agendaitem.subcase.subcaseName}}
-            </p>
+          {{/each}}
+        </div>
+        {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+          <div class="vl-u-spacer-extended-bottom-s">
+            <div class="vl-u-spacer-extended-bottom-s">
+              <h3 class="vl-title vl-title--h5">
+                {{agendaitem.shortTitle}}
+              </h3>
+              <p>
+                {{agendaitem.title}}
+              </p>
+            </div>
+            <div class="vl-typography">
+              <ul>
+                {{#if (gt (await agendaitem.decisions.length) 0)}}
+                  {{#each (await agendaitem.decisions) as |decision|}}
+                    <li>
+                      {{decision.description}}
+                    </li>
+                  {{/each}}
+                {{else}}
+                  <p class="vl-u-text--muted">
+                    {{t "no-decision"}}
+                  </p>
+                {{/if}}
+              </ul>
+              <p>
+                {{agendaitem.subcase.subcaseName}}
+              </p>
+            </div>
           </div>
         {{/each}}
         <div class="vl-u-spacer-extended-bottom-l">
           <hr class="vlc-hr" />
         </div>
-      </div>
+      {{/each}}
     {{/each}}
   </div>
 </div>

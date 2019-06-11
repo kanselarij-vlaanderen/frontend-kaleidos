@@ -1,8 +1,13 @@
 import Controller from '@ember/controller';
-import PrintOverviewMixin from 'fe-redpencil/mixins/print-overview-mixin';
+import { computed } from '@ember/object';
+import moment from 'moment';
+import { inject } from '@ember/service';
 
-export default Controller.extend(PrintOverviewMixin, {
-	titleTranslationKey: 'decisions-of',
-	titlePrintKey: 'decisions-pdf-name',
-	routeModel: 'print-overviews.decisions',
+export default Controller.extend({
+	intl: inject(),
+
+	title: computed('model.currentAgenda.createdFor', function () {
+		const date = this.get('model.currentAgenda.createdFor.plannedStart');
+		return `${this.intl.t('decisions-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+	}),
 });
