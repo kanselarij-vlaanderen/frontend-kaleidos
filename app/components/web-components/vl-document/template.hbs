@@ -38,15 +38,3 @@
     aria-hidden="true"
   ></span>
 </div>
-{{#if isShowingDocumentVersionViewer}}
-  {{#web-components/vl-modal
-    closeModal=(action "showDocumentVersionViewer")
-    isOverlay=true
-    isDocumentViewer=true
-    title=(await documentVersionToShow.nameToDisplay)
-  }}
-    <div class="vl-modal-dialog__content full-height">
-      {{kaleidos-viewer documentVersion=(await documentVersionToShow)}}
-    </div>
-  {{/web-components/vl-modal}}
-{{/if}}

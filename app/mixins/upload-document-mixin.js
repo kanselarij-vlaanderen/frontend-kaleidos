@@ -148,5 +148,9 @@ export default Mixin.create(FileSaverMixin, {
 			})
 			this.get('uploadedFiles').removeObject(file);
 		},
+
+		async showDocumentVersionViewer(documentVersion) {
+			window.open(`/document/${(await documentVersion).get('id')}`);
+		}
 	}
 });

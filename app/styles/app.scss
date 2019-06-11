@@ -445,7 +445,7 @@ a.vlc-agenda-items-new__sub-item--active:focus {
   width: 80rem;
 }
 
-.vl-modal-dialog__content.full-height {
+.vlc-scroll-wrapper__body.full-height {
   > .ember-view {
     height: 100% !important;
   }

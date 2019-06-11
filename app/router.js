@@ -51,6 +51,7 @@ Router.map(function () {
 
   });
   this.route('accountless-users');
+  this.route('document-viewer', { path: '/document/:document_version_id', });
 });
 
 export default Router;
