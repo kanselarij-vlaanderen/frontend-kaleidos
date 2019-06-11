@@ -8,7 +8,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 		refresh: { refreshModel: true }
 	},
 
-	async model(params) {
+	async model() {
 		const agenda = await this.get('sessionService.currentAgenda');
 		this.set('sessionService.selectedAgendaItem', null);
 		const session = this.modelFor('agenda');

@@ -1,5 +1,14 @@
-<input class="vl-checkbox--switch" type="checkbox" value="1" checked={{value}} />
-<label class="vl-checkbox--switch__label" {{action "valueChanged"}}>
+<input
+  class="vl-checkbox--switch"
+  type="checkbox"
+  value="1"
+  checked={{value}}
+ />
+
+<label
+  class="vl-checkbox--switch__label"
+  {{action "valueChanged" bubbles=false}}
+>
   <span aria-hidden="true"></span>
   <span class="vl-u-visually-hidden"></span>
 </label>

@@ -1,83 +1,21 @@
-{{#data-table
-  content=model
-  sort=sort
-  page=page
-  size=size
-  class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-  isLoading=isLoadingModel as |t|
-}}
-  {{#t.content as |c|}}
-    {{#c.header}}
-      {{th-sortable
-        class=" vl-data-table__header-title"
-        currentSorting=sort
-        field="priority"
-        label="#"
-      }}
-      {{th-sortable
-        class="vl-data-table-col-7 vl-data-table__header-title"
-        currentSorting=sort
-        field="title"
-        label="Titel en inhoud"
-      }}
-      <th class="vl-data-table-col-2 vl-data-table__header-title">
-        <a class="data-table__header-title--sortable">
-          Ministers
-        </a>
-      </th>
-      <th class="vl-data-table-col-1 vl-data-table__header-title">
-        <a class="data-table__header-title--sortable">
-          In kort bestek
-        </a>
-      </th>
-      {{th-sortable
-        class="vl-data-table-col-1 vl-data-table__header-title"
-        currentSorting=sort
-        field="modified"
-        label="Laatst gewijzigd"
-      }}
-      <th class="vl-data-table-col-1 vl-data-table__header-title"></th>
-    {{/c.header}}
-    {{#c.body as |row|}}
-      <td>
-        {{row.priority}}
-      </td>
-      <td class="vl-data-table-col-7">
-        {{row.title}}
-        <br />
-        {{await row.subcase.newsletterInfo.text}}
-      </td>
-      <td class="vl-data-table-col-2">
-        {{#each (await row.sortedMandatees) as |mandatee index|}}
-          {{await mandatee.person.nameToDisplay}}<br />
-        {{/each}}
-      </td>
-      <td class="vl-data-table-col-1">
-        {{web-components/vl-toggle value=row.forPress}}
-      </td>
-      <td class="vl-data-table-col-1">
-        {{moment-format row.modified "DD.MM.YYYY-HH:mm"}}
-      </td>
-      <td class="vl-data-table-col-1 vl-u-flex-space-between">
-        <button
-          class="vl-button vl-button--link vl-button--icon"
-          {{action "navigateToNewsLetter" meeting}}
-        >
-          <i class="vl-button__icon vl-vi vl-vi-pencil"></i>
-        </button>
-        <button
-          class="vl-button vl-button--link vl-button--icon"
-          {{action "navigateToNewsLetter" meeting}}
-        >
-          <i class="vl-button__icon vl-vi vl-vi-document"></i>
-        </button>
-        <button
-          class="vl-button vl-button--link vl-button--icon"
-          {{action "navigateToNewsLetter" meeting}}
-        >
-          <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-        </button>
-      </td>
-    {{/c.body}}
-  {{/t.content}}
-{{/data-table}}
+{{#light-table table height="100vh" tableClassNames="vl-data-table" as |t|}}
+  {{t.head
+    onColumnClick=(action "onColumnClick")
+    iconSortable="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
+    iconAscending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
+    iconDescending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
+    fixed=true
+  }}
+  {{#t.body
+    canExpand=true
+    multiRowExpansion=false
+    onScrolledToBottom=(action "onScrolledToBottom") as |body|
+  }}
+    {{#body.expanded-row as |row|}}{{yield row}}{{/body.expanded-row}}
+    {{#if isLoading}}
+      {{#body.loader}}
+        {{web-components/vl-loader text="De agendapunten worden geladen.."}}
+      {{/body.loader}}
+    {{/if}}
+  {{/t.body}}
+{{/light-table}}

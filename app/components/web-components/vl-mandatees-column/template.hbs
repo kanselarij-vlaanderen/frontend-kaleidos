@@ -1,0 +1,3 @@
+{{#each (await value) as |mandatee|}}
+  {{await mandatee.person.nameToDisplay}}<br />
+{{/each}}

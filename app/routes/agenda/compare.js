@@ -10,7 +10,7 @@ export default Route.extend({
 		filter: { refreshModel: true }
 	},
 
-	async model(params) {
+	async model() {
 		this.set('sessionService.selectedAgendaItem', null);
 		const agenda = await this.get('sessionService.currentAgenda');
 		const session = await this.modelFor('agenda');
