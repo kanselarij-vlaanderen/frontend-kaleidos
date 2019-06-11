@@ -201,7 +201,7 @@ export default Model.extend({
     });
   }),
 
-  approved: computed('decisions.@each', function () {
+  approved: computed('decisions', function () {
     return PromiseObject.create({
       promise: this.get('decisions').then((decisions) => {
         const approvedDecisions = decisions.map((decision) => decision.get('approved'));

@@ -26,9 +26,11 @@
           {{/each}}
         </div>
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-          <div class="vl-u-spacer-extended-bottom-s">
+          <div class="vl-u-spacer-extended-bottom-l">
             <div class="vl-u-spacer-extended-bottom-s">
               <h3 class="vl-title vl-title--h5">
+                {{agendaitem.priority}}
+                .
                 {{agendaitem.shortTitle}}
               </h3>
               <p>
@@ -37,16 +39,25 @@
             </div>
             <div class="vl-typography">
               <ul>
-                {{#if (gt (await agendaitem.decisions.length) 0)}}
-                  {{#each (await agendaitem.decisions) as |decision|}}
+                {{#if (gt agendaitem.decisions.length 0)}}
+                  {{#each agendaitem.decisions as |decision|}}
+                    {{#if (or isAdmin isEditor)}}
+                      <div class="vl-u-display-flex align-right">
+                        <a class="vl-link" {{action "toggleIsEditing"}}>
+                          {{t "edit"}}
+                        </a>
+                      </div>
+                    {{/if}}
                     <li>
                       {{decision.description}}
                     </li>
                   {{/each}}
                 {{else}}
-                  <p class="vl-u-text--muted">
-                    {{t "no-decision"}}
-                  </p>
+                  <li>
+                    <p class="vl-u-text--muted">
+                      {{t "no-decision"}}
+                    </p>
+                  </li>
                 {{/if}}
               </ul>
               <p>
@@ -54,10 +65,11 @@
               </p>
             </div>
           </div>
+          {{web-components/vl-signature}}
+          <div class="vl-u-spacer-extended-bottom-l">
+            <hr class="vlc-hr" />
+          </div>
         {{/each}}
-        <div class="vl-u-spacer-extended-bottom-l">
-          <hr class="vlc-hr" />
-        </div>
       {{/each}}
     {{/each}}
   </div>

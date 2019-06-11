@@ -42,7 +42,7 @@ export default Model.extend({
     });
   }),
 
-  decisions: computed('subcase.decisions.@each', function () {
+  decisions: computed('subcase.decisions', function () {
     return PromiseArray.create({
       promise: this.store.query('decision',
         {

@@ -19,8 +19,7 @@ export default Mixin.create({
 
 	async model(params) {
 		const session = await this.modelFor('print-overviews');
-		const agenda = await this.modelFor('print-overviews.decisions');
-		console.log('reached')
+		const agenda = await this.modelFor(`print-overviews.${this.type}`);
 		const { groups, announcements, lastPrio } = await this.parseAgendaItems(agenda, session);
 
 		return hash({

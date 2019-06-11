@@ -1,8 +1,7 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
-
-const decidedID = "4ea2c010-06c0-4594-966b-2cb9ed1e07b7"
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(DocumentsSelectorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
@@ -16,14 +15,14 @@ export default Component.extend(DocumentsSelectorMixin, {
 		const subcase = await this.get('subcase')
 
 		const foundDecidedPhases = await this.store.query('subcase-phase', {
-			filter: { code: { id: decidedID }, subcase: { id: subcase.get('id') } }
+			filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } }
 		})
 
 		if (foundDecidedPhases && foundDecidedPhases.length > 0) {
 			await Promise.all(foundDecidedPhases.map((phase) => phase.destroyRecord()));
 		}
 		if (approved) {
-			const decidedCode = await this.store.findRecord('subcase-phase-code', decidedID);
+			const decidedCode = await this.store.findRecord('subcase-phase-code', CONFIG.decidedCodeId);
 			const newDecisionPhase = this.store.createRecord('subcase-phase', {
 				date: new Date(),
 				code: decidedCode,
