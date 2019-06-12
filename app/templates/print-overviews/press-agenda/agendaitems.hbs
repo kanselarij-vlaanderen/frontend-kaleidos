@@ -1,1 +1,18 @@
+<div class="vl-u-spacer-extended-l">
+  <div class=""></div>
+  {{#utils/agendaitem-table
+    model=model
+    sort=sort
+    page=page
+    filter=filter
+    size=size
+    columns=columns as |row|
+  }}
+    {{#if (is-pending row.decisions)}}
+      {{web-components/vl-loader text="De beslissingen worden geladen.."}}
+    {{else}}
+
+    {{/if}}
+  {{/utils/agendaitem-table}}
+</div>
 {{outlet}}

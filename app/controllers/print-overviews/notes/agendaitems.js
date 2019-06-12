@@ -26,12 +26,12 @@ export default Controller.extend({
 			cellComponent: 'web-components/vl-mandatees-column'
 		},
 		{
-			label: 'Publiek',
+			label: 'Status',
 			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-2"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			sortable: false,
-			cellComponent: "web-components/vl-press-column",
+			cellComponent: "web-components/vl-decisions-column",
 		},
 		{
 			label: 'Laatst gewijzigd',
@@ -47,5 +47,18 @@ export default Controller.extend({
 			sortable: false,
 			cellComponent: "web-components/vl-table-actions"
 		}];
-	})
+	}),
+	actions: {
+		async addDecision(row, decisions) {
+			const subcase = await row.get('subcase');
+			let decision = this.store.createRecord("decision", {
+				subcase: await subcase,
+				title: await subcase.get('title'),
+				shortTitle: await subcase.get('shortTitle'),
+				approved: false
+			});
+			let decisions2 = await decisions;
+			decisions2.addObject(decision);
+		},
+	}
 });

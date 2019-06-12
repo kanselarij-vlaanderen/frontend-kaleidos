@@ -1,1 +1,34 @@
+<div class="vl-u-spacer-extended-l">
+  <div class=""></div>
+  {{#utils/agendaitem-table
+    model=model
+    sort=sort
+    page=page
+    filter=filter
+    size=size
+    columns=columns as |row|
+  }}
+    {{#if (is-pending row.meetingRecord)}}
+      {{web-components/vl-loader text="De beslissingen worden geladen.."}}
+    {{else}}
+      {{!-- <div class="vl-u-spacer-extended-l">
+        <div class="vl-action-group vl-action-group--align-left">
+          <button
+            class="vl-button vl-button--tertiary vl-button--narrow"
+            {{action "addDecision" row row.decisions}}
+          >
+            Voeg beslissing toe
+          </button>
+        </div>
+        {{#each (await row.decisions) as |decision|}}
+          {{agenda/agendaitem/agendaitem-decision
+            subcase=(await row.subcase)
+            decision=decision
+            agendaitem=row
+          }}
+        {{/each}}
+      </div> --}}
+    {{/if}}
+  {{/utils/agendaitem-table}}
+</div>
 {{outlet}}

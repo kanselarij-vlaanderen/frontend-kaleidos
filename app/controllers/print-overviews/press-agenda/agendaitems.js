@@ -31,7 +31,8 @@ export default Controller.extend({
 			cellClassNames: ["vl-data-table-col-2"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			sortable: false,
-			cellComponent: "web-components/vl-press-column",
+			cellComponent: "web-components/vl-toggle",
+			valuePath: "forPress"
 		},
 		{
 			label: 'Laatst gewijzigd',

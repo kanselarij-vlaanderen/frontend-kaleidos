@@ -12,4 +12,3 @@ services:
     environment:
       - EMBER_ENV=development
     restart: always
-
