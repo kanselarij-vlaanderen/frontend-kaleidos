@@ -69,6 +69,16 @@ export default Component.extend(DocumentsSelectorMixin, {
 				}
 			}
 			await this.setDecisionPhaseToSubcase();
+
+			let agendaitemToUpdate;
+
+			if (this.isTableRow) {
+				agendaitemToUpdate = await this.agendaitem.content;
+			} else {
+				agendaitemToUpdate = await this.agendaitem;
+			}
+			agendaitemToUpdate.set('modified', new Date())
+			await agendaitemToUpdate.save();
 			this.toggleProperty('isEditing');
 
 		}

@@ -8,11 +8,10 @@ import { task, timeout } from 'ember-concurrency';
 export default Mixin.create({
 	store: service(),
 	modelName: null,
-	size: 10,
 	dir: 'asc',
 	isLoading: computed.oneWay('fetchRecords.isRunning'),
 	canLoadMore: true,
-	enableSync: false,
+	enableSync: true,
 	include: null,
 
 	meta: null,
@@ -21,7 +20,8 @@ export default Mixin.create({
 	init() {
 		this._super(...arguments);
 		this.set('page', 0);
-		let table = new Table(this.get('columns'), this.get('model'), { enableSync: this.get('enableSync') });
+		let table = new Table(this.get('columns'), [], { enableSync: this.get('enableSync') });
+		table.addRows(this.get('model'))
 		let sortColumn = table.get('allColumns').findBy('valuePath', this.get('sort'));
 
 		// Setup initial sort column
@@ -36,7 +36,7 @@ export default Mixin.create({
 		const queryOptions = {
 			filter: this.filter,
 			sort: this.sortBy,
-			page: { number: this.page, size: this.size },
+			page: { number: this.page, size: 10 },
 			include: this.include
 		}
 		let records = yield this.get('store').query(`${this.modelName}`, queryOptions);
@@ -45,8 +45,7 @@ export default Mixin.create({
 		this.set('meta', records.get('meta'));
 		this.set('canLoadMore', !isEmpty(records));
 		this.get('table').addRows(this.get('model'));
-
-	}).restartable(),
+	}),
 
 	sortBy: computed('dir', 'sort', function () {
 		const dir = this.dir;
@@ -58,9 +57,9 @@ export default Mixin.create({
 	}).readOnly(),
 
 	setRows: task(function* (rows) {
-		this.get('table').setRows([]);
+		this.get('table').setRowsSynced([]);
 		yield timeout(100); // Allows isLoading state to be shown
-		this.get('table').setRows(rows);
+		this.get('table').setRowsSynced(rows);
 	}).restartable(),
 
 	actions: {

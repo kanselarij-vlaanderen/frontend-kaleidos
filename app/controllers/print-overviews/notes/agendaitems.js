@@ -10,8 +10,8 @@ export default Controller.extend({
 			valuePath: 'priority',
 		}, {
 			label: 'Titel en inhoud',
-			classNames: ['vl-data-table-col-6 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-6"],
+			classNames: ['vl-data-table-col-7 vl-data-table__header-title'],
+			cellClassNames: ["vl-data-table-col-7"],
 			sortable: false,
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			cellComponent: "web-components/vl-content-column",
@@ -27,8 +27,8 @@ export default Controller.extend({
 		},
 		{
 			label: 'Afgewerkt',
-			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-2"],
+			classNames: ['vl-data-table-col-1 vl-data-table__header-title'],
+			cellClassNames: ["vl-data-table-col-1"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			sortable: false,
 			cellComponent: "web-components/vl-decisions-column",
@@ -43,22 +43,10 @@ export default Controller.extend({
 			cellComponent: "web-components/vl-modified-column"
 		},
 		{
-			width: "150px",
+			width: "144px",
 			sortable: false,
+			breakpoints: ['mobile', 'tablet', 'desktop'],
 			cellComponent: "web-components/vl-table-actions"
 		}];
-	}),
-	actions: {
-		async addDecision(row, decisions) {
-			const subcase = await row.get('subcase');
-			let decision = this.store.createRecord("decision", {
-				subcase: await subcase,
-				title: await subcase.get('title'),
-				shortTitle: await subcase.get('shortTitle'),
-				approved: false
-			});
-			let decisions2 = await decisions;
-			decisions2.addObject(decision);
-		},
-	}
+	})
 });

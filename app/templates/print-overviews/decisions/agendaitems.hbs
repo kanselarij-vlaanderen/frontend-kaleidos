@@ -13,17 +13,23 @@
       {{web-components/vl-loader text="De beslissingen worden geladen.."}}
     {{else}}
       <div class="vl-u-spacer-extended-l">
-        <div class="vl-action-group vl-action-group--align-left">
-          <button
-            class="vl-button vl-button--tertiary vl-button--narrow"
-            {{action "addDecision" row row.decisions}}
-          >
-            Voeg beslissing toe
-          </button>
+        <div class="vl-u-spacer">
+          <div class="vl-action-group vl-action-group--align-left">
+            <button
+              class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+              {{action "addDecision" row}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              Voeg beslissing toe
+            </button>
+          </div>
         </div>
         {{#each (await row.decisions) as |decision|}}
           {{agenda/agendaitem/agendaitem-decision
             subcase=(await row.subcase)
+            isTableRow=true
             decision=decision
             agendaitem=row
           }}

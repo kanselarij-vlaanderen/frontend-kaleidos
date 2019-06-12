@@ -4,14 +4,17 @@
   </button>
   <button
     class="vl-button vl-button--link vl-button--icon"
-    {{action "navigateToNewsLetter" row bubbles=false}}
+    {{action "openDocument" row bubbles=false}}
   >
     <i class="vl-button__icon vl-vi vl-vi-document"></i>
   </button>
-  <button
+  {{#link-to
+    "cases.case.subcases.subcase"
+    (await row.subcase.case.id)
+    (await row.subcase.id)
+    target="_blank"
     class="vl-button vl-button--link vl-button--icon"
-    {{action "navigateToNewsLetter" row bubbles=false}}
-  >
+  }}
     <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-  </button>
+  {{/link-to}}
 </div>

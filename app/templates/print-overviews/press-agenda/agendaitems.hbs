@@ -9,11 +9,7 @@
     include=include
     columns=columns as |row|
   }}
-    {{#if (is-pending row.decisions)}}
-      {{web-components/vl-loader text="De beslissingen worden geladen.."}}
-    {{else}}
-
-    {{/if}}
+    {{agendaitem-press-edit isTableRow=true agendaitem=row}}
   {{/utils/agendaitem-table}}
 </div>
 {{outlet}}

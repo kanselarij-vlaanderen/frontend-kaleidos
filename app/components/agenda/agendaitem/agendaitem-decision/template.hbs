@@ -1,10 +1,7 @@
 {{#if (not (is-pending (await item)))}}
   {{#if (not isEditing)}}
-    <div class="vl-u-spacer vl-typography vl-form__group vl-u-bg-porcelain">
+    <div class="vl-u-spacer vl-typography">
       <div class="vl-u-display-flex align-right">
-        <h4 class="vl-title vl-title--h6">
-          {{await decision.title}}
-        </h4>
         {{#if (or isAdmin isEditor)}}
           <a class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
@@ -70,6 +67,7 @@
     {{agenda/agendaitem/agendaitem-decision-edit
       isEditing=isEditing
       item=decision
+      isTableRow=isTableRow
       subcase=subcase
       agendaitem=agendaitem
     }}

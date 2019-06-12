@@ -10,5 +10,20 @@ export default Controller.extend({
 	title: computed('model.currentAgenda.createdFor', function () {
 		const date = this.get('model.currentAgenda.createdFor.plannedStart');
 		return `${this.intl.t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+	}),
+
+	filteredGroups: computed('model', 'definite', async function () {
+		return this.model.get('groups').then(agenda => {
+			agenda.groups.map((group) => {
+				const newAgendaitems = group.agendaitems.filter((item) => item.forPress);
+				console.log(newAgendaitems)
+			})
+		})
+
 	})
+	// group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
+
+	// if (group.agendaitems.get('length') < 1) {
+	// 	agenda.groups = null;
+	// }
 });

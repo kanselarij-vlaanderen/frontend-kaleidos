@@ -13,7 +13,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 		this.set('sessionService.selectedAgendaItem', null);
 		const session = this.modelFor('agenda');
 
-		const { groups, firstAgendaItem, announcements, lastPrio } = await this.parseAgendaItems(agenda, session);
+		const { groups, firstAgendaItem, announcements, lastPrio } = await this.parseAgendaItems(agenda, session, null);
 
 		this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
 
