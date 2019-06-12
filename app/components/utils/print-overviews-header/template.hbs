@@ -35,6 +35,7 @@
                     {{#link-to
                       routeModelOverview
                       (await model.id)
+                      (query-params definite=false)
                       class="border-left vlc-tabs-reverse__link"
                       activeClass="vlc-tabs-reverse__link--active"
                     }}
@@ -43,8 +44,9 @@
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     {{#link-to
-                      "agenda.agendaitems.agendaitem"
-                      firstAgendaItemOfAgenda.id
+                      routeModelOverview
+                      (await model.id)
+                      (query-params definite=true)
                       class="vlc-tabs-reverse__link"
                       activeClass="vlc-tabs-reverse__link--active"
                     }}
@@ -61,16 +63,18 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          <button
-            class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-            {{action "print"}}
-          >
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-              aria-hidden="true"
-            ></i>
-            {{t "print"}}
-          </button>
+          {{#if shouldShowPrintButton}}
+            <button
+              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+              {{action "print"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+                aria-hidden="true"
+              ></i>
+              {{t "print"}}
+            </button>
+          {{/if}}
         </div>
       </div>
     </div>

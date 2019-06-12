@@ -43,9 +43,11 @@
                   {{#each agendaitem.decisions as |decision|}}
                     {{#if (or isAdmin isEditor)}}
                       <div class="vl-u-display-flex align-right">
-                        <a class="vl-link" {{action "toggleIsEditing"}}>
-                          {{t "edit"}}
-                        </a>
+                        {{#if (not allowEditing)}}
+                          <a class="vl-link" {{action "toggleIsEditing"}}>
+                            {{t "edit"}}
+                          </a>
+                        {{/if}}
                       </div>
                     {{/if}}
                     <li>

@@ -3,5 +3,9 @@ import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items
 
 export default Route.extend(SortedAgendaItemsRouteMixin, {
 	type: 'decisions',
-	include: 'decisions'
+	include: 'decisions',
+
+	queryParams: {
+		definite: { refreshModel: false }
+	}
 });	
