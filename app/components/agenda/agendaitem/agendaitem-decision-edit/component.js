@@ -44,6 +44,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 					const agendaitemSubcase = await item.get('subcase');
 					agendaitemSubcase.set('modified', new Date());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
+					agendaitemSubcase.notifyPropertyChanged('decisions')
 				}
 				await this.setNewPropertiesToModel(item).then(async () => {
 					const agenda = await item.get('agenda');
@@ -60,13 +61,16 @@ export default Component.extend(DocumentsSelectorMixin, {
 							this.updateModifiedProperty(agenda).then((agenda) => {
 								agenda.reload();
 							});
-							item.reload();
+							await item.reload();
+							item.notifyPropertyChanged('decisions')
+
 						});
 					}));
 				}
 			}
 			await this.setDecisionPhaseToSubcase();
 			this.toggleProperty('isEditing');
+
 		}
 	}
 });

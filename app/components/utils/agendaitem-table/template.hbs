@@ -1,10 +1,9 @@
-{{#light-table table height="100vh" tableClassNames="vl-data-table" as |t|}}
+{{#light-table table tableClassNames="vl-data-table" as |t|}}
   {{t.head
     onColumnClick=(action "onColumnClick")
     iconSortable="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
     iconAscending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
     iconDescending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
-    fixed=true
   }}
   {{#t.body
     canExpand=true

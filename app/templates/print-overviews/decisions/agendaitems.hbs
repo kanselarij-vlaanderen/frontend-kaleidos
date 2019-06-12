@@ -1,24 +1,24 @@
-<div class="vlc-scroll-wrapper__body">
-  <div class="vl-u-spacer-extended-l">
-    {{#utils/agendaitem-table
-      model=model
-      sort=sort
-      page=page
-      filter=filter
-      size=size
-      isLoadingModel=isLoadingModel as |row|
-    }}
+{{! <div class="vlc-scroll-wrapper__body"> }}
+<div class="vl-u-spacer-extended-l">
+  {{#utils/agendaitem-table
+    model=model
+    sort=sort
+    page=page
+    filter=filter
+    size=size
+    columns=columns as |row|
+  }}
+    {{#if (is-pending row.decisions)}}
+      {{web-components/vl-loader text="De beslissingen worden geladen.."}}
+    {{else}}
       <div class="vl-action-group vl-action-group--align-left">
         <button
           class="vl-button vl-button--tertiary vl-button--narrow"
-          {{action "addDecision"}}
+          {{action "addDecision" row row.decisions}}
         >
           Voeg beslissing toe
         </button>
       </div>
-      {{#if (is-pending row.decisions)}}
-        {{web-components/vl-loader text="De beslissingen worden geladen.."}}
-      {{/if}}
       {{#each (await row.decisions) as |decision|}}
         {{agenda/agendaitem/agendaitem-decision
           subcase=(await row.subcase)
@@ -26,7 +26,8 @@
           agendaitem=row
         }}
       {{/each}}
-    {{/utils/agendaitem-table}}
-  </div>
+    {{/if}}
+  {{/utils/agendaitem-table}}
 </div>
+{{! </div> }}
 {{outlet}}

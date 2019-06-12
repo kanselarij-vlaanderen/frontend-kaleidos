@@ -46,7 +46,9 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 			model.set(property, await this.get(property));
 		}))
 
-		return model.save();
+		return model.save().then((item) => {
+			item.reload();
+		});
 	},
 
 	actions: {
