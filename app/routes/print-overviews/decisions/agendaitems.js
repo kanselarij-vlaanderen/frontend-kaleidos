@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-// import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Route.extend(AuthenticatedRouteMixin, {
@@ -25,7 +24,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 				number: this.get('page')
 			}
 		}).then((items) => {
-			return items.toArray()
+			return items.toArray();
 		})
 	},
 
@@ -35,12 +34,10 @@ export default Route.extend(AuthenticatedRouteMixin, {
 		controller.set('sort', this.sort);
 	},
 
-
 	actions: {
 		refresh() {
 			this._super(...arguments);
 			this.refresh();
-		},
-
+		}
 	}
 });

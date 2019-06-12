@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 // import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import { computed } from '@ember/object';
 export default Controller.extend({
+
 	columns: computed(function () {
 		return [{
 			label: '#',

@@ -8,20 +8,19 @@ import { task, timeout } from 'ember-concurrency';
 export default Mixin.create({
 	store: service(),
 
-	page: 0,
 	limit: 10,
-	dir: '',
+	dir: 'asc',
 
 	isLoading: computed.oneWay('fetchRecords.isRunning'),
 	canLoadMore: true,
 	enableSync: false,
 
-	model: null,
 	meta: null,
 	table: null,
 
 	init() {
 		this._super(...arguments);
+		this.set('page', 0);
 		let table = new Table(this.get('columns'), this.get('model'), { enableSync: this.get('enableSync') });
 		let sortColumn = table.get('allColumns').findBy('valuePath', this.get('sort'));
 
@@ -37,7 +36,8 @@ export default Mixin.create({
 		let records = yield this.get('store').query('agendaitem', {
 			filter: this.get('filter'),
 			sort: this.sortBy,
-			page: { number: this.page, size: this.limit }
+			page: { number: this.page, size: this.limit },
+			include: 'subcase,mandatees,subcase.decisions'
 		});
 
 		this.get('model').pushObjects(records.toArray());
