@@ -4,7 +4,7 @@ import AgendaitemTableRouteMixin from 'fe-redpencil/mixins/light-table/agendaite
 
 export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, {
 	authenticationRoute: 'mock-login',
+	routeNamePrefix: 'newsletter',
 	sort: 'priority',
-	routeNamePrefix: 'notes',
-	include: 'subcase,mandatees,meeting-record'
+	include: 'subcase,mandatees,subcase.newsletter-info'
 });

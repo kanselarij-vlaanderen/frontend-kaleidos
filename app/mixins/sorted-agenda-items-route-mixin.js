@@ -26,7 +26,8 @@ export default Mixin.create({
 			currentAgenda: agenda,
 			groups,
 			announcements,
-			lastPrio
+			lastPrio,
+			meeting: session
 		});
 	},
 });

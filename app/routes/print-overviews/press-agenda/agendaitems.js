@@ -7,5 +7,4 @@ export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, 
 	routeNamePrefix: 'press-agenda',
 	sort: 'priority',
 	include: 'subcase,mandatees'
-
 });

@@ -4,10 +4,10 @@ import moment from 'moment';
 import { inject } from '@ember/service'
 
 export default Component.extend(isAuthenticatedMixin, {
-	classNames: ["vlc-page-header"],
+	classNames: ["vlc-page-header", 'vl-u-bg-alt'],
 	session: inject(),
-  sessionService: inject(),
-  agendaService: inject(),
+	sessionService: inject(),
+	agendaService: inject(),
 	intl: inject(),
 
 	actions: {
@@ -18,8 +18,8 @@ export default Component.extend(isAuthenticatedMixin, {
 			window.document.title = tempTitle;
 		},
 		async sendNewsletter() {
-      const agenda = await this.get('agenda');
-      this.get('agendaService').sendNewsletter(agenda);
+			const agenda = await this.get('agenda');
+			this.get('agendaService').sendNewsletter(agenda);
 		}
 	}
 });

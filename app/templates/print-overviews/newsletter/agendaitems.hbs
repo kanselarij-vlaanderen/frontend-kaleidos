@@ -5,11 +5,11 @@
     sort=sort
     page=page
     filter=filter
-    size=size
     include=include
+    size=size
     columns=columns as |row|
   }}
-    {{#if (is-pending row.decisions)}}
+    {{#if (is-pending row.meetingRecord)}}
       {{web-components/vl-loader text="De beslissingen worden geladen.."}}
     {{else}}
 

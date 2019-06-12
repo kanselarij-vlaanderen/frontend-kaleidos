@@ -7,13 +7,13 @@ import { task, timeout } from 'ember-concurrency';
 
 export default Mixin.create({
 	store: service(),
-
-	limit: 10,
+	modelName: null,
+	size: 10,
 	dir: 'asc',
-
 	isLoading: computed.oneWay('fetchRecords.isRunning'),
 	canLoadMore: true,
 	enableSync: false,
+	include: null,
 
 	meta: null,
 	table: null,
@@ -33,12 +33,13 @@ export default Mixin.create({
 	},
 
 	fetchRecords: task(function* () {
-		let records = yield this.get('store').query('agendaitem', {
-			filter: this.get('filter'),
+		const queryOptions = {
+			filter: this.filter,
 			sort: this.sortBy,
-			page: { number: this.page, size: this.limit },
-			include: 'subcase,mandatees,subcase.decisions'
-		});
+			page: { number: this.page, size: this.size },
+			include: this.include
+		}
+		let records = yield this.get('store').query(`${this.modelName}`, queryOptions);
 
 		this.get('model').pushObjects(records.toArray());
 		this.set('meta', records.get('meta'));

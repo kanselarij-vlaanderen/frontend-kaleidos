@@ -19,7 +19,7 @@ export default Mixin.create({
 			},
 		};
 		this.set('filter', filter);
-		return this.store.query(`${this.modelName}`, {
+		return this.store.query(`${this.get('modelName')}`, {
 			filter,
 			include: this.get('include'),
 			sort: this.get('sort'),
@@ -36,6 +36,7 @@ export default Mixin.create({
 		this._super(...arguments)
 		controller.set('filter', this.filter);
 		controller.set('sort', this.sort);
+		controller.set('include', this.include);
 	},
 
 	actions: {

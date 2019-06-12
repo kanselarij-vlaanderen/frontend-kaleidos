@@ -34,7 +34,7 @@ Router.map(function () {
   });
 
   this.route('newsletters');
-  this.route('newsletters-overview', { path: ':meeting_id' });
+
   this.route('print-overviews', { path: "/overzicht/:meeting_id" }, function () {
     this.route('notes', { path: "/notulen/:agenda_id" }, function () {
       this.route('overview', { path: "/klad" });
@@ -48,7 +48,10 @@ Router.map(function () {
       this.route('overview', { path: "/klad" });
       this.route('agendaitems', { path: '/agendapunten' });
     });
-
+    this.route('newsletter', { path: "/kort-bestek/:agenda_id" }, function () {
+      this.route('agendaitems', { path: "/agendapunten" });
+      this.route('overview', { path: "/klad" });
+    });
   });
   this.route('accountless-users');
   this.route('document-viewer', { path: '/document/:document_version_id', });
