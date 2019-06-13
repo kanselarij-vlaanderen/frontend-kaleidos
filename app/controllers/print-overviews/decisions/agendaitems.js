@@ -26,7 +26,7 @@ export default Controller.extend({
 			cellComponent: 'web-components/vl-mandatees-column'
 		},
 		{
-			label: 'Publiek',
+			label: 'Beslist',
 			classNames: ['vl-data-table-col-1 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-1"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],

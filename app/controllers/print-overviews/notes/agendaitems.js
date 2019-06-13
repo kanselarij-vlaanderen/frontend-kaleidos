@@ -26,14 +26,6 @@ export default Controller.extend({
 			cellComponent: 'web-components/vl-mandatees-column'
 		},
 		{
-			label: 'Afgewerkt',
-			classNames: ['vl-data-table-col-1 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-1"],
-			breakpoints: ['mobile', 'tablet', 'desktop'],
-			sortable: false,
-			cellComponent: "web-components/vl-decisions-column",
-		},
-		{
 			label: 'Laatst gewijzigd',
 			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-2"],
@@ -48,5 +40,19 @@ export default Controller.extend({
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			cellComponent: "web-components/vl-table-actions"
 		}];
-	})
+	}),
+
+	actions: {
+		async addMeetingRecord(row) {
+			const date = new Date();
+			const meetingRecord = this.store.createRecord('meeting-record', {
+				created: date,
+				modified: date,
+				attendees: [],
+				agendaitem: await row.content,
+			})
+			await meetingRecord.save();
+			await row.get('meetingRecord');
+		}
+	}
 });

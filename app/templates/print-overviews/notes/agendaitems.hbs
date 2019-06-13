@@ -9,27 +9,36 @@
     size=size
     columns=columns as |row|
   }}
-    {{#if (is-pending row.meetingRecord)}}
-      {{web-components/vl-loader text="De beslissingen worden geladen.."}}
-    {{else}}
-      {{!-- <div class="vl-u-spacer-extended-l">
-        <div class="vl-action-group vl-action-group--align-left">
-          <button
-            class="vl-button vl-button--tertiary vl-button--narrow"
-            {{action "addDecision" row row.decisions}}
-          >
-            Voeg beslissing toe
-          </button>
+    <div class="vl-u-spacer-extended-l">
+      {{#if (is-pending row.meetingRecord)}}
+        {{web-components/vl-loader text="De notulen worden geladen.."}}
+      {{else if (await row.meetingRecord)}}
+        {{agenda/agendaitem/agendaitem-minutes-edit
+          isEditing=row.expanded
+          isTableRow=true
+          agendaitem=row
+        }}
+      {{else}}
+        <div class="vl-u-spacer-extended">
+          <div class="vl-action-group vl-action-group--align-center">
+            <button
+              class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+              {{action "addMeetingRecord" row}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              Voeg notulen toe.
+            </button>
+          </div>
         </div>
-        {{#each (await row.decisions) as |decision|}}
-          {{agenda/agendaitem/agendaitem-decision
-            subcase=(await row.subcase)
-            decision=decision
-            agendaitem=row
-          }}
-        {{/each}}
-      </div> --}}
-    {{/if}}
+        <div class="vl-u-align-center vl-typography">
+          <p class="vl-u-text--muted">
+            {{t "no-notes"}}
+          </p>
+        </div>
+      {{/if}}
+    </div>
   {{/utils/agendaitem-table}}
 </div>
 {{outlet}}

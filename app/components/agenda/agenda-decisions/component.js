@@ -6,15 +6,15 @@ export default Component.extend(isAuthenticatedMixin, {
 	isEditing: false,
 
 	allowEditing: computed('definite', function () {
-		return this.definite === 'true';
+		return this.definite === 'false';
 	}),
 
 	actions: {
 		close() {
 			this.closeModal();
 		},
-		toggleIsEditing() {
-			this.toggleProperty('isEditing');
+		toggleIsEditing(decision) {
+			decision.toggleProperty('isEditing');
 		}
 	}
 });

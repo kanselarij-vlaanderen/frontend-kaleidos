@@ -3,6 +3,7 @@
     <img
       style="margin:-75px 0px -50px 0px; height:250px"
       src="/assets/logo_vlaamse_regering.svg"
+      alt="Vlaamse Regering"
      />
 
   </div>
@@ -41,18 +42,29 @@
               <ul>
                 {{#if (gt agendaitem.decisions.length 0)}}
                   {{#each agendaitem.decisions as |decision|}}
-                    {{#if (or isAdmin isEditor)}}
+                    {{#if decision.isEditing}}
+                      {{agenda/agendaitem/agendaitem-decision-edit
+                        isEditing=decision.isEditing
+                        item=decision
+                        subcase=(await agendaitem.subcase)
+                        isTableRow=isTableRow
+                        agendaitem=agendaitem
+                      }}
+                    {{else if (or isAdmin isEditor)}}
                       <div class="vl-u-display-flex align-right">
-                        {{#if (not allowEditing)}}
-                          <a class="vl-link" {{action "toggleIsEditing"}}>
+                        {{#if allowEditing}}
+                          <a
+                            class="vl-link"
+                            {{action "toggleIsEditing" decision}}
+                          >
                             {{t "edit"}}
                           </a>
                         {{/if}}
                       </div>
+                      <li>
+                        {{decision.description}}
+                      </li>
                     {{/if}}
-                    <li>
-                      {{decision.description}}
-                    </li>
                   {{/each}}
                 {{else}}
                   <li>
@@ -67,10 +79,12 @@
               </p>
             </div>
           </div>
-          {{web-components/vl-signature}}
-          <div class="vl-u-spacer-extended-bottom-l">
-            <hr class="vlc-hr" />
-          </div>
+          {{#if (not allowEditing)}}
+            {{web-components/vl-signature}}
+            <div class="vl-u-spacer-extended-bottom-l">
+              <hr class="vlc-hr" />
+            </div>
+          {{/if}}
         {{/each}}
       {{/each}}
     {{/each}}

@@ -44,7 +44,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 					const agendaitemSubcase = await item.get('subcase');
 					agendaitemSubcase.set('modified', new Date());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
-					agendaitemSubcase.notifyPropertyChanged('decisions')
+					agendaitemSubcase.reload();
 				}
 				await this.setNewPropertiesToModel(item).then(async () => {
 					const agenda = await item.get('agenda');
@@ -70,17 +70,20 @@ export default Component.extend(DocumentsSelectorMixin, {
 			}
 			await this.setDecisionPhaseToSubcase();
 
-			let agendaitemToUpdate;
+			if (!this.get('isDestroyed')) {
+				let agendaitemToUpdate;
+				if (this.isTableRow) {
+					const subcase = await this.agendaitem.get('subcase');
+					(await subcase.get('decisions')).reload();
+					agendaitemToUpdate = await this.agendaitem.content;
+				} else {
+					agendaitemToUpdate = await this.agendaitem;
+				}
+				agendaitemToUpdate.set('modified', new Date())
 
-			if (this.isTableRow) {
-				agendaitemToUpdate = await this.agendaitem.content;
-			} else {
-				agendaitemToUpdate = await this.agendaitem;
+				await agendaitemToUpdate.save();
 			}
-			agendaitemToUpdate.set('modified', new Date())
-			await agendaitemToUpdate.save();
 			this.toggleProperty('isEditing');
-
 		}
 	}
 });

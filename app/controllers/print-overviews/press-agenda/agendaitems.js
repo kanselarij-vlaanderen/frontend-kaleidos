@@ -31,7 +31,7 @@ export default Controller.extend({
 			cellClassNames: ["vl-data-table-col-1"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			sortable: false,
-			cellComponent: "web-components/vl-toggle",
+			cellComponent: "web-components/light-table/vl-content-toggle",
 			valuePath: "forPress"
 		},
 		{

@@ -52,6 +52,7 @@ Router.map(function () {
       this.route('agendaitems', { path: "/agendapunten" });
       this.route('overview', { path: "/klad" });
     });
+    this.route('loading');
   });
   this.route('accountless-users');
   this.route('document-viewer', { path: '/document/:document_version_id', });

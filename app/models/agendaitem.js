@@ -1,8 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import CONFIG from 'fe-redpencil/utils/config';
 
-let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
+let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
   store: inject(),
@@ -84,6 +85,14 @@ export default Model.extend({
   documentsLength: computed('documents.@each', function () {
     return this.get('documents').then((documents) => {
       return documents.get('length');
+    });
+  }),
+
+  nota: computed('documents.@each', function () {
+    return PromiseObject.create({
+      promise: this.get('documents').then((results) => {
+        return (results.find((item) => item.get('type.id')) === CONFIG.notaID);
+      })
     });
   }),
 

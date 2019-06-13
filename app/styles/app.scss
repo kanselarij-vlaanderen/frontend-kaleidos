@@ -537,6 +537,13 @@ body > .ember-view {
   overflow: hidden !important;
 }
 
+.ember-attacher-popper-small {
+  padding: 1em;
+  &::before {
+    display: none;
+  }
+}
+
 .ember-attacher-popper-wide {
   width: 600px;
   padding: 1em;
@@ -596,4 +603,20 @@ p {
 
 tr.lt-expanded-row:hover {
   background-color: white !important;
+}
+
+.skeletal-loader {
+  background-color: $porcelain;
+  display: inline-block;
+  position: relative;
+  height: $base-font-size;
+  width: 100px;
+}
+
+.vlc-tabs-reverse__link {
+  padding: 0.7rem 4rem 0.8rem;
+}
+
+.vlc-page-header__title {
+  padding-bottom: 0.5rem !important;
 }
