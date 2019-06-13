@@ -3,5 +3,9 @@ import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items
 
 export default Route.extend(SortedAgendaItemsRouteMixin, {
 	type: 'newsletter',
-	include: 'newsletter-info'
+	include: 'newsletter-info',
+
+	queryParams: {
+		definite: { refreshModel: false }
+	}
 });	

@@ -6,5 +6,5 @@ export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, 
 	authenticationRoute: 'mock-login',
 	routeNamePrefix: 'press-agenda',
 	sort: 'priority',
-	include: 'subcase,mandatees'
+	include: 'subcase'
 });

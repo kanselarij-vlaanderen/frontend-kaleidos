@@ -10,6 +10,11 @@ export default Component.extend(isAuthenticatedMixin, {
 	intl: inject(),
 	store: inject(),
 
+	allowEditing: computed('definite', function () {
+		return this.definite === 'false';
+	}),
+
+
 	editTitle: computed('meeting', function () {
 		const date = this.get('meeting.plannedStart');
 		return `${this.get('intl').t('newsletter-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;

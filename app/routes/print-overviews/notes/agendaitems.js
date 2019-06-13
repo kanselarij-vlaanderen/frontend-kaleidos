@@ -6,5 +6,5 @@ export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, 
 	authenticationRoute: 'mock-login',
 	sort: 'priority',
 	routeNamePrefix: 'notes',
-	include: 'subcase,mandatees,meeting-record'
+	include: 'subcase,meeting-record'
 });

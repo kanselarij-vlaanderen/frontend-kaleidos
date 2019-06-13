@@ -6,5 +6,5 @@ export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, 
 	authenticationRoute: 'mock-login',
 	routeNamePrefix: 'decisions',
 	sort: 'priority',
-	include: 'subcase,mandatees,subcase.decisions'
+	include: 'subcase,subcase.decisions'
 });
