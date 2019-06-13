@@ -11,7 +11,7 @@ export default Mixin.create({
 		propertiesToSet.map((property) => {
 			model.set(property, this.get(property));
 		})
-		return await model.save();
+		return model.save().then((model) => model.reload());
 	},
 
 	actions: {

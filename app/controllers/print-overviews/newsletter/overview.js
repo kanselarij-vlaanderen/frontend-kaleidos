@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 
 export default Controller.extend({
+	queryParams: ['definite'],
 	page: 0,
 	size: 30,
 

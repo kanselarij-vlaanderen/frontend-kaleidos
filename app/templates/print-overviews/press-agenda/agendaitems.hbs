@@ -1,0 +1,14 @@
+<div class="vl-u-spacer-extended-l">
+  {{#utils/agendaitem-table
+    model=model
+    sort=sort
+    page=page
+    filter=filter
+    size=size
+    include=include
+    columns=columns as |row|
+  }}
+    {{agendaitem-press-edit isTableRow=true agendaitem=row}}
+  {{/utils/agendaitem-table}}
+</div>
+{{outlet}}

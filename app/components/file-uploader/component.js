@@ -3,6 +3,7 @@ import { task } from 'ember-concurrency';
 import { get } from '@ember/object';
 import { inject } from '@ember/service';
 import { observer } from '@ember/object';
+
 export default Component.extend({
   store: inject(),
   fileQueue: inject(),
@@ -14,6 +15,14 @@ export default Component.extend({
   didInsertElement() {
     this._super(...arguments);
     this.set('uploadedFileLength', 0);
+    this.store.findAll('document-type',
+      {
+        sort: "priority",
+        page: { size: 50 }
+      }).then((types) => {
+        console.log(types)
+        return types;
+      });
   },
 
   isNotLoading: observer('fileQueue.files.@each', function () {

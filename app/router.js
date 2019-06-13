@@ -9,10 +9,10 @@ const Router = EmberRouter.extend({
 Router.map(function () {
   this.route('agendas', { path: "/" });
   this.route('agenda', { path: '/agenda/:id' }, function () {
-    this.route('agendaitems', function () {
+    this.route('agendaitems', { path: "/agendapunten" }, function () {
       this.route('agendaitem', { path: '/:agendaitem_id' });
     });
-    this.route('compare');
+    this.route('compare', { path: "/vergelijken" });
   });
   this.route('cases', { path: '/dossiers' }, function () {
     this.route('case', { path: ':id' }, function () {
@@ -24,7 +24,7 @@ Router.map(function () {
     });
     this.route('overview', { path: '' });
   });
-  this.route('settings');
+  this.route('settings', { path: "/instellingen" });
   this.route('loading');
   this.route('mock-login');
   this.route('login');
@@ -32,20 +32,30 @@ Router.map(function () {
   this.route('route-not-found', {
     path: '/*wildcard'
   });
+
   this.route('newsletters');
-  this.route('newsletters-overview', { path: ':meeting_id' });
-  this.route('print-overviews', function () {
-    this.route('notes', function () {
-      this.route('overview', { path: '/:meeting_id' });
+
+  this.route('print-overviews', { path: "/overzicht/:meeting_id" }, function () {
+    this.route('notes', { path: "/notulen/:agenda_id" }, function () {
+      this.route('overview', { path: "/klad" });
+      this.route('agendaitems', { path: '/agendapunten' });
     });
-    this.route('decisions', function () {
-      this.route('overview', { path: '/:meeting_id' });
+    this.route('decisions', { path: "/beslissingen/:agenda_id" }, function () {
+      this.route('overview', { path: "/klad" });
+      this.route('agendaitems', { path: '/agendapunten' });
     });
-    this.route('press-agenda', function () {
-      this.route('overview', { path: '/:meeting_id' });
+    this.route('press-agenda', { path: "/persagenda/:agenda_id" }, function () {
+      this.route('overview', { path: "/klad" });
+      this.route('agendaitems', { path: '/agendapunten' });
     });
+    this.route('newsletter', { path: "/kort-bestek/:agenda_id" }, function () {
+      this.route('agendaitems', { path: "/agendapunten" });
+      this.route('overview', { path: "/klad" });
+    });
+    this.route('loading');
   });
   this.route('accountless-users');
+  this.route('document-viewer', { path: '/document/:document_version_id', });
 });
 
 export default Router;

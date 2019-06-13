@@ -1,8 +1,7 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
-
-const decidedID = "4ea2c010-06c0-4594-966b-2cb9ed1e07b7"
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(DocumentsSelectorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
@@ -16,14 +15,14 @@ export default Component.extend(DocumentsSelectorMixin, {
 		const subcase = await this.get('subcase')
 
 		const foundDecidedPhases = await this.store.query('subcase-phase', {
-			filter: { code: { id: decidedID }, subcase: { id: subcase.get('id') } }
+			filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } }
 		})
 
 		if (foundDecidedPhases && foundDecidedPhases.length > 0) {
 			await Promise.all(foundDecidedPhases.map((phase) => phase.destroyRecord()));
 		}
 		if (approved) {
-			const decidedCode = await this.store.findRecord('subcase-phase-code', decidedID);
+			const decidedCode = await this.store.findRecord('subcase-phase-code', CONFIG.decidedCodeId);
 			const newDecisionPhase = this.store.createRecord('subcase-phase', {
 				date: new Date(),
 				code: decidedCode,
@@ -45,6 +44,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 					const agendaitemSubcase = await item.get('subcase');
 					agendaitemSubcase.set('modified', new Date());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
+					agendaitemSubcase.reload();
 				}
 				await this.setNewPropertiesToModel(item).then(async () => {
 					const agenda = await item.get('agenda');
@@ -61,12 +61,28 @@ export default Component.extend(DocumentsSelectorMixin, {
 							this.updateModifiedProperty(agenda).then((agenda) => {
 								agenda.reload();
 							});
-							item.reload();
+							await item.reload();
+							item.notifyPropertyChanged('decisions')
+
 						});
 					}));
 				}
 			}
 			await this.setDecisionPhaseToSubcase();
+
+			if (!this.get('isDestroyed')) {
+				let agendaitemToUpdate;
+				if (this.isTableRow) {
+					const subcase = await this.agendaitem.get('subcase');
+					(await subcase.get('decisions')).reload();
+					agendaitemToUpdate = await this.agendaitem.content;
+				} else {
+					agendaitemToUpdate = await this.agendaitem;
+				}
+				agendaitemToUpdate.set('modified', new Date())
+
+				await agendaitemToUpdate.save();
+			}
 			this.toggleProperty('isEditing');
 		}
 	}

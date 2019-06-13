@@ -6,7 +6,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
 	sessionService: inject(),
-  classNames: ['vlc-padding-bottom--large'],
+	classNames: ['vlc-padding-bottom--large'],
 	isEditing: false,
 
 	currentSession: alias('sessionService.currentSession'),
@@ -14,11 +14,11 @@ export default Component.extend(isAuthenticatedMixin, {
 	actions: {
 		async toggleIsEditing() {
 			const agendaitemNotes = await this.get('agendaitem.meetingRecord');
-
+			const date = new Date();
 			if (!agendaitemNotes) {
 				const meetingRecord = this.store.createRecord('meeting-record', {
-					created: new Date(),
-					modified: new Date(),
+					created: date,
+					modified: date,
 					announcements: null,
 					others: null,
 					description: "",

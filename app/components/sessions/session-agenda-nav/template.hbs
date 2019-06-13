@@ -1,16 +1,26 @@
 <ul class="vlc-tabs-reverse" role="tablist">
   <li class="vlc-tabs-reverse__item">
     <a
-      class="vlc-tabs-reverse__link {{selectedOverviewClass}}"
+      class="border-left vlc-tabs-reverse__link {{selectedOverviewClass}}"
       {{action "goToOverview"}}
     >
       {{t "overview"}}
     </a>
   </li>
   <li class="vlc-tabs-reverse__item">
-    <a class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}">
-      {{t "detail"}}
-    </a>
+    {{#if sessionService.selectedAgendaItem}}
+      <a class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}">
+        {{t "detail"}}
+      </a>
+    {{else}}
+      {{#link-to
+        "agenda.agendaitems.agendaitem"
+        firstAgendaItemOfAgenda.id
+        class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}"
+      }}
+        {{t "detail"}}
+      {{/link-to}}
+    {{/if}}
   </li>
   {{#if (or isAdmin isEditor)}}
     <li class="vlc-tabs-reverse__item">

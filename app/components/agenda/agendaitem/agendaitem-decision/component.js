@@ -45,7 +45,19 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		async verify() {
 			await this.decisionToDelete.destroyRecord();
-			this.set('isVerifyingDelete', true);
+			let agendaitemToUpdate;
+
+			if (this.isTableRow) {
+				const subcase = await this.agendaitem.get('subcase');
+				(await subcase.get('decisions')).reload();
+				agendaitemToUpdate = await this.agendaitem.content;
+			} else {
+				agendaitemToUpdate = await this.agendaitem;
+			}
+			agendaitemToUpdate.set('modified', new Date())
+			await agendaitemToUpdate.save();
+
+			this.set('isVerifyingDelete', false);
 		},
 
 		cancel() {

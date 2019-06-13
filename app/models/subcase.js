@@ -26,20 +26,27 @@ export default Model.extend({
   iseCodes: hasMany('ise-code'),
   agendaitems: hasMany('agendaitem', { inverse: null }),
   remarks: hasMany('remark'),
-  documentVersions: hasMany('document-version', { inverse: null }),
+  documentVersions: hasMany('document-version'),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval', { serialize: false }),
-  decisions: hasMany('decision', { inverse: null }),
+  decisions: hasMany('decision'),
 
   confidentiality: belongsTo('confidentiality'),
   type: belongsTo('subcase-type'),
   case: belongsTo('case', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
+  newsletterInfo: belongsTo('newsletter-info'),
 
   firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({
-      promise: this.store.query('subcase-phase', { filter: { subcase: { id: this.get('id') } }, sort: 'date', include: 'code' }).then((subcasePhases) => {
+      promise: this.store.query('subcase-phase', {
+        filter: {
+          subcase: { id: this.get('id') }
+        },
+        sort: 'date',
+        include: 'code'
+      }).then((subcasePhases) => {
         return subcasePhases.get('firstObject');
       })
     });
@@ -60,6 +67,7 @@ export default Model.extend({
 
   async documentNumberOfVersion(version) {
     const documents = await this.get('documents');
+
     const sortedDocuments = documents.sortBy('created');
     const targetDocument = await version.get('document');
     let foundIndex;
@@ -71,17 +79,24 @@ export default Model.extend({
     return foundIndex;
   },
 
-  documents: computed('documentVersions.@each', function () {
+  documents: computed('documentVersions', function () {
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
-        return Promise.all(documentVersions.map(documentVersion => {
-          return documentVersion.get('document');
-        })).then((documents) => { return documents.uniqBy('id') })
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            sort: 'type.priority',
+            include: 'type,document-versions',
+          })
+        }
       })
     });
   }),
 
-  documentsLength: computed('documents.@each', function () {
+  documentsLength: computed('documents', function () {
     return PromiseObject.create({
       promise: this.get('documents').then((documents) => {
         return documents.get('length');
@@ -186,7 +201,7 @@ export default Model.extend({
     });
   }),
 
-  approved: computed('decisions.@each', function () {
+  approved: computed('decisions', function () {
     return PromiseObject.create({
       promise: this.get('decisions').then((decisions) => {
         const approvedDecisions = decisions.map((decision) => decision.get('approved'));

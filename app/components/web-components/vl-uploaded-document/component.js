@@ -11,12 +11,12 @@ export default Component.extend(UploadDocumentMixin, {
 	}),
 
 	filteredItems: computed('subcase', async function () {
-		return this.store.query('document-type',
+		const filter = await this.get('subcase.documentTypeFilter');
+		return this.store.findAll('document-type',
 			{
-				filter: await this.get('subcase.documentTypeFilter'),
-				sort: "label",
-				page: { size: 50 }
-			});
+				sort: "priority",
+				filter
+			})
 	}),
 
 	fileName: computed('file', function () {

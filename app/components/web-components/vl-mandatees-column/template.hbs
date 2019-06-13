@@ -1,0 +1,11 @@
+{{#if (is-pending value)}}
+
+{{else}}
+  {{#each (await value) as |mandatee|}}
+    {{#if (is-pending mandatee.person)}}
+      <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+    {{/if}}
+    {{await mandatee.person.nameToDisplay}}
+    <br />
+  {{/each}}
+{{/if}}

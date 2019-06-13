@@ -1,0 +1,23 @@
+{{#light-table
+  table
+  tableClassNames="vl-data-table vl-data-table vl-data-table--hover" as |t|
+}}
+  {{t.head
+    onColumnClick=(action "onColumnClick")
+    iconSortable="vl-data-table__header-title__sort-icon vl-vi vl-vi-expand-vertical"
+    iconAscending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
+    iconDescending="vl-data-table__header-title__sort-icon vl-vi vl-vi-arrow-up"
+  }}
+  {{#t.body
+    canExpand=true
+    multiRowExpansion=false
+    onScrolledToBottom=(action "onScrolledToBottom") as |body|
+  }}
+    {{#body.expanded-row as |row|}}{{yield row}}{{/body.expanded-row}}
+    {{#if isLoading}}
+      {{#body.loader}}
+        {{web-components/vl-loader text="De agendapunten worden geladen.."}}
+      {{/body.loader}}
+    {{/if}}
+  {{/t.body}}
+{{/light-table}}

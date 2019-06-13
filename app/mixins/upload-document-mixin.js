@@ -106,10 +106,8 @@ export default Mixin.create(FileSaverMixin, {
 			}
 		},
 
-		async downloadFile(documentVersion) {
-			if (!(await documentVersion)) {
-				return;
-			}
+		async downloadFile(version) {
+			const documentVersion = await version;
 			let file = await documentVersion.get('file');
 			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
 				method: 'GET',
@@ -150,5 +148,9 @@ export default Mixin.create(FileSaverMixin, {
 			})
 			this.get('uploadedFiles').removeObject(file);
 		},
+
+		async showDocumentVersionViewer(documentVersion) {
+			window.open(`/document/${(await documentVersion).get('id')}`);
+		}
 	}
 });

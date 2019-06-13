@@ -1,20 +1,20 @@
 
 import Component from '@ember/component';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed } from '@ember/object';
-import moment from 'moment';
-import { inject } from '@ember/service';
+export default Component.extend(isAuthenticatedMixin, {
+	isEditing: false,
 
-export default Component.extend({
-	intl: inject(),
-
-	title: computed('currentSession', function() {
-		const date = this.get('currentSession.plannedStart');
-		return `${this.get('intl').t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+	allowEditing: computed('definite', function () {
+		return this.definite === 'false';
 	}),
 
 	actions: {
 		close() {
 			this.closeModal();
+		},
+		toggleIsEditing(decision) {
+			decision.toggleProperty('isEditing');
 		}
 	}
 });

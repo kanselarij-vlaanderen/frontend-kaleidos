@@ -1,88 +1,28 @@
 import Route from '@ember/routing/route';
-import { inject } from '@ember/service';
+import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items-route-mixin';
 import { hash } from 'rsvp';
 
-export default Route.extend({
-	sessionService: inject(),
-	agendaService: inject(),
-
+export default Route.extend(SortedAgendaItemsRouteMixin, {
 	queryParams: {
 		filter: { refreshModel: true },
 		refresh: { refreshModel: true }
 	},
 
-	async model(params) {
+	async model() {
 		const agenda = await this.get('sessionService.currentAgenda');
 		this.set('sessionService.selectedAgendaItem', null);
+		const session = this.modelFor('agenda');
 
-		const filterOptions = {
-			filter: { agenda: { id: agenda.get('id') } },
-			include: 'subcase.mandatees,subcase,subcase.case',
-			page: { 'size': 300 }
-		}
-		if (params.filter) {
-			filterOptions['filter']['subcase'] = { 'short-title': params.filter };
-		}
+		const { groups, firstAgendaItem, announcements, lastPrio } = await this.parseAgendaItems(agenda, session, null);
 
-		const agendaitems = await this.store.query('agendaitem', filterOptions);
-		const announcements = agendaitems.filter((item) => item.showAsRemark);
-
-		const groups = await this.reduceGroups(agendaitems, agenda);
+		this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
 
 		return hash({
-			agendaitems: agendaitems,
-			groups: groups,
-			announcements: announcements.sortBy('created')
+			currentAgenda: agenda,
+			groups,
+			announcements,
+			lastPrio
 		});
-	},
-
-	async reduceGroups(agendaitems, agenda) {
-		const { agendaService } = this;
-		const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
-		const itemsAddedAfterwards = []
-
-		let filteredAgendaItems = await agendaitems.filter(agendaitem => {
-			if (agendaitem && agendaitem.id) {
-
-				if (!agendaitem.showAsRemark) {
-					if (agendaitem.priority) {
-						const foundItem = sortedAgendaItems.find(item => item.uuid === agendaitem.id);
-						if (foundItem) {
-							agendaitem.set('foundPriority', foundItem.priority);
-							return agendaitem;
-						}
-					} else {
-						itemsAddedAfterwards.push(agendaitem);
-					}
-				}
-
-			}
-		});
-
-		// filteredAgendaItems = filteredAgendaItems.sortBy('created');
-
-		const filteredAgendaGroupList = Object.values(await agendaService.reduceAgendaitemsByMandatees(filteredAgendaItems));
-
-		const filteredAgendaGroupListAddedAfterwards = Object.values(await agendaService.reduceAgendaitemsByMandatees(itemsAddedAfterwards));
-		let sortedAgendaGroupList = [];
-		let sortedAgendaGroupListAddedAfterwards = [];
-
-		if (filteredAgendaGroupList) {
-			sortedAgendaGroupList = filteredAgendaGroupList.sortBy('foundPriority')
-		} else {
-			sortedAgendaGroupList = filteredAgendaGroupList;
-		}
-
-		if (filteredAgendaGroupList) {
-			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards.sortBy('foundPriority')
-		} else {
-			sortedAgendaGroupListAddedAfterwards = filteredAgendaGroupListAddedAfterwards;
-		}
-
-		return [
-			sortedAgendaGroupList,
-			sortedAgendaGroupListAddedAfterwards
-		];
 	},
 
 	actions: {

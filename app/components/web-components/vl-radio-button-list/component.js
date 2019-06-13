@@ -15,7 +15,7 @@ export default Component.extend({
 	async didInsertElement() {
 		this._super(...arguments);
 		const model = await this.model;
-		if (model.length > 1) {
+		if (model && model.length > 1 && !this.selectedModel) {
 			this.set('selectedModel', model.get('firstObject'));
 		}
 	},

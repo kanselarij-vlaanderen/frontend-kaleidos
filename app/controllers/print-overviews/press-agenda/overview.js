@@ -5,29 +5,25 @@ import moment from 'moment';
 
 export default Controller.extend({
 	intl: inject(),
+	queryParams: ['definite'],
 
-	title: computed('model.currentSession', function () {
-		const date = this.get('model.currentSession.plannedStart');
-		return `${this.get('intl').t('agenda-for')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+	title: computed('model.currentAgenda.createdFor', function () {
+		const date = this.get('model.currentAgenda.createdFor.plannedStart');
+		return `${this.intl.t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
 	}),
 
-	pageTitle: computed('model.currentSession', function () {
-		const date = this.get('model.currentSession.plannedStart');
-		return `${this.get('intl').t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
-	}),
+	filteredGroups: computed('model', 'definite', async function () {
+		return this.model.get('groups').then(agenda => {
+			agenda.groups.map((group) => {
+				const newAgendaitems = group.agendaitems.filter((item) => item.forPress);
+				console.log(newAgendaitems)
+			})
+		})
 
-	actions: {
-		async navigateBackToAgenda() {
-			const currentSessionId = await this.get('model.currentSession.id');
-			const selectedAgendaid = this.get('selectedAgenda_id');
-			this.transitionToRoute('agenda.agendaitems', currentSessionId, { queryParams: { selectedAgenda: selectedAgendaid } })
-		},
+	})
+	// group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
 
-		print() {
-			var tempTitle = window.document.title;
-			window.document.title = `${this.get('intl').t('press-agenda-pdf-name')}${moment(this.get('currentSession.plannenStart')).format('YYYYMMDD')}`;
-			window.print();
-			window.document.title = tempTitle;
-		}
-	}
+	// if (group.agendaitems.get('length') < 1) {
+	// 	agenda.groups = null;
+	// }
 });

@@ -13,7 +13,7 @@ export default Component.extend({
 	searchField: null,
 	propertyToShow: null,
 	rows: "5",
-	text: null,
+	text: '',
 	label: null,
 
 	focusTextarea() {
@@ -24,13 +24,15 @@ export default Component.extend({
 
 	actions: {
 		selectModel(items) {
-			const text = this.get('text');
+			const text = this.get('text') || "";
 			const textToAdd = items.description;
-			let newText;
+			let newText = "";
 			if (text != "") {
 				newText = text + " " + textToAdd;
 			} else {
-				newText = textToAdd;
+				if (textToAdd) {
+					newText = textToAdd;
+				}
 			}
 			this.set('text', newText);
 			this.focusTextarea();

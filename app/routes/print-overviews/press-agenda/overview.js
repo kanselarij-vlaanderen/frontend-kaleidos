@@ -1,32 +1,29 @@
 import Route from '@ember/routing/route';
-import { inject } from '@ember/service';
-import { hash } from 'rsvp';
+import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items-route-mixin';
 
-export default Route.extend({
-	agendaService: inject(),
-	sessionService: inject(),
+export default Route.extend(SortedAgendaItemsRouteMixin, {
+	type: 'press-agenda',
+	include: null,
 
 	queryParams: {
-		selectedAgenda_id: { refreshModel: true }
+		definite: { refreshModel: true }
 	},
 
-	async model(params) {
-		const currentSession = await this.store.findRecord('meeting', params.meeting_id)
-		const currentAgenda = await this.store.findRecord('agenda', params.selectedAgenda_id)
-		const sortedAgendaItemIds = await this.get('agendaService').getSortedAgendaItems(currentAgenda);
-		let sortedAgendaItems = await Promise.all(sortedAgendaItemIds.map(async (item) => {
-			if (item.uuid) {
-				const agendaitem = await this.store.findRecord('agendaitem', item.uuid, { include: 'subcase,subcase.mandatees' });
-				agendaitem.set('foundPriority', item.priority);
-				if (!(await agendaitem.get('subcase.confidential'))) {
-					return agendaitem;
-				}
-			}
-		}));
+	async parseAgendaItems(agenda, session, definite) {
+		let agendaitems = await (await agenda.get('agendaitems')).filter((item) => !item.get('subcase.showAsRemark'));
+		let filteredAgendaItems = [];
+		if (definite === "true") {
+			const publicItems = agendaitems.filter((item) => item.get('forPress'));
+			filteredAgendaItems.push(...publicItems);
+		} else {
+			filteredAgendaItems.push(...agendaitems);
+		}
 
-		sortedAgendaItems = sortedAgendaItems.filter((item) => item);
-		const agendaitemGroups = Object.values(await this.get('agendaService').reduceAgendaitemsByMandatees(sortedAgendaItems));
+		const announcements = agendaitems.filter((item) => item.get('subcase.showAsRemark'));
 
-		return hash({ agendaitemGroups: agendaitemGroups, currentSession: currentSession });
-	}
-});
+		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
+		const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(groups, filteredAgendaItems);
+
+		return { groups, firstAgendaItem, announcements, lastPrio };
+	},
+});	

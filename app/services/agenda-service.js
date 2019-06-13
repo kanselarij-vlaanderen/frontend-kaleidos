@@ -84,6 +84,18 @@ export default Service.extend({
 		});
 	},
 
+	newSorting(sessionId, currentAgendaID) {
+		return $.ajax(
+			{
+				method: "GET",
+				url: `/agenda-sort/sortedAgenda?sessionId=${sessionId.get('id')}&selectedAgenda=${currentAgendaID}`,
+				data: {}
+			}
+		).then((result) => {
+			return result;
+		});
+	},
+
 	async createNewAgendaItem(selectedAgenda, subcase) {
 		const mandatees = await subcase.get('mandatees');
 		const titles = mandatees.map((mandatee) => mandatee.get('title'));
@@ -109,5 +121,39 @@ export default Service.extend({
 			approvals: await subcase.get('approvals')
 		});
 		return agendaitem.save();
-	}
+	},
+
+	parseGroups(groups, agendaitems) {
+		let lastPrio = 0;
+		let firstAgendaItem;
+		groups.map((agenda) => {
+			agenda.groups.map((group) => {
+				const newAgendaitems = group.agendaitems.map((item) => {
+					const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
+
+					if (!firstAgendaItem) {
+						firstAgendaItem = foundItem;
+					}
+					if (foundItem && foundItem.get('priority')) {
+						lastPrio = foundItem.priority;
+					} else {
+						if (foundItem) {
+							foundItem.set('priority', parseInt(lastPrio) + 1)
+						}
+					}
+
+					return foundItem;
+				})
+
+				group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
+
+				if (group.agendaitems.get('length') < 1) {
+					group.agendaitems = null;
+					group = null;
+				}
+
+			})
+		});
+		return { lastPrio, firstAgendaItem };
+	},
 });

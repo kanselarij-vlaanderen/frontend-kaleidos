@@ -14,5 +14,6 @@ export default EmberObject.create({
 	onAgendaCodeId: "3e6dba4f-5c3c-439a-993e-92348ec73642",
 	decidedCodeId: "4ea2c010-06c0-4594-966b-2cb9ed1e07b7",
 	onAgendaLabel: "geagendeerd",
-	decidedLabel: "beslist"
+	decidedLabel: "beslist",
+	notaID: "9e5b1230-f3ad-438f-9c68-9d7b1b2d875d"
 }) 

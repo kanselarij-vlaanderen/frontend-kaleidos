@@ -16,12 +16,14 @@ export default Mixin.create({
 	selectedItems: null,
 
 	items: computed('modelName', async function () {
-		const { modelName, searchField } = this;
-		return this.store.query(modelName,
-			{
-				sort: searchField,
-				page: { size: 50 }
-			});
+		const { modelName, sortField } = this;
+		const filteredItems = await this.get('filteredItems');
+		if (!filteredItems || !filteredItems.length > 0) {
+			return this.store.findAll(modelName,
+				{
+					sort: sortField,
+				});
+		}
 	}),
 
 	searchTask: task(function* (searchValue) {
@@ -44,7 +46,7 @@ export default Mixin.create({
 		resetValueIfEmpty(param) {
 			if (param == "") {
 				const modelName = this.get('modelName');
-				this.set('items', this.store.peekAll(modelName));
+				this.set('items', this.store.findAll(modelName, { sort: this.get('sortField') }));
 			}
 		}
 	},

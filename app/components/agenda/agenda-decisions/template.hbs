@@ -3,12 +3,13 @@
     <img
       style="margin:-75px 0px -50px 0px; height:250px"
       src="/assets/logo_vlaamse_regering.svg"
+      alt="Vlaamse Regering"
      />
 
   </div>
   <div class="vl-u-spacer-extended-bottom-l">
     <h1 class="vl-title vl-title--h2">
-      {{title}}
+      {{await title}}
       <br />
     </h1>
   </div>
@@ -16,41 +17,76 @@
     <hr class="vlc-hr" />
   </div>
   <div class="vl-u-spacer-extended-bottom">
-    {{#each (await agendaitemGroups) as |agendaitemGroup|}}
-      <div class="vl-u-spacer-extended-bottom">
-        {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
-          <h2 class="vl-title vl-title--h4">
-            {{mandatee.title}}
-          </h2>
-        {{/each}}
-      </div>
-      <div class="vl-u-spacer-extended-bottom-l">
-        {{#each (await agendaitemGroup.agendaitems) as |agendaitem|}}
-          <div class="vl-u-spacer-extended-bottom-s">
+    {{#each (await agendaitemGroups) as |group|}}
+      {{#each group.groups as |agendaitemGroup|}}
+        <div class="vl-u-spacer-extended-bottom">
+          {{#each agendaitemGroup.mandatees as |mandatee|}}
             <h3 class="vl-title vl-title--h5">
-              {{agendaitem.shortTitle}}
+              {{mandatee.title}}
             </h3>
-            <p>
-              {{agendaitem.title}}
-            </p>
-          </div>
-          <div class="vl-typography">
-            <ul>
-              {{#each (await agendaitem.decisions) as |decision|}}
-                <li>
-                  {{decision.description}}
-                </li>
-              {{/each}}
-            </ul>
-            <p>
-              {{agendaitem.subcase.subcaseName}}
-            </p>
-          </div>
-        {{/each}}
-        <div class="vl-u-spacer-extended-bottom-l">
-          <hr class="vlc-hr" />
+          {{/each}}
         </div>
-      </div>
+        {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+          <div class="vl-u-spacer-extended-bottom-l">
+            <div class="vl-u-spacer-extended-bottom-s">
+              <h3 class="vl-title vl-title--h5">
+                {{agendaitem.priority}}
+                .
+                {{agendaitem.shortTitle}}
+              </h3>
+              <p>
+                {{agendaitem.title}}
+              </p>
+            </div>
+            <div class="vl-typography">
+              <ul>
+                {{#if (gt agendaitem.decisions.length 0)}}
+                  {{#each agendaitem.decisions as |decision|}}
+                    {{#if decision.isEditing}}
+                      {{agenda/agendaitem/agendaitem-decision-edit
+                        isEditing=decision.isEditing
+                        item=decision
+                        subcase=(await agendaitem.subcase)
+                        isTableRow=isTableRow
+                        agendaitem=agendaitem
+                      }}
+                    {{else if (or isAdmin isEditor)}}
+                      <div class="vl-u-display-flex align-right">
+                        {{#if allowEditing}}
+                          <a
+                            class="vl-link"
+                            {{action "toggleIsEditing" decision}}
+                          >
+                            {{t "edit"}}
+                          </a>
+                        {{/if}}
+                      </div>
+                      <li>
+                        {{decision.description}}
+                      </li>
+                    {{/if}}
+                  {{/each}}
+                {{else}}
+                  <li>
+                    <p class="vl-u-text--muted">
+                      {{t "no-decision"}}
+                    </p>
+                  </li>
+                {{/if}}
+              </ul>
+              <p>
+                {{agendaitem.subcase.subcaseName}}
+              </p>
+            </div>
+          </div>
+          {{#if (not allowEditing)}}
+            {{web-components/vl-signature}}
+            <div class="vl-u-spacer-extended-bottom-l">
+              <hr class="vlc-hr" />
+            </div>
+          {{/if}}
+        {{/each}}
+      {{/each}}
     {{/each}}
   </div>
 </div>

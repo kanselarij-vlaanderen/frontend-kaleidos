@@ -21,7 +21,7 @@ export default Component.extend({
 	}),
 
 	mandatees: computed("store", function () {
-		return this.store.query('mandatee', { sort: 'priority', include: 'person' });
+		return this.store.findAll('mandatee', { sort: 'priority', include: 'person' });
 	}),
 
 	filteredMandatees: filter('mandatees.@each', function (mandatee) {
@@ -39,7 +39,7 @@ export default Component.extend({
 		},
 		async resetValueIfEmpty(param) {
 			if (param === "") {
-				this.set('mandatees', this.store.query('mandatee', { sort: 'priority' }));
+				this.set('mandatees', this.store.findAll('mandatee', { sort: 'priority', include: 'person' }));
 			}
 		}
 	}

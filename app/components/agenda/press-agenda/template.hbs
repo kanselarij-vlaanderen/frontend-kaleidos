@@ -3,12 +3,13 @@
     <img
       style="margin:-75px 0px -50px 0px; height:250px"
       src="/assets/logo_vlaamse_regering.svg"
+      alt="Vlaamse Regering"
      />
 
   </div>
   <div class="vl-u-spacer-extended-bottom-l">
     <h1 class="vl-title vl-title--h2">
-      {{title}}
+      {{await title}}
       <br />
       <span class="vl-u-spacer-extended-top-s vl-u-text--muted">
         {{t "agenda"}}
@@ -19,34 +20,61 @@
     <hr class="vlc-hr" />
   </div>
   <div class="vl-u-spacer-extended-bottom">
-    {{#each (await agendaitemGroups) as |agendaitemGroup|}}
-      <div class="vl-u-spacer-extended-bottom">
-        {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
-          <h2 class="vl-title vl-title--h4">
-            {{mandatee.title}}
-          </h2>
-        {{/each}}
-      </div>
-      <div class="vl-u-spacer-extended-bottom-l">
-        {{#each (await agendaitemGroup.agendaitems) as |agendaitem|}}
-          <div class="vl-u-spacer-extended-bottom-s">
-            <h3 class="vl-title vl-title--h5">
-              {{agendaitem.titlePress}}
-            </h3>
+    {{#each (await agendaitemGroups) as |group|}}
+      {{#each group.groups as |agendaitemGroup|}}
+        {{#if agendaitemGroup.agendaitems.length}}
+          <div class="vl-u-spacer-extended-bottom">
+            {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
+              <h2 class="vl-title vl-title--h4">
+                {{mandatee.title}}
+              </h2>
+            {{/each}}
           </div>
-          <div class="vl-typography">
-            <ul>
-              <li>
-                {{agendaitem.textPress}}
-              </li>
-            </ul>
-            <p></p>
+          <div class="vl-u-spacer-extended-bottom-l">
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              {{#if (not agendaitem.isEditing)}}
+                <div class="vl-u-spacer-extended-bottom-s">
+                  <div class="vl-u-display-flex vl-u-flex-space-between">
+                    <h3 class="vl-title vl-title--h5">
+                      {{agendaitem.priority}}
+                      .
+                      {{agendaitem.titlePress}}
+                    </h3>
+                    {{#if (eq definite "false")}}
+                      {{#if (or isAdmin isEditor)}}
+                        <div class="vl-u-spacer-extended-left-s">
+                          <a
+                            class="vl-link"
+                            {{action "toggleIsEditing" agendaitem}}
+                          >
+                            {{t "edit"}}
+                          </a>
+                        </div>
+                      {{/if}}
+                    {{/if}}
+                  </div>
+                </div>
+                <div class="vl-typography">
+                  <ul>
+                    <li>
+                      {{agendaitem.textPress}}
+                    </li>
+                  </ul>
+                  <p></p>
+                </div>
+              {{else}}
+                {{agendaitem-press-edit
+                  agendaitem=agendaitem
+                  isEditing=agendaitem.isEditing
+                }}
+              {{/if}}
+            {{/each}}
+            <div class="vl-u-spacer-extended-bottom-l">
+              <hr class="vlc-hr" />
+            </div>
           </div>
-        {{/each}}
-        <div class="vl-u-spacer-extended-bottom-l">
-          <hr class="vlc-hr" />
-        </div>
-      </div>
+        {{/if}}
+      {{/each}}
     {{/each}}
   </div>
 </div>

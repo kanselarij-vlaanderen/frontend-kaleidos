@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
@@ -8,9 +9,13 @@ export default Component.extend(isAuthenticatedMixin, {
 	isShowingVersions: false,
 	isEditing: false,
 
-	async addNewsItem(agendaitem) {
+	allowEditing: computed('definite', function () {
+		return this.definite === 'false';
+	}),
+
+	async addNewsItem(subcase, agendaitem) {
 		const news = this.store.createRecord("newsletter-info", {
-			agendaitem: agendaitem,
+			subcase: subcase,
 			created: new Date(),
 			title: await agendaitem.get('shortTitle')
 		});
@@ -23,9 +28,10 @@ export default Component.extend(isAuthenticatedMixin, {
 		},
 		async toggleIsEditing() {
 			const { agendaitem } = this;
-			const newsletter = await agendaitem.get('newsletterInfo');
+			const subcase = await agendaitem.get('subcase');
+			const newsletter = await subcase.get('newsletterInfo');
 			if (!newsletter) {
-				await this.addNewsItem(agendaitem);
+				await this.addNewsItem(subcase, agendaitem);
 			} else {
 				if (!newsletter.get('title')) {
 					newsletter.set('title', agendaitem.get('shortTitle'));

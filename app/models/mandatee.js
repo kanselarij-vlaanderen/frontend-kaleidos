@@ -9,13 +9,15 @@ export default Model.extend({
 	end: attr('date'),
 	dateSwornIn: attr('date'),
 	dateDecree: attr('date'),
+
+	holds: belongsTo('mandate', { inverse: null }),
+	person: belongsTo('person', { inverse: null }),
+
 	iseCodes: hasMany('ise-code', { inverse: null }),
 	decisions: hasMany('decision'),
 	cases: hasMany('case'),
-	holds: belongsTo('mandate', { inverse: null }),
-	person: belongsTo('person', { inverse: null }),
 	meetingsAttended: hasMany('meeting-record'),
 	approvals: hasMany('approval'),
 	subcases: hasMany('subcase', { inverse: null }),
-	agendaitems: hasMany('agendaitem')
+	agendaitems: hasMany('agendaitem', { inverse: null })
 });

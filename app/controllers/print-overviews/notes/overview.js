@@ -1,26 +1,14 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
-import { inject } from '@ember/service';
 import moment from 'moment';
 
+import { inject } from '@ember/service';
 export default Controller.extend({
 	intl: inject(),
-	queryParams: ['selectedAgenda_id'],
+	queryParams: ['definite'],
 
-	title: computed('model.currentSession', async function () {
-		const date = await this.get('model.currentSession.plannedStart');
-		return `${this.get('intl').t('agenda-notes')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+	title: computed('model.currentAgenda.createdFor', function () {
+		const date = this.get('model.currentAgenda.createdFor.plannedStart');
+		return `${this.intl.t('notes-of-session')} ${moment(date).format('dddd DD-MM-YYYY')}`;
 	}),
-
-	actions: {
-		async navigateBackToAgenda() {
-			const currentSessionId = await this.get('model.currentSession.id');
-			const selectedAgendaid = this.get('selectedAgenda_id');
-			this.transitionToRoute('agenda.agendaitems', currentSessionId, { queryParams: { selectedAgenda: selectedAgendaid } })
-		},
-
-		print() {
-			window.print();
-		}
-	}
 });

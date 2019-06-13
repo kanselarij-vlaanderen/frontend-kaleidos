@@ -1,8 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import CONFIG from 'fe-redpencil/utils/config';
 
-let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
+let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
   store: inject(),
@@ -23,13 +24,12 @@ export default Model.extend({
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
   subcase: belongsTo('subcase', { inverse: null }),
-  newsletterInfo: belongsTo('newsletter-info'),
   meetingRecord: belongsTo('meeting-record'),
 
   remarks: hasMany('remark'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
-  documentVersions: hasMany('document-version', { inverse: null }),
+  documentVersions: hasMany('document-version'),
   phases: hasMany('subcase-phase'),
   themes: hasMany('theme'),
 
@@ -43,7 +43,7 @@ export default Model.extend({
     });
   }),
 
-  decisions: computed('subcase.decisions.@each', function () {
+  decisions: computed('subcase.decisions', function () {
     return PromiseArray.create({
       promise: this.store.query('decision',
         {
@@ -55,7 +55,6 @@ export default Model.extend({
     })
   }),
 
-
   isDesignAgenda: computed('agenda', function () {
     const agendaName = this.get('agenda.name');
     if (agendaName === "Ontwerpagenda") {
@@ -65,12 +64,22 @@ export default Model.extend({
     }
   }),
 
-  documents: computed('documentVersions.@each', async function () {
-    const documentVersions = await this.get('documentVersions');
-    const documents = await Promise.all(documentVersions.map(documentVersion => {
-      return documentVersion.get('document');
-    }));
-    return documents.uniqBy('id');
+  documents: computed('documentVersions', function () {
+    return PromiseArray.create({
+      promise: this.get('documentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            sort: 'type.priority',
+            include: 'document-versions'
+          })
+        }
+      })
+    });
   }),
 
   documentsLength: computed('documents.@each', function () {
@@ -79,16 +88,26 @@ export default Model.extend({
     });
   }),
 
-  sortedMandatees: computed('mandatees', function () {
+  nota: computed('documents.@each', function () {
+    return PromiseObject.create({
+      promise: this.get('documents').then((results) => {
+        return (results.find((item) => item.get('type.id')) === CONFIG.notaID);
+      })
+    });
+  }),
+
+  sortedMandatees: computed('mandatees.@each', function () {
     return this.get('mandatees').sortBy('priority');
   }),
 
   subcasesFromCase: computed('subcase', function () {
     return PromiseArray.create({
-      promise: this.get('subcase').then((subcase) => {
-        return subcase.get('case.subcases').then((subcases) => {
-          return subcases;
-        });
+      promise: this.subcase.get('case').then((caze) => {
+        if (caze) {
+          return caze.get('subcases').then((subcases) => {
+            return subcases;
+          });
+        }
       })
     })
   })

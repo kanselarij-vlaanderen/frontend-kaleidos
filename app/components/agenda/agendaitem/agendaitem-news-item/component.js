@@ -2,45 +2,51 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 	classNames: ['vlc-padding-bottom--large'],
 	store: inject(),
+	subcase: null,
 	agendaitem: null,
 	isEditing: false,
 
-	async addNewsItem(agendaitem) {
+	item: computed('subcase.newsletterInfo', function () {
+		return this.get('subcase.newsletterInfo');
+	}),
+
+	async addNewsItem(subcase) {
+		console.log(subcase)
 		const news = this.store.createRecord("newsletter-info", {
-			agendaitem: agendaitem,
+			subcase: await subcase,
 			created: new Date(),
 			finished: false,
-			title: await agendaitem.get('subcase.title')
+			title: await subcase.get('title')
 		});
-		agendaitem.set('newsletterInfo', news);
+		subcase.set('newsletterInfo', news);
 	},
 
 	actions: {
 		async toggleIsEditing() {
-			const { agendaitem } = this;
-			const newsletter = await agendaitem.get('newsletterInfo');
+			const subcase = await this.get('subcase');
+			const newsletter = await subcase.get('newsletterInfo');
 			if (!newsletter) {
-				await this.addNewsItem(agendaitem);
+				await this.addNewsItem(subcase);
 			} else {
 				if (!newsletter.get('title')) {
-					newsletter.set('title', agendaitem.get('title'));
-					// await newsletter.save();
-					await this.updateModifiedProperty(await agendaitem.get('agenda'));
+					newsletter.set('title', subcase.get('title'));
+					await this.updateModifiedProperty(await this.agendaitem.get('agenda'));
 				}
 			}
 			this.toggleProperty('isEditing');
 		},
 
-		async saveChanges(agendaitem) {
-			const newsItem = await agendaitem.get('newsletterInfo');
+		async saveChanges(subcase) {
+			const newsItem = await subcase.get('newsletterInfo');
 			newsItem.set('publicationDate', new Date());
 
 			await newsItem.save().then(async () => {
-				await this.updateModifiedProperty(await agendaitem.get('agenda'));
+				await this.updateModifiedProperty(await this.get('agendaitem.agenda'));
 				this.toggleProperty('isEditing');
 			})
 		}

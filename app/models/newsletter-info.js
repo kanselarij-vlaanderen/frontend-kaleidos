@@ -12,7 +12,7 @@ export default Model.extend({
 	publicationDocDate: attr('date'),
 
 	remarks: hasMany('remark', { inverse: null }),
-	agendaitem: belongsTo('agendaitem'),
+	subcase: belongsTo('subcase'),
 	meeting: belongsTo('meeting', { inverse: null }),
 	documentVersions: hasMany('document-version', { inverse: null })
 });

@@ -31,11 +31,26 @@ export default Component.extend(ApprovalsEditMixin, {
 		const mandatees = await latestSubcase.get('mandatees');
 		const iseCodes = await latestSubcase.get('iseCodes');
 		const themes = await latestSubcase.get('themes');
+
 		subcase.set('mandatees', mandatees);
 		subcase.set('iseCodes', iseCodes);
 		subcase.set('themes', themes);
 
 		return subcase.save()
+	},
+
+	async copyNewsletterInfo(subcase, newsletterInfo) {
+		const newsletterInfoToCreate = this.store.createRecord('newsletter-info', {
+			subcase,
+			text: newsletterInfo.get('text'),
+			subtitle: newsletterInfo.get('subtitle'),
+			title: newsletterInfo.get('title'),
+			richtext: newsletterInfo.get('richtext'),
+			finished: newsletterInfo.get('finished'),
+			publicationDate: newsletterInfo.get('publicationDate'),
+			publicationDocDate: newsletterInfo.get('publicationDocDate'),
+		})
+		return newsletterInfoToCreate.save();
 	},
 
 	async copyDecisions(subcase, decisions) {
@@ -53,17 +68,16 @@ export default Component.extend(ApprovalsEditMixin, {
 	},
 
 	createSubcaseObject(newCase, newDate) {
-		const { type, title, shortTitle, confidential } = this;
+		const { type, title, shortTitle, confidential, showAsRemark } = this;
 		const subcaseName = this.getSubcaseName(type);
 		return this.store.createRecord('subcase', {
-			type, subcaseName, shortTitle, title, confidential,
+			type, subcaseName, shortTitle, title, confidential, showAsRemark,
 			case: newCase,
 			created: newDate,
 			modified: newDate,
 			isArchived: false,
 			phases: [],
 			formallyOk: false,
-			showAsRemark: false,
 		})
 	},
 
@@ -79,7 +93,7 @@ export default Component.extend(ApprovalsEditMixin, {
 		async createSubCase(event) {
 			event.preventDefault();
 			this.set('isLoading', true);
-			const caze = await this.store.peekRecord('case', this.case.id);
+			const caze = await this.store.findRecord('case', this.case.id);
 			const latestSubcase = await caze.get('latestSubcase');
 			const date = new Date();
 			let subcase = this.createSubcaseObject(caze, date);
@@ -88,6 +102,10 @@ export default Component.extend(ApprovalsEditMixin, {
 				subcase.set('subcaseName', subcaseName);
 				subcase = await this.copySubcaseProperties(subcase, latestSubcase);
 				await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
+				const newsletterInfo = await latestSubcase.get('newsletterInfo')
+				if (newsletterInfo) {
+					await this.copyNewsletterInfo(subcase, newsletterInfo);
+				}
 			} else {
 				subcase = await subcase.save();
 			}

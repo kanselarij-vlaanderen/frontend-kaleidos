@@ -5,6 +5,7 @@ const { Model, attr, hasMany, belongsTo } = DS;
 export default Model.extend({
 	label: attr('string'),
 	scopeNote: attr('string'),
+	priority: attr('number'),
 	isOc: attr('boolean'),
 
 	documents: hasMany('document', { inverse: null }),

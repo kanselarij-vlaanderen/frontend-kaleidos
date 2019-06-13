@@ -81,9 +81,12 @@
               </div>
               <div class="vl-action-group vl-action-group--align-left">
                 <button
-                  class="vl-button vl-button--tertiary vl-button--narrow"
+                  class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
                   {{action "addDecision"}}
                 >
+                  <i
+                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                  ></i>
                   {{t "add-decision"}}
                 </button>
               </div>
@@ -96,7 +99,10 @@
               {{/each}}
             {{/if}}
           {{else if (eq activeAgendaItemSection "news-item")}}
-            {{agenda/agendaitem/agendaitem-news-item agendaitem=agendaitem}}
+            {{agenda/agendaitem/agendaitem-news-item
+              agendaitem=agendaitem
+              subcase=(await subcase)
+            }}
           {{else if (eq activeAgendaItemSection "minutes")}}
             {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
           {{/if}}

@@ -19,7 +19,7 @@
     </div>
     {{#each (await sortedRemarks) as |comment|}}
       <div class="vlc-comment">
-        {{#if (eq await comment.author.id await user.id)}}
+        {{#if (eq (await comment.author.id) (await user.id))}}
           <div class="vl-badge vl-badge--initials vl-badge--action">
             <span>
               {{user-initials user=(await comment.author)}}
@@ -42,7 +42,7 @@
                 </h4>
               </div>
               <div class="vlc-toolbar__right">
-                {{#if (eq await comment.author.id await user.id)}}
+                {{#if (eq (await comment.author.id) (await user.id))}}
                   <button
                     class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle vl-popover__toggle"
                   >
@@ -52,8 +52,26 @@
                     <span class="vl-u-visually-hidden">
                       {{t "more-options"}}
                     </span>
+                    {{#attach-popover
+                      class="ember-attacher-popper"
+                      hideOn="clickout click"
+                      showOn="click"
+                      animation="shift"
+                      placement="bottom" as |attacher|
+                    }}
+                      <ul class="vl-popover__link-list">
+                        <li class="vl-popover__link-list__item">
+                          <button
+                            class="vl-link color-red"
+                            {{action attacher.hide}}
+                            {{action "deleteComment" comment}}
+                          >
+                            {{t "delete-comment"}}
+                          </button>
+                        </li>
+                      </ul>
+                    {{/attach-popover}}
                   </button>
-                  {{! TODO: Ember attacher to delete a comment }}
                 {{/if}}
               </div>
             </div>
@@ -71,7 +89,7 @@
       {{#if (await comment.answers)}}
         {{#each (await comment.answers) as |answer|}}
           <div class="vlc-comment vlc-comment--response">
-            {{#if (eq await comment.author.id await user.id)}}
+            {{#if (eq (await comment.author.id) (await user.id))}}
               <div class="vl-badge vl-badge--initials vl-badge--action">
                 <span>
                   {{user-initials user=(await comment.author)}}
@@ -86,10 +104,47 @@
             {{/if}}
             <div class="vlc-comment-content">
               <div class="vlc-comment-content__header">
-                <h4 class="vl-title vl-title--h6">
-                  {{await answer.author.firstName}}
-                  {{await answer.author.lastName}}
-                </h4>
+                <div class="vlc-toolbar">
+                  <div class="vlc-toolbar__left">
+                    <h4 class="vl-title vl-title--h6">
+                      {{await answer.author.firstName}}
+                      {{await answer.author.lastName}}
+                    </h4>
+                  </div>
+                  <div class="vlc-toolbar__right">
+                    {{#if (eq (await answer.author.id) (await user.id))}}
+                      <button
+                        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle vl-popover__toggle"
+                      >
+                        <i
+                          class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                        ></i>
+                        <span class="vl-u-visually-hidden">
+                          {{t "more-options"}}
+                        </span>
+                        {{#attach-popover
+                          class="ember-attacher-popper"
+                          hideOn="clickout click"
+                          showOn="click"
+                          animation="shift"
+                          placement="bottom" as |attacher|
+                        }}
+                          <ul class="vl-popover__link-list">
+                            <li class="vl-popover__link-list__item">
+                              <button
+                                class="vl-link color-red"
+                                {{action attacher.hide}}
+                                {{action "deleteComment" answer}}
+                              >
+                                {{t "delete-comment"}}
+                              </button>
+                            </li>
+                          </ul>
+                        {{/attach-popover}}
+                      </button>
+                    {{/if}}
+                  </div>
+                </div>
               </div>
               <div class="vl-typography">
                 <p>
@@ -104,7 +159,7 @@
         {{/each}}
       {{/if}}
       <div class="vlc-comment-input vlc-comment-input--response">
-        {{#if (eq await comment.author.id await user.id)}}
+        {{#if (eq (await comment.author.id) (await user.id))}}
           <div class="vl-badge vl-badge--initials vl-badge--action">
             <span>
               {{user-initials user=(await comment.author)}}
@@ -128,3 +183,11 @@
     {{/each}}
   {{/if}}
 </div>
+{{#if isVerifyingDelete}}
+  {{web-components/vl-modal-verify
+    title=(t "delete-comment")
+    message=(t "delete-decision-message")
+    cancel=(action "cancel")
+    verify=(action "verify")
+  }}
+{{/if}}
