@@ -1,45 +1,8 @@
-{{!-- <div class="vlc-page-header">
-  <div class="vlc-toolbar">
-    <div class="vlc-toolbar__left">
-      <div class="vlc-toolbar__item">
-        <h1 class="vlc-page-header__title">
-          {{await title}}
-        </h1>
-        <div class="vlc-page-header__sub">
-          <a
-            class="vlc-backlink vl-link vl-link--bold"
-            {{action "navigateBackToAgenda"}}
-          >
-            <i
-              class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
-            ></i>
-            {{t "back"}}
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="vlc-toolbar__right">
-      <div class="vlc-toolbar__item">
-        <div class="vl-action-group">
-          <button
-            class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-            {{action "print"}}
-          >
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-              aria-hidden="true"
-            ></i>
-            {{t "print"}}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 <div class="vlc-scroll-wrapper__body">
   {{agenda/agenda-minutes
-    title=title
-    currentSession=(await model.currentSession)
-    agendaitemGroups=(await model.agendaitemGroups)
+    title=(await title)
+    currentSession=(await model.meeting)
+    definite=definite
+    agendaitemGroups=(await model.groups)
   }}
-</div> --}}
+</div>
