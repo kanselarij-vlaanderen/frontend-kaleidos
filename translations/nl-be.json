@@ -299,5 +299,8 @@
 	"newsletter-for-meeting-of": "Kort bestek voor de ministerraad van",
 	"dash": "-",
 	"show-document-version": "Viewer",
-	"status": "Status"
+	"status": "Status",
+	"no-newsletter-info": "Nog geen kort bestek voor dit agendapunt.",
+	"create-newsletter-info": "Kort bestek aanmaken",
+	"create-notes": "Notulen aanmaken"
 }

@@ -9,10 +9,33 @@
     size=size
     columns=columns as |row|
   }}
-    {{#if (is-pending row.meetingRecord)}}
-      {{web-components/vl-loader text="De beslissingen worden geladen.."}}
+    {{#if (is-pending row.subcase.newsletterInfo)}}
+      {{web-components/vl-loader text="Het kort bestek wordt geladen.."}}
+    {{else if (await row.subcase.newsletterInfo)}}
+      {{news-item/edit-item
+        agendaitem=row
+        item=(await row.subcase.newsletterInfo)
+        isEditing=row.expanded
+      }}
     {{else}}
-
+      <div class="vl-u-spacer-extended">
+        <div class="vl-action-group vl-action-group--align-center">
+          <button
+            class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+            {{action "addNewsletterInfo" row}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            ></i>
+            {{t "create-newsletter-info"}}
+          </button>
+        </div>
+      </div>
+      <div class="vl-u-align-center vl-typography">
+        <p class="vl-u-text--muted">
+          {{t "no-newsletter-info"}}
+        </p>
+      </div>
     {{/if}}
   {{/utils/agendaitem-table}}
 </div>

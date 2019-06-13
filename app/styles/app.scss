@@ -605,6 +605,10 @@ tr.lt-expanded-row:hover {
   background-color: white !important;
 }
 
+tr.postponed {
+  opacity: 0.5;
+}
+
 .skeletal-loader {
   background-color: $porcelain;
   display: inline-block;

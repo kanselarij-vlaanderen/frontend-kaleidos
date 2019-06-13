@@ -31,7 +31,8 @@ export default Controller.extend({
 			cellClassNames: ["vl-data-table-col-1"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			sortable: false,
-			cellComponent: "web-components/vl-decisions-column",
+			cellComponent: "web-components/light-table/vl-content-toggle",
+			valuePath: 'subcase.newsletterInfo.finished'
 		},
 		{
 			label: 'Laatst gewijzigd',
@@ -48,5 +49,22 @@ export default Controller.extend({
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			cellComponent: "web-components/vl-table-actions"
 		}];
-	})
+	}),
+	async addNewsItem(subcase, agendaitem, value) {
+		const news = this.store.createRecord("newsletter-info", {
+			subcase: subcase,
+			created: new Date(),
+			title: await agendaitem.get('shortTitle'),
+			finished: value
+		});
+		return news.save();
+	},
+
+	actions: {
+		async addNewsletterInfo(row) {
+			const subcase = await row.get('subcase');
+			await this.addNewsItem(subcase, row, false);
+			await subcase.get('meetingRecord');
+		}
+	}
 });

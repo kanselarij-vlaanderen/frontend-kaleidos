@@ -30,6 +30,7 @@ export default Mixin.create({
 		}
 
 		this.set('table', table);
+		this.checkRowClasses();
 	},
 
 	fetchRecords: task(function* () {
@@ -45,7 +46,19 @@ export default Mixin.create({
 		this.set('meta', records.get('meta'));
 		this.set('canLoadMore', !isEmpty(records));
 		this.get('table').addRows(this.get('model'));
+		this.checkRowClasses();
 	}),
+
+	checkRowClasses() {
+		const rows = this.table.rows;
+		const postponedItems = this.model.filter((item) => item.get('retracted'))
+		postponedItems.map((postponedItem) => {
+			const myRow = rows.find((row) => row.content.get('id') === postponedItem.get('id'));
+			if (myRow) {
+				myRow.set('classNames', "postponed")
+			}
+		})
+	},
 
 	sortBy: computed('dir', 'sort', function () {
 		const dir = this.dir;
