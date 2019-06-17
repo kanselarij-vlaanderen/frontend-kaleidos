@@ -9,6 +9,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 
 	actions: {
 		async saveChanges() {
+			this.set('isLoading', true);
 			const { item } = this;
 			await Promise.all(item.get('approvals').map(async (approval) => {
 				return await approval.save();
@@ -17,21 +18,25 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 			if (agenda) {
 				await this.updateModifiedProperty(agenda);
 			}
-
+			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		},
 
 		async cancelEditing() {
+			this.set('isLoading', true);
 			const { item } = this;
 			const approvals = await item.get('approvals');
 			approvals.map((approval) => {
 				approval.rollbackAttributes();
 			});
+			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		},
 
 		async toggleIsEditing() {
+			this.set('isLoading', true);
 			await this.checkForActionChanges();
+			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		}
 	}

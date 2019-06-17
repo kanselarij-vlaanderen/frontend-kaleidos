@@ -18,6 +18,7 @@ export default Component.extend(UploadDocumentMixin, {
 		},
 
 		async saveChanges() {
+			this.set('isLoading', true);
 			const { documents } = this;
 			await Promise.all(
 				documents.map((document) => {
@@ -27,6 +28,7 @@ export default Component.extend(UploadDocumentMixin, {
 						return document.save();
 					}
 				}))
+			this.set('isLoading', false);
 			this.cancelForm();
 		},
 

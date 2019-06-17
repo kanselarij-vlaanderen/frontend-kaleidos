@@ -32,7 +32,6 @@ export default Component.extend({
 			caze.save().then(() => {
 				this.cancelEditing();
 				this.set('isLoading', false);
-
 			});
 		}
 	}

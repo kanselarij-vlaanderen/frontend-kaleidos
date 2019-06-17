@@ -21,7 +21,9 @@ export default Component.extend({
 		},
 
 		saveChanges() {
+			this.set('isLoading', true);
 			this.get('selectedUser').save().then(() => {
+				this.set('isLoading', false);
 				this.close();
 			});
 		},
