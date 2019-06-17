@@ -36,7 +36,9 @@ export default Component.extend({
 			signatureToSetActive.save().then((newDefault) => {
 				this.set('defaultSignature', newDefault);
 				signatureToSetActive.reload();
-				currentDefault.reload()
+				if (currentDefault) {
+					currentDefault.reload()
+				}
 			});
 		},
 
