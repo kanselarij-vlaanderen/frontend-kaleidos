@@ -16,7 +16,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 		const { groups, firstAgendaItem, announcements, lastPrio } = await this.parseAgendaItems(agenda, session, null);
 
 		this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
-		console.log(announcements)
+
 		return hash({
 			currentAgenda: agenda,
 			groups,
