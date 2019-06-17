@@ -8,11 +8,13 @@ export default Component.extend(ModifiedMixin, {
 
 	actions: {
 		async saveChanges(agendaitem) {
+			this.set('isLoading', true);
 			const meetingRecord = await agendaitem.get('meetingRecord');
 			const recordToSave = await this.store.findRecord('meeting-record', meetingRecord.get('id'));
 			const agenda = await this.get('agendaitem.agenda');
 			await recordToSave.save();
 			await this.updateModifiedProperty(agenda);
+			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		},
 		async cancelEditing(agendaitem) {

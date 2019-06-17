@@ -22,13 +22,13 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 			finished: false,
 			title: await subcase.get('title'),
 			subtitle: await subcase.get('shortTitle')
-
 		});
 		subcase.set('newsletterInfo', news);
 	},
 
 	actions: {
 		async toggleIsEditing() {
+			this.set('isLoading', true);
 			const subcase = await this.get('subcase');
 			const newsletter = await subcase.get('newsletterInfo');
 			if (!newsletter) {
@@ -39,15 +39,18 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 					await this.updateModifiedProperty(await this.agendaitem.get('agenda'));
 				}
 			}
+			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		},
 
 		async saveChanges(subcase) {
+			this.set('isLoading', true);
 			const newsItem = await subcase.get('newsletterInfo');
 			newsItem.set('publicationDate', new Date());
 
 			await newsItem.save().then(async () => {
 				await this.updateModifiedProperty(await this.get('agendaitem.agenda'));
+				this.set('isLoading', false);
 				this.toggleProperty('isEditing');
 			})
 		}

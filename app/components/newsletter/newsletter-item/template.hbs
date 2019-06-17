@@ -20,6 +20,7 @@
 {{else}}
   {{news-item/edit-item
     agendaitem=agendaitem
+    isLoading=isLoading
     item=(await agendaitem.subcase.newsletterInfo)
     isEditing=isEditing
   }}
