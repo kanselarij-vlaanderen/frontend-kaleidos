@@ -1,10 +1,17 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import $ from 'jquery';
+import { computed } from '@ember/object';
 
 export default Component.extend({
 	store: inject(),
 	selectedPerson: null,
+
+	name: computed('selectedPerson', function () {
+		if (this.selectedPerson) {
+			return this.selectedPerson.get('nameToDisplay');
+		}
+	}),
 
 	actions: {
 		personSelected(person) {

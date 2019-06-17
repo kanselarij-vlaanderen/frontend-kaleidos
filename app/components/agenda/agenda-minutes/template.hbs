@@ -1,106 +1,116 @@
 <div class="vlc-container">
-  <div class="vl-u-display-flex vl-u-flex-justify-center">
-    <img
-      style="margin:-75px 0px -50px 0px; height:250px"
-      src="/assets/logo_vlaamse_regering.svg"
-      alt="Vlaamse Regering"
-     />
+  <div style="page-break-after:always;">
+    <div class="vl-u-display-flex vl-u-flex-justify-center">
+      <img
+        style="margin:-75px 0px -50px 0px; height:250px"
+        src="/assets/logo_vlaamse_regering.svg"
+        alt="Vlaamse Regering"
+       />
 
+    </div>
+    <div class="vl-u-spacer-extended-bottom-l">
+      <h1 class="vl-title vl-title--h2">
+        {{await title}}
+        <br />
+        <span class="vl-u-spacer-extended-top-s vl-u-text--muted">
+          {{t "agenda"}}
+        </span>
+      </h1>
+    </div>
+    <div class="vl-u-spacer-extended-bottom-l">
+      <hr class="vlc-hr" />
+    </div>
+    <div class="vl-u-display-flex vl-u-flex-align-baseline">
+      <h3 class="vl-title vl-title--h3">
+        {{t "notes"}}
+      </h3>
+      {{#if (or isAdmin isEditor)}}
+        <div class="vl-u-spacer-extended-left-s">
+          {{#if allowEditing}}
+            <a class="vl-link" {{action "toggleIsEditing"}}>
+              {{t "edit"}}
+            </a>
+          {{/if}}
+        </div>
+      {{/if}}
+    </div>
+    {{sessions/session-notes currentSession=currentSession isEditing=isEditing}}
   </div>
-  <div class="vl-u-spacer-extended-bottom-l">
-    <h1 class="vl-title vl-title--h2">
-      {{await title}}
-      <br />
-      <span class="vl-u-spacer-extended-top-s vl-u-text--muted">
-        {{t "agenda"}}
-      </span>
-    </h1>
-  </div>
-  <div class="vl-u-spacer-extended-bottom-l">
-    <hr class="vlc-hr" />
-  </div>
-  <div class="vl-u-display-flex vl-u-flex-align-baseline">
-    <h3 class="vl-title vl-title--h3">
-      {{t "notes"}}
-    </h3>
-    {{#if (or isAdmin isEditor)}}
-      <div class="vl-u-spacer-extended-left-s">
-        {{#if allowEditing}}
-          <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "edit"}}
-          </a>
-        {{/if}}
-      </div>
-    {{/if}}
-  </div>
-  {{sessions/session-notes currentSession=currentSession isEditing=isEditing}}
   <div class="vl-u-spacer-extended-bottom">
     {{#each (await agendaitemGroups) as |group|}}
       {{#each group.groups as |agendaitemGroup|}}
-        <div class="vl-u-spacer-extended-bottom">
-          {{#each agendaitemGroup.mandatees as |mandatee|}}
-            <h2 class="vl-title vl-title--h4">
-              {{mandatee.title}}
-            </h2>
-          {{/each}}
-        </div>
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-          <div class="vl-u-spacer-extended-bottom">
-            <div class="vl-u-spacer-extended-bottom-s">
-              <h3 class="vl-title vl-title--h5">
-                {{agendaitem.priority}}
-                .
-                {{agendaitem.shortTitle}}
-              </h3>
-              <p>
-                {{agendaitem.title}}
+          <div class="vl-u-display-flex vl-u-flex-justify-center">
+            <div class="print-only vl-u-spacer-extended-top-l">
+              <img
+                style="margin:-75px 0px -50px 0px; width:200px"
+                src="/assets/logo_vlaamse_regering.svg"
+                alt="Vlaamse Regering"
+               />
+
+              <p class="vl-u-text--bold vl-u-text--capitalized">
+                {{await title}}
               </p>
+              <hr class="vlc-hr" />
             </div>
-            {{#if agendaitem.isEditing}}
-              {{agenda/agendaitem/agendaitem-minutes-edit
-                isEditing=agendaitem.isEditing
-                agendaitem=agendaitem
-              }}
-            {{else}}
-              <div class="vl-typography">
-                <ul>
-                  {{#if (or isAdmin isEditor)}}
-                    <div class="vl-u-display-flex align-right">
-                      {{#if allowEditing}}
-                        <a
-                          class="vl-link"
-                          {{action "toggleIsEditingMeetingRecord" agendaitem}}
-                        >
-                          {{t "edit"}}
-                        </a>
-                      {{/if}}
-                    </div>
-                  {{/if}}
-                  <li>
-                    {{#if (await agendaitem.meetingRecord.description)}}
-                      <p>
-                        {{await agendaitem.meetingRecord.description}}
-                      </p>
-                    {{else}}
-                      <p class="vl-u-text--muted">
-                        {{t "no-notes"}}
-                      </p>
-                    {{/if}}
-                  </li>
-                </ul>
+          </div>
+          <div style="page-break-after:always;">
+            <div class="vl-u-spacer-extended-bottom">
+              <div class="vl-u-spacer-extended-bottom-s">
+                <h3 class="vl-title vl-title--h5">
+                  {{agendaitem.priority}}
+                  .
+                  {{agendaitem.shortTitle}}
+                </h3>
                 <p>
-                  {{agendaitem.subcase.subcaseName}}
+                  {{agendaitem.title}}
                 </p>
               </div>
+              {{#if agendaitem.isEditing}}
+                {{agenda/agendaitem/agendaitem-minutes-edit
+                  isEditing=agendaitem.isEditing
+                  agendaitem=agendaitem
+                }}
+              {{else}}
+                <div class="vl-typography">
+                  <ul>
+                    {{#if (or isAdmin isEditor)}}
+                      <div class="vl-u-display-flex align-right">
+                        {{#if allowEditing}}
+                          <a
+                            class="vl-link"
+                            {{action "toggleIsEditingMeetingRecord" agendaitem}}
+                          >
+                            {{t "edit"}}
+                          </a>
+                        {{/if}}
+                      </div>
+                    {{/if}}
+                    <li>
+                      {{#if (await agendaitem.meetingRecord.description)}}
+                        <p>
+                          {{await agendaitem.meetingRecord.description}}
+                        </p>
+                      {{else}}
+                        <p class="vl-u-text--muted">
+                          {{t "no-notes"}}
+                        </p>
+                      {{/if}}
+                    </li>
+                  </ul>
+                  <p>
+                    {{agendaitem.subcase.subcaseName}}
+                  </p>
+                </div>
+              {{/if}}
+            </div>
+            {{#if (not allowEditing)}}
+              {{web-components/vl-signature
+                signature=currentSession.defaultSignature
+              }}
             {{/if}}
           </div>
         {{/each}}
-        {{#if (not allowEditing)}}
-          {{web-components/vl-signature}}
-          <div class="vl-u-spacer-extended-bottom-l">
-            <hr class="vlc-hr" />
-          </div>
-        {{/if}}
       {{/each}}
     {{/each}}
   </div>

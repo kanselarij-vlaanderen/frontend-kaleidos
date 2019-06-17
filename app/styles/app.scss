@@ -632,8 +632,22 @@ tr.postponed {
         background-color: $porcelain;
       }
       &:hover {
-        background-color: $blue-gray-light;
+        background-color: #eee;
       }
     }
   }
+}
+
+.preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    max-width: 200px;
+    max-height: 200px;
+  }
+}
+
+.print-only {
+  display: none;
 }

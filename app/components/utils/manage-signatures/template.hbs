@@ -1,22 +1,24 @@
 {{#if (not isAdding)}}
-  {{#if (not isResigning)}}
-    <div class="vl-modal-dialog__content">
-      {{utils/model-selector
-        modelName="signature"
-        searchField="name"
-        propertyToShow="name"
-        sortField="name"
-        selectedItems=(await selectedMandatee)
-        selectModel=(action "selectMandatee")
-      }}
-    </div>
-  {{/if}}
+  <div class="vl-modal-dialog__content">
+    {{utils/model-selector
+      modelName="signature"
+      searchField="name"
+      propertyToShow="name"
+      sortField="name"
+      selectedItems=(await selectedSignature)
+      selectModel=(action "selectSignature")
+    }}
+  </div>
+  <div class="">
+    {{t "signature-default"}}
+    {{await defaultSignature.name}}
+  </div>
   {{#if isEditing}}
-    {{utils/edit-mandatee
-      mandateeToEdit=(await selectedMandatee)
+    {{utils/edit-signature
+      signatureToEdit=(await selectedSignature)
       closeModal=(action "toggleIsEditing")
     }}
-  {{else if (not isResigning)}}
+  {{else}}
     <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
       <div class="vlc-toolbar">
         <div class="vlc-toolbar__left">
@@ -28,29 +30,38 @@
               {{t "cancel"}}
             </button>
           </div>
-          <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              {{#if selectedMandatee}}
-                <button
-                  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-                  {{action "toggleIsEditing"}}
-                >
-                  <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
-                  ></i>
-                  {{t "signature-edit"}}
-                </button>
-              {{/if}}
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            {{#if selectedSignature}}
               <button
                 class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-                {{action "toggleIsAdding"}}
+                {{action "setDefaultSignature"}}
               >
                 <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
-                {{t "signature-add"}}
+                {{t "signature-set-default"}}
               </button>
-            </div>
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                {{action "toggleIsEditing"}}
+              >
+                <i
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                ></i>
+                {{t "signature-edit"}}
+              </button>
+            {{/if}}
+            <button
+              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              {{action "toggleIsAdding"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              {{t "signature-add"}}
+            </button>
           </div>
         </div>
       </div>
@@ -58,33 +69,4 @@
   {{/if}}
 {{else}}
   {{utils/create-signature closeModal=(action "toggleIsAdding")}}
-{{/if}}
-{{#if isResigning}}
-  <div class="vl-modal-dialog__content">
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "end-date")}}
-      {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
-    </div>
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "new-person")}}
-      {{utils/model-selector
-        modelName="person"
-        searchField="alternative-name"
-        propertyToShow="alternativeName"
-        sortField="alternative-name"
-        selectedItems=selectedPerson
-        selectModel=(action "personSelected")
-      }}
-    </div>
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "start-date")}}
-      {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
-    </div>
-  </div>
-  {{web-components/vl-modal-footer
-    cancelButtonText=(t "cancel")
-    saveButtonText=(t "save-resignation")
-    cancelAction=(action "toggleIsResigning")
-    saveAction=(action "saveResignation")
-  }}
 {{/if}}

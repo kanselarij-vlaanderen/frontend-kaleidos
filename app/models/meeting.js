@@ -1,7 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-
-const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+import CONFIG from 'fe-redpencil/utils/config';
 
 let { Model, attr, hasMany, belongsTo } = DS;
 
@@ -38,8 +37,21 @@ export default Model.extend({
 			if (agendaName !== "Ontwerpagenda") {
 				return `Agenda ${agendaName}`;
 			} else {
-				return `${agendaName} ${alphabet[agendaLength - 1]}`;
+				return `${agendaName} ${CONFIG.alphabet[agendaLength - 1]}`;
 			}
 		})
+	}),
+
+	defaultSignature: computed('signature', async function () {
+		const signature = await this.get('signature');
+		if (!signature) {
+			return DS.PromiseObject.create({
+				promise: this.store.query('signature', { filter: { 'is-active': true } }).then((signatures) => {
+					return signatures.objectAt(0);
+				})
+			});
+		} else {
+			return signature;
+		}
 	}),
 });

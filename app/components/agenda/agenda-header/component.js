@@ -2,8 +2,7 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-
-const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
@@ -73,14 +72,14 @@ export default Component.extend(isAuthenticatedMixin, {
 			let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
 			if (!lastDefiniteAgenda) {
-				agendaToLock.set('name', alphabet[0]);
+				agendaToLock.set('name', CONFIG.alphabet[0]);
 			} else {
 				if (definiteAgendas) {
 					const agendaLength = definiteAgendas.length;
 
-					if (agendaLength && alphabet[agendaLength]) {
-						if (agendaLength < (alphabet.get('length') - 1)) {
-							agendaToLock.set('name', alphabet[agendaLength]);
+					if (agendaLength && CONFIG.alphabet[agendaLength]) {
+						if (agendaLength < (CONFIG.alphabet.get('length') - 1)) {
+							agendaToLock.set('name', CONFIG.alphabet[agendaLength]);
 						}
 					} else {
 						agendaToLock.set('name', agendaLength + 1);
@@ -159,6 +158,10 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		reloadRoute(id) {
 			this.reloadRoute(id);
+		},
+
+		selectSignature() {
+			this.toggleProperty('isAssigningSignature', false);
 		}
 	},
 

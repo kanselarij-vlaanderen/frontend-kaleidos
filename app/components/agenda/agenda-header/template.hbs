@@ -112,6 +112,15 @@
                 </a>
               </li>
               {{#if (or isAdmin isEditor)}}
+                <li>
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action "selectSignature"}}
+                    {{action attacher.hide}}
+                  >
+                    {{t "signature-edit"}}
+                  </a>
+                </li>
                 <li class="vl-popover__link-list__separator" role="none"></li>
                 <li class="vl-popover__link-list__item">
                   {{#if (not currentSession.isFinal)}}
@@ -147,8 +156,8 @@
                     </a>
                   {{else if
                     (and
-                      (not designAgendaPresent)
-                      (not await currentSession.isFinal)
+                      (not (await designAgendaPresent))
+                      (not (await currentSession.isFinal))
                     )}}
                     <a
                       class="vl-link vl-link--block"
@@ -178,5 +187,11 @@
     isAddingAnnouncement=isAddingAnnouncement
     currentAgenda=currentAgenda
     reloadRoute=(action "reloadRoute")
+  }}
+{{/if}}
+{{#if isAssigningSignature}}
+  {{sessions/select-signature
+    meeting=currentSession
+    closeDialog=(action "selectSignature")
   }}
 {{/if}}

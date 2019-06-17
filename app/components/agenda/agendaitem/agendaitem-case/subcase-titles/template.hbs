@@ -43,11 +43,11 @@
     <div class="vl-u-spacer-extended-bottom-s">
       {{#if (await item.subcase)}}
         {{#if (await item.subcase.approved)}}
-          <span class="vl-pill vl-pill--success">
+          <span class="vl-pill vl-pill--success vl-u-text--capitalize">
             {{await item.subcase.subcaseName}}
           </span>
         {{else}}
-          <span class="vl-pill vl-pill--warning">
+          <span class="vl-pill vl-pill--warning vl-u-text--capitalize">
             {{await item.subcase.subcaseName}}
           </span>
         {{/if}}

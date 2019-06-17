@@ -1,0 +1,24 @@
+{{#web-components/vl-modal
+  closeModal=(action "closeDialog")
+  isOverlay=true
+  title=(t "signature-edit")
+}}
+  <div class="vl-modal-dialog__content">
+    <div class="vlc-scroll-wrapper__body">
+      {{utils/model-selector
+        modelName="signature"
+        searchField="name"
+        propertyToShow="name"
+        sortField="name"
+        selectedItems=selectedSignature
+        selectModel=(action "selectSignature")
+      }}
+    </div>
+  </div>
+  {{web-components/vl-modal-footer
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "save")
+    cancelAction=(action "closeDialog")
+    saveAction=(action "saveChanges")
+  }}
+{{/web-components/vl-modal}}
