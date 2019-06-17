@@ -104,6 +104,7 @@
       </div>
     </div>
     {{web-components/vl-modal-footer
+      isLoading=isLoading
       cancelButtonText=(t "cancel")
       saveButtonText=(t "add")
       cancelAction=(action "toggleIsAdding")
@@ -136,7 +137,10 @@
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "message")}}
-        {{textarea rows="2" class="vl-textarea vl-textarea--block" value=selectedAlert.message
+        {{textarea
+          rows="2"
+          class="vl-textarea vl-textarea--block"
+          value=selectedAlert.message
         }}
       </div>
       <div class="vlc-input-field-block">
@@ -152,6 +156,7 @@
       </div>
     </div>
     {{web-components/vl-modal-footer
+      isLoading=isLoading
       cancelButtonText=(t "cancel")
       saveButtonText=(t "save")
       cancelAction=(action "toggleIsEditing")

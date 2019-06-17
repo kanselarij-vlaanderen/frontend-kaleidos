@@ -11,6 +11,7 @@ export default Component.extend({
 			return 'vlc-navbar--bordered-top'
 		}
 	},
+
 	actions: {
 		cancelAction() {
 			this.cancelAction();

@@ -310,5 +310,6 @@
 	"uploading": "opgeladen",
 	"user": "Gebruiker",
 	"user-role": "Gebruikersrol",
-	"version": "Versie nummer"
+	"version": "Versie nummer",
+	"loadingText": "Opslaan.."
 }

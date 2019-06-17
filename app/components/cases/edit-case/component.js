@@ -24,12 +24,15 @@ export default Component.extend({
 		},
 
 		saveChanges() {
+			this.set('isLoading', true);
 			const caze = this.store.peekRecord('case', this.get('caseToEdit.id'));
 			caze.set('title', this.get('title'));
 			caze.set('shortTitle', this.get('shortTitle'));
 			caze.set('type', this.get('type'));
 			caze.save().then(() => {
 				this.cancelEditing();
+				this.set('isLoading', false);
+
 			});
 		}
 	}

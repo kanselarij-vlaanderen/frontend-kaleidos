@@ -29,6 +29,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 		},
 
 		async uploadNewDocument() {
+			this.set('isLoading', true);
 			const modelName = await this.get('modelToAddDocumentVersionTo');
 			const item = await this.get('item');
 			this.set('isCreatingDocuments', true);
@@ -39,6 +40,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 				item.hasMany('documentVersions').reload();
 				this.set('isCreatingDocuments', false);
 				this.toggleProperty('isAddingNewDocument');
+				this.set('isLoading', true);
 			});
 		}
 	}

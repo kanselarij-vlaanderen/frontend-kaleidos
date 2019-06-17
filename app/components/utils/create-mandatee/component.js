@@ -26,6 +26,7 @@ export default Component.extend({
 		},
 
 		async createMandatee() {
+			this.set('isLoading', true);
 
 			const newMandatee = this.store.createRecord('mandatee', {
 				title: this.get('title'),
@@ -35,6 +36,7 @@ export default Component.extend({
 				end: null
 			});
 			newMandatee.save().then(() => {
+				this.set('isLoading', false);
 				this.clearValues();
 			});
 		}

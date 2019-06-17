@@ -12,18 +12,12 @@
   </div>
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
-      {{#if (not isLoading)}}
-        <button class="vl-button vl-button--narrow" {{action "saveAction"}}>
-          {{saveButtonText}}
-        </button>
-      {{else}}
-        <button
-          class="vl-button vl-button--loading vl-button--narrow"
-          disabled="true"
-        >
-          {{loadingText}}
-        </button>
-      {{/if}}
+      {{web-components/vl-save-button
+        text=saveButtonText
+        loadingText=loadingText
+        isLoading=isLoading
+        saveAction=(action "saveAction")
+      }}
     </div>
   </div>
 </div>

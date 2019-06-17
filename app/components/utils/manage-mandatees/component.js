@@ -2,13 +2,13 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-	store:inject(),
-  subcasesService:inject(),
-	isAdding:false,
-	isResigning:false,
+	store: inject(),
+	subcasesService: inject(),
+	isAdding: false,
+	isResigning: false,
 	isEditing: false,
-  selectedStartDate: null,
-  selectedEndDate: null,
+	selectedStartDate: null,
+	selectedEndDate: null,
 
 	actions: {
 		closeModal() {
@@ -46,10 +46,10 @@ export default Component.extend({
 		resignMandatee(mandateeToEdit) {
 			this.set('mandateeToResign', mandateeToEdit);
 			this.toggleProperty('isResigning');
-
 		},
 
 		async saveResignation() {
+			this.set('isLoading', true);
 			let oldMandatee = this.get('selectedMandatee');
 			let domains = await oldMandatee.get('governmentDomains');
 			let holds = await oldMandatee.get('holds');
@@ -66,7 +66,8 @@ export default Component.extend({
 					priority: oldMandatee.get('priority')
 				});
 				newMandatee.save().then(() => {
-          this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
+					this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
+					this.set('isLoading', false);
 					this.closeModal();
 				});
 			});

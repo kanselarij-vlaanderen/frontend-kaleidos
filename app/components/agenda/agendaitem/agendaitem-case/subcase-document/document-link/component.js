@@ -73,10 +73,12 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		},
 
 		saveChanges() {
+			this.set('isLoading', true);
 			const document = this.get('document');
 			document.set('numberVr', this.get('numberVr'))
 			document.save().then(() => {
 				this.toggleProperty('isEditing');
+				this.set('isLoading', false);
 			});
 		},
 	},

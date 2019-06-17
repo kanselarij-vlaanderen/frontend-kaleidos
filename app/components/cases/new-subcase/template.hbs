@@ -42,18 +42,13 @@
       </div>
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
-          {{#if (not isLoading)}}
-            <button type="submit" class="vl-button vl-button--tertiary">
-              {{t "new-subcase"}}
-            </button>
-          {{else}}
-            <button
-              class="vl-button vl-button--loading vl-button--narrow"
-              disabled="true"
-            >
-              {{t "creating-subcase"}}
-            </button>
-          {{/if}}
+          {{web-components/vl-save-button
+            text=(t "new-subcase")
+            type="submit"
+            class="vl-button vl-button--narrow"
+            loadingText=(t "creating-subcase")
+            isLoading=isLoading
+          }}
         </div>
       </div>
     </div>
