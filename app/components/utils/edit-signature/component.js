@@ -22,7 +22,7 @@ export default Component.extend({
 		},
 
 		async saveChanges() {
-			const signature = this.store.findRecord('signature', await this.signatureToEdit.get('id'))
+			const signature = await this.store.findRecord('signature', await this.signatureToEdit.get('id'))
 			if (this.get('uploadedFile')) {
 				signature.set('file', this.get('uploadedFile'))
 			}
