@@ -1,0 +1,48 @@
+import Component from '@ember/component';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject } from '@ember/service';
+import { computed } from '@ember/object';
+
+export default Component.extend(isAuthenticatedMixin, {
+	store: inject(),
+	isShowingVersions: false,
+
+	numberToShow: computed('agendaitem.priority', 'index', function () {
+		if (this.index) {
+			return this.index;
+		} else {
+			return this.agendaitem.get('priority');
+		}
+	}),
+
+	async addNewsItem(subcase, agendaitem) {
+		const news = this.store.createRecord("newsletter-info", {
+			subcase: subcase,
+			created: new Date(),
+			title: await agendaitem.get('shortTitle'),
+			subtitle: await agendaitem.get('title')
+		});
+		await news.save();
+	},
+
+	actions: {
+		showDocuments() {
+			this.toggleProperty('isShowingVersions');
+		},
+		async toggleIsEditing() {
+			const { agendaitem } = this;
+			const subcase = await agendaitem.get('subcase');
+			const newsletter = await subcase.get('newsletterInfo');
+			if (!newsletter) {
+				await this.addNewsItem(subcase, agendaitem);
+			} else {
+				if (!newsletter.get('title')) {
+					newsletter.set('title', agendaitem.get('shortTitle'));
+					await newsletter.save();
+				}
+			}
+
+			this.toggleProperty('isEditing');
+		}
+	}
+});

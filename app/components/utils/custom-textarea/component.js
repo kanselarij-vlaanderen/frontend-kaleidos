@@ -1,4 +1,6 @@
-export default Ember.TextArea.extend({
+import TextArea from '@ember/component/text-area';
+
+export default TextArea.extend({
 	didRender() {
     this.$().keypress(function(event) {
       if (event.keyCode == 13) {

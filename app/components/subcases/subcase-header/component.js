@@ -56,12 +56,11 @@ export default Component.extend(ModifiedMixin, {
 					return phase;
 				}
 			}))
-			const meeting = await subcase.get('requestedForMeeting');
-			const latestAgenda = await meeting.get('latestAgenda');
-			const agendaitems = await latestAgenda.get('agendaitems');
+			// const meeting = await subcase.get('requestedForMeeting');
+			// const latestAgenda = await meeting.get('latestAgenda');
+			// const agendaitems = await latestAgenda.get('agendaitems');
 
 			// const agendaitems = await subcase.get('agendaitems');
-			// await Promise.all(agendaitems.map((item) => { return item.destroyRecord(); }))
 			subcase.set('requestedForMeeting', null);
 
 			subcase.save();

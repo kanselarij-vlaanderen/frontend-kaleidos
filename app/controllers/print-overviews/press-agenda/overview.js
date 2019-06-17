@@ -16,7 +16,6 @@ export default Controller.extend({
 		return this.model.get('groups').then(agenda => {
 			agenda.groups.map((group) => {
 				const newAgendaitems = group.agendaitems.filter((item) => item.forPress);
-				console.log(newAgendaitems)
 			})
 		})
 

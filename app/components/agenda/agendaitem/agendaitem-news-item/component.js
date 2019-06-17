@@ -16,12 +16,13 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 	}),
 
 	async addNewsItem(subcase) {
-		console.log(subcase)
 		const news = this.store.createRecord("newsletter-info", {
 			subcase: await subcase,
 			created: new Date(),
 			finished: false,
-			title: await subcase.get('title')
+			title: await subcase.get('title'),
+			subtitle: await subcase.get('shortTitle')
+
 		});
 		subcase.set('newsletterInfo', news);
 	},

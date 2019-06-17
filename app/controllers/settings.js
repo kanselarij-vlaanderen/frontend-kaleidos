@@ -10,43 +10,11 @@ export default Controller.extend({
 	isManagingSubcaseTypes: false,
 	isManagingIseCodes: false,
 	isManagingFunctions: false,
+	isManagingSignature: false,
 
 	actions: {
-		showAddingMandateForm() {
-			this.toggleProperty('isAddingMandate');
-		},
-
-		showEditingMandateeForm() {
-			this.toggleProperty('isEditingMandatee');
-		},
-
-		showAlertManagementForm() {
-			this.toggleProperty('isManagingAlerts');
-		},
-
-		showDocumentTypesManagementForm() {
-			this.toggleProperty('isManagingDocumentTypes');
-		},
-
-		showCaseTypesManagementForm() {
-			this.toggleProperty('isManagingCaseTypes');
-		},
-
-		showUserManagementInterface() {
-			this.toggleProperty('isManagingUsers');
-		},
-
-		showSubcaseTypesManagementForm() {
-			this.toggleProperty('isManagingSubcaseTypes');
-		},
-
-		showIseCodeManagement() {
-			this.toggleProperty('isManagingIseCodes');
-		},
-
-		showFunctionsManagement() {
-			this.toggleProperty('isManagingFunctions');
-
+		toggleProperty(prop) {
+			this.toggleProperty(prop);
 		}
 	}
 });

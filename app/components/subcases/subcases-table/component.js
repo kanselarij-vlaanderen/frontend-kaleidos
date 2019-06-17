@@ -2,7 +2,7 @@ import Component from '@ember/component';
 
 export default Component.extend({
   actions: {
-    async selectAllSubCases(subcases) {
+    async selectAllSubCases() {
       //this.typeChanged(type);
     },
     async selectSubcase(subcase) {

@@ -43,6 +43,7 @@
 	"approval-mandatee": "Akkoord",
 	"not-yet-approval-mandatee": "Nog niet akkoord",
 	"approve": "Goedkeuren",
+	"approve-small": "goedkeuren",
 	"approved": "Beslist",
 	"archive-case": "Dossier archiveren",
 	"archive-case-confirmation": "Ben je zeker dat je het dossier wilt archiveren?",
@@ -134,6 +135,7 @@
 	"manage-ministers": "Ministerbeheer",
 	"manage-ministers-title": "Ministers en beleidsvelden",
 	"manage-user-roles": "Gebruikersbeheer",
+	"manage-signatures": "Handtekeningen beheren",
 	"manage-subcase-types": "Procedurestap types beheer",
 	"mandate": "Bevoegdheid",
 	"mandatee": "Hoedanigheid",
@@ -236,7 +238,7 @@
 	"single-newsletter": "Losstaand kort bestek",
 	"size-extension": "KB",
 	"start-date": "Start datum",
-	"sub-title": "Ondertitel",
+	"sub-title": "titel",
 	"subcase-type": "Procedurestap type",
 	"subcase-phase": "Fase",
 	"in-function-of": "In functie van",
@@ -302,5 +304,9 @@
 	"status": "Status",
 	"no-newsletter-info": "Nog geen kort bestek voor dit agendapunt.",
 	"create-newsletter-info": "Kort bestek aanmaken",
-	"create-notes": "Notulen aanmaken"
+	"create-notes": "Notulen aanmaken",
+	"signature-add": "Handtekening toevoegen",
+	"signature-edit": "Handtekening aanpassen",
+	"signature-file": "Afbeelding",
+	"signature-function": "Functie (bv: secretaris)"
 }

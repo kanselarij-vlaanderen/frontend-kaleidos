@@ -2,7 +2,7 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showEditingMandateeForm"}}
+      {{action "toggleProperty" "isEditingMandatee"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-ministers"}}
@@ -11,7 +11,7 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showAddingMandateForm"}}
+      {{action "toggleProperty" "isAddingMandate"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-government-domains"}}
@@ -20,7 +20,7 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showFunctionsManagement"}}
+      {{action "toggleProperty" "isManagingFunctions"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-government-fields"}}
@@ -29,7 +29,7 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showIseCodeManagement"}}
+      {{action "toggleProperty" "isManagingIseCodes"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-ise-codes"}}
@@ -38,7 +38,7 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showAlertManagementForm"}}
+      {{action "toggleProperty" "isManagingAlerts"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-alerts"}}
@@ -47,7 +47,7 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showDocumentTypesManagementForm"}}
+      {{action "toggleProperty" "isManagingDocumentTypes"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-document-types"}}
@@ -56,7 +56,7 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showCaseTypesManagementForm"}}
+      {{action "toggleProperty" "isManagingCaseTypes"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-case-types"}}
@@ -65,7 +65,7 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showUserManagementInterface"}}
+      {{action "toggleProperty" "isManagingUsers"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-user-roles"}}
@@ -74,10 +74,19 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "showSubcaseTypesManagementForm"}}
+      {{action "toggleProperty" "isManagingSubcaseTypes"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-subcase-types"}}
+    </button>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+      {{action "toggleProperty" "isManagingSignature"}}
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-signatures"}}
     </button>
   </div>
 </div>
@@ -85,35 +94,37 @@
   {{utils/model-manager
     modalTitle=(t "manage-government-domains")
     modelName="government-domain"
-    close=(action "showAddingMandateForm")
+    close=(action "toggleProperty" "isAddingMandate")
   }}
 {{/if}}
 {{#if isManagingFunctions}}
   {{utils/manage-government-fields
     modalTitle=(t "manage-government-fields")
-    close=(action "showFunctionsManagement")
+    close=(action "toggleProperty" "isManagingFunctions")
   }}
 {{/if}}
 {{#if isManagingIseCodes}}
   {{utils/manage-ise-code
     modalTitle=(t "manage-ise-codes")
-    close=(action "showIseCodeManagement")
+    close=(action "toggleProperty" "isManagingIseCodes")
   }}
 {{/if}}
 {{#if isManagingDocumentTypes}}
   {{utils/model-manager
     modalTitle=(t "manage-document-types")
     modelName="document-type"
-    close=(action "showDocumentTypesManagementForm")
+    close=(action "toggleProperty" "isManagingDocumentTypes")
   }}
 {{/if}}
 {{#if isEditingMandatee}}
   {{#web-components/vl-modal
     isOverlay=true
     title=(t "manage-ministers")
-    closeModal=(action "showEditingMandateeForm")
+    closeModal=(action "toggleProperty" "isEditingMandatee")
   }}
-    {{utils/manage-mandatees closeModal=(action "showEditingMandateeForm")}}
+    {{utils/manage-mandatees
+      closeModal=(action "toggleProperty" "isEditingMandatee")
+    }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isManagingAlerts}}
@@ -123,19 +134,30 @@
   {{utils/model-manager
     modalTitle=(t "manage-case-types")
     modelName="case-type"
-    close=(action "showCaseTypesManagementForm")
+    close=(action "toggleProperty" "isManagingCaseTypes")
   }}
 {{/if}}
 {{#if isManagingUsers}}
   {{utils/user-management-interface
     modalTitle=(t "manage-user-roles")
-    close=(action "showUserManagementInterface")
+    close=(action "toggleProperty" "isManagingUsers")
   }}
 {{/if}}
 {{#if isManagingSubcaseTypes}}
   {{utils/model-manager
     modalTitle=(t "manage-subcase-types")
     modelName="subcase-type"
-    close=(action "showSubcaseTypesManagementForm")
+    close=(action "toggleProperty" "isManagingSubcaseTypes")
   }}
+{{/if}}
+{{#if isManagingSignature}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "manage-signatures")
+    closeModal=(action "toggleProperty" "isManagingSignature")
+  }}
+    {{utils/manage-signatures
+      closeModal=(action "toggleProperty" "isManagingSignature")
+    }}
+  {{/web-components/vl-modal}}
 {{/if}}

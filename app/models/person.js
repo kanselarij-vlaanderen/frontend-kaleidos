@@ -6,10 +6,13 @@ export default Model.extend({
 	lastName: attr('string'),
 	alternativeName: attr('string'),
 	firstName: attr('string'),
+
 	mandatees: hasMany('mandatee', { inverse: null }),
+
 	birth: belongsTo('birth'),
 	mandatee: belongsTo('mandatee', { inverse: null }),
 	gender: belongsTo('gender'),
+	signature: belongsTo('signature'),
 
 	nameToDisplay: computed('alternativeName', 'firstName', 'lastName', function () {
 		const { alternativeName, firstName, lastName } = this;

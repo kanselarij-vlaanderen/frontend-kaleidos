@@ -71,7 +71,7 @@
     <div class="vlc-toolbar__item">
       <button
         class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
-        {{action "showMultipleOptions"}}
+        {{action "showMultipleOptions" bubbles=false}}
       >
         {{#if (not isShowingOptions)}}
           <i

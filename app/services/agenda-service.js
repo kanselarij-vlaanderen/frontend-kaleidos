@@ -144,7 +144,6 @@ export default Service.extend({
 
 					return foundItem;
 				})
-
 				group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
 
 				if (group.agendaitems.get('length') < 1) {

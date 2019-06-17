@@ -18,6 +18,7 @@ export default Component.extend({
 			subcase: subcase,
 			created: new Date(),
 			title: await agendaitem.get('shortTitle'),
+			subtitle: await agendaitem.get('title'),
 			finished: value
 		});
 		await news.save();

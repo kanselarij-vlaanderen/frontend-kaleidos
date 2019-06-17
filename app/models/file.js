@@ -4,6 +4,8 @@ const { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
 	documentVersion: belongsTo('document-version'),
+	signature: belongsTo('signature'),
+
 	filename: attr('string'),
 	format: attr('string'),
 	size: attr('number'),

@@ -35,7 +35,8 @@
             class="vl-button vl-button--narrow"
             {{action "approveAgenda" currentSession}}
           >
-            {{t "agenda-approve"}}
+            {{await currentSession.latestAgendaName}}
+            {{t "approve-small"}}
           </button>
         {{/if}}
         <button
@@ -45,12 +46,12 @@
           {{#if (not isShowingOptions)}}
             <i
               class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
-              {{action "showMultipleOptions"}}
+              {{action "showMultipleOptions" bubbles=false}}
             ></i>
           {{else}}
             <i
               class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
-              {{action "showMultipleOptions"}}
+              {{action "showMultipleOptions" bubbles=false}}
             ></i>
           {{/if}}
           {{t "actions"}}
@@ -115,7 +116,7 @@
                 <li class="vl-popover__link-list__item">
                   {{#if (not currentSession.isFinal)}}
                     <a
-                      class="vl-link vl-link--block color-red"
+                      class="vl-link vl-link--block vl-u-text--error"
                       {{action "lockAgenda" currentAgenda}}
                       {{action attacher.hide}}
                     >
@@ -138,7 +139,7 @@
                     (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
                   }}
                     <a
-                      class="vl-link color-red"
+                      class="vl-link vl-u-text--error"
                       {{action "deleteDesignAgenda" currentAgenda}}
                       {{action attacher.hide}}
                     >

@@ -88,12 +88,24 @@ export default Model.extend({
     });
   }),
 
-  nota: computed('documents.@each', function () {
+  nota: computed('documentVersions', function () {
     return PromiseObject.create({
-      promise: this.get('documents').then((results) => {
-        return (results.find((item) => item.get('type.id')) === CONFIG.notaID);
+      promise: this.get('documentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+              'type': { id: CONFIG.notaID }
+            },
+            include: 'document-versions'
+          }).then((notas) => {
+            return notas.get('firstObject');
+          })
+        }
       })
-    });
+    })
   }),
 
   sortedMandatees: computed('mandatees.@each', function () {

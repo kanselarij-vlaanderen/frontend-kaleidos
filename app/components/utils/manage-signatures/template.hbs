@@ -1,0 +1,90 @@
+{{#if (not isAdding)}}
+  {{#if (not isResigning)}}
+    <div class="vl-modal-dialog__content">
+      {{utils/model-selector
+        modelName="signature"
+        searchField="name"
+        propertyToShow="name"
+        sortField="name"
+        selectedItems=(await selectedMandatee)
+        selectModel=(action "selectMandatee")
+      }}
+    </div>
+  {{/if}}
+  {{#if isEditing}}
+    {{utils/edit-mandatee
+      mandateeToEdit=(await selectedMandatee)
+      closeModal=(action "toggleIsEditing")
+    }}
+  {{else if (not isResigning)}}
+    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+      <div class="vlc-toolbar">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <button
+              class="vl-button vl-button--link vl-button--narrow"
+              {{action "closeModal"}}
+            >
+              {{t "cancel"}}
+            </button>
+          </div>
+          <div class="vlc-toolbar__right">
+            <div class="vlc-toolbar__item">
+              {{#if selectedMandatee}}
+                <button
+                  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                  {{action "toggleIsEditing"}}
+                >
+                  <i
+                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                  ></i>
+                  {{t "signature-edit"}}
+                </button>
+              {{/if}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                {{action "toggleIsAdding"}}
+              >
+                <i
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                ></i>
+                {{t "signature-add"}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+{{else}}
+  {{utils/create-signature closeModal=(action "toggleIsAdding")}}
+{{/if}}
+{{#if isResigning}}
+  <div class="vl-modal-dialog__content">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "end-date")}}
+      {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "new-person")}}
+      {{utils/model-selector
+        modelName="person"
+        searchField="alternative-name"
+        propertyToShow="alternativeName"
+        sortField="alternative-name"
+        selectedItems=selectedPerson
+        selectModel=(action "personSelected")
+      }}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "start-date")}}
+      {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
+    </div>
+  </div>
+  {{web-components/vl-modal-footer
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "save-resignation")
+    cancelAction=(action "toggleIsResigning")
+    saveAction=(action "saveResignation")
+  }}
+{{/if}}

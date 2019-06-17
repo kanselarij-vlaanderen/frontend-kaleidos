@@ -41,19 +41,21 @@
     <div class="{{spacerClass}}">
       <div class="vl-u-spacer-extended-bottom">
         {{#each group.groups as |agendaitemGroup|}}
-          <div class="vlc-list-section-header">
-            {{#each agendaitemGroup.mandatees as |mandatee|}}
-              {{mandatee.title}}<br />
-            {{/each}}
-          </div>
-          {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-            <div class="vlc-agenda-items-new__sub-item">
-              {{agenda/agenda-list/list-item
-                agendaitem=agendaitem
-                selectAgendaItem=(action "selectAgendaItem")
-              }}
+          {{#if (gt agendaitemGroup.agendaitems.length 0)}}
+            <div class="vlc-list-section-header">
+              {{#each agendaitemGroup.mandatees as |mandatee|}}
+                {{mandatee.title}}<br />
+              {{/each}}
             </div>
-          {{/each}}
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              <div class="vlc-agenda-items-new__sub-item">
+                {{agenda/agenda-list/list-item
+                  agendaitem=agendaitem
+                  selectAgendaItem=(action "selectAgendaItem")
+                }}
+              </div>
+            {{/each}}
+          {{/if}}
         {{/each}}
       </div>
     </div>

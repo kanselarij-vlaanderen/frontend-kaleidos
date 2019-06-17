@@ -20,6 +20,7 @@ export default Model.extend({
 
 	notes: belongsTo('meeting-record'),
 	newsletter: belongsTo('newsletter-info'),
+	signature: belongsTo('signature'),
 
 	latestAgenda: computed('agendas.@each', function () {
 		return DS.PromiseObject.create({

@@ -1,0 +1,44 @@
+<div class="vl-modal-dialog__content">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "add-people")}}
+    {{utils/model-selector
+      modelName="person"
+      searchField="alternative-name"
+      propertyToShow="nameToDisplay"
+      sortField="alternative-name"
+      selectedItems=selectedPerson
+      selectModel=(action "personSelected")
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "name")}}
+    {{web-components/vl-form-input width="4" value=name}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "signature-function")}}
+    {{web-components/vl-form-input width="4" value=function}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "signature-file")}}
+    {{#if (not uploadedFile)}}
+      {{file-uploader
+        multipleFiles=false
+        uploadedFile=(action "getUploadedFile")
+      }}
+    {{else}}
+      <div class="document">
+        {{fa-icon "file"}}
+        {{await uploadedFile.name}}
+        <a {{action "removeFile" uploadedFile}}>
+          {{fa-icon "remove"}}
+        </a>
+      </div>
+    {{/if}}
+  </div>
+</div>
+{{web-components/vl-modal-footer
+  cancelButtonText=(t "cancel")
+  saveButtonText=(t "signature-add")
+  cancelAction=(action "closeModal")
+  saveAction=(action "createSignature")
+}}

@@ -20,7 +20,6 @@ export default Component.extend({
         sort: "priority",
         page: { size: 50 }
       }).then((types) => {
-        console.log(types)
         return types;
       });
   },

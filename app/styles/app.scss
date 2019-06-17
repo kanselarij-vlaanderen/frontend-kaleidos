@@ -478,10 +478,6 @@ tr.disabled {
   padding: 2rem 0;
 }
 
-.color-red {
-  color: $red;
-}
-
 .max-width {
   text-overflow: ellipsis;
   max-width: 800px;
@@ -507,12 +503,6 @@ tr.disabled {
         border: 0;
       }
     }
-  }
-}
-
-.vlc-document-list {
-  a {
-    padding: 0;
   }
 }
 
@@ -607,10 +597,16 @@ tr.lt-expanded-row:hover {
 
 tr.postponed {
   opacity: 0.5;
+  .vl-button__icon.vl-vi.vl-vi-pencil {
+    color: $silver-chalice;
+  }
+  .vl-button__icon.vl-vi.vl-vi-document {
+    color: $silver-chalice;
+  }
 }
 
 .skeletal-loader {
-  background-color: $porcelain;
+  background-color: $blue-gray-light;
   display: inline-block;
   position: relative;
   height: $base-font-size;
@@ -623,4 +619,21 @@ tr.postponed {
 
 .vlc-page-header__title {
   padding-bottom: 0.5rem !important;
+}
+
+.vl-pill.vl-u-spacer-extended-right-s {
+  margin: 0.1em;
+}
+
+.vl-data-table--zebra {
+  tbody {
+    tr {
+      &:nth-child(odd) {
+        background-color: $porcelain;
+      }
+      &:hover {
+        background-color: $blue-gray-light;
+      }
+    }
+  }
 }

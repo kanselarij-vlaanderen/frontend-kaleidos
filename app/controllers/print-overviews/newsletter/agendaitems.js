@@ -55,6 +55,7 @@ export default Controller.extend({
 			subcase: subcase,
 			created: new Date(),
 			title: await agendaitem.get('shortTitle'),
+			subtitle: await agendaitem.get('title'),
 			finished: value
 		});
 		return news.save();

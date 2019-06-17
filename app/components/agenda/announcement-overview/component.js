@@ -17,9 +17,6 @@ export default Component.extend({
 	}),
 
 	actions: {
-		save(announcement) {
-
-		},
 		toggleIsEditing() {
 			this.toggleProperty('isEditing');
 		},
