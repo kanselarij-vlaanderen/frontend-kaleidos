@@ -13,6 +13,10 @@ export default Component.extend({
 		}
 	}),
 
+	downloadUrl: computed('uploadedFile', function () {
+		return `/files/${this.uploadedFile.get('id')}/download`;
+	}),
+
 	actions: {
 		personSelected(person) {
 			this.set('selectedPerson', person);
@@ -28,7 +32,7 @@ export default Component.extend({
 				function: this.get('function'),
 				isActive: false,
 				person: await this.get('selectedPerson'),
-				file: this.get('uploadedFile')
+				file: await this.get('uploadedFile')
 			});
 			newSignature.save().then(() => {
 				this.clearValues();

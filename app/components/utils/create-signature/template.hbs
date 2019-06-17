@@ -26,9 +26,8 @@
         uploadedFile=(action "getUploadedFile")
       }}
     {{else}}
-      <div class="document">
-        {{fa-icon "file"}}
-        {{await uploadedFile.name}}
+      <div class="preview-container">
+        <img src="{{downloadUrl}}" alt="Signature" />
         <a {{action "removeFile" uploadedFile}}>
           {{fa-icon "remove"}}
         </a>
