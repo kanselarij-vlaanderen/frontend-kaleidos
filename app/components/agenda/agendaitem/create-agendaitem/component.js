@@ -161,7 +161,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
         if (agendas.length === 1) {
           return agendaService.sortAgendaItems(selectedAgenda);
         }
-        await selectedAgenda.hasMany('agendaitem').reload();
+        // await selectedAgenda.hasMany('agendaitem').reload();
       }).then(() => {
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
