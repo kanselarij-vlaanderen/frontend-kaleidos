@@ -24,7 +24,7 @@ export default Component.extend({
 		async saveChanges() {
 			const signature = await this.store.findRecord('signature', await this.signatureToEdit.get('id'))
 			if (this.get('uploadedFile')) {
-				signature.set('file', this.get('uploadedFile'))
+				signature.set('file', (await this.get('uploadedFile')));
 			}
 			signature.save().then(() => {
 				this.closeModal();
