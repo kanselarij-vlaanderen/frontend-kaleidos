@@ -23,7 +23,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
 	afterModel(model, transition) {
 		const selectedAgendaId = transition.queryParams.selectedAgenda;
-		return this.get('sessionService.agendas').then(agendas => {
+		return model.get('agendas').then(agendas => {
 			if (selectedAgendaId) {
 				const selectedAgenda = agendas.find((agenda) => agenda.id === selectedAgendaId);
 				if (selectedAgenda) {
