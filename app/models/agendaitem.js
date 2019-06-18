@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
+import EmberObject from '@ember/object';
 
 let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
@@ -19,7 +20,7 @@ export default Model.extend({
   forPress: attr('boolean'),
   shortTitle: attr('string'),
   title: attr('string'),
-  formallyOk: attr('boolean'),
+  formallyOk: attr('string'),
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
@@ -122,5 +123,13 @@ export default Model.extend({
         }
       })
     })
-  })
+  }),
+
+  formallyOkToShow: computed('formallyOk', function () {
+    const options = CONFIG.formallyOkOptions;
+    const { formallyOk } = this;
+    const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
+
+    return EmberObject.create(foundOption);
+  }),
 });

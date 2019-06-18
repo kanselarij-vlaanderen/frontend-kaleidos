@@ -35,19 +35,14 @@
     {{#if (not item.showAsRemark)}}
       <div class="vl-u-spacer">
         <div class="vlc-input-field-block">
-          <label class="vl-checkbox vl-checkbox__box">
-            {{input
-              class="vl-checkbox__toggle"
-              type="checkbox"
-              checked=formallyOk
-            }}
-            <div class="vl-checkbox__label">
-              <i class="vl-checkbox__box"></i>
-              <span class="vl-annotation">
-                {{t "formal-ok"}}
-              </span>
-            </div>
-          </label>
+          {{web-components/vl-form-label value=(t "status")}}
+          {{#power-select
+            options=options
+            selected=selectedFormallyOk
+            onchange=(action "setAction") as |option|
+          }}
+            {{option.label}}
+          {{/power-select}}
         </div>
       </div>
     {{/if}}

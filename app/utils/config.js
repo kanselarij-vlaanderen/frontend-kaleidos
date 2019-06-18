@@ -17,4 +17,30 @@ export default EmberObject.create({
 	onAgendaLabel: "geagendeerd",
 	decidedLabel: "beslist",
 	notaID: "9e5b1230-f3ad-438f-9c68-9d7b1b2d875d",
+	formallyOkOptions: [
+		{
+			label: "Formeel OK",
+			uri: "http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636",
+			classNames: "vlc-agenda-items-new__status vlc-agenda-items-new__status--positive",
+			approved: true,
+			pillClassNames:"vlc-pill vlc-pill--success"
+		},
+		{
+			label: "Formeel niet OK",
+			uri: "http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6",
+			classNames: "vlc-agenda-items-new__status vl-u-text--error",
+			pillClassNames:"vlc-pill vlc-pill--error"
+		},
+		{
+			label: "Nog niet formeel OK",
+			uri: "http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0",
+			classNames: "vlc-agenda-items-new__status",
+			pillClassNames: "vlc-pill"
+		}
+	],
+
+	notYetFormallyOk: "http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0",
+	formallyNok: "http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6",
+	formallyOk: "http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636"
+
 }) 

@@ -36,16 +36,14 @@
   <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">
     {{await agendaitem.subcase.subcaseName}}
   </span>
-  {{#if (await agendaitem.formallyOk)}}
-    <p
-      class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
-    >
-      {{t "formal-ok"}}
+  {{#if agendaitem.formallyOkToShow.approved}}
+    <p class="{{agendaitem.formallyOkToShow.classNames}}">
+      {{agendaitem.formallyOkToShow.label}}
       <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
     </p>
   {{else}}
-    <span class="vlc-agenda-items-new__status">
-      {{t "formal-nok"}}
-    </span>
+    <p class="{{agendaitem.formallyOkToShow.classNames}}">
+      {{agendaitem.formallyOkToShow.label}}
+    </p>
   {{/if}}
 </div>
