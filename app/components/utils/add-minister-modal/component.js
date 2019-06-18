@@ -6,7 +6,6 @@ export default Component.extend(ManageMinisterMixin, {
 
 	actions: {
 		async mandateeSelected(mandatee) {
-			this.set('isLoading', true);
 			const rowToShow = await this.get('rowToShow');
 			if (rowToShow) {
 				rowToShow.domains.map((domain) => {
@@ -20,7 +19,6 @@ export default Component.extend(ManageMinisterMixin, {
 			}
 			this.set('selectedMandatee', mandatee);
 			this.set('rowToShow', (await this.refreshData(mandatee)));
-			this.set('isLoading', false);
 		}
 
 	}
