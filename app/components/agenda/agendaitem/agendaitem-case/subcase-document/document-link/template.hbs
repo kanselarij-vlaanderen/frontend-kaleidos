@@ -152,26 +152,19 @@
     title=(t "new-document-version")
   }}
     <div class="vl-modal-dialog__content">
-      <div class="vl-u-spacer-extended-bottom-s">
-        <div class="vlc-input-field-block">
-          {{web-components/vl-form-label value="Naam van bestand"}}
-          {{web-components/vl-form-input width="4" value=fileName}}
-        </div>
+      <div class="upload-container">
+        {{#if (not uploadedFile)}}
+          {{file-uploader
+            multipleFiles=false
+            uploadedFile=(action "getUploadedFile")
+          }}
+        {{else}}
+          {{web-components/vl-uploaded-document
+            file=uploadedFile
+            showMetadata=false
+          }}
+        {{/if}}
       </div>
-      {{#if (not uploadedFile)}}
-        {{file-uploader
-          multipleFiles=false
-          uploadedFile=(action "getUploadedFile")
-        }}
-      {{else}}
-        <div class="document">
-          {{fa-icon "file"}}
-          {{await uploadedFile.name}}
-          <a {{action "removeFile" uploadedFile}}>
-            {{fa-icon "remove"}}
-          </a>
-        </div>
-      {{/if}}
     </div>
     {{web-components/vl-modal-footer
       cancelButtonText=(t "cancel")

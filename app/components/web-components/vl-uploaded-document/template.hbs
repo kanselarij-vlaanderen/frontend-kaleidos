@@ -41,27 +41,29 @@
     {{web-components/vl-form-label value=(t "alt-file-name")}}
     {{web-components/vl-form-input width="4" value=fileName}}
   </div>
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "document-type")}}
-    {{utils/model-selector
-      modelName="document-type"
-      searchField="label"
-      propertyToShow="label"
-      items=filteredItems
-      sortField="priority"
-      selectedItems=file.documentType
-      selectModel=(action "chooseDocumentType")
-    }}
-  </div>
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "publicity")}}
-    {{utils/model-selector
-      modelName="confidentiality"
-      searchField="label"
-      propertyToShow="label"
-      sortField="label"
-      selectedItems=file.confidentiality
-      selectModel=(action "chooseDocumentConfidentiality")
-    }}
-  </div>
+  {{#if showMetadata}}
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "document-type")}}
+      {{utils/model-selector
+        modelName="document-type"
+        searchField="label"
+        propertyToShow="label"
+        items=filteredItems
+        sortField="priority"
+        selectedItems=file.documentType
+        selectModel=(action "chooseDocumentType")
+      }}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "publicity")}}
+      {{utils/model-selector
+        modelName="confidentiality"
+        searchField="label"
+        propertyToShow="label"
+        sortField="label"
+        selectedItems=file.confidentiality
+        selectModel=(action "chooseDocumentConfidentiality")
+      }}
+    </div>
+  {{/if}}
 </div>

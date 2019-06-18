@@ -36,6 +36,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		},
 
 		async uploadNewVersion() {
+			this.set('isLoading', true);
 			const { item, uploadedFile, fileName } = this;
 			const document = await this.get('document');
 			const newVersion = await document.get('lastDocumentVersion');
@@ -45,7 +46,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			document.set('lastDocumentVersion', newDocumentVersion);
 			await item.hasMany('documentVersions').reload();
 			await item.save();
-
+			this.set('isLoading', false);
 			if (!this.get('isDestroyed')) {
 				this.set('isUploadingNewVersion', false);
 			}
@@ -72,9 +73,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			this.toggleProperty('isEditing');
 		},
 
-		saveChanges() {
+		async saveChanges() {
 			this.set('isLoading', true);
-			const document = this.get('document');
+			const document = await this.get('document');
 			document.set('numberVr', this.get('numberVr'))
 			document.save().then(() => {
 				this.toggleProperty('isEditing');
