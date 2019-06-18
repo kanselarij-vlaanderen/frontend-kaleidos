@@ -20,12 +20,11 @@ export default Model.extend({
 
 	nameToDisplay: computed('chosenFileName', 'document', 'file', function () {
 		const chosenFileName = this.get('chosenFileName');
-		const name = this.get('file.filename');
 		const title = this.get('document.title');
 		if (chosenFileName) {
 			return chosenFileName;
-		} else if (name) {
-			return name;
+		} else if (this.get('file.filename')) {
+			return this.get('file.filename');
 		} else if (title) {
 			return title;
 		} else {

@@ -28,11 +28,11 @@ export default Mixin.create({
 			if (rowToShow) {
 				rowToShow.domains.map((domain) => {
 					const domainToClear = this.store.findRecord('government-domain', domain.id);
-					domainToClear.set('selected', false)
+					domainToClear.rollbackAttributes();
 				});
 				rowToShow.fields.map((field) => {
 					const fieldToClear = this.store.findRecord('government-field', field.id);
-					fieldToClear.set('selected', false)
+					fieldToClear.rollbackAttributes();
 				});
 			}
 
