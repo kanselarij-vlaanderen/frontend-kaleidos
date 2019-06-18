@@ -6,20 +6,21 @@ export default Component.extend(ManageMinisterMixin, {
 
 	actions: {
 		async mandateeSelected(mandatee) {
+			this.set('isLoading', true);
 			const rowToShow = await this.get('rowToShow');
 			if (rowToShow) {
 				rowToShow.domains.map((domain) => {
-					const domainToClear = this.store.peekRecord('government-domain', domain.id);
+					const domainToClear = this.store.findRecord('government-domain', domain.id);
 					domainToClear.set('selected', false)
 				});
 				rowToShow.fields.map((field) => {
-					const fieldToClear = this.store.peekRecord('government-field', field.id);
+					const fieldToClear = this.store.findRecord('government-field', field.id);
 					fieldToClear.set('selected', false)
 				});
 			}
 			this.set('selectedMandatee', mandatee);
-
-			this.set('rowToShow', await this.refreshData(mandatee));
+			this.set('rowToShow', (await this.refreshData(mandatee)));
+			this.set('isLoading', false);
 		}
 
 	}

@@ -8,6 +8,7 @@ export default Mixin.create({
 	selectedMandatee: null,
 
 	async refreshData(mandatee) {
+		this.set('isLoading', true);
 		const iseCodes = await mandatee.get('iseCodes');
 		const fields = await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')));
 		const domains = await Promise.all(fields.map((field) => field.get('domain')));
@@ -16,7 +17,7 @@ export default Mixin.create({
 			domains: [...new Set(domains)],
 			fields: [...new Set(fields)],
 		});
-
+		this.set('isLoading', false);
 		return rowToShow;
 	},
 
@@ -26,11 +27,11 @@ export default Mixin.create({
 			const rowToShow = await this.get('rowToShow');
 			if (rowToShow) {
 				rowToShow.domains.map((domain) => {
-					const domainToClear = this.store.peekRecord('government-domain', domain.id);
+					const domainToClear = this.store.findRecord('government-domain', domain.id);
 					domainToClear.set('selected', false)
 				});
 				rowToShow.fields.map((field) => {
-					const fieldToClear = this.store.peekRecord('government-field', field.id);
+					const fieldToClear = this.store.findRecord('government-field', field.id);
 					fieldToClear.set('selected', false)
 				});
 			}
