@@ -34,6 +34,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 
 	actions: {
 		async saveChanges() {
+			this.set('isLoading', true);
 			const { isAgendaItem } = this;
 			const item = await this.get('item');
 			item.set('modified', new Date());
@@ -83,6 +84,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 
 				await agendaitemToUpdate.save();
 			}
+			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		}
 	}

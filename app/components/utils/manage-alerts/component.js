@@ -71,6 +71,7 @@ export default Component.extend({
 		},
 
 		editAlert() {
+			this.set('isLoading', true);
 			const { selectedAlert, beginDate, title, message, endDate, type } = this;
 			const alertToSave = this.store.peekRecord('alert', selectedAlert.get('id'));
 			alertToSave.set('beginDate', beginDate);
@@ -81,11 +82,13 @@ export default Component.extend({
 			alertToSave.save().then(() => {
 				alertToSave.reload();
 				this.toggleProperty('isEditing');
+				this.set('isLoading', false);
 				this.clearProperties();
 			});
 		},
 
 		createAlert() {
+			this.set('isLoading', true);
 			const { title, type, message, beginDate, endDate } = this;
 
 			const alert = this.store.createRecord('alert', {
@@ -93,6 +96,7 @@ export default Component.extend({
 			});
 			alert.save().then(() => {
 				this.clearProperties();
+				this.set('isLoading', false);
 				this.set('isAdding', false);
 			});
 		}

@@ -109,9 +109,11 @@
       >
         {{t "cancel"}}
       </a>
-      <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-        {{t "save"}}
-      </button>
+      {{web-components/vl-save-button
+        text=(t "save")
+        isLoading=isLoading
+        saveAction=(action "saveChanges")
+      }}
     </div>
   {{/if}}
 {{/if}}

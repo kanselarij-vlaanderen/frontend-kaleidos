@@ -9,6 +9,7 @@ export default Component.extend({
 
 	actions: {
 		async createNewSession() {
+			this.set('isLoading', true);
 			let newMeeting = this.store.createRecord('meeting', {
 				plannedStart: this.get('startDate'),
 				created: new Date()
@@ -20,10 +21,11 @@ export default Component.extend({
 					createdFor: meeting,
 					created: new Date(),
 					modified: new Date()
-        });
+				});
 
 				await agenda.save();
 				await $.get('/session-service/assignNewSessionNumbers');
+				this.set('isLoading', false);
 				this.successfullyAdded();
 			});
 		},

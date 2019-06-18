@@ -27,6 +27,7 @@ export default Component.extend({
 		},
 
 		async createSignature() {
+			this.set('isLoading', true);
 			const newSignature = this.store.createRecord('signature', {
 				name: this.get('name'),
 				function: this.get('function'),
@@ -36,6 +37,7 @@ export default Component.extend({
 			});
 			newSignature.save().then(() => {
 				this.clearValues();
+				this.set('isLoading', false);
 				this.closeModal();
 			});
 		},

@@ -66,12 +66,11 @@
       </div>
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
-          <button
-            class="vl-button vl-button--narrow"
-            {{action "saveChanges" currentSession.notes}}
-          >
-            {{t "save"}}
-          </button>
+          {{web-components/vl-save-button
+            text=(t "save")
+            isLoading=isLoading
+            saveAction=(action "saveChanges" currentSession.notes)
+          }}
         </div>
       </div>
     </div>

@@ -33,6 +33,7 @@ export default Component.extend({
 		},
 
 		saveChanges() {
+			this.set('isLoading', true);
 			const { startDate, title, shortTitle, priority, mandateeToEdit, iseCodes } = this;
 			const mandatee = this.store.peekRecord('mandatee', mandateeToEdit.get('id'));
 			mandatee.set('end', null);
@@ -42,6 +43,7 @@ export default Component.extend({
 			mandatee.set('iseCodes', iseCodes)
 			mandatee.set('start', startDate);
 			mandatee.save().then(() => {
+				this.set('isLoading', false);
 				this.closeModal();
 			});
 		}

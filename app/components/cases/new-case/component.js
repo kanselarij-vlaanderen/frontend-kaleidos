@@ -22,11 +22,13 @@ export default Component.extend({
 
   actions: {
     async createCase($event) {
+      this.set('isLoading', true)
       $event.preventDefault();
       const newDate = new Date();
       const caze = this.createCase(newDate);
 
       caze.save().then((newCase) => {
+        this.set('isLoading', false);
         this.close(newCase);
       });
     },

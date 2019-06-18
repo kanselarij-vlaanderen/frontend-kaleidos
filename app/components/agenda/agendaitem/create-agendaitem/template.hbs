@@ -37,9 +37,7 @@
                 currentSorting=sort
                 label="Korte titel van het dossier"
               }}
-              <th>
-
-              </th>
+              <th></th>
             {{/c.header}}
             {{#c.body as |row|}}
               <td class="vl-data-table-col-1">
@@ -75,6 +73,7 @@
       </div>
     </div>
     {{web-components/vl-modal-footer
+      isLoading=isLoading
       cancelButtonText=(t "cancel")
       saveButtonText=(t "add-to-agenda")
       cancelAction=(action "close")

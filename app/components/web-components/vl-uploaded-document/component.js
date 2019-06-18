@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 export default Component.extend(UploadDocumentMixin, {
 	classNames: ["vl-uploaded-document"],
-
+	showMetadata: true,
 	sizeToShow: computed('file', function () {
 		return this.bytesToSize(this.get('file.size'));
 	}),

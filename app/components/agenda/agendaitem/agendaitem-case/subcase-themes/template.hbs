@@ -1,16 +1,15 @@
-
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-display-flex-align-center">
       <h4 class="vl-title vl-title--h4">
         {{t "themes"}}
       </h4>
-          {{#if (or isAdmin isEditor)}}
-      <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "edit"}}
-        </a>
-      </div>
+      {{#if (or isAdmin isEditor)}}
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "edit"}}
+          </a>
+        </div>
       {{/if}}
     </div>
   </div>
@@ -49,9 +48,11 @@
       <a class="vl-link" {{action "cancelEditing"}}>
         {{t "cancel"}}
       </a>
-      <button class="vl-button vl-button--narrow" {{action "saveChanges"}}>
-        {{t "save"}}
-      </button>
+      {{web-components/vl-save-button
+        text=(t "save")
+        isLoading=isLoading
+        saveAction=(action "saveChanges")
+      }}
     </div>
   </div>
 {{/if}}

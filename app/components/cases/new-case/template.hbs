@@ -42,9 +42,10 @@
       </div>
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
-          <button class="vl-button vl-button--narrow">
-            {{t "create-case"}}
-          </button>
+          {{web-components/vl-save-button
+            text=(t "create-case")
+            isLoading=isLoading
+          }}
         </div>
       </div>
     </div>

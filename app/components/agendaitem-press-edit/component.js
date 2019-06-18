@@ -12,6 +12,7 @@ export default Component.extend(ModifiedMixin, {
 		},
 
 		async saveChanges(agendaitem) {
+			this.set('isLoading', true);
 			const agenda = await agendaitem.get('agenda');
 			let agendaitemToUpdate;
 
@@ -28,7 +29,7 @@ export default Component.extend(ModifiedMixin, {
 					agendaitem.set('expanded', false);
 				}
 			});
-
+			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		},
 

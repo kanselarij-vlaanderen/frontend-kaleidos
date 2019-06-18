@@ -22,11 +22,13 @@ export default Component.extend({
 		},
 
 		async saveChanges() {
+			this.set('isLoading', true);
 			const signature = await this.store.findRecord('signature', await this.signatureToEdit.get('id'))
 			if (this.get('uploadedFile')) {
 				signature.set('file', (await this.get('uploadedFile')));
 			}
 			signature.save().then(() => {
+				this.set('isLoading', false);
 				this.closeModal();
 			});
 

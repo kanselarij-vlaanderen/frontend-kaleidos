@@ -12,12 +12,14 @@ export default Component.extend(ModelManageMixin, {
 
 	actions: {
 		async editModel() {
+			this.set('isLoading', true);
 			const model = await this.get('item');
 			const field = await this.get('field');
 			model.set('name', this.get('name'));
 			model.set('code', this.get('code'));
 			model.set('field', field)
 			model.save().then(() => {
+				this.set('isLoading', false);
 				this.set('code', null);
 				this.set('name', null);
 				this.set('field', null);
@@ -26,6 +28,7 @@ export default Component.extend(ModelManageMixin, {
 		},
 
 		async createModel() {
+			this.set('isLoading', true);
 			const field = await this.get('field');
 			const governmentDomain = this.store.createRecord('ise-code', {
 				name: this.get('name'),
@@ -33,6 +36,7 @@ export default Component.extend(ModelManageMixin, {
 				field: field
 			});
 			governmentDomain.save().then(() => {
+				this.set('isLoading', false);
 				this.set('code', null);
 				this.set('name', null);
 				this.set('field', null);

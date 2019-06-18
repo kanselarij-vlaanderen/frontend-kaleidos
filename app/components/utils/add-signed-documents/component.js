@@ -18,11 +18,12 @@ export default Component.extend(UploadDocumentMixin, {
 		},
 
 		async uploadNewDocument() {
+			this.set('isLoading', true);
 			const item = await this.get('item');
 			this.set('isCreatingDocuments', true);
 			await this.uploadFiles(item).then(async () => {
-				// item.belongsTo('document').reload();
 				this.set('isCreatingDocuments', false);
+				this.set('isLoading', false);
 				this.toggleProperty('isAddingNewDocument');
 			});
 		}

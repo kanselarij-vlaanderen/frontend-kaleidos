@@ -20,10 +20,9 @@
   <a class="vl-link" {{action "cancelEditing" agendaitem}}>
     {{t "cancel"}}
   </a>
-  <button
-    class="vl-button vl-button--narrow"
-    {{action "saveChanges" agendaitem}}
-  >
-    {{t "save"}}
-  </button>
+  {{web-components/vl-save-button
+    text=(t "save")
+    isLoading=isLoading
+    saveAction=(action "saveChanges" agendaitem)
+  }}
 </div>

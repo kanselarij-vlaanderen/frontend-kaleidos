@@ -63,6 +63,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 		},
 
 		async saveChanges() {
+			this.set('isLoading', true);
 			const { isAgendaItem } = this;
 			const item = await this.get('item');
 			item.set('modified', new Date());
@@ -97,6 +98,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 					}));
 				}
 			}
+			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		}
 	}

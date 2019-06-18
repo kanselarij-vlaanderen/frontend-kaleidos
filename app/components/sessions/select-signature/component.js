@@ -19,8 +19,10 @@ export default Component.extend({
 		},
 
 		async saveChanges() {
+			this.set('isLoading', true);
 			this.meeting.set('signature', await this.selectedSignature);
 			this.meeting.save().then(() => {
+				this.set('isLoading', false);
 				this.closeDialog();
 			});
 		}

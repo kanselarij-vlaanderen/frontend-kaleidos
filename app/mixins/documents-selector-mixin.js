@@ -30,6 +30,7 @@ export default Mixin.create({
 		},
 
 		async saveChanges() {
+			this.set('isLoading', true);
 			const item = await this.get('item');
 			const documentVersionsSelected = this.get('documentVersionsSelected');
 			const itemDocumentsToEdit = await item.get('documentVersions');
@@ -48,6 +49,7 @@ export default Mixin.create({
 			}
 			this.setNewPropertiesToModel(item).then((newModel) => {
 				newModel.reload();
+				this.set('isLoading', false);
 				this.toggleProperty('isEditing');
 			});
 		}
