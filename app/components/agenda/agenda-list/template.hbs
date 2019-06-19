@@ -1,8 +1,15 @@
 {{#if (not selectedAgendaItem)}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="vl-u-display-flex vl-u-flex-align-baseline">
     <span class="vl-title vl-title--h3">
       {{t "agendaitems-subtitle"}}
     </span>
+    {{#if (or isAdmin isEditor)}}
+      <div class="vl-u-spacer-extended-left-s">
+        <a class="vl-link" {{action "toggleIsEditingOverview"}}>
+          {{t "edit"}}
+        </a>
+      </div>
+    {{/if}}
   </div>
 {{else}}
   <div class="vl-u-spacer-extended-s vlc-agenda-items-new--spaced">
@@ -11,7 +18,7 @@
     </span>
   </div>
 {{/if}}
-{{#if (eq agendaitems.length 0)}}
+{{#if (eq agendaitemGroups.length 0)}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
   </div>
@@ -51,6 +58,7 @@
               <div class="vlc-agenda-items-new__sub-item">
                 {{agenda/agenda-list/list-item
                   agendaitem=agendaitem
+                  isEditingOverview=isEditingOverview
                   selectAgendaItem=(action "selectAgendaItem")
                 }}
               </div>

@@ -36,14 +36,23 @@
   <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">
     {{await agendaitem.subcase.subcaseName}}
   </span>
-  {{#if agendaitem.formallyOkToShow.approved}}
-    <p class="{{agendaitem.formallyOkToShow.classNames}}">
-      {{agendaitem.formallyOkToShow.label}}
-      <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-    </p>
+  {{#if (not isEditingOverview)}}
+    {{#if agendaitem.formallyOkToShow.approved}}
+      <p class="{{agendaitem.formallyOkToShow.classNames}}">
+        {{agendaitem.formallyOkToShow.label}}
+        <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+      </p>
+    {{else}}
+      <p class="{{agendaitem.formallyOkToShow.classNames}}">
+        {{agendaitem.formallyOkToShow.label}}
+      </p>
+    {{/if}}
   {{else}}
-    <p class="{{agendaitem.formallyOkToShow.classNames}}">
-      {{agendaitem.formallyOkToShow.label}}
-    </p>
+    {{utils/formally-ok-selector
+      formallyOk=formallyOk
+      isLoading=isLoading
+      hideLabel=hideLabel
+      setAction=(action "setAction")
+    }}
   {{/if}}
 </div>
