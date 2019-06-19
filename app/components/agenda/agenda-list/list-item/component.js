@@ -59,12 +59,14 @@ export default Component.extend(isAuthenticatedMixin, {
 	},
 
 	actions: {
-		setAction(item) {
+		async setAction(item) {
 			this.set('isLoading', true);
 			const uri = item.get('uri');
 			this.agendaitem.set('formallyOk', uri);
+			const agenda = await this.agendaitem.get('agenda');
 			this.agendaitem.save().then(() => {
 				this.set('isLoading', false);
+				agenda.notifyPropertyChange('agendaitems');
 			})
 		}
 	}

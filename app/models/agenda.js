@@ -25,6 +25,7 @@ export default Model.extend({
 		return this.get('agendaitems').then((agendaitems) => {
 			const agendaitemsWithoutAnnouncements = agendaitems.filter((agendaitem) => !agendaitem.get('showAsRemark'));
 			const approvedAgendaItems = agendaitemsWithoutAnnouncements.filter((agendaitem) => agendaitem.get('formallyOk') == CONFIG.formallyOk);
+			console.log(approvedAgendaItems.get('length'), agendaitemsWithoutAnnouncements.get('length'))
 			return approvedAgendaItems.get('length') === agendaitemsWithoutAnnouncements.get('length')
 		});
 
