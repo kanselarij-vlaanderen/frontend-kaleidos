@@ -32,7 +32,6 @@ export default Model.extend({
   approvals: hasMany('approval', { serialize: false }),
   decisions: hasMany('decision'),
 
-  confidentiality: belongsTo('confidentiality'),
   type: belongsTo('subcase-type'),
   case: belongsTo('case', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),

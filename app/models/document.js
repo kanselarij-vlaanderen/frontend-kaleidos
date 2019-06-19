@@ -14,7 +14,6 @@ export default Model.extend({
 	remarks: hasMany('remark'),
 	description: attr('string'),
 	type: belongsTo('document-type'),
-	confidentiality: belongsTo('confidentiality'),
 	signedDecision: belongsTo('decision'),
 
 	sortedDocumentVersions: computed('documentVersions', function () {
