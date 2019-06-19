@@ -8,7 +8,9 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 	classNames: ["vl-form__group", "vl-u-bg-porcelain"],
 	propertiesToSet: ['title', 'shortTitle', 'formallyOk', 'confidentiality', 'confidential'],
 
+	formallyOk: getCachedProperty('formallyOk'),
 	title: getCachedProperty('title'),
+	confidentiality: getCachedProperty('confidentiality'),
 	shortTitle: getCachedProperty('shortTitle'),
 	confidential: computed(`item.confidential`, `item.subcase.confidential`, {
 		get() {
@@ -23,12 +25,13 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 		}
 	}),
 
-	formallyOk: getCachedProperty('formallyOk'),
-	confidentiality: getCachedProperty('confidentiality'),
-
 	actions: {
 		selectConfidentiality(confidentiality) {
 			this.set('confidentiality', confidentiality)
+		},
+
+		setAction(item) {
+			this.set('formallyOk', item.get('uri'))
 		}
 	}
 });

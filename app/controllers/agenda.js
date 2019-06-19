@@ -50,8 +50,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 		reloadRouteWithNewAgenda(selectedAgendaId) {
 			const { currentSession } = this;
-			this.transitionToRoute('agenda.agendaitems', currentSession.id, { queryParams: { selectedAgenda: selectedAgendaId } });
-			this.send('refresh');
+			this.transitionToRoute('agenda.agendaitems', currentSession.id, { queryParams: { selectedAgenda: selectedAgendaId } })
 		},
 
 		compareAgendas() {

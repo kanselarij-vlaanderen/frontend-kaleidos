@@ -6,7 +6,6 @@
       {{add index 1}}.
     {{/if}}
   </span>
-  {{await agendaitem.subcase.case.type.label}}
 </p>
 <h4 class="vlc-agenda-items-new__subject">
   {{#if (await agendaitem.shortTitle)}}
@@ -37,16 +36,23 @@
   <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">
     {{await agendaitem.subcase.subcaseName}}
   </span>
-  {{#if (await agendaitem.formallyOk)}}
-    <p
-      class="vlc-agenda-items-new__status vlc-agenda-items-new__status--positive"
-    >
-      {{t "formal-ok"}}
-      <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-    </p>
+  {{#if (not isEditingOverview)}}
+    {{#if agendaitem.formallyOkToShow.approved}}
+      <p class="{{agendaitem.formallyOkToShow.classNames}}">
+        {{agendaitem.formallyOkToShow.label}}
+        <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+      </p>
+    {{else}}
+      <p class="{{agendaitem.formallyOkToShow.classNames}}">
+        {{agendaitem.formallyOkToShow.label}}
+      </p>
+    {{/if}}
   {{else}}
-    <span class="vlc-agenda-items-new__status">
-      {{t "formal-nok"}}
-    </span>
+    {{utils/formally-ok-selector
+      formallyOk=formallyOk
+      isLoading=isLoading
+      hideLabel=hideLabel
+      setAction=(action "setAction")
+    }}
   {{/if}}
 </div>

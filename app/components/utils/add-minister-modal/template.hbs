@@ -11,32 +11,36 @@
         chooseMandatee=(action "mandateeSelected")
       }}
     </div>
-    {{#each rowToShow.domains as |domain|}}
-      <ul class="vlc-checkbox-tree">
-        <li>
-          {{web-components/vl-checkbox
-            value=domain.selected
-            label=domain.label
-            toggle=(action "selectDomain" domain)
-          }}
-          <ul>
-            {{#each rowToShow.fields as |field|}}
-              {{#if (eq (await field.domain.id) domain.id)}}
-                <li>
-                  {{web-components/vl-checkbox
-                    value=field.selected
-                    label=field.label
-                    toggle=(action "selectField" domain)
-                  }}
-                  {{field.name}}
-                </li>
-              {{/if}}
-            {{/each}}
-          </ul>
-          <div class="vlc-hr"></div>
-        </li>
-      </ul>
-    {{/each}}
+    {{#if isLoading}}
+      {{web-components/vl-loader text="Even geduld aub.."}}
+    {{else}}
+      {{#each rowToShow.domains as |domain|}}
+        <ul class="vlc-checkbox-tree">
+          <li>
+            {{web-components/vl-checkbox
+              value=domain.selected
+              label=domain.label
+              toggle=(action "selectDomain" domain)
+            }}
+            <ul>
+              {{#each rowToShow.fields as |field|}}
+                {{#if (eq (await field.domain.id) domain.id)}}
+                  <li>
+                    {{web-components/vl-checkbox
+                      value=field.selected
+                      label=field.label
+                      toggle=(action "selectField" domain)
+                    }}
+                    {{field.name}}
+                  </li>
+                {{/if}}
+              {{/each}}
+            </ul>
+            <div class="vlc-hr"></div>
+          </li>
+        </ul>
+      {{/each}}
+    {{/if}}
   </div>
   {{web-components/vl-modal-footer
     isLoading=isLoading

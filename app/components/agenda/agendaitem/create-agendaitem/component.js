@@ -4,7 +4,6 @@ import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import CONFIG from 'fe-redpencil/utils/config';
-
 import { computed } from '@ember/object';
 
 export default Component.extend(DefaultQueryParamsMixin, {
@@ -165,7 +164,9 @@ export default Component.extend(DefaultQueryParamsMixin, {
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
         this.set('sessionService.selectedAgendaItem', null);
-        this.reloadRoute(selectedAgenda.get('id'));
+        // this.reloadRoute(selectedAgenda.get('id'));
+        // Dirty fix for full-reload after adding an agendaitem
+        window.location.reload();
       });
     }
   }

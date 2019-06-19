@@ -70,13 +70,9 @@
         </span>
       {{/if}}
       {{#if isAgendaItem}}
-        {{#if (and (or isEditor isAdmin) (await item.formallyOk))}}
-          <span class="vlc-pill vlc-pill--success">
-            {{t "formal-ok"}}
-          </span>
-        {{else}}
-          <span class="vl-pill">
-            {{t "formal-nok"}}
+        {{#if (and (or isEditor isAdmin) (await item.formallyOkToShow))}}
+          <span class="{{item.formallyOkToShow.pillClassNames}}">
+            {{item.formallyOkToShow.label}}
           </span>
         {{/if}}
       {{/if}}

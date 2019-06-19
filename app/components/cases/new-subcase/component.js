@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
-import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(ApprovalsEditMixin, {
 	store: inject(),
@@ -36,7 +35,7 @@ export default Component.extend(ApprovalsEditMixin, {
 		subcase.set('iseCodes', iseCodes);
 		subcase.set('themes', themes);
 
-		return subcase.save()
+		return subcase.save();
 	},
 
 	async copyNewsletterInfo(subcase, newsletterInfo) {
@@ -69,9 +68,8 @@ export default Component.extend(ApprovalsEditMixin, {
 
 	createSubcaseObject(newCase, newDate) {
 		const { type, title, shortTitle, confidential, showAsRemark } = this;
-		const subcaseName = this.getSubcaseName(type);
 		return this.store.createRecord('subcase', {
-			type, subcaseName, shortTitle, title, confidential, showAsRemark,
+			type, shortTitle, title, confidential, showAsRemark,
 			case: newCase,
 			created: newDate,
 			modified: newDate,
@@ -79,10 +77,6 @@ export default Component.extend(ApprovalsEditMixin, {
 			phases: [],
 			formallyOk: false,
 		})
-	},
-
-	getSubcaseName(subcaseType) {
-		return (((subcaseType.get('id') === CONFIG.approvalSubcaseTypeId) ? CONFIG.resultSubcaseName : subcaseType.get('label')));
 	},
 
 	actions: {
@@ -96,10 +90,10 @@ export default Component.extend(ApprovalsEditMixin, {
 			const caze = await this.store.findRecord('case', this.case.id);
 			const latestSubcase = await caze.get('latestSubcase');
 			const date = new Date();
-			let subcase = this.createSubcaseObject(caze, date);
+			let subcase = await this.createSubcaseObject(caze, date);
+			const subcaseName = await caze.getNameForNextSubcase((await this.get('type')));
+			subcase.set('subcaseName', subcaseName);
 			if (latestSubcase) {
-				const subcaseName = await caze.getNameForNextSubcase(latestSubcase, this.get('type'))
-				subcase.set('subcaseName', subcaseName);
 				subcase = await this.copySubcaseProperties(subcase, latestSubcase);
 				await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
 				const newsletterInfo = await latestSubcase.get('newsletterInfo')
@@ -109,7 +103,9 @@ export default Component.extend(ApprovalsEditMixin, {
 			} else {
 				subcase = await subcase.save();
 			}
+
 			this.set('item', subcase);
+			caze.notifyPropertyChange('subcases');
 			await this.checkForActionChanges();
 
 			this.set('isLoading', false);
