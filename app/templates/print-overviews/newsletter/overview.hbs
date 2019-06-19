@@ -1,6 +1,16 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
     <div class="vlc-container">
+      {{#if (eq definite "true")}}
+        <div class="vl-u-display-flex vl-u-flex-justify-center">
+          <img
+            style="margin:-75px 0px -50px 0px; height:250px"
+            src="/assets/logo_vlaamse_regering.svg"
+            alt="Vlaamse Regering"
+           />
+
+        </div>
+      {{/if}}
       {{newsletter/newsletter-meeting
         definite=definite
         meeting=(await model.meeting)

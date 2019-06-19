@@ -1,0 +1,11 @@
+{{#if (is-pending value.newsletterInfo)}}
+
+{{else if value.newsletterInfo}}
+  <p class="vl-u-text--capitalize">
+    {{await value.newsletterInfo.text}}
+  </p>
+{{else}}
+  <p class="vl-u-text--muted">
+    {{t "no-newsletter-info"}}
+  </p>
+{{/if}}

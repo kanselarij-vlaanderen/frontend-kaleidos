@@ -14,12 +14,13 @@ export default Controller.extend({
 			cellClassNames: ["vl-data-table-col-7"],
 			sortable: false,
 			breakpoints: ['mobile', 'tablet', 'desktop'],
-			cellComponent: "web-components/vl-content-column",
+			cellComponent: "web-components/light-table/vl-content-newsletter",
+			valuePath: "subcase",
 		},
 		{
 			label: 'Ministers',
-			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-2"],
+			classNames: ['vl-data-table-col-3 vl-data-table__header-title'],
+			cellClassNames: ["vl-data-table-col-3"],
 			sortable: false,
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			valuePath: 'mandatees',
@@ -27,22 +28,22 @@ export default Controller.extend({
 		},
 		{
 			label: 'In kort bestek',
-			classNames: ['vl-data-table-col-1 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-1"],
+			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
+			cellClassNames: ["vl-data-table-col-2"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],
 			sortable: false,
 			cellComponent: "web-components/light-table/vl-content-toggle",
 			valuePath: 'subcase.newsletterInfo.finished'
 		},
-		{
-			label: 'Laatst gewijzigd',
-			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-2"],
-			breakpoints: ['mobile', 'tablet', 'desktop'],
-			valuePath: 'modified',
-			sortable: true,
-			cellComponent: "web-components/vl-modified-column"
-		},
+		// {
+		// 	label: 'Laatst gewijzigd',
+		// 	classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
+		// 	cellClassNames: ["vl-data-table-col-2"],
+		// 	breakpoints: ['mobile', 'tablet', 'desktop'],
+		// 	valuePath: 'modified',
+		// 	sortable: true,
+		// 	cellComponent: "web-components/vl-modified-column"
+		// },
 		{
 			width: "144px",
 			sortable: false,
