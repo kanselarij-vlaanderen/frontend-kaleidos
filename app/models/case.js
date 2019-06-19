@@ -54,48 +54,31 @@ export default Model.extend({
     }
   }),
 
-  async getNameForNextSubcase(givenSubcase, type) {
-    const subcases = await this.store.query('subcase', {
+  getAllSubcasesByTypeId(id) {
+    return this.store.query('subcase', {
       filter: {
         case: { id: this.get('id') },
-        // "is-archived": false,
+        type: { id: id }
       },
-      include: "phases,phases.code,type",
+      include: "type",
       sort: 'created'
     });
+  },
 
-    const filteredSubcases = subcases.filter((subcase) => subcase.get('id') !== givenSubcase.get('id'))
+  async getNameForNextSubcase(type) {
+    const principalApprovalId = CONFIG.principalApprovalId;
 
-    if (filteredSubcases.length === 0) {
-      const label = type.get('label');
-      if (givenSubcase && label === CONFIG.phasesCodes[0].label) {
-        return CONFIG.resultSubcaseName;
-      } else {
-        return label;
-      }
+    if (!(type.get('id') == principalApprovalId)) {
+      return type.get('label');
+    }
+
+    const principalApprovalSubcases = await this.getAllSubcasesByTypeId(principalApprovalId);
+
+    const length = principalApprovalSubcases.get('length');
+    if (length === 0) {
+      return CONFIG.resultSubcaseName;
     } else {
-      let counter = 0;
-
-      for (let i = 0; i < filteredSubcases.length; i++) {
-        const subcase = filteredSubcases.objectAt(i);
-        const subcaseTypeLabel = await subcase.type;
-        if (subcaseTypeLabel) {
-          if (subcaseTypeLabel.get('label') === CONFIG.phasesCodes[0].label) {
-            counter++;
-          }
-        }
-      }
-      if (type.label === CONFIG.phasesCodes[0].label) {
-        if (counter === 0) {
-          counter++;
-          return `${counter}ste ${type.label}`;
-        } else if (counter > 0) {
-          counter++;
-          return `${counter}de ${type.label}`;
-        }
-      } else {
-        return type.label;
-      }
+      return `${(length + 1)}de ${CONFIG.phasesCodes[0].label}`
     }
   },
 });
