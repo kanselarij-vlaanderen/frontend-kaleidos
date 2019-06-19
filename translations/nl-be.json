@@ -311,5 +311,8 @@
 	"user": "Gebruiker",
 	"user-role": "Gebruikersrol",
 	"version": "Versie nummer",
-	"loadingText": "Opslaan"
+	"loadingText": "Opslaan",
+	"approve-agenda-warning": "Deze agenda kan niet goedgekeurd worden zolang dat niet alle agendapunten formeel OK verklaard zijn.",
+	"warning-text": "Venster sluiten",
+	"warning-title": "Opgelet!"
 }

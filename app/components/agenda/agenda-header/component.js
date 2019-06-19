@@ -61,46 +61,59 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.clearSelectedAgendaItem();
 		},
 
+		cancel() {
+			this.set('showWarning', false);
+		},
+
+		verify() {
+			this.set('showWarning', false);
+		},
+
 		async approveAgenda(session) {
-			this.changeLoading();
-			let agendas = await this.get('agendas');
-			let agendaToLock = await agendas.find(agenda => agenda.name == "Ontwerpagenda");
-			if (agendaToLock) {
-				agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
-			}
-			let definiteAgendas = await this.get('definiteAgendas');
-			let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
-
-			if (!lastDefiniteAgenda) {
-				agendaToLock.set('name', CONFIG.alphabet[0]);
+			const isApprovable = await this.currentAgenda.get('isApprovable');
+			if (!isApprovable) {
+				this.set('showWarning', true);
 			} else {
-				if (definiteAgendas) {
-					const agendaLength = definiteAgendas.length;
+				this.changeLoading();
+				let agendas = await this.get('agendas');
+				let agendaToLock = await agendas.find(agenda => agenda.name == "Ontwerpagenda");
+				if (agendaToLock) {
+					agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
+				}
+				let definiteAgendas = await this.get('definiteAgendas');
+				let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
-					if (agendaLength && CONFIG.alphabet[agendaLength]) {
-						if (agendaLength < (CONFIG.alphabet.get('length') - 1)) {
-							agendaToLock.set('name', CONFIG.alphabet[agendaLength]);
+				if (!lastDefiniteAgenda) {
+					agendaToLock.set('name', CONFIG.alphabet[0]);
+				} else {
+					if (definiteAgendas) {
+						const agendaLength = definiteAgendas.length;
+
+						if (agendaLength && CONFIG.alphabet[agendaLength]) {
+							if (agendaLength < (CONFIG.alphabet.get('length') - 1)) {
+								agendaToLock.set('name', CONFIG.alphabet[agendaLength]);
+							}
+						} else {
+							agendaToLock.set('name', agendaLength + 1);
 						}
 					} else {
-						agendaToLock.set('name', agendaLength + 1);
+						agendaToLock.set('name', agendas.get('length') + 1);
 					}
-				} else {
-					agendaToLock.set('name', agendas.get('length') + 1);
 				}
-			}
 
-			agendaToLock.set('isAccepted', true);
-			agendaToLock.set('modified', new Date());
-			agendaToLock.save().then((agendaToApprove) => {
-				this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToApprove).then(newAgenda => {
-					this.changeLoading();
-					this.get('agendaService').sortAgendaItems(newAgenda);
-					this.get('agendaService').sortAgendaItems(agendaToLock);
-					this.set('sessionService.currentAgenda', newAgenda);
-					this.set('sessionService.selectedAgendaItem', null);
-					this.reloadRoute(newAgenda.get('id'));
-				});
-			})
+				agendaToLock.set('isAccepted', true);
+				agendaToLock.set('modified', new Date());
+				agendaToLock.save().then((agendaToApprove) => {
+					this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToApprove).then(newAgenda => {
+						this.changeLoading();
+						this.get('agendaService').sortAgendaItems(newAgenda);
+						this.get('agendaService').sortAgendaItems(agendaToLock);
+						this.set('sessionService.currentAgenda', newAgenda);
+						this.set('sessionService.selectedAgendaItem', null);
+						this.reloadRoute(newAgenda.get('id'));
+					});
+				})
+			}
 		},
 
 		async lockAgenda() {

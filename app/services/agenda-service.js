@@ -2,6 +2,7 @@ import Service from '@ember/service';
 import $ from 'jquery';
 import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Service.extend({
 	store: inject(),
@@ -112,7 +113,7 @@ export default Service.extend({
 			priority: null,
 			title: subcase.get('title'),
 			shortTitle: subcase.get('shortTitle'),
-			formallyOk: subcase.get('formallyOk'),
+			formallyOk: CONFIG.notYetFormallyOk,
 			showAsRemark: subcase.get('showAsRemark'),
 			mandatees: mandatees,
 			documentVersions: await subcase.get('documentVersions'),

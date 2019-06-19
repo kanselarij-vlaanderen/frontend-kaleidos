@@ -195,3 +195,13 @@
     closeDialog=(action "selectSignature")
   }}
 {{/if}}
+{{#if showWarning}}
+  {{web-components/vl-modal-verify
+    title=(t "warning-title")
+    buttonType="warning"
+    verifyButtonText=(t "warning-text")
+    message=(t "approve-agenda-warning")
+    cancel=(action "cancel")
+    verify=(action "verify")
+  }}
+{{/if}}
