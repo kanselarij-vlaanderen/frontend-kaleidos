@@ -9,7 +9,7 @@ export default Controller.extend({
 
 	title: computed('model.currentAgenda.createdFor', function () {
 		const date = this.get('model.currentAgenda.createdFor.plannedStart');
-		return `${this.intl.t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+		return `${this.intl.t('press-agenda')} ${moment(date).utc().format('dddd DD-MM-YYYY')}`;
 	}),
 
 	filteredGroups: computed('model', 'definite', async function () {

@@ -1,5 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import moment from 'moment';
+
 export default Component.extend({
 	store: inject(),
 
@@ -11,8 +13,8 @@ export default Component.extend({
 				meeting: selectedMeeting,
 				title: title,
 				subtitle: subtitle,
-				publicationDate: new Date(date),
-				publicationDocDate: new Date(docDate)
+				publicationDate: moment(date).utc().toDate(),
+				publicationDocDate: moment(docDate).utc().toDate()
 			})
 			newsletter.save().then(() => {
 				this.set('isLoading', false);

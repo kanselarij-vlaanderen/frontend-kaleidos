@@ -1,8 +1,9 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
+import moment from 'moment';
 
-export default Component.extend(UploadDocumentMixin,{
+export default Component.extend(UploadDocumentMixin, {
   store: inject(),
   classNames: ["vlc-panel-layout__main-content"],
   modelToAddDocumentVersionTo: 'agendaitem',
@@ -12,10 +13,10 @@ export default Component.extend(UploadDocumentMixin,{
     closeDialog() {
       this.toggleProperty('isAddingAnnouncement');
     },
-    
+
     async createAnnouncement() {
       const { title, text, currentAgenda } = this;
-      const date = new Date();
+      const date = moment().utc().toDate();
       const agendaitem = this.store.createRecord('agendaitem',
         {
           shortTitle: title,

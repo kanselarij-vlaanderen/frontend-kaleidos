@@ -14,10 +14,9 @@ export default Component.extend(isAuthenticatedMixin, {
 		return this.definite === 'false';
 	}),
 
-
 	editTitle: computed('meeting', function () {
 		const date = this.get('meeting.plannedStart');
-		return `${this.get('intl').t('newsletter-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+		return `${this.get('intl').t('newsletter-of')} ${moment(date).utc().format('dddd DD-MM-YYYY')}`;
 	}),
 
 	actions: {
@@ -28,8 +27,8 @@ export default Component.extend(isAuthenticatedMixin, {
 				const newsletter = this.store.createRecord('newsletter-info', {
 					meeting: meeting,
 					finished: false,
-					publicationDate: new Date(),
-					publicationDocDate: new Date(),
+					publicationDate: moment().utc().toDate(),
+					publicationDocDate: moment().utc().toDate(),
 				})
 				meeting.set('newsletter', newsletter);
 				meeting.save();

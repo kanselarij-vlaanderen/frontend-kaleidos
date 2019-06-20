@@ -3,6 +3,7 @@ import $ from 'jquery';
 import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
+import moment from 'moment';
 
 export default Service.extend({
 	store: inject(),
@@ -68,8 +69,8 @@ export default Service.extend({
 		let newAgenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
 			createdFor: currentSession,
-			created: new Date(),
-			modified: new Date()
+			created: moment().utc().toDate(),
+			modified: moment().utc().toDate()
 		});
 
 		return newAgenda.save().then(agenda => {
@@ -128,7 +129,7 @@ export default Service.extend({
 			postPoned: null,
 			titlePress: subcase.get('shortTitle'),
 			textPress: pressText,
-			created: new Date(),
+			created: moment().utc().toDate(),
 			subcase: subcase,
 			agenda: selectedAgenda,
 			priority: null,

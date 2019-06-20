@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import moment from 'moment';
 
 export default Component.extend({
   title: null,
@@ -24,7 +25,7 @@ export default Component.extend({
     async createCase($event) {
       this.set('isLoading', true)
       $event.preventDefault();
-      const newDate = new Date();
+      const newDate = moment().utc().toDate();
       const caze = this.createCase(newDate);
 
       caze.save().then((newCase) => {

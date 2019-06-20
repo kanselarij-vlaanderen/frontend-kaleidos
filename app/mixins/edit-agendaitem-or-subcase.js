@@ -3,6 +3,7 @@ import { computed } from '@ember/object';
 import { not } from '@ember/object/computed';
 import { inject } from '@ember/service';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import moment from 'moment';
 
 const getCachedProperty = function (property) {
 	return computed(`item.${property}`, {
@@ -66,12 +67,12 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 			this.set('isLoading', true);
 			const { isAgendaItem } = this;
 			const item = await this.get('item');
-			item.set('modified', new Date());
+			item.set('modified', moment().utc().toDate());
 			if (isAgendaItem && !item.showAsRemark) {
 				const isDesignAgenda = await item.get('isDesignAgenda');
 				if (isDesignAgenda) {
 					const agendaitemSubcase = await item.get('subcase');
-					agendaitemSubcase.set('modified', new Date());
+					agendaitemSubcase.set('modified', moment().utc().toDate());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
 				}
 

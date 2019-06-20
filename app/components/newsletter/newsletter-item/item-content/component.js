@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
+import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
@@ -18,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, {
 	async addNewsItem(subcase, agendaitem) {
 		const news = this.store.createRecord("newsletter-info", {
 			subcase: subcase,
-			created: new Date(),
+			created: moment().utc().toDate(),
 			title: await agendaitem.get('shortTitle'),
 			subtitle: await agendaitem.get('title')
 		});

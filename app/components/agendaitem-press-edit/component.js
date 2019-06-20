@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import moment from 'moment';
 
 export default Component.extend(ModifiedMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
@@ -21,7 +22,7 @@ export default Component.extend(ModifiedMixin, {
 			} else {
 				agendaitemToUpdate = await agendaitem;
 			}
-			agendaitemToUpdate.set('modified', new Date());
+			agendaitemToUpdate.set('modified', moment().utc().toDate());
 			agendaitemToUpdate.set('formallyOk', false);
 			await agendaitemToUpdate.save().then(() => {
 				this.updateModifiedProperty(agenda);

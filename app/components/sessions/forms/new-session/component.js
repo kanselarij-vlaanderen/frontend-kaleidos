@@ -27,11 +27,11 @@ export default Component.extend({
 		const agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
 			postPoned: null,
-			created: new Date(),
+			created: moment().utc().toDate(),
 			agenda: agenda,
 			priority: 1,
 			title: `${closestMeeting.meeting_id}/${closestMeeting.agenda_id}`,
-			shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(new Date(closestMeeting.plannedstart)).format("dddd DD-MM-YYYY")}.`,
+			shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(closestMeeting.plannedstart).utc().format("dddd DD-MM-YYYY")}.`,
 			formallyOk: CONFIG.notYetFormallyOk,
 			mandatees: [],
 			documentVersions: [],
@@ -44,7 +44,7 @@ export default Component.extend({
 	actions: {
 		async createNewSession() {
 			this.set('isLoading', true);
-			const date = new Date();
+			const date = moment().utc().toDate();
 			const startDate = this.get('startDate');
 			const newMeeting = this.store.createRecord('meeting', {
 				plannedStart: startDate,

@@ -9,7 +9,7 @@ export function subcaseTimelineItemText(params, values) {
     case CONFIG.onAgendaLabel:
       return "Geagendeerd voor " + values.subcase.get('subcaseName');
     case CONFIG.decidedLabel:
-      return "Beslist op " + moment(phase.get('date')).format('DD/MM/YYYY');
+      return "Beslist op " + moment(phase.get('date')).utc().format('DD/MM/YYYY');
     default:
       return label;
   }

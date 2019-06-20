@@ -17,10 +17,10 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 		const sortedMeetings = meetings.sortBy('plannedStart');
 
 		let closest = sortedMeetings.get('lastObject');
-		const now = moment().format();
+		const now = moment().utc().format();
 		sortedMeetings.map(function (meeting) {
-			let date = moment(meeting.plannedStart).format();
-			let closestDate = moment(closest.plannedStart).format();
+			let date = moment(meeting.plannedStart).utc().format();
+			let closestDate = moment(closest.plannedStart).utc().format();
 			if (date >= now && date < closestDate) {
 				closest = meeting;
 			}
@@ -31,9 +31,9 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 
 	futureMeetings: computed('model', 'nearestMeeting', function () {
 		const meetings = this.get('model');
-		const nearestMeetingDate = moment(this.get('nearestMeeting.plannedStart')).format();
+		const nearestMeetingDate = moment(this.get('nearestMeeting.plannedStart')).utc().format();
 		return meetings.filter(meeting => {
-			let date = moment(meeting.plannedStart).format();
+			let date = moment(meeting.plannedStart).utc().format();
 
 			if (date > nearestMeetingDate) {
 				return meeting;
@@ -44,11 +44,11 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 	filteredMeetings: computed('nearestMeeting', 'model', function () {
 		const meetings = this.get('model');
 		const nearestMeeting = this.get('nearestMeeting');
-		const now = moment().format();
+		const now = moment().utc().format();
 
 		let filteredMeetings = meetings.filter(meeting => meeting.id != nearestMeeting.id);
 		return filteredMeetings.filter(meeting => {
-			const date = moment(meeting.plannedStart).format();
+			const date = moment(meeting.plannedStart).utc().format();
 
 			if (date < now) {
 				return meeting;

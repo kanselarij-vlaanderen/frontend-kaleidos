@@ -1,5 +1,6 @@
 import Mixin from '@ember/object/mixin';
 import { inject } from '@ember/service';
+import moment from 'moment';
 
 export default Mixin.create({
 	store: inject(),
@@ -21,7 +22,7 @@ export default Mixin.create({
 	},
 
 	async createMissingApprovals(mandatees, mandateesAlreadyAdded, item) {
-		const date = new Date();
+		const date = moment().utc().toDate();
 		return Promise.all(mandatees.map(async (mandatee) => {
 			const indexOf = mandateesAlreadyAdded.indexOf(mandatee);
 			if (indexOf == -1) {

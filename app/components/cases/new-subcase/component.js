@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
+import moment from 'moment';
 
 export default Component.extend(ApprovalsEditMixin, {
 	store: inject(),
@@ -89,7 +90,7 @@ export default Component.extend(ApprovalsEditMixin, {
 			this.set('isLoading', true);
 			const caze = await this.store.findRecord('case', this.case.id);
 			const latestSubcase = await caze.get('latestSubcase');
-			const date = new Date();
+			const date = moment().utc().toDate();
 			let subcase = await this.createSubcaseObject(caze, date);
 			const subcaseName = await caze.getNameForNextSubcase((await this.get('type')));
 			subcase.set('subcaseName', subcaseName);

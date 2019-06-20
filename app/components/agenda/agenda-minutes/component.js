@@ -3,6 +3,7 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed } from '@ember/object';
+import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
 	classNames: ['vl-u-spacer-extended-l'],
@@ -21,7 +22,7 @@ export default Component.extend(isAuthenticatedMixin, {
 		async toggleIsEditing() {
 			const meetingNotes = await this.get('currentSession.notes');
 			if (!meetingNotes) {
-				const date = new Date();
+				const date = moment().utc().toDate()
 				const meetingRecord = this.store.createRecord('meeting-record',
 					{
 						created: date,
@@ -36,7 +37,7 @@ export default Component.extend(isAuthenticatedMixin, {
 		async toggleIsEditingMeetingRecord(agendaitem) {
 			const notes = await agendaitem.get('meetingRecord');
 			if (!notes) {
-				const date = new Date();
+				const date = moment().utc().toDate()
 				const meetingRecord = this.store.createRecord('meeting-record',
 					{
 						created: date,

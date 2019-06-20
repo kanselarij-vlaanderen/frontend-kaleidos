@@ -20,7 +20,7 @@ export default Component.extend({
 			const meetings = await dateObjectsToEnable;
 
 			const meetingToAssignTo = meetings.find(meeting =>
-				moment(meeting.get('plannedStart')).format() == moment(startDate).format());
+				moment(meeting.get('plannedStart')).utc().format() == moment(startDate).utc().format());
 
 			const selectedSubcase = this.store.peekRecord('subcase', subcase.get('id'));
 			if (selectedSubcase && meetingToAssignTo) {
@@ -42,7 +42,7 @@ export default Component.extend({
 		const phaseCode = phasesCodes.get('firstObject');
 		if (phaseCode) {
 			const phase = this.store.createRecord('subcase-phase', {
-				date: new Date(),
+				date: moment().utc().toDate(),
 				code: phaseCode,
 				subcase: subcase
 			});

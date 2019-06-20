@@ -9,6 +9,6 @@ export default Controller.extend({
 
 	title: computed('model.currentAgenda.createdFor', function () {
 		const date = this.get('model.currentAgenda.createdFor.plannedStart');
-		return `${this.intl.t('decisions-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+		return `${this.intl.t('decisions-of')} ${moment(date).utc().format('dddd DD-MM-YYYY')}`;
 	}),
 });

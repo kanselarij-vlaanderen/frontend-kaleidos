@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { computed,observer } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
@@ -7,20 +7,20 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 export default Controller.extend(isAuthenticatedMixin, {
 	currentSession: inject(),
 	session: inject(),
-	router:inject(),
+	router: inject(),
 
 	shouldNavigateObserver: on('init', observer('router.currentRouteName', 'currentSession.userRole', async function () {
 		const router = this.get('router');
 		const role = await this.get('currentSession.userRole');
 		const user = await this.get('session.isAuthenticated');
-		if (router && user && role == "no-access" ) {
+		if (router && user && role == "no-access") {
 			this.transitionToRoute('accountless-users');
 		}
-  })),
-	
-	type: computed('model', async function() {
+	})),
+
+	type: computed('model', async function () {
 		const { model } = this;
-		if(model) {
+		if (model) {
 			const type = await model.get('type.label');
 			if (type === 'Waarschuwing') {
 				return 'vl-alert--warning';
