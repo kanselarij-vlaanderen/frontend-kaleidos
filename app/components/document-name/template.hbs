@@ -1,1 +1,5 @@
-{{await documentName}}
+{{#if (is-pending documentName)}}
+  <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+{{else}}
+  {{await documentName}}
+{{/if}}

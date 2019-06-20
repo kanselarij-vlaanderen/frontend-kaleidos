@@ -621,8 +621,12 @@ tr.postponed {
   padding-bottom: 0.5rem !important;
 }
 
-.vl-pill.vl-u-spacer-extended-right-s {
-  margin: 0.1em;
+ul {
+  li {
+    .vl-pill {
+      margin-bottom: 0.2em;
+    }
+  }
 }
 
 .vl-data-table--zebra {
@@ -650,4 +654,9 @@ tr.postponed {
 
 .print-only {
   display: none;
+}
+
+.vl-icon-wrapper-loading {
+  display: flex;
+  align-items: center;
 }

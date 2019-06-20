@@ -17,11 +17,10 @@ export default Mixin.create(FileSaverMixin, {
 	async createNewDocumentWithDocumentVersion(model, file, documentTitle) {
 		const { modelToAddDocumentVersionTo } = this;
 		const creationDate = moment().utc().toDate();
-		let type, confidentiality, chosenFileName;
+		let type, chosenFileName;
 		if (file) { //If no file, the file is not digitally available, should asked at the `archive`
 			chosenFileName = file.get('chosenFileName') || file.get('filename') || file.get('name');
 			type = file.get('documentType');
-			confidentiality = file.get('confidentiality');
 		} else {
 			chosenFileName = documentTitle;
 		}
@@ -29,7 +28,6 @@ export default Mixin.create(FileSaverMixin, {
 			created: creationDate,
 			title: documentTitle,
 			type: type,
-			confidentiality: confidentiality
 		});
 		const modelName = model.get('constructor.modelName');
 

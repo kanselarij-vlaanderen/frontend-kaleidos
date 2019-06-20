@@ -13,16 +13,16 @@
       {{/if}}
     </div>
   </div>
-  {{#if (gt (await item.themes.length) 0)}}
-    <div class="vl-custom">
-      <ul>
-        {{#each (await item.themes) as |theme|}}
-          <li class="vl-pill vl-u-spacer-extended-right-s">
-            {{theme.label}}
-          </li>
-        {{/each}}
-      </ul>
-    </div>
+  {{#if (is-pending item.themes)}}
+    {{web-components/vl-loader text=(t "themes-loading-text")}}
+  {{else if (gt (await item.themes.length) 0)}}
+    <ul>
+      {{#each (await item.themes) as |theme|}}
+        <li class="vl-pill">
+          {{theme.label}}
+        </li>
+      {{/each}}
+    </ul>
   {{else}}
     <div class="vl-u-spacer-extended-top-s">
       {{web-components/vl-alert message=(t "no-themes-yet")}}

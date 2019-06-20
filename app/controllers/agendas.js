@@ -72,10 +72,10 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 			this.set('creatingNewSession', false);
 			this.send('refresh');
 		},
-		deleteSession(meeting) {
-			meeting.destroyRecord().then(() => {
-				this.send('refresh');
-			});
-		}
+		// deleteSession(meeting) {
+		// 	meeting.destroyRecord().then(() => {
+		// 		this.send('refresh');
+		// 	});
+		// }
 	}
 });

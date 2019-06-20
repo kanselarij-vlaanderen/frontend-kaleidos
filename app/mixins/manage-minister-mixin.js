@@ -22,7 +22,6 @@ export default Mixin.create({
 	},
 
 	actions: {
-
 		async mandateeSelected(mandatee) {
 			const rowToShow = await this.get('rowToShow');
 			if (rowToShow) {
@@ -40,14 +39,11 @@ export default Mixin.create({
 		},
 
 		async selectDomain(domain, value) {
-			this.set('isLoading', true);
 			const fields = await this.get('rowToShow.fields').filter((field) => field.get('domain.id') === domain.id);
 			fields.map((field) => field.set('selected', value));
-			this.set('isLoading', false);
 		},
 
 		async selectField(domain, value) {
-			this.set('isLoading', true);
 			const foundDomain = this.get('rowToShow.domains').find((item) => item.id == domain.id);
 			const fields = await domain.get('governmentFields');
 			const selectedFields = fields.filter((field) => field.selected);
@@ -59,7 +55,6 @@ export default Mixin.create({
 					foundDomain.set('selected', value);
 				}
 			}
-			this.set('isLoading', false);
 		},
 
 		async saveChanges() {
