@@ -7,6 +7,26 @@ import CONFIG from 'fe-redpencil/utils/config';
 export default Service.extend({
 	store: inject(),
 
+	assignNewSessionNumbers() {
+		return $.ajax(
+			{
+				method: "GET",
+				url: `/session-service/assignNewSessionNumbers`
+			}
+		);
+	},
+
+	getClosestMeetingId(date) {
+		return $.ajax(
+			{
+				method: "GET",
+				url: `/session-service/closestMeeting?date=${date}`
+			}
+		).then((result) => {
+			return result.body.closestMeeting;
+		});
+	},
+
 	getSortedAgendaItems(agenda) {
 		return $.ajax(
 			{
@@ -17,6 +37,7 @@ export default Service.extend({
 			return result.body.items;
 		})
 	},
+
 	sendNewsletter(agenda) {
 		return $.ajax(
 			{
@@ -102,9 +123,9 @@ export default Service.extend({
 		const titles = mandatees.map((mandatee) => mandatee.get('title'));
 		const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`
 
-		let agendaitem = this.store.createRecord('agendaitem', {
+		const agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
-			postPoned: false,
+			postPoned: null,
 			titlePress: subcase.get('shortTitle'),
 			textPress: pressText,
 			created: new Date(),
@@ -118,7 +139,6 @@ export default Service.extend({
 			mandatees: mandatees,
 			documentVersions: await subcase.get('documentVersions'),
 			themes: await subcase.get('themes'),
-			governmentDomains: await subcase.get('governmentDomains'),
 			approvals: await subcase.get('approvals')
 		});
 		return agendaitem.save();

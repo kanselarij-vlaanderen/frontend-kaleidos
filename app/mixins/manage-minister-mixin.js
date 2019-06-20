@@ -9,8 +9,8 @@ export default Mixin.create({
 
 	async refreshData(mandatee) {
 		this.set('isLoading', true);
-		const iseCodes = await mandatee.get('iseCodes');
-		const fields = await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')));
+		const iseCodes = (await mandatee.get('iseCodes')).filter((item) => item);
+		const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((item) => item);
 		const domains = await Promise.all(fields.map((field) => field.get('domain')));
 
 		const rowToShow = EmberObject.create({

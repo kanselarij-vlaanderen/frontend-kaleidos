@@ -14,7 +14,6 @@ export default Model.extend({
   subcase: belongsTo('subcase', { inverse: null }),
   publication: belongsTo('publication'),
   documentType: belongsTo('document-type'),
-  confidentiality: belongsTo('confidentiality'),
   documentVersions: hasMany('document-version', { inverse: null }),
   signedDocument: belongsTo('document', { inverse: null }),
 });
