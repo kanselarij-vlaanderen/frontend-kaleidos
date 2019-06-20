@@ -125,6 +125,12 @@
               <td class="vl-u-align-center">
                 <button
                   class="vl-button vl-button--link vl-button--icon"
+                  {{action "deleteSession" meeting}}
+                >
+                  <i class="vl-button__icon vl-vi vl-vi-trash"></i>
+                </button>
+                <button
+                  class="vl-button vl-button--link vl-button--icon"
                   {{action "selectAgenda" meeting}}
                 >
                   <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>

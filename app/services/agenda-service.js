@@ -16,7 +16,7 @@ export default Service.extend({
 		);
 	},
 
-	getClosestMeetingId(date) {
+	getClosestMeetingAndAgendaId(date) {
 		return $.ajax(
 			{
 				method: "GET",

@@ -21,6 +21,15 @@ export default Component.extend(EditAgendaitemOrSubcase, {
     }
   }),
 
+  shouldShowDetails: computed('agendaitem', 'subcase', function () {
+    const { agendaitem } = this;
+    if (agendaitem) {
+      return agendaitem.get('subcase');
+    } else {
+      return true;
+    }
+  }),
+
   subcases: computed('item', function () {
     return this.get('item.subcasesFromCase');
   }),

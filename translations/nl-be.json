@@ -314,5 +314,6 @@
 	"loadingText": "Opslaan",
 	"approve-agenda-warning": "Deze agenda kan niet goedgekeurd worden zolang dat niet alle agendapunten formeel OK verklaard zijn.",
 	"warning-text": "Venster sluiten",
-	"warning-title": "Opgelet!"
+	"warning-title": "Opgelet!",
+	"show-minutes": "Verslag openen"
 }

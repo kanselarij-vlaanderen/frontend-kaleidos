@@ -21,7 +21,7 @@ export default Component.extend({
 
 	createAgendaItemToApproveMinutes(agenda, closestMeeting) {
 		if (!closestMeeting) {
-			return
+			return;
 		}
 
 		const agendaitem = this.store.createRecord('agendaitem', {
@@ -30,8 +30,8 @@ export default Component.extend({
 			created: new Date(),
 			agenda: agenda,
 			priority: 1,
-			title: `De notulen kan u vinden op <a href="/overzicht/${closestMeeting.meeting_id}/notulen/${closestMeeting.agenda_id}."></a>`,
-			shortTitle: `Goedkeuring notulen voor de vergadering van ${moment(new Date(closestMeeting.plannedstart)).format("dddd DD-MM-YYYY")}.`,
+			title: `${closestMeeting.meeting_id}/${closestMeeting.agenda_id}`,
+			shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(new Date(closestMeeting.plannedstart)).format("dddd DD-MM-YYYY")}.`,
 			formallyOk: CONFIG.notYetFormallyOk,
 			mandatees: [],
 			documentVersions: [],
@@ -50,10 +50,10 @@ export default Component.extend({
 				plannedStart: startDate,
 				created: date
 			});
+			const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
 			newMeeting.save().then(async (meeting) => {
 				const agenda = await this.createAgenda(meeting, date);
-				const closestMeeting = await this.agendaService.getClosestMeetingId(startDate);
 				await this.createAgendaItemToApproveMinutes(agenda, closestMeeting);
 				await this.agendaService.assignNewSessionNumbers();
 
@@ -63,8 +63,6 @@ export default Component.extend({
 		},
 
 		async selectStartDate(val) {
-			const closestMeeting = await this.agendaService.getClosestMeetingId(val)
-			console.log(closestMeeting.agenda_id)
 			this.set('startDate', val);
 		},
 
