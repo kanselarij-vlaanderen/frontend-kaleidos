@@ -24,12 +24,14 @@
   </div>
 {{/if}}
 {{#if selectedAgendaItem}}
-  <div class="vlc-agenda-items-new__sub-item">
-    {{agenda/agenda-list/list-item
-      agendaitem=(await minutesApproval)
-      selectAgendaItem=(action "selectAgendaItem")
-    }}
-  </div>
+  {{#if (await minutesApproval)}}
+    <div class="vlc-agenda-items-new__sub-item">
+      {{agenda/agenda-list/list-item
+        agendaitem=(await minutesApproval)
+        selectAgendaItem=(action "selectAgendaItem")
+      }}
+    </div>
+  {{/if}}
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
       {{#each group.groups as |agendaitemGroup|}}
@@ -49,14 +51,16 @@
       {{/each}}
     </div>
   {{/each}}
-{{else}}
-  <div class="vlc-agenda-items-new__sub-item">
-    {{agenda/agenda-list/list-item
-      agendaitem=(await minutesApproval)
-      isEditingOverview=isEditingOverview
-      selectAgendaItem=(action "selectAgendaItem")
-    }}
-  </div>
+{{else if (not selectedAgendaItem)}}
+  {{#if (await minutesApproval)}}
+    <div class="vlc-agenda-items-new__sub-item">
+      {{agenda/agenda-list/list-item
+        agendaitem=(await minutesApproval)
+        isEditingOverview=isEditingOverview
+        selectAgendaItem=(action "selectAgendaItem")
+      }}
+    </div>
+  {{/if}}
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
       <div class="vl-u-spacer-extended-bottom">

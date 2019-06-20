@@ -7,16 +7,21 @@ export default Mixin.create({
 	agendaService: inject(),
 
 	async parseAgendaItems(agenda, session, definite) {
-		const agendaitems = await agenda.get('agendaitems');
+		const agendaitems = (await agenda.get('agendaitems')).filter((item) => item);
 		const agendaitemsToGroup = agendaitems.filter((item) => !item.get('subcase.showAsRemark'));
 
-		const agendaitemsWithoutSubcases = agendaitems.filter((item) => !item.get("subcase.id"));
 		const announcements = agendaitemsToGroup.filter((item) => item.get('showAsRemark'))
 
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
 		const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(groups, agendaitemsToGroup);
+		const minutesApproval = ((await Promise.all(agendaitems.map(async (agendaitem) => {
+			const subcase = await agendaitem.get('subcase');
+			if (!subcase) {
+				return agendaitem;
+			}
+		}))) || []).get('firstObject');
 
-		return { groups, firstAgendaItem, announcements, lastPrio, minutesApproval: agendaitemsWithoutSubcases.get('firstObject') };
+		return { groups, firstAgendaItem, announcements, lastPrio, minutesApproval };
 	},
 
 	async model(params) {
