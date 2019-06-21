@@ -15,26 +15,43 @@ export default Mixin.create({
 	defaultSelected: null,
 	selectedItems: null,
 
-	items: computed('modelName', async function () {
-		const { modelName, sortField } = this;
-		const filteredItems = await this.get('filteredItems');
-		if (!filteredItems || !filteredItems.length > 0) {
-			return this.store.findAll(modelName,
-				{
-					sort: sortField,
-				});
+	isLoadingData: computed('findAll.isRunning', 'searchTask.isRunning', function () {
+		if (this.findAll.isRunning) {
+			return true;
+		} else if (this.searchTask.isRunning) {
+			return true;
+		} else {
+			return false;
 		}
 	}),
 
+	findAll: task(function* () {
+		const { modelName, sortField } = this;
+		const filteredItems = yield this.get('filteredItems');
+		if (!filteredItems || !filteredItems.length > 0) {
+			const items = yield this.store.findAll(modelName,
+				{
+					sort: sortField,
+				});
+			this.set('items', items);
+		}
+	}),
+
+	init() {
+		this._super(...arguments);
+		this.findAll.perform();
+	},
+
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
-		const { searchField, sortField, modelName } = this;
+		const { searchField, sortField, modelName, includeField } = this;
 		let filter = {};
 
 		filter[searchField] = searchValue;
 		return this.store.query(modelName, {
 			filter: filter,
-			sort: sortField
+			sort: sortField,
+			include: includeField || ''
 		});
 	}),
 
@@ -45,8 +62,7 @@ export default Mixin.create({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
-				const modelName = this.get('modelName');
-				this.set('items', this.store.findAll(modelName, { sort: this.get('sortField') }));
+				this.findAll.perform();
 			}
 		}
 	},

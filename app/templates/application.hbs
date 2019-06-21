@@ -30,6 +30,48 @@
     </button>
   </div>
 {{/if}}
+{{#if (gt (await messages.length) 0)}}
+  <div class="vl-modal">
+    {{#click-outside action=(action "closeErrorMessage")}}
+      <div
+        class="vl-alert vl-alert-relative vl-alert-relative--center-mid vl-alert--error"
+        role="alert"
+      >
+        <div class="vl-alert__icon">
+          <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
+        </div>
+        <button class="vl-alert__close" type="button">
+          <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
+          <span class="vl-u-visually-hidden">
+            {{t "close"}}
+          </span>
+        </button>
+        {{#each messages as |errorMessage|}}
+          <div class="vl-alert__content">
+            <p class="vl-alert__title">
+              {{errorMessage.title}}
+            </p>
+            <div class="vl-alert__message">
+              <p>
+                {{errorMessage.message}}
+              </p>
+            </div>
+          </div>
+        {{/each}}
+        <button
+          class="vl-alert__close"
+          type="button"
+          {{action "closeErrorMessage"}}
+        >
+          <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
+          <span class="vl-u-visually-hidden">
+            {{t "close"}}
+          </span>
+        </button>
+      </div>
+    {{/click-outside}}
+  </div>
+{{/if}}
 {{#if (and (await role) (not-eq (await role) ""))}}
   {{m-header navigateToMockLogin=(action "navigateToMockLogin")}}
 {{/if}}

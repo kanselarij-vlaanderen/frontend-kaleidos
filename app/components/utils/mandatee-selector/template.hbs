@@ -1,23 +1,23 @@
 {{#if (not singleSelect)}}
   {{#power-select-multiple
     options=filteredMandatees
-    selected=selectedMandatees
+    selected=(await selectedMandatees)
     disabled=readOnly
-    search=(perform searchTheme)
+    search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
     onchange=(action "chooseMandatee") as |mandatee|
   }}
-    {{await mandatee.person.nameToDisplay}}{{t "divider"}}{{mandatee.title}}
+    {{await mandatee.fullDisplayName}}
   {{/power-select-multiple}}
 {{else}}
   {{#power-select
     options=filteredMandatees
-    selected=selectedMandatees
+    selected=(await selectedMandatees)
     disabled=readOnly
-    search=(perform searchTheme)
+    search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
     onchange=(action "chooseMandatee") as |mandatee|
   }}
-    {{await mandatee.person.nameToDisplay}}{{t "divider"}}{{mandatee.title}}
+    {{await mandatee.fullDisplayName}}
   {{/power-select}}
 {{/if}}

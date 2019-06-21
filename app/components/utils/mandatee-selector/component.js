@@ -1,31 +1,20 @@
 import Component from '@ember/component';
-import { task, timeout } from 'ember-concurrency';
 import { inject } from '@ember/service';
-import { computed } from '@ember/object';
 import { filter } from '@ember/object/computed';
 import moment from 'moment';
+import ModelSelectorMixin from 'fe-redpencil/mixins/model-selector-mixin';
 
-export default Component.extend({
+export default Component.extend(ModelSelectorMixin, {
 	classNames: ["mandatee-selector-container"],
 	store: inject(),
 	selectedMandatees: null,
 	singleSelect: false,
+	modelName: 'mandatee',
+	sortField: 'priority',
+	searchField: 'title',
+	includeField: 'person',
 
-	searchMandatee: task(function* (searchValue) {
-		yield timeout(300);
-		return this.store.query('mandatee', {
-			filter: {
-				title: searchValue
-			},
-			sort: 'priority'
-		});
-	}),
-
-	mandatees: computed("store", function () {
-		return this.store.findAll('mandatee', { sort: 'priority', include: 'person' });
-	}),
-
-	filteredMandatees: filter('mandatees.@each', function (mandatee) {
+	filteredMandatees: filter('items.@each', function (mandatee) {
 		if (!mandatee.end || (moment(mandatee.end).utc().toDate() > moment().utc().toDate())) {
 			if (moment(mandatee.start).utc().toDate() < (moment().utc().toDate())) {
 				return mandatee;
@@ -38,10 +27,5 @@ export default Component.extend({
 			this.set('selectedMandatees', mandatees);
 			this.chooseMandatee(mandatees);
 		},
-		async resetValueIfEmpty(param) {
-			if (param === "") {
-				this.set('mandatees', this.store.findAll('mandatee', { sort: 'priority', include: 'person' }));
-			}
-		}
 	}
 });

@@ -1,14 +1,19 @@
 {{#if (not isAdding)}}
   {{#if (not isResigning)}}
     <div class="vl-modal-dialog__content">
-      {{utils/model-selector
+      {{utils/mandatee-selector
+        singleSelect=true
+        selectedItems=(await selectedMandatee)
+        chooseMandatee=(action "selectMandatee")
+      }}
+      {{!-- {{utils/model-selector
         modelName="mandatee"
         searchField="title"
-        propertyToShow="title"
+        propertyToShow="fullDisplayName"
         sortField="priority"
         selectedItems=(await selectedMandatee)
         selectModel=(action "selectMandatee")
-      }}
+      }} --}}
     </div>
   {{/if}}
   {{#if isEditing}}

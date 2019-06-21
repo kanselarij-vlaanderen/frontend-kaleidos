@@ -15,15 +15,17 @@ export default Component.extend({
 			this.set('selectedMandatees', mandatees);
 		},
 
-		cancel(notes) {
-			const notesToEdit = this.store.peekRecord('meeting-record', notes.get('id'));
-			notesToEdit.rollbackAttributes().then(() => {
+		async cancel(notes) {
+			const notesToEdit = await this.store.findRecord('meeting-record', (await notes.get('id')));
+			if (!notesToEdit) {
 				this.toggleProperty('isEditing');
-			});
+			}
+			notesToEdit.rollbackAttributes();
+			this.toggleProperty('isEditing');
 		},
 
-		saveChanges(notes) {
-			const notesToSave = this.store.peekRecord('meeting-record', notes.get('id'));
+		async saveChanges(notes) {
+			const notesToSave = await this.store.findRecord('meeting-record', notes.get('id'));
 			const selectedMandatees = this.get('selectedMandatees');
 			if (selectedMandatees) {
 				notesToSave.set('attendees', selectedMandatees);

@@ -14,7 +14,7 @@ export default Model.extend({
 	gender: belongsTo('gender'),
 	signature: belongsTo('signature'),
 
-	nameToDisplay: computed('alternativeName', 'firstName', 'lastName', function () {
+	nameToDisplay: computed('mandatee', 'alternativeName', 'firstName', 'lastName', function () {
 		const { alternativeName, firstName, lastName } = this;
 		if (alternativeName) {
 			return alternativeName;

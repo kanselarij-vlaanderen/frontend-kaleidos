@@ -11,7 +11,7 @@
     oninput=(action "resetValueIfEmpty")
     onchange=(action "selectModel") as |model|
   }}
-    {{model-property-to-show model propertyToShow}}
+    {{await (model-property-to-show model propertyToShow)}}
   {{/power-select}}
 {{else}}
   {{#power-select-multiple
@@ -26,6 +26,6 @@
     oninput=(action "resetValueIfEmpty")
     onchange=(action "selectModel") as |model|
   }}
-    {{model-property-to-show model propertyToShow}}
+    {{await (model-property-to-show model propertyToShow)}}
   {{/power-select-multiple}}
 {{/if}}
