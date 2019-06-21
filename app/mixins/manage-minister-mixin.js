@@ -17,24 +17,16 @@ export default Mixin.create({
 			domains: [...new Set(domains)],
 			fields: [...new Set(fields)],
 		});
+		rowToShow.get('domains').map((domain) => domain.set('selected', false));
+		rowToShow.get('fields').map((domain) => domain.set('selected', false));
+
 		this.set('isLoading', false);
 		return rowToShow;
 	},
 
 	actions: {
 		async mandateeSelected(mandatee) {
-			const rowToShow = await this.get('rowToShow');
-			if (rowToShow) {
-				rowToShow.domains.map((domain) => {
-					const domainToClear = this.store.findRecord('government-domain', domain.id);
-					domainToClear.rollbackAttributes();
-				});
-				rowToShow.fields.map((field) => {
-					const fieldToClear = this.store.findRecord('government-field', field.id);
-					fieldToClear.rollbackAttributes();
-				});
-			}
-
+			this.set('selectedMandatee', mandatee);
 			this.set('rowToShow', await this.refreshData(mandatee));
 		},
 

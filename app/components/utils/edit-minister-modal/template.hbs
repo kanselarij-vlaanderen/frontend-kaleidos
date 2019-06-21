@@ -12,7 +12,8 @@
         chooseMandatee=(action "mandateeSelected")
       }}
     </div>
-    {{#each (await rowToShow.domains) as |domain|}}
+    {{log (await rowToShow)}}
+    {{#each rowToShow.domains as |domain|}}
       <ul class="vlc-checkbox-tree">
         <li>
           {{web-components/vl-checkbox
@@ -21,7 +22,7 @@
             toggle=(action "selectDomain" domain)
           }}
           <ul>
-            {{#each (await rowToShow.fields) as |field|}}
+            {{#each rowToShow.fields as |field|}}
               {{#if (eq (await field.domain.id) domain.id)}}
                 <li>
                   {{web-components/vl-checkbox
