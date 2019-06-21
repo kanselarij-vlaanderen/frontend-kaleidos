@@ -5,6 +5,7 @@ import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-
 import EmberObject from '@ember/object';
 import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import DS from 'ember-data';
 
 export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, ApprovalsEditMixin, {
 	store: inject(),
@@ -12,8 +13,13 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 	item: null,
 	propertiesToSet: ['mandatees', 'governmentDomains'],
 
-	mandateeRows: computed('item', 'item.subcase', function () {
-		return this.constructMandateeRows();
+	mandateeRows: computed('item', 'item.subcase', 'mandatees.@each', function () {
+		return DS.PromiseArray.create({
+			promise: this.constructMandateeRows().then((rows) => {
+				return rows.sortBy('mandateePriority');
+			})
+		})
+
 	}),
 
 	async createMandateeRow(mandatee, iseCodes) {
@@ -28,6 +34,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 				fieldsToShow,
 				domainsToShow,
 				mandatee: mandatee,
+				mandateePriority: mandatee.get('priority'),
 				domains: domains,
 				fields: fields,
 				iseCodes: iseCodes,
@@ -57,7 +64,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		}
 
 		const iseCodes = await item.get('iseCodes');
-		const mandatees = await item.get('mandatees');
+		const mandatees = await (await item.get('mandatees')).sortBy('priority');
 
 		return Promise.all(mandatees.map(async (mandatee) => {
 			const filteredIseCodes = await this.getIseCodesOfMandatee(iseCodes, mandatee);

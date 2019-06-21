@@ -312,7 +312,14 @@
 	"user-role": "Gebruikersrol",
 	"version": "Versie nummer",
 	"loadingText": "Opslaan",
+	"loading-text-inactive": "Even geduld",
 	"approve-agenda-warning": "Deze agenda kan niet goedgekeurd worden zolang dat niet alle agendapunten formeel OK verklaard zijn.",
 	"warning-text": "Venster sluiten",
-	"warning-title": "Opgelet!"
+	"warning-title": "Opgelet!",
+	"show-minutes": "Verslag openen",
+	"all-subcases-loading-text": "De procedurestappen worden geladen..",
+	"documents-loading-text": "De documenten worden geladen..",
+	"themes-loading-text": "De themas worden geladen..",
+	"mandatees-loading-text": "De ministers en beleidsvelden worden geladen..",
+	"ise-codes-loading-text": "De inhoudelijke structuurelementen worden geladen.."
 }

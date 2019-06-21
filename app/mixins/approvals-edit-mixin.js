@@ -1,18 +1,25 @@
 import Mixin from '@ember/object/mixin';
 import { inject } from '@ember/service';
+import moment from 'moment';
 
 export default Mixin.create({
 	store: inject(),
 
 	async checkForActionChanges() {
-		const item = await this.get('item');
-		const approvals = await item.get('approvals');
-		const mandatees = await item.get('mandatees');
-		const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
+		try {
 
-		await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, item);
-		await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
-		await item.hasMany('approvals').reload();
+			const item = await this.get('item');
+			const approvals = await item.get('approvals');
+			const mandatees = await item.get('mandatees');
+			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
+
+			await this.createMissingApprovals(mandatees, mandateesAlreadyAdded, item);
+			await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
+			await item.hasMany('approvals').reload();
+
+		} catch {
+			console.error('Something went wrong with the edit for the approvals.')
+		}
 	},
 
 	modelIsAgendaItem(model) {
@@ -21,7 +28,7 @@ export default Mixin.create({
 	},
 
 	async createMissingApprovals(mandatees, mandateesAlreadyAdded, item) {
-		const date = new Date();
+		const date = moment().utc().toDate();
 		return Promise.all(mandatees.map(async (mandatee) => {
 			const indexOf = mandateesAlreadyAdded.indexOf(mandatee);
 			if (indexOf == -1) {

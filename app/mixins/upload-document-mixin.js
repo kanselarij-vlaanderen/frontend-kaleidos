@@ -3,6 +3,7 @@ import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { notifyPropertyChange } from '@ember/object';
 import $ from 'jquery';
 import { inject } from '@ember/service';
+import moment from 'moment';
 
 /**
  * @param modelToAddDocumentVersionTo:String Is the model where the relation of document-version should be set to.
@@ -15,12 +16,11 @@ export default Mixin.create(FileSaverMixin, {
 
 	async createNewDocumentWithDocumentVersion(model, file, documentTitle) {
 		const { modelToAddDocumentVersionTo } = this;
-		const creationDate = new Date();
-		let type, confidentiality, chosenFileName;
+		const creationDate = moment().utc().toDate();
+		let type, chosenFileName;
 		if (file) { //If no file, the file is not digitally available, should asked at the `archive`
 			chosenFileName = file.get('chosenFileName') || file.get('filename') || file.get('name');
 			type = file.get('documentType');
-			confidentiality = file.get('confidentiality');
 		} else {
 			chosenFileName = documentTitle;
 		}
@@ -28,7 +28,6 @@ export default Mixin.create(FileSaverMixin, {
 			created: creationDate,
 			title: documentTitle,
 			type: type,
-			confidentiality: confidentiality
 		});
 		const modelName = model.get('constructor.modelName');
 
@@ -92,7 +91,7 @@ export default Mixin.create(FileSaverMixin, {
 				file: uploadedFile,
 				versionNumber: latestVersionNumber + 1,
 				chosenFileName: uploadedFile.get('chosenFileName') || uploadedFile.get('fileName'),
-				created: new Date()
+				created: moment().utc().toDate()
 			});
 	},
 

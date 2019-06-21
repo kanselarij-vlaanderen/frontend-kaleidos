@@ -1,11 +1,12 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import moment from 'moment';
 
 export default Component.extend({
 	store: inject(),
 	selectedPerson: null,
 	selectedDomains: [],
-	today: new Date(),
+	today: moment().utc().toDate(),
 	title: null,
 
 	actions: {
@@ -30,7 +31,7 @@ export default Component.extend({
 
 			const newMandatee = this.store.createRecord('mandatee', {
 				title: this.get('title'),
-				start: new Date(this.get('startDate')),
+				start: moment(this.get('startDate')).utc().toDate(),
 				governmentDomains: this.get('selectedDomains'),
 				person: await this.get('selectedPerson'),
 				end: null

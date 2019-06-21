@@ -14,7 +14,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 
 	editTitle: computed('selectedMeeting', function () {
 		const date = this.get('selectedMeeting.plannedStart');
-		return `${this.get('intl').t('newsletter-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
+		return `${this.get('intl').t('newsletter-of')} ${moment(date).utc().format('dddd DD-MM-YYYY')}`;
 	}),
 
 	translatedPrefix: computed('intl', function () {

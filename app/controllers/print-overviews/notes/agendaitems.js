@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
+import moment from 'moment';
 
 export default Controller.extend({
 	columns: computed(function () {
@@ -44,7 +45,7 @@ export default Controller.extend({
 
 	actions: {
 		async addMeetingRecord(row) {
-			const date = new Date();
+			const date = moment().utc().toDate();
 			const meetingRecord = this.store.createRecord('meeting-record', {
 				created: date,
 				modified: date,

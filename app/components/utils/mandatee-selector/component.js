@@ -3,6 +3,7 @@ import { task, timeout } from 'ember-concurrency';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import { filter } from '@ember/object/computed';
+import moment from 'moment';
 
 export default Component.extend({
 	classNames: ["mandatee-selector-container"],
@@ -25,8 +26,8 @@ export default Component.extend({
 	}),
 
 	filteredMandatees: filter('mandatees.@each', function (mandatee) {
-		if (!mandatee.end || (new Date(mandatee.end) > new Date())) {
-			if (new Date(mandatee.start) < (new Date())) {
+		if (!mandatee.end || (moment(mandatee.end).utc().toDate() > moment().utc().toDate())) {
+			if (moment(mandatee.start).utc().toDate() < (moment().utc().toDate())) {
 				return mandatee;
 			}
 		}

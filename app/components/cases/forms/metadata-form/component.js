@@ -25,9 +25,9 @@ export default Component.extend({
 
     async selectMeeting(date) {
       const meetings = await this.get('dateObjectsToEnable');
-      const dateToCheck = moment(date).format();
+      const dateToCheck = moment(date).utc().format();
       const meetingToAssignTo = meetings.find(meeting =>
-        moment(meeting.get('plannedStart')).format() == dateToCheck);
+        moment(meeting.get('plannedStart')).utc().format() == dateToCheck);
 
       this.selectedMeetingChanged(meetingToAssignTo);
     },

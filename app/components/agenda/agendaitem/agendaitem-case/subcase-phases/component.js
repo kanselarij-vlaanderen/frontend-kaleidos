@@ -3,6 +3,7 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import moment from 'moment';
 
 export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	store: inject(),
@@ -15,9 +16,9 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 		return modelName === 'agendaitem';
 	},
 
-	phasesToShow: computed('item', function() {
+	phasesToShow: computed('item', function () {
 		const { modelIsAgendaItem, item } = this;
-		if(modelIsAgendaItem) {
+		if (modelIsAgendaItem) {
 			return item.get('subcase.phases');
 		} else {
 			return item.get('phases');
@@ -34,7 +35,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 		const { selectedPhase } = this;
 		if (this.modelIsAgendaItem(model)) {
 			const modelPhase = this.store.createRecord('subcase-phase', {
-				date: new Date(),
+				date: moment().utc().toDate(),
 				code: selectedPhase,
 				agendaitem: model
 			});
@@ -43,7 +44,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 			});
 		} else {
 			const modelPhase = this.store.createRecord('subcase-phase', {
-				date: new Date(),
+				date: moment().utc().toDate(),
 				code: selectedPhase,
 				subcase: model
 			});

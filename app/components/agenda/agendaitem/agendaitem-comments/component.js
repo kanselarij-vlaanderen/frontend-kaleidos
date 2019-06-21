@@ -3,6 +3,7 @@ import { inject } from '@ember/service';
 import { sort } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   classNames: ['vl-grid'],
@@ -25,7 +26,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       const comment = this.store.createRecord('remark',
         {
           text: event,
-          created: new Date(),
+          created: moment().utc().toDate(),
           agendaitem: agendaitem,
           author: user
         });
@@ -41,7 +42,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       const newComment = this.store.createRecord('remark',
         {
           text: comment.get('answer'),
-          created: new Date(),
+          created: moment().utc().toDate(),
           author: user
         });
       newComment.save().then(savedComment => {

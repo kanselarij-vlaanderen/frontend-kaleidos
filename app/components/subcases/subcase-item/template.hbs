@@ -5,6 +5,12 @@
     >
       <i class="vl-badge__icon vl-vi vl-vi-sitemap" aria-hidden="true"></i>
     </div>
+  {{else if (is-pending subcase.approved)}}
+    <div
+      class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
+    >
+      <div class="vl-loader" role="alert" aria-busy="true"></div>
+    </div>
   {{else if (await subcase.approved)}}
     <div
       class="vl-badge vl-badge--icon vl-badge--success vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper"

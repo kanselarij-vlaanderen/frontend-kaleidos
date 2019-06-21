@@ -1,18 +1,19 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
+import moment from 'moment';
 
 export default Component.extend({
 	store: inject(),
 
 	date: computed('newsletter.publicationDate', function () {
 		const { selectedMeeting } = this;
-		return new Date(selectedMeeting.get('newsletter.publicationDate'))
+		return moment(selectedMeeting.get('newsletter.publicationDate')).utc().toDate();
 	}),
 
 	docDate: computed('newsletter.publicationDocDate', function () {
 		const { selectedMeeting } = this;
-		return new Date(selectedMeeting.get('newsletter.publicationDocDate'))
+		return moment(selectedMeeting.get('newsletter.publicationDocDate')).utc().toDate();
 	}),
 
 	actions: {

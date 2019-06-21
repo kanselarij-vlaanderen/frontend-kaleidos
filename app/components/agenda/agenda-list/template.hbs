@@ -18,12 +18,20 @@
     </span>
   </div>
 {{/if}}
-{{#if (eq agendaitemGroups.length 0)}}
+{{#if (and (eq agendaitemGroups.length 0) (not (await minutesApproval)))}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
   </div>
 {{/if}}
 {{#if selectedAgendaItem}}
+  {{#if (await minutesApproval)}}
+    <div class="vlc-agenda-items-new__sub-item">
+      {{agenda/agenda-list/list-item
+        agendaitem=(await minutesApproval)
+        selectAgendaItem=(action "selectAgendaItem")
+      }}
+    </div>
+  {{/if}}
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
       {{#each group.groups as |agendaitemGroup|}}
@@ -43,7 +51,16 @@
       {{/each}}
     </div>
   {{/each}}
-{{else}}
+{{else if (not selectedAgendaItem)}}
+  {{#if (await minutesApproval)}}
+    <div class="vlc-agenda-items-new__sub-item">
+      {{agenda/agenda-list/list-item
+        agendaitem=(await minutesApproval)
+        isEditingOverview=isEditingOverview
+        selectAgendaItem=(action "selectAgendaItem")
+      }}
+    </div>
+  {{/if}}
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
       <div class="vl-u-spacer-extended-bottom">

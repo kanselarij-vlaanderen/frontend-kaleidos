@@ -42,7 +42,7 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   async checkAlerts() {
-    const dateOfToday = moment().format();
+    const dateOfToday = moment().utc().format();
     try {
       const alerts = await this.store.query('alert', {
         filter: {

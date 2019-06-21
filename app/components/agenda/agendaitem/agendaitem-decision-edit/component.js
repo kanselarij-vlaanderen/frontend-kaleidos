@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import CONFIG from 'fe-redpencil/utils/config';
+import moment from 'moment';
 
 export default Component.extend(DocumentsSelectorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
@@ -24,7 +25,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 		if (approved) {
 			const decidedCode = await this.store.findRecord('subcase-phase-code', CONFIG.decidedCodeId);
 			const newDecisionPhase = this.store.createRecord('subcase-phase', {
-				date: new Date(),
+				date: moment().utc().toDate(),
 				code: decidedCode,
 				subcase: subcase
 			});
@@ -37,13 +38,13 @@ export default Component.extend(DocumentsSelectorMixin, {
 			this.set('isLoading', true);
 			const { isAgendaItem } = this;
 			const item = await this.get('item');
-			item.set('modified', new Date());
+			item.set('modified', moment().utc().toDate());
 
 			if (isAgendaItem && !item.showAsRemark) {
 				const isDesignAgenda = await item.get('isDesignAgenda');
 				if (isDesignAgenda) {
 					const agendaitemSubcase = await item.get('subcase');
-					agendaitemSubcase.set('modified', new Date());
+					agendaitemSubcase.set('modified', moment().utc().toDate());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
 					agendaitemSubcase.reload();
 				}
@@ -80,7 +81,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 				} else {
 					agendaitemToUpdate = await this.agendaitem;
 				}
-				agendaitemToUpdate.set('modified', new Date())
+				agendaitemToUpdate.set('modified', moment().utc().toDate())
 
 				await agendaitemToUpdate.save();
 			}

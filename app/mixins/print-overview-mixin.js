@@ -11,7 +11,7 @@ export default Mixin.create({
 
 	title: computed('model.createdFor', 'titleTranslationKey', function () {
 		const date = this.get('model.createdFor.plannedStart');
-		return `${this.intl.t(`${this.titleTranslationKey}`)} ${moment(date).format('dddd DD-MM-YYYY')}`;
+		return `${this.intl.t(`${this.titleTranslationKey}`)} ${moment(date).utc().format('dddd DD-MM-YYYY')}`;
 	}),
 
 	actions: {
@@ -22,7 +22,7 @@ export default Mixin.create({
 		},
 		print() {
 			var tempTitle = window.document.title;
-			window.document.title = `${this.intl.t(`${this.titlePrintKey}`)}${moment(this.get('model.createdFor.plannedStart')).format('YYYYMMDD')}`;
+			window.document.title = `${this.intl.t(`${this.titlePrintKey}`)}${moment(this.get('model.createdFor.plannedStart')).utc().format('YYYYMMDD')}`;
 			window.print();
 			window.document.title = tempTitle;
 		}

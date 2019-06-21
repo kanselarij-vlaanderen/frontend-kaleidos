@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
+import moment from 'moment';
 
 export default Controller.extend({
 	columns: computed(function () {
@@ -54,7 +55,7 @@ export default Controller.extend({
 	async addNewsItem(subcase, agendaitem, value) {
 		const news = this.store.createRecord("newsletter-info", {
 			subcase: subcase,
-			created: new Date(),
+			created: moment().utc().toDate(),
 			title: await agendaitem.get('shortTitle'),
 			subtitle: await agendaitem.get('title'),
 			finished: value

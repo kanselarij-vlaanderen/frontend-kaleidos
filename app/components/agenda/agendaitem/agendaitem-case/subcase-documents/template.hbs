@@ -14,7 +14,9 @@
     </div>
   </div>
   {{#if (not isEditing)}}
-    {{#if (gt (await item.documentsLength) 0)}}
+    {{#if (is-pending item.documents)}}
+      {{web-components/vl-loader text=(t "documents-loading-text")}}
+    {{else if (gt (await item.documentsLength) 0)}}
       {{#each (await item.documents) as |document|}}
         {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
           document=document
@@ -33,7 +35,11 @@
       cancelForm=(action "cancelEditing")
     }}
   {{/if}}
-  {{#if (or isAdmin isEditor)}}
+  {{#if (is-pending item.documents)}}
+    <button class="vl-button vl-button--loading vl-button--narrow" disabled>
+      {{t "loading-text-inactive"}}
+    </button>
+  {{else if (or isAdmin isEditor)}}
     <div class="vl-u-spacer">
       <button
         class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
@@ -63,7 +69,7 @@
           }}
         {{/each}}
       {{else}}
-        {{web-components/vl-loader text="De documenten worden opgeladen.."}}
+        {{web-components/vl-loader text=(t "documents-loading-text")}}
       {{/if}}
     </div>
     {{web-components/vl-modal-footer

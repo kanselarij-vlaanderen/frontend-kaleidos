@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed } from '@ember/object'
+import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
 	classNames: ['vl-u-spacer'],
@@ -54,7 +55,7 @@ export default Component.extend(isAuthenticatedMixin, {
 			} else {
 				agendaitemToUpdate = await this.agendaitem;
 			}
-			agendaitemToUpdate.set('modified', new Date())
+			agendaitemToUpdate.set('modified', moment().utc().toDate());
 			await agendaitemToUpdate.save();
 
 			this.set('isVerifyingDelete', false);

@@ -13,8 +13,10 @@
   </div>
 </div>
 {{#if (not isEditing)}}
-  {{#if (gt (await item.mandatees.length) 0)}}
-    {{#each (await mandateeRows) as |mandateeRow|}}
+  {{#if (is-pending mandateeRows)}}
+    {{web-components/vl-loader text=(t "mandatees-loading-text")}}
+  {{else if (gt (await item.mandatees.length) 0)}}
+    {{#each mandateeRows as |mandateeRow|}}
       <ul class="vlc-minister-list">
         {{web-components/vl-mandatee-link
           mandatee=mandateeRow.mandatee
@@ -29,7 +31,7 @@
   <div class="vlc-box">
     {{cases/subcase-mandatees
       showSelected=true
-      mandateeRows=(await mandateeRows)
+      mandateeRows=mandateeRows
       isEditing=isEditing
       isAdding=isAdding
     }}

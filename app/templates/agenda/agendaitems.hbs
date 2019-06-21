@@ -5,6 +5,7 @@
           {{agenda/agendaitem-search selectedAgenda=currentAgenda search=(action "searchAgendaItems")}}
         {{/if}} --}}
       {{agenda/agenda-list
+        minutesApproval=(await model.minutesApproval)
         agendaitemGroups=(await model.groups)
         announcements=(await model.announcements)
         lastPrio=(await model.lastPrio)

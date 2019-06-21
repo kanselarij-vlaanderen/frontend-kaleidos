@@ -114,6 +114,9 @@ export default Model.extend({
   }),
 
   subcasesFromCase: computed('subcase', function () {
+    if (!this.get('subcase.id')) {
+      return [];
+    }
     return PromiseArray.create({
       promise: this.subcase.get('case').then((caze) => {
         if (caze) {

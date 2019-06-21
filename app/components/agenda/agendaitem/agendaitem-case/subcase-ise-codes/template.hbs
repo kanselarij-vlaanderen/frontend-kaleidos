@@ -5,17 +5,17 @@
     </h4>
   </div>
 </div>
-{{#if (gt (await item.iseCodes.length) 0)}}
-  <div class="vl-custom">
-    <ul>
-      {{#each (await item.iseCodes) as |iseCode|}}
-        <li class="vl-pill vl-u-spacer-extended-right-s">
-          {{iseCode.name}}
-          ({{iseCode.code}})
-        </li>
-      {{/each}}
-    </ul>
-  </div>
+{{#if (is-pending item.iseCodes)}}
+  {{web-components/vl-loader text=(t "documents-loading-text")}}
+{{else if (gt (await item.iseCodes.length) 0)}}
+  <ul>
+    {{#each (await item.iseCodes) as |iseCode|}}
+      <li class="vl-pill">
+        {{iseCode.name}}
+        {{!-- ({{iseCode.code}}) --}}
+      </li>
+    {{/each}}
+  </ul>
 {{else}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-ise-codes-yet")}}

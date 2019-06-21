@@ -12,8 +12,8 @@ export default Component.extend(ModifiedMixin, {
 	isShowingOptions: false,
 
 	meetings: computed('store', function () {
-		const dateOfToday = moment().format();
-		const dateInTwoWeeks = moment().add(6, 'weeks').format();
+		const dateOfToday = moment().utc().format();
+		const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
 
 		return this.store.query('meeting', {
 			filter: {
@@ -100,7 +100,7 @@ export default Component.extend(ModifiedMixin, {
 		const phaseCode = phasesCodes.get('firstObject');
 		if (phaseCode) {
 			const phase = this.store.createRecord('subcase-phase', {
-				date: new Date(),
+				date: moment().utc().toDate(),
 				code: phaseCode,
 				subcase: subcase
 			});

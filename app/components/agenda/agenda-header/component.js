@@ -3,6 +3,7 @@ import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import CONFIG from 'fe-redpencil/utils/config';
+import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
@@ -102,7 +103,7 @@ export default Component.extend(isAuthenticatedMixin, {
 				}
 
 				agendaToLock.set('isAccepted', true);
-				agendaToLock.set('modified', new Date());
+				agendaToLock.set('modified', moment().utc().toDate());
 				agendaToLock.save().then((agendaToApprove) => {
 					this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToApprove).then(newAgenda => {
 						this.changeLoading();

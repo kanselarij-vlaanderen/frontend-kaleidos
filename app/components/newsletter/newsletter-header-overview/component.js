@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, {
 	actions: {
 		print() {
 			var tempTitle = window.document.title;
-			window.document.title = `${this.get('intl').t('newsletter-overview-pdf-name')}${moment(this.get('sessionService.currentSession.plannenStart')).format('YYYYMMDD')}`;
+			window.document.title = `${this.get('intl').t('newsletter-overview-pdf-name')}${moment(this.get('sessionService.currentSession.plannenStart')).utc().format('YYYYMMDD')}`;
 			window.print();
 			window.document.title = tempTitle;
 		},

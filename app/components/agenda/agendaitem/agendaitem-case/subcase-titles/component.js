@@ -9,6 +9,22 @@ export default Component.extend(isAuthenticatedMixin, {
 		return this.get('item.agenda.name');
 	}),
 
+	agendaId: computed('item', 'shouldShowDetails', function () {
+		const { item } = this;
+		if (item.get('title')) {
+			const values = item.get('title').split('/');
+			return values.get('lastObject');
+		}
+	}),
+
+	meetingId: computed('item', 'shouldShowDetails', function () {
+		const { item } = this;
+		if (item.get('title')) {
+			const values = item.get('title').split('/');
+			return values.get('firstObject');
+		}
+	}),
+
 	isAgendaItem: computed('item.constructor.modelName', function () {
 		return "agendaitem" === this.get('item.constructor.modelName');
 	}),

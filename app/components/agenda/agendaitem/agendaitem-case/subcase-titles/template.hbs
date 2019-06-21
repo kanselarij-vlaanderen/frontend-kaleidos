@@ -34,14 +34,27 @@
   </h4>
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
-  <p>
-    {{await item.title}}
-  </p>
+  {{#if (not (await shouldShowDetails))}}
+    {{#link-to
+      "print-overviews.notes.overview"
+      (await meetingId)
+      (await agendaId)
+      (query-params definite=true)
+      class="vl-link"
+      target="_blank"
+    }}
+      {{t "show-minutes"}}
+    {{/link-to}}
+  {{else}}
+    <p>
+      {{await item.title}}
+    </p>
+  {{/if}}
 </div>
 {{#if (not (await item.isOC))}}
   {{#if (not item.showAsRemark)}}
     <div class="vl-u-spacer-extended-bottom-s">
-      {{#if (await item.subcase)}}
+      {{#if (await item.subcase.id)}}
         {{#if (await item.subcase.approved)}}
           <span class="vl-pill vl-pill--success vl-u-text--capitalize">
             {{await item.subcase.subcaseName}}
@@ -53,10 +66,6 @@
         {{/if}}
       {{else if (await item.approved)}}
         <span class="vl-pill vl-pill--success">
-          {{await item.subcaseName}}
-        </span>
-      {{else}}
-        <span class="vl-pill vl-pill--warning">
           {{await item.subcaseName}}
         </span>
       {{/if}}

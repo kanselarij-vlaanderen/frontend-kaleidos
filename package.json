@@ -48,6 +48,7 @@
     "ember-file-upload": "^2.5.3",
     "ember-flatpickr": "^2.12.0",
     "ember-font-awesome": "^4.0.0-rc.4",
+    "ember-infinity": "^1.4.7",
     "ember-intl": "^3.5.0",
     "ember-light-table": "^2.0.0-beta.3",
     "ember-load-initializers": "^1.1.0",
