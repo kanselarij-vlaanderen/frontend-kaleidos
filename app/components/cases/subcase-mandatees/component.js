@@ -10,15 +10,16 @@ export default Component.extend(ManageMinisterMixin, {
 	isEditingMandateeRow: false,
 
 	getDomainOfField(field) {
-		return field.get('domain');
+		if (field)
+			return field.get('domain');
 	},
 
 	getFieldOfIseCode(iseCode) {
-		return iseCode.get('field');
+		if (iseCode)
+			return iseCode.get('field');
 	},
 
 	actions: {
-
 		async saveChanges(mandatee, newRow) {
 			const rowToShow = await this.get('rowToShow');
 			const mandateeRows = await this.get('mandateeRows');
@@ -39,7 +40,9 @@ export default Component.extend(ManageMinisterMixin, {
 						fieldsToShow, domainsToShow,
 						...newRow
 					}))
+				this.set('mandateeRows', mandateeRows.sortBy('mandateePriority'))
 			}
+
 		},
 
 		cancel() {
@@ -55,6 +58,7 @@ export default Component.extend(ManageMinisterMixin, {
 		async editRow(mandateeRow) {
 			this.set('selectedMandateeRow', await mandateeRow);
 			const mandatee = mandateeRow.mandatee;
+			this.set('isLoading', true);
 			const totalIseCodes = await mandatee.get('iseCodes');
 			const totalFields = [];
 			const totalDomains = [];
@@ -74,9 +78,10 @@ export default Component.extend(ManageMinisterMixin, {
 
 			const rowToShow = EmberObject.create({
 				mandatee: mandatee,
-				domains: [...new Set(totalDomains)],
-				fields: [...new Set(totalFields)]
+				domains: [...new Set(totalDomains.filter((item) => item))],
+				fields: [...new Set(totalFields.filter((item) => item))]
 			});
+			this.set('isLoading', false);
 			this.set('rowToShow', rowToShow);
 			this.set('isEditingMandateeRow', true);
 

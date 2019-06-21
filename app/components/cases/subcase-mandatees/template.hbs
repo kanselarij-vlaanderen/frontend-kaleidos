@@ -16,10 +16,10 @@
         </tr>
       </thead>
       <tbody>
-        {{#each (await mandateeRows) as |mandateeRow|}}
+        {{#each mandateeRows as |mandateeRow|}}
           <tr>
             <td>
-              {{await mandateeRow.mandatee.person.alternativeName}}
+              {{await mandateeRow.mandatee.person.nameToDisplay}}
             </td>
             <td>
               {{await mandateeRow.domainsToShow}}
@@ -28,15 +28,25 @@
               {{await mandateeRow.fieldsToShow}}
             </td>
             <td class="vl-u-align-right vl-u-flex-align-center">
-              <button
-                class="vl-button vl-button--link vl-button--icon"
-                {{action "editRow" mandateeRow}}
-              >
-                <i class="vl-vi vl-vi-pencil" aria-hidden="true"></i>
-                <span class="vl-u-visually-hidden">
-                  {{t "edit"}}
-                </span>
-              </button>
+              {{#if isLoading}}
+                <button
+                  class="vl-button vl-button--link vl-button--icon"
+                  disabled
+                  {{action "editRow" mandateeRow}}
+                >
+                  <div class="vl-loader" role="alert" aria-busy="true"></div>
+                </button>
+              {{else}}
+                <button
+                  class="vl-button vl-button--link vl-button--icon"
+                  {{action "editRow" mandateeRow}}
+                >
+                  <i class="vl-vi vl-vi-pencil" aria-hidden="true"></i>
+                  <span class="vl-u-visually-hidden">
+                    {{t "edit"}}
+                  </span>
+                </button>
+              {{/if}}
               <button
                 class="vl-button vl-button--link vl-button--icon"
                 {{action "deleteRow" mandateeRow}}

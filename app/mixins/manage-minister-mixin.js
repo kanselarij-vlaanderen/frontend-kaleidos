@@ -70,6 +70,7 @@ export default Mixin.create({
 
 			const newRow = EmberObject.create({
 				mandatee: selectedMandatee,
+				mandateePriority: selectedMandatee.get('priority'),
 				fields: selectedFields,
 				domains: selectedDomains,
 				iseCodes: selectedIseCodeLists
