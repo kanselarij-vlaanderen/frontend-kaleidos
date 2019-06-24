@@ -352,5 +352,9 @@
 	"theme":"thema",
 	"time-period":"tijdsspanne",
 	"signature":"handtekening",
-	"meeting":"zitting"
+	"meeting":"zitting",
+	"meeting-record":"notule",
+	"remark":"opmerking",
+	"decision":"beslissing",
+	"successfully-deleted":"succesvol verwijderd."
 }

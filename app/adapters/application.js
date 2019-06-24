@@ -44,12 +44,22 @@ export default DS.JSONAPIAdapter.extend({
 					}));
 					break;
 				case 204:
+					if (requestData && requestData.method === "DELETE") {
+					this.globalError.showToast.perform(EmberObject.create({
+						title: this.intl.t('successfully-created-title'),
+						message: this.intl.t('successfully-deleted'),
+						type: 'success'
+					}));
+				} else {
 					this.globalError.showToast.perform(EmberObject.create({
 						title: this.intl.t('successfully-created-title'),
 						message: this.intl.t('successfully-saved'),
 						type: 'success'
 					}));
-					break;
+				}
+				break;
+				default:
+				return this._super(...arguments);
 			}
 			return this._super(...arguments);
 		}
@@ -62,10 +72,13 @@ export default DS.JSONAPIAdapter.extend({
 
 	ajax: function () {
 		let args = [].slice.call(arguments);
-		let originalData = args[2] && args[2].data;
-		if (originalData && typeof originalData === "object") {
-			originalData = JSON.stringify(originalData);
+		let originalData;
+		if (args[1] === "DELETE") {
+			return this._super.apply(this, args);
+		} else {
+			originalData = args[2] && args[2].data;
 		}
+
 		let original = this._super;
 		let retries = 0;
 		let retry = (error) => {
