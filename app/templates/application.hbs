@@ -31,12 +31,14 @@
   </div>
 {{/if}}
 {{#if (gt (await messages.length) 0)}}
-  {{#each messages as |errorMessage|}}
-  {{utils/custom-messages-toasts
-    errorMessage=errorMessage
-    closeErrorMessage=(action "closeErrorMessage")
-  }}
-  {{/each}}
+  <div class="toasts-container">
+    {{#each messages as |errorMessage|}}
+      {{utils/custom-messages-toasts
+      errorMessage=errorMessage
+      closeErrorMessage=(action "closeErrorMessage")
+      }}
+    {{/each}}
+  </div>
 {{/if}}
 {{#if (and (await role) (not-eq (await role) ""))}}
   {{m-header navigateToMockLogin=(action "navigateToMockLogin")}}

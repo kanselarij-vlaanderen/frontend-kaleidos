@@ -43,8 +43,8 @@ export default Controller.extend(isAuthenticatedMixin, {
 			this.transitionToRoute('mock-login');
 		},
 
-		closeErrorMessage() {
-			this.set('globalError.messages', null);
+		closeErrorMessage(errorMessage) {
+			this.get('globalError.messages').removeObject(errorMessage);
 		}
 	}
 });

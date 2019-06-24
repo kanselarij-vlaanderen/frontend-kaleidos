@@ -26,3 +26,29 @@
     opacity: 1;
   }
 }
+
+.toasts-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  bottom: 1%;
+  right:0;
+  width:30%;
+
+.vl-alert-relative {
+    opacity: 1;
+    position: relative;
+
+    &--center-mid {
+      height: auto !important;
+      width: 100% !important;
+      bottom: 1%;
+      right: 2%;
+      & button.vl-alert__close {
+        font-size: 1.3em;
+      }
+    }
+  }
+
+  
+}
