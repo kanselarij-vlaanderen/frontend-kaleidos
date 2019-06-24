@@ -1,6 +1,9 @@
 <div class="vl-modal">
   <div class={{backdropClass}}>
-    {{#click-outside action=(action "closeErrorMessage")}}
+    {{#click-outside
+      action=(action "close")
+      except-selector=".flatpickr-calendar"
+    }}
       <div class="vl-modal-dialog {{sizeClass}}" tabindex="-1" role="dialog">
         <div
           class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-bottom"

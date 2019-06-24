@@ -53,5 +53,5 @@ export default Model.extend({
 		} else {
 			return signature;
 		}
-	}),
+	})
 });

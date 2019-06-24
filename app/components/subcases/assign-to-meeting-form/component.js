@@ -7,7 +7,7 @@ export default Component.extend({
 	store: inject(),
 
 	dateObjectsToEnable: computed('store', function () {
-		return this.store.findAll('meeting', {});
+		return this.store.findAll('meeting');
 	}),
 
 	actions: {

@@ -106,10 +106,9 @@ export default Component.extend(ApprovalsEditMixin, {
 			}
 
 			this.set('item', subcase);
-			caze.notifyPropertyChange('subcases');
 			await this.checkForActionChanges();
-
 			this.set('isLoading', false);
+			caze.notifyPropertyChange('subcases');
 			this.refresh();
 		},
 

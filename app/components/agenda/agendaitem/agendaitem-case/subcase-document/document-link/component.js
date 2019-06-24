@@ -46,9 +46,10 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			document.set('lastDocumentVersion', newDocumentVersion);
 			await item.hasMany('documentVersions').reload();
 			await item.save();
-			this.set('isLoading', false);
+			item.hasMany('documentVersions').reload();
 			if (!this.get('isDestroyed')) {
 				this.set('isUploadingNewVersion', false);
+				this.set('isLoading', false);
 			}
 		},
 

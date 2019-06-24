@@ -15,7 +15,7 @@ export default Component.extend({
   didInsertElement() {
     this._super(...arguments);
     this.set('uploadedFileLength', 0);
-    this.store.findAll('document-type',
+    this.store.query('document-type',
       {
         sort: "priority",
         page: { size: 50 }

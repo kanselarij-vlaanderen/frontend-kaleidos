@@ -9,7 +9,7 @@ export default Component.extend({
 	selectedModel: null,
 
 	model: computed('modelName', 'store', function () {
-		return this.store.findAll(this.modelName, { sort: '-label' });
+		return this.store.query(this.modelName, { sort: '-label' });
 	}),
 
 	async didInsertElement() {

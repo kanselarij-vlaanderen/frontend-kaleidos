@@ -29,7 +29,7 @@ export default Mixin.create({
 		const { modelName, sortField } = this;
 		const filteredItems = yield this.get('filteredItems');
 		if (!filteredItems || !filteredItems.length > 0) {
-			const items = yield this.store.findAll(modelName,
+			const items = yield this.store.query(modelName,
 				{
 					sort: sortField,
 				});

@@ -9,19 +9,5 @@ export default DS.JSONAPISerializer.extend(DataTableSerializerMixin, {
       return shouldSerialize && serializeOption.serialize;
     }
     return shouldSerialize;
-  },
-
-  handleResponse: function (status, headers, payload) {
-    console.log(status, headers, payload)
-    if (!this.isSuccess(status, headers, payload)) {
-      if (payload.error) {
-        console.log(payload.error)
-        return new DS.InvalidError([payload.error]);
-      } else {
-        return this._super(...arguments);
-      }
-    } else {
-      return this._super(...arguments);
-    }
   }
 });

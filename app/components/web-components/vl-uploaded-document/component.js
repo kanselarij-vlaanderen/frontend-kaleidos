@@ -12,7 +12,7 @@ export default Component.extend(UploadDocumentMixin, {
 
 	filteredItems: computed('subcase', async function () {
 		const filter = await this.get('subcase.documentTypeFilter');
-		return this.store.findAll('document-type',
+		return this.store.query('document-type',
 			{
 				sort: "priority",
 				filter

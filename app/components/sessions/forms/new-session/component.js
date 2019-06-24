@@ -7,6 +7,7 @@ import moment from 'moment';
 export default Component.extend({
 	store: inject(),
 	agendaService: inject(),
+	globalError: inject(),
 
 	createAgenda(meeting, date) {
 		const agenda = this.store.createRecord('agenda', {
@@ -48,7 +49,7 @@ export default Component.extend({
 			const startDate = this.get('startDate');
 			const newMeeting = this.store.createRecord('meeting', {
 				plannedStart: startDate,
-				created: date
+				created: date,
 			});
 			const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
@@ -56,7 +57,9 @@ export default Component.extend({
 				const agenda = await this.createAgenda(meeting, date);
 				await this.createAgendaItemToApproveMinutes(agenda, closestMeeting);
 				await this.agendaService.assignNewSessionNumbers();
-
+			}).catch((error) => {
+				this.globalError.handleError(error);
+			}).finally(() => {
 				this.set('isLoading', false);
 				this.successfullyAdded();
 			});

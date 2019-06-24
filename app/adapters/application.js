@@ -1,0 +1,88 @@
+import DS from 'ember-data';
+import { inject } from '@ember/service';
+import EmberObject from '@ember/object';
+
+export default DS.JSONAPIAdapter.extend({
+	defaultSerializer: 'JSONAPISerializer',
+	intl: inject(),
+	globalError: inject(),
+
+	handleResponse: function (status, headers, payload, requestData) {
+		if (!this.isSuccess(status, headers, payload)) {
+			switch (status) {
+				case 400:
+					this.globalError.showToast.perform(EmberObject.create({
+						title: this.intl.t('warning-title'),
+						message: this.intl.t('error-bad-request'),
+						type: 'error'
+					}));
+					break;
+				case 404:
+					this.globalError.showToast.perform(EmberObject.create({
+						title: this.intl.t('warning-title'),
+						message: this.intl.t('error-not-found'),
+						type: 'error'
+					}));
+					break;
+				case 500:
+					this.globalError.showToast.perform(EmberObject.create({
+						title: this.intl.t('warning-title'),
+						message: this.intl.t('error'),
+						type: 'error'
+					}));
+					break;
+				default:
+					return new DS.InvalidError(status);
+			}
+		} else {
+			switch (status) {
+				case 201:
+					this.globalError.showToast.perform(EmberObject.create({
+						title: this.intl.t('successfully-created-title'),
+						message: this.intl.t('successfully-created', { type: this.translateAndParseSuccesType(payload.data.type) }),
+						type: 'success'
+					}));
+					break;
+				case 204:
+					this.globalError.showToast.perform(EmberObject.create({
+						title: this.intl.t('successfully-created-title'),
+						message: this.intl.t('successfully-saved'),
+						type: 'success'
+					}));
+					break;
+			}
+			return this._super(...arguments);
+		}
+	},
+
+	translateAndParseSuccesType(type) {
+		const singular = type.slice(0, -1)
+		return this.intl.t(singular).toLowerCase();
+	},
+
+	ajax: function () {
+		let args = [].slice.call(arguments);
+		let originalData = args[2] && args[2].data;
+		if (originalData && typeof originalData === "object") {
+			originalData = JSON.stringify(originalData);
+		}
+		let original = this._super;
+		let retries = 0;
+		let retry = (error) => {
+			if (retries < 3) {
+				retries++;
+				let originalResult = original.apply(this, args);
+				return originalResult.catch((error) => {
+					if (originalData) {
+						args[2].data = JSON.parse(originalData);
+					}
+					return retry(error);
+				});
+			} else {
+				return Promise.reject(error);
+			}
+		};
+
+		return retry();
+	},
+});

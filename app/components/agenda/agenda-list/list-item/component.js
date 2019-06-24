@@ -8,6 +8,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 export default Component.extend(isAuthenticatedMixin, {
 	store: inject(),
 	sessionService: inject(),
+	globalError: inject(),
 	classNameBindings: ["extraAgendaItemClass"],
 	tagName: 'a',
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
@@ -67,6 +68,8 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.agendaitem.save().then(() => {
 				this.set('isLoading', false);
 				agenda.notifyPropertyChange('agendaitems');
+			}).catch((error) => {
+				this.globalError.handleError(error)
 			})
 		}
 	}

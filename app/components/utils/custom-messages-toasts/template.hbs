@@ -1,0 +1,34 @@
+{{#click-outside action=(action "closeErrorMessage")}}
+  <div
+    class="vl-alert vl-alert-relative vl-alert-relative--center-mid vl-alert--{{errorMessage.type}}"
+    role="alert"
+  >
+    <div class="vl-alert__icon">
+      {{#if (eq errorMessage.type "error")}}
+        <i class="vl-vi vl-vi-circle" aria-hidden="true"></i>
+      {{else}}
+        <i class="vl-vi vl-vi-check" aria-hidden="true"></i>
+      {{/if}}
+    </div>
+    <div class="vl-alert__content">
+      <p class="vl-alert__title">
+        {{errorMessage.title}}
+      </p>
+      <div class="vl-alert__message vl-u-text--capitalize">
+        <p>
+          {{errorMessage.message}}
+        </p>
+      </div>
+    </div>
+    <button
+      class="vl-alert__close"
+      type="button"
+      {{action "closeErrorMessage"}}
+    >
+      <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
+      <span class="vl-u-visually-hidden">
+        {{t "close"}}
+      </span>
+    </button>
+  </div>
+{{/click-outside}}

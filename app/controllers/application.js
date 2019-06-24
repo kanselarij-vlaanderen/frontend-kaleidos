@@ -4,7 +4,6 @@ import { alias } from '@ember/object/computed';
 import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import EmberObject from '@ember/object';
 
 export default Controller.extend(isAuthenticatedMixin, {
 	currentSession: inject(),
@@ -12,12 +11,6 @@ export default Controller.extend(isAuthenticatedMixin, {
 	router: inject(),
 	globalError: inject(),
 	messages: alias('globalError.messages'),
-
-	init() {
-		this._super(...arguments);
-		this.globalError.showToast.perform(EmberObject.create({ title: "lol", message: "lolly" }));
-
-	},
 
 	shouldNavigateObserver: on('init', observer('router.currentRouteName', 'currentSession.userRole', async function () {
 		const router = this.get('router');
