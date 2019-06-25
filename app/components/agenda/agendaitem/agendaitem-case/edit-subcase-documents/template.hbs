@@ -9,8 +9,11 @@
           <th class="vl-data-table-col-3">
             {{web-components/vl-form-label value=(t "file-type")}}
           </th>
-          <th class="vl-data-table-col-4">
+          <th class="vl-data-table-col-1">
             {{web-components/vl-form-label value=(t "public")}}
+          </th>
+          <th class="vl-data-table-col-1">
+            {{web-components/vl-form-label value=(t "for-cabinet")}}
           </th>
           <th class="vl-data-table-col-1"></th>
         </tr>
@@ -52,14 +55,10 @@
                 }}
               </td>
               <td>
-                {{utils/model-selector
-                  modelName="confidentiality"
-                  searchField="label"
-                  propertyToShow="label"
-                  sortField="label"
-                  selectedItems=(await document.confidentiality)
-                  selectModel=(action "chooseDocumentConfidentiality" document)
-                }}
+                {{web-components/vl-toggle value=document.freezeAccessLevel}}
+              </td>
+              <td>
+                {{web-components/vl-toggle value=document.forCabinet}}
               </td>
               <td class="vl-u-align-right">
                 <button

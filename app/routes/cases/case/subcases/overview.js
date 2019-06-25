@@ -15,7 +15,7 @@ export default Route.extend({
       filter: {
         case: { id: caze.get('id') },
       },
-      include: "phases,document-versions",
+      include: "phases",
       sort: '-created'
     });
 

@@ -18,13 +18,23 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            <span class="vlc-pill vlc-pill--success">
-              {{await document.confidentiality.label}}
-            </span>
+            {{#if document.freezeAccessLevel}}
+              <span class="vlc-pill vlc-pill--warning">
+                {{t "public"}}
+              </span>
+            {{else}}
+              <span class="vlc-pill vlc-pill--success">
+                {{t "public-press"}}
+              </span>
+            {{/if}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if (or isAdmin isEditor)}}
-              <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+              {{#if document.forCabinet}}
+                <span class="vl-icon vl-vi vl-vi-lock"></span>
+              {{else}}
+                <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+              {{/if}}
               <button class="vl-button vl-button--link vl-button--icon">
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
               </button>
