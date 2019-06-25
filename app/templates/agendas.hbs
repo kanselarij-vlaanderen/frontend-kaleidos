@@ -56,11 +56,11 @@
         <div class="vl-u-spacer--large">
           {{#if (eq page 0)}}
             {{agenda/future-agendas
-              futureMeetings=futureMeetings
+              meetings=futureMeetings
               selectAgenda=(action "selectAgenda")
             }}
-            {{agenda/active-agendas
-              nearestMeeting=nearestMeeting
+            {{agenda/future-agendas
+              meetings=nearestMeeting
               selectAgenda=(action "selectAgenda")
             }}
           {{/if}}
@@ -107,15 +107,14 @@
                   {{#c.body as |meeting|}}
                     {{#if (not meeting.alreadyShown)}}
                       <td {{action "selectAgenda" meeting}}>
-                        Agenda voor
-                        {{! Translate not possible in the data table }}
+                        {{agendaForTranslation}}
                         {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                       </td>
                       <td>
                         {{#if meeting.isFinal}}
-                          Afgesloten
+                          {{closedTranslation}}
                         {{else}}
-                          Geopend
+                          {{openedTranslation}}
                         {{/if}}
                       </td>
                       <td {{action "selectAgenda" meeting}}>

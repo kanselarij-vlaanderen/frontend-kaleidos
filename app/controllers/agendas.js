@@ -7,9 +7,22 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
 	sessionService: inject(),
+	intl: inject(),
 	creatingNewSession: false,
 	sort: '-planned-start',
 	size: 10,
+
+	closedTranslation: computed('intl', function() {
+		return this.intl.t('closed');
+	}),
+
+	openedTranslation: computed('intl', function () {
+		return this.intl.t('opened');
+	}),
+
+	agendaForTranslation: computed('intl', function() {
+		return this.intl.t('agenda-for');
+	}),
 
 	nearestMeeting: computed('model', function () {
 		const meetings = this.get('model');
@@ -28,7 +41,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 		if (this.page === 0) {
 			closest.set('alreadyShown', true);
 		}
-		return closest;
+		return [closest];
 	}),
 
 	futureMeetings: computed('model', 'nearestMeeting', function () {
