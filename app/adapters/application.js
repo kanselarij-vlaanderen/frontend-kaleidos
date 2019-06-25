@@ -37,30 +37,33 @@ export default DS.JSONAPIAdapter.extend({
 		} else {
 			switch (status) {
 				case 201:
-					this.globalError.showToast.perform(EmberObject.create({
-						title: this.intl.t('successfully-created-title'),
-						message: this.intl.t('successfully-created', { type: this.translateAndParseSuccesType(payload.data.type) }),
-						type: 'success'
-					}));
+					if (payload && payload.data && this.checkIfNotificationShouldBeShown(payload.data.type)) {
+						this.globalError.showToast.perform(EmberObject.create({
+							title: this.intl.t('successfully-created-title'),
+							message: this.intl.t('successfully-created', { type: this.translateAndParseSuccesType(payload.data.type) }),
+							type: 'success'
+						}));
+					}
 					break;
 				case 204:
 					if (requestData && requestData.method === "DELETE") {
-					this.globalError.showToast.perform(EmberObject.create({
-						title: this.intl.t('successfully-created-title'),
-						message: this.intl.t('successfully-deleted'),
-						type: 'success'
-					}));
-				} else {
-					this.globalError.showToast.perform(EmberObject.create({
-						title: this.intl.t('successfully-created-title'),
-						message: this.intl.t('successfully-saved'),
-						type: 'success'
-					}));
-				}
-				break;
+						this.globalError.showToast.perform(EmberObject.create({
+							title: this.intl.t('successfully-created-title'),
+							message: this.intl.t('successfully-deleted'),
+							type: 'success'
+						}));
+					} else {
+						this.globalError.showToast.perform(EmberObject.create({
+							title: this.intl.t('successfully-created-title'),
+							message: this.intl.t('successfully-saved'),
+							type: 'success'
+						}));
+					}
+					break;
 				default:
-				return this._super(...arguments);
+					return this._super(...arguments);
 			}
+
 			return this._super(...arguments);
 		}
 	},
@@ -68,6 +71,11 @@ export default DS.JSONAPIAdapter.extend({
 	translateAndParseSuccesType(type) {
 		const singular = type.slice(0, -1)
 		return this.intl.t(singular).toLowerCase();
+	},
+
+	checkIfNotificationShouldBeShown(type) {
+		const modelListToNotShowNotificationFor = ['subcase-phase-codes', 'genders', 'formally-oks', 'confidentialities', 'approvals', 'alert-types', 'policy-levels', 'subcase-phases'];
+		return !(modelListToNotShowNotificationFor.includes(type));
 	},
 
 	ajax: function () {

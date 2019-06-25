@@ -19,7 +19,7 @@ export default Service.extend({
 				yield timeout(3000);
 				break;
 			case 'success':
-				yield timeout(1000);
+				yield timeout(2000);
 				break;
 		}
 		this.messages.removeObject(messageToAdd);

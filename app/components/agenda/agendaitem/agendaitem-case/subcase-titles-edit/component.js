@@ -27,11 +27,11 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 
 	actions: {
 		selectConfidentiality(confidentiality) {
-			this.set('confidentiality', confidentiality)
+			this.set('confidentiality', confidentiality);
 		},
 
 		setAction(item) {
-			this.set('formallyOk', item.get('uri'))
+			this.set('formallyOk', item.get('uri'));
 		}
 	}
 });

@@ -4,6 +4,7 @@ import { not } from '@ember/object/computed';
 import { inject } from '@ember/service';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import moment from 'moment';
+import CONFIG from 'fe-redpencil/utils/config';
 
 const getCachedProperty = function (property) {
 	return computed(`item.${property}`, {
@@ -33,13 +34,13 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 	isSubcase: not('isAgendaItem'),
 
 	changeFormallyOkPropertyIfNotSetOnTrue(subcase) {
-		subcase.set('formallyOk', false);
+		subcase.set('formallyOk', CONFIG.notYetFormallyOk);
 	},
 
 	async setNewPropertiesToModel(model) {
 		const { propertiesToSet } = this;
 
-		if (model.get('formallyOk') && !this.get('formallyOk')) {
+		if (model.get('formallyOk') && (this.get('formallyOk') != CONFIG.notYetFormallyOk)) {
 			this.changeFormallyOkPropertyIfNotSetOnTrue(model);
 		}
 

@@ -24,6 +24,7 @@ export default Model.extend({
 	isApprovable: computed('agendaitems.@each', function () {
 		return this.get('agendaitems').then((agendaitems) => {
 			const agendaitemsWithoutAnnouncements = agendaitems.filter((agendaitem) => !agendaitem.get('showAsRemark'));
+
 			const approvedAgendaItems = agendaitemsWithoutAnnouncements.filter((agendaitem) => agendaitem.get('formallyOk') == CONFIG.formallyOk);
 			return approvedAgendaItems.get('length') === agendaitemsWithoutAnnouncements.get('length')
 		});

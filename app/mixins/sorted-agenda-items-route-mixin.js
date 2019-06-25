@@ -14,13 +14,14 @@ export default Mixin.create({
 
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
 		const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(groups, agendaitemsToGroup);
-		const minutesApproval = ((await Promise.all(agendaitems.map(async (agendaitem) => {
+		const minutesApprovals = await Promise.all(agendaitems.map(async (agendaitem) => {
 			const subcase = await agendaitem.get('subcase');
 			if (!subcase) {
 				return agendaitem;
 			}
-		}))) || []).get('firstObject');
+		}));
 
+		const minutesApproval = minutesApprovals.filter((item) => item).get('firstObject');
 		return { groups, firstAgendaItem, announcements, lastPrio, minutesApproval };
 	},
 

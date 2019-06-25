@@ -25,7 +25,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
 	isPostPonable: computed('sessionService.agendas.@each', function () {
 		return this.get('sessionService.agendas').then(agendas => {
-			if (agendas && agendas.length > 1) {
+			if (agendas && agendas.get('length') > 1) {
 				return true;
 			} else {
 				return false;
