@@ -14,6 +14,7 @@ export default Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
+    this.set('isLoading', false);
     this.set('uploadedFileLength', 0);
     this.store.query('document-type',
       {
@@ -34,6 +35,7 @@ export default Component.extend({
 
   uploadFile: task(function* (file) {
     try {
+      this.set('isLoading', true);
       file.readAsDataURL().then(() => {
       });
       // yield is being used to pause the execution of the promise behind it
@@ -43,13 +45,13 @@ export default Component.extend({
       this.incrementProperty('uploadedFileLength');
     } catch (e) {
       this.set('isLoading', false);
-      // TODO: Error handling
+    } finally {
+      this.set('isLoading', false);
     }
   }).maxConcurrency(3).enqueue(),
 
   actions: {
     uploadFile(file) {
-      this.set('isLoading', true);
       get(this, 'uploadFile').perform(file);
     },
 

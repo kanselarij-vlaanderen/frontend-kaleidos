@@ -15,6 +15,7 @@ export default Model.extend({
 	agendaitem: belongsTo('agendaitem', { inverse: null }),
 	announcement: belongsTo('announcement'),
 	file: belongsTo('file'),
+	convertedFile: belongsTo('file', {inverse:null}),
 	newsletter: belongsTo('newsletter-info'),
 	meetingRecord: belongsTo('meeting-record'),
 

@@ -13,6 +13,7 @@ export default Mixin.create(FileSaverMixin, {
 	uploadedFiles: null,
 	nonDigitalDocuments: null,
 	store: inject(),
+	fileService: inject(),
 
 	isAgendaItem: computed('modelToAddDocumentVersionTo', function() {
 		return (this.get('modelToAddDocumentVersionTo') === 'agendaitem');
@@ -49,7 +50,10 @@ export default Mixin.create(FileSaverMixin, {
 			});
 			documentVersion.set(modelToAddDocumentVersionTo, model);
 
-			await documentVersion.save();
+			const savedDocumentVersion = await documentVersion.save();
+			if(file.get('extension') === "docx") {
+				await this.fileService.convertDocumentVersionById(savedDocumentVersion.get('id'));
+			}
 		});
 	},
 
