@@ -25,17 +25,12 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 	item: null,
 	isEditing: false,
 
-	isAgendaItem: computed('item', function () {
+	isAgendaItem: computed('item.contructor', function () {
 		const { item } = this;
-		const modelName = item.get('constructor.modelName')
-		return modelName === 'agendaitem';
+		return item.get('constructor.modelName') === 'agendaitem';
 	}),
 
 	isSubcase: not('isAgendaItem'),
-
-	changeFormallyOkPropertyIfNotSetOnTrue(subcase) {
-		subcase.set('formallyOk', CONFIG.notYetFormallyOk);
-	},
 
 	async setNewPropertiesToModel(model) {
 		const { propertiesToSet } = this;

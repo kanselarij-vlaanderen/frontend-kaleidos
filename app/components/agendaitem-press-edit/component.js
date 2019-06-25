@@ -23,7 +23,7 @@ export default Component.extend(ModifiedMixin, {
 				agendaitemToUpdate = await agendaitem;
 			}
 			agendaitemToUpdate.set('modified', moment().utc().toDate());
-			agendaitemToUpdate.set('formallyOk', false);
+			this.changeFormallyOkPropertyIfNotSetOnTrue(agendaitemToUpdate);
 			await agendaitemToUpdate.save().then(() => {
 				this.updateModifiedProperty(agenda);
 				if (this.isTableRow) {

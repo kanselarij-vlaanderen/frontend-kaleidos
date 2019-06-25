@@ -30,12 +30,13 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 
 		async uploadNewDocument() {
 			this.set('isLoading', true);
-			const modelName = await this.get('modelToAddDocumentVersionTo');
 			const item = await this.get('item');
 			this.set('isCreatingDocuments', true);
 			await this.uploadFiles(item).then(async () => {
-				if (modelName === 'agendaitem') {
+				if (this.modelToAddDocumentVersionTo === 'agendaitem') {
+					this.changeFormallyOkPropertyIfNotSetOnTrue(item);
 					await this.updateModifiedProperty(await item.get('agenda'));
+					await item.save();
 				}
 				item.hasMany('documentVersions').reload();
 				this.set('isCreatingDocuments', false);

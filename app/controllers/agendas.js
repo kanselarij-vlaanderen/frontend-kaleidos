@@ -10,7 +10,6 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 	creatingNewSession: false,
 	sort: '-planned-start',
 	size: 10,
-	sizes: [10, 20, 50, 100, 200],
 
 	nearestMeeting: computed('model', function () {
 		const meetings = this.get('model');
@@ -26,6 +25,9 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 			}
 		});
 		sortedMeetings.removeObject(closest);
+		if (this.page === 0) {
+			closest.set('alreadyShown', true);
+		}
 		return closest;
 	}),
 
@@ -36,24 +38,16 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 			let date = moment(meeting.plannedStart).utc().format();
 
 			if (date > nearestMeetingDate) {
+				if (this.page === 0) {
+
+					const found = meetings.find((meetingToCheck) => meetingToCheck.get('id') === meeting.get('id'));
+					if (found) {
+						found.set('alreadyShown', true);
+					}
+				}
 				return meeting;
 			}
 		}).sortBy('plannedStart');
-	}),
-
-	filteredMeetings: computed('nearestMeeting', 'model', function () {
-		const meetings = this.get('model');
-		const nearestMeeting = this.get('nearestMeeting');
-		const now = moment().utc().format();
-
-		let filteredMeetings = meetings.filter(meeting => meeting.id != nearestMeeting.id);
-		return filteredMeetings.filter(meeting => {
-			const date = moment(meeting.plannedStart).utc().format();
-
-			if (date < now) {
-				return meeting;
-			}
-		});
 	}),
 
 	actions: {

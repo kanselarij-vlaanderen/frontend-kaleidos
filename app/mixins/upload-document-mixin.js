@@ -4,7 +4,7 @@ import { notifyPropertyChange } from '@ember/object';
 import $ from 'jquery';
 import { inject } from '@ember/service';
 import moment from 'moment';
-
+import { computed } from '@ember/object';
 /**
  * @param modelToAddDocumentVersionTo:String Is the model where the relation of document-version should be set to.
  */
@@ -13,6 +13,10 @@ export default Mixin.create(FileSaverMixin, {
 	uploadedFiles: null,
 	nonDigitalDocuments: null,
 	store: inject(),
+
+	isAgendaItem: computed('modelToAddDocumentVersionTo', function() {
+		return (this.get('modelToAddDocumentVersionTo') === 'agendaitem');
+	}),
 
 	async createNewDocumentWithDocumentVersion(model, file, documentTitle) {
 		const { modelToAddDocumentVersionTo } = this;
