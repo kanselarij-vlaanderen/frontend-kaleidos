@@ -226,6 +226,7 @@
 	"overview": "Overzicht",
 	"phases": "Fases",
 	"postpone": "Uitstellen",
+	"postponed-item":"Dit punt is uitgesteld.",
 	"postpone-item": "Agendapunt uitstellen",
 	"postpone-until": "Uitstellen tot",
 	"postponed-until": "Uitgesteld, aanvraag voor de zitting op ",
@@ -356,5 +357,6 @@
 	"meeting-record":"notule",
 	"remark":"opmerking",
 	"decision":"beslissing",
-	"successfully-deleted":"succesvol verwijderd."
+	"successfully-deleted":"succesvol verwijderd.",
+	"postponed":"uitstel"
 }

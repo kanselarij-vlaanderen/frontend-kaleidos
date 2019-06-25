@@ -53,92 +53,97 @@
             </div>
           </div>
         </div>
-        {{agenda/future-agendas
-          futureMeetings=futureMeetings
-          selectAgenda=(action "selectAgenda")
-        }}
-        {{agenda/active-agendas
-          nearestMeeting=nearestMeeting
-          selectAgenda=(action "selectAgenda")
-        }}
-        <h2 class="vl-title vl-title--h3">
-          {{t "history"}}
-        </h2>
-        {{#data-table
-          content=model
-          class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-          page=page
-          size=size
-          sort=sort
-          enableSizes=true
-          isLoading=isLoadingModel as |t|
-        }}
-          {{#t.content as |c|}}
-            {{#c.header}}
-              {{th-sortable
-                class="vl-data-table-col-4 vl-data-table__header-title"
-                currentSorting=sort
-                field="planned-start"
-                label="Agenda"
+        <div class="vl-u-spacer--large">
+          {{agenda/future-agendas
+            futureMeetings=futureMeetings
+            selectAgenda=(action "selectAgenda")
+          }}
+          {{agenda/active-agendas
+            nearestMeeting=nearestMeeting
+            selectAgenda=(action "selectAgenda")
+          }}
+          <div class="vl-u-spacer--large">
+            <h2 class="vl-title vl-title--h3">
+              {{t "history"}}
+            </h2>
+            <div class="vl-u-spacer-extended-bottom-l">
+              {{#data-table
+                content=model
+                class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+                page=page
+                size=size
+                sort=sort
+                isLoading=isLoadingModel as |t|
               }}
-              {{th-sortable
-                class="vl-data-table-col-2 vl-data-table__header-title"
-                currentSorting=sort
-                field="is-final"
-                label="Status"
-              }}
-              {{th-sortable
-                class="vl-data-table-col-3 vl-data-table__header-title"
-                field="agendas"
-                label="Agenda Versie"
-              }}
-              {{th-sortable
-                class="vl-data-table-col-3 vl-data-table__header-title"
-                currentSorting=sort
-                field="modified"
-                label="Laatst gewijzigd"
-              }}
-              <th class="vl-data-table-col-1"></th>
-            {{/c.header}}
-            {{#c.body as |meeting|}}
-              <td {{action "selectAgenda" meeting}}>
-                Agenda voor
-                {{! Translate not possible in the data table }}
-                {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
-              </td>
-              <td>
-                {{#if meeting.isFinal}}
-                  Afgesloten
-                {{else}}
-                  Geopend
-                {{/if}}
-              </td>
-              <td {{action "selectAgenda" meeting}}>
-                {{await meeting.latestAgendaName}}
-              </td>
-              <td {{action "selectAgenda" meeting}}>
-                {{moment-format
-                  (await meeting.latestAgenda.modified)
-                  "DD-MM-YYYY HH:mm"
-                }}
-              </td>
-              <td class="vl-u-align-center">
-                {{!-- <button
+                {{#t.content as |c|}}
+                  {{#c.header}}
+                    {{th-sortable
+                      class="vl-data-table-col-4 vl-data-table__header-title"
+                      currentSorting=sort
+                      field="planned-start"
+                      label="Agenda"
+                    }}
+                    {{th-sortable
+                      class="vl-data-table-col-2 vl-data-table__header-title"
+                      currentSorting=sort
+                      field="is-final"
+                      label="Status"
+                    }}
+                    {{th-sortable
+                      class="vl-data-table-col-3 vl-data-table__header-title"
+                      field="agendas"
+                      label="Agenda Versie"
+                    }}
+                    {{th-sortable
+                      class="vl-data-table-col-3 vl-data-table__header-title"
+                      currentSorting=sort
+                      field="modified"
+                      label="Laatst gewijzigd"
+                    }}
+                    <th class="vl-data-table-col-1"></th>
+                  {{/c.header}}
+                  {{#c.body as |meeting|}}
+                    <td {{action "selectAgenda" meeting}}>
+                      Agenda voor
+                      {{! Translate not possible in the data table }}
+                      {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
+                    </td>
+                    <td>
+                      {{#if meeting.isFinal}}
+                        Afgesloten
+                      {{else}}
+                        Geopend
+                      {{/if}}
+                    </td>
+                    <td {{action "selectAgenda" meeting}}>
+                      {{await meeting.latestAgendaName}}
+                    </td>
+                    <td {{action "selectAgenda" meeting}}>
+                      {{moment-format
+                        (await meeting.latestAgenda.modified)
+                        "DD-MM-YYYY HH:mm"
+                      }}
+                    </td>
+                    <td class="vl-u-align-center">
+                      {{!-- <button
                   class="vl-button vl-button--link vl-button--icon"
                   {{action "deleteSession" meeting}}
                 >
                   <i class="vl-button__icon vl-vi vl-vi-trash"></i>
                 </button> --}}
-                <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  {{action "selectAgenda" meeting}}
-                >
-                  <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-                </button>
-              </td>
-            {{/c.body}}
-          {{/t.content}}
-        {{/data-table}}
+                      <button
+                        class="vl-button vl-button--link vl-button--icon"
+                        {{action "selectAgenda" meeting}}
+                      >
+                        <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+                      </button>
+                    </td>
+                  {{/c.body}}
+                {{/t.content}}
+              {{/data-table}}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -12,6 +12,8 @@
           {{web-components/vl-form-label value=(t "user")}}
           {{utils/user-account-selector
             selectedItems=selectedUser
+            searchField='first-name'
+            sortField='last-name'
             selectModel=(action "selectUser")
           }}
         </div>
