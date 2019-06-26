@@ -4,6 +4,9 @@
   z-index: 100;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
 
+  animation: fpFadeInLeft 0.3s linear;
+  opacity: 1;
+
   &--center {
     left: 20%;
     top: 60px;
@@ -25,6 +28,7 @@
   &:hover {
     opacity: 1;
   }
+ 
 }
 
 .toasts-container {
@@ -32,10 +36,10 @@
   display: flex;
   flex-direction: column;
   bottom: 1%;
-  right:0;
-  width:30%;
+  right: 0;
+  width: 30%;
 
-.vl-alert-relative {
+  .vl-alert-relative {
     opacity: 1;
     position: relative;
 
@@ -49,6 +53,4 @@
       }
     }
   }
-
-  
 }

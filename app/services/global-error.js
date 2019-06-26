@@ -9,6 +9,10 @@ export default Service.extend({
 	type: 'error',
 
 	showToast: task(function* (messageToAdd) {
+		const messageTypeAlreadyFound = this.messages.find((item) => item.get('type') === messageToAdd.get('type'));
+		if (messageTypeAlreadyFound) {
+			return;
+		}
 		if(this.messages.get('length') >= 3) {
 			const firstObject = this.messages.get('firstObject');
 			this.messages.removeObject(firstObject);
