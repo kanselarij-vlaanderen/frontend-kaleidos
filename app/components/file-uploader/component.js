@@ -38,7 +38,6 @@ export default Component.extend({
       this.set('isLoading', true);
       file.readAsDataURL().then(() => {
       });
-      // yield is being used to pause the execution of the promise behind it
       let response = yield file.upload('/files');
       let fileTest = yield this.store.findRecord('file', response.body.data.id);
       this.uploadedFile(fileTest);

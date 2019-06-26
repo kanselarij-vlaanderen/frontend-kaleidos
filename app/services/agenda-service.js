@@ -4,6 +4,7 @@ import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
+import EmberObject from '@ember/object';
 
 export default Service.extend({
 	store: inject(),
@@ -115,7 +116,10 @@ export default Service.extend({
 				data: {}
 			}
 		).then((result) => {
-			return result;
+			return result.map((item) => {
+				item.groups = item.groups.map((group) => EmberObject.create(group))
+				return EmberObject.create(item);
+			} );
 		});
 	},
 
@@ -150,6 +154,7 @@ export default Service.extend({
 		let firstAgendaItem;
 		groups.map((agenda) => {
 			agenda.groups.map((group) => {
+				
 				const newAgendaitems = group.agendaitems.map((item) => {
 					const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
 
@@ -169,7 +174,7 @@ export default Service.extend({
 				group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
 
 				if (group.agendaitems.get('length') < 1) {
-					group.agendaitems = null;
+					group.agendaitems = 0;
 					group = null;
 				}
 

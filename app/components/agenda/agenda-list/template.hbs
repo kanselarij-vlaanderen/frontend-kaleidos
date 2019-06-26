@@ -71,15 +71,27 @@
                 {{mandatee.title}}<br />
               {{/each}}
             </div>
-            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-              <div class="vlc-agenda-items-new__sub-item">
-                {{agenda/agenda-list/list-item
-                  agendaitem=agendaitem
-                  isEditingOverview=isEditingOverview
-                  selectAgendaItem=(action "selectAgendaItem")
+            {{#sortable-group
+              tagName="div"
+              onChange=(action "reorderItems" agendaitemGroup) as |sortableGroup|
+            }}
+              {{#each agendaitemGroup.agendaitems as |agendaitem idx|}}
+                {{#sortable-item
+                  tagName="div"
+                  model=agendaitem
+                  group=sortableGroup
+                  handle=".vlc-agenda-items-new__sub-item"
                 }}
-              </div>
-            {{/each}}
+                  <div class="vlc-agenda-items-new__sub-item">
+                    {{agenda/agenda-list/list-item
+                      agendaitem=agendaitem
+                      isEditingOverview=isEditingOverview
+                      selectAgendaItem=(action "selectAgendaItem")
+                    }}
+                  </div>
+                {{/sortable-item}}
+              {{/each}}
+            {{/sortable-group}}
           {{/if}}
         {{/each}}
       </div>

@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items-route-mixin';
 import { hash } from 'rsvp';
+import EmberObject from '@ember/object';
 
 export default Route.extend(SortedAgendaItemsRouteMixin, {
 	queryParams: {
@@ -19,7 +20,6 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 		} else {
 			this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
 		}
-
 		return hash({
 			currentAgenda: agenda,
 			groups,
