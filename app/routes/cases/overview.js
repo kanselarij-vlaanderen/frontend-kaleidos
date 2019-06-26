@@ -24,9 +24,7 @@ export default Route.extend(DataTableRouteMixin, {
 
     }
     return {
-      // include: 'subcases',
       filter: filter
-      // filter: { 'is-archived': params.filter }
     };
   },
 

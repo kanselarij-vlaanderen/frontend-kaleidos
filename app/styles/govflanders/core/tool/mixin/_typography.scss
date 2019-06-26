@@ -4,11 +4,10 @@
 @mixin font-face($family, $location, $name, $weight: normal, $style: normal) {
   @font-face {
     font-family: $family;
-    src:
-    url($location + $name + ".woff2") format("woff2"),
-    url($location + $name + ".woff") format("woff");
+    src: url($location+$name+".woff2") format("woff2"), url($location+$name+".woff") format("woff");
     font-weight: $weight;
     font-style: $style;
+    font-display: swap;
   }
 }
 

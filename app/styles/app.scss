@@ -662,11 +662,11 @@ ul {
 }
 
 .data-table-pagination {
-  margin-bottom:6em; //fix for firefox (agenda view height)
+  margin-bottom: 6em; //fix for firefox (agenda view height)
 }
 
 .sortable-item {
-  transition: all .125s;
+  transition: all 0.125s;
 }
 
 .sortable-item.is-dragging {

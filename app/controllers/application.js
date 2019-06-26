@@ -12,6 +12,16 @@ export default Controller.extend(isAuthenticatedMixin, {
 	globalError: inject(),
 	messages: alias('globalError.messages'),
 
+	init() {
+		this._super(...arguments);
+		document.addEventListener('wheel', (evt) => {
+			// ... do stuff with evt
+		}, {
+				capture: true,
+				passive: true
+			})
+	},
+
 	shouldNavigateObserver: on('init', observer('router.currentRouteName', 'currentSession.userRole', async function () {
 		const router = this.get('router');
 		const role = await this.get('currentSession.userRole');
