@@ -23,10 +23,7 @@ export default Route.extend(ApplicationRouteMixin, {
     this._loadCurrentSession();
   },
 
-  sessionInvalidated() {
-    // const logoutUrl = ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'];
-    // window.location.replace(logoutUrl);
-  },
+  sessionInvalidated() { },
 
   _loadCurrentSession() {
     return this.currentSession.load().catch(() => this.session.invalidate());

@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items-route-mixin';
 import { hash } from 'rsvp';
-import EmberObject from '@ember/object';
 
 export default Route.extend(SortedAgendaItemsRouteMixin, {
 	queryParams: {
@@ -10,7 +9,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 	},
 
 	async model() {
-		const agenda = await this.get('sessionService.currentAgenda');
+		const agenda = await this.store.findRecord('agenda', await this.get('sessionService.currentAgenda.id'));
 		this.set('sessionService.selectedAgendaItem', null);
 		const session = this.modelFor('agenda');
 

@@ -161,12 +161,12 @@ export default Component.extend(DefaultQueryParamsMixin, {
           return agendaService.sortAgendaItems(selectedAgenda);
         }
       }).then(() => {
+        selectedAgenda.hasMany('agendaitems').reload();
+
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
         this.set('sessionService.selectedAgendaItem', null);
-        // this.reloadRoute(selectedAgenda.get('id'));
-        // Dirty fix for full-reload after adding an agendaitem
-        window.location.reload();
+        this.reloadRoute(selectedAgenda.get('id'));
       });
     }
   }

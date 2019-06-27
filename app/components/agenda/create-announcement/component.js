@@ -17,20 +17,22 @@ export default Component.extend(UploadDocumentMixin, {
     async createAnnouncement() {
       const { title, text, currentAgenda } = this;
       const date = moment().utc().toDate();
+      const agenda = await this.store.findRecord('agenda', currentAgenda.get('id'))
+
       const agendaitem = this.store.createRecord('agendaitem',
         {
           shortTitle: title,
           title: text,
-          agenda: currentAgenda,
+          agenda: agenda,
           showAsRemark: true,
           created: date
         });
       await agendaitem.save();
 
       await this.uploadFiles(agendaitem);
-
+      await agenda.hasMany('agendaitems').reload();
+      this.reloadRoute(agenda.get('id'))
       this.toggleProperty('isAddingAnnouncement');
-      this.reloadRoute(currentAgenda.get('id'));
     },
 
     chooseDocumentType(uploadedFile, type) {

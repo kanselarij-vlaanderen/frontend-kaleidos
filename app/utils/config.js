@@ -18,6 +18,7 @@ export default EmberObject.create({
 	onAgendaLabel: "geagendeerd",
 	decidedLabel: "beslist",
 	notaID: "9e5b1230-f3ad-438f-9c68-9d7b1b2d875d",
+	remarkType:"http://kanselarij.vo.data.gift/id/dossier-types/305E9678-8106-4C14-9BD6-60AE2032D794",
 	formallyOkOptions: [
 		{
 			label: "Formeel OK",

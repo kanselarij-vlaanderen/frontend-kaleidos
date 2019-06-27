@@ -73,7 +73,9 @@
             </div>
             {{#sortable-group
               tagName="div"
-              onChange=(action "reorderItems" agendaitemGroup) as |sortableGroup|
+              onChange=(action
+                "reorderItems" agendaitemGroup
+              ) as |sortableGroup|
             }}
               {{#each agendaitemGroup.agendaitems as |agendaitem idx|}}
                 {{#sortable-item
@@ -118,6 +120,7 @@
         {{agenda/agenda-list/list-item
           agendaitem=announcement
           index=index
+          isEditingOverview=isEditingOverview
           selectAgendaItem=(action "selectAgendaItem")
         }}
       </div>

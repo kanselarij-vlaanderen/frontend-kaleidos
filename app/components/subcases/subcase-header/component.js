@@ -35,6 +35,7 @@ export default Component.extend(ModifiedMixin, {
 			if (designAgenda.get('name') === "Ontwerpagenda") {
 				await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
 				await this.updateModifiedProperty(designAgenda);
+				await designAgenda.hasMany('agendaitems').reload();
 			}
 			subcase.save().then(subcase => {
 				this.assignSubcasePhase(subcase);
@@ -56,11 +57,6 @@ export default Component.extend(ModifiedMixin, {
 					return phase;
 				}
 			}))
-			// const meeting = await subcase.get('requestedForMeeting');
-			// const latestAgenda = await meeting.get('latestAgenda');
-			// const agendaitems = await latestAgenda.get('agendaitems');
-
-			// const agendaitems = await subcase.get('agendaitems');
 			subcase.set('requestedForMeeting', null);
 
 			subcase.save();

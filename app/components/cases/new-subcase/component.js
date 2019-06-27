@@ -21,11 +21,9 @@ export default Component.extend(ApprovalsEditMixin, {
 		return this.get('case.confidential');
 	}),
 
-	didInsertElement() {
-		this._super(...arguments);
-		this.set('showAsRemark', false);
-		this.set('item', null);
-	},
+	showAsRemark: computed('case', function() {
+		return this.get('case.isRemark');
+	}),
 
 	async copySubcaseProperties(subcase, latestSubcase) {
 		const mandatees = await latestSubcase.get('mandatees');

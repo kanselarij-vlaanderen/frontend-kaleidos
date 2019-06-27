@@ -19,6 +19,16 @@ export default Controller.extend(isAuthenticatedMixin, {
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentAgendaItems: alias('sessionService.currentAgendaItems'),
 
+	create_UUID() {
+		var dt = new Date().getTime();
+		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			var r = (dt + Math.random() * 16) % 16 | 0;
+			dt = Math.floor(dt / 16);
+			return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+		});
+		return uuid;
+	},
+
 	actions: {
 		selectAgenda(agenda) {
 			const { currentSession } = this;
@@ -54,7 +64,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 		reloadRouteWithNewAgenda(selectedAgendaId) {
 			const { currentSession } = this;
-			this.transitionToRoute('agenda.agendaitems', currentSession.id, { queryParams: { selectedAgenda: selectedAgendaId } })
+			this.transitionToRoute('agenda.agendaitems', currentSession.id, { queryParams: { selectedAgenda: selectedAgendaId, refresh: this.create_UUID() } })
 		},
 
 		compareAgendas() {
