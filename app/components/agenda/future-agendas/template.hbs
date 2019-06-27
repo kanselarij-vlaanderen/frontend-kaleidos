@@ -1,6 +1,6 @@
 {{#if (await meetings)}}
   <h2 class="vl-title vl-title--h3">
-    {{t "future-agendas"}}
+    {{title}}
   </h2>
   <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
     <thead>
@@ -69,13 +69,21 @@
             {{/if}}
           </td>
           <td>
-            {{await meeting.latestAgendaName}}
+            {{#if (is-pending meeting.latestAgendaName)}}
+              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+            {{else}}
+              {{await meeting.latestAgendaName}}
+            {{/if}}
           </td>
           <td>
-            {{moment-format
-              (await meeting.latestAgenda.modified)
-              "DD-MM-YYYY HH:mm"
-            }}
+            {{#if (is-pending meeting.latestAgenda)}}
+              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+            {{else}}
+              {{moment-format
+                (await meeting.latestAgenda.modified)
+                "DD-MM-YYYY HH:mm"
+              }}
+            {{/if}}
           </td>
           <td class="vl-u-align-center">
             <button

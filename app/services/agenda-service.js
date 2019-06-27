@@ -29,6 +29,17 @@ export default Service.extend({
 		});
 	},
 
+	getClosestMeetingAndAgendaIdInTheFuture(date) {
+		return $.ajax(
+			{
+				method: "GET",
+				url: `/session-service/closestFutureMeeting?date=${date}`
+			}
+		).then((result) => {
+			return result.body.closestMeeting;
+		});
+	},
+
 	getSortedAgendaItems(agenda) {
 		return $.ajax(
 			{
@@ -177,7 +188,6 @@ export default Service.extend({
 					group.agendaitems = 0;
 					group = null;
 				}
-
 			})
 		});
 		return { lastPrio, firstAgendaItem };

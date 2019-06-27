@@ -57,10 +57,14 @@
           {{#if (eq page 0)}}
             {{agenda/future-agendas
               meetings=futureMeetings
+              type="future"
+              title=(t "future-agendas")
               selectAgenda=(action "selectAgenda")
             }}
             {{agenda/future-agendas
               meetings=nearestMeeting
+              type="active"
+              title=(t "active-agenda")
               selectAgenda=(action "selectAgenda")
             }}
           {{/if}}
@@ -70,7 +74,7 @@
             </h2>
             <div class="vl-u-spacer-extended-bottom-l">
               {{#data-table
-                content=model
+                content=(await model)
                 class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
                 page=page
                 size=size
@@ -118,21 +122,31 @@
                         {{/if}}
                       </td>
                       <td {{action "selectAgenda" meeting}}>
-                        {{await meeting.latestAgendaName}}
+                        {{#if (is-pending meeting.latestAgendaName)}}
+                          <div
+                            class="skeletal-loader"
+                            role="alert"
+                            aria-busy="true"
+                          ></div>
+                        {{else}}
+                          {{await meeting.latestAgendaName}}
+                        {{/if}}
                       </td>
                       <td {{action "selectAgenda" meeting}}>
-                        {{moment-format
-                          (await meeting.latestAgenda.modified)
-                          "DD-MM-YYYY HH:mm"
-                        }}
+                        {{#if (is-pending meeting.latestAgenda)}}
+                          <div
+                            class="skeletal-loader"
+                            role="alert"
+                            aria-busy="true"
+                          ></div>
+                        {{else}}
+                          {{moment-format
+                            (await meeting.latestAgenda.modified)
+                            "DD-MM-YYYY HH:mm"
+                          }}
+                        {{/if}}
                       </td>
                       <td class="vl-u-align-center">
-                        {{!-- <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  {{action "deleteSession" meeting}}
-                >
-                  <i class="vl-button__icon vl-vi vl-vi-trash"></i>
-                </button> --}}
                         <button
                           class="vl-button vl-button--link vl-button--icon"
                           {{action "selectAgenda" meeting}}

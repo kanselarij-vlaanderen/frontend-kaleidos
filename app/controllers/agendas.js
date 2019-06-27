@@ -8,11 +8,13 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
 	sessionService: inject(),
 	intl: inject(),
+	agendaService: inject(),
+
 	creatingNewSession: false,
 	sort: '-planned-start',
 	size: 10,
 
-	closedTranslation: computed('intl', function() {
+	closedTranslation: computed('intl', function () {
 		return this.intl.t('closed');
 	}),
 
@@ -20,28 +22,38 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 		return this.intl.t('opened');
 	}),
 
-	agendaForTranslation: computed('intl', function() {
+	agendaForTranslation: computed('intl', function () {
 		return this.intl.t('agenda-for');
 	}),
 
-	nearestMeeting: computed('model', function () {
+	nearestMeeting: computed('model', async function () {
+		const nearestMeeting = await this.agendaService.getClosestMeetingAndAgendaIdInTheFuture(moment().utc().toDate());
 		const meetings = this.get('model');
-		const sortedMeetings = meetings.sortBy('plannedStart');
 
-		let closest = sortedMeetings.get('lastObject');
-		const now = moment().utc().format();
-		sortedMeetings.map(function (meeting) {
-			let date = moment(meeting.plannedStart).utc().format();
-			let closestDate = moment(closest.plannedStart).utc().format();
-			if (date >= now && date < closestDate) {
-				closest = meeting;
-			}
-		});
-		sortedMeetings.removeObject(closest);
-		if (this.page === 0) {
-			closest.set('alreadyShown', true);
+		const nearestMeetingInModel = meetings.find(((item) => item.get('id') === nearestMeeting.meeting_id));
+		if (nearestMeetingInModel) {
+			nearestMeetingInModel.set('isNearest', true);
+			return [nearestMeetingInModel];
+		} else {
+			return [this.store.findRecord('meeting', nearestMeeting.meeting_id)];
 		}
-		return [closest];
+		// const sortedMeetings = meetings.sortBy('plannedStart');
+
+		// let closest = sortedMeetings.get('lastObject');
+		// const now = moment().utc().format();
+		// sortedMeetings.map(function (meeting) {
+		// 	let date = moment(meeting.plannedStart).utc().format();
+		// 	let closestDate = moment(closest.plannedStart).utc().format();
+		// 	if (date >= now && date < closestDate) {
+		// 		closest = meeting;
+		// 	}
+		// });
+		// sortedMeetings.removeObject(closest);
+		// if (this.page === 0) {
+		// 	closest.set('alreadyShown', true);
+		// 	closest.set('isNearest', true);
+		// }
+		// return [closest];
 	}),
 
 	futureMeetings: computed('model', 'nearestMeeting', function () {
@@ -58,7 +70,9 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 						found.set('alreadyShown', true);
 					}
 				}
-				return meeting;
+				if (!meeting.get('isNearest')) {
+					return meeting;
+				}
 			}
 		}).sortBy('plannedStart');
 	}),
@@ -78,11 +92,6 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 		successfullyAdded() {
 			this.set('creatingNewSession', false);
 			this.send('refresh');
-		},
-		// deleteSession(meeting) {
-		// 	meeting.destroyRecord().then(() => {
-		// 		this.send('refresh');
-		// 	});
-		// }
+		}
 	}
 });
