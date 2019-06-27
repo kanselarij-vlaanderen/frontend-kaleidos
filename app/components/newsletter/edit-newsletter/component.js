@@ -33,12 +33,12 @@ export default Component.extend({
 
 		async selectDate(date) {
 			const newsletter = await this.get('newsletter');
-			await newsletter.set('publicationDate', date);
+			await newsletter.set('publicationDate', moment(date).utc().toDate());
 		},
 
 		async selectDocDate(date) {
 			const newsletter = await this.get('newsletter');
-			await newsletter.set('publicationDocDate', date);
+			await newsletter.set('publicationDocDate', moment(date).utc().toDate());
 		}
 	}
 });

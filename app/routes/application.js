@@ -12,6 +12,7 @@ export default Route.extend(ApplicationRouteMixin, {
 
   beforeModel() {
     this.get('moment').setLocale('nl');
+    this.set('moment.defaultFormat', 'DD.MM.YYYY');
     this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
     return this._loadCurrentSession();

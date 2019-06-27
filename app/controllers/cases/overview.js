@@ -2,13 +2,30 @@ import Controller from '@ember/controller';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-
+import { inject } from '@ember/service';
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
+  intl: inject(),
   sort: '-created',
   oc: false,
   isEditingRow: false,
   isNotArchived: false,
   isArchivingCase: false,
+
+  emptyCaseType: computed('intl', function() {
+    return this.intl.t('no-case-type');
+  }),
+
+  editCase: computed('intl', function () {
+    return this.intl.t('edit-case');
+  }),
+
+  archiveCase: computed('intl', function () {
+    return this.intl.t('archive-case');
+  }),
+
+  unArchiveCase: computed('intl', function () {
+    return this.intl.t('unarchive-case');
+  }),
 
   filter: computed('isNotArchived', function () {
     return this.isNotArchived;

@@ -11,11 +11,8 @@ module.exports = function (defaults) {
       locales: ['nl']
     },
     moment: {
-      allowEmpty: true
-    },
-    // autoImport: {
-    //   exclude: ['moment-timezone', 'moment', 'ember-moment', 'ember-cli-moment-shim']
-    // }
+      allowEmpty: true,
+    }
   });
 
   return app.toTree();

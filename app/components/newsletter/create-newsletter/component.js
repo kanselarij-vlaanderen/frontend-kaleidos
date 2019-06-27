@@ -29,7 +29,7 @@ export default Component.extend({
 		},
 
 		selectDate(date) {
-			this.set('date', date);
+			this.set('date', moment(date).utc().toDate());
 		},
 
 		selectDocDate(date) {

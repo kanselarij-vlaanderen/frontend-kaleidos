@@ -66,7 +66,7 @@ export default Component.extend({
 		},
 
 		async selectStartDate(val) {
-			this.set('startDate', val);
+			this.set('startDate', moment(val).utc().toDate());
 		},
 
 		cancelForm(event) {

@@ -17,7 +17,7 @@ export default Component.extend({
 	selectedDate: computed('date', function () {
 		const date = this.get('date');
 		if (date) {
-			return date;
+			return moment(date.get('firstObject')).utc().toDate();
 		} else {
 			return moment().utc().toDate();
 		}
@@ -29,7 +29,7 @@ export default Component.extend({
 		},
 
 		dateChanged(val) {
-			this.dateChanged(val.get('firstObject'));
+			this.dateChanged(moment(val.get('firstObject')).utc().toDate());
 		}
 	}
 });

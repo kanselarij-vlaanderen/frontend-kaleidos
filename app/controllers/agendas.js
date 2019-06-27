@@ -37,23 +37,6 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 		} else {
 			return [this.store.findRecord('meeting', nearestMeeting.meeting_id)];
 		}
-		// const sortedMeetings = meetings.sortBy('plannedStart');
-
-		// let closest = sortedMeetings.get('lastObject');
-		// const now = moment().utc().format();
-		// sortedMeetings.map(function (meeting) {
-		// 	let date = moment(meeting.plannedStart).utc().format();
-		// 	let closestDate = moment(closest.plannedStart).utc().format();
-		// 	if (date >= now && date < closestDate) {
-		// 		closest = meeting;
-		// 	}
-		// });
-		// sortedMeetings.removeObject(closest);
-		// if (this.page === 0) {
-		// 	closest.set('alreadyShown', true);
-		// 	closest.set('isNearest', true);
-		// }
-		// return [closest];
 	}),
 
 	futureMeetings: computed('model', 'nearestMeeting', function () {

@@ -15,11 +15,6 @@ export default Controller.extend({
 	actions: {
 		toggleProperty(prop) {
 			this.toggleProperty(prop);
-		},
-		async execute(hrId, contexts, hintsRegistry, editor) {
-			// update hints in the hints registry
-			console.log(hrId, contexts, hintsRegistry, editor)
 		}
-	
 	}
 });

@@ -51,7 +51,15 @@
             {{/if}}
           </td>
           <td>
-            {{await row.type.label}}
+            {{#if (is-pending row.type)}}
+              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+            {{else if (not (await row.type))}}
+            <p class="vl-u-text--muted vl-u-text--italic">
+                  {{emptyCaseType}}
+                </p>
+              {{else}}
+              {{await row.type.label}}
+            {{/if}}
           </td>
           <td>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
@@ -76,7 +84,7 @@
                         {{action attacher.hide}}
                         {{action "editRow" row}}
                       >
-                        Dossier aanpassen
+                        {{editCase}}
                       </button>
                     </li>
                     <li class="vl-popover__link-list__item">
@@ -86,7 +94,7 @@
                           {{action attacher.hide}}
                           {{action "requestArchiveCase" row}}
                         >
-                          Dossier archiveren
+                          {{archiveCase}}
                         </a>
                       {{else}}
                         <a
@@ -94,7 +102,7 @@
                           {{action attacher.hide}}
                           {{action "unarchiveCase" row}}
                         >
-                          Dossier onarchiveren
+                          {{unArchiveCase}}
                         </a>
                       {{/if}}
                     </li>
