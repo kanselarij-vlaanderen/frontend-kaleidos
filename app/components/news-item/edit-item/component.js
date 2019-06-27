@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import { computed } from '@ember/object';
-import { task } from 'ember-concurrency';
 
 export default Component.extend(DocumentsSelectorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
@@ -25,6 +24,14 @@ export default Component.extend(DocumentsSelectorMixin, {
 		}
 		return this.editor.rootNode.innerHTML.htmlSafe();
 	}),
+
+	didInsertElement() {
+		// Make sure that the view scrolls to the center of this component
+		this._super(...arguments);
+		const config = { behavior: "smooth", block: "end", inline: "nearest" };
+		const elements = document.getElementsByClassName("vl-form__group vl-u-bg-porcelain");
+		elements[0].scrollIntoView(config);
+	},
 
 	actions: {
 		async handleRdfaEditorInit(editorInterface) {

@@ -44,6 +44,10 @@ export default Controller.extend(isAuthenticatedMixin, {
 			this.transitionToRoute('print-overviews.press-agenda.agendaitems', currentSessionId, currentAgendaId)
 		},
 
+		navigateToNewsletter(currentSessionId, currentAgendaId) {
+			this.transitionToRoute('print-overviews.newsletter.agendaitems', currentSessionId, currentAgendaId)
+		},
+
 		navigateToSubCases() {
 			this.transitionToRoute('subcases');
 		},

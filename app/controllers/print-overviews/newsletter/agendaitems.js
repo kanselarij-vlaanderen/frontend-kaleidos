@@ -10,7 +10,7 @@ export default Controller.extend({
 			sortable: true,
 			valuePath: 'priority',
 		}, {
-			label: 'Titel en inhoud',
+			label: 'Kort bestek',
 			classNames: ['vl-data-table-col-7 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-7"],
 			sortable: false,

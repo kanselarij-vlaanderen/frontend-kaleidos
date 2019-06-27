@@ -53,6 +53,11 @@ export default Component.extend(isAuthenticatedMixin, {
 			this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
 		},
 
+		navigateToNewsletter() {
+			const { currentSession, currentAgenda } = this;
+			this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
+		},
+
 		navigateToDecisions() {
 			const { currentSession, currentAgenda } = this;
 			this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));

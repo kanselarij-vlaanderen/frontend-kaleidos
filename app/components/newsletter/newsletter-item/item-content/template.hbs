@@ -3,7 +3,11 @@
     <h4 class="vl-title vl-title--h5 vl-u-text--capitalize">
       {{await numberToShow}}
       .
-      {{await agendaitem.subcase.newsletterInfo.title}}
+      {{#if (not (await agendaitem.subcase.newsletterInfo))}}
+        {{agendaitem.title}}
+      {{else}}
+        {{await agendaitem.subcase.newsletterInfo.title}}
+      {{/if}}
     </h4>
     {{#if allowEditing}}
       {{#if (or isAdmin isEditor)}}
@@ -24,7 +28,13 @@
     {{await agendaitem.subcase.newsletterInfo.subtitle}}
   </h4>
   <div class="vl-u-text">
-    {{{await agendaitem.subcase.newsletterInfo.richtext}}}
+    {{#if (not (await agendaitem.subcase.newsletterInfo.richtext))}}
+      <p class="vl-u-text vl-u-text--italic vl-u-text--muted">
+        {{t "no-newsletter-info"}}
+      </p>
+    {{else}}
+      {{{await agendaitem.subcase.newsletterInfo.richtext}}}
+    {{/if}}
   </div>
 </div>
 {{#if (gt (await agendaitem.themes.length) 0)}}
