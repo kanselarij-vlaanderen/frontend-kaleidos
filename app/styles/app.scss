@@ -176,6 +176,10 @@ $icon-font-location: "/fonts/";
 //custom css added
 @import "custom-application/toast";
 @import "custom-application/compare";
+@import "custom-application/power-select";
+@import "custom-application/editor";
+@import "custom-application/ember-attacher";
+@import "custom-application/file-uploader";
 
 a.vlc-agenda-items-new__sub-item {
   display: block;
@@ -204,127 +208,10 @@ a.vlc-agenda-items-new__sub-item--active:focus {
   height: 100% !important;
 }
 
-.progress-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-
-  progress {
-    width: 100%;
-  }
-}
-
 .align-right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
-
-.vl-upload__element__label {
-  text-decoration: none;
-  margin: 0;
-  padding: 8rem;
-  em {
-    display: block;
-  }
-
-  a {
-    text-decoration: none;
-    font-size: 1.2rem;
-    color: #333332;
-    text-decoration: none;
-    text-align: center;
-  }
-}
-
-.ember-attacher-popper {
-  background-color: $page-bg;
-  box-shadow: 0 3px 17px rgba(#000, 0.15); // sass-lint:disable-line no-color-literals
-  width: 23rem;
-  min-width: 23rem;
-  max-width: 90vw;
-  max-height: 300px;
-  z-index: z("dropdown");
-
-  @include respond-to(small) {
-    max-height: 65vh;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: none;
-    z-index: z("popover");
-    transform: translateY(120%);
-  }
-
-  &::before {
-    display: block;
-    content: "";
-    position: absolute;
-    right: 12px;
-    top: -10px;
-    border: 12px solid transparent;
-    border-bottom-color: $page-bg;
-    border-top-width: 0;
-  }
-
-  &[x-placement="top-end"] {
-    &::before {
-      @include arrow-bottom;
-    }
-
-    &::after {
-      bottom: -0.7rem;
-    }
-  }
-}
-
-.ember-attacher {
-  top: 4px !important;
-}
-
-.non-digital-document {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
-  float: left;
-}
-
-.ember-power-select-trigger,
-.ember-basic-dropdown-trigger {
-  @include select-default;
-  display: block;
-  width: 100%;
-  min-height: 3.5rem;
-
-  .ember-power-select-status-icon {
-    display: none;
-  }
-  &::-ms-expand {
-    // sass-lint:disable-line no-vendor-prefixes
-    display: none;
-  }
-
-  &[disabled] {
-    color: $disabled-color;
-    border-color: $disabled-color;
-    background-color: $disabled-bg-color;
-  }
-
-  &:focus,
-  &--focus {
-    outline: none;
-    border-color: $outline-color;
-    box-shadow: inset 0 0 0 0.1rem $outline-color;
-  }
-
-  &[multiple] {
-    height: auto;
-  }
 }
 
 tr.disabled {
@@ -332,118 +219,6 @@ tr.disabled {
   pointer-events: none;
   opacity: 0.65;
   background-color: $porcelain;
-}
-
-.ember-basic-dropdown-content--left.ember-basic-dropdown-content--below.ember-basic-dropdown--transitioned-in {
-  display: block;
-  top: 100%;
-  width: 100%;
-  transform: translateY(-1px);
-  border: 1px $ghost solid;
-  border-radius: 0;
-  background-color: $white;
-}
-
-.ember-power-select-option {
-  border-top: 1px solid $ghost;
-  display: block;
-  position: relative;
-  width: 100%;
-  padding: 0.7rem 0 0.5rem 3.2rem;
-  color: $black;
-  font-size: 1.6rem;
-  font-weight: normal;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-
-  &:hover {
-    position: relative;
-    background-color: $athens-gray;
-    color: $action-text-color;
-    // text-decoration: underline;
-  }
-}
-
-.ember-basic-dropdown-trigger {
-  height: auto;
-  max-height: 10rem;
-}
-
-.ember-power-select-search-input {
-  width: 100%;
-  display: inline-block;
-  background: $page-bg;
-  font-family: $base-font;
-  font-size: $form-font-size;
-  color: $text-color;
-  max-width: 100%;
-  height: $form-input-height;
-  line-height: $form-input-height;
-  border-radius: 0;
-  border: 0.1rem solid $border-color;
-  -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
-  padding: 0 1rem;
-
-  @include respond-to(small) {
-    font-size: 1.6rem;
-  }
-
-  &:hover {
-    box-shadow: none;
-  }
-
-  &:focus,
-  &--focus {
-    outline: none;
-    border-color: $outline-color;
-    box-shadow: inset 0 0 0 0.1rem $outline-color;
-  }
-
-  &::placeholder {
-    color: $placeholder-color;
-  }
-
-  &::-webkit-search-cancel-button {
-    // sass-lint:disable-line no-vendor-prefixes
-    -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
-  }
-
-  // Input field block modifier
-  &--block {
-    display: block;
-    width: 100%;
-  }
-
-  // Input field small modifier
-  &--small {
-    max-width: 6rem;
-    padding: 0 0.8rem;
-  }
-  line-height: 3.5rem !important;
-}
-
-.ember-power-select-multiple-option {
-  margin: 0.5rem;
-  background: $porcelain;
-  font-weight: 400;
-  color: $text-color;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  border: none;
-  border-radius: 0;
-
-  .ember-power-select-multiple-remove-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0.4em;
-    font-size: 2rem;
-    border: none;
-    color: $gray-light;
-  }
 }
 
 .vl-modal-dialog {
@@ -466,12 +241,6 @@ tr.disabled {
   .vl-modal__backdrop {
     z-index: 52;
   }
-}
-
-.mandatee-selector-container,
-.domains-selector-container,
-.people-selector-container {
-  width: 100%;
 }
 
 .vl-modal-dialog__content {
@@ -527,21 +296,6 @@ body > .ember-view {
   overflow: hidden !important;
 }
 
-.ember-attacher-popper-small {
-  padding: 1em;
-  &::before {
-    display: none;
-  }
-}
-
-.ember-attacher-popper-wide {
-  width: 600px;
-  padding: 1em;
-  &::before {
-    display: none;
-  }
-}
-
 .vlc-padding-bottom--large {
   padding-bottom: 6rem;
 }
@@ -558,29 +312,6 @@ body > .ember-view {
 p {
   word-break: break-word;
   white-space: normal;
-}
-
-.vl-uploaded-document {
-  padding: 2rem;
-
-  .metadata-container {
-    margin-left: 4rem;
-  }
-
-  &__title-container {
-    margin-left: 1rem;
-    margin-bottom: 1rem;
-    .title {
-      display: flex;
-      align-items: center;
-    }
-    .metadata {
-      margin: 0;
-    }
-  }
-  &__title {
-    display: flex;
-  }
 }
 
 .border-left {
@@ -652,10 +383,6 @@ ul {
   }
 }
 
-.print-only {
-  display: none;
-}
-
 .vl-icon-wrapper-loading {
   display: flex;
   align-items: center;
@@ -678,4 +405,12 @@ ul {
 .sortable-item.is-dropping {
   background: #f66;
   z-index: 10;
+}
+
+.col--4-12.u-align-right,
+.editor-commands,
+.col--2-12,
+.print-only,
+.ember-power-select-status-icon {
+  display: none;
 }

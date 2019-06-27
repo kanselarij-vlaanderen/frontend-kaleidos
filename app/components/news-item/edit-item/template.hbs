@@ -9,16 +9,32 @@
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "content")}}
-    {{textarea rows="10" class="vl-textarea vl-textarea--block" value=text}}
+    {{web-components/vl-rdfa-editor
+      isLarge=isExpanded
+      richtext=(await agendaitem.subcase.newsletterInfo.richtext)
+      handleRdfaEditorInit=(action "handleRdfaEditorInit")
+    }}
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "finished")}}
     {{web-components/vl-toggle value=finished}}
   </div>
+  {{!-- <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "themes")}}
+    {{utils/model-selector
+      modelName="theme"
+      searchField="label"
+      propertyToShow="label"
+      multiSelect=true
+      sortField="label"
+      selectedItems=themes
+      selectModel=(action "chooseTheme")
+    }}
+  </div> --}}
   {{#if finished}}
     <div class="vlc-input-field-block">
       {{utils/documents-selector-of-agendaitem
-        item=subcase
+        item=(await agendaitem)
         title=(t "documents-attached-to")
         itemWithDocuments=(await item)
         selectDocument=(action "selectDocument")

@@ -1,9 +1,7 @@
 {{#if (is-pending value.newsletterInfo)}}
-
+  <div class="skeletal-loader" role="alert" aria-busy="true"></div>
 {{else if value.newsletterInfo}}
-  <p class="vl-u-text--capitalize">
-    {{await value.newsletterInfo.text}}
-  </p>
+  {{{await value.newsletterInfo.richtext}}}
 {{else}}
   <p class="vl-u-text--muted">
     {{t "no-newsletter-info"}}

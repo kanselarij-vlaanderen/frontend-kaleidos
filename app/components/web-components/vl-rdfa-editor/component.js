@@ -1,14 +1,12 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
 
 export default Component.extend({
-	richText: computed('editor.rootNode.innerHTML', function() {
-		return this.editor.rootNode.innerHTML;
-	}),
-
+	classNames:["vl-editor"],
+	classNameBindings: ['isLarge:--large'],
+	isLarge:null,
 	actions: {
 		handleRdfaEditorInit(editorInterface) {
-			this.set('editor', editorInterface);
-		}
+			this.handleRdfaEditorInit(editorInterface);
+		} 
 	}
 });

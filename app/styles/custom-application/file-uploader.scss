@@ -1,0 +1,50 @@
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  progress {
+    width: 100%;
+  }
+}
+
+.vl-upload__element__label {
+  text-decoration: none;
+  margin: 0;
+  padding: 8rem;
+  em {
+    display: block;
+  }
+
+  a {
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #333332;
+    text-decoration: none;
+    text-align: center;
+  }
+}
+
+.vl-uploaded-document {
+  padding: 2rem;
+
+  .metadata-container {
+    margin-left: 4rem;
+  }
+
+  &__title-container {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    .title {
+      display: flex;
+      align-items: center;
+    }
+    .metadata {
+      margin: 0;
+    }
+  }
+  &__title {
+    display: flex;
+  }
+}

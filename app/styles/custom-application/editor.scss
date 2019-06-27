@@ -1,0 +1,60 @@
+.vl-editor {
+	height:400px;
+	&--large {
+		height:950px;
+	}
+}
+.container-flex--contain {
+	height: 100%;
+  &.editor-container {
+    border: 0.1rem solid $ghost;
+    border-top: none;
+  }
+
+  .toolbar {
+    border: 0.1rem solid $ghost;
+    background: $page-bg;
+  }
+
+  .col--8-12 {
+    max-width: 100%;
+    margin-top: 0;
+    min-width: 100%;
+
+    .editor {
+      box-shadow: none;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+
+      .editor__paper {
+        margin: 0;
+        padding: 1rem;
+        max-width: 100%;
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+        width: 100%;
+
+        ul {
+          li {
+            margin-left: 1em;
+            list-style-type: circle;
+          }
+        }
+
+        ol {
+          list-style: none;
+          counter-reset: my-awesome-counter;
+        }
+        ol li {
+          counter-increment: my-awesome-counter;
+        }
+        ol li::before {
+          content: counter(my-awesome-counter) ". ";
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

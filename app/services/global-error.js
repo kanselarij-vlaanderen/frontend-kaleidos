@@ -13,7 +13,7 @@ export default Service.extend({
 		if (messageTypeAlreadyFound) {
 			return;
 		}
-		if(this.messages.get('length') >= 3) {
+		if (this.messages.get('length') >= 3) {
 			const firstObject = this.messages.get('firstObject');
 			this.messages.removeObject(firstObject);
 		}
