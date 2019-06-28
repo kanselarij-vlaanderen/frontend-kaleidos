@@ -1,7 +1,7 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
-    <div class="vlc-container">
-      {{#if (eq definite "true")}}
+    {{#if (eq definite "true")}}
+      <div class="vlc-container">
         <div class="vl-u-display-flex vl-u-flex-justify-center">
           <img
             style="margin:-75px 0px -50px 0px; height:250px"
@@ -10,22 +10,70 @@
            />
 
         </div>
-      {{/if}}
-      {{newsletter/newsletter-meeting
-        definite=definite
-        meeting=(await model.meeting)
-      }}
-      {{#each (await model.groups) as |group|}}
-        {{#each group.groups as |agendaitemGroup|}}
-          {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-            {{newsletter/newsletter-item
-              agenda=(await model.agenda)
-              definite=definite
-              agendaitem=agendaitem
-            }}
+        {{newsletter/newsletter-meeting
+          definite=definite
+          meeting=(await model.meeting)
+        }}
+        {{#each (await model.groups) as |group|}}
+          {{#each group.groups as |agendaitemGroup|}}
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              {{newsletter/newsletter-item
+                agenda=(await model.agenda)
+                definite=definite
+                agendaitem=agendaitem
+              }}
+            {{/each}}
           {{/each}}
         {{/each}}
-      {{/each}}
-    </div>
+      </div>
+    {{else}}
+    <div class="vl-u-spacer-extended-l">
+      <div class="vl-u-display-flex vl-u-flex-justify-center">
+        <img
+          style="margin:-75px 0px -50px 0px; height:250px"
+          src="/assets/logo_vlaamse_regering.svg"
+          alt="Vlaamse Regering"
+         />
+      </div>
+      <div class="vl-grid">
+        {{#each (await model.groups) as |group|}}
+          {{#each group.groups as |agendaitemGroup|}}
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              <div class="vl-col--3-3">
+                <div class="vl-grid">
+                  {{#if agendaitem.showRemarks}}
+                    <div class="vl-col--2-3">
+                      {{newsletter/newsletter-item
+                        agenda=(await model.agenda)
+                        definite=definite
+                        agendaitem=agendaitem
+                      }}
+                    </div>
+                    {{#if agendaitem.showRemarks}}
+                      <div class="vl-col--1-3">
+                        {{agenda/agendaitem/agendaitem-comments
+                          agendaitem=agendaitem
+                        }}
+                      </div>
+                    {{/if}}
+                  {{else}}
+                    <div class="vl-col--3-3">
+                      {{newsletter/newsletter-item
+                        agenda=(await model.agenda)
+                        definite=definite
+                        agendaitem=agendaitem
+                      }}
+                    </div>
+                  {{/if}}
+                </div>
+                <hr class="vlc-hr" />
+              </div>
+            {{/each}}
+          {{/each}}
+        {{/each}}
+      </div>
+          </div>
+
+    {{/if}}
   </div>
 </div>

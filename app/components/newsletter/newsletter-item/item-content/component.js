@@ -50,6 +50,10 @@ export default Component.extend(isAuthenticatedMixin, {
 			}
 
 			this.toggleProperty('isEditing');
+		},
+
+		toggleIsShowingRemarks() {
+			this.agendaitem.toggleProperty('showRemarks');
 		}
 	}
 });

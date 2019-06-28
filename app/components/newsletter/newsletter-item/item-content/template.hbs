@@ -11,10 +11,17 @@
         {{/if}}
       </h4>
       {{#if (or isAdmin isEditor)}}
-        <div class="vl-u-spacer-extended-left-s">
-          <a class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "edit"}}
-          </a>
+        <div class="vl-u-display-flex vl-u-flex-space-between">
+          <div class="vl-u-spacer-extended-left-s">
+            <a class="vl-link" {{action "toggleIsShowingRemarks"}}>
+              {{t "show-remarks"}}
+            </a>
+          </div>
+          <div class="vl-u-spacer-extended-left-s">
+            <a class="vl-link" {{action "toggleIsEditing"}}>
+              {{t "edit"}}
+            </a>
+          </div>
         </div>
       {{/if}}
     </div>
@@ -69,7 +76,6 @@
   </div>
 {{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
-  <hr class="vlc-hr" />
   <div class="vl-u-spacer-extended-top-s">
     {{utils/documents-list-for-item
       item=(await agendaitem.subcase.newsletterInfo)
