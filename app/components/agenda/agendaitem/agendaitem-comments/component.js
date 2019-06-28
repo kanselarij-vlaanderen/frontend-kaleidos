@@ -7,6 +7,7 @@ import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   classNames: ['vl-grid'],
+  elementId: "agendaitem-comments",
   store: inject(),
 
   sortedRemarks: sort('agendaitem.remarks', function (a, b) {
