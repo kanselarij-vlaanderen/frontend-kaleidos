@@ -12,7 +12,6 @@ export default Mixin.create({
 		const agendaitemsToGroup = agendaitems.filter((item) => !item.get('showAsRemark'));
 
 		const announcements = agendaitems.filter((item) => item.get('showAsRemark'));
-		console.log(announcements);
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
 
 		const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(groups, agendaitemsToGroup);
