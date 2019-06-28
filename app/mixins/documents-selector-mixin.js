@@ -32,6 +32,7 @@ export default Mixin.create({
 		async saveChanges() {
 			this.set('isLoading', true);
 			const item = await this.get('item');
+
 			const documentVersionsSelected = this.get('documentVersionsSelected');
 			const itemDocumentsToEdit = await item.get('documentVersions');
 

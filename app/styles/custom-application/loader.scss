@@ -1,0 +1,12 @@
+.skeletal-loader {
+  background-color: $blue-gray-light;
+  display: inline-block;
+  position: relative;
+  height: $base-font-size;
+  width: 100px;
+}
+
+.vl-icon-wrapper-loading {
+  display: flex;
+  align-items: center;
+}

@@ -13,4 +13,3 @@ $flanders-serif-family: "flanders-serif";
 @include font-face($flanders-serif-family, $font-location, $flanders-serif-family + "-regular", 400, normal);
 @include font-face($flanders-serif-family, $font-location, $flanders-serif-family + "-medium", 500, normal);
 @include font-face($flanders-serif-family, $font-location, $flanders-serif-family + "-bold", 700, normal);
-

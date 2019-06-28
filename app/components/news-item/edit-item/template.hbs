@@ -1,11 +1,11 @@
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "short-title")}}
-    {{textarea rows="2" class="vl-textarea vl-textarea--block" value=title}}
+    {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "subtitle")}}
-    {{textarea rows="4" class="vl-textarea vl-textarea--block" value=subtitle}}
+    {{web-components/vl-form-label value=(t "mandatee-proposal")}}
+    {{web-components/vl-form-input width="4" value=mandateeProposal}}
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "content")}}
@@ -19,7 +19,7 @@
     {{web-components/vl-form-label value=(t "finished")}}
     {{web-components/vl-toggle value=finished}}
   </div>
-  {{!-- <div class="vlc-input-field-block">
+  <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "themes")}}
     {{utils/model-selector
       modelName="theme"
@@ -30,7 +30,7 @@
       selectedItems=themes
       selectModel=(action "chooseTheme")
     }}
-  </div> --}}
+  </div>
   {{#if finished}}
     <div class="vlc-input-field-block">
       {{utils/documents-selector-of-agendaitem

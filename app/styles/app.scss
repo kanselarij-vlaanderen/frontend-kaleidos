@@ -180,6 +180,8 @@ $icon-font-location: "/fonts/";
 @import "custom-application/editor";
 @import "custom-application/ember-attacher";
 @import "custom-application/file-uploader";
+@import "custom-application/extra-fonts";
+@import "custom-application/loader";
 
 a.vlc-agenda-items-new__sub-item {
   display: block;
@@ -309,11 +311,6 @@ body > .ember-view {
   flex-wrap: wrap;
 }
 
-p {
-  word-break: break-word;
-  white-space: normal;
-}
-
 .border-left {
   border-left: 1px solid #cbd2da;
 }
@@ -336,14 +333,6 @@ tr.postponed {
   }
 }
 
-.skeletal-loader {
-  background-color: $blue-gray-light;
-  display: inline-block;
-  position: relative;
-  height: $base-font-size;
-  width: 100px;
-}
-
 .vlc-tabs-reverse__link {
   padding: 0.7rem 4rem 0.8rem;
 }
@@ -355,6 +344,7 @@ tr.postponed {
 ul {
   li {
     &.vl-pill {
+      display: inline-flex;
       margin-bottom: 0.2em;
     }
   }
@@ -383,11 +373,6 @@ ul {
   }
 }
 
-.vl-icon-wrapper-loading {
-  display: flex;
-  align-items: center;
-}
-
 .data-table-pagination {
   margin-bottom: 6em; //fix for firefox (agenda view height)
 }
@@ -413,4 +398,13 @@ ul {
 .print-only,
 .ember-power-select-status-icon {
   display: none;
+}
+
+.data-table__actions.data-table__actions--top {
+  border-bottom: none;
+}
+
+.newsletter-themes {
+  margin: 0 !important;
+  padding-left: 0 !important;
 }

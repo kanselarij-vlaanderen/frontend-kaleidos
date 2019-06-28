@@ -205,6 +205,7 @@
 	"no-rights-message": "Je account heeft nog geen rechten om deze applicatie te gebruiken.",
 	"no-subcases": "Er zijn nog geen producurestappen aangemaakt.",
 	"no-themes-yet": "Er zijn nog geen thema's toegevoegd.",
+	"no-themes-agendaitem":"Dit agendapunt heeft geen geselecteerde thema's.",
 	"non-digital-attachements": "Niet-digitale bijlagen",
 	"non-digital-file": "Niet-digitaal document toevoegen",
 	"not-agreed": "Niet Akkoord",
@@ -299,7 +300,7 @@
 	"subtitle-newsletter": "Ondertitel kort bestek",
 	"text": "Mededeling",
 	"th-select-all": "Selecteer alles",
-	"themes": "Themas",
+	"themes": "Thema's",
 	"title": "Titel",
 	"title-available-subcases": "Beschikbare procedurestappen",
 	"title-case": "Lange titel dossier",
@@ -326,7 +327,7 @@
 	"show-minutes": "Verslag openen",
 	"all-subcases-loading-text": "De procedurestappen worden geladen..",
 	"documents-loading-text": "De documenten worden geladen..",
-	"themes-loading-text": "De themas worden geladen..",
+	"themes-loading-text": "De thema's worden geladen..",
 	"mandatees-loading-text": "De ministers en beleidsvelden worden geladen..",
 	"ise-codes-loading-text": "De inhoudelijke structuurelementen worden geladen..",
 	"error-not-found": "Pagina kon niet worden gevonden.",
@@ -364,5 +365,6 @@
 	"decision":"beslissing",
 	"successfully-deleted":"succesvol verwijderd.",
 	"postponed":"uitstel",
-	"for-cabinet":"Voor kabinetten"
+	"for-cabinet":"Voor kabinetten",
+	"mandatee-proposal":"Voorstel tekst"
 }

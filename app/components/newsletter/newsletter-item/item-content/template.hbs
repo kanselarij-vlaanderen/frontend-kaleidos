@@ -1,15 +1,15 @@
-<div class="vl-u-spacer--xsmall">
-  <div class="vl-u-display-flex vl-u-flex-space-between">
-    <h4 class="vl-title vl-title--h5 vl-u-text--capitalize">
-      {{await numberToShow}}
-      .
-      {{#if (not (await agendaitem.subcase.newsletterInfo))}}
-        {{agendaitem.title}}
-      {{else}}
-        {{await agendaitem.subcase.newsletterInfo.title}}
-      {{/if}}
-    </h4>
-    {{#if allowEditing}}
+{{#if allowEditing}}
+  <div class="vl-u-spacer-extended-bottom-s">
+    <div class="vl-u-display-flex vl-u-flex-space-between">
+      <h4>
+        {{await numberToShow}}
+        .
+        {{#if (not (await agendaitem.subcase.newsletterInfo))}}
+          {{agendaitem.title}}
+        {{else}}
+          {{await agendaitem.subcase.newsletterInfo.title}}
+        {{/if}}
+      </h4>
       {{#if (or isAdmin isEditor)}}
         <div class="vl-u-spacer-extended-left-s">
           <a class="vl-link" {{action "toggleIsEditing"}}>
@@ -17,16 +17,23 @@
           </a>
         </div>
       {{/if}}
-    {{/if}}
+    </div>
+    <div class="vl-u-text vl-u-text--small vl-u-text--muted">
+      {{moment-format (await agenda.createdFor.plannedstart) "DD MMMM YYYY"}}
+    </div>
   </div>
-  <div class="vl-u-text vl-u-text--small vl-u-text--muted">
-    {{moment-format (await agenda.createdFor.plannedStart) "DD MMMM YYYY"}}
+{{else}}
+  <div class="vl-u-spacer-extended-bottom-s">
+    <h4>
+      {{#if (not (await agendaitem.subcase.newsletterInfo))}}
+        {{agendaitem.title}}
+      {{else}}
+        {{await agendaitem.subcase.newsletterInfo.title}}
+      {{/if}}
+    </h4>
   </div>
-</div>
-<div class="vl-u-spacer--xsmall">
-  <h4 class="vl-title vl-title--h6 vl-u-text--capitalize">
-    {{await agendaitem.subcase.newsletterInfo.subtitle}}
-  </h4>
+{{/if}}
+<div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-text">
     {{#if (not (await agendaitem.subcase.newsletterInfo.richtext))}}
       <p class="vl-u-text vl-u-text--italic vl-u-text--muted">
@@ -37,22 +44,31 @@
     {{/if}}
   </div>
 </div>
+<div class="vl-u-spacer-extended-bottom-s">
+  <p class="vl-u-text--italic">
+    {{await agendaitem.subcase.newsletterInfo.mandateeProposal}}
+  </p>
+</div>
 {{#if (gt (await agendaitem.themes.length) 0)}}
-  <div class="vl-u-spacer--xsmall">
+  <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-spacer-extended-top-s">
-      <ul>
+      <ul class="newsletter-themes">
         {{#each (await agendaitem.themes) as |theme|}}
-          <li
-            class="vl-pill vl-u-spacer-extended-right-s vl-u-text--capitalize"
-          >
+          <li class="vl-pill">
             {{theme.label}}
           </li>
         {{/each}}
       </ul>
     </div>
   </div>
+{{else if allowEditing}}
+  <div class="vl-u-spacer-extended-bottom-s">
+    <p class="vl-u-text--muted vl-u-text--capitalize">
+      {{t "no-themes-agendaitem"}}
+    </p>
+  </div>
 {{/if}}
-<div class="vl-u-spacer--xsmall">
+<div class="vl-u-spacer-extended-bottom-s">
   <hr class="vlc-hr" />
   <div class="vl-u-spacer-extended-top-s">
     {{utils/documents-list-for-item

@@ -19,6 +19,7 @@
       page=page
       size=size
       sort=sort
+      class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
       isLoading=isLoadingModel as |t|
     }}
       {{#t.content as |c|}}
@@ -44,21 +45,25 @@
         {{/c.header}}
         {{#c.body as |row|}}
           <td>
+            <p>
             {{#if row.shortTitle}}
               {{row.shortTitle}}
             {{else}}
               {{row.title}}
             {{/if}}
+            </p>
           </td>
           <td>
             {{#if (is-pending row.type)}}
               <div class="skeletal-loader" role="alert" aria-busy="true"></div>
             {{else if (not (await row.type))}}
-            <p class="vl-u-text--muted vl-u-text--italic">
-                  {{emptyCaseType}}
-                </p>
-              {{else}}
-              {{await row.type.label}}
+              <p class="vl-u-text--muted vl-u-text--italic">
+                {{emptyCaseType}}
+              </p>
+            {{else}}
+              <p>
+                {{await row.type.label}}
+              </p>
             {{/if}}
           </td>
           <td>

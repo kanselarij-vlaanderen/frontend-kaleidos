@@ -5,8 +5,14 @@ import { computed } from '@ember/object';
 import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
+	classNames:['vl-typography'],
+	classNameBindings: ['isFlandersArt:vl-typography--definite'],
 	store: inject(),
 	isShowingVersions: false,
+
+	isFlandersArt: computed('allowEditing', function() {
+		return !this.allowEditing;
+	}),
 
 	numberToShow: computed('agendaitem.priority', 'index', function () {
 		if (this.index) {

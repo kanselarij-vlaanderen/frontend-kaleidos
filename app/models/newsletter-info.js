@@ -7,6 +7,7 @@ export default Model.extend({
 	subtitle: attr('string'),
 	title: attr('string'),
 	richtext: attr('string'),
+	mandateeProposal: attr('string'),
 	finished: attr('boolean'),
 	publicationDate: attr('date'),
 	publicationDocDate: attr('date'),
