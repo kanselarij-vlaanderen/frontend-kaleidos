@@ -35,6 +35,10 @@
           alt="Vlaamse Regering"
          />
       </div>
+       {{newsletter/newsletter-meeting
+          definite=definite
+          meeting=(await model.meeting)
+        }}
       <div class="vl-grid">
         {{#each (await model.groups) as |group|}}
           {{#each group.groups as |agendaitemGroup|}}
