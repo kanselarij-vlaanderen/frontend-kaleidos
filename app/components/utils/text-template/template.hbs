@@ -1,15 +1,27 @@
 <div class="vlc-input-field vlc-input-field-block">
   {{web-components/vl-form-label value="Tekst templates"}}
   {{#power-select
-    options=items
+    options=(await items)
     searchField=searchField
     oninput=(action "resetValueIfEmpty")
     onchange=(action "selectModel") as |model|
   }}
-    {{model.name}}
+    {{model.label}}
+    {{#attach-popover
+      placement="top"
+      class="ember-attacher-popper ember-attacher-popper-wide"
+    }}
+      <p>
+        {{{model.description}}}
+      </p>
+    {{/attach-popover}}
   {{/power-select}}
 </div>
 <div class="vlc-input-field vlc-input-field-block">
   {{web-components/vl-form-label value=label}}
-  {{textarea id="toFocus" rows=rows class="vl-textarea vl-textarea--block" value=text}}
+  {{web-components/vl-rdfa-editor
+    isLarge=isExpanded
+    richtext=text
+    handleRdfaEditorInit=(action "handleRdfaEditorInit")
+  }}
 </div>

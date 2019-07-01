@@ -1,54 +1,73 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { later } from '@ember/runloop';
-// import { task, timeout } from 'ember-concurrency';
-// import { computed } from '@ember/object';
-import $ from 'jquery';
-/**
- * LEAVE THE COMMENTS IN THIS CODE TO SPEED UP THE NEXT TICKETS 
- */
+// import { later } from '@ember/runloop';
+import { task, timeout } from 'ember-concurrency';
+import { computed } from '@ember/object';
+
 export default Component.extend({
 	classNames: ["vlc-input-field-block"],
 	store: inject(),
 	searchField: null,
-	propertyToShow: null,
-	rows: "5",
-	text: '',
 	label: null,
+	type: "decisions",
+	modelName: "shortcut",
 
-	focusTextarea() {
-		later(this, function () {
-			document.getElementById('toFocus').focus();
-		}, 250);
-	},
+	// focusTextarea() {
+	// 	later(this, function () {
+	// 		let p = document.getElementsByClassName('editor__paper')[0],
+	// 			s = window.getSelection(),
+	// 			r = document.createRange();
+	// 		r.setStart(p, 0);
+	// 		r.setEnd(p, 0);
+	// 		s.removeAllRanges();
+	// 		s.addRange(r);
+	// 	}, 250);
+	// },
 
+	text: computed('editor.currentTextContent', function () {
+		if (!this.editor) {
+			return;
+		}
+
+		return this.editor.rootNode.innerHTML.htmlSafe();
+	}),
+
+	findAll: task(function* () {
+		const { modelName } = this;
+			const items = yield this.store.query(modelName, { filter: { type: this.type } });
+			this.set('items', items);
+	}),
+
+	searchTask: task(function* (searchValue) {
+		yield timeout(300);
+		const { searchField, modelName } = this;
+		let filter = {};
+
+		filter[searchField] = searchValue;
+		return this.store.query(modelName, {
+			filter: filter,
+		});
+	}),
 	actions: {
 		selectModel(items) {
-			const text = this.get('text') || "";
-			const textToAdd = items.description;
-			let newText = "";
-			if (text != "") {
-				newText = text + " " + textToAdd;
-			} else {
-				if (textToAdd) {
-					newText = textToAdd;
-				}
-			}
+			const richtext = this.editor.rootNode.innerHTML;
+			const newText = richtext + items.get('description');
 			this.set('text', newText);
-			this.focusTextarea();
 		},
 
 		async resetValueIfEmpty(param) {
 			if (param == "") {
-				let textTemplates = await $.getJSON("/utils/text-templates.json");
-				this.set('items', textTemplates.textTemplates);
+				this.searchTask.perform(param);
 			}
+		},
+
+		async handleRdfaEditorInit(editorInterface) {
+			this.set('editor', editorInterface);
 		},
 	},
 
 	async didInsertElement() {
 		this._super(...arguments);
-		let textTemplates = await $.getJSON("/utils/text-templates.json");
-		this.set('items', textTemplates.textTemplates);
+		this.findAll.perform();
 	}
 });

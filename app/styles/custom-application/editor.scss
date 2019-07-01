@@ -45,7 +45,21 @@
 
         ol {
           list-style: none;
+          list-style-position: inside;
           counter-reset: my-awesome-counter;
+        }
+
+        ol ol > li {
+          display: block;
+          margin-left: 20px;
+        }
+
+        ol ol > li:before {
+          content: counters(my-awesome-counter, ".") ". ";
+        }
+
+        ol ol > li {
+          list-style-position: inside;
         }
         ol li {
           counter-increment: my-awesome-counter;

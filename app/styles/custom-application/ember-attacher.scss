@@ -1,4 +1,3 @@
-
 .mandatee-selector-container,
 .domains-selector-container,
 .people-selector-container {
@@ -61,9 +60,53 @@
 }
 
 .ember-attacher-popper-wide {
-  width: 600px;
+  width: 400px;
+  display: block;
   padding: 1em;
+  // max-width: calc(600px - 2em);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
   &::before {
     display: none;
+  }
+  background-color: $porcelain;
+
+  ul {
+    li {
+      margin-left: 1em;
+      list-style-type: circle;
+    }
+  }
+
+  ol {
+    list-style: none;
+    list-style-position: inside;
+    counter-reset: my-awesome-counter;
+  }
+
+  ol ol > li {
+    display: block;
+    margin-left: 20px;
+  }
+
+  ol ol > li:before {
+    content: counters(my-awesome-counter, ".") ". ";
+  }
+
+  ol ol > li {
+    list-style-position: inside;
+  }
+  ol li {
+    counter-increment: my-awesome-counter;
+  }
+  ol li::before {
+    content: counter(my-awesome-counter) ". ";
+    font-weight: bold;
+  }
+
+  em {
+    font-style: italic;
   }
 }
