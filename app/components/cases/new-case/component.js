@@ -43,11 +43,6 @@ export default Component.extend({
       this.set('selectedPolicyLevel', policyLevel);
     },
 
-    typeChanged(id) {
-      const type = this.store.peekRecord('case-type', id);
-      this.set('type', type);
-    },
-
     statusChange(status) {
       this.set('status', status);
     },

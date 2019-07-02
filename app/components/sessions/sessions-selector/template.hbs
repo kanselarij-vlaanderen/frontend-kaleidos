@@ -5,8 +5,7 @@
   searchField="plannedstart"
   search=(perform searchTask)
   oninput=(action "resetValueIfEmpty")
-  onchange=(action "chooseSession") 
-as |session|
+  onchange=(action "selectModel") as |session|
 }}
   {{#if session.plannedStart}}
     {{moment-format session.plannedStart "dddd DD-MM-YYYY"}}

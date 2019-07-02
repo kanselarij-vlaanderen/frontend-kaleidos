@@ -4,16 +4,23 @@ import { task, timeout } from 'ember-concurrency';
 import { computed } from '@ember/object';
 
 export default Mixin.create({
+	classNameBindings: ['classes'],
 	store: inject(),
 	modelName: null,
 	searchField: null,
 	propertyToShow: null,
 	placeholder: null,
 	sortField: null,
+	filter: null,
 	loadingMessage: "Even geduld aub..",
 	noMatchesMessage: "Geen zoekresultaten gevonden",
+	searchMessage: "Even geduld aub..",
 	defaultSelected: null,
 	selectedItems: null,
+
+	class:computed('class', function() {
+		return this.class;
+	}),
 
 	isLoadingData: computed('findAll.isRunning', 'searchTask.isRunning', function () {
 		if (this.findAll.isRunning) {
@@ -25,14 +32,26 @@ export default Mixin.create({
 		}
 	}),
 
+	queryOptions: computed('sortField', 'filter', 'modelName', 'includeField', function () {
+		let options = {};
+		const { filter, sortField, includeField } = this;
+		if (sortField) {
+			options['sort'] = sortField;
+		}
+		if (filter) {
+			options['filter'] = filter;
+		}
+		if (includeField) {
+			options['include'] = includeField;
+		}
+		return options;
+	}),
+
 	findAll: task(function* () {
-		const { modelName, sortField } = this;
+		const { modelName, queryOptions } = this;
 		const filteredItems = yield this.get('filteredItems');
 		if (!filteredItems || !filteredItems.length > 0) {
-			const items = yield this.store.query(modelName,
-				{
-					sort: sortField,
-				});
+			const items = yield this.store.query(modelName, queryOptions);
 			this.set('items', items);
 		}
 	}),
@@ -44,15 +63,10 @@ export default Mixin.create({
 
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
-		const { searchField, sortField, modelName, includeField } = this;
-		let filter = {};
+		const { queryOptions, searchField, modelName } = this;
 
-		filter[searchField] = searchValue;
-		return this.store.query(modelName, {
-			filter: filter,
-			sort: sortField,
-			include: includeField || ''
-		});
+		queryOptions['filter'][searchField] = searchValue;
+		return this.store.query(modelName, queryOptions);
 	}),
 
 	actions: {

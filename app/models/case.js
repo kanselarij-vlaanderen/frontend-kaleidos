@@ -80,16 +80,6 @@ export default Model.extend({
     } else {
       return `${(length + 1)}de ${CONFIG.phasesCodes[0].label}`
     }
-  },
-
-  isRemark: computed('type', function() {
-    return this.get('type').then((item) => {
-      if(item && item.uri === CONFIG.remarkType) {
-        return true;
-      } else {
-        return false;
-      }
-    })
-
-  })
+  }
+  
 });

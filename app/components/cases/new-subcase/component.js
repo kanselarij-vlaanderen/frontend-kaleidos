@@ -3,11 +3,13 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
 import moment from 'moment';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(ApprovalsEditMixin, {
 	store: inject(),
 	classNames: ["vl-custom"],
 	confidentiality: null,
+	filter: { type: "subcase-name"},
 
 	title: computed('case', function () {
 		return this.get('case.title');
@@ -19,10 +21,6 @@ export default Component.extend(ApprovalsEditMixin, {
 
 	confidential: computed('case', function () {
 		return this.get('case.confidential');
-	}),
-
-	showAsRemark: computed('case', function() {
-		return this.get('case.isRemark');
 	}),
 
 	async copySubcaseProperties(subcase, latestSubcase) {
@@ -83,6 +81,19 @@ export default Component.extend(ApprovalsEditMixin, {
 			this.closeModal();
 		},
 
+		typeChanged(id) {
+			const type = this.store.peekRecord('case-type', id);
+			if (type.get('id') === CONFIG.remarkId) {
+				this.set('showAsRemark',true);
+			} else {
+				this.set('showAsRemark', false);
+			}
+		},
+
+		toggleIsEditing() {
+			this.toggleProperty('isEditing');
+		},
+
 		async createSubCase(event) {
 			event.preventDefault();
 			this.set('isLoading', true);
@@ -90,8 +101,8 @@ export default Component.extend(ApprovalsEditMixin, {
 			const latestSubcase = await caze.get('latestSubcase');
 			const date = moment().utc().toDate();
 			let subcase = await this.createSubcaseObject(caze, date);
-			const subcaseName = await caze.getNameForNextSubcase((await this.get('type')));
-			subcase.set('subcaseName', subcaseName);
+			//const subcaseName = await caze.getNameForNextSubcase((await this.get('type')));
+			subcase.set('subcaseName', this.subcaseName);
 			if (latestSubcase) {
 				subcase = await this.copySubcaseProperties(subcase, latestSubcase);
 				await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
@@ -116,6 +127,11 @@ export default Component.extend(ApprovalsEditMixin, {
 
 		selectType(type) {
 			this.set('type', type);
-		}
+		},
+
+		selectModel(items) {
+			this.set('selectedSubcaseName', items);
+			this.set('subcaseName', items.get('label'));
+		},
 	},
 })
