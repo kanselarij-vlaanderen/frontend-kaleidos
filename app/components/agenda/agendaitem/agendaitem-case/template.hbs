@@ -7,16 +7,6 @@
         toggle=(action "toggleConfidential")
       }}
     </div>
-    <div class="confidentiality-type">
-      {{utils/model-selector
-        modelName="confidentiality"
-        searchField="label"
-        propertyToShow="label"
-        sortField="label"
-        selectedItems=(await item.confidentiality)
-        selectModel=(action "chooseConfidentiality")
-      }}
-    </div>
   </div>
 {{/if}}
 {{#if (not isEditing)}}
@@ -45,4 +35,5 @@
   {{/if}}
   {{agenda/agendaitem/agendaitem-case/all-subcases subcases=subcases}}
 {{/if}}
-{{agenda/agendaitem/agendaitem-case/subcase-documents item=item}}
+{{log item}}
+{{agenda/agendaitem/agendaitem-case/subcase-documents item=item modelToAddDocumentVersionTo=modelToAddDocumentVersionTo}}

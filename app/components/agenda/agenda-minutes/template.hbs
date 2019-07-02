@@ -56,7 +56,7 @@
                   {{agendaitem.shortTitle}}
                 </h3>
                 <p>
-                  {{agendaitem.title}}
+                  {{{agendaitem.title}}}
                 </p>
               </div>
               {{#if agendaitem.isEditing}}
@@ -82,7 +82,7 @@
                     <li>
                       {{#if (await agendaitem.meetingRecord.description)}}
                         <p>
-                          {{await agendaitem.meetingRecord.description}}
+                          {{{await agendaitem.meetingRecord.description}}}
                         </p>
                       {{else}}
                         <p class="vl-u-text--muted">

@@ -16,19 +16,20 @@
           }}
         </div>
         <div class="vlc-input-field-block">
-          {{file-uploader uploadedFile=(action "uploadedFile")}}
-        </div>
-        <div class="vlc-input-field-block">
-          {{#if (not uploadedFiles.length eq "0")}}
-            <h4 class="vl-title vl-title--h4">
-              {{t "attachements"}}
-            </h4>
-          {{/if}}
-          {{subcases/edit-documents uploadedFiles=uploadedFiles}}
-          {{#if (not nonDigitalDocuments.length eq "0")}}
-            <h4 class="vl-title vl-title--h4">
-              {{t "non-digital-attachements"}}
-            </h4>
+          {{file-uploader
+            isLoading=isLoading
+            uploadedFile=(action "uploadedFile")
+          }}
+          {{#if (not isLoading)}}
+            {{#each uploadedFiles as |uploadedFile|}}
+              {{web-components/vl-uploaded-document
+                file=uploadedFile
+                subcase=item
+                uploadedFiles=uploadedFiles
+              }}
+            {{/each}}
+          {{else}}
+            {{web-components/vl-loader text=(t "documents-loading-text")}}
           {{/if}}
         </div>
       </form>

@@ -3,12 +3,13 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
-
+import { alias } from '@ember/object/computed';
 let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
-  store: inject(),
+  modelName: alias('constructor.modelName'),
 
+  store: inject(),
   priority: attr('number'),
   created: attr('date'),
   record: attr('string'),

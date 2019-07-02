@@ -2,10 +2,12 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
+import { alias } from '@ember/object/computed';
 
 const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
+  modelName: alias('constructor.modelName'),
   store: inject(),
   intl: inject(),
 

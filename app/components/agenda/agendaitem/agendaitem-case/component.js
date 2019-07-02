@@ -21,6 +21,10 @@ export default Component.extend(EditAgendaitemOrSubcase, {
     }
   }),
 
+  modelToAddDocumentVersionTo: computed('item', function () {
+    return this.get('item.modelName');
+  }),
+
   shouldShowDetails: computed('agendaitem', 'subcase', function () {
     const { agendaitem } = this;
     if (agendaitem) {

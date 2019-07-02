@@ -27,7 +27,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
 	isAgendaItem: computed('item.contructor', function () {
 		const { item } = this;
-		return item.get('constructor.modelName') === 'agendaitem';
+		return item.get('modelName') === 'agendaitem';
 	}),
 
 	isSubcase: not('isAgendaItem'),

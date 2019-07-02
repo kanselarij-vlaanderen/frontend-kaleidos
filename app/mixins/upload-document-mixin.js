@@ -15,7 +15,7 @@ export default Mixin.create(FileSaverMixin, {
 	store: inject(),
 	fileService: inject(),
 
-	isAgendaItem: computed('modelToAddDocumentVersionTo', function() {
+	isAgendaItem: computed('modelToAddDocumentVersionTo', function () {
 		return (this.get('modelToAddDocumentVersionTo') === 'agendaitem');
 	}),
 
@@ -23,7 +23,7 @@ export default Mixin.create(FileSaverMixin, {
 		const { modelToAddDocumentVersionTo } = this;
 		const creationDate = moment().utc().toDate();
 		let type, chosenFileName;
-		if (file) { //If no file, the file is not digitally available, should asked at the `archive`
+		if (file) {
 			chosenFileName = file.get('chosenFileName') || file.get('filename') || file.get('name');
 			type = file.get('documentType');
 		} else {
@@ -50,10 +50,13 @@ export default Mixin.create(FileSaverMixin, {
 			});
 			documentVersion.set(modelToAddDocumentVersionTo, model);
 
-			const savedDocumentVersion = await documentVersion.save();
-			if(file.get('extension') === "docx") {
-				await this.fileService.convertDocumentVersionById(savedDocumentVersion.get('id'));
-			}
+			await documentVersion.save().then(async (createdDocumentVersion) => {
+				model.hasMany('documentVersions').reload();
+				if (file.get('extension') === "docx") {
+					const conversion = await this.fileService.convertDocumentVersionById(createdDocumentVersion.get('id'));
+					return conversion;
+				}
+			});
 		});
 	},
 
@@ -67,15 +70,16 @@ export default Mixin.create(FileSaverMixin, {
 			}));
 		}
 
-		if (nonDigitalDocuments) {
-			await Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
-				if (nonDigitalDocument.title) {
-					return this.createNewDocumentWithDocumentVersion(model, null, nonDigitalDocument.title);
-				}
-			}));
-		}
+		// if (nonDigitalDocuments) {
+		// 	await Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
+		// 		if (nonDigitalDocument.title) {
+		// 			return this.createNewDocumentWithDocumentVersion(model, null, nonDigitalDocument.title);
+		// 		}
+		// 	}));
+		// }
 		this.set('uploadedFiles', null);
 		this.set('nonDigitalDocuments', null);
+		this.set('isLoading', false);
 	},
 
 	async createNewDocumentVersion(uploadedFile, document, versionNumber) {

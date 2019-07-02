@@ -3,17 +3,15 @@ import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
-import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, UploadDocumentMixin, ModifiedMixin, {
+	globalError: inject(),
 	classNames: ['vl-u-spacer--large'],
 	isAddingNewDocument: false,
 	isEditing: false,
 	isLoading: false,
-
-	modelToAddDocumentVersionTo: computed('item.constructor', function () {
-		return this.get('item.constructor.modelName');
-	}),
+	item: null, // can be of type 'agendaitem' or 'subcase'
 
 	actions: {
 		toggleIsAddingNewDocument() {
@@ -30,19 +28,24 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 
 		async uploadNewDocument() {
 			this.set('isLoading', true);
-			const item = await this.get('item');
 			this.set('isCreatingDocuments', true);
-			await this.uploadFiles(item).then(async () => {
-				if (this.modelToAddDocumentVersionTo === 'agendaitem') {
-					this.changeFormallyOkPropertyIfNotSetOnTrue(item);
-					await this.updateModifiedProperty(await item.get('agenda'));
-					await item.save();
-				}
-				item.hasMany('documentVersions').reload();
+			try {
+				const item = await this.get('item');
+				await this.uploadFiles(item).then(async () => {
+					if (this.modelToAddDocumentVersionTo === 'agendaitem') {
+						this.changeFormallyOkPropertyIfNotSetOnTrue(item);
+						await this.updateModifiedProperty(await item.get('agenda'));
+						await item.save();
+					}
+					item.hasMany('documentVersions').reload();
+				});
+			} catch (e) {
+				console.error('something went wrong in the document-uploader', e);
+			} finally {
 				this.set('isCreatingDocuments', false);
 				this.toggleProperty('isAddingNewDocument');
 				this.set('isLoading', true);
-			});
+			}
 		}
 	}
 });
