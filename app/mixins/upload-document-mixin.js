@@ -92,9 +92,16 @@ export default Mixin.create(FileSaverMixin, {
 			newDocumentVersion.set('document', document);
 		}
 
-		await newDocumentVersion.save();
-		return item.reload();
-
+		const savedDocumentVersion = await newDocumentVersion.save();
+		const extension = await savedDocumentVersion.get('file.extension');
+		if (extension === "docx") {
+				try {
+					await this.fileService.convertDocumentVersionById(savedDocumentVersion.get('id'));
+				} catch(e) {
+					console.error("Something went wrong with the conversion of a new version", e);
+				}
+			}
+		return savedDocumentVersion;
 	},
 
 	createVersion(uploadedFile, latestVersionNumber) {
@@ -102,7 +109,7 @@ export default Mixin.create(FileSaverMixin, {
 			{
 				file: uploadedFile,
 				versionNumber: latestVersionNumber + 1,
-				chosenFileName: uploadedFile.get('chosenFileName') || uploadedFile.get('fileName'),
+				chosenFileName: uploadedFile.get('chosenFileName') || uploadedFile.get('filename') || uploadedFile.get('name'),
 				created: moment().utc().toDate()
 			});
 	},

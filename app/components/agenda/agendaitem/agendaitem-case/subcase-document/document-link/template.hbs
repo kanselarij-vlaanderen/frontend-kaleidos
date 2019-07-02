@@ -64,6 +64,16 @@
                       {{t "document-title-edit"}}
                     </a>
                   </li>
+                  <li class="vl-popover__link-list__separator" role="none"></li>
+                  <li class="vl-popover__link-list__item">
+                    <a
+                      class="vl-link vl-link--block vl-u-text--error"
+                      {{action attacher.hide}}
+                      {{action "deleteDocument" document}}
+                    >
+                      {{t "document-delete"}}
+                    </a>
+                  </li>
                 </ul>
               {{/attach-popover}}
             {{/if}}
@@ -74,7 +84,7 @@
         {{#if (not isEditing)}}
           <span {{action "toggleIsEditing"}}>
             {{document-name
-              documentVersion=(await document.lastDocumentVersion)
+              documentVersion=document.lastDocumentVersion
               item=item
             }}
           </span>
@@ -184,4 +194,12 @@
       saveAction=(action "uploadNewVersion")
     }}
   {{/web-components/vl-modal}}
+{{/if}}
+{{#if isVerifyingDelete}}
+  {{web-components/vl-modal-verify
+    title=(t "document-delete")
+    message=(t "delete-document-message")
+    cancel=(action "cancel")
+    verify=(action "verify")
+  }}
 {{/if}}

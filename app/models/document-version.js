@@ -15,19 +15,18 @@ export default Model.extend({
 	agendaitem: belongsTo('agendaitem', { inverse: null }),
 	announcement: belongsTo('announcement'),
 	file: belongsTo('file'),
-	convertedFile: belongsTo('file', {inverse:null}),
+	convertedFile: belongsTo('file', { inverse: null }),
 	newsletter: belongsTo('newsletter-info'),
 	meetingRecord: belongsTo('meeting-record'),
 
 	nameToDisplay: computed('chosenFileName', 'document', 'file', function () {
 		const chosenFileName = this.get('chosenFileName');
-		const title = this.get('document.title');
 		if (chosenFileName) {
 			return chosenFileName;
 		} else if (this.get('file.filename')) {
 			return this.get('file.filename');
-		} else if (title) {
-			return title;
+		} else if (this.get('document.title')) {
+			return this.get('document.title')
 		} else {
 			return this.get('file.name');
 		}

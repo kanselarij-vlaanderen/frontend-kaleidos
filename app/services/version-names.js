@@ -1,26 +1,14 @@
 import Service from '@ember/service';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Service.extend({
-  names: {
-    1: "",
-    2: "bis",
-    3: "ter",
-    4: "quater",
-    5: "quinquies",
-    6: "sexies",
-    7: "septies",
-    8: "octies",
-    9: "novies",
-    10: "decies"
-  },
-
   createVersionName: function (number) {
     let prefix = "";
     if (number > 1) {
       prefix = " ";
     }
-    let name = prefix + this.names[number];
-    if (typeof name === "undefined") {
+    let name = prefix + CONFIG.names[number];
+    if (name === "undefined") {
       return `${number || ""}`;
     } else {
       return name.toUpperCase();

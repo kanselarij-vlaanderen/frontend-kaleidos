@@ -19,8 +19,7 @@ export default Model.extend({
 	type: belongsTo('document-type'),
 	signedDecision: belongsTo('decision'),
 	
-
-	sortedDocumentVersions: computed('documentVersions', function () {
+	sortedDocumentVersions: computed('documentVersions.@each', function () {
 		return PromiseArray.create({
 			promise: this.get('documentVersions').then(versions => {
 				return versions.sortBy('versionNumber');
@@ -28,7 +27,7 @@ export default Model.extend({
 		});
 	}),
 
-	lastDocumentVersion: computed('sortedDocumentVersions.@each', function () {
+	lastDocumentVersion: computed('sortedDocumentVersions.@each','documentVersions.@each', function () {
 		return PromiseObject.create({
 			promise: this.get('sortedDocumentVersions').then((documentVersions) => {
 				return documentVersions.get('lastObject');

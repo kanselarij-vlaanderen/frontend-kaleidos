@@ -11,6 +11,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	uploadedFile: null,
 	fileName: null,
 	isEditing: false,
+	documentToDelete:null,
 
 	numberVr: computed('document.numberVr', function () {
 		return this.get('document.numberVr')
@@ -36,20 +37,22 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		},
 
 		async uploadNewVersion() {
-			this.set('isLoading', true);
 			const { item, uploadedFile, fileName } = this;
-			const document = await this.get('document');
-			const newVersion = await document.get('lastDocumentVersion');
-			uploadedFile.set('fileName', fileName);
-			const newDocumentVersion = await this.createNewDocumentVersion(uploadedFile, document, newVersion.get('versionNumber'));
-
-			document.set('lastDocumentVersion', newDocumentVersion);
-			await item.hasMany('documentVersions').reload();
-			await item.save();
-			item.hasMany('documentVersions').reload();
-			if (!this.get('isDestroyed')) {
-				this.set('isUploadingNewVersion', false);
-				this.set('isLoading', false);
+			this.set('isLoading', true);
+			try {
+				const document = await this.get('document');
+				const newVersion = await document.get('lastDocumentVersion');
+				uploadedFile.set('fileName', fileName);
+				const newDocumentVersion = await this.createNewDocumentVersion(uploadedFile, document, newVersion.get('versionNumber'));
+				document.set('lastDocumentVersion', newDocumentVersion);
+			} catch (e) {
+				console.error(e);
+			} finally {
+				await item.hasMany('documentVersions').reload();
+				if (!this.get('isDestroyed')) {
+					this.set('isUploadingNewVersion', false);
+					this.set('isLoading', false);
+				}
 			}
 		},
 
@@ -66,11 +69,12 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			this.set('uploadedFile', file);
 		},
 
-		toggleIsEditing() {
+		async toggleIsEditing() {
 			if (!this.get('document.numberVr')) {
-				return;
+				this.get('document').rollbackAttributes();
+				const lastVersion = await this.document.get('lastDocumentVersion');
+				this.document.set('numberVr', lastVersion.get('nameToDisplay'));
 			}
-			this.get('document').rollbackAttributes();
 			this.toggleProperty('isEditing');
 		},
 
@@ -83,6 +87,23 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 				this.set('isLoading', false);
 			});
 		},
+
+		cancel() {
+			this.set('documentToDelete', null);
+			this.set('isVerifyingDelete', false);
+		},
+
+		verify() {
+			this.documentToDelete.destroyRecord().then(() => {
+				this.set('documentToDelete', null);
+				this.set('isVerifyingDelete', false);
+			});
+		},
+
+		deleteDocument(document) {
+			this.set('documentToDelete', document);
+			this.set('isVerifyingDelete', true);
+		}
 	},
 
 	removeFile() {

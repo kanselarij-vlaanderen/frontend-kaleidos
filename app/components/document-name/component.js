@@ -6,24 +6,25 @@ import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-
 export default Component.extend(EditAgendaitemOrSubcase, {
 	item: null,
 	documentVersion: null,
-
 	tagName: "p",
 	versionNames: inject(),
 
-	fallbackDocumentName: computed('documentVersion.nameToDisplay', async function () {
-		return await this.get('documentVersion.nameToDisplay');
+	fallbackDocumentName: computed('documentVersion.nameToDisplay', function () {
+		return this.get('documentVersion.nameToDisplay');
 	}),
 
 	documentName: computed('documentVersion', 'fallbackDocumentName', 'item', async function () {
 		const documentVersion = await this.get('documentVersion');
-		const version = await this.versionNames.createVersionName(documentVersion.get('versionNumber'));
+		const versionNumber = await documentVersion.get('versionNumber');
+		const version = await this.versionNames.createVersionName(versionNumber);
+		let documentNumberVr = await documentVersion.get('document.numberVr');
 
-		let title = await documentVersion.get('document.numberVr') + version;
-		if (await documentVersion.get('document.numberVr') !== "undefined") {
-			if (title !== "undefined") {
+		if (documentNumberVr && documentNumberVr != "undefined") {
+			let title = documentNumberVr + version;
+			if (title != "undefined") {
 				return title;
 			}
 		}
-		return await this.get('fallbackDocumentName');
+		return this.get('fallbackDocumentName');
 	})
 });
