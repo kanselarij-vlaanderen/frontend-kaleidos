@@ -10,33 +10,10 @@ export default Model.extend({
 	description: attr('string'),
 
 	attendees: hasMany('mandatee'),
-	signedDocumentVersions: hasMany('document-version'),
-
+	signedDocument: belongsTo('document'),
 	agendaitem: belongsTo('agendaitem'),
 	meeting: belongsTo('meeting'),
-
-	sortedDocumentVersions: computed.sort('signedDocumentVersions', function (a, b) {
-		if (a.versionNumber > b.versionNumber) {
-			return 1;
-		} else if (a.versionNumber < b.versionNumber) {
-			return -1;
-		}
-		return 0;
-	}),
-
-	latestDocumentVersion: computed('sortedDocumentVersions', function () {
-		return this.get('sortedDocumentVersions.lastObject');
-	}),
-
-	compare(a, b) {
-		if (a.priority < b.priority) {
-			return -1;
-		}
-		if (a.priority > b.priority) {
-			return 1;
-		}
-		return 0;
-	},
+	documentVersions: hasMany('document-version', { inverse: null }),
 
 	sortedAttendees: computed('attendees.@each', function () {
 		return PromiseArray.create({

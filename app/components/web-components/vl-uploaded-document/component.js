@@ -10,13 +10,13 @@ export default Component.extend(UploadDocumentMixin, {
 		return this.bytesToSize(this.get('file.size'));
 	}),
 
-	filteredItems: computed('subcase', async function () {
+	filter: computed('subcase', async function () {
 		const filter = await this.get('subcase.documentTypeFilter');
-		return this.store.query('document-type',
-			{
-				sort: "priority",
-				filter
-			})
+		if(filter) {
+			return filter;
+		} else {
+			return {};
+		}	
 	}),
 
 	fileName: computed('file', function () {
@@ -33,9 +33,6 @@ export default Component.extend(UploadDocumentMixin, {
 	actions: {
 		chooseDocumentType(type) {
 			this.file.set('documentType', type);
-		},
-		chooseDocumentConfidentiality(confidentiality) {
-			this.file.set('confidentiality', confidentiality);
 		},
 
 		async downloadFile(file) {

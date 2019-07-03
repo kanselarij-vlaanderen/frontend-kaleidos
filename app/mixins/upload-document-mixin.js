@@ -29,39 +29,49 @@ export default Mixin.create(FileSaverMixin, {
 		} else {
 			chosenFileName = documentTitle;
 		}
-		let document = await this.store.createRecord('document', {
+		let document = this.store.createRecord('document', {
 			created: creationDate,
 			title: documentTitle,
 			type: type,
 		});
-		const modelName = model.get('constructor.modelName');
+		const modelName = await model.get('constructor.modelName');
 
 		if (modelName == "meeting-record" || modelName == "decision") {
 			document.set(modelToAddDocumentVersionTo, model);
 		}
 
-		await document.save().then(async (createdDocument) => {
-			const documentVersion = await this.store.createRecord('document-version', {
+		document.save().then((createdDocument) => {
+			const documentVersion = this.store.createRecord('document-version', {
 				document: createdDocument,
 				created: creationDate,
 				file: file,
 				versionNumber: 1,
 				chosenFileName: chosenFileName
 			});
-			documentVersion.set(modelToAddDocumentVersionTo, model);
-
-			await documentVersion.save().then(async (createdDocumentVersion) => {
+			if (!(modelName == "meeting-record" || modelName == "decision")) {
+				documentVersion.set(modelToAddDocumentVersionTo, model);
+			}
+			documentVersion.save().then((createdDocumentVersion) => {
 				model.hasMany('documentVersions').reload();
 				if (file.get('extension') === "docx") {
-					const conversion = await this.fileService.convertDocumentVersionById(createdDocumentVersion.get('id'));
-					return conversion;
+					try {
+						this.fileService.convertDocumentVersionById(createdDocumentVersion.get('id')).then((convertedMessage) => {
+							return convertedMessage;
+						});
+					} catch(e) { 
+						// TODO: Handle errors
+					}
 				}
+				if (modelName == "meeting-record" || modelName == "decision") {
+					model.set('signedDocument', createdDocument);
+				}
+				
 			});
 		});
 	},
 
 	async uploadFiles(model) {
-		const { uploadedFiles, nonDigitalDocuments } = this;
+		const { uploadedFiles } = this;
 		if (uploadedFiles) {
 			await Promise.all(uploadedFiles.map(uploadedFile => {
 				if (uploadedFile.id) {
@@ -70,13 +80,6 @@ export default Mixin.create(FileSaverMixin, {
 			}));
 		}
 
-		// if (nonDigitalDocuments) {
-		// 	await Promise.all(nonDigitalDocuments.map(nonDigitalDocument => {
-		// 		if (nonDigitalDocument.title) {
-		// 			return this.createNewDocumentWithDocumentVersion(model, null, nonDigitalDocument.title);
-		// 		}
-		// 	}));
-		// }
 		this.set('uploadedFiles', null);
 		this.set('nonDigitalDocuments', null);
 		this.set('isLoading', false);
@@ -95,12 +98,12 @@ export default Mixin.create(FileSaverMixin, {
 		const savedDocumentVersion = await newDocumentVersion.save();
 		const extension = await savedDocumentVersion.get('file.extension');
 		if (extension === "docx") {
-				try {
-					await this.fileService.convertDocumentVersionById(savedDocumentVersion.get('id'));
-				} catch(e) {
-					console.error("Something went wrong with the conversion of a new version", e);
-				}
+			try {
+				await this.fileService.convertDocumentVersionById(savedDocumentVersion.get('id'));
+			} catch (e) {
+				// TODO: Handle errors
 			}
+		}
 		return savedDocumentVersion;
 	},
 

@@ -25,8 +25,8 @@ export default Component.extend(isAuthenticatedMixin, {
 		}
 	}),
 
-	isAgendaItem: computed('item.constructor.modelName', function () {
-		return "agendaitem" === this.get('item.constructor.modelName');
+	isAgendaItem: computed('item.modelName', function () {
+		return "agendaitem" === this.get('item.modelName');
 	}),
 
 	case: computed('item', function () {

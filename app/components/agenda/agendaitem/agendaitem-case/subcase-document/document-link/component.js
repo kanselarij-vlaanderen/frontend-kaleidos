@@ -3,15 +3,19 @@ import $ from 'jquery';
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
+import { inject } from '@ember/service';
+import EmberObject from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
+	globalError: inject(),
+	fileService: inject(),
 	classNames: ["vl-u-spacer-extended-bottom-s"],
 	isShowingVersions: false,
 	isUploadingNewVersion: false,
 	uploadedFile: null,
 	fileName: null,
 	isEditing: false,
-	documentToDelete:null,
+	documentToDelete: null,
 
 	numberVr: computed('document.numberVr', function () {
 		return this.get('document.numberVr')
@@ -46,7 +50,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 				const newDocumentVersion = await this.createNewDocumentVersion(uploadedFile, document, newVersion.get('versionNumber'));
 				document.set('lastDocumentVersion', newDocumentVersion);
 			} catch (e) {
-				console.error(e);
+				// TODO: Handle errors
 			} finally {
 				await item.hasMany('documentVersions').reload();
 				if (!this.get('isDestroyed')) {
@@ -94,10 +98,14 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		},
 
 		verify() {
-			this.documentToDelete.destroyRecord().then(() => {
-				this.set('documentToDelete', null);
-				this.set('isVerifyingDelete', false);
-			});
+			this.globalError.showToast.perform(EmberObject.create({
+				title: 'WARNING',
+				message: "Document wordt verwijderd.",
+				type: "warning-undo"
+			}));
+			this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete);
+			this.set('isVerifyingDelete', false);
+			this.set('documentToDelete', null);
 		},
 
 		deleteDocument(document) {

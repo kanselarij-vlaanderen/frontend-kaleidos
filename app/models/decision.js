@@ -15,5 +15,5 @@ export default Model.extend({
   publication: belongsTo('publication'),
   documentType: belongsTo('document-type'),
   documentVersions: hasMany('document-version', { inverse: null }),
-  signedDocument: belongsTo('document', { inverse: null }),
+  signedDocument: belongsTo('document'),
 });

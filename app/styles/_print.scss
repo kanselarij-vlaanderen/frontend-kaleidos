@@ -1,6 +1,10 @@
 // Print stylesheet focussed on making agenda overview look good when printed
 
 @media print {
+  .vl-alert {
+    display:none;
+  }
+
   html {
     font-size: 50%;
   }

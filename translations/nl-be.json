@@ -34,6 +34,7 @@
 	"agendaitem-title": "Type dossiers & titels",
 	"agendaitems": "agendapunten",
 	"agendaitems-subtitle": "Nota's",
+	"note":"Nota",
 	"agendas": "Agendas",
 	"alt-file-name": "Alternatieve document naam",
 	"amount-showed": "Dossiers per rij",
@@ -296,6 +297,7 @@
 	"subcase-name": "Procedurestap naam",
 	"subcase-phase": "Fase",
 	"subcase-type": "Procedurestap type",
+	"subcase-type-dropdown":"Procedurestap",
 	"subcases": "Procedurestappen",
 	"submitter": "Indiener",
 	"submitter-title": "Indiener: ",
@@ -315,6 +317,7 @@
 	"toggle": "aan-uit",
 	"unarchive-case": "Dossier onarchiveren",
 	"unarchive-subcase": "Procedurestap onarchiveren",
+	"undo":"Ongedaan maken",
 	"undo-propose": "Niet ingediend",
 	"upload-file": "Bestanden uploaden",
 	"uploaded-at": "Geupload op",
@@ -349,7 +352,6 @@
 	"birth":"geboorte",
 	"capacity":"capaciteit",
 	"confidentiality":"vertrouwelijkheid",
-	"dicision":"beslissing",
 	"document":"document",
 	"document-version":"documentversie",
 	"file":"bestand",
@@ -369,5 +371,7 @@
 	"successfully-deleted":"succesvol verwijderd.",
 	"postponed":"uitstel",
 	"for-cabinet":"Voor kabinetten",
-	"mandatee-proposal":"Voorstel tekst"
+	"mandatee-proposal":"Voorstel tekst",
+	"decision-document-loading-text":"De beslissingsfiche wordt geladen..",
+	"minutes-document-loading-text": "De notulen worden geladen.."
 }

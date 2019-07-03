@@ -17,7 +17,7 @@ export default Mixin.create({
 		const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(groups, agendaitemsToGroup);
 		const minutesApprovals = await Promise.all(agendaitems.map(async (agendaitem) => {
 			const subcase = await agendaitem.get('subcase');
-			if (!subcase) {
+			if (!subcase && !agendaitem.get('showAsRemark')) {
 				return agendaitem;
 			}
 		}));

@@ -1,7 +1,7 @@
 <form class="vl-form" onsubmit={{action "createSubCase"}}>
   <div class="vl-modal-dialog__content">
     {{web-components/vl-radio-button-list
-      title=(t "case-type")
+      title=(t "subcase-type")
       modelName="case-type"
       selectedModel=remarkType
       modelChanged=(action "typeChanged")
@@ -19,7 +19,7 @@
       {{textarea rows="2" class="vl-textarea vl-textarea--block" value=title}}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "subcase-type")}}
+      {{web-components/vl-form-label value=(t "subcase-type-dropdown")}}
       {{utils/model-selector
         modelName="subcase-type"
         searchField="label"

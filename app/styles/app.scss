@@ -420,3 +420,12 @@ ul {
 .full-width-selector {
   width: 100%;
 }
+
+.vl-button-icon--error {
+  color: $red;
+}
+
+.js-vl-popover__toggle:hover {
+  background-color: $blue-gray-lighter;
+  
+}

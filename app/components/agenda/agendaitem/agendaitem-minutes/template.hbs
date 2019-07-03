@@ -24,10 +24,20 @@
     </p>
   </div>
   <div class="vlc-hr"></div>
-  {{utils/add-signed-documents
-    item=agendaitem.meetingRecord
-    title=(t "signed-notes-add")
-  }}
+  {{#if (is-pending agendaitem.meetingRecord.signedDocument)}}
+    {{web-components/vl-loader text=(t "minutes-document-loading-text")}}
+  {{else if (not (await agendaitem.meetingRecord.signedDocument))}}
+    {{utils/add-signed-documents
+      item=agendaitem.meetingRecord
+      modelToAddDocumentVersionTo="signedMinutes"
+      title=(t "signed-notes-add")
+    }}
+  {{else}}
+    {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+      document=(await agendaitem.meetingRecord.signedDocument)
+      item=agendaitem.meetingRecord
+    }}
+  {{/if}}
 {{else}}
   {{agenda/agendaitem/agendaitem-minutes-edit
     isEditing=isEditing

@@ -18,7 +18,7 @@ export default Mixin.create({
 	defaultSelected: null,
 	selectedItems: null,
 
-	class:computed('class', function() {
+	class: computed('class', function () {
 		return this.class;
 	}),
 
@@ -49,11 +49,8 @@ export default Mixin.create({
 
 	findAll: task(function* () {
 		const { modelName, queryOptions } = this;
-		const filteredItems = yield this.get('filteredItems');
-		if (!filteredItems || !filteredItems.length > 0) {
-			const items = yield this.store.query(modelName, queryOptions);
-			this.set('items', items);
-		}
+		const items = yield this.store.query(modelName, queryOptions);
+		this.set('items', items);
 	}),
 
 	init() {

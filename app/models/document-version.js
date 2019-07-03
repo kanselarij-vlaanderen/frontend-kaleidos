@@ -17,7 +17,6 @@ export default Model.extend({
 	file: belongsTo('file'),
 	convertedFile: belongsTo('file', { inverse: null }),
 	newsletter: belongsTo('newsletter-info'),
-	meetingRecord: belongsTo('meeting-record'),
 
 	nameToDisplay: computed('chosenFileName', 'document', 'file', function () {
 		const chosenFileName = this.get('chosenFileName');

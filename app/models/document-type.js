@@ -10,6 +10,5 @@ export default Model.extend({
 
 	documents: hasMany('document', { inverse: null }),
 	subtypes: hasMany('document-type', { inverse: null }),
-
 	superType: belongsTo('document-type', { inverse: null })
 });

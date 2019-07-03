@@ -12,13 +12,14 @@ export default Model.extend({
 	numberVr: attr('string'),
 	freezeAccessLevel: attr('boolean'),
 	forCabinet: attr('boolean'),
-	
+
 	documentVersions: hasMany('document-version'),
 	remarks: hasMany('remark'),
 	description: attr('string'),
 	type: belongsTo('document-type'),
-	signedDecision: belongsTo('decision'),
-	
+	signedDecision: belongsTo('decision', { inverse: null }),
+	signedMinutes: belongsTo('meeting-record', { inverse: null }),
+
 	sortedDocumentVersions: computed('documentVersions.@each', function () {
 		return PromiseArray.create({
 			promise: this.get('documentVersions').then(versions => {
@@ -27,7 +28,7 @@ export default Model.extend({
 		});
 	}),
 
-	lastDocumentVersion: computed('sortedDocumentVersions.@each','documentVersions.@each', function () {
+	lastDocumentVersion: computed('sortedDocumentVersions.@each', 'documentVersions.@each', function () {
 		return PromiseObject.create({
 			promise: this.get('sortedDocumentVersions').then((documentVersions) => {
 				return documentVersions.get('lastObject');

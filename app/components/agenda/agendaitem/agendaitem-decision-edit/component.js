@@ -64,8 +64,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 								agenda.reload();
 							});
 							await item.reload();
-							item.notifyPropertyChanged('decisions')
-
+							item.notifyPropertyChanged('decisions');
 						});
 					}));
 				}

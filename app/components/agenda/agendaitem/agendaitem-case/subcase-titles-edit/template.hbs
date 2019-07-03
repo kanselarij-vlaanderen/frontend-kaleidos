@@ -1,11 +1,9 @@
-{{#if (not item.showAsRemark)}}
-  <div class="vl-u-spacer">
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "public")}}
-      {{web-components/vl-toggle value=confidential}}
-    </div>
+<div class="vl-u-spacer">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "public")}}
+    {{web-components/vl-toggle value=confidential}}
   </div>
-{{/if}}
+</div>
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "name-subcase")}}
@@ -21,12 +19,10 @@
 </div>
 {{#if isAgendaItem}}
   {{#if (not (await item.isOC))}}
-    {{#if (not item.showAsRemark)}}
-      {{utils/formally-ok-selector
-        formallyOk=formallyOk
-        setAction=(action "setAction")
-      }}
-    {{/if}}
+    {{utils/formally-ok-selector
+      formallyOk=formallyOk
+      setAction=(action "setAction")
+    }}
   {{/if}}
 {{/if}}
 <div class="vl-action-group vl-action-group--align-right">

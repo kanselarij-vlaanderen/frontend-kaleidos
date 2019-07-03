@@ -9,20 +9,34 @@
   }
 }
 
-.vl-upload__element__label {
-  text-decoration: none;
-  margin: 0;
-  padding: 8rem;
-  em {
-    display: block;
-  }
+.vl-upload__element {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 400px;
+  margin: 0 auto;
 
-  a {
+  .vl-upload__element__label {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    padding: 8rem;
+    justify-content: center;
     text-decoration: none;
-    font-size: 1.2rem;
-    color: #333332;
-    text-decoration: none;
-    text-align: center;
+    width: 100%;
+
+    em {
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      font-size: 1.2rem;
+      color: #333332;
+      text-decoration: none;
+      text-align: center;
+    }
   }
 }
 

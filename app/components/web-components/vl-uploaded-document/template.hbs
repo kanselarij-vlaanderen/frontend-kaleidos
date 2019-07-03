@@ -48,22 +48,11 @@
         modelName="document-type"
         searchField="label"
         propertyToShow="label"
-        items=filteredItems
         sortField="priority"
+        filter=(await filter)
         selectedItems=file.documentType
         selectModel=(action "chooseDocumentType")
       }}
     </div>
-    {{!-- <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "publicity")}}
-      {{utils/model-selector
-        modelName="confidentiality"
-        searchField="label"
-        propertyToShow="label"
-        sortField="label"
-        selectedItems=file.confidentiality
-        selectModel=(action "chooseDocumentConfidentiality")
-      }}
-    </div> --}}
   {{/if}}
 </div>

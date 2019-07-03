@@ -53,7 +53,7 @@ export default Component.extend(isAuthenticatedMixin, {
 				(await subcase.get('decisions')).reload();
 				agendaitemToUpdate = await this.agendaitem.content;
 			} else {
-				agendaitemToUpdate = await this.agendaitem;
+				agendaitemToUpdate = await this.get('agendaitem');
 			}
 			agendaitemToUpdate.set('modified', moment().utc().toDate());
 			await agendaitemToUpdate.save();

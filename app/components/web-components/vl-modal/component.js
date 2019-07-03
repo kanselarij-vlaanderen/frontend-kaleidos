@@ -4,21 +4,22 @@ import { computed } from '@ember/object';
 export default Component.extend({
 	isOverlay: null,
 	large: false,
+	clickOutside: false,
 	isDocumentViewer: null,
 
-	backdropClass: computed('isOverlay', function() {
-		const { isOverlay} = this;
-		if(isOverlay) {
+	backdropClass: computed('isOverlay', function () {
+		const { isOverlay } = this;
+		if (isOverlay) {
 			return "vl-modal__backdrop";
 		}
 	}),
 
-	sizeClass: computed('large', 'isDocumentViewer', function() {
-		const { large,isDocumentViewer } = this;
-		if(large) {
+	sizeClass: computed('large', 'isDocumentViewer', function () {
+		const { large, isDocumentViewer } = this;
+		if (large) {
 			return "vl-modal-dialog--large";
 		}
-		if(isDocumentViewer) {
+		if (isDocumentViewer) {
 			return "vl-modal-dialog full-height";
 		}
 	}),
@@ -26,6 +27,12 @@ export default Component.extend({
 	actions: {
 		close() {
 			this.closeModal();
+		},
+
+		clickOutside() {
+			if (this.clickOutside) {
+				this.closeModal();
+			}
 		}
 	}
 });

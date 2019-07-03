@@ -17,8 +17,8 @@ export default Mixin.create({
 			await this.deleteApprovals(mandateesAlreadyAdded, mandatees, approvals);
 			await item.hasMany('approvals').reload();
 
-		} catch {
-			console.error('Something went wrong with the edit for the approvals.')
+		} catch(e) {
+				// TODO: Handle errors
 		}
 	},
 

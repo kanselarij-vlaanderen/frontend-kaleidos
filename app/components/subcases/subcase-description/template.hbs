@@ -120,6 +120,17 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcase-type")}}
         {{utils/model-selector
+          modelName="case-type"
+          searchField="label"
+          sortField="label"
+          propertyToShow="label"
+          selectedItems=remarkType
+          selectModel=(action "selectRemarkType")
+        }}
+      </div>
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "subcase-type-dropdown")}}
+        {{utils/model-selector
           modelName="subcase-type"
           searchField="label"
           sortField="label"
@@ -135,16 +146,16 @@
     </div>
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__right">
-        <div class="vl-action-group">
-          <a class="vl-link" {{action "cancelEditing"}}>
-            {{t "cancel"}}
-          </a>
-          {{web-components/vl-save-button
-            text=(t "save")
-            isLoading=isLoading
-            saveAction=(action "saveChanges")
-          }}
-        </div>
+        <a class="vl-link" {{action "cancelEditing"}}>
+          {{t "cancel"}}
+        </a>
+      </div>
+      <div class="vlc-toolbar__left">
+        {{web-components/vl-save-button
+          text=(t "save")
+          isLoading=isLoading
+          saveAction=(action "saveChanges")
+        }}
       </div>
     </div>
   </div>

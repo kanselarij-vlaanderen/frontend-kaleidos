@@ -30,12 +30,6 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   async model() {
-    // load code-lists that are used alot.
-    await this.store.findAll('policy-level');
-    await this.store.findAll('mandatee');
-    await this.store.findAll('case-type');
-    await this.store.findAll('subcase-type');
-
     return await this.checkAlerts();
   },
 

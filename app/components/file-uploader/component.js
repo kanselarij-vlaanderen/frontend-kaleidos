@@ -16,13 +16,13 @@ export default Component.extend({
     this._super(...arguments);
     this.set('isLoading', false);
     this.set('uploadedFileLength', 0);
-    this.store.query('document-type',
-      {
-        sort: "priority",
-        page: { size: 50 }
-      }).then((types) => {
-        return types;
-      });
+    // this.store.query('document-type',
+    //   {
+    //     sort: "priority",
+    //     page: { size: 50 }
+    //   }).then((types) => {
+    //     return types;
+    //   });
   },
 
   isNotLoading: observer('fileQueue.files.@each', function () {

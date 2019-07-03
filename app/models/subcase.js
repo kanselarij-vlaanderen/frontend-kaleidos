@@ -227,5 +227,15 @@ export default Model.extend({
         });
       })
     })
+  }),
+
+  remarkType: computed('showAsRemark', function() {
+    let id = "";
+    if (this.showAsRemark) {
+      id = CONFIG.remarkId;
+    } else {
+      id = CONFIG.notaID;
+    }
+    return this.store.findRecord('case-type', id);
   })
 });

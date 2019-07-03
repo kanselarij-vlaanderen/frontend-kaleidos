@@ -40,7 +40,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 					item.hasMany('documentVersions').reload();
 				});
 			} catch (e) {
-				console.error('something went wrong in the document-uploader', e);
+				// TODO: Handle errors
 			} finally {
 				this.set('isCreatingDocuments', false);
 				this.toggleProperty('isAddingNewDocument');

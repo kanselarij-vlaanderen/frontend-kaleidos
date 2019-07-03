@@ -7,6 +7,7 @@ export default Service.extend({
 	intl: inject(),
 	messages: [],
 	type: 'error',
+	shouldUndoChanges: false,
 
 	showToast: task(function* (messageToAdd) {
 		const messageTypeAlreadyFound = this.messages.find((item) => item.get('type') === messageToAdd.get('type'));
@@ -24,6 +25,9 @@ export default Service.extend({
 				break;
 			case 'success':
 				yield timeout(2000);
+				break;
+			case 'warning-undo':
+				yield timeout(15000);
 				break;
 		}
 		this.messages.removeObject(messageToAdd);
