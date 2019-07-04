@@ -28,7 +28,7 @@
   {{web-components/vl-form-label value=label}}
   {{web-components/vl-rdfa-editor
     isLarge=isExpanded
-    richtext=text
+    richtext=(await text)
     handleRdfaEditorInit=(action "handleRdfaEditorInit")
   }}
 </div>

@@ -6,17 +6,26 @@ import $ from 'jquery';
 export default Component.extend(UploadDocumentMixin, {
 	classNames: ["vl-uploaded-document"],
 	showMetadata: true,
+
+	didInsertElement() {
+		// Make sure that the view scrolls to the center of this component
+		this._super(...arguments);
+		const config = { behavior: "smooth", block: "start", inline: "nearest" };
+		const elements = document.getElementsByClassName("upload-container");
+		elements[0].scrollIntoView(config);
+	},
+
 	sizeToShow: computed('file', function () {
 		return this.bytesToSize(this.get('file.size'));
 	}),
 
 	filter: computed('subcase', async function () {
 		const filter = await this.get('subcase.documentTypeFilter');
-		if(filter) {
+		if (filter) {
 			return filter;
 		} else {
 			return {};
-		}	
+		}
 	}),
 
 	fileName: computed('file', function () {

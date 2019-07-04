@@ -6,6 +6,14 @@ export default Mixin.create({
 	documentVersionsSelected: null,
 	isEditing: false,
 
+	didInsertElement() {
+		// Make sure that the view scrolls to the center of this component
+		this._super(...arguments);
+		const config = { behavior: "smooth", block: "start", inline: "nearest" };
+		const elements = document.getElementsByClassName("vl-form__group vl-u-bg-porcelain");
+		elements[0].scrollIntoView(config);
+	},
+
 	async setNewPropertiesToModel(model) {
 		const { propertiesToSet } = this;
 		propertiesToSet.map((property) => {

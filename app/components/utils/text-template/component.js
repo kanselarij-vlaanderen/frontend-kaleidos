@@ -9,6 +9,7 @@ export default Component.extend(ModelSelectorMixin,{
 	store: inject(),
 	searchField: null,
 	label: null,
+	value:null,
 	type: "decisions",
 	modelName: "shortcut",
 	
@@ -28,19 +29,23 @@ export default Component.extend(ModelSelectorMixin,{
 	// 	}, 250);
 	// },
 
-	text: computed('editor.currentTextContent', function () {
+	text: computed('editor.currentTextContent', 'newText', function () {
 		if (!this.editor) {
 			return;
 		}
 
-		return this.editor.rootNode.innerHTML.htmlSafe();
+		if (!this.newText) {
+			return this.editor.rootNode.innerHTML.htmlSafe();
+		}
+
+		return this.newText;
 	}),
 
 	actions: {
 		selectModel(items) {
 			const richtext = this.editor.rootNode.innerHTML;
 			const newText = richtext + items.get('description');
-			this.set('text', newText);
+			this.set('newText', newText);
 		},
 
 		async handleRdfaEditorInit(editorInterface) {

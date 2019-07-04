@@ -61,13 +61,15 @@
     <div class="vl-modal-dialog__content">
       {{file-uploader isLoading=isLoading uploadedFile=(action "uploadedFile")}}
       {{#if (not isLoading)}}
-        {{#each uploadedFiles as |uploadedFile|}}
-          {{web-components/vl-uploaded-document
-            file=uploadedFile
-            subcase=item
-            uploadedFiles=uploadedFiles
-          }}
-        {{/each}}
+        <div class="upload-container">
+          {{#each uploadedFiles as |uploadedFile|}}
+            {{web-components/vl-uploaded-document
+              file=uploadedFile
+              subcase=item
+              uploadedFiles=uploadedFiles
+            }}
+          {{/each}}
+        </div>
       {{else}}
         {{web-components/vl-loader text=(t "documents-loading-text")}}
       {{/if}}

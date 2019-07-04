@@ -10,6 +10,8 @@ export default Route.extend(ApplicationRouteMixin, {
   currentSession: inject(),
   routeAfterAuthentication: "agendas",
 
+  
+
   beforeModel() {
     this.get('moment').setLocale('nl');
     this.set('moment.defaultFormat', 'DD.MM.YYYY');
@@ -50,6 +52,19 @@ export default Route.extend(ApplicationRouteMixin, {
       return null;
     } catch (e) {
       return null;
+    }
+  },
+
+  actions: {
+    willTransition: function (transition) {
+      if (this.controller.get('userHasEnteredData') &&
+        !confirm("Are you sure you want to abandon progress?")) {
+        transition.abort();
+      } else {
+        // Bubble the `willTransition` action so that
+        // parent routes can decide whether or not to abort.
+        return true;
+      }
     }
   }
 });

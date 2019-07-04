@@ -172,19 +172,19 @@
     title=(t "new-document-version")
   }}
     <div class="vl-modal-dialog__content">
-      <div class="upload-container">
-        {{#if (not uploadedFile)}}
-          {{file-uploader
-            multipleFiles=false
-            uploadedFile=(action "getUploadedFile")
-          }}
-        {{else}}
+      {{#if (not uploadedFile)}}
+        {{file-uploader
+          multipleFiles=false
+          uploadedFile=(action "getUploadedFile")
+        }}
+      {{else}}
+        <div class="upload-container">
           {{web-components/vl-uploaded-document
             file=uploadedFile
             showMetadata=false
           }}
-        {{/if}}
-      </div>
+        </div>
+      {{/if}}
     </div>
     {{web-components/vl-modal-footer
       cancelButtonText=(t "cancel")
