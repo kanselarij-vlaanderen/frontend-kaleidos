@@ -7,7 +7,7 @@ export default Model.extend({
 	modified: attr('date'),
 	announcements: attr('string'),
 	others: attr('string'),
-	description: attr('string'),
+	richtext: attr('string'),
 
 	attendees: hasMany('mandatee'),
 	signedDocument: belongsTo('document'),

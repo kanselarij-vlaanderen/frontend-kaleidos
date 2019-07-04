@@ -80,9 +80,9 @@
                       </div>
                     {{/if}}
                     <li>
-                      {{#if (await agendaitem.meetingRecord.description)}}
+                      {{#if (await agendaitem.meetingRecord.richtext)}}
                         <p>
-                          {{{await agendaitem.meetingRecord.description}}}
+                          {{{await agendaitem.meetingRecord.richtext}}}
                         </p>
                       {{else}}
                         <p class="vl-u-text--muted">

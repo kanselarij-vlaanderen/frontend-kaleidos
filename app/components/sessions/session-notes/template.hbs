@@ -26,7 +26,7 @@
       {{t "notes-of-session"}}
     </h3>
     <p>
-      {{await currentSession.notes.description}}
+      {{await currentSession.notes.richtext}}
     </p>
   </div>
 {{else}}
@@ -45,12 +45,12 @@
         chooseMandatee=(action "peopleSelected")
       }}
     </div>
-    {{utils/text-template
+    {{!-- {{utils/text-template
       label="Notulen"
       type="minutes"
-      text=currentSession.notes.description
+      text=currentSession.notes.richtext
       searchField="label"
-    }}
+    }} --}}
   </div>
   <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
     <div class="vlc-toolbar">

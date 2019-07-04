@@ -2,11 +2,11 @@ import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import { computed } from '@ember/object';
+import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 
-export default Component.extend(DocumentsSelectorMixin, {
+export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
 	propertiesToSet: ['finished', 'subtitle', 'title', 'text', 'richtext', 'mandateeProposal'],
-	isExpanded: false,
 	subtitle: getCachedProperty('subtitle'),
 	text: getCachedProperty('text'),
 	title: getCachedProperty('title'),
@@ -19,20 +19,7 @@ export default Component.extend(DocumentsSelectorMixin, {
 		});
 	}),
 
-	richtext: computed('editor.currentTextContent', function () {
-		if (!this.editor) {
-			return;
-		}
-		return this.editor.rootNode.innerHTML.htmlSafe();
-	}),
-
 	actions: {
-		async handleRdfaEditorInit(editorInterface) {
-			this.set('editor', editorInterface);
-		},
-		expandEditor() {
-			this.set('isExpanded', true);
-		},
 		chooseTheme(themes) {
 			this.set('themes', themes);
 		},
@@ -58,8 +45,6 @@ export default Component.extend(DocumentsSelectorMixin, {
 			this.setNewPropertiesToModel(item).then((newModel) => {
 				newModel.reload();
 				if (themes) {
-					console.log(themes)
-
 					agendaitem.set('themes', themes);
 					agendaitem.save().then(() => {
 						this.set('isLoading', false);

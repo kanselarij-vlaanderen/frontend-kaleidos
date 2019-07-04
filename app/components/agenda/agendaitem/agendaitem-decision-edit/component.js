@@ -1,15 +1,15 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
+import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
-export default Component.extend(DocumentsSelectorMixin, {
+export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
-	propertiesToSet: ['approved', 'description'],
-
-	description: getCachedProperty('description'),
+	propertiesToSet: ['approved', 'richtext'],
 	approved: getCachedProperty('approved'),
+	initValue: getCachedProperty('richtext'),
 
 	async setDecisionPhaseToSubcase() {
 		const approved = await this.get('approved');
@@ -86,6 +86,10 @@ export default Component.extend(DocumentsSelectorMixin, {
 			}
 			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
+		},
+
+		descriptionUpdated(val) {
+			this.set('initValue', this.richtext + val);
 		}
 	}
 });

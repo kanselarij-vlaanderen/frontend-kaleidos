@@ -3,7 +3,7 @@ import DS from 'ember-data';
 let { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
-  description: attr("string"),
+  richtext: attr("string"),
   shortTitle: attr("string"),
   approved: attr('boolean'),
   archived: attr('boolean'),
