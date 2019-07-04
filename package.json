@@ -72,6 +72,7 @@
     "eslint-plugin-react-hooks": "^1.6.0",
     "jquery-datetimepicker": "^2.5.20",
     "kaleidos-viewer": "git+https://github.com/kanselarij-vlaanderen/kaleidos-viewer.git",
+    "liquid-fire": "^0.30.0",
     "loader.js": "^4.7.0",
     "qunit-dom": "^0.8.0",
     "sass": "^1.16.1"

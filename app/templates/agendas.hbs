@@ -57,6 +57,7 @@
           {{#if (eq page 0)}}
             {{agenda/future-agendas
               meetings=futureMeetings
+              nearestMeeting=(await nearestMeeting)
               type="future"
               title=(t "future-agendas")
               selectAgenda=(action "selectAgenda")

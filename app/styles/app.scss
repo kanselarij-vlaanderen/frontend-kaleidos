@@ -429,3 +429,14 @@ ul {
   background-color: $blue-gray-lighter;
   
 }
+
+.liquid-container {
+ 
+ height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  // overflow: hidden !important;
+  .liquid-child {
+    height:100% ;
+  }
+}
