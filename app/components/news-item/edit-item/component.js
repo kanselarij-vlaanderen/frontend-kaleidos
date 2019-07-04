@@ -49,7 +49,8 @@ export default Component.extend(DocumentsSelectorMixin, {
 			const item = await this.get('item');
 			const documentVersionsSelected = this.get('documentVersionsSelected');
 			const itemDocumentsToEdit = await item.get('documentVersions');
-
+			const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
+			const themes = await this.themes;
 			if (documentVersionsSelected) {
 				await Promise.all(documentVersionsSelected.map(async (documentVersion) => {
 					if (documentVersion.get('selected')) {
@@ -64,9 +65,10 @@ export default Component.extend(DocumentsSelectorMixin, {
 			}
 			this.setNewPropertiesToModel(item).then((newModel) => {
 				newModel.reload();
-				const agendaitem = this.get('agendaitem');
-				if (this.themes) {
-					agendaitem.set('themes', this.themes);
+				if (themes) {
+					console.log(themes)
+
+					agendaitem.set('themes', themes);
 					agendaitem.save().then(() => {
 						this.set('isLoading', false);
 						this.toggleProperty('isEditing');
