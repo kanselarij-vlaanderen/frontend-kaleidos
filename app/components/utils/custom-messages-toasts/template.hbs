@@ -16,7 +16,7 @@
         </p>
         <button
           class="vl-button vl-button--link vl-button--icon-before"
-          {{action "undoChanges"}}
+          {{action "undoChanges" errorMessage}}
         >
           <i
             class="vl-button__icon vl-button__icon--before vl-vi vl-vi-text-undo"
@@ -29,10 +29,7 @@
   </div>
 {{else}}
   {{#click-outside action=(action "closeErrorMessage")}}
-    <div
-      class="vl-alert vl-alert-relative vl-alert-relative--center-mid vl-alert--{{errorMessage.type}}"
-      role="alert"
-    >
+    <div class="vl-alert {{alertType}}" role="alert">
       <div class="vl-alert__icon">
         {{#if (eq errorMessage.type "error")}}
           <i class="vl-vi vl-vi-alert-triangle" aria-hidden="true"></i>

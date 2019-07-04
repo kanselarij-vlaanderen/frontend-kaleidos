@@ -10,10 +10,13 @@ export default Service.extend({
 	shouldUndoChanges: false,
 
 	showToast: task(function* (messageToAdd) {
-		const messageTypeAlreadyFound = this.messages.find((item) => item.get('type') === messageToAdd.get('type'));
-		if (messageTypeAlreadyFound) {
-			return;
+		if (messageToAdd.get('type') != "warning-undo") {
+			const messageTypeAlreadyFound = this.messages.find((item) => item.get('type') === messageToAdd.get('type'));
+			if (messageTypeAlreadyFound) {
+				return;
+			}
 		}
+
 		if (this.messages.get('length') >= 3) {
 			const firstObject = this.messages.get('firstObject');
 			this.messages.removeObject(firstObject);

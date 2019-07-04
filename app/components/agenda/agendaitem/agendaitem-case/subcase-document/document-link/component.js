@@ -10,12 +10,21 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 	globalError: inject(),
 	fileService: inject(),
 	classNames: ["vl-u-spacer-extended-bottom-s"],
+	classNameBindings: ['aboutToDelete'],
 	isShowingVersions: false,
 	isUploadingNewVersion: false,
 	uploadedFile: null,
 	fileName: null,
 	isEditing: false,
 	documentToDelete: null,
+
+	aboutToDelete: computed('document.aboutToDelete', function () {
+		if (this.document) {
+			if (this.document.get('aboutToDelete')) {
+				return "deleted-state";
+			}
+		}
+	}),
 
 	numberVr: computed('document.numberVr', function () {
 		return this.get('document.numberVr')
@@ -101,7 +110,8 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 			this.globalError.showToast.perform(EmberObject.create({
 				title: 'WARNING',
 				message: "Document wordt verwijderd.",
-				type: "warning-undo"
+				type: "warning-undo",
+				modelIdToDelete: this.documentToDelete.get('id')
 			}));
 			this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete);
 			this.set('isVerifyingDelete', false);

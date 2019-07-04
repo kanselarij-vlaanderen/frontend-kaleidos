@@ -8,9 +8,8 @@ export default Route.extend(ApplicationRouteMixin, {
   moment: inject(),
   intl: inject(),
   currentSession: inject(),
+  fileService: inject(),
   routeAfterAuthentication: "agendas",
-
-  
 
   beforeModel() {
     this.get('moment').setLocale('nl');
@@ -57,12 +56,9 @@ export default Route.extend(ApplicationRouteMixin, {
 
   actions: {
     willTransition: function (transition) {
-      if (this.controller.get('userHasEnteredData') &&
-        !confirm("Are you sure you want to abandon progress?")) {
+      if (this.fileService.get('deleteDocumentWithUndo.isRunning') && confirm(this.intl.t("leave-page-message"))) {
         transition.abort();
       } else {
-        // Bubble the `willTransition` action so that
-        // parent routes can decide whether or not to abort.
         return true;
       }
     }
