@@ -29,10 +29,7 @@
     class="vl-button vl-button--link vl-button--icon vl-button-icon--error js-vl-popover__toggle"
     {{action "deleteDocumentVersion" documentVersion}}
   >
-    <i
-      class="vl-vi vl-vi-trash vl-button__icon"
-      aria-hidden="true"
-    ></i>
+    <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>
     <span class="vl-u-visually-hidden">
       {{t "delete"}}
     </span>
@@ -50,3 +47,11 @@
     aria-hidden="true"
   ></span>
 </div>
+{{#if isVerifyingDelete}}
+  {{web-components/vl-modal-verify
+    title=(t "document-delete")
+    message=(t "delete-document-message")
+    cancel=(action "cancel")
+    verify=(action "verify")
+  }}
+{{/if}}

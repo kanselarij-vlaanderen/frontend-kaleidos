@@ -108,7 +108,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 
 		verify() {
 			this.globalError.showToast.perform(EmberObject.create({
-				title: 'WARNING',
+				title: 'Opgelet!',
 				message: "Document wordt verwijderd.",
 				type: "warning-undo",
 				modelIdToDelete: this.documentToDelete.get('id')
