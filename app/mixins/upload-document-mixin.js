@@ -21,6 +21,7 @@ export default Mixin.create(FileSaverMixin, {
 
 	async createNewDocumentWithDocumentVersion(model, file, documentTitle) {
 		const { modelToAddDocumentVersionTo } = this;
+		const confidential = model.get('confidential');
 		const creationDate = moment().utc().toDate();
 		let type, chosenFileName;
 		if (file) {
@@ -29,10 +30,12 @@ export default Mixin.create(FileSaverMixin, {
 		} else {
 			chosenFileName = documentTitle;
 		}
+
 		let document = this.store.createRecord('document', {
 			created: creationDate,
 			title: documentTitle,
 			type: type,
+			freezeAccessLevel: confidential
 		});
 		const modelName = await model.get('constructor.modelName');
 
@@ -58,14 +61,14 @@ export default Mixin.create(FileSaverMixin, {
 						this.fileService.convertDocumentVersionById(createdDocumentVersion.get('id')).then((convertedMessage) => {
 							return convertedMessage;
 						});
-					} catch(e) { 
+					} catch (e) {
 						// TODO: Handle errors
 					}
 				}
 				if (modelName == "meeting-record" || modelName == "decision") {
 					model.set('signedDocument', createdDocument);
 				}
-				
+
 			});
 		});
 	},

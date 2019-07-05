@@ -81,7 +81,7 @@ export default Model.extend({
     return foundIndex;
   },
 
-  documents: computed('documentVersions', function () {
+  documents: computed('documentVersions.@each', function () {
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {

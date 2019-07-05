@@ -35,4 +35,8 @@
   {{/if}}
   {{agenda/agendaitem/agendaitem-case/all-subcases subcases=subcases}}
 {{/if}}
-{{agenda/agendaitem/agendaitem-case/subcase-documents item=item modelToAddDocumentVersionTo=modelToAddDocumentVersionTo}}
+{{agenda/agendaitem/agendaitem-case/subcase-documents
+  item=item
+  refreshRoute=(action "refreshRoute")
+  modelToAddDocumentVersionTo=item.modelName
+}}

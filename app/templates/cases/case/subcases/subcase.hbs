@@ -8,7 +8,10 @@
       <div class="vl-u-spacer-extended-bottom-l">
         <div class="vlc-hr"></div>
       </div>
-      {{agenda/agendaitem/agendaitem-case item=model}}
+      {{agenda/agendaitem/agendaitem-case
+        item=model
+        refreshRoute=(action "refreshRoute")
+      }}
     {{/if}}
   </div>
 </div>

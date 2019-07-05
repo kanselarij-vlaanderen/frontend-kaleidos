@@ -47,6 +47,10 @@ export default Component.extend(EditAgendaitemOrSubcase, {
     },
     chooseConfidentiality(confidentiality) {
       this.get('item').set('confidentiality', confidentiality);
+    },
+
+    refreshRoute() {
+      this.refreshRoute();
     }
   }
 });

@@ -13,5 +13,12 @@ export default Route.extend({
 
 	afterModel(model) {
 		this.set('sessionService.selectedAgendaItem', model);
+	},
+
+	actions: {
+		refreshRoute() {
+			this._super(...arguments);
+			this.refresh();
+		}
 	}
 });

@@ -26,20 +26,29 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 			this.toggleProperty('isEditing');
 		},
 
+		refreshRoute() {
+			this.refreshRoute();
+		},
+
 		async uploadNewDocument() {
 			this.set('isLoading', true);
 			this.set('isCreatingDocuments', true);
+			const item = await this.get('item');
+
 			try {
-				const item = await this.get('item');
 				await this.uploadFiles(item).then(async () => {
 					if (this.modelToAddDocumentVersionTo === 'agendaitem') {
 						this.changeFormallyOkPropertyIfNotSetOnTrue(item);
 						await this.updateModifiedProperty(await item.get('agenda'));
 						await item.save();
 					}
-					item.hasMany('documentVersions').reload();
+					await item.hasMany('documentVersions').reload();
+					item.notifyPropertyChange('documents');
+					item.notifyPropertyChange('documentVersions');
+					this.send('refreshRoute');
 				});
 			} catch (e) {
+				console.log(e);
 				// TODO: Handle errors
 			} finally {
 				this.set('isCreatingDocuments', false);

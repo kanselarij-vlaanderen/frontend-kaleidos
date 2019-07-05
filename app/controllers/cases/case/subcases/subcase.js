@@ -23,6 +23,10 @@ export default Controller.extend({
       subcase.save().then(() => {
         this.toggleProperty('isEditingMandatees');
       });
+    },
+
+    refreshRoute() {
+      this.send('refresh');
     }
   }
 });
