@@ -38,6 +38,7 @@ export default Model.extend({
   case: belongsTo('case', { inverse: null }),
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
   newsletterInfo: belongsTo('newsletter-info'),
+  requestedBy: belongsTo('mandatee', { inverse: null }),
 
   firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({
@@ -107,6 +108,10 @@ export default Model.extend({
 
   sortedMandatees: computed('mandatees', function () {
     return this.get('mandatees').sortBy('priority');
+  }),
+
+  sortedApprovals: computed('approvals.@each', function () {
+    return
   }),
 
   sortedThemes: computed('themes', function () {
@@ -229,7 +234,7 @@ export default Model.extend({
     })
   }),
 
-  remarkType: computed('showAsRemark', function() {
+  remarkType: computed('showAsRemark', function () {
     let id = "";
     if (this.showAsRemark) {
       id = CONFIG.remarkId;

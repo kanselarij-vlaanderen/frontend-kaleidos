@@ -9,6 +9,7 @@ export default Mixin.create({
 
 	async refreshData(mandatee) {
 		this.set('isLoading', true);
+
 		const iseCodes = (await mandatee.get('iseCodes')).filter((item) => item);
 		const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((item) => item);
 		const domains = await Promise.all(fields.map((field) => field.get('domain')));
@@ -19,7 +20,11 @@ export default Mixin.create({
 		});
 		rowToShow.get('domains').map((domain) => domain.set('selected', false));
 		rowToShow.get('fields').map((domain) => domain.set('selected', false));
+		const mandateeRows = await this.get('mandateeRows');
 
+		if (!mandateeRows) {
+			rowToShow.set('isSubmitter', true);
+		}
 		this.set('isLoading', false);
 		return rowToShow;
 	},
@@ -67,6 +72,10 @@ export default Mixin.create({
 				domains: selectedDomains,
 				iseCodes: selectedIseCodeLists
 			});
+
+			if (rowToShow.get('isSubmitter')) {
+				newRow.set('isSubmitter', true);
+			}
 
 			this.saveChanges(selectedMandatee, newRow);
 			this.set('isLoading', false);

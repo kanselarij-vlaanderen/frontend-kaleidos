@@ -12,6 +12,9 @@
           <th class="vl-data-table-col-5">
             {{t "government-field"}}
           </th>
+          <th class="vl-data-table-col-1">
+            {{t "submitter"}}
+          </th>
           <th class="vl-data-table-col-1"></th>
         </tr>
       </thead>
@@ -26,6 +29,12 @@
             </td>
             <td>
               {{await mandateeRow.fieldsToShow}}
+            </td>
+            <td>
+              {{web-components/vl-toggle
+                valueChanged=(action "valueChanged" mandateeRow)
+                value=(await mandateeRow.isSubmitter)
+              }}
             </td>
             <td class="vl-u-align-right vl-u-flex-align-center">
               {{#if isLoading}}

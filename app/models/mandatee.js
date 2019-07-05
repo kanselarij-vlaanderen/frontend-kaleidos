@@ -19,6 +19,7 @@ export default Model.extend({
 	meetingsAttended: hasMany('meeting-record'),
 	approvals: hasMany('approval'),
 	subcases: hasMany('subcase', { inverse: null }),
+	requestedSubcases: hasMany('subcase', { inverse: null }),
 	agendaitems: hasMany('agendaitem', { inverse: null }),
 
 	fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function () {

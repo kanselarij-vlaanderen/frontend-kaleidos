@@ -16,10 +16,19 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 	mandateeRows: computed('item', 'item.subcase', 'mandatees.@each', function () {
 		return DS.PromiseArray.create({
 			promise: this.constructMandateeRows().then((rows) => {
-				return rows.sortBy('mandateePriority');
+				return this.get('item.requestedBy').then((requestedBy) => {
+					if (!requestedBy && rows.get('length') > 0) {
+						rows.get('firstObject').set('isSubmitter', true);
+					} else {
+						const foundMandatee = rows.find((row) => row.get('mandatee.id') == requestedBy.get('id'));
+						if (foundMandatee) {
+							foundMandatee.set('isSubmitter', true);
+						}
+					}
+					return rows.sortBy('mandateePriority');
+				});
 			})
 		})
-
 	}),
 
 	async createMandateeRow(mandatee, iseCodes) {
@@ -65,10 +74,20 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 
 		const iseCodes = await item.get('iseCodes');
 		const mandatees = await (await item.get('mandatees')).sortBy('priority');
-
+		let selectedMandatee = await item.get('requestedBy');
+		const mandateeLength = mandatees.get('length')
+		if (mandateeLength === 1) {
+			selectedMandatee = mandatees.get('firstObject');
+		}
 		return Promise.all(mandatees.map(async (mandatee) => {
 			const filteredIseCodes = await this.getIseCodesOfMandatee(iseCodes, mandatee);
-			return this.createMandateeRow(mandatee, filteredIseCodes);
+			const row = await this.createMandateeRow(mandatee, filteredIseCodes);
+			if (selectedMandatee && mandatee.get('id') === selectedMandatee.get('id')) {
+				row.set('isSubmitter', true);
+			} else if (mandateeLength === 0) {
+				row.set('isSubmitter', true);
+			}
+			return row;
 		}))
 	},
 
@@ -89,10 +108,11 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 
 	async setNewPropertiesToModel(model) {
 		await this.parseDomainsAndMandatees();
-		const { selectedMandatees, selectedIseCodes } = this;
+		const { selectedMandatees, selectedIseCodes, submitter } = this;
 		model.set('formallyOk', false);
 		model.set('mandatees', selectedMandatees);
 		model.set('iseCodes', selectedIseCodes);
+		model.set('requestedBy', submitter)
 		return model.save().then((model) => {
 			return this.checkForActionChanges(model);
 		});
@@ -102,9 +122,12 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		const mandateeRows = await this.get('mandateeRows');
 		const mandatees = [];
 		let selectedIseCodes = [];
-
+		let submitter = null;
 		if (mandateeRows && mandateeRows.get('length') > 0) {
 			mandateeRows.map(row => {
+				if (row.get('isSubmitter')) {
+					submitter = row.get('mandatee');
+				}
 				mandatees.push(row.get('mandatee'));
 				const iseCodes = row.get('iseCodes');
 				iseCodes.map((code) => {
@@ -114,5 +137,6 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		}
 		this.set('selectedMandatees', mandatees);
 		this.set('selectedIseCodes', selectedIseCodes);
+		this.set('submitter', submitter);
 	}
 });

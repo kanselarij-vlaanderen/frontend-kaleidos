@@ -19,6 +19,11 @@ export default Component.extend(ManageMinisterMixin, {
 			return iseCode.get('field');
 	},
 
+	checkMandateeRowsForSubmitter(mandateeRows) {
+		const submitters = mandateeRows.filter((item) => item.get('isSubmitter'));
+		return submitters.get('length') > 0;
+	},
+
 	actions: {
 		async saveChanges(mandatee, newRow) {
 			const rowToShow = await this.get('rowToShow');
@@ -35,14 +40,16 @@ export default Component.extend(ManageMinisterMixin, {
 				this.set('isEditingMandateeRow', false);
 				this.set('rowToShow', null);
 			} else {
+				if (this.checkMandateeRowsForSubmitter(mandateeRows)) {
+					newRow.set('isSubmitter', false);
+				}
 				mandateeRows.addObject(EmberObject.create(
 					{
 						fieldsToShow, domainsToShow,
 						...newRow
-					}))
-				this.set('mandateeRows', mandateeRows.sortBy('mandateePriority'))
+					}));
+				this.set('mandateeRows', mandateeRows.sortBy('mandateePriority'));
 			}
-
 		},
 
 		cancel() {
@@ -84,7 +91,19 @@ export default Component.extend(ManageMinisterMixin, {
 			this.set('isLoading', false);
 			this.set('rowToShow', rowToShow);
 			this.set('isEditingMandateeRow', true);
-
 		},
+
+		async valueChanged(mandateeRow) {
+			const mandateeRows = await this.mandateeRows;
+			const newRows = mandateeRows.map((item) => {
+				if (item === mandateeRow) {
+					item.set('isSubmitter', true);
+				} else {
+					item.set('isSubmitter', false);
+				}
+				return item;
+			});
+			this.set('mandateeRows', newRows);
+		}
 	},
 });

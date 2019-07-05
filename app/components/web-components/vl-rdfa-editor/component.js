@@ -7,7 +7,6 @@ export default Component.extend({
 
 	actions: {
 		handleRdfaEditorInit(editorInterface) {
-			console.log(editorInterface)
 			this.handleRdfaEditorInit(editorInterface);
 		}
 	}
