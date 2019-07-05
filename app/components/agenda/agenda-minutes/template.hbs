@@ -58,6 +58,7 @@
                 <p>
                   {{{agendaitem.title}}}
                 </p>
+                <p></p>
               </div>
               {{#if agendaitem.isEditing}}
                 {{agenda/agendaitem/agendaitem-minutes-edit
@@ -81,9 +82,18 @@
                     {{/if}}
                     <li>
                       {{#if (await agendaitem.meetingRecord.richtext)}}
-                        <p>
+                        <p class="vl-u-text--ellipse">
                           {{{await agendaitem.meetingRecord.richtext}}}
                         </p>
+                        {{#each
+                          (await agendaitem.subcase.decisions) as |decision|
+                        }}
+                          {{#if (await decision.signedDocument.numberVr)}}
+                            <p class="vl-u-text--muted">
+                              {{await decision.decisionApproval}}
+                            </p>
+                          {{/if}}
+                        {{/each}}
                       {{else}}
                         <p class="vl-u-text--muted">
                           {{t "no-notes"}}
