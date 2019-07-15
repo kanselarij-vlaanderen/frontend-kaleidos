@@ -130,7 +130,7 @@ export default Service.extend({
 			return result.map((item) => {
 				item.groups = item.groups.map((group) => EmberObject.create(group))
 				return EmberObject.create(item);
-			} );
+			});
 		});
 	},
 
@@ -165,7 +165,7 @@ export default Service.extend({
 		let firstAgendaItem;
 		groups.map((agenda) => {
 			agenda.groups.map((group) => {
-				
+
 				const newAgendaitems = group.agendaitems.map((item) => {
 					const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
 

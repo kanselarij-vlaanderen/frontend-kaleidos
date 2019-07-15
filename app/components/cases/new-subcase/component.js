@@ -9,7 +9,7 @@ export default Component.extend(ApprovalsEditMixin, {
 	store: inject(),
 	classNames: ["vl-custom"],
 	confidentiality: null,
-	filter: { type: "subcase-name"},
+	filter: { type: "subcase-name" },
 
 	title: computed('case', function () {
 		return this.get('case.title');
@@ -27,10 +27,12 @@ export default Component.extend(ApprovalsEditMixin, {
 		const mandatees = await latestSubcase.get('mandatees');
 		const iseCodes = await latestSubcase.get('iseCodes');
 		const themes = await latestSubcase.get('themes');
+		const requestedBy = await latestSubcase.get('requestedBy');
 
 		subcase.set('mandatees', mandatees);
 		subcase.set('iseCodes', iseCodes);
 		subcase.set('themes', themes);
+		subcase.set('requestedBy', requestedBy);
 
 		return subcase.save();
 	},
@@ -84,7 +86,7 @@ export default Component.extend(ApprovalsEditMixin, {
 		typeChanged(id) {
 			const type = this.store.peekRecord('case-type', id);
 			if (type.get('id') === CONFIG.remarkId) {
-				this.set('showAsRemark',true);
+				this.set('showAsRemark', true);
 			} else {
 				this.set('showAsRemark', false);
 			}
@@ -101,7 +103,7 @@ export default Component.extend(ApprovalsEditMixin, {
 			const latestSubcase = await caze.get('latestSubcase');
 			const date = moment().utc().toDate();
 			let subcase = await this.createSubcaseObject(caze, date);
-			//const subcaseName = await caze.getNameForNextSubcase((await this.get('type')));
+
 			subcase.set('subcaseName', this.subcaseName);
 			if (latestSubcase) {
 				subcase = await this.copySubcaseProperties(subcase, latestSubcase);
@@ -116,8 +118,8 @@ export default Component.extend(ApprovalsEditMixin, {
 
 			this.set('item', subcase);
 			await this.checkForActionChanges();
+			await caze.hasMany('subcases').reload();
 			this.set('isLoading', false);
-			caze.notifyPropertyChange('subcases');
 			this.refresh();
 		},
 
