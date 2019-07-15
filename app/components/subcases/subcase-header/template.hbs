@@ -130,11 +130,12 @@
 {{#if isAssigningToAgenda}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "new-agenda")
+    title=(t "propose-for-agenda")
     closeModal=(action "cancel")
   }}
     {{subcases/assign-to-meeting-form
       subcase=selectedSubcase
+      proposeForAgenda=(action "proposeForAgenda")
       cancel=(action "cancel")
     }}
   {{/web-components/vl-modal}}

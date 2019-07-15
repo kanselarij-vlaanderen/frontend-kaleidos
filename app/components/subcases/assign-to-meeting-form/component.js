@@ -6,13 +6,13 @@ import moment from 'moment';
 export default Component.extend({
 	store: inject(),
 
-	dateObjectsToEnable: computed('store', function () {
-		return this.store.findAll('meeting');
+	dateObjectsToEnable: computed(function () {
+		return this.store.query('meeting', { sort: 'planned-start' });
 	}),
 
 	actions: {
 		selectStartDate(val) {
-			this.set('startDate', val);
+			this.set('startDate', moment(val).utc().format());
 		},
 
 		async assignToMeeting(subcase) {
@@ -22,13 +22,10 @@ export default Component.extend({
 			const meetingToAssignTo = meetings.find(meeting =>
 				moment(meeting.get('plannedStart')).utc().format() == moment(startDate).utc().format());
 
-			const selectedSubcase = this.store.peekRecord('subcase', subcase.get('id'));
+			const selectedSubcase = await this.store.findRecord('subcase', subcase.get('id'));
 			if (selectedSubcase && meetingToAssignTo) {
-				selectedSubcase.set('requestedForMeeting', meetingToAssignTo);
-				selectedSubcase.save().then(subcase => {
-					this.assignSubcasePhase(subcase);
-					this.cancel();
-				});
+				await this.proposeForAgenda(selectedSubcase, meetingToAssignTo);
+				this.cancel();
 			}
 		},
 

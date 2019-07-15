@@ -1,11 +1,15 @@
 <div class="vl-modal-dialog__content">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "propose-for")}}
-    {{web-components/vl-datepicker
-      dateObjectsToEnable=(await dateObjectsToEnable)
-      datePropertyToUse="plannedStart"
-      dateChanged=(action "selectStartDate")
-    }}
+    {{#if (is-pending dateObjectsToEnable)}}
+      {{web-components/vl-loader text=(t "sessions-loading-text")}}
+    {{else}}
+      {{web-components/vl-datepicker
+        dateObjectsToEnable=(await dateObjectsToEnable)
+        datePropertyToUse="plannedStart"
+        dateChanged=(action "selectStartDate")
+      }}
+    {{/if}}
   </div>
 </div>
 <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">

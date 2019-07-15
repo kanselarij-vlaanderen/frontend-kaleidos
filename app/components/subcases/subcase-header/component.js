@@ -30,8 +30,10 @@ export default Component.extend(ModifiedMixin, {
 		},
 
 		async proposeForAgenda(subcase, meeting) {
-			subcase.set('requestedForMeeting', meeting);
-			const designAgenda = await meeting.get('latestAgenda');
+			const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
+			subcase.set('requestedForMeeting', meetingRecord);
+			const designAgenda = await meetingRecord.get('latestAgenda');
+
 			if (designAgenda.get('name') === "Ontwerpagenda") {
 				await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
 				await this.updateModifiedProperty(designAgenda);
@@ -61,6 +63,7 @@ export default Component.extend(ModifiedMixin, {
 
 			subcase.save();
 		},
+
 		cancel() {
 			this.toggleProperty('isAssigningToAgenda');
 			this.set('selectedSubcase', null);
