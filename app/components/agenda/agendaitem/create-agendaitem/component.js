@@ -156,12 +156,8 @@ export default Component.extend(DefaultQueryParamsMixin, {
       }));
 
       promise.then(async () => {
-        const agendas = await this.get('agendas');
-        if (agendas.length === 1) {
-          return agendaService.sortAgendaItems(selectedAgenda);
-        }
-      }).then(() => {
-        selectedAgenda.hasMany('agendaitems').reload();
+        await selectedAgenda.hasMany('agendaitems').reload();
+        await agendaService.assignDirtyPrioritiesToAgendaitems(selectedAgenda);
 
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);

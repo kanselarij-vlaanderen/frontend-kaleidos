@@ -51,6 +51,19 @@ export default Service.extend({
 		})
 	},
 
+	async assignDirtyPrioritiesToAgendaitems(selectedAgenda) {
+		const sortedItems = await this.getSortedAgendaItems(selectedAgenda)
+		const agendaitems = await selectedAgenda.get('agendaitems');
+		agendaitems.map((agendaitem) => {
+			if (!agendaitem.get('priority')) {
+				const sortedAgendaItemFound = sortedItems.find((sortedItem) =>
+					sortedItem.uuid == agendaitem.get('id')
+				);
+				agendaitem.set('priority', sortedAgendaItemFound.priority)
+			}
+		})
+	},
+
 	sendNewsletter(agenda) {
 		return $.ajax(
 			{
@@ -141,13 +154,11 @@ export default Service.extend({
 
 		const agendaitem = this.store.createRecord('agendaitem', {
 			retracted: false,
-			postPoned: null,
 			titlePress: subcase.get('shortTitle'),
 			textPress: pressText,
 			created: moment().utc().toDate(),
 			subcase: subcase,
 			agenda: selectedAgenda,
-			priority: null,
 			title: subcase.get('title'),
 			shortTitle: subcase.get('shortTitle'),
 			formallyOk: CONFIG.notYetFormallyOk,

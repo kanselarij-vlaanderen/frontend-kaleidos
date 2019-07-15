@@ -10,7 +10,7 @@ export default Mixin.create({
 	async parseAgendaItems(agenda, session, definite) {
 		const agendaitems = (await agenda.get('agendaitems')).filter((item) => item);
 		const agendaitemsToGroup = agendaitems.filter((item) => !item.get('showAsRemark'));
-
+		await this.agendaService.assignDirtyPrioritiesToAgendaitems(agenda);
 		const announcements = agendaitems.filter((item) => item.get('showAsRemark'));
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
 
