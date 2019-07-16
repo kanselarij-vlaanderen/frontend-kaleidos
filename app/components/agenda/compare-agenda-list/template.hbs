@@ -32,6 +32,8 @@
       </div>
     {{/each}}
   </div>
+{{else if isLoadingAgendaitems}}
+  {{web-components/vl-loader text=(t "loading-text-inactive")}}
 {{else}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}

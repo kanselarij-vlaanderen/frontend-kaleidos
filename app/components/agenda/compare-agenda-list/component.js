@@ -14,6 +14,17 @@ export default Component.extend({
   agendaToCompareGroups: null,
   agendaOne: null,
   agendaTwo: null,
+
+  isLoadingAgendaitems: computed('isLoadingAgendaOne', 'isLoadingAgendaTwo', function () {
+    if (this.isLoadingAgendaOne) {
+      return true;
+    }
+    if (this.isLoadingAgendaTwo) {
+      return true;
+    }
+    return false;
+  }),
+
   hasChangedSet: computed('changedGroups', function () {
     return !!this.changedGroups && Object.keys(this.changedGroups).length > 0;
   }),
@@ -21,6 +32,7 @@ export default Component.extend({
   currentAgendaItemsObserver: on('init', observer('agendaOne', async function () {
     let agenda = await this.get('agendaOne');
     if (!agenda) return;
+    this.set('isLoadingAgendaTwo', true);
     let agendaItems = await this.store.query('agendaitem', {
       filter: {
         'agenda': { id: agenda.id },
@@ -31,11 +43,13 @@ export default Component.extend({
 
     const groups = await this.reduceGroups(agendaItems, agenda);
     this.set('currentAgendaGroups', groups);
+    this.set('isLoadingAgendaTwo', false);
   })),
 
   agendaToCompareAgendaItemsObserver: on('init', observer('agendaTwo', async function () {
     let agenda = await this.get('agendaTwo');
     if (!agenda) return;
+    this.set('isLoadingAgendaOne', true);
     let agendaItems = await this.store.query('agendaitem', {
       filter: {
         'agenda': { id: agenda.id },
@@ -45,6 +59,7 @@ export default Component.extend({
     });
     const groups = await this.reduceGroups(agendaItems, agenda);
     this.set('agendaToCompareGroups', groups);
+    this.set('isLoadingAgendaOne', false);
   })),
 
   changedGroups: computed('currentAgendaGroups.@each', 'agendaToCompareGroups.@each', function () {
