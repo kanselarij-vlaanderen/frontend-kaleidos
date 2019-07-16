@@ -1,46 +1,39 @@
-
-  <div class="vl-grid vl-grid--is-stacked vl-u-spacer-extended-bottom-l compare-container">
-    <div class="compare-left-column">
-      {{utils/agenda-selector
-        searchField="name"
-        propertyToShow="agendaName"
-        placeholder="Selecteer een agenda"
-        multiSelect=false
-        sortField="label"
-        selectedItems=agendaOne
-        selectModel=(action "chooseAgendaOne")
-      }}
-    </div>
-    <div class="compare-right-column">
-      {{utils/agenda-selector
-        searchField="name"
-        propertyToShow="agendaName"
-        placeholder="Selecteer een agenda"
-        multiSelect=false
-        sortField="label"
-        selectedItems=agendaTwo
-        selectModel=(action "chooseAgendaTwo")
-      }}
-    </div>
+<div
+  class="vl-grid vl-grid--is-stacked vl-u-spacer-extended-bottom-l compare-container"
+>
+  <div class="compare-left-column">
+    {{utils/agenda-selector
+      searchField="name"
+      propertyToShow="agendaName"
+      placeholder="Selecteer een agenda"
+      multiSelect=false
+      sortField="label"
+      selectedItems=agendaOne
+      selectModel=(action "chooseAgendaOne")
+    }}
   </div>
-
-
-  {{#if hasChangedSet}}
-
-    <div class="u-spacer--large">
-
-      {{#each changedGroups as |changedSet|}}
-        <div class="{{spacerClass}}">
-          {{agenda/compare-agenda-item changedSet=changedSet}}
-        </div>
-      {{/each}}
-
-    </div>
-
-  {{else}}
-
-    <div class="vl-u-spacer-extended-top-s">
-      {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
-    </div>
-
-  {{/if}}
+  <div class="compare-right-column">
+    {{utils/agenda-selector
+      searchField="name"
+      propertyToShow="agendaName"
+      placeholder="Selecteer een agenda"
+      multiSelect=false
+      sortField="label"
+      selectedItems=agendaTwo
+      selectModel=(action "chooseAgendaTwo")
+    }}
+  </div>
+</div>
+{{#if hasChangedSet}}
+  <div class="u-spacer--large">
+    {{#each changedGroups as |changedSet|}}
+      <div class="{{spacerClass}}">
+        {{agenda/compare-agenda-item changedSet=changedSet}}
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <div class="vl-u-spacer-extended-top-s">
+    {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
+  </div>
+{{/if}}

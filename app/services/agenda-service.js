@@ -51,6 +51,17 @@ export default Service.extend({
 		})
 	},
 
+	getComparedSortedAgendaItems(agenda) {
+		return $.ajax(
+			{
+				method: "GET",
+				url: `/agenda-sort/compared-sort?agendaId=${agenda.get('id')}`,
+			}
+		).then(result => {
+			return result.body.items;
+		})
+	},
+
 	async assignDirtyPrioritiesToAgendaitems(selectedAgenda) {
 		const sortedItems = await this.getSortedAgendaItems(selectedAgenda)
 		const agendaitems = await selectedAgenda.get('agendaitems');

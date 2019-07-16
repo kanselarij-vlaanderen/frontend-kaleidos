@@ -24,7 +24,7 @@
   </li>
   {{#if (or isAdmin isEditor)}}
     <li class="vlc-tabs-reverse__item">
-      <a class="vlc-tabs-reverse__link" {{action "compareAgendas"}}>
+      <a class="vlc-tabs-reverse__link {{selectedCompareClass}}" {{action "compareAgendas"}}>
         {{t "compare"}}
       </a>
     </li>

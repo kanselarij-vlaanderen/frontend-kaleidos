@@ -68,7 +68,7 @@ export default Component.extend({
 
   async reduceGroups(agendaitems, agenda) {
     const { agendaService } = this;
-    const sortedAgendaItems = await agendaService.getSortedAgendaItems(agenda);
+    const sortedAgendaItems = await agendaService.getComparedSortedAgendaItems(agenda);
     const itemsAddedAfterwards = [];
 
     let filteredAgendaItems = agendaitems.filter(agendaitem => {

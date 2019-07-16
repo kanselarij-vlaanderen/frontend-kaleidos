@@ -25,6 +25,13 @@ export default Component.extend(isAuthenticatedMixin, {
 		}
 	}),
 
+	selectedCompareClass: computed('routing.currentRouteName', function () {
+		const { routing } = this;
+		if (routing.get('currentRouteName') === "agenda.compare") {
+			return "vlc-tabs-reverse__link--active";
+		}
+	}),
+
 	actions: {
 		compareAgendas() {
 			this.compareAgendas();

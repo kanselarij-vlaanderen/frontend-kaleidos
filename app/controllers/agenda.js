@@ -2,9 +2,11 @@ import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { computed } from '@ember/object';
 
 export default Controller.extend(isAuthenticatedMixin, {
 	sessionService: inject(),
+	router: inject(),
 	queryParams: ['selectedAgenda'],
 	selectedAgenda: null,
 	creatingNewSession: false,
@@ -12,6 +14,10 @@ export default Controller.extend(isAuthenticatedMixin, {
 	createAnnouncement: false,
 	isLoading: false,
 	isPrintingDecisions: false,
+	
+	shouldHideNav:computed('router.currentRouteName', function() {
+		return this.get('router.currentRouteName') === "agenda.compare";
+	}),
 
 	currentSession: alias('sessionService.currentSession'),
 	agendas: alias('sessionService.agendas'),

@@ -43,19 +43,19 @@ export default Service.extend({
 			return result.body;
 		})
 	},
-	announcements: computed('currentAgenda.announcements.@each', function () {
-		let currentAgenda = this.get('currentAgenda');
-		if (currentAgenda) {
-			let announcements = this.store.query('announcement', {
-				filter: {
-					agenda: { id: currentAgenda.id },
-				}
-			});
-			return announcements;
-		} else {
-			return [];
-		}
-	}),
+	// announcements: computed('currentAgenda.announcements.@each', function () {
+	// 	let currentAgenda = this.get('currentAgenda');
+	// 	if (currentAgenda) {
+	// 		let announcements = this.store.query('announcement', {
+	// 			filter: {
+	// 				agenda: { id: currentAgenda.id },
+	// 			}
+	// 		});
+	// 		return announcements;
+	// 	} else {
+	// 		return [];
+	// 	}
+	// }),
 
 	definiteAgendas: computed('agendas', function () {
 		return this.get('agendas').then((agendas) => {
