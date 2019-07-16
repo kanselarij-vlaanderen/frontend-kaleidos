@@ -3,5 +3,11 @@ import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
-	classNames: ['vl-u-spacer-extended-l']
+	classNames: ['vl-u-spacer-extended-l'],
+	isShowingDocuments: false,
+	actions: {
+		toggleIsShowingDocuments() {
+			this.toggleProperty('isShowingDocuments');
+		}
+	}
 });

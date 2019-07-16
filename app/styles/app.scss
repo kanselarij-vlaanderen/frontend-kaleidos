@@ -434,3 +434,8 @@ ul {
   pointer-events: none;
   cursor: none;
 }
+
+.no-capitalize {
+  white-space:pre-line;
+  display:inline-flex;
+}

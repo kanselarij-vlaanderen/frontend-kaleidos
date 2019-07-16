@@ -50,9 +50,9 @@
       {{t "show-minutes"}}
     {{/link-to}}
   {{else}}
-    <p>
+    <pre class="no-capitalize">
       {{await item.title}}
-    </p>
+    </pre>
   {{/if}}
 </div>
 {{#if (not (await item.isOC))}}
