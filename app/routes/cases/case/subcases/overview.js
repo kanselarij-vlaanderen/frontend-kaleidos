@@ -16,7 +16,7 @@ export default Route.extend({
         case: { id: caze.get('id') },
       },
       include: "phases",
-      sort: '-created'
+      sort: '-created',
     });
 
     return hash({

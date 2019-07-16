@@ -2,16 +2,15 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
     {{cases/cases-filter size=size}}
-    <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vl-u-flex-space-between">
       <h2 class="vl-title vl-title--h3">
         {{t "my-cases"}}
       </h2>
       {{#if (or isAdmin isEditor)}}
-        {{web-components/vl-checkbox
-          value=isNotArchived
-          label=(t "show-archived")
-          toggle=(action "toggleArchived")
-        }}
+<div class="vl-u-display-flex align-right">
+          {{web-components/vl-form-label value=(t "show-archived")}}
+          {{web-components/vl-toggle value=isArchived}}
+        </div>
       {{/if}}
     </div>
     {{#data-table
@@ -46,11 +45,11 @@
         {{#c.body as |row|}}
           <td>
             <p>
-            {{#if row.shortTitle}}
-              {{row.shortTitle}}
-            {{else}}
-              {{row.title}}
-            {{/if}}
+              {{#if row.shortTitle}}
+                {{row.shortTitle}}
+              {{else}}
+                {{row.title}}
+              {{/if}}
             </p>
           </td>
           <td>

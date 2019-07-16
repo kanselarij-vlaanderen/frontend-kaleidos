@@ -10,6 +10,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
   isEditingRow: false,
   isNotArchived: false,
   isArchivingCase: false,
+  isArchived:false,
 
   emptyCaseType: computed('intl', function() {
     return this.intl.t('no-case-type');
@@ -27,10 +28,6 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     return this.intl.t('unarchive-case');
   }),
 
-  filter: computed('isNotArchived', function () {
-    return this.isNotArchived;
-  }),
-
   actions: {
     editRow(caze) {
       this.set('caseToEdit', caze);
@@ -39,10 +36,6 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 
     cancelEditing() {
       this.toggleProperty('isEditingRow');
-    },
-
-    toggleArchived(value) {
-      this.set("filter", value)
     },
 
     archiveCase(caze) {

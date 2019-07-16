@@ -8,6 +8,9 @@ export default Route.extend(DataTableRouteMixin, {
   queryParams: {
     oc: {
       refreshModel: true
+    },
+    isArchived: {
+      refreshModel: true
     }
   },
 
@@ -21,8 +24,8 @@ export default Route.extend(DataTableRouteMixin, {
       filter["policy-level"] = { id: CONFIG.VRCaseTypeID };
     } else {
       filter["policy-level"] = { id: CONFIG.VRCaseTypeID };
-
     }
+    filter["is-archived"] = params.isArchived;
     return {
       filter: filter
     };
