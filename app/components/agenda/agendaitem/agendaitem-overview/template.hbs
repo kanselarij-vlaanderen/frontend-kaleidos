@@ -20,48 +20,11 @@
             <div class="vl-action-group vl-action-group--align-right">
               {{#if (or isAdmin isEditor)}}
                 {{#if (not currentAgenda.isFinal)}}
-                  {{#if (await isPostPonable)}}
-                    {{#if
-                      (or agendaitem.retracted (await agendaitem.postponedTo))
-                    }}
-                      <button
-                        class="vl-button vl-button--tertiary vl-button--narrow"
-                        {{action "advanceAgendaitem" agendaitem}}
-                      >
-                        {{t "not-postpone"}}
-                      </button>
-                    {{else}}
-                      <button
-                        class="vl-button vl-button--tertiary vl-button--narrow"
-                        {{action "togglePostponed" agendaitem}}
-                      >
-                        {{t "postpone"}}
-                      </button>
-                    {{/if}}
-                  {{/if}}
-                  {{#if
-                    (await
-                      (allow-delete-agendaitem
-                        agendaitem=agendaitem
-                        lastDefiniteAgenda=(await lastDefiniteAgenda)
-                      )
-                    )
+                  {{agenda/agendaitem/agendaitem-controls
+                    agendaitem=agendaitem
+                    currentAgenda=currentAgenda
+                    lastDefiniteAgenda=lastDefiniteAgenda
                   }}
-                    <button
-                      class="vl-button vl-button--tertiary vl-button--narrow"
-                      {{action "deleteItem" agendaitem}}
-                    >
-                      {{t "delete"}}
-                    </button>
-                  {{/if}}
-                  <button
-                    class="vl-button vl-button--tertiary vl-button--icon"
-                    {{action "showOptions"}}
-                  >
-                    <i
-                      class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
-                    ></i>
-                  </button>
                 {{/if}}
               {{/if}}
             </div>
@@ -73,37 +36,37 @@
           {{else if (eq activeAgendaItemSection "press-agenda")}}
             {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "decision")}}
-              {{#if (or isEditor isAdmin)}}
-                <div class="vl-u-display-flex vl-u-flex-space-between">
-                  <h3 class="vl-title vl-title--h3">
-                    {{t "decision-title"}}
-                  </h3>
+            {{#if (or isEditor isAdmin)}}
+              <div class="vl-u-display-flex vl-u-flex-space-between">
+                <h3 class="vl-title vl-title--h3">
+                  {{t "decision-title"}}
+                </h3>
+              </div>
+              {{#if (not (await agendaitem.isPostponed))}}
+                <div class="vl-action-group vl-action-group--align-left">
+                  <button
+                    class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+                    {{action "addDecision"}}
+                  >
+                    <i
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                    ></i>
+                    {{t "add-decision"}}
+                  </button>
                 </div>
-                {{#if (not (await agendaitem.isPostponed))}}
-                  <div class="vl-action-group vl-action-group--align-left">
-                    <button
-                      class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
-                      {{action "addDecision"}}
-                    >
-                      <i
-                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-                      ></i>
-                      {{t "add-decision"}}
-                    </button>
-                  </div>
-                  {{#each (await agendaitem.decisions) as |decision|}}
-                    {{agenda/agendaitem/agendaitem-decision
-                      subcase=(await subcase)
-                      decision=decision
-                      agendaitem=agendaitem
-                    }}
-                  {{/each}}
-                {{else}}
-                  <p>
-                    {{t "postponed-item"}}
-                  </p>
-                {{/if}}
+                {{#each (await agendaitem.decisions) as |decision|}}
+                  {{agenda/agendaitem/agendaitem-decision
+                    subcase=(await subcase)
+                    decision=decision
+                    agendaitem=agendaitem
+                  }}
+                {{/each}}
+              {{else}}
+                <p>
+                  {{t "postponed-item"}}
+                </p>
               {{/if}}
+            {{/if}}
           {{else if (eq activeAgendaItemSection "news-item")}}
             {{agenda/agendaitem/agendaitem-news-item
               agendaitem=agendaitem
@@ -117,44 +80,3 @@
     </div>
   </div>
 </div>
-{{#if isShowingPostponeModal}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "postpone-item")
-    closeModal=(action "togglePostponed")
-  }}
-    <div class="vl-modal-dialog__content">
-      <label class="vl-form__label">
-        {{t "postpone-until"}}
-      </label>
-      {{sessions/sessions-selector
-        currentSession=postponeTargetSession
-        selectModel=(action "chooseSession")
-      }}
-    </div>
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "togglePostponed"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-        </div>
-        <div class="vlc-toolbar__right">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "postponeAgendaItem" agendaitem}}
-            >
-              {{t "postpone"}}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  {{/web-components/vl-modal}}
-{{/if}}
