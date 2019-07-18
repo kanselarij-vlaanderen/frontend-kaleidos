@@ -56,6 +56,23 @@ Router.map(function () {
   });
   this.route('accountless-users');
   this.route('document-viewer', { path: '/document/:document_version_id', });
+
+  this.route('oc', function () {
+    this.route('meetings', { path: '/vergaderingen' }, function () {
+      this.route('meeting', { path: '/:meeting_id' }, function () {
+        this.route('agendaitems', { path: "/agendapunten" }, function () {
+          this.route('view', { path: '/:agendaitem_id' });
+          this.route('new', { path: '/nieuw' });
+        });
+      });
+      this.route('new', { path: '/nieuw' });
+    });
+    this.route('cases', { path: '/dossiers' }, function () {
+      this.route('case', { path: '/:case_id' }, function () {
+        this.route('agendaitems', { path: "/agendapunten" });
+      });
+    });
+  });
 });
 
 export default Router;
