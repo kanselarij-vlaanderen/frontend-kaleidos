@@ -4,5 +4,5 @@ let { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
   identifier: attr('string'),
-  agendaitems: hasMany('oc-agendaitem', { inverse: null }),
+  agendaItems: hasMany('oc-agendaitem', { inverse: null }),
 });

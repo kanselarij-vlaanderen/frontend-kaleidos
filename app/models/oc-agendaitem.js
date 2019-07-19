@@ -9,7 +9,7 @@ export default Model.extend({
   distributionDate: attr('date'),
 
   case: belongsTo('oc-case'),
-  // submitter: belongsTo('government-body'),
+  submitters: hasMany('government-body'),
   meetingRecord: belongsTo('file'),
   notification: belongsTo('file'),
 
