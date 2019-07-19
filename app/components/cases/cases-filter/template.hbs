@@ -1,50 +1,94 @@
-    <div
-      class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+<div
+  class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+>
+  <div class="vl-col--8-12 vl-col--1-1--s">
+    <label class="vl-form__label" for="dossierId">
+      {{t "agendaitem-case"}}
+    </label>
+    {{input
+      class="vl-input-field vl-input-field--block"
+      type="text"
+      id="dossierId"
+      value=searchText
+      key-press=(perform searchTask)
+    }}
+  </div>
+  <div class="vl-col--1-12 vl-col--1-1--s">
+    <button
+      class="vl-button vl-button--tertiary vl-button--block"
+      type="button"
+      onclick={{perform searchTask}}
     >
-      <div class="vl-col--5-12 vl-col--1-1--s">
-        <label class="vl-form__label" for="dossierId">
-          {{t "agendaitem-case"}}
-        </label>
-        {{input
-          class="vl-input-field vl-input-field--block"
-          type="text"
-          id="dossierId"
-        }}
-      </div>
-      <div class="vl-col--3-12 vl-col--1-1--s">
-        <label class="vl-form__label" for="ministerId">
-          {{t "minister"}}
-        </label>
-        {{input
-          class="vl-input-field vl-input-field--block"
-          type="text"
-          id="ministerId"
-        }}
-      </div>
-      <div class="vl-col--1-12 vl-col--1-1--s">
-        <button
-          class="vl-button vl-button--tertiary vl-button--block"
-          type="button"
-        >
-          {{t "filter"}}
-        </button>
-      </div>
-      <div class="vl-col--2-12 vl-col--1-1--s">
-        <button class="vl-button vl-button--link vl-button--narrow" href="#">
-          {{t "advanced-search"}}
-        </button>
-      </div>
-      <div class="vl-col--1-12 vl-col--1-1--s">
-        <label class="vl-form__label" for="dossierId">
-          {{t "amount-showed"}}
-        </label>
-        {{#power-select
-          options=sizeOptions
-          selected=size
-          searchEnabled=false
-          onchange=(action "selectSize") as |sizeValue|
-        }}
-          {{sizeValue}}
-        {{/power-select}}
-      </div>
+      {{t "filter"}}
+    </button>
+  </div>
+  <div class="vl-col--2-12 vl-col--1-1--s">
+    <button class="vl-button vl-button--link vl-button--narrow" href="#" 
+            onclick={{action "toggleAdvanced"}}>
+      {{t "advanced-search"}}
+    </button>
+  </div>
+  <div class="vl-col--1-12 vl-col--1-1--s">
+    <label class="vl-form__label" for="dossierId">
+      {{t "amount-showed"}}
+    </label>
+    {{#power-select
+      options=sizeOptions
+      selected=size
+      searchEnabled=false
+      onchange=(action "selectSize") as |sizeValue|
+    }}
+      {{sizeValue}}
+    {{/power-select}}
+  </div>
 </div>
+{{#if showAdvanced}}
+  <div
+    class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+  >
+    <div class="vl-col--6-12">
+      <label class="vl-form__label" for="ministerName">
+        {{t "find-mandatee-label"}}
+      </label>
+      {{input
+        class="vl-input-field vl-input-field--block"
+        type="text"
+        id="ministerName"
+        value=ministerName
+        key-press=(perform searchTask)
+      }}
+    </div>
+    <div class="vlc-input-field-block vl-col--2-12">
+      {{web-components/vl-form-label value=(t "from-date")}}
+      {{web-components/vl-datepicker
+        selectedDate=dateFrom
+        dateChanged=(action "selectDateFrom")
+      }}
+    </div>
+    <div class="vlc-input-field-block vl-col--2-12">
+      {{web-components/vl-form-label value=(t "until-date")}}
+      {{web-components/vl-datepicker
+        selectedDate=dateTo
+        dateChanged=(action "selectDateTo")
+      }}
+    </div>
+    <div class="vlc-input-field-block vl-col--2-12"
+      onclick={{perform searchTask}}
+    >
+      <label class="vl-checkbox vl-checkbox__box">
+        {{input
+          class="vl-checkbox__toggle"
+          type="checkbox"
+          checked=searchInDecisionsOnly
+        }}
+        <div class="vl-checkbox__label">
+          <i class="vl-checkbox__box"></i>
+          <span class="vl-annotation">
+            {{t "search-in-decisions-only"}}
+          </span>
+        </div>
+      </label>
+    </div>
+     
+  </div>
+{{/if}}

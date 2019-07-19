@@ -1,7 +1,7 @@
 {{cases/cases-header isAddingCase=isAddingCase close=(action "close")}}
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
-    {{cases/cases-filter size=size}}
+    {{cases/cases-filter size=size filter=(action "filterCases")}}
     <div class="vl-u-display-flex vl-u-flex-space-between">
       <h2 class="vl-title vl-title--h3">
         {{t "my-cases"}}
