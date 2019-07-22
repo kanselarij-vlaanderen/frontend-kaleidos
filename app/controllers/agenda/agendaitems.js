@@ -4,7 +4,10 @@ import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
+	queryParams: ["filter"],
+
 	routing: inject('-routing'),
+	filter: null,
 	sessionService: inject(),
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 
@@ -16,7 +19,7 @@ export default Controller.extend({
 			return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
 		}
 	}),
-
+	
 	actions: {
 		selectAgendaItem(agendaitem) {
 			this.set('sessionService.selectedAgendaItem', agendaitem);

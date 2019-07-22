@@ -381,5 +381,6 @@
 	"from-date": "Vanaf datum",
 	"until-date": "Tot datum",
 	"search-in-decisions-only": "Zoek enkel in beslissingen",
-	"find-mandatee-label": "Mandataris"
+	"find-mandatee-label": "Mandataris",
+	"search-agenda-items": "Zoeken"
 }
