@@ -1,0 +1,16 @@
+<a>
+  <p class="vlc-agenda-items-new__overline">
+    <span class="vlc-agenda-items-new__numbering">
+      {{agendaItem.priority}}{{agendaItem.subPriority}}.
+    </span>
+  </p>
+  <h4 class="vlc-agenda-items-new__subject">
+    {{agendaItem.subject}}
+  </h4>
+  <div class="vl-u-display-flex vl-u-flex-space-between">
+    <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">
+      {{get (await agendaItem.case) "identifier"}}
+      {{await agendaItem.case.identifier}}
+    </span>
+  </div>
+</a>

@@ -1,1 +1,11 @@
-{{outlet}}
+<div class="vl-u-bg-alt">
+</div>
+{{#if (not isLoading)}}
+  <div class="vlc-panel-layout">
+    {{outlet}}
+  </div>
+{{else}}
+  {{web-components/vl-loader
+    text="De agenda wordt goedgekeurd. Even geduld aub.."
+  }}
+{{/if}}

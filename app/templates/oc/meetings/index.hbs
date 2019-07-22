@@ -84,7 +84,7 @@
                     <th class="vl-data-table-col-1"></th>
                   {{/c.header}}
                   {{#c.body as |session|}}
-                    <td {{action "selectAgenda" session}}>
+                    <td {{action "selectSession" session}}>
                       {{agendaForTranslation}}
                       {{moment-format session.startedAt "DD.MM.YYYY"}}
                     </td>
