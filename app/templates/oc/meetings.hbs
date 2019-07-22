@@ -11,15 +11,12 @@
       <div class="vlc-toolbar__right">
         {{#if (or isAdmin isEditor)}}
           <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--narrow vl-button--icon-before"
-              {{action "createNewSession"}}
-            >
+            {{#link-to 'oc.meetings.new' tagName='button' class='vl-button vl-button--narrow vl-button--icon-before'}}
               <i
                 class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
               Nieuwe vergadering
-            </button>
+            {{/link-to}}
           </div>
         {{/if}}
       </div>
@@ -116,15 +113,4 @@
     {{web-components/vl-alert message="Geen vergaderingen"}}
   </div>
 {{/if}}
-{{#if creatingNewSession}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title="Nieuwe vergadering"
-    closeModal=(action "cancelNewSessionForm")
-  }}
-    {{oc/session/new-session-form
-      successfullyAdded=(action "successfullyAdded")
-      cancelForm=(action "cancelNewSessionForm")
-    }}
-  {{/web-components/vl-modal}}
-{{/if}}
+{{outlet}}

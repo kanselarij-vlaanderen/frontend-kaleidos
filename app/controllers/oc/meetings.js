@@ -16,15 +16,5 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 		selectSession(session) {
 			this.transitionToRoute('oc.meetings.meeting', session);
 		},
-		createNewSession() {
-			this.toggleProperty('creatingNewSession');
-		},
-		cancelNewSessionForm() {
-			this.set('creatingNewSession', false);
-		},
-		successfullyAdded() {
-			this.set('creatingNewSession', false);
-			this.send('refresh');
-		}
 	}
 });

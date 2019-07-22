@@ -66,6 +66,7 @@ Router.map(function () {
           });
         });
       });
+      this.route('new', { path: '/nieuw' });
     });
     this.route('cases', { path: '/dossiers' }, function () {
       this.route('case', { path: '/:case_id' }, function () {
