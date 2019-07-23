@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | sessions/sessions-selector', function(hooks) {
+module('Integration | Component | agenda/agendaitem/agendaitem-controls', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{sessions/sessions-selector}}`);
+    await render(hbs`{{agenda/agendaitem/agendaitem-controls}}`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      {{#sessions/sessions-selector}}
+      {{#agenda/agendaitem/agendaitem-controls}}
         template block text
-      {{/sessions/sessions-selector}}
+      {{/agenda/agendaitem/agendaitem-controls}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

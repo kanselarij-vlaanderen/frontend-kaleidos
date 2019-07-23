@@ -421,6 +421,13 @@ ul {
   width: 100%;
 }
 
+.separate-children > * {
+  margin-right: 1em;
+}
+.separate-children > *:last-child {
+  margin-right: 0;
+}
+
 .vl-button-icon--error {
   color: $red;
 }

@@ -377,5 +377,10 @@
 	"leave-page-message": "Ben je zeker dat je de pagina wilt verlaten?",
 	"requested-by": "Ingediend door:",
 	"signed-document-decision": "Dit punt wordt goedgekeurd confer beslissingsfiche {name}.",
-	"sessions-loading-text": "De zittingen worden geladen. Even geduld aub.."
+	"sessions-loading-text": "De zittingen worden geladen. Even geduld aub..",
+	"from-date": "Vanaf datum",
+	"until-date": "Tot datum",
+	"search-in-decisions-only": "Zoek enkel in beslissingen",
+	"find-mandatee-label": "Mandataris",
+	"search-agenda-items": "Zoeken"
 }

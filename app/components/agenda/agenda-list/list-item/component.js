@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, {
 		return this.agendaitem.get('formallyOk');
 	}),
 
-	extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'isClickable', async function () {
+	extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'isClickable','agendaitem.retracted', async function () {
 		let clazz = '';
 		if (this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
 			clazz += 'vlc-agenda-items-new__sub-item--active ';
