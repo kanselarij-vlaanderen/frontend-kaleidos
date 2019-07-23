@@ -1,13 +1,13 @@
 import Controller from '@ember/controller';
-import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { inject as controller } from '@ember/controller';
 import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Controller.extend(isAuthenticatedMixin, {
-	store: inject(),
-	globalError: inject(),
+	globalError: service(),
+
+	parentController: controller('oc.meetings'),
 
 	isLoading: false, 
 	
@@ -26,6 +26,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 				this.globalError.handleError(error);
 			}).finally(() => {
 				this.set('isLoading', false);
+				this.parentController.send('updateModel');
 				this.transitionToRoute('oc.meetings.index');
 			});
 		},

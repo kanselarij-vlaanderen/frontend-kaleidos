@@ -13,6 +13,10 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 	size: 10,
 
 	actions: {
+    updateModel() {
+      this.get('model').update();
+    },
+
 		selectSession(session) {
 			this.transitionToRoute('oc.meetings.meeting', session);
 		},
