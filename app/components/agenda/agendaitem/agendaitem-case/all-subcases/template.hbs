@@ -16,40 +16,37 @@
           {{subcase.title}}
         </p>
       </div>
-      <ul class="vlc-document-list">
-        {{#if (is-pending subcase.documents)}}
-          {{web-components/vl-loader text=(t "documents-loading-text")}}
-        {{else if (gt (await subcases.length) 1)}}
-          {{#each (await subcase.documents) as |document|}}
-            <li class="vlc-document-list__item">
-              <a {{action "downloadFile" (await document.lastDocumentVersion)}}>
-                <div
-                  class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
-                >
-                  <i
-                    class="vl-badge__icon vl-vi vl-vi-document"
-                    aria-hidden="true"
-                  ></i>
-                </div>
-                {{#if (is-pending document.lastDocumentVersion)}}
-                  <div
-                    class="skeletal-loader"
-                    role="alert"
-                    aria-busy="true"
-                  ></div>
-                {{else}}
-                  <p class="vl-u-text--capitalize">
-                    {{document-name
-                      documentVersion=(await document.lastDocumentVersion)
-                      item=subcase
-                    }}
-                  </p>
-                {{/if}}
-              </a>
-            </li>
-          {{/each}}
-        {{/if}}
-      </ul>
+      {{#if (gt (await subcase.documentVersions.length) 1)}}
+      <div class="js-vl-accordion">
+        <button
+          class="vl-toggle vl-link vl-link--bold"
+          data-vl-accordion-toggle=""
+          data-vl-accordion-dressed="true"
+          aria-expanded="false"
+          {{action "toggleIsShowingDocuments" subcase}}
+        >
+          {{#if subcase.isShowingDocuments}}
+            <i
+              class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-down-fat"
+              aria-hidden="true"
+            ></i>
+          {{else}}
+            <i
+              class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
+              aria-hidden="true"
+            ></i>
+          {{/if}}
+          {{t "documents"}}
+        </button>
+      </div>
+      {{#if subcase.isShowingDocuments}}
+        <div class="vl-accordion__panel">
+          <div class="vl-u-spacer-extended-top">
+            {{utils/documents-list-for-item item=subcase}}
+          </div>
+        </div>
+      {{/if}}
+    {{/if}}
     {{/subcases/subcase-item}}
   {{/each}}
 {{/if}}

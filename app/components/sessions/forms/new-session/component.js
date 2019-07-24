@@ -13,8 +13,8 @@ export default Component.extend({
 		const agenda = this.store.createRecord('agenda', {
 			name: "Ontwerpagenda",
 			createdFor: meeting,
-			created: date,
-			modified: date
+			created: date || moment().utc().toDate(),
+			modified: date || moment().utc().toDate()
 		});
 
 		return agenda.save();
@@ -46,7 +46,7 @@ export default Component.extend({
 		async createNewSession() {
 			this.set('isLoading', true);
 			const date = moment().utc().toDate();
-			const startDate = this.get('startDate');
+			const startDate = this.get('startDate') || moment().utc().toDate();
 			const newMeeting = this.store.createRecord('meeting', {
 				plannedStart: startDate,
 				created: date,

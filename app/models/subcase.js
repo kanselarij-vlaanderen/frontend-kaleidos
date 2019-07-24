@@ -228,7 +228,7 @@ export default Model.extend({
     return PromiseArray.create({
       promise: this.get('case').then((caze) => {
         return caze.get('subcases').then((subcases) => {
-          return subcases;
+          return subcases.filter((item) => item.get('id') != this.id);
         });
       })
     })
