@@ -16,15 +16,16 @@
         {{subcase.title}}
       </p>
     </div>
-    <div class="js-vl-accordion">
+    {{#if (gt (await subcase.documentVersions.length) 1) }}
+      <div class="js-vl-accordion">
       <button
         class="vl-toggle vl-link vl-link--bold"
         data-vl-accordion-toggle=""
         data-vl-accordion-dressed="true"
         aria-expanded="false"
-        {{action "toggleIsShowingDocuments"}}
+        {{action "toggleIsShowingDocuments" subcase}}
       >
-        {{#if isShowingDocuments}}
+        {{#if subcase.isShowingDocuments}}
           <i
             class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-down-fat"
             aria-hidden="true"
@@ -38,12 +39,14 @@
         {{t "documents"}}
       </button>
     </div>
-    {{#if isShowingDocuments}}
+    {{#if subcase.isShowingDocuments}}
       <div class="vl-accordion__panel">
         <div class="vl-u-spacer-extended-top">
           {{utils/documents-list-for-item item=subcase}}
         </div>
       </div>
     {{/if}}
+    {{/if}}
+    
   {{/subcases/subcase-item}}
 {{/each}}
