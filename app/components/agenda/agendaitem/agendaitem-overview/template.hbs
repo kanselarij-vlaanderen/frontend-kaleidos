@@ -24,6 +24,7 @@
                     agendaitem=agendaitem
                     currentAgenda=currentAgenda
                     lastDefiniteAgenda=lastDefiniteAgenda
+                    refreshRoute=(action "refreshRoute")
                   }}
                 {{/if}}
               {{/if}}
@@ -37,7 +38,6 @@
               isDesignAgenda=(eq currentAgenda.name "Ontwerpagenda")
               modelToAddDocumentVersionTo="agendaitem"
             }}
-            {{! refreshRoute=(action "refreshRoute") }}
           {{else if (eq activeAgendaItemSection "comments")}}
             {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "press-agenda")}}

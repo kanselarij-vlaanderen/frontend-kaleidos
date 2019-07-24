@@ -42,6 +42,10 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		setAgendaItemSection(section) {
 			this.set("activeAgendaItemSection", section);
+		},
+
+		refreshRoute(id) {
+			this.refreshRoute(id);
 		}
 	}
 });
