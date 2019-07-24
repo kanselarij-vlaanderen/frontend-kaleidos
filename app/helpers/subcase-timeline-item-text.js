@@ -5,9 +5,14 @@ import CONFIG from 'fe-redpencil/utils/config';
 export function subcaseTimelineItemText(params, values) {
   const label = values.label;
   const phase = values.phase;
+  const subcaseNames = values.subcase.get('subcaseName');
   switch (label.toLowerCase()) {
     case CONFIG.onAgendaLabel:
-      return "Geagendeerd voor " + values.subcase.get('subcaseName');
+      if (subcaseNames) {
+        return "Geagendeerd voor " + subcaseNames;
+      } else {
+        return "Geagendeerd"
+      }
     case CONFIG.decidedLabel:
       return "Beslist op " + moment(phase.get('date')).utc().format('DD/MM/YYYY');
     default:
