@@ -10,17 +10,13 @@ export default Component.extend(isAuthenticatedMixin, {
 	currentAgenda: alias('sessionService.currentAgenda'),
 	sessionService: inject(),
 	store: inject(),
-	postponeTargetSession: null,
-	isShowingDetail: false,
-	agendaitemToShowOptionsFor: null,
-	isShowingPostponeModal: false,
-	currentAgendaItem: null,
 	activeAgendaItemSection: 'details',
-	showOptions: false,
 
 	subcase: computed('agendaitem.subcase', function () {
-		return this.get('agendaitem.subcase').then((subcase) => {
-			return subcase;
+		DS.PromiseObject.create({
+			promise: this.get('agendaitem.subcase').then((subcase) => {
+				return subcase;
+			})
 		})
 	}),
 
@@ -33,24 +29,15 @@ export default Component.extend(isAuthenticatedMixin, {
 	}),
 
 	actions: {
-		showDetail() {
-			this.toggleProperty('isShowingDetail');
-		},
-
 		async addDecision() {
 			const subcase = await this.get('subcase');
-			const newDecision = this.store.createRecord('decision', {
-				approved: false, subcase
-			})
-			await newDecision.save();
-			await subcase.get('decisions').addObject(newDecision);
-		},
-
-		toggleShowMore(agendaitem) {
-			if (agendaitem.showDetails) {
-				agendaitem.save();
+			if(subcase) {
+				const newDecision = this.store.createRecord('decision', {
+					approved: false, subcase
+				})
+				await newDecision.save();
+				await subcase.get('decisions').addObject(newDecision);
 			}
-			agendaitem.toggleProperty("showDetails");
 		},
 
 		setAgendaItemSection(section) {

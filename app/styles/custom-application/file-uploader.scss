@@ -16,15 +16,24 @@
   min-height: 400px;
   margin: 0 auto;
 
+  .vl-upload__element__button__container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2em;
+  }
+
   .vl-upload__element__label {
     align-items: center;
     display: flex;
     flex-direction: column;
     height: 400px;
-    padding: 8rem;
+    width: 100%;
     justify-content: center;
     text-decoration: none;
-    width: 100%;
 
     em {
       display: block;

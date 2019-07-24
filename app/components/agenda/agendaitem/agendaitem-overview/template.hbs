@@ -31,6 +31,13 @@
           {{/if}}
           {{#if (eq activeAgendaItemSection "details")}}
             {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
+          {{else if (eq activeAgendaItemSection "documents")}}
+            {{agenda/agendaitem/agendaitem-case/subcase-documents
+              item=agendaitem
+              isDesignAgenda=(eq currentAgenda.name "Ontwerpagenda")
+              modelToAddDocumentVersionTo="agendaitem"
+            }}
+            {{! refreshRoute=(action "refreshRoute") }}
           {{else if (eq activeAgendaItemSection "comments")}}
             {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "press-agenda")}}

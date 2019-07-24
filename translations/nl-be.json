@@ -377,5 +377,7 @@
 	"leave-page-message": "Ben je zeker dat je de pagina wilt verlaten?",
 	"requested-by": "Ingediend door:",
 	"signed-document-decision": "Dit punt wordt goedgekeurd confer beslissingsfiche {name}.",
-	"sessions-loading-text": "De zittingen worden geladen. Even geduld aub.."
+	"sessions-loading-text": "De zittingen worden geladen. Even geduld aub..",
+	"no-nota":"Geen nota beschikbaar.",
+	"nota-loading-text":"De nota wordt geladen.."
 }

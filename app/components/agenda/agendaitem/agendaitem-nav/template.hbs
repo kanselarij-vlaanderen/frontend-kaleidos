@@ -7,6 +7,15 @@
     {{t "agendaitem-case"}}
   </a>
 </li>
+<li class="vl-tab">
+  <a
+    class="vl-tab__link
+      {{active-class activeAgendaItemSection "documents" class="active"}}"
+    {{action "setAgendaItemSection" "documents"}}
+  >
+    {{t "documents"}}
+  </a>
+</li>
 {{#if (or isAdmin isEditor)}}
   <li class="vl-tab">
     <a
@@ -21,39 +30,39 @@
     </a>
   </li>
 {{/if}}
-  <li class="vl-tab">
-    <a
-      class="vl-tab__link
-        {{active-class activeAgendaItemSection "decision" class="active"}}"
-      {{action "setAgendaItemSection" "decision"}}
-    >
-      {{t "agendaitem-decision"}}
-    </a>
-  </li>
-  <li class="vl-tab">
-    <a
-      class="vl-tab__link
-        {{active-class activeAgendaItemSection "minutes" class="active"}}"
-      {{action "setAgendaItemSection" "minutes"}}
-    >
-      {{t "agendaitem-notes"}}
-    </a>
-  </li>
-  <li class="vl-tab">
-    <a
-      class="vl-tab__link
-        {{active-class activeAgendaItemSection "news-item" class="active"}}"
-      {{action "setAgendaItemSection" "news-item"}}
-    >
-      {{t "agendaitem-bestek"}}
-    </a>
-  </li>
-  <li class="vl-tab">
-    <a
-      class="vl-tab__link
-        {{active-class activeAgendaItemSection "press-agenda" class="active"}}"
-      {{action "setAgendaItemSection" "press-agenda"}}
-    >
-      {{t "agendaitem-press-agenda"}}
-    </a>
-  </li>
+<li class="vl-tab">
+  <a
+    class="vl-tab__link
+      {{active-class activeAgendaItemSection "decision" class="active"}}"
+    {{action "setAgendaItemSection" "decision"}}
+  >
+    {{t "agendaitem-decision"}}
+  </a>
+</li>
+<li class="vl-tab">
+  <a
+    class="vl-tab__link
+      {{active-class activeAgendaItemSection "minutes" class="active"}}"
+    {{action "setAgendaItemSection" "minutes"}}
+  >
+    {{t "agendaitem-notes"}}
+  </a>
+</li>
+<li class="vl-tab">
+  <a
+    class="vl-tab__link
+      {{active-class activeAgendaItemSection "news-item" class="active"}}"
+    {{action "setAgendaItemSection" "news-item"}}
+  >
+    {{t "agendaitem-bestek"}}
+  </a>
+</li>
+<li class="vl-tab">
+  <a
+    class="vl-tab__link
+      {{active-class activeAgendaItemSection "press-agenda" class="active"}}"
+    {{action "setAgendaItemSection" "press-agenda"}}
+  >
+    {{t "agendaitem-press-agenda"}}
+  </a>
+</li>
