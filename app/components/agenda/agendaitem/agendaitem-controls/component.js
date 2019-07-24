@@ -115,26 +115,21 @@ export default Component.extend({
 		async deleteItem(agendaitem) {
 			const id = agendaitem.get('id');
 			const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'));
-		
-			// const subcase = await this.get('subcase');
-			// if (subcase) {
-			// 	const phases = await subcase.get('phases');
-			// 	await Promise.all(phases.filter(async phase => {
-			// 		const code = await phase.get('code');
-			// 		if (!code || code.get('label') == "Ingediend voor agendering") {
-			// 			await phase.destroyRecord();
-			// 		} else {
-			// 			return phase;
-			// 		}
-			// 	}))
-			// 	subcase.set('requestedForMeeting', null);
-			// 	subcase.save();
-			// }
+			const subcase = await itemToDelete.get('subcase');
 
-			const agenda = await this.store.findRecord('agenda', await agendaitem.get('agenda.id'))
+			if (subcase) {
+				const phases = await subcase.get('phases');
+				await Promise.all(phases.filter(async phase => {
+					await phase.destroyRecord();
+				}));
+
+				subcase.set('requestedForMeeting', null);
+				subcase.set('consulationRequests', []);
+				subcase.set('agendaitems', []);
+				await subcase.save();
+			}
 
 			itemToDelete.destroyRecord().then(() => {
-				agenda.hasMany('agendaitems').reload();
 				this.set('sessionService.selectedAgendaItem', null);
 				this.refreshRoute(id);
 			});

@@ -66,12 +66,12 @@ export default Service.extend({
 		const sortedItems = await this.getSortedAgendaItems(selectedAgenda)
 		const agendaitems = await selectedAgenda.get('agendaitems');
 		agendaitems.map((agendaitem) => {
-			if (!agendaitem.get('priority')) {
-				const sortedAgendaItemFound = sortedItems.find((sortedItem) =>
-					sortedItem.uuid == agendaitem.get('id')
-				);
-				agendaitem.set('priority', sortedAgendaItemFound.priority)
-			}
+			// if (!agendaitem.get('priority')) {
+			// 	const sortedAgendaItemFound = sortedItems.find((sortedItem) =>
+			// 		sortedItem.uuid == agendaitem.get('id')
+			// 	);
+			// 	agendaitem.set('priority', sortedAgendaItemFound.priority)
+			// }
 		})
 	},
 
