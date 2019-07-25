@@ -379,5 +379,6 @@
 	"signed-document-decision": "Dit punt wordt goedgekeurd confer beslissingsfiche {name}.",
 	"sessions-loading-text": "De zittingen worden geladen. Even geduld aub..",
 	"no-nota":"Geen nota beschikbaar.",
-	"nota-loading-text":"De nota wordt geladen.."
+	"nota-loading-text":"De nota wordt geladen..",
+	"general-settings":"Algemene instellingen"
 }

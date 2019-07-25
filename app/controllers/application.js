@@ -15,7 +15,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 	init() {
 		this._super(...arguments);
-		document.addEventListener('wheel', (evt) => {
+		document.addEventListener('wheel', () => {
 			// ... do stuff with evt
 		}, {
 				capture: true,

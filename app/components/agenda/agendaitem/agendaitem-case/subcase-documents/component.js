@@ -71,7 +71,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 				this.set('modelToAddDocumentVersionTo', modelName);
 				this.send('refreshRoute');
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 				// TODO: Handle errors
 			} finally {
 				this.set('isCreatingDocuments', false);

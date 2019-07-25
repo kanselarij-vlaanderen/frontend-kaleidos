@@ -10,12 +10,8 @@ export default Component.extend({
 		return this.get('mandateeToEdit');
 	}),
 
-	startDate: computed('mandateeToEdit', function () {
-		return this.get('mandateeToEdit.start');
-	}),
-
+	startDate: getCachedProperty('start'),
 	iseCodes: getCachedProperty('iseCodes'),
-	priority: getCachedProperty('priority'),
 	title: getCachedProperty('title'),
 	shortTitle: getCachedProperty('shortTitle'),
 

@@ -1,7 +1,18 @@
+   <div class="vl-u-display-flex vl-u-flex-space-between">
+
+  <h4 class="vl-title vl-title--h4">
+  </h4>
+	<button
+              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              {{action "toggleIsAdding"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              {{t "create-mandatee"}}
+            </button>
+	</div>
 {{#if (await model)}}
-  <h2 class="vl-title vl-title--h3">
-    {{title}}
-  </h2>
   <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
     <thead>
       <tr>
@@ -63,13 +74,36 @@
               <td class="vl-u-align-center">
                 <button
                   class="vl-button vl-button--link vl-button--icon"
-                  {{!-- {{action "selectAgenda" mandatee}} --}}
+                  {{action "toggleProperty" "isEditingMandatee" mandatee}}
                 >
-                  <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+                  <i class="vl-button__icon vl-vi vl-vi-edit"></i>
                 </button>
               </td>
           {{/sortable-item}}
         {{/each}}
       {{/sortable-group}}
   </table>
+{{/if}}
+{{#if isEditingMandatee}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
+  }}
+    {{utils/manage-mandatees
+			mandateeToEdit=mandateeToEdit
+			isEditing=isEditingMandatee
+      closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+
+{{#if isAddingMandatee}}
+{{#web-components/vl-modal
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleIsAdding")
+  }}
+ 		{{utils/create-mandatee closeModal=(action "toggleIsAdding")}}
+	{{/web-components/vl-modal}}
 {{/if}}
