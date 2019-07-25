@@ -5,7 +5,7 @@ export default Route.extend({
   afterModel(model) {
     this._super(...arguments);
     if (model) {
-      this.transitionTo('oc.meetings.meeting.agendaitems.index', model);
+      this.transitionTo('oc.meetings.meeting.agendaitems', model);
     }
   }
 });

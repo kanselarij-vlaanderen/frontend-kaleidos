@@ -17,6 +17,7 @@ export default Controller.extend(isAuthenticatedMixin, {
   routing: inject('-routing'),
   itemsSortDefinition: ['priority:asc', 'subPriority:asc'],
   agendaItemsSorted: sort('model', 'itemsSortDefinition'),
+  meeting: null,
 
 	agendaItemGroups: computed('agendaItemsSorted.@each.submitters', async function () {
 		let agendaItems = this.get('agendaItemsSorted');
@@ -44,19 +45,26 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 	agendaitemsClass: computed('routing.currentRouteName', function () {
 		const { routing } = this;
-		if (routing.get('currentRouteName') === "oc.meetings.meeting.agendaitems.index") {
+		// if (routing.get('currentRouteName') === "oc.meetings.meeting.agendaitems.index") {
 			return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
-		} else {
-			return "vlc-panel-layout__agenda-items";
-		}
+		// } else {
+		// 	return "vlc-panel-layout__agenda-items";
+		// }
 	}),
 
 	actions: {
+
 		selectAgendaItem(agendaitem) {
 			this.transitionToRoute('oc.meetings.meeting.agendaitems.agendaitem.index', agendaitem);
 		},
+    
 		searchAgendaItems(value) {
 			this.set('filter', value);
 		},
+    
+    updateModel() {
+      this.get('model').update();
+		},
+
 	}
 });
