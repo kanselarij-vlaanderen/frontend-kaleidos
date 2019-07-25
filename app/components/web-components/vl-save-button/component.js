@@ -30,7 +30,7 @@ export default Component.extend({
 
 	getClassNames: computed('isLoading', 'class', function () {
 		if (this.isLoading) {
-			return `vl-button vl-button--loading vl-button--narrow`;
+			return `${this.class} vl-button--loading`;
 		} else {
 			return this.class;
 		}
