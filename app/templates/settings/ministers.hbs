@@ -71,6 +71,18 @@
                 <i class="vl-button__icon vl-vi vl-vi-edit"></i>
               </button>
               <button
+                class="vl-button vl-button--link vl-button--icon"
+                {{action "toggleProperty" "isResigningMandatee" mandatee}}
+              >
+                <i class="vl-button__icon vl-vi vl-vi-cog"></i>
+                {{#attach-popover
+                  placement="bottom"
+                  class="ember-attacher-popper ember-attacher-popper-small"
+                }}
+                  {{t "resign"}}
+                {{/attach-popover}}
+              </button>
+              <button
                 class="vl-button vl-button--link vl-button--icon vl-u-text--error"
                 {{action "toggleProperty" "isDeletingMandatee" mandatee}}
               >
@@ -93,6 +105,19 @@
       mandateeToEdit=mandateeToEdit
       isEditing=isEditingMandatee
       closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isResigningMandatee}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
+  }}
+    {{utils/manage-mandatees
+      mandateeToEdit=mandateeToEdit
+      isResigning=isResigningMandatee
+      closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
     }}
   {{/web-components/vl-modal}}
 {{/if}}

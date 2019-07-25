@@ -4,7 +4,6 @@ import { inject } from '@ember/service';
 export default Component.extend({
 	store: inject(),
 	subcasesService: inject(),
-	isAdding: false,
 	isResigning: false,
 	isEditing: false,
 	selectedStartDate: null,
@@ -16,11 +15,7 @@ export default Component.extend({
 		},
 
 		selectMandatee(mandatee) {
-			this.set('selectedMandatee', mandatee);
-		},
-
-		toggleIsAdding() {
-			this.toggleProperty('isAdding');
+			this.set('mandateeToEdit', mandatee);
 		},
 
 		toggleIsEditing() {
@@ -50,9 +45,9 @@ export default Component.extend({
 
 		async saveResignation() {
 			this.set('isLoading', true);
-			let oldMandatee = this.get('selectedMandatee');
-			let domains = await oldMandatee.get('governmentDomains');
-			let holds = await oldMandatee.get('holds');
+			const oldMandatee = this.get('mandateeToEdit');
+			const domains = await oldMandatee.get('governmentDomains');
+			const holds = await oldMandatee.get('holds');
 
 			oldMandatee.set('end', this.get('selectedEndDate'));
 			oldMandatee.save().then(() => {

@@ -5,7 +5,7 @@ import { isPresent } from '@ember/utils';
 export default Controller.extend(isAuthenticatedMixin, {
 	isEditingMandatee: false,
 	isAddingMandatee: false,
-
+	isResigningMandatee:false,
 	reAssignPriorities: task(function* (model) {
 		yield model.map((item) => {
 			if (isPresent(item.changedAttributes().priority)) {
