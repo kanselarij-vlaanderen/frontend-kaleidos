@@ -1,0 +1,75 @@
+{{#if (await model)}}
+  <h2 class="vl-title vl-title--h3">
+    {{title}}
+  </h2>
+  <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
+    <thead>
+      <tr>
+        <th class="vl-data-table-col-6 vl-data-table__header-title">
+          <a
+            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+            href="#"
+          ></a>
+          <a class="vl-data-table__header-title--sortable" href="#">
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "minister"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col- vl-data-table__header-title">
+          <a
+            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+            href="#"
+          ></a>
+          <a class="vl-data-table__header-title--sortable" href="#">
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "priority"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col-1"></th>
+      </tr>
+    </thead>
+      {{#sortable-group
+        tagName="tbody"
+        onChange=(action "reorderItems" model) as |sortableGroup|
+      }}
+
+        {{#each model as |mandatee|}}
+          {{#sortable-item
+            tagName="tr"
+            model=mandatee
+            group=sortableGroup
+            handle=".mandatee-draggable-row"
+          }}
+              <td class="mandatee-draggable-row">
+                {{#if (is-pending mandatee.fullDisplayName)}}
+                  <div
+                    class="skeletal-loader"
+                    role="alert"
+                    aria-busy="true"
+                  ></div>
+                {{else}}
+                  {{await mandatee.fullDisplayName}}
+                {{/if}}
+              </td>
+              <td class="mandatee-draggable-row">
+                {{await mandatee.priority}}
+              </td>
+              <td class="vl-u-align-center">
+                <button
+                  class="vl-button vl-button--link vl-button--icon"
+                  {{!-- {{action "selectAgenda" mandatee}} --}}
+                >
+                  <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+                </button>
+              </td>
+          {{/sortable-item}}
+        {{/each}}
+      {{/sortable-group}}
+  </table>
+{{/if}}

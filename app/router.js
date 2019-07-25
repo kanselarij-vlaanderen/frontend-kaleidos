@@ -27,7 +27,9 @@ Router.map(function () {
     });
     this.route('overview', { path: '' });
   });
-  this.route('settings', { path: "/instellingen" });
+  this.route('settings', { path: "/instellingen" }, function() {
+    this.route('ministers');
+  });
   this.route('loading');
   this.route('mock-login');
   this.route('login');
