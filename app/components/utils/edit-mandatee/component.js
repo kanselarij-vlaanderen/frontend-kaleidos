@@ -30,12 +30,11 @@ export default Component.extend({
 
 		saveChanges() {
 			this.set('isLoading', true);
-			const { startDate, title, shortTitle, priority, mandateeToEdit, iseCodes } = this;
+			const { startDate, title, shortTitle, mandateeToEdit, iseCodes } = this;
 			const mandatee = this.store.peekRecord('mandatee', mandateeToEdit.get('id'));
 			mandatee.set('end', null);
 			mandatee.set('title', title);
 			mandatee.set('shortTitle', shortTitle);
-			mandatee.set('priority', priority);
 			mandatee.set('iseCodes', iseCodes)
 			mandatee.set('start', startDate);
 			mandatee.save().then(() => {

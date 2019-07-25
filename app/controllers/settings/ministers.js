@@ -3,9 +3,9 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
 export default Controller.extend(isAuthenticatedMixin, {
-	isEditingMandatee:false,
-	isAddingMandatee:false,
-	
+	isEditingMandatee: false,
+	isAddingMandatee: false,
+
 	reAssignPriorities: task(function* (model) {
 		yield model.map((item) => {
 			if (isPresent(item.changedAttributes().priority)) {
@@ -23,7 +23,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 					const agendaitem = model.find((item) => item.id === reOrderedAgendaitem.get('id'));
 					const newPrio = (i + firstPrio);
 					agendaitem.set('priority', newPrio);
-					}
+				}
 				this.reAssignPriorities.perform(model);
 				this.set('model', model.sortBy('priority'));
 			}
@@ -36,6 +36,17 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 		toggleIsAdding() {
 			this.toggleProperty('isAddingMandatee');
-		}
+		},
+
+		cancel() {
+			this.set('isDeletingMandatee', false);
+		},
+
+		async	deleteMandatee() {
+			const mandateeToEdit = await this.get('mandateeToEdit');
+			this.model.removeObject(mandateeToEdit);
+			await mandateeToEdit.destroyRecord();
+			this.set('isDeletingMandatee', false);
+		},
 	}
 });

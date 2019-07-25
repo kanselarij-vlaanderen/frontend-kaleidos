@@ -36,9 +36,11 @@ export default Component.extend({
 				person: await this.get('selectedPerson'),
 				end: null
 			});
-			newMandatee.save().then(() => {
+			newMandatee.save().then((newMandatee) => {
+				this.model.addObject(newMandatee);
 				this.set('isLoading', false);
 				this.clearValues();
+				this.closeModal();
 			});
 		}
 	},
