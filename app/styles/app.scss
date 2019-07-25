@@ -439,3 +439,13 @@ ul {
   white-space:pre-line;
   display:inline-flex;
 }
+
+.checkbox-list-selector {
+  display:flex;
+  flex-wrap:wrap;
+
+  .vl-checkbox-container {
+    padding:0.1em;
+    width:calc(25% - 0.2em);
+  }
+}

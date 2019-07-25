@@ -13,7 +13,7 @@ export default Component.extend(isAuthenticatedMixin, {
 	activeAgendaItemSection: 'details',
 
 	subcase: computed('agendaitem.subcase', function () {
-		DS.PromiseObject.create({
+		return DS.PromiseObject.create({
 			promise: this.get('agendaitem.subcase').then((subcase) => {
 				return subcase;
 			})

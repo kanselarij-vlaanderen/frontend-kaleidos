@@ -63,7 +63,7 @@
                 </div>
                 {{#each (await agendaitem.decisions) as |decision|}}
                   {{agenda/agendaitem/agendaitem-decision
-                    subcase=(await subcase)
+                    subcase=subcase
                     decision=decision
                     agendaitem=agendaitem
                   }}
@@ -77,7 +77,7 @@
           {{else if (eq activeAgendaItemSection "news-item")}}
             {{agenda/agendaitem/agendaitem-news-item
               agendaitem=agendaitem
-              subcase=(await subcase)
+              subcase=subcase
             }}
           {{else if (eq activeAgendaItemSection "minutes")}}
             {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}
