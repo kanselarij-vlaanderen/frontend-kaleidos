@@ -1,0 +1,11 @@
+{{#if findAll.isRunning}}
+  {{web-components/vl-loader text=(t "themes-loading-text")}}
+{{else}}
+  {{#each themes as |theme|}}
+    {{web-components/vl-checkbox
+      value=theme.selected
+      label=theme.label
+      toggle=(action "selectModel" theme)
+    }}
+  {{/each}}
+{{/if}}

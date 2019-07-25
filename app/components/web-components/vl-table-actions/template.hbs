@@ -14,7 +14,7 @@
           placement="bottom"
           class="ember-attacher-popper ember-attacher-popper-small"
         }}
-          Geen nota beschikbaar.
+          {{t "no-nota"}}
         {{/attach-popover}}
       </button>
     {{else}}
@@ -31,12 +31,12 @@
         placement="bottom"
         class="ember-attacher-popper ember-attacher-popper-small"
       }}
-        De nota wordt geladen..
+        {{t "nota-loading-text"}}
       {{/attach-popover}}
     </div>
   {{/if}}
   {{#link-to
-    "cases.case.subcases.subcase"
+    "cases.case.subcases.subcase.overview"
     (await row.subcase.case.id)
     (await row.subcase.id)
     target="_blank"

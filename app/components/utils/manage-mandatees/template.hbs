@@ -1,77 +1,8 @@
-{{#if (not isAdding)}}
-  {{#if (not isResigning)}}
-    <div class="vl-modal-dialog__content">
-      {{utils/mandatee-selector
-        singleSelect=true
-        selectedItems=(await selectedMandatee)
-        chooseMandatee=(action "selectMandatee")
-      }}
-      {{!-- {{utils/model-selector
-        modelName="mandatee"
-        searchField="title"
-        propertyToShow="fullDisplayName"
-        sortField="priority"
-        selectedItems=(await selectedMandatee)
-        selectModel=(action "selectMandatee")
-      }} --}}
-    </div>
-  {{/if}}
-  {{#if isEditing}}
-    {{utils/edit-mandatee
-      mandateeToEdit=(await selectedMandatee)
-      closeModal=(action "toggleIsEditing")
-    }}
-  {{else if (not isResigning)}}
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
-            <button
-              class="vl-button vl-button--link vl-button--narrow"
-              {{action "closeModal"}}
-            >
-              {{t "cancel"}}
-            </button>
-          </div>
-          <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              {{#if selectedMandatee}}
-                <button
-                  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-                  {{action "resignMandatee" mandateeToEdit}}
-                >
-                  <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-cog"
-                  ></i>
-                  {{t "resign"}}
-                </button>
-                <button
-                  class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-                  {{action "toggleIsEditing"}}
-                >
-                  <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
-                  ></i>
-                  {{t "edit-mandatee"}}
-                </button>
-              {{/if}}
-              <button
-                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-                {{action "toggleIsAdding"}}
-              >
-                <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-                ></i>
-                {{t "create-mandatee"}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  {{/if}}
-{{else}}
-  {{utils/create-mandatee closeModal=(action "toggleIsAdding")}}
+{{#if isEditing}}
+  {{utils/edit-mandatee
+    mandateeToEdit=(await mandateeToEdit)
+    closeModal=(action "toggleIsEditing")
+  }}
 {{/if}}
 {{#if isResigning}}
   <div class="vl-modal-dialog__content">

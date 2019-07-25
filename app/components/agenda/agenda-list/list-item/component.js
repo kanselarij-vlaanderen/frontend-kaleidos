@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, {
 		return this.agendaitem.get('formallyOk');
 	}),
 
-	extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'isClickable','agendaitem.retracted', async function () {
+	extraAgendaItemClassObserver: on('init', observer('agendaitem', 'selectedAgendaItem', 'isClickable','agendaitem.retracted','agendaitem.postponedTo', async function () {
 		let clazz = '';
 		if (this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
 			clazz += 'vlc-agenda-items-new__sub-item--active ';
@@ -30,9 +30,9 @@ export default Component.extend(isAuthenticatedMixin, {
 		}
 
 		const retracted = this.get('agendaitem.retracted');
-		// const postponed = (await this.get('agendaitem.postponedTo'));
+		const postponed = await this.get('agendaitem.postponedTo');
 
-		if (retracted) {
+		if (retracted || postponed) {
 			clazz += ' transparant';
 		}
 

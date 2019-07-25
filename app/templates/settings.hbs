@@ -1,164 +1,37 @@
-<div class="vl-u-spacer-extended-l settings-container">
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isEditingMandatee"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-ministers"}}
-    </button>
+<div class="vlc-scroll-wrapper">
+  <div class="vl-u-bg-alt">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <div class="vlc-toolbar vlc-toolbar--auto">
+            <div class="vlc-toolbar__left">
+              <ul class="vl-tabs vl-u-reset-margin" role="tablist">
+                <li class="vl-tab">
+                  {{#link-to
+                    "settings.overview"
+                    class="vl-tab__link"
+                    activeClass="vl-tab__link--active"
+                  }}
+                    {{t "general-settings"}}
+                  {{/link-to}}
+                </li>
+                <li class="vl-tab">
+                  {{#link-to
+                    "settings.ministers"
+                    class="vl-tab__link"
+                    activeClass="vl-tab__link--active"
+                  }}
+                    {{t "manage-ministers"}}
+                  {{/link-to}}
+                </li>
+              </ul>
+            </div>
+          </div>
+      </div>
+    </div>
   </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isAddingMandate"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-government-domains"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingFunctions"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-government-fields"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingIseCodes"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-ise-codes"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingAlerts"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-alerts"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingDocumentTypes"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-document-types"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingCaseTypes"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-case-types"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingUsers"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-user-roles"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingSubcaseTypes"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-subcase-types"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingSignature"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-signatures"}}
-    </button>
+  <div class="vlc-scroll-wrapper__body">
+    <div class="vl-u-spacer-extended-l">
+      {{outlet}}
+    </div>
   </div>
 </div>
-{{#if isAddingMandate}}
-  {{utils/model-manager
-    modalTitle=(t "manage-government-domains")
-    modelName="government-domain"
-    close=(action "toggleProperty" "isAddingMandate")
-  }}
-{{/if}}
-{{#if isManagingFunctions}}
-  {{utils/manage-government-fields
-    modalTitle=(t "manage-government-fields")
-    close=(action "toggleProperty" "isManagingFunctions")
-  }}
-{{/if}}
-{{#if isManagingIseCodes}}
-  {{utils/manage-ise-code
-    modalTitle=(t "manage-ise-codes")
-    close=(action "toggleProperty" "isManagingIseCodes")
-  }}
-{{/if}}
-{{#if isManagingDocumentTypes}}
-  {{utils/model-manager
-    modalTitle=(t "manage-document-types")
-    modelName="document-type"
-    close=(action "toggleProperty" "isManagingDocumentTypes")
-  }}
-{{/if}}
-{{#if isEditingMandatee}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "manage-ministers")
-    closeModal=(action "toggleProperty" "isEditingMandatee")
-  }}
-    {{utils/manage-mandatees
-      closeModal=(action "toggleProperty" "isEditingMandatee")
-    }}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isManagingAlerts}}
-  {{utils/manage-alerts isManagingAlerts=isManagingAlerts}}
-{{/if}}
-{{#if isManagingCaseTypes}}
-  {{utils/model-manager
-    modalTitle=(t "manage-case-types")
-    modelName="case-type"
-    close=(action "toggleProperty" "isManagingCaseTypes")
-  }}
-{{/if}}
-{{#if isManagingUsers}}
-  {{utils/user-management-interface
-    modalTitle=(t "manage-user-roles")
-    close=(action "toggleProperty" "isManagingUsers")
-  }}
-{{/if}}
-{{#if isManagingSubcaseTypes}}
-  {{utils/model-manager
-    modalTitle=(t "manage-subcase-types")
-    modelName="subcase-type"
-    close=(action "toggleProperty" "isManagingSubcaseTypes")
-  }}
-{{/if}}
-{{#if isManagingSignature}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "manage-signatures")
-    closeModal=(action "toggleProperty" "isManagingSignature")
-  }}
-    {{utils/manage-signatures
-      closeModal=(action "toggleProperty" "isManagingSignature")
-    }}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{!-- {{rdfa-editor }} --}}

@@ -13,16 +13,18 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 	finished: getCachedProperty('finished'),
 	mandateeProposal: getCachedProperty('mandateeProposal'),
 
-	themes: computed('agendaitem.themes', function () {
-		return this.get('agendaitem.themes').then((themes) => {
-			return themes;
-		});
+	themes: computed(`agendaitem.themes`, {
+		get() {
+			const { agendaitem } = this;
+			if (agendaitem)
+				return agendaitem.get('themes');
+		},
+		set: function (key, value) {
+			return value;
+		}
 	}),
 
 	actions: {
-		chooseTheme(themes) {
-			this.set('themes', themes);
-		},
 		async saveChanges() {
 			this.set('isLoading', true);
 			const item = await this.get('item');

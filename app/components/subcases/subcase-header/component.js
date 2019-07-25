@@ -18,7 +18,8 @@ export default Component.extend(ModifiedMixin, {
 		return this.store.query('meeting', {
 			filter: {
 				':gte:planned-start': dateOfToday,
-				':lte:planned-start': dateInTwoWeeks
+				':lte:planned-start': dateInTwoWeeks,
+				'is-final':false
 			},
 			sort: 'planned-start'
 		})

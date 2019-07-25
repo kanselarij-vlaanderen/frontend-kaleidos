@@ -99,6 +99,7 @@
 	"delete-decision": "Beslissing verwijderen",
 	"delete-decision-message": "Bent u zeker dat u de beslissing wil verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
 	"delete-document-message": "Bent u zeker dat u het document wilt verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
+	"delete-mandatee-message":"Bent u zeker dat u de minister wilt verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
 	"design": "Klad",
 	"detail": "Detail",
 	"divider": ", ",
@@ -112,8 +113,8 @@
 	"documents-attached-to": "Bijbehorende documenten",
 	"documents-sub case": "Documenten van de procedurestap",
 	"download": "Download",
-	"drop-text": "Laat los om het bestand te uploaden",
-	"dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren",
+	"drop-text": "Laat los om het bestand op te laden.",
+	"dropzone-text": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren.",
 	"edit": "Wijzigen",
 	"edit-case": "Dossier wijzigen",
 	"edit-mandatee": "Minister wijzigen",
@@ -382,5 +383,8 @@
 	"until-date": "Tot datum",
 	"search-in-decisions-only": "Zoek enkel in beslissingen",
 	"find-mandatee-label": "Mandataris",
-	"search-agenda-items": "Zoeken"
+    "search-agenda-items": "Zoeken",
+	"no-nota":"Geen nota beschikbaar.",
+	"nota-loading-text":"De nota wordt geladen..",
+	"general-settings":"Algemene instellingen"
 }

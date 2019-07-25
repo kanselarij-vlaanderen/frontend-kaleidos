@@ -1,6 +1,5 @@
 import Mixin from '@ember/object/mixin';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-import { notifyPropertyChange } from '@ember/object';
 import $ from 'jquery';
 import { inject } from '@ember/service';
 import moment from 'moment';
@@ -143,26 +142,6 @@ export default Mixin.create(FileSaverMixin, {
 
 		removeDocument(document) {
 			this.get('nonDigitalDocuments').removeObject(document);
-		},
-
-		createNonDigitalDocument() {
-			const { nonDigitalDocuments, documentTitle, documentDescription } = this;
-			const newNonDigitalDocument = {
-				title: documentTitle,
-				description: documentDescription
-			};
-			if (nonDigitalDocuments) {
-				nonDigitalDocuments.addObject(newNonDigitalDocument);
-			} else {
-				this.set('nonDigitalDocuments', [newNonDigitalDocument])
-			}
-			notifyPropertyChange(this, 'nonDigitalDocuments');
-			this.set('documentTitle', null);
-			this.set('documentDescription', null);
-		},
-
-		toggleAddNonDigitalDocument() {
-			this.toggleProperty('isAddingNonDigitalDocument')
 		},
 
 		removeFile(file) {

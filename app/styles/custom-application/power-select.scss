@@ -8,6 +8,10 @@
   background-color: $white;
 }
 
+.ember-power-select-trigger, .ember-basic-dropdown-trigger {
+  height:unset !important;
+}
+
 .ember-power-select-option {
   border-top: 1px solid $ghost;
   display: block;
@@ -25,12 +29,10 @@
     position: relative;
     background-color: $athens-gray;
     color: $action-text-color;
-    // text-decoration: underline;
   }
 }
 
 .ember-basic-dropdown-trigger {
-  height: auto;
   max-height: 10rem;
 }
 
@@ -42,7 +44,7 @@
   font-size: $form-font-size;
   color: $text-color;
   max-width: 100%;
-  height: $form-input-height;
+  height: unset !important;
   line-height: $form-input-height;
   border-radius: 0;
   border: 0.1rem solid $border-color;

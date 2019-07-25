@@ -4,6 +4,7 @@ import { alias } from '@ember/object/computed';
 import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Controller.extend(isAuthenticatedMixin, {
 	currentSession: inject(),
@@ -14,7 +15,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 	init() {
 		this._super(...arguments);
-		document.addEventListener('wheel', (evt) => {
+		document.addEventListener('wheel', () => {
 			// ... do stuff with evt
 		}, {
 				capture: true,
@@ -23,6 +24,12 @@ export default Controller.extend(isAuthenticatedMixin, {
 	},
 
 	shouldNavigateObserver: on('init', observer('router.currentRouteName', 'currentSession.userRole', async function () {
+		const currentRouteName = this.router.get('currentRouteName');
+		if(CONFIG.routesAllowed.includes(currentRouteName)) {
+			document.getElementById('vlaanderen-header').style = "display:none;";
+		} else {
+			document.getElementById('vlaanderen-header').style = "display:block;";
+		}
 		const router = this.get('router');
 		const role = await this.get('currentSession.userRole');
 		const user = await this.get('session.isAuthenticated');

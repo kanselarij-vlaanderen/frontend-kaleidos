@@ -1,6 +1,8 @@
 import EmberObject from '@ember/object';
 
 export default EmberObject.create({
+	routesAllowed: ['agenda.agendaitems.index', 'print-overviews.newsletter.agendaitems', 'print-overviews.decisions.agendaitems', 'print-overviews.press-agenda.agendaitems','print-overviews.notes.agendaitems',
+	'cases.case.subcases.overview','cases.case.subcases.subcase.overview','cases.case.subcases.subcase.documenten', 'agenda.agendaitems.agendaitem'],
 	phasesCodes: [
 		{
 			label: "principiële goedkeuring",
