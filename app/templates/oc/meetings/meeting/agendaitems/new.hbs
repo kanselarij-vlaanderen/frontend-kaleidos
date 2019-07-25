@@ -1,0 +1,53 @@
+{{#web-components/vl-modal
+  isOverlay=true
+  title="Nieuwe vergadering"
+  closeModal=(action "cancel")
+}}
+  <div class="vl-modal-dialog__content">
+    <div class="vlc-input-field-block">
+      <div class="vl-grid vl-grid--is-stacked">
+        <div class="vl-col--4-12">
+          <div class="vlc-input-field-block">
+            {{web-components/vl-form-label value="Volgnummer"}}
+            {{web-components/vl-form-input type="number" value=(mut model.priority)}}
+          </div>
+        </div>
+        <div class="vl-col--4-12">
+          <div class="vlc-input-field-block">
+            {{web-components/vl-form-label value="Sub-volgnummer"}}
+            {{web-components/vl-form-input type="text" value=(mut model.subPriority)}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value="Dossier"}}
+      {{web-components/vl-form-input type="text" width="1" value=(mut caseIdentifier)}}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value="Indiener"}}
+      {{#power-select-multiple
+        options=governmentBodies
+        searchField="name" selected=model.submitters
+        class="vl-form__input vl-col--4-4" tagName="div"
+        onchange=(action "updateGovernmentBodies")
+        as |governmentBody|}}
+        {{governmentBody.name}}
+      {{/power-select-multiple}}
+    </div>
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value="Onderwerp"}}
+      {{textarea rows="3" class="vl-textarea vl-textarea--block" value=(mut model.subject)}}
+    </div>
+    <div class="vlc-input-field-block" height="5em">
+      {{file-uploader isLoading=isLoading uploadedFile=(action "uploadedFile")}}
+    </div>
+  </div>
+  {{web-components/vl-modal-footer
+    isLoading=isLoading
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "add")
+    cancelAction=(action "cancel")
+    saveAction=(action "save")
+  }}
+{{/web-components/vl-modal}}
