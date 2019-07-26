@@ -10,15 +10,17 @@ export default Model.extend({
 	title: attr('string'),
 	numberVp: attr('string'),
 	numberVr: attr('string'),
+	description: attr('string'),
 	freezeAccessLevel: attr('boolean'),
 	forCabinet: attr('boolean'),
 
 	documentVersions: hasMany('document-version'),
 	remarks: hasMany('remark'),
-	description: attr('string'),
+	
 	type: belongsTo('document-type'),
 	signedDecision: belongsTo('decision', { inverse: null }),
 	signedMinutes: belongsTo('meeting-record', { inverse: null }),
+	accessLevel: belongsTo('access-level'),
 
 	sortedDocumentVersions: computed('documentVersions.@each', function () {
 		return PromiseArray.create({

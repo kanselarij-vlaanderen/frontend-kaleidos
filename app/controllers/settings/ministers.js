@@ -19,10 +19,10 @@ export default Controller.extend(isAuthenticatedMixin, {
 			if (this.isEditor || this.isAdmin) {
 				const firstPrio = 1;
 				for (let i = 0; i < reOrderedModel.get('length'); i++) {
-					const reOrderedAgendaitem = reOrderedModel.objectAt(i);
-					const agendaitem = model.find((item) => item.id === reOrderedAgendaitem.get('id'));
+					const reOrderedMandatee = reOrderedModel.objectAt(i);
+					const mandatee = model.find((item) => item.id === reOrderedMandatee.get('id'));
 					const newPrio = (i + firstPrio);
-					agendaitem.set('priority', newPrio);
+					mandatee.set('priority', newPrio);
 				}
 				this.reAssignPriorities.perform(model);
 				this.set('model', model.sortBy('priority'));

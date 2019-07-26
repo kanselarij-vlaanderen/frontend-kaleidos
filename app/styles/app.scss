@@ -441,11 +441,7 @@ ul {
 }
 
 .checkbox-list-selector {
-  display:flex;
-  flex-wrap:wrap;
-
-  .vl-checkbox-container {
-    padding:0.1em;
-    width:calc(25% - 0.2em);
-  }
+  display: grid;
+  grid-template-columns: repeat(3,calc(100% / 3));
+  grid-gap: 10px;
 }

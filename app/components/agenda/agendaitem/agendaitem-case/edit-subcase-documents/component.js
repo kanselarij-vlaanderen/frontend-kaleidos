@@ -13,8 +13,8 @@ export default Component.extend(UploadDocumentMixin, {
 			document.set('type', type);
 		},
 
-		chooseDocumentConfidentiality(document, confidentiality) {
-			document.set('confidentiality', confidentiality);
+		chooseAccessLevel(document, accessLevel) {
+			document.set('accessLevel', accessLevel);
 		},
 
 		async saveChanges() {
