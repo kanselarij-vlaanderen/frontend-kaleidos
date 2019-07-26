@@ -6,32 +6,25 @@ import { computed } from '@ember/object';
 export default Component.extend(EditAgendaitemOrSubcase, {
 	store: inject(),
 	classNames: ["vl-form__group", "vl-u-bg-porcelain"],
-	propertiesToSet: ['title', 'shortTitle', 'formallyOk', 'confidentiality', 'confidential'],
+	propertiesToSet: ['title', 'shortTitle', 'formallyOk', 'accessLevel', 'freezeAccessLevel'],
 
-	formallyOk: getCachedProperty('formallyOk'),
-	title: getCachedProperty('title'),
-	confidentiality: getCachedProperty('confidentiality'),
-	shortTitle: getCachedProperty('shortTitle'),
-	confidential: computed(`item.confidential`, `item.subcase.confidential`, {
-		get() {
-			if (this.get('isAgendaItem')) {
-				return this.get('item.subcase.confidential');
-			} else {
-				return this.get('item.confidential');
-			}
-		},
-		set: function (key, value) {
-			return value;
-		}
+	isAgendaItem: computed('item.modelName', function() {
+		return "agendaitem" == this.get('item.modelName');
 	}),
 
+	// formallyOk: getCachedProperty('formallyOk'),
+	title: getCachedProperty('title'),
+	accessLevel: getCachedProperty('accessLevel'),
+	shortTitle: getCachedProperty('shortTitle'),
+	freezeAccessLevel: getCachedProperty('freezeAccessLevel'),
+
 	actions: {
-		selectConfidentiality(confidentiality) {
-			this.set('confidentiality', confidentiality);
+		setAccessLevel(accessLevel) {
+			this.set('accessLevel', accessLevel);
 		},
 
 		setAction(item) {
 			this.set('formallyOk', item.get('uri'));
-		}
+		},
 	}
 });
