@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
-import { next } from '@ember/runloop';
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
-export default Route.extend({
+export default Route.extend(AuthenticatedRouteMixin, {
   modelName: "oc-meeting",
   model(params) {
     return this.store.findRecord('oc-meeting', params.meeting_id);
