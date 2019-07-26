@@ -55,6 +55,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
   }),
   
   model: computed('items.@each', function() {
+    this.items.map((item) => item.set('selected', false));
     return this.items;
   }),
 
@@ -171,28 +172,6 @@ export default Component.extend(DefaultQueryParamsMixin, {
     async addSubcasesToAgenda() {
       this.set('loading', true);
       const { selectedAgenda, availableSubcases, postponedSubcases, agendaService } = this;
-      const alreadySelected = await selectedAgenda.get('agendaitems');
-
-      await Promise.all(postponedSubcases.map(async (item) => {
-        const agendaitems = await item.get('agendaitems');
-        return agendaitems.map(async (agendaitem) => {
-          const idx = await alreadySelected.indexOf(agendaitem);
-          if (idx !== -1) {
-            const postponed_obj = await agendaitem.get('postponedTo');
-            if (postponed_obj) {
-              await postponed_obj.set('agendaitem', null);
-              await postponed_obj.destroyRecord();
-              await agendaitem.set('retracted', false);
-              await agendaitem.set('postponedTo', null);
-              await agendaitem.save();
-            } else {
-              console.log('lollig')
-              // Never reached this
-            }
-          }
-        });
-      }));
-
       const itemsToAdd = [...postponedSubcases, ...availableSubcases];
 
       let promise = Promise.all(itemsToAdd.map(async (subCase) => {
