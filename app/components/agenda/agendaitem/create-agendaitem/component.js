@@ -1,14 +1,15 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import { A } from '@ember/array';
+
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import CONFIG from 'fe-redpencil/utils/config';
-import { computed } from '@ember/object';
+import { computed,observer } from '@ember/object';
+import { task, timeout } from 'ember-concurrency';
 
 export default Component.extend(DefaultQueryParamsMixin, {
-  postponedSubcases: A([]),
-  availableSubcases: A([]),
+  postponedSubcases:null,
+  availableSubcases: null,
   currentSession: alias('sessionService.currentSession'),
   selectedAgenda: alias('sessionService.currentAgenda'),
   agendas: alias('sessionService.agendas'),
@@ -21,9 +22,9 @@ export default Component.extend(DefaultQueryParamsMixin, {
   size: 5,
   sort: 'short-title',
 
-  model: computed('store', 'sort', 'page', 'filter', 'size', function () {
-    const { store, page, filter, size, sort } = this;
-    const options = {
+  queryOptions: computed('sort', 'filter', 'page', function () {
+    const { page, filter, size, sort } = this;
+		let options = {
       sort: sort,
       page: {
         number: page,
@@ -35,18 +36,53 @@ export default Component.extend(DefaultQueryParamsMixin, {
       }
     };
     if (filter) {
-      options['filter'] = {
-        ':has-no:agendaitems': 'yes',
-        // 'short-title': filter,
-      };
+      options['filter']['short-title'] = filter;
     }
-    return store.query('subcase', options);
+		return options;
   }),
+
+  // dirty observers to make use of the datatable actions
+  pageObserver: observer('page', function() {
+    this.findAll.perform();
+  }),
+
+  // dirty observers to make use of the datatable actions
+  filterObserver: observer('filter', function() {
+    if(this.filter == "") {
+      this.findAll.perform();
+    }
+  }),
+  
+  model: computed('items.@each', function() {
+    return this.items;
+  }),
+
+  setFocus() {
+    document.getElementById("searchId").focus();
+  },
+
+  findAll: task(function* () {
+		const { queryOptions } = this;
+		const items = yield this.store.query("subcase", queryOptions);
+    this.set('items', items);
+    yield timeout(100);
+    this.setFocus();
+  }),
+
+  searchTask: task(function* () {
+    yield timeout(300);
+    const { queryOptions } = this;
+		const items = yield this.store.query("subcase", queryOptions);
+    this.set('items', items);
+    yield timeout(100);
+    this.setFocus();
+  }).restartable(),
 
   async didInsertElement() {
     this._super(...arguments);
     this.set('postponedSubcases', []);
     this.set('availableSubcases', []);
+    this.findAll.perform();
     const ids = await this.get('subcasesService').getPostPonedSubcaseIds();
     let postPonedSubcases = [];
 

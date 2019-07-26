@@ -18,15 +18,39 @@
     </div>
   {{else}}
     <div class="vl-modal-dialog__content">
+      <div class="vlc-toolbar vlc-toolbar--auto">
+        <div class="vlc-toolbar__justified">
+          <div class="vlc-toolbar__item">
+            <div class="vl-input-field--inline">
+              {{input
+                value=filter
+                elementId="searchId"
+                placeholder="Zoeken.."
+                key-press=(perform searchTask)
+                class="vl-input-field vl-input-field__input"
+              }}
+              <button
+                class="vl-input-field__submit vl-button"
+                onclick={{perform searchTask}}
+              >
+                <i class="vl-vi vl-vi-magnifier"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="vlc-toolbar__item">
+          {{#if searchTask.isRunning}}
+            <div class="vl-loader" role="alert" aria-busy="true"></div>
+          {{/if}}
+        </div>
+      </div>
       <div class="vl-u-spacer">
         {{#data-table
           content=model
           sort=sort
           page=page
           size=size
-          filter=filter
-          isLoading=isLoadingModel
-          searchDebounceTime=500
+          isLoading=findAll.isRunning
           onClickRow=(action "selectAvailableSubcase") as |t|
         }}
           {{#t.content as |c|}}
