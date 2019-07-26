@@ -8,8 +8,9 @@ import { computed,observer } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 
 export default Component.extend(DefaultQueryParamsMixin, {
-  postponedSubcases:null,
   availableSubcases: null,
+  showPostponed:null,
+
   currentSession: alias('sessionService.currentSession'),
   selectedAgenda: alias('sessionService.currentAgenda'),
   agendas: alias('sessionService.agendas'),
@@ -69,6 +70,20 @@ export default Component.extend(DefaultQueryParamsMixin, {
     this.setFocus();
   }),
 
+  findPostponed: task(function* () {
+    const ids = yield this.get('subcasesService').getPostPonedSubcaseIds();
+    let postPonedSubcases = [];
+
+    if (ids && ids.length > 0) {
+      postPonedSubcases = yield this.store.query('subcase', {
+        filter: {
+          "id": ids.toString()
+        }
+      });
+    }
+    this.set('items', postPonedSubcases);
+  }),
+
   searchTask: task(function* () {
     yield timeout(300);
     const { queryOptions } = this;
@@ -80,20 +95,9 @@ export default Component.extend(DefaultQueryParamsMixin, {
 
   async didInsertElement() {
     this._super(...arguments);
-    this.set('postponedSubcases', []);
     this.set('availableSubcases', []);
+    this.set('postponedSubcases', []);
     this.findAll.perform();
-    const ids = await this.get('subcasesService').getPostPonedSubcaseIds();
-    let postPonedSubcases = [];
-
-    if (ids && ids.length > 0) {
-      postPonedSubcases = await this.store.query('subcase', {
-        filter: {
-          "id": ids.toString()
-        }
-      });
-    }
-    this.set('postPonedSubcases', postPonedSubcases);
   },
 
   actions: {
@@ -101,11 +105,44 @@ export default Component.extend(DefaultQueryParamsMixin, {
       this.set('isAddingAgendaitems', false);
     },
 
+    checkShowPostponedValue() {
+      const { showPostponed } = this;
+      if(showPostponed) {
+        this.findPostponed.perform();
+      } else {
+        this.findAll.perform();
+      }
+    },
+
+    async selectPostponed(subcase, event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      let action = 'add';
+      if (subcase.selected) {
+        subcase.set('selected', false);
+        action = 'remove';
+      } else {
+        subcase.set('selected', true);
+        action = 'add';
+      }
+      const postponed = await this.get('postponedSubcases');
+
+      if (action === 'add') {
+        postponed.pushObject(subcase)
+      } else if (action === 'remove') {
+        const index = postponed.indexOf(subcase);
+        if (index > -1) {
+          postponed.splice(index, 1);
+        }
+      }
+    },
+
     async selectAvailableSubcase(subcase, destination, event) {
       if (event) {
         event.stopPropagation();
       }
-
+      
       let action = 'add';
       if (subcase.selected) {
         subcase.set('selected', false);
@@ -127,31 +164,6 @@ export default Component.extend(DefaultQueryParamsMixin, {
       }
     },
 
-    async selectPostponed(subcase, event) {
-      if (event) {
-        event.stopPropagation();
-      }
-
-      let action = 'add';
-      if (subcase.selected) {
-        subcase.set('selected', false);
-        action = 'remove';
-      } else {
-        subcase.set('selected', true);
-        action = 'add';
-      }
-      const postponed = await this.get('postponedSubcases');
-
-      if (action === 'add') {
-        postponed.pushObject(subcase)
-      } else if (action === 'remove') {
-        const index = postponed.indexOf(subcase);
-        if (index > -1) {
-          postponed.splice(index, 1);
-        }
-      }
-    },
-
     reloadRoute(id) {
       this.reloadRoute(id);
     },
@@ -163,7 +175,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
 
       await Promise.all(postponedSubcases.map(async (item) => {
         const agendaitems = await item.get('agendaitems');
-        agendaitems.map(async (agendaitem) => {
+        return agendaitems.map(async (agendaitem) => {
           const idx = await alreadySelected.indexOf(agendaitem);
           if (idx !== -1) {
             const postponed_obj = await agendaitem.get('postponedTo');
@@ -174,6 +186,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
               await agendaitem.set('postponedTo', null);
               await agendaitem.save();
             } else {
+              console.log('lollig')
               // Never reached this
             }
           }
@@ -183,12 +196,9 @@ export default Component.extend(DefaultQueryParamsMixin, {
       const itemsToAdd = [...postponedSubcases, ...availableSubcases];
 
       let promise = Promise.all(itemsToAdd.map(async (subCase) => {
-        const agendaitems = await subCase.get('agendaitems');
-        if (agendaitems.length === 0) {
           if (subCase.selected) {
             return agendaService.createNewAgendaItem(selectedAgenda, subCase);
           }
-        }
       }));
 
       promise.then(async () => {

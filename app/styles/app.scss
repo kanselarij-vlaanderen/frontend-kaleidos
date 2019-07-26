@@ -445,3 +445,9 @@ ul {
   grid-template-columns: repeat(3,calc(100% / 3));
   grid-gap: 10px;
 }
+
+.vl-modal-dialog__content {
+  .data-table-pagination {
+    margin-bottom: 0em;
+  }
+}
