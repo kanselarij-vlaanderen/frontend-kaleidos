@@ -1,7 +1,35 @@
 <div
   class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
 >
-  <div class="vl-col--8-12 vl-col--1-1--s">
+  {{#if showAdvanced}}
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <h4 class="vlc-toolbar__title">
+            {{t "advanced-search"}}
+          </h4>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__item">
+          <a
+            class="vl-button vl-button--link-muted vl-button--icon"
+            href="#"
+            {{action "toggleAdvanced"}}
+          >
+            <i
+              class="vl-button__icon vl-vi vl-vi-close-light"
+              aria-hidden="true"
+            ></i>
+            <span class="vl-u-visually-hidden">
+              {{t "close"}}
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  <div class="vl-col--6-12 vl-col--1-1--s">
     <label class="vl-form__label" for="dossierId">
       {{t "agendaitem-case"}}
     </label>
@@ -13,42 +41,33 @@
       key-press=(perform searchTask)
     }}
   </div>
-  <div class="vl-col--1-12 vl-col--1-1--s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--block"
-      type="button"
-      onclick={{perform searchTask}}
-    >
-      {{t "filter"}}
-    </button>
-  </div>
-  <div class="vl-col--2-12 vl-col--1-1--s">
-    <button class="vl-button vl-button--link vl-button--narrow" href="#" 
-            onclick={{action "toggleAdvanced"}}>
-      {{t "advanced-search"}}
-    </button>
-  </div>
-  <div class="vl-col--1-12 vl-col--1-1--s">
-    <label class="vl-form__label" for="dossierId">
-      {{t "amount-showed"}}
-    </label>
-    {{#power-select
-      options=sizeOptions
-      selected=size
-      searchEnabled=false
-      onchange=(action "selectSize") as |sizeValue|
-    }}
-      {{sizeValue}}
-    {{/power-select}}
-  </div>
-</div>
-{{#if showAdvanced}}
-  <div
-    class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
-  >
-    <div class="vl-col--6-12">
+  {{#if (not showAdvanced)}}
+    <div class="vl-col--1-12 vl-col--1-1--s">
+      <button
+        class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+        type="button"
+        onclick={{perform searchTask}}
+      >
+        <i
+          class="vl-button__icon vl-button__icon--before vl-vi vl-vi-search"
+          aria-hidden="true"
+        ></i>
+        {{t "filter"}}
+      </button>
+    </div>
+    <div class="vl-col--2-12 vl-col--1-1--s">
+      <button
+        class="vl-button vl-button--link vl-button--narrow"
+        href="#"
+        onclick={{action "toggleAdvanced"}}
+      >
+        {{t "advanced-search"}}
+      </button>
+    </div>
+  {{else}}
+    <div class="vlc-input-field-block vl-col--6-12">
       <label class="vl-form__label" for="ministerName">
-        {{t "find-mandatee-label"}}
+        {{t "minister"}}
       </label>
       {{input
         class="vl-input-field vl-input-field--block"
@@ -58,6 +77,12 @@
         key-press=(perform searchTask)
       }}
     </div>
+  {{/if}}
+</div>
+{{#if showAdvanced}}
+  <div
+    class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer custom-search"
+  >
     <div class="vlc-input-field-block vl-col--2-12">
       {{web-components/vl-form-label value=(t "from-date")}}
       {{web-components/vl-datepicker
@@ -72,23 +97,31 @@
         dateChanged=(action "selectDateTo")
       }}
     </div>
-    <div class="vlc-input-field-block vl-col--2-12"
-      onclick={{perform searchTask}}
-    >
-      <label class="vl-checkbox vl-checkbox__box">
-        {{input
-          class="vl-checkbox__toggle"
-          type="checkbox"
-          checked=searchInDecisionsOnly
-        }}
-        <div class="vl-checkbox__label">
-          <i class="vl-checkbox__box"></i>
-          <span class="vl-annotation">
-            {{t "search-in-decisions-only"}}
-          </span>
-        </div>
-      </label>
+    <div class="vlc-input-field-block vl-col--6-12"></div>
+    <div class="vl-col--2-12 action-toggle-container no-margin">
+      {{web-components/vl-form-label value=(t "search-in-decisions-only")}}
+      {{web-components/vl-toggle
+        valueChanged=(perform searchTask)
+        value=searchInDecisionsOnly
+      }}
     </div>
-     
+  </div>
+  <div class="vlc-toolbar">
+    <div class="vlc-toolbar__left"></div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <button
+          class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+          type="button"
+          onclick={{perform searchTask}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-search"
+            aria-hidden="true"
+          ></i>
+          {{t "filter"}}
+        </button>
+      </div>
+    </div>
   </div>
 {{/if}}

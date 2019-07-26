@@ -1,8 +1,11 @@
 <div class={{agendaitemsClass}}>
   <div class="vlc-scroll-wrapper">
+    {{agenda/agendaitem-search
+      selectedAgenda=currentAgenda
+      value=(readonly filter)
+      search=(action "searchAgendaItems")
+    }}
     <div class="vlc-scroll-wrapper__body">
-      {{agenda/agendaitem-search selectedAgenda=currentAgenda value=(readonly filter) search=(action "searchAgendaItems")}}
-      
       {{agenda/agenda-list
         minutesApproval=(await model.minutesApproval)
         agendaitemGroups=(await model.groups)

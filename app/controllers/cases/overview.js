@@ -6,7 +6,9 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
   queryParams: ['oc', 'isArchived', 'searchText', 'mandatees', 'dateFrom', 'dateTo', 'decisionsOnly'],
-  
+  sizeOptions: [5, 10, 20, 50, 100, 200],
+	size:null,
+
   intl: inject(),
   sort: '-created',
   oc: false,
@@ -32,6 +34,10 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
   }),
 
   actions: {
+    selectSize(size) {
+      this.set('size', size)
+    }, 
+    
     editRow(caze) {
       this.set('caseToEdit', caze);
       this.toggleProperty('isEditingRow');

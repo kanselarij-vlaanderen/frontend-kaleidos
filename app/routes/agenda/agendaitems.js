@@ -3,8 +3,6 @@ import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items
 import { hash } from 'rsvp';
 import { isEmpty} from '@ember/utils';
 import $ from 'jquery';
-import iseCode from '../../models/ise-code';
-
 
 export default Route.extend(SortedAgendaItemsRouteMixin, {
 	queryParams: {
@@ -13,7 +11,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 	},
 
 	async model(params) {
-		
+
 	  const {agenda,matchingAgendaItems} = await hash({
 			agenda: this.store.findRecord('agenda', await this.get('sessionService.currentAgenda.id')),
 			matchingAgendaItems: this.matchingAgendaItems(params.filter)

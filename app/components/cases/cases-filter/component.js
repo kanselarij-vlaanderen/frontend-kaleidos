@@ -4,10 +4,8 @@ import moment from 'moment';
 
 export default Component.extend({
 	classNames:["vl-form vl-u-spacer-extended-bottom-l"],
-	sizeOptions: [5, 10, 20, 50, 100, 200],
+	classNameBindings: ["showAdvanced:vlc-box--padding-sides-only", "showAdvanced:vlc-box"],
 	showAdvanced: false,
-	size:null,
-
 	searchText: null,
 	ministerName: null,
 	dateFrom: undefined,
@@ -36,9 +34,6 @@ export default Component.extend({
 	}).restartable(),
 
 	actions: {
-		selectSize(size) {
-      this.set('size', size)
-		},
 		toggleAdvanced() {
 			this.toggleProperty('showAdvanced');
 		},
