@@ -37,11 +37,13 @@
         </div>
       </div>
     </div>
+    <div class="vlc-panel-layout__main-content">
+      {{outlet}}
+    </div>
   </div>
 {{else}}
   {{web-components/vl-loader
     text="De agenda wordt goedgekeurd. Even geduld aub.."
   }}
 {{/if}}
-{{outlet}}
 {{outlet 'modal'}}

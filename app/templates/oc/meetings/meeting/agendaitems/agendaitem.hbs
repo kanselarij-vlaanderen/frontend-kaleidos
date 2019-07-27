@@ -1,0 +1,39 @@
+<div class="vlc-scroll-wrapper">
+  <!-- <div class="vlc-scroll-wrapper__header">
+    <div
+      class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom"
+    >
+      <div class="vl-tabs__wrapper">
+        {{agenda/agendaitem/agendaitem-nav
+          agendaitem=agendaitem
+          activeAgendaItemSection=activeAgendaItemSection
+          setAgendaItemSection=(action "setAgendaItemSection")
+        }}
+      </div>
+    </div>
+  </div> -->
+  <div class="vlc-scroll-wrapper__body">
+    <div class="vl-u-spacer-extended">
+      <div class="vlc-container">
+        <div class="vl-u-spacer--small">
+          <div class="vl-action-group vl-action-group--align-right">
+            {{#if (or isAdmin isEditor)}}
+                {{agenda/agendaitem/agendaitem-controls
+                  agendaitem=agendaitem
+                  currentAgenda=currentAgenda
+                  lastDefiniteAgenda=lastDefiniteAgenda
+                }}
+            {{/if}}
+          </div>
+          <div class="vl-u-spacer-extended-bottom-l">
+            <div class="vl-u-spacer-extended-bottom-s">
+              <h4 class="vl-title vl-title--h4">
+                {{model.subject}}
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

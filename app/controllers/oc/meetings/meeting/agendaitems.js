@@ -45,11 +45,11 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 	agendaitemsClass: computed('routing.currentRouteName', function () {
 		const { routing } = this;
-		// if (routing.get('currentRouteName') === "oc.meetings.meeting.agendaitems.index") {
-			return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
-		// } else {
-		// 	return "vlc-panel-layout__agenda-items";
-		// }
+		if (routing.get('currentRouteName').startsWith('oc.meetings.meeting.agendaitems.agendaitem')) {
+      return "vlc-panel-layout__agenda-items";
+		} else  {
+      return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
+		}
 	}),
 
 	actions: {
