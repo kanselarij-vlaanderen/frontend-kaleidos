@@ -31,6 +31,37 @@
                 {{model.subject}}
               </h4>
             </div>
+            <div class="vlc-hr"></div>
+            <div class="vl-u-spacer-extended-bottom-s">
+              <h4 class="vl-title vl-title--h4">
+                Notificatie
+              </h4>
+              {{#if model.notification}}
+                {{oc/oc-file
+                  model=model.notification
+                }}
+              {{else}}
+                <div class="vl-u-spacer-extended-top-s">
+                  {{web-components/vl-alert message="Nog geen notificatie beschikbaar"}}
+                </div>
+              {{/if}}
+            </div>
+            <div class="vl-u-spacer-extended-bottom-s">
+              <h4 class="vl-title vl-title--h4">
+                Documenten
+              </h4>
+              {{#if model.documents}}
+                {{#each model.documents as |file|}}
+                  {{oc/oc-file
+                    model=file
+                  }}
+                {{/each}}
+              {{else}}
+                <div class="vl-u-spacer-extended-top-s">
+                  {{web-components/vl-alert message="Geen documenten beschikbaar"}}
+                </div>
+              {{/if}}
+            </div>
           </div>
         </div>
       </div>
