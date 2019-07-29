@@ -2,7 +2,7 @@
   {{ember-flatpickr
     classNames="vl-input-field vl-input-field--block"
     locale="nl"
-    date=selectedDate
+    date=(readonly selectedDate)
     onChange=(action "dateChanged")
     getFlatpickrRef=(action (mut flatpickrRef))
   }}
@@ -18,7 +18,7 @@
     classNames="vl-input-field vl-input-field--block"
     locale="nl"
     enable=datesToEnable
-    date=selectedDate
+    date=(readonly selectedDate)
     onChange=(action "dateChanged")
     getFlatpickrRef=(action (mut flatpickrRef))
   }}

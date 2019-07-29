@@ -9,11 +9,11 @@ export default Component.extend({
 	searchTask: task(function* () {
 		yield timeout(600);
 		this.search(this.get('value'));
-	}),
+	}).restartable(),
 
 	actions: {
-		search(value){
-			this.search(value);
+		search(){
+			this.searchTask.perform();
 		}
 	}
 });

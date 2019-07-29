@@ -379,6 +379,11 @@
 	"requested-by": "Ingediend door:",
 	"signed-document-decision": "Dit punt wordt goedgekeurd confer beslissingsfiche {name}.",
 	"sessions-loading-text": "De zittingen worden geladen. Even geduld aub..",
+	"from-date": "Vanaf datum",
+	"until-date": "Tot datum",
+	"search-in-decisions-only": "Zoek enkel in beslissingen",
+	"find-mandatee-label": "Mandataris",
+    "search-agenda-items": "Zoeken",
 	"no-nota":"Geen nota beschikbaar.",
 	"nota-loading-text":"De nota wordt geladen..",
 	"general-settings":"Algemene instellingen"
