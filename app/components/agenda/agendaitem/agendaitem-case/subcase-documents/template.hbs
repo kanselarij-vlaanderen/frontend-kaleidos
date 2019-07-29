@@ -59,6 +59,17 @@
     title=(t "document-add")
   }}
     <div class="vl-modal-dialog__content">
+      {{#if showDetail}}
+        <div class="vl-u-align-right vl-u-spacer-extended-s">
+          {{#link-to
+            "cases.case.subcases.subcase.overview"
+            item.id
+            target="_blank"
+          }}
+            {{t "to-subcase"}}
+          {{/link-to}}
+        </div>
+      {{/if}}
       {{file-uploader isLoading=isLoading uploadedFile=(action "uploadedFile")}}
       {{#if (not isLoading)}}
         <div class="upload-container">

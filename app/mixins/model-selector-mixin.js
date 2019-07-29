@@ -32,7 +32,7 @@ export default Mixin.create({
 		}
 	}),
 
-	queryOptions: computed('sortField', 'filter', 'modelName', 'includeField', function () {
+	queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
 		let options = {};
 		const { filter, sortField, includeField } = this;
 		if (sortField) {
@@ -61,8 +61,14 @@ export default Mixin.create({
 	searchTask: task(function* (searchValue) {
 		yield timeout(300);
 		const { queryOptions, searchField, modelName } = this;
+		if (queryOptions['filter']) {
+			queryOptions['filter'][searchField] = searchValue;
+		} else {
+			let filter = {};
+			filter[searchField] = searchValue;
+			queryOptions['filter'] = filter;
+		}
 
-		queryOptions['filter'][searchField] = searchValue;
 		return this.store.query(modelName, queryOptions);
 	}),
 
@@ -73,6 +79,7 @@ export default Mixin.create({
 
 		resetValueIfEmpty(param) {
 			if (param == "") {
+				this.set('queryOptions', { sort: this.sortField });
 				this.findAll.perform();
 			}
 		}
