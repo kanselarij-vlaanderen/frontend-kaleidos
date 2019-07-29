@@ -12,11 +12,7 @@
     </div>
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "new-person")}}
-      {{utils/model-selector
-        modelName="person"
-        searchField="alternative-name"
-        propertyToShow="alternativeName"
-        sortField="alternative-name"
+      {{utils/create-person-selector
         selectedItems=selectedPerson
         selectModel=(action "personSelected")
       }}

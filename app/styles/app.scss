@@ -443,13 +443,13 @@ ul {
 }
 
 .no-capitalize {
-  white-space:pre-line;
-  display:inline-flex;
+  white-space: pre-line;
+  display: inline-flex;
 }
 
 .checkbox-list-selector {
   display: grid;
-  grid-template-columns: repeat(3,calc(100% / 3));
+  grid-template-columns: repeat(3, calc(100% / 3));
   grid-gap: 10px;
 }
 
@@ -458,7 +458,7 @@ ul {
     margin-bottom: 0em;
   }
 }
- 
+
 .action-toggle-container {
   display: flex;
   height: 100%;
@@ -469,5 +469,9 @@ ul {
 }
 
 .no-margin {
-  margin:0;
+  margin: 0;
+}
+
+.padding-small {
+  padding: 0.2em;
 }
