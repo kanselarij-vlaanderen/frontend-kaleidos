@@ -19,7 +19,7 @@ export default Model.extend({
   showAsRemark: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
-  confidential: attr('boolean'),
+  freezeAccessLevel: attr('boolean'),
   concluded: attr('boolean'),
   subcaseName: attr('string'),
 
@@ -39,6 +39,8 @@ export default Model.extend({
   requestedForMeeting: belongsTo('meeting', { inverse: null }),
   newsletterInfo: belongsTo('newsletter-info'),
   requestedBy: belongsTo('mandatee', { inverse: null }),
+  accessLevel: belongsTo('access-level'),
+
 
   firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({

@@ -1,9 +1,23 @@
-<div class="vl-u-spacer">
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "public")}}
-    {{web-components/vl-toggle value=confidential}}
+{{#if (not isAgendaItem)}}
+  <div class="vl-u-spacer">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "public")}}
+      {{web-components/vl-toggle value=freezeAccessLevel}}
+    </div>
   </div>
-</div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    {{web-components/vl-form-label value=(t "publicity")}}
+    {{utils/model-selector
+      modelName="access-level"
+      searchField="label"
+      propertyToShow="label"
+      readOnly=freezeAccessLevel
+      sortField="label"
+      selectedItems=accessLevel
+      selectModel=(action "setAccessLevel")
+    }}
+  </div>
+{{/if}}
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "name-subcase")}}
@@ -17,14 +31,14 @@
     {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
   </div>
 </div>
-{{#if isAgendaItem}}
+{{!-- {{#if isAgendaItem}}
   {{#if (not (await item.isOC))}}
     {{utils/formally-ok-selector
       formallyOk=formallyOk
       setAction=(action "setAction")
     }}
   {{/if}}
-{{/if}}
+{{/if}} --}}
 <div class="vl-action-group vl-action-group--align-right">
   <a
     class="vl-button vl-button--tertiary vl-button--narrow"

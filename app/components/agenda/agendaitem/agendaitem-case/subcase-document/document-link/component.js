@@ -121,6 +121,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 		deleteDocument(document) {
 			this.set('documentToDelete', document);
 			this.set('isVerifyingDelete', true);
+		},
+
+		toggleFreezeAccessLevel(document) {
+			document.toggleProperty('freezeAccessLevel');
+			document.save();
 		}
 	},
 

@@ -448,12 +448,14 @@ ul {
 }
 
 .checkbox-list-selector {
-  display:flex;
-  flex-wrap:wrap;
+  display: grid;
+  grid-template-columns: repeat(3,calc(100% / 3));
+  grid-gap: 10px;
+}
 
-  .vl-checkbox-container {
-    padding:0.1em;
-    width:calc(25% - 0.2em);
+.vl-modal-dialog__content {
+  .data-table-pagination {
+    margin-bottom: 0em;
   }
 }
  

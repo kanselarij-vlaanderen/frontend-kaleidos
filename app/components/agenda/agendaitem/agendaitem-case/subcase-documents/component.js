@@ -58,13 +58,6 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 					subcase.notifyPropertyChange('documentVersions');
 				}
 
-				// await this.uploadFiles(item).then(async () => {
-				// 	if (this.modelToAddDocumentVersionTo === 'agendaitem') {
-				// 		this.changeFormallyOkPropertyIfNotSetOnTrue(item);
-				// 		await this.updateModifiedProperty(await item.get('agenda'));
-				// 		await item.save();
-				// 	}
-				// });
 				await item.hasMany('documentVersions').reload();
 				item.notifyPropertyChange('documents');
 				item.notifyPropertyChange('documentVersions');
