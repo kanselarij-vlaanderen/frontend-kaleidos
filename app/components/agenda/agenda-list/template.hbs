@@ -35,19 +35,21 @@
   {{#each (await agendaitemGroups) as |group|}}
     <div class="{{spacerClass}}">
       {{#each group.groups as |agendaitemGroup|}}
-        <div class="vlc-list-section-header">
-          {{#each agendaitemGroup.mandatees as |mandatee|}}
-            {{mandatee.title}}<br />
-          {{/each}}
-        </div>
-        {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-          <div class="vlc-agenda-items-new__sub-item">
-            {{agenda/agenda-list/list-item
-              agendaitem=agendaitem
-              selectAgendaItem=(action "selectAgendaItem")
-            }}
+        {{#if (gt agendaitemGroup.agendaitems.length 0)}}
+          <div class="vlc-list-section-header">
+            {{#each agendaitemGroup.mandatees as |mandatee|}}
+              {{mandatee.title}}({{mandatee.priority}})<br />
+            {{/each}}
           </div>
-        {{/each}}
+          {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+            <div class="vlc-agenda-items-new__sub-item">
+              {{agenda/agenda-list/list-item
+                agendaitem=agendaitem
+                selectAgendaItem=(action "selectAgendaItem")
+              }}
+            </div>
+          {{/each}}
+        {{/if}}
       {{/each}}
     </div>
   {{/each}}
@@ -68,7 +70,7 @@
           {{#if (gt agendaitemGroup.agendaitems.length 0)}}
             <div class="vlc-list-section-header">
               {{#each agendaitemGroup.mandatees as |mandatee|}}
-                {{mandatee.title}}<br />
+                {{mandatee.title}}({{mandatee.priority}})<br />
               {{/each}}
             </div>
             {{#sortable-group
@@ -82,6 +84,7 @@
                   tagName="div"
                   model=agendaitem
                   group=sortableGroup
+                  distance=30
                   handle=".vlc-agenda-items-new__sub-item"
                 }}
                   <div class="vlc-agenda-items-new__sub-item">
