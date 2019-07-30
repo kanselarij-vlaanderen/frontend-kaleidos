@@ -55,7 +55,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 	actions: {
 
 		selectAgendaItem(agendaitem) {
-			this.transitionToRoute('oc.meetings.meeting.agendaitems.agendaitem.index', agendaitem);
+			this.transitionToRoute('oc.meetings.meeting.agendaitems.agendaitem', agendaitem);
 		},
     
 		searchAgendaItems(value) {
