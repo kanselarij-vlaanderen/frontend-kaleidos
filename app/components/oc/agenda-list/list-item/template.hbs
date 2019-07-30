@@ -1,15 +1,13 @@
-<a>
-  <p class="vlc-agenda-items-new__overline">
-    <span class="vlc-agenda-items-new__numbering">
-      {{agendaItem.priority}}{{agendaItem.subPriority}}.
-    </span>
-  </p>
+<div class="vl-u-display-flex vl-u-flex-align-baseline">
   <h4 class="vlc-agenda-items-new__subject">
+    <span class="oc-agendaitem-priority">
+      {{agendaitemPrio}}
+    </span>
     {{agendaItem.subject}}
   </h4>
-  <div class="vl-u-display-flex vl-u-flex-space-between">
-    <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">
-      {{agendaItem.case.identifier}}
-    </span>
-  </div>
-</a>
+</div>
+<div class="vl-u-display-flex vl-u-flex-space-between">
+  <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">
+    {{agendaItem.case.identifier}}
+  </span>
+</div>

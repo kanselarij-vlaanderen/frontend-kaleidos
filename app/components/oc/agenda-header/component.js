@@ -1,24 +1,23 @@
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { alias, filter } from '@ember/object/computed';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import Component from "@ember/component";
+import { inject } from "@ember/service";
+import isAuthenticatedMixin from "fe-redpencil/mixins/is-authenticated-mixin";
 
 export default Component.extend(isAuthenticatedMixin, {
-	store: inject(),
-	classNames: ["vlc-page-header"],
+  store: inject(),
+  classNames: ["vlc-page-header"],
 
-	meeting: undefined,
-	selectedItem: undefined,
-	
-	dropdownOpen: false,
+  meeting: undefined,
+  selectedItem: undefined,
 
-	actions: {
-		toggleDropdown() {
-			this.toggleProperty('dropdownOpen');
-		},
-	},
+  dropdownOpen: false,
 
-	changeLoading() {
-		this.loading();
-	},
+  actions: {
+    toggleDropdown() {
+      this.toggleProperty("dropdownOpen");
+    }
+  },
+
+  changeLoading() {
+    this.loading();
+  }
 });

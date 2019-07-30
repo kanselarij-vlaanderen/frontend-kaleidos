@@ -13,61 +13,84 @@
     </div>
   </div> -->
   <div class="vlc-scroll-wrapper__body">
-    <div class="vl-u-spacer-extended">
+    <div class="vl-u-spacer-extended-l">
       <div class="vlc-container">
         <div class="vl-u-spacer--small">
-        <div class="vl-u-spacer-extended-bottom-l">
-            <div class="vl-u-spacer-extended-bottom-s">
-              <h4 class="vl-title vl-title--h4">
-                {{model.subject}}
-              </h4>
-            </div>
-            <div class="vlc-hr"></div>
-            <div class="vl-u-spacer-extended-bottom-s">
-              <h4 class="vl-title vl-title--h4">
-                Notificatie
-                {{#if (or isAdmin isEditor)}}
-                  <button {{action 'showAddNotification'}} class={{concat "vl-button vl-button--tertiary vl-button--icon vl-u-spacer--xsmall"
-                  (if model.notification " vl-button--disabled" "")
+          <div class="vl-u-spacer-extended-bottom-l">
+            <div class="vl-u-spacer-extended-bottom-l">
+              <div class="vl-u-spacer-extended-bottom-s">
+                <h4 class="vl-title vl-title--h4">
+                  {{model.subject}}
+                </h4>
+              </div>
+              <div class="vlc-hr"></div>
+              <div class="vl-u-spacer-extended-bottom-s">
+                <h4 class="vl-title vl-title--h4">
+                  {{t "notification"}}
+                </h4>
+              </div>
+              <div class="vl-u-spacer-extended-bottom-s">
+                {{#if (is-pending model.notification)}}
+                  {{web-components/vl-loader
+                    text=(t "notification-loading-text")
                   }}
-                  disabled={{if model.notification true null}}>
-                    <i aria-hidden="true" class="vl-vi vl-vi-add vl-button__icon"></i>
-                    <span class="vl-u-hidden"></span>
+                {{else if model.notification}}
+                  {{oc/oc-file model=(await model.notification)}}
+                {{else}}
+                  {{web-components/vl-alert message=(t "no-notification-yet")}}
+                {{/if}}
+              </div>
+              <div class="vl-u-spacer-extended-bottom-s">
+                {{#if (or isAdmin isEditor)}}
+                  <button
+                    class={{concat
+                      "vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      (if model.notification " vl-button--disabled" "")
+                    }}
+                    disabled={{if model.notification true null}}
+                    {{action "showAddNotification"}}
+                  >
+                    <i
+                      aria-hidden="true"
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                    ></i>
+                    {{t "add-notification"}}
                   </button>
                 {{/if}}
-              </h4>
-              {{#if model.notification}}
-                {{oc/oc-file
-                  model=(await model.notification)
-                }}
-              {{else}}
-                <div class="vl-u-spacer-extended-top-s">
-                  {{web-components/vl-alert message="Nog geen notificatie beschikbaar"}}
-                </div>
-              {{/if}}
+              </div>
             </div>
+          </div>
+          <div class="vl-u-spacer-extended-bottom-l">
             <div class="vl-u-spacer-extended-bottom-s">
               <h4 class="vl-title vl-title--h4">
-                Documenten
-                {{#if (or isAdmin isEditor)}}
-                  <button  {{action 'showAddDocuments'}} class="vl-button vl-button--tertiary vl-button--icon vl-u-spacer--xsmall">
-                    <i aria-hidden="true" class="vl-vi vl-vi-add vl-button__icon"></i>
-                    <span class="vl-u-hidden"></span>
-                  </button>
-                {{/if}}
+                {{t "documents"}}
               </h4>
-              {{#if model.documents}}
-                {{#each model.documents as |file|}}
-                  {{oc/oc-file
-                    model=file
-                  }}
-                {{/each}}
-              {{else}}
-                <div class="vl-u-spacer-extended-top-s">
-                  {{web-components/vl-alert message="Geen documenten beschikbaar"}}
-                </div>
-              {{/if}}
             </div>
+            {{#if (is-pending model.documents)}}
+              {{web-components/vl-loader text=(t "documents-loading-text")}}
+            {{else if model.documents}}
+              {{#each model.documents as |file|}}
+                <div class="vl-u-spacer-extended-bottom-s">
+                  {{oc/oc-file model=file}}
+                </div>
+              {{/each}}
+            {{else}}
+              <div class="vl-u-spacer-extended-bottom-s">
+                {{web-components/vl-alert message=(t "no-documents-yet")}}
+              </div>
+            {{/if}}
+            {{#if (or isAdmin isEditor)}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                {{action "showAddDocuments"}}
+              >
+                <i
+                  aria-hidden="true"
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                ></i>
+                {{t "document-add"}}
+              </button>
+            {{/if}}
           </div>
         </div>
       </div>
@@ -75,8 +98,18 @@
   </div>
 </div>
 {{#if showAddNotification}}
-  {{oc/file-uploader onSave=(action 'saveNotification') onCancel=(action 'cancel') onClose=(action 'cancel') multipleFiles=false}}
+  {{oc/file-uploader
+    onSave=(action "saveNotification")
+    onCancel=(action "cancel")
+    onClose=(action "cancel")
+    multipleFiles=false
+  }}
 {{/if}}
 {{#if showAddDocuments}}
-  {{oc/file-uploader onSave=(action 'saveDocuments') onCancel=(action 'cancel') onClose=(action 'cancel') multipleFiles=true}}
+  {{oc/file-uploader
+    onSave=(action "saveDocuments")
+    onCancel=(action "cancel")
+    onClose=(action "cancel")
+    multipleFiles=true
+  }}
 {{/if}}
