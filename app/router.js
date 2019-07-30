@@ -61,8 +61,7 @@ Router.map(function () {
     this.route('meetings', { path: '/vergaderingen' }, function () {
       this.route('meeting', { path: '/:meeting_id' }, function () {
         this.route('agendaitems', { path: "/agendapunten" }, function () {
-          this.route('agendaitem', { path: "/:agendaitem_id" }, function () {
-          });
+          this.route('agendaitem', { path: "/:agendaitem_id" });
           this.route('new', { path: '/nieuw' });
           this.route('delete', { path: '/verwijder' });
         });
