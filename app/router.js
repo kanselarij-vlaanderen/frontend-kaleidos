@@ -58,6 +58,7 @@ Router.map(function () {
   this.route('document-viewer', { path: '/document/:document_version_id', });
 
   this.route('oc', function () {
+    this.route('search', { path: 'agendapunten/zoeken' });
     this.route('meetings', { path: '/vergaderingen' }, function () {
       this.route('meeting', { path: '/:meeting_id' }, function () {
         this.route('agendaitems', { path: "/agendapunten" }, function () {
