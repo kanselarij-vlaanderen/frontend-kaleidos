@@ -37,6 +37,7 @@ export default Component.extend({
 			this.set('isLoading', true);
 			this.get('model').save().then(() => {
 				this.set('showDeleteWarning', false);
+				this.onDelete();
 			}).catch((error) => {
 				this.globalError.handleError(error);
 			}).finally(() => {

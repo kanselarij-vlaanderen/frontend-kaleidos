@@ -16,16 +16,7 @@
     <div class="vl-u-spacer-extended">
       <div class="vlc-container">
         <div class="vl-u-spacer--small">
-          <div class="vl-action-group vl-action-group--align-right">
-            {{#if (or isAdmin isEditor)}}
-                {{agenda/agendaitem/agendaitem-controls
-                  agendaitem=agendaitem
-                  currentAgenda=currentAgenda
-                  lastDefiniteAgenda=lastDefiniteAgenda
-                }}
-            {{/if}}
-          </div>
-          <div class="vl-u-spacer-extended-bottom-l">
+        <div class="vl-u-spacer-extended-bottom-l">
             <div class="vl-u-spacer-extended-bottom-s">
               <h4 class="vl-title vl-title--h4">
                 {{model.subject}}
@@ -35,10 +26,19 @@
             <div class="vl-u-spacer-extended-bottom-s">
               <h4 class="vl-title vl-title--h4">
                 Notificatie
+                {{#if (or isAdmin isEditor)}}
+                  <button {{action 'showAddNotification'}} class={{concat "vl-button vl-button--tertiary vl-button--icon vl-u-spacer--xsmall"
+                  (if model.notification " vl-button--disabled" "")
+                  }}
+                  disabled={{if model.notification true null}}>
+                    <i aria-hidden="true" class="vl-vi vl-vi-add vl-button__icon"></i>
+                    <span class="vl-u-hidden"></span>
+                  </button>
+                {{/if}}
               </h4>
               {{#if model.notification}}
                 {{oc/oc-file
-                  model=model.notification
+                  model=(await model.notification)
                 }}
               {{else}}
                 <div class="vl-u-spacer-extended-top-s">
@@ -49,6 +49,12 @@
             <div class="vl-u-spacer-extended-bottom-s">
               <h4 class="vl-title vl-title--h4">
                 Documenten
+                {{#if (or isAdmin isEditor)}}
+                  <button  {{action 'showAddDocuments'}} class="vl-button vl-button--tertiary vl-button--icon vl-u-spacer--xsmall">
+                    <i aria-hidden="true" class="vl-vi vl-vi-add vl-button__icon"></i>
+                    <span class="vl-u-hidden"></span>
+                  </button>
+                {{/if}}
               </h4>
               {{#if model.documents}}
                 {{#each model.documents as |file|}}
@@ -68,3 +74,9 @@
     </div>
   </div>
 </div>
+{{#if showAddNotification}}
+  {{oc/file-uploader onSave=(action 'saveNotification') onCancel=(action 'cancel') onClose=(action 'cancel') multipleFiles=false}}
+{{/if}}
+{{#if showAddDocuments}}
+  {{oc/file-uploader onSave=(action 'saveDocuments') onCancel=(action 'cancel') onClose=(action 'cancel') multipleFiles=true}}
+{{/if}}
