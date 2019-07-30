@@ -381,5 +381,6 @@
   "notification": "Notificatie",
   "no-notification-yet": "Nog geen notificatie beschikbaar",
   "add-notification": "Notificatie toevoegen",
-  "notification-loading-text": "De notificatie wordt geladen."
+  "notification-loading-text": "De notificatie wordt geladen.",
+  "new-agendaitem": "Nieuw agendapunt"
 }
