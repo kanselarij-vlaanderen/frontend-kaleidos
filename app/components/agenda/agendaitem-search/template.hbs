@@ -8,6 +8,7 @@
           {{input
             value=value
             placeholder=(t "search-agenda-items")
+            key-up=(action "emptySearchTask" value)
             key-press=(perform searchTask)
             class="vl-input-field vl-input-field__input"
           }}
