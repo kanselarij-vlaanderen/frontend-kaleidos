@@ -11,7 +11,11 @@
       <div class="vlc-toolbar__right">
         {{#if (or isAdmin isEditor)}}
           <div class="vlc-toolbar__item">
-            {{#link-to 'oc.meetings.new' tagName='button' class='vl-button vl-button--narrow vl-button--icon-before'}}
+            {{#link-to
+              "oc.meetings.new"
+              tagName="button"
+              class="vl-button vl-button--narrow vl-button--icon-before"
+            }}
               <i
                 class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
@@ -27,9 +31,12 @@
   <div class="vlc-scroll-wrapper">
     <div class="vlc-scroll-wrapper__body">
       <div class="vl-u-spacer-extended-l">
-        <div class="vl-grid">
-          <div class="vl-col--2-4">
-            <div class="vl-u-spacer--medium">
+        <div class="vl-u-spacer--large">
+          <div class="vl-u-display-flex vl-u-flex-space-between">
+            <h2 class="vl-title vl-title--h3">
+              {{t "agenda-title"}}
+            </h2>
+            <div class="vl-u-spacer-extended-bottom-s">
               <div
                 class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
               >
@@ -49,60 +56,52 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="vl-u-spacer--large">
-          <div class="vl-u-spacer--large">
-            <h2 class="vl-title vl-title--h3">
-              {{t "history"}}
-            </h2>
-            <div class="vl-u-spacer-extended-bottom-l">
-              {{#data-table
-                content=(await model)
-                class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-                page=page
-                size=size
-                sort=sort
-                isLoading=isLoadingModel as |t|
-              }}
-                {{#t.content as |c|}}
-                  {{#c.header}}
-                    {{th-sortable
-                      class="vl-data-table-col-4 vl-data-table__header-title"
-                      currentSorting=sort
-                      field="startedAt"
-                      label="Vergadering"
+          <div class="vl-u-spacer-extended-bottom-l">
+            {{#data-table
+              content=model
+              class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+              page=page
+              size=size
+              sort=sort
+              isLoading=isLoadingModel
+              onClickRow=(action "selectSession") as |t|
+            }}
+              {{#t.content as |c|}}
+                {{#c.header}}
+                  {{th-sortable
+                    class="vl-data-table-col-6 vl-data-table__header-title"
+                    currentSorting=sort
+                    field="startedAt"
+                    label="Vergadering"
+                  }}
+                  {{th-sortable
+                    class="vl-data-table-col-5 vl-data-table__header-title"
+                    currentSorting=sort
+                    field="modified"
+                    label="Laatst gewijzigd"
+                  }}
+                  <th class="vl-data-table-col-1"></th>
+                {{/c.header}}
+                {{#c.body as |session|}}
+                  <td>
+                    {{agendaForTranslation}}
+                    {{moment-format session.startedAt "DD.MM.YYYY"}}
+                  </td>
+                  <td>
+                    {{moment-format (await session.modified) "DD-MM-YYYY HH:mm"
                     }}
-                    {{th-sortable
-                      class="vl-data-table-col-3 vl-data-table__header-title"
-                      currentSorting=sort
-                      field="modified"
-                      label="Laatst gewijzigd"
-                    }}
-                    <th class="vl-data-table-col-1"></th>
-                  {{/c.header}}
-                  {{#c.body as |session|}}
-                    <td {{action "selectSession" session}}>
-                      {{agendaForTranslation}}
-                      {{moment-format session.startedAt "DD.MM.YYYY"}}
-                    </td>
-                    <td {{action "selectSession" session}}>
-                      {{moment-format
-                        (await session.modified)
-                        "DD-MM-YYYY HH:mm"
-                      }}
-                    </td>
-                    <td class="vl-u-align-center">
-                      <button
-                        class="vl-button vl-button--link vl-button--icon"
-                        {{action "selectSession" session}}
-                      >
-                        <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-                      </button>
-                    </td>
-                  {{/c.body}}
-                {{/t.content}}
-              {{/data-table}}
-            </div>
+                  </td>
+                  <td class="vl-u-align-center">
+                    <button
+                      class="vl-button vl-button--link vl-button--icon"
+                      {{action "selectSession" session}}
+                    >
+                      <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+                    </button>
+                  </td>
+                {{/c.body}}
+              {{/t.content}}
+            {{/data-table}}
           </div>
         </div>
       </div>
