@@ -6,15 +6,11 @@ export default Component.extend({
 	tagName: 'button',
 	class: "vl-button vl-button--narrow",
 	type: 'button',
-	attributeBindings: ['disabled:disabled'],
-	classNameBindings: ['getClassNames'],
+	attributeBindings: ['isLoading:disabled'],
+	classNameBindings: ['isLoading:vl-button--loading'],
 
 	loadingText: computed('intl', function () {
 		return this.intl.t('loadingText');
-	}),
-
-	disabled: computed('isLoading', function () {
-		return this.isLoading;
 	}),
 
 	focus: computed('isLoading', function () {
@@ -26,14 +22,6 @@ export default Component.extend({
 			return this.loadingText;
 		}
 		return this.text;
-	}),
-
-	getClassNames: computed('isLoading', 'class', function () {
-		if (this.isLoading) {
-			return `${this.class} vl-button--loading`;
-		} else {
-			return this.class;
-		}
 	}),
 
 	click() {
