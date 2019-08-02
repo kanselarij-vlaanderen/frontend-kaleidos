@@ -1,0 +1,19 @@
+.vlc-panel-layout__agenda-items-oc {
+  min-width: 500px;
+}
+
+.vlc-agenda-items-new__sub-item--oc {
+  .vlc-agenda-items-new__subject {
+    font-weight: unset;
+    margin-left: 1.5rem;
+
+    .oc-agendaitem-priority {
+      position: absolute;
+      left: 1.5rem;
+      font-weight: 500;
+    }
+  }
+  .vlc-agenda-items-new__times-passed.vl-u-text--capitalize {
+    margin-left: 1.5rem;
+  }
+}

@@ -1,1 +1,5 @@
-{{textToDisplay}}
+{{#if text}}
+  {{textToDisplay}}
+{{else}}
+  {{yield}}
+{{/if}}

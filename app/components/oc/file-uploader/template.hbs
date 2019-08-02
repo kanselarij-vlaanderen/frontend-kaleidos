@@ -1,0 +1,33 @@
+{{#web-components/vl-modal
+  closeModal=onClose
+  isOverlay=true
+  large=true
+  title=(t "document-add")
+}}
+  <div class="vl-modal-dialog__content">
+    {{#if (or multipleFiles (not uploadedFiles.length))}}
+      {{file-uploader isLoading=isLoading uploadedFile=(action "add") multipleFiles=multipleFiles}}
+    {{/if}}
+    {{#if (not isLoading)}}
+      <div class="upload-container">
+        {{#each uploadedFiles as |uploadedFile|}}
+          {{#oc/oc-file model=uploadedFile onDelete=(action 'delete' uploadedFile)}}
+            <div class="vlc-input-field-block">
+              {{web-components/vl-form-label value=(t "alt-file-name")}}
+              {{web-components/vl-form-input width="4" value=(mut uploadedFile.filename)}}
+            </div>
+          {{/oc/oc-file}}
+        {{/each}}
+      </div>
+    {{else}}
+      {{web-components/vl-loader text=(t "documents-loading-text")}}
+    {{/if}}
+  </div>
+  {{web-components/vl-modal-footer
+    isLoading=isCreatingDocuments
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "document-add")
+    cancelAction=onCancel
+    saveAction=(action "save")
+  }}
+{{/web-components/vl-modal}}

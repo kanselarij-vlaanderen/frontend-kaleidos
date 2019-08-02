@@ -1,0 +1,115 @@
+<div class="vlc-scroll-wrapper">
+  <!-- <div class="vlc-scroll-wrapper__header">
+    <div
+      class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom"
+    >
+      <div class="vl-tabs__wrapper">
+        {{agenda/agendaitem/agendaitem-nav
+          agendaitem=agendaitem
+          activeAgendaItemSection=activeAgendaItemSection
+          setAgendaItemSection=(action "setAgendaItemSection")
+        }}
+      </div>
+    </div>
+  </div> -->
+  <div class="vlc-scroll-wrapper__body">
+    <div class="vl-u-spacer-extended-l">
+      <div class="vlc-container">
+        <div class="vl-u-spacer--small">
+          <div class="vl-u-spacer-extended-bottom-l">
+            <div class="vl-u-spacer-extended-bottom-l">
+              <div class="vl-u-spacer-extended-bottom-s">
+                <h4 class="vl-title vl-title--h4">
+                  {{model.subject}}
+                </h4>
+              </div>
+              <div class="vlc-hr"></div>
+              <div class="vl-u-spacer-extended-bottom-s">
+                <h4 class="vl-title vl-title--h4">
+                  {{t "notification"}}
+                </h4>
+              </div>
+              <div class="vl-u-spacer-extended-bottom-s">
+                {{#if (is-pending model.notification)}}
+                  {{web-components/vl-loader
+                    text=(t "notification-loading-text")
+                  }}
+                {{else if model.notification}}
+                  {{oc/oc-file model=(await model.notification)}}
+                {{else}}
+                  {{web-components/vl-alert message=(t "no-notification-yet")}}
+                {{/if}}
+              </div>
+              <div class="vl-u-spacer-extended-bottom-s">
+                {{#if (or isAdmin isEditor)}}
+                  <button
+                    class={{concat
+                      "vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      (if model.notification " vl-button--disabled" "")
+                    }}
+                    disabled={{if model.notification true null}}
+                    {{action "showAddNotification"}}
+                  >
+                    <i
+                      aria-hidden="true"
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                    ></i>
+                    {{t "add-notification"}}
+                  </button>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+          <div class="vl-u-spacer-extended-bottom-l">
+            <div class="vl-u-spacer-extended-bottom-s">
+              <h4 class="vl-title vl-title--h4">
+                {{t "documents"}}
+              </h4>
+            </div>
+            {{#if (is-pending model.documents)}}
+              {{web-components/vl-loader text=(t "documents-loading-text")}}
+            {{else if model.documents}}
+              {{#each model.documents as |file|}}
+                <div class="vl-u-spacer-extended-bottom-s">
+                  {{oc/oc-file model=file}}
+                </div>
+              {{/each}}
+            {{else}}
+              <div class="vl-u-spacer-extended-bottom-s">
+                {{web-components/vl-alert message=(t "no-documents-yet")}}
+              </div>
+            {{/if}}
+            {{#if (or isAdmin isEditor)}}
+              <button
+                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                {{action "showAddDocuments"}}
+              >
+                <i
+                  aria-hidden="true"
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                ></i>
+                {{t "document-add"}}
+              </button>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{#if showAddNotification}}
+  {{oc/file-uploader
+    onSave=(action "saveNotification")
+    onCancel=(action "cancel")
+    onClose=(action "cancel")
+    multipleFiles=false
+  }}
+{{/if}}
+{{#if showAddDocuments}}
+  {{oc/file-uploader
+    onSave=(action "saveDocuments")
+    onCancel=(action "cancel")
+    onClose=(action "cancel")
+    multipleFiles=true
+  }}
+{{/if}}

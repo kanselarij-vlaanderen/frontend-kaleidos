@@ -1,0 +1,19 @@
+{{#web-components/vl-modal
+  isOverlay=true
+  title="Nieuwe vergadering"
+  closeModal=(action "cancel")
+}}
+  <div class="vl-modal-dialog__content">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "date")}}
+      {{web-components/vl-datepicker dateChanged=(action "setSessionDate")}}
+    </div>
+  </div>
+  {{web-components/vl-modal-footer
+    isLoading=isLoading
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "add")
+    cancelAction=(action "cancel")
+    saveAction=(action "save")
+  }}
+{{/web-components/vl-modal}}

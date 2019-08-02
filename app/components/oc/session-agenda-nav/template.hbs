@@ -1,0 +1,19 @@
+<ul class="vlc-tabs-reverse" role="tablist">
+  <li class="vlc-tabs-reverse__item border-left">
+    {{#link-to
+      "oc.meetings.meeting.agendaitems"
+      class=(concat "vlc-tabs-reverse__link " (if inOverview activeClass ""))
+    }}
+      {{t "overview"}}
+    {{/link-to}}
+  </li>
+  <li class="vlc-tabs-reverse__item">
+    {{#link-to
+      "oc.meetings.meeting.agendaitems.agendaitem"
+      selectedItem
+      class=(concat "vlc-tabs-reverse__link " (if inDetail activeClass ""))
+    }}
+      {{t "detail"}}
+    {{/link-to}}
+  </li>
+</ul>
