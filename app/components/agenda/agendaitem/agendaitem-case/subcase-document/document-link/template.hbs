@@ -18,23 +18,38 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            {{#if document.freezeAccessLevel}}
-              <span class="vlc-pill vlc-pill--warning">
-                {{t "public"}}
-              </span>
-            {{else}}
-              <span class="vlc-pill vlc-pill--success">
-                {{t "public-press"}}
-              </span>
+            {{#if (not document.freezeAccessLevel)}}
+              {{#if (is-pending document.accessLevel)}}
+                <div
+                  class="skeletal-loader"
+                  role="alert"
+                  aria-busy="true"
+                ></div>
+              {{else if
+                (eq (await document.accessLevel.label) "Actief openbaar")}}
+                <span class="vlc-pill vlc-pill--success">
+                  {{await document.accessLevel.label}}
+                </span>
+              {{else if (eq document.accessLevel.label "Intern overheid")}}
+                <span class="vlc-pill vlc-pill--error">
+                  {{await document.accessLevel.label}}
+                </span>
+              {{else}}
+                <span class="vlc-pill vlc-pill--warning">
+                  {{await document.accessLevel.label}}
+                </span>
+              {{/if}}
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if (or isAdmin isEditor)}}
-              {{#if document.forCabinet}}
-                <span class="vl-icon vl-vi vl-vi-lock"></span>
+              <button  class="vl-button vl-button--link-muted vl-button--icon" {{action "toggleFreezeAccessLevel" document}}>
+              {{#if document.freezeAccessLevel}}
+                <span class="vl-icon vl-vi vl-vi-lock vl-u-text--error"></span>
               {{else}}
                 <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
               {{/if}}
+              </button>
               <button class="vl-button vl-button--link vl-button--icon">
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
               </button>

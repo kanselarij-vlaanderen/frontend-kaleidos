@@ -6,17 +6,7 @@
       >
         {{subcase.subcaseName}}
       </h1>
-      <div class="vlc-page-header__sub">
-        {{#link-to
-          "cases.case.subcases"
-          class="vlc-backlink vl-link vl-link--bold"
-        }}
-          <i
-            class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
-          ></i>
-          {{t "back"}}
-        {{/link-to}}
-      </div>
+      {{subcases/subcase-detail-nav}}
     </div>
   </div>
   <div class="vlc-toolbar__right">

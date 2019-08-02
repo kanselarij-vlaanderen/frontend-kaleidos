@@ -14,7 +14,7 @@
     "build": "ember build --environment=production",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
-    "start": "ember serve --proxy=http://localhost:8082",
+    "start": "ember serve --proxy=http://localhost:88",
     "test": "ember test"
   },
   "devDependencies": {
@@ -49,7 +49,7 @@
     "ember-data": "~3.6.0",
     "ember-export-application-global": "^2.0.0",
     "ember-file-upload": "^2.5.3",
-    "ember-flatpickr": "^2.12.0",
+    "ember-flatpickr": "^2.13.0",
     "ember-font-awesome": "^4.0.0-rc.4",
     "ember-infinity": "^1.4.7",
     "ember-intl": "^3.5.0",

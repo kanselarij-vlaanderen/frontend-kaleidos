@@ -9,11 +9,11 @@
           <th class="vl-data-table-col-3">
             {{web-components/vl-form-label value=(t "file-type")}}
           </th>
-          <th class="vl-data-table-col-1">
-            {{web-components/vl-form-label value=(t "public")}}
+          <th class="vl-data-table-col-3">
+            {{web-components/vl-form-label value=(t "publicity")}}
           </th>
           <th class="vl-data-table-col-1">
-            {{web-components/vl-form-label value=(t "for-cabinet")}}
+            {{web-components/vl-form-label value=(t "public")}}
           </th>
           <th class="vl-data-table-col-1"></th>
         </tr>
@@ -55,10 +55,18 @@
                 }}
               </td>
               <td>
-                {{web-components/vl-toggle value=document.freezeAccessLevel}}
+                {{utils/model-selector
+                  modelName="access-level"
+                  searchField="label"
+                  propertyToShow="label"
+                  readOnly=document.freezeAccessLevel
+                  sortField="label"
+                  selectedItems=(await document.accessLevel)
+                  selectModel=(action "chooseAccessLevel" document)
+                }}
               </td>
               <td>
-                {{web-components/vl-toggle value=document.forCabinet}}
+                {{web-components/vl-toggle value=document.freezeAccessLevel}}
               </td>
               <td class="vl-u-align-right">
                 <button

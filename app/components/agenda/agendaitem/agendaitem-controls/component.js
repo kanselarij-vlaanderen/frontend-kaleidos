@@ -5,15 +5,16 @@ import { inject } from '@ember/service';
 export default Component.extend({
 	store: inject(),
 	sessionService: inject(),
+	agendaService: inject(),
 	currentAgenda: null,
 	agendaitem: null,
 	lastDefiniteAgenda: null,
 
-	currentMeeting: computed('currentAgenda.meeting', function () {
+	currentMeeting: computed('currentAgenda.createdFor', function () {
 		return this.currentAgenda.get('createdFor');
 	}),
 
-	meetings: computed('store', function () {
+	meetings: computed('currentMeeting', function () {
 		const currentMeetingDate = this.currentMeeting.get('plannedStart')
 		const dateOfToday = moment(currentMeetingDate).utc().format();
 		const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
@@ -44,12 +45,9 @@ export default Component.extend({
 		const lastDefiniteAgenda = await this.lastDefiniteAgenda;
 
 		if (!lastDefiniteAgenda) {
-			console.log('No last definite agenda')
 			return true;
 		}
-		console.log(currentAgendaName)
 		if (currentAgendaName != "Ontwerpagenda") {
-			console.log('no Design agenda')
 			return false;
 		}
 		const agendaitems = await lastDefiniteAgenda.get('agendaitems');
@@ -84,9 +82,18 @@ export default Component.extend({
 				meeting: meetingToPostponeTo
 			});
 
+			if (meetingToPostponeTo) {
+				const subcase = await agendaitem.get('subcase');
+				const agenda = await meetingToPostponeTo.get('latestAgenda');
+				if (agenda.get('name') == 'Ontwerpagenda' && subcase) {
+					await this.agendaService.createNewAgendaItem(agenda, subcase);
+					await agenda.hasMany('agendaitems').reload();
+				}
+			}
+
 			postPonedObject.save().then(postponedTo => {
 				agendaitem.set('postponed', postponedTo);
-			})
+			});
 
 			await agendaitem.save();
 			await agendaitem.reload();
@@ -106,25 +113,25 @@ export default Component.extend({
 		},
 
 		async deleteItem(agendaitem) {
+			const id = agendaitem.get('id');
 			const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'));
-			const subcase = await this.get('subcase');
+			const subcase = await itemToDelete.get('subcase');
+
 			if (subcase) {
 				const phases = await subcase.get('phases');
 				await Promise.all(phases.filter(async phase => {
-					const code = await phase.get('code');
-					if (!code || code.get('label') == "Ingediend voor agendering") {
-						await phase.destroyRecord();
-					} else {
-						return phase;
-					}
-				}))
+					await phase.destroyRecord();
+				}));
+
 				subcase.set('requestedForMeeting', null);
-				subcase.save();
+				subcase.set('consulationRequests', []);
+				subcase.set('agendaitems', []);
+				await subcase.save();
 			}
 
 			itemToDelete.destroyRecord().then(() => {
 				this.set('sessionService.selectedAgendaItem', null);
-				this.refreshRoute(agendaitem.id);
+				this.refreshRoute(id);
 			});
 		},
 	}

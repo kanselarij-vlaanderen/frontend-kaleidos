@@ -1,17 +1,40 @@
 {{cases/cases-header isAddingCase=isAddingCase close=(action "close")}}
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
-    {{cases/cases-filter size=size}}
+    {{cases/cases-filter
+      size=size
+      searchText=(readonly searchText)
+      searchInDecisionOnly=(readonly searchInDecisionOnly)
+      dateFrom=(or dateFrom null)
+      dateTo=(or dateTo null)
+      ministerName=(readonly mandatees)
+      filter=(action "filterCases")
+    }}
     <div class="vl-u-display-flex vl-u-flex-space-between">
       <h2 class="vl-title vl-title--h3">
         {{t "my-cases"}}
       </h2>
-      {{#if (or isAdmin isEditor)}}
-<div class="vl-u-display-flex align-right">
-          {{web-components/vl-form-label value=(t "show-archived")}}
-          {{web-components/vl-toggle value=isArchived}}
+      <div class="vl-action-group vl-action-group--align-right">
+        {{#if (or isAdmin isEditor)}}
+          <div class="action-toggle-container">
+            {{web-components/vl-form-label value=(t "show-archived")}}
+            {{web-components/vl-toggle value=isArchived}}
+          </div>
+        {{/if}}
+        <div>
+          <label class="vl-form__label" for="dossierId">
+            {{t "amount-showed"}}
+          </label>
+          {{#power-select
+            options=sizeOptions
+            selected=size
+            searchEnabled=false
+            onchange=(action "selectSize") as |sizeValue|
+          }}
+            {{sizeValue}}
+          {{/power-select}}
         </div>
-      {{/if}}
+      </div>
     </div>
     {{#data-table
       content=model

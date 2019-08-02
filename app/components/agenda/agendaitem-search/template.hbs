@@ -1,14 +1,25 @@
 <div class="vlc-navbar vlc-navbar--bordered-bottom">
   <div class="vlc-toolbar vlc-toolbar--auto">
     <div class="vlc-toolbar__justified">
-      <div class="vlc-toolbar__item">
-        <div class="vl-input-field--inline">
-          {{input value=value key-press=(perform searchTask) class="vl-input-field vl-input-field__input"}}
-          <button class="vl-input-field__submit vl-button" {{action "search" value}}>
+      <div class="vlc-toolbar__item full-width-selector">
+        <div
+          class="vl-input-field--inline vl-u-display-flex vl-u-flex-align-center vl-u-flex-space-between separate-children"
+        >
+          {{input
+            value=value
+            placeholder=(t "search-agenda-items")
+            key-up=(action "emptySearchTask" value)
+            key-press=(perform searchTask)
+            class="vl-input-field vl-input-field__input"
+          }}
+          <button class="vl-input-field__submit vl-button" {{action "search"}}>
             <i class="vl-vi vl-vi-magnifier"></i>
           </button>
         </div>
       </div>
+      {{#if searchTask.isRunning}}
+        <div class="vl-loader" role="alert" aria-busy="true"></div>
+      {{/if}}
     </div>
   </div>
 </div>

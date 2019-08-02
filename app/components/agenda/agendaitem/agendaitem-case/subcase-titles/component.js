@@ -1,13 +1,9 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-
+import DS from 'ember-data';
 export default Component.extend(isAuthenticatedMixin, {
 	classNames: ["vl-u-spacer-extended-bottom-l"],
-
-	agenda: computed('item', function () {
-		return this.get('item.agenda.name');
-	}),
 
 	agendaId: computed('item', 'shouldShowDetails', function () {
 		const { item } = this;
@@ -26,7 +22,39 @@ export default Component.extend(isAuthenticatedMixin, {
 	}),
 
 	isAgendaItem: computed('item.modelName', function () {
-		return "agendaitem" === this.get('item.modelName');
+		return "agendaitem" == this.get('item.modelName');
+	}),
+
+	freezeAccessLevel: computed('item', 'item.subcase', function () {
+		const { isAgendaItem, item } = this;
+		if (isAgendaItem) {
+			return DS.PromiseObject.create({
+				promise: item.get('subcase').then((subcase) => {
+					return subcase.get('freezeAccessLevel');
+				})
+			})
+		} else {
+			return item.get('freezeAccessLevel');
+		}
+	}),
+
+	accessLevelLabel: computed('item', 'item.subcase', function () {
+		const { isAgendaItem, item } = this;
+		if (isAgendaItem) {
+			return DS.PromiseObject.create({
+				promise: item.get('subcase').then((subcase) => {
+					return subcase.get('accessLevel').then((accessLevel) => {
+						return accessLevel.get('label');
+					});
+				})
+			})
+		} else {
+			return DS.PromiseObject.create({
+				promise: item.get('accessLevel').then((accessLevel) => {
+					return accessLevel.get('label');
+				})
+			})
+		}
 	}),
 
 	case: computed('item', function () {

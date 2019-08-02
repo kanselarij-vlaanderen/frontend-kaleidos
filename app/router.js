@@ -18,13 +18,19 @@ Router.map(function () {
     this.route('case', { path: ':id' }, function () {
       this.route('subcases', { path: '/deeldossiers' }, function () {
         this.route('overview', { path: '' });
-        this.route('subcase', { path: ':subcase_id' });
+        this.route('subcase', { path: ':subcase_id' }, function() {
+          this.route('documents', {path: "/documenten"});
+          this.route('overview', {path: "/overzicht"});
+        });
         this.route('loading');
       });
     });
     this.route('overview', { path: '' });
   });
-  this.route('settings', { path: "/instellingen" });
+  this.route('settings', { path: "/instellingen" }, function() {
+    this.route('ministers');
+    this.route('overview', {path: ''});
+  });
   this.route('loading');
   this.route('mock-login');
   this.route('login');

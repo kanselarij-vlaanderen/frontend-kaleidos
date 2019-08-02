@@ -7,6 +7,15 @@
     {{t "agendaitem-case"}}
   </a>
 </li>
+<li class="vl-tab">
+  <a
+    class="vl-tab__link
+      {{active-class activeAgendaItemSection "documents" class="active"}}"
+    {{action "setAgendaItemSection" "documents"}}
+  >
+    {{t "documents"}}
+  </a>
+</li>
 {{#if (or isAdmin isEditor)}}
   <li class="vl-tab">
     <a
@@ -21,6 +30,7 @@
     </a>
   </li>
 {{/if}}
+{{#if (await agendaitem.subcase)}}
   <li class="vl-tab">
     <a
       class="vl-tab__link
@@ -57,3 +67,4 @@
       {{t "agendaitem-press-agenda"}}
     </a>
   </li>
+{{/if}}

@@ -4,10 +4,9 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
 	classNames: ['vl-u-spacer-extended-l'],
-	isShowingDocuments: false,
 	actions: {
-		toggleIsShowingDocuments() {
-			this.toggleProperty('isShowingDocuments');
+		toggleIsShowingDocuments(subcase) {
+			subcase.toggleProperty('isShowingDocuments');
 		}
 	}
 });

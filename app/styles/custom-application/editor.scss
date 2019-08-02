@@ -1,11 +1,8 @@
 .vl-editor {
-  height: 400px;
-  &--large {
-    height: 950px;
-  }
+  min-height: 160px;
 }
+
 .container-flex--contain {
-  height: 100%;
   &.editor-container {
     border: 0.1rem solid $ghost;
     border-top: none;
@@ -35,7 +32,9 @@
         padding-bottom: 1rem;
         padding-top: 1rem;
         width: 100%;
-        
+        height: unset;
+        min-height: 160px;
+
         ul {
           li {
             margin-left: 1em;
@@ -75,4 +74,4 @@
       }
     }
   }
-}
+} 

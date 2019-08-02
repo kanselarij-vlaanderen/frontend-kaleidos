@@ -95,7 +95,7 @@ export default DS.JSONAPIAdapter.extend({
 				let originalResult = original.apply(this, args);
 				return originalResult.catch((error) => {
 					if (originalData) {
-						args[2].data = JSON.parse(originalData);
+						args[2].data = typeof originalData === 'string' ? JSON.parse(originalData) : originalData;
 					}
 					return retry(error);
 				});

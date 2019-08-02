@@ -1,0 +1,141 @@
+<div class="vl-u-display-flex vl-u-flex-space-between">
+  <h4 class="vl-title vl-title--h4"></h4>
+  <button
+    class="vl-button vl-button--narrow vl-button--icon-before"
+    {{action "toggleIsAdding"}}
+  >
+    <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+    {{t "create-mandatee"}}
+  </button>
+</div>
+{{#if (await model)}}
+  <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
+    <thead>
+      <tr>
+        <th class="vl-data-table-col-9 vl-data-table__header-title">
+          <a
+            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+            href="#"
+          ></a>
+          <a class="vl-data-table__header-title--sortable" href="#">
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "minister"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col-1 vl-data-table__header-title">
+          <a
+            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+            href="#"
+          ></a>
+          <a class="vl-data-table__header-title--sortable" href="#">
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "priority"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col-2"></th>
+      </tr>
+    </thead>
+    {{#sortable-group
+      tagName="tbody"
+      onChange=(action "reorderItems" model) as |sortableGroup|
+    }}
+      {{#each model as |mandatee|}}
+        {{#sortable-item
+          tagName="tr"
+          model=mandatee
+          group=sortableGroup
+          handle=".mandatee-draggable-row"
+        }}
+          <td class="mandatee-draggable-row">
+            {{#if (is-pending mandatee.fullDisplayName)}}
+              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+            {{else}}
+              {{await mandatee.fullDisplayName}}
+            {{/if}}
+          </td>
+          <td class="mandatee-draggable-row">
+            {{await mandatee.priority}}
+          </td>
+          <td class="vl-u-align-center">
+            <div class="vl-action-group vl-action-group--align-center">
+              <button
+                class="vl-button vl-button--link vl-button--icon"
+                {{action "toggleProperty" "isEditingMandatee" mandatee}}
+              >
+                <i class="vl-button__icon vl-vi vl-vi-edit"></i>
+              </button>
+              <button
+                class="vl-button vl-button--link vl-button--icon"
+                {{action "toggleProperty" "isResigningMandatee" mandatee}}
+              >
+                <i class="vl-button__icon vl-vi vl-vi-cog"></i>
+                {{#attach-popover
+                  placement="bottom"
+                  class="ember-attacher-popper ember-attacher-popper-small"
+                }}
+                  {{t "resign"}}
+                {{/attach-popover}}
+              </button>
+              <button
+                class="vl-button vl-button--link vl-button--icon vl-u-text--error"
+                {{action "toggleProperty" "isDeletingMandatee" mandatee}}
+              >
+                <i class="vl-button__icon vl-vi vl-vi-trash"></i>
+              </button>
+            </div>
+          </td>
+        {{/sortable-item}}
+      {{/each}}
+    {{/sortable-group}}
+  </table>
+{{/if}}
+{{#if isEditingMandatee}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
+  }}
+    {{utils/manage-mandatees
+      mandateeToEdit=mandateeToEdit
+      isEditing=isEditingMandatee
+      closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isResigningMandatee}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
+  }}
+    {{utils/manage-mandatees
+      mandateeToEdit=mandateeToEdit
+      isResigning=isResigningMandatee
+      closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isAddingMandatee}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleIsAdding")
+  }}
+    {{utils/create-mandatee model=model closeModal=(action "toggleIsAdding")}}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isDeletingMandatee}}
+  {{web-components/vl-modal-verify
+    title=(t "warning-title")
+    verifyButtonText=(t "warning-text")
+    message=(t "delete-mandatee-message")
+    cancel=(action "cancel")
+    verify=(action "deleteMandatee")
+  }}
+{{/if}}

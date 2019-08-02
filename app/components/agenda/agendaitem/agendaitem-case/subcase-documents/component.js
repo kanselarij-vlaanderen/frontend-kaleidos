@@ -12,6 +12,11 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 	isEditing: false,
 	isLoading: false,
 	item: null, // can be of type 'agendaitem' or 'subcase'
+	isDesignAgenda:null,
+
+	async createDocumentsForModel(item) {
+		return this.uploadFiles(item);
+	},
 
 	actions: {
 		toggleIsAddingNewDocument() {
@@ -31,24 +36,35 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, U
 		},
 
 		async uploadNewDocument() {
+			const { isDesignAgenda } = this;
+			
 			this.set('isLoading', true);
 			this.set('isCreatingDocuments', true);
 			const item = await this.get('item');
-
+			const modelName = await item.get('modelName');
 			try {
-				await this.uploadFiles(item).then(async () => {
+				await this.createDocumentsForModel(item);
+				if (isDesignAgenda) {
+					const subcase = await this.get('item.subcase');
+					this.set('modelToAddDocumentVersionTo', 'subcase');
+					await this.createDocumentsForModel(subcase);
 					if (this.modelToAddDocumentVersionTo === 'agendaitem') {
 						this.changeFormallyOkPropertyIfNotSetOnTrue(item);
 						await this.updateModifiedProperty(await item.get('agenda'));
 						await item.save();
 					}
-					await item.hasMany('documentVersions').reload();
-					item.notifyPropertyChange('documents');
-					item.notifyPropertyChange('documentVersions');
-					this.send('refreshRoute');
-				});
+					await subcase.hasMany('documentVersions').reload();
+					subcase.notifyPropertyChange('documents');
+					subcase.notifyPropertyChange('documentVersions');
+				}
+
+				await item.hasMany('documentVersions').reload();
+				item.notifyPropertyChange('documents');
+				item.notifyPropertyChange('documentVersions');
+				this.set('modelToAddDocumentVersionTo', modelName);
+				this.send('refreshRoute');
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 				// TODO: Handle errors
 			} finally {
 				this.set('isCreatingDocuments', false);

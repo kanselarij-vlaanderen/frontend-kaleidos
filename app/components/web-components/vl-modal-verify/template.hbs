@@ -53,23 +53,15 @@
           </div>
           <div class="vlc-toolbar__right">
             <div class="vlc-toolbar__item">
-              {{#web-components/vl-save-button
-                class=buttonClass
-                isLoading=isLoading
-                saveAction=(action "verify")
-              }}
+              <button class="vl-button  vl-button--narrow {{buttonClass}}" {{action "verify"}}>
                 {{#if showIcon}}
                   <i
                     class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
                     aria-hidden="true"
                   ></i>
                 {{/if}}
-                {{#if (not isLoading)}}
-                  {{verifyButtonText}}
-                {{else}}
-                  {{t 'loading-text-inactive'}}
-                {{/if}}
-              {{/web-components/vl-save-button}}
+                {{verifyButtonText}}
+              </button>
             </div>
           </div>
         </div>

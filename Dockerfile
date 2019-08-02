@@ -1,30 +1,15 @@
-FROM nginx:1.9.12
+FROM madnificent/ember:3.6.0 as builder
 
-ARG EMBER_ENV=production
+LABEL maintainer="info@redpencil.io"
 
-RUN apt-get update \
-	&& apt-get install -y curl git bzip2 libfontconfig1-dev xz-utils
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+RUN DEPLOY_ENV=production ember build -prod
 
-ENV NPM_CONFIG_LOGLEVEL info
-ENV STATIC_FOLDERS_REGEX "^/(assets|font)/"
-ENV NODE_VERSION 10.8.0
+FROM semtech/ember-proxy-service:1.4.0
 
-RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
-  && tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 \
-  && rm "node-v$NODE_VERSION-linux-x64.tar.xz"
+ENV STATIC_FOLDERS_REGEX "^/(assets|fonts|files)/"
 
-RUN \
-	npm install -g ember-cli@3.6.1
-
-COPY ember-proxy-service.sh /
-ADD package.json /tmp/client/
-
-
-RUN cd /tmp/client && npm install 
-ADD . /tmp/client
-RUN cd /tmp/client && ember build --environment=${EMBER_ENV} && mv dist/* /usr/share/nginx/html/ && rm -rf /tmp/client
-ADD nginx.conf /etc/nginx/conf.d/nginx.temp
-EXPOSE ${APP_PORT}
-
-CMD /bin/bash -c "envsubst '\$BACKEND' < /etc/nginx/conf.d/nginx.temp > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
-
+COPY --from=builder /app/dist /app
