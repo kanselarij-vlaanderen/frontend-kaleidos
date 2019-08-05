@@ -28,6 +28,6 @@ export default Controller.extend({
     if (this.definite == 'false') {
       prefix = 'Klad ';
     }
-    return `${prefix}${this.intl.t('agendaitem-bestek')} ${moment(date).format('DD-MM-YYYY')}`;
+    return `${prefix}${this.intl.t('newsletter-overview-pdf-name')} ${moment(date).format('DD-MM-YYYY')}`;
   })
 });

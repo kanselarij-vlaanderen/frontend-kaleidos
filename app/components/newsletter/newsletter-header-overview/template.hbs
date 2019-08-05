@@ -4,7 +4,7 @@
       <h1
         class="vlc-page-header__title vlc-page-header__title--bordered max-width"
       >
-        {{t "newsletter-of"}}
+        {{t "newsletter-overview-pdf-name"}}
         {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
       </h1>
       <div class="vlc-page-header__sub">
@@ -26,7 +26,7 @@
                 <li class="vlc-tabs-reverse__item">
                   {{#link-to
                     "print-overviews.newsletter.agendaitems"
-                    agenda.id
+                    agenda
                     class="border-left vlc-tabs-reverse__link"
                     activeClass="vlc-tabs-reverse__link--active"
                   }}
