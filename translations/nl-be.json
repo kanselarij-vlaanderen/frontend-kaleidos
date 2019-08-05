@@ -397,5 +397,9 @@
   "peopl": "persoon",
   "nick-name": "Roepnaam",
   "proposal-text": "Op voorstel van ",
-  "page-title": "Kaleidos"
+  "page-title": "Kaleidos",
+  "meeting-location": "Plaats van de vergadering",
+  "digital": "Elektronisch",
+  "digital-text":"Deze zitting is digitaal.",
+  "not-digital-text":"Deze zitting is niet digitaal."
 }

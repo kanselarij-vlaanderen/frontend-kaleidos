@@ -7,6 +7,7 @@ export default Component.extend({
   classNames: ['vl-input-group', 'vl-datepicker'],
   dateObjectsToEnable: null,
   datePropertyToUse: null,
+  enableTime: null,
 
   datesToEnable: computed('dateObjectsToEnable', function() {
     const { dateObjectsToEnable, datePropertyToUse } = this;

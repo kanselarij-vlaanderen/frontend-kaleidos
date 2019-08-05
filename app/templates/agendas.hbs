@@ -114,7 +114,7 @@
                     {{#if (not meeting.alreadyShown)}}
                       <td {{action "selectAgenda" meeting}}>
                         {{agendaForTranslation}}
-                        {{moment-format meeting.plannedStart}}
+                        {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                       </td>
                       <td>
                         {{#if meeting.isFinal}}

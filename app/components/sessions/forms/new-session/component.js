@@ -53,6 +53,7 @@ export default Component.extend({
 
   actions: {
     async createNewSession() {
+      const { isDigital, extraInfo } = this;
       this.set('isLoading', true);
       const date = moment()
         .utc()
@@ -60,7 +61,9 @@ export default Component.extend({
       const startDate = this.get('startDate') || date;
       const newMeeting = this.store.createRecord('meeting', {
         plannedStart: startDate,
-        created: date
+        created: date,
+        isDigital,
+        extraInfo
       });
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
@@ -85,6 +88,7 @@ export default Component.extend({
     },
 
     async selectStartDate(val) {
+      console.log(val);
       this.set(
         'startDate',
         moment(val)

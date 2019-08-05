@@ -1,7 +1,24 @@
 <div class="vl-modal-dialog__content">
-  <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "start-date")}}
-    {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
+  <div class="vl-u-spacer-extended-bottom-s">
+    <div class="vlc-input-field vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "digital")}}
+      {{web-components/vl-toggle value=isDigital}}
+    </div>
+  </div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "start-date")}}
+      {{web-components/vl-datepicker
+        enableTime=true
+        dateChanged=(action "selectStartDate")
+      }}
+    </div>
+  </div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "meeting-location")}}
+      {{web-components/vl-form-input width="4" value=extraInfo}}
+    </div>
   </div>
 </div>
 {{web-components/vl-modal-footer
