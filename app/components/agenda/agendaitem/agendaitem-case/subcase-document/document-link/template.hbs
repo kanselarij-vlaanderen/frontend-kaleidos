@@ -43,12 +43,17 @@
           </div>
           <div class="vlc-toolbar__item">
             {{#if (or isAdmin isEditor)}}
-              <button  class="vl-button vl-button--link-muted vl-button--icon" {{action "toggleFreezeAccessLevel" document}}>
-              {{#if document.freezeAccessLevel}}
-                <span class="vl-icon vl-vi vl-vi-lock vl-u-text--error"></span>
-              {{else}}
-                <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
-              {{/if}}
+              <button
+                class="vl-button vl-button--link-muted vl-button--icon"
+                {{action "toggleFreezeAccessLevel" document}}
+              >
+                {{#if document.freezeAccessLevel}}
+                  <span
+                    class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
+                  ></span>
+                {{else}}
+                  <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+                {{/if}}
               </button>
               <button class="vl-button vl-button--link vl-button--icon">
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
@@ -142,10 +147,7 @@
       </h6>
       <div class="vlc-document-card-content__meta">
         {{t "uploaded-at"}}
-        {{moment-format
-          (await document.lastDocumentVersion.created)
-          "DD.MM.YYYY"
-        }}
+        {{moment-format (await document.lastDocumentVersion.created)}}
         {{t "at"}}
         {{moment-format (await document.lastDocumentVersion.created) "HH:mm"}}
       </div>

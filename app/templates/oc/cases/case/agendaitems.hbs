@@ -4,7 +4,8 @@
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <h1 class="vlc-page-header__title">
-            Overlegcomité - agendapunten voor dossier {{case.identifier}}
+            Overlegcomité - agendapunten voor dossier
+            {{case.identifier}}
           </h1>
         </div>
       </div>
@@ -18,17 +19,24 @@
         <div class="vl-grid">
           <div class="vl-col--2-4">
             <div class="vl-u-spacer--medium">
-              <div class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline">
-                <div class="vlc-input-field-group vlc-input-field-group--gmeeting">
-                  {{input class="vl-input-field" 
-                    type="search" 
+              <div
+                class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
+              >
+                <div
+                  class="vlc-input-field-group vlc-input-field-group--gmeeting"
+                >
+                  {{input
+                    class="vl-input-field"
+                    type="search"
                     value=(mut caseSearchKey)
-                    placeholder='dossiernummer'}}
+                    placeholder="dossiernummer"
+                  }}
                 </div>
                 <div class="vlc-input-field-group">
-                  <button {{action 'searchCase' caseSearchKey}}
+                  <button
                     class="vl-button vl-button--secondary vl-button--icon"
                     type="submit"
+                    {{action "searchCase" caseSearchKey}}
                   >
                     <i class="vl-vi vl-vi-magnifier"></i>
                   </button>
@@ -69,8 +77,12 @@
                     <th class="vl-data-table-col-1"></th>
                   {{/c.header}}
                   {{#c.body as |item|}}
-                    <td>{{moment-format item.meeting.startedAt "DD.MM.YYYY"}}</td>
-                    <td>{{item.subject}}</td>
+                    <td>
+                      {{moment-format item.meeting.startedAt}}
+                    </td>
+                    <td>
+                      {{item.subject}}
+                    </td>
                     <td class="vl-u-align-center">
                       <button
                         class="vl-button vl-button--link vl-button--icon"

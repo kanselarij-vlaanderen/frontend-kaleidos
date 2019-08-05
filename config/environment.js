@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (environment) {
+module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'fe-redpencil',
     environment,
@@ -8,7 +8,8 @@ module.exports = function (environment) {
     locationType: 'auto',
     moment: {
       includeLocales: ['nl'],
-      allowEmpty: true
+      allowEmpty: true,
+      outputFormat: 'L'
     },
     EmberENV: {
       FEATURES: {
@@ -37,9 +38,6 @@ module.exports = function (environment) {
       }
     }
   };
-
-
-
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;

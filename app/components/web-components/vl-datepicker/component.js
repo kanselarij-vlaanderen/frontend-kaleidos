@@ -1,35 +1,36 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import moment from 'moment';
+import { inject } from '@ember/service';
 
 export default Component.extend({
-	classNames: ["vl-input-group", "vl-datepicker"],
-	dateObjectsToEnable: null,
-	datePropertyToUse: null,
+  formatter: inject(),
+  classNames: ['vl-input-group', 'vl-datepicker'],
+  dateObjectsToEnable: null,
+  datePropertyToUse: null,
 
-	datesToEnable: computed('dateObjectsToEnable', function () {
-		const { dateObjectsToEnable, datePropertyToUse } = this;
-		return dateObjectsToEnable.map((object) => {
-			return moment(object.get(datePropertyToUse)).utc().toDate();
-		})
-	}),
+  datesToEnable: computed('dateObjectsToEnable', function() {
+    const { dateObjectsToEnable, datePropertyToUse } = this;
+    return dateObjectsToEnable.map(object => {
+      return this.formatter.formatDate(object.get(datePropertyToUse));
+    });
+  }),
 
-	selectedDate: computed('date', function () {
-		const date = this.get('date');
-		if (date) {
-			return moment(date.get('firstObject')).utc().toDate();
-		} else {
-			return moment().utc().toDate();
-		}
-	}),
+  selectedDate: computed('date', function() {
+    const date = this.get('date');
+    if (date) {
+      return this.formatter.formatDate(date.get('firstObject'));
+    } else {
+      return this.formatter.formatDate(null);
+    }
+  }),
 
-	actions: {
-		toggleCalendar() {
-			this.flatpickrRef.toggle();
-		},
+  actions: {
+    toggleCalendar() {
+      this.flatpickrRef.toggle();
+    },
 
-		dateChanged(val) {
-			this.dateChanged(moment(val.get('firstObject')).utc().toDate());
-		}
-	}
+    dateChanged(val) {
+      this.dateChanged(this.formatter.formatDate(val.get('firstObject')));
+    }
+  }
 });

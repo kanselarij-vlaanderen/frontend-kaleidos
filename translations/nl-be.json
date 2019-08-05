@@ -22,6 +22,7 @@
   "agenda-lock": "Agenda afsluiten",
   "agenda-notes": "Notulen van",
   "agenda-of": "Agenda van",
+  "agenda-of-date": "Agenda van {date}",
   "agenda-title": "Agenda's",
   "agenda-unlock": "Agenda heropenen",
   "agenda-version": "Agenda versie",
@@ -395,5 +396,6 @@
   "first-name": "Voornaam",
   "peopl": "persoon",
   "nick-name": "Roepnaam",
-  "proposal-text": "Op voorstel van "
+  "proposal-text": "Op voorstel van ",
+  "page-title": "Kaleidos"
 }
