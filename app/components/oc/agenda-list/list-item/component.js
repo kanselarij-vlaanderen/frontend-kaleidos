@@ -1,47 +1,40 @@
-import Component from "@ember/component";
-import isAuthenticatedMixin from "fe-redpencil/mixins/is-authenticated-mixin";
-import { computed } from "@ember/object";
-import { inject } from "@ember/service";
+import Component from '@ember/component';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Component.extend(isAuthenticatedMixin, {
   router: inject(),
-  tagName: "a",
+  tagName: 'a',
 
-  classNameBindings: ["extraAgendaItemClass"],
+  classNameBindings: ['extraAgendaItemClass'],
   agendaItem: undefined,
 
   async click() {
     this.selectAgendaItem(this.agendaItem);
   },
 
-  agendaitemPrio: computed("agendaItem", function() {
+  agendaitemPrio: computed('agendaItem', function() {
     if (!this.agendaItem) {
-      return "";
+      return '';
     }
     const { priority, subPriority } = this.agendaItem;
 
-    let priorityString = "";
+    let priorityString = '';
     if (priority) {
       priorityString += priority;
     }
     if (subPriority) {
       priorityString += subPriority;
     }
-    priorityString += ".";
+    priorityString += '.';
     return priorityString;
   }),
 
-  extraAgendaItemClass: computed(
-    "agendaItem.id",
-    "router.currentRoute",
-    function() {
-      const currentAgendaitemId = this.router.get(
-        "currentRoute.parent.params.agendaitem_id"
-      );
-      console.log(this.agendaItem.id, currentAgendaitemId);
-      if (currentAgendaitemId == this.get("agendaItem.id")) {
-        return "vlc-agenda-items-new__sub-item--active";
-      }
+  extraAgendaItemClass: computed('agendaItem.id', 'router.currentRoute', function() {
+    const currentAgendaitemId = this.router.get('currentRoute.parent.params.agendaitem_id');
+    if (currentAgendaitemId == this.get('agendaItem.id')) {
+      return 'vlc-agenda-items-new__sub-item--active';
     }
-  )
+  })
 });

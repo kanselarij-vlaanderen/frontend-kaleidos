@@ -3,53 +3,59 @@ import { inject } from '@ember/service';
 import moment from 'moment';
 
 export default Component.extend({
-	store: inject(),
-	selectedPerson: null,
-	selectedDomains: [],
-	today: moment().utc().toDate(),
-	title: null,
+  store: inject(),
+  selectedPerson: null,
+  today: moment()
+    .utc()
+    .toDate(),
+  title: null,
 
-	actions: {
-		personSelected(person) {
-			this.set('selectedPerson', person);
-		},
+  actions: {
+    personSelected(person) {
+      this.set('selectedPerson', person);
+    },
 
-		selectStartDate(val) {
-			this.set('startDate', val);
-		},
+    selectStartDate(val) {
+      this.set('startDate', val);
+    },
 
-		chooseDomain(domains) {
-			this.set('selectedDomains', domains);
-		},
+    chooseDomain(domains) {
+      this.set('selectedDomains', domains);
+    },
 
-		closeModal() {
-			this.closeModal();
-		},
+    closeModal() {
+      this.closeModal();
+    },
 
-		async createMandatee() {
-			this.set('isLoading', true);
+    async createMandatee() {
+      this.set('isLoading', true);
+      const { nickName, title, selectedDomains } = this;
+      const person = await this.get('selectedPerson');
+      const newMandatee = this.store.createRecord('mandatee', {
+        title,
+        nickName,
+        person,
+        governmentDomains: selectedDomains,
+        start: moment(this.get('startDate'))
+          .utc()
+          .toDate(),
+        end: null
+      });
+      newMandatee.save().then(newMandatee => {
+        this.model.addObject(newMandatee);
+        this.set('isLoading', false);
+        this.clearValues();
+        this.closeModal();
+      });
+    }
+  },
 
-			const newMandatee = this.store.createRecord('mandatee', {
-				title: this.get('title'),
-				start: moment(this.get('startDate')).utc().toDate(),
-				governmentDomains: this.get('selectedDomains'),
-				person: await this.get('selectedPerson'),
-				end: null
-			});
-			newMandatee.save().then((newMandatee) => {
-				this.model.addObject(newMandatee);
-				this.set('isLoading', false);
-				this.clearValues();
-				this.closeModal();
-			});
-		}
-	},
-
-	clearValues() {
-		this.set('selectedPerson', null);
-		this.set('title', null);
-		this.set('startDate', null);
-		this.set('endDate', null);
-		this.set('selectedDomains', []);
-	}
+  clearValues() {
+    this.set('selectedPerson', null);
+    this.set('title', null);
+    this.set('startDate', null);
+    this.set('endDate', null);
+    this.set('nickName', null);
+    this.set('selectedDomains', []);
+  }
 });

@@ -58,6 +58,7 @@
     "ember-math-helpers": "^2.11.1",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-moment": "^7.7.0",
+    "ember-page-title": "^5.0.2",
     "ember-pikaday": "^2.3.1",
     "ember-power-select": "^2.2.1",
     "ember-promise-helpers": "^1.0.6",

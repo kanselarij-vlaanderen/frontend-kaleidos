@@ -77,7 +77,7 @@
           </span>
           <span class="vl-description-data__value">
             {{#if (await subcase.onAgendaInfo)}}
-              {{moment-format (await subcase.onAgendaInfo) "DD.MM.YYYY"}}
+              {{moment-format (await subcase.onAgendaInfo)}}
             {{else}}
               {{t "not-yet-on-agenda"}}
             {{/if}}

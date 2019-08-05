@@ -22,6 +22,7 @@
   "agenda-lock": "Agenda afsluiten",
   "agenda-notes": "Notulen van",
   "agenda-of": "Agenda van",
+  "agenda-of-date": "Agenda van {date}",
   "agenda-title": "Agenda's",
   "agenda-unlock": "Agenda heropenen",
   "agenda-version": "Agenda versie",
@@ -185,7 +186,7 @@
   "newsletter-doc-date": "Datum van beschikbaarheid van de documenten",
   "newsletter-for-meeting-of": "Kort bestek voor de ministerraad van",
   "newsletter-of": "Kort bestek voor de agenda van",
-  "newsletter-overview-pdf-name": "KortBestekBeslissingenVlaamseRegering_",
+  "newsletter-overview-pdf-name": "Beslissingen van de Vlaamse Regering",
   "newsletter-pdf-name": "KortBestekVlaamseRegering_",
   "newsletter-title": "Voorbereidende tekst voor het kort bestek",
   "next": "Volgende",
@@ -395,5 +396,12 @@
   "nota-loading-text": "De nota wordt geladen..",
   "general-settings": "Algemene instellingen",
   "first-name": "Voornaam",
-  "peopl": "persoon"
+  "peopl": "persoon",
+  "nick-name": "Roepnaam",
+  "proposal-text": "Op voorstel van ",
+  "page-title": "Kaleidos",
+  "meeting-location": "Plaats van de vergadering",
+  "digital": "Elektronisch",
+  "digital-text":"Deze zitting is digitaal.",
+  "not-digital-text":"Deze zitting is niet digitaal."
 }
