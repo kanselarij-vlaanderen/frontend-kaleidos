@@ -393,5 +393,7 @@
   "nota-loading-text": "De nota wordt geladen..",
   "general-settings": "Algemene instellingen",
   "first-name": "Voornaam",
-  "peopl": "persoon"
+  "peopl": "persoon",
+  "nick-name": "Roepnaam",
+  "proposal-text": "Op voorstel van "
 }
