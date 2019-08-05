@@ -71,10 +71,8 @@ export default Component.extend({
           await this.createAgendaItemToApproveMinutes(agenda, closestMeeting);
           try {
             await this.agendaService.assignNewSessionNumbers();
-          } catch {
-            error => {
-              this.globalError.handleError(error);
-            };
+          } catch (error) {
+            this.globalError.handleError(error);
           }
         })
         .catch(error => {
@@ -87,11 +85,6 @@ export default Component.extend({
     },
 
     async selectStartDate(val) {
-      console.log(
-        moment(val)
-          .utc()
-          .toDate()
-      );
       this.set(
         'startDate',
         moment(val)

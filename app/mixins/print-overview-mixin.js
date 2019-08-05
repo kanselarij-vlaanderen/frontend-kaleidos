@@ -25,14 +25,12 @@ export default Mixin.create({
       });
     },
     print() {
-      var tempTitle = window.document.title;
-      window.document.title = `${this.intl.t(`${this.titlePrintKey}`)}${moment(
-        this.get('model.createdFor.plannedStart')
-      )
-        .utc()
-        .format('YYYYMMDD')}`;
+      // var tempTitle = window.document.title;
+      // window.document.title = `${this.intl.t(`${this.titlePrintKey}`)}${moment(
+      //   this.get('model.createdFor.plannedStart')
+      // ).format('YYYYMMDD')}`;
       window.print();
-      window.document.title = tempTitle;
+      // window.document.title = tempTitle;
     }
   }
 });
