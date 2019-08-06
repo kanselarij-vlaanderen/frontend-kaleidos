@@ -4,7 +4,7 @@
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <h1 class="vlc-page-header__title">
-            Overlegcomité vergaderingen
+            {{capitalize (t 'meetings')}}
           </h1>
         </div>
       </div>
@@ -19,7 +19,7 @@
               <i
                 class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
-              Nieuwe vergadering
+              {{capitalize (t 'meeting-new')}}
             {{/link-to}}
           </div>
         {{/if}}

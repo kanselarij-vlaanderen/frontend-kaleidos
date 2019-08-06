@@ -4,12 +4,12 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 export default Route.extend(AuthenticatedRouteMixin, {
   beforeModel() {
     return this.store.query('oc-case', { // Transition to random case
-			page: {
-				'size': 1,
+      page: {
+        'size': 1,
         'number': 0
-			},
-		}).then(cases => {
-			this.transitionTo('oc.cases.case.agendaitems', cases.firstObject);
-		});
+      },
+    }).then(cases => {
+      this.transitionTo('oc.cases.case.agendaitems', cases.firstObject);
+    });
   },
 });
