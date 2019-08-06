@@ -19,7 +19,7 @@
             {{input class="vl-input-field vl-input-field--block"
               type="text"
               value=(mut searchTerm)
-              placeholder='Geef hier uw zoekterm in'
+              placeholder=(t 'search-placeholder')
               enter=(action 'search' searchTerm)
             }}
           </div>

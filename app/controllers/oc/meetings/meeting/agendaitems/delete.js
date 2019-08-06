@@ -4,28 +4,28 @@ import { inject as controller } from '@ember/controller';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Controller.extend(isAuthenticatedMixin, {
-	globalError: service(),
+  globalError: service(),
 
-	parentController: controller('oc.meetings'),
+  parentController: controller('oc.meetings'),
 
-	isLoading: false, 
-	
-	actions: {
-		save() {
-			this.set('isLoading', true);
-			this.get('model').save()
-				.catch((error) => {
-				this.globalError.handleError(error);
-			}).finally(() => {
-				this.set('isLoading', false);
-				this.parentController.send('updateModel');
-				this.transitionToRoute('oc.meetings.index');
-			});
-		},
+  isLoading: false, 
+  
+  actions: {
+    save() {
+      this.set('isLoading', true);
+      this.get('model').save()
+        .catch((error) => {
+        this.globalError.handleError(error);
+      }).finally(() => {
+        this.set('isLoading', false);
+        this.parentController.send('updateModel');
+        this.transitionToRoute('oc.meetings.index');
+      });
+    },
 
-		cancel() {
+    cancel() {
       this.get('model').rollbackAttributes();
-			this.transitionToRoute('oc.meetings.meeting.agendaitems', this.get('model'));
-		},
-	}
+      this.transitionToRoute('oc.meetings.meeting.agendaitems', this.get('model'));
+    },
+  }
 });

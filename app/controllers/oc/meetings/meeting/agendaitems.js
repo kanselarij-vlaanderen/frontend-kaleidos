@@ -19,8 +19,8 @@ export default Controller.extend(isAuthenticatedMixin, {
   agendaItemsSorted: sort('model', 'itemsSortDefinition'),
   meeting: null,
 
-	agendaItemGroups: computed('agendaItemsSorted.@each.submitters', async function () {
-		let agendaItems = this.get('agendaItemsSorted');
+  agendaItemGroups: computed('agendaItemsSorted.@each.submitters', async function () {
+    let agendaItems = this.get('agendaItemsSorted');
     if (agendaItems.length === 0) {
       return [];
     } else {
@@ -43,28 +43,28 @@ export default Controller.extend(isAuthenticatedMixin, {
     }
   }),
 
-	agendaitemsClass: computed('routing.currentRouteName', function () {
-		const { routing } = this;
-		if (routing.get('currentRouteName').startsWith('oc.meetings.meeting.agendaitems.agendaitem')) {
+  agendaitemsClass: computed('routing.currentRouteName', function () {
+    const { routing } = this;
+    if (routing.get('currentRouteName').startsWith('oc.meetings.meeting.agendaitems.agendaitem')) {
       return "vlc-panel-layout__agenda-items";
-		} else  {
+    } else  {
       return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
-		}
-	}),
+    }
+  }),
 
-	actions: {
+  actions: {
 
-		selectAgendaItem(agendaitem) {
-			this.transitionToRoute('oc.meetings.meeting.agendaitems.agendaitem', agendaitem);
-		},
+    selectAgendaItem(agendaitem) {
+      this.transitionToRoute('oc.meetings.meeting.agendaitems.agendaitem', agendaitem);
+    },
     
-		searchAgendaItems(value) {
-			this.set('filter', value);
-		},
+    searchAgendaItems(value) {
+      this.set('filter', value);
+    },
     
     updateModel() {
       this.get('model').update();
-		},
+    },
 
-	}
+  }
 });

@@ -7,13 +7,13 @@ export default Route.extend(DataTableRouteMixin, {
   mergeQueryOptions() {
     let parentModel = this.modelFor('oc.cases.case');
     return {
-			filter: {
-				'case': {
+      filter: {
+        'case': {
           'id': parentModel.id
         }
-			},
+      },
       include: 'meeting'
-		};
+    };
   },
   
   setupController(controller, model) {

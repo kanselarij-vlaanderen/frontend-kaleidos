@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
-import { inject as controller } from '@ember/controller';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Controller.extend(isAuthenticatedMixin, {
