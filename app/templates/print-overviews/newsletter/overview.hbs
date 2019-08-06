@@ -21,49 +21,30 @@
         {{/each}}
       </div>
     {{else}}
-      <div class="vl-u-spacer-extended-l">
+      <div class="vlc-container">
         {{utils/logo-header}}
         {{newsletter/newsletter-meeting
           definite=definite
           meeting=(await model.meeting)
         }}
-        <div class="vl-grid">
-          {{#each (await model.groups) as |group|}}
-            {{#each group.groups as |agendaitemGroup|}}
-              {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-                <div class="vl-col--3-3">
-                  <div class="vl-grid">
-                    {{#if agendaitem.showRemarks}}
-                      <div class="vl-col--2-3">
-                        {{newsletter/newsletter-item
-                          agenda=(await model.agenda)
-                          definite=definite
-                          agendaitem=agendaitem
-                        }}
-                      </div>
-                      {{#if agendaitem.showRemarks}}
-                        <div class="vl-col--1-3">
-                          {{agenda/agendaitem/agendaitem-comments
-                            agendaitem=agendaitem
-                          }}
-                        </div>
-                      {{/if}}
-                    {{else}}
-                      <div class="vl-col--3-3">
-                        {{newsletter/newsletter-item
-                          agenda=(await model.agenda)
-                          definite=definite
-                          agendaitem=agendaitem
-                        }}
-                      </div>
-                    {{/if}}
-                  </div>
-                  <hr class="vlc-hr" />
-                </div>
-              {{/each}}
+        {{#each (await model.groups) as |group|}}
+          {{#each group.groups as |agendaitemGroup|}}
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              {{newsletter/newsletter-item
+                agenda=(await model.agenda)
+                definite=definite
+                agendaitem=agendaitem
+              }}
+              {{#if agendaitem.showRemarks}}
+                <div class="vlc-hr"></div>
+                {{agenda/agendaitem/agendaitem-comments
+                  item=(await agendaitem.subcase.newsletterInfo)
+                }}
+              {{/if}}
+              <hr class="vlc-hr" />
             {{/each}}
           {{/each}}
-        </div>
+        {{/each}}
       </div>
     {{/if}}
   </div>

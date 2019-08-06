@@ -39,7 +39,7 @@
               modelToAddDocumentVersionTo="agendaitem"
             }}
           {{else if (eq activeAgendaItemSection "comments")}}
-            {{agenda/agendaitem/agendaitem-comments agendaitem=agendaitem}}
+            {{agenda/agendaitem/agendaitem-comments item=agendaitem}}
           {{else if (eq activeAgendaItemSection "press-agenda")}}
             {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "decision")}}

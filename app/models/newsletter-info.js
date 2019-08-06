@@ -1,19 +1,22 @@
 import DS from 'ember-data';
 
 const { Model, attr, hasMany, belongsTo } = DS;
+import { alias } from '@ember/object/computed';
 
 export default Model.extend({
-	text: attr('string'),
-	subtitle: attr('string'),
-	title: attr('string'),
-	richtext: attr('string'),
-	mandateeProposal: attr('string'),
-	finished: attr('boolean'),
-	publicationDate: attr('date'),
-	publicationDocDate: attr('date'),
+  modelName: alias('constructor.modelName'),
 
-	remarks: hasMany('remark', { inverse: null }),
-	subcase: belongsTo('subcase'),
-	meeting: belongsTo('meeting', { inverse: null }),
-	documentVersions: hasMany('document-version', { inverse: null })
+  text: attr('string'),
+  subtitle: attr('string'),
+  title: attr('string'),
+  richtext: attr('string'),
+  mandateeProposal: attr('string'),
+  finished: attr('boolean'),
+  publicationDate: attr('date'),
+  publicationDocDate: attr('date'),
+
+  remarks: hasMany('remark'),
+  subcase: belongsTo('subcase'),
+  meeting: belongsTo('meeting', { inverse: null }),
+  documentVersions: hasMany('document-version', { inverse: null })
 });

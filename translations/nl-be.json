@@ -67,7 +67,7 @@
   "compare": "Vergelijk",
   "compare-title": "Vergelijk Agenda's",
   "contact-person": "Contactpersoon",
-  "content": "Kort bestek",
+  "content": "De beslissing in kort bestek",
   "create": "Aanmaken",
   "create-announcement": "Mededeling toevoegen",
   "create-case": "Dossier aanmaken",
@@ -400,6 +400,6 @@
   "page-title": "Kaleidos",
   "meeting-location": "Plaats van de vergadering",
   "digital": "Elektronisch",
-  "digital-text":"Deze zitting is digitaal.",
-  "not-digital-text":"Deze zitting is niet digitaal."
+  "digital-text": "Deze zitting is digitaal.",
+  "not-digital-text": "Deze zitting is niet digitaal."
 }
