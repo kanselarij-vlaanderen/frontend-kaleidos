@@ -6,8 +6,9 @@ import { observer } from '@ember/object';
 import ModelSelectorMixin from 'fe-redpencil/mixins/model-selector-mixin';
 import { A } from '@ember/array';
 import { debounce } from '@ember/runloop';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend(ModelSelectorMixin, {
+export default Controller.extend(isAuthenticatedMixin, ModelSelectorMixin, {
 	store: service(),
 	globalError: service(),
 	parentController: controller('oc.meetings.meeting.agendaitems'),
