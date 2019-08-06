@@ -6,8 +6,7 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . .
-
-RUN ember build -prod
+RUN DEPLOY_ENV=production ember build -prod
 
 FROM semtech/ember-proxy-service:1.4.0
 
