@@ -1,0 +1,115 @@
+<div class="vl-u-bg-alt">
+  <div class="vlc-page-header">
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <h1 class="vlc-page-header__title">
+            {{capitalize (t 'meetings')}}
+          </h1>
+        </div>
+      </div>
+      <div class="vlc-toolbar__right">
+        {{#if (or isAdmin isEditor)}}
+          <div class="vlc-toolbar__item">
+            {{#link-to
+              "oc.meetings.new"
+              tagName="button"
+              class="vl-button vl-button--narrow vl-button--icon-before"
+            }}
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              {{capitalize (t 'meeting-new')}}
+            {{/link-to}}
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+{{#if (gt model.length 0)}}
+  <div class="vlc-scroll-wrapper">
+    <div class="vlc-scroll-wrapper__body">
+      <div class="vl-u-spacer-extended-l">
+        <div class="vl-u-spacer--large">
+          <div class="vl-u-display-flex vl-u-flex-space-between">
+            <h2 class="vl-title vl-title--h3">
+              {{t "agenda-title"}}
+            </h2>
+            <div class="vl-u-spacer-extended-bottom-s">
+              <div
+                class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
+              >
+                <div
+                  class="vlc-input-field-group vlc-input-field-group--gmeeting"
+                >
+                  <input class="vl-input-field" type="search" />
+                </div>
+                <div class="vlc-input-field-group">
+                  <button
+                    class="vl-button vl-button--secondary vl-button--icon"
+                    type="submit"
+                  >
+                    <i class="vl-vi vl-vi-magnifier"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="vl-u-spacer-extended-bottom-l">
+            {{#data-table
+              content=model
+              class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+              page=page
+              size=size
+              sort=sort
+              isLoading=isLoadingModel
+              onClickRow=(action "selectSession") as |t|
+            }}
+              {{#t.content as |c|}}
+                {{#c.header}}
+                  {{th-sortable
+                    class="vl-data-table-col-6 vl-data-table__header-title"
+                    currentSorting=sort
+                    field="startedAt"
+                    label="Vergadering"
+                  }}
+                  {{th-sortable
+                    class="vl-data-table-col-5 vl-data-table__header-title"
+                    currentSorting=sort
+                    field="modified"
+                    label="Laatst gewijzigd"
+                  }}
+                  <th class="vl-data-table-col-1"></th>
+                {{/c.header}}
+                {{#c.body as |session|}}
+                  <td>
+                    {{agendaForTranslation}}
+                    {{moment-format session.startedAt "DD.MM.YYYY"}}
+                  </td>
+                  <td>
+                    {{moment-format (await session.modified) "DD-MM-YYYY HH:mm"
+                    }}
+                  </td>
+                  <td class="vl-u-align-center">
+                    <button
+                      class="vl-button vl-button--link vl-button--icon"
+                      {{action "selectSession" session}}
+                    >
+                      <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+                    </button>
+                  </td>
+                {{/c.body}}
+              {{/t.content}}
+            {{/data-table}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="vl-u-spacer-extended-l">
+    {{web-components/vl-alert message="Geen vergaderingen"}}
+  </div>
+{{/if}}
+{{outlet}}

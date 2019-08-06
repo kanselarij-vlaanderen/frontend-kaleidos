@@ -2,7 +2,7 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function (defaults) {
+module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
     sassOptions: {
       extension: 'scss'
@@ -11,7 +11,8 @@ module.exports = function (defaults) {
       locales: ['nl']
     },
     moment: {
-      allowEmpty: true,
+      outputFormat: 'L',
+      allowEmpty: true
     }
   });
 

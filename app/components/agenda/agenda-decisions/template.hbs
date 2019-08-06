@@ -1,13 +1,13 @@
 <div class="vlc-container">
   {{!-- {{utils/logo-header}} --}}
-  <div class="vl-u-spacer-extended-bottom-l no-print">
-    <h1 class="vl-title vl-title--h2">
+  <div class="vl-u-spacer-extended-top-l no-print">
+    <h3 class="vl-title vl-title--h3">
       {{await title}}
       <br />
-    </h1>
+    </h3>
   </div>
   <div class="vl-u-spacer-extended-bottom-l no-print">
-    <hr class="vlc-hr" />
+    {{! <hr class="vlc-hr" /> }}
   </div>
   <div class="vl-u-spacer-extended-bottom vl-u-spacer-extended-top-l">
     {{#each (await agendaitemGroups) as |group|}}

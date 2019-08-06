@@ -1,5 +1,4 @@
 <div class="vl-u-spacer-extended-l">
-  <div class=""></div>
   {{#utils/agendaitem-table
     model=model
     sort=sort
@@ -12,11 +11,13 @@
     {{#if (is-pending row.subcase.newsletterInfo)}}
       {{web-components/vl-loader text="Het kort bestek wordt geladen.."}}
     {{else if (await row.subcase.newsletterInfo)}}
-      {{news-item/edit-item
-        agendaitem=row
-        item=(await row.subcase.newsletterInfo)
-        isEditing=row.expanded
-      }}
+      <div class="vlc-container">
+        {{news-item/edit-item
+          agendaitem=row
+          item=(await row.subcase.newsletterInfo)
+          isEditing=row.expanded
+        }}
+      </div>
     {{else}}
       <div class="vl-u-spacer-extended">
         <div class="vl-action-group vl-action-group--align-center">

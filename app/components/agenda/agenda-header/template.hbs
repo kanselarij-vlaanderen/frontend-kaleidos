@@ -4,6 +4,19 @@
       <h1 class="vlc-page-header__title vlc-page-header__title--bordered">
         {{t "agenda-of"}}
         {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
+        {{t "at"}}
+        {{moment-format currentSession.plannedStart "HH:mm"}}
+        <i class="vl-link__icon vl-vi vl-vi-info-filled"></i>
+        {{#attach-popover
+          placement="bottom"
+          animation="shift"
+          class="ember-attacher-popper ember-attacher-popper-small"
+        }}
+          {{#if (not (eq currentSession.extraInfo ""))}}
+            {{await currentSession.extraInfo}}<br />
+          {{/if}}
+          {{await currentSession.kindToShow.label}}
+        {{/attach-popover}}
       </h1>
       <div class="vlc-page-header__sub">
         <div class="vlc-toolbar vlc-toolbar--auto">

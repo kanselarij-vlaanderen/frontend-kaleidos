@@ -1,3 +1,4 @@
+{{title (t "manage-ministers")}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
   <h4 class="vl-title vl-title--h4"></h4>
   <button
@@ -12,7 +13,7 @@
   <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
     <thead>
       <tr>
-        <th class="vl-data-table-col-9 vl-data-table__header-title">
+        <th class="vl-data-table-col-6 vl-data-table__header-title">
           <a
             class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
             href="#"
@@ -21,6 +22,19 @@
             <div class="vl-u-display-flex vl-u-flex-align-center">
               <span>
                 {{t "minister"}}
+              </span>
+            </div>
+          </a>
+        </th>
+        <th class="vl-data-table-col-3 vl-data-table__header-title">
+          <a
+            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+            href="#"
+          ></a>
+          <a class="vl-data-table__header-title--sortable" href="#">
+            <div class="vl-u-display-flex vl-u-flex-align-center">
+              <span>
+                {{t "nick-name"}}
               </span>
             </div>
           </a>
@@ -57,6 +71,13 @@
               <div class="skeletal-loader" role="alert" aria-busy="true"></div>
             {{else}}
               {{await mandatee.fullDisplayName}}
+            {{/if}}
+          </td>
+          <td class="mandatee-draggable-row">
+            {{#if (is-pending mandatee.nickName)}}
+              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+            {{else}}
+              {{await mandatee.nickName}}
             {{/if}}
           </td>
           <td class="mandatee-draggable-row">

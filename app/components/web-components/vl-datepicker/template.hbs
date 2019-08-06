@@ -2,6 +2,8 @@
   {{ember-flatpickr
     classNames="vl-input-field vl-input-field--block"
     locale="nl"
+    enableTime=enableTime
+    time_24hr=true
     date=(readonly selectedDate)
     onChange=(action "dateChanged")
     getFlatpickrRef=(action (mut flatpickrRef))
@@ -18,6 +20,8 @@
     classNames="vl-input-field vl-input-field--block"
     locale="nl"
     enable=datesToEnable
+    enableTime=enableTime
+    time_24hr=true
     date=(readonly selectedDate)
     onChange=(action "dateChanged")
     getFlatpickrRef=(action (mut flatpickrRef))

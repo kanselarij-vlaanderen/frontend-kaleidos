@@ -4,6 +4,10 @@
     {{web-components/vl-form-input width="4" value=title}}
   </div>
   <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "nick-name")}}
+    {{web-components/vl-form-input width="4" value=nickName}}
+  </div>
+  <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "add-people")}}
     {{utils/create-person-selector
       selectedItems=selectedPerson

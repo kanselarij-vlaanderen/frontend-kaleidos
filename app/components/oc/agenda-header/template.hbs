@@ -1,0 +1,83 @@
+<div class="vlc-toolbar">
+  <div class="vlc-toolbar__left">
+    <div class="vlc-toolbar__item">
+      <h1 class="vlc-page-header__title vlc-page-header__title--bordered">
+        {{t "agenda-of"}}
+        {{moment-format meeting.startedAt "DD MMMM YYYY HH:mm"}}
+      </h1>
+      <div class="vlc-page-header__sub">
+        <div class="vlc-toolbar vlc-toolbar--auto">
+          <div class="vlc-toolbar__left">
+            <div class="vlc-toolbar__item">
+              {{#link-to
+                "oc.meetings"
+                class="vlc-backlink vl-link vl-link--bold"
+              }}
+                <i
+                  class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
+                ></i>
+                {{t "back"}}
+              {{/link-to}}
+            </div>
+            {{oc/session-agenda-nav
+              selectedItem=(if
+                selectedItem
+                selectedItem
+                (await meeting.agendaItems.firstObject)
+              )
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="vlc-toolbar__right">
+    <div class="vlc-toolbar__item">
+      <div class="vl-action-group">
+        <button
+          class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+          {{action "toggleDropdown"}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi
+              {{if dropdownOpen "vl-vi-arrow-up-fat" "vl-vi-arrow-down-fat"}}"
+            {{action "toggleDropdown" bubbles=false}}
+          ></i>
+          {{t "actions"}}
+          {{#attach-popover
+            class="ember-attacher-popper"
+            hideOn="clickout click"
+            showOn="click"
+            animation="shift"
+            placement="bottom" as |attacher|
+          }}
+            <ul class="vl-popover__link-list">
+              {{#if (or isAdmin isEditor)}}
+                <li class="vl-popover__link-list__item">
+                  {{#link-to
+                    "oc.meetings.meeting.agendaitems.new"
+                    class="vl-link vl-link--block"
+                  }}
+                    {{t "add-to-agenda"}}
+                  {{/link-to}}
+                </li>
+                <li class="vl-popover__link-list__separator" role="none"></li>
+                <li
+                  class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
+                >
+                  {{#link-to
+                    "oc.meetings.meeting.agendaitems.delete"
+                    meeting
+                    class="vl-link vl-link--block vl-u-text--error"
+                  }}
+                    {{t "agenda-delete"}}
+                  {{/link-to}}
+                </li>
+              {{/if}}
+            </ul>
+          {{/attach-popover}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

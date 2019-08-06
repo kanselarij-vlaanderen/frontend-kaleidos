@@ -2,7 +2,11 @@
 
 @media print {
   .vl-alert {
-    display:none;
+    display: none;
+  }
+
+  .vl-link {
+    display: none;
   }
 
   html {

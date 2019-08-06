@@ -1,8 +1,8 @@
-import Route from '@ember/routing/route';
-import { inject } from '@ember/service';
-import moment from 'moment';
+import Route from "@ember/routing/route";
+import { inject } from "@ember/service";
+import moment from "moment";
 
-import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
+import ApplicationRouteMixin from "ember-simple-auth/mixins/application-route-mixin";
 
 export default Route.extend(ApplicationRouteMixin, {
   moment: inject(),
@@ -12,10 +12,10 @@ export default Route.extend(ApplicationRouteMixin, {
   routeAfterAuthentication: "agendas",
 
   beforeModel() {
-    this.get('moment').setLocale('nl');
-    this.set('moment.defaultFormat', 'DD.MM.YYYY');
-    this.get('moment').set('allowEmpty', true);
-    this.intl.setLocale('nl-be');
+    this.get("moment").setLocale("nl");
+    this.set("moment.defaultFormat", "DD.MM.YYYY");
+    this.get("moment").set("allowEmpty", true);
+    this.intl.setLocale("nl-be");
     return this._loadCurrentSession();
   },
 
@@ -24,7 +24,7 @@ export default Route.extend(ApplicationRouteMixin, {
     this._loadCurrentSession();
   },
 
-  sessionInvalidated() { },
+  sessionInvalidated() {},
 
   _loadCurrentSession() {
     return this.currentSession.load().catch(() => this.session.invalidate());
@@ -35,17 +35,19 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   async checkAlerts() {
-    const dateOfToday = moment().utc().format();
+    const dateOfToday = moment()
+      .utc()
+      .format();
     try {
-      const alerts = await this.store.query('alert', {
+      const alerts = await this.store.query("alert", {
         filter: {
-          ':gte:end-date': dateOfToday,
-          ':lte:begin-date': dateOfToday
+          ":gte:end-date": dateOfToday,
+          ":lte:begin-date": dateOfToday
         },
-        include: 'type'
-      })
-      if (alerts.get('length') > 0) {
-        const alertToShow = alerts.get('firstObject');
+        include: "type"
+      });
+      if (alerts.get("length") > 0) {
+        const alertToShow = alerts.get("firstObject");
         return alertToShow;
       }
       return null;
@@ -55,8 +57,11 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   actions: {
-    willTransition: function (transition) {
-      if (this.fileService.get('deleteDocumentWithUndo.isRunning') && confirm(this.intl.t("leave-page-message"))) {
+    willTransition: function(transition) {
+      if (
+        this.fileService.get("deleteDocumentWithUndo.isRunning") &&
+        confirm(this.intl.t("leave-page-message"))
+      ) {
         transition.abort();
       } else {
         return true;
