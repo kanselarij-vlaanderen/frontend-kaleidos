@@ -7,16 +7,17 @@ export default Component.extend({
   store: inject(),
   agendaService: inject(),
   globalError: inject(),
+  formatter: inject(),
+  kind: null,
+  selectedKindUri: null,
 
   createAgenda(meeting, date) {
-    const fallBackDate = moment()
-      .utc()
-      .toDate();
+    const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
       name: 'Ontwerpagenda',
       createdFor: meeting,
       created: date || fallBackDate,
-      modified: date || fallBackDate
+      modified: date || fallBackDate,
     });
 
     return agenda.save();
@@ -26,59 +27,50 @@ export default Component.extend({
     if (!closestMeeting) {
       return;
     }
-    const fallBackDate = moment()
-      .utc()
-      .toDate();
-
+    const fallBackDate = this.formatter.formatDate(null);
     const agendaitem = this.store.createRecord('agendaitem', {
-      retracted: false,
-      postPoned: null,
       created: fallBackDate,
       agenda: agenda,
       priority: 1,
       title: `${closestMeeting.meeting_id}/${closestMeeting.agenda_id}`,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
         closestMeeting.plannedstart
-      )
-        .utc()
-        .format('dddd DD-MM-YYYY')}.`,
+      ).format('dddd DD-MM-YYYY')}.`,
       formallyOk: CONFIG.notYetFormallyOk,
       mandatees: [],
       documentVersions: [],
       themes: [],
-      approvals: []
+      approvals: [],
     });
     return agendaitem.save();
   },
 
   actions: {
     async createNewSession() {
-      const { isDigital, extraInfo } = this;
+      const { isDigital, extraInfo, selectedKindUri } = this;
       this.set('isLoading', true);
-      const date = moment()
-        .utc()
-        .toDate();
+      const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
+      const date = this.formatter.formatDate(null);
       const startDate = this.get('startDate') || date;
       const newMeeting = this.store.createRecord('meeting', {
+        isDigital,
+        extraInfo,
         plannedStart: startDate,
         created: date,
-        isDigital,
-        extraInfo
+        kind: kindUriToAdd,
       });
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
       newMeeting
         .save()
-        .then(async meeting => {
+        .then(async (meeting) => {
           const agenda = await this.createAgenda(meeting, date);
           await this.createAgendaItemToApproveMinutes(agenda, closestMeeting);
-          try {
-            await this.agendaService.assignNewSessionNumbers();
-          } catch (error) {
-            this.globalError.handleError(error);
-          }
+
+          // TODO: Should fix sessionNrBug
+          // await this.agendaService.assignNewSessionNumbers();
         })
-        .catch(error => {
+        .catch((error) => {
           this.globalError.handleError(error);
         })
         .finally(() => {
@@ -88,13 +80,7 @@ export default Component.extend({
     },
 
     async selectStartDate(val) {
-      console.log(val);
-      this.set(
-        'startDate',
-        moment(val)
-          .utc()
-          .toDate()
-      );
+      this.set('startDate', this.formatter.formatDate(val));
     },
 
     cancelForm(event) {
@@ -103,6 +89,10 @@ export default Component.extend({
 
     successfullyAdded() {
       this.successfullyAdded();
-    }
-  }
+    },
+
+    setKind(kind) {
+      this.set('selectedKindUri', kind);
+    },
+  },
 });

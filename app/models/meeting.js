@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
-
+import EmberObject from '@ember/object';
 let { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
@@ -12,7 +12,7 @@ export default Model.extend({
   number: attr('number'),
   isFinal: attr('boolean'),
   extraInfo: attr('string'),
-  isDigital: attr('boolean'),
+  kind: attr('string'),
 
   agendas: hasMany('agenda', { inverse: null, serialize: false }),
   requestedSubcases: hasMany('subcase'),
@@ -25,15 +25,15 @@ export default Model.extend({
 
   latestAgenda: computed('agendas.@each', function() {
     return DS.PromiseObject.create({
-      promise: this.get('agendas').then(agendas => {
+      promise: this.get('agendas').then((agendas) => {
         const sortedAgendas = agendas.sortBy('agendaName').reverse();
         return sortedAgendas.get('firstObject');
-      })
+      }),
     });
   }),
 
   latestAgendaName: computed('latestAgenda', 'agendas', function() {
-    return this.get('latestAgenda').then(agenda => {
+    return this.get('latestAgenda').then((agenda) => {
       const agendaLength = this.get('agendas.length');
       const agendaName = agenda.name;
       if (agendaName !== 'Ontwerpagenda') {
@@ -50,12 +50,20 @@ export default Model.extend({
       return DS.PromiseObject.create({
         promise: this.store
           .query('signature', { filter: { 'is-active': true } })
-          .then(signatures => {
+          .then((signatures) => {
             return signatures.objectAt(0);
-          })
+          }),
       });
     } else {
       return signature;
     }
-  })
+  }),
+
+  kindToShow: computed('kind', function() {
+    const options = CONFIG.kinds;
+    const { kind } = this;
+    const foundOption = options.find((kindOption) => kindOption.uri === kind);
+
+    return EmberObject.create(foundOption);
+  }),
 });

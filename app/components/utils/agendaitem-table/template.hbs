@@ -21,3 +21,11 @@
     {{/if}}
   {{/t.body}}
 {{/light-table}}
+{{#if isScrolling}}
+  <button class="vl-button vl-button--secondary vl-button--icon">
+    <i class="vl-button__icon vl-vi vl-vi-add" aria-hidden="true"></i>
+    <span class="vl-u-visually-hidden">
+      {{t "back"}}
+    </span>
+  </button>
+{{/if}}

@@ -1,39 +1,40 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import moment from 'moment';
 
 export default Component.extend({
-	store: inject(),
+  store: inject(),
+  formatter: inject(),
 
-	actions: {
-		createSingleNewsLetter() {
-			this.set('isLoading', true);
-			const { title, subtitle, date, docDate, selectedMeeting } = this;
-			const newsletter = this.store.createRecord('newsletter-info', {
-				meeting: selectedMeeting,
-				title: title,
-				subtitle: subtitle,
-				publicationDate: moment(date).utc().toDate(),
-				publicationDocDate: moment(docDate).utc().toDate()
-			})
-			newsletter.save().then(() => {
-				this.set('isLoading', false);
-				this.close();
-			});
-		},
+  actions: {
+    createSingleNewsLetter() {
+      this.set('isLoading', true);
+      const { title, subtitle, date, docDate, selectedMeeting } = this;
+      const newsletter = this.store.createRecord('newsletter-info', {
+        meeting: selectedMeeting,
+        title,
+        subtitle,
+        mandateeProposal: null,
+        publicationDate: this.formatter.formatDate(date),
+        publicationDocDate: this.formatter.formatDate(docDate)
+      });
+      newsletter.save().then(() => {
+        this.set('isLoading', false);
+        this.close();
+      });
+    },
 
-		close() {
-			const { selectedMeeting } = this;
-			selectedMeeting.rollbackAttributes();
-			this.close();
-		},
+    close() {
+      const { selectedMeeting } = this;
+      selectedMeeting.rollbackAttributes();
+      this.close();
+    },
 
-		selectDate(date) {
-			this.set('date', moment(date).utc().toDate());
-		},
+    selectDate(date) {
+      this.set('date', this.formatter.formatDate(date));
+    },
 
-		selectDocDate(date) {
-			this.set('docDate', date);
-		}
-	}
+    selectDocDate(date) {
+      this.set('docDate', date);
+    }
+  }
 });

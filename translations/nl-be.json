@@ -402,6 +402,8 @@
   "page-title": "Kaleidos",
   "meeting-location": "Plaats van de vergadering",
   "digital": "Elektronisch",
+  "kind": "Aard",
   "digital-text": "Deze zitting is digitaal.",
-  "not-digital-text": "Deze zitting is niet digitaal."
+  "not-digital-text": "Deze zitting is niet digitaal.",
+  "normal-meeting": "Niet-elektronisch"
 }

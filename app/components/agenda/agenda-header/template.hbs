@@ -12,14 +12,10 @@
           animation="shift"
           class="ember-attacher-popper ember-attacher-popper-small"
         }}
-          {{#if (not (eq currentSession.extraInfo))}}
+          {{#if (not (eq currentSession.extraInfo ""))}}
             {{await currentSession.extraInfo}}<br />
           {{/if}}
-          {{#if currentSession.isDigital}}
-            {{t "digital-text"}}
-          {{else}}
-            {{t "not-digital-text"}}
-          {{/if}}
+          {{await currentSession.kindToShow.label}}
         {{/attach-popover}}
       </h1>
       <div class="vlc-page-header__sub">

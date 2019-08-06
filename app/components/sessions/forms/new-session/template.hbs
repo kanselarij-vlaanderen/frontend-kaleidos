@@ -1,10 +1,5 @@
 <div class="vl-modal-dialog__content">
-  <div class="vl-u-spacer-extended-bottom-s">
-    <div class="vlc-input-field vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "digital")}}
-      {{web-components/vl-toggle value=isDigital}}
-    </div>
-  </div>
+  {{utils/kind-selector kind=kind setAction=(action "setKind")}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "start-date")}}

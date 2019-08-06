@@ -38,9 +38,11 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
             const proposalText = this.intl.t('proposal-text');
             return `${proposalText}${requestedBy.get('nickName')}`;
           } else {
-            return null;
+            return '';
           }
         });
+      } else {
+        return '';
       }
     },
     set: function(key, value) {
