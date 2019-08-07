@@ -5,9 +5,8 @@ export default Component.extend(isAuthenticatedMixin, {
 	classNames: ['vl-u-display-block'],
 
 	actions: {
-		navigateToMockLogin() {
-			// this.currentAuthenticatedSession.logout()
-			// this.navigateToMockLogin();
+		logout() {
+			this.currentAuthenticatedSession.logout()
 		}
 	}
 });

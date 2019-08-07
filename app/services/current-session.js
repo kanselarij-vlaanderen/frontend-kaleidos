@@ -6,10 +6,23 @@ import { task, waitForProperty } from 'ember-concurrency';
 export default Service.extend({
   session: service('session'),
   store: service('store'),
+  router: service(),
 
-  logout() {
-    // TODO implement logout
-    localStorage.clear(); //not working
+  async logout() {
+    await this.get('session').invalidate();
+    this.setProperties({
+      accountContent: null,
+      userContent: null,
+      userRole: 'no-access',
+      isEditor: null,
+      isAdmin: null,
+      _user: null,
+      _account: null,
+      _group: null,
+      rolesContent: null,
+      groupContent: null
+    });
+    this.get('router').transitionTo('login');
   },
 
   async load() {
@@ -22,7 +35,7 @@ export default Service.extend({
       let groupId = get(session, 'data.authenticated.relationships.group.data.id');
       if(groupId){
         group = await this.store.find('account-group', groupId);
-      } 
+      }
       const roles = await get(session, 'data.authenticated.data.attributes.roles');
       this.set('_account', account);
       this.set('_user', user);
@@ -42,7 +55,7 @@ export default Service.extend({
       } else {
         this.set('userRole', "no-access");
       }
-      
+
       this.set('isEditor', this.canAccess('kanselarij'))
       this.set('isAdmin', this.canAccess('admin'));
     }

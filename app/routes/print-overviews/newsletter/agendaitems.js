@@ -3,7 +3,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import AgendaitemTableRouteMixin from 'fe-redpencil/mixins/light-table/agendaitem-table-route-mixin';
 
 export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, {
-	authenticationRoute: 'mock-login',
+	authenticationRoute: 'login',
 	routeNamePrefix: 'newsletter',
 	sort: 'priority',
 	include: 'subcase'

@@ -43,6 +43,6 @@
   </div>
 {{/if}}
 {{#if (and (await role) (not-eq (await role) ""))}}
-  {{m-header navigateToMockLogin=(action "navigateToMockLogin")}}
+  {{m-header navigateToLogin=(action "navigateToLogin")}}
 {{/if}}
 {{outlet}}

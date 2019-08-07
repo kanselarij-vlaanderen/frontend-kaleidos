@@ -56,8 +56,8 @@ export default Controller.extend(isAuthenticatedMixin, {
 			this.set('model', null);
 		},
 
-		navigateToMockLogin() {
-			this.transitionToRoute('mock-login');
+		navigateToLogin() {
+			this.transitionToRoute('login');
 		},
 
 		closeErrorMessage(errorMessage) {
