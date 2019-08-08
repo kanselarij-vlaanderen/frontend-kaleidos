@@ -1,5 +1,5 @@
-@import "ember-power-select";
-@import "ember-vo-webuniversum-data-table";
+@import 'ember-power-select';
+@import 'ember-vo-webuniversum-data-table';
 /* ==========================================================================
    CSS file for Digikan
    ========================================================================== */
@@ -7,9 +7,9 @@
 /* Official code
    ========================================================================== */
 
-@import "_colors";
+@import '_colors';
 
-$icon-font-location: "/fonts/";
+$icon-font-location: '/fonts/';
 
 // Core (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-core/src/scss/_setting.scss";
@@ -20,11 +20,11 @@ $icon-font-location: "/fonts/";
 // @import "node_modules/@govflanders/vl-ui-core/src/scss/_object.scss";
 
 // Components (loaded locally to easily read source)
-@import "govflanders/core/_setting.scss";
-@import "govflanders/core/_tool.scss";
-@import "govflanders/core/_generic.scss";
-@import "govflanders/core/_element.scss";
-@import "govflanders/core/_object.scss";
+@import 'govflanders/core/_setting.scss';
+@import 'govflanders/core/_tool.scss';
+@import 'govflanders/core/_generic.scss';
+@import 'govflanders/core/_element.scss';
+@import 'govflanders/core/_object.scss';
 
 // Components (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-accordion/src/scss/_accordion";
@@ -62,127 +62,127 @@ $icon-font-location: "/fonts/";
 // @import "node_modules/@govflanders/vl-ui-input-group/src/scss/_input-group";
 
 // Components (loaded locally to easily read source)
-@import "govflanders/components/_accordion";
-@import "govflanders/components/_action-group";
-@import "govflanders/components/_alert";
-@import "govflanders/components/_autocomplete";
-@import "govflanders/components/_badge";
-@import "govflanders/components/_button";
-@import "govflanders/components/_checkbox";
-@import "govflanders/components/_data-table";
-@import "govflanders/components/_datepicker";
-@import "govflanders/components/_description-data";
-@import "govflanders/components/_document";
-@import "govflanders/components/_form-message";
-@import "govflanders/components/_form-structure";
-@import "govflanders/components/_icon";
-@import "govflanders/components/_info-tile";
-@import "govflanders/components/_input-addon";
-@import "govflanders/components/_input-field";
-@import "govflanders/components/_input-group";
-@import "govflanders/components/_link-list";
-@import "govflanders/components/_link";
-@import "govflanders/components/_loader";
-@import "govflanders/components/_modal";
-@import "govflanders/components/_pager";
-@import "govflanders/components/_pill-input";
-@import "govflanders/components/_pill";
-@import "govflanders/components/_popover";
-@import "govflanders/components/_radio";
-@import "govflanders/components/_search";
-@import "govflanders/components/_side-navigation";
-@import "govflanders/components/_tabs";
-@import "govflanders/components/_textarea";
-@import "govflanders/components/_titles";
-@import "govflanders/components/_typography";
-@import "govflanders/components/_upload";
+@import 'govflanders/components/_accordion';
+@import 'govflanders/components/_action-group';
+@import 'govflanders/components/_alert';
+@import 'govflanders/components/_autocomplete';
+@import 'govflanders/components/_badge';
+@import 'govflanders/components/_button';
+@import 'govflanders/components/_checkbox';
+@import 'govflanders/components/_data-table';
+@import 'govflanders/components/_datepicker';
+@import 'govflanders/components/_description-data';
+@import 'govflanders/components/_document';
+@import 'govflanders/components/_form-message';
+@import 'govflanders/components/_form-structure';
+@import 'govflanders/components/_icon';
+@import 'govflanders/components/_info-tile';
+@import 'govflanders/components/_input-addon';
+@import 'govflanders/components/_input-field';
+@import 'govflanders/components/_input-group';
+@import 'govflanders/components/_link-list';
+@import 'govflanders/components/_link';
+@import 'govflanders/components/_loader';
+@import 'govflanders/components/_modal';
+@import 'govflanders/components/_pager';
+@import 'govflanders/components/_pill-input';
+@import 'govflanders/components/_pill';
+@import 'govflanders/components/_popover';
+@import 'govflanders/components/_radio';
+@import 'govflanders/components/_search';
+@import 'govflanders/components/_side-navigation';
+@import 'govflanders/components/_tabs';
+@import 'govflanders/components/_textarea';
+@import 'govflanders/components/_titles';
+@import 'govflanders/components/_typography';
+@import 'govflanders/components/_upload';
 
 // Interdependent components (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-select/src/scss/_select";
 // @import "node_modules/@govflanders/vl-ui-select/src/scss/_js-select";
 
 // Interdependent components - These are source order dependent
-@import "govflanders/components/_select";
-@import "govflanders/components/_js-select";
+@import 'govflanders/components/_select';
+@import 'govflanders/components/_js-select';
 
 /* Unofficial code
       ========================================================================== */
 
 // Additions to existing components
-@import "govflanders/additions/_badge";
-@import "govflanders/additions/_button";
-@import "govflanders/additions/_checkbox";
-@import "govflanders/additions/_data-table";
-@import "govflanders/additions/_icon-list";
-@import "govflanders/additions/_link-list";
-@import "govflanders/additions/_modal";
-@import "govflanders/additions/_pill-input";
-@import "govflanders/additions/_popover";
-@import "govflanders/additions/_tabs";
+@import 'govflanders/additions/_badge';
+@import 'govflanders/additions/_button';
+@import 'govflanders/additions/_checkbox';
+@import 'govflanders/additions/_data-table';
+@import 'govflanders/additions/_icon-list';
+@import 'govflanders/additions/_link-list';
+@import 'govflanders/additions/_modal';
+@import 'govflanders/additions/_pill-input';
+@import 'govflanders/additions/_popover';
+@import 'govflanders/additions/_tabs';
 
 // Additions to existing utilities
-@import "govflanders/additions/_background";
-@import "govflanders/additions/_typography";
+@import 'govflanders/additions/_background';
+@import 'govflanders/additions/_typography';
 
 // Custom components
-@import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
-@import "custom-components/vlc-agenda-item";
-@import "custom-components/vlc-agenda-items-new";
-@import "custom-components/vlc-backlink";
-@import "custom-components/vlc-box";
-@import "custom-components/vlc-comment";
-@import "custom-components/vlc-container";
-@import "custom-components/vlc-date-range";
-@import "custom-components/vlc-document-card";
-@import "custom-components/vlc-document-list";
-@import "custom-components/vlc-hr";
-@import "custom-components/vlc-input-field-block";
-@import "custom-components/vlc-list-section-header";
-@import "custom-components/vlc-minister";
-@import "custom-components/vlc-navbar";
-@import "custom-components/vlc-page-header";
-@import "custom-components/vlc-panel-layout";
-@import "custom-components/vlc-pill";
-@import "custom-components/vlc-procedure-step";
-@import "custom-components/vlc-radio-inline";
-@import "custom-components/vlc-scroll-wrapper";
-@import "custom-components/vlc-side-nav";
-@import "custom-components/vlc-status-timeline";
-@import "custom-components/vlc-subline";
-@import "custom-components/vlc-tabs-reverse";
-@import "custom-components/vlc-toolbar";
-@import "custom-components/vlc-user";
+@import 'custom-components/temporary-header'; // To be replaced with Javascript in actual implementation.
+@import 'custom-components/vlc-agenda-item';
+@import 'custom-components/vlc-agenda-items-new';
+@import 'custom-components/vlc-backlink';
+@import 'custom-components/vlc-box';
+@import 'custom-components/vlc-comment';
+@import 'custom-components/vlc-container';
+@import 'custom-components/vlc-date-range';
+@import 'custom-components/vlc-document-card';
+@import 'custom-components/vlc-document-list';
+@import 'custom-components/vlc-hr';
+@import 'custom-components/vlc-input-field-block';
+@import 'custom-components/vlc-list-section-header';
+@import 'custom-components/vlc-minister';
+@import 'custom-components/vlc-navbar';
+@import 'custom-components/vlc-page-header';
+@import 'custom-components/vlc-panel-layout';
+@import 'custom-components/vlc-pill';
+@import 'custom-components/vlc-procedure-step';
+@import 'custom-components/vlc-radio-inline';
+@import 'custom-components/vlc-scroll-wrapper';
+@import 'custom-components/vlc-side-nav';
+@import 'custom-components/vlc-status-timeline';
+@import 'custom-components/vlc-subline';
+@import 'custom-components/vlc-tabs-reverse';
+@import 'custom-components/vlc-toolbar';
+@import 'custom-components/vlc-user';
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
 
 // Utilities (loaded locally to easily read source)
-@import "govflanders/util/_util";
+@import 'govflanders/util/_util';
 
 // Fixes to the framework
-@import "fixes/fix-pre";
-@import "fixes/fix-flex-utils";
-@import "fixes/fix-badge-avatars";
+@import 'fixes/fix-pre';
+@import 'fixes/fix-flex-utils';
+@import 'fixes/fix-badge-avatars';
 
 // Custom utilities
-@import "custom-utilities/_reset";
-@import "custom-utilities/_extended-spacer";
-@import "custom-utilities/_scroll";
-@import "custom-utilities/_box-model";
+@import 'custom-utilities/_reset';
+@import 'custom-utilities/_extended-spacer';
+@import 'custom-utilities/_scroll';
+@import 'custom-utilities/_box-model';
 
 // Print
-@import "print/print";
-@import "print";
+@import 'print/print';
+@import 'print';
 
 //custom css added
-@import "custom-application/toast";
-@import "custom-application/compare";
-@import "custom-application/power-select";
-@import "custom-application/editor";
-@import "custom-application/ember-attacher";
-@import "custom-application/file-uploader";
-@import "custom-application/extra-fonts";
-@import "custom-application/loader";
-@import "custom-application/oc-additions";
+@import 'custom-application/toast';
+@import 'custom-application/compare';
+@import 'custom-application/power-select';
+@import 'custom-application/editor';
+@import 'custom-application/ember-attacher';
+@import 'custom-application/file-uploader';
+@import 'custom-application/extra-fonts';
+@import 'custom-application/loader';
+@import 'custom-application/oc-additions';
 
 a.vlc-agenda-items-new__sub-item {
   display: block;

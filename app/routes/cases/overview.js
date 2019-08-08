@@ -1,53 +1,41 @@
-import Route from "@ember/routing/route";
-import DataTableRouteMixin from "ember-data-table/mixins/route";
-import CONFIG from "fe-redpencil/utils/config";
-import $ from "jquery";
-import { isEmpty } from "@ember/utils";
+import Route from '@ember/routing/route';
+import DataTableRouteMixin from 'ember-data-table/mixins/route';
+import CONFIG from 'fe-redpencil/utils/config';
+import $ from 'jquery';
+import { isEmpty } from '@ember/utils';
 
 export default Route.extend(DataTableRouteMixin, {
-  modelName: "case",
+  modelName: 'case',
 
   queryParams: {
-    oc: {
-      refreshModel: true
-    },
     isArchived: {
-      refreshModel: true
+      refreshModel: true,
     },
     searchText: {
-      refreshModel: true
+      refreshModel: true,
     },
     mandatees: {
-      refreshModel: true
+      refreshModel: true,
     },
     dateFrom: {
-      refreshModel: true
+      refreshModel: true,
     },
     dateTo: {
-      refreshModel: true
+      refreshModel: true,
     },
     decisionsOnly: {
-      refreshModel: true
-    }
+      refreshModel: true,
+    },
   },
 
-  textSearchFields: ["title", "data", "subcaseTitle", "subcaseSubTitle"],
+  textSearchFields: ['title', 'data', 'subcaseTitle', 'subcaseSubTitle'],
 
   mergeQueryOptions(params) {
     let filter = {};
-    let oc = params.oc;
-
-    if (oc === true) {
-      filter["policy-level"] = { id: CONFIG.OCCaseTypeID };
-    } else if (oc === false) {
-      filter["policy-level"] = { id: CONFIG.VRCaseTypeID };
-    } else {
-      filter["policy-level"] = { id: CONFIG.VRCaseTypeID };
-    }
-
-    filter["is-archived"] = params.isArchived;
+    filter['policy-level'] = { id: CONFIG.VRCaseTypeID };
+    filter['is-archived'] = params.isArchived;
     return {
-      filter: filter
+      filter: filter,
     };
   },
 
@@ -66,14 +54,12 @@ export default Route.extend(DataTableRouteMixin, {
       return this._super(...arguments);
     }
     let filterString = [];
-    let type = "cases";
+    let type = 'cases';
     if (!isEmpty(params.decisionsOnly)) {
-      type = "casesByDecisionText";
+      type = 'casesByDecisionText';
     }
     if (!isEmpty(params.searchText)) {
-      filterString.push(
-        `filter[${this.textSearchFields.join(",")}]=${params.searchText || ""}`
-      );
+      filterString.push(`filter[${this.textSearchFields.join(',')}]=${params.searchText || ''}`);
     }
     if (!isEmpty(params.mandatees)) {
       filterString.push(`filter[creators,mandatees]=${params.mandatees}`);
@@ -85,24 +71,24 @@ export default Route.extend(DataTableRouteMixin, {
       filterString.push(`filter[:lte:sessionDates]=${params.dateTo}`);
     }
     let searchResults = await $.ajax({
-      method: "GET",
-      url: `/${type}/search?${filterString.join("&")}`
+      method: 'GET',
+      url: `/${type}/search?${filterString.join('&')}`,
     });
 
     if (!searchResults.data || searchResults.data.length < 1) {
       return [];
     }
 
-    return this.store.query(this.get("modelName"), {
+    return this.store.query(this.get('modelName'), {
       filter: {
-        id: searchResults.data.map(item => item.id).join(",")
-      }
+        id: searchResults.data.map((item) => item.id).join(','),
+      },
     });
   },
 
   actions: {
     refreshModel() {
       this.refresh();
-    }
-  }
+    },
+  },
 });

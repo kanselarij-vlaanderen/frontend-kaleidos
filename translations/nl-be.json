@@ -148,7 +148,7 @@
   "ISE-code": "Code",
   "kanselarij": "Kanselarij",
   "keyword": "Trefwoord",
-  "latest-modified": "Laatst gewijzigd:",
+  "latest-modified": "Laatst gewijzigd",
   "loading-text": "Pagina is aan het laden",
   "login": "Aanmelden",
   "manage-alerts": "Systeemberichten beheer",
@@ -408,5 +408,7 @@
   "kind": "Aard",
   "digital-text": "Deze zitting is digitaal.",
   "not-digital-text": "Deze zitting is niet digitaal.",
-  "normal-meeting": "Niet-elektronisch"
+  "normal-meeting": "Niet-elektronisch",
+  "main-nav-title": "Vlaamse Regering",
+  "main-nav-oc-title":"Overlegcomité"
 }

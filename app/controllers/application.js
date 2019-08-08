@@ -5,63 +5,94 @@ import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import CONFIG from 'fe-redpencil/utils/config';
+import { A } from '@ember/array';
 
 export default Controller.extend(isAuthenticatedMixin, {
-	currentSession: inject(),
-	session: inject(),
-	router: inject(),
-	globalError: inject(),
-	messages: alias('globalError.messages'),
+  currentSession: inject(),
+  session: inject(),
+  router: inject(),
+  globalError: inject(),
 
-	init() {
-		this._super(...arguments);
-		document.addEventListener('wheel', () => {
-			// ... do stuff with evt
-		}, {
-				capture: true,
-				passive: true
-			})
-	},
+  messages: alias('globalError.messages'),
+  options: A([
+    { key: 'main-nav-title', route: 'agendas' },
+    { key: 'main-nav-oc-title', route: 'oc' },
+  ]),
 
-	shouldNavigateObserver: on('init', observer('router.currentRouteName', 'currentSession.userRole', async function () {
-		const currentRouteName = this.router.get('currentRouteName');
-		if(CONFIG.routesAllowed.includes(currentRouteName)) {
-			document.getElementById('vlaanderen-header').style = "display:none;";
-		} else {
-			document.getElementById('vlaanderen-header').style = "display:block;";
-		}
-		const router = this.get('router');
-		const role = await this.get('currentSession.userRole');
-		const user = await this.get('session.isAuthenticated');
-		if (router && user && role == "no-access") {
-			this.transitionToRoute('accountless-users');
-		}
-	})),
+  selectedOption: computed('options', function() {
+    return this.options.get('firstObject');
+  }),
 
-	type: computed('model', async function () {
-		const { model } = this;
-		if (model) {
-			const type = await model.get('type.label');
-			if (type === 'Waarschuwing') {
-				return 'vl-alert--warning';
-			} else if (type === 'Dringend') {
-				return 'vl-alert--error';
-			}
-		}
-		return '';
-	}),
+  isOc: computed('selectedOption', function() {
+    return this.get('selectedOption.route') == 'oc';
+  }),
 
-	actions: {
-		close() {
-			this.set('model', null);
-		},
+  init() {
+    this._super(...arguments);
+    document.addEventListener(
+      'wheel',
+      () => {
+        // ... do stuff with evt
+      },
+      {
+        capture: true,
+        passive: true,
+      }
+    );
+  },
 
-		navigateToLogin() {
-			this.transitionToRoute('login');
-		},
+  shouldNavigateObserver: on(
+    'init',
+    observer('router.currentRouteName', 'currentSession.userRole', async function() {
+      const currentRouteName = this.router.get('currentRouteName');
 
-		closeErrorMessage(errorMessage) {
-			this.get('globalError.messages').removeObject(errorMessage);
-		}
-	}
+      if (currentRouteName && currentRouteName.includes('oc')) {
+        this.set('selectedOption', this.options[1]);
+      } else {
+        this.set('selectedOption', this.options[0]);
+      }
+      if (CONFIG.routesAllowed.includes(currentRouteName)) {
+        document.getElementById('vlaanderen-header').style = 'display:none;';
+      } else {
+        document.getElementById('vlaanderen-header').style = 'display:block;';
+      }
+      const router = this.get('router');
+      const role = await this.get('currentSession.userRole');
+      const user = await this.get('session.isAuthenticated');
+      if (router && user && role == 'no-access' && currentRouteName != "loading") {
+        this.transitionToRoute('accountless-users');
+      }
+    })
+  ),
+
+  type: computed('model', async function() {
+    const { model } = this;
+    if (model) {
+      const type = await model.get('type.label');
+      if (type === 'Waarschuwing') {
+        return 'vl-alert--warning';
+      } else if (type === 'Dringend') {
+        return 'vl-alert--error';
+      }
+    }
+    return '';
+  }),
+
+  actions: {
+    close() {
+      this.set('model', null);
+    },
+
+    navigateToLogin() {
+      this.transitionToRoute('login');
+    },
+
+    closeErrorMessage(errorMessage) {
+      this.get('globalError.messages').removeObject(errorMessage);
+    },
+
+    navigateToRoute(option) {
+      this.transitionToRoute(option.route);
+    },
+  },
 });
