@@ -410,5 +410,8 @@
   "not-digital-text": "Deze zitting is niet digitaal.",
   "normal-meeting": "Niet-elektronisch",
   "main-nav-title": "Vlaamse Regering",
-  "main-nav-oc-title":"Overlegcomité"
+  "main-nav-oc-title": "Overlegcomité",
+  "added-agendaitem-text": "Dit punt is toegevoegd sinds de vorige agenda.",
+  "show-changes": "Toon aangepaste punten",
+  "show-all": "Toon alle punten"
 }

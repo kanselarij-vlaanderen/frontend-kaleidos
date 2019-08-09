@@ -8,6 +8,9 @@ let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
   modelName: alias('constructor.modelName'),
+  agendaService: inject(),
+  addedAgendaitems: alias('agendaService.addedAgendaitems'),
+  addedDocuments: alias('agendaService.addedDocuments'),
 
   store: inject(),
   priority: attr('number'),
@@ -40,7 +43,7 @@ export default Model.extend({
   }),
 
   isPostponed: computed('retracted', 'postponedTo', function() {
-    return this.get('postponedTo').then(session => {
+    return this.get('postponedTo').then((session) => {
       return session || this.get('retracted');
     });
   }),
@@ -49,10 +52,10 @@ export default Model.extend({
     return PromiseArray.create({
       promise: this.store.query('decision', {
         filter: {
-          subcase: { id: this.subcase.get('id') }
+          subcase: { id: this.subcase.get('id') },
         },
-        sort: 'approved'
-      })
+        sort: 'approved',
+      }),
     });
   }),
 
@@ -67,47 +70,47 @@ export default Model.extend({
 
   documents: computed('documentVersions.@each', function() {
     return PromiseArray.create({
-      promise: this.get('documentVersions').then(documentVersions => {
+      promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.map(item => item.get('id')).join(',');
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
 
           return this.store.query('document', {
             filter: {
-              'document-versions': { id: documentVersionIds }
+              'document-versions': { id: documentVersionIds },
             },
             sort: 'type.priority',
-            include: 'document-versions'
+            include: 'document-versions',
           });
         }
-      })
+      }),
     });
   }),
 
   documentsLength: computed('documents.@each', function() {
-    return this.get('documents').then(documents => {
+    return this.get('documents').then((documents) => {
       return documents.get('length');
     });
   }),
 
   nota: computed('documentVersions', function() {
     return PromiseObject.create({
-      promise: this.get('documentVersions').then(documentVersions => {
+      promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.map(item => item.get('id')).join(',');
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
 
           return this.store
             .query('document', {
               filter: {
                 'document-versions': { id: documentVersionIds },
-                type: { id: CONFIG.notaID }
+                type: { id: CONFIG.notaID },
               },
-              include: 'document-versions'
+              include: 'document-versions',
             })
-            .then(notas => {
+            .then((notas) => {
               return notas.get('firstObject');
             });
         }
-      })
+      }),
     });
   }),
 
@@ -120,29 +123,46 @@ export default Model.extend({
       return [];
     }
     return PromiseArray.create({
-      promise: this.subcase.get('case').then(caze => {
+      promise: this.subcase.get('case').then((caze) => {
         if (caze) {
-          return caze.get('subcases').then(subcases => {
-            return subcases.filter(item => item.get('id') != this.get('subcase.id'));
+          return caze.get('subcases').then((subcases) => {
+            return subcases.filter((item) => item.get('id') != this.get('subcase.id'));
           });
         }
-      })
+      }),
     });
   }),
 
   formallyOkToShow: computed('formallyOk', function() {
     const options = CONFIG.formallyOkOptions;
     const { formallyOk } = this;
-    const foundOption = options.find(formallyOkOption => formallyOkOption.uri === formallyOk);
+    const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
 
     return EmberObject.create(foundOption);
   }),
 
   requestedBy: computed('subcase.requestedBy', function() {
     return PromiseObject.create({
-      promise: this.get('subcase.requestedBy').then(requestedBy => {
+      promise: this.get('subcase.requestedBy').then((requestedBy) => {
         return requestedBy;
-      })
+      }),
     });
-  })
+  }),
+
+  checkAdded: computed('id', 'addedAgendaitems.@each', function() {
+    return this.addedAgendaitems.includes(this.id);
+  }),
+
+  hasChanges: computed('checkAdded', function() {
+    return this.hasAddedDocuments.then((hasAddedDocuments) => {
+      return this.checkAdded || hasAddedDocuments;
+    });
+  }),
+
+  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', function() {
+    return this.get('documents').then((documents) => {
+      if (!documents) return false;
+      return documents.every((document) => document.get('checkAdded'));
+    });
+  }),
 });

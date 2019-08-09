@@ -7,6 +7,19 @@
     {{/if}}
   </span>
 </p>
+<span class="added-tag">
+  {{#if agendaitem.checkAdded}}
+    <i class="vl-link__icon vl-vi vl-vi-tag-add"></i>
+    {{#attach-popover
+      placement="top"
+      class="ember-attacher-popper ember-attacher-popper-wide"
+    }}
+      <p>
+        {{t "added-agendaitem-text"}}
+      </p>
+    {{/attach-popover}}
+  {{/if}}
+</span>
 <h4 class="vlc-agenda-items-new__subject">
   {{#if (await agendaitem.shortTitle)}}
     {{await agendaitem.shortTitle}}
@@ -15,8 +28,7 @@
   {{/if}}
 </h4>
 {{#if (not selectedAgendaItem)}}
-  {{! TODO: Fix amount of requests made for the versions and the documents }}
-  {{!-- {{#if (await agendaitem.documents)}}
+  {{#if (await agendaitem.documents)}}
     <div class="vlc-hr"></div>
     {{utils/documents-list-for-item
       isNotClickable=true
@@ -30,7 +42,7 @@
       item=(await agendaitem.subcase)
       agendaitem=(await agendaitem.subcase)
     }}
-  {{/if}} --}}
+  {{/if}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
   <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">

@@ -1,37 +1,34 @@
-import Route from "@ember/routing/route";
-import SortedAgendaItemsRouteMixin from "fe-redpencil/mixins/sorted-agenda-items-route-mixin";
-import { hash } from "rsvp";
-import { isEmpty } from "@ember/utils";
-import $ from "jquery";
+import Route from '@ember/routing/route';
+import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items-route-mixin';
+import { hash } from 'rsvp';
+import { isEmpty } from '@ember/utils';
+import $ from 'jquery';
 
 export default Route.extend(SortedAgendaItemsRouteMixin, {
   queryParams: {
     filter: { refreshModel: true },
-    refresh: { refreshModel: true }
+    refresh: { refreshModel: true },
   },
 
   async model(params) {
     const { agenda, matchingAgendaItems } = await hash({
-      agenda: this.store.findRecord(
-        "agenda",
-        await this.get("sessionService.currentAgenda.id")
-      ),
-      matchingAgendaItems: this.matchingAgendaItems(params.filter)
+      agenda: this.store.findRecord('agenda', await this.get('sessionService.currentAgenda.id')),
+      matchingAgendaItems: this.matchingAgendaItems(params.filter),
     });
-    this.set("sessionService.selectedAgendaItem", null);
-    const session = this.modelFor("agenda");
+    this.set('sessionService.selectedAgendaItem', null);
+    const session = this.modelFor('agenda');
 
     const {
       groups,
       firstAgendaItem,
       announcements,
       lastPrio,
-      minutesApproval
+      minutesApproval,
     } = await this.parseAgendaItems(agenda, session);
     if (minutesApproval) {
-      this.set("sessionService.firstAgendaItemOfAgenda", minutesApproval);
+      this.set('sessionService.firstAgendaItemOfAgenda', minutesApproval);
     } else {
-      this.set("sessionService.firstAgendaItemOfAgenda", firstAgendaItem);
+      this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
     }
 
     let filteredGroups = groups;
@@ -43,7 +40,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
       groups: filteredGroups,
       announcements,
       lastPrio,
-      minutesApproval
+      minutesApproval,
     });
   },
 
@@ -51,32 +48,32 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
     if (isEmpty(filter)) {
       return {};
     }
-    const agendaId = this.get("sessionService.currentAgenda.id");
+    const agendaId = this.get('sessionService.currentAgenda.id');
     const searchResults = await $.ajax({
-      method: "GET",
-      url: `/agendaitems/search?filter[agendaId]=${agendaId}&filter[data,title,shortTitle,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`
+      method: 'GET',
+      url: `/agendaitems/search?filter[agendaId]=${agendaId}&filter[data,title,shortTitle,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`,
     });
     const searchMap = {};
-    searchResults.data.map(item => {
+    searchResults.data.map((item) => {
       searchMap[item.id] = true;
     });
     return searchMap;
   },
 
   filterAgendaGroups: function(groups, matchingAgendaItems) {
-    groups.map(agenda => {
-      agenda.groups.map(group => {
-        group.agendaitems = group.agendaitems.filter(item => {
-          return matchingAgendaItems[item.get("id")];
+    groups.map((agenda) => {
+      agenda.groups.map((group) => {
+        group.agendaitems = group.agendaitems.filter((item) => {
+          return matchingAgendaItems[item.get('id')];
         });
       });
 
-      agenda.groups = agenda.groups.filter(group => {
+      agenda.groups = agenda.groups.filter((group) => {
         return group.agendaitems.length > 0;
       });
     });
 
-    groups = groups.filter(agenda => {
+    groups = groups.filter((agenda) => {
       return agenda.groups.length > 0;
     });
     return groups;
@@ -86,6 +83,6 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
     refresh() {
       this._super(...arguments);
       this.refresh();
-    }
-  }
+    },
+  },
 });

@@ -1,13 +1,24 @@
 {{#if (not selectedAgendaItem)}}
-  <div class="vl-u-display-flex vl-u-flex-align-baseline">
+  <div class="vl-u-display-flex vl-u-flex-space-between">
     <span class="vl-title vl-title--h3">
       {{t "agendaitems-subtitle"}}
     </span>
     {{#if (or isAdmin isEditor)}}
-      <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditingOverview"}}>
-          {{t "edit"}}
-        </a>
+      <div class="vl-u-display-flex vl-u-flex-end">
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleChangesOnly"}}>
+            {{#if (not isShowingChanges)}}
+              {{t "show-changes"}}
+            {{else}}
+              {{t "show-all"}}
+            {{/if}}
+          </a>
+        </div>
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vl-link" {{action "toggleIsEditingOverview"}}>
+            {{t "edit"}}
+          </a>
+        </div>
       </div>
     {{/if}}
   </div>
@@ -68,11 +79,13 @@
       <div class="vl-u-spacer-extended-bottom">
         {{#each group.groups as |agendaitemGroup|}}
           {{#if (gt agendaitemGroup.agendaitems.length 0)}}
-            <div class="vlc-list-section-header">
-              {{#each agendaitemGroup.mandatees as |mandatee|}}
-                {{mandatee.title}}({{mandatee.priority}})<br />
-              {{/each}}
-            </div>
+            {{#if (not isShowingChanges)}}
+              <div class="vlc-list-section-header">
+                {{#each agendaitemGroup.mandatees as |mandatee|}}
+                  {{mandatee.title}}({{mandatee.priority}})<br />
+                {{/each}}
+              </div>
+            {{/if}}
             {{#sortable-group
               tagName="div"
               onChange=(action
@@ -80,21 +93,41 @@
               ) as |sortableGroup|
             }}
               {{#each agendaitemGroup.agendaitems as |agendaitem idx|}}
-                {{#sortable-item
-                  tagName="div"
-                  model=agendaitem
-                  group=sortableGroup
-                  distance=30
-                  handle=".vlc-agenda-items-new__sub-item"
-                }}
-                  <div class="vlc-agenda-items-new__sub-item">
-                    {{agenda/agenda-list/list-item
-                      agendaitem=agendaitem
-                      isEditingOverview=isEditingOverview
-                      selectAgendaItem=(action "selectAgendaItem")
-                    }}
-                  </div>
-                {{/sortable-item}}
+                {{#if (not isShowingChanges)}}
+                  {{#sortable-item
+                    tagName="div"
+                    model=agendaitem
+                    group=sortableGroup
+                    distance=30
+                    handle=".vlc-agenda-items-new__sub-item"
+                  }}
+                    <div class="vlc-agenda-items-new__sub-item">
+                      {{agenda/agenda-list/list-item
+                        agendaitem=agendaitem
+                        isEditingOverview=isEditingOverview
+                        isShowingChanges=isShowingChanges
+                        selectAgendaItem=(action "selectAgendaItem")
+                      }}
+                    </div>
+                  {{/sortable-item}}
+                {{else if (await agendaitem.hasChanges)}}
+                  {{#sortable-item
+                    tagName="div"
+                    model=agendaitem
+                    group=sortableGroup
+                    distance=30
+                    handle=".vlc-agenda-items-new__sub-item"
+                  }}
+                    <div class="vlc-agenda-items-new__sub-item">
+                      {{agenda/agenda-list/list-item
+                        agendaitem=agendaitem
+                        isEditingOverview=isEditingOverview
+                        isShowingChanges=isShowingChanges
+                        selectAgendaItem=(action "selectAgendaItem")
+                      }}
+                    </div>
+                  {{/sortable-item}}
+                {{/if}}
               {{/each}}
             {{/sortable-group}}
           {{/if}}

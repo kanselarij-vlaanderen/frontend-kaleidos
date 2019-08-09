@@ -193,6 +193,17 @@ a.vlc-agenda-items-new__sub-item {
   background: #fff;
 }
 
+.added-tag {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  i {
+    color: $green-light;
+    font-size: 1.3em;
+    font-weight: 500;
+  }
+}
+
 a.vlc-agenda-items-new__sub-item--active,
 a.vlc-agenda-items-new__sub-item--active:hover,
 a.vlc-agenda-items-new__sub-item--active:active {
@@ -474,4 +485,10 @@ ul {
 
 .padding-small {
   padding: 0.2em;
+}
+.vlc-list-section-header + .vlc-list-section-header {
+  clear: both;
+}
+.display-none {
+  display: none !important;
 }

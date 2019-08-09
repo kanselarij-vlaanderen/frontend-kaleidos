@@ -2,7 +2,13 @@
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
   {{#each (await item.documents) as |document|}}
-    <li class="vlc-document-list__item">
+    <li
+      class="vlc-document-list__item
+        {{if
+          document.checkAdded
+          "vlc-document-list__item vlc-document-list__item--active"
+        }}"
+    >
       {{#if (is-pending document.lastDocumentVersion)}}
         <div class="skeletal-loader" role="alert" aria-busy="true"></div>
       {{else if (not isNotClickable)}}
