@@ -207,4 +207,73 @@ export default Service.extend({
     });
     return { lastPrio, firstAgendaItem };
   },
+
+  // TODO: Should be refactored into seperate functions -> much cleaner
+  async reduceCombinedAgendaitemsByMandatees(combinedAgendaitems) {
+    return combinedAgendaitems
+      .map((agendaitem) => {
+        const { left, right } = agendaitem;
+        let mappedLeft, mappedRight;
+        if (left) {
+          mappedLeft = this.setProperties(left);
+        }
+        if (right) {
+          mappedRight = this.setProperties(right);
+        }
+
+        return { left: mappedLeft, right: mappedRight };
+      })
+      .sort((a, b) => (a.left && b.left ? a.left.priority - b.left.priority : 1))
+      .reduce((items, combinedItem) => {
+        const leftGroupOfCombinedItem = combinedItem.left ? combinedItem.left.groupName : null;
+        const rightGroupOfCombinedItem = combinedItem.right ? combinedItem.right.groupName : null;
+
+        if (leftGroupOfCombinedItem == rightGroupOfCombinedItem) {
+          const foundGroup = items.find((item) => item.groupName == leftGroupOfCombinedItem);
+          if (!foundGroup) {
+            items.push({
+              groupName: leftGroupOfCombinedItem || rightGroupOfCombinedItem,
+              isSame: true,
+              agendaitems: [combinedItem],
+            });
+          } else {
+            foundGroup.agendaitems.push(combinedItem);
+          }
+        } else {
+          items.push({
+            groupName: null,
+            isSame: false,
+            agendaitems: [combinedItem],
+          });
+        }
+
+        return items;
+      }, []);
+  },
+
+  setProperties(agendaitem) {
+    let { titles, minPriority, mandatees } = this.createMandateeListWithPriorities(agendaitem);
+
+    if (titles && titles != []) {
+      titles = titles.join(',');
+      return {
+        groupName: titles,
+        groupPrio: minPriority,
+        mandatees: mandatees,
+        agendaitem: agendaitem,
+        priority: agendaitem.priority,
+      };
+    }
+  },
+
+  createMandateeListWithPriorities(agendaitem) {
+    let mandatees = agendaitem.get('subcase.mandatees');
+    const priorities = mandatees.map((item) => parseInt(item.priority));
+    let minPriority = Math.min(...priorities);
+    if (mandatees) {
+      mandatees = mandatees.sortBy('priority');
+    }
+    let titles = (mandatees || []).map((mandatee) => mandatee.title);
+    return { titles, minPriority, mandatees };
+  },
 });

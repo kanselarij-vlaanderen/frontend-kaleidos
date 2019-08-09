@@ -30,12 +30,12 @@ export default Component.extend({
     const bothAgendasSelected = agendaOne && agendaTwo;
 
     if (bothAgendasSelected) {
-      this.creatCombinedAgendaitemList(agendaitemsLeft, agendaitemsRight);
+      await this.creatCombinedAgendaitemList(agendaitemsLeft, agendaitemsRight);
+      const newItems = await this.agendaService.reduceCombinedAgendaitemsByMandatees(
+        this.combinedItems
+      );
+      this.set('combinedItems', newItems);
     }
-  }),
-
-  hasChangedSet: computed('changedGroups', function() {
-    return !!this.changedGroups && Object.keys(this.changedGroups).length > 0;
   }),
 
   actions: {
@@ -77,7 +77,7 @@ export default Component.extend({
       })
     );
 
-    -(await Promise.all(
+    await Promise.all(
       rightAgenda.map(async (rightAgendaItem) => {
         const rightSubcaseId = await rightAgendaItem.get('subcase.id');
         const foundItem = combinedItems.find(
@@ -92,7 +92,7 @@ export default Component.extend({
           });
         }
       })
-    ));
+    );
     this.set('combinedItems', combinedItems);
   },
 });
