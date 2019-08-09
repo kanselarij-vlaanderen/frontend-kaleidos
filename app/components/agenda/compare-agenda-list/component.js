@@ -1,12 +1,12 @@
 import Component from '@ember/component';
 import { observer, computed } from '@ember/object';
 import { inject } from '@ember/service';
-import { on } from '@ember/object/evented';
 
 export default Component.extend({
   store: inject(),
   sessionService: inject(),
   agendaService: inject(),
+
   classNames: ['vlc-scroll-wrapper__body'],
   agendaToCompare: null,
   currentAgenda: null,
@@ -25,106 +25,74 @@ export default Component.extend({
     return false;
   }),
 
+  bothAgendasSelectedObserver: observer('agendaOne.id', 'agendaTwo.id', async function() {
+    const { agendaOne, agendaTwo, agendaitemsLeft, agendaitemsRight } = this;
+    const bothAgendasSelected = agendaOne && agendaTwo;
+
+    if (bothAgendasSelected) {
+      this.creatCombinedAgendaitemList(agendaitemsLeft, agendaitemsRight);
+    }
+  }),
+
   hasChangedSet: computed('changedGroups', function() {
     return !!this.changedGroups && Object.keys(this.changedGroups).length > 0;
   }),
 
-  currentAgendaItemsObserver: on(
-    'init',
-    observer('agendaOne', async function() {
-      let agenda = await this.get('agendaOne');
-      if (!agenda) return;
-      this.set('isLoadingAgendaTwo', true);
-      let agendaItems = await this.store.query('agendaitem', {
-        filter: {
-          agenda: { id: agenda.id },
-          'show-as-remark': false,
-        },
-        include: 'subcase,subcase.mandatees,postponed-to',
-      });
-
-      const groups = await this.reduceGroups(agendaItems, agenda);
-      this.set('currentAgendaGroups', groups);
-      this.set('isLoadingAgendaTwo', false);
-    })
-  ),
-
-  agendaToCompareAgendaItemsObserver: on(
-    'init',
-    observer('agendaTwo', async function() {
-      let agenda = await this.get('agendaTwo');
-      if (!agenda) return;
+  actions: {
+    async chooseAgendaOne(agenda) {
       this.set('isLoadingAgendaOne', true);
-      let agendaItems = await this.store.query('agendaitem', {
-        filter: {
-          agenda: { id: agenda.id },
-          'show-as-remark': false,
-        },
-        include: 'agenda,subcase,subcase.mandatees',
-      });
-      const groups = await this.reduceGroups(agendaItems, agenda);
-      this.set('agendaToCompareGroups', groups);
+      const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
+      this.set('agendaitemsLeft', agendaitems);
+      this.set('agendaOne', agenda);
       this.set('isLoadingAgendaOne', false);
-    })
-  ),
-
-  changedGroups: computed('currentAgendaGroups.@each', 'agendaToCompareGroups.@each', function() {
-    let groups = {};
-
-    (this.currentAgendaGroups || []).flat().map((item) => {
-      let groupName = item.groupName;
-      groups[groupName] = { left: item };
-    });
-
-    (this.agendaToCompareGroups || []).flat().map((item) => {
-      let groupName = item.groupName;
-      groups[groupName] = groups[groupName] || {};
-      groups[groupName].right = item;
-    });
-
-    return Object.keys(groups).map((key) => {
-      return groups[key];
-    });
-  }),
-
-  async reduceGroups(agendaitems, agenda) {
-    const { agendaService } = this;
-    const sortedAgendaItems = await agendaService.getComparedSortedAgendaItems(agenda);
-
-    const itemsAddedAfterwards = [];
-
-    let filteredAgendaItems = agendaitems.filter((agendaitem) => {
-      if (agendaitem && agendaitem.id) {
-        if (agendaitem.priority) {
-          const foundItem = sortedAgendaItems.find((item) => item.uuid === agendaitem.id);
-          if (foundItem) {
-            agendaitem.set('foundPriority', foundItem.priority);
-            return agendaitem;
-          }
-        } else {
-          itemsAddedAfterwards.push(agendaitem);
-        }
-      }
-    });
-    filteredAgendaItems = filteredAgendaItems.sortBy('created');
-    const filteredAgendaGroupList = await agendaService.reduceAgendaitemsByMandatees(
-      filteredAgendaItems
-    );
-    const filteredAgendaGroupListAddedAfterwards = await agendaService.reduceAgendaitemsByMandatees(
-      itemsAddedAfterwards
-    );
-    return [
-      Object.values(filteredAgendaGroupList).sortBy('foundPriority'),
-      Object.values(filteredAgendaGroupListAddedAfterwards).sortBy('foundPriority'),
-    ];
+    },
+    async chooseAgendaTwo(agenda) {
+      this.set('isLoadingAgendaTwo', true);
+      const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
+      this.set('agendaitemsRight', agendaitems);
+      this.set('agendaTwo', agenda);
+      this.set('isLoadingAgendaTwo', false);
+    },
   },
 
-  actions: {
-    chooseAgendaOne(agenda) {
-      this.set('agendaOne', agenda);
-    },
-    chooseAgendaTwo(agenda) {
-      this.set('agendaTwo', agenda);
-    },
+  getAgendaitemsFromAgenda(id) {
+    return this.store.query('agendaitem', {
+      filter: {
+        agenda: { id: id },
+        'show-as-remark': false,
+      },
+      include: 'agenda,subcase,subcase.mandatees',
+    });
+  },
+
+  async creatCombinedAgendaitemList(leftAgenda, rightAgenda) {
+    const combinedItems = await Promise.all(
+      leftAgenda.map(async (leftAgendaItem) => {
+        const leftSubcaseId = await leftAgendaItem.get('subcase.id');
+
+        const foundItem = rightAgenda.find(
+          (rightAgendaItem) => rightAgendaItem.get('subcase.id') == leftSubcaseId
+        );
+        return { subcaseId: leftSubcaseId, left: leftAgendaItem, right: foundItem || null };
+      })
+    );
+
+    -(await Promise.all(
+      rightAgenda.map(async (rightAgendaItem) => {
+        const rightSubcaseId = await rightAgendaItem.get('subcase.id');
+        const foundItem = combinedItems.find(
+          (combinedItem) => combinedItem.subcaseId == rightSubcaseId
+        );
+
+        if (!foundItem) {
+          combinedItems.push({
+            subcaseId: rightSubcaseId,
+            left: null,
+            right: rightAgendaItem,
+          });
+        }
+      })
+    ));
+    this.set('combinedItems', combinedItems);
   },
 });

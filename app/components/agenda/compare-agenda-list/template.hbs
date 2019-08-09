@@ -1,11 +1,14 @@
-<div
+{{! <div
   class="vl-grid vl-grid--is-stacked vl-u-spacer-extended-bottom-l compare-container"
+> }}
+<div
+  class="vl-u-display-flex vl-u-flex-space-between vl-u-spacer-extended-bottom-s"
 >
   <div class="compare-left-column">
     {{utils/agenda-selector
       searchField="name"
       propertyToShow="agendaName"
-      placeholder="Selecteer een agenda"
+      placeholder=(t "select-agenda")
       multiSelect=false
       sortField="label"
       selectedItems=agendaOne
@@ -16,7 +19,7 @@
     {{utils/agenda-selector
       searchField="name"
       propertyToShow="agendaName"
-      placeholder="Selecteer een agenda"
+      placeholder=(t "select-agenda")
       multiSelect=false
       sortField="label"
       selectedItems=agendaTwo
@@ -24,13 +27,26 @@
     }}
   </div>
 </div>
-{{#if hasChangedSet}}
-  <div class="u-spacer--large">
-    {{#each changedGroups as |changedSet|}}
+{{! </div> }}
+{{#if (await combinedItems)}}
+  <div class="compare-grid-container">
+    {{#each (await combinedItems) as |item|}}
+      <div class="vlc-agenda-items-new__sub-item grid-item">
+        {{#if item.left}}
+          {{agenda/agenda-list/list-item agendaitem=item.left}}
+        {{/if}}
+      </div>
+      <div class="vlc-agenda-items-new__sub-item grid-item">
+        {{#if item.right}}
+          {{agenda/agenda-list/list-item agendaitem=item.right}}
+        {{/if}}
+      </div>
+    {{/each}}
+    {{!-- {{#each changedGroups as |changedSet|}}
       <div class="{{spacerClass}}">
         {{agenda/compare-agenda-item changedSet=changedSet}}
       </div>
-    {{/each}}
+    {{/each}} --}}
   </div>
 {{else if isLoadingAgendaitems}}
   {{web-components/vl-loader text=(t "loading-text-inactive")}}

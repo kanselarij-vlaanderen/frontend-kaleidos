@@ -76,31 +76,6 @@ export default Service.extend({
     });
   },
 
-  async reduceAgendaitemsByMandatees(agendaitems) {
-    return agendaitems.reduce((items, agendaitem) => {
-      let mandatees = agendaitem.get('subcase.mandatees');
-      if (mandatees) {
-        mandatees = mandatees.sortBy('priority');
-      }
-      let titles = (mandatees || []).map((mandatee) => mandatee.title);
-      if (titles && titles != []) {
-        titles = titles.join(',');
-        items[titles] = items[titles] || {
-          groupName: titles,
-          mandatees: mandatees,
-          agendaitems: [],
-          foundPriority: agendaitem.foundPriority,
-        };
-        items[titles].foundPriority = Math.min(
-          items[titles].foundPriority,
-          agendaitem.foundPriority
-        );
-        items[titles].agendaitems.push(agendaitem);
-        return items;
-      }
-    }, {});
-  },
-
   approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
     let newAgenda = this.store.createRecord('agenda', {
       name: 'Ontwerpagenda',

@@ -46,9 +46,23 @@
 }
 
 .compare-left-column {
-  width: calc(49% - 15px);
+  width: calc(47%);
+  margin-right: 6%;
 }
 
 .compare-right-column {
-  width: 49%;
+  width: 47%;
+}
+
+.compare-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 47%);
+  grid-row-gap: 10px;
+  grid-column-gap: 6%;
+  .grid-item {
+    height: 100%;
+    a {
+      height: 100%;
+    }
+  }
 }
