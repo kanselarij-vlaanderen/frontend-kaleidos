@@ -77,7 +77,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     selectAgenda(meeting) {
       this.set('sessionService.selectedAgendaItem', null);
       this.set('sessionService.currentSession', meeting);
-      this.transitionToRoute('agenda.agendaitems', meeting.id);
+      this.transitionToRoute('agenda.agendaitems', meeting.get('id'));
     },
     createNewSession() {
       this.toggleProperty('creatingNewSession');

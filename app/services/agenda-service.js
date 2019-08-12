@@ -136,12 +136,10 @@ export default Service.extend({
     });
   },
 
-  agendaWithChanges(agendaToCompare, currentAgendaID) {
+  agendaWithChanges(currentAgendaID, agendaToCompareID) {
     return $.ajax({
       method: 'GET',
-      url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompare.get(
-        'id'
-      )}&selectedAgenda=${currentAgendaID}`,
+      url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
       data: {},
     }).then((result) => {
       this.set('addedDocuments', result.addedDocuments);
@@ -208,56 +206,20 @@ export default Service.extend({
     return { lastPrio, firstAgendaItem };
   },
 
-  // TODO: Should be refactored into seperate functions -> much cleaner
-  async reduceCombinedAgendaitemsByMandatees(combinedAgendaitems) {
-    return combinedAgendaitems
-      .map((agendaitem) => {
-        const { left, right } = agendaitem;
-        let mappedLeft, mappedRight;
-        if (left) {
-          mappedLeft = this.setProperties(left);
-        }
-        if (right) {
-          mappedRight = this.setProperties(right);
-        }
-
-        return { left: mappedLeft, right: mappedRight };
-      })
-      .sort((a, b) => (a.left && b.left ? a.left.priority - b.left.priority : 1))
-      .reduce((items, combinedItem) => {
-        const leftGroupOfCombinedItem = combinedItem.left ? combinedItem.left.groupName : null;
-        const rightGroupOfCombinedItem = combinedItem.right ? combinedItem.right.groupName : null;
-
-        if (leftGroupOfCombinedItem == rightGroupOfCombinedItem) {
-          const foundGroup = items.find((item) => item.groupName == leftGroupOfCombinedItem);
-          if (!foundGroup) {
-            items.push({
-              groupName: leftGroupOfCombinedItem || rightGroupOfCombinedItem,
-              isSame: true,
-              agendaitems: [combinedItem],
-            });
-          } else {
-            foundGroup.agendaitems.push(combinedItem);
-          }
-        } else {
-          items.push({
-            groupName: null,
-            isSame: false,
-            agendaitems: [combinedItem],
-          });
-        }
-
-        return items;
-      }, []);
+  async reduceComparison(combinedAgendaItems) {
+    return this.groupComparisonByMandatee(
+      combinedAgendaItems
+        .map(compinedItem => this.addExtraAgendaItemProperties(compinedItem))
+        .sort((a, b) => (a.left && b.left ? a.left.priority - b.left.priority : 1))
+    );
   },
 
-  setProperties(agendaitem) {
-    let { titles, minPriority, mandatees } = this.createMandateeListWithPriorities(agendaitem);
+  setExtraAgendaItemProperties(agendaitem) {
+    let { minPriority, mandatees } = this.createMandateeListWithPriorities(agendaitem);
 
-    if (titles && titles != []) {
-      titles = titles.join(',');
+    if (mandatees && mandatees !== []) {
       return {
-        groupName: titles,
+        groupName: mandatees.map(mandatee => `${mandatee.title} (${mandatee.priority})`).join(', '),
         groupPrio: minPriority,
         mandatees: mandatees,
         agendaitem: agendaitem,
@@ -276,4 +238,66 @@ export default Service.extend({
     let titles = (mandatees || []).map((mandatee) => mandatee.title);
     return { titles, minPriority, mandatees };
   },
+
+  addExtraAgendaItemProperties(agendaitem) {
+    const { left, right } = agendaitem;
+    let mappedLeft, mappedRight;
+    if (left) {
+      mappedLeft = this.setExtraAgendaItemProperties(left);
+    }
+    if (right) {
+      mappedRight = this.setExtraAgendaItemProperties(right);
+    }
+    return { left: mappedLeft, right: mappedRight };
+  },
+
+  groupComparisonByMandatee(comparison) {
+    return comparison.reduce((groups, combinedItem) => {
+      const leftGroupOfCombinedItem = combinedItem.left ? combinedItem.left.groupName : null;
+      const rightGroupOfCombinedItem = combinedItem.right ? combinedItem.right.groupName : null;
+      const group = {
+        leftGroupName: leftGroupOfCombinedItem,
+        rightGroupName: rightGroupOfCombinedItem,
+        agendaitems: [combinedItem]
+      };
+      if (leftGroupOfCombinedItem === rightGroupOfCombinedItem) {
+        this.addToGroups(
+          groups,
+          {
+            ...group,
+            isSame: true,
+          },
+          (group) => group.leftGroupName === leftGroupOfCombinedItem
+        );
+      } else if (leftGroupOfCombinedItem) {
+        this.addToGroups(
+          groups,
+          {
+            ...group,
+            isSame: false
+          },
+          (group) => group.leftGroupName === leftGroupOfCombinedItem
+        );
+      } else {
+        this.addToGroups(
+          groups,
+          {
+            ...group,
+            isSame: false
+          },
+          (group) => group.rightGroupName === rightGroupOfCombinedItem
+        );
+      }
+      return groups;
+    }, []);
+  },
+
+  addToGroups(groups, group, compareFunc) {
+    const foundGroup = groups.find(compareFunc);
+    if (!foundGroup) {
+      groups.push(group);
+    } else {
+      foundGroup.agendaitems.push(...group.agendaitems);
+    }
+  }
 });

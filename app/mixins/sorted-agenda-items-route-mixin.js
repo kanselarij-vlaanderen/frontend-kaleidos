@@ -19,7 +19,7 @@ export default Mixin.create({
     const agendasLength = agendas.get('length');
     if (foundIndex + 1 != agendasLength) {
       const previousAgenda = agendas.objectAt(foundIndex + 1);
-      const test = await this.agendaService.agendaWithChanges(previousAgenda, agenda.get('id'));
+      await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
     }
     const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(
       groups,

@@ -24,38 +24,33 @@
     }}
   </div>
 </div>
-{{!-- {{#if (await combinedItems)}} --}}
-{{#each (await combinedItems) as |group|}}
-  <div class="compare-grid-container">
-    <div class="vlc-list-section-header">
-      {{group.groupName}}
-    </div>
-    <div class="vlc-list-section-header">
-      {{group.groupName}}
-    </div>
-    {{#each group.agendaitems as |item|}}
-      <div class="vlc-agenda-items-new__sub-item grid-item">
-        {{#if item.left.agendaitem}}
-          {{agenda/agenda-list/list-item agendaitem=item.left.agendaitem}}
-        {{/if}}
+{{#if (await combinedItems)}}
+  {{#each (await combinedItems) as |group|}}
+    <div class="compare-grid-container">
+      <div class="vlc-list-section-header">
+        {{group.leftGroupName}}
       </div>
-      <div class="vlc-agenda-items-new__sub-item grid-item">
-        {{#if item.right.agendaitem}}
-          {{agenda/agenda-list/list-item agendaitem=item.right.agendaitem}}
-        {{/if}}
+      <div class="vlc-list-section-header">
+        {{group.rightGroupName}}
       </div>
-    {{/each}}
-  </div>
-  {{!-- {{#each changedGroups as |changedSet|}}
-    <div class="{{spacerClass}}">
-      {{agenda/compare-agenda-item changedSet=changedSet}}
+      {{#each group.agendaitems as |item|}}
+        <div class="vlc-agenda-items-new__sub-item grid-item">
+          {{#if item.left.agendaitem}}
+            {{agenda/agenda-list/list-item agendaitem=item.left.agendaitem}}
+          {{/if}}
+        </div>
+        <div class="vlc-agenda-items-new__sub-item grid-item">
+          {{#if item.right.agendaitem}}
+            {{agenda/agenda-list/list-item agendaitem=item.right.agendaitem}}
+          {{/if}}
+        </div>
+      {{/each}}
     </div>
-  {{/each}} --}}
-{{/each}}
-{{!-- {{else if isLoadingAgendaitems}}
+  {{/each}}
+{{else if isLoadingAgendaitems}}
   {{web-components/vl-loader text=(t "loading-text-inactive")}}
-{{else}}
+{{else if (and agendaOne agendaTwo)}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
   </div>
-{{/if}} --}}
+{{/if}}

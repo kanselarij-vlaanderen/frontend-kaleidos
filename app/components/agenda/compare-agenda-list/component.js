@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { observer, computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import { inject } from '@ember/service';
 
 export default Component.extend({
@@ -22,6 +22,9 @@ export default Component.extend({
     if (this.isLoadingAgendaTwo) {
       return true;
     }
+    if (this.isLoadingComparison) {
+      return true;
+    }
     return false;
   }),
 
@@ -30,11 +33,14 @@ export default Component.extend({
     const bothAgendasSelected = agendaOne && agendaTwo;
 
     if (bothAgendasSelected) {
-      await this.creatCombinedAgendaitemList(agendaitemsLeft, agendaitemsRight);
-      const newItems = await this.agendaService.reduceCombinedAgendaitemsByMandatees(
-        this.combinedItems
+      this.set('isLoadingComparison', true);
+      this.set('combinedItems', []);
+      await this.agendaService.agendaWithChanges(agendaOne.get('id'), agendaTwo.get('id'));
+      const newItems = await this.agendaService.reduceComparison(
+        await this.creatComparison(agendaitemsLeft, agendaitemsRight)
       );
       this.set('combinedItems', newItems);
+      this.set('isLoadingComparison', false);
     }
   }),
 
@@ -65,7 +71,7 @@ export default Component.extend({
     });
   },
 
-  async creatCombinedAgendaitemList(leftAgenda, rightAgenda) {
+  async creatComparison(leftAgenda, rightAgenda) {
     const combinedItems = await Promise.all(
       leftAgenda.map(async (leftAgendaItem) => {
         const leftSubcaseId = await leftAgendaItem.get('subcase.id');
@@ -93,6 +99,6 @@ export default Component.extend({
         }
       })
     );
-    this.set('combinedItems', combinedItems);
+    return combinedItems;
   },
 });

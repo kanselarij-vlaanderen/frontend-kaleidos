@@ -88,7 +88,7 @@ export default Model.extend({
 
   documentsLength: computed('documents.@each', function() {
     return this.get('documents').then((documents) => {
-      return documents.get('length');
+      return documents ? documents.get('length') : 0;
     });
   }),
 
@@ -153,7 +153,7 @@ export default Model.extend({
     return this.addedAgendaitems.includes(this.id);
   }),
 
-  hasChanges: computed('checkAdded', function() {
+  hasChanges: computed('checkAdded', 'hasAddedDocuments', function() {
     return this.hasAddedDocuments.then((hasAddedDocuments) => {
       return this.checkAdded || hasAddedDocuments;
     });
