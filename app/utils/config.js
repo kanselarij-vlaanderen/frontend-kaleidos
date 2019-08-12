@@ -84,19 +84,19 @@ export default EmberObject.create({
     },
   ],
   defaultKindUri:
-    'http://kanselarij.vo.data.gift/id/concept/aarden/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
+    'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
   kinds: [
     {
       label: 'Ministerraad',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/aarden/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
+      uri: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
     },
     {
       label: 'Elektronische procedure',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/aarden/406F2ECA-524D-47DC-B889-651893135456',
+      uri: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/406F2ECA-524D-47DC-B889-651893135456',
     },
     {
       label: 'Bijzondere ministerraad',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/aarden/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
+      uri: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
     },
   ],
   notYetFormallyOk:
