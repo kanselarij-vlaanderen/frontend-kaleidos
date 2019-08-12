@@ -89,14 +89,14 @@
               {{role}}
               )
             </div>
-            <a class="vlc-user__action" {{action "navigateToMockLogin"}}>
+            <a class="vlc-user__action" {{action "logout"}}>
               {{t "sign-out"}}
             </a>
           </div>
         {{else}}
           <div class="vlc-user">
             <div class="vlc-user__username"></div>
-            {{#link-to "mock-login" class="vlc-user__action"}}
+            {{#link-to "login" class="vlc-user__action"}}
               {{t "login"}}
             {{/link-to}}
           </div>

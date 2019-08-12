@@ -59,7 +59,7 @@ export default Controller.extend(isAuthenticatedMixin, {
       const router = this.get('router');
       const role = await this.get('currentSession.userRole');
       const user = await this.get('session.isAuthenticated');
-      if (router && user && role == 'no-access') {
+      if (router && user && role == 'no-access' && currentRouteName != "loading") {
         this.transitionToRoute('accountless-users');
       }
     })
@@ -83,8 +83,8 @@ export default Controller.extend(isAuthenticatedMixin, {
       this.set('model', null);
     },
 
-    navigateToMockLogin() {
-      this.transitionToRoute('mock-login');
+    navigateToLogin() {
+      this.transitionToRoute('login');
     },
 
     closeErrorMessage(errorMessage) {

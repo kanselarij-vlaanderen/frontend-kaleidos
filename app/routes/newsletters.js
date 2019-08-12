@@ -3,7 +3,7 @@ import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Route.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
-	authenticationRoute: 'mock-login',
+	authenticationRoute: 'login',
 	modelName: 'meeting',
 
 	actions: {

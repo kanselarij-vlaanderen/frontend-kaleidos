@@ -42,13 +42,13 @@
     {{/each}}
   </div>
 {{/if}}
-{{#if (and (await role) (not-eq (await role) ""))}}
+{{#if (and (await role) (not-eq (await role) "") (not-eq (await role) "no-access"))}}
   {{m-header
     selectedOption=selectedOption
     options=options
     isOc=isOc
     navigateToRoute=(action "navigateToRoute")
-    navigateToMockLogin=(action "navigateToMockLogin")
+    navigateToLogin=(action "navigateToLogin")
   }}
 {{/if}}
 {{outlet}}

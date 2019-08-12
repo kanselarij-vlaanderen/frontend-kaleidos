@@ -8,7 +8,9 @@ export default Component.extend(isAuthenticatedMixin, {
   isOc: null,
 
   actions: {
-    navigateToMockLogin() {},
+	logout() {
+	  this.currentAuthenticatedSession.logout()
+	},
     setAction(option) {
       this.navigateToRoute(option);
     },
