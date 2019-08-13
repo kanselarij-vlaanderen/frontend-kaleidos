@@ -209,7 +209,8 @@ export default Service.extend({
   async reduceComparison(combinedAgendaItems) {
     return this.groupComparisonByMandatee(
       combinedAgendaItems
-        .map(compinedItem => this.addExtraAgendaItemProperties(compinedItem))
+        .map(combinedItem => this.addExtraAgendaItemProperties(combinedItem))
+        .filter(combinedItem => combinedItem.left || combinedItem.right)
         .sort((a, b) => (a.left && b.left ? a.left.priority - b.left.priority : 1))
     );
   },
@@ -230,13 +231,14 @@ export default Service.extend({
 
   createMandateeListWithPriorities(agendaitem) {
     let mandatees = agendaitem.get('subcase.mandatees');
-    const priorities = mandatees.map((item) => parseInt(item.priority));
-    let minPriority = Math.min(...priorities);
+    let priorities = [];
+    let minPriority = 0;
     if (mandatees) {
       mandatees = mandatees.sortBy('priority');
+      priorities = mandatees.map((item) => parseInt(item.priority));
+      minPriority = Math.min(...priorities);
     }
-    let titles = (mandatees || []).map((mandatee) => mandatee.title);
-    return { titles, minPriority, mandatees };
+    return { minPriority, mandatees };
   },
 
   addExtraAgendaItemProperties(agendaitem) {

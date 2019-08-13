@@ -15,14 +15,8 @@ export default Component.extend({
   agendaOne: null,
   agendaTwo: null,
 
-  isLoadingAgendaitems: computed('isLoadingAgendaOne', 'isLoadingAgendaTwo', function() {
-    if (this.isLoadingAgendaOne) {
-      return true;
-    }
-    if (this.isLoadingAgendaTwo) {
-      return true;
-    }
-    if (this.isLoadingComparison) {
+  isLoadingAgendaitems: computed('isLoadingAgendaOne', 'isLoadingAgendaTwo', 'isLoadingComparison', function() {
+    if (this.isLoadingAgendaOne || this.isLoadingAgendaTwo || this.isLoadingComparison) {
       return true;
     }
     return false;
