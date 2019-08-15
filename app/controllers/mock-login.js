@@ -9,7 +9,7 @@ export default Controller.extend({
   size: 10,
 
   queryStore: task(function* () {
-    const filter = { provider: 'https://github.com/lblod/mock-login-service' };
+    const filter = { provider: 'https://github.com/kanselarij-vlaanderen/mock-login-service' };
     if (this.role)
       filter.user = { 'last-name': this.role };
     const accounts = yield this.store.query('account', {
