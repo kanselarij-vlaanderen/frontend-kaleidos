@@ -55,63 +55,61 @@
     </pre>
   {{/if}}
 </div>
-{{#if (not (await item.isOC))}}
-  {{#if (not item.showAsRemark)}}
-    <div class="vl-u-spacer-extended-bottom-s">
-      {{#if (or isEditor isAdmin)}}
-        {{#if (await freezeAccessLevel)}}
-          <span
-            class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"
-          ></span>
-        {{else}}
-          <span
-            class="vlc-pill vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
-          ></span>
-        {{/if}}
+{{#if (not item.showAsRemark)}}
+  <div class="vl-u-spacer-extended-bottom-s">
+    {{#if (or isEditor isAdmin)}}
+      {{#if (await freezeAccessLevel)}}
+        <span
+          class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"
+        ></span>
+      {{else}}
+        <span
+          class="vlc-pill vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+        ></span>
       {{/if}}
-      {{#if (await item.subcase)}}
-        {{#if (await item.subcase.approved)}}
-          <span class="vl-pill vl-pill--success vl-u-text--capitalize">
-            {{await item.subcase.subcaseName}}
-          </span>
-        {{else}}
-          <span class="vl-pill vl-u-text--capitalize">
-            {{await item.subcase.subcaseName}}
-          </span>
-        {{/if}}
-      {{else if (await item.approved)}}
+    {{/if}}
+    {{#if (await item.subcase)}}
+      {{#if (await item.subcase.approved)}}
         <span class="vl-pill vl-pill--success vl-u-text--capitalize">
-          {{await item.subcaseName}}
+          {{await item.subcase.subcaseName}}
         </span>
       {{else}}
         <span class="vl-pill vl-u-text--capitalize">
-          {{await item.subcaseName}}
+          {{await item.subcase.subcaseName}}
         </span>
       {{/if}}
-      {{#if (not (await freezeAccessLevel))}}
-        {{#if (is-pending accessLevelLabel)}}
-          <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-        {{else if (eq (await accessLevelLabel) "Actief openbaar")}}
-          <span class="vlc-pill vlc-pill--success">
-            {{await accessLevelLabel}}
-          </span>
-        {{else if (eq (await accessLevelLabel) "Intern overheid")}}
-          <span class="vlc-pill vlc-pill--error">
-            {{await accessLevelLabel}}
-          </span>
-        {{else}}
-          <span class="vlc-pill vlc-pill--warning">
-            {{await accessLevelLabel}}
-          </span>
-        {{/if}}
+    {{else if (await item.approved)}}
+      <span class="vl-pill vl-pill--success vl-u-text--capitalize">
+        {{await item.subcaseName}}
+      </span>
+    {{else}}
+      <span class="vl-pill vl-u-text--capitalize">
+        {{await item.subcaseName}}
+      </span>
+    {{/if}}
+    {{#if (not (await freezeAccessLevel))}}
+      {{#if (is-pending accessLevelLabel)}}
+        <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+      {{else if (eq (await accessLevelLabel) "Actief openbaar")}}
+        <span class="vlc-pill vlc-pill--success">
+          {{await accessLevelLabel}}
+        </span>
+      {{else if (eq (await accessLevelLabel) "Intern overheid")}}
+        <span class="vlc-pill vlc-pill--error">
+          {{await accessLevelLabel}}
+        </span>
+      {{else}}
+        <span class="vlc-pill vlc-pill--warning">
+          {{await accessLevelLabel}}
+        </span>
       {{/if}}
-      {{#if isAgendaItem}}
-        {{#if (and (or isEditor isAdmin) (await item.formallyOkToShow))}}
-          <span class="{{item.formallyOkToShow.pillClassNames}}">
-            {{item.formallyOkToShow.label}}
-          </span>
-        {{/if}}
+    {{/if}}
+    {{#if isAgendaItem}}
+      {{#if (and (or isEditor isAdmin) (await item.formallyOkToShow))}}
+        <span class="{{item.formallyOkToShow.pillClassNames}}">
+          {{item.formallyOkToShow.label}}
+        </span>
       {{/if}}
-    </div>
-  {{/if}}
+    {{/if}}
+  </div>
 {{/if}}

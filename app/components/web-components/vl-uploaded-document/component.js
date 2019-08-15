@@ -19,15 +19,6 @@ export default Component.extend(UploadDocumentMixin, {
 		return this.bytesToSize(this.get('file.size'));
 	}),
 
-	filter: computed('subcase', async function () {
-		const filter = await this.get('subcase.documentTypeFilter');
-		if (filter) {
-			return filter;
-		} else {
-			return {};
-		}
-	}),
-
 	fileName: computed('file', function () {
 		return this.get('file.name');
 	}),

@@ -1,11 +1,5 @@
 <div class="vlc-procedure-step__badge-wrapper">
-  {{#if (await subcase.isOC) class="crossFade"}}
-    <div
-      class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
-    >
-      <i class="vl-badge__icon vl-vi vl-vi-sitemap" aria-hidden="true"></i>
-    </div>
-  {{else if (is-pending subcase.approved)}}
+  {{#if (is-pending subcase.approved)}}
     <div
       class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
     >

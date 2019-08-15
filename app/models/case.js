@@ -15,7 +15,6 @@ export default Model.extend({
   confidential: attr('boolean'),
 
   type: belongsTo('case-type'),
-  policyLevel: belongsTo('policy-level'),
   relatedMeeting: belongsTo('meeting'),
   submitter: belongsTo('submitter'),
 

@@ -6,12 +6,6 @@
         {{web-components/vl-toggle value=confidential}}
       </div>
     </div>
-    {{web-components/vl-radio-button-list
-      title=(t "case-level")
-      modelName="policy-level"
-      selectedModel=selectedPolicyLevel
-      modelChanged=(action "policyLevelChanged")
-    }}
     {{cases/forms/metadata-form
       submitter=submitter
       meeting=meeting

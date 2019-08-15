@@ -22,16 +22,14 @@
   }}
 {{/if}}
 {{#if (await shouldShowDetails)}}
-  {{#if (not (await item.isOC))}}
-    {{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
-    {{#if (await item.subcase)}}
-      {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item.subcase}}
-      {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item.subcase}}
-    {{else}}
-      {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
-      {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item}}
-    {{/if}}
-    {{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
+  {{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
+  {{#if (await item.subcase)}}
+    {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item.subcase}}
+    {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item.subcase}}
+  {{else}}
+    {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
+    {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item}}
   {{/if}}
+  {{agenda/agendaitem/agendaitem-case/subcase-actions item=item}}
   {{agenda/agendaitem/agendaitem-case/all-subcases subcases=subcases}}
 {{/if}}

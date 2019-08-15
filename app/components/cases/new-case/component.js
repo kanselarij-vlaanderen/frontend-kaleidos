@@ -9,14 +9,13 @@ export default Component.extend({
   store: inject(),
 
   createCase(newDate) {
-    const { title, shortTitle, type, selectedPolicyLevel, selectedMeeting, submitter, confidential } = this;
+    const { title, shortTitle, type, selectedMeeting, submitter, confidential } = this;
 
     return this.store.createRecord('case',
       {
         title, shortTitle, submitter, type, confidential,
         isArchived: false,
         created: newDate,
-        policyLevel: selectedPolicyLevel,
         relatedMeeting: selectedMeeting
       });
   },
@@ -36,11 +35,6 @@ export default Component.extend({
 
     chooseTheme(theme) {
       this.set('selectedThemes', theme);
-    },
-
-    policyLevelChanged(id) {
-      const policyLevel = this.store.peekRecord('policy-level', id);
-      this.set('selectedPolicyLevel', policyLevel);
     },
 
     statusChange(status) {

@@ -11,51 +11,49 @@
   </div>
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
-      {{#if (not (await subcase.isOC))}}
-        {{#if
-          (and
-            (not (await subcase.requestedForMeeting))
-            (not (await subcase.hasAgendaItem))
-          )
+      {{#if
+        (and
+          (not (await subcase.requestedForMeeting))
+          (not (await subcase.hasAgendaItem))
+        )
+      }}
+        <button class="vl-button vl-button--narrow">
+          {{t "propose-for-agenda"}}
+        </button>
+        {{#attach-popover
+          class="ember-attacher-popper"
+          hideOn="clickout click"
+          showOn="click"
+          animation="shift"
+          placement="bottom" as |attacher|
         }}
-          <button class="vl-button vl-button--narrow">
-            {{t "propose-for-agenda"}}
-          </button>
-          {{#attach-popover
-            class="ember-attacher-popper"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom" as |attacher|
-          }}
-            <ul class="vl-popover__link-list">
-              {{#each (await meetings) as |meeting|}}
-                <li class="vl-popover__link-list__item">
-                  <button
-                    class="vl-link"
-                    {{action attacher.hide}}
-                    {{action "proposeForAgenda" subcase meeting}}
-                  >
-                    {{t "agenda-for"}}
-                    {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-                  </button>
-                </li>
-              {{/each}}
-              {{#if (gt (await meetings.length) 0)}}
-                <li class="vl-popover__link-list__separator" role="none"></li>
-              {{/if}}
+          <ul class="vl-popover__link-list">
+            {{#each (await meetings) as |meeting|}}
               <li class="vl-popover__link-list__item">
                 <button
                   class="vl-link"
                   {{action attacher.hide}}
-                  {{action "proposeForOtherAgenda" subcase}}
+                  {{action "proposeForAgenda" subcase meeting}}
                 >
-                  {{t "other-agenda"}}
+                  {{t "agenda-for"}}
+                  {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                 </button>
               </li>
-            </ul>
-          {{/attach-popover}}
-        {{/if}}
+            {{/each}}
+            {{#if (gt (await meetings.length) 0)}}
+              <li class="vl-popover__link-list__separator" role="none"></li>
+            {{/if}}
+            <li class="vl-popover__link-list__item">
+              <button
+                class="vl-link"
+                {{action attacher.hide}}
+                {{action "proposeForOtherAgenda" subcase}}
+              >
+                {{t "other-agenda"}}
+              </button>
+            </li>
+          </ul>
+        {{/attach-popover}}
       {{/if}}
     </div>
     <div class="vlc-toolbar__item">

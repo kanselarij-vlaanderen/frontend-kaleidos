@@ -183,28 +183,12 @@ export default Model.extend({
     });
   },
 
-  isOC: computed('case.policyLevel', function () {
-    return this.get('case').then((caze) => {
-      return caze.get('policyLevel').then((policyLevel) => {
-        return policyLevel.get('id') === CONFIG.OCCaseTypeID;
-      })
-    });
-  }),
-
   submitter: computed('case.submitter', function () {
     return PromiseObject.create({
       promise: this.get('case').then((caze) => {
         return caze.get('submitter').then((submitter) => {
           return submitter;
         });
-      })
-    });
-  }),
-
-  documentTypeFilter: computed('isOC', function () {
-    return PromiseObject.create({
-      promise: this.get('isOC').then((value) => {
-        return { 'is-oc': value };
       })
     });
   }),

@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
-import CONFIG from 'fe-redpencil/utils/config';
 import $ from 'jquery';
 import { isEmpty } from '@ember/utils';
 
@@ -32,7 +31,6 @@ export default Route.extend(DataTableRouteMixin, {
 
   mergeQueryOptions(params) {
     let filter = {};
-    filter['policy-level'] = { id: CONFIG.VRCaseTypeID };
     filter['is-archived'] = params.isArchived;
     return {
       filter: filter,
