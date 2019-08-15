@@ -10,7 +10,7 @@ RUN DEPLOY_ENV=test ember build -prod
 
 FROM semtech/ember-proxy-service:1.4.0
 
-ENV STATIC_FOLDERS_REGEX "^/(assets|fonts|files)/"
+ENV STATIC_FOLDERS_REGEX "^/(assets|fonts|files|ember-pdfjs-wrapper)/"
 
 COPY ./proxy/torii-authorization.conf /config/torii-authorization.conf
 COPY ./proxy/file-upload.conf /config/file-upload.conf
