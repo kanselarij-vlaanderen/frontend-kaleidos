@@ -122,15 +122,7 @@ export default Model.extend({
     if (!this.get('subcase.id')) {
       return [];
     }
-    return PromiseArray.create({
-      promise: this.subcase.get('case').then((caze) => {
-        if (caze) {
-          return caze.get('subcases').then((subcases) => {
-            return subcases.filter((item) => item.get('id') != this.get('subcase.id'));
-          });
-        }
-      }),
-    });
+    return this.subcase.get('subcasesFromCase');
   }),
 
   formallyOkToShow: computed('formallyOk', function() {

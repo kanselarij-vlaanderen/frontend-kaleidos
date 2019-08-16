@@ -214,7 +214,9 @@ export default Model.extend({
     return PromiseArray.create({
       promise: this.get('case').then((caze) => {
         return caze.get('subcases').then((subcases) => {
-          return subcases.filter((item) => item.get('id') != this.id);
+          return subcases.filter((item) => item.get('id') != this.id).sort(function (a, b) {
+            return b.created - a.created; //  We want to sort descending on date the subcase was concluded. In practice, sorting on created will be close
+          });
         });
       })
     })
