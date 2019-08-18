@@ -17,7 +17,7 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
     }
     let searchResults = $.ajax({
       method: "GET",
-      url: `/oc-agendaitems/search?filter[subject,notification,documents]=${params.term}&page[size]=${params.size}&page[number]=${params.page}`
+      url: `/oc-agendaitems/search?filter[_all]=${params.term}&page[size]=${params.size}&page[number]=${params.page}`
     });
     return searchResults.then(results => {
       if (results.count === 0) {
