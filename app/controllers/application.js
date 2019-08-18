@@ -46,7 +46,7 @@ export default Controller.extend(isAuthenticatedMixin, {
     observer('router.currentRouteName', 'currentSession.userRole', async function() {
       const currentRouteName = this.router.get('currentRouteName');
 
-      if (currentRouteName && currentRouteName.includes('oc')) {
+      if (currentRouteName && currentRouteName.startsWith('oc.')) {
         this.set('selectedOption', this.options[1]);
       } else {
         this.set('selectedOption', this.options[0]);
