@@ -12,6 +12,7 @@ export default Route.extend(ApplicationRouteMixin, {
   routeAfterAuthentication: "agendas",
 
   beforeModel() {
+    this._super(...arguments);
     this.get("moment").setLocale("nl");
     this.set("moment.defaultFormat", "DD.MM.YYYY");
     this.get("moment").set("allowEmpty", true);
