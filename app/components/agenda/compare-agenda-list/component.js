@@ -15,12 +15,17 @@ export default Component.extend({
   agendaOne: null,
   agendaTwo: null,
 
-  isLoadingAgendaitems: computed('isLoadingAgendaOne', 'isLoadingAgendaTwo', 'isLoadingComparison', function() {
-    if (this.isLoadingAgendaOne || this.isLoadingAgendaTwo || this.isLoadingComparison) {
-      return true;
+  isLoadingAgendaitems: computed(
+    'isLoadingAgendaOne',
+    'isLoadingAgendaTwo',
+    'isLoadingComparison',
+    function() {
+      if (this.isLoadingAgendaOne || this.isLoadingAgendaTwo || this.isLoadingComparison) {
+        return true;
+      }
+      return false;
     }
-    return false;
-  }),
+  ),
 
   bothAgendasSelectedObserver: observer('agendaOne.id', 'agendaTwo.id', async function() {
     const { agendaOne, agendaTwo, agendaitemsLeft, agendaitemsRight } = this;
@@ -42,6 +47,8 @@ export default Component.extend({
     async chooseAgendaOne(agenda) {
       this.set('isLoadingAgendaOne', true);
       const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
+      await this.agendaService.assignDirtyPrioritiesToAgendaitems(agenda);
+
       this.set('agendaitemsLeft', agendaitems);
       this.set('agendaOne', agenda);
       this.set('isLoadingAgendaOne', false);
@@ -49,6 +56,8 @@ export default Component.extend({
     async chooseAgendaTwo(agenda) {
       this.set('isLoadingAgendaTwo', true);
       const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
+      await this.agendaService.assignDirtyPrioritiesToAgendaitems(agenda);
+
       this.set('agendaitemsRight', agendaitems);
       this.set('agendaTwo', agenda);
       this.set('isLoadingAgendaTwo', false);
