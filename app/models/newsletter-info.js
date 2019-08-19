@@ -14,9 +14,9 @@ export default Model.extend({
   finished: attr('boolean'),
   publicationDate: attr('date'),
   publicationDocDate: attr('date'),
+  remark: attr('string'),
 
-  remarks: hasMany('remark'),
   subcase: belongsTo('subcase'),
   meeting: belongsTo('meeting', { inverse: null }),
-  documentVersions: hasMany('document-version', { inverse: null })
+  documentVersions: hasMany('document-version', { inverse: null }),
 });

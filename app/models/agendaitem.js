@@ -142,7 +142,7 @@ export default Model.extend({
   }),
 
   checkAdded: computed('id', 'addedAgendaitems.@each', function() {
-    return this.addedAgendaitems.includes(this.id);
+    if (this.addedAgendaitems) return this.addedAgendaitems.includes(this.id);
   }),
 
   hasChanges: computed('checkAdded', 'hasAddedDocuments', function() {
