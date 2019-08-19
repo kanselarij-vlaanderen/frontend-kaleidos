@@ -24,7 +24,9 @@
     }}
   </div>
 </div>
-{{#if (await combinedItems)}}
+{{#if isLoadingAgendaitems}}
+  {{web-components/vl-loader text=(t "loading-text-inactive")}}
+{{else if (await combinedItems)}}
   {{#each (await combinedItems) as |group|}}
     <div class="compare-grid-container">
       <div class="vlc-list-section-header">
@@ -47,9 +49,7 @@
       {{/each}}
     </div>
   {{/each}}
-{{else if isLoadingAgendaitems}}
-  {{web-components/vl-loader text=(t "loading-text-inactive")}}
-{{else if (and agendaOne agendaTwo)}}
+{{else}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
   </div>
