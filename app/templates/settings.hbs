@@ -5,26 +5,29 @@
       <div class="vlc-toolbar__item">
         <div class="vlc-toolbar vlc-toolbar--auto">
           <div class="vlc-toolbar__left">
-            <ul class="vl-tabs vl-u-reset-margin" role="tablist">
-              <li class="vl-tab">
-                {{#link-to
-                  "settings.overview"
-                  class="vl-tab__link"
-                  activeClass="vl-tab__link--active"
-                }}
-                  {{t "general-settings"}}
-                {{/link-to}}
-              </li>
-              <li class="vl-tab">
-                {{#link-to
-                  "settings.ministers"
-                  class="vl-tab__link"
-                  activeClass="vl-tab__link--active"
-                }}
-                  {{t "manage-ministers"}}
-                {{/link-to}}
-              </li>
-            </ul>
+            <div class="vlc-toolbar__item">
+              <ul class="vlc-tabs-reverse" role="tablist">
+                <li class="vlc-tabs-reverse__item">
+                  {{#link-to
+                    "settings.overview"
+                    class="vl-tab__link border-left"
+                    activeClass="vl-tab__link--active"
+                    current-when="settings settings.overview"
+                  }}
+                    {{t "general-settings"}}
+                  {{/link-to}}
+                </li>
+                <li class="vlc-tabs-reverse__item border-left">
+                  {{#link-to
+                    "settings.ministers"
+                    class="vl-tab__link"
+                    activeClass="vl-tab__link--active"
+                  }}
+                    {{t "manage-ministers"}}
+                  {{/link-to}}
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

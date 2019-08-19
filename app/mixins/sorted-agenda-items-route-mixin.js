@@ -13,12 +13,9 @@ export default Mixin.create({
     await this.agendaService.assignDirtyPrioritiesToAgendaitems(agenda);
     const announcements = agendaitems.filter((item) => item.get('showAsRemark'));
     const groups = await this.agendaService.newSorting(session, agenda.get('id'));
-    const agendas = await this.sessionService.get('agendas');
-    const foundIndex = agendas.findIndex((item) => agenda == item);
 
-    const agendasLength = agendas.get('length');
-    if (foundIndex + 1 != agendasLength) {
-      const previousAgenda = agendas.objectAt(foundIndex + 1);
+    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
+    if (previousAgenda) {
       await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
     }
     const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(

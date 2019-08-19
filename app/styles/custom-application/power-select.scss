@@ -152,8 +152,9 @@
       border: none;
       background-size: 1.1rem;
       height: auto !important;
-      line-height: 1.2em;
-      font-size: 1.2em;
+      line-height: 1em;
+      font-size: 1em;
+      padding-left: 0;
       &:focus {
         outline: none;
         border-color: $blue-gray-lighter;

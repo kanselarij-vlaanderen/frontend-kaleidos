@@ -2,7 +2,7 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
-let { Model, attr, hasMany, belongsTo } = DS;
+const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
   plannedStart: attr('date'),
@@ -30,6 +30,10 @@ export default Model.extend({
         return sortedAgendas.get('firstObject');
       }),
     });
+  }),
+
+  sortedAgendas: computed('agendas.@each', function() {
+    return this.agendas.sortBy('agendaName').reverse();
   }),
 
   latestAgendaName: computed('latestAgenda', 'agendas', function() {
