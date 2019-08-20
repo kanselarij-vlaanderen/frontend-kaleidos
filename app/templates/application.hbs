@@ -42,7 +42,7 @@
     {{/each}}
   </div>
 {{/if}}
-{{#if (and (await role) (not-eq (await role) "") (not-eq (await role) "no-access"))}}
+{{#if showHeader}}
   {{m-header
     selectedOption=selectedOption
     options=options

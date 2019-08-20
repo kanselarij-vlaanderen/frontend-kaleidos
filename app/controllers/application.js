@@ -65,6 +65,11 @@ export default Controller.extend(isAuthenticatedMixin, {
     })
   ),
 
+  showHeader: computed('role', function(){
+    let role = this.get('role');
+    return role && role !== "" && role !== "no-access";
+  }),
+
   type: computed('model', async function() {
     const { model } = this;
     if (model) {

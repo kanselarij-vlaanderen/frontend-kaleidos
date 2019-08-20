@@ -39,7 +39,7 @@ export default Service.extend({
       const roles = await get(session, 'data.authenticated.data.attributes.roles');
       this.set('_account', account);
       this.set('_user', user);
-      this.set('_roles', roles);
+      this.set('_roles',  roles);
       this.set('_group', group);
       // The naming is off, but account,user,roles are taken for the
       // promises in a currently public API.
