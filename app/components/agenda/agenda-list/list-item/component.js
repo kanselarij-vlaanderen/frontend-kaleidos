@@ -69,7 +69,7 @@ export default Component.extend(isAuthenticatedMixin, {
   }),
 
   async click() {
-    if (!this.isEditingOverview) {
+    if (!this.isEditingOverview && !this.isComparing) {
       const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
       this.selectAgendaItem(agendaitem);
     }

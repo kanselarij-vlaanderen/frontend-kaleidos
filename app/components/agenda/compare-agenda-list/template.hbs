@@ -36,12 +36,18 @@
       {{#each group.agendaitems as |item|}}
         <div class="vlc-agenda-items-new__sub-item grid-item">
           {{#if item.left.agendaitem}}
-            {{agenda/agenda-list/list-item agendaitem=item.left.agendaitem}}
+            {{agenda/agenda-list/list-item
+              isDocumentClickable=true
+              isComparing=true
+              agendaitem=item.left.agendaitem}}
           {{/if}}
         </div>
         <div class="vlc-agenda-items-new__sub-item grid-item">
           {{#if item.right.agendaitem}}
-            {{agenda/agenda-list/list-item agendaitem=item.right.agendaitem}}
+            {{agenda/agenda-list/list-item
+              isDocumentClickable=true
+              isComparing=true
+              agendaitem=item.right.agendaitem}}
           {{/if}}
         </div>
       {{/each}}
