@@ -60,9 +60,22 @@ export default Service.extend({
   },
 
   removeFile(id) {
-    return fetch({
+    return $.ajax({
       method: 'DELETE',
       url: '/files/' + id,
     });
+  },
+
+  getAllDocumentsFromAgenda(agendaId) {
+    return $.ajax({
+      method: 'GET',
+      url: `/document-grouping-service/getDocumentsFromAgenda/${agendaId}`,
+    })
+      .then((result) => {
+        return result.data.files;
+      })
+      .catch((error) => {
+        return;
+      });
   },
 });
