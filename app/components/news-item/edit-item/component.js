@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { inject } from '@ember/service';
 
@@ -33,30 +33,27 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     },
   }),
 
-  mandateeProposal: computed(`agendaitem.requestedBy.nickName`, 'item.mandateeProposal', {
-    get() {
-      const { agendaitem, item } = this;
+  mandateeProposal: null,
 
-      if (item && agendaitem) {
-        const mandateeProposal = item.get('mandateeProposal');
-        if (mandateeProposal && mandateeProposal != '') {
-          return mandateeProposal;
-        }
-        return agendaitem.get('requestedBy').then((requestedBy) => {
-          if (requestedBy) {
-            const proposalText = this.intl.t('proposal-text');
-            return `${proposalText}${requestedBy.get('nickName')}`;
-          } else {
-            return '';
-          }
-        });
+  mandateeProposalObserver: observer(`agendaitem.requestedBy`, 'item.mandateeProposal', async function() {
+    const { agendaitem, item } = this;
+    if (item && agendaitem) {
+      const mandateeProposal = item.get('mandateeProposal');
+      if (mandateeProposal) {
+        this.set('mandateeProposal', mandateeProposal);
       } else {
-        return '';
+        const requestedBy = await agendaitem.get('requestedBy');
+        const proposalText = this.intl.t('proposal-text');
+        if (requestedBy) {
+          const nickName = requestedBy.get('nickName');
+          if (nickName) {
+            this.set('mandateeProposal', `${proposalText}${nickName}`)
+          } else {
+            this.set('mandateeProposal', `${proposalText}${requestedBy.get('title')}`)
+          }
+        }
       }
-    },
-    set: function(key, value) {
-      return value;
-    },
+    }
   }),
 
   actions: {
