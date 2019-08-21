@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
+import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
@@ -22,6 +23,10 @@ export default Component.extend(isAuthenticatedMixin, {
 	agendas: alias('sessionService.agendas'),
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	definiteAgendas: alias('sessionService.definiteAgendas'),
+
+  hasMultipleAgendas: computed('agendas', function() {
+    return this.agendas && this.agendas.length > 1
+  }),
 
 	designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {
 		return agenda.get('name') === "Ontwerpagenda";

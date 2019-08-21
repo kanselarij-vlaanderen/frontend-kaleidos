@@ -483,3 +483,7 @@ ul {
 .display-none {
   display: none !important;
 }
+
+.vl-popover__link-list {
+  overflow-y: scroll;
+}
