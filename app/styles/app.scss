@@ -184,15 +184,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-a.vlc-agenda-items-new__sub-item {
-  display: block;
-  position: relative;
-  font-size: 1.3rem;
-  text-decoration: none;
-  color: $black;
-  background: #fff;
-}
-
 .added-tag {
   position: absolute;
   top: 5px;

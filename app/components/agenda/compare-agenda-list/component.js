@@ -34,7 +34,17 @@ export default Component.extend({
     if (bothAgendasSelected) {
       this.set('isLoadingComparison', true);
       this.set('combinedItems', []);
-      await this.agendaService.agendaWithChanges(agendaOne.get('id'), agendaTwo.get('id'));
+
+      const sortedAgendas = await this.sessionService.currentSession.sortedAgendas;
+      let agendaOneIndex = sortedAgendas.indexOf(agendaOne);
+      let agendaTwoIndex = sortedAgendas.indexOf(agendaTwo);
+
+      if (agendaOneIndex < agendaTwoIndex) {
+        await this.agendaService.agendaWithChanges(agendaOne.get('id'), agendaTwo.get('id'));
+      } else {
+        await this.agendaService.agendaWithChanges(agendaTwo.get('id'), agendaOne.get('id'));
+      }
+
       const newItems = await this.agendaService.reduceComparison(
         await this.creatComparison(agendaitemsLeft, agendaitemsRight)
       );

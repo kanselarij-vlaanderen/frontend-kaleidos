@@ -24,9 +24,7 @@
     }}
   </div>
 </div>
-{{#if isLoadingAgendaitems}}
-  {{web-components/vl-loader text=(t "loading-text-inactive")}}
-{{else if (await combinedItems)}}
+{{#if (await combinedItems)}}
   {{#each (await combinedItems) as |group|}}
     <div class="compare-grid-container">
       <div class="vlc-list-section-header">
@@ -38,18 +36,26 @@
       {{#each group.agendaitems as |item|}}
         <div class="vlc-agenda-items-new__sub-item grid-item">
           {{#if item.left.agendaitem}}
-            {{agenda/agenda-list/list-item agendaitem=item.left.agendaitem}}
+            {{agenda/agenda-list/list-item
+              isDocumentClickable=true
+              isComparing=true
+              agendaitem=item.left.agendaitem}}
           {{/if}}
         </div>
         <div class="vlc-agenda-items-new__sub-item grid-item">
           {{#if item.right.agendaitem}}
-            {{agenda/agenda-list/list-item agendaitem=item.right.agendaitem}}
+            {{agenda/agenda-list/list-item
+              isDocumentClickable=true
+              isComparing=true
+              agendaitem=item.right.agendaitem}}
           {{/if}}
         </div>
       {{/each}}
     </div>
   {{/each}}
-{{else}}
+{{else if isLoadingAgendaitems}}
+  {{web-components/vl-loader text=(t "loading-text-inactive")}}
+{{else if (and agendaOne agendaTwo)}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
   </div>

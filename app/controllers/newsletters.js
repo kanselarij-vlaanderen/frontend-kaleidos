@@ -25,6 +25,10 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 		return this.get('intl').t('dash');
 	}),
 
+  translatedModifiedTitle: computed('intl', function () {
+		return this.get('intl').t('latest-modified');
+	}),
+
 	actions: {
 		async navigateToNewsletter(meeting) {
 			const latestAgenda = await meeting.get('latestAgenda')

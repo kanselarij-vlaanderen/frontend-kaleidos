@@ -78,8 +78,12 @@ export default Model.extend({
             filter: {
               'document-versions': { id: documentVersionIds },
             },
-            sort: 'type.priority',
-            include: 'document-versions',
+            include: 'document-versions,type',
+          }).then((documents) => {
+            // Sorting is done in the frontend to work around a Virtuoso issue, where
+            // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
+            // some items not being returned. By not having a sort parameter, this doesn't occur.
+            return documents.sortBy('type.priority');
           });
         }
       }),
