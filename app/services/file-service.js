@@ -74,7 +74,26 @@ export default Service.extend({
       .then((result) => {
         return result.data.files;
       })
-      .catch((error) => {
+      .catch(() => {
+        return;
+      });
+  },
+
+  getZippedFiles(date, agenda, files) {
+    return $.ajax({
+      method: 'POST',
+      url: `/file-bundling-service/bundleAllFiles`,
+      dataType: 'arraybuffer', // or 'blob'
+      data: {
+        meetingDate: date.toString(),
+        agenda: JSON.stringify(agenda),
+        files: JSON.stringify(files),
+      },
+    })
+      .then((content) => {
+        return content;
+      })
+      .catch(() => {
         return;
       });
   },

@@ -127,7 +127,6 @@ export default Service.extend({
       url: `/agenda-sort/sortedAgenda?sessionId=${sessionId.get(
         'id'
       )}&selectedAgenda=${currentAgendaID}`,
-      data: {},
     }).then((result) => {
       return result.map((item) => {
         item.groups = item.groups.map((group) => EmberObject.create(group));
@@ -140,7 +139,6 @@ export default Service.extend({
     return $.ajax({
       method: 'GET',
       url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
-      data: {},
     })
       .then((result) => {
         this.set('addedDocuments', result.addedDocuments);

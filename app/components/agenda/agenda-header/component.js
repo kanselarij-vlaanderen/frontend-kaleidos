@@ -1,11 +1,13 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
+import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   classNames: ['vlc-page-header'],
 
   store: inject(),
@@ -180,8 +182,16 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     async downloadAllDocuments() {
+      const date = moment(this.currentSession.get('plannedStart'))
+        .format('DD_MM_YYYY')
+        .toString();
       const files = await this.fileService.getAllDocumentsFromAgenda(this.currentAgenda.get('id'));
-      return this.fileService.getZippedFiles(files);
+      const file = await this.fileService.getZippedFiles(date, this.currentAgenda, files);
+      return this.saveFileAs(
+        `${this.currentAgenda.get('agendaName')}_${date}.zip`,
+        file,
+        'application/zip'
+      );
     },
 
     async deleteDesignAgenda(agenda) {
