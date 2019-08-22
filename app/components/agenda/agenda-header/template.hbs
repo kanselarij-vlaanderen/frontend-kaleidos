@@ -137,6 +137,7 @@
                   {{t "printable-press-agenda"}}
                 </a>
               </li>
+              <li class="vl-popover__link-list__separator" role="none"></li>
               {{#if (or isAdmin isEditor)}}
                 <li>
                   <a
@@ -147,7 +148,7 @@
                     {{t "signature-edit"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__separatorcd " role="none"></li>
+                <li class="vl-popover__link-list__separatorcd" role="none"></li>
                 {{#if (await hasMultipleAgendas)}}
                   <li class="vl-popover__link-list__item">
                     {{#if (not currentSession.isFinal)}}
