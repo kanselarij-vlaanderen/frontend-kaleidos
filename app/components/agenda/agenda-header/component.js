@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
+import { computed } from '@ember/object';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
@@ -26,6 +27,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   agendas: alias('sessionService.agendas'),
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
+
+  hasMultipleAgendas: computed('agendas.@each',async function() {
+    return this.agendas && this.agendas.then(agendas => agendas.length > 1);
+  }),
 
   designAgendaPresent: filter('currentSession.agendas.@each.name', function(agenda) {
     return agenda.get('name') === 'Ontwerpagenda';
