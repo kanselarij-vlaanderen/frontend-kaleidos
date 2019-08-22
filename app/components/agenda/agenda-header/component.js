@@ -24,8 +24,8 @@ export default Component.extend(isAuthenticatedMixin, {
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	definiteAgendas: alias('sessionService.definiteAgendas'),
 
-  hasMultipleAgendas: computed('agendas', function() {
-    return this.agendas && this.agendas.length > 1
+  hasMultipleAgendas: computed('agendas.@each',async function() {
+    return this.agendas && this.agendas.then(agendas => agendas.length > 1);
   }),
 
 	designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {
