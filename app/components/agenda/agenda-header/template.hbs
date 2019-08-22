@@ -148,35 +148,28 @@
                     {{t "signature-edit"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action attacher.hide}}
-                    {{action "downloadAllDocuments"}}
-                  >
-                    {{t "download-documents"}}
-                  </a>
-                </li>
-                <li class="vl-popover__link-list__separator" role="none"></li>
-                <li class="vl-popover__link-list__item">
-                  {{#if (not currentSession.isFinal)}}
-                    <a
-                      class="vl-link vl-link--block vl-u-text--error"
-                      {{action "lockAgenda" currentAgenda}}
-                      {{action attacher.hide}}
-                    >
-                      {{t "agenda-lock"}}
-                    </a>
-                  {{else}}
-                    <a
-                      class="vl-link vl-link--block"
-                      {{action "unlockAgenda"}}
-                      {{action attacher.hide}}
-                    >
-                      {{t "agenda-unlock"}}
-                    </a>
-                  {{/if}}
-                </li>
+                <li class="vl-popover__link-list__separatorcd" role="none"></li>
+                {{#if (await hasMultipleAgendas)}}
+                  <li class="vl-popover__link-list__item">
+                    {{#if (not currentSession.isFinal)}}
+                      <a
+                        class="vl-link vl-link--block vl-u-text--error"
+                        {{action "lockAgenda" currentAgenda}}
+                        {{action attacher.hide}}
+                      >
+                        {{t "agenda-lock"}}
+                      </a>
+                    {{else}}
+                      <a
+                        class="vl-link vl-link--block"
+                        {{action "unlockAgenda"}}
+                        {{action attacher.hide}}
+                      >
+                        {{t "agenda-unlock"}}
+                      </a>
+                    {{/if}}
+                  </li>
+                {{/if}}
                 <li
                   class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
                 >

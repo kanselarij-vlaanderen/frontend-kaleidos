@@ -1,10 +1,12 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
 const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
+  intl: inject(),
   plannedStart: attr('date'),
   startedOn: attr('date'),
   endedOn: attr('date'),
@@ -36,8 +38,9 @@ export default Model.extend({
     return this.agendas.sortBy('agendaName').reverse();
   }),
 
-  latestAgendaName: computed('latestAgenda', 'agendas', function() {
+  latestAgendaName: computed('latestAgenda', 'agendas', 'intl', function() {
     return this.get('latestAgenda').then((agenda) => {
+      if (!agenda) return this.intl.t("no-agenda");
       const agendaLength = this.get('agendas.length');
       const agendaName = agenda.name;
       if (agendaName !== 'Ontwerpagenda') {

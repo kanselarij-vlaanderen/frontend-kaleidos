@@ -25,6 +25,12 @@ export default Route.extend(DataTableRouteMixin, {
     decisionsOnly: {
       refreshModel: true,
     },
+    size: {
+      refreshModel: true
+    },
+    page: {
+      refreshModel: true
+    }
   },
 
   textSearchFields: ['title', 'data', 'subcaseTitle', 'subcaseSubTitle'],
@@ -68,6 +74,7 @@ export default Route.extend(DataTableRouteMixin, {
     if (!isEmpty(params.dateTo)) {
       filterString.push(`filter[:lte:sessionDates]=${params.dateTo}`);
     }
+    filterString.push(`page[size]=${params.size || 10}&page[number]=${params.page || 0}`);
     let searchResults = await $.ajax({
       method: 'GET',
       url: `/${type}/search?${filterString.join('&')}`,

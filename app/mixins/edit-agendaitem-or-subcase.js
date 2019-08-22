@@ -17,7 +17,7 @@ const getCachedProperty = function (property) {
 			return value;
 		}
 	})
-}
+};
 
 const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 	// XOR
@@ -41,7 +41,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
 		await Promise.all(propertiesToSet.map(async (property) => {
 			model.set(property, await this.get(property));
-		}))
+		}));
 
 		return model.save().then((item) => {
 			item.reload();
@@ -56,6 +56,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 		async cancelEditing() {
 			const item = await this.get('item');
 			item.reload();
+			this.propertiesToSet.forEach(prop => item.notifyPropertyChange(prop));
 			this.toggleProperty('isEditing');
 		},
 

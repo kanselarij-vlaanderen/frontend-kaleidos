@@ -80,8 +80,10 @@
           <td>
             {{#if (is-pending meeting.latestAgendaName)}}
               <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-            {{else}}
+            {{else if (await meeting.latestAgendaName)}}
               {{await meeting.latestAgendaName}}
+            {{else}}
+              {{t "no-agenda"}}
             {{/if}}
           </td>
           <td>
