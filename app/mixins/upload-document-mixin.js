@@ -1,9 +1,10 @@
 import Mixin from '@ember/object/mixin';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-import $ from 'jquery';
 import { inject } from '@ember/service';
 import moment from 'moment';
 import { computed } from '@ember/object';
+import { fileDownloadPrompt, removeFile } from 'fe-redpencil/utils/file-utils';
+
 /**
  * @param modelToAddDocumentVersionTo:String Is the model where the relation of document-version should be set to.
  */
@@ -132,12 +133,7 @@ export default Mixin.create(FileSaverMixin, {
 		async downloadFile(version) {
 			const documentVersion = await version;
 			let file = await documentVersion.get('file');
-			$.ajax(`/files/${file.id}/download?name=${file.filename}`, {
-				method: 'GET',
-				dataType: 'arraybuffer', // or 'blob'
-				processData: false
-			})
-				.then((content) => this.saveFileAs(documentVersion.nameToDisplay, content, file.get('contentType')));
+      fileDownloadPrompt(file, documentVersion.nameToDisplay);
 		},
 
 		removeDocument(document) {
@@ -145,11 +141,9 @@ export default Mixin.create(FileSaverMixin, {
 		},
 
 		removeFile(file) {
-			$.ajax({
-				method: "DELETE",
-				url: '/files/' + file.id
-			})
-			this.get('uploadedFiles').removeObject(file);
+			removeFile(file).then(() => {
+        this.get('uploadedFiles').removeObject(file);
+      });
 		},
 
 		async showDocumentVersionViewer(documentVersion) {

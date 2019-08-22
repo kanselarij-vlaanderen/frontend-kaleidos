@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
-import $ from 'jquery';
+import { fileDownloadPrompt } from 'fe-redpencil/utils/file-utils';
 
 export default Component.extend(UploadDocumentMixin, {
 	classNames: ["vl-uploaded-document"],
@@ -19,14 +19,8 @@ export default Component.extend(UploadDocumentMixin, {
 			this.file.set('documentType', type);
 		},
 
-		downloadFile(file, filename) {
-      filename = filename || file.get('filename');
-			return $.ajax(`/files/${file.id}/download`, {
-				method: 'GET',
-				dataType: 'blob',
-				processData: false
-			})
-				.then((content) => this.saveFileAs(filename, content, file.get('contentType')));
+		downloadFile(file) {
+      fileDownloadPrompt(file);
 		}
 	}
 });
