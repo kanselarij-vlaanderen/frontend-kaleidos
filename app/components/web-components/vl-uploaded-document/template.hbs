@@ -5,7 +5,7 @@
   <div class="vl-uploaded-document__title-container">
     <div class="title">
       <h6 class="vl-title vl-title--h6">
-        {{file.name}}
+        {{file.filename}}
       </h6>
       <button
         class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
@@ -32,14 +32,14 @@
     <div class="vl-document__metadata metadata">
       {{file.extension}}
       -
-      {{sizeToShow}}
+      {{format-bytesize file.size}}
     </div>
   </div>
 </div>
 <div class="metadata-container">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "alt-file-name")}}
-    {{web-components/vl-form-input width="4" value=fileName}}
+    {{web-components/vl-form-input width="4" value=file.filenameWithoutExtension}}
   </div>
   {{#if showMetadata}}
     <div class="vlc-input-field-block">
