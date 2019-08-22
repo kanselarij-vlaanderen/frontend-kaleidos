@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import $ from "jquery";
+import { fileDownloadPrompt } from 'fe-redpencil/utils/file-utils';
 
 export default Component.extend({
   classNames: ["vl-uploaded-document", "vlc-document-card"],
@@ -17,18 +17,7 @@ export default Component.extend({
 
   actions: {
     download() {
-      $.ajax(
-        `/files/${this.model.id}/download?name=${this.model.filename}.${
-          this.model.extension
-        }`,
-        {
-          method: "GET",
-          dataType: "blob", // or 'arraybuffer'
-          processData: false
-        }
-      ).then(content =>
-        this.saveFileAs(this.model.name, content, this.model.get("contentType"))
-      );
+      fileDownloadPrompt(this.get('model'));
     },
 
     promptDelete() {
