@@ -13,8 +13,8 @@
         {{#each uploadedFiles as |uploadedFile|}}
           {{#oc/oc-file model=uploadedFile onDelete=(action 'delete' uploadedFile)}}
             <div class="vlc-input-field-block">
-              {{web-components/vl-form-label value=(t "alt-file-name")}}
-              {{web-components/vl-form-input width="4" value=(mut uploadedFile.filename)}}
+              {{web-components/vl-form-label value=(t "document-name")}}
+              {{web-components/vl-form-input width="4" value=(mut uploadedFile.filenameWithoutExtension)}}
             </div>
           {{/oc/oc-file}}
         {{/each}}
