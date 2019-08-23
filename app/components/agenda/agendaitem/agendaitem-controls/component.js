@@ -2,137 +2,126 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import moment from 'moment';
 import { inject } from '@ember/service';
+
 export default Component.extend({
-	store: inject(),
-	sessionService: inject(),
-	agendaService: inject(),
-	currentAgenda: null,
-	agendaitem: null,
-	lastDefiniteAgenda: null,
+  store: inject(),
+  sessionService: inject(),
+  agendaService: inject(),
+  currentAgenda: null,
+  agendaitem: null,
+  lastDefiniteAgenda: null,
 
-	currentMeeting: computed('currentAgenda.createdFor', function () {
-		return this.currentAgenda.get('createdFor');
-	}),
+  currentMeeting: computed('currentAgenda.createdFor', function() {
+    return this.currentAgenda.get('createdFor');
+  }),
 
-	meetings: computed('currentMeeting', function () {
-		const currentMeetingDate = this.currentMeeting.get('plannedStart')
-		const dateOfToday = moment(currentMeetingDate).utc().format();
-		const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
+  meetings: computed('currentMeeting', function() {
+    const currentMeetingDate = this.currentMeeting.get('plannedStart')
+    const dateOfToday = moment(currentMeetingDate).utc().format();
+    const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
 
-		return this.store.query('meeting', {
-			filter: {
-				':gt:planned-start': dateOfToday,
-				':lte:planned-start': dateInTwoWeeks,
-				'is-final': false
-			},
-			sort: 'planned-start'
-		})
-	}),
+    return this.store.query('meeting', {
+      filter: {
+        ':gt:planned-start': dateOfToday,
+        ':lte:planned-start': dateInTwoWeeks,
+        'is-final': false
+      },
+      sort: 'planned-start'
+    })
+  }),
 
-	isPostPonable: computed('sessionService.agendas.@each', function () {
-		return this.get('sessionService.agendas').then(agendas => {
-			if (agendas && agendas.get('length') > 1) {
-				return true;
-			} else {
-				return false;
-			}
-		})
-	}),
+  isPostPonable: computed('sessionService.agendas.@each', function() {
+    return this.get('sessionService.agendas').then(agendas => {
+      if (agendas && agendas.get('length') > 1) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+  }),
 
-	isDeletable: computed('agendaitem', 'agendaitem.subcase', 'lastDefiniteAgenda.agendaitems.@each', 'currentAgenda', async function () {
-		const currentAgendaName = await this.get('currentAgenda.name');
-		const agendaitem = await this.agendaitem;
-		const lastDefiniteAgenda = await this.lastDefiniteAgenda;
+  isDeletable: computed(
+    'agendaitem.subcase',
+    'agendaitem.subcase.agendaitems.@each',
+    'currentAgenda.name',
+    async function() {
+      const currentAgendaName = await this.get('currentAgenda.name');
+      const agendaitemSubcase = await this.get('agendaitem.subcase');
 
-		if (!lastDefiniteAgenda) {
-			return true;
-		}
-		if (currentAgendaName != "Ontwerpagenda") {
-			return false;
-		}
-		const agendaitems = await lastDefiniteAgenda.get('agendaitems');
-		const agendaitemSubcase = await agendaitem.get('subcase');
+      if (currentAgendaName !== "Ontwerpagenda") {
+        return false;
+      }
+      if (await agendaitemSubcase.get('agendaitems.length') !== 1) {
+        return false
+      }
+      return true;
 
-		let agendaitemNotInDefiniteAgenda = true;
+    }),
 
-		await Promise.all(agendaitems.map(item => {
-			return item.get('subcase').then((subcase) => {
-				if (!subcase || !agendaitemSubcase) {
-					return;
-				}
-				if (agendaitemSubcase.id == subcase.id) {
-					agendaitemNotInDefiniteAgenda = false;
-				}
-			})
-		}));
+  actions: {
+    showOptions() {
+      this.toggleProperty('showOptions');
+    },
 
-		return agendaitemNotInDefiniteAgenda;
-	}),
+    async postponeAgendaItem(agendaitem, meetingToPostponeTo) {
+      agendaitem.set('retracted', true);
 
-	actions: {
-		showOptions() {
-			this.toggleProperty('showOptions');
-		},
+      const postPonedObject = this.store.createRecord('postponed', {
+        agendaitem: agendaitem,
+        meeting: meetingToPostponeTo
+      });
 
-		async postponeAgendaItem(agendaitem, meetingToPostponeTo) {
-			agendaitem.set('retracted', true);
+      if (meetingToPostponeTo) {
+        const subcase = await agendaitem.get('subcase');
+        const agenda = await meetingToPostponeTo.get('latestAgenda');
+        if (agenda.get('name') == 'Ontwerpagenda' && subcase) {
+          await this.agendaService.createNewAgendaItem(agenda, subcase);
+          await agenda.hasMany('agendaitems').reload();
+        }
+      }
 
-			const postPonedObject = this.store.createRecord('postponed', {
-				agendaitem: agendaitem,
-				meeting: meetingToPostponeTo
-			});
+      postPonedObject.save().then(postponedTo => {
+        agendaitem.set('postponed', postponedTo);
+      });
 
-			if (meetingToPostponeTo) {
-				const subcase = await agendaitem.get('subcase');
-				const agenda = await meetingToPostponeTo.get('latestAgenda');
-				if (agenda.get('name') == 'Ontwerpagenda' && subcase) {
-					await this.agendaService.createNewAgendaItem(agenda, subcase);
-					await agenda.hasMany('agendaitems').reload();
-				}
-			}
+      await agendaitem.save();
+      await agendaitem.reload();
+    },
 
-			postPonedObject.save().then(postponedTo => {
-				agendaitem.set('postponed', postponedTo);
-			});
+    async advanceAgendaitem() {
+      const agendaitem = await this.store.findRecord('agendaitem', this.agendaitem.get('id'));
+      if (agendaitem && agendaitem.retracted) {
+        agendaitem.set('retracted', false);
+      }
+      const postponedTo = await agendaitem.get('postponedTo');
+      if (agendaitem && postponedTo) {
+        await postponedTo.destroyRecord();
+      }
+      await agendaitem.save();
+      await agendaitem.reload();
+    },
 
-			await agendaitem.save();
-			await agendaitem.reload();
-		},
+    async deleteItem(agendaitem) {
+      const id = agendaitem.get('id');
+      const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'));
+      const subcase = await itemToDelete.get('subcase');
 
-		async advanceAgendaitem() {
-			const agendaitem = await this.store.findRecord('agendaitem', this.agendaitem.get('id'));
-			if (agendaitem && agendaitem.retracted) {
-				agendaitem.set('retracted', false);
-			}
-			const postponedTo = await agendaitem.get('postponedTo');
-			if (agendaitem && postponedTo) {
-				await postponedTo.destroyRecord();
-			}
-			await agendaitem.save();
-			await agendaitem.reload();
-		},
+      if (subcase) {
+        const phases = await subcase.get('phases');
+        await Promise.all(phases.filter(async phase => {
+          await phase.destroyRecord();
+        }));
 
-		async deleteItem(agendaitem) {
-			const id = agendaitem.get('id');
-			const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'));
-			const subcase = await itemToDelete.get('subcase');
+        subcase.set('requestedForMeeting', null);
+        subcase.set('consulationRequests', []);
+        subcase.set('agendaitems', []);
+        await subcase.save();
+      }
 
-			if (subcase) {
-				const phases = await subcase.get('phases');
-				await Promise.all(phases.filter(async phase => {
-					await phase.destroyRecord();
-				}));
-
-				subcase.set('requestedForMeeting', null);
-				subcase.set('consulationRequests', []);
-				subcase.set('agendaitems', []);
-				await subcase.save();
-			}
-
-			itemToDelete.destroyRecord().then(() => {
-				this.set('sessionService.selectedAgendaItem', null);
-				this.refreshRoute(id);
-			});
-		},
-	}
+      itemToDelete.destroyRecord().then(() => {
+        this.set('sessionService.selectedAgendaItem', null);
+        this.refreshRoute(id);
+      });
+    },
+  }
 });
