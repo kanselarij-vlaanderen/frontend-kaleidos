@@ -60,7 +60,7 @@ export default Route.extend(DataTableRouteMixin, {
     let filterString = [];
     let type = 'cases';
     if (!isEmpty(params.decisionsOnly)) {
-      type = 'casesByDecisionText';
+      type = params.decisionsOnly === 'true' ? 'casesByDecisionText' : 'cases';
     }
     if (!isEmpty(params.searchText)) {
       filterString.push(`filter[${this.textSearchFields.join(',')}]=${params.searchText || ''}`);
