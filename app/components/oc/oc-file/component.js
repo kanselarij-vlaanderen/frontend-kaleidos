@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { fileDownloadPrompt } from 'fe-redpencil/utils/file-utils';
+import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 
 export default Component.extend({
   classNames: ["vl-uploaded-document", "vlc-document-card"],
@@ -17,7 +17,7 @@ export default Component.extend({
 
   actions: {
     download() {
-      fileDownloadPrompt(this.get('model'));
+      downloadFilePrompt(this, this.get('model'));
     },
 
     promptDelete() {

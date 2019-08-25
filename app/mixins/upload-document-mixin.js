@@ -3,7 +3,7 @@ import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { inject } from '@ember/service';
 import moment from 'moment';
 import { computed } from '@ember/object';
-import { fileDownloadPrompt, removeFile } from 'fe-redpencil/utils/file-utils';
+import { downloadFilePrompt, removeFile } from 'fe-redpencil/utils/file-utils';
 
 /**
  * @param modelToAddDocumentVersionTo:String Is the model where the relation of document-version should be set to.
@@ -133,7 +133,7 @@ export default Mixin.create(FileSaverMixin, {
 		async downloadFile(version) {
 			const documentVersion = await version;
 			let file = await documentVersion.get('file');
-      fileDownloadPrompt(file, documentVersion.nameToDisplay);
+      downloadFilePrompt(this, file, documentVersion.nameToDisplay);
 		},
 
 		removeDocument(document) {
