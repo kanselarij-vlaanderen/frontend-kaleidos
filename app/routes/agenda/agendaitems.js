@@ -34,6 +34,8 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
         this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
       }
 
+
+
       let filteredGroups = groups;
       if (!isEmpty(params.filter)) {
         filteredGroups = this.filterAgendaGroups(groups, matchingAgendaItems);
@@ -41,7 +43,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
       return hash({
         currentAgenda: agenda,
         groups: filteredGroups,
-        announcements,
+        announcements: (announcements || []).sortBy('priority'),
         lastPrio,
         minutesApproval,
       });
