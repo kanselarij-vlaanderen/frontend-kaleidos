@@ -44,13 +44,7 @@ export default Route.extend(DataTableRouteMixin, {
   },
 
   wantsFilteredResults(params) {
-    return (
-      !isEmpty(params.searchText) ||
-      !isEmpty(params.dateFrom) ||
-      !isEmpty(params.dateTo) ||
-      !isEmpty(params.mandatees) ||
-      !isEmpty(params.decisionsOnly)
-    );
+    return !isEmpty(params.searchText);
   },
 
   async model(params) {
