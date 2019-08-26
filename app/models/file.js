@@ -27,5 +27,8 @@ export default Model.extend({
 	extension: attr('string'),
 	created: attr('date'),
 	contentType: attr('string'),
+  downloadLink: computed('id', function() {
+    return `/files/${this.get('id')}/download`
+  }),
 	name: alias('filename') // Compatibility. Use of 'name' should be refactored out.
 });
