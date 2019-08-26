@@ -82,6 +82,11 @@ export default Route.extend(DataTableRouteMixin, {
       filter: {
         id: searchResults.data.map((item) => item.id).join(','),
       },
+    }).then(function (res) {
+      if (res.get('meta')) {
+        res.set('meta.count', searchResults.count);
+      }
+      return res;
     });
   },
 
