@@ -3,6 +3,6 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Route.extend(AuthenticatedRouteMixin, {
   model() {
-    return this.store.query("user", {});
+    return this.store.query("user", {}).then(users => users.toArray());
   }
-  });
+});
