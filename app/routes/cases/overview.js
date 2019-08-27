@@ -44,13 +44,7 @@ export default Route.extend(DataTableRouteMixin, {
   },
 
   wantsFilteredResults(params) {
-    return (
-      !isEmpty(params.searchText) ||
-      !isEmpty(params.dateFrom) ||
-      !isEmpty(params.dateTo) ||
-      !isEmpty(params.mandatees) ||
-      !isEmpty(params.decisionsOnly)
-    );
+    return !isEmpty(params.searchText);
   },
 
   async model(params) {
@@ -88,6 +82,11 @@ export default Route.extend(DataTableRouteMixin, {
       filter: {
         id: searchResults.data.map((item) => item.id).join(','),
       },
+    }).then(function (res) {
+      if (res.get('meta')) {
+        res.set('meta.count', searchResults.count);
+      }
+      return res;
     });
   },
 
