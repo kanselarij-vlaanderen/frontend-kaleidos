@@ -15,6 +15,8 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   sessionService: inject(),
   agendaService: inject(),
   fileService: inject(),
+  router: inject(),
+
 
   isShowingOptions: false,
   isPrintingNotes: false,
@@ -203,9 +205,11 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       const definiteAgendas = await this.get('definiteAgendas');
       const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
-      agenda.destroyRecord().then(() => {
-        this.set('sessionService.currentAgenda', lastDefiniteAgenda || null);
-      });
+      agenda.destroyRecord().then(() =>
+        lastDefiniteAgenda
+          ? this.set('sessionService.currentAgenda', lastDefiniteAgenda || null)
+          : this.currentSession.destroyRecord().then(() => this.router.transitionTo('agendas'))
+      );
     },
 
     async createNewDesignAgenda() {
