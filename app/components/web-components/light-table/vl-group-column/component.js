@@ -7,13 +7,11 @@ export default Component.extend({
   user: alias('row'),
   store: inject(),
 
-
   actions: {
     async chooseAccountGroup(newGroup) {
-      const user = this.get('user');
-      user.set('group', newGroup);
-      let foundUser = await this.store.findRecord('user', user.get('id'));
-      foundUser.save()
+      let foundUser = await this.store.findRecord('user', this.get('user.id'));
+      foundUser.set('group', newGroup);
+      foundUser.save();
     },
   }
 });
