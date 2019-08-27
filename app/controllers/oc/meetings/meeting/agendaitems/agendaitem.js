@@ -39,7 +39,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
     saveNotification(documents) {
       this.set('isLoading', true);
-      let notification = documents.objecAt(0);
+      let notification = documents.firstObject;
       this.set('model.notification', notification);
       notification
         .save()

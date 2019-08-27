@@ -1,9 +1,10 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
+import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+import $ from 'jquery';
 
-export default Component.extend({
+export default Component.extend(FileSaverMixin, {
   classNames: ["vl-uploaded-document", "vlc-document-card"],
   showDeleteWarning: false,
   isLoading: false,
@@ -17,7 +18,13 @@ export default Component.extend({
 
   actions: {
     download() {
-      downloadFilePrompt(this, this.get('model'));
+      const file = this.get('model')
+      return $.ajax(file.get('downloadLink'), {
+        method: 'GET',
+        dataType: 'blob',
+        processData: false
+      })
+        .then((content) => this.saveFileAs(file.get('filename'), content, file.get('contentType')));
     },
 
     promptDelete() {
@@ -36,7 +43,9 @@ export default Component.extend({
         .save()
         .then(() => {
           this.set("showDeleteWarning", false);
-          this.onDelete();
+          if (this.onDelete) {
+            this.onDelete();
+          }
         })
         .catch(error => {
           this.globalError.handleError(error);

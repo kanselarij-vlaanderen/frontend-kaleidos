@@ -53,6 +53,8 @@ export default Route.extend(DataTableRouteMixin, {
     }
     let filterString = [];
     let type = 'cases';
+    const size = params.size || 10;
+    const page = params.page || 0;
     if (!isEmpty(params.decisionsOnly)) {
       type = params.decisionsOnly === 'true' ? 'casesByDecisionText' : 'cases';
     }
@@ -68,7 +70,7 @@ export default Route.extend(DataTableRouteMixin, {
     if (!isEmpty(params.dateTo)) {
       filterString.push(`filter[:lte:sessionDates]=${params.dateTo}`);
     }
-    filterString.push(`page[size]=${params.size || 10}&page[number]=${params.page || 0}`);
+    filterString.push(`page[size]=${size}&page[number]=${page}`);
     let searchResults = await $.ajax({
       method: 'GET',
       url: `/${type}/search?${filterString.join('&')}`,
@@ -82,6 +84,9 @@ export default Route.extend(DataTableRouteMixin, {
       filter: {
         id: searchResults.data.map((item) => item.id).join(','),
       },
+      page: {
+        size
+      }
     }).then(function (res) {
       if (res.get('meta')) {
         res.set('meta.count', searchResults.count);
