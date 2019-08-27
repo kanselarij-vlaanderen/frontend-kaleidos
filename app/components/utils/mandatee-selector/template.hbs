@@ -1,6 +1,6 @@
 {{#if (not singleSelect)}}
   {{#power-select-multiple
-    options=filteredMandatees
+    options=items
     selected=(await selectedMandatees)
     disabled=readOnly
     closeOnSelect=false
@@ -12,7 +12,7 @@
   {{/power-select-multiple}}
 {{else}}
   {{#power-select
-    options=filteredMandatees
+    options=items
     selected=(await selectedMandatees)
     disabled=readOnly
     search=(perform searchTask)
