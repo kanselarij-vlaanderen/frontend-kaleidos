@@ -71,6 +71,7 @@ export default Route.extend(DataTableRouteMixin, {
       filterString.push(`filter[:lte:sessionDates]=${params.dateTo}`);
     }
     filterString.push(`page[size]=${size}&page[number]=${page}`);
+    filterString.push('collapse_uuids=t');
     let searchResults = await $.ajax({
       method: 'GET',
       url: `/${type}/search?${filterString.join('&')}`,
