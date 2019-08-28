@@ -5,7 +5,8 @@ export default Component.extend({
 	classBindings: ['getClassNames'],
 	loadingText: "Even geduld",
 	isLoading: null,
-
+  disableSave: false,
+  
 	getClassNames() {
 		if (!this.get('nonBordered')) {
 			return 'vlc-navbar--bordered-top'

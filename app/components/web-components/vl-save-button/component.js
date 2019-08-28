@@ -6,8 +6,8 @@ export default Component.extend({
 	tagName: 'button',
 	classNames: ['vl-button', 'vl-button--narrow'],
 	type: 'button',
-	attributeBindings: ['isLoading:disabled'],
-	classNameBindings: ['isLoading:vl-button--loading'],
+	attributeBindings: ['isLoading:disabled', 'disabled:disabled'],
+	classNameBindings: ['isLoading:vl-button--loading', 'disabled:vl-button--disabled'],
 
 	loadingText: computed('intl', function () {
 		return this.intl.t('loadingText');
