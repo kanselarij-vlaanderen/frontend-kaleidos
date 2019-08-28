@@ -24,8 +24,8 @@
     }}
   </div>
 </div>
-{{#if (await sortedCombinedItems)}}
-  {{#each (await sortedCombinedItems) as |group|}}
+{{#if (await combinedItems)}}
+  {{#each (await combinedItems) as |group|}}
     <div class="compare-grid-container">
       {{#if (not (and isShowingChanges group.isSame))}}
         <div class="vlc-list-section-header">
