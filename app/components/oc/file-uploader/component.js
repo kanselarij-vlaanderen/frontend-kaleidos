@@ -15,7 +15,9 @@ export default Component.extend(isAuthenticatedMixin, {
   
   actions: {
     delete(file) {
-      this.get('uploadedFiles').removeObject(file);
+      file.destroyRecord().then(() => {
+        this.get('uploadedFiles').removeObject(file);
+      })
     },
     
     add(file) {
