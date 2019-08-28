@@ -163,6 +163,7 @@
   "manage-signatures": "Handtekeningen beheren",
   "manage-subcase-types": "Procedurestap types beheer",
   "manage-user-roles": "Gebruikersbeheer",
+  "manage-users": "Gebruikersbeheer",
   "mandate": "Bevoegdheid",
   "mandatee": "Hoedanigheid",
   "mandatee-approval": "Goedkeuring co-agendering",
@@ -335,6 +336,7 @@
   "user-role": "Gebruikersrol",
   "version": "Versie nummer",
   "loadingText": "Opslaan",
+  "users-loading-text": "De gebruikers worden geladen...",
   "loading-text-inactive": "Even geduld",
   "approve-agenda-warning": "Deze agenda kan niet goedgekeurd worden zolang dat niet alle agendapunten formeel OK verklaard zijn.",
   "warning-text": "Venster sluiten",
@@ -415,5 +417,8 @@
   "main-nav-oc-title": "Overlegcomité",
   "added-agendaitem-text": "Dit punt is toegevoegd sinds de vorige agenda.",
   "show-changes": "Toon aangepaste punten",
-  "show-all": "Toon alle punten"
+  "show-all": "Toon alle punten",
+  "national-number": "Rijksregisternummer",
+  "last-name": "Achternaam",
+  "group": "Groep"
 }

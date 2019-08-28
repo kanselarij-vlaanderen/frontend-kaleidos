@@ -1,0 +1,30 @@
+{{#light-table
+  table
+  tableClassNames="vl-data-table vl-data-table vl-data-table--hover vl-data-table--zebra" as |t|
+}}
+  {{t.head
+    onColumnClick=(action "onColumnClick")
+    iconSortable="vl-data-table__header-title__sort-icon vl-vi vl-vi-expand-vertical"
+    iconAscending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
+    iconDescending="vl-data-table__header-title__sort-icon vl-vi vl-vi-arrow-up"
+  }}
+  {{#t.body
+    multiRowExpansion=false
+    onScrolledToBottom=(action "onScrolledToBottom") as |body|
+  }}
+    {{#body.expanded-row as |row|}}{{yield row}}{{/body.expanded-row}}
+    {{#if isLoading}}
+      {{#body.loader}}
+        {{web-components/vl-loader text=loadingText}}
+      {{/body.loader}}
+    {{/if}}
+  {{/t.body}}
+{{/light-table}}
+{{#if isScrolling}}
+  <button class="vl-button vl-button--secondary vl-button--icon">
+    <i class="vl-button__icon vl-vi vl-vi-add" aria-hidden="true"></i>
+    <span class="vl-u-visually-hidden">
+      {{t "back"}}
+    </span>
+  </button>
+{{/if}}
