@@ -24,9 +24,9 @@ export default Controller.extend(isAuthenticatedMixin, {
       this.get('model.documents').then(docs => {
         docs.addObjects(documents);
       });
-      Promise.all(savePromises)
+      return Promise.all(savePromises)
         .then(() => {
-          this.get('model')
+          return this.get('model')
             .save()
             .then(() => {
               this.set('showAddDocuments', false);
@@ -41,10 +41,10 @@ export default Controller.extend(isAuthenticatedMixin, {
       this.set('isLoading', true);
       let notification = documents.firstObject;
       this.set('model.notification', notification);
-      notification
+      return notification
         .save()
         .then(() => {
-          this.get('model')
+          return this.get('model')
             .save()
             .then(() => {
               this.set('showAddNotification', false);
@@ -53,6 +53,11 @@ export default Controller.extend(isAuthenticatedMixin, {
         .catch(error => {
           this.globalError.handleError(error);
         });
+    },
+    
+    detachDocument(doc) {
+      this.get('model.documents').removeObject(doc);
+      return this.get('model').save();
     },
 
     cancel() {

@@ -1,42 +1,39 @@
 {{#web-components/vl-modal
-  closeModal=onClose
+  closeModal=(action "close")
   isOverlay=true
   large=true
   title=(t "document-add")
 }}
   <div class="vl-modal-dialog__content">
-    {{#if (or multipleFiles (not uploadedFiles.length))}}
-      {{file-uploader isLoading=isLoading uploadedFile=(action "add") multipleFiles=multipleFiles}}
+    {{#if (or multipleFiles (not model.length))}}
+      {{file-uploader uploadedFile=(action "add") multipleFiles=multipleFiles}}
     {{/if}}
-    {{#if (not isLoading)}}
-      <div class="upload-container">
-        {{#each uploadedFiles as |uploadedFile|}}
-          {{#ember-kaleidos-webuniversum/vl-uploaded-document
-            name=uploadedFile.filename
-            extension=uploadedFile.extension
-            size=uploadedFile.size
-            downloadLink=(concat uploadedFile.downloadLink "?name=" uploadedFile.filename)
-            downloadName=model.filename
-            delete=(action "delete" uploadedFile)
-          }}
-            <div class="metadata-container">
-              <div class="vlc-input-field-block">
-                {{web-components/vl-form-label value=(t "document-name")}}
-                {{web-components/vl-form-input width="4" value=(mut uploadedFile.filenameWithoutExtension)}}
-              </div>
+    <div class="upload-container">
+      {{#each model as |uploadedFile|}}
+        {{#ember-kaleidos-webuniversum/vl-uploaded-document
+          name=uploadedFile.filename
+          extension=uploadedFile.extension
+          size=uploadedFile.size
+          downloadLink=(concat uploadedFile.downloadLink "?name=" uploadedFile.filename)
+          downloadName=uploadedFile.filename
+          delete=(action "delete" uploadedFile)
+        }}
+          <div class="metadata-container">
+            <div class="vlc-input-field-block">
+              {{web-components/vl-form-label value=(t "document-name")}}
+              {{web-components/vl-form-input width="4" value=(mut uploadedFile.filenameWithoutExtension)}}
             </div>
-          {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
-        {{/each}}
-      </div>
-    {{else}}
-      {{web-components/vl-loader text=(t "documents-loading-text")}}
-    {{/if}}
+          </div>
+        {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
+      {{/each}}
+    </div>
   </div>
   {{web-components/vl-modal-footer
-    isLoading=isCreatingDocuments
+    isLoading=isLoading
     cancelButtonText=(t "cancel")
     saveButtonText=(t "document-add")
-    cancelAction=onCancel
+    cancelAction=(action "cancel")
     saveAction=(action "save")
+    disableSave=(eq model.length 0)
   }}
 {{/web-components/vl-modal}}

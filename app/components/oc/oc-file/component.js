@@ -26,12 +26,12 @@ export default Component.extend({
 
     confirmDelete() {
       this.set("isLoading", true);
-      this.get("model")
+      return this.get("model")
         .save()
-        .then(() => {
+        .then((res) => {
           this.set("showDeleteWarning", false);
           if (this.onDelete) {
-            this.onDelete();
+            return this.onDelete(res);
           }
         })
         .catch(error => {

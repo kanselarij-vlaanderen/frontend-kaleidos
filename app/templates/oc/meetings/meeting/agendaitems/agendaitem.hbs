@@ -22,7 +22,9 @@
                     text=(t "notification-loading-text")
                   }}
                 {{else if model.notification}}
-                  {{oc/oc-file model=(await model.notification)}}
+                  {{oc/oc-file
+                    model=(await model.notification)
+                  }}
                 {{else}}
                   {{web-components/vl-alert message=(t "no-notification-yet")}}
                 {{/if}}
@@ -56,9 +58,11 @@
             {{#if (is-pending model.documents)}}
               {{web-components/vl-loader text=(t "documents-loading-text")}}
             {{else if model.documents}}
-              {{#each model.documents as |file|}}
+              {{#each (await model.documents) as |file|}}
                 <div class="vl-u-spacer-extended-bottom-s">
-                  {{oc/oc-file model=file}}
+                  {{oc/oc-file
+                    model=file
+                    onDelete=(action "detachDocument" file)}}
                 </div>
               {{/each}}
             {{else}}
@@ -86,7 +90,7 @@
 </div>
 {{#if showAddNotification}}
   {{oc/file-uploader
-    onSave=(action "saveNotification")
+    save=(action "saveNotification")
     onCancel=(action "cancel")
     onClose=(action "cancel")
     multipleFiles=false
@@ -94,7 +98,7 @@
 {{/if}}
 {{#if showAddDocuments}}
   {{oc/file-uploader
-    onSave=(action "saveDocuments")
+    save=(action "saveDocuments")
     onCancel=(action "cancel")
     onClose=(action "cancel")
     multipleFiles=true
