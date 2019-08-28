@@ -15,7 +15,8 @@
             name=uploadedFile.filename
             extension=uploadedFile.extension
             size=uploadedFile.size
-            downloadLink=uploadedFile.downloadLink
+            downloadLink=(concat uploadedFile.downloadLink "?name=" uploadedFile.filename)
+            downloadName=model.filename
             delete=(action "delete" uploadedFile)
           }}
             <div class="metadata-container">

@@ -2,7 +2,7 @@
   name=model.filenameWithoutExtension
   extension=model.extension
   size=model.size
-  downloadLink=model.downloadLink
+  downloadLink=(concat model.downloadLink "?name=" model.filename)
   downloadName=model.filename
   delete=(action "promptDelete")
   class="vlc-document-card"}}
