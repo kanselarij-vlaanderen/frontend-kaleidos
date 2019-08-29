@@ -77,12 +77,81 @@
               ></i>
               {{t "print"}}
             </button>
-            <button
-              class="vl-button vl-button--tertiary vl-button--narrow"
-              {{action "sendNewsletter"}}
-            >
-              {{t "send-newsletter"}}
-            </button>
+            {{#if (or isAdmin isEditor)}}
+              <button
+                class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+                {{action "showMultipleOptions"}}
+              >
+                {{#if (not isShowingOptions)}}
+                  <i
+                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                    {{action "showMultipleOptions" bubbles=false}}
+                  ></i>
+                {{else}}
+                  <i
+                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                    {{action "showMultipleOptions" bubbles=false}}
+                  ></i>
+                {{/if}}
+                {{t "actions"}}
+                {{#attach-popover
+                  class="ember-attacher-popper"
+                  hideOn="clickout click"
+                  showOn="click"
+                  animation="shift"
+                  placement="bottom" as |attacher|
+                }}
+                  <ul class="vl-popover__link-list">
+                    {{#if (await agenda.createdFor.mailCampaign)}}
+                      <li class="vl-popover__link-list__item">
+                        <a
+                          class="vl-link vl-link--block"
+                          target="_blank"
+                          href={{await agenda.createdFor.mailCampaign.archiveUrl
+                          }}
+                        >
+                          {{t "preview-campaign"}}
+                        </a>
+                      </li>
+                      {{#if (not (await agenda.createdFor.mailCampaign.sent))}}
+                        <li class="vl-popover__link-list__item">
+                          <a
+                            class="vl-link vl-link--block"
+                            {{action attacher.hide}}
+                            {{action "sendCampaign"}}
+                          >
+                            {{t "send-campaign"}}
+                          </a>
+                        </li>
+                      {{/if}}
+                      <li
+                        class="vl-popover__link-list__separator"
+                        role="none"
+                      ></li>
+                      <li class="vl-popover__link-list__item">
+                        <a
+                          class="vl-link vl-link--block vl-u-text--error"
+                          {{action attacher.hide}}
+                          {{action "deleteCampaign"}}
+                        >
+                          {{t "delete-campaign"}}
+                        </a>
+                      </li>
+                    {{else}}
+                      <li class="vl-popover__link-list__item">
+                        <a
+                          class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "createCampaign"}}
+                        >
+                          {{t "create-campaign"}}
+                        </a>
+                      </li>
+                    {{/if}}
+                  </ul>
+                {{/attach-popover}}
+              </button>
+            {{/if}}
           {{/if}}
         </div>
       </div>

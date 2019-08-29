@@ -279,7 +279,10 @@
   "select-agenda": "Selecteer een agenda",
   "select-meeting": "Selecteer de vergadering",
   "selected-mandatees": "Geselecteerde ministers",
-  "send-newsletter": "Kort bestek versturen",
+  "create-campaign": "Nieuwsbrief aanmaken",
+  "send-campaign":"Nieuwsbrief versturen",
+  "delete-campaign":"Nieuwsbrief verwijderen",
+  "preview-campaign":"Voorbeeld nieuwsbrief",
   "settings": "Instellingen",
   "severity": "Strengheid",
   "short-title": "Korte titel",
@@ -420,5 +423,8 @@
   "show-all": "Toon alle punten",
   "national-number": "Rijksregisternummer",
   "last-name": "Achternaam",
-  "group": "Groep"
+  "group": "Groep",
+  "mail-campaign":"Email campagne",
+  "not-sent-yet":"Nog niet verstuurd",
+  "not-yet-created":"Nog niet aangemaakt"
 }

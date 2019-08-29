@@ -18,8 +18,10 @@ export default Model.extend({
 		const { alternativeName, firstName, lastName } = this;
 		if (alternativeName) {
 			return alternativeName;
+		} else if(firstName && lastName) {
+			return `${firstName} ${lastName}`;
 		} else {
-			return firstName + " " + lastName;
+			return "";
 		}
 	})
 });
