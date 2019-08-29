@@ -1,9 +1,9 @@
 {{web-components/vl-modal-verify
-  title="Vergadering verwijderen"
+  title=(t "meeting-delete")
   isLoading=isLoading
   buttonType="danger"
-  verifyButtonText="Doorgaan"
-  message="Weet u zeker dat u de vergadering wil verwijderen? Alle bijbehorende agendapunten en documenten zullen ook verwijderd worden."
+  verifyButtonText=(t "proceed")
+  message=(t "delete-meeting-message")
   cancel=(action "cancel")
   verify=(action "save")
 }}

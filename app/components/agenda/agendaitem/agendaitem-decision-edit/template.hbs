@@ -1,5 +1,5 @@
 {{utils/text-template
-  label="Beslissing"
+  label=(t "agendaitem-decision")
   type="decisions"
   text=initValue
   searchField="label"
@@ -14,7 +14,7 @@
   }}
 </div>
 <div class="vlc-input-field vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "approved")}}
+  {{web-components/vl-form-label value=(t "decided")}}
   {{web-components/vl-toggle value=approved}}
 </div>
 <div class="vlc-input-field-block">

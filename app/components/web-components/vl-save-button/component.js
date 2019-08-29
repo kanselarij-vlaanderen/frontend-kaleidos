@@ -10,7 +10,7 @@ export default Component.extend({
 	classNameBindings: ['isLoading:vl-button--loading', 'disabled:vl-button--disabled'],
 
 	loadingText: computed('intl', function () {
-		return this.intl.t('loadingText');
+		return this.intl.t('please-be-patient');
 	}),
 
 	focus: computed('isLoading', function () {

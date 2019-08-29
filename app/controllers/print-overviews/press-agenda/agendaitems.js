@@ -1,7 +1,10 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Controller.extend({
+	intl: inject(),
+
 	columns: computed(function () {
 		return [{
 			label: '#',
@@ -9,7 +12,7 @@ export default Controller.extend({
 			sortable: true,
 			valuePath: 'priority',
 		}, {
-			label: 'Titel en inhoud',
+			label: this.intl.t('title-and-content'),
 			classNames: ['vl-data-table-col-7 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-7"],
 			sortable: false,
@@ -17,7 +20,7 @@ export default Controller.extend({
 			cellComponent: "web-components/vl-agendaitem-content-column",
 		},
 		{
-			label: 'Ministers',
+			label: this.intl.t('ministers'),
 			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-2"],
 			sortable: false,
@@ -26,7 +29,7 @@ export default Controller.extend({
 			cellComponent: 'web-components/vl-mandatees-column'
 		},
 		{
-			label: 'Publiek',
+			label: this.intl.t('for-press'),
 			classNames: ['vl-data-table-col-1 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-1"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],
@@ -35,7 +38,7 @@ export default Controller.extend({
 			valuePath: "forPress"
 		},
 		{
-			label: 'Laatst gewijzigd',
+			label: this.intl.t('latest-modified'),
 			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-2"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],

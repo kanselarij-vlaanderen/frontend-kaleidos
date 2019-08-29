@@ -12,7 +12,7 @@
       }}
     </div>
     {{#if isLoading}}
-      {{web-components/vl-loader text="Even geduld aub.."}}
+      {{web-components/vl-loader text=(t "please-be-patient")}}
     {{else}}
       {{#each rowToShow.domains as |domain|}}
         <ul class="vlc-checkbox-tree">

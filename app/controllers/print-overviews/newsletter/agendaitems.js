@@ -1,8 +1,11 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import moment from 'moment';
+import { inject } from '@ember/service';
 
 export default Controller.extend({
+  intl: inject(),
+
   columns: computed(function() {
     return [
       {
@@ -12,7 +15,7 @@ export default Controller.extend({
         valuePath: 'priority',
       },
       {
-        label: 'Kort bestek',
+        label: this.intl.t('newsletter'),
         classNames: ['vl-data-table-col-7 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-7'],
         sortable: false,
@@ -21,7 +24,7 @@ export default Controller.extend({
         valuePath: 'subcase',
       },
       {
-        label: 'Ministers',
+        label: this.intl.t('ministers'),
         classNames: ['vl-data-table-col-3 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-3'],
         sortable: false,
@@ -30,7 +33,7 @@ export default Controller.extend({
         cellComponent: 'web-components/vl-mandatees-column',
       },
       {
-        label: 'In kort bestek',
+        label: this.intl.t("in-newsletter"),
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
