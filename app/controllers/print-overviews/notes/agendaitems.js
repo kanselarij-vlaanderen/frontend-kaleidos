@@ -1,8 +1,11 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import moment from 'moment';
+import { inject } from '@ember/service';
 
 export default Controller.extend({
+	intl: inject(),
+
 	columns: computed(function () {
 		return [{
 			label: '#',
@@ -10,7 +13,7 @@ export default Controller.extend({
 			sortable: true,
 			valuePath: 'priority',
 		}, {
-			label: 'Titel en inhoud',
+			label: this.intl.t('title-and-content'),
 			classNames: ['vl-data-table-col-7 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-7"],
 			sortable: false,
@@ -18,7 +21,7 @@ export default Controller.extend({
 			cellComponent: "web-components/vl-content-column",
 		},
 		{
-			label: 'Ministers',
+			label: this.intl.t('ministers'),
 			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-2"],
 			sortable: false,
@@ -27,7 +30,7 @@ export default Controller.extend({
 			cellComponent: 'web-components/vl-mandatees-column'
 		},
 		{
-			label: 'Laatst gewijzigd',
+			label: this.intl.t('latest-modified'),
 			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
 			cellClassNames: ["vl-data-table-col-2"],
 			breakpoints: ['mobile', 'tablet', 'desktop'],

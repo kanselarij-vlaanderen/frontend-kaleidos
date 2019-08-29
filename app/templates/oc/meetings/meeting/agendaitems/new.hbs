@@ -8,14 +8,14 @@
       <div class="vl-grid vl-grid--is-stacked">
         <div class="vl-col--6-12">
           <div class="vlc-input-field-block">
-            {{web-components/vl-form-label value="Volgnummer"}}
+            {{web-components/vl-form-label value=(t "oc-priority")}}
             {{web-components/vl-form-input width="4" value=(mut model.priority)
             }}
           </div>
         </div>
         <div class="vl-col--6-12">
           <div class="vlc-input-field-block">
-            {{web-components/vl-form-label value="Sub-volgnummer"}}
+            {{web-components/vl-form-label value=(t "oc-sub-priority")}}
             {{web-components/vl-form-input
               width="4"
               value=(mut model.subPriority)
@@ -25,11 +25,11 @@
       </div>
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value="Dossier"}}
+      {{web-components/vl-form-label value=(t "case")}}
       {{web-components/vl-form-input width="4" value=(mut caseIdentifier)}}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value="Indiener"}}
+      {{web-components/vl-form-label value=(t "submitter")}}
       {{#power-select-multiple
         options=governmentBodies
         searchField="name"
@@ -42,7 +42,7 @@
       {{/power-select-multiple}}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value="Onderwerp"}}
+      {{web-components/vl-form-label value=(t "subject")}}
       {{textarea
         rows="3"
         class="vl-textarea vl-textarea--block"

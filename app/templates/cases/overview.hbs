@@ -43,26 +43,26 @@
       size=size
       sort=sort
       class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-      isLoading=isLoadingModel as |t|
+      isLoading=isLoadingModel as |table|
     }}
-      {{#t.content as |c|}}
+      {{#table.content as |c|}}
         {{#c.header}}
           {{th-sortable
             class="vl-data-table-col-5 vl-data-table__header-title"
             currentSorting=sort
             field="shortTitle"
-            label="Dossiernaam"
+            label=(t "case-name")
           }}
           {{th-sortable
             class="vl-data-table-col-4 vl-data-table__header-title"
             field="type"
-            label="Dossiertype"
+            label=(t "case-type")
           }}
           {{th-sortable
             class="vl-data-table-col-2 vl-data-table__header-title"
             currentSorting=sort
             field="created"
-            label="Aangemaakt op"
+            label=(t "created-on")
           }}
           <th class="vl-data-table-col-1"></th>
         {{/c.header}}
@@ -148,7 +148,7 @@
             {{/link-to}}
           </td>
         {{/c.body}}
-      {{/t.content}}
+      {{/table.content}}
     {{/data-table}}
   </div>
 </div>
@@ -174,7 +174,7 @@
       class="vl-spacer-box vl-u-spacer-extended-top-l vl-u-spacer-extended-bottom-l"
     >
       {{web-components/vl-alert
-        title="Opgelet!"
+        title=(t "warning-title")
         message=(t "archive-case-confirmation")
         type="danger"
       }}

@@ -11,7 +11,7 @@
   }}
     <div class="vl-u-spacer-extended-l">
       {{#if (is-pending row.meetingRecord)}}
-        {{web-components/vl-loader text="De notulen worden geladen.."}}
+        {{web-components/vl-loader text=(t "minutes-document-loading-text")}}
       {{else if (await row.meetingRecord)}}
         {{agenda/agendaitem/agendaitem-minutes-edit
           isEditing=row.expanded

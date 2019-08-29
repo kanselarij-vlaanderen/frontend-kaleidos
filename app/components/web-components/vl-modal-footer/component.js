@@ -3,7 +3,6 @@ import Component from '@ember/component';
 export default Component.extend({
 	classNames: ['vlc-navbar vlc-navbar--no-padding'],
 	classBindings: ['getClassNames'],
-	loadingText: "Even geduld",
 	isLoading: null,
 
 	getClassNames() {

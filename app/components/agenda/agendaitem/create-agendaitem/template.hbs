@@ -2,17 +2,17 @@
   isOverlay=true
   large=true
   closeModal=(action "close")
-  title="Agendapunten toevoegen"
+  title=(concat (t "add-agendaitems") " " (t "please-be-patient"))
 }}
   {{#if (or (is-pending model) loading)}}
     <div class="vl-modal-dialog__content">
       {{#if (is-pending model)}}
         {{web-components/vl-loader
-          text="De dossiers worden geladen. Even geduld aub..."
+          text=(concat (t "cases-loading-text") " " (t "please-be-patient"))
         }}
       {{else}}
         {{web-components/vl-loader
-          text="De agendapunten worden aangemaakt. Even geduld aub..."
+          text=(concat (t "agendaitems-creating-text") " " (t "please-be-patient"))
         }}
       {{/if}}
     </div>
@@ -65,15 +65,15 @@
         page=page
         size=size
         isLoading=findAll.isRunning
-        onClickRow=(action "selectPostponed") as |t|
+        onClickRow=(action "selectPostponed") as |table|
       }}
-        {{#t.content as |c|}}
+        {{#table.content as |c|}}
           {{#c.header}}
             <th></th>
             {{th-sortable
               field="shortTitle"
               currentSorting=sort
-              label="Korte titel van het dossier"
+              label=(t "short-title-case")
             }}
             <th></th>
           {{/c.header}}
@@ -92,7 +92,7 @@
               </p>
             </td>
           {{/c.body}}
-        {{/t.content}}
+        {{/table.content}}
       {{/data-table}}
     </div>
     {{web-components/vl-modal-footer

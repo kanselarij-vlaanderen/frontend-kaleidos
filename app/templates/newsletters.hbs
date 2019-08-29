@@ -1,4 +1,4 @@
-{{title (t "news-item-title")}}
+{{title (t "newsletter")}}
 {{newsletter/newsletter-header}}
 {{#if (gt model.length 0)}}
   <div class="vlc-scroll-wrapper">
@@ -11,24 +11,23 @@
           size=size
           sort=sort
           enableSizes=true
-          isLoading=isLoadingModel as |t|
+          isLoading=isLoadingModel as |table|
         }}
-          {{#t.content as |c|}}
+          {{#table.content as |c|}}
             {{#c.header}}
               {{th-sortable
                 class="vl-data-table-col-5 vl-data-table__header-title"
                 currentSorting=sort
                 field="planned-start"
-                label="Kort bestek"
+                label=(t "newsletter")
               }}
-              {{th-sortable
-                class="vl-data-table-col-3 vl-data-table__header-title"
-                field="agendas"
-                label="Kort bestek verstuurd op"
-              }}
-              <th class="vl-data-table-col-3 vl-data-table__header-title">
+              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable">
+              <!--TODO: should sort on field agendas but does not return all 10 results-->
+                {{concat (t "newsletter") " " (t "sent-at")}}
+              </th>
+              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable" >
               <!--TODO: should sort on latest modified agenda-->
-                {{translatedModifiedTitle}}
+                {{t "latest-modified"}}
               </th>
               <th class="vl-data-table-col-1"></th>
             {{/c.header}}
@@ -41,12 +40,12 @@
                     aria-busy="true"
                   ></div>
                 {{else}}
-                  {{translatedPrefix}}
+                  {{t "newsletter-for-meeting-of"}}
                   {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                 {{/if}}
               </td>
               <td>
-                {{emptyValue}}
+                {{t "dash"}}
               </td>
               <td>
                 {{#if (is-pending meeting.latestAgenda)}}
@@ -71,7 +70,7 @@
                 </button>
               </td>
             {{/c.body}}
-          {{/t.content}}
+          {{/table.content}}
         {{/data-table}}
       </div>
     </div>

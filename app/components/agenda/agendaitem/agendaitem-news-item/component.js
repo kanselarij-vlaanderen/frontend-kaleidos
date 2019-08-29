@@ -11,6 +11,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 	subcase: null,
 	agendaitem: null,
 	isEditing: false,
+	intl: inject(),
 
 	item: computed('subcase.newsletterInfo', function () {
 		return this.get('subcase.newsletterInfo');

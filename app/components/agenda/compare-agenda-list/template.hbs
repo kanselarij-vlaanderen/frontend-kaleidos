@@ -54,7 +54,7 @@
     </div>
   {{/each}}
 {{else if isLoadingAgendaitems}}
-  {{web-components/vl-loader text=(t "loading-text-inactive")}}
+  {{web-components/vl-loader text=(t "please-be-patient")}}
 {{else if (and agendaOne agendaTwo)}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}

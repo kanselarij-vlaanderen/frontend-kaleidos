@@ -380,6 +380,10 @@ ul {
   margin-bottom: 6em; //fix for firefox (agenda view height)
 }
 
+.table-header-unsortable {
+  color: $dove-gray;
+}
+
 .sortable-item {
   transition: all 0.125s;
 }

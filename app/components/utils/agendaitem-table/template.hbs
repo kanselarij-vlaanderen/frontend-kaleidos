@@ -1,14 +1,14 @@
 {{#light-table
   table
-  tableClassNames="vl-data-table vl-data-table vl-data-table--hover vl-data-table--zebra" as |t|
+  tableClassNames="vl-data-table vl-data-table vl-data-table--hover vl-data-table--zebra" as |tab|
 }}
-  {{t.head
+  {{tab.head
     onColumnClick=(action "onColumnClick")
     iconSortable="vl-data-table__header-title__sort-icon vl-vi vl-vi-expand-vertical"
     iconAscending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
     iconDescending="vl-data-table__header-title__sort-icon vl-vi vl-vi-arrow-up"
   }}
-  {{#t.body
+  {{#tab.body
     canExpand=true
     multiRowExpansion=false
     onScrolledToBottom=(action "onScrolledToBottom") as |body|
@@ -16,10 +16,10 @@
     {{#body.expanded-row as |row|}}{{yield row}}{{/body.expanded-row}}
     {{#if isLoading}}
       {{#body.loader}}
-        {{web-components/vl-loader text="De agendapunten worden geladen.."}}
+        {{web-components/vl-loader text=(t "agendaitems-loading-text")}}
       {{/body.loader}}
     {{/if}}
-  {{/t.body}}
+  {{/tab.body}}
 {{/light-table}}
 {{#if isScrolling}}
   <button class="vl-button vl-button--secondary vl-button--icon">

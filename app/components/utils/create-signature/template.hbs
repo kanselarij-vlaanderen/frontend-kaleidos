@@ -23,7 +23,7 @@
       }}
     {{else}}
       <div class="preview-container">
-        <img src="{{downloadUrl}}" alt="Signature" />
+        <img src="{{downloadUrl}}" alt="{{t "no-signature-yet"}}" />
         <a {{action "removeFile" uploadedFile}}>
           {{fa-icon "remove"}}
         </a>
