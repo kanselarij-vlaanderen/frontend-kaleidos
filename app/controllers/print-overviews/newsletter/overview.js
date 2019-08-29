@@ -7,7 +7,7 @@ export default Controller.extend({
   intl: inject(),
   queryParams: ['definite'],
   page: 0,
-  size: 30,
+  size: 100,
 
   links: computed('model.links', function() {
     return this.get('model.links');
@@ -29,5 +29,5 @@ export default Controller.extend({
       prefix = 'Klad ';
     }
     return `${prefix}${this.intl.t('newsletter-overview-pdf-name')} ${moment(date).format('DD-MM-YYYY')}`;
-  })
+  }),
 });

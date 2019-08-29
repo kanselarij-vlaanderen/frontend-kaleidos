@@ -8,7 +8,6 @@ export default Model.extend({
 
   author: belongsTo('user'),
   agendaitem: belongsTo('agendaitem'),
-  newsletterInfo: belongsTo('newsletter-info'),
 
-  answers: hasMany('remark', { polymorphic: true })
+  answers: hasMany('remark', { polymorphic: true }),
 });

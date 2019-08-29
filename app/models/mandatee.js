@@ -24,8 +24,9 @@ export default Model.extend({
   agendaitems: hasMany('agendaitem', { inverse: null }),
 
   fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
-    if (this.get('person.nameToDisplay')) {
-      return `${this.get('person.nameToDisplay')}, ${this.get('title')}`;
+    const nameToDisplay = this.get('person.nameToDisplay');
+    if (nameToDisplay) {
+      return `${nameToDisplay}, ${this.get('title')}`;
     } else {
       return `${this.get('title')}`;
     }

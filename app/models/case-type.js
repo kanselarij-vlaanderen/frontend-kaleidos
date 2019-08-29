@@ -5,5 +5,6 @@ const { Model, attr, hasMany } = DS;
 export default Model.extend({
 	label: attr('string'),
 	scopeNote: attr('string'),
-	cases: hasMany('case', { inverse: null })
+	cases: hasMany('case', { inverse: null }),
+	deprecated: attr('boolean')
 });

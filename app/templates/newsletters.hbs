@@ -11,9 +11,9 @@
           size=size
           sort=sort
           enableSizes=true
-          isLoading=isLoadingModel as |t|
+          isLoading=isLoadingModel as |table|
         }}
-          {{#t.content as |c|}}
+          {{#table.content as |c|}}
             {{#c.header}}
               {{th-sortable
                 class="vl-data-table-col-5 vl-data-table__header-title"
@@ -26,12 +26,10 @@
                 field="agendas"
                 label="Kort bestek verstuurd op"
               }}
-              {{th-sortable
-                class="vl-data-table-col-3 vl-data-table__header-title"
-                currentSorting=sort
-                field="created"
-                label="Laatst gewijzigd"
-              }}
+              <th class="vl-data-table-col-3 vl-data-table__header-title">
+                <!--TODO: should sort on latest modified agenda-->
+                {{translatedModifiedTitle}}
+              </th>
               <th class="vl-data-table-col-1"></th>
             {{/c.header}}
             {{#c.body as |meeting|}}
@@ -48,7 +46,24 @@
                 {{/if}}
               </td>
               <td>
-                {{emptyValue}}
+                {{#if (is-pending meeting.mailCampaign)}}
+                  <div
+                    class="skeletal-loader"
+                    role="alert"
+                    aria-busy="true"
+                  ></div>
+                {{else if (await meeting.mailCampaign)}}
+                  {{#if (await meeting.mailCampaign.sent)}}
+                    {{moment-format
+                      (await meeting.mailCampaign.sentAt)
+                      "DD.MM.YYYY HH:mm"
+                    }}
+                  {{else}}
+                    {{t "not-sent-yet"}}
+                  {{/if}}
+                {{else}}
+                  {{t "not-yet-created"}}
+                {{/if}}
               </td>
               <td>
                 {{#if (is-pending meeting.latestAgenda)}}
@@ -73,7 +88,7 @@
                 </button>
               </td>
             {{/c.body}}
-          {{/t.content}}
+          {{/table.content}}
         {{/data-table}}
       </div>
     </div>

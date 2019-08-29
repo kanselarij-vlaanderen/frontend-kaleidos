@@ -15,12 +15,17 @@ export default Component.extend({
   agendaOne: null,
   agendaTwo: null,
 
-  isLoadingAgendaitems: computed('isLoadingAgendaOne', 'isLoadingAgendaTwo', 'isLoadingComparison', function() {
-    if (this.isLoadingAgendaOne || this.isLoadingAgendaTwo || this.isLoadingComparison) {
-      return true;
+  isLoadingAgendaitems: computed(
+    'isLoadingAgendaOne',
+    'isLoadingAgendaTwo',
+    'isLoadingComparison',
+    function() {
+      if (this.isLoadingAgendaOne || this.isLoadingAgendaTwo || this.isLoadingComparison) {
+        return true;
+      }
+      return false;
     }
-    return false;
-  }),
+  ),
 
   bothAgendasSelectedObserver: observer('agendaOne.id', 'agendaTwo.id', async function() {
     const { agendaOne, agendaTwo, agendaitemsLeft, agendaitemsRight } = this;
@@ -29,7 +34,17 @@ export default Component.extend({
     if (bothAgendasSelected) {
       this.set('isLoadingComparison', true);
       this.set('combinedItems', []);
-      await this.agendaService.agendaWithChanges(agendaOne.get('id'), agendaTwo.get('id'));
+
+      const sortedAgendas = await this.sessionService.currentSession.sortedAgendas;
+      let agendaOneIndex = sortedAgendas.indexOf(agendaOne);
+      let agendaTwoIndex = sortedAgendas.indexOf(agendaTwo);
+
+      if (agendaOneIndex < agendaTwoIndex) {
+        await this.agendaService.agendaWithChanges(agendaOne.get('id'), agendaTwo.get('id'));
+      } else {
+        await this.agendaService.agendaWithChanges(agendaTwo.get('id'), agendaOne.get('id'));
+      }
+
       const newItems = await this.agendaService.reduceComparison(
         await this.creatComparison(agendaitemsLeft, agendaitemsRight)
       );
@@ -42,6 +57,8 @@ export default Component.extend({
     async chooseAgendaOne(agenda) {
       this.set('isLoadingAgendaOne', true);
       const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
+      await this.agendaService.assignDirtyPrioritiesToAgendaitems(agenda);
+
       this.set('agendaitemsLeft', agendaitems);
       this.set('agendaOne', agenda);
       this.set('isLoadingAgendaOne', false);
@@ -49,6 +66,8 @@ export default Component.extend({
     async chooseAgendaTwo(agenda) {
       this.set('isLoadingAgendaTwo', true);
       const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
+      await this.agendaService.assignDirtyPrioritiesToAgendaitems(agenda);
+
       this.set('agendaitemsRight', agendaitems);
       this.set('agendaTwo', agenda);
       this.set('isLoadingAgendaTwo', false);

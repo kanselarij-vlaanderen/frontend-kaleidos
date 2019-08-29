@@ -19,7 +19,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   documentTitle: computed('currentAgenda', 'currentSession', function() {
     const { currentSession, currentAgenda } = this;
-    const agendaName = currentAgenda.get('agendaName');
+    const agendaName = currentAgenda ? currentAgenda.get('agendaName') : '';
     const dateToDisplay = moment(currentSession.get('plannedStart')).format('DD/MM/YYYY HH:mm');
     return `${agendaName} van ${dateToDisplay}`;
   }),

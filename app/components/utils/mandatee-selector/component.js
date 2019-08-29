@@ -1,8 +1,8 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { filter } from '@ember/object/computed';
 import moment from 'moment';
 import ModelSelectorMixin from 'fe-redpencil/mixins/model-selector-mixin';
+import { computed } from '@ember/object';
 
 export default Component.extend(ModelSelectorMixin, {
 	classNames: ["mandatee-selector-container"],
@@ -13,13 +13,9 @@ export default Component.extend(ModelSelectorMixin, {
 	sortField: 'priority',
 	searchField: 'title',
 	includeField: 'person',
-
-	filteredMandatees: filter('items.@each', function (mandatee) {
-		if (!mandatee.end || (moment(mandatee.end).utc().toDate() > moment().utc().toDate())) {
-			if (moment(mandatee.start).utc().toDate() < (moment().utc().toDate())) {
-				return mandatee;
-			}
-		}
+	
+	filter: computed(function() {
+		return {':gte:end': moment().utc().toDate().toISOString()};
 	}),
 
 	actions: {

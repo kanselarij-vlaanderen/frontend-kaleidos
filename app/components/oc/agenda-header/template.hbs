@@ -3,7 +3,24 @@
     <div class="vlc-toolbar__item">
       <h1 class="vlc-page-header__title vlc-page-header__title--bordered">
         {{t "agenda-of"}}
-        {{moment-format meeting.startedAt "DD MMMM YYYY HH:mm"}}
+        {{moment-format meeting.startedAt "DD MMMM YYYY"}}
+        {{t "at"}}
+        {{moment-format meeting.startedAt "HH:mm"}}
+        <a class="vl-link vl-link--bold">
+          <i class="vl-link__icon vl-vi vl-vi-info-filled"></i>
+        </a>
+        {{#attach-popover
+          placement="right"
+          animation="shift"
+          showOn="click"
+          hideOn="clickout click"
+          class="ember-attacher-popper ember-attacher-popper-small ember-attacher-popper-info" as |attacher|
+        }}
+          <p>
+            {{await meeting.kindToShow.label}}
+            {{await meeting.extraInfo}}
+          </p>
+        {{/attach-popover}}
       </h1>
       <div class="vlc-page-header__sub">
         <div class="vlc-toolbar vlc-toolbar--auto">

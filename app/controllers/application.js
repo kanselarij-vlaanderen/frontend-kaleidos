@@ -51,19 +51,31 @@ export default Controller.extend(isAuthenticatedMixin, {
       } else {
         this.set('selectedOption', this.options[0]);
       }
+      const mainNav = document.getElementById('c-main-nav');
       if (CONFIG.routesAllowed.includes(currentRouteName)) {
         document.getElementById('vlaanderen-header').style = 'display:none;';
+        if (mainNav) {
+          mainNav.style = 'display:none;';
+        }
       } else {
         document.getElementById('vlaanderen-header').style = 'display:block;';
+        if (mainNav) {
+          mainNav.style = 'display:block;';
+        }
       }
       const router = this.get('router');
       const role = await this.get('currentSession.userRole');
       const user = await this.get('session.isAuthenticated');
-      if (router && user && role == 'no-access' && currentRouteName != "loading") {
+      if (router && user && role == 'no-access' && currentRouteName != 'loading') {
         this.transitionToRoute('accountless-users');
       }
     })
   ),
+
+  showHeader: computed('role', function(){
+    let role = this.get('role');
+    return role && role !== "" && role !== "no-access";
+  }),
 
   type: computed('model', async function() {
     const { model } = this;

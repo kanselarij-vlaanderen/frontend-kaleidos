@@ -6,16 +6,20 @@
         {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
         {{t "at"}}
         {{moment-format currentSession.plannedStart "HH:mm"}}
-        <i class="vl-link__icon vl-vi vl-vi-info-filled"></i>
+        <a class="vl-link vl-link--bold">
+          <i class="vl-link__icon vl-vi vl-vi-info-filled"></i>
+        </a>
         {{#attach-popover
-          placement="bottom"
+          placement="right"
           animation="shift"
-          class="ember-attacher-popper ember-attacher-popper-small"
+          showOn="click"
+          hideOn="clickout click"
+          class="ember-attacher-popper ember-attacher-popper-small ember-attacher-popper-info" as |attacher|
         }}
-          {{#if (not (eq currentSession.extraInfo ""))}}
-            {{await currentSession.extraInfo}}<br />
-          {{/if}}
-          {{await currentSession.kindToShow.label}}
+          <p>
+            {{await currentSession.kindToShow.label}}
+            {{await currentSession.extraInfo}}
+          </p>
         {{/attach-popover}}
       </h1>
       <div class="vlc-page-header__sub">
@@ -133,6 +137,7 @@
                   {{t "printable-press-agenda"}}
                 </a>
               </li>
+              <li class="vl-popover__link-list__separator" role="none"></li>
               {{#if (or isAdmin isEditor)}}
                 <li>
                   <a
@@ -143,16 +148,27 @@
                     {{t "signature-edit"}}
                   </a>
                 </li>
+                <li class="vl-popover__link-list__item">
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "downloadAllDocuments"}}
+                  >
+                    {{t "download-documents"}}
+                  </a>
+                </li>
                 <li class="vl-popover__link-list__separator" role="none"></li>
                 <li class="vl-popover__link-list__item">
                   {{#if (not currentSession.isFinal)}}
-                    <a
-                      class="vl-link vl-link--block vl-u-text--error"
-                      {{action "lockAgenda" currentAgenda}}
-                      {{action attacher.hide}}
-                    >
-                      {{t "agenda-lock"}}
-                    </a>
+                    {{#if (await hasMultipleAgendas)}}
+                      <a
+                        class="vl-link vl-link--block vl-u-text--error"
+                        {{action "lockAgenda" currentAgenda}}
+                        {{action attacher.hide}}
+                      >
+                        {{t "agenda-lock"}}
+                      </a>
+                    {{/if}}
                   {{else}}
                     <a
                       class="vl-link vl-link--block"

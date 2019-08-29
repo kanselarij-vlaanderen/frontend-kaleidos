@@ -11,7 +11,7 @@
   min-width: 23rem;
   max-width: 90vw;
   max-height: 300px;
-  z-index: z("dropdown");
+  z-index: z('dropdown');
 
   @include respond-to(small) {
     max-height: 65vh;
@@ -22,13 +22,13 @@
     bottom: 0;
     left: 0;
     display: none;
-    z-index: z("popover");
+    z-index: z('popover');
     transform: translateY(120%);
   }
 
   &::before {
     display: block;
-    content: "";
+    content: '';
     position: absolute;
     right: 12px;
     top: -10px;
@@ -37,7 +37,7 @@
     border-top-width: 0;
   }
 
-  &[x-placement="top-end"] {
+  &[x-placement='top-end'] {
     &::before {
       @include arrow-bottom;
     }
@@ -63,7 +63,6 @@
   width: 400px;
   display: block;
   padding: 1em;
-  // max-width: calc(600px - 2em);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -92,7 +91,7 @@
   }
 
   ol ol > li:before {
-    content: counters(my-awesome-counter, ".") ". ";
+    content: counters(my-awesome-counter, '.') '. ';
   }
 
   ol ol > li {
@@ -102,11 +101,15 @@
     counter-increment: my-awesome-counter;
   }
   ol li::before {
-    content: counter(my-awesome-counter) ". ";
+    content: counter(my-awesome-counter) '. ';
     font-weight: bold;
   }
 
   em {
     font-style: italic;
+  }
+
+  .ember-attacher-popper-info {
+    padding: 0;
   }
 }

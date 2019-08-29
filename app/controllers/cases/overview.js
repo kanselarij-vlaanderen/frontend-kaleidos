@@ -77,7 +77,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       this.set('mandatees', filter.mandatees);
       this.set('dateFrom', filter.dateFrom);
       this.set('dateTo', filter.dateTo);
-      this.set('decisionsOnly', filter.decisionsOnly);
+      this.set('decisionsOnly', filter.searchInDecisionsOnly);
     },
   },
 });

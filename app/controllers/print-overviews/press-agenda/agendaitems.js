@@ -14,7 +14,7 @@ export default Controller.extend({
 			cellClassNames: ["vl-data-table-col-7"],
 			sortable: false,
 			breakpoints: ['mobile', 'tablet', 'desktop'],
-			cellComponent: "web-components/vl-content-column",
+			cellComponent: "web-components/vl-agendaitem-content-column",
 		},
 		{
 			label: 'Ministers',

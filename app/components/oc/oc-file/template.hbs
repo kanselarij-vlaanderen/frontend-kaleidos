@@ -1,40 +1,11 @@
-<div class="vl-uploaded-document__title">
-  <div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt">
-    <i class="vl-badge__icon vl-vi vl-vi-document" aria-hidden="true"></i>
-  </div>
-  <div class="vl-uploaded-document__title-container">
-    <div class="title">
-      <h6 class="vl-title vl-title--h6">
-        {{model.filename}}
-      </h6>
-      <button
-        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-        {{action "download"}}
-      >
-        <i
-          class="vl-vi vl-vi-download-harddisk vl-button__icon"
-          aria-hidden="true"
-        ></i>
-        <span class="vl-u-visually-hidden">
-          {{t "download"}}
-        </span>
-      </button>
-      <button
-        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-        {{action "promptDelete"}}
-      >
-        <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>
-        <span class="vl-u-visually-hidden">
-          {{t "delete"}}
-        </span>
-      </button>
-    </div>
-    <div class="vl-document__metadata metadata">
-      {{model.extension}} - {{format-bytesize model.size}}
-    </div>
-  </div>
-</div>
-{{yield}}
+{{ember-kaleidos-webuniversum/vl-uploaded-document
+  name=model.filenameWithoutExtension
+  extension=model.extension
+  size=model.size
+  downloadLink=(concat model.downloadLink "?name=" model.filename)
+  downloadName=model.filename
+  delete=(action "promptDelete")
+  class="vlc-document-card"}}
 {{#if showDeleteWarning}}
   {{web-components/vl-modal-verify
     title="Bestand verwijderen"

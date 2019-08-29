@@ -59,11 +59,21 @@
   grid-template-columns: repeat(2, 47%);
   grid-row-gap: 10px;
   grid-column-gap: 6%;
+
   .grid-item {
     height: 100%;
-    a {
+
+    & > a {
       height: 100%;
+
+      background: #fff !important;
+      cursor: default !important;
+
+      :not(.vlc-document-list__item a) {
+        cursor: default;
+      }
     }
   }
+
   padding-bottom: 10px;
 }

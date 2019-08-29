@@ -11,37 +11,43 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
   },
 
   async model(params) {
-    const { agenda, matchingAgendaItems } = await hash({
-      agenda: this.store.findRecord('agenda', await this.get('sessionService.currentAgenda.id')),
-      matchingAgendaItems: this.matchingAgendaItems(params.filter),
-    });
-    this.set('sessionService.selectedAgendaItem', null);
-    const session = this.modelFor('agenda');
+    const id = await this.get('sessionService.currentAgenda.id');
+    if (id) {
+      const { agenda, matchingAgendaItems } = await hash({
+        agenda: this.store.findRecord('agenda', id),
+        matchingAgendaItems: this.matchingAgendaItems(params.filter),
+      });
 
-    const {
-      groups,
-      firstAgendaItem,
-      announcements,
-      lastPrio,
-      minutesApproval,
-    } = await this.parseAgendaItems(agenda, session);
-    if (minutesApproval) {
-      this.set('sessionService.firstAgendaItemOfAgenda', minutesApproval);
-    } else {
-      this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
-    }
+      this.set('sessionService.selectedAgendaItem', null);
+      const session = this.modelFor('agenda');
 
-    let filteredGroups = groups;
-    if (!isEmpty(params.filter)) {
-      filteredGroups = this.filterAgendaGroups(groups, matchingAgendaItems);
+      const {
+        groups,
+        firstAgendaItem,
+        announcements,
+        lastPrio,
+        minutesApproval,
+      } = await this.parseAgendaItems(agenda, session);
+      if (minutesApproval) {
+        this.set('sessionService.firstAgendaItemOfAgenda', minutesApproval);
+      } else {
+        this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
+      }
+
+
+
+      let filteredGroups = groups;
+      if (!isEmpty(params.filter)) {
+        filteredGroups = this.filterAgendaGroups(groups, matchingAgendaItems);
+      }
+      return hash({
+        currentAgenda: agenda,
+        groups: filteredGroups,
+        announcements: (announcements || []).sortBy('priority'),
+        lastPrio,
+        minutesApproval,
+      });
     }
-    return hash({
-      currentAgenda: agenda,
-      groups: filteredGroups,
-      announcements,
-      lastPrio,
-      minutesApproval,
-    });
   },
 
   matchingAgendaItems: async function(filter) {

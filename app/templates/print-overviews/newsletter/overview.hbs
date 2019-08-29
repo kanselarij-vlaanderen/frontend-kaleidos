@@ -35,13 +35,6 @@
                 definite=definite
                 agendaitem=agendaitem
               }}
-              {{#if agendaitem.showRemarks}}
-                <div class="vlc-hr"></div>
-                {{agenda/agendaitem/agendaitem-comments
-                  item=(await agendaitem.subcase.newsletterInfo)
-                }}
-              {{/if}}
-              <hr class="vlc-hr" />
             {{/each}}
           {{/each}}
         {{/each}}

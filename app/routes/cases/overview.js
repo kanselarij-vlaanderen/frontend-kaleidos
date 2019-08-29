@@ -24,7 +24,14 @@ export default Route.extend(DataTableRouteMixin, {
     },
     decisionsOnly: {
       refreshModel: true,
+      type: 'boolean',
     },
+    size: {
+      refreshModel: true
+    },
+    page: {
+      refreshModel: true
+    }
   },
 
   textSearchFields: ['title', 'data', 'subcaseTitle', 'subcaseSubTitle'],
@@ -38,13 +45,7 @@ export default Route.extend(DataTableRouteMixin, {
   },
 
   wantsFilteredResults(params) {
-    return (
-      !isEmpty(params.searchText) ||
-      !isEmpty(params.dateFrom) ||
-      !isEmpty(params.dateTo) ||
-      !isEmpty(params.mandatees) ||
-      !isEmpty(params.decisionsOnly)
-    );
+    return !isEmpty(params.searchText);
   },
 
   async model(params) {
@@ -53,8 +54,10 @@ export default Route.extend(DataTableRouteMixin, {
     }
     let filterString = [];
     let type = 'cases';
+    const size = params.size || 10;
+    const page = params.page || 0;
     if (!isEmpty(params.decisionsOnly)) {
-      type = 'casesByDecisionText';
+      type = params.decisionsOnly ? 'casesByDecisionText' : 'cases';
     }
     if (!isEmpty(params.searchText)) {
       filterString.push(`filter[${this.textSearchFields.join(',')}]=${params.searchText || ''}`);
@@ -68,6 +71,8 @@ export default Route.extend(DataTableRouteMixin, {
     if (!isEmpty(params.dateTo)) {
       filterString.push(`filter[:lte:sessionDates]=${params.dateTo}`);
     }
+    filterString.push(`page[size]=${size}&page[number]=${page}`);
+    // filterString.push('collapse_uuids=t');
     let searchResults = await $.ajax({
       method: 'GET',
       url: `/${type}/search?${filterString.join('&')}`,
@@ -81,6 +86,14 @@ export default Route.extend(DataTableRouteMixin, {
       filter: {
         id: searchResults.data.map((item) => item.id).join(','),
       },
+      page: {
+        size
+      }
+    }).then(function (res) {
+      if (res.get('meta')) {
+        res.set('meta.count', searchResults.count);
+      }
+      return res;
     });
   },
 

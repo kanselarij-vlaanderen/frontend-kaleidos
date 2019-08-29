@@ -1,10 +1,8 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import $ from "jquery";
 
 export default Component.extend({
-  classNames: ["vl-uploaded-document", "vlc-document-card"],
   showDeleteWarning: false,
   isLoading: false,
   globalError: service(),
@@ -16,21 +14,6 @@ export default Component.extend({
   }),
 
   actions: {
-    download() {
-      $.ajax(
-        `/files/${this.model.id}/download?name=${this.model.filename}.${
-          this.model.extension
-        }`,
-        {
-          method: "GET",
-          dataType: "blob", // or 'arraybuffer'
-          processData: false
-        }
-      ).then(content =>
-        this.saveFileAs(this.model.name, content, this.model.get("contentType"))
-      );
-    },
-
     promptDelete() {
       this.set("showDeleteWarning", true);
       this.get("model").deleteRecord();
@@ -43,11 +26,13 @@ export default Component.extend({
 
     confirmDelete() {
       this.set("isLoading", true);
-      this.get("model")
+      return this.get("model")
         .save()
-        .then(() => {
+        .then((res) => {
           this.set("showDeleteWarning", false);
-          this.onDelete();
+          if (this.onDelete) {
+            return this.onDelete(res);
+          }
         })
         .catch(error => {
           this.globalError.handleError(error);

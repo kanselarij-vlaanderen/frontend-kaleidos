@@ -1,10 +1,12 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
-let { Model, attr, hasMany, belongsTo } = DS;
+const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
+  intl: inject(),
   plannedStart: attr('date'),
   startedOn: attr('date'),
   endedOn: attr('date'),
@@ -22,7 +24,8 @@ export default Model.extend({
   notes: belongsTo('meeting-record'),
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
-
+  mailCampaign: belongsTo('mail-campaign'),
+  
   latestAgenda: computed('agendas.@each', function() {
     return DS.PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {
@@ -32,8 +35,13 @@ export default Model.extend({
     });
   }),
 
-  latestAgendaName: computed('latestAgenda', 'agendas', function() {
+  sortedAgendas: computed('agendas.@each', function() {
+    return this.agendas.sortBy('agendaName').reverse();
+  }),
+
+  latestAgendaName: computed('latestAgenda', 'agendas', 'intl', function() {
     return this.get('latestAgenda').then((agenda) => {
+      if (!agenda) return this.intl.t("no-agenda");
       const agendaLength = this.get('agendas.length');
       const agendaName = agenda.name;
       if (agendaName !== 'Ontwerpagenda') {

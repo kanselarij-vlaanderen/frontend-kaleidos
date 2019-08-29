@@ -4,13 +4,19 @@ export default EmberObject.create({
   routesAllowed: [
     'agenda.agendaitems.index',
     'print-overviews.newsletter.agendaitems',
+    'print-overviews.newsletter.overview',
     'print-overviews.decisions.agendaitems',
+    'print-overviews.decisions.overview',
     'print-overviews.press-agenda.agendaitems',
+    'print-overviews.press-agenda.overview',
     'print-overviews.notes.agendaitems',
+    'print-overviews.notes.overview',
     'cases.case.subcases.overview',
     'cases.case.subcases.subcase.overview',
-    'cases.case.subcases.subcase.documenten',
+    'cases.case.subcases.subcase.documents',
     'agenda.agendaitems.agendaitem',
+    'agenda.compare',
+    'agenda.agendaitems.documents',
   ],
   phasesCodes: [
     {
@@ -88,15 +94,18 @@ export default EmberObject.create({
   kinds: [
     {
       label: 'Ministerraad',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
+      uri:
+        'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
     },
     {
       label: 'Elektronische procedure',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/406F2ECA-524D-47DC-B889-651893135456',
+      uri:
+        'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/406F2ECA-524D-47DC-B889-651893135456',
     },
     {
       label: 'Bijzondere ministerraad',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
+      uri:
+        'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
     },
   ],
   notYetFormallyOk:

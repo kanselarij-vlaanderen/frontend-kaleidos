@@ -1,194 +1,235 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
+import { computed } from '@ember/object';
+import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, {
-	store: inject(),
-	sessionService: inject(),
-	agendaService: inject(),
-	classNames: ["vlc-page-header"],
+export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
+  classNames: ['vlc-page-header'],
 
-	isShowingOptions: false,
-	isPrintingNotes: false,
-	isAddingAnnouncement: false,
-	isAddingAgendaitems: false,
+  store: inject(),
+  sessionService: inject(),
+  agendaService: inject(),
+  fileService: inject(),
+  router: inject(),
 
-	currentAgendaItems: alias('sessionService.currentAgendaItems'),
-	currentSession: alias('sessionService.currentSession'),
-	currentAgenda: alias('sessionService.currentAgenda'),
-	agendas: alias('sessionService.agendas'),
-	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
-	definiteAgendas: alias('sessionService.definiteAgendas'),
 
-	designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {
-		return agenda.get('name') === "Ontwerpagenda";
-	}),
+  isShowingOptions: false,
+  isPrintingNotes: false,
+  isAddingAnnouncement: false,
+  isAddingAgendaitems: false,
 
-	async createDesignAgenda() {
-		this.changeLoading();
-		const session = this.get('currentSession');
-		session.set('isFinal', false);
-		session.save();
-		const definiteAgendas = await this.get('definiteAgendas');
-		const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
+  currentAgendaItems: alias('sessionService.currentAgendaItems'),
+  currentSession: alias('sessionService.currentSession'),
+  currentAgenda: alias('sessionService.currentAgenda'),
+  agendas: alias('sessionService.agendas'),
+  selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  definiteAgendas: alias('sessionService.definiteAgendas'),
 
-		this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda).then(newAgenda => {
-			this.changeLoading();
-			this.set('sessionService.currentAgenda', newAgenda);
-			this.reloadRoute(newAgenda.get('id'));
-		});
-	},
+  hasMultipleAgendas: computed('agendas.@each',async function() {
+    return this.agendas && this.agendas.then(agendas => agendas.length > 1);
+  }),
 
-	actions: {
-		navigateToNotes() {
-			const { currentSession, currentAgenda } = this;
-			this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
-		},
+  designAgendaPresent: filter('currentSession.agendas.@each.name', function(agenda) {
+    return agenda.get('name') === 'Ontwerpagenda';
+  }),
 
-		navigateToPressAgenda() {
-			const { currentSession, currentAgenda } = this;
-			this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
-		},
+  async createDesignAgenda() {
+    this.changeLoading();
+    const session = this.get('currentSession');
+    session.set('isFinal', false);
+    session.save();
+    const definiteAgendas = await this.get('definiteAgendas');
+    const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
-		navigateToNewsletter() {
-			const { currentSession, currentAgenda } = this;
-			this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
-		},
+    this.get('agendaService')
+      .approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda)
+      .then((newAgenda) => {
+        this.changeLoading();
+        this.set('sessionService.currentAgenda', newAgenda);
+        this.reloadRoute(newAgenda.get('id'));
+      });
+  },
 
-		navigateToDecisions() {
-			const { currentSession, currentAgenda } = this;
-			this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
-		},
+  actions: {
+    navigateToNotes() {
+      const { currentSession, currentAgenda } = this;
+      this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
+    },
 
-		clearSelectedAgendaItem() {
-			this.clearSelectedAgendaItem();
-		},
+    navigateToPressAgenda() {
+      const { currentSession, currentAgenda } = this;
+      this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
+    },
 
-		cancel() {
-			this.set('showWarning', false);
-		},
+    navigateToNewsletter() {
+      const { currentSession, currentAgenda } = this;
+      this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
+    },
 
-		verify() {
-			this.set('showWarning', false);
-		},
+    navigateToDecisions() {
+      const { currentSession, currentAgenda } = this;
+      this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
+    },
 
-		async approveAgenda(session) {
-			const isApprovable = await this.currentAgenda.get('isApprovable');
-			if (!isApprovable) {
-				this.set('showWarning', true);
-			} else {
-				this.changeLoading();
-				let agendas = await this.get('agendas');
-				let agendaToLock = await agendas.find(agenda => agenda.name == "Ontwerpagenda");
-				if (agendaToLock) {
-					agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
-				}
-				let definiteAgendas = await this.get('definiteAgendas');
-				let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
+    clearSelectedAgendaItem() {
+      this.clearSelectedAgendaItem();
+    },
 
-				if (!lastDefiniteAgenda) {
-					agendaToLock.set('name', CONFIG.alphabet[0]);
-				} else {
-					if (definiteAgendas) {
-						const agendaLength = definiteAgendas.length;
+    cancel() {
+      this.set('showWarning', false);
+    },
 
-						if (agendaLength && CONFIG.alphabet[agendaLength]) {
-							if (agendaLength < (CONFIG.alphabet.get('length') - 1)) {
-								agendaToLock.set('name', CONFIG.alphabet[agendaLength]);
-							}
-						} else {
-							agendaToLock.set('name', agendaLength + 1);
-						}
-					} else {
-						agendaToLock.set('name', agendas.get('length') + 1);
-					}
-				}
+    verify() {
+      this.set('showWarning', false);
+    },
 
-				agendaToLock.set('isAccepted', true);
-				agendaToLock.set('modified', moment().utc().toDate());
-				agendaToLock.save().then((agendaToApprove) => {
-					this.get('agendaService').approveAgendaAndCopyToDesignAgenda(session, agendaToApprove).then(newAgenda => {
-						this.changeLoading();
-						this.get('agendaService').sortAgendaItems(newAgenda);
-						this.get('agendaService').sortAgendaItems(agendaToLock);
-						this.set('sessionService.currentAgenda', newAgenda);
-						this.set('sessionService.selectedAgendaItem', null);
-						this.reloadRoute(newAgenda.get('id'));
-					});
-				})
-			}
-		},
+    async approveAgenda(session) {
+      const isApprovable = await this.currentAgenda.get('isApprovable');
+      if (!isApprovable) {
+        this.set('showWarning', true);
+      } else {
+        this.changeLoading();
+        let agendas = await this.get('agendas');
+        let agendaToLock = await agendas.find((agenda) => agenda.name == 'Ontwerpagenda');
+        if (agendaToLock) {
+          agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
+        }
+        let definiteAgendas = await this.get('definiteAgendas');
+        let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
-		async lockAgenda() {
-			const agendas = await this.get('agendas');
-			const draft = agendas.filter(agenda => agenda.name === "Ontwerpagenda").sortBy('-name').get('firstObject');
-			const lastAgenda = agendas.filter(agenda => agenda.name !== "Ontwerpagenda").sortBy('-name').get('firstObject');
+        if (!lastDefiniteAgenda) {
+          agendaToLock.set('name', CONFIG.alphabet[0]);
+        } else {
+          if (definiteAgendas) {
+            const agendaLength = definiteAgendas.length;
 
-			if (draft) {
-				await draft.destroyRecord();
+            if (agendaLength && CONFIG.alphabet[agendaLength]) {
+              if (agendaLength < CONFIG.alphabet.get('length') - 1) {
+                agendaToLock.set('name', CONFIG.alphabet[agendaLength]);
+              }
+            } else {
+              agendaToLock.set('name', agendaLength + 1);
+            }
+          } else {
+            agendaToLock.set('name', agendas.get('length') + 1);
+          }
+        }
 
-				const session = await lastAgenda.get('createdFor');
-				session.set('isFinal', true);
-				await session.save();
-				this.set('sessionService.currentAgenda', lastAgenda);
-				this.reloadRoute();
-			}
-		},
+        agendaToLock.set('isAccepted', true);
+        agendaToLock.set(
+          'modified',
+          moment()
+            .utc()
+            .toDate()
+        );
+        agendaToLock.save().then((agendaToApprove) => {
+          this.get('agendaService')
+            .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
+            .then((newAgenda) => {
+              this.changeLoading();
+              this.get('agendaService').sortAgendaItems(newAgenda);
+              this.get('agendaService').sortAgendaItems(agendaToLock);
+              this.set('sessionService.currentAgenda', newAgenda);
+              this.set('sessionService.selectedAgendaItem', null);
+              this.reloadRoute(newAgenda.get('id'));
+            });
+        });
+      }
+    },
 
-		async unlockAgenda() {
-			await this.createDesignAgenda();
-		},
+    async lockAgenda() {
+      const agendas = await this.get('agendas');
+      const draft = agendas
+        .filter((agenda) => agenda.name === 'Ontwerpagenda')
+        .sortBy('-name')
+        .get('firstObject');
+      const lastAgenda = agendas
+        .filter((agenda) => agenda.name !== 'Ontwerpagenda')
+        .sortBy('-name')
+        .get('firstObject');
 
-		showMultipleOptions() {
-			this.toggleProperty('isShowingOptions');
-		},
+      if (draft) {
+        await draft.destroyRecord();
 
-		compareAgendas() {
-			this.compareAgendas();
-		},
+        const session = await lastAgenda.get('createdFor');
+        session.set('isFinal', true);
+        await session.save();
+        this.set('sessionService.currentAgenda', lastAgenda);
+        this.reloadRoute();
+      }
+    },
 
-		navigateToSubCases() {
-			this.set('isAddingAgendaitems', true);
-		},
+    async unlockAgenda() {
+      await this.createDesignAgenda();
+    },
 
-		toggleIsAddingAnnouncement() {
-			this.toggleProperty('isAddingAnnouncement');
-		},
+    showMultipleOptions() {
+      this.toggleProperty('isShowingOptions');
+    },
 
-		navigateToCreateAnnouncement() {
-			this.set('addingAnnouncement', true);
-		},
+    compareAgendas() {
+      this.compareAgendas();
+    },
 
-		async deleteDesignAgenda(agenda) {
-			const definiteAgendas = await this.get('definiteAgendas');
-			const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
+    navigateToSubCases() {
+      this.set('isAddingAgendaitems', true);
+    },
 
-			agenda.destroyRecord().then(() => {
-				this.set('sessionService.currentAgenda', lastDefiniteAgenda || null)
-			});
-		},
+    toggleIsAddingAnnouncement() {
+      this.toggleProperty('isAddingAnnouncement');
+    },
 
-		async createNewDesignAgenda() {
-			await this.createDesignAgenda();
-		},
+    navigateToCreateAnnouncement() {
+      this.set('addingAnnouncement', true);
+    },
 
-		reloadRoute(id) {
-			this.reloadRoute(id);
-		},
+    async downloadAllDocuments() {
+      const date = moment(this.currentSession.get('plannedStart'))
+        .format('DD_MM_YYYY')
+        .toString();
+      const files = await this.fileService.getAllDocumentsFromAgenda(this.currentAgenda.get('id'));
+      const file = await this.fileService.getZippedFiles(date, this.currentAgenda, files);
+      return this.saveFileAs(
+        `${this.currentAgenda.get('agendaName')}_${date}.zip`,
+        file,
+        'application/zip'
+      );
+    },
 
-		selectSignature() {
-			this.toggleProperty('isAssigningSignature', false);
-		}
-	},
+    async deleteDesignAgenda(agenda) {
+      const definiteAgendas = await this.get('definiteAgendas');
+      const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
-	changeLoading() {
-		this.loading();
-	},
+      agenda.destroyRecord().then(() =>
+        lastDefiniteAgenda
+          ? this.set('sessionService.currentAgenda', lastDefiniteAgenda || null)
+          : this.currentSession.destroyRecord().then(() => this.router.transitionTo('agendas'))
+      );
+    },
 
-	reloadRoute(id) {
-		this.reloadRouteWithNewAgenda(id);
-	}
+    async createNewDesignAgenda() {
+      await this.createDesignAgenda();
+    },
+
+    reloadRoute(id) {
+      this.reloadRoute(id);
+    },
+
+    selectSignature() {
+      this.toggleProperty('isAssigningSignature', false);
+    },
+  },
+
+  changeLoading() {
+    this.loading();
+  },
+
+  reloadRoute(id) {
+    this.reloadRouteWithNewAgenda(id);
+  },
 });

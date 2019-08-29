@@ -69,13 +69,6 @@ export default Service.extend({
     });
   },
 
-  sendNewsletter(agenda) {
-    return $.ajax({
-      method: 'GET',
-      url: `/newsletter/mails?agendaId=${agenda.get('id')}`,
-    });
-  },
-
   approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
     let newAgenda = this.store.createRecord('agenda', {
       name: 'Ontwerpagenda',
@@ -127,7 +120,6 @@ export default Service.extend({
       url: `/agenda-sort/sortedAgenda?sessionId=${sessionId.get(
         'id'
       )}&selectedAgenda=${currentAgendaID}`,
-      data: {},
     }).then((result) => {
       return result.map((item) => {
         item.groups = item.groups.map((group) => EmberObject.create(group));
@@ -140,12 +132,15 @@ export default Service.extend({
     return $.ajax({
       method: 'GET',
       url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
-      data: {},
-    }).then((result) => {
-      this.set('addedDocuments', result.addedDocuments);
-      this.set('addedAgendaitems', result.addedAgendaitems);
-      return result;
-    });
+    })
+      .then((result) => {
+        this.set('addedDocuments', result.addedDocuments);
+        this.set('addedAgendaitems', result.addedAgendaitems);
+        return result;
+      })
+      .catch((err) => {
+        return;
+      });
   },
 
   async createNewAgendaItem(selectedAgenda, subcase) {
@@ -209,8 +204,8 @@ export default Service.extend({
   async reduceComparison(combinedAgendaItems) {
     return this.groupComparisonByMandatee(
       combinedAgendaItems
-        .map(combinedItem => this.addExtraAgendaItemProperties(combinedItem))
-        .filter(combinedItem => combinedItem.left || combinedItem.right)
+        .map((combinedItem) => this.addExtraAgendaItemProperties(combinedItem))
+        .filter((combinedItem) => combinedItem.left || combinedItem.right)
         .sort((a, b) => (a.left && b.left ? a.left.priority - b.left.priority : 1))
     );
   },
@@ -220,7 +215,9 @@ export default Service.extend({
 
     if (mandatees && mandatees !== []) {
       return {
-        groupName: mandatees.map(mandatee => `${mandatee.title} (${mandatee.priority})`).join(', '),
+        groupName: mandatees
+          .map((mandatee) => `${mandatee.title} (${mandatee.priority})`)
+          .join(', '),
         groupPrio: minPriority,
         mandatees: mandatees,
         agendaitem: agendaitem,
@@ -260,7 +257,7 @@ export default Service.extend({
       const group = {
         leftGroupName: leftGroupOfCombinedItem,
         rightGroupName: rightGroupOfCombinedItem,
-        agendaitems: [combinedItem]
+        agendaitems: [combinedItem],
       };
       if (leftGroupOfCombinedItem === rightGroupOfCombinedItem) {
         this.addToGroups(
@@ -276,7 +273,7 @@ export default Service.extend({
           groups,
           {
             ...group,
-            isSame: false
+            isSame: false,
           },
           (group) => group.leftGroupName === leftGroupOfCombinedItem
         );
@@ -285,7 +282,7 @@ export default Service.extend({
           groups,
           {
             ...group,
-            isSame: false
+            isSame: false,
           },
           (group) => group.rightGroupName === rightGroupOfCombinedItem
         );
@@ -301,5 +298,5 @@ export default Service.extend({
     } else {
       foundGroup.agendaitems.push(...group.agendaitems);
     }
-  }
+  },
 });

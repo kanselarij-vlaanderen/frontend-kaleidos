@@ -1,18 +1,27 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { inject } from '@ember/service';
 
 export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   intl: inject(),
   classNames: ['vl-form__group vl-u-bg-porcelain'],
-  propertiesToSet: ['finished', 'subtitle', 'title', 'text', 'richtext', 'mandateeProposal'],
+  propertiesToSet: [
+    'finished',
+    'subtitle',
+    'title',
+    'text',
+    'richtext',
+    'mandateeProposal',
+    'remark',
+  ],
   subtitle: getCachedProperty('subtitle'),
   text: getCachedProperty('text'),
   title: getCachedProperty('title'),
   finished: getCachedProperty('finished'),
+  remark: getCachedProperty('remark'),
 
   themes: computed(`agendaitem.themes`, {
     get() {
@@ -21,32 +30,29 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     },
     set: function(key, value) {
       return value;
-    }
+    },
   }),
 
-  mandateeProposal: computed(`agendaitem.requestedBy.nickName`, 'item.mandateeProposal', {
-    get() {
-      const { agendaitem, item } = this;
+  mandateeProposal: null,
 
-      if (item && agendaitem) {
-        const mandateeProposal = item.get('mandateeProposal');
-        if (mandateeProposal && mandateeProposal != '') {
-          return mandateeProposal;
-        }
-        return agendaitem.get('requestedBy').then(requestedBy => {
-          if (requestedBy) {
-            const proposalText = this.intl.t('proposal-text');
-            return `${proposalText}${requestedBy.get('nickName')}`;
-          } else {
-            return '';
-          }
-        });
+  mandateeProposalObserver: observer(`agendaitem.requestedBy`, 'item.mandateeProposal', async function() {
+    const { agendaitem, item } = this;
+    if (item && agendaitem) {
+      const mandateeProposal = item.get('mandateeProposal');
+      if (mandateeProposal) {
+        this.set('mandateeProposal', mandateeProposal);
       } else {
-        return '';
+        const requestedBy = await agendaitem.get('requestedBy');
+        const proposalText = this.intl.t('proposal-text');
+        if (requestedBy) {
+          const nickName = requestedBy.get('nickName');
+          if (nickName) {
+            this.set('mandateeProposal', `${proposalText}${nickName}`)
+          } else {
+            this.set('mandateeProposal', `${proposalText}${requestedBy.get('title')}`)
+          }
+        }
       }
-    },
-    set: function(key, value) {
-      return value;
     }
   }),
 
@@ -60,12 +66,12 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
       const themes = await this.themes;
       if (documentVersionsSelected) {
         await Promise.all(
-          documentVersionsSelected.map(async documentVersion => {
+          documentVersionsSelected.map(async (documentVersion) => {
             if (documentVersion.get('selected')) {
               item.get('documentVersions').addObject(documentVersion);
             } else {
               const foundDocument = itemDocumentsToEdit.find(
-                item => item.get('id') == documentVersion.get('id')
+                (item) => item.get('id') == documentVersion.get('id')
               );
               if (foundDocument) {
                 item.get('documentVersions').removeObject(documentVersion);
@@ -74,7 +80,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
           })
         );
       }
-      this.setNewPropertiesToModel(item).then(newModel => {
+      this.setNewPropertiesToModel(item).then((newModel) => {
         newModel.reload();
         if (themes) {
           agendaitem.set('themes', themes);
@@ -87,6 +93,6 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
           this.toggleProperty('isEditing');
         }
       });
-    }
-  }
+    },
+  },
 });

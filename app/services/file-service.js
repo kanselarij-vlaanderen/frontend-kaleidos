@@ -60,9 +60,41 @@ export default Service.extend({
   },
 
   removeFile(id) {
-    return fetch({
+    return $.ajax({
       method: 'DELETE',
       url: '/files/' + id,
     });
+  },
+
+  getAllDocumentsFromAgenda(agendaId) {
+    return $.ajax({
+      method: 'GET',
+      url: `/document-grouping-service/getDocumentsFromAgenda/${agendaId}`,
+    })
+      .then((result) => {
+        return result.data.files;
+      })
+      .catch(() => {
+        return;
+      });
+  },
+
+  getZippedFiles(date, agenda, files) {
+    return $.ajax({
+      method: 'POST',
+      url: `/file-bundling-service/bundleAllFiles`,
+      dataType: 'arraybuffer', // or 'blob'
+      data: {
+        meetingDate: date.toString(),
+        agenda: JSON.stringify(agenda),
+        files: JSON.stringify(files),
+      },
+    })
+      .then((content) => {
+        return content;
+      })
+      .catch(() => {
+        return;
+      });
   },
 });
