@@ -1,40 +1,51 @@
 import Route from '@ember/routing/route';
-import $ from "jquery";
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { inject as service } from '@ember/service';
 
 export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   modelName: 'oc-agendaitem',
+  muSearch: service(),
+  isLoading: false,
+
   queryParams: {
     term: {
       refreshModel: true
-    }
+    },
+    // size (implicit through mixin)
+    // page (implicit through mixin)
   },
-
+  
   model(params) {
+    this.set('isLoading', true);
+    let that = this;
     if (!params.term) {
       return null;
     }
-    let searchResults = $.ajax({
-      method: "GET",
-      url: `/oc-agendaitems/search?filter[_all]=${params.term}&page[size]=${params.size}&page[number]=${params.page}`
-    });
-    return searchResults.then(results => {
-      if (results.count === 0) {
-        return null;
-      }
-      let resultIds = results.data.map(res => res.id).join();
-      return this.store.query('oc-agendaitem', { // Transition to random case
-        page: {
-          'size': params.size,
-          'number': params.page
-        },
-        sort: params.sort,
-        filter: {
-          'id': resultIds
-        },
-        include: 'meeting'
+    const mapping = {
+      'meeting.started-at': 'sessionDate'
+    };
+    params.filter = {
+      '_all': params.term
+    }
+    params.page = {
+      size: params.size,
+      number: params.page
+    };
+    
+    params.include = 'meeting';
+    
+    return this.muSearch.query('oc-agendaitems',
+                               params,
+                               this.get('modelName'),
+                               mapping)
+      .then((results) => {
+        that.set('isLoading', false);
+        return results;
+      }).catch(() => {
+        that.set('isLoading', false);
+        // message
+        return [];
       });
-    });
   },
 });

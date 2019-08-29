@@ -18,9 +18,9 @@
           <div class="vl-col--6-12 vl-col--1-1--s">
             {{input class="vl-input-field vl-input-field--block"
               type="text"
-              value=(mut searchTerm)
+              value=searchTerm
               placeholder=(t 'search-placeholder')
-              enter=(action 'search' searchTerm)
+              enter=(action "search" searchTerm)
             }}
           </div>
           <div class="vl-col--1-12 vl-col--1-1--s">
