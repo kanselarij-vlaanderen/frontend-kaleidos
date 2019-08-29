@@ -24,6 +24,7 @@ export default Route.extend(DataTableRouteMixin, {
     },
     decisionsOnly: {
       refreshModel: true,
+      type: 'boolean',
     },
     size: {
       refreshModel: true
@@ -56,7 +57,7 @@ export default Route.extend(DataTableRouteMixin, {
     const size = params.size || 10;
     const page = params.page || 0;
     if (!isEmpty(params.decisionsOnly)) {
-      type = params.decisionsOnly === 'true' ? 'casesByDecisionText' : 'cases';
+      type = params.decisionsOnly ? 'casesByDecisionText' : 'cases';
     }
     if (!isEmpty(params.searchText)) {
       filterString.push(`filter[${this.textSearchFields.join(',')}]=${params.searchText || ''}`);
