@@ -24,7 +24,8 @@ export default Model.extend({
   notes: belongsTo('meeting-record'),
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
-
+  mailCampaign: belongsTo('mail-campaign'),
+  
   latestAgenda: computed('agendas.@each', function() {
     return DS.PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {

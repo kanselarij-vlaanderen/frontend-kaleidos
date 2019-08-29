@@ -69,13 +69,6 @@ export default Service.extend({
     });
   },
 
-  sendNewsletter(agenda) {
-    return $.ajax({
-      method: 'GET',
-      url: `/newsletter/mails?agendaId=${agenda.get('id')}`,
-    });
-  },
-
   approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
     let newAgenda = this.store.createRecord('agenda', {
       name: 'Ontwerpagenda',
