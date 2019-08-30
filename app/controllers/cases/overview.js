@@ -79,6 +79,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     },
 
     filterCases(filter) {
+      this.set('page', 0);
       this.set('searchText', filter.searchText);
       this.set('mandatees', filter.mandatees);
       this.set('dateFrom', filter.dateFrom);
