@@ -2,6 +2,7 @@ import Service from '@ember/service';
 import $ from 'jquery';
 import { inject } from '@ember/service';
 import { A } from '@ember/array';
+import ArrayProxy from '@ember/array/proxy';
 
 export default Service.extend({
   store: inject(),
@@ -51,7 +52,11 @@ export default Service.extend({
               resourceResults.set('meta.pagination.prev', previous);
             }
           }
-          return resourceResults;
+          // return resourceResults;
+          return ArrayProxy.create({
+            content: this.loadSearchPropsOnObject(searchResults.data, resourceResults.toArray()),
+            meta: resourceResults.get('meta')
+          });
         });
       } else {
         return Promise.resolve(A([]));
@@ -152,6 +157,29 @@ export default Service.extend({
       params.push(`sort[${muSearchKey}]=${order}`);
     }
     return params;
+  },
+
+  /**
+   * Load all properties from search objects onto resources objects
+   *
+   */
+  loadSearchPropsOnObject(searchResults, emberDataObjects) {
+    for (var i = 0; i < searchResults.length; i++) {
+      const searchRes = searchResults[i];
+      const edObj = emberDataObjects.findBy('id', searchRes.id);
+      const searchAttrs = Object.keys(searchRes.attributes);
+      for (const n in searchAttrs) {
+        const key = searchAttrs[n];
+        if (searchRes.attributes.hasOwnProperty(key) &&
+            edObj.get(key) === undefined) {
+          edObj.set(key, searchRes.attributes[key])
+        }
+      }
+      edObj.getRecord = function() {
+        return edObj;
+      }
+    }
+    return A(emberDataObjects);
   },
 
 
