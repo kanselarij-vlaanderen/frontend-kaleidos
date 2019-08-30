@@ -2,7 +2,7 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "propose-for")}}
     {{#if (is-pending dateObjectsToEnable)}}
-      {{web-components/vl-loader text=(t "sessions-loading-text")}}
+      {{web-components/vl-loader text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))}}
     {{else}}
       {{web-components/vl-datepicker
         dateObjectsToEnable=(await dateObjectsToEnable)

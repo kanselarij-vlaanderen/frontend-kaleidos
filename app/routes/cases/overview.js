@@ -27,11 +27,11 @@ export default Route.extend(DataTableRouteMixin, {
       type: 'boolean',
     },
     size: {
-      refreshModel: true
+      refreshModel: true,
     },
     page: {
-      refreshModel: true
-    }
+      refreshModel: true,
+    },
   },
 
   textSearchFields: ['title', 'data', 'subcaseTitle', 'subcaseSubTitle'],
@@ -82,19 +82,22 @@ export default Route.extend(DataTableRouteMixin, {
       return [];
     }
 
-    return this.store.query(this.get('modelName'), {
-      filter: {
-        id: searchResults.data.map((item) => item.id).join(','),
-      },
-      page: {
-        size
-      }
-    }).then(function (res) {
-      if (res.get('meta')) {
-        res.set('meta.count', searchResults.count);
-      }
-      return res;
-    });
+    return this.store
+      .query(this.get('modelName'), {
+        filter: {
+          id: searchResults.data.map((item) => item.id).join(','),
+          'is-archived': params.isArchived,
+        },
+        page: {
+          size,
+        },
+      })
+      .then(function(res) {
+        if (res.get('meta')) {
+          res.set('meta.count', searchResults.count);
+        }
+        return res;
+      });
   },
 
   actions: {

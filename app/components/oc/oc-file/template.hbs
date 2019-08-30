@@ -8,10 +8,10 @@
   class="vlc-document-card"}}
 {{#if showDeleteWarning}}
   {{web-components/vl-modal-verify
-    title="Bestand verwijderen"
+    title=(t "document-delete")
     isLoading=isLoading
     buttonType="danger"
-    verifyButtonText="Doorgaan"
+    verifyButtonText=(t "proceed")
     message=removalWarningText
     cancel=(action "cancelDelete")
     verify=(action "confirmDelete")

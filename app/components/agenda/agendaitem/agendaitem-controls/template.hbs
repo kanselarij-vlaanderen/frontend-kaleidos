@@ -21,7 +21,7 @@
             }}
               <ul class="vl-popover__link-list">
                 {{#if (is-pending meetings)}}
-                  {{web-components/vl-loader text=(t "sessions-loading-text")}}
+                  {{web-components/vl-loader text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))}}
                 {{else if (gt (await meetings.length) 0)}}
                   {{#each (await meetings) as |meeting|}}
                     <li class="vl-popover__link-list__item">

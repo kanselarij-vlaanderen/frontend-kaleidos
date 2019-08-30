@@ -6,27 +6,9 @@
         {{textarea
           rows="2"
           class="vl-textarea vl-textarea--block"
-          value=shortTitle
+          value=(mut caseToEdit.shortTitle)
         }}
       </div>
-    </div>
-    <div class="vl-u-spacer">
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title-subcase")}}
-        {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
-      </div>
-    </div>
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value="Dossiertype"}}
-      {{utils/model-selector
-        modelName="case-type"
-        searchField="label"
-        propertyToShow="label"
-        multiSelect=false
-        sortField="label"
-        selectedItems=type
-        selectModel=(action "selectType")
-      }}
     </div>
   </div>
   {{web-components/vl-modal-footer

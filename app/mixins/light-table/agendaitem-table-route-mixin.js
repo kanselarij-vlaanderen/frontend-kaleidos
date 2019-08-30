@@ -8,16 +8,19 @@ export default Mixin.create({
   page: 0,
   size: 10,
   include: null,
+  shouldFilterRemarks: true,
 
   model() {
     const filter = {
       agenda: {
         id: this.modelFor(`print-overviews.${this.routeNamePrefix}`).get('id'),
       },
-      subcase: {
-        'show-as-remark': false,
-      },
     };
+    if (this.shouldFilterRemarks) {
+      filter['subcase'] = {
+        'show-as-remark': false,
+      };
+    }
     this.set('filter', filter);
     return this.store
       .query(this.get('modelName'), {

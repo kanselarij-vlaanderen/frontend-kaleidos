@@ -14,18 +14,6 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
   sort: '-planned-start',
   size: 10,
 
-  closedTranslation: computed('intl', function() {
-    return this.intl.t('closed');
-  }),
-
-  openedTranslation: computed('intl', function() {
-    return this.intl.t('opened');
-  }),
-
-  agendaForTranslation: computed('intl', function() {
-    return this.intl.t('agenda-for');
-  }),
-
   nearestMeeting: computed('model', async function() {
     const nearestMeeting = await this.agendaService.getClosestMeetingAndAgendaIdInTheFuture(
       moment()

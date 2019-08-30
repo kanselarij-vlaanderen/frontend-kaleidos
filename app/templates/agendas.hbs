@@ -58,45 +58,42 @@
                 page=page
                 size=size
                 sort=sort
-                isLoading=isLoadingModel as |t|
+                isLoading=isLoadingModel as |table|
               }}
-                {{#t.content as |c|}}
+                {{#table.content as |c|}}
                   {{#c.header}}
                     {{th-sortable
                       class="vl-data-table-col-3 vl-data-table__header-title"
                       currentSorting=sort
                       field="planned-start"
-                      label="Agenda"
+                      label=(t "agenda")
                     }}
                     {{th-sortable
                       class="vl-data-table-col-2 vl-data-table__header-title"
                       field="agendas"
-                      label="Agenda Versie"
+                      label=(t "agenda-version")
                     }}
-                    {{th-sortable
-                      class="vl-data-table-col-2 vl-data-table__header-title"
-                      currentSorting=sort
-                      field="modified"
-                      label="Laatst gewijzigd"
-                    }}
+                    <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable">
+                      {{t "latest-modified"}}
+                    </th>
                     {{th-sortable
                       class="vl-data-table-col-2 vl-data-table__header-title"
                       currentSorting=sort
                       field="is-final"
-                      label="Status"
+                      label=(t "status")
                     }}
                     {{th-sortable
                       class="vl-data-table-col-2 vl-data-table__header-title"
                       currentSorting=sort
                       field="kind"
-                      label="Aard"
+                      label=(t "kind")
                     }}
                     <th class="vl-data-table-col-1"></th>
                   {{/c.header}}
                   {{#c.body as |meeting|}}
                     {{#if (not meeting.alreadyShown)}}
                       <td {{action "selectAgenda" meeting}}>
-                        {{agendaForTranslation}}
+                        {{t "agenda-for"}}
                         {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                       </td>
                       <td {{action "selectAgenda" meeting}}>
@@ -126,9 +123,9 @@
                       </td>
                       <td>
                         {{#if meeting.isFinal}}
-                          {{closedTranslation}}
+                          {{t "closed"}}
                         {{else}}
-                          {{openedTranslation}}
+                          {{t "opened"}}
                         {{/if}}
                       </td>
                       <td {{action "selectAgenda" meeting}}>
@@ -144,7 +141,7 @@
                       </td>
                     {{/if}}
                   {{/c.body}}
-                {{/t.content}}
+                {{/table.content}}
               {{/data-table}}
             </div>
           </div>

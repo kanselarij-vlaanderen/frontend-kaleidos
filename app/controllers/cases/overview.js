@@ -10,6 +10,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 
   intl: inject(),
   sort: '-created',
+  selectedCase:null,
   isEditingRow: false,
   isNotArchived: false,
   isArchivingCase: false,
@@ -45,10 +46,14 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       this.toggleProperty('isEditingRow');
     },
 
-    archiveCase(caze) {
-      caze.set('isArchived', true);
-      this.set('isArchivingCase', false);
-      caze.save();
+   async archiveCase() {
+      const caseModel = await this.store.findRecord('case',this.get('selectedCase.id'));
+      caseModel.set('isArchived', true);
+      caseModel.save().then(() => {
+        this.set('selectedCase', null);
+        this.send('refreshModel');
+        this.set('isArchivingCase', false);
+      });
     },
 
     unarchiveCase(caze) {
@@ -63,6 +68,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 
     cancelArchiveCase() {
       this.set('isArchivingCase', false);
+      this.set('selectedCase', null);
     },
 
     close(caze) {

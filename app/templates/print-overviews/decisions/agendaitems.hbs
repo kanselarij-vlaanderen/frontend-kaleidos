@@ -10,7 +10,7 @@
     columns=columns as |row|
   }}
     {{#if (is-pending row.decisions)}}
-      {{web-components/vl-loader text="De beslissingen worden geladen.."}}
+      {{web-components/vl-loader text=(t "decisions-loading-text")}}
     {{else}}
       <div class="vl-u-spacer-extended-l">
         <div class="vl-u-spacer">
