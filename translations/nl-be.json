@@ -78,7 +78,7 @@
   "create-notes": "Notulen aanmaken",
   "create-single-newsletter": "Losstaand kort bestek aanmaken",
   "create-subcase": "Procedurestap toevoegen",
-  "created-on": "Aangemaakt op:",
+  "created-on": "Aangemaakt op",
   "creating-subcase": "Procedurestap aanmaken",
   "current-subcase": "Huidige procedurestap",
   "dash": "-",
@@ -447,5 +447,6 @@
   "confidential": "Vertrouwelijk",
   "text-templates": "Tekst templates",
   "oc-priority": "Volgnummer",
-  "oc-sub-priority": "Sub-volgnummer"
+  "oc-sub-priority": "Sub-volgnummer",
+  "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden."
 }

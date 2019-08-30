@@ -10,6 +10,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 
   intl: inject(),
   sort: '-created',
+  selectedCase:null,
   isEditingRow: false,
   isNotArchived: false,
   isArchivingCase: false,
@@ -45,10 +46,12 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       this.toggleProperty('isEditingRow');
     },
 
-    archiveCase(caze) {
-      caze.set('isArchived', true);
+    archiveCase() {
+      this.selectedCase.set('isArchived', true);
       this.set('isArchivingCase', false);
-      caze.save();
+      this.selectedCase.save().then(() => {
+        this.set('selectedCase', null);
+      });
     },
 
     unarchiveCase(caze) {
@@ -63,6 +66,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 
     cancelArchiveCase() {
       this.set('isArchivingCase', false);
+      this.set('selectedCase', null);
     },
 
     close(caze) {

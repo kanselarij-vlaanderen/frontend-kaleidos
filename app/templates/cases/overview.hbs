@@ -48,15 +48,10 @@
       {{#table.content as |c|}}
         {{#c.header}}
           {{th-sortable
-            class="vl-data-table-col-5 vl-data-table__header-title"
+            class="vl-data-table-col-9 vl-data-table__header-title"
             currentSorting=sort
             field="shortTitle"
             label=(t "case-name")
-          }}
-          {{th-sortable
-            class="vl-data-table-col-4 vl-data-table__header-title"
-            field="type"
-            label=(t "case-type")
           }}
           {{th-sortable
             class="vl-data-table-col-2 vl-data-table__header-title"
@@ -75,19 +70,6 @@
                 {{row.title}}
               {{/if}}
             </p>
-          </td>
-          <td>
-            {{#if (is-pending row.type)}}
-              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-            {{else if (not (await row.type))}}
-              <p class="vl-u-text--muted vl-u-text--italic">
-                {{emptyCaseType}}
-              </p>
-            {{else}}
-              <p>
-                {{await row.type.label}}
-              </p>
-            {{/if}}
           </td>
           <td>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
@@ -165,22 +147,10 @@
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isArchivingCase}}
-  {{#web-components/vl-modal
-    isOverlay=true
+  {{web-components/vl-modal-verify
     title=(t "archive-case")
-    closeModal=(action "cancelArchiveCase")
+    message=(t "archive-case-message")
+    cancel=(action "cancelArchiveCase")
+    verify=(action "archiveCase")
   }}
-    <div
-      class="vl-spacer-box vl-u-spacer-extended-top-l vl-u-spacer-extended-bottom-l"
-    >
-      {{web-components/vl-alert
-        title=(t "warning-title")
-        message=(t "archive-case-confirmation")
-        type="danger"
-      }}
-    </div>
-    <button class="vl-button" {{action "archiveCase" selectedCase}}>
-      {{t "archive-case"}}
-    </button>
-  {{/web-components/vl-modal}}
 {{/if}}
