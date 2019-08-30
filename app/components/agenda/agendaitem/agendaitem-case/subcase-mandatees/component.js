@@ -6,6 +6,7 @@ import EmberObject from '@ember/object';
 import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import DS from 'ember-data';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, ApprovalsEditMixin, {
 	store: inject(),
@@ -109,7 +110,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 	async setNewPropertiesToModel(model) {
 		await this.parseDomainsAndMandatees();
 		const { selectedMandatees, selectedIseCodes, submitter } = this;
-		model.set('formallyOk', false);
+		model.set('formallyOk', CONFIG.notYetFormallyOk);
 		model.set('mandatees', selectedMandatees);
 		model.set('iseCodes', selectedIseCodes);
 		model.set('requestedBy', submitter)
