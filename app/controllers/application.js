@@ -29,16 +29,10 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   init() {
     this._super(...arguments);
-    document.addEventListener(
-      'wheel',
-      () => {
-        // ... do stuff with evt
-      },
-      {
-        capture: true,
-        passive: true,
-      }
-    );
+    document.addEventListener('wheel', () => {}, {
+      capture: true,
+      passive: true,
+    });
   },
 
   shouldNavigateObserver: on(
@@ -52,13 +46,18 @@ export default Controller.extend(isAuthenticatedMixin, {
         this.set('selectedOption', this.options[0]);
       }
       const mainNav = document.getElementById('c-main-nav');
+      if (this.isOc) {
+        document.getElementById('vlaanderen-header').style = 'display:none;';
+      }
       if (CONFIG.routesAllowed.includes(currentRouteName)) {
         document.getElementById('vlaanderen-header').style = 'display:none;';
         if (mainNav) {
           mainNav.style = 'display:none;';
         }
       } else {
-        document.getElementById('vlaanderen-header').style = 'display:block;';
+        if (!this.isOc) {
+          document.getElementById('vlaanderen-header').style = 'display:block;';
+        }
         if (mainNav) {
           mainNav.style = 'display:block;';
         }
@@ -72,9 +71,9 @@ export default Controller.extend(isAuthenticatedMixin, {
     })
   ),
 
-  showHeader: computed('role', function(){
+  showHeader: computed('role', function() {
     let role = this.get('role');
-    return role && role !== "" && role !== "no-access";
+    return role && role !== '' && role !== 'no-access';
   }),
 
   type: computed('model', async function() {

@@ -46,11 +46,13 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       this.toggleProperty('isEditingRow');
     },
 
-    archiveCase() {
-      this.selectedCase.set('isArchived', true);
-      this.set('isArchivingCase', false);
-      this.selectedCase.save().then(() => {
+   async archiveCase() {
+      const caseModel = await this.store.findRecord('case',this.get('selectedCase.id'));
+      caseModel.set('isArchived', true);
+      caseModel.save().then(() => {
         this.set('selectedCase', null);
+        this.send('refreshModel');
+        this.set('isArchivingCase', false);
       });
     },
 
