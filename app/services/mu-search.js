@@ -52,7 +52,7 @@ export default Service.extend({
             }
           }
           return resourceResults;
-        })
+        });
       } else {
         return Promise.resolve(A([]));
       }
