@@ -27,15 +27,19 @@ export default Service.extend({
             resourceResults.set('meta.count', searchResults.count);
           }
           if (params.page && params.page.number !== undefined && params.page.size) {
-            const maxcount = (params.page.number+1) * params.page.size;
+            const maxcount = (params.page.number + 1) * params.page.size;
+            // const isLast = Boolean(maxcount > searchResults.count);
             resourceResults.set('meta.pagination.first', {size: params.page.size});
-            resourceResults.set('meta.pagination.last.number', Math.floor(searchResults.count / params.page.size) +1);
+            resourceResults.set('meta.pagination.last', {
+              number: Math.floor(searchResults.count / params.page.size),
+              size: searchResults.count % params.page.size
+            });
             resourceResults.set('meta.pagination.self.number', params.page.number);
-            resourceResults.set('meta.pagination.self.size', params.page.size);
-            if ((maxcount + params.page.size) <= searchResults.count) {
+            if (maxcount < searchResults.count) {
+              let nextIsLast = Boolean((maxcount + 1) > searchResults.count);
               const next = {
                 number: params.page.number + 1,
-                size: params.page.size
+                size: nextIsLast ? (searchResults.count % params.page.size) : params.page.size
               };
               resourceResults.set('meta.pagination.next', next);
             }
