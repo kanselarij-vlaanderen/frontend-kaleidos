@@ -40,7 +40,7 @@
               <div class="vl-u-spacer-extended-bottom-l">
                 {{#data-table
                   content=(await model)
-                  onClickRow=(action "selectItem" item)
+                  onClickRow=(action "selectItem")
                   class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
                   page=page
                   size=size
@@ -55,12 +55,10 @@
                         field="meeting.startedAt"
                         label=(t "meeting")
                       }}
-                      {{th-sortable
-                        class="vl-data-table-col-4 vl-data-table__header-title"
-                        currentSorting=sort
-                        field="subject"
-                        label=(t "subject")
-                      }}
+                      <th
+                        class="vl-data-table-col-4 vl-data-table__header-title">
+                        {{t "subject"}}
+                      </th>
                       <th class="vl-data-table-col-1"></th>
                     {{/c.header}}
                     {{#c.body as |item|}}
