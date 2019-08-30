@@ -17,7 +17,6 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   },
   
   model(params) {
-    this.set('isLoading', true);
     let that = this;
     if (!params.term) {
       return null;
@@ -32,9 +31,9 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
       size: params.size,
       number: params.page
     };
-    
     params.include = 'meeting';
-    
+
+    this.set('isLoading', true);
     return this.muSearch.query('oc-agendaitems',
                                params,
                                this.get('modelName'),
