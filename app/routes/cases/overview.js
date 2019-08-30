@@ -1,10 +1,12 @@
 import Route from '@ember/routing/route';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
-import $ from 'jquery';
 import { isEmpty } from '@ember/utils';
+import { inject as service } from '@ember/service';
+import moment from 'moment';
 
 export default Route.extend(DataTableRouteMixin, {
   modelName: 'case',
+  muSearch: service(),
 
   queryParams: {
     isArchived: {
@@ -33,8 +35,9 @@ export default Route.extend(DataTableRouteMixin, {
       refreshModel: true,
     },
   },
-
   textSearchFields: ['title', 'data', 'subcaseTitle', 'subcaseSubTitle'],
+  
+  isLoading: false,
 
   mergeQueryOptions(params) {
     let filter = {};
@@ -43,61 +46,56 @@ export default Route.extend(DataTableRouteMixin, {
       filter: filter,
     };
   },
-
+  
   wantsFilteredResults(params) {
     return !isEmpty(params.searchText);
   },
 
   async model(params) {
+    let that = this;
     if (!this.wantsFilteredResults(params)) {
       return this._super(...arguments);
     }
-    let filterString = [];
-    let type = 'cases';
-    const size = params.size || 10;
-    const page = params.page || 0;
-    if (!isEmpty(params.decisionsOnly)) {
-      type = params.decisionsOnly ? 'casesByDecisionText' : 'cases';
-    }
-    if (!isEmpty(params.searchText)) {
-      filterString.push(`filter[${this.textSearchFields.join(',')}]=${params.searchText || ''}`);
-    }
+    const textSearchKey = this.textSearchFields.join(',');
+    let queryParams = {
+      filter: {
+        // 'is-archived': params.isArchived // Cannot post-filter on mu-cl-resources. field MUST be included in search-object keys
+      },
+      page: {
+        size: params.size,
+        number: params.page
+      },
+      sort: params.sort // Currently only "sessionDates available in search config"
+    };
+    queryParams.filter[textSearchKey] = params.searchText;
+
+    let searchDocumentType = params.decisionsOnly ? 'casesByDecisionText' : 'cases';
     if (!isEmpty(params.mandatees)) {
-      filterString.push(`filter[creators,mandatees]=${params.mandatees}`);
+      queryParams.filter['creators,mandatees'] = params.mandatees;
     }
     if (!isEmpty(params.dateFrom)) {
-      filterString.push(`filter[:gte:sessionDates]=${params.dateFrom}`);
+      queryParams.filter[':gte:sessionDates'] = params.dateFrom;
     }
     if (!isEmpty(params.dateTo)) {
-      filterString.push(`filter[:lte:sessionDates]=${params.dateTo}`);
-    }
-    filterString.push(`page[size]=${size}&page[number]=${page}`);
-    // filterString.push('collapse_uuids=t');
-    let searchResults = await $.ajax({
-      method: 'GET',
-      url: `/${type}/search?${filterString.join('&')}`,
-    });
-
-    if (!searchResults.data || searchResults.data.length < 1) {
-      return [];
+      queryParams.filter[':lte:sessionDates'] = params.dateTo;
     }
 
-    return this.store
-      .query(this.get('modelName'), {
-        filter: {
-          id: searchResults.data.map((item) => item.id).join(','),
-          'is-archived': params.isArchived,
-        },
-        page: {
-          size,
-        },
-      })
+    return this.muSearch.query(searchDocumentType,
+                               queryParams,
+                               this.get('modelName'),
+                               {'session-dates': 'sessionDates'})
       .then(function(res) {
-        if (res.get('meta')) {
-          res.set('meta.count', searchResults.count);
-        }
+        that.set('isLoading', false);
+        res.forEach((_case) => {
+          if (_case.get('sessionDates')) {
+            _case.set('sessionDates', moment(_case.get('sessionDates')));
+          }
+        })
         return res;
-      });
+      }).catch(() => {
+        that.set('isLoading', false);
+        return [];
+      })
   },
 
   actions: {
