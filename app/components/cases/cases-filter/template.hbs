@@ -89,6 +89,14 @@
         dateChanged=(action "selectDateFrom")
       }}
     </div>
+    <div class="vlc-input-field-block vl-col--1-12">
+      {{#if dateFrom}}
+        <button class="vl-button vl-button--link-muted vl-button--icon"
+          onclick={{action "selectDateFrom" null}}>
+          <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
+        </button>
+      {{/if}}
+    </div>
     <div class="vlc-input-field-block vl-col--2-12">
       {{web-components/vl-form-label value=(t "until-date")}}
       {{web-components/vl-datepicker
@@ -96,7 +104,15 @@
         dateChanged=(action "selectDateTo")
       }}
     </div>
-    <div class="vlc-input-field-block vl-col--6-12"></div>
+    <div class="vlc-input-field-block vl-col--1-12">
+      {{#if dateTo}}
+        <button class="vl-button vl-button--link-muted vl-button--icon"
+          onclick={{action "selectDateTo" null}}>
+          <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
+        </button>
+      {{/if}}
+    </div>
+    <div class="vlc-input-field-block vl-col--4-12"></div>
     <div class="vl-col--2-12 action-toggle-container no-margin">
       {{web-components/vl-form-label value=(t "search-in-decisions-only")}}
       {{web-components/vl-toggle
