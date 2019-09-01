@@ -51,16 +51,23 @@
             class="vl-data-table-col-9 vl-data-table__header-title">
             {{t "case-name"}}
           </th>
-          <th
-            class="vl-data-table-col-1 vl-data-table__header-title">
-            {{t "created-on"}}
-          </th>
-          {{th-sortable
-            class="vl-data-table-col-1 vl-data-table__header-title"
-            currentSorting=sort
-            field="sessionDates"
-            label="Op agenda van"
-          }}
+          {{#if searchText}}
+            <th
+              class="vl-data-table-col-1 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+            {{th-sortable
+              class="vl-data-table-col-1 vl-data-table__header-title"
+              currentSorting=sort
+              field="sessionDates"
+              label=(t "on-agenda-of")
+            }}
+          {{else}}
+            <th
+              class="vl-data-table-col-2 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+          {{/if}}
           <th class="vl-data-table-col-1"></th>
         {{/c.header}}
         {{#c.body as |row|}}
@@ -76,9 +83,11 @@
           <td>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
-          <td>
-            {{moment-format row.sessionDates "DD-MM-YYYY"}}
-          </td>
+          {{#if searchText}}
+            <td>
+              {{moment-format row.sessionDates "DD-MM-YYYY"}}
+            </td>
+          {{/if}}
           <td class="vl-u-align-right">
             {{#if (or isAdmin isEditor)}}
               <button class="vl-button vl-button--link vl-button--icon">
