@@ -1,153 +1,145 @@
 import Mixin from '@ember/object/mixin';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import moment from 'moment';
-import { computed } from '@ember/object';
-import { downloadFilePrompt, removeFile } from 'fe-redpencil/utils/file-utils';
+import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
+import { A } from '@ember/array';
 
 /**
  * @param modelToAddDocumentVersionTo:String Is the model where the relation of document-version should be set to.
  */
-export default Mixin.create(FileSaverMixin, {
-	modelToAddDocumentVersionTo: null,
-	uploadedFiles: null,
-	nonDigitalDocuments: null,
-	store: inject(),
-	fileService: inject(),
+export default Mixin.create({
+  store: service(),
+  fileService: service(),
 
-	isAgendaItem: computed('modelToAddDocumentVersionTo', function () {
-		return (this.get('modelToAddDocumentVersionTo') === 'agendaitem');
-	}),
+  documentsInCreation: A([]), // When creating new documents
+  document: null, // When adding a new version to an existing document
 
-	async createNewDocumentWithDocumentVersion(model, file, documentTitle) {
-		const { modelToAddDocumentVersionTo } = this;
-		const confidential = model.get('confidential');
-		const creationDate = moment().utc().toDate();
-		let type, chosenFileName;
-		if (file) {
-			chosenFileName = file.get('chosenFileName') || file.get('filename') || file.get('name');
-			type = file.get('documentType');
-		} else {
-			chosenFileName = documentTitle;
-		}
+  modelToAddDocumentVersionTo: null,
 
-		let document = this.store.createRecord('document', {
-			created: creationDate,
-			title: documentTitle,
-			type: type,
-			freezeAccessLevel: confidential
-		});
-		const modelName = await model.get('constructor.modelName');
+  createNewDocument(title, type, confidential, documentVersion) {
+    const creationDate = moment()
+      .utc()
+      .toDate();
+    return this.store.createRecord('document', {
+      created: creationDate,
+      title: title,
+      type: type,
+      documentVersions: documentVersion ? A([documentVersion]) : undefined, // Optional
+      freezeAccessLevel: confidential,
+    });
+  },
 
-		if (modelName == "meeting-record" || modelName == "decision") {
-			document.set(modelToAddDocumentVersionTo, model);
-		}
+  async createNewDocumentVersion(uploadedFile, document, chosenFileName) {
+    document = await document;
+    const latestVersionNumber = document ? document.get('lastDocumentVersion') || 0 : 0;
+    return this.store.createRecord('document-version', {
+      document, // Optional
+      versionNumber: latestVersionNumber + 1,
+      file: uploadedFile,
+      created: moment()
+        .utc()
+        .toDate(),
+      chosenFileName, // Optional
+    });
+  },
 
-		document.save().then((createdDocument) => {
-			const documentVersion = this.store.createRecord('document-version', {
-				document: createdDocument,
-				created: creationDate,
-				file: file,
-				versionNumber: 1,
-				chosenFileName: chosenFileName
-			});
-			if (!(modelName == "meeting-record" || modelName == "decision")) {
-				documentVersion.set(modelToAddDocumentVersionTo, model);
-			}
-			documentVersion.save().then((createdDocumentVersion) => {
-				model.hasMany('documentVersions').reload();
-				if (file.get('extension') === "docx") {
-					try {
-						this.fileService.convertDocumentVersionById(createdDocumentVersion.get('id')).then((convertedMessage) => {
-							return convertedMessage;
-						});
-					} catch (e) {
-						// TODO: Handle errors
-					}
-				}
-				if (modelName == "meeting-record" || modelName == "decision") {
-					model.set('signedDocument', createdDocument);
-				}
+  async saveDocuments(freezeAccessLevel) {
+    this.set('isLoading', true);
+    const documents = this.get('documentsInCreation');
 
-			});
-		});
-	},
+    const savedDocuments = await Promise.all(
+      documents.map(async (document) => {
+        const documentVersion = await document.get('documentVersions.firstObject');
+        document.set('freezeAccessLevel', freezeAccessLevel);
 
-	async uploadFiles(model) {
-		const { uploadedFiles } = this;
-		if (uploadedFiles) {
-			await Promise.all(uploadedFiles.map(uploadedFile => {
-				if (uploadedFile.id) {
-					return this.createNewDocumentWithDocumentVersion(model, uploadedFile, uploadedFile.get('name'));
-				}
-			}));
-		}
+        return documentVersion.save().then((documentVersion) => {
+          return document.save().then((document) => {
+            this.fileService.convertDocumentVersion(documentVersion);
+            return document;
+          });
+        });
+      })
+    );
 
-		this.set('uploadedFiles', null);
-		this.set('nonDigitalDocuments', null);
-		this.set('isLoading', false);
-	},
+    this.set('documentsInCreation', A([]));
+    this.set('isLoading', false);
+    return savedDocuments;
+  },
 
-	async createNewDocumentVersion(uploadedFile, document, versionNumber) {
-		const { item, modelToAddDocumentVersionTo } = this;
-		const latestDocumentVersion = versionNumber || 0;
-		const newDocumentVersion = await this.createVersion(uploadedFile, latestDocumentVersion);
-		newDocumentVersion.set(modelToAddDocumentVersionTo, (await item));
+  async attachDocumentsToModel(documents, model) {
+    const modelName = await model.get('constructor.modelName');
+    // Don't do anything if other than these
+    if (!['meeting-record', 'decision'].includes(modelName)) {
+      return model;
+    }
 
-		if (document) {
-			newDocumentVersion.set('document', document);
-		}
+    const modelDocuments = await model.get('documents');
+    if (modelDocuments) {
+      model.set(
+        'documents',
+        A(Array.prototype.concat(modelDocuments.toArray(), documents.toArray()))
+      );
+    } else {
+      model.set('documents', documents);
+    }
+    return model;
+  },
 
-		const savedDocumentVersion = await newDocumentVersion.save();
-		const extension = await savedDocumentVersion.get('file.extension');
-		if (extension === "docx") {
-			try {
-				await this.fileService.convertDocumentVersionById(savedDocumentVersion.get('id'));
-			} catch (e) {
-				// TODO: Handle errors
-			}
-		}
-		return savedDocumentVersion;
-	},
+  async attachDocumentVersionsToModel(documentVersions, model) {
+    const modelName = await model.get('constructor.modelName');
+    // Don't do anything for these models
+    if (['meeting-record', 'decision'].includes(modelName)) {
+      return model;
+    }
 
-	createVersion(uploadedFile, latestVersionNumber) {
-		return this.store.createRecord('document-version',
-			{
-				file: uploadedFile,
-				versionNumber: latestVersionNumber + 1,
-				chosenFileName: uploadedFile.get('chosenFileName') || uploadedFile.get('filename') || uploadedFile.get('name'),
-				created: moment().utc().toDate()
-			});
-	},
+    const modelDocumentVersions = await model.get('documentVersions');
+    if (modelDocumentVersions) {
+      model.set(
+        'documentVersions',
+        A(Array.prototype.concat(modelDocumentVersions.toArray(), documentVersions.toArray()))
+      );
+    } else {
+      model.set('documentVersions', documentVersions);
+    }
+    return model;
+  },
 
-	actions: {
-		uploadedFile(uploadedFile) {
-			const { uploadedFiles } = this;
-			if (uploadedFiles) {
-				uploadedFiles.pushObject(uploadedFile);
-			} else {
-				this.set('uploadedFiles', [uploadedFile]);
-			}
-		},
+  actions: {
+    async uploadedFile(uploadedFile) {
+      const documentVersion = await this.createNewDocumentVersion(uploadedFile);
+      let document;
+      if (this.get('document')) {
+        document = this.get('document');
+      } else {
+        document = this.createNewDocument(
+          uploadedFile.get('filenameWithoutExtension'),
+          undefined,
+          undefined,
+          documentVersion
+        );
+        this.get('documentsInCreation').pushObject(document);
+      }
+      documentVersion.set('document', document);
+    },
 
-		async downloadFile(version) {
-			const documentVersion = await version;
-			let file = await documentVersion.get('file');
-      downloadFilePrompt(this, file, documentVersion.nameToDisplay);
-		},
+    async downloadFile(version) {
+      const documentVersion = await version;
+      let file = await documentVersion.get('file');
+      downloadFilePrompt(this, file, documentVersion.get('name'));
+    },
 
-		removeDocument(document) {
-			this.get('nonDigitalDocuments').removeObject(document);
-		},
+    async removeDocument(document) {
+      this.get('documentsInCreation').removeObject(document);
+      const file = await document.get('documentVersions.firstObject.file');
+      if (file.get('id')) {
+        file.destroyRecord();
+      }
+      document.get('documentVersions.firstObject').rollbackAttributes();
+      document.rollbackAttributes();
+    },
 
-		removeFile(file) {
-			removeFile(file).then(() => {
-        this.get('uploadedFiles').removeObject(file);
-      });
-		},
-
-		async showDocumentVersionViewer(documentVersion) {
-			window.open(`/document/${(await documentVersion).get('id')}`);
-		}
-	}
+    async showDocumentVersionViewer(documentVersion) {
+      window.open(`/document/${(await documentVersion).get('id')}`);
+    },
+  },
 });

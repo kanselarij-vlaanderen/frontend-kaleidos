@@ -70,15 +70,30 @@
           {{/link-to}}
         </div>
       {{/if}}
-      {{file-uploader isLoading=isLoading uploadedFile=(action "uploadedFile")}}
+      {{file-uploader isLoading=isLoading uploadedFile=(action "add")}}
       {{#if (not isLoading)}}
         <div class="upload-container">
-          {{#each uploadedFiles as |uploadedFile|}}
-            {{web-components/vl-uploaded-document
-              file=uploadedFile
-              subcase=item
-              uploadedFiles=uploadedFiles
+          {{#each documentsInCreation as |document|}}
+            {{#ember-kaleidos-webuniversum/vl-uploaded-document
+              name=document.documentVersions.firstObject.file.filename
+              extension=document.documentVersions.firstObject.file.extension
+              size=document.documentVersions.firstObject.file.size
+              downloadName=document.documentVersions.firstObject.file.filename
+              downloadLink=(concat
+                document.documentVersions.firstObject.file.downloadLink "?name=" document.documentVersions.firstObject.file.filename
+              )
+              delete=(action "delete" document)
             }}
+              <div class="metadata-container">
+                <div class="vlc-input-field-block">
+                  {{web-components/vl-form-label value=(t "document-name")}}
+                  {{web-components/vl-form-input
+                    width="4"
+                    value=(mut document.name)
+                  }}
+                </div>
+              </div>
+            {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
           {{/each}}
         </div>
       {{else}}
@@ -86,11 +101,12 @@
       {{/if}}
     </div>
     {{web-components/vl-modal-footer
-      isLoading=isCreatingDocuments
+      isLoading=isLoading
       cancelButtonText=(t "cancel")
       saveButtonText=(t "document-add")
-      cancelAction=(action "toggleIsAddingNewDocument")
-      saveAction=(action "uploadNewDocument")
+      cancelAction=(action "cancel")
+      saveAction=(action "saveDocuments")
+      disableSave=(eq model.length 0)
     }}
   {{/web-components/vl-modal}}
 {{/if}}

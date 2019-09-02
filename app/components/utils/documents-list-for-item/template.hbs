@@ -4,9 +4,11 @@
   {{#each (await item.documents) as |document|}}
     <li
       class="vlc-document-list__item
-        {{if document.checkAdded
+        {{if
+          document.checkAdded
           "vlc-document-list__item vlc-document-list__item--active"
-        }}">
+        }}"
+    >
       {{#if (is-pending document.lastDocumentVersion)}}
         <div class="skeletal-loader" role="alert" aria-busy="true"></div>
       {{else if isClickable}}
@@ -16,10 +18,7 @@
           >
             <i class="vl-badge__icon vl-vi vl-vi-document"></i>
           </div>
-          {{document-name
-            documentVersion=(await document.lastDocumentVersion)
-            item=agendaitem
-          }}
+          {{await document.lastDocumentVersion.name}}
         </a>
       {{else}}
         <span>
@@ -28,10 +27,7 @@
           >
             <i class="vl-badge__icon vl-vi vl-vi-document"></i>
           </div>
-          {{document-name
-            documentVersion=(await document.lastDocumentVersion)
-            item=agendaitem
-          }}
+          {{await document.lastDocumentVersion.name}}
         </span>
       {{/if}}
     </li>

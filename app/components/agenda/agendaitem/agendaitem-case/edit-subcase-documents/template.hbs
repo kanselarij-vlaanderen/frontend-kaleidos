@@ -37,10 +37,7 @@
                     ></i>
                   </div>
                   <p>
-                    {{document-name
-                      documentVersion=(await document.lastDocumentVersion)
-                      item=(await item)
-                    }}
+                    {{await document.lastDocumentVersion.name}}
                   </p>
                 </a>
               </td>

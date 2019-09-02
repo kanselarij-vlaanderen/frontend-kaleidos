@@ -115,7 +115,7 @@ export default EmberObject.create({
   formallyOk:
     'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
 
-  names: {
+    latinAdverbialNumberals: {
     1: '',
     2: 'bis',
     3: 'ter',

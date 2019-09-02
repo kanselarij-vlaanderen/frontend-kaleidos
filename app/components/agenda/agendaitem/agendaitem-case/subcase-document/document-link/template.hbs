@@ -103,10 +103,7 @@
       <h6 class="vl-title vl-title--h6">
         {{#if (not isEditing)}}
           <span {{action "toggleIsEditing"}}>
-            {{document-name
-              documentVersion=document.lastDocumentVersion
-              item=item
-            }}
+            {{await document.lastDocumentVersion.name}}
           </span>
         {{else}}
           <div class="vl-u-display-flex vl-u-display-flex-align-center">
