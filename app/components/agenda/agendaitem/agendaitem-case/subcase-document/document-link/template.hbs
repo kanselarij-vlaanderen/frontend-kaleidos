@@ -193,7 +193,7 @@
       {{#if (not uploadedFile)}}
         {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
       {{else}}
-        {{#ember-kaleidos-webuniversum/vl-uploaded-document
+        {{ember-kaleidos-webuniversum/vl-uploaded-document
           name=document.lastDocumentVersion.file.filename
           extension=document.lastDocumentVersion.file.extension
           size=document.lastDocumentVersion.file.size
@@ -205,14 +205,6 @@
           )
           delete=(action "delete" document)
         }}
-          <div class="metadata-container">
-            <div class="vlc-input-field-block">
-              {{web-components/vl-form-label value=(t "document-name")}}
-              {{web-components/vl-form-input width="4" value=(mut document.name)
-              }}
-            </div>
-          </div>
-        {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
       {{/if}}
     </div>
     {{web-components/vl-modal-footer

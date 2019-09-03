@@ -49,27 +49,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     add(file) {
       this.set('uploadedFile', file);
       this.send('uploadedFile', file);
-      //   const { item, uploadedFile, fileName } = this;
-      //   this.set('isLoading', true);
-      //   try {
-      //     const document = await this.get('document');
-      //     const newVersion = await document.get('lastDocumentVersion');
-      //     uploadedFile.set('fileName', fileName);
-      //     const newDocumentVersion = await this.createNewDocumentVersion(
-      //       uploadedFile,
-      //       document,
-      //       newVersion.get('versionNumber')
-      //     );
-      //     document.set('lastDocumentVersion', newDocumentVersion);
-      //   } catch (e) {
-      //     // TODO: Handle errors
-      //   } finally {
-      //     await item.hasMany('documentVersions').reload();
-      //     if (!this.get('isDestroyed')) {
-      //       this.set('isUploadingNewVersion', false);
-      //       this.set('isLoading', false);
-      //     }
-      //   }
     },
 
     async openUploadDialog() {
