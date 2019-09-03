@@ -34,9 +34,13 @@
                 <span class="vlc-pill vlc-pill--error">
                   {{await document.accessLevel.label}}
                 </span>
-              {{else}}
+              {{else if (eq document.accessLevel.label "Beperkt openbaar")}}
                 <span class="vlc-pill vlc-pill--warning">
                   {{await document.accessLevel.label}}
+                </span>
+              {{else}}
+                <span class="vlc-pill">
+                  {{t "no-accessLevel"}}
                 </span>
               {{/if}}
             {{/if}}
@@ -187,31 +191,28 @@
   }}
     <div class="vl-modal-dialog__content">
       {{#if (not uploadedFile)}}
-        {{file-uploader
-          multipleFiles=false
-          uploadedFile=(action "add")
-        }}
+        {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
       {{else}}
         {{#ember-kaleidos-webuniversum/vl-uploaded-document
-              name=document.lastDocumentVersion.file.filename
-              extension=document.lastDocumentVersion.file.extension
-              size=document.lastDocumentVersion.file.size
-              downloadName=document.lastDocumentVersion.file.filename
-              downloadLink=(concat
-                document.lastDocumentVersion.file.downloadLink "?name=" document.lastDocumentVersion.file.filename
-              )
-              delete=(action "delete" document)
-            }}
-              <div class="metadata-container">
-                <div class="vlc-input-field-block">
-                  {{web-components/vl-form-label value=(t "document-name")}}
-                  {{web-components/vl-form-input
-                    width="4"
-                    value=(mut document.name)
-                  }}
-                </div>
-              </div>
-            {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
+          name=document.lastDocumentVersion.file.filename
+          extension=document.lastDocumentVersion.file.extension
+          size=document.lastDocumentVersion.file.size
+          downloadName=document.lastDocumentVersion.file.filename
+          downloadLink=(concat
+            document.lastDocumentVersion.file.downloadLink
+            "?name="
+            document.lastDocumentVersion.file.filename
+          )
+          delete=(action "delete" document)
+        }}
+          <div class="metadata-container">
+            <div class="vlc-input-field-block">
+              {{web-components/vl-form-label value=(t "document-name")}}
+              {{web-components/vl-form-input width="4" value=(mut document.name)
+              }}
+            </div>
+          </div>
+        {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
       {{/if}}
     </div>
     {{web-components/vl-modal-footer

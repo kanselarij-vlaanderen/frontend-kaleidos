@@ -447,5 +447,6 @@
   "text-templates": "Tekst templates",
   "oc-priority": "Volgnummer",
   "oc-sub-priority": "Sub-volgnummer",
-  "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden."
+  "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden.",
+  "no-accessLevel":"Nog geen openbaarheid"
 }
