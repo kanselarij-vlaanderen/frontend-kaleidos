@@ -4,17 +4,12 @@ import moment from 'moment';
 import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import { A } from '@ember/array';
 
-/**
- * @param modelToAddDocumentVersionTo:String Is the model where the relation of document-version should be set to.
- */
 export default Mixin.create({
   store: service(),
   fileService: service(),
 
   documentsInCreation: A([]), // When creating new documents
   document: null, // When adding a new version to an existing document
-
-  modelToAddDocumentVersionTo: null,
 
   createNewDocument(title, type, confidential, documentVersion) {
     const creationDate = moment()
@@ -30,16 +25,17 @@ export default Mixin.create({
   },
 
   async createNewDocumentVersion(uploadedFile, document, chosenFileName) {
+    const created = moment()
+      .utc()
+      .toDate();
     document = await document;
     const latestVersionNumber = document ? document.get('lastDocumentVersion') || 0 : 0;
     return this.store.createRecord('document-version', {
       document, // Optional
+      created,
+      chosenFileName, // Optional
       versionNumber: latestVersionNumber + 1,
       file: uploadedFile,
-      created: moment()
-        .utc()
-        .toDate(),
-      chosenFileName, // Optional
     });
   },
 

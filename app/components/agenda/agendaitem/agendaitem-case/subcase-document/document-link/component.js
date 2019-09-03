@@ -35,10 +35,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     }
   }),
 
-  modelToAddDocumentVersionTo: computed('item', function() {
-    return this.get('item.constructor.modelName');
-  }),
-
   lastDocumentVersion: computed('filteredDocumentVersions.@each', function() {
     return (this.get('filteredDocumentVersions') || []).objectAt(0);
   }),
@@ -48,28 +44,32 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.toggleProperty('isShowingVersions');
     },
 
-    async uploadNewVersion() {
-      const { item, uploadedFile, fileName } = this;
-      this.set('isLoading', true);
-      try {
-        const document = await this.get('document');
-        const newVersion = await document.get('lastDocumentVersion');
-        uploadedFile.set('fileName', fileName);
-        const newDocumentVersion = await this.createNewDocumentVersion(
-          uploadedFile,
-          document,
-          newVersion.get('versionNumber')
-        );
-        document.set('lastDocumentVersion', newDocumentVersion);
-      } catch (e) {
-        // TODO: Handle errors
-      } finally {
-        await item.hasMany('documentVersions').reload();
-        if (!this.get('isDestroyed')) {
-          this.set('isUploadingNewVersion', false);
-          this.set('isLoading', false);
-        }
-      }
+    delete() {},
+    saveChanges() {},
+    add(file) {
+      this.set('uploadedFile', file);
+      this.send('uploadedFile', file);
+      //   const { item, uploadedFile, fileName } = this;
+      //   this.set('isLoading', true);
+      //   try {
+      //     const document = await this.get('document');
+      //     const newVersion = await document.get('lastDocumentVersion');
+      //     uploadedFile.set('fileName', fileName);
+      //     const newDocumentVersion = await this.createNewDocumentVersion(
+      //       uploadedFile,
+      //       document,
+      //       newVersion.get('versionNumber')
+      //     );
+      //     document.set('lastDocumentVersion', newDocumentVersion);
+      //   } catch (e) {
+      //     // TODO: Handle errors
+      //   } finally {
+      //     await item.hasMany('documentVersions').reload();
+      //     if (!this.get('isDestroyed')) {
+      //       this.set('isUploadingNewVersion', false);
+      //       this.set('isLoading', false);
+      //     }
+      //   }
     },
 
     async openUploadDialog() {
@@ -81,11 +81,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.toggleProperty('isUploadingNewVersion');
     },
 
-    async getUploadedFile(file) {
-      this.set('fileName', file.filename);
-      this.set('uploadedFile', file);
-    },
-
     async toggleIsEditing() {
       if (!this.get('document.numberVr')) {
         this.get('document').rollbackAttributes();
@@ -95,14 +90,17 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.toggleProperty('isEditing');
     },
 
-    async saveChanges() {
+    async saveDocuments() {
       this.set('isLoading', true);
       const document = await this.get('document');
-      document.set('numberVr', this.get('numberVr'));
-      document.save().then(() => {
-        this.toggleProperty('isEditing');
-        this.set('isLoading', false);
-      });
+      const documentVersionAdded = await document.get('lastDocumentVersion');
+      const item = await this.get('item');
+      item.get('documentVersions').addObject(documentVersionAdded);
+      await documentVersionAdded.save();
+      await item.save();
+      await document.save();
+      this.set('isLoading', false);
+      this.toggleProperty('isEditing');
     },
 
     cancel() {

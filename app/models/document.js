@@ -7,24 +7,27 @@ const { Model, attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 export default Model.extend({
   store: inject(),
   agendaService: inject(),
+
   addedDocuments: alias('agendaService.addedDocuments'),
-  uri: attr('string'),
-  created: attr('date'),
+
+  archived: attr('boolean'),
   title: attr('string'),
+  description: attr('string'),
+  confidential: attr('boolean'),
+  created: attr('date'),
   numberVp: attr('string'),
   numberVr: attr('string'),
-  description: attr('string'),
   numberVrOriginal: attr(),
   freezeAccessLevel: attr('boolean'),
   forCabinet: attr('boolean'),
 
-  documentVersions: hasMany('document-version'),
   remarks: hasMany('remark'),
+  documentVersions: hasMany('document-version'),
 
   type: belongsTo('document-type'),
+  accessLevel: belongsTo('access-level'),
   signedDecision: belongsTo('decision', { inverse: null }),
   signedMinutes: belongsTo('meeting-record', { inverse: null }),
-  accessLevel: belongsTo('access-level'),
 
   sortedDocumentVersions: computed('documentVersions.@each', function() {
     return PromiseArray.create({

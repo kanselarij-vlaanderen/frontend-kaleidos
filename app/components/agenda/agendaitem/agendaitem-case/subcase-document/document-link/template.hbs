@@ -189,15 +189,29 @@
       {{#if (not uploadedFile)}}
         {{file-uploader
           multipleFiles=false
-          uploadedFile=(action "getUploadedFile")
+          uploadedFile=(action "add")
         }}
       {{else}}
-        <div class="upload-container">
-          {{web-components/vl-uploaded-document
-            file=uploadedFile
-            showMetadata=false
-          }}
-        </div>
+        {{#ember-kaleidos-webuniversum/vl-uploaded-document
+              name=document.lastDocumentVersion.file.filename
+              extension=document.lastDocumentVersion.file.extension
+              size=document.lastDocumentVersion.file.size
+              downloadName=document.lastDocumentVersion.file.filename
+              downloadLink=(concat
+                document.lastDocumentVersion.file.downloadLink "?name=" document.lastDocumentVersion.file.filename
+              )
+              delete=(action "delete" document)
+            }}
+              <div class="metadata-container">
+                <div class="vlc-input-field-block">
+                  {{web-components/vl-form-label value=(t "document-name")}}
+                  {{web-components/vl-form-input
+                    width="4"
+                    value=(mut document.name)
+                  }}
+                </div>
+              </div>
+            {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
       {{/if}}
     </div>
     {{web-components/vl-modal-footer
@@ -205,7 +219,7 @@
       saveButtonText=(t "add")
       isLoading=isLoading
       cancelAction=(action "openUploadDialog")
-      saveAction=(action "uploadNewVersion")
+      saveAction=(action "saveDocuments")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
