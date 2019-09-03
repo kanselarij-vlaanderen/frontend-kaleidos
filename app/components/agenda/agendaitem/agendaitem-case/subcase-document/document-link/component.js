@@ -24,10 +24,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     }
   }),
 
-  numberVr: computed('document.numberVr', function() {
-    return this.get('document.numberVr');
-  }),
-
   openClass: computed('isShowingVersions', function() {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
@@ -43,7 +39,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.toggleProperty('isShowingVersions');
     },
 
-    delete() {},
+    async delete(documentVersion) {
+      this.deleteDocumentVersion((await documentVersion)).then(() => {
+        this.set('uploadedFile', null);
+      });
+    },
 
     async saveChanges() {
       await this.document.save();
@@ -74,8 +74,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       await documentVersion.save();
       const item = await this.attachDocumentVersionsToModel([documentVersion], this.get('item'));
       await item.save();
-      this.set('isLoading', false);
-      this.toggleProperty('isEditing');
     },
 
     cancel() {
@@ -102,8 +100,8 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.set('isVerifyingDelete', true);
     },
 
-    toggleFreezeAccessLevel(document) {
-      document.toggleProperty('freezeAccessLevel');
+    toggleConfidential(document) {
+      document.toggleProperty('confidential');
       document.save();
     },
   },

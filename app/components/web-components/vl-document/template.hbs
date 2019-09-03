@@ -11,18 +11,23 @@
       {{t "download"}}
     </span>
   </button>
-  <button
-    class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-    {{action "downloadFile" documentVersion}}
-  >
-    <i
-      class="vl-vi vl-vi-download-harddisk vl-button__icon"
-      aria-hidden="true"
-    ></i>
-    <span class="vl-u-visually-hidden">
-      {{t "download"}}
-    </span>
-  </button>
+   <a
+          class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+          href={{await documentVersion.file.downloadLink}}
+          download={{concat
+            (await document.lastDocumentVersion.file.downloadLink)
+            "?name="
+            (await document.lastDocumentVersion.file.filename)
+          }}
+        >
+          <i
+            class="vl-vi vl-vi-download-harddisk vl-button__icon"
+            aria-hidden="true"
+          ></i>
+          <span class="vl-u-visually-hidden">
+            {{t "download"}}
+          </span>
+        </a>
   <button
     class="vl-button vl-button--link vl-button--icon vl-button-icon--error js-vl-popover__toggle"
     {{action "deleteDocumentVersion" documentVersion}}

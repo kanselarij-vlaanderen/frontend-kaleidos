@@ -18,7 +18,7 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            {{#if (not document.freezeAccessLevel)}}
+            {{#if (not document.confidential)}}
               {{#if (is-pending document.accessLevel)}}
                 <div
                   class="skeletal-loader"
@@ -49,9 +49,9 @@
             {{#if (or isAdmin isEditor)}}
               <button
                 class="vl-button vl-button--link-muted vl-button--icon"
-                {{action "toggleFreezeAccessLevel" document}}
+                {{action "toggleConfidential" document}}
               >
-                {{#if document.freezeAccessLevel}}
+                {{#if document.confidential}}
                   <span
                     class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
                   ></span>
@@ -203,7 +203,7 @@
             "?name="
             document.lastDocumentVersion.file.filename
           )
-          delete=(action "delete" document)
+          delete=(action "delete" document.lastDocumentVersion)
         }}
       {{/if}}
     </div>

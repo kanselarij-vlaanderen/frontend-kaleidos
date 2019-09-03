@@ -11,6 +11,36 @@ export default Mixin.create({
   documentsInCreation: A([]), // When creating new documents
   document: null, // When adding a new version to an existing document
 
+  didInsertElement() {
+    this._super(...arguments);
+    this.set('documentsInCreation', A([]));
+  },
+
+  async deleteDocument(document) {
+    const documentToDelete = await document;
+    if(!documentToDelete) return;    
+    const documentVersions = await documentToDelete.get('documentVersions');
+    await Promise.all(
+      documentVersions.map(async (documentVersion) => {
+        return this.deleteDocumentVersion(documentVersion);
+      })
+    );
+  },
+
+  async deleteDocumentVersion(documentVersion) {
+    const documentVersionToDelete = await documentVersion;
+    if(!documentVersionToDelete) return;    
+    const file = documentVersionToDelete.get('file');
+    await this.deleteFile(file);
+    return documentVersionToDelete.destroyRecord();
+  },
+
+  async deleteFile(file) {
+    const fileToDelete = await file;
+    if(!fileToDelete) return;
+    return fileToDelete.destroyRecord();
+  },
+
   createNewDocument(title, type, confidential, documentVersion) {
     const creationDate = moment()
       .utc()
@@ -29,7 +59,9 @@ export default Mixin.create({
       .utc()
       .toDate();
     document = await document;
-    const latestVersionNumber = document ? (await document.get('lastDocumentVersion.versionNumber')) || 0 : 0;
+    const latestVersionNumber = document
+      ? (await document.get('lastDocumentVersion.versionNumber')) || 0
+      : 0;
     return this.store.createRecord('document-version', {
       document, // Optional
       created,

@@ -19,7 +19,6 @@ export default Component.extend(
     isEditing: false,
     isLoading: false,
     item: null,
-    isDesignAgenda: null,
 
     model: alias('uploadedFiles'),
 
@@ -29,9 +28,9 @@ export default Component.extend(
     },
 
     actions: {
-      delete(file) {
-        file.destroyRecord().then(() => {
-          this.get('model').removeObject(file);
+      delete(document) {
+        this.deleteDocument(document).then(() => {
+          this.get('documentsInCreation').removeObject(document);
         });
       },
 
@@ -40,15 +39,17 @@ export default Component.extend(
         this.send('uploadedFile', file);
       },
 
-      cancel() {
-        this.get('model').invoke('destroyRecord');
-        if (this.onCancel) {
-          this.onCancel(...arguments);
-        }
+      async deleteAll() {
+        await Promise.all(this.get('documentsInCreation').map((document) => {
+          return this.deleteDocument(document).then(() => {
+            this.get('documentsInCreation').removeObject(document);
+          })
+        }))
+        this.set('isAddingNewDocument', false);
       },
 
       toggleIsAddingNewDocument() {
-        this.set('isAddingNewDocument', true);
+        this.toggleProperty('isAddingNewDocument');
       },
 
       toggleIsEditing() {

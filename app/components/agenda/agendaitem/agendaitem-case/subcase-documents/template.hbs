@@ -53,7 +53,7 @@
 </div>
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
-    closeModal=(action "toggleIsAddingNewDocument")
+    closeModal=(action "deleteAll")
     isOverlay=true
     large=true
     title=(t "document-add")
@@ -104,7 +104,7 @@
       isLoading=isLoading
       cancelButtonText=(t "cancel")
       saveButtonText=(t "document-add")
-      cancelAction=(action "cancel")
+      cancelAction=(action "deleteAll")
       saveAction=(action "saveDocuments")
       disableSave=(eq model.length 0)
     }}
