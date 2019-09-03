@@ -10,10 +10,15 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
   intl: inject(),
   agendaService: inject(),
 
+  queryParams: ['from', 'to'],
+  dateFilter: '',
+  
   creatingNewSession: false,
   sort: '-planned-start',
   size: 10,
 
+  dateRegex: /^(?:(\d{1,2})-)?(?:(\d{1,2})-)?(\d{4})$/,
+  
   nearestMeeting: computed('model', async function() {
     const nearestMeeting = await this.agendaService.getClosestMeetingAndAgendaIdInTheFuture(
       moment()
@@ -76,6 +81,31 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     successfullyAdded() {
       this.set('creatingNewSession', false);
       this.send('refresh');
+    },
+    setDateFilter(date) {
+      date = date.split('/').join('-');
+      const match = this.dateRegex.exec(date);
+      if (!match) {
+        this.set('from', undefined);
+        this.set('to', undefined);
+        return;
+      }
+      const min = moment(parseInt(match[3]), 'YYYY', true);
+      let unitToAdd;
+      if (match[1] && match[2]) {
+        unitToAdd = 'day';
+        min.set('date', parseInt(match[1]));
+        min.set('month', parseInt(match[2]) - 1); // Count starts from 0
+      } else if (match[1]) {
+        unitToAdd = 'month';
+        min.set('month', parseInt(match[1]) - 1);
+      } else {
+        unitToAdd = 'year';
+      }
+      const max = min.clone().add(1, unitToAdd + 's');
+      
+      this.set('from', min.format('YYYY-MM-DD'));
+      this.set('to', max.format('YYYY-MM-DD'));
     }
   }
 });

@@ -79,11 +79,21 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     },
 
     filterCases(filter) {
-      this.set('searchText', filter.searchText);
-      this.set('mandatees', filter.mandatees);
-      this.set('dateFrom', filter.dateFrom);
-      this.set('dateTo', filter.dateTo);
-      this.set('decisionsOnly', filter.searchInDecisionsOnly);
+      this.set('page', 0);
+      const stoppingSearch = Boolean(!filter.searchText);
+      if (stoppingSearch) {
+        this.set('searchText', null);
+        this.set('mandatees', null);
+        this.set('dateFrom', null);
+        this.set('dateTo', null);
+        this.set('sort', null);
+      } else {
+        this.set('searchText', filter.searchText);
+        this.set('mandatees', filter.mandatees);
+        this.set('dateFrom', filter.dateFrom);
+        this.set('dateTo', filter.dateTo);
+        this.set('decisionsOnly', filter.searchInDecisionsOnly);
+      }
     },
   },
 });
