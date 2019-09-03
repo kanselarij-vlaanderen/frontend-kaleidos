@@ -92,13 +92,10 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 
     async saveDocuments() {
       this.set('isLoading', true);
-      const document = await this.get('document');
-      const documentVersionAdded = await document.get('lastDocumentVersion');
-      const item = await this.get('item');
-      item.get('documentVersions').addObject(documentVersionAdded);
-      await documentVersionAdded.save();
+      const documentVersion = await this.get('document.lastDocumentVersion');
+      await documentVersion.save();
+      const item = await this.attachDocumentVersionsToModel([documentVersion], this.get('item'));
       await item.save();
-      await document.save();
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     },

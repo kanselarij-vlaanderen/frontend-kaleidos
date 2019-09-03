@@ -29,7 +29,7 @@ export default Mixin.create({
       .utc()
       .toDate();
     document = await document;
-    const latestVersionNumber = document ? document.get('lastDocumentVersion') || 0 : 0;
+    const latestVersionNumber = document ? (await document.get('lastDocumentVersion.versionNumber')) || 0 : 0;
     return this.store.createRecord('document-version', {
       document, // Optional
       created,
@@ -102,20 +102,22 @@ export default Mixin.create({
 
   actions: {
     async uploadedFile(uploadedFile) {
-      const documentVersion = await this.createNewDocumentVersion(uploadedFile);
-      let document;
-      if (this.get('document')) {
-        document = this.get('document');
+      let { document } = this;
+
+      if (document) {
+        const documentVersion = await this.createNewDocumentVersion(uploadedFile, document);
+        (await document.get('documentVersions')).pushObject(documentVersion);
       } else {
+        const documentVersion = await this.createNewDocumentVersion(uploadedFile);
         document = this.createNewDocument(
           uploadedFile.get('filenameWithoutExtension'),
           undefined,
           undefined,
           documentVersion
         );
+        documentVersion.set('document', document);
         this.get('documentsInCreation').pushObject(document);
       }
-      documentVersion.set('document', document);
     },
 
     async downloadFile(version) {

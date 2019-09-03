@@ -19,6 +19,6 @@ export default Model.extend({
   newsletter: belongsTo('newsletter-info'),
 
   name: computed('document.name', async function() {
-    return formatVersionedDocumentName(this.get('document.name'), this.get('versionNumber'));
+    return formatVersionedDocumentName(await this.get('document.name'), this.get('versionNumber'));
   }),
 });
