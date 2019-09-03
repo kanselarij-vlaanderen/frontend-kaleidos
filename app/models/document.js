@@ -9,6 +9,7 @@ export default Model.extend({
   agendaService: inject(),
 
   addedDocuments: alias('agendaService.addedDocuments'),
+  uri:attr('string'),
 
   archived: attr('boolean'),
   title: attr('string'),

@@ -13,7 +13,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   isShowingVersions: false,
   isUploadingNewVersion: false,
   uploadedFile: null,
-  fileName: null,
   isEditing: false,
   documentToDelete: null,
 
@@ -45,7 +44,12 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     delete() {},
-    saveChanges() {},
+
+    async saveChanges() {
+      await this.document.save();
+      this.set('isEditing', false);
+    },
+
     add(file) {
       this.set('uploadedFile', file);
       this.send('uploadedFile', file);
@@ -60,12 +64,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.toggleProperty('isUploadingNewVersion');
     },
 
-    async toggleIsEditing() {
-      if (!this.get('document.numberVr')) {
-        this.get('document').rollbackAttributes();
-        const lastVersion = await this.document.get('lastDocumentVersion');
-        this.document.set('numberVr', lastVersion.get('nameToDisplay'));
-      }
+    toggleIsEditing() {
       this.toggleProperty('isEditing');
     },
 

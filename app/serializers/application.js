@@ -9,5 +9,13 @@ export default DS.JSONAPISerializer.extend(DataTableSerializerMixin, {
       return shouldSerialize && serializeOption.serialize;
     }
     return shouldSerialize;
-  }
+  },
+
+     serialize() {
+       let payload = this._super(...arguments);
+        if(payload && payload.data && payload.data.attributes){
+          delete payload.data.attributes.uri;
+        }
+        return payload;
+      },
 });

@@ -116,7 +116,7 @@
                 type="text"
                 id=id
                 class="vl-input-field vl-input-field--block"
-                value=numberVr
+                value=(mut document.name)
               }}
             </div>
             <button
@@ -213,6 +213,7 @@
       isLoading=isLoading
       cancelAction=(action "openUploadDialog")
       saveAction=(action "saveDocuments")
+      disableSave=(not uploadedFile)
     }}
   {{/web-components/vl-modal}}
 {{/if}}
