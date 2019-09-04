@@ -1,76 +1,83 @@
 import Component from '@ember/component';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
+import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
+import { A } from '@ember/array';
 
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, UploadDocumentMixin, ModifiedMixin, {
-	globalError: inject(),
-	classNames: ['vl-u-spacer--large'],
-	isAddingNewDocument: false,
-	isEditing: false,
-	isLoading: false,
-	item: null, // can be of type 'agendaitem' or 'subcase'
-	isDesignAgenda:null,
+export default Component.extend(
+  EditAgendaitemOrSubcase,
+  isAuthenticatedMixin,
+  ModifiedMixin,
+  uploadDocumentMixin,
+  {
+    globalError: inject(),
+    classNames: ['vl-u-spacer--large'],
+    isAddingNewDocument: false,
+    isEditing: false,
+    isLoading: false,
+    item: null,
 
-	async createDocumentsForModel(item) {
-		return this.uploadFiles(item);
-	},
+    model: alias('uploadedFiles'),
 
-	actions: {
-		toggleIsAddingNewDocument() {
-			this.toggleProperty('isAddingNewDocument');
-		},
+    init() {
+      this._super(...arguments);
+      this.set('model', A([]));
+    },
 
-		toggleIsEditing() {
-			this.toggleProperty('isEditing');
-		},
+    actions: {
+      delete(document) {
+        this.deleteDocument(document).then(() => {
+          this.get('documentsInCreation').removeObject(document);
+        });
+      },
 
-		cancelEditing() {
-			this.toggleProperty('isEditing');
-		},
+      add(file) {
+        this.get('model').pushObject(file);
+        this.send('uploadedFile', file);
+      },
 
-		refreshRoute() {
-			this.refreshRoute();
-		},
+      async deleteAll() {
+        await Promise.all(this.get('documentsInCreation').map((document) => {
+          return this.deleteDocument(document).then(() => {
+            this.get('documentsInCreation').removeObject(document);
+          })
+        }))
+        this.set('isAddingNewDocument', false);
+      },
 
-		async uploadNewDocument() {
-			const { isDesignAgenda } = this;
-			
-			this.set('isLoading', true);
-			this.set('isCreatingDocuments', true);
-			const item = await this.get('item');
-			const modelName = await item.get('modelName');
-			try {
-				await this.createDocumentsForModel(item);
-				if (isDesignAgenda) {
-					const subcase = await this.get('item.subcase');
-					this.set('modelToAddDocumentVersionTo', 'subcase');
-					await this.createDocumentsForModel(subcase);
-					if (this.modelToAddDocumentVersionTo === 'agendaitem') {
-						this.changeFormallyOkPropertyIfNotSetOnTrue(item);
-						await this.updateModifiedProperty(await item.get('agenda'));
-						await item.save();
-					}
-					await subcase.hasMany('documentVersions').reload();
-					subcase.notifyPropertyChange('documents');
-					subcase.notifyPropertyChange('documentVersions');
-				}
+      toggleIsAddingNewDocument() {
+        this.toggleProperty('isAddingNewDocument');
+      },
 
-				await item.hasMany('documentVersions').reload();
-				item.notifyPropertyChange('documents');
-				item.notifyPropertyChange('documentVersions');
-				this.set('modelToAddDocumentVersionTo', modelName);
-				this.send('refreshRoute');
-			} catch (e) {
-				console.error(e);
-				// TODO: Handle errors
-			} finally {
-				this.set('isCreatingDocuments', false);
-				this.toggleProperty('isAddingNewDocument');
-				this.set('isLoading', true);
-			}
-		}
-	}
-});
+      toggleIsEditing() {
+        this.toggleProperty('isEditing');
+      },
+
+      cancelEditing() {
+        this.toggleProperty('isEditing');
+      },
+
+      refreshRoute() {
+        this.send('refresh');
+      },
+
+      async saveDocuments() {
+        const documents = await this.saveDocuments(null);
+        const item = await this.get('item');
+
+        await Promise.all(
+          documents.map(async (document) => {
+            const documentVersions = await document.get('documentVersions');
+            return this.attachDocumentVersionsToModel(documentVersions, item);
+          })
+        );
+        item.save().then(() => {
+          this.set('isAddingNewDocument', false);
+        });
+      },
+    },
+  }
+);

@@ -13,7 +13,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   isShowingVersions: false,
   isUploadingNewVersion: false,
   uploadedFile: null,
-  fileName: null,
   isEditing: false,
   documentToDelete: null,
 
@@ -25,18 +24,10 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     }
   }),
 
-  numberVr: computed('document.numberVr', function() {
-    return this.get('document.numberVr');
-  }),
-
   openClass: computed('isShowingVersions', function() {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }
-  }),
-
-  modelToAddDocumentVersionTo: computed('item', function() {
-    return this.get('item.constructor.modelName');
   }),
 
   lastDocumentVersion: computed('filteredDocumentVersions.@each', function() {
@@ -48,28 +39,20 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.toggleProperty('isShowingVersions');
     },
 
-    async uploadNewVersion() {
-      const { item, uploadedFile, fileName } = this;
-      this.set('isLoading', true);
-      try {
-        const document = await this.get('document');
-        const newVersion = await document.get('lastDocumentVersion');
-        uploadedFile.set('fileName', fileName);
-        const newDocumentVersion = await this.createNewDocumentVersion(
-          uploadedFile,
-          document,
-          newVersion.get('versionNumber')
-        );
-        document.set('lastDocumentVersion', newDocumentVersion);
-      } catch (e) {
-        // TODO: Handle errors
-      } finally {
-        await item.hasMany('documentVersions').reload();
-        if (!this.get('isDestroyed')) {
-          this.set('isUploadingNewVersion', false);
-          this.set('isLoading', false);
-        }
-      }
+    async delete(documentVersion) {
+      this.deleteDocumentVersion((await documentVersion)).then(() => {
+        this.set('uploadedFile', null);
+      });
+    },
+
+    async saveChanges() {
+      await this.document.save();
+      this.set('isEditing', false);
+    },
+
+    add(file) {
+      this.set('uploadedFile', file);
+      this.send('uploadedFile', file);
     },
 
     async openUploadDialog() {
@@ -81,28 +64,16 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.toggleProperty('isUploadingNewVersion');
     },
 
-    async getUploadedFile(file) {
-      this.set('fileName', file.filename);
-      this.set('uploadedFile', file);
-    },
-
-    async toggleIsEditing() {
-      if (!this.get('document.numberVr')) {
-        this.get('document').rollbackAttributes();
-        const lastVersion = await this.document.get('lastDocumentVersion');
-        this.document.set('numberVr', lastVersion.get('nameToDisplay'));
-      }
+    toggleIsEditing() {
       this.toggleProperty('isEditing');
     },
 
-    async saveChanges() {
+    async saveDocuments() {
       this.set('isLoading', true);
-      const document = await this.get('document');
-      document.set('numberVr', this.get('numberVr'));
-      document.save().then(() => {
-        this.toggleProperty('isEditing');
-        this.set('isLoading', false);
-      });
+      const documentVersion = await this.get('document.lastDocumentVersion');
+      await documentVersion.save();
+      const item = await this.attachDocumentVersionsToModel([documentVersion], this.get('item'));
+      await item.save();
     },
 
     cancel() {
@@ -129,8 +100,8 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.set('isVerifyingDelete', true);
     },
 
-    toggleFreezeAccessLevel(document) {
-      document.toggleProperty('freezeAccessLevel');
+    toggleConfidential(document) {
+      document.toggleProperty('confidential');
       document.save();
     },
   },

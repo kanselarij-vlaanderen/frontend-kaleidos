@@ -12,21 +12,25 @@
         </div>
         <div class="vlc-input-field-block">
           {{web-components/vl-form-label value=(t "text")}}
-          {{textarea class="vl-textarea vl-textarea--block" rows="6" value=text
+          {{textarea class="vl-textarea vl-textarea--block" rows="2" value=text
           }}
         </div>
         <div class="vlc-input-field-block">
-          {{file-uploader
-            isLoading=isLoading
-            uploadedFile=(action "uploadedFile")
-          }}
+          {{file-uploader isLoading=isLoading uploadedFile=(action "add")}}
           {{#if (not isLoading)}}
             <div class="upload-container">
-              {{#each uploadedFiles as |uploadedFile|}}
-                {{web-components/vl-uploaded-document
-                  file=uploadedFile
-                  subcase=item
-                  uploadedFiles=uploadedFiles
+              {{#each documentsInCreation as |document|}}
+                {{ember-kaleidos-webuniversum/vl-uploaded-document
+                  name=document.lastDocumentVersion.file.filename
+                  extension=document.lastDocumentVersion.file.extension
+                  size=document.lastDocumentVersion.file.size
+                  downloadName=document.lastDocumentVersion.file.filename
+                  downloadLink=(concat
+                    document.lastDocumentVersion.file.downloadLink
+                    "?name="
+                    document.lastDocumentVersion.file.filename
+                  )
+                  delete=(action "delete" document)
                 }}
               {{/each}}
             </div>

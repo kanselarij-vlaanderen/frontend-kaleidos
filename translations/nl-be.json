@@ -24,7 +24,7 @@
   "agenda-notes": "Notulen van",
   "agenda-of": "Agenda van",
   "agenda-of-date": "Agenda van {date}",
-  "agenda-title": "Agenda's",
+  "agenda-title": "Agenda’s",
   "agenda-unlock": "Agenda heropenen",
   "agenda-version": "Agenda versie",
   "agendaitem-bestek": "Kort bestek",
@@ -448,5 +448,6 @@
   "text-templates": "Tekst templates",
   "oc-priority": "Volgnummer",
   "oc-sub-priority": "Sub-volgnummer",
-  "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden."
+  "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden.",
+  "no-accessLevel":"Nog geen openbaarheid"
 }
