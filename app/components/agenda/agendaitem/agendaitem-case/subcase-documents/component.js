@@ -72,11 +72,12 @@ export default Component.extend(
 
         const subcase = await item.get('subcase');
         const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
+
         await Promise.all(
           documents.map(async (document) => {
             const documentVersions = await document.get('documentVersions');
             if (subcase) {
-              await this.attachDocumentVersionsToModel(documentVersions, subcase);
+              await this.addDocumentVersionsToSubcase(documentVersions, subcase);
             } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
               await this.addDocumentVersionsToAgendaitems(
                 documentVersions,
@@ -86,7 +87,7 @@ export default Component.extend(
             return this.attachDocumentVersionsToModel(documentVersions, item);
           })
         );
-        if (subcase) await subcase.save();
+
         item.save().then(() => {
           this.set('isAddingNewDocument', false);
         });
@@ -101,5 +102,10 @@ export default Component.extend(
         })
       );
     },
+
+    async addDocumentVersionsToSubcase(documentVersions, subcase) {
+      await this.attachDocumentVersionsToModel(documentVersions, subcase);
+      return subcase.save();
+    }
   }
 );
