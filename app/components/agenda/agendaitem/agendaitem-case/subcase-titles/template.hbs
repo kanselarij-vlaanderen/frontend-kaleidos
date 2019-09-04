@@ -58,66 +58,68 @@
 {{#if (not item.showAsRemark)}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container">
-    {{#if (or isEditor isAdmin)}}
-      {{#if (await freezeAccessLevel)}}
-        <span
-          class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"
-        ></span>
-      {{else}}
-        <span
-          class="vlc-pill vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
-        ></span>
-      {{/if}}
-    {{/if}}
-    {{#if (await item.subcase)}}
-      {{#if (await item.subcase.approved)}}
+      {{#if (await item.subcase)}}
+        {{#if (await item.subcase.approved)}}
+          <span class="vl-pill vl-pill--success vl-u-text--capitalize">
+            {{await item.subcase.subcaseName}}
+          </span>
+        {{else}}
+          <span class="vl-pill vl-u-text--capitalize">
+            {{await item.subcase.subcaseName}}
+          </span>
+        {{/if}}
+      {{else if (await item.approved)}}
         <span class="vl-pill vl-pill--success vl-u-text--capitalize">
-          {{await item.subcase.subcaseName}}
+          {{await item.subcaseName}}
         </span>
       {{else}}
         <span class="vl-pill vl-u-text--capitalize">
-          {{await item.subcase.subcaseName}}
+          {{await item.subcaseName}}
         </span>
       {{/if}}
-    {{else if (await item.approved)}}
-      <span class="vl-pill vl-pill--success vl-u-text--capitalize">
-        {{await item.subcaseName}}
-      </span>
-    {{else}}
-      <span class="vl-pill vl-u-text--capitalize">
-        {{await item.subcaseName}}
-      </span>
-    {{/if}}
+      {{#if isAgendaItem}}
+        {{#if (and (or isEditor isAdmin) (await item.formallyOkToShow))}}
+          <span class="{{item.formallyOkToShow.pillClassNames}}">
+            {{item.formallyOkToShow.label}}
+          </span>
+        {{/if}}
+      {{/if}}
     </div>
+  </div>
+  <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container">
-    {{#if (not (await freezeAccessLevel))}}
-      {{#if (is-pending accessLevelLabel)}}
-        <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-      {{else if (eq (await accessLevelLabel) "Actief openbaar")}}
-        <span class="vlc-pill vlc-pill--success">
-          {{await accessLevelLabel}}
-        </span>
-      {{else if (eq (await accessLevelLabel) "Intern overheid")}}
-        <span class="vlc-pill vlc-pill--error">
-          {{await accessLevelLabel}}
-        </span>
-      {{else if (eq document.accessLevel.label "Beperkt openbaar")}}
-        <span class="vlc-pill vlc-pill--warning">
-          {{await accessLevelLabel}}
-        </span>
-         {{else}}
-                <span class="vlc-pill">
-                  {{t "no-accessLevel"}}
-                </span>
-              {{/if}}
-    {{/if}}
-    </div>
-    {{#if isAgendaItem}}
-      {{#if (and (or isEditor isAdmin) (await item.formallyOkToShow))}}
-        <span class="{{item.formallyOkToShow.pillClassNames}}">
-          {{item.formallyOkToShow.label}}
-        </span>
+      {{#if (or isEditor isAdmin)}}
+        {{#if (await freezeAccessLevel)}}
+          <span
+            class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"
+          ></span>
+        {{else}}
+          <span
+            class="vlc-pill vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+          ></span>
+        {{/if}}
       {{/if}}
-    {{/if}}
+      {{#if (not (await freezeAccessLevel))}}
+        {{#if (is-pending accessLevelLabel)}}
+          <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+        {{else if (eq (await accessLevelLabel) "Actief openbaar")}}
+          <span class="vlc-pill vlc-pill--success">
+            {{await accessLevelLabel}}
+          </span>
+        {{else if (eq (await accessLevelLabel) "Intern overheid")}}
+          <span class="vlc-pill vlc-pill--error">
+            {{await accessLevelLabel}}
+          </span>
+        {{else if (eq document.accessLevel.label "Beperkt openbaar")}}
+          <span class="vlc-pill vlc-pill--warning">
+            {{await accessLevelLabel}}
+          </span>
+        {{else}}
+          <span class="vlc-pill">
+            {{t "no-accessLevel"}}
+          </span>
+        {{/if}}
+      {{/if}}
+    </div>
   </div>
 {{/if}}
