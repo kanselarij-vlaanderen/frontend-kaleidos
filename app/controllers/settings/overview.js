@@ -6,7 +6,6 @@ export default Controller.extend({
 	isEditingMandatee: false,
 	isManagingAlerts: false,
 	isManagingDocumentTypes: false,
-	isManagingUsers: false,
 	isManagingSubcaseTypes: false,
 	isManagingIseCodes: false,
 	isManagingFunctions: false,
