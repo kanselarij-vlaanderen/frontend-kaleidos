@@ -24,3 +24,7 @@
 
 .idea/
 .vscode/
+
+# cypress
+/cypress/videos/
+/cypress/screenshots/
