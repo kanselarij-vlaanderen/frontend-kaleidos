@@ -49,7 +49,7 @@
         {{#if (gt agendaitemGroup.agendaitems.length 0)}}
           <div class="vlc-list-section-header">
             {{#each agendaitemGroup.mandatees as |mandatee|}}
-              {{mandatee.title}}({{mandatee.priority}})<br />
+              {{mandatee.title}}<br />
             {{/each}}
           </div>
           {{#each agendaitemGroup.agendaitems as |agendaitem|}}
@@ -82,7 +82,7 @@
             {{#if (not isShowingChanges)}}
               <div class="vlc-list-section-header">
                 {{#each agendaitemGroup.mandatees as |mandatee|}}
-                  {{mandatee.title}}({{mandatee.priority}})<br />
+                  {{mandatee.title}}<br />
                 {{/each}}
               </div>
             {{/if}}

@@ -57,6 +57,7 @@
 </div>
 {{#if (not item.showAsRemark)}}
   <div class="vl-u-spacer-extended-bottom-s">
+    <div class="pill-container">
     {{#if (or isEditor isAdmin)}}
       {{#if (await freezeAccessLevel)}}
         <span
@@ -87,6 +88,8 @@
         {{await item.subcaseName}}
       </span>
     {{/if}}
+    </div>
+    <div class="pill-container">
     {{#if (not (await freezeAccessLevel))}}
       {{#if (is-pending accessLevelLabel)}}
         <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -98,12 +101,17 @@
         <span class="vlc-pill vlc-pill--error">
           {{await accessLevelLabel}}
         </span>
-      {{else}}
+      {{else if (eq document.accessLevel.label "Beperkt openbaar")}}
         <span class="vlc-pill vlc-pill--warning">
           {{await accessLevelLabel}}
         </span>
-      {{/if}}
+         {{else}}
+                <span class="vlc-pill">
+                  {{t "no-accessLevel"}}
+                </span>
+              {{/if}}
     {{/if}}
+    </div>
     {{#if isAgendaItem}}
       {{#if (and (or isEditor isAdmin) (await item.formallyOkToShow))}}
         <span class="{{item.formallyOkToShow.pillClassNames}}">
