@@ -450,5 +450,7 @@
   "oc-priority": "Volgnummer",
   "oc-sub-priority": "Sub-volgnummer",
   "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden.",
-  "no-accessLevel":"Nog geen openbaarheid"
+  "no-accessLevel":"Nog geen openbaarheid",
+  "import-users":"Gebruikers importeren",
+  "import-users-text":"Gebruikers worden geïmporteerd"
 }

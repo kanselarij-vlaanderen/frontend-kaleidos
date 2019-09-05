@@ -4,6 +4,8 @@ import { inject } from '@ember/service';
 
 export default Controller.extend({
 	intl: inject(),
+	isUploadingFile:null,
+
 	columns: computed(function () {
 		return [{
 			label: this.intl.t('first-name'),
@@ -37,5 +39,15 @@ export default Controller.extend({
 			sortable: true,
 			cellComponent: "web-components/light-table/vl-group-column"
 		}];
-	})
+	}),
+
+	actions: {
+		showFileUploader() {
+			this.toggleProperty('isUploadingFile');
+		},
+
+		add() {
+			
+		}
+	}
 });

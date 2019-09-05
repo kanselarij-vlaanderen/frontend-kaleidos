@@ -12,7 +12,7 @@ export default Component.extend({
   files: null,
   uploadedFileLength: null,
   multipleFiles: true,
-
+  
   didInsertElement() {
     this._super(...arguments);
     this.set('isLoading', false);
