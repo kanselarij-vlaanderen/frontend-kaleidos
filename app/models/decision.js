@@ -2,7 +2,7 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
-let { Model, attr, belongsTo, hasMany } = DS;
+let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
 
 export default Model.extend({
   intl: inject(),
@@ -20,7 +20,29 @@ export default Model.extend({
   documentVersions: hasMany('document-version', { inverse: null }),
   signedDocument: belongsTo('document'),
 
-  decisionApproval: computed('signedDocument', function () {
+  decisionApproval: computed('signedDocument', function() {
     return this.intl.t('signed-document-decision', { name: this.get('signedDocument.numberVr') })
-  })
+  }),
+
+  documents: computed('documentVersions.@each', function() {
+    return PromiseArray.create({
+      promise: this.get('documentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            include: 'document-versions,type',
+          }).then((documents) => {
+            // Sorting is done in the frontend to work around a Virtuoso issue, where
+            // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
+            // some items not being returned. By not having a sort parameter, this doesn't occur.
+            return documents.sortBy('type.priority', 'numberVr');
+          });
+        }
+      }),
+    });
+  }),
 });
