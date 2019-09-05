@@ -15,9 +15,8 @@ export default Component.extend({
 
   uploadFile: task(function*(file) {
     file.readAsDataURL().then(() => {});
-    let response = yield file.upload('/');
-    let fileTest = yield this.store.findRecord('file', response.body.data.id);
-    this.uploadedFile(fileTest);
+    let response = yield file.upload('/user-management-service/import-users');
+    this.uploadedFile(response);
   }).enqueue(),
 
   actions: {

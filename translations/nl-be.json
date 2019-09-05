@@ -452,5 +452,7 @@
   "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden.",
   "no-accessLevel":"Nog geen openbaarheid",
   "import-users":"Gebruikers importeren",
-  "import-users-text":"Gebruikers worden geïmporteerd"
+  "import-users-text":"Gebruikers worden geïmporteerd..",
+  "import-users-success":"De gebruikers zijn succesvol opgeladen."
+
 }
