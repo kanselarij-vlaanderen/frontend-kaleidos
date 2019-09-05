@@ -27,7 +27,7 @@
 
 Cypress.Commands.add('login', (name) => {
   cy.visit('mock-login')
-  cy.get('.grid').within(() => {
+  cy.get('.grid',{timeout: 12000}).within(() => {
       cy.contains(name).click();
   })
   cy.wait(1000)
