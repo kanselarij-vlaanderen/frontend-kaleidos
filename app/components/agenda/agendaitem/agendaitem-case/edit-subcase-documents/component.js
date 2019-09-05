@@ -23,7 +23,7 @@ export default Component.extend(UploadDocumentMixin, {
 			await Promise.all(
 				documents.map((document) => {
 					if (document.get('deleted')) {
-						return document.destroyRecord();
+						return this.deleteDocument(document);
 					} else {
 						return document.save();
 					}

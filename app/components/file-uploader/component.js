@@ -3,6 +3,7 @@ import { task } from 'ember-concurrency';
 import { get } from '@ember/object';
 import { inject } from '@ember/service';
 import { observer } from '@ember/object';
+import { A } from '@ember/array';
 
 export default Component.extend({
   store: inject(),
@@ -16,6 +17,7 @@ export default Component.extend({
     this._super(...arguments);
     this.set('isLoading', false);
     this.set('uploadedFileLength', 0);
+    this.set('fileQueue.files', A([]));
   },
 
   isNotLoading: observer('fileQueue.files.@each', function() {
@@ -40,6 +42,7 @@ export default Component.extend({
       this.set('isLoading', false);
     }
   })
+    .maxConcurrency(3)
     .enqueue(),
 
   actions: {

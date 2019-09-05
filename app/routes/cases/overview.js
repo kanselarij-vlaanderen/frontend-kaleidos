@@ -53,6 +53,7 @@ export default Route.extend(DataTableRouteMixin, {
 
   async model(params) {
     let that = this;
+    const searchModifier = ':sqs:';
     if (!this.wantsFilteredResults(params)) {
       return this._super(...arguments);
     }
@@ -67,7 +68,7 @@ export default Route.extend(DataTableRouteMixin, {
       },
       sort: params.sort // Currently only "sessionDates available in search config"
     };
-    queryParams.filter[textSearchKey] = params.searchText;
+    queryParams.filter[searchModifier + textSearchKey] = params.searchText;
 
     let searchDocumentType = params.decisionsOnly ? 'casesByDecisionText' : 'cases';
     if (!isEmpty(params.mandatees)) {
