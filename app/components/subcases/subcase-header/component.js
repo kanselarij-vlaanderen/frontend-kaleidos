@@ -42,7 +42,6 @@ export default Component.extend(ModifiedMixin, {
         subcase.save().then(subcase => {
           this.assignSubcasePhase(subcase);
         });
-      } else {
       }
     },
     proposeForOtherAgenda(subcase) {
