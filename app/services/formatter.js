@@ -9,7 +9,7 @@ export default Service.extend({
     if (!date) {
       return moment()
         .utc()
-        .toDate().setHours(10);
+        .toDate();
     }
     return moment(date)
       .utc()
