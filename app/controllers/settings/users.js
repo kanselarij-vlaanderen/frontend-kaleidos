@@ -30,8 +30,8 @@ export default Controller.extend({
         label: this.intl.t('national-number'),
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
-        breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'rijksregisterNummer',
+				breakpoints: ['mobile', 'tablet', 'desktop'],
+        valuePath: 'account.voId',
       },
       {
         label: this.intl.t('group'),
