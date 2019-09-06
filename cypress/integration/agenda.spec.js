@@ -7,8 +7,9 @@ context('Agenda tests', () => {
 
   it('should create a new agenda and then delete it', () => {
     cy.server().route('POST', '/meetings').as('createNewMeeting');
+    cy.route('POST', '/agendas').as('createNewAgenda');
+    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
 
-    cy.visit('');
     const plusMonths = 1;
     const futureDate = Cypress.moment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
 
@@ -19,16 +20,15 @@ context('Agenda tests', () => {
 
         cy.route('GET', `/meetings/${meetingId}/agendas`).as('getMeetingAgendas')
           .route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
-        const latestModified = Cypress.moment().format("DD-MM-YYYY HH");
         cy.get('.vl-alert').contains('Gelukt');
         cy.wait('@getMeetingAgendas', { timeout: 20000 });
-        cy.get('td').contains(latestModified).parents('tr').within(() => {
-          cy.contains(futureDate.format("DD.MM.YYYY")).should('exist');
-          cy.contains('Ontwerpagenda A').should('exist')
-            .get('.vl-button').click();
-        });
 
-        cy.contains('Acties').click()
+        cy.wait('@createNewAgenda',{ timeout: 20000 });
+        cy.wait('@createNewAgendaItems',{ timeout: 20000 });
+        cy.wait(2000)
+        cy.visit(`/agenda/${meetingId}/agendapunten`);
+
+        cy.contains('Acties').click();
         cy.contains('Agenda verwijderen').click()
           .wait('@deleteMeeting')
           .get('.vl-alert').contains('Gelukt');

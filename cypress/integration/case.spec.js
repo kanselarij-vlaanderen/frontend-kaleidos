@@ -1,5 +1,6 @@
 /// <reference types="Cypress" />
 
+
 context('Case test', () => {
   before(() => {
     cy.login('Admin')
@@ -7,11 +8,7 @@ context('Case test', () => {
 
   it('should create a new case and add a subcase', () => {
 
-    cy.server()
-      cy.route({
-      method: 'PATCH',
-      url: '/subcases/*',
-    }).as('patchCheck')
+    cy.server().route('PATCH','/subcases/*').as('patchCheck')
 
     const dossierTitelKort= 'Cypress test 1'
     const type= 'Nota'

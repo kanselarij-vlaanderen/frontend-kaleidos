@@ -26,16 +26,17 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('login', (name) => {
+  cy.server().route('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login')
   cy.get('.grid',{timeout: 12000}).within(() => {
-      cy.contains(name).click();
+      cy.contains(name).click()
+      .wait('@mockLogin');
   })
-  cy.wait(1000)
 })
 
 Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
   cy.visit('')
-  cy.get('h1').should('contain', 'Agenda\'s')
+  cy.get('.vlc-page-header__title').should('be', 'Agenda\'s')
   cy.contains('Nieuwe agenda aanmaken').click()
   cy.get('.vl-modal-dialog').contains('Aard').parents('.vlc-input-field-block').within(() => {
       cy.get('[role=button]').click()
@@ -86,8 +87,8 @@ Cypress.Commands.add('createCase', (shortTitle) => {
 })
 
 Cypress.Commands.add('addSubCase', (caseShortTitle, type, newShortTitle, longTitle, step, stepName ) => {
-  cy.visit("/dossiers")
-  cy.wait(1000)
+  cy.server().route('GET', '/cases?*').as('getCases');
+  cy.visit("/dossiers").wait('@getCases')
   cy.get('td').contains(caseShortTitle).parents('tr').within(() => {
     cy.get('.vl-button').get('.vl-vi-nav-right').click()
   })
