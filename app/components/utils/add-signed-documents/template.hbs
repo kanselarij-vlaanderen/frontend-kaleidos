@@ -3,7 +3,7 @@
     document=(await item.signedDocument)
     item=(await item.signedDocument)
   }}
-{{else}}
+{{else if (await item)}}
   <button
     class="vl-button vl-button--tertiary vl-button--narrow"
     {{action "toggleIsAddingNewDocument"}}
@@ -19,16 +19,27 @@
     title=(t "document-add")
   }}
     <div class="vl-modal-dialog__content">
-      {{file-uploader isLoading=isLoading uploadedFile=(action "uploadedFile")}}
+      {{#if (eq documentsInCreation.length 0)}}
+        {{file-uploader
+          isLoading=isLoading
+          multipleFiles=false
+          uploadedFile=(action "uploadedFile")
+        }}
+      {{/if}}
       {{#if (not isLoading)}}
         <div class="upload-container">
-          {{#each uploadedFiles as |uploadedFile|}}
-            {{web-components/vl-uploaded-document
-              multipleFiles=false
-              file=uploadedFile
-              showMetadata=false
-              subcase=(await item)
-              uploadedFiles=uploadedFiles
+          {{#each documentsInCreation as |document|}}
+            {{ember-kaleidos-webuniversum/vl-uploaded-document
+              name=document.lastDocumentVersion.file.filename
+              extension=document.lastDocumentVersion.file.extension
+              size=document.lastDocumentVersion.file.size
+              downloadName=document.lastDocumentVersion.file.filename
+              downloadLink=(concat
+                document.lastDocumentVersion.file.downloadLink
+                "?name="
+                document.lastDocumentVersion.file.filename
+              )
+              delete=(action "delete" document)
             }}
           {{/each}}
         </div>
@@ -42,6 +53,7 @@
       saveButtonText=(t "document-add")
       cancelAction=(action "toggleIsAddingNewDocument")
       saveAction=(action "uploadNewDocument")
+      disableSave=(eq documentsInCreation.length 0)
     }}
   {{/web-components/vl-modal}}
 {{/if}}

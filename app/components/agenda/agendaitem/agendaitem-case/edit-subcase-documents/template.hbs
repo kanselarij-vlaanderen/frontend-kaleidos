@@ -37,10 +37,7 @@
                     ></i>
                   </div>
                   <p>
-                    {{document-name
-                      documentVersion=(await document.lastDocumentVersion)
-                      item=(await item)
-                    }}
+                    {{await document.lastDocumentVersion.name}}
                   </p>
                 </a>
               </td>
@@ -66,7 +63,7 @@
                 }}
               </td>
               <td>
-                {{web-components/vl-toggle value=document.freezeAccessLevel}}
+                {{web-components/vl-toggle value=(mut document.confidential)}}
               </td>
               <td class="vl-u-align-right">
                 <button

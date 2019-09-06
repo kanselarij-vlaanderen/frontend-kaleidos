@@ -1,6 +1,5 @@
 import Service from '@ember/service';
 import { inject } from '@ember/service';
-import EmberObject from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 import $ from 'jquery';
 
@@ -10,27 +9,24 @@ export default Service.extend({
   shouldUndoChanges: false,
   documentsToDelete: [],
 
-  convertDocumentVersionById(id) {
-    return $.ajax({
-      headers: {
-        Accept: 'application/json',
-      },
-      method: 'GET',
-      url: `/document-versions/${id}/convert`,
-    })
-      .then((result) => {
-        return result;
+  convertDocumentVersion(documentVersion) {
+    try {
+      $.ajax({
+        headers: {
+          Accept: 'application/json',
+        },
+        method: 'GET',
+        url: `/document-versions/${documentVersion.get('id')}/convert`,
       })
-      .catch((err) => {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: 'Opgelet',
-            message: 'Something went wrong with the conversion of the document.',
-            type: 'error',
-          })
-        );
-        return err;
-      });
+        .then((result) => {
+          return result;
+        })
+        .catch((err) => {
+          return err;
+        });
+    } catch (e) {
+      console.error(e, 'something went wrong with the conversion');
+    }
   },
 
   deleteDocumentWithUndo: task(function*(documentToDelete) {

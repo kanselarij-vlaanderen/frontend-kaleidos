@@ -107,8 +107,8 @@
                         <a
                           class="vl-link vl-link--block"
                           target="_blank"
-                          href={{await agenda.createdFor.mailCampaign.archiveUrl
-                          }}
+                          rel="noopener"
+                          href={{await agenda.createdFor.mailCampaign.archiveUrl}}
                         >
                           {{t "preview-campaign"}}
                         </a>
@@ -118,7 +118,7 @@
                           <a
                             class="vl-link vl-link--block"
                             {{action attacher.hide}}
-                            {{action "sendCampaign"}}
+                            {{action "toggleIsVerifying"}}
                           >
                             {{t "send-campaign"}}
                           </a>
@@ -158,3 +158,13 @@
     </div>
   </div>
 </div>
+{{#if isVerifying}}
+ {{web-components/vl-modal-verify
+    title=(t "send-campaign")
+    buttonType="warning"
+    verifyButtonText=(t "send-campaign")
+    message=(t "send-campaign-warning")
+    cancel=(action "toggleIsVerifying")
+    verify=(action "sendCampaign")
+  }}
+{{/if}}

@@ -5,10 +5,10 @@ import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(UploadDocumentMixin, {
-	classNames: ["vl-u-spacer"],
-	isAddingDocument: false,
 	store: inject(),
-	modelToAddDocumentVersionTo: null,
+	classNames: ["vl-u-spacer"],
+	isAddingDocument: null,
+	isLoading:null,
 
 	documentTypeToAssign: computed('modelToAddDocumentVersionTo', function () {
 		const { modelToAddDocumentVersionTo } = this;
@@ -27,20 +27,23 @@ export default Component.extend(UploadDocumentMixin, {
 		},
 
 		async uploadNewDocument() {
-			this.set('isLoading', true);
+			// TODO:fix-type
 			const item = await this.get('item');
-			const documentType = await this.documentTypeToAssign;
-			this.set('isCreatingDocuments', true);
-			this.uploadedFiles.map((uploadedFile) => {
-				uploadedFile.set('documentType', documentType);
-			})
-			await this.uploadFiles(item);
-			await item.belongsTo('signedDocument').reload();
-			await item.reload();
-			this.set('isCreatingDocuments', false);
-			this.set('isLoading', false);
-			this.toggleProperty('isAddingNewDocument');
+			const documents = await this.saveDocuments(null);
+			// const documentType = await this.get('documentTypeToAssign');
 
+			await Promise.all(
+				documents.map(async (document) => {
+					// document.set('type', documentType);
+					document.set(this.modelToAddDocumentVersionTo, item);
+					item.set('signedDocument', document);
+				})
+			);
+			await item.save()
+		},
+
+		delete() {
+			// TODO: fix me
 		}
 	}
 });

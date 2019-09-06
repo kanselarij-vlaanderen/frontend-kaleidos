@@ -138,7 +138,7 @@ export default Service.extend({
         this.set('addedAgendaitems', result.addedAgendaitems);
         return result;
       })
-      .catch((err) => {
+      .catch(() => {
         return;
       });
   },
