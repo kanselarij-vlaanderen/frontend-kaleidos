@@ -43,7 +43,7 @@
           {{else if (eq activeAgendaItemSection "press-agenda")}}
             {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "decision")}}
-            {{#if (or isEditor isAdmin)}}
+
               <div class="vl-u-display-flex vl-u-flex-space-between">
                 <h3 class="vl-title vl-title--h3">
                   {{t "decision-title"}}
@@ -73,7 +73,7 @@
                   {{t "postponed-item"}}
                 </p>
               {{/if}}
-            {{/if}}
+
           {{else if (eq activeAgendaItemSection "news-item")}}
             {{agenda/agendaitem/agendaitem-news-item
               agendaitem=agendaitem

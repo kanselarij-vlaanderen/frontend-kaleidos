@@ -179,6 +179,25 @@
                     </a>
                   {{/if}}
                 </li>
+                <li class="vl-popover__link-list__item">
+                  {{#if (not currentSession.releasedDecisions)}}
+                    <a
+                      class="vl-link vl-link--block vl-u-text--error"
+                      {{action "releaseDecisions" currentAgenda}}
+                      {{action attacher.hide}}
+                    >
+                      {{t "agenda-release-decisions"}}
+                    </a>
+                  {{else if (not currentSession.releasedDocuments)}}
+                    <a
+                      class="vl-link vl-link--block vl-u-text--error"
+                      {{action "releaseDocuments"}}
+                      {{action attacher.hide}}
+                    >
+                      {{t "agenda-release-documents"}}
+                    </a>
+                  {{/if}}
+                </li>
                 <li
                   class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
                 >
