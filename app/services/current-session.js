@@ -56,7 +56,7 @@ export default Service.extend({
         this.set('userRole', "no-access");
       }
 
-      this.set('isEditor', this.canAccess('kanselarij'))
+      this.set('isEditor', this.canAccess('kanselarij') || this.canAccess('admin'));
       this.set('isAdmin', this.canAccess('admin'));
     }
   },
