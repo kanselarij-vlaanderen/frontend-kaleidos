@@ -18,21 +18,26 @@ context('Agenda tests', () => {
       .then((res) => {
         const meetingId = res.responseBody.data.id;
 
-        cy.route('GET', `/meetings/${meetingId}/agendas`).as('getMeetingAgendas')
-          .route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
+        // cy.route('GET', `/meetings/${meetingId}/**`).as('getMeetingAgendas')
+        cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
         cy.get('.vl-alert').contains('Gelukt');
-        cy.wait('@getMeetingAgendas', { timeout: 20000 });
-
         cy.wait('@createNewAgenda',{ timeout: 20000 });
         cy.wait('@createNewAgendaItems',{ timeout: 20000 });
-        cy.wait(2000)
-        cy.visit(`/agenda/${meetingId}/agendapunten`);
+        // cy.wait('@getMeetingAgendas', { timeout: 20000 });
 
-        cy.contains('Acties').click();
-        cy.contains('Agenda verwijderen').click()
+        //TODO use the search bar to look for the new agenda instead
+        cy.visit(`/agenda/${meetingId}/agendapunten`);
+        // cy.wait('@getMeetingAgendas', { timeout: 20000 });
+
+        cy.get('.vl-button--icon-before')
+          .contains('Acties')
+          .click()
+        cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
+          .contains('Agenda verwijderen')
+          .click()
           .wait('@deleteMeeting')
           .get('.vl-alert').contains('Gelukt');
-      })
-  })
+      });
+  });
 
 });
