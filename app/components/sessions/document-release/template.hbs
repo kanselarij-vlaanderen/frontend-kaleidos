@@ -1,0 +1,11 @@
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "date-publication-decisions")}}
+  {{web-components/vl-datepicker dateChanged=(action "selectDateDecisions") enableTime=true}}
+</div>
+
+<div class="vlc-input-field-block">
+  {{web-components/vl-form-label value=(t "date-publication-documents")}}
+  {{web-components/vl-datepicker dateChanged=(action "selectDateDocuments") enableTime=true}}
+</div>
+
+{{yield}}
