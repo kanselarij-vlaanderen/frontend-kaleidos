@@ -38,6 +38,15 @@ export default Model.extend({
   phases: hasMany('subcase-phase'),
   themes: hasMany('theme'),
 
+  number: computed('displayPriority', 'priority', function() {
+    const { priority, displayPriority} = this;
+    if(!priority) {
+      return displayPriority;
+    } else {
+      return priority;
+    }
+  }),
+
   sortedThemes: computed('themes', function() {
     return this.get('themes').sortBy('label');
   }),

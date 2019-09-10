@@ -63,7 +63,7 @@ export default Service.extend({
           (sortedItem) => sortedItem.uuid == agendaitem.get('id')
         );
         if (sortedAgendaItemFound) {
-          agendaitem.set('priority', sortedAgendaItemFound.priority);
+          agendaitem.set('displayPriority', sortedAgendaItemFound.priority);
         }
       }
     });
@@ -184,7 +184,7 @@ export default Service.extend({
             lastPrio = foundItem.priority;
           } else {
             if (foundItem) {
-              foundItem.set('priority', parseInt(lastPrio) + 1);
+              foundItem.set('displayPriority', parseInt(lastPrio) + 1);
             }
           }
 
