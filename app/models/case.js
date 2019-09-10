@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
+import { A } from '@ember/array';
 
 const { Model, attr, hasMany, belongsTo, PromiseObject } = DS;
 
@@ -25,7 +26,7 @@ export default Model.extend({
   creators: hasMany('person'),
   mandatees: hasMany('mandatee'),
 
-  OCMeetingNumber: computed('relatedMeeting.number', function () {
+  OCMeetingNumber: computed('relatedMeeting.number', function() {
     return PromiseObject.create({
       promise: this.get('relatedMeeting').then((meeting) => {
         return meeting.get('number');
@@ -33,7 +34,7 @@ export default Model.extend({
     });
   }),
 
-  latestSubcase: computed('subcases.@each', function () {
+  latestSubcase: computed('subcases.@each', function() {
     return PromiseObject.create({
       promise:
         this.get('subcases').then((subcases) => {
@@ -43,7 +44,15 @@ export default Model.extend({
     })
   }),
 
-  mandateesOfSubcase: computed('subcases', function () {
+  subcaseDocumentVersions: computed('subcases.@each', async function() {
+    const subcases = await this.get('subcases');
+
+    const documentVersions = await Promise.all(subcases.map(subcase => subcase.get('documentVersions')));
+
+    return documentVersions.reduce((all, curr) => all.concat(curr.toArray()), A([]))
+  }),
+
+  mandateesOfSubcase: computed('subcases', function() {
     const subcases = this.get('subcases');
     if (subcases && subcases.length > 0) {
       const currentSubcase = subcases.sortBy('created').get('lastObject');
@@ -80,5 +89,4 @@ export default Model.extend({
       return `${(length + 1)}de ${CONFIG.phasesCodes[0].label}`
     }
   }
-  
 });

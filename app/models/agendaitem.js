@@ -1,9 +1,9 @@
 import DS from 'ember-data';
-import { computed } from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-import EmberObject from '@ember/object';
 import { alias } from '@ember/object/computed';
+
 let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
@@ -35,6 +35,7 @@ export default Model.extend({
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   documentVersions: hasMany('document-version'),
+  linkedDocumentVersions: hasMany('document-version'),
   phases: hasMany('subcase-phase'),
   themes: hasMany('theme'),
 
@@ -102,6 +103,35 @@ export default Model.extend({
   documentsLength: computed('documents.@each', function() {
     return this.get('documents').then((documents) => {
       return documents ? documents.get('length') : 0;
+    });
+  }),
+
+  linkedDocuments: computed('linkedDocumentVersions.@each', function() {
+    return PromiseArray.create({
+      promise: this.get('linkedDocumentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            include: 'type,document-versions',
+          }).then((documents) => {
+            // Sorting is done in the frontend to work around a Virtuoso issue, where
+            // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
+            // some items not being returned. By not having a sort parameter, this doesn't occur.
+            return documents.sortBy('type.priority', 'numberVr');
+          });
+        }
+      })
+    });
+  }),
+
+  linkedDocumentsLength: computed('linkedDocuments', function() {
+    return PromiseObject.create({
+      promise: this.get('linkedDocuments').then((documents) => {
+        return documents.get('length');
+      })
     });
   }),
 

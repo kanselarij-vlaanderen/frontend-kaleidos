@@ -163,6 +163,7 @@ export default Service.extend({
       showAsRemark: subcase.get('showAsRemark'),
       mandatees: mandatees,
       documentVersions: await subcase.get('documentVersions'),
+      linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       themes: await subcase.get('themes'),
       approvals: await subcase.get('approvals'),
     });

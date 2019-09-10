@@ -1,0 +1,109 @@
+<div class="vlc-document-card">
+  <div class="vlc-document-card__summary">
+    <div class="vlc-document-card__badge">
+      <div
+        class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
+      >
+        <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="vlc-document-card__content">
+      <div class="vlc-toolbar vlc-toolbar--auto">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <p class="vlc-subline">
+              {{await document.type.label}}
+            </p>
+          </div>
+        </div>
+        <div class="vlc-toolbar__right">
+          <div class="vlc-toolbar__item">
+            {{#if (not document.confidential)}}
+              {{#if (is-pending document.accessLevel)}}
+                <div
+                  class="skeletal-loader"
+                  role="alert"
+                  aria-busy="true"
+                ></div>
+              {{else if
+                (eq (await document.accessLevel.label) "Actief openbaar")}}
+                <span class="vlc-pill vlc-pill--success">
+                  {{await document.accessLevel.label}}
+                </span>
+              {{else if (eq document.accessLevel.label "Intern overheid")}}
+                <span class="vlc-pill vlc-pill--error">
+                  {{await document.accessLevel.label}}
+                </span>
+              {{else if (eq document.accessLevel.label "Beperkt openbaar")}}
+                <span class="vlc-pill vlc-pill--warning">
+                  {{await document.accessLevel.label}}
+                </span>
+              {{else}}
+                <span class="vlc-pill">
+                  {{t "no-accessLevel"}}
+                </span>
+              {{/if}}
+            {{/if}}
+          </div>
+          <div class="vlc-toolbar__item">
+            {{#if (or isAdmin isEditor)}}
+              <button
+                class="vl-button vl-button--link-muted vl-button--icon"
+                {{action "unlinkDocument" document}}>
+                <span class="vl-icon vl-vi vl-vi-link-broken vl-u-text--error"></span>
+              </button>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      <h6 class="vl-title vl-title--h6">
+        <span {{action "toggleIsEditing"}}>
+          {{await document.lastDocumentVersion.name}}
+        </span>
+      </h6>
+      <div class="vlc-document-card-content__meta">
+        {{t "uploaded-at"}}
+        {{moment-format (await document.lastDocumentVersion.created)}}
+        {{t "at"}}
+        {{moment-format (await document.lastDocumentVersion.created) "HH:mm"}}
+      </div>
+    </div>
+  </div>
+  {{#if (gt (await document.reverseSortedDocumentVersions.length) 0)}}
+    <div class="vlc-document-card__more">
+      <div class="js-vl-accordion {{openClass}}">
+        <button
+          class="vl-toggle vl-link vl-link--bold"
+          {{action "showVersions"}}
+        >
+          <i
+            class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
+          ></i>
+          {{t "show-versions"}}
+        </button>
+        {{#if isShowingVersions}}
+          <div class="vl-accordion__content js-vl-accordion__content">
+            <div class="vl-accordion__panel">
+              {{#each
+                (await
+                  document.reverseSortedDocumentVersions
+                ) as |documentVersion|
+              }}
+                {{web-components/vl-document documentVersion=documentVersion}}
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
+</div>
+{{#if isVerifyingUnlink}}
+  {{web-components/vl-modal-verify
+    title=(t "document-unlink")
+    message=(t "unlink-document-message")
+    cancel=(action "cancel")
+    verify=(action "verify")
+    verifyButtonText=(t "unlink")
+  }}
+{{/if}}

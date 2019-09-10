@@ -28,11 +28,13 @@ export default Component.extend(ApprovalsEditMixin, {
     const iseCodes = await latestSubcase.get('iseCodes');
     const themes = await latestSubcase.get('themes');
     const requestedBy = await latestSubcase.get('requestedBy');
+    const documentVersions = await latestSubcase.get('documentVersions');
 
     subcase.set('mandatees', mandatees);
     subcase.set('iseCodes', iseCodes);
     subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
+    subcase.set('linkedDocumentVersions', documentVersions);
 
     return subcase.save();
   },
