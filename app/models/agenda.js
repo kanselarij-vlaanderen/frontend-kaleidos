@@ -13,6 +13,10 @@ export default Model.extend({
   isAccepted: attr("boolean"),
   modified: attr("date"),
 
+  isDesignAgenda: computed('name', function() {
+    return this.name == "Ontwerpagenda";
+  }),
+
   agendaName: computed("name", function() {
     if (this.get("name.length") > 2) {
       return this.name;

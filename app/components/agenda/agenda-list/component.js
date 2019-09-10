@@ -5,6 +5,7 @@ import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
+
 export default Component.extend(isAuthenticatedMixin, {
   sessionService: inject(),
   classNames: ['vlc-agenda-items-new'],
