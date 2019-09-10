@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
+import { later } from '@ember/runloop';
 
 export default Controller.extend({
   intl: inject(),
@@ -59,7 +60,9 @@ export default Controller.extend({
             type: 'success',
           })
 				);
-				this.send('refresh');
+				// later(()=> {
+					this.send('refresh');
+				// }, 5000)
       } else {
         this.globalError.showToast.perform(
           EmberObject.create({

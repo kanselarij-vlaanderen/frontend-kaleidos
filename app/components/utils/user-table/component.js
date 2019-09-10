@@ -7,6 +7,7 @@ export default Component.extend(LightTableMixin, {
   classNames: ['container-flex'],
   modelName: 'user',
   isScrolling: false,
+  sortBy: 'last-name',
 
   intl: inject(),
   loadingText: computed('intl', function() {

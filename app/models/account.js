@@ -7,5 +7,4 @@ export default Model.extend({
 	user: belongsTo('person'),
 	gebruiker: alias('user'),
 	voId: attr('string')
-
 });
