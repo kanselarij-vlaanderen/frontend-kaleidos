@@ -18,7 +18,7 @@ export default Mixin.create({
 
   async deleteDocument(document) {
     const documentToDelete = await document;
-    if(!documentToDelete) return;    
+    if (!documentToDelete) return;
     const documentVersions = await documentToDelete.get('documentVersions');
     await Promise.all(
       documentVersions.map(async (documentVersion) => {
@@ -29,7 +29,7 @@ export default Mixin.create({
 
   async deleteDocumentVersion(documentVersion) {
     const documentVersionToDelete = await documentVersion;
-    if(!documentVersionToDelete) return;    
+    if (!documentVersionToDelete) return;
     const file = documentVersionToDelete.get('file');
     await this.deleteFile(file);
     return documentVersionToDelete.destroyRecord();
@@ -37,7 +37,7 @@ export default Mixin.create({
 
   async deleteFile(file) {
     const fileToDelete = await file;
-    if(!fileToDelete) return;
+    if (!fileToDelete) return;
     return fileToDelete.destroyRecord();
   },
 
@@ -113,23 +113,49 @@ export default Mixin.create({
     return model;
   },
 
-  async attachDocumentVersionsToModel(documentVersions, model) {
+  async attachDocumentVersionsToModel(documentVersions, model, documentVersionsType = 'documentVersions') {
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
     if (['meeting-record', 'decision'].includes(modelName)) {
       return model;
     }
 
-    const modelDocumentVersions = await model.get('documentVersions');
+    const modelDocumentVersions = await model.get(documentVersionsType);
     if (modelDocumentVersions) {
       model.set(
-        'documentVersions',
+        documentVersionsType,
         A(Array.prototype.concat(modelDocumentVersions.toArray(), documentVersions.toArray()))
       );
     } else {
-      model.set('documentVersions', documentVersions);
+      model.set(documentVersionsType, documentVersions);
     }
     return model;
+  },
+
+  async unlinkDocumentVersions(documentVersions, model) {
+    const modelName = await model.get('constructor.modelName');
+    // Don't do anything for these models
+    if (['meeting-record', 'decision'].includes(modelName)) {
+      return model;
+    }
+    const subcase = await model.get('subcase');
+    const agendaitemsOnDesignAgenda = await model.get('agendaitemsOnDesignAgendaToEdit');
+    if (subcase) {
+      await this.unlinkDocumentVersionsFromModel(subcase, documentVersions);
+    } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+      await Promise.all(agendaitemsOnDesignAgenda.map(agendaitem => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
+    }
+    return await this.unlinkDocumentVersionsFromModel(model, documentVersions);
+  },
+
+  async unlinkDocumentVersionsFromModel(model, documentVersions) {
+    const modelDocumentVersions = await model.get('linkedDocumentVersions');
+    if (modelDocumentVersions) {
+      documentVersions.forEach(documentVersion => modelDocumentVersions.removeObject(documentVersion))
+    } else {
+      model.set('linkedDocumentVersions', A([]));
+    }
+    return model.save();
   },
 
   actions: {
