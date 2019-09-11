@@ -43,7 +43,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 
     await Promise.all(agendaitemsOnDesignAgendas
       .map(async agendaitem => {
-        agendaitem.set('formallyOk', CONFIG.formallyOkOptions[2].uri);
+        agendaitem.set('formallyOk', CONFIG.notYetFormallyOk);
         const approvals = await agendaitem.get('approvals');
         agendaitem.set('approvals', approvals.map(approval => {
           approval.set('approved', false);
