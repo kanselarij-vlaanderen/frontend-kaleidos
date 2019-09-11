@@ -132,6 +132,12 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         agendaToLock.save().then((agendaToApprove) => {
           this.get('agendaService')
             .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
+            .then(async newAgenda => {
+              const agendaItems = await agendaToLock.get('agendaitems');
+              const newNotYetOKItems = agendaItems.filter(agendaItem => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
+              await Promise.all(newNotYetOKItems.map(newNotYetOK => newNotYetOK.destroyRecord()));
+              return newAgenda;
+            })
             .then((newAgenda) => {
               this.changeLoading();
               this.get('agendaService').sortAgendaItems(newAgenda);
