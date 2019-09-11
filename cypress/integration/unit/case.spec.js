@@ -13,10 +13,9 @@ context('Case test', () => {
     cy.route('GET', '/subcases?**').as('getSubCases');
     cy.route('GET', '/mandatees?**').as('getMandatees');
     cy.route('GET', '/cases/**/subcases').as('getCaseSubCases');
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubCases');
     cy.route('POST', '/cases').as('createNewCase');
     cy.route('POST', '/subcases').as('createNewSubCase');
-    cy.route('PATCH','/subcases/*').as('patchCheck');
+    cy.route('PATCH','/subcases/*').as('patchSubCase');
 
     const dossierTitelKort= 'Cypress test';
     const type= 'Nota';
@@ -90,7 +89,7 @@ context('Case test', () => {
       .contains('Opslaan')
       .click();
     });
-    cy.wait('@patchCheck', { timeout: 20000 }).then(() => {
+    cy.wait('@patchSubCase', { timeout: 20000 }).then(() => {
       cy.get('.vl-alert').contains('Gelukt');
     });
     //#endregion
