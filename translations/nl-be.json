@@ -284,6 +284,7 @@
   "selected-mandatees": "Geselecteerde ministers",
   "create-campaign": "Nieuwsbrief aanmaken",
   "send-campaign":"Nieuwsbrief versturen",
+  "send-campaign-warning":"Bent u zeker dat u de nieuwsbrief wilt versturen? Dit Kort Bestek zal naar alle ingeschreven groepen verstuurd worden.",
   "delete-campaign":"Nieuwsbrief verwijderen",
   "preview-campaign":"Voorbeeld nieuwsbrief",
   "settings": "Instellingen",

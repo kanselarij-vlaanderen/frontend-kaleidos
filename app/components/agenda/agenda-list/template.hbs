@@ -92,7 +92,7 @@
                 "reorderItems" agendaitemGroup
               ) as |sortableGroup|
             }}
-              {{#each agendaitemGroup.agendaitems as |agendaitem idx|}}
+              {{#each agendaitemGroup.agendaitems as |agendaitem|}}
                 {{#if (not isShowingChanges)}}
                   {{#sortable-item
                     tagName="div"

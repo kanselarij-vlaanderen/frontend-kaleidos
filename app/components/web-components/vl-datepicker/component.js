@@ -8,6 +8,8 @@ export default Component.extend({
   dateObjectsToEnable: null,
   datePropertyToUse: null,
   enableTime: null,
+  defaultHour: null,
+  defaultMinute: null,
 
   datesToEnable: computed('dateObjectsToEnable', function() {
     const { dateObjectsToEnable, datePropertyToUse } = this;
@@ -21,7 +23,14 @@ export default Component.extend({
     if (date) {
       return this.formatter.formatDate(date.get('firstObject'));
     } else {
-      return this.formatter.formatDate(null);
+      const defaultDate = this.formatter.formatDate(null);
+      if (this.defaultHour != null && !isNaN(this.defaultHour)) {
+        defaultDate.setHours(this.defaultHour);
+      }
+      if (this.defaultMinute != null && !isNaN(this.defaultMinute)) {
+        defaultDate.setMinutes(this.defaultMinute);
+      }
+      return defaultDate;
     }
   }),
 

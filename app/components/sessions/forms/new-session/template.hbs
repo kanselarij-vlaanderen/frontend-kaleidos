@@ -5,6 +5,8 @@
       {{web-components/vl-form-label value=(t "start-date")}}
       {{web-components/vl-datepicker
         enableTime=true
+        defaultHour=10
+        defaultMinute=0
         dateChanged=(action "selectStartDate")
       }}
     </div>

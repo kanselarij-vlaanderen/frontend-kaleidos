@@ -11,6 +11,7 @@ export default Component.extend(isAuthenticatedMixin, {
   newsletterService: inject(),
   isShowingOptions: null,
   agenda: null,
+  isVerifying: null,
 
   shouldShowPrintButton: computed('routing.currentRouteName', function() {
     return this.routing.get('currentRouteName').includes(`newsletter.overview`);
@@ -19,6 +20,10 @@ export default Component.extend(isAuthenticatedMixin, {
   actions: {
     print() {
       window.print();
+    },
+
+    toggleIsVerifying() {
+      this.toggleProperty('isVerifying');
     },
 
     async createCampaign() {
@@ -48,6 +53,7 @@ export default Component.extend(isAuthenticatedMixin, {
         mailCampaign.set('sent', true);
         mailCampaign.set('sentAt', moment().utc().toDate());
         mailCampaign.save();
+        this.set('isVerifying',false);
       });
     },
 
