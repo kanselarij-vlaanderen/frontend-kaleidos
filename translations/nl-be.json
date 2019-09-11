@@ -453,5 +453,8 @@
   "oc-priority": "Volgnummer",
   "oc-sub-priority": "Sub-volgnummer",
   "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden.",
+  "release-decisions-message": "Bent u zeker dat u de belissingen wil vrijgeven? Deze actie kan niet meer ongedaan gemaakt worden.",
+  "release-documents-message": "Bent u zeker dat u de publieke documenten van de beslissingen wil vrijgeven? Deze actie kan niet meer ongedaan gemaakt worden.",
+  "releaseToPublicButton": "Vrijgeven",
   "no-accessLevel":"Nog geen openbaarheid"
 }

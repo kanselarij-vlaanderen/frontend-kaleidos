@@ -82,6 +82,8 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
     cancel() {
       this.set('showWarning', false);
+      this.set('releasingDecisions', false);
+      this.set('releasingDocuments', false);
     },
 
     verify() {
@@ -223,6 +225,22 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
     },
+    releaseDecisions() {
+      this.set('releasingDecisions', true);
+    },
+    confirmReleaseDecisions() {
+      this.set('releasingDecisions', false);
+      this.currentSession.set('releasedDecisions', moment().utc().toDate());
+      this.currentSession.save();
+    },
+    releaseDocuments() {
+      this.set('releasingDocuments', true);
+    },
+    confirmReleaseDocuments() {
+      this.set('releasingDocuments', false);
+      this.currentSession.set('releasedDocuments', moment().utc().toDate());
+      this.currentSession.save();
+    }
   },
 
   changeLoading() {

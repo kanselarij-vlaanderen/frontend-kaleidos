@@ -15,8 +15,8 @@ export default Model.extend({
   isFinal: attr('boolean'),
   extraInfo: attr('string'),
   kind: attr('string'),
-  releaseDocuments: attr('date'),
-  releaseDecisions: attr('date'),
+  releasedDocuments: attr('date'),
+  releasedDecisions: attr('date'),
 
   agendas: hasMany('agenda', { inverse: null, serialize: false }),
   requestedSubcases: hasMany('subcase'),
@@ -27,6 +27,14 @@ export default Model.extend({
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
   mailCampaign: belongsTo('mail-campaign'),
+
+  canReleaseDecisions: computed('isFinal', 'releasedDecisions', function(){
+    return this.isFinal && !this.releasedDecisions;
+  }),
+
+  canReleaseDocuments: computed('isFinal', 'releasedDocuments', function(){
+    return this.isFinal && !this.releasedDocuments;
+  }),
 
   latestAgenda: computed('agendas.@each', function() {
     return DS.PromiseObject.create({

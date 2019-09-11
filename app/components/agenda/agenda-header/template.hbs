@@ -180,15 +180,15 @@
                   {{/if}}
                 </li>
                 <li class="vl-popover__link-list__item">
-                  {{#if (not currentSession.releasedDecisions)}}
+                  {{#if currentSession.canReleaseDecisions}}
                     <a
                       class="vl-link vl-link--block vl-u-text--error"
-                      {{action "releaseDecisions" currentAgenda}}
+                      {{action "releaseDecisions"}}
                       {{action attacher.hide}}
                     >
                       {{t "agenda-release-decisions"}}
                     </a>
-                  {{else if (not currentSession.releasedDocuments)}}
+                  {{else if currentSession.canReleaseDocuments}}
                     <a
                       class="vl-link vl-link--block vl-u-text--error"
                       {{action "releaseDocuments"}}
@@ -260,5 +260,25 @@
     message=(t "approve-agenda-warning")
     cancel=(action "cancel")
     verify=(action "verify")
+  }}
+{{/if}}
+{{#if releasingDocuments}}
+  {{web-components/vl-modal-verify
+    title=(t "agenda-release-documents")
+    buttonType="warning"
+    verifyButtonText=(t "releaseToPublicButton")
+    message=(t "release-documents-message")
+    cancel=(action "cancel")
+    verify=(action "confirmReleaseDocuments")
+  }}
+{{/if}}
+{{#if releasingDecisions}}
+  {{web-components/vl-modal-verify
+    title=(t "agenda-release-decisions")
+    buttonType="warning"
+    verifyButtonText=(t "releaseToPublicButton")
+    message=(t "release-decisions-message")
+    cancel=(action "cancel")
+    verify=(action "confirmReleaseDecisions")
   }}
 {{/if}}
