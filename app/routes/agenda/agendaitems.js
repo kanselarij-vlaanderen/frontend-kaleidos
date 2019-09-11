@@ -27,6 +27,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
         announcements,
         lastPrio,
         minutesApproval,
+        brokenAgendaItems
       } = await this.parseAgendaItems(agenda, session);
       if (minutesApproval) {
         this.set('sessionService.firstAgendaItemOfAgenda', minutesApproval);
@@ -46,6 +47,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
         announcements: (announcements || []).sortBy('priority'),
         lastPrio,
         minutesApproval,
+        brokenAgendaItems: brokenAgendaItems
       });
     }
   },

@@ -32,20 +32,50 @@ export default Mixin.create({
     );
 
     const minutesApproval = minutesApprovals.filter((item) => item).get('firstObject');
+    const brokenAgendaItems = this.findBrokenAgendaItems(agendaitems, groups, minutesApproval, announcements);
     return {
       groups,
       firstAgendaItem,
       announcements,
       lastPrio,
       minutesApproval,
+      brokenAgendaItems
     };
+  },
+
+  findBrokenAgendaItems(agendaitems, groups, minutesApproval, announcements) {
+    const knownAgendaIds = {};
+    if(groups){
+      groups.map((result) => {
+        result.groups.map((group) => {
+          if(group.agendaitems) {
+            group.agendaitems.map((agendaitem) => {
+              knownAgendaIds[agendaitem.id] = true;
+            });
+          }
+        });
+      });
+    }
+    
+    if(minutesApproval) {
+      knownAgendaIds[minutesApproval.id] = true;
+    }
+    if(announcements) {
+      announcements.map((announcement) => {
+        knownAgendaIds[announcement.id] = true;
+      });
+    }
+    
+    return agendaitems.filter((agendaitem) => {
+      return !knownAgendaIds[agendaitem.id];
+    });
   },
 
   async model(params) {
     const definite = params.definite;
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
-    const { groups, announcements, lastPrio, minutesApproval } = await this.parseAgendaItems(
+    const { groups, announcements, lastPrio, minutesApproval, brokenAgendaItems } = await this.parseAgendaItems(
       agenda,
       session,
       definite
@@ -59,6 +89,7 @@ export default Mixin.create({
       lastPrio,
       meeting: session,
       minutesApproval,
+      brokenAgendaItems
     });
   },
 });

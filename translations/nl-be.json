@@ -456,5 +456,6 @@
   "oc-priority": "Volgnummer",
   "oc-sub-priority": "Sub-volgnummer",
   "archive-case-message":"Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden.",
-  "no-accessLevel":"Nog geen openbaarheid"
+  "no-accessLevel":"Nog geen openbaarheid",
+  "faulty-agendaitems": "Er zijn agendapunten gevonden zonder procedurestap en moeten manueel verwijderd worden"
 }
