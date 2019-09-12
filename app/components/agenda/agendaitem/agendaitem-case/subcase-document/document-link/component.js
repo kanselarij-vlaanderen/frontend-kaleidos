@@ -1,9 +1,9 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { inject } from '@ember/service';
-import EmberObject from '@ember/object';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   globalError: inject(),
@@ -33,6 +33,25 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   lastDocumentVersion: computed('filteredDocumentVersions.@each', function() {
     return (this.get('filteredDocumentVersions') || []).objectAt(0);
   }),
+
+  async resetFormallyOk() {
+    const doc = await this.get('document');
+    const subcases = await Promise.all(doc.get('documentVersions').map(docVer => docVer.subcase));
+
+    const agendaitemsOnDesignAgendas = await Promise.all(subcases.filter(subcase => !!subcase).map(subcase => subcase.agendaitemsOnDesignAgendaToEdit))
+      .then(agendaItemArrays => agendaItemArrays.reduce((prev, curr) => prev.concat(curr.toArray()), []));
+
+    await Promise.all(agendaitemsOnDesignAgendas
+      .map(async agendaitem => {
+        agendaitem.set('formallyOk', CONFIG.notYetFormallyOk);
+        const approvals = await agendaitem.get('approvals');
+        agendaitem.set('approvals', approvals.map(approval => {
+          approval.set('approved', false);
+          return approval
+        }));
+        agendaitem.save();
+      }))
+  },
 
   actions: {
     showVersions() {
@@ -72,8 +91,20 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.set('isLoading', true);
       const documentVersion = await this.get('document.lastDocumentVersion');
       await documentVersion.save();
-      const item = await this.attachDocumentVersionsToModel([documentVersion], this.get('item'));
-      await item.save();
+      const item = await this.get('item');
+      const subcase = await item.get('subcase');
+      const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
+
+      if (subcase) {
+        await this.attachDocumentVersionsToModel([documentVersion], subcase).then(item => item.save());
+      } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+        await this.attachDocumentVersionsToModel([documentVersion], agendaitemsOnDesignAgenda).then(item => item.save());
+      }
+      await this.attachDocumentVersionsToModel([documentVersion], item);
+
+      await item.save().then(() => {
+        this.resetFormallyOk();
+      });
     },
 
     cancel() {
@@ -103,6 +134,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     toggleConfidential(document) {
       document.toggleProperty('confidential');
       document.save();
-    },
+    }
   },
 });

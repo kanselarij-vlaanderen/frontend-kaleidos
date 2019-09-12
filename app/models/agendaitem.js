@@ -188,6 +188,8 @@ export default Model.extend({
     if (this.addedAgendaitems) return this.addedAgendaitems.includes(this.id);
   }),
 
+  isAdded: alias('checkAdded'),
+
   hasChanges: computed('checkAdded', 'hasAddedDocuments', function() {
     return this.hasAddedDocuments.then((hasAddedDocuments) => {
       return this.checkAdded || hasAddedDocuments;

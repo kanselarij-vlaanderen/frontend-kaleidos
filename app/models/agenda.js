@@ -27,23 +27,12 @@ export default Model.extend({
 
   isApprovable: computed("agendaitems.@each", function() {
     return this.get("agendaitems").then(agendaitems => {
-      const approvedAgendaItems = agendaitems.filter(agendaitem =>
-        this.checkFormallyOkStatus(agendaitem)
-      );
+      const approvedAgendaItems = agendaitems.filter(agendaitem => this.checkFormallyOkStatus(agendaitem));
       return approvedAgendaItems.get("length") === agendaitems.get("length");
     });
   }),
 
   checkFormallyOkStatus(agendaitem) {
-    const formallyOkStatus = agendaitem.get("formallyOk");
-    if (formallyOkStatus == CONFIG.formallyOk) {
-      return true;
-    }
-
-    if (formallyOkStatus == CONFIG.formallyNok) {
-      return true;
-    }
-
-    return false;
+    return agendaitem.get('isAdded') || [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get("formallyOk"));
   }
 });
