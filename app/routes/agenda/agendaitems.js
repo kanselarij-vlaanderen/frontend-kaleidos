@@ -48,6 +48,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
         lastPrio,
         minutesApproval,
         brokenAgendaItems
+
       });
     }
   },
