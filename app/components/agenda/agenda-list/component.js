@@ -45,12 +45,12 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     async deleteBrokenAgendaitem(brokenAgendaItem) {
-      const itemToDelete = await this.store.findRecord('agendaitem', brokenAgendaItem.get('id'));
-      const subcase = await itemToDelete.get('subcase');
+      const id = brokenAgendaItem.id;
+      const subcase = await brokenAgendaItem.get('subcase');
 
       if (!subcase) {
-      itemToDelete.destroyRecord().then(() => {
-        this.set('sessionService.selectedAgendaItem', null);
+        brokenAgendaItem.destroyRecord().then(() => {
+          this.refresh(id);
       });
       }
     },

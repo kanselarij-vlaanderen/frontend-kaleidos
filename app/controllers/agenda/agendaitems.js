@@ -10,6 +10,8 @@ export default Controller.extend({
 	filter: null,
 	sessionService: inject(),
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+	currentAgenda: alias('sessionService.currentAgenda'),
+	currentSession: alias('sessionService.currentSession'),
 
 	agendaitemsClass: computed('routing.currentRouteName', function () {
 		const { routing } = this;
@@ -27,6 +29,10 @@ export default Controller.extend({
 		},
 		searchAgendaItems(value) {
 			this.set('filter', value);
+		},
+		refresh(id) {
+			const { currentAgenda, currentSession } = this;
+			this.transitionToRoute('agenda.agendaitems.index', currentSession.id, { queryParams: { selectedAgenda: currentAgenda.id , refresh: id},  });
 		},
 	}
 });
