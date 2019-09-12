@@ -44,6 +44,17 @@ export default Component.extend(isAuthenticatedMixin, {
       this.toggleProperty('isShowingChanges');
     },
 
+    async deleteBrokenAgendaitem(brokenAgendaItem) {
+      const id = brokenAgendaItem.id;
+      const subcase = await brokenAgendaItem.get('subcase');
+
+      if (!subcase) {
+        brokenAgendaItem.destroyRecord().then(() => {
+          this.refresh(id);
+      });
+      }
+    },
+
     async reorderItems(agendaitemGroup, reOrderedAgendaitemGroup, itemDragged) {
       if (this.isEditor || this.isAdmin) {
         const firstItem = agendaitemGroup.agendaitems.get('firstObject');
