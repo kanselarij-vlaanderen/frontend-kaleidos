@@ -38,22 +38,18 @@ export default Component.extend(isAuthenticatedMixin, {
 		}
 	}),
 
-	accessLevelLabel: computed('item', 'item.subcase', function () {
+	accessLevel: computed('item', 'item.subcase', function () {
 		const { isAgendaItem, item } = this;
 		if (isAgendaItem) {
 			return DS.PromiseObject.create({
 				promise: item.get('subcase').then((subcase) => {
-					return subcase.get('accessLevel').then((accessLevel) => {
-						return accessLevel.get('label');
-					});
+					return subcase.get('accessLevel');
 				})
-			})
+			});
 		} else {
 			return DS.PromiseObject.create({
-				promise: item.get('accessLevel').then((accessLevel) => {
-					return accessLevel.get('label');
-				})
-			})
+				promise: item.get('accessLevel')
+			});
 		}
 	}),
 
