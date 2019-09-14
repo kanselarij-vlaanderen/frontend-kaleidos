@@ -131,9 +131,14 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.set('isVerifyingDelete', true);
     },
 
-    toggleConfidential(document) {
+    async toggleConfidential(document) {
       document.toggleProperty('confidential');
-      document.save();
+      await document.save();
+      let documentVersions = await document.get('documentVersions');
+      await Promise.all(documentVersions.map(documentVersion => {
+        documentVersion.set('confidential', document.get('confidential'));
+        documentVersion.save();
+      }))
     }
   },
 });

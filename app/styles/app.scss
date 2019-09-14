@@ -491,3 +491,11 @@ ul {
 .vl-popover__link-list {
   overflow-y: scroll;
 }
+
+.vlc-pill--clickable {
+  cursor: pointer;
+}
+
+pre {
+  white-space: pre-line;
+}

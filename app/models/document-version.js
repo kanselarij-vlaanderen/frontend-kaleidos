@@ -9,6 +9,7 @@ export default Model.extend({
   chosenFileName: attr('string'),
   versionNumber: attr('number'),
   numberVr: attr('string'),
+  confidential: attr('boolean'),
 
   file: belongsTo('file'),
   convertedFile: belongsTo('file', { inverse: null }),
@@ -17,6 +18,7 @@ export default Model.extend({
   agendaitem: belongsTo('agendaitem', { inverse: null }),
   announcement: belongsTo('announcement'),
   newsletter: belongsTo('newsletter-info'),
+  accessLevel: belongsTo('access-level'),
 
   name: computed('document.name', async function() {
     return formatVersionedDocumentName(await this.get('document.name'), this.get('versionNumber'));

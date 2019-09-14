@@ -2,36 +2,106 @@
   <h6 class="vl-title vl-title--h6">
     {{await documentVersion.name}}
   </h6>
+  {{#if (not documentVersion.confidential)}}
+    {{#if (not isEditingAccessLevel)}}
+      <div {{action "toggleIsEditingAccessLevel"}}>
+        {{#if (is-pending documentVersion.accessLevel)}}
+          <div
+            class="skeletal-loader"
+            role="alert"
+            aria-busy="true"
+          ></div>
+        {{else if
+          (eq (await documentVersion.accessLevel.label) "Actief openbaar")}}
+          <span class="vlc-pill vlc-pill--clickable vlc-pill--success">
+            {{await documentVersion.accessLevel.label}}
+          </span>
+        {{else if (eq documentVersion.accessLevel.label "Intern overheid")}}
+          <span class="vlc-pill vlc-pill--clickable vlc-pill--error">
+            {{await documentVersion.accessLevel.label}}
+          </span>
+        {{else if (eq documentVersion.accessLevel.label "Beperkt openbaar")}}
+          <span class="vlc-pill vlc-pill--clickable vlc-pill--warning">
+            {{await documentVersion.accessLevel.label}}
+          </span>
+        {{else}}
+          <span class="vlc-pill">
+            {{t "no-accessLevel"}}
+          </span>
+        {{/if}}
+      </div>
+    {{else}}
+      <div class="vl-form__input" style="width:75%">
+        {{utils/model-selector
+          modelName="access-level"
+          searchField="label"
+          propertyToShow="label"
+          readOnly=documentVersion.confidential
+          sortField="label"
+          selectedItems=(await preferredAccessLevel)
+          selectModel=(action "chooseAccessLevel")
+        }}
+      </div>
+      <button class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "saveChanges"}}>
+        <i class="vl-vi vl-vi-save vl-button__icon"
+           aria-hidden="true">
+        </i>
+        <span class="vl-u-visually-hidden">
+          {{t "more-options"}}
+        </span>
+      </button>
+      <button class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "toggleIsEditingAccessLevel"}}>
+        <i class="vl-vi vl-vi-cross vl-button__icon"
+           aria-hidden="true">
+        </i>
+        <span class="vl-u-visually-hidden">
+          {{t "more-options"}}
+        </span>
+      </button>
+    {{/if}}
+  {{/if}}
+  {{#if (or isAdmin isEditor)}}
+    <button
+      class="vl-button vl-button--link-muted vl-button--icon"
+      {{action "toggleConfidential" documentVersion}}>
+      {{#if documentVersion.confidential}}
+        <span
+          class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
+        ></span>
+      {{else}}
+        <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+      {{/if}}
+    </button>
+  {{/if}}
   <button
     class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-    {{action "showDocumentVersionViewer" documentVersion}}
-  >
+    {{action "showDocumentVersionViewer" documentVersion}}>
     <i class="vl-vi vl-vi-file-copy vl-button__icon" aria-hidden="true"></i>
     <span class="vl-u-visually-hidden">
       {{t "download"}}
     </span>
   </button>
-   <a
-          class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-          href={{await documentVersion.file.downloadLink}}
-          download={{concat
-            (await document.lastDocumentVersion.file.downloadLink)
-            "?name="
-            (await document.lastDocumentVersion.file.filename)
-          }}
-        >
-          <i
-            class="vl-vi vl-vi-download-harddisk vl-button__icon"
-            aria-hidden="true"
-          ></i>
-          <span class="vl-u-visually-hidden">
-            {{t "download"}}
-          </span>
-        </a>
+  <a
+    class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+    href={{await documentVersion.file.downloadLink}}
+    download={{concat
+    (await document.lastDocumentVersion.file.downloadLink)
+    "?name="
+    (await document.lastDocumentVersion.file.filename)
+  }}>
+    <i
+      class="vl-vi vl-vi-download-harddisk vl-button__icon"
+      aria-hidden="true">
+    </i>
+    <span class="vl-u-visually-hidden">
+      {{t "download"}}
+    </span>
+  </a>
   <button
     class="vl-button vl-button--link vl-button--icon vl-button-icon--error js-vl-popover__toggle"
-    {{action "deleteDocumentVersion" documentVersion}}
-  >
+    {{action "deleteDocumentVersion" documentVersion}}>
     <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>
     <span class="vl-u-visually-hidden">
       {{t "delete"}}
