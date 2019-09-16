@@ -22,7 +22,9 @@
 </span>
 <h4 class="vlc-agenda-items-new__subject">
   {{#if (await agendaitem.shortTitle)}}
-    {{await agendaitem.shortTitle}}
+    <pre>
+      {{await agendaitem.shortTitle}}
+    </pre>
   {{else}}
     {{await agendaitem.title}}
   {{/if}}

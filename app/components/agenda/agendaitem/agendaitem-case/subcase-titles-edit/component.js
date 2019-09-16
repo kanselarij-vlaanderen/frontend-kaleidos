@@ -15,7 +15,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
 	title: getCachedProperty('title'),
 	accessLevel: getCachedProperty('accessLevel'),
 	shortTitle: getCachedProperty('shortTitle'),
-	freezeAccessLevel: getCachedProperty('freezeAccessLevel'),
+	confidential: getCachedProperty('confidential'),
 
 	actions: {
 		setAccessLevel(accessLevel) {

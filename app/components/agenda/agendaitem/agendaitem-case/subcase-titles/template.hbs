@@ -34,22 +34,11 @@
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
   <h4 class="vl-title vl-title--h4">
-    {{await item.shortTitle}}
+    <pre>{{await item.shortTitle}}</pre>
   </h4>
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
-  {{#if (not (await shouldShowDetails))}}
-    {{#link-to
-      "print-overviews.notes.overview"
-      (await meetingId)
-      (await agendaId)
-      (query-params definite=true)
-      class="vl-link"
-      target="_blank"
-    }}
-      {{t "show-minutes"}}
-    {{/link-to}}
-  {{else}}
+  {{#if (await shouldShowDetails)}}
     <pre class="no-capitalize">
       {{await item.title}}
     </pre>
@@ -87,38 +76,20 @@
     </div>
   </div>
   <div class="vl-u-spacer-extended-bottom-s">
-    <div class="pill-container">
+    <div class="pill-container vl-u-display-flex">
       {{#if (or isEditor isAdmin)}}
-        {{#if (await freezeAccessLevel)}}
+        {{#if (await confidential)}}
           <span
             class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"
           ></span>
         {{else}}
           <span
-            class="vlc-pill vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+            class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
           ></span>
         {{/if}}
       {{/if}}
-      {{#if (not (await freezeAccessLevel))}}
-        {{#if (is-pending accessLevelLabel)}}
-          <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-        {{else if (eq (await accessLevelLabel) "Actief openbaar")}}
-          <span class="vlc-pill vlc-pill--success">
-            {{await accessLevelLabel}}
-          </span>
-        {{else if (eq (await accessLevelLabel) "Intern overheid")}}
-          <span class="vlc-pill vlc-pill--error">
-            {{await accessLevelLabel}}
-          </span>
-        {{else if (eq document.accessLevel.label "Beperkt openbaar")}}
-          <span class="vlc-pill vlc-pill--warning">
-            {{await accessLevelLabel}}
-          </span>
-        {{else}}
-          <span class="vlc-pill">
-            {{t "no-accessLevel"}}
-          </span>
-        {{/if}}
+      {{#if (not (await confidential))}}
+        {{access-level-pill accessLevel=accessLevel}}
       {{/if}}
     </div>
   </div>

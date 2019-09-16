@@ -17,6 +17,7 @@ export default Model.extend({
   title: attr('string'),
   subcaseIdentifier: attr('string'),
   showAsRemark: attr('boolean'),
+  confidential: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
   freezeAccessLevel: attr('boolean'),

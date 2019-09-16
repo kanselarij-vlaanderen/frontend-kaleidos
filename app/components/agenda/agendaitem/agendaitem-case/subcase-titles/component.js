@@ -25,35 +25,31 @@ export default Component.extend(isAuthenticatedMixin, {
 		return "agendaitem" == this.get('item.modelName');
 	}),
 
-	freezeAccessLevel: computed('item', 'item.subcase', function () {
+	confidential: computed('item.confidential', 'item.subcase.confidential', function () {
 		const { isAgendaItem, item } = this;
 		if (isAgendaItem) {
 			return DS.PromiseObject.create({
 				promise: item.get('subcase').then((subcase) => {
-					return subcase.get('freezeAccessLevel');
+					return subcase.get('confidential');
 				})
 			})
 		} else {
-			return item.get('freezeAccessLevel');
+			return item.get('confidential');
 		}
 	}),
 
-	accessLevelLabel: computed('item', 'item.subcase', function () {
+	accessLevel: computed('item', 'item.subcase', function () {
 		const { isAgendaItem, item } = this;
 		if (isAgendaItem) {
 			return DS.PromiseObject.create({
 				promise: item.get('subcase').then((subcase) => {
-					return subcase.get('accessLevel').then((accessLevel) => {
-						return accessLevel.get('label');
-					});
+					return subcase.get('accessLevel');
 				})
-			})
+			});
 		} else {
 			return DS.PromiseObject.create({
-				promise: item.get('accessLevel').then((accessLevel) => {
-					return accessLevel.get('label');
-				})
-			})
+				promise: item.get('accessLevel')
+			});
 		}
 	}),
 
