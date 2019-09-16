@@ -17,6 +17,7 @@ export default EmberObject.create({
     'agenda.agendaitems.agendaitem',
     'agenda.compare',
     'agenda.agendaitems.documents',
+    'agenda.documents'
   ],
   phasesCodes: [
     {

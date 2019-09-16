@@ -8,6 +8,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   globalError: inject(),
   fileService: inject(),
+  intl: inject(),
   classNames: ['vl-u-spacer-extended-bottom-s'],
   classNameBindings: ['aboutToDelete'],
   isShowingVersions: false,
@@ -103,7 +104,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       await this.attachDocumentVersionsToModel([documentVersion], item);
 
       await item.save().then(() => {
-        this.resetFormallyOk();
+        if(subcase) this.resetFormallyOk();
       });
     },
 
@@ -115,8 +116,8 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     verify() {
       this.globalError.showToast.perform(
         EmberObject.create({
-          title: 'Opgelet!',
-          message: 'Document wordt verwijderd.',
+          title: this.intl.t('warning-title'),
+          message: this.intl.t('document-being-deleted'),
           type: 'warning-undo',
           modelIdToDelete: this.documentToDelete.get('id'),
         })

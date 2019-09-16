@@ -9,6 +9,7 @@ export default Component.extend(LightTableMixin, {
   isScrolling: false,
 
   intl: inject(),
+  
   loadingText: computed('intl', function() {
     return this.intl.t('users-loading-text')
   }),
