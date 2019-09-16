@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
-const { Model, attr, hasMany, belongsTo } = DS;
+const { Model, attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
   intl: inject(),
@@ -22,6 +22,7 @@ export default Model.extend({
   requestedSubcases: hasMany('subcase'),
   postponeds: hasMany('postponed'),
   relatedCases: hasMany('case'),
+  documentVersions: hasMany('document-version'),
 
   notes: belongsTo('meeting-record'),
   newsletter: belongsTo('newsletter-info'),
@@ -83,5 +84,34 @@ export default Model.extend({
     const foundOption = options.find((kindOption) => kindOption.uri === kind);
 
     return EmberObject.create(foundOption);
+  }),
+
+  documents: computed('documentVersions.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('documentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            include: 'type,document-versions',
+          }).then((documents) => {
+            // Sorting is done in the frontend to work around a Virtuoso issue, where
+            // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
+            // some items not being returned. By not having a sort parameter, this doesn't occur.
+            return documents.sortBy('type.priority', 'numberVr');
+          });
+        }
+      })
+    });
+  }),
+
+  documentsLength: computed('documents', function () {
+    return PromiseObject.create({
+      promise: this.get('documents').then((documents) => {
+        return documents.get('length');
+      })
+    });
   }),
 });

@@ -19,6 +19,7 @@ export default Model.extend({
   announcement: belongsTo('announcement'),
   newsletter: belongsTo('newsletter-info'),
   accessLevel: belongsTo('access-level'),
+  meeting: belongsTo('meeting', { inverse: null }),
 
   name: computed('document.name', async function() {
     return formatVersionedDocumentName(await this.get('document.name'), this.get('versionNumber'));

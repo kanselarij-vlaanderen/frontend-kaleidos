@@ -196,6 +196,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       this.set('addingAnnouncement', true);
     },
 
+    navigateToDocuments() {
+      this.navigateToDocuments();
+    },
+
     async downloadAllDocuments() {
       const date = moment(this.currentSession.get('plannedStart'))
         .format('DD_MM_YYYY')

@@ -32,6 +32,13 @@ export default Component.extend(isAuthenticatedMixin, {
 		}
 	}),
 
+	selectedDocumentClass: computed('routing.currentRouteName', function () {
+		const { routing } = this;
+		if (routing.get('currentRouteName') === "agenda.documents") {
+			return "vlc-tabs-reverse__link--active";
+		}
+	}),
+
 	actions: {
 		compareAgendas() {
 			this.compareAgendas();
@@ -39,6 +46,10 @@ export default Component.extend(isAuthenticatedMixin, {
 
 		goToOverview() {
 			this.clearSelectedAgendaItem();
+		},
+
+		navigateToDocuments() {
+			this.navigateToDocuments();
 		},
 	}
 });
