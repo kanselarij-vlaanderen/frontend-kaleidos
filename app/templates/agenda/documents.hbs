@@ -1,7 +1,17 @@
 <div class="vlc-scroll-wrapper__body">
-  <div class="vl-u-spacer-extended-l"> 
-    {{sessions/session-documents
-      item=model
-    }}
+  <div class="vl-u-spacer-extended-l">
+    {{#if (not isEditing)}}
+      {{agenda/agendaitem/agendaitem-case/subcase-documents
+        documents=(await model.documents)
+        item=model
+        shouldShowLinkedDocuments=false
+      }}
+    {{else}}
+      {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
+        documents=(await model.documents)
+        item=model
+        cancelForm=(action "cancelEditing")
+      }}
+    {{/if}}
   </div>
 </div>

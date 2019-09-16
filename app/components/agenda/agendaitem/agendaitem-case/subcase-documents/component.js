@@ -18,6 +18,7 @@ export default Component.extend(
     isAddingNewDocument: false,
     isEditing: false,
     isLoading: false,
+    shouldShowLinkedDocuments: true,
     item: null,
     documentsToLink: A([]),
 

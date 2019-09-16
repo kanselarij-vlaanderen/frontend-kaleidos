@@ -50,41 +50,45 @@
       </button>
     </div>
   {{/if}}
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-display-flex-align-center">
-      <h4 class="vl-title vl-title--h4">
-        {{t "linked-documents"}}
-      </h4>
-    </div>
-  </div>
-  {{#if (is-pending item.linkedDocuments)}}
-    {{web-components/vl-loader text=(t "documents-loading-text")}}
-  {{else if (gt (await item.linkedDocumentsLength) 0)}}
-    {{#each (await item.linkedDocuments) as |document|}}
-      {{agenda/agendaitem/agendaitem-case/subcase-document/linked-document-link
-        document=document
-        item=item
-      }}
-    {{/each}}
-  {{else}}
-    <div class="vl-u-spacer-extended-top-s">
-      {{web-components/vl-alert message=(t "no-linked-documents-yet")}}
-    </div>
-  {{/if}}
-  {{#if (is-pending item.linkedDocuments)}}
-    <button class="vl-button vl-button--loading vl-button--narrow" disabled>
-      {{t "please-be-patient"}}
-    </button>
-  {{else if (or isAdmin isEditor)}}
+  {{#if shouldShowLinkedDocuments}}
     <div class="vl-u-spacer">
-      <button
-        class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-        {{action "toggleIsLinkingOldDocument"}}
-      >
-        <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-        {{t "document-link-old"}}
-      </button>
+      <div class="vl-u-display-flex vl-u-display-flex-align-center">
+        <h4 class="vl-title vl-title--h4">
+          {{t "linked-documents"}}
+        </h4>
+      </div>
     </div>
+    {{#if (is-pending item.linkedDocuments)}}
+      {{web-components/vl-loader text=(t "documents-loading-text")}}
+    {{else if (gt (await item.linkedDocumentsLength) 0)}}
+      {{#each (await item.linkedDocuments) as |document|}}
+        {{agenda/agendaitem/agendaitem-case/subcase-document/linked-document-link
+          document=document
+          item=item
+        }}
+      {{/each}}
+    {{else}}
+      <div class="vl-u-spacer-extended-top-s">
+        {{web-components/vl-alert message=(t "no-linked-documents-yet")}}
+      </div>
+    {{/if}}
+    {{#if (is-pending item.linkedDocuments)}}
+      <button class="vl-button vl-button--loading vl-button--narrow" disabled>
+        {{t "please-be-patient"}}
+      </button>
+    {{else if (or isAdmin isEditor)}}
+      <div class="vl-u-spacer">
+        <button
+          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          {{action "toggleIsLinkingOldDocument"}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+          ></i>
+          {{t "document-link-old"}}
+        </button>
+      </div>
+    {{/if}}
   {{/if}}
 </div>
 {{#if isAddingNewDocument}}
@@ -116,7 +120,9 @@
               size=document.documentVersions.firstObject.file.size
               downloadName=document.documentVersions.firstObject.file.filename
               downloadLink=(concat
-                document.documentVersions.firstObject.file.downloadLink "?name=" document.documentVersions.firstObject.file.filename
+                document.documentVersions.firstObject.file.downloadLink
+                "?name="
+                document.documentVersions.firstObject.file.filename
               )
               delete=(action "delete" document)
             }}

@@ -15,7 +15,7 @@
     {{else}}
       {{#link-to
         "agenda.agendaitems.agendaitem"
-        firstAgendaItemOfAgenda.id
+        (await firstAgendaItemOfAgenda.id)
         class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}"
       }}
         {{t "detail"}}

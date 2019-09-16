@@ -104,7 +104,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       await this.attachDocumentVersionsToModel([documentVersion], item);
 
       await item.save().then(() => {
-        this.resetFormallyOk();
+        if(subcase) this.resetFormallyOk();
       });
     },
 
