@@ -18,7 +18,7 @@
       {{web-components/vl-loader text=(t "documents-loading-text")}}
     {{else if (gt (await item.documentsLength) 0)}}
       {{#each (await item.documents) as |document|}}
-        {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+        {{sessions/session-document/document-link
           document=document
           item=item
         }}
@@ -29,7 +29,7 @@
       </div>
     {{/if}}
   {{else}}
-    {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
+    {{sessions/edit-session-documents
       documents=(await item.documents)
       item=item
       cancelForm=(action "cancelEditing")
@@ -99,28 +99,3 @@
     }}
   {{/web-components/vl-modal}}
 {{/if}}
-<!--
-{{#if isLinkingOldDocument}}
-  {{#web-components/vl-modal
-    closeModal=(action "toggleIsLinkingOldDocument")
-    isOverlay=true
-    large=true
-    title=(t "document-link-old")
-  }}
-    <div class="vl-modal-dialog__content">
-      {{components/utils/add-existing-document
-        add=(action "link")
-        delete=(action "unlink")
-      }}
-    </div>
-    {{web-components/vl-modal-footer
-      isLoading=isLoading
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "document-link-old")
-      cancelAction=(action "toggleIsLinkingOldDocument")
-      saveAction=(action "linkDocuments")
-      disableSave=(eq documentsToLink.length 0)
-    }}
-  {{/web-components/vl-modal}}
-{{/if}}
--->
