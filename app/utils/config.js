@@ -71,7 +71,7 @@ export default EmberObject.create({
       label: 'Formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
-      classNames: 'vlc-agenda-items-new__status vlc-agenda-items-new__status--positive',
+      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive',
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
     },
@@ -79,14 +79,14 @@ export default EmberObject.create({
       label: 'Formeel niet OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
-      classNames: 'vlc-agenda-items-new__status vl-u-text--error',
+      classNames: 'vlc-agenda-items__status vl-u-text--error',
       pillClassNames: 'vlc-pill vlc-pill--error',
     },
     {
       label: 'Nog niet formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
-      classNames: 'vlc-agenda-items-new__status',
+      classNames: 'vlc-agenda-items__status',
       pillClassNames: 'vlc-pill',
     },
   ],

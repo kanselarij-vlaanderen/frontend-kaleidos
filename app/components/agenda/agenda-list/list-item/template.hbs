@@ -1,5 +1,5 @@
-<p class="vlc-agenda-items-new__overline">
-  <span class="vlc-agenda-items-new__numbering">
+<p class="vlc-agenda-items__overline">
+  <span class="vlc-agenda-items__numbering">
     {{#if agendaitem.number}}
       {{agendaitem.number}}.
     {{else}}
@@ -20,7 +20,7 @@
     {{/attach-popover}}
   {{/if}}
 </span>
-<h4 class="vlc-agenda-items-new__subject">
+<h4 class="vlc-agenda-items__subject">
   {{#if (await agendaitem.shortTitle)}}
     <pre>
       {{await agendaitem.shortTitle}}
@@ -47,7 +47,7 @@
   {{/if}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
-  <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">
+  <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize">
     {{await agendaitem.subcase.subcaseName}}
   </span>
   {{#if (not isEditingOverview)}}

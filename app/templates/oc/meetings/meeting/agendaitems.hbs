@@ -6,7 +6,7 @@
     <div class={{agendaitemsClass}}>
       <div class="vlc-scroll-wrapper">
         <div class="vlc-scroll-wrapper__body">
-          <div class="vl-u-spacer-extended-l vlc-agenda-items-new--spaced">
+          <div class="vl-u-spacer-extended-l vlc-agenda-items--spaced">
             <div class="vl-u-display-flex vl-u-flex-align-baseline">
               <span class="vl-title vl-title--h3 vl-u-text--capitalize">
                 {{t "agendaitems"}}
@@ -24,7 +24,7 @@
                   </div>
                   {{#each agendaItemGroup as |agendaItem|}}
                     <div
-                      class="vlc-agenda-items-new__sub-item vlc-agenda-items-new__sub-item--oc"
+                      class="vlc-agenda-items__sub-item vlc-agenda-items__sub-item--oc"
                     >
                       {{oc/agenda-list/list-item
                         agendaItem=agendaItem

@@ -8,7 +8,7 @@
   </div>
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
-  <div class="vlc-agenda-items-new__sub-item">
+  <div class="vlc-agenda-items__sub-item">
   {{#each brokenAgendaItems as |brokenAgendaItem|}}
     <div class="vlc-agenda-item">
       <div class="vl-u-display-flex">
@@ -18,7 +18,7 @@
           </button>
         </div>
         <div class="vl-title--h5">
-          <h4 class="vlc-agenda-items-new__subject">
+          <h4 class="vlc-agenda-items__subject">
           {{brokenAgendaItem.shortTitle}}
           </h4>
         </div>
@@ -57,7 +57,7 @@
   </div>
 {{else}}
   <div
-    class="vl-u-spacer-extended-s vlc-agenda-items-new--spaced vl-u-display-flex vl-u-flex-space-between"
+    class="vl-u-spacer-extended-s vlc-agenda-items--spaced vl-u-display-flex vl-u-flex-space-between"
   >
     <span class="vl-title vl-title--h3 no-margin">
       {{t "agendaitems-subtitle"}}
@@ -82,7 +82,7 @@
 {{/if}}
 {{#if selectedAgendaItem}}
   {{#if (await minutesApproval)}}
-    <div class="vlc-agenda-items-new__sub-item">
+    <div class="vlc-agenda-items__sub-item">
       {{agenda/agenda-list/list-item
         agendaitem=(await minutesApproval)
         selectAgendaItem=(action "selectAgendaItem")
@@ -100,31 +100,33 @@
               {{/each}}
             </div>
           {{/if}}
+          <ol>
           {{#each agendaitemGroup.agendaitems as |agendaitem|}}
             {{#if (not isShowingChanges)}}
-              <div class="vlc-agenda-items-new__sub-item">
+              <li class="vlc-agenda-items__sub-item">
                 {{agenda/agenda-list/list-item
                   agendaitem=agendaitem
                   selectAgendaItem=(action "selectAgendaItem")
                 }}
-              </div>
+              </li>
             {{else if (await agendaitem.hasChanges)}}
-              <div class="vlc-agenda-items-new__sub-item">
+              <li class="vlc-agenda-items__sub-item">
                 {{agenda/agenda-list/list-item
                   agendaitem=agendaitem
                   isShowingChanges=isShowingChanges
                   selectAgendaItem=(action "selectAgendaItem")
                 }}
-              </div>
+              </li>
             {{/if}}
           {{/each}}
+          </ol>
         {{/if}}
       {{/each}}
     </div>
   {{/each}}
 {{else if (not selectedAgendaItem)}}
   {{#if (await minutesApproval)}}
-    <div class="vlc-agenda-items-new__sub-item">
+    <div class="vlc-agenda-items__sub-item">
       {{agenda/agenda-list/list-item
         agendaitem=(await minutesApproval)
         isEditingOverview=isEditingOverview
@@ -150,6 +152,7 @@
                 "reorderItems" agendaitemGroup
               ) as |sortableGroup|
             }}
+            <ol>
               {{#each agendaitemGroup.agendaitems as |agendaitem|}}
                 {{#if (not isShowingChanges)}}
                   {{#sortable-item
@@ -157,16 +160,16 @@
                     model=agendaitem
                     group=sortableGroup
                     distance=30
-                    handle=".vlc-agenda-items-new__sub-item"
+                    handle=".vlc-agenda-items__sub-item"
                   }}
-                    <div class="vlc-agenda-items-new__sub-item">
+                    <li class="vlc-agenda-items__sub-item">
                       {{agenda/agenda-list/list-item
                         agendaitem=agendaitem
                         isEditingOverview=isEditingOverview
                         isShowingChanges=isShowingChanges
                         selectAgendaItem=(action "selectAgendaItem")
                       }}
-                    </div>
+                    </li>
                   {{/sortable-item}}
                 {{else if (await agendaitem.hasChanges)}}
                   {{#sortable-item
@@ -174,19 +177,21 @@
                     model=agendaitem
                     group=sortableGroup
                     distance=30
-                    handle=".vlc-agenda-items-new__sub-item"
+                    handle=".vlc-agenda-items__sub-item"
                   }}
-                    <div class="vlc-agenda-items-new__sub-item">
+                    <li class="vlc-agenda-items__sub-item">
                       {{agenda/agenda-list/list-item
                         agendaitem=agendaitem
                         isEditingOverview=isEditingOverview
                         isShowingChanges=isShowingChanges
                         selectAgendaItem=(action "selectAgendaItem")
                       }}
-                    </div>
+                    </li>
                   {{/sortable-item}}
                 {{/if}}
               {{/each}}
+                      </ol>
+
             {{/sortable-group}}
           {{/if}}
         {{/each}}
@@ -201,7 +206,7 @@
     </span>
   </div>
 {{else}}
-  <div class="vl-u-spacer-extended-s vlc-agenda-items-new--spaced">
+  <div class="vl-u-spacer-extended-s vlc-agenda-items--spaced">
     <span class="vl-title vl-title--h3">
       {{t "announcements-subtitle"}}
     </span>
@@ -210,7 +215,7 @@
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
     {{#each (await announcements) as |announcement index|}}
-      <div class="vlc-agenda-items-new__sub-item">
+      <div class="vlc-agenda-items__sub-item">
         {{agenda/agenda-list/list-item
           agendaitem=announcement
           index=index

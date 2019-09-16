@@ -34,7 +34,7 @@ export default Component.extend(isAuthenticatedMixin, {
   extraAgendaItemClass: computed('agendaItem.id', 'router.currentRoute', function() {
     const currentAgendaitemId = this.router.get('currentRoute.parent.params.agendaitem_id');
     if (currentAgendaitemId == this.get('agendaItem.id')) {
-      return 'vlc-agenda-items-new__sub-item--active';
+      return 'vlc-agenda-items__sub-item--active';
     }
   })
 });

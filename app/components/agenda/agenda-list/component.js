@@ -8,7 +8,7 @@ import { isPresent } from '@ember/utils';
 
 export default Component.extend(isAuthenticatedMixin, {
   sessionService: inject(),
-  classNames: ['vlc-agenda-items-new'],
+  classNames: ['vlc-agenda-items'],
   classNameBindings: ['getClassNames'],
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   agendaitems: null,
@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, {
     if (this.get('selectedAgendaItem')) {
       return 'vlc-agenda-items--small';
     } else {
-      return 'vl-u-spacer-extended-l vlc-agenda-items-new--spaced';
+      return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
     }
   }),
 

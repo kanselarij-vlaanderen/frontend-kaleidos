@@ -4,9 +4,11 @@
    ========================================================================== */
 
 .vlc-backlink {
+  display: flex;
   padding: 0.8rem 0.2rem;
-  display: inline-flex;
+  display: inline-block;
   i {
     position: relative;
+    top: 0.2rem;
   }
 }

@@ -2,108 +2,101 @@
    vlc-document-card
    ========================================================================== */
 
- .vlc-document-card {
+.vlc-document-card {
   display: block;
-  border: 1px solid $border-color;
+  border: 0.1rem solid $border-color;
   padding: 1.8rem;
 
-    .js-vl-accordion .vl-toggle {
-        margin: 0.8rem 4.6rem 0;
-    }
+  .js-vl-accordion .vl-toggle {
+    margin: 0.8rem 4.6rem 0;
+  }
 
-    .vl-title {
-        margin: 0.5rem 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+  .vl-title {
+    margin: 0.5rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    .vl-accordion__panel {
-        margin: -1.8rem;
-        padding: 1rem 1.8rem;
-        background: $porcelain;
-        border-top: 1px solid $border-color;
-    }
+  .vl-accordion__panel {
+    margin: -1.8rem;
+    padding: 1rem 1.8rem;
+    background: $porcelain;
+    border-top: 1px solid $border-color;
+  }
 
-    .js-vl-accordion--open .vl-toggle {
-        margin-bottom: 4rem;
-    }
+  .js-vl-accordion--open .vl-toggle {
+    margin-bottom: 4rem;
+  }
+
 }
 
-  .vlc-document-card__badge {
-    margin-right: 16px;
-  }
+.vlc-document-card__badge {
+  margin-right: 1.6rem;
+}
 
-  .vlc-document-card__summary {
-    display: flex;
-    align-items: center;
-  }
+.vlc-document-card__summary {
+  display: flex;
+  align-items: center;
+}
 
-  .vlc-document-card__badge {
-  }
+.vlc-document-card__content {
+  flex: 1;
+  min-width: 0;
+}
 
-  .vlc-document-card__content {
-    flex: 1;
-    min-width: 0;
-  }
+.vlc-document-card-content__meta {
+  font-size: 1.4rem;
+  color: $dove-gray;
+}
 
-    .vlc-document-card-content__meta {
-      font-size: 1.4rem;
-      color: $dove-gray;
-    }
+.vlc-document-card__actions {
+  margin-left: auto;
+}
 
-  .vlc-document-card__actions {
-      margin-left: auto;
-  }
-
-  .vlc-document-card-item__icon {
-      position: absolute;
-      left: -4rem;
-      top: 0.3rem;
-      color: $primary-blue;
-  }
-
+.vlc-document-card-item__icon {
+  position: absolute;
+  left: -4rem;
+  top: 0.3rem;
+  color: $primary-blue;
+}
 
 /* ==========================================================================
    Documents timeline
    ========================================================================== */
 
 .vlc-document-card-item {
-    display: block;
-    position: relative;
+  display: block;
+  position: relative;
 
+  &:before {
+    content: "";
+    background: $blue-gray-light;
+    height: calc(100% - 1.5rem);
+    width: 1px;
+    position: absolute;
+    left: -3.1rem;
+    top: 3.2rem;
+    z-index: 0;
+  }
+  &:last-child {
     &:before {
-      content: "";
-      background: $blue-gray-light;
-      height: calc(100% - 1.5rem);
-      width: 1px;
-      position: absolute;
-      left: -3.1rem;
-      top: 3.2rem;
-      z-index: 0;
+      height: 0;
     }
-    &:last-child {
-      &:before {
-        height: 0;
-      }
-    }
+  }
 
-    margin-left: 4.6rem;
-    margin-bottom: 2rem;
-    &:last-child {
-      margin-bottom: 0;
-    }
+  margin-left: 4.6rem;
+  margin-bottom: 2rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .vlc-document-card-item__title {
-    display: flex;
-    align-items: center;
-
-    .vl-button, div, .vlc-pill {
-        margin-left: 0.7rem;
-    }
+  display: flex;
+  align-items: center;
 }
 
 .vlc-document-card-item__meta {
-    font-size: 1.4rem;
+  font-size: 1.4rem;
 }
 
