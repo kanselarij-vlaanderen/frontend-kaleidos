@@ -225,6 +225,13 @@ export default Service.extend({
         priority: agendaitem.priority,
       };
     }
+    return {
+      groupName: null,
+      groupPrio: null,
+      mandatees: null,
+      agendaitem: agendaitem,
+      priority: agendaitem.priority,
+    };
   },
 
   createMandateeListWithPriorities(agendaitem) {

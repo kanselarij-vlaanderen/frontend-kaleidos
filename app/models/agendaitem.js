@@ -40,8 +40,8 @@ export default Model.extend({
   themes: hasMany('theme'),
 
   number: computed('displayPriority', 'priority', function() {
-    const { priority, displayPriority} = this;
-    if(!priority) {
+    const { priority, displayPriority } = this;
+    if (!priority) {
       return displayPriority;
     } else {
       return priority;
@@ -184,8 +184,10 @@ export default Model.extend({
     });
   }),
 
-  checkAdded: computed('id', 'addedAgendaitems.@each', function() {
-    if (this.addedAgendaitems) return this.addedAgendaitems.includes(this.id);
+  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', function() {
+    return (this.addedAgendaitems && this.addedAgendaitems.includes(this.id))
+      || (this.agenda.get('createdFor.agendas') && this.agenda.get('createdFor.agendas').length <= 1)
+      || (this.agenda.get('name')  === CONFIG.alphabet[0]);
   }),
 
   isAdded: alias('checkAdded'),
