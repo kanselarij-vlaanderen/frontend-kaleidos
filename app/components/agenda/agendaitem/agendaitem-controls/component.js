@@ -51,7 +51,7 @@ export default Component.extend({
       if (currentAgendaName !== "Ontwerpagenda") {
         return false;
       }
-      if (await agendaitemSubcase.get('agendaitems.length') !== 1) {
+      if (await agendaitemSubcase.get('agendaitems.length') > 1) {
         return false
       }
       return true;
