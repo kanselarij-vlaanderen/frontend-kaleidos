@@ -86,8 +86,8 @@ export default Service.extend({
 
   checkEditRights() {
     const { userRoleId } = this;
-    const { adminId, kanselarijId, ministerId } = CONFIG;
-    let roles = [adminId, kanselarijId, ministerId];
+    const { adminId, kanselarijId } = CONFIG;
+    let roles = [adminId, kanselarijId];
     return roles.includes(userRoleId);
   },
 
