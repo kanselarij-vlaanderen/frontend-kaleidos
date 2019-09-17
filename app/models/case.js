@@ -86,7 +86,7 @@ export default Model.extend({
     if (length === 0) {
       return CONFIG.resultSubcaseName;
     } else {
-      return `${(length + 1)}de ${CONFIG.phasesCodes[0].label}`
+      return `${(length + 1)}de principiële goedkeuring`
     }
   }
 });

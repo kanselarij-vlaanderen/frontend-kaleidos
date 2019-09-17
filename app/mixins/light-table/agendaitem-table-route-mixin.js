@@ -1,6 +1,7 @@
 import Mixin from '@ember/object/mixin';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Mixin.create({
+export default Mixin.create(isAuthenticatedMixin, {
   routeNamePrefix: null,
   modelName: 'agendaitem',
   filter: null,
@@ -42,6 +43,14 @@ export default Mixin.create({
     controller.set('filter', this.filter);
     controller.set('sort', this.sort);
     controller.set('include', this.include);
+  },
+
+  redirect() {
+    if (!this.editor) {
+      this.transitionTo(`print-overviews.${this.routeNamePrefix}.overview`, {
+        queryParams: { definite: true },
+      });
+    }
   },
 
   actions: {

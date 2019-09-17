@@ -56,7 +56,7 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     async reorderItems(agendaitemGroup, reOrderedAgendaitemGroup, itemDragged) {
-      if (this.isEditor || this.isAdmin) {
+      if (this.isEditor) {
         const firstItem = agendaitemGroup.agendaitems.get('firstObject');
         const firstPrio = firstItem.get('priority');
         const newIndex = reOrderedAgendaitemGroup.indexOf(itemDragged);

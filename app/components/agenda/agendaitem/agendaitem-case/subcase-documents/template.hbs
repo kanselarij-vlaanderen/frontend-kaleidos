@@ -4,7 +4,7 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      {{#if (or isAdmin isEditor)}}
+      {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           <a class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
@@ -39,7 +39,7 @@
     <button class="vl-button vl-button--loading vl-button--narrow" disabled>
       {{t "please-be-patient"}}
     </button>
-  {{else if (or isAdmin isEditor)}}
+  {{else if isEditor}}
     <div class="vl-u-spacer">
       <button
         class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
@@ -76,7 +76,7 @@
       <button class="vl-button vl-button--loading vl-button--narrow" disabled>
         {{t "please-be-patient"}}
       </button>
-    {{else if (or isAdmin isEditor)}}
+    {{else if isEditor}}
       <div class="vl-u-spacer">
         <button
           class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"

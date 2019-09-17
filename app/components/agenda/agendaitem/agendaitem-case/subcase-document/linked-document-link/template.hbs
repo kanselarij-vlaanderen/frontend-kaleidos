@@ -23,7 +23,7 @@
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
-            {{#if (or isAdmin isEditor)}}
+            {{#if isEditor}}
               <button
                 class="vl-button vl-button--link-muted vl-button--icon"
                 {{action "unlinkDocument" document}}>

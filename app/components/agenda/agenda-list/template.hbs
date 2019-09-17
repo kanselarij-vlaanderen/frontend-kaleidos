@@ -1,40 +1,44 @@
 {{#if (gt brokenAgendaItems.length 0)}}
-<div class="vl-u-spacer-extended-bottom-s">
-  <div class="vl-title vl-title--h3">
-    {{t "faulty-agendaitems"}}
-  </div>
-  <div class="vl-title">
-    {{t "faulty-agendaitems-message"}}
-  </div>
-</div>
-<div class="vl-u-spacer-extended-bottom-s">
-  <div class="vlc-agenda-items__sub-item">
-  {{#each brokenAgendaItems as |brokenAgendaItem|}}
-    <div class="vlc-agenda-item">
-      <div class="vl-u-display-flex">
-        <div class="vl-button-group">
-          <button class='vl-button vl-button--narrow vl-button--error' {{action "deleteBrokenAgendaitem" brokenAgendaItem}}>
-          {{t "delete"}}
-          </button>
-        </div>
-        <div class="vl-title--h5">
-          <h4 class="vlc-agenda-items__subject">
-          {{brokenAgendaItem.shortTitle}}
-          </h4>
-        </div>
-        </div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <div class="vl-title vl-title--h3">
+      {{t "faulty-agendaitems"}}
     </div>
-  {{/each}}
+    <div class="vl-title">
+      {{t "faulty-agendaitems-message"}}
+    </div>
   </div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <div class="vlc-agenda-items__sub-item">
+      {{#each brokenAgendaItems as |brokenAgendaItem|}}
+        <div class="vlc-agenda-item">
+          <div class="vl-u-display-flex">
+            {{#if isEditor}}
+              <div class="vl-button-group">
+                <button
+                  class="vl-button vl-button--narrow vl-button--error"
+                  {{action "deleteBrokenAgendaitem" brokenAgendaItem}}
+                >
+                  {{t "delete"}}
+                </button>
+              </div>
+            {{/if}}
+            <div class="vl-title--h5">
+              <h4 class="vlc-agenda-items__subject">
+                {{brokenAgendaItem.shortTitle}}
+              </h4>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
   </div>
 {{/if}}
-
 {{#if (not selectedAgendaItem)}}
   <div class="vl-u-display-flex vl-u-flex-space-between">
     <span class="vl-title vl-title--h3">
       {{t "agendaitems-subtitle"}}
     </span>
-    {{#if (or isAdmin isEditor)}}
+    {{#if isEditor}}
       {{#if (await currentAgenda.isDesignAgenda)}}
         <div class="vl-u-display-flex vl-u-flex-end">
           <div class="vl-u-spacer-extended-left-s">
@@ -101,24 +105,24 @@
             </div>
           {{/if}}
           <ol>
-          {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-            {{#if (not isShowingChanges)}}
-              <li class="vlc-agenda-items__sub-item">
-                {{agenda/agenda-list/list-item
-                  agendaitem=agendaitem
-                  selectAgendaItem=(action "selectAgendaItem")
-                }}
-              </li>
-            {{else if (await agendaitem.hasChanges)}}
-              <li class="vlc-agenda-items__sub-item">
-                {{agenda/agenda-list/list-item
-                  agendaitem=agendaitem
-                  isShowingChanges=isShowingChanges
-                  selectAgendaItem=(action "selectAgendaItem")
-                }}
-              </li>
-            {{/if}}
-          {{/each}}
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              {{#if (not isShowingChanges)}}
+                <li class="vlc-agenda-items__sub-item">
+                  {{agenda/agenda-list/list-item
+                    agendaitem=agendaitem
+                    selectAgendaItem=(action "selectAgendaItem")
+                  }}
+                </li>
+              {{else if (await agendaitem.hasChanges)}}
+                <li class="vlc-agenda-items__sub-item">
+                  {{agenda/agenda-list/list-item
+                    agendaitem=agendaitem
+                    isShowingChanges=isShowingChanges
+                    selectAgendaItem=(action "selectAgendaItem")
+                  }}
+                </li>
+              {{/if}}
+            {{/each}}
           </ol>
         {{/if}}
       {{/each}}
@@ -152,46 +156,45 @@
                 "reorderItems" agendaitemGroup
               ) as |sortableGroup|
             }}
-            <ol>
-              {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-                {{#if (not isShowingChanges)}}
-                  {{#sortable-item
-                    tagName="div"
-                    model=agendaitem
-                    group=sortableGroup
-                    distance=30
-                    handle=".vlc-agenda-items__sub-item"
-                  }}
-                    <li class="vlc-agenda-items__sub-item">
-                      {{agenda/agenda-list/list-item
-                        agendaitem=agendaitem
-                        isEditingOverview=isEditingOverview
-                        isShowingChanges=isShowingChanges
-                        selectAgendaItem=(action "selectAgendaItem")
-                      }}
-                    </li>
-                  {{/sortable-item}}
-                {{else if (await agendaitem.hasChanges)}}
-                  {{#sortable-item
-                    tagName="div"
-                    model=agendaitem
-                    group=sortableGroup
-                    distance=30
-                    handle=".vlc-agenda-items__sub-item"
-                  }}
-                    <li class="vlc-agenda-items__sub-item">
-                      {{agenda/agenda-list/list-item
-                        agendaitem=agendaitem
-                        isEditingOverview=isEditingOverview
-                        isShowingChanges=isShowingChanges
-                        selectAgendaItem=(action "selectAgendaItem")
-                      }}
-                    </li>
-                  {{/sortable-item}}
-                {{/if}}
-              {{/each}}
-                      </ol>
-
+              <ol>
+                {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+                  {{#if (not isShowingChanges)}}
+                    {{#sortable-item
+                      tagName="div"
+                      model=agendaitem
+                      group=sortableGroup
+                      distance=30
+                      handle=".vlc-agenda-items__sub-item"
+                    }}
+                      <li class="vlc-agenda-items__sub-item">
+                        {{agenda/agenda-list/list-item
+                          agendaitem=agendaitem
+                          isEditingOverview=isEditingOverview
+                          isShowingChanges=isShowingChanges
+                          selectAgendaItem=(action "selectAgendaItem")
+                        }}
+                      </li>
+                    {{/sortable-item}}
+                  {{else if (await agendaitem.hasChanges)}}
+                    {{#sortable-item
+                      tagName="div"
+                      model=agendaitem
+                      group=sortableGroup
+                      distance=30
+                      handle=".vlc-agenda-items__sub-item"
+                    }}
+                      <li class="vlc-agenda-items__sub-item">
+                        {{agenda/agenda-list/list-item
+                          agendaitem=agendaitem
+                          isEditingOverview=isEditingOverview
+                          isShowingChanges=isShowingChanges
+                          selectAgendaItem=(action "selectAgendaItem")
+                        }}
+                      </li>
+                    {{/sortable-item}}
+                  {{/if}}
+                {{/each}}
+              </ol>
             {{/sortable-group}}
           {{/if}}
         {{/each}}

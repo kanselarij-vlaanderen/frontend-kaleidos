@@ -3,8 +3,8 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import AgendaitemTableRouteMixin from 'fe-redpencil/mixins/light-table/agendaitem-table-route-mixin';
 
 export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, {
-	authenticationRoute: 'login',
-	sort: 'priority',
-	routeNamePrefix: 'notes',
-	include: 'subcase,meeting-record'
+  authenticationRoute: 'login',
+  sort: 'priority',
+  routeNamePrefix: 'notes',
+  include: 'subcase,meeting-record'
 });

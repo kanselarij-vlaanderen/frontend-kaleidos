@@ -16,7 +16,7 @@
         {{t "my-cases"}}
       </h2>
       <div class="vl-action-group vl-action-group--align-right">
-        {{#if (or isAdmin isEditor)}}
+        {{#if isEditor}}
           <div class="action-toggle-container">
             {{web-components/vl-form-label value=(t "show-archived")}}
             {{web-components/vl-toggle value=isArchived}}
@@ -89,7 +89,7 @@
             </td>
           {{/if}}
           <td class="vl-u-align-right">
-            {{#if (or isAdmin isEditor)}}
+            {{#if isEditor}}
               <button class="vl-button vl-button--link vl-button--icon">
                 <i
                   class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"

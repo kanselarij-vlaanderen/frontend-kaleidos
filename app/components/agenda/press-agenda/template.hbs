@@ -34,7 +34,7 @@
                       {{agendaitem.titlePress}}
                     </h3>
                     {{#if (eq definite "false")}}
-                      {{#if (or isAdmin isEditor)}}
+                      {{#if isEditor}}
                         <div class="vl-u-spacer-extended-left-s">
                           <a
                             class="vl-link"

@@ -29,44 +29,48 @@
     {{await agendaitem.title}}
   {{/if}}
 </h4>
-{{#if (not selectedAgendaItem)}}
-  {{#if (await agendaitem.documents)}}
-    <div class="vlc-hr"></div>
-    {{utils/documents-list-for-item
-      isClickable=isDocumentClickable
-      item=agendaitem
-      agendaitem=agendaitem
-    }}
-  {{else if (await agendaitem.subcase.documents)}}
-    <div class="vlc-hr"></div>
-    {{utils/documents-list-for-item
-      isClickable=isDocumentClickable
-      item=(await agendaitem.subcase)
-      agendaitem=(await agendaitem.subcase)
-    }}
+{{#if isEditor}}
+  {{#if (not selectedAgendaItem)}}
+    {{#if (await agendaitem.documents)}}
+      <div class="vlc-hr"></div>
+      {{utils/documents-list-for-item
+        isClickable=isDocumentClickable
+        item=agendaitem
+        agendaitem=agendaitem
+      }}
+    {{else if (await agendaitem.subcase.documents)}}
+      <div class="vlc-hr"></div>
+      {{utils/documents-list-for-item
+        isClickable=isDocumentClickable
+        item=(await agendaitem.subcase)
+        agendaitem=(await agendaitem.subcase)
+      }}
+    {{/if}}
   {{/if}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
   <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize">
     {{await agendaitem.subcase.subcaseName}}
   </span>
-  {{#if (not isEditingOverview)}}
-    {{#if agendaitem.formallyOkToShow.approved}}
-      <p class="{{agendaitem.formallyOkToShow.classNames}}">
-        {{agendaitem.formallyOkToShow.label}}
-        <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-      </p>
+  {{#if isEditor}}
+    {{#if (not isEditingOverview)}}
+      {{#if agendaitem.formallyOkToShow.approved}}
+        <p class="{{agendaitem.formallyOkToShow.classNames}}">
+          {{agendaitem.formallyOkToShow.label}}
+          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+        </p>
+      {{else}}
+        <p class="{{agendaitem.formallyOkToShow.classNames}}">
+          {{agendaitem.formallyOkToShow.label}}
+        </p>
+      {{/if}}
     {{else}}
-      <p class="{{agendaitem.formallyOkToShow.classNames}}">
-        {{agendaitem.formallyOkToShow.label}}
-      </p>
+      {{utils/formally-ok-selector
+        formallyOk=formallyOk
+        isLoading=isLoading
+        hideLabel=hideLabel
+        setAction=(action "setAction")
+      }}
     {{/if}}
-  {{else}}
-    {{utils/formally-ok-selector
-      formallyOk=formallyOk
-      isLoading=isLoading
-      hideLabel=hideLabel
-      setAction=(action "setAction")
-    }}
   {{/if}}
 </div>

@@ -19,34 +19,33 @@
           selectModel=(action "chooseAccessLevel")
         }}
       </div>
-      <button class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-        {{action "saveChanges"}}>
-        <i class="vl-vi vl-vi-save vl-button__icon"
-           aria-hidden="true">
-        </i>
+      <button
+        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "saveChanges"}}
+      >
+        <i class="vl-vi vl-vi-save vl-button__icon" aria-hidden="true"></i>
         <span class="vl-u-visually-hidden">
           {{t "more-options"}}
         </span>
       </button>
-      <button class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-        {{action "toggleIsEditingAccessLevel"}}>
-        <i class="vl-vi vl-vi-cross vl-button__icon"
-           aria-hidden="true">
-        </i>
+      <button
+        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "toggleIsEditingAccessLevel"}}
+      >
+        <i class="vl-vi vl-vi-cross vl-button__icon" aria-hidden="true"></i>
         <span class="vl-u-visually-hidden">
           {{t "more-options"}}
         </span>
       </button>
     {{/if}}
   {{/if}}
-  {{#if (or isAdmin isEditor)}}
+  {{#if isEditor}}
     <button
       class="vl-button vl-button--link-muted vl-button--icon"
-      {{action "toggleConfidential" documentVersion}}>
+      {{action "toggleConfidential" documentVersion}}
+    >
       {{#if documentVersion.confidential}}
-        <span
-          class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
-        ></span>
+        <span class="vl-icon vl-vi vl-vi-lock vl-u-text--error"></span>
       {{else}}
         <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
       {{/if}}
@@ -54,7 +53,8 @@
   {{/if}}
   <button
     class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-    {{action "showDocumentVersionViewer" documentVersion}}>
+    {{action "showDocumentVersionViewer" documentVersion}}
+  >
     <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
     <span class="vl-u-visually-hidden">
       {{t "download"}}
@@ -64,33 +64,39 @@
     class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
     href={{await documentVersion.file.downloadLink}}
     download={{concat
-    (await document.lastDocumentVersion.file.downloadLink)
-    "?name="
-    (await document.lastDocumentVersion.file.filename)
-  }}>
+      (await document.lastDocumentVersion.file.downloadLink)
+      "?name="
+      (await document.lastDocumentVersion.file.filename)
+    }}
+  >
     <i
       class="vl-vi vl-vi-download-harddisk vl-button__icon"
-      aria-hidden="true">
-    </i>
+      aria-hidden="true"
+    ></i>
     <span class="vl-u-visually-hidden">
       {{t "download"}}
     </span>
   </a>
-  <button
-    class="vl-button vl-button--link vl-button--icon vl-button-icon--error js-vl-popover__toggle"
-    {{action "deleteDocumentVersion" documentVersion}}>
-    <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>
-    <span class="vl-u-visually-hidden">
-      {{t "delete"}}
-    </span>
-  </button>
+  {{#if isEditor}}
+    <button
+      class="vl-button vl-button--link vl-button--icon vl-button-icon--error js-vl-popover__toggle"
+      {{action "deleteDocumentVersion" documentVersion}}
+    >
+      <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>
+      <span class="vl-u-visually-hidden">
+        {{t "delete"}}
+      </span>
+    </button>
+  {{/if}}
 </div>
-<div class="vlc-document-card-item__meta">
-  {{t "uploaded-at"}}
-  {{moment-format documentVersion.created "DD.MM.YYYY"}}
-  {{t "at"}}
-  {{moment-format documentVersion.created "HH:mm"}}
-</div>
+{{#if isEditor}}
+  <div class="vlc-document-card-item__meta">
+    {{t "uploaded-at"}}
+    {{moment-format documentVersion.created "DD.MM.YYYY"}}
+    {{t "at"}}
+    {{moment-format documentVersion.created "HH:mm"}}
+  </div>
+{{/if}}
 <div class="vlc-document-card-item__icon">
   <span
     class="vl-icon vl-icon--large vl-vi vl-vi-timeline"

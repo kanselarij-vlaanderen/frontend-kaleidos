@@ -6,6 +6,7 @@
       <div class="vl-tabs__wrapper">
         {{agenda/agendaitem/agendaitem-nav
           agendaitem=agendaitem
+          currentAgenda=currentAgenda
           activeAgendaItemSection=activeAgendaItemSection
           setAgendaItemSection=(action "setAgendaItemSection")
         }}
@@ -18,7 +19,7 @@
         <div class="vl-u-spacer--small">
           {{#if (eq activeAgendaItemSection "details")}}
             <div class="vl-action-group vl-action-group--align-right">
-              {{#if (or isAdmin isEditor)}}
+              {{#if isEditor}}
                 {{#if (not currentAgenda.isFinal)}}
                   {{agenda/agendaitem/agendaitem-controls
                     agendaitem=agendaitem

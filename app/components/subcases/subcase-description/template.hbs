@@ -4,7 +4,7 @@
       {{t "subcase"}}
     </h3>
     {{#if (not (await subcase.isOC))}}
-      {{#if (or isEditor isAdmin)}}
+      {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           <a class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}

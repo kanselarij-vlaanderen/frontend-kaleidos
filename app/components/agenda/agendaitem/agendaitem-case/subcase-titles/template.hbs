@@ -1,4 +1,4 @@
-{{#if (and (await item.subcase.case.id) isAdmin)}}
+{{#if (and (await item.subcase.case.id) isEditor)}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
       {{#link-to
@@ -22,14 +22,14 @@
           {{t "text"}}
         {{/if}}
       </h2>
-    </div>
-    <div class="vl-u-spacer-extended-left-s">
-      {{#if (or isAdmin isEditor)}}
+    </div>      
+    {{#if isEditor}}
+      <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
-      {{/if}}
-    </div>
+      </div>
+    {{/if}}
   </div>
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
@@ -67,7 +67,7 @@
         </span>
       {{/if}}
       {{#if isAgendaItem}}
-        {{#if (and (or isEditor isAdmin) (await item.formallyOkToShow))}}
+        {{#if (and isEditor (await item.formallyOkToShow))}}
           <span class="{{item.formallyOkToShow.pillClassNames}}">
             {{item.formallyOkToShow.label}}
           </span>
@@ -77,7 +77,7 @@
   </div>
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
-      {{#if (or isEditor isAdmin)}}
+      {{#if isEditor}}
         {{#if (await confidential)}}
           <span
             class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"

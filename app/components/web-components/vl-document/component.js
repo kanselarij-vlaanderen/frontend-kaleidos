@@ -13,15 +13,16 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     this._super(...arguments);
     await this.resetPreferredAccessLevel();
   },
-  classNames: ["vlc-document-card-item"],
 
+  classNames: ['vlc-document-card-item'],
   classNameBindings: ['aboutToDelete'],
   documentVersion: null,
   isEditingAccessLevel: false,
+  
   aboutToDelete: computed('documentVersion.aboutToDelete', function() {
     if (this.documentVersion) {
       if (this.documentVersion.get('aboutToDelete')) {
-        return "deleted-state";
+        return 'deleted-state';
       }
     }
   }),
@@ -39,12 +40,14 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     verify() {
-      this.globalError.showToast.perform(EmberObject.create({
-        title: 'Opgelet!',
-        message: "Documentversie wordt verwijderd.",
-        type: "warning-undo",
-        modelIdToDelete: this.documentVersionToDelete.get('id')
-      }));
+      this.globalError.showToast.perform(
+        EmberObject.create({
+          title: 'Opgelet!',
+          message: 'Documentversie wordt verwijderd.',
+          type: 'warning-undo',
+          modelIdToDelete: this.documentVersionToDelete.get('id'),
+        })
+      );
       this.fileService.get('deleteDocumentWithUndo').perform(this.documentVersionToDelete);
       this.set('isVerifyingDelete', false);
       this.set('documentVersionToDelete', null);
@@ -65,9 +68,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     toggleIsEditingAccessLevel() {
-      if (this.get('isAdmin') || this.get('isEditor')) {
+      if (this.get('isEditor')) {
         if (this.isEditingAccessLevel) {
-          this.resetPreferredAccessLevel()
+          this.resetPreferredAccessLevel();
         }
         this.toggleProperty('isEditingAccessLevel');
       }
@@ -79,9 +82,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       let documentVersion = this.get('documentVersion');
       if (preferredAccessLevel) {
         await documentVersion.set('accessLevel', preferredAccessLevel);
-        await documentVersion.save()
+        await documentVersion.save();
       }
-      this.resetPreferredAccessLevel()
-    }
-  }
+      this.resetPreferredAccessLevel();
+    },
+  },
 });

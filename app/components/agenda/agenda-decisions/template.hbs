@@ -1,5 +1,4 @@
 <div class="vlc-container">
-  {{!-- {{utils/logo-header}} --}}
   <div class="vl-u-spacer-extended-top-l no-print">
     <h3 class="vl-title vl-title--h3">
       {{await title}}
@@ -7,18 +6,10 @@
     </h3>
   </div>
   <div class="vl-u-spacer-extended-bottom-l no-print">
-    {{! <hr class="vlc-hr" /> }}
   </div>
   <div class="vl-u-spacer-extended-bottom vl-u-spacer-extended-top-l">
     {{#each (await agendaitemGroups) as |group|}}
       {{#each group.groups as |agendaitemGroup|}}
-        {{!-- <div class="vl-u-spacer-extended-bottom">
-          {{#each agendaitemGroup.mandatees as |mandatee|}}
-            <h3 class="vl-title vl-title--h5">
-              {{mandatee.title}}
-            </h3>
-          {{/each}}
-        </div> --}}
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
           <div class="vl-u-display-flex vl-u-flex-justify-center">
             <div class="print-only vl-u-spacer-extended-top-l">
@@ -58,7 +49,7 @@
                           isTableRow=isTableRow
                           agendaitem=agendaitem
                         }}
-                      {{else if (or isAdmin isEditor)}}
+                      {{else if isEditor}}
                         <div class="vl-u-display-flex align-right">
                           {{#if allowEditing}}
                             <a
