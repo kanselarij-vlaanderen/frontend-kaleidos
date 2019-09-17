@@ -68,6 +68,10 @@ export default Component.extend(
         this.send('refresh');
       },
 
+      chooseDocumentType(document, type) {
+        document.set('type', type);
+      },
+
       async saveDocuments() {
         const documents = await this.saveDocuments(null);
         const item = await this.get('item');

@@ -134,6 +134,17 @@
                     value=(mut document.name)
                   }}
                 </div>
+                <div class="vlc-input-field-block">
+                  {{web-components/vl-form-label value=(t "document-type")}}
+                  {{utils/model-selector
+                  modelName="document-type"
+                  searchField="label"
+                  propertyToShow="label"
+                  sortField="priority"
+                  selectedItems=document.type
+                  selectModel=(action "chooseDocumentType" document)
+                }}
+                </div>
               </div>
             {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
           {{/each}}

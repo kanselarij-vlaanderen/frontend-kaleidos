@@ -172,9 +172,6 @@ $icon-font-location: '/fonts/';
 @import "custom-utilities/_box-model";
 
 // Print
-@import "print";
-
-// Print
 @import 'print/print';
 @import 'print';
 
@@ -421,14 +418,6 @@ ul {
   padding-left: 0 !important;
 }
 
-.vl-col--1-3 {
-  #agendaitem-comments {
-    padding: 1rem 1rem 0 0;
-    margin-left: 0.1rem;
-    border: 1px $porcelain solid;
-  }
-}
-
 .full-width-selector {
   width: 100%;
 }
@@ -470,6 +459,7 @@ ul {
     margin-bottom: 0em;
   }
 }
+
 .action-toggle-container {
   display: flex;
   height: 100%;
@@ -509,4 +499,10 @@ pre {
   font-weight: 500;
   opacity: 1;
   color: $napier-green;
+}
+
+.vlc-document-card-item__title {
+  .vl-title {
+    margin-right: 0.5em;
+  }
 }
