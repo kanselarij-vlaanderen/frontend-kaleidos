@@ -67,7 +67,10 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    // here you can enable a production-specific feature
+    ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = 'cb70a19f-4189-4af3-b88f-9d3adaa1aca1';
+    ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/auth';
+    ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos.vlaanderen.be/authorization/callback';
+    ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/logout';
   }
 
   return ENV;
