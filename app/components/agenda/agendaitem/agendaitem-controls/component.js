@@ -42,20 +42,21 @@ export default Component.extend({
 
   isDeletable: computed(
     'agendaitem.subcase',
-    'agendaitem.subcase.agendaitems.@each',
+    'agendaitem.subcase.agendaitems',
     'currentAgenda.name',
     async function() {
       const currentAgendaName = await this.get('currentAgenda.name');
       const agendaitemSubcase = await this.get('agendaitem.subcase');
-
-      if (currentAgendaName !== "Ontwerpagenda") {
+      const agendaitems = await this.get('agendaitem.subcase.agendaitems');
+      if (currentAgendaName && currentAgendaName !== "Ontwerpagenda") {
         return false;
+      } else if (agendaitemSubcase) {
+        if (agendaitems && agendaitems.length > 1) {
+          return false
+        } else {
+          return true;
+        }
       }
-      if (await agendaitemSubcase.get('agendaitems.length') > 1) {
-        return false
-      }
-      return true;
-
     }),
 
   actions: {
