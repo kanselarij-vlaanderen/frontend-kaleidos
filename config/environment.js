@@ -53,6 +53,14 @@ module.exports = function(environment) {
     ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos-test.vlaanderen.be/authorization/callback';
     ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
   }
+  
+  
+  if (process.env.DEPLOY_ENV === 'production') {
+    ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = 'cb70a19f-4189-4af3-b88f-9d3adaa1aca1';
+    ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/auth';
+    ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos.vlaanderen.be/authorization/callback';
+    ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/logout';
+  }
 
   if (environment === 'test') {
     // Testem prefers this...
@@ -65,12 +73,8 @@ module.exports = function(environment) {
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
   }
-
   if (environment === 'production') {
-    ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = 'cb70a19f-4189-4af3-b88f-9d3adaa1aca1';
-    ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/auth';
-    ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos.vlaanderen.be/authorization/callback';
-    ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/logout';
+    // config for production builds
   }
 
   return ENV;
