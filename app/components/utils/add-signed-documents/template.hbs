@@ -4,12 +4,14 @@
     item=(await item.signedDocument)
   }}
 {{else if (await item)}}
-  <button
-    class="vl-button vl-button--tertiary vl-button--narrow"
-    {{action "toggleIsAddingNewDocument"}}
-  >
-    {{title}}
-  </button>
+  {{#if isEditor}}
+    <button
+      class="vl-button vl-button--tertiary vl-button--narrow"
+      {{action "toggleIsAddingNewDocument"}}
+    >
+      {{title}}
+    </button>
+  {{/if}}
 {{/if}}
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal

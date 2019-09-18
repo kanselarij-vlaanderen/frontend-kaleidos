@@ -46,32 +46,30 @@
         {{/if}}
       </div>
     </div>
-    {{#if isEditor}}
-      {{#if (gt (await decision.documentVersions.length) 0)}}
-        <div class="vl-u-spacer">
-          <h4 class="vl-title vl-title--h6">
-            {{t "documents-attached-to"}}
-          </h4>
-          <div class="vl-u-spacer-extended-top-s">
-            {{utils/documents-list-for-item item=decision agendaitem=subcase}}
-          </div>
+    {{#if (gt (await decision.documentVersions.length) 0)}}
+      <div class="vl-u-spacer">
+        <h4 class="vl-title vl-title--h6">
+          {{t "documents-attached-to"}}
+        </h4>
+        <div class="vl-u-spacer-extended-top-s">
+          {{utils/documents-list-for-item item=decision agendaitem=subcase}}
         </div>
-      {{/if}}
-      {{#if (is-pending decision.signedDocument)}}
-        {{web-components/vl-loader text=(t "decision-document-loading-text")}}
-      {{else if (not (await decision.signedDocument))}}
-        {{utils/add-signed-documents
-          item=decision
-          defaultType=defaultType
-          modelToAddDocumentVersionTo="signedDecision"
-          title=(t "signed-decision-add")
-        }}
-      {{else}}
-        {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-          document=(await decision.signedDocument)
-          item=decision
-        }}
-      {{/if}}
+      </div>
+    {{/if}}
+    {{#if (is-pending decision.signedDocument)}}
+      {{web-components/vl-loader text=(t "decision-document-loading-text")}}
+    {{else if (not (await decision.signedDocument))}}
+      {{utils/add-signed-documents
+        item=decision
+        defaultType=defaultType
+        modelToAddDocumentVersionTo="signedDecision"
+        title=(t "signed-decision-add")
+      }}
+    {{else}}
+      {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+        document=(await decision.signedDocument)
+        item=decision
+      }}
     {{/if}}
   {{else}}
     {{agenda/agendaitem/agendaitem-decision-edit

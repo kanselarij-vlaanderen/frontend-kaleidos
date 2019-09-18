@@ -1,37 +1,39 @@
-{{#if (gt brokenAgendaItems.length 0)}}
-  <div class="vl-u-spacer-extended-bottom-s">
-    <div class="vl-title vl-title--h3">
-      {{t "faulty-agendaitems"}}
+{{#if isEditor}}
+  {{#if (gt brokenAgendaItems.length 0)}}
+    <div class="vl-u-spacer-extended-bottom-s">
+      <div class="vl-title vl-title--h3">
+        {{t "faulty-agendaitems"}}
+      </div>
+      <div class="vl-title">
+        {{t "faulty-agendaitems-message"}}
+      </div>
     </div>
-    <div class="vl-title">
-      {{t "faulty-agendaitems-message"}}
-    </div>
-  </div>
-  <div class="vl-u-spacer-extended-bottom-s">
-    <div class="vlc-agenda-items__sub-item">
-      {{#each brokenAgendaItems as |brokenAgendaItem|}}
-        <div class="vlc-agenda-item">
-          <div class="vl-u-display-flex">
-            {{#if isEditor}}
-              <div class="vl-button-group">
-                <button
-                  class="vl-button vl-button--narrow vl-button--error"
-                  {{action "deleteBrokenAgendaitem" brokenAgendaItem}}
-                >
-                  {{t "delete"}}
-                </button>
+    <div class="vl-u-spacer-extended-bottom-s">
+      <div class="vlc-agenda-items__sub-item">
+        {{#each brokenAgendaItems as |brokenAgendaItem|}}
+          <div class="vlc-agenda-item">
+            <div class="vl-u-display-flex">
+              {{#if isEditor}}
+                <div class="vl-button-group">
+                  <button
+                    class="vl-button vl-button--narrow vl-button--error"
+                    {{action "deleteBrokenAgendaitem" brokenAgendaItem}}
+                  >
+                    {{t "delete"}}
+                  </button>
+                </div>
+              {{/if}}
+              <div class="vl-title--h5">
+                <h4 class="vlc-agenda-items__subject">
+                  {{brokenAgendaItem.shortTitle}}
+                </h4>
               </div>
-            {{/if}}
-            <div class="vl-title--h5">
-              <h4 class="vlc-agenda-items__subject">
-                {{brokenAgendaItem.shortTitle}}
-              </h4>
             </div>
           </div>
-        </div>
-      {{/each}}
+        {{/each}}
+      </div>
     </div>
-  </div>
+  {{/if}}
 {{/if}}
 {{#if (not selectedAgendaItem)}}
   <div class="vl-u-display-flex vl-u-flex-space-between">
