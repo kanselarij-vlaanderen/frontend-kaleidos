@@ -46,7 +46,7 @@ export default Mixin.create(isAuthenticatedMixin, {
   },
 
   redirect() {
-    if (!this.editor) {
+    if (!this.isEditor) {
       this.transitionTo(`print-overviews.${this.routeNamePrefix}.overview`, {
         queryParams: { definite: true },
       });
