@@ -10,7 +10,7 @@
           {{await agendaitem.subcase.newsletterInfo.title}}
         {{/if}}
       </h4>
-      {{#if (or isAdmin isEditor)}}
+      {{#if isEditor}}
         <div class="vl-u-display-flex vl-u-flex-space-between">
           <div class="vl-u-spacer-extended-left-s">
             <a class="vl-link" {{action "toggleIsEditing"}}>

@@ -7,9 +7,11 @@ export default Route.extend({
       refreshModel: true
     }
   },
+
   currentSession: service(),
   session: service(),
   store: service(),
+
   beforeModel() {
     if (this.currentSession.userRole == "") {
       this.transitionTo('accountless-users');
@@ -26,7 +28,6 @@ export default Route.extend({
     return this.store.query('account', {
       include: 'user,user.group',
       filter: filter,
-      // page: { size: 10, number: params.page },
       sort: 'user.last-name'
     });
   }

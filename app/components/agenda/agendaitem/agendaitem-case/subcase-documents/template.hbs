@@ -4,7 +4,7 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      {{#if (or isAdmin isEditor)}}
+      {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           <a class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
@@ -39,7 +39,7 @@
     <button class="vl-button vl-button--loading vl-button--narrow" disabled>
       {{t "please-be-patient"}}
     </button>
-  {{else if (or isAdmin isEditor)}}
+  {{else if isEditor}}
     <div class="vl-u-spacer">
       <button
         class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
@@ -49,6 +49,46 @@
         {{t "document-add"}}
       </button>
     </div>
+  {{/if}}
+  {{#if shouldShowLinkedDocuments}}
+    <div class="vl-u-spacer">
+      <div class="vl-u-display-flex vl-u-display-flex-align-center">
+        <h4 class="vl-title vl-title--h4">
+          {{t "linked-documents"}}
+        </h4>
+      </div>
+    </div>
+    {{#if (is-pending item.linkedDocuments)}}
+      {{web-components/vl-loader text=(t "documents-loading-text")}}
+    {{else if (gt (await item.linkedDocumentsLength) 0)}}
+      {{#each (await item.linkedDocuments) as |document|}}
+        {{agenda/agendaitem/agendaitem-case/subcase-document/linked-document-link
+          document=document
+          item=item
+        }}
+      {{/each}}
+    {{else}}
+      <div class="vl-u-spacer-extended-top-s">
+        {{web-components/vl-alert message=(t "no-linked-documents-yet")}}
+      </div>
+    {{/if}}
+    {{#if (is-pending item.linkedDocuments)}}
+      <button class="vl-button vl-button--loading vl-button--narrow" disabled>
+        {{t "please-be-patient"}}
+      </button>
+    {{else if isEditor}}
+      <div class="vl-u-spacer">
+        <button
+          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          {{action "toggleIsLinkingOldDocument"}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+          ></i>
+          {{t "document-link-old"}}
+        </button>
+      </div>
+    {{/if}}
   {{/if}}
 </div>
 {{#if isAddingNewDocument}}
@@ -80,7 +120,9 @@
               size=document.documentVersions.firstObject.file.size
               downloadName=document.documentVersions.firstObject.file.filename
               downloadLink=(concat
-                document.documentVersions.firstObject.file.downloadLink "?name=" document.documentVersions.firstObject.file.filename
+                document.documentVersions.firstObject.file.downloadLink
+                "?name="
+                document.documentVersions.firstObject.file.filename
               )
               delete=(action "delete" document)
             }}
@@ -91,6 +133,17 @@
                     width="4"
                     value=(mut document.name)
                   }}
+                </div>
+                <div class="vlc-input-field-block">
+                  {{web-components/vl-form-label value=(t "document-type")}}
+                  {{utils/model-selector
+                  modelName="document-type"
+                  searchField="label"
+                  propertyToShow="label"
+                  sortField="priority"
+                  selectedItems=document.type
+                  selectModel=(action "chooseDocumentType" document)
+                }}
                 </div>
               </div>
             {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
@@ -107,6 +160,29 @@
       cancelAction=(action "deleteAll")
       saveAction=(action "saveDocuments")
       disableSave=(eq model.length 0)
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isLinkingOldDocument}}
+  {{#web-components/vl-modal
+    closeModal=(action "toggleIsLinkingOldDocument")
+    isOverlay=true
+    large=true
+    title=(t "document-link-old")
+  }}
+    <div class="vl-modal-dialog__content">
+      {{components/utils/add-existing-document
+        add=(action "link")
+        delete=(action "unlink")
+      }}
+    </div>
+    {{web-components/vl-modal-footer
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "document-link-old")
+      cancelAction=(action "toggleIsLinkingOldDocument")
+      saveAction=(action "linkDocuments")
+      disableSave=(eq documentsToLink.length 0)
     }}
   {{/web-components/vl-modal}}
 {{/if}}

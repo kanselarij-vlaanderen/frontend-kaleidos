@@ -1,0 +1,20 @@
+{{#if (is-pending accessLevel)}}
+  <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+{{else if (eq (await accessLevelId) "6ca49d86-d40f-46c9-bde3-a322aa7e5c8e")}}
+  <span class="vlc-pill vlc-pill--success">
+    {{await accessLevelLabel}}
+  </span>
+{{else if (eq (await accessLevelId) "abe4c18d-13a9-45f0-8cdd-c493eabbbe29")}}
+  <span class="vlc-pill vlc-pill--warning">
+    {{await accessLevelLabel}}
+  </span>
+{{else if (eq (await accessLevelId) "d335f7e3-aefd-4f93-81a2-1629c2edafa3")}}
+  <span class="vlc-pill vlc-pill--error">
+    {{await accessLevelLabel}}
+  </span>
+{{else}}
+  <span class="vlc-pill">
+    {{t "no-accessLevel"}}
+  </span>
+{{/if}}
+{{yield}}

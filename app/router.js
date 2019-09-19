@@ -13,6 +13,7 @@ Router.map(function() {
       this.route('agendaitem', { path: '/:agendaitem_id' });
     });
     this.route('compare', { path: '/vergelijken' });
+    this.route('documents', { path: '/documenten' });
   });
   this.route('cases', { path: '/dossiers' }, function() {
     this.route('case', { path: ':id' }, function() {

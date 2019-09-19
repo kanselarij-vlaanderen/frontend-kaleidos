@@ -17,6 +17,7 @@ export default Model.extend({
   title: attr('string'),
   subcaseIdentifier: attr('string'),
   showAsRemark: attr('boolean'),
+  confidential: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
   freezeAccessLevel: attr('boolean'),
@@ -29,6 +30,7 @@ export default Model.extend({
   agendaitems: hasMany('agendaitem', { inverse: null }),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
+  linkedDocumentVersions: hasMany('document-version'),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval', { serialize: false }),
@@ -107,6 +109,35 @@ export default Model.extend({
   documentsLength: computed('documents', function () {
     return PromiseObject.create({
       promise: this.get('documents').then((documents) => {
+        return documents.get('length');
+      })
+    });
+  }),
+
+  linkedDocuments: computed('linkedDocumentVersions.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('linkedDocumentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            include: 'type,document-versions',
+          }).then((documents) => {
+            // Sorting is done in the frontend to work around a Virtuoso issue, where
+            // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
+            // some items not being returned. By not having a sort parameter, this doesn't occur.
+            return documents.sortBy('type.priority', 'numberVr');
+          });
+        }
+      })
+    });
+  }),
+
+  linkedDocumentsLength: computed('linkedDocuments', function () {
+    return PromiseObject.create({
+      promise: this.get('linkedDocuments').then((documents) => {
         return documents.get('length');
       })
     });

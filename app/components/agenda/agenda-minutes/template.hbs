@@ -17,7 +17,7 @@
       <h3 class="vl-title vl-title--h3">
         {{t "notes"}}
       </h3>
-      {{#if (or isAdmin isEditor)}}
+      {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           {{#if allowEditing}}
             <a class="vl-link" {{action "toggleIsEditing"}}>
@@ -51,7 +51,7 @@
             <div class="vl-u-spacer-extended-bottom">
               <div class="vl-u-spacer-extended-bottom-s">
                 <h3 class="vl-title vl-title--h5">
-                  {{agendaitem.priority}}
+                  {{agendaitem.number}}
                   .
                   {{agendaitem.shortTitle}}
                 </h3>
@@ -67,7 +67,7 @@
               {{else}}
                 <div class="vl-typography">
                   <ul>
-                    {{#if (or isAdmin isEditor)}}
+                    {{#if isEditor}}
                       <div class="vl-u-display-flex align-right">
                         {{#if allowEditing}}
                           <a

@@ -46,17 +46,24 @@ export default Controller.extend(isAuthenticatedMixin, {
         this.set('selectedOption', this.options[0]);
       }
       const mainNav = document.getElementById('c-main-nav');
+      const vrHeader= document.getElementById('vlaanderen-header');
       if (this.isOc) {
-        document.getElementById('vlaanderen-header').style = 'display:none;';
+        if(vrHeader){
+          vrHeader.style = 'display:none;';
+        }
       }
       if (CONFIG.routesAllowed.includes(currentRouteName)) {
-        document.getElementById('vlaanderen-header').style = 'display:none;';
+        if(vrHeader){
+          vrHeader.style = 'display:none;';
+          }
         if (mainNav) {
           mainNav.style = 'display:none;';
         }
       } else {
         if (!this.isOc) {
-          document.getElementById('vlaanderen-header').style = 'display:block;';
+          if(vrHeader){
+            vrHeader.style = 'display:block;';
+            }
         }
         if (mainNav) {
           mainNav.style = 'display:block;';

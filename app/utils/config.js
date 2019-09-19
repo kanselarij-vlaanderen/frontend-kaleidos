@@ -17,11 +17,7 @@ export default EmberObject.create({
     'agenda.agendaitems.agendaitem',
     'agenda.compare',
     'agenda.agendaitems.documents',
-  ],
-  phasesCodes: [
-    {
-      label: 'principiële goedkeuring',
-    },
+    'agenda.documents'
   ],
   alphabet: [
     'A',
@@ -51,10 +47,6 @@ export default EmberObject.create({
     'Y',
     'Z',
   ],
-  OCCaseTypeID: '6f771654-a8be-43e6-9fe5-7e17fed1cb9a',
-  VRCaseTypeID: 'c3edbd53-db3b-42d8-a18d-75b8a53ba741',
-  preparationSubcaseTypeId: '343e05e1-24ca-4cfb-8708-048011c2b741',
-  approvalSubcaseTypeId: '7b90b3a6-2787-4b41-8a1d-886fc5abbb33',
   resultSubcaseName: '1ste principiële goedkeuring',
   principalApprovalId: '7b90b3a6-2787-4b41-8a1d-886fc5abbb33',
   onAgendaCodeId: '3e6dba4f-5c3c-439a-993e-92348ec73642',
@@ -70,7 +62,7 @@ export default EmberObject.create({
       label: 'Formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
-      classNames: 'vlc-agenda-items-new__status vlc-agenda-items-new__status--positive',
+      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive',
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
     },
@@ -78,14 +70,14 @@ export default EmberObject.create({
       label: 'Formeel niet OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
-      classNames: 'vlc-agenda-items-new__status vl-u-text--error',
+      classNames: 'vlc-agenda-items__status vl-u-text--error',
       pillClassNames: 'vlc-pill vlc-pill--error',
     },
     {
       label: 'Nog niet formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
-      classNames: 'vlc-agenda-items-new__status',
+      classNames: 'vlc-agenda-items__status',
       pillClassNames: 'vlc-pill',
     },
   ],
@@ -132,4 +124,9 @@ export default EmberObject.create({
     14: 'quater decies',
     15: 'quindecies',
   },
+  adminId:"71c068e6-d2f0-43de-93ab-cd1e7156ac4b",
+  kanselarijId:"50f4c79c-902d-4ad2-bca1-0f37a69f0c13",
+  priviligedId:"3e824494-bbe7-45cf-aed8-5828970a10dc",
+  ministerId:"1cc0710c-1b28-4e23-b3ff-399c8089bc71",
+  usersId:"450915b2-4c64-4b03-9caa-71180400f831",
 });

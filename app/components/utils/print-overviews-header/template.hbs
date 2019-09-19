@@ -21,27 +21,28 @@
               </div>
               <div class="vlc-toolbar__item">
                 <ul class="vlc-tabs-reverse" role="tablist">
-                  <li class="vlc-tabs-reverse__item">
-                    {{#link-to
-                      routeModelAgendaitems
-                      (await model.id)
-                      class="border-left vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
-                    }}
-                      {{t "overview"}}
-                    {{/link-to}}
-                  </li>
-                  <li class="vlc-tabs-reverse__item">
-                    {{#link-to
-                      routeModelOverview
-                      (await model.id)
-                      (query-params definite=false)
-                      class="vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
-                    }}
-                      {{t "design"}}
-                    {{/link-to}}
-                  </li>
+                  {{#if isEditor}}
+                    <li class="vlc-tabs-reverse__item">
+                      {{#link-to
+                        routeModelAgendaitems
+                        (await model.id)
+                        class="border-left vlc-tabs-reverse__link"
+                        activeClass="vlc-tabs-reverse__link--active"
+                      }}
+                        {{t "overview"}}
+                      {{/link-to}}
+                    </li>
+                    <li class="vlc-tabs-reverse__item">
+                      {{#link-to
+                        routeModelOverview
+                        (await model.id)
+                        (query-params definite=false)
+                        class="vlc-tabs-reverse__link"
+                        activeClass="vlc-tabs-reverse__link--active"
+                      }}
+                        {{t "design"}}
+                      {{/link-to}}
+                    </li>
                   <li class="vlc-tabs-reverse__item">
                     {{#link-to
                       routeModelOverview
@@ -53,6 +54,7 @@
                       {{t "definite"}}
                     {{/link-to}}
                   </li>
+                  {{/if}}
                 </ul>
               </div>
             </div>

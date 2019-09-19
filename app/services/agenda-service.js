@@ -63,7 +63,7 @@ export default Service.extend({
           (sortedItem) => sortedItem.uuid == agendaitem.get('id')
         );
         if (sortedAgendaItemFound) {
-          agendaitem.set('priority', sortedAgendaItemFound.priority);
+          agendaitem.set('displayPriority', sortedAgendaItemFound.priority);
         }
       }
     });
@@ -138,7 +138,7 @@ export default Service.extend({
         this.set('addedAgendaitems', result.addedAgendaitems);
         return result;
       })
-      .catch((err) => {
+      .catch(() => {
         return;
       });
   },
@@ -163,6 +163,7 @@ export default Service.extend({
       showAsRemark: subcase.get('showAsRemark'),
       mandatees: mandatees,
       documentVersions: await subcase.get('documentVersions'),
+      linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       themes: await subcase.get('themes'),
       approvals: await subcase.get('approvals'),
     });
@@ -184,7 +185,7 @@ export default Service.extend({
             lastPrio = foundItem.priority;
           } else {
             if (foundItem) {
-              foundItem.set('priority', parseInt(lastPrio) + 1);
+              foundItem.set('displayPriority', parseInt(lastPrio) + 1);
             }
           }
 
@@ -224,6 +225,13 @@ export default Service.extend({
         priority: agendaitem.priority,
       };
     }
+    return {
+      groupName: null,
+      groupPrio: null,
+      mandatees: null,
+      agendaitem: agendaitem,
+      priority: agendaitem.priority,
+    };
   },
 
   createMandateeListWithPriorities(agendaitem) {

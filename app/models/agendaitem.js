@@ -1,9 +1,9 @@
 import DS from 'ember-data';
-import { computed } from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-import EmberObject from '@ember/object';
 import { alias } from '@ember/object/computed';
+
 let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
 export default Model.extend({
@@ -35,8 +35,18 @@ export default Model.extend({
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   documentVersions: hasMany('document-version'),
+  linkedDocumentVersions: hasMany('document-version'),
   phases: hasMany('subcase-phase'),
   themes: hasMany('theme'),
+
+  number: computed('displayPriority', 'priority', function() {
+    const { priority, displayPriority } = this;
+    if (!priority) {
+      return displayPriority;
+    } else {
+      return priority;
+    }
+  }),
 
   sortedThemes: computed('themes', function() {
     return this.get('themes').sortBy('label');
@@ -96,6 +106,35 @@ export default Model.extend({
     });
   }),
 
+  linkedDocuments: computed('linkedDocumentVersions.@each', function() {
+    return PromiseArray.create({
+      promise: this.get('linkedDocumentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+          return this.store.query('document', {
+            filter: {
+              'document-versions': { id: documentVersionIds },
+            },
+            include: 'type,document-versions',
+          }).then((documents) => {
+            // Sorting is done in the frontend to work around a Virtuoso issue, where
+            // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
+            // some items not being returned. By not having a sort parameter, this doesn't occur.
+            return documents.sortBy('type.priority', 'numberVr');
+          });
+        }
+      })
+    });
+  }),
+
+  linkedDocumentsLength: computed('linkedDocuments', function() {
+    return PromiseObject.create({
+      promise: this.get('linkedDocuments').then((documents) => {
+        return documents.get('length');
+      })
+    });
+  }),
+
   nota: computed('documentVersions', function() {
     return PromiseObject.create({
       promise: this.get('documentVersions').then((documentVersions) => {
@@ -145,9 +184,13 @@ export default Model.extend({
     });
   }),
 
-  checkAdded: computed('id', 'addedAgendaitems.@each', function() {
-    if (this.addedAgendaitems) return this.addedAgendaitems.includes(this.id);
+  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', function() {
+    return (this.addedAgendaitems && this.addedAgendaitems.includes(this.id))
+      || (this.agenda.get('createdFor.agendas') && this.agenda.get('createdFor.agendas').length <= 1)
+      || (this.agenda.get('name')  === CONFIG.alphabet[0]);
   }),
+
+  isAdded: alias('checkAdded'),
 
   hasChanges: computed('checkAdded', 'hasAddedDocuments', function() {
     return this.hasAddedDocuments.then((hasAddedDocuments) => {

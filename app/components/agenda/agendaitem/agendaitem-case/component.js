@@ -5,7 +5,7 @@ import { computed } from '@ember/object';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 
 export default Component.extend(EditAgendaitemOrSubcase, {
-  store: inject('store'),
+  store: inject(),
   sessionService: inject(),
   currentSession: alias('sessionService.currentSession'),
   authentication: inject('currentSession'),

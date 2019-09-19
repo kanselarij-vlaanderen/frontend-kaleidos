@@ -21,42 +21,44 @@
                 {{t "back"}}
               {{/link-to}}
             </div>
-            <div class="vlc-toolbar__item">
-              <ul class="vlc-tabs-reverse" role="tablist">
-                <li class="vlc-tabs-reverse__item">
-                  {{#link-to
-                    "print-overviews.newsletter.agendaitems"
-                    agenda
-                    class="border-left vlc-tabs-reverse__link"
-                    activeClass="vlc-tabs-reverse__link--active"
-                  }}
-                    {{t "overview"}}
-                  {{/link-to}}
-                </li>
-                <li class="vlc-tabs-reverse__item">
-                  {{#link-to
-                    "print-overviews.newsletter.overview"
-                    agenda.id
-                    (query-params definite=false)
-                    class="vlc-tabs-reverse__link"
-                    activeClass="vlc-tabs-reverse__link--active"
-                  }}
-                    {{t "design"}}
-                  {{/link-to}}
-                </li>
-                <li class="vlc-tabs-reverse__item">
-                  {{#link-to
-                    "print-overviews.newsletter.overview"
-                    agenda.id
-                    (query-params definite=true)
-                    class="vlc-tabs-reverse__link"
-                    activeClass="vlc-tabs-reverse__link--active"
-                  }}
-                    {{t "definite"}}
-                  {{/link-to}}
-                </li>
-              </ul>
-            </div>
+            {{#if isEditor}}
+              <div class="vlc-toolbar__item">
+                <ul class="vlc-tabs-reverse" role="tablist">
+                  <li class="vlc-tabs-reverse__item">
+                    {{#link-to
+                      "print-overviews.newsletter.agendaitems"
+                      agenda
+                      class="border-left vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
+                    }}
+                      {{t "overview"}}
+                    {{/link-to}}
+                  </li>
+                  <li class="vlc-tabs-reverse__item">
+                    {{#link-to
+                      "print-overviews.newsletter.overview"
+                      agenda.id
+                      (query-params definite=false)
+                      class="vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
+                    }}
+                      {{t "design"}}
+                    {{/link-to}}
+                  </li>
+                  <li class="vlc-tabs-reverse__item">
+                    {{#link-to
+                      "print-overviews.newsletter.overview"
+                      agenda.id
+                      (query-params definite=true)
+                      class="vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
+                    }}
+                      {{t "definite"}}
+                    {{/link-to}}
+                  </li>
+                </ul>
+              </div>
+            {{/if}}
           </div>
         </div>
       </div>
@@ -77,7 +79,7 @@
               ></i>
               {{t "print"}}
             </button>
-            {{#if (or isAdmin isEditor)}}
+            {{#if isEditor}}
               <button
                 class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
                 {{action "showMultipleOptions"}}
@@ -107,6 +109,7 @@
                         <a
                           class="vl-link vl-link--block"
                           target="_blank"
+                          rel="noopener"
                           href={{await agenda.createdFor.mailCampaign.archiveUrl
                           }}
                         >
@@ -159,7 +162,7 @@
   </div>
 </div>
 {{#if isVerifying}}
- {{web-components/vl-modal-verify
+  {{web-components/vl-modal-verify
     title=(t "send-campaign")
     buttonType="warning"
     verifyButtonText=(t "send-campaign")

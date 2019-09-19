@@ -60,9 +60,9 @@ export default Controller.extend({
             type: 'success',
           })
 				);
-				// later(()=> {
+				later(()=> {
 					this.send('refresh');
-				// }, 5000)
+				}, 3000);
       } else {
         this.globalError.showToast.perform(
           EmberObject.create({

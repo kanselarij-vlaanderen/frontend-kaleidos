@@ -12,7 +12,5 @@ export default Controller.extend({
 			const { currentAgenda, currentSession } = this;
 			this.transitionToRoute('agenda.agendaitems.index', currentSession.id, { queryParams: { selectedAgenda: currentAgenda.id , refresh: id},  });
 		},
-
-		
 	}
 });

@@ -15,7 +15,9 @@
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "start": "ember serve --proxy=http://localhost:80",
-    "test": "ember test"
+    "test": "ember test",
+    "cypress-local": "./node_modules/.bin/cypress open --env configFile=development",
+    "cypress-dev": "./node_modules/.bin/cypress open --env configFile=dev"
   },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
@@ -27,6 +29,7 @@
     "@lblod/ember-vo-webuniversum": "^0.19.12",
     "@lblod/ember-vo-webuniversum-data-table": "^0.2.11",
     "broccoli-asset-rev": "^2.7.0",
+    "cypress": "^3.4.1",
     "ember-ajax": "^3.1.0",
     "ember-attacher": "^0.13.10",
     "ember-changeset": "^1.6.0",

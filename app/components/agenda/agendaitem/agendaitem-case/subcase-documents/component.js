@@ -18,7 +18,9 @@ export default Component.extend(
     isAddingNewDocument: false,
     isEditing: false,
     isLoading: false,
+    shouldShowLinkedDocuments: true,
     item: null,
+    documentsToLink: A([]),
 
     model: alias('uploadedFiles'),
 
@@ -66,6 +68,10 @@ export default Component.extend(
         this.send('refresh');
       },
 
+      chooseDocumentType(document, type) {
+        document.set('type', type);
+      },
+
       async saveDocuments() {
         const documents = await this.saveDocuments(null);
         const item = await this.get('item');
@@ -92,6 +98,44 @@ export default Component.extend(
           this.set('isAddingNewDocument', false);
         });
       },
+
+      toggleIsLinkingOldDocument() {
+        this.toggleProperty('isLinkingOldDocument');
+      },
+
+      link(document) {
+        this.get('documentsToLink').addObject(document);
+      },
+
+      unlink(document) {
+        this.get('documentsToLink').removeObject(document);
+      },
+
+      async linkDocuments() {
+        const documents = await this.get('documentsToLink');
+        const item = await this.get('item');
+
+        const subcase = await item.get('subcase');
+        const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
+
+        await Promise.all(
+          documents.map(async (document) => {
+            const storedDocument = await this.store.findRecord('document', document.id);
+            const documentVersions = await storedDocument.get('documentVersions');
+            if (subcase) {
+              await this.linkDocumentVersionsToSubcase(documentVersions, subcase);
+            } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+              await this.linkDocumentVersionsToAgendaitems(documentVersions, agendaitemsOnDesignAgenda);
+            }
+            return this.attachDocumentVersionsToModel(documentVersions, item, 'linkedDocumentVersions');
+          })
+        );
+
+        item.save().then(() => {
+          this.set('isLinkingOldDocument', false);
+          this.set('documentsToLink', A([]));
+        });
+      },
     },
 
     async addDocumentVersionsToAgendaitems(documentVersions, agendaitems) {
@@ -105,6 +149,20 @@ export default Component.extend(
 
     async addDocumentVersionsToSubcase(documentVersions, subcase) {
       await this.attachDocumentVersionsToModel(documentVersions, subcase);
+      return subcase.save();
+    },
+
+    async linkDocumentVersionsToAgendaitems(documentVersions, agendaitems) {
+      return Promise.all(
+        agendaitems.map(async (agendaitem) => {
+          await this.attachDocumentVersionsToModel(documentVersions, agendaitem, 'linkedDocumentVersions');
+          return agendaitem.save();
+        })
+      );
+    },
+
+    async linkDocumentVersionsToSubcase(documentVersions, subcase) {
+      await this.attachDocumentVersionsToModel(documentVersions, subcase, 'linkedDocumentVersions');
       return subcase.save();
     }
   }

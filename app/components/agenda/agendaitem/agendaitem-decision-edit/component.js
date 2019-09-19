@@ -17,7 +17,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 
 		const foundDecidedPhases = await this.store.query('subcase-phase', {
 			filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } }
-		})
+		});
 
 		if (foundDecidedPhases && foundDecidedPhases.length > 0) {
 			await Promise.all(foundDecidedPhases.map((phase) => phase.destroyRecord()));
@@ -35,7 +35,8 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 
 	actions: {
 		async saveChanges() {
-			this.set('isLoading', true);
+      this._super.call(this);
+      this.set('isLoading', true);
 			const { isAgendaItem } = this;
 			const item = await this.get('item');
 			item.set('modified', moment().utc().toDate());
