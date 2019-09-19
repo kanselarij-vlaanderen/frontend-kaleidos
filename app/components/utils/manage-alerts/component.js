@@ -10,7 +10,7 @@ export default Component.extend({
 	isEditing: false,
 
 	item: computed('selectedAlert', function () {
-		return this.get('selectedAlert')
+    return this.get('selectedAlert') || this.store.createRecord('alert',{});
 	}),
 
 	title: getCachedProperty('title'),
