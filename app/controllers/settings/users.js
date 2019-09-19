@@ -8,6 +8,7 @@ export default Controller.extend({
   intl: inject(),
   globalError: inject(),
   isUploadingFile: null,
+  shouldRefreshTableModel:null,
 
   columns: computed(function() {
     return [
@@ -61,8 +62,9 @@ export default Controller.extend({
           })
 				);
 				later(()=> {
-					this.send('refresh');
-				}, 3000);
+          this.send('refresh');
+          this.set('shouldRefreshTableModel', true);
+				}, 2000);
       } else {
         this.globalError.showToast.perform(
           EmberObject.create({

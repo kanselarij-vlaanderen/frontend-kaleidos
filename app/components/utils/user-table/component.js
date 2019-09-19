@@ -3,16 +3,21 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import LightTableMixin from 'fe-redpencil/mixins/light-table/light-table-mixin';
 import { observer } from '@ember/object';
+
 export default Component.extend(LightTableMixin, {
   classNames: ['container-flex'],
   modelName: 'user',
   isScrolling: false,
+  shouldRefreshTableModel: null,
   sortBy: 'last-name',
 
   intl: inject(),
 
-  modelObserver: observer('model.length', function() {
-    this.init();
+  modelObserver: observer('shouldRefreshTableModel', function() {
+    if(this.shouldRefreshTableModel) {
+      this.initialiseTableBasedOnModel();
+      this.set('shouldRefreshTableModel', false);
+    }
   }),
   
   loadingText: computed('intl', function() {
