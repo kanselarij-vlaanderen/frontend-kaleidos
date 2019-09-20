@@ -128,5 +128,6 @@ export default EmberObject.create({
   kanselarijId:"50f4c79c-902d-4ad2-bca1-0f37a69f0c13",
   priviligedId:"3e824494-bbe7-45cf-aed8-5828970a10dc",
   ministerId:"1cc0710c-1b28-4e23-b3ff-399c8089bc71",
+  kabinetId:"7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb",
   usersId:"450915b2-4c64-4b03-9caa-71180400f831",
 });

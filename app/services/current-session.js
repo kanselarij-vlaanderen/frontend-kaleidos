@@ -72,15 +72,15 @@ export default Service.extend({
 
   checkPublicRights() {
     const { userRoleId } = this;
-    const { adminId, kanselarijId, priviligedId, ministerId, usersId } = CONFIG;
-    let roles = [adminId, kanselarijId, priviligedId, ministerId, usersId];
+    const { adminId, kanselarijId, priviligedId, ministerId, usersId, kabinetId } = CONFIG;
+    let roles = [adminId, kanselarijId, priviligedId, ministerId, usersId, kabinetId];
     return roles.includes(userRoleId);
   },
 
   checkViewRights() {
     const { userRoleId } = this;
-    const { adminId, kanselarijId, priviligedId, ministerId } = CONFIG;
-    let roles = [adminId, kanselarijId, priviligedId, ministerId];
+    const { adminId, kanselarijId, priviligedId, ministerId, kabinetId } = CONFIG;
+    let roles = [adminId, kanselarijId, priviligedId, ministerId, kabinetId];
     return roles.includes(userRoleId);
   },
 
