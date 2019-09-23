@@ -15,7 +15,7 @@
 </div>
 {{#if (not isLoading)}}
   <div class="vlc-panel-layout">
-    {{#if (and isEditor (not shouldHideNav))}}
+    {{#if (not shouldHideNav)}}
       {{agenda/side-nav
         agendas=agendas
         currentAgenda=currentAgenda
