@@ -8,7 +8,7 @@ context('Full test', () => {
   });
 
   it('Scenario where a complete agenda is created', () => {
-    testId = 'testId=' + generateRandomId(8) + ': '
+    testId = 'testId=' + currentTimestamp() + ': '
     cy.server();
 
     //#region routes to be reused
@@ -28,14 +28,16 @@ context('Full test', () => {
     //#region create the meeting/agenda
     const plusMonths = 1;
     const futureDate = Cypress.moment().add('month', plusMonths).set('date', 15).set('hour', 15).set('minute', 15);
-    const searchDate = futureDate.month()+1 + '/' + futureDate.year();
+    const searchDate = futureDate.date()+ '/' +(futureDate.month()+1) + '/' + futureDate.year();
+    const location = 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, futureDate, testId + 'Zaal cypress in de wetstraat');
+    cy.createAgenda('Ministerraad', plusMonths, futureDate, testId + location);
     cy.wait('@createNewMeeting', { timeout: 20000 })
       .then(function (res) {
         const meetingId = res.responseBody.data.id;
 
-        cy.route('GET', `/meetings/${meetingId}/**`).as('getMeetingAgendas')
+        // cy.route('GET', `/meetings/${meetingId}/**`).as('getMeetingAgendas');
+        cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
         cy.get('.vl-alert').contains('Gelukt');
         cy.wait('@createNewAgenda',{ timeout: 20000 });
         cy.wait('@createNewAgendaItems',{ timeout: 20000 });
@@ -97,29 +99,8 @@ context('Full test', () => {
     // cy.get('@subCaseParts').eq(1).within(() => {
     // });
 
-    // //#region Change the mandatees
-    // cy.get('@subCaseParts').eq(2).within(() => {
-    //   cy.get('a').click();
-    // });
-    // cy.get('.vlc-box a').contains('Minister toevoegen').click();
-    // cy.get('.mandatee-selector-container').click();
-    // cy.get('.ember-power-select-option').should('not.have.length', 1);
-    // cy.get('.ember-power-select-option').eq(0).click();
-    // cy.wait('@getMandatees', { timeout: 12000 });
-    // cy.get('.vlc-checkbox-tree').eq(0).within(() => {
-    //   cy.get('.vl-checkbox').eq(0).click();
-    // });
-    // cy.get('.vlc-toolbar').within(() => {
-    //   cy.contains('Toevoegen').click();
-    // });
-    // cy.get('@subCaseParts').eq(2).within(() => {
-    //   cy.get('.vlc-toolbar')
-    //   .contains('Opslaan')
-    //   .click();
-    // });
-    // cy.wait('@patchSubCase', { timeout: 20000 }).then(() => {
-    //   cy.get('.vl-alert').contains('Gelukt');
-    // });
+    // //#region Add the mandatees
+    // cy.addSubCaseMandatee(1, 0, 0);
     // //#endregion
 
     // //The ise-code
@@ -141,12 +122,21 @@ context('Full test', () => {
   //#endregion
   
   //#region check and approve the agenda > A
-  cy.visit('');
-  cy.get('.vlc-input-field-group-wrapper--inline').within(() => {
-    cy.get('.vl-input-field').type(searchDate)
-    cy.get('.vl-button').click()
-  })
-  cy.wait('@getMeetingAgendas', { timeout: 20000 });
+  cy.openAgendaForDate(searchDate);
+  // cy.wait('@getMeetingAgendas', { timeout: 20000 });
+
+  //TODO temp to clean up data, implement after test completed ?
+  //#region delete agenda
+  // cy.get('.vl-data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click()
+  cy.get('.vl-button--icon-before')
+    .contains('Acties')
+    .click()
+  cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
+    .contains('Agenda verwijderen')
+    .click()
+    .wait('@deleteMeeting')
+    .get('.vl-alert').contains('Gelukt');
+  //#endregion
   
 
   //#endregion
@@ -176,10 +166,14 @@ context('Full test', () => {
 
 
 const generateRandomId = (amount)=>{
-    let chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
-    let string = '';
-    for(let i=0; i<amount; i++){
-        string += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return string;
+  let chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
+  let string = '';
+  for(let i=0; i<amount; i++){
+      string += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return string;
+}
+
+const currentTimestamp = () => {
+  return Cypress.moment().unix();
 }

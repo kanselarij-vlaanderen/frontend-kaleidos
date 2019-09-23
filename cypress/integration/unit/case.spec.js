@@ -52,55 +52,20 @@ context('Case test', () => {
     cy.wait('@getSubCases', { timeout: 12000 });
     cy.get('.vlc-procedure-step').as('subCasesList');
     cy.get('@subCasesList').eq(0).within(() => {
-      //TODO figure out why click does not always work w/o waiting or clicking twice (no xhr calls are made)
       cy.get('.vl-title').click();
-      // cy.get('.vl-title').click();
     })
     cy.wait('@getCaseSubCases', { timeout: 12000 });
 
 
-    cy.get('.vl-title--h4').parents('.vl-u-spacer-extended-bottom-l').as('subCaseParts').should('have.length' , 5);
+    //Change the access level
+    cy.changeSubCaseAccessLevel(dossierTitelKort, true, 'Intern Overheid', 'Cypress test nieuwere titel', 'Cypress test nieuwere lange titel');
 
-    //Change the type
-    cy.get('@subCaseParts').eq(0).within(() => {
-    });
+    //Add the themes
+    cy.addSubCaseThemes([0, 5 , 10]);
+    cy.addSubCaseThemes(['Energie', 'haven' , 'Gezin']);
 
-    //Change the themes
-    cy.get('@subCaseParts').eq(1).within(() => {
-    });
-
-    //#region Change the mandatees
-    cy.get('@subCaseParts').eq(2).within(() => {
-      cy.get('a').click();
-    });
-    cy.get('.vlc-box a').contains('Minister toevoegen').click();
-    cy.get('.mandatee-selector-container').click();
-    cy.get('.ember-power-select-option').should('not.have.length', 1);
-    cy.get('.ember-power-select-option').eq(0).click();
-    cy.wait('@getMandatees', { timeout: 12000 });
-    cy.get('.vlc-checkbox-tree').eq(0).within(() => {
-      cy.get('.vl-checkbox').eq(0).click();
-    });
-    cy.get('.vlc-toolbar').within(() => {
-      cy.contains('Toevoegen').click();
-    });
-    cy.get('@subCaseParts').eq(2).within(() => {
-      cy.get('.vlc-toolbar')
-      .contains('Opslaan')
-      .click();
-    });
-    cy.wait('@patchSubCase', { timeout: 20000 }).then(() => {
-      cy.get('.vl-alert').contains('Gelukt');
-    });
-    //#endregion
-
-    //The ise-code
-    cy.get('@subCaseParts').eq(3).within(() => {
-    });
-
-    //The subcases
-    cy.get('@subCaseParts').eq(4).within(() => {
-    });
+    //Add the mandatees
+    cy.addSubCaseMandatee(1, 0, 0);
 
   });
 

@@ -12,6 +12,7 @@ context('Agenda tests', () => {
 
     const plusMonths = 1;
     const futureDate = Cypress.moment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
+    const searchDate = futureDate.date()+ '/' +(futureDate.month()+1) + '/' + futureDate.year();
 
     cy.createAgenda('Elektronische procedure', plusMonths, futureDate, 'Zaal oxford bij Cronos Leuven');
     cy.wait('@createNewMeeting', { timeout: 20000 })
@@ -23,10 +24,9 @@ context('Agenda tests', () => {
         cy.get('.vl-alert').contains('Gelukt');
         cy.wait('@createNewAgenda',{ timeout: 20000 });
         cy.wait('@createNewAgendaItems',{ timeout: 20000 });
-        // cy.wait('@getMeetingAgendas', { timeout: 20000 });
 
         //TODO use the search bar to look for the new agenda instead
-        cy.visit(`/agenda/${meetingId}/agendapunten`);
+        cy.openAgendaForDate(searchDate);
         // cy.wait('@getMeetingAgendas', { timeout: 20000 });
 
         cy.get('.vl-button--icon-before')

@@ -49,6 +49,8 @@ Cypress.Commands.add('setDateInFlatpickr', (date, plusMonths) => {
   });
 });
 
+//#region Agenda commands
+
 Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
   cy.visit('/');
   cy.get('.vlc-toolbar__item > .vl-button')
@@ -83,8 +85,23 @@ Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
   });
 });
 
+Cypress.Commands.add('openAgendaForDate', (searchDate) => {
+  cy.visit('');
+  cy.route('GET', `/meetings/**`).as('getMeetings')
+  cy.get('.vlc-input-field-group-wrapper--inline').within(() => {
+    cy.get('.vl-input-field').type(searchDate);
+    cy.get('.vl-button').click();
+  });
+  cy.wait('@getMeetings', { timeout: 10000 });
+  cy.get('.vl-data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click()
+});
+
+//#endregion
+
+//#region Case commands
+
 Cypress.Commands.add('createCase', (confidential, shortTitle) => {
-  cy.server().route('GET', '/cases?**').as('getCases');
+  cy.route('GET', '/cases?**').as('getCases');
   cy.visit('/dossiers');
   cy.wait('@getCases', { timeout: 12000 });
 
@@ -111,10 +128,9 @@ Cypress.Commands.add('createCase', (confidential, shortTitle) => {
   cy.get('@dialog').within(()=> {
     cy.get('.vlc-toolbar__item > .vl-button').contains('Dossier aanmaken').click();
   });
-})
+});
 
 Cypress.Commands.add('addSubCase', (caseShortTitle, type, newShortTitle, longTitle, step, stepName) => {
-  cy.server();
   cy.route('GET', '/cases?*').as('getCases');
   cy.route('GET', '/subcases?*').as('getSubCases');
 
@@ -162,4 +178,132 @@ Cypress.Commands.add('addSubCase', (caseShortTitle, type, newShortTitle, longTit
   cy.get('.vlc-toolbar').within(() => {
     cy.contains('Procedurestap aanmaken').click();
   });
+});
+
+//#endregion
+
+//#region Subcase commands
+
+/**
+ * Use this when in the subcase view (/dossiers/..id../overzicht) to change the access level and titels
+ * shortTitle is required to find the dom element
+ * other params are optional, only give values when you want something changed
+ * shortTitle: String,             current title of the subcase (same as case title unless already renamed)
+ * confidentialityChange: boolean  if true will change the current confidentialityChange
+ * accessLevel: String             must match exactly with possible options in dropdown
+ * newShortTitle: String           new short title for the subcase
+ * newLongTitle: String            new long title for the subcase
+ */
+Cypress.Commands.add('changeSubCaseAccessLevel', (shortTitle, confidentialityChange, accessLevel, newShortTitle, newLongTitle) => {
+  cy.route('GET', '/themes?**').as('getThemes');
+  cy.route('PATCH','/subcases/*').as('patchSubCase');
+
+  cy.get('.vl-title--h4').contains(shortTitle).parents('.vl-u-spacer-extended-bottom-l').within(() => {
+    cy.get('a').click();
+  });
+
+  cy.get('.vl-form__group').as('subCaseAccessLevel');
+
+  if(accessLevel) {
+    cy.get('@subCaseAccessLevel').within(() => {
+      cy.get('.ember-power-select-trigger').click();
+    });
+    cy.get('.ember-power-select-option').contains(accessLevel).click();
+  }
+
+  cy.get('@subCaseAccessLevel').within(() => {
+    cy.get('.vlc-input-field-block').as('editCaseForm').should('have.length', 3);
+
+    if(confidentialityChange) {
+      cy.get('@editCaseForm').eq(0).within(() => {
+        cy.get('.vl-checkbox--switch__label').click();
+      });
+    }
+    if(newShortTitle) {
+      cy.get('@editCaseForm').eq(1).within(() => {
+        cy.get('.vl-textarea').click().clear().type(newShortTitle);
+      });
+    }
+    if(newLongTitle) {
+      cy.get('@editCaseForm').eq(2).within(() => {
+        cy.get('.vl-textarea').click().clear().type(newLongTitle);
+      });
+    }
+
+    cy.get('.vl-action-group > .vl-button')
+      .contains('Opslaan')
+      .click();
+  });
+  cy.wait('@patchSubCase', { timeout: 20000 }).then(() => {
+    cy.get('.vl-alert').contains('Gelukt');
+  });
+});
+
+/**
+ * Use this when in the subcase view (/dossiers/..id../overzicht) to change the themes
+ * themes
+ * 
+ */
+Cypress.Commands.add('addSubCaseThemes', (themes) => {
+  cy.route('GET', '/themes?**').as('getThemes');
+  cy.route('PATCH','/subcases/*').as('patchSubCase');
+  cy.get('.vl-title--h4').contains(`Thema's`).parents('.vl-u-spacer-extended-bottom-l').as('subCaseTheme');
+
+  cy.get('@subCaseTheme').within(() => {
+    cy.get('a').click();
+    themes.forEach(element => {
+      if(isNaN(element)){
+        cy.get('.vl-checkbox').contains(element).click();
+      } else {
+        cy.get('.vl-checkbox').eq(element).click();
+      }
+      
+    });
+    cy.get('.vl-action-group > .vl-button')
+      .contains('Opslaan')
+      .click();
+  });
+  cy.wait('@patchSubCase', { timeout: 20000 }).then(() => {
+    cy.get('.vl-alert').contains('Gelukt');
+  });
+});
+
+Cypress.Commands.add('addSubCaseMandatee', (mandateeNumber, fieldNumber, domainNumber  ) => {
+  cy.route('GET', '/mandatees?**').as('getMandatees');
+  cy.route('GET', '/ise-codes/**').as('getIseCodes');
+  cy.route('GET', '/government-fields/**').as('getGovernmentFields');
+  cy.route('PATCH','/subcases/*').as('patchSubCase');
+
+  cy.get('.vl-title--h4').contains(`Ministers en beleidsvelden`).parents('.vl-u-spacer-extended-bottom-l').as('subCaseMandatees');
+  cy.get('@subCaseMandatees').within(() => {
+    cy.get('a').click();
+  });
+
+  cy.get('.vlc-box a').contains('Minister toevoegen').click();
+  cy.get('.mandatee-selector-container').click();
+  cy.wait('@getMandatees', { timeout: 12000 });
+  cy.get('.ember-power-select-option').should('not.have.length', 1);
+  cy.get('.ember-power-select-option').eq(mandateeNumber).click();
+  cy.wait('@getIseCodes', { timeout: 12000 });
+  cy.wait('@getGovernmentFields', { timeout: 12000 });
+  cy.get('.vlc-checkbox-tree').eq(fieldNumber).within(() => {
+    cy.get('.vl-checkbox').eq(domainNumber).click();
+  });
+  cy.get('.vlc-toolbar').within(() => {
+    cy.contains('Toevoegen').click();
+  });
+  cy.get('@subCaseMandatees').within(() => {
+    cy.get('.vlc-toolbar')
+    .contains('Opslaan')
+    .click();
+  });
+  cy.wait('@patchSubCase', { timeout: 20000 }).then(() => {
+    cy.get('.vl-alert').contains('Gelukt');
+  });
+});
+
+//#endregion
+
+Cypress.Commands.add('addDocVersion', (docName) => {
+
 });
