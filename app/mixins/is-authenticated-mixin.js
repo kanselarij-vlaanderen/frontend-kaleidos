@@ -7,6 +7,7 @@ export default Mixin.create({
 	store:inject(),
 	isAdmin: alias('currentAuthenticatedSession.isAdmin'),
 	isEditor: alias('currentAuthenticatedSession.isEditor'),
+	isViewer: alias('currentAuthenticatedSession.isViewer'),
 	user: alias('currentAuthenticatedSession.userContent'),
 	role: alias('currentAuthenticatedSession.userRole'),
 
@@ -16,4 +17,3 @@ export default Mixin.create({
 		}
 	}
 });
-

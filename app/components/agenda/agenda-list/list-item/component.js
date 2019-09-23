@@ -32,7 +32,7 @@ export default Component.extend(isAuthenticatedMixin, {
       async function() {
         let clazz = '';
         if (this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
-          clazz += 'vlc-agenda-items-new__sub-item--active ';
+          clazz += 'vlc-agenda-items__sub-item--active ';
         }
 
         if (!this.get('isClickable')) {
@@ -47,7 +47,7 @@ export default Component.extend(isAuthenticatedMixin, {
         }
         const added = this.get('agendaitem.checkAdded');
         if (added) {
-          clazz += ' vlc-agenda-items-new__sub-item--added-item';
+          clazz += ' vlc-agenda-items__sub-item--added-item';
         }
 
         if (!this.get('isDestroyed')) {

@@ -51,25 +51,25 @@
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
       <div class="vl-action-group">
-        <button
-          class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
-          {{action "toggleDropdown"}}
-        >
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi
-              {{if dropdownOpen "vl-vi-arrow-up-fat" "vl-vi-arrow-down-fat"}}"
-            {{action "toggleDropdown" bubbles=false}}
-          ></i>
-          {{t "actions"}}
-          {{#attach-popover
-            class="ember-attacher-popper"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom" as |attacher|
-          }}
-            <ul class="vl-popover__link-list">
-              {{#if (or isAdmin isEditor)}}
+        {{#if isEditor}}
+          <button
+            class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+            {{action "toggleDropdown"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi
+                {{if dropdownOpen "vl-vi-arrow-up-fat" "vl-vi-arrow-down-fat"}}"
+              {{action "toggleDropdown" bubbles=false}}
+            ></i>
+            {{t "actions"}}
+            {{#attach-popover
+              class="ember-attacher-popper"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom" as |attacher|
+            }}
+              <ul class="vl-popover__link-list">
                 <li class="vl-popover__link-list__item">
                   {{#link-to
                     "oc.meetings.meeting.agendaitems.new"
@@ -90,10 +90,10 @@
                     {{t "agenda-delete"}}
                   {{/link-to}}
                 </li>
-              {{/if}}
-            </ul>
-          {{/attach-popover}}
-        </button>
+              </ul>
+            {{/attach-popover}}
+          </button>
+        {{/if}}
       </div>
     </div>
   </div>

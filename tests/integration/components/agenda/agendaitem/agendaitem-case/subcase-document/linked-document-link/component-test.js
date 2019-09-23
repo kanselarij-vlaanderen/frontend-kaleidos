@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | utils/user-management-interface', function(hooks) {
+module('Integration | Component | agenda/agendaitem/agendaitem-case/subcase-document/linked-document-link', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{utils/user-management-interface}}`);
+    await render(hbs`{{agenda/agendaitem/agendaitem-case/subcase-document/linked-document-link}}`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      {{#utils/user-management-interface}}
+      {{#agenda/agendaitem/agendaitem-case/subcase-document/linked-document-link}}
         template block text
-      {{/utils/user-management-interface}}
+      {{/agenda/agendaitem/agendaitem-case/subcase-document/linked-document-link}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

@@ -11,10 +11,12 @@
         agendaitemGroups=(await model.groups)
         announcements=(await model.announcements)
         lastPrio=(await model.lastPrio)
-        currentAgendaId=(await model.currentAgenda.id)
+        currentAgenda=(await model.currentAgenda)
         selectedAgendaItem=selectedAgendaItem
         filteredAgendaItems=filteredAgendaItems
         selectAgendaItem=(action "selectAgendaItem")
+        brokenAgendaItems=(await model.brokenAgendaItems)
+        refresh=(action "refresh")
       }}
     </div>
   </div>

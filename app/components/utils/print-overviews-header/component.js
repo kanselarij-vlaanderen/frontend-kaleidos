@@ -1,7 +1,9 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-export default Component.extend({
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+
+export default Component.extend(isAuthenticatedMixin, {
 	classNames: ["vl-u-bg-alt"],
 	routing: inject('-routing'),
 	title: null,

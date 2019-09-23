@@ -5,9 +5,10 @@ import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
+
 export default Component.extend(isAuthenticatedMixin, {
   sessionService: inject(),
-  classNames: ['vlc-agenda-items-new'],
+  classNames: ['vlc-agenda-items'],
   classNameBindings: ['getClassNames'],
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   agendaitems: null,
@@ -18,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, {
     if (this.get('selectedAgendaItem')) {
       return 'vlc-agenda-items--small';
     } else {
-      return 'vl-u-spacer-extended-l vlc-agenda-items-new--spaced';
+      return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
     }
   }),
 
@@ -43,8 +44,19 @@ export default Component.extend(isAuthenticatedMixin, {
       this.toggleProperty('isShowingChanges');
     },
 
+    async deleteBrokenAgendaitem(brokenAgendaItem) {
+      const id = brokenAgendaItem.id;
+      const subcase = await brokenAgendaItem.get('subcase');
+
+      if (!subcase) {
+        brokenAgendaItem.destroyRecord().then(() => {
+          this.refresh(id);
+      });
+      }
+    },
+
     async reorderItems(agendaitemGroup, reOrderedAgendaitemGroup, itemDragged) {
-      if (this.isEditor || this.isAdmin) {
+      if (this.isEditor) {
         const firstItem = agendaitemGroup.agendaitems.get('firstObject');
         const firstPrio = firstItem.get('priority');
         const newIndex = reOrderedAgendaitemGroup.indexOf(itemDragged);

@@ -16,7 +16,7 @@
     {{t "documents"}}
   </a>
 </li>
-{{#if (or isAdmin isEditor)}}
+{{#if isEditor}}
   <li class="vl-tab">
     <a
       class="vl-tab__link
@@ -30,7 +30,7 @@
     </a>
   </li>
 {{/if}}
-{{#if (await agendaitem.subcase)}}
+{{#if (and (await shouldShowFinishedDetails) (await agendaitem.subcase))}}
   <li class="vl-tab">
     <a
       class="vl-tab__link

@@ -3,7 +3,7 @@
     {{t "general-newsletter"}}
   </h4>
   {{#if allowEditing}}
-    {{#if (or isEditor isAdmin)}}
+    {{#if isEditor}}
       <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}

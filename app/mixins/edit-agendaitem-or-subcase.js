@@ -14,6 +14,7 @@ const getCachedProperty = function (property) {
 				return item.get(property);
 		},
 		set: function (key, value) {
+		  this.item.set(property, value);
 			return value;
 		}
 	})

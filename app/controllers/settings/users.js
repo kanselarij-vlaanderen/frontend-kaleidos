@@ -1,41 +1,79 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import EmberObject from '@ember/object';
+import { later } from '@ember/runloop';
 
 export default Controller.extend({
-	intl: inject(),
-	columns: computed(function () {
-		return [{
-			label: this.intl.t('first-name'),
-			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-2"],
-			sortable: true,
-			breakpoints: ['mobile', 'tablet', 'desktop'],
-      valuePath: 'firstName'
+  intl: inject(),
+  globalError: inject(),
+  isUploadingFile: null,
+  shouldRefreshTableModel:null,
+
+  columns: computed(function() {
+    return [
+      {
+        label: this.intl.t('first-name'),
+        classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
+        cellClassNames: ['vl-data-table-col-2'],
+        sortable: true,
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        valuePath: 'firstName',
+      },
+      {
+        label: this.intl.t('last-name'),
+        classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
+        cellClassNames: ['vl-data-table-col-2'],
+        sortable: true,
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        valuePath: 'lastName',
+      },
+      {
+        label: this.intl.t('national-number'),
+        classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
+        cellClassNames: ['vl-data-table-col-2'],
+				breakpoints: ['mobile', 'tablet', 'desktop'],
+        valuePath: 'account.voId',
+      },
+      {
+        label: this.intl.t('group'),
+        classNames: ['vl-data-table-col-4 vl-data-table__header-title'],
+        cellClassNames: ['vl-data-table-col-4'],
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        valuePath: 'group',
+        sortable: true,
+        cellComponent: 'web-components/light-table/vl-group-column',
+      },
+    ];
+  }),
+
+  actions: {
+    showFileUploader() {
+      this.toggleProperty('isUploadingFile');
     },
-		{
-			label: this.intl.t('last-name'),
-			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-2"],
-			sortable: true,
-			breakpoints: ['mobile', 'tablet', 'desktop'],
-      valuePath: 'lastName'
-		},
-		{
-			label: this.intl.t('national-number'),
-			classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-2"],
-			breakpoints: ['mobile', 'tablet', 'desktop'],
-      valuePath: 'rijksregisterNummer'
-		},
-		{
-			label: this.intl.t('group'),
-			classNames: ['vl-data-table-col-4 vl-data-table__header-title'],
-			cellClassNames: ["vl-data-table-col-4"],
-			breakpoints: ['mobile', 'tablet', 'desktop'],
-			valuePath: 'group',
-			sortable: true,
-			cellComponent: "web-components/light-table/vl-group-column"
-		}];
-	})
+
+    uploaded(response) {
+      if (response && response.status == 200) {
+        this.globalError.showToast.perform(
+          EmberObject.create({
+            title: this.intl.t('successfully-created-title'),
+            message: this.intl.t('import-users-success'),
+            type: 'success',
+          })
+				);
+				later(()=> {
+          this.send('refresh');
+          this.set('shouldRefreshTableModel', true);
+				}, 2000);
+      } else {
+        this.globalError.showToast.perform(
+          EmberObject.create({
+            title: this.intl.t('warning-title'),
+            message: this.intl.t('error'),
+            type: 'error',
+          })
+        );
+      }
+    },
+  },
 });

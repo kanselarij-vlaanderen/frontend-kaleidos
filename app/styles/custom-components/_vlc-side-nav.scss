@@ -27,7 +27,7 @@
   .vlc-side-nav-item {
     padding: 0.8rem 1.6rem;
     border-bottom: 1px solid $ghost;
-    border-left: 3px solid rgba(0, 0, 0, 0);
+    border-left: 3px solid rgba(0,0,0,0);
     a {
       text-decoration: none;
     }
@@ -59,7 +59,7 @@
    ========================================================================== */
 
 .vlc-panel-layout__agenda-history.vlc-panel-layout__agenda-history--collapsed {
-  // flex: 1 0 95px;
+  flex: 1 0 95px;
 
   .vlc-side-nav-item__label span {
     display: none;
@@ -69,7 +69,7 @@
     display: none;
   }
 
-  .vlc-side-nav-toggle {
+  .vlc-side-nav-toggle{
     .vl-vi {
       @include vi-nav-right;
     }

@@ -16,7 +16,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
 	actions: {
 		async reorderItems(model, reOrderedModel) {
-			if (this.isEditor || this.isAdmin) {
+			if (this.isEditor) {
 				const firstPrio = 1;
 				for (let i = 0; i < reOrderedModel.get('length'); i++) {
 					const reOrderedMandatee = reOrderedModel.objectAt(i);

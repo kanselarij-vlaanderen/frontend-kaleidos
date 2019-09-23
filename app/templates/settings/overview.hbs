@@ -56,15 +56,6 @@
   <div class="vl-u-spacer-extended-s">
     <button
       class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingUsers"}}
-    >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-      {{t "manage-user-roles"}}
-    </button>
-  </div>
-  <div class="vl-u-spacer-extended-s">
-    <button
-      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
       {{action "toggleProperty" "isManagingSubcaseTypes"}}
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
@@ -115,12 +106,6 @@
     modalTitle=(t "manage-case-types")
     modelName="case-type"
     close=(action "toggleProperty" "isManagingCaseTypes")
-  }}
-{{/if}}
-{{#if isManagingUsers}}
-  {{utils/user-management-interface
-    modalTitle=(t "manage-user-roles")
-    close=(action "toggleProperty" "isManagingUsers")
   }}
 {{/if}}
 {{#if isManagingSubcaseTypes}}

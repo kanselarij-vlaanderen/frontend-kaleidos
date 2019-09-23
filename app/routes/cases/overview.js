@@ -36,7 +36,7 @@ export default Route.extend(DataTableRouteMixin, {
     },
   },
   textSearchFields: ['title', 'data', 'subcaseTitle', 'subcaseSubTitle'],
-  
+
   isLoading: false,
 
   mergeQueryOptions(params) {
@@ -46,9 +46,21 @@ export default Route.extend(DataTableRouteMixin, {
       filter: filter,
     };
   },
-  
+
   wantsFilteredResults(params) {
     return !isEmpty(params.searchText);
+  },
+
+  postProcessDates: function(_case) {
+    const sessionDates = _case.get('sessionDates');
+    if (sessionDates) {
+      if (Array.isArray(sessionDates)) {
+        const moments = sessionDates.map(sessionDate => moment(sessionDate));
+        _case.set('sessionDates', moments[moments.length - 1])
+      } else {
+        _case.set('sessionDates', moment(sessionDates));
+      }
+    }
   },
 
   async model(params) {
@@ -80,18 +92,14 @@ export default Route.extend(DataTableRouteMixin, {
     if (!isEmpty(params.dateTo)) {
       queryParams.filter[':lte:sessionDates'] = params.dateTo;
     }
-
+    const postProcessDates = this.postProcessDates;
     return this.muSearch.query(searchDocumentType,
                                queryParams,
                                this.get('modelName'),
                                {'session-dates': 'sessionDates'})
       .then(function(res) {
         that.set('isLoading', false);
-        res.forEach((_case) => {
-          if (_case.get('sessionDates')) {
-            _case.set('sessionDates', moment(_case.get('sessionDates')));
-          }
-        })
+        res.forEach(postProcessDates);
         return res;
       }).catch(() => {
         that.set('isLoading', false);

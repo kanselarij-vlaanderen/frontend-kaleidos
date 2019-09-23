@@ -1,0 +1,19 @@
+/* ==========================================================================
+  Component: Button Toolbar
+  ---
+  Group multiple buttons together
+   ========================================================================== */
+
+.vlc-button-toolbar {
+  align-items: center;
+  display: flex;
+
+  .vl-button + .vl-button {
+    margin-left: 0.4rem;
+  }
+
+  .vl-button + .vl-popover {
+    margin-left: 0.4rem;
+  }
+
+}

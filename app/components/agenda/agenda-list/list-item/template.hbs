@@ -1,7 +1,7 @@
-<p class="vlc-agenda-items-new__overline">
-  <span class="vlc-agenda-items-new__numbering">
-    {{#if agendaitem.priority}}
-      {{agendaitem.priority}}.
+<p class="vlc-agenda-items__overline">
+  <span class="vlc-agenda-items__numbering">
+    {{#if agendaitem.number}}
+      {{agendaitem.number}}.
     {{else}}
       {{add index 1}}.
     {{/if}}
@@ -20,9 +20,11 @@
     {{/attach-popover}}
   {{/if}}
 </span>
-<h4 class="vlc-agenda-items-new__subject">
+<h4 class="vlc-agenda-items__subject">
   {{#if (await agendaitem.shortTitle)}}
-    {{await agendaitem.shortTitle}}
+    <pre>
+      {{await agendaitem.shortTitle}}
+    </pre>
   {{else}}
     {{await agendaitem.title}}
   {{/if}}
@@ -45,26 +47,28 @@
   {{/if}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
-  <span class="vlc-agenda-items-new__times-passed vl-u-text--capitalize">
+  <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize">
     {{await agendaitem.subcase.subcaseName}}
   </span>
-  {{#if (not isEditingOverview)}}
-    {{#if agendaitem.formallyOkToShow.approved}}
-      <p class="{{agendaitem.formallyOkToShow.classNames}}">
-        {{agendaitem.formallyOkToShow.label}}
-        <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-      </p>
+  {{#if isEditor}}
+    {{#if (not isEditingOverview)}}
+      {{#if agendaitem.formallyOkToShow.approved}}
+        <p class="{{agendaitem.formallyOkToShow.classNames}}">
+          {{agendaitem.formallyOkToShow.label}}
+          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+        </p>
+      {{else}}
+        <p class="{{agendaitem.formallyOkToShow.classNames}}">
+          {{agendaitem.formallyOkToShow.label}}
+        </p>
+      {{/if}}
     {{else}}
-      <p class="{{agendaitem.formallyOkToShow.classNames}}">
-        {{agendaitem.formallyOkToShow.label}}
-      </p>
+      {{utils/formally-ok-selector
+        formallyOk=formallyOk
+        isLoading=isLoading
+        hideLabel=hideLabel
+        setAction=(action "setAction")
+      }}
     {{/if}}
-  {{else}}
-    {{utils/formally-ok-selector
-      formallyOk=formallyOk
-      isLoading=isLoading
-      hideLabel=hideLabel
-      setAction=(action "setAction")
-    }}
   {{/if}}
 </div>

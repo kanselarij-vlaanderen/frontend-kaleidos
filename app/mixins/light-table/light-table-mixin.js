@@ -16,9 +16,14 @@ export default Mixin.create({
   row: null,
   meta: null,
   table: null,
+  size: 10,
 
   init() {
     this._super(...arguments);
+    this.initialiseTableBasedOnModel();
+  },
+
+  initialiseTableBasedOnModel() {
     this.set("page", 0);
     let table = new Table(this.get("columns"), [], {
       enableSync: this.get("enableSync")
@@ -27,11 +32,9 @@ export default Mixin.create({
     let sortColumn = table
       .get("allColumns")
       .findBy("valuePath", this.get("sort"));
-
     if (sortColumn) {
       sortColumn.set("sorted", true);
     }
-
     this.set("table", table);
     this.checkRowClasses();
   },
@@ -40,7 +43,7 @@ export default Mixin.create({
     const queryOptions = {
       filter: this.filter,
       sort: this.sortBy,
-      page: { number: this.page, size: 10 },
+      page: { number: this.page, size: this.size },
       include: this.include
     };
     let records = yield this.get("store").query(

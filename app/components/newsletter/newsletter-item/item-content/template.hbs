@@ -10,7 +10,7 @@
           {{await agendaitem.subcase.newsletterInfo.title}}
         {{/if}}
       </h4>
-      {{#if (or isAdmin isEditor)}}
+      {{#if isEditor}}
         <div class="vl-u-display-flex vl-u-flex-space-between">
           <div class="vl-u-spacer-extended-left-s">
             <a class="vl-link" {{action "toggleIsEditing"}}>
@@ -46,6 +46,10 @@
     {{/if}}
   </div>
 </div>
+<p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+  {{{await agendaitem.subcase.newsletterInfo.displayRemark}}}
+</p>
+
 <div class="vl-u-spacer-extended-bottom-s">
   <p class="vl-u-text--italic">
     {{await agendaitem.subcase.newsletterInfo.mandateeProposal}}

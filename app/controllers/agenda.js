@@ -108,6 +108,10 @@ export default Controller.extend(isAuthenticatedMixin, {
       this.transitionToRoute('agenda.compare');
     },
 
+    navigateToDocuments() {
+      this.transitionToRoute('agenda.documents');
+    },
+
     loadingAgendaitems() {
       this.toggleProperty('isLoading');
     }

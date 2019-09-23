@@ -55,18 +55,18 @@
                 {{t "newsletter"}}
               {{/link-to}}
             </li>
-            {{#if isAdmin}}
+            {{#if isEditor}}
               <li class="vl-tab">
                 {{#link-to "settings.overview" class="vl-tab__link"}}
                   {{t "settings"}}
                 {{/link-to}}
               </li>
             {{/if}}
-            <li class="vl-tab">
+            {{!-- <li class="vl-tab">
               <a class="vl-tab__link" role="tab" aria-selected="true">
                 {{t "notifications"}}
               </a>
-            </li>
+            </li> --}}
           {{else}}
             <li class="vl-tab">
               {{#link-to "oc.search" class="vl-tab__link vl-u-text--capitalize"
@@ -85,9 +85,7 @@
             <div class="vlc-user__username">
               {{user.firstName}}
               {{user.lastName}}
-              (
-              {{role}}
-              )
+              ({{role}})
             </div>
             <a class="vlc-user__action" {{action "logout"}}>
               {{t "sign-out"}}

@@ -23,7 +23,7 @@
     <div class="vlc-toolbar__item">
       <div class="vl-u-spacer-extended-bottom-s">
         {{#if (not (is-pending subcase))}}
-          {{#if (or isAdmin isEditor)}}
+          {{#if isEditor}}
             {{#link-to
               "cases.case.subcases.subcase.overview"
               (await subcase.case.id)

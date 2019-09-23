@@ -35,6 +35,7 @@
             </div>
             {{sessions/session-agenda-nav
               compareAgendas=(action "compareAgendas")
+              navigateToDocuments=(action "navigateToDocuments")
               clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
             }}
           </div>
@@ -42,177 +43,197 @@
       </div>
     </div>
   </div>
-  <div class="vlc-toolbar__right">
-    <div class="vlc-toolbar__item">
-      <div class="vl-action-group">
-        {{#if
-          (and (eq currentAgenda.name "Ontwerpagenda") (or isAdmin isEditor))
-        }}
-          <button
-            class="vl-button vl-button--narrow"
-            {{action "approveAgenda" currentSession}}
-          >
-            {{await currentSession.latestAgendaName}}
-            {{t "approve-small"}}
-          </button>
-        {{/if}}
-        <button
-          class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
-          {{action "showMultipleOptions"}}
-        >
-          {{#if (not isShowingOptions)}}
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
-              {{action "showMultipleOptions" bubbles=false}}
-            ></i>
-          {{else}}
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
-              {{action "showMultipleOptions" bubbles=false}}
-            ></i>
+  {{#if isViewer}}
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <div class="vl-action-group">
+          {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "approveAgenda" currentSession}}
+            >
+              {{await currentSession.latestAgendaName}}
+              {{t "approve-small"}}
+            </button>
           {{/if}}
-          {{t "actions"}}
-          {{#attach-popover
-            class="ember-attacher-popper"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom" as |attacher|
-          }}
-            <ul class="vl-popover__link-list">
-              {{#if
-                (and
-                  (or isAdmin isEditor) (eq currentAgenda.name "Ontwerpagenda")
-                )
-              }}
+          <button
+            class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+            {{action "showMultipleOptions"}}
+          >
+            {{#if (not isShowingOptions)}}
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                {{action "showMultipleOptions" bubbles=false}}
+              ></i>
+            {{else}}
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                {{action "showMultipleOptions" bubbles=false}}
+              ></i>
+            {{/if}}
+            {{t "actions"}}
+            {{#attach-popover
+              class="ember-attacher-popper"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom" as |attacher|
+            }}
+              <ul class="vl-popover__link-list">
+                {{#if (and isEditor (eq currentAgenda.name "Ontwerpagenda"))}}
+                  <li class="vl-popover__link-list__item">
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "navigateToSubCases"}}
+                    >
+                      {{t "add-to-agenda"}}
+                    </a>
+                  </li>
+                  <li class="vl-popover__link-list__item">
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "toggleIsAddingAnnouncement"}}
+                    >
+                      {{t "create-announcement"}}
+                    </a>
+                  </li>
+                  <li class="vl-popover__link-list__separator" role="none"></li>
+                {{/if}}
                 <li class="vl-popover__link-list__item">
                   <a
                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
-                    {{action "navigateToSubCases"}}
+                    {{action "navigateToDecisions"}}
                   >
-                    {{t "add-to-agenda"}}
+                    {{t "print-decisions"}}
                   </a>
                 </li>
                 <li class="vl-popover__link-list__item">
                   <a
                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
-                    {{action "toggleIsAddingAnnouncement"}}
+                    {{action "navigateToNewsletter"}}
                   >
-                    {{t "create-announcement"}}
-                  </a>
-                </li>
-                <li class="vl-popover__link-list__separator" role="none"></li>
-              {{/if}}
-              <li class="vl-popover__link-list__item">
-                <a
-                  class="vl-link vl-link--block"
-                  {{action attacher.hide}}
-                  {{action "navigateToDecisions"}}
-                >
-                  {{t "print-decisions"}}
-                </a>
-              </li>
-              <li class="vl-popover__link-list__item">
-                <a
-                  class="vl-link vl-link--block"
-                  {{action attacher.hide}}
-                  {{action "navigateToNewsletter"}}
-                >
-                  {{t "print-newsletter"}}
-                </a>
-              </li>
-              <li class="vl-popover__link-list__item">
-                <a class="vl-link vl-link--block" {{action "navigateToNotes"}}>
-                  {{t "print-notes"}}
-                </a>
-              </li>
-              <li class="vl-popover__link-list__item">
-                <a
-                  class="vl-link vl-link--block"
-                  {{action "navigateToPressAgenda"}}
-                  {{action attacher.hide}}
-                >
-                  {{t "printable-press-agenda"}}
-                </a>
-              </li>
-              <li class="vl-popover__link-list__separator" role="none"></li>
-              {{#if (or isAdmin isEditor)}}
-                <li>
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action "selectSignature"}}
-                    {{action attacher.hide}}
-                  >
-                    {{t "signature-edit"}}
+                    {{t "print-newsletter"}}
                   </a>
                 </li>
                 <li class="vl-popover__link-list__item">
                   <a
                     class="vl-link vl-link--block"
-                    {{action attacher.hide}}
-                    {{action "downloadAllDocuments"}}
+                    {{action "navigateToNotes"}}
                   >
-                    {{t "download-documents"}}
+                    {{t "print-notes"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__separator" role="none"></li>
                 <li class="vl-popover__link-list__item">
-                  {{#if (not currentSession.isFinal)}}
-                    {{#if (await hasMultipleAgendas)}}
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action "navigateToPressAgenda"}}
+                    {{action attacher.hide}}
+                  >
+                    {{t "printable-press-agenda"}}
+                  </a>
+                </li>
+                {{#if isEditor}}
+                  <li class="vl-popover__link-list__separator" role="none"></li>
+                  <li>
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action "selectSignature"}}
+                      {{action attacher.hide}}
+                    >
+                      {{t "signature-edit"}}
+                    </a>
+                  </li>
+                  <li class="vl-popover__link-list__item">
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "downloadAllDocuments"}}
+                    >
+                      {{t "download-documents"}}
+                    </a>
+                  </li>
+                  <li class="vl-popover__link-list__separator" role="none"></li>
+                  <li class="vl-popover__link-list__item">
+                    {{#if (not currentSession.isFinal)}}
+                      {{#if (await hasMultipleAgendas)}}
+                        <a
+                          class="vl-link vl-link--block vl-u-text--error"
+                          {{action "lockAgenda" currentAgenda}}
+                          {{action attacher.hide}}
+                        >
+                          {{t "agenda-lock"}}
+                        </a>
+                      {{/if}}
+                    {{else}}
                       <a
-                        class="vl-link vl-link--block vl-u-text--error"
-                        {{action "lockAgenda" currentAgenda}}
+                        class="vl-link vl-link--block"
+                        {{action "unlockAgenda"}}
                         {{action attacher.hide}}
                       >
-                        {{t "agenda-lock"}}
+                        {{t "agenda-unlock"}}
                       </a>
                     {{/if}}
-                  {{else}}
-                    <a
-                      class="vl-link vl-link--block"
-                      {{action "unlockAgenda"}}
-                      {{action attacher.hide}}
-                    >
-                      {{t "agenda-unlock"}}
-                    </a>
-                  {{/if}}
-                </li>
-                <li
-                  class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
-                >
-                  {{#if
-                    (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
-                  }}
-                    <a
-                      class="vl-link vl-u-text--error"
-                      {{action "deleteDesignAgenda" currentAgenda}}
-                      {{action attacher.hide}}
-                    >
-                      {{t "agenda-delete"}}
-                    </a>
-                  {{else if
-                    (and
-                      (not (await designAgendaPresent))
-                      (not (await currentSession.isFinal))
-                    )}}
-                    <a
-                      class="vl-link vl-link--block"
-                      {{action "createNewDesignAgenda" currentSession}}
-                      {{action attacher.hide}}
-                    >
-                      {{t "agenda-add"}}
-                    </a>
-                  {{/if}}
-                </li>
-              {{/if}}
-            </ul>
-          {{/attach-popover}}
-        </button>
+                  </li>
+                  <li class="vl-popover__link-list__item">
+                    {{#if currentSession.canReleaseDecisions}}
+                      <a
+                        class="vl-link vl-link--block vl-u-text--error"
+                        {{action "releaseDecisions"}}
+                        {{action attacher.hide}}
+                      >
+                        {{t "agenda-release-decisions"}}
+                      </a>
+                    {{else if currentSession.canReleaseDocuments}}
+                      <a
+                        class="vl-link vl-link--block vl-u-text--error"
+                        {{action "releaseDocuments"}}
+                        {{action attacher.hide}}
+                      >
+                        {{t "agenda-release-documents"}}
+                      </a>
+                    {{/if}}
+                  </li>
+                  <li
+                    class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
+                  >
+                    {{#if
+                      (and
+                        currentAgenda (eq currentAgenda.name "Ontwerpagenda")
+                      )
+                    }}
+                      <a
+                        class="vl-link vl-u-text--error"
+                        {{action "deleteDesignAgenda" currentAgenda}}
+                        {{action attacher.hide}}
+                      >
+                        {{t "agenda-delete"}}
+                      </a>
+                    {{else if
+                      (and
+                        (not (await designAgendaPresent))
+                        (not (await currentSession.isFinal))
+                      )}}
+                      <a
+                        class="vl-link vl-link--block"
+                        {{action "createNewDesignAgenda" currentSession}}
+                        {{action attacher.hide}}
+                      >
+                        {{t "agenda-add"}}
+                      </a>
+                    {{/if}}
+                  </li>
+                {{/if}}
+              </ul>
+            {{/attach-popover}}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  {{/if}}
 </div>
 {{#if isAddingAgendaitems}}
   {{agenda/agendaitem/create-agendaitem
@@ -241,5 +262,25 @@
     message=(t "approve-agenda-warning")
     cancel=(action "cancel")
     verify=(action "verify")
+  }}
+{{/if}}
+{{#if releasingDocuments}}
+  {{web-components/vl-modal-verify
+    title=(t "agenda-release-documents")
+    buttonType="warning"
+    verifyButtonText=(t "releaseToPublicButton")
+    message=(t "release-documents-message")
+    cancel=(action "cancel")
+    verify=(action "confirmReleaseDocuments")
+  }}
+{{/if}}
+{{#if releasingDecisions}}
+  {{web-components/vl-modal-verify
+    title=(t "agenda-release-decisions")
+    buttonType="warning"
+    verifyButtonText=(t "releaseToPublicButton")
+    message=(t "release-decisions-message")
+    cancel=(action "cancel")
+    verify=(action "confirmReleaseDecisions")
   }}
 {{/if}}

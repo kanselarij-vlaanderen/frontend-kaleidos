@@ -1,0 +1,50 @@
+/* ==========================================================================
+  Agenda meta
+  The last line in an agenda item
+   ========================================================================== */
+
+.vlc-agenda-meta,
+.vlc-agenda-meta__status-holder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vlc-agenda-meta__status {
+  display: flex;
+  align-items: center;
+  opacity: 0.65;
+}
+
+.vlc-agenda-meta__status {
+  font-weight: 500;
+  .vl-vi-check-small {
+    font-size: 2rem;
+  }
+}
+
+.vlc-agenda-meta__status--positive {
+  opacity: 1;
+  color: $napier-green;
+}
+
+.vlc-agenda-meta__status--warning {
+  opacity: 1;
+  color: #ECB307;
+}
+
+.vlc-agenda-items__sub-item--active a,
+.vlc-agenda-items__sub-item--active a:hover,
+.vlc-agenda-items__sub-item--active a:active {
+  .vlc-agenda-meta__status {
+    color: #FFF;
+  }
+}
+
+.vlc-agenda-meta__recently-added {
+  opacity: 0.5;
+}
+
+.vlc-agenda-meta__recently-added:hover {
+  opacity: 1;
+}
