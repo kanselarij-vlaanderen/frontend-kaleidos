@@ -42,9 +42,9 @@ export default Route.extend(ApplicationRouteMixin, {
     try {
       const alerts = await this.store.query("alert", {
         filter: {
-          ":gte:end-date": dateOfToday,
-          ":lte:begin-date": dateOfToday
+          ":gte:end-date": dateOfToday
         },
+        sort: "-begin-date",
         include: "type"
       });
       if (alerts.get("length") > 0) {
