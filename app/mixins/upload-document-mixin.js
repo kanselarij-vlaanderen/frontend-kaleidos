@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import moment from 'moment';
 import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import { A } from '@ember/array';
+import config from '../utils/config';
 
 export default Mixin.create({
   store: service(),
@@ -10,10 +11,16 @@ export default Mixin.create({
 
   documentsInCreation: A([]), // When creating new documents
   document: null, // When adding a new version to an existing document
+  defaultAccessLevel: null, // when creating a new document
 
   didInsertElement() {
     this._super(...arguments);
     this.set('documentsInCreation', A([]));
+    this.store.query('access-level', {}).then((accessLevels) => {
+      this.set('defaultAccessLevel', accessLevels.find((item) => {
+        return item.id == config.internRegeringAccessLevelId;
+      }));
+    });
   },
 
   async deleteDocument(document) {
@@ -49,8 +56,9 @@ export default Mixin.create({
       created: creationDate,
       title: title,
       type: type,
+      accessLevel: this.defaultAccessLevel,
       documentVersions: documentVersion ? A([documentVersion]) : undefined, // Optional
-      freezeAccessLevel: confidential,
+      confidential: confidential,
     });
   },
 
@@ -62,9 +70,11 @@ export default Mixin.create({
     const latestVersionNumber = document
       ? (await document.get('lastDocumentVersion.versionNumber')) || 0
       : 0;
+    let accessLevel = (document ? document.accessLevel : null) || this.defaultAccessLevel;
     return this.store.createRecord('document-version', {
       document, // Optional
       created,
+      accessLevel,
       chosenFileName, // Optional
       versionNumber: latestVersionNumber + 1,
       file: uploadedFile,
