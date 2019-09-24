@@ -31,10 +31,10 @@ context('Case test', () => {
         cy.get('.vl-alert').contains('Gelukt');
       });
 
-    cy.visit('');
+    // cy.visit('');
     
-    cy.visit('/dossiers');
-    cy.wait('@getCases', { timeout: 20000 });
+    // cy.visit('/dossiers');
+    // cy.wait('@getCases', { timeout: 20000 });
     
     cy.addSubCase(dossierTitelKort,type,dossierTitelKort,dossierTitelLang, procedureStap, procedureNaam);
     cy.wait('@createNewSubCase', { timeout: 20000 })

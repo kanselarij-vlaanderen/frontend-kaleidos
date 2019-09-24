@@ -86,8 +86,9 @@ Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
 });
 
 Cypress.Commands.add('openAgendaForDate', (searchDate) => {
-  cy.visit('');
   cy.route('GET', `/meetings/**`).as('getMeetings')
+
+  cy.visit('');
   cy.get('.vlc-input-field-group-wrapper--inline').within(() => {
     cy.get('.vl-input-field').type(searchDate);
     cy.get('.vl-button').click();
@@ -134,10 +135,11 @@ Cypress.Commands.add('addSubCase', (caseShortTitle, type, newShortTitle, longTit
   cy.route('GET', '/cases?*').as('getCases');
   cy.route('GET', '/subcases?*').as('getSubCases');
 
-  cy.visit("/dossiers").wait('@getCases', { timeout: 12000 })
-  cy.get('td').contains(caseShortTitle).parents('tr').within(() => {
-    cy.get('.vl-button').get('.vl-vi-nav-right').click();
-  });
+  //TODO
+  // cy.visit("/dossiers").wait('@getCases', { timeout: 12000 })
+  // cy.get('td').contains(caseShortTitle).parents('tr').within(() => {
+  //   cy.get('.vl-button').get('.vl-vi-nav-right').click();
+  // });
   cy.wait('@getSubCases',{ timeout: 12000 });
 
   cy.get('.vlc-toolbar__item .vl-button')
@@ -185,17 +187,16 @@ Cypress.Commands.add('addSubCase', (caseShortTitle, type, newShortTitle, longTit
 //#region Subcase commands
 
 /**
- * Use this when in the subcase view (/dossiers/..id../overzicht) to change the access level and titels
+ * Changes the subcase access levels and titles when used in the subcase view (/dossiers/..id../overzicht)
  * shortTitle is required to find the dom element
- * other params are optional, only give values when you want something changed
- * shortTitle: String,             current title of the subcase (same as case title unless already renamed)
- * confidentialityChange: boolean  if true will change the current confidentialityChange
- * accessLevel: String             must match exactly with possible options in dropdown
- * newShortTitle: String           new short title for the subcase
- * newLongTitle: String            new long title for the subcase
+ * 
+ * @param {string} shortTitle - Current title of the subcase (same as case title unless already renamed)
+ * @param {boolean} [confidentialityChange] -Will change the current confidentiality if true
+ * @param {string} [accessLevel] -Access level to set, must match exactly with possible options in dropdown
+ * @param {string} [newShortTitle] - new short title for the subcase
+ * @param {string} [newLongTitle] - new long title for the subcase
  */
 Cypress.Commands.add('changeSubCaseAccessLevel', (shortTitle, confidentialityChange, accessLevel, newShortTitle, newLongTitle) => {
-  cy.route('GET', '/themes?**').as('getThemes');
   cy.route('PATCH','/subcases/*').as('patchSubCase');
 
   cy.get('.vl-title--h4').contains(shortTitle).parents('.vl-u-spacer-extended-bottom-l').within(() => {
@@ -240,17 +241,19 @@ Cypress.Commands.add('changeSubCaseAccessLevel', (shortTitle, confidentialityCha
 });
 
 /**
- * Use this when in the subcase view (/dossiers/..id../overzicht) to change the themes
- * themes
+ * Changes the themes of a sucase when used in the subcase view (/dossiers/..id../overzicht)
+ * 
+ * @param {Array<Number|String>} themes - An array of theme names that must match exactly or an array of numbers that correspond to the checkboxes in themes 
  * 
  */
 Cypress.Commands.add('addSubCaseThemes', (themes) => {
-  cy.route('GET', '/themes?**').as('getThemes');
+  cy.route('GET', '/themes').as('getThemes');
   cy.route('PATCH','/subcases/*').as('patchSubCase');
   cy.get('.vl-title--h4').contains(`Thema's`).parents('.vl-u-spacer-extended-bottom-l').as('subCaseTheme');
 
   cy.get('@subCaseTheme').within(() => {
     cy.get('a').click();
+    cy.wait('@getThemes', { timeout: 12000 });
     themes.forEach(element => {
       if(isNaN(element)){
         cy.get('.vl-checkbox').contains(element).click();
@@ -268,7 +271,7 @@ Cypress.Commands.add('addSubCaseThemes', (themes) => {
   });
 });
 
-Cypress.Commands.add('addSubCaseMandatee', (mandateeNumber, fieldNumber, domainNumber  ) => {
+Cypress.Commands.add('addSubCaseMandatee', (mandateeNumber, fieldNumber, domainNumber) => {
   cy.route('GET', '/mandatees?**').as('getMandatees');
   cy.route('GET', '/ise-codes/**').as('getIseCodes');
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
