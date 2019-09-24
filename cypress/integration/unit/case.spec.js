@@ -17,13 +17,13 @@ context('Case test', () => {
     cy.route('POST', '/subcases').as('createNewSubCase');
     cy.route('PATCH','/subcases/*').as('patchSubCase');
 
-    const dossierTitelKort= 'Cypress test';
+    const caseTitleShort= 'Cypress test';
     const type= 'Nota';
-    const dossierTitelLang= 'Cypress test voor het aanmaken van een dossier en procedurestap';
+    const caseTitleLong= 'Cypress test voor het aanmaken van een dossier en procedurestap';
     const procedureStap='In voorbereiding';
     const procedureNaam='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(true, dossierTitelKort);
+    cy.createCase(true, caseTitleShort);
     cy.wait('@createNewCase', { timeout: 20000 })
       .then((res) => {
         const caseId = res.responseBody.data.id;
@@ -36,7 +36,7 @@ context('Case test', () => {
     // cy.visit('/dossiers');
     // cy.wait('@getCases', { timeout: 20000 });
     
-    cy.addSubCase(dossierTitelKort,type,dossierTitelKort,dossierTitelLang, procedureStap, procedureNaam);
+    cy.addSubCase(caseTitleShort,type,caseTitleShort,caseTitleLong, procedureStap, procedureNaam);
     cy.wait('@createNewSubCase', { timeout: 20000 })
       .then((res) => {
         const subCaseId = res.responseBody.data.id;
@@ -45,7 +45,7 @@ context('Case test', () => {
       });
 
     //TODO only use when not creating a subcase
-    // cy.get('td').contains(dossierTitelKort).parents('tr').within(() => {
+    // cy.get('td').contains(caseTitleShort).parents('tr').within(() => {
     //   cy.get('.vl-button').get('.vl-vi-nav-right').click()
     // })
     
@@ -58,7 +58,7 @@ context('Case test', () => {
 
 
     //Change the access level
-    cy.changeSubCaseAccessLevel(dossierTitelKort, true, 'Intern Overheid', 'Cypress test nieuwere titel', 'Cypress test nieuwere lange titel');
+    cy.changeSubCaseAccessLevel(caseTitleShort, true, 'Intern Overheid', 'Cypress test nieuwere titel', 'Cypress test nieuwere lange titel');
 
     //Add the themes
     cy.addSubCaseThemes([0, 5 , 10]);
