@@ -40,7 +40,7 @@
               <div class="vl-typography">
                 <ul>
                   {{#if (gt agendaitem.decisions.length 0)}}
-                    {{#each agendaitem.decisions as |decision|}}
+                    {{#each (await agendaitem.decisions) as |decision|}}
                       {{#if decision.isEditing}}
                         {{agenda/agendaitem/agendaitem-decision-edit
                           isEditing=decision.isEditing
@@ -60,10 +60,10 @@
                             </a>
                           {{/if}}
                         </div>
-                        <li>
-                          {{{decision.richtext}}}
-                        </li>
                       {{/if}}
+                      <li>
+                        {{{decision.richtext}}}
+                      </li>
                     {{/each}}
                   {{else}}
                     <li>
