@@ -13,25 +13,24 @@ context('Full test', () => {
 
     //#region routes to be reused
     cy.route('GET', '/cases?**').as('getCases');
-    cy.route('GET', '/subcases?**').as('getSubCases');
+    cy.route('GET', '/subcases?**').as('getSubcases');
     cy.route('GET', '/mandatees?**').as('getMandatees');
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubCases');
+    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
     cy.route('POST', '/agendaitems').as('createNewAgendaItems');
     cy.route('POST', '/cases').as('createNewCase');
-    cy.route('POST', '/subcases').as('createNewSubCase');
-    cy.route('PATCH','/subcases/*').as('patchSubCase');
+    cy.route('POST', '/subcases').as('createNewSubcase');
+    cy.route('PATCH','/subcases/*').as('patchSubcase');
 
     //#endregion
 
     //#region create the meeting/agenda
     const plusMonths = 1;
-    const futureDate = Cypress.moment().add('month', plusMonths).set('date', 15).set('hour', 15).set('minute', 15);
-    const searchDate = futureDate.date()+ '/' +(futureDate.month()+1) + '/' + futureDate.year();
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 15).set('hour', 15).set('minute', 15);
     const location = 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, futureDate, testId + location);
+    cy.createAgenda('Ministerraad', plusMonths, agendaDate, testId + location);
     cy.wait('@createNewMeeting', { timeout: 20000 })
       .then(function (res) {
         const meetingId = res.responseBody.data.id;
@@ -66,10 +65,10 @@ context('Full test', () => {
     // cy.visit('/dossiers');
     // cy.wait('@getCases', { timeout: 20000 });
     
-    // cy.addSubCase(dossierTitelKort,type,dossierTitelKort,dossierTitelLang, procedureStap, procedureNaam);
-    // cy.wait('@createNewSubCase', { timeout: 20000 })
+    // cy.addSubcase(dossierTitelKort,type,dossierTitelKort,dossierTitelLang, procedureStap, procedureNaam);
+    // cy.wait('@createNewSubcase', { timeout: 20000 })
     //   .then((res) => {
-    //     const subCaseId = res.responseBody.data.id;
+    //     const subcaseId = res.responseBody.data.id;
 
     //     cy.get('.vl-alert').contains('Gelukt');
     //   });
@@ -79,36 +78,36 @@ context('Full test', () => {
     // //   cy.get('.vl-button').get('.vl-vi-nav-right').click()
     // // })
     
-    // cy.wait('@getSubCases', { timeout: 12000 });
-    // cy.get('.vlc-procedure-step').as('subCasesList');
-    // cy.get('@subCasesList').eq(0).within(() => {
+    // cy.wait('@getSubcases', { timeout: 12000 });
+    // cy.get('.vlc-procedure-step').as('subcasesList');
+    // cy.get('@subcasesList').eq(0).within(() => {
     //   //TODO figure out why click does not always work w/o waiting or clicking twice (no xhr calls are made)
     //   cy.get('.vl-title').click();
     //   // cy.get('.vl-title').click();
     // })
-    // cy.wait('@getCaseSubCases', { timeout: 12000 });
+    // cy.wait('@getCaseSubcases', { timeout: 12000 });
 
 
-    // cy.get('.vl-title--h4').parents('.vl-u-spacer-extended-bottom-l').as('subCaseParts').should('have.length' , 5);
+    // cy.get('.vl-title--h4').parents('.vl-u-spacer-extended-bottom-l').as('subcaseParts').should('have.length' , 5);
 
     // //Change the type
-    // cy.get('@subCaseParts').eq(0).within(() => {
+    // cy.get('@subcaseParts').eq(0).within(() => {
     // });
 
     // //Change the themes
-    // cy.get('@subCaseParts').eq(1).within(() => {
+    // cy.get('@subcaseParts').eq(1).within(() => {
     // });
 
     // //#region Add the mandatees
-    // cy.addSubCaseMandatee(1, 0, 0);
+    // cy.addSubcaseMandatee(1, 0, 0);
     // //#endregion
 
     // //The ise-code
-    // cy.get('@subCaseParts').eq(3).within(() => {
+    // cy.get('@subcaseParts').eq(3).within(() => {
     // });
 
     // //The subcases
-    // cy.get('@subCaseParts').eq(4).within(() => {
+    // cy.get('@subcaseParts').eq(4).within(() => {
     // });
 
   //#endregion
@@ -122,7 +121,7 @@ context('Full test', () => {
   //#endregion
   
   //#region check and approve the agenda > A
-  cy.openAgendaForDate(searchDate);
+  cy.openAgendaForDate(agendaDate);
   // cy.wait('@getMeetingAgendas', { timeout: 20000 });
 
   //TODO temp to clean up data, implement after test completed ?

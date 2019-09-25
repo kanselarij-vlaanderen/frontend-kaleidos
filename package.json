@@ -30,6 +30,7 @@
     "@lblod/ember-vo-webuniversum-data-table": "^0.2.11",
     "broccoli-asset-rev": "^2.7.0",
     "cypress": "^3.4.1",
+    "cypress-file-upload": "^3.3.4",
     "ember-ajax": "^3.1.0",
     "ember-attacher": "^0.13.10",
     "ember-changeset": "^1.6.0",
