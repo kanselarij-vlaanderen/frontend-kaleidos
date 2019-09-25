@@ -46,10 +46,11 @@
     {{/if}}
   </div>
 </div>
+{{#if allowEditing}}
 <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
   {{{await agendaitem.subcase.newsletterInfo.displayRemark}}}
 </p>
-
+{{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
   <p class="vl-u-text--italic">
     {{await agendaitem.subcase.newsletterInfo.mandateeProposal}}
