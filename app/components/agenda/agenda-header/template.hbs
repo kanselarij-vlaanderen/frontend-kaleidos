@@ -141,6 +141,15 @@
                   <li>
                     <a
                       class="vl-link vl-link--block"
+                      {{action "toggleEditingSession"}}
+                      {{action attacher.hide}}
+                    >
+                      {{t "edit-session"}}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class="vl-link vl-link--block"
                       {{action "selectSignature"}}
                       {{action attacher.hide}}
                     >
@@ -283,4 +292,17 @@
     cancel=(action "cancel")
     verify=(action "confirmReleaseDecisions")
   }}
+{{/if}}
+{{#if editingSession}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "edit-session")
+    closeModal=(action "cancelEditSessionForm")
+  }}
+    {{sessions/forms/edit-session
+      meeting=currentSession
+      successfullyEdited=(action "successfullyEdited")
+      cancelForm=(action "cancelEditSessionForm")
+    }}
+  {{/web-components/vl-modal}}
 {{/if}}
