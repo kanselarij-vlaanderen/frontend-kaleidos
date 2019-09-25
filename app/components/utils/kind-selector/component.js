@@ -15,7 +15,7 @@ export default Component.extend({
   }),
 
   selectedkind: computed('options', 'kind', function() {
-    return this.options.get('firstObject');
+    return this.options.find(kind => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');
   }),
 
   actions: {

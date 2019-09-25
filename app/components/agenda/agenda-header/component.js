@@ -250,6 +250,15 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       this.set('releasingDocuments', false);
       this.currentSession.set('releasedDocuments', moment().utc().toDate());
       this.currentSession.save();
+    },
+    toggleEditingSession() {
+      this.toggleProperty('editingSession')
+    },
+    successfullyEdited() {
+      this.toggleProperty('editingSession')
+    },
+    cancelEditSessionForm() {
+      this.toggleProperty('editingSession')
     }
   },
 
