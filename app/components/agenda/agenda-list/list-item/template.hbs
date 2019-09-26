@@ -21,14 +21,17 @@
   {{/if}}
 </span>
 <h4 class="vlc-agenda-items__subject">
-  {{#if (await agendaitem.shortTitle)}}
-    <pre>
-      {{await agendaitem.shortTitle}}
-    </pre>
-  {{else}}
-    {{await agendaitem.title}}
-  {{/if}}
+  <pre>
+    {{agendaitem.shortTitle}}
+  </pre>
 </h4>
+{{#if (not selectedAgendaItem)}}
+  {{#if (await agendaitem.subcase)}}
+    <p class="vl-u-text">
+      {{agendaitem.title}}
+    </p>
+  {{/if}}
+{{/if}}
 {{#if (not selectedAgendaItem)}}
   {{#if (await agendaitem.documents)}}
     <div class="vlc-hr"></div>
