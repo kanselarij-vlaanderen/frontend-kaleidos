@@ -144,6 +144,7 @@ export default Service.extend({
   },
 
   async createNewAgendaItem(selectedAgenda, subcase) {
+    const priorityToAssign = await selectedAgenda.get('lastAgendaitemPriority') + 1;
     const mandatees = await subcase.get('mandatees');
     const titles = mandatees.map((mandatee) => mandatee.get('title'));
     const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
@@ -156,6 +157,7 @@ export default Service.extend({
         .utc()
         .toDate(),
       subcase: subcase,
+      priority: priorityToAssign,
       agenda: selectedAgenda,
       title: subcase.get('title'),
       shortTitle: subcase.get('shortTitle'),
@@ -170,6 +172,7 @@ export default Service.extend({
     return agendaitem.save();
   },
 
+  // TODO: check deadcode
   parseGroups(groups, agendaitems) {
     let lastPrio = 0;
     let firstAgendaItem;
@@ -307,4 +310,26 @@ export default Service.extend({
       foundGroup.agendaitems.push(...group.agendaitems);
     }
   },
+
+  setGroupNameOnAgendaItems(agendaitems) {
+    let previousAgendaitemGroupName;
+    return agendaitems.map(async (item) => {
+      const mandatees = await item.get('mandatees');
+      if(item.isApproval) {
+        item.set('groupName', null);
+        return;
+      }
+      if(mandatees.length == 0){
+        item.set('groupName', "Geen toegekende ministers");
+        return ;
+      }
+      const currentAgendaitemGroupName = mandatees.map((mandatee)=> mandatee.title).join(', ');
+      if(currentAgendaitemGroupName != previousAgendaitemGroupName) {
+        previousAgendaitemGroupName = currentAgendaitemGroupName;
+        item.set('groupName', currentAgendaitemGroupName);
+      } else {
+        item.set('groupName', null);
+      }
+    })
+  }
 });

@@ -25,6 +25,7 @@ export default Model.extend({
   shortTitle: attr('string'),
   title: attr('string'),
   formallyOk: attr('string'),
+  isApproval: attr('boolean'),
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
