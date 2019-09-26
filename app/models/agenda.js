@@ -32,7 +32,18 @@ export default Model.extend({
     });
   }),
 
+  isPassable: computed("agendaitems.@each", function() {
+    return this.get("agendaitems").then(agendaitems => {
+      const approvedAgendaItems = agendaitems.filter(agendaitem => this.checkPassable(agendaitem));
+      return approvedAgendaItems.get("length") === agendaitems.get("length");
+    });
+  }),
+
   checkFormallyOkStatus(agendaitem) {
+    return [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get("formallyOk"));
+  },
+
+  checkPassable(agendaitem) {
     return agendaitem.get('isAdded') || [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get("formallyOk"));
   }
 });

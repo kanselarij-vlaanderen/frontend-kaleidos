@@ -52,21 +52,23 @@
             </div>
           </div>
           <div class="vlc-toolbar__right">
-            <div class="vlc-toolbar__item">
-              {{#web-components/vl-save-button
-                class=buttonClass
-                isLoading=isLoading
-                saveAction=(action "verify")
-              }}
-                {{#if showIcon}}
-                  <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
-                    aria-hidden="true"
-                  ></i>
-                {{/if}}
-                {{verifyButtonText}}
-              {{/web-components/vl-save-button}}
-            </div>
+            {{#if showVerify}}
+              <div class="vlc-toolbar__item">
+                {{#web-components/vl-save-button
+                  class=buttonClass
+                  isLoading=isLoading
+                  saveAction=(action "verify")
+                }}
+                  {{#if showIcon}}
+                    <i
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
+                      aria-hidden="true"
+                    ></i>
+                  {{/if}}
+                  {{verifyButtonText}}
+                {{/web-components/vl-save-button}}
+              </div>
+            {{/if}}
           </div>
         </div>
       {{/if}}

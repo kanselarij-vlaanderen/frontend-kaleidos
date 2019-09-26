@@ -50,7 +50,7 @@
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
             <button
               class="vl-button vl-button--narrow"
-              {{action "approveAgenda" currentSession}}
+              {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}
               {{t "approve-small"}}
@@ -267,10 +267,11 @@
   {{web-components/vl-modal-verify
     title=(t "warning-title")
     buttonType="warning"
-    verifyButtonText=(t "warning-text")
-    message=(t "approve-agenda-warning")
+    verifyButtonText=(t "continue")
+    message=(if (and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable))) (t "approve-agenda-passable") (t "approve-agenda-warning"))
     cancel=(action "cancel")
-    verify=(action "verify")
+    verify=(action "doApproveAgenda" currentSession)
+    showVerify=(and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable)))
   }}
 {{/if}}
 {{#if releasingDocuments}}
