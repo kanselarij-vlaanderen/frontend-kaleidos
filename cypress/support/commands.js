@@ -72,7 +72,10 @@ Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
   cy.get('@newAgendaForm').eq(0).within(() => {
     cy.get('.ember-power-select-trigger').click();
   });
-  cy.contains(kind).click();
+  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+    cy.contains(kind).click();
+  });
+  
   //#endregion
 
   //#region Set the start date
@@ -112,17 +115,22 @@ Cypress.Commands.add('openAgendaForDate', (agendaDate) => {
   });
   cy.wait('@getMeetings', { timeout: 10000 });
   cy.get('.vl-data-table > tbody').children().should('have.length', 1);
-  cy.get('.vl-data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click()
+  cy.get('.vl-data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
 });
 
 Cypress.Commands.add('deleteAgenda', (agendaDate, meetingId) => {
-  cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
+  if(meetingId) {
+    cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
+  } else {
+    cy.route('DELETE', '/meetings/**').as('deleteMeeting');
+  }
+  
   cy.openAgendaForDate(agendaDate);
 
   //TODO remove subcases
   cy.get('.vl-button--icon-before')
     .contains('Acties')
-    .click()
+    .click();
   cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
     .contains('Agenda verwijderen')
     .click()
@@ -205,16 +213,22 @@ Cypress.Commands.add('addSubcase', (type, newShortTitle, longTitle, step, stepNa
 
   //#region Set the step type
   cy.get('.vlc-input-field-block').eq(3).within(() => {
-    cy.get('[role=button]').click();
+    cy.get('.ember-power-select-trigger').click();
   });
-  cy.get('.ember-power-select-option').contains(step).click();
+  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+    cy.contains(step).click();
+  });
+  // cy.get('.ember-power-select-option').contains(step).click();
   //#endregion
 
   //#region Set the step name
   cy.get('.vlc-input-field-block').eq(4).within(() => {
-    cy.get('[role=button]').click();
+    cy.get('.ember-power-select-trigger').click();
   });
-  cy.get('.ember-power-select-option').contains(stepName).click();
+  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+    cy.contains(stepName).click();
+  });
+  // cy.get('.ember-power-select-option').contains(stepName).click();
   //#endregion
   
   cy.get('.vlc-toolbar').within(() => {
@@ -258,7 +272,10 @@ Cypress.Commands.add('changeSubcaseAccessLevel', (shortTitle, confidentialityCha
     cy.get('@subcaseAccessLevel').within(() => {
       cy.get('.ember-power-select-trigger').click();
     });
-    cy.get('.ember-power-select-option').contains(accessLevel).click();
+    cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+      cy.contains(accessLevel).click();
+    });
+    
   }
 
   cy.get('@subcaseAccessLevel').within(() => {
@@ -341,10 +358,13 @@ Cypress.Commands.add('addSubcaseMandatee', (mandateeNumber, fieldNumber, domainN
   });
 
   cy.get('.vlc-box a').contains('Minister toevoegen').click();
-  cy.get('.mandatee-selector-container').click();
+  cy.get('.mandatee-selector-container').children('.ember-power-select-trigger').click();
   cy.wait('@getMandatees', { timeout: 12000 });
-  cy.get('.ember-power-select-option').should('not.have.length', 1);
-  cy.get('.ember-power-select-option').eq(mandateeNumber).click();
+  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+    cy.get('.ember-power-select-option').eq(mandateeNumber).click();
+  });
+  // cy.get('.ember-power-select-option').should('not.have.length', 1);
+  // cy.get('.ember-power-select-option').eq(mandateeNumber).click();
   cy.wait('@getIseCodes', { timeout: 12000 });
   cy.wait('@getGovernmentFields', { timeout: 12000 });
   cy.get('.vlc-checkbox-tree').eq(fieldNumber).within(() => {
@@ -426,8 +446,11 @@ Cypress.Commands.add('addDocVersion', (files) => {
           });
         });
       });
-      cy.get('.ember-power-select-option').should('not.have.length', 1);
-      cy.get('.ember-power-select-option').contains(file.fileType).click();
+      cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+        cy.contains(file.fileType).click();
+      });
+      // cy.get('.ember-power-select-option').should('not.have.length', 1);
+      // cy.get('.ember-power-select-option').contains(file.fileType).click();
     }
 
     cy.get('@fileUploadDialog').within(() => {

@@ -39,14 +39,14 @@ context('Case test', () => {
 
 
     //Change the access level
-    // cy.changeSubcaseAccessLevel(caseTitleShort, true, 'Intern Overheid', 'Cypress test nieuwere titel', 'Cypress test nieuwere lange titel');
+    cy.changeSubcaseAccessLevel(caseTitleShort, true, 'Intern Overheid', 'Cypress test nieuwere titel', 'Cypress test nieuwere lange titel');
 
-    // //Add the themes
-    // cy.addSubcaseThemes([0, 5 , 10]);
-    // cy.addSubcaseThemes(['Energie', 'haven' , 'Gezin']);
+    //Add the themes
+    cy.addSubcaseThemes([0, 5 , 10]);
+    cy.addSubcaseThemes(['Energie', 'haven' , 'Gezin']);
 
-    // //Add the mandatees
-    // cy.addSubcaseMandatee(1, 0, 0);
+    //Add the mandatees
+    cy.addSubcaseMandatee(1, 0, 0);
 
   });
 
