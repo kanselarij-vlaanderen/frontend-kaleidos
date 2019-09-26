@@ -33,9 +33,11 @@
   {{/if}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
-  <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize">
-    {{await agendaitem.subcase.subcaseName}}
-  </span>
+  {{#if (not selectedAgendaItem)}}
+    <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize">
+      {{await agendaitem.subcase.subcaseName}}
+    </span>
+  {{/if}}
   {{#if isEditor}}
     {{#if (not isEditingOverview)}}
       {{#if agendaitem.formallyOkToShow.approved}}
