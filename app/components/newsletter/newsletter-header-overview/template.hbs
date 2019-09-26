@@ -133,6 +133,25 @@
                       ></li>
                       <li class="vl-popover__link-list__item">
                         <a
+                          class="vl-link vl-link--block"
+                          target="_blank"
+                          rel="noopener"
+                          href={{concat "/newsletter/xml-newsletter/" agenda.id
+                          }}
+                          download={{concat
+                            "/newsletter/xml-newsletter/"
+                            agenda.id
+                          }}
+                        >
+                          {{t "generate-xml"}}
+                        </a>
+                      </li>
+                      <li
+                        class="vl-popover__link-list__separator"
+                        role="none"
+                      ></li>
+                      <li class="vl-popover__link-list__item">
+                        <a
                           class="vl-link vl-link--block vl-u-text--error"
                           {{action attacher.hide}}
                           {{action "deleteCampaign"}}

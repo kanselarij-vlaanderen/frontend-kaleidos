@@ -21,6 +21,7 @@ export default Model.extend({
 
   meeting: belongsTo('meeting', { inverse: null }),
   documentVersions: hasMany('document-version', { inverse: null }),
+  
   displayRemark: computed('remark', 'intl', function() {
     const remark = this.get('remark');
     if (remark && remark != '') {
