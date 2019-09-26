@@ -32,23 +32,6 @@
     </p>
   {{/if}}
 {{/if}}
-{{#if (not selectedAgendaItem)}}
-  {{#if (await agendaitem.documents)}}
-    <div class="vlc-hr"></div>
-    {{utils/documents-list-for-item
-      isClickable=isDocumentClickable
-      item=agendaitem
-      agendaitem=agendaitem
-    }}
-  {{else if (await agendaitem.subcase.documents)}}
-    <div class="vlc-hr"></div>
-    {{utils/documents-list-for-item
-      isClickable=isDocumentClickable
-      item=(await agendaitem.subcase)
-      agendaitem=(await agendaitem.subcase)
-    }}
-  {{/if}}
-{{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
   <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize">
     {{await agendaitem.subcase.subcaseName}}
@@ -75,3 +58,20 @@
     {{/if}}
   {{/if}}
 </div>
+{{#if (not selectedAgendaItem)}}
+  {{#if (await agendaitem.documents)}}
+    <div class="vlc-hr"></div>
+    {{utils/documents-list-for-item
+      isClickable=isDocumentClickable
+      item=agendaitem
+      agendaitem=agendaitem
+    }}
+  {{else if (await agendaitem.subcase.documents)}}
+    <div class="vlc-hr"></div>
+    {{utils/documents-list-for-item
+      isClickable=isDocumentClickable
+      item=(await agendaitem.subcase)
+      agendaitem=(await agendaitem.subcase)
+    }}
+  {{/if}}
+{{/if}}
