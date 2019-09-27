@@ -1,10 +1,12 @@
 import Route from '@ember/routing/route';
-import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items-route-mixin';
 import { hash } from 'rsvp';
 import { isEmpty } from '@ember/utils';
 import $ from 'jquery';
+import { inject } from '@ember/service';
 
-export default Route.extend(SortedAgendaItemsRouteMixin, {
+export default Route.extend( {
+  sessionService: inject(),
+  agendaService: inject(),
   queryParams: {
     filter: { refreshModel: true },
     refresh: { refreshModel: true },
@@ -18,37 +20,19 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
         matchingAgendaItems: this.matchingAgendaItems(params.filter),
       });
 
-      this.set('sessionService.selectedAgendaItem', null);
-      const session = this.modelFor('agenda');
-
-      const {
-        groups,
-        firstAgendaItem,
-        announcements,
-        lastPrio,
-        minutesApproval,
-        brokenAgendaItems
-      } = await this.parseAgendaItems(agenda, session);
-      if (minutesApproval) {
-        this.set('sessionService.firstAgendaItemOfAgenda', minutesApproval);
-      } else {
-        this.set('sessionService.firstAgendaItemOfAgenda', firstAgendaItem);
-      }
-
-
-
-      let filteredGroups = groups;
+      let agendaitems = await this.store.query('agendaitem', { filter: {agenda: {id: id}}, include: 'mandatees' })
       if (!isEmpty(params.filter)) {
-        filteredGroups = this.filterAgendaGroups(groups, matchingAgendaItems);
+        agendaitems = agendaitems.filter((item) => !matchingAgendaItems[item.id])
       }
+      
+      const announcements = agendaitems.filter((item) => item.showAsRemark);
+    
+      this.set('sessionService.selectedAgendaItem', null);
+
       return hash({
         currentAgenda: agenda,
-        groups: filteredGroups,
         announcements: (announcements || []).sortBy('priority'),
-        lastPrio,
-        minutesApproval,
-        brokenAgendaItems
-
+        agendaitems
       });
     }
   },
@@ -67,31 +51,5 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
       searchMap[item.id] = true;
     });
     return searchMap;
-  },
-
-  filterAgendaGroups: function(groups, matchingAgendaItems) {
-    groups.map((agenda) => {
-      agenda.groups.map((group) => {
-        group.agendaitems = group.agendaitems.filter((item) => {
-          return matchingAgendaItems[item.get('id')];
-        });
-      });
-
-      agenda.groups = agenda.groups.filter((group) => {
-        return group.agendaitems.length > 0;
-      });
-    });
-
-    groups = groups.filter((agenda) => {
-      return agenda.groups.length > 0;
-    });
-    return groups;
-  },
-
-  actions: {
-    refresh() {
-      this._super(...arguments);
-      this.refresh();
-    },
-  },
+  }
 });

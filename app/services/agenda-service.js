@@ -144,6 +144,7 @@ export default Service.extend({
   },
 
   async createNewAgendaItem(selectedAgenda, subcase) {
+    const priorityToAssign = await selectedAgenda.get('lastAgendaitemPriority') + 1;
     const mandatees = await subcase.get('mandatees');
     const titles = mandatees.map((mandatee) => mandatee.get('title'));
     const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
@@ -156,6 +157,7 @@ export default Service.extend({
         .utc()
         .toDate(),
       subcase: subcase,
+      priority: priorityToAssign,
       agenda: selectedAgenda,
       title: subcase.get('title'),
       shortTitle: subcase.get('shortTitle'),
@@ -170,6 +172,7 @@ export default Service.extend({
     return agendaitem.save();
   },
 
+  // TODO: check deadcode
   parseGroups(groups, agendaitems) {
     let lastPrio = 0;
     let firstAgendaItem;
@@ -202,109 +205,25 @@ export default Service.extend({
     return { lastPrio, firstAgendaItem };
   },
 
-  async reduceComparison(combinedAgendaItems) {
-    return this.groupComparisonByMandatee(
-      combinedAgendaItems
-        .map((combinedItem) => this.addExtraAgendaItemProperties(combinedItem))
-        .filter((combinedItem) => combinedItem.left || combinedItem.right)
-        .sort((a, b) => (a.left && b.left ? a.left.priority - b.left.priority : 1))
-    );
-  },
-
-  setExtraAgendaItemProperties(agendaitem) {
-    let { minPriority, mandatees } = this.createMandateeListWithPriorities(agendaitem);
-
-    if (mandatees && mandatees !== []) {
-      return {
-        groupName: mandatees
-          .map((mandatee) => `${mandatee.title} (${mandatee.priority})`)
-          .join(', '),
-        groupPrio: minPriority,
-        mandatees: mandatees,
-        agendaitem: agendaitem,
-        priority: agendaitem.priority,
-      };
-    }
-    return {
-      groupName: null,
-      groupPrio: null,
-      mandatees: null,
-      agendaitem: agendaitem,
-      priority: agendaitem.priority,
-    };
-  },
-
-  createMandateeListWithPriorities(agendaitem) {
-    let mandatees = agendaitem.get('subcase.mandatees');
-    let priorities = [];
-    let minPriority = 0;
-    if (mandatees) {
-      mandatees = mandatees.sortBy('priority');
-      priorities = mandatees.map((item) => parseInt(item.priority));
-      minPriority = Math.min(...priorities);
-    }
-    return { minPriority, mandatees };
-  },
-
-  addExtraAgendaItemProperties(agendaitem) {
-    const { left, right } = agendaitem;
-    let mappedLeft, mappedRight;
-    if (left) {
-      mappedLeft = this.setExtraAgendaItemProperties(left);
-    }
-    if (right) {
-      mappedRight = this.setExtraAgendaItemProperties(right);
-    }
-    return { left: mappedLeft, right: mappedRight };
-  },
-
-  groupComparisonByMandatee(comparison) {
-    return comparison.reduce((groups, combinedItem) => {
-      const leftGroupOfCombinedItem = combinedItem.left ? combinedItem.left.groupName : null;
-      const rightGroupOfCombinedItem = combinedItem.right ? combinedItem.right.groupName : null;
-      const group = {
-        leftGroupName: leftGroupOfCombinedItem,
-        rightGroupName: rightGroupOfCombinedItem,
-        agendaitems: [combinedItem],
-      };
-      if (leftGroupOfCombinedItem === rightGroupOfCombinedItem) {
-        this.addToGroups(
-          groups,
-          {
-            ...group,
-            isSame: true,
-          },
-          (group) => group.leftGroupName === leftGroupOfCombinedItem
-        );
-      } else if (leftGroupOfCombinedItem) {
-        this.addToGroups(
-          groups,
-          {
-            ...group,
-            isSame: false,
-          },
-          (group) => group.leftGroupName === leftGroupOfCombinedItem
-        );
-      } else {
-        this.addToGroups(
-          groups,
-          {
-            ...group,
-            isSame: false,
-          },
-          (group) => group.rightGroupName === rightGroupOfCombinedItem
-        );
+  setGroupNameOnAgendaItems(agendaitems) {
+    let previousAgendaitemGroupName;
+    return agendaitems.map(async (item) => {
+      const mandatees = await item.get('mandatees');
+      if(item.isApproval) {
+        item.set('groupName', null);
+        return;
       }
-      return groups;
-    }, []);
-  },
-
-  addToGroups(groups, group, compareFunc) {
-    const foundGroup = groups.find(compareFunc);
-    if (!foundGroup) {
-      groups.push(group);
-    } else {
-      foundGroup.agendaitems.push(...group.agendaitems);
-    }
-  },
+      if(mandatees.length == 0){
+        item.set('groupName', "Geen toegekende ministers");
+        return ;
+      }
+      const currentAgendaitemGroupName = mandatees.map((mandatee)=> mandatee.title).join(', ');
+      if(currentAgendaitemGroupName != previousAgendaitemGroupName) {
+        previousAgendaitemGroupName = currentAgendaitemGroupName;
+        item.set('groupName', currentAgendaitemGroupName);
+      } else {
+        item.set('groupName', null);
+      }
+    })
+  }
 });

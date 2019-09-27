@@ -23,8 +23,8 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   }),
 
-  reAssignPriorities: task(function*(agendaitemGroup) {
-    yield agendaitemGroup.agendaitems.map((item) => {
+  reAssignPriorities: task(function*(agendaitems) {
+    yield agendaitems.map((item) => {
       if (isPresent(item.changedAttributes().priority)) {
         return item.save();
       }
@@ -51,37 +51,16 @@ export default Component.extend(isAuthenticatedMixin, {
       if (!subcase) {
         brokenAgendaItem.destroyRecord().then(() => {
           this.refresh(id);
+        });
+      }
+    },
+    reorderItems(itemModels) {
+      itemModels.map((item, index) => {
+        item.set('priority', index + 1);
       });
-      }
-    },
-
-    async reorderItems(agendaitemGroup, reOrderedAgendaitemGroup, itemDragged) {
-      if (this.isEditor) {
-        const firstItem = agendaitemGroup.agendaitems.get('firstObject');
-        const firstPrio = firstItem.get('priority');
-        const newIndex = reOrderedAgendaitemGroup.indexOf(itemDragged);
-
-        for (let i = 0; i < reOrderedAgendaitemGroup.get('length'); i++) {
-          const reOrderedAgendaitem = reOrderedAgendaitemGroup.objectAt(i);
-          const agendaitem = agendaitemGroup.agendaitems.find(
-            (item) => item.id === reOrderedAgendaitem.get('id')
-          );
-          const newPrio = i + firstPrio;
-          const draggedPrio = newIndex + firstPrio;
-          const agendaitemPrio = agendaitem.get('priority');
-          if (newPrio != draggedPrio) {
-            if (agendaitemPrio != newPrio) {
-              agendaitem.set('priority', newPrio);
-            }
-          } else {
-            if (agendaitemPrio != draggedPrio) {
-              agendaitem.set('priority', draggedPrio);
-            }
-          }
-        }
-        this.reAssignPriorities.perform(agendaitemGroup);
-        agendaitemGroup.set('agendaitems', agendaitemGroup.agendaitems.sortBy('priority'));
-      }
-    },
-  },
+      this.reAssignPriorities.perform(itemModels);
+      this.refresh();
+      this.set('agendaitems', itemModels);
+    }
+  }
 });

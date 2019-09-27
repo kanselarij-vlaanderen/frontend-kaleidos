@@ -392,12 +392,10 @@ ul {
 
 .sortable-item.is-dragging {
   transition-duration: 0s;
-  background: red;
   z-index: 10;
 }
 
 .sortable-item.is-dropping {
-  background: #f66;
   z-index: 10;
 }
 

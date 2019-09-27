@@ -5,7 +5,10 @@
   {{#if (not documentVersion.confidential)}}
     {{#if (not isEditingAccessLevel)}}
       <div {{action "toggleIsEditingAccessLevel"}}>
-        {{access-level-pill accessLevel=documentVersion.accessLevel}}
+        {{access-level-pill
+          accessLevel=documentVersion.accessLevel
+          shouldShowPills=documentVersion.confidential
+        }}
       </div>
     {{else}}
       <div class="vl-form__input" style="width:75%">
@@ -63,12 +66,14 @@
   </button>
   <a
     class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-    href={{await documentVersion.file.downloadLink}}
-    download={{concat
-      (await document.lastDocumentVersion.file.downloadLink)
+    href={{concat
+      (await documentVersion.file.downloadLink)
       "?name="
-      (await document.lastDocumentVersion.file.filename)
+      (await documentVersion.downloadFilename)
     }}
+    {{!-- download --}}
+    {{! 'download' attribute doesn't specify a filename, as this gets overruled by 
+    the filename received in the "Content-Disposition HTTP header" }}
   >
     <i
       class="vl-vi vl-vi-download-harddisk vl-button__icon"
