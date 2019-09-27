@@ -1,8 +1,8 @@
 import Component from '@ember/component';
-import { computed, observer } from '@ember/object';
+import { computed, observer, get } from '@ember/object';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
-import {alias  } from '@ember/object/computed';
+import { alias } from '@ember/object/computed';
 export default Component.extend({
   store: inject(),
   sessionService: inject(),
@@ -81,7 +81,7 @@ export default Component.extend({
         'show-as-remark': false,
       },
       sort: 'priority',
-      include: 'agenda,subcase,subcase.mandatees',
+      include: 'agenda,subcase,mandatees',
     });
   },
 
@@ -92,7 +92,7 @@ export default Component.extend({
   },
 
   async createComparisonList(leftAgendaitems, rightAgendaitems) {
-    const addedAgendaitems = this.get('addedAgendaitems')
+    const addedAgendaitems = this.get('addedAgendaitems');
     leftAgendaitems = [].concat(leftAgendaitems.toArray());
     rightAgendaitems = [].concat(rightAgendaitems.toArray());
 
@@ -114,14 +114,14 @@ export default Component.extend({
         continue;
       }
 
-      if(addedAgendaitems.indexOf(currentRight.id) >= 0) {
+      if (addedAgendaitems.indexOf(currentRight.id) >= 0) {
         combinedItems.push(EmberObject.create({ left: null, right: currentRight }));
         currentRight = null;
         continue;
       }
       const foundLeftItem = this.findItemBySubcase(currentLeft, rightAgendaitems);
 
-      if(!foundLeftItem) {
+      if (!foundLeftItem) {
         combinedItems.push(EmberObject.create({ left: currentLeft, right: null }));
         currentLeft = null;
         continue;
@@ -129,29 +129,33 @@ export default Component.extend({
 
       const foundRightItem = this.findItemBySubcase(currentRight, leftAgendaitems);
 
-      if(!foundRightItem) {
+      if (!foundRightItem) {
         combinedItems.push(EmberObject.create({ left: null, right: currentRight }));
         currentLeft = null;
         continue;
       }
 
-      // if(foundLeftItem) {
-      //   const foundLeftIndex = rightAgendaitems.indexOf(foundLeftItem);
-
-      // }
-
-
       combinedItems.push(EmberObject.create({ left: currentLeft, right: currentRight }));
-
-      
-      
       currentLeft = null;
       currentRight = null;
     }
-    return combinedItems;
+    return this.setCombinedGroupNames(combinedItems);
+  },
+
+  setCombinedGroupNames(list) {
+    list.map((combinedItem) => {
+      const leftGroupName = get(combinedItem, 'left.groupName');
+      const rightGroupName = get(combinedItem, 'right.groupName');
+      if (!leftGroupName && !rightGroupName) {
+        return;
+      }
+
+      combinedItem.set('groupName', leftGroupName || rightGroupName);
+    });
+    return list;
   },
 
   findItemBySubcase(item, list) {
     return list.find((possibleMatch) => possibleMatch.get('subcase.id') == item.get('subcase.id'));
-  }
+  },
 });
