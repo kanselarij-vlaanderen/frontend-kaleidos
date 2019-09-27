@@ -474,5 +474,6 @@
   "document-being-deleted": "Document wordt verwijderd.",
   "edit-session": "Vergadering wijzigen",
   "users-loading-text":"De gebruikers worden geladen..",
-  "generate-xml":"Genereer XML voor Belga"
+  "generate-xml":"Genereer XML voor Belga",
+  "delete-agendaitem": "Dit punt is reeds goedgekeurd. Bent u zeker dat u dit agendapunt wilt verwijderen?"
 }
