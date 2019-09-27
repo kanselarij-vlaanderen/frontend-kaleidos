@@ -6,7 +6,9 @@ import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import CONFIG from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
-
+import moment from "moment";
+import { later } from '@ember/runloop';
+const timeout = 60000;
 export default Controller.extend(isAuthenticatedMixin, {
   currentSession: inject(),
   session: inject(),
@@ -27,12 +29,40 @@ export default Controller.extend(isAuthenticatedMixin, {
     return this.get('selectedOption.route') == 'oc';
   }),
 
-  init() {
+  async init() {
     this._super(...arguments);
     document.addEventListener('wheel', () => {}, {
       capture: true,
       passive: true,
     });
+
+     this.startCheckingAlert();
+  },
+
+  async startCheckingAlert() {
+    const dateOfToday = moment()
+      .utc()
+      .format();
+    try {
+      const alerts = await this.store.query("alert", {
+        filter: {
+          ":gte:end-date": dateOfToday
+        },
+        sort: "-begin-date",
+        include: "type"
+      });
+      if (alerts.get("length") > 0) {
+        this.set('alert', alerts.get("firstObject"));
+      }
+      return null;
+    } catch (e) {
+      return null;
+    } finally {
+      later(this, () => {
+        this.startCheckingAlert();
+      }, timeout);
+    }
+
   },
 
   shouldNavigateObserver: on(
@@ -83,10 +113,10 @@ export default Controller.extend(isAuthenticatedMixin, {
     return role && role !== '' && role !== 'no-access';
   }),
 
-  type: computed('model', async function() {
-    const { model } = this;
-    if (model) {
-      const type = await model.get('type.label');
+  type: computed('alert', async function() {
+    const { alert } = this;
+    if (alert) {
+      const type = await alert.get('type.label');
       if (type === 'Waarschuwing') {
         return 'vl-alert--warning';
       } else if (type === 'Dringend') {
@@ -98,7 +128,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   actions: {
     close() {
-      this.set('model', null);
+      this.set('alert', null);
     },
 
     navigateToLogin() {

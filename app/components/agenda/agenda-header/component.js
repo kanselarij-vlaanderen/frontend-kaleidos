@@ -30,7 +30,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
-  hasMultipleAgendas: computed('agendas.@each',async function() {
+  hasMultipleAgendas: computed('agendas.@each', async function() {
     return this.agendas && this.agendas.then(agendas => agendas.length > 1);
   }),
 
@@ -90,64 +90,17 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       this.set('showWarning', false);
     },
 
-    async approveAgenda(session) {
+    async tryToApproveAgenda(session) {
       const isApprovable = await this.currentAgenda.get('isApprovable');
       if (!isApprovable) {
         this.set('showWarning', true);
       } else {
-        this.changeLoading();
-        let agendas = await this.get('agendas');
-        let agendaToLock = await agendas.find((agenda) => agenda.name == 'Ontwerpagenda');
-        if (agendaToLock) {
-          agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
-        }
-        let definiteAgendas = await this.get('definiteAgendas');
-        let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
-
-        if (!lastDefiniteAgenda) {
-          agendaToLock.set('name', CONFIG.alphabet[0]);
-        } else {
-          if (definiteAgendas) {
-            const agendaLength = definiteAgendas.length;
-
-            if (agendaLength && CONFIG.alphabet[agendaLength]) {
-              if (agendaLength < CONFIG.alphabet.get('length') - 1) {
-                agendaToLock.set('name', CONFIG.alphabet[agendaLength]);
-              }
-            } else {
-              agendaToLock.set('name', agendaLength + 1);
-            }
-          } else {
-            agendaToLock.set('name', agendas.get('length') + 1);
-          }
-        }
-
-        agendaToLock.set('isAccepted', true);
-        agendaToLock.set(
-          'modified',
-          moment()
-            .utc()
-            .toDate()
-        );
-        agendaToLock.save().then((agendaToApprove) => {
-          this.get('agendaService')
-            .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
-            .then(async newAgenda => {
-              const agendaItems = await agendaToLock.get('agendaitems');
-              const newNotYetOKItems = agendaItems.filter(agendaItem => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
-              await Promise.all(newNotYetOKItems.map(newNotYetOK => newNotYetOK.destroyRecord()));
-              return newAgenda;
-            })
-            .then((newAgenda) => {
-              this.changeLoading();
-              this.get('agendaService').sortAgendaItems(newAgenda);
-              this.get('agendaService').sortAgendaItems(agendaToLock);
-              this.set('sessionService.currentAgenda', newAgenda);
-              this.set('sessionService.selectedAgendaItem', null);
-              this.reloadRoute(newAgenda.get('id'));
-            });
-        });
+        await this.approveAgenda(session)
       }
+    },
+
+    async doApproveAgenda(session) {
+      await this.approveAgenda(session)
     },
 
     async lockAgenda() {
@@ -250,6 +203,15 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       this.set('releasingDocuments', false);
       this.currentSession.set('releasedDocuments', moment().utc().toDate());
       this.currentSession.save();
+    },
+    toggleEditingSession() {
+      this.toggleProperty('editingSession')
+    },
+    successfullyEdited() {
+      this.toggleProperty('editingSession')
+    },
+    cancelEditSessionForm() {
+      this.toggleProperty('editingSession')
     }
   },
 
@@ -260,4 +222,60 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   reloadRoute(id) {
     this.reloadRouteWithNewAgenda(id);
   },
+
+  async approveAgenda(session) {
+    this.changeLoading();
+    let agendas = await this.get('agendas');
+    let agendaToLock = await agendas.find((agenda) => agenda.name == 'Ontwerpagenda');
+    if (agendaToLock) {
+      agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
+    }
+    let definiteAgendas = await this.get('definiteAgendas');
+    let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
+
+    if (!lastDefiniteAgenda) {
+      agendaToLock.set('name', CONFIG.alphabet[0]);
+    } else {
+      if (definiteAgendas) {
+        const agendaLength = definiteAgendas.length;
+
+        if (agendaLength && CONFIG.alphabet[agendaLength]) {
+          if (agendaLength < CONFIG.alphabet.get('length') - 1) {
+            agendaToLock.set('name', CONFIG.alphabet[agendaLength]);
+          }
+        } else {
+          agendaToLock.set('name', agendaLength + 1);
+        }
+      } else {
+        agendaToLock.set('name', agendas.get('length') + 1);
+      }
+    }
+
+    agendaToLock.set('isAccepted', true);
+    agendaToLock.set(
+      'modified',
+      moment()
+        .utc()
+        .toDate()
+    );
+    agendaToLock.save().then((agendaToApprove) => {
+      this.get('agendaService')
+        .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
+        .then(async newAgenda => {
+          const agendaItems = await agendaToLock.get('agendaitems');
+          const newNotYetOKItems = agendaItems.filter(agendaItem => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
+          await Promise.all(newNotYetOKItems.map(newNotYetOK => newNotYetOK.destroyRecord()));
+          return newAgenda;
+        })
+        .then((newAgenda) => {
+          this.changeLoading();
+          this.get('agendaService').sortAgendaItems(newAgenda);
+          this.get('agendaService').sortAgendaItems(agendaToLock);
+          this.set('sessionService.currentAgenda', newAgenda);
+          this.set('sessionService.selectedAgendaItem', null);
+          this.reloadRoute(newAgenda.get('id'));
+        });
+    });
+
+  }
 });

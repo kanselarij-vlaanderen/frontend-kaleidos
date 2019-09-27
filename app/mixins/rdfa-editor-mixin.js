@@ -10,10 +10,12 @@ export default Mixin.create({
 		}
 		return this.editor.rootNode.innerHTML.htmlSafe();
 	}),
+
 	actions: {
 		expandEditor() {
 			this.set('isExpanded', true);
 		},
+
 		async handleRdfaEditorInit(editorInterface) {
 			this.set('editor', editorInterface);
 		},

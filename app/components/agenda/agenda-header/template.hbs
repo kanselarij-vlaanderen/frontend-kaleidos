@@ -50,7 +50,7 @@
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
             <button
               class="vl-button vl-button--narrow"
-              {{action "approveAgenda" currentSession}}
+              {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}
               {{t "approve-small"}}
@@ -138,6 +138,15 @@
                 </li>
                 {{#if isEditor}}
                   <li class="vl-popover__link-list__separator" role="none"></li>
+                  <li>
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action "toggleEditingSession"}}
+                      {{action attacher.hide}}
+                    >
+                      {{t "edit-session"}}
+                    </a>
+                  </li>
                   <li>
                     <a
                       class="vl-link vl-link--block"
@@ -258,10 +267,11 @@
   {{web-components/vl-modal-verify
     title=(t "warning-title")
     buttonType="warning"
-    verifyButtonText=(t "warning-text")
-    message=(t "approve-agenda-warning")
+    verifyButtonText=(t "continue")
+    message=(if (and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable))) (t "approve-agenda-passable") (t "approve-agenda-warning"))
     cancel=(action "cancel")
-    verify=(action "verify")
+    verify=(action "doApproveAgenda" currentSession)
+    showVerify=(and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable)))
   }}
 {{/if}}
 {{#if releasingDocuments}}
@@ -283,4 +293,17 @@
     cancel=(action "cancel")
     verify=(action "confirmReleaseDecisions")
   }}
+{{/if}}
+{{#if editingSession}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "edit-session")
+    closeModal=(action "cancelEditSessionForm")
+  }}
+    {{sessions/forms/edit-session
+      meeting=currentSession
+      successfullyEdited=(action "successfullyEdited")
+      cancelForm=(action "cancelEditSessionForm")
+    }}
+  {{/web-components/vl-modal}}
 {{/if}}

@@ -1,6 +1,5 @@
 import Route from "@ember/routing/route";
 import { inject } from "@ember/service";
-import moment from "moment";
 
 import ApplicationRouteMixin from "ember-simple-auth/mixins/application-route-mixin";
 
@@ -29,32 +28,6 @@ export default Route.extend(ApplicationRouteMixin, {
 
   _loadCurrentSession() {
     return this.currentSession.load().catch(() => this.session.invalidate());
-  },
-
-  async model() {
-    return await this.checkAlerts();
-  },
-
-  async checkAlerts() {
-    const dateOfToday = moment()
-      .utc()
-      .format();
-    try {
-      const alerts = await this.store.query("alert", {
-        filter: {
-          ":gte:end-date": dateOfToday,
-          ":lte:begin-date": dateOfToday
-        },
-        include: "type"
-      });
-      if (alerts.get("length") > 0) {
-        const alertToShow = alerts.get("firstObject");
-        return alertToShow;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
   },
 
   actions: {

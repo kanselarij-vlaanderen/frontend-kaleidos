@@ -66,17 +66,17 @@
           {{await item.subcaseName}}
         </span>
       {{/if}}
-      {{#if isAgendaItem}}
-        {{#if (and isEditor (await item.formallyOkToShow))}}
-          <span class="{{item.formallyOkToShow.pillClassNames}}">
-            {{item.formallyOkToShow.label}}
-          </span>
-        {{/if}}
-      {{/if}}
     </div>
   </div>
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
+      {{#if isAgendaItem}}
+        {{#if (and isEditor (await item.formallyOkToShow))}}
+          <span class="{{item.formallyOkToShow.pillClassNames}} vl-u-spacer-extended-right-s">
+            {{item.formallyOkToShow.label}}
+          </span>
+        {{/if}}
+      {{/if}}
       {{#if isEditor}}
         {{#if (await confidential)}}
           <span

@@ -1,6 +1,6 @@
 {{title (t "page-title")}}
 {{head-layout}}
-{{#if (await model)}}
+{{#if (await alert)}}
   <div
     class="vl-alert vl-alert-relative vl-alert-relative--center {{await type}}"
     role="alert"
@@ -16,11 +16,11 @@
     </button>
     <div class="vl-alert__content">
       <p class="vl-alert__title">
-        {{await model.title}}
+        {{await alert.title}}
       </p>
       <div class="vl-alert__message">
         <p>
-          {{await model.message}}
+          {{await alert.message}}
         </p>
       </div>
     </div>

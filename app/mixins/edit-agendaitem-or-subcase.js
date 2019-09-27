@@ -56,6 +56,13 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
 		async cancelEditing() {
 			const item = await this.get('item');
+			if(item.get('hasDirtyAttributes')) {
+				item.rollbackAttributes();
+			}
+			if(this.isSubcase) {
+				item.belongsTo('type').reload();
+				item.belongsTo('accessLevel').reload();
+			}
 			item.reload();
 			this.propertiesToSet.forEach(prop => item.notifyPropertyChange(prop));
 			this.toggleProperty('isEditing');

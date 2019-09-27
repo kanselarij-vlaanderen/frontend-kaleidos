@@ -8,6 +8,7 @@ export default Component.extend({
 	title: null,
 	showActions: true,
 	buttonType: 'danger',
+  showVerify: true,
 
 	verifyButtonText: computed('intl', function () {
 		return this.intl.t('delete');
