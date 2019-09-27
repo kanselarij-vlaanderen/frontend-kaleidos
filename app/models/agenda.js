@@ -41,7 +41,7 @@ export default Model.extend({
 
   lastAgendaitemPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems)=> {
-      return Math.max(agendaitems.map((item) => item.priority));
+      return Math.max(...agendaitems.map((item) => item.priority || 0));
     })
   }),
 
