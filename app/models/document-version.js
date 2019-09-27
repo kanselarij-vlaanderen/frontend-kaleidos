@@ -1,6 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import formatVersionedDocumentName from 'fe-redpencil/utils/format-versioned-document-name';
+import sanitize from 'sanitize-filename';
 
 const { Model, attr, belongsTo } = DS;
 
@@ -24,4 +25,9 @@ export default Model.extend({
   name: computed('document.name', async function() {
     return formatVersionedDocumentName(await this.get('document.name'), this.get('versionNumber'));
   }),
+  
+  downloadFilename: computed('name', 'file.extension', async function() {
+    let filename = `${await this.get('name')}.${await this.get('file.extension')}`;
+    return sanitize(filename, {replacement: '_'});
+  })
 });

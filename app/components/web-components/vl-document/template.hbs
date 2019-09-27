@@ -63,12 +63,14 @@
   </button>
   <a
     class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-    href={{await documentVersion.file.downloadLink}}
-    download={{concat
-      (await document.lastDocumentVersion.file.downloadLink)
+    href={{concat
+      (await documentVersion.file.downloadLink)
       "?name="
-      (await document.lastDocumentVersion.file.filename)
+      (await documentVersion.downloadFilename)
     }}
+    {{!-- 'download' attribute doesn't specify a filename, as this gets overruled by 
+    the filename received in the "Content-Disposition HTTP header" --}}
+    download 
   >
     <i
       class="vl-vi vl-vi-download-harddisk vl-button__icon"

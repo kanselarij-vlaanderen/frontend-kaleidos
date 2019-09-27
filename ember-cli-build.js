@@ -16,5 +16,11 @@ module.exports = function(defaults) {
     }
   });
 
+  app.import('node_modules/sanitize-filename/index.js', {
+    using: [
+      { transformation: 'cjs', as: 'sanitize-filename' }
+    ]
+  });
+  
   return app.toTree();
 };
