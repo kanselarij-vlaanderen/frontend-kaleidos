@@ -41,6 +41,7 @@ export default Component.extend({
       documentVersions: [],
       themes: [],
       approvals: [],
+      isApproval:true
     });
     return agendaitem.save();
   },
