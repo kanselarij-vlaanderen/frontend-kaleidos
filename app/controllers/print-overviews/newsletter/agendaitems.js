@@ -39,7 +39,7 @@ export default Controller.extend({
         breakpoints: ['mobile', 'tablet', 'desktop'],
         sortable: false,
         cellComponent: 'web-components/light-table/vl-content-toggle',
-        valuePath: 'subcase.newsletterInfo.finished',
+        valuePath: 'subcase.newsletterInfo.inNewsletter',
       },
       {
         width: '144px',

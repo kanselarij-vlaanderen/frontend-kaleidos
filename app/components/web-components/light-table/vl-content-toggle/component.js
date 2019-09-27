@@ -19,7 +19,7 @@ export default Component.extend({
 			created: moment().utc().toDate(),
 			title: await agendaitem.get('shortTitle'),
 			subtitle: await agendaitem.get('title'),
-			finished: value
+      inNewsletter: value
 		});
 		await news.save();
 	},
@@ -34,11 +34,11 @@ export default Component.extend({
 			if (key === "forPress") {
 				itemToUpdate = row.content;
 				itemToUpdate.set(`${this.key}`, this.value);
-			} else if (key === "subcase.newsletterInfo.finished") {
+			} else if (key === "subcase.newsletterInfo.inNewsletter") {
 				const subcase = await row.content.get('subcase');
 				itemToUpdate = await subcase.get('newsletterInfo');
 				if (itemToUpdate) {
-					itemToUpdate.set(`finished`, (await this.value));
+					itemToUpdate.set(`inNewsletter`, (await this.value));
 				} else {
 					itemToUpdate = await this.addNewsItem((await row.get('subcase')), row, this.value);
 				}

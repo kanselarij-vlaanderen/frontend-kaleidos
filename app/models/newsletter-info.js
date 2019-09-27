@@ -14,6 +14,7 @@ export default Model.extend({
   richtext: attr('string'),
   mandateeProposal: attr('string'),
   finished: attr('boolean'),
+  inNewsletter: attr('boolean'),
   publicationDate: attr('date'),
   publicationDocDate: attr('date'),
   remark: attr('string'),
@@ -21,7 +22,7 @@ export default Model.extend({
 
   meeting: belongsTo('meeting', { inverse: null }),
   documentVersions: hasMany('document-version', { inverse: null }),
-  
+
   displayRemark: computed('remark', 'intl', function() {
     const remark = this.get('remark');
     if (remark && remark != '') {
