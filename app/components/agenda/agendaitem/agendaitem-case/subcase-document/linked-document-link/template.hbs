@@ -19,15 +19,21 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
             {{#if (not document.confidential)}}
-              {{access-level-pill accessLevel=document.accessLevel}}
+              {{access-level-pill
+                accessLevel=document.accessLevel
+                shouldShowPills=document.confidential
+              }}
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if isEditor}}
               <button
                 class="vl-button vl-button--link-muted vl-button--icon"
-                {{action "unlinkDocument" document}}>
-                <span class="vl-icon vl-vi vl-vi-link-broken vl-u-text--error"></span>
+                {{action "unlinkDocument" document}}
+              >
+                <span
+                  class="vl-icon vl-vi vl-vi-link-broken vl-u-text--error"
+                ></span>
               </button>
             {{/if}}
           </div>

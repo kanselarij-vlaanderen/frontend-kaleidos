@@ -26,7 +26,10 @@
           <div class="vlc-toolbar__item vl-u-display-flex">
             {{#if (not isEditingAccessLevel)}}
               <div {{action "toggleIsEditingAccessLevel"}}>
-                {{access-level-pill accessLevel=document.accessLevel}}
+                {{access-level-pill
+                  accessLevel=document.accessLevel
+                  shouldShowPills=document.confidential
+                }}
               </div>
             {{else}}
               <div class="vl-form__input">
