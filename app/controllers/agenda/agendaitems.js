@@ -9,9 +9,17 @@ export default Controller.extend({
 	routing: inject('-routing'),
 	filter: null,
 	sessionService: inject(),
+	agendaService: inject(),
+	agendaitems: alias('model.agendaitems'),
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentSession: alias('sessionService.currentSession'),
+
+	sortedAgendaitems: computed('agendaitems.@each.priority', function() {
+		const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark).sortBy('priority');
+		this.agendaService.setGroupNameOnAgendaItems(actualAgendaitems)
+		return actualAgendaitems;
+	}),
 
 	agendaitemsClass: computed('routing.currentRouteName', function () {
 		const { routing } = this;

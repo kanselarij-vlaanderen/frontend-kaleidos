@@ -24,16 +24,15 @@ export default Route.extend( {
       if (!isEmpty(params.filter)) {
         agendaitems = agendaitems.filter((item) => !matchingAgendaItems[item.id])
       }
-      const actualAgendaitems = agendaitems.filter((item) => !item.showAsRemark).sortBy('priority');
       
       const announcements = agendaitems.filter((item) => item.showAsRemark);
-      this.agendaService.setGroupNameOnAgendaItems(actualAgendaitems);
+    
       this.set('sessionService.selectedAgendaItem', null);
 
       return hash({
         currentAgenda: agenda,
         announcements: (announcements || []).sortBy('priority'),
-        agendaitems: actualAgendaitems
+        agendaitems
       });
     }
   },

@@ -32,7 +32,7 @@
     onChange=(action "reorderItems") as |sortableGroup|
   }}
     <ol>
-      {{#each (await agendaitems) as |agendaitem|}}
+      {{#each agendaitems as |agendaitem|}}
         {{#if agendaitem.groupName}}
           <div class="vlc-list-section-header">
             {{agendaitem.groupName}}
