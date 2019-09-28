@@ -105,10 +105,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       const documentVersion = await this.get('document.lastDocumentVersion');
       await documentVersion.save();
       const item = await this.get('item');
+      const itemType = item.get('constructor.modelName');
       const subcase = await item.get('subcase');
       const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
 
-      if (subcase) {
+      if (itemType !== "decision" && subcase) {
         await this.attachDocumentVersionsToModel([documentVersion], subcase).then(item => item.save());
       } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
         await this.attachDocumentVersionsToModel([documentVersion], agendaitemsOnDesignAgenda).then(item => item.save());
@@ -118,6 +119,8 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       await item.save().then(() => {
         if(subcase) this.resetFormallyOk();
       });
+      this.set('isLoading', false);
+      this.set('isUploadingNewVersion', false);
     },
 
     cancel() {

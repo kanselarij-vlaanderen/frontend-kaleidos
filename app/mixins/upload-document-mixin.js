@@ -70,7 +70,7 @@ export default Mixin.create({
     const latestVersionNumber = document
       ? (await document.get('lastDocumentVersion.versionNumber')) || 0
       : 0;
-    let accessLevel = (document ? document.accessLevel : null) || this.defaultAccessLevel;
+    let accessLevel = (document ? (await document.get('accessLevel')) : null) || this.defaultAccessLevel;
     return this.store.createRecord('document-version', {
       document, // Optional
       created,
