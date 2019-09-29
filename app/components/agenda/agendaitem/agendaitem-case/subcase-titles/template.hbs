@@ -22,7 +22,7 @@
           {{t "text"}}
         {{/if}}
       </h2>
-    </div>      
+    </div>
     {{#if isEditor}}
       <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link" {{action "toggleIsEditing"}}>
@@ -87,9 +87,6 @@
             class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
           ></span>
         {{/if}}
-      {{/if}}
-      {{#if (not (await confidential))}}
-        {{access-level-pill accessLevel=accessLevel}}
       {{/if}}
     </div>
   </div>

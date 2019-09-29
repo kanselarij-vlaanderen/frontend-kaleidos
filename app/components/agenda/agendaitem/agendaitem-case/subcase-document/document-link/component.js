@@ -17,10 +17,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   isEditing: false,
   documentToDelete: null,
 
-  preferredAccessLevel:computed('document.accessLevel', function() {
-    return this.document.accessLevel;
-  }),
-
   aboutToDelete: computed('document.aboutToDelete', function() {
     if (this.document) {
       if (this.document.get('aboutToDelete')) {
@@ -58,10 +54,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       }))
   },
 
-  resetPreferredAccessLevel: async function() {
-    this.set('preferredAccessLevel', await this.document.get('accessLevel'));
-  },
-
   actions: {
     showVersions() {
       this.toggleProperty('isShowingVersions');
@@ -74,11 +66,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     async saveChanges() {
-      if (this.preferredAccessLevel) {
-        await this.document.set('accessLevel', this.preferredAccessLevel);
-      }
       await this.document.save();
-      this.set('isEditingAccessLevel',false);
       this.set('isEditing', false);
     },
 
@@ -156,18 +144,5 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
         documentVersion.save();
       }))
     },
-
-    chooseAccessLevel(accessLevel) {
-      this.set('preferredAccessLevel', accessLevel);
-    },
-
-    toggleIsEditingAccessLevel() {
-      if (this.get('isEditor')) {
-        if (this.isEditingAccessLevel) {
-          this.resetPreferredAccessLevel();
-        }
-        this.toggleProperty('isEditingAccessLevel');
-      }
-    },
-  },
+  }
 });

@@ -59,6 +59,17 @@ export default Model.extend({
     });
   }),
 
+  storeAccessLevel: async function(accessLevel){
+    this.set('accessLevel', accessLevel);
+    let versions = await this.get('documentVersions');
+    let promises = versions.map((version) => {
+      version.set('accessLevel', accessLevel);
+      return version.save();
+    });
+    promises.push(this.save());
+    return Promise.all(promises);
+  },
+
   checkAdded: computed('uri', 'addedDocuments.@each', function() {
     if (this.addedDocuments) return this.addedDocuments.includes(this.get('uri'));
   }),
