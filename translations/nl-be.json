@@ -475,5 +475,6 @@
   "edit-session": "Vergadering wijzigen",
   "users-loading-text":"De gebruikers worden geladen..",
   "generate-xml":"Genereer XML voor Belga",
-  "delete-agendaitem": "Dit punt is reeds goedgekeurd. Bent u zeker dat u dit agendapunt wilt verwijderen?"
+  "delete-agendaitem": "Dit punt is reeds goedgekeurd. Bent u zeker dat u dit agendapunt wilt verwijderen?",
+  "open-note":"Nota openen"
 }

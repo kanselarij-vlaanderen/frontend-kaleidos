@@ -25,7 +25,6 @@ export default Model.extend({
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
 
-
 	type: belongsTo('document-type'),
   accessLevel: belongsTo('access-level'),
   signedDecision: belongsTo('decision', { inverse: null }),
