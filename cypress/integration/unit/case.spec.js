@@ -6,7 +6,7 @@ context('Case test', () => {
     cy.login('Admin')
   })
 
-  it('should create a new case and add a subcase', () => {
+  it.only('should create a new case and add a subcase', () => {
 
     cy.server()
     cy.route('GET', '/cases?**').as('getCases');
@@ -22,7 +22,7 @@ context('Case test', () => {
     const subcaseType='In voorbereiding';
     const subcaseName='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(true, caseTitleShort).then((caseId) => {
+    cy.createCase(false, caseTitleShort).then((caseId) => {
       cy.get('.vl-alert').contains('Gelukt');
     });
 
@@ -43,10 +43,13 @@ context('Case test', () => {
 
     //Add the themes
     cy.addSubcaseThemes([0, 5 , 10]);
-    cy.addSubcaseThemes(['Energie', 'haven' , 'Gezin']);
+    cy.addSubcaseThemes(['Energie', 'Jeugd' , 'Gezin']);
 
     //Add the mandatees
     cy.addSubcaseMandatee(1, 0, 0);
+    cy.addSubcaseMandatee(2, 0, 0);
+
+    cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR.270919/1', fileType: 'Nota'}]);
 
   });
 

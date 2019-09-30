@@ -25,16 +25,16 @@ context('Full test', () => {
 
     //#endregion
 
-    //#region create the meeting/agenda
     const plusMonths = 1;
     const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 15).set('hour', 15).set('minute', 15);
+
+    //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then((meetingId) => {
       cy.get('.vl-alert').contains('Gelukt');
       cy.wait('@createNewAgenda',{ timeout: 20000 });
       cy.wait('@createNewAgendaItems',{ timeout: 20000 });
-      // cy.deleteAgenda(agendaDate, meetingId);
 
     });
 
@@ -42,18 +42,18 @@ context('Full test', () => {
 
     //#region create the 1st case and subcase
 
-    let caseTitleShort= testId + 'Cypress test dossier 1';
-    let type= 'Nota';
-    let newSubcaseTitleShort= caseTitleShort + ' procedure';
-    let subcaseTitleLong= testId + 'Cypress test voor het aanmaken van een dossier (1) en procedurestap';
-    let subcaseType='In voorbereiding';
-    let subcaseName='Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const case_1_TitleShort= testId + 'Cypress test dossier 1';
+    const type_1= 'Nota';
+    const newSubcase_1_TitleShort= case_1_TitleShort + ' procedure';
+    const subcase_1_TitleLong= testId + 'Cypress test voor het aanmaken van een dossier (1) en procedurestap';
+    const subcase_1_Type='In voorbereiding';
+    const subcase_1_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, caseTitleShort).then((caseId) => {
+    cy.createCase(false, case_1_TitleShort).then((caseId) => {
       cy.get('.vl-alert').contains('Gelukt');
     });
 
-    cy.addSubcase(type,newSubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName).then((subcaseId) => {
+    cy.addSubcase(type_1,newSubcase_1_TitleShort,subcase_1_TitleLong, subcase_1_Type, subcase_1_Name).then((subcaseId) => {
       cy.get('.vl-alert').contains('Gelukt');
     });
     
@@ -66,33 +66,38 @@ context('Full test', () => {
 
 
     //Change the access level
-    cy.changeSubcaseAccessLevel(caseTitleShort, true, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(case_1_TitleShort, true, 'Intern Overheid');
 
     //Add the themes
     cy.addSubcaseThemes([0, 5 , 10]);
-    cy.addSubcaseThemes(['Energie', 'haven' , 'Gezin']);
+    cy.addSubcaseThemes(['Energie', 'Jeugd' , 'Gezin']);
 
     //Add the mandatees
     cy.addSubcaseMandatee(0, 0, 0);
 
+    cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota'}]);
+
+    cy.get('.vlc-toolbar__item').within(() => {
+      cy.contains('Documenten').click();
+    })
     cy.proposeSubcaseForAgenda(agendaDate);
 
   //#endregion
 
-  //#region create the 2nd case and subcase
+    //#region create the 2nd case and subcase
 
-    caseTitleShort= testId + 'Cypress test dossier 2';
-    type= 'Nota';
-    newSubcaseTitleShort= caseTitleShort + ' procedure';
-    subcaseTitleLong= testId + 'Cypress test voor het aanmaken van een dossier (2) en procedurestap';
-    subcaseType='In voorbereiding';
-    subcaseName='Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const case_2_TitleShort= testId + 'Cypress test dossier 2';
+    const type_2= 'Nota';
+    const newSubcase_2_TitleShort= case_2_TitleShort + ' procedure';
+    const subcase_2_TitleLong= testId + 'Cypress test voor het aanmaken van een dossier (2) en procedurestap';
+    const subcase_2_Type='In voorbereiding';
+    const subcase_2_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, caseTitleShort).then((caseId) => {
+    cy.createCase(true, case_2_TitleShort).then((caseId) => {
       cy.get('.vl-alert').contains('Gelukt');
     });
 
-    cy.addSubcase(type,newSubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName).then((subcaseId) => {
+    cy.addSubcase(type_2,newSubcase_2_TitleShort,subcase_2_TitleLong, subcase_2_Type, subcase_2_Name).then((subcaseId) => {
       cy.get('.vl-alert').contains('Gelukt');
     });
     
@@ -105,34 +110,33 @@ context('Full test', () => {
 
 
     //Change the access level
-    // cy.changeSubcaseAccessLevel(caseTitleShort, true, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(case_2_TitleShort, false, 'Intern Overheid');
 
     //Add the themes
     cy.addSubcaseThemes([2, 4 , 6]);
-    // cy.addSubcaseThemes(['Energie', 'haven' , 'Gezin']);
 
     //Add the mandatees
     cy.addSubcaseMandatee(1, 0, 0);
-    // cy.addSubcaseMandatee(2, 0, 0);
+    cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
-  //#endregion
+    //#endregion
 
-  //#region create the 3d case and subcase
+    //#region create the 3d case and subcase
 
-    caseTitleShort= testId + 'Cypress test dossier 3';
-    type= 'Mededeling';
-    newSubcaseTitleShort= caseTitleShort + ' procedure';
-    subcaseTitleLong= testId + 'Cypress test voor het aanmaken van een dossier (2) en procedurestap';
-    subcaseType='In voorbereiding';
-    subcaseName='Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const caseTitle_3_Short= testId + 'Cypress test dossier 3';
+    const type_3= 'Mededeling';
+    const newSubcase_3_TitleShort= caseTitle_3_Short + ' procedure';
+    const subcase_3_TitleLong= testId + 'Cypress test voor het aanmaken van een dossier (3) en procedurestap';
+    const subcase_3_Type='In voorbereiding';
+    const subcase_3_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, caseTitleShort).then((caseId) => {
+    cy.createCase(true, caseTitle_3_Short).then((caseId) => {
       cy.get('.vl-alert').contains('Gelukt');
     });
 
-    cy.addSubcase(type,newSubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName).then((subcaseId) => {
+    cy.addSubcase(type_3,newSubcase_3_TitleShort,subcase_3_TitleLong, subcase_3_Type, subcase_3_Name).then((subcaseId) => {
       cy.get('.vl-alert').contains('Gelukt');
     });
     
@@ -143,52 +147,52 @@ context('Full test', () => {
     })
     cy.wait('@getCaseSubcases', { timeout: 12000 });
 
-    cy.proposeSubcaseForAgenda(agendaDate);
-
-
+    
     //Change the access level
-    // cy.changeSubcaseAccessLevel(caseTitleShort, true, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(caseTitle_3_Short, false, 'Intern Overheid');
 
     //Add the themes
-    // cy.addSubcaseThemes([2, 4 , 6]);
-    // cy.addSubcaseThemes(['Energie', 'haven' , 'Gezin']);
+    // cy.addSubcaseThemes([8, 15 , 20, 25]); //no themes for a mededeling
 
     //Add the mandatees
-    // cy.addSubcaseMandatee(1, 0, 0);
-    // cy.addSubcaseMandatee(2, 0, 0);
+    // cy.addSubcaseMandatee(2, 0, 0); //no mandatees for a mededeling
 
-  //#endregion
-  
-  //#region check and approve the agenda > A
-  cy.openAgendaForDate(agendaDate);
-  cy.contains('Documenten').click();
-  cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
+    cy.proposeSubcaseForAgenda(agendaDate);
+    //#endregion
+    
+    //#region check and approve the agenda > A
+    cy.openAgendaForDate(agendaDate);
+    
+    cy.setFormalOkOnAllItems();
+    //TODO temp
+    // const case_2_TitleShort= 'Cypress test dossier 2';
 
-  //#endregion
+    
+    cy.approveCoAgendaitem(case_2_TitleShort);
 
-  //TODO temp to clean up data, implement db restore after test completed ?
-  //#region delete agenda
-  // cy.deleteAgenda(agendaDate);
-  //#endregion
-  
+    // cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
+    // cy.approveDesignAgenda();
+    //#endregion
 
-  //#endregion
+    //TODO Clean up data, implement db restore after test completed ?
 
-  //#region create the 4th case and subcase
+    //#endregion
 
-  //#endregion
+    //#region create the 4th case and subcase
 
-  //#region create the 5th case and subcase
+    //#endregion
 
-  //#endregion
+    //#region create the 5th case and subcase
 
-  //#region create the 6th case and subcase
+    //#endregion
 
-  //#endregion
+    //#region create the 6th case and subcase
 
-  //#region check and approve the agenda > B
+    //#endregion
 
-  //#endregion
+    //#region check and approve the agenda > B
+
+    //#endregion
 
 
   });

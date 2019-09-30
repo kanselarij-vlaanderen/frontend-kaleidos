@@ -5,7 +5,7 @@ context('Add files to an agenda', () => {
       cy.login('Admin')
     });
   
-    it('should open an agenda and add document to it', () => {
+    it('should open an agenda and add documents to it', () => {
       cy.server();
       cy.route('POST', '/agendas').as('createNewAgenda');
       cy.route('POST', '/agendaitems').as('createNewAgendaItems');
@@ -20,7 +20,7 @@ context('Add files to an agenda', () => {
         cy.wait('@createNewAgendaItems',{ timeout: 20000 });
 
         cy.openAgendaForDate(agendaDate);
-        cy.contains('Documenten').click();
+        
         cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
         // cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'txt', newFileName: 'testtxt', fileType: 'Decreet'}]);
     

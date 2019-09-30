@@ -7,7 +7,6 @@ context('Agenda tests', () => {
 
   it('should create a new agenda and then delete it', () => {
     cy.server();
-    // cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
     cy.route('POST', '/agendaitems').as('createNewAgendaItems');
 
@@ -22,5 +21,12 @@ context('Agenda tests', () => {
 
     });
   });
+
+  it.only('should set formal ok on all agendaitems', () => {
+    const agendaDate = Cypress.moment().set('month', 10).set('date', 2).set('hour', 16).set('minute', 16);
+    cy.openAgendaForDate(agendaDate);
+    cy.setFormalOkOnAllItems();
+    cy.approveDesignAgenda();
+  })
 
 });

@@ -106,10 +106,10 @@ Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
 
 Cypress.Commands.add('openAgendaForDate', (agendaDate) => {
   const searchDate = agendaDate.date()+ '/' +(agendaDate.month()+1) + '/' + agendaDate.year();
-  cy.route('GET', `/meetings/**`).as('getMeetings')
+  cy.route('GET', '/meetings/**').as('getMeetings');
 
   cy.visit('');
-  cy.get('.vlc-input-field-group-wrapper--inline').within(() => {
+  cy.get('.vlc-input-field-group-wrapper--inline', { timeout: 10000 }).should('exist').within(() => {
     cy.get('.vl-input-field').type(searchDate);
     cy.get('.vl-button').click();
   });
@@ -136,7 +136,138 @@ Cypress.Commands.add('deleteAgenda', (agendaDate, meetingId) => {
     .click()
     .wait('@deleteMeeting')
     .get('.vl-alert').contains('Gelukt');
-})
+});
+
+Cypress.Commands.add('setFormalOkOnAllItems', () => {
+  cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
+    cy.contains('Overzicht').click();
+  });
+  cy.get('.vl-title--h3').contains(`Nota's`).parent().within(() => {
+    cy.get('.vl-link').contains('Wijzigen').should('exist').click();
+  });
+  
+  cy.get('.vlc-agenda-items__sub-item').as('agendaItemsAndRemarks');
+  cy.get('@agendaItemsAndRemarks').each((item) => {
+
+    cy.get(item).within(() => {
+      cy.get('.ember-power-select-selected-item').click();
+      he
+    });
+    cy.contains('Formeel OK').click();
+  });
+
+  cy.get('.vl-title--h3').contains(`Nota's`).parent().within(() => {
+    cy.get('.vl-link').contains('Wijzigen').should('exist').click();
+  });
+});
+
+Cypress.Commands.add('approveCoAgendaitem', (caseShortTitle) => {
+  cy.route('GET', '/ise-codes/**').as('getIseCodes');
+  cy.route('GET', '/government-fields/**').as('getGovernmentFields');
+  cy.route('PATCH', '/approvals/**').as('patchApprovals');
+  cy.route('PATCH', '/agendas/**').as('patchAgendas');
+
+  // cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
+  //   cy.contains('Overzicht').click();
+  // });
+
+  cy.contains(caseShortTitle).click();
+  cy.wait('@getIseCodes', { timeout: 20000 });
+  cy.wait('@getGovernmentFields', { timeout: 20000 });
+  cy.get('.vlc-panel-layout__main-content').within(() => {
+
+    cy.get('.vl-u-spacer-extended-bottom-l').as('detailBlocks');
+    cy.get('@detailBlocks').eq(4).within(() => {
+      cy.contains('Acties').should('exist');
+      cy.contains('Wijzigen').click();
+      cy.get('.vl-data-table > tbody > tr').as('mandatees');
+      cy.get('@mandatees').each((item) => {
+        cy.get(item).within(() => {
+          cy.get('.vl-checkbox', { timeout: 10000 }).should('exist').click();
+        })
+      });
+
+      cy.get('.vl-action-group > .vl-button--narrow')
+        .contains('Opslaan')
+        .click();
+    });
+  });
+  cy.wait('@patchApprovals', { timeout: 10000 }).then(() => {
+    cy.get('.vl-alert').contains('Gelukt');
+  });
+  cy.wait('@patchAgendas', { timeout: 10000 }).then(() => {
+    cy.get('.vl-alert').contains('Gelukt');
+  });
+});
+
+Cypress.Commands.add('approveDesignAgenda', () => {
+  cy.route('PATCH', '/agendas/**').as('patchAgenda');
+  cy.route('POST', '/agendas').as('createNewDesignAgenda');
+  cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
+  cy.route('POST', '/agenda-sort?**').as('createSorting');
+  cy.get('.vlc-toolbar').within(() => {
+    cy.get('.vl-button--narrow')
+    .contains('Ontwerpagenda')
+    .click();
+  });
+
+  cy.wait('@patchAgenda', { timeout: 12000 });
+  cy.wait('@createNewDesignAgenda', { timeout: 12000 });
+  cy.wait('@createApprovedAgenda', { timeout: 12000 });
+  cy.wait('@createSorting', { timeout: 12000 });
+});
+
+/**
+ * Creates a remark for an agenda and attaches any file in the files array
+ * 
+ * @param {String} title - The title of the remark
+ * @param {String} remark - The remark
+ * @param {{folder: String, fileName: String, fileExtension: String}[]} files
+ * 
+ */
+Cypress.Commands.add('addRemarkToAgenda', (title, remark, files) => {
+
+  cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
+    .contains('Acties')
+    .click();
+  cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
+    .contains('Mededeling toevoegen')
+    .click();
+
+    cy.get('.vl-modal-dialog').as('dialog').within(() =>{
+      cy.get('.vlc-input-field-block').as('newRemarkForm').should('have.length', 3);
+  
+    });
+  
+    //Set title
+    cy.get('@newCaseForm').eq(1).within(() => {
+      cy.get('.vl-input-field').click().type(title);
+    });
+    
+    //Set remark
+    cy.get('@newCaseForm').eq(1).within(() => {
+      cy.get('.vl-textarea').click().type(remark);
+    });
+
+    //TODO add files, new command for this dialog
+  
+    cy.get('@dialog').within(()=> {
+      cy.get('.vlc-toolbar__item > .vl-button').contains('Dossier aanmaken').click();
+    });
+  
+});
+
+Cypress.Commands.add('addAgendaitemToAgenda', () => {
+
+  cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
+    .contains('Acties')
+    .click();
+  cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
+    .contains('Mededeling toevoegen')
+    .click();
+
+  
+});
 
 //#endregion
 
@@ -354,20 +485,21 @@ Cypress.Commands.add('addSubcaseMandatee', (mandateeNumber, fieldNumber, domainN
 
   cy.get('.vl-title--h4').contains(`Ministers en beleidsvelden`).parents('.vl-u-spacer-extended-bottom-l').as('subcaseMandatees');
   cy.get('@subcaseMandatees').within(() => {
-    cy.get('a').click();
+    cy.get('.vl-u-spacer-extended-left-s', { timeout: 5000 }).should('exist').then(() => {
+      cy.contains('Wijzigen').click();
+    });
   });
 
   cy.get('.vlc-box a').contains('Minister toevoegen').click();
   cy.get('.mandatee-selector-container').children('.ember-power-select-trigger').click();
   cy.wait('@getMandatees', { timeout: 12000 });
-  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+  cy.get('.ember-power-select-option', { timeout: 10000 }).should('exist').then(() => {
     cy.get('.ember-power-select-option').eq(mandateeNumber).click();
   });
-  // cy.get('.ember-power-select-option').should('not.have.length', 1);
-  // cy.get('.ember-power-select-option').eq(mandateeNumber).click();
-  cy.wait('@getIseCodes', { timeout: 12000 });
-  cy.wait('@getGovernmentFields', { timeout: 12000 });
-  cy.get('.vlc-checkbox-tree').eq(fieldNumber).within(() => {
+  //TODO loading the isecodes and government fields takes time to load, are they be cached for reuse ?
+  cy.wait('@getIseCodes', { timeout: 20000 });
+  cy.wait('@getGovernmentFields', { timeout: 20000 });
+  cy.get('.vlc-checkbox-tree', { timeout: 20000 }).should('exist').eq(fieldNumber).within(() => {
     cy.get('.vl-checkbox').eq(domainNumber).click();
   });
   cy.get('.vlc-toolbar').within(() => {
@@ -420,7 +552,10 @@ Cypress.Commands.add('addDocVersion', (files) => {
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
   cy.route('POST', 'documents').as('createNewDocument');
   cy.route('PATCH', '**').as('patchModel');
-  
+
+  cy.get('.vlc-toolbar__item').within(() => {
+    cy.contains('Documenten').click();
+  })
   cy.contains('Documenten toevoegen').click();
   cy.get('.vl-modal-dialog').as('fileUploadDialog');
 
@@ -449,8 +584,6 @@ Cypress.Commands.add('addDocVersion', (files) => {
       cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
         cy.contains(file.fileType).click();
       });
-      // cy.get('.ember-power-select-option').should('not.have.length', 1);
-      // cy.get('.ember-power-select-option').contains(file.fileType).click();
     }
 
     cy.get('@fileUploadDialog').within(() => {
@@ -477,7 +610,7 @@ Cypress.Commands.add('uploadFile', (folder, fileName, extension) => {
 
   const fileFullName = fileName + '.' + extension;
   const filePath = folder + '/' + fileFullName;
-  //TODO pdf is uploaded but all pages are blank, encoding issue ? 
+  //TODO pdf is uploaded but all pages are blank, encoding issue? Irrelevant for test
   // let mimeType = 'text/plain';
   // if(extension == 'pdf'){
   //   mimeType = 'application/pdf';
@@ -499,11 +632,11 @@ const getTranslatedMonth = (month) => {
     case 0:
       return 'januari';
     case 1:
-        return 'februari';
+      return 'februari';
     case 2:
-        return 'maart';
+      return 'maart';
     case 3:
-        return 'april';
+      return 'april';
     case 4:
       return 'mei';
     case 5:
