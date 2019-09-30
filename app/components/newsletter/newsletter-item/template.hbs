@@ -2,7 +2,7 @@
   {{web-components/vl-loader text=(t "newletter-loading-text")}}
 {{else if (not isEditing)}}
   {{#if (not allowEditing)}}
-    {{#if (await agendaitem.subcase.newsletterInfo.finished)}}
+    {{#if (await agendaitem.subcase.newsletterInfo.inNewsletter)}}
       {{newsletter/newsletter-item/item-content
         allowEditing=allowEditing
         index=index
