@@ -59,8 +59,17 @@ export default Component.extend(isAuthenticatedMixin, {
         item.set('priority', index + 1);
       });
       this.reAssignPriorities.perform(itemModels);
-      this.refresh();
+      // this.refresh();
       this.set('agendaitems', itemModels);
+    },
+
+    reorderAnnouncements(itemModels) {
+      itemModels.map((item, index) => {
+        item.set('priority', index + 1);
+      });
+      this.reAssignPriorities.perform(itemModels);
+      // this.refresh();
+      this.set('announcements', itemModels);
     }
   }
 });
