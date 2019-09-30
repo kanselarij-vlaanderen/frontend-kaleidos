@@ -18,9 +18,7 @@ export default Mixin.create(isAuthenticatedMixin, {
       },
     };
     if (this.shouldFilterRemarks) {
-      filter['subcase'] = {
-        'show-as-remark': false,
-      };
+      filter['show-as-remark']  =  false;
     }
     this.set('filter', filter);
     return this.store

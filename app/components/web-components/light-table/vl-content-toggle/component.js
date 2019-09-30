@@ -33,7 +33,7 @@ export default Component.extend({
 			let itemToUpdate;
 			if (key === "forPress") {
 				itemToUpdate = row.content;
-				itemToUpdate.set(`${this.key}`, this.value);
+				itemToUpdate.set(`${this.key}`, (await this.value));
 			} else if (key === "subcase.newsletterInfo.inNewsletter") {
 				const subcase = await row.content.get('subcase');
 				itemToUpdate = await subcase.get('newsletterInfo');
