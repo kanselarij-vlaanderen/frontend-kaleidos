@@ -10,7 +10,7 @@ export default Mixin.create({
   async parseAgendaItems(agenda, session) {
     const agendaitems = (await agenda.get('agendaitems')).filter((item) => item);
     const agendaitemsToGroup = agendaitems.filter((item) => !item.get('showAsRemark'));
-    await this.agendaService.assignDirtyPrioritiesToAgendaitems(agenda);
+    // await this.agendaService.assignDirtyPrioritiesToAgendaitems(agenda);
     const announcements = agendaitems.filter((item) => item.get('showAsRemark'));
     const groups = await this.agendaService.newSorting(session, agenda.get('id'));
 
@@ -75,6 +75,7 @@ export default Mixin.create({
     const definite = params.definite;
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
+    const agendaitems = (await agenda.get('agendaitems')).filter((item) => !item.showAsRemark).sortBy('priority');
     const { groups, announcements, lastPrio, minutesApproval, brokenAgendaItems } = await this.parseAgendaItems(
       agenda,
       session,
@@ -85,6 +86,7 @@ export default Mixin.create({
     return hash({
       currentAgenda: agenda,
       groups: groupsArray,
+      agendaitems,
       announcements,
       lastPrio,
       meeting: session,

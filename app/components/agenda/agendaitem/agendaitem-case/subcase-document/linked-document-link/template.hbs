@@ -20,7 +20,7 @@
           <div class="vlc-toolbar__item">
             {{#if (not document.confidential)}}
               {{access-level-pill
-                accessLevel=document.accessLevel
+                item=document
                 shouldShowPills=document.confidential
               }}
             {{/if}}

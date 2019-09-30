@@ -7,5 +7,5 @@ export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, 
   routeNamePrefix: 'newsletter',
   sort: 'priority',
   include: 'subcase',
-  shouldFilterRemarks: false,
+  shouldFilterRemarks: true,
 });

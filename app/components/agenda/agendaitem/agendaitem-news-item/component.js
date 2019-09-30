@@ -55,6 +55,6 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 				this.set('isLoading', false);
 				this.toggleProperty('isEditing');
 			})
-		}
+		},
 	}
 });

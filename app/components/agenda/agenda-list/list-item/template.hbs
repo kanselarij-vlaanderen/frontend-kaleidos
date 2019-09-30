@@ -22,14 +22,20 @@
 </span>
 <h4 class="vlc-agenda-items__subject">
   <pre>
-    {{agendaitem.shortTitle}}
+    {{#if agendaitem.shortTitle}}
+      {{agendaitem.shortTitle}}
+    {{else}}
+      {{agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
+    {{/if}}
   </pre>
 </h4>
 {{#if (not selectedAgendaItem)}}
-  {{#if (await agendaitem.subcase)}}
-    <p class="vl-u-text">
-      {{agendaitem.title}}
-    </p>
+  {{#if (await agendaitem.subcase)}} {{!-- What is this test for? Determining if announcement better through "showAsRemark"? --}}
+    {{#if agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
+      <p class="vl-u-text">
+        {{agendaitem.title}}
+      </p>
+    {{/if}}
   {{/if}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">

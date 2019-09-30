@@ -31,7 +31,7 @@ export default Route.extend( {
 
       return hash({
         currentAgenda: agenda,
-        announcements: (announcements || []).sortBy('priority'),
+        announcements,
         agendaitems
       });
     }

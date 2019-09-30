@@ -24,50 +24,11 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
-            {{#if (not isEditingAccessLevel)}}
-              <div {{action "toggleIsEditingAccessLevel"}}>
-                {{access-level-pill
-                  accessLevel=document.accessLevel
-                  shouldShowPills=document.confidential
-                }}
-              </div>
-            {{else}}
-              <div class="vl-form__input">
-                {{utils/model-selector
-                  modelName="access-level"
-                  allowClear=true
-                  searchField="label"
-                  propertyToShow="label"
-                  readOnly=document.confidential
-                  sortField="label"
-                  selectedItems=(await preferredAccessLevel)
-                  selectModel=(action "chooseAccessLevel")
-                }}
-              </div>
-              <button
-                class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                {{action "saveChanges"}}
-              >
-                <i
-                  class="vl-vi vl-vi-save vl-button__icon"
-                  aria-hidden="true"
-                ></i>
-                <span class="vl-u-visually-hidden">
-                  {{t "more-options"}}
-                </span>
-              </button>
-              <button
-                class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                {{action "toggleIsEditingAccessLevel"}}
-              >
-                <i
-                  class="vl-vi vl-vi-cross vl-button__icon"
-                  aria-hidden="true"
-                ></i>
-                <span class="vl-u-visually-hidden">
-                  {{t "more-options"}}
-                </span>
-              </button>
+            {{#if document}}
+              {{access-level-pill
+                item=document
+                shouldShowPills=document.confidential
+              }}
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">

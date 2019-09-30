@@ -18,7 +18,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   classNameBindings: ['aboutToDelete'],
   documentVersion: null,
   isEditingAccessLevel: false,
-  
+
   aboutToDelete: computed('documentVersion.aboutToDelete', function() {
     if (this.documentVersion) {
       if (this.documentVersion.get('aboutToDelete')) {
@@ -65,15 +65,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 
     chooseAccessLevel(accessLevel) {
       this.set('preferredAccessLevel', accessLevel);
-    },
-
-    toggleIsEditingAccessLevel() {
-      if (this.get('isEditor')) {
-        if (this.isEditingAccessLevel) {
-          this.resetPreferredAccessLevel();
-        }
-        this.toggleProperty('isEditingAccessLevel');
-      }
     },
 
     async saveChanges() {

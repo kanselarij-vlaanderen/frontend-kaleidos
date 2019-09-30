@@ -11,6 +11,7 @@ export default Controller.extend({
 	sessionService: inject(),
 	agendaService: inject(),
 	agendaitems: alias('model.agendaitems'),
+	announcements: alias('model.announcements'),
 	selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentSession: alias('sessionService.currentSession'),
@@ -19,6 +20,12 @@ export default Controller.extend({
 		const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark &&!item.isDeleted).sortBy('priority');
 		this.agendaService.setGroupNameOnAgendaItems(actualAgendaitems)
 		return actualAgendaitems;
+	}),
+
+	sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', function() {
+		const announcements = this.get('announcements').filter((item) => !item.isDeleted).sortBy('priority');
+		// this.agendaService.setGroupNameOnAgendaItems(actualAgendaitems)
+		return announcements;
 	}),
 
 	agendaitemsClass: computed('routing.currentRouteName', function () {

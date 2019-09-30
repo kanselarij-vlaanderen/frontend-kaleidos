@@ -73,16 +73,28 @@
 {{/if}}
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
-    {{#each (await announcements) as |announcement index|}}
-      <div class="vlc-agenda-items__sub-item">
-        {{agenda/agenda-list/list-item
-          agendaitem=announcement
-          index=index
-          isEditingOverview=isEditingOverview
-          selectAgendaItem=(action "selectAgendaItem")
+    {{#sortable-group
+      tagName="div"
+      onChange=(action "reorderAnnouncements") as |sortableAnnouncements|
+    }}
+      {{#each (await announcements) as |announcement index|}}
+        {{#sortable-item
+          tagName="div"
+          model=announcement
+          group=sortableAnnouncements
+          distance=30
+          handle=dragHandleClass
         }}
-      </div>
-    {{/each}}
+          <div class="vlc-agenda-items__sub-item">
+            {{agenda/agenda-list/list-item
+              agendaitem=announcement
+              isEditingOverview=isEditingOverview
+              selectAgendaItem=(action "selectAgendaItem")
+            }}
+          </div>
+        {{/sortable-item}}
+      {{/each}}
+    {{/sortable-group}}
   {{else}}
     {{web-components/vl-alert message=(t "no-announcements-yet")}}
   {{/if}}

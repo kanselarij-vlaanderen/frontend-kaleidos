@@ -17,10 +17,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   isEditing: false,
   documentToDelete: null,
 
-  preferredAccessLevel:computed('document.accessLevel', function() {
-    return this.document.accessLevel;
-  }),
-
   aboutToDelete: computed('document.aboutToDelete', function() {
     if (this.document) {
       if (this.document.get('aboutToDelete')) {
@@ -58,10 +54,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       }))
   },
 
-  resetPreferredAccessLevel: async function() {
-    this.set('preferredAccessLevel', await this.document.get('accessLevel'));
-  },
-
   actions: {
     showVersions() {
       this.toggleProperty('isShowingVersions');
@@ -74,11 +66,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     async saveChanges() {
-      if (this.preferredAccessLevel) {
-        await this.document.set('accessLevel', this.preferredAccessLevel);
-      }
       await this.document.save();
-      this.set('isEditingAccessLevel',false);
       this.set('isEditing', false);
     },
 
@@ -105,10 +93,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       const documentVersion = await this.get('document.lastDocumentVersion');
       await documentVersion.save();
       const item = await this.get('item');
+      const itemType = item.get('constructor.modelName');
       const subcase = await item.get('subcase');
       const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
 
-      if (subcase) {
+      if (itemType !== "decision" && subcase) {
         await this.attachDocumentVersionsToModel([documentVersion], subcase).then(item => item.save());
       } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
         await this.attachDocumentVersionsToModel([documentVersion], agendaitemsOnDesignAgenda).then(item => item.save());
@@ -118,6 +107,8 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       await item.save().then(() => {
         if(subcase) this.resetFormallyOk();
       });
+      this.set('isLoading', false);
+      this.set('isUploadingNewVersion', false);
     },
 
     cancel() {
@@ -153,18 +144,5 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
         documentVersion.save();
       }))
     },
-
-    chooseAccessLevel(accessLevel) {
-      this.set('preferredAccessLevel', accessLevel);
-    },
-
-    toggleIsEditingAccessLevel() {
-      if (this.get('isEditor')) {
-        if (this.isEditingAccessLevel) {
-          this.resetPreferredAccessLevel();
-        }
-        this.toggleProperty('isEditingAccessLevel');
-      }
-    },
-  },
+  }
 });
