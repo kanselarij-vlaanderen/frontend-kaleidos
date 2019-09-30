@@ -151,7 +151,6 @@ Cypress.Commands.add('setFormalOkOnAllItems', () => {
 
     cy.get(item).within(() => {
       cy.get('.ember-power-select-selected-item').click();
-      he
     });
     cy.contains('Formeel OK').click();
   });
