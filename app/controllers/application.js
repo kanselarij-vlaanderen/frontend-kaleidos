@@ -18,7 +18,7 @@ export default Controller.extend(isAuthenticatedMixin, {
   messages: alias('globalError.messages'),
   options: A([
     { key: 'main-nav-title', route: 'agendas' },
-    { key: 'main-nav-oc-title', route: 'oc' },
+    // { key: 'main-nav-oc-title', route: 'oc' }, // Hide oc nav option, as the first release won't feature any OC data
   ]),
 
   selectedOption: computed('options', function() {
