@@ -1,10 +1,11 @@
+/* eslint-disable no-undef */
 /// <reference types="Cypress" />
 
 
 context('Case test', () => {
   beforeEach(() => {
-    cy.login('Admin')
-  })
+    cy.login('Admin');
+  });
 
   it.only('should create a new case and add a subcase', () => {
 
@@ -22,12 +23,12 @@ context('Case test', () => {
     const subcaseType='In voorbereiding';
     const subcaseName='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, caseTitleShort).then((caseId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.createCase(false, caseTitleShort).then(() => {
+      cy.verifyAlertSuccess();
     });
 
-    cy.addSubcase(type,newSubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName).then((subcaseId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.addSubcase(type,newSubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName).then(() => {
+      cy.verifyAlertSuccess();
     });
     
     cy.wait('@getSubcases', { timeout: 12000 });
@@ -49,7 +50,7 @@ context('Case test', () => {
     cy.addSubcaseMandatee(1, 0, 0);
     cy.addSubcaseMandatee(2, 0, 0);
 
-    cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR.270919/1', fileType: 'Nota'}]);
+    cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR.270919/1', fileType: 'Nota'}]);
 
   });
 
@@ -64,7 +65,7 @@ context('Case test', () => {
     const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+      cy.verifyAlertSuccess();
       cy.wait('@createNewAgenda',{ timeout: 20000 });
       cy.wait('@createNewAgendaItems',{ timeout: 20000 });
 

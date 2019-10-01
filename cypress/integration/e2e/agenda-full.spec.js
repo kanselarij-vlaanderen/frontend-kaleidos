@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /// <reference types="Cypress" />
 
 context('Full test', () => {
@@ -26,13 +27,13 @@ context('Full test', () => {
     //#endregion
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 15).set('hour', 15).set('minute', 15);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 15).set('minute', 15);
 
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then((meetingId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then(() => {
+      cy.verifyAlertSuccess();
       cy.wait('@createNewAgenda',{ timeout: 20000 });
       cy.wait('@createNewAgendaItems',{ timeout: 20000 });
 
@@ -49,12 +50,12 @@ context('Full test', () => {
     const subcase_1_Type='In voorbereiding';
     const subcase_1_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, case_1_TitleShort).then((caseId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.createCase(false, case_1_TitleShort).then(() => {
+      cy.verifyAlertSuccess();
     });
 
-    cy.addSubcase(type_1,newSubcase_1_TitleShort,subcase_1_TitleLong, subcase_1_Type, subcase_1_Name).then((subcaseId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.addSubcase(type_1,newSubcase_1_TitleShort,subcase_1_TitleLong, subcase_1_Type, subcase_1_Name).then(() => {
+      cy.verifyAlertSuccess();
     });
     
     cy.wait('@getSubcases', { timeout: 12000 });
@@ -75,7 +76,7 @@ context('Full test', () => {
     //Add the mandatees
     cy.addSubcaseMandatee(0, 0, 0);
 
-    cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota'}]);
+    cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota'}]);
 
     cy.get('.vlc-toolbar__item').within(() => {
       cy.contains('Documenten').click();
@@ -93,12 +94,12 @@ context('Full test', () => {
     const subcase_2_Type='In voorbereiding';
     const subcase_2_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(true, case_2_TitleShort).then((caseId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.createCase(true, case_2_TitleShort).then(() => {
+      cy.verifyAlertSuccess();
     });
 
-    cy.addSubcase(type_2,newSubcase_2_TitleShort,subcase_2_TitleLong, subcase_2_Type, subcase_2_Name).then((subcaseId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.addSubcase(type_2,newSubcase_2_TitleShort,subcase_2_TitleLong, subcase_2_Type, subcase_2_Name).then(() => {
+      cy.verifyAlertSuccess();
     });
     
     cy.wait('@getSubcases', { timeout: 12000 });
@@ -132,12 +133,12 @@ context('Full test', () => {
     const subcase_3_Type='In voorbereiding';
     const subcase_3_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(true, caseTitle_3_Short).then((caseId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.createCase(true, caseTitle_3_Short).then(() => {
+      cy.verifyAlertSuccess();
     });
 
-    cy.addSubcase(type_3,newSubcase_3_TitleShort,subcase_3_TitleLong, subcase_3_Type, subcase_3_Name).then((subcaseId) => {
-      cy.get('.vl-alert').contains('Gelukt');
+    cy.addSubcase(type_3,newSubcase_3_TitleShort,subcase_3_TitleLong, subcase_3_Type, subcase_3_Name).then(() => {
+      cy.verifyAlertSuccess();
     });
     
     cy.wait('@getSubcases', { timeout: 12000 });
@@ -170,7 +171,7 @@ context('Full test', () => {
     
     cy.approveCoAgendaitem(case_2_TitleShort);
 
-    // cy.addDocVersion([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
+    // cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     // cy.approveDesignAgenda();
     //#endregion
 

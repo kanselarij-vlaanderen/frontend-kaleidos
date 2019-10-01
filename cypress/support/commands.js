@@ -25,6 +25,7 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+/* eslint-disable no-undef */
 import 'cypress-file-upload';
 
 Cypress.Commands.add('login', (name) => {
@@ -135,7 +136,7 @@ Cypress.Commands.add('deleteAgenda', (agendaDate, meetingId) => {
     .contains('Agenda verwijderen')
     .click()
     .wait('@deleteMeeting')
-    .get('.vl-alert').contains('Gelukt');
+    .verifyAlertSuccess();
 });
 
 Cypress.Commands.add('setFormalOkOnAllItems', () => {
@@ -148,7 +149,6 @@ Cypress.Commands.add('setFormalOkOnAllItems', () => {
   
   cy.get('.vlc-agenda-items__sub-item').as('agendaItemsAndRemarks');
   cy.get('@agendaItemsAndRemarks').each((item) => {
-
     cy.get(item).within(() => {
       cy.get('.ember-power-select-selected-item').click();
     });
@@ -192,10 +192,10 @@ Cypress.Commands.add('approveCoAgendaitem', (caseShortTitle) => {
     });
   });
   cy.wait('@patchApprovals', { timeout: 10000 }).then(() => {
-    cy.get('.vl-alert').contains('Gelukt');
+    cy.verifyAlertSuccess();
   });
   cy.wait('@patchAgendas', { timeout: 10000 }).then(() => {
-    cy.get('.vl-alert').contains('Gelukt');
+    cy.verifyAlertSuccess();
   });
 });
 
@@ -221,51 +221,78 @@ Cypress.Commands.add('approveDesignAgenda', () => {
  * 
  * @param {String} title - The title of the remark
  * @param {String} remark - The remark
- * @param {{folder: String, fileName: String, fileExtension: String}[]} files
+ * @param {{folder: String, fileName: String, fileExtension: String}[]} file
  * 
  */
 Cypress.Commands.add('addRemarkToAgenda', (title, remark, files) => {
-
+  cy.route('POST', '/agendaitems').as('createNewAgendaitem');
   cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
     .contains('Acties')
     .click();
-  cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
+  cy.get('.vl-popover__link-list__item > .vl-link')
     .contains('Mededeling toevoegen')
     .click();
 
-    cy.get('.vl-modal-dialog').as('dialog').within(() =>{
-      cy.get('.vlc-input-field-block').as('newRemarkForm').should('have.length', 3);
-  
-    });
-  
+  cy.get('.vl-modal-dialog').as('dialog').within(() =>{
+    cy.get('.vlc-input-field-block').as('newRemarkForm').should('have.length', 3);
+
     //Set title
-    cy.get('@newCaseForm').eq(1).within(() => {
+    cy.get('@newRemarkForm').eq(0).within(() => {
       cy.get('.vl-input-field').click().type(title);
     });
     
     //Set remark
-    cy.get('@newCaseForm').eq(1).within(() => {
+    cy.get('@newRemarkForm').eq(1).within(() => {
       cy.get('.vl-textarea').click().type(remark);
     });
 
-    //TODO add files, new command for this dialog
-  
-    cy.get('@dialog').within(()=> {
-      cy.get('.vlc-toolbar__item > .vl-button').contains('Dossier aanmaken').click();
+    //add file
+    cy.get('@newRemarkForm').eq(2).within(() => {
+      files.forEach((file) => {
+        cy.get('@dialog').within(() => {
+          cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+        });
+      });
     });
-  
+    cy.get('.vl-button').contains('Mededeling toevoegen').click();
+    cy.wait('@createNewAgendaitem', { timeout: 20000 }).then(() => {
+      cy.verifyAlertSuccess();
+    });
+  });
 });
 
-Cypress.Commands.add('addAgendaitemToAgenda', () => {
+Cypress.Commands.add('addAgendaitemToAgenda', (caseTitle, postponed) => {
+  cy.route('GET', '/subcases?**').as('getSubcasesFiltered');
+  cy.route('POST', '/agendaitems').as('createNewAgendaitem');
 
   cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
     .contains('Acties')
     .click();
-  cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
-    .contains('Mededeling toevoegen')
+  cy.get('.vl-popover__link-list__item > .vl-link')
+    .contains('Agendapunt toevoegen')
     .click();
+  cy.wait('@getSubcasesFiltered', { timeout: 12000 });
 
-  
+  cy.get('.vl-modal-dialog').as('dialog').within(() =>{
+    cy.get('.vl-form-grid').children().as('formGrid');
+
+    if(postponed) {
+      cy.get('@formGrid').eq(1).within(() => {
+        cy.get('.vl-checkbox--switch__label').click();
+      });
+    }
+    cy.get('@formGrid').eq(0).within(() => {
+      cy.get('.vl-input-field').clear().type(caseTitle);
+      cy.wait('@getSubcasesFiltered', { timeout: 12000 });
+    });
+
+    cy.get('table > tbody > tr').as('rows');
+    cy.get('@rows').eq(0).click().get('[type="checkbox"]').should('be.checked');
+    cy.get('.vl-button').contains('Agendapunt toevoegen').click();
+  });
+  cy.wait('@createNewAgendaitem', { timeout: 20000 }).then(() => {
+    cy.verifyAlertSuccess();
+  });
 });
 
 //#endregion
@@ -432,7 +459,7 @@ Cypress.Commands.add('changeSubcaseAccessLevel', (shortTitle, confidentialityCha
       .click();
   });
   cy.wait('@patchSubcase', { timeout: 20000 }).then(() => {
-    cy.get('.vl-alert').contains('Gelukt');
+    cy.verifyAlertSuccess();
   });
 });
 
@@ -463,7 +490,7 @@ Cypress.Commands.add('addSubcaseThemes', (themes) => {
       .click();
   });
   cy.wait('@patchSubcase', { timeout: 20000 }).then(() => {
-    cy.get('.vl-alert').contains('Gelukt');
+    cy.verifyAlertSuccess();
   });
 });
 
@@ -510,7 +537,7 @@ Cypress.Commands.add('addSubcaseMandatee', (mandateeNumber, fieldNumber, domainN
     .click();
   });
   cy.wait('@patchSubcase', { timeout: 20000 }).then(() => {
-    cy.get('.vl-alert').contains('Gelukt');
+    cy.verifyAlertSuccess();
   });
 });
 
@@ -545,16 +572,16 @@ Cypress.Commands.add('proposeSubcaseForAgenda', (agendaDate) => {
  * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
  * 
  */
-Cypress.Commands.add('addDocVersion', (files) => {
+Cypress.Commands.add('addDocuments', (files) => {
 
   cy.route('GET', 'document-types?**').as('getDocumentTypes');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
   cy.route('POST', 'documents').as('createNewDocument');
   cy.route('PATCH', '**').as('patchModel');
 
-  cy.get('.vlc-toolbar__item').within(() => {
+  cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
     cy.contains('Documenten').click();
-  })
+  });
   cy.contains('Documenten toevoegen').click();
   cy.get('.vl-modal-dialog').as('fileUploadDialog');
 
@@ -597,6 +624,44 @@ Cypress.Commands.add('addDocVersion', (files) => {
 });
 
 /**
+ * Opens the new document version dialog and adds the file
+ * 
+ * @param {{folder: String, fileName: String, fileExtension: String} file
+ * 
+ */
+Cypress.Commands.add('addNewDocumentVersion', (oldFileName, file) => {
+
+  cy.route('GET', 'document-types?**').as('getDocumentTypes');
+  cy.route('POST', 'document-versions').as('createNewDocumentVersion');
+  cy.route('PATCH', '**').as('patchModel');
+
+  cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
+    cy.contains('Documenten').click();
+  });
+  cy.get('.vl-title--h6').contains(oldFileName).parents('.vlc-document-card').as('documentCard');
+
+  cy.get('@documentCard').within(() => {
+    cy.get('.vl-vi-nav-show-more-horizontal').click();
+  });
+  cy.get('.vl-link--block').contains('Nieuwe versie uploaden').click();
+
+  cy.get('.vl-modal-dialog').as('fileUploadDialog');
+
+  cy.get('@fileUploadDialog').within(() => {
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+  });
+
+  cy.get('@fileUploadDialog').within(() => {
+    cy.get('.vl-button').contains('Toevoegen').click();
+  });
+  
+
+  cy.wait('@createNewDocumentVersion');
+  cy.wait('@patchModel');
+
+});
+
+/**
  * Uploads a file to an open document dialog window
  * 
  * @param {String} folder - The relative path to the file in the cypress/fixtures folder excluding the fileName
@@ -622,6 +687,14 @@ Cypress.Commands.add('uploadFile', (folder, fileName, extension) => {
     );
   });
   cy.wait('@createNewFile');
+});
+
+//#endregion
+
+//#region general resuable commands
+
+Cypress.Commands.add('verifyAlertSuccess', () => {
+  cy.get('.vl-alert').contains('Gelukt').should('be.visible');
 });
 
 //#endregion
