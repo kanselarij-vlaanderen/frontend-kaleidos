@@ -143,7 +143,7 @@ export default Service.extend({
       });
   },
 
-  async createNewAgendaItem(selectedAgenda, subcase) {
+  async createNewAgendaItem(selectedAgenda, subcase, index) {
     let priorityToAssign = 0;
     const mandatees = await subcase.get('mandatees');
     const titles = mandatees.map((mandatee) => mandatee.get('title'));
@@ -157,6 +157,10 @@ export default Service.extend({
 
     if (isNaN(priorityToAssign)) {
       priorityToAssign = 1;
+    }
+
+    if(index) {
+      priorityToAssign += index;
     }
     const agendaitem = this.store.createRecord('agendaitem', {
       retracted: false,
