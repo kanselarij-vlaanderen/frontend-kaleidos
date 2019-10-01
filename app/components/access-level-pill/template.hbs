@@ -42,7 +42,8 @@
     {{/if}}
   {{/if}}
   <button
-    class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item {{if (not isEditor) "disabled"}}"
+    class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+    disabled={{if isEditor undefined "true"}}
     {{action "toggleConfidential"}}
   >
     {{#if item.confidential}}
