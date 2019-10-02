@@ -39,7 +39,7 @@ export default Component.extend({
         start: moment(this.get('startDate'))
           .utc()
           .toDate(),
-        end: null
+        end: moment().add(5,'years').toDate()
       });
       newMandatee.save().then(newMandatee => {
         this.model.addObject(newMandatee);
