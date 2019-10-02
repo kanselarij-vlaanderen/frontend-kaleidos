@@ -20,19 +20,22 @@ export default Route.extend({
         matchingAgendaItems: this.matchingAgendaItems(params.filter),
       });
 
-      let agendaitems = await this.store.query('agendaitem', { filter: { agenda: { id: id } }, include: 'mandatees' });
+      let agendaitems = await this.store.query('agendaitem', {
+        filter: { agenda: { id: id } },
+        include: 'mandatees',
+      });
       if (!isEmpty(params.filter)) {
-        agendaitems = agendaitems.filter((item) => matchingAgendaItems[item.id])
+        agendaitems = agendaitems.filter((item) => matchingAgendaItems[item.id]);
       }
-      
+
       const announcements = agendaitems.filter((item) => item.showAsRemark);
-    
+
       this.set('sessionService.selectedAgendaItem', null);
 
       return hash({
         currentAgenda: agenda,
         announcements,
-        agendaitems
+        agendaitems,
       });
     }
   },
@@ -51,5 +54,5 @@ export default Route.extend({
       searchMap[item.id] = true;
     });
     return searchMap;
-  }
+  },
 });

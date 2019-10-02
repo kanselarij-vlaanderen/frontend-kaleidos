@@ -45,30 +45,6 @@ export default Service.extend({
     });
   },
 
-  getComparedSortedAgendaItems(agenda) {
-    return $.ajax({
-      method: 'GET',
-      url: `/agenda-sort/compared-sort?agendaId=${agenda.get('id')}`,
-    }).then((result) => {
-      return result.body.items;
-    });
-  },
-
-  async assignDirtyPrioritiesToAgendaitems(selectedAgenda) {
-    const sortedItems = await this.getSortedAgendaItems(selectedAgenda);
-    const agendaitems = await selectedAgenda.get('agendaitems');
-    agendaitems.map((agendaitem) => {
-      if (agendaitem.get('subcase') && sortedItems) {
-        const sortedAgendaItemFound = sortedItems.find(
-          (sortedItem) => sortedItem.uuid == agendaitem.get('id')
-        );
-        if (sortedAgendaItemFound) {
-          agendaitem.set('displayPriority', sortedAgendaItemFound.priority);
-        }
-      }
-    });
-  },
-
   approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
     let newAgenda = this.store.createRecord('agenda', {
       name: 'Ontwerpagenda',
@@ -185,42 +161,36 @@ export default Service.extend({
     return agendaitem.save();
   },
 
-  // TODO: check deadcode
-  parseGroups(groups, agendaitems) {
-    let lastPrio = 0;
-    let firstAgendaItem;
-    groups.map((agenda) => {
-      agenda.groups.map((group) => {
-        const newAgendaitems = group.agendaitems.map((item) => {
-          const foundItem = agendaitems.find((agendaitem) => item.id === agendaitem.get('id'));
-
-          if (!firstAgendaItem) {
-            firstAgendaItem = foundItem;
-          }
-          if (foundItem && foundItem.get('priority')) {
-            lastPrio = foundItem.priority;
-          } else {
-            if (foundItem) {
-              foundItem.set('displayPriority', parseInt(lastPrio) + 1);
-            }
-          }
-
-          return foundItem;
-        });
-        group.agendaitems = newAgendaitems.filter((item) => item).sortBy('priority');
-
-        if (group.agendaitems.get('length') < 1) {
-          group.agendaitems = 0;
-          group = null;
-        }
-      });
-    });
-    return { lastPrio, firstAgendaItem };
+  /**
+   * Dirty calculation to fix the priorities of a mandateeGroup.
+   * This should be done in the backend using queries.
+   */
+  setCalculatedGroupPriorities(agendaitems) {
+    return Promise.all(agendaitems.map(async (item) => {
+      const mandatees = await item.get('mandatees');
+      if (item.isApproval) {
+        return;
+      }
+      if (mandatees.length == 0) {
+        item.set('groupPriority', 20000000);
+        return;
+      }
+      const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
+      const minPrio = Math.min(...mandateePriorities);
+      const minPrioIndex = mandateePriorities.indexOf(minPrio);
+      delete mandateePriorities[minPrioIndex];
+      let calculatedGroupPriority = minPrio;
+       mandateePriorities.forEach((value) => {
+        calculatedGroupPriority += value / 100;
+      })
+      item.set('groupPriority', calculatedGroupPriority);
+    }));
   },
 
-  setGroupNameOnAgendaItems(agendaitems) {
+
+  async setGroupNameOnAgendaItems(agendaitems) {
     let previousAgendaitemGroupName;
-    return agendaitems.map(async (item) => {
+    return Promise.all(agendaitems.map(async (item) => {
       const mandatees = await item.get('mandatees');
       if (item.isApproval) {
         item.set('groupName', null);
@@ -231,12 +201,14 @@ export default Service.extend({
         return;
       }
       const currentAgendaitemGroupName = mandatees.map((mandatee) => mandatee.title).join('<br/>');
+      
       if (currentAgendaitemGroupName != previousAgendaitemGroupName) {
         previousAgendaitemGroupName = currentAgendaitemGroupName;
         item.set('groupName', currentAgendaitemGroupName);
       } else {
         item.set('groupName', null);
       }
-    });
+
+    }));
   },
 });

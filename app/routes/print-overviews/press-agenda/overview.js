@@ -22,8 +22,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 		const announcements = agendaitems.filter((item) => item.get('subcase.showAsRemark'));
 
 		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
-		const { lastPrio, firstAgendaItem } = await this.agendaService.parseGroups(groups, filteredAgendaItems);
 
-		return { groups, firstAgendaItem, announcements, lastPrio };
+		return { groups, announcements };
 	},
 });	
