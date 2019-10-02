@@ -143,12 +143,25 @@ export default Service.extend({
       });
   },
 
-  async createNewAgendaItem(selectedAgenda, subcase) {
-    const priorityToAssign = await selectedAgenda.get('lastAgendaitemPriority') + 1;
+  async createNewAgendaItem(selectedAgenda, subcase, index) {
+    let priorityToAssign = 0;
     const mandatees = await subcase.get('mandatees');
     const titles = mandatees.map((mandatee) => mandatee.get('title'));
     const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
+    const isAnnouncement = subcase.get('showAsRemark');
+    if (isAnnouncement) {
+      priorityToAssign = (await selectedAgenda.get('lastAnnouncementPriority')) + 1;
+    } else {
+      priorityToAssign = (await selectedAgenda.get('lastAgendaitemPriority')) + 1;
+    }
 
+    if (isNaN(priorityToAssign)) {
+      priorityToAssign = 1;
+    }
+
+    if(index) {
+      priorityToAssign += index;
+    }
     const agendaitem = this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.get('shortTitle'),
@@ -162,7 +175,7 @@ export default Service.extend({
       title: subcase.get('title'),
       shortTitle: subcase.get('shortTitle'),
       formallyOk: CONFIG.notYetFormallyOk,
-      showAsRemark: subcase.get('showAsRemark'),
+      showAsRemark: isAnnouncement,
       mandatees: mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
@@ -209,21 +222,21 @@ export default Service.extend({
     let previousAgendaitemGroupName;
     return agendaitems.map(async (item) => {
       const mandatees = await item.get('mandatees');
-      if(item.isApproval) {
+      if (item.isApproval) {
         item.set('groupName', null);
         return;
       }
-      if(mandatees.length == 0){
-        item.set('groupName', "Geen toegekende ministers");
-        return ;
+      if (mandatees.length == 0) {
+        item.set('groupName', 'Geen toegekende ministers');
+        return;
       }
-      const currentAgendaitemGroupName = mandatees.map((mandatee)=> mandatee.title).join(', ');
-      if(currentAgendaitemGroupName != previousAgendaitemGroupName) {
+      const currentAgendaitemGroupName = mandatees.map((mandatee) => mandatee.title).join('<br/>');
+      if (currentAgendaitemGroupName != previousAgendaitemGroupName) {
         previousAgendaitemGroupName = currentAgendaitemGroupName;
         item.set('groupName', currentAgendaitemGroupName);
       } else {
         item.set('groupName', null);
       }
-    })
-  }
+    });
+  },
 });

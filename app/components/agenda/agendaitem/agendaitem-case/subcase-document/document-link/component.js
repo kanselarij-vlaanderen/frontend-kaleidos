@@ -136,13 +136,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     async toggleConfidential(document) {
-      document.toggleProperty('confidential');
-      await document.save();
-      let documentVersions = await document.get('documentVersions');
-      await Promise.all(documentVersions.map(documentVersion => {
-        documentVersion.set('confidential', document.get('confidential'));
-        documentVersion.save();
-      }))
+
     },
   }
 });

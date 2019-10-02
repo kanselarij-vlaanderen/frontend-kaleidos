@@ -18,12 +18,7 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            {{#if (not document.confidential)}}
-              {{access-level-pill
-                item=document
-                shouldShowPills=document.confidential
-              }}
-            {{/if}}
+            {{access-level-pill item=document}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if isEditor}}

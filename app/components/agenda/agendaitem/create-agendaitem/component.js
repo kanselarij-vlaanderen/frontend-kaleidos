@@ -176,11 +176,23 @@ export default Component.extend(DefaultQueryParamsMixin, {
         agendaService
       } = this;
       const itemsToAdd = [...postponedSubcases, ...availableSubcases];
+      
+      // These counters are needed to set an init counter for the agendaitems that are being added to an empty agenda.
+      let index;
+      let agendaitemCounter = -1;
+      let announcementCounter = -1;
 
       let promise = Promise.all(
         itemsToAdd.map(async subCase => {
           if (subCase.selected) {
-            return agendaService.createNewAgendaItem(selectedAgenda, subCase);
+            if(subCase.showAsRemark) {
+              announcementCounter++;
+              index = announcementCounter;
+            } else {
+              agendaitemCounter++;
+              index = agendaitemCounter;
+            }
+            return agendaService.createNewAgendaItem(selectedAgenda, subCase, index);
           }
         })
       );

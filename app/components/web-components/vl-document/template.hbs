@@ -2,29 +2,12 @@
   <h6 class="vl-title vl-title--h6">
     {{await documentVersion.name}}
   </h6>
-  {{#if (not documentVersion.confidential)}}
-    {{access-level-pill
-      item=documentVersion
-      shouldShowPills=documentVersion.confidential
-    }}
-  {{/if}}
-  {{#if isEditor}}
-    <button
-      class="vl-button vl-button--link-muted vl-button--icon"
-      {{action "toggleConfidential" documentVersion}}
-    >
-      {{#if documentVersion.confidential}}
-        <span class="vl-icon vl-vi vl-vi-lock vl-u-text--error"></span>
-      {{else}}
-        <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
-      {{/if}}
-    </button>
-  {{/if}}
+  {{access-level-pill item=documentVersion}}
   <button
     class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
     {{action "showDocumentVersionViewer" documentVersion}}
   >
-    <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
+  <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
     <span class="vl-u-visually-hidden">
       {{t "download"}}
     </span>

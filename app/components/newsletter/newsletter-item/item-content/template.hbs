@@ -25,7 +25,7 @@
     </div>
   </div>
 {{else}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div>
     <h4>
       {{#if (not (await agendaitem.subcase.newsletterInfo))}}
         {{agendaitem.title}}
@@ -35,6 +35,11 @@
     </h4>
   </div>
 {{/if}}
+<div class="vl-u-spacer-extended-bottom-s">
+  <p>
+    {{await agendaitem.subcase.newsletterInfo.mandateeProposal}}
+  </p>
+</div>
 <div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-text">
     {{#if (not (await agendaitem.subcase.newsletterInfo.richtext))}}
@@ -51,11 +56,7 @@
   {{{await agendaitem.subcase.newsletterInfo.displayRemark}}}
 </p>
 {{/if}}
-<div class="vl-u-spacer-extended-bottom-s">
-  <p class="vl-u-text--italic">
-    {{await agendaitem.subcase.newsletterInfo.mandateeProposal}}
-  </p>
-</div>
+
 {{#if (gt (await agendaitem.themes.length) 0)}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-spacer-extended-top-s">
