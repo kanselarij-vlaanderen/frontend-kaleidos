@@ -10,11 +10,11 @@
       }}
       {{#if (eq definite "true")}}
         {{#each (await model.groups) as |group|}}
-          {{!-- TODO: DELETE --}}
-          {{{group.groupName}}} ({{group.groupPriority}})
+          <h3 class="vl-title vl-title--h3">{{{group.groupName}}}</h3>
           {{#each group.agendaitems as |agendaitem|}}
             {{newsletter/newsletter-item
               agenda=(await model.agenda)
+              itemIndex=agendaitem.itemIndex
               definite=definite
               agendaitem=agendaitem
             }}
@@ -25,7 +25,6 @@
           {{newsletter/newsletter-item
             agenda=(await model.agenda)
             definite=definite
-            index=index
             agendaitem=agendaitem
           }}
         {{/each}}

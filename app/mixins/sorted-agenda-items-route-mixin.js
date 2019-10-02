@@ -7,15 +7,12 @@ export default Mixin.create({
   sessionService: inject(),
   agendaService: inject(),
 
-  async parseAgendaItems(agenda, agendaitems, definite) {
+  async parseAgendaItems(agendaitems) {
     const announcements = agendaitems.filter((item) => item.showAsRemark);
     let draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
 
-    const sortedAgendaitems = await this.agendaService.getSortedAgendaItems(agenda);
-
     await this.agendaService.setGroupNameOnAgendaItems(draftAgendaitems);
-    // this.assignDirtyPrioritiesToAgendaitems(draftAgendaitems, sortedAgendaitems);
-    await this.agendaService.setCalculatedGroupPriorities(draftAgendaitems);
+    await this.setCalculatedGroupPriorities(draftAgendaitems);
 
     const groupedAgendaitems = Object.values(this.groupAgendaitemsByGroupname(draftAgendaitems));
     return {
@@ -48,36 +45,35 @@ export default Mixin.create({
   },
 
   // TODO: check dead code
-  findBrokenAgendaItems(agendaitems, groups, minutesApproval, announcements) {
-    const knownAgendaIds = {};
-    if (groups) {
-      groups.map((result) => {
-        result.groups.map((group) => {
-          if (group.agendaitems) {
-            group.agendaitems.map((agendaitem) => {
-              knownAgendaIds[agendaitem.id] = true;
-            });
-          }
-        });
-      });
-    }
+  // findBrokenAgendaItems(agendaitems, groups, minutesApproval, announcements) {
+  //   const knownAgendaIds = {};
+  //   if (groups) {
+  //     groups.map((result) => {
+  //       result.groups.map((group) => {
+  //         if (group.agendaitems) {
+  //           group.agendaitems.map((agendaitem) => {
+  //             knownAgendaIds[agendaitem.id] = true;
+  //           });
+  //         }
+  //       });
+  //     });
+  //   }
 
-    if (minutesApproval) {
-      knownAgendaIds[minutesApproval.id] = true;
-    }
-    if (announcements) {
-      announcements.map((announcement) => {
-        knownAgendaIds[announcement.id] = true;
-      });
-    }
+  //   if (minutesApproval) {
+  //     knownAgendaIds[minutesApproval.id] = true;
+  //   }
+  //   if (announcements) {
+  //     announcements.map((announcement) => {
+  //       knownAgendaIds[announcement.id] = true;
+  //     });
+  //   }
 
-    return agendaitems.filter((agendaitem) => {
-      return !knownAgendaIds[agendaitem.id];
-    });
-  },
+  //   return agendaitems.filter((agendaitem) => {
+  //     return !knownAgendaIds[agendaitem.id];
+  //   });
+  // },
 
-  async model(params) {
-    const definite = params.definite;
+  async model() {
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
     let agendaitems = await this.store.query('agendaitem', {
@@ -85,18 +81,55 @@ export default Mixin.create({
       include: 'mandatees',
     });
     const { draftAgendaitems, announcements, groupedAgendaitems } = await this.parseAgendaItems(
-      agenda,
-      agendaitems,
-      definite
+      agendaitems
     );
 
-    const groupsArray = groupedAgendaitems.map((item) => EmberObject.create(item));
+    let prevIndex = 0;
+    const groupsArray = groupedAgendaitems
+      .filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
+      .sortBy('groupPriority')
+      .map((item) => {
+        item.agendaitems.map((agendaitem, index) => {
+          prevIndex = index + prevIndex + 1;
+          agendaitem.itemIndex = prevIndex;
+        });
+        return EmberObject.create(item);
+      });
+
     return hash({
       currentAgenda: agenda,
-      groups: groupsArray.sortBy('groupPriority'),
+      groups: groupsArray,
       agendaitems: draftAgendaitems.sortBy('priority'),
       announcements: announcements.sortBy('priority'),
       meeting: session,
     });
-  }
+  },
+
+  /**
+   * Dirty calculation to fix the priorities of a mandateeGroup.
+   * This should be done in the backend using queries.
+   */
+  setCalculatedGroupPriorities(agendaitems) {
+    return Promise.all(
+      agendaitems.map(async (item) => {
+        const mandatees = await item.get('mandatees');
+        if (item.isApproval) {
+          return;
+        }
+        if (mandatees.length == 0) {
+          item.set('groupPriority', 20000000);
+          return;
+        }
+        const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
+        const minPrio = Math.min(...mandateePriorities);
+        const minPrioIndex = mandateePriorities.indexOf(minPrio);
+        delete mandateePriorities[minPrioIndex];
+        let calculatedGroupPriority = minPrio;
+        mandateePriorities.forEach((value) => {
+          calculatedGroupPriority += value / 100;
+        });
+        item.set('groupPriority', calculatedGroupPriority);
+      })
+    );
+  },
 });

@@ -4,7 +4,6 @@ import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
-import EmberObject from '@ember/object';
 
 export default Service.extend({
   store: inject(),
@@ -33,15 +32,6 @@ export default Service.extend({
       url: `/session-service/closestFutureMeeting?date=${date}`,
     }).then((result) => {
       return result.body.closestMeeting;
-    });
-  },
-
-  getSortedAgendaItems(agenda) {
-    return $.ajax({
-      method: 'GET',
-      url: `/agenda-sort?agendaId=${agenda.get('id')}`,
-    }).then((result) => {
-      return result.body.items;
     });
   },
 
@@ -80,30 +70,6 @@ export default Service.extend({
       });
   },
 
-  sortAgendaItems(selectedAgenda) {
-    return $.ajax({
-      method: 'POST',
-      url: `/agenda-sort?agendaId=${selectedAgenda.get('id')}`,
-      data: {},
-    }).then(() => {
-      notifyPropertyChange(selectedAgenda, 'agendaitems');
-    });
-  },
-
-  newSorting(sessionId, currentAgendaID) {
-    return $.ajax({
-      method: 'GET',
-      url: `/agenda-sort/sortedAgenda?sessionId=${sessionId.get(
-        'id'
-      )}&selectedAgenda=${currentAgendaID}`,
-    }).then((result) => {
-      return result.map((item) => {
-        item.groups = item.groups.map((group) => EmberObject.create(group));
-        return EmberObject.create(item);
-      });
-    });
-  },
-
   agendaWithChanges(currentAgendaID, agendaToCompareID) {
     return $.ajax({
       method: 'GET',
@@ -135,7 +101,7 @@ export default Service.extend({
       priorityToAssign = 1;
     }
 
-    if(index) {
+    if (index) {
       priorityToAssign += index;
     }
     const agendaitem = this.store.createRecord('agendaitem', {
@@ -161,54 +127,30 @@ export default Service.extend({
     return agendaitem.save();
   },
 
-  /**
-   * Dirty calculation to fix the priorities of a mandateeGroup.
-   * This should be done in the backend using queries.
-   */
-  setCalculatedGroupPriorities(agendaitems) {
-    return Promise.all(agendaitems.map(async (item) => {
-      const mandatees = await item.get('mandatees');
-      if (item.isApproval) {
-        return;
-      }
-      if (mandatees.length == 0) {
-        item.set('groupPriority', 20000000);
-        return;
-      }
-      const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
-      const minPrio = Math.min(...mandateePriorities);
-      const minPrioIndex = mandateePriorities.indexOf(minPrio);
-      delete mandateePriorities[minPrioIndex];
-      let calculatedGroupPriority = minPrio;
-       mandateePriorities.forEach((value) => {
-        calculatedGroupPriority += value / 100;
-      })
-      item.set('groupPriority', calculatedGroupPriority);
-    }));
-  },
-
-
   async setGroupNameOnAgendaItems(agendaitems) {
     let previousAgendaitemGroupName;
-    return Promise.all(agendaitems.map(async (item) => {
-      const mandatees = await item.get('mandatees');
-      if (item.isApproval) {
-        item.set('groupName', null);
-        return;
-      }
-      if (mandatees.length == 0) {
-        item.set('groupName', 'Geen toegekende ministers');
-        return;
-      }
-      const currentAgendaitemGroupName = mandatees.map((mandatee) => mandatee.title).join('<br/>');
-      
-      if (currentAgendaitemGroupName != previousAgendaitemGroupName) {
-        previousAgendaitemGroupName = currentAgendaitemGroupName;
-        item.set('groupName', currentAgendaitemGroupName);
-      } else {
-        item.set('groupName', null);
-      }
+    return Promise.all(
+      agendaitems.map(async (item) => {
+        const mandatees = await item.get('mandatees');
+        if (item.isApproval) {
+          item.set('groupName', null);
+          return;
+        }
+        if (mandatees.length == 0) {
+          item.set('groupName', 'Geen toegekende ministers');
+          return;
+        }
+        const currentAgendaitemGroupName = mandatees
+          .map((mandatee) => mandatee.title)
+          .join('<br/>');
 
-    }));
+        if (currentAgendaitemGroupName != previousAgendaitemGroupName) {
+          previousAgendaitemGroupName = currentAgendaitemGroupName;
+          item.set('groupName', currentAgendaitemGroupName);
+        } else {
+          item.set('groupName', null);
+        }
+      })
+    );
   },
 });

@@ -8,7 +8,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 	queryParams: {
 		definite: { refreshModel: true }
 	},
-
+	// TODO: check deadcode
 	async parseAgendaItems(agenda, session, definite) {
 		let agendaitems = await (await agenda.get('agendaitems')).filter((item) => !item.get('subcase.showAsRemark'));
 		let filteredAgendaItems = [];
@@ -21,8 +21,9 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 
 		const announcements = agendaitems.filter((item) => item.get('subcase.showAsRemark'));
 
-		const groups = await this.agendaService.newSorting(session, agenda.get('id'));
+		// const groups = await this.agendaService.newSorting(session, agenda.get('id'));
+		const groups = [];
 
-		return { groups, announcements };
+		return { groups , announcements };
 	},
 });	
