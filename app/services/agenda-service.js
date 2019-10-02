@@ -230,7 +230,7 @@ export default Service.extend({
         item.set('groupName', 'Geen toegekende ministers');
         return;
       }
-      const currentAgendaitemGroupName = mandatees.map((mandatee) => mandatee.title).join(', ');
+      const currentAgendaitemGroupName = mandatees.map((mandatee) => mandatee.title).join('<br/>');
       if (currentAgendaitemGroupName != previousAgendaitemGroupName) {
         previousAgendaitemGroupName = currentAgendaitemGroupName;
         item.set('groupName', currentAgendaitemGroupName);
