@@ -9,6 +9,13 @@
         isEditing=isEditing
         agendaitem=agendaitem
       }}
+    {{else if agendaitem.showAsRemark}}
+      {{newsletter/newsletter-item/item-content
+        allowEditing=allowEditing
+        itemIndex=itemIndex
+        isEditing=isEditing
+        agendaitem=agendaitem
+      }}
     {{/if}}
   {{else}}
     {{newsletter/newsletter-item/item-content

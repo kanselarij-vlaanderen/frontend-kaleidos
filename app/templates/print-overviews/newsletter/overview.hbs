@@ -8,9 +8,14 @@
         title=(await title)
         meeting=(await model.meeting)
       }}
+      <h2 class="vl-title vl-title--h2">
+        {{t "agendaitems-subtitle"}}
+      </h2>
       {{#if (eq definite "true")}}
         {{#each (await model.groups) as |group|}}
-          <h3 class="vl-title vl-title--h3">{{{group.groupName}}}</h3>
+          <h7 class="vl-title--h7">
+            {{{group.groupName}}}
+          </h7>
           {{#each group.agendaitems as |agendaitem|}}
             {{newsletter/newsletter-item
               agenda=(await model.agenda)
@@ -26,6 +31,18 @@
             agenda=(await model.agenda)
             definite=definite
             agendaitem=agendaitem
+          }}
+        {{/each}}
+      {{/if}}
+      {{#if (await model.announcements.length)}}
+        <h2 class="vl-title vl-title--h2">
+          {{t "announcements-subtitle"}}
+        </h2>
+        {{#each (await model.announcements) as |announcement|}}
+          {{newsletter/newsletter-item
+            agenda=(await model.agenda)
+            definite=definite
+            agendaitem=announcement
           }}
         {{/each}}
       {{/if}}

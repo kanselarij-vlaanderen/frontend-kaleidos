@@ -8,8 +8,7 @@ export default Mixin.create({
   agendaService: inject(),
 
   async parseAgendaItems(agendaitems) {
-    const announcements = agendaitems.filter((item) => item.showAsRemark);
-    let draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
+    let draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
 
     await this.agendaService.setGroupNameOnAgendaItems(draftAgendaitems);
     await this.setCalculatedGroupPriorities(draftAgendaitems);
@@ -17,7 +16,6 @@ export default Mixin.create({
     const groupedAgendaitems = Object.values(this.groupAgendaitemsByGroupname(draftAgendaitems));
     return {
       draftAgendaitems,
-      announcements,
       groupedAgendaitems,
     };
   },
@@ -44,43 +42,15 @@ export default Mixin.create({
     return groups;
   },
 
-  // TODO: check dead code
-  // findBrokenAgendaItems(agendaitems, groups, minutesApproval, announcements) {
-  //   const knownAgendaIds = {};
-  //   if (groups) {
-  //     groups.map((result) => {
-  //       result.groups.map((group) => {
-  //         if (group.agendaitems) {
-  //           group.agendaitems.map((agendaitem) => {
-  //             knownAgendaIds[agendaitem.id] = true;
-  //           });
-  //         }
-  //       });
-  //     });
-  //   }
-
-  //   if (minutesApproval) {
-  //     knownAgendaIds[minutesApproval.id] = true;
-  //   }
-  //   if (announcements) {
-  //     announcements.map((announcement) => {
-  //       knownAgendaIds[announcement.id] = true;
-  //     });
-  //   }
-
-  //   return agendaitems.filter((agendaitem) => {
-  //     return !knownAgendaIds[agendaitem.id];
-  //   });
-  // },
-
   async model() {
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
     let agendaitems = await this.store.query('agendaitem', {
       filter: { agenda: { id: agenda.get('id') } },
-      include: 'mandatees',
+      include: 'mandatees'
     });
-    const { draftAgendaitems, announcements, groupedAgendaitems } = await this.parseAgendaItems(
+    const announcements = agendaitems.filter((item) => item.showAsRemark);
+    const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
       agendaitems
     );
 
@@ -91,7 +61,7 @@ export default Mixin.create({
       .map((item) => {
         item.agendaitems.map((agendaitem, index) => {
           prevIndex = index + prevIndex + 1;
-          agendaitem.itemIndex = prevIndex;
+          agendaitem.set('itemIndex',prevIndex);
         });
         return EmberObject.create(item);
       });
