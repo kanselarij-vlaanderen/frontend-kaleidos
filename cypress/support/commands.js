@@ -140,9 +140,11 @@ Cypress.Commands.add('deleteAgenda', (agendaDate, meetingId) => {
 });
 
 Cypress.Commands.add('setFormalOkOnAllItems', () => {
+  cy.route('GET', '/meetings/**').as('getMeetings');
   cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
     cy.contains('Overzicht').click();
   });
+  cy.wait('@getMeetings', { timeout: 10000 });
   cy.get('.vl-title--h3').contains(`Nota's`).parent().within(() => {
     cy.get('.vl-link').contains('Wijzigen').should('exist').click();
   });
@@ -255,9 +257,9 @@ Cypress.Commands.add('addRemarkToAgenda', (title, remark, files) => {
       });
     });
     cy.get('.vl-button').contains('Mededeling toevoegen').click();
-    cy.wait('@createNewAgendaitem', { timeout: 20000 }).then(() => {
-      cy.verifyAlertSuccess();
-    });
+  });
+  cy.wait('@createNewAgendaitem', { timeout: 20000 }).then(() => {
+    cy.verifyAlertSuccess();
   });
 });
 
@@ -273,7 +275,7 @@ Cypress.Commands.add('addAgendaitemToAgenda', (caseTitle, postponed) => {
     .click();
   cy.wait('@getSubcasesFiltered', { timeout: 12000 });
 
-  cy.get('.vl-modal-dialog').as('dialog').within(() =>{
+  cy.get('.vl-modal-dialog').as('dialog').within(() => {
     cy.get('.vl-form-grid').children().as('formGrid');
 
     if(postponed) {
@@ -617,9 +619,9 @@ Cypress.Commands.add('addDocuments', (files) => {
     });
   });
 
-  cy.wait('@createNewDocumentVersion');
-  cy.wait('@createNewDocument');
-  cy.wait('@patchModel');
+  cy.wait('@createNewDocumentVersion', { timeout: 12000 });
+  cy.wait('@createNewDocument', { timeout: 12000 });
+  cy.wait('@patchModel', { timeout: 12000 });
 
 });
 
@@ -656,8 +658,8 @@ Cypress.Commands.add('addNewDocumentVersion', (oldFileName, file) => {
   });
   
 
-  cy.wait('@createNewDocumentVersion');
-  cy.wait('@patchModel');
+  cy.wait('@createNewDocumentVersion', { timeout: 12000 });
+  cy.wait('@patchModel', { timeout: 12000 });
 
 });
 

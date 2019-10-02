@@ -165,14 +165,18 @@ context('Full test', () => {
     cy.openAgendaForDate(agendaDate);
     
     cy.setFormalOkOnAllItems();
-    //TODO temp
-    // const case_2_TitleShort= 'Cypress test dossier 2';
-
     
     cy.approveCoAgendaitem(case_2_TitleShort);
 
-    // cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
-    // cy.approveDesignAgenda();
+    cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
+    cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+
+    cy.setFormalOkOnAllItems();
+    cy.addRemarkToAgenda('Titel mededeling', 
+      'mededeling omschrijving', 
+      [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
+    cy.addAgendaitemToAgenda('Cypress test', false);
+    cy.approveDesignAgenda();
     //#endregion
 
     //TODO Clean up data, implement db restore after test completed ?

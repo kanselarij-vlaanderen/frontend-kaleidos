@@ -62,7 +62,7 @@ context('Case test', () => {
     cy.route('POST', '/agendaitems').as('createNewAgendaItems');
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
       cy.verifyAlertSuccess();
@@ -86,7 +86,6 @@ context('Case test', () => {
 
       cy.proposeSubcaseForAgenda(agendaDate);
 
-      // cy.openAgendaForDate(agendaDate);
       cy.deleteAgenda(agendaDate, meetingId);
 
     });
