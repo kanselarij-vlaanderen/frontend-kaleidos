@@ -54,7 +54,7 @@ export default Component.extend({
 				const newMandatee = this.store.createRecord('mandatee', {
 					title: oldMandatee.get('title'),
 					start: this.get('selectedStartDate'),
-					end: null,
+					end: moment().add(5, 'years').toDate(),
 					person: this.get('selectedPerson'),
 					holds: holds,
 					governmentDomains: domains,
