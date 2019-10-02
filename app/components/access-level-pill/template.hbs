@@ -1,43 +1,58 @@
 {{#if loading}}
   <div class="vl-loader" role="alert" aria-busy="true"></div>
 {{else}}
-  {{#if (not editing)}}
-    <div class="pill-wrap" {{action "toggleEdit"}}>
+  {{#if (not item.confidential)}}
+    {{#if (not editing)}}
+      <div class="pill-wrap" {{action "toggleEdit"}}>
       <span class="vlc-pill {{accessLevelClass}}">
         {{accessLevelLabel}}
       </span>
-    </div>
-  {{else}}
-    <div class="vl-form__input" style="width:75%">
-      {{utils/model-selector
-        modelName="access-level"
-        allowClear=true
-        searchField="label"
-        propertyToShow="label"
-        readOnly=item.confidential
-        sortField="label"
-        selectedItems=accessLevel
-        selectModel=(action "chooseAccessLevel")
-      }}
-    </div>
-    <button
-      class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-      {{action "save"}}
-    >
-      <i class="vl-vi vl-vi-save vl-button__icon" aria-hidden="true"></i>
-      <span class="vl-u-visually-hidden">
-        {{t "more-options"}}
-      </span>
-    </button>
-    <button
-      class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-      {{action "cancelChanges"}}
-    >
-      <i class="vl-vi vl-vi-cross vl-button__icon" aria-hidden="true"></i>
-      <span class="vl-u-visually-hidden">
-        {{t "more-options"}}
-      </span>
-    </button>
+      </div>
+    {{else}}
+      <div class="vl-form__input" style="width:75%">
+        {{utils/model-selector
+          modelName="access-level"
+          allowClear=true
+          searchField="label"
+          propertyToShow="label"
+          readOnly=item.confidential
+          sortField="label"
+          selectedItems=accessLevel
+          selectModel=(action "chooseAccessLevel")
+        }}
+      </div>
+      <button
+        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "save"}}
+      >
+        <i class="vl-vi vl-vi-save vl-button__icon" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "more-options"}}
+        </span>
+      </button>
+      <button
+        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "cancelChanges"}}
+      >
+        <i class="vl-vi vl-vi-cross vl-button__icon" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "more-options"}}
+        </span>
+      </button>
+    {{/if}}
   {{/if}}
+  <button
+    class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+    disabled={{if isEditor undefined "true"}}
+    {{action "toggleConfidential"}}
+  >
+    {{#if item.confidential}}
+      <span
+        class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
+      ></span>
+    {{else}}
+      <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+    {{/if}}
+  </button>
   {{yield}}
 {{/if}}

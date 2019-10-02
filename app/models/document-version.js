@@ -34,5 +34,11 @@ export default Model.extend({
   storeAccessLevel(accessLevel){
     this.set('accessLevel', accessLevel);
     return this.save();
+  },
+
+  toggleConfidential: async function(){
+    this.toggleProperty('confidential');
+    await this.save();
   }
+
 });

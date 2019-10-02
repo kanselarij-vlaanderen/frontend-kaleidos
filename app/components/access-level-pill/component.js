@@ -11,7 +11,7 @@ export default Component.extend(isAuthenticatedMixin, {
   loading: true,
   editing: false,
   intl: service(),
-  classNameBindings: [':vl-u-display-flex'],
+  classNameBindings: [':vl-u-display-flex', ':vl-u-flex-align-center'],
 
   didInsertElement: function(){
     this._super(...arguments);
@@ -61,6 +61,13 @@ export default Component.extend(isAuthenticatedMixin, {
     },
     chooseAccessLevel(accessLevel) {
       this.set('accessLevel', accessLevel);
+    },
+    toggleConfidential: function(){
+      if(!this.get('isEditor')){
+        return;
+      }
+
+      this.item.toggleConfidential();
     },
     save: async function(){
       this.set('loading', true);

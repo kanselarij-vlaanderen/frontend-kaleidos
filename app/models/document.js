@@ -69,6 +69,16 @@ export default Model.extend({
     return Promise.all(promises);
   },
 
+  toggleConfidential: async function(){
+    this.toggleProperty('confidential');
+    await this.save();
+    let documentVersions = await this.get('documentVersions');
+    await Promise.all(documentVersions.map(documentVersion => {
+      documentVersion.set('confidential', this.get('confidential'));
+      documentVersion.save();
+    }));
+  },
+
   checkAdded: computed('uri', 'addedDocuments.@each', function() {
     if (this.addedDocuments) return this.addedDocuments.includes(this.get('uri'));
   }),
