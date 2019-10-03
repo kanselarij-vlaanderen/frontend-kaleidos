@@ -36,6 +36,7 @@
     "ember-cli": "~3.6.0",
     "ember-cli-app-version": "^3.2.0",
     "ember-cli-babel": "^7.1.2",
+    "ember-cli-cjs-transform": "^2.0.0",
     "ember-cli-dependency-checker": "^3.0.0",
     "ember-cli-eslint": "^4.2.3",
     "ember-cli-file-saver": "^1.2.4",
@@ -79,6 +80,7 @@
     "liquid-fire": "^0.30.0",
     "loader.js": "^4.7.0",
     "qunit-dom": "^0.8.0",
+    "sanitize-filename": "^1.6.3",
     "sass": "^1.16.1"
   },
   "engines": {

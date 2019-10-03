@@ -1,44 +1,51 @@
 {{title (await documentTitle) replace=true}}
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
-    {{#if (eq definite "true")}}
-      <div class="vlc-container">
-        {{utils/logo-header}}
-        {{newsletter/newsletter-meeting
-          definite=definite
-          meeting=(await model.meeting)
-        }}
+    <div class="vlc-container">
+      {{utils/logo-header}}
+      {{newsletter/newsletter-meeting
+        definite=definite
+        title=(await title)
+        meeting=(await model.meeting)
+      }}
+      <h2 class="vl-title vl-title--h2">
+        {{t "agendaitems-subtitle"}}
+      </h2>
+      {{#if (eq definite "true")}}
         {{#each (await model.groups) as |group|}}
-          {{#each group.groups as |agendaitemGroup|}}
-            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-              {{newsletter/newsletter-item
-                agenda=(await model.agenda)
-                definite=definite
-                agendaitem=agendaitem
-              }}
-            {{/each}}
+          <h7 class="vl-title--h7">
+            {{{group.groupName}}}
+          </h7>
+          {{#each group.agendaitems as |agendaitem|}}
+            {{newsletter/newsletter-item
+              agenda=(await model.agenda)
+              itemIndex=agendaitem.itemIndex
+              definite=definite
+              agendaitem=agendaitem
+            }}
           {{/each}}
         {{/each}}
-      </div>
-    {{else}}
-      <div class="vlc-container">
-        {{utils/logo-header}}
-        {{newsletter/newsletter-meeting
-          definite=definite
-          meeting=(await model.meeting)
-        }}
-        {{#each (await model.groups) as |group|}}
-          {{#each group.groups as |agendaitemGroup|}}
-            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-              {{newsletter/newsletter-item
-                agenda=(await model.agenda)
-                definite=definite
-                agendaitem=agendaitem
-              }}
-            {{/each}}
-          {{/each}}
+      {{else}}
+        {{#each (await model.agendaitems) as |agendaitem|}}
+          {{newsletter/newsletter-item
+            agenda=(await model.agenda)
+            definite=definite
+            agendaitem=agendaitem
+          }}
         {{/each}}
-      </div>
-    {{/if}}
+      {{/if}}
+      {{#if (await model.announcements.length)}}
+        <h2 class="vl-title vl-title--h2">
+          {{t "announcements-subtitle"}}
+        </h2>
+        {{#each (await model.announcements) as |announcement|}}
+          {{newsletter/newsletter-item
+            agenda=(await model.agenda)
+            definite=definite
+            agendaitem=announcement
+          }}
+        {{/each}}
+      {{/if}}
+    </div>
   </div>
 </div>

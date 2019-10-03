@@ -1,9 +1,13 @@
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default function (name, versionNumber) {
-  let numeral = CONFIG.latinAdverbialNumberals[versionNumber].toUpperCase();
   if (name) {
-    return `${name} ${numeral}`;
+    if (versionNumber > 1) {
+      let numeral = CONFIG.latinAdverbialNumberals[versionNumber].toUpperCase();
+      return `${name} ${numeral}`;
+    } else {
+      return `${name}`;
+    }
   } else {
     return `${versionNumber || ""}`; 
   }

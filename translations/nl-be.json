@@ -356,7 +356,7 @@
   "loading-text-inactive": "Even geduld",
   "please-be-patient": "Even geduld aub...",
   "approve-agenda-warning": "Deze agenda kan niet goedgekeurd worden zolang dat niet alle agendapunten formeel OK verklaard zijn.",
-  "approve-agenda-passable": "Deze agenda bevat nieuwe agendapunten die nog niet formeel OK verklaard zijn. Als u wilt kan u de agenda toch goedkeuren. Dan worden die punten overget naar de volgende ontwerpagenda ",
+  "approve-agenda-passable": "Deze agenda bevat nieuwe agendapunten die nog niet formeel OK verklaard zijn. Als u op doorgaan klikt worden de huidige agendapunten overgezet naar de volgende ontwerpagenda.",
   "warning-text": "Venster sluiten",
   "continue": "Doorgaan",
   "warning-title": "Opgelet!",
@@ -477,5 +477,7 @@
   "document-being-deleted": "Document wordt verwijderd.",
   "edit-session": "Vergadering wijzigen",
   "users-loading-text":"De gebruikers worden geladen..",
-  "generate-xml":"Genereer XML voor Belga"
+  "generate-xml":"Genereer XML voor Belga",
+  "delete-agendaitem": "Dit punt is reeds goedgekeurd. Bent u zeker dat u dit agendapunt wilt verwijderen?",
+  "open-note":"Nota openen"
 }

@@ -14,9 +14,9 @@ export default Component.extend(isAuthenticatedMixin, {
     return !this.allowEditing;
   }),
 
-  numberToShow: computed('agendaitem.number', 'index', function() {
-    if (this.index) {
-      return this.index;
+  numberToShow: computed('agendaitem.number', 'itemIndex', function() {
+    if (this.itemIndex) {
+      return this.itemIndex;
     } else {
       return this.agendaitem.get('number');
     }

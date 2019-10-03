@@ -2,8 +2,9 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import moment from 'moment';
 import { inject } from '@ember/service';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend({
+export default Component.extend( isAuthenticatedMixin, {
   store: inject(),
   sessionService: inject(),
   agendaService: inject(),
@@ -59,6 +60,37 @@ export default Component.extend({
       }
     }),
 
+  async deleteItem(agendaitem) {
+    const id = agendaitem.get('id');
+    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'));
+    const subcase = await itemToDelete.get('subcase');
+
+    if (subcase) {
+      const phases = await subcase.get('phases');
+      await Promise.all(phases.map(async phase => {
+        await phase.destroyRecord();
+      }));
+
+      const otherItems = await subcase.get('agendaitems');
+      await Promise.all(otherItems.map(async item => {
+        await item.destroyRecord();
+      }));
+
+      await subcase.set('requestedForMeeting', null);
+      await subcase.set('consulationRequests', []);
+      await subcase.set('agendaitems', []);
+      await subcase.save();
+      this.set('sessionService.selectedAgendaItem', null);
+      this.refreshRoute(id);
+    } else {
+
+      await itemToDelete.destroyRecord()
+      this.set('sessionService.selectedAgendaItem', null);
+      this.refreshRoute(id);
+    }
+
+  },
+
   actions: {
     showOptions() {
       this.toggleProperty('showOptions');
@@ -102,27 +134,20 @@ export default Component.extend({
       await agendaitem.reload();
     },
 
-    async deleteItem(agendaitem) {
-      const id = agendaitem.get('id');
-      const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'));
-      const subcase = await itemToDelete.get('subcase');
-
-      if (subcase) {
-        const phases = await subcase.get('phases');
-        await Promise.all(phases.filter(async phase => {
-          await phase.destroyRecord();
-        }));
-
-        subcase.set('requestedForMeeting', null);
-        subcase.set('consulationRequests', []);
-        subcase.set('agendaitems', []);
-        await subcase.save();
-      }
-
-      itemToDelete.destroyRecord().then(() => {
-        this.set('sessionService.selectedAgendaItem', null);
-        this.refreshRoute(id);
-      });
+    toggleIsVerifying() {
+      this.toggleProperty('isVerifying')
     },
+
+    async tryToDeleteItem(agendaitem) {
+      if (await this.isDeletable) {
+        this.deleteItem(agendaitem)
+      } else if (this.isAdmin) {
+        this.toggleProperty('isVerifying')
+      }
+    },
+
+    verifyDelete(agendaitem) {
+      this.deleteItem(agendaitem)
+    }
   }
 });

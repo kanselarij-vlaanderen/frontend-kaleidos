@@ -56,6 +56,15 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     }
   }),
 
+  hasNota: computed('agendaitem', async function () {
+		const nota = await this.agendaitem.get('nota');
+		if (nota) {
+			return true;
+		} else {
+			return false;
+		}
+	}),
+
   actions: {
     async saveChanges() {
       this.set('isLoading', true);
@@ -94,5 +103,14 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         }
       });
     },
+
+    async openDocument(agendaitem) {
+			const nota = await agendaitem.get('nota');
+			if (!nota) {
+				return;
+			}
+			const documentVersion = await nota.get('lastDocumentVersion');
+			window.open(`/document/${documentVersion.get('id')}`);
+		}
   },
 });

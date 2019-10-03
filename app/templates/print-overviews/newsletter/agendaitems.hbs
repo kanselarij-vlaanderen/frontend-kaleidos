@@ -8,6 +8,7 @@
     size=size
     columns=columns as |row|
   }}
+  {{#if (not row.isApproval)}}
     {{#if (is-pending row.subcase.newsletterInfo)}}
       {{web-components/vl-loader text=(t "newletter-loading-text")}}
     {{else if (await row.subcase.newsletterInfo)}}
@@ -38,6 +39,7 @@
         </p>
       </div>
     {{/if}}
+  {{/if}}
   {{/utils/agendaitem-table}}
 </div>
 {{outlet}}

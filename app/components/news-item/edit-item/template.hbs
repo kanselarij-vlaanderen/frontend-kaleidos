@@ -1,4 +1,43 @@
 <div class="vl-u-spacer">
+  <div class="vl-u-display-flex align-right vl-u-spacer-extended-bottom-s">
+    {{#if (not (is-pending agendaitem.nota))}}
+      {{#if (not (await agendaitem.nota))}}
+        <button
+          class="vl-button vl-button--secondary vl-button--icon-before vl-button--disabled"
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
+          ></i>
+          {{t "no-nota"}}
+        </button>
+      {{else}}
+        <button
+          class="vl-button vl-button--secondary vl-button--icon-before"
+          {{action "openDocument" agendaitem bubbles=false}}
+        >
+          <i
+            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
+          ></i>
+          {{t "open-note"}}
+        </button>
+      {{/if}}
+    {{else}}
+      <div class="vl-loader" role="alert" aria-busy="true">
+        {{#attach-popover
+          placement="bottom"
+          class="ember-attacher-popper ember-attacher-popper-small"
+        }}
+          {{t "nota-loading-text"}}
+        {{/attach-popover}}
+      </div>
+    {{/if}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "title")}}
+    <p>
+      {{agendaitem.title}}
+    </p>
+  </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "short-title")}}
     {{web-components/vl-form-input width="4" value=title}}

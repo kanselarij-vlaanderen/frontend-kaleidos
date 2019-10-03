@@ -28,7 +28,7 @@ export default Mixin.create({
     let table = new Table(this.get("columns"), [], {
       enableSync: this.get("enableSync")
     });
-    table.addRows(this.get("model"));
+    table.addRows(this.get("model").filter((item)=> !item.isApproval));
     let sortColumn = table
       .get("allColumns")
       .findBy("valuePath", this.get("sort"));
@@ -51,10 +51,10 @@ export default Mixin.create({
       queryOptions
     );
 
-    this.get("model").pushObjects(records.toArray());
+    this.get("model").pushObjects(records.toArray().filter((item)=> !item.isApproval));
     this.set("meta", records.get("meta"));
     this.set("canLoadMore", !isEmpty(records));
-    this.get("table").addRows(this.get("model"));
+    this.get("table").addRows(this.get("model").filter((item)=> !item.isApproval));
     this.checkRowClasses();
   }),
 

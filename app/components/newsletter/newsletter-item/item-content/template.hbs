@@ -5,7 +5,7 @@
         {{await numberToShow}}
         .
         {{#if (not (await agendaitem.subcase.newsletterInfo))}}
-          {{agendaitem.title}}
+          {{agendaitem.shortTitle}}
         {{else}}
           {{await agendaitem.subcase.newsletterInfo.title}}
         {{/if}}
@@ -25,8 +25,10 @@
     </div>
   </div>
 {{else}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div>
     <h4>
+      {{await numberToShow}}
+      .
       {{#if (not (await agendaitem.subcase.newsletterInfo))}}
         {{agendaitem.title}}
       {{else}}
@@ -36,26 +38,28 @@
   </div>
 {{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
+  <p>
+    {{await agendaitem.subcase.newsletterInfo.mandateeProposal}}
+  </p>
+</div>
+<div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-text">
-    {{#if (not (await agendaitem.subcase.newsletterInfo.richtext))}}
-      <p class="vl-u-text vl-u-text--italic vl-u-text--muted">
-        {{t "no-newsletter-info"}}
-      </p>
-    {{else}}
-      {{{await agendaitem.subcase.newsletterInfo.richtext}}}
+    {{#if (not agendaitem.showAsRemark)}}
+      {{#if (not (await agendaitem.subcase.newsletterInfo.richtext))}}
+        <p class="vl-u-text vl-u-text--italic vl-u-text--muted">
+          {{t "no-newsletter-info"}}
+        </p>
+      {{else}}
+        {{{await agendaitem.subcase.newsletterInfo.richtext}}}
+      {{/if}}
     {{/if}}
   </div>
 </div>
 {{#if allowEditing}}
-<p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-  {{{await agendaitem.subcase.newsletterInfo.displayRemark}}}
-</p>
-{{/if}}
-<div class="vl-u-spacer-extended-bottom-s">
-  <p class="vl-u-text--italic">
-    {{await agendaitem.subcase.newsletterInfo.mandateeProposal}}
+  <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+    {{{await agendaitem.subcase.newsletterInfo.displayRemark}}}
   </p>
-</div>
+{{/if}}
 {{#if (gt (await agendaitem.themes.length) 0)}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-spacer-extended-top-s">

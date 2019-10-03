@@ -24,104 +24,53 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
-            {{#if (not isEditingAccessLevel)}}
-              <div {{action "toggleIsEditingAccessLevel"}}>
-                {{access-level-pill accessLevel=document.accessLevel}}
-              </div>
-            {{else}}
-              <div class="vl-form__input">
-                {{utils/model-selector
-                  modelName="access-level"
-                  allowClear=true
-                  searchField="label"
-                  propertyToShow="label"
-                  readOnly=document.confidential
-                  sortField="label"
-                  selectedItems=(await preferredAccessLevel)
-                  selectModel=(action "chooseAccessLevel")
-                }}
-              </div>
-              <button
-                class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                {{action "saveChanges"}}
-              >
-                <i
-                  class="vl-vi vl-vi-save vl-button__icon"
-                  aria-hidden="true"
-                ></i>
-                <span class="vl-u-visually-hidden">
-                  {{t "more-options"}}
-                </span>
-              </button>
-              <button
-                class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                {{action "toggleIsEditingAccessLevel"}}
-              >
-                <i
-                  class="vl-vi vl-vi-cross vl-button__icon"
-                  aria-hidden="true"
-                ></i>
-                <span class="vl-u-visually-hidden">
-                  {{t "more-options"}}
-                </span>
-              </button>
+            {{#if document}}
+              {{access-level-pill item=document}}
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if isEditor}}
-              <button
-                class="vl-button vl-button--link-muted vl-button--icon"
-                {{action "toggleConfidential" document}}
-              >
-                {{#if document.confidential}}
-                  <span
-                    class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
-                  ></span>
-                {{else}}
-                  <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
-                {{/if}}
-              </button>
               <button class="vl-button vl-button--link vl-button--icon">
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
+                {{#attach-popover
+                  class="ember-attacher-popper"
+                  hideOn="clickout click"
+                  showOn="click"
+                  animation="shift"
+                  placement="bottom" as |attacher|
+                }}
+                  <ul class="vl-popover__link-list">
+                    <li class="vl-popover__link-list__item">
+                      <a
+                        class="vl-link vl-link--block"
+                        {{action attacher.hide}}
+                        {{action "openUploadDialog" document}}
+                      >
+                        {{t "new-version"}}
+                      </a>
+                    </li>
+                    <li class="vl-popover__link-list__item">
+                      <a
+                        class="vl-link vl-link--block"
+                        {{action attacher.hide}}
+                        {{action "toggleIsEditing"}}
+                      >
+                        {{t "document-title-edit"}}
+                      </a>
+                    </li>
+                    <li class="vl-popover__link-list__separator" role="none"></li>
+                    <li class="vl-popover__link-list__item">
+                      <a
+                        class="vl-link vl-link--block vl-u-text--error"
+                        {{action attacher.hide}}
+                        {{action "deleteDocument" document}}
+                      >
+                        {{t "document-delete"}}
+                      </a>
+                    </li>
+                  </ul>
+                {{/attach-popover}}
               </button>
-              {{#attach-popover
-                class="ember-attacher-popper"
-                hideOn="clickout click"
-                showOn="click"
-                animation="shift"
-                placement="bottom" as |attacher|
-              }}
-                <ul class="vl-popover__link-list">
-                  <li class="vl-popover__link-list__item">
-                    <a
-                      class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "openUploadDialog" document}}
-                    >
-                      {{t "new-version"}}
-                    </a>
-                  </li>
-                  <li class="vl-popover__link-list__item">
-                    <a
-                      class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "toggleIsEditing"}}
-                    >
-                      {{t "document-title-edit"}}
-                    </a>
-                  </li>
-                  <li class="vl-popover__link-list__separator" role="none"></li>
-                  <li class="vl-popover__link-list__item">
-                    <a
-                      class="vl-link vl-link--block vl-u-text--error"
-                      {{action attacher.hide}}
-                      {{action "deleteDocument" document}}
-                    >
-                      {{t "document-delete"}}
-                    </a>
-                  </li>
-                </ul>
-              {{/attach-popover}}
             {{/if}}
           </div>
         </div>

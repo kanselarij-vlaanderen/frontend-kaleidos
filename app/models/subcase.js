@@ -43,7 +43,6 @@ export default Model.extend({
   requestedBy: belongsTo('mandatee', { inverse: null }),
   accessLevel: belongsTo('access-level'),
 
-
   firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({
       promise: this.store.query('subcase-phase', {
@@ -109,7 +108,7 @@ export default Model.extend({
   documentsLength: computed('documents', function () {
     return PromiseObject.create({
       promise: this.get('documents').then((documents) => {
-        return documents.get('length');
+        return documents ? documents.get('length'): 0;
       })
     });
   }),
@@ -138,7 +137,7 @@ export default Model.extend({
   linkedDocumentsLength: computed('linkedDocuments', function () {
     return PromiseObject.create({
       promise: this.get('linkedDocuments').then((documents) => {
-        return documents.get('length');
+        return documents ? documents.get('length'): 0;
       })
     });
   }),

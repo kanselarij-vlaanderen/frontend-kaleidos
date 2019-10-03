@@ -25,6 +25,7 @@ export default Model.extend({
   shortTitle: attr('string'),
   title: attr('string'),
   formallyOk: attr('string'),
+  isApproval: attr('boolean'),
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
@@ -88,6 +89,9 @@ export default Model.extend({
           return this.store.query('document', {
             filter: {
               'document-versions': { id: documentVersionIds },
+            },
+            page : {
+              size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
             include: 'document-versions,type',
           }).then((documents) => {
@@ -185,10 +189,11 @@ export default Model.extend({
     });
   }),
 
-  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', function() {
-    return (this.addedAgendaitems && this.addedAgendaitems.includes(this.id))
-      || (this.agenda.get('createdFor.agendas') && this.agenda.get('createdFor.agendas').length <= 1)
-      || (this.agenda.get('name')  === CONFIG.alphabet[0]);
+  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
+    const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
+    const hasOnlyOneAgenda = (await this.agenda.get('createdFor.agendas.length')) == 1;
+    const isDesignAgenda = this.agenda.get('isDesignAgenda');
+    return wasAdded && !(isDesignAgenda && hasOnlyOneAgenda);
   }),
 
   isAdded: alias('checkAdded'),

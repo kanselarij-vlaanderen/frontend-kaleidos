@@ -1,20 +1,58 @@
-{{#if (is-pending accessLevel)}}
-  <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-{{else if (eq (await accessLevelId) "6ca49d86-d40f-46c9-bde3-a322aa7e5c8e")}}
-  <span class="vlc-pill vlc-pill--success">
-    {{await accessLevelLabel}}
-  </span>
-{{else if (eq (await accessLevelId) "abe4c18d-13a9-45f0-8cdd-c493eabbbe29")}}
-  <span class="vlc-pill vlc-pill--warning">
-    {{await accessLevelLabel}}
-  </span>
-{{else if (eq (await accessLevelId) "d335f7e3-aefd-4f93-81a2-1629c2edafa3")}}
-  <span class="vlc-pill vlc-pill--error">
-    {{await accessLevelLabel}}
-  </span>
+{{#if loading}}
+  <div class="vl-loader" role="alert" aria-busy="true"></div>
 {{else}}
-  <span class="vlc-pill">
-    {{t "no-accessLevel"}}
-  </span>
+  {{#if (not item.confidential)}}
+    {{#if (not editing)}}
+      <div class="pill-wrap" {{action "toggleEdit"}}>
+      <span class="vlc-pill {{accessLevelClass}}">
+        {{accessLevelLabel}}
+      </span>
+      </div>
+    {{else}}
+      <div class="vl-form__input" style="width:75%">
+        {{utils/model-selector
+          modelName="access-level"
+          allowClear=true
+          searchField="label"
+          propertyToShow="label"
+          readOnly=item.confidential
+          sortField="label"
+          selectedItems=accessLevel
+          selectModel=(action "chooseAccessLevel")
+        }}
+      </div>
+      <button
+        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "save"}}
+      >
+        <i class="vl-vi vl-vi-save vl-button__icon" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "more-options"}}
+        </span>
+      </button>
+      <button
+        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        {{action "cancelChanges"}}
+      >
+        <i class="vl-vi vl-vi-cross vl-button__icon" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "more-options"}}
+        </span>
+      </button>
+    {{/if}}
+  {{/if}}
+  <button
+    class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+    disabled={{if isEditor undefined "true"}}
+    {{action "toggleConfidential"}}
+  >
+    {{#if item.confidential}}
+      <span
+        class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
+      ></span>
+    {{else}}
+      <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+    {{/if}}
+  </button>
+  {{yield}}
 {{/if}}
-{{yield}}
