@@ -32,6 +32,14 @@
     {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
   </div>
 </div>
+{{#if isRemark}}
+  <div class="vl-u-spacer">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "show-in-newsletter")}}
+      {{web-components/vl-toggle value=showInNewsletter}}
+    </div>
+  </div>
+{{/if}}
 <div class="vl-action-group vl-action-group--align-right">
   <a
     class="vl-button vl-button--tertiary vl-button--narrow"

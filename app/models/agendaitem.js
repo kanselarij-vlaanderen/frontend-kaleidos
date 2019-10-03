@@ -30,6 +30,7 @@ export default Model.extend({
   agenda: belongsTo('agenda', { inverse: null }),
   subcase: belongsTo('subcase', { inverse: null }),
   meetingRecord: belongsTo('meeting-record'),
+  showInNewsletter: attr('boolean'),
 
   remarks: hasMany('remark'),
   mandatees: hasMany('mandatee'),
