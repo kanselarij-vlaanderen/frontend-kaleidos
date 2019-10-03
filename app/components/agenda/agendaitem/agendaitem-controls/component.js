@@ -4,7 +4,7 @@ import moment from 'moment';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend( isAuthenticatedMixin, {
+export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   sessionService: inject(),
   agendaService: inject(),
@@ -57,6 +57,8 @@ export default Component.extend( isAuthenticatedMixin, {
         } else {
           return true;
         }
+      } else {
+        return true;
       }
     }),
 
@@ -71,10 +73,8 @@ export default Component.extend( isAuthenticatedMixin, {
         await phase.destroyRecord();
       }));
 
-      const otherItems = await subcase.get('agendaitems');
-      await Promise.all(otherItems.map(async item => {
-        await item.destroyRecord();
-      }));
+      const allItems = await subcase.get('agendaitems');
+      await Promise.all(allItems.map(async item => item.destroyRecord()));
 
       await subcase.set('requestedForMeeting', null);
       await subcase.set('consulationRequests', []);
