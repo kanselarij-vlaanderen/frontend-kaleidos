@@ -212,14 +212,18 @@ export default Model.extend({
     }, A([]))
   }),
 
-  onAgendaInfo: computed('meetings.@each', async function() {
+  latestMeeting: computed('meetings.@each', async function() {
     const meetings = await this.get('meetings');
     return meetings
       .reduce((meeting1, meeting2) =>
         moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
           ? meeting1
           : meeting2)
-      .plannedStart
+  }),
+
+  onAgendaInfo: computed('latestMeeting', async function() {
+    const latestMeeting = await this.get('latestMeeting');
+    return latestMeeting.plannedStart
   }),
 
   decidedInfo: computed('phases.@each', function() {
