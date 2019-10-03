@@ -77,17 +77,16 @@
           </span>
         {{/if}}
       {{/if}}
-      {{#if isEditor}}
-        {{#if (await confidential)}}
-          <span
-            class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"
-          ></span>
-        {{else}}
-          <span
-            class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
-          ></span>
-        {{/if}}
+      {{#if (await confidential)}}
+        <span
+          class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"
+        ></span>
+      {{else}}
+        <span
+          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+        ></span>
       {{/if}}
+
     </div>
   </div>
 {{/if}}
