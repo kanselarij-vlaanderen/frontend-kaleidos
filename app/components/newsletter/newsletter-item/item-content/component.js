@@ -14,11 +14,14 @@ export default Component.extend(isAuthenticatedMixin, {
     return !this.allowEditing;
   }),
 
-  numberToShow: computed('agendaitem.number', 'itemIndex', function() {
+  numberToShow: computed('agendaitem.number', 'itemIndex', 'definite', 'agendaitem.showAsRemark', function() {
+    if(this.agendaitem.showAsRemark && this.definite === "true"){
+      return '';
+    }
     if (this.itemIndex) {
-      return this.itemIndex;
+      return this.itemIndex + ".";
     } else {
-      return this.agendaitem.get('number');
+      return this.agendaitem.get('number') + ".";
     }
   }),
 

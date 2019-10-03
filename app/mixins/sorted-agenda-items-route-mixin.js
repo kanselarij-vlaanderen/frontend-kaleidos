@@ -7,8 +7,10 @@ export default Mixin.create({
   sessionService: inject(),
   agendaService: inject(),
 
-  async parseAgendaItems(agendaitems) {
+  async parseAgendaItems(agendaitems, params) {
     let draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
+
+    draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
 
     await this.agendaService.setGroupNameOnAgendaItems(draftAgendaitems);
     await this.setCalculatedGroupPriorities(draftAgendaitems);
@@ -42,16 +44,27 @@ export default Mixin.create({
     return groups;
   },
 
-  async model() {
+  filterAnnouncements: function(items){
+    return items;
+  },
+
+  filterAgendaitems: async function(items){
+    return items;
+  },
+
+  async model(params) {
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
     let agendaitems = await this.store.query('agendaitem', {
       filter: { agenda: { id: agenda.get('id') } },
       include: 'mandatees'
     });
-    const announcements = agendaitems.filter((item) => item.showAsRemark);
+    const announcements = this.filterAnnouncements(agendaitems.filter((item) => {
+      return item.showAsRemark;
+    }), params);
+
     const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
-      agendaitems
+      agendaitems, params
     );
 
     let prevIndex = 0;
