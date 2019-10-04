@@ -57,7 +57,8 @@ export default Mixin.create({
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
     let agendaitems = await this.store.query('agendaitem', {
       filter: { agenda: { id: agenda.get('id') } },
-      include: 'mandatees'
+      include: 'mandatees',
+      sort: "priority"
     });
     const announcements = this.filterAnnouncements(agendaitems.filter((item) => {
       return item.showAsRemark;
