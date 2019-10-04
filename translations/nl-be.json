@@ -255,6 +255,7 @@
   "phases": "Fases",
   "postpone": "Uitstellen",
   "postponed-item": "Dit punt is uitgesteld.",
+  "postponed-subcase": "Deze stap is uitgesteld.",
   "postpone-item": "Agendapunt uitstellen",
   "postpone-until": "Uitstellen tot",
   "postponed-until": "Uitgesteld, aanvraag voor de zitting op ",

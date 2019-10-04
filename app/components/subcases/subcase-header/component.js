@@ -35,12 +35,22 @@ export default Component.extend(ModifiedMixin, {
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
       await designAgenda.reload(); //ensures latest state is pulled
       if (designAgenda.get('name') === "Ontwerpagenda") {
-        subcase.set('requestedForMeeting', meetingRecord);
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
+
+        subcase.set('requestedForMeeting', meetingRecord);
         await this.updateModifiedProperty(designAgenda);
         await designAgenda.hasMany('agendaitems').reload();
-        subcase.save().then(subcase => {
-          this.assignSubcasePhase(subcase);
+        subcase.save().then(async subcase => {
+          const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
+          const phaseCode = phasesCodes.get('firstObject');
+          if (phaseCode) {
+            const phase = this.store.createRecord('subcase-phase', {
+              date: moment().utc().toDate(),
+              code: phaseCode,
+              subcase: subcase
+            });
+            phase.save();
+          }
         });
       }
     },
@@ -92,19 +102,6 @@ export default Component.extend(ModifiedMixin, {
     },
     cancelArchiveSubcase() {
       this.set('isArchivingSubcase', false);
-    }
-  },
-
-  async assignSubcasePhase(subcase) {
-    const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
-    const phaseCode = phasesCodes.get('firstObject');
-    if (phaseCode) {
-      const phase = this.store.createRecord('subcase-phase', {
-        date: moment().utc().toDate(),
-        code: phaseCode,
-        subcase: subcase
-      });
-      phase.save();
     }
   }
 });

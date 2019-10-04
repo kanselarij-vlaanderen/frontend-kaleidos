@@ -76,10 +76,21 @@
             {{t "is-on-agenda"}}
           </span>
           <span class="vl-description-data__value">
-            {{#if (await subcase.onAgendaInfo)}}
-              {{moment-format (await subcase.onAgendaInfo)}}
+            {{#if (or
+                      (is-pending subcase.isPostponed)
+                      (is-pending subcase.onAgendaInfo)
+                  )}}
+                <div class="vl-loader"></div>
             {{else}}
-              {{t "not-yet-on-agenda"}}
+              {{#if (await subcase.isPostponed)}}
+                {{t "postponed-subcase"}}
+              {{else}}
+                {{#if (await subcase.onAgendaInfo)}}
+                  {{moment-format (await subcase.onAgendaInfo)}}
+                {{else}}
+                  {{t "not-yet-on-agenda"}}
+                {{/if}}
+              {{/if}}
             {{/if}}
           </span>
         </div>
