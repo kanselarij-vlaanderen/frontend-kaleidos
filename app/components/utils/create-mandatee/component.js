@@ -5,6 +5,7 @@ import moment from 'moment';
 export default Component.extend({
   store: inject(),
   selectedPerson: null,
+  mandateesUpdated: null,
   today: moment()
     .utc()
     .toDate(),
@@ -46,6 +47,7 @@ export default Component.extend({
         this.set('isLoading', false);
         this.clearValues();
         this.closeModal();
+        this.mandateesUpdated();
       });
     }
   },

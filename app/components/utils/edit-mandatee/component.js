@@ -10,6 +10,8 @@ export default Component.extend({
     return this.get('mandateeToEdit');
   }),
 
+  mandateesUpdated: null,
+
   startDate: getCachedProperty('start'),
   endDate: getCachedProperty('end'),
   iseCodes: getCachedProperty('iseCodes'),
@@ -46,6 +48,7 @@ export default Component.extend({
       mandatee.save().then(() => {
         this.set('isLoading', false);
         this.closeModal();
+        this.mandateesUpdated();
       });
     }
   }
