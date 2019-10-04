@@ -16,4 +16,10 @@ export default Route.extend(AuthenticatedRouteMixin, {
         return mandatees.sortBy('priority');
       });
   },
+
+  actions: {
+    refreshRoute() {
+      this.refresh();
+    }
+  }
 });

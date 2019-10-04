@@ -48,5 +48,11 @@ export default Controller.extend(isAuthenticatedMixin, {
 			await mandateeToEdit.destroyRecord();
 			this.set('isDeletingMandatee', false);
 		},
+
+		mandateesUpdated() {
+      this.send('refreshRoute');
+		}
+
+
 	}
 });

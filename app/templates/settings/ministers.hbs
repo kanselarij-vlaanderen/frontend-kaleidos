@@ -124,6 +124,7 @@
   }}
     {{utils/manage-mandatees
       mandateeToEdit=mandateeToEdit
+      mandateesUpdated=(action "mandateesUpdated")
       isEditing=isEditingMandatee
       closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
     }}
@@ -137,6 +138,7 @@
   }}
     {{utils/manage-mandatees
       mandateeToEdit=mandateeToEdit
+      mandateesUpdated=(action "mandateesUpdated")
       isResigning=isResigningMandatee
       closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
     }}
@@ -148,16 +150,20 @@
     title=(t "manage-ministers")
     closeModal=(action "toggleIsAdding")
   }}
-    {{utils/create-mandatee model=model closeModal=(action "toggleIsAdding")}}
+    {{utils/create-mandatee model=model
+      closeModal=(action "toggleIsAdding")
+      mandateesUpdated=(action "mandateesUpdated")
+    }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isDeletingMandatee}}
   {{web-components/vl-modal-verify
     title=(t "warning-title")
-    verifyButtonText=(t "warning-text")
+    verifyButtonText=(t "delete")
     message=(t "delete-mandatee-message")
     cancel=(action "cancel")
     verify=(action "deleteMandatee")
+    mandateesUpdated=(action "mandateesUpdated")
   }}
 {{/if}}
 {{outlet}}
