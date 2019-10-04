@@ -113,7 +113,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		model.set('formallyOk', CONFIG.notYetFormallyOk);
 		model.set('mandatees', selectedMandatees);
 		model.set('iseCodes', selectedIseCodes);
-		model.set('requestedBy', submitter)
+		model.set('requestedBy', submitter);
 		return model.save().then((model) => {
 			return this.checkForActionChanges(model);
 		});
