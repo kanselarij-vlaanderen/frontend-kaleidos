@@ -124,7 +124,28 @@ export default Service.extend({
       themes: await subcase.get('themes'),
       approvals: await subcase.get('approvals'),
     });
-    return agendaitem.save();
+    await agendaitem.save();
+
+    const meeting = await selectedAgenda.get('createdFor')
+    await subcase.hasMany('agendaitems').reload();
+    subcase.set('requestedForMeeting', meeting);
+    await subcase.save();
+    await this.assignSubcasePhase(subcase);
+    await subcase.hasMany('phases').reload();
+
+  },
+
+  async assignSubcasePhase(subcase) {
+    const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
+    const phaseCode = phasesCodes.get('firstObject');
+    if (phaseCode) {
+      const phase = this.store.createRecord('subcase-phase', {
+        date: moment().utc().toDate(),
+        code: phaseCode,
+        subcase: subcase
+      });
+      await phase.save();
+    }
   },
 
   async setGroupNameOnAgendaItems(agendaitems) {
