@@ -20,8 +20,8 @@ export default Component.extend({
       this.set('startDate', val);
     },
 
-    chooseDomain(domains) {
-      this.set('selectedDomains', domains);
+    chooseIseCodes(iseCodes) {
+      this.set('iseCodes', iseCodes);
     },
 
     closeModal() {
@@ -36,7 +36,7 @@ export default Component.extend({
         title,
         nickName,
         person,
-        governmentDomains: selectedDomains,
+        iseCodes: this.iseCodes || [],
         start: moment(this.get('startDate'))
           .utc()
           .toDate(),

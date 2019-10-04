@@ -27,13 +27,19 @@ export default Component.extend({
       this.set('endDate', val);
     },
 
-    chooseDomain(iseCodes) {
+    chooseIseCodes(iseCodes) {
       this.set('iseCodes', iseCodes);
     },
 
     closeModal() {
       this.closeModal();
     },
+
+    async chooseDomain(domains) {
+      this.set('selectedDomains', domains)
+      this.chooseDomain(domains);
+    },
+
 
     async saveChanges() {
       this.set('isLoading', true);
