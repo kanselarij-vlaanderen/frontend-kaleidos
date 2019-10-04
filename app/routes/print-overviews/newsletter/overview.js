@@ -6,6 +6,28 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 	include: 'newsletter-info',
 
 	queryParams: {
-		definite: { refreshModel: false }
-	}
-});	
+		definite: { refreshModel: true }
+	},
+
+  filterAnnouncements: function(announcements){
+	  return announcements.filter((item) => {
+	    return item.showInNewsletter;
+    });
+  },
+
+  filterAgendaitems: async function(items, params){
+    if(params.definite !== "true"){
+      return items;
+    }
+    let newsLetterByIndex = await Promise.all(items.map((item)=>{
+      return item.get('subcase.newsletterInfo.inNewsletter');
+    }));
+    let filtered = [];
+    items.map((item, index) => {
+      if(newsLetterByIndex[index]){
+        filtered.push(item);
+      }
+    });
+    return filtered;
+  }
+});

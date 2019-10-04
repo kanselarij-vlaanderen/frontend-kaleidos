@@ -8,16 +8,23 @@
         title=(await title)
         meeting=(await model.meeting)
       }}
+      <h2 class="vl-title vl-title--h2">
+        {{t "agendaitems-subtitle"}}
+      </h2>
       {{#if (eq definite "true")}}
         {{#each (await model.groups) as |group|}}
-          {{#each group.groups as |agendaitemGroup|}}
-            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-              {{newsletter/newsletter-item
-                agenda=(await model.agenda)
-                definite=definite
-                agendaitem=agendaitem
-              }}
-            {{/each}}
+          {{#if (not (is-empty group.agendaitems))}}
+            <h7 class="vl-title--h7">
+              {{{group.groupName}}}
+            </h7>
+          {{/if}}
+          {{#each group.agendaitems as |agendaitem|}}
+            {{newsletter/newsletter-item
+              agenda=(await model.agenda)
+              itemIndex=agendaitem.itemIndex
+              definite=definite
+              agendaitem=agendaitem
+            }}
           {{/each}}
         {{/each}}
       {{else}}
@@ -25,8 +32,19 @@
           {{newsletter/newsletter-item
             agenda=(await model.agenda)
             definite=definite
-            index=index
             agendaitem=agendaitem
+          }}
+        {{/each}}
+      {{/if}}
+      {{#if (await model.announcements.length)}}
+        <h2 class="vl-title vl-title--h2">
+          {{t "announcements-subtitle"}}
+        </h2>
+        {{#each (await model.announcements) as |announcement|}}
+          {{newsletter/newsletter-item
+            agenda=(await model.agenda)
+            definite=definite
+            agendaitem=announcement
           }}
         {{/each}}
       {{/if}}

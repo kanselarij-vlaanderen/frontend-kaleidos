@@ -199,7 +199,6 @@ export default Component.extend(DefaultQueryParamsMixin, {
 
       promise.then(async () => {
         await selectedAgenda.hasMany("agendaitems").reload();
-        await agendaService.assignDirtyPrioritiesToAgendaitems(selectedAgenda);
 
         this.set("loading", false);
         this.set("isAddingAgendaitems", false);

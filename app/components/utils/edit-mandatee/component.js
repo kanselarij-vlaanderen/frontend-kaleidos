@@ -11,6 +11,7 @@ export default Component.extend({
   }),
 
   startDate: getCachedProperty('start'),
+  endDate: getCachedProperty('end'),
   iseCodes: getCachedProperty('iseCodes'),
   title: getCachedProperty('title'),
   shortTitle: getCachedProperty('shortTitle'),
@@ -19,6 +20,9 @@ export default Component.extend({
   actions: {
     selectStartDate(val) {
       this.set('startDate', val);
+    },
+    selectEndDate(val) {
+      this.set('endDate', val);
     },
 
     chooseDomain(iseCodes) {
@@ -31,9 +35,9 @@ export default Component.extend({
 
     async saveChanges() {
       this.set('isLoading', true);
-      const { startDate, title, shortTitle, mandateeToEdit, iseCodes, nickName } = this;
+      const { startDate, endDate, title, shortTitle, mandateeToEdit, iseCodes, nickName } = this;
       const mandatee = await this.store.findRecord('mandatee', mandateeToEdit.get('id'));
-      mandatee.set('end', null);
+      mandatee.set('end', endDate);
       mandatee.set('title', title);
       mandatee.set('shortTitle', shortTitle);
       mandatee.set('iseCodes', iseCodes);

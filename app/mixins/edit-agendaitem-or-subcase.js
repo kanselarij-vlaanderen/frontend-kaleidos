@@ -75,8 +75,8 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 			item.set('modified', moment().utc().toDate());
 			if (isAgendaItem && !item.showAsRemark) {
 				const isDesignAgenda = await item.get('isDesignAgenda');
-				if (isDesignAgenda) {
-					const agendaitemSubcase = await item.get('subcase');
+        const agendaitemSubcase = await item.get('subcase');
+        if (isDesignAgenda && agendaitemSubcase) {
 					agendaitemSubcase.set('modified', moment().utc().toDate());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
 				}
