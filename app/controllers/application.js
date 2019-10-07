@@ -40,11 +40,11 @@ export default Controller.extend(isAuthenticatedMixin, {
       this.set('environmentName', 'LOCAL');
     }
 
-    if(window.location.href.indexOf("https://kanselarij-dev.vlaanderen.be") == 0){
+    if(window.location.href.indexOf("https://kaleidos-dev.vlaanderen.be") == 0){
       this.set('environmentName', 'DEV');
     }
 
-    if(window.location.href.indexOf("https://kanselarij-test.vlaanderen.be") == 0){
+    if(window.location.href.indexOf("https://kaleidos-test.vlaanderen.be") == 0){
       this.set('environmentName', 'TEST');
     }
 
