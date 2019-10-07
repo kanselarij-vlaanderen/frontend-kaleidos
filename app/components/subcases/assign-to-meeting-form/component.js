@@ -34,16 +34,4 @@ export default Component.extend({
 		}
 	},
 
-	async assignSubcasePhase(subcase) {
-		const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
-		const phaseCode = phasesCodes.get('firstObject');
-		if (phaseCode) {
-			const phase = this.store.createRecord('subcase-phase', {
-				date: moment().utc().toDate(),
-				code: phaseCode,
-				subcase: subcase
-			});
-			phase.save();
-		}
-	}
 });

@@ -100,7 +100,7 @@ export default Model.extend({
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
             // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return documents.sortBy('type.priority', 'numberVr');
+            return documents.sortBy('type.priority', 'name');
           });
         }
       })
@@ -129,7 +129,7 @@ export default Model.extend({
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
             // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return documents.sortBy('type.priority', 'numberVr');
+            return documents.sortBy('type.priority', 'name');
           });
         }
       })
@@ -169,7 +169,7 @@ export default Model.extend({
     return PromiseObject.create({
       promise: store.query('agendaitem', {
         filter: { subcase: { id: id } },
-        sort: 'created'
+        sort: '-created'
       }).then((agendaitems) => {
         const lastAgendaItem = agendaitems.get('firstObject');
         if (lastAgendaItem) {
@@ -277,6 +277,18 @@ export default Model.extend({
       id = CONFIG.notaID;
     }
     return this.store.findRecord('case-type', id);
+  }),
+
+  isPostponed: computed('latestMeeting', async function() {
+    const latestMeeting = await this.get('latestMeeting');
+    const latestAgenda = await latestMeeting.get('latestAgenda');
+    const agendaitems = await latestAgenda.get('agendaitems');
+    const subcases = await Promise.all(agendaitems.map(item => item.subcase.then(() => item)));
+    const foundItem = subcases.find(item => item.subcase && item.subcase.get('id') === this.id);
+    if (foundItem) {
+      return foundItem.isPostponed
+    }
+    return false;
   }),
 
   async findPhaseDateByCodeId(codeId) {

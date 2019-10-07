@@ -21,7 +21,7 @@ export default Model.extend({
   signedDocument: belongsTo('document'),
 
   decisionApproval: computed('signedDocument', function() {
-    return this.intl.t('signed-document-decision', { name: this.get('signedDocument.numberVr') })
+    return this.intl.t('signed-document-decision', { name: this.get('signedDocument.name') });
   }),
 
   documents: computed('documentVersions.@each', function() {
@@ -39,7 +39,7 @@ export default Model.extend({
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
             // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return documents.sortBy('type.priority', 'numberVr');
+            return documents.sortBy('type.priority', 'name');
           });
         }
       }),
