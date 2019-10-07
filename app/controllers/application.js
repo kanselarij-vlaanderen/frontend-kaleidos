@@ -36,7 +36,19 @@ export default Controller.extend(isAuthenticatedMixin, {
       passive: true,
     });
 
-     this.startCheckingAlert();
+    if(window.location.href.indexOf("http://localhost") == 0){
+      this.set('environmentName', 'LOCAL');
+    }
+
+    if(window.location.href.indexOf("https://kanselarij-dev.vlaanderen.be") == 0){
+      this.set('environmentName', 'DEV');
+    }
+
+    if(window.location.href.indexOf("https://kanselarij-test.vlaanderen.be") == 0){
+      this.set('environmentName', 'TEST');
+    }
+
+    this.startCheckingAlert();
   },
 
   async startCheckingAlert() {
@@ -111,6 +123,10 @@ export default Controller.extend(isAuthenticatedMixin, {
   showHeader: computed('role', function() {
     let role = this.get('role');
     return role && role !== '' && role !== 'no-access';
+  }),
+
+  showEnvironmentName: computed('environmentName', function(){
+    return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
   }),
 
   type: computed('alert', async function() {
