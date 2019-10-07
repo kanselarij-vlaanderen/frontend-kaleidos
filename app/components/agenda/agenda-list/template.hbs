@@ -1,10 +1,10 @@
-<div class="vl-u-display-flex vl-u-flex-space-between">
-  <span class="vl-title vl-title--h3">
+<div class="vlc-agenda-items-section-header">
+  <h3 class="vlc-agenda-items-section-header__title">
     {{t "agendaitems-subtitle"}}
-  </span>
+  </h3>
   <div class="vl-u-display-flex vl-u-flex-end">
     <div class="vl-u-spacer-extended-left-s">
-      <a class="vl-link" {{action "toggleChangesOnly"}}>
+      <a class="vlc-agenda-items-section-header__link" {{action "toggleChangesOnly"}}>
         {{#if (not isShowingChanges)}}
           {{t "show-changes"}}
         {{else}}
@@ -14,7 +14,7 @@
     </div>
     {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
       <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditingOverview"}}>
+        <a class="vlc-agenda-items-section-header__link" {{action "toggleIsEditingOverview"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -59,16 +59,16 @@
   {{/sortable-group}}
 </div>
 {{#if (not selectedAgendaItem)}}
-  <div class="vl-u-spacer-extended-bottom-s">
-    <span class="vl-title vl-title--h3">
+  <div class="vlc-agenda-items-section-header">
+    <h3 class="vlc-agenda-items-section-header__title">
       {{t "announcements-subtitle"}}
-    </span>
+    </h3>
   </div>
 {{else}}
-  <div class="vl-u-spacer-extended-s vlc-agenda-items--spaced">
-    <span class="vl-title vl-title--h3">
+  <div class="vlc-agenda-items-section-header">
+    <h3 class="vlc-agenda-items-section-header__title">
       {{t "announcements-subtitle"}}
-    </span>
+    </h3>
   </div>
 {{/if}}
 <div class="vl-u-spacer">
