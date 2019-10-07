@@ -85,6 +85,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     toggleIsEditing() {
+      if(!this.isEditor){
+        return;
+      }
       this.toggleProperty('isEditing');
     },
 
