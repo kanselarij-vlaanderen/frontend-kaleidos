@@ -29,7 +29,7 @@ export default Controller.extend({
         cellClassNames: ['vl-data-table-col-3'],
         sortable: false,
         breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'mandatees',
+        valuePath: 'sortedMandatees',
         cellComponent: 'web-components/vl-mandatees-column',
       },
       {

@@ -87,7 +87,7 @@ export default Service.extend({
 
   async createNewAgendaItem(selectedAgenda, subcase, index) {
     let priorityToAssign = 0;
-    const mandatees = await subcase.get('mandatees');
+    const mandatees = await subcase.get('sortedMandatees');
     const titles = mandatees.map((mandatee) => mandatee.get('title'));
     const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
     const isAnnouncement = subcase.get('showAsRemark');
@@ -152,7 +152,7 @@ export default Service.extend({
     let previousAgendaitemGroupName;
     return Promise.all(
       agendaitems.map(async (item) => {
-        const mandatees = await item.get('mandatees');
+        const mandatees = await item.get('sortedMandatees');
         if (item.isApproval) {
           item.set('groupName', null);
           return;
