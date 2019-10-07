@@ -48,6 +48,7 @@ export default Controller.extend({
         classNames: ['vl-data-table-col-1'],
         cellClassNames: ['vl-data-table-col-1'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
+        sortable: false,
         cellComponent: 'web-components/light-table/vl-delete-user',
       },
     ];
