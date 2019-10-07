@@ -37,12 +37,19 @@ export default Controller.extend({
       },
       {
         label: this.intl.t('group'),
-        classNames: ['vl-data-table-col-4 vl-data-table__header-title'],
-        cellClassNames: ['vl-data-table-col-4'],
+        classNames: ['vl-data-table-col-3 vl-data-table__header-title'],
+        cellClassNames: ['vl-data-table-col-3'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
         valuePath: 'group',
         sortable: true,
         cellComponent: 'web-components/light-table/vl-group-column',
+      },
+      {
+        classNames: ['vl-data-table-col-1'],
+        cellClassNames: ['vl-data-table-col-1'],
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        sortable: false,
+        cellComponent: 'web-components/light-table/vl-delete-user',
       },
     ];
   }),
