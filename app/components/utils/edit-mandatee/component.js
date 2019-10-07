@@ -40,6 +40,9 @@ export default Component.extend({
       this.chooseDomain(domains);
     },
 
+    personSelected(person) {
+      this.set('mandateeToEdit.person', person);
+    },
 
     async saveChanges() {
       this.set('isLoading', true);

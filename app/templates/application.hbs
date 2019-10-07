@@ -1,5 +1,12 @@
 {{title (t "page-title")}}
 {{head-layout}}
+{{#if showEnvironmentName}}
+  <div
+    class="vl-u-text--bold vl-u-align-center no-margin padding--left-1 padding-small vl-alert--warning"
+  >
+    {{environmentName}} Omgeving
+  </div>
+{{/if}}
 {{#if (await alert)}}
   <div
     class="vl-alert vl-alert-relative vl-alert-relative--center {{await type}}"

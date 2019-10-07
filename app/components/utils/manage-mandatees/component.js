@@ -47,17 +47,16 @@ export default Component.extend({
 		},
 
 		async saveResignation() {
-		  if(!this.get('selectedPerson')){
+		  const selectedPerson = this.get('selectedPerson');
+		  if(!selectedPerson){
         this.globalError.showToast.perform(
           EmberObject.create({
             title: 'Opgelet!',
-            message: 'Geen nieuwe mandataris gekozen.',
-            type: 'error'
+            message: 'Het mandaat wordt beëindigd, maar er is geen nieuwe mandataris gekozen.',
+            type: 'warning-undo'
           })
         );
-        return
 		  }
-
 			this.set('isLoading', true);
 			const oldMandatee = this.get('mandateeToEdit');
 			const domains = await oldMandatee.get('governmentDomains');
@@ -65,22 +64,25 @@ export default Component.extend({
 
 			oldMandatee.set('end', this.get('selectedEndDate') || moment().toDate());
 			oldMandatee.save().then(() => {
+			  if(!selectedPerson){
+          return;
+			  }
 				const newMandatee = this.store.createRecord('mandatee', {
 					title: oldMandatee.get('title'),
 					start: this.get('selectedStartDate') || moment().toDate(),
 					end: moment().add(5, 'years').toDate(),
-					person: this.get('selectedPerson'),
+					person: selectedPerson,
 					holds: holds,
 					governmentDomains: domains,
 					priority: oldMandatee.get('priority')
 				});
 				return newMandatee.save().then(() => {
 					this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
-					this.set('isLoading', false);
-					this.closeModal();
 				});
 			}).then(() => {
 			  this.mandateesUpdated();
+        this.set('isLoading', false);
+        this.closeModal();
 			});
 		}
 	}

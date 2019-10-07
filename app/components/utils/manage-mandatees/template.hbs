@@ -17,10 +17,13 @@
         selectModel=(action "personSelected")
       }}
     </div>
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "start-date")}}
-      {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
-    </div>
+
+    {{#if selectedPerson}}
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "start-date")}}
+        {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
+      </div>
+    {{/if}}
   </div>
   {{web-components/vl-modal-footer
     isLoading=isLoading
