@@ -87,7 +87,7 @@
                         {{#each
                           (await agendaitem.subcase.decisions) as |decision|
                         }}
-                          {{#if (await decision.signedDocument.numberVr)}}
+                          {{#if (await decision.signedDocument.name)}}
                             <p class="vl-u-text--muted">
                               {{await decision.decisionApproval}}
                             </p>
