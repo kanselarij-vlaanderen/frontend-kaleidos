@@ -9,11 +9,9 @@
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "add-people")}}
-    {{utils/model-selector
-      modelName="person"
-      readOnly=true
-      propertyToShow="alternativeName"
+    {{utils/create-person-selector
       selectedItems=mandateeToEdit.person
+      selectModel=(action "personSelected")
     }}
   </div>
   <div class="vlc-input-field-block">
