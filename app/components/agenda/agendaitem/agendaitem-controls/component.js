@@ -119,6 +119,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
       await agendaitem.save();
       await agendaitem.reload();
+      await agendaitem.subcase.reload();
     },
 
     async advanceAgendaitem() {
@@ -132,6 +133,7 @@ export default Component.extend(isAuthenticatedMixin, {
       }
       await agendaitem.save();
       await agendaitem.reload();
+      await agendaitem.subcase.reload();
     },
 
     toggleIsVerifying() {

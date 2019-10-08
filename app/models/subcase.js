@@ -201,7 +201,7 @@ export default Model.extend({
     const agendaitems = await this.agendaitems;
     const meetings = await Promise.all(agendaitems.map(async (agendaitem) => {
       const agenda = await agendaitem.get('agenda');
-      return agenda.get('createdFor');
+      return agenda ? agenda.get('createdFor') : null;
     }));
 
     return meetings.reduce((addedMeetings, meeting) => {
@@ -219,6 +219,19 @@ export default Model.extend({
         moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
           ? meeting1
           : meeting2)
+  }),
+
+  latestAgenda: computed('latestMeeting', async function() {
+    const lastMeeting = await this.get('latestMeeting');
+    return lastMeeting.get('latestAgenda')
+  }),
+
+  latestAgendaItem: computed('latestAgenda', async function() {
+    const latestAgenda = await this.get('latestAgenda');
+    const latestAgendaItems = await latestAgenda.get('agendaitems');
+    const agendaitems = await this.agendaitems;
+
+    return latestAgendaItems.find(item => agendaitems.includes(item))
   }),
 
   onAgendaInfo: computed('latestMeeting', async function() {
@@ -279,14 +292,10 @@ export default Model.extend({
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestMeeting', async function() {
-    const latestMeeting = await this.get('latestMeeting');
-    const latestAgenda = await latestMeeting.get('latestAgenda');
-    const agendaitems = await latestAgenda.get('agendaitems');
-    const subcases = await Promise.all(agendaitems.map(item => item.subcase.then(() => item)));
-    const foundItem = subcases.find(item => item.subcase && item.subcase.get('id') === this.id);
-    if (foundItem) {
-      return foundItem.isPostponed
+  isPostponed: computed('latestAgendaItem', 'latestAgendaItem.isPostponed', async function() {
+    const latestAgendaItem = await this.get('latestAgendaItem');
+    if (latestAgendaItem) {
+      return latestAgendaItem.isPostponed
     }
     return false;
   }),

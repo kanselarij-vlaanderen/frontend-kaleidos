@@ -3,6 +3,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
+import EmberObject from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
@@ -54,6 +55,12 @@ export default Component.extend(isAuthenticatedMixin, {
         mailCampaign.set('sentAt', moment().utc().toDate());
         mailCampaign.save();
         this.set('isVerifying',false);
+      }).catch(() => {
+        this.globalError.showToast.perform(EmberObject.create({
+          title: this.intl.t('warning-title'),
+          message: this.intl.t('error-send-newsletter'),
+          type: 'error'
+        }));
       });
     },
 
