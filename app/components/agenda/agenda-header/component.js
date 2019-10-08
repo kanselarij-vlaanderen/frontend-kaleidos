@@ -169,12 +169,13 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     async deleteDesignAgenda(agenda) {
       const definiteAgendas = await this.get('definiteAgendas');
       const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
+      const agendaitems = await agenda.get('agendaitems');
 
-      agenda.destroyRecord().then(() =>
-        lastDefiniteAgenda
-          ? this.set('sessionService.currentAgenda', lastDefiniteAgenda || null)
-          : this.currentSession.destroyRecord().then(() => this.router.transitionTo('agendas'))
-      );
+      await Promise.all(agendaitems.map(item => item.destroyRecord()));
+      await agenda.destroyRecord();
+      await lastDefiniteAgenda
+        ? this.set('sessionService.currentAgenda', lastDefiniteAgenda || null)
+        : this.currentSession.destroyRecord().then(() => this.router.transitionTo('agendas'));
     },
 
     async createNewDesignAgenda() {
