@@ -126,6 +126,7 @@ $icon-font-location: '/fonts/';
 
 // Custom components
 @import "custom-components/temporary-header"; // To be replaced with Javascript in actual implementation.
+@import "custom-components/vlc-agenda-items-section-header";
 @import "custom-components/vlc-agenda-items";
 @import "custom-components/vlc-agenda-meta";
 @import "custom-components/vlc-backlink";

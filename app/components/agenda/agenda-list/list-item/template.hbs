@@ -1,12 +1,3 @@
-<p class="vlc-agenda-items__overline">
-  <span class="vlc-agenda-items__numbering">
-    {{#if agendaitem.number}}
-      {{agendaitem.number}}.
-    {{else}}
-      {{add index 1}}.
-    {{/if}}
-  </span>
-</p>
 <span class="added-tag">
   {{#if (await agendaitem.checkAdded)}}
     <i class="vl-link__icon vl-vi vl-vi-tag-add"></i>
@@ -21,6 +12,13 @@
   {{/if}}
 </span>
 <h4 class="vlc-agenda-items__subject">
+  <span class="vlc-agenda-items-sub-item__numbering">
+    {{#if agendaitem.number}}
+      {{agendaitem.number}}.
+    {{else}}
+      {{add index 1}}.
+    {{/if}}
+  </span>
   <pre>
     {{#if agendaitem.shortTitle}}
       {{agendaitem.shortTitle}}
