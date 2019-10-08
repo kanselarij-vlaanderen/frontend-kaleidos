@@ -1,6 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import sortDocumentsByNameAndNumber from 'fe-redpencil/utils/sort-document-by-name-and-number';
 
 let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
 
@@ -39,7 +40,7 @@ export default Model.extend({
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
             // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return documents.sortBy('type.priority', 'name');
+            return sortDocumentsByNameAndNumber(documents);
           });
         }
       }),
