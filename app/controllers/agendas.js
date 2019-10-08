@@ -106,6 +106,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       
       this.set('from', min.format('YYYY-MM-DD'));
       this.set('to', max.format('YYYY-MM-DD'));
+      this.set('page', undefined);
     }
   }
 });
