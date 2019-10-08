@@ -56,7 +56,7 @@ export default Model.extend({
 
   isPostponed: computed('retracted', 'postponedTo', function() {
     return this.get('postponedTo').then((session) => {
-      return session || this.get('retracted');
+      return !!session || this.get('retracted');
     });
   }),
 

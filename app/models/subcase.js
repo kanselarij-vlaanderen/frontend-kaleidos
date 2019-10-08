@@ -292,14 +292,10 @@ export default Model.extend({
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestMeeting', async function() {
-    const latestMeeting = await this.get('latestMeeting');
-    const latestAgenda = await latestMeeting.get('latestAgenda');
-    const agendaitems = await latestAgenda.get('agendaitems');
-    const subcases = await Promise.all(agendaitems.map(item => item.subcase.then(() => item)));
-    const foundItem = subcases.find(item => item.subcase && item.subcase.get('id') === this.id);
-    if (foundItem) {
-      return foundItem.isPostponed
+  isPostponed: computed('latestAgendaItem', async function() {
+    const latestAgendaItem = await this.get('latestAgendaItem');
+    if (latestAgendaItem) {
+      return latestAgendaItem.isPostponed
     }
     return false;
   }),
