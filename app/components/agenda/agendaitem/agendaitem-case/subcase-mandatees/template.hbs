@@ -15,7 +15,7 @@
 {{#if (not isEditing)}}
   {{#if (is-pending mandateeRows)}}
     {{web-components/vl-loader text=(t "mandatees-loading-text")}}
-  {{else if (gt (await item.mandatees.length) 0)}}
+  {{else if (gt (await mandateeRows.length) 0)}}
     {{#each mandateeRows as |mandateeRow|}}
       <ul class="vlc-minister-list">
         {{web-components/vl-mandatee-link

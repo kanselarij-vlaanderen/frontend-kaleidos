@@ -11,6 +11,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
   authentication: inject('currentSession'),
   editable: null,
   agendaitem: null,
+  subcase: null,
 
   item: computed('agendaitem', 'subcase', function () {
     const { agendaitem, subcase } = this;
@@ -21,25 +22,14 @@ export default Component.extend(EditAgendaitemOrSubcase, {
     }
   }),
 
-  modelToAddDocumentVersionTo: computed('item', function () {
-    return this.get('item.modelName');
-  }),
-
-  shouldShowDetails: computed('agendaitem', 'subcase', function () {
-    const { agendaitem } = this;
-    if (agendaitem) {
-      if(agendaitem.get('showAsRemark')) {
-        return true;
-      } else {
-        return agendaitem.get('subcase');
-      }
-    } else {
-      return true;
+  subcases: computed('item', async function () {
+    const { isAgendaItem, isSubcase } = this;
+    if (isAgendaItem) {
+      const subcase = await this.get('item.subcase');
+      return subcase.get('subcasesFromCase');
+    } else if (isSubcase) {
+      return this.get('item.subcasesFromCase');
     }
-  }),
-
-  subcases: computed('item', function () {
-    return this.get('item.subcasesFromCase');
   }),
 
   actions: {
