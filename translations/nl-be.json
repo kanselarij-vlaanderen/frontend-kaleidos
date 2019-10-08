@@ -477,11 +477,14 @@
   "faulty-agendaitems": "Problemen in deze agenda",
   "document-being-deleted": "Document wordt verwijderd.",
   "edit-session": "Vergadering wijzigen",
-  "users-loading-text":"De gebruikers worden geladen..",
-  "generate-xml":"Genereer XML voor Belga",
+  "users-loading-text": "De gebruikers worden geladen..",
+  "generate-xml": "Genereer XML voor Belga",
   "delete-agendaitem": "Dit punt is reeds goedgekeurd. Bent u zeker dat u dit agendapunt wilt verwijderen?",
-  "open-note":"Nota openen",
+  "open-note": "Nota openen",
   "propose": "Indienen",
-  "delete-account":"Gebruiker verwijderen",
-  "delete-account-message":"Bent u zeker dat u deze gebruiker wilt verwijderen?"
+  "delete-account": "Gebruiker verwijderen",
+  "delete-account-message": "Bent u zeker dat u deze gebruiker wilt verwijderen?",
+  "error-send-newsletter": "Er ging iets mis tijdens het versturen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
+  "error-create-newsletter": "Er ging iets mis tijdens het aanmaken van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
+  "error-delete-newsletter": "Er ging iets mis tijdens het verwijderen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw."
 }
