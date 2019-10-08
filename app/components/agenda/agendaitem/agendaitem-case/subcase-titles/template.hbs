@@ -14,15 +14,13 @@
 {{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-display-flex vl-u-display-flex-align-center">
-    <div class="vlc-subline">
-      <h2 class="vlc-subline">
-        {{#if (not item.showAsRemark)}}
-          {{t "note"}}
-        {{else}}
-          {{t "text"}}
-        {{/if}}
-      </h2>
-    </div>
+    <h2 class="vlc-subline">
+      {{#if (not item.showAsRemark)}}
+        {{t "note"}}
+      {{else}}
+        {{t "text"}}
+      {{/if}}
+    </h2>
     {{#if isEditor}}
       <div class="vl-u-spacer-extended-left-s">
         <a class="vl-link" {{action "toggleIsEditing"}}>
