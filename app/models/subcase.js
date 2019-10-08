@@ -292,7 +292,7 @@ export default Model.extend({
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestAgendaItem', async function() {
+  isPostponed: computed('latestAgendaItem', 'agendaitems.@each.postponedTo', async function() {
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
       return latestAgendaItem.isPostponed
