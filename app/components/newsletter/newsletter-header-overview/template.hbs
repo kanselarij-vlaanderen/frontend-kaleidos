@@ -104,69 +104,85 @@
                   placement="bottom" as |attacher|
                 }}
                   <ul class="vl-popover__link-list">
-                    {{#if (await agenda.createdFor.mailCampaign)}}
-                      <li class="vl-popover__link-list__item">
-                        <a
-                          class="vl-link vl-link--block"
-                          target="_blank"
-                          rel="noopener"
-                          href={{await agenda.createdFor.mailCampaign.archiveUrl
-                          }}
-                        >
-                          {{t "preview-campaign"}}
-                        </a>
-                      </li>
-                      {{#if (not (await agenda.createdFor.mailCampaign.sent))}}
+                    {{#if (not isLoading)}}
+                      {{#if (await agenda.createdFor.mailCampaign)}}
+                        <li class="vl-popover__link-list__item">
+                          <a
+                            class="vl-link vl-link--block"
+                            target="_blank"
+                            rel="noopener"
+                            href={{await
+                              agenda.createdFor.mailCampaign.archiveUrl
+                            }}
+                          >
+                            {{t "preview-campaign"}}
+                          </a>
+                        </li>
+                        {{#if (not (await agenda.createdFor.mailCampaign.sent))
+                        }}
+                          <li class="vl-popover__link-list__item">
+                            <a
+                              class="vl-link vl-link--block"
+                              {{action attacher.hide}}
+                              {{action "toggleIsVerifying"}}
+                            >
+                              {{t "send-campaign"}}
+                            </a>
+                          </li>
+                        {{/if}}
+                        <li
+                          class="vl-popover__link-list__separator"
+                          role="none"
+                        ></li>
+                        <li class="vl-popover__link-list__item">
+                          <a
+                            class="vl-link vl-link--block"
+                            target="_blank"
+                            rel="noopener"
+                            href={{concat
+                              "/newsletter/xml-newsletter/"
+                              agenda.id
+                            }}
+                            download={{concat
+                              "/newsletter/xml-newsletter/"
+                              agenda.id
+                            }}
+                          >
+                            {{t "generate-xml"}}
+                          </a>
+                        </li>
+                        <li
+                          class="vl-popover__link-list__separator"
+                          role="none"
+                        ></li>
+                        <li class="vl-popover__link-list__item">
+                          <a
+                            class="vl-link vl-link--block vl-u-text--error"
+                            {{action attacher.hide}}
+                            {{action "deleteCampaign"}}
+                          >
+                            {{t "delete-campaign"}}
+                          </a>
+                        </li>
+                      {{else}}
                         <li class="vl-popover__link-list__item">
                           <a
                             class="vl-link vl-link--block"
                             {{action attacher.hide}}
-                            {{action "toggleIsVerifying"}}
+                            {{action "createCampaign"}}
                           >
-                            {{t "send-campaign"}}
+                            {{t "create-campaign"}}
                           </a>
                         </li>
                       {{/if}}
-                      <li
-                        class="vl-popover__link-list__separator"
-                        role="none"
-                      ></li>
-                      <li class="vl-popover__link-list__item">
-                        <a
-                          class="vl-link vl-link--block"
-                          target="_blank"
-                          rel="noopener"
-                          href={{concat "/newsletter/xml-newsletter/" agenda.id
-                          }}
-                          download={{concat
-                            "/newsletter/xml-newsletter/"
-                            agenda.id
-                          }}
-                        >
-                          {{t "generate-xml"}}
-                        </a>
-                      </li>
-                      <li
-                        class="vl-popover__link-list__separator"
-                        role="none"
-                      ></li>
-                      <li class="vl-popover__link-list__item">
-                        <a
-                          class="vl-link vl-link--block vl-u-text--error"
-                          {{action attacher.hide}}
-                          {{action "deleteCampaign"}}
-                        >
-                          {{t "delete-campaign"}}
-                        </a>
-                      </li>
                     {{else}}
                       <li class="vl-popover__link-list__item">
-                        <a
-                          class="vl-link vl-link--block"
-                          {{action attacher.hide}}
-                          {{action "createCampaign"}}
-                        >
-                          {{t "create-campaign"}}
+                        <a class="vl-link vl-link--block">
+                          <div
+                            class="vl-loader"
+                            role="alert"
+                            aria-busy="true"
+                          ></div>
                         </a>
                       </li>
                     {{/if}}

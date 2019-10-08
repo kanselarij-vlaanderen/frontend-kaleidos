@@ -28,9 +28,12 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     async createCampaign() {
+      this.set('isLoading', true);
       const agenda = await this.get('agenda');
       const meeting = await agenda.get('createdFor');
-      this.newsletterService.createCampaign(agenda, meeting);
+      this.newsletterService.createCampaign(agenda, meeting).then(() => {
+        this.set('isLoading', false);
+      });
     },
 
     async deleteCampaign() {
