@@ -66,16 +66,14 @@
     {{web-components/vl-form-label value=(t "themes")}}
     {{utils/themes-selector selectedThemes=themes}}
   </div>
-  {{#if finished}}
-    <div class="vlc-input-field-block">
-      {{utils/documents-selector-of-agendaitem
-        item=(await agendaitem)
-        title=(t "documents-attached-to")
-        itemWithDocuments=(await item)
-        selectDocument=(action "selectDocument")
-      }}
-    </div>
-  {{/if}}
+  <div class="vlc-input-field-block">
+    {{utils/documents-selector-of-agendaitem
+      item=(await agendaitem)
+      title=(t "documents-attached-to")
+      itemWithDocuments=(await item)
+      selectDocument=(action "selectDocument")
+    }}
+  </div>
 </div>
 <div class="vl-action-group vl-action-group--align-right">
   <a class="vl-link" {{action "cancelEditing"}}>
