@@ -274,7 +274,7 @@ export default Model.extend({
     if (this.showAsRemark) {
       id = CONFIG.remarkId;
     } else {
-      id = CONFIG.notaID;
+      id = CONFIG.notaCaseTypeID;
     }
     return this.store.findRecord('case-type', id);
   }),

@@ -14,6 +14,10 @@ export default Component.extend({
       await foundUser.destroyRecord();
       this.get('table').removeRow(foundUser);
       this.isDeleting = false;
+      this.isVerifying = false;
     },
+    toggleIsVerifying() {
+      this.toggleProperty("isVerifying")
+    }
   }
 });

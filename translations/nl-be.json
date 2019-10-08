@@ -481,5 +481,7 @@
   "generate-xml":"Genereer XML voor Belga",
   "delete-agendaitem": "Dit punt is reeds goedgekeurd. Bent u zeker dat u dit agendapunt wilt verwijderen?",
   "open-note":"Nota openen",
-  "propose": "Indienen"
+  "propose": "Indienen",
+  "delete-account":"Gebruiker verwijderen",
+  "delete-account-message":"Bent u zeker dat u deze gebruiker wilt verwijderen?"
 }
