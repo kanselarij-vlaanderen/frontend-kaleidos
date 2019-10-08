@@ -17,9 +17,19 @@ export default Component.extend(isAuthenticatedMixin, EditAgendaitemOrSubcase, {
 	subcaseName: getCachedProperty('subcaseName'),
 	type: getCachedProperty('type'),
 	showAsRemark: getCachedProperty('showAsRemark'),
-	
+
 	remarkType: computed('subcase.remarkType', function() {
 		return this.subcase.get('remarkType');
+	}),
+
+  latestMeetingId: computed('subcase', function() {
+		return this.subcase.get('latestMeeting').then(meeting => meeting.id);
+	}),
+  latestAgendaId: computed('subcase', function() {
+		return this.subcase.get('latestAgenda').then(agenda => agenda.id);
+	}),
+  latestAgendaItemId: computed('subcase', function() {
+		return this.subcase.get('latestAgendaItem').then(item => item.id);
 	}),
 
 	actions: {

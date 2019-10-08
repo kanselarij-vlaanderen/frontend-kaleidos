@@ -201,7 +201,7 @@ export default Model.extend({
     const agendaitems = await this.agendaitems;
     const meetings = await Promise.all(agendaitems.map(async (agendaitem) => {
       const agenda = await agendaitem.get('agenda');
-      return agenda.get('createdFor');
+      return agenda ? agenda.get('createdFor') : null;
     }));
 
     return meetings.reduce((addedMeetings, meeting) => {
@@ -219,6 +219,19 @@ export default Model.extend({
         moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
           ? meeting1
           : meeting2)
+  }),
+
+  latestAgenda: computed('latestMeeting', async function() {
+    const lastMeeting = await this.get('latestMeeting');
+    return lastMeeting.get('latestAgenda')
+  }),
+
+  latestAgendaItem: computed('latestAgenda', async function() {
+    const latestAgenda = await this.get('latestAgenda');
+    const latestAgendaItems = await latestAgenda.get('agendaitems');
+    const agendaitems = await this.agendaitems;
+
+    return latestAgendaItems.find(item => agendaitems.includes(item))
   }),
 
   onAgendaInfo: computed('latestMeeting', async function() {
