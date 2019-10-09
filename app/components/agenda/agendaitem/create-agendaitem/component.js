@@ -175,8 +175,8 @@ export default Component.extend(DefaultQueryParamsMixin, {
         postponedSubcases,
         agendaService
       } = this;
-      const itemsToAdd = [...postponedSubcases, ...availableSubcases];
-      
+      const itemsToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
+
       // These counters are needed to set an init counter for the agendaitems that are being added to an empty agenda.
       let index;
       let agendaitemCounter = -1;
