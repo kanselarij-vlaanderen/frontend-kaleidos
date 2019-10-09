@@ -57,7 +57,7 @@ export default Component.extend(ModifiedMixin, {
         } else {
           return phase;
         }
-      }))
+      }));
       subcase.set('requestedForMeeting', null);
 
       subcase.save();
@@ -69,8 +69,8 @@ export default Component.extend(ModifiedMixin, {
     },
 
     async archiveSubcase(subcase) {
-      const agendaitems = await subcase.get('agendaitems');
-      if (!agendaitems) {
+      const hasAgendaItem = await subcase.get('hasAgendaItem');
+      if (!hasAgendaItem) {
         subcase.set('isArchived', true);
         subcase.save();
       }
