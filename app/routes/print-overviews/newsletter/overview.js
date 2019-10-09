@@ -22,6 +22,9 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
     let newsLetterByIndex = await Promise.all(items.map((item)=>{
       return item.get('subcase').then((subcase) => {
         return subcase.get('newsletterInfo').then((newsletter) => {
+          if(!newsletter) {
+            return;
+          }
           return newsletter.inNewsletter;
         });
       });
