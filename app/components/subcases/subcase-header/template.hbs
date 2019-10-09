@@ -23,6 +23,7 @@
               (and
                     (not (await subcase.requestedForMeeting))
                     (not (await subcase.hasAgendaItem))
+                    (not isAssigning)
               )
               (await subcase.isPostponed)
           )
@@ -124,7 +125,7 @@
     </div>
   </div>
 </div>
-{{#if isAssigningToAgenda}}
+{{#if isAssigningToOtherAgenda}}
   {{#web-components/vl-modal
     isOverlay=true
     title=(t "propose-for-agenda")
@@ -134,6 +135,7 @@
       subcase=selectedSubcase
       proposeForAgenda=(action "proposeForAgenda")
       cancel=(action "cancel")
+      closeModal=(action "cancel")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
