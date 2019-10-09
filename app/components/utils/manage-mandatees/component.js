@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
-
+import moment from 'moment';
 export default Component.extend({
 	store: inject(),
 	subcasesService: inject(),

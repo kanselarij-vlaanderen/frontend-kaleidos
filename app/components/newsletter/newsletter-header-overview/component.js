@@ -43,9 +43,9 @@ export default Component.extend(isAuthenticatedMixin, {
       if (mailCampaign && mailCampaign.campaignId) {
         await this.newsletterService.deleteCampaign(mailCampaign.campaignId);
       }
-
       mailCampaign.destroyRecord();
       meeting.set('mailCampaign', null);
+      this.set('mailCampaign', null);
       meeting.save();
     },
 
@@ -53,18 +53,22 @@ export default Component.extend(isAuthenticatedMixin, {
       const agenda = await this.get('agenda');
       const meeting = await agenda.get('createdFor');
       const mailCampaign = await meeting.get('mailCampaign');
-      this.newsletterService.sendCampaign(mailCampaign.campaignId).then(() => {
-        mailCampaign.set('sent', true);
-        mailCampaign.set('sentAt', moment().utc().toDate());
-        mailCampaign.save();
-        this.set('isVerifying',false);
-      }).catch(() => {
+
+      if(!mailCampaign || !mailCampaign.id || mailCampaign.sent) {
+        return;
+      } 
+       await this.newsletterService.sendCampaign(mailCampaign.campaignId).catch(() => {
         this.globalError.showToast.perform(EmberObject.create({
           title: this.intl.t('warning-title'),
           message: this.intl.t('error-send-newsletter'),
           type: 'error'
         }));
-      });
+      });        
+      mailCampaign.set('sent', true);
+      mailCampaign.set('sentAt', moment().utc().toDate());
+      await mailCampaign.save();
+      await meeting.belongsTo('mailCampaign').reload();
+      this.set('isVerifying',false);
     },
 
     showMultipleOptions() {
