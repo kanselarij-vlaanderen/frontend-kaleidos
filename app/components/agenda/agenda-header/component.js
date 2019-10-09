@@ -42,6 +42,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     this.changeLoading();
     const session = this.get('currentSession');
     session.set('isFinal', false);
+    session.set('agenda', lastAgenda);
     session.save();
     const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
@@ -119,6 +120,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
         const session = await lastAgenda.get('createdFor');
         session.set('isFinal', true);
+        session.set('agenda', lastAgenda);
         await session.save();
         this.set('sessionService.currentAgenda', lastAgenda);
         this.reloadRoute();

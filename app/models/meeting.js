@@ -29,6 +29,7 @@ export default Model.extend({
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
   mailCampaign: belongsTo('mail-campaign'),
+  agenda: belongsTo('agenda', { inverse:null }),
 
   canReleaseDecisions: computed('isFinal', 'releasedDecisions', function(){
     return this.isFinal && !this.releasedDecisions;
