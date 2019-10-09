@@ -8,8 +8,9 @@ export default Component.extend(ModifiedMixin, {
   store: inject(),
   agendaService: inject(),
   classNames: ["vlc-page-header"],
-  isAssigningToAgenda: false,
+  isAssigningToOtherAgenda: false,
   isShowingOptions: false,
+  isAssigning: false,
 
   meetings: computed('store', function() {
     const dateOfToday = moment().utc().format();
@@ -31,6 +32,7 @@ export default Component.extend(ModifiedMixin, {
     },
 
     async proposeForAgenda(subcase, meeting) {
+      this.set('isAssigning', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
       await designAgenda.reload(); //ensures latest state is pulled
@@ -38,9 +40,10 @@ export default Component.extend(ModifiedMixin, {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
         await this.updateModifiedProperty(designAgenda);
       }
+      this.set('isAssigning', false);
     },
     proposeForOtherAgenda(subcase) {
-      this.toggleProperty('isAssigningToAgenda');
+      this.toggleProperty('isAssigningToOtherAgenda');
       this.set('selectedSubcase', subcase);
     },
 
@@ -61,7 +64,7 @@ export default Component.extend(ModifiedMixin, {
     },
 
     cancel() {
-      this.toggleProperty('isAssigningToAgenda');
+      this.set('isAssigningToOtherAgenda', false);
       this.set('selectedSubcase', null);
     },
 
