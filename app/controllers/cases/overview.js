@@ -47,17 +47,27 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     },
 
    async archiveCase() {
-      const caseModel = await this.store.findRecord('case',this.get('selectedCase.id'));
-      caseModel.set('isArchived', true);
-      caseModel.save().then(() => {
-        this.set('selectedCase', null);
-        this.send('refreshModel');
-        this.set('isArchivingCase', false);
-      });
-    },
+     const caseModel = await this.store.findRecord('case', this.get('selectedCase.id'));
+     caseModel.set('isArchived', true);
+     const subcases = await caseModel.subcases;
+     await Promise.all(subcases.map(subcase => {
+       subcase.set('isArchived', true);
+       return subcase.save()
+     }));
+     caseModel.save().then(() => {
+       this.set('selectedCase', null);
+       this.send('refreshModel');
+       this.set('isArchivingCase', false);
+     });
+   },
 
-    unarchiveCase(caze) {
+    async unarchiveCase(caze) {
       caze.set('isArchived', false);
+      const subcases = await caze.subcases;
+      await Promise.all(subcases.map(subcase => {
+        subcase.set('isArchived', false);
+        return subcase.save()
+      }));
       caze.save();
     },
 
