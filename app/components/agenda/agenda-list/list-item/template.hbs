@@ -1,16 +1,3 @@
-<span class="added-tag">
-  {{#if (await agendaitem.checkAdded)}}
-    <i class="vl-link__icon vl-vi vl-vi-tag-add"></i>
-    {{#attach-popover
-      placement="top"
-      class="ember-attacher-popper ember-attacher-popper-wide"
-    }}
-      <p>
-        {{t "added-agendaitem-text"}}
-      </p>
-    {{/attach-popover}}
-  {{/if}}
-</span>
 <h4 class="vlc-agenda-items__subject">
   <span class="vlc-agenda-items-sub-item__numbering">
     {{#if agendaitem.number}}
@@ -37,40 +24,54 @@
   {{/if}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
-  {{#if (not selectedAgendaItem)}}
-    <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
-      {{await agendaitem.subcase.subcaseName}}
-    </span>
-  {{/if}}
-  {{#if isEditor}}
-    {{#if (not isEditingOverview)}}
-      {{#if agendaitem.formallyOkToShow.approved}}
-        <p class="{{agendaitem.formallyOkToShow.classNames}}">
-          {{agendaitem.formallyOkToShow.label}}
-          <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
-        </p>
-      {{else}}
-        <p class="{{agendaitem.formallyOkToShow.classNames}}">
-          {{agendaitem.formallyOkToShow.label}}
-        </p>
+  <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
+    {{await agendaitem.subcase.subcaseName}}
+  </span>
+  <div class="vlc-agenda-meta__status-holder">
+    <span class="added-tag vlc-agenda-meta__recently-added">
+      {{#if (await agendaitem.checkAdded)}}
+        <i class="vl-link__icon vl-vi vl-vi-calendar-add"></i>
+        {{#attach-popover
+          placement="top"
+          class="ember-attacher-popper ember-attacher-popper-wide"
+        }}
+          <p>
+            {{t "added-agendaitem-text"}}
+          </p>
+        {{/attach-popover}}
       {{/if}}
-    {{else}}
-      {{utils/formally-ok-selector
-        formallyOk=formallyOk
-        isLoading=isLoading
-        hideLabel=hideLabel
-        setAction=(action "setAction")
-      }}
+    </span>
+    {{#if isEditor}}
+      {{#if (not isEditingOverview)}}
+        {{#if agendaitem.formallyOkToShow.approved}}
+          <p class="{{agendaitem.formallyOkToShow.classNames}}">
+            {{agendaitem.formallyOkToShow.label}}
+            <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+          </p>
+        {{else}}
+          <p class="{{agendaitem.formallyOkToShow.classNames}}">
+            {{agendaitem.formallyOkToShow.label}}
+          </p>
+        {{/if}}
+      {{else}}
+        {{utils/formally-ok-selector
+          formallyOk=formallyOk
+          isLoading=isLoading
+          hideLabel=hideLabel
+          setAction=(action "setAction")
+        }}
+      {{/if}}
     {{/if}}
-  {{/if}}
-  {{#if (and agendaitem.showAsRemark (not agendaitem.showInNewsletter))}}
-    <i class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s opacity-lighter"></i>
-  {{/if}}
-  {{#if (await agendaitem.subcase.confidential)}}
-    <span
-      class="vl-icon vl-vi vl-vi-lock vl-u-text--error vl-u-spacer-extended-left-s"
-    ></span>
-  {{/if}}
+    {{#if (and agendaitem.showAsRemark (not agendaitem.showInNewsletter))}}
+      <i class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s opacity-lighter"></i>
+    {{/if}}
+    {{#if (await agendaitem.subcase.confidential)}}
+      <span
+        class="vl-icon vl-vi vl-vi-lock vl-u-text--error vl-u-spacer-extended-left-s"
+      ></span>
+    {{/if}}
+  </div>
+
 </div>
 {{#if (not selectedAgendaItem)}}
   {{#if (await agendaitem.documents)}}
