@@ -42,7 +42,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     this.changeLoading();
     const session = this.get('currentSession');
     session.set('isFinal', false);
-    session.set('agenda', lastAgenda);
+    session.set('agenda', null);
     session.save();
     const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
