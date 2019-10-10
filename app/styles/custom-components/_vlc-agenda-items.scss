@@ -44,6 +44,15 @@
   &:hover,
   &:focus {
     background: $blue-gray-lighter;
+    color: $blue-dark;
+
+    span {
+      color: $blue-dark;
+    }
+
+    .vl-badge--alt {
+      background-color: $blue-gray-lightest;
+    }
   }
 }
 
