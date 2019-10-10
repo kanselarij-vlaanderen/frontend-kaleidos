@@ -70,7 +70,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		}
 
 		const iseCodes = await subcase.get('iseCodes');
-		const mandatees = await (await subcase.get('mandatees')).sortBy('priority');
+		const mandatees = await (await this.get('item.mandatees')).sortBy('priority');
 		let selectedMandatee = await subcase.get('requestedBy');
 		const mandateeLength = mandatees.get('length');
 		if (mandateeLength === 1) {
