@@ -1,6 +1,5 @@
 import Mixin from "@ember/object/mixin";
 import { computed } from "@ember/object";
-import { isEmpty } from "@ember/utils";
 import { inject as service } from "@ember/service";
 import { dasherize } from "@ember/string";
 import Table from "ember-light-table";
@@ -65,7 +64,7 @@ export default Mixin.create({
 
     this.get("model").pushObjects(records.toArray().filter((item)=> !item.isApproval));
     this.set("meta", records.get("meta"));
-    this.set("canLoadMore", records.get('meta.count') > ((this.page + 1) * this.size));
+    this.set("canLoadMore", records.get('meta.count') > this.get('model.length'));
     this.get("table").addRows(this.get("model").filter((item)=> !item.isApproval));
     this.checkRowClasses();
   }).restartable(),
