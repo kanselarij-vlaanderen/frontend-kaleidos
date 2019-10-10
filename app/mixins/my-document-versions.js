@@ -1,35 +1,52 @@
 import Mixin from '@ember/object/mixin';
 import EmberObject, { computed } from '@ember/object';
+import DS from 'ember-data';
 
 export default Mixin.create({
-  lastDocumentVersion: computed('mySortedDocumentVersions', async function(){
-    return (await this.get('mySortedDocumentVersions')).lastObject;
+  myDocumentVersions: computed.alias('item.documentVersions'),
+
+  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function(){
+    const sortedVersions = this.get('mySortedDocumentVersions');
+    return sortedVersions.lastObject;
   }),
 
-  lastDocumentVersionName: computed('lastDocumentVersion.document.name', async function(){
-    const version = await this.get('lastDocumentVersion');
-    const document = await version.get('document');
-    return await version.get('name');
+  lastDocumentVersionName: computed('lastDocumentVersion.document.name', function(){
+    const version = this.get('lastDocumentVersion');
+    if(!version){
+      return null;
+    }
+    const document = version.get('document');
+    return version.get('name');
   }),
 
-  mySortedDocumentVersions: computed('item.documentVersions.@each', 'document.sortedDocumentVersions.@each', async function(){
-    const itemVersionIds = {};
-    (await this.get('item.documentVersions')).map((item) => {
-      itemVersionIds[item.get('id')] = true;
+  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function(){
+    return DS.PromiseArray.create({
+      promise: (async () => {
+        const itemVersionIds = {};
+        (await this.get('myDocumentVersions')).map((item) => {
+          itemVersionIds[item.get('id')] = true;
+        });
+        const documentVersions = await this.get('document.sortedDocumentVersions');
+
+        const matchingVersions = await documentVersions.filter((item) => {
+          return itemVersionIds[item.id];
+        });
+        return matchingVersions;
+      })()
     });
-    const documentVersions = await this.get('document.sortedDocumentVersions');
+  }),
 
-    return documentVersions.filter((item) => {
-      return itemVersionIds[item.id];
+  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function(){
+    const reversed = [];
+    this.get('mySortedDocumentVersions').map((item) => {
+      reversed.push(item);
     });
+    reversed.reverse();
+    return reversed;
   }),
 
-  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', async function(){
-    return (await this.get('mySortedDocumentVersions')).reverse();
-  }),
-
-  numberOfDocumentVersions: computed('mySortedDocumentVersions.@each', async function(){
-    return (await this.get('mySortedDocumentVersions')).length;
+  numberOfDocumentVersions: computed('mySortedDocumentVersions.@each', function(){
+    return this.get('mySortedDocumentVersions').length;
   })
 
 });

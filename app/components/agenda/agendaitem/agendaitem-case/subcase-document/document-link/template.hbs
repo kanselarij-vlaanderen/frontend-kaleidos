@@ -24,8 +24,8 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
-            {{#if document}}
-              {{access-level-pill item=document}}
+            {{#if lastDocumentVersion}}
+              {{access-level-pill item=lastDocumentVersion}}
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -165,16 +165,16 @@
         {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
       {{else}}
         {{ember-kaleidos-webuniversum/vl-uploaded-document
-          name=document.lastDocumentVersion.file.filename
-          extension=document.lastDocumentVersion.file.extension
-          size=document.lastDocumentVersion.file.size
-          downloadName=document.lastDocumentVersion.file.filename
+          name=lastDocumentVersion.file.filename
+          extension=lastDocumentVersion.file.extension
+          size=lastDocumentVersion.file.size
+          downloadName=lastDocumentVersion.file.filename
           downloadLink=(concat
-            document.lastDocumentVersion.file.downloadLink
+            lastDocumentVersion.file.downloadLink
             "?name="
-            document.lastDocumentVersion.file.filename
+            lastDocumentVersion.file.filename
           )
-          delete=(action "delete" document.lastDocumentVersion)
+          delete=(action "delete" lastDocumentVersion)
         }}
       {{/if}}
     </div>
