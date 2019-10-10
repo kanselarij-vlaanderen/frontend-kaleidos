@@ -187,20 +187,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-a.vlc-agenda-items__sub-item--active,
-a.vlc-agenda-items__sub-item--active:hover,
-a.vlc-agenda-items__sub-item--active:active {
-  background: $science-blue;
-  color: #fff;
-  .vlc-agenda-items__status--positive {
-    color: #fff;
-  }
-}
-
-a.vlc-agenda-items__sub-item--active:focus {
-  background: darken($science-blue, 5%);
-}
-
 .vlc-scroll-wrapper {
   height: 100% !important;
 }
