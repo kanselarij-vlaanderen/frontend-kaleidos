@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
-import { computed, observer } from '@ember/object';
+import { computed } from '@ember/object';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { inject } from '@ember/service';
 
@@ -22,6 +22,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   title: getCachedProperty('title'),
   finished: getCachedProperty('finished'),
   remark: getCachedProperty('remark'),
+  mandateeProposal: getCachedProperty('newsletterProposal'),
 
   themes: computed(`agendaitem.themes`, {
     get() {
@@ -33,28 +34,6 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     },
   }),
 
-  mandateeProposal: null,
-
-  mandateeProposalObserver: observer(`agendaitem.requestedBy`, 'item.mandateeProposal', async function() {
-    const { agendaitem, item } = this;
-    if (item && agendaitem) {
-      const mandateeProposal = item.get('mandateeProposal');
-      if (mandateeProposal) {
-        this.set('mandateeProposal', mandateeProposal);
-      } else {
-        const requestedBy = await agendaitem.get('requestedBy');
-        const proposalText = this.intl.t('proposal-text');
-        if (requestedBy) {
-          const nickName = requestedBy.get('nickName');
-          if (nickName) {
-            this.set('mandateeProposal', `${proposalText}${nickName}`)
-          } else {
-            this.set('mandateeProposal', `${proposalText}${requestedBy.get('title')}`)
-          }
-        }
-      }
-    }
-  }),
 
   hasNota: computed('agendaitem', async function () {
 		const nota = await this.agendaitem.get('nota');
