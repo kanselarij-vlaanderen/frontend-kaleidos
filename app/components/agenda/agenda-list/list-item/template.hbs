@@ -24,9 +24,14 @@
   {{/if}}
 {{/if}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
-  <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
-    {{await agendaitem.subcase.subcaseName}}
-  </span>
+  {{#if (and selectedAgendaItem isEditingOverview)}}
+    <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
+    </span>
+  {{else}}
+    <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
+      {{await agendaitem.subcase.subcaseName}}
+    </span>
+  {{/if}}
   <div class="vlc-agenda-meta__status-holder">
     <span class="added-tag vlc-agenda-meta__recently-added">
       {{#if (await agendaitem.checkAdded)}}
