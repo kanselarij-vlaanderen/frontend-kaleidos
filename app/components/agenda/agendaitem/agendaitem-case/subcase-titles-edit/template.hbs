@@ -21,22 +21,14 @@
 {{/if}}
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
-    {{#if isRemark}}
-      {{web-components/vl-form-label value=(t "title")}}
-    {{else}}
-      {{web-components/vl-form-label value=(t "name-subcase")}}
-    {{/if}}
+    {{web-components/vl-form-label value=(t "name-subcase")}}
     {{textarea rows="2" class="vl-textarea vl-textarea--block" value=shortTitle
     }}
   </div>
 </div>
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
-    {{#if isRemark}}
-      {{web-components/vl-form-label value=(t "text")}}
-    {{else}}
-      {{web-components/vl-form-label value=(t "title-subcase")}}
-    {{/if}}
+    {{web-components/vl-form-label value=(t "title-subcase")}}
     {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
   </div>
 </div>
