@@ -32,6 +32,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
       },
       filter: {
         ":has-no:agendaitems": "yes",
+        ":not:is-archived": "true",
       }
     };
     if (filter) {
