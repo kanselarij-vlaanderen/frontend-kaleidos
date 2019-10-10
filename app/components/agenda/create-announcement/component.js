@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import moment from 'moment';
+import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 
@@ -11,7 +12,7 @@ export default Component.extend(UploadDocumentMixin, {
 
   classNames: ['vlc-panel-layout__main-content'],
   isAddingAnnouncement: null,
-
+  creatingAnnouncement: false,
   init() {
     this._super(...arguments);
     this.set('model', A([]));
@@ -34,23 +35,27 @@ export default Component.extend(UploadDocumentMixin, {
     },
 
     async createAnnouncement() {
+      this.toggleProperty('creatingAnnouncement');
       const { title, text, currentAgenda } = this;
       const date = moment()
         .utc()
         .toDate();
       const agenda = await this.store.findRecord('agenda', currentAgenda.get('id'));
-
+      const lastAnnouncementPriority = await agenda.lastAnnouncementPriority
       const agendaitem = this.store.createRecord('agendaitem', {
         shortTitle: title,
         title: text,
         agenda,
         showAsRemark: true,
         created: date,
+        formallyOk: CONFIG.notYetFormallyOk,
+        priority: lastAnnouncementPriority + 1,
       });
       await this.addDocumentVersions(agendaitem);
       currentAgenda.hasMany('agendaitems').reload();
-      this.reloadRoute(agenda.get('id'))
+      this.reloadRoute(agenda.get('id'));
       this.toggleProperty('isAddingAnnouncement');
+      this.toggleProperty('creatingAnnouncement');
     },
   },
 
