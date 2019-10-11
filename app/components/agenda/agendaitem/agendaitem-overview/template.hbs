@@ -51,7 +51,7 @@
               </div>
               {{#if (not (await agendaitem.isPostponed))}}
                 {{#if isEditor}}
-                  <div class="vl-action-group vl-action-group--align-center">
+                  <div class="vl-action-group">
                     <button
                       class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
                       {{action "addDecision"}}
