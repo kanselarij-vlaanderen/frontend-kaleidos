@@ -2,36 +2,6 @@
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
   {{#each (await item.documents) as |document|}}
-    <li
-      class="vlc-document-list__item
-        {{if
-          document.checkAdded
-          "vlc-document-list__item vlc-document-list__item--active"
-        }}"
-    >
-      {{#if (is-pending document.lastDocumentVersion)}}
-        <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-      {{else if isClickable}}
-        <a {{action "showDocumentVersionViewer" document.lastDocumentVersion}}>
-          <div
-            class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
-          >
-            <i class="vl-badge__icon vl-vi
-            {{if (await document.lastDocumentVersion.confidential) "vl-vi-lock" "vl-vi-document"}}"></i>
-          </div>
-          {{await document.lastDocumentVersion.name}}
-        </a>
-      {{else}}
-        <span>
-          <div
-            class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
-          >
-            <i class="vl-badge__icon vl-vi
-            {{if (await document.lastDocumentVersion.confidential) "vl-vi-lock" "vl-vi-document"}}"></i>
-          </div>
-          {{await document.lastDocumentVersion.name}}
-        </span>
-      {{/if}}
-    </li>
+    {{item-document item=item document=document isClickable=isClickable}}
   {{/each}}
 {{/if}}

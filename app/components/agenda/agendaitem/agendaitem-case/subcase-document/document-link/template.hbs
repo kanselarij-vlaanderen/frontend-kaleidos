@@ -1,18 +1,31 @@
 <div class="vlc-document-card">
   <div class="vlc-document-card__summary">
+    <div
+      class="vlc-document-card__badge
+        {{if
+          document.checkAdded
+          "vlc-document-list__item vlc-document-list__item--active"
+        }}"
+    >
+      <div
+        class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
+      >
+        <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
+      </div>
+    </div>
     <div class="vlc-document-card__content">
       <div class="vlc-toolbar vlc-toolbar--auto">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
-            <p class="vlc-subline vlc-document-card__subline">
+            <p class="vlc-subline">
               {{await document.type.label}}
             </p>
           </div>
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
-            {{#if document}}
-              {{access-level-pill item=document}}
+            {{#if lastDocumentVersion}}
+              {{access-level-pill item=lastDocumentVersion}}
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -62,75 +75,57 @@
           </div>
         </div>
       </div>
-      <div class="vl-u-display-flex">
-        <div
-          class="vlc-document-card__badge
-            {{if
-              document.checkAdded
-              "vlc-document-list__item vlc-document-list__item--active"
-            }}"
-        >
-          <div
-            class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
-          >
-            <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
-          </div>
-        </div>
-
-        <div>
-          <h6 class="vl-title vl-title--h6">
-            {{#if (not isEditing)}}
-              <span {{action "toggleIsEditing"}}>
-                {{await document.lastDocumentVersion.name}}
+      <h6 class="vl-title vl-title--h6">
+        {{#if (not isEditing)}}
+          <span {{action "toggleIsEditing"}}>
+            {{await lastDocumentVersionName}}
+          </span>
+        {{else}}
+          <div class="vl-u-display-flex vl-u-display-flex-align-center">
+            <div class="vl-form__input" style="width:75%">
+              {{input
+                type="text"
+                id=id
+                class="vl-input-field vl-input-field--block"
+                value=(mut document.name)
+              }}
+            </div>
+            <button
+              class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+              {{action "saveChanges"}}
+            >
+              <i
+                class="vl-vi vl-vi-save vl-button__icon"
+                aria-hidden="true"
+              ></i>
+              <span class="vl-u-visually-hidden">
+                {{t "more-options"}}
               </span>
-            {{else}}
-              <div class="vl-u-display-flex vl-u-display-flex-align-center">
-                <div class="vl-form__input" style="width:75%">
-                  {{input
-                    type="text"
-                    id=id
-                    class="vl-input-field vl-input-field--block"
-                    value=(mut document.name)
-                  }}
-                </div>
-                <button
-                  class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                  {{action "saveChanges"}}
-                >
-                  <i
-                    class="vl-vi vl-vi-save vl-button__icon"
-                    aria-hidden="true"
-                  ></i>
-                  <span class="vl-u-visually-hidden">
-                    {{t "more-options"}}
-                  </span>
-                </button>
-                <button
-                  class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                  {{action "toggleIsEditing"}}
-                >
-                  <i
-                    class="vl-vi vl-vi-cross vl-button__icon"
-                    aria-hidden="true"
-                  ></i>
-                  <span class="vl-u-visually-hidden">
-                    {{t "more-options"}}
-                  </span>
-                </button>
-              </div>
-            {{/if}}
-          </h6>
-          <div class="vlc-document-card-content__meta">
-            {{t "uploaded-at"}}
-            {{moment-format (await document.lastDocumentVersion.created)}}
-            {{t "at"}}
-            {{moment-format (await document.lastDocumentVersion.created) "HH:mm"}}
+            </button>
+            <button
+              class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+              {{action "toggleIsEditing"}}
+            >
+              <i
+                class="vl-vi vl-vi-cross vl-button__icon"
+                aria-hidden="true"
+              ></i>
+              <span class="vl-u-visually-hidden">
+                {{t "more-options"}}
+              </span>
+            </button>
           </div>
-        </div>
+        {{/if}}
+      </h6>
+      <div class="vlc-document-card-content__meta">
+        {{t "uploaded-at"}}
+        {{moment-format (await document.lastDocumentVersion.created)}}
+        {{t "at"}}
+        {{moment-format (await document.lastDocumentVersion.created) "HH:mm"}}
       </div>
     </div>
   </div>
-  {{#if (gt (await document.reverseSortedDocumentVersions.length) 0)}}
+  {{#if (gt (await numberOfDocumentVersions) 0)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
         <button
@@ -147,7 +142,7 @@
             <div class="vl-accordion__panel">
               {{#each
                 (await
-                  document.reverseSortedDocumentVersions
+                  myReverseSortedVersions
                 ) as |documentVersion|
               }}
                 {{web-components/vl-document documentVersion=documentVersion}}
@@ -170,16 +165,16 @@
         {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
       {{else}}
         {{ember-kaleidos-webuniversum/vl-uploaded-document
-          name=document.lastDocumentVersion.file.filename
-          extension=document.lastDocumentVersion.file.extension
-          size=document.lastDocumentVersion.file.size
-          downloadName=document.lastDocumentVersion.file.filename
+          name=lastDocumentVersion.file.filename
+          extension=lastDocumentVersion.file.extension
+          size=lastDocumentVersion.file.size
+          downloadName=lastDocumentVersion.file.filename
           downloadLink=(concat
-            document.lastDocumentVersion.file.downloadLink
+            lastDocumentVersion.file.downloadLink
             "?name="
-            document.lastDocumentVersion.file.filename
+            lastDocumentVersion.file.filename
           )
-          delete=(action "delete" document.lastDocumentVersion)
+          delete=(action "delete" lastDocumentVersion)
         }}
       {{/if}}
     </div>

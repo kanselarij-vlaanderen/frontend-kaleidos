@@ -34,7 +34,11 @@ export default Service.extend({
     documentToDelete.set('aboutToDelete', true);
     yield timeout(10000);
     if (this.findObjectToDelete(documentToDelete.get('id'))) {
-      documentToDelete.destroyRecord();
+      const agendaitem = yield documentToDelete.get('agendaitem');
+      yield documentToDelete.destroyRecord();
+      if (agendaitem) {
+        yield agendaitem.documentVersions.reload()
+      }
     } else {
       documentToDelete.set('aboutToDelete', false);
     }

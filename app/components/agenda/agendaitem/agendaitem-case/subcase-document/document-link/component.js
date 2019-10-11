@@ -2,10 +2,11 @@ import Component from '@ember/component';
 import EmberObject, { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
+import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
+export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDocumentVersions, {
   globalError: inject(),
   fileService: inject(),
   intl: inject(),
@@ -29,10 +30,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }
-  }),
-
-  lastDocumentVersion: computed('filteredDocumentVersions.@each', function() {
-    return (this.get('filteredDocumentVersions') || []).objectAt(0);
   }),
 
   async resetFormallyOk() {
@@ -110,8 +107,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       await item.save().then(() => {
         if(subcase) this.resetFormallyOk();
       });
-      this.set('isLoading', false);
-      this.set('isUploadingNewVersion', false);
+      if(!this.isDestroyed){
+        this.set('isLoading', false);
+        this.set('isUploadingNewVersion', false);
+      }
+
     },
 
     cancel() {

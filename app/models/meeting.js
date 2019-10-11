@@ -4,6 +4,7 @@ import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
 const { Model, attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
+import sortDocumentsByNameAndNumber from 'fe-redpencil/utils/sort-document-by-name-and-number';
 
 export default Model.extend({
   intl: inject(),
@@ -28,6 +29,7 @@ export default Model.extend({
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
   mailCampaign: belongsTo('mail-campaign'),
+  agenda: belongsTo('agenda', { inverse:null }),
 
   canReleaseDecisions: computed('isFinal', 'releasedDecisions', function(){
     return this.isFinal && !this.releasedDecisions;
@@ -100,7 +102,7 @@ export default Model.extend({
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
             // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return documents.sortBy('type.priority', 'name');
+            return sortDocumentsByNameAndNumber(documents);
           });
         }
       })

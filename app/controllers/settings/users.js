@@ -3,12 +3,14 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
 import { later } from '@ember/runloop';
+import { isEmpty } from '@ember/utils';
 
 export default Controller.extend({
   intl: inject(),
   globalError: inject(),
   isUploadingFile: null,
   shouldRefreshTableModel:null,
+  filterText: null,
 
   columns: computed(function() {
     return [
@@ -52,6 +54,14 @@ export default Controller.extend({
         cellComponent: 'web-components/light-table/vl-delete-user',
       },
     ];
+  }),
+
+  filter: computed('filterText', function(){
+    const searchText = this.get('filterText');
+    if(isEmpty(searchText)){
+      return null;
+    }
+    return {"last-name":searchText};
   }),
 
   actions: {

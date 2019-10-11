@@ -516,3 +516,11 @@ pre {
 .vl-u-flex-grow {
   flex-grow: 1;
 }
+
+.vl-loader-link {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

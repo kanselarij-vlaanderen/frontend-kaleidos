@@ -23,7 +23,7 @@
       {{{await subcase.newsletterInfo.richtext}}}
     </p>
     <p class="vl-u-text--italic">
-      {{await subcase.newsletterInfo.mandateeProposal}}
+      {{await subcase.newsletterInfo.newsletterProposal}}
     </p>
   </div>
   <hr />
@@ -51,6 +51,7 @@
       <div class="vl-u-spacer-extended-top-s">
         {{utils/documents-list-for-item
           item=(await subcase.newsletterInfo)
+          isClickable=true
           subcase=subcase
         }}
       </div>

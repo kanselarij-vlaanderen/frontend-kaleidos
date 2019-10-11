@@ -23,6 +23,7 @@
               (and
                     (not (await subcase.requestedForMeeting))
                     (not (await subcase.hasAgendaItem))
+                    (not isAssigning)
               )
               (await subcase.isPostponed)
           )
@@ -88,26 +89,30 @@
           placement="bottom" as |attacher|
         }}
           <ul class="vl-popover__link-list">
-            <li class="vl-popover__link-list__item">
-              {{#if (not await subcase.isArchived)}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action attacher.hide}}
-                  {{action "requestArchiveSubcase"}}
-                >
-                  {{t "archive-subcase"}}
-                </a>
-              {{else}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action attacher.hide}}
-                  {{action "unarchiveSubcase" subcase}}
-                >
-                  {{t "unarchive-subcase"}}
-                </a>
+            {{#if (not await subcase.isArchived)}}
+              {{#if (not await subcase.hasAgendaItem)}}
+                  <li class="vl-popover__link-list__item">
+                      <a
+                              class="vl-link vl-link--block"
+                        {{action attacher.hide}}
+                        {{action "requestArchiveSubcase"}}
+                      >
+                        {{t "archive-subcase"}}
+                      </a>
+                  </li>
               {{/if}}
-            </li>
-            <li class="vl-popover__link-list__item">
+            {{else}}
+                <li class="vl-popover__link-list__item">
+                    <a
+                            class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "unarchiveSubcase" subcase}}
+                    >
+                      {{t "unarchive-subcase"}}
+                    </a>
+                </li>
+            {{/if}}
+              <li class="vl-popover__link-list__item">
               {{#if (not await subcase.concluded)}}
                 <a
                   class="vl-link vl-link--block"
@@ -124,7 +129,7 @@
     </div>
   </div>
 </div>
-{{#if isAssigningToAgenda}}
+{{#if isAssigningToOtherAgenda}}
   {{#web-components/vl-modal
     isOverlay=true
     title=(t "propose-for-agenda")
@@ -134,6 +139,7 @@
       subcase=selectedSubcase
       proposeForAgenda=(action "proposeForAgenda")
       cancel=(action "cancel")
+      closeModal=(action "cancel")
     }}
   {{/web-components/vl-modal}}
 {{/if}}

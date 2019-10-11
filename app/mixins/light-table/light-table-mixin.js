@@ -1,7 +1,7 @@
 import Mixin from "@ember/object/mixin";
 import { computed } from "@ember/object";
-import { isEmpty } from "@ember/utils";
 import { inject as service } from "@ember/service";
+import { dasherize } from "@ember/string";
 import Table from "ember-light-table";
 import { task, timeout } from "ember-concurrency";
 
@@ -39,13 +39,24 @@ export default Mixin.create({
     this.checkRowClasses();
   },
 
+  previousFilter: null,
   fetchRecords: task(function*() {
+    yield timeout(500);
+    if(this.previousFilter !== this.filter){
+      this.set('previousFilter', this.filter);
+      this.set('model', []);
+      this.get('table').setRows([]);
+      this.set('page', 0);
+    }
     const queryOptions = {
       filter: this.filter,
-      sort: this.sortBy,
+      sort: this.get('sortBy'),
       page: { number: this.page, size: this.size },
       include: this.include
     };
+    if(!this.filter){
+      delete queryOptions.filter;
+    }
     let records = yield this.get("store").query(
       `${this.modelName}`,
       queryOptions
@@ -53,10 +64,10 @@ export default Mixin.create({
 
     this.get("model").pushObjects(records.toArray().filter((item)=> !item.isApproval));
     this.set("meta", records.get("meta"));
-    this.set("canLoadMore", !isEmpty(records));
+    this.set("canLoadMore", records.get('meta.count') > this.get('model.length'));
     this.get("table").addRows(this.get("model").filter((item)=> !item.isApproval));
     this.checkRowClasses();
-  }),
+  }).restartable(),
 
   checkRowClasses() {
     const rows = this.table.rows;
@@ -100,7 +111,7 @@ export default Mixin.create({
       if (column.sorted) {
         this.setProperties({
           dir: column.ascending ? "asc" : "desc",
-          sort: column.get("valuePath"),
+          sort: dasherize(column.get("valuePath")),
           canLoadMore: true,
           page: 0
         });

@@ -104,19 +104,22 @@
                   placement="bottom" as |attacher|
                 }}
                   <ul class="vl-popover__link-list">
-                    {{#if (await agenda.createdFor.mailCampaign)}}
+                    {{#if
+                      (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+                    }}
                       <li class="vl-popover__link-list__item">
-                        <a
-                          class="vl-link vl-link--block"
-                          target="_blank"
-                          rel="noopener"
-                          href={{await agenda.createdFor.mailCampaign.archiveUrl
-                          }}
-                        >
-                          {{t "preview-campaign"}}
-                        </a>
+                        <div class="vl-loader-link">
+                          <div
+                            class="vl-loader"
+                            role="alert"
+                            aria-busy="true"
+                          ></div>
+                          {{t "newsletter-loading-text"}}
+                        </div>
                       </li>
-                      {{#if (not (await agenda.createdFor.mailCampaign.sent))}}
+                    {{else if (await agenda.createdFor.mailCampaign)}}
+                      {{#if (not (await agenda.createdFor.mailCampaign.isSent))
+                      }}
                         <li class="vl-popover__link-list__item">
                           <a
                             class="vl-link vl-link--block"
@@ -126,11 +129,11 @@
                             {{t "send-campaign"}}
                           </a>
                         </li>
+                        <li
+                          class="vl-popover__link-list__separator"
+                          role="none"
+                        ></li>
                       {{/if}}
-                      <li
-                        class="vl-popover__link-list__separator"
-                        role="none"
-                      ></li>
                       <li class="vl-popover__link-list__item">
                         <a
                           class="vl-link vl-link--block"
@@ -163,7 +166,6 @@
                       <li class="vl-popover__link-list__item">
                         <a
                           class="vl-link vl-link--block"
-                          {{action attacher.hide}}
                           {{action "createCampaign"}}
                         >
                           {{t "create-campaign"}}

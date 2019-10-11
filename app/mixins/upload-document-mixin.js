@@ -70,7 +70,7 @@ export default Mixin.create({
     const latestVersionNumber = document
       ? (await document.get('lastDocumentVersion.versionNumber')) || 0
       : 0;
-    let accessLevel = (document ? (await document.get('accessLevel')) : null) || this.defaultAccessLevel;
+    let accessLevel = (await this.get('document.lastDocumentVersion.accessLevel')) || this.defaultAccessLevel;
     return this.store.createRecord('document-version', {
       document, // Optional
       created,
@@ -81,14 +81,14 @@ export default Mixin.create({
     });
   },
 
-  async saveDocuments(freezeAccessLevel) {
+  async saveDocuments(confidential) {
     this.set('isLoading', true);
     const documents = this.get('documentsInCreation');
 
     const savedDocuments = await Promise.all(
       documents.map(async (document) => {
         const documentVersion = await document.get('documentVersions.firstObject');
-        document.set('freezeAccessLevel', freezeAccessLevel);
+        document.set('confidential', confidential);
 
         return documentVersion.save().then((documentVersion) => {
           return document.save().then((document) => {
@@ -175,6 +175,7 @@ export default Mixin.create({
       if (document) {
         const documentVersion = await this.createNewDocumentVersion(uploadedFile, document);
         (await document.get('documentVersions')).pushObject(documentVersion);
+        document.notifyPropertyChange('documentVersions');
       } else {
         const documentVersion = await this.createNewDocumentVersion(uploadedFile);
         document = this.createNewDocument(

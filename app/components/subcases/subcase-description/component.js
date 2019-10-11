@@ -22,13 +22,15 @@ export default Component.extend(isAuthenticatedMixin, EditAgendaitemOrSubcase, {
 		return this.subcase.get('remarkType');
 	}),
 
-  latestMeetingId: computed('subcase', function() {
+  latestMeetingId: computed('subcase.latestMeeting', function() {
 		return this.subcase.get('latestMeeting').then(meeting => meeting.id);
 	}),
-  latestAgendaId: computed('subcase', function() {
+
+  latestAgendaId: computed('subcase.latestAgenda', function() {
 		return this.subcase.get('latestAgenda').then(agenda => agenda.id);
 	}),
-  latestAgendaItemId: computed('subcase', function() {
+
+  latestAgendaItemId: computed('subcase.latestAgendaItem', function() {
 		return this.subcase.get('latestAgendaItem').then(item => item.id);
 	}),
 

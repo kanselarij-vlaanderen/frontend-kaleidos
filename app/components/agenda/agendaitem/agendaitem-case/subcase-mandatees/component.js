@@ -21,7 +21,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 					if (!requestedBy && rows.get('length') > 0) {
 						rows.get('firstObject').set('isSubmitter', true);
 					} else {
-						const foundMandatee = rows.find((row) => row.get('mandatee.id') == requestedBy.get('id'));
+						const foundMandatee = rows.find((row) => row.get('mandatee.id') === requestedBy.get('id'));
 						if (foundMandatee) {
 							foundMandatee.set('isSubmitter', true);
 						}
@@ -56,27 +56,23 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		return iseCodes.filter((iseCodeOfMandatee) => {
 			const foundIseCode = iseCodesOfMandatee.find((iseCode) => iseCode.get('id') === iseCodeOfMandatee.get('id'));
 
-			if (foundIseCode) {
-				return true;
-			} else {
-				return false
-			}
+			return !!foundIseCode;
 		})
 	},
 
 	async constructMandateeRows() {
 		const { isAgendaItem } = this;
-		let item;
+		let subcase;
 		if (isAgendaItem) {
-			item = await this.get('item.subcase');
+			subcase = await this.get('item.subcase');
 		} else {
-			item = await this.get('item');
+			subcase = await this.get('item');
 		}
 
-		const iseCodes = await item.get('iseCodes');
-		const mandatees = await (await item.get('mandatees')).sortBy('priority');
-		let selectedMandatee = await item.get('requestedBy');
-		const mandateeLength = mandatees.get('length')
+		const iseCodes = await subcase.get('iseCodes');
+		const mandatees = await (await this.get('item.mandatees')).sortBy('priority');
+		let selectedMandatee = await subcase.get('requestedBy');
+		const mandateeLength = mandatees.get('length');
 		if (mandateeLength === 1) {
 			selectedMandatee = mandatees.get('firstObject');
 		}

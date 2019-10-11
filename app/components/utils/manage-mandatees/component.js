@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
-
+import moment from 'moment';
 export default Component.extend({
 	store: inject(),
 	subcasesService: inject(),
@@ -15,6 +15,10 @@ export default Component.extend({
 	actions: {
 		closeModal() {
 			this.closeModal();
+		},
+		
+		mandateesUpdated () {
+			this.mandateesUpdated();
 		},
 
 		selectMandatee(mandatee) {
@@ -47,8 +51,8 @@ export default Component.extend({
 		},
 
 		async saveResignation() {
-		  const selectedPerson = this.get('selectedPerson');
-		  if(!selectedPerson){
+      const selectedPerson = this.get('selectedPerson');
+      if(!selectedPerson){
         this.globalError.showToast.perform(
           EmberObject.create({
             title: 'Opgelet!',
@@ -56,7 +60,7 @@ export default Component.extend({
             type: 'warning-undo'
           })
         );
-		  }
+      }
 			this.set('isLoading', true);
 			const oldMandatee = this.get('mandateeToEdit');
 			const domains = await oldMandatee.get('governmentDomains');
@@ -64,9 +68,9 @@ export default Component.extend({
 
 			oldMandatee.set('end', this.get('selectedEndDate') || moment().toDate());
 			oldMandatee.save().then(() => {
-			  if(!selectedPerson){
+        if(!selectedPerson){
           return;
-			  }
+        }
 				const newMandatee = this.store.createRecord('mandatee', {
 					title: oldMandatee.get('title'),
 					start: this.get('selectedStartDate') || moment().toDate(),
@@ -80,7 +84,7 @@ export default Component.extend({
 					this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
 				});
 			}).then(() => {
-			  this.mandateesUpdated();
+        this.mandateesUpdated();
         this.set('isLoading', false);
         this.closeModal();
 			});

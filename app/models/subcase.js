@@ -5,6 +5,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 import moment from 'moment';
+import sortDocumentsByNameAndNumber from 'fe-redpencil/utils/sort-document-by-name-and-number';
 
 const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
@@ -22,7 +23,6 @@ export default Model.extend({
   confidential: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
-  freezeAccessLevel: attr('boolean'),
   concluded: attr('boolean'),
   subcaseName: attr('string'),
 
@@ -100,7 +100,7 @@ export default Model.extend({
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
             // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return documents.sortBy('type.priority', 'name');
+            return sortDocumentsByNameAndNumber(documents);
           });
         }
       })
@@ -129,7 +129,7 @@ export default Model.extend({
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
             // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return documents.sortBy('type.priority', 'name');
+            return sortDocumentsByNameAndNumber(documents);
           });
         }
       })
@@ -292,7 +292,7 @@ export default Model.extend({
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestAgendaItem', async function() {
+  isPostponed: computed('latestAgendaItem', 'latestAgendaItem.isPostponed', async function() {
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
       return latestAgendaItem.isPostponed

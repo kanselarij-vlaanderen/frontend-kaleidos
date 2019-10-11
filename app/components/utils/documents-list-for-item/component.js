@@ -1,7 +1,7 @@
 import Component from '@ember/component';
-import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
-export default Component.extend(UploadDocumentMixin, {
+export default Component.extend({
 	tagName: 'ul',
-	classNames:['vlc-document-list']
+	classNames:['vlc-document-list'],
+	isClickable: null
 });

@@ -19,14 +19,12 @@ export default Model.extend({
   numberVp: attr('string'),
   numberVr: attr('string'),
   numberVrOriginal: attr(),
-  freezeAccessLevel: attr('boolean'),
   forCabinet: attr('boolean'),
 
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
 
 	type: belongsTo('document-type'),
-  accessLevel: belongsTo('access-level'),
   signedDecision: belongsTo('decision', { inverse: null }),
   signedMinutes: belongsTo('meeting-record', { inverse: null }),
 
@@ -57,17 +55,6 @@ export default Model.extend({
       }),
     });
   }),
-
-  storeAccessLevel: async function(accessLevel){
-    this.set('accessLevel', accessLevel);
-    let versions = await this.get('documentVersions');
-    let promises = versions.map((version) => {
-      version.set('accessLevel', accessLevel);
-      return version.save();
-    });
-    promises.push(this.save());
-    return Promise.all(promises);
-  },
 
   toggleConfidential: async function(){
     this.toggleProperty('confidential');

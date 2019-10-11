@@ -42,6 +42,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     this.changeLoading();
     const session = this.get('currentSession');
     session.set('isFinal', false);
+    session.set('agenda', null);
     session.save();
     const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
@@ -119,6 +120,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
         const session = await lastAgenda.get('createdFor');
         session.set('isFinal', true);
+        session.set('agenda', lastAgenda);
         await session.save();
         this.set('sessionService.currentAgenda', lastAgenda);
         this.reloadRoute();
@@ -169,12 +171,13 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     async deleteDesignAgenda(agenda) {
       const definiteAgendas = await this.get('definiteAgendas');
       const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
+      const agendaitems = await agenda.get('agendaitems');
 
-      agenda.destroyRecord().then(() =>
-        lastDefiniteAgenda
-          ? this.set('sessionService.currentAgenda', lastDefiniteAgenda || null)
-          : this.currentSession.destroyRecord().then(() => this.router.transitionTo('agendas'))
-      );
+      await Promise.all(agendaitems.map(item => item.destroyRecord()));
+      await agenda.destroyRecord();
+      await lastDefiniteAgenda
+        ? this.set('sessionService.currentAgenda', lastDefiniteAgenda || null)
+        : this.currentSession.destroyRecord().then(() => this.router.transitionTo('agendas'));
     },
 
     async createNewDesignAgenda() {
