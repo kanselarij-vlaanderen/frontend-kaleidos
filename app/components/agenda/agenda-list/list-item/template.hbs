@@ -28,7 +28,7 @@
   </pre>
 </h4>
 {{#if (not selectedAgendaItem)}}
-  {{#if agendaitem.showAsRemark}} {{!-- What is this test for? Determining if announcement better through "showAsRemark"? --}}
+  {{#if (or (await agendaitem.subcase) agendaitem.showAsRemark)}} {{!-- What is this test for? Determining if announcement better through "showAsRemark"? --}}
     {{#if agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
       <p class="vl-u-text">
         {{agendaitem.title}}
