@@ -487,5 +487,6 @@
   "error-send-newsletter": "Er ging iets mis tijdens het versturen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-create-newsletter": "Er ging iets mis tijdens het aanmaken van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-delete-newsletter": "Er ging iets mis tijdens het verwijderen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
-  "newsletter-loading-text":"De nieuwsbrief wordt aangemaakt. Dit kan even duren.."
+  "newsletter-loading-text":"De nieuwsbrief wordt aangemaakt. Dit kan even duren..",
+  "not-applicable": "Niet van toepassing"
 }

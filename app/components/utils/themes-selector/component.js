@@ -43,7 +43,9 @@ export default Component.extend({
     if (selectedThemes && selectedThemes.length > 0) {
       selectedThemes.map((selectedTheme) => {
         const foundTheme = themes.find((theme) => theme.get('label') === selectedTheme.get('label'));
-        foundTheme.set('selected', true);
+        if(foundTheme) {
+          foundTheme.set('selected', true);
+        }
       })
     }
   }
