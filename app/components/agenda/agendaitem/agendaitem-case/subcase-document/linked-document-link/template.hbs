@@ -18,7 +18,7 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            {{access-level-pill item=document}}
+            {{access-level-pill item=lastDocumentVersion}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if isEditor}}
@@ -35,19 +35,17 @@
         </div>
       </div>
       <h6 class="vl-title vl-title--h6">
-        <span {{action "toggleIsEditing"}}>
-          {{await document.lastDocumentVersion.name}}
-        </span>
+        {{await lastDocumentVersionName}}
       </h6>
       <div class="vlc-document-card-content__meta">
         {{t "uploaded-at"}}
-        {{moment-format (await document.lastDocumentVersion.created)}}
+        {{moment-format lastDocumentVersion.created}}
         {{t "at"}}
-        {{moment-format (await document.lastDocumentVersion.created) "HH:mm"}}
+        {{moment-format lastDocumentVersion.created "HH:mm"}}
       </div>
     </div>
   </div>
-  {{#if (gt (await document.reverseSortedDocumentVersions.length) 0)}}
+  {{#if (gt myReverseSortedVersions.length 0)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
         <button
@@ -62,10 +60,7 @@
         {{#if isShowingVersions}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
-              {{#each
-                (await
-                  document.reverseSortedDocumentVersions
-                ) as |documentVersion|
+              {{#each myReverseSortedVersions as |documentVersion|
               }}
                 {{web-components/vl-document documentVersion=documentVersion}}
               {{/each}}

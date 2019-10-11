@@ -2,6 +2,7 @@
   {{utils/edit-mandatee
     mandateeToEdit=(await mandateeToEdit)
     closeModal=(action "toggleIsEditing")
+    mandateesUpdated= (action "mandateesUpdated")
   }}
 {{/if}}
 {{#if isResigning}}

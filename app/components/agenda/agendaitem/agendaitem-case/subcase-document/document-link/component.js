@@ -107,8 +107,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       await item.save().then(() => {
         if(subcase) this.resetFormallyOk();
       });
-      this.set('isLoading', false);
-      this.set('isUploadingNewVersion', false);
+      if(!this.isDestroyed){
+        this.set('isLoading', false);
+        this.set('isUploadingNewVersion', false);
+      }
+
     },
 
     cancel() {

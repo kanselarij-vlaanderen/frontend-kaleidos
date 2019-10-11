@@ -12,6 +12,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
   editable: null,
   agendaitem: null,
   subcase: null,
+  isRemark: alias('item.showAsRemark'),
 
   item: computed('agendaitem', 'subcase', function () {
     const { agendaitem, subcase } = this;

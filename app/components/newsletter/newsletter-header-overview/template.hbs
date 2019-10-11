@@ -104,18 +104,22 @@
                   placement="bottom" as |attacher|
                 }}
                   <ul class="vl-popover__link-list">
-                    {{#if (or (is-pending agenda.createdFor.mailCampaign) isLoading)}}
+                    {{#if
+                      (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+                    }}
                       <li class="vl-popover__link-list__item">
-                        <a class="vl-link vl-link--block">
+                        <div class="vl-loader-link">
                           <div
                             class="vl-loader"
                             role="alert"
                             aria-busy="true"
                           ></div>
-                        </a>
+                          {{t "newsletter-loading-text"}}
+                        </div>
                       </li>
                     {{else if (await agenda.createdFor.mailCampaign)}}
-                      {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
+                      {{#if (not (await agenda.createdFor.mailCampaign.isSent))
+                      }}
                         <li class="vl-popover__link-list__item">
                           <a
                             class="vl-link vl-link--block"
@@ -162,7 +166,6 @@
                       <li class="vl-popover__link-list__item">
                         <a
                           class="vl-link vl-link--block"
-                          {{action attacher.hide}}
                           {{action "createCampaign"}}
                         >
                           {{t "create-campaign"}}

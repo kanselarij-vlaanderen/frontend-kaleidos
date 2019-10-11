@@ -3,8 +3,9 @@ import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { inject } from '@ember/service';
+import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
 
-export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
+export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDocumentVersions, {
   globalError: inject(),
   fileService: inject(),
   classNames: ['vl-u-spacer-extended-bottom-s'],
@@ -21,9 +22,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     }
   }),
 
-  lastDocumentVersion: computed('filteredDocumentVersions.@each', function() {
-    return (this.get('filteredDocumentVersions') || []).objectAt(0);
-  }),
+  myDocumentVersions: computed.alias('item.linkedDocumentVersions'),
 
   actions: {
     showVersions() {
@@ -45,6 +44,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     unlinkDocument(document) {
       this.set('documentToDelete', document);
       this.set('isVerifyingUnlink', true);
-    },
+    }
   },
 });

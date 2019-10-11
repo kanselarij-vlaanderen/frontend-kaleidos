@@ -23,7 +23,6 @@ export default Model.extend({
   confidential: attr('boolean'),
   formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
-  freezeAccessLevel: attr('boolean'),
   concluded: attr('boolean'),
   subcaseName: attr('string'),
 

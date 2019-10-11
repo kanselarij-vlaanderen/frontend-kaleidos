@@ -1,32 +1,40 @@
 import Component from '@ember/component';
+import EmberObject from '@ember/object';
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject as service } from '@ember/service';
+import DS from 'ember-data';
 
 export default Component.extend(isAuthenticatedMixin, {
-  accessLevel: null,
-  originalAccessLevel: null,
-  item: null,
   confidential: false,
-  loading: true,
   editing: false,
   intl: service(),
   classNameBindings: [':vl-u-display-flex', ':vl-u-flex-align-center'],
 
-  didInsertElement: function(){
-    this._super(...arguments);
-    if(!this.item){
-      return;
+  accessLevel: computed('item.accessLevel', function(){
+    const accessLevel = this.get('item.accessLevel');
+    if(!accessLevel){
+      return null;
     }
-    this.set('loading', true);
+    return DS.PromiseObject.create({
+      promise: accessLevel.then((access) => {
+        return access;
+      })
+    })
+  }),
+  originalAccessLevel: computed('item.accessLevel', function(){
+    const accessLevel = this.get('item.accessLevel');
+    if(!accessLevel){
+      return null;
+    }
+    return DS.PromiseObject.create({
+      promise: accessLevel.then((access) => {
+        return access;
+      })
+    })
+  }),
 
-    this.get('item.accessLevel').then((accessLevel) => {
-      this.set('accessLevel', accessLevel);
-      this.set('originalAccessLevel', accessLevel);
-      this.set('loading', false);
-    });
-
-  },
+  loading: computed.alias('accessLevel.isPending'),
 
   accessLevelClass: computed('accessLevelId', function(){
     switch(this.accessLevelId){
@@ -42,11 +50,11 @@ export default Component.extend(isAuthenticatedMixin, {
   }),
 
   accessLevelId: computed('accessLevel.id', function(){
-    return (this.get('accessLevel') || {}).id;
+    return (this.get('accessLevel') || EmberObject.create()).get('id');
   }),
 
   accessLevelLabel: computed('accessLevel.label', function(){
-    return (this.get('accessLevel') || {}).label || this.intl.t('no-accessLevel');
+    return (this.get('accessLevel') || EmberObject.create()).get('label') || this.intl.t('no-accessLevel');
   }),
 
   actions: {
