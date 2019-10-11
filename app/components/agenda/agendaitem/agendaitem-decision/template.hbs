@@ -52,7 +52,7 @@
           {{t "documents-attached-to"}}
         </h4>
         <div class="vl-u-spacer-extended-top-s">
-          {{utils/documents-list-for-item item=decision agendaitem=subcase}}
+          {{utils/documents-list-for-item item=decision agendaitem=subcase isClickable=true}}
         </div>
       </div>
     {{/if}}
@@ -68,7 +68,7 @@
     {{else}}
       {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
         document=(await decision.signedDocument)
-        item=decision
+        item=(await decision.signedDocument)
       }}
     {{/if}}
   {{else}}
