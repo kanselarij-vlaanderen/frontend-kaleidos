@@ -44,14 +44,13 @@
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "mandatee-proposal")}}
-      <p>
+    <p>
+      {{#if (await item.newsletterProposal)}}
         {{await item.newsletterProposal}}
-      </p>
-    {{#if (not (await item.newsletterProposal))}}
-      <p>
+      {{else}}
         {{t "not-applicable"}}
-      </p>
-    {{/if}}
+      {{/if}}
+    </p>
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "decision-in-newsletter")}}
