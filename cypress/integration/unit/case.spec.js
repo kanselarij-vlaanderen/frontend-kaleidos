@@ -7,7 +7,7 @@ context('Case test', () => {
     cy.login('Admin');
   });
 
-  it.only('should create a new case and add a subcase', () => {
+  it('should create a new case and add a subcase', () => {
 
     cy.server()
     cy.route('GET', '/cases?**').as('getCases');
@@ -16,7 +16,7 @@ context('Case test', () => {
     cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.route('PATCH','/subcases/*').as('patchSubcase');
 
-    const caseTitleShort= 'Cypress test';
+    const caseTitleShort= 'Cypress test ' + currentTimestamp();
     const type= 'Nota';
     const newSubcaseTitleShort= caseTitleShort;
     const subcaseTitleLong= 'Cypress test voor het aanmaken van een dossier en procedurestap';
@@ -40,11 +40,10 @@ context('Case test', () => {
 
 
     //Change the access level
-    cy.changeSubcaseAccessLevel(caseTitleShort, true, 'Intern Overheid', 'Cypress test nieuwere titel', 'Cypress test nieuwere lange titel');
+    cy.changeSubcaseAccessLevel(false, caseTitleShort, true, 'Intern Overheid', 'Cypress test nieuwere titel', 'Cypress test nieuwere lange titel');
 
     //Add the themes
     cy.addSubcaseThemes([0, 5 , 10]);
-    cy.addSubcaseThemes(['Energie', 'Jeugd' , 'Gezin']);
 
     //Add the mandatees
     cy.addSubcaseMandatee(1, 0, 0);
@@ -52,10 +51,10 @@ context('Case test', () => {
 
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR.270919/1', fileType: 'Nota'}]);
 
-  });
+  // });
 
-  it('should propose a subcase to an new agenda', () => {
-    cy.server()
+  // it('should propose a subcase to an new agenda', () => {
+    // cy.server()
     cy.route('GET', '/cases?**').as('getCases');
     cy.route('GET', '/subcases?**').as('getSubcases');
     cy.route('POST', '/agendas').as('createNewAgenda');
@@ -93,4 +92,8 @@ context('Case test', () => {
   });
 
 });
+
+const currentTimestamp = () => {
+  return Cypress.moment().unix();
+}
 
