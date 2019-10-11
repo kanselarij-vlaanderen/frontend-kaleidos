@@ -23,6 +23,10 @@
   }
 }
 
+.vlc-agenda-items__status {
+  white-space: nowrap;
+}
+
 .vlc-agenda-meta__status--positive {
   opacity: 1;
   color: $napier-green;
@@ -41,8 +45,25 @@
   }
 }
 
+.vlc-agenda-meta__times-passed {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .vlc-agenda-meta__recently-added {
   opacity: 0.5;
+  margin-right: 1rem;
+  i {
+    font-size: 1em;
+    display: inline;
+    font-weight: 500;
+
+    &:before {
+      position: relative;
+      top: 1.2px;
+    }
+  }
 }
 
 .vlc-agenda-meta__recently-added:hover {

@@ -187,31 +187,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-.added-tag {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  i {
-    color: $green-light;
-    font-size: 1.3em;
-    font-weight: 500;
-  }
-}
-
-a.vlc-agenda-items__sub-item--active,
-a.vlc-agenda-items__sub-item--active:hover,
-a.vlc-agenda-items__sub-item--active:active {
-  background: $science-blue;
-  color: #fff;
-  .vlc-agenda-items__status--positive {
-    color: #fff;
-  }
-}
-
-a.vlc-agenda-items__sub-item--active:focus {
-  background: darken($science-blue, 5%);
-}
-
 .vlc-scroll-wrapper {
   height: 100% !important;
 }
