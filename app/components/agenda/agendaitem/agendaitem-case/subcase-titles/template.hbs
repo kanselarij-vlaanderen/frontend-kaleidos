@@ -56,13 +56,17 @@
           </span>
         {{/if}}
       {{else if (await item.approved)}}
+        {{#if (await item.subcaseName)}}
         <span class="vl-pill vl-pill--success vl-u-text--capitalize">
           {{await item.subcaseName}}
         </span>
+        {{/if}}
       {{else}}
+        {{#if (await item.subcaseName)}}
         <span class="vl-pill vl-u-text--capitalize">
           {{await item.subcaseName}}
         </span>
+        {{/if}}
       {{/if}}
     </div>
   </div>
@@ -84,7 +88,6 @@
           class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
         ></span>
       {{/if}}
-
     </div>
   </div>
   {{#if (await item.isPostponed)}}
