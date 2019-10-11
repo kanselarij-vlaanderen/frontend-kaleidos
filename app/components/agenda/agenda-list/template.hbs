@@ -1,9 +1,14 @@
-<div class="vlc-agenda-items-section-header">
-  <h3 class="vlc-agenda-items-section-header__title">
-    {{t "agendaitems-subtitle"}}
-  </h3>
-  <div class="vl-u-display-flex vl-u-flex-end">
-    <div class="vl-u-spacer-extended-left-s">
+<div class="vlc-toolbar vlc-agenda-items-section-header">
+  <div class="vlc-toolbar__left">
+    <div class="vlc-toolbar__item">
+      <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
+        {{t "agendaitems-subtitle"}}
+      </h3>
+    </div>
+  </div>
+
+  <div class="vlc-toolbar__right">
+    <div class="vlc-toolbar__item">
       <a class="vlc-agenda-items-section-header__link" {{action "toggleChangesOnly"}}>
         {{#if (not isShowingChanges)}}
           {{t "show-changes"}}
@@ -12,13 +17,15 @@
         {{/if}}
       </a>
     </div>
-    {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
-      <div class="vl-u-spacer-extended-left-s">
-        <a class="vlc-agenda-items-section-header__link" {{action "toggleIsEditingOverview"}}>
-          {{t "edit"}}
-        </a>
-      </div>
-    {{/if}}
+    <div class="vlc-toolbar__item">
+      {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
+        <div class="vl-u-spacer-extended-left-s">
+          <a class="vlc-agenda-items-section-header__link" {{action "toggleIsEditingOverview"}}>
+            {{t "edit"}}
+          </a>
+        </div>
+      {{/if}}
+    </div>
   </div>
 </div>
 {{#if (is-empty agendaitems)}}
@@ -60,13 +67,13 @@
 </div>
 {{#if (not selectedAgendaItem)}}
   <div class="vlc-agenda-items-section-header">
-    <h3 class="vlc-agenda-items-section-header__title">
+    <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
       {{t "announcements-subtitle"}}
     </h3>
   </div>
 {{else}}
   <div class="vlc-agenda-items-section-header">
-    <h3 class="vlc-agenda-items-section-header__title">
+    <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
       {{t "announcements-subtitle"}}
     </h3>
   </div>

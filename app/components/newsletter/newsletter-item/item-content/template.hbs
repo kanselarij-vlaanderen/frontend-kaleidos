@@ -27,7 +27,7 @@
   <div>
     <h4>
       {{#if (not (await agendaitem.subcase.newsletterInfo))}}
-        {{agendaitem.title}}
+        {{agendaitem.shortTitle}}
       {{else}}
         {{await agendaitem.subcase.newsletterInfo.title}}
       {{/if}}
