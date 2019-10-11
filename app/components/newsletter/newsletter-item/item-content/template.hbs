@@ -19,6 +19,11 @@
         </div>
       {{/if}}
     </div>
+    {{#if (not (await agendaitem.subcase.newsletterInfo))}}
+      <p>
+        {{agendaitem.title}}
+      </p>
+    {{/if}}
     <div class="vl-u-text vl-u-text--small vl-u-text--muted">
       {{moment-format (await agenda.createdFor.plannedstart) "DD MMMM YYYY"}}
     </div>
@@ -32,6 +37,11 @@
         {{await agendaitem.subcase.newsletterInfo.title}}
       {{/if}}
     </h4>
+    {{#if (not (await agendaitem.subcase.newsletterInfo))}}
+      <p>
+        {{agendaitem.title}}
+      </p>
+    {{/if}}
   </div>
 {{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
