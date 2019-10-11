@@ -12,7 +12,7 @@
     {{#if (is-pending row.subcase.newsletterInfo)}}
       {{web-components/vl-loader text=(t "newletter-loading-text")}}
     {{else if (await row.subcase.newsletterInfo)}}
-      <div class="vlc-container">
+      <div class="vlc-container-center">
         {{news-item/edit-item
           agendaitem=row
           item=(await row.subcase.newsletterInfo)
