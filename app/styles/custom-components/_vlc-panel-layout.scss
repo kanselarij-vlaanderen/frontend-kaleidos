@@ -1,6 +1,6 @@
 /* ==========================================================================
-   vl-panel-layout
-   ========================================================================== */
+  vl-panel-layout
+  ========================================================================== */
 
 .vlc-panel-layout {
   display: flex;
@@ -10,24 +10,45 @@
 }
 
 .vlc-panel-layout-agenda__detail {
-  width: 100%; // Fix a flexbox issue
+  width: 100%;
 }
 
 .vlc-panel-layout__agenda-history {
+  width: 160px;
   height: 100%;
 }
 
 .vlc-panel-layout__agenda-items {
-  flex: 1 1 20%;
+  width: 320px;
   height: 100%;
-  min-width: 320px;
-  max-width: 480px;
   background: $porcelain;
   border-right: 1px solid $ghost;
+
+  @media (min-width: 1280px) {
+    width: 400px;
+  }
+
+  @media (min-width: 1440px) {
+    width: 480px;
+  }
+
+  // If there is a history panel, the agenda panel is 40px smaller
+  .vlc-panel-layout__agenda-history + & {
+    width: 280px;
+
+    @media (min-width: 1280px) {
+      width: 360px;
+    }
+
+    @media (min-width: 1440px) {
+      width: 440px;
+    }
+  }
+
 }
 
 .vlc-panel-layout__main-content {
-  flex: 1 1 auto;
+  flex: 1;
   height: 100%;
   min-width: 0;
 }
