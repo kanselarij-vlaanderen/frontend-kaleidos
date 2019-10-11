@@ -9,7 +9,7 @@ export default Component.extend({
   intl: inject(),
 
 	dateObjectsToEnable: computed(function () {
-		const dateOfToday = moment().utc().format();
+    const dateOfToday = moment().utc().subtract(1,'weeks').format();
 		return this.store.query('meeting', {
 			filter: {
 				':gte:planned-start': dateOfToday,

@@ -13,7 +13,7 @@ export default Component.extend(ModifiedMixin, {
   isAssigning: false,
 
   meetings: computed('store', function() {
-    const dateOfToday = moment().utc().format();
+    const dateOfToday = moment().utc().subtract(1,'weeks').format();
     const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
 
     return this.store.query('meeting', {
