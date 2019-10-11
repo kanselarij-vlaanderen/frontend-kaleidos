@@ -1,98 +1,98 @@
 /* ==========================================================================
-   vl-side-nav
-   ========================================================================== */
+  vl-side-nav
+  ========================================================================== */
 
-   .vlc-side-nav {
-    background: $blue-gray-lighter;
-    border-right: 1px solid $ghost;
-    height: 100%;
+.vlc-side-nav {
+  background: $blue-gray-lighter;
+  border-right: 1px solid $ghost;
+  height: 100%;
 
-    .vl-title {
-      display: flex;
-      align-items: center;
-      margin-right: .8rem;
+  .vl-title {
+    display: flex;
+    align-items: center;
+    margin-right: .8rem;
 
-      .vl-icon {
-        &:before {
-          position: relative;
-          top: 2.2px;
-        }
-        font-size: 1.8rem;
-        margin-right: .4rem;
+    .vl-icon {
+      &:before {
+        position: relative;
+        top: 2.2px;
       }
-    }
-
-    // Small fix to center icon in toggle
-    .vlc-side-nav-toggle {
-      justify-content: center;
-    }
-
-    .vlc-side-nav-item {
-      padding: 0.8rem 1.6rem;
-      border-bottom: 1px solid $ghost;
-      border-left: 3px solid rgba(0,0,0,0);
-      a {
-        text-decoration: none;
-      }
-      .vlc-side-nav-item__label {
-        margin-bottom: 0.4rem;
-        color: $black;
-      }
-
-      .vlc-side-nav-item__meta {
-        font-size: 1.3rem;
-        color: $blue-gray-dark;
-      }
-
-      .vlc-side-nav-item__meta--small {
-        display: none;
-        font-size: 1.3rem;
-        color: $blue-gray-dark;
-      }
-    }
-
-    .vlc-side-nav-item--active,
-    .vlc-side-nav-item:hover {
-      background: $ghost;
-      border-left-color: $primary-blue;
+      font-size: 1.8rem;
+      margin-right: .4rem;
     }
   }
 
-  /* Collapsed state menu
-     ========================================================================== */
+  // Small fix to center icon in toggle
+  .vlc-side-nav-toggle {
+    justify-content: center;
+  }
 
-  .vlc-panel-layout__agenda-history.vlc-panel-layout__agenda-history--collapsed {
-    width: 80px;
-
-    .vlc-navbar {
-      padding: 0 .8rem;
+  .vlc-side-nav-item {
+    padding: 0.8rem 1.6rem;
+    border-bottom: 1px solid $ghost;
+    border-left: 3px solid rgba(0,0,0,0);
+    a {
+      text-decoration: none;
+    }
+    .vlc-side-nav-item__label {
+      margin-bottom: 0.4rem;
+      color: $black;
     }
 
-    .vlc-side-nav .vlc-side-nav-item {
-      padding: 0.8rem .8rem;
-    }
-
-    .vlc-side-nav-item__label span {
-      display: none;
-    }
-
-    .vl-title span {
-      display: none;
-    }
-
-    .vlc-side-nav-toggle{
-      .vl-vi {
-        @include vi-nav-right;
-      }
-    }
-
-    .vlc-side-nav-item__meta--small {
-      display: block;
+    .vlc-side-nav-item__meta {
       font-size: 1.3rem;
       color: $blue-gray-dark;
     }
 
-    .vlc-side-nav-item__meta {
+    .vlc-side-nav-item__meta--small {
       display: none;
+      font-size: 1.3rem;
+      color: $blue-gray-dark;
     }
   }
+
+  .vlc-side-nav-item--active,
+  .vlc-side-nav-item:hover {
+    background: $ghost;
+    border-left-color: $primary-blue;
+  }
+}
+
+/* Collapsed state menu
+  ========================================================================== */
+
+.vlc-panel-layout__agenda-history.vlc-panel-layout__agenda-history--collapsed {
+  width: 80px;
+
+  .vlc-navbar {
+    padding: 0 .8rem;
+  }
+
+  .vlc-side-nav .vlc-side-nav-item {
+    padding: 0.8rem .8rem;
+  }
+
+  .vlc-side-nav-item__label span {
+    display: none;
+  }
+
+  .vl-title span {
+    display: none;
+  }
+
+  .vlc-side-nav-toggle{
+    .vl-vi {
+      @include vi-nav-right;
+    }
+  }
+
+  .vlc-side-nav-item__meta--small {
+    display: block;
+    font-size: 1.3rem;
+    color: $blue-gray-dark;
+  }
+
+  .vlc-side-nav-item__meta {
+    display: none;
+  }
+}
