@@ -13,7 +13,15 @@ module.exports = function(defaults) {
     moment: {
       outputFormat: 'L',
       allowEmpty: true
-    }
+    },
+
+    'ember-cli-babel': {
+      includePolyfill: true,
+      plugins: [
+        'transform-object-rest-spread'
+      ]
+    },
+   
   });
 
   app.import('node_modules/sanitize-filename/index.js', {

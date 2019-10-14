@@ -83,6 +83,7 @@ Router.map(function() {
       });
     });
   });
+  this.route('not-supported');
 });
 
 export default Router;

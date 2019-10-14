@@ -14,7 +14,7 @@
     "build": "ember build --environment=production",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
-    "start": "ember serve --proxy=http://localhost:80",
+    "start": "ember serve --proxy=http://localhost:80 --prod",
     "test": "ember test",
     "cypress-local": "./node_modules/.bin/cypress open --env configFile=development",
     "cypress-dev": "./node_modules/.bin/cypress open --env configFile=dev"
@@ -36,7 +36,7 @@
     "ember-changeset": "^1.6.0",
     "ember-cli": "~3.6.0",
     "ember-cli-app-version": "^3.2.0",
-    "ember-cli-babel": "^7.1.2",
+    "ember-cli-babel": "^7.12.0",
     "ember-cli-cjs-transform": "^2.0.0",
     "ember-cli-dependency-checker": "^3.0.0",
     "ember-cli-eslint": "^4.2.3",
