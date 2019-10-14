@@ -2,11 +2,12 @@ import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import moment from 'moment';
 
 export default Controller.extend(isAuthenticatedMixin, {
   sessionService: inject(),
+  agendaService: inject(),
   router: inject(),
   intl: inject(),
   queryParams: ['selectedAgenda'],
@@ -16,6 +17,16 @@ export default Controller.extend(isAuthenticatedMixin, {
   createAnnouncement: false,
   isLoading: false,
   isPrintingDecisions: false,
+
+  selectedAgendaObserver: observer('selectedAgenda', async function() {
+    const session = await this.get('sessionService.currentSession');
+    const agenda = await this.get('sessionService.currentAgenda');
+
+    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
+    if (previousAgenda) {
+      await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
+    }
+  }),
 
   documentTitle: computed('currentAgenda', 'currentSession', function() {
     const { currentSession, currentAgenda } = this;
