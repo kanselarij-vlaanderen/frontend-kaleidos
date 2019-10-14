@@ -212,8 +212,9 @@
                     class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
                   >
                     {{#if
-                      (and
-                        currentAgenda (eq currentAgenda.name "Ontwerpagenda")
+                      (or
+                        (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
+                        (and isAdmin (await currentAgendaIsLast))
                       )
                     }}
                       <a
@@ -223,8 +224,8 @@
                       >
                         {{t "agenda-delete"}}
                       </a>
-                    {{else if
-                      (and
+                    {{/if}}
+                    {{#if (and
                         (not (await designAgendaPresent))
                         (not (await currentSession.isFinal))
                       )}}

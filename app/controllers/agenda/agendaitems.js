@@ -18,14 +18,17 @@ export default Controller.extend({
 
 	sortedAgendaitems: computed('agendaitems.@each.{priority,isDeleted}', function() {
 		const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark &&!item.isDeleted).sortBy('priority');
-		this.agendaService.setGroupNameOnAgendaItems(actualAgendaitems)
+		this.agendaService.setGroupNameOnAgendaItems(actualAgendaitems);
 		return actualAgendaitems;
 	}),
 
 	sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', function() {
-		const announcements = this.get('announcements').filter((item) => !item.isDeleted).sortBy('priority');
-		// this.agendaService.setGroupNameOnAgendaItems(actualAgendaitems)
-		return announcements;
+    const announcements = this.get('announcements');
+    if (announcements) {
+      return announcements.filter((item) => !item.isDeleted).sortBy('priority');
+    } else {
+      return [];
+    }
 	}),
 
 	agendaitemsClass: computed('routing.currentRouteName', function () {
@@ -36,7 +39,7 @@ export default Controller.extend({
 			return "vlc-panel-layout-agenda__detail vl-u-bg-porcelain";
 		}
 	}),
-	
+
 	actions: {
 		selectAgendaItem(agendaitem) {
 			this.set('sessionService.selectedAgendaItem', agendaitem);

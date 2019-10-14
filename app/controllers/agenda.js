@@ -23,7 +23,7 @@ export default Controller.extend(isAuthenticatedMixin, {
     const agenda = await this.get('sessionService.currentAgenda');
 
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
-    if (previousAgenda) {
+    if (previousAgenda && session && agenda) {
       await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
     }
   }),
