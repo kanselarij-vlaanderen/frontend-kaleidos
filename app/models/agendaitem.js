@@ -192,9 +192,9 @@ export default Model.extend({
 
   checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
-    const hasOnlyOneAgenda = (await this.agenda.get('createdFor.agendas.length')) == 1;
-    const isDesignAgenda = this.agenda.get('isDesignAgenda');
-    return wasAdded && !(isDesignAgenda && hasOnlyOneAgenda);
+    const meetingOnlyHasOneAgenda = (await this.agenda.get('createdFor.agendas.length')) == 1;
+    const isOnFirstAgenda = this.agenda.get('name')  === CONFIG.alphabet[0];
+    return wasAdded || isOnFirstAgenda || meetingOnlyHasOneAgenda;
   }),
 
   isAdded: alias('checkAdded'),
