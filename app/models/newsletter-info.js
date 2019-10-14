@@ -18,8 +18,8 @@ export default Model.extend({
   publicationDate: attr('date'),
   publicationDocDate: attr('date'),
   remark: attr('string'),
+  
   subcase: belongsTo('subcase'),
-
   meeting: belongsTo('meeting', { inverse: null }),
   documentVersions: hasMany('document-version', { inverse: null }),
 

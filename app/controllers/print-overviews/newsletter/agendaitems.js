@@ -1,10 +1,10 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
-import moment from 'moment';
 import { inject } from '@ember/service';
 
 export default Controller.extend({
   intl: inject(),
+  newsletterService: inject(),
 
   columns: computed(function() {
     return [
@@ -49,23 +49,11 @@ export default Controller.extend({
       },
     ];
   }),
-  async addNewsItem(subcase, agendaitem, value) {
-    const news = this.store.createRecord('newsletter-info', {
-      subcase: subcase,
-      created: moment()
-        .utc()
-        .toDate(),
-      title: await agendaitem.get('shortTitle'),
-      subtitle: await agendaitem.get('title'),
-      finished: value,
-    });
-    return news.save();
-  },
 
   actions: {
-    async addNewsletterInfo(row) {
-      const subcase = await row.get('subcase');
-      await this.addNewsItem(subcase, row, false);
+    async addNewsletterInfo(agendaitem) {
+      const subcase = await agendaitem.get('subcase');
+      await this.newsletterService.createNewsItemForSubcase(subcase, agendaitem);
       await subcase.get('meetingRecord');
     },
   },
