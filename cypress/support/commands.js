@@ -60,7 +60,7 @@ Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
   cy.route('GET', '/meetings**').as('getMeetings');
   cy.route('POST', '/meetings').as('createNewMeeting');
   
-  cy.wait('@getMeetings', { timeout: 12000 });
+  cy.wait('@getMeetings', { timeout: 20000 });
   cy.get('.vlc-toolbar__item > .vl-button')
     .contains('Nieuwe agenda aanmaken')
     .click();
@@ -114,8 +114,8 @@ Cypress.Commands.add('openAgendaForDate', (agendaDate) => {
     cy.get('.vl-input-field').type(searchDate);
     cy.get('.vl-button').click();
   });
-  cy.wait('@getMeetings', { timeout: 10000 });
-  cy.get('.vl-data-table > tbody').children().should('have.length', 1);
+  cy.wait('@getMeetings', { timeout: 20000 });
+  // cy.get('.vl-data-table > tbody').children().should('have.length', 1);
   cy.get('.vl-data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
 });
 
@@ -144,9 +144,9 @@ Cypress.Commands.add('setFormalOkOnAllItems', () => {
   cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
     cy.contains('Overzicht').click();
   });
-  cy.wait('@getMeetings', { timeout: 10000 });
-  cy.get('.vl-title--h3').contains(`Nota's`).parent().within(() => {
-    cy.get('.vl-link').contains('Wijzigen').should('exist').click();
+  cy.wait('@getMeetings', { timeout: 20000 });
+  cy.get('.vl-title--h3').contains(`Nota's`).parents('.vlc-agenda-items-section-header').within(() => {
+    cy.get('.vlc-agenda-items-section-header__link').contains('Wijzigen').should('exist').click();
   });
   
   cy.get('.vlc-agenda-items__sub-item').as('agendaItemsAndRemarks');
@@ -157,8 +157,8 @@ Cypress.Commands.add('setFormalOkOnAllItems', () => {
     cy.contains('Formeel OK').click();
   });
 
-  cy.get('.vl-title--h3').contains(`Nota's`).parent().within(() => {
-    cy.get('.vl-link').contains('Wijzigen').should('exist').click();
+  cy.get('.vl-title--h3').contains(`Nota's`).parents('.vlc-agenda-items-section-header').within(() => {
+    cy.get('.vlc-agenda-items-section-header__link').contains('Wijzigen').should('exist').click();
   });
 });
 
@@ -168,13 +168,9 @@ Cypress.Commands.add('approveCoAgendaitem', (caseShortTitle) => {
   cy.route('PATCH', '/approvals/**').as('patchApprovals');
   cy.route('PATCH', '/agendas/**').as('patchAgendas');
 
-  // cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
-  //   cy.contains('Overzicht').click();
-  // });
-
   cy.contains(caseShortTitle).click();
-  cy.wait('@getIseCodes', { timeout: 20000 });
-  cy.wait('@getGovernmentFields', { timeout: 20000 });
+  cy.wait('@getIseCodes', { timeout: 50000 });
+  cy.wait('@getGovernmentFields', { timeout: 50000 });
   cy.get('.vlc-panel-layout__main-content').within(() => {
 
     cy.get('.vl-u-spacer-extended-bottom-l').as('detailBlocks');
@@ -205,7 +201,7 @@ Cypress.Commands.add('approveDesignAgenda', () => {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
   cy.route('POST', '/agendas').as('createNewDesignAgenda');
   cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
-  cy.route('POST', '/agenda-sort?**').as('createSorting');
+
   cy.get('.vlc-toolbar').within(() => {
     cy.get('.vl-button--narrow')
     .contains('Ontwerpagenda')
@@ -215,7 +211,6 @@ Cypress.Commands.add('approveDesignAgenda', () => {
   cy.wait('@patchAgenda', { timeout: 12000 });
   cy.wait('@createNewDesignAgenda', { timeout: 12000 });
   cy.wait('@createApprovedAgenda', { timeout: 12000 });
-  cy.wait('@createSorting', { timeout: 12000 });
 });
 
 /**
@@ -228,6 +223,8 @@ Cypress.Commands.add('approveDesignAgenda', () => {
  */
 Cypress.Commands.add('addRemarkToAgenda', (title, remark, files) => {
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
+  cy.route('PATCH', '**').as('patchModel');
+
   cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
     .contains('Acties')
     .click();
@@ -261,11 +258,16 @@ Cypress.Commands.add('addRemarkToAgenda', (title, remark, files) => {
   cy.wait('@createNewAgendaitem', { timeout: 20000 }).then(() => {
     cy.verifyAlertSuccess();
   });
+  cy.wait('@patchModel', { timeout: 20000 }).then(() => {
+    cy.verifyAlertSuccess();
+  });
 });
 
 Cypress.Commands.add('addAgendaitemToAgenda', (caseTitle, postponed) => {
   cy.route('GET', '/subcases?**').as('getSubcasesFiltered');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
+  cy.route('POST','/subcase-phases').as('createSubcasePhase');
+  cy.route('PATCH', '**').as('patchModel');
 
   cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
     .contains('Acties')
@@ -295,6 +297,13 @@ Cypress.Commands.add('addAgendaitemToAgenda', (caseTitle, postponed) => {
   cy.wait('@createNewAgendaitem', { timeout: 20000 }).then(() => {
     cy.verifyAlertSuccess();
   });
+  cy.wait('@patchModel', { timeout: 20000 }).then(() => {
+    cy.verifyAlertSuccess();
+  });
+  cy.wait('@createSubcasePhase', { timeout: 20000 }).then(() => {
+    cy.verifyAlertSuccess();
+  });
+
 });
 
 //#endregion
@@ -412,13 +421,15 @@ Cypress.Commands.add('addSubcase', (type, newShortTitle, longTitle, step, stepNa
  * Changes the subcase access levels and titles when used in the subcase view (/dossiers/..id../overzicht)
  * shortTitle is required to find the dom element
  * 
+ * @param {boolean} isRemark - Is this a subcase of type remark
  * @param {string} shortTitle - Current title of the subcase (same as case title unless already renamed)
  * @param {boolean} [confidentialityChange] -Will change the current confidentiality if true
  * @param {string} [accessLevel] -Access level to set, must match exactly with possible options in dropdown
  * @param {string} [newShortTitle] - new short title for the subcase
  * @param {string} [newLongTitle] - new long title for the subcase
+ * @param {boolean} [inNewsletter] - Will toggle "in newsletter" if true
  */
-Cypress.Commands.add('changeSubcaseAccessLevel', (shortTitle, confidentialityChange, accessLevel, newShortTitle, newLongTitle) => {
+Cypress.Commands.add('changeSubcaseAccessLevel', (isRemark, shortTitle, confidentialityChange, accessLevel, newShortTitle, newLongTitle) => {
   cy.route('PATCH','/subcases/*').as('patchSubcase');
 
   cy.get('.vl-title--h4').contains(shortTitle).parents('.vl-u-spacer-extended-bottom-l').within(() => {
@@ -438,7 +449,17 @@ Cypress.Commands.add('changeSubcaseAccessLevel', (shortTitle, confidentialityCha
   }
 
   cy.get('@subcaseAccessLevel').within(() => {
-    cy.get('.vlc-input-field-block').as('editCaseForm').should('have.length', 3);
+    if(isRemark) {
+      cy.get('.vlc-input-field-block').as('editCaseForm').should('have.length', 4);
+      if(newLongTitle) {
+        cy.get('@editCaseForm').eq(2).within(() => {
+          cy.get('.vl-textarea').click().clear().type(newLongTitle);
+        });
+      }
+    } else {
+      cy.get('.vlc-input-field-block').as('editCaseForm').should('have.length', 3);
+    }
+
 
     if(confidentialityChange) {
       cy.get('@editCaseForm').eq(0).within(() => {
@@ -552,7 +573,8 @@ Cypress.Commands.add('proposeSubcaseForAgenda', (agendaDate) => {
   const formattedDate = agendaDate.date() + ' ' + monthDutch + ' ' + agendaDate.year();
 
   cy.get('.vlc-page-header').within(() => {
-    cy.get('.vl-button').contains('Indienen voor agendering').click();
+    cy.get('.vl-button', { timeout: 12000 }).should('have.length', 2);
+    cy.get('.vl-button').contains('Indienen voor agendering').should('exist').click();
 
   });
   cy.get('.ember-attacher-show').within(() => {

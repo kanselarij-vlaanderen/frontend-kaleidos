@@ -67,11 +67,11 @@ context('Full test', () => {
 
 
     //Change the access level
-    cy.changeSubcaseAccessLevel(case_1_TitleShort, true, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(false, case_1_TitleShort, true, 'Intern Overheid');
 
     //Add the themes
     cy.addSubcaseThemes([0, 5 , 10]);
-    cy.addSubcaseThemes(['Energie', 'Jeugd' , 'Gezin']);
+    cy.addSubcaseThemes([1, 15 , 20]);
 
     //Add the mandatees
     cy.addSubcaseMandatee(0, 0, 0);
@@ -94,7 +94,7 @@ context('Full test', () => {
     const subcase_2_Type='In voorbereiding';
     const subcase_2_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(true, case_2_TitleShort).then(() => {
+    cy.createCase(false, case_2_TitleShort).then(() => {
       cy.verifyAlertSuccess();
     });
 
@@ -111,7 +111,7 @@ context('Full test', () => {
 
 
     //Change the access level
-    cy.changeSubcaseAccessLevel(case_2_TitleShort, false, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(false, case_2_TitleShort, false, 'Intern Overheid');
 
     //Add the themes
     cy.addSubcaseThemes([2, 4 , 6]);
@@ -133,7 +133,7 @@ context('Full test', () => {
     const subcase_3_Type='In voorbereiding';
     const subcase_3_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(true, caseTitle_3_Short).then(() => {
+    cy.createCase(false, caseTitle_3_Short).then(() => {
       cy.verifyAlertSuccess();
     });
 
@@ -150,7 +150,7 @@ context('Full test', () => {
 
     
     //Change the access level
-    cy.changeSubcaseAccessLevel(caseTitle_3_Short, false, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(true, caseTitle_3_Short, false, 'Intern Overheid');
 
     //Add the themes
     // cy.addSubcaseThemes([8, 15 , 20, 25]); //no themes for a mededeling
