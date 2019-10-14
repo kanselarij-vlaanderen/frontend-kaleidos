@@ -47,6 +47,7 @@ export default Component.extend(ApprovalsEditMixin, {
       title: newsletterInfo.get('title'),
       richtext: newsletterInfo.get('richtext'),
       finished: false,
+      inNewsletter: false,
       mandateeProposal: null,
       publicationDate: newsletterInfo.get('publicationDate'),
       publicationDocDate: newsletterInfo.get('publicationDocDate')
