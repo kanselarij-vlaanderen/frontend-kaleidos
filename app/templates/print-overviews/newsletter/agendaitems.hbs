@@ -10,7 +10,7 @@
   }}
   {{#if (not row.isApproval)}}
     {{#if (is-pending row.subcase.newsletterInfo)}}
-      {{web-components/vl-loader text=(t "newletter-loading-text")}}
+      {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
     {{else if (await row.subcase.newsletterInfo)}}
       <div class="vlc-container-center">
         {{news-item/edit-item

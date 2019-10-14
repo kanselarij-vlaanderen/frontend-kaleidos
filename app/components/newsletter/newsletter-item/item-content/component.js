@@ -2,19 +2,18 @@ import Component from '@ember/component';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
-import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vl-typography'],
   classNameBindings: ['isFlandersArt:vl-typography--definite'],
-  store: inject(),
+  newsletterService: inject(),
   isShowingVersions: false,
 
   isFlandersArt: computed('allowEditing', function() {
     return !this.allowEditing;
   }),
 
-  numberToShow: computed('agendaitem.number', 'itemIndex', 'definite', 'agendaitem.showAsRemark', function() {
+  numberToShow: computed('agendaitem.{number,showAsRemark}', 'itemIndex', 'definite', function() {
     if(this.agendaitem.showAsRemark && this.definite === "true"){
       return '';
     }
@@ -25,18 +24,6 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   }),
 
-  async addNewsItem(subcase, agendaitem) {
-    const news = this.store.createRecord('newsletter-info', {
-      subcase: subcase,
-      created: moment()
-        .utc()
-        .toDate(),
-      title: await agendaitem.get('shortTitle'),
-      subtitle: await agendaitem.get('title'),
-    });
-    await news.save();
-  },
-
   actions: {
     showDocuments() {
       this.toggleProperty('isShowingVersions');
@@ -46,15 +33,10 @@ export default Component.extend(isAuthenticatedMixin, {
       const subcase = await agendaitem.get('subcase');
       const newsletter = await subcase.get('newsletterInfo');
       if (!newsletter) {
-        await this.addNewsItem(subcase, agendaitem);
+        await this.newsletterService.createNewsItemForSubcase(subcase, agendaitem);
       } else {
-        if (!newsletter.get('title')) {
-          newsletter.set('title', agendaitem.get('shortTitle'));
-          await newsletter.save();
-        }
+        this.toggleProperty('isEditing');
       }
-
-      this.toggleProperty('isEditing');
     },
   },
 });

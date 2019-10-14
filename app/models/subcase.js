@@ -144,7 +144,7 @@ export default Model.extend({
     });
   }),
 
-  sortedMandatees: computed('mandatees', function() {
+  sortedMandatees: computed('mandatees.@each', function() {
     return this.get('mandatees').sortBy('priority');
   }),
 
