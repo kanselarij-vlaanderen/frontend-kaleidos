@@ -434,15 +434,6 @@ ul {
   }
 }
 
-.action-toggle-container {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-right: 1em;
-}
-
 .no-margin {
   margin: 0;
 }
@@ -499,3 +490,15 @@ pre {
   justify-content: center;
   align-items: center;
 }
+
+.vlc-button-in-input {
+  position: absolute;
+  top: 44%;
+  right: 3.6rem;
+
+  &:hover {
+    background: none;
+    color: #05c;
+  }
+}
+

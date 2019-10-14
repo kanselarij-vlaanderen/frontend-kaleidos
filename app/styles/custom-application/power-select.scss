@@ -116,7 +116,7 @@
 .ember-basic-dropdown-trigger {
   @include select-default;
   display: block;
-  width: 100%;
+  //width: 100%;
   min-height: 3.5rem;
 
   &::-ms-expand {

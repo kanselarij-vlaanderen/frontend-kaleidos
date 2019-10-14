@@ -11,19 +11,24 @@
       ministerName=(readonly mandatees)
       filter=(action "filterCases")
     }}
-    <div class="vl-u-display-flex vl-u-flex-space-between">
-      <h2 class="vl-title vl-title--h3">
-        {{t "my-cases"}}
-      </h2>
-      <div class="vl-action-group vl-action-group--align-right">
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <h2 class="vl-title vl-title--h3">{{t "my-cases"}}</h2>
+        </div>
+      </div>
+
+      <div class="vlc-toolbar__right">
         {{#if isEditor}}
-          <div class="action-toggle-container">
-            {{web-components/vl-form-label value=(t "show-archived")}}
+          <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
+            <label class="vl-form__label vl-u-spacer-extended-right-s" for="isArchived">
+              {{t "show-archived"}}
+            </label>
             {{web-components/vl-toggle value=isArchived}}
           </div>
         {{/if}}
-        <div>
-          <label class="vl-form__label" for="dossierId">
+        <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
+          <label class="vl-form__label vl-u-spacer-extended-right-s" for="dossierId">
             {{t "amount-showed"}}
           </label>
           {{#power-select
