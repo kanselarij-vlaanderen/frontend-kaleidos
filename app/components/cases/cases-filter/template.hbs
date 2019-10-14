@@ -88,6 +88,12 @@
         selectedDate=dateFrom
         dateChanged=(action "selectDateFrom")
       }}
+      {{#if dateFrom}}
+        <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+          onclick={{action "selectDateFrom" null}}>
+          <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
+        </button>
+      {{/if}}
     </div>
     <div class="vl-col--2-12 vlc-input-field-block">
       {{web-components/vl-form-label value=(t "until-date")}}
@@ -95,6 +101,12 @@
         selectedDate=dateTo
         dateChanged=(action "selectDateTo")
       }}
+      {{#if dateTo}}
+        <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+          onclick={{action "selectDateTo" null}}>
+          <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
+        </button>
+      {{/if}}
     </div>
     <div class="vl-u-display-flex vl-u-flex-align-center">
       <label class="vl-form__label vl-u-spacer-extended-right-s" for="searchInDecisionsOnly">
