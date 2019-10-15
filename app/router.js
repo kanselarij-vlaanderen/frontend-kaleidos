@@ -7,7 +7,10 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('agendas', { path: '/' });
+  this.route('agendas', { path: '/' }, function() {
+    this.route('history', { path: '/historiek' });
+    this.route('overview', { path: '/overzicht' });
+  });
   this.route('agenda', { path: '/agenda/:id' }, function() {
     this.route('agendaitems', { path: '/agendapunten' }, function() {
       this.route('agendaitem', { path: '/:agendaitem_id' });
