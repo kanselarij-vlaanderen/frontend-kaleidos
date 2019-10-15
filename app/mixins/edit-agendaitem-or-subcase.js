@@ -14,7 +14,7 @@ const getCachedProperty = function (property) {
 				return item.get(property);
 		},
 		set: function (key, value) {
-		  this.item.set(property, value);
+			this.item.set(property, value);
 			return value;
 		}
 	})
@@ -33,11 +33,13 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
 	isSubcase: not('isAgendaItem'),
 
-	async setNewPropertiesToModel(model) {
+	async setNewPropertiesToModel(model, resetFormallyOk = true) {
 		const { propertiesToSet } = this;
 
-		if (model.get('formallyOk') && (this.get('formallyOk') != CONFIG.notYetFormallyOk)) {
-			this.changeFormallyOkPropertyIfNotSetOnTrue(model);
+		if(resetFormallyOk) {
+			if (model.get('formallyOk') && (this.get('formallyOk') != CONFIG.notYetFormallyOk)) {
+				this.changeFormallyOkPropertyIfNotSetOnTrue(model);
+			}
 		}
 
 		await Promise.all(propertiesToSet.map(async (property) => {
@@ -75,8 +77,8 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 			item.set('modified', moment().utc().toDate());
 			if (isAgendaItem && !item.showAsRemark) {
 				const isDesignAgenda = await item.get('isDesignAgenda');
-        const agendaitemSubcase = await item.get('subcase');
-        if (isDesignAgenda && agendaitemSubcase) {
+				const agendaitemSubcase = await item.get('subcase');
+				if (isDesignAgenda && agendaitemSubcase) {
 					agendaitemSubcase.set('modified', moment().utc().toDate());
 					await this.setNewPropertiesToModel(agendaitemSubcase);
 				}
@@ -89,12 +91,20 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 					item.reload();
 				});
 			} else {
-				await this.setNewPropertiesToModel(item);
+				let resetFormallyOk = true;
+				// Don't reset the formalOk when the "showInNewsletter" of a remark is the only change made in the agendaitem
+				if(isAgendaItem) {
+					if(item.changedAttributes()['showInNewsletter'] && !(item.changedAttributes()['title'] || item.changedAttributes()['shortTitle'] )) {
+						resetFormallyOk = false;
+					}
+				}
+
+				await this.setNewPropertiesToModel(item, resetFormallyOk);
 
 				const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
 				if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
 					await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
-						await this.setNewPropertiesToModel(agendaitem).then(async () => {
+						await this.setNewPropertiesToModel(agendaitem, resetFormallyOk).then(async () => {
 							const agenda = await item.get('agenda');
 							if (agenda) {
 								await this.updateModifiedProperty(agenda);
