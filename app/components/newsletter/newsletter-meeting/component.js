@@ -29,7 +29,7 @@ export default Component.extend(isAuthenticatedMixin, {
           meeting: meeting,
           finished: false,
           mandateeProposal: null,
-          publicationDate: this.formatter.formatDate(null),
+          publicationDate: this.formatter.formatDate(meeting.get('plannedStart')),
           publicationDocDate: this.formatter.formatDate(null)
         });
         meeting.set('newsletter', newsletter);
