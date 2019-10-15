@@ -7,6 +7,11 @@
     </p>
   {{else}}
     <div class="vl-u-spacer-extended-bottom-s">
+      <p class="vl-u-text--bold">
+        {{await value.newsletterInfo.title}}
+      </p>
+    </div>
+    <div class="vl-u-spacer-extended-bottom-s">
       {{{await value.newsletterInfo.richtext}}}
     </div>
     <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
