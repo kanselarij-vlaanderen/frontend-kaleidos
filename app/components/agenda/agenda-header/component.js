@@ -21,6 +21,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   isPrintingNotes: false,
   isAddingAnnouncement: false,
   isAddingAgendaitems: false,
+  isApprovingAgenda: false,
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -239,6 +240,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   },
 
   async approveAgenda(session) {
+    if(this.get('isApprovingAgenda')){
+      return;
+    }
+    this.set('isApprovingAgenda', true);
     this.changeLoading();
     let agendas = await this.get('agendas');
     let agendaToLock = await agendas.find((agenda) => agenda.name == 'Ontwerpagenda');
@@ -289,6 +294,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           this.reloadRoute(newAgenda.get('id'));
         });
     });
-
+    this.set('isApprovingAgenda', false);
   }
 });
