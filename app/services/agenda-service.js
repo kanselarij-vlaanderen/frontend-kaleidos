@@ -87,6 +87,7 @@ export default Service.extend(ModifiedMixin, {
   },
 
   async createNewAgendaItem(selectedAgenda, subcase, index) {
+    await selectedAgenda.hasMany("agendaitems").reload();
     let priorityToAssign = 0;
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');
