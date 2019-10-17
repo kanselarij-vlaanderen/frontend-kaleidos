@@ -4,8 +4,9 @@ import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
+import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 
-export default Service.extend({
+export default Service.extend(ModifiedMixin, {
   store: inject(),
   addedDocuments: null,
   addedAgendaitems: null,
@@ -134,6 +135,8 @@ export default Service.extend({
     await this.assignSubcasePhase(subcase);
     await subcase.hasMany('phases').reload();
 
+    await selectedAgenda.hasMany("agendaitems").reload();
+    await this.updateModifiedProperty(selectedAgenda);
   },
 
   async assignSubcasePhase(subcase) {
