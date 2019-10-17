@@ -7,7 +7,6 @@ export default Service.extend({
   store: inject(),
   currentSession: null,
   selectedAgendaItem: null,
-  firstAgendaItemOfAgenda: null,
 
   agendas: computed('currentSession.agendas.@each', function() {
     if (!this.get('currentSession')) {
