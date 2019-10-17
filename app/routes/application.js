@@ -22,9 +22,8 @@ export default Route.extend(ApplicationRouteMixin, {
   checkSupportedBrowser() {
     const isFirefox = typeof InstallTrigger !== 'undefined';
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    // console.log(isSafari)
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-  return isFirefox || isChrome || isSafari;
+    return isFirefox || isChrome || isSafari;
   },
 
   sessionAuthenticated() {
@@ -38,9 +37,6 @@ export default Route.extend(ApplicationRouteMixin, {
     }
     return this.checkSupportedBrowser();
   },
-
-
-  sessionInvalidated() {},
 
   _loadCurrentSession() {
     return this.currentSession.load().catch(() => this.session.invalidate());
