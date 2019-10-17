@@ -62,6 +62,7 @@ Router.map(function() {
     this.route('newsletter', { path: '/kort-bestek/:agenda_id' }, function() {
       this.route('agendaitems', { path: '/agendapunten' });
       this.route('overview', { path: '/klad' });
+      this.route('loading', {path:'/laden'});
     });
     this.route('loading'), { path: '/laden' };
   });
@@ -87,6 +88,7 @@ Router.map(function() {
     });
   });
   this.route('not-supported');
+  this.route('help');
 });
 
 export default Router;
