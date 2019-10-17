@@ -22,6 +22,9 @@ export default Controller.extend(isAuthenticatedMixin, {
     const session = await this.get('sessionService.currentSession');
     const agenda = await this.get('sessionService.currentAgenda');
 
+    this.set('agendaService.addedAgendaitems', []);
+    this.set('agendaService.addedDocuments', []);
+
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
     if (previousAgenda && session && agenda) {
       await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
