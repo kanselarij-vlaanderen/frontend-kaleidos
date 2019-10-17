@@ -8,6 +8,7 @@ export default Service.extend({
   store: inject(),
   globalError: inject(),
   intl: inject(),
+  formatter: inject(),
 
   createCampaign(agenda, meeting) {
     return $.ajax({
@@ -81,4 +82,20 @@ export default Service.extend({
 		});
     return await news.save();
   },
+
+  async createNewsItemForMeeting(meeting) {
+    const plannedStart = await meeting.get('plannedStart');
+    const pubDate = moment(plannedStart).set({hour:14,minute:0});
+    const pubDocDate = moment(plannedStart).weekday(7).set({hour:14,minute:0});
+    const newsletter = this.store.createRecord('newsletter-info', {
+      meeting: meeting,
+      finished: false,
+      mandateeProposal: null,
+      publicationDate: this.formatter.formatDate(pubDate),
+      publicationDocDate: this.formatter.formatDate(pubDocDate)
+    });
+    await newsletter.save();
+    meeting.set('newsletter', newsletter);
+    return await meeting.save();
+  }
 });
