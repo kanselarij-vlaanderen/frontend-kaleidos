@@ -10,7 +10,7 @@ padding: 1.2rem;
     position: sticky;
     height: 4.8rem;
     top: 0;
-    z-index: 9999;
+    z-index: z('sticky-header');
   }
 }
 
