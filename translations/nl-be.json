@@ -41,7 +41,7 @@
   "note": "Nota",
   "agendas": "Agendas",
   "alt-document-name": "Alternatieve document naam",
-  "amount-showed": "Dossiers per rij",
+  "amount-showed": "Dossiers per pagina",
   "annotation-on-agenda": "Annotatie bij agendering: ",
   "announcements-subtitle": "Mededelingen",
   "approval-mandatee": "Akkoord",
@@ -415,7 +415,7 @@
   "agendaitems-creating-text": "De agendapunten worden aangemaakt.",
   "agendaitems-loading-text": "De agendapunten worden geladen.",
   "agenda-approving-text": "De agenda wordt goedgekeurd.",
-  "newletter-loading-text": "Het kort bestek wordt geladen.",
+  "newsletter-info-loading-text": "Het kort bestek wordt geladen.",
   "notification": "Notificatie",
   "no-notification-yet": "Nog geen notificatie beschikbaar",
   "add-notification": "Notificatie toevoegen",
@@ -488,5 +488,8 @@
   "error-create-newsletter": "Er ging iets mis tijdens het aanmaken van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-delete-newsletter": "Er ging iets mis tijdens het verwijderen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "newsletter-loading-text":"De nieuwsbrief wordt aangemaakt. Dit kan even duren..",
-  "not-applicable": "Niet van toepassing"
+  "not-applicable": "Niet van toepassing",
+  "active":"Actieve",
+  "no-subcases-yet":"Er zijn nog geen andere procedurestappen binnen dit dossier.",
+  "redirect-loading-text":"Even geduld.. We verwijzen u door naar de helppagina."
 }

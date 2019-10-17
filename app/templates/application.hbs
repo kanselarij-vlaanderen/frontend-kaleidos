@@ -1,61 +1,65 @@
-{{title (t "page-title")}}
-{{head-layout}}
-{{#if showEnvironmentName}}
-  <div
-    class="vl-u-text--bold vl-u-align-center no-margin padding--left-1 padding-small vl-alert--warning"
-  >
-    {{environmentName}} Omgeving
-  </div>
-{{/if}}
-{{#if (await alert)}}
-  <div
-    class="vl-alert vl-alert-relative vl-alert-relative--center {{await type}}"
-    role="alert"
-  >
-    <div class="vl-alert__icon">
-      <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
+{{#if model}}
+  {{title (t "page-title")}}
+  {{head-layout}}
+  {{#if showEnvironmentName}}
+    <div
+      class="vl-u-text--bold vl-u-align-center no-margin padding--left-1 padding-small vl-alert--warning"
+    >
+      {{environmentName}}
+      Omgeving
     </div>
-    <button class="vl-alert__close" type="button">
-      <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
-      <span class="vl-u-visually-hidden">
-        {{t "close"}}
-      </span>
-    </button>
-    <div class="vl-alert__content">
-      <p class="vl-alert__title">
-        {{await alert.title}}
-      </p>
-      <div class="vl-alert__message">
-        <p>
-          {{await alert.message}}
-        </p>
+  {{/if}}
+  {{#if (await alert)}}
+    <div
+      class="vl-alert vl-alert-relative vl-alert-relative--center
+        {{await type}}"
+      role="alert"
+    >
+      <div class="vl-alert__icon">
+        <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
       </div>
+      <button class="vl-alert__close" type="button">
+        <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "close"}}
+        </span>
+      </button>
+      <div class="vl-alert__content">
+        <p class="vl-alert__title">
+          {{await alert.title}}
+        </p>
+        <div class="vl-alert__message">
+          <p>
+            {{await alert.message}}
+          </p>
+        </div>
+      </div>
+      <button class="vl-alert__close" type="button" {{action "close"}}>
+        <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "close"}}
+        </span>
+      </button>
     </div>
-    <button class="vl-alert__close" type="button" {{action "close"}}>
-      <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
-      <span class="vl-u-visually-hidden">
-        {{t "close"}}
-      </span>
-    </button>
-  </div>
-{{/if}}
-{{#if (gt (await messages.length) 0)}}
-  <div class="toasts-container">
-    {{#each messages as |errorMessage|}}
-      {{utils/custom-messages-toasts
-        errorMessage=errorMessage
-        closeErrorMessage=(action "closeErrorMessage")
-      }}
-    {{/each}}
-  </div>
-{{/if}}
-{{#if showHeader}}
-  {{m-header
-    selectedOption=selectedOption
-    options=options
-    isOc=isOc
-    navigateToRoute=(action "navigateToRoute")
-    navigateToLogin=(action "navigateToLogin")
-  }}
+  {{/if}}
+  {{#if (gt (await messages.length) 0)}}
+    <div class="toasts-container">
+      {{#each messages as |errorMessage|}}
+        {{utils/custom-messages-toasts
+          errorMessage=errorMessage
+          closeErrorMessage=(action "closeErrorMessage")
+        }}
+      {{/each}}
+    </div>
+  {{/if}}
+  {{#if showHeader}}
+    {{m-header
+      selectedOption=selectedOption
+      options=options
+      isOc=isOc
+      navigateToRoute=(action "navigateToRoute")
+      navigateToLogin=(action "navigateToLogin")
+    }}
+  {{/if}}
 {{/if}}
 {{outlet}}

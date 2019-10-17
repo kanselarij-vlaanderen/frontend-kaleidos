@@ -1,0 +1,25 @@
+{{#if (gt model.length 0)}}
+  <div class="vlc-scroll-wrapper">
+    <div class="vlc-scroll-wrapper__body">
+      <div class="vl-u-spacer-extended-l">
+        <div class="vl-u-spacer--large">
+          {{agenda/future-agendas
+            meetings=futureMeetings
+            nearestMeeting=(await nearestMeeting)
+            type="future"
+            title=(t "future-agendas")
+          }}
+          {{agenda/future-agendas
+            meetings=nearestMeeting
+            type="active"
+            title=(t "active-agenda")
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="vl-u-spacer-extended-l">
+    {{web-components/vl-alert message=(t "no-meetings")}}
+  </div>
+{{/if}}

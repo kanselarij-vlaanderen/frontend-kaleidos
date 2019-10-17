@@ -17,11 +17,11 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   fileService: inject(),
   router: inject(),
 
-
   isShowingOptions: false,
   isPrintingNotes: false,
   isAddingAnnouncement: false,
   isAddingAgendaitems: false,
+  isApprovingAgenda: false,
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -32,6 +32,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
   hasMultipleAgendas: computed('agendas.@each', async function() {
     return this.agendas && this.agendas.then(agendas => agendas.length > 1);
+  }),
+
+  currentAgendaIsLast: computed('currentSession','currentAgenda', async function() {
+    return await this.currentSession.get('sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
   designAgendaPresent: filter('currentSession.agendas.@each.name', function(agenda) {
@@ -169,15 +173,24 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async deleteDesignAgenda(agenda) {
-      const definiteAgendas = await this.get('definiteAgendas');
-      const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
+      const session = await this.currentSession;
+      if (!agenda) {
+        await session.destroyRecord().then(() => this.router.transitionTo('agendas'));
+        return
+      }
+      const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
       const agendaitems = await agenda.get('agendaitems');
 
       await Promise.all(agendaitems.map(item => item.destroyRecord()));
       await agenda.destroyRecord();
-      await lastDefiniteAgenda
-        ? this.set('sessionService.currentAgenda', lastDefiniteAgenda || null)
-        : this.currentSession.destroyRecord().then(() => this.router.transitionTo('agendas'));
+      if (previousAgenda) {
+        this.set('sessionService.currentAgenda', previousAgenda);
+        this.router.transitionTo('agenda.agendaitems.index', session.id, {
+          queryParams: { selectedAgenda: previousAgenda.get('id') }
+        });
+      } else {
+        session.destroyRecord().then(() => this.router.transitionTo('agendas'));
+      }
     },
 
     async createNewDesignAgenda() {
@@ -227,6 +240,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   },
 
   async approveAgenda(session) {
+    if(this.get('isApprovingAgenda')){
+      return;
+    }
+    this.set('isApprovingAgenda', true);
     this.changeLoading();
     let agendas = await this.get('agendas');
     let agendaToLock = await agendas.find((agenda) => agenda.name == 'Ontwerpagenda');
@@ -277,6 +294,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           this.reloadRoute(newAgenda.get('id'));
         });
     });
-
+    this.set('isApprovingAgenda', false);
   }
 });

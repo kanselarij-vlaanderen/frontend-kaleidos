@@ -1,5 +1,5 @@
 {{#if (is-pending agendaitem.subcase.newsletterInfo)}}
-  {{web-components/vl-loader text=(t "newletter-loading-text")}}
+  {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
 {{else if (not isEditing)}}
   {{#if (not allowEditing)}}
     {{#if (await agendaitem.subcase.newsletterInfo.inNewsletter)}}

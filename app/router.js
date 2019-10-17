@@ -7,7 +7,10 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('agendas', { path: '/' });
+  this.route('agendas', { path: '/' }, function() {
+    this.route('history', { path: '/historiek' });
+    this.route('overview', { path: '/overzicht' });
+  });
   this.route('agenda', { path: '/agenda/:id' }, function() {
     this.route('agendaitems', { path: '/agendapunten' }, function() {
       this.route('agendaitem', { path: '/:agendaitem_id' });
@@ -59,6 +62,7 @@ Router.map(function() {
     this.route('newsletter', { path: '/kort-bestek/:agenda_id' }, function() {
       this.route('agendaitems', { path: '/agendapunten' });
       this.route('overview', { path: '/klad' });
+      this.route('loading', {path:'/laden'});
     });
     this.route('loading'), { path: '/laden' };
   });
@@ -83,6 +87,8 @@ Router.map(function() {
       });
     });
   });
+  this.route('not-supported');
+  this.route('help');
 });
 
 export default Router;

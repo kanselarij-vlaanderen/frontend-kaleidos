@@ -13,11 +13,6 @@
       </h2>
       {{#if (eq definite "true")}}
         {{#each (await model.groups) as |group|}}
-          {{#if (not (is-empty group.agendaitems))}}
-            <h7 class="vl-title--h7">
-              {{{group.groupName}}}
-            </h7>
-          {{/if}}
           {{#each group.agendaitems as |agendaitem|}}
             {{newsletter/newsletter-item
               agenda=(await model.agenda)

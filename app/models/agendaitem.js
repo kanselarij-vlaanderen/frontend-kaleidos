@@ -32,7 +32,7 @@ export default Model.extend({
   agenda: belongsTo('agenda', { inverse: null }),
   subcase: belongsTo('subcase', { inverse: null }),
   meetingRecord: belongsTo('meeting-record'),
-  showInNewsletter: attr('boolean'),
+  showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
   remarks: hasMany('remark'),
   mandatees: hasMany('mandatee'),
@@ -192,9 +192,7 @@ export default Model.extend({
 
   checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
-    const hasOnlyOneAgenda = (await this.agenda.get('createdFor.agendas.length')) == 1;
-    const isDesignAgenda = this.agenda.get('isDesignAgenda');
-    return wasAdded && !(isDesignAgenda && hasOnlyOneAgenda);
+    return wasAdded;
   }),
 
   isAdded: alias('checkAdded'),

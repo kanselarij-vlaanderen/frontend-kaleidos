@@ -109,7 +109,6 @@ export default Component.extend(isAuthenticatedMixin, {
         const agenda = await meetingToPostponeTo.get('latestAgenda');
         if (agenda.get('name') == 'Ontwerpagenda' && subcase) {
           await this.agendaService.createNewAgendaItem(agenda, subcase);
-          await agenda.hasMany('agendaitems').reload();
         }
       }
 

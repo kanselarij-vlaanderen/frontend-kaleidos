@@ -4,8 +4,9 @@ import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
+import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 
-export default Service.extend({
+export default Service.extend(ModifiedMixin, {
   store: inject(),
   addedDocuments: null,
   addedAgendaitems: null,
@@ -86,9 +87,11 @@ export default Service.extend({
   },
 
   async createNewAgendaItem(selectedAgenda, subcase, index) {
+    await selectedAgenda.hasMany("agendaitems").reload();
     let priorityToAssign = 0;
-    const mandatees = await subcase.get('sortedMandatees');
-    const titles = mandatees.map((mandatee) => mandatee.get('title'));
+    const mandatees = await subcase.get('mandatees');
+    const sortedMandatees = await mandatees.sortBy('priority');
+    const titles = sortedMandatees.map((mandatee) => mandatee.get('title'));
     const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
     const isAnnouncement = subcase.get('showAsRemark');
     if (isAnnouncement) {
@@ -133,6 +136,8 @@ export default Service.extend({
     await this.assignSubcasePhase(subcase);
     await subcase.hasMany('phases').reload();
 
+    await selectedAgenda.hasMany("agendaitems").reload();
+    await this.updateModifiedProperty(selectedAgenda);
   },
 
   async assignSubcasePhase(subcase) {

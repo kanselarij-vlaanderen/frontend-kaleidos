@@ -38,7 +38,6 @@ export default Component.extend(ModifiedMixin, {
       await designAgenda.reload(); //ensures latest state is pulled
       if (designAgenda.get('name') === "Ontwerpagenda") {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
-        await this.updateModifiedProperty(designAgenda);
       }
       this.set('isAssigning', false);
     },

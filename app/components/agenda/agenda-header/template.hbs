@@ -26,7 +26,7 @@
         <div class="vlc-toolbar vlc-toolbar--auto">
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
-              {{#link-to "agendas" class="vlc-backlink vl-link vl-link--bold"}}
+              {{#link-to "agendas.overview" class="vlc-backlink vl-link vl-link--bold"}}
                 <i
                   class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
                 ></i>
@@ -212,8 +212,9 @@
                     class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
                   >
                     {{#if
-                      (and
-                        currentAgenda (eq currentAgenda.name "Ontwerpagenda")
+                      (or
+                        (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
+                        (and isAdmin (await currentAgendaIsLast))
                       )
                     }}
                       <a
@@ -223,8 +224,8 @@
                       >
                         {{t "agenda-delete"}}
                       </a>
-                    {{else if
-                      (and
+                    {{/if}}
+                    {{#if (and
                         (not (await designAgendaPresent))
                         (not (await currentSession.isFinal))
                       )}}

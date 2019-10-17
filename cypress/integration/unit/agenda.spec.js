@@ -58,7 +58,7 @@ context('Agenda tests', () => {
     });
   });
 
-  it.only('should add an agendaitem to an agenda', () => {
+  it('should add an agendaitem to an agenda', () => {
     //TODO extract create agenda before test to beforeAll
     cy.server();
     cy.route('POST', '/agendas').as('createNewAgenda');
