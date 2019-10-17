@@ -45,16 +45,6 @@ export default Component.extend(isAuthenticatedMixin, {
       this.toggleProperty('isShowingChanges');
     },
 
-    async deleteBrokenAgendaitem(brokenAgendaItem) {
-      const id = brokenAgendaItem.id;
-      const subcase = await brokenAgendaItem.get('subcase');
-
-      if (!subcase) {
-        brokenAgendaItem.destroyRecord().then(() => {
-          this.refresh(id);
-        });
-      }
-    },
     reorderItems(itemModels) {
       itemModels.map((item, index) => {
         item.set('priority', index + 1);
