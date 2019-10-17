@@ -6,6 +6,7 @@
   border: 1px $ghost solid;
   border-radius: 0;
   background-color: $white;
+  z-index: z('power-select');
 }
 
 .ember-power-select-trigger,
