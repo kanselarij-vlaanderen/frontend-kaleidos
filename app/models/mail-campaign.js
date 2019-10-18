@@ -6,7 +6,7 @@ export default Model.extend({
 	campaignId:attr('string'),
 	campaignWebId:attr('string'),
 	archiveUrl:attr('string'),
-  sentAt: attr('date'),
+  sentAt: attr('datetime'),
 
 	meetings:hasMany('meeting', {inverse:null}),
 

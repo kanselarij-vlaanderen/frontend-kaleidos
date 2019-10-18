@@ -8,7 +8,7 @@ const { Model, attr, hasMany, belongsTo, PromiseObject } = DS;
 
 export default Model.extend({
   store: inject(),
-  created: attr('date'),
+  created: attr('datetime'),
   title: attr('string'),
   shortTitle: attr('string'),
   number: attr('string'),

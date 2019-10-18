@@ -14,8 +14,8 @@ export default Model.extend({
   store: inject(),
   intl: inject(),
 
-  created: attr('date'),
-  modified: attr('date'),
+  created: attr('datetime'),
+  modified: attr('datetime'),
   shortTitle: attr('string'),
   title: attr('string'),
   subcaseIdentifier: attr('string'),
@@ -82,7 +82,7 @@ export default Model.extend({
       if (document == targetDocument) {
         foundIndex = index;
       }
-    })
+    });
     return foundIndex;
   },
 
@@ -149,7 +149,7 @@ export default Model.extend({
   }),
 
   sortedApprovals: computed('approvals.@each', function() {
-    return
+
   }),
 
   sortedThemes: computed('themes', function() {

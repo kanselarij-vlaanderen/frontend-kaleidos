@@ -15,11 +15,11 @@ export default Model.extend({
 
   store: inject(),
   priority: attr('number'),
-  created: attr('date'),
+  created: attr('datetime'),
   record: attr('string'),
   retracted: attr('boolean'),
   showAsRemark: attr('boolean'),
-  modified: attr('date'),
+  modified: attr('datetime'),
   titlePress: attr('string'),
   textPress: attr('string'),
   forPress: attr('boolean'),

@@ -6,12 +6,12 @@ const { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
   name: attr('string'),
-  issued: attr('date'),
+  issued: attr('datetime'),
   createdFor: belongsTo('meeting'),
   agendaitems: hasMany('agendaitem', { inverse: null, serialize: false }),
   created: attr('date'),
   isAccepted: attr('boolean'),
-  modified: attr('date'),
+  modified: attr('datetime'),
 
   isDesignAgenda: computed('name', function() {
     return this.name == 'Ontwerpagenda';
