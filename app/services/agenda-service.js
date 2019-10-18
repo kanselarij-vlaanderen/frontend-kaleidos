@@ -82,7 +82,7 @@ export default Service.extend(ModifiedMixin, {
         return result;
       })
       .catch(() => {
-        return;
+
       });
   },
 
@@ -129,7 +129,7 @@ export default Service.extend(ModifiedMixin, {
     });
     await agendaitem.save();
 
-    const meeting = await selectedAgenda.get('createdFor')
+    const meeting = await selectedAgenda.get('createdFor');
     await subcase.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
@@ -153,7 +153,7 @@ export default Service.extend(ModifiedMixin, {
     }
   },
 
-  async setGroupNameOnAgendaItems(agendaitems) {
+  async groupAgendaItemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
       agendaitems.map(async (item) => {

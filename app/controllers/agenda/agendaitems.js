@@ -18,7 +18,7 @@ export default Controller.extend({
 
 	sortedAgendaitems: computed('agendaitems.@each.{priority,isDeleted}', function() {
 		const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark &&!item.isDeleted).sortBy('priority');
-		this.agendaService.setGroupNameOnAgendaItems(actualAgendaitems);
+		this.agendaService.groupAgendaItemsOnGroupName(actualAgendaitems);
 		return actualAgendaitems;
 	}),
 

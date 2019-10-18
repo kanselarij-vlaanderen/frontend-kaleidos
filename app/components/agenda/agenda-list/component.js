@@ -8,6 +8,7 @@ import { isPresent } from '@ember/utils';
 
 export default Component.extend(isAuthenticatedMixin, {
   sessionService: inject(),
+  agendaService: inject(),
   classNames: ['vlc-agenda-items'],
   classNameBindings: ['getClassNames'],
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
@@ -51,6 +52,7 @@ export default Component.extend(isAuthenticatedMixin, {
       });
       this.reAssignPriorities.perform(itemModels);
       // this.refresh();
+      this.agendaService.etGroupNameOnAgendaItems(itemModels);
       this.set('agendaitems', itemModels);
     },
 
