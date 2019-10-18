@@ -52,7 +52,7 @@ export default Component.extend(isAuthenticatedMixin, {
       });
       this.reAssignPriorities.perform(itemModels);
       // this.refresh();
-      this.agendaService.etGroupNameOnAgendaItems(itemModels);
+      this.agendaService.groupAgendaItemsOnGroupName(itemModels);
       this.set('agendaitems', itemModels);
     },
 
