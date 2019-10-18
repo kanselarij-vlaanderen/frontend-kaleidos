@@ -155,6 +155,7 @@ export default Service.extend({
         const mandatees = await item.get('sortedMandatees');
         if (item.isApproval) {
           item.set('groupName', null);
+          item.set('ownGroupName', null)
           return;
         }
         if (mandatees.length == 0) {
@@ -171,6 +172,7 @@ export default Service.extend({
         } else {
           item.set('groupName', null);
         }
+        item.set('ownGroupName', currentAgendaitemGroupName);
       })
     );
   },
