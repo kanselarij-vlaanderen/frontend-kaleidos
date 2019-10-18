@@ -36,7 +36,7 @@ export default Mixin.create({
         });
       } else {
         const foundIndex = groups.indexOf(foundItem);
-        if (foundIndex) {
+        if (foundIndex >= 0) {
           groups[foundIndex].agendaitems.push(agendaitem);
         }
       }
