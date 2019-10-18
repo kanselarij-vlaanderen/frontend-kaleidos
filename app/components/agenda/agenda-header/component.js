@@ -175,13 +175,14 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     async deleteDesignAgenda(agenda) {
       const session = await this.currentSession;
       if (!agenda) {
-        await session.destroyRecord().then(() => this.router.transitionTo('agendas'));
+        //TODO possible dead code, there is always an agenda ?
+        await this.sessionService.deleteSession(session);
         return
       }
       const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
       const agendaitems = await agenda.get('agendaitems');
 
-      await Promise.all(agendaitems.map(item => item.destroyRecord()));
+      await Promise.all(agendaitems.map(item => this.agendaService.deleteAgendaitemFromAgenda(item)));
       await agenda.destroyRecord();
       if (previousAgenda) {
         this.set('sessionService.currentAgenda', previousAgenda);
@@ -189,7 +190,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           queryParams: { selectedAgenda: previousAgenda.get('id') }
         });
       } else {
-        session.destroyRecord().then(() => this.router.transitionTo('agendas'));
+        await this.sessionService.deleteSession(session);
       }
     },
 

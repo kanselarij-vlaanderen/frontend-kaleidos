@@ -42,8 +42,7 @@ export default Component.extend(isAuthenticatedMixin, {
   }),
 
   isDeletable: computed(
-    'agendaitem.subcase',
-    'agendaitem.subcase.agendaitems',
+    'agendaitem.{subcase,subcase.agendaitems}',
     'currentAgenda.name',
     async function() {
       const currentAgendaName = await this.get('currentAgenda.name');
@@ -63,32 +62,10 @@ export default Component.extend(isAuthenticatedMixin, {
     }),
 
   async deleteItem(agendaitem) {
-    const id = agendaitem.get('id');
-    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'));
-    const subcase = await itemToDelete.get('subcase');
-
-    if (subcase) {
-      const phases = await subcase.get('phases');
-      await Promise.all(phases.map(async phase => {
-        await phase.destroyRecord();
-      }));
-
-      const allItems = await subcase.get('agendaitems');
-      await Promise.all(allItems.map(async item => item.destroyRecord()));
-
-      await subcase.set('requestedForMeeting', null);
-      await subcase.set('consulationRequests', []);
-      await subcase.set('agendaitems', []);
-      await subcase.save();
-      this.set('sessionService.selectedAgendaItem', null);
-      this.refreshRoute(id);
-    } else {
-
-      await itemToDelete.destroyRecord()
-      this.set('sessionService.selectedAgendaItem', null);
-      this.refreshRoute(id);
-    }
-
+    const id = agendaitem.get('id')
+    await this.agendaService.deleteAgendaitemFromAgenda(agendaitem);
+    this.set('sessionService.selectedAgendaItem', null);
+    this.refreshRoute(id);
   },
 
   actions: {
@@ -136,19 +113,19 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     toggleIsVerifying() {
-      this.toggleProperty('isVerifying')
+      this.toggleProperty('isVerifying');
     },
 
     async tryToDeleteItem(agendaitem) {
       if (await this.isDeletable) {
-        this.deleteItem(agendaitem)
+        this.deleteItem(agendaitem);
       } else if (this.isAdmin) {
-        this.toggleProperty('isVerifying')
+        this.toggleProperty('isVerifying');
       }
     },
 
     verifyDelete(agendaitem) {
-      this.deleteItem(agendaitem)
+      this.deleteItem(agendaitem);
     }
   }
 });
