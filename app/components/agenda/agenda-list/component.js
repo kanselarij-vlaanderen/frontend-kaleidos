@@ -47,6 +47,9 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     reorderItems(itemModels) {
+      if(!this.isEditor){
+        return;
+      }
       itemModels.map((item, index) => {
         item.set('priority', index + 1);
       });
@@ -57,6 +60,9 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     reorderAnnouncements(itemModels) {
+      if(!this.isEditor){
+        return;
+      }
       itemModels.map((item, index) => {
         item.set('priority', index + 1);
       });
