@@ -36,7 +36,7 @@ export default Mixin.create({
         });
       } else {
         const foundIndex = groups.indexOf(foundItem);
-        if (foundIndex) {
+        if (foundIndex >= 0) {
           groups[foundIndex].agendaitems.push(agendaitem);
         }
       }
@@ -69,16 +69,21 @@ export default Mixin.create({
     );
 
     let prevIndex = 0;
-    const groupsArray = groupedAgendaitems
-      .filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
-      .sortBy('groupPriority')
-      .map((item) => {
-        item.agendaitems.map((agendaitem, index) => {
-          prevIndex = index + prevIndex + 1;
-          agendaitem.set('itemIndex',prevIndex);
-        });
-        return EmberObject.create(item);
+    let groupsArray = groupedAgendaitems;
+    if(!this.allowEmptyGroups){
+      groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
+    }else{
+      groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers')
+    }
+
+    groupsArray.sortBy('groupPriority')
+    .map((item) => {
+      item.agendaitems.map((agendaitem, index) => {
+        prevIndex = index + prevIndex + 1;
+        agendaitem.set('itemIndex',prevIndex);
       });
+      return EmberObject.create(item);
+    });
 
     return hash({
       currentAgenda: agenda,
