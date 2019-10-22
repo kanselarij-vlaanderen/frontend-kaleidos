@@ -54,9 +54,7 @@ export default Component.extend(isAuthenticatedMixin, {
         item.set('priority', index + 1);
       });
       this.reAssignPriorities.perform(itemModels);
-      // this.refresh();
       this.agendaService.groupAgendaItemsOnGroupName(itemModels);
-      this.set('agendaitems', itemModels);
     },
 
     reorderAnnouncements(itemModels) {
