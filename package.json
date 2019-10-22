@@ -16,8 +16,8 @@
     "lint:js": "eslint .",
     "start": "ember serve --proxy=http://localhost:80",
     "test": "ember test",
-    "cypress-local": "./node_modules/.bin/cypress open --env configFile=development",
-    "cypress-dev": "./node_modules/.bin/cypress open --env configFile=dev"
+    "cypress-local": "./node_modules/.bin/cypress open --browser chrome --env configFile=development",
+    "cypress-dev": "./node_modules/.bin/cypress open --browser chrome --env configFile=dev"
   },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",

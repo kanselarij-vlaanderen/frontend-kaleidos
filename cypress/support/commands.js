@@ -29,12 +29,17 @@
 import 'cypress-file-upload';
 
 Cypress.Commands.add('login', (name) => {
-  cy.server().route('POST', '/mock/sessions').as('mockLogin');
+  cy.route('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login');
   cy.get('.grid', { timeout: 12000 }).within(() => {
     cy.contains(name).click()
       .wait('@mockLogin');
   });
+});
+
+Cypress.Commands.add('logout', () => {
+  cy.visit('');
+  cy.contains('Afmelden').click();
 });
 
 Cypress.Commands.add('setDateInFlatpickr', (date, plusMonths) => {
@@ -56,9 +61,13 @@ Cypress.Commands.add('setDateInFlatpickr', (date, plusMonths) => {
 
 
 Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
-  cy.visit('/');
+  cy.visit('');
   cy.route('GET', '/meetings**').as('getMeetings');
   cy.route('POST', '/meetings').as('createNewMeeting');
+  cy.route('POST', '/agendas').as('createNewAgenda');
+  cy.route('POST', '/agendaitems').as('createNewAgendaItems');
+  cy.route('POST', '/newsletter-infos').as('createNewsletter');
+  cy.route('PATCH', '/meetings/**').as('patchMeetings');
   
   cy.wait('@getMeetings', { timeout: 20000 });
   cy.get('.vlc-toolbar__item > .vl-button')
@@ -95,50 +104,82 @@ Cypress.Commands.add('createAgenda', (kind, plusMonths, date, location) => {
     cy.get('.vlc-toolbar__item').contains('Toevoegen').click();
   });
 
+  let meetingId;
+
   cy.wait('@createNewMeeting', { timeout: 20000 })
     .then((res) => {
-      const meetingId = res.responseBody.data.id;
+      meetingId = res.responseBody.data.id;
+    }).verifyAlertSuccess();
 
+  cy.wait('@createNewAgenda',{ timeout: 20000 });
+  cy.wait('@createNewAgendaItems',{ timeout: 20000 });
+  cy.wait('@createNewsletter',{ timeout: 20000 });
+  cy.wait('@patchMeetings',{ timeout: 20000 }).then(() => {
       return new Cypress.Promise((resolve) => {
         resolve(meetingId);
       });
     });
 });
 
-Cypress.Commands.add('openAgendaForDate', (agendaDate) => {
+Cypress.Commands.add('openAgendaForDate', (agendaDate, meetingId) => {
+  if(meetingId) {
+    cy.visit(`agenda/${meetingId}/agendapunten`);
+  } else {
   const searchDate = agendaDate.date()+ '/' +(agendaDate.month()+1) + '/' + agendaDate.year();
   cy.route('GET', '/meetings/**').as('getMeetings');
 
   cy.visit('');
+  cy.wait('@getMeetings', { timeout: 20000 });
+  cy.get('.vlc-tabs-reverse', { timeout: 20000 }).should('exist').within(() =>{
+    cy.contains('Historiek').click();
+  });
   cy.get('.vlc-input-field-group-wrapper--inline', { timeout: 10000 }).should('exist').within(() => {
     cy.get('.vl-input-field').type(searchDate);
     cy.get('.vl-button').click();
   });
+    
   cy.wait('@getMeetings', { timeout: 20000 });
   // cy.get('.vl-data-table > tbody').children().should('have.length', 1);
-  cy.get('.vl-data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
+  cy.get('.data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
+  }
 });
 
-Cypress.Commands.add('deleteAgenda', (agendaDate, meetingId) => {
+/**
+ * Deletes the current open agenda, either a design or an approved one
+ * 
+ * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
+ * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
+ */
+Cypress.Commands.add('deleteAgenda', (meetingId, lastAgenda) => {
   if(meetingId) {
     cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
   } else {
     cy.route('DELETE', '/meetings/**').as('deleteMeeting');
   }
-  
-  cy.openAgendaForDate(agendaDate);
+  cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitems');
+  cy.route('DELETE', '/agendas/**').as('deleteAgendas');
+  cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
 
-  //TODO remove subcases
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
   cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
     .contains('Agenda verwijderen')
     .click()
-    .wait('@deleteMeeting')
-    .verifyAlertSuccess();
+  cy.wait('@deleteAgendaitems', { timeout: 20000 });
+  cy.wait('@deleteAgendas', { timeout: 20000 });
+  if(lastAgenda) {
+    cy.wait('@deleteNewsletter', { timeout: 20000 });
+    cy.wait('@deleteMeeting', { timeout: 20000 });
+  }
+  //TODO should patches happen when deleting a design agenda ?
+  
 });
 
+/**
+ * Set all agendaitems on an open agenda to "formally OK"
+ * 
+ */
 Cypress.Commands.add('setFormalOkOnAllItems', () => {
   cy.route('GET', '/meetings/**').as('getMeetings');
   cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
@@ -162,13 +203,18 @@ Cypress.Commands.add('setFormalOkOnAllItems', () => {
   });
 });
 
-Cypress.Commands.add('approveCoAgendaitem', (caseShortTitle) => {
+/**
+ * Check all approval checkboxes of an agendaitem
+ * 
+ * @param {String} agendaitemShortTitle - The short title of the case with coapprovals, must be unique in an agenda.
+ */
+Cypress.Commands.add('approveCoAgendaitem', (agendaitemShortTitle) => {
   cy.route('GET', '/ise-codes/**').as('getIseCodes');
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
   cy.route('PATCH', '/approvals/**').as('patchApprovals');
-  cy.route('PATCH', '/agendas/**').as('patchAgendas');
+  cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
-  cy.contains(caseShortTitle).click();
+  cy.contains(agendaitemShortTitle).click();
   cy.wait('@getIseCodes', { timeout: 50000 });
   cy.wait('@getGovernmentFields', { timeout: 50000 });
   cy.get('.vlc-panel-layout__main-content').within(() => {
@@ -189,19 +235,19 @@ Cypress.Commands.add('approveCoAgendaitem', (caseShortTitle) => {
         .click();
     });
   });
-  cy.wait('@patchApprovals', { timeout: 10000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
-  cy.wait('@patchAgendas', { timeout: 10000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
+  cy.wait('@patchApprovals', { timeout: 10000 });
+  cy.wait('@patchAgenda', { timeout: 10000 });
 });
 
+/**
+ * Approve an open agenda when all formally OK's are set ()
+ */
 Cypress.Commands.add('approveDesignAgenda', () => {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
   cy.route('POST', '/agendas').as('createNewDesignAgenda');
   cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
 
+  //TODO add boolean for when not all items are formally ok, click through the confirmation modal
   cy.get('.vlc-toolbar').within(() => {
     cy.get('.vl-button--narrow')
     .contains('Ontwerpagenda')
@@ -255,19 +301,18 @@ Cypress.Commands.add('addRemarkToAgenda', (title, remark, files) => {
     });
     cy.get('.vl-button').contains('Mededeling toevoegen').click();
   });
-  cy.wait('@createNewAgendaitem', { timeout: 20000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
-  cy.wait('@patchModel', { timeout: 20000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
+  cy.wait('@createNewAgendaitem', { timeout: 20000 })
+  //TODO patchmodel does not happen ??
+  // cy.wait('@patchModel', { timeout: 20000 }).verifyAlertSuccess();
 });
 
 Cypress.Commands.add('addAgendaitemToAgenda', (caseTitle, postponed) => {
   cy.route('GET', '/subcases?**').as('getSubcasesFiltered');
+  cy.route('GET', '/agendaitems/**').as('getAgendaitems');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
   cy.route('POST','/subcase-phases').as('createSubcasePhase');
-  cy.route('PATCH', '**').as('patchModel');
+  cy.route('PATCH', '/subcases/**').as('patchSubcase');
+  cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
     .contains('Acties')
@@ -275,7 +320,7 @@ Cypress.Commands.add('addAgendaitemToAgenda', (caseTitle, postponed) => {
   cy.get('.vl-popover__link-list__item > .vl-link')
     .contains('Agendapunt toevoegen')
     .click();
-  cy.wait('@getSubcasesFiltered', { timeout: 12000 });
+  cy.wait('@getSubcasesFiltered', { timeout: 20000 });
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
     cy.get('.vl-form-grid').children().as('formGrid');
@@ -285,24 +330,25 @@ Cypress.Commands.add('addAgendaitemToAgenda', (caseTitle, postponed) => {
         cy.get('.vl-checkbox--switch__label').click();
       });
     }
-    cy.get('@formGrid').eq(0).within(() => {
-      cy.get('.vl-input-field').clear().type(caseTitle);
-      cy.wait('@getSubcasesFiltered', { timeout: 12000 });
-    });
-
-    cy.get('table > tbody > tr').as('rows');
-    cy.get('@rows').eq(0).click().get('[type="checkbox"]').should('be.checked');
+    if(caseTitle){
+      cy.get('@formGrid').eq(0).within(() => {
+        cy.get('.vl-input-field').clear().type(caseTitle);
+        cy.wait('@getSubcasesFiltered', { timeout: 12000 });
+      });
+      cy.get('table > tbody > tr', ).as('rows');
+    } else {
+      cy.get('table > tbody > tr', ).as('rows');
+      cy.get('@rows', { timeout: 12000 }).should('not.have.length', 1)
+    }
+    cy.get('@rows', { timeout: 12000 }).eq(0).click().get('[type="checkbox"]').should('be.checked');
     cy.get('.vl-button').contains('Agendapunt toevoegen').click();
   });
-  cy.wait('@createNewAgendaitem', { timeout: 20000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
-  cy.wait('@patchModel', { timeout: 20000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
-  cy.wait('@createSubcasePhase', { timeout: 20000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
+  cy.wait('@createNewAgendaitem', { timeout: 20000 });
+  cy.wait('@patchSubcase', { timeout: 20000 });
+  
+  cy.wait('@createSubcasePhase', { timeout: 20000 });
+  cy.wait('@patchAgenda', { timeout: 20000 });
+  cy.wait('@getAgendaitems', { timeout: 20000 });
 
 });
 
@@ -481,9 +527,7 @@ Cypress.Commands.add('changeSubcaseAccessLevel', (isRemark, shortTitle, confiden
       .contains('Opslaan')
       .click();
   });
-  cy.wait('@patchSubcase', { timeout: 20000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
+  cy.wait('@patchSubcase', { timeout: 20000 });
 });
 
 /**
@@ -499,7 +543,8 @@ Cypress.Commands.add('addSubcaseThemes', (themes) => {
 
   cy.get('@subcaseTheme').within(() => {
     cy.get('a').click();
-    cy.wait('@getThemes', { timeout: 12000 });
+    // cy.wait('@getThemes', { timeout: 12000 });
+    cy.get('.vl-checkbox', { timeout: 12000 }).should('exist').end();
     themes.forEach(element => {
       if(isNaN(element)){
         cy.get('.vl-checkbox').contains(element).click();
@@ -512,9 +557,7 @@ Cypress.Commands.add('addSubcaseThemes', (themes) => {
       .contains('Opslaan')
       .click();
   });
-  cy.wait('@patchSubcase', { timeout: 20000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
+  cy.wait('@patchSubcase', { timeout: 20000 });
 });
 
 //TODO use arrays of fields and domains, search on mandatee name 
@@ -559,9 +602,7 @@ Cypress.Commands.add('addSubcaseMandatee', (mandateeNumber, fieldNumber, domainN
     .contains('Opslaan')
     .click();
   });
-  cy.wait('@patchSubcase', { timeout: 20000 }).then(() => {
-    cy.verifyAlertSuccess();
-  });
+  cy.wait('@patchSubcase', { timeout: 20000 });
 });
 
 Cypress.Commands.add('proposeSubcaseForAgenda', (agendaDate) => {
@@ -588,7 +629,24 @@ Cypress.Commands.add('proposeSubcaseForAgenda', (agendaDate) => {
 
 //#endregion
 
+//#region newsletter commands
+
+Cypress.Commands.add('editNewsletter',() => {
+//
+});
+
+//#endregion
 //#region Document commands
+
+/**
+ * Goes to the document tab
+ */
+Cypress.Commands.add('gotoDocuments', () => {
+  cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
+    cy.contains('Documenten').click();
+  });
+});
+
 
 /**
  * Opens the document add dialog and adds each file in the files array
@@ -603,9 +661,8 @@ Cypress.Commands.add('addDocuments', (files) => {
   cy.route('POST', 'documents').as('createNewDocument');
   cy.route('PATCH', '**').as('patchModel');
 
-  cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
-    cy.contains('Documenten').click();
-  });
+  cy.gotoDocuments();
+
   cy.contains('Documenten toevoegen').click();
   cy.get('.vl-modal-dialog').as('fileUploadDialog');
 
@@ -718,7 +775,7 @@ Cypress.Commands.add('uploadFile', (folder, fileName, extension) => {
 //#region general resuable commands
 
 Cypress.Commands.add('verifyAlertSuccess', () => {
-  cy.get('.vl-alert').contains('Gelukt').should('be.visible');
+  cy.get('.vl-alert', { timeout: 12000 }).contains('Gelukt').should('be.visible');
 });
 
 //#endregion

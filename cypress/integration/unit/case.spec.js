@@ -57,17 +57,12 @@ context('Case test', () => {
     // cy.server()
     cy.route('GET', '/cases?**').as('getCases');
     cy.route('GET', '/subcases?**').as('getSubcases');
-    cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
 
     const plusMonths = 1;
     const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
-      cy.verifyAlertSuccess();
-      cy.wait('@createNewAgenda',{ timeout: 20000 });
-      cy.wait('@createNewAgendaItems',{ timeout: 20000 });
-
+      
       cy.visit('/dossiers');
       cy.wait('@getCases', { timeout: 12000 });
       cy.get('td').eq(0).parents('tr').within(() => {
@@ -85,7 +80,9 @@ context('Case test', () => {
 
       cy.proposeSubcaseForAgenda(agendaDate);
 
-      cy.deleteAgenda(agendaDate, meetingId);
+      cy.openAgendaForDate(agendaDate,meetingId);
+      //TODO verify that subcase is an the agenda, check if all tabs are present and link to subcase is there
+      cy.deleteAgenda(meetingId, true);
 
     });
     

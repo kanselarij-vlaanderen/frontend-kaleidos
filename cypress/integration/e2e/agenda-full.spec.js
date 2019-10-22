@@ -5,12 +5,13 @@ context('Full test', () => {
   let testId;
 
   before(() => {
+    cy.server();
     cy.login('Admin')
   });
 
   it('Scenario where a complete agenda is created', () => {
     testId = 'testId=' + currentTimestamp() + ': '
-    cy.server();
+    // cy.server();
 
     //#region routes to be reused
     cy.route('GET', '/cases?**').as('getCases');
@@ -31,11 +32,11 @@ context('Full test', () => {
 
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
+    let meetingId;
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then(() => {
-      cy.verifyAlertSuccess();
-      cy.wait('@createNewAgenda',{ timeout: 20000 });
-      cy.wait('@createNewAgendaItems',{ timeout: 20000 });
+    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then((id) => {
+      meetingId = id;
+      // cy.openAgendaForDate(agendaDate, meetingId);
 
     });
 
@@ -152,17 +153,14 @@ context('Full test', () => {
     //Change the access level
     cy.changeSubcaseAccessLevel(true, caseTitle_3_Short, false, 'Intern Overheid');
 
-    //Add the themes
-    // cy.addSubcaseThemes([8, 15 , 20, 25]); //no themes for a mededeling
-
     //Add the mandatees
-    // cy.addSubcaseMandatee(2, 0, 0); //no mandatees for a mededeling
+    cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
     //#endregion
     
     //#region check and approve the agenda > A
-    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaForDate(agendaDate, meetingId);
     
     cy.setFormalOkOnAllItems();
     
@@ -171,15 +169,18 @@ context('Full test', () => {
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
-    cy.setFormalOkOnAllItems();
+    
     cy.addRemarkToAgenda('Titel mededeling', 
       'mededeling omschrijving', 
       [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
-    cy.addAgendaitemToAgenda('Cypress test', false);
+    cy.addAgendaitemToAgenda('Cypress', false);
+    cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();
     //#endregion
 
     //TODO Clean up data, implement db restore after test completed ?
+    cy.deleteAgenda(meetingId);
+    cy.deleteAgenda(meetingId, true);
 
     //#endregion
 

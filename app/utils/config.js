@@ -47,6 +47,7 @@ export default EmberObject.create({
     'Y',
     'Z',
   ],
+  //TODO translate
   resultSubcaseName: '1ste principiële goedkeuring',
   principalApprovalId: '7b90b3a6-2787-4b41-8a1d-886fc5abbb33',
   onAgendaCodeId: '3e6dba4f-5c3c-439a-993e-92348ec73642',
