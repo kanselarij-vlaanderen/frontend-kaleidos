@@ -23,7 +23,8 @@ export default Route.extend(ApplicationRouteMixin, {
     const isFirefox = typeof InstallTrigger !== 'undefined';
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-    return isFirefox || isChrome || isSafari;
+    const isCypress = !!window.Cypress && window.Cypress.browser.family == "chrome";
+    return isFirefox || isChrome || isSafari || isCypress;
   },
 
   sessionAuthenticated() {

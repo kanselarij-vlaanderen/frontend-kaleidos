@@ -82,6 +82,8 @@ export default Model.extend({
 
     const principalApprovalSubcases = await this.getAllSubcasesByTypeId(principalApprovalId);
 
+    //TODO translate
+    //TODO 8ste ipv 8de,  8e ?
     const length = principalApprovalSubcases.get('length');
     if (length === 0) {
       return CONFIG.resultSubcaseName;
