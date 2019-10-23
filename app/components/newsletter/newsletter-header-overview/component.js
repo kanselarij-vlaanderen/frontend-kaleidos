@@ -54,7 +54,7 @@ export default Component.extend(isAuthenticatedMixin, {
       const meeting = await agenda.get('createdFor');
       const mailCampaign = await meeting.get('mailCampaign');
 
-      if(!mailCampaign || !mailCampaign.id || mailCampaign.sent) {
+      if(!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
         return;
       }
        await this.newsletterService.sendCampaign(mailCampaign.campaignId).catch(() => {
