@@ -7,6 +7,7 @@ context('Add files to an agenda', () => {
   });
   
   beforeEach(() => {
+    cy.server();
     cy.login('Admin');
   });
 
@@ -18,7 +19,25 @@ context('Add files to an agenda', () => {
       cy.openAgendaForDate(agendaDate,meetingId);
       
       cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
+      cy.get('.vlc-scroll-wrapper__body').within(() => {
+        cy.get('.vlc-document-card').eq(0).within(() => {
+          cy.get('.vl-title--h6 > span').contains('test pdf');
+        });
+      });
+
       cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+      cy.get('.vlc-scroll-wrapper__body').within(() => {
+        cy.get('.vlc-document-card').eq(0).within(() => {
+          cy.get('.vl-title--h6 > span').contains(/BIS/);
+        });
+      });
+
+      cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+      cy.get('.vlc-scroll-wrapper__body').within(() => {
+        cy.get('.vlc-document-card').eq(0).within(() => {
+          cy.get('.vl-title--h6 > span').contains(/TER/);
+        });
+      });
   
       cy.deleteAgenda(meetingId, true);
     });
@@ -33,14 +52,17 @@ context('Add files to an agenda', () => {
       
       cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2018 1010 DOC.0005/1 - 2e', fileType: 'Nota'}]);
       cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/1 - 3e', fileType: 'Nota'}]);
-      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/3 - 5e', fileType: 'Nota'}]);
-      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-4 - 6e', fileType: 'Nota'}]);
-      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/2 - 4e', fileType: 'Nota'}]);
-      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0004/1 - 7e', fileType: 'Nota'}]);
-      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'no vr number - 1e', fileType: 'Nota'}]);
+      cy.addDocuments(
+        [
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0004/1 - 7e', fileType: 'Nota'},
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'no vr number - 1e', fileType: 'Nota'},
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/2 - 4e', fileType: 'Nota'},
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-4 - 6e', fileType: 'Nota'},
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/3 - 5e', fileType: 'Nota'}
+        ]
+      );
   
       cy.get('.vlc-scroll-wrapper__body').within(() => {
-
         cy.get('.vlc-document-card').as('docCards');
         cy.get('@docCards').eq(0).within(() => {
           cy.get('.vl-title--h6 > span').contains(/1e/);
@@ -66,6 +88,6 @@ context('Add files to an agenda', () => {
       });
       cy.deleteAgenda(meetingId, true);
     });
-  })
+  });
 });
   

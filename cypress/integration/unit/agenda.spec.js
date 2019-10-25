@@ -30,9 +30,9 @@ context('Agenda tests', () => {
   });
 
   it('should set formal ok on all agendaitems and approve it', () => {
-      cy.openAgendaForDate(agendaDate);
-      cy.setFormalOkOnAllItems();
-      cy.approveDesignAgenda();   
+    cy.openAgendaForDate(agendaDate);
+    cy.setFormalOkOnAllItems();
+    cy.approveDesignAgenda();   
   });
 
   it('should add a remark with documents to an agenda', () => {
