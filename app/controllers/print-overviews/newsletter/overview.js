@@ -11,9 +11,11 @@ export default Controller.extend({
 
   title: computed('model.meeting', async function() {
     const date = await this.get('model.meeting.plannedStart');
+    const procedure = await this.get('model.meeting.kindToShow.procedure');
+
     return `${this.intl.t(
       `newsletter-overview-pdf-name`
-    )} van ${moment(date).format('dddd DD-MM-YYYY')}`;
+    )}${procedure} van ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
   links: computed('model.links', function() {

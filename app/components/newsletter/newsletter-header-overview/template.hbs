@@ -5,6 +5,7 @@
         class="vlc-page-header__title vlc-page-header__title--bordered max-width"
       >
         {{t "newsletter-overview-pdf-name"}}
+        {{await agenda.createdFor.kindToShow.procedure}}
         {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
       </h1>
       <div class="vlc-page-header__sub">
