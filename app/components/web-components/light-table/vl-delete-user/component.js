@@ -11,6 +11,10 @@ export default Component.extend({
       if (this.isDeleting) return;
       this.isDeleting = true;
       let foundUser = await this.store.findRecord('user', this.get('user.id'), { reload: true});
+      const account = await foundUser.get('account');
+      if(account){
+        await account.destroyRecord();
+      }
       await foundUser.destroyRecord();
       this.get('table').removeRow(foundUser);
       this.isDeleting = false;
