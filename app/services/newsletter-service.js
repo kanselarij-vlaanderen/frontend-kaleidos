@@ -71,8 +71,8 @@ export default Service.extend({
 
   getMailCampaign(id) {
     return $.ajax({
-      method: 'POST',
-      url: `/newsletter/sendTestCampaign/${id}`,
+      method: 'GET',
+      url: `/newsletter/fetchTestCampaign/${id}`,
       error: () => {
         this.globalError.showToast.perform(
           EmberObject.create({
