@@ -133,9 +133,9 @@ function camelCase(path) {
 }
 
 function genericSort(sort) {
-  const negative = sort.substring(0, 1).match(/[-]/);
-  const path = negative ? sort.replace(/[-]/, '') : sort;
-  return (a, b) => negative
-    ? nestedProperty(a, path) - nestedProperty(b, path)
-    : nestedProperty(b, path) - nestedProperty(a, path);
+  const desc = sort.substring(0, 1).match(/[-]/);
+  const path = desc ? sort.replace(/[-]/, '') : sort;
+  return (a, b) => desc
+    ? nestedProperty(b, path) - nestedProperty(a, path)
+    : nestedProperty(a, path) - nestedProperty(b, path);
 }
