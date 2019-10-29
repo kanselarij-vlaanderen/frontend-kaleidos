@@ -65,7 +65,7 @@ export default Mixin.create({
     this.get("model").pushObjects(records.toArray().filter((item)=> !item.isApproval));
     this.set("meta", records.get("meta"));
     this.set("canLoadMore", records.get('meta.count') > this.get('model.length'));
-    this.get("table").addRows(this.get("model").filter((item)=> !item.isApproval));
+    this.get("table").addRows(this.get("model").filter((item) => !item.isApproval).sort(genericSort(this.get('sortBy'))));
     this.checkRowClasses();
   }).restartable(),
 
@@ -122,3 +122,22 @@ export default Mixin.create({
     }
   }
 });
+
+function nestedProperty(obj, path) {
+  const nestedValue = camelCase(path)
+    .split('.')
+    .reduce((prevProp, currentPath) => prevProp && prevProp.get(currentPath), obj);
+  return nestedValue === undefined ? null : nestedValue
+}
+
+function camelCase(path) {
+  return path.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+}
+
+function genericSort(sort) {
+  const negative = sort.substring(0, 1).match(/[-]/);
+  const path = negative ? sort.replace(/[-]/, '') : sort;
+  return (a, b) => negative
+    ? nestedProperty(a, path) - nestedProperty(b, path)
+    : nestedProperty(b, path) - nestedProperty(a, path);
+}
