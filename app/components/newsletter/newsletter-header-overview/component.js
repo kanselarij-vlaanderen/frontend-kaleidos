@@ -83,6 +83,12 @@ export default Component.extend(isAuthenticatedMixin, {
       const meeting = await agenda.get('createdFor');
       const mailCampaign = await meeting.get('mailCampaign');
 
+      if(!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
+        this.set('newsletterHTML', html.body);
+        this.set('testCampaignIsLoading', false);
+        return;
+      }
+
       const html = await this.newsletterService.getMailCampaign(mailCampaign.campaignId).catch(() => {
         this.globalError.showToast.perform(EmberObject.create({
           title: this.intl.t('warning-title'),
