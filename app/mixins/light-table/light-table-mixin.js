@@ -124,9 +124,7 @@ export default Mixin.create({
 });
 
 function nestedProperty(obj, path) {
-  const nestedValue = camelCase(path)
-    .split('.')
-    .reduce((prevProp, currentPath) => prevProp && prevProp.get(currentPath), obj);
+  const nestedValue = obj.get(camelCase(path));
   return nestedValue === undefined ? null : nestedValue
 }
 
