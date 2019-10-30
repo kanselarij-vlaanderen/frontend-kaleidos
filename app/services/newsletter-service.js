@@ -69,6 +69,22 @@ export default Service.extend({
     });
   },
 
+  getMailCampaign(id) {
+    return $.ajax({
+      method: 'GET',
+      url: `/newsletter/fetchTestCampaign/${id}`,
+      error: () => {
+        this.globalError.showToast.perform(
+          EmberObject.create({
+            title: this.intl.t('warning-title'),
+            message: this.intl.t('error-send-newsletter'),
+            type: 'error',
+          })
+        );
+      },
+    });
+  },
+
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForSubcase(subcase, agendaitem, inNewsletter = false) {
 		const news = this.store.createRecord("newsletter-info", {
