@@ -4,7 +4,7 @@ const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
 	request: attr('string'),
-	date: attr('date'),
+	date: attr('datetime'),
 	subcase: belongsTo('subcase'),
 	type: belongsTo('consulation-type'),
 	contactPerson: belongsTo('person'),

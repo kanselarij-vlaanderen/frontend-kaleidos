@@ -5,9 +5,9 @@ import $ from 'jquery';
 
 export default Service.extend({
   store: inject(),
+  router: inject(),
   currentSession: null,
   selectedAgendaItem: null,
-  firstAgendaItemOfAgenda: null,
 
   agendas: computed('currentSession.agendas.@each', function() {
     if (!this.get('currentSession')) {
@@ -85,4 +85,15 @@ export default Service.extend({
       return null;
     }
   },
+
+  async deleteSession(session) {
+    const newsletter = await session.get('newsletter');
+    if(newsletter){
+      await newsletter.destroyRecord();
+    }
+    
+    await session.destroyRecord();
+    this.router.transitionTo('agendas');
+  },
+
 });

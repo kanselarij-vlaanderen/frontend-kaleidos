@@ -34,6 +34,9 @@ export default Component.extend(isAuthenticatedMixin, {
       this.newsletterService.createCampaign(agenda, meeting).then(() => {
         this.set('isLoading', false);
       });
+      this.set('newsletterHTML', null);
+      this.set('testCampaignIsLoading', false);
+
     },
 
     async deleteCampaign() {
@@ -54,17 +57,16 @@ export default Component.extend(isAuthenticatedMixin, {
       const meeting = await agenda.get('createdFor');
       const mailCampaign = await meeting.get('mailCampaign');
 
-      if(!mailCampaign || !mailCampaign.id || mailCampaign.sent) {
+      if(!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
         return;
-      } 
+      }
        await this.newsletterService.sendCampaign(mailCampaign.campaignId).catch(() => {
         this.globalError.showToast.perform(EmberObject.create({
           title: this.intl.t('warning-title'),
           message: this.intl.t('error-send-newsletter'),
           type: 'error'
         }));
-      });        
-      mailCampaign.set('sent', true);
+      });
       mailCampaign.set('sentAt', moment().utc().toDate());
       await mailCampaign.save();
       await meeting.belongsTo('mailCampaign').reload();
@@ -74,5 +76,33 @@ export default Component.extend(isAuthenticatedMixin, {
     showMultipleOptions() {
       this.toggleProperty('isShowingOptions');
     },
+
+    async sendTestCampaign() {
+      this.set('testCampaignIsLoading', true);
+      const agenda = await this.get('agenda');
+      const meeting = await agenda.get('createdFor');
+      const mailCampaign = await meeting.get('mailCampaign');
+
+      if(!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
+        this.set('newsletterHTML', html.body);
+        this.set('testCampaignIsLoading', false);
+        return;
+      }
+
+      const html = await this.newsletterService.getMailCampaign(mailCampaign.campaignId).catch(() => {
+        this.globalError.showToast.perform(EmberObject.create({
+          title: this.intl.t('warning-title'),
+          message: this.intl.t('error-send-newsletter'),
+          type: 'error'
+        }));
+      });
+      this.set('newsletterHTML', html.body);
+      this.set('testCampaignIsLoading', false);
+    },
+
+    async clearNewsletterHTML() {
+      this.set('newsletterHTML', null);
+      this.set('testCampaignIsLoading', false);
+    }
   },
 });

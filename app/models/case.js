@@ -8,7 +8,7 @@ const { Model, attr, hasMany, belongsTo, PromiseObject } = DS;
 
 export default Model.extend({
   store: inject(),
-  created: attr('date'),
+  created: attr('datetime'),
   title: attr('string'),
   shortTitle: attr('string'),
   number: attr('string'),
@@ -82,6 +82,8 @@ export default Model.extend({
 
     const principalApprovalSubcases = await this.getAllSubcasesByTypeId(principalApprovalId);
 
+    //TODO translate
+    //TODO 8ste ipv 8de,  8e ?
     const length = principalApprovalSubcases.get('length');
     if (length === 0) {
       return CONFIG.resultSubcaseName;

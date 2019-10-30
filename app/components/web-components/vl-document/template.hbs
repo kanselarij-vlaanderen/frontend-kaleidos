@@ -3,34 +3,37 @@
     {{await documentVersion.name}}
   </h6>
   {{access-level-pill item=documentVersion}}
-  <button
-    class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-    {{action "showDocumentVersionViewer" documentVersion}}
-  >
-  <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
-    <span class="vl-u-visually-hidden">
-      {{t "download"}}
-    </span>
-  </button>
-  <a
-    class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-    href={{concat
+  {{#if (await documentVersion.file.downloadLink)}}
+    <button
+      class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+      {{action "showDocumentVersionViewer" documentVersion}}
+    >
+      <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
+      <span class="vl-u-visually-hidden">
+        {{t "download"}}
+      </span>
+    </button>
+    <a
+      class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+      href={{concat
       (await documentVersion.file.downloadLink)
       "?name="
       (await documentVersion.downloadFilename)
     }}
-    {{!-- download --}}
-    {{! 'download' attribute doesn't specify a filename, as this gets overruled by
-    the filename received in the "Content-Disposition HTTP header" }}
-  >
-    <i
-      class="vl-vi vl-vi-download-harddisk vl-button__icon"
-      aria-hidden="true"
-    ></i>
-    <span class="vl-u-visually-hidden">
-      {{t "download"}}
-    </span>
-  </a>
+      {{!-- download --}}
+      {{! 'download' attribute doesn't specify a filename, as this gets overruled by
+      the filename received in the "Content-Disposition HTTP header" }}
+    >
+      <i
+        class="vl-vi vl-vi-download-harddisk vl-button__icon"
+        aria-hidden="true"
+      ></i>
+      <span class="vl-u-visually-hidden">
+        {{t "download"}}
+      </span>
+    </a>
+  {{/if}}
+
   {{#if isEditor}}
     <button
       class="vl-button vl-button--link vl-button--icon vl-button-icon--error js-vl-popover__toggle"

@@ -8,16 +8,16 @@ import sortDocumentsByNameAndNumber from 'fe-redpencil/utils/sort-document-by-na
 
 export default Model.extend({
   intl: inject(),
-  plannedStart: attr('date'),
-  startedOn: attr('date'),
-  endedOn: attr('date'),
+  plannedStart: attr('datetime'),
+  startedOn: attr('datetime'),
+  endedOn: attr('datetime'),
   location: attr('string'),
   number: attr('number'),
   isFinal: attr('boolean'),
   extraInfo: attr('string'),
   kind: attr('string'),
-  releasedDocuments: attr('date'),
-  releasedDecisions: attr('date'),
+  releasedDocuments: attr('datetime'),
+  releasedDecisions: attr('datetime'),
 
   agendas: hasMany('agenda', { inverse: null, serialize: false }),
   requestedSubcases: hasMany('subcase'),

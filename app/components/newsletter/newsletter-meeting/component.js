@@ -8,8 +8,16 @@ export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vl-u-spacer-extended-bottom-l'],
   isEditing: false,
   intl: inject(),
-  store: inject(),
-  formatter: inject(),
+  newsletterService: inject(),
+
+  async init() {
+    this._super(...arguments);
+    const meeting = await this.get('meeting');
+    const newsletter = await meeting.get('newsletter');
+    if (!newsletter) {
+      await this.newsletterService.createNewsItemForMeeting(meeting);
+    }
+  },
 
   allowEditing: computed('definite', function() {
     return this.definite === 'false';
@@ -25,15 +33,7 @@ export default Component.extend(isAuthenticatedMixin, {
       const meeting = await this.get('meeting');
       const newsletter = await meeting.get('newsletter');
       if (!newsletter) {
-        const newsletter = this.store.createRecord('newsletter-info', {
-          meeting: meeting,
-          finished: false,
-          mandateeProposal: null,
-          publicationDate: this.formatter.formatDate(meeting.get('plannedStart')),
-          publicationDocDate: this.formatter.formatDate(null)
-        });
-        meeting.set('newsletter', newsletter);
-        meeting.save();
+        await this.newsletterService.createNewsItemForMeeting(meeting);
       }
 
       this.toggleProperty('isEditing');

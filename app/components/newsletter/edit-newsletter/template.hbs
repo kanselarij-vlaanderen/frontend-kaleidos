@@ -6,6 +6,7 @@
       {{web-components/vl-form-label value=(t "date-publication")}}
       {{web-components/vl-datepicker
         enableTime=true
+        selectedDate=date
         defaultHour=14
         defaultMinute=0
         dateChanged=(action "selectDate")
@@ -15,6 +16,7 @@
       {{web-components/vl-form-label value=(t "newsletter-doc-date")}}
       {{web-components/vl-datepicker
         enableTime=true
+        selectedDate=docDate
         defaultHour=14
         defaultMinute=0
         dateChanged=(action "selectDocDate")

@@ -15,7 +15,7 @@ export default Model.extend({
   title: attr('string'),
   description: attr('string'),
   confidential: attr('boolean'),
-  created: attr('date'),
+  created: attr('datetime'),
   numberVp: attr('string'),
   numberVr: attr('string'),
   numberVrOriginal: attr(),
