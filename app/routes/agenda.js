@@ -16,6 +16,8 @@ export default Route.extend(AuthenticatedRouteMixin, {
 	model(params) {
 		const id = params.id;
 		return this.store.findRecord('meeting', id, { include: 'agendas' }).then((meeting) => {
+			this.set('sessionService.selectedAgendaItem', null);
+			this.set('sessionService.currentSession',null);
 			this.set('sessionService.currentSession', meeting);
 			return meeting;
 		});

@@ -199,8 +199,6 @@ export default Component.extend(DefaultQueryParamsMixin, {
       );
 
       promise.then(async () => {
-        await selectedAgenda.hasMany("agendaitems").reload();
-
         this.set("loading", false);
         this.set("isAddingAgendaitems", false);
         this.set("sessionService.selectedAgendaItem", null);

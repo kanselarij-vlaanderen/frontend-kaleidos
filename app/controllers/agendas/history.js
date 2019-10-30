@@ -18,11 +18,6 @@ export default Controller.extend(DefaultQueryParamsMixin,isAuthenticatedMixin, {
 	size: 10,
 	
 	actions: {
-		selectAgenda(meeting) {
-      this.set('sessionService.selectedAgendaItem', null);
-      this.set('sessionService.currentSession', meeting);
-      this.transitionToRoute('agenda.agendaitems', meeting.get('id'));
-		},
 		setDateFilter(date) {
       date = date.split('/').join('-');
       const match = this.dateRegex.exec(date);

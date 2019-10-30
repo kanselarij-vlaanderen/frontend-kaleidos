@@ -8,6 +8,7 @@ import { isPresent } from '@ember/utils';
 
 export default Component.extend(isAuthenticatedMixin, {
   sessionService: inject(),
+  agendaService: inject(),
   classNames: ['vlc-agenda-items'],
   classNameBindings: ['getClassNames'],
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
@@ -45,26 +46,21 @@ export default Component.extend(isAuthenticatedMixin, {
       this.toggleProperty('isShowingChanges');
     },
 
-    async deleteBrokenAgendaitem(brokenAgendaItem) {
-      const id = brokenAgendaItem.id;
-      const subcase = await brokenAgendaItem.get('subcase');
-
-      if (!subcase) {
-        brokenAgendaItem.destroyRecord().then(() => {
-          this.refresh(id);
-        });
-      }
-    },
     reorderItems(itemModels) {
+      if(!this.isEditor){
+        return;
+      }
       itemModels.map((item, index) => {
         item.set('priority', index + 1);
       });
       this.reAssignPriorities.perform(itemModels);
-      // this.refresh();
-      this.set('agendaitems', itemModels);
+      this.agendaService.groupAgendaItemsOnGroupName(itemModels);
     },
 
     reorderAnnouncements(itemModels) {
+      if(!this.isEditor){
+        return;
+      }
       itemModels.map((item, index) => {
         item.set('priority', index + 1);
       });

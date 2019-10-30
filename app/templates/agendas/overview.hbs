@@ -8,13 +8,11 @@
             nearestMeeting=(await nearestMeeting)
             type="future"
             title=(t "future-agendas")
-            selectAgenda=(action "selectAgenda")
           }}
           {{agenda/future-agendas
             meetings=nearestMeeting
             type="active"
             title=(t "active-agenda")
-            selectAgenda=(action "selectAgenda")
           }}
         </div>
       </div>

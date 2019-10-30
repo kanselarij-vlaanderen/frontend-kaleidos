@@ -11,7 +11,7 @@
   min-width: 23rem;
   max-width: 90vw;
   max-height: 300px;
-  z-index: z('dropdown');
+  z-index: 11000;
 
   @include respond-to(small) {
     max-height: 65vh;

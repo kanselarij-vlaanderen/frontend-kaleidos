@@ -6,12 +6,12 @@ const { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
   name: attr('string'),
-  issued: attr('date'),
+  issued: attr('datetime'),
   createdFor: belongsTo('meeting'),
   agendaitems: hasMany('agendaitem', { inverse: null, serialize: false }),
   created: attr('date'),
   isAccepted: attr('boolean'),
-  modified: attr('date'),
+  modified: attr('datetime'),
 
   isDesignAgenda: computed('name', function() {
     return this.name == 'Ontwerpagenda';
@@ -46,24 +46,20 @@ export default Model.extend({
   lastAgendaitemPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const filteredAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
-      if(filteredAgendaitems.length == 0) {
+      if (filteredAgendaitems.length == 0) {
         return 0;
       }
-      return Math.max(
-        ...filteredAgendaitems.map((item) => item.priority || 0)
-      );
+      return Math.max(...filteredAgendaitems.map((item) => item.priority || 0));
     });
   }),
 
   lastAnnouncementPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const announcements = agendaitems.filter((item) => item.showAsRemark);
-      if(announcements.length == 0) {
+      if (announcements.length == 0) {
         return 0;
       }
-      return Math.max(
-        ...announcements.map((item) => item.priority || 0)
-      );
+      return Math.max(...announcements.map((item) => item.priority || 0));
     });
   }),
 
@@ -77,4 +73,12 @@ export default Model.extend({
       [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get('formallyOk'))
     );
   },
+
+  firstAgendaItem: computed('agendaitems.@each', function() {
+    return DS.PromiseObject.create({
+      promise: this.get('agendaitems').then((agendaitems) => {
+        return agendaitems.sortBy('priority').get('firstObject');
+      }),
+    });
+  }),
 });

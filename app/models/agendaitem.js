@@ -15,11 +15,11 @@ export default Model.extend({
 
   store: inject(),
   priority: attr('number'),
-  created: attr('date'),
+  created: attr('datetime'),
   record: attr('string'),
   retracted: attr('boolean'),
   showAsRemark: attr('boolean'),
-  modified: attr('date'),
+  modified: attr('datetime'),
   titlePress: attr('string'),
   textPress: attr('string'),
   forPress: attr('boolean'),
@@ -192,9 +192,7 @@ export default Model.extend({
 
   checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
-    const meetingOnlyHasOneAgenda = (await this.agenda.get('createdFor.agendas.length')) == 1;
-    const isOnFirstAgenda = this.agenda.get('name')  === CONFIG.alphabet[0];
-    return wasAdded || isOnFirstAgenda || meetingOnlyHasOneAgenda;
+    return wasAdded;
   }),
 
   isAdded: alias('checkAdded'),

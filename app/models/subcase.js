@@ -14,8 +14,8 @@ export default Model.extend({
   store: inject(),
   intl: inject(),
 
-  created: attr('date'),
-  modified: attr('date'),
+  created: attr('datetime'),
+  modified: attr('datetime'),
   shortTitle: attr('string'),
   title: attr('string'),
   subcaseIdentifier: attr('string'),
@@ -82,7 +82,7 @@ export default Model.extend({
       if (document == targetDocument) {
         foundIndex = index;
       }
-    })
+    });
     return foundIndex;
   },
 
@@ -149,7 +149,7 @@ export default Model.extend({
   }),
 
   sortedApprovals: computed('approvals.@each', function() {
-    return
+
   }),
 
   sortedThemes: computed('themes', function() {
@@ -212,13 +212,13 @@ export default Model.extend({
     }, A([]))
   }),
 
-  latestMeeting: computed('meetings.@each', async function() {
-    const meetings = await this.get('meetings');
-    return meetings
-      .reduce((meeting1, meeting2) =>
-        moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
-          ? meeting1
-          : meeting2)
+  latestMeeting: computed('meetings.@each', function() {
+    return PromiseObject.create({promise: this.get('meetings').then((meetings) => {
+      return meetings.reduce((meeting1, meeting2) =>
+      moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
+        ? meeting1
+        : meeting2)})
+    })
   }),
 
   latestAgenda: computed('latestMeeting', async function() {

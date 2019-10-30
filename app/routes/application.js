@@ -16,22 +16,15 @@ export default Route.extend(ApplicationRouteMixin, {
     this.set('moment.defaultFormat', 'DD.MM.YYYY');
     this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
-    if(!this.checkSupportedBrowser()) {
-      this.transitionTo('not-supported');
-    }
     return this._loadCurrentSession();
   },
 
   checkSupportedBrowser() {
     const isFirefox = typeof InstallTrigger !== 'undefined';
-    const isSafari =
-      /constructor/i.test(window.HTMLElement) ||
-      (function(p) {
-        return p.toString() === '[object SafariRemoteNotification]';
-      })(!window['safari'] || typeof safari !== 'undefined');
-
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-    return isFirefox || isChrome || isSafari;
+    const isCypress = !!window.Cypress && window.Cypress.browser.family == "chrome";
+    return isFirefox || isChrome || isSafari || isCypress;
   },
 
   sessionAuthenticated() {
@@ -40,10 +33,11 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   model(){
+    if(!this.checkSupportedBrowser()) {
+      this.transitionTo('not-supported');
+    }
     return this.checkSupportedBrowser();
   },
-
-  sessionInvalidated() {},
 
   _loadCurrentSession() {
     return this.currentSession.load().catch(() => this.session.invalidate());

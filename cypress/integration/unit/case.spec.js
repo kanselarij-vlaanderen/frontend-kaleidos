@@ -3,13 +3,23 @@
 
 
 context('Case test', () => {
+
+  const plusMonths = 1;
+  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
+
+  before(() => {
+    cy.server();
+    cy.login('Admin');
+    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.logout();
+  });
+
   beforeEach(() => {
+    cy.server();
     cy.login('Admin');
   });
 
   it('should create a new case and add a subcase', () => {
-
-    cy.server()
     cy.route('GET', '/cases?**').as('getCases');
     cy.route('GET', '/subcases?**').as('getSubcases');
     cy.route('GET', '/mandatees?**').as('getMandatees');
@@ -18,18 +28,14 @@ context('Case test', () => {
 
     const caseTitleShort= 'Cypress test ' + currentTimestamp();
     const type= 'Nota';
-    const newSubcaseTitleShort= caseTitleShort;
+    let newSubcaseTitleShort= caseTitleShort;
     const subcaseTitleLong= 'Cypress test voor het aanmaken van een dossier en procedurestap';
     const subcaseType='In voorbereiding';
     const subcaseName='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, caseTitleShort).then(() => {
-      cy.verifyAlertSuccess();
-    });
+    cy.createCase(false, caseTitleShort);
 
-    cy.addSubcase(type,newSubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName).then(() => {
-      cy.verifyAlertSuccess();
-    });
+    cy.addSubcase(type,newSubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     
     cy.wait('@getSubcases', { timeout: 12000 });
     cy.get('.vlc-procedure-step').as('subcasesList');
@@ -38,57 +44,51 @@ context('Case test', () => {
     })
     cy.wait('@getCaseSubcases', { timeout: 12000 });
 
-
-    //Change the access level
-    cy.changeSubcaseAccessLevel(false, caseTitleShort, true, 'Intern Overheid', 'Cypress test nieuwere titel', 'Cypress test nieuwere lange titel');
-
-    //Add the themes
+    cy.changeSubcaseAccessLevel(false, caseTitleShort, true, 'Intern Overheid', newSubcaseTitleShort, 'Cypress test nieuwere lange titel');
     cy.addSubcaseThemes([0, 5 , 10]);
-
-    //Add the mandatees
     cy.addSubcaseMandatee(1, 0, 0);
     cy.addSubcaseMandatee(2, 0, 0);
 
-    cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR.270919/1', fileType: 'Nota'}]);
+    cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001/1', fileType: 'Nota'}]);
 
-  // });
+    cy.clickReverseTab('Overzicht');
+    cy.proposeSubcaseForAgenda(agendaDate);
 
-  // it('should propose a subcase to an new agenda', () => {
-    // cy.server()
-    cy.route('GET', '/cases?**').as('getCases');
-    cy.route('GET', '/subcases?**').as('getSubcases');
-    cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
+    cy.get('.vlc-status-timeline > li').eq(0).contains('Ingediend voor agendering');
 
-    const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
+    const dateFormat = Cypress.moment(agendaDate).format('DD.MM.YYYY');
+    const dateRegex = new RegExp(".?"+Cypress.moment(agendaDate).date()+".\\w+."+Cypress.moment(agendaDate).year()); 
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
-      cy.verifyAlertSuccess();
-      cy.wait('@createNewAgenda',{ timeout: 20000 });
-      cy.wait('@createNewAgendaItems',{ timeout: 20000 });
-
-      cy.visit('/dossiers');
-      cy.wait('@getCases', { timeout: 12000 });
-      cy.get('td').eq(0).parents('tr').within(() => {
-        cy.get('.vl-button').get('.vl-vi-nav-right').click();
-      });
-
-      cy.wait('@getSubcases', { timeout: 12000 });
-
-      cy.get('.vlc-procedure-step').as('subcasesList');
-      cy.get('@subcasesList').eq(0).within(() => {
-        //TODO figure out why click does not always work w/o waiting or clicking twice (no xhr calls are made)
-        cy.wait(500); 
-        cy.get('.vl-title').click();
-      });
-
-      cy.proposeSubcaseForAgenda(agendaDate);
-
-      cy.deleteAgenda(agendaDate, meetingId);
+    cy.get('.vlc-status-timeline > li').eq(0).contains(/Ingediend voor agendering/);
+    cy.get('.vl-description-data').within(() => {
+      cy.get('.vl-description-data__value').as('descriptionValue');
+      cy.get('@descriptionValue').eq(0).contains(/Nog geen nummer/);
+      cy.get('@descriptionValue').eq(1).contains(/Ingediend voor de agenda van/);
+      cy.get('@descriptionValue').eq(1).contains(dateRegex);
+      cy.get('@descriptionValue').eq(2).contains(dateFormat);
+      cy.get('@descriptionValue').eq(4).contains(/Nog niet beslist/);
+      //TODO, know what minister we have selected for durable test.
+      cy.get('@descriptionValue').eq(5).contains(/Hilde Crevits/);
 
     });
-    
+
+    cy.openAgendaForDate(agendaDate);
+    cy.contains(newSubcaseTitleShort).click();
+    cy.get('.vlc-panel-layout__main-content').within(() => {
+      cy.wait('@getCaseSubcases');
+      cy.get('.vl-tab').as('agendaitemTabs');
+      cy.get('@agendaitemTabs').eq(0).should('contain', 'Dossier').click();
+      
+      cy.get('.vlc-container').as('agendaitemContent');
+      cy.get('@agendaitemContent').within(() => {
+        cy.contains('Naar procedurestap').should('exist');
+      })
+    });
+  });
+
+  after(() => {
+    cy.openAgendaForDate(agendaDate);
+    cy.deleteAgenda(null,true); // approved agenda A (and therefore the meeting)
   });
 
 });
@@ -96,4 +96,3 @@ context('Case test', () => {
 const currentTimestamp = () => {
   return Cypress.moment().unix();
 }
-

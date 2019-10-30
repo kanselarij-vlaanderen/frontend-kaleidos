@@ -52,15 +52,5 @@ export default Controller.extend(isAuthenticatedMixin,{
         }
       })
       .sortBy('plannedStart');
-  }),
-
-	
-	actions: {
-    selectAgenda(meeting) {
-      this.set('sessionService.selectedAgendaItem', null);
-      this.set('sessionService.currentSession', meeting);
-      this.transitionToRoute('agenda.agendaitems', meeting.get('id'));
-		},
-	}
-
+  })
 });
