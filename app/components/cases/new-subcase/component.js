@@ -7,6 +7,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(ApprovalsEditMixin, {
   store: inject(),
+  newsletterService: inject(),
   classNames: ['vl-custom'],
   confidentiality: null,
   filter: { type: 'subcase-name' },
@@ -124,6 +125,7 @@ export default Component.extend(ApprovalsEditMixin, {
           await this.copyNewsletterInfo(subcase, newsletterInfo);
         }
       } else {
+        await this.newsletterService.createNewsItemForSubcase(subcase, null, false);
         subcase = await subcase.save();
       }
 
