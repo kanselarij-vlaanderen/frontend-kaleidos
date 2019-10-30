@@ -90,7 +90,6 @@ export default Service.extend({
   async createNewsItemForSubcase(subcase, agendaitem, inNewsletter = false) {
 		const news = this.store.createRecord('newsletter-info', {
 			subcase: await subcase,
-			created: moment().utc().toDate(),
       title: agendaitem ? await agendaitem.get('shortTitle') : await subcase.get('shortTitle'),
       subtitle: agendaitem ? await agendaitem.get('title') : await subcase.get('title'),
       finished: false,
