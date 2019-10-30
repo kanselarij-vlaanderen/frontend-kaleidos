@@ -125,7 +125,7 @@ export default Component.extend(ApprovalsEditMixin, {
           await this.copyNewsletterInfo(subcase, newsletterInfo);
         }
       } else {
-        await this.newsletterService.createNewsItemForSubcase(subcase, null, false);
+        await this.newsletterService.createNewsItemForSubcase(subcase);
         subcase = await subcase.save();
       }
 
