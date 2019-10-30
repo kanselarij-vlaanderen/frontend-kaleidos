@@ -6,7 +6,7 @@ import sanitize from 'sanitize-filename';
 const { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
-  created: attr('date'),
+  created: attr('datetime'),
   chosenFileName: attr('string'),
   versionNumber: attr('number'),
   numberVr: attr('string'),

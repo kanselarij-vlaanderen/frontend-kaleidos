@@ -22,9 +22,9 @@ export default Route.extend(ApplicationRouteMixin, {
   checkSupportedBrowser() {
     const isFirefox = typeof InstallTrigger !== 'undefined';
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    // console.log(isSafari)
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-  return isFirefox || isChrome || isSafari;
+    const isCypress = !!window.Cypress && window.Cypress.browser.family == "chrome";
+    return isFirefox || isChrome || isSafari || isCypress;
   },
 
   sessionAuthenticated() {
@@ -38,9 +38,6 @@ export default Route.extend(ApplicationRouteMixin, {
     }
     return this.checkSupportedBrowser();
   },
-
-
-  sessionInvalidated() {},
 
   _loadCurrentSession() {
     return this.currentSession.load().catch(() => this.session.invalidate());

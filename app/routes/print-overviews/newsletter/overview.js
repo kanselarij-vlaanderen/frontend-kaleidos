@@ -15,6 +15,8 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
     });
   },
 
+  allowEmptyGroups: true,
+
   filterAgendaitems: async function(items, params){
     if(params.definite !== "true"){
       return items;

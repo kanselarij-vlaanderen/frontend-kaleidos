@@ -2,76 +2,54 @@
 /// <reference types="Cypress" />
 
 context('Agenda tests', () => {
+
+  const plusMonths = 1;
+  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 20).set('minute', 20);
+
+  before(() => {
+    cy.server();
+    cy.login('Admin');
+    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.logout();
+  });
+
   beforeEach(() => {
+    cy.server();
     cy.login('Admin');
   });
 
   it('should create a new agenda and then delete it', () => {
-    cy.server();
-    cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
+    const plusMonthsSingleTest = 1;
+    const agendaDateSingleTest = Cypress.moment().add('month', plusMonthsSingleTest).set('date', 16).set('hour', 16).set('minute', 16);
 
-    const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 16).set('hour', 16).set('minute', 16);
-
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven').then((meetingId) => {
-      cy.verifyAlertSuccess();
-      cy.wait('@createNewAgenda',{ timeout: 20000 });
-      cy.wait('@createNewAgendaItems',{ timeout: 20000 });
-      cy.deleteAgenda(agendaDate, meetingId);
+    cy.createAgenda('Elektronische procedure', plusMonthsSingleTest, agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven')
+    .then((meetingId) => {
+      cy.openAgendaForDate(agendaDateSingleTest, meetingId);
+      cy.deleteAgenda(meetingId, true);
     });
   });
 
   it('should set formal ok on all agendaitems and approve it', () => {
-    //TODO extract create agenda before test to beforeAll
-    cy.server();
-    cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
-    const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 2).set('hour', 16).set('minute', 16);
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven').then(() => {
-      cy.verifyAlertSuccess();
-      cy.wait('@createNewAgenda',{ timeout: 20000 });
-      cy.wait('@createNewAgendaItems',{ timeout: 20000 });
-    });
     cy.openAgendaForDate(agendaDate);
     cy.setFormalOkOnAllItems();
-    cy.approveDesignAgenda();
+    cy.approveDesignAgenda();   
   });
 
   it('should add a remark with documents to an agenda', () => {
-    //TODO extract create agenda before test to beforeAll
-    cy.server();
-    cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
-    const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 16).set('minute', 16);
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven').then((meetingId) => {
-      cy.verifyAlertSuccess();
-      cy.wait('@createNewAgenda',{ timeout: 20000 });
-      cy.wait('@createNewAgendaItems',{ timeout: 20000 });
       cy.openAgendaForDate(agendaDate);
       cy.addRemarkToAgenda('Titel mededeling', 
       'mededeling omschrijving', 
       [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
-      cy.deleteAgenda(agendaDate, meetingId);
-    });
   });
 
   it('should add an agendaitem to an agenda', () => {
-    //TODO extract create agenda before test to beforeAll
-    cy.server();
-    cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
-    const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 16).set('minute', 16);
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven').then((meetingId) => {
-      cy.verifyAlertSuccess();
-      cy.wait('@createNewAgenda',{ timeout: 20000 });
-      cy.wait('@createNewAgendaItems',{ timeout: 20000 });
       cy.openAgendaForDate(agendaDate);
-      cy.addAgendaitemToAgenda('Cypress test', false);
-      cy.deleteAgenda(agendaDate, meetingId);
-    });
+      cy.addAgendaitemToAgenda(false);
+  });
+
+  after(() => {
+    cy.openAgendaForDate(agendaDate);
+    cy.deleteAgenda(); // design agenda
+    cy.deleteAgenda(true); // approved agenda A (and therefore the meeting)
   });
 });

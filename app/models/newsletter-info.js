@@ -15,10 +15,10 @@ export default Model.extend({
   mandateeProposal: attr('string'),
   finished: attr('boolean'),
   inNewsletter: attr('boolean'),
-  publicationDate: attr('date'),
-  publicationDocDate: attr('date'),
+  publicationDate: attr('datetime'),
+  publicationDocDate: attr('datetime'),
   remark: attr('string'),
-  
+
   subcase: belongsTo('subcase'),
   meeting: belongsTo('meeting', { inverse: null }),
   documentVersions: hasMany('document-version', { inverse: null }),
@@ -67,7 +67,7 @@ export default Model.extend({
           proposalText = `${proposalText}${requestedBy.get('title')}`;
         }
         return proposalText;
-      } 
+      }
       else {
         return null;
       }

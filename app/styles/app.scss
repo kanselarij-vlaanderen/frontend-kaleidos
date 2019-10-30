@@ -219,6 +219,15 @@ tr.disabled {
   height: 95% !important;
 }
 
+.vl-modal {
+  .vl-modal__backdrop {
+    z-index: 52;
+  }
+  tbody {
+    background-color:white;
+  }
+}
+
 .vl-modal-dialog__content {
   padding: 2rem 0;
 }

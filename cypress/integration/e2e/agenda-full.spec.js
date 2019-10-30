@@ -5,12 +5,12 @@ context('Full test', () => {
   let testId;
 
   before(() => {
+    cy.server();
     cy.login('Admin')
   });
 
   it('Scenario where a complete agenda is created', () => {
     testId = 'testId=' + currentTimestamp() + ': '
-    cy.server();
 
     //#region routes to be reused
     cy.route('GET', '/cases?**').as('getCases');
@@ -32,11 +32,8 @@ context('Full test', () => {
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then(() => {
-      cy.verifyAlertSuccess();
-      cy.wait('@createNewAgenda',{ timeout: 20000 });
-      cy.wait('@createNewAgendaItems',{ timeout: 20000 });
-
+    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then((meetingId) => {
+      // cy.openAgendaForDate(agendaDate, meetingId);
     });
 
     //#endregion
@@ -50,40 +47,26 @@ context('Full test', () => {
     const subcase_1_Type='In voorbereiding';
     const subcase_1_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, case_1_TitleShort).then(() => {
-      cy.verifyAlertSuccess();
-    });
-
-    cy.addSubcase(type_1,newSubcase_1_TitleShort,subcase_1_TitleLong, subcase_1_Type, subcase_1_Name).then(() => {
-      cy.verifyAlertSuccess();
-    });
+    cy.createCase(false, case_1_TitleShort);
+    cy.addSubcase(type_1,newSubcase_1_TitleShort,subcase_1_TitleLong, subcase_1_Type, subcase_1_Name);
+    cy.openSubcase(0);
     
-    cy.wait('@getSubcases', { timeout: 12000 });
-    cy.get('.vlc-procedure-step').as('subcasesList');
-    cy.get('@subcasesList').eq(0).within(() => {
-      cy.get('.vl-title').click();
-    })
-    cy.wait('@getCaseSubcases', { timeout: 12000 });
+    // cy.wait('@getSubcases', { timeout: 12000 });
+    // cy.get('.vlc-procedure-step').as('subcasesList');
+    // cy.get('@subcasesList').eq(0).within(() => {
+    //   cy.get('.vl-title').click();
+    // })
+    // cy.wait('@getCaseSubcases', { timeout: 12000 });
 
-
-    //Change the access level
     cy.changeSubcaseAccessLevel(false, case_1_TitleShort, true, 'Intern Overheid');
-
-    //Add the themes
-    cy.addSubcaseThemes([0, 5 , 10]);
-    cy.addSubcaseThemes([1, 15 , 20]);
-
-    //Add the mandatees
+    cy.addSubcaseThemes([0, 1, 5, 10, 15, 20]);
     cy.addSubcaseMandatee(0, 0, 0);
 
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota'}]);
 
-    cy.get('.vlc-toolbar__item').within(() => {
-      cy.contains('Documenten').click();
-    })
     cy.proposeSubcaseForAgenda(agendaDate);
 
-  //#endregion
+    //#endregion
 
     //#region create the 2nd case and subcase
 
@@ -101,22 +84,9 @@ context('Full test', () => {
     cy.addSubcase(type_2,newSubcase_2_TitleShort,subcase_2_TitleLong, subcase_2_Type, subcase_2_Name).then(() => {
       cy.verifyAlertSuccess();
     });
-    
-    cy.wait('@getSubcases', { timeout: 12000 });
-    cy.get('.vlc-procedure-step').as('subcasesList');
-    cy.get('@subcasesList').eq(0).within(() => {
-      cy.get('.vl-title').click();
-    })
-    cy.wait('@getCaseSubcases', { timeout: 12000 });
-
-
-    //Change the access level
+    cy.openSubcase(0);
     cy.changeSubcaseAccessLevel(false, case_2_TitleShort, false, 'Intern Overheid');
-
-    //Add the themes
     cy.addSubcaseThemes([2, 4 , 6]);
-
-    //Add the mandatees
     cy.addSubcaseMandatee(1, 0, 0);
     cy.addSubcaseMandatee(2, 0, 0);
 
@@ -140,23 +110,10 @@ context('Full test', () => {
     cy.addSubcase(type_3,newSubcase_3_TitleShort,subcase_3_TitleLong, subcase_3_Type, subcase_3_Name).then(() => {
       cy.verifyAlertSuccess();
     });
-    
-    cy.wait('@getSubcases', { timeout: 12000 });
-    cy.get('.vlc-procedure-step').as('subcasesList');
-    cy.get('@subcasesList').eq(0).within(() => {
-      cy.get('.vl-title').click();
-    })
-    cy.wait('@getCaseSubcases', { timeout: 12000 });
 
-    
-    //Change the access level
+    cy.openSubcase();   
     cy.changeSubcaseAccessLevel(true, caseTitle_3_Short, false, 'Intern Overheid');
-
-    //Add the themes
-    // cy.addSubcaseThemes([8, 15 , 20, 25]); //no themes for a mededeling
-
-    //Add the mandatees
-    // cy.addSubcaseMandatee(2, 0, 0); //no mandatees for a mededeling
+    cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
     //#endregion
@@ -171,15 +128,19 @@ context('Full test', () => {
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
-    cy.setFormalOkOnAllItems();
+    
     cy.addRemarkToAgenda('Titel mededeling', 
       'mededeling omschrijving', 
       [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
-    cy.addAgendaitemToAgenda('Cypress test', false);
+    cy.addAgendaitemToAgenda('Cypress', false);
+    cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();
     //#endregion
 
     //TODO Clean up data, implement db restore after test completed ?
+    cy.openAgendaForDate(agendaDate);
+    cy.deleteAgenda();
+    cy.deleteAgenda(null, true);
 
     //#endregion
 

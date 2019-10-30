@@ -6,16 +6,12 @@ export default Model.extend({
 	campaignId:attr('string'),
 	campaignWebId:attr('string'),
 	archiveUrl:attr('string'),
-	sent: attr('boolean'),
-	sentAt: attr('date'),
-	
+  sentAt: attr('datetime'),
+
 	meetings:hasMany('meeting', {inverse:null}),
 
-	isSent: computed('sent','sentAt', function() {
-		const { sent, sentAt} = this;
-		if(sent || sentAt){
-			return true;
-		}
-		return false;
-	})
+  isSent: computed('sentAt', function() {
+    const { sentAt } = this;
+    return !!sentAt;
+  })
 });

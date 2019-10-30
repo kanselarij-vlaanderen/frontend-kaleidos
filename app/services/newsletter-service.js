@@ -8,6 +8,7 @@ export default Service.extend({
   store: inject(),
   globalError: inject(),
   intl: inject(),
+  formatter: inject(),
 
   createCampaign(agenda, meeting) {
     return $.ajax({
@@ -69,6 +70,22 @@ export default Service.extend({
     });
   },
 
+  getMailCampaign(id) {
+    return $.ajax({
+      method: 'GET',
+      url: `/newsletter/fetchTestCampaign/${id}`,
+      error: () => {
+        this.globalError.showToast.perform(
+          EmberObject.create({
+            title: this.intl.t('warning-title'),
+            message: this.intl.t('error-send-newsletter'),
+            type: 'error',
+          })
+        );
+      },
+    });
+  },
+
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForSubcase(subcase, agendaitem, inNewsletter = false) {
 		const news = this.store.createRecord("newsletter-info", {
@@ -81,4 +98,20 @@ export default Service.extend({
 		});
     return await news.save();
   },
+
+  async createNewsItemForMeeting(meeting) {
+    const plannedStart = await meeting.get('plannedStart');
+    const pubDate = moment(plannedStart).set({hour:14,minute:0});
+    const pubDocDate = moment(plannedStart).weekday(7).set({hour:14,minute:0});
+    const newsletter = this.store.createRecord('newsletter-info', {
+      meeting: meeting,
+      finished: false,
+      mandateeProposal: null,
+      publicationDate: this.formatter.formatDate(pubDate),
+      publicationDocDate: this.formatter.formatDate(pubDocDate)
+    });
+    await newsletter.save();
+    meeting.set('newsletter', newsletter);
+    return await meeting.save();
+  }
 });

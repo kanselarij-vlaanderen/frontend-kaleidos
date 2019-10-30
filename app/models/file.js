@@ -25,7 +25,7 @@ export default Model.extend({
 	format: attr('string'),
 	size: attr('number'),
 	extension: attr('string'),
-	created: attr('date'),
+	created: attr('datetime'),
 	contentType: attr('string'),
   downloadLink: computed('id', function() {
     return `/files/${this.get('id')}/download`

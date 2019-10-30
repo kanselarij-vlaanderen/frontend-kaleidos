@@ -47,6 +47,7 @@ export default EmberObject.create({
     'Y',
     'Z',
   ],
+  //TODO translate
   resultSubcaseName: '1ste principiële goedkeuring',
   principalApprovalId: '7b90b3a6-2787-4b41-8a1d-886fc5abbb33',
   onAgendaCodeId: '3e6dba4f-5c3c-439a-993e-92348ec73642',
@@ -87,16 +88,19 @@ export default EmberObject.create({
   kinds: [
     {
       label: 'Ministerraad',
+      procedure: '',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
     },
     {
       label: 'Elektronische procedure',
+      procedure: ' via elektronische procedure',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/406F2ECA-524D-47DC-B889-651893135456',
     },
     {
       label: 'Bijzondere ministerraad',
+      procedure: '',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
     },

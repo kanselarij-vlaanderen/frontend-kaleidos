@@ -17,9 +17,14 @@ export default Mixin.create({
     this._super(...arguments);
     this.set('documentsInCreation', A([]));
     this.store.query('access-level', {}).then((accessLevels) => {
-      this.set('defaultAccessLevel', accessLevels.find((item) => {
-        return item.id == config.internRegeringAccessLevelId;
-      }));
+      try{
+        this.set('defaultAccessLevel', accessLevels.find((item) => {
+          return item.id == config.internRegeringAccessLevelId;
+        }));
+      } catch(e) {
+        // TODO error during cypress tests: 
+        // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
+      }
     });
   },
 

@@ -12,7 +12,7 @@ export default Mixin.create({
 
     draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
 
-    await this.agendaService.setGroupNameOnAgendaItems(draftAgendaitems);
+    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
     await this.setCalculatedGroupPriorities(draftAgendaitems);
 
     const groupedAgendaitems = Object.values(this.groupAgendaitemsByGroupname(draftAgendaitems));
@@ -25,7 +25,7 @@ export default Mixin.create({
   groupAgendaitemsByGroupname(agendaitems) {
     let groups = [];
     agendaitems.map((agendaitem) => {
-      const groupName = agendaitem.get('groupName');
+      const groupName = agendaitem.get('ownGroupName');
       const foundItem = groups.find((item) => item.groupName == groupName);
 
       if (!foundItem) {
@@ -36,7 +36,7 @@ export default Mixin.create({
         });
       } else {
         const foundIndex = groups.indexOf(foundItem);
-        if (foundIndex) {
+        if (foundIndex >= 0) {
           groups[foundIndex].agendaitems.push(agendaitem);
         }
       }
@@ -69,16 +69,21 @@ export default Mixin.create({
     );
 
     let prevIndex = 0;
-    const groupsArray = groupedAgendaitems
-      .filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
-      .sortBy('groupPriority')
-      .map((item) => {
-        item.agendaitems.map((agendaitem, index) => {
-          prevIndex = index + prevIndex + 1;
-          agendaitem.set('itemIndex',prevIndex);
-        });
-        return EmberObject.create(item);
+    let groupsArray = groupedAgendaitems;
+    if(!this.allowEmptyGroups){
+      groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
+    }else{
+      groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers')
+    }
+
+    groupsArray = groupsArray.sortBy('groupPriority')
+    .map((item) => {
+      item.agendaitems.map((agendaitem, index) => {
+        prevIndex = index + prevIndex + 1;
+        agendaitem.set('itemIndex',prevIndex);
       });
+      return EmberObject.create(item);
+    });
 
     return hash({
       currentAgenda: agenda,

@@ -82,7 +82,7 @@ export default Service.extend(ModifiedMixin, {
         return result;
       })
       .catch(() => {
-        return;
+
       });
   },
 
@@ -129,7 +129,7 @@ export default Service.extend(ModifiedMixin, {
     });
     await agendaitem.save();
 
-    const meeting = await selectedAgenda.get('createdFor')
+    const meeting = await selectedAgenda.get('createdFor');
     await subcase.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
@@ -153,13 +153,14 @@ export default Service.extend(ModifiedMixin, {
     }
   },
 
-  async setGroupNameOnAgendaItems(agendaitems) {
+  async groupAgendaItemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
       agendaitems.map(async (item) => {
         const mandatees = await item.get('sortedMandatees');
         if (item.isApproval) {
           item.set('groupName', null);
+          item.set('ownGroupName', null)
           return;
         }
         if (mandatees.length == 0) {
@@ -176,7 +177,30 @@ export default Service.extend(ModifiedMixin, {
         } else {
           item.set('groupName', null);
         }
+        item.set('ownGroupName', currentAgendaitemGroupName);
       })
     );
   },
+
+  async deleteAgendaitemFromAgenda(agendaitem) {
+    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    const subcase = await itemToDelete.get('subcase');
+
+    if (subcase) {
+      const phases = await subcase.get('phases');
+      await Promise.all(phases.map(async phase => {
+        await phase.destroyRecord();
+      }));
+
+      const allItems = await subcase.get('agendaitems');
+      await Promise.all(allItems.map(async item => item.destroyRecord()));
+
+      await subcase.set('requestedForMeeting', null);
+      await subcase.set('consulationRequests', []);
+      await subcase.set('agendaitems', []);
+      await subcase.save();
+    } else {
+      await itemToDelete.destroyRecord();
+    }
+  }
 });

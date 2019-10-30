@@ -491,5 +491,7 @@
   "not-applicable": "Niet van toepassing",
   "active":"Actieve",
   "no-subcases-yet":"Er zijn nog geen andere procedurestappen binnen dit dossier.",
-  "redirect-loading-text":"Even geduld.. We verwijzen u door naar de helppagina."
+  "redirect-loading-text":"Even geduld.. We verwijzen u door naar de helppagina.",
+  "send-test-campaign":"Bekijk nieuwsbrief",
+  "preview-loading-text":"De nieuwsbrief wordt geladen.. Even geduld aub."
 }
