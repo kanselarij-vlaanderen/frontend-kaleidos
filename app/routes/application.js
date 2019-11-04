@@ -32,6 +32,11 @@ export default Route.extend(ApplicationRouteMixin, {
     this._loadCurrentSession();
   },
 
+  sessionInvalidated() {
+    const logoutUrl = ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'];
+    window.location.replace(logoutUrl);
+  },
+
   model(){
     if(!this.checkSupportedBrowser()) {
       this.transitionTo('not-supported');
