@@ -16,19 +16,19 @@ export default Controller.extend({
 	currentAgenda: alias('sessionService.currentAgenda'),
 	currentSession: alias('sessionService.currentSession'),
 
-	sortedAgendaitems: computed('agendaitems.@each.{priority,isDeleted}', function() {
+	sortedAgendaitems: computed('agendaitems.@each.{priority,isDeleted}', async function() {
 		const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark &&!item.isDeleted).sortBy('priority');
-		this.agendaService.groupAgendaItemsOnGroupName(actualAgendaitems);
+		await this.agendaService.groupAgendaItemsOnGroupName(actualAgendaitems);
 		return actualAgendaitems;
 	}),
 
-	sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', function() {
-    const announcements = this.get('announcements');
-    if (announcements) {
+	sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', async function() {
+		const announcements = this.get('announcements');
+		if (announcements) {
       return announcements.filter((item) => !item.isDeleted).sortBy('priority');
-    } else {
+		} else {
       return [];
-    }
+		}
 	}),
 
 	agendaitemsClass: computed('routing.currentRouteName', function () {
