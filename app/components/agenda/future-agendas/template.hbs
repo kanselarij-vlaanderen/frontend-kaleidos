@@ -55,7 +55,7 @@
     </thead>
     <tbody>
       {{#each (await items) as |meeting|}}
-        <tr>
+        {{#link-to "agenda.agendaitems" meeting.id tagName="tr"}}
           <td>
             {{#if (is-pending meeting)}}
               <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -98,12 +98,17 @@
               "agenda.agendaitems"
               meeting.id
               class="vl-button vl-button--link vl-button--icon"
+              bubbles=false
             }}
               <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
             {{/link-to}}
           </td>
-        </tr>
+        {{/link-to}}
       {{/each}}
     </tbody>
   </table>
+{{else}}
+  <div class="vl-u-spacer-extended-l">
+    {{web-components/vl-alert message=emptyText}}
+  </div>
 {{/if}}
