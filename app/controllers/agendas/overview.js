@@ -9,9 +9,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   activeAgendas: computed("model", async function() {
     const meetings = this.get("model");
-    const dateOfToday = moment()
-      .utc()
-      .format();
+    const dateOfToday = moment().utc().subtract(5, 'days').format();
     const activeAgendas = await this.agendaService.getActiveAgendas(dateOfToday);
 
     return meetings.filter((meeting) => this.checkIfAgendaIsPresent(activeAgendas, meeting));
