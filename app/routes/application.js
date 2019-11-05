@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
+import ENV from 'fe-redpencil/config/environment';
 
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 
