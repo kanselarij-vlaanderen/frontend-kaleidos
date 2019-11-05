@@ -23,35 +23,35 @@ export default Component.extend(isAuthenticatedMixin, {
 
   isAgendaItem: computed('item.modelName', function() {
     return 'agendaitem' == this.get('item.modelName');
-	}),
-	
-	subcaseName: computed('item.{subcaseName,subcase.subcaseName}', async function() {
-		const item = await this.get('item');
-		const subcase = await this.get('item.subcase');
+  }),
 
-		if(!subcase) {
-			return item.get('subcaseName');
-		}
+  subcaseName: computed('item.{subcaseName,subcase.subcaseName}', async function() {
+    const item = await this.get('item');
+    const subcase = await this.get('item.subcase');
 
-		const subcaseName = await subcase.get('subcaseName');
-		if(!subcaseName) {
-			return;
-		}
-		return subcaseName;
-	}),
+    if(!subcase) {
+      return item.get('subcaseName');
+    }
 
-	pillClass: computed('subcaseName','item.{subcase.approved,approved}', async function() {
-		let baseClass= "vl-pill vl-u-text--capitalize";
-		if(!await this.subcaseName) {
-			return baseClass;
-		}
-		const approved = await this.get('item.subcase.approved');
-		const itemApproved = await this.get('item.approved');
-		if(approved || itemApproved){
-			return baseClass + " vl-pill--success";
-		}
-		return baseClass;
-	}),
+    const subcaseName = await subcase.get('subcaseName');
+    if(!subcaseName) {
+      return;
+    }
+    return subcaseName;
+  }),
+
+  pillClass: computed('subcaseName','item.{subcase.approved,approved}', async function() {
+    let baseClass= "vl-pill vl-u-text--capitalize";
+    if(!await this.subcaseName) {
+      return baseClass;
+    }
+    const approved = await this.get('item.subcase.approved');
+    const itemApproved = await this.get('item.approved');
+    if(approved || itemApproved){
+      return baseClass + " vl-pill--success";
+    }
+    return baseClass;
+  }),
 
   confidential: computed('item.{subcase.confidential,confidential}', function() {
     const { isAgendaItem, item } = this;
