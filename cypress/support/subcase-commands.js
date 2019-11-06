@@ -9,6 +9,7 @@ Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
 Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
 Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
 Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
+Cypress.Commands.add('deleteSubcase', deleteSubcase);
 
 // ***********************************************
 // Functions
@@ -191,6 +192,21 @@ function proposeSubcaseForAgenda (agendaDate) {
   cy.wait('@patchAgenda', { timeout: 12000 });
   cy.wait('@patchSubcase', { timeout: 12000 });
   cy.wait('@createSubcasePhase', { timeout: 12000 });
+}
+
+function deleteSubcase() {
+  cy.route('DELETE', '/subcases/**').as('deleteSubcase');
+  cy.get('.vl-button--icon-before')
+    .contains('Acties')
+    .click();
+  cy.get('.vl-popover__link-list__item > .vl-link')
+    .contains('Procedurestap verwijderen')
+    .click()
+  
+  cy.get('.vl-modal-dialog').as('dialog').within(() => {
+    cy.get('button').contains('Procedurestap verwijderen').click();
+  })
+  cy.wait('@deleteSubcase', { timeout: 20000 });
 }
 
 /**
