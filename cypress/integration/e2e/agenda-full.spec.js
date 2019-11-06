@@ -50,13 +50,6 @@ context('Full test', () => {
     cy.createCase(false, case_1_TitleShort);
     cy.addSubcase(type_1,newSubcase_1_TitleShort,subcase_1_TitleLong, subcase_1_Type, subcase_1_Name);
     cy.openSubcase(0);
-    
-    // cy.wait('@getSubcases', { timeout: 12000 });
-    // cy.get('.vlc-procedure-step').as('subcasesList');
-    // cy.get('@subcasesList').eq(0).within(() => {
-    //   cy.get('.vl-title').click();
-    // })
-    // cy.wait('@getCaseSubcases', { timeout: 12000 });
 
     cy.changeSubcaseAccessLevel(false, case_1_TitleShort, true, 'Intern Overheid');
     cy.addSubcaseThemes([0, 1, 5, 10, 15, 20]);
@@ -166,17 +159,6 @@ context('Full test', () => {
 
 });
 
-
-
-// const generateRandomId = (amount)=>{
-//   let chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
-//   let string = '';
-//   for(let i=0; i<amount; i++){
-//       string += chars[Math.floor(Math.random() * chars.length)];
-//   }
-//   return string;
-// }
-
-const currentTimestamp = () => {
+function currentTimestamp() {
   return Cypress.moment().unix();
 }

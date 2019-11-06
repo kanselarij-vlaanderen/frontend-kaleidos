@@ -103,5 +103,5 @@ function clickReverseTab(tabName){
  *
  */
 function verifyAlertSuccess() {
-  cy.get('.vl-alert', { timeout: 12000 }).contains('Gelukt').should('be.visible');
+  cy.get('.toasts-container', { timeout: 12000 }).contains('Gelukt').should('be.visible');
 }
