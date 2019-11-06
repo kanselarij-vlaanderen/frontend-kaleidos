@@ -5,6 +5,7 @@
 
 Cypress.Commands.add('createCase', createCase);
 Cypress.Commands.add('addSubcase', addSubcase);
+Cypress.Commands.add('openCase', openCase);
 
 //TODO open case method
 
@@ -76,10 +77,10 @@ function createCase(confidential, shortTitle) {
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.route('GET', '/cases?*').as('getCases');
-  cy.route('GET', '/subcases?*').as('getSubcases');
+  // cy.route('GET', '/subcases?*').as('getSubcases');
   cy.route('POST', '/subcases').as('createNewSubcase');
 
-  cy.wait('@getSubcases',{ timeout: 12000 });
+  // cy.wait('@getSubcases',{ timeout: 12000 });
 
   cy.get('.vlc-toolbar__item .vl-button')
     .contains('Procedurestap toevoegen')
@@ -133,6 +134,22 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   .then(() => {
     return new Cypress.Promise((resolve) => {
       resolve(subcaseId);
+    });
+  });
+}
+
+/**
+ * Navigates to the dossier route with page size 100 and opens the specified case if found
+ *
+ * @param {String} caseTitle The title to search in the list of cases, should be unique
+ */
+function openCase(caseTitle) {
+  //TODO use search function instead ?
+  cy.visit('dossiers?size=100');
+  cy.get('.data-table > tbody').children().as('rows');
+  cy.get('@rows').within(() => {
+    cy.contains(caseTitle).parents('tr').within(() => {
+      cy.get('.vl-vi-nav-right').click();
     });
   });
 }
