@@ -3,8 +3,9 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(ModifiedMixin, {
+export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   store: inject(),
   agendaService: inject(),
   classNames: ["vlc-page-header"],
