@@ -20,14 +20,14 @@ Cypress.Commands.add('deleteSubcase', deleteSubcase);
  * @param {number} [index] The list index of the subcase to select, default 0
  */
 function openSubcase(index=0){
-  cy.route('GET', '/subcases?**').as('getSubcases');
-  cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
-  cy.wait('@getSubcases', { timeout: 12000 });
+  // cy.route('GET', '/subcases?**').as('getSubcases');
+  // cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
+  // cy.wait('@getSubcases', { timeout: 12000 });
   cy.get('.vlc-procedure-step').as('subcasesList');
   cy.get('@subcasesList').eq(index).within(() => {
     cy.get('.vl-title').click();
   })
-  cy.wait('@getCaseSubcases', { timeout: 12000 });
+  // cy.wait('@getCaseSubcases', { timeout: 12000 });
 }
 
 /**
