@@ -48,7 +48,8 @@
               page=page
               size=size
               sort=sort
-              isLoading=isLoadingModel as |table|
+              isLoading=isLoadingModel
+              onClickRow=(action "onClickRow") as |table|
             }}
               {{#table.content as |c|}}
                 {{#c.header}}
@@ -82,7 +83,7 @@
                   }}
                   <th class="vl-data-table-col-1"></th>
                 {{/c.header}}
-                {{#c.body as |meeting|}}
+                {{#c.body class="tr-hover" as |meeting|}}
                   {{#if (not meeting.alreadyShown)}}
                     <td>
                       {{t "agenda-for"}}
