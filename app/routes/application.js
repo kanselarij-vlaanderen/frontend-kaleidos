@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
+import ENV from 'fe-redpencil/config/environment';
 
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 
@@ -30,6 +31,11 @@ export default Route.extend(ApplicationRouteMixin, {
   sessionAuthenticated() {
     this._super(...arguments);
     this._loadCurrentSession();
+  },
+
+  sessionInvalidated() {
+    const logoutUrl = ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'];
+    window.location.replace(logoutUrl);
   },
 
   model(){
