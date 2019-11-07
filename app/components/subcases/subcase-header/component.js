@@ -8,6 +8,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   store: inject(),
   agendaService: inject(),
+  router: inject(),
   classNames: ["vlc-page-header"],
   isAssigningToOtherAgenda: false,
   isShowingOptions: false,
@@ -26,6 +27,15 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       sort: 'planned-start'
     })
   }),
+
+  async deleteSubcase(subcase) {
+    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), { reload: true });
+    const newsletterInfo = await itemToDelete.get('newsletterInfo');
+    if(newsletterInfo) {
+      await newsletterInfo.destroyRecord();
+    }
+    await itemToDelete.destroyRecord();
+  },
 
   actions: {
     showMultipleOptions() {
@@ -47,34 +57,22 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       this.set('selectedSubcase', subcase);
     },
 
-    async unPropose(subcase) {
-      const phases = await subcase.get('phases');
-
-      await Promise.all(phases.filter(async phase => {
-        const code = await phase.get('code');
-        if (!code || code.get('label') == "Ingediend voor agendering") {
-          await phase.destroyRecord();
-        } else {
-          return phase;
-        }
-      }));
-      subcase.set('requestedForMeeting', null);
-
-      subcase.save();
-    },
-
     cancel() {
       this.set('isAssigningToOtherAgenda', false);
       this.set('selectedSubcase', null);
     },
 
-    async archiveSubcase(subcase) {
-      const hasAgendaItem = await subcase.get('hasAgendaItem');
-      if (!hasAgendaItem) {
-        subcase.set('isArchived', true);
-        subcase.save();
+    async deleteSubcase(subcase) {
+      subcase.hasMany('agendaitems').reload();
+      const caze = await subcase.get('case');
+      const agendaitems = await subcase.get('agendaitems');
+      if (agendaitems && agendaitems.length > 0) {
+        return;
+      } else {
+        await this.deleteSubcase(subcase);
       }
-      this.set('isArchivingSubcase', false);
+      this.set('isDeletingSubcase', false);
+      this.router.transitionTo('cases.case.subcases', caze.id);
     },
     unarchiveSubcase(subcase) {
       subcase.set('isArchived', false);
@@ -85,11 +83,11 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       subcase.set('concluded', !concluded);
       subcase.save();
     },
-    requestArchiveSubcase() {
-      this.set('isArchivingSubcase', true);
+    requestDeleteSubcase() {
+      this.set('isDeletingSubcase', true);
     },
-    cancelArchiveSubcase() {
-      this.set('isArchivingSubcase', false);
+    cancelDeleteSubcase() {
+      this.set('isDeletingSubcase', false);
     }
   },
 });
