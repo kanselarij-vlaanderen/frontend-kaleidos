@@ -105,5 +105,10 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
         this.set('decisionsOnly', filter.searchInDecisionsOnly);
       }
     },
+
+    navigateToCase(caze) {
+      this.transitionToRoute("cases.case.subcases", caze.id);
+    }
   },
+
 });
