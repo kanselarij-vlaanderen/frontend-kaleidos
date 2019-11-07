@@ -45,6 +45,7 @@ Cypress.Commands.add('verifyAlertSuccess', verifyAlertSuccess);
  * @param {String} name the profile to log in with, case sensitive
  */
 function login(name){
+  cy.server();
   cy.route('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login');
   cy.get('.grid', { timeout: 12000 }).within(() => {
@@ -58,9 +59,10 @@ function login(name){
  *
  */
 function logout(){
+  cy.server();
   cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('');
-  cy.contains('Afmelden').click();
+  cy.contains('Afmelden', { timeout: 12000 }).click();
   cy.wait('@mockLogout');
 }
 
