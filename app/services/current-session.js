@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { get, computed } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
 import CONFIG from 'fe-redpencil/utils/config';
-import { later } from '@ember/runloop';
 
 export default Service.extend({
   session: service('session'),
@@ -12,23 +11,6 @@ export default Service.extend({
 
   async logout() {
     await this.get('session').invalidate();
-    this.setProperties({
-      accountContent: null,
-      userContent: null,
-      userRole: 'no-access',
-      userRoleId: null,
-      isEditor: null,
-      isAdmin: null,
-      _user: null,
-      _account: null,
-      _group: null,
-      rolesContent: null,
-      groupContent: null,
-    });
-    this.get('router').transitionTo('login');
-    later(this, () => {
-      location.reload();
-    }, 500);
   },
 
   async load() {
