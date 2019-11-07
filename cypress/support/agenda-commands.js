@@ -96,6 +96,7 @@ function createAgenda(kind, plusMonths, date, location) {
  * @param {*} [meetingId] If known, use the meetingId to open the meeting with a direct route instead of searching
  */
 function openAgendaForDate(agendaDate, meetingId) {
+  cy.server();
   if(meetingId) {
     cy.visit(`agenda/${meetingId}/agendapunten`);
   } else {

@@ -79,6 +79,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.route('GET', '/cases?*').as('getCases');
   // cy.route('GET', '/subcases?*').as('getSubcases');
   cy.route('POST', '/subcases').as('createNewSubcase');
+  // cy.route('POST', '/newsletter-infos').as('createNewsletter');
 
   // cy.wait('@getSubcases',{ timeout: 12000 });
 
@@ -131,6 +132,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   .then((res) => {
     subcaseId = res.responseBody.data.id;
   }).verifyAlertSuccess()
+  // cy.wait('@createNewsletter', { timeout: 20000 })
   .then(() => {
     return new Cypress.Promise((resolve) => {
       resolve(subcaseId);
@@ -146,7 +148,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 function openCase(caseTitle) {
   //TODO use search function instead ?
   cy.visit('dossiers?size=100');
-  cy.get('.data-table > tbody').children().as('rows');
+  cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
   cy.get('@rows').within(() => {
     cy.contains(caseTitle).parents('tr').within(() => {
       cy.get('.vl-vi-nav-right').click();
