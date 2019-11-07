@@ -96,11 +96,13 @@ function createAgenda(kind, plusMonths, date, location) {
  * @param {*} [meetingId] If known, use the meetingId to open the meeting with a direct route instead of searching
  */
 function openAgendaForDate(agendaDate, meetingId) {
+  cy.server();
   if(meetingId) {
     cy.visit(`agenda/${meetingId}/agendapunten`);
   } else {
   const searchDate = agendaDate.date()+ '/' +(agendaDate.month()+1) + '/' + agendaDate.year();
   cy.route('GET', '/meetings/**').as('getMeetings');
+  cy.route('GET', '/meetings?filter**').as('getFilteredMeetings');
 
   cy.visit('');
   cy.wait('@getMeetings', { timeout: 20000 });
@@ -112,8 +114,7 @@ function openAgendaForDate(agendaDate, meetingId) {
     cy.get('.vl-button').click();
   });
     
-  cy.wait('@getMeetings', { timeout: 20000 });
-  // cy.get('.vl-data-table > tbody').children().should('have.length', 1);
+  cy.wait('@getFilteredMeetings', { timeout: 20000 });
   cy.get('.data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
   }
 }
