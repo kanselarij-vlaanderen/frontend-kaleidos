@@ -6,6 +6,9 @@ export default ApplicationAdapter.extend({
     if (relationship.meta.key === 'documentVersions') {
       url = url + '?page[size]=9999'
     }
+    if (relationship.meta.key === 'linkedDocumentVersions') {
+      url = url + '?page[size]=9999'
+    }
     return this._super(store, snapshot, url, relationship);
   }
 });

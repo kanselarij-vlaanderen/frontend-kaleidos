@@ -121,6 +121,9 @@ export default Model.extend({
             filter: {
               'document-versions': { id: documentVersionIds },
             },
+            page : {
+              size: documentVersions.get('length'), // # documents will always be <= # document versions
+            },
             include: 'type,document-versions',
           }).then((documents) => {
             // Sorting is done in the frontend to work around a Virtuoso issue, where
@@ -136,7 +139,7 @@ export default Model.extend({
   linkedDocumentsLength: computed('linkedDocuments', function() {
     return PromiseObject.create({
       promise: this.get('linkedDocuments').then((documents) => {
-        return documents.get('length');
+        return documents ? documents.get('length') : 0;
       })
     });
   }),

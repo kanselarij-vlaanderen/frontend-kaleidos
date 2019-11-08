@@ -95,6 +95,9 @@ export default Model.extend({
             filter: {
               'document-versions': { id: documentVersionIds },
             },
+            page : {
+              size: documentVersions.get('length'), // # documents will always be <= # document versions
+            },
             include: 'type,document-versions',
           }).then((documents) => {
             // Sorting is done in the frontend to work around a Virtuoso issue, where
@@ -123,6 +126,9 @@ export default Model.extend({
           return this.store.query('document', {
             filter: {
               'document-versions': { id: documentVersionIds },
+            },
+            page : {
+              size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
             include: 'type,document-versions',
           }).then((documents) => {
