@@ -100,7 +100,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       if (itemType !== "decision" && subcase) {
         await this.attachDocumentVersionsToModel([documentVersion], subcase).then(item => item.save());
       } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-        await this.attachDocumentVersionsToModel([documentVersion], agendaitemsOnDesignAgenda).then(item => item.save());
+        await this.addDocumentVersionsToAgendaitems([documentVersion], agendaitemsOnDesignAgenda);
       }
       await this.attachDocumentVersionsToModel([documentVersion], item);
 
@@ -141,5 +141,14 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     async toggleConfidential(document) {
 
     },
-  }
+  },
+
+  async addDocumentVersionsToAgendaitems(documentVersions, agendaitems) {
+    return Promise.all(
+      agendaitems.map(async (agendaitem) => {
+        await this.attachDocumentVersionsToModel(documentVersions, agendaitem);
+        return await agendaitem.save();
+      })
+    );
+  },
 });
