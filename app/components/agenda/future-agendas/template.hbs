@@ -55,7 +55,7 @@
     </thead>
     <tbody>
       {{#each (await items) as |meeting|}}
-        {{#link-to "agenda.agendaitems" meeting.id tagName="tr"}}
+        {{#link-to "agenda.agendaitems" meeting.id tagName="tr" class="tr-hover"}}
           <td>
             {{#if (is-pending meeting)}}
               <div class="skeletal-loader" role="alert" aria-busy="true"></div>
