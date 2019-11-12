@@ -1,6 +1,7 @@
 // Print stylesheet focussed on making agenda overview look good when printed
 
 @media print {
+
   .vl-alert {
     display: none;
   }
@@ -70,7 +71,14 @@
       border-top: 1px solid black;
     }
   }
+
   .no-print {
     display: none !important;
   }
+
+  // Fix an issue which causes Firefox to only print a single page
+  .vlc-scroll-wrapper {
+    display: block;
+  }
+
 }
