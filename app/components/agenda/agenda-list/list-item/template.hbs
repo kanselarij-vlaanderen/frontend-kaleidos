@@ -86,13 +86,6 @@
         item=agendaitem
         agendaitem=agendaitem
       }}
-    {{else if (await agendaitem.subcase.documents)}}
-      <div class="vlc-hr"></div>
-      {{utils/documents-list-for-item
-        isClickable=isDocumentClickable
-        item=(await agendaitem.subcase)
-        agendaitem=(await agendaitem.subcase)
-      }}
     {{/if}}
   {{/if}}
 {{/if}}
