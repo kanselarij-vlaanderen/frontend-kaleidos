@@ -18,7 +18,7 @@ context('Agendaitem changes tests', () => {
       return !err.message.includes('animationClass')
     });
 
-    cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
+    
     cy.createCase(false, caseTitle).then(() => {
       cy.verifyAlertSuccess();
     });
@@ -56,6 +56,7 @@ context('Agendaitem changes tests', () => {
 
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
+    cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
     cy.wait( '@patchAgendaItem');
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);

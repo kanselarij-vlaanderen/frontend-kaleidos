@@ -26,9 +26,11 @@ function addNewDocumentVersionToAgenda(oldFileName, file) {
 }
 
 function addDocumentsToAgendaItem(agendaItemTitle, files) {
+  cy.route('GET', 'cases/**/subcases').as('getSubcase');
   cy.get('li.vlc-agenda-items__sub-item h4')
     .contains(agendaItemTitle)
     .click();
+    cy.wait('@getSubcase', { timeout: 12000 });
   cy.get('.vl-tab > a.vl-tab__link')
     .contains('Documenten', {timeout: 12000})
     .click();
@@ -36,12 +38,14 @@ function addDocumentsToAgendaItem(agendaItemTitle, files) {
 }
 
 function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName,  file) {
+  cy.route('GET', 'access-levels').as('getAccessLevels');
   cy.get('li.vlc-agenda-items__sub-item h4')
     .contains(agendaItemTitle)
     .click();
   cy.get('.vl-tab > a.vl-tab__link')
     .contains('Documenten', {timeout: 12000})
-    .click();
+    .click()
+    .wait('@getAccessLevels', { timeout: 12000 });
   return addNewDocumentVersion(oldFileName, file)
 }
 
