@@ -5,7 +5,7 @@ context('Add files to an agenda', () => {
   before(() => {
     cy.server();
   });
-  
+
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
@@ -17,7 +17,7 @@ context('Add files to an agenda', () => {
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
       cy.openAgendaForDate(agendaDate,meetingId);
-      
+
       cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -38,7 +38,7 @@ context('Add files to an agenda', () => {
           cy.get('.vl-title--h6 > span').contains(/TER/);
         });
       });
-  
+
       cy.deleteAgenda(meetingId, true);
     });
   });
@@ -49,7 +49,7 @@ context('Add files to an agenda', () => {
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
       cy.openAgendaForDate(agendaDate,meetingId);
-      
+
       cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2018 1010 DOC.0005/1 - 2e', fileType: 'Nota'}]);
       cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/1 - 3e', fileType: 'Nota'}]);
       cy.addDocuments(
@@ -61,7 +61,7 @@ context('Add files to an agenda', () => {
         {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/3 - 5e', fileType: 'Nota'}
         ]
       );
-  
+
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').as('docCards');
         cy.get('@docCards').eq(0).within(() => {
@@ -90,4 +90,3 @@ context('Add files to an agenda', () => {
     });
   });
 });
-  

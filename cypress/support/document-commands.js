@@ -26,27 +26,30 @@ function addNewDocumentVersionToAgenda(oldFileName, file) {
 }
 
 function addDocumentsToAgendaItem(agendaItemTitle, files) {
-  cy.route('GET', 'cases/**/subcases').as('getSubcase');
-  cy.get('li.vlc-agenda-items__sub-item h4')
-    .contains(agendaItemTitle)
-    .click();
-    cy.wait('@getSubcase', { timeout: 12000 });
-  cy.get('.vl-tab > a.vl-tab__link')
-    .contains('Documenten', {timeout: 12000})
-    .click();
+  openAgendaItemDocumentTab(agendaItemTitle);
   return addDocuments(files)
 }
 
-function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName,  file) {
+function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
+  openAgendaItemDocumentTab(agendaItemTitle, true);
+  return addNewDocumentVersion(oldFileName, file)
+}
+
+function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
   cy.route('GET', 'access-levels').as('getAccessLevels');
+  cy.route('GET', 'documents**').as('getDocuments');
   cy.get('li.vlc-agenda-items__sub-item h4')
     .contains(agendaItemTitle)
-    .click();
-  cy.get('.vl-tab > a.vl-tab__link')
-    .contains('Documenten', {timeout: 12000})
     .click()
-    .wait('@getAccessLevels', { timeout: 12000 });
-  return addNewDocumentVersion(oldFileName, file)
+    .wait(2000); // sorry
+  cy.get('.vl-tab > a.vl-tab__link')
+    .contains('Documenten')
+    .should('be.visible')
+    .click()
+    .wait('@getAccessLevels');
+  if (alreadyHasDocs) {
+    cy.wait('@getDocuments')
+  }
 }
 
 /**
@@ -112,12 +115,17 @@ function addNewDocumentVersion(oldFileName, file) {
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
   cy.route('PATCH', '**').as('patchModel');
 
-  cy.get('.vl-title--h6').contains(oldFileName).parents('.vlc-document-card').as('documentCard');
+  cy.get('.vlc-document-card__content .vl-title--h6', { timeout: 12000 })
+    .contains(oldFileName, { timeout: 12000 })
+    .parents('.vlc-document-card').as('documentCard');
 
   cy.get('@documentCard').within(() => {
     cy.get('.vl-vi-nav-show-more-horizontal').click();
   });
-  cy.get('.vl-link--block').contains('Nieuwe versie uploaden').click();
+  cy.get('.vl-link--block')
+    .contains('Nieuwe versie uploaden', { timeout: 12000 })
+    .should('be.visible')
+    .click();
 
   cy.get('.vl-modal-dialog').as('fileUploadDialog');
 

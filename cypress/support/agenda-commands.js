@@ -308,6 +308,7 @@ function addAgendaitemToAgenda(caseTitle, postponed){
     .click();
   cy.get('.vl-popover__link-list__item > .vl-link')
     .contains('Agendapunt toevoegen')
+    .should('be.visible')
     .click();
   cy.wait('@getSubcasesFiltered', { timeout: 20000 });
 
