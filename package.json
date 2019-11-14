@@ -24,7 +24,7 @@
     "@ember/optional-features": "^0.6.3",
     "@lblod/ember-acmidm-login": "github:lblod/ember-acmidm-login",
     "@lblod/ember-mock-login": "github:lblod/ember-mock-login",
-    "@lblod/ember-rdfa-editor": "^0.23.2",
+    "@lblod/ember-rdfa-editor": "^0.29.1",
     "@lblod/ember-rdfa-editor-plugin-system-dispatcher": "^0.5.8",
     "@lblod/ember-vo-webuniversum": "^0.19.12",
     "@lblod/ember-vo-webuniversum-data-table": "^0.2.11",
