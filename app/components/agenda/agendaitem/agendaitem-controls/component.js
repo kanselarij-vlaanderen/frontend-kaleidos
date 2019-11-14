@@ -63,7 +63,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
   async deleteItem(agendaitem) {
     const id = agendaitem.get('id')
-    await this.agendaService.deleteAgendaitemFromAgenda(agendaitem);
+    await this.agendaService.deleteAgendaitem(agendaitem);
     this.set('sessionService.selectedAgendaItem', null);
     this.refreshRoute(id);
   },

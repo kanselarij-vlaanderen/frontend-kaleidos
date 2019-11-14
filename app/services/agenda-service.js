@@ -182,25 +182,29 @@ export default Service.extend(ModifiedMixin, {
     );
   },
 
-  async deleteAgendaitemFromAgenda(agendaitem) {
-    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+  async deleteAgendaitem(agendaitem) {
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    await itemToDelete.belongsTo('subcase').reload();
     const subcase = await itemToDelete.get('subcase');
 
     if (subcase) {
-      const phases = await subcase.get('phases');
-      await Promise.all(phases.map(async phase => {
-        await phase.destroyRecord();
-      }));
-
-      const allItems = await subcase.get('agendaitems');
-      await Promise.all(allItems.map(async item => item.destroyRecord()));
-
-      await subcase.set('requestedForMeeting', null);
-      await subcase.set('consulationRequests', []);
-      await subcase.set('agendaitems', []);
-      await subcase.save();
-    } else {
-      await itemToDelete.destroyRecord();
+      await subcase.hasMany('agendaitems').reload();
+      const agendaitemsFromSubcase = await subcase.get('agendaitems');
+      if(agendaitemsFromSubcase.length == 1) {
+        // if only 1 item is found, all phases should be destroyed and the subcase updated before deleting the agendaitem
+        const phases = await subcase.get('phases');
+        await Promise.all(phases.map(async phase => {
+          await phase.destroyRecord();
+        }));
+        await subcase.set('requestedForMeeting', null);
+        await subcase.set('consulationRequests', []);
+        await subcase.set('agendaitems', []);
+        await subcase.save();
+      }else {
+        const foundAgendaitem = agendaitemsFromSubcase.find((agendaitem) => agendaitem.id == itemToDelete.id);
+        itemToDelete = foundAgendaitem;
+      }
     }
+    await itemToDelete.destroyRecord();
   }
 });
