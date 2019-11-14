@@ -18,6 +18,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   isEditing: false,
   documentToDelete: null,
 
+  isSubcase: computed('item.contructor', function () {
+		const { item } = this;
+		return item.get('modelName') === 'subcase';
+	}),
+
   aboutToDelete: computed('document.aboutToDelete', function() {
     if (this.document) {
       if (this.document.get('aboutToDelete')) {
@@ -95,6 +100,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       const item = await this.get('item');
       const itemType = item.get('constructor.modelName');
       const subcase = await item.get('subcase');
+      const { isSubcase } = this;
       const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
 
       if (itemType !== "decision" && subcase) {
@@ -105,7 +111,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       await this.attachDocumentVersionsToModel([documentVersion], item);
 
       await item.save().then(() => {
-        if(subcase) this.resetFormallyOk();
+        if(subcase || isSubcase) this.resetFormallyOk();
       });
       if(!this.isDestroyed){
         this.set('isLoading', false);
