@@ -14,11 +14,7 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should add an agendaitem to an agenda and should highlight as added', () => {
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      return !err.message.includes('animationClass')
-    });
 
-    
     cy.createCase(false, caseTitle).then(() => {
       cy.verifyAlertSuccess();
     });
