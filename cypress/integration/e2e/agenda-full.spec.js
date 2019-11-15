@@ -2,6 +2,8 @@
 /// <reference types="Cypress" />
 
 context('Full test', () => {
+  const testStart =  Cypress.moment();
+
   let testId;
 
   before(() => {
@@ -10,7 +12,7 @@ context('Full test', () => {
   });
 
   it('Scenario where a complete agenda is created', () => {
-    testId = 'testId=' + currentTimestamp() + ': '
+    testId = 'testId=' + currentTimestamp() + ': ';
 
     //#region routes to be reused
     cy.route('GET', '/cases?**').as('getCases');
@@ -104,36 +106,31 @@ context('Full test', () => {
       cy.verifyAlertSuccess();
     });
 
-    cy.openSubcase();   
+    cy.openSubcase();
     cy.changeSubcaseAccessLevel(true, caseTitle_3_Short, false, 'Intern Overheid');
     cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
     //#endregion
-    
+
     //#region check and approve the agenda > A
     cy.openAgendaForDate(agendaDate);
-    
+
     cy.setFormalOkOnAllItems();
-    
+
     cy.approveCoAgendaitem(case_2_TitleShort);
 
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
-    
-    cy.addRemarkToAgenda('Titel mededeling', 
-      'mededeling omschrijving', 
+
+    cy.addRemarkToAgenda('Titel mededeling',
+      'mededeling omschrijving',
       [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
     cy.addAgendaitemToAgenda('Cypress', false);
     cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();
     //#endregion
-
-    //TODO Clean up data, implement db restore after test completed ?
-    cy.openAgendaForDate(agendaDate);
-    cy.deleteAgenda();
-    cy.deleteAgenda(null, true);
 
     //#endregion
 
@@ -156,6 +153,9 @@ context('Full test', () => {
 
   });
 
+  after(() => {
+    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
+  })
 
 });
 

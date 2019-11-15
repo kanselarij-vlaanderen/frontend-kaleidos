@@ -200,16 +200,14 @@ export default Model.extend({
 
   isAdded: alias('checkAdded'),
 
-  hasChanges: computed('checkAdded', 'hasAddedDocuments', function() {
-    return this.hasAddedDocuments.then((hasAddedDocuments) => {
-      return this.checkAdded || hasAddedDocuments;
-    });
+  hasChanges: computed('checkAdded', 'hasAddedDocuments', async function() {
+    const hasAddedDocuments = await this.hasAddedDocuments;
+    const checkAdded = await this.checkAdded;
+    return checkAdded || hasAddedDocuments;
   }),
 
-  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', function() {
-    return this.get('documents').then((documents) => {
-      if (!documents) return false;
-      return documents.every((document) => document.get('checkAdded'));
-    });
+  hasAddedDocuments: computed('documents.@each', async function() {
+    const documents = await this.get('documents');
+    return documents && documents.some((document) => document.checkAdded);
   }),
 });

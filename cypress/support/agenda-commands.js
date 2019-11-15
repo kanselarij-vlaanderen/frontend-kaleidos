@@ -13,6 +13,8 @@ Cypress.Commands.add('approveCoAgendaitem',approveCoAgendaitem);
 Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
 Cypress.Commands.add('addRemarkToAgenda', addRemarkToAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda',addAgendaitemToAgenda);
+Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
+Cypress.Commands.add('agendaItemExists', agendaItemExists);
 
 
 // ***********************************************
@@ -20,11 +22,11 @@ Cypress.Commands.add('addAgendaitemToAgenda',addAgendaitemToAgenda);
 
 /**
  * Goes to the agenda overview and creates a new agenda
- * 
+ *
  * @returns {Promise<String>} the id of the created agenda
  *
  * @param {*} kind The kind of meeting to select, language and case sensitive
- * @param {*} plusMonths The positive amount of months from today to advance in the vl-datepicker 
+ * @param {*} plusMonths The positive amount of months from today to advance in the vl-datepicker
  * @param {*} date The cypress.moment object with the date and time to set
  * @param {*} location The location of the meeting to enter as input
  */
@@ -36,7 +38,7 @@ function createAgenda(kind, plusMonths, date, location) {
   cy.route('POST', '/agendaitems').as('createNewAgendaItems');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
-  
+
   cy.wait('@getMeetings', { timeout: 20000 });
   cy.get('.vlc-toolbar__item > .vl-button')
     .contains('Nieuwe agenda aanmaken')
@@ -113,7 +115,7 @@ function openAgendaForDate(agendaDate, meetingId) {
     cy.get('.vl-input-field').type(searchDate);
     cy.get('.vl-button').click();
   });
-    
+
   cy.wait('@getFilteredMeetings', { timeout: 20000 });
   cy.get('.data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
   }
@@ -121,7 +123,7 @@ function openAgendaForDate(agendaDate, meetingId) {
 
 /**
  * Deletes the current **open agenda**, either a design or an approved one
- * 
+ *
  * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
  * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
  */
@@ -140,7 +142,7 @@ function deleteAgenda(meetingId, lastAgenda) {
     .click();
   cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
     .contains('Agenda verwijderen')
-    .click()
+    .click();
   cy.wait('@deleteAgendaitems', { timeout: 20000 });
   cy.wait('@deleteAgendas', { timeout: 20000 });
   if(lastAgenda) {
@@ -152,35 +154,44 @@ function deleteAgenda(meetingId, lastAgenda) {
 
 /**
  * Set all agendaitems on an open agenda to "formally OK"
- * 
+ *
  */
 function setFormalOkOnAllItems() {
   //TODO set only some items to formally ok with list as parameter
   cy.route('GET', '/meetings/**').as('getMeetings');
-  cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
-    cy.contains('Overzicht').click();
-  });
-  cy.wait('@getMeetings', { timeout: 20000 });
-  cy.get('.vl-title--h3').contains(`Nota's`).parents('.vlc-agenda-items-section-header').within(() => {
-    cy.get('.vlc-agenda-items-section-header__link').contains('Wijzigen').should('exist').click();
-  });
-  
-  cy.get('.vlc-agenda-items__sub-item').as('agendaItemsAndRemarks');
-  cy.get('@agendaItemsAndRemarks').each((item) => {
-    cy.get(item).within(() => {
-      cy.get('.ember-power-select-selected-item').click();
-    });
-    cy.contains('Formeel OK').click();
-  });
+  cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
 
-  cy.get('.vl-title--h3').contains(`Nota's`).parents('.vlc-agenda-items-section-header').within(() => {
-    cy.get('.vlc-agenda-items-section-header__link').contains('Wijzigen').should('exist').click();
-  });
+  cy.clickReverseTab('Overzicht');
+
+  cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
+    .last().as('editFormality');
+
+  cy.get('@editFormality').click();
+
+  cy.get('li.vlc-agenda-items__sub-item')
+    .each((whatever, index) =>
+      cy.get('li.vlc-agenda-items__sub-item')
+        .eq(index)
+        .scrollIntoView()
+        .within($selectBox =>
+          cy.get('.vl-u-spacer-extended-bottom-s').as('selectBox'))
+        .get('@selectBox')
+        .then($selectBox =>
+          !$selectBox.text().includes('Formeel OK')
+            ? cy.get('@selectBox')
+              .click()
+              .get('.ember-power-select-option')
+              .contains('Formeel OK')
+              .click()
+              .wait('@patchAgendaItem')
+              .wait(1000) // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
+            : cy.get('@selectBox')));
+  cy.get('@editFormality').click();
 }
 
 /**
  * Check all approval checkboxes of an agendaitem
- * 
+ *
  * @param {String} agendaitemShortTitle - The short title of the case with coapprovals, must be unique in an agenda.
  */
 function approveCoAgendaitem(agendaitemShortTitle) {
@@ -221,6 +232,7 @@ function approveDesignAgenda() {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
   cy.route('POST', '/agendas').as('createNewDesignAgenda');
   cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
+  cy.route('GET', '/agendaitems/**').as('getAgendaitems');
 
   //TODO add boolean for when not all items are formally ok, click through the confirmation modal
   cy.get('.vlc-toolbar').within(() => {
@@ -232,15 +244,16 @@ function approveDesignAgenda() {
   cy.wait('@patchAgenda', { timeout: 12000 });
   cy.wait('@createNewDesignAgenda', { timeout: 12000 });
   cy.wait('@createApprovedAgenda', { timeout: 12000 });
+  cy.wait('@getAgendaitems', { timeout: 12000 });
 }
 
 /**
  * Creates a remark for an agenda and attaches any file in the files array
- * 
+ *
  * @param {String} title - The title of the remark
  * @param {String} remark - The remark
  * @param {{folder: String, fileName: String, fileExtension: String}[]} file
- * 
+ *
  */
 function addRemarkToAgenda(title, remark, files) {
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
@@ -260,7 +273,7 @@ function addRemarkToAgenda(title, remark, files) {
     cy.get('@newRemarkForm').eq(0).within(() => {
       cy.get('.vl-input-field').click().type(title);
     });
-    
+
     //Set remark
     cy.get('@newRemarkForm').eq(1).within(() => {
       cy.get('.vl-textarea').click().type(remark);
@@ -294,6 +307,7 @@ function addAgendaitemToAgenda(caseTitle, postponed){
     .click();
   cy.get('.vl-popover__link-list__item > .vl-link')
     .contains('Agendapunt toevoegen')
+    .should('be.visible')
     .click();
   cy.wait('@getSubcasesFiltered', { timeout: 20000 });
 
@@ -320,8 +334,34 @@ function addAgendaitemToAgenda(caseTitle, postponed){
   });
   cy.wait('@createNewAgendaitem', { timeout: 20000 });
   cy.wait('@patchSubcase', { timeout: 20000 });
-  
+
   cy.wait('@createSubcasePhase', { timeout: 20000 });
   cy.wait('@patchAgenda', { timeout: 20000 });
   cy.wait('@getAgendaitems', { timeout: 20000 });
+}
+
+function toggleShowChanges(refresh) {
+  cy.route('GET', '/agendaitems/**').as('getAgendaitems');
+  cy.route('GET', '/agenda-sort/agenda-with-changes**').as('getChanges');
+
+  if (refresh) {
+    cy.get('.vlc-side-nav-item', { timeout: 12000 })
+      .last({ timeout: 12000 })
+      .click();
+    cy.wait('@getAgendaitems', { timeout: 20000 });
+    cy.get('.vlc-side-nav-item', { timeout: 12000 })
+      .first({ timeout: 12000 })
+      .click();
+    cy.wait('@getChanges', { timeout: 20000 });
+  }
+
+  cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
+    .first()
+    .click();
+}
+
+function agendaItemExists(agendaItemName) {
+  cy.get('li.vlc-agenda-items__sub-item h4')
+    .contains(agendaItemName, {timeout: 12000})
+    .should('exist');
 }
