@@ -94,7 +94,7 @@ export default Model.extend({
             page : {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
-            include: 'document-versions,type',
+            include: 'document-versions,type,access-level',
           }).then((documents) => {
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
@@ -121,7 +121,7 @@ export default Model.extend({
             filter: {
               'document-versions': { id: documentVersionIds },
             },
-            include: 'type,document-versions',
+            include: 'document-versions,type,access-level',
           }).then((documents) => {
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
@@ -153,7 +153,7 @@ export default Model.extend({
                 'document-versions': { id: documentVersionIds },
                 type: { id: CONFIG.notaID },
               },
-              include: 'document-versions',
+              include: 'document-versions,type,access-level',
             })
             .then((notas) => {
               return notas.get('firstObject');
