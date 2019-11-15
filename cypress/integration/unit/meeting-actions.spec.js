@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 context('meeting actions tests', () => {
+  const testStart = currentMoment();
 
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
@@ -12,7 +13,6 @@ context('meeting actions tests', () => {
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.createCase(false, caseTitle);
-
     cy.logout();
   });
 
@@ -21,7 +21,7 @@ context('meeting actions tests', () => {
     cy.login('Admin');
   });
 
-  xit('should perform action delete agenda', () => {
+  it('should perform action delete agenda with agendaitems on designagenda', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete agenda - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het verwijderen van een agenda';
@@ -39,16 +39,25 @@ context('meeting actions tests', () => {
 
       cy.setFormalOkOnAllItems();
       cy.approveDesignAgenda();
-      //verify stuff on design agenda and agenda A
+      // Verify agendaitem exists and has subcase on design agenda and agenda A
+      cy.agendaItemExists(SubcaseTitleShort).click();
+      cy.contains('Naar procedurestap', { timeout: 12000});
+
+      cy.changeSelectedAgenda('Agenda A');
+      cy.agendaItemExists(SubcaseTitleShort).click();
+      cy.contains('Naar procedurestap', { timeout: 12000});
+      cy.changeSelectedAgenda('Ontwerpagenda');
       cy.deleteAgenda(meetingId); 
-      //verify stuff on Agenda A 
-      //verify subcase is still ok
+
+      // Verify subcase is still ok on agenda A after delete designagenda
+      cy.agendaItemExists(SubcaseTitleShort).click();
+      cy.contains('Naar procedurestap', { timeout: 12000});
 
       cy.deleteAgenda(meetingId,true);
     });
   });
 
-  xit('should perform action close agenda', () => {
+  it('should perform action close agenda with agendaitems on designagenda', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: close agenda - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het sluiten van een agenda';
@@ -66,22 +75,32 @@ context('meeting actions tests', () => {
 
       cy.setFormalOkOnAllItems();
       cy.approveDesignAgenda();
-      // verify stuff on design agenda and agenda A
-      // cy .close meeting
-      // close the agenda and verify stuff on agenda A 
-      //verify subcase is still ok
+      // Verify agendaitem exists and has subcase on design agenda and agenda A
+      cy.agendaItemExists(SubcaseTitleShort).click();
+      cy.contains('Naar procedurestap', { timeout: 12000});
 
-      cy.deleteAgenda(meetingId); 
+      cy.changeSelectedAgenda('Agenda A');
+      cy.agendaItemExists(SubcaseTitleShort).click();
+      cy.contains('Naar procedurestap', { timeout: 12000});
+      cy.changeSelectedAgenda('Ontwerpagenda');
+      cy.closeAgenda(); 
+
+      // Verify subcase is still ok on agenda A after closing the agenda (designagenda is deleted if present)
+      cy.agendaItemExists(SubcaseTitleShort).click();
+      cy.contains('Naar procedurestap', { timeout: 12000});
       cy.deleteAgenda(meetingId,true);
     });
   });
 
 
   after(() => {
-
-  });
+    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
+  })
 });
 
+function currentMoment() {
+  return Cypress.moment();
+}
 function currentTimestamp() {
   return Cypress.moment().unix();
 }
