@@ -57,7 +57,7 @@ export default Component.extend({
     async chooseAgendaOne(agenda) {
       this.set('isLoadingAgendaOne', true);
       const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
-      await this.agendaService.setGroupNameOnAgendaItems(agendaitems);
+      await this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
 
       this.set('agendaitemsLeft', agendaitems);
       this.set('agendaOne', agenda);
@@ -66,7 +66,7 @@ export default Component.extend({
     async chooseAgendaTwo(agenda) {
       this.set('isLoadingAgendaTwo', true);
       const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
-      await this.agendaService.setGroupNameOnAgendaItems(agendaitems);
+      await this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
 
       this.set('agendaitemsRight', agendaitems);
       this.set('agendaTwo', agenda);

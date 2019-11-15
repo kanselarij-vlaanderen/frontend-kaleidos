@@ -14,6 +14,7 @@ export default Route.extend({
 
   async model(params) {
     const id = await this.get('sessionService.currentAgenda.id');
+    console.log(id)
     if (id) {
       const { agenda, matchingAgendaItems } = await hash({
         agenda: this.store.findRecord('agenda', id),

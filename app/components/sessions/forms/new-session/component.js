@@ -6,6 +6,7 @@ import moment from 'moment';
 export default Component.extend({
   store: inject(),
   agendaService: inject(),
+  newsletterService: inject(),
   globalError: inject(),
   formatter: inject(),
   kind: null,
@@ -67,6 +68,7 @@ export default Component.extend({
         .then(async (meeting) => {
           const agenda = await this.createAgenda(meeting, date);
           await this.createAgendaItemToApproveMinutes(agenda, closestMeeting);
+          await this.newsletterService.createNewsItemForMeeting(meeting);
 
           // TODO: Should fix sessionNrBug
           // await this.agendaService.assignNewSessionNumbers();

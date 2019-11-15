@@ -125,6 +125,15 @@
                           <a
                             class="vl-link vl-link--block"
                             {{action attacher.hide}}
+                            {{action "sendTestCampaign"}}
+                          >
+                            {{t "send-test-campaign"}}
+                          </a>
+                        </li>
+                        <li class="vl-popover__link-list__item">
+                          <a
+                            class="vl-link vl-link--block"
+                            {{action attacher.hide}}
                             {{action "toggleIsVerifying"}}
                           >
                             {{t "send-campaign"}}
@@ -192,4 +201,19 @@
     cancel=(action "toggleIsVerifying")
     verify=(action "sendCampaign")
   }}
+{{/if}}
+{{#if (or testCampaignIsLoading newsletterHTML)}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "send-test-campaign")
+    closeModal=(action "clearNewsletterHTML")
+  }}
+    <div class="vl-modal-dialog__content">
+      {{#if testCampaignIsLoading}}
+        {{web-components/vl-loader text=(t "preview-loading-text")}}
+      {{else}}
+        {{{newsletterHTML}}}
+      {{/if}}
+    </div>
+  {{/web-components/vl-modal}}
 {{/if}}

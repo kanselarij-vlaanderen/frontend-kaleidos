@@ -10,9 +10,11 @@ export default function (documents) {
     return documentsToSort.sort(function(a, b) {
       const titleA = a.get('name');
       const titleB = b.get('name');
-      // If no match with regex, return -1
-      if(!titleB.match(regex) | !titleA.match(regex) ) {
+      if(!titleA.match(regex)) {
         return -1;
+      }
+      if(!titleB.match(regex)) {
+        return 1;
       }
 
       const { name: nameA, number: numberA } = getNameAndNumber(titleA);

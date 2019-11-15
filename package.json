@@ -16,8 +16,8 @@
     "lint:js": "eslint .",
     "start": "ember serve --proxy=http://localhost:80",
     "test": "ember test",
-    "cypress-local": "./node_modules/.bin/cypress open --env configFile=development",
-    "cypress-dev": "./node_modules/.bin/cypress open --env configFile=dev"
+    "cypress-local": "./node_modules/.bin/cypress open --browser chrome --env configFile=development",
+    "cypress-dev": "./node_modules/.bin/cypress open --browser chrome --env configFile=dev"
   },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
@@ -71,7 +71,7 @@
     "ember-rdfa-helpers": "^0.2.1",
     "ember-resolver": "^5.0.1",
     "ember-responsive": "^3.0.5",
-    "ember-sortable": "^1.12.9",
+    "ember-sortable": "1.12.1",
     "ember-source": "~3.6.0",
     "ember-welcome-page": "^3.2.0",
     "eslint-plugin-ember": "^5.2.0",
@@ -82,7 +82,8 @@
     "loader.js": "^4.7.0",
     "qunit-dom": "^0.8.0",
     "sanitize-filename": "^1.6.3",
-    "sass": "^1.16.1"
+    "sass": "^1.16.1",
+    "sparql-client-2": "^0.6.3"
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"

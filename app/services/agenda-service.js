@@ -4,8 +4,9 @@ import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
+import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 
-export default Service.extend({
+export default Service.extend(ModifiedMixin, {
   store: inject(),
   addedDocuments: null,
   addedAgendaitems: null,
@@ -81,14 +82,16 @@ export default Service.extend({
         return result;
       })
       .catch(() => {
-        return;
+
       });
   },
 
   async createNewAgendaItem(selectedAgenda, subcase, index) {
+    await selectedAgenda.hasMany("agendaitems").reload();
     let priorityToAssign = 0;
-    const mandatees = await subcase.get('sortedMandatees');
-    const titles = mandatees.map((mandatee) => mandatee.get('title'));
+    const mandatees = await subcase.get('mandatees');
+    const sortedMandatees = await mandatees.sortBy('priority');
+    const titles = sortedMandatees.map((mandatee) => mandatee.get('title'));
     const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
     const isAnnouncement = subcase.get('showAsRemark');
     if (isAnnouncement) {
@@ -126,13 +129,15 @@ export default Service.extend({
     });
     await agendaitem.save();
 
-    const meeting = await selectedAgenda.get('createdFor')
+    const meeting = await selectedAgenda.get('createdFor');
     await subcase.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
     await this.assignSubcasePhase(subcase);
     await subcase.hasMany('phases').reload();
 
+    await selectedAgenda.hasMany("agendaitems").reload();
+    await this.updateModifiedProperty(selectedAgenda);
   },
 
   async assignSubcasePhase(subcase) {
@@ -148,7 +153,7 @@ export default Service.extend({
     }
   },
 
-  async setGroupNameOnAgendaItems(agendaitems) {
+  async groupAgendaItemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
       agendaitems.map(async (item) => {
@@ -176,4 +181,26 @@ export default Service.extend({
       })
     );
   },
+
+  async deleteAgendaitemFromAgenda(agendaitem) {
+    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    const subcase = await itemToDelete.get('subcase');
+
+    if (subcase) {
+      const phases = await subcase.get('phases');
+      await Promise.all(phases.map(async phase => {
+        await phase.destroyRecord();
+      }));
+
+      const allItems = await subcase.get('agendaitems');
+      await Promise.all(allItems.map(async item => item.destroyRecord()));
+
+      await subcase.set('requestedForMeeting', null);
+      await subcase.set('consulationRequests', []);
+      await subcase.set('agendaitems', []);
+      await subcase.save();
+    } else {
+      await itemToDelete.destroyRecord();
+    }
+  }
 });

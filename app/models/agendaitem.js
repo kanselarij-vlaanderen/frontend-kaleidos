@@ -15,11 +15,11 @@ export default Model.extend({
 
   store: inject(),
   priority: attr('number'),
-  created: attr('date'),
+  created: attr('datetime'),
   record: attr('string'),
   retracted: attr('boolean'),
   showAsRemark: attr('boolean'),
-  modified: attr('date'),
+  modified: attr('datetime'),
   titlePress: attr('string'),
   textPress: attr('string'),
   forPress: attr('boolean'),
@@ -192,23 +192,19 @@ export default Model.extend({
 
   checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
-    const meetingOnlyHasOneAgenda = (await this.agenda.get('createdFor.agendas.length')) == 1;
-    const isOnFirstAgenda = this.agenda.get('name')  === CONFIG.alphabet[0];
-    return wasAdded || isOnFirstAgenda || meetingOnlyHasOneAgenda;
+    return wasAdded;
   }),
 
   isAdded: alias('checkAdded'),
 
-  hasChanges: computed('checkAdded', 'hasAddedDocuments', function() {
-    return this.hasAddedDocuments.then((hasAddedDocuments) => {
-      return this.checkAdded || hasAddedDocuments;
-    });
+  hasChanges: computed('checkAdded', 'hasAddedDocuments', async function() {
+    const hasAddedDocuments = await this.hasAddedDocuments;
+    const checkAdded = await this.checkAdded;
+    return checkAdded || hasAddedDocuments;
   }),
 
-  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', function() {
-    return this.get('documents').then((documents) => {
-      if (!documents) return false;
-      return documents.every((document) => document.get('checkAdded'));
-    });
+  hasAddedDocuments: computed('documents.@each', async function() {
+    const documents = await this.get('documents');
+    return documents && documents.some((document) => document.checkAdded);
   }),
 });

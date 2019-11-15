@@ -12,7 +12,7 @@ export default Mixin.create({
 
     draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
 
-    await this.agendaService.setGroupNameOnAgendaItems(draftAgendaitems);
+    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
     await this.setCalculatedGroupPriorities(draftAgendaitems);
 
     const groupedAgendaitems = Object.values(this.groupAgendaitemsByGroupname(draftAgendaitems));

@@ -7,8 +7,8 @@
     }}
     <div class="vlc-scroll-wrapper__body">
       {{agenda/agenda-list
-        announcements=sortedAnnouncements
-        agendaitems=sortedAgendaitems
+        announcements=(await sortedAnnouncements)
+        agendaitems=(await sortedAgendaitems)
         currentAgenda=(await model.currentAgenda)
         selectedAgendaItem=selectedAgendaItem
         filteredAgendaItems=filteredAgendaItems

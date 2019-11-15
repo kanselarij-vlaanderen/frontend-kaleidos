@@ -48,7 +48,8 @@
       size=size
       sort=sort
       class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-      isLoading=isLoadingModel as |table|
+      isLoading=isLoadingModel
+      onClickRow=(action "navigateToCase") as |table|
     }}
       {{#table.content as |c|}}
         {{#c.header}}
@@ -75,7 +76,7 @@
           {{/if}}
           <th class="vl-data-table-col-1"></th>
         {{/c.header}}
-        {{#c.body as |row|}}
+        {{#c.body class="tr-hover" as |row|}}
           <td>
             <p>
               {{#if row.shortTitle}}
@@ -142,7 +143,6 @@
             {{#link-to
               "cases.case.subcases"
               row.id
-              tagName="button"
               class="vl-button vl-button--link vl-button--icon"
             }}
               <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>

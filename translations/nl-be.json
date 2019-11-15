@@ -489,5 +489,9 @@
   "error-delete-newsletter": "Er ging iets mis tijdens het verwijderen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "newsletter-loading-text":"De nieuwsbrief wordt aangemaakt. Dit kan even duren..",
   "not-applicable": "Niet van toepassing",
-  "active":"Actieve"
+  "active":"Actieve",
+  "no-subcases-yet":"Er zijn nog geen andere procedurestappen binnen dit dossier.",
+  "redirect-loading-text":"Even geduld.. We verwijzen u door naar de helppagina.",
+  "send-test-campaign":"Bekijk nieuwsbrief",
+  "preview-loading-text":"De nieuwsbrief wordt geladen.. Even geduld aub."
 }
