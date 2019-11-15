@@ -39,7 +39,7 @@
   </div>
 {{/if}}
 <div class="{{spacerClass}}">
-  {{#if isEditor}}
+  {{#if (and isEditor (not isShowingChanges))}}
     {{#sortable-group
       tagName="ul"
       onChange=(action "reorderItems") as |sortableGroup|
@@ -61,7 +61,6 @@
           {{agenda/agenda-list/list-item
             agendaitem=agendaitem
             isEditingOverview=isEditingOverview
-            isShowingChanges=isShowingChanges
             selectAgendaItem=(action "selectAgendaItem")
           }}
         {{/sortable-item}}
@@ -70,19 +69,20 @@
   {{else}}
     <ul>
       {{#each agendaitems as |agendaitem|}}
-        {{#if agendaitem.groupName}}
+        {{#if (and agendaitem.groupName (not isShowingChanges))}}
           <div class="vlc-list-section-header">
             {{{agendaitem.groupName}}}
           </div>
         {{/if}}
-        <li class="vlc-agenda-items__sub-item">
-          {{agenda/agenda-list/list-item
-            agendaitem=agendaitem
-            isEditingOverview=isEditingOverview
-            isShowingChanges=isShowingChanges
-            selectAgendaItem=(action "selectAgendaItem")
-          }}
-        </li>
+        {{#if (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))}}
+            <li class="vlc-agenda-items__sub-item">
+              {{agenda/agenda-list/list-item
+                      agendaitem=agendaitem
+                      isEditingOverview=isEditingOverview
+                      selectAgendaItem=(action "selectAgendaItem")
+              }}
+            </li>
+        {{/if}}
       {{/each}}
     </ul>
   {{/if}}

@@ -70,7 +70,7 @@ function logout(){
  * Sets the date and time in an **open vl-flatpickr**
  *
  * @param {Object} date the Cypress.moment with the date to set
- * @param {number} plusMonths The positive amount of months from today to advance in the vl-flatpickr 
+ * @param {number} plusMonths The positive amount of months from today to advance in the vl-flatpickr
  */
 function setDateInFlatpickr(date, plusMonths) {
   cy.get('.flatpickr-months').within(() => {

@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
+import ENV from 'fe-redpencil/config/environment';
 
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 
@@ -23,13 +24,18 @@ export default Route.extend(ApplicationRouteMixin, {
     const isFirefox = typeof InstallTrigger !== 'undefined';
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-    const isCypress = !!window.Cypress && window.Cypress.browser.family == "chrome";
+    const isCypress = !!window.Cypress && (window.Cypress.browser.family === "chrome" || window.Cypress.browser.family === "electron" );
     return isFirefox || isChrome || isSafari || isCypress;
   },
 
   sessionAuthenticated() {
     this._super(...arguments);
     this._loadCurrentSession();
+  },
+
+  async sessionInvalidated() {
+    const logoutUrl = ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'];
+    window.location.replace(logoutUrl);
   },
 
   model(){
