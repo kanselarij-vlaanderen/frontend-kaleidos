@@ -35,6 +35,7 @@ Cypress.Commands.add('logout',logout);
 Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
 
 Cypress.Commands.add('clickReverseTab', clickReverseTab);
+Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 
 Cypress.Commands.add('verifyAlertSuccess', verifyAlertSuccess);
 
@@ -95,6 +96,20 @@ function setDateInFlatpickr(date, plusMonths) {
  */
 function clickReverseTab(tabName){
   cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
+    // cy.wait(1000);
+    cy.contains(tabName).click();
+  });
+}
+
+/**
+ * Clicks on the specified agendaitem tab for navigating
+ * @if class="vlc-tabs"
+ *
+ * @param {String} tabName The name of the tab to click on, case sensitive
+ */
+function clickAgendaitemTab(tabName){
+  cy.get('.vl-tabs', { timeout: 12000 }).should('exist').within(() =>{
+    cy.wait(1000); //tabs are not loaded...
     cy.contains(tabName).click();
   });
 }

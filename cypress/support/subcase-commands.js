@@ -22,7 +22,8 @@ Cypress.Commands.add('deleteSubcase', deleteSubcase);
 function openSubcase(index=0){
   cy.route('GET', '/subcases?**').as('getSubcases');
   cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
-  cy.wait('@getSubcases', { timeout: 12000 });
+  // cy.wait('@getSubcases', { timeout: 12000 }); //This doesn't always happen
+  cy.wait(2000);
   cy.get('.vlc-procedure-step').as('subcasesList');
   cy.get('@subcasesList').eq(index).within(() => {
     cy.get('.vl-title').click();
