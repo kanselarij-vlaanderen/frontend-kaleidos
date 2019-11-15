@@ -20,5 +20,10 @@ import './case-commands'
 import './subcase-commands'
 import './document-commands'
 
+Cypress.on('uncaught:exception', (err, runnable) => {
+  return !err.message.includes('calling set on destroyed object')
+});
+
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

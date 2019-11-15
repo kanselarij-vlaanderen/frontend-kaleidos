@@ -1,7 +1,7 @@
 context('Agendaitem changes tests', () => {
   const testStart = currentMoment();
   const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
+  const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
   const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
   const subcaseTitle1 = caseTitle + ' test stap 1';
   const subcaseTitle2 = caseTitle + ' test stap 2';
@@ -14,11 +14,7 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should add an agendaitem to an agenda and should highlight as added', () => {
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      return !err.message.includes('animationClass')
-    });
 
-    
     cy.createCase(false, caseTitle).then(() => {
       cy.verifyAlertSuccess();
     });
@@ -64,7 +60,7 @@ context('Agendaitem changes tests', () => {
   });
 
   after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()}, {timeout: 30000});
+    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
   })
 });
 

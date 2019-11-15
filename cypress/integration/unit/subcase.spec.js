@@ -3,6 +3,7 @@
 
 
 context('Subcase tests', () => {
+  const testStart =  Cypress.moment();
 
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
@@ -43,7 +44,7 @@ context('Subcase tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const dateFormat = Cypress.moment(agendaDate).format('DD.MM.YYYY');
-    const dateRegex = new RegExp(".?"+Cypress.moment(agendaDate).date()+".\\w+."+Cypress.moment(agendaDate).year()); 
+    const dateRegex = new RegExp(".?"+Cypress.moment(agendaDate).date()+".\\w+."+Cypress.moment(agendaDate).year());
 
     cy.get('.vlc-status-timeline > li').eq(0).contains(/Ingediend voor agendering/);
     cy.get('.vl-description-data').within(() => {
@@ -64,7 +65,7 @@ context('Subcase tests', () => {
       cy.wait('@getCaseSubcases');
       cy.get('.vl-tab').as('agendaitemTabs');
       cy.get('@agendaitemTabs').eq(0).should('contain', 'Dossier').click();
-      
+
       cy.get('.vlc-container').as('agendaitemContent');
       cy.get('@agendaitemContent').within(() => {
         cy.contains('Naar procedurestap').should('exist');
@@ -128,14 +129,10 @@ context('Subcase tests', () => {
   });
 
   after(() => {
-    cy.logout();
-    cy.login('Admin');
-    cy.openAgendaForDate(agendaDate);
-    cy.deleteAgenda(null,true); // approved agenda A (and therefore the meeting)
-  });
-  
+    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
+  })
 });
-  
+
 function currentTimestamp() {
   return Cypress.moment().unix();
 }

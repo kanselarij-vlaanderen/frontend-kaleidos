@@ -168,24 +168,23 @@ function setFormalOkOnAllItems() {
 
   cy.get('@editFormality').click();
 
-  cy.get('.vlc-agenda-items__sub-item .vl-u-spacer-extended-bottom-s').as('agendaItemsAndRemarks');
-  cy.get('@agendaItemsAndRemarks')
+  cy.get('li.vlc-agenda-items__sub-item')
     .each((whatever, index) =>
-      cy.get('@agendaItemsAndRemarks')
+      cy.get('li.vlc-agenda-items__sub-item')
         .eq(index)
-        .as('selectBox')
+        .scrollIntoView()
         .within($selectBox =>
-          cy.get('.ember-power-select-selected-item').as('selected'))
-        .get('@selected')
-        .then($selected =>
-          !$selected.text().includes('Formeel OK')
+          cy.get('.vl-u-spacer-extended-bottom-s').as('selectBox'))
+        .get('@selectBox')
+        .then($selectBox =>
+          !$selectBox.text().includes('Formeel OK')
             ? cy.get('@selectBox')
-              .scrollIntoView()
               .click()
               .get('.ember-power-select-option')
               .contains('Formeel OK')
               .click()
-              .wait('@patchAgendaItem', { timeout: 12000 })
+              .wait('@patchAgendaItem')
+              .wait(1000) // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
             : cy.get('@selectBox')));
   cy.get('@editFormality').click();
 }
