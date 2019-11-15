@@ -36,7 +36,6 @@ function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
 }
 
 function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
-  cy.route('GET', 'access-levels').as('getAccessLevels');
   cy.route('GET', 'documents**').as('getDocuments');
   cy.get('li.vlc-agenda-items__sub-item h4')
     .contains(agendaItemTitle)
@@ -45,8 +44,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
   cy.get('.vl-tab > a.vl-tab__link')
     .contains('Documenten')
     .should('be.visible')
-    .click()
-    .wait('@getAccessLevels');
+    .click();
   if (alreadyHasDocs) {
     cy.wait('@getDocuments')
   }
