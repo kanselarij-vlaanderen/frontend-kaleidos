@@ -23,7 +23,6 @@ context('Subcase tests', () => {
   });
 
   it('should open an existing case and add a subcase', () => {
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
 
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
@@ -60,6 +59,7 @@ context('Subcase tests', () => {
     });
 
     cy.openAgendaForDate(agendaDate);
+    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.contains(SubcaseTitleShort).click();
     cy.get('.vlc-panel-layout__main-content').within(() => {
       cy.wait('@getCaseSubcases');
@@ -72,7 +72,7 @@ context('Subcase tests', () => {
       })
     });
   });
-  
+
   it('should add a subcase and then delete it', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete subcase - ' + currentTimestamp();
@@ -84,7 +84,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
     cy.deleteSubcase();
   });
-  
+
   it('should not be able to delete a subcase with agendaitems', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete subcase not possible - ' + currentTimestamp();
