@@ -13,19 +13,18 @@ export default Mixin.create({
   document: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
 
-  didInsertElement() {
+  async didInsertElement() {
     this._super(...arguments);
     this.set('documentsInCreation', A([]));
-    this.store.query('access-level', {}).then((accessLevels) => {
-      try{
-        this.set('defaultAccessLevel', accessLevels.find((item) => {
-          return item.id == config.internRegeringAccessLevelId;
-        }));
-      } catch(e) {
-        // TODO error during cypress tests: 
-        // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
-      }
-    });
+    const accessLevels = await this.store.findAll('access-level');
+    try{
+      this.set('defaultAccessLevel', accessLevels.find((item) => {
+        return item.id == config.internRegeringAccessLevelId;
+      }));
+    } catch(e) {
+      // TODO error during cypress tests:
+      // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
+    }
   },
 
   async deleteDocument(document) {
