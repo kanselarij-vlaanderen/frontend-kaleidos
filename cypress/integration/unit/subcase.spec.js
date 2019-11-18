@@ -22,7 +22,6 @@ context('Subcase tests', () => {
   });
 
   it('should open an existing case and add a subcase', () => {
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
 
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
@@ -43,7 +42,7 @@ context('Subcase tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const dateFormat = Cypress.moment(agendaDate).format('DD.MM.YYYY');
-    const dateRegex = new RegExp(".?"+Cypress.moment(agendaDate).date()+".\\w+."+Cypress.moment(agendaDate).year()); 
+    const dateRegex = new RegExp(".?"+Cypress.moment(agendaDate).date()+".\\w+."+Cypress.moment(agendaDate).year());
 
     cy.get('.vlc-status-timeline > li').eq(0).contains(/Ingediend voor agendering/);
     cy.get('.vl-description-data').within(() => {
@@ -59,19 +58,20 @@ context('Subcase tests', () => {
     });
 
     cy.openAgendaForDate(agendaDate);
+    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.contains(SubcaseTitleShort).click();
     cy.get('.vlc-panel-layout__main-content').within(() => {
       cy.wait('@getCaseSubcases');
       cy.get('.vl-tab').as('agendaitemTabs');
       cy.get('@agendaitemTabs').eq(0).should('contain', 'Dossier').click();
-      
+
       cy.get('.vlc-container').as('agendaitemContent');
       cy.get('@agendaitemContent').within(() => {
         cy.contains('Naar procedurestap').should('exist');
       })
     });
   });
-  
+
   it.skip('should add a subcase and then delete it', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete subcase - ' + currentTimestamp();
@@ -83,7 +83,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
     cy.deleteSubcase();
   });
-  
+
   it.skip('should not be able to delete a subcase with agendaitems', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete subcase not possible - ' + currentTimestamp();
@@ -133,9 +133,9 @@ context('Subcase tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.deleteAgenda(null,true); // approved agenda A (and therefore the meeting)
   });
-  
+
 });
-  
+
 function currentTimestamp() {
   return Cypress.moment().unix();
 }
