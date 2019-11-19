@@ -60,7 +60,7 @@ export default Component.extend(isAuthenticatedMixin, {
       if(!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
         return;
       }
-       await this.newsletterService.sendCampaign(mailCampaign.campaignId).catch(() => {
+       await this.newsletterService.sendCampaign(mailCampaign.campaignId, agenda.id).catch(() => {
         this.globalError.showToast.perform(EmberObject.create({
           title: this.intl.t('warning-title'),
           message: this.intl.t('error-send-newsletter'),
