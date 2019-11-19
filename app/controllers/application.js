@@ -53,6 +53,8 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   async startCheckingAlert() {
     const dateOfToday = moment()
+      .seconds(0)
+      .milliseconds(0)
       .utc()
       .format();
     try {

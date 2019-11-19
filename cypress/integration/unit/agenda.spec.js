@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 context('Agenda tests', () => {
+  const testStart =  Cypress.moment();
 
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 20).set('minute', 20);
@@ -32,13 +33,13 @@ context('Agenda tests', () => {
   it('should set formal ok on all agendaitems and approve it', () => {
     cy.openAgendaForDate(agendaDate);
     cy.setFormalOkOnAllItems();
-    cy.approveDesignAgenda();   
+    cy.approveDesignAgenda();
   });
 
   it('should add a remark with documents to an agenda', () => {
       cy.openAgendaForDate(agendaDate);
-      cy.addRemarkToAgenda('Titel mededeling', 
-      'mededeling omschrijving', 
+      cy.addRemarkToAgenda('Titel mededeling',
+      'mededeling omschrijving',
       [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
   });
 
@@ -48,8 +49,6 @@ context('Agenda tests', () => {
   });
 
   after(() => {
-    cy.openAgendaForDate(agendaDate);
-    cy.deleteAgenda(); // design agenda
-    cy.deleteAgenda(true); // approved agenda A (and therefore the meeting)
-  });
+    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
+  })
 });
