@@ -75,6 +75,50 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   },
 
+  /* Begin lazy partial rendering
+
+     This implementation of lazy partial rendering uses an
+     IntersectionObserver to figure out if we're currently rendering.
+     Part of the content is hidden when we are not in view to easen
+     the browser's load and to substantially limit the amount of calls
+     happening to the backend on larger agenda's.
+   */
+  renderDetails: false,
+  didEnterViewport() {
+    this.set("renderDetails", true);
+  },
+  didExitViewport() {
+    this.set("renderDetails", false);
+  },
+  didInsertElement() {
+    try {
+      let options = {
+        root: document.querySelector("body"),
+        rootMargin: "5px",
+        threshold: [0,1]
+      };
+
+      let intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
+      this.set('intersectionObserver', intersectionObserver);
+      intersectionObserver.observe(this.element);
+    } catch(e) {
+      this.set('renderDetails', true);
+    }
+  },
+  willDestroyElement() {
+    this.get('intersectionObserver').unobserve(this.element);
+  },
+  checkElementPosition(entries) {
+    for( let entry of entries ) {
+      if( entry.isIntersecting ) {
+        this.didEnterViewport();
+      } else {
+        this.didExitViewport();
+      }
+    }
+  },
+  // End lazy partial rendering
+
   actions: {
     async setAction(item) {
       this.set('isLoading', true);
