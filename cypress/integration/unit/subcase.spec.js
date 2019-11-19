@@ -73,7 +73,7 @@ context('Subcase tests', () => {
     });
   });
 
-  it.skip('should add a subcase and then delete it', () => {
+  it('should add a subcase and then delete it', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete subcase - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
@@ -85,7 +85,7 @@ context('Subcase tests', () => {
     cy.deleteSubcase();
   });
 
-  it.skip('should not be able to delete a subcase with agendaitems', () => {
+  it('should not be able to delete a subcase with agendaitems', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete subcase not possible - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
