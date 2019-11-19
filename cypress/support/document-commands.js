@@ -44,9 +44,11 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
   cy.get('.vl-tab > a.vl-tab__link')
     .contains('Documenten')
     .should('be.visible')
-    .click();
+    .click()
+    .wait(2000); //Access-levels GET occured earlier, general wait instead
   if (alreadyHasDocs) {
-    cy.wait('@getDocuments')
+    // cy.wait('@getDocuments')
+    cy.wait(2000); //documents GET occured earlier, general wait instead
   }
 }
 
@@ -98,7 +100,7 @@ function addDocuments(files) {
 
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
   cy.wait('@createNewDocument', { timeout: 12000 });
-  cy.wait('@patchModel', { timeout: 12000 });
+  cy.wait('@patchModel', { timeout: 12000  + 2000 * files.length });
 }
 
 /**
