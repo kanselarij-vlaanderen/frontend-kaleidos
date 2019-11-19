@@ -31,12 +31,12 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
     });
   },
 
-  getClosestMeetingAndAgendaIdInTheFuture(date) {
+  getActiveAgendas(date) {
     return $.ajax({
       method: 'GET',
-      url: `/session-service/closestFutureMeeting?date=${date}`,
+      url: `/session-service/activeAgendas?date=${date}`,
     }).then((result) => {
-      return result.body.closestMeeting;
+      return result.body.agendas;
     });
   },
 

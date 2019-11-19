@@ -1,13 +1,14 @@
 import DS from 'ember-data';
 import EmberObject, { computed } from '@ember/object';
-import sortDocumentsByNameAndNumber from 'fe-redpencil/utils/sort-document-by-name-and-number';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
+import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
+import LinkedDocumentModelMixin from 'fe-redpencil/mixins/models/linked-document-model-mixin';
 
 let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
-export default Model.extend({
+export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   modelName: alias('constructor.modelName'),
   agendaService: inject(),
   addedAgendaitems: alias('agendaService.addedAgendaitems'),
@@ -81,66 +82,6 @@ export default Model.extend({
     }
   }),
 
-  documents: computed('documentVersions.@each', function() {
-    return PromiseArray.create({
-      promise: this.get('documentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
-
-          return this.store.query('document', {
-            filter: {
-              'document-versions': { id: documentVersionIds },
-            },
-            page : {
-              size: documentVersions.get('length'), // # documents will always be <= # document versions
-            },
-            include: 'document-versions,type',
-          }).then((documents) => {
-            // Sorting is done in the frontend to work around a Virtuoso issue, where
-            // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
-            // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return sortDocumentsByNameAndNumber(documents);
-          });
-        }
-      }),
-    });
-  }),
-
-  documentsLength: computed('documents.@each', function() {
-    return this.get('documents').then((documents) => {
-      return documents ? documents.get('length') : 0;
-    });
-  }),
-
-  linkedDocuments: computed('linkedDocumentVersions.@each', function() {
-    return PromiseArray.create({
-      promise: this.get('linkedDocumentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
-          return this.store.query('document', {
-            filter: {
-              'document-versions': { id: documentVersionIds },
-            },
-            include: 'type,document-versions',
-          }).then((documents) => {
-            // Sorting is done in the frontend to work around a Virtuoso issue, where
-            // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
-            // some items not being returned. By not having a sort parameter, this doesn't occur.
-            return sortDocumentsByNameAndNumber(documents);
-          });
-        }
-      })
-    });
-  }),
-
-  linkedDocumentsLength: computed('linkedDocuments', function() {
-    return PromiseObject.create({
-      promise: this.get('linkedDocuments').then((documents) => {
-        return documents.get('length');
-      })
-    });
-  }),
-
   nota: computed('documentVersions', function() {
     return PromiseObject.create({
       promise: this.get('documentVersions').then((documentVersions) => {
@@ -153,7 +94,7 @@ export default Model.extend({
                 'document-versions': { id: documentVersionIds },
                 type: { id: CONFIG.notaID },
               },
-              include: 'document-versions',
+              include: 'document-versions,type,document-versions.access-level',
             })
             .then((notas) => {
               return notas.get('firstObject');

@@ -2,8 +2,7 @@
   {{#if (is-pending subcase.approved)}}
     <div
       class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
-    >
-    </div>
+    ></div>
   {{else if (await subcase.approved)}}
     <div
       class="vl-badge vl-badge--icon vl-badge--success vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
@@ -23,21 +22,14 @@
     <div class="vlc-toolbar__item">
       <div class="vl-u-spacer-extended-bottom-s">
         {{#if (not (is-pending subcase))}}
-          {{#if isEditor}}
-            {{#link-to
-              "cases.case.subcases.subcase.overview"
-              (await subcase.case.id)
-              (await subcase.id)
-              class="vl-title vl-title--h6 max-width"
-            }}
-              {{await subcase.nameToShow}}
-            {{/link-to}}
-          {{else}}
-            <h6 class="vl-title vl-title--h6 max-width vl-u-text--capitalize">
-              {{t "in-function-of"}}
-              {{await subcase.subcaseName}}
-            </h6>
-          {{/if}}
+          {{#link-to
+            "cases.case.subcases.subcase.overview"
+            (await subcase.case.id)
+            (await subcase.id)
+            class="vl-title vl-title--h6 max-width"
+          }}
+            {{await subcase.nameToShow}}
+          {{/link-to}}
         {{/if}}
       </div>
       <div class="vlc-procedure-step__meta">

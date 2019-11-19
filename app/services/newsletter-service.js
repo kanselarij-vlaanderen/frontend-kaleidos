@@ -88,11 +88,10 @@ export default Service.extend({
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForSubcase(subcase, agendaitem, inNewsletter = false) {
-		const news = this.store.createRecord("newsletter-info", {
+		const news = this.store.createRecord('newsletter-info', {
 			subcase: await subcase,
-			created: moment().utc().toDate(),
-			title: await agendaitem.get('shortTitle'),
-      subtitle: await agendaitem.get('title'),
+      title: agendaitem ? await agendaitem.get('shortTitle') : await subcase.get('shortTitle'),
+      subtitle: agendaitem ? await agendaitem.get('title') : await subcase.get('title'),
       finished: false,
       inNewsletter: inNewsletter
 		});

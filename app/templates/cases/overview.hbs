@@ -48,8 +48,7 @@
       size=size
       sort=sort
       class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-      isLoading=isLoadingModel
-      onClickRow=(action "navigateToCase") as |table|
+      isLoading=isLoadingModel as |table|
     }}
       {{#table.content as |c|}}
         {{#c.header}}
@@ -77,7 +76,7 @@
           <th class="vl-data-table-col-1"></th>
         {{/c.header}}
         {{#c.body class="tr-hover" as |row|}}
-          <td>
+          <td onclick={{action "navigateToCase" row}}>
             <p>
               {{#if row.shortTitle}}
                 {{row.shortTitle}}
@@ -86,11 +85,11 @@
               {{/if}}
             </p>
           </td>
-          <td>
+          <td onclick={{action "navigateToCase" row}}>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           {{#if searchText}}
-            <td>
+            <td onclick={{action "navigateToCase" row}}>
               {{moment-format row.sessionDates "DD-MM-YYYY"}}
             </td>
           {{/if}}
