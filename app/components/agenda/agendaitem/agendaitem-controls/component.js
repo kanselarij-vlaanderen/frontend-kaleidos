@@ -52,7 +52,7 @@ export default Component.extend(isAuthenticatedMixin, {
         return false;
       } else if (agendaitemSubcase) {
         if (agendaitems && agendaitems.length > 1) {
-          return false
+          return false;
         } else {
           return true;
         }
@@ -62,8 +62,18 @@ export default Component.extend(isAuthenticatedMixin, {
     }),
 
   async deleteItem(agendaitem) {
-    const id = agendaitem.get('id')
-    await this.agendaService.deleteAgendaitem(agendaitem);
+    const id = await agendaitem.get('id');
+    const subcase = await agendaitem.get('subcase');
+    if(subcase) {
+      // Refresh the agendaitems for isDeletable
+      await subcase.hasMany('agendaitems').reload();
+    }
+    if (await this.get('isDeletable')) {
+      await this.agendaService.deleteAgendaitem(agendaitem);
+    } else {
+      const currentMeetingId = await this.get('currentMeeting.id');
+      await this.agendaService.deleteAgendaitemFromMeeting(agendaitem,currentMeetingId);
+    }
     this.set('sessionService.selectedAgendaItem', null);
     this.refreshRoute(id);
   },

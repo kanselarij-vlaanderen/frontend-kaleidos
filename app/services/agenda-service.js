@@ -5,9 +5,13 @@ import { notifyPropertyChange } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import EmberObject from '@ember/object';
 
-export default Service.extend(ModifiedMixin, {
+export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
   store: inject(),
+  globalError: inject(),
+  intl: inject(),
   addedDocuments: null,
   addedAgendaitems: null,
 
@@ -206,5 +210,43 @@ export default Service.extend(ModifiedMixin, {
       }
     }
     await itemToDelete.destroyRecord();
+  },
+
+  async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    if(this.isAdmin) {
+      const subcase = await itemToDelete.get('subcase');
+      const agendaitems = await subcase.get('agendaitems');
+
+      if(subcase){
+        await Promise.all(agendaitems.map(async item => { 
+          const agenda = await item.get('agenda');
+          const meeting = await agenda.get('createdFor');
+          const meetingId = await meeting.get('id');
+          if(meetingId === currentMeetingId) {
+            await item.destroyRecord();
+          }
+        }));
+        await subcase.hasMany('agendaitems').reload();
+        const agendaitemsFromSubcase = await subcase.get('agendaitems');
+        if(agendaitemsFromSubcase.length == 0) {
+          const phases = await subcase.get('phases');
+          await Promise.all(phases.map(async phase => {
+            await phase.destroyRecord();
+          }));
+        }
+        await subcase.set('requestedForMeeting', null);
+        await subcase.save();
+      } else {
+        await itemToDelete.destroyRecord();
+      }
+
+    } else {
+      this.globalError.showToast.perform(EmberObject.create({
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('action-not-allowed'),
+        type: 'error'
+      }));
+    }
   }
 });

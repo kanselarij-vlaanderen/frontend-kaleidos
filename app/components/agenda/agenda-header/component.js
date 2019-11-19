@@ -64,8 +64,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     const session = await this.currentSession;
     if (!agenda) {
       //TODO possible dead code, there is always an agenda ?
-      await this.sessionService.deleteSession(session);
-      return
+      return;
     }
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
     const agendaitems = await agenda.get('agendaitems');
