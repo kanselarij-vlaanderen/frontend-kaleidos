@@ -1,6 +1,6 @@
 {
   "actions": "Acties",
-  "active-agenda": "Actieve agenda",
+  "active-agenda": "Actieve agenda's",
   "add": "Toevoegen",
   "add-attachements": "Documenten opladen",
   "add-case": "Nieuw dossier aanmaken",
@@ -49,8 +49,8 @@
   "approve-small": "goedkeuren",
   "approved": "Goedgekeurd",
   "archive-case": "Dossier verwijderen",
-  "archive-subcase": "Procedurestap verwijderen",
-  "archive-subcase-confirmation": "Ben je zeker dat je de procedurestap wilt verwijderen?",
+  "delete-subcase": "Procedurestap verwijderen",
+  "delete-subcase-confirmation": "Ben je zeker dat je de procedurestap wilt verwijderen?",
   "at": "om",
   "attachements": "Bijlagen",
   "attendees": "Aanwezigen",
@@ -493,5 +493,6 @@
   "no-subcases-yet":"Er zijn nog geen andere procedurestappen binnen dit dossier.",
   "redirect-loading-text":"Even geduld.. We verwijzen u door naar de helppagina.",
   "send-test-campaign":"Bekijk nieuwsbrief",
-  "preview-loading-text":"De nieuwsbrief wordt geladen.. Even geduld aub."
+  "preview-loading-text":"De nieuwsbrief wordt geladen.. Even geduld aub.",
+  "no-active-agenda":"Er zijn nog geen actieve agenda's."
 }

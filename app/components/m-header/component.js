@@ -7,8 +7,8 @@ export default Component.extend(isAuthenticatedMixin, {
   isOc: null,
 
   actions: {
-    logout() {
-      this.currentAuthenticatedSession.logout();
+    async logout() {
+      await this.logoutUser();
     },
     setAction(option) {
       this.navigateToRoute(option);

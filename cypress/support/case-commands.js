@@ -5,6 +5,7 @@
 
 Cypress.Commands.add('createCase', createCase);
 Cypress.Commands.add('addSubcase', addSubcase);
+Cypress.Commands.add('openCase', openCase);
 
 //TODO open case method
 
@@ -15,7 +16,7 @@ Cypress.Commands.add('addSubcase', addSubcase);
  * Goes to the case overview and creates a new case
  *
  * @returns {Promise<String>} the id of the created case
- * 
+ *
  * @param {boolean} confidential Weather confidential is to be set to true
  * @param {String} shortTitle The title of the case
  */
@@ -40,7 +41,7 @@ function createCase(confidential, shortTitle) {
       cy.get('.vl-checkbox--switch__label').click();
     });
   }
-  
+
   // Set short title
   cy.get('@newCaseForm').eq(1).within(() => {
     cy.get('.vl-textarea').click().type(shortTitle);
@@ -65,7 +66,7 @@ function createCase(confidential, shortTitle) {
 
 /**
  * Creates a new subcase from an open case overview.
- * 
+ *
  * @returns {Promise<String>} the id of the created subcase
  *
  * @param {String} type Type of subcase, case sensitive
@@ -76,10 +77,12 @@ function createCase(confidential, shortTitle) {
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.route('GET', '/cases?*').as('getCases');
-  cy.route('GET', '/subcases?*').as('getSubcases');
+  // cy.route('GET', '/subcases?*').as('getSubcases');
   cy.route('POST', '/subcases').as('createNewSubcase');
+  // cy.route('POST', '/newsletter-infos').as('createNewsletter');
 
-  cy.wait('@getSubcases',{ timeout: 12000 });
+  // cy.wait('@getSubcases',{ timeout: 12000 });
+  cy.wait(2000);
 
   cy.get('.vlc-toolbar__item .vl-button')
     .contains('Procedurestap toevoegen')
@@ -119,7 +122,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
     cy.contains(stepName).click();
   });
-  
+
   cy.get('.vlc-toolbar').within(() => {
     cy.contains('Procedurestap aanmaken').click();
   });
@@ -130,9 +133,26 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   .then((res) => {
     subcaseId = res.responseBody.data.id;
   }).verifyAlertSuccess()
+  // cy.wait('@createNewsletter', { timeout: 20000 })
   .then(() => {
     return new Cypress.Promise((resolve) => {
       resolve(subcaseId);
+    });
+  });
+}
+
+/**
+ * Navigates to the dossier route with page size 100 and opens the specified case if found
+ *
+ * @param {String} caseTitle The title to search in the list of cases, should be unique
+ */
+function openCase(caseTitle) {
+  //TODO use search function instead ?
+  cy.visit('dossiers?size=100');
+  cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
+  cy.get('@rows').within(() => {
+    cy.contains(caseTitle).parents('tr').within(() => {
+      cy.get('.vl-vi-nav-right').click();
     });
   });
 }

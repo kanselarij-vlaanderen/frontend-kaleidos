@@ -9,6 +9,7 @@ Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
 Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
 Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
 Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
+Cypress.Commands.add('deleteSubcase', deleteSubcase);
 
 // ***********************************************
 // Functions
@@ -19,20 +20,20 @@ Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
  * @param {number} [index] The list index of the subcase to select, default 0
  */
 function openSubcase(index=0){
-  cy.route('GET', '/subcases?**').as('getSubcases');
-  cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
-  cy.wait('@getSubcases', { timeout: 12000 });
+  // cy.route('GET', '/subcases?**').as('getSubcases');
+  // cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
+  // cy.wait('@getSubcases', { timeout: 12000 });
   cy.get('.vlc-procedure-step').as('subcasesList');
   cy.get('@subcasesList').eq(index).within(() => {
     cy.get('.vl-title').click();
   })
-  cy.wait('@getCaseSubcases', { timeout: 12000 });
+  // cy.wait('@getCaseSubcases', { timeout: 12000 });
 }
 
 /**
  * Changes the subcase access levels and titles when used in the subcase view (/dossiers/..id../overzicht)
  * shortTitle is required to find the dom element
- * 
+ *
  * @param {boolean} isRemark - Is this a subcase of type remark
  * @param {string} shortTitle - Current title of the subcase (same as case title unless already renamed)
  * @param {boolean} [confidentialityChange] -Will change the current confidentiality if true
@@ -57,7 +58,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
     cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
       cy.contains(accessLevel).click();
     });
-    
+
   }
 
   cy.get('@subcaseAccessLevel').within(() => {
@@ -98,9 +99,9 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
 
 /**
  * Changes the themes of a sucase when used in the subcase view (/dossiers/..id../overzicht)
- * 
- * @param {Array<Number|String>} themes - An array of theme names that must match exactly or an array of numbers that correspond to the checkboxes in themes 
- * 
+ *
+ * @param {Array<Number|String>} themes - An array of theme names that must match exactly or an array of numbers that correspond to the checkboxes in themes
+ *
  */
 function addSubcaseThemes(themes) {
   cy.route('GET', '/themes').as('getThemes');
@@ -117,7 +118,7 @@ function addSubcaseThemes(themes) {
       } else {
         cy.get('.vl-checkbox').eq(element).click();
       }
-      
+
     });
     cy.get('.vl-action-group > .vl-button')
       .contains('Opslaan')
@@ -126,14 +127,14 @@ function addSubcaseThemes(themes) {
   cy.wait('@patchSubcase', { timeout: 20000 });
 }
 
-//TODO use arrays of fields and domains, search on mandatee name 
+//TODO use arrays of fields and domains, search on mandatee name
 /**
  * Adds a mandatees with field and domain to a sucase when used in the subcase view (/dossiers/..id../overzicht)
- * 
- * @param {Number} mandatees - The list index of the mandatee 
- * @param {Number} fieldNumber - The list index of the field 
- * @param {Number} domainNumber - The list index of the domain 
- * 
+ *
+ * @param {Number} mandatees - The list index of the mandatee
+ * @param {Number} fieldNumber - The list index of the field
+ * @param {Number} domainNumber - The list index of the domain
+ *
  */
 function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
   cy.route('GET', '/mandatees?**').as('getMandatees');
@@ -191,6 +192,21 @@ function proposeSubcaseForAgenda (agendaDate) {
   cy.wait('@patchAgenda', { timeout: 12000 });
   cy.wait('@patchSubcase', { timeout: 12000 });
   cy.wait('@createSubcasePhase', { timeout: 12000 });
+}
+
+function deleteSubcase() {
+  cy.route('DELETE', '/subcases/**').as('deleteSubcase');
+  cy.get('.vl-button--icon-before')
+    .contains('Acties')
+    .click();
+  cy.get('.vl-popover__link-list__item > .vl-link')
+    .contains('Procedurestap verwijderen')
+    .click()
+
+  cy.get('.vl-modal-dialog').as('dialog').within(() => {
+    cy.get('button').contains('Procedurestap verwijderen').click();
+  })
+  cy.wait('@deleteSubcase', { timeout: 20000 });
 }
 
 /**

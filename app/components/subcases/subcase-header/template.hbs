@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="vlc-toolbar__right">
-    <div class="vlc-toolbar__item">
+    {{#if isEditor}}<div class="vlc-toolbar__item">
       {{#if (or
               (is-pending subcase.requestedForMeeting)
               (is-pending subcase.hasAgendaItem)
@@ -89,44 +89,53 @@
           placement="bottom" as |attacher|
         }}
           <ul class="vl-popover__link-list">
-            {{#if (not await subcase.isArchived)}}
-              {{#if (not await subcase.hasAgendaItem)}}
-                  <li class="vl-popover__link-list__item">
-                      <a
-                              class="vl-link vl-link--block"
-                        {{action attacher.hide}}
-                        {{action "requestArchiveSubcase"}}
-                      >
-                        {{t "archive-subcase"}}
-                      </a>
-                  </li>
-              {{/if}}
-            {{else}}
+            {{#if
+              (and
+                (not (await subcase.requestedForMeeting))
+                (not (await subcase.hasAgendaItem))
+                (not (await subcase.isPostponed))
+                (not isAssigning)
+                (not isAssigningToOtherAgenda)
+              )
+            }}
+              {{#if (not await subcase.isArchived)}}
                 <li class="vl-popover__link-list__item">
-                    <a
-                            class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "unarchiveSubcase" subcase}}
-                    >
-                      {{t "unarchive-subcase"}}
-                    </a>
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "requestDeleteSubcase"}}
+                  >
+                    {{t "delete-subcase"}}
+                  </a>
                 </li>
-            {{/if}}
-              <li class="vl-popover__link-list__item">
-              {{#if (not await subcase.concluded)}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action attacher.hide}}
-                  {{action "closeSubcase" subcase}}
-                >
-                  {{t "close-subcase"}}
-                </a>
+              {{else}}
+                <li class="vl-popover__link-list__item">
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "unarchiveSubcase" subcase}}
+                  >
+                    {{t "unarchive-subcase"}}
+                  </a>
+                </li>
               {{/if}}
-            </li>
-          </ul>
-        {{/attach-popover}}
-      </button>
-    </div>
+              {{/if}}
+                <li class="vl-popover__link-list__item">
+                {{#if (not await subcase.concluded)}}
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "closeSubcase" subcase}}
+                  >
+                    {{t "close-subcase"}}
+                  </a>
+                {{/if}}
+              </li>
+            </ul>
+          {{/attach-popover}}
+        </button>
+      </div>
+    {{/if}}
   </div>
 </div>
 {{#if isAssigningToOtherAgenda}}
@@ -143,23 +152,23 @@
     }}
   {{/web-components/vl-modal}}
 {{/if}}
-{{#if isArchivingSubcase}}
+{{#if isDeletingSubcase}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "archive-subcase")
-    closeModal=(action "cancelArchiveSubcase")
+    title=(t "delete-subcase")
+    closeModal=(action "cancelDeleteSubcase")
   }}
     <div
       class="vl-spacer-box vl-u-spacer-extended-top-l vl-u-spacer-extended-bottom-l"
     >
       {{web-components/vl-alert
-        title="Opgelet!"
-        message=(t "archive-subcase-confirmation")
+        title=(t "warning-title")
+        message=(t "delete-subcase-confirmation")
         type="danger"
       }}
     </div>
-    <button class="vl-button" {{action "archiveSubcase" subcase}}>
-      {{t "archive-subcase"}}
+    <button class="vl-button" {{action "deleteSubcase" subcase}}>
+      {{t "delete-subcase"}}
     </button>
   {{/web-components/vl-modal}}
 {{/if}}

@@ -11,9 +11,7 @@ export default Mixin.create({
 	user: alias('currentAuthenticatedSession.userContent'),
 	role: alias('currentAuthenticatedSession.userRole'),
 
-	actions: {
-		logoutUser() {
-			this.currentAuthenticatedSession.logout();
-		}
+	async logoutUser() {
+		await this.currentAuthenticatedSession.logout();
 	}
 });

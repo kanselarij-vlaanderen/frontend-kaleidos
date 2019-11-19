@@ -2,6 +2,8 @@
 /// <reference types="Cypress" />
 
 context('Full test', () => {
+  const testStart =  Cypress.moment();
+
   let testId;
 
   before(() => {
@@ -10,7 +12,7 @@ context('Full test', () => {
   });
 
   it('Scenario where a complete agenda is created', () => {
-    testId = 'testId=' + currentTimestamp() + ': '
+    testId = 'testId=' + currentTimestamp() + ': ';
 
     //#region routes to be reused
     cy.route('GET', '/cases?**').as('getCases');
@@ -50,13 +52,6 @@ context('Full test', () => {
     cy.createCase(false, case_1_TitleShort);
     cy.addSubcase(type_1,newSubcase_1_TitleShort,subcase_1_TitleLong, subcase_1_Type, subcase_1_Name);
     cy.openSubcase(0);
-    
-    // cy.wait('@getSubcases', { timeout: 12000 });
-    // cy.get('.vlc-procedure-step').as('subcasesList');
-    // cy.get('@subcasesList').eq(0).within(() => {
-    //   cy.get('.vl-title').click();
-    // })
-    // cy.wait('@getCaseSubcases', { timeout: 12000 });
 
     cy.changeSubcaseAccessLevel(false, case_1_TitleShort, true, 'Intern Overheid');
     cy.addSubcaseThemes([0, 1, 5, 10, 15, 20]);
@@ -111,36 +106,31 @@ context('Full test', () => {
       cy.verifyAlertSuccess();
     });
 
-    cy.openSubcase();   
+    cy.openSubcase();
     cy.changeSubcaseAccessLevel(true, caseTitle_3_Short, false, 'Intern Overheid');
     cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
     //#endregion
-    
+
     //#region check and approve the agenda > A
     cy.openAgendaForDate(agendaDate);
-    
+
     cy.setFormalOkOnAllItems();
-    
+
     cy.approveCoAgendaitem(case_2_TitleShort);
 
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
-    
-    cy.addRemarkToAgenda('Titel mededeling', 
-      'mededeling omschrijving', 
+
+    cy.addRemarkToAgenda('Titel mededeling',
+      'mededeling omschrijving',
       [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
     cy.addAgendaitemToAgenda('Cypress', false);
     cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();
     //#endregion
-
-    //TODO Clean up data, implement db restore after test completed ?
-    cy.openAgendaForDate(agendaDate);
-    cy.deleteAgenda();
-    cy.deleteAgenda(null, true);
 
     //#endregion
 
@@ -163,20 +153,12 @@ context('Full test', () => {
 
   });
 
+  after(() => {
+    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
+  })
 
 });
 
-
-
-// const generateRandomId = (amount)=>{
-//   let chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
-//   let string = '';
-//   for(let i=0; i<amount; i++){
-//       string += chars[Math.floor(Math.random() * chars.length)];
-//   }
-//   return string;
-// }
-
-const currentTimestamp = () => {
+function currentTimestamp() {
   return Cypress.moment().unix();
 }
