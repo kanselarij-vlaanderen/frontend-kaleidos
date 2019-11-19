@@ -23,7 +23,6 @@ context('Subcase tests', () => {
   });
 
   it('should open an existing case and add a subcase', () => {
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
 
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
@@ -60,6 +59,7 @@ context('Subcase tests', () => {
     });
 
     cy.openAgendaForDate(agendaDate);
+    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.contains(SubcaseTitleShort).click();
     cy.get('.vlc-panel-layout__main-content').within(() => {
       cy.wait('@getCaseSubcases');
@@ -102,6 +102,31 @@ context('Subcase tests', () => {
       .contains('Procedurestap verwijderen')
       .should("not.exist");
     });
+
+  it('should be able to open a subcase with user profile: Minister', () => {
+    cy.route('GET', '/subcases/**/document-versions').as('getSubcaseDocuments');
+    cy.route('GET', '/subcases/**/linked-document-versions').as('getSubcaseLinkedDocuments');
+    const type = 'Nota';
+    const SubcaseTitleShort = 'Cypress test: Non-editor profiles can open subcase - ' + currentTimestamp();
+    const subcaseTitleLong = 'Cypress test voor het kunnen bekijken van een procedurestap door een ander profiel dan "editor" maar mag geen wijzigingen kunnen doen';
+    const subcaseType = 'In voorbereiding';
+    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    cy.openCase(caseTitle);
+    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.logout();
+    cy.login('Minister');
+    cy.openCase(caseTitle);
+    cy.openSubcase(0);
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Acties').should('not.exist');
+    cy.contains('Indienen voor agendering').should('not.exist');
+    cy.clickReverseTab('Documenten');
+    cy.wait('@getSubcaseDocuments');
+    cy.wait('@getSubcaseLinkedDocuments');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Documenten toevoegen').should('not.exist');
+    cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
+  });
 
   after(() => {
     cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
