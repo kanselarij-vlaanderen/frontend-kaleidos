@@ -11,7 +11,8 @@
           size=size
           sort=sort
           enableSizes=true
-          isLoading=isLoadingModel as |table|
+          isLoading=isLoadingModel
+          onClickRow=(action "navigateToNewsletter") as |table|
         }}
           {{#table.content as |c|}}
             {{#c.header}}
@@ -21,17 +22,21 @@
                 field="planned-start"
                 label=(t "newsletter")
               }}
-              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable">
-              <!--TODO: should sort on field agendas but does not return all 10 results-->
+              <th
+                class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
+              >
+                <!--TODO: should sort on field agendas but does not return all 10 results-->
                 {{concat (t "newsletter") " " (t "sent-at")}}
               </th>
-              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable" >
-              <!--TODO: should sort on latest modified agenda-->
+              <th
+                class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
+              >
+                <!--TODO: should sort on latest modified agenda-->
                 {{t "latest-modified"}}
               </th>
               <th class="vl-data-table-col-1"></th>
             {{/c.header}}
-            {{#c.body as |meeting|}}
+            {{#c.body class="tr-hover" as |meeting|}}
               <td>
                 {{#if (is-pending meeting)}}
                   <div
@@ -79,12 +84,14 @@
                 {{/if}}
               </td>
               <td class="vl-u-align-center">
-                <button
+                {{#link-to
+                  "print-overviews.newsletter.agendaitems"
+                  meeting.id
+                  meeting.latestAgenda.id
                   class="vl-button vl-button--link vl-button--icon"
-                  {{action "navigateToNewsletter" meeting}}
-                >
+                }}
                   <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-                </button>
+                {{/link-to}}
               </td>
             {{/c.body}}
           {{/table.content}}

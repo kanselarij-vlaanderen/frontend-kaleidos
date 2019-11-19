@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="vlc-toolbar__right">
-    <div class="vlc-toolbar__item">
+    {{#if isEditor}}<div class="vlc-toolbar__item">
       {{#if (or
               (is-pending subcase.requestedForMeeting)
               (is-pending subcase.hasAgendaItem)
@@ -89,7 +89,7 @@
           placement="bottom" as |attacher|
         }}
           <ul class="vl-popover__link-list">
-            {{#if 
+            {{#if
               (and
                 (not (await subcase.requestedForMeeting))
                 (not (await subcase.hasAgendaItem))
@@ -119,22 +119,23 @@
                   </a>
                 </li>
               {{/if}}
-            {{/if}}
-              <li class="vl-popover__link-list__item">
-              {{#if (not await subcase.concluded)}}
-                <a
-                  class="vl-link vl-link--block"
-                  {{action attacher.hide}}
-                  {{action "closeSubcase" subcase}}
-                >
-                  {{t "close-subcase"}}
-                </a>
               {{/if}}
-            </li>
-          </ul>
-        {{/attach-popover}}
-      </button>
-    </div>
+                <li class="vl-popover__link-list__item">
+                {{#if (not await subcase.concluded)}}
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "closeSubcase" subcase}}
+                  >
+                    {{t "close-subcase"}}
+                  </a>
+                {{/if}}
+              </li>
+            </ul>
+          {{/attach-popover}}
+        </button>
+      </div>
+    {{/if}}
   </div>
 </div>
 {{#if isAssigningToOtherAgenda}}
