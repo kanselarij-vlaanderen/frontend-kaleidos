@@ -6,6 +6,6 @@ export default Route.extend(AuthenticatedRouteMixin, AgendaitemTableRouteMixin, 
   authenticationRoute: 'login',
   routeNamePrefix: 'newsletter',
   sort: 'priority',
-  include: 'subcase',
+  include: 'subcase,subcase.newsletter-info',
   shouldFilterRemarks: true,
 });

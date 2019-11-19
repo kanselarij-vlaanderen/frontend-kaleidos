@@ -3,6 +3,7 @@
 
 
 context('Subcase tests', () => {
+  const testStart =  Cypress.moment();
 
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
@@ -128,12 +129,8 @@ context('Subcase tests', () => {
   });
 
   after(() => {
-    cy.logout();
-    cy.login('Admin');
-    cy.openAgendaForDate(agendaDate);
-    cy.deleteAgenda(null,true); // approved agenda A (and therefore the meeting)
-  });
-
+    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
+  })
 });
 
 function currentTimestamp() {
