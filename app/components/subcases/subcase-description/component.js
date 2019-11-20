@@ -4,7 +4,6 @@ import { getCachedProperty, EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/
 import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject } from '@ember/service';
-import DS from 'ember-data';
 
 export default Component.extend(isAuthenticatedMixin, EditAgendaitemOrSubcase, {
 	store:inject(),

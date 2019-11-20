@@ -50,6 +50,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       if (designAgenda.get('name') === "Ontwerpagenda") {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
+      await subcase.hasMany('agendaitems').reload();
       this.set('isAssigning', false);
     },
     proposeForOtherAgenda(subcase) {
