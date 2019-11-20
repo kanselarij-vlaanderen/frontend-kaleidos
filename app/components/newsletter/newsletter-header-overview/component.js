@@ -40,6 +40,7 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     async deleteCampaign() {
+      this.set('isLoading', true);
       const agenda = await this.get('agenda');
       const meeting = await agenda.get('createdFor');
       const mailCampaign = await meeting.get('mailCampaign');
@@ -50,9 +51,11 @@ export default Component.extend(isAuthenticatedMixin, {
       meeting.set('mailCampaign', null);
       this.set('mailCampaign', null);
       meeting.save();
+      this.set('isLoading', false);
     },
 
     async sendCampaign() {
+      this.set('isLoading', true);
       const agenda = await this.get('agenda');
       const meeting = await agenda.get('createdFor');
       const mailCampaign = await meeting.get('mailCampaign');
@@ -60,6 +63,7 @@ export default Component.extend(isAuthenticatedMixin, {
       if(!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
         return;
       }
+      
        await this.newsletterService.sendCampaign(mailCampaign.campaignId, agenda.id).catch(() => {
         this.globalError.showToast.perform(EmberObject.create({
           title: this.intl.t('warning-title'),
@@ -67,6 +71,7 @@ export default Component.extend(isAuthenticatedMixin, {
           type: 'error'
         }));
       });
+      this.set('isLoading', false);
       mailCampaign.set('sentAt', moment().utc().toDate());
       await mailCampaign.save();
       await meeting.belongsTo('mailCampaign').reload();
