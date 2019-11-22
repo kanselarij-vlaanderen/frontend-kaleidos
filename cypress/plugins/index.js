@@ -13,18 +13,8 @@
 
 //Do not convert to an ES6 module (suggested by extensions), not supported!
 const { SparqlClient } = require('sparql-client-2');
-const fs = require('fs-extra');
-const path = require('path');
-
-function getConfigurationByFile (file) {
-  const pathToConfigFile = path.resolve('./cypress', 'config', `${file}.json`);
-
-  return fs.readJson(pathToConfigFile)
-}
 
 module.exports = (on, config) => {
-  const file = config.env.configFile || 'development';
-
   on('task', {
     async deleteProgress({date, time}) {
       return new SparqlClient('http://localhost:8890/sparql')
@@ -34,7 +24,7 @@ module.exports = (on, config) => {
     }
   });
 
-  return getConfigurationByFile(file)
+  return config
 };
 
 const deleteQuery = (date, time) => `
