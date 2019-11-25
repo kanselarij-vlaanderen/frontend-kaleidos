@@ -133,6 +133,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   .then((res) => {
     subcaseId = res.responseBody.data.id;
   }).verifyAlertSuccess()
+  .wait(2000) // post to newsletter-info
   // cy.wait('@createNewsletter', { timeout: 20000 })
   .then(() => {
     return new Cypress.Promise((resolve) => {
