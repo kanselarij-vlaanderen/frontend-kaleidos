@@ -121,16 +121,11 @@ export default Component.extend(isAuthenticatedMixin, {
 
   actions: {
     async setAction(item) {
-      this.set('isLoading', true);
+      // this.set('isLoading', true);
       const uri = item.get('uri');
       this.agendaitem.set('formallyOk', uri);
-      const agenda = await this.agendaitem.get('agenda');
       this.agendaitem
         .save()
-        .then(() => {
-          this.set('isLoading', false);
-          agenda.notifyPropertyChange('agendaitems');
-        })
         .catch((error) => {
           this.globalError.handleError(error);
         });
