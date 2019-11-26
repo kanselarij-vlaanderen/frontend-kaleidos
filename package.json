@@ -71,6 +71,7 @@
     "ember-responsive": "^3.0.5",
     "ember-sortable": "1.12.1",
     "ember-source": "~3.6.0",
+    "ember-welcome-page": "^3.2.0",
     "eslint-plugin-ember": "^5.2.0",
     "eslint-plugin-react-hooks": "^1.6.0",
     "jquery-datetimepicker": "^2.5.20",
