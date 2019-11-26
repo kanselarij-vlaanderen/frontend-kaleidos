@@ -174,7 +174,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     const latestAgendaItems = await latestAgenda.get('agendaitems');
     const agendaitems = await this.agendaitems;
 
-    return latestAgendaItems.find(item => agendaitems.includes(item))
+    return latestAgendaItems.find(item => agendaitems.includes(item));
   }),
 
   onAgendaInfo: computed('latestMeeting', async function() {

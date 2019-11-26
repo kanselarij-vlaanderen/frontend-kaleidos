@@ -104,8 +104,6 @@ context('Subcase tests', () => {
     });
 
   it('should be able to open a subcase with user profile: Minister', () => {
-    cy.route('GET', '/subcases/**/document-versions').as('getSubcaseDocuments');
-    cy.route('GET', '/subcases/**/linked-document-versions').as('getSubcaseLinkedDocuments');
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: Non-editor profiles can open subcase - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het kunnen bekijken van een procedurestap door een ander profiel dan "editor" maar mag geen wijzigingen kunnen doen';
@@ -117,15 +115,40 @@ context('Subcase tests', () => {
     cy.login('Minister');
     cy.openCase(caseTitle);
     cy.openSubcase(0);
+    cy.url().should('contain', '/deeldossiers/')
+    cy.url().should('contain', '/overzicht');
     cy.contains('Wijzigen').should('not.exist');
     cy.contains('Acties').should('not.exist');
     cy.contains('Indienen voor agendering').should('not.exist');
     cy.clickReverseTab('Documenten');
-    cy.wait('@getSubcaseDocuments');
-    cy.wait('@getSubcaseLinkedDocuments');
     cy.contains('Wijzigen').should('not.exist');
     cy.contains('Documenten toevoegen').should('not.exist');
     cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
+  });
+
+  it('Clickable link should go to the agenda right after proposing to agenda', () => {
+    const type = 'Nota';
+    const SubcaseTitleShort = 'Cypress test: Link to agenda item ok - ' + currentTimestamp();
+    const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap' ;
+    const subcaseType = 'In voorbereiding';
+    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    cy.openCase(caseTitle);
+    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.openSubcase(0);
+    cy.proposeSubcaseForAgenda(agendaDate);
+    cy.route('GET', 'agendaitems?filter**').as('getFilteredAgendaitem');
+    cy.wait('@getFilteredAgendaitem');
+
+    const dateFormat = Cypress.moment(agendaDate).format('DD.MM.YYYY');
+
+    cy.get('.vl-description-data').within(() => {
+      cy.get('.vl-description-data__value').as('descriptionValue');
+      cy.get('@descriptionValue').eq(2).contains(dateFormat);
+      cy.get('@descriptionValue').eq(2).get('.vl-link').click();
+    });
+    cy.url().should('contain', '/agenda/');
+    cy.url().should('contain', '/agendapunten/');
+    cy.url().should('not.contain', '/dossier/');
   });
 
   after(() => {
