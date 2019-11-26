@@ -54,10 +54,10 @@ export default Service.extend({
     });
   },
 
-  sendCampaign(id) {
+  sendCampaign(id, agendaId) {
     return $.ajax({
       method: 'POST',
-      url: `/newsletter/sendCampaign/${id}`,
+      url: `/newsletter/sendCampaign/${id}?agendaId=${agendaId}`,
       error: () => {
         this.globalError.showToast.perform(
           EmberObject.create({
