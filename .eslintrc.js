@@ -17,7 +17,12 @@ module.exports = {
   rules: {
     'ember/no-on-calls-in-components': 'off',
     "ember/jquery-ember-run": 'off',
-    "ember/avoid-leaking-state-in-ember-objects": 'off'
+    "ember/avoid-leaking-state-in-ember-objects": 'off',
+    "no-invalid-interactive": 'off',
+    "no-mixed-spaces-and-tabs": 'off',
+    "ember/use-brace-expansion": "off",
+    "table-groups":"off",
+    "no-triple-curlies":"off"
   },
   overrides: [
     // node files
@@ -43,7 +48,11 @@ module.exports = {
         'ember/no-on-calls-in-components': 'off',
         "attribute-indentation": 'off',
         "block-indentation": 'off',
-        "no-invalid-interactive": 'off'
+        "no-invalid-interactive": 'off',
+        "no-mixed-spaces-and-tabs": 'off',
+        "ember/use-brace-expansion": "off",
+        "table-groups":"off",
+        "no-triple-curlies":"off"
       },
     }
   ]
