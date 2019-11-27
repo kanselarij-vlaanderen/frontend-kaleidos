@@ -18,7 +18,7 @@
       {{await subcase.subcaseName}}
     </p>
     <ul class="vlc-status-timeline">
-      {{#each (await subcase.sortedPhases) as |phase|}}
+      {{#each subcase.sortedPhases as |phase|}}
         {{#if (not (await subcase.isOC))}}
           <li
             class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
@@ -31,7 +31,7 @@
                 {{subcase-timeline-item-text
                   label=(await phase.code.label)
                   phase=phase
-                  subcase=subcase
+                  onAgendaInfo=(await subcase.onAgendaInfo)
                 }}
               </div>
             {{/if}}
@@ -93,7 +93,7 @@
                           (query-params selectedAgenda=(await latestAgendaId))
                           class="vl-link"
                   }}
-                    {{moment-format (await subcase.onAgendaInfo)}}
+                    {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
                   {{/link-to}}
                 {{else}}
                   {{t "not-yet-on-agenda"}}
