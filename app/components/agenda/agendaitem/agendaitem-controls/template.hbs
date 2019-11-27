@@ -1,13 +1,13 @@
-{{#if (eq currentAgenda.name "Ontwerpagenda") }}
+{{#if (eq currentAgenda.name "Ontwerpagenda")}}
   {{#if (and (not (is-pending isDeletable)) (not (is-pending isPostPonable)))}}
     {{#if (await isPostPonable)}}
       {{#if (or agendaitem.retracted (await agendaitem.postponedTo))}}
-          <button
-                  class="vl-button vl-button--tertiary vl-button--narrow"
-            {{action "advanceAgendaitem"}}
-          >
-            {{t "not-postpone"}}
-          </button>
+        <button
+          class="vl-button vl-button--tertiary vl-button--narrow"
+          {{action "advanceAgendaitem"}}
+        >
+          {{t "not-postpone"}}
+        </button>
       {{else}}
           <button class="vl-button vl-button--tertiary vl-button--narrow">
             {{t "postpone"}}
@@ -57,7 +57,7 @@
         </button>
     {{/if}}
   {{else}}
-      <div class="vl-loader"></div>
+    <div class="vl-loader"></div>
   {{/if}}
   {{#if isVerifying}}
     {{web-components/vl-modal-verify
