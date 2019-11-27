@@ -60,6 +60,28 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       });
   },
 
+  async deleteAgenda(agenda) {
+    const session = await this.currentSession;
+    if (!agenda) {
+      //TODO possible dead code, there is always an agenda ?
+      return;
+    }
+    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
+    const agendaitems = await agenda.get('agendaitems');
+    if(agendaitems){
+      await Promise.all(agendaitems.map(async item => await this.agendaService.deleteAgendaitem(item)));
+    }
+    await agenda.destroyRecord();
+    if (previousAgenda) {
+      this.set('sessionService.currentAgenda', previousAgenda);
+      this.router.transitionTo('agenda.agendaitems.index', session.id, {
+        queryParams: { selectedAgenda: previousAgenda.get('id') }
+      });
+    } else {
+      await this.sessionService.deleteSession(session);
+    }
+  },
+
   actions: {
     navigateToNotes() {
       const { currentSession, currentAgenda } = this;
@@ -110,7 +132,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
     async lockAgenda() {
       const agendas = await this.get('agendas');
-      const draft = agendas
+      const designAgenda = agendas
         .filter((agenda) => agenda.name === 'Ontwerpagenda')
         .sortBy('-name')
         .get('firstObject');
@@ -119,15 +141,12 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         .sortBy('-name')
         .get('firstObject');
 
-      if (draft) {
-        await draft.destroyRecord();
-
+      if (designAgenda) {
         const session = await lastAgenda.get('createdFor');
         session.set('isFinal', true);
         session.set('agenda', lastAgenda);
         await session.save();
-        this.set('sessionService.currentAgenda', lastAgenda);
-        this.reloadRoute();
+        await this.deleteAgenda(designAgenda);
       }
     },
 
@@ -172,26 +191,8 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       );
     },
 
-    async deleteDesignAgenda(agenda) {
-      const session = await this.currentSession;
-      if (!agenda) {
-        //TODO possible dead code, there is always an agenda ?
-        await this.sessionService.deleteSession(session);
-        return
-      }
-      const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
-      const agendaitems = await agenda.get('agendaitems');
-
-      await Promise.all(agendaitems.map(item => this.agendaService.deleteAgendaitemFromAgenda(item)));
-      await agenda.destroyRecord();
-      if (previousAgenda) {
-        this.set('sessionService.currentAgenda', previousAgenda);
-        this.router.transitionTo('agenda.agendaitems.index', session.id, {
-          queryParams: { selectedAgenda: previousAgenda.get('id') }
-        });
-      } else {
-        await this.sessionService.deleteSession(session);
-      }
+    async deleteAgenda(agenda) {
+      await this.deleteAgenda(agenda);
     },
 
     async createNewDesignAgenda() {

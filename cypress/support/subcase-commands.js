@@ -23,6 +23,7 @@ function openSubcase(index=0){
   // cy.route('GET', '/subcases?**').as('getSubcases');
   // cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
   // cy.wait('@getSubcases', { timeout: 12000 });
+  cy.wait(2000); //link does not always work (not visible or click does nothing unless we wait)
   cy.get('.vlc-procedure-step').as('subcasesList');
   cy.get('@subcasesList').eq(index).within(() => {
     cy.wait(1000); //sorry, link is not loaded most of the time

@@ -79,7 +79,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.route('GET', '/cases?*').as('getCases');
   // cy.route('GET', '/subcases?*').as('getSubcases');
   cy.route('POST', '/subcases').as('createNewSubcase');
-  // cy.route('POST', '/newsletter-infos').as('createNewsletter');
+  cy.route('POST', '/newsletter-infos').as('createNewsletter');
 
   // cy.wait('@getSubcases',{ timeout: 12000 });
   cy.wait(2000);
@@ -129,12 +129,11 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   let subcaseId;
 
-  cy.wait('@createNewSubcase', { timeout: 20000 })
+  cy.wait('@createNewSubcase', { timeout: 10000 })
   .then((res) => {
     subcaseId = res.responseBody.data.id;
   }).verifyAlertSuccess()
-  .wait(2000) // post to newsletter-info
-  // cy.wait('@createNewsletter', { timeout: 20000 })
+  cy.wait('@createNewsletter', { timeout: 10000 })
   .then(() => {
     return new Cypress.Promise((resolve) => {
       resolve(subcaseId);
