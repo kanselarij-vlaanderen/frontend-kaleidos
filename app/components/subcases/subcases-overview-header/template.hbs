@@ -77,6 +77,8 @@
     title=(t "create-subcase")
   }}
     {{cases/new-subcase
+      title=title
+      shortTitle=shortTitle
       case=(await model.case)
       closeModal=(action "close")
       refresh=(action "refresh")
