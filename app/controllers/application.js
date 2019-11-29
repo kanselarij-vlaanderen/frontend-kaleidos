@@ -4,7 +4,6 @@ import { alias } from '@ember/object/computed';
 import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import CONFIG from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 import moment from 'moment';
 import { later } from '@ember/runloop';
@@ -93,7 +92,7 @@ export default Controller.extend(isAuthenticatedMixin, {
       'session.isAuthenticated',
       function() {
         const { router } = this;
-        if (!router || !router.currentRouteName || !CONFIG.routesAllowed) {
+        if (!router || !router.currentRouteName) {
           return;
         }
         const currentRouteName = router.get('currentRouteName');
