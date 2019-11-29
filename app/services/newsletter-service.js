@@ -3,9 +3,9 @@ import { inject } from '@ember/service';
 import $ from 'jquery';
 import EmberObject from '@ember/object';
 import moment from 'moment';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Service.extend(AuthenticatedRouteMixin, {
+export default Service.extend(isAuthenticatedMixin, {
   store: inject(),
   globalError: inject(),
   intl: inject(),
