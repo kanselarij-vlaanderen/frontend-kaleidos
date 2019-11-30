@@ -64,7 +64,7 @@ Router.map(function() {
       this.route('overview', { path: '/klad' });
       this.route('loading', {path:'/laden'});
     });
-    this.route('loading'), { path: '/laden' };
+    this.route('loading', { path: '/laden' });
   });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker'});
   this.route('document-viewer', { path: '/document/:document_version_id' });

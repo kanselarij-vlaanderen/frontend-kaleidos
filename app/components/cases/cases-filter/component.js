@@ -21,7 +21,7 @@ export default Component.extend({
 			this.set('dateTo', moment(this.dateTo).toDate());
 		}
 	},
-	
+
 	searchTask: task(function* () {
 		yield timeout(600);
 		this.filter({

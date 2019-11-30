@@ -52,7 +52,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
      const subcases = await caseModel.subcases;
      await Promise.all(subcases.map(subcase => {
        subcase.set('isArchived', true);
-       return subcase.save()
+       return subcase.save();
      }));
      caseModel.save().then(() => {
        this.set('selectedCase', null);
@@ -66,7 +66,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       const subcases = await caze.subcases;
       await Promise.all(subcases.map(subcase => {
         subcase.set('isArchived', false);
-        return subcase.save()
+        return subcase.save();
       }));
       caze.save();
     },
