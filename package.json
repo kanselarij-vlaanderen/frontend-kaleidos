@@ -53,6 +53,7 @@
     "ember-click-outside": "^1.0.4",
     "ember-data": "~3.6.0",
     "ember-export-application-global": "^2.0.0",
+    "ember-fetch": "^7.0.0",
     "ember-file-upload": "^2.5.3",
     "ember-flatpickr": "^2.13.0",
     "ember-infinity": "^1.4.7",
