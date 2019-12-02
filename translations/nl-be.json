@@ -494,5 +494,9 @@
   "redirect-loading-text":"Even geduld.. We verwijzen u door naar de helppagina.",
   "send-test-campaign":"Bekijk nieuwsbrief",
   "preview-loading-text":"De nieuwsbrief wordt geladen.. Even geduld aub.",
-  "no-active-agenda":"Er zijn nog geen actieve agenda’s."
+  "no-active-agenda":"Er zijn nog geen actieve agenda’s.",
+  "filtered-agendas": "Deze data is gefilterd.",
+  "editing-agenda-overview": "U bent nu aan het bewerken. U kan de volgorde en de status van de mededelingen en nota's aanpassen. Wijzigingen worden onmiddellijk opgeslagen.",
+  "end-editing-overview": "Bewerken afsluiten",
+  "clear-filter": "Reset filter"
 }
