@@ -1,24 +1,6 @@
 import EmberObject from '@ember/object';
 
 export default EmberObject.create({
-  routesAllowed: [
-    'agenda.agendaitems.index',
-    'print-overviews.newsletter.agendaitems',
-    'print-overviews.newsletter.overview',
-    'print-overviews.decisions.agendaitems',
-    'print-overviews.decisions.overview',
-    'print-overviews.press-agenda.agendaitems',
-    'print-overviews.press-agenda.overview',
-    'print-overviews.notes.agendaitems',
-    'print-overviews.notes.overview',
-    'cases.case.subcases.overview',
-    'cases.case.subcases.subcase.overview',
-    'cases.case.subcases.subcase.documents',
-    'agenda.agendaitems.agendaitem',
-    'agenda.compare',
-    'agenda.agendaitems.documents',
-    'agenda.documents'
-  ],
   alphabet: [
     'A',
     'B',
@@ -137,6 +119,5 @@ export default EmberObject.create({
   ministerId:"1cc0710c-1b28-4e23-b3ff-399c8089bc71",
   kabinetId:"7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb",
   usersId:"450915b2-4c64-4b03-9caa-71180400f831",
-
   internRegeringAccessLevelId: "d335f7e3-aefd-4f93-81a2-1629c2edafa3"
 });

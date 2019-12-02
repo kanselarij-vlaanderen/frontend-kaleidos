@@ -81,7 +81,7 @@ export default Component.extend(isAuthenticatedMixin, {
      IntersectionObserver to figure out if we're currently rendering.
      Part of the content is hidden when we are not in view to easen
      the browser's load and to substantially limit the amount of calls
-     happening to the backend on larger agenda's.
+     happening to the backend on largerAgenda’s.
    */
   renderDetails: false,
   didEnterViewport() {
