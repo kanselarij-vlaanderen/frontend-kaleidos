@@ -1,11 +1,17 @@
 <form class="vl-form" onsubmit={{action "createSubCase"}}>
   <div class="vl-modal-dialog__content">
-    {{web-components/vl-radio-button-list
-      title=(t "subcase-type")
-      modelName="case-type"
-      selectedModel=remarkType
-      modelChanged=(action "typeChanged")
-    }}
+      <div class="vl-u-display-flex vl-u-flex-space-between vl-col-4-4">
+      {{web-components/vl-radio-button-list
+        title=(t "subcase-type")
+        modelName="case-type"
+        selectedModel=remarkType
+        modelChanged=(action "typeChanged")
+      }}
+          <div class="vl-action-group vl-action-group--align-right">
+              <button class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before" {{action "copyFullSubcase"}}>
+                  <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-copy-paste" aria-hidden="true"></i>{{t "clone-previous-subcase"}}</button>
+          </div>
+      </div>
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "name-subcase")}}
       {{textarea
