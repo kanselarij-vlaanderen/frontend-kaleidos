@@ -15,6 +15,7 @@ export function subcaseTimelineItemText(params, values) {
   const label = values.label;
   const phase = values.phase;
   const onAgendaInfo = values.onAgendaInfo;
+  const isPostponed = values.isPostponed;
   const formattedDate = formatDate(onAgendaInfo);
   const date = formatDate(phase.get("date"));
 
@@ -22,6 +23,9 @@ export function subcaseTimelineItemText(params, values) {
     case CONFIG.onAgendaLabel:
       return `Geagendeerd op de agenda van ${formattedDate}`;
     case CONFIG.decidedLabel:
+      if(isPostponed) {
+        return `Er is beslist om dit agendapunt uit te stellen.`;
+      }
       return `Beslist op de vergadering van ${formattedDate}`;
     case CONFIG.postponedLabel:
       return `Uitgesteld op de vergadering van ${formattedDate}`;
