@@ -1,4 +1,8 @@
+{{#if isEditingOverview}}
+  {{changes-alert message=(t "editing-agenda-overview") buttonText=(t "end-editing-overview") clearAction=(action "toggleIsEditingOverview")}}
+{{/if}}
 <div class="vlc-toolbar vlc-agenda-items-section-header">
+
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
@@ -6,6 +10,7 @@
       </h3>
     </div>
   </div>
+  {{#if (not isEditingOverview)}}
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
       <a
@@ -32,7 +37,9 @@
       {{/if}}
     </div>
   </div>
+  {{/if}}
 </div>
+
 {{#if (is-empty agendaitems)}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}

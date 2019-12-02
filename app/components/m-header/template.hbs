@@ -1,12 +1,9 @@
-<div
-  class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--no-padding vlc-navbar--bg-alt vlc-navbar--auto"
-  id="c-main-nav"
->
-  <div class="vlc-toolbar vlc-toolbar--auto">
+<div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--no-padding vlc-navbar--bg-alt vlc-navbar--auto" id="c-main-nav">
+  <div class="vlc-toolbar vlc-toolbar--auto c-slide-in-toolbar">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <ul class="vl-tabs vl-u-reset-margin">
-          <li class="vl-tab">
+          <!--<li class="vl-tab">
             {{#power-select
               options=options
               class="vl-tab__link vl-tab__link-header"
@@ -18,7 +15,7 @@
             }}
               {{t option.key}}
             {{/power-select}}
-          </li>
+          </li>-->
           <li class="vl-tab">
             {{#if isOc}}
               {{#link-to "oc.meetings" class="vl-tab__link"}}
@@ -79,6 +76,14 @@
       </div>
     </div>
     <div class="vlc-toolbar__right">
+        <div class="vlc-toolbar__right">
+          {{#if showEnvironmentName}}
+              <div class="c-environment">
+                {{environmentName}}
+                  Omgeving
+              </div>
+          {{/if}}
+        </div>
       <div class="vlc-toolbar__item">
         {{#if user}}
           <div class="vlc-user">
