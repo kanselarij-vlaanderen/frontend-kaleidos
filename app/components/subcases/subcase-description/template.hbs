@@ -29,9 +29,10 @@
             {{else}}
               <div class="vlc-status-timeline__text">
                 {{subcase-timeline-item-text
-                  label=(await phase.code.label)
-                  phase=phase
-                  onAgendaInfo=(await subcase.onAgendaInfo)
+                        label=(await phase.code.label)
+                        phase=phase
+                        onAgendaInfo=(await subcase.onAgendaInfo)
+                        isPostponed=(await subcase.isPostponed)
                 }}
               </div>
             {{/if}}
