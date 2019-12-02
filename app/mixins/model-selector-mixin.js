@@ -18,9 +18,9 @@ export default Mixin.create({
 	defaultSelected: null,
 	selectedItems: null,
 
-	class: computed('class', function () {
-		return this.class;
-	}),
+	// class: computed('class', function () {
+	// 	return this.class;
+	// }),
 
 	isLoadingData: computed('findAll.isRunning', 'searchTask.isRunning', function () {
 		if (this.findAll.isRunning) {
