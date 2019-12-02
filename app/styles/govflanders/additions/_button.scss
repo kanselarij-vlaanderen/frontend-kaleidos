@@ -39,3 +39,14 @@
     color: $action-color;
   }
 }
+
+.vl-button--reset {
+  background-color: #FFC515;
+  color:black;
+  cursor:pointer;
+  &:hover,
+  &:focus {
+    background: $orange-light;
+    color: $mine-shaft;
+  }
+}

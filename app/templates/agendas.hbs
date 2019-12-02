@@ -6,36 +6,6 @@
         <h1 class="vlc-page-header__title vlc-page-header__title--bordered">
           {{t "agenda-title"}}
         </h1>
-        <div class="vlc-page-header__sub">
-          <div class="vlc-toolbar vlc-toolbar--auto">
-            <div class="vlc-toolbar__left">
-              <div class="vlc-toolbar__item">
-                <ul class="vlc-tabs-reverse" role="tablist">
-                  <li class="vlc-tabs-reverse__item">
-                    {{#link-to
-                      "agendas.overview"
-                      class="vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
-                    }}
-                      {{t "active"}}
-                    {{/link-to}}
-                  </li>
-                  <li class="vlc-tabs-reverse__item">
-                   {{#link-to
-                      "agendas.history"
-                      (query-params page=0 to=null from=null)
-                      class="vlc-tabs-reverse__link"
-                      current-when="agendas.history"
-                      activeClass="vlc-tabs-reverse__link--active"
-                    }}
-                      {{t "history"}}
-                    {{/link-to}}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="vlc-toolbar__right">
         {{#if isEditor}}
