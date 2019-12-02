@@ -1,24 +1,6 @@
 import EmberObject from '@ember/object';
 
 export default EmberObject.create({
-  routesAllowed: [
-    'agenda.agendaitems.index',
-    'print-overviews.newsletter.agendaitems',
-    'print-overviews.newsletter.overview',
-    'print-overviews.decisions.agendaitems',
-    'print-overviews.decisions.overview',
-    'print-overviews.press-agenda.agendaitems',
-    'print-overviews.press-agenda.overview',
-    'print-overviews.notes.agendaitems',
-    'print-overviews.notes.overview',
-    'cases.case.subcases.overview',
-    'cases.case.subcases.subcase.overview',
-    'cases.case.subcases.subcase.documents',
-    'agenda.agendaitems.agendaitem',
-    'agenda.compare',
-    'agenda.agendaitems.documents',
-    'agenda.documents'
-  ],
   alphabet: [
     'A',
     'B',
@@ -52,8 +34,10 @@ export default EmberObject.create({
   principalApprovalId: '7b90b3a6-2787-4b41-8a1d-886fc5abbb33',
   onAgendaCodeId: '3e6dba4f-5c3c-439a-993e-92348ec73642',
   decidedCodeId: '4ea2c010-06c0-4594-966b-2cb9ed1e07b7',
+  postponedCodeId: 'F8AB7F8C-2928-4CED-812F-80EF560F6E31',
   onAgendaLabel: 'geagendeerd',
   decidedLabel: 'beslist',
+  postponedLabel: 'uitgesteld',
   notaID: '9e5b1230-f3ad-438f-9c68-9d7b1b2d875d',
   notaCaseTypeID: '1b6a6975-28e7-46b5-83fe-da37bb967db2',
   decisionDocumentTypeId: '2b73f8e2-b1f8-4cbd-927f-30c91759f08b',
@@ -135,6 +119,5 @@ export default EmberObject.create({
   ministerId:"1cc0710c-1b28-4e23-b3ff-399c8089bc71",
   kabinetId:"7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb",
   usersId:"450915b2-4c64-4b03-9caa-71180400f831",
-
   internRegeringAccessLevelId: "d335f7e3-aefd-4f93-81a2-1629c2edafa3"
 });

@@ -5,8 +5,11 @@
 
 .vlc-backlink {
   display: flex;
-  padding: 0.8rem 0.2rem;
-  display: inline-block;
+  padding:0.2em 0.2em;
+  font-size: 1.2em;
+  transform: rotate(90deg);
+  text-decoration: none;
+
   i {
     position: relative;
     top: 0.2rem;

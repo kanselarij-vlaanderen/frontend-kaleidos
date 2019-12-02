@@ -30,8 +30,7 @@ context('Tests for KAS-1076', () => {
       cy.contains('Documenten').click().wait('@getPage9999');
     });
 
-    // This works but takes 250 or more seconds... Optimize calls to backend and uncomment
-    /*
+    // This works but takes 300 or more seconds...
     cy.addDocuments(
       [
       {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001/1', fileType: 'Nota'},
@@ -64,7 +63,18 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 25);
     });
-    */
+    cy.get('.vl-vi-arrow-left-fat').click();
+    cy.addSubcase(type,SubcaseTitleShort + " part 2",subcaseTitleLong, subcaseType, subcaseName);
+    cy.openSubcase(0);
+    cy.route('GET', '**/linkedDocument-versions?page*size*=9999').as('getPage9999');
+
+    cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
+      cy.contains('Documenten').click().wait('@getPage9999');
+    });
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').as('docCards').should('have.length', 25);
+    });
+
   });
 
   it('Adding new document-version to agendaitem on designagenda should reset formally ok and update the subcase', () => {
@@ -180,6 +190,7 @@ context('Tests for KAS-1076', () => {
       cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
       }); 
   });
+
   after(() => {
     cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
   })

@@ -5,6 +5,9 @@ export default Route.extend({
     return this.store.findRecord('subcase', params.subcase_id,
       {
         reload: true
+      }).then((subcase) => {
+        subcase.hasMany('phases').reload();
+        return subcase;
       });
   },
 
