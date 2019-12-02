@@ -521,6 +521,9 @@ pre {
   cursor: pointer;
 }
 
+.ember-power-select-selected-item {
+  color: $black !important;
+}
 .c-environment {
   pointer-events: none;
   background: #FFC;
