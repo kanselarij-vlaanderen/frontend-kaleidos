@@ -5,9 +5,13 @@ import { notifyPropertyChange } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import EmberObject from '@ember/object';
 
-export default Service.extend(ModifiedMixin, {
+export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
   store: inject(),
+  globalError: inject(),
+  intl: inject(),
   addedDocuments: null,
   addedAgendaitems: null,
 
@@ -182,25 +186,67 @@ export default Service.extend(ModifiedMixin, {
     );
   },
 
-  async deleteAgendaitemFromAgenda(agendaitem) {
-    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+  async deleteAgendaitem(agendaitem) {
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    await itemToDelete.belongsTo('subcase').reload();
     const subcase = await itemToDelete.get('subcase');
 
     if (subcase) {
-      const phases = await subcase.get('phases');
-      await Promise.all(phases.map(async phase => {
-        await phase.destroyRecord();
-      }));
+      await subcase.hasMany('agendaitems').reload();
+      const agendaitemsFromSubcase = await subcase.get('agendaitems');
+      if(agendaitemsFromSubcase.length == 1) {
+        // if only 1 item is found, all phases should be destroyed and the subcase updated before deleting the agendaitem
+        const phases = await subcase.get('phases');
+        await Promise.all(phases.map(async phase => {
+          await phase.destroyRecord();
+        }));
+        await subcase.set('requestedForMeeting', null);
+        await subcase.set('consulationRequests', []);
+        await subcase.set('agendaitems', []);
+        await subcase.save();
+      }else {
+        const foundAgendaitem = agendaitemsFromSubcase.find((agendaitem) => agendaitem.id == itemToDelete.id);
+        itemToDelete = foundAgendaitem;
+      }
+    }
+    await itemToDelete.destroyRecord();
+  },
 
-      const allItems = await subcase.get('agendaitems');
-      await Promise.all(allItems.map(async item => item.destroyRecord()));
+  async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    if(this.isAdmin) {
+      const subcase = await itemToDelete.get('subcase');
+      const agendaitems = await subcase.get('agendaitems');
 
-      await subcase.set('requestedForMeeting', null);
-      await subcase.set('consulationRequests', []);
-      await subcase.set('agendaitems', []);
-      await subcase.save();
+      if(subcase){
+        await Promise.all(agendaitems.map(async item => { 
+          const agenda = await item.get('agenda');
+          const meeting = await agenda.get('createdFor');
+          const meetingId = await meeting.get('id');
+          if(meetingId === currentMeetingId) {
+            await item.destroyRecord();
+          }
+        }));
+        await subcase.hasMany('agendaitems').reload();
+        const agendaitemsFromSubcase = await subcase.get('agendaitems');
+        if(agendaitemsFromSubcase.length == 0) {
+          const phases = await subcase.get('phases');
+          await Promise.all(phases.map(async phase => {
+            await phase.destroyRecord();
+          }));
+        }
+        await subcase.set('requestedForMeeting', null);
+        await subcase.save();
+      } else {
+        await itemToDelete.destroyRecord();
+      }
+
     } else {
-      await itemToDelete.destroyRecord();
+      this.globalError.showToast.perform(EmberObject.create({
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('action-not-allowed'),
+        type: 'error'
+      }));
     }
   }
 });

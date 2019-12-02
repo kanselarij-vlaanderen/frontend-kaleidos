@@ -495,5 +495,6 @@
   "send-test-campaign":"Bekijk nieuwsbrief",
   "preview-loading-text":"De nieuwsbrief wordt geladen.. Even geduld aub.",
   "no-active-agenda":"Er zijn nog geen actieve agenda's.",
-  "clone-previous-subcase": "Kopieer voorgaande stap"
+  "clone-previous-subcase": "Kopieer voorgaande stap",
+  "action-not-allowed":"Deze actie is niet toegestaan, Contacteer de administrator of probeer het opnieuw."
 }
