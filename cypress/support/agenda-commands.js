@@ -15,6 +15,8 @@ Cypress.Commands.add('addRemarkToAgenda', addRemarkToAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda',addAgendaitemToAgenda);
 Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
 Cypress.Commands.add('agendaItemExists', agendaItemExists);
+Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
+Cypress.Commands.add('closeAgenda', closeAgenda)
 
 
 // ***********************************************
@@ -364,4 +366,24 @@ function agendaItemExists(agendaItemName) {
   cy.get('li.vlc-agenda-items__sub-item h4')
     .contains(agendaItemName, {timeout: 12000})
     .should('exist');
+}
+
+function changeSelectedAgenda(agendaName) {
+  cy.get('.vlc-side-nav-item').children()
+  .contains(agendaName).click();
+}
+
+function closeAgenda() {
+  cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitems');
+  cy.route('DELETE', '/agendas/**').as('deleteAgendas');
+
+  cy.get('.vl-button--icon-before')
+    .contains('Acties')
+    .click();
+  cy.get('.vl-popover__link-list__item > .vl-link')
+    .contains('Agenda afsluiten')
+    .click();
+  cy.wait('@deleteAgendaitems', { timeout: 20000 });
+  cy.wait('@deleteAgendas', { timeout: 20000 });
+
 }

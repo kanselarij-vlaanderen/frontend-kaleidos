@@ -100,7 +100,7 @@ function addDocuments(files) {
 
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
   cy.wait('@createNewDocument', { timeout: 12000 });
-  cy.wait('@patchModel', { timeout: 12000  + 2000 * files.length });
+  cy.wait('@patchModel', { timeout: 12000  + 4000 * files.length });
 }
 
 /**
