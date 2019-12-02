@@ -6,19 +6,15 @@ import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(ApprovalsEditMixin, {
+  classNames: ['vl-custom'],
+
   store: inject(),
   newsletterService: inject(),
-  classNames: ['vl-custom'],
+
   confidentiality: null,
+  title:null,
+  shortTitle:null,
   filter: { type: 'subcase-name' },
-
-  title: computed('case', function() {
-    return this.get('case.title');
-  }),
-
-  shortTitle: computed('case', function() {
-    return this.get('case.shortTitle');
-  }),
 
   confidential: computed('case', function() {
     return this.get('case.confidential');
@@ -29,14 +25,16 @@ export default Component.extend(ApprovalsEditMixin, {
     const iseCodes = await latestSubcase.get('iseCodes');
     const themes = await latestSubcase.get('themes');
     const requestedBy = await latestSubcase.get('requestedBy');
+    const linkedDocumentVersions = await latestSubcase.get('linkedDocumentVersions');
     const documentVersions = await latestSubcase.get('documentVersions');
 
     subcase.set('mandatees', mandatees);
     subcase.set('iseCodes', iseCodes);
     subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
-    subcase.set('linkedDocumentVersions', documentVersions);
-
+    subcase.set('linkedDocumentVersions', linkedDocumentVersions);
+    subcase.set('documentVersions', documentVersions);
+    
     return subcase.save();
   },
 
@@ -102,7 +100,7 @@ export default Component.extend(ApprovalsEditMixin, {
       }
     },
 
-    toggleIsEditing() {
+    async toggleIsEditing() {
       this.toggleProperty('isEditing');
     },
 

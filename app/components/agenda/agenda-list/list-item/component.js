@@ -81,7 +81,7 @@ export default Component.extend(isAuthenticatedMixin, {
      IntersectionObserver to figure out if we're currently rendering.
      Part of the content is hidden when we are not in view to easen
      the browser's load and to substantially limit the amount of calls
-     happening to the backend on larger agenda's.
+     happening to the backend on largerAgenda’s.
    */
   renderDetails: false,
   didEnterViewport() {
@@ -121,16 +121,11 @@ export default Component.extend(isAuthenticatedMixin, {
 
   actions: {
     async setAction(item) {
-      this.set('isLoading', true);
+      // this.set('isLoading', true);
       const uri = item.get('uri');
       this.agendaitem.set('formallyOk', uri);
-      const agenda = await this.agendaitem.get('agenda');
       this.agendaitem
         .save()
-        .then(() => {
-          this.set('isLoading', false);
-          agenda.notifyPropertyChange('agendaitems');
-        })
         .catch((error) => {
           this.globalError.handleError(error);
         });

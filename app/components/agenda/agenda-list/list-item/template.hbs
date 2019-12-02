@@ -47,7 +47,7 @@
           {{/attach-popover}}
         {{/if}}
       </span>
-      {{#if isEditor}}
+      {{#if (and isEditor (eq (await agendaitem.agenda.name) "Ontwerpagenda"))}}
         {{#if (not isEditingOverview)}}
           {{#if agendaitem.formallyOkToShow.approved}}
             <p class="{{agendaitem.formallyOkToShow.classNames}}">

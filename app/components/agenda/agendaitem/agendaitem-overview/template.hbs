@@ -49,7 +49,6 @@
                   {{t "decision-title"}}
                 </h3>
               </div>
-              {{#if (not (await agendaitem.isPostponed))}}
                 {{#if isEditor}}
                   <div class="vl-action-group">
                     <button
@@ -70,11 +69,6 @@
                     agendaitem=agendaitem
                   }}
                 {{/each}}
-              {{else}}
-                <p>
-                  {{t "postponed-item"}}
-                </p>
-              {{/if}}
           {{else if (eq activeAgendaItemSection "news-item")}}
             {{agenda/agendaitem/agendaitem-news-item
               agendaitem=agendaitem
