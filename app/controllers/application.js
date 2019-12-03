@@ -38,25 +38,24 @@ export default Controller.extend(isAuthenticatedMixin, {
   },
 
   async startCheckingAlert() {
-    const dateOfToday = moment()
-      .seconds(0)
-      .milliseconds(0)
-      .utc()
-      .format();
+    const today = `${new Date().toISOString().substr(0, 11)}00:00:00`;
     try {
       const alerts = await this.store.query('alert', {
         filter: {
-          ':gte:end-date': dateOfToday,
+          ':gte:end-date': today,
         },
         sort: '-begin-date',
         include: 'type',
+        page: { size: 10 }
       });
-      if (alerts.get('length') > 0) {
-        this.set('alert', alerts.get('firstObject'));
+      if (alerts.length) {
+        const now = new Date();
+        const activeAlert = alerts.find(a => a.endDate > now);
+        if (activeAlert)
+          this.set('alert', activeAlert);
       }
-      return null;
     } catch (e) {
-      return null;
+      // No alerts. Nothing should happen
     } finally {
       later(
         this,
