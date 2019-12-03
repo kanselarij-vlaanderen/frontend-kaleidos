@@ -14,30 +14,6 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   isShowingOptions: false,
   isAssigning: false,
 
-  canPropose: computed('subcase.{requestedForMeeting,hasAgendaItem,isPostponed}', 'isAssigning', async function() {
-    const isAssigning = this.isAssigning;
-    const subcase = await this.get('subcase');
-    const requestedForMeeting = await subcase.get('requestedForMeeting');
-    const hasAgendaItem = await subcase.get('hasAgendaItem');
-
-    if(hasAgendaItem || requestedForMeeting || isAssigning) {
-      return false;
-    }
-
-    return true;
-  }),
-
-  canDelete: computed('canPropose', 'isAssigning', 'isAssigningToOtherAgenda', async function() {
-    const canPropose = await this.get('canPropose');  
-    const { isAssigning, isAssigningToOtherAgenda} = this;
-
-    if(canPropose && !isAssigningToOtherAgenda && !isAssigning) {
-      return true;
-    }
-
-    return false;
-  }),
-
   meetings: computed('store', function() {
     const dateOfToday = moment().utc().subtract(1,'weeks').format();
     const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
@@ -101,6 +77,11 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
     },
     unarchiveSubcase(subcase) {
       subcase.set('isArchived', false);
+      subcase.save();
+    },
+    closeSubcase(subcase) {
+      const concluded = subcase.get('concluded');
+      subcase.set('concluded', !concluded);
       subcase.save();
     },
     requestDeleteSubcase() {

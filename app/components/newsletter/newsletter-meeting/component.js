@@ -14,7 +14,7 @@ export default Component.extend(isAuthenticatedMixin, {
     this._super(...arguments);
     const meeting = await this.get('meeting');
     const newsletter = await meeting.get('newsletter');
-    if (!newsletter && this.isEditor) {
+    if (!newsletter) {
       await this.newsletterService.createNewsItemForMeeting(meeting);
     }
   },
@@ -32,7 +32,7 @@ export default Component.extend(isAuthenticatedMixin, {
     async toggleIsEditing() {
       const meeting = await this.get('meeting');
       const newsletter = await meeting.get('newsletter');
-      if (!newsletter && this.isEditor) {
+      if (!newsletter) {
         await this.newsletterService.createNewsItemForMeeting(meeting);
       }
 

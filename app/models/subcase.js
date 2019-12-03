@@ -60,19 +60,6 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     });
   }),
 
-  postponedPhases: computed("phases.@each", function() {
-    return this.store
-      .query("subcase-phase", {
-        filter: {
-          subcase: { id: this.get("id") },
-          code: { id: CONFIG.postponedCodeId }
-        }
-      })
-      .then(subcasePhases => {
-        return subcasePhases;
-      });
-  }),
-
   nameToShow: computed('subcaseName', function() {
     const { subcaseName, title, shortTitle } = this;
     if (subcaseName) {
@@ -102,6 +89,10 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
 
   sortedMandatees: computed('mandatees.@each', function() {
     return this.get('mandatees').sortBy('priority');
+  }),
+
+  sortedApprovals: computed('approvals.@each', function() {
+
   }),
 
   sortedThemes: computed('themes', function() {
@@ -140,7 +131,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     })
   }),
 
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', function() {
+  agendaitemsOnDesignAgendaToEdit: computed('id', function() {
     return this.store.query('agendaitem', {
       filter: {
         subcase: { id: this.get('id') },
@@ -178,7 +169,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     return lastMeeting.get('latestAgenda')
   }),
 
-  latestAgendaItem: computed('latestAgenda.agendaitems.@each.postponedTo', async function() {
+  latestAgendaItem: computed('latestAgenda', async function() {
     const latestAgenda = await this.get('latestAgenda');
     // latestAgenda.hasMany('agendaitems').reload();
     const latestAgendaItems = await latestAgenda.get('agendaitems');
@@ -189,7 +180,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
 
   onAgendaInfo: computed('latestMeeting', async function() {
     const latestMeeting = await this.get('latestMeeting');
-    return latestMeeting.plannedStart;
+    return latestMeeting.plannedStart
   }),
 
   decidedInfo: computed('phases.@each', function() {
@@ -245,7 +236,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestAgendaItem', async function() {
+  isPostponed: computed('latestAgendaItem', 'latestAgendaItem.isPostponed', async function() {
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
       return latestAgendaItem.isPostponed

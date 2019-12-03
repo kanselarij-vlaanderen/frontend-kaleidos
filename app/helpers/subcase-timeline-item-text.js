@@ -1,37 +1,24 @@
-import { helper } from "@ember/component/helper";
-import moment from "moment";
-import CONFIG from "fe-redpencil/utils/config";
-
-const formatDate = (date) => {
-  if(!date) {
-    return '';
-  }
-  return moment(date)
-  .utc()
-  .format("DD MMMM YYYY");
-}
+import { helper } from '@ember/component/helper';
+import moment from 'moment';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export function subcaseTimelineItemText(params, values) {
   const label = values.label;
   const phase = values.phase;
-  const onAgendaInfo = values.onAgendaInfo;
-  const formattedDate = formatDate(onAgendaInfo);
-  const date = formatDate(phase.get("date"));
-
+  const subcaseNames = values.subcase.get('subcaseName');
   switch (label.toLowerCase()) {
     case CONFIG.onAgendaLabel:
-      return `Geagendeerd op de agenda van ${formattedDate}` ;
+      if (subcaseNames) {
+        return "Geagendeerd voor " + subcaseNames;
+      } else {
+        return "Geagendeerd"
+      }
     case CONFIG.decidedLabel:
-      return `Beslist op ${date}`;
-    case CONFIG.postponedLabel:
-      return `Uitgesteld op ${date}`;
-    case "ingediend voor agendering":
-      return `Ingediend voor agendering op ${date}`
+      return "Beslist op " + moment(phase.get('date')).utc().format('DD/MM/YYYY');
     default:
       return label;
   }
 }
-
 
 
 export default helper(subcaseTimelineItemText);
