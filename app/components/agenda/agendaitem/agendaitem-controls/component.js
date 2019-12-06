@@ -6,6 +6,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
+  intl: inject(),
   sessionService: inject(),
   agendaService: inject(),
   currentAgenda: null,
@@ -78,6 +79,14 @@ export default Component.extend(isAuthenticatedMixin, {
     this.refreshRoute(id);
   },
 
+  deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function() {
+    if (await this.isDeletable) {
+      return this.intl.t('delete-agendaitem');
+    } else if (this.isAdmin) {
+      return this.intl.t('delete-agendaitem-from-meeting');
+    }
+  }),
+
   actions: {
     showOptions() {
       this.toggleProperty('showOptions');
@@ -124,14 +133,6 @@ export default Component.extend(isAuthenticatedMixin, {
 
     toggleIsVerifying() {
       this.toggleProperty('isVerifying');
-    },
-
-    async tryToDeleteItem(agendaitem) {
-      if (await this.isDeletable) {
-        this.deleteItem(agendaitem);
-      } else if (this.isAdmin) {
-        this.toggleProperty('isVerifying');
-      }
     },
 
     verifyDelete(agendaitem) {
