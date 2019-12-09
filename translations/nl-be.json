@@ -498,5 +498,7 @@
   "filtered-agendas": "Deze data is gefilterd.",
   "editing-agenda-overview": "U bent nu aan het bewerken. U kan de volgorde en de status van de mededelingen en nota's aanpassen. Wijzigingen worden onmiddellijk opgeslagen.",
   "end-editing-overview": "Bewerken afsluiten",
-  "clear-filter": "Reset filter"
+  "clear-filter": "Reset filter",
+  "agenda-delete-message": "De agenda wordt verwijderd. Dit kan even duren.",
+  "agenda-lock-message": "De agenda wordt afgesloten. Dit kan even duren."
 }
