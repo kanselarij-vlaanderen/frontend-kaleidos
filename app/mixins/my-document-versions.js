@@ -23,15 +23,21 @@ export default Mixin.create({
     return DS.PromiseArray.create({
       promise: (async () => {
         const itemVersionIds = {};
-        (await this.get('myDocumentVersions')).map((item) => {
-          itemVersionIds[item.get('id')] = true;
-        });
+        const versions = await this.get('myDocumentVersions');
+        if(versions){
+          versions.map((item) => {
+            itemVersionIds[item.get('id')] = true;
+          });
+        }
         const documentVersions = await this.get('document.sortedDocumentVersions');
-
-        const matchingVersions = await documentVersions.filter((item) => {
-          return itemVersionIds[item.id];
-        });
-        return matchingVersions;
+        if(documentVersions) {
+          const matchingVersions = await documentVersions.filter((item) => {
+            return itemVersionIds[item.id];
+          });
+          return matchingVersions;
+        }
+        
+        return;
       })()
     });
   }),
