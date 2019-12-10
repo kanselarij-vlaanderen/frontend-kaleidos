@@ -63,12 +63,8 @@ export default Component.extend(isAuthenticatedMixin, {
     }),
 
   async deleteItem(agendaitem) {
+    this.toggleProperty('isVerifying');
     const id = await agendaitem.get('id');
-    const subcase = await agendaitem.get('subcase');
-    if(subcase) {
-      // Refresh the agendaitems for isDeletable
-      await subcase.hasMany('agendaitems').reload();
-    }
     if (await this.get('isDeletable')) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
@@ -81,9 +77,9 @@ export default Component.extend(isAuthenticatedMixin, {
 
   deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function() {
     if (await this.isDeletable) {
-      return this.intl.t('delete-agendaitem');
+      return this.intl.t('delete-agendaitem-message');
     } else if (this.isAdmin) {
-      return this.intl.t('delete-agendaitem-from-meeting');
+      return this.intl.t('delete-agendaitem-from-meeting-message');
     }
   }),
 
