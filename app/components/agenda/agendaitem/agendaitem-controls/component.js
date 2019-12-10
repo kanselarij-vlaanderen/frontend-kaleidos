@@ -63,6 +63,7 @@ export default Component.extend(isAuthenticatedMixin, {
     }),
 
   async deleteItem(agendaitem) {
+    this.toggleProperty('isVerifying');
     const id = await agendaitem.get('id');
     if (await this.get('isDeletable')) {
       await this.agendaService.deleteAgendaitem(agendaitem);
