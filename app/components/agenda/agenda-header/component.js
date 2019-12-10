@@ -16,6 +16,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   agendaService: inject(),
   fileService: inject(),
   router: inject(),
+  intl: inject(),
 
   isShowingOptions: false,
   isPrintingNotes: false,
@@ -42,6 +43,31 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
   designAgendaPresent: filter('currentSession.agendas.@each.name', function(agenda) {
     return agenda.get('name') === 'Ontwerpagenda';
+  }),
+
+  shouldShowLoader: computed('isDeletingAgenda','isLockingAgenda', function() {
+    return this.isDeletingAgenda || this.isLockingAgenda;
+  }),
+
+  loaderText: computed('isDeletingAgenda','isLockingAgenda', function() {
+    let text = '';
+    if(this.isDeletingAgenda) {
+      text = this.intl.t('agenda-delete-message');
+    } 
+    if(this.isLockingAgenda) {
+      text = this.intl.t('agenda-lock-message');
+    } 
+    return text + ' ' + this.intl.t('please-be-patient');
+  }),
+  
+  loaderTitle: computed('isDeletingAgenda','isLockingAgenda', function() {
+    if(this.isDeletingAgenda) {
+      return this.intl.t('agenda-delete');
+    } 
+    if(this.isLockingAgenda) {
+      return this.intl.t('agenda-lock');
+    } 
+    return "";
   }),
 
   async createDesignAgenda() {

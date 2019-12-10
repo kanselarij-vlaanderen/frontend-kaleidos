@@ -294,19 +294,11 @@
     }}
   {{/web-components/vl-modal}}
 {{/if}}
-{{#if isDeletingAgenda}}
+{{#if shouldShowLoader}}
   {{#web-components/vl-modal
     isOverlay=true
-    title=(t "agenda-delete")
+    title=loaderTitle
   }}
-  {{web-components/vl-loader text=(concat (t "agenda-delete-message") " " (t "please-be-patient"))}}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isLockingAgenda}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "agenda-lock")
-  }}
-  {{web-components/vl-loader text=(concat (t "agenda-lock-message") " " (t "please-be-patient"))}}
+  {{web-components/vl-loader text=loaderText}}
   {{/web-components/vl-modal}}
 {{/if}}
