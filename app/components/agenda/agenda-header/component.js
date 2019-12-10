@@ -286,6 +286,12 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         .then(async newAgenda => {
           const agendaItems = await agendaToLock.get('agendaitems');
           const newNotYetOKItems = agendaItems.filter(agendaItem => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
+          await Promise.all(agendaItems.map(async agendaitem => {
+            const subcase = await agendaitem.get('subcase');
+            if(subcase) {
+              await subcase.hasMany('agendaitems').reload();
+            }
+          }));
           await Promise.all(newNotYetOKItems.map(newNotYetOK => newNotYetOK.destroyRecord()));
           return newAgenda;
         })
