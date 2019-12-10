@@ -16,12 +16,15 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   agendaService: inject(),
   fileService: inject(),
   router: inject(),
+  intl: inject(),
 
   isShowingOptions: false,
   isPrintingNotes: false,
   isAddingAnnouncement: false,
   isAddingAgendaitems: false,
   isApprovingAgenda: false,
+  isDeletingAgenda:false,
+  isLockingAgenda:false,
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -40,6 +43,31 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
   designAgendaPresent: filter('currentSession.agendas.@each.name', function(agenda) {
     return agenda.get('name') === 'Ontwerpagenda';
+  }),
+
+  shouldShowLoader: computed('isDeletingAgenda','isLockingAgenda', function() {
+    return this.isDeletingAgenda || this.isLockingAgenda;
+  }),
+
+  loaderText: computed('isDeletingAgenda','isLockingAgenda', function() {
+    let text = '';
+    if(this.isDeletingAgenda) {
+      text = this.intl.t('agenda-delete-message');
+    } 
+    if(this.isLockingAgenda) {
+      text = this.intl.t('agenda-lock-message');
+    } 
+    return text + ' ' + this.intl.t('please-be-patient');
+  }),
+  
+  loaderTitle: computed('isDeletingAgenda','isLockingAgenda', function() {
+    if(this.isDeletingAgenda) {
+      return this.intl.t('agenda-delete');
+    } 
+    if(this.isLockingAgenda) {
+      return this.intl.t('agenda-lock');
+    } 
+    return "";
   }),
 
   async createDesignAgenda() {
@@ -65,7 +93,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     if (!agenda) {
       //TODO possible dead code, there is always an agenda ?
       return;
-    }
+    }    
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
     const agendaitems = await agenda.get('agendaitems');
     if(agendaitems){
@@ -131,6 +159,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async lockAgenda() {
+      this.set('isLockingAgenda', true);
       const agendas = await this.get('agendas');
       const designAgenda = agendas
         .filter((agenda) => agenda.name === 'Ontwerpagenda')
@@ -140,14 +169,16 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         .filter((agenda) => agenda.name !== 'Ontwerpagenda')
         .sortBy('-name')
         .get('firstObject');
+        
+      const session = await lastAgenda.get('createdFor');
+      session.set('isFinal', true);
+      session.set('agenda', lastAgenda);
+      await session.save();
 
       if (designAgenda) {
-        const session = await lastAgenda.get('createdFor');
-        session.set('isFinal', true);
-        session.set('agenda', lastAgenda);
-        await session.save();
         await this.deleteAgenda(designAgenda);
       }
+      this.set('isLockingAgenda', false);
     },
 
     async unlockAgenda() {
@@ -192,7 +223,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async deleteAgenda(agenda) {
+      this.set('isDeletingAgenda', true);
       await this.deleteAgenda(agenda);
+      this.set('isDeletingAgenda', false);
     },
 
     async createNewDesignAgenda() {
