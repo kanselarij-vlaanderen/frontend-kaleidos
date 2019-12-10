@@ -22,7 +22,15 @@ export default Component.extend(UploadDocumentMixin, {
       this.cancelForm();
     },
 
-    cancelEditing() {
+    async cancelEditing() {
+      const { documents } = this;
+        documents.map(async (document) => {
+          const version = await document.get('lastDocumentVersion');
+          version.rollbackAttributes();
+          version.belongsTo('accessLevel').reload();
+          document.rollbackAttributes();
+          document.belongsTo('type').reload();
+        });
       this.cancelForm();
     },
   }

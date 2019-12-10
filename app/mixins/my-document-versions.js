@@ -1,5 +1,5 @@
 import Mixin from '@ember/object/mixin';
-import EmberObject, { computed } from '@ember/object';
+import { computed } from '@ember/object';
 import DS from 'ember-data';
 
 export default Mixin.create({
@@ -15,7 +15,7 @@ export default Mixin.create({
     if(!version){
       return null;
     }
-    const document = version.get('document');
+    // const document = version.get('document');
     return version.get('name');
   }),
 
