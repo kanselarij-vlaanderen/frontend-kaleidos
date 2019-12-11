@@ -72,6 +72,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       this.set('isEditing', false);
     },
 
+    async cancelChanges(){
+      await this.document.rollbackAttributes();
+      this.set('isEditing', false);
+    },
+
     add(file) {
       this.set('uploadedFile', file);
       this.send('uploadedFile', file);
