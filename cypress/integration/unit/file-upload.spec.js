@@ -84,8 +84,62 @@ context('Add files to an agenda', () => {
         });
         cy.get('@docCards').eq(6).within(() => {
           cy.get('.vl-title--h6 > span').contains(/7e/);
-        })
+        });
       });
+      cy.deleteAgenda(meetingId, true);
+    });
+  });
+
+  it('should delete documents, document-versions and files', () => {
+    const plusMonths = 1;
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
+    cy.route('DELETE', 'files/*').as('deleteFile');
+    cy.route('DELETE', 'document-versions/*').as('deleteVersion');
+    cy.route('DELETE', 'documents/*').as('deleteDocument');
+
+
+    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten verwijderen').then((meetingId) => {
+      cy.openAgendaForDate(agendaDate,meetingId);
+
+      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/1 - 1e', fileType: 'Nota'}]);
+      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/2 - 2e', fileType: 'Nota'}]);
+
+      cy.get('.vlc-scroll-wrapper__body').within(() => {
+        cy.get('.vlc-document-card').as('docCards');
+      });
+      cy.get('@docCards').should('have.length', 2);
+      cy.get('@docCards').eq(0).within(() => {
+        cy.get('.vl-title--h6 > span').contains(/1e/);
+        cy.get('.vl-vi-nav-show-more-horizontal').click();
+      });
+      cy.get('.vl-popover__link-list').within(() => {
+        cy.get('.vl-u-text--error').contains('Document verwijderen').click();
+      });
+      cy.get('.vl-modal').within(() => {
+        cy.get('button').contains('Verwijderen').click();
+      });
+      cy.wait('@deleteFile', { timeout: 12000 });
+      cy.wait('@deleteVersion', { timeout: 12000 });
+      cy.wait('@deleteDocument', { timeout: 12000 });
+      
+      cy.get('@docCards').should('have.length', 1);
+      cy.get('@docCards').eq(0).within(() => {
+        cy.get('.vl-title--h6 > span').contains(/2e/);
+        cy.get('.js-vl-accordion > button').click();
+        cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
+        cy.get('@versions').eq(0).within(() => {
+          cy.get('.vl-vi-trash').click();
+        });
+      });
+      cy.get('.vl-modal').within(() => {
+        cy.get('button').contains('Verwijderen').click();
+      });
+      cy.wait('@deleteFile', { timeout: 12000 });
+      cy.wait('@deleteVersion', { timeout: 12000 });
+      cy.wait('@deleteDocument', { timeout: 12000 });
+
+      cy.get('@docCards').should('have.length', 0);
+
       cy.deleteAgenda(meetingId, true);
     });
   });
