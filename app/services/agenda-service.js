@@ -14,7 +14,6 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
   intl: inject(),
   addedDocuments: null,
   addedAgendaitems: null,
-  agendaitemsToDelete : [],
 
   assignNewSessionNumbers() {
     return $.ajax({
