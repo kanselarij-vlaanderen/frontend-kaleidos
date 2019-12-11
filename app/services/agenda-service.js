@@ -14,6 +14,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
   intl: inject(),
   addedDocuments: null,
   addedAgendaitems: null,
+  agendaitemsToDelete : [],
 
   assignNewSessionNumbers() {
     return $.ajax({
@@ -188,6 +189,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
 
   async deleteAgendaitem(agendaitem) {
     let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    itemToDelete.set('aboutToDelete', true);
     await itemToDelete.belongsTo('subcase').reload();
     const subcase = await itemToDelete.get('subcase');
 
@@ -215,6 +217,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
   async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {
     let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     if(this.isAdmin) {
+      itemToDelete.set('aboutToDelete', true);
       const subcase = await itemToDelete.get('subcase');
       const agendaitems = await subcase.get('agendaitems');
 
