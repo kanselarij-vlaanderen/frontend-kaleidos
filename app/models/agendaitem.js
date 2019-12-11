@@ -28,6 +28,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   title: attr('string'),
   formallyOk: attr('string'),
   isApproval: attr('boolean'),
+  explanation: attr('string'),
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),

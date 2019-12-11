@@ -505,5 +505,6 @@
   "end-editing-overview": "Bewerken afsluiten",
   "clear-filter": "Reset filter",
   "agenda-delete-message": "De agenda wordt verwijderd. Dit kan even duren.",
-  "agenda-lock-message": "De agenda wordt afgesloten. Dit kan even duren."
+  "agenda-lock-message": "De agenda wordt afgesloten. Dit kan even duren.",
+  "explanation": "Toelichting"
 }
