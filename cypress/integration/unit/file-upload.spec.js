@@ -92,7 +92,7 @@ context('Add files to an agenda', () => {
 
   it('should delete documents, document-versions and files', () => {
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'document-versions/*').as('deleteVersion');
     cy.route('DELETE', 'documents/*').as('deleteDocument');

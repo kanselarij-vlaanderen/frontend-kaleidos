@@ -80,7 +80,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   },
 
   async deleteDocumentVersionWithUndo() {
-    const { documentVersionToDelete } = this;
+    const { documentVersionToDelete, item } = this;
     const document = await documentVersionToDelete.get('document');
     const documentVersions = await document.get('documentVersions');
     if(documentVersions.length > 1) {
@@ -88,6 +88,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     }else {
       const documentToDelete = document;
       await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
+        if(!item.aboutToDelete && documentVersions) {
+          item.hasMany('documentVersions').reload();
+        }
       });
     }
 
