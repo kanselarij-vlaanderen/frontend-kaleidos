@@ -77,22 +77,21 @@
           </div>
         </div>
 
-        <div>
-          <h6 class="vl-title vl-title--h6">
+        <div class="vl-u-display-flex vl-u-flex-direction-column vlc-u-box-model-maximize-width">
             {{#if (not isEditing)}}
+            <h6 class="vl-title vl-title--h6">
               <span {{action "toggleIsEditing"}}>
                 {{await lastDocumentVersionName}}
               </span>
+            </h6>
             {{else}}
               <div class="vl-u-display-flex vl-u-display-flex-align-center">
-                <div class="vl-form__input" style="width:75%">
                   {{input
                     type="text"
                     id=id
                     class="vl-input-field vl-input-field--block"
                     value=(mut document.name)
                   }}
-                </div>
                 <button
                   class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
                   {{action "saveChanges"}}
@@ -107,7 +106,7 @@
                 </button>
                 <button
                   class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                  {{action "toggleIsEditing"}}
+                  {{action "cancelChanges"}}
                 >
                   <i
                     class="vl-vi vl-vi-cross vl-button__icon"
@@ -119,7 +118,6 @@
                 </button>
               </div>
             {{/if}}
-          </h6>
           <div class="vlc-document-card-content__meta">
             {{t "uploaded-at"}}
             {{moment-format (await document.lastDocumentVersion.created)}}
