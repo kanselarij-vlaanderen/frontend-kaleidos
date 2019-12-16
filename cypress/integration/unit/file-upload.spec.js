@@ -4,6 +4,7 @@
 context('Add files to an agenda', () => {
   before(() => {
     cy.server();
+    cy.resetDB();
   });
 
   beforeEach(() => {
@@ -38,8 +39,6 @@ context('Add files to an agenda', () => {
           cy.get('.vl-title--h6 > span').contains(/TER/);
         });
       });
-
-      cy.deleteAgenda(meetingId, true);
     });
   });
 
@@ -86,7 +85,6 @@ context('Add files to an agenda', () => {
           cy.get('.vl-title--h6 > span').contains(/7e/);
         })
       });
-      cy.deleteAgenda(meetingId, true);
     });
   });
 });

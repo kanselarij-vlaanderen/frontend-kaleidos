@@ -49,7 +49,4 @@ context('Agenda tests', () => {
       cy.addAgendaitemToAgenda(false);
   });
 
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-  })
 });
