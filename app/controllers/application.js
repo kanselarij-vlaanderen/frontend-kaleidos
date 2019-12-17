@@ -4,7 +4,6 @@ import { alias } from '@ember/object/computed';
 import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import CONFIG from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 import moment from 'moment';
 import { later } from '@ember/runloop';
@@ -18,7 +17,6 @@ export default Controller.extend(isAuthenticatedMixin, {
   messages: alias('globalError.messages'),
   options: A([
     { key: 'main-nav-title', route: 'agendas' },
-    // { key: 'main-nav-oc-title', route: 'oc' }, // Hide oc nav option, as the first release won't feature any OC data
   ]),
 
   selectedOption: computed('options', function() {
@@ -36,41 +34,28 @@ export default Controller.extend(isAuthenticatedMixin, {
       passive: true,
     });
 
-    if (window.location.href.indexOf('http://localhost') == 0) {
-      this.set('environmentName', 'LOCAL');
-    }
-
-    if (window.location.href.indexOf('https://kaleidos-dev.vlaanderen.be') == 0) {
-      this.set('environmentName', 'DEV');
-    }
-
-    if (window.location.href.indexOf('https://kaleidos-test.vlaanderen.be') == 0) {
-      this.set('environmentName', 'TEST');
-    }
-
     this.startCheckingAlert();
   },
 
   async startCheckingAlert() {
-    const dateOfToday = moment()
-      .seconds(0)
-      .milliseconds(0)
-      .utc()
-      .format();
+    const today = `${new Date().toISOString().substr(0, 11)}00:00:00`;
     try {
       const alerts = await this.store.query('alert', {
         filter: {
-          ':gte:end-date': dateOfToday,
+          ':gte:end-date': today,
         },
         sort: '-begin-date',
         include: 'type',
+        page: { size: 10 }
       });
-      if (alerts.get('length') > 0) {
-        this.set('alert', alerts.get('firstObject'));
+      if (alerts.length) {
+        const now = new Date();
+        const activeAlert = alerts.find(a => a.endDate > now);
+        if (activeAlert)
+          this.set('alert', activeAlert);
       }
-      return null;
     } catch (e) {
-      return null;
+      // No alerts. Nothing should happen
     } finally {
       later(
         this,
@@ -79,45 +64,6 @@ export default Controller.extend(isAuthenticatedMixin, {
         },
         timeout
       );
-    }
-  },
-
-  checkRouteOptions(currentRouteName) {
-    if (currentRouteName && currentRouteName.startsWith('oc.')) {
-      this.set('selectedOption', this.options[1]);
-    } else {
-      this.set('selectedOption', this.options[0]);
-    }
-  },
-
-  hideItem(item) {
-    item.style = 'display:none;';
-  },
-
-  showItem(item) {
-    item.style = 'display:block;';
-  },
-
-  determineHeaderStyle(currentRouteName) {
-    const mainNav = document.getElementById('c-main-nav') || {};
-    const vrHeader = document.getElementById('vlaanderen-header') || {};
-    const headerShouldBeDisplayed = CONFIG.routesAllowed.includes(currentRouteName);
-    if (headerShouldBeDisplayed) {
-      this.hideItem(vrHeader);
-      this.hideItem(mainNav);
-    }
-    if (!headerShouldBeDisplayed) {
-      this.showItem(vrHeader);
-      this.showItem(mainNav);
-    }
-
-    if (this.isOc) {
-      this.hideItem(vrHeader);
-    }
-
-    if (currentRouteName.includes('loading') && currentRouteName.includes('print-overviews')) {
-      this.hideItem(vrHeader);
-      this.hideItem(mainNav);
     }
   },
 
@@ -145,12 +91,10 @@ export default Controller.extend(isAuthenticatedMixin, {
       'session.isAuthenticated',
       function() {
         const { router } = this;
-        if (!router || !router.currentRouteName || !CONFIG.routesAllowed) {
+        if (!router || !router.currentRouteName) {
           return;
         }
         const currentRouteName = router.get('currentRouteName');
-        this.checkRouteOptions(currentRouteName);
-        this.determineHeaderStyle(currentRouteName);
         this.checkAccountlessUser(currentRouteName);
       }
     )
@@ -159,10 +103,6 @@ export default Controller.extend(isAuthenticatedMixin, {
   showHeader: computed('role', function() {
     let role = this.get('role');
     return role && role !== '' && role !== 'no-access';
-  }),
-
-  showEnvironmentName: computed('environmentName', function() {
-    return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
   }),
 
   type: computed('alert', async function() {

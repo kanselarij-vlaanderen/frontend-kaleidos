@@ -1,19 +1,15 @@
 <td class="vl-u-display-flex vlc-document-list__item">
-  <a
-    {{action "downloadFile" (await document.lastDocumentVersion)}}
+  <div
+    class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
   >
-    <div
-      class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
-    >
-      <i
-        class="vl-badge__icon vl-vi vl-vi-document"
-        aria-hidden="true"
-      ></i>
-    </div>
-    <p>
-      {{await lastDocumentVersionName}}
-    </p>
-  </a>
+    <i
+      class="vl-badge__icon vl-vi vl-vi-document"
+      aria-hidden="true"
+    ></i>
+  </div>
+  <p>
+    {{await lastDocumentVersionName}}
+  </p>
 </td>
 <td>
   {{utils/model-selector
@@ -33,7 +29,7 @@
     propertyToShow="label"
     readOnly=document.confidential
     sortField="label"
-    selectedItems=(await document.accessLevel)
+    selectedItems=(await document.lastDocumentVersion.accessLevel)
     selectModel=(action "chooseAccessLevel" document)
   }}
 </td>

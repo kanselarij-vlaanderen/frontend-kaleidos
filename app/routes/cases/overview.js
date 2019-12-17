@@ -35,7 +35,7 @@ export default Route.extend(DataTableRouteMixin, {
       refreshModel: true
     },
   },
-  textSearchFields: ['title', 'data', 'subcaseTitle', 'subcaseSubTitle'],
+  textSearchFields: ['title', 'shortTitle', 'data', 'subcaseTitle', 'subcaseSubTitle'],
 
   isLoading: false,
 
