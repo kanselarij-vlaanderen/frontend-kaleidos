@@ -6,6 +6,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
+  intl: inject(),
   sessionService: inject(),
   agendaService: inject(),
   currentAgenda: null,
@@ -62,12 +63,8 @@ export default Component.extend(isAuthenticatedMixin, {
     }),
 
   async deleteItem(agendaitem) {
+    this.toggleProperty('isVerifying');
     const id = await agendaitem.get('id');
-    const subcase = await agendaitem.get('subcase');
-    if(subcase) {
-      // Refresh the agendaitems for isDeletable
-      await subcase.hasMany('agendaitems').reload();
-    }
     if (await this.get('isDeletable')) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
@@ -77,6 +74,14 @@ export default Component.extend(isAuthenticatedMixin, {
     this.set('sessionService.selectedAgendaItem', null);
     this.refreshRoute(id);
   },
+
+  deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function() {
+    if (await this.isDeletable) {
+      return this.intl.t('delete-agendaitem-message');
+    } else if (this.isAdmin) {
+      return this.intl.t('delete-agendaitem-from-meeting-message');
+    }
+  }),
 
   actions: {
     showOptions() {
@@ -124,14 +129,6 @@ export default Component.extend(isAuthenticatedMixin, {
 
     toggleIsVerifying() {
       this.toggleProperty('isVerifying');
-    },
-
-    async tryToDeleteItem(agendaitem) {
-      if (await this.isDeletable) {
-        this.deleteItem(agendaitem);
-      } else if (this.isAdmin) {
-        this.toggleProperty('isVerifying');
-      }
     },
 
     verifyDelete(agendaitem) {

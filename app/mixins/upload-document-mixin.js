@@ -28,28 +28,15 @@ export default Mixin.create({
   },
 
   async deleteDocument(document) {
-    const documentToDelete = await document;
-    if (!documentToDelete) return;
-    const documentVersions = await documentToDelete.get('documentVersions');
-    await Promise.all(
-      documentVersions.map(async (documentVersion) => {
-        return this.deleteDocumentVersion(documentVersion);
-      })
-    );
+    await this.fileService.deleteDocument(document)
   },
 
   async deleteDocumentVersion(documentVersion) {
-    const documentVersionToDelete = await documentVersion;
-    if (!documentVersionToDelete) return;
-    const file = documentVersionToDelete.get('file');
-    await this.deleteFile(file);
-    return documentVersionToDelete.destroyRecord();
+    await this.fileService.deleteDocumentVersion(documentVersion);
   },
 
   async deleteFile(file) {
-    const fileToDelete = await file;
-    if (!fileToDelete) return;
-    return fileToDelete.destroyRecord();
+    await this.fileService.deleteFile(file);
   },
 
   createNewDocument(title, type, confidential, documentVersion) {

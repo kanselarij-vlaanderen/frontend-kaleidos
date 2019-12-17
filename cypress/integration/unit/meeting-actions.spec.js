@@ -113,8 +113,6 @@ context('meeting actions tests', () => {
       cy.setFormalOkOnAllItems();
       cy.approveDesignAgenda();
       // Verify agendaitem exists and has subcase on design agenda and agenda A
-      // TODO fix isDeletable, does not refresh after approving design agenda so page reload is needed
-      cy.reload();
       cy.changeSelectedAgenda('Ontwerpagenda');
 
       cy.agendaItemExists(SubcaseTitleShort).click();
@@ -145,8 +143,6 @@ context('meeting actions tests', () => {
 
       cy.setFormalOkOnAllItems();
       cy.approveDesignAgenda();
-      // TODO fix isDeletable, does not refresh after approving design agenda so page reload is needed
-      cy.reload();
       // Verify agendaitem exists and has subcase on design agenda and agenda A
       cy.changeSelectedAgenda('Agenda A');
       cy.agendaItemExists(SubcaseTitleShort).click();
