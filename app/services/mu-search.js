@@ -63,14 +63,14 @@ export default Service.extend({
       }
     });
   },
-  
+
   querySearch(type, params, sortMapping) {
     return $.ajax({
       method: "GET",
       url: this.urlForQuery(params, type, sortMapping)
     });
   },
-  
+
   queryResources(type, ids, params) {
     let serIds = ids.join();
     const queryParams = {
@@ -114,7 +114,7 @@ export default Service.extend({
 
   urlForQuery(params, type, sortMapping) {
     let filterString = [];
-    
+
     if (params.filter) {
       filterString = filterString.concat(this.serializeFilterParams(params.filter));
     }
@@ -127,7 +127,7 @@ export default Service.extend({
     filterString.push('collapse_uuids=t');
     return `/${type}/search?${filterString.join('&')}`;
   },
-  
+
   serializeFilterParams(filter) {
     let params = [];
     for (const param in filter) {
@@ -135,7 +135,7 @@ export default Service.extend({
     }
     return params;
   },
-  
+
   serializePageParams(page) {
     let params = [];
     if (page.size) {
@@ -172,12 +172,12 @@ export default Service.extend({
         const key = searchAttrs[n];
         if (searchRes.attributes.hasOwnProperty(key) &&
             edObj.get(key) === undefined) {
-          edObj.set(key, searchRes.attributes[key])
+          edObj.set(key, searchRes.attributes[key]);
         }
       }
       edObj.getRecord = function() {
         return edObj;
-      }
+      };
     }
     return A(emberDataObjects);
   },
