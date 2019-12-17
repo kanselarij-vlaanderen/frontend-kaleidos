@@ -33,6 +33,12 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
+  downloadAllDocumentsLink: computed('currentSession', 'currentAgenda', function() {
+    const agenda_id = this.get('currentAgenda.id');
+    const date = moment(this.currentSession.get('plannedStart')).format('DD_MMMM_YYYY').toString();
+    return `/file-bundling-service/bundleAllFiles?agenda_id=${agenda_id}&meeting_date=${date}`;
+  }),
+
   hasMultipleAgendas: computed('agendas.@each', async function() {
     return this.agendas && this.agendas.then(agendas => agendas.length > 1);
   }),
@@ -53,20 +59,20 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     let text = '';
     if(this.isDeletingAgenda) {
       text = this.intl.t('agenda-delete-message');
-    } 
+    }
     if(this.isLockingAgenda) {
       text = this.intl.t('agenda-lock-message');
-    } 
+    }
     return text + ' ' + this.intl.t('please-be-patient');
   }),
-  
+
   loaderTitle: computed('isDeletingAgenda','isLockingAgenda', function() {
     if(this.isDeletingAgenda) {
       return this.intl.t('agenda-delete');
-    } 
+    }
     if(this.isLockingAgenda) {
       return this.intl.t('agenda-lock');
-    } 
+    }
     return "";
   }),
 
@@ -175,6 +181,11 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       session.set('agenda', lastAgenda);
       await session.save();
 
+      const session = await lastAgenda.get('createdFor');
+      session.set('isFinal', true);
+      session.set('agenda', lastAgenda);
+      await session.save();
+
       if (designAgenda) {
         await this.deleteAgenda(designAgenda);
       }
@@ -207,19 +218,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
     navigateToDocuments() {
       this.navigateToDocuments();
-    },
-
-    async downloadAllDocuments() {
-      const date = moment(this.currentSession.get('plannedStart'))
-        .format('DD_MM_YYYY')
-        .toString();
-      const files = await this.fileService.getAllDocumentsFromAgenda(this.currentAgenda.get('id'));
-      const file = await this.fileService.getZippedFiles(date, this.currentAgenda, files);
-      return this.saveFileAs(
-        `${this.currentAgenda.get('agendaName')}_${date}.zip`,
-        file,
-        'application/zip'
-      );
     },
 
     async deleteAgenda(agenda) {
