@@ -46,18 +46,17 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   requestedBy: belongsTo('mandatee', { inverse: null }),
   accessLevel: belongsTo('access-level'),
 
-  firstPhase: computed('phases.@each', function() {
-    return PromiseObject.create({
-      promise: this.store.query('subcase-phase', {
+  postponedPhases: computed("phases.@each", function() {
+    return this.store
+      .query("subcase-phase", {
         filter: {
-          subcase: { id: this.get('id') }
-        },
-        sort: 'date',
-        include: 'code'
-      }).then((subcasePhases) => {
-        return subcasePhases.get('firstObject');
+          subcase: { id: this.get("id") },
+          code: { id: CONFIG.postponedCodeId }
+        }
       })
-    });
+      .then(subcasePhases => {
+        return subcasePhases;
+      });
   }),
 
   nameToShow: computed('subcaseName', function() {
@@ -91,17 +90,13 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     return this.get('mandatees').sortBy('priority');
   }),
 
-  sortedApprovals: computed('approvals.@each', function() {
-
-  }),
-
   sortedThemes: computed('themes', function() {
     return this.get('themes').sortBy('label');
   }),
 
-  sortedPhases: computed('phases.@each', function() {
+  sortedPhases: computed('phases.@each', 'isPostponed', function() {
     return PromiseArray.create({
-      promise: this.get('phases').then((phases) => {
+      promise: this.get('phases').then( (phases) => {
         return phases.sortBy('date');
       })
     });
@@ -131,7 +126,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     })
   }),
 
-  agendaitemsOnDesignAgendaToEdit: computed('id', function() {
+  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', function() {
     return this.store.query('agendaitem', {
       filter: {
         subcase: { id: this.get('id') },
@@ -141,14 +136,14 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   }),
 
   meetings: computed('agendaitems.@each', async function() {
-    const agendaitems = await this.agendaitems;
+    const agendaitems = await this.get('agendaitems');
     const meetings = await Promise.all(agendaitems.map(async (agendaitem) => {
       const agenda = await agendaitem.get('agenda');
       return agenda ? agenda.get('createdFor') : null;
     }));
 
     return meetings.reduce((addedMeetings, meeting) => {
-      if (meeting && !addedMeetings.find(adddedMeeting => meeting === adddedMeeting)) {
+      if (meeting && !addedMeetings.find(addedMeeting => meeting === addedMeeting)) {
         addedMeetings.push(meeting)
       }
       return addedMeetings
@@ -166,10 +161,10 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
 
   latestAgenda: computed('latestMeeting', async function() {
     const lastMeeting = await this.get('latestMeeting');
-    return lastMeeting.get('latestAgenda')
+    return lastMeeting.get('latestAgenda');
   }),
 
-  latestAgendaItem: computed('latestAgenda', async function() {
+  latestAgendaItem: computed('latestAgenda.agendaitems.@each.postponedTo', async function() {
     const latestAgenda = await this.get('latestAgenda');
     // latestAgenda.hasMany('agendaitems').reload();
     const latestAgendaItems = await latestAgenda.get('agendaitems');
@@ -180,7 +175,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
 
   onAgendaInfo: computed('latestMeeting', async function() {
     const latestMeeting = await this.get('latestMeeting');
-    return latestMeeting.plannedStart
+    return latestMeeting.plannedStart;
   }),
 
   decidedInfo: computed('phases.@each', function() {
@@ -236,10 +231,10 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestAgendaItem', 'latestAgendaItem.isPostponed', async function() {
+  isPostponed: computed('latestAgendaItem','latestAgendaItem.isPostponed', async function() {
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
-      return latestAgendaItem.isPostponed
+      return latestAgendaItem.isPostponed;
     }
     return false;
   }),

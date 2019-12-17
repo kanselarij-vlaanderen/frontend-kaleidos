@@ -6,36 +6,41 @@ import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(ApprovalsEditMixin, {
+  classNames: ['vl-custom'],
+
   store: inject(),
   newsletterService: inject(),
-  classNames: ['vl-custom'],
+
   confidentiality: null,
+  title:null,
+  shortTitle:null,
   filter: { type: 'subcase-name' },
-
-  title: computed('case', function() {
-    return this.get('case.title');
-  }),
-
-  shortTitle: computed('case', function() {
-    return this.get('case.shortTitle');
-  }),
 
   confidential: computed('case', function() {
     return this.get('case.confidential');
   }),
 
-  async copySubcaseProperties(subcase, latestSubcase) {
+  async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
     const mandatees = await latestSubcase.get('mandatees');
     const iseCodes = await latestSubcase.get('iseCodes');
     const themes = await latestSubcase.get('themes');
     const requestedBy = await latestSubcase.get('requestedBy');
-    const documentVersions = await latestSubcase.get('documentVersions');
+    const linkedDocumentVersions = await latestSubcase.get('linkedDocumentVersions');
+
+    if(copyFullSubcase) {
+      const subcaseName =  await latestSubcase.get('subcaseName');
+      const documentVersions = await latestSubcase.get('documentVersions');
+      const accessLevel = await latestSubcase.get('accessLevel');
+      subcase.set('documentVersions', documentVersions);
+      subcase.set('subcaseName', subcaseName);
+      subcase.set('accessLevel', accessLevel);
+    }
 
     subcase.set('mandatees', mandatees);
     subcase.set('iseCodes', iseCodes);
     subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
-    subcase.set('linkedDocumentVersions', documentVersions);
+    subcase.set('linkedDocumentVersions', linkedDocumentVersions);
 
     return subcase.save();
   },
@@ -88,6 +93,30 @@ export default Component.extend(ApprovalsEditMixin, {
     });
   },
 
+  async copySubcase(fullCopy = false) {
+    const caze = await this.store.findRecord('case', this.case.id);
+    const latestSubcase = await caze.get('latestSubcase');
+    const date = moment()
+      .utc()
+      .toDate();
+    let subcase = await this.createSubcaseObject(caze, date);
+    subcase.set('subcaseName', this.subcaseName);
+    if (latestSubcase) {
+      subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
+      await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
+      const newsletterInfo = await latestSubcase.get('newsletterInfo');
+      if (newsletterInfo) {
+        await this.copyNewsletterInfo(subcase, newsletterInfo);
+      }
+    } else {
+      await this.newsletterService.createNewsItemForSubcase(subcase);
+      subcase = await subcase.save();
+    }
+    await caze.hasMany('subcases').reload();
+    await this.checkForActionChanges();
+    return subcase;
+  },
+
   actions: {
     closeModal() {
       this.closeModal();
@@ -102,36 +131,23 @@ export default Component.extend(ApprovalsEditMixin, {
       }
     },
 
-    toggleIsEditing() {
+    async toggleIsEditing() {
       this.toggleProperty('isEditing');
+    },
+
+    async copyFullSubcase() {
+      this.set('isLoading', true);
+      const subcase = await this.copySubcase(true);
+      this.set('item', subcase);
+      this.set('isLoading', false);
+      this.refresh();
     },
 
     async createSubCase(event) {
       event.preventDefault();
       this.set('isLoading', true);
-      const caze = await this.store.findRecord('case', this.case.id);
-      const latestSubcase = await caze.get('latestSubcase');
-      const date = moment()
-        .utc()
-        .toDate();
-      let subcase = await this.createSubcaseObject(caze, date);
-
-      subcase.set('subcaseName', this.subcaseName);
-      if (latestSubcase) {
-        subcase = await this.copySubcaseProperties(subcase, latestSubcase);
-        await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
-        const newsletterInfo = await latestSubcase.get('newsletterInfo');
-        if (newsletterInfo) {
-          await this.copyNewsletterInfo(subcase, newsletterInfo);
-        }
-      } else {
-        await this.newsletterService.createNewsItemForSubcase(subcase);
-        subcase = await subcase.save();
-      }
-
+      const subcase = await this.copySubcase(false);
       this.set('item', subcase);
-      await this.checkForActionChanges();
-      await caze.hasMany('subcases').reload();
       this.set('isLoading', false);
       this.refresh();
     },

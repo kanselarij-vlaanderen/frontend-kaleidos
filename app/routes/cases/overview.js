@@ -10,29 +10,29 @@ export default Route.extend(DataTableRouteMixin, {
 
   queryParams: {
     isArchived: {
-      refreshModel: true,
+      refreshModel: true
     },
     searchText: {
-      refreshModel: true,
+      refreshModel: true
     },
     mandatees: {
-      refreshModel: true,
+      refreshModel: true
     },
     dateFrom: {
-      refreshModel: true,
+      refreshModel: true
     },
     dateTo: {
-      refreshModel: true,
+      refreshModel: true
     },
     decisionsOnly: {
       refreshModel: true,
-      type: 'boolean',
+      type: 'boolean'
     },
     size: {
-      refreshModel: true,
+      refreshModel: true
     },
     page: {
-      refreshModel: true,
+      refreshModel: true
     },
   },
   textSearchFields: ['title', 'shortTitle', 'data', 'subcaseTitle', 'subcaseSubTitle'],
@@ -56,7 +56,7 @@ export default Route.extend(DataTableRouteMixin, {
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
         const moments = sessionDates.map(sessionDate => moment(sessionDate));
-        _case.set('sessionDates', moments[moments.length - 1])
+        _case.set('sessionDates', moments[moments.length - 1]);
       } else {
         _case.set('sessionDates', moment(sessionDates));
       }
@@ -104,7 +104,7 @@ export default Route.extend(DataTableRouteMixin, {
       }).catch(() => {
         that.set('isLoading', false);
         return [];
-      })
+      });
   },
 
   actions: {
