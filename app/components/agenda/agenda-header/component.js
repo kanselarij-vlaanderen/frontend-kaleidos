@@ -99,7 +99,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     if (!agenda) {
       //TODO possible dead code, there is always an agenda ?
       return;
-    }    
+    }
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
     const agendaitems = await agenda.get('agendaitems');
     if(agendaitems){
@@ -175,11 +175,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         .filter((agenda) => agenda.name !== 'Ontwerpagenda')
         .sortBy('-name')
         .get('firstObject');
-        
-      const session = await lastAgenda.get('createdFor');
-      session.set('isFinal', true);
-      session.set('agenda', lastAgenda);
-      await session.save();
 
       const session = await lastAgenda.get('createdFor');
       session.set('isFinal', true);
