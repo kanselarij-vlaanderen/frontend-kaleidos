@@ -74,16 +74,19 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 			this.set('isLoading', true);
 			const { isAgendaItem } = this;
 			const item = await this.get('item');
-			item.set('modified', moment().utc().toDate());
+      item.set('modified', moment().utc().toDate());
+      let resetFormallyOk = true;
 			if (isAgendaItem && !item.showAsRemark) {
+        if(Object.keys(item.changedAttributes()).length == 2 && item.changedAttributes()['explanation']) {
+          resetFormallyOk = false;
+        }
 				const isDesignAgenda = await item.get('isDesignAgenda');
 				const agendaitemSubcase = await item.get('subcase');
 				if (isDesignAgenda && agendaitemSubcase) {
 					agendaitemSubcase.set('modified', moment().utc().toDate());
-					await this.setNewPropertiesToModel(agendaitemSubcase);
+					await this.setNewPropertiesToModel(agendaitemSubcase, resetFormallyOk);
 				}
-
-				await this.setNewPropertiesToModel(item).then(async () => {
+				await this.setNewPropertiesToModel(item, resetFormallyOk).then(async () => {
 					const agenda = await item.get('agenda');
 					if (agenda) {
 						await this.updateModifiedProperty(agenda);
@@ -91,10 +94,11 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 					item.reload();
 				});
 			} else {
-				let resetFormallyOk = true;
 				// Don't reset the formalOk when the "showInNewsletter" of a remark is the only change made in the agendaitem
 				if(isAgendaItem) {
-					if(item.changedAttributes()['showInNewsletter'] && !(item.changedAttributes()['title'] || item.changedAttributes()['shortTitle'] )) {
+					if((item.changedAttributes()['showInNewsletter'] || item.changedAttributes()['explanation']) 
+            && 
+            !(item.changedAttributes()['title'] || item.changedAttributes()['shortTitle'] )) {
 						resetFormallyOk = false;
 					}
 				}
