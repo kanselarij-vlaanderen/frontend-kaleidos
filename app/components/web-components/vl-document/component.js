@@ -48,7 +48,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
           modelIdToDelete: this.documentVersionToDelete.get('id'),
         })
       );
-      this.fileService.get('deleteDocumentWithUndo').perform(this.documentVersionToDelete);
+      this.deleteDocumentVersionWithUndo();
       this.set('isVerifyingDelete', false);
       this.set('documentVersionToDelete', null);
     },
@@ -77,5 +77,22 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       }
       this.resetPreferredAccessLevel();
     },
+  },
+
+  async deleteDocumentVersionWithUndo() {
+    const { documentVersionToDelete, item } = this;
+    const document = await documentVersionToDelete.get('document');
+    const documentVersions = await document.get('documentVersions');
+    if(documentVersions.length > 1) {
+      await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
+    }else {
+      const documentToDelete = document;
+      await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
+        if(!item.aboutToDelete && documentVersions) {
+          item.hasMany('documentVersions').reload();
+        }
+      });
+    }
+
   },
 });
