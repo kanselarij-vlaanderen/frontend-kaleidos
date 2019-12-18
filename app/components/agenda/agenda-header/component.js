@@ -36,12 +36,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   downloadAllDocumentsLink: computed('currentSession', 'currentAgenda', function() {
     const agenda_id = this.get('currentAgenda.id');
     const date = moment(this.currentSession.get('plannedStart')).format('DD_MMMM_YYYY').toString();
-    return `/file-bundling-service/bundleAllFiles?agenda_id=${agenda_id}&meeting_date=${date}`;
-  }),
-
-  downloadName: computed('currentSession', 'currentAgenda', function() {
-    const date = moment(this.currentSession.get('plannedStart')).format('DD_MMMM_YYYY').toString();
-    return `agenda_van_${date}.zip`;
+    return `/file-bundling-service/bundleAllFiles/${agenda_id}?meeting_date=${date}`;
   }),
 
   hasMultipleAgendas: computed('agendas.@each', async function() {
