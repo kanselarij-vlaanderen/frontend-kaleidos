@@ -7,7 +7,7 @@ export default Service.extend({
   globalError: inject(),
   store: inject(),
   shouldUndoChanges: false,
-  documentsToDelete: [],
+  objectsToDelete: [],
 
   convertDocumentVersion(documentVersion) {
     try {
@@ -30,24 +30,58 @@ export default Service.extend({
   },
 
   deleteDocumentWithUndo: task(function*(documentToDelete) {
-    this.documentsToDelete.push(documentToDelete);
+    this.objectsToDelete.push(documentToDelete);
     documentToDelete.set('aboutToDelete', true);
     yield timeout(10000);
     if (this.findObjectToDelete(documentToDelete.get('id'))) {
-      const agendaitem = yield documentToDelete.get('agendaitem');
-      yield documentToDelete.destroyRecord();
-      if (agendaitem) {
-        yield agendaitem.documentVersions.reload()
-      }
+      yield this.deleteDocument(documentToDelete);
     } else {
       documentToDelete.set('aboutToDelete', false);
     }
     this.globalError.set('shouldUndoChanges', false);
   }),
 
+  deleteDocumentVersionWithUndo: task(function*(documentVersionToDelete) {
+    this.objectsToDelete.push(documentVersionToDelete);
+    documentVersionToDelete.set('aboutToDelete', true);
+    yield timeout(10000);
+    if (this.findObjectToDelete(documentVersionToDelete.get('id'))) {
+      yield this.deleteDocumentVersion(documentVersionToDelete);
+    } else {
+      documentVersionToDelete.set('aboutToDelete', false);
+    }
+    this.globalError.set('shouldUndoChanges', false);
+  }),
+  
+  async deleteDocument(document) {
+    const documentToDelete = await document;
+    if (!documentToDelete) return;
+    const documentVersions = await documentToDelete.get('documentVersions');
+    await Promise.all(
+      documentVersions.map(async (documentVersion) => {
+        return this.deleteDocumentVersion(documentVersion);
+      })
+    );
+    documentToDelete.destroyRecord();
+  },
+
+  async deleteDocumentVersion(documentVersion) {
+    const documentVersionToDelete = await documentVersion;
+    if (!documentVersionToDelete) return;
+    const file = documentVersionToDelete.get('file');
+    await this.deleteFile(file);
+    return documentVersionToDelete.destroyRecord();
+  },
+
+  async deleteFile(file) {
+    const fileToDelete = await file;
+    if (!fileToDelete) return;
+    return fileToDelete.destroyRecord();
+  },
+
   async reverseDelete(id) {
     const foundDocumentToDelete = this.findObjectToDelete(id);
-    this.documentsToDelete.removeObject(foundDocumentToDelete);
+    this.objectsToDelete.removeObject(foundDocumentToDelete);
     const record = await this.store.findRecord(
       foundDocumentToDelete.get('constructor.modelName'),
       id
@@ -56,7 +90,7 @@ export default Service.extend({
   },
 
   findObjectToDelete(id) {
-    return this.documentsToDelete.find((document) => document.get('id') === id);
+    return this.objectsToDelete.find((document) => document.get('id') === id);
   },
 
   removeFile(id) {

@@ -5,5 +5,7 @@
     "baseUrl": "http://localhost:4200",
     "env": {
       "KALEIDOS_PROJECT": "../kaleidos-project"
-    }
+    },
+    "viewportHeight": 720,
+    "viewportWidth": 1280
 }

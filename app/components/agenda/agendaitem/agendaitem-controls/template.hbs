@@ -52,7 +52,7 @@
     {{/if}}
     {{#if (or isAdmin (await isDeletable))}}
         <button class="vl-button vl-button--tertiary vl-button--narrow"
-          {{action "tryToDeleteItem" agendaitem}}>
+          {{action "toggleIsVerifying"}}>
           {{t "delete"}}
         </button>
     {{/if}}
@@ -61,8 +61,8 @@
   {{/if}}
   {{#if isVerifying}}
     {{web-components/vl-modal-verify
-            title=(t "delete")
-            message=(t "delete-agendaitem")
+            title=(t "delete-agendaitem")
+            message=(await deleteWarningText)
             cancel=(action "toggleIsVerifying")
             verify=(action "verifyDelete" agendaitem)
     }}

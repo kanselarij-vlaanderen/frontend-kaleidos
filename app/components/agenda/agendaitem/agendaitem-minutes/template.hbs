@@ -35,7 +35,7 @@
   {{else}}
     {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
       document=(await agendaitem.meetingRecord.signedDocument)
-      item=agendaitem.meetingRecord
+      item=(await agendaitem.meetingRecord.signedDocument)
     }}
   {{/if}}
 {{else}}

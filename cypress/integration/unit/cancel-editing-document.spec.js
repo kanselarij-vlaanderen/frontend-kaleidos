@@ -14,7 +14,7 @@ context('Tests for KAS-917', () => {
     cy.login('Admin');
   });
 
-  it.only('Editing of a document or document-version but cancelling should show old data', () => {
+  it('Editing of a document or document-version but cancelling should show old data', () => {
     const caseTitle = 'Cypress test: cancel editing document versions - ' + currentTimestamp();
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: cancel editing of documents on agendaitem - ' + currentTimestamp();

@@ -92,7 +92,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   //Set the type
   cy.get('.vlc-input-field-block').eq(0).within(() => {
-    cy.contains(type).click();
+    cy.contains(type).scrollIntoView().click();
   });
 
   // Set the short title
@@ -132,7 +132,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.wait('@createNewSubcase', { timeout: 10000 })
   .then((res) => {
     subcaseId = res.responseBody.data.id;
-  }).verifyAlertSuccess()
+  }).verifyAlertSuccess();
   cy.wait('@createNewsletter', { timeout: 10000 })
   .then(() => {
     return new Cypress.Promise((resolve) => {
