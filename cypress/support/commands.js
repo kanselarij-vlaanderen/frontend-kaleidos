@@ -63,7 +63,7 @@ function logout(){
   cy.server();
   cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('');
-  cy.contains('Afmelden', { timeout: 12000 }).click();
+  cy.contains('Afmelden', { timeout: 12000 }).click({force: true});
   cy.wait('@mockLogout');
 }
 

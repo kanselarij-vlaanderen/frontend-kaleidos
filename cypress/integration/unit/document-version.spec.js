@@ -7,7 +7,7 @@ context('Tests for KAS-1076', () => {
   before(() => {
     cy.server();
   });
-  
+
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
@@ -63,7 +63,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 25);
     });
-    cy.get('.vl-vi-arrow-left-fat').click();
+    cy.get('.vlc-backlink').click();
     cy.addSubcase(type,SubcaseTitleShort + " part 2",subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.route('GET', '**/linkedDocument-versions?page*size*=9999').as('getPage9999');
@@ -188,7 +188,7 @@ context('Tests for KAS-1076', () => {
         });
       });
       cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
-      }); 
+      });
   });
 
   after(() => {
@@ -203,4 +203,3 @@ function currentMoment() {
 function currentTimestamp() {
   return Cypress.moment().unix();
 }
-    
