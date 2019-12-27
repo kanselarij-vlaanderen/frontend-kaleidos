@@ -6,6 +6,7 @@ context('Tests for KAS-917', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
   });
 
   beforeEach(() => {
@@ -177,16 +178,12 @@ context('Tests for KAS-917', () => {
       cy.get('.js-vl-accordion > button').click();
     });
   });
-
-    after(() => {
-      cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-    })
   });
 
-  function currentMoment() {
+function currentMoment() {
     return Cypress.moment();
   }
 
-  function currentTimestamp() {
+function currentTimestamp() {
     return Cypress.moment().unix();
   }

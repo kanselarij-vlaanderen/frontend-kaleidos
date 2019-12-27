@@ -6,6 +6,7 @@ context('Tests for KAS-1076', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
   });
 
   beforeEach(() => {
@@ -190,10 +191,6 @@ context('Tests for KAS-1076', () => {
       cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
       });
   });
-
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-  })
 });
 
 function currentMoment() {

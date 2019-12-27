@@ -10,6 +10,7 @@ context('meeting actions tests', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.createCase(false, caseTitle);
@@ -180,10 +181,6 @@ context('meeting actions tests', () => {
     });
   });
 
-
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-  })
 });
 
 function currentMoment() {

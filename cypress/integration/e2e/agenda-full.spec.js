@@ -8,7 +8,9 @@ context('Full test', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
     cy.login('Admin')
+
   });
 
   it('Scenario where a complete agenda is created', () => {
@@ -127,7 +129,7 @@ context('Full test', () => {
     cy.addRemarkToAgenda('Titel mededeling',
       'mededeling omschrijving',
       [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
-    cy.addAgendaitemToAgenda('Cypress', false);
+    cy.addAgendaitemToAgenda();
     cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();
     //#endregion
@@ -152,10 +154,6 @@ context('Full test', () => {
 
 
   });
-
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-  })
 
 });
 

@@ -2,7 +2,12 @@
 /// <reference types="Cypress" />
 
 context("Table Row Click tests", () => {
-	beforeEach(() => {
+
+  before(() => {
+    cy.resetDB();
+  });
+
+  beforeEach(() => {
     cy.server();
     cy.login('Admin');
   });

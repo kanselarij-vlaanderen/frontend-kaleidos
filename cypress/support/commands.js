@@ -1,30 +1,3 @@
-
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-
 /* eslint-disable no-undef */
 import 'cypress-file-upload';
 
@@ -38,6 +11,7 @@ Cypress.Commands.add('clickReverseTab', clickReverseTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 
 Cypress.Commands.add('verifyAlertSuccess', verifyAlertSuccess);
+Cypress.Commands.add('resetDB', resetDB);
 
 
 /**
@@ -121,4 +95,21 @@ function clickAgendaitemTab(tabName){
  */
 function verifyAlertSuccess() {
   cy.get('.toasts-container', { timeout: 12000 }).contains('Gelukt').should('be.visible');
+}
+
+function resetDB() {
+  const kaleidosProject = Cypress.env('KALEIDOS_PROJECT');
+  const env = {
+    COMPOSE_FILE: kaleidosProject + '/docker-compose.yml:' +
+      kaleidosProject + '/docker-compose.development.yml:' +
+      kaleidosProject + '/docker-compose.test.yml:' +
+      kaleidosProject + '/docker-compose.override.yml'
+  };
+
+  cy.exec('docker-compose stop triplestore elasticsearch file', { env })
+    .exec(`rm -rf ${kaleidosProject}/testdata`)
+    .exec(`unzip -o ${kaleidosProject}/testdata.zip -d ${kaleidosProject}`)
+    .exec('docker-compose up -d', { env })
+    .exec('docker-compose restart cache resource', { env })
+    .wait(5000)
 }

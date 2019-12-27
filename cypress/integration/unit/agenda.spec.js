@@ -9,6 +9,7 @@ context('Agenda tests', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
@@ -48,7 +49,4 @@ context('Agenda tests', () => {
       cy.addAgendaitemToAgenda(false);
   });
 
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-  })
 });
