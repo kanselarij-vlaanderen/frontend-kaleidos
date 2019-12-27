@@ -32,6 +32,9 @@ export default Service.extend({
 			case 'warning-undo':
 				yield timeout(15000);
 				break;
+      case 'warning':
+				yield timeout(15000);
+				break;
 		}
 		this.messages.removeObject(messageToAdd);
 	}),

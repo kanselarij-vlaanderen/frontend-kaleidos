@@ -1,13 +1,20 @@
-import Service from '@ember/service';
-import { inject } from '@ember/service';
+import Service, { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 import $ from 'jquery';
+import { later } from '@ember/runloop';
+import fetch from 'fetch';
+import { alias } from '@ember/object/computed';
+import EmberObject from '@ember/object';
+import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 
-export default Service.extend({
+export default Service.extend(FileSaverMixin, {
   globalError: inject(),
   store: inject(),
+  sessionService: inject(),
+  intl: inject(),
   shouldUndoChanges: false,
   objectsToDelete: [],
+  currentAgenda: alias('sessionService.currentAgenda'),
 
   convertDocumentVersion(documentVersion) {
     try {
@@ -52,7 +59,7 @@ export default Service.extend({
     }
     this.globalError.set('shouldUndoChanges', false);
   }),
-  
+
   async deleteDocument(document) {
     const documentToDelete = await document;
     if (!documentToDelete) return;
@@ -100,35 +107,56 @@ export default Service.extend({
     });
   },
 
-  getAllDocumentsFromAgenda(agendaId) {
-    return $.ajax({
-      method: 'GET',
-      url: `/document-grouping-service/getDocumentsFromAgenda/${agendaId}`,
-    })
-      .then((result) => {
-        return result.data.files;
+  downloadBundle(agendaId, meetingDate) {
+    return fetch(`/file-bundling-service/bundleAllFiles?agenda_id=${agendaId}`, {
+      method: 'POST'
+    }).then(response => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        throw new Error(response)
+      }
+    }).then(path => {
+      this.toast('bundling-started');
+      return this.tryDownload(path);
+    }).then(file => {
+      return this.saveFileAs(`${this.currentAgenda.get('agendaName')}_${meetingDate}.zip`, file, 'application/zip');
+    }).then(() => {
+      return this.toast('bundling-done', 'success', 'successfully-created-title');
+    }).catch(err => {
+      this.toast('bundling-failed', 'error');
+      throw new Error(err);
+    });
+
+  },
+
+  tryDownload(path, countdown = 5) {
+    return fetch(`/file-bundling-service/downloadBundle?path=${path}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.blob();
+        } else if (response.status === 202) {
+          return new Promise((resolve, reject) =>
+            later(this, () => this.tryDownload(path, --countdown)
+              .then(res => resolve(res))
+              .catch(err => reject(err)), Math.max(1000 * countdown, 1000)));
+        } else {
+          throw new Error(response)
+        }
       })
-      .catch(() => {
-        return;
+      .catch(err => {
+        this.toast('bundling-failed', 'error');
+        throw new Error(err);
       });
   },
 
-  getZippedFiles(date, agenda, files) {
-    return $.ajax({
-      method: 'POST',
-      url: `/file-bundling-service/bundleAllFiles`,
-      dataType: 'arraybuffer', // or 'blob'
-      data: {
-        meetingDate: date.toString(),
-        agenda: JSON.stringify(agenda),
-        files: JSON.stringify(files),
-      },
-    })
-      .then((content) => {
-        return content;
+  toast(messageKey, type = 'warning', titleKey = 'warning-title') {
+    return this.globalError.showToast.perform(
+      EmberObject.create({
+        title: this.intl.t(titleKey),
+        message: this.intl.t(messageKey),
+        type
       })
-      .catch(() => {
-        return;
-      });
-  },
+    );
+  }
 });

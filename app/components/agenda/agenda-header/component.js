@@ -53,20 +53,20 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     let text = '';
     if(this.isDeletingAgenda) {
       text = this.intl.t('agenda-delete-message');
-    } 
+    }
     if(this.isLockingAgenda) {
       text = this.intl.t('agenda-lock-message');
-    } 
+    }
     return text + ' ' + this.intl.t('please-be-patient');
   }),
-  
+
   loaderTitle: computed('isDeletingAgenda','isLockingAgenda', function() {
     if(this.isDeletingAgenda) {
       return this.intl.t('agenda-delete');
-    } 
+    }
     if(this.isLockingAgenda) {
       return this.intl.t('agenda-lock');
-    } 
+    }
     return "";
   }),
 
@@ -93,7 +93,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     if (!agenda) {
       //TODO possible dead code, there is always an agenda ?
       return;
-    }    
+    }
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
     const agendaitems = await agenda.get('agendaitems');
     if(agendaitems){
@@ -169,7 +169,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         .filter((agenda) => agenda.name !== 'Ontwerpagenda')
         .sortBy('-name')
         .get('firstObject');
-        
+
       const session = await lastAgenda.get('createdFor');
       session.set('isFinal', true);
       session.set('agenda', lastAgenda);
@@ -210,16 +210,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async downloadAllDocuments() {
-      const date = moment(this.currentSession.get('plannedStart'))
-        .format('DD_MM_YYYY')
-        .toString();
-      const files = await this.fileService.getAllDocumentsFromAgenda(this.currentAgenda.get('id'));
-      const file = await this.fileService.getZippedFiles(date, this.currentAgenda, files);
-      return this.saveFileAs(
-        `${this.currentAgenda.get('agendaName')}_${date}.zip`,
-        file,
-        'application/zip'
-      );
+      const agenda_id = this.get('currentAgenda.id');
+      const date = moment(this.currentSession.get('plannedStart')).format('DD_MMMM_YYYY').toString();
+      await this.fileService.downloadBundle(agenda_id, date);
     },
 
     async deleteAgenda(agenda) {
