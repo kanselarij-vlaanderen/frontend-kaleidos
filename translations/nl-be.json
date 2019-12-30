@@ -484,7 +484,9 @@
   "edit-session": "Vergadering wijzigen",
   "users-loading-text": "De gebruikers worden geladen..",
   "generate-xml": "Genereer XML voor Belga",
-  "delete-agendaitem": "Dit punt is reeds goedgekeurd. Bent u zeker dat u dit agendapunt wilt verwijderen?",
+  "delete-agendaitem": "Agendapunt verwijderen",
+  "delete-agendaitem-message": "Bent u zeker dat u dit agendapunt wilt verwijderen?",
+  "delete-agendaitem-from-meeting-message": "Dit punt is reeds goedgekeurd. Bent u zeker dat u dit agendapunt wilt verwijderen? Dit zal het agendapunt ook verwijderen op reeds goedgekeurde agenda’s.",
   "open-note": "Nota openen",
   "propose": "Indienen",
   "delete-account": "Gebruiker verwijderen",
@@ -503,5 +505,8 @@
   "filtered-agendas": "Deze data is gefilterd.",
   "editing-agenda-overview": "U bent nu aan het bewerken. U kan de volgorde en de status van de mededelingen en nota's aanpassen. Wijzigingen worden onmiddellijk opgeslagen.",
   "end-editing-overview": "Bewerken afsluiten",
-  "clear-filter": "Reset filter"
+  "clear-filter": "Reset filter",
+  "agenda-delete-message": "De agenda wordt verwijderd. Dit kan even duren.",
+  "agenda-lock-message": "De agenda wordt afgesloten. Dit kan even duren.",
+  "explanation": "Toelichting"
 }

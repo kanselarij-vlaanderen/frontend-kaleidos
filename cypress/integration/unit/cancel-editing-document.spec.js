@@ -6,14 +6,15 @@ context('Tests for KAS-917', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
   });
-  
+
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
   });
 
-  it.only('Editing of a document or document-version but cancelling should show old data', () => {
+  it('Editing of a document or document-version but cancelling should show old data', () => {
     const caseTitle = 'Cypress test: cancel editing document versions - ' + currentTimestamp();
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: cancel editing of documents on agendaitem - ' + currentTimestamp();
@@ -36,7 +37,7 @@ context('Tests for KAS-917', () => {
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.setFormalOkOnAllItems();
       cy.agendaItemExists(SubcaseTitleShort).click();
-      
+
       cy.clickAgendaitemTab('Documenten');
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -44,7 +45,7 @@ context('Tests for KAS-917', () => {
           cy.get('.vl-title--h6 > span').contains(file.newFileName);
         });
       });
-      
+
       cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -62,7 +63,7 @@ context('Tests for KAS-917', () => {
       cy.get('.vl-u-spacer-extended-left-s > .vl-link').contains('Wijzigen').click();
       cy.get('tbody > tr').as('documentRows');
       cy.get('@documentRows').eq(0).within(() => {
-        cy.get('td').eq(1).within(() => { 
+        cy.get('td').eq(1).within(() => {
           cy.get('.ember-power-select-trigger').click();
         });
       });
@@ -71,7 +72,7 @@ context('Tests for KAS-917', () => {
       });
 
       cy.get('@documentRows').eq(0).within(() => {
-        cy.get('td').eq(2).within(() => { 
+        cy.get('td').eq(2).within(() => {
           cy.get('.ember-power-select-trigger').click();
         });
       });
@@ -90,12 +91,12 @@ context('Tests for KAS-917', () => {
       cy.get('.vl-u-spacer-extended-left-s > .vl-link').contains('Wijzigen').click();
       cy.get('tbody > tr').as('documentRows');
       cy.get('@documentRows').eq(0).within(() => {
-        cy.get('td').eq(1).within(() => { 
+        cy.get('td').eq(1).within(() => {
           cy.contains('Nota');
         });
       });
       cy.get('@documentRows').eq(0).within(() => {
-        cy.get('td').eq(2).within(() => { 
+        cy.get('td').eq(2).within(() => {
           cy.get('.ember-power-select-trigger').click();
         });
       });
@@ -177,16 +178,12 @@ context('Tests for KAS-917', () => {
       cy.get('.js-vl-accordion > button').click();
     });
   });
-
-    after(() => {
-      cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-    })
   });
-  
-  function currentMoment() {
+
+function currentMoment() {
     return Cypress.moment();
   }
-  
-  function currentTimestamp() {
+
+function currentTimestamp() {
     return Cypress.moment().unix();
   }

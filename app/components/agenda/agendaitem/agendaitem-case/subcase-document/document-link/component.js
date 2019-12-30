@@ -139,7 +139,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
           modelIdToDelete: this.documentToDelete.get('id'),
         })
       );
-      this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete);
+      this.deleteDocumentWithUndo();
       this.set('isVerifyingDelete', false);
       this.set('documentToDelete', null);
     },
@@ -152,6 +152,16 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     async toggleConfidential(document) {
 
     },
+  },
+
+  async deleteDocumentWithUndo() {
+    const { item } = this;
+    const documentVersions = item.get('documentVersions');
+    await this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete).then(() => {
+      if(!item.aboutToDelete && documentVersions) {
+        item.hasMany('documentVersions').reload();
+      }
+    });
   },
 
   async addDocumentVersionsToAgendaitems(documentVersions, agendaitems) {

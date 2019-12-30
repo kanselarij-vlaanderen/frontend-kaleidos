@@ -75,6 +75,13 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   },
 
+  // Disable lazy partial rendering when deleting
+  aboutToDelete: computed('agendaitem.aboutToDelete', function() {
+    if (this.agendaitem) {
+      return this.agendaitem.get('aboutToDelete');
+    }
+  }),
+
   /* Begin lazy partial rendering
 
      This implementation of lazy partial rendering uses an

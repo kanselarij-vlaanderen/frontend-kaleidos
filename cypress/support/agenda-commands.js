@@ -16,7 +16,7 @@ Cypress.Commands.add('addAgendaitemToAgenda',addAgendaitemToAgenda);
 Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
 Cypress.Commands.add('agendaItemExists', agendaItemExists);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
-Cypress.Commands.add('closeAgenda', closeAgenda)
+Cypress.Commands.add('closeAgenda', closeAgenda);
 
 
 // ***********************************************
@@ -110,9 +110,6 @@ function openAgendaForDate(agendaDate, meetingId) {
 
   cy.visit('');
   cy.wait('@getMeetings', { timeout: 20000 });
-  cy.get('.vlc-tabs-reverse', { timeout: 20000 }).should('exist').within(() =>{
-    cy.contains('Historiek').click();
-  });
   cy.get('.vlc-input-field-group-wrapper--inline', { timeout: 10000 }).should('exist').within(() => {
     cy.get('.vl-input-field').type(searchDate);
     cy.get('.vl-button').click();
@@ -188,7 +185,8 @@ function setFormalOkOnAllItems() {
               .wait('@patchAgendaItem')
               .wait(1000) // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
             : cy.get('@selectBox')));
-  cy.get('@editFormality').click();
+  cy.get('.vlc-agenda-items .vl-alert button')
+    .click();
 }
 
 /**
@@ -323,7 +321,7 @@ function addAgendaitemToAgenda(caseTitle, postponed){
     }
     if(caseTitle){
       cy.get('@formGrid').eq(0).within(() => {
-        cy.get('.vl-input-field').clear().type(caseTitle);
+        cy.get('.vl-input-field').clear().type(caseTitle, {force: true});
         cy.wait('@getSubcasesFiltered', { timeout: 12000 });
       });
       cy.get('table > tbody > tr', ).as('rows');

@@ -16,8 +16,8 @@
     "lint:js": "eslint .",
     "start": "ember serve --proxy=http://localhost:80",
     "test": "ember test",
-    "cypress-local": "./node_modules/.bin/cypress open --browser chrome --env configFile=development",
-    "cypress-dev": "./node_modules/.bin/cypress open --browser chrome --env configFile=dev"
+    "cypress-local": "./node_modules/.bin/cypress open --browser chrome ",
+    "cypress-dev": "./node_modules/.bin/cypress open --browser chrome --config baseUrl=https://kaleidos-dev.vlaanderen.be"
   },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
@@ -78,8 +78,7 @@
     "loader.js": "^4.7.0",
     "qunit-dom": "^0.8.0",
     "sanitize-filename": "^1.6.3",
-    "sass": "^1.23.7",
-    "sparql-client-2": "^0.6.3"
+    "sass": "^1.23.7"
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"

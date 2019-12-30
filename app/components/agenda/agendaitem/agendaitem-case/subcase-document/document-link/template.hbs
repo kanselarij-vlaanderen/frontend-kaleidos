@@ -148,7 +148,10 @@
                   myReverseSortedVersions
                 ) as |documentVersion|
               }}
-                {{web-components/vl-document documentVersion=documentVersion}}
+                {{web-components/vl-document 
+                  documentVersion=documentVersion
+                  item=item
+                }}
               {{/each}}
             </div>
           </div>
