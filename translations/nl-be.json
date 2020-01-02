@@ -511,5 +511,8 @@
   "clear-filter": "Reset filter",
   "agenda-delete-message": "De agenda wordt verwijderd. Dit kan even duren.",
   "agenda-lock-message": "De agenda wordt afgesloten. Dit kan even duren.",
-  "explanation": "Toelichting"
+  "explanation": "Toelichting",
+  "bundling-started":  "De zip van de documenten word aangemaakt. Dit kan enkele minuten duren.",
+  "bundling-done": "De zip is klaar!",
+  "bundling-failed": "Er is iets foutgelopen tijdens het aanmaken van de zip"
 }

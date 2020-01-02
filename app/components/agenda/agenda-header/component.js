@@ -236,6 +236,12 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       this.navigateToDocuments();
     },
 
+    async downloadAllDocuments() {
+      const agenda_id = this.get('currentAgenda.id');
+      const date = moment(this.currentSession.get('plannedStart')).format('DD_MMMM_YYYY').toString();
+      await this.fileService.downloadBundle(agenda_id, date);
+    },
+
     async deleteAgenda(agenda) {
       this.set('isDeletingAgenda', true);
       await this.deleteAgenda(agenda);
