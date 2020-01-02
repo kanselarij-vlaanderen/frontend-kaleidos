@@ -33,12 +33,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
-  downloadAllDocumentsLink: computed('currentSession', 'currentAgenda', function() {
-    const agenda_id = this.get('currentAgenda.id');
-    const date = moment(this.currentSession.get('plannedStart')).format('DD_MMMM_YYYY').toString();
-    return `/file-bundling-service/bundleAllFiles/${agenda_id}?meeting_date=${date}`;
-  }),
-
   hasMultipleAgendas: computed('agendas.@each', async function() {
     return this.agendas && this.agendas.then(agendas => agendas.length > 1);
   }),
