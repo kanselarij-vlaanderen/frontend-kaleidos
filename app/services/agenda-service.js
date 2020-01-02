@@ -72,6 +72,15 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
       .then(() => {
         notifyPropertyChange(newAgenda, 'agendaitems');
         return newAgenda;
+      }).catch(() => {
+        this.store.findRecord('agenda', newAgenda.get('id')).then((agenda) => {
+          agenda.destroyRecord();
+        });
+        this.globalError.showToast.perform(EmberObject.create({
+          title: this.intl.t('warning-title'),
+          message: "Something went wrong while approving the agenda. Please try again.",
+          type: 'error'
+        }));
       });
   },
 
@@ -221,7 +230,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
       const agendaitems = await subcase.get('agendaitems');
 
       if(subcase){
-        await Promise.all(agendaitems.map(async item => { 
+        await Promise.all(agendaitems.map(async item => {
           const agenda = await item.get('agenda');
           const meeting = await agenda.get('createdFor');
           const meetingId = await meeting.get('id');

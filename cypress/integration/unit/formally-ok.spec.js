@@ -9,6 +9,7 @@ context('Formally ok/nok tests', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
@@ -28,12 +29,9 @@ context('Formally ok/nok tests', () => {
     cy.get('.vlc-agenda-items__status').should('contain','Formeel OK');
     cy.get('.vlc-side-nav-item').as('agendas');
     cy.get('@agendas').eq(1).click();
-    cy.wait(1000); //Make sure the formally ok can load (false positive if testing immediately)
+    cy.wait(2000); //Make sure the formally ok can load (false positive if testing immediately)
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
     cy.get('.vlc-agenda-items__status').should('not.contain', 'Formeel OK');
   });
 
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString() });
-  })
 });
