@@ -43,20 +43,6 @@
     </div>
   {{/if}}
 
-  {{#if
-          (gt (await subcase.newsletterInfo.documentVersions.length) 0)
-  }}
-    <div class="vl-u-spacer">
-      <div class="vl-u-spacer-extended-top-s">
-        {{utils/documentversions-list-for-item
-                item=(await subcase.newsletterInfo)
-                isClickable=true
-                subcase=subcase
-        }}
-      </div>
-    </div>
-  {{/if}}
-
   <hr/>
   <div class="vl-u-spacer vl-u-spacer-extended-top-s">
     {{#if (await subcase.newsletterInfo.finished)}}

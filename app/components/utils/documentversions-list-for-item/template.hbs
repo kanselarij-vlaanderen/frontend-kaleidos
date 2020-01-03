@@ -1,7 +1,0 @@
-{{#if (is-pending item.documentVersions)}}
-  {{web-components/vl-loader text=(t "documents-loading-text")}}
-{{else}}
-  {{#each (await item.documentVersions) as |documentVersion|}}
-    {{item-document item=item document=documentVersion.document isClickable=isClickable}}
-  {{/each}}
-{{/if}}
