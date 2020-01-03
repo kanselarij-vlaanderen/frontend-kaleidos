@@ -26,7 +26,24 @@
       {{await subcase.newsletterInfo.newsletterProposal}}
     </p>
   </div>
-  <hr />
+
+  {{#if (is-pending agendaitem.themes)}}
+    {{web-components/vl-loader text=(t "themes-loading-text")}}
+  {{else if (gt (await agendaitem.themes.length) 0)}}
+    <ul>
+      {{#each (await agendaitem.themes) as |theme|}}
+        <li class="vl-pill">
+          {{theme.label}}
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <div class="vl-u-spacer-extended-top-s">
+      {{web-components/vl-alert message=(t "no-themes-yet")}}
+    </div>
+  {{/if}}
+
+  <hr/>
   <div class="vl-u-spacer vl-u-spacer-extended-top-s">
     {{#if (await subcase.newsletterInfo.finished)}}
       <div class="vlc-pill vlc-pill--success">
@@ -38,30 +55,12 @@
       </div>
     {{/if}}
   </div>
-  {{#if
-    (and
-      (gt (await subcase.newsletterInfo.documentVersions.length) 0)
-      (await subcase.newsletterInfo.finished)
-    )
-  }}
-    <div class="vl-u-spacer">
-      <h4 class="vl-title vl-title--h6">
-        {{t "documents-attached-to"}}
-      </h4>
-      <div class="vl-u-spacer-extended-top-s">
-        {{utils/documents-list-for-item
-          item=(await subcase.newsletterInfo)
-          isClickable=true
-          subcase=subcase
-        }}
-      </div>
-    </div>
-  {{/if}}
+
 {{else}}
   {{news-item/edit-item
-    subcase=(await subcase)
-    item=(await subcase.newsletterInfo)
-    agendaitem=agendaitem
-    isEditing=isEditing
+          subcase=(await subcase)
+          item=(await subcase.newsletterInfo)
+          agendaitem=agendaitem
+          isEditing=isEditing
   }}
 {{/if}}
