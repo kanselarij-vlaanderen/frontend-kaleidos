@@ -5,6 +5,7 @@ import { A } from '@ember/array';
 
 async function muSearch(index, page, size, filter, dataMapping) {
   let endpoint = `/${index}/search?page[size]=${size}&page[number]=${page}`;
+  endpoint += '&collapse_uuids=t';
 
   for (let field in filter) {
     endpoint += `&filter[${field}]=${filter[field]}`;
