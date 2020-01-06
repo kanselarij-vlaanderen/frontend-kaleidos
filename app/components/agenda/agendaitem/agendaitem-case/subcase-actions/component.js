@@ -8,18 +8,38 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 	propertiesToSet: ['approvals'],
 
 	actions: {
-		async saveChanges() {
+		async saveChanges(approvals) {
 			this.set('isLoading', true);
-			const { item } = this;
-			await Promise.all(item.get('approvals').map(async (approval) => {
-				return await approval.save();
-			}));
+      const { item } = this;
+			await Promise.all(approvals.map(async (approval) => {
+        if(approval.changedAttributes()){
+          return await approval.save();
+        }
+				
+      }));
+      // item.reload();
+      // item.hasMany('approvals').reload();
 			const agenda = await item.get('agenda');
 			if (agenda) {
 				await this.updateModifiedProperty(agenda);
 			}
 			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
+		},
+		async toggleApproved(approval) {
+      await this.store.findRecord('approval', approval.id, { reload:false}).then(function(item) {
+        const currentValue = approval.get('approved')
+        item.set('approved', !currentValue);
+        item.save();
+      });
+      // console.log(approval.get('approved'));
+      // approval.set('approved', value);
+      // await approval.save();
+      // const agenda = await approval.get('agendaitem.agenda');
+			// if (agenda) {
+			// 	await this.updateModifiedProperty(agenda);
+			// }
+			// this.toggleProperty('isEditing');
 		},
 
 		async cancelEditing() {
@@ -34,9 +54,9 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		},
 
 		async toggleIsEditing() {
-			this.set('isLoading', true);
-			await this.checkForActionChanges();
-			this.set('isLoading', false);
+			// this.set('isLoading', true);/
+			// await this.checkForActionChanges();
+			// this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		}
 	}

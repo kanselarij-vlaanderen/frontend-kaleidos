@@ -40,7 +40,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#each item.approvals as |approval|}}
+          {{#each (await item.sortedApprovals) as |approval|}}
             <tr>
               <td>
                 <h6 class="vl-title vl-title--h6">
@@ -52,7 +52,7 @@
               </td>
               <td>
                 {{#if (not isEditing)}}
-                  {{#if approval.approved}}
+                  {{#if (await approval.approved)}}
                     <p class="vl-icon-wrapper vl-u-text--success">
                       <span
                         class="vl-icon vl-icon--before vl-vi vl-vi-check"
@@ -75,19 +75,11 @@
                   {{/if}}
                 {{else}}
                   <div class="vlc-input-field-block">
-                    <label class="vl-checkbox vl-checkbox__box">
-                      {{input
-                        class="vl-checkbox__toggle"
-                        type="checkbox"
-                        checked=approval.approved
-                      }}
-                      <div class="vl-checkbox__label">
-                        <i class="vl-checkbox__box"></i>
-                        <span class="vl-annotation">
-                          {{t "approval-mandatee"}}
-                        </span>
-                      </div>
-                    </label>
+                    {{web-components/vl-checkbox
+                      value=approval.approved
+                      label=(t "approval-mandatee")
+                      toggle=(action "toggleApproved" approval)
+                    }}
                   </div>
                 {{/if}}
               </td>
@@ -112,7 +104,7 @@
       {{web-components/vl-save-button
         text=(t "save")
         isLoading=isLoading
-        saveAction=(action "saveChanges")
+        saveAction=(action "saveChanges" item.approvals)
       }}
     </div>
   {{/if}}

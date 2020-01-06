@@ -9,6 +9,8 @@ export default Mixin.create({
 		try {
 
 			const item = await this.get('item');
+			await item.hasMany('approvals').reload();
+			await item.hasMany('mandatees').reload();
 			const approvals = await item.get('approvals');
 			const mandatees = await item.get('mandatees');
 			const mandateesAlreadyAdded = await Promise.all(approvals.map(async (approval) => await approval.get('mandatee')));
@@ -18,6 +20,7 @@ export default Mixin.create({
 			await item.hasMany('approvals').reload();
 
 		} catch(e) {
+			console.log('ERRORS HIER', e);
 				// TODO: Handle errors
 		}
 	},
@@ -32,17 +35,38 @@ export default Mixin.create({
 		return Promise.all(mandatees.map(async (mandatee) => {
 			const indexOf = mandateesAlreadyAdded.indexOf(mandatee);
 			if (indexOf == -1) {
-				const approvalToCreate = this.store.createRecord('approval', {
-					mandatee: mandatee,
-					created: date,
-					modified: date,
-				})
+				// const approvalToCreate = this.store.createRecord('approval', {
+				// 	mandatee: mandatee,
+				// 	created: date,
+				// 	modified: date,
+				// })
+        // await approvalToCreate.save();
+        // item.get('approvals').addObject(approvalToCreate);
+
 				if (this.modelIsAgendaItem(item)) {
-					approvalToCreate.set('agendaitem', item);
-					return approvalToCreate.save();
+          const approvalToCreate = this.store.createRecord('approval', {
+            mandatee: mandatee,
+            created: date,
+			modified: date,
+			approved: false,
+			agendaitem : item,
+          })
+          await approvalToCreate.save();
+          item.get('approvals').addObject(approvalToCreate);
+					// approvalToCreate.set('agendaitem', item);
+					// return approvalToCreate.save();
 				} else {
-					approvalToCreate.set('subcase', item);
-					return approvalToCreate.save();
+          const approvalToCreate = this.store.createRecord('approval', {
+            mandatee: mandatee,
+            created: date,
+			modified: date,
+			approved: false,
+            subcase : item,
+          })
+          await approvalToCreate.save();
+          item.get('approvals').addObject(approvalToCreate);
+					// approvalToCreate.set('subcase', item);
+					// return approvalToCreate.save();
 				}
 			}
 		}))
@@ -59,7 +83,8 @@ export default Mixin.create({
 		return await Promise.all(mandateesAlreadyAdded.map(mandateeAdded => {
 			if (mandateeAdded) {
 				const foundMandatee = mandatees.find(mandatee => mandateeAdded.get('id') === mandatee.get('id'));
-				if (!foundMandatee) {
+				const alreadyProcessed = mandateesProcessed.find(mandatee => foundMandatee.get('id') === mandatee.get('id'));
+				if (!foundMandatee || alreadyProcessed) {
 					const approvalToDelete = approvals.find((approval) => approval.get('mandatee.id') == mandateeAdded.get('id'));
 					approvalToDelete.destroyRecord();
 				} else {
