@@ -54,7 +54,7 @@ export default Route.extend(DataTableRouteMixin, {
       filter[':sqs:title'] = '*'; // search without filter
     }
 
-    return search('agendaitems', params.page, params.size, filter, function(item) {
+    return search('agendaitems', params.page, params.size, params.sort, filter, function(item) {
       const entry = item.attributes;
       entry.id = item.id;
       return entry;
