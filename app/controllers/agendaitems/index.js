@@ -21,7 +21,9 @@ export default Controller.extend({
     },
     navigateToAgendaitem(searchEntry) {
       if (searchEntry.meetingId) {
-        this.transitionToRoute('agenda.agendaitems.agendaitem', searchEntry.meetingId, searchEntry.id);
+        this.transitionToRoute('agenda.agendaitems.agendaitem', searchEntry.meetingId, searchEntry.id, {
+          queryParams: { selectedAgenda: searchEntry.agendaId }
+        });
       } else {
         warn(`Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, { id: 'agendaitem.no-meeting' });
       }

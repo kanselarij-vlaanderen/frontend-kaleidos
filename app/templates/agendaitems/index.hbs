@@ -70,6 +70,7 @@
             {{#link-to
                  "agenda.agendaitems.agendaitem"
                  row.meetingId row.id
+                 (query-params selectedAgenda=row.agendaId)
                  class="vl-button vl-button--link vl-button--icon"
             }}
               <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
