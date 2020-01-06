@@ -4,6 +4,10 @@
 
 context('Case test', () => {
 
+  before(() => {
+    cy.resetDB();
+  });
+
   beforeEach(() => {
     cy.server();
     cy.login('Admin');

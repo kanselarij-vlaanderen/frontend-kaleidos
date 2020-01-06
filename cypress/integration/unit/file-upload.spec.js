@@ -4,6 +4,7 @@
 context('Add files to an agenda', () => {
   before(() => {
     cy.server();
+    cy.resetDB();
   });
 
   beforeEach(() => {
@@ -38,8 +39,6 @@ context('Add files to an agenda', () => {
           cy.get('.vl-title--h6 > span').contains(/TER/);
         });
       });
-
-      cy.deleteAgenda(meetingId, true);
     });
   });
 
@@ -86,7 +85,6 @@ context('Add files to an agenda', () => {
           cy.get('.vl-title--h6 > span').contains(/7e/);
         });
       });
-      cy.deleteAgenda(meetingId, true);
     });
   });
 
@@ -121,7 +119,7 @@ context('Add files to an agenda', () => {
       cy.wait('@deleteFile', { timeout: 12000 });
       cy.wait('@deleteVersion', { timeout: 12000 });
       cy.wait('@deleteDocument', { timeout: 12000 });
-      
+
       cy.get('@docCards').should('have.length', 1);
       cy.get('@docCards').eq(0).within(() => {
         cy.get('.vl-title--h6 > span').contains(/2e/);

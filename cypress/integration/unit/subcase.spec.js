@@ -11,6 +11,7 @@ context('Subcase tests', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.createCase(false, caseTitle);
@@ -115,7 +116,7 @@ context('Subcase tests', () => {
     cy.login('Minister');
     cy.openCase(caseTitle);
     cy.openSubcase(0);
-    cy.url().should('contain', '/deeldossiers/')
+    cy.url().should('contain', '/deeldossiers/');
     cy.url().should('contain', '/overzicht');
     cy.contains('Wijzigen').should('not.exist');
     cy.contains('Acties').should('not.exist');
@@ -150,10 +151,6 @@ context('Subcase tests', () => {
     cy.url().should('contain', '/agendapunten/');
     cy.url().should('not.contain', '/dossier/');
   });
-
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-  })
 });
 
 function currentTimestamp() {

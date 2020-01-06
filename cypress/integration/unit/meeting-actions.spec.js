@@ -10,6 +10,7 @@ context('meeting actions tests', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.createCase(false, caseTitle);
@@ -47,7 +48,7 @@ context('meeting actions tests', () => {
       cy.agendaItemExists(SubcaseTitleShort).click();
       cy.contains('Naar procedurestap', { timeout: 12000});
       cy.changeSelectedAgenda('Ontwerpagenda');
-      cy.deleteAgenda(meetingId); 
+      cy.deleteAgenda(meetingId);
 
       // Verify subcase is still ok on agenda A after delete designagenda
       cy.agendaItemExists(SubcaseTitleShort).click();
@@ -84,7 +85,7 @@ context('meeting actions tests', () => {
       cy.agendaItemExists(SubcaseTitleShort).click();
       cy.contains('Naar procedurestap', { timeout: 12000});
       cy.changeSelectedAgenda('Ontwerpagenda');
-      cy.closeAgenda(); 
+      cy.closeAgenda();
 
       // Verify subcase is still ok on agenda A after closing the agenda (designagenda is deleted if present)
       cy.agendaItemExists(SubcaseTitleShort).click();
@@ -166,7 +167,7 @@ context('meeting actions tests', () => {
       cy.wait('@deleteSubcasePhase', {timeout: 12000 }); // 2 of these happen
       cy.wait('@patchSubcase', { timeout: 12000 });
       cy.get('.vl-modal').should('not.be.visible');
-      
+
       // Verify subcase is no longer on designagenda after deleting the agendaitem
       cy.changeSelectedAgenda('Agenda A');
       cy.get('li.vlc-agenda-items__sub-item h4')
@@ -180,10 +181,6 @@ context('meeting actions tests', () => {
     });
   });
 
-
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-  })
 });
 
 function currentMoment() {

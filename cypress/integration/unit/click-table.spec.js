@@ -2,7 +2,12 @@
 /// <reference types="Cypress" />
 
 context("Table Row Click tests", () => {
-	beforeEach(() => {
+
+  before(() => {
+    cy.resetDB();
+  });
+
+  beforeEach(() => {
     cy.server();
     cy.login('Admin');
   });
@@ -43,6 +48,6 @@ context("Table Row Click tests", () => {
     cy.get('.vl-alert__content').should('exist').contains('Deze data is gefilterd.');
     cy.get('.vl-button.vl-button--narrow.vl-button--reset').should('exist').contains('Reset filter');
     cy.get('.vl-button.vl-button--narrow.vl-button--reset').contains('Reset filter').click();
-    cy.get('.vl-alert__content').should('not.exist');
+    cy.get('td').contains('No data').should('not.exist');
   })
 });
