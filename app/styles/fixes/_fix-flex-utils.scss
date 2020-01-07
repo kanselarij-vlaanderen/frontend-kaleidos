@@ -11,7 +11,8 @@
   align-items: baseline !important;
 }
 
-.vl-u-display-flex-align-center {
+.vl-u-display-flex-align-center,
+.vl-u-display-flex-items-align-center {
   align-items: center;
 }
 
@@ -21,4 +22,8 @@
 
 .vl-u-flex-direction-column {
   flex-direction: column !important;
+}
+
+.vl-u-flex-align-right {
+  justify-content: flex-end;
 }
