@@ -52,27 +52,52 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
         .toDate(),
     });
 
-    return newAgenda
-      .save()
-      .then((agenda) => {
+    // let newAgenda = this.store.createRecord('agenda', {
+    //   name: 'Ontwerpagenda',
+    //   createdFor: currentSession,
+    //   created: moment()
+    //     .utc()
+    //     .toDate(),
+    //   modified: moment()
+    //     .utc()
+    //     .toDate(),
+    // });
+
+    // return newAgenda
+    //   .save()
+    //   .then((agenda) => {
         if (oldAgenda) {
           return $.ajax({
             method: 'POST',
             url: '/agenda-approve/approveAgenda',
             data: {
-              newAgendaId: agenda.id,
+              agendaName: "Ontwerpagenda",
+              createdFor: currentSession.id,
               oldAgendaId: oldAgenda.id,
             },
+          }).then((result) => {
+            notifyPropertyChange(oldAgenda, 'agendaitems');
+            return this.store.find('agenda', result.body.newAgenda.id);
           });
         } else {
-          notifyPropertyChange(agenda, 'agendaitems');
-          return agenda;
+          // This code is so wrong: if ! oldAgenda return oldAgenda
+          //return oldAgenda;
         }
-      })
-      .then(() => {
-        notifyPropertyChange(newAgenda, 'agendaitems');
-        return newAgenda;
-      });
+
+      // })
+      // .then(() => {
+      //   // notifyPropertyChange(newAgenda, 'agendaitems');
+      //   // return newAgenda;
+      // }).catch(() => {
+      //   this.store.findRecord('agenda', newAgenda.get('id')).then((agenda) => {
+      //     agenda.destroyRecord();
+      //   });
+      //   this.globalError.showToast.perform(EmberObject.create({
+      //     title: this.intl.t('warning-title'),
+      //     message: "Something went wrong while approving the agenda. Please try again.",
+      //     type: 'error'
+      //   }));
+      // });
   },
 
   agendaWithChanges(currentAgendaID, agendaToCompareID) {
@@ -221,7 +246,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
       const agendaitems = await subcase.get('agendaitems');
 
       if(subcase){
-        await Promise.all(agendaitems.map(async item => { 
+        await Promise.all(agendaitems.map(async item => {
           const agenda = await item.get('agenda');
           const meeting = await agenda.get('createdFor');
           const meetingId = await meeting.get('id');
