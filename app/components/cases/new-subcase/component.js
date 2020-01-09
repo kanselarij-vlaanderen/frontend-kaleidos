@@ -1,11 +1,10 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default Component.extend(ApprovalsEditMixin, {
+export default Component.extend({
   store: inject(),
   newsletterService: inject(),
   classNames: ['vl-custom'],
@@ -130,7 +129,6 @@ export default Component.extend(ApprovalsEditMixin, {
       }
 
       this.set('item', subcase);
-      await this.checkForActionChanges();
       await caze.hasMany('subcases').reload();
       this.set('isLoading', false);
       this.refresh();

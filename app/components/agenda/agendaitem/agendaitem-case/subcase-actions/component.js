@@ -1,45 +1,66 @@
 import Component from '@ember/component';
+import { inject } from '@ember/service';
 import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
+import { computed, get } from '@ember/object';
+import moment from 'moment';
 
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, ApprovalsEditMixin, {
+export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	classNames: ["vl-u-spacer-extended-bottom-l"],
-	propertiesToSet: ['approvals'],
+	store: inject(),
+
+	mandateeApprovals: computed('item.mandatees.[]', 'item.approvals.@each.mandatee', async function () {
+		const mandatees = await get(this, 'item.mandatees');
+		const approvals = await get(this, 'item.approvals');
+		return mandatees.map((mandatee) => {
+			const approvalForMandatee = this.getApprovalForMandatee(mandatee, approvals);
+
+			return {
+				mandatee,
+				approval: approvalForMandatee,
+				checked: !!approvalForMandatee,
+			};
+		});
+	}),
+
+	getApprovalForMandatee: (mandatee, approvals) => approvals.find((approval) => {
+		return get(approval, 'mandatee.id') === get(mandatee, 'id');
+	}),
 
 	actions: {
-		async saveChanges(approvals) {
+		async saveChanges() {
 			this.set('isLoading', true);
-      const { item } = this;
-			await Promise.all(approvals.map(async (approval) => {
-        if(approval.changedAttributes()){
-          return await approval.save();
-        }
-				
-      }));
-      // item.reload();
-      // item.hasMany('approvals').reload();
-			const agenda = await item.get('agenda');
-			if (agenda) {
-				await this.updateModifiedProperty(agenda);
-			}
+
+			await Promise.all(get(this, 'item.approvals').map(async (approval) => {
+				return await approval.save();
+			}));
+
 			this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		},
-		async toggleApproved(approval) {
-      await this.store.findRecord('approval', approval.id, { reload:false}).then(function(item) {
-        const currentValue = approval.get('approved')
-        item.set('approved', !currentValue);
-        item.save();
-      });
-      // console.log(approval.get('approved'));
-      // approval.set('approved', value);
-      // await approval.save();
-      // const agenda = await approval.get('agendaitem.agenda');
-			// if (agenda) {
-			// 	await this.updateModifiedProperty(agenda);
-			// }
-			// this.toggleProperty('isEditing');
+
+		async toggleApproved(mandatee, approval) {
+			const approvals = get(this, 'item.approvals');
+
+			if (approval) {
+				if (!approval.isDeleted) {
+					approval.deleteRecord();
+				} else {
+					approval.rollbackAttributes();
+				}
+
+				if (!approval.id) {
+					approval.unloadRecord();
+				}
+			} else {
+				const approvalToCreate = get(this, 'store').createRecord('approval', {
+					mandatee,
+					created: moment().utc().toDate(),
+					agendaitem: get(this, 'item'),
+				});
+
+				await approvals.addObject(approvalToCreate);
+			}
 		},
 
 		async cancelEditing() {
@@ -54,9 +75,6 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, A
 		},
 
 		async toggleIsEditing() {
-			// this.set('isLoading', true);/
-			// await this.checkForActionChanges();
-			// this.set('isLoading', false);
 			this.toggleProperty('isEditing');
 		}
 	}

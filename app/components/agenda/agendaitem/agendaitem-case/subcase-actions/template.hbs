@@ -1,9 +1,4 @@
-{{#if
-  (or
-    (gt (await item.subcase.approvals.length) 1)
-    (gt (await item.approvals.length) 1)
-  )
-}}
+{{#if (gt (await item.mandatees.length) 1)}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
       <h4 class="vl-title vl-title--h4">
@@ -18,81 +13,75 @@
       {{/if}}
     </div>
   </div>
-  {{#if (gt (await item.approvals.length) 0)}}
-    <div class="vl-u-spacer-extended-bottom-s">
-      <h5 class="vl-title vl-title--h6">
-        {{t "mandatee-approval"}}
-      </h5>
-    </div>
-    <div class="vl-u-spacer">
-      <table class="vl-data-table">
-        <thead>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <h5 class="vl-title vl-title--h6">
+      {{t "mandatee-approval"}}
+    </h5>
+  </div>
+  <div class="vl-u-spacer">
+    <table class="vl-data-table">
+      <thead>
+        <tr>
+          <th>
+            {{t "name"}}
+          </th>
+          <th>
+            {{t "function-mandatee"}}
+          </th>
+          <th>
+            {{t "approval-mandatee"}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each (await mandateeApprovals) as |mandateeApproval|}}
           <tr>
-            <th>
-              {{t "name"}}
-            </th>
-            <th>
-              {{t "function-mandatee"}}
-            </th>
-            <th>
-              {{t "approval-mandatee"}}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each (await item.sortedApprovals) as |approval|}}
-            <tr>
-              <td>
-                <h6 class="vl-title vl-title--h6">
-                  {{await approval.mandatee.person.alternativeName}}
-                </h6>
-              </td>
-              <td>
-                {{await approval.mandatee.title}}
-              </td>
-              <td>
-                {{#if (not isEditing)}}
-                  {{#if (await approval.approved)}}
-                    <p class="vl-icon-wrapper vl-u-text--success">
-                      <span
-                        class="vl-icon vl-icon--before vl-vi vl-vi-check"
-                        aria-hidden="true"
-                      ></span>
-                      <span class="vl-annotation">
-                        {{t "approval-mandatee"}}
-                      </span>
-                    </p>
-                  {{else}}
-                    <p class="vl-icon-wrapper vl-u-text--muted">
-                      <span
-                        class="vl-icon vl-icon--before vl-vi vl-vi-minus"
-                        aria-hidden="true"
-                      ></span>
-                      <span>
-                        {{t "not-yet-approval-mandatee"}}
-                      </span>
-                    </p>
-                  {{/if}}
+            <td>
+              <h6 class="vl-title vl-title--h6">
+                {{await mandateeApproval.mandatee.person.alternativeName}}
+              </h6>
+            </td>
+            <td>
+              {{await mandateeApproval.mandatee.title}}
+            </td>
+            <td>
+              {{#if (not isEditing)}}
+                {{#if (await mandateeApproval.approval)}}
+                  <p class="vl-icon-wrapper vl-u-text--success">
+                    <span
+                      class="vl-icon vl-icon--before vl-vi vl-vi-check"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="vl-annotation">
+                      {{t "approval-mandatee"}}
+                    </span>
+                  </p>
                 {{else}}
-                  <div class="vlc-input-field-block">
-                    {{web-components/vl-checkbox
-                      value=approval.approved
-                      label=(t "approval-mandatee")
-                      toggle=(action "toggleApproved" approval)
-                    }}
-                  </div>
+                  <p class="vl-icon-wrapper vl-u-text--muted">
+                    <span
+                      class="vl-icon vl-icon--before vl-vi vl-vi-minus"
+                      aria-hidden="true"
+                    ></span>
+                    <span>
+                      {{t "not-yet-approval-mandatee"}}
+                    </span>
+                  </p>
                 {{/if}}
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-  {{else}}
-    <div class="vl-u-spacer-extended-top-s">
-      {{web-components/vl-alert message=(t "no-approvals-yet")}}
-    </div>
-  {{/if}}
+              {{else}}
+                <div class="vlc-input-field-block">
+                  {{web-components/vl-checkbox
+                    value=(not (is-empty mandateeApproval.approval))
+                    label=(t "approval-mandatee")
+                    toggle=(action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)
+                  }}
+                </div>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
   {{#if isEditing}}
     <div class="vl-action-group vl-action-group--align-right">
       <a
