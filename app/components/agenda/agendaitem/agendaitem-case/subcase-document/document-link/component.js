@@ -48,10 +48,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       .map(async agendaitem => {
         agendaitem.set('formallyOk', CONFIG.notYetFormallyOk);
         const approvals = await agendaitem.get('approvals');
-        agendaitem.set('approvals', approvals.map(approval => {
-          approval.set('approved', false);
-          return approval
-        }));
+        await Promise.all(approvals.map(approval =>  approval.destroyRecord()));
         agendaitem.save();
       }))
   },
