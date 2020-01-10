@@ -5,42 +5,38 @@ import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default Component.extend(ApprovalsEditMixin, {
+export default Component.extend({
   classNames: ['vl-custom'],
-
   store: inject(),
   newsletterService: inject(),
-
+  classNames: ['vl-custom'],
   confidentiality: null,
-  title:null,
-  shortTitle:null,
   filter: { type: 'subcase-name' },
+
+  title: computed('case', function() {
+    return this.get('case.title');
+  }),
+
+  shortTitle: computed('case', function() {
+    return this.get('case.shortTitle');
+  }),
 
   confidential: computed('case', function() {
     return this.get('case.confidential');
   }),
 
-  async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
+  async copySubcaseProperties(subcase, latestSubcase) {
     const mandatees = await latestSubcase.get('mandatees');
     const iseCodes = await latestSubcase.get('iseCodes');
     const themes = await latestSubcase.get('themes');
     const requestedBy = await latestSubcase.get('requestedBy');
-    const linkedDocumentVersions = await latestSubcase.get('linkedDocumentVersions');
-
-    if(copyFullSubcase) {
-      const subcaseName =  await latestSubcase.get('subcaseName');
-      const documentVersions = await latestSubcase.get('documentVersions');
-      const accessLevel = await latestSubcase.get('accessLevel');
-      subcase.set('documentVersions', documentVersions);
-      subcase.set('subcaseName', subcaseName);
-      subcase.set('accessLevel', accessLevel);
-    }
+    const documentVersions = await latestSubcase.get('documentVersions');
 
     subcase.set('mandatees', mandatees);
     subcase.set('iseCodes', iseCodes);
     subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
-    subcase.set('linkedDocumentVersions', linkedDocumentVersions);
+    subcase.set('linkedDocumentVersions', documentVersions);
 
     return subcase.save();
   },
@@ -113,7 +109,6 @@ export default Component.extend(ApprovalsEditMixin, {
       subcase = await subcase.save();
     }
     await caze.hasMany('subcases').reload();
-    await this.checkForActionChanges();
     return subcase;
   },
 

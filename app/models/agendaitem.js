@@ -149,4 +149,18 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     const documents = await this.get('documents');
     return documents && documents.some((document) => document.checkAdded);
   }),
+
+  sortedApprovals: computed('approvals.@each', async function() {
+    return PromiseArray.create({
+      promise: this.store.query('approval', {
+        filter: {
+          agendaitem: { id: this.get('id') },
+        },
+        sort: 'mandatee.priority',
+      }),
+    });
+    // const approvals = await this.get('approvals');
+    // const sortedApprovals = await approvals.sortBy('mandatee.priority');
+    // return sortedApprovals;
+  }),
 });
