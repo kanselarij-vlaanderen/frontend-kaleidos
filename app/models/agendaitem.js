@@ -159,8 +159,5 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
         sort: 'mandatee.priority',
       }),
     });
-    // const approvals = await this.get('approvals');
-    // const sortedApprovals = await approvals.sortBy('mandatee.priority');
-    // return sortedApprovals;
   }),
 });
