@@ -1,9 +1,7 @@
 <div class="vlc-toolbar">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <h1
-        class="vlc-page-header__title vlc-page-header__title--bordered max-width vl-u-text--capitalize"
-      >
+      <h1 class="vlc-page-header__title vlc-page-header__title--bordered max-width vl-u-text--capitalize">
         {{subcase.subcaseName}}
       </h1>
       {{subcases/subcase-detail-nav}}
@@ -19,17 +17,16 @@
             {{t "propose-for-agenda"}}
           </button>
           {{#attach-popover
-            class="ember-attacher-popper"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom" as |attacher|
+                  class="ember-attacher-popper"
+                  hideOn="clickout click"
+                  showOn="click"
+                  animation="shift"
+                  placement="bottom" as |attacher|
           }}
             <ul class="vl-popover__link-list">
               {{#each (await meetings) as |meeting|}}
                 <li class="vl-popover__link-list__item">
-                  <button
-                    class="vl-link"
+                  <button class="vl-link"
                     {{action attacher.hide}}
                     {{action "proposeForAgenda" subcase meeting}}
                   >
@@ -42,8 +39,7 @@
                 <li class="vl-popover__link-list__separator" role="none"></li>
               {{/if}}
               <li class="vl-popover__link-list__item">
-                <button
-                  class="vl-link"
+                <button class="vl-link"
                   {{action attacher.hide}}
                   {{action "proposeForOtherAgenda" subcase}}
                 >
@@ -55,35 +51,35 @@
         {{/if}}
       </div>
       <div class="vlc-toolbar__item">
-         {{#if (await canDelete)}}
-        <button
-          class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
-          {{action "showMultipleOptions" bubbles=false}}
-        >
-          {{#if (not isShowingOptions)}}
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
-            ></i>
-          {{else}}
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
-            ></i>
-          {{/if}}
-          {{t "actions"}}
-          {{#attach-popover
-            class="ember-attacher-popper"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom" as |attacher|
-          }}
-            <ul class="vl-popover__link-list">
+        {{#if (await canDelete)}}
+          <button
+                  class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+            {{action "showMultipleOptions" bubbles=false}}
+          >
+            {{#if isShowingOptions}}
+              <i
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+              ></i>
+            {{else}}
+              <i
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+              ></i>
+            {{/if}}
+            {{t "actions"}}
+            {{#attach-popover
+                    class="ember-attacher-popper"
+                    hideOn="clickout click"
+                    showOn="click"
+                    animation="shift"
+                    placement="bottom" as |attacher|
+            }}
+              <ul class="vl-popover__link-list">
                 {{#if (not await subcase.isArchived)}}
                   <li class="vl-popover__link-list__item">
                     <a
-                      class="vl-link vl-link--block"
+                            class="vl-link vl-link--block"
                       {{action attacher.hide}}
-                      {{action "requestDeleteSubcase"}}
+                      {{action "requestDeleteSubcase" subcase}}
                     >
                       {{t "delete-subcase"}}
                     </a>
@@ -91,7 +87,7 @@
                 {{else}}
                   <li class="vl-popover__link-list__item">
                     <a
-                      class="vl-link vl-link--block"
+                            class="vl-link vl-link--block"
                       {{action attacher.hide}}
                       {{action "unarchiveSubcase" subcase}}
                     >
@@ -99,9 +95,9 @@
                     </a>
                   </li>
                 {{/if}}
-            </ul>
-          {{/attach-popover}}
-        </button>
+              </ul>
+            {{/attach-popover}}
+          </button>
         {{/if}}
       </div>
     {{/if}}
@@ -109,35 +105,24 @@
 </div>
 {{#if isAssigningToOtherAgenda}}
   {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "propose-for-agenda")
-    closeModal=(action "cancel")
+          isOverlay=true
+          title=(t "propose-for-agenda")
+          closeModal=(action "cancel")
   }}
     {{subcases/assign-to-meeting-form
-      subcase=selectedSubcase
-      proposeForAgenda=(action "proposeForAgenda")
-      cancel=(action "cancel")
-      closeModal=(action "cancel")
+            subcase=selectedSubcase
+            proposeForAgenda=(action "proposeForAgenda")
+            cancel=(action "cancel")
+            closeModal=(action "cancel")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isDeletingSubcase}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "delete-subcase")
-    closeModal=(action "cancelDeleteSubcase")
+  {{web-components/vl-modal-verify
+          isLoading=isLoading
+          title=(t "delete-subcase")
+          message=(t "delete-subcase-confirmation")
+          cancel=(action "cancel")
+          verify=(action "deleteSubcase")
   }}
-    <div
-      class="vl-spacer-box vl-u-spacer-extended-top-l vl-u-spacer-extended-bottom-l"
-    >
-      {{web-components/vl-alert
-        title=(t "warning-title")
-        message=(t "delete-subcase-confirmation")
-        type="danger"
-      }}
-    </div>
-    <button class="vl-button" {{action "deleteSubcase" subcase}}>
-      {{t "delete-subcase"}}
-    </button>
-  {{/web-components/vl-modal}}
 {{/if}}
