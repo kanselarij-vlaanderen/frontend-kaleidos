@@ -11,14 +11,11 @@ export default Model.extend({
   addedDocuments: alias('agendaService.addedDocuments'),
   uri:attr('string'),
 
-  archived: attr('boolean'),
   title: attr('string'),
-  description: attr('string'),
   confidential: attr('boolean'),
   created: attr('datetime'),
   forCabinet: attr('boolean'),
 
-  remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
 
 	type: belongsTo('document-type'),
