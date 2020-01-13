@@ -18,24 +18,9 @@ export default Component.extend(isAuthenticatedMixin, {
     return this.currentAgenda.get("createdFor");
   }),
 
-  meetings: computed('currentMeeting', function() {
-    const currentMeetingDate = this.currentMeeting.get('plannedStart')
-    const dateOfToday = moment(currentMeetingDate).utc().format();
-    const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
-
-    return this.store.query('meeting', {
-      filter: {
-        ':gt:planned-start': dateOfToday,
-        ':lte:planned-start': dateInTwoWeeks,
-        'is-final': false
-      },
-      sort: 'planned-start'
-    })
-  }),
-
-  isPostPonable: computed('sessionService.agendas.@each', function() {
-    return this.get('sessionService.agendas').then(agendas => {
-      if (agendas && agendas.get('length') > 1) {
+  isPostPonable: computed("sessionService.agendas.@each", function() {
+    return this.get("sessionService.agendas").then(agendas => {
+      if (agendas && agendas.get("length") > 1) {
         return true;
       } else {
         return false;
@@ -59,11 +44,17 @@ export default Component.extend(isAuthenticatedMixin, {
       } else {
         return true;
       }
-    }),
+    }
+  ),
 
   async deleteItem(agendaitem) {
     this.toggleProperty('isVerifying');
     const id = await agendaitem.get('id');
+    const subcase = await agendaitem.get('subcase');
+    if(subcase) {
+      // Refresh the agendaitems for isDeletable
+      await subcase.hasMany('agendaitems').reload();
+    }
     if (await this.get('isDeletable')) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
@@ -125,6 +116,7 @@ export default Component.extend(isAuthenticatedMixin, {
       await subcase.hasMany("phases").reload();
       await subcase.notifyPropertyChange('isPostponed');
       await subcase.reload();
+      await agendaitem.subcase.reload();
     },
 
     toggleIsVerifying() {
