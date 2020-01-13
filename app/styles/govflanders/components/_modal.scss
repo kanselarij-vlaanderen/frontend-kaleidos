@@ -14,6 +14,10 @@ $modal-content-padding: 1.5rem;
   }
 }
 
+.vl-modal__backdrop {
+  z-index: 52;
+}
+
 .vl-modal-dialog {
   display: none;
   position: fixed;
@@ -29,7 +33,9 @@ $modal-content-padding: 1.5rem;
   border: 0;
   box-shadow: $base-box-shadow;
   overflow: auto;
-  z-index: z("modal");
+  display: block;
+  z-index: 40;
+  width: 80rem;
 
   &::backdrop {
     @include backdrop;
@@ -95,5 +101,26 @@ $modal-content-padding: 1.5rem;
     &.vl-icon {
       margin-right: 0;
     }
+  }
+}
+
+.vl-modal {
+  tbody {
+    background-color: white;
+  }
+}
+
+.vl-modal-dialog__content {
+  padding: 2rem 0;
+}
+
+
+.vl-modal-dialog--large {
+  width: 88rem;
+}
+
+.vl-modal-dialog__content {
+  .data-table-pagination {
+    margin-bottom: 0;
   }
 }
