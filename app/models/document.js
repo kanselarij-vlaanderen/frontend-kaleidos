@@ -16,9 +16,6 @@ export default Model.extend({
   description: attr('string'),
   confidential: attr('boolean'),
   created: attr('datetime'),
-  numberVp: attr('string'),
-  numberVr: attr('string'),
-  numberVrOriginal: attr(),
   forCabinet: attr('boolean'),
 
   remarks: hasMany('remark'),
@@ -70,22 +67,5 @@ export default Model.extend({
     if (this.addedDocuments) return this.addedDocuments.includes(this.get('uri'));
   }),
 
-  name: computed('title', 'numberVr', 'numberVrOriginal', {
-    get() {
-      if (this.get('numberVr')) {
-        return this.get('numberVr');
-      } else if (this.get('numberVrOriginal')) {
-        return this.get('numberVrOriginal');
-      } else {
-        return this.get('title');
-      }
-    },
-    set(key, value) {
-      if (this.get('numberVrOriginal')) {
-        return this.set('numberVr', value);
-      } else {
-        return this.set('title', value);
-      }
-    }
-  }),
+  name: alias('title')
 });
