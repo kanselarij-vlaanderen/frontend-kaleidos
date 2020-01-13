@@ -39,14 +39,14 @@
       {{textarea rows="2" class="vl-textarea vl-textarea--block" value=item.explanation}}
     </div>
   </div>
-{{/if}}
-{{#if isRemark}}
-  <div class="vl-u-spacer">
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "show-in-newsletter")}}
-      {{web-components/vl-toggle value=showInNewsletter}}
+  {{#if isRemark}}
+    <div class="vl-u-spacer">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "show-in-newsletter")}}
+        {{web-components/vl-toggle value=showInNewsletter}}
+      </div>
     </div>
-  </div>
+  {{/if}}
 {{/if}}
 <div class="vl-action-group vl-action-group--align-right">
   <a
