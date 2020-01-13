@@ -90,10 +90,6 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
     return this.get('mandatees').sortBy('priority');
   }),
 
-  sortedApprovals: computed('approvals.@each', function() {
-
-  }),
-
   sortedThemes: computed('themes', function() {
     return this.get('themes').sortBy('label');
   }),
