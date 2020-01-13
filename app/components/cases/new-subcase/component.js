@@ -6,11 +6,9 @@ import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(ApprovalsEditMixin, {
-  classNames: ['vl-custom'],
-
   store: inject(),
   newsletterService: inject(),
-
+  classNames: ['vl-custom'],
   confidentiality: null,
   title:null,
   shortTitle:null,

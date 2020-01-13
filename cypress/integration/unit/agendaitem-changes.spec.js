@@ -10,6 +10,7 @@ context('Agendaitem changes tests', () => {
 
   before(() => {
     cy.server();
+    cy.resetDB();
     cy.login('Admin');
   });
 
@@ -58,10 +59,6 @@ context('Agendaitem changes tests', () => {
     cy.agendaItemExists(subcaseTitle1);
 
   });
-
-  after(() => {
-    cy.task('deleteProgress', { date: testStart.format('YYYY-MM-DD'), time: testStart.toISOString()});
-  })
 });
 
 function currentMoment() {

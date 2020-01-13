@@ -13,9 +13,8 @@ export default Component.extend(MyDocumentVersions, {
     },
 
     async chooseAccessLevel(document, accessLevel) {
-      document.set('accessLevel', accessLevel);
-      let documentVersions = await document.get('documentVersions');
-      documentVersions.forEach(documentVersion => documentVersion.set('accessLevel', accessLevel))
+      let documentVersion = await document.get('lastDocumentVersion');
+      documentVersion.set('accessLevel', accessLevel);
     }
   }
 });

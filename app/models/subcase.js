@@ -46,6 +46,20 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   requestedBy: belongsTo('mandatee', { inverse: null }),
   accessLevel: belongsTo('access-level'),
 
+  firstPhase: computed('phases.@each', function() {
+    return PromiseObject.create({
+      promise: this.store.query('subcase-phase', {
+        filter: {
+          subcase: { id: this.get('id') }
+        },
+        sort: 'date',
+        include: 'code'
+      }).then((subcasePhases) => {
+        return subcasePhases.get('firstObject');
+      })
+    });
+  }),
+
   postponedPhases: computed("phases.@each", function() {
     return this.store
       .query("subcase-phase", {
@@ -96,7 +110,7 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
 
   sortedPhases: computed('phases.@each', 'isPostponed', function() {
     return PromiseArray.create({
-      promise: this.get('phases').then( (phases) => {
+      promise: this.get('phases').then((phases) => {
         return phases.sortBy('date');
       })
     });
@@ -141,9 +155,9 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
       const agenda = await agendaitem.get('agenda');
       return agenda ? agenda.get('createdFor') : null;
     }));
-
+    // find met ===
     return meetings.reduce((addedMeetings, meeting) => {
-      if (meeting && !addedMeetings.find(addedMeeting => meeting === addedMeeting)) {
+      if (meeting && !addedMeetings.find(adddedMeeting => meeting === adddedMeeting)) {
         addedMeetings.push(meeting)
       }
       return addedMeetings

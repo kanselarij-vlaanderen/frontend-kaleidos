@@ -44,6 +44,13 @@
     </pre>
   {{/if}}
 </div>
+{{#if isAgendaItem}}
+  <div class="vl-u-spacer-extended-bottom-s">
+    <pre class="vl-u-text--muted no-capitalize">
+      {{await item.explanation}}
+    </pre>
+  </div>
+{{/if}}
 {{#if (not item.showAsRemark)}}
   <div class="vl-u-spacer-extended-bottom-s">
     {{#if (await subcaseName)}}
