@@ -1,7 +1,7 @@
 {{#if (not (is-pending (await item)))}}
   {{#if (not isEditing)}}
     <div class="vl-u-spacer vl-typography">
-      <div class="vl-u-display-flex vl-u-flex-align-right vl-u-display-flex-items-align-center">
+      <div class="vl-u-display-flex align-right">
         {{#if isEditor}}
           <a class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}

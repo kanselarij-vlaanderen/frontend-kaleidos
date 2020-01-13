@@ -146,12 +146,23 @@ $icon-font-location: '/fonts/';
   height: 100% !important;
 }
 
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
 
 tr.disabled {
   text-decoration: none;
   pointer-events: none;
   opacity: 0.65;
   background-color: $porcelain;
+}
+
+.vl-modal-dialog {
+  display: block;
+  z-index: 40;
+  width: 80rem;
 }
 
 .vlc-scroll-wrapper__body.full-height {
@@ -162,6 +173,19 @@ tr.disabled {
 
 .full-height {
   height: 95% !important;
+}
+
+.vl-modal {
+  .vl-modal__backdrop {
+    z-index: 52;
+  }
+  tbody {
+    background-color:white;
+  }
+}
+
+.vl-modal-dialog__content {
+  padding: 2rem 0;
 }
 
 .max-width {
@@ -192,7 +216,13 @@ tr.disabled {
   }
 }
 
+.vl-modal-dialog--large {
+  width: 88rem;
+}
 
+.vlc-agenda-items__header--small {
+  padding: 2rem 1.5rem 1.5rem !important;
+}
 
 a.disabled {
   text-decoration: none;
@@ -355,6 +385,11 @@ ul {
   grid-gap: 10px;
 }
 
+.vl-modal-dialog__content {
+  .data-table-pagination {
+    margin-bottom: 0em;
+  }
+}
 
 .no-margin {
   margin: 0;
