@@ -1,20 +1,19 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
-import ApprovalsEditMixin from 'fe-redpencil/mixins/approvals-edit-mixin';
+import {computed} from '@ember/object';
+import {inject} from '@ember/service';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default Component.extend(ApprovalsEditMixin, {
+export default Component.extend( {
   store: inject(),
   newsletterService: inject(),
   classNames: ['vl-custom'],
   confidentiality: null,
-  title:null,
-  shortTitle:null,
-  filter: { type: 'subcase-name' },
+  title: null,
+  shortTitle: null,
+  filter: {type: 'subcase-name'},
 
-  confidential: computed('case', function() {
+  confidential: computed('case', function () {
     return this.get('case.confidential');
   }),
 
@@ -25,8 +24,8 @@ export default Component.extend(ApprovalsEditMixin, {
     const requestedBy = await latestSubcase.get('requestedBy');
     const linkedDocumentVersions = await latestSubcase.get('linkedDocumentVersions');
 
-    if(copyFullSubcase) {
-      const subcaseName =  await latestSubcase.get('subcaseName');
+    if (copyFullSubcase) {
+      const subcaseName = await latestSubcase.get('subcaseName');
       const documentVersions = await latestSubcase.get('documentVersions');
       const accessLevel = await latestSubcase.get('accessLevel');
       subcase.set('documentVersions', documentVersions);
@@ -75,7 +74,7 @@ export default Component.extend(ApprovalsEditMixin, {
   },
 
   createSubcaseObject(newCase, newDate) {
-    const { type, title, shortTitle, confidential, showAsRemark } = this;
+    const {type, title, shortTitle, confidential, showAsRemark} = this;
     return this.store.createRecord('subcase', {
       type,
       shortTitle,
@@ -86,19 +85,18 @@ export default Component.extend(ApprovalsEditMixin, {
       created: newDate,
       modified: newDate,
       isArchived: false,
-      phases: [],
-      formallyOk: false
-    });
+      formallyOk: false,
+      phases: []
+  });
   },
 
   async copySubcase(fullCopy = false) {
     const caze = await this.store.findRecord('case', this.case.id);
     const latestSubcase = await caze.get('latestSubcase');
-    const date = moment()
-      .utc()
-      .toDate();
+    const date = moment().utc().toDate();
     let subcase = await this.createSubcaseObject(caze, date);
     subcase.set('subcaseName', this.subcaseName);
+
     if (latestSubcase) {
       subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
       await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
@@ -111,7 +109,6 @@ export default Component.extend(ApprovalsEditMixin, {
       subcase = await subcase.save();
     }
     await caze.hasMany('subcases').reload();
-    await this.checkForActionChanges();
     return subcase;
   },
 
@@ -148,10 +145,6 @@ export default Component.extend(ApprovalsEditMixin, {
       this.set('item', subcase);
       this.set('isLoading', false);
       this.refresh();
-    },
-
-    selectPhase(phase) {
-      this.set('phase', phase);
     },
 
     selectType(type) {
