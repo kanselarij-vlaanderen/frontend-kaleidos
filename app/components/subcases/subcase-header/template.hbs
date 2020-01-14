@@ -1,36 +1,21 @@
 <div class="vlc-toolbar">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <h1
-        class="vlc-page-header__title vlc-page-header__title--bordered max-width vl-u-text--capitalize"
-      >
+      <h1 class="vlc-page-header__title vlc-page-header__title--bordered max-width vl-u-text--capitalize">
         {{subcase.subcaseName}}
       </h1>
       {{subcases/subcase-detail-nav}}
     </div>
   </div>
   <div class="vlc-toolbar__right">
-    {{#if isEditor}}<div class="vlc-toolbar__item">
-      {{#if (or
-              (is-pending subcase.requestedForMeeting)
-              (is-pending subcase.hasAgendaItem)
-              (is-pending subcase.isPostponed)
-            )}}
+    {{#if isEditor}}
+      <div class="vlc-toolbar__item">
+        {{#if (is-pending canPropose)}}
           <div class="vl-loader"></div>
-      {{else}}
-        {{#if
-          (or
-              (and
-                    (not (await subcase.requestedForMeeting))
-                    (not (await subcase.hasAgendaItem))
-                    (not isAssigning)
-              )
-              (await subcase.isPostponed)
-          )
-        }}
-            <button class="vl-button vl-button--narrow">
-              {{t "propose-for-agenda"}}
-            </button>
+        {{else if (await canPropose)}}
+          <button class="vl-button vl-button--narrow">
+            {{t "propose-for-agenda"}}
+          </button>
           {{#attach-popover
                   class="ember-attacher-popper"
                   hideOn="clickout click"
@@ -38,137 +23,106 @@
                   animation="shift"
                   placement="bottom" as |attacher|
           }}
-              <ul class="vl-popover__link-list">
-                {{#each (await meetings) as |meeting|}}
-                    <li class="vl-popover__link-list__item">
-                        <button class="vl-link"
-                          {{action attacher.hide}}
-                          {{action "proposeForAgenda" subcase meeting}}
-                        >
-                          {{t "agenda-for"}}
-                          {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-                        </button>
-                    </li>
-                {{/each}}
-                {{#if (gt (await meetings.length) 0)}}
-                    <li class="vl-popover__link-list__separator" role="none"></li>
-                {{/if}}
-                  <li class="vl-popover__link-list__item">
-                      <button class="vl-link"
-                        {{action attacher.hide}}
-                        {{action "proposeForOtherAgenda" subcase}}
-                      >
-                        {{t "other-agenda"}}
-                      </button>
-                  </li>
-              </ul>
-          {{/attach-popover}}
-        {{/if}}
-      {{/if}}
-    </div>
-    <div class="vlc-toolbar__item">
-      <button
-        class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
-        {{action "showMultipleOptions" bubbles=false}}
-      >
-        {{#if (not isShowingOptions)}}
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
-          ></i>
-        {{else}}
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
-          ></i>
-        {{/if}}
-        {{t "actions"}}
-        {{#attach-popover
-          class="ember-attacher-popper"
-          hideOn="clickout click"
-          showOn="click"
-          animation="shift"
-          placement="bottom" as |attacher|
-        }}
-          <ul class="vl-popover__link-list">
-            {{#if
-              (and
-                (not (await subcase.requestedForMeeting))
-                (not (await subcase.hasAgendaItem))
-                (not (await subcase.isPostponed))
-                (not isAssigning)
-                (not isAssigningToOtherAgenda)
-              )
-            }}
-              {{#if (not await subcase.isArchived)}}
+            <ul class="vl-popover__link-list">
+              {{#each (await meetings) as |meeting|}}
                 <li class="vl-popover__link-list__item">
-                  <a
-                    class="vl-link vl-link--block"
+                  <button class="vl-link"
                     {{action attacher.hide}}
-                    {{action "requestDeleteSubcase"}}
+                    {{action "proposeForAgenda" subcase meeting}}
                   >
-                    {{t "delete-subcase"}}
-                  </a>
+                    {{t "agenda-for"}}
+                    {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                  </button>
                 </li>
-              {{else}}
-                <li class="vl-popover__link-list__item">
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action attacher.hide}}
-                    {{action "unarchiveSubcase" subcase}}
-                  >
-                    {{t "unarchive-subcase"}}
-                  </a>
-                </li>
+              {{/each}}
+              {{#if (gt (await meetings.length) 0)}}
+                <li class="vl-popover__link-list__separator" role="none"></li>
               {{/if}}
-              {{/if}}
-                <li class="vl-popover__link-list__item">
-                {{#if (not await subcase.concluded)}}
-                  <a
-                    class="vl-link vl-link--block"
-                    {{action attacher.hide}}
-                    {{action "closeSubcase" subcase}}
-                  >
-                    {{t "close-subcase"}}
-                  </a>
-                {{/if}}
+              <li class="vl-popover__link-list__item">
+                <button class="vl-link"
+                  {{action attacher.hide}}
+                  {{action "proposeForOtherAgenda" subcase}}
+                >
+                  {{t "other-agenda"}}
+                </button>
               </li>
             </ul>
           {{/attach-popover}}
-        </button>
+        {{/if}}
+      </div>
+      <div class="vlc-toolbar__item">
+        {{#if (await canDelete)}}
+          <button
+                  class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+            {{action "showMultipleOptions" bubbles=false}}
+          >
+            {{#if isShowingOptions}}
+              <i
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+              ></i>
+            {{else}}
+              <i
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+              ></i>
+            {{/if}}
+            {{t "actions"}}
+            {{#attach-popover
+                    class="ember-attacher-popper"
+                    hideOn="clickout click"
+                    showOn="click"
+                    animation="shift"
+                    placement="bottom" as |attacher|
+            }}
+              <ul class="vl-popover__link-list">
+                {{#if (not await subcase.isArchived)}}
+                  <li class="vl-popover__link-list__item">
+                    <a
+                            class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "requestDeleteSubcase" subcase}}
+                    >
+                      {{t "delete-subcase"}}
+                    </a>
+                  </li>
+                {{else}}
+                  <li class="vl-popover__link-list__item">
+                    <a
+                            class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "unarchiveSubcase" subcase}}
+                    >
+                      {{t "unarchive-subcase"}}
+                    </a>
+                  </li>
+                {{/if}}
+              </ul>
+            {{/attach-popover}}
+          </button>
+        {{/if}}
       </div>
     {{/if}}
   </div>
 </div>
 {{#if isAssigningToOtherAgenda}}
   {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "propose-for-agenda")
-    closeModal=(action "cancel")
+          isOverlay=true
+          title=(t "propose-for-agenda")
+          closeModal=(action "cancel")
   }}
     {{subcases/assign-to-meeting-form
-      subcase=selectedSubcase
-      proposeForAgenda=(action "proposeForAgenda")
-      cancel=(action "cancel")
-      closeModal=(action "cancel")
+            subcase=selectedSubcase
+            proposeForAgenda=(action "proposeForAgenda")
+            cancel=(action "cancel")
+            closeModal=(action "cancel")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isDeletingSubcase}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "delete-subcase")
-    closeModal=(action "cancelDeleteSubcase")
+  {{web-components/vl-modal-verify
+          isLoading=isLoading
+          title=(t "delete-subcase")
+          message=(t "delete-subcase-confirmation")
+          cancel=(action "cancel")
+          verify=(action "deleteSubcase")
   }}
-    <div
-      class="vl-spacer-box vl-u-spacer-extended-top-l vl-u-spacer-extended-bottom-l"
-    >
-      {{web-components/vl-alert
-        title=(t "warning-title")
-        message=(t "delete-subcase-confirmation")
-        type="danger"
-      }}
-    </div>
-    <button class="vl-button" {{action "deleteSubcase" subcase}}>
-      {{t "delete-subcase"}}
-    </button>
-  {{/web-components/vl-modal}}
 {{/if}}

@@ -22,7 +22,8 @@ module.exports = {
     "no-mixed-spaces-and-tabs": 'off',
     "ember/use-brace-expansion": "off",
     "table-groups":"off",
-    "no-triple-curlies":"off"
+    "no-triple-curlies":"off",
+    "no-console":"off",
   },
   overrides: [
     // node files
