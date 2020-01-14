@@ -4,7 +4,7 @@ import {inject} from '@ember/service';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default Component.extend( {
+export default Component.extend({
   store: inject(),
   newsletterService: inject(),
   classNames: ['vl-custom'],
@@ -126,7 +126,7 @@ export default Component.extend( {
       }
     },
 
-    async toggleIsEditing() {
+    toggleIsEditing() {
       this.toggleProperty('isEditing');
     },
 

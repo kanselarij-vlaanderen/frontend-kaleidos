@@ -36,7 +36,6 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   linkedDocumentVersions: hasMany('document-version'),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
-  approvals: hasMany('approval', { serialize: false }),
   decisions: hasMany('decision'),
 
   type: belongsTo('subcase-type'),

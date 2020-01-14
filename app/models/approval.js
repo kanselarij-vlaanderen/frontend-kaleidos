@@ -4,9 +4,6 @@ let { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
 	created: attr('date'),
-	modified: attr('date'),
-	approved: attr('boolean'),
 	mandatee: belongsTo('mandatee', { inverse: null }),
-	subcase: belongsTo('subcase', { inverse: null }),
 	agendaitem: belongsTo('agendaitem', { inverse: null })
 });
