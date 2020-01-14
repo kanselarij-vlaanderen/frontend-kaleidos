@@ -7,12 +7,13 @@ import { computed } from '@ember/object';
 export default Component.extend(EditAgendaitemOrSubcase, {
 	store: inject(),
 	classNames: ["vl-form__group", "vl-u-bg-porcelain"],
+	
 	propertiesToSet: computed('isAgendaItem', function() {
+		let properties =  ['title', 'shortTitle', 'accessLevel', 'confidential'];
 		if(this.isAgendaItem) {
-			return ['title', 'shortTitle', 'accessLevel', 'confidential', 'showInNewsletter'];
-		} else {
-			return ['title', 'shortTitle', 'accessLevel', 'confidential'];
+			properties.push('showInNewsletter');
 		}
+		return properties;
 	}),
 
 	isAgendaItem: computed('item.modelName', function() {
