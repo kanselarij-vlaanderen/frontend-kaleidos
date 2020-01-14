@@ -114,7 +114,6 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       themes: await subcase.get('themes'),
-      approvals: await subcase.get('approvals'),
     });
     await agendaitem.save();
 
@@ -149,7 +148,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
         const mandatees = await item.get('sortedMandatees');
         if (item.isApproval) {
           item.set('groupName', null);
-          item.set('ownGroupName', null)
+          item.set('ownGroupName', null);
           return;
         }
         if (mandatees.length == 0) {

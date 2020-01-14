@@ -36,7 +36,6 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   linkedDocumentVersions: hasMany('document-version'),
   themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
-  approvals: hasMany('approval', { serialize: false }),
   decisions: hasMany('decision'),
 
   type: belongsTo('subcase-type'),
@@ -89,10 +88,6 @@ export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
 
   sortedMandatees: computed('mandatees.@each', function() {
     return this.get('mandatees').sortBy('priority');
-  }),
-
-  sortedApprovals: computed('approvals.@each', function() {
-
   }),
 
   sortedThemes: computed('themes', function() {
