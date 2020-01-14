@@ -14,12 +14,12 @@ export default Component.extend(isAuthenticatedMixin, {
   isLoading: false,
 
   canPropose: computed('subcase.{requestedForMeeting,hasAgendaItem,isPostponed}', 'isAssigningToOtherAgenda', async function () {
-    const {isAssigningToOtherAgenda} = this;
+    const {isAssigningToOtherAgenda, isLoading} = this;
     const subcase = await this.get('subcase');
     const requestedForMeeting = await subcase.get('requestedForMeeting');
     const hasAgendaItem = await subcase.get('hasAgendaItem');
 
-    if (hasAgendaItem || requestedForMeeting || isAssigningToOtherAgenda) {
+    if (hasAgendaItem || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
       return false;
     }
 
@@ -69,6 +69,7 @@ export default Component.extend(isAuthenticatedMixin, {
     this.set('isDeletingSubcase', false);
     this.set('selectedSubcase', null);
     this.set('subcaseToDelete', null);
+    this.set('isLoading', false);
   },
 
   actions: {
@@ -78,11 +79,6 @@ export default Component.extend(isAuthenticatedMixin, {
 
     showMultipleOptions() {
       this.toggleProperty('isShowingOptions');
-    },
-
-    unarchiveSubcase(subcase) {
-      subcase.set('isArchived', false);
-      subcase.save();
     },
 
     requestDeleteSubcase(subcase) {
@@ -96,7 +92,7 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     async proposeForAgenda(subcase, meeting) {
-      this.set('isAssigningToOtherAgenda', true);
+      this.set('isLoading', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
       await designAgenda.reload(); //ensures latest state is pulled

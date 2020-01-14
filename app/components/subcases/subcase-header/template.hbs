@@ -74,27 +74,14 @@
                     placement="bottom" as |attacher|
             }}
               <ul class="vl-popover__link-list">
-                {{#if (not await subcase.isArchived)}}
-                  <li class="vl-popover__link-list__item">
-                    <a
-                            class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "requestDeleteSubcase" subcase}}
-                    >
-                      {{t "delete-subcase"}}
-                    </a>
-                  </li>
-                {{else}}
-                  <li class="vl-popover__link-list__item">
-                    <a
-                            class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "unarchiveSubcase" subcase}}
-                    >
-                      {{t "unarchive-subcase"}}
-                    </a>
-                  </li>
-                {{/if}}
+                <li class="vl-popover__link-list__item">
+                  <a class="vl-link"
+                    {{action attacher.hide}}
+                    {{action "requestDeleteSubcase" subcase}}
+                  >
+                    {{t "delete-subcase"}}
+                  </a>
+                </li>
               </ul>
             {{/attach-popover}}
           </button>
