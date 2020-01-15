@@ -12,10 +12,18 @@ $modal-content-padding: 1.5rem;
   .vl-modal__backdrop {
     @include backdrop;
   }
+
+  .vl-modal__backdrop {
+    z-index: 52;
+  }
+
+  tbody {
+    background-color:white;
+  }
 }
 
 .vl-modal-dialog {
-  display: none;
+  display: block;
   position: fixed;
   width: $modal-width;
   max-width: 95vw;
@@ -95,5 +103,11 @@ $modal-content-padding: 1.5rem;
     &.vl-icon {
       margin-right: 0;
     }
+  }
+}
+
+.vl-modal-dialog__content {
+  .data-table-pagination {
+    margin-bottom: 0em;
   }
 }
