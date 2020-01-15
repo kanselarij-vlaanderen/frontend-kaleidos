@@ -61,6 +61,10 @@ $modal-content-padding: 1.5rem;
   }
 }
 
+.vl-modal-dialog--large {
+  width: 80rem;
+}
+
 .vl-modal-dialog__title {
   font-weight: 500;
   font-family: $accent-font;
