@@ -25,7 +25,9 @@ $modal-max-height: 95vh;
 }
 
 .vl-modal-dialog {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: fixed;
   width: $modal-width;
   max-width: 95vw;
@@ -33,7 +35,6 @@ $modal-max-height: 95vh;
   top: 50%;
   left: 50%;
   margin: 0;
-  padding: 3rem;
   transform: translate(-50%, -50%);
   background-color: $white;
   border: 0;
@@ -113,6 +114,10 @@ $modal-max-height: 95vh;
 }
 
 .vl-modal-dialog__content {
+  padding: 2rem;
+  max-height: calc(#{$modal-max-height} - (#{$toolbar-size} * 2));
+  overflow: auto;
+
   .data-table-pagination {
     margin-bottom: 0em;
   }
