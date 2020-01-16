@@ -3,43 +3,14 @@
     {{cases/cases-filter
             size=size
             searchText=(readonly searchText)
+            showAdvanced=false
             searchInDecisionsOnly=(readonly decisionsOnly)
             dateFrom=(or dateFrom null)
             dateTo=(or dateTo null)
             ministerName=(readonly mandatees)
             filter=(action "filterCases")
     }}
-    <div class="vlc-toolbar">
-      <div class="vlc-toolbar__left">
-        <div class="vlc-toolbar__item">
-          <h2 class="vl-title vl-title--h3">{{t "my-cases"}}</h2>
-        </div>
-      </div>
 
-      <div class="vlc-toolbar__right">
-        {{#if isEditor}}
-          <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
-            <label class="vl-form__label vl-u-spacer-extended-right-s" for="isArchived">
-              {{t "show-archived"}}
-            </label>
-            {{web-components/vl-toggle value=isArchived}}
-          </div>
-        {{/if}}
-        <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
-          <label class="vl-form__label vl-u-spacer-extended-right-s" for="dossierId">
-            {{t "amount-showed"}}
-          </label>
-          {{#power-select
-                  options=sizeOptions
-                  selected=size
-                  searchEnabled=false
-                  onchange=(action "selectSize") as |sizeValue|
-          }}
-            {{sizeValue}}
-          {{/power-select}}
-        </div>
-      </div>
-    </div>
     {{#data-table
             content=model
             page=page

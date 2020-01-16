@@ -6,9 +6,11 @@ import DS from 'ember-data';
 import {task, timeout} from "ember-concurrency";
 import {computed, observer} from "@ember/object";
 import moment from "moment";
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import _ from "lodash";
 
 
-export default Component.extend(DataTableRouteMixin, {
+export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
   store: inject(),
   muSearch: inject(),
   size: 5,
@@ -54,7 +56,12 @@ export default Component.extend(DataTableRouteMixin, {
           },
           sort: this.sort // Currently only "sessionDates available in search config"
         };
+        if(!this.searchText) {
+          _.merge(queryParams, this.mergeQueryOptions(queryParams));
+          return this.get('store').query("case",queryParams);
+        }
         queryParams.filter[searchModifier + textSearchKey] = this.searchText;
+
 
         let searchDocumentType = this.decisionsOnly ? 'casesByDecisionText' : 'cases';
         if (!isEmpty(this.mandatees)) {
