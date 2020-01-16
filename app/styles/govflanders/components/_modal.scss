@@ -3,7 +3,8 @@ $modal-padding: 3rem;
 $modal-padding-small: 1.5rem;
 $modal-content-padding: 1.5rem;
 $toolbar-size: 6.5rem !default;
-$modal-max-height: 95vh;
+$nav-header-height: 44px;
+$modal-max-height: calc(100vh - #{$nav-header-height});
 
 .vl-modal {
   .vl-action-group {
@@ -32,7 +33,7 @@ $modal-max-height: 95vh;
   width: $modal-width;
   max-width: 95vw;
   max-height: $modal-max-height;
-  top: 50%;
+  top: calc(50% + (#{$nav-header-height} / 2)); // Nudges the modal out of the nav bar's sight
   left: 50%;
   margin: 0;
   transform: translate(-50%, -50%);
