@@ -67,8 +67,8 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       });
     },
 
-    async saveChanges() {
-      await this.document.save();
+    async saveChanges(doc) {
+      await doc.save();
       this.set('isEditing', false);
     },
 
@@ -100,7 +100,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
 
     async saveDocuments() {
       this.set('isLoading', true);
-      const documentVersion = await this.get('document.lastDocumentVersion');
+      const documentVersion = await this.get('documentContainer.lastDocumentVersion');
       await documentVersion.save();
       const item = await this.get('item');
       const itemType = item.get('constructor.modelName');

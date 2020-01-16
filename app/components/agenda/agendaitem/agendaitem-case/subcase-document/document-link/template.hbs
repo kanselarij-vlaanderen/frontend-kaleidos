@@ -90,11 +90,11 @@
                     type="text"
                     id=id
                     class="vl-input-field vl-input-field--block"
-                    value=(mut document.name)
+                    value=(mut document.lastDocumentVersion.name)
                   }}
                 <button
                   class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                  {{action "saveChanges"}}
+                  {{action "saveChanges" document.lastDocumentVersion.content}} {{!-- TODO: Get rid of 'content' (in current setup I didn't see an other way) --}}
                 >
                   <i
                     class="vl-vi vl-vi-save vl-button__icon"
