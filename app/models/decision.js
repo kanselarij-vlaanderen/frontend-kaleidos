@@ -28,9 +28,8 @@ export default Model.extend({
   documents: computed('documentVersions.@each', function() {
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
-
+        if (documentVersions && documentVersions.length > 0) {
+          const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
               'documents': { id: documentVersionIds },
