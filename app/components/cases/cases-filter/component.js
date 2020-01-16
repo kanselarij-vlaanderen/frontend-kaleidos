@@ -3,10 +3,9 @@ import { task, timeout } from 'ember-concurrency';
 import moment from 'moment';
 
 export default Component.extend({
-	classNames:["vl-form vl-u-spacer-extended-bottom-l"],
-	classNameBindings: ["showAdvanced:vlc-box--padding-sides-only", "showAdvanced:vlc-box"],
-	showAdvanced: false,
+	classNames:["vl-form vl-u-spacer-extended-bottom-l vlc-box"],
 	searchText: null,
+  disableAdvanced: false,
 	ministerName: null,
 	dateFrom: undefined,
 	dateTo: undefined,
@@ -21,7 +20,7 @@ export default Component.extend({
 			this.set('dateTo', moment(this.dateTo).toDate());
 		}
 	},
-	
+
 	searchTask: task(function* () {
 		yield timeout(600);
 		this.filter({
@@ -34,9 +33,6 @@ export default Component.extend({
 	}).restartable(),
 
 	actions: {
-		toggleAdvanced() {
-			this.toggleProperty('showAdvanced');
-		},
 		selectDateFrom(date) {
 			this.set('dateFrom', date);
 			this.searchTask.perform();

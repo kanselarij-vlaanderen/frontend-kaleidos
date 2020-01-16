@@ -1,14 +1,14 @@
 import Service from '@ember/service';
 import $ from 'jquery';
-import { inject } from '@ember/service';
-import { notifyPropertyChange } from '@ember/object';
+import {inject} from '@ember/service';
+import {notifyPropertyChange} from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import EmberObject from '@ember/object';
 
-export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
+export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   store: inject(),
   globalError: inject(),
   intl: inject(),
@@ -40,39 +40,24 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
     });
   },
 
-  approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
-    let newAgenda = this.store.createRecord('agenda', {
-      name: 'Ontwerpagenda',
-      createdFor: currentSession,
-      created: moment()
-        .utc()
-        .toDate(),
-      modified: moment()
-        .utc()
-        .toDate(),
+  async approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
+    if (!oldAgenda) {
+      return oldAgenda;
+    }
+    // Use approveagendaService to duoplicate AgendaItems into new agenda.
+    let result = await $.ajax({
+      method: 'POST',
+      url: '/agenda-approve/approveAgenda',
+      data: {
+        agendaName: "Ontwerpagenda",
+        createdFor: currentSession.id,
+        oldAgendaId: oldAgenda.id,
+      },
     });
-
-    return newAgenda
-      .save()
-      .then((agenda) => {
-        if (oldAgenda) {
-          return $.ajax({
-            method: 'POST',
-            url: '/agenda-approve/approveAgenda',
-            data: {
-              newAgendaId: agenda.id,
-              oldAgendaId: oldAgenda.id,
-            },
-          });
-        } else {
-          notifyPropertyChange(agenda, 'agendaitems');
-          return agenda;
-        }
-      })
-      .then(() => {
-        notifyPropertyChange(newAgenda, 'agendaitems');
-        return newAgenda;
-      });
+    notifyPropertyChange(oldAgenda, 'agendaitems');
+    let newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
+    notifyPropertyChange(newAgenda, 'agendaitems');
+    return newAgenda;
   },
 
   agendaWithChanges(currentAgendaID, agendaToCompareID) {
@@ -129,7 +114,6 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       themes: await subcase.get('themes'),
-      approvals: await subcase.get('approvals'),
     });
     await agendaitem.save();
 
@@ -145,7 +129,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
   },
 
   async assignSubcasePhase(subcase) {
-    const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
+    const phasesCodes = await this.store.query('subcase-phase-code', {filter: {label: 'Ingediend voor agendering'}});
     const phaseCode = phasesCodes.get('firstObject');
     if (phaseCode) {
       const phase = this.store.createRecord('subcase-phase', {
@@ -164,7 +148,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
         const mandatees = await item.get('sortedMandatees');
         if (item.isApproval) {
           item.set('groupName', null);
-          item.set('ownGroupName', null)
+          item.set('ownGroupName', null);
           return;
         }
         if (mandatees.length == 0) {
@@ -187,7 +171,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
   },
 
   async deleteAgendaitem(agendaitem) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
     itemToDelete.set('aboutToDelete', true);
     await itemToDelete.belongsTo('subcase').reload();
     const subcase = await itemToDelete.get('subcase');
@@ -195,7 +179,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
     if (subcase) {
       await subcase.hasMany('agendaitems').reload();
       const agendaitemsFromSubcase = await subcase.get('agendaitems');
-      if(agendaitemsFromSubcase.length == 1) {
+      if (agendaitemsFromSubcase.length == 1) {
         // if only 1 item is found, all phases should be destroyed and the subcase updated before deleting the agendaitem
         const phases = await subcase.get('phases');
         await Promise.all(phases.map(async phase => {
@@ -205,7 +189,7 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
         await subcase.set('consulationRequests', []);
         await subcase.set('agendaitems', []);
         await subcase.save();
-      }else {
+      } else {
         const foundAgendaitem = agendaitemsFromSubcase.find((agendaitem) => agendaitem.id == itemToDelete.id);
         itemToDelete = foundAgendaitem;
       }
@@ -214,24 +198,24 @@ export default Service.extend(ModifiedMixin,isAuthenticatedMixin, {
   },
 
   async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
-    if(this.isAdmin) {
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
+    if (this.isAdmin) {
       itemToDelete.set('aboutToDelete', true);
       const subcase = await itemToDelete.get('subcase');
       const agendaitems = await subcase.get('agendaitems');
 
-      if(subcase){
-        await Promise.all(agendaitems.map(async item => { 
+      if (subcase) {
+        await Promise.all(agendaitems.map(async item => {
           const agenda = await item.get('agenda');
           const meeting = await agenda.get('createdFor');
           const meetingId = await meeting.get('id');
-          if(meetingId === currentMeetingId) {
+          if (meetingId === currentMeetingId) {
             await item.destroyRecord();
           }
         }));
         await subcase.hasMany('agendaitems').reload();
         const agendaitemsFromSubcase = await subcase.get('agendaitems');
-        if(agendaitemsFromSubcase.length == 0) {
+        if (agendaitemsFromSubcase.length == 0) {
           const phases = await subcase.get('phases');
           await Promise.all(phases.map(async phase => {
             await phase.destroyRecord();

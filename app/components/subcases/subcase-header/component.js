@@ -2,10 +2,9 @@ import Component from '@ember/component';
 import {inject} from '@ember/service';
 import {computed} from '@ember/object';
 import moment from 'moment';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
+export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   agendaService: inject(),
   router: inject(),
@@ -14,9 +13,34 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   isAssigningToOtherCase: false,
   promptDeleteCase: false,
   isShowingOptions: false,
+  isLoading: false,
   isAssigning: false,
   subcase: null,
   caseToDelete: null,
+
+  canPropose: computed('subcase.{requestedForMeeting,hasAgendaItem,isPostponed}', 'isAssigningToOtherAgenda', async function () {
+    const {isAssigningToOtherAgenda, isLoading} = this;
+    const subcase = await this.get('subcase');
+    const requestedForMeeting = await subcase.get('requestedForMeeting');
+    const hasAgendaItem = await subcase.get('hasAgendaItem');
+
+    if (hasAgendaItem || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
+      return false;
+    }
+
+    return true;
+  }),
+
+  canDelete: computed('canPropose', 'isAssigningToOtherAgenda', async function () {
+    const canPropose = await this.get('canPropose');
+    const {isAssigningToOtherAgenda} = this;
+
+    if (canPropose && !isAssigningToOtherAgenda) {
+      return true;
+    }
+
+    return false;
+  }),
 
   meetings: computed('store', function () {
     const dateOfToday = moment().utc().subtract(1, 'weeks').format();
@@ -45,13 +69,40 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
     this.set('promptDeleteCase', true);
   },
 
+  navigateToSubcaseOverview(caze) {
+    this.router.transitionTo('cases.case.subcases', caze.id);
+  },
+
+  toggleAllPropertiesBackToDefault() {
+    this.set('isAssigningToOtherAgenda', false);
+    this.set('isDeletingSubcase', false);
+    this.set('selectedSubcase', null);
+    this.set('subcaseToDelete', null);
+    this.set('isLoading', false);
+    this.set('isAssigningToOtherCase', false);
+  },
+
   actions: {
+    cancel() {
+      this.toggleAllPropertiesBackToDefault();
+    },
+
     showMultipleOptions() {
       this.toggleProperty('isShowingOptions');
     },
 
+    requestDeleteSubcase(subcase) {
+      this.set('isDeletingSubcase', true);
+      this.set('subcaseToDelete', subcase);
+    },
+
+    proposeForOtherAgenda(subcase) {
+      this.toggleProperty('isAssigningToOtherAgenda');
+      this.set('selectedSubcase', subcase);
+    },
+
     async proposeForAgenda(subcase, meeting) {
-      this.set('isAssigning', true);
+      this.set('isLoading', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
       await designAgenda.reload(); //ensures latest state is pulled
@@ -59,49 +110,26 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
       await subcase.hasMany('agendaitems').reload();
-      this.set('isAssigning', false);
-    },
-    proposeForOtherAgenda(subcase) {
-      this.toggleProperty('isAssigningToOtherAgenda');
-      this.set('selectedSubcase', subcase);
+      this.toggleAllPropertiesBackToDefault();
     },
 
-    cancel() {
-      this.set('isAssigningToOtherAgenda', false);
-      this.set('isAssigningToOtherCase', false);
-      this.set('selectedSubcase', null);
-    },
+    async deleteSubcase() {
+      this.set('isLoading', true);
+      const subcaseToDelete = await this.get('subcaseToDelete');
+      const caze = await subcaseToDelete.get('case');
 
-    async deleteSubcase(subcase) {
-      subcase.hasMany('agendaitems').reload();
-      const caze = await subcase.get('case');
-      const agendaitems = await subcase.get('agendaitems');
+      subcaseToDelete.hasMany('agendaitems').reload();
+      const agendaitems = await subcaseToDelete.get('agendaitems');
+
       if (agendaitems && agendaitems.length > 0) {
         return;
       } else {
-        await this.deleteSubcase(subcase);
+        await this.deleteSubcase(subcaseToDelete);
       }
-      this.set('isDeletingSubcase', false);
-      this.router.transitionTo('cases.case.subcases', caze.id);
+      this.navigateToSubcaseOverview(caze);
     },
-    unarchiveSubcase(subcase) {
-      subcase.set('isArchived', false);
-      subcase.save();
-    },
-    closeSubcase(subcase) {
-      const concluded = subcase.get('concluded');
-      subcase.set('concluded', !concluded);
-      subcase.save();
-    },
-    async deleteCase() {
-      const itemToDelete = await this.store.findRecord('case', this.get("caseToDelete.id"));
-      await itemToDelete.destroyRecord();
-      this.get('router').transitionTo('cases');
-    },
-
     triggerMoveSubcaseDialog() {
       this.set('isAssigningToOtherCase', true);
-
     },
     async moveSubcase(newCase) {
       this.subcase.set("case", newCase);
@@ -121,9 +149,6 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
         // This works fine, but if the delete is done, there are indexing issues.
         //this.triggerDeleteCaseDialog();
       }
-    },
-    requestDeleteSubcase() {
-      this.set('isDeletingSubcase', true);
     },
     cancelDeleteSubcase() {
       this.set('isDeletingSubcase', false);

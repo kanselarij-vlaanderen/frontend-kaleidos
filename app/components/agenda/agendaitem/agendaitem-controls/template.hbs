@@ -1,63 +1,26 @@
-{{#if (eq currentAgenda.name "Ontwerpagenda") }}
+{{#if (eq currentAgenda.name "Ontwerpagenda")}}
   {{#if (and (not (is-pending isDeletable)) (not (is-pending isPostPonable)))}}
     {{#if (await isPostPonable)}}
       {{#if (or agendaitem.retracted (await agendaitem.postponedTo))}}
-          <button
-                  class="vl-button vl-button--tertiary vl-button--narrow"
-            {{action "advanceAgendaitem"}}
-          >
-            {{t "not-postpone"}}
-          </button>
+        <button class="vl-button vl-button--tertiary vl-button--narrow"
+          {{action "advanceAgendaitem"}}
+        >
+          {{t "not-postpone"}}
+        </button>
       {{else}}
-          <button class="vl-button vl-button--tertiary vl-button--narrow">
-            {{t "postpone"}}
-            {{#attach-popover
-                    class="ember-attacher-popper"
-                    hideOn="clickout click"
-                    showOn="click"
-                    animation="shift"
-                    placement="bottom" as |attacher|
-            }}
-                <ul class="vl-popover__link-list">
-                  {{#if (is-pending meetings)}}
-                    {{web-components/vl-loader text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))}}
-                  {{else if (gt (await meetings.length) 0)}}
-                    {{#each (await meetings) as |meeting|}}
-                        <li class="vl-popover__link-list__item">
-                            <button
-                                    class="vl-link"
-                              {{action attacher.hide}}
-                              {{action "postponeAgendaItem" agendaitem meeting}}
-                            >
-                              {{t "postpone-until"}}
-                              {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-                            </button>
-                        </li>
-                    {{/each}}
-                      <li class="vl-popover__link-list__separator" role="none"></li>
-                  {{/if}}
-                    <li class="vl-popover__link-list__item">
-                        <button
-                                class="vl-link"
-                          {{action attacher.hide}}
-                          {{action "postponeAgendaItem" agendaitem}}
-                        >
-                          {{t "postpone"}}
-                        </button>
-                    </li>
-                </ul>
-            {{/attach-popover}}
-          </button>
+        <button class="vl-button vl-button--tertiary vl-button--narrow" {{action "postponeAgendaItem" agendaitem}}>
+          {{t "postpone"}}
+        </button>
       {{/if}}
     {{/if}}
     {{#if (or isAdmin (await isDeletable))}}
-        <button class="vl-button vl-button--tertiary vl-button--narrow"
-          {{action "toggleIsVerifying"}}>
-          {{t "delete"}}
-        </button>
+      <button class="vl-button vl-button--tertiary vl-button--narrow"
+        {{action "toggleIsVerifying"}}>
+        {{t "delete"}}
+      </button>
     {{/if}}
   {{else}}
-      <div class="vl-loader"></div>
+    <div class="vl-loader"></div>
   {{/if}}
   {{#if isVerifying}}
     {{web-components/vl-modal-verify
