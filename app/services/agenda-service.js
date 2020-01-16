@@ -215,8 +215,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
         itemToDelete = foundAgendaitem;
       }
     }
-    await agendaitem.destroyRecord();
-    // await itemToDelete.destroyRecord();
+    await itemToDelete.destroyRecord();
   },
 
   async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {
