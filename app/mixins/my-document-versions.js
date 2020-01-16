@@ -10,13 +10,8 @@ export default Mixin.create({
     return sortedVersions.lastObject;
   }),
 
-  lastDocumentVersionName: computed('lastDocumentVersion.document.name', function(){
-    const version = this.get('lastDocumentVersion');
-    if(!version){
-      return null;
-    }
-    // const document = version.get('document');
-    return version.get('name');
+  lastDocumentVersionName: computed('lastDocumentVersion.name', function(){
+    return this.get('lastDocumentVersion.name');
   }),
 
   mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function(){
