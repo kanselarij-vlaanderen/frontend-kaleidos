@@ -82,5 +82,7 @@
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ember-test-selectors": "^3.0.0"
+  }
 }

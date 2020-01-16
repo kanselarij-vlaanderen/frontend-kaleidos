@@ -106,10 +106,9 @@ function resetDB() {
       kaleidosProject + '/docker-compose.override.yml'
   };
 
-  cy.exec('docker-compose stop triplestore elasticsearch file', { env })
+  cy.exec('docker-compose kill triplestore elasticsearch file cache resource', { env })
     .exec(`rm -rf ${kaleidosProject}/testdata`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -d ${kaleidosProject}`)
     .exec('docker-compose up -d', { env })
-    .exec('docker-compose restart cache resource', { env })
     .wait(5000)
 }

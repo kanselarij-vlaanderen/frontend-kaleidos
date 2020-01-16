@@ -19,6 +19,7 @@ import './agenda-commands'
 import './case-commands'
 import './subcase-commands'
 import './document-commands'
+import './util/utility-commands'
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   return !err.message.includes('calling set on destroyed object')

@@ -21,7 +21,9 @@ module.exports = function(defaults) {
         'transform-object-rest-spread'
       ]
     },
-   
+    'ember-test-selectors': {
+      strip: false
+    }
   });
 
   app.import('node_modules/sanitize-filename/index.js', {
@@ -29,6 +31,6 @@ module.exports = function(defaults) {
       { transformation: 'cjs', as: 'sanitize-filename' }
     ]
   });
-  
+
   return app.toTree();
 };
