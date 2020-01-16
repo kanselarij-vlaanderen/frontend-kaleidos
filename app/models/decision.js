@@ -33,9 +33,9 @@ export default Model.extend({
 
           return this.store.query('document', {
             filter: {
-              'document-versions': { id: documentVersionIds },
+              'documents': { id: documentVersionIds },
             },
-            include: 'document-versions,type',
+            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
           }).then((documents) => {
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
