@@ -499,12 +499,12 @@
   "no-active-agenda":"Er zijn nog geen actieve agenda's.",
   "clone-previous-subcase": "Kopieer voorgaande stap",
   "action-not-allowed":"Deze actie is niet toegestaan, Contacteer de administrator of probeer het opnieuw.",
-  "no-active-agenda":"Er zijn nog geen actieve agenda’s.",
   "filtered-agendas": "Deze data is gefilterd.",
   "editing-agenda-overview": "U bent nu aan het bewerken. U kan de volgorde en de status van de mededelingen en nota's aanpassen. Wijzigingen worden onmiddellijk opgeslagen.",
   "end-editing-overview": "Bewerken afsluiten",
   "clear-filter": "Reset filter",
   "agenda-delete-message": "De agenda wordt verwijderd. Dit kan even duren.",
   "agenda-lock-message": "De agenda wordt afgesloten. Dit kan even duren.",
-  "explanation": "Toelichting"
+  "explanation": "Toelichting",
+  "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw."
 }

@@ -60,6 +60,27 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     return newAgenda;
   },
 
+  async deleteAgenda(agendaToDelete) {
+    if (!agendaToDelete) {
+      return;
+    }
+    // Use approveagendaService to delete agendaitems and agenda.
+    let result = await $.ajax({
+      method: 'POST',
+      url: '/agenda-approve/deleteAgenda',
+      data: {
+        agendaToDeleteId: agendaToDelete.id,
+      },
+    });
+    if(result.statusCode != 200) {
+      this.globalError.showToast.perform(EmberObject.create({
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('error-delete-agenda'),
+        type: 'error'
+      }));
+    }
+  },
+
   agendaWithChanges(currentAgendaID, agendaToCompareID) {
     return $.ajax({
       method: 'GET',
@@ -194,7 +215,8 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
         itemToDelete = foundAgendaitem;
       }
     }
-    await itemToDelete.destroyRecord();
+    await agendaitem.destroyRecord();
+    // await itemToDelete.destroyRecord();
   },
 
   async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {

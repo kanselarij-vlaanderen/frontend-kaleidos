@@ -95,12 +95,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       return;
     }    
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
-    const agendaitems = await agenda.get('agendaitems');
-    if(agendaitems){
-      await Promise.all(agendaitems.map(async item => await this.agendaService.deleteAgendaitem(item)));
-    }
-    await agenda.destroyRecord();
+    await this.agendaService.deleteAgenda(agenda);
     if (previousAgenda) {
+      await session.save();
       this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems.index', session.id, {
         queryParams: { selectedAgenda: previousAgenda.get('id') }
@@ -178,7 +175,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       if (designAgenda) {
         await this.deleteAgenda(designAgenda);
       }
+      if (!this.isDestroyed) {
       this.set('isLockingAgenda', false);
+      }
     },
 
     async unlockAgenda() {
@@ -225,7 +224,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     async deleteAgenda(agenda) {
       this.set('isDeletingAgenda', true);
       await this.deleteAgenda(agenda);
-      this.set('isDeletingAgenda', false);
+      if (!this.isDestroyed) {
+        this.set('isDeletingAgenda', false);
+      }
     },
 
     async createNewDesignAgenda() {
