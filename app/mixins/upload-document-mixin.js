@@ -4,13 +4,19 @@ import moment from 'moment';
 import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import { A } from '@ember/array';
 import config from '../utils/config';
+import { deprecatingAlias } from '@ember/object/computed';
 
 export default Mixin.create({
   store: service(),
   fileService: service(),
 
   documentsInCreation: A([]), // When creating new documents
-  document: null, // When adding a new version to an existing document
+
+  document: deprecatingAlias('documentContainer', {
+    id: 'model-refactor.documents',
+    until: '?'
+  }),
+  documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
 
   async didInsertElement() {
@@ -39,100 +45,77 @@ export default Mixin.create({
     await this.fileService.deleteFile(file);
   },
 
-  createNewDocument(title, type, confidential, documentVersion) {
-    const creationDate = moment()
-      .utc()
-      .toDate();
-    return this.store.createRecord('document', {
-      created: creationDate,
-      title: title,
-      type: type,
-      accessLevel: this.defaultAccessLevel,
-      documentVersions: documentVersion ? A([documentVersion]) : undefined, // Optional
-      confidential: confidential,
-    });
+  createNewDocument(uploadedFile, previousDocument, defaults) {
+    const propsFromPrevious = [
+      'accessLevel',
+      'confidential'
+    ];
+    const newDocument = this.store.createRecord('document-version', {});
+    propsFromPrevious.forEach(async key => {
+      newDocument.set(key, previousDocument ?
+        await previousDocument.getWithDefault(key, defaults[key]) :
+        defaults[key]
+      );
+    })
+    newDocument.set('file', uploadedFile);
+    newDocument.set('previousVersion', previousDocument);
+    newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
+    return newDocument;
   },
 
-  async createNewDocumentVersion(uploadedFile, document, chosenFileName) {
-    const created = moment()
-      .utc()
-      .toDate();
-    document = await document;
-    const latestVersionNumber = document
-      ? (await document.get('lastDocumentVersion.versionNumber')) || 0
-      : 0;
-    let accessLevel = (await this.get('document.lastDocumentVersion.accessLevel')) || this.defaultAccessLevel;
-    return this.store.createRecord('document-version', {
-      document, // Optional
-      created,
-      accessLevel,
-      chosenFileName, // Optional
-      versionNumber: latestVersionNumber + 1,
-      file: uploadedFile,
-    });
-  },
-
-  async saveDocuments(confidential) {
+  async saveDocumentContainers() {
+    if (arguments.length > 0){
+      console.log("This function takes no arguments, 'confidential' should be set on individual document level");
+    }
     this.set('isLoading', true);
-    const documents = this.get('documentsInCreation');
+    const docs = this.get('documentsInCreation');
 
     const savedDocuments = await Promise.all(
-      documents.map(async (document) => {
-        const documentVersion = await document.get('documentVersions.firstObject');
-        document.set('confidential', confidential);
-
-        return documentVersion.save().then((documentVersion) => {
-          return document.save().then((document) => {
-            this.fileService.convertDocumentVersion(documentVersion);
-            return document;
-          });
-        });
+      docs.map(async (doc) => {
+        doc = await doc.save();
+        let container = doc.get('documentContainer.content'); // TODO: cannot use .content
+        container.set('documents', A([doc]));
+        await container.save();
+        return container;
       })
     );
 
-    this.set('documentsInCreation', A([]));
+    this.get('documentsInCreation').clear();
     this.set('isLoading', false);
     return savedDocuments;
   },
 
-  async attachDocumentsToModel(documents, model) {
-    const modelName = await model.get('constructor.modelName');
-    // Don't do anything if other than these
-    if (!['meeting-record', 'decision'].includes(modelName)) {
-      return model;
-    }
-
-    const modelDocuments = await model.get('documents');
-    if (modelDocuments) {
-      model.set(
-        'documents',
-        A(Array.prototype.concat(modelDocuments.toArray(), documents.toArray()))
-      );
-    } else {
-      model.set('documents', documents);
-    }
-    return model;
+  async saveDocuments() {
+    console.log('Deprecated by saveDocumentContainers');
+    return this.saveDocumentContainers(...arguments);
   },
 
-  async attachDocumentVersionsToModel(documentVersions, model, documentVersionsType = 'documentVersions') {
+  async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
     if (['meeting-record', 'decision'].includes(modelName)) {
       return model;
     }
 
-    const modelDocumentVersions = await model.get(documentVersionsType);
+    const modelDocumentVersions = await model.get(propertyName);
     if (modelDocumentVersions) {
       model.set(
-        documentVersionsType,
-        A(Array.prototype.concat(modelDocumentVersions.toArray(), documentVersions.toArray()))
+        propertyName,
+        A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray()))
       );
     } else {
-      model.set(documentVersionsType, documentVersions);
+      model.set(propertyName, documents);
     }
     return model;
   },
 
+  async attachDocumentVersionsToModel() {
+    console.log('Deprecated by attachDocumentsToModel')
+    console.trace();
+    return this.attachDocumentsToModel(...arguments);
+  },
+
+  // TODO: refactor model/code in function of "reeds aangeleverde documenten"
   async unlinkDocumentVersions(documentVersions, model) {
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
@@ -149,6 +132,7 @@ export default Mixin.create({
     return await this.unlinkDocumentVersionsFromModel(model, documentVersions);
   },
 
+  // TODO: refactor model/code in function of "reeds aangeleverde documenten"
   async unlinkDocumentVersionsFromModel(model, documentVersions) {
     const modelDocumentVersions = await model.get('linkedDocumentVersions');
     if (modelDocumentVersions) {
@@ -161,39 +145,38 @@ export default Mixin.create({
 
   actions: {
     async uploadedFile(uploadedFile) {
-      let { document } = this;
-
-      if (document) {
-        const documentVersion = await this.createNewDocumentVersion(uploadedFile, document);
-        (await document.get('documentVersions')).pushObject(documentVersion);
-        document.notifyPropertyChange('documentVersions');
-      } else {
-        const documentVersion = await this.createNewDocumentVersion(uploadedFile);
-        document = this.createNewDocument(
-          uploadedFile.get('filenameWithoutExtension'),
-          undefined,
-          undefined,
-          documentVersion
-        );
-        documentVersion.set('document', document);
-        this.get('documentsInCreation').pushObject(document);
+      const creationDate = moment().utc().toDate();
+      const previousVersion = this.documentContainer ? (await this.documentContainer.get('lastDocumentVersion')) : null;
+      const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
+        accessLevel: this.defaultAccessLevel,
+      });
+      newDocument.set('created', creationDate);
+      newDocument.set('modified', creationDate);
+      if (this.documentContainer) { // Adding new version to existing container
+        (await this.documentContainer.get('documents')).pushObject(newDocument);
+        this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
+      } else { // Adding new version, new container
+        const newContainer = this.store.createRecord('document', {
+          'created': creationDate
+        });
+        newDocument.set('documentContainer', newContainer);
+        this.get('documentsInCreation').pushObject(newDocument);
       }
     },
 
     async downloadFile(version) {
-      const documentVersion = await version;
-      let file = await documentVersion.get('file');
-      downloadFilePrompt(this, file, documentVersion.get('name'));
+      const doc = await version;
+      let file = await doc.get('file');
+      downloadFilePrompt(this, file, doc.get('name'));
     },
 
-    async removeDocument(document) {
-      this.get('documentsInCreation').removeObject(document);
-      const file = await document.get('documentVersions.firstObject.file');
+    async removeDocument(documentContainer) {
+      const file = await documentContainer.get('documents.firstObject.file');
       if (file.get('id')) {
         file.destroyRecord();
       }
-      document.get('documentVersions.firstObject').rollbackAttributes();
-      document.rollbackAttributes();
+      documentContainer.get('documents.firstObject').rollbackAttributes();
+      documentContainer.rollbackAttributes();
     },
 
     async showDocumentVersionViewer(documentVersion) {
