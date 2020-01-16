@@ -171,16 +171,16 @@
         {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
       {{else}}
         {{ember-kaleidos-webuniversum/vl-uploaded-document
-          name=lastDocumentVersion.file.filename
-          extension=lastDocumentVersion.file.extension
-          size=lastDocumentVersion.file.size
-          downloadName=lastDocumentVersion.file.filename
+          name=documentContainer.lastDocument.file.filename
+          extension=documentContainer.lastDocument.file.extension
+          size=documentContainer.lastDocument.file.size
+          downloadName=documentContainer.lastDocument.file.filename
           downloadLink=(concat
-            lastDocumentVersion.file.downloadLink
+            documentContainer.lastDocument.file.downloadLink
             "?name="
-            lastDocumentVersion.file.filename
+            documentContainer.lastDocument.file.filename
           )
-          delete=(action "delete" lastDocumentVersion)
+          delete=(action "delete" documentContainer.lastDocument)
         }}
       {{/if}}
     </div>
