@@ -39,7 +39,6 @@ $modal-max-height: 95vh;
   background-color: $white;
   border: 0;
   box-shadow: $base-box-shadow;
-  overflow: auto;
   z-index: z("modal");
 
   &::backdrop {
