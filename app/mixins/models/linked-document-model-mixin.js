@@ -18,7 +18,7 @@ export default Mixin.create({
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
-            include: 'document-versions,type,document-versions.access-level',
+            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
           }).then((documents) => {
             // Sorting is done in the frontend to work around a Virtuoso issue, where
             // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
