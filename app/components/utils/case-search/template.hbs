@@ -1,0 +1,172 @@
+<div class="vlc-scroll-wrapper__body">
+  <div class="vl-u-spacer-extended-l">
+    {{cases/cases-filter
+            size=size
+            searchText=(readonly searchText)
+            searchInDecisionsOnly=(readonly decisionsOnly)
+            dateFrom=(or dateFrom null)
+            dateTo=(or dateTo null)
+            ministerName=(readonly mandatees)
+            filter=(action "filterCases")
+    }}
+    <div class="vlc-toolbar">
+      <div class="vlc-toolbar__left">
+        <div class="vlc-toolbar__item">
+          <h2 class="vl-title vl-title--h3">{{t "my-cases"}}</h2>
+        </div>
+      </div>
+
+      <div class="vlc-toolbar__right">
+        {{#if isEditor}}
+          <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
+            <label class="vl-form__label vl-u-spacer-extended-right-s" for="isArchived">
+              {{t "show-archived"}}
+            </label>
+            {{web-components/vl-toggle value=isArchived}}
+          </div>
+        {{/if}}
+        <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
+          <label class="vl-form__label vl-u-spacer-extended-right-s" for="dossierId">
+            {{t "amount-showed"}}
+          </label>
+          {{#power-select
+                  options=sizeOptions
+                  selected=size
+                  searchEnabled=false
+                  onchange=(action "selectSize") as |sizeValue|
+          }}
+            {{sizeValue}}
+          {{/power-select}}
+        </div>
+      </div>
+    </div>
+    {{#data-table
+            content=model
+            page=page
+            size=size
+            sort=sort
+            class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+            as |table|
+    }}
+      {{#table.content as |c|}}
+        {{#c.header}}
+          <th
+                  class="vl-data-table-col-9 vl-data-table__header-title">
+            {{t "case-name"}}
+          </th>
+          {{#if searchText}}
+            <th
+                    class="vl-data-table-col-1 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+            {{th-sortable
+                    class="vl-data-table-col-1 vl-data-table__header-title"
+                    currentSorting=sort
+                    field="sessionDates"
+                    label=(t "on-agenda-of")
+            }}
+          {{else}}
+            <th
+                    class="vl-data-table-col-2 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+          {{/if}}
+          <th class="vl-data-table-col-1"></th>
+        {{/c.header}}
+        {{#c.body class="tr-hover" as |row|}}
+          <td onclick={{action "selectCase" row}}>
+            <p>
+              {{#if row.shortTitle}}
+                {{row.shortTitle}}
+              {{else}}
+                {{row.title}}
+              {{/if}}
+            </p>
+          </td>
+          <td onclick={{action "selectCase" row}}>
+            {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+          </td>
+          {{#if searchText}}
+            <td onclick={{action "selectCase" row}}>
+              {{moment-format row.sessionDates "DD-MM-YYYY"}}
+            </td>
+          {{/if}}
+          <td class="vl-u-align-right">
+            {{#if isEditor}}
+              <button class="vl-button vl-button--link vl-button--icon">
+                <i
+                        class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                ></i>
+                {{#attach-popover
+                        class="ember-attacher-popper"
+                        hideOn="clickout click"
+                        showOn="click"
+                        animation="shift"
+                        placement="bottom" as |attacher|
+                }}
+                  <ul class="vl-popover__link-list">
+                    <li class="vl-popover__link-list__item">
+                      <button
+                              class="vl-link"
+                        {{action attacher.hide}}
+                        {{action "editRow" row}}
+                      >
+                        {{editCase}}
+                      </button>
+                    </li>
+                    <li class="vl-popover__link-list__item">
+                      {{#if (not row.isArchived)}}
+                        <a
+                                class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "requestArchiveCase" row}}
+                        >
+                          {{archiveCase}}
+                        </a>
+                      {{else}}
+                        <a
+                                class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "unarchiveCase" row}}
+                        >
+                          {{unArchiveCase}}
+                        </a>
+                      {{/if}}
+                    </li>
+                  </ul>
+                {{/attach-popover}}
+              </button>
+            {{/if}}
+            {{#link-to
+                    "cases.case.subcases"
+                    row.id
+                    class="vl-button vl-button--link vl-button--icon"
+            }}
+              <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+            {{/link-to}}
+          </td>
+        {{/c.body}}
+      {{/table.content}}
+    {{/data-table}}
+  </div>
+</div>
+{{#if isEditingRow}}
+  {{#web-components/vl-modal
+          isOverlay=true
+          title=(t "edit-case")
+          closeModal=(action "cancelEditing")
+  }}
+    {{cases/edit-case
+            caseToEdit=caseToEdit
+            cancelEditing=(action "cancelEditing")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isArchivingCase}}
+  {{web-components/vl-modal-verify
+          title=(t "archive-case")
+          message=(t "archive-case-message")
+          cancel=(action "cancelArchiveCase")
+          verify=(action "archiveCase")
+  }}
+{{/if}}

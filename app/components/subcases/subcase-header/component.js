@@ -1,6 +1,6 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import {inject} from '@ember/service';
+import {computed} from '@ember/object';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
@@ -11,11 +11,15 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   router: inject(),
   classNames: ["vlc-page-header"],
   isAssigningToOtherAgenda: false,
+  isAssigningToOtherCase: false,
+  promptDeleteCase: false,
   isShowingOptions: false,
   isAssigning: false,
+  subcase: null,
+  caseToDelete: null,
 
-  meetings: computed('store', function() {
-    const dateOfToday = moment().utc().subtract(1,'weeks').format();
+  meetings: computed('store', function () {
+    const dateOfToday = moment().utc().subtract(1, 'weeks').format();
     const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
 
     return this.store.query('meeting', {
@@ -29,12 +33,16 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   }),
 
   async deleteSubcase(subcase) {
-    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), { reload: true });
+    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), {reload: true});
     const newsletterInfo = await itemToDelete.get('newsletterInfo');
-    if(newsletterInfo) {
+    if (newsletterInfo) {
       await newsletterInfo.destroyRecord();
     }
     await itemToDelete.destroyRecord();
+  },
+
+  async triggerDeleteCaseDialog() {
+    this.set('promptDeleteCase', true);
   },
 
   actions: {
@@ -60,6 +68,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 
     cancel() {
       this.set('isAssigningToOtherAgenda', false);
+      this.set('isAssigningToOtherCase', false);
       this.set('selectedSubcase', null);
     },
 
@@ -84,11 +93,44 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       subcase.set('concluded', !concluded);
       subcase.save();
     },
+    async deleteCase() {
+      const itemToDelete = await this.store.findRecord('case', this.get("caseToDelete.id"));
+      await itemToDelete.destroyRecord();
+      this.get('router').transitionTo('cases');
+    },
+
+    triggerMoveSubcaseDialog() {
+      this.set('isAssigningToOtherCase', true);
+
+    },
+    async moveSubcase(newCase) {
+      this.subcase.set("case", newCase);
+      await this.subcase.save();
+
+      this.set('isAssigningToOtherCase', false);
+      let caze = this.subcase.get('case');
+      caze = await this.store.findRecord('case', caze.get("id"));
+      caze.hasMany('subcases').reload();
+      this.set('caseToDelete', caze);
+      const subCases = caze.get('subcases');
+      if (subCases.length > 0) {
+        this.get('router').transitionTo('cases.case.subcases');
+      } else {
+        this.get('router').transitionTo('cases.case.subcases');
+        // Prompt the user to Delete the case.
+        // This works fine, but if the delete is done, there are indexing issues.
+        //this.triggerDeleteCaseDialog();
+      }
+    },
     requestDeleteSubcase() {
       this.set('isDeletingSubcase', true);
     },
     cancelDeleteSubcase() {
       this.set('isDeletingSubcase', false);
+    },
+    cancelDeleteCase() {
+      this.set('promptDeleteCase', false);
+      this.get('router').transitionTo('cases.case.subcases');
     }
   },
 });
