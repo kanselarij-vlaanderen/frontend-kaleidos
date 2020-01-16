@@ -5,6 +5,7 @@ import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import { A } from '@ember/array';
 import config from '../utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
+import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 
 export default Mixin.create({
   store: service(),
@@ -156,6 +157,8 @@ export default Mixin.create({
         const docs = await this.documentContainer.get('documents')
         docs.pushObject(newDocument);
         newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
+        const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
+        newDocument.set('name', newName);
         this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
       } else { // Adding new version, new container
         const newContainer = this.store.createRecord('document', {
