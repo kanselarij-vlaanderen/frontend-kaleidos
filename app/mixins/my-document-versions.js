@@ -31,7 +31,7 @@ export default Mixin.create({
           });
           return matchingVersions;
         }
-        
+
         return;
       })()
     });
