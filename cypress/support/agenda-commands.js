@@ -132,8 +132,7 @@ function deleteAgenda(meetingId, lastAgenda) {
   } else {
     cy.route('DELETE', '/meetings/**').as('deleteMeeting');
   }
-  cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitems');
-  cy.route('DELETE', '/agendas/**').as('deleteAgendas');
+  cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
 
   cy.get('.vl-button--icon-before')
@@ -142,8 +141,9 @@ function deleteAgenda(meetingId, lastAgenda) {
   cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
     .contains('Agenda verwijderen')
     .click();
-  cy.wait('@deleteAgendaitems', { timeout: 20000 });
-  cy.wait('@deleteAgendas', { timeout: 20000 });
+  cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
+    cy.get('.vl-modal').should('not.exist');
+  });
   if(lastAgenda) {
     cy.wait('@deleteNewsletter', { timeout: 20000 });
     cy.wait('@deleteMeeting', { timeout: 20000 });
@@ -230,7 +230,6 @@ function approveCoAgendaitem(agendaitemShortTitle) {
  */
 function approveDesignAgenda() {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
-  cy.route('POST', '/agendas').as('createNewDesignAgenda');
   cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
   cy.route('GET', '/agendaitems/**').as('getAgendaitems');
 
@@ -242,7 +241,6 @@ function approveDesignAgenda() {
   });
 
   cy.wait('@patchAgenda', { timeout: 12000 });
-  cy.wait('@createNewDesignAgenda', { timeout: 12000 });
   cy.wait('@createApprovedAgenda', { timeout: 12000 });
   cy.wait('@getAgendaitems', { timeout: 12000 });
 }
@@ -372,8 +370,7 @@ function changeSelectedAgenda(agendaName) {
 }
 
 function closeAgenda() {
-  cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitems');
-  cy.route('DELETE', '/agendas/**').as('deleteAgendas');
+  cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
 
   cy.get('.vl-button--icon-before')
     .contains('Acties')
@@ -381,7 +378,8 @@ function closeAgenda() {
   cy.get('.vl-popover__link-list__item > .vl-link')
     .contains('Agenda afsluiten')
     .click();
-  cy.wait('@deleteAgendaitems', { timeout: 20000 });
-  cy.wait('@deleteAgendas', { timeout: 20000 });
+  cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
+    cy.get('.vl-modal').should('not.exist');
+  });
 
 }
