@@ -153,7 +153,9 @@ export default Mixin.create({
       newDocument.set('created', creationDate);
       newDocument.set('modified', creationDate);
       if (this.documentContainer) { // Adding new version to existing container
-        (await this.documentContainer.get('documents')).pushObject(newDocument);
+        const docs = await this.documentContainer.get('documents')
+        docs.pushObject(newDocument);
+        newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
         this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
       } else { // Adding new version, new container
         const newContainer = this.store.createRecord('document', {
