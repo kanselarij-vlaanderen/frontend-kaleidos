@@ -10,11 +10,10 @@ export default Mixin.create({
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
-
+          const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'document-versions': { id: documentVersionIds },
+              'documents': { id: documentVersionIds },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
