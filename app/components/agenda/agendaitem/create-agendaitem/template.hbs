@@ -66,6 +66,7 @@
         page=page
         size=size
         isLoading=findAll.isRunning
+        noDataMessage=(t "no-results-found")
         onClickRow=(action "selectPostponed") as |table|
       }}
         {{#table.content as |c|}}
