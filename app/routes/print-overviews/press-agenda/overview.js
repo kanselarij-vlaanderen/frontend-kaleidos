@@ -4,26 +4,9 @@ import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items
 export default Route.extend(SortedAgendaItemsRouteMixin, {
 	type: 'press-agenda',
 	include: null,
-
+  allowEmptyGroups: true,
 	queryParams: {
 		definite: { refreshModel: true }
 	},
-	// TODO: check deadcode
-	async parseAgendaItems(agenda, session, definite) {
-		let agendaitems = await (await agenda.get('agendaitems')).filter((item) => !item.get('subcase.showAsRemark'));
-		let filteredAgendaItems = [];
-		if (definite === "true") {
-			const publicItems = agendaitems.filter((item) => item.get('forPress'));
-			filteredAgendaItems.push(...publicItems);
-		} else {
-			filteredAgendaItems.push(...agendaitems);
-		}
 
-		const announcements = agendaitems.filter((item) => item.get('subcase.showAsRemark'));
-
-		// const groups = await this.agendaService.newSorting(session, agenda.get('id'));
-		const groups = [];
-
-		return { groups , announcements };
-	},
-});	
+});
