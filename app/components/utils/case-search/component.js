@@ -3,8 +3,7 @@ import {inject} from "@ember/service";
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import {isEmpty} from '@ember/utils';
 import DS from 'ember-data';
-import {task, timeout} from "ember-concurrency";
-import {computed, observer} from "@ember/object";
+import {computed } from "@ember/object";
 import moment from "moment";
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import _ from "lodash";
@@ -42,7 +41,7 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
   model: computed("searchText", function () {
     return DS.PromiseArray.create({
       promise: (() => {
-        let params = {};
+        // let params = {};
         const searchModifier = ':sqs:';
 
         const textSearchKey = this.textSearchFields.join(',');
