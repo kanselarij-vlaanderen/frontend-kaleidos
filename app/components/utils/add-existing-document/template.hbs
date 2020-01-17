@@ -39,11 +39,12 @@
   {{#table.content as |c|}}
     {{#c.header}}
       <th></th>
-      {{th-sortable
+      <th><span class="">{{t "short-title-case"}}</span></th>
+      {{!--{{th-sortable
         field="title"
         currentSorting=sort
         label=(t "title")
-      }}
+      }}--}}
       <th></th>
     {{/c.header}}
     {{#c.body as |row|}}
