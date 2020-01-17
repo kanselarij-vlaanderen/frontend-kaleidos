@@ -13,8 +13,7 @@
     <hr class="vlc-hr" />
   </div>
   <div class="vl-u-spacer-extended-bottom">
-    {{#each (await agendaitemGroups) as |group|}}
-      {{#each group.groups as |agendaitemGroup|}}
+    {{#each (await agendaitemGroups) as |agendaitemGroup|}}
         {{#if agendaitemGroup.agendaitems.length}}
           <div class="vl-u-spacer-extended-bottom">
             {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
@@ -67,7 +66,6 @@
             </div>
           </div>
         {{/if}}
-      {{/each}}
     {{/each}}
   </div>
 </div>
