@@ -72,7 +72,7 @@
             {{/if}}
           </td>
           <td>
-            {{#if row.showAsAnnouncement}}
+            {{#if (eq row.showAsAnnouncement "true")}}
               {{t "announcement"}}
             {{else}}
               {{t "note"}}
