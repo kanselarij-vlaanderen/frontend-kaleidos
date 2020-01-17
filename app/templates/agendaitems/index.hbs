@@ -44,8 +44,16 @@
       {{#table.content as |c|}}
         {{#c.header}}
           <th
-            class="vl-data-table-col-9 vl-data-table__header-title">
+            class="vl-data-table-col-7 vl-data-table__header-title">
             {{t "agendaitem-table-header"}}
+          </th>
+          <th
+            class="vl-data-table-col-1 vl-data-table__header-title">
+            {{t "agendaitem-type"}}
+          </th>
+          <th
+            class="vl-data-table-col-1 vl-data-table__header-title">
+            {{t "agenda-version"}}
           </th>
           {{th-sortable
             class="vl-data-table-col-1 vl-data-table__header-title"
@@ -62,6 +70,16 @@
             {{else}}
               {{row.title}}
             {{/if}}
+          </td>
+          <td>
+            {{#if row.showAsAnnouncement}}
+              {{t "announcement"}}
+            {{else}}
+              {{t "note"}}
+            {{/if}}
+          </td>
+          <td>
+            {{row.agendaName}}
           </td>
           <td>
             {{moment-format row.sessionDates "DD-MM-YYYY"}}
