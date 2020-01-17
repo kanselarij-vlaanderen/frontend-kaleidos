@@ -41,17 +41,10 @@ $modal-max-height: calc(100vh - #{$nav-header-height});
   border: 0;
   box-shadow: $base-box-shadow;
   z-index: z("modal");
+  outline: none;
 
   &::backdrop {
     @include backdrop;
-  }
-
-  &[open] {
-    display: block;
-
-    &:focus {
-      outline: auto $outline-color 3px;
-    }
   }
 
   &--static {
