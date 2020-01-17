@@ -26,7 +26,12 @@ export default Component.extend({
 	isDocumentViewer: null,
 
   didInsertElement() {
-    this.getFocusableNodes()[1].focus()
+    const focusableNodes = this.getFocusableNodes();
+    if (focusableNodes.length > 1) {
+      focusableNodes[1].focus()
+    } else {
+      this.get('element').querySelector('[role="dialog"]').focus();
+    }
   },
 
   keyDown: function(event) {
