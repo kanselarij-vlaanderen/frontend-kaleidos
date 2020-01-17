@@ -51,7 +51,6 @@
         {{/if}}
       </div>
       <div class="vlc-toolbar__item">
-        {{#if (await canDelete)}}
           <button
                   class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions" bubbles=false}}
@@ -74,7 +73,8 @@
                     placement="bottom" as |attacher|
             }}
               <ul class="vl-popover__link-list">
-                <li class="vl-popover__link-list__item">
+                {{#if (await canDelete)}}
+                    <li class="vl-popover__link-list__item">
                   <a class="vl-link"
                     {{action attacher.hide}}
                     {{action "requestDeleteSubcase" subcase}}
@@ -82,7 +82,8 @@
                     {{t "delete-subcase"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
+                {{/if}}
+                  <li class="vl-popover__link-list__item">
                   {{#if (not await subcase.concluded)}}
                     <a
                             class="vl-link vl-link--block"
@@ -96,7 +97,6 @@
               </ul>
             {{/attach-popover}}
           </button>
-        {{/if}}
       </div>
     {{/if}}
   </div>
