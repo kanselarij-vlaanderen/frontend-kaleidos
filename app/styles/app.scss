@@ -497,3 +497,7 @@ pre {
   z-index: 3200;
   width: calc(100% - 37rem);
 }
+
+.ember-power-select-trigger {
+  min-width: 20rem;
+}
