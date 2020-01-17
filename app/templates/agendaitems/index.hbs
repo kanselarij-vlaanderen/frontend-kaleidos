@@ -79,7 +79,11 @@
             {{/if}}
           </td>
           <td>
-            {{row.agendaName}}
+            {{#if (eq row.agendaName.length 1)}}
+              {{t "agenda"}} {{row.agendaName}}
+            {{else}}
+              {{row.agendaName}}
+            {{/if}}
           </td>
           <td>
             {{moment-format row.sessionDates "DD-MM-YYYY"}}
