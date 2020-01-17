@@ -35,6 +35,10 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
     debounce(this, this.debouncedSearch, 500);
   }),
 
+  debouncedSearch: function() {
+    this.send('performSearch', get(this, 'searchText'));
+  },
+
   postProcessDates: function (_case) {
     const sessionDates = _case.get('sessionDates');
     if (sessionDates) {
@@ -45,10 +49,6 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
         _case.set('sessionDates', moment(sessionDates));
       }
     }
-  },
-
-  debouncedSearch: function() {
-    this.send('performSearch', get(this, 'searchText'));
   },
 
   actions: {
