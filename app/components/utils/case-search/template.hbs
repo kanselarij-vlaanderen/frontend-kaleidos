@@ -1,15 +1,12 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
-    {{cases/cases-filter
-            size=size
-            searchText=(readonly searchText)
-            disableAdvanced=true
-            searchInDecisionsOnly=(readonly decisionsOnly)
-            dateFrom=(or dateFrom null)
-            dateTo=(or dateTo null)
-            ministerName=(readonly mandatees)
-            filter=(action "filterCases")
-    }}
+    <div class="vl-u-display-flex vl-u-flex-align-center">
+      {{input
+        value=searchText
+        placeholder=(t "search-agenda-items")
+        class="vl-input-field vl-input-field__input full-width-selector"
+      }}
+    </div>
 
     {{#data-table
             content=model
