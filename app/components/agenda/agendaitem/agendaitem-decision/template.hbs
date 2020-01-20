@@ -31,7 +31,9 @@
         {{/if}}
       </div>
       <p>
-        {{{await decision.richtext}}}
+        {{!-- template-lint-disable no-triple-curlies  --}}
+        {{{sanitize-html value=(await decision.richtext)}}}
+        {{!-- template-lint-enable no-triple-curlies  --}}
       </p>
       <hr />
       <div class="vl-u-spacer-extended-top-s">

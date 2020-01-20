@@ -20,7 +20,9 @@
   </div>
   <div class="vl-typography">
     <p>
-      {{{await agendaitem.meetingRecord.richtext}}}
+      {{!-- template-lint-disable no-triple-curlies  --}}
+      {{{sanitize-html value=(await agendaitem.meetingRecord.richtext)}}}
+      {{!-- template-lint-enable no-triple-curlies  --}}
     </p>
   </div>
   <div class="vlc-hr"></div>

@@ -20,7 +20,9 @@
   </div>
   <div class="vl-typography">
     <p>
-      {{{await subcase.newsletterInfo.richtext}}}
+      {{!-- template-lint-disable no-triple-curlies  --}}
+      {{{sanitize-html value=(await subcase.newsletterInfo.richtext)}}}
+      {{!-- template-lint-enable no-triple-curlies  --}}
     </p>
     <p class="vl-u-text--italic">
       {{await subcase.newsletterInfo.newsletterProposal}}
