@@ -212,7 +212,9 @@
       {{#if testCampaignIsLoading}}
         {{web-components/vl-loader text=(t "preview-loading-text")}}
       {{else}}
-        {{{newsletterHTML}}}
+        {{!-- template-lint-disable no-triple-curlies  --}}
+        {{{sanitize-html value=newsletterHTML}}}
+        {{!-- template-lint-enable no-triple-curlies  --}}
       {{/if}}
     </div>
   {{/web-components/vl-modal}}
