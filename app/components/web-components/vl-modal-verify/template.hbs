@@ -6,7 +6,7 @@
       tabindex="-1"
       role="dialog"
     >
-      <div class="vlc-navbar vlc-navbar--no-padding">
+      <div class="vlc-navbar">
         <div class="vlc-toolbar">
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
@@ -39,36 +39,38 @@
         </p>
       </div>
       {{#if showActions}}
-        <div class="vlc-toolbar">
-          <div class="vlc-toolbar__left">
-            <div class="vlc-toolbar__item">
-              <button
-                type="button"
-                class="vl-button vl-button--link vl-button--narrow"
-                {{action "cancel"}}
-              >
-                {{t "cancel"}}
-              </button>
-            </div>
-          </div>
-          <div class="vlc-toolbar__right">
-            {{#if showVerify}}
+        <div class="vlc-navbar">
+          <div class="vlc-toolbar">
+            <div class="vlc-toolbar__left">
               <div class="vlc-toolbar__item">
-                {{#web-components/vl-save-button
-                  class=buttonClass
-                  isLoading=isLoading
-                  saveAction=(action "verify")
-                }}
-                  {{#if showIcon}}
-                    <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
-                      aria-hidden="true"
-                    ></i>
-                  {{/if}}
-                  {{verifyButtonText}}
-                {{/web-components/vl-save-button}}
+                <button
+                  type="button"
+                  class="vl-button vl-button--link vl-button--narrow"
+                  {{action "cancel"}}
+                >
+                  {{t "cancel"}}
+                </button>
               </div>
-            {{/if}}
+            </div>
+            <div class="vlc-toolbar__right">
+              {{#if showVerify}}
+                <div class="vlc-toolbar__item">
+                  {{#web-components/vl-save-button
+                    class=buttonClass
+                    isLoading=isLoading
+                    saveAction=(action "verify")
+                  }}
+                    {{#if showIcon}}
+                      <i
+                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
+                        aria-hidden="true"
+                      ></i>
+                    {{/if}}
+                    {{verifyButtonText}}
+                  {{/web-components/vl-save-button}}
+                </div>
+              {{/if}}
+            </div>
           </div>
         </div>
       {{/if}}

@@ -1,6 +1,6 @@
 import Mixin from '@ember/object/mixin';
-import { inject } from '@ember/service';
-import { hash } from 'rsvp';
+import {inject} from '@ember/service';
+import {hash} from 'rsvp';
 import EmberObject from '@ember/object';
 
 export default Mixin.create({
@@ -44,11 +44,11 @@ export default Mixin.create({
     return groups;
   },
 
-  filterAnnouncements: function(items){
+  filterAnnouncements: function (items) {
     return items;
   },
 
-  filterAgendaitems: async function(items){
+  filterAgendaitems: async function (items) {
     return items;
   },
 
@@ -56,7 +56,7 @@ export default Mixin.create({
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
     let agendaitems = await this.store.query('agendaitem', {
-      filter: { agenda: { id: agenda.get('id') } },
+      filter: {agenda: {id: agenda.get('id')}},
       include: 'mandatees',
       sort: "priority"
     });
@@ -64,27 +64,26 @@ export default Mixin.create({
       return item.showAsRemark;
     }), params);
 
-    const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
+    const {draftAgendaitems, groupedAgendaitems} = await this.parseAgendaItems(
       agendaitems, params
     );
 
     let prevIndex = 0;
     let groupsArray = groupedAgendaitems;
-    if(!this.allowEmptyGroups){
+    if (!this.allowEmptyGroups) {
       groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
-    }else{
+    } else {
       groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers')
     }
 
     groupsArray = groupsArray.sortBy('groupPriority')
-    .map((item) => {
-      item.agendaitems.map((agendaitem, index) => {
-        prevIndex = index + prevIndex + 1;
-        agendaitem.set('itemIndex',prevIndex);
+      .map((item) => {
+        item.agendaitems.map((agendaitem, index) => {
+          prevIndex = index + prevIndex + 1;
+          agendaitem.set('itemIndex', prevIndex);
+        });
+        return EmberObject.create(item);
       });
-      return EmberObject.create(item);
-    });
-
     return hash({
       currentAgenda: agenda,
       groups: groupsArray,

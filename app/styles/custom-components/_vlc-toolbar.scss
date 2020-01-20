@@ -40,6 +40,7 @@ $c-toolbar-middle-z: 20;
 
 .vlc-toolbar__left {
   z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
+  max-width: 100%;
   .vlc-toolbar__item {
     margin-right: $c-toolbar-item-spacing;
     &:only-child {
@@ -50,6 +51,7 @@ $c-toolbar-middle-z: 20;
 
 .vlc-toolbar__right {
   z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
+  max-width: 100%;
   .vlc-toolbar__item {
     margin-left: $c-toolbar-item-spacing;
     &:only-child {
@@ -104,4 +106,15 @@ $c-toolbar-middle-z: 20;
 
 .vlc-toolbar--align-top {
   align-items: flex-start;
+}
+
+/* Bordered equivalents
+   ========================================================================== */
+
+.vlc-toolbar--bordered-top {
+  border-top: 0.1rem solid $ghost;
+}
+
+.vlc-toolbar--bordered-bottom {
+  border-bottom: 0.1rem solid $ghost;
 }

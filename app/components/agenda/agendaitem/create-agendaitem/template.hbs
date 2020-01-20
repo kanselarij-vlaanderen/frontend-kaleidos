@@ -66,16 +66,13 @@
         page=page
         size=size
         isLoading=findAll.isRunning
+        noDataMessage=(t "no-results-found")
         onClickRow=(action "selectPostponed") as |table|
       }}
         {{#table.content as |c|}}
           {{#c.header}}
             <th></th>
-            {{th-sortable
-              field="shortTitle"
-              currentSorting=sort
-              label=(t "short-title-case")
-            }}
+              <th><span class="">{{t "short-title-case"}}</span></th>
             <th></th>
           {{/c.header}}
           {{#c.body as |row|}}

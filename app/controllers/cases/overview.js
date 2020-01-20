@@ -52,7 +52,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
      const subcases = await caseModel.subcases;
      await Promise.all(subcases.map(subcase => {
        subcase.set('isArchived', true);
-       return subcase.save()
+       return subcase.save();
      }));
      caseModel.save().then(() => {
        this.set('selectedCase', null);
@@ -66,7 +66,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       const subcases = await caze.subcases;
       await Promise.all(subcases.map(subcase => {
         subcase.set('isArchived', false);
-        return subcase.save()
+        return subcase.save();
       }));
       caze.save();
     },
@@ -96,13 +96,14 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
         this.set('mandatees', null);
         this.set('dateFrom', null);
         this.set('dateTo', null);
-        this.set('sort', null);
+        this.set('sort', '-created');
       } else {
         this.set('searchText', filter.searchText);
         this.set('mandatees', filter.mandatees);
         this.set('dateFrom', filter.dateFrom);
         this.set('dateTo', filter.dateTo);
         this.set('decisionsOnly', filter.searchInDecisionsOnly);
+        this.set('sort', '-session-dates');
       }
     },
 
