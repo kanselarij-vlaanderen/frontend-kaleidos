@@ -7,6 +7,12 @@ export default Component.extend({
 	clickOutside: false,
 	isDocumentViewer: null,
 
+  keyDown: function(event) {
+	  if(event.key === 'Escape') {
+      this.closeModal();
+    }
+  },
+
 	backdropClass: computed('isOverlay', function () {
 		const { isOverlay } = this;
 		if (isOverlay) {
