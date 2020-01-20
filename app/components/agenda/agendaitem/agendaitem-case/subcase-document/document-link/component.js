@@ -91,6 +91,19 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       this.toggleProperty('isUploadingNewVersion');
     },
 
+    async cancelUploadVersion() {
+      const uploadedFile = this.get('uploadedFile');
+      if (uploadedFile) {
+        const container = this.get('documentContainer');
+        const doc = await this.get('documentContainer.lastDocumentVersion');
+        doc.rollbackAttributes()
+        container.rollbackAttributes();
+        await uploadedFile.destroyRecord();
+        this.set('uploadedFile', null);
+      }
+      this.set('isUploadingNewVersion', false);
+    },
+
     toggleIsEditing() {
       if(!this.isEditor){
         return;
