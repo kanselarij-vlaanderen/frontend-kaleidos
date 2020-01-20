@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import { deprecatingAlias } from '@ember/object/computed';
+import moment from 'moment';
 
 const { Model, attr, belongsTo } = DS;
 
@@ -39,11 +40,13 @@ export default Model.extend({
   }),
 
   storeAccessLevel(accessLevel){
+    this.set('modified', moment().toDate());
     this.set('accessLevel', accessLevel);
     return this.save();
   },
 
   toggleConfidential: async function(){
+    this.set('modified', moment().toDate());
     this.toggleProperty('confidential');
     await this.save();
   }

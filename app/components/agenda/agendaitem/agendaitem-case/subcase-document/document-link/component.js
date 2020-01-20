@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import EmberObject, { computed } from '@ember/object';
+import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
@@ -68,6 +69,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     async saveChanges(doc) {
+      doc.set('modified', moment().toDate());
       await doc.save();
       this.set('isEditing', false);
     },
