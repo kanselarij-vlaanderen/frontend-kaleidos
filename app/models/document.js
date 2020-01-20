@@ -28,16 +28,16 @@ export default Model.extend({
 
   sortedDocuments: computed('documents.@each', function() {
     return PromiseArray.create({
-      promise: this.get('documents').then((docs) => {
         const head = docs.filter(function(doc) {
-          const previousVersion = doc.get('previousVersion.content');
+      promise: this.get('documents').then(async (docs) => {
+          const previousVersion = await doc.get('previousVersion');
           return !previousVersion;
         }).get('firstObject');
         const l = [];
         let next = head;
         while (next) {
           l.push(next);
-          next = next.get('nextVersion.content');
+            next = await next.get('nextVersion');
         }
         return A(l);
       }),
