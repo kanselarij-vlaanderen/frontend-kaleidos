@@ -1,39 +1,5 @@
 <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
-  {{#unless showAdvanced}}
-    <div class="vl-col--4-12 vl-col--1-1--s">
-      <label class="vl-form__label" for="agendaItemId">
-        {{t "agendaitem-field-label"}}
-      </label>
-      {{input
-          class="vl-input-field vl-input-field--block"
-          type="text"
-          id="agendaItemId"
-          value=searchText
-          key-up=(perform searchTask)
-      }}
-    </div>
-    <div class="vl-col--0-12 vl-col--1-1--s">
-      <button
-        class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
-        type="button"
-        onclick={{perform searchTask}}
-      >
-        <i
-          class="vl-vi vl-vi-magnifier"
-          aria-hidden="true"
-        ></i>
-      </button>
-    </div>
-    <div class="vl-col--2-12 vl-col--1-1--s">
-      <button
-        class="vl-button vl-button--link vl-button--narrow"
-        href="#"
-        onclick={{action "toggleAdvanced"}}
-      >
-        {{t "advanced-search"}}
-      </button>
-    </div>
-  {{else}}
+  {{#if showAdvanced}}
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
@@ -84,7 +50,41 @@
           key-press=(perform searchTask)
       }}
     </div>
-  {{/unless}}
+  {{else}}
+    <div class="vl-col--4-12 vl-col--1-1--s">
+      <label class="vl-form__label" for="agendaItemId">
+        {{t "agendaitem-field-label"}}
+      </label>
+      {{input
+          class="vl-input-field vl-input-field--block"
+          type="text"
+          id="agendaItemId"
+          value=searchText
+          key-up=(perform searchTask)
+      }}
+    </div>
+    <div class="vl-col--0-12 vl-col--1-1--s">
+      <button
+        class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+        type="button"
+        onclick={{perform searchTask}}
+      >
+        <i
+          class="vl-vi vl-vi-magnifier"
+          aria-hidden="true"
+        ></i>
+      </button>
+    </div>
+    <div class="vl-col--2-12 vl-col--1-1--s">
+      <button
+        class="vl-button vl-button--link vl-button--narrow"
+        href="#"
+        onclick={{action "toggleAdvanced"}}
+      >
+        {{t "advanced-search"}}
+      </button>
+    </div>
+  {{/if}}
 </div>
 {{#if showAdvanced}}
   <div
