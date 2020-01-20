@@ -109,6 +109,8 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
     },
 
     async selectCase(caseItem, event) {
+      // We never set loading to false, because the component closes after this action
+      set(this, 'isLoading', true);
       if (event) {
         event.stopPropagation();
       }
