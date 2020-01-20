@@ -7,7 +7,6 @@ export const flatpickrMonthDropdownMonths = '.flatpickr-monthDropdown-months';
 export const numInputWrapper = '.numInputWrapper';
 export const inputNumInputCurYear = 'input.numInput.cur-year';
 export const flatpickrDay = '.flatpickr-day';
-export const formInput = '[data-test-vlc-form-input]';
 export const button = 'button';
 export const agendaOverviewTitleSelector = '[data-test-agendas-title]';
-
+export const agendaListListItemDocumentsSelector ='[data-test-agenda-list-list-item-documents]'

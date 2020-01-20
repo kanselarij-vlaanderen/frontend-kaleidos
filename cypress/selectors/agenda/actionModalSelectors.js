@@ -9,3 +9,4 @@ export const toggleeditingsession = '[data-test-agenda-header-toggleeditingsessi
 export const selectsignature = '[data-test-agenda-header-selectsignature]';
 export const downloadddocuments = '[data-test-agenda-header-downloadddocuments]';
 export const deleteAgenda = '[data-test-agenda-header-deleteAgenda]';
+export const addAnnouncementSelector = '[data-test-agenda-header-announcement]';

@@ -2,7 +2,7 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <button
-        type="button"
+        type="button" data-test-vl-modal-footer-cancel
         class="vl-button vl-button--link vl-button--narrow"
         {{action "cancelAction"}}
       >
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="vlc-toolbar__right">
-    <div class="vlc-toolbar__item">
+    <div class="vlc-toolbar__item" data-test-vl-modal-footer-save>
       {{web-components/vl-save-button
         text=saveButtonText
         loadingText=(t "please-be-patient")

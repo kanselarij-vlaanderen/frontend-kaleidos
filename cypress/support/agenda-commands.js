@@ -9,9 +9,9 @@ import {
   button,
   emberPowerSelectOption,
   emberPowerSelectTrigger,
-  formInput,
   newAgendaButton
 } from "../selectors/agenda/agendaSelectors";
+import {formInputSelector} from "../selectors/formSelectors/formSelectors";
 
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
@@ -127,7 +127,7 @@ Cypress.Commands.add('openAgenda', openAgenda);
     cy.get(emberPowerSelectTrigger).click();
     cy.get(emberPowerSelectOption).contains(kindOfAgenda).click();
     cy.selectDate(year, month, day);
-    cy.get(formInput).type(location);
+    cy.get(formInputSelector).type(location);
     cy.get(button).contains(TOEVOEGEN).click();
   }
 
