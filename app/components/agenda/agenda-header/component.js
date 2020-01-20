@@ -1,7 +1,7 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { alias, filter } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import {inject} from '@ember/service';
+import {alias, filter} from '@ember/object/computed';
+import {computed} from '@ember/object';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
@@ -23,8 +23,8 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   isAddingAnnouncement: false,
   isAddingAgendaitems: false,
   isApprovingAgenda: false,
-  isDeletingAgenda:false,
-  isLockingAgenda:false,
+  isDeletingAgenda: false,
+  isLockingAgenda: false,
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -33,40 +33,40 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
-  hasMultipleAgendas: computed('agendas.@each', async function() {
+  hasMultipleAgendas: computed('agendas.@each', async function () {
     return this.agendas && this.agendas.then(agendas => agendas.length > 1);
   }),
 
-  currentAgendaIsLast: computed('currentSession','currentAgenda', async function() {
+  currentAgendaIsLast: computed('currentSession', 'currentAgenda', async function () {
     return await this.currentSession.get('sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
-  designAgendaPresent: filter('currentSession.agendas.@each.name', function(agenda) {
+  designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {
     return agenda.get('name') === 'Ontwerpagenda';
   }),
 
-  shouldShowLoader: computed('isDeletingAgenda','isLockingAgenda', function() {
+  shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function () {
     return this.isDeletingAgenda || this.isLockingAgenda;
   }),
 
-  loaderText: computed('isDeletingAgenda','isLockingAgenda', function() {
+  loaderText: computed('isDeletingAgenda', 'isLockingAgenda', function () {
     let text = '';
-    if(this.isDeletingAgenda) {
+    if (this.isDeletingAgenda) {
       text = this.intl.t('agenda-delete-message');
-    } 
-    if(this.isLockingAgenda) {
+    }
+    if (this.isLockingAgenda) {
       text = this.intl.t('agenda-lock-message');
-    } 
+    }
     return text + ' ' + this.intl.t('please-be-patient');
   }),
-  
-  loaderTitle: computed('isDeletingAgenda','isLockingAgenda', function() {
-    if(this.isDeletingAgenda) {
+
+  loaderTitle: computed('isDeletingAgenda', 'isLockingAgenda', function () {
+    if (this.isDeletingAgenda) {
       return this.intl.t('agenda-delete');
-    } 
-    if(this.isLockingAgenda) {
+    }
+    if (this.isLockingAgenda) {
       return this.intl.t('agenda-lock');
-    } 
+    }
     return "";
   }),
 
@@ -93,41 +93,62 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     if (!agenda) {
       //TODO possible dead code, there is always an agenda ?
       return;
-    }    
+    }
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
     const agendaitems = await agenda.get('agendaitems');
-    if(agendaitems){
+    if (agendaitems) {
       await Promise.all(agendaitems.map(async item => await this.agendaService.deleteAgendaitem(item)));
     }
     await agenda.destroyRecord();
     if (previousAgenda) {
       this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems.index', session.id, {
-        queryParams: { selectedAgenda: previousAgenda.get('id') }
+        queryParams: {selectedAgenda: previousAgenda.get('id')}
       });
     } else {
       await this.sessionService.deleteSession(session);
     }
   },
 
+  reloadAgendaitemsOfSubcases(agendaItems) {
+    return Promise.all(agendaItems.map(async agendaitem => {
+      const subcase = await agendaitem.get('subcase');
+      if (subcase) {
+        await subcase.hasMany('agendaitems').reload();
+      }
+      return agendaitem;
+    })).catch(() => {
+      console.error('Something went wrong while reloading the agendaitems of the subcases.');
+    });
+  },
+
+  destroyAgendaitemsList(agendaitems) {
+    return Promise.all(agendaitems.map(agendaitem => {
+      if (!agendaitem) {
+        return;
+      }
+      return agendaitem.destroyRecord().catch(() => console.error('Something went wrong while deleting the agendaitem.'));
+    }));
+  },
+
   actions: {
     navigateToNotes() {
-      const { currentSession, currentAgenda } = this;
+      const {currentSession, currentAgenda} = this;
       this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToPressAgenda() {
-      const { currentSession, currentAgenda } = this;
+      const {currentSession, currentAgenda} = this;
       this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToNewsletter() {
-      const { currentSession, currentAgenda } = this;
+      const {currentSession, currentAgenda} = this;
       this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToDecisions() {
-      const { currentSession, currentAgenda } = this;
+      const {currentSession, currentAgenda} = this;
       this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
     },
 
@@ -169,7 +190,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         .filter((agenda) => agenda.name !== 'Ontwerpagenda')
         .sortBy('-name')
         .get('firstObject');
-        
+
       const session = await lastAgenda.get('createdFor');
       session.set('isFinal', true);
       session.set('agenda', lastAgenda);
@@ -275,7 +296,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   },
 
   async approveAgenda(session) {
-    if(this.get('isApprovingAgenda')){
+    if (this.get('isApprovingAgenda')) {
       return;
     }
     this.set('isApprovingAgenda', true);
@@ -319,22 +340,18 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         .then(async newAgenda => {
           const agendaItems = await agendaToLock.get('agendaitems');
           const newNotYetOKItems = agendaItems.filter(agendaItem => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
-          await Promise.all(agendaItems.map(async agendaitem => {
-            const subcase = await agendaitem.get('subcase');
-            if(subcase) {
-              await subcase.hasMany('agendaitems').reload();
-            }
-          }));
-          await Promise.all(newNotYetOKItems.map(newNotYetOK => newNotYetOK.destroyRecord()));
+          await this.reloadAgendaitemsOfSubcases(agendaItems);
+          await this.destroyAgendaitemsList(newNotYetOKItems);
           return newAgenda;
         })
         .then((newAgenda) => {
-          this.changeLoading();
           this.set('sessionService.currentAgenda', newAgenda);
-          this.set('sessionService.selectedAgendaItem', null);
           this.reloadRoute(newAgenda.get('id'));
-        });
+        }).finally(() => {
+          this.set('sessionService.selectedAgendaItem', null);
+          this.changeLoading();
+          this.set('isApprovingAgenda', false);
+      });
     });
-    this.set('isApprovingAgenda', false);
-  }
+  },
 });
