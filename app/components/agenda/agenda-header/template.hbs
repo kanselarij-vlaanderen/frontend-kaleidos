@@ -12,10 +12,12 @@
         <div class="vlc-toolbar vlc-toolbar--auto">
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
-              <!-- TODO: Fix this symbol into a custom icon based of the figma file-->
+              {{!-- TODO: Fix this symbol into a custom icon based of the figma file --}}
+              {{!-- template-lint-disable no-bare-strings  --}}
               {{#link-to "agendas.overview" class="vlc-backlink vl-link vl-link--bold"}}
                   &#8629;
               {{/link-to}}
+              {{!-- template-lint-enable no-bare-strings  --}}
             </div>
             {{sessions/session-agenda-nav
               currentAgenda=currentAgenda

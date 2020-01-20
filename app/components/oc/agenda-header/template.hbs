@@ -30,7 +30,9 @@
                 "oc.meetings"
                 class="vlc-backlink vl-link vl-link--bold"
               }}
+                  {{!-- template-lint-disable no-bare-strings  --}}
                   &#8629;
+                  {{!-- template-lint-enable no-bare-strings  --}}
               {{/link-to}}
             </div>
             {{oc/session-agenda-nav
@@ -64,7 +66,7 @@
               hideOn="clickout click"
               showOn="click"
               animation="shift"
-              placement="bottom" as |attacher|
+              placement="bottom"
             }}
               <ul class="vl-popover__link-list">
                 <li class="vl-popover__link-list__item">
