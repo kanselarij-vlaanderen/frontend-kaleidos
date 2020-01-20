@@ -107,3 +107,14 @@ $c-toolbar-middle-z: 20;
 .vlc-toolbar--align-top {
   align-items: flex-start;
 }
+
+/* Bordered equivalents
+   ========================================================================== */
+
+.vlc-toolbar--bordered-top {
+  border-top: 0.1rem solid $ghost;
+}
+
+.vlc-toolbar--bordered-bottom {
+  border-bottom: 0.1rem solid $ghost;
+}
