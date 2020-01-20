@@ -73,10 +73,10 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
           };
           if(!searchTerm) {
             _.merge(queryParams, this.mergeQueryOptions(queryParams));
+            this.set('isLoading', false);
             return this.get('store').query("case",queryParams);
           }
           queryParams.filter[searchModifier + textSearchKey] = searchTerm;
-
 
           let searchDocumentType = this.decisionsOnly ? 'casesByDecisionText' : 'cases';
           if (!isEmpty(this.mandatees)) {
