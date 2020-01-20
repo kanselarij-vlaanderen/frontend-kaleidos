@@ -13,6 +13,8 @@
           {{else}}
             {{changes-alert message=(t "filtered-agendas") buttonText=(t "clear-filter") clearAction=(action "clearFilter")}}
           {{/if}}
+
+
             <div class="vl-u-spacer--large">
                 <div class="vl-u-spacer--large">
                     <div class="vl-u-display-flex vl-u-flex-space-between">
@@ -54,101 +56,108 @@
                         </div>
                     </div>
                     <div class="vl-u-spacer-extended-bottom-l">
-                      {{#data-table
-                              content=(await model)
-                              class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-                              page=page
-                              size=size
-                              sort=sort
-                              isLoading=isLoadingModel
-                              onClickRow=(action "onClickRow") as |table|
-                      }}
-                        {{#table.content as |c|}}
-                          {{#c.header}}
-                            {{th-sortable
-                                    class="vl-data-table-col-3 vl-data-table__header-title"
-                                    currentSorting=sort
-                                    field="planned-start"
-                                    label=(t "agenda")
-                            }}
-                            {{th-sortable
-                                    class="vl-data-table-col-2 vl-data-table__header-title"
-                                    field="agendas"
-                                    label=(t "agenda-version")
-                            }}
-                              <th
-                                      class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
-                              >
-                                {{t "latest-modified"}}
-                              </th>
-                            {{th-sortable
-                                    class="vl-data-table-col-2 vl-data-table__header-title"
-                                    currentSorting=sort
-                                    field="is-final"
-                                    label=(t "status")
-                            }}
-                            {{th-sortable
-                                    class="vl-data-table-col-2 vl-data-table__header-title"
-                                    currentSorting=sort
-                                    field="kind"
-                                    label=(t "kind")
-                            }}
-                              <th class="vl-data-table-col-1"></th>
-                          {{/c.header}}
-                          {{#c.body class="tr-hover" as |meeting|}}
-                            {{#if (not meeting.alreadyShown)}}
-                                <td>
-                                  {{t "agenda-for"}}
-                                  {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
-                                </td>
-                                <td>
-                                  {{#if (is-pending meeting.latestAgendaName)}}
+                      {{#if (await model)}}
+                        {{#data-table
+                                content=(await model)
+                                class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+                                page=page
+                                size=size
+                                sort=sort
+                                isLoading=isLoadingModel
+                                noDataMessage=(t "no-results-found")
+                                onClickRow=(action "onClickRow") as |table|
+                        }}
+                          {{#table.content as |c|}}
+                            {{#c.header}}
+                              {{th-sortable
+                                      class="vl-data-table-col-3 vl-data-table__header-title"
+                                      currentSorting=sort
+                                      field="planned-start"
+                                      label=(t "agenda")
+                              }}
+                              {{th-sortable
+                                      class="vl-data-table-col-2 vl-data-table__header-title"
+                                      field="agendas"
+                                      label=(t "agenda-version")
+                              }}
+                                <th
+                                        class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+                                >
+                                  {{t "latest-modified"}}
+                                </th>
+                              {{th-sortable
+                                      class="vl-data-table-col-2 vl-data-table__header-title"
+                                      currentSorting=sort
+                                      field="is-final"
+                                      label=(t "status")
+                              }}
+                              {{th-sortable
+                                      class="vl-data-table-col-2 vl-data-table__header-title"
+                                      currentSorting=sort
+                                      field="kind"
+                                      label=(t "kind")
+                              }}
+                                <th class="vl-data-table-col-1"></th>
+                            {{/c.header}}
+                            {{#c.body class="tr-hover" as |meeting|}}
+                              {{#if (not meeting.alreadyShown)}}
+                                  <td>
+                                    {{t "agenda-for"}}
+                                    {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
+                                  </td>
+                                  <td>
+                                    {{#if (is-pending meeting.latestAgendaName)}}
                                       <div
                                               class="skeletal-loader"
                                               role="alert"
                                               aria-busy="true"
                                       ></div>
-                                  {{else}}
-                                    {{await meeting.latestAgendaName}}
-                                  {{/if}}
-                                </td>
-                                <td>
-                                  {{#if (is-pending meeting.latestAgenda)}}
+                                    {{else}}
+                                      {{await meeting.latestAgendaName}}
+                                    {{/if}}
+                                  </td>
+                                  <td>
+                                    {{#if (is-pending meeting.latestAgenda)}}
                                       <div
                                               class="skeletal-loader"
                                               role="alert"
                                               aria-busy="true"
                                       ></div>
-                                  {{else}}
-                                    {{moment-format
-                                            (await meeting.latestAgenda.modified)
-                                            "DD-MM-YYYY HH:mm"
+                                    {{else}}
+                                      {{moment-format
+                                              (await meeting.latestAgenda.modified)
+                                              "DD-MM-YYYY HH:mm"
+                                      }}
+                                    {{/if}}
+                                  </td>
+                                  <td>
+                                    {{#if meeting.isFinal}}
+                                      {{t "closed"}}
+                                    {{else}}
+                                      {{t "opened"}}
+                                    {{/if}}
+                                  </td>
+                                  <td>
+                                    {{meeting.kindToShow.label}}
+                                  </td>
+                                  <td class="vl-u-align-center">
+                                    {{#link-to
+                                            "agenda.agendaitems"
+                                            meeting.id
+                                            class="vl-button vl-button--link vl-button--icon"
                                     }}
-                                  {{/if}}
-                                </td>
-                                <td>
-                                  {{#if meeting.isFinal}}
-                                    {{t "closed"}}
-                                  {{else}}
-                                    {{t "opened"}}
-                                  {{/if}}
-                                </td>
-                                <td>
-                                  {{meeting.kindToShow.label}}
-                                </td>
-                                <td class="vl-u-align-center">
-                                  {{#link-to
-                                          "agenda.agendaitems"
-                                          meeting.id
-                                          class="vl-button vl-button--link vl-button--icon"
-                                  }}
                                       <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-                                  {{/link-to}}
-                                </td>
-                            {{/if}}
-                          {{/c.body}}
-                        {{/table.content}}
-                      {{/data-table}}
+                                    {{/link-to}}
+                                  </td>
+                              {{/if}}
+                            {{/c.body}}
+                          {{/table.content}}
+                        {{/data-table}}
+                      {{else}}
+                        <div class="vl-u-spacer-extended-l">
+                          {{web-components/vl-alert message=(t "no-historical-agenda")}}
+                        </div>
+                      {{/if}}
                     </div>
                 </div>
             </div>

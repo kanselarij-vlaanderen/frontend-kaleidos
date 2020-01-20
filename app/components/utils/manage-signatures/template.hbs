@@ -8,10 +8,11 @@
       selectedItems=(await selectedSignature)
       selectModel=(action "selectSignature")
     }}
-  </div>
-  <div class="">
-    {{t "signature-default"}}
-    {{await defaultSignature.name}}
+    <div class="vl-u-spacer--small" />
+    <div>
+      {{t "signature-default"}}
+      {{await defaultSignature.name}}
+    </div>
   </div>
   {{#if isEditing}}
     {{utils/edit-signature
@@ -19,7 +20,7 @@
       closeModal=(action "toggleIsEditing")
     }}
   {{else}}
-    <div class="vlc-navbar vlc-navbar--no-padding vlc-navbar--bordered-top">
+    <div class="vlc-navbar vlc-navbar--bordered-top">
       <div class="vlc-toolbar">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">

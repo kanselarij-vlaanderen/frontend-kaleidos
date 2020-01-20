@@ -159,12 +159,6 @@ tr.disabled {
   background-color: $porcelain;
 }
 
-.vl-modal-dialog {
-  display: block;
-  z-index: 40;
-  width: 80rem;
-}
-
 .vlc-scroll-wrapper__body.full-height {
   > .ember-view {
     height: 100% !important;
@@ -173,19 +167,6 @@ tr.disabled {
 
 .full-height {
   height: 95% !important;
-}
-
-.vl-modal {
-  .vl-modal__backdrop {
-    z-index: 52;
-  }
-  tbody {
-    background-color:white;
-  }
-}
-
-.vl-modal-dialog__content {
-  padding: 2rem 0;
 }
 
 .max-width {
@@ -214,10 +195,6 @@ tr.disabled {
       }
     }
   }
-}
-
-.vl-modal-dialog--large {
-  width: 88rem;
 }
 
 .vlc-agenda-items__header--small {
@@ -383,12 +360,6 @@ ul {
   display: grid;
   grid-template-columns: repeat(3, calc(100% / 3));
   grid-gap: 10px;
-}
-
-.vl-modal-dialog__content {
-  .data-table-pagination {
-    margin-bottom: 0em;
-  }
 }
 
 .no-margin {
