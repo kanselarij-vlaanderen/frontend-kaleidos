@@ -37,7 +37,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     return this.agendas && this.agendas.then(agendas => agendas.length > 1);
   }),
 
-  currentAgendaIsLast: computed('currentSession', 'currentAgenda', async function () {
+  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function () {
     return await this.currentSession.get('sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
@@ -95,13 +95,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       return;
     }
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
-    const agendaitems = await agenda.get('agendaitems');
-    if (agendaitems) {
-      await Promise.all(agendaitems.map(async item => await this.agendaService.deleteAgendaitem(item)));
-    }
-    await agenda.destroyRecord();
+    await this.agendaService.deleteAgenda(agenda);
     if (previousAgenda) {
-      this.set('sessionService.currentAgenda', previousAgenda);
+      await session.save();
+      await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems.index', session.id, {
         queryParams: {selectedAgenda: previousAgenda.get('id')}
       });
@@ -199,7 +196,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       if (designAgenda) {
         await this.deleteAgenda(designAgenda);
       }
+      if (!this.isDestroyed) {
       this.set('isLockingAgenda', false);
+      }
     },
 
     async unlockAgenda() {
@@ -246,7 +245,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     async deleteAgenda(agenda) {
       this.set('isDeletingAgenda', true);
       await this.deleteAgenda(agenda);
-      this.set('isDeletingAgenda', false);
+      if (!this.isDestroyed) {
+        this.set('isDeletingAgenda', false);
+      }
     },
 
     async createNewDesignAgenda() {
