@@ -13,9 +13,7 @@ export default Model.extend({
   addedDocuments: alias('agendaService.addedDocuments'),
   uri:attr('string'),
 
-  confidential: attr('boolean'),
   created: attr('datetime'),
-  forCabinet: attr('boolean'),
 
   documents: hasMany('document-version'),
   documentVersions: deprecatingAlias('documents', {
