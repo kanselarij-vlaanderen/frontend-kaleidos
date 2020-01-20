@@ -50,7 +50,7 @@ context('Tests for KAS-917', () => {
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + ' BIS');
+          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
         });
       });
       cy.get('.js-vl-accordion > button').click();
