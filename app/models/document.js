@@ -5,6 +5,7 @@ import { alias } from '@ember/object/computed';
 const { Model, attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 import { deprecatingAlias } from '@ember/object/computed';
 import { A } from '@ember/array';
+import { warn } from '@ember/debug';
 
 export default Model.extend({
   store: inject(),
@@ -28,18 +29,26 @@ export default Model.extend({
 
   sortedDocuments: computed('documents.@each', function() {
     return PromiseArray.create({
-        const head = docs.filter(function(doc) {
       promise: this.get('documents').then(async (docs) => {
+        const heads = docs.filter(async function(doc) {
           const previousVersion = await doc.get('previousVersion');
           return !previousVersion;
-        }).get('firstObject');
-        const l = [];
-        let next = head;
-        while (next) {
-          l.push(next);
+        })
+        if ( heads.length <= 1 ) {
+          const head = heads.get('firstObject');
+          const l = [];
+          let next = head;
+          while (next) {
+            l.push(next);
             next = await next.get('nextVersion');
+          }
+          return A(l);
+        } else {
+          warn('More than 1 possible head for linked list. Linked list data possibly is broken. Falling back to sorting by document creation date', heads.length > 1, {
+            id: 'multiple-possible-linked-list-heads'
+          });
+          return docs.sortBy('created');
         }
-        return A(l);
       }),
     });
   }),
