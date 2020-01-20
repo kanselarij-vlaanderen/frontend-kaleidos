@@ -94,9 +94,6 @@ export default Component.extend(isAuthenticatedMixin, {
   didEnterViewport() {
     this.set("renderDetails", true);
   },
-  didExitViewport() {
-    this.set("renderDetails", false);
-  },
   didInsertElement() {
     try {
       let options = {
