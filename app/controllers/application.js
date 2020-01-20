@@ -16,7 +16,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   messages: alias('globalError.messages'),
   options: A([
-    { key: 'main-nav-title', route: 'agendas' },
+    { key: 'flemish-government', route: 'agendas' },
   ]),
 
   selectedOption: computed('options', function() {
