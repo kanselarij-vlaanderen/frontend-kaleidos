@@ -164,7 +164,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       this.set('isVerifyingDelete', true);
     },
 
-    async toggleConfidential(document) {
+    async toggleConfidential() {
 
     },
   },

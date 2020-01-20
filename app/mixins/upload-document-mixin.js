@@ -5,6 +5,7 @@ import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import { A } from '@ember/array';
 import config from '../utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
+import { deprecate } from '@ember/debug';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 
 export default Mixin.create({
@@ -66,7 +67,7 @@ export default Mixin.create({
 
   async saveDocumentContainers() {
     if (arguments.length > 0){
-      console.log("This function takes no arguments, 'confidential' should be set on individual document level");
+      deprecate("The function 'saveDocumentContainers' takes no arguments, 'confidential' should be set on individual document level", true);
     }
     this.set('isLoading', true);
     const docs = this.get('documentsInCreation');
@@ -87,7 +88,7 @@ export default Mixin.create({
   },
 
   async saveDocuments() {
-    console.log('Deprecated by saveDocumentContainers');
+    deprecate("'saveDocuments' is deprecated by saveDocumentContainers", true);
     return this.saveDocumentContainers(...arguments);
   },
 
@@ -111,8 +112,7 @@ export default Mixin.create({
   },
 
   async attachDocumentVersionsToModel() {
-    console.log('Deprecated by attachDocumentsToModel')
-    console.trace();
+    deprecate("'attachDocumentVersionsToModel' is deprecated by attachDocumentsToModel", true);
     return this.attachDocumentsToModel(...arguments);
   },
 
