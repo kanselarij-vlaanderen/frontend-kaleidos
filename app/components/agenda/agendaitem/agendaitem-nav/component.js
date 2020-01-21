@@ -31,8 +31,7 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   ],
 
-  activeTabs: computed('isEditor', 'agendaitem.remarks.length', 'shouldShowFinishedDetails',
-  'agendaitem.subcase', async function(){
+  activeTabs: computed('isEditor', 'agendaitem.{subcase,remarks.length}', 'shouldShowFinishedDetails', async function(){
     const activeTabs = [];
     activeTabs.push(...this.defaultTabs);
 
