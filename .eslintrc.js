@@ -19,7 +19,6 @@ module.exports = {
     "ember/jquery-ember-run": 'off',
     "ember/avoid-leaking-state-in-ember-objects": 'off',
     "no-invalid-interactive": 'off',
-    "no-mixed-spaces-and-tabs": 'off',
     "ember/use-brace-expansion": "off",
     "table-groups":"off",
     "no-triple-curlies":"off",
