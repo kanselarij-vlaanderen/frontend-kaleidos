@@ -83,9 +83,7 @@
                     <li>
                       {{#if (await agendaitem.meetingRecord.richtext)}}
                         <p class="vl-u-text--ellipse">
-                          {{!-- template-lint-disable no-triple-curlies  --}}
-                          {{{sanitize-html value=(await agendaitem.meetingRecord.richtext)}}}
-                          {{!-- template-lint-enable no-triple-curlies  --}}
+                          {{sanitize-html raw=true value=(await agendaitem.meetingRecord.richtext)}}
                         </p>
                         {{#each
                           (await agendaitem.subcase.decisions) as |decision|

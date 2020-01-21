@@ -62,9 +62,7 @@
                         </div>
                       {{/if}}
                       <li>
-                        {{!-- template-lint-disable no-triple-curlies  --}}
-                        {{{sanitize-html value=decision.richtext}}}
-                        {{!-- template-lint-enable no-triple-curlies  --}}
+                        {{sanitize-html raw=true value=decision.richtext}}
                       </li>
                     {{/each}}
                   {{else}}
