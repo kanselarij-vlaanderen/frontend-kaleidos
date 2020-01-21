@@ -11,6 +11,7 @@ import {
   emberPowerSelectTrigger,
   newAgendaButton
 } from "../selectors/agenda/agendaSelectors";
+
 import {formInputSelector} from "../selectors/formSelectors/formSelectors";
 
 Cypress.Commands.add('createAgenda', createAgenda);
@@ -25,15 +26,8 @@ Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
 Cypress.Commands.add('agendaItemExists', agendaItemExists);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
-
-
-
 Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgenda', openAgenda);
-
-
-
-
 
 // ***********************************************
 // Functions
@@ -173,36 +167,36 @@ Cypress.Commands.add('openAgenda', openAgenda);
     }
   }
 
-  /**
-   * Deletes the current **open agenda**, either a design or an approved one
-   *
-   * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
-   * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
-   */
-  function deleteAgenda(meetingId, lastAgenda) {
-    if (meetingId) {
-      cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
-    } else {
-      cy.route('DELETE', '/meetings/**').as('deleteMeeting');
-    }
-    cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitems');
-    cy.route('DELETE', '/agendas/**').as('deleteAgendas');
-    cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
-
-    cy.get('.vl-button--icon-before')
-      .contains('Acties')
-      .click();
-    cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
-      .contains('Agenda verwijderen')
-      .click();
-    cy.wait('@deleteAgendaitems', {timeout: 20000});
-    cy.wait('@deleteAgendas', {timeout: 20000});
-    if (lastAgenda) {
-      cy.wait('@deleteNewsletter', {timeout: 20000});
-      cy.wait('@deleteMeeting', {timeout: 20000});
-    }
-    //TODO should patches happen when deleting a design agenda ?
+/**
+ * Deletes the current **open agenda**, either a design or an approved one
+ *
+ * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
+ * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
+ */
+function deleteAgenda(meetingId, lastAgenda) {
+  if(meetingId) {
+    cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
+  } else {
+    cy.route('DELETE', '/meetings/**').as('deleteMeeting');
   }
+  cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
+  cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
+
+  cy.get('.vl-button--icon-before')
+    .contains('Acties')
+    .click();
+  cy.get('.vl-popover__link-list__item--action-danger > .vl-link')
+    .contains('Agenda verwijderen')
+    .click();
+  cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
+    cy.get('.vl-modal').should('not.exist');
+  });
+  if(lastAgenda) {
+    cy.wait('@deleteNewsletter', { timeout: 20000 });
+    cy.wait('@deleteMeeting', { timeout: 20000 });
+  }
+  //TODO should patches happen when deleting a design agenda ?
+}
 
   /**
    * Set all agendaitems on an open agenda to "formally OK"
@@ -278,14 +272,13 @@ Cypress.Commands.add('openAgenda', openAgenda);
     cy.wait('@patchAgenda', {timeout: 10000});
   }
 
-  /**
-   * Approve an open agenda when all formally OK's are set ()
-   */
-  function approveDesignAgenda() {
-    cy.route('PATCH', '/agendas/**').as('patchAgenda');
-    cy.route('POST', '/agendas').as('createNewDesignAgenda');
-    cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
-    cy.route('GET', '/agendaitems/**').as('getAgendaitems');
+/**
+ * Approve an open agenda when all formally OK's are set ()
+ */
+function approveDesignAgenda() {
+  cy.route('PATCH', '/agendas/**').as('patchAgenda');
+  cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
+  cy.route('GET', '/agendaitems/**').as('getAgendaitems');
 
     //TODO add boolean for when not all items are formally ok, click through the confirmation modal
     cy.get('.vlc-toolbar').within(() => {
@@ -294,11 +287,10 @@ Cypress.Commands.add('openAgenda', openAgenda);
         .click();
     });
 
-    cy.wait('@patchAgenda', {timeout: 12000});
-    cy.wait('@createNewDesignAgenda', {timeout: 12000});
-    cy.wait('@createApprovedAgenda', {timeout: 12000});
-    cy.wait('@getAgendaitems', {timeout: 12000});
-  }
+  cy.wait('@patchAgenda', { timeout: 12000 });
+  cy.wait('@createApprovedAgenda', { timeout: 12000 });
+  cy.wait('@getAgendaitems', { timeout: 12000 });
+}
 
   /**
    * Creates a remark for an agenda and attaches any file in the files array
@@ -424,17 +416,17 @@ Cypress.Commands.add('openAgenda', openAgenda);
       .contains(agendaName).click();
   }
 
-  function closeAgenda() {
-    cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitems');
-    cy.route('DELETE', '/agendas/**').as('deleteAgendas');
+function closeAgenda() {
+  cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
 
-    cy.get('.vl-button--icon-before')
-      .contains('Acties')
-      .click();
-    cy.get('.vl-popover__link-list__item > .vl-link')
-      .contains('Agenda afsluiten')
-      .click();
-    cy.wait('@deleteAgendaitems', {timeout: 20000});
-    cy.wait('@deleteAgendas', {timeout: 20000});
+  cy.get('.vl-button--icon-before')
+    .contains('Acties')
+    .click();
+  cy.get('.vl-popover__link-list__item > .vl-link')
+    .contains('Agenda afsluiten')
+    .click();
+  cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
+    cy.get('.vl-modal').should('not.exist');
+  });
 
   }

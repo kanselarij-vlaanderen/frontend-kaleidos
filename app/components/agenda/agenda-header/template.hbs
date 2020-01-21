@@ -255,6 +255,7 @@
   {{web-components/vl-modal-verify
     title=(t "warning-title")
     buttonType="warning"
+    isLoading=isApprovingAgenda
     verifyButtonText=(t "continue")
     message=(if (and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable))) (t "approve-agenda-passable") (t "approve-agenda-warning"))
     cancel=(action "cancel")

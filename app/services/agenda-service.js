@@ -40,24 +40,69 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     });
   },
 
-  async approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
-    if (!oldAgenda) {
-      return oldAgenda;
+  approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
+    let newAgenda = this.store.createRecord('agenda', {
+      name: 'Ontwerpagenda',
+      createdFor: currentSession,
+      created: moment()
+        .utc()
+        .toDate(),
+      modified: moment()
+        .utc()
+        .toDate(),
+    });
+
+    return newAgenda
+      .save()
+      .then((agenda) => {
+        if (oldAgenda) {
+          return $.ajax({
+            method: 'POST',
+            url: '/agenda-approve/approveAgenda',
+            data: {
+              newAgendaId: agenda.id,
+              oldAgendaId: oldAgenda.id,
+            },
+          });
+        } else {
+          notifyPropertyChange(agenda, 'agendaitems');
+          return agenda;
+        }
+      })
+      .then(() => {
+        notifyPropertyChange(newAgenda, 'agendaitems');
+        return newAgenda;
+      }).catch(() => {
+        this.store.findRecord('agenda', newAgenda.get('id')).then((agenda) => {
+          agenda.destroyRecord();
+        });
+        this.globalError.showToast.perform(EmberObject.create({
+          title: this.intl.t('warning-title'),
+          message: "Something went wrong while approving the agenda. Please try again.",
+          type: 'error'
+        }));
+      });
+  },
+
+  async deleteAgenda(agendaToDelete) {
+    if (!agendaToDelete) {
+      return;
     }
-    // Use approveagendaService to duoplicate AgendaItems into new agenda.
+    // Use approveagendaService to delete agendaitems and agenda.
     let result = await $.ajax({
       method: 'POST',
-      url: '/agenda-approve/approveAgenda',
+      url: '/agenda-approve/deleteAgenda',
       data: {
-        agendaName: "Ontwerpagenda",
-        createdFor: currentSession.id,
-        oldAgendaId: oldAgenda.id,
+        agendaToDeleteId: agendaToDelete.id,
       },
     });
-    notifyPropertyChange(oldAgenda, 'agendaitems');
-    let newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
-    notifyPropertyChange(newAgenda, 'agendaitems');
-    return newAgenda;
+    if(result.statusCode != 200) {
+      this.globalError.showToast.perform(EmberObject.create({
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('error-delete-agenda'),
+        type: 'error'
+      }));
+    }
   },
 
   agendaWithChanges(currentAgendaID, agendaToCompareID) {
