@@ -9,7 +9,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	store: inject(),
 	classNames: ["vl-u-spacer--large"],
 	item: null,
-	propertiesToSet: ['phases'],
+	propertiesToSet: Object.freeze(['phases']),
 
 	modelIsAgendaItem(model) {
 		const modelName = model.get('constructor.modelName')

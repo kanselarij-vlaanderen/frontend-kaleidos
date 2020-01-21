@@ -20,7 +20,7 @@ export default Component.extend(isAuthenticatedMixin, {
     return meeting.isFinal;
   }),
 
-  defaultTabs: [
+  defaultTabs: Object.freeze([
     {
       name: "details",
       label: "agendaitem-case"
@@ -29,7 +29,7 @@ export default Component.extend(isAuthenticatedMixin, {
       name: "documents",
       label: "documents"
     }
-  ],
+  ]),
 
   activeTabs: computed('isEditor', 'agendaitem.{subcase,remarks.length}', 'shouldShowFinishedDetails', async function(){
     const activeTabs = [];

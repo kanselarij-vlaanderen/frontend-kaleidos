@@ -8,7 +8,11 @@ export default Service.extend({
   globalError: inject(),
   store: inject(),
   shouldUndoChanges: false,
-  objectsToDelete: [],
+
+  init() {
+    this._super(...arguments);
+    this.set('objectsToDelete', []);
+  },
 
   convertDocumentVersion(documentVersion) {
     try {

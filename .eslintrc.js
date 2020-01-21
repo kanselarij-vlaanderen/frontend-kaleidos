@@ -17,7 +17,6 @@ module.exports = {
   rules: {
     'ember/no-on-calls-in-components': 'off',
     "ember/jquery-ember-run": 'off',
-    "ember/avoid-leaking-state-in-ember-objects": 'off',
   },
   overrides: [
     // node files

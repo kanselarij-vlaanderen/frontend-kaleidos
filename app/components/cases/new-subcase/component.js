@@ -11,7 +11,7 @@ export default Component.extend({
   confidentiality: null,
   title: null,
   shortTitle: null,
-  filter: {type: 'subcase-name'},
+  filter: Object.freeze({ type: 'subcase-name' }),
 
   confidential: computed('case', function () {
     return this.get('case.confidential');
