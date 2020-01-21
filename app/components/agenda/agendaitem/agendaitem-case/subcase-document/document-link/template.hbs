@@ -148,7 +148,7 @@
                   myReverseSortedVersions
                 ) as |documentVersion|
               }}
-                {{web-components/vl-document 
+                {{web-components/vl-document
                   documentVersion=documentVersion
                   item=item
                 }}
@@ -162,7 +162,7 @@
 </div>
 {{#if isUploadingNewVersion}}
   {{#web-components/vl-modal
-    closeModal=(action "openUploadDialog")
+    closeModal=(action "closeUploadDialog")
     isOverlay=true
     title=(t "new-document-version")
   }}
@@ -180,7 +180,7 @@
             "?name="
             lastDocumentVersion.file.filename
           )
-          delete=(action "delete" lastDocumentVersion)
+          delete=(action "delete")
         }}
       {{/if}}
     </div>
@@ -188,7 +188,7 @@
       cancelButtonText=(t "cancel")
       saveButtonText=(t "add")
       isLoading=isLoading
-      cancelAction=(action "openUploadDialog")
+      cancelAction=(action "closeUploadDialog")
       saveAction=(action "saveDocuments")
       disableSave=(not uploadedFile)
     }}
