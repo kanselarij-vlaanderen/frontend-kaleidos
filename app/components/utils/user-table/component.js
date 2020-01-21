@@ -3,7 +3,6 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import LightTableMixin from 'fe-redpencil/mixins/light-table/light-table-mixin';
 import { observer } from '@ember/object';
-import { on } from '@ember/object/evented';
 
 export default Component.extend(LightTableMixin, {
   classNames: ['container-flex'],
@@ -21,9 +20,12 @@ export default Component.extend(LightTableMixin, {
     }
   }),
 
-  filterObserver: on('init', observer('filter', function(){
-    this.get("fetchRecords").perform();
-  })),
+  init() {
+    this._super(...arguments);
+    observer('filter', function(){
+      this.get("fetchRecords").perform();
+    });
+  },
 
   loadingText: computed('intl', function() {
     return this.intl.t('users-loading-text')
