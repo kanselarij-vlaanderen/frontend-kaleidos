@@ -14,13 +14,9 @@ export default Mixin.create({
 	filter: null,
 	loadingMessage: "Even geduld aub..",
 	noMatchesMessage: "Geen zoekresultaten gevonden",
-	searchMessage: "Even geduld aub..",
+	searchMessage: null,
 	defaultSelected: null,
 	selectedItems: null,
-
-	// class: computed('class', function () {
-	// 	return this.class;
-	// }),
 
 	isLoadingData: computed('findAll.isRunning', 'searchTask.isRunning', function () {
 		if (this.findAll.isRunning) {
