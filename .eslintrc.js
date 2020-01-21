@@ -21,7 +21,6 @@ module.exports = {
     "no-invalid-interactive": 'off',
     "ember/use-brace-expansion": "off",
     "table-groups":"off",
-    "no-triple-curlies":"off",
     "no-console":"off",
   },
   overrides: [
