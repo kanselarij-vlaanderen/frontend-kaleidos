@@ -2,7 +2,7 @@
 /// <reference types="Cypress" />
 
 import {casesHeaderAddCaseSelector, metadataForm} from "../../../selectors/cases/caseSelectors";
-import {formVlToggle} from "../../../selectors/formSelectors/formSelectors";
+import {formCancelButton, formVlToggle} from "../../../selectors/formSelectors/formSelectors";
 
 context('Create case as Admin user', () => {
 
@@ -39,5 +39,11 @@ context('Create case as Admin user', () => {
     cy.get(casesHeaderAddCaseSelector).click();
     cy.get(metadataForm).type("Dit is een dossier met een korte titel");
     cy.get('button').contains('Dossier aanmaken').click();
+  });
+
+  it('Hitting cancel should hide the model', () => {
+    cy.visit('/dossiers');
+    cy.get(casesHeaderAddCaseSelector).click();
+    cy.get(formCancelButton).click();
   });
 });
