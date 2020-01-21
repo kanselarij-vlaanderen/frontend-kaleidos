@@ -20,7 +20,6 @@ context('Agenda tests', () => {
     const DAY = '13';
     cy.createDefaultAgenda(KIND,YEAR,JANUARI,DAY,PLACE);
     cy.openAgenda(1,"13 januari 2020", "10:00");
-
   });
 
 });

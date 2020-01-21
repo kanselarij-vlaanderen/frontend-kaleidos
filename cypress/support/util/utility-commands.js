@@ -13,10 +13,13 @@ import {
 import {showActionOptions, navigatetosubcases,announcement,navigatetodecisions, navigatetonewsletter,
   navigatetonotes,navigatetopressagenda, toggleeditingsession, selectsignature, downloadddocuments, deleteAgenda
 } from "../../selectors/agenda/actionModalSelectors";
+import {modalDialogCloseModalSelector, modalDialogSelector} from "../../selectors/models/modelSelectors";
 
 Cypress.Commands.add('selectDate', selectDate);
 Cypress.Commands.add('selectAction', selectAction);
 Cypress.Commands.add('openActionModal', openActionModal);
+Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
+Cypress.Commands.add('openSettingsModal', openSettingsModal);
 
 // ***********************************************
 // Functions
@@ -74,3 +77,27 @@ function openActionModal() {
   cy.get(deleteAgenda).should(BE_VISIBLE);
 }
 
+/**
+ * Validate the content of the dropdown
+ * @memberOf Cypress.Chainable#
+ * @name validateDropdownElements
+ * @function
+ */
+function validateDropdownElements(elementIndex, textContent) {
+  cy.get('.ember-power-select-trigger').click();
+  cy.get('.ember-power-select-option').eq(elementIndex).should('contain.text', textContent);
+  cy.get('.ember-power-select-option').eq(elementIndex).click();
+}
+
+/**
+ * Validate the content of the dropdown
+ * @memberOf Cypress.Chainable#
+ * @name openSettingsModal
+ * @function
+ */
+function openSettingsModal(selector) {
+  cy.get(selector).click();
+  cy.get(modalDialogSelector).should('be.visible');
+  cy.get(modalDialogCloseModalSelector).click();
+  cy.get(modalDialogSelector).should('not.be.visible');
+}

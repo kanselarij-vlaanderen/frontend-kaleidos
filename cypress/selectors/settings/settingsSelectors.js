@@ -1,3 +1,11 @@
 export const generalSettingsSelector = '[data-test-settings-generalSettings]';
 export const manageMinistersSelector = '[data-test-settings-manageMinisters]';
 export const manageUsersSelector = '[data-test-settings-manageUsers]';
+export const manageGovermentDomainsSelector = '[data-test-manage-goverment-domains]';
+export const manageGovermentFieldsSelector = '[data-test-manage-goverment-fields]';
+export const manageIseCodesSelector = '[data-test-manage-ise-codes]';
+export const manageAlertsSelector = '[data-test-manage-alerts]';
+export const manageDocumentTypesSelector = '[data-test-manage-document-types]';
+export const manageCaseTypesSelector = '[data-test-manage-case-types]';
+export const manageSubcaseTypesSelector = '[data-test-manage-subcase-types]';
+export const manageSignaturesSelector = '[data-test-manage-signatures]';
