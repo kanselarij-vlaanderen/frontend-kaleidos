@@ -82,7 +82,12 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     async openUploadDialog() {
       const uploadedFile = this.get('uploadedFile');
       if (uploadedFile && uploadedFile.id) {
-        await this.fileService.removeFile(uploadedFile.id);
+        const versionInCreation = await uploadedFile.get('documentVersion');
+        if(versionInCreation) {
+          await this.fileService.deleteDocumentVersion(versionInCreation);
+        } else {
+          await this.fileService.removeFile(uploadedFile.id);
+        }
         this.set('uploadedFile', null);
       }
       this.toggleProperty('isUploadingNewVersion');
