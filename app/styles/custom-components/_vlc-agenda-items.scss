@@ -83,6 +83,8 @@ a.vlc-agenda-items__sub-item--active:focus {
 
 // Subject: the “title”
 .vlc-agenda-items__subject {
+  display: flex;
+  justify-content: flex-start;
   font-size: 1.6rem;
   line-height: 1.1;
   margin: 0 0 0.6rem;
@@ -109,8 +111,7 @@ a.vlc-agenda-items__sub-item--active:focus {
 }
 
 .vlc-agenda-items-sub-item__numbering {
-  position: absolute;
-  left: 1.5rem;
+  padding-right: 0.75rem
 }
 
 /* Agenda items compare view

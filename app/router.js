@@ -17,6 +17,9 @@ Router.map(function() {
     this.route('compare', { path: '/vergelijken' });
     this.route('documents', { path: '/documenten' });
   });
+  // this.route('agendaitems', { path: '/agendaitems' }, function() {
+  //
+  // });
   this.route('cases', { path: '/dossiers' }, function() {
     this.route('case', { path: ':id' }, function() {
       this.route('subcases', { path: '/deeldossiers' }, function() {
@@ -63,7 +66,7 @@ Router.map(function() {
       this.route('overview', { path: '/klad' });
       this.route('loading', {path:'/laden'});
     });
-    this.route('loading'), { path: '/laden' };
+    this.route('loading', { path: '/laden' });
   });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker'});
   this.route('document-viewer', { path: '/document/:document_version_id' });
