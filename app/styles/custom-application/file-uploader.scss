@@ -43,8 +43,8 @@
       color: #333332;
       text-decoration: none;
       text-align: center;
-      height:100%;
-      width:100%;
+      height: 100%;
+      width: 100%;
     }
   }
 }
@@ -59,14 +59,17 @@
   &__title-container {
     margin-left: 1rem;
     margin-bottom: 1rem;
+
     .title {
       display: flex;
       align-items: center;
     }
+
     .metadata {
       margin: 0;
     }
   }
+
   &__title {
     display: flex;
   }
