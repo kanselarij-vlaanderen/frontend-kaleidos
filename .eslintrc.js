@@ -15,7 +15,6 @@ module.exports = {
     browser: true
   },
   rules: {
-    "ember/jquery-ember-run": 'off',
   },
   overrides: [
     // node files

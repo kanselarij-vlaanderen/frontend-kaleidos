@@ -2,6 +2,7 @@ import Service from '@ember/service';
 import $ from 'jquery';
 import {inject} from '@ember/service';
 import {notifyPropertyChange} from '@ember/object';
+import { bind } from '@ember/runloop';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
@@ -110,11 +111,11 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       method: 'GET',
       url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
     })
-      .then((result) => {
+      .then(bind(this, (result) => {
         this.set('addedDocuments', result.addedDocuments);
         this.set('addedAgendaitems', result.addedAgendaitems);
         return result;
-      })
+      }))
       .catch(() => {
 
       });
