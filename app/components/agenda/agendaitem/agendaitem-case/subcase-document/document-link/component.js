@@ -57,7 +57,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     const uploadedFile = this.get('uploadedFile');
     if (uploadedFile && uploadedFile.id) {
       const versionInCreation = await uploadedFile.get('documentVersion');
-      if(versionInCreation) {
+      if (versionInCreation) {
         await this.fileService.deleteDocumentVersion(versionInCreation);
       } else {
         await this.fileService.removeFile(uploadedFile.id);
