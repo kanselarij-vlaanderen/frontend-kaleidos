@@ -18,9 +18,7 @@ module.exports = {
     'ember/no-on-calls-in-components': 'off',
     "ember/jquery-ember-run": 'off',
     "ember/avoid-leaking-state-in-ember-objects": 'off',
-    "no-invalid-interactive": 'off',
     "ember/use-brace-expansion": "off",
-    "table-groups":"off",
     "no-console":"off",
   },
   overrides: [
