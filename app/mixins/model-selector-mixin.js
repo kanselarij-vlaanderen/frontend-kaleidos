@@ -14,7 +14,6 @@ export default Mixin.create({
 	filter: null,
 	loadingMessage: "Even geduld aub..",
 	noMatchesMessage: "Geen zoekresultaten gevonden",
-	searchMessage: null,
 	defaultSelected: null,
 	selectedItems: null,
 
