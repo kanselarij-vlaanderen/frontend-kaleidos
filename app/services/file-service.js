@@ -1,5 +1,6 @@
 import Service from '@ember/service';
 import { inject } from '@ember/service';
+import { warn } from '@ember/debug';
 import { task, timeout } from 'ember-concurrency';
 import $ from 'jquery';
 
@@ -25,7 +26,7 @@ export default Service.extend({
           return err;
         });
     } catch (e) {
-      console.error(e, 'something went wrong with the conversion');
+      warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
     }
   },
 
@@ -52,7 +53,7 @@ export default Service.extend({
     }
     this.globalError.set('shouldUndoChanges', false);
   }),
-  
+
   async deleteDocument(document) {
     const documentToDelete = await document;
     if (!documentToDelete) return;

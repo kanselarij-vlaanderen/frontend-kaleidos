@@ -19,7 +19,6 @@ module.exports = {
     "ember/jquery-ember-run": 'off',
     "ember/avoid-leaking-state-in-ember-objects": 'off',
     "ember/use-brace-expansion": "off",
-    "no-console":"off",
   },
   overrides: [
     // node files
