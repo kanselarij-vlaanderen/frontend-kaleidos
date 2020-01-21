@@ -5,9 +5,10 @@ import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { A } from '@ember/array';
-import moment from 'moment';
 import { later } from '@ember/runloop';
+
 const timeout = 60000;
+
 export default Controller.extend(isAuthenticatedMixin, {
   currentSession: inject(),
   session: inject(),
