@@ -108,6 +108,18 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
       set(this, 'results', results);
     },
 
+    prevPage() {
+      if (get(this, 'page') > 0) {
+        set(this, 'page', get(this, 'page') - 1);
+        this.send('performSearch', get(this, 'searchText'));
+      }
+    },
+
+    nextPage() {
+      set(this, 'page', get(this, 'page') + 1);
+      this.send('performSearch', get(this, 'searchText'));
+    },
+
     async selectCase(caseItem, event) {
       // We never set loading to false, because the component closes after this action
       set(this, 'isLoading', true);

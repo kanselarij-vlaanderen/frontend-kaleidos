@@ -11,79 +11,44 @@
     {{#if isLoading}}
       {{web-components/vl-loader text=(t "please-be-patient")}}
     {{else}}
-      {{#data-table
-              content=results
-              page=page
-              size=size
-              sort=sort
-              class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-              as |table|
-      }}
-        {{#table.content as |c|}}
-          {{#c.header}}
-            <th
-                    class="vl-data-table-col-9 vl-data-table__header-title">
+      <table class="vl-data-table tr-hover vl-data-table--zebra">
+        <thead>
+          <tr>
+            <th class="vl-data-table-col-9 vl-data-table__header-title">
               {{t "case-name"}}
             </th>
-            {{#if searchText}}
-              <th
-                      class="vl-data-table-col-1 vl-data-table__header-title">
-                {{t "created-on"}}
-              </th>
-              {{th-sortable
-                      class="vl-data-table-col-1 vl-data-table__header-title"
-                      currentSorting=sort
-                      field="sessionDates"
-                      label=(t "on-agenda-of")
-              }}
-            {{else}}
-              <th
-                      class="vl-data-table-col-2 vl-data-table__header-title">
-                {{t "created-on"}}
-              </th>
-            {{/if}}
-          {{/c.header}}
-          {{#c.body class="tr-hover" as |row|}}
-            <td onclick={{action "selectCase" row}}>
-              <p>
-                {{#if row.shortTitle}}
-                  {{row.shortTitle}}
-                {{else}}
-                  {{row.title}}
-                {{/if}}
-              </p>
-            </td>
-            <td onclick={{action "selectCase" row}}>
-              {{moment-format row.created "DD-MM-YYYY HH:mm"}}
-            </td>
-            {{#if searchText}}
+            <th class="vl-data-table-col-2 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each (await results) as |row|}}
+            <tr>
               <td onclick={{action "selectCase" row}}>
-                {{moment-format row.sessionDates "DD-MM-YYYY"}}
+                <p>
+                  {{#if row.shortTitle}}
+                    {{row.shortTitle}}
+                  {{else}}
+                    {{row.title}}
+                  {{/if}}
+                </p>
               </td>
-            {{/if}}
-          {{/c.body}}
-        {{/table.content}}
-      {{/data-table}}
+              <td onclick={{action "selectCase" row}}>
+                {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <div class="vl-u-spacer--small" />
+      {{web-components/vl-pagination
+        page=page
+        nbOfItems=results.length
+        size=size
+        nextAction=(action 'nextPage')
+        previousAction=(action 'prevPage')
+        total=results.meta.count}}
     {{/if}}
   </div>
 </div>
-{{#if isEditingRow}}
-  {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "edit-case")
-          closeModal=(action "cancelEditing")
-  }}
-    {{cases/edit-case
-            caseToEdit=caseToEdit
-            cancelEditing=(action "cancelEditing")
-    }}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isArchivingCase}}
-  {{web-components/vl-modal-verify
-          title=(t "archive-case")
-          message=(t "archive-case-message")
-          cancel=(action "cancelArchiveCase")
-          verify=(action "archiveCase")
-  }}
-{{/if}}
