@@ -22,22 +22,24 @@ export default Component.extend({
     const iseCodes = await latestSubcase.get('iseCodes');
     const themes = await latestSubcase.get('themes');
     const requestedBy = await latestSubcase.get('requestedBy');
-    const linkedDocumentVersions = await latestSubcase.get('linkedDocumentVersions');
-
+    const documentVersions = await latestSubcase.get('documentVersions');
+    
     if (copyFullSubcase) {
       const subcaseName = await latestSubcase.get('subcaseName');
-      const documentVersions = await latestSubcase.get('documentVersions');
+      const linkedDocumentVersions = await latestSubcase.get('linkedDocumentVersions');
       const accessLevel = await latestSubcase.get('accessLevel');
       subcase.set('documentVersions', documentVersions);
+      subcase.set('linkedDocumentVersions', linkedDocumentVersions);
       subcase.set('subcaseName', subcaseName);
       subcase.set('accessLevel', accessLevel);
+    } else {
+      subcase.set('linkedDocumentVersions', documentVersions);
     }
 
     subcase.set('mandatees', mandatees);
     subcase.set('iseCodes', iseCodes);
     subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
-    subcase.set('linkedDocumentVersions', linkedDocumentVersions);
 
     return subcase.save();
   },

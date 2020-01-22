@@ -65,6 +65,7 @@ export default Component.extend({
     return Array(...nodes)
   },
 
+// credit: https://github.com/ghosh/Micromodal/blob/master/lib/src/index.js#L151
   maintainFocus (event) {
     const focusableNodes = this.getFocusableNodes();
 
