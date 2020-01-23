@@ -120,7 +120,7 @@ export default Service.extend({
       data: JSON.stringify(data),
       contentType: 'application/vnd.api+json',
       processData: false,
-      dataType: 'json',
+      dataType: 'blob',
     })
       .then((content) => {
         return content;
