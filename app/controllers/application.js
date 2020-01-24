@@ -5,7 +5,6 @@ import { on } from '@ember/object/evented';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { A } from '@ember/array';
-import moment from 'moment';
 import { later } from '@ember/runloop';
 const timeout = 60000;
 export default Controller.extend(isAuthenticatedMixin, {
@@ -21,10 +20,6 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   selectedOption: computed('options', function() {
     return this.options.get('firstObject');
-  }),
-
-  isOc: computed('selectedOption', function() {
-    return this.get('selectedOption.route') == 'oc';
   }),
 
   async init() {
