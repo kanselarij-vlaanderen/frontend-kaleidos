@@ -52,6 +52,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
       const documentVersionsSelected = this.get('documentVersionsSelected');
       const itemDocumentsToEdit = await item.get('documentVersions');
       const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
+      const subcase = await agendaitem.get('subcase');
       const themes = await this.themes;
       if (documentVersionsSelected) {
         await Promise.all(
@@ -73,7 +74,8 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         newModel.reload();
         if (themes) {
           agendaitem.set('themes', themes);
-          agendaitem.save().then(() => {
+          subcase.set('themes', themes);
+          Promise.all([agendaitem.save(), subcase.save()]).then(() => {
             this.set('isLoading', false);
             this.toggleProperty('isEditing');
           });
