@@ -17,9 +17,9 @@ Router.map(function() {
     this.route('compare', { path: '/vergelijken' });
     this.route('documents', { path: '/documenten' });
   });
-  this.route('agendaitems', { path: '/agendaitems' }, function() {
-
-  });
+  // this.route('agendaitems', { path: '/agendaitems' }, function() {
+  //
+  // });
   this.route('cases', { path: '/dossiers' }, function() {
     this.route('case', { path: ':id' }, function() {
       this.route('subcases', { path: '/deeldossiers' }, function() {
