@@ -4,8 +4,7 @@
 import {addAnnouncementSelector} from "../../../../../selectors/agenda/actionModalSelectors";
 import {formFooterSaveSelector, formInputSelector} from "../../../../../selectors/formSelectors/formSelectors";
 import {
-  createAnnouncementTitleSubcaseSelector,
-  fileUploaderSelector
+  createAnnouncementTitleSubcaseSelector
 } from "../../../../../selectors/models/modelSelectors";
 
 context('Model action', () => {

@@ -11,11 +11,12 @@
     </div>
   </div>
   <div class="vlc-toolbar__right">
-    <div class="vlc-toolbar__item" data-test-vl-modal-footer-save>
+    <div class="vlc-toolbar__item">
       {{web-components/vl-save-button
         text=saveButtonText
         loadingText=(t "please-be-patient")
         isLoading=isLoading
+        data-test-vl-save=true
         disabled=disableSave
         saveAction=(action "saveAction")
       }}

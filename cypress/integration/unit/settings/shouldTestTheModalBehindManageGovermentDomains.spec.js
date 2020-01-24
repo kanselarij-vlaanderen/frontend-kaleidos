@@ -10,6 +10,7 @@ import {
   modalDialogSelector,
   modalManagerAddSelector, modalManagerCloseSelector, modalManagerDeleteSelector, modalManagerEditSelector
 } from "../../../selectors/models/modelSelectors";
+import {formInputSelector, formSaveSelector} from "../../../selectors/formSelectors/formSelectors";
 
 context('Settings page tests', () => {
 
@@ -32,18 +33,16 @@ context('Settings page tests', () => {
     cy.server();
     cy.login('Admin');
     cy.route('/')
+    cy.get(settingsSelector).click();
+    cy.url().should('include','instellingen/overzicht');
   });
 
   it('Should open the model behind manage goverment domains', () => {
-    cy.get(settingsSelector).click();
-    cy.url().should('include','instellingen/overzicht');
     cy.get(manageGovermentDomainsSelector).click();
     cy.get(modalDialogSelector).should('be.visible');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
-    cy.get(settingsSelector).click();
-    cy.url().should('include','instellingen/overzicht');
     cy.get(manageGovermentDomainsSelector).click();
     cy.get(modalDialogSelector).should('be.visible');
     cy.get(modalDialogCloseModalSelector).click();
@@ -51,21 +50,17 @@ context('Settings page tests', () => {
   });
 
   it('Should open the dropdown in the modal', () => {
-    cy.get(settingsSelector).click();
-    cy.url().should('include','instellingen/overzicht');
     cy.get(manageGovermentDomainsSelector).click();
     cy.get(modalDialogSelector).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length', 11);
+    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
   });
 
   it('Should open the dropdown in the modal and see each item', () => {
-    cy.get(settingsSelector).click();
-    cy.url().should('include','instellingen/overzicht');
     cy.get(manageGovermentDomainsSelector).click();
     cy.get(modalDialogSelector).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length', 11);
+    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
 
     for(let i = 0; i<govermentDomains.length;i++) {
       cy.get('.ember-power-select-option').eq(i).should('contain.text', govermentDomains[i]);
@@ -73,8 +68,6 @@ context('Settings page tests', () => {
   });
 
   it('Should open the dropdown in the modal and selecting the first element should show advanced model', () => {
-    cy.get(settingsSelector).click();
-    cy.url().should('include','instellingen/overzicht');
     cy.get(manageGovermentDomainsSelector).click();
     cy.get(modalDialogSelector).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
@@ -89,9 +82,6 @@ context('Settings page tests', () => {
   });
 
   it('Should open the dropdown in the modal and selecting the each element should show advanced model with that element in the dropdown span', () => {
-
-    cy.get(settingsSelector).click();
-    cy.url().should('include','instellingen/overzicht');
     cy.get(manageGovermentDomainsSelector).click();
     cy.get(modalDialogSelector).should('be.visible');
     for(let i = 0; i<govermentDomains.length;i++) {
@@ -99,4 +89,29 @@ context('Settings page tests', () => {
     }
   });
 
+  it('Should open the modal and add a new item in the list', () => {
+    cy.get(manageGovermentDomainsSelector).click();
+    cy.get(modalManagerAddSelector).click();
+    cy.get(formInputSelector).type('Andere zaken', {delay: 300});
+    cy.get(formSaveSelector).click();
+    cy.get('.ember-power-select-trigger').click();
+    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length + 1);
+    // Should clean the database after to get rid of the added elements and so that the other tests can run smooth.
+    cy.resetDB();
+  });
+
+  // it('Should open the modal, select the first element and edit it to Edited then edit it back to the standard', () => {
+  //   cy.route('GET', '/government-domains?sort=label').as('getGovernmentDomains');
+  //   cy.get(manageGovermentDomainsSelector).click();
+  //   cy.get(modalDialogSelector).should('be.visible');
+  //   cy.wait("@getGovernmentDomains");
+  //   cy.get('.ember-power-select-trigger').click();
+  //   cy.get('.ember-power-select-option').should('have.length.greaterThan', 2);
+  //   cy.get('.ember-power-select-option').eq(0).should('contain.text', "Cultuur, jeugd, sport & media");
+  //   cy.get('.ember-power-select-option').eq(0).click();
+  //   cy.get(modalManagerEditSelector).click();
+  //   cy.get(formInputSelector).clear();
+  //   cy.get(formInputSelector).type("Edited");
+  //   cy.get(formSaveSelector).click();
+  // });
 });

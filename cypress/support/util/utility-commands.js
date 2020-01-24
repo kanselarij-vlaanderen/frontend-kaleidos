@@ -20,6 +20,7 @@ Cypress.Commands.add('selectAction', selectAction);
 Cypress.Commands.add('openActionModal', openActionModal);
 Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
 Cypress.Commands.add('openSettingsModal', openSettingsModal);
+Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
 
 // ***********************************************
 // Functions
@@ -82,6 +83,8 @@ function openActionModal() {
  * @memberOf Cypress.Chainable#
  * @name validateDropdownElements
  * @function
+ * @param {int} elementIndex: index of the element that needs to be selected
+ * @param {String} textContent: Text that need to be in the dropdown element
  */
 function validateDropdownElements(elementIndex, textContent) {
   cy.get('.ember-power-select-trigger').click();
@@ -94,10 +97,21 @@ function validateDropdownElements(elementIndex, textContent) {
  * @memberOf Cypress.Chainable#
  * @name openSettingsModal
  * @function
+ * @param selector: selector that needs to be used.
  */
 function openSettingsModal(selector) {
   cy.get(selector).click();
   cy.get(modalDialogSelector).should('be.visible');
+}
+
+/**
+ * Validate the content of the dropdown
+ * @memberOf Cypress.Chainable#
+ * @name closeSettingsModal
+ * @function
+ */
+function closeSettingsModal() {
   cy.get(modalDialogCloseModalSelector).click();
   cy.get(modalDialogSelector).should('not.be.visible');
 }
+

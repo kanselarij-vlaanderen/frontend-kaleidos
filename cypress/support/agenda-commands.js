@@ -32,15 +32,17 @@ Cypress.Commands.add('openAgenda', openAgenda);
 // ***********************************************
 // Functions
 
+
 /**
- * Goes to the agenda overview and creates a new agenda
- *
- * @returns {Promise<String>} the id of the created agenda
- *
+ * @description Goes to the agenda overview and creates a new agenda.
+ * @name createAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {*} kind The kind of meeting to select, language and case sensitive
  * @param {*} plusMonths The positive amount of months from today to advance in the vl-datepicker
  * @param {*} date The cypress.moment object with the date and time to set
  * @param {*} location The location of the meeting to enter as input
+ * @returns {Promise<String>} the id of the created agenda
  */
   function createAgenda(kind, plusMonths, date, location) {
     cy.visit('');
@@ -128,7 +130,7 @@ Cypress.Commands.add('openAgenda', openAgenda);
 /**
  * Opens a calendar of choice in a table
  * @memberOf Cypress.Chainable#
- * @name createDefaultAgenda
+ * @name openAgenda
  * @function
  * @param {String} index - index of the agendaitem in the table
  * @param {String} agendaDatumInTitel - Datum in de titel van de agenda waartegen gecontroleerd dient te worden
@@ -139,13 +141,15 @@ Cypress.Commands.add('openAgenda', openAgenda);
     cy.get('[data-test-agenda-header-title]').contains(agendaDatumInTitel);
     cy.get('[data-test-agenda-header-title]').contains(agendaTijdstipInTitel);
   }
-  /**
-   * Searches for the agendaDate in the history view of the agenda page, or uses the meetingId to open
-   * the meeting directly using the route 'agenda/meetingId/agendapunten'
-   *
-   * @param {*} agendaDate A cypress.moment object with the date to search
-   * @param {*} [meetingId] If known, use the meetingId to open the meeting with a direct route instead of searching
-   */
+
+/**
+ * @description Searches for the agendaDate in the history view of the agenda page, or uses the meetingId to open the meeting directly using the route 'agenda/meetingId/agendapunten'
+ * @name openAgendaForDate
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {*} agendaDate A cypress.moment object with the date to search
+ * @param {*} [meetingId] If known, use the meetingId to open the meeting with a direct route instead of searching
+ */
   function openAgendaForDate(agendaDate, meetingId) {
     cy.server();
     if (meetingId) {
@@ -168,8 +172,10 @@ Cypress.Commands.add('openAgenda', openAgenda);
   }
 
 /**
- * Deletes the current **open agenda**, either a design or an approved one
- *
+ * @description Deletes the current **open agenda**, either a design or an approved one
+ * @name deleteAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
  * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
  */
@@ -198,10 +204,12 @@ function deleteAgenda(meetingId, lastAgenda) {
   //TODO should patches happen when deleting a design agenda ?
 }
 
-  /**
-   * Set all agendaitems on an open agenda to "formally OK"
-   *
-   */
+/**
+ * @description Set all agendaitems on an open agenda to "formally OK"
+ * @name setFormalOkOnAllItems
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
   function setFormalOkOnAllItems() {
     //TODO set only some items to formally ok with list as parameter
     cy.route('GET', '/meetings/**').as('getMeetings');
@@ -236,11 +244,13 @@ function deleteAgenda(meetingId, lastAgenda) {
       .click();
   }
 
-  /**
-   * Check all approval checkboxes of an agendaitem
-   *
-   * @param {String} agendaitemShortTitle - The short title of the case with coapprovals, must be unique in an agenda.
-   */
+/**
+ * @description Check all approval checkboxes of an agendaitem
+ * @name approveCoAgendaitem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} agendaitemShortTitle - The short title of the case with coapprovals, must be unique in an agenda.
+ */
   function approveCoAgendaitem(agendaitemShortTitle) {
     cy.route('GET', '/ise-codes/**').as('getIseCodes');
     cy.route('GET', '/government-fields/**').as('getGovernmentFields');
@@ -273,7 +283,10 @@ function deleteAgenda(meetingId, lastAgenda) {
   }
 
 /**
- * Approve an open agenda when all formally OK's are set ()
+ * @description Approve an open agenda when all formally OK's are set ()
+ * @name approveDesignAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
  */
 function approveDesignAgenda() {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
@@ -292,14 +305,15 @@ function approveDesignAgenda() {
   cy.wait('@getAgendaitems', { timeout: 12000 });
 }
 
-  /**
-   * Creates a remark for an agenda and attaches any file in the files array
-   *
-   * @param {String} title - The title of the remark
-   * @param {String} remark - The remark
-   * @param {{folder: String, fileName: String, fileExtension: String}[]} file
-   *
-   */
+/**
+ * @description Creates a remark for an agenda and attaches any file in the files array
+ * @name approveDesignAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} title - The title of the remark
+ * @param {String} remark - The remark
+ * @param {{folder: String, fileName: String, fileExtension: String}[]} file
+ */
   function addRemarkToAgenda(title, remark, files) {
     cy.route('POST', '/agendaitems').as('createNewAgendaitem');
     cy.route('PATCH', '**').as('patchModel');
