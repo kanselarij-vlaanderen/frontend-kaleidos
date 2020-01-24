@@ -1,22 +1,61 @@
 import CONFIG from 'fe-redpencil/utils/config';
-// import moment from 'moment';
+import moment from 'moment';
 
 export default class VRDocumentName {
-  get versionSuffixes () {
-    return CONFIG.latinAdverbialNumberals;
+  static get regexGroups () {
+    return Object.freeze({
+      date: '([12][90][0-9]{2} [0-3][0-9][01][0-9])',
+      docType: '((DOC)|(DEC)|(MED))',
+      caseNr: '(\\d{4})',
+      index: '(\\d{1,3})',
+      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map(s => s.toUpperCase()).join(')|(')}))`.replace('()|', '') // Hack to get out the value for version '0'
+    });
   }
 
-  get versionSuffixesRegexGroup () {
-    const str = '((' + Object.values(this.versionSuffixes).join(')|(') + '))';
-    return str.replace('()|', ''); // Hack to get out the value for version '0'
+  static get looseRegex () {
+    const g = VRDocumentName.regexGroups;
+    return new RegExp(`VR ${g.date} ${g.docType}\\.${g.caseNr}(/|-${g.index})?`);
   }
 
-  get validityRegex () {
-    return new RegExp('^VR [12][0-9]{3} [0-3][0-9][01][0-9] (DOC)|(DEC)\\.[0-9]{4}(/[0-9]{1,3})?' + this.versionSuffixesRegexGroup + '$');
+  static get strictRegex () {
+    const g = VRDocumentName.regexGroups;
+    return new RegExp(`^VR ${g.date} ${g.docType}\\.${g.caseNr}(/${g.index})?${g.versionSuffix}?$`);
   }
 
-  constructor(name) {
+  constructor(name, options) {
     this.name = name;
+    this.strict = !!options && !!options.strict;
+    if (this.strict && !this.isValid) {
+      throw new Error(`Invalid VR Document Name "${this.name}" (strict mode)`);
+    }
+  }
+
+  toString () {
+    return this.name;
+  }
+
+  get regex () {
+    return this.strict ? VRDocumentName.strictRegex : VRDocumentName.looseRegex;
+  }
+
+  parseMeta () {
+    const match = this.regex.exec(this.name);
+    if (!match) {
+      throw new Error(`Couldn't parse VR Document Name "${this.name}" (${this.strict ? 'strict' : 'loose'} parsing mode)`);
+    }
+    const meta = {
+      date: moment(match[1], "YYYY DDMM").toDate(),
+      docType: match[2],
+      caseNr: parseInt(match[6]),
+      index: parseInt(match[8]),
+      // versionSuffix: TODO
+      // versionNr: TODO
+    };
+    if (this.strict) {
+      return meta;
+    } else {
+      return meta;
+    }
   }
 
   // Will only be needed by backend renaming service
@@ -32,14 +71,14 @@ export default class VRDocumentName {
   // }
 
   get isValid() {
-    return this.validityRegex.test(this.name);
+    return VRDocumentName.strictRegex.test(this.name);
   }
 
   get withoutVersionSuffix() {
-    return this.name.replace(new RegExp(this.versionSuffixesRegexGroup + '$', 'ui'), '');
+    return this.name.replace(new RegExp(VRDocumentName.regexGroups.versionSuffix + '$', 'ui'), '');
   }
 
   withOtherVersionSuffix (versionNr) {
-    return `${this.withoutVersionSuffix}${this.versionSuffixes[versionNr].toUpperCase()}`
+    return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[versionNr].toUpperCase()}`
   }
 }
