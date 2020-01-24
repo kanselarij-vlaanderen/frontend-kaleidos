@@ -93,7 +93,7 @@
                     value=(mut document.name)
                   }}
                 <button
-                  class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+                  class="vl-button vl-button--link vl-button--icon"
                   {{action "saveChanges"}}
                 >
                   <i
@@ -105,7 +105,7 @@
                   </span>
                 </button>
                 <button
-                  class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+                  class="vl-button vl-button--link vl-button--icon"
                   {{action "cancelChanges"}}
                 >
                   <i
@@ -148,7 +148,7 @@
                   myReverseSortedVersions
                 ) as |documentVersion|
               }}
-                {{web-components/vl-document 
+                {{web-components/vl-document
                   documentVersion=documentVersion
                   item=item
                 }}
