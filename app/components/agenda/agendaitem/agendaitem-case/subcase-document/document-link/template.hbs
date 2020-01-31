@@ -162,7 +162,7 @@
 </div>
 {{#if isUploadingNewVersion}}
   {{#web-components/vl-modal
-    closeModal=(action "openUploadDialog")
+    closeModal=(action "cancelUploadVersion")
     isOverlay=true
     title=(t "new-document-version")
   }}
