@@ -170,7 +170,11 @@
       {{#if (not uploadedFile)}}
         {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
       {{else}}
-        {{web-components/vl-form-input value=documentContainer.lastDocument.name}}
+        {{web-components/vl-form-label value=(t "name")}}
+        {{web-components/vl-form-input
+          value=documentContainer.lastDocument.name
+          width=4
+        }}
         {{ember-kaleidos-webuniversum/vl-uploaded-document
           name=documentContainer.lastDocument.file.filename
           extension=documentContainer.lastDocument.file.extension
