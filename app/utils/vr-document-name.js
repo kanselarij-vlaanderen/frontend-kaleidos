@@ -82,3 +82,25 @@ export default class VRDocumentName {
     return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[versionNr].toUpperCase()}`
   }
 }
+
+export const compareFunction = function(a, b) {
+  try {
+    const metaA = a.parseMeta();
+    try { // Both names parse
+      const metaB = b.parseMeta();
+      return (metaA.date - metaB.date) ||
+        metaA.docType.localeCompare(metaB.docType) ||
+        (metaA.caseNr - metaB.caseNr) ||
+        (metaA.index - metaB.index);
+    } catch (e) { // Only a parses
+      return -1;
+    }
+  } catch (e) {
+    try { // Only b parses
+      b.parseMeta();
+      return 1;
+    } catch (e) { // Both don't parse
+      return a.localeCompare(b);
+    }
+  }
+};
