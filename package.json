@@ -69,6 +69,7 @@
     "ember-promise-helpers": "^1.0.9",
     "ember-qunit": "^3.4.1",
     "ember-rdfa-helpers": "^0.2.1",
+    "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#73baa4fc16106a33f894b276bf5b3437206be598",
     "ember-resolver": "^5.3.0",
     "ember-responsive": "^3.0.5",
     "ember-sortable": "1.12.1",
