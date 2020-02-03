@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import {inject} from '@ember/service';
 import {alias, filter} from '@ember/object/computed';
 import {computed} from '@ember/object';
+import { warn } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
@@ -115,7 +116,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       }
       return agendaitem;
     })).catch(() => {
-      console.error('Something went wrong while reloading the agendaitems of the subcases.');
+      warn('Something went wrong while reloading the agendaitems of the subcases.', { id: 'subcase-reloading' });
     });
   },
 
@@ -124,7 +125,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       if (!agendaitem) {
         return;
       }
-      return agendaitem.destroyRecord().catch(() => console.error('Something went wrong while deleting the agendaitem.'));
+      return agendaitem.destroyRecord().catch(() => warn('Something went wrong while deleting the agendaitem.', { id: 'agenda-item-reloading' }));
     }));
   },
 

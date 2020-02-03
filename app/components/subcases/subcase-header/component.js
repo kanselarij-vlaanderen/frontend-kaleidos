@@ -10,8 +10,13 @@ export default Component.extend(isAuthenticatedMixin, {
   router: inject(),
   classNames: ["vlc-page-header"],
   isAssigningToOtherAgenda: false,
+  isAssigningToOtherCase: false,
+  promptDeleteCase: false,
   isShowingOptions: false,
   isLoading: false,
+  isAssigning: false,
+  subcase: null,
+  caseToDelete: null,
 
   canPropose: computed('subcase.{requestedForMeeting,hasAgendaItem,isPostponed}', 'isAssigningToOtherAgenda', async function () {
     const {isAssigningToOtherAgenda, isLoading} = this;
@@ -60,6 +65,10 @@ export default Component.extend(isAuthenticatedMixin, {
     await itemToDelete.destroyRecord();
   },
 
+  async triggerDeleteCaseDialog() {
+    this.set('promptDeleteCase', true);
+  },
+
   navigateToSubcaseOverview(caze) {
     this.router.transitionTo('cases.case.subcases', caze.id);
   },
@@ -70,6 +79,7 @@ export default Component.extend(isAuthenticatedMixin, {
     this.set('selectedSubcase', null);
     this.set('subcaseToDelete', null);
     this.set('isLoading', false);
+    this.set('isAssigningToOtherCase', false);
   },
 
   actions: {
@@ -118,5 +128,34 @@ export default Component.extend(isAuthenticatedMixin, {
       }
       this.navigateToSubcaseOverview(caze);
     },
+    triggerMoveSubcaseDialog() {
+      this.set('isAssigningToOtherCase', true);
+    },
+    async moveSubcase(newCase) {
+      this.subcase.set("case", newCase);
+      await this.subcase.save();
+
+      this.set('isAssigningToOtherCase', false);
+      let caze = this.subcase.get('case');
+      caze = await this.store.findRecord('case', caze.get("id"));
+      caze.hasMany('subcases').reload();
+      this.set('caseToDelete', caze);
+      const subCases = caze.get('subcases');
+      if (subCases.length > 0) {
+        this.get('router').transitionTo('cases.case.subcases');
+      } else {
+        this.get('router').transitionTo('cases.case.subcases');
+        // Prompt the user to Delete the case.
+        // This works fine, but if the delete is done, there are indexing issues.
+        //this.triggerDeleteCaseDialog();
+      }
+    },
+    cancelDeleteSubcase() {
+      this.set('isDeletingSubcase', false);
+    },
+    cancelDeleteCase() {
+      this.set('promptDeleteCase', false);
+      this.get('router').transitionTo('cases.case.subcases');
+    }
   },
 });

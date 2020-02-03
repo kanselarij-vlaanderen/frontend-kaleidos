@@ -3,72 +3,38 @@
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <ul class="vl-tabs vl-u-reset-margin">
-          <!--<li class="vl-tab">
-            {{#power-select
-              options=options
-              class="vl-tab__link vl-tab__link-header"
-              tagName="a"
-              dropdownClass="vl-tab__link-header-dropdown"
-              searchEnabled=false
-              selected=selectedOption
-              onchange=(action "setAction") as |option|
+          <li class="vl-tab">
+            {{#link-to
+              "agendas.overview"
+              class="vl-tab__link"
+              current-when="agendas agenda print-overviews.decisions print-overviews.notes print-overviews.press-agenda"
             }}
-              {{t option.key}}
-            {{/power-select}}
-          </li>-->
-          <li class="vl-tab">
-            {{#if isOc}}
-              {{#link-to "oc.meetings" class="vl-tab__link"}}
-                {{t "agenda"}}
-              {{/link-to}}
-            {{else}}
-              {{#link-to
-                "agendas.overview"
-                class="vl-tab__link"
-                current-when="agendas agenda print-overviews.decisions print-overviews.notes print-overviews.press-agenda"
-              }}
-                {{t "agenda"}}
-              {{/link-to}}
-            {{/if}}
+              {{t "agenda"}}
+            {{/link-to}}
           </li>
           <li class="vl-tab">
-            {{#if isOc}}
-              {{#link-to "oc.cases" class="vl-tab__link"}}
-                {{t "cases"}}
-              {{/link-to}}
-            {{else}}
-              {{#link-to "cases" (query-params oc=false) class="vl-tab__link"}}
-                {{t "cases"}}
-              {{/link-to}}
-            {{/if}}
+            {{#link-to "cases" (query-params oc=false) class="vl-tab__link"}}
+              {{t "cases"}}
+            {{/link-to}}
           </li>
-          {{#if (not isOc)}}
+          <li class="vl-tab">
+            {{#link-to "agendaitems" class="vl-tab__link"}}
+              {{t "agendaitems"}}
+            {{/link-to}}
+          </li>
+          <li class="vl-tab">
+            {{#link-to
+              "newsletters"
+              class="vl-tab__link"
+              current-when="newsletters print-overviews.newsletter print-overviews.newsletter.agendaitems print-overviews.newsletter.overview"
+            }}
+              {{t "newsletter"}}
+            {{/link-to}}
+          </li>
+          {{#if isEditor}}
             <li class="vl-tab">
-              {{#link-to
-                "newsletters"
-                class="vl-tab__link"
-                current-when="newsletters print-overviews.newsletter print-overviews.newsletter.agendaitems print-overviews.newsletter.overview"
-              }}
-                {{t "newsletter"}}
-              {{/link-to}}
-            </li>
-            {{#if isEditor}}
-              <li class="vl-tab">
-                {{#link-to "settings.overview" class="vl-tab__link"}}
-                  {{t "settings"}}
-                {{/link-to}}
-              </li>
-            {{/if}}
-            {{!-- <li class="vl-tab">
-              <a class="vl-tab__link" role="tab" aria-selected="true">
-                {{t "notifications"}}
-              </a>
-            </li> --}}
-          {{else}}
-            <li class="vl-tab">
-              {{#link-to "oc.search" class="vl-tab__link vl-u-text--capitalize"
-              }}
-                {{t "search"}}
+              {{#link-to "settings.overview" class="vl-tab__link"}}
+                {{t "settings"}}
               {{/link-to}}
             </li>
           {{/if}}
@@ -80,7 +46,7 @@
           {{#if showEnvironmentName}}
               <div class="c-environment">
                 {{environmentName}}
-                  Omgeving
+                {{capitalize (t "environment")}}
               </div>
           {{/if}}
         </div>

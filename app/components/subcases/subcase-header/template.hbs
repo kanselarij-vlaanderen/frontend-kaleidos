@@ -51,7 +51,6 @@
         {{/if}}
       </div>
       <div class="vlc-toolbar__item">
-        {{#if (await canDelete)}}
           <button
                   class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions" bubbles=false}}
@@ -74,7 +73,8 @@
                     placement="bottom" as |attacher|
             }}
               <ul class="vl-popover__link-list">
-                <li class="vl-popover__link-list__item">
+                {{#if (await canDelete)}}
+                    <li class="vl-popover__link-list__item">
                   <a class="vl-link"
                     {{action attacher.hide}}
                     {{action "requestDeleteSubcase" subcase}}
@@ -82,14 +82,48 @@
                     {{t "delete-subcase"}}
                   </a>
                 </li>
+                {{/if}}
+                  <li class="vl-popover__link-list__item">
+                  {{#if (not await subcase.concluded)}}
+                    <a
+                            class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "triggerMoveSubcaseDialog" }}
+                    >
+                      {{t "move-subcase"}}
+                    </a>
+                  {{/if}}
+                </li>
               </ul>
             {{/attach-popover}}
           </button>
-        {{/if}}
       </div>
     {{/if}}
   </div>
 </div>
+{{# if promptDeleteCase}}
+  {{web-components/vl-modal-verify
+          title="REPLACEME delete dossier ?"
+          verifyButtonText="REPLACEME: delete dossier BUTN?"
+          message="REPLACEME: delete dossier MSG?"
+          cancel=(action "cancelDeleteCase")
+          verify=(action "deleteCase")
+  }}
+{{/if}}
+
+{{#if isAssigningToOtherCase}}
+  {{#web-components/vl-modal
+          closeModal=(action "cancel")
+          isOverlay=true
+          title=(t "move-subcase-to-other-case")
+  }}
+    {{utils/case-search
+            subcase=selectedSubcase
+            onSelect=(action "moveSubcase")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+
 {{#if isAssigningToOtherAgenda}}
   {{#web-components/vl-modal
           isOverlay=true

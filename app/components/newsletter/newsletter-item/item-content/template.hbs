@@ -57,14 +57,14 @@
           {{t "no-newsletter-info"}}
         </p>
       {{else}}
-        {{{await agendaitem.subcase.newsletterInfo.richtext}}}
+        {{sanitize-html raw=true value=(await agendaitem.subcase.newsletterInfo.richtext)}}
       {{/if}}
     {{/if}}
   </div>
 </div>
 {{#if allowEditing}}
   <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-    {{{await agendaitem.subcase.newsletterInfo.displayRemark}}}
+    {{await agendaitem.subcase.newsletterInfo.displayRemark}}
   </p>
 {{/if}}
 {{#if (gt (await agendaitem.themes.length) 0)}}

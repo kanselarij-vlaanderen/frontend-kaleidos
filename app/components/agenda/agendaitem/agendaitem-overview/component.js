@@ -13,12 +13,12 @@ export default Component.extend(isAuthenticatedMixin, {
 	activeAgendaItemSection: 'details',
 
 	checkAgendaItemSubcase: observer('subcase', function () {
-	  this.get('subcase').then((subcase) => {
-	    let currentSelection = this.activeAgendaItemSection;
+    this.get('subcase').then((subcase) => {
+      let currentSelection = this.activeAgendaItemSection;
       if(!subcase && ['details', 'documenten', 'comments'].indexOf(currentSelection) < 0){
         this.set('activeAgendaItemSection', 'details');
       }
-	  });
+    });
 	}),
 
 	subcase: computed('agendaitem.subcase', function () {

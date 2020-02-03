@@ -5,9 +5,13 @@ import EmberObject from '@ember/object';
 
 export default Service.extend({
 	intl: inject(),
-	messages: [],
 	type: 'error',
 	shouldUndoChanges: false,
+
+  init() {
+    this._super(...arguments);
+    this.set('messages', []);
+  },
 
 	showToast: task(function* (messageToAdd) {
 		if (messageToAdd.get('type') != "warning-undo") {

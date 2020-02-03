@@ -15,7 +15,7 @@ let equalContentArrays = function(a, b) {
 
 export default Controller.extend(isAuthenticatedMixin, {
   routing: inject('-routing'),
-  itemsSortDefinition: ['priority:asc', 'subPriority:asc'],
+  itemsSortDefinition: Object.freeze(['priority:asc', 'subPriority:asc']),
   agendaItemsSorted: sort('model', 'itemsSortDefinition'),
   meeting: null,
 
@@ -57,11 +57,11 @@ export default Controller.extend(isAuthenticatedMixin, {
     selectAgendaItem(agendaitem) {
       this.transitionToRoute('oc.meetings.meeting.agendaitems.agendaitem', agendaitem);
     },
-    
+
     searchAgendaItems(value) {
       this.set('filter', value);
     },
-    
+
     updateModel() {
       this.get('model').update();
     },

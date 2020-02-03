@@ -10,13 +10,13 @@
         {{endItem}}
       </strong>
       {{t "of"}}
-      {{total}}
+      {{totalNbOfItems}}
     </li>
     {{#if hasMultiplePages}}
       <li class="vl-pager__element">
         <a
           class="vl-pager__element__cta vl-link vl-link--bold {{disabledPrev}}"
-          {{action "prevPage" links.prev}}
+          {{action "prevPage"}}
         >
           <i
             class="vl-link__icon vl-link__icon--before vl-vi vl-vi-arrow-left-fat"
@@ -30,7 +30,7 @@
       <li class="vl-pager__element">
         <a
           class="vl-pager__element__cta vl-link vl-link--bold {{disabledNext}}"
-          {{action "nextPage" links.next}}
+          {{action "nextPage"}}
         >
           {{t "next"}}
           <span class="vl-u-visually-hidden">
