@@ -77,7 +77,7 @@ function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
  * @param {boolean} alreadyHasDocs
  */
 function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
-  cy.route('GET', 'documents**').as('getDocuments');
+  // cy.route('GET', 'documents**').as('getDocuments');
   cy.get('li.vlc-agenda-items__sub-item h4')
     .contains(agendaItemTitle)
     .click()
