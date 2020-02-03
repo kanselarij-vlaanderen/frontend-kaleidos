@@ -20,7 +20,7 @@
   </div>
   <div class="vl-typography">
     <p>
-      {{{await agendaitem.meetingRecord.richtext}}}
+      {{sanitize-html raw=true value=(await agendaitem.meetingRecord.richtext)}}
     </p>
   </div>
   <div class="vlc-hr"></div>

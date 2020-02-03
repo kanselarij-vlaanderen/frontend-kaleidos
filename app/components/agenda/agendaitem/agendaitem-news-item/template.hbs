@@ -20,7 +20,7 @@
   </div>
   <div class="vl-typography">
     <p>
-      {{{await subcase.newsletterInfo.richtext}}}
+      {{sanitize-html raw=true value=(await subcase.newsletterInfo.richtext)}}
     </p>
     <p class="vl-u-text--italic">
       {{await subcase.newsletterInfo.newsletterProposal}}

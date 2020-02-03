@@ -15,7 +15,11 @@
               {{#link-to
                 "newsletters"
                 class="vlc-backlink vl-link vl-link--bold"
-              }}&#8629;{{/link-to}}
+              }}
+              {{!-- template-lint-disable no-bare-strings  --}}
+                &#8629;
+              {{!-- template-lint-enable no-bare-strings  --}}
+              {{/link-to}}
             </div>
             {{#if isEditor}}
               <div class="vlc-toolbar__item">
@@ -208,7 +212,7 @@
       {{#if testCampaignIsLoading}}
         {{web-components/vl-loader text=(t "preview-loading-text")}}
       {{else}}
-        {{{newsletterHTML}}}
+        {{sanitize-html raw=true value=newsletterHTML}}
       {{/if}}
     </div>
   {{/web-components/vl-modal}}

@@ -30,7 +30,7 @@ export default Component.extend({
 
     async createMandatee() {
       this.set('isLoading', true);
-      const { nickName, title, selectedDomains } = this;
+      const { nickName, title } = this;
       const person = await this.get('selectedPerson');
       const newMandatee = this.store.createRecord('mandatee', {
         title,

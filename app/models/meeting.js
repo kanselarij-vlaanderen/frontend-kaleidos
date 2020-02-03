@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
-const { Model, attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
+const { Model, attr, hasMany, belongsTo, PromiseObject } = DS;
 import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
 
 export default Model.extend(DocumentModelMixin,{

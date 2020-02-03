@@ -5,7 +5,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
   queryParams: ['isArchived', 'searchText', 'mandatees', 'dateFrom', 'dateTo', 'decisionsOnly'],
-  sizeOptions: [5, 10, 20, 50, 100, 200],
+  sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
   size: 10,
 
   intl: inject(),

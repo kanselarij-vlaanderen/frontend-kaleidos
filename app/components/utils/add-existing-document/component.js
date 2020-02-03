@@ -64,7 +64,6 @@ export default Component.extend({
       if (event) {
         event.stopPropagation();
       }
-      let action = "add";
       if (document.selected) {
         document.set("selected", false);
         this.delete(document)
