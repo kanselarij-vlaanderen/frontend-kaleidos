@@ -1,8 +1,8 @@
-/* eslint-disable no-undef */
+/*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 context('Tests for KAS-1076', () => {
-  const testStart = currentMoment();
+  // const testStart = cy.currentMoment();
 
   before(() => {
     cy.server();
@@ -15,9 +15,9 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding more then 20 document-versions to subcase should show all', () => {
-    const caseTitleSingle = 'Cypress test: document versions - ' + currentTimestamp();
+    const caseTitleSingle = 'Cypress test: document versions - ' + cy.currentTimestamp();
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: 20+ documents subcase - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: 20+ documents subcase - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -79,9 +79,9 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding new document-version to agendaitem on designagenda should reset formally ok and update the subcase', () => {
-    const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
+    const caseTitle = 'Cypress test: document versions - ' + cy.currentTimestamp();
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: new document version on agendaitem - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: new document version on agendaitem - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het toevoegen van een nieuwe document versie aan een agendaitem';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -93,7 +93,7 @@ context('Tests for KAS-1076', () => {
     cy.openSubcase(0);
     cy.addDocuments(files);
     const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
+    const agendaDate = cy.currentMoment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
       cy.openAgendaForDate(agendaDate,meetingId);
@@ -136,9 +136,9 @@ context('Tests for KAS-1076', () => {
     });
 
   it('Adding new document-version to subcase should reset formally ok and update the agendaitem on designagendas', () => {
-    const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
+    const caseTitle = 'Cypress test: document versions - ' + cy.currentTimestamp();
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: new document version on procedurestap - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: new document version on procedurestap - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het toevoegen van een nieuwe document versie aan een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -150,7 +150,7 @@ context('Tests for KAS-1076', () => {
     cy.openSubcase(0);
     cy.addDocuments(files);
     const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
+    const agendaDate = cy.currentMoment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
       cy.openAgendaForDate(agendaDate,meetingId);
@@ -193,10 +193,3 @@ context('Tests for KAS-1076', () => {
   });
 });
 
-function currentMoment() {
-  return Cypress.moment();
-}
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

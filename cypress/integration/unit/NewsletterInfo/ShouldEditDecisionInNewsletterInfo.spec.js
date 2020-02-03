@@ -1,5 +1,6 @@
-/* eslint-disable no-undef */
+/*global context, before, it, cy*/
 /// <reference types="Cypress" />
+
 
 context('KB: Edit decision in newsletter-info', () => {
   before(() => {

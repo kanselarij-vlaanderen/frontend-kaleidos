@@ -1,9 +1,9 @@
-/* eslint-disable no-undef */
+/*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
+
 import {
-  manageSignaturesSelector,
-  manageSubcaseTypesSelector,
+  manageSignaturesSelector
 } from "../../../selectors/settings/settingsSelectors";
 import {settingsSelector} from "../../../selectors/toolbar/toolbarSelectors";
 import {modalDialogCloseModalSelector, modalDialogSelector} from "../../../selectors/models/modelSelectors";

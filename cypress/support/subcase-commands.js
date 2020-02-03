@@ -1,6 +1,6 @@
+/*global  cy, Cypress*/
+/// <reference types="Cypress" />
 
-
-/* eslint-disable no-undef */
 // ***********************************************
 // Commands
 

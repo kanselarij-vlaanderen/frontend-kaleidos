@@ -1,5 +1,6 @@
+/*global cy, Cypress*/
+/// <reference types="Cypress" />
 
-/* eslint-disable no-undef */
 import 'cypress-file-upload';
 // ***********************************************
 // Commands

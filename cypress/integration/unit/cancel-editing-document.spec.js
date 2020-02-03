@@ -1,8 +1,8 @@
-/* eslint-disable no-undef */
+/*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 context('Tests for KAS-917', () => {
-  const testStart = currentMoment();
+  // const testStart = cy.currentMoment();
 
   before(() => {
     cy.server();
@@ -15,9 +15,9 @@ context('Tests for KAS-917', () => {
   });
 
   it('Editing of a document or document-version but cancelling should show old data', () => {
-    const caseTitle = 'Cypress test: cancel editing document versions - ' + currentTimestamp();
+    const caseTitle = 'Cypress test: cancel editing document versions - ' + cy.currentTimestamp();
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: cancel editing of documents on agendaitem - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: cancel editing of documents on agendaitem - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het annuleren van editeren van een document aan een agendaitem';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -30,7 +30,7 @@ context('Tests for KAS-917', () => {
     cy.openSubcase(0);
     cy.addDocuments(files);
     const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
+    const agendaDate = cy.currentMoment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test annuleren van editeren documenten').then((meetingId) => {
       cy.openAgendaForDate(agendaDate,meetingId);
@@ -179,11 +179,3 @@ context('Tests for KAS-917', () => {
     });
   });
   });
-
-function currentMoment() {
-    return Cypress.moment();
-  }
-
-function currentTimestamp() {
-    return Cypress.moment().unix();
-  }

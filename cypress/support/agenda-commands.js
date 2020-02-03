@@ -1,6 +1,5 @@
-
-
-/* eslint-disable no-undef */
+/*global cy, Cypress*/
+/// <reference types="Cypress" />
 
 // ***********************************************
 // Commands
@@ -353,6 +352,14 @@ function approveDesignAgenda() {
     // cy.wait('@patchModel', { timeout: 20000 }).verifyAlertSuccess();
   }
 
+/**
+ * @description Add a new case to the agenda
+ * @name addAgendaitemToAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} caseTitle - The title of the case
+ * @param {boolean} postponed - The remark
+ */
   function addAgendaitemToAgenda(caseTitle, postponed) {
     cy.route('GET', '/subcases?**').as('getSubcasesFiltered');
     cy.route('GET', '/agendaitems/**').as('getAgendaitems');
@@ -399,6 +406,13 @@ function approveDesignAgenda() {
     cy.wait('@getAgendaitems', {timeout: 20000});
   }
 
+/**
+ * @description Toggles the show changes
+ * @name toggleShowChanges
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {boolean} refresh - boolean to check if a refresh needs to happen.
+ */
   function toggleShowChanges(refresh) {
     cy.route('GET', '/agendaitems/**').as('getAgendaitems');
     cy.route('GET', '/agenda-sort/agenda-with-changes**').as('getChanges');
@@ -419,17 +433,37 @@ function approveDesignAgenda() {
       .click();
   }
 
+/**
+ * @description Checks if a case with a specific name exists on an agenda
+ * @name agendaItemExists
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemName - boolean to check if a refresh needs to happen.
+ */
   function agendaItemExists(agendaItemName) {
     cy.get('li.vlc-agenda-items__sub-item h4')
       .contains(agendaItemName, {timeout: 12000})
       .should('exist');
   }
 
+/**
+ * @description Checks if a case with a specific name exists on an agenda
+ * @name changeSelectedAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemName - name of the agenda item
+ */
   function changeSelectedAgenda(agendaName) {
     cy.get('.vlc-side-nav-item').children()
       .contains(agendaName).click();
   }
 
+/**
+ * @description closes an agenda
+ * @name closeAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
 function closeAgenda() {
   cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
 

@@ -13,6 +13,9 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+/*global Cypress*/
+/// <reference types="Cypress" />
+
 // Import commands.js using ES2015 syntax:
 import './commands'
 import './agenda-commands'

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 import {addAnnouncementSelector} from "../../../../../selectors/agenda/actionModalSelectors";

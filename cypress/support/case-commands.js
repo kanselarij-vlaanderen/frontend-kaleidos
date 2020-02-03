@@ -1,14 +1,12 @@
+/*global cy,Cypress*/
+/// <reference types="Cypress" />
 
-/* eslint-disable no-undef */
 // ***********************************************
 // Commands
 
 Cypress.Commands.add('createCase', createCase);
 Cypress.Commands.add('addSubcase', addSubcase);
 Cypress.Commands.add('openCase', openCase);
-
-//TODO open case method
-
 // ***********************************************
 // Functions
 

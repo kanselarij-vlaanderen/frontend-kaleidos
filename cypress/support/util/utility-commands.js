@@ -21,6 +21,8 @@ Cypress.Commands.add('openActionModal', openActionModal);
 Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
 Cypress.Commands.add('openSettingsModal', openSettingsModal);
 Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
+Cypress.Commands.add('currentMoment', currentMoment);
+Cypress.Commands.add('currentTimestamp', currentTimestamp);
 
 // ***********************************************
 // Functions
@@ -44,7 +46,7 @@ function selectDate(year,month,day) {
 /**
  * Create a default agenda
  * @memberOf Cypress.Chainable#
- * @name createDefaultAgenda
+ * @name selectAction
  * @function
  * @param {String} elementToSelect - The action that has to be made
  * @param {String} textToContain - Tekst that the element should contain that is selected
@@ -58,7 +60,7 @@ function selectAction(elementToSelect, textToContain) {
 /**
  * Open the action modal of the agenda page
  * @memberOf Cypress.Chainable#
- * @name createDefaultAgenda
+ * @name openActionModal
  * @function
  */
 function openActionModal() {
@@ -115,3 +117,25 @@ function closeSettingsModal() {
   cy.get(modalDialogSelector).should('not.be.visible');
 }
 
+
+/**
+ * @description Returns the current moment in Cypress
+ * @name currentMoment
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @returns {moment.Moment} The current moment
+ */
+function currentMoment() {
+  return Cypress.moment();
+}
+
+/**
+ * @description returns the current time in unix timestamp
+ * @name currentTimestamp
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @returns {number} The current time in unix timestamp
+ */
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}

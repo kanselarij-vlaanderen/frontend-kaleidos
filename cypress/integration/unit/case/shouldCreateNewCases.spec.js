@@ -1,5 +1,6 @@
-/* eslint-disable no-undef */
+/*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
+
 
 import {casesHeaderAddCaseSelector, metadataForm} from "../../../selectors/cases/caseSelectors";
 import {formCancelButton, formVlToggle} from "../../../selectors/formSelectors/formSelectors";
