@@ -1,81 +1,85 @@
 <div
-  class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+        class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
 >
   <div class="vl-col--4-12 vl-col--1-1--s">
     <label class="vl-form__label" for="dossierId">
       {{t "agendaitem-case"}}
     </label>
     {{input
-      class="vl-input-field vl-input-field--block"
-      type="text"
-      id="dossierId"
-      value=searchText
-      key-up=(perform searchTask)
+            class="vl-input-field vl-input-field--block"
+            type="text"
+            id="dossierId"
+            value=searchText
+            key-up=(perform searchTask)
     }}
   </div>
-  <div class="vlc-input-field-block vl-col--4-12">
-    <label class="vl-form__label" for="ministerName">
-      {{t "minister"}}
-    </label>
-    {{input
-      class="vl-input-field vl-input-field--block"
-      type="text"
-      id="ministerName"
-      value=ministerName
-      key-press=(perform searchTask)
-    }}
-  </div>
+  {{#if (not disableAdvanced)}}
+    <div class="vlc-input-field-block vl-col--4-12">
+      <label class="vl-form__label" for="ministerName">
+        {{t "minister"}}
+      </label>
+      {{input
+              class="vl-input-field vl-input-field--block"
+              type="text"
+              id="ministerName"
+              value=ministerName
+              key-press=(perform searchTask)
+      }}
+    </div>
+  {{/if}}
 </div>
-<div
-  class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer custom-search"
->
-  <div class="vl-col--2-12 vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "from-date")}}
-    {{web-components/vl-datepicker
-      selectedDate=dateFrom
-      dateChanged=(action "selectDateFrom")
-    }}
-    {{#if dateFrom}}
-      <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
-        onclick={{action "selectDateFrom" null}}>
-        <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
-      </button>
-    {{/if}}
+{{#if (not disableAdvanced)}}
+  <div
+          class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer custom-search"
+  >
+    <div class="vl-col--2-12 vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "from-date")}}
+      {{web-components/vl-datepicker
+              selectedDate=dateFrom
+              dateChanged=(action "selectDateFrom")
+      }}
+      {{#if dateFrom}}
+        <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+                onclick={{action "selectDateFrom" null}}>
+          <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
+        </button>
+      {{/if}}
+    </div>
+    <div class="vl-col--2-12 vlc-input-field-block">
+      {{web-components/vl-form-label value=(t "until-date")}}
+      {{web-components/vl-datepicker
+              selectedDate=dateTo
+              dateChanged=(action "selectDateTo")
+      }}
+      {{#if dateTo}}
+        <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+                onclick={{action "selectDateTo" null}}>
+          <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
+        </button>
+      {{/if}}
+    </div>
+    <div class="vl-u-display-flex vl-u-flex-align-center">
+      <label class="vl-form__label vl-u-spacer-extended-right-s" for="searchInDecisionsOnly">
+        {{t "search-in-decisions-only"}}
+      </label>
+      {{web-components/vl-toggle
+              valueChanged=(perform searchTask)
+              value=searchInDecisionsOnly
+      }}
+    </div>
   </div>
-  <div class="vl-col--2-12 vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "until-date")}}
-    {{web-components/vl-datepicker
-      selectedDate=dateTo
-      dateChanged=(action "selectDateTo")
-    }}
-    {{#if dateTo}}
-      <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
-        onclick={{action "selectDateTo" null}}>
-        <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
-      </button>
-    {{/if}}
-  </div>
-  <div class="vl-u-display-flex vl-u-flex-align-center">
-    <label class="vl-form__label vl-u-spacer-extended-right-s" for="searchInDecisionsOnly">
-      {{t "search-in-decisions-only"}}
-    </label>
-    {{web-components/vl-toggle
-      valueChanged=(perform searchTask)
-      value=searchInDecisionsOnly
-    }}
-  </div>
-</div>
+{{/if}}
 <div class="vlc-toolbar">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <button
-        class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
-        type="button"
-        onclick={{perform searchTask}}
+              class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+              type="button"
+              onclick={{perform searchTask}}
       >
         <i
-          class="vl-button__icon vl-button__icon--before vl-vi vl-vi-magnifier"
-          aria-hidden="true"
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-magnifier"
+                aria-hidden="true"
         ></i>
         {{t "search"}}
       </button>

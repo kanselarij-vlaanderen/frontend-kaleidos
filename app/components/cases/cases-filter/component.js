@@ -5,6 +5,7 @@ import moment from 'moment';
 export default Component.extend({
 	classNames:["vl-form vl-u-spacer-extended-bottom-l vlc-box"],
 	searchText: null,
+  disableAdvanced: false,
 	ministerName: null,
 	dateFrom: undefined,
 	dateTo: undefined,
