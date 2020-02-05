@@ -20,12 +20,9 @@ export default Component.extend(LightTableMixin, {
     }
   }),
 
-  init() {
-    this._super(...arguments);
-    observer('filter', function(){
-      this.get("fetchRecords").perform();
-    });
-  },
+  filterObserver: observer('filter', function(){
+    this.get("fetchRecords").perform();
+  }),
 
   loadingText: computed('intl', function() {
     return this.intl.t('users-loading-text')
