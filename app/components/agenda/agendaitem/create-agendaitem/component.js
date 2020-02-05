@@ -3,10 +3,11 @@ import { inject } from "@ember/service";
 import { alias } from "@ember/object/computed";
 
 import DefaultQueryParamsMixin from "ember-data-table/mixins/default-query-params";
+import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import { computed, observer } from "@ember/object";
 import { task, timeout } from "ember-concurrency";
 
-export default Component.extend(DefaultQueryParamsMixin, {
+export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
   availableSubcases: null,
   showPostponed: null,
   noItemsSelected: true,
@@ -20,9 +21,10 @@ export default Component.extend(DefaultQueryParamsMixin, {
   agendaService: inject(),
   sessionService: inject(),
 
+  modelName: 'subcase',
+
   size: 5,
   sort: "short-title",
-
   queryOptions: computed("sort", "filter", "page", function() {
     const { page, filter, size, sort } = this;
     let options = {
@@ -36,6 +38,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
         ":not:is-archived": "true",
       }
     };
+
     if (filter) {
       options["filter"]["short-title"] = filter;
     }
@@ -43,7 +46,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
   }),
 
   // dirty observers to make use of the datatable actions
-  pageObserver: observer("page", function() {
+  pageObserver: observer("page", "sort",  function() {
     this.findAll.perform();
   }),
 
