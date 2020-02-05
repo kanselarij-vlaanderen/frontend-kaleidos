@@ -193,7 +193,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
               agendaitemCounter++;
               index = agendaitemCounter;
             }
-            return agendaService.createNewAgendaItem(selectedAgenda, subCase, index);
+            return await agendaService.createNewAgendaItem(selectedAgenda, subCase, index);
           }
         })
       );
