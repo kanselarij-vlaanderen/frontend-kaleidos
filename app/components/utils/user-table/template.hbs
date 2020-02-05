@@ -12,7 +12,9 @@
     multiRowExpansion=false
     onScrolledToBottom=(action "onScrolledToBottom") as |body|
   }}
-    {{#body.expanded-row as |row|}}{{yield row}}{{/body.expanded-row}}
+    {{#body.expanded-row as |row|}}
+      {{yield row}}
+    {{/body.expanded-row}}
     {{#if isLoading}}
       {{#body.loader}}
         {{web-components/vl-loader text=loadingText}}

@@ -13,18 +13,18 @@ export default Component.extend(LightTableMixin, {
 
   intl: inject(),
 
-  modelObserver: observer('shouldRefreshTableModel', function() {
-    if(this.shouldRefreshTableModel) {
+  modelObserver: observer('shouldRefreshTableModel', function () {
+    if (this.shouldRefreshTableModel) {
       this.initialiseTableBasedOnModel();
       this.set('shouldRefreshTableModel', false);
     }
   }),
 
-  filterObserver: observer('filter', function(){
+  filterObserver: observer('filter', function () {
     this.get("fetchRecords").perform();
   }),
 
-  loadingText: computed('intl', function() {
+  loadingText: computed('intl', function () {
     return this.intl.t('users-loading-text')
   }),
 });
