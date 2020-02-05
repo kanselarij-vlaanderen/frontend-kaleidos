@@ -9,6 +9,7 @@ import { task, timeout } from "ember-concurrency";
 export default Component.extend(DefaultQueryParamsMixin, {
   availableSubcases: null,
   showPostponed: null,
+  noItemsSelected: true,
 
   currentSession: alias("sessionService.currentSession"),
   selectedAgenda: alias("sessionService.currentAgenda"),
@@ -57,6 +58,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
     (this.get("items") || []).map(item => item.set("selected", false));
     return this.items;
   }),
+
 
   setFocus() {
     document.getElementById("searchId").focus();
@@ -125,6 +127,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
       } else {
         subcase.set("selected", true);
         action = "add";
+        this.set('noItemsSelected', false);
       }
       const postponed = await this.get("postponedSubcases");
 
@@ -134,6 +137,9 @@ export default Component.extend(DefaultQueryParamsMixin, {
         const index = postponed.indexOf(subcase);
         if (index > -1) {
           postponed.splice(index, 1);
+        }
+        if (!postponed.length) {
+          this.set('noItemsSelected', true);
         }
       }
     },

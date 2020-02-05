@@ -4,7 +4,7 @@ export default Component.extend({
 	classNames: ['vlc-navbar vlc-navbar--no-padding'],
 	classBindings: ['getClassNames'], // TODO: This behaviour currently doesn't show, as it is "classNameBindings" ... Do we still want this? If so: correct, if not: remove.
 	isLoading: null,
-  disableSave: false,
+  disableSave: true,
 
 	getClassNames() {
 		if (!this.get('nonBordered')) {
