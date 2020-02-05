@@ -70,7 +70,7 @@
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "themes")}}
-    {{utils/themes-selector selectedThemes=themes}}
+    {{utils/themes-selector selectedThemes=(await themes)}}
   </div>
   
 </div>

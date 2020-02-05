@@ -4,7 +4,6 @@ import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcas
 import { computed } from '@ember/object';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { inject } from '@ember/service';
-import { A } from '@ember/array';
 
 export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   intl: inject(),
@@ -26,9 +25,13 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   mandateeProposal: getCachedProperty('newsletterProposal'),
 
   themes: computed(`agendaitem.themes`, {
-    get() {
+    async get() {
       const { agendaitem } = this;
-      if (agendaitem) return A([...agendaitem.get('themes').toArray()]);
+      if (agendaitem) {
+        return await agendaitem.get('themes').then((themes) => {
+          return themes.toArray();
+        })
+      }
     },
     set: function(key, value) {
       return value;
