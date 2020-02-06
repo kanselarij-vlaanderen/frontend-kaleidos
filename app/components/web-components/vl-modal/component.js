@@ -35,10 +35,10 @@ export default Component.extend({
   },
 
   keyDown: function(event) {
-	  if(event.key === 'Escape') {
+    if(event.key === 'Escape') {
       this.closeModal();
     }
-	  if(event.key === 'Tab') {
+    if(event.key === 'Tab') {
       this.maintainFocus(event);
     }
   },

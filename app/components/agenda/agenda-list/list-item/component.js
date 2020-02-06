@@ -2,60 +2,41 @@ import Component from '@ember/component';
 import { computed, observer } from '@ember/object';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import { on } from '@ember/object/evented';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   sessionService: inject(),
   globalError: inject(),
-  classNameBindings: ['extraAgendaItemClass'],
+  classNameBindings: [
+    'isActive:vlc-agenda-items__sub-item--active',
+    'isClickable::not-clickable',
+    'agendaitem.retracted:transparant',
+    'isPostponed:transparant',
+    'isNew:vlc-agenda-items__sub-item--added-item'
+  ],
   tagName: 'a',
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   isClickable: true,
   hideLabel: true,
   isShowingChanges: null,
 
+  init() {
+    this._super(...arguments);
+    observer(
+      'agendaitem.postponedTo',
+      async function() {
+        const postponed = await this.get('agendaitem.postponedTo');
+        if (!this.get('isDestroyed')) {
+          this.set('isPostponed', !!postponed);
+        }
+      }
+    );
+  },
+
   formallyOk: computed('agendaitem.formallyOk', function() {
     return this.agendaitem.get('formallyOk');
   }),
-
-  extraAgendaItemClassObserver: on(
-    'init',
-    observer(
-      'agendaitem',
-      'selectedAgendaItem',
-      'isClickable',
-      'agendaitem.retracted',
-      'agendaitem.checkAdded',
-      'agendaitem.postponedTo',
-      async function() {
-        let clazz = '';
-        if (this.get('agendaitem.id') == this.get('selectedAgendaItem.id')) {
-          clazz += 'vlc-agenda-items__sub-item--active ';
-        }
-
-        if (!this.get('isClickable')) {
-          clazz += ' not-clickable ';
-        }
-
-        const retracted = this.get('agendaitem.retracted');
-        const postponed = await this.get('agendaitem.postponedTo');
-
-        if (retracted || postponed) {
-          clazz += ' transparant';
-        }
-        const added = this.get('agendaitem.checkAdded');
-        if (added) {
-          clazz += ' vlc-agenda-items__sub-item--added-item';
-        }
-
-        if (!this.get('isDestroyed')) {
-          this.set('extraAgendaItemClass', clazz);
-        }
-      }
-    )
-  ),
 
   agenda: computed('agendaitem', function() {
     return this.get('agendaitem.agenda.name');
@@ -67,6 +48,12 @@ export default Component.extend(isAuthenticatedMixin, {
     }
     return this.get('agendaitem.documents');
   }),
+
+  isActive: computed('agendaitem.id', 'selectedAgendaItem.id', function() {
+    return this.get('agendaitem.id') === this.get('selectedAgendaItem.id');
+  }),
+
+  isNew: alias('agendaitem.checkAdded'),
 
   async click() {
     if (!this.isEditingOverview && !this.isComparing) {

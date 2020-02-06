@@ -8,7 +8,7 @@ import { inject } from '@ember/service';
 export default Component.extend(isAuthenticatedMixin, EditAgendaitemOrSubcase, {
 	store:inject(),
 	classNames: ["vl-u-spacer-extended-bottom-l"],
-	propertiesToSet: ['subcaseName', 'type', 'showAsRemark'],
+	propertiesToSet: Object.freeze(['subcaseName', 'type', 'showAsRemark']),
 
 	item: computed('subcase', function () {
 		return this.get('subcase');

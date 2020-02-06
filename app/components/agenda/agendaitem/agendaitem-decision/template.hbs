@@ -31,7 +31,7 @@
         {{/if}}
       </div>
       <p>
-        {{{await decision.richtext}}}
+        {{sanitize-html raw=true value=(await decision.richtext)}}
       </p>
       <hr />
       <div class="vl-u-spacer-extended-top-s">

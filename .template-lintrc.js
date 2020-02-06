@@ -13,5 +13,9 @@ module.exports = {
     "no-nested-interactive":false,
     "self-closing-void-elements":false,
     "no-invalid-interactive":false
-  }
+  },
+
+  ignore: [
+    'addon/**'
+  ]
 };

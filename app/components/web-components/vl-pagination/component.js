@@ -1,12 +1,16 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import { computed, get } from '@ember/object';
+import { alias } from '@ember/object/computed';
 
 export default Component.extend({
-	links: null,
+	pageOffset: 0,
 	total: null,
 	page: null,
 	size: null,
 	nbOfItems: null,
+
+	currentPage: alias('page'),
+	firstPage: alias('pageOffset'),
 
 	disabledNext: computed('isLastPage', function () {
 		if (this.get('isLastPage')) {
@@ -20,59 +24,51 @@ export default Component.extend({
 		}
 	}),
 
-	currentPage: computed('page', {
-		get() {
-			const { page } = this;
-			return page ? parseInt(page) + 1 : 1;
-		},
-		set(key, value) {
-			this.set('page', value - 1);
-			return value;
+	totalNbOfItems: computed('total', function () {
+		if (!get(this, 'total')) {
+			return 0;
 		}
+
+		return get(this, 'total');
 	}),
 
-	firstPage: computed('links', function () {
-		return this.get('links.first.number') || 1;
-	}),
-
-	lastPage: computed('links', function () {
-		const max = this.get('links.last.number') || -1;
-		return max ? max + 1 : max;
+	lastPage: computed('size', 'total', function () {
+		return Math.ceil(get(this, 'total') / get(this, 'size')) - 1;
 	}),
 
 	isFirstPage: computed('firstPage', 'currentPage', function () {
-		return this.get('firstPage') == this.get('currentPage');
+		return get(this, 'firstPage') === get(this, 'currentPage');
 	}),
 
 	isLastPage: computed('lastPage', 'currentPage', function () {
-		return this.get('lastPage') == this.get('currentPage');
+		return get(this, 'lastPage') === get(this, 'currentPage');
 	}),
 
 	hasMultiplePages: computed('lastPage', function () {
-		return this.get('lastPage') > 0;
+		return get(this, 'lastPage') > 0;
 	}),
 
-	startItem: computed('size', 'currentPage', function () {
-		return this.get('size') * (this.get('currentPage') - 1) + 1;
+	startItem: computed('size', 'currentPage', 'nbOfItems', function () {
+		if (get(this, 'nbOfItems') === 0) {
+			return 0;
+		}
+		return get(this, 'size') * get(this, 'currentPage') + 1;
 	}),
 
 	endItem: computed('startItem', 'nbOfItems', function () {
-		const { startItem, nbOfItems } = this;
-		return startItem + nbOfItems - 1;
+		if (get(this, 'nbOfItems') === 0) {
+			return 0;
+		}
+		return (get(this, 'startItem') + get(this, 'nbOfItems')) - 1;
 	}),
 
 	actions: {
-		prevPage(link) {
-			const { isFirstPage } = this;
-			if (!isFirstPage) {
-				this.set('page', link['number'] || 0);
-			}
+		nextPage() {
+			this.nextAction();
 		},
-		nextPage(link) {
-			const { isLastPage } = this;
-			if (!isLastPage) {
-				this.set('page', link['number'] || 0);
-			}
+
+		prevPage() {
+			this.previousAction();
 		}
 	}
 });

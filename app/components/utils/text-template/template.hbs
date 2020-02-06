@@ -19,7 +19,7 @@
       class="ember-attacher-popper ember-attacher-popper-wide"
     }}
       <p>
-        {{{model.description}}}
+        {{sanitize-html raw=true value=model.description}}
       </p>
     {{/attach-popover}}
   {{/power-select}}

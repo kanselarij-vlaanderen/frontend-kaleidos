@@ -16,7 +16,7 @@
               <img
                 style="margin:-75px 0px -50px 0px; width:200px"
                 src="/assets/logo_vlaamse_regering.svg"
-                alt="Vlaamse Regering"
+                alt={{t "flemish-government"}}
                />
 
               <p class="vl-u-text--bold vl-u-text--capitalized">
@@ -62,7 +62,7 @@
                         </div>
                       {{/if}}
                       <li>
-                        {{{decision.richtext}}}
+                        {{sanitize-html raw=true value=decision.richtext}}
                       </li>
                     {{/each}}
                   {{else}}

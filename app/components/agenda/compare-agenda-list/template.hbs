@@ -29,10 +29,18 @@
     <div class="compare-grid-container">
       {{#if combinedItem.groupName}}
         <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
+          {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+            These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+          {{!-- template-lint-disable no-triple-curlies  --}}
           {{{combinedItem.groupName}}}
+          {{!-- template-lint-enable no-triple-curlies  --}}
         </div>
         <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
+          {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+            These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+          {{!-- template-lint-disable no-triple-curlies  --}}
           {{{combinedItem.groupName}}}
+          {{!-- template-lint-enable no-triple-curlies  --}}
         </div>
       {{else}}
         <div></div><div></div>

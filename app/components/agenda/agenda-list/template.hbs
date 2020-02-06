@@ -54,7 +54,11 @@
       {{#each agendaitems as |agendaitem|}}
         {{#if agendaitem.groupName}}
           <div class="vlc-list-section-header">
+            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+            {{!-- template-lint-disable no-triple-curlies  --}}
             {{{agendaitem.groupName}}}
+            {{!-- template-lint-enable no-triple-curlies  --}}
           </div>
         {{/if}}
         {{#sortable-item
@@ -78,7 +82,11 @@
       {{#each agendaitems as |agendaitem|}}
         {{#if (and agendaitem.groupName (not isShowingChanges))}}
           <div class="vlc-list-section-header">
+            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+            {{!-- template-lint-disable no-triple-curlies  --}}
             {{{agendaitem.groupName}}}
+            {{!-- template-lint-enable no-triple-curlies  --}}
           </div>
         {{/if}}
         {{#if (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))}}
@@ -114,7 +122,7 @@
         tagName="ul"
         onChange=(action "reorderAnnouncements") as |sortableAnnouncements|
       }}
-        {{#each (await announcements) as |announcement index|}}
+        {{#each (await announcements) as |announcement|}}
           {{#sortable-item
             tagName="li"
             class="vlc-agenda-items__sub-item"
@@ -132,7 +140,7 @@
         {{/each}}
       {{/sortable-group}}
     {{else}}
-      {{#each (await announcements) as |announcement index|}}
+      {{#each (await announcements) as |announcement|}}
         <div class="vlc-agenda-items__sub-item">
           {{agenda/agenda-list/list-item
             agendaitem=announcement

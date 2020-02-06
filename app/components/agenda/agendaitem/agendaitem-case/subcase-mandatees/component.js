@@ -11,7 +11,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	store: inject(),
 	classNames: ["vl-u-spacer-extended-bottom-l"],
 	item: null,
-	propertiesToSet: ['mandatees', 'governmentDomains'],
+	propertiesToSet: Object.freeze(['mandatees', 'governmentDomains']),
 
 	mandateeRows: computed('item', 'item.subcase', 'mandatees.@each', function () {
 		return DS.PromiseArray.create({

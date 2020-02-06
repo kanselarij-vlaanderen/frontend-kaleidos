@@ -10,8 +10,8 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 	},
 
   filterAnnouncements: function(announcements){
-	  return announcements.filter((item) => {
-	    return item.showInNewsletter;
+    return announcements.filter((item) => {
+      return item.showInNewsletter;
     });
   },
 
