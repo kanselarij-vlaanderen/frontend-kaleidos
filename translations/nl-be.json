@@ -526,5 +526,7 @@
   "search-legend-not-explanation": "NIET: Zoek op 'Antwerpen' en neem alle resultaten waar ook 'verkeer' in zit, weg",
   "search-legend-order-explanation": "Zoekt op de gehele reeks van woorden in die volgorde",
   "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord",
-  "submitted-by": "- Indiener"
+  "submitted-by": "- Indiener",
+  "changes-could-not-be-saved-title": "Je wijzigingen werden niet opgeslagen.",
+  "changes-could-not-be-saved-message": "{firstname} {lastname} heeft {time} een aanpassing gedaan in dit item. Jouw aanpasingen konden niet opgeslagen worden. Je kan de pagina best vernieuwen."
 }
