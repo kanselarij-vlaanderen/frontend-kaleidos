@@ -64,9 +64,9 @@
               animation="shift"
               placement="bottom" as |attacher|
             }}
-              <ul class="vl-popover__link-list">
+              <ul class="vlc-dropdown-menu">
                 {{#if (and isEditor (eq currentAgenda.name "Ontwerpagenda"))}}
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__item">
                     <a
                       class="vl-link vl-link--block"
                       {{action attacher.hide}}
@@ -75,7 +75,7 @@
                       {{t "add-to-agenda"}}
                     </a>
                   </li>
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__item">
                     <a
                       class="vl-link vl-link--block"
                       {{action attacher.hide}}
@@ -84,9 +84,9 @@
                       {{t "create-announcement"}}
                     </a>
                   </li>
-                  <li class="vl-popover__link-list__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__separator" role="none"></li>
                 {{/if}}
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a
                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
@@ -95,7 +95,7 @@
                     {{t "print-decisions"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a
                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
@@ -104,7 +104,7 @@
                     {{t "print-newsletter"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a
                     class="vl-link vl-link--block"
                     {{action "navigateToNotes"}}
@@ -112,7 +112,7 @@
                     {{t "print-notes"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a
                     class="vl-link vl-link--block"
                     {{action "navigateToPressAgenda"}}
@@ -122,8 +122,8 @@
                   </a>
                 </li>
                 {{#if isEditor}}
-                  <li class="vl-popover__link-list__separator" role="none"></li>
-                  <li>
+                  <li class="vlc-dropdown-menu__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__item">
                     <a
                       class="vl-link vl-link--block"
                       {{action "toggleEditingSession"}}
@@ -132,7 +132,7 @@
                       {{t "edit-session"}}
                     </a>
                   </li>
-                  <li>
+                  <li class="vlc-dropdown-menu__item">
                     <a
                       class="vl-link vl-link--block"
                       {{action "selectSignature"}}
@@ -142,7 +142,7 @@
                     </a>
                   </li>
                 {{/if}}
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a
                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
@@ -152,8 +152,8 @@
                   </a>
                 </li>
                 {{#if isEditor}}
-                  <li class="vl-popover__link-list__separator" role="none"></li>
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__item">
                     {{#if (not currentSession.isFinal)}}
                       {{#if (await hasMultipleAgendas)}}
                         <a
@@ -174,7 +174,7 @@
                       </a>
                     {{/if}}
                   </li>
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__item">
                     {{#if currentSession.canReleaseDecisions}}
                       <a
                         class="vl-link vl-link--block vl-u-text--error"
@@ -194,7 +194,7 @@
                     {{/if}}
                   </li>
                   <li
-                    class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
+                    class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                   >
                     {{#if
                       (or
