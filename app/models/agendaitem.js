@@ -3,12 +3,13 @@ import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
+import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
 import LinkedDocumentModelMixin from 'fe-redpencil/mixins/models/linked-document-model-mixin';
 
-let { Model, attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
+let { attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
-export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
+export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   modelName: alias('constructor.modelName'),
   agendaService: inject(),
   addedAgendaitems: alias('agendaService.addedAgendaitems'),
