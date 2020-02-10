@@ -144,12 +144,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-a.disabled {
-  text-decoration: none;
-  pointer-events: none;
-  cursor: default;
-}
-
 body > .ember-view {
   height: 100% !important;
   display: flex;
