@@ -144,20 +144,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-.vl-tab__link {
-  &.active {
-    color: $text-color;
-    border-bottom: $tabs-stroke-height solid $text-color;
-    background-color: transparent;
-
-    @include respond-to(small) {
-      [data-vl-tabs] & {
-        border: 0;
-      }
-    }
-  }
-}
-
 .vlc-agenda-items__header--small {
   padding: 2rem 1.5rem 1.5rem !important;
 }
