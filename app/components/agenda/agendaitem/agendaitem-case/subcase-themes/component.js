@@ -9,7 +9,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	store: inject(),
 	classNames: ["vl-u-spacer-extended-bottom-l"],
 	item: null,
-	propertiesToSet: ['themes'],
+	propertiesToSet: Object.freeze(['themes']),
 
 	themes: computed('item.themes', {
     get() {

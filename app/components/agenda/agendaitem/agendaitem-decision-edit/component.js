@@ -7,7 +7,7 @@ import moment from 'moment';
 
 export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 	classNames: ["vl-form__group vl-u-bg-porcelain"],
-	propertiesToSet: ['approved', 'richtext'],
+	propertiesToSet: Object.freeze(['approved', 'richtext']),
 	approved: getCachedProperty('approved'),
 	initValue: getCachedProperty('richtext'),
 

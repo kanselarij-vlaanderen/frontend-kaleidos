@@ -9,7 +9,7 @@ import { A } from '@ember/array';
 export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   intl: inject(),
   classNames: ['vl-form__group vl-u-bg-porcelain'],
-  propertiesToSet: [
+  propertiesToSet: Object.freeze([
     'finished',
     'subtitle',
     'title',
@@ -17,7 +17,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     'richtext',
     'mandateeProposal',
     'remark',
-  ],
+  ]),
   subtitle: getCachedProperty('subtitle'),
   text: getCachedProperty('text'),
   title: getCachedProperty('title'),

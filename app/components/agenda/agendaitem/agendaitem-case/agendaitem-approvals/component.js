@@ -9,7 +9,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
 	classNames: ["vl-u-spacer-extended-bottom-l"],
 	store: inject(),
 
-	mandateeApprovals: computed('item.mandatees.[]', 'item.approvals.@each.mandatee', async function () {
+	mandateeApprovals: computed('item.{mandatees.[],approvals.@each.mandatee}', async function () {
 		const mandatees = await get(this, 'item.mandatees');
 		const approvals = await get(this, 'item.approvals');
 		return mandatees.map((mandatee) => {
