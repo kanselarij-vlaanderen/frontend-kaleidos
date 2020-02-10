@@ -117,9 +117,10 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/util/_util';
 
 // Fixes to the framework
-@import 'fixes/fix-pre';
-@import 'fixes/fix-flex-utils';
 @import 'fixes/fix-badge-avatars';
+@import 'fixes/fix-flex-utils';
+@import 'fixes/fix-pre';
+@import 'fixes/fix-kaleidos-viewer';
 
 // Custom utilities
 @import 'custom-utilities/_reset';
@@ -144,23 +145,6 @@ $icon-font-location: '/fonts/';
 
 .vlc-scroll-wrapper {
   height: 100% !important;
-}
-
-tr.disabled {
-  text-decoration: none;
-  pointer-events: none;
-  opacity: 0.65;
-  background-color: $porcelain;
-}
-
-.vlc-scroll-wrapper__body.full-height {
-  > .ember-view {
-    height: 100% !important;
-  }
-}
-
-.full-height {
-  height: 95% !important;
 }
 
 .max-width {
