@@ -526,8 +526,8 @@
   "search-legend-order-example": "\"kind en gezin\"",
   "search-legend-wildcard-example": "Koolstof*",
   "search-legend-and-explanation": "EN: Zoek op het voorkomen van de uitdrukking 'digitale meters' in die volgorde",
-  "search-legend-or-explanation": "OF: Zoek op 'Oostende', zoek op 'Zaventem' en bren alles samen",
-  "search-legend-not-explanation": "NIET: Zoek op 'Antwerpen' en neem alle resultaten waar ook 'verkeer' in zit weg",
+  "search-legend-or-explanation": "OF: Zoek op 'Oostende', zoek op 'Zaventem' en breng alles samen",
+  "search-legend-not-explanation": "NIET: Zoek op 'Antwerpen' en neem alle resultaten waar ook 'verkeer' in zit, weg",
   "search-legend-order-explanation": "Zoekt op de gehele reeks van woorden in die volgorde",
   "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord"
 }
