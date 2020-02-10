@@ -31,7 +31,7 @@ module.exports = function(environment) {
         'acmidm-oauth2': {
           apiKey: 'b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d',
           baseUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/auth',
-          scope: 'vo profile openid dkbkaleidos',
+          scope: 'vo profile openid dkbkaleidos phone',
           redirectUri: 'https://kaleidos-dev.vlaanderen.be/authorization/callback',
           logoutUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/logout'
         }
@@ -47,14 +47,14 @@ module.exports = function(environment) {
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
   }
 
-  if (process.env.DEPLOY_ENV === 'test') {
+  if (true || process.env.DEPLOY_ENV === 'test') {
     ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = '556bc0c9-d04e-45c8-b465-09e68071ed0a';
     ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
     ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos-test.vlaanderen.be/authorization/callback';
     ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
   }
-  
-  
+
+
   if (process.env.DEPLOY_ENV === 'production') {
     ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = 'cb70a19f-4189-4af3-b88f-9d3adaa1aca1';
     ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/auth';
