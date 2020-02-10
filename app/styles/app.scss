@@ -119,6 +119,7 @@ $icon-font-location: '/fonts/';
 // Fixes to the framework
 @import 'fixes/fix-badge-avatars';
 @import 'fixes/fix-flex-utils';
+@import 'fixes/fix-full-height';
 @import 'fixes/fix-pre';
 @import 'fixes/fix-kaleidos-viewer';
 
@@ -143,13 +144,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
-
-body > .ember-view {
-  height: 100% !important;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden !important;
-}
 
 .vlc-padding-bottom--large {
   padding-bottom: 6rem;
