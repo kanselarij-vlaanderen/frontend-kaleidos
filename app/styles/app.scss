@@ -123,10 +123,11 @@ $icon-font-location: '/fonts/';
 @import 'fixes/fix-kaleidos-viewer';
 
 // Custom utilities
-@import 'custom-utilities/_reset';
-@import 'custom-utilities/_extended-spacer';
-@import 'custom-utilities/_scroll';
 @import 'custom-utilities/_box-model';
+@import 'custom-utilities/_extended-spacer';
+@import 'custom-utilities/_padding';
+@import 'custom-utilities/_reset';
+@import 'custom-utilities/_scroll';
 
 // Print
 @import 'print/print';
@@ -142,24 +143,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
-
-.vlc-scroll-wrapper {
-  height: 100% !important;
-}
-
-.max-width {
-  text-overflow: ellipsis;
-  max-width: 800px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.max-width-title {
-  text-overflow: ellipsis;
-  max-width: 500px;
-  overflow: hidden;
-  white-space: nowrap;
-}
 
 .vl-tab__link {
   &.active {
@@ -229,10 +212,6 @@ tr.postponed {
 
 .vlc-tabs-reverse__link {
   padding: 0.7rem 4rem 0.8rem;
-}
-
-.vlc-page-header__title {
-  padding-bottom: 0.5rem !important;
 }
 
 ul {
