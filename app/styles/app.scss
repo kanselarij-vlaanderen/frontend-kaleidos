@@ -146,11 +146,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-.settings-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .border-left {
   border-left: 1px solid #cbd2da;
 }
