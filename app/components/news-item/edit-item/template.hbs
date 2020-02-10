@@ -1,5 +1,5 @@
 <div class="vl-u-spacer">
-  <div class="vl-u-display-flex align-right vl-u-spacer-extended-bottom-s">
+  <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom vl-u-spacer-extended-bottom-s">
     {{#if (not (is-pending agendaitem.nota))}}
       {{#if (not (await agendaitem.nota))}}
         <button
@@ -72,7 +72,7 @@
     {{web-components/vl-form-label value=(t "themes")}}
     {{utils/themes-selector selectedThemes=themes}}
   </div>
-  
+
 </div>
 <div class="vl-action-group vl-action-group--align-right">
   <a class="vl-link" {{action "cancelEditing"}}>
