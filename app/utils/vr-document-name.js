@@ -100,7 +100,7 @@ export const compareFunction = function(a, b) {
       b.parseMeta();
       return 1;
     } catch (e) { // Both don't parse
-      return a.localeCompare(b);
+      return a.name.localeCompare(b.name);
     }
   }
 };
