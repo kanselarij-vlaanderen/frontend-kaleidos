@@ -11,8 +11,8 @@ export default Component.extend(isAuthenticatedMixin, {
   classNameBindings: [
     'isActive:vlc-agenda-items__sub-item--active',
     'isClickable::not-clickable',
-    'agendaitem.retracted:transparant',
-    'isPostponed:transparant',
+    'agendaitem.retracted:transparent',
+    'isPostponed:transparent',
     'isNew:vlc-agenda-items__sub-item--added-item'
   ],
   tagName: 'a',

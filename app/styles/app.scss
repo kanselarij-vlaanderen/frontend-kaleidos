@@ -129,6 +129,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-utilities/_padding';
 @import 'custom-utilities/_reset';
 @import 'custom-utilities/_scroll';
+@import 'custom-utilities/_transparency';
 
 // Print
 @import 'print/print';
@@ -144,10 +145,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
-
-.transparant {
-  opacity: 0.3 !important;
-}
 
 .settings-container {
   display: flex;
