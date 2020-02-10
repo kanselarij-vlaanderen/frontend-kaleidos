@@ -144,10 +144,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-.vlc-agenda-items__header--small {
-  padding: 2rem 1.5rem 1.5rem !important;
-}
-
 a.disabled {
   text-decoration: none;
   pointer-events: none;
