@@ -146,10 +146,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-.vl-data-table__header-title__sort-icon.vl-vi {
-  color: $primary-blue;
-}
-
 tr.lt-expanded-row:hover {
   background-color: white !important;
 }
