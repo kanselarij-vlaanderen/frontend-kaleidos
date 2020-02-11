@@ -4,7 +4,6 @@ export default Controller.extend({
 	queryParams: ['refresh'],
 
 	isShowingOptions: false,
-	isShowingOverview: true,
 	isShowingProcess: false,
 	refresh: false,
 
