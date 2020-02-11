@@ -3,12 +3,14 @@ import { inject } from "@ember/service";
 import { alias } from "@ember/object/computed";
 
 import DefaultQueryParamsMixin from "ember-data-table/mixins/default-query-params";
+import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import { computed, observer } from "@ember/object";
 import { task, timeout } from "ember-concurrency";
 
-export default Component.extend(DefaultQueryParamsMixin, {
+export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
   availableSubcases: null,
   showPostponed: null,
+  noItemsSelected: true,
 
   currentSession: alias("sessionService.currentSession"),
   selectedAgenda: alias("sessionService.currentAgenda"),
@@ -19,9 +21,10 @@ export default Component.extend(DefaultQueryParamsMixin, {
   agendaService: inject(),
   sessionService: inject(),
 
+  modelName: 'subcase',
+
   size: 5,
   sort: "short-title",
-
   queryOptions: computed("sort", "filter", "page", function() {
     const { page, filter, size, sort } = this;
     let options = {
@@ -35,6 +38,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
         ":not:is-archived": "true",
       }
     };
+
     if (filter) {
       options["filter"]["short-title"] = filter;
     }
@@ -42,7 +46,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
   }),
 
   // dirty observers to make use of the datatable actions
-  pageObserver: observer("page", function() {
+  pageObserver: observer("page", "sort",  function() {
     this.findAll.perform();
   }),
 
@@ -57,6 +61,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
     (this.get("items") || []).map(item => item.set("selected", false));
     return this.items;
   }),
+
 
   setFocus() {
     document.getElementById("searchId").focus();
@@ -125,6 +130,7 @@ export default Component.extend(DefaultQueryParamsMixin, {
       } else {
         subcase.set("selected", true);
         action = "add";
+        this.set('noItemsSelected', false);
       }
       const postponed = await this.get("postponedSubcases");
 
@@ -134,6 +140,9 @@ export default Component.extend(DefaultQueryParamsMixin, {
         const index = postponed.indexOf(subcase);
         if (index > -1) {
           postponed.splice(index, 1);
+        }
+        if (!postponed.length) {
+          this.set('noItemsSelected', true);
         }
       }
     },
