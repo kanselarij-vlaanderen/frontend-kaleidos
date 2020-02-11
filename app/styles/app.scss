@@ -120,6 +120,7 @@ $icon-font-location: '/fonts/';
 @import 'fixes/fix-badge-avatars';
 @import 'fixes/fix-flex-utils';
 @import 'fixes/fix-full-height';
+@import 'fixes/fix-light-table';
 @import 'fixes/fix-pre';
 @import 'fixes/fix-kaleidos-viewer';
 
@@ -145,20 +146,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
-
-tr.lt-expanded-row:hover {
-  background-color: white !important;
-}
-
-tr.postponed {
-  opacity: 0.5;
-  .vl-button__icon.vl-vi.vl-vi-pencil {
-    color: $silver-chalice;
-  }
-  .vl-button__icon.vl-vi.vl-vi-document {
-    color: $silver-chalice;
-  }
-}
 
 .vlc-tabs-reverse__link {
   padding: 0.7rem 4rem 0.8rem;
