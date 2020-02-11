@@ -130,7 +130,7 @@ $icon-font-location: '/fonts/';
 // Custom utilities
 @import 'custom-utilities/_box-model';
 @import 'custom-utilities/_extended-spacer';
-@import 'custom-utilities/_padding';
+@import 'custom-utilities/_spacing';
 @import 'custom-utilities/_reset';
 @import 'custom-utilities/_scroll';
 @import 'custom-utilities/_transparency';
@@ -152,11 +152,6 @@ $icon-font-location: '/fonts/';
 
 .data-table__actions.data-table__actions--top {
   border-bottom: none;
-}
-
-.newsletter-themes {
-  margin: 0 !important;
-  padding-left: 0 !important;
 }
 
 .full-width-selector {
