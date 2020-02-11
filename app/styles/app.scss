@@ -101,6 +101,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-page-header';
 @import 'custom-components/vlc-panel-layout';
 @import 'custom-components/vlc-pill';
+@import 'custom-components/vlc-preview-container';
 @import 'custom-components/vlc-procedure-step';
 @import 'custom-components/vlc-radio-inline';
 @import 'custom-components/vlc-scroll-wrapper';
@@ -147,18 +148,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
-
-
-
-.preview-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  img {
-    max-width: 200px;
-    max-height: 200px;
-  }
-}
 
 .data-table-pagination {
   margin-bottom: 6em; //fix for firefox (agenda view height)
