@@ -72,6 +72,7 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/additions/_icon-list';
 @import 'govflanders/additions/_link-list';
 @import 'govflanders/additions/_modal';
+@import 'govflanders/additions/_pill';
 @import 'govflanders/additions/_pill-input';
 @import 'govflanders/additions/_popover';
 @import 'govflanders/additions/_tabs';
@@ -147,14 +148,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-ul {
-  li {
-    &.vl-pill {
-      display: inline-flex;
-      margin-bottom: 0.2em;
-    }
-  }
-}
+
 
 .preview-container {
   display: flex;
