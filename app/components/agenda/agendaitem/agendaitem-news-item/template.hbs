@@ -24,12 +24,12 @@
             {{await subcase.newsletterInfo.newsletterProposal}}
           </p>
           <p>
-            {{{await subcase.newsletterInfo.richtext}}}
+            {{sanitize-html raw=true value=(await subcase.newsletterInfo.richtext)}}
           </p>
       </div>
   </div>
   <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-    {{{await subcase.newsletterInfo.displayRemark}}}
+    {{ sanitize-html raw=true value=(await subcase.newsletterInfo.displayRemark)}}
   </p>
   <div class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s">
     {{#if (is-pending agendaitem.themes)}}
