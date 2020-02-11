@@ -29,7 +29,7 @@
       </div>
   </div>
   <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-    {{ sanitize-html raw=true value=(await subcase.newsletterInfo.displayRemark)}}
+    {{await subcase.newsletterInfo.displayRemark}}
   </p>
   <div class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s">
     {{#if (is-pending agendaitem.themes)}}
