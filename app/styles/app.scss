@@ -156,18 +156,6 @@ ul {
   }
 }
 
-.vl-data-table--zebra {
-  tbody {
-    tr {
-      &:nth-child(odd) {
-        a:hover {
-          background-color: #eee;
-        }
-      }
-    }
-  }
-}
-
 .preview-container {
   display: flex;
   justify-content: center;
