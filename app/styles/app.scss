@@ -123,8 +123,9 @@ $icon-font-location: '/fonts/';
 @import 'fixes/fix-flex-utils';
 @import 'fixes/fix-full-height';
 @import 'fixes/fix-light-table';
-@import 'fixes/fix-pre';
 @import 'fixes/fix-kaleidos-viewer';
+@import 'fixes/fix-pre';
+@import 'fixes/fix-sortable-item';
 
 // Custom utilities
 @import 'custom-utilities/_box-model';
@@ -148,23 +149,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
-
-.table-header-unsortable {
-  color: $dove-gray;
-}
-
-.sortable-item {
-  transition: all 0.125s;
-}
-
-.sortable-item.is-dragging {
-  transition-duration: 0s;
-  z-index: 10;
-}
-
-.sortable-item.is-dropping {
-  z-index: 10;
-}
 
 .col--4-12.u-align-right,
 .editor-commands,
