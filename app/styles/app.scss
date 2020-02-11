@@ -150,14 +150,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-.col--4-12.u-align-right,
-.editor-commands,
-.col--2-12,
-.print-only,
-.ember-power-select-status-icon {
-  display: none;
-}
-
 .data-table__actions.data-table__actions--top {
   border-bottom: none;
 }
