@@ -25,3 +25,10 @@
     width: 88rem;
   }
 }
+
+/* Firefox fix for pagination
+	 ========================================================================== */
+
+ .data-table-pagination {
+   margin-bottom: 6em; //fix for firefox (agenda view height)
+ }
