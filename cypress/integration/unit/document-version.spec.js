@@ -2,8 +2,6 @@
 /// <reference types="Cypress" />
 
 context('Tests for KAS-1076', () => {
-  const testStart = currentMoment();
-
   before(() => {
     cy.server();
     cy.resetDB();

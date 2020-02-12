@@ -24,6 +24,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   finished: getCachedProperty('finished'),
   remark: getCachedProperty('remark'),
   mandateeProposal: getCachedProperty('newsletterProposal'),
+  isTryingToSave: false,
 
   themes: computed(`agendaitem.themes`, {
     get() {
@@ -44,44 +45,60 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 			return false;
 		}
 	}),
-
-  actions: {
-    async saveChanges() {
-      this.set('isLoading', true);
-      const item = await this.get('item');
-      const documentVersionsSelected = this.get('documentVersionsSelected');
-      const itemDocumentsToEdit = await item.get('documentVersions');
-      const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
-      const themes = await this.themes;
-      if (documentVersionsSelected) {
-        await Promise.all(
-          documentVersionsSelected.map(async (documentVersion) => {
-            if (documentVersion.get('selected')) {
-              item.get('documentVersions').addObject(documentVersion);
-            } else {
-              const foundDocument = itemDocumentsToEdit.find(
-                (item) => item.get('id') == documentVersion.get('id')
-              );
-              if (foundDocument) {
-                item.get('documentVersions').removeObject(documentVersion);
-              }
+  async saveChanges() {
+    this.set('isLoading', true);
+    const item = await this.get('item');
+    const documentVersionsSelected = this.get('documentVersionsSelected');
+    const itemDocumentsToEdit = await item.get('documentVersions');
+    const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
+    const themes = await this.themes;
+    if (documentVersionsSelected) {
+      await Promise.all(
+        documentVersionsSelected.map(async (documentVersion) => {
+          if (documentVersion.get('selected')) {
+            item.get('documentVersions').addObject(documentVersion);
+          } else {
+            const foundDocument = itemDocumentsToEdit.find(
+              (item) => item.get('id') == documentVersion.get('id')
+            );
+            if (foundDocument) {
+              item.get('documentVersions').removeObject(documentVersion);
             }
-          })
-        );
-      }
-      this.setNewPropertiesToModel(item).then((newModel) => {
-        newModel.reload();
-        if (themes) {
-          agendaitem.set('themes', themes);
-          agendaitem.save().then(() => {
-            this.set('isLoading', false);
-            this.toggleProperty('isEditing');
-          });
-        } else {
+          }
+        })
+      );
+    }
+    this.setNewPropertiesToModel(item).then((newModel) => {
+      newModel.reload();
+      if (themes) {
+        agendaitem.set('themes', themes);
+        agendaitem.save().then(() => {
           this.set('isLoading', false);
           this.toggleProperty('isEditing');
-        }
-      });
+        });
+      } else {
+        this.set('isLoading', false);
+        this.toggleProperty('isEditing');
+      }
+    });
+  },
+
+  actions: {
+    async trySaveChanges() {
+      const themes = await this.themes;
+      if (themes.length > 0) {
+        return this.saveChanges()
+      }
+      this.toggleProperty('isTryingToSave');
+    },
+
+    cancelSaveChanges() {
+      this.toggleProperty('isTryingToSave');
+    },
+
+    saveChanges() {
+      this.toggleProperty('isTryingToSave');
+      this.saveChanges()
     },
 
     async openDocument(agendaitem) {
