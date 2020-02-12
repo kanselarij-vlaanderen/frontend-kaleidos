@@ -18,7 +18,12 @@ export default Component.extend(isAuthenticatedMixin, {
     return this.currentAgenda.get("createdFor");
   }),
 
-  isPostPonable: computed("sessionService.agendas.@each", function() {
+  isPostPonable: computed("sessionService.agendas.@each","agendaitem.subcase", async function() {
+
+    if(!(await this.checkIfSubcaseExist())) {
+      return false;
+    }
+
     return this.get("sessionService.agendas").then(agendas => {
       if (agendas && agendas.get("length") > 1) {
         return true;
@@ -27,6 +32,14 @@ export default Component.extend(isAuthenticatedMixin, {
       }
     });
   }),
+
+  async checkIfSubcaseExist(){
+      const subcase = await this.agendaitem.get('subcase');
+      if(!subcase) {
+        return;
+      }
+      return subcase;
+  },
 
   isDeletable: computed(
     "agendaitem.{subcase,subcase.agendaitems}", "currentAgenda.name", async function() {
@@ -137,15 +150,15 @@ export default Component.extend(isAuthenticatedMixin, {
   },
 
   async deletePostponedPhases(subcase) {
-    const postponedPhases = await subcase.get("postponedPhases");
-    if (postponedPhases && postponedPhases.length) {
-      await Promise.all(
-        postponedPhases.map(phase => {
-          phase.destroyRecord();
-        })
-      );
-    }
-    return subcase;
+      const postponedPhases = await subcase.get("postponedPhases");
+      if (postponedPhases && postponedPhases.length) {
+        await Promise.all(
+          postponedPhases.map(phase => {
+            phase.destroyRecord();
+          })
+        );
+      }
+      return subcase;
   },
 
   async createPostponedPhase(subcase) {
