@@ -102,3 +102,9 @@
 .vlc-document-card-item__meta {
   font-size: 1.4rem;
 }
+
+.vlc-document--deleted-state {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: none;
+}
