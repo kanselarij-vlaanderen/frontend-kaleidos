@@ -87,6 +87,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-backlink';
 @import 'custom-components/vlc-box';
+@import 'custom-components/vlc-button-in-input';
 @import 'custom-components/vlc-button-toolbar';
 @import 'custom-components/vlc-comment';
 @import 'custom-components/vlc-container';
@@ -158,17 +159,6 @@ $icon-font-location: '/fonts/';
 .no-capitalize {
   white-space: pre-line;
   display: inline-flex;
-}
-
-.vlc-button-in-input {
-  position: absolute;
-  top: 44%;
-  right: 3.6rem;
-
-  &:hover {
-    background: none;
-    color: #05c;
-  }
 }
 
 .vlc-u-box-model-maximize-height.vlc-scroll-wrapper.vl-u-no-overflow.not-supported {
