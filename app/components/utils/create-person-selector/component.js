@@ -5,7 +5,7 @@ export default Component.extend(ModelSelectorMixin, {
   classNames: ["vlc-input-field-block"],
   classNameBindings: [
     "isCreatingPerson:vl-u-bg-alt",
-    "isCreatingPerson:no-margin",
+    "isCreatingPerson:vlc-u-no-margin",
     "isCreatingPerson:padding-small"
   ],
   searchField: "first-name",
