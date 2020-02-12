@@ -6,7 +6,7 @@ export default Component.extend(ModelSelectorMixin, {
   classNameBindings: [
     "isCreatingPerson:vl-u-bg-alt",
     "isCreatingPerson:vlc-u-no-margin",
-    "isCreatingPerson:padding-small"
+    "isCreatingPerson:vlc-u-padding-2"
   ],
   searchField: "first-name",
   modelName: "person",
