@@ -150,10 +150,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-.vl-button-icon--error {
-  color: $red;
-}
-
 .js-vl-popover__toggle:hover {
   background-color: $blue-gray-lighter;
 }
