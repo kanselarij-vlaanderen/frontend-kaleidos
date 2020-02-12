@@ -40,7 +40,7 @@
                       <a
                         class="vl-link vl-link--block"
                         {{action attacher.hide}}
-                        {{action "toggleIsEditing"}}
+                        {{action "startEditingName"}}
                       >
                         {{t "document-title-edit"}}
                       </a>
@@ -80,21 +80,20 @@
         <div class="vl-u-display-flex vl-u-flex-direction-column vlc-u-box-model-maximize-width">
             {{#if (not isEditing)}}
             <h6 class="vl-title vl-title--h6">
-              <span {{action "toggleIsEditing"}}>
-                {{await lastDocumentVersionName}}
+              <span {{action "startEditingName"}}>
+                {{document.lastDocumentVersion.name}}
               </span>
             </h6>
             {{else}}
               <div class="vl-u-display-flex vl-u-display-flex-align-center">
                   {{input
                     type="text"
-                    id=id
                     class="vl-input-field vl-input-field--block"
-                    value=(mut document.lastDocumentVersion.name)
+                    value=nameBuffer
                   }}
                 <button
                   class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                  {{action "saveChanges" document.lastDocumentVersion.content}} {{!-- TODO: Get rid of 'content' (in current setup I didn't see an other way) --}}
+                  {{action "saveNameChange" document.lastDocumentVersion.content}} {{!-- TODO: Get rid of 'content' (in current setup I didn't see an other way) --}}
                 >
                   <i
                     class="vl-vi vl-vi-save vl-button__icon"
@@ -106,7 +105,7 @@
                 </button>
                 <button
                   class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                  {{action "cancelChanges"}}
+                  {{action "cancelEditingName"}}
                 >
                   <i
                     class="vl-vi vl-vi-cross vl-button__icon"

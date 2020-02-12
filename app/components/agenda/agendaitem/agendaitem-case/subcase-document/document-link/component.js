@@ -18,6 +18,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   uploadedFile: null,
   isEditing: false,
   documentToDelete: null,
+  nameBuffer: '',
 
   isSubcase: computed('item.contructor', function () {
 		const { item } = this;
@@ -65,14 +66,23 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       });
     },
 
-    async saveChanges(doc) {
-      doc.set('modified', moment().toDate());
-      await doc.save();
+    startEditingName() {
+      if(!this.isEditor){
+        return;
+      }
+      this.set('nameBuffer', this.get('document.lastDocumentVersion.name'));
+      this.set('isEditing', true);
+    },
+
+    cancelEditingName() {
+      this.document.rollbackAttributes();
       this.set('isEditing', false);
     },
 
-    async cancelChanges(){
-      await this.document.rollbackAttributes();
+    async saveNameChange(doc) {
+      doc.set('modified', moment().toDate());
+      doc.set('name', this.get('nameBuffer'));
+      await doc.save();
       this.set('isEditing', false);
     },
 
@@ -101,13 +111,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
         this.set('uploadedFile', null);
       }
       this.set('isUploadingNewVersion', false);
-    },
-
-    toggleIsEditing() {
-      if(!this.isEditor){
-        return;
-      }
-      this.toggleProperty('isEditing');
     },
 
     async saveDocuments() {
