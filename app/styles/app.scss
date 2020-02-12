@@ -109,6 +109,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-status-timeline';
 @import 'custom-components/vlc-subline';
 @import 'custom-components/vlc-tabs-reverse';
+@import 'custom-components/vlc-themes-selector';
 @import 'custom-components/vlc-toolbar';
 @import 'custom-components/vlc-user';
 
@@ -157,12 +158,6 @@ $icon-font-location: '/fonts/';
 .no-capitalize {
   white-space: pre-line;
   display: inline-flex;
-}
-
-.checkbox-list-selector {
-  display: grid;
-  grid-template-columns: repeat(3, calc(100% / 3));
-  grid-gap: 10px;
 }
 
 .no-margin {
