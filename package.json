@@ -16,8 +16,8 @@
     "lint:js": "eslint .",
     "start": "ember serve --proxy=http://localhost:80",
     "test": "ember test",
-    "cypress-local": "./node_modules/.bin/cypress open --browser chrome ",
-    "cypress-dev": "./node_modules/.bin/cypress open --browser chrome --config baseUrl=https://kaleidos-dev.vlaanderen.be"
+    "cypress-local": "./node_modules/.bin/cypress open",
+    "cypress-dev": "./node_modules/.bin/cypress open --config baseUrl=https://kaleidos-dev.vlaanderen.be"
   },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",

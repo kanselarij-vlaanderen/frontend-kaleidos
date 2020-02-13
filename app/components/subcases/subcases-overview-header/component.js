@@ -14,13 +14,7 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   }),
 
-  activeOverview: computed("isShowingOverview", function() {
-    if (this.get("isShowingOverview")) {
-      return "vlc-tabs-reverse__link--active";
-    }
-  }),
-
-	// This is needed to give the input-helpers a proper string instead of 
+	// This is needed to give the input-helpers a proper string instead of
 	// a promise object based on the previous subcase or known case
   async setKnownPropertiesOfCase() {
     const caze = await this.get("model.case");
@@ -50,12 +44,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
     toggleIsShowingProcess() {
       this.set("isShowingProcess", true);
-      this.set("isShowingOverview", false);
     },
 
-    toggleIsShowingOverview() {
-      this.set("isShowingProcess", false);
-      this.set("isShowingOverview", true);
-    }
   }
 });
