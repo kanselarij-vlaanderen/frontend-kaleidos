@@ -71,6 +71,7 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/additions/_data-table';
 @import 'govflanders/additions/_icon-list';
 @import 'govflanders/additions/_link-list';
+@import 'govflanders/additions/_loader';
 @import 'govflanders/additions/_modal';
 @import 'govflanders/additions/_pill';
 @import 'govflanders/additions/_pill-input';
@@ -159,18 +160,4 @@ $icon-font-location: '/fonts/';
 .no-capitalize {
   white-space: pre-line;
   display: inline-flex;
-}
-
-.vlc-u-box-model-maximize-height.vlc-scroll-wrapper.vl-u-no-overflow.not-supported {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .width-50 {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
 }
