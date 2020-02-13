@@ -136,6 +136,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-utilities/_spacing';
 @import 'custom-utilities/_reset';
 @import 'custom-utilities/_scroll';
+@import 'custom-utilities/_text';
 @import 'custom-utilities/_transparency';
 
 // Print
@@ -152,8 +153,3 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
-
-.no-capitalize {
-  white-space: pre-line;
-  display: inline-flex;
-}
