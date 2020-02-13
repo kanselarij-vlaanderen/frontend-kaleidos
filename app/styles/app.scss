@@ -153,10 +153,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 @import 'custom-application/oc-additions';
 
-.js-vl-popover__toggle:hover {
-  background-color: $blue-gray-lighter;
-}
-
 .no-capitalize {
   white-space: pre-line;
   display: inline-flex;
