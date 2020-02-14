@@ -9,9 +9,10 @@ export default Component.extend({
 	showActions: true,
 	buttonType: 'danger',
   showVerify: true,
+  buttonText: 'delete',
 
-	verifyButtonText: computed('intl', function () {
-		return this.intl.t('delete');
+	verifyButtonText: computed('intl', 'buttonText', function () {
+		return this.intl.t(this.get('buttonText'));
 	}),
 
 	showIcon: computed('buttonType', function () {

@@ -72,7 +72,7 @@
     {{web-components/vl-form-label value=(t "themes")}}
     {{utils/themes-selector selectedThemes=themes}}
   </div>
-  
+
 </div>
 <div class="vl-action-group vl-action-group--align-right">
   <a class="vl-link" {{action "cancelEditing"}}>
@@ -81,6 +81,17 @@
   {{web-components/vl-save-button
     text=(t "save")
     isLoading=isLoading
-    saveAction=(action "saveChanges")
+    saveAction=(action "trySaveChanges")
   }}
 </div>
+{{#if isTryingToSave}}
+  {{web-components/vl-modal-verify
+          title=(t "no-themes-selected")
+          message=(t "no-themes-selected-message")
+          cancel=(action "cancelSaveChanges")
+          verify=(action "saveChanges")
+          buttonText="save"
+          buttonType="warning"
+          showIcon=false
+  }}
+{{/if}}

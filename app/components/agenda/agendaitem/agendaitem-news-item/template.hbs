@@ -18,30 +18,36 @@
       {{await subcase.newsletterInfo.title}}
     </h3>
   </div>
-  <div class="vl-typography">
-    <p>
-      {{sanitize-html raw=true value=(await subcase.newsletterInfo.richtext)}}
-    </p>
-    <p class="vl-u-text--italic">
-      {{await subcase.newsletterInfo.newsletterProposal}}
-    </p>
+  <div class="vl-u-spacer-extended-bottom-s">
+      <div class="vl-typography">
+          <p class="vl-u-text--italic">
+            {{await subcase.newsletterInfo.newsletterProposal}}
+          </p>
+          <p>
+            {{sanitize-html raw=true value=(await subcase.newsletterInfo.richtext)}}
+          </p>
+      </div>
   </div>
-
-  {{#if (is-pending agendaitem.themes)}}
-    {{web-components/vl-loader text=(t "themes-loading-text")}}
-  {{else if (gt (await agendaitem.themes.length) 0)}}
-    <ul>
-      {{#each (await agendaitem.themes) as |theme|}}
-        <li class="vl-pill">
-          {{theme.label}}
-        </li>
-      {{/each}}
-    </ul>
-  {{else}}
-    <div class="vl-u-spacer-extended-top-s">
-      {{web-components/vl-alert message=(t "no-themes-yet")}}
-    </div>
-  {{/if}}
+  <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+    {{await subcase.newsletterInfo.displayRemark}}
+  </p>
+  <div class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s">
+    {{#if (is-pending agendaitem.themes)}}
+      {{web-components/vl-loader text=(t "themes-loading-text")}}
+    {{else if (gt (await agendaitem.themes.length) 0)}}
+        <ul>
+          {{#each (await agendaitem.themes) as |theme|}}
+              <li class="vl-pill">
+                {{theme.label}}
+              </li>
+          {{/each}}
+        </ul>
+    {{else}}
+        <div class="vl-u-spacer-extended-top-s">
+          {{web-components/vl-alert message=(t "no-themes-yet")}}
+        </div>
+    {{/if}}
+  </div>
 
   <hr/>
   <div class="vl-u-spacer vl-u-spacer-extended-top-s">

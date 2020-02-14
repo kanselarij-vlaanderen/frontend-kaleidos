@@ -519,5 +519,7 @@
   "explanation": "Toelichting",
   "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "changes-could-not-be-saved-title": "Je wijzigingen werden niet opgeslagen.",
-  "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
+  "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
+  "no-themes-selected": "Geen thema's geselecteerd",
+  "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?"
 }
