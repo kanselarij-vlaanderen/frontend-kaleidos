@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 context("Table Row Click tests", () => {

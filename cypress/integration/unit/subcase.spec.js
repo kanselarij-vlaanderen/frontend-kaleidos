@@ -1,5 +1,6 @@
-/* eslint-disable no-undef */
+/*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
+
 
 
 context('Subcase tests', () => {
@@ -7,7 +8,7 @@ context('Subcase tests', () => {
 
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
-  const caseTitle = 'Cypress test: subcases - ' + currentTimestamp();
+  // const caseTitle = 'Cypress test: subcases - ' + cy.currentTimestamp();
 
   before(() => {
     cy.server();
@@ -26,7 +27,7 @@ context('Subcase tests', () => {
   it('should open an existing case and add a subcase', () => {
 
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: add subcase - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -76,7 +77,7 @@ context('Subcase tests', () => {
 
   it('should add a subcase and then delete it', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: delete subcase - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: delete subcase - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -88,7 +89,7 @@ context('Subcase tests', () => {
 
   it('should not be able to delete a subcase with agendaitems', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: delete subcase not possible - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: delete subcase not possible - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -106,7 +107,7 @@ context('Subcase tests', () => {
 
   it('should be able to open a subcase with user profile: Minister', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: Non-editor profiles can open subcase - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: Non-editor profiles can open subcase - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het kunnen bekijken van een procedurestap door een ander profiel dan "editor" maar mag geen wijzigingen kunnen doen';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -129,7 +130,7 @@ context('Subcase tests', () => {
 
   it('Clickable link should go to the agenda right after proposing to agenda', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: Link to agenda item ok - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: Link to agenda item ok - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap' ;
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -152,7 +153,3 @@ context('Subcase tests', () => {
     cy.url().should('not.contain', '/dossier/');
   });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

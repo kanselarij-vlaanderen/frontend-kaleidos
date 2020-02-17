@@ -1,7 +1,6 @@
 'use strict';
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
-
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
     sassOptions: {
@@ -21,7 +20,9 @@ module.exports = function(defaults) {
         'transform-object-rest-spread'
       ]
     },
-   
+    'ember-test-selectors': {
+      strip: false
+    }
   });
 
   app.import('node_modules/sanitize-filename/index.js', {
@@ -29,6 +30,6 @@ module.exports = function(defaults) {
       { transformation: 'cjs', as: 'sanitize-filename' }
     ]
   });
-  
+
   return app.toTree();
 };
