@@ -209,7 +209,7 @@ a.disabled {
 
 body > .ember-view {
   height: 100% !important;
-  display: flex;
+  display: block;
   flex-direction: column;
   overflow: hidden !important;
 }
