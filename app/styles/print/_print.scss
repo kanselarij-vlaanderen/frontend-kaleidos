@@ -56,7 +56,7 @@
     border: none;
   }
 
-  .vl-u-no-overflow {
-    overflow: auto !important;
+  body > .ember-view {
+    display: block !important;
   }
 }
