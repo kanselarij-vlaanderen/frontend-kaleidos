@@ -1,6 +1,4 @@
-<div
-        class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
->
+<div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
   <div class="vl-col--4-12 vl-col--1-1--s">
     <label class="vl-form__label" for="dossierId">
       {{t "agendaitem-case"}}
@@ -32,7 +30,7 @@
   <div
           class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer custom-search"
   >
-    <div class="vl-col--2-12 vlc-input-field-block">
+    <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "from-date")}}
       {{web-components/vl-datepicker
               selectedDate=dateFrom
@@ -45,7 +43,7 @@
         </button>
       {{/if}}
     </div>
-    <div class="vl-col--2-12 vlc-input-field-block">
+    <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "until-date")}}
       {{web-components/vl-datepicker
               selectedDate=dateTo
