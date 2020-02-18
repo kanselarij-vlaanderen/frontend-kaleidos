@@ -9,10 +9,10 @@ export default Controller.extend({
   intl: inject(),
   globalError: inject(),
   isUploadingFile: null,
-  shouldRefreshTableModel:null,
+  shouldRefreshTableModel: null,
   filterText: null,
 
-  columns: computed(function() {
+  columns: computed(function () {
     return [
       {
         label: this.intl.t('first-name'),
@@ -34,7 +34,7 @@ export default Controller.extend({
         label: this.intl.t('national-number'),
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
-				breakpoints: ['mobile', 'tablet', 'desktop'],
+        breakpoints: ['mobile', 'tablet', 'desktop'],
         valuePath: 'account.voId',
       },
       {
@@ -56,12 +56,12 @@ export default Controller.extend({
     ];
   }),
 
-  filter: computed('filterText', function(){
+  filter: computed('filterText', function () {
     const searchText = this.get('filterText');
-    if(isEmpty(searchText)){
+    if (isEmpty(searchText)) {
       return null;
     }
-    return {"last-name":searchText};
+    return { "last-name": searchText };
   }),
 
   actions: {
@@ -77,11 +77,11 @@ export default Controller.extend({
             message: this.intl.t('import-users-success'),
             type: 'success',
           })
-				);
-				later(()=> {
+        );
+        later(() => {
           this.send('refresh');
           this.set('shouldRefreshTableModel', true);
-				}, 2000);
+        }, 2000);
       } else {
         this.globalError.showToast.perform(
           EmberObject.create({
