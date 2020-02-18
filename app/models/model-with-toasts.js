@@ -29,7 +29,7 @@ export default Model.extend({
         if (this.checkIfCreatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
           this.globalError.showToast.perform(EmberObject.create({
             title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('successfully-created', {type: this.translateAndParseSuccesType(payload.data.type)}),
+            message: this.intl.t('successfully-created', {type: this.translateAndParseSuccesType(this.get('constructor.modelName'))}),
             type: 'success'
           }));
         }

@@ -18,17 +18,21 @@ export default ModelWithToasts.extend({
     const parentSave = this._super;
     const modified = this.get('modified');
 
-    const current_modified = moment.utc(this.get('modified'));
+    const currentModifiedModel = moment.utc(this.get('modified'));
     const oldModelData = await this.store.adapterFor(this.get('constructor.modelName'))
       .queryRecord(this.store, this.get('constructor'),
         {
           filter:
             {id: this.get('id')}
         });
+    const oldModelModifiedMoment = moment.utc(oldModelData.data[0].attributes.modified);
 
-    const old_model_modified = moment.utc(oldModelData.data[0].attributes.modified);
-
-    if (typeof modified != 'undefined' && current_modified.toString() == old_model_modified.toString() || typeof modified == 'undefined') {
+    if (typeof modified == 'undefined' ||
+      (
+        typeof modified != 'undefined'
+        && currentModifiedModel.isSame(oldModelModifiedMoment)
+        && typeof oldModelData.data[0]['relationships']['modified-by'] != 'undefined')
+    ) {
       this.set('modified', moment().utc().toDate());
       await this.currentSession.get('user').then((user) => {
         this.set('modifiedBy', user);
@@ -49,7 +53,7 @@ export default ModelWithToasts.extend({
         message: this.intl.t('changes-could-not-be-saved-message', {
           firstname: vals['first-name'],
           lastname: vals['last-name'],
-          time: old_model_modified.locale("nl").fromNow()
+          time: oldModelModifiedMoment.locale("nl").fromNow()
         }),
         type: 'error'
       }), 600000);
