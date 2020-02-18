@@ -1,7 +1,7 @@
 {{title (t "manage-ministers")}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
   <h4 class="vl-title vl-title--h4"></h4>
-  <button
+  <button data-test-minister-add
     class="vl-button vl-button--narrow vl-button--icon-before"
     {{action "toggleIsAdding"}}
   >
@@ -58,42 +58,44 @@
       </tr>
     </thead>
     {{#sortable-group
+            data-test-ministers-sortable-group
       tagName="tbody"
       onChange=(action "reorderItems" model) as |sortableGroup|
     }}
-      {{#each model as |mandatee|}}
+      {{#each model as |mandatee index|}}
         {{#sortable-item
           tagName="tr"
           model=mandatee
+          data-test-ministers-sortable-group-row=index
           group=sortableGroup
           handle=".mandatee-draggable-row"
         }}
-          <td class="mandatee-draggable-row">
+          <td data-test-mandatee-fullDisplayName={{index}} class="mandatee-draggable-row">
             {{#if (is-pending mandatee.fullDisplayName)}}
               <div class="skeletal-loader" role="alert" aria-busy="true"></div>
             {{else}}
               {{await mandatee.fullDisplayName}}
             {{/if}}
           </td>
-          <td class="mandatee-draggable-row">
+          <td data-test-mandatee-nickName={{index}} class="mandatee-draggable-row">
             {{#if (is-pending mandatee.nickName)}}
               <div class="skeletal-loader" role="alert" aria-busy="true"></div>
             {{else}}
               {{await mandatee.nickName}}
             {{/if}}
           </td>
-          <td class="mandatee-draggable-row">
+          <td data-test-mandatee-priority={{index}} class="mandatee-draggable-row">
             {{await mandatee.priority}}
           </td>
           <td class="vl-u-align-center">
             <div class="vl-action-group vl-action-group--align-center">
-              <button
+              <button data-test-mandatee-edit={{index}}
                 class="vl-button vl-button--link vl-button--icon"
                 {{action "toggleProperty" "isEditingMandatee" mandatee}}
               >
                 <i class="vl-button__icon vl-vi vl-vi-edit"></i>
               </button>
-              <button
+              <button data-test-mandatee-resign={{index}}
                 class="vl-button vl-button--link vl-button--icon"
                 {{action "toggleProperty" "isResigningMandatee" mandatee}}
               >
@@ -105,7 +107,7 @@
                   {{t "resign"}}
                 {{/attach-popover}}
               </button>
-              <button
+              <button data-test-mandatee-delete={{index}}
                 class="vl-button vl-button--link vl-button--icon vl-u-text--error"
                 {{action "toggleProperty" "isDeletingMandatee" mandatee}}
               >

@@ -2,7 +2,7 @@
   <h2 class="vl-title vl-title--h3">
     {{title}}
   </h2>
-  <table class="data-table vl-data-table vl-data-table--zebra vl-data-table--align-middle">
+  <table class="data-table vl-data-table vl-data-table--zebra vl-data-table--align-middle" data-test-future-agenda-table>
     <thead>
       <tr>
         <th
@@ -53,7 +53,7 @@
         <th class="vl-data-table-col-1"></th>
       </tr>
     </thead>
-    <tbody class="tr-hover">
+    <tbody class="tr-hover" data-test-future-agenda-table-body>
       {{#each (await items) as |meeting|}}
         {{#link-to "agenda.agendaitems" meeting.id tagName="tr" classNames="tr-hover"}}
           <td>

@@ -1,9 +1,10 @@
-/* eslint-disable no-undef */
+/*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 import {formCancelButton, formFooterSaveSelector} from "../../selectors/formSelectors/formSelectors";
 import {modalDialogCloseModalSelector, modalDialogSelector} from "../../selectors/models/modelSelectors";
 import {modalDocumentVersionDeleteSelector} from "../../selectors/documents/documentSelectors";
+  // const testStart = cy.currentMoment();
 
 context('Tests for cancelling CRUD operations on document and document-versions' , () => {
   before(() => {
@@ -17,9 +18,9 @@ context('Tests for cancelling CRUD operations on document and document-versions'
   });
 
   it('Editing of a document or document-version but cancelling should show old data', () => {
-    const caseTitle = 'Cypress test: cancel editing document versions - ' + currentTimestamp();
+    const caseTitle = 'Cypress test: cancel editing document versions - ' + cy.currentTimestamp();
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: cancel editing of documents on agendaitem - ' + currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: cancel editing of documents on agendaitem - ' + cy.currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het annuleren van editeren van een document aan een agendaitem';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -32,7 +33,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.openSubcase(0);
     cy.addDocuments(files);
     const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
+    const agendaDate = cy.currentMoment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
 
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test annuleren van editeren documenten').then((meetingId) => {
       cy.openAgendaForDate(agendaDate,meetingId);
@@ -288,7 +289,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
       cy.get('.js-vl-accordion > button').click();
 
-      
+
       });
   });
 });

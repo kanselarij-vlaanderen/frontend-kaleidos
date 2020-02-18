@@ -7,7 +7,7 @@
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
               <ul class="vlc-tabs-reverse" role="tablist">
-                <li class="vlc-tabs-reverse__item">
+                <li class="vlc-tabs-reverse__item" data-test-settings-generalSettings>
                   {{#link-to
                     "settings.overview"
                     class="vl-tab__link border-left"
@@ -17,7 +17,7 @@
                     {{t "general-settings"}}
                   {{/link-to}}
                 </li>
-                <li class="vlc-tabs-reverse__item border-left">
+                <li class="vlc-tabs-reverse__item border-left" data-test-settings-manageMinisters>
                   {{#link-to
                     "settings.ministers"
                     class="vl-tab__link"
@@ -26,7 +26,7 @@
                     {{t "manage-ministers"}}
                   {{/link-to}}
                 </li>
-                <li class="vlc-tabs-reverse__item border-left">
+                <li class="vlc-tabs-reverse__item border-left" data-test-settings-manageUsers>
                   {{#link-to
                     "settings.users"
                     class="vl-tab__link"

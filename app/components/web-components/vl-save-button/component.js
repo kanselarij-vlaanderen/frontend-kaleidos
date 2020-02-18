@@ -9,7 +9,8 @@ export default Component.extend({
 	attributeBindings: ['isLoading:disabled', 'disabled:disabled'],
 	classNameBindings: ['isLoading:vl-button--loading', 'disabled:vl-button--disabled'],
 
-	loadingText: computed('intl', function () {
+
+loadingText: computed('intl', function () {
 		return this.intl.t('please-be-patient');
 	}),
 

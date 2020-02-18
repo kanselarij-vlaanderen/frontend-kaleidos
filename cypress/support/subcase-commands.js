@@ -1,6 +1,6 @@
+/*global  cy, Cypress*/
+/// <reference types="Cypress" />
 
-
-/* eslint-disable no-undef */
 // ***********************************************
 // Commands
 
@@ -14,9 +14,12 @@ Cypress.Commands.add('deleteSubcase', deleteSubcase);
 // ***********************************************
 // Functions
 
+
 /**
- * Opens the selected subcase when in the overview screen of a case
- *
+ * Open the subcase of the specified index.
+ * @memberOf Cypress.Chainable#
+ * @name openSubcase
+ * @function
  * @param {number} [index] The list index of the subcase to select, default 0
  */
 function openSubcase(index=0){
@@ -35,7 +38,9 @@ function openSubcase(index=0){
 /**
  * Changes the subcase access levels and titles when used in the subcase view (/dossiers/..id../overzicht)
  * shortTitle is required to find the dom element
- *
+ * @name changeSubcaseAccessLevel
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {boolean} isRemark - Is this a subcase of type remark
  * @param {string} shortTitle - Current title of the subcase (same as case title unless already renamed)
  * @param {boolean} [confidentialityChange] -Will change the current confidentiality if true
@@ -99,11 +104,13 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
   cy.wait('@patchSubcase', { timeout: 20000 });
 }
 
+
 /**
  * Changes the themes of a sucase when used in the subcase view (/dossiers/..id../overzicht)
- *
+ * @name addSubcaseThemes
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {Array<Number|String>} themes - An array of theme names that must match exactly or an array of numbers that correspond to the checkboxes in themes
- *
  */
 function addSubcaseThemes(themes) {
   cy.route('GET', '/themes').as('getThemes');
@@ -130,13 +137,15 @@ function addSubcaseThemes(themes) {
 }
 
 //TODO use arrays of fields and domains, search on mandatee name
+
 /**
  * Adds a mandatees with field and domain to a sucase when used in the subcase view (/dossiers/..id../overzicht)
- *
- * @param {Number} mandatees - The list index of the mandatee
+ * @name addSubcaseThemes
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {Number} mandateeNumber - The list index of the mandatee
  * @param {Number} fieldNumber - The list index of the field
  * @param {Number} domainNumber - The list index of the domain
- *
  */
 function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
   cy.route('GET', '/mandatees?**').as('getMandatees');
@@ -174,6 +183,12 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
   cy.wait('@patchSubcase', { timeout: 20000 });
 }
 
+/**
+ * @name proposeSubcaseForAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {date} agendaDate - The list index of the mandatee
+ */
 function proposeSubcaseForAgenda (agendaDate) {
   cy.route('POST','/agendaitems').as('createNewAgendaitem');
   cy.route('PATCH','/agendas/*').as('patchAgenda');
@@ -196,6 +211,12 @@ function proposeSubcaseForAgenda (agendaDate) {
   cy.wait('@createSubcasePhase', { timeout: 12000 });
 }
 
+/**
+ * @description deletes a subcase.
+ * @name deleteSubcase
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
 function deleteSubcase() {
   cy.route('DELETE', '/subcases/**').as('deleteSubcase');
   cy.get('.vl-button--icon-before')
@@ -211,9 +232,12 @@ function deleteSubcase() {
   cy.wait('@deleteSubcase', { timeout: 20000 });
 }
 
+
 /**
- * Translates a month number to a dutch month in lowercase.
- *
+ * @description Translates a month number to a dutch month in lowercase.
+ * @name getTranslatedMonth
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {number} month the number of the month to translate (from moment so starts from 0)
  * @returns the month in dutch
  */
