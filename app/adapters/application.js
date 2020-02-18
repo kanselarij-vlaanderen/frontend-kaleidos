@@ -83,10 +83,7 @@ export default DS.JSONAPIAdapter.extend({
   },
 
   checkIfNotificationShouldBeShownInModel(requestUrl) {
-    if(requestUrl.includes('agendaitems/')) {
-      return false;
-    }
-    return true;
+    return requestUrl.includes('agendaitems/');
   },
 
   checkIfNotificationShouldBeShown(type) {
