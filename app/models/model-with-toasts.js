@@ -18,7 +18,7 @@ export default Model.extend({
     return !(modelListToNotShowNotificationFor.includes(type));
   },
   checkIfUpdatedNotificationShouldBeShown(type) {
-    const modelListToNotShowNotificationFor = ['agendaitem'];
+    const modelListToNotShowNotificationFor = ['agendaitem', 'newsletter-info'];
     return !(modelListToNotShowNotificationFor.includes(type));
   },
 
@@ -38,7 +38,7 @@ export default Model.extend({
         if (this.checkIfUpdatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
           this.globalError.showToast.perform(EmberObject.create({
             title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('successfully-saved'),
+            message: this.intl.t('successfully-saved-type', {type: this.translateAndParseSuccesType(this.get('constructor.modelName'))}),
             type: 'success'
           }));
         }
