@@ -53,7 +53,9 @@ export default DS.JSONAPIAdapter.extend({
               type: 'success'
             }));
           } else if (requestData && requestData.method === "PATCH") {
-            if(this.checkIfNotificationShouldBeShownInModel(requestData.url)) {
+            // Toast for newer models (with modifier locking) are thrown from the model.
+            // Not form here.
+            if (!this.checkIfNotificationShouldBeShownInModel(requestData.url)) {
               this.globalError.showToast.perform(EmberObject.create({
                 title: this.intl.t('successfully-created-title'),
                 message: this.intl.t('successfully-saved'),
