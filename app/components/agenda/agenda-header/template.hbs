@@ -34,6 +34,16 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
+          <button
+            class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+            {{action "print"}}
+          >
+            <i
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+              aria-hidden="true"
+            ></i>
+            {{t "print"}}
+          </button>
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
             <button
               class="vl-button vl-button--narrow"
