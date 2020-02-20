@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
 context('Test the KB functionality', () => {
@@ -11,7 +11,7 @@ context('Test the KB functionality', () => {
       cy.login('Admin');
     });
 
-    xit('should test the newsletter of an agenda', () => {
+    it('should test the newsletter of an agenda', () => {
       const plusMonths = 1;
       const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 18).set('hour', 18).set('minute', 18);
 

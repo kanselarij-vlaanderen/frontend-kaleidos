@@ -1,12 +1,9 @@
+/*global context, before, it, cy*/
+/// <reference types="Cypress" />
+
 context('Agendaitem changes tests', () => {
-  const testStart = currentMoment();
-  const plusMonths = 1;
-  const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
-  const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-  const subcaseTitle1 = caseTitle + ' test stap 1';
-  const subcaseTitle2 = caseTitle + ' test stap 2';
-  const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
-  const files = [file];
+  // const testStart = cy.currentMoment();
+
 
   before(() => {
     cy.server();
@@ -15,7 +12,13 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should add an agendaitem to an agenda and should highlight as added', () => {
-
+    const caseTitle = 'testId=' + cy.currentTimestamp() + ': ' + 'Cypress test dossier 1';
+    const agendaDate = cy.currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
+    const plusMonths = 1;
+    const subcaseTitle1 = caseTitle + ' test stap 1';
+    const subcaseTitle2 = caseTitle + ' test stap 2';
+    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
+    const files = [file];
     cy.createCase(false, caseTitle).then(() => {
       cy.verifyAlertSuccess();
     });
@@ -60,11 +63,3 @@ context('Agendaitem changes tests', () => {
 
   });
 });
-
-function currentMoment() {
-  return Cypress.moment();
-}
-
-function currentTimestamp() {
-  return currentMoment().unix();
-}

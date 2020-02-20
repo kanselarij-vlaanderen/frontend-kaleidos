@@ -33,7 +33,7 @@
     <div class="vl-u-spacer">
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "themes")}}
-        {{utils/themes-selector selectedThemes=themes}}
+        {{utils/themes-selector selectedThemes=(await themes)}}
       </div>
     </div>
     <div class="vl-action-group vl-action-group--align-right">

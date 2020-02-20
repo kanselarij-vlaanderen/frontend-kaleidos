@@ -3,14 +3,14 @@
   <div class="vlc-page-header">
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__item">
-        <h1 class="vlc-page-header__title vlc-page-header__title--bordered">
+        <h1 class="vlc-page-header__title vlc-page-header__title--bordered" data-test-agendas-title>
           {{t "agenda-title"}}
         </h1>
       </div>
       <div class="vlc-toolbar__right">
         {{#if isEditor}}
           <div class="vlc-toolbar__item">
-            <button
+            <button data-test-vlc-agenda-createnewagendabutton
               class="vl-button vl-button--narrow vl-button--icon-before"
               {{action "createNewSession"}}
             >

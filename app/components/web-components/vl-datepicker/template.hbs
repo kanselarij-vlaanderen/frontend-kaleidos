@@ -1,5 +1,6 @@
 {{#if (not await dateObjectsToEnable)}}
   {{ember-flatpickr
+          data-test-vl-datepicker-input
     classNames="vl-input-field vl-input-field--block"
     locale="nl"
     enableTime=enableTime
@@ -10,7 +11,7 @@
     defaultMinute=defaultMinute
     getFlatpickrRef=(action (mut flatpickrRef))
   }}
-  <button
+  <button data-test-vlc-vl-datepickerButton
     class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"
     type="button"
     {{action "toggleCalendar"}}
@@ -19,6 +20,7 @@
   </button>
 {{else}}
   {{ember-flatpickr
+    data-test-vl-datepicker-input
     classNames="vl-input-field vl-input-field--block"
     locale="nl"
     enable=datesToEnable

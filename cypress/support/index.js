@@ -13,12 +13,16 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+/*global Cypress*/
+/// <reference types="Cypress" />
+
 // Import commands.js using ES2015 syntax:
 import './commands'
 import './agenda-commands'
 import './case-commands'
 import './subcase-commands'
 import './document-commands'
+import './util/utility-commands'
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   return !err.message.includes('calling set on destroyed object')
