@@ -94,7 +94,14 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       doc.set('modified', moment().toDate());
       doc.set('name', this.get('nameBuffer'));
       await doc.save();
-      this.set('isEditing', false);
+      if (!this.isDestroyed) {
+        /*
+         * Due to over-eager computed properties, this components gets destroyed after a namechange,
+         * which eliminates the need for changing this flag (Changing properties of destroyed components causes exceptions).
+         * This should get fixed in the future though.
+         */
+        this.set('isEditing', false);
+      }
     },
 
     add(file) {
