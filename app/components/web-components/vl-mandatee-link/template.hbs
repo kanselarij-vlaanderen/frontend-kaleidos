@@ -9,7 +9,11 @@
   <div class="vlc-minister-item__title">
     <h6 class="vl-title vl-title--h6">
       <p>
+
         {{await titleToShow}}
+
+        {{#if  submitter }} ({{ t "submitter" }}){{/if}}
+        
       </p>
     </h6>
   </div>
