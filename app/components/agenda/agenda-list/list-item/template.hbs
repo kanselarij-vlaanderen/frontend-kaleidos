@@ -26,9 +26,9 @@
   {{/if}}
 
   {{#if (not isEditingOverview)}}
-  {{#if isEditor}}
-    <span class="vl-u-text--bold ">{{ t "remark-title" }}: </span> {{await agendaitem.explanation}}
-  {{/if}}
+    {{#if (isEditor && agendaitem.explanation)}}
+      <span class="vl-u-text--bold ">{{ t "remark-title" }}: </span> {{agendaitem.explanation}}
+    {{/if}}
   {{/if}}
 
   <div class="vl-u-display-flex vl-u-flex-space-between">
