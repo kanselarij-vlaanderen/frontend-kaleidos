@@ -56,8 +56,9 @@
                   {{agendaitem.shortTitle}}
                 </h3>
                 <pre class="no-capitalize">
-                  {{!-- TODO: Figure out the exact reason for using curlies here  --}}
+                  {{!-- template-lint-disable no-triple-curlies  --}}
                   {{{agendaitem.title}}}
+                  {{!-- template-lint-enable no-triple-curlies  --}}
                 </pre>
               </div>
               {{#if agendaitem.isEditing}}
