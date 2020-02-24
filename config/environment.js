@@ -52,7 +52,7 @@ module.exports = function(environment) {
     ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
     ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos-test.vlaanderen.be/authorization/callback';
     ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
-    ENV['torii']['providers']['acmidm-oauth2']['scope'] = 'vo profile openid dkbkaleidos VO_EMAIL'
+    ENV['torii']['providers']['acmidm-oauth2']['scope'] = 'vo profile openid dkbkaleidos vo_email'
   }
 
 
