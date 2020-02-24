@@ -2,7 +2,7 @@
   <div class="vlc-toolbar vlc-toolbar--auto">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
-        <h1 class="vlc-page-header__title">
+        <h1 class="vlc-page-header__title" data-test-cases-header-title>
           {{t "cases"}}
         </h1>
       </div>
@@ -11,7 +11,7 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if isEditor}}
-          <button
+          <button data-test-cases-header-add-case
             class="vl-button vl-button--narrow vl-button--icon-before"
             {{action "toggleAddingCase"}}
           >

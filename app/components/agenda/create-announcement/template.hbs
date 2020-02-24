@@ -4,40 +4,42 @@
   title=(t "create-announcement")
 }}
   <div class="vl-modal-dialog__content">
-    <form>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "name-subcase")}}
-        {{web-components/vl-form-input width="4" value=title}}
-      </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title-subcase")}}
-        {{textarea class="vl-textarea vl-textarea--block" rows="2" value=text
-        }}
-      </div>
-      <div class="vlc-input-field-block">
-        {{file-uploader isLoading=isLoading uploadedFile=(action "add")}}
-        {{#if (not isLoading)}}
-          <div class="upload-container">
-            {{#each documentsInCreation as |document|}}
-              {{ember-kaleidos-webuniversum/vl-uploaded-document
-                name=document.lastDocumentVersion.file.filename
-                extension=document.lastDocumentVersion.file.extension
-                size=document.lastDocumentVersion.file.size
-                downloadName=document.lastDocumentVersion.file.filename
-                downloadLink=(concat
-                  document.lastDocumentVersion.file.downloadLink
-                  "?name="
-                  document.lastDocumentVersion.file.filename
-                )
-                delete=(action "delete" document)
-              }}
-            {{/each}}
-          </div>
-        {{else}}
-          {{web-components/vl-loader text=(t "documents-loading-text")}}
-        {{/if}}
-      </div>
-    </form>
+    <div class="vlc-scroll-wrapper__body">
+      <form>
+        <div class="vlc-input-field-block">
+          {{web-components/vl-form-label value=(t "name-subcase")}}
+          {{web-components/vl-form-input width="4" value=title}}
+        </div>
+        <div class="vlc-input-field-block" data-test-vl-create-announcement-title-subcase>
+          {{web-components/vl-form-label value=(t "title-subcase")}}
+          {{textarea class="vl-textarea vl-textarea--block" rows="2" value=text
+          }}
+        </div>
+        <div class="vlc-input-field-block">
+          {{file-uploader isLoading=isLoading uploadedFile=(action "add")}}
+          {{#if (not isLoading)}}
+            <div class="upload-container">
+              {{#each documentsInCreation as |document|}}
+                {{ember-kaleidos-webuniversum/vl-uploaded-document
+                  name=document.lastDocumentVersion.file.filename
+                  extension=document.lastDocumentVersion.file.extension
+                  size=document.lastDocumentVersion.file.size
+                  downloadName=document.lastDocumentVersion.file.filename
+                  downloadLink=(concat
+                    document.lastDocumentVersion.file.downloadLink
+                    "?name="
+                    document.lastDocumentVersion.file.filename
+                  )
+                  delete=(action "delete" document)
+                }}
+              {{/each}}
+            </div>
+          {{else}}
+            {{web-components/vl-loader text=(t "documents-loading-text")}}
+          {{/if}}
+        </div>
+      </form>
+    </div>
   </div>
   {{web-components/vl-modal-footer
     isLoading=isLoading

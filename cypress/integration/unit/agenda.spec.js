@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
 context('Agenda tests', () => {

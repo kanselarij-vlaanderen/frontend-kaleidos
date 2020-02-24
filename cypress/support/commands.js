@@ -1,4 +1,6 @@
-/* eslint-disable no-undef */
+/*global cy, Cypress*/
+/// <reference types="Cypress" />
+
 import 'cypress-file-upload';
 
 
@@ -15,8 +17,10 @@ Cypress.Commands.add('resetDB', resetDB);
 
 
 /**
- * Goes to the mock-login page and selects the profile that matches the given name
- *
+ * @description Goes to the mock-login page and selects the profile that matches the given name.
+ * @name login
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {String} name the profile to log in with, case sensitive
  */
 function login(name){
@@ -30,8 +34,10 @@ function login(name){
 }
 
 /**
- * Logs out the current user and end the mocked session
- *
+ * @description Logs out the current user and end the mocked session
+ * @name logout
+ * @memberOf Cypress.Chainable#
+ * @function
  */
 function logout(){
   cy.server();
@@ -42,8 +48,10 @@ function logout(){
 }
 
 /**
- * Sets the date and time in an **open vl-flatpickr**
- *
+ * @description Sets the date and time in an **open vl-flatpickr**
+ * @name setDateInFlatpickr
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {Object} date the Cypress.moment with the date to set
  * @param {number} plusMonths The positive amount of months from today to advance in the vl-flatpickr
  */
@@ -63,9 +71,11 @@ function setDateInFlatpickr(date, plusMonths) {
 }
 
 /**
- * Clicks on the specified reverse tab for navigating
+ * @description Clicks on the specified reverse tab for navigating
+ * @name clickReverseTab
  * @if class="vlc-tabs-reverse"
- *
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {String} tabName The name of the tab to click on, case sensitive
  */
 function clickReverseTab(tabName){
@@ -76,9 +86,11 @@ function clickReverseTab(tabName){
 }
 
 /**
- * Clicks on the specified agendaitem tab for navigating
+ * @description Clicks on the specified agendaitem tab for navigating
+ * @name clickAgendaitemTab
  * @if class="vlc-tabs"
- *
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {String} tabName The name of the tab to click on, case sensitive
  */
 function clickAgendaitemTab(tabName){
@@ -89,14 +101,23 @@ function clickAgendaitemTab(tabName){
 }
 
 /**
- * Watch if the verification alert popup appears on successful network calls
+ * @description Watch if the verification alert popup appears on successful network calls
  * use in a .then() of the sent request
- *
+ * @name verifyAlertSuccess
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} tabName The name of the tab to click on, case sensitive
  */
 function verifyAlertSuccess() {
   cy.get('.toasts-container', { timeout: 12000 }).contains('Gelukt').should('be.visible');
 }
 
+/**
+ * @description Reset the current database to the default database for testing
+ * @name verifyAlertSuccess
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
 function resetDB() {
   const kaleidosProject = Cypress.env('KALEIDOS_PROJECT');
   const env = {
@@ -106,10 +127,9 @@ function resetDB() {
       kaleidosProject + '/docker-compose.override.yml'
   };
 
-  cy.exec('docker-compose stop triplestore elasticsearch file', { env })
+  cy.exec('docker-compose kill triplestore elasticsearch file cache resource', { env })
     .exec(`rm -rf ${kaleidosProject}/testdata`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -d ${kaleidosProject}`)
     .exec('docker-compose up -d', { env })
-    .exec('docker-compose restart cache resource', { env })
     .wait(5000)
 }
