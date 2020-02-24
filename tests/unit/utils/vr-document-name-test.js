@@ -1,7 +1,7 @@
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 import { module, test } from 'qunit';
 
-module('Unit | Utility | vr-document-name', function(hooks) {
+module('Unit | Utility | vr-document-name', function() {
 
   let name = 'VR 2019 1511 MED.0377/19TER';
   let result = new VRDocumentName(name, { strict: true });
