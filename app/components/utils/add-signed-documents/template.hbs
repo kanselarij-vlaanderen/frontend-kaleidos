@@ -30,18 +30,18 @@
       {{/if}}
       {{#if (not isLoading)}}
         <div class="upload-container">
-          {{#each documentsInCreation as |document|}}
+          {{#each documentsInCreation as |doc|}}
             {{ember-kaleidos-webuniversum/vl-uploaded-document
-              name=document.lastDocumentVersion.file.filename
-              extension=document.lastDocumentVersion.file.extension
-              size=document.lastDocumentVersion.file.size
-              downloadName=document.lastDocumentVersion.file.filename
+              name=doc.file.filename
+              extension=doc.file.extension
+              size=doc.file.size
+              downloadName=doc.file.filename
               downloadLink=(concat
-                document.lastDocumentVersion.file.downloadLink
+                doc.file.downloadLink
                 "?name="
-                document.lastDocumentVersion.file.filename
+                doc.file.filename
               )
-              delete=(action "delete" document)
+              delete=(action "delete" doc.documentContainer)
             }}
           {{/each}}
         </div>

@@ -93,10 +93,10 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
           return this.store
             .query('document', {
               filter: {
-                'document-versions': { id: documentVersionIds },
+                'documents': { id: documentVersionIds },
                 type: { id: CONFIG.notaID },
               },
-              include: 'document-versions,type,document-versions.access-level',
+              include: 'documents,type,documents.access-level',
             })
             .then((notas) => {
               return notas.get('firstObject');
