@@ -34,6 +34,15 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
+          {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
+            <button
+              class="vl-button vl-button--narrow"
+              {{action "tryToApproveAgenda" currentSession}}
+            >
+              {{await currentSession.latestAgendaName}}
+              {{t "approve-small"}}
+            </button>
+          {{/if}}
           <button
             class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
             {{action "print"}}
@@ -44,15 +53,6 @@
             ></i>
             {{t "print"}}
           </button>
-          {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
-            <button
-              class="vl-button vl-button--narrow"
-              {{action "tryToApproveAgenda" currentSession}}
-            >
-              {{await currentSession.latestAgendaName}}
-              {{t "approve-small"}}
-            </button>
-          {{/if}}
           <button data-test-agenda-header-showActionOptions
             class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions"}}

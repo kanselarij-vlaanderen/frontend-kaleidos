@@ -5,6 +5,7 @@
       value=(readonly filter)
       search=(action "searchAgendaItems")
     }}
+    {{!--
     <div class="vlc-scroll-wrapper__body">
       {{agenda/agenda-list
         announcements=(await sortedAnnouncements)
@@ -16,6 +17,33 @@
         refresh=(action "refresh")
       }}
     </div>
+    --}}
+
+    <div class="vlc-container-center vl-typography">
+      {{utils/logo-header}}
+
+      <h3>A. Agendapunten</h3>
+      {{#each (await sortedAgendaitems) as |agendaitem|}}
+        <div class="vl-u-spacer-extended-bottom-s">
+          <h4>
+            {{#if agendaitem.number}}
+              {{agendaitem.number}}.
+            {{else}}
+              {{add index 1}}.
+            {{/if}}
+            {{#if agendaitem.shortTitle}}
+              {{agendaitem.shortTitle}}
+            {{else}}
+              {{agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
+            {{/if}}
+          </h4>
+          <p>
+            {{agendaitem.title}}
+          </p>
+        </div>
+      {{/each}}
+    </div>
+
   </div>
 </div>
 {{outlet}}
