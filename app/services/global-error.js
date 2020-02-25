@@ -13,7 +13,7 @@ export default Service.extend({
     this.set('messages', []);
   },
 
-	showToast: task(function* (messageToAdd) {
+	showToast: task(function* (messageToAdd, duration) {
 		if (messageToAdd.get('type') != "warning-undo") {
 			const messageTypeAlreadyFound = this.messages.find((item) => item.get('type') === messageToAdd.get('type'));
 			if (messageTypeAlreadyFound) {
@@ -26,15 +26,16 @@ export default Service.extend({
 			this.messages.removeObject(firstObject);
 		}
 		this.messages.addObject(messageToAdd);
+
 		switch (messageToAdd.type) {
 			case 'error':
-				yield timeout(3000);
+				yield timeout(duration || 3000);
 				break;
 			case 'success':
-				yield timeout(2000);
+				yield timeout(duration || 2000);
 				break;
 			case 'warning-undo':
-				yield timeout(15000);
+				yield timeout(duration || 15000);
 				break;
 		}
 		this.messages.removeObject(messageToAdd);
