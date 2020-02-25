@@ -109,6 +109,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-procedure-step';
 @import 'custom-components/vlc-radio-inline';
 @import 'custom-components/vlc-scroll-wrapper';
+@import 'custom-components/vlc-search-legend';
 @import 'custom-components/vlc-side-nav';
 @import 'custom-components/vlc-status-timeline';
 @import 'custom-components/vlc-subline';
@@ -134,10 +135,11 @@ $icon-font-location: '/fonts/';
 
 // Custom utilities
 @import 'custom-utilities/_box-model';
+@import 'custom-utilities/_cursors';
 @import 'custom-utilities/_extended-spacer';
-@import 'custom-utilities/_spacing';
 @import 'custom-utilities/_reset';
 @import 'custom-utilities/_scroll';
+@import 'custom-utilities/_spacing';
 @import 'custom-utilities/_text';
 @import 'custom-utilities/_transparency';
 
