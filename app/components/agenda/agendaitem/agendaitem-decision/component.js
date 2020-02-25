@@ -30,10 +30,13 @@ export default Component.extend(isAuthenticatedMixin, {
 	actions: {
 		async toggleIsEditing() {
 			const { subcase } = this;
-			const decision = await subcase.get('decision');
+      const decision = await subcase.get('decision');
+
 			if (!decision) {
 				await this.addDecision(subcase);
 			} else if (decision.get('title') === "") {
+        await decision.get('subcase').reload();
+        await decision.reload();
 				decision.set('title', subcase.get('title'));
 			}
 			this.toggleProperty('isEditing');
