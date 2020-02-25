@@ -118,3 +118,16 @@ $c-toolbar-middle-z: 20;
 .vlc-toolbar--bordered-bottom {
   border-bottom: 0.1rem solid $ghost;
 }
+
+/* Slide-in toolbar
+	 ========================================================================== */
+
+.vlc-toolbar--slide-in {
+  position: absolute;
+  top: 0;
+  right: 18rem;
+  left: 18rem;
+  max-height: 4.3rem;
+  z-index: 3200;
+  width: calc(100% - 37rem);
+}

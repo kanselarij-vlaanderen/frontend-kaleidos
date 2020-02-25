@@ -22,7 +22,7 @@
         uploadedFile=(action "getUploadedFile")
       }}
     {{else}}
-      <div class="preview-container">
+      <div class="vlc-preview-container">
         <img src="{{downloadUrl}}" alt="{{t "no-signature-yet"}}" />
         <a {{action "removeFile" uploadedFile}}>
           {{fa-icon "remove"}}

@@ -8,11 +8,26 @@
   border-bottom: 1px solid $ghost;
 
   .vlc-page-header__title {
+    padding-bottom: 0.5rem;
     font-family: flanders-serif, serif;
     font-size: 2rem;
     font-weight: 500;
     margin: 0;
     padding: 0;
+  }
+
+  .vlc-page-header__title--max-width {
+    text-overflow: ellipsis;
+    max-width: 800px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .vlc-page-header__title--max-width-title {
+    text-overflow: ellipsis;
+    max-width: 500px;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
 }
