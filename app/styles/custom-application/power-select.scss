@@ -200,6 +200,17 @@
 
 .ember-power-select-clear-btn {
   margin-right:0.2em;
-  line-height: 1.2em; 
+  line-height: 1.2em;
   font-size:2.6rem;
+}
+
+.ember-power-select-status-icon {
+  display: none;
+}
+
+/* Custom overrides
+	 ========================================================================== */
+
+.ember-power-select-trigger {
+  width: 100%;
 }
