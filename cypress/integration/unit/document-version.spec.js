@@ -115,7 +115,7 @@ context('Tests for KAS-1076', () => {
       // Verify agendaitem is updated
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + ' BIS');
+          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
         });
       });
 
@@ -129,7 +129,7 @@ context('Tests for KAS-1076', () => {
       // cy.wait(1000);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + ' BIS');
+          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
         });
       });
       });
@@ -176,7 +176,7 @@ context('Tests for KAS-1076', () => {
       // cy.wait(1000);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + ' BIS');
+          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
         });
       });
 
@@ -185,7 +185,7 @@ context('Tests for KAS-1076', () => {
       cy.clickAgendaitemTab('Documenten');
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + ' BIS');
+          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
         });
       });
       cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);

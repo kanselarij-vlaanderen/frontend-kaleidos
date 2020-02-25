@@ -154,6 +154,10 @@
                     </a>
                   </li>
                 {{/if}}
+                {{!-- Temporarily disable "downloading all documents" since changes to the document model break its functionality.
+                  A more thorough solution for this is in progress.
+                --}}
+                {{!--
                 <li class="vl-popover__link-list__item">
                   <a data-test-agenda-header-downloaddDocuments
                     class="vl-link vl-link--block"
@@ -163,6 +167,7 @@
                     {{t "download-documents"}}
                   </a>
                 </li>
+                --}}
                 {{#if isEditor}}
                   <li class="vl-popover__link-list__separator" role="none"></li>
                   <li class="vl-popover__link-list__item">

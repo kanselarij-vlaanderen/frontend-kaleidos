@@ -30,10 +30,13 @@ export default Component.extend(
     },
 
     actions: {
-      delete(document) {
-        this.deleteDocument(document).then(() => {
-          this.get('documentsInCreation').removeObject(document);
-        });
+      async delete(doc) {
+        const file = await doc.get('file');
+        file.destroyRecord();
+        this.get('documentsInCreation').removeObject(doc);
+        const container = doc.get('documentContainer.content');
+        container.deleteRecord();
+        doc.deleteRecord();
       },
 
       add(file) {
@@ -43,12 +46,15 @@ export default Component.extend(
 
       async deleteAll() {
         await Promise.all(
-          this.get('documentsInCreation').map((document) => {
-            return this.deleteDocument(document).then(() => {
-              this.get('documentsInCreation').removeObject(document);
-            });
+          this.get('documentsInCreation').map(async (doc) => {
+            const file = await doc.get('file');
+            file.destroyRecord();
+            const container = doc.get('documentContainer.content');
+            container.deleteRecord();
+            doc.deleteRecord();
           })
         );
+        this.get('documentsInCreation').clear();
         this.set('isAddingNewDocument', false);
       },
 
