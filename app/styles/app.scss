@@ -123,10 +123,11 @@ $icon-font-location: '/fonts/';
 @import 'fixes/fix-badge-avatars';
 
 // Custom utilities
-@import 'custom-utilities/_reset';
-@import 'custom-utilities/_extended-spacer';
-@import 'custom-utilities/_scroll';
 @import 'custom-utilities/_box-model';
+@import 'custom-utilities/_cursors';
+@import 'custom-utilities/_extended-spacer';
+@import 'custom-utilities/_reset';
+@import 'custom-utilities/_scroll';
 
 // Print
 @import 'print/print';
