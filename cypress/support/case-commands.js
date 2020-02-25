@@ -1,24 +1,23 @@
+/*global cy,Cypress*/
+/// <reference types="Cypress" />
 
-/* eslint-disable no-undef */
 // ***********************************************
 // Commands
 
 Cypress.Commands.add('createCase', createCase);
 Cypress.Commands.add('addSubcase', addSubcase);
 Cypress.Commands.add('openCase', openCase);
-
-//TODO open case method
-
 // ***********************************************
 // Functions
 
 /**
- * Goes to the case overview and creates a new case
- *
- * @returns {Promise<String>} the id of the created case
- *
+ * @description Goes to the case overview and creates a new case
+ * @name createCase
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {boolean} confidential Weather confidential is to be set to true
  * @param {String} shortTitle The title of the case
+ * @returns {Promise<String>} the id of the created case
  */
 function createCase(confidential, shortTitle) {
   cy.route('GET', '/cases?**').as('getCases');
@@ -64,16 +63,18 @@ function createCase(confidential, shortTitle) {
   });
 }
 
+
 /**
- * Creates a new subcase from an open case overview.
- *
- * @returns {Promise<String>} the id of the created subcase
- *
+ * @description Creates a new subcase from an open case overview.
+ * @name addSubcase
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {String} type Type of subcase, case sensitive
  * @param {String} newShortTitle The new short title of the subcase (null to keep the existing case title)
  * @param {String} longTitle The long title of the subcase
  * @param {String} step The step to be selected from the list, case sensitive
  * @param {String} stepName The step name to be selected from the list, case sensitive
+ * @returns {Promise<String>} the id of the created subcase
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.route('GET', '/cases?*').as('getCases');
@@ -142,8 +143,10 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 }
 
 /**
- * Navigates to the dossier route with page size 100 and opens the specified case if found
- *
+ * @description Navigates to the dossier route with page size 100 and opens the specified case if found.
+ * @name openCase
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {String} caseTitle The title to search in the list of cases, should be unique
  */
 function openCase(caseTitle) {

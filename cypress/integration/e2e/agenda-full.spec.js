@@ -9,12 +9,11 @@ context('Full test', () => {
   before(() => {
     cy.server();
     cy.resetDB();
-    cy.login('Admin')
-
+    cy.login('Admin');
   });
 
   it('Scenario where a complete agenda is created', () => {
-    testId = 'testId=' + currentTimestamp() + ': ';
+    testId = 'testId=' + cy.currentTimestamp() + ': ';
 
     //#region routes to be reused
     cy.route('GET', '/cases?**').as('getCases');
@@ -156,7 +155,3 @@ context('Full test', () => {
   });
 
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

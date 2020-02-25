@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import EmberObject, { computed } from '@ember/object';
+import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
@@ -17,6 +18,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   uploadedFile: null,
   isEditing: false,
   documentToDelete: null,
+  nameBuffer: '',
 
   isSubcase: computed('item.contructor', function () {
 		const { item } = this;
@@ -53,25 +55,53 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       }))
   },
 
+  async deleteUploadedDocument() {
+    const uploadedFile = this.get('uploadedFile');
+    if (uploadedFile && uploadedFile.id) {
+      const versionInCreation = await uploadedFile.get('documentVersion');
+      if (versionInCreation) {
+        await this.fileService.deleteDocumentVersion(versionInCreation);
+      } else {
+        await this.fileService.removeFile(uploadedFile.id);
+      }
+      this.set('uploadedFile', null);
+    }
+  },
+
   actions: {
     showVersions() {
       this.toggleProperty('isShowingVersions');
     },
 
-    async delete(documentVersion) {
-      this.deleteDocumentVersion((await documentVersion)).then(() => {
-        this.set('uploadedFile', null);
-      });
+    async delete() {
+      this.deleteUploadedDocument();
     },
 
-    async saveChanges() {
-      await this.document.save();
+    startEditingName() {
+      if(!this.isEditor){
+        return;
+      }
+      this.set('nameBuffer', this.get('document.lastDocumentVersion.name'));
+      this.set('isEditing', true);
+    },
+
+    cancelEditingName() {
+      this.document.rollbackAttributes();
       this.set('isEditing', false);
     },
 
-    async cancelChanges(){
-      await this.document.rollbackAttributes();
-      this.set('isEditing', false);
+    async saveNameChange(doc) {
+      doc.set('modified', moment().toDate());
+      doc.set('name', this.get('nameBuffer'));
+      await doc.save();
+      if (!this.isDestroyed) {
+        /*
+         * Due to over-eager computed properties, this components gets destroyed after a namechange,
+         * which eliminates the need for changing this flag (Changing properties of destroyed components causes exceptions).
+         * This should get fixed in the future though.
+         */
+        this.set('isEditing', false);
+      }
     },
 
     add(file) {
@@ -80,24 +110,30 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     async openUploadDialog() {
-      const uploadedFile = this.get('uploadedFile');
-      if (uploadedFile && uploadedFile.id) {
-        await this.fileService.removeFile(uploadedFile.id);
-        this.set('uploadedFile', null);
-      }
       this.toggleProperty('isUploadingNewVersion');
     },
 
-    toggleIsEditing() {
-      if(!this.isEditor){
-        return;
+    async closeUploadDialog() {
+      this.deleteUploadedDocument();
+      this.toggleProperty('isUploadingNewVersion');
+    },
+
+    async cancelUploadVersion() {
+      const uploadedFile = this.get('uploadedFile');
+      if (uploadedFile) {
+        const container = this.get('documentContainer');
+        const doc = await this.get('documentContainer.lastDocumentVersion');
+        doc.rollbackAttributes()
+        container.rollbackAttributes();
+        await uploadedFile.destroyRecord();
+        this.set('uploadedFile', null);
       }
-      this.toggleProperty('isEditing');
+      this.set('isUploadingNewVersion', false);
     },
 
     async saveDocuments() {
       this.set('isLoading', true);
-      const documentVersion = await this.get('document.lastDocumentVersion');
+      const documentVersion = await this.get('documentContainer.lastDocumentVersion');
       await documentVersion.save();
       const item = await this.get('item');
       const itemType = item.get('constructor.modelName');

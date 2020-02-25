@@ -1,5 +1,6 @@
+/*global cy, Cypress*/
+/// <reference types="Cypress" />
 
-/* eslint-disable no-undef */
 import 'cypress-file-upload';
 // ***********************************************
 // Commands
@@ -15,28 +16,68 @@ Cypress.Commands.add('uploadFile', uploadFile);
 // ***********************************************
 // Functions
 
+/**
+ * @description Add document to agenda.
+ * @name addDocumentsToAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string[]} files
+ */
 function addDocumentsToAgenda(files) {
   cy.clickReverseTab('Documenten');
   return addDocuments(files)
 }
 
+/**
+ * @description Add a new documentversion to an agenda.
+ * @name addNewDocumentVersionToAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} oldFileName
+ * @param {string} file
+ */
 function addNewDocumentVersionToAgenda(oldFileName, file) {
   cy.clickReverseTab('Documenten');
   return addNewDocumentVersion(oldFileName, file)
 }
 
+/**
+ * @description Add a new document to an agendaitem.
+ * @name addDocumentsToAgendaItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {string} files
+ */
 function addDocumentsToAgendaItem(agendaItemTitle, files) {
   openAgendaItemDocumentTab(agendaItemTitle);
   return addDocuments(files)
 }
 
+/**
+ * @description Add a new documentversion to an agendaitem
+ * @name addNewDocumentVersionToAgendaItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {string} oldFileName
+ * @param {string} file
+ */
 function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
   openAgendaItemDocumentTab(agendaItemTitle, true);
   return addNewDocumentVersion(oldFileName, file)
 }
 
+/**
+ * @description Opens agendaitem with agendaitemTitle and clicks the document link.
+ * @name openAgendaItemDocumentTab
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {boolean} alreadyHasDocs
+ */
 function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
-  cy.route('GET', 'documents**').as('getDocuments');
+  // cy.route('GET', 'documents**').as('getDocuments');
   cy.get('li.vlc-agenda-items__sub-item h4')
     .contains(agendaItemTitle)
     .click()
@@ -53,10 +94,11 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
 }
 
 /**
- * Opens the document add dialog and adds each file in the files array
- *
+ * @description Opens the document add dialog and adds each file in the files array
+ * @name addDocuments
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
- *
  */
 function addDocuments(files) {
   cy.route('GET', 'document-types?**').as('getDocumentTypes');
@@ -104,10 +146,12 @@ function addDocuments(files) {
 }
 
 /**
- * Opens the new document version dialog and adds the file
- *
- * @param {{folder: String, fileName: String, fileExtension: String} file
- *
+ * @description Opens the new document version dialog and adds the file.
+ * @name addNewDocumentVersion
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ * @param {String} file - The name of the file without the extension
  */
 function addNewDocumentVersion(oldFileName, file) {
 
@@ -142,12 +186,13 @@ function addNewDocumentVersion(oldFileName, file) {
 }
 
 /**
- * Uploads a file to an open document dialog window
- *
+ * @description Uploads a file to an open document dialog window.
+ * @name uploadFile
+ * @memberOf Cypress.Chainable#
+ * @function
  * @param {String} folder - The relative path to the file in the cypress/fixtures folder excluding the fileName
  * @param {String} fileName - The name of the file without the extension
  * @param {String} extension - The extension of the file
- *
  */
 function uploadFile(folder, fileName, extension) {
   cy.route('POST', 'files').as('createNewFile');

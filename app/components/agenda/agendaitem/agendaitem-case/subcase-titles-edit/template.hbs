@@ -27,14 +27,14 @@
   </div>
 </div>
 <div class="vl-u-spacer">
-  <div class="vlc-input-field-block">
+  <div class="vlc-input-field-block" data-test-vl-subcase-titles-edit-title-subcase>
     {{web-components/vl-form-label value=(t "title-subcase")}}
     {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
   </div>
 </div>
 {{#if isAgendaItem}}
   <div class="vl-u-spacer">
-    <div class="vlc-input-field-block">
+    <div class="vlc-input-field-block" data-test-vl-subcase-titles-edit-explanation>
       {{web-components/vl-form-label value=(t "explanation")}}
       {{textarea rows="2" class="vl-textarea vl-textarea--block" value=item.explanation}}
     </div>
@@ -42,7 +42,7 @@
 {{/if}}
 {{#if isRemark}}
   <div class="vl-u-spacer">
-    <div class="vlc-input-field-block">
+    <div class="vlc-input-field-block" data-test-vl-subcase-titles-edit-show-in-newsletter>
       {{web-components/vl-form-label value=(t "show-in-newsletter")}}
       {{web-components/vl-toggle value=showInNewsletter}}
     </div>

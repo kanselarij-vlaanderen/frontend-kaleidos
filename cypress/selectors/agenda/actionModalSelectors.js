@@ -1,0 +1,12 @@
+export const showActionOptions = '[data-test-agenda-header-showactionoptions]';
+export const navigatetosubcases = '[data-test-agenda-header-navigatetosubcases]';
+export const announcement = '[data-test-agenda-header-announcement]';
+export const navigatetodecisions = '[data-test-agenda-header-navigatetodecisions]';
+export const navigatetonewsletter = '[data-test-agenda-header-navigatetonewsletter]';
+export const navigatetonotes = '[data-test-agenda-header-navigatetonotes]';
+export const navigatetopressagenda = '[data-test-agenda-header-navigatetopressagenda]';
+export const toggleeditingsession = '[data-test-agenda-header-toggleeditingsession]';
+export const selectsignature = '[data-test-agenda-header-selectsignature]';
+export const downloadddocuments = '[data-test-agenda-header-downloadddocuments]';
+export const deleteAgenda = '[data-test-agenda-header-deleteAgenda]';
+export const addAnnouncementSelector = '[data-test-agenda-header-announcement]';

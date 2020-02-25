@@ -25,7 +25,7 @@
         <div class="vlc-toolbar vlc-toolbar--auto">
         <div class="vlc-toolbar__justified custom-table-search">
           <div class="vlc-toolbar__item" style="width:100%;">
-            <div class="vl-input-field--inline">
+            <div class="vl-input-field--inline" data-test-vl-create-agendaItem-search>
               {{input
                 value=filter
                 elementId="searchId"
@@ -72,7 +72,11 @@
         {{#table.content as |c|}}
           {{#c.header}}
             <th></th>
-              <th><span class="">{{t "short-title-case"}}</span></th>
+            {{th-sortable
+                    field="shortTitle"
+                    currentSorting=sort
+                    label=(t "short-title-case")
+            }}
             <th></th>
           {{/c.header}}
           {{#c.body as |row|}}
@@ -95,6 +99,7 @@
     </div>
     {{web-components/vl-modal-footer
       isLoading=isLoading
+      disableSave=noItemsSelected
       cancelButtonText=(t "cancel")
       saveButtonText=(t "add-to-agenda")
       cancelAction=(action "close")
