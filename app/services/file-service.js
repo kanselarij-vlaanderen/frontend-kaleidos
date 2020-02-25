@@ -108,26 +108,24 @@ export default Service.extend({
   getAllDocumentsFromAgenda(agendaId) {
     return $.ajax({
       method: 'GET',
-      url: `/document-grouping-service/getDocumentsFromAgenda/${agendaId}`,
+      url: `/agendas/${agendaId}/agendaitems/files`,
     })
       .then((result) => {
-        return result.data.files;
+        return result;
       })
       .catch(() => {
         return;
       });
   },
 
-  getZippedFiles(date, agenda, files) {
+  getZippedFiles(data) {
     return $.ajax({
       method: 'POST',
-      url: `/file-bundling-service/bundleAllFiles`,
-      dataType: 'arraybuffer', // or 'blob'
-      data: {
-        meetingDate: date.toString(),
-        agenda: JSON.stringify(agenda),
-        files: JSON.stringify(files),
-      },
+      url: `/files/archive`,
+      data: JSON.stringify(data),
+      contentType: 'application/vnd.api+json',
+      processData: false,
+      dataType: 'blob',
     })
       .then((content) => {
         return content;

@@ -231,14 +231,29 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async downloadAllDocuments() {
+      const filesFromAgenda = await this.fileService.getAllDocumentsFromAgenda(this.currentAgenda.get('id'));
+      const filesForArchive = filesFromAgenda.data.map((file) => {
+        const document = filesFromAgenda.included.filter((incl) => {
+          return incl.type === 'document-versions' &&
+            incl.id === file.relationships.document.data.id;
+        })[0];
+        return {
+          type: 'files',
+          attributes: {
+            uri: file.attributes.uri,
+            name: document.attributes.name + '.' + file.attributes.extension
+          }
+        }
+      })
+      const archive = await this.fileService.getZippedFiles({
+        data: filesForArchive
+      });
       const date = moment(this.currentSession.get('plannedStart'))
         .format('DD_MM_YYYY')
         .toString();
-      const files = await this.fileService.getAllDocumentsFromAgenda(this.currentAgenda.get('id'));
-      const file = await this.fileService.getZippedFiles(date, this.currentAgenda, files);
       return this.saveFileAs(
         `${this.currentAgenda.get('agendaName')}_${date}.zip`,
-        file,
+        archive,
         'application/zip'
       );
     },
