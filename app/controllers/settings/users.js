@@ -37,23 +37,13 @@ export default Controller.extend({
         breakpoints: ['mobile', 'tablet', 'desktop'],
         valuePath: 'account.voId',
       },
-
       {
         label: this.intl.t('email'),
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'account.email',
+        valuePath: 'account.voEmail',
       },
-
-      {
-        label: this.intl.t('ovo-code'),
-        classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-        cellClassNames: ['vl-data-table-col-2'],
-        breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'account.ovo',
-      },
-
       {
         label: this.intl.t('phone'),
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
@@ -61,7 +51,6 @@ export default Controller.extend({
         breakpoints: ['mobile', 'tablet', 'desktop'],
         valuePath: 'account.phone',
       },
-
       {
         label: this.intl.t('group'),
         classNames: ['vl-data-table-col-3 vl-data-table__header-title'],
