@@ -24,10 +24,6 @@ export default Controller.extend(isAuthenticatedMixin, {
     return this.options.get('firstObject');
   }),
 
-  isOc: computed('selectedOption', function() {
-    return this.get('selectedOption.route') == 'oc';
-  }),
-
   async init() {
     this._super(...arguments);
     document.addEventListener('wheel', () => {}, {
