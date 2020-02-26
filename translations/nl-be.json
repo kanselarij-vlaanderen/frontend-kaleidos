@@ -524,7 +524,6 @@
   "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "no-themes-selected": "Geen thema's geselecteerd",
   "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?",
-  "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "search-legend-header-example": "Voorbeeldtoepassing",
   "search-legend-header-explanation": "Betekenis",
   "search-legend-and-example": "Digitale+meters",
@@ -536,5 +535,6 @@
   "search-legend-or-explanation": "OF: Zoek op 'Oostende', zoek op 'Zaventem' en breng alles samen",
   "search-legend-not-explanation": "NIET: Zoek op 'Antwerpen' en neem alle resultaten waar ook 'verkeer' in zit, weg",
   "search-legend-order-explanation": "Zoekt op de gehele reeks van woorden in die volgorde",
-  "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord"
+  "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord",
+  "submitted-by": "- Indiener"
 }
