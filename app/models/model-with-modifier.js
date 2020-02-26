@@ -76,6 +76,6 @@ export default ModelWithToasts.extend({
         }
       }
     }
-
+    return parentSave.call(this, ...arguments);
   }
 });
