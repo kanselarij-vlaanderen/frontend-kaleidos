@@ -1,8 +1,6 @@
 import DS from 'ember-data';
 import {inject} from '@ember/service';
-import moment from "moment";
 import EmberObject from '@ember/object';
-import fetch from 'fetch';
 
 let {Model, attr, belongsTo} = DS;
 
@@ -20,6 +18,10 @@ export default Model.extend({
   checkIfUpdatedNotificationShouldBeShown(type) {
     const modelListToNotShowNotificationFor = ['agendaitem', 'newsletter-info'];
     return !(modelListToNotShowNotificationFor.includes(type));
+  },
+  translateAndParseSuccesType(type) {
+    const singular = type.slice(0, -1)
+    return this.intl.t(singular).toLowerCase();
   },
 
   async save() {

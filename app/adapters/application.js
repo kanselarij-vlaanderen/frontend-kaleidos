@@ -7,6 +7,11 @@ export default DS.JSONAPIAdapter.extend({
   intl: inject(),
   globalError: inject(),
 
+  translateAndParseSuccesType(type) {
+    const singular = type.slice(0, -1)
+    return this.intl.t(singular).toLowerCase();
+  },
+
   handleResponse: function (status, headers, payload, requestData) {
     if (!this.isSuccess(status, headers, payload)) {
       switch (status) {
@@ -79,10 +84,7 @@ export default DS.JSONAPIAdapter.extend({
     }
   },
 
-  translateAndParseSuccesType(type) {
-    const singular = type.slice(0, -1)
-    return this.intl.t(singular).toLowerCase();
-  },
+
 
   checkIfNotificationShouldBeShownInModel(requestUrl) {
     return requestUrl.includes('agendaitems/') || requestUrl.includes('newsletter-infos/');
