@@ -1,0 +1,6 @@
+.vlc-mock-login {
+  // Allow scroll by restricting height to viewport
+  // Subtract from viewport height the header
+  height: calc(100vh - 4.4rem);
+  overflow: auto;
+}

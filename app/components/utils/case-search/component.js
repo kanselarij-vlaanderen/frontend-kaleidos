@@ -8,6 +8,7 @@ import moment from "moment";
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import { debounce } from '@ember/runloop';
 import _ from "lodash";
+import { A } from '@ember/array';
 
 export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
   store: inject(),
@@ -16,11 +17,11 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
   sort: "title",
   action: "",
   onSelect: null,
-  textSearchFields: ['title', 'shortTitle', 'data', 'subcaseTitle', 'subcaseSubTitle'],
+  textSearchFields: A(['title', 'shortTitle', 'data', 'subcaseTitle', 'subcaseSubTitle']),
   isLoading: false,
   isArchived: false,
   searchText: null,
-  mandatees: [],
+  mandatees: A([]),
   dateFrom: null,
   dateTo: null,
   decisionsOnly: false,
@@ -97,8 +98,7 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
               this.set('isLoading', false);
               res.forEach(postProcessDates);
               return res;
-            }).catch((error) => {
-              console.log(error);
+            }).catch(() => {
               this.set('isLoading', false);
               return [];
             })

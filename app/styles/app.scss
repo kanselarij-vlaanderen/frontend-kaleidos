@@ -43,7 +43,6 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/components/_pager';
 @import 'govflanders/components/_pill-input';
 @import 'govflanders/components/_pill';
-@import 'govflanders/components/_popover';
 @import 'govflanders/components/_radio';
 @import 'govflanders/components/_search';
 @import 'govflanders/components/_side-navigation';
@@ -71,9 +70,10 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/additions/_data-table';
 @import 'govflanders/additions/_icon-list';
 @import 'govflanders/additions/_link-list';
+@import 'govflanders/additions/_loader';
 @import 'govflanders/additions/_modal';
+@import 'govflanders/additions/_pill';
 @import 'govflanders/additions/_pill-input';
-@import 'govflanders/additions/_popover';
 @import 'govflanders/additions/_tabs';
 
 // Additions to existing utilities
@@ -86,27 +86,34 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-backlink';
 @import 'custom-components/vlc-box';
+@import 'custom-components/vlc-button-in-input';
 @import 'custom-components/vlc-button-toolbar';
 @import 'custom-components/vlc-comment';
 @import 'custom-components/vlc-container';
 @import 'custom-components/vlc-date-range';
 @import 'custom-components/vlc-document-card';
 @import 'custom-components/vlc-document-list';
+@import 'custom-components/vlc-environment-pill';
+@import 'custom-components/vlc-dropdown-menu';
 @import 'custom-components/vlc-hr';
 @import 'custom-components/vlc-input-field-block';
 @import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-minister';
+@import 'custom-components/vlc-mock-login';
 @import 'custom-components/vlc-navbar';
 @import 'custom-components/vlc-page-header';
 @import 'custom-components/vlc-panel-layout';
 @import 'custom-components/vlc-pill';
+@import 'custom-components/vlc-preview-container';
 @import 'custom-components/vlc-procedure-step';
 @import 'custom-components/vlc-radio-inline';
 @import 'custom-components/vlc-scroll-wrapper';
+@import 'custom-components/vlc-search-legend';
 @import 'custom-components/vlc-side-nav';
 @import 'custom-components/vlc-status-timeline';
 @import 'custom-components/vlc-subline';
 @import 'custom-components/vlc-tabs-reverse';
+@import 'custom-components/vlc-themes-selector';
 @import 'custom-components/vlc-toolbar';
 @import 'custom-components/vlc-user';
 
@@ -117,15 +124,23 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/util/_util';
 
 // Fixes to the framework
-@import 'fixes/fix-pre';
-@import 'fixes/fix-flex-utils';
 @import 'fixes/fix-badge-avatars';
+@import 'fixes/fix-flex-utils';
+@import 'fixes/fix-full-height';
+@import 'fixes/fix-light-table';
+@import 'fixes/fix-kaleidos-viewer';
+@import 'fixes/fix-pre';
+@import 'fixes/fix-sortable-item';
 
 // Custom utilities
-@import 'custom-utilities/_reset';
-@import 'custom-utilities/_extended-spacer';
-@import 'custom-utilities/_scroll';
 @import 'custom-utilities/_box-model';
+@import 'custom-utilities/_cursors';
+@import 'custom-utilities/_extended-spacer';
+@import 'custom-utilities/_reset';
+@import 'custom-utilities/_scroll';
+@import 'custom-utilities/_spacing';
+@import 'custom-utilities/_text';
+@import 'custom-utilities/_transparency';
 
 // Print
 @import 'print/print';
@@ -140,335 +155,3 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/file-uploader';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
-@import 'custom-application/oc-additions';
-
-.vlc-scroll-wrapper {
-  height: 100% !important;
-}
-
-.align-right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-tr.disabled {
-  text-decoration: none;
-  pointer-events: none;
-  opacity: 0.65;
-  background-color: $porcelain;
-}
-
-.vlc-scroll-wrapper__body.full-height {
-  > .ember-view {
-    height: 100% !important;
-  }
-}
-
-.full-height {
-  height: 95% !important;
-}
-
-.max-width {
-  text-overflow: ellipsis;
-  max-width: 800px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.max-width-title {
-  text-overflow: ellipsis;
-  max-width: 500px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.vl-tab__link {
-  &.active {
-    color: $text-color;
-    border-bottom: $tabs-stroke-height solid $text-color;
-    background-color: transparent;
-
-    @include respond-to(small) {
-      [data-vl-tabs] & {
-        border: 0;
-      }
-    }
-  }
-}
-
-.vlc-agenda-items__header--small {
-  padding: 2rem 1.5rem 1.5rem !important;
-}
-
-a.disabled {
-  text-decoration: none;
-  pointer-events: none;
-  cursor: default;
-}
-
-body > .ember-view {
-  height: 100% !important;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden !important;
-}
-
-.vlc-padding-bottom--large {
-  padding-bottom: 6rem;
-}
-
-.transparant {
-  opacity: 0.3 !important;
-}
-
-.settings-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.border-left {
-  border-left: 1px solid #cbd2da;
-}
-
-.vl-data-table__header-title__sort-icon.vl-vi {
-  color: $primary-blue;
-}
-
-tr.lt-expanded-row:hover {
-  background-color: white !important;
-}
-
-tr.postponed {
-  opacity: 0.5;
-  .vl-button__icon.vl-vi.vl-vi-pencil {
-    color: $silver-chalice;
-  }
-  .vl-button__icon.vl-vi.vl-vi-document {
-    color: $silver-chalice;
-  }
-}
-
-.vlc-tabs-reverse__link {
-  padding: 0.7rem 4rem 0.8rem;
-}
-
-.vlc-page-header__title {
-  padding-bottom: 0.5rem !important;
-}
-
-ul {
-  li {
-    &.vl-pill {
-      display: inline-flex;
-      margin-bottom: 0.2em;
-    }
-  }
-}
-
-.vl-data-table--zebra {
-  tbody {
-    tr {
-      &:nth-child(odd) {
-        a:hover {
-          background-color: #eee;
-        }
-      }
-    }
-  }
-}
-
-.preview-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  img {
-    max-width: 200px;
-    max-height: 200px;
-  }
-}
-
-.data-table-pagination {
-  margin-bottom: 6em; //fix for firefox (agenda view height)
-}
-
-.table-header-unsortable {
-  color: $dove-gray;
-}
-
-.sortable-item {
-  transition: all 0.125s;
-}
-
-.sortable-item.is-dragging {
-  transition-duration: 0s;
-  z-index: 10;
-}
-
-.sortable-item.is-dropping {
-  z-index: 10;
-}
-
-.col--4-12.u-align-right,
-.editor-commands,
-.col--2-12,
-.print-only,
-.ember-power-select-status-icon {
-  display: none;
-}
-
-.data-table__actions.data-table__actions--top {
-  border-bottom: none;
-}
-
-.newsletter-themes {
-  margin: 0 !important;
-  padding-left: 0 !important;
-}
-
-.full-width-selector {
-  width: 100%;
-}
-
-.separate-children > * {
-  margin-right: 1em;
-}
-.separate-children > *:last-child {
-  margin-right: 0;
-}
-
-.vl-button-icon--error {
-  color: $red;
-}
-
-.js-vl-popover__toggle:hover {
-  background-color: $blue-gray-lighter;
-}
-
-.deleted-state {
-  opacity: 0.3;
-  pointer-events: none;
-  cursor: none;
-}
-
-.no-capitalize {
-  white-space: pre-line;
-  display: inline-flex;
-}
-
-.checkbox-list-selector {
-  display: grid;
-  grid-template-columns: repeat(3, calc(100% / 3));
-  grid-gap: 10px;
-}
-
-.no-margin {
-  margin: 0;
-}
-
-.padding-small {
-  padding: 0.2em;
-}
-.vlc-list-section-header + .vlc-list-section-header {
-  clear: both;
-}
-.display-none {
-  display: none !important;
-}
-
-.vl-popover__link-list {
-  overflow-y: scroll;
-}
-
-.vlc-pill--clickable {
-  cursor: pointer;
-}
-
-pre {
-  white-space: pre-line;
-}
-
-.vlc-agenda-items__status--positive {
-  font-weight: 500;
-  opacity: 1;
-  color: $napier-green;
-}
-
-.vlc-document-card-item__title {
-  .vl-title {
-    margin-right: 0.5em;
-  }
-}
-
-.ember-attacher-popper {
-  max-height: 400px;
-}
-
-.opacity-lighter {
-  opacity: 0.3;
-}
-.vl-u-flex-grow {
-  flex-grow: 1;
-}
-
-.vl-loader-link {
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.vlc-button-in-input {
-  position: absolute;
-  top: 44%;
-  right: 3.6rem;
-
-  &:hover {
-    background: none;
-    color: #05c;
-  }
-}
-
-.vlc-u-box-model-maximize-height.vlc-scroll-wrapper.vl-u-no-overflow.not-supported {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .width-50 {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-}
-
-.tr-hover {
-  cursor: pointer;
-}
-
-.c-environment {
-  pointer-events: none;
-  background: #FFF7BB;
-  border: 1px solid #E5D34F;
-  border-radius: 2.2rem;
-  padding: 0.6rem 1.2rem;
-  font-weight: bold;
-  font-size: 1.3rem;
-  z-index: 99999;
-}
-
-.c-slide-in-toolbar {
-  position: absolute;
-  top: 0;
-  right: 18rem;
-  left: 18rem;
-  max-height: 4.3rem;
-  z-index: 3200;
-  width: calc(100% - 37rem);
-}
-
-.ember-power-select-trigger {
-  width: 100%;
-}
