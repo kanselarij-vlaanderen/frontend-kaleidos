@@ -74,10 +74,7 @@ export default ModelWithToasts.extend({
           }), 600000);
           throw('The content you were trying to save has already been updated.');
         }
-        break;
       }
-
-
     }
 
   }
