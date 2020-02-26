@@ -41,7 +41,7 @@ export default Component.extend(UploadDocumentMixin, {
         .utc()
         .toDate();
       const agenda = await this.store.findRecord('agenda', currentAgenda.get('id'));
-      const lastAnnouncementPriority = await agenda.lastAnnouncementPriority;
+      const lastAnnouncementPriority = await agenda.lastAnnouncementPriority
       const agendaitem = await this.store.createRecord('agendaitem', {
         shortTitle: title,
         title: text,
