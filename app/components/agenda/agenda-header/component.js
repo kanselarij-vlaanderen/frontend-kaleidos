@@ -130,6 +130,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   },
 
   actions: {
+    print() {
+      window.print();
+    },
+
     navigateToNotes() {
       const {currentSession, currentAgenda} = this;
       this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
