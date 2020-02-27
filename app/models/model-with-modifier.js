@@ -4,6 +4,7 @@ import moment from "moment";
 import EmberObject from '@ember/object';
 import ModelWithToasts from 'fe-redpencil/models/model-with-toasts';
 import fetch from 'fetch';
+import ModifiedOldDataError from "../errors/modified-old-data-error";
 
 let {attr, belongsTo} = DS;
 
@@ -17,10 +18,10 @@ export default ModelWithToasts.extend({
   async save() {
     const parentSave = this._super;
     const modified = this.get('modified');
-
+    const modifiedBy = await this.get('modifiedBy');
     const currentModifiedModel = moment.utc(this.get('modified'));
-
     const dirtyType = this.get('dirtyType');
+
     switch (dirtyType) {
       case 'created': {
         this.set('modified', moment().utc().toDate());
@@ -42,7 +43,7 @@ export default ModelWithToasts.extend({
             });
         const oldModelModifiedMoment = moment.utc(oldModelData.data[0].attributes.modified);
 
-        if (typeof modified == 'undefined' ||
+        if (typeof modified == 'undefined' || modifiedBy == null ||
           (
             typeof modified != 'undefined'
             && currentModifiedModel.isSame(oldModelModifiedMoment)
@@ -72,7 +73,9 @@ export default ModelWithToasts.extend({
             }),
             type: 'error'
           }), 600000);
-          throw('The content you were trying to save has already been updated.');
+          let e = new ModifiedOldDataError();
+          e.message = 'Editing concurrency protection. Data in the db was altered under your feet.';
+          throw(e);
         }
       }
     }

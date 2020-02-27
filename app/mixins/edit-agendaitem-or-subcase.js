@@ -5,6 +5,7 @@ import {inject} from '@ember/service';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
+import ModifiedOldDataError from "../errors/modified-old-data-error";
 
 const getCachedProperty = function (property) {
   return computed(`item.${property}`, {
@@ -51,6 +52,9 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
     return model.save().then((item) => {
       item.reload();
+      return true;
+    }).catch((e) => {
+      throw(e);
     });
   },
 
@@ -85,8 +89,10 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
         const isDesignAgenda = await item.get('isDesignAgenda');
         const agendaitemSubcase = await item.get('subcase');
         if (isDesignAgenda && agendaitemSubcase) {
-          agendaitemSubcase.set('modified', moment().utc().toDate());
-          await this.setNewPropertiesToModel(agendaitemSubcase, resetFormallyOk);
+          await this.setNewPropertiesToModel(agendaitemSubcase, resetFormallyOk).catch((e) => {
+            this.set('isLoading', false);
+            throw(e);
+          });
         }
         await this.setNewPropertiesToModel(item, resetFormallyOk).then(async () => {
           const agenda = await item.get('agenda');
@@ -94,6 +100,9 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
             await this.updateModifiedProperty(agenda);
           }
           item.reload();
+        }).catch((e) => {
+          this.set('isLoading', false);
+          throw(e);
         });
       } else {
         // Don't reset the formalOk when the "showInNewsletter" of a remark is the only change made in the agendaitem
@@ -105,7 +114,10 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
           }
         }
 
-        await this.setNewPropertiesToModel(item, resetFormallyOk);
+        await this.setNewPropertiesToModel(item, resetFormallyOk).catch((e) => {
+          this.set('isLoading', false);
+          throw(e);
+        });
 
         const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
         if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
@@ -116,6 +128,9 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
                 await this.updateModifiedProperty(agenda);
               }
               item.reload();
+            }).catch((e) => {
+              this.set('isLoading', false);
+              throw(e);
             });
           }));
         }
