@@ -22,8 +22,17 @@
     <div class="vlc-container-center vl-typography">
       {{utils/logo-header}}
 
-      <h3>A. Agendapunten</h3>
+      <h4 class="vl-u-text--uppercase vlc-u-text-decoration-underline">A. Agendapunten</h4>
       {{#each (await sortedAgendaitems) as |agendaitem|}}
+        {{#if agendaitem.groupName}}
+          <h4 class="vl-u-text--uppercase vlc-u-text-decoration-underline">
+            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+            {{!-- template-lint-disable no-triple-curlies  --}}
+            {{{agendaitem.groupName}}}
+            {{!-- template-lint-enable no-triple-curlies  --}}
+          </h4>
+        {{/if}}
         <div class="vl-u-spacer-extended-bottom-s">
           <h4>
             {{#if agendaitem.number}}
@@ -41,9 +50,11 @@
             {{agendaitem.title}}
           </p>
         </div>
+        {{#each (await agendaitem.documents) as |document|}}
+          {{item-document shortNotation=true item=agendaitem document=document isClickable=isClickable}}
+        {{/each}}
       {{/each}}
     </div>
-
   </div>
 </div>
 {{outlet}}
