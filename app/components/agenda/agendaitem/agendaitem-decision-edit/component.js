@@ -46,16 +46,25 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 				if (isDesignAgenda) {
 					const agendaitemSubcase = await item.get('subcase');
 					agendaitemSubcase.set('modified', moment().utc().toDate());
-					await this.setNewPropertiesToModel(agendaitemSubcase);
+					await this.setNewPropertiesToModel(agendaitemSubcase).catch((e) => {
+            this.set('isLoading', false);
+            throw(e);
+          });
 					agendaitemSubcase.reload();
 				}
 				await this.setNewPropertiesToModel(item).then(async () => {
 					const agenda = await item.get('agenda');
 					this.updateModifiedProperty(agenda);
 					item.reload();
-				});
+				}).catch((e) => {
+          this.set('isLoading', false);
+          throw(e);
+        });
 			} else {
-				await this.setNewPropertiesToModel(item);
+				await this.setNewPropertiesToModel(item).catch((e) => {
+          this.set('isLoading', false);
+          throw(e);
+        });
 				const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
 				if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
 					await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
@@ -66,7 +75,10 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 							});
 							await item.reload();
 							item.notifyPropertyChanged('decisions');
-						});
+						}).catch((e) => {
+              this.set('isLoading', false);
+              throw(e);
+            });
 					}));
 				}
 			}
