@@ -239,7 +239,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       if (!job.hasEnded) {
         debug('Archive in creation ...');
         this.jobMonitor.register(job);
-        const context = this;
         job.on('didEnd', this, async function (status) {
           if (status === job.SUCCESS) {
             const url = await fileDownloadUrlFromJob(job, name);
