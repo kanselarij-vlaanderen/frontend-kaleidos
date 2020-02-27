@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import {inject} from '@ember/service';
 import {alias, filter} from '@ember/object/computed';
 import {computed} from '@ember/object';
-import { warn } from '@ember/debug';
+import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
@@ -237,24 +237,24 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
       const [name, job] = await Promise.all([namePromise, jobPromise]);
       if (!job.hasEnded) {
-        console.log('Your archive is in creation. Please be patient.');
+        debug('Archive in creation ...');
         this.jobMonitor.register(job);
         const context = this;
         job.on('didEnd', this, async function (status) {
           if (status === job.SUCCESS) {
             const url = await fileDownloadUrlFromJob(job, name);
             const blob = await (await fetch(url)).blob();
+            debug(`Archive ready. (${url})`);
             this.saveFileAs(name, blob, 'application/zip');
-            console.log(`Your archive is ready. (${url})`);
           } else {
-            console.log('Something went wrong while generating your archive.');
+            debug('Something went wrong while generating archive.');
           }
         });
       } else {
         const url = await fileDownloadUrlFromJob(job, name);
         const blob = await (await fetch(url)).blob();
+        debug(`Archive ready. (${url})`);
         this.saveFileAs(name, blob, 'application/zip');
-        console.log(`Your archive is ready. (${url})`);
       }
     },
 
