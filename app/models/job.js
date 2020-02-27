@@ -6,7 +6,7 @@ import { computed } from '@ember/object';
 export default DS.Model.extend(Evented, {
   RUNNING: Object.freeze('http://vocab.deri.ie/cogs#Running'),
   SUCCESS: Object.freeze('http://vocab.deri.ie/cogs#Success'),
-  FAILED: Object.freeze('http://vocab.deri.ie/cogs#Failed'),
+  FAILED: Object.freeze('http://vocab.deri.ie/cogs#Fail'),
 
   created: DS.attr(),
   status: DS.attr(),
