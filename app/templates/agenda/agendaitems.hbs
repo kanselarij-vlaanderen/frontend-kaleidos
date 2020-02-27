@@ -5,8 +5,7 @@
       value=(readonly filter)
       search=(action "searchAgendaItems")
     }}
-    {{!--
-    <div class="vlc-scroll-wrapper__body">
+    <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       {{agenda/agenda-list
         announcements=(await sortedAnnouncements)
         agendaitems=(await sortedAgendaitems)
@@ -17,10 +16,16 @@
         refresh=(action "refresh")
       }}
     </div>
-    --}}
 
-    <div class="vlc-container-center vl-typography">
+    <div class="vlc-container-center vl-typography vlc-printable-agenda-list vlc-show-on-print">
       {{utils/logo-header}}
+
+      <h2 class="vlc-page-header__title vlc-page-header__title--bordered vlc-printable-agenda-list__title" data-test-agenda-header-title>
+        {{t "agenda-of"}}
+        {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
+        {{t "at"}}
+        {{moment-format currentSession.plannedStart "HH:mm"}}
+      </h2>
 
       <h4 class="vl-u-text--uppercase vlc-u-text-decoration-underline">A. Agendapunten</h4>
       {{#each (await sortedAgendaitems) as |agendaitem|}}
