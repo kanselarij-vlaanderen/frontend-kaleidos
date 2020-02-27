@@ -4,6 +4,7 @@ import {alias, filter} from '@ember/object/computed';
 import {computed} from '@ember/object';
 import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+import EmberObject from '@ember/object';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { constructArchiveName, fetchArchivingJobForAgenda, fileDownloadUrlFromJob } from 'fe-redpencil/utils/zip-agenda-files';
@@ -20,6 +21,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   router: inject(),
   intl: inject(),
   jobMonitor: inject(),
+  globalError: inject(),
 
   isShowingOptions: false,
   isPrintingNotes: false,
@@ -238,21 +240,41 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       const [name, job] = await Promise.all([namePromise, jobPromise]);
       if (!job.hasEnded) {
         debug('Archive in creation ...');
+        this.globalError.showToast.perform(EmberObject.create({
+          title: this.intl.t('archive-in-creation-title'),
+          message: this.intl.t('archive-in-creation-message'),
+          type: 'success'
+        }));
         this.jobMonitor.register(job);
         job.on('didEnd', this, async function (status) {
           if (status === job.SUCCESS) {
             const url = await fileDownloadUrlFromJob(job, name);
             const blob = await (await fetch(url)).blob();
             debug(`Archive ready. (${url})`);
+            this.globalError.showToast.perform(EmberObject.create({
+              title: this.intl.t('file-downloading-title'),
+              message: this.intl.t('file-downloading-message'),
+              type: 'success'
+            }));
             this.saveFileAs(name, blob, 'application/zip');
           } else {
             debug('Something went wrong while generating archive.');
+            this.globalError.showToast.perform(EmberObject.create({
+              title: this.intl.t('warning-title'),
+              message: this.intl.t('error'),
+              type: 'error'
+            }));
           }
         });
       } else {
         const url = await fileDownloadUrlFromJob(job, name);
         const blob = await (await fetch(url)).blob();
         debug(`Archive ready. (${url})`);
+        this.globalError.showToast.perform(EmberObject.create({
+          title: this.intl.t('file-downloading-title'),
+          message: this.intl.t('file-downloading-message'),
+          type: 'success'
+        }));
         this.saveFileAs(name, blob, 'application/zip');
       }
     },
