@@ -379,7 +379,7 @@
   "error-bad-request": "Foute aanvraag",
   "successfully-created-title": "Gelukt!",
   "successfully-saved": "De wijzigingen zijn opgeslagen.",
-  "successfully-saved-type": "De wijzigingen het {type} werden opgeslagen.",
+  "successfully-saved-type": "De wijzigingen in het {type} werden opgeslagen.",
   "successfully-created": "Een {type} werd aangemaakt.",
   "agendaitem": "agendapunt",
   "policy-level": "beleidsniveau",
