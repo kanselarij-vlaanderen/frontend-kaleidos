@@ -6,6 +6,7 @@ import { warn } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { constructArchiveName, fetchArchivingJobForAgenda, fileDownloadUrlFromJob } from 'fe-redpencil/utils/zip-agenda-files';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
@@ -18,6 +19,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   fileService: inject(),
   router: inject(),
   intl: inject(),
+  jobMonitor: inject(),
 
   isShowingOptions: false,
   isPrintingNotes: false,
@@ -231,31 +233,29 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async downloadAllDocuments() {
-      const filesFromAgenda = await this.fileService.getAllDocumentsFromAgenda(this.currentAgenda.get('id'));
-      const filesForArchive = filesFromAgenda.data.map((file) => {
-        const document = filesFromAgenda.included.filter((incl) => {
-          return incl.type === 'document-versions' &&
-            incl.id === file.relationships.document.data.id;
-        })[0];
-        return {
-          type: 'files',
-          attributes: {
-            uri: file.attributes.uri,
-            name: document.attributes.name + '.' + file.attributes.extension
+      const namePromise = constructArchiveName(this.currentAgenda);
+      const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
+      const [name, job] = await Promise.all([namePromise, jobPromise]);
+      if (!job.hasEnded) {
+        console.log('Your archive is in creation. Please be patient.');
+        this.jobMonitor.register(job);
+        const context = this;
+        job.on('didEnd', this, async function (status) {
+          if (status === job.SUCCESS) {
+            const url = await fileDownloadUrlFromJob(job, name);
+            const blob = await (await fetch(url)).blob();
+            this.saveFileAs(name, blob, 'application/zip');
+            console.log(`Your archive is ready. (${url})`);
+          } else {
+            console.log('Something went wrong while generating your archive.');
           }
-        }
-      })
-      const archive = await this.fileService.getZippedFiles({
-        data: filesForArchive
-      });
-      const date = moment(this.currentSession.get('plannedStart'))
-        .format('DD_MM_YYYY')
-        .toString();
-      return this.saveFileAs(
-        `${this.currentAgenda.get('agendaName')}_${date}.zip`,
-        archive,
-        'application/zip'
-      );
+        });
+      } else {
+        const url = await fileDownloadUrlFromJob(job, name);
+        const blob = await (await fetch(url)).blob();
+        this.saveFileAs(name, blob, 'application/zip');
+        console.log(`Your archive is ready. (${url})`);
+      }
     },
 
     async deleteAgenda(agenda) {
