@@ -1,7 +1,4 @@
 import fetch from 'fetch';
-import getPaginationMetadata from './get-pagination-metadata';
-import ArrayProxy from '@ember/array/proxy';
-import { A } from '@ember/array';
 import moment from 'moment';
 
 function prettifyAgendaName (name) {
