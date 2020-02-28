@@ -43,16 +43,6 @@
               {{t "approve-small"}}
             </button>
           {{/if}}
-          <button
-            class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-            {{action "print"}}
-          >
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-              aria-hidden="true"
-            ></i>
-            {{t "print"}}
-          </button>
           <button data-test-agenda-header-showActionOptions
             class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions"}}
@@ -209,6 +199,15 @@
                         {{t "agenda-release-documents"}}
                       </a>
                     {{/if}}
+                  </li>
+                  <li class="vl-popover__link-list__item">
+                    <a
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "print"}}
+                    >
+                      {{t "print"}}
+                    </a>
                   </li>
                   <li
                     class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
