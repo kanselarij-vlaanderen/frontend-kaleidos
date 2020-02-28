@@ -37,6 +37,8 @@ Router.map(function() {
     this.route('ministers', { path: '/ministers' });
     this.route('overview', { path: '/overzicht' });
     this.route('users', { path:"/gebruikers"});
+    this.route('errors', { path: "/errors"});
+    this.route('logs', { path: "/logs"});
   });
   this.route('loading', { path: '/laden' });
   this.route('mock-login');

@@ -183,6 +183,8 @@
   "manage-subcase-types": "Procedurestap types beheer",
   "manage-user-roles": "Gebruikersbeheer",
   "manage-users": "Gebruikersbeheer",
+  "logging-errors": "Errors",
+  "logging-logs": "Logs",
   "mandate": "Bevoegdheid",
   "mandatee": "Hoedanigheid",
   "mandatee-approval": "Goedkeuring co-agendering",
@@ -519,5 +521,11 @@
   "explanation": "Toelichting",
   "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "no-themes-selected": "Geen thema's geselecteerd",
-  "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?"
+  "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?",
+  "monitoring-id": "ID",
+  "monitoring-type": "Type",
+  "monitoring-service": "Service",
+  "monitoring-timestamp": "Timestamp",
+  "monitoring-state": "Status",
+  "monitoring-error": "Error"
 }
