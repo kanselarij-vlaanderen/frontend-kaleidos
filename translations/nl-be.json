@@ -522,5 +522,13 @@
   "explanation": "Toelichting",
   "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "no-themes-selected": "Geen thema's geselecteerd",
-  "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?"
+  "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?",
+  "manage-users-name": "Naam",
+  "manage-users-email": "Email",
+  "manage-users-telephone": "Telefoonnummer",
+  "manage-users-group": "Groep",
+  "manage-users-void": "VO-ID",
+  "manage-users-ovo": "OVO-code",
+  "manage-users-general-info": "Algemene informatie",
+  "manage-users-technical-info": "Technische informatie"
 }

@@ -4,7 +4,6 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Route.extend(AuthenticatedRouteMixin,isAuthenticatedMixin, {
 	authenticationRoute: 'login',
-
 	redirect() {
 		if (!this.isEditor) {
 			this.transitionTo('');
