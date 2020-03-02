@@ -1,5 +1,12 @@
 import Controller from '@ember/controller';
 
-export default Controller.extend({
+import { inject as service } from "@ember/service";
 
+export default Controller.extend({
+  intl: service(),
+  globalError: service(),
+
+  actions:{
+
+  }
 });
