@@ -249,13 +249,13 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         job.on('didEnd', this, async function (status) {
           if (status === job.SUCCESS) {
             const url = await fileDownloadUrlFromJob(job, name);
-            const blob = await (await fetch(url)).blob();
-            debug(`Archive ready. (${url})`);
+            debug(`Archive ready. Downloading now (${url})`);
             this.globalError.showToast.perform(EmberObject.create({
               title: this.intl.t('file-downloading-title'),
               message: this.intl.t('file-downloading-message'),
               type: 'success'
             }));
+            const blob = await (await fetch(url)).blob();
             this.saveFileAs(name, blob, 'application/zip');
           } else {
             debug('Something went wrong while generating archive.');
@@ -268,13 +268,13 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         });
       } else {
         const url = await fileDownloadUrlFromJob(job, name);
-        const blob = await (await fetch(url)).blob();
-        debug(`Archive ready. (${url})`);
+        debug(`Archive ready. Downloading now (${url})`);
         this.globalError.showToast.perform(EmberObject.create({
           title: this.intl.t('file-downloading-title'),
           message: this.intl.t('file-downloading-message'),
           type: 'success'
         }));
+        const blob = await (await fetch(url)).blob();
         this.saveFileAs(name, blob, 'application/zip');
       }
     },
