@@ -1,3 +1,7 @@
+
+{{#utils/settings-header title=(t 'manage-user' firstName=model.firstName lastName=model.lastName)}}
+  {{utils/back-button}}
+{{/utils/settings-header}}
 <div class="vl-u-spacer-extended-l">
 <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
 <div class="vl-col--6-12">
@@ -12,7 +16,7 @@
         <p class="form__label u-padding--left--small">{{t 'manage-users-name'}}</p>
       </div>
       <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p>{{model.firstName}} {{model.firstName}}</p>
+        <p>{{model.firstName}} {{model.lastName}}</p>
       </div>
     </div>
     <div class="vl-grid vl-grid--isstacked">
