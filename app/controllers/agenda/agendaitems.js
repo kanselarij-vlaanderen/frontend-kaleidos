@@ -7,6 +7,7 @@ export default Controller.extend({
 	queryParams: ["filter"],
 
 	routing: inject('-routing'),
+	printService: inject('print-service'),
 	filter: null,
 	sessionService: inject(),
 	agendaService: inject(),

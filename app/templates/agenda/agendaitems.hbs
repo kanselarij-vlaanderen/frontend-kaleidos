@@ -17,11 +17,13 @@
       }}
     </div>
 
-    {{agenda/printable-agenda-list
-      agendaitems=(await sortedAgendaitems)
-      announcements=(await sortedAnnouncements)
-      currentSession=currentSession
-    }}
+    {{#if printService.isPrinting}}
+      {{agenda/printable-agenda-list
+        agendaitems=(await sortedAgendaitems)
+        announcements=(await sortedAnnouncements)
+        currentSession=currentSession
+      }}
+    {{/if}}
   </div>
 </div>
 {{outlet}}
