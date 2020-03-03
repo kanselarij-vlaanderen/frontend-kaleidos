@@ -37,8 +37,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     async verify() {
       const documentVersions = await this.get('documentToDelete.documentVersions');
       await this.unlinkDocumentVersions(documentVersions, this.get('item'));
-      this.set('isVerifyingUnlink', false);
-      // this.set('documentToDelete', null);
+      if (!this.isDestroyed) {
+        this.set('isVerifyingUnlink', false);
+      }
     },
 
     unlinkDocument(document) {
