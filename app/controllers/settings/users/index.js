@@ -49,9 +49,8 @@ export default Controller.extend({
         classNames: ['vl-data-table-col-3 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-3'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'group',
+        valuePath: 'group.name',
         sortable: true,
-        cellComponent: 'web-components/light-table/vl-group-column',
       },
       {
         classNames: ['vl-data-table-col-1'],
@@ -65,7 +64,7 @@ export default Controller.extend({
         cellClassNames: ['vl-data-table-col-1'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
         sortable: false,
-        cellComponent: 'web-components/light-table/vl-delete-user',
+        cellComponent: 'components/utils/next-button',
       },
     ];
   }),

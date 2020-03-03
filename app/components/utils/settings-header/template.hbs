@@ -1,5 +1,8 @@
 <div class="vlc-toolbar u-border">
   <div class="vlc-toolbar__left">
+    {{#if showBackButton}}
+      {{utils/back-button}}
+    {{/if}}
     <div class="vlc-toolbar__item u-padding--left">
       <h4 class="vlc-toolbar__title">{{title}}</h4>
     </div>
