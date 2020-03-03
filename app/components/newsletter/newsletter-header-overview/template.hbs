@@ -69,16 +69,6 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if shouldShowPrintButton}}
-            <button
-              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-              {{action "print"}}
-            >
-              <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-                aria-hidden="true"
-              ></i>
-              {{t "print"}}
-            </button>
             {{#if isEditor}}
               <button
                 class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
@@ -97,7 +87,7 @@
                 {{/if}}
                 {{t "actions"}}
                 {{#attach-popover
-                  class="ember-attacher-popper"
+                  class="ember-attacher-popper vlc-hide-on-print"
                   hideOn="clickout click"
                   showOn="click"
                   animation="shift"
@@ -181,6 +171,15 @@
                         </a>
                       </li>
                     {{/if}}
+                    <li class="vlc-dropdown-menu__item">
+                      <a
+                        class="vl-link vl-link--block"
+                        {{action attacher.hide}}
+                        {{action "print"}}
+                      >
+                        {{t "print"}}
+                      </a>
+                    </li>
                   </ul>
                 {{/attach-popover}}
               </button>

@@ -5,7 +5,7 @@
       value=(readonly filter)
       search=(action "searchAgendaItems")
     }}
-    <div class="vlc-scroll-wrapper__body">
+    <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       {{agenda/agenda-list
         announcements=(await sortedAnnouncements)
         agendaitems=(await sortedAgendaitems)
@@ -16,6 +16,12 @@
         refresh=(action "refresh")
       }}
     </div>
+
+    {{agenda/printable-agenda-list
+      agendaitems=(await sortedAgendaitems)
+      announcements=(await sortedAnnouncements)
+      currentSession=currentSession
+    }}
   </div>
 </div>
 {{outlet}}

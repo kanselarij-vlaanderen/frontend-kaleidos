@@ -60,7 +60,7 @@
             {{/if}}
             {{t "actions"}}
             {{#attach-popover
-              class="ember-attacher-popper"
+              class="ember-attacher-popper vlc-hide-on-print"
               hideOn="clickout click"
               showOn="click"
               animation="shift"
@@ -121,6 +121,15 @@
                     {{action attacher.hide}}
                   >
                     {{t "printable-press-agenda"}}
+                  </a>
+                </li>
+                <li class="vlc-dropdown-menu__item">
+                  <a
+                    class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "print"}}
+                  >
+                    {{t "print"}}
                   </a>
                 </li>
                 {{#if isEditor}}
