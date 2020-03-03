@@ -23,9 +23,9 @@
                   animation="shift"
                   placement="bottom" as |attacher|
           }}
-            <ul class="vl-popover__link-list">
+            <ul class="vlc-dropdown-menu">
               {{#each (await meetings) as |meeting|}}
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <button class="vl-link"
                     {{action attacher.hide}}
                     {{action "proposeForAgenda" subcase meeting}}
@@ -36,9 +36,9 @@
                 </li>
               {{/each}}
               {{#if (gt (await meetings.length) 0)}}
-                <li class="vl-popover__link-list__separator" role="none"></li>
+                <li class="vlc-dropdown-menu__separator" role="none"></li>
               {{/if}}
-              <li class="vl-popover__link-list__item">
+              <li class="vlc-dropdown-menu__item">
                 <button class="vl-link"
                   {{action attacher.hide}}
                   {{action "proposeForOtherAgenda" subcase}}
@@ -72,9 +72,9 @@
                     animation="shift"
                     placement="bottom" as |attacher|
             }}
-              <ul class="vl-popover__link-list">
+              <ul class="vlc-dropdown-menu">
                 {{#if (await canDelete)}}
-                    <li class="vl-popover__link-list__item">
+                    <li class="vlc-dropdown-menu__item">
                   <a class="vl-link"
                     {{action attacher.hide}}
                     {{action "requestDeleteSubcase" subcase}}
@@ -83,7 +83,7 @@
                   </a>
                 </li>
                 {{/if}}
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__item">
                   {{#if (not await subcase.concluded)}}
                     <a
                             class="vl-link vl-link--block"

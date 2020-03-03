@@ -43,7 +43,6 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/components/_pager';
 @import 'govflanders/components/_pill-input';
 @import 'govflanders/components/_pill';
-@import 'govflanders/components/_popover';
 @import 'govflanders/components/_radio';
 @import 'govflanders/components/_search';
 @import 'govflanders/components/_side-navigation';
@@ -75,7 +74,6 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/additions/_modal';
 @import 'govflanders/additions/_pill';
 @import 'govflanders/additions/_pill-input';
-@import 'govflanders/additions/_popover';
 @import 'govflanders/additions/_tabs';
 
 // Additions to existing utilities
@@ -96,6 +94,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-document-card';
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
+@import 'custom-components/vlc-dropdown-menu';
 @import 'custom-components/vlc-hr';
 @import 'custom-components/vlc-input-field-block';
 @import 'custom-components/vlc-list-section-header';
