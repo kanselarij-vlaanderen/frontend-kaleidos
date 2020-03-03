@@ -14,6 +14,13 @@
     {{/if}}
   </pre>
 </h4>
+
+{{#if (not isEditingOverview)}}
+  {{#if (and isViewer agendaitem.explanation)}}
+    <span class="vl-u-text--bold vlc-agenda-items__remark">{{ t "remark-title" }}: </span> {{agendaitem.explanation}}
+  {{/if}}
+{{/if}}
+
 {{#if (and renderDetails (not aboutToDelete))}}
   {{#if (not selectedAgendaItem)}}
     {{#if (or (await agendaitem.subcase) agendaitem.showAsRemark)}} {{!-- What is this test for? Determining if announcement better through "showAsRemark"? --}}
@@ -22,12 +29,6 @@
           {{agendaitem.title}}
         </pre>
       {{/if}}
-    {{/if}}
-  {{/if}}
-
-  {{#if (not isEditingOverview)}}
-    {{#if (and isViewer agendaitem.explanation)}}
-      <span class="vl-u-text--bold ">{{ t "remark-title" }}: </span> {{agendaitem.explanation}}
     {{/if}}
   {{/if}}
 
