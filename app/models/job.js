@@ -17,6 +17,8 @@ export default DS.Model.extend(Evented, {
   }),
 
   statusObserver: observer('hasEnded', function() {
-    this.trigger('didEnd', this.status);
+    if (this.hasEnded) {
+      this.trigger('didEnd', this.status);
+    }
   })
 });
