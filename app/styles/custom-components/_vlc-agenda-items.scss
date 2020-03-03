@@ -204,3 +204,9 @@ $i: 0;
 .vlc-agenda-items-compare__item.agenda-2-item-3 {
   opacity: 0.30;
 }
+
+.vlc-agenda-items__status--positive {
+  font-weight: 500;
+  opacity: 1;
+  color: $napier-green;
+}

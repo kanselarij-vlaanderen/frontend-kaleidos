@@ -1,12 +1,12 @@
 <div class="vlc-toolbar">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <h1 class="vlc-page-header__title vlc-page-header__title--bordered" data-test-agenda-header-title>
+      <h1 class="vlc-page-header__title vlc-u-padding-bottom-5 vlc-page-header__title--bordered" data-test-agenda-header-title>
         {{t "agenda-of"}}
         {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
         {{t "at"}}
         {{moment-format currentSession.plannedStart "HH:mm"}}
-          <span class="vl-u-text vl-u-text--muted" style="font-size:1.6rem;"> - {{await currentSession.kindToShow.label}}</span>
+          <span class="vlc-page-header__subtitle vl-u-text vl-u-text--muted" style="font-size:1.6rem;"> - {{await currentSession.kindToShow.label}}</span>
       </h1>
       <div class="vlc-page-header__sub">
         <div class="vlc-toolbar vlc-toolbar--auto">
@@ -66,9 +66,9 @@
               animation="shift"
               placement="bottom" as |attacher|
             }}
-              <ul class="vl-popover__link-list">
+              <ul class="vlc-dropdown-menu">
                 {{#if (and isEditor (eq currentAgenda.name "Ontwerpagenda"))}}
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__item">
                     <a data-test-agenda-header-navigateToSubCases
                       class="vl-link vl-link--block"
                       {{action attacher.hide}}
@@ -77,7 +77,7 @@
                       {{t "add-to-agenda"}}
                     </a>
                   </li>
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__item">
                     <a data-test-agenda-header-announcement
                       class="vl-link vl-link--block"
                       {{action attacher.hide}}
@@ -86,9 +86,9 @@
                       {{t "create-announcement"}}
                     </a>
                   </li>
-                  <li class="vl-popover__link-list__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__separator" role="none"></li>
                 {{/if}}
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-navigateToDecisions
                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
@@ -97,7 +97,7 @@
                     {{t "print-decisions"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-navigateToNewsletter
                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
@@ -106,7 +106,7 @@
                     {{t "print-newsletter"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-navigateToNotes
                     class="vl-link vl-link--block"
                     {{action "navigateToNotes"}}
@@ -114,7 +114,7 @@
                     {{t "print-notes"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-navigateToPressAgenda
                     class="vl-link vl-link--block"
                     {{action "navigateToPressAgenda"}}
@@ -124,8 +124,8 @@
                   </a>
                 </li>
                 {{#if isEditor}}
-                  <li class="vl-popover__link-list__separator" role="none"></li>
-                  <li>
+                  <li class="vlc-dropdown-menu__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__item">
                     <a data-test-agenda-header-toggleEditingSession
                       class="vl-link vl-link--block"
                       {{action "toggleEditingSession"}}
@@ -134,7 +134,7 @@
                       {{t "edit-session"}}
                     </a>
                   </li>
-                  <li>
+                  <li class="vlc-dropdown-menu__item">
                     <a data-test-agenda-header-selectSignature
                       class="vl-link vl-link--block"
                       {{action "selectSignature"}}
@@ -144,11 +144,7 @@
                     </a>
                   </li>
                 {{/if}}
-                {{!-- Temporarily disable "downloading all documents" since changes to the document model break its functionality.
-                  A more thorough solution for this is in progress.
-                --}}
-                {{!--
-                <li class="vl-popover__link-list__item">
+                <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-downloaddDocuments
                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
@@ -157,10 +153,9 @@
                     {{t "download-documents"}}
                   </a>
                 </li>
-                --}}
                 {{#if isEditor}}
-                  <li class="vl-popover__link-list__separator" role="none"></li>
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__item">
                     {{#if (not currentSession.isFinal)}}
                       {{#if (await hasMultipleAgendas)}}
                         <a data-test-agenda-header-lockAgenda
@@ -181,7 +176,7 @@
                       </a>
                     {{/if}}
                   </li>
-                  <li class="vl-popover__link-list__item">
+                  <li class="vlc-dropdown-menu__item">
                     {{#if currentSession.canReleaseDecisions}}
                       <a data-test-agenda-header-releaseDecisions
                         class="vl-link vl-link--block vl-u-text--error"
@@ -201,7 +196,7 @@
                     {{/if}}
                   </li>
                   <li
-                    class="vl-popover__link-list__item vl-popover__link-list__item--action-danger"
+                    class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                   >
                     {{#if
                       (or

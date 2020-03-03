@@ -2,10 +2,12 @@ import Component from '@ember/component';
 import {inject} from '@ember/service';
 import {alias, filter} from '@ember/object/computed';
 import {computed} from '@ember/object';
-import { warn } from '@ember/debug';
+import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+import EmberObject from '@ember/object';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { constructArchiveName, fetchArchivingJobForAgenda, fileDownloadUrlFromJob } from 'fe-redpencil/utils/zip-agenda-files';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
@@ -18,6 +20,8 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   fileService: inject(),
   router: inject(),
   intl: inject(),
+  jobMonitor: inject(),
+  globalError: inject(),
 
   isShowingOptions: false,
   isPrintingNotes: false,
@@ -231,31 +235,48 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async downloadAllDocuments() {
-      const filesFromAgenda = await this.fileService.getAllDocumentsFromAgenda(this.currentAgenda.get('id'));
-      const filesForArchive = filesFromAgenda.data.map((file) => {
-        const document = filesFromAgenda.included.filter((incl) => {
-          return incl.type === 'document-versions' &&
-            incl.id === file.relationships.document.data.id;
-        })[0];
-        return {
-          type: 'files',
-          attributes: {
-            uri: file.attributes.uri,
-            name: document.attributes.name + '.' + file.attributes.extension
+      const namePromise = constructArchiveName(this.currentAgenda);
+      const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
+      const [name, job] = await Promise.all([namePromise, jobPromise]);
+      if (!job.hasEnded) {
+        debug('Archive in creation ...');
+        this.globalError.showToast.perform(EmberObject.create({
+          title: this.intl.t('archive-in-creation-title'),
+          message: this.intl.t('archive-in-creation-message'),
+          type: 'success'
+        }));
+        this.jobMonitor.register(job);
+        job.on('didEnd', this, async function (status) {
+          if (status === job.SUCCESS) {
+            const url = await fileDownloadUrlFromJob(job, name);
+            debug(`Archive ready. Downloading now (${url})`);
+            this.globalError.showToast.perform(EmberObject.create({
+              title: this.intl.t('file-downloading-title'),
+              message: this.intl.t('file-downloading-message'),
+              type: 'success'
+            }));
+            const blob = await (await fetch(url)).blob();
+            this.saveFileAs(name, blob, 'application/zip');
+          } else {
+            debug('Something went wrong while generating archive.');
+            this.globalError.showToast.perform(EmberObject.create({
+              title: this.intl.t('warning-title'),
+              message: this.intl.t('error'),
+              type: 'error'
+            }));
           }
-        }
-      })
-      const archive = await this.fileService.getZippedFiles({
-        data: filesForArchive
-      });
-      const date = moment(this.currentSession.get('plannedStart'))
-        .format('DD_MM_YYYY')
-        .toString();
-      return this.saveFileAs(
-        `${this.currentAgenda.get('agendaName')}_${date}.zip`,
-        archive,
-        'application/zip'
-      );
+        });
+      } else {
+        const url = await fileDownloadUrlFromJob(job, name);
+        debug(`Archive ready. Downloading now (${url})`);
+        this.globalError.showToast.perform(EmberObject.create({
+          title: this.intl.t('file-downloading-title'),
+          message: this.intl.t('file-downloading-message'),
+          type: 'success'
+        }));
+        const blob = await (await fetch(url)).blob();
+        this.saveFileAs(name, blob, 'application/zip');
+      }
     },
 
     async deleteAgenda(agenda) {
