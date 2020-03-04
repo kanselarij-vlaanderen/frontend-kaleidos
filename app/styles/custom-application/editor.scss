@@ -1,5 +1,21 @@
 .vl-editor {
   min-height: 160px;
+
+  .toolbar {
+    .col--4-12 {
+      display: none;
+    } 
+  }
+
+  .editor-commands {
+    display: none;
+  }
+  .editor-loading-events {
+    display: none;
+  }
+  .editor-hints {
+    display: none;
+  }
 }
 
 .container-flex--contain {

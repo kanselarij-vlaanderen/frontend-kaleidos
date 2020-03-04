@@ -55,4 +55,8 @@
   .vlc-page-header .vlc-page-header__title--bordered {
     border: none;
   }
+
+  body > .ember-view {
+    display: block !important;
+  }
 }

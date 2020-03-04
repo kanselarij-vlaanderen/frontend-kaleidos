@@ -26,8 +26,8 @@
                   animation="shift"
                   placement="bottom" as |attacher|
                 }}
-                  <ul class="vl-popover__link-list">
-                    <li class="vl-popover__link-list__item">
+                  <ul class="vlc-dropdown-menu">
+                    <li class="vlc-dropdown-menu__item">
                       <a
                         class="vl-link vl-link--block"
                         {{action attacher.hide}}
@@ -36,17 +36,17 @@
                         {{t "new-version"}}
                       </a>
                     </li>
-                    <li class="vl-popover__link-list__item">
+                    <li class="vlc-dropdown-menu__item">
                       <a
                         class="vl-link vl-link--block"
                         {{action attacher.hide}}
-                        {{action "toggleIsEditing"}}
+                        {{action "startEditingName"}}
                       >
                         {{t "document-title-edit"}}
                       </a>
                     </li>
-                    <li class="vl-popover__link-list__separator" role="none"></li>
-                    <li class="vl-popover__link-list__item">
+                    <li class="vlc-dropdown-menu__separator" role="none"></li>
+                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                       <a
                         class="vl-link vl-link--block vl-u-text--error"
                         {{action attacher.hide}}
@@ -80,21 +80,20 @@
         <div class="vl-u-display-flex vl-u-flex-direction-column vlc-u-box-model-maximize-width">
             {{#if (not isEditing)}}
             <h6 class="vl-title vl-title--h6">
-              <span {{action "toggleIsEditing"}}>
-                {{await lastDocumentVersionName}}
+              <span {{action "startEditingName"}}>
+                {{document.lastDocumentVersion.name}}
               </span>
             </h6>
             {{else}}
               <div class="vl-u-display-flex vl-u-display-flex-align-center">
                   {{input
                     type="text"
-                    id=id
                     class="vl-input-field vl-input-field--block"
-                    value=(mut document.name)
+                    value=nameBuffer
                   }}
                 <button
-                  class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                  {{action "saveChanges"}}
+                  class="vl-button vl-button--link vl-button--icon"
+                  {{action "saveNameChange" document.lastDocumentVersion.content}} {{!-- TODO: Get rid of 'content' (in current setup I didn't see an other way) --}}
                 >
                   <i
                     class="vl-vi vl-vi-save vl-button__icon"
@@ -105,8 +104,8 @@
                   </span>
                 </button>
                 <button
-                  class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
-                  {{action "cancelChanges"}}
+                  class="vl-button vl-button--link vl-button--icon"
+                  {{action "cancelEditingName"}}
                 >
                   <i
                     class="vl-vi vl-vi-cross vl-button__icon"
@@ -162,7 +161,7 @@
 </div>
 {{#if isUploadingNewVersion}}
   {{#web-components/vl-modal
-    closeModal=(action "closeUploadDialog")
+    closeModal=(action "cancelUploadVersion")
     isOverlay=true
     title=(t "new-document-version")
   }}
@@ -170,17 +169,22 @@
       {{#if (not uploadedFile)}}
         {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
       {{else}}
+        {{web-components/vl-form-label value=(t "name")}}
+        {{web-components/vl-form-input
+          value=documentContainer.lastDocument.name
+          width=4
+        }}
         {{ember-kaleidos-webuniversum/vl-uploaded-document
-          name=lastDocumentVersion.file.filename
-          extension=lastDocumentVersion.file.extension
-          size=lastDocumentVersion.file.size
-          downloadName=lastDocumentVersion.file.filename
+          name=documentContainer.lastDocument.file.filename
+          extension=documentContainer.lastDocument.file.extension
+          size=documentContainer.lastDocument.file.size
+          downloadName=documentContainer.lastDocument.file.filename
           downloadLink=(concat
-            lastDocumentVersion.file.downloadLink
+            documentContainer.lastDocument.file.downloadLink
             "?name="
-            lastDocumentVersion.file.filename
+            documentContainer.lastDocument.file.filename
           )
-          delete=(action "delete")
+          delete=(action "delete" documentContainer.lastDocument)
         }}
       {{/if}}
     </div>
@@ -188,7 +192,7 @@
       cancelButtonText=(t "cancel")
       saveButtonText=(t "add")
       isLoading=isLoading
-      cancelAction=(action "closeUploadDialog")
+      cancelAction=(action "cancelUploadVersion")
       saveAction=(action "saveDocuments")
       disableSave=(not uploadedFile)
     }}

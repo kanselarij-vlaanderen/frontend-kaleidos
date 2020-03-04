@@ -28,14 +28,4 @@ export default Component.extend(LightTableMixin, {
   loadingText: computed('intl', function () {
     return this.intl.t('users-loading-text')
   }),
-
-  actions: {
-    async onRowClick(row) {
-      //TODO: Route to new page when clicking on row.
-      const account = await row.content.account;
-      const user = await account.get('user');
-      const userId = await user.get('id');
-      this.router.transitionTo('settings.users.user', userId);
-    },
-  }
 });

@@ -1,4 +1,4 @@
-<div class="vl-u-spacer--large vlc-padding-bottom--large">
+<div class="vl-u-spacer--large">
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-display-flex-align-center">
       <h4 class="vl-title vl-title--h4">
@@ -113,25 +113,25 @@
       {{file-uploader isLoading=isLoading uploadedFile=(action "add")}}
       {{#if (not isLoading)}}
         <div class="upload-container">
-          {{#each documentsInCreation as |document|}}
+          {{#each documentsInCreation as |doc|}}
             {{#ember-kaleidos-webuniversum/vl-uploaded-document
-              name=document.documentVersions.firstObject.file.filename
-              extension=document.documentVersions.firstObject.file.extension
-              size=document.documentVersions.firstObject.file.size
-              downloadName=document.documentVersions.firstObject.file.filename
+              name=doc.file.filename
+              extension=doc.file.extension
+              size=doc.file.size
+              downloadName=doc.file.filename
               downloadLink=(concat
-                document.documentVersions.firstObject.file.downloadLink
+                doc.file.downloadLink
                 "?name="
-                document.documentVersions.firstObject.file.filename
+                doc.file.filename
               )
-              delete=(action "delete" document)
+              delete=(action "delete" doc)
             }}
               <div class="metadata-container">
                 <div class="vlc-input-field-block">
                   {{web-components/vl-form-label value=(t "document-name")}}
                   {{web-components/vl-form-input
                     width="4"
-                    value=(mut document.name)
+                    value=(mut doc.name)
                   }}
                 </div>
                 <div class="vlc-input-field-block">
@@ -141,8 +141,8 @@
                   searchField="label"
                   propertyToShow="label"
                   sortField="priority"
-                  selectedItems=document.type
-                  selectModel=(action "chooseDocumentType" document)
+                  selectedItems=doc.documentContainer.type
+                  selectModel=(action "chooseDocumentType" doc.documentContainer)
                 }}
                 </div>
               </div>

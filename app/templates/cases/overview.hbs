@@ -107,8 +107,8 @@
                   animation="shift"
                   placement="bottom" as |attacher|
                 }}
-                  <ul class="vl-popover__link-list">
-                    <li class="vl-popover__link-list__item">
+                  <ul class="vlc-dropdown-menu">
+                    <li class="vlc-dropdown-menu__item">
                       <button
                         class="vl-link"
                         {{action attacher.hide}}
@@ -117,7 +117,7 @@
                         {{editCase}}
                       </button>
                     </li>
-                    <li class="vl-popover__link-list__item">
+                    <li class="vlc-dropdown-menu__item">
                       {{#if (not row.isArchived)}}
                         <a
                           class="vl-link vl-link--block"
