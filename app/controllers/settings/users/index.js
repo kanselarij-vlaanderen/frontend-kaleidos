@@ -52,19 +52,19 @@ export default Controller.extend({
         valuePath: 'group.name',
         sortable: true,
       },
+      // {
+      //   classNames: ['vl-data-table-col-1'],
+      //   cellClassNames: ['vl-data-table-col-1'],
+      //   breakpoints: ['mobile', 'tablet', 'desktop'],
+      //   sortable: false,
+      //   cellComponent: 'web-components/light-table/vl-delete-user',
+      // },
       {
         classNames: ['vl-data-table-col-1'],
         cellClassNames: ['vl-data-table-col-1'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
         sortable: false,
-        cellComponent: 'web-components/light-table/vl-delete-user',
-      },
-      {
-        classNames: ['vl-data-table-col-1'],
-        cellClassNames: ['vl-data-table-col-1'],
-        breakpoints: ['mobile', 'tablet', 'desktop'],
-        sortable: false,
-        cellComponent: 'components/utils/next-button',
+        cellComponent: 'web-components/light-table/vl-actionbar',
       },
     ];
   }),
