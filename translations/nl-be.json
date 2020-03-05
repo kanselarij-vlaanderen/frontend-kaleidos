@@ -379,6 +379,7 @@
   "error-bad-request": "Foute aanvraag",
   "successfully-created-title": "Gelukt!",
   "successfully-saved": "De wijzigingen zijn opgeslagen.",
+  "successfully-saved-type": "De wijzigingen in het {type} werden opgeslagen.",
   "successfully-created": "Een {type} werd aangemaakt.",
   "agendaitem": "agendapunt",
   "policy-level": "beleidsniveau",
@@ -406,6 +407,7 @@
   "meeting": "vergadering",
   "meeting-record": "notulen",
   "remark": "opmerking",
+  "remark-title": "Opmerking",
   "decision": "beslissing",
   "successfully-deleted": "succesvol verwijderd.",
   "postponed": "uitstel",
@@ -526,5 +528,7 @@
   "search-legend-not-explanation": "NIET: Zoek op 'Antwerpen' en neem alle resultaten waar ook 'verkeer' in zit, weg",
   "search-legend-order-explanation": "Zoekt op de gehele reeks van woorden in die volgorde",
   "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord",
-  "submitted-by": "- Indiener"
+  "submitted-by": "- Indiener",
+  "changes-could-not-be-saved-title": "Je wijzigingen werden niet opgeslagen.",
+  "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
 }
