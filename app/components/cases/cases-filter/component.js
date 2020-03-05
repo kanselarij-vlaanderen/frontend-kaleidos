@@ -10,6 +10,7 @@ export default Component.extend({
 	dateFrom: undefined,
 	dateTo: undefined,
 	searchInDecisionsOnly: false,
+  popoverShown: false,
 
 	init() {
 		this._super(...arguments);
@@ -20,6 +21,8 @@ export default Component.extend({
 			this.set('dateTo', moment(this.dateTo).toDate());
 		}
 	},
+
+
 
 	searchTask: task(function* () {
 		yield timeout(600);
@@ -33,13 +36,19 @@ export default Component.extend({
 	}).restartable(),
 
 	actions: {
-		selectDateFrom(date) {
-			this.set('dateFrom', date);
-			this.searchTask.perform();
-		},
-		selectDateTo(date) {
-			this.set('dateTo', date);
-			this.searchTask.perform();
-		}
+    selectDateFrom(date) {
+      this.set('dateFrom', date);
+      this.searchTask.perform();
+    },
+    selectDateTo(date) {
+      this.set('dateTo', date);
+      this.searchTask.perform();
+    },
+    initTrigger() {
+      this.set('popoverShown', true);
+    },
+    closeModal() {
+      this.set('popoverShown', false);
+    },
 	}
 });
