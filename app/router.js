@@ -72,24 +72,6 @@ Router.map(function() {
   this.route('accountless-users', { path: '/onbevoegde-gebruiker'});
   this.route('document-viewer', { path: '/document/:document_version_id' });
 
-  this.route('oc', function() {
-    this.route('search', { path: 'agendapunten/zoeken' });
-    this.route('meetings', { path: '/vergaderingen' }, function() {
-      this.route('meeting', { path: '/:meeting_id' }, function() {
-        this.route('agendaitems', { path: '/agendapunten' }, function() {
-          this.route('agendaitem', { path: '/:agendaitem_id' });
-          this.route('new', { path: '/nieuw' });
-          this.route('delete', { path: '/verwijder' });
-        });
-      });
-      this.route('new', { path: '/nieuw' });
-    });
-    this.route('cases', { path: '/dossiers' }, function() {
-      this.route('case', { path: '/:id' }, function() {
-        this.route('agendaitems', { path: '/agendapunten' });
-      });
-    });
-  });
   this.route('not-supported');
   this.route('help');
 });

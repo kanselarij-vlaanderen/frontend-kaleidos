@@ -1,0 +1,57 @@
+@mixin arrow-bottom {
+  top: auto;
+  bottom: -12px;
+  border: 12px solid transparent;
+  border-top-color: $page-bg;
+  border-bottom-width: 0;
+}
+
+.vl-link-list {
+  padding: .5rem 0;
+  max-height: inherit;
+  overflow-y: auto;
+
+  &__item {
+    .vl-link {
+      .vl-popover & {
+        padding: .8rem 1.5rem;
+      }
+    }
+  }
+}
+
+.vlc-dropdown-menu {
+  padding: .5rem 0;
+  max-height: inherit;
+  overflow-y: auto;
+}
+
+.vlc-dropdown-menu__separator {
+  height: 1px;
+  background: $border-color;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.vlc-dropdown-menu__item {
+  .vl-link {
+    padding: .8rem 1.5rem;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+}
+
+.vlc-dropdown-menu__item--action-danger .vl-link {
+  color: $red;
+  &:hover {
+    color: $red;
+  }
+}

@@ -2,7 +2,7 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <h1
-        class="vlc-page-header__title vlc-page-header__title--bordered max-width"
+        class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width vlc-u-padding-bottom-5"
       >
         {{t "newsletter-overview-pdf-name"}}
         {{await agenda.createdFor.kindToShow.procedure}}
@@ -93,11 +93,11 @@
                   animation="shift"
                   placement="bottom" as |attacher|
                 }}
-                  <ul class="vl-popover__link-list">
+                  <ul class="vlc-dropdown-menu">
                     {{#if
                       (or (is-pending agenda.createdFor.mailCampaign) isLoading)
                     }}
-                      <li class="vl-popover__link-list__item">
+                      <li class="vlc-dropdown-menu__item">
                         <div class="vl-loader-link">
                           <div
                             class="vl-loader"
@@ -110,7 +110,7 @@
                     {{else if (await agenda.createdFor.mailCampaign)}}
                       {{#if (not (await agenda.createdFor.mailCampaign.isSent))
                       }}
-                        <li class="vl-popover__link-list__item">
+                        <li class="vlc-dropdown-menu__item">
                           <a
                             class="vl-link vl-link--block"
                             {{action attacher.hide}}
@@ -119,7 +119,7 @@
                             {{t "send-test-campaign"}}
                           </a>
                         </li>
-                        <li class="vl-popover__link-list__item">
+                        <li class="vlc-dropdown-menu__item">
                           <a
                             class="vl-link vl-link--block"
                             {{action attacher.hide}}
@@ -129,11 +129,11 @@
                           </a>
                         </li>
                         <li
-                          class="vl-popover__link-list__separator"
+                          class="vlc-dropdown-menu__separator"
                           role="none"
                         ></li>
                       {{/if}}
-                      <li class="vl-popover__link-list__item">
+                      <li class="vlc-dropdown-menu__item">
                         <a
                           class="vl-link vl-link--block"
                           target="_blank"
@@ -149,10 +149,10 @@
                         </a>
                       </li>
                       <li
-                        class="vl-popover__link-list__separator"
+                        class="vlc-dropdown-menu__separator"
                         role="none"
                       ></li>
-                      <li class="vl-popover__link-list__item">
+                      <li class="vlc-dropdown-menu__item">
                         <a
                           class="vl-link vl-link--block vl-u-text--error"
                           {{action attacher.hide}}
@@ -162,7 +162,7 @@
                         </a>
                       </li>
                     {{else}}
-                      <li class="vl-popover__link-list__item">
+                      <li class="vlc-dropdown-menu__item">
                         <a
                           class="vl-link vl-link--block"
                           {{action "createCampaign"}}

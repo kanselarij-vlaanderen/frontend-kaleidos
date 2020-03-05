@@ -60,6 +60,10 @@
     border: none;
   }
 
+  body > .ember-view {
+    display: block !important;
+  }
+
   .vlc-hide-on-print {
     display: none;
   }

@@ -126,8 +126,8 @@ export default Component.extend(
 
         await Promise.all(
           documents.map(async (document) => {
-            const storedDocument = await this.store.findRecord('document', document.id);
-            const documentVersions = await storedDocument.get('documentVersions');
+            const documentContainer = await document.get('documentContainer');
+            const documentVersions = await documentContainer.get('documentVersions');
             if (subcase) {
               await this.linkDocumentVersionsToSubcase(documentVersions, subcase);
             } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
