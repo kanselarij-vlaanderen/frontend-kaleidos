@@ -1,0 +1,5 @@
+.checkbox-list-selector {
+  display: grid;
+  grid-template-columns: repeat(3, calc(100% / 3));
+  grid-gap: 1rem;
+}

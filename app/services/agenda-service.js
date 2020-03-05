@@ -127,7 +127,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     if (index) {
       priorityToAssign += index;
     }
-    const agendaitem = this.store.createRecord('agendaitem', {
+    const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.get('shortTitle'),
       textPress: pressText,
@@ -154,7 +154,6 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     await subcase.save();
     await this.assignSubcasePhase(subcase);
     await subcase.hasMany('phases').reload();
-
     await selectedAgenda.hasMany("agendaitems").reload();
     await this.updateModifiedProperty(selectedAgenda);
   },

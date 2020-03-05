@@ -26,14 +26,6 @@ export default Model.extend({
   creators: hasMany('person'),
   mandatees: hasMany('mandatee'),
 
-  OCMeetingNumber: computed('relatedMeeting.number', function() {
-    return PromiseObject.create({
-      promise: this.get('relatedMeeting').then((meeting) => {
-        return meeting.get('number');
-      })
-    });
-  }),
-
   latestSubcase: computed('subcases.@each', function() {
     return PromiseObject.create({
       promise:

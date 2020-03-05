@@ -23,7 +23,7 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
 
   modelName: 'subcase',
 
-  size: 5,
+  size: 10,
   sort: "short-title",
   queryOptions: computed("sort", "filter", "page", function() {
     const { page, filter, size, sort } = this;
@@ -202,7 +202,7 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
               agendaitemCounter++;
               index = agendaitemCounter;
             }
-            return agendaService.createNewAgendaItem(selectedAgenda, subCase, index);
+            return await agendaService.createNewAgendaItem(selectedAgenda, subCase, index);
           }
         })
       );

@@ -2,10 +2,11 @@ import DS from 'ember-data';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 
-const { Model, attr, hasMany, belongsTo } = DS;
+const { attr, hasMany, belongsTo } = DS;
 
-export default Model.extend({
+export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   intl: inject(),
   text: attr('string'),

@@ -1,0 +1,13 @@
+tr.lt-expanded-row:hover {
+  background-color: white !important;
+}
+
+tr.postponed {
+  opacity: 0.5;
+  .vl-button__icon.vl-vi.vl-vi-pencil {
+    color: $silver-chalice;
+  }
+  .vl-button__icon.vl-vi.vl-vi-document {
+    color: $silver-chalice;
+  }
+}

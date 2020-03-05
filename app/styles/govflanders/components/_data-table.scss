@@ -126,6 +126,10 @@ $pad-tiny: 0.3rem;
 
       .vl-data-table__header-title__sort-icon {
         opacity: 0;
+
+        .vl-vi {
+          color: $primary-blue;
+        }
       }
 
       &:hover,
