@@ -3,7 +3,6 @@ import { computed } from '@ember/object';
 import { not } from '@ember/object/computed';
 import { inject } from '@ember/service';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
-import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
 const getCachedProperty = function (property) {
