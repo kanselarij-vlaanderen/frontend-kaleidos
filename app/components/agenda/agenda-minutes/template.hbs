@@ -55,9 +55,10 @@
                   .
                   {{agendaitem.shortTitle}}
                 </h3>
-                <pre class="no-capitalize">
-                  {{!-- TODO: Figure out the exact reason for using curlies here  --}}
+                <pre class="vl-u-flex-inline-flex vlc-u-pre-line-wrap">
+                  {{!-- template-lint-disable no-triple-curlies  --}}
                   {{{agendaitem.title}}}
+                  {{!-- template-lint-enable no-triple-curlies  --}}
                 </pre>
               </div>
               {{#if agendaitem.isEditing}}
@@ -69,7 +70,7 @@
                 <div class="vl-typography">
                   <ul>
                     {{#if isEditor}}
-                      <div class="vl-u-display-flex align-right">
+                      <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                         {{#if allowEditing}}
                           <a
                             class="vl-link"

@@ -8,3 +8,7 @@
   background: $orange-light;
   line-height: 1.33;
 }
+
+.vlc-list-section-header + .vlc-list-section-header {
+  clear: both;
+}

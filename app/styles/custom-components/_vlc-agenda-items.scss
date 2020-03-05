@@ -90,9 +90,11 @@ a.vlc-agenda-items__sub-item--active:focus {
   justify-content: flex-start;
   font-size: 1.6rem;
   line-height: 1.1;
-  margin: 0 0 0.6rem;
+  margin: 0 0 1rem;
   font-weight: 500;
 }
+
+
 
 // Content: the longer description
 .vlc-agenda-items__content {
@@ -201,4 +203,10 @@ $i: 0;
 //
 .vlc-agenda-items-compare__item.agenda-2-item-3 {
   opacity: 0.30;
+}
+
+.vlc-agenda-items__status--positive {
+  font-weight: 500;
+  opacity: 1;
+  color: $napier-green;
 }

@@ -3,6 +3,10 @@
     tr {
       &:nth-child(odd) {
         background-color: $porcelain;
+
+        a:hover {
+          background-color: $white-background;
+        }
       }
     }
   }
