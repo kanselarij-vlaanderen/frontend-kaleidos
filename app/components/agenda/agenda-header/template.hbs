@@ -124,13 +124,11 @@
                   </a>
                 </li>
                 <li class="vl-popover__link-list__item">
-                  <a
+                  {{#link-to "agenda.print"
                     class="vl-link vl-link--block"
-                    {{action attacher.hide}}
-                    {{action "print"}}
-                  >
-                    {{t "print"}}
-                  </a>
+                  }}
+                    {{t "printable-version"}}
+                  {{/link-to}}
                 </li>
                 {{#if isEditor}}
                   <li class="vl-popover__link-list__separator" role="none"></li>
