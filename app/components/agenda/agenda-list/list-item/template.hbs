@@ -88,13 +88,15 @@
 {{/if}}
 {{#if (not aboutToDelete)}}
   {{#if (not selectedAgendaItem)}}
-    {{#if (and renderDetails (await agendaitem.documents))}}
-      <div class="vlc-hr"></div>
-      {{utils/documents-list-for-item
-              isClickable=isDocumentClickable
-              item=agendaitem
-              agendaitem=agendaitem
-      }}
+    {{#if renderDetails }}
+      {{#if (await agendaitem.documents)}}
+        <div class="vlc-hr"></div>
+        {{utils/documents-list-for-item
+                isClickable=isDocumentClickable
+                item=agendaitem
+                agendaitem=agendaitem
+        }}
+        {{/if}}
     {{else}}
       {{#if (await documentNames)}}
         <div class="vlc-hr"></div>
