@@ -4,7 +4,6 @@ import {not} from '@ember/object/computed';
 import {inject} from '@ember/service';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import CONFIG from 'fe-redpencil/utils/config';
-import ModifiedOldDataError from "../errors/modified-old-data-error";
 
 const getCachedProperty = function (property) {
   return computed(`item.${property}`, {
