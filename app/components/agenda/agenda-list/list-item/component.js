@@ -18,6 +18,7 @@ export default Component.extend(isAuthenticatedMixin, {
   ],
   tagName: 'a',
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  currentAgenda: alias('sessionService.currentAgenda'),
   isClickable: true,
   hideLabel: true,
   isShowingChanges: null,

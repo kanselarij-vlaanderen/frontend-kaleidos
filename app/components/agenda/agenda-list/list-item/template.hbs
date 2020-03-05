@@ -48,7 +48,7 @@
             {{/attach-popover}}
           {{/if}}
         </span>
-        {{#if (and isEditor (eq (await agendaitem.agenda.name) "Ontwerpagenda"))}}
+        {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
           {{#if (not isEditingOverview)}}
             {{#if agendaitem.formallyOkToShow.approved}}
               <p class="{{agendaitem.formallyOkToShow.classNames}}">
@@ -96,22 +96,20 @@
                 item=agendaitem
                 agendaitem=agendaitem
         }}
+      {{else}}
+        {{#if (await documentNames)}}
+          <div class="vlc-hr"></div>
+          {{utils/documents-list-lazy-loaded
+            documentNames=documentNames
+          }}
         {{/if}}
+      {{/if}}
     {{else}}
       {{#if (await documentNames)}}
         <div class="vlc-hr"></div>
-        <li class="vlc-document-list"> 
-        {{#each (await documentNames) as |documentName|}}
-          <li class="vlc-document-list__item vlc-document-list__item--loading"> 
-            <span>
-              <div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt">
-                <i class="vl-badge__icon vl-vi vl-vi-synchronize"></i>
-              </div>
-              {{documentName}}
-            </span>
-          </li>
-        {{/each}}
-        </li>
+        {{utils/documents-list-lazy-loaded
+          documentNames=documentNames
+        }}
       {{/if}}
     {{/if}}
   {{/if}}
