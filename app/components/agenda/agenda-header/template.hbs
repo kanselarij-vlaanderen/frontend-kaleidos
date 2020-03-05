@@ -34,6 +34,18 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
+          {{#if showPrintButton}}
+            <button
+              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+              {{action "print"}}
+            >
+              <i
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+                aria-hidden="true"
+              ></i>
+              {{t "print"}}
+            </button>
+          {{/if}}
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
             <button
               class="vl-button vl-button--narrow"
@@ -123,13 +135,23 @@
                     {{t "printable-press-agenda"}}
                   </a>
                 </li>
-                <li class="vl-popover__link-list__item">
-                  {{#link-to "agenda.print"
-                    class="vl-link vl-link--block"
-                  }}
-                    {{t "printable-version"}}
-                  {{/link-to}}
-                </li>
+                {{#if showPrintButton}}
+                  <li class="vlc-dropdown-menu__item">
+                    {{#link-to "agenda.agendaitems"
+                      class="vl-link vl-link--block"
+                    }}
+                      {{t "agenda-view"}}
+                    {{/link-to}}
+                  </li>
+                {{else}}
+                  <li class="vlc-dropdown-menu__item">
+                    {{#link-to "agenda.print"
+                      class="vl-link vl-link--block"
+                    }}
+                      {{t "printable-version"}}
+                    {{/link-to}}
+                  </li>
+                {{/if}}
                 {{#if isEditor}}
                   <li class="vlc-dropdown-menu__separator" role="none"></li>
                   <li class="vlc-dropdown-menu__item">

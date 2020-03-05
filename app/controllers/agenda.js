@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { computed, observer } from '@ember/object';
+import { computed, observer, get } from '@ember/object';
 import moment from 'moment';
 
 export default Controller.extend(isAuthenticatedMixin, {
@@ -40,6 +40,10 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   shouldHideNav: computed('router.currentRouteName', function() {
     return this.get('router.currentRouteName') === 'agenda.compare';
+  }),
+
+  showPrintButton: computed('router.currentRouteName', function() {
+    return get(this, 'router.currentRouteName') === 'agenda.print';
   }),
 
   currentSession: alias('sessionService.currentSession'),

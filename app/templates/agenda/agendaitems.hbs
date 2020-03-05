@@ -16,12 +16,6 @@
         refresh=(action "refresh")
       }}
     </div>
-
-    {{agenda/printable-agenda-list
-      agendaitems=(await sortedAgendaitems)
-      announcements=(await sortedAnnouncements)
-      currentSession=currentSession
-    }}
   </div>
 </div>
 {{outlet}}
