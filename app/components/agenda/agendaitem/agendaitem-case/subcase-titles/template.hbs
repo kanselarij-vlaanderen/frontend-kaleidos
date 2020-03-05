@@ -113,8 +113,10 @@
 
 {{#if isAgendaItem}}
   <div class="vl-u-spacer-extended-bottom-s">
+  {{#if item.explanation}}
     <pre class="vl-u-text--muted vl-u-flex-inline-flex vlc-u-pre-line-wrap">
       {{t "remark-title"}}: {{await item.explanation}}
     </pre>
+  {{/if}}
   </div>
 {{/if}}
