@@ -31,7 +31,7 @@ export default Model.extend({
         if (this.checkIfCreatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
           this.globalError.showToast.perform(EmberObject.create({
             title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('successfully-created', {type: this.translateAndParseSuccesType(this.get('constructor.modelName'))}),
+            message: this.intl.t('successfully-created', {type: this.get('constructor.modelName')}),
             type: 'success'
           }));
         }
@@ -40,7 +40,7 @@ export default Model.extend({
         if (this.checkIfUpdatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
           this.globalError.showToast.perform(EmberObject.create({
             title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('successfully-saved-type', {type: this.translateAndParseSuccesType(this.get('constructor.modelName'))}),
+            message: this.intl.t('successfully-saved-type', {type: this.get('constructor.modelName')}),
             type: 'success'
           }));
         }
