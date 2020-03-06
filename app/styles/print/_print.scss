@@ -79,4 +79,9 @@
   .vlc-show-on-print {
     display: block;
   }
+
+  // Firefox printable agenda requires the panel not to be display flex
+  .vlc-panel-layout {
+    display: block;
+  }
 }
