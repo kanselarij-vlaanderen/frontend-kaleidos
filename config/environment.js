@@ -47,7 +47,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
   }
 
-  if (true || process.env.DEPLOY_ENV === 'test') {
+  if (process.env.DEPLOY_ENV === 'test') {
     ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = '556bc0c9-d04e-45c8-b465-09e68071ed0a';
     ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
     ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos-test.vlaanderen.be/authorization/callback';
