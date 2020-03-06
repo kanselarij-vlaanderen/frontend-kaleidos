@@ -1,75 +1,73 @@
-
 {{utils/settings-header showBackButton=true title=(t 'manage-user' firstName=model.firstName lastName=model.lastName)}}
 <div class="vl-u-spacer-extended-l">
-<div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
-<div class="vl-col--6-12">
-  <div class="vl-grid vl-grid--is-stacked u-padding--left">
-    <div class="vlc-toolbar u-border--light--left u-padding--bottom--tinier u-padding--top--tinier u-padding--right u-border--light--top u-border--right u-padding--bottom--tiny">
-      <h3 class="vl-title vl-title--h5 u-padding--left--small">{{t 'manage-users-general-info'}}</h3>
+  <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
+    <div class="vl-col--6-12">
+      <div class="vl-grid vl-grid--is-stacked u-padding--left">
+        <div class="vlc-toolbar u-border--light--left u-padding--bottom--tinier u-padding--top--tinier u-padding--right u-border--light--top u-border--right u-padding--bottom--tiny">
+          <h3 class="vl-title vl-title--h5 u-padding--left--small">{{t 'manage-users-general-info'}}</h3>
+        </div>
+      </div>
+      <div class="vlc-document-card">
+        <div class="vl-grid vl-grid--isstacked">
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p class="form__label u-padding--left--small">{{t 'manage-users-name'}}</p>
+          </div>
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p>{{model.firstName}} {{model.lastName}}</p>
+          </div>
+        </div>
+        <div class="vl-grid vl-grid--isstacked">
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p class="form__label u-padding--left--small">{{t 'manage-users-email'}}</p>
+          </div>
+          <div class="vl-col--1-2">
+            <p>{{model.account.voEmail}}</p>
+          </div>
+        </div>
+        <div class="vl-grid vl-grid--isstacked">
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p class="form__label u-padding--left--small">{{t 'manage-users-telephone'}}</p>
+          </div>
+          <div class="vl-col--1-2">
+            <p>{{model.account.phoneNumber}}</p>
+          </div>
+        </div>
+        <div class="vl-grid vl-grid--isstacked">
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p class="form__label u-padding--left--small">{{t 'manage-users-group'}}</p>
+          </div>
+          <div class="vl-col--1-2">
+            {{web-components/light-table/vl-group-column user=model}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="vlc-document-card">
-    <div class="vl-grid vl-grid--isstacked">
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p class="form__label u-padding--left--small">{{t 'manage-users-name'}}</p>
+  <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
+    <div class="vl-col--6-12">
+      <div class="vl-grid vl-grid--is-stacked u-padding--left">
+        <div class="vlc-toolbar u-border--light--left u-padding--bottom--tinier u-padding--top--tinier u-padding--right u-border--light--top u-border--right">
+          <h3 class="vl-title vl-title--h5">{{t 'manage-users-technical-info'}}</h3>
+        </div>
       </div>
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p>{{model.firstName}} {{model.lastName}}</p>
-      </div>
-    </div>
-    <div class="vl-grid vl-grid--isstacked">
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p class="form__label u-padding--left--small">{{t 'manage-users-email'}}</p>
-      </div>
-      <div class="vl-col--1-2">
-        <p>{{model.account.voEmail}}</p>
-      </div>
-    </div>
-    <div class="vl-grid vl-grid--isstacked">
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p class="form__label u-padding--left--small">{{t 'manage-users-telephone'}}</p>
-      </div>
-      <div class="vl-col--1-2">
-        <p>{{model.account.phoneNumber}}</p>
-      </div>
-    </div>
-
-    <div class="vl-grid vl-grid--isstacked">
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p class="form__label u-padding--left--small">{{t 'manage-users-group'}}</p>
-      </div>
-      <div class="vl-col--1-2">
-        {{web-components/light-table/vl-group-column user=model}}
+      <div class="vlc-document-card">
+        <div class="vl-grid vl-grid--isstacked">
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p class="form__label u-padding--left--small">{{t 'manage-users-void'}}</p>
+          </div>
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p>{{model.account.voId}}</p>
+          </div>
+        </div>
+        <div class="vl-grid vl-grid--isstacked">
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p class="form__label u-padding--left--small">{{t 'manage-users-ovo'}}</p>
+          </div>
+          <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
+            <p></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
-</div>
-<div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
-  <div class="vl-col--6-12">
-    <div class="vl-grid vl-grid--is-stacked u-padding--left">
-    <div class="vlc-toolbar u-border--light--left u-padding--bottom--tinier u-padding--top--tinier u-padding--right u-border--light--top u-border--right">
-      <h3 class="vl-title vl-title--h5">{{t 'manage-users-technical-info'}}</h3>
-    </div>
-  </div>
-  <div class="vlc-document-card">
-    <div  class="vl-grid vl-grid--isstacked">
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p class="form__label u-padding--left--small">{{t 'manage-users-void'}}</p>
-      </div>
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p>{{model.account.voId}}</p>
-      </div>
-    </div>
-    <div class="vl-grid vl-grid--isstacked">
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p class="form__label u-padding--left--small">{{t 'manage-users-ovo'}}</p>
-      </div>
-      <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-        <p></p>
-      </div>
-    </div>
-  </div>
-</div>
-</div></div>

@@ -8,7 +8,7 @@ export default Component.extend({
   actions: {
     goToParentRoute() {
       const parentRoute = this.router.currentRoute.parent;
-      if(parentRoute && parentRoute.name !== 'application') {
+      if (parentRoute && parentRoute.name !== 'application') {
         this.router.transitionTo(parentRoute.name);
       }
     }
