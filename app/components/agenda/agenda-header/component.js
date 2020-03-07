@@ -236,6 +236,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
     async downloadAllDocuments() {
       const namePromise = constructArchiveName(this.currentAgenda);
+      debug('Checking if archive exists ...');
       const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
       const [name, job] = await Promise.all([namePromise, jobPromise]);
       if (!job.hasEnded) {
