@@ -27,6 +27,6 @@
     </p>
   </div>
   {{#each (await agendaitem.documents) as |document|}}
-    {{item-document shortNotation=true item=agendaitem document=document isClickable=isClickable}}
+    {{item-document-printable item=agendaitem document=document}}
   {{/each}}
 {{/each}}
