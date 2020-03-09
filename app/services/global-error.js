@@ -38,7 +38,9 @@ export default Service.extend({
 				yield timeout(duration || 15000);
 				break;
 		}
-		this.messages.removeObject(messageToAdd);
+    if (this.messages.includes(messageToAdd)) {
+      this.messages.removeObject(messageToAdd);
+    }
 	}),
 
 	handleError() {
