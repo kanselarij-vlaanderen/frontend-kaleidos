@@ -16,13 +16,13 @@
           searchField="label"
           propertyToShow="label"
           readOnly=item.confidential
-          sortField="label"
+          sortField="priority"
           selectedItems=accessLevel
           selectModel=(action "chooseAccessLevel")
         }}
       </div>
       <button
-        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        class="vl-button vl-button--link vl-button--icon"
         {{action "save"}}
       >
         <i class="vl-vi vl-vi-save vl-button__icon" aria-hidden="true"></i>
@@ -31,7 +31,7 @@
         </span>
       </button>
       <button
-        class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+        class="vl-button vl-button--link vl-button--icon"
         {{action "cancelChanges"}}
       >
         <i class="vl-vi vl-vi-cross vl-button__icon" aria-hidden="true"></i>

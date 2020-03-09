@@ -97,8 +97,18 @@
 .vlc-document-card-item__title {
   display: flex;
   align-items: center;
+
+  .vl-title {
+    margin-right: 0.5em;
+  }
 }
 
 .vlc-document-card-item__meta {
   font-size: 1.4rem;
+}
+
+.vlc-document--deleted-state {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: none;
 }

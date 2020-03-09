@@ -28,7 +28,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   aboutToDelete: computed('document.aboutToDelete', function() {
     if (this.document) {
       if (this.document.get('aboutToDelete')) {
-        return 'deleted-state';
+        return 'vlc-document--deleted-state';
       }
     }
   }),

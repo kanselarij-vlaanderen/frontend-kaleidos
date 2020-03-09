@@ -1,7 +1,7 @@
 import Component from "@ember/component";
-import { computed } from "@ember/object";
+import {computed} from "@ember/object";
 import moment from "moment";
-import { inject } from "@ember/service";
+import {inject} from "@ember/service";
 import isAuthenticatedMixin from "fe-redpencil/mixins/is-authenticated-mixin";
 import CONFIG from "fe-redpencil/utils/config";
 
@@ -14,33 +14,30 @@ export default Component.extend(isAuthenticatedMixin, {
   agendaitem: null,
   lastDefiniteAgenda: null,
 
-  currentMeeting: computed("currentAgenda.createdFor", function() {
+  currentMeeting: computed("currentAgenda.createdFor", function () {
     return this.currentAgenda.get("createdFor");
   }),
 
-  isPostPonable: computed("sessionService.agendas.@each", function() {
+  isPostPonable: computed("sessionService.agendas.@each", "agendaitem.subcase", async function () {
+    const subcase = await this.agendaitem.get('subcase');
+    if (!subcase) {
+      return;
+    }
+
     return this.get("sessionService.agendas").then(agendas => {
-      if (agendas && agendas.get("length") > 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return !!(agendas && agendas.get("length") > 1);
     });
   }),
 
   isDeletable: computed(
-    "agendaitem.{subcase,subcase.agendaitems}", "currentAgenda.name", async function() {
+    "agendaitem.{subcase,subcase.agendaitems}", "currentAgenda.name", async function () {
       const currentAgendaName = await this.get("currentAgenda.name");
       const agendaitemSubcase = await this.get("agendaitem.subcase");
       const agendaitems = await this.get("agendaitem.subcase.agendaitems");
       if (currentAgendaName && currentAgendaName !== "Ontwerpagenda") {
         return false;
       } else if (agendaitemSubcase) {
-        if (agendaitems && agendaitems.length > 1) {
-          return false;
-        } else {
-          return true;
-        }
+        return !(agendaitems && agendaitems.length > 1);
       } else {
         return true;
       }
@@ -51,7 +48,7 @@ export default Component.extend(isAuthenticatedMixin, {
     this.toggleProperty('isVerifying');
     const id = await agendaitem.get('id');
     const subcase = await agendaitem.get('subcase');
-    if(subcase) {
+    if (subcase) {
       // Refresh the agendaitems for isDeletable
       await subcase.hasMany('agendaitems').reload();
     }
@@ -59,13 +56,13 @@ export default Component.extend(isAuthenticatedMixin, {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
       const currentMeetingId = await this.get('currentMeeting.id');
-      await this.agendaService.deleteAgendaitemFromMeeting(agendaitem,currentMeetingId);
+      await this.agendaService.deleteAgendaitemFromMeeting(agendaitem, currentMeetingId);
     }
     this.set('sessionService.selectedAgendaItem', null);
     this.refreshRoute(id);
   },
 
-  deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function() {
+  deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function () {
     if (await this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
     } else if (this.isAdmin) {

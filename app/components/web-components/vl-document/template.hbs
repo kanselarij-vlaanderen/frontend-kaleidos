@@ -5,7 +5,7 @@
   {{access-level-pill item=documentVersion}}
   {{#if (await documentVersion.file.downloadLink)}}
     <button
-      class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+      class="vl-button vl-button--link vl-button--icon"
       {{action "showDocumentVersionViewer" documentVersion}}
     >
       <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
@@ -14,7 +14,7 @@
       </span>
     </button>
     <a
-      class="vl-button vl-button--link vl-button--icon js-vl-popover__toggle"
+      class="vl-button vl-button--link vl-button--icon"
       href={{concat
       (await documentVersion.file.downloadLink)
       "?name="
@@ -36,7 +36,7 @@
 
   {{#if isEditor}}
     <button
-      class="vl-button vl-button--link vl-button--icon vl-button-icon--error js-vl-popover__toggle"
+      class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
       {{action "deleteDocumentVersion" documentVersion}}
     >
       <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>

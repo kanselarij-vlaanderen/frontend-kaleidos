@@ -9,7 +9,7 @@ export default Component.extend({
   store: inject(),
 
   size: 5,
-  sort: "title",
+  sort: "-created,name",
 
   documents: computed("items.@each", function() {
     (this.get("items") || []).map(item => item.set("selected", false));
@@ -32,23 +32,23 @@ export default Component.extend({
       filter: {},
     };
     if (filter) {
-      options["filter"]["title"] = filter;
+      options["filter"]["name"] = filter;
     }
     return options;
   }),
 
   findAll: task(function*() {
     const { queryOptions } = this;
-    const items = yield this.store.query("document", queryOptions);
-    this.set("items", items);
+    const documents = yield this.store.query("document-version", queryOptions);
+    this.set("items", documents);
     yield timeout(100);
   }),
 
   searchTask: task(function*() {
     yield timeout(300);
     const { queryOptions } = this;
-    const items = yield this.store.query("document", queryOptions);
-    this.set("items", items);
+    const documents = yield this.store.query("document-version", queryOptions);
+    this.set("items", documents);
     yield timeout(100);
   }).restartable(),
 
