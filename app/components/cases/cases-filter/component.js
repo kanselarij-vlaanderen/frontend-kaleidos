@@ -44,10 +44,10 @@ export default Component.extend({
       this.set('dateTo', date);
       this.searchTask.perform();
     },
-    initTrigger() {
+    openPopover() {
       this.set('popoverShown', true);
     },
-    closeModal() {
+    closePopover() {
       this.set('popoverShown', false);
     },
 	}

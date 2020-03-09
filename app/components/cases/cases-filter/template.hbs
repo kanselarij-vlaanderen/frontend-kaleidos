@@ -4,16 +4,16 @@
       <label class="vl-form__label u-padding--right--tinier" for="dossierId">
         {{t "agendaitem-case"}}
       </label>
-      <span onclick={{action "initTrigger"}} class="vl-icon vl-icon--small vl-vi vl-vi-info-filled vlc-u-cursor-pointer" aria-hidden="true">
+      <span onclick={{action "openPopover"}} class="vl-icon vl-icon--small vl-vi vl-vi-info-filled vlc-u-cursor-pointer" aria-hidden="true">
         {{#attach-popover
                 showOn="click"
                 placement="right"
                 hideOn="clickout"
                 isShown=popoverShown
                 renderInPlace=true
-                class="ember-attacher-popper vlc-search-legend-popover"
+                class="ember-attacher-popper vlc-search-legend-popover vlc-u-cursor-default"
         }}
-          {{utils/search-legend userClickedClose=(action "closeModal")}}
+          {{utils/search-legend userClickedClose=(action "closePopover")}}
         {{/attach-popover}}
       </span>
 
