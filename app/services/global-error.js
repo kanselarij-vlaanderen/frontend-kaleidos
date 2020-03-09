@@ -37,6 +37,9 @@ export default Service.extend({
 			case 'warning-undo':
 				yield timeout(duration || 15000);
 				break;
+			case 'file-download':
+				yield timeout(duration || 15000);
+				break;
 		}
     if (this.messages.includes(messageToAdd)) {
       this.messages.removeObject(messageToAdd);

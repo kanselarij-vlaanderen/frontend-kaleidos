@@ -240,11 +240,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         message: this.intl.t('archive-in-creation-message'),
         type: 'success'
       }));
-      const fileDownloadingMessage = Object.freeze(EmberObject.create({
-        title: this.intl.t('file-downloading-title'),
-        message: this.intl.t('file-downloading-message'),
-        type: 'success'
-      }));
+      const fileDownloadMessage = EmberObject.create({
+        title: this.intl.t('file-ready'),
+        type: 'file-download'
+      });
 
       const namePromise = constructArchiveName(this.currentAgenda);
       debug('Checking if archive exists ...');
@@ -252,7 +251,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       const [name, job] = await Promise.all([namePromise, jobPromise]);
       if (!job.hasEnded) {
         debug('Archive in creation ...');
-        this.globalError.showToast.perform(inCreationMessage, 2 * 60 * 1000);
+        this.globalError.showToast.perform(inCreationMessage, 3 * 60 * 1000);
         this.jobMonitor.register(job);
         job.on('didEnd', this, async function (status) {
           if (this.globalError.messages.includes(inCreationMessage)) {
@@ -260,13 +259,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           }
           if (status === job.SUCCESS) {
             const url = await fileDownloadUrlFromJob(job, name);
-            debug(`Archive ready. Downloading now (${url})`);
-            this.globalError.showToast.perform(fileDownloadingMessage, 5 * 60 * 1000);
-            const blob = await (await fetch(url)).blob();
-            if (this.globalError.messages.includes(fileDownloadingMessage)) {
-              this.globalError.messages.removeObject(fileDownloadingMessage);
-            }
-            this.saveFileAs(name, blob, 'application/zip');
+            debug(`Archive ready. Prompting for download now (${url})`);
+            fileDownloadMessage.downloadLink = url;
+            fileDownloadMessage.fileName = name;
+            this.globalError.showToast.perform(fileDownloadMessage);
           } else {
             debug('Something went wrong while generating archive.');
             this.globalError.showToast.perform(EmberObject.create({
@@ -278,13 +274,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         });
       } else {
         const url = await fileDownloadUrlFromJob(job, name);
-        debug(`Archive ready. Downloading now (${url})`);
-        this.globalError.showToast.perform(fileDownloadingMessage, 5 * 60 * 1000);
-        const blob = await (await fetch(url)).blob();
-        if (this.globalError.messages.includes(fileDownloadingMessage)) {
-          this.globalError.messages.removeObject(fileDownloadingMessage);
-        }
-        this.saveFileAs(name, blob, 'application/zip');
+        debug(`Archive ready. Prompting for download now (${url})`);
+        fileDownloadMessage.downloadLink = url;
+        fileDownloadMessage.fileName = name;
+        this.globalError.showToast.perform(fileDownloadMessage);
       }
     },
 
