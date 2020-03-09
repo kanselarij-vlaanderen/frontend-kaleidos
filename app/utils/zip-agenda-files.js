@@ -39,6 +39,7 @@ function registerJobToStore (job, store) {
 async function fileDownloadUrlFromJob (job, archiveName) {
   let file = job.belongsTo('generated').value();
   if (!file) {
+    await job.reload();
     file = await job.get('generated');
   }
   const url = `${file.downloadLink}?name=${archiveName}`;
