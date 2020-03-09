@@ -4,7 +4,8 @@
       <label class="vl-form__label u-padding--right--tinier" for="dossierId">
         {{t "agendaitem-case"}}
       </label>
-      <span onclick={{action "openPopover"}} class="vl-icon vl-icon--small vl-vi vl-vi-info-filled vlc-u-cursor-pointer" aria-hidden="true">
+      <span onclick={{action "openPopover"}} class="vl-icon vl-icon--small vl-vi vl-vi-info-filled vlc-u-cursor-pointer"
+            aria-hidden="true">
         {{#attach-popover
                 showOn="click"
                 placement="right"
@@ -16,9 +17,7 @@
           {{utils/search-legend userClickedClose=(action "closePopover")}}
         {{/attach-popover}}
       </span>
-
     </div>
-
     {{input
             class="vl-input-field vl-input-field--block"
             type="text"
@@ -81,13 +80,13 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <button
-              class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
-              type="button"
-              onclick={{perform searchTask}}
+        class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+        type="button"
+        onclick={{perform searchTask}}
       >
         <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-magnifier"
-                aria-hidden="true"
+          class="vl-button__icon vl-button__icon--before vl-vi vl-vi-magnifier"
+          aria-hidden="true"
         ></i>
         {{t "search"}}
       </button>
