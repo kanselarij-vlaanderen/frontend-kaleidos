@@ -14,7 +14,7 @@ export default Model.extend({
 
   email: computed('emailLink', {
     get() {
-      return this.emailLink.replace(/^mailto:/, '');
+      return this.emailLink && this.emailLink.replace(/^mailto:/, '');
     },
     set(key, value) {
       this.set('emailLink', `mailto:${value}`);
@@ -23,7 +23,7 @@ export default Model.extend({
   }),
   phone: computed('phoneLink', {
     get() {
-      return this.phoneLink.replace(/^tel:/, '');
+      return this.phoneLink && this.phoneLink.replace(/^tel:/, '');
     },
     set(key, value) {
       this.set('phoneLink', `tel:${value.replace(/[/ .]/, '')}`);
