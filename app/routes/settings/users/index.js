@@ -5,7 +5,10 @@ export default Route.extend({
   router: service(),
 
   model() {
-    return this.store.query("user", { sort: 'first-name' }).then(users => users.toArray());
+    return this.store.query('user', {
+      include: 'group',
+      sort: 'first-name'
+    }).then(users => users.toArray());
   },
 
   actions: {
