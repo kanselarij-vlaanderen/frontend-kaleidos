@@ -1,5 +1,10 @@
 {{#if showNewsItemIsEditedWarning}}
-  {{changes-alert message=(t "newsitem-changed-message") buttonText=(t "close") clearAction=(action "clearMessage")}}
+  {{changes-alert message=(t "newsitem-changed-message") buttonText=(t "close")
+                  clearAction=(action "clearShowNewsItemIsEditedWarning")}}
+{{/if}}
+{{#if showNoNotaIsAddedWarning}}
+  {{changes-alert message=(t "newsitem-changed-no-note-message") buttonText=(t "close")
+                  clearAction=(action "clearShowNoNotaIsAddedWarning")}}
 {{/if}}
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
