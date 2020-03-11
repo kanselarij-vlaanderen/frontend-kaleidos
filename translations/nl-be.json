@@ -379,7 +379,11 @@
   "error-bad-request": "Foute aanvraag",
   "successfully-created-title": "Gelukt!",
   "successfully-saved": "De wijzigingen zijn opgeslagen.",
+  "successfully-saved-type": "De wijzigingen in het {type} werden opgeslagen.",
   "successfully-created": "Een {type} werd aangemaakt.",
+  "archive-in-creation-title": "Archiefbestand in aanmaak",
+  "archive-in-creation-message": "Uw archiefbestand wordt samengesteld. Even geduld ...",
+  "file-ready": "Bestand gereed",
   "agendaitem": "agendapunt",
   "policy-level": "beleidsniveau",
   "account": "account",
@@ -406,6 +410,7 @@
   "meeting": "vergadering",
   "meeting-record": "notulen",
   "remark": "opmerking",
+  "remark-title": "Opmerking",
   "decision": "beslissing",
   "successfully-deleted": "succesvol verwijderd.",
   "postponed": "uitstel",
@@ -530,7 +535,6 @@
   "search-legend-order-explanation": "Zoekt op de gehele reeks van woorden in die volgorde",
   "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord",
   "submitted-by": "- Indiener",
-  "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?",
   "manage-users-name": "Naam",
   "manage-users-email": "Email",
   "manage-users-telephone": "Telefoonnummer",
@@ -539,5 +543,7 @@
   "manage-users-ovo": "OVO-code",
   "manage-users-general-info": "Algemene informatie",
   "manage-users-technical-info": "Technische informatie",
-  "manage-user": "Gebruiker: {firstName} {lastName}"
+  "manage-user": "Gebruiker: {firstName} {lastName}",
+  "changes-could-not-be-saved-title": "Je wijzigingen werden niet opgeslagen.",
+  "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
 }

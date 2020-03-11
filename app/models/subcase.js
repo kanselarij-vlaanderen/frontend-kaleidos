@@ -7,10 +7,11 @@ import { A } from '@ember/array';
 import moment from 'moment';
 import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
 import LinkedDocumentModelMixin from 'fe-redpencil/mixins/models/linked-document-model-mixin';
+import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 
-const { attr, Model, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
+const { attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
-export default Model.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
+export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
   modelName: alias('constructor.modelName'),
   store: inject(),
   intl: inject(),

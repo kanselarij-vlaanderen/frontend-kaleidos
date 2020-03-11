@@ -103,35 +103,5 @@ export default Service.extend({
       method: 'DELETE',
       url: '/files/' + id,
     });
-  },
-
-  getAllDocumentsFromAgenda(agendaId) {
-    return $.ajax({
-      method: 'GET',
-      url: `/agendas/${agendaId}/agendaitems/files`,
-    })
-      .then((result) => {
-        return result;
-      })
-      .catch(() => {
-        return;
-      });
-  },
-
-  getZippedFiles(data) {
-    return $.ajax({
-      method: 'POST',
-      url: `/files/archive`,
-      data: JSON.stringify(data),
-      contentType: 'application/vnd.api+json',
-      processData: false,
-      dataType: 'blob',
-    })
-      .then((content) => {
-        return content;
-      })
-      .catch(() => {
-        return;
-      });
-  },
+  }
 });
