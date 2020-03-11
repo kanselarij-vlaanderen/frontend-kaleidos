@@ -1,0 +1,30 @@
+{{#utils/settings-header title=(t 'manage-users')}}
+  <div class="vl-col--8-12 vl-col--1-1--s vl-action-group vl-action-group--align-right">
+    {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
+  </div>
+{{/utils/settings-header}}
+<div class="vl-u-spacer-extended-l">
+  <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
+    <div class="vl-col--4-12 vl-col--1-1--s">
+      <label class="vl-form__label" for="dossierId">
+        {{t "filter"}}
+      </label>
+      {{input
+        class="vl-input-field vl-input-field--block"
+        type="text"
+        id="dossierId"
+        value=filterText
+      }}
+    </div>
+  </div>
+  {{utils/user-table
+    model=model
+    shouldRefreshTableModel=shouldRefreshTableModel
+    sort=sort
+    page=page
+    filter=filter
+    include=include
+    size=size
+    columns=columns
+  }}
+</div>
