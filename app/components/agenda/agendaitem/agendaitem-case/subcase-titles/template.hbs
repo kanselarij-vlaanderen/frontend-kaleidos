@@ -44,13 +44,7 @@
     </pre>
   {{/if}}
 </div>
-{{#if isAgendaItem}}
-  <div class="vl-u-spacer-extended-bottom-s">
-    <pre class="vl-u-text--muted vl-u-flex-inline-flex vlc-u-pre-line-wrap">
-      {{await item.explanation}}
-    </pre>
-  </div>
-{{/if}}
+
 {{#if (not item.showAsRemark)}}
   <div class="vl-u-spacer-extended-bottom-s">
     {{#if (await subcaseName)}}
@@ -114,5 +108,15 @@
         {{/if}}
       </span>
     </div>
+  </div>
+{{/if}}
+
+{{#if isAgendaItem}}
+  <div class="vl-u-spacer-extended-bottom-s">
+  {{#if item.explanation}}
+    <pre class="vl-u-text--muted vl-u-flex-inline-flex vlc-u-pre-line-wrap">
+      {{t "remark-title"}}: {{await item.explanation}}
+    </pre>
+  {{/if}}
   </div>
 {{/if}}
