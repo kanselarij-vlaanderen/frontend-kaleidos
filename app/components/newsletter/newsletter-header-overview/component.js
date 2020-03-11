@@ -50,7 +50,7 @@ export default Component.extend(isAuthenticatedMixin, {
       mailCampaign.destroyRecord();
       meeting.set('mailCampaign', null);
       this.set('mailCampaign', null);
-      meeting.save();
+      await meeting.save();
       this.set('isLoading', false);
     },
 

@@ -58,9 +58,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.set('isVerifyingDelete', true);
     },
 
-    toggleConfidential(document) {
+    async toggleConfidential(document) {
       document.toggleProperty('confidential');
-      document.save();
+      await document.save();
     },
 
     chooseAccessLevel(accessLevel) {

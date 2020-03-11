@@ -529,6 +529,6 @@
   "search-legend-order-explanation": "Zoekt op de gehele reeks van woorden in die volgorde",
   "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord",
   "submitted-by": "- Indiener",
-  "changes-could-not-be-saved-title": "Je wijzigingen werden niet opgeslagen.",
+  "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
   "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
 }

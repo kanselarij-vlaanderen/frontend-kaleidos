@@ -12,7 +12,7 @@ export default Component.extend({
   kind: null,
   selectedKindUri: null,
 
-  createAgenda(meeting, date) {
+  async createAgenda(meeting, date) {
     const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
       name: 'Ontwerpagenda',
@@ -21,10 +21,10 @@ export default Component.extend({
       modified: date || fallBackDate,
     });
 
-    return agenda.save();
+    return await agenda.save();
   },
 
-  createAgendaItemToApproveMinutes(agenda, closestMeeting) {
+  async createAgendaItemToApproveMinutes(agenda, closestMeeting) {
     if (!closestMeeting) {
       return;
     }
@@ -44,7 +44,7 @@ export default Component.extend({
       approvals: [],
       isApproval:true
     });
-    return agendaitem.save();
+    return await agendaitem.save();
   },
 
   actions: {

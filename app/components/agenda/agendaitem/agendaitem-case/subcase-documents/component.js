@@ -29,6 +29,20 @@ export default Component.extend(
       this.set('model', A([]));
     },
 
+    async deleteAll() {
+      await Promise.all(
+        this.get('documentsInCreation').map(async (doc) => {
+          const file = await doc.get('file');
+          file.destroyRecord();
+          const container = doc.get('documentContainer.content');
+          container.deleteRecord();
+          doc.deleteRecord();
+        })
+      );
+      this.get('documentsInCreation').clear();
+      this.set('isAddingNewDocument', false);
+    },
+
     actions: {
       async delete(doc) {
         const file = await doc.get('file');
@@ -45,24 +59,16 @@ export default Component.extend(
       },
 
       async deleteAll() {
-        await Promise.all(
-          this.get('documentsInCreation').map(async (doc) => {
-            const file = await doc.get('file');
-            file.destroyRecord();
-            const container = doc.get('documentContainer.content');
-            container.deleteRecord();
-            doc.deleteRecord();
-          })
-        );
-        this.get('documentsInCreation').clear();
-        this.set('isAddingNewDocument', false);
+        this.deleteAll();
       },
 
-      toggleIsAddingNewDocument() {
+      async toggleIsAddingNewDocument() {
+        await this.item.preEditOrSaveCheck();
         this.toggleProperty('isAddingNewDocument');
       },
 
-      toggleIsEditing() {
+      async toggleIsEditing() {
+        await this.item.preEditOrSaveCheck();
         this.toggleProperty('isEditing');
       },
 
@@ -80,29 +86,36 @@ export default Component.extend(
 
       async saveDocuments() {
         const documents = await this.saveDocuments(null);
+        this.set('isLoading', true);
         const item = await this.get('item');
 
         const subcase = await item.get('subcase');
         const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
 
-        await Promise.all(
-          documents.map(async (document) => {
-            const documentVersions = await document.get('documentVersions');
-            if (subcase) {
-              await this.addDocumentVersionsToSubcase(documentVersions, subcase);
-            } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-              await this.addDocumentVersionsToAgendaitems(
-                documentVersions,
-                agendaitemsOnDesignAgenda
-              );
-            }
-            return this.attachDocumentVersionsToModel(documentVersions, item);
-          })
-        );
+        try {
+          await Promise.all(
+            documents.map(async (document) => {
+              const documentVersions = await document.get('documentVersions');
+              if (subcase) {
+                await this.addDocumentVersionsToSubcase(documentVersions, subcase);
+              } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+                await this.addDocumentVersionsToAgendaitems(
+                  documentVersions,
+                  agendaitemsOnDesignAgenda
+                );
+              }
+              return await this.attachDocumentVersionsToModel(documentVersions, item);
+            })
+          );
 
-        item.save().then(() => {
+          await item.save();
+        } catch(error) {
+          this.deleteAll();
+          throw error;
+        } finally {
+          this.set('isLoading', false);
           this.set('isAddingNewDocument', false);
-        });
+        }
       },
 
       toggleIsLinkingOldDocument() {
@@ -133,11 +146,11 @@ export default Component.extend(
             } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
               await this.linkDocumentVersionsToAgendaitems(documentVersions, agendaitemsOnDesignAgenda);
             }
-            return this.attachDocumentVersionsToModel(documentVersions, item, 'linkedDocumentVersions');
+            return await this.attachDocumentVersionsToModel(documentVersions, item, 'linkedDocumentVersions');
           })
         );
 
-        item.save().then(() => {
+        await item.save().then(() => {
           this.set('isLinkingOldDocument', false);
           this.set('documentsToLink', A([]));
         });
@@ -148,28 +161,28 @@ export default Component.extend(
       return Promise.all(
         agendaitems.map(async (agendaitem) => {
           await this.attachDocumentVersionsToModel(documentVersions, agendaitem);
-          return agendaitem.save();
+          return await agendaitem.save();
         })
       );
     },
 
     async addDocumentVersionsToSubcase(documentVersions, subcase) {
       await this.attachDocumentVersionsToModel(documentVersions, subcase);
-      return subcase.save();
+      return await subcase.save();
     },
 
     async linkDocumentVersionsToAgendaitems(documentVersions, agendaitems) {
       return Promise.all(
         agendaitems.map(async (agendaitem) => {
           await this.attachDocumentVersionsToModel(documentVersions, agendaitem, 'linkedDocumentVersions');
-          return agendaitem.save();
+          return await agendaitem.save();
         })
       );
     },
 
     async linkDocumentVersionsToSubcase(documentVersions, subcase) {
       await this.attachDocumentVersionsToModel(documentVersions, subcase, 'linkedDocumentVersions');
-      return subcase.save();
+      return await subcase.save();
     }
   }
 );

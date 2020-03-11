@@ -141,12 +141,16 @@ export default Mixin.create({
     } else {
       model.set('linkedDocumentVersions', A([]));
     }
-    return model.save();
+    return await model.save();
   },
 
   actions: {
     async uploadedFile(uploadedFile) {
       const creationDate = moment().utc().toDate();
+      if (this.documentContainer) {
+        await this.documentContainer.reload();
+        await this.documentContainer.hasMany('documents').reload();
+      }
       const previousVersion = this.documentContainer ? (await this.documentContainer.get('lastDocumentVersion')) : null;
       const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
         accessLevel: this.defaultAccessLevel,
