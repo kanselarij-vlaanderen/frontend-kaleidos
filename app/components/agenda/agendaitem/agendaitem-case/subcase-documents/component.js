@@ -63,12 +63,18 @@ export default Component.extend(
       },
 
       async toggleIsAddingNewDocument() {
-        await this.item.preEditOrSaveCheck();
+        const itemType = this.item.get('constructor.modelName');
+        if(itemType === "agendaitem" || itemType === "subcase") {
+          await this.item.preEditOrSaveCheck();
+        }
         this.toggleProperty('isAddingNewDocument');
       },
 
       async toggleIsEditing() {
-        await this.item.preEditOrSaveCheck();
+        const itemType = this.item.get('constructor.modelName');
+        if(itemType === "agendaitem" || itemType === "subcase") {
+          await this.item.preEditOrSaveCheck();
+        }
         this.toggleProperty('isEditing');
       },
 

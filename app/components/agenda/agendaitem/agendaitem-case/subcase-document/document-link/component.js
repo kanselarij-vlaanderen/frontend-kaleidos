@@ -104,7 +104,10 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     async openUploadDialog() {
-      await this.item.preEditOrSaveCheck();
+      const itemType = this.item.get('constructor.modelName');
+      if(itemType === "agendaitem" || itemType === "subcase") {
+        await this.item.preEditOrSaveCheck();
+      }
       this.toggleProperty('isUploadingNewVersion');
     },
 
