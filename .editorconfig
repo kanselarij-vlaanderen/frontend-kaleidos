@@ -4,6 +4,8 @@
 
 root = true
 
+[*.hbs]
+insert_final_newline = false
 
 [*]
 end_of_line = lf
