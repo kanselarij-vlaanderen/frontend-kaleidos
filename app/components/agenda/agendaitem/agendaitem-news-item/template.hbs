@@ -1,3 +1,7 @@
+{{#if showNewsItemIsEditedWarning}}
+  {{changes-alert message=(t "newsitem-changed-message") buttonText=(t "close") clearAction=(action "clearMessage")}}
+{{/if}}
+
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
@@ -64,9 +68,9 @@
 
 {{else}}
   {{news-item/edit-item
-          subcase=(await subcase)
-          item=(await subcase.newsletterInfo)
-          agendaitem=agendaitem
-          isEditing=isEditing
+      subcase=(await subcase)
+      item=(await subcase.newsletterInfo)
+      agendaitem=agendaitem
+      isEditing=isEditing
   }}
 {{/if}}
