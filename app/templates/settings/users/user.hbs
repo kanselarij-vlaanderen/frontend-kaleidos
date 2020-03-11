@@ -21,7 +21,7 @@
             <p class="form__label u-padding--left--small">{{t 'manage-users-email'}}</p>
           </div>
           <div class="vl-col--1-2">
-            <p>{{model.account.voEmail}}</p>
+            <p>{{if model.email model.email "-"}}</p>
           </div>
         </div>
         <div class="vl-grid vl-grid--isstacked">
@@ -29,7 +29,7 @@
             <p class="form__label u-padding--left--small">{{t 'manage-users-telephone'}}</p>
           </div>
           <div class="vl-col--1-2">
-            <p>{{model.account.phoneNumber}}</p>
+            <p>{{if model.phone model.phone "-"}}</p>
           </div>
         </div>
         <div class="vl-grid vl-grid--isstacked">
@@ -64,7 +64,7 @@
             <p class="form__label u-padding--left--small">{{t 'manage-users-ovo'}}</p>
           </div>
           <div class="vl-col--1-2 u-padding--bottom--tinier u-padding--top--tinier">
-            <p></p>
+            <p>{{if model.organization.identifier model.organization.identifier "-"}}</p>
           </div>
         </div>
       </div>
