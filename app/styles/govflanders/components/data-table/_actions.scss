@@ -1,4 +1,10 @@
 .vl-data-table {
+
+  // override the default data-table line.
+  .data-table__actions--top {
+    border-bottom: none !important;
+  }
+
   // Data table actions
   &__actions {
     // Data table actions top modifier
