@@ -1,16 +1,16 @@
 {{utils/text-template
-  label=(t "agendaitem-decision")
-  type="decisions"
-  text=initValue
-  searchField="label"
-  descriptionUpdated=(action "descriptionUpdated")
+        label=(t "agendaitem-decision")
+        type="decisions"
+        text=initValue
+        searchField="label"
+        descriptionUpdated=(action "descriptionUpdated")
 }}
 <div class="vlc-input-field vlc-input-field-block">
   {{web-components/vl-form-label value=label}}
   {{web-components/vl-rdfa-editor
-    isLarge=isExpanded
-    richtext=initValue
-    handleRdfaEditorInit=(action "handleRdfaEditorInit")
+          isLarge=isExpanded
+          richtext=initValue
+          handleRdfaEditorInit=(action "handleRdfaEditorInit")
   }}
 </div>
 <div class="vlc-input-field vlc-input-field-block">
@@ -19,10 +19,10 @@
 </div>
 <div class="vlc-input-field-block">
   {{utils/documents-selector-of-agendaitem
-    item=agendaitem
-    title=(t "documents-attached-to")
-    itemWithDocuments=(await item)
-    selectDocument=(action "selectDocument")
+          item=agendaitem
+          title=(t "documents-attached-to")
+          itemWithDocuments=(await item)
+          selectDocument=(action "selectDocument")
   }}
 </div>
 <div class="vl-action-group vl-action-group--align-right">
@@ -30,8 +30,8 @@
     {{t "cancel"}}
   </a>
   {{web-components/vl-save-button
-    text=(t "save")
-    isLoading=isLoading
-    saveAction=(action "saveChanges")
+          text=(t "save")
+          isLoading=isLoading
+          saveAction=(action "saveChanges")
   }}
 </div>

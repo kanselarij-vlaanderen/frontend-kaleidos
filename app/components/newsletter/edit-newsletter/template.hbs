@@ -1,25 +1,25 @@
 <div class="vl-modal-dialog__content">
   <div
-    class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+          class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
   >
     <div class="vlc-input-field-block vl-col--2-4">
       {{web-components/vl-form-label value=(t "date-publication")}}
       {{web-components/vl-datepicker
-        enableTime=true
-        selectedDate=date
-        defaultHour=14
-        defaultMinute=0
-        dateChanged=(action "selectDate")
+              enableTime=true
+              selectedDate=date
+              defaultHour=14
+              defaultMinute=0
+              dateChanged=(action "selectDate")
       }}
     </div>
     <div class="vlc-input-field-block vl-col--2-4">
       {{web-components/vl-form-label value=(t "newsletter-doc-date")}}
       {{web-components/vl-datepicker
-        enableTime=true
-        selectedDate=docDate
-        defaultHour=14
-        defaultMinute=0
-        dateChanged=(action "selectDocDate")
+              enableTime=true
+              selectedDate=docDate
+              defaultHour=14
+              defaultMinute=0
+              dateChanged=(action "selectDocDate")
       }}
     </div>
   </div>
@@ -29,7 +29,7 @@
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <button
-          class="vl-button vl-button--link vl-button--narrow"
+                class="vl-button vl-button--link vl-button--narrow"
           {{action "close"}}
         >
           {{t "cancel"}}
@@ -39,9 +39,9 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         {{web-components/vl-save-button
-          text=(t "save")
-          isLoading=isLoading
-          saveAction=(action "saveChanges" selectedMeeting)
+                text=(t "save")
+                isLoading=isLoading
+                saveAction=(action "saveChanges" selectedMeeting)
         }}
       </div>
     </div>

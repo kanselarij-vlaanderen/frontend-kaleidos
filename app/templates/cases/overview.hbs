@@ -3,13 +3,13 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
     {{cases/cases-filter
-      size=size
-      searchText=(readonly searchText)
-      searchInDecisionsOnly=(readonly decisionsOnly)
-      dateFrom=(or dateFrom null)
-      dateTo=(or dateTo null)
-      ministerName=(readonly mandatees)
-      filter=(action "filterCases")
+            size=size
+            searchText=(readonly searchText)
+            searchInDecisionsOnly=(readonly decisionsOnly)
+            dateFrom=(or dateFrom null)
+            dateTo=(or dateTo null)
+            ministerName=(readonly mandatees)
+            filter=(action "filterCases")
     }}
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
@@ -32,10 +32,10 @@
             {{t "amount-showed"}}
           </label>
           {{#power-select
-            options=sizeOptions
-            selected=size
-            searchEnabled=false
-            onchange=(action "selectSize") as |sizeValue|
+                  options=sizeOptions
+                  selected=size
+                  searchEnabled=false
+                  onchange=(action "selectSize") as |sizeValue|
           }}
             {{sizeValue}}
           {{/power-select}}
@@ -43,34 +43,34 @@
       </div>
     </div>
     {{#data-table
-      content=model
-      page=page
-      noDataMessage=(t "no-results-found")
-      size=size
-      sort=sort
-      class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-      isLoading=isLoadingModel as |table|
+            content=model
+            page=page
+            noDataMessage=(t "no-results-found")
+            size=size
+            sort=sort
+            class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+            isLoading=isLoadingModel as |table|
     }}
       {{#table.content as |c|}}
         {{#c.header}}
           <th
-            class="vl-data-table-col-9 vl-data-table__header-title">
+                  class="vl-data-table-col-9 vl-data-table__header-title">
             {{t "case-name"}}
           </th>
           {{#if searchText}}
             <th
-              class="vl-data-table-col-1 vl-data-table__header-title">
+                    class="vl-data-table-col-1 vl-data-table__header-title">
               {{t "created-on"}}
             </th>
             {{th-sortable
-              class="vl-data-table-col-1 vl-data-table__header-title"
-              currentSorting=sort
-              field="sessionDates"
-              label=(t "on-agenda-of")
+                    class="vl-data-table-col-1 vl-data-table__header-title"
+                    currentSorting=sort
+                    field="sessionDates"
+                    label=(t "on-agenda-of")
             }}
           {{else}}
             <th
-              class="vl-data-table-col-2 vl-data-table__header-title">
+                    class="vl-data-table-col-2 vl-data-table__header-title">
               {{t "created-on"}}
             </th>
           {{/if}}
@@ -98,19 +98,19 @@
             {{#if isEditor}}
               <button class="vl-button vl-button--link vl-button--icon">
                 <i
-                  class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                        class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
                 ></i>
                 {{#attach-popover
-                  class="ember-attacher-popper"
-                  hideOn="clickout click"
-                  showOn="click"
-                  animation="shift"
-                  placement="bottom" as |attacher|
+                        class="ember-attacher-popper"
+                        hideOn="clickout click"
+                        showOn="click"
+                        animation="shift"
+                        placement="bottom" as |attacher|
                 }}
                   <ul class="vlc-dropdown-menu">
                     <li class="vlc-dropdown-menu__item">
                       <button
-                        class="vl-link"
+                              class="vl-link"
                         {{action attacher.hide}}
                         {{action "editRow" row}}
                       >
@@ -120,7 +120,7 @@
                     <li class="vlc-dropdown-menu__item">
                       {{#if (not row.isArchived)}}
                         <a
-                          class="vl-link vl-link--block"
+                                class="vl-link vl-link--block"
                           {{action attacher.hide}}
                           {{action "requestArchiveCase" row}}
                         >
@@ -128,7 +128,7 @@
                         </a>
                       {{else}}
                         <a
-                          class="vl-link vl-link--block"
+                                class="vl-link vl-link--block"
                           {{action attacher.hide}}
                           {{action "unarchiveCase" row}}
                         >
@@ -141,9 +141,9 @@
               </button>
             {{/if}}
             {{#link-to
-              "cases.case.subcases"
-              row.id
-              class="vl-button vl-button--link vl-button--icon"
+                    "cases.case.subcases"
+                    row.id
+                    class="vl-button vl-button--link vl-button--icon"
             }}
               <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
             {{/link-to}}
@@ -155,21 +155,21 @@
 </div>
 {{#if isEditingRow}}
   {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "edit-case")
-    closeModal=(action "cancelEditing")
+          isOverlay=true
+          title=(t "edit-case")
+          closeModal=(action "cancelEditing")
   }}
     {{cases/edit-case
-      caseToEdit=caseToEdit
-      cancelEditing=(action "cancelEditing")
+            caseToEdit=caseToEdit
+            cancelEditing=(action "cancelEditing")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isArchivingCase}}
   {{web-components/vl-modal-verify
-    title=(t "archive-case")
-    message=(t "archive-case-message")
-    cancel=(action "cancelArchiveCase")
-    verify=(action "archiveCase")
+          title=(t "archive-case")
+          message=(t "archive-case-message")
+          cancel=(action "cancelArchiveCase")
+          verify=(action "archiveCase")
   }}
 {{/if}}

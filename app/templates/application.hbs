@@ -3,9 +3,9 @@
   {{head-layout}}
   {{#if (await alert)}}
     <div
-      class="vl-alert vl-alert-relative vl-alert-relative--center
+            class="vl-alert vl-alert-relative vl-alert-relative--center
         {{await type}}"
-      role="alert"
+            role="alert"
     >
       <div class="vl-alert__icon">
         <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
@@ -38,18 +38,18 @@
     <div class="toasts-container">
       {{#each messages as |errorMessage|}}
         {{utils/custom-messages-toasts
-          errorMessage=errorMessage
-          closeErrorMessage=(action "closeErrorMessage")
+                errorMessage=errorMessage
+                closeErrorMessage=(action "closeErrorMessage")
         }}
       {{/each}}
     </div>
   {{/if}}
   {{#if showHeader}}
     {{m-header
-      selectedOption=selectedOption
-      options=options
-      navigateToRoute=(action "navigateToRoute")
-      navigateToLogin=(action "navigateToLogin")
+            selectedOption=selectedOption
+            options=options
+            navigateToRoute=(action "navigateToRoute")
+            navigateToLogin=(action "navigateToLogin")
     }}
   {{/if}}
 {{/if}}

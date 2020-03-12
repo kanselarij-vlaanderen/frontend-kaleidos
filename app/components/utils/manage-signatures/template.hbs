@@ -1,14 +1,14 @@
 {{#if (not isAdding)}}
   <div class="vl-modal-dialog__content">
     {{utils/model-selector
-      modelName="signature"
-      searchField="name"
-      propertyToShow="name"
-      sortField="name"
-      selectedItems=(await selectedSignature)
-      selectModel=(action "selectSignature")
+            modelName="signature"
+            searchField="name"
+            propertyToShow="name"
+            sortField="name"
+            selectedItems=(await selectedSignature)
+            selectModel=(action "selectSignature")
     }}
-    <div class="vl-u-spacer--small" />
+    <div class="vl-u-spacer--small"/>
     <div>
       {{t "signature-default"}}
       {{await defaultSignature.name}}
@@ -16,8 +16,8 @@
   </div>
   {{#if isEditing}}
     {{utils/edit-signature
-      signatureToEdit=(await selectedSignature)
-      closeModal=(action "toggleIsEditing")
+            signatureToEdit=(await selectedSignature)
+            closeModal=(action "toggleIsEditing")
     }}
   {{else}}
     <div class="vlc-navbar vlc-navbar--bordered-top">
@@ -25,7 +25,7 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <button
-              class="vl-button vl-button--link vl-button--narrow"
+                    class="vl-button vl-button--link vl-button--narrow"
               {{action "closeModal"}}
             >
               {{t "cancel"}}
@@ -36,30 +36,30 @@
           <div class="vlc-toolbar__item">
             {{#if selectedSignature}}
               <button
-                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "setDefaultSignature"}}
               >
                 <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "signature-set-default"}}
               </button>
               <button
-                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "toggleIsEditing"}}
               >
                 <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "signature-edit"}}
               </button>
             {{/if}}
             <button
-              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
               {{action "toggleIsAdding"}}
             >
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
               {{t "signature-add"}}
             </button>

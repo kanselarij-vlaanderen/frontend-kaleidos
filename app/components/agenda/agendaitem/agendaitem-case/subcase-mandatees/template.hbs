@@ -19,9 +19,9 @@
     {{#each mandateeRows as |mandateeRow|}}
       <ul class="vlc-minister-list">
         {{web-components/vl-mandatee-link
-          mandatee=mandateeRow.mandatee
-          fields=mandateeRow.fields
-          submitter=mandateeRow.isSubmitter
+                mandatee=mandateeRow.mandatee
+                fields=mandateeRow.fields
+                submitter=mandateeRow.isSubmitter
         }}
       </ul>
     {{/each}}
@@ -31,21 +31,21 @@
 {{else}}
   <div class="vlc-box">
     {{cases/subcase-mandatees
-      showSelected=true
-      item=item
-      mandateeRows=mandateeRows
-      isEditing=isEditing
-      isAdding=isAdding
+            showSelected=true
+            item=item
+            mandateeRows=mandateeRows
+            isEditing=isEditing
+            isAdding=isAdding
     }}
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__left">
         <a
-          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
           {{action "addRow"}}
         >
           <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-            aria-hidden="true"
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                  aria-hidden="true"
           ></i>
           {{t "add-minister"}}
         </a>
@@ -53,16 +53,16 @@
       <div class="vlc-toolbar__right">
         <div class="vl-action-group vl-action-group--align-right">
           <a
-            class="vl-button vl-button--tertiary vl-button--narrow"
+                  class="vl-button vl-button--tertiary vl-button--narrow"
             {{action "cancelEditing"}}
           >
             {{t "cancel"}}
           </a>
           {{web-components/vl-save-button
-            text=(t "save")
-            isLoading=isLoading
-            test-data-vl-save-button=true
-            saveAction=(action "saveChanges")
+                  text=(t "save")
+                  isLoading=isLoading
+                  test-data-vl-save-button=true
+                  saveAction=(action "saveChanges")
           }}
         </div>
       </div>

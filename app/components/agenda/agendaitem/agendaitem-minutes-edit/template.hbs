@@ -1,16 +1,16 @@
 <div class="vl-u-spacer">
   {{utils/text-template
-    label=(t "notes-of-agendaitem")
-    type="minutes"
-    searchField="label"
-    descriptionUpdated=(action "descriptionUpdated")
+          label=(t "notes-of-agendaitem")
+          type="minutes"
+          searchField="label"
+          descriptionUpdated=(action "descriptionUpdated")
   }}
   <div class="vlc-input-field vlc-input-field-block">
     {{web-components/vl-form-label value=label}}
     {{web-components/vl-rdfa-editor
-      isLarge=isExpanded
-      richtext=initValue
-      handleRdfaEditorInit=(action "handleRdfaEditorInit")
+            isLarge=isExpanded
+            richtext=initValue
+            handleRdfaEditorInit=(action "handleRdfaEditorInit")
     }}
   </div>
 </div>
@@ -19,8 +19,8 @@
     {{t "cancel"}}
   </a>
   {{web-components/vl-save-button
-    text=(t "save")
-    isLoading=isLoading
-    saveAction=(action "saveChanges" agendaitem)
+          text=(t "save")
+          isLoading=isLoading
+          saveAction=(action "saveChanges" agendaitem)
   }}
 </div>

@@ -24,7 +24,7 @@ export default ModelWithModifier.extend({
   meeting: belongsTo('meeting', { inverse: null }),
   documentVersions: hasMany('document-version', { inverse: null }),
 
-  displayRemark: computed('remark', 'intl', function() {
+  displayRemark: computed('remark', 'intl', function () {
     const remark = this.get('remark');
     if (remark && remark != '') {
       return `${this.intl.t('remark')}: ${this.get('remark')}`;
@@ -34,20 +34,20 @@ export default ModelWithModifier.extend({
   }),
 
   newsletterProposal: computed('mandateeProposal', async function () {
-    const subcase =  await this.get('subcase');
+    const subcase = await this.get('subcase');
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');
     let proposalText = this.intl.t('proposal-text');
     const seperatorComma = ', ';
     const seperatorAnd = ' en ';
-    if(sortedMandatees && sortedMandatees.length > 1) {
+    if (sortedMandatees && sortedMandatees.length > 1) {
       for (var i = 0; i < sortedMandatees.length; i++) {
         let mandatee = sortedMandatees.objectAt(i);
         const nickName = await mandatee.get('nickName');
-        if(i > 0) {
-          if (sortedMandatees.length -1 == i){
+        if (i > 0) {
+          if (sortedMandatees.length - 1 == i) {
             proposalText = `${proposalText}${seperatorAnd}`;
-          }else {
+          } else {
             proposalText = `${proposalText}${seperatorComma}`;
           }
         }
@@ -68,8 +68,7 @@ export default ModelWithModifier.extend({
           proposalText = `${proposalText}${requestedBy.get('title')}`;
         }
         return proposalText;
-      }
-      else {
+      } else {
         return null;
       }
     }

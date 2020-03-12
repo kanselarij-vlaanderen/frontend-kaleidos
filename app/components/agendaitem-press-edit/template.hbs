@@ -6,9 +6,9 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "content")}}
     {{textarea
-      class="vl-textarea vl-textarea--block"
-      rows="10"
-      value=agendaitem.textPress
+            class="vl-textarea vl-textarea--block"
+            rows="10"
+            value=agendaitem.textPress
     }}
   </div>
   <div class="vlc-input-field vlc-input-field-block">
@@ -21,8 +21,8 @@
     {{t "cancel"}}
   </a>
   {{web-components/vl-save-button
-    text=(t "save")
-    isLoading=isLoading
-    saveAction=(action "saveChanges" agendaitem)
+          text=(t "save")
+          isLoading=isLoading
+          saveAction=(action "saveChanges" agendaitem)
   }}
 </div>

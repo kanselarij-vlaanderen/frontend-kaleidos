@@ -1,10 +1,10 @@
 <div class="vl-modal">
   <div class="vl-modal__backdrop">
     <div
-      class="vl-modal-dialog {{sizeClass}}"
-      style="width: 60rem;"
-      tabindex="-1"
-      role="dialog"
+            class="vl-modal-dialog {{sizeClass}}"
+            style="width: 60rem;"
+            tabindex="-1"
+            role="dialog"
     >
       <div class="vlc-navbar">
         <div class="vlc-toolbar">
@@ -18,12 +18,12 @@
           <div class="vlc-toolbar__right">
             <div class="vlc-toolbar__item">
               <button
-                class="vl-button vl-button--link-muted vl-button--icon"
+                      class="vl-button vl-button--link-muted vl-button--icon"
                 {{action "cancel"}}
               >
                 <i
-                  class="vl-button__icon vl-vi vl-vi-close-light"
-                  aria-hidden="true"
+                        class="vl-button__icon vl-vi vl-vi-close-light"
+                        aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "close"}}
@@ -44,8 +44,8 @@
             <div class="vlc-toolbar__left">
               <div class="vlc-toolbar__item">
                 <button
-                  type="button"
-                  class="vl-button vl-button--link vl-button--narrow"
+                        type="button"
+                        class="vl-button vl-button--link vl-button--narrow"
                   {{action "cancel"}}
                 >
                   {{t "cancel"}}
@@ -56,14 +56,14 @@
               {{#if showVerify}}
                 <div class="vlc-toolbar__item">
                   {{#web-components/vl-save-button
-                    class=buttonClass
-                    isLoading=isLoading
-                    saveAction=(action "verify")
+                          class=buttonClass
+                          isLoading=isLoading
+                          saveAction=(action "verify")
                   }}
                     {{#if showIcon}}
                       <i
-                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
-                        aria-hidden="true"
+                              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
+                              aria-hidden="true"
                       ></i>
                     {{/if}}
                     {{verifyButtonText}}

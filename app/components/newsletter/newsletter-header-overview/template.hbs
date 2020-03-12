@@ -2,7 +2,7 @@
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
       <h1
-        class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width vlc-u-padding-bottom-5"
+              class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width vlc-u-padding-bottom-5"
       >
         {{t "newsletter-overview-pdf-name"}}
         {{await agenda.createdFor.kindToShow.procedure}}
@@ -13,8 +13,8 @@
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
               {{#link-to
-                "newsletters"
-                class="vlc-backlink vl-link vl-link--bold"
+                      "newsletters"
+                      class="vlc-backlink vl-link vl-link--bold"
               }}
               {{!-- template-lint-disable no-bare-strings  --}}
                 &#8629;
@@ -26,32 +26,32 @@
                 <ul class="vlc-tabs-reverse" role="tablist">
                   <li class="vlc-tabs-reverse__item">
                     {{#link-to
-                      "print-overviews.newsletter.agendaitems"
-                      agenda
-                      class="border-left vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
+                            "print-overviews.newsletter.agendaitems"
+                            agenda
+                            class="border-left vlc-tabs-reverse__link"
+                            activeClass="vlc-tabs-reverse__link--active"
                     }}
                       {{t "overview"}}
                     {{/link-to}}
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     {{#link-to
-                      "print-overviews.newsletter.overview"
-                      agenda.id
-                      (query-params definite=false)
-                      class="vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
+                            "print-overviews.newsletter.overview"
+                            agenda.id
+                            (query-params definite=false)
+                            class="vlc-tabs-reverse__link"
+                            activeClass="vlc-tabs-reverse__link--active"
                     }}
                       {{t "design"}}
                     {{/link-to}}
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     {{#link-to
-                      "print-overviews.newsletter.overview"
-                      agenda.id
-                      (query-params definite=true)
-                      class="vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
+                            "print-overviews.newsletter.overview"
+                            agenda.id
+                            (query-params definite=true)
+                            class="vlc-tabs-reverse__link"
+                            activeClass="vlc-tabs-reverse__link--active"
                     }}
                       {{t "definite"}}
                     {{/link-to}}
@@ -70,49 +70,49 @@
         <div class="vl-action-group">
           {{#if shouldShowPrintButton}}
             <button
-              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+                    class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
               {{action "print"}}
             >
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-                aria-hidden="true"
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+                      aria-hidden="true"
               ></i>
               {{t "print"}}
             </button>
             {{#if isEditor}}
               <button
-                class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+                      class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
                 {{action "showMultipleOptions"}}
               >
                 {{#if (not isShowingOptions)}}
                   <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                          class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
                     {{action "showMultipleOptions" bubbles=false}}
                   ></i>
                 {{else}}
                   <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                          class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
                     {{action "showMultipleOptions" bubbles=false}}
                   ></i>
                 {{/if}}
                 {{t "actions"}}
                 {{#attach-popover
-                  class="ember-attacher-popper"
-                  hideOn="clickout click"
-                  showOn="click"
-                  animation="shift"
-                  placement="bottom" as |attacher|
+                        class="ember-attacher-popper"
+                        hideOn="clickout click"
+                        showOn="click"
+                        animation="shift"
+                        placement="bottom" as |attacher|
                 }}
                   <ul class="vlc-dropdown-menu">
                     {{#if
-                      (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+                            (or (is-pending agenda.createdFor.mailCampaign) isLoading)
                     }}
                       <li class="vlc-dropdown-menu__item">
                         <div class="vl-loader-link">
                           <div
-                            class="vl-loader"
-                            role="alert"
-                            aria-busy="true"
+                                  class="vl-loader"
+                                  role="alert"
+                                  aria-busy="true"
                           ></div>
                           {{t "newsletter-loading-text"}}
                         </div>
@@ -122,7 +122,7 @@
                       }}
                         <li class="vlc-dropdown-menu__item">
                           <a
-                            class="vl-link vl-link--block"
+                                  class="vl-link vl-link--block"
                             {{action attacher.hide}}
                             {{action "sendTestCampaign"}}
                           >
@@ -131,7 +131,7 @@
                         </li>
                         <li class="vlc-dropdown-menu__item">
                           <a
-                            class="vl-link vl-link--block"
+                                  class="vl-link vl-link--block"
                             {{action attacher.hide}}
                             {{action "toggleIsVerifying"}}
                           >
@@ -139,32 +139,32 @@
                           </a>
                         </li>
                         <li
-                          class="vlc-dropdown-menu__separator"
-                          role="none"
+                                class="vlc-dropdown-menu__separator"
+                                role="none"
                         ></li>
                       {{/if}}
                       <li class="vlc-dropdown-menu__item">
                         <a
-                          class="vl-link vl-link--block"
-                          target="_blank"
-                          rel="noopener"
-                          href={{concat "/newsletter/xml-newsletter/" agenda.id
-                          }}
-                          download={{concat
-                            "/newsletter/xml-newsletter/"
-                            agenda.id
-                          }}
+                                class="vl-link vl-link--block"
+                                target="_blank"
+                                rel="noopener"
+                                href={{concat "/newsletter/xml-newsletter/" agenda.id
+                        }}
+                                download={{concat
+                                "/newsletter/xml-newsletter/"
+                                agenda.id
+                        }}
                         >
                           {{t "generate-xml"}}
                         </a>
                       </li>
                       <li
-                        class="vlc-dropdown-menu__separator"
-                        role="none"
+                              class="vlc-dropdown-menu__separator"
+                              role="none"
                       ></li>
                       <li class="vlc-dropdown-menu__item">
                         <a
-                          class="vl-link vl-link--block vl-u-text--error"
+                                class="vl-link vl-link--block vl-u-text--error"
                           {{action attacher.hide}}
                           {{action "deleteCampaign"}}
                         >
@@ -174,7 +174,7 @@
                     {{else}}
                       <li class="vlc-dropdown-menu__item">
                         <a
-                          class="vl-link vl-link--block"
+                                class="vl-link vl-link--block"
                           {{action "createCampaign"}}
                         >
                           {{t "create-campaign"}}
@@ -193,20 +193,20 @@
 </div>
 {{#if isVerifying}}
   {{web-components/vl-modal-verify
-    title=(t "send-campaign")
-    buttonType="warning"
-    isLoading=isLoading
-    verifyButtonText=(t "send-campaign")
-    message=(t "send-campaign-warning")
-    cancel=(action "toggleIsVerifying")
-    verify=(action "sendCampaign")
+          title=(t "send-campaign")
+          buttonType="warning"
+          isLoading=isLoading
+          verifyButtonText=(t "send-campaign")
+          message=(t "send-campaign-warning")
+          cancel=(action "toggleIsVerifying")
+          verify=(action "sendCampaign")
   }}
 {{/if}}
 {{#if (or testCampaignIsLoading newsletterHTML)}}
   {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "send-test-campaign")
-    closeModal=(action "clearNewsletterHTML")
+          isOverlay=true
+          title=(t "send-test-campaign")
+          closeModal=(action "clearNewsletterHTML")
   }}
     <div class="vl-modal-dialog__content">
       {{#if testCampaignIsLoading}}

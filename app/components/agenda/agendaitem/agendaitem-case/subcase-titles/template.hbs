@@ -2,10 +2,10 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
       {{#link-to
-        "cases.case.subcases.subcase.overview"
-        (await item.subcase.case.id)
-        (await item.subcase.id)
-        class="vl-link"
+              "cases.case.subcases.subcase.overview"
+              (await item.subcase.case.id)
+              (await item.subcase.id)
+              class="vl-link"
       }}
         {{t "to-subcase"}}
       {{/link-to}}
@@ -58,7 +58,7 @@
       {{#if isAgendaItem}}
         {{#if (and isEditor (await item.formallyOkToShow))}}
           <span
-            class="{{item.formallyOkToShow.pillClassNames}}
+                  class="{{item.formallyOkToShow.pillClassNames}}
                vl-u-spacer-extended-right-s"
           >
             {{item.formallyOkToShow.label}}
@@ -69,7 +69,7 @@
         <span class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
       {{else}}
         <span
-          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+                class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
         ></span>
       {{/if}}
     </div>
@@ -87,7 +87,7 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
       <span
-        class="vlc-pill
+              class="vlc-pill
           {{if item.showInNewsletter "vlc-pill--success" "vlc-pill--error"}}
            vl-u-spacer-extended-right-s"
       >
@@ -96,14 +96,14 @@
             {{t "visible-in-newsletter"}}
           </span>
           <i
-            class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
+                  class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
           ></i>
         {{else}}
           <span>
             {{t "hidden-in-newsletter"}}
           </span>
           <i
-            class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
+                  class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
           ></i>
         {{/if}}
       </span>
@@ -113,10 +113,10 @@
 
 {{#if isAgendaItem}}
   <div class="vl-u-spacer-extended-bottom-s">
-  {{#if item.explanation}}
-    <pre class="vl-u-text--muted vl-u-flex-inline-flex vlc-u-pre-line-wrap">
+    {{#if item.explanation}}
+      <pre class="vl-u-text--muted vl-u-flex-inline-flex vlc-u-pre-line-wrap">
       {{t "remark-title"}}: {{await item.explanation}}
     </pre>
-  {{/if}}
+    {{/if}}
   </div>
 {{/if}}

@@ -3,9 +3,9 @@
 {{else}}
   {{#each themes as |theme|}}
     {{web-components/vl-checkbox
-      value=theme.selected
-      label=theme.label
-      toggle=(action "selectModel" theme)
+            value=theme.selected
+            label=theme.label
+            toggle=(action "selectModel" theme)
     }}
   {{/each}}
 {{/if}}

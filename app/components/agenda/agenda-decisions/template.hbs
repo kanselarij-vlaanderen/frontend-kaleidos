@@ -2,7 +2,7 @@
   <div class="vl-u-spacer-extended-top-l no-print">
     <h3 class="vl-title vl-title--h3">
       {{await title}}
-      <br />
+      <br/>
     </h3>
   </div>
   <div class="vl-u-spacer-extended-bottom-l no-print">
@@ -14,15 +14,15 @@
           <div class="vl-u-display-flex vl-u-flex-justify-center">
             <div class="print-only vl-u-spacer-extended-top-l">
               <img
-                style="margin:-75px 0px -50px 0px; width:200px"
-                src="/assets/logo_vlaamse_regering.svg"
-                alt={{t "flemish-government"}}
-               />
+                      style="margin:-75px 0px -50px 0px; width:200px"
+                      src="/assets/logo_vlaamse_regering.svg"
+                      alt={{t "flemish-government"}}
+              />
 
               <p class="vl-u-text--bold vl-u-text--capitalized">
                 {{await title}}
               </p>
-              <hr class="vlc-hr" />
+              <hr class="vlc-hr"/>
             </div>
           </div>
           <div style="page-break-after:always;">
@@ -43,17 +43,17 @@
                     {{#each (await agendaitem.decisions) as |decision|}}
                       {{#if decision.isEditing}}
                         {{agenda/agendaitem/agendaitem-decision-edit
-                          isEditing=decision.isEditing
-                          item=decision
-                          subcase=(await agendaitem.subcase)
-                          isTableRow=isTableRow
-                          agendaitem=agendaitem
+                                isEditing=decision.isEditing
+                                item=decision
+                                subcase=(await agendaitem.subcase)
+                                isTableRow=isTableRow
+                                agendaitem=agendaitem
                         }}
                       {{else if isEditor}}
                         <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                           {{#if allowEditing}}
                             <a
-                              class="vl-link"
+                                    class="vl-link"
                               {{action "toggleIsEditing" decision}}
                             >
                               {{t "edit"}}

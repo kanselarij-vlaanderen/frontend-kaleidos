@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+
 const { Model, attr, hasMany, belongsTo } = DS;
 
 export default Model.extend({
@@ -23,7 +24,7 @@ export default Model.extend({
   requestedSubcases: hasMany('subcase', { inverse: null }),
   agendaitems: hasMany('agendaitem', { inverse: null }),
 
-  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
+  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function () {
     const nameToDisplay = this.get('person.nameToDisplay');
     if (nameToDisplay) {
       return `${nameToDisplay}, ${this.get('title')}`;

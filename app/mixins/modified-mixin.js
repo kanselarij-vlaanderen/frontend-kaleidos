@@ -4,14 +4,14 @@ import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default Mixin.create({
-	store: inject(),
+  store: inject(),
 
-	updateModifiedProperty(model) {
-		model.set('modified', moment().utc().toDate());
-		return model.save();
-	},
+  updateModifiedProperty(model) {
+    model.set('modified', moment().utc().toDate());
+    return model.save();
+  },
 
-	changeFormallyOkPropertyIfNotSetOnTrue(subcase) {
-		subcase.set('formallyOk', CONFIG.notYetFormallyOk);
-	},
+  changeFormallyOkPropertyIfNotSetOnTrue(subcase) {
+    subcase.set('formallyOk', CONFIG.notYetFormallyOk);
+  },
 });

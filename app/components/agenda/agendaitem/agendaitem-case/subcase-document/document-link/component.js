@@ -21,11 +21,11 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   nameBuffer: '',
 
   isSubcase: computed('item.contructor', function () {
-		const { item } = this;
-		return item.get('modelName') === 'subcase';
-	}),
+    const { item } = this;
+    return item.get('modelName') === 'subcase';
+  }),
 
-  aboutToDelete: computed('document.aboutToDelete', function() {
+  aboutToDelete: computed('document.aboutToDelete', function () {
     if (this.document) {
       if (this.document.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
@@ -33,7 +33,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     }
   }),
 
-  openClass: computed('isShowingVersions', function() {
+  openClass: computed('isShowingVersions', function () {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }
@@ -50,7 +50,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       .map(async agendaitem => {
         agendaitem.set('formallyOk', CONFIG.notYetFormallyOk);
         const approvals = await agendaitem.get('approvals');
-        await Promise.all(approvals.map(approval =>  approval.destroyRecord()));
+        await Promise.all(approvals.map(approval => approval.destroyRecord()));
         agendaitem.save();
       }))
   },
@@ -78,7 +78,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     startEditingName() {
-      if(!this.isEditor){
+      if (!this.isEditor) {
         return;
       }
       this.set('nameBuffer', this.get('document.lastDocumentVersion.name'));
@@ -141,7 +141,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       const { isSubcase } = this;
       const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
 
-      if (itemType !== "decision" && subcase) {
+      if (itemType !== 'decision' && subcase) {
         await this.attachDocumentVersionsToModel([documentVersion], subcase).then(item => item.save());
       } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
         await this.addDocumentVersionsToAgendaitems([documentVersion], agendaitemsOnDesignAgenda);
@@ -149,9 +149,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       await this.attachDocumentVersionsToModel([documentVersion], item);
 
       await item.save().then(() => {
-        if(subcase || isSubcase) this.resetFormallyOk();
+        if (subcase || isSubcase) this.resetFormallyOk();
       });
-      if(!this.isDestroyed){
+      if (!this.isDestroyed) {
         this.set('isLoading', false);
         this.set('isUploadingNewVersion', false);
       }
@@ -191,7 +191,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     const { item } = this;
     const documentVersions = item.get('documentVersions');
     await this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete).then(() => {
-      if(!item.aboutToDelete && documentVersions) {
+      if (!item.aboutToDelete && documentVersions) {
         item.hasMany('documentVersions').reload();
       }
     });

@@ -1,31 +1,31 @@
 {{title documentTitle}}
 <div class="vl-u-bg-alt">
   {{agenda/agenda-header
-    compareAgendas=(action "compareAgendas")
-    navigateToSubCases=(action "navigateToSubCases")
-    loading=(action "loadingAgendaitems")
-    reloadRoute=(action "reloadRouteWithNewAgenda")
-    clearSelectedAgendaItem=(action "navigateToOverview")
-    navigateToNotes=(action "navigateToNotes")
-    navigateToPressAgenda=(action "navigateToPressAgenda")
-    navigateToDecisions=(action "navigateToDecisions")
-    navigateToNewsletter=(action "navigateToNewsletter")
-    navigateToDocuments=(action "navigateToDocuments")
+          compareAgendas=(action "compareAgendas")
+          navigateToSubCases=(action "navigateToSubCases")
+          loading=(action "loadingAgendaitems")
+          reloadRoute=(action "reloadRouteWithNewAgenda")
+          clearSelectedAgendaItem=(action "navigateToOverview")
+          navigateToNotes=(action "navigateToNotes")
+          navigateToPressAgenda=(action "navigateToPressAgenda")
+          navigateToDecisions=(action "navigateToDecisions")
+          navigateToNewsletter=(action "navigateToNewsletter")
+          navigateToDocuments=(action "navigateToDocuments")
   }}
 </div>
 {{#if (not isLoading)}}
   <div class="vlc-panel-layout">
     {{#if (not shouldHideNav)}}
       {{agenda/side-nav
-        agendas=agendas
-        currentAgenda=currentAgenda
-        selectAgenda=(action "selectAgenda")
+              agendas=agendas
+              currentAgenda=currentAgenda
+              selectAgenda=(action "selectAgenda")
       }}
     {{/if}}
     {{outlet}}
   </div>
 {{else}}
   {{web-components/vl-loader
-    text=(concat (t "agenda-approving-text") " " (t "please-be-patient"))
+          text=(concat (t "agenda-approving-text") " " (t "please-be-patient"))
   }}
 {{/if}}

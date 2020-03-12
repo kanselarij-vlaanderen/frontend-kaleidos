@@ -4,33 +4,33 @@
   {{#if (not allowEditing)}}
     {{#if (await agendaitem.subcase.newsletterInfo.inNewsletter)}}
       {{newsletter/newsletter-item/item-content
-        allowEditing=allowEditing
-        itemIndex=itemIndex
-        isEditing=isEditing
-        agendaitem=agendaitem
+              allowEditing=allowEditing
+              itemIndex=itemIndex
+              isEditing=isEditing
+              agendaitem=agendaitem
       }}
     {{else if agendaitem.showAsRemark}}
       {{newsletter/newsletter-item/item-content
-        allowEditing=allowEditing
-        definite=definite
-        itemIndex=itemIndex
-        isEditing=isEditing
-        agendaitem=agendaitem
+              allowEditing=allowEditing
+              definite=definite
+              itemIndex=itemIndex
+              isEditing=isEditing
+              agendaitem=agendaitem
       }}
     {{/if}}
   {{else}}
     {{newsletter/newsletter-item/item-content
-      allowEditing=allowEditing
-      definite=definite
-      isEditing=isEditing
-      agendaitem=agendaitem
+            allowEditing=allowEditing
+            definite=definite
+            isEditing=isEditing
+            agendaitem=agendaitem
     }}
   {{/if}}
 {{else}}
   {{news-item/edit-item
-    agendaitem=agendaitem
-    isLoading=isLoading
-    item=(await agendaitem.subcase.newsletterInfo)
-    isEditing=isEditing
+          agendaitem=agendaitem
+          isLoading=isLoading
+          item=(await agendaitem.subcase.newsletterInfo)
+          isEditing=isEditing
   }}
 {{/if}}

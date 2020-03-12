@@ -1,7 +1,7 @@
 {{#each (if (is-pending activeTabs) defaultTabs (await activeTabs)) as |tab|}}
   <li class="vl-tab">
     <a
-      class="vl-tab__link
+            class="vl-tab__link
       {{active-class activeAgendaItemSection tab.name class="active"}}"
       {{action "setAgendaItemSection" tab.name}}
     >

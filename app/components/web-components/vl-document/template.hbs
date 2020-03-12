@@ -5,7 +5,7 @@
   {{access-level-pill item=documentVersion}}
   {{#if (await documentVersion.file.downloadLink)}}
     <button
-      class="vl-button vl-button--link vl-button--icon"
+            class="vl-button vl-button--link vl-button--icon"
       {{action "showDocumentVersionViewer" documentVersion}}
     >
       <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
@@ -14,19 +14,19 @@
       </span>
     </button>
     <a
-      class="vl-button vl-button--link vl-button--icon"
-      href={{concat
-      (await documentVersion.file.downloadLink)
-      "?name="
-      (await documentVersion.downloadFilename)
+            class="vl-button vl-button--link vl-button--icon"
+            href={{concat
+            (await documentVersion.file.downloadLink)
+            "?name="
+            (await documentVersion.downloadFilename)
     }}
       {{!-- download --}}
       {{! 'download' attribute doesn't specify a filename, as this gets overruled by
       the filename received in the "Content-Disposition HTTP header" }}
     >
       <i
-        class="vl-vi vl-vi-download-harddisk vl-button__icon"
-        aria-hidden="true"
+              class="vl-vi vl-vi-download-harddisk vl-button__icon"
+              aria-hidden="true"
       ></i>
       <span class="vl-u-visually-hidden">
         {{t "download"}}
@@ -36,7 +36,7 @@
 
   {{#if isEditor}}
     <button
-      class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
+            class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
       {{action "deleteDocumentVersion" documentVersion}}
     >
       <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>
@@ -56,15 +56,15 @@
 {{/if}}
 <div class="vlc-document-card-item__icon">
   <span
-    class="vl-icon vl-icon--large vl-vi vl-vi-timeline"
-    aria-hidden="true"
+          class="vl-icon vl-icon--large vl-vi vl-vi-timeline"
+          aria-hidden="true"
   ></span>
 </div>
 {{#if isVerifyingDelete}}
   {{web-components/vl-modal-verify
-    title=(t "document-delete")
-    message=(t "delete-document-message")
-    cancel=(action "cancel")
-    verify=(action "verify")
+          title=(t "document-delete")
+          message=(t "delete-document-message")
+          cancel=(action "cancel")
+          verify=(action "verify")
   }}
 {{/if}}

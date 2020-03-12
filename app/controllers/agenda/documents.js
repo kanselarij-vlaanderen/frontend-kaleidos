@@ -8,5 +8,5 @@ export default Controller.extend(isAuthenticatedMixin, {
     cancelEditing() {
       this.toggleProperty('isEditing');
     }
-	},
+  },
 });

@@ -1,7 +1,7 @@
 {{#if (eq errorMessage.type "warning-undo")}}
   <div
-    class="vl-alert vl-alert-relative vl-alert-relative--center-mid vl-alert--warning"
-    role="alert"
+          class="vl-alert vl-alert-relative vl-alert-relative--center-mid vl-alert--warning"
+          role="alert"
   >
     <div class="vl-alert__icon">
       <i class="vl-vi vl-vi-alert-triangle" aria-hidden="true"></i>
@@ -15,12 +15,12 @@
           {{errorMessage.message}}
         </p>
         <button
-          class="vl-button vl-button--link vl-button--icon-before"
+                class="vl-button vl-button--link vl-button--icon-before"
           {{action "undoChanges" errorMessage}}
         >
           <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-text-undo"
-            aria-hidden="true"
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-text-undo"
+                  aria-hidden="true"
           ></i>
           {{t "undo"}}
         </button>
@@ -29,8 +29,8 @@
   </div>
 {{else if (eq errorMessage.type "file-download")}}
   <div
-    class="vl-alert vl-alert-relative vl-alert-relative--center-mid vl-alert--success"
-    role="alert"
+          class="vl-alert vl-alert-relative vl-alert-relative--center-mid vl-alert--success"
+          role="alert"
   >
     <div class="vl-alert__icon">
       <i class="vl-vi vl-vi-check" aria-hidden="true"></i>
@@ -41,13 +41,13 @@
       </p>
       <div class="vl-alert__message vl-u-text--capitalize">
         <a
-          class="vl-button vl-button--link vl-button--icon-before"
-          href={{errorMessage.downloadLink}}
-          download
+                class="vl-button vl-button--link vl-button--icon-before"
+                href={{errorMessage.downloadLink}}
+                download
         >
           <i
-            class="vl-vi vl-vi-download-harddisk vl-button__icon"
-            aria-hidden="true"
+                  class="vl-vi vl-vi-download-harddisk vl-button__icon"
+                  aria-hidden="true"
           ></i>
           {{errorMessage.fileName}}
         </a>
@@ -75,8 +75,8 @@
         </div>
       </div>
       <button
-        class="vl-alert__close"
-        type="button"
+              class="vl-alert__close"
+              type="button"
         {{action "closeErrorMessage"}}
       >
         <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>

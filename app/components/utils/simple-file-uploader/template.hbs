@@ -1,16 +1,16 @@
 <FileUpload
-  @name="files"
-  @accept=".csv"
-  @onfileadd={{action "uploadFile"}} as |queue|
+        @name="files"
+        @accept=".csv"
+        @onfileadd={{action "uploadFile"}} as |queue|
 >
   <a
-    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
   >
     {{#if queue.files.length}}
       {{t "import-users-text"}}
     {{else}}
       <i
-        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-cloud-upload"
+              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-cloud-upload"
       ></i>
       {{t "import-users"}}
     {{/if}}

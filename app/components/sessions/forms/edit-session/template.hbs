@@ -4,9 +4,9 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "start-date")}}
       {{web-components/vl-datepicker
-        enableTime=true
-        date=date
-        dateChanged=(action "selectStartDate")
+              enableTime=true
+              date=date
+              dateChanged=(action "selectStartDate")
       }}
     </div>
   </div>
@@ -18,9 +18,9 @@
   </div>
 </div>
 {{web-components/vl-modal-footer
-  isLoading=isLoading
-  cancelButtonText=(t "cancel")
-  saveButtonText=(t "edit")
-  cancelAction=(action "cancelForm")
-  saveAction=(action "updateSession")
+        isLoading=isLoading
+        cancelButtonText=(t "cancel")
+        saveButtonText=(t "edit")
+        cancelAction=(action "cancelForm")
+        saveAction=(action "updateSession")
 }}

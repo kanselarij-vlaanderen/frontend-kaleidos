@@ -2,9 +2,9 @@
   <div class="vl-u-spacer-extended-l">
     <div class="vl-u-display-flex vl-u-flex-align-center">
       {{input
-        value=searchText
-        placeholder=(t "search-agenda-items")
-        class="vl-input-field vl-input-field__input vlc-u-box-model-maximize-width"
+              value=searchText
+              placeholder=(t "search-agenda-items")
+              class="vl-input-field vl-input-field__input vlc-u-box-model-maximize-width"
       }}
     </div>
 
@@ -13,42 +13,42 @@
     {{else}}
       <table class="vl-data-table tr-hover vl-data-table--zebra">
         <thead>
-          <tr>
-            <th class="vl-data-table-col-9 vl-data-table__header-title">
-              {{t "case-name"}}
-            </th>
-            <th class="vl-data-table-col-2 vl-data-table__header-title">
-              {{t "created-on"}}
-            </th>
-          </tr>
+        <tr>
+          <th class="vl-data-table-col-9 vl-data-table__header-title">
+            {{t "case-name"}}
+          </th>
+          <th class="vl-data-table-col-2 vl-data-table__header-title">
+            {{t "created-on"}}
+          </th>
+        </tr>
         </thead>
         <tbody>
-          {{#each (await results) as |row|}}
-            <tr>
-              <td onclick={{action "selectCase" row}}>
-                <p>
-                  {{#if row.shortTitle}}
-                    {{row.shortTitle}}
-                  {{else}}
-                    {{row.title}}
-                  {{/if}}
-                </p>
-              </td>
-              <td onclick={{action "selectCase" row}}>
-                {{moment-format row.created "DD-MM-YYYY HH:mm"}}
-              </td>
-            </tr>
-          {{/each}}
+        {{#each (await results) as |row|}}
+          <tr>
+            <td onclick={{action "selectCase" row}}>
+              <p>
+                {{#if row.shortTitle}}
+                  {{row.shortTitle}}
+                {{else}}
+                  {{row.title}}
+                {{/if}}
+              </p>
+            </td>
+            <td onclick={{action "selectCase" row}}>
+              {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+            </td>
+          </tr>
+        {{/each}}
         </tbody>
       </table>
       <div class="vl-u-spacer--small"></div>
       {{web-components/vl-pagination
-        page=page
-        nbOfItems=results.length
-        size=size
-        nextAction=(action 'nextPage')
-        previousAction=(action 'prevPage')
-        total=results.meta.count}}
+              page=page
+              nbOfItems=results.length
+              size=size
+              nextAction=(action 'nextPage')
+              previousAction=(action 'prevPage')
+              total=results.meta.count}}
     {{/if}}
   </div>
 </div>

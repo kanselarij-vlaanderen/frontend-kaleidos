@@ -1,10 +1,10 @@
 <td class="vl-u-display-flex vlc-document-list__item">
   <div
-    class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
+          class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
   >
     <i
-      class="vl-badge__icon vl-vi vl-vi-document"
-      aria-hidden="true"
+            class="vl-badge__icon vl-vi vl-vi-document"
+            aria-hidden="true"
     ></i>
   </div>
   <p>
@@ -13,24 +13,24 @@
 </td>
 <td>
   {{utils/model-selector
-    modelName="document-type"
-    searchField="label"
-    propertyToShow="label"
-    sortField="priority"
-    selectedItems=(await document.type)
-    selectModel=(action "chooseDocumentType" document)
+          modelName="document-type"
+          searchField="label"
+          propertyToShow="label"
+          sortField="priority"
+          selectedItems=(await document.type)
+          selectModel=(action "chooseDocumentType" document)
   }}
 </td>
 <td>
   {{utils/model-selector
-    modelName="access-level"
-    searchField="label"
-    allowClear=true
-    propertyToShow="label"
-    readOnly=document.confidential
-    sortField="label"
-    selectedItems=(await document.lastDocumentVersion.accessLevel)
-    selectModel=(action "chooseAccessLevel" document)
+          modelName="access-level"
+          searchField="label"
+          allowClear=true
+          propertyToShow="label"
+          readOnly=document.confidential
+          sortField="label"
+          selectedItems=(await document.lastDocumentVersion.accessLevel)
+          selectModel=(action "chooseAccessLevel" document)
   }}
 </td>
 <td>
@@ -38,7 +38,7 @@
 </td>
 <td class="vl-u-align-right">
   <button
-    class="vl-button vl-button--link"
+          class="vl-button vl-button--link"
     {{action "deleteRow" document}}
   >
     <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>

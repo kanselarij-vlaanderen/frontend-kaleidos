@@ -30,7 +30,7 @@ export default Service.extend({
           if (params.page && params.page.number !== undefined && params.page.size) {
             const maxcount = (params.page.number + 1) * params.page.size;
             // const isLast = Boolean(maxcount > searchResults.count);
-            resourceResults.set('meta.pagination.first', {size: params.page.size});
+            resourceResults.set('meta.pagination.first', { size: params.page.size });
             resourceResults.set('meta.pagination.last', {
               number: Math.floor(searchResults.count / params.page.size),
               size: searchResults.count % params.page.size
@@ -66,7 +66,7 @@ export default Service.extend({
 
   querySearch(type, params, sortMapping) {
     return $.ajax({
-      method: "GET",
+      method: 'GET',
       url: this.urlForQuery(params, type, sortMapping)
     });
   },
@@ -171,11 +171,11 @@ export default Service.extend({
       for (const n in searchAttrs) {
         const key = searchAttrs[n];
         if (searchRes.attributes.hasOwnProperty(key) &&
-            edObj.get(key) === undefined) {
+          edObj.get(key) === undefined) {
           edObj.set(key, searchRes.attributes[key]);
         }
       }
-      edObj.getRecord = function() {
+      edObj.getRecord = function () {
         return edObj;
       };
     }

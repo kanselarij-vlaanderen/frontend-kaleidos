@@ -1,18 +1,18 @@
 {{#web-components/vl-modal
-  isOverlay=true
-  title=(t "manage-alerts")
-  closeModal=(action "close")
+        isOverlay=true
+        title=(t "manage-alerts")
+        closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
         {{utils/model-selector
-          modelName="alert"
-          searchField="title"
-          propertyToShow="title"
-          sortField="title"
-          selectedItems=selectedAlert
-          selectModel=(action "selectAlert")
+                modelName="alert"
+                searchField="title"
+                propertyToShow="title"
+                sortField="title"
+                selectedItems=selectedAlert
+                selectModel=(action "selectAlert")
         }}
       </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <button
-              class="vl-button vl-button--link vl-button--narrow"
+                    class="vl-button vl-button--link vl-button--narrow"
               {{action "close"}}
             >
               {{t "cancel"}}
@@ -31,32 +31,32 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
             <button
-              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
               {{action "toggleIsAdding"}}
             >
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
               {{t "message"}}
               {{t "add"}}
             </button>
             {{#if selectedAlert}}
               <button
-                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "toggleIsEditing"}}
               >
                 <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "message"}}
                 {{t "edit"}}
               </button>
               <button
-                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "removeAlert"}}
               >
                 <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
+                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
                 ></i>
                 {{t "message"}}
                 {{t "delete"}}
@@ -70,7 +70,7 @@
   {{#if isAdding}}
     <div class="vl-modal-dialog__content">
       <div
-        class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+              class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
       >
         <div class="vlc-input-field-block vl-col--2-4">
           {{web-components/vl-form-label value=(t "start-date")}}
@@ -94,40 +94,40 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "severity")}}
         {{utils/model-selector
-          modelName="alert-type"
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=type
-          selectModel=(action "selectType")
+                modelName="alert-type"
+                searchField="label"
+                propertyToShow="label"
+                sortField="label"
+                selectedItems=type
+                selectModel=(action "selectType")
         }}
       </div>
     </div>
     {{web-components/vl-modal-footer
-      isLoading=isLoading
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "add")
-      cancelAction=(action "toggleIsAdding")
-      saveAction=(action "createAlert")
+            isLoading=isLoading
+            cancelButtonText=(t "cancel")
+            saveButtonText=(t "add")
+            cancelAction=(action "toggleIsAdding")
+            saveAction=(action "createAlert")
     }}
   {{/if}}
   {{#if isEditing}}
     <div class="vl-modal-dialog__content">
       <div
-        class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+              class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
       >
         <div class="vlc-input-field-block vl-col--2-4">
           {{web-components/vl-form-label value=(t "start-date")}}
           {{web-components/vl-datepicker
-            date=selectedAlert.beginDate
-            dateChanged=(action "selectBeginDate")
+                  date=selectedAlert.beginDate
+                  dateChanged=(action "selectBeginDate")
           }}
         </div>
         <div class="vlc-input-field-block vl-col--2-4">
           {{web-components/vl-form-label value=(t "end-date")}}
           {{web-components/vl-datepicker
-            date=selectedAlert.endDate
-            dateChanged=(action "selectEndDate")
+                  date=selectedAlert.endDate
+                  dateChanged=(action "selectEndDate")
           }}
         </div>
       </div>
@@ -138,29 +138,29 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "message")}}
         {{textarea
-          rows="2"
-          class="vl-textarea vl-textarea--block"
-          value=selectedAlert.message
+                rows="2"
+                class="vl-textarea vl-textarea--block"
+                value=selectedAlert.message
         }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "severity")}}
         {{utils/model-selector
-          modelName="alert-type"
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=type
-          selectModel=(action "selectType")
+                modelName="alert-type"
+                searchField="label"
+                propertyToShow="label"
+                sortField="label"
+                selectedItems=type
+                selectModel=(action "selectType")
         }}
       </div>
     </div>
     {{web-components/vl-modal-footer
-      isLoading=isLoading
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "save")
-      cancelAction=(action "toggleIsEditing")
-      saveAction=(action "editAlert")
+            isLoading=isLoading
+            cancelButtonText=(t "cancel")
+            saveButtonText=(t "save")
+            cancelAction=(action "toggleIsEditing")
+            saveAction=(action "editAlert")
     }}
   {{/if}}
 {{/web-components/vl-modal}}

@@ -11,18 +11,18 @@
     {{else}}
       <div class="vl-form__input" style="width:75%">
         {{utils/model-selector
-          modelName="access-level"
-          allowClear=true
-          searchField="label"
-          propertyToShow="label"
-          readOnly=item.confidential
-          sortField="priority"
-          selectedItems=accessLevel
-          selectModel=(action "chooseAccessLevel")
+                modelName="access-level"
+                allowClear=true
+                searchField="label"
+                propertyToShow="label"
+                readOnly=item.confidential
+                sortField="priority"
+                selectedItems=accessLevel
+                selectModel=(action "chooseAccessLevel")
         }}
       </div>
       <button
-        class="vl-button vl-button--link vl-button--icon"
+              class="vl-button vl-button--link vl-button--icon"
         {{action "save"}}
       >
         <i class="vl-vi vl-vi-save vl-button__icon" aria-hidden="true"></i>
@@ -31,7 +31,7 @@
         </span>
       </button>
       <button
-        class="vl-button vl-button--link vl-button--icon"
+              class="vl-button vl-button--link vl-button--icon"
         {{action "cancelChanges"}}
       >
         <i class="vl-vi vl-vi-cross vl-button__icon" aria-hidden="true"></i>
@@ -42,13 +42,13 @@
     {{/if}}
   {{/if}}
   <button
-    class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
-    disabled={{if isEditor undefined "true"}}
+          class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+          disabled={{if isEditor undefined "true"}}
     {{action "toggleConfidential"}}
   >
     {{#if item.confidential}}
       <span
-        class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
+              class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
       ></span>
     {{else}}
       <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>

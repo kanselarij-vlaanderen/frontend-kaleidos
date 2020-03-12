@@ -51,30 +51,30 @@
         {{/if}}
       </div>
       <div class="vlc-toolbar__item">
-          <button
-                  class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
-            {{action "showMultipleOptions" bubbles=false}}
-          >
-            {{#if isShowingOptions}}
-              <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
-              ></i>
-            {{else}}
-              <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
-              ></i>
-            {{/if}}
-            {{t "actions"}}
-            {{#attach-popover
-                    class="ember-attacher-popper"
-                    hideOn="clickout click"
-                    showOn="click"
-                    animation="shift"
-                    placement="bottom" as |attacher|
-            }}
-              <ul class="vlc-dropdown-menu">
-                {{#if (await canDelete)}}
-                    <li class="vlc-dropdown-menu__item">
+        <button
+                class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+          {{action "showMultipleOptions" bubbles=false}}
+        >
+          {{#if isShowingOptions}}
+            <i
+                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+            ></i>
+          {{else}}
+            <i
+                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+            ></i>
+          {{/if}}
+          {{t "actions"}}
+          {{#attach-popover
+                  class="ember-attacher-popper"
+                  hideOn="clickout click"
+                  showOn="click"
+                  animation="shift"
+                  placement="bottom" as |attacher|
+          }}
+            <ul class="vlc-dropdown-menu">
+              {{#if (await canDelete)}}
+                <li class="vlc-dropdown-menu__item">
                   <a class="vl-link"
                     {{action attacher.hide}}
                     {{action "requestDeleteSubcase" subcase}}
@@ -82,21 +82,21 @@
                     {{t "delete-subcase"}}
                   </a>
                 </li>
+              {{/if}}
+              <li class="vlc-dropdown-menu__item">
+                {{#if (not await subcase.concluded)}}
+                  <a
+                          class="vl-link vl-link--block"
+                    {{action attacher.hide}}
+                    {{action "triggerMoveSubcaseDialog" }}
+                  >
+                    {{t "move-subcase"}}
+                  </a>
                 {{/if}}
-                  <li class="vlc-dropdown-menu__item">
-                  {{#if (not await subcase.concluded)}}
-                    <a
-                            class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "triggerMoveSubcaseDialog" }}
-                    >
-                      {{t "move-subcase"}}
-                    </a>
-                  {{/if}}
-                </li>
-              </ul>
-            {{/attach-popover}}
-          </button>
+              </li>
+            </ul>
+          {{/attach-popover}}
+        </button>
       </div>
     {{/if}}
   </div>

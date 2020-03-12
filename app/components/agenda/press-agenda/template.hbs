@@ -3,69 +3,69 @@
   <div class="vl-u-spacer-extended-bottom-l">
     <h1 class="vl-title vl-title--h2">
       {{await title}}
-      <br />
+      <br/>
       <span class="vl-u-spacer-extended-top-s vl-u-text--muted">
         {{t "agenda"}}
       </span>
     </h1>
   </div>
   <div class="vl-u-spacer-extended-bottom-l">
-    <hr class="vlc-hr" />
+    <hr class="vlc-hr"/>
   </div>
   <div class="vl-u-spacer-extended-bottom">
     {{#each (await agendaitemGroups) as |agendaitemGroup|}}
-        {{#if agendaitemGroup.agendaitems.length}}
-          <div class="vl-u-spacer-extended-bottom">
-            {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
-              <h2 class="vl-title vl-title--h4">
-                {{mandatee.title}}
-              </h2>
-            {{/each}}
-          </div>
-          <div class="vl-u-spacer-extended-bottom-l">
-            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-              {{#if (not agendaitem.isEditing)}}
-                <div class="vl-u-spacer-extended-bottom-s">
-                  <div class="vl-u-display-flex vl-u-flex-space-between">
-                    <h3 class="vl-title vl-title--h5">
-                      {{agendaitem.number}}
-                      .
-                      {{agendaitem.titlePress}}
-                    </h3>
-                    {{#if (eq definite "false")}}
-                      {{#if isEditor}}
-                        <div class="vl-u-spacer-extended-left-s">
-                          <a
-                            class="vl-link"
-                            {{action "toggleIsEditing" agendaitem}}
-                          >
-                            {{t "edit"}}
-                          </a>
-                        </div>
-                      {{/if}}
+      {{#if agendaitemGroup.agendaitems.length}}
+        <div class="vl-u-spacer-extended-bottom">
+          {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
+            <h2 class="vl-title vl-title--h4">
+              {{mandatee.title}}
+            </h2>
+          {{/each}}
+        </div>
+        <div class="vl-u-spacer-extended-bottom-l">
+          {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+            {{#if (not agendaitem.isEditing)}}
+              <div class="vl-u-spacer-extended-bottom-s">
+                <div class="vl-u-display-flex vl-u-flex-space-between">
+                  <h3 class="vl-title vl-title--h5">
+                    {{agendaitem.number}}
+                    .
+                    {{agendaitem.titlePress}}
+                  </h3>
+                  {{#if (eq definite "false")}}
+                    {{#if isEditor}}
+                      <div class="vl-u-spacer-extended-left-s">
+                        <a
+                                class="vl-link"
+                          {{action "toggleIsEditing" agendaitem}}
+                        >
+                          {{t "edit"}}
+                        </a>
+                      </div>
                     {{/if}}
-                  </div>
+                  {{/if}}
                 </div>
-                <div class="vl-typography">
-                  <ul>
-                    <li>
-                      {{agendaitem.textPress}}
-                    </li>
-                  </ul>
-                  <p></p>
-                </div>
-              {{else}}
-                {{agendaitem-press-edit
-                  agendaitem=agendaitem
-                  isEditing=agendaitem.isEditing
-                }}
-              {{/if}}
-            {{/each}}
-            <div class="vl-u-spacer-extended-bottom-l">
-              <hr class="vlc-hr" />
-            </div>
+              </div>
+              <div class="vl-typography">
+                <ul>
+                  <li>
+                    {{agendaitem.textPress}}
+                  </li>
+                </ul>
+                <p></p>
+              </div>
+            {{else}}
+              {{agendaitem-press-edit
+                      agendaitem=agendaitem
+                      isEditing=agendaitem.isEditing
+              }}
+            {{/if}}
+          {{/each}}
+          <div class="vl-u-spacer-extended-bottom-l">
+            <hr class="vlc-hr"/>
           </div>
-        {{/if}}
+        </div>
+      {{/if}}
     {{/each}}
   </div>
 </div>

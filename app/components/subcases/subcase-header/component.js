@@ -1,6 +1,6 @@
 import Component from '@ember/component';
-import {inject} from '@ember/service';
-import {computed} from '@ember/object';
+import { inject } from '@ember/service';
+import { computed } from '@ember/object';
 import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
@@ -8,7 +8,7 @@ export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   agendaService: inject(),
   router: inject(),
-  classNames: ["vlc-page-header"],
+  classNames: ['vlc-page-header'],
   isAssigningToOtherAgenda: false,
   isAssigningToOtherCase: false,
   promptDeleteCase: false,
@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, {
   caseToDelete: null,
 
   canPropose: computed('subcase.{requestedForMeeting,hasAgendaItem,isPostponed}', 'isAssigningToOtherAgenda', async function () {
-    const {isAssigningToOtherAgenda, isLoading} = this;
+    const { isAssigningToOtherAgenda, isLoading } = this;
     const subcase = await this.get('subcase');
     const requestedForMeeting = await subcase.get('requestedForMeeting');
     const hasAgendaItem = await subcase.get('hasAgendaItem');
@@ -33,7 +33,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
   canDelete: computed('canPropose', 'isAssigningToOtherAgenda', async function () {
     const canPropose = await this.get('canPropose');
-    const {isAssigningToOtherAgenda} = this;
+    const { isAssigningToOtherAgenda } = this;
 
     if (canPropose && !isAssigningToOtherAgenda) {
       return true;
@@ -57,7 +57,7 @@ export default Component.extend(isAuthenticatedMixin, {
   }),
 
   async deleteSubcase(subcase) {
-    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), {reload: true});
+    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), { reload: true });
     const newsletterInfo = await itemToDelete.get('newsletterInfo');
     if (newsletterInfo) {
       await newsletterInfo.destroyRecord();
@@ -106,7 +106,7 @@ export default Component.extend(isAuthenticatedMixin, {
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
       await designAgenda.reload(); //ensures latest state is pulled
-      if (designAgenda.get('name') === "Ontwerpagenda") {
+      if (designAgenda.get('name') === 'Ontwerpagenda') {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
       await subcase.hasMany('agendaitems').reload();
@@ -132,12 +132,12 @@ export default Component.extend(isAuthenticatedMixin, {
       this.set('isAssigningToOtherCase', true);
     },
     async moveSubcase(newCase) {
-      this.subcase.set("case", newCase);
+      this.subcase.set('case', newCase);
       await this.subcase.save();
 
       this.set('isAssigningToOtherCase', false);
       let caze = this.subcase.get('case');
-      caze = await this.store.findRecord('case', caze.get("id"));
+      caze = await this.store.findRecord('case', caze.get('id'));
       caze.hasMany('subcases').reload();
       this.set('caseToDelete', caze);
       const subCases = caze.get('subcases');

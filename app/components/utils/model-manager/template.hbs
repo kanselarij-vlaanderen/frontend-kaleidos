@@ -1,18 +1,18 @@
 {{#web-components/vl-modal
-  isOverlay=true
-  title=modalTitle
-  closeModal=(action "close")
+        isOverlay=true
+        title=modalTitle
+        closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
         {{utils/model-selector
-          modelName=modelName
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=item
-          selectModel=(action "selectModel")
+                modelName=modelName
+                searchField="label"
+                propertyToShow="label"
+                sortField="label"
+                selectedItems=item
+                selectModel=(action "selectModel")
         }}
       </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <button data-test-vl-model-manager-close
-              class="vl-button vl-button--link vl-button--narrow"
+                    class="vl-button vl-button--link vl-button--narrow"
               {{action "close"}}
             >
               {{t "cancel"}}
@@ -31,30 +31,30 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
             <button data-test-vl-model-manager-add
-              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
               {{action "toggleIsAdding"}}
             >
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
               {{t "add"}}
             </button>
             {{#if item}}
               <button data-test-vl-model-manager-edit
-                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "toggleIsEditing"}}
               >
                 <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "edit"}}
               </button>
               <button data-test-vl-model-manager-delete
-                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "removeModel"}}
               >
                 <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
+                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
                 ></i>
                 {{t "delete"}}
               </button>
@@ -72,11 +72,11 @@
       </div>
     </div>
     {{web-components/vl-modal-footer
-      isLoading=isLoading
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "add")
-      cancelAction=(action "toggleIsAdding")
-      saveAction=(action "createModel")
+            isLoading=isLoading
+            cancelButtonText=(t "cancel")
+            saveButtonText=(t "add")
+            cancelAction=(action "toggleIsAdding")
+            saveAction=(action "createModel")
     }}
   {{/if}}
   {{#if isEditing}}
@@ -87,11 +87,11 @@
       </div>
     </div>
     {{web-components/vl-modal-footer
-      isLoading=isLoading
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "save")
-      cancelAction=(action "toggleIsEditing")
-      saveAction=(action "editModel")
+            isLoading=isLoading
+            cancelButtonText=(t "cancel")
+            saveButtonText=(t "save")
+            cancelAction=(action "toggleIsEditing")
+            saveAction=(action "editModel")
     }}
   {{/if}}
 {{/web-components/vl-modal}}

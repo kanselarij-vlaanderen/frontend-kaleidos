@@ -5,32 +5,32 @@
     <div class="vlc-scroll-wrapper__body">
       <div class="vl-u-spacer-extended-l">
         {{#data-table
-          content=model
-          class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-          page=page
-          size=size
-          sort=sort
-          enableSizes=true
-          isLoading=isLoadingModel
-          noDataMessage=(t "no-results-found")
-          onClickRow=(action "navigateToNewsletter") as |table|
+                content=model
+                class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+                page=page
+                size=size
+                sort=sort
+                enableSizes=true
+                isLoading=isLoadingModel
+                noDataMessage=(t "no-results-found")
+                onClickRow=(action "navigateToNewsletter") as |table|
         }}
           {{#table.content as |c|}}
             {{#c.header}}
               {{th-sortable
-                class="vl-data-table-col-5 vl-data-table__header-title"
-                currentSorting=sort
-                field="planned-start"
-                label=(t "newsletter")
+                      class="vl-data-table-col-5 vl-data-table__header-title"
+                      currentSorting=sort
+                      field="planned-start"
+                      label=(t "newsletter")
               }}
               <th
-                class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
+                      class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
               >
                 {{!--TODO: should sort on field agendas but does not return all 10 results --}}
                 {{concat (t "newsletter") " " (t "sent-at")}}
               </th>
               <th
-                class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
+                      class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
               >
                 {{!--TODO: should sort on latest modified agenda --}}
                 {{t "latest-modified"}}
@@ -41,9 +41,9 @@
               <td>
                 {{#if (is-pending meeting)}}
                   <div
-                    class="skeletal-loader"
-                    role="alert"
-                    aria-busy="true"
+                          class="skeletal-loader"
+                          role="alert"
+                          aria-busy="true"
                   ></div>
                 {{else}}
                   {{t "newsletter-for-meeting-of"}}
@@ -53,15 +53,15 @@
               <td>
                 {{#if (is-pending meeting.mailCampaign)}}
                   <div
-                    class="skeletal-loader"
-                    role="alert"
-                    aria-busy="true"
+                          class="skeletal-loader"
+                          role="alert"
+                          aria-busy="true"
                   ></div>
                 {{else if (await meeting.mailCampaign)}}
                   {{#if (await meeting.mailCampaign.isSent)}}
                     {{moment-format
-                      (await meeting.mailCampaign.sentAt)
-                      "DD.MM.YYYY [om] HH:mm"
+                            (await meeting.mailCampaign.sentAt)
+                            "DD.MM.YYYY [om] HH:mm"
                     }}
                   {{else}}
                     {{t "not-sent-yet"}}
@@ -73,23 +73,23 @@
               <td>
                 {{#if (is-pending meeting.latestAgenda)}}
                   <div
-                    class="skeletal-loader"
-                    role="alert"
-                    aria-busy="true"
+                          class="skeletal-loader"
+                          role="alert"
+                          aria-busy="true"
                   ></div>
                 {{else}}
                   {{moment-format
-                    (await meeting.latestAgenda.modified)
-                    "DD.MM.YYYY HH:mm"
+                          (await meeting.latestAgenda.modified)
+                          "DD.MM.YYYY HH:mm"
                   }}
                 {{/if}}
               </td>
               <td class="vl-u-align-center">
                 {{#link-to
-                  "print-overviews.newsletter.agendaitems"
-                  meeting.id
-                  meeting.latestAgenda.id
-                  class="vl-button vl-button--link vl-button--icon"
+                        "print-overviews.newsletter.agendaitems"
+                        meeting.id
+                        meeting.latestAgenda.id
+                        class="vl-button vl-button--link vl-button--icon"
                 }}
                   <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
                 {{/link-to}}

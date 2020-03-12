@@ -1,13 +1,14 @@
-<div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--no-padding vlc-navbar--bg-alt vlc-navbar--auto" id="c-main-nav">
+<div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--no-padding vlc-navbar--bg-alt vlc-navbar--auto"
+     id="c-main-nav">
   <div class="vlc-toolbar vlc-toolbar--auto vlc-toolbar--slide-in">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <ul class="vl-tabs vl-u-reset-margin">
           <li class="vl-tab">
             {{#link-to
-              "agendas.overview"
-              class="vl-tab__link"
-              current-when="agendas agenda print-overviews.decisions print-overviews.notes print-overviews.press-agenda"
+                    "agendas.overview"
+                    class="vl-tab__link"
+                    current-when="agendas agenda print-overviews.decisions print-overviews.notes print-overviews.press-agenda"
             }}
               {{t "agenda"}}
             {{/link-to}}
@@ -24,9 +25,9 @@
           </li>
           <li class="vl-tab" data-test-m-header-newsletters>
             {{#link-to
-              "newsletters"
-              class="vl-tab__link"
-              current-when="newsletters print-overviews.newsletter print-overviews.newsletter.agendaitems print-overviews.newsletter.overview"
+                    "newsletters"
+                    class="vl-tab__link"
+                    current-when="newsletters print-overviews.newsletter print-overviews.newsletter.agendaitems print-overviews.newsletter.overview"
             }}
               {{t "newsletter"}}
             {{/link-to}}
@@ -42,14 +43,14 @@
       </div>
     </div>
     <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__right">
-          {{#if showEnvironmentName}}
-              <div class="vlc-environment-pill">
-                {{environmentName}}
-                {{capitalize (t "environment")}}
-              </div>
-          {{/if}}
-        </div>
+      <div class="vlc-toolbar__right">
+        {{#if showEnvironmentName}}
+          <div class="vlc-environment-pill">
+            {{environmentName}}
+            {{capitalize (t "environment")}}
+          </div>
+        {{/if}}
+      </div>
       <div class="vlc-toolbar__item">
         {{#if user}}
           <div class="vlc-user">

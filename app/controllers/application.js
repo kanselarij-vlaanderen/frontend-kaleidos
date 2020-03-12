@@ -20,13 +20,14 @@ export default Controller.extend(isAuthenticatedMixin, {
     { key: 'flemish-government', route: 'agendas' },
   ]),
 
-  selectedOption: computed('options', function() {
+  selectedOption: computed('options', function () {
     return this.options.get('firstObject');
   }),
 
   async init() {
     this._super(...arguments);
-    document.addEventListener('wheel', () => {}, {
+    document.addEventListener('wheel', () => {
+    }, {
       capture: true,
       passive: true,
     });
@@ -86,7 +87,7 @@ export default Controller.extend(isAuthenticatedMixin, {
       'router.currentRouteName',
       'currentSession.userRole',
       'session.isAuthenticated',
-      function() {
+      function () {
         const { router } = this;
         if (!router || !router.currentRouteName) {
           return;
@@ -97,12 +98,12 @@ export default Controller.extend(isAuthenticatedMixin, {
     )
   ),
 
-  showHeader: computed('role', function() {
+  showHeader: computed('role', function () {
     let role = this.get('role');
     return role && role !== '' && role !== 'no-access';
   }),
 
-  type: computed('alert', async function() {
+  type: computed('alert', async function () {
     const { alert } = this;
     if (!alert) {
       return;

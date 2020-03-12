@@ -9,28 +9,29 @@
               <ul class="vlc-tabs-reverse" role="tablist">
                 <li class="vlc-tabs-reverse__item" data-test-settings-generalSettings>
                   {{#link-to
-                    "settings.overview"
-                    class="vl-tab__link border-left"
-                    activeClass="vl-tab__link--active"
-                    current-when="settings settings.overview"
+                          "settings.overview"
+                          class="vl-tab__link border-left"
+                          activeClass="vl-tab__link--active"
+                          current-when="settings settings.overview"
                   }}
                     {{t "general-settings"}}
                   {{/link-to}}
                 </li>
-                <li class="vlc-tabs-reverse__item vlc-tabs-reverse__item--border-left" data-test-settings-manageMinisters>
+                <li class="vlc-tabs-reverse__item vlc-tabs-reverse__item--border-left"
+                    data-test-settings-manageMinisters>
                   {{#link-to
-                    "settings.ministers"
-                    class="vl-tab__link"
-                    activeClass="vl-tab__link--active"
+                          "settings.ministers"
+                          class="vl-tab__link"
+                          activeClass="vl-tab__link--active"
                   }}
                     {{t "manage-ministers"}}
                   {{/link-to}}
                 </li>
                 <li class="vlc-tabs-reverse__item vlc-tabs-reverse__item--border-left" data-test-settings-manageUsers>
                   {{#link-to
-                    "settings.users"
-                    class="vl-tab__link"
-                    activeClass="vl-tab__link--active"
+                          "settings.users"
+                          class="vl-tab__link"
+                          activeClass="vl-tab__link--active"
                   }}
                     {{t "manage-users"}}
                   {{/link-to}}

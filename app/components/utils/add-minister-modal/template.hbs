@@ -1,14 +1,14 @@
 {{#web-components/vl-modal
-  closeModal=(action "cancel")
-  isOverlay=true
-  title=(t "add-minister")
+        closeModal=(action "cancel")
+        isOverlay=true
+        title=(t "add-minister")
 }}
   <div class="vl-modal-dialog__content">
     <div class="vl-u-spacer-extended-bottom-l">
       {{utils/mandatee-selector
-        singleSelect=true
-        selectedMandatees=selectedMandatee
-        chooseMandatee=(action "mandateeSelected")
+              singleSelect=true
+              selectedMandatees=selectedMandatee
+              chooseMandatee=(action "mandateeSelected")
       }}
     </div>
     {{#if isLoading}}
@@ -18,18 +18,18 @@
         <ul class="vlc-checkbox-tree">
           <li>
             {{web-components/vl-checkbox
-              value=domain.selected
-              label=domain.label
-              toggle=(action "selectDomain" domain)
+                    value=domain.selected
+                    label=domain.label
+                    toggle=(action "selectDomain" domain)
             }}
             <ul>
               {{#each rowToShow.fields as |field|}}
                 {{#if (eq (await field.domain.id) domain.id)}}
                   <li>
                     {{web-components/vl-checkbox
-                      value=field.selected
-                      label=field.label
-                      toggle=(action "selectField" domain)
+                            value=field.selected
+                            label=field.label
+                            toggle=(action "selectField" domain)
                     }}
                     {{field.name}}
                   </li>
@@ -43,11 +43,11 @@
     {{/if}}
   </div>
   {{web-components/vl-modal-footer
-    isLoading=isLoading
-    nonBordered=true
-    cancelButtonText=(t "cancel")
-    saveButtonText=(t "add")
-    cancelAction=(action "cancel")
-    saveAction=(action "saveChanges")
+          isLoading=isLoading
+          nonBordered=true
+          cancelButtonText=(t "cancel")
+          saveButtonText=(t "add")
+          cancelAction=(action "cancel")
+          saveAction=(action "saveChanges")
   }}
 {{/web-components/vl-modal}}

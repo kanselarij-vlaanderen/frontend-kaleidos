@@ -1,17 +1,17 @@
 <div class="vlc-procedure-step__badge-wrapper">
   {{#if (is-pending subcase.approved)}}
     <div
-      class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
+            class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
     ></div>
   {{else if (await subcase.approved)}}
     <div
-      class="vl-badge vl-badge--icon vl-badge--success vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
+            class="vl-badge vl-badge--icon vl-badge--success vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
     >
       <i class="vl-badge__icon vl-vi vl-vi-check" aria-hidden="true"></i>
     </div>
   {{else}}
     <div
-      class="vl-badge vl-badge--icon vl-badge--warning vlc-procedure-step__badge vl-badge--medium vl-badge--small-medium"
+            class="vl-badge vl-badge--icon vl-badge--warning vlc-procedure-step__badge vl-badge--medium vl-badge--small-medium"
     >
       <i class="vl-badge__icon vl-vi vl-vi-sitemap" aria-hidden="true"></i>
     </div>
@@ -23,10 +23,10 @@
       <div class="vl-u-spacer-extended-bottom-s">
         {{#if (not (is-pending subcase))}}
           {{#link-to
-            "cases.case.subcases.subcase.overview"
-            (await subcase.case.id)
-            (await subcase.id)
-            class="vl-title vl-title--h6"
+                  "cases.case.subcases.subcase.overview"
+                  (await subcase.case.id)
+                  (await subcase.id)
+                  class="vl-title vl-title--h6"
           }}
             {{await subcase.nameToShow}}
           {{/link-to}}
@@ -48,15 +48,15 @@
         {{#each (await subcase.sortedPhases) as |phase|}}
           {{#if (await phase.code.label)}}
             <li
-              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+                    class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
             >
               <div class="vlc-status-timeline__dot"></div>
               <div class="vlc-status-timeline__text">
                 {{subcase-timeline-item-text
-                  label=(await phase.code.label)
-                  phase=phase
-                  onAgendaInfo=(await subcase.onAgendaInfo)
-                  isPostponed=(await subcase.isPostponed)
+                        label=(await phase.code.label)
+                        phase=phase
+                        onAgendaInfo=(await subcase.onAgendaInfo)
+                        isPostponed=(await subcase.isPostponed)
                 }}
               </div>
             </li>

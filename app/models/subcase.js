@@ -46,7 +46,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   requestedBy: belongsTo('mandatee', { inverse: null }),
   accessLevel: belongsTo('access-level'),
 
-  firstPhase: computed('phases.@each', function() {
+  firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({
       promise: this.store.query('subcase-phase', {
         filter: {
@@ -60,11 +60,11 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     });
   }),
 
-  postponedPhases: computed("phases.@each", function() {
+  postponedPhases: computed('phases.@each', function () {
     return this.store
-      .query("subcase-phase", {
+      .query('subcase-phase', {
         filter: {
-          subcase: { id: this.get("id") },
+          subcase: { id: this.get('id') },
           code: { id: CONFIG.postponedCodeId }
         }
       })
@@ -73,7 +73,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
       });
   }),
 
-  nameToShow: computed('subcaseName', function() {
+  nameToShow: computed('subcaseName', function () {
     const { subcaseName, title, shortTitle } = this;
     if (subcaseName) {
       return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
@@ -100,15 +100,15 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     return foundIndex;
   },
 
-  sortedMandatees: computed('mandatees.@each', function() {
+  sortedMandatees: computed('mandatees.@each', function () {
     return this.get('mandatees').sortBy('priority');
   }),
 
-  sortedThemes: computed('themes', function() {
+  sortedThemes: computed('themes', function () {
     return this.get('themes').sortBy('label');
   }),
 
-  sortedPhases: computed('phases.@each', 'isPostponed', function() {
+  sortedPhases: computed('phases.@each', 'isPostponed', function () {
     return PromiseArray.create({
       promise: this.get('phases').then((phases) => {
         return phases.sortBy('date');
@@ -116,7 +116,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     });
   }),
 
-  hasAgendaItem: computed('agendaitems.@each', function() {
+  hasAgendaItem: computed('agendaitems.@each', function () {
     const { id, store } = this;
     return PromiseObject.create({
       promise: store.query('agendaitem', {
@@ -140,16 +140,16 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     })
   }),
 
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', function() {
+  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', function () {
     return this.store.query('agendaitem', {
       filter: {
         subcase: { id: this.get('id') },
-        agenda: { name: "Ontwerpagenda" }
+        agenda: { name: 'Ontwerpagenda' }
       }
     })
   }),
 
-  meetings: computed('agendaitems.@each', async function() {
+  meetings: computed('agendaitems.@each', async function () {
     const agendaitems = await this.get('agendaitems');
     const meetings = await Promise.all(agendaitems.map(async (agendaitem) => {
       const agenda = await agendaitem.get('agenda');
@@ -164,21 +164,23 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     }, A([]))
   }),
 
-  latestMeeting: computed('meetings.@each', function() {
-    return PromiseObject.create({promise: this.get('meetings').then((meetings) => {
-      return meetings.reduce((meeting1, meeting2) =>
-      moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
-        ? meeting1
-        : meeting2)})
+  latestMeeting: computed('meetings.@each', function () {
+    return PromiseObject.create({
+      promise: this.get('meetings').then((meetings) => {
+        return meetings.reduce((meeting1, meeting2) =>
+          moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
+            ? meeting1
+            : meeting2)
+      })
     })
   }),
 
-  latestAgenda: computed('latestMeeting', async function() {
+  latestAgenda: computed('latestMeeting', async function () {
     const lastMeeting = await this.get('latestMeeting');
     return lastMeeting.get('latestAgenda');
   }),
 
-  latestAgendaItem: computed('latestAgenda.agendaitems.@each.postponedTo', async function() {
+  latestAgendaItem: computed('latestAgenda.agendaitems.@each.postponedTo', async function () {
     const latestAgenda = await this.get('latestAgenda');
     // latestAgenda.hasMany('agendaitems').reload();
     const latestAgendaItems = await latestAgenda.get('agendaitems');
@@ -187,16 +189,16 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     return latestAgendaItems.find(item => agendaitems.includes(item));
   }),
 
-  onAgendaInfo: computed('latestMeeting', async function() {
+  onAgendaInfo: computed('latestMeeting', async function () {
     const latestMeeting = await this.get('latestMeeting');
     return latestMeeting.plannedStart;
   }),
 
-  decidedInfo: computed('phases.@each', function() {
+  decidedInfo: computed('phases.@each', function () {
     return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
   }),
 
-  submitter: computed('case.submitter', function() {
+  submitter: computed('case.submitter', function () {
     return PromiseObject.create({
       promise: this.get('case').then((caze) => {
         return caze.get('submitter').then((submitter) => {
@@ -206,7 +208,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     });
   }),
 
-  approved: computed('decisions', function() {
+  approved: computed('decisions', function () {
     return PromiseObject.create({
       promise: this.get('decisions').then((decisions) => {
         const approvedDecisions = decisions.map((decision) => decision.get('approved'));
@@ -223,11 +225,11 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     })
   }),
 
-  subcasesFromCase: computed('case.subcases.@each', function() {
+  subcasesFromCase: computed('case.subcases.@each', function () {
     return PromiseArray.create({
       promise: this.get('case').then((caze) => {
         return caze.get('subcases').then((subcases) => {
-          return subcases.filter((item) => item.get('id') != this.id).sort(function(a, b) {
+          return subcases.filter((item) => item.get('id') != this.id).sort(function (a, b) {
             return b.created - a.created; //  We want to sort descending on date the subcase was concluded. In practice, sorting on created will be close
           });
         });
@@ -235,8 +237,8 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     })
   }),
 
-  remarkType: computed('showAsRemark', function() {
-    let id = "";
+  remarkType: computed('showAsRemark', function () {
+    let id = '';
     if (this.showAsRemark) {
       id = CONFIG.remarkId;
     } else {
@@ -245,7 +247,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestAgendaItem','latestAgendaItem.isPostponed', async function() {
+  isPostponed: computed('latestAgendaItem', 'latestAgendaItem.isPostponed', async function () {
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
       return latestAgendaItem.isPostponed;

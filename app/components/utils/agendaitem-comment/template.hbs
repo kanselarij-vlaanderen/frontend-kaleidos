@@ -23,23 +23,23 @@
       <div class="vlc-toolbar__right">
         {{#if (eq (await comment.author.id) (await user.id))}}
           <button
-            class="vl-button vl-button--link vl-button--icon"
+                  class="vl-button vl-button--link vl-button--icon"
           >
             <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
             <span class="vl-u-visually-hidden">
               {{t "more-options"}}
             </span>
             {{#attach-popover
-              class="ember-attacher-popper"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom" as |attacher|
+                    class="ember-attacher-popper"
+                    hideOn="clickout click"
+                    showOn="click"
+                    animation="shift"
+                    placement="bottom" as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
                 <li class="vlc-dropdown-menu__item">
                   <button
-                    class="vl-link vl-u-text--error"
+                          class="vl-link vl-u-text--error"
                     {{action attacher.hide}}
                     {{action "deleteComment" comment}}
                   >
@@ -65,9 +65,9 @@
 
 {{#if isVerifyingDelete}}
   {{web-components/vl-modal-verify
-    title=(t "delete-comment")
-    message=(t "delete-comment-message")
-    cancel=(action "cancel")
-    verify=(action "verify")
+          title=(t "delete-comment")
+          message=(t "delete-comment-message")
+          cancel=(action "cancel")
+          verify=(action "verify")
   }}
 {{/if}}

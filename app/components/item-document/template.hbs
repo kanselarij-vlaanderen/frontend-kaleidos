@@ -1,16 +1,16 @@
 <li
-  class="vlc-document-list__item
+        class="vlc-document-list__item
         {{if
-    document.checkAdded
-    "vlc-document-list__item vlc-document-list__item--active"
-  }}"
+                document.checkAdded
+                "vlc-document-list__item vlc-document-list__item--active"
+        }}"
 >
   {{#if (is-pending lastDocumentVersion)}}
     <div class="skeletal-loader" role="alert" aria-busy="true"></div>
   {{else if isClickable}}
     <a {{action "showDocumentVersionViewer" lastDocumentVersion}}>
       <div
-        class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
+              class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
       >
         <i class="vl-badge__icon vl-vi
             {{if (await lastDocumentVersion.confidential) "vl-vi-lock" "vl-vi-document"}}"></i>
@@ -20,7 +20,7 @@
   {{else}}
     <span>
           <div
-            class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
+                  class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
           >
             <i class="vl-badge__icon vl-vi
             {{if (await lastDocumentVersion.confidential) "vl-vi-lock" "vl-vi-document"}}"></i>

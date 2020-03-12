@@ -9,16 +9,16 @@
           <button class="vl-button vl-button--link vl-button--icon">
             <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
             {{#attach-popover
-              class="ember-attacher-popper"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom" as |attacher|
+                    class="ember-attacher-popper"
+                    hideOn="clickout click"
+                    showOn="click"
+                    animation="shift"
+                    placement="bottom" as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
                 <li class="vlc-dropdown-menu__item">
                   <button
-                    class="vl-link vl-u-text--error"
+                          class="vl-link vl-u-text--error"
                     {{action attacher.hide}}
                     {{action "deleteDecision" decision}}
                   >
@@ -33,7 +33,7 @@
       <p>
         {{sanitize-html raw=true value=(await decision.richtext)}}
       </p>
-      <hr />
+      <hr/>
       <div class="vl-u-spacer-extended-top-s">
         {{#if (await decision.approved)}}
           <div class="vlc-pill vlc-pill--success">
@@ -60,32 +60,32 @@
       {{web-components/vl-loader text=(t "decision-document-loading-text")}}
     {{else if (not (await decision.signedDocument))}}
       {{utils/add-signed-documents
-        item=decision
-        defaultType=defaultType
-        modelToAddDocumentVersionTo="signedDecision"
-        title=(t "signed-decision-add")
+              item=decision
+              defaultType=defaultType
+              modelToAddDocumentVersionTo="signedDecision"
+              title=(t "signed-decision-add")
       }}
     {{else}}
       {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-        document=(await decision.signedDocument)
-        item=(await decision.signedDocument)
+              document=(await decision.signedDocument)
+              item=(await decision.signedDocument)
       }}
     {{/if}}
   {{else}}
     {{agenda/agendaitem/agendaitem-decision-edit
-      isEditing=isEditing
-      item=decision
-      isTableRow=isTableRow
-      subcase=subcase
-      agendaitem=agendaitem
+            isEditing=isEditing
+            item=decision
+            isTableRow=isTableRow
+            subcase=subcase
+            agendaitem=agendaitem
     }}
   {{/if}}
 {{/if}}
 {{#if isVerifyingDelete}}
   {{web-components/vl-modal-verify
-    title=(t "delete-decision")
-    message=(t "delete-decision-message")
-    cancel=(action "cancel")
-    verify=(action "verify")
+          title=(t "delete-decision")
+          message=(t "delete-decision-message")
+          cancel=(action "cancel")
+          verify=(action "verify")
   }}
 {{/if}}

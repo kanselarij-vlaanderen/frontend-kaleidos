@@ -3,20 +3,20 @@
     {{#if (not (is-pending agendaitem.nota))}}
       {{#if (not (await agendaitem.nota))}}
         <button
-          class="vl-button vl-button--secondary vl-button--icon-before vl-button--disabled"
+                class="vl-button vl-button--secondary vl-button--icon-before vl-button--disabled"
         >
           <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
           ></i>
           {{t "no-nota"}}
         </button>
       {{else}}
         <button
-          class="vl-button vl-button--secondary vl-button--icon-before"
+                class="vl-button vl-button--secondary vl-button--icon-before"
           {{action "openDocument" agendaitem bubbles=false}}
         >
           <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
           ></i>
           {{t "open-note"}}
         </button>
@@ -24,8 +24,8 @@
     {{else}}
       <div class="vl-loader" role="alert" aria-busy="true">
         {{#attach-popover
-          placement="bottom"
-          class="ember-attacher-popper ember-attacher-popper-small"
+                placement="bottom"
+                class="ember-attacher-popper ember-attacher-popper-small"
         }}
           {{t "nota-loading-text"}}
         {{/attach-popover}}
@@ -55,9 +55,9 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "decision-in-newsletter")}}
     {{web-components/vl-rdfa-editor
-      isLarge=isExpanded
-      richtext=(await agendaitem.subcase.newsletterInfo.richtext)
-      handleRdfaEditorInit=(action "handleRdfaEditorInit")
+            isLarge=isExpanded
+            richtext=(await agendaitem.subcase.newsletterInfo.richtext)
+            handleRdfaEditorInit=(action "handleRdfaEditorInit")
     }}
   </div>
   <div class="vlc-input-field-block vl-u-text--capitalize">
@@ -79,9 +79,9 @@
     {{t "cancel"}}
   </a>
   {{web-components/vl-save-button
-    text=(t "save")
-    isLoading=isLoading
-    saveAction=(action "trySaveChanges")
+          text=(t "save")
+          isLoading=isLoading
+          saveAction=(action "trySaveChanges")
   }}
 </div>
 {{#if isTryingToSave}}

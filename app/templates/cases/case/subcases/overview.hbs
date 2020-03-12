@@ -1,14 +1,14 @@
 {{title (t "subcases")}}
 {{subcases/subcases-overview-header
-  model=model
-  isShowingProcess=isShowingProcess
-  refresh=(action "refresh")
+        model=model
+        isShowingProcess=isShowingProcess
+        refresh=(action "refresh")
 }}
 <div class="vlc-scroll-wrapper__body">
   {{#if (gt (await model.subcases.length) 0)}}
 
-      {{subcases/subcases-process subcases=(await model.subcases)}}
-    
+    {{subcases/subcases-process subcases=(await model.subcases)}}
+
   {{else}}
     <div class="vl-u-spacer-extended-l">
       {{web-components/vl-alert message=(t "no-subcases")}}

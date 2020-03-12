@@ -5,9 +5,9 @@
       {{web-components/vl-loader text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))}}
     {{else}}
       {{web-components/vl-datepicker
-        dateObjectsToEnable=(await dateObjectsToEnable)
-        datePropertyToUse="plannedStart"
-        dateChanged=(action "selectStartDate")
+              dateObjectsToEnable=(await dateObjectsToEnable)
+              datePropertyToUse="plannedStart"
+              dateChanged=(action "selectStartDate")
       }}
     {{/if}}
   </div>
@@ -17,7 +17,7 @@
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <button
-          class="vl-button vl-button--link vl-button--narrow"
+                class="vl-button vl-button--link vl-button--narrow"
           {{action "cancel"}}
         >
           {{t "cancel"}}
@@ -27,7 +27,7 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <button
-          class="vl-button vl-button--narrow"
+                class="vl-button vl-button--narrow"
           {{action "assignToMeeting" subcase}}
         >
           {{t "propose"}}

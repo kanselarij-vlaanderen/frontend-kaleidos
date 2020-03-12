@@ -7,12 +7,12 @@
       </div>
     </div>
     {{cases/forms/metadata-form
-      submitter=submitter
-      meeting=meeting
-      shortTitle=shortTitle
-      selectedPolicyLevel=selectedPolicyLevel
-      selectedMeetingChanged=(action "selectedMeetingChanged")
-      submitterChanged=(action "submitterChanged")
+            submitter=submitter
+            meeting=meeting
+            shortTitle=shortTitle
+            selectedPolicyLevel=selectedPolicyLevel
+            selectedMeetingChanged=(action "selectedMeetingChanged")
+            submitterChanged=(action "submitterChanged")
     }}
   </div>
   <div class="vlc-navbar vlc-navbar--bordered-top">
@@ -20,8 +20,8 @@
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <button
-            type="button" data-test-vl-modal-footer-cancel
-            class="vl-button vl-button--link vl-button--narrow"
+                  type="button" data-test-vl-modal-footer-cancel
+                  class="vl-button vl-button--link vl-button--narrow"
             {{action "close"}}
           >
             {{t "cancel"}}
@@ -31,10 +31,10 @@
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
           {{web-components/vl-save-button
-            text=(t "create-case")
-            type="submit"
-            isLoading=isLoading
-            disabled=isLoading
+                  text=(t "create-case")
+                  type="submit"
+                  isLoading=isLoading
+                  disabled=isLoading
           }}
         </div>
       </div>

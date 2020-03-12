@@ -1,12 +1,14 @@
 <div class="vlc-toolbar">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <h1 class="vlc-page-header__title vlc-u-padding-bottom-5 vlc-page-header__title--bordered" data-test-agenda-header-title>
+      <h1 class="vlc-page-header__title vlc-u-padding-bottom-5 vlc-page-header__title--bordered"
+          data-test-agenda-header-title>
         {{t "agenda-of"}}
         {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
         {{t "at"}}
         {{moment-format currentSession.plannedStart "HH:mm"}}
-          <span class="vlc-page-header__subtitle vl-u-text vl-u-text--muted" style="font-size:1.6rem;"> - {{await currentSession.kindToShow.label}}</span>
+        <span class="vlc-page-header__subtitle vl-u-text vl-u-text--muted" style="font-size:1.6rem;"> - {{await
+                currentSession.kindToShow.label}}</span>
       </h1>
       <div class="vlc-page-header__sub">
         <div class="vlc-toolbar vlc-toolbar--auto">
@@ -15,15 +17,15 @@
               {{!-- TODO: Fix this symbol into a custom icon based of the figma file --}}
               {{!-- template-lint-disable no-bare-strings  --}}
               {{#link-to "agendas.overview" class="vlc-backlink vl-link vl-link--bold"}}
-                  &#8629;
+                &#8629;
               {{/link-to}}
               {{!-- template-lint-enable no-bare-strings  --}}
             </div>
             {{sessions/session-agenda-nav
-              currentAgenda=currentAgenda
-              compareAgendas=(action "compareAgendas")
-              navigateToDocuments=(action "navigateToDocuments")
-              clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
+                    currentAgenda=currentAgenda
+                    compareAgendas=(action "compareAgendas")
+                    navigateToDocuments=(action "navigateToDocuments")
+                    clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
             }}
           </div>
         </div>
@@ -36,7 +38,7 @@
         <div class="vl-action-group">
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
             <button
-              class="vl-button vl-button--narrow"
+                    class="vl-button vl-button--narrow"
               {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}
@@ -44,33 +46,33 @@
             </button>
           {{/if}}
           <button data-test-agenda-header-showActionOptions
-            class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+                  class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions"}}
           >
             {{#if (not isShowingOptions)}}
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{else}}
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{/if}}
             {{t "actions"}}
             {{#attach-popover
-              class="ember-attacher-popper"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom" as |attacher|
+                    class="ember-attacher-popper"
+                    hideOn="clickout click"
+                    showOn="click"
+                    animation="shift"
+                    placement="bottom" as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
                 {{#if (and isEditor (eq currentAgenda.name "Ontwerpagenda"))}}
                   <li class="vlc-dropdown-menu__item">
                     <a data-test-agenda-header-navigateToSubCases
-                      class="vl-link vl-link--block"
+                       class="vl-link vl-link--block"
                       {{action attacher.hide}}
                       {{action "navigateToSubCases"}}
                     >
@@ -79,7 +81,7 @@
                   </li>
                   <li class="vlc-dropdown-menu__item">
                     <a data-test-agenda-header-announcement
-                      class="vl-link vl-link--block"
+                       class="vl-link vl-link--block"
                       {{action attacher.hide}}
                       {{action "toggleIsAddingAnnouncement"}}
                     >
@@ -90,7 +92,7 @@
                 {{/if}}
                 <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-navigateToDecisions
-                    class="vl-link vl-link--block"
+                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
                     {{action "navigateToDecisions"}}
                   >
@@ -99,7 +101,7 @@
                 </li>
                 <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-navigateToNewsletter
-                    class="vl-link vl-link--block"
+                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
                     {{action "navigateToNewsletter"}}
                   >
@@ -108,7 +110,7 @@
                 </li>
                 <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-navigateToNotes
-                    class="vl-link vl-link--block"
+                     class="vl-link vl-link--block"
                     {{action "navigateToNotes"}}
                   >
                     {{t "print-notes"}}
@@ -116,7 +118,7 @@
                 </li>
                 <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-navigateToPressAgenda
-                    class="vl-link vl-link--block"
+                     class="vl-link vl-link--block"
                     {{action "navigateToPressAgenda"}}
                     {{action attacher.hide}}
                   >
@@ -127,7 +129,7 @@
                   <li class="vlc-dropdown-menu__separator" role="none"></li>
                   <li class="vlc-dropdown-menu__item">
                     <a data-test-agenda-header-toggleEditingSession
-                      class="vl-link vl-link--block"
+                       class="vl-link vl-link--block"
                       {{action "toggleEditingSession"}}
                       {{action attacher.hide}}
                     >
@@ -136,7 +138,7 @@
                   </li>
                   <li class="vlc-dropdown-menu__item">
                     <a data-test-agenda-header-selectSignature
-                      class="vl-link vl-link--block"
+                       class="vl-link vl-link--block"
                       {{action "selectSignature"}}
                       {{action attacher.hide}}
                     >
@@ -146,7 +148,7 @@
                 {{/if}}
                 <li class="vlc-dropdown-menu__item">
                   <a data-test-agenda-header-downloaddDocuments
-                    class="vl-link vl-link--block"
+                     class="vl-link vl-link--block"
                     {{action attacher.hide}}
                     {{action "downloadAllDocuments"}}
                   >
@@ -159,7 +161,7 @@
                     {{#if (not currentSession.isFinal)}}
                       {{#if (await hasMultipleAgendas)}}
                         <a data-test-agenda-header-lockAgenda
-                          class="vl-link vl-link--block vl-u-text--error"
+                           class="vl-link vl-link--block vl-u-text--error"
                           {{action "lockAgenda" currentAgenda}}
                           {{action attacher.hide}}
                         >
@@ -168,7 +170,7 @@
                       {{/if}}
                     {{else}}
                       <a data-test-agenda-header-unlockAgenda
-                        class="vl-link vl-link--block"
+                         class="vl-link vl-link--block"
                         {{action "unlockAgenda"}}
                         {{action attacher.hide}}
                       >
@@ -179,7 +181,7 @@
                   <li class="vlc-dropdown-menu__item">
                     {{#if currentSession.canReleaseDecisions}}
                       <a data-test-agenda-header-releaseDecisions
-                        class="vl-link vl-link--block vl-u-text--error"
+                         class="vl-link vl-link--block vl-u-text--error"
                         {{action "releaseDecisions"}}
                         {{action attacher.hide}}
                       >
@@ -187,7 +189,7 @@
                       </a>
                     {{else if currentSession.canReleaseDocuments}}
                       <a data-test-agenda-header-releaseDocuments
-                        class="vl-link vl-link--block vl-u-text--error"
+                         class="vl-link vl-link--block vl-u-text--error"
                         {{action "releaseDocuments"}}
                         {{action attacher.hide}}
                       >
@@ -196,16 +198,16 @@
                     {{/if}}
                   </li>
                   <li
-                    class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                          class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                   >
                     {{#if
-                      (or
-                        (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
-                        (and isAdmin (await currentAgendaIsLast))
-                      )
+                            (or
+                                    (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
+                                    (and isAdmin (await currentAgendaIsLast))
+                            )
                     }}
                       <a data-test-agenda-header-deleteAgenda
-                        class="vl-link vl-u-text--error"
+                         class="vl-link vl-u-text--error"
                         {{action "deleteAgenda" currentAgenda}}
                         {{action attacher.hide}}
                       >
@@ -213,11 +215,11 @@
                       </a>
                     {{/if}}
                     {{#if (and
-                        (not (await designAgendaPresent))
-                        (not (await currentSession.isFinal))
-                      )}}
+                                  (not (await designAgendaPresent))
+                                  (not (await currentSession.isFinal))
+                          )}}
                       <a data-test-agenda-header-createNewDesignAgenda
-                        class="vl-link vl-link--block"
+                         class="vl-link vl-link--block"
                         {{action "createNewDesignAgenda" currentSession}}
                         {{action attacher.hide}}
                       >
@@ -236,73 +238,73 @@
 </div>
 {{#if isAddingAgendaitems}}
   {{agenda/agendaitem/create-agendaitem
-    isAddingAgendaitems=isAddingAgendaitems
-    reloadRoute=(action "reloadRoute")
+          isAddingAgendaitems=isAddingAgendaitems
+          reloadRoute=(action "reloadRoute")
   }}
 {{/if}}
 {{#if isAddingAnnouncement}}
   {{agenda/create-announcement
-    isAddingAnnouncement=isAddingAnnouncement
-    currentAgenda=currentAgenda
-    reloadRoute=(action "reloadRoute")
+          isAddingAnnouncement=isAddingAnnouncement
+          currentAgenda=currentAgenda
+          reloadRoute=(action "reloadRoute")
   }}
 {{/if}}
 {{#if isAssigningSignature}}
   {{sessions/select-signature
-    meeting=currentSession
-    closeDialog=(action "selectSignature")
+          meeting=currentSession
+          closeDialog=(action "selectSignature")
   }}
 {{/if}}
 {{#if showWarning}}
   {{web-components/vl-modal-verify
-    title=(t "warning-title")
-    buttonType="warning"
-    isLoading=isApprovingAgenda
-    verifyButtonText=(t "continue")
-    message=(if (and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable))) (t "approve-agenda-passable") (t "approve-agenda-warning"))
-    cancel=(action "cancel")
-    verify=(action "doApproveAgenda" currentSession)
-    showVerify=(and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable)))
+          title=(t "warning-title")
+          buttonType="warning"
+          isLoading=isApprovingAgenda
+          verifyButtonText=(t "continue")
+          message=(if (and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable))) (t "approve-agenda-passable") (t "approve-agenda-warning"))
+          cancel=(action "cancel")
+          verify=(action "doApproveAgenda" currentSession)
+          showVerify=(and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable)))
   }}
 {{/if}}
 {{#if releasingDocuments}}
   {{web-components/vl-modal-verify
-    title=(t "agenda-release-documents")
-    buttonType="warning"
-    verifyButtonText=(t "releaseToPublicButton")
-    message=(t "release-documents-message")
-    cancel=(action "cancel")
-    verify=(action "confirmReleaseDocuments")
+          title=(t "agenda-release-documents")
+          buttonType="warning"
+          verifyButtonText=(t "releaseToPublicButton")
+          message=(t "release-documents-message")
+          cancel=(action "cancel")
+          verify=(action "confirmReleaseDocuments")
   }}
 {{/if}}
 {{#if releasingDecisions}}
   {{web-components/vl-modal-verify
-    title=(t "agenda-release-decisions")
-    buttonType="warning"
-    verifyButtonText=(t "releaseToPublicButton")
-    message=(t "release-decisions-message")
-    cancel=(action "cancel")
-    verify=(action "confirmReleaseDecisions")
+          title=(t "agenda-release-decisions")
+          buttonType="warning"
+          verifyButtonText=(t "releaseToPublicButton")
+          message=(t "release-decisions-message")
+          cancel=(action "cancel")
+          verify=(action "confirmReleaseDecisions")
   }}
 {{/if}}
 {{#if editingSession}}
   {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "edit-session")
-    closeModal=(action "cancelEditSessionForm")
+          isOverlay=true
+          title=(t "edit-session")
+          closeModal=(action "cancelEditSessionForm")
   }}
     {{sessions/forms/edit-session
-      meeting=currentSession
-      successfullyEdited=(action "successfullyEdited")
-      cancelForm=(action "cancelEditSessionForm")
+            meeting=currentSession
+            successfullyEdited=(action "successfullyEdited")
+            cancelForm=(action "cancelEditSessionForm")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if shouldShowLoader}}
   {{#web-components/vl-modal
-    isOverlay=true
-    title=loaderTitle
+          isOverlay=true
+          title=loaderTitle
   }}
-  {{web-components/vl-loader text=loaderText}}
+    {{web-components/vl-loader text=loaderText}}
   {{/web-components/vl-modal}}
 {{/if}}

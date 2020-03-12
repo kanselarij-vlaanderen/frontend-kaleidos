@@ -61,7 +61,7 @@ export default Controller.extend({
     if (isEmpty(searchText)) {
       return null;
     }
-    return { "last-name": searchText };
+    return { 'last-name': searchText };
   }),
 
   actions: {

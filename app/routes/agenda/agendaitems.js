@@ -40,7 +40,7 @@ export default Route.extend({
     }
   },
 
-  matchingAgendaItems: async function(filter) {
+  matchingAgendaItems: async function (filter) {
     if (isEmpty(filter)) {
       return {};
     }

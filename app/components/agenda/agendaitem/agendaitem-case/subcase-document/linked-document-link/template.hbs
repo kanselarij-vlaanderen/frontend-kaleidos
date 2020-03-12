@@ -2,7 +2,7 @@
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__badge">
       <div
-        class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
+              class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
       >
         <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
       </div>
@@ -23,11 +23,11 @@
           <div class="vlc-toolbar__item">
             {{#if isEditor}}
               <button
-                class="vl-button vl-button--link-muted vl-button--icon"
+                      class="vl-button vl-button--link-muted vl-button--icon"
                 {{action "unlinkDocument" document}}
               >
                 <span
-                  class="vl-icon vl-vi vl-vi-link-broken vl-u-text--error"
+                        class="vl-icon vl-vi vl-vi-link-broken vl-u-text--error"
                 ></span>
               </button>
             {{/if}}
@@ -49,11 +49,11 @@
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
         <button
-          class="vl-toggle vl-link vl-link--bold"
+                class="vl-toggle vl-link vl-link--bold"
           {{action "showVersions"}}
         >
           <i
-            class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
+                  class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
           ></i>
           {{t "show-versions"}}
         </button>
@@ -62,9 +62,9 @@
             <div class="vl-accordion__panel">
               {{#each myReverseSortedVersions as |documentVersion|
               }}
-                {{web-components/vl-document 
-                documentVersion=documentVersion
-                item=item
+                {{web-components/vl-document
+                        documentVersion=documentVersion
+                        item=item
                 }}
               {{/each}}
             </div>
@@ -76,10 +76,10 @@
 </div>
 {{#if isVerifyingUnlink}}
   {{web-components/vl-modal-verify
-    title=(t "document-unlink")
-    message=(t "unlink-document-message")
-    cancel=(action "cancel")
-    verify=(action "verify")
-    verifyButtonText=(t "unlink")
+          title=(t "document-unlink")
+          message=(t "unlink-document-message")
+          cancel=(action "cancel")
+          verify=(action "verify")
+          verifyButtonText=(t "unlink")
   }}
 {{/if}}

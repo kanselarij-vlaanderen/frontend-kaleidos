@@ -28,19 +28,19 @@
     {{web-components/vl-loader text=(t "minutes-document-loading-text")}}
   {{else if (not (await agendaitem.meetingRecord.signedDocument))}}
     {{utils/add-signed-documents
-      item=agendaitem.meetingRecord
-      modelToAddDocumentVersionTo="signedMinutes"
-      title=(t "signed-notes-add")
+            item=agendaitem.meetingRecord
+            modelToAddDocumentVersionTo="signedMinutes"
+            title=(t "signed-notes-add")
     }}
   {{else}}
     {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-      document=(await agendaitem.meetingRecord.signedDocument)
-      item=(await agendaitem.meetingRecord.signedDocument)
+            document=(await agendaitem.meetingRecord.signedDocument)
+            item=(await agendaitem.meetingRecord.signedDocument)
     }}
   {{/if}}
 {{else}}
   {{agenda/agendaitem/agendaitem-minutes-edit
-    isEditing=isEditing
-    agendaitem=agendaitem
+          isEditing=isEditing
+          agendaitem=agendaitem
   }}
 {{/if}}
