@@ -7,5 +7,9 @@
 }
 
 .vlc-u-text-decoration-underline {
-  text-decoration: underline;
+  text-decoration: underline !important;
+}
+
+.vlc-u-text--nowrap {
+  white-space: nowrap !important;
 }
