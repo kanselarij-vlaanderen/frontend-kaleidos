@@ -12,6 +12,7 @@ export default Component.extend({
   dateFrom: undefined,
   dateTo: undefined,
   announcementsOnly: false,
+  popoverShown: false,
 
   init() {
     this._super(...arguments);
@@ -49,6 +50,12 @@ export default Component.extend({
     selectDateTo(date) {
       this.set('dateTo', date);
       this.searchTask.perform();
-    }
+    },
+    openPopover() {
+      this.set('popoverShown', true);
+    },
+    closePopover() {
+      this.set('popoverShown', false);
+    },
   }
 });

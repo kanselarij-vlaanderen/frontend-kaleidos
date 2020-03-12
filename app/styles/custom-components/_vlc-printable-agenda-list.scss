@@ -1,11 +1,12 @@
 /* ==========================================================================
-	 Utilities: text
+	 Printable agenda list
 	 ========================================================================== */
 
-.vlc-u-pre-line-wrap {
-  white-space: pre-line;
-}
+.vlc-printable-agenda-list {
+  padding: 4rem;
 
-.vlc-u-text-decoration-underline {
-  text-decoration: underline;
+  h2.vlc-printable-agenda-list__title {
+    margin-top: 0;
+    text-align: center;
+  }
 }

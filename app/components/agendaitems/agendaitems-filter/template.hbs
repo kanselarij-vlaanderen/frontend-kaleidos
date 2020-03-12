@@ -14,9 +14,7 @@
              href="#"
             {{action "toggleAdvanced"}}
           >
-            <i class="vl-button__icon vl-vi vl-vi-close-light"
-               aria-hidden="true"
-            ></i>
+            <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
             <span class="vl-u-visually-hidden">
               {{t "close"}}
             </span>
@@ -24,10 +22,25 @@
         </div>
       </div>
     </div>
-    <div class="vl-col--4-12 vl-col--1-1--s">
-      <label class="vl-form__label" for="agendaItemId">
-        {{t "agendaitem-field-label"}}
-      </label>
+    <div class="vlc-input-field-block vl-col--4-12">
+      <div class="vl-u-display-flex">
+        <label class="vl-form__label u-padding--right--tinier" for="agendaItemId">
+          {{t "agendaitem-field-label"}}
+        </label>
+        <span onclick={{action "openPopover"}}
+              class="vl-icon vl-icon--small vl-vi vl-vi-info-filled vlc-u-cursor-pointer" aria-hidden="true">
+          {{#attach-popover
+                  placement="right"
+                  isShown=popoverShown
+                  renderInPlace=true
+                  showOn="click"
+                  hideOn="clickout"
+                  class="ember-attacher-popper vlc-search-legend-popover vlc-u-cursor-default"
+          }}
+            {{utils/search-legend userClickedClose=(action "closePopover")}}
+          {{/attach-popover}}
+        </span>
+      </div>
       {{input
               class="vl-input-field vl-input-field--block"
               type="text"
@@ -62,17 +75,17 @@
       }}
     </div>
     <div class="vl-col--0-12 vl-col--1-1--s">
-      <button class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+      <button
+              class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
               type="button"
               onclick={{perform searchTask}}
       >
-        <i class="vl-vi vl-vi-magnifier"
-           aria-hidden="true"
-        ></i>
+        <i class="vl-vi vl-vi-magnifier" aria-hidden="true"></i>
       </button>
     </div>
     <div class="vl-col--2-12 vl-col--1-1--s">
-      <button class="vl-button vl-button--link vl-button--narrow"
+      <button
+              class="vl-button vl-button--link vl-button--narrow"
               href="#"
               onclick={{action "toggleAdvanced"}}
       >
@@ -125,12 +138,14 @@
     <div class="vlc-toolbar__left"></div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <button class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+        <button
+                class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
                 type="button"
                 onclick={{perform searchTask}}
         >
-          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-magnifier"
-             aria-hidden="true"
+          <i
+                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-magnifier"
+                  aria-hidden="true"
           ></i>
           {{t "search"}}
         </button>

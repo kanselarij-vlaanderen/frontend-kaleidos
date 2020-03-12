@@ -66,111 +66,124 @@
     <div class="vlc-toolbar__item">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          {{#if shouldShowPrintButton}}
-            <button class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
-              {{action "print"}}
-            >
-              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-                 aria-hidden="true"
-              ></i>
-              {{t "print"}}
-            </button>
-            {{#if isEditor}}
-              <button class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
-                {{action "showMultipleOptions"}}
-              >
-                {{#if (not isShowingOptions)}}
-                  <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
-                    {{action "showMultipleOptions" bubbles=false}}
-                  ></i>
-                {{else}}
-                  <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
-                    {{action "showMultipleOptions" bubbles=false}}
-                  ></i>
-                {{/if}}
-                {{t "actions"}}
-                {{#attach-popover
-                        class="ember-attacher-popper"
-                        hideOn="clickout click"
-                        showOn="click"
-                        animation="shift"
-                        placement="bottom" as |attacher|
-                }}
-                  <ul class="vlc-dropdown-menu">
-                    {{#if
-                            (or (is-pending agenda.createdFor.mailCampaign) isLoading)
-                    }}
-                      <li class="vlc-dropdown-menu__item">
-                        <div class="vl-loader-link">
-                          <div class="vl-loader"
-                               role="alert"
-                               aria-busy="true"
-                          ></div>
-                          {{t "newsletter-loading-text"}}
-                        </div>
-                      </li>
-                    {{else if (await agenda.createdFor.mailCampaign)}}
-                      {{#if (not (await agenda.createdFor.mailCampaign.isSent))
-                      }}
-                        <li class="vlc-dropdown-menu__item">
-                          <a class="vl-link vl-link--block"
-                            {{action attacher.hide}}
-                            {{action "sendTestCampaign"}}
-                          >
-                            {{t "send-test-campaign"}}
-                          </a>
-                        </li>
-                        <li class="vlc-dropdown-menu__item">
-                          <a class="vl-link vl-link--block"
-                            {{action attacher.hide}}
-                            {{action "toggleIsVerifying"}}
-                          >
-                            {{t "send-campaign"}}
-                          </a>
-                        </li>
-                        <li class="vlc-dropdown-menu__separator"
-                            role="none"
-                        ></li>
-                      {{/if}}
-                      <li class="vlc-dropdown-menu__item">
-                        <a class="vl-link vl-link--block"
-                           target="_blank"
-                           rel="noopener"
-                           href={{concat "/newsletter/xml-newsletter/" agenda.id
-                        }}
-                           download={{concat
-                                "/newsletter/xml-newsletter/"
-                                agenda.id
-                        }}
-                        >
-                          {{t "generate-xml"}}
-                        </a>
-                      </li>
-                      <li class="vlc-dropdown-menu__separator"
-                          role="none"
-                      ></li>
-                      <li class="vlc-dropdown-menu__item">
-                        <a class="vl-link vl-link--block vl-u-text--error"
-                          {{action attacher.hide}}
-                          {{action "deleteCampaign"}}
-                        >
-                          {{t "delete-campaign"}}
-                        </a>
-                      </li>
-                    {{else}}
-                      <li class="vlc-dropdown-menu__item">
-                        <a class="vl-link vl-link--block"
-                          {{action "createCampaign"}}
-                        >
-                          {{t "create-campaign"}}
-                        </a>
-                      </li>
-                    {{/if}}
-                  </ul>
-                {{/attach-popover}}
-              </button>
-            {{/if}}
+          {{#if isEditor}}
           {{/if}}
+          <button
+                  class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+            {{action "showMultipleOptions"}}
+          >
+            {{#if (not isShowingOptions)}}
+              <i
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                {{action "showMultipleOptions" bubbles=false}}
+              ></i>
+            {{else}}
+              <i
+                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                {{action "showMultipleOptions" bubbles=false}}
+              ></i>
+            {{/if}}
+            {{t "actions"}}
+            {{#attach-popover
+                    class="ember-attacher-popper vlc-hide-on-print"
+                    hideOn="clickout click"
+                    showOn="click"
+                    animation="shift"
+                    placement="bottom" as |attacher|
+            }}
+              <ul class="vlc-dropdown-menu">
+                {{#if isEditor}}
+                  {{#if
+                          (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+                  }}
+                    <li class="vlc-dropdown-menu__item">
+                      <div class="vl-loader-link">
+                        <div
+                                class="vl-loader"
+                                role="alert"
+                                aria-busy="true"
+                        ></div>
+                        {{t "newsletter-loading-text"}}
+                      </div>
+                    </li>
+                  {{else if (await agenda.createdFor.mailCampaign)}}
+                    {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
+                      <li class="vlc-dropdown-menu__item">
+                        <a
+                                class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "sendTestCampaign"}}
+                        >
+                          {{t "send-test-campaign"}}
+                        </a>
+                      </li>
+                      <li class="vlc-dropdown-menu__item">
+                        <a
+                                class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "toggleIsVerifying"}}
+                        >
+                          {{t "send-campaign"}}
+                        </a>
+                      </li>
+                      <li
+                              class="vlc-dropdown-menu__separator"
+                              role="none"
+                      ></li>
+                    {{/if}}
+                    <li class="vlc-dropdown-menu__item">
+                      <a
+                              class="vl-link vl-link--block"
+                              target="_blank"
+                              rel="noopener"
+                              href={{concat "/newsletter/xml-newsletter/" agenda.id
+                      }}
+                              download={{concat
+                              "/newsletter/xml-newsletter/"
+                              agenda.id
+                      }}
+                      >
+                        {{t "generate-xml"}}
+                      </a>
+                    </li>
+                    <li
+                            class="vlc-dropdown-menu__separator"
+                            role="none"
+                    ></li>
+                    <li class="vlc-dropdown-menu__item">
+                      <a
+                              class="vl-link vl-link--block vl-u-text--error"
+                        {{action attacher.hide}}
+                        {{action "deleteCampaign"}}
+                      >
+                        {{t "delete-campaign"}}
+                      </a>
+                    </li>
+                  {{else}}
+                    <li class="vlc-dropdown-menu__item">
+                      <a
+                              class="vl-link vl-link--block"
+                        {{action "createCampaign"}}
+                      >
+                        {{t "create-campaign"}}
+                      </a>
+                    </li>
+                  {{/if}}
+                {{/if}}
+                {{#if shouldShowPrintButton}}
+                  <li class="vlc-dropdown-menu__item">
+                    <a
+                            class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "print"}}
+                    >
+                      {{t "print"}}
+                    </a>
+                  </li>
+                {{/if}}
+              </ul>
+            {{/attach-popover}}
+          </button>
         </div>
       </div>
     </div>

@@ -74,7 +74,7 @@
           {{#if (not isEditing)}}
             <h6 class="vl-title vl-title--h6">
               <span {{action "startEditingName"}}>
-                {{document.lastDocumentVersion.name}}
+                {{lastDocumentVersion.name}}
               </span>
             </h6>
           {{else}}
@@ -84,22 +84,25 @@
                       class="vl-input-field vl-input-field--block"
                       value=nameBuffer
               }}
-              <button class="vl-button vl-button--link vl-button--icon"
-                {{action "saveNameChange"
-                         document.lastDocumentVersion.content}} {{!-- TODO: Get rid of 'content' (in current setup I didn't see an other way) --}}
+              <button
+                      class="vl-button vl-button--link vl-button--icon"
+                {{action "saveNameChange" lastDocumentVersion}}
               >
-                <i class="vl-vi vl-vi-save vl-button__icon"
-                   aria-hidden="true"
+                <i
+                        class="vl-vi vl-vi-save vl-button__icon"
+                        aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "more-options"}}
                 </span>
               </button>
-              <button class="vl-button vl-button--link vl-button--icon"
+              <button
+                      class="vl-button vl-button--link vl-button--icon"
                 {{action "cancelEditingName"}}
               >
-                <i class="vl-vi vl-vi-cross vl-button__icon"
-                   aria-hidden="true"
+                <i
+                        class="vl-vi vl-vi-cross vl-button__icon"
+                        aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "more-options"}}
@@ -109,9 +112,9 @@
           {{/if}}
           <div class="vlc-document-card-content__meta">
             {{t "uploaded-at"}}
-            {{moment-format (await document.lastDocumentVersion.created)}}
+            {{moment-format (await lastDocumentVersion.created)}}
             {{t "at"}}
-            {{moment-format (await document.lastDocumentVersion.created) "HH:mm"}}
+            {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
           </div>
         </div>
       </div>

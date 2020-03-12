@@ -10,6 +10,7 @@ export default Component.extend({
   dateFrom: undefined,
   dateTo: undefined,
   searchInDecisionsOnly: false,
+  popoverShown: false,
 
   init() {
     this._super(...arguments);
@@ -20,6 +21,7 @@ export default Component.extend({
       this.set('dateTo', moment(this.dateTo).toDate());
     }
   },
+
 
   searchTask: task(function* () {
     yield timeout(600);
@@ -40,6 +42,12 @@ export default Component.extend({
     selectDateTo(date) {
       this.set('dateTo', date);
       this.searchTask.perform();
-    }
+    },
+    openPopover() {
+      this.set('popoverShown', true);
+    },
+    closePopover() {
+      this.set('popoverShown', false);
+    },
   }
 });
