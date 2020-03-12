@@ -1,5 +1,9 @@
 // Print stylesheet focussed on making agenda overview look good when printed
 
+.vlc-show-on-print {
+  display: none;
+}
+
 @media print {
   .vlc-navbar.vlc-navbar--bordered-bottom.vlc-navbar--bg-alt.vlc-navbar--large {
     display: none;
@@ -58,5 +62,26 @@
 
   body > .ember-view {
     display: block !important;
+  }
+
+  .vlc-hide-on-print {
+    display: none;
+  }
+
+  .vlc-page-header {
+    display: none;
+  }
+
+  .vlc-panel-layout__agenda-history {
+    display: none;
+  }
+
+  .vlc-show-on-print {
+    display: block;
+  }
+
+  // Firefox printable agenda requires the panel not to be display flex
+  .vlc-panel-layout {
+    display: block;
   }
 }

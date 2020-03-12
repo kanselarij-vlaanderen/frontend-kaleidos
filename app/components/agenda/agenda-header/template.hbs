@@ -60,7 +60,7 @@
             {{/if}}
             {{t "actions"}}
             {{#attach-popover
-              class="ember-attacher-popper"
+              class="ember-attacher-popper vlc-hide-on-print"
               hideOn="clickout click"
               showOn="click"
               animation="shift"
@@ -123,6 +123,32 @@
                     {{t "printable-press-agenda"}}
                   </a>
                 </li>
+                {{#if showPrintButton}}
+                  <li class="vlc-dropdown-menu__item">
+                    {{#link-to "agenda.agendaitems"
+                      class="vl-link vl-link--block"
+                    }}
+                      {{t "agenda-view"}}
+                    {{/link-to}}
+                  </li>
+                  <li class="vlc-dropdown-menu__item">
+                    <a data-test-agenda-header-navigateToPressAgenda
+                      class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "print"}}
+                    >
+                      {{t "print"}}
+                    </a>
+                  </li>
+                {{else}}
+                  <li class="vlc-dropdown-menu__item">
+                    {{#link-to "agenda.print"
+                      class="vl-link vl-link--block"
+                    }}
+                      {{t "printable-version"}}
+                    {{/link-to}}
+                  </li>
+                {{/if}}
                 {{#if isEditor}}
                   <li class="vlc-dropdown-menu__separator" role="none"></li>
                   <li class="vlc-dropdown-menu__item">
