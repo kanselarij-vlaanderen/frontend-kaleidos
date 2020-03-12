@@ -2,21 +2,17 @@
   <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom vl-u-spacer-extended-bottom-s">
     {{#if (not (is-pending agendaitem.nota))}}
       {{#if (not (await agendaitem.nota))}}
-        <button
-                class="vl-button vl-button--secondary vl-button--icon-before vl-button--disabled"
+        <button class="vl-button vl-button--secondary vl-button--icon-before vl-button--disabled"
         >
-          <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
+          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
           ></i>
           {{t "no-nota"}}
         </button>
       {{else}}
-        <button
-                class="vl-button vl-button--secondary vl-button--icon-before"
+        <button class="vl-button vl-button--secondary vl-button--icon-before"
           {{action "openDocument" agendaitem bubbles=false}}
         >
-          <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
+          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
           ></i>
           {{t "open-note"}}
         </button>

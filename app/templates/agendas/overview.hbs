@@ -30,11 +30,9 @@
               {{/if}}
             </h2>
             <div class="vl-u-spacer-extended-bottom-s">
-              <div
-                      class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
+              <div class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
               >
-                <div
-                        class="vlc-input-field-group vlc-input-field-group--gmeeting"
+                <div class="vlc-input-field-group vlc-input-field-group--gmeeting"
                 >
                   {{input
                           type="text"
@@ -45,8 +43,7 @@
                   }}
                 </div>
                 <div class="vlc-input-field-group">
-                  <button
-                          class="vl-button vl-button--secondary vl-button--icon"
+                  <button class="vl-button vl-button--secondary vl-button--icon"
                           type="submit"
                           onclick={{action "setDateFilter" dateFilter}}
                   >
@@ -108,10 +105,9 @@
                       </td>
                       <td>
                         {{#if (is-pending meeting.latestAgendaName)}}
-                          <div
-                                  class="skeletal-loader"
-                                  role="alert"
-                                  aria-busy="true"
+                          <div class="skeletal-loader"
+                               role="alert"
+                               aria-busy="true"
                           ></div>
                         {{else}}
                           {{await meeting.latestAgendaName}}
@@ -119,10 +115,9 @@
                       </td>
                       <td>
                         {{#if (is-pending meeting.latestAgenda)}}
-                          <div
-                                  class="skeletal-loader"
-                                  role="alert"
-                                  aria-busy="true"
+                          <div class="skeletal-loader"
+                               role="alert"
+                               aria-busy="true"
                           ></div>
                         {{else}}
                           {{moment-format

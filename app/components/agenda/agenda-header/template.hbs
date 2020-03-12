@@ -37,8 +37,7 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
-            <button
-                    class="vl-button vl-button--narrow"
+            <button class="vl-button vl-button--narrow"
               {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}
@@ -50,13 +49,11 @@
             {{action "showMultipleOptions"}}
           >
             {{#if (not isShowingOptions)}}
-              <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{else}}
-              <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{/if}}
@@ -197,8 +194,7 @@
                       </a>
                     {{/if}}
                   </li>
-                  <li
-                          class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                  <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                   >
                     {{#if
                             (or

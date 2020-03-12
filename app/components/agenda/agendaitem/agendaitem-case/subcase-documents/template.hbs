@@ -41,10 +41,8 @@
     </button>
   {{else if isEditor}}
     <div class="vl-u-spacer">
-      <button
-              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-        {{action "toggleIsAddingNewDocument"}}
-      >
+      <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+        {{action "toggleIsAddingNewDocument"}}>
         <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
         {{t "document-add"}}
       </button>
@@ -78,12 +76,9 @@
       </button>
     {{else if isEditor}}
       <div class="vl-u-spacer">
-        <button
-                class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-          {{action "toggleIsLinkingOldDocument"}}
-        >
-          <i
-                  class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+        <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          {{action "toggleIsLinkingOldDocument"}}>
+          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
           ></i>
           {{t "document-link-old"}}
         </button>

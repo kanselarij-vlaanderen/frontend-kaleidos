@@ -53,13 +53,11 @@
     }}
       {{#table.content as |c|}}
         {{#c.header}}
-          <th
-                  class="vl-data-table-col-9 vl-data-table__header-title">
+          <th class="vl-data-table-col-9 vl-data-table__header-title">
             {{t "case-name"}}
           </th>
           {{#if searchText}}
-            <th
-                    class="vl-data-table-col-1 vl-data-table__header-title">
+            <th class="vl-data-table-col-1 vl-data-table__header-title">
               {{t "created-on"}}
             </th>
             {{th-sortable
@@ -69,8 +67,7 @@
                     label=(t "on-agenda-of")
             }}
           {{else}}
-            <th
-                    class="vl-data-table-col-2 vl-data-table__header-title">
+            <th class="vl-data-table-col-2 vl-data-table__header-title">
               {{t "created-on"}}
             </th>
           {{/if}}
@@ -97,8 +94,7 @@
           <td class="vl-u-align-right">
             {{#if isEditor}}
               <button class="vl-button vl-button--link vl-button--icon">
-                <i
-                        class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
+                <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
                 ></i>
                 {{#attach-popover
                         class="ember-attacher-popper"
@@ -109,8 +105,7 @@
                 }}
                   <ul class="vlc-dropdown-menu">
                     <li class="vlc-dropdown-menu__item">
-                      <button
-                              class="vl-link"
+                      <button class="vl-link"
                         {{action attacher.hide}}
                         {{action "editRow" row}}
                       >
@@ -119,16 +114,14 @@
                     </li>
                     <li class="vlc-dropdown-menu__item">
                       {{#if (not row.isArchived)}}
-                        <a
-                                class="vl-link vl-link--block"
+                        <a class="vl-link vl-link--block"
                           {{action attacher.hide}}
                           {{action "requestArchiveCase" row}}
                         >
                           {{archiveCase}}
                         </a>
                       {{else}}
-                        <a
-                                class="vl-link vl-link--block"
+                        <a class="vl-link vl-link--block"
                           {{action attacher.hide}}
                           {{action "unarchiveCase" row}}
                         >

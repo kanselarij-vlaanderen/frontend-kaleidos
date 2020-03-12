@@ -2,11 +2,9 @@
   {{title (t "page-title")}}
   {{head-layout}}
   {{#if (await alert)}}
-    <div
-            class="vl-alert vl-alert-relative vl-alert-relative--center
+    <div class="vl-alert vl-alert-relative vl-alert-relative--center
         {{await type}}"
-            role="alert"
-    >
+         role="alert">
       <div class="vl-alert__icon">
         <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
       </div>

@@ -2,8 +2,7 @@
   <div class="vlc-toolbar">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
-        <h1
-                class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width-title vlc-u-padding-bottom-5"
+        <h1 class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width-title vlc-u-padding-bottom-5"
         >
           {{#if (await model.case.shortTitle)}}
             {{await model.case.shortTitle}}
@@ -27,9 +26,8 @@
               <div class="vlc-toolbar__item">
                 <ul class="vlc-tabs-reverse" role="tablist">
                   <li class="vlc-tabs-reverse__item">
-                    <a
-                            class="vlc-tabs-reverse__link {{activeProcess}}"
-                            role="tab"
+                    <a class="vlc-tabs-reverse__link {{activeProcess}}"
+                       role="tab"
                       {{action "toggleIsShowingProcess"}}
                     >
                       {{t "process"}}
@@ -45,12 +43,10 @@
     <div class="vlc-toolbar__right">
       {{#if isEditor}}
         <div class="vlc-toolbar__item">
-          <button
-                  class="vl-button vl-button--narrow vl-button--icon-before"
+          <button class="vl-button vl-button--narrow vl-button--icon-before"
             {{action "toggleIsAddingSubcase"}}
           >
-            <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+            <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
             ></i>
             {{t "create-subcase"}}
           </button>

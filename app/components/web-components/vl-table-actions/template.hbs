@@ -4,8 +4,7 @@
   </button>
   {{#if (not (is-pending (await row.nota)))}}
     {{#if (not (await row.nota))}}
-      <button
-              class="vl-button vl-button--link vl-button--icon"
+      <button class="vl-button vl-button--link vl-button--icon"
               style="opacity:0.3;"
         {{action "openDocument" row bubbles=false}}
       >
@@ -18,8 +17,7 @@
         {{/attach-popover}}
       </button>
     {{else}}
-      <button
-              class="vl-button vl-button--link vl-button--icon"
+      <button class="vl-button vl-button--link vl-button--icon"
         {{action "openDocument" row bubbles=false}}
       >
         <i class="vl-button__icon vl-vi vl-vi-document"></i>

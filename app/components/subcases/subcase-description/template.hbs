@@ -17,8 +17,7 @@
     </p>
     <ul class="vlc-status-timeline">
       {{#each subcase.sortedPhases as |phase|}}
-        <li
-                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         >
           <div class="vlc-status-timeline__dot"></div>
           {{#if (is-pending phase.code)}}

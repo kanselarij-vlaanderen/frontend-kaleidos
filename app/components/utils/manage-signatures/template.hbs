@@ -24,8 +24,7 @@
       <div class="vlc-toolbar">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
-            <button
-                    class="vl-button vl-button--link vl-button--narrow"
+            <button class="vl-button vl-button--link vl-button--narrow"
               {{action "closeModal"}}
             >
               {{t "cancel"}}
@@ -35,31 +34,25 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
             {{#if selectedSignature}}
-              <button
-                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "setDefaultSignature"}}
               >
-                <i
-                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "signature-set-default"}}
               </button>
-              <button
-                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "toggleIsEditing"}}
               >
-                <i
-                        class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+                <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "signature-edit"}}
               </button>
             {{/if}}
-            <button
-                    class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+            <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
               {{action "toggleIsAdding"}}
             >
-              <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
               {{t "signature-add"}}
             </button>

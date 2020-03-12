@@ -1,9 +1,7 @@
 <div class="vlc-toolbar">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <h1
-              class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width vlc-u-padding-bottom-5"
-      >
+      <h1 class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width vlc-u-padding-bottom-5">
         {{t "newsletter-overview-pdf-name"}}
         {{await agenda.createdFor.kindToShow.procedure}}
         {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
@@ -69,29 +67,24 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if shouldShowPrintButton}}
-            <button
-                    class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+            <button class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
               {{action "print"}}
             >
-              <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-                      aria-hidden="true"
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+                 aria-hidden="true"
               ></i>
               {{t "print"}}
             </button>
             {{#if isEditor}}
-              <button
-                      class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+              <button class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
                 {{action "showMultipleOptions"}}
               >
                 {{#if (not isShowingOptions)}}
-                  <i
-                          class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                  <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
                     {{action "showMultipleOptions" bubbles=false}}
                   ></i>
                 {{else}}
-                  <i
-                          class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                  <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
                     {{action "showMultipleOptions" bubbles=false}}
                   ></i>
                 {{/if}}
@@ -109,10 +102,9 @@
                     }}
                       <li class="vlc-dropdown-menu__item">
                         <div class="vl-loader-link">
-                          <div
-                                  class="vl-loader"
-                                  role="alert"
-                                  aria-busy="true"
+                          <div class="vl-loader"
+                               role="alert"
+                               aria-busy="true"
                           ></div>
                           {{t "newsletter-loading-text"}}
                         </div>
@@ -121,8 +113,7 @@
                       {{#if (not (await agenda.createdFor.mailCampaign.isSent))
                       }}
                         <li class="vlc-dropdown-menu__item">
-                          <a
-                                  class="vl-link vl-link--block"
+                          <a class="vl-link vl-link--block"
                             {{action attacher.hide}}
                             {{action "sendTestCampaign"}}
                           >
@@ -130,27 +121,24 @@
                           </a>
                         </li>
                         <li class="vlc-dropdown-menu__item">
-                          <a
-                                  class="vl-link vl-link--block"
+                          <a class="vl-link vl-link--block"
                             {{action attacher.hide}}
                             {{action "toggleIsVerifying"}}
                           >
                             {{t "send-campaign"}}
                           </a>
                         </li>
-                        <li
-                                class="vlc-dropdown-menu__separator"
-                                role="none"
+                        <li class="vlc-dropdown-menu__separator"
+                            role="none"
                         ></li>
                       {{/if}}
                       <li class="vlc-dropdown-menu__item">
-                        <a
-                                class="vl-link vl-link--block"
-                                target="_blank"
-                                rel="noopener"
-                                href={{concat "/newsletter/xml-newsletter/" agenda.id
+                        <a class="vl-link vl-link--block"
+                           target="_blank"
+                           rel="noopener"
+                           href={{concat "/newsletter/xml-newsletter/" agenda.id
                         }}
-                                download={{concat
+                           download={{concat
                                 "/newsletter/xml-newsletter/"
                                 agenda.id
                         }}
@@ -158,13 +146,11 @@
                           {{t "generate-xml"}}
                         </a>
                       </li>
-                      <li
-                              class="vlc-dropdown-menu__separator"
-                              role="none"
+                      <li class="vlc-dropdown-menu__separator"
+                          role="none"
                       ></li>
                       <li class="vlc-dropdown-menu__item">
-                        <a
-                                class="vl-link vl-link--block vl-u-text--error"
+                        <a class="vl-link vl-link--block vl-u-text--error"
                           {{action attacher.hide}}
                           {{action "deleteCampaign"}}
                         >
@@ -173,8 +159,7 @@
                       </li>
                     {{else}}
                       <li class="vlc-dropdown-menu__item">
-                        <a
-                                class="vl-link vl-link--block"
+                        <a class="vl-link vl-link--block"
                           {{action "createCampaign"}}
                         >
                           {{t "create-campaign"}}

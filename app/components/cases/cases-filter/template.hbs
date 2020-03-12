@@ -27,9 +27,7 @@
   {{/if}}
 </div>
 {{#if (not disableAdvanced)}}
-  <div
-          class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer custom-search"
-  >
+  <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer custom-search">
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "from-date")}}
       {{web-components/vl-datepicker
@@ -70,14 +68,12 @@
 <div class="vlc-toolbar">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <button
-              class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+      <button class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
               type="button"
               onclick={{perform searchTask}}
       >
-        <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-magnifier"
-                aria-hidden="true"
+        <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-magnifier"
+           aria-hidden="true"
         ></i>
         {{t "search"}}
       </button>

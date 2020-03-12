@@ -56,12 +56,10 @@
           {{action "showMultipleOptions" bubbles=false}}
         >
           {{#if isShowingOptions}}
-            <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+            <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
             ></i>
           {{else}}
-            <i
-                    class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+            <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
             ></i>
           {{/if}}
           {{t "actions"}}
@@ -85,8 +83,7 @@
               {{/if}}
               <li class="vlc-dropdown-menu__item">
                 {{#if (not await subcase.concluded)}}
-                  <a
-                          class="vl-link vl-link--block"
+                  <a class="vl-link vl-link--block"
                     {{action attacher.hide}}
                     {{action "triggerMoveSubcaseDialog" }}
                   >

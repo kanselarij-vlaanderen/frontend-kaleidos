@@ -14,8 +14,7 @@
   {{#if (not isEditingOverview)}}
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <a
-                class="vlc-agenda-items-section-header__link"
+        <a class="vlc-agenda-items-section-header__link"
           {{action "toggleChangesOnly"}}
         >
           {{#if (not isShowingChanges)}}
@@ -28,8 +27,7 @@
       <div class="vlc-toolbar__item">
         {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
           <div class="vl-u-spacer-extended-left-s">
-            <a
-                    class="vlc-agenda-items-section-header__link"
+            <a class="vlc-agenda-items-section-header__link"
               {{action "toggleIsEditingOverview"}}
             >
               {{t "edit"}}

@@ -23,8 +23,7 @@
                       field="planned-start"
                       label=(t "newsletter")
               }}
-              <th
-                      class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
+              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
               >
                 {{!--TODO: should sort on field agendas but does not return all 10 results --}}
                 {{concat (t "newsletter") " " (t "sent-at")}}
@@ -40,10 +39,9 @@
             {{#c.body class="tr-hover" as |meeting|}}
               <td>
                 {{#if (is-pending meeting)}}
-                  <div
-                          class="skeletal-loader"
-                          role="alert"
-                          aria-busy="true"
+                  <div class="skeletal-loader"
+                       role="alert"
+                       aria-busy="true"
                   ></div>
                 {{else}}
                   {{t "newsletter-for-meeting-of"}}
@@ -52,10 +50,9 @@
               </td>
               <td>
                 {{#if (is-pending meeting.mailCampaign)}}
-                  <div
-                          class="skeletal-loader"
-                          role="alert"
-                          aria-busy="true"
+                  <div class="skeletal-loader"
+                       role="alert"
+                       aria-busy="true"
                   ></div>
                 {{else if (await meeting.mailCampaign)}}
                   {{#if (await meeting.mailCampaign.isSent)}}
@@ -72,10 +69,9 @@
               </td>
               <td>
                 {{#if (is-pending meeting.latestAgenda)}}
-                  <div
-                          class="skeletal-loader"
-                          role="alert"
-                          aria-busy="true"
+                  <div class="skeletal-loader"
+                       role="alert"
+                       aria-busy="true"
                   ></div>
                 {{else}}
                   {{moment-format

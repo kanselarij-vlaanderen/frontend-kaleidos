@@ -1,8 +1,6 @@
 <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
   <div class="vlc-scroll-wrapper__header">
-    <div
-            class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom"
-    >
+    <div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom">
       <div class="vl-tabs__wrapper">
         {{agenda/agendaitem/agendaitem-nav
                 agendaitem=agendaitem
@@ -51,13 +49,10 @@
             </div>
             {{#if isEditor}}
               <div class="vl-action-group">
-                <button
-                        class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+                <button class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
                   {{action "addDecision"}}
                 >
-                  <i
-                          class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-                  ></i>
+                  <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
                   {{t "add-decision"}}
                 </button>
               </div>

@@ -9,8 +9,7 @@
           <div class="vlc-toolbar vlc-toolbar--auto">
             <div class="vlc-toolbar__left">
               <div class="vlc-toolbar__item">
-                <a
-                        class="vlc-backlink vl-link vl-link--bold"
+                <a class="vlc-backlink vl-link vl-link--bold"
                   {{action "navigateBackToAgenda"}}
                 >
                   {{!-- template-lint-disable no-bare-strings  --}}
@@ -65,13 +64,11 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if shouldShowPrintButton}}
-            <button
-                    class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+            <button class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
               {{action "print"}}
             >
-              <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-                      aria-hidden="true"
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+                 aria-hidden="true"
               ></i>
               {{t "print"}}
             </button>
