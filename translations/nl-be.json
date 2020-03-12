@@ -14,6 +14,7 @@
   "add-agendaitems": "Agendapunten toevoegen",
   "advanced-search": "Geavanceerd zoeken",
   "agenda": "Agenda",
+  "agenda-view": "Agenda bekijken",
   "agenda-add": "Nieuwe ontwerpagenda aanmaken",
   "agenda-approve": "Agenda goedkeuren",
   "agenda-back": "Terug naar agenda",
@@ -272,6 +273,7 @@
   "previous": "Vorige",
   "previous-step": "Vorige Stap",
   "print": "Afdrukken",
+  "printable-version": "Afdrukbare versie",
   "print-decisions": "Beslissingen bekijken",
   "print-notes": "Notulen bekijken",
   "print-newsletter": "Kort bestek bekijken",
@@ -535,8 +537,6 @@
   "search-legend-order-explanation": "Zoekt op de gehele reeks van woorden in die volgorde",
   "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord",
   "submitted-by": "- Indiener",
-  "changes-could-not-be-saved-title": "Je wijzigingen werden niet opgeslagen.",
-  "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "manage-users-name": "Naam",
   "manage-users-email": "Email",
   "manage-users-telephone": "Telefoonnummer",
@@ -545,5 +545,7 @@
   "manage-users-ovo": "OVO-code",
   "manage-users-general-info": "Algemene informatie",
   "manage-users-technical-info": "Technische informatie",
-  "manage-user": "Gebruiker: {firstName} {lastName}"
+  "manage-user": "Gebruiker: {firstName} {lastName}",
+  "changes-could-not-be-saved-title": "Je wijzigingen werden niet opgeslagen.",
+  "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
 }

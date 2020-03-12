@@ -75,7 +75,7 @@ export default Controller.extend({
       this.toggleProperty('isUploadingFile');
     },
     uploaded(response) {
-      if (response && response.status === 200) {
+      if (response && response.status == 200) {
         this.globalError.showToast.perform(
           EmberObject.create({
             title: this.intl.t('successfully-created-title'),

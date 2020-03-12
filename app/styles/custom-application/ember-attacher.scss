@@ -10,7 +10,6 @@
   width: 23rem;
   min-width: 23rem;
   max-width: 90vw;
-  max-height: 400px;
   z-index: 11000;
 
   @include respond-to(small) {
