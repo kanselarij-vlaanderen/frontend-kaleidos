@@ -537,7 +537,7 @@
   "search-legend-order-explanation": "Zoekt op de gehele reeks van woorden in die volgorde",
   "search-legend-wildcard-explanation": "Zoeken waarbij het opgegeven lemma de prefix is voor een woord",
   "submitted-by": "- Indiener",
-  "manage-users-name": "Naam",
+  "manage-users-full-name": "Naam",
   "manage-users-email": "Email",
   "manage-users-telephone": "Telefoonnummer",
   "manage-users-group": "Groep",
