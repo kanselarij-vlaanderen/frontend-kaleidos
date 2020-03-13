@@ -3,10 +3,10 @@
     <div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom">
       <div class="vl-tabs__wrapper">
         {{agenda/agendaitem/agendaitem-nav
-                agendaitem=agendaitem
-                currentAgenda=currentAgenda
-                activeAgendaItemSection=activeAgendaItemSection
-                setAgendaItemSection=(action "setAgendaItemSection")
+          agendaitem=agendaitem
+          currentAgenda=currentAgenda
+          activeAgendaItemSection=activeAgendaItemSection
+          setAgendaItemSection=(action "setAgendaItemSection")
         }}
       </div>
     </div>
@@ -20,10 +20,10 @@
               {{#if isEditor}}
                 {{#if (not currentAgenda.isFinal)}}
                   {{agenda/agendaitem/agendaitem-controls
-                          agendaitem=agendaitem
-                          currentAgenda=currentAgenda
-                          lastDefiniteAgenda=lastDefiniteAgenda
-                          refreshRoute=(action "refreshRoute")
+                    agendaitem=agendaitem
+                    currentAgenda=currentAgenda
+                    lastDefiniteAgenda=lastDefiniteAgenda
+                    refreshRoute=(action "refreshRoute")
                   }}
                 {{/if}}
               {{/if}}
@@ -33,9 +33,9 @@
             {{agenda/agendaitem/agendaitem-case agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "documents")}}
             {{agenda/agendaitem/agendaitem-case/subcase-documents
-                    item=agendaitem
-                    isDesignAgenda=(eq currentAgenda.name "Ontwerpagenda")
-                    modelToAddDocumentVersionTo="agendaitem"
+              item=agendaitem
+              isDesignAgenda=(eq currentAgenda.name "Ontwerpagenda")
+              modelToAddDocumentVersionTo="agendaitem"
             }}
           {{else if (eq activeAgendaItemSection "comments")}}
             {{agenda/agendaitem/agendaitem-comments item=agendaitem}}
@@ -59,15 +59,15 @@
             {{/if}}
             {{#each (await agendaitem.decisions) as |decision|}}
               {{agenda/agendaitem/agendaitem-decision
-                      subcase=subcase
-                      decision=decision
-                      agendaitem=agendaitem
+                subcase=subcase
+                decision=decision
+                agendaitem=agendaitem
               }}
             {{/each}}
           {{else if (eq activeAgendaItemSection "news-item")}}
             {{agenda/agendaitem/agendaitem-news-item
-                    agendaitem=agendaitem
-                    subcase=subcase
+              agendaitem=agendaitem
+              subcase=subcase
             }}
           {{else if (eq activeAgendaItemSection "minutes")}}
             {{agenda/agendaitem/agendaitem-minutes agendaitem=agendaitem}}

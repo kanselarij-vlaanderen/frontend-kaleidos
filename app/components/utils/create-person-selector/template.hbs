@@ -1,17 +1,17 @@
 {{#if (not isCreatingPerson)}}
   <div class="vl-u-display-flex vl-u-display-flex-align-center vl-col-4-4">
     {{#power-select
-            options=items
-            selected=selectedItems
-            disabled=readOnly
-            searchField=searchField
-            placeholder=placeholder
-            loadingMessage=loadingMessage
-            noMatchesMessage=noMatchesMessage
-            searchMessage=searchMessage
-            search=(perform searchTask)
-            oninput=(action "resetValueIfEmpty")
-            onchange=(action "selectModel") as |model|
+      options=items
+      selected=selectedItems
+      disabled=readOnly
+      searchField=searchField
+      placeholder=placeholder
+      loadingMessage=loadingMessage
+      noMatchesMessage=noMatchesMessage
+      searchMessage=searchMessage
+      search=(perform searchTask)
+      oninput=(action "resetValueIfEmpty")
+      onchange=(action "selectModel") as |model|
     }}
       {{await (model-property-to-show model propertyToShow)}}
     {{/power-select}}
@@ -42,9 +42,9 @@
         {{t "cancel"}}
       </a>
       {{web-components/vl-save-button
-              text=(t "save")
-              isLoading=isLoading
-              saveAction=(action "createPerson")
+        text=(t "save")
+        isLoading=isLoading
+        saveAction=(action "createPerson")
       }}
     </div>
   </div>

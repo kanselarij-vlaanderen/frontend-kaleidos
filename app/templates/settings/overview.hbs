@@ -74,28 +74,28 @@
 </div>
 {{#if isAddingMandate}}
   {{utils/model-manager
-          modalTitle=(t "manage-government-domains")
-          modelName="government-domain"
-          close=(action "toggleProperty" "isAddingMandate")
+    modalTitle=(t "manage-government-domains")
+    modelName="government-domain"
+    close=(action "toggleProperty" "isAddingMandate")
   }}
 {{/if}}
 {{#if isManagingFunctions}}
   {{utils/manage-government-fields
-          modalTitle=(t "manage-government-fields")
-          close=(action "toggleProperty" "isManagingFunctions")
+    modalTitle=(t "manage-government-fields")
+    close=(action "toggleProperty" "isManagingFunctions")
   }}
 {{/if}}
 {{#if isManagingIseCodes}}
   {{utils/manage-ise-code
-          modalTitle=(t "manage-ise-codes")
-          close=(action "toggleProperty" "isManagingIseCodes")
+    modalTitle=(t "manage-ise-codes")
+    close=(action "toggleProperty" "isManagingIseCodes")
   }}
 {{/if}}
 {{#if isManagingDocumentTypes}}
   {{utils/model-manager
-          modalTitle=(t "manage-document-types")
-          modelName="document-type"
-          close=(action "toggleProperty" "isManagingDocumentTypes")
+    modalTitle=(t "manage-document-types")
+    modelName="document-type"
+    close=(action "toggleProperty" "isManagingDocumentTypes")
   }}
 {{/if}}
 {{#if isManagingAlerts}}
@@ -103,27 +103,27 @@
 {{/if}}
 {{#if isManagingCaseTypes}}
   {{utils/model-manager
-          modalTitle=(t "manage-case-types")
-          modelName="case-type"
-          close=(action "toggleProperty" "isManagingCaseTypes")
+    modalTitle=(t "manage-case-types")
+    modelName="case-type"
+    close=(action "toggleProperty" "isManagingCaseTypes")
   }}
 {{/if}}
 {{#if isManagingSubcaseTypes}}
   {{utils/model-manager
-          modalTitle=(t "manage-subcase-types")
-          modelName="subcase-type"
-          close=(action "toggleProperty" "isManagingSubcaseTypes")
+    modalTitle=(t "manage-subcase-types")
+    modelName="subcase-type"
+    close=(action "toggleProperty" "isManagingSubcaseTypes")
   }}
 {{/if}}
 {{#if isManagingSignature}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "manage-signatures")
-          closeModal=(action "toggleProperty" "isManagingSignature")
-          large=true
+    isOverlay=true
+    title=(t "manage-signatures")
+    closeModal=(action "toggleProperty" "isManagingSignature")
+    large=true
   }}
     {{utils/manage-signatures
-            closeModal=(action "toggleProperty" "isManagingSignature")
+      closeModal=(action "toggleProperty" "isManagingSignature")
     }}
   {{/web-components/vl-modal}}
 {{/if}}

@@ -4,9 +4,9 @@
     <div class="vlc-container-center">
       {{utils/logo-header}}
       {{newsletter/newsletter-meeting
-              definite=definite
-              title=(await title)
-              meeting=(await model.meeting)
+        definite=definite
+        title=(await title)
+        meeting=(await model.meeting)
       }}
       <h2 class="vl-title vl-title--h2">
         {{t "agendaitems-subtitle"}}
@@ -15,19 +15,19 @@
         {{#each (await model.groups) as |group|}}
           {{#each group.agendaitems as |agendaitem|}}
             {{newsletter/newsletter-item
-                    agenda=(await model.agenda)
-                    itemIndex=agendaitem.itemIndex
-                    definite=definite
-                    agendaitem=agendaitem
+              agenda=(await model.agenda)
+              itemIndex=agendaitem.itemIndex
+              definite=definite
+              agendaitem=agendaitem
             }}
           {{/each}}
         {{/each}}
       {{else}}
         {{#each (await model.agendaitems) as |agendaitem|}}
           {{newsletter/newsletter-item
-                  agenda=(await model.agenda)
-                  definite=definite
-                  agendaitem=agendaitem
+            agenda=(await model.agenda)
+            definite=definite
+            agendaitem=agendaitem
           }}
         {{/each}}
       {{/if}}
@@ -37,9 +37,9 @@
         </h2>
         {{#each (await model.announcements) as |announcement|}}
           {{newsletter/newsletter-item
-                  agenda=(await model.agenda)
-                  definite=definite
-                  agendaitem=announcement
+            agenda=(await model.agenda)
+            definite=definite
+            agendaitem=announcement
           }}
         {{/each}}
       {{/if}}

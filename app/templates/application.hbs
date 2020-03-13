@@ -36,18 +36,18 @@
     <div class="toasts-container">
       {{#each messages as |errorMessage|}}
         {{utils/custom-messages-toasts
-                errorMessage=errorMessage
-                closeErrorMessage=(action "closeErrorMessage")
+          errorMessage=errorMessage
+          closeErrorMessage=(action "closeErrorMessage")
         }}
       {{/each}}
     </div>
   {{/if}}
   {{#if showHeader}}
     {{m-header
-            selectedOption=selectedOption
-            options=options
-            navigateToRoute=(action "navigateToRoute")
-            navigateToLogin=(action "navigateToLogin")
+      selectedOption=selectedOption
+      options=options
+      navigateToRoute=(action "navigateToRoute")
+      navigateToLogin=(action "navigateToLogin")
     }}
   {{/if}}
 {{/if}}

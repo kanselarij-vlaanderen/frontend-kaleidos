@@ -11,17 +11,17 @@
 
   {{#if (get (await agendaitems) 'length')}}
     {{agenda/printable-agenda-list/list-section
-            items=(await agendaitems)
-            letter="A"
-            title=(t "agendaitems")
+      items=(await agendaitems)
+      letter="A"
+      title=(t "agendaitems")
     }}
   {{/if}}
 
   {{#if (get (await announcements) 'length')}}
     {{agenda/printable-agenda-list/list-section
-            items=(await announcements)
-            letter="B"
-            title=(t "announcements-subtitle")
+      items=(await announcements)
+      letter="B"
+      title=(t "announcements-subtitle")
     }}
   {{/if}}
 </div>

@@ -36,14 +36,14 @@
 </div>
 {{#if isEditing}}
   {{#web-components/vl-modal
-          isOverlay=true
-          closeModal=(action "close")
-          title=editTitle
+    isOverlay=true
+    closeModal=(action "close")
+    title=editTitle
   }}
     {{newsletter/edit-newsletter
-            newsletter=(await meeting.newsletter)
-            selectedMeeting=meeting
-            close=(action "close")
+      newsletter=(await meeting.newsletter)
+      selectedMeeting=meeting
+      close=(action "close")
     }}
   {{/web-components/vl-modal}}
 {{/if}}

@@ -10,8 +10,8 @@
       >
         <i class="vl-button__icon vl-vi vl-vi-document"></i>
         {{#attach-popover
-                placement="bottom"
-                class="ember-attacher-popper ember-attacher-popper-small"
+          placement="bottom"
+          class="ember-attacher-popper ember-attacher-popper-small"
         }}
           {{t "no-nota"}}
         {{/attach-popover}}
@@ -26,20 +26,20 @@
   {{else}}
     <div class="vl-loader" role="alert" aria-busy="true">
       {{#attach-popover
-              placement="bottom"
-              class="ember-attacher-popper ember-attacher-popper-small"
+        placement="bottom"
+        class="ember-attacher-popper ember-attacher-popper-small"
       }}
         {{t "nota-loading-text"}}
       {{/attach-popover}}
     </div>
   {{/if}}
   {{#link-to
-          "cases.case.subcases.subcase.overview"
-          (await row.subcase.case.id)
-          (await row.subcase.id)
-          target="_blank"
-          bubbles=false
-          class="vl-button vl-button--link vl-button--icon"
+    "cases.case.subcases.subcase.overview"
+    (await row.subcase.case.id)
+    (await row.subcase.id)
+    target="_blank"
+    bubbles=false
+    class="vl-button vl-button--link vl-button--icon"
   }}
     <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
   {{/link-to}}

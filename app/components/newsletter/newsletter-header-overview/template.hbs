@@ -24,32 +24,32 @@
                 <ul class="vlc-tabs-reverse" role="tablist">
                   <li class="vlc-tabs-reverse__item">
                     {{#link-to
-                            "print-overviews.newsletter.agendaitems"
-                            agenda
-                            class="border-left vlc-tabs-reverse__link"
-                            activeClass="vlc-tabs-reverse__link--active"
+                      "print-overviews.newsletter.agendaitems"
+                      agenda
+                      class="border-left vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
                     }}
                       {{t "overview"}}
                     {{/link-to}}
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     {{#link-to
-                            "print-overviews.newsletter.overview"
-                            agenda.id
-                            (query-params definite=false)
-                            class="vlc-tabs-reverse__link"
-                            activeClass="vlc-tabs-reverse__link--active"
+                      "print-overviews.newsletter.overview"
+                      agenda.id
+                      (query-params definite=false)
+                      class="vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
                     }}
                       {{t "design"}}
                     {{/link-to}}
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     {{#link-to
-                            "print-overviews.newsletter.overview"
-                            agenda.id
-                            (query-params definite=true)
-                            class="vlc-tabs-reverse__link"
-                            activeClass="vlc-tabs-reverse__link--active"
+                      "print-overviews.newsletter.overview"
+                      agenda.id
+                      (query-params definite=true)
+                      class="vlc-tabs-reverse__link"
+                      activeClass="vlc-tabs-reverse__link--active"
                     }}
                       {{t "definite"}}
                     {{/link-to}}
@@ -85,11 +85,11 @@
             {{/if}}
             {{t "actions"}}
             {{#attach-popover
-                    class="ember-attacher-popper vlc-hide-on-print"
-                    hideOn="clickout click"
-                    showOn="click"
-                    animation="shift"
-                    placement="bottom" as |attacher|
+              class="ember-attacher-popper vlc-hide-on-print"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom" as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
                 {{#if isEditor}}
@@ -191,20 +191,20 @@
 </div>
 {{#if isVerifying}}
   {{web-components/vl-modal-verify
-          title=(t "send-campaign")
-          buttonType="warning"
-          isLoading=isLoading
-          verifyButtonText=(t "send-campaign")
-          message=(t "send-campaign-warning")
-          cancel=(action "toggleIsVerifying")
-          verify=(action "sendCampaign")
+    title=(t "send-campaign")
+    buttonType="warning"
+    isLoading=isLoading
+    verifyButtonText=(t "send-campaign")
+    message=(t "send-campaign-warning")
+    cancel=(action "toggleIsVerifying")
+    verify=(action "sendCampaign")
   }}
 {{/if}}
 {{#if (or testCampaignIsLoading newsletterHTML)}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "send-test-campaign")
-          closeModal=(action "clearNewsletterHTML")
+    isOverlay=true
+    title=(t "send-test-campaign")
+    closeModal=(action "clearNewsletterHTML")
   }}
     <div class="vl-modal-dialog__content">
       {{#if testCampaignIsLoading}}

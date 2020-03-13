@@ -13,9 +13,9 @@
       </a>
     {{else}}
       {{#link-to
-              "agenda.agendaitems.agendaitem"
-              (await firstAgendaItemOfAgenda.id)
-              class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}"
+        "agenda.agendaitems.agendaitem"
+        (await firstAgendaItemOfAgenda.id)
+        class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}"
       }}
         {{t "detail"}}
       {{/link-to}}

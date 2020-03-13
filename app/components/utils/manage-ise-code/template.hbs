@@ -1,18 +1,18 @@
 {{#web-components/vl-modal
-        isOverlay=true
-        title=modalTitle
-        closeModal=(action "close")
+  isOverlay=true
+  title=modalTitle
+  closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
         {{utils/model-selector
-                modelName="ise-code"
-                searchField="name"
-                propertyToShow="nameToShow"
-                sortField="name"
-                selectedItems=item
-                selectModel=(action "selectModel")
+          modelName="ise-code"
+          searchField="name"
+          propertyToShow="nameToShow"
+          sortField="name"
+          selectedItems=item
+          selectModel=(action "selectModel")
         }}
       </div>
     </div>
@@ -70,21 +70,21 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "government-field")}}
         {{utils/model-selector
-                modelName="government-field"
-                searchField="label"
-                propertyToShow="label"
-                sortField="label"
-                selectedItems=field
-                selectModel=(action "chooseField")
+          modelName="government-field"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=field
+          selectModel=(action "chooseField")
         }}
       </div>
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "add")
-            cancelAction=(action "toggleIsAdding")
-            saveAction=(action "createModel")
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add")
+      cancelAction=(action "toggleIsAdding")
+      saveAction=(action "createModel")
     }}
   {{/if}}
   {{#if isEditing}}
@@ -100,21 +100,21 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "government-field")}}
         {{utils/model-selector
-                modelName="government-field"
-                searchField="label"
-                propertyToShow="label"
-                sortField="label"
-                selectedItems=field
-                selectModel=(action "chooseField")
+          modelName="government-field"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=field
+          selectModel=(action "chooseField")
         }}
       </div>
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "save")
-            cancelAction=(action "toggleIsEditing")
-            saveAction=(action "editModel")
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "save")
+      cancelAction=(action "toggleIsEditing")
+      saveAction=(action "editModel")
     }}
   {{/if}}
 {{/web-components/vl-modal}}

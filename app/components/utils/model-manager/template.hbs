@@ -1,18 +1,18 @@
 {{#web-components/vl-modal
-        isOverlay=true
-        title=modalTitle
-        closeModal=(action "close")
+  isOverlay=true
+  title=modalTitle
+  closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
         {{utils/model-selector
-                modelName=modelName
-                searchField="label"
-                propertyToShow="label"
-                sortField="label"
-                selectedItems=item
-                selectModel=(action "selectModel")
+          modelName=modelName
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=item
+          selectModel=(action "selectModel")
         }}
       </div>
     </div>
@@ -69,11 +69,11 @@
       </div>
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "add")
-            cancelAction=(action "toggleIsAdding")
-            saveAction=(action "createModel")
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add")
+      cancelAction=(action "toggleIsAdding")
+      saveAction=(action "createModel")
     }}
   {{/if}}
   {{#if isEditing}}
@@ -84,11 +84,11 @@
       </div>
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "save")
-            cancelAction=(action "toggleIsEditing")
-            saveAction=(action "editModel")
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "save")
+      cancelAction=(action "toggleIsEditing")
+      saveAction=(action "editModel")
     }}
   {{/if}}
 {{/web-components/vl-modal}}

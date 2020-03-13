@@ -1,16 +1,16 @@
 {{#light-table
-        table
-        tableClassNames="vl-data-table vl-data-table vl-data-table--hover vl-data-table--zebra vl-data-table--align-middle" as |t|
+  table
+  tableClassNames="vl-data-table vl-data-table vl-data-table--hover vl-data-table--zebra vl-data-table--align-middle" as |t|
 }}
   {{t.head
-          onColumnClick=(action "onColumnClick")
-          iconSortable="vl-data-table__header-title__sort-icon vl-vi vl-vi-expand-vertical"
-          iconAscending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
-          iconDescending="vl-data-table__header-title__sort-icon vl-vi vl-vi-arrow-up"
+    onColumnClick=(action "onColumnClick")
+    iconSortable="vl-data-table__header-title__sort-icon vl-vi vl-vi-expand-vertical"
+    iconAscending="vl-data-table__header-title__sort-icon vl-vi vl-vi-long-arrow"
+    iconDescending="vl-data-table__header-title__sort-icon vl-vi vl-vi-arrow-up"
   }}
   {{#t.body
-          multiRowExpansion=false
-          onScrolledToBottom=(action "onScrolledToBottom") as |body|
+    multiRowExpansion=false
+    onScrolledToBottom=(action "onScrolledToBottom") as |body|
   }}
     {{#body.expanded-row as |row|}}
       {{yield row}}

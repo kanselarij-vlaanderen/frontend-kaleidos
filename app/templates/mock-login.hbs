@@ -3,7 +3,7 @@
   <div id="main" itemprop="mainContentOfPage" role="main" tabindex="-1" class="main-content">
     <header class="content-header content-header--small content-header--half-image u-spacer--large">
       <div class="content-header__wrapper">
-        <picture class="content-header__bg"><img sizes="50vw" srcset="" alt="" title=""></picture>
+        <picture class="content-header__bg"><img sizes="50vw" srcset="" alt="" role="none" title=""></picture>
         <div class="layout layout--wide">
           <div class="content-header__content">
             <div class="content-header__logo-wrapper">
@@ -19,8 +19,9 @@
         <div class="col--1-1 col--10-12--m col--6-12--l">
           <h2 class="h4 u-spacer">Kies een gebruiker om mee in te loggen.</h2>
           <input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
-                 placeholder="Gebruikersnaam..." value={{role}} autofocus oninput={{perform updateSearch
-                                                                                            value='target.value'}}>
+                 placeholder="Gebruikersnaam..."
+                 value={{role}} autofocus
+                 oninput={{perform updateSearch value='target.value'}}>
           {{#mock-login as |login|}}
             {{#if queryStore.isRunning}}
               <div class="loader-wrapper">
@@ -30,7 +31,10 @@
               </div>
             {{else}}
               {{#if login.errorMessage}}
-                {{wu-alert title=login.errorMessage isWarning=true}}
+                {{wu-alert
+                  title=login.errorMessage
+                  isWarning=true
+                }}
               {{/if}}
               {{#login.each-account accounts=model as |account|}}
                 {{#wu-info-tile class="u-spacer--tiny" as |i|}}
@@ -40,8 +44,12 @@
                 {{/wu-info-tile}}
               {{/login.each-account}}
               {{number-pagination
-                      page=page size=size nbOfItems=model.length
-                      total=model.meta.count links=model.meta.pagination}}
+                page=page
+                size=size
+                nbOfItems=model.length
+                total=model.meta.count
+                links=model.meta.pagination
+              }}
             {{/if}}
           {{/mock-login}}
         </div>

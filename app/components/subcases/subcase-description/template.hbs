@@ -25,10 +25,10 @@
           {{else}}
             <div class="vlc-status-timeline__text">
               {{subcase-timeline-item-text
-                      label=(await phase.code.label)
-                      phase=phase
-                      onAgendaInfo=(await subcase.onAgendaInfo)
-                      isPostponed=(await subcase.isPostponed)
+                label=(await phase.code.label)
+                phase=phase
+                onAgendaInfo=(await subcase.onAgendaInfo)
+                isPostponed=(await subcase.isPostponed)
               }}
             </div>
           {{/if}}
@@ -58,8 +58,8 @@
           {{#if (await subcase.requestedForMeeting)}}
             {{t "requested-for-agenda"}}
             {{moment-format
-                    subcase.requestedForMeeting.plannedStart
-                    "DD MMMM YYYY"
+              subcase.requestedForMeeting.plannedStart
+              "DD MMMM YYYY"
             }}
           {{else}}
             {{t "not-yet-requested"}}
@@ -82,11 +82,11 @@
             {{else}}
               {{#if (await subcase.onAgendaInfo)}}
                 {{#link-to
-                        "agenda.agendaitems.agendaitem"
-                        (await latestMeetingId)
-                        (await latestAgendaItemId)
-                        (query-params selectedAgenda=(await latestAgendaId))
-                        class="vl-link"
+                  "agenda.agendaitems.agendaitem"
+                  (await latestMeetingId)
+                  (await latestAgendaItemId)
+                  (query-params selectedAgenda=(await latestAgendaId))
+                  class="vl-link"
                 }}
                   {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
                 {{/link-to}}
@@ -146,23 +146,23 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcase-type")}}
         {{utils/model-selector
-                modelName="case-type"
-                searchField="label"
-                sortField="label"
-                propertyToShow="label"
-                selectedItems=remarkType
-                selectModel=(action "selectRemarkType")
+          modelName="case-type"
+          searchField="label"
+          sortField="label"
+          propertyToShow="label"
+          selectedItems=remarkType
+          selectModel=(action "selectRemarkType")
         }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "subcase-type-dropdown")}}
         {{utils/model-selector
-                modelName="subcase-type"
-                searchField="label"
-                sortField="label"
-                propertyToShow="label"
-                selectedItems=type
-                selectModel=(action "selectType")
+          modelName="subcase-type"
+          searchField="label"
+          sortField="label"
+          propertyToShow="label"
+          selectedItems=type
+          selectModel=(action "selectType")
         }}
       </div>
       <div class="vlc-input-field-block">
@@ -178,9 +178,9 @@
       </div>
       <div class="vlc-toolbar__left">
         {{web-components/vl-save-button
-                text=(t "save")
-                isLoading=isLoading
-                saveAction=(action "saveChanges")
+          text=(t "save")
+          isLoading=isLoading
+          saveAction=(action "saveChanges")
         }}
       </div>
     </div>

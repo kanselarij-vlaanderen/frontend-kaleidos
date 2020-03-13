@@ -19,8 +19,8 @@
     {{else if (gt (await item.documentsLength) 0)}}
       {{#each (await item.documents) as |document|}}
         {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-                document=document
-                item=item
+          document=document
+          item=item
         }}
       {{/each}}
     {{else}}
@@ -30,9 +30,9 @@
     {{/if}}
   {{else}}
     {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
-            documents=(await item.documents)
-            item=item
-            cancelForm=(action "cancelEditing")
+      documents=(await item.documents)
+      item=item
+      cancelForm=(action "cancelEditing")
     }}
   {{/if}}
   {{#if (is-pending item.documents)}}
@@ -61,8 +61,8 @@
     {{else if (gt (await item.linkedDocumentsLength) 0)}}
       {{#each (await item.linkedDocuments) as |document|}}
         {{agenda/agendaitem/agendaitem-case/subcase-document/linked-document-link
-                document=document
-                item=item
+          document=document
+          item=item
         }}
       {{/each}}
     {{else}}
@@ -88,18 +88,18 @@
 </div>
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
-          closeModal=(action "deleteAll")
-          isOverlay=true
-          large=true
-          title=(t "document-add")
+    closeModal=(action "deleteAll")
+    isOverlay=true
+    large=true
+    title=(t "document-add")
   }}
     <div class="vl-modal-dialog__content">
       {{#if showDetail}}
         <div class="vl-u-align-right vl-u-spacer-extended-s">
           {{#link-to
-                  "cases.case.subcases.subcase.overview"
-                  item.id
-                  target="_blank"
+            "cases.case.subcases.subcase.overview"
+            item.id
+            target="_blank"
           }}
             {{t "to-subcase"}}
           {{/link-to}}
@@ -110,34 +110,34 @@
         <div class="upload-container">
           {{#each documentsInCreation as |doc|}}
             {{#ember-kaleidos-webuniversum/vl-uploaded-document
-                    name=doc.file.filename
-                    extension=doc.file.extension
-                    size=doc.file.size
-                    downloadName=doc.file.filename
-                    downloadLink=(concat
-                            doc.file.downloadLink
-                            "?name="
-                            doc.file.filename
-                    )
-                    delete=(action "delete" doc)
+              name=doc.file.filename
+              extension=doc.file.extension
+              size=doc.file.size
+              downloadName=doc.file.filename
+              downloadLink=(concat
+                      doc.file.downloadLink
+                      "?name="
+                      doc.file.filename
+              )
+              delete=(action "delete" doc)
             }}
               <div class="metadata-container">
                 <div class="vlc-input-field-block">
                   {{web-components/vl-form-label value=(t "document-name")}}
                   {{web-components/vl-form-input
-                          width="4"
-                          value=(mut doc.name)
+                    width="4"
+                    value=(mut doc.name)
                   }}
                 </div>
                 <div class="vlc-input-field-block">
                   {{web-components/vl-form-label value=(t "document-type")}}
                   {{utils/model-selector
-                          modelName="document-type"
-                          searchField="label"
-                          propertyToShow="label"
-                          sortField="priority"
-                          selectedItems=doc.documentContainer.type
-                          selectModel=(action "chooseDocumentType" doc.documentContainer)
+                    modelName="document-type"
+                    searchField="label"
+                    propertyToShow="label"
+                    sortField="priority"
+                    selectedItems=doc.documentContainer.type
+                    selectModel=(action "chooseDocumentType" doc.documentContainer)
                   }}
                 </div>
               </div>
@@ -149,35 +149,35 @@
       {{/if}}
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "document-add")
-            cancelAction=(action "deleteAll")
-            saveAction=(action "saveDocuments")
-            disableSave=(eq model.length 0)
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "document-add")
+      cancelAction=(action "deleteAll")
+      saveAction=(action "saveDocuments")
+      disableSave=(eq model.length 0)
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isLinkingOldDocument}}
   {{#web-components/vl-modal
-          closeModal=(action "toggleIsLinkingOldDocument")
-          isOverlay=true
-          large=true
-          title=(t "document-link-old")
+    closeModal=(action "toggleIsLinkingOldDocument")
+    isOverlay=true
+    large=true
+    title=(t "document-link-old")
   }}
     <div class="vl-modal-dialog__content">
       {{components/utils/add-existing-document
-              add=(action "link")
-              delete=(action "unlink")
+        add=(action "link")
+        delete=(action "unlink")
       }}
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "document-link-old")
-            cancelAction=(action "toggleIsLinkingOldDocument")
-            saveAction=(action "linkDocuments")
-            disableSave=(eq documentsToLink.length 0)
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "document-link-old")
+      cancelAction=(action "toggleIsLinkingOldDocument")
+      saveAction=(action "linkDocuments")
+      disableSave=(eq documentsToLink.length 0)
     }}
   {{/web-components/vl-modal}}
 {{/if}}

@@ -54,11 +54,10 @@
         {{#if isShowingVersions}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
-              {{#each myReverseSortedVersions as |documentVersion|
-              }}
+              {{#each myReverseSortedVersions as |documentVersion|}}
                 {{web-components/vl-document
-                        documentVersion=documentVersion
-                        item=item
+                  documentVersion=documentVersion
+                  item=item
                 }}
               {{/each}}
             </div>
@@ -70,10 +69,10 @@
 </div>
 {{#if isVerifyingUnlink}}
   {{web-components/vl-modal-verify
-          title=(t "document-unlink")
-          message=(t "unlink-document-message")
-          cancel=(action "cancel")
-          verify=(action "verify")
-          verifyButtonText=(t "unlink")
+    title=(t "document-unlink")
+    message=(t "unlink-document-message")
+    cancel=(action "cancel")
+    verify=(action "verify")
+    verifyButtonText=(t "unlink")
   }}
 {{/if}}

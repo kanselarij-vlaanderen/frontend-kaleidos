@@ -1,12 +1,12 @@
 {{#if (not isAdding)}}
   <div class="vl-modal-dialog__content">
     {{utils/model-selector
-            modelName="signature"
-            searchField="name"
-            propertyToShow="name"
-            sortField="name"
-            selectedItems=(await selectedSignature)
-            selectModel=(action "selectSignature")
+      modelName="signature"
+      searchField="name"
+      propertyToShow="name"
+      sortField="name"
+      selectedItems=(await selectedSignature)
+      selectModel=(action "selectSignature")
     }}
     <div class="vl-u-spacer--small"/>
     <div>
@@ -16,8 +16,8 @@
   </div>
   {{#if isEditing}}
     {{utils/edit-signature
-            signatureToEdit=(await selectedSignature)
-            closeModal=(action "toggleIsEditing")
+      signatureToEdit=(await selectedSignature)
+      closeModal=(action "toggleIsEditing")
     }}
   {{else}}
     <div class="vlc-navbar vlc-navbar--bordered-top">

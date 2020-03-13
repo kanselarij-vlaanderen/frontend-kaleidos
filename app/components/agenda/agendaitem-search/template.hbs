@@ -5,11 +5,11 @@
         <div class="vl-input-field--inline vl-u-display-flex vl-u-flex-align-center vl-u-flex-space-between"
         >
           {{input
-                  value=value
-                  placeholder=(t "search-agenda-items")
-                  key-up=(action "emptySearchTask" value)
-                  key-press=(perform searchTask)
-                  class="vl-input-field vl-input-field__input"
+            value=value
+            placeholder=(t "search-agenda-items")
+            key-up=(action "emptySearchTask" value)
+            key-press=(perform searchTask)
+            class="vl-input-field vl-input-field__input"
           }}
           <button class="vl-input-field__submit vl-button" {{action "search"}}>
             <i class="vl-vi vl-vi-magnifier"></i>

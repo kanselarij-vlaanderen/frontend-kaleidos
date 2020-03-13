@@ -67,14 +67,14 @@
   </div>
 {{else if isAdding}}
   {{utils/add-minister-modal
-          cancel=(action "cancel")
-          saveChanges=(action "saveChanges")
+    cancel=(action "cancel")
+    saveChanges=(action "saveChanges")
   }}
 {{else if isEditingMandateeRow}}
   {{utils/edit-minister-modal
-          rowToShow=rowToShow
-          selectedMandatee=rowToShow.mandatee
-          cancel=(action "cancel")
-          saveChanges=(action "saveChanges")
+    rowToShow=rowToShow
+    selectedMandatee=rowToShow.mandatee
+    cancel=(action "cancel")
+    saveChanges=(action "saveChanges")
   }}
 {{/if}}

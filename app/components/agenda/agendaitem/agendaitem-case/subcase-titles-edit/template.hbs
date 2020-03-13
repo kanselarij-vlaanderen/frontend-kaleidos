@@ -8,14 +8,14 @@
   <div class="vl-u-spacer-extended-bottom-s">
     {{web-components/vl-form-label value=(t "publicity")}}
     {{utils/model-selector
-            modelName="access-level"
-            allowClear=true
-            searchField="label"
-            propertyToShow="label"
-            readOnly=confidential
-            sortField="label"
-            selectedItems=accessLevel
-            selectModel=(action "setAccessLevel")
+      modelName="access-level"
+      allowClear=true
+      searchField="label"
+      propertyToShow="label"
+      readOnly=confidential
+      sortField="label"
+      selectedItems=accessLevel
+      selectModel=(action "setAccessLevel")
     }}
   </div>
 {{/if}}
@@ -55,8 +55,8 @@
     {{t "cancel"}}
   </a>
   {{web-components/vl-save-button
-          text=(t "save")
-          isLoading=isLoading
-          saveAction=(action "saveChanges")
+    text=(t "save")
+    isLoading=isLoading
+    saveAction=(action "saveChanges")
   }}
 </div>

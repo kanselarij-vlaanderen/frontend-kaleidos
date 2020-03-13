@@ -4,15 +4,17 @@
       {{#if (not (or from to))}}
         <div class="vl-u-spacer--large">
           {{agenda/future-agendas
-                  meetings=activeAgendas
-                  type="active"
-                  emptyText=(t "no-active-agenda")
-                  title=(t "active-agenda")
+            meetings=activeAgendas
+            type="active"
+            emptyText=(t "no-active-agenda")
+            title=(t "active-agenda")
           }}
         </div>
       {{else}}
-        {{changes-alert message=(t "filtered-agendas") buttonText=(t "clear-filter")
-                        clearAction=(action "clearFilter")}}
+        {{changes-alert
+          message=(t "filtered-agendas")
+          buttonText=(t "clear-filter")
+          clearAction=(action "clearFilter")}}
       {{/if}}
 
 
@@ -35,11 +37,11 @@
                 <div class="vlc-input-field-group vlc-input-field-group--gmeeting"
                 >
                   {{input
-                          type="text"
-                          id=id
-                          class="vl-input-field"
-                          value=dateFilter
-                          placeholder="bv. 02/2018"
+                    type="text"
+                    id=id
+                    class="vl-input-field"
+                    value=dateFilter
+                    placeholder="bv. 02/2018"
                   }}
                 </div>
                 <div class="vlc-input-field-group">
@@ -56,27 +58,27 @@
           <div class="vl-u-spacer-extended-bottom-l">
             {{#if (await model)}}
               {{#data-table
-                      content=(await model)
-                      class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-                      page=page
-                      size=size
-                      sort=sort
-                      isLoading=isLoadingModel
-                      noDataMessage=(t "no-results-found")
-                      onClickRow=(action "onClickRow") as |table|
+                content=(await model)
+                class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+                page=page
+                size=size
+                sort=sort
+                isLoading=isLoadingModel
+                noDataMessage=(t "no-results-found")
+                onClickRow=(action "onClickRow") as |table|
               }}
                 {{#table.content as |c|}}
                   {{#c.header}}
                     {{th-sortable
-                            class="vl-data-table-col-3 vl-data-table__header-title"
-                            currentSorting=sort
-                            field="planned-start"
-                            label=(t "agenda")
+                      class="vl-data-table-col-3 vl-data-table__header-title"
+                      currentSorting=sort
+                      field="planned-start"
+                      label=(t "agenda")
                     }}
                     {{th-sortable
-                            class="vl-data-table-col-2 vl-data-table__header-title"
-                            field="agendas"
-                            label=(t "agenda-version")
+                      class="vl-data-table-col-2 vl-data-table__header-title"
+                      field="agendas"
+                      label=(t "agenda-version")
                     }}
                     <th
                             class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
@@ -84,16 +86,16 @@
                       {{t "latest-modified"}}
                     </th>
                     {{th-sortable
-                            class="vl-data-table-col-2 vl-data-table__header-title"
-                            currentSorting=sort
-                            field="is-final"
-                            label=(t "status")
+                      class="vl-data-table-col-2 vl-data-table__header-title"
+                      currentSorting=sort
+                      field="is-final"
+                      label=(t "status")
                     }}
                     {{th-sortable
-                            class="vl-data-table-col-2 vl-data-table__header-title"
-                            currentSorting=sort
-                            field="kind"
-                            label=(t "kind")
+                      class="vl-data-table-col-2 vl-data-table__header-title"
+                      currentSorting=sort
+                      field="kind"
+                      label=(t "kind")
                     }}
                     <th class="vl-data-table-col-1"></th>
                   {{/c.header}}

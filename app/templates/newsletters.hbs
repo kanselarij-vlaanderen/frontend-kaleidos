@@ -5,23 +5,23 @@
     <div class="vlc-scroll-wrapper__body">
       <div class="vl-u-spacer-extended-l">
         {{#data-table
-                content=model
-                class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-                page=page
-                size=size
-                sort=sort
-                enableSizes=true
-                isLoading=isLoadingModel
-                noDataMessage=(t "no-results-found")
-                onClickRow=(action "navigateToNewsletter") as |table|
+          content=model
+          class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+          page=page
+          size=size
+          sort=sort
+          enableSizes=true
+          isLoading=isLoadingModel
+          noDataMessage=(t "no-results-found")
+          onClickRow=(action "navigateToNewsletter") as |table|
         }}
           {{#table.content as |c|}}
             {{#c.header}}
               {{th-sortable
-                      class="vl-data-table-col-5 vl-data-table__header-title"
-                      currentSorting=sort
-                      field="planned-start"
-                      label=(t "newsletter")
+                class="vl-data-table-col-5 vl-data-table__header-title"
+                currentSorting=sort
+                field="planned-start"
+                label=(t "newsletter")
               }}
               <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
               >
@@ -57,8 +57,8 @@
                 {{else if (await meeting.mailCampaign)}}
                   {{#if (await meeting.mailCampaign.isSent)}}
                     {{moment-format
-                            (await meeting.mailCampaign.sentAt)
-                            "DD.MM.YYYY [om] HH:mm"
+                      (await meeting.mailCampaign.sentAt)
+                      "DD.MM.YYYY [om] HH:mm"
                     }}
                   {{else}}
                     {{t "not-sent-yet"}}
@@ -75,17 +75,17 @@
                   ></div>
                 {{else}}
                   {{moment-format
-                          (await meeting.latestAgenda.modified)
-                          "DD.MM.YYYY HH:mm"
+                    (await meeting.latestAgenda.modified)
+                    "DD.MM.YYYY HH:mm"
                   }}
                 {{/if}}
               </td>
               <td class="vl-u-align-center">
                 {{#link-to
-                        "print-overviews.newsletter.agendaitems"
-                        meeting.id
-                        meeting.latestAgenda.id
-                        class="vl-button vl-button--link vl-button--icon"
+                  "print-overviews.newsletter.agendaitems"
+                  meeting.id
+                  meeting.latestAgenda.id
+                  class="vl-button vl-button--link vl-button--icon"
                 }}
                   <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
                 {{/link-to}}

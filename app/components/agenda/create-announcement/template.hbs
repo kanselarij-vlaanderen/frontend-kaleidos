@@ -1,7 +1,7 @@
 {{#web-components/vl-modal
-        closeModal=(action "closeDialog")
-        isOverlay=true
-        title=(t "create-announcement")
+  closeModal=(action "closeDialog")
+  isOverlay=true
+  title=(t "create-announcement")
 }}
   <div class="vl-modal-dialog__content">
     <div class="vlc-scroll-wrapper__body">
@@ -21,16 +21,16 @@
             <div class="upload-container">
               {{#each documentsInCreation as |doc|}}
                 {{ember-kaleidos-webuniversum/vl-uploaded-document
-                        name=doc.file.filename
-                        extension=doc.file.extension
-                        size=doc.file.size
-                        downloadName=doc.file.filename
-                        downloadLink=(concat
-                                doc.file.downloadLink
-                                "?name="
-                                doc.file.filename
-                        )
-                        delete=(action "delete" doc.documentContainer)
+                  name=doc.file.filename
+                  extension=doc.file.extension
+                  size=doc.file.size
+                  downloadName=doc.file.filename
+                  downloadLink=(concat
+                          doc.file.downloadLink
+                          "?name="
+                          doc.file.filename
+                  )
+                  delete=(action "delete" doc.documentContainer)
                 }}
               {{/each}}
             </div>
@@ -42,11 +42,11 @@
     </div>
   </div>
   {{web-components/vl-modal-footer
-          isLoading=isLoading
-          cancelButtonText=(t "cancel")
-          saveButtonText=(t "create-announcement")
-          disableSave=creatingAnnouncement
-          cancelAction=(action "closeDialog")
-          saveAction=(action "createAnnouncement")
+    isLoading=isLoading
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "create-announcement")
+    disableSave=creatingAnnouncement
+    cancelAction=(action "closeDialog")
+    saveAction=(action "createAnnouncement")
   }}
 {{/web-components/vl-modal}}

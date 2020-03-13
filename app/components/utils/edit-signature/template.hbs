@@ -2,8 +2,8 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "new-person")}}
     {{utils/create-person-selector
-            selectedItems=selectedPerson
-            selectModel=(action "personSelected")
+      selectedItems=selectedPerson
+      selectModel=(action "personSelected")
     }}
   </div>
   <div class="vlc-input-field-block">
@@ -18,8 +18,8 @@
     {{web-components/vl-form-label value=(t "signature-file")}}
     {{#if (not uploadedFile)}}
       {{file-uploader
-              multipleFiles=false
-              uploadedFile=(action "getUploadedFile")
+        multipleFiles=false
+        uploadedFile=(action "getUploadedFile")
       }}
     {{else}}
       <div class="vlc-preview-container">
@@ -32,9 +32,9 @@
   </div>
 </div>
 {{web-components/vl-modal-footer
-        isLoading=isLoading
-        cancelButtonText=(t "cancel")
-        saveButtonText=(t "save")
-        cancelAction=(action "closeModal")
-        saveAction=(action "saveChanges")
+  isLoading=isLoading
+  cancelButtonText=(t "cancel")
+  saveButtonText=(t "save")
+  cancelAction=(action "closeModal")
+  saveAction=(action "saveChanges")
 }}

@@ -68,9 +68,9 @@
             {{else}}
               <div class="vlc-input-field-block">
                 {{web-components/vl-checkbox
-                        value=(not (is-empty mandateeApproval.approval))
-                        label=(t "approval-mandatee")
-                        toggle=(action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)
+                  value=(not (is-empty mandateeApproval.approval))
+                  label=(t "approval-mandatee")
+                  toggle=(action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)
                 }}
               </div>
             {{/if}}
@@ -88,9 +88,9 @@
         {{t "cancel"}}
       </a>
       {{web-components/vl-save-button
-              text=(t "save")
-              isLoading=isLoading
-              saveAction=(action "saveChanges" item.approvals)
+        text=(t "save")
+        isLoading=isLoading
+        saveAction=(action "saveChanges" item.approvals)
       }}
     </div>
   {{/if}}

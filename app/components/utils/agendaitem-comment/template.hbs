@@ -28,11 +28,11 @@
               {{t "more-options"}}
             </span>
             {{#attach-popover
-                    class="ember-attacher-popper"
-                    hideOn="clickout click"
-                    showOn="click"
-                    animation="shift"
-                    placement="bottom" as |attacher|
+              class="ember-attacher-popper"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom" as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
                 <li class="vlc-dropdown-menu__item">
@@ -62,9 +62,9 @@
 
 {{#if isVerifyingDelete}}
   {{web-components/vl-modal-verify
-          title=(t "delete-comment")
-          message=(t "delete-comment-message")
-          cancel=(action "cancel")
-          verify=(action "verify")
+    title=(t "delete-comment")
+    message=(t "delete-comment-message")
+    cancel=(action "cancel")
+    verify=(action "verify")
   }}
 {{/if}}

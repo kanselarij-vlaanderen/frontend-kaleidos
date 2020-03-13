@@ -2,23 +2,23 @@
   <div class="confidentialities">
     <div class="confidential">
       {{web-components/vl-checkbox
-              value=item.confidential
-              label=(t "confidential")
-              toggle=(action "toggleConfidential")
+        value=item.confidential
+        label=(t "confidential")
+        toggle=(action "toggleConfidential")
       }}
     </div>
   </div>
 {{/if}}
 {{#if (not isEditing)}}
   {{agenda/agendaitem/agendaitem-case/subcase-titles
-          item=item
-          shouldShowDetails=(or isRemark (and isAgendaItem (await item.subcase)) isSubcase)
-          toggleIsEditing=(action "toggleIsEditing")
+    item=item
+    shouldShowDetails=(or isRemark (and isAgendaItem (await item.subcase)) isSubcase)
+    toggleIsEditing=(action "toggleIsEditing")
   }}
 {{else}}
   {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
-          item=item
-          isEditing=isEditing
+    item=item
+    isEditing=isEditing
   }}
 {{/if}}
 {{#if item.showAsRemark}}

@@ -55,17 +55,17 @@
     </tr>
     </thead>
     {{#sortable-group
-            data-test-ministers-sortable-group
-            tagName="tbody"
-            onChange=(action "reorderItems" model) as |sortableGroup|
+      data-test-ministers-sortable-group
+      tagName="tbody"
+      onChange=(action "reorderItems" model) as |sortableGroup|
     }}
       {{#each model as |mandatee index|}}
         {{#sortable-item
-                tagName="tr"
-                model=mandatee
-                data-test-ministers-sortable-group-row=index
-                group=sortableGroup
-                handle=".mandatee-draggable-row"
+          tagName="tr"
+          model=mandatee
+          data-test-ministers-sortable-group-row=index
+          group=sortableGroup
+          handle=".mandatee-draggable-row"
         }}
           <td data-test-mandatee-fullDisplayName={{index}} class="mandatee-draggable-row">
             {{#if (is-pending mandatee.fullDisplayName)}}
@@ -120,52 +120,52 @@
 {{/if}}
 {{#if isEditingMandatee}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "manage-ministers")
-          closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
   }}
     {{utils/manage-mandatees
-            mandateeToEdit=mandateeToEdit
-            mandateesUpdated=(action "mandateesUpdated")
-            isEditing=isEditingMandatee
-            closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
+      mandateeToEdit=mandateeToEdit
+      mandateesUpdated=(action "mandateesUpdated")
+      isEditing=isEditingMandatee
+      closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isResigningMandatee}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "manage-ministers")
-          closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
   }}
     {{utils/manage-mandatees
-            mandateeToEdit=mandateeToEdit
-            mandateesUpdated=(action "mandateesUpdated")
-            isResigning=isResigningMandatee
-            closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
+      mandateeToEdit=mandateeToEdit
+      mandateesUpdated=(action "mandateesUpdated")
+      isResigning=isResigningMandatee
+      closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isAddingMandatee}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "manage-ministers")
-          closeModal=(action "toggleIsAdding")
+    isOverlay=true
+    title=(t "manage-ministers")
+    closeModal=(action "toggleIsAdding")
   }}
     {{utils/create-mandatee model=model
-                            closeModal=(action "toggleIsAdding")
-                            mandateesUpdated=(action "mandateesUpdated")
+      closeModal=(action "toggleIsAdding")
+      mandateesUpdated=(action "mandateesUpdated")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isDeletingMandatee}}
   {{web-components/vl-modal-verify
-          title=(t "warning-title")
-          verifyButtonText=(t "delete")
-          message=(t "delete-mandatee-message")
-          cancel=(action "cancel")
-          verify=(action "deleteMandatee")
-          mandateesUpdated=(action "mandateesUpdated")
+    title=(t "warning-title")
+    verifyButtonText=(t "delete")
+    message=(t "delete-mandatee-message")
+    cancel=(action "cancel")
+    verify=(action "deleteMandatee")
+    mandateesUpdated=(action "mandateesUpdated")
   }}
 {{/if}}
 {{outlet}}

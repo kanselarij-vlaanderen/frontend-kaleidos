@@ -10,35 +10,35 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "add-people")}}
     {{utils/create-person-selector
-            selectedItems=mandateeToEdit.person
-            selectModel=(action "personSelected")
+      selectedItems=mandateeToEdit.person
+      selectModel=(action "personSelected")
     }}
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "start-date")}}
     {{web-components/vl-datepicker
-            selectedDate=startDate
-            dateChanged=(action "selectStartDate")
+      selectedDate=startDate
+      dateChanged=(action "selectStartDate")
     }}
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "end-date")}}
     {{web-components/vl-datepicker
-            selectedDate=endDate
-            dateChanged=(action "selectEndDate")
+      selectedDate=endDate
+      dateChanged=(action "selectEndDate")
     }}
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "ise-code")}}
     {{utils/model-selector
-            data-test-model-selector-iseCodes
-            modelName="ise-code"
-            searchField="name"
-            propertyToShow="nameToShow"
-            sortField="name"
-            multiSelect=true
-            selectedItems=iseCodes
-            selectModel=(action "chooseIseCodes")
+      data-test-model-selector-iseCodes
+      modelName="ise-code"
+      searchField="name"
+      propertyToShow="nameToShow"
+      sortField="name"
+      multiSelect=true
+      selectedItems=iseCodes
+      selectModel=(action "chooseIseCodes")
     }}
   </div>
 </div>
@@ -56,10 +56,10 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         {{web-components/vl-save-button
-                text=(t "save")
-                isLoading=isLoading
-                data-test-vl-save=true
-                saveAction=(action "saveChanges" mandateeToEdit)
+          text=(t "save")
+          isLoading=isLoading
+          data-test-vl-save=true
+          saveAction=(action "saveChanges" mandateeToEdit)
         }}
       </div>
     </div>

@@ -1,13 +1,13 @@
 <div class="vl-u-spacer-extended-l">
   <div class=""></div>
   {{#utils/agendaitem-table
-          model=model
-          sort=sort
-          page=page
-          filter=filter
-          include=include
-          size=size
-          columns=columns as |row|
+    model=model
+    sort=sort
+    page=page
+    filter=filter
+    include=include
+    size=size
+    columns=columns as |row|
   }}
     {{#if (is-pending row.decisions)}}
       {{web-components/vl-loader text=(t "decisions-loading-text")}}
@@ -26,10 +26,10 @@
         </div>
         {{#each (await row.decisions) as |decision|}}
           {{agenda/agendaitem/agendaitem-decision
-                  subcase=(await row.subcase)
-                  isTableRow=true
-                  decision=decision
-                  agendaitem=row
+            subcase=(await row.subcase)
+            isTableRow=true
+            decision=decision
+            agendaitem=row
           }}
         {{/each}}
       </div>

@@ -34,15 +34,15 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "date")}}
       {{web-components/vl-datepicker
-              value=currentSession.notes.startDate
-              dateChanged=(action "selectStartDate")
+        value=currentSession.notes.startDate
+        dateChanged=(action "selectStartDate")
       }}
     </div>
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "attendees")}}
       {{utils/mandatee-selector
-              selectedMandatees=currentSession.notes.attendees
-              chooseMandatee=(action "peopleSelected")
+        selectedMandatees=currentSession.notes.attendees
+        chooseMandatee=(action "peopleSelected")
       }}
     </div>
     {{!-- {{utils/text-template
@@ -66,9 +66,9 @@
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item">
           {{web-components/vl-save-button
-                  text=(t "save")
-                  isLoading=isLoading
-                  saveAction=(action "saveChanges" currentSession.notes)
+            text=(t "save")
+            isLoading=isLoading
+            saveAction=(action "saveChanges" currentSession.notes)
           }}
         </div>
       </div>

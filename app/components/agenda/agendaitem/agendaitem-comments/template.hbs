@@ -10,11 +10,11 @@
         </span>
       </div>
       {{utils/custom-textarea
-              rows="2"
-              class="vl-input-field vl-input-field--block"
-              value=text
-              placeholder="Type hier jouw opmerking..."
-              enter=(action "addComment")
+        rows="2"
+        class="vl-input-field vl-input-field--block"
+        value=text
+        placeholder="Type hier jouw opmerking..."
+        enter=(action "addComment")
       }}
     </div>
     {{#each (await sortedRemarks) as |comment|}}
@@ -22,9 +22,9 @@
       {{#if (await comment.answers)}}
         {{#each (await comment.answers) as |answer|}}
           {{utils/agendaitem-comment
-                  comment=answer
-                  isAnswer=true
-                  user=(await user)
+            comment=answer
+            isAnswer=true
+            user=(await user)
           }}
         {{/each}}
       {{/if}}
@@ -43,11 +43,11 @@
           </div>
         {{/if}}
         {{utils/custom-textarea
-                rows="2"
-                class="vl-input-field vl-input-field--block"
-                value=comment.answer
-                placeholder="Type hier jouw opmerking..."
-                enter=(action "addAnswer" comment)
+          rows="2"
+          class="vl-input-field vl-input-field--block"
+          value=comment.answer
+          placeholder="Type hier jouw opmerking..."
+          enter=(action "addAnswer" comment)
         }}
       </div>
     {{/each}}

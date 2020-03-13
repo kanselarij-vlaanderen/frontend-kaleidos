@@ -22,10 +22,10 @@
               {{!-- template-lint-enable no-bare-strings  --}}
             </div>
             {{sessions/session-agenda-nav
-                    currentAgenda=currentAgenda
-                    compareAgendas=(action "compareAgendas")
-                    navigateToDocuments=(action "navigateToDocuments")
-                    clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
+              currentAgenda=currentAgenda
+              compareAgendas=(action "compareAgendas")
+              navigateToDocuments=(action "navigateToDocuments")
+              clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
             }}
           </div>
         </div>
@@ -59,11 +59,11 @@
             {{/if}}
             {{t "actions"}}
             {{#attach-popover
-                    class="ember-attacher-popper vlc-hide-on-print"
-                    hideOn="clickout click"
-                    showOn="click"
-                    animation="shift"
-                    placement="bottom" as |attacher|
+               class="ember-attacher-popper vlc-hide-on-print"
+               hideOn="clickout click"
+               showOn="click"
+               animation="shift"
+               placement="bottom" as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
                 {{#if (and isEditor (eq currentAgenda.name "Ontwerpagenda"))}}
@@ -260,72 +260,72 @@
 </div>
 {{#if isAddingAgendaitems}}
   {{agenda/agendaitem/create-agendaitem
-          isAddingAgendaitems=isAddingAgendaitems
-          reloadRoute=(action "reloadRoute")
+    isAddingAgendaitems=isAddingAgendaitems
+    reloadRoute=(action "reloadRoute")
   }}
 {{/if}}
 {{#if isAddingAnnouncement}}
   {{agenda/create-announcement
-          isAddingAnnouncement=isAddingAnnouncement
-          currentAgenda=currentAgenda
-          reloadRoute=(action "reloadRoute")
+    isAddingAnnouncement=isAddingAnnouncement
+    currentAgenda=currentAgenda
+    reloadRoute=(action "reloadRoute")
   }}
 {{/if}}
 {{#if isAssigningSignature}}
   {{sessions/select-signature
-          meeting=currentSession
-          closeDialog=(action "selectSignature")
+    meeting=currentSession
+    closeDialog=(action "selectSignature")
   }}
 {{/if}}
 {{#if showWarning}}
   {{web-components/vl-modal-verify
-          title=(t "warning-title")
-          buttonType="warning"
-          isLoading=isApprovingAgenda
-          verifyButtonText=(t "continue")
-          message=(if (and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable))) (t "approve-agenda-passable") (t "approve-agenda-warning"))
-          cancel=(action "cancel")
-          verify=(action "doApproveAgenda" currentSession)
-          showVerify=(and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable)))
+    title=(t "warning-title")
+    buttonType="warning"
+    isLoading=isApprovingAgenda
+    verifyButtonText=(t "continue")
+    message=(if (and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable))) (t "approve-agenda-passable") (t "approve-agenda-warning"))
+    cancel=(action "cancel")
+    verify=(action "doApproveAgenda" currentSession)
+    showVerify=(and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable)))
   }}
 {{/if}}
 {{#if releasingDocuments}}
   {{web-components/vl-modal-verify
-          title=(t "agenda-release-documents")
-          buttonType="warning"
-          verifyButtonText=(t "releaseToPublicButton")
-          message=(t "release-documents-message")
-          cancel=(action "cancel")
-          verify=(action "confirmReleaseDocuments")
+    title=(t "agenda-release-documents")
+    buttonType="warning"
+    verifyButtonText=(t "releaseToPublicButton")
+    message=(t "release-documents-message")
+    cancel=(action "cancel")
+    verify=(action "confirmReleaseDocuments")
   }}
 {{/if}}
 {{#if releasingDecisions}}
   {{web-components/vl-modal-verify
-          title=(t "agenda-release-decisions")
-          buttonType="warning"
-          verifyButtonText=(t "releaseToPublicButton")
-          message=(t "release-decisions-message")
-          cancel=(action "cancel")
-          verify=(action "confirmReleaseDecisions")
+    title=(t "agenda-release-decisions")
+    buttonType="warning"
+    verifyButtonText=(t "releaseToPublicButton")
+    message=(t "release-decisions-message")
+    cancel=(action "cancel")
+    verify=(action "confirmReleaseDecisions")
   }}
 {{/if}}
 {{#if editingSession}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "edit-session")
-          closeModal=(action "cancelEditSessionForm")
+    isOverlay=true
+    title=(t "edit-session")
+    closeModal=(action "cancelEditSessionForm")
   }}
     {{sessions/forms/edit-session
-            meeting=currentSession
-            successfullyEdited=(action "successfullyEdited")
-            cancelForm=(action "cancelEditSessionForm")
+      meeting=currentSession
+      successfullyEdited=(action "successfullyEdited")
+      cancelForm=(action "cancelEditSessionForm")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if shouldShowLoader}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=loaderTitle
+    isOverlay=true
+    title=loaderTitle
   }}
     {{web-components/vl-loader text=loaderText}}
   {{/web-components/vl-modal}}

@@ -1,6 +1,6 @@
 {{#if isEditingOverview}}
   {{changes-alert message=(t "editing-agenda-overview") buttonText=(t "end-editing-overview")
-                  clearAction=(action "toggleIsEditingOverview")}}
+    clearAction=(action "toggleIsEditingOverview")}}
 {{/if}}
 <div class="vlc-toolbar vlc-agenda-items-section-header">
 
@@ -47,8 +47,8 @@
 <div class="{{spacerClass}}">
   {{#if (and isEditor (not isShowingChanges))}}
     {{#sortable-group
-            tagName="ul"
-            onChange=(action "reorderItems") as |sortableGroup|
+      tagName="ul"
+      onChange=(action "reorderItems") as |sortableGroup|
     }}
       {{#each agendaitems as |agendaitem|}}
         {{#if agendaitem.groupName}}
@@ -61,17 +61,17 @@
           </div>
         {{/if}}
         {{#sortable-item
-                tagName="li"
-                class="vlc-agenda-items__sub-item"
-                model=agendaitem
-                group=sortableGroup
-                distance=30
-                handle=dragHandleClass
+          tagName="li"
+          class="vlc-agenda-items__sub-item"
+          model=agendaitem
+          group=sortableGroup
+          distance=30
+          handle=dragHandleClass
         }}
           {{agenda/agenda-list/list-item
-                  agendaitem=agendaitem
-                  isEditingOverview=isEditingOverview
-                  selectAgendaItem=(action "selectAgendaItem")
+            agendaitem=agendaitem
+            isEditingOverview=isEditingOverview
+            selectAgendaItem=(action "selectAgendaItem")
           }}
         {{/sortable-item}}
       {{/each}}
@@ -91,9 +91,9 @@
         {{#if (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))}}
           <li class="vlc-agenda-items__sub-item">
             {{agenda/agenda-list/list-item
-                    agendaitem=agendaitem
-                    isEditingOverview=isEditingOverview
-                    selectAgendaItem=(action "selectAgendaItem")
+              agendaitem=agendaitem
+              isEditingOverview=isEditingOverview
+              selectAgendaItem=(action "selectAgendaItem")
             }}
           </li>
         {{/if}}
@@ -118,22 +118,22 @@
   {{#if (gt (await announcements.length) 0)}}
     {{#if isEditor}}
       {{#sortable-group
-              tagName="ul"
-              onChange=(action "reorderAnnouncements") as |sortableAnnouncements|
+        tagName="ul"
+        onChange=(action "reorderAnnouncements") as |sortableAnnouncements|
       }}
         {{#each (await announcements) as |announcement|}}
           {{#sortable-item
-                  tagName="li"
-                  class="vlc-agenda-items__sub-item"
-                  model=announcement
-                  group=sortableAnnouncements
-                  distance=30
-                  handle=dragHandleClass
+            tagName="li"
+            class="vlc-agenda-items__sub-item"
+            model=announcement
+            group=sortableAnnouncements
+            distance=30
+            handle=dragHandleClass
           }}
             {{agenda/agenda-list/list-item
-                    agendaitem=announcement
-                    isEditingOverview=isEditingOverview
-                    selectAgendaItem=(action "selectAgendaItem")
+              agendaitem=announcement
+              isEditingOverview=isEditingOverview
+              selectAgendaItem=(action "selectAgendaItem")
             }}
           {{/sortable-item}}
         {{/each}}
@@ -142,9 +142,9 @@
       {{#each (await announcements) as |announcement|}}
         <div class="vlc-agenda-items__sub-item">
           {{agenda/agenda-list/list-item
-                  agendaitem=announcement
-                  isEditingOverview=isEditingOverview
-                  selectAgendaItem=(action "selectAgendaItem")
+            agendaitem=announcement
+            isEditingOverview=isEditingOverview
+            selectAgendaItem=(action "selectAgendaItem")
           }}
         </div>
       {{/each}}

@@ -24,10 +24,10 @@
   {{/if}}
   {{#if isVerifying}}
     {{web-components/vl-modal-verify
-            title=(t "delete-agendaitem")
-            message=(await deleteWarningText)
-            cancel=(action "toggleIsVerifying")
-            verify=(action "verifyDelete" agendaitem)
+      title=(t "delete-agendaitem")
+      message=(await deleteWarningText)
+      cancel=(action "toggleIsVerifying")
+      verify=(action "verifyDelete" agendaitem)
     }}
   {{/if}}
 {{/if}}

@@ -1,22 +1,22 @@
 <div class="vlc-input-field vlc-input-field-block">
   {{web-components/vl-form-label value=(t "text-templates")}}
   {{#power-select
-          options=items
-          selected=selectedItems
-          disabled=readOnly
-          searchField=searchField
-          placeholder=placeholder
-          searchMessage=searchMessage
-          loadingMessage=loadingMessage
-          noMatchesMessage=noMatchesMessage
-          search=(perform searchTask)
-          oninput=(action "resetValueIfEmpty")
-          onchange=(action "selectModel") as |model|
+    options=items
+    selected=selectedItems
+    disabled=readOnly
+    searchField=searchField
+    placeholder=placeholder
+    searchMessage=searchMessage
+    loadingMessage=loadingMessage
+    noMatchesMessage=noMatchesMessage
+    search=(perform searchTask)
+    oninput=(action "resetValueIfEmpty")
+    onchange=(action "selectModel") as |model|
   }}
     {{model.label}}
     {{#attach-popover
-            placement="top"
-            class="ember-attacher-popper ember-attacher-popper-wide"
+      placement="top"
+      class="ember-attacher-popper ember-attacher-popper-wide"
     }}
       <p>
         {{sanitize-html raw=true value=model.description}}

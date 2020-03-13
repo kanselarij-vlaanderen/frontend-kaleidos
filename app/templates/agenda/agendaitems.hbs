@@ -1,19 +1,19 @@
 <div class={{agendaitemsClass}}>
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
     {{agenda/agendaitem-search
-            selectedAgenda=currentAgenda
-            value=(readonly filter)
-            search=(action "searchAgendaItems")
+      selectedAgenda=currentAgenda
+      value=(readonly filter)
+      search=(action "searchAgendaItems")
     }}
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       {{agenda/agenda-list
-              announcements=(await sortedAnnouncements)
-              agendaitems=(await sortedAgendaitems)
-              currentAgenda=(await model.currentAgenda)
-              selectedAgendaItem=selectedAgendaItem
-              filteredAgendaItems=filteredAgendaItems
-              selectAgendaItem=(action "selectAgendaItem")
-              refresh=(action "refresh")
+        announcements=(await sortedAnnouncements)
+        agendaitems=(await sortedAgendaitems)
+        currentAgenda=(await model.currentAgenda)
+        selectedAgendaItem=selectedAgendaItem
+        filteredAgendaItems=filteredAgendaItems
+        selectAgendaItem=(action "selectAgendaItem")
+        refresh=(action "refresh")
       }}
     </div>
   </div>

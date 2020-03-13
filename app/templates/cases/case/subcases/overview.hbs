@@ -1,8 +1,8 @@
 {{title (t "subcases")}}
 {{subcases/subcases-overview-header
-        model=model
-        isShowingProcess=isShowingProcess
-        refresh=(action "refresh")
+  model=model
+  isShowingProcess=isShowingProcess
+  refresh=(action "refresh")
 }}
 <div class="vlc-scroll-wrapper__body">
   {{#if (gt (await model.subcases.length) 0)}}

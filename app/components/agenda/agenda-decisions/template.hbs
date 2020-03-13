@@ -42,11 +42,11 @@
                     {{#each (await agendaitem.decisions) as |decision|}}
                       {{#if decision.isEditing}}
                         {{agenda/agendaitem/agendaitem-decision-edit
-                                isEditing=decision.isEditing
-                                item=decision
-                                subcase=(await agendaitem.subcase)
-                                isTableRow=isTableRow
-                                agendaitem=agendaitem
+                          isEditing=decision.isEditing
+                          item=decision
+                          subcase=(await agendaitem.subcase)
+                          isTableRow=isTableRow
+                          agendaitem=agendaitem
                         }}
                       {{else if isEditor}}
                         <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">

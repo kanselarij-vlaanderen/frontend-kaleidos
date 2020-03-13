@@ -17,11 +17,11 @@
             {{t "propose-for-agenda"}}
           </button>
           {{#attach-popover
-                  class="ember-attacher-popper"
-                  hideOn="clickout click"
-                  showOn="click"
-                  animation="shift"
-                  placement="bottom" as |attacher|
+            class="ember-attacher-popper"
+            hideOn="clickout click"
+            showOn="click"
+            animation="shift"
+            placement="bottom" as |attacher|
           }}
             <ul class="vlc-dropdown-menu">
               {{#each (await meetings) as |meeting|}}
@@ -64,11 +64,11 @@
           {{/if}}
           {{t "actions"}}
           {{#attach-popover
-                  class="ember-attacher-popper"
-                  hideOn="clickout click"
-                  showOn="click"
-                  animation="shift"
-                  placement="bottom" as |attacher|
+            class="ember-attacher-popper"
+            hideOn="clickout click"
+            showOn="click"
+            animation="shift"
+            placement="bottom" as |attacher|
           }}
             <ul class="vlc-dropdown-menu">
               {{#if (await canDelete)}}
@@ -100,47 +100,47 @@
 </div>
 {{# if promptDeleteCase}}
   {{web-components/vl-modal-verify
-          title="REPLACEME delete dossier ?"
-          verifyButtonText="REPLACEME: delete dossier BUTN?"
-          message="REPLACEME: delete dossier MSG?"
-          cancel=(action "cancelDeleteCase")
-          verify=(action "deleteCase")
+    title="REPLACEME delete dossier ?"
+    verifyButtonText="REPLACEME: delete dossier BUTN?"
+    message="REPLACEME: delete dossier MSG?"
+    cancel=(action "cancelDeleteCase")
+    verify=(action "deleteCase")
   }}
 {{/if}}
 
 {{#if isAssigningToOtherCase}}
   {{#web-components/vl-modal
-          closeModal=(action "cancel")
-          isOverlay=true
-          title=(t "move-subcase-to-other-case")
+    closeModal=(action "cancel")
+    isOverlay=true
+    title=(t "move-subcase-to-other-case")
   }}
     {{utils/case-search
-            subcase=selectedSubcase
-            onSelect=(action "moveSubcase")
+      subcase=selectedSubcase
+      onSelect=(action "moveSubcase")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 
 {{#if isAssigningToOtherAgenda}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "propose-for-agenda")
-          closeModal=(action "cancel")
+    isOverlay=true
+    title=(t "propose-for-agenda")
+    closeModal=(action "cancel")
   }}
     {{subcases/assign-to-meeting-form
-            subcase=selectedSubcase
-            proposeForAgenda=(action "proposeForAgenda")
-            cancel=(action "cancel")
-            closeModal=(action "cancel")
+      subcase=selectedSubcase
+      proposeForAgenda=(action "proposeForAgenda")
+      cancel=(action "cancel")
+      closeModal=(action "cancel")
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isDeletingSubcase}}
   {{web-components/vl-modal-verify
-          isLoading=isLoading
-          title=(t "delete-subcase")
-          message=(t "delete-subcase-confirmation")
-          cancel=(action "cancel")
-          verify=(action "deleteSubcase")
+    isLoading=isLoading
+    title=(t "delete-subcase")
+    message=(t "delete-subcase-confirmation")
+    cancel=(action "cancel")
+    verify=(action "deleteSubcase")
   }}
 {{/if}}

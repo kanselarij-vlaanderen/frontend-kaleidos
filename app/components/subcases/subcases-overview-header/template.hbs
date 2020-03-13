@@ -15,8 +15,8 @@
             <div class="vlc-toolbar__left">
               <div class="vlc-toolbar__item">
                 {{#link-to
-                        "cases.overview"
-                        class="vlc-backlink vl-link vl-link--bold"
+                  "cases.overview"
+                  class="vlc-backlink vl-link vl-link--bold"
                 }}
                 {{!-- template-lint-disable no-bare-strings  --}}
                   &#8629;
@@ -57,17 +57,17 @@
 </div>
 {{#if isAddingSubcase}}
   {{#web-components/vl-modal
-          isOverlay=true
-          large=true
-          closeModal=(action "close")
-          title=(t "create-subcase")
+    isOverlay=true
+    large=true
+    closeModal=(action "close")
+    title=(t "create-subcase")
   }}
     {{cases/new-subcase
-            title=title
-            shortTitle=shortTitle
-            case=(await model.case)
-            closeModal=(action "close")
-            refresh=(action "refresh")
+      title=title
+      shortTitle=shortTitle
+      case=(await model.case)
+      closeModal=(action "close")
+      refresh=(action "refresh")
     }}
   {{/web-components/vl-modal}}
 {{/if}}

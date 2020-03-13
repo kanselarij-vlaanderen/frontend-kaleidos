@@ -1,12 +1,12 @@
 <div class="vl-u-spacer-extended-l">
   {{#utils/agendaitem-table
-          model=model
-          sort=sort
-          page=page
-          filter=filter
-          include=include
-          size=size
-          columns=columns as |row|
+    model=model
+    sort=sort
+    page=page
+    filter=filter
+    include=include
+    size=size
+    columns=columns as |row|
   }}
     {{#if (not row.isApproval)}}
       {{#if (is-pending row.subcase.newsletterInfo)}}
@@ -14,9 +14,9 @@
       {{else if (await row.subcase.newsletterInfo)}}
         <div class="vlc-container-center">
           {{news-item/edit-item
-                  agendaitem=row
-                  item=(await row.subcase.newsletterInfo)
-                  isEditing=row.expanded
+            agendaitem=row
+            item=(await row.subcase.newsletterInfo)
+            isEditing=row.expanded
           }}
         </div>
       {{else}}

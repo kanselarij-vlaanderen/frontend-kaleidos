@@ -1,18 +1,18 @@
 {{#web-components/vl-modal
-        isOverlay=true
-        large=true
-        closeModal=(action "close")
-        title=(t "add-agendaitems")
+  isOverlay=true
+  large=true
+  closeModal=(action "close")
+  title=(t "add-agendaitems")
 }}
   {{#if (or (is-pending model) loading)}}
     <div class="vl-modal-dialog__content">
       {{#if (is-pending model)}}
         {{web-components/vl-loader
-                text=(concat (t "cases-loading-text") " " (t "please-be-patient"))
+          text=(concat (t "cases-loading-text") " " (t "please-be-patient"))
         }}
       {{else}}
         {{web-components/vl-loader
-                text=(concat (t "agendaitems-creating-text") " " (t "please-be-patient"))
+          text=(concat (t "agendaitems-creating-text") " " (t "please-be-patient"))
         }}
       {{/if}}
     </div>
@@ -26,12 +26,12 @@
               <div class="vlc-toolbar__item" style="width:100%;">
                 <div class="vl-input-field--inline" data-test-vl-create-agendaItem-search>
                   {{input
-                          value=filter
-                          elementId="searchId"
-                          placeholder="Zoeken.."
-                          key-press=(perform searchTask)
-                          disabled=showPostponed
-                          class="vl-input-field vl-input-field__input"
+                    value=filter
+                    elementId="searchId"
+                    placeholder="Zoeken.."
+                    key-press=(perform searchTask)
+                    disabled=showPostponed
+                    class="vl-input-field vl-input-field__input"
                   }}
                   <button class="vl-input-field__submit vl-button"
                           onclick={{perform searchTask}}
@@ -47,8 +47,8 @@
           <div class="vlc-input-field-block">
             {{web-components/vl-form-label value=(t "title-postponed-subcases")}}
             {{web-components/vl-toggle
-                    value=showPostponed
-                    valueChanged=(action "checkShowPostponedValue")
+              value=showPostponed
+              valueChanged=(action "checkShowPostponedValue")
             }}
           </div>
         </div>
@@ -59,29 +59,29 @@
         </div>
       </div>
       {{#data-table
-              content=model
-              sort=sort
-              page=page
-              size=size
-              isLoading=findAll.isRunning
-              noDataMessage=(t "no-results-found")
-              onClickRow=(action "selectPostponed") as |table|
+        content=model
+        sort=sort
+        page=page
+        size=size
+        isLoading=findAll.isRunning
+        noDataMessage=(t "no-results-found")
+        onClickRow=(action "selectPostponed") as |table|
       }}
         {{#table.content as |c|}}
           {{#c.header}}
             <th></th>
             {{th-sortable
-                    field="shortTitle"
-                    currentSorting=sort
-                    label=(t "short-title-case")
+              field="shortTitle"
+              currentSorting=sort
+              label=(t "short-title-case")
             }}
             <th></th>
           {{/c.header}}
           {{#c.body as |row|}}
             <td class="vl-data-table-col-1">
               {{web-components/vl-checkbox
-                      value=row.selected
-                      toggle=(action "selectAvailableSubcase" row)
+                value=row.selected
+                toggle=(action "selectAvailableSubcase" row)
               }}
             </td>
             <td class="vl-data-table-col-11">
@@ -96,12 +96,12 @@
       {{/data-table}}
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            disableSave=noItemsSelected
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "add-to-agenda")
-            cancelAction=(action "close")
-            saveAction=(action "addSubcasesToAgenda")
+      isLoading=isLoading
+      disableSave=noItemsSelected
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add-to-agenda")
+      cancelAction=(action "close")
+      saveAction=(action "addSubcasesToAgenda")
     }}
   {{/if}}
 {{/web-components/vl-modal}}

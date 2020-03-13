@@ -1,15 +1,15 @@
 {{#if (not await dateObjectsToEnable)}}
   {{ember-flatpickr
-          data-test-vl-datepicker-input
-          classNames="vl-input-field vl-input-field--block"
-          locale="nl"
-          enableTime=enableTime
-          time_24hr=true
-          date=(readonly selectedDate)
-          onChange=(action "dateChanged")
-          defaultHour=defaultHour
-          defaultMinute=defaultMinute
-          getFlatpickrRef=(action (mut flatpickrRef))
+    data-test-vl-datepicker-input
+    classNames="vl-input-field vl-input-field--block"
+    locale="nl"
+    enableTime=enableTime
+    time_24hr=true
+    date=(readonly selectedDate)
+    onChange=(action "dateChanged")
+    defaultHour=defaultHour
+    defaultMinute=defaultMinute
+    getFlatpickrRef=(action (mut flatpickrRef))
   }}
   <button data-test-vlc-vl-datepickerButton
           class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"
@@ -20,17 +20,17 @@
   </button>
 {{else}}
   {{ember-flatpickr
-          data-test-vl-datepicker-input
-          classNames="vl-input-field vl-input-field--block"
-          locale="nl"
-          enable=datesToEnable
-          enableTime=enableTime
-          time_24hr=true
-          date=(readonly selectedDate)
-          onChange=(action "dateChanged")
-          defaultHour=defaultHour
-          defaultMinute=defaultMinute
-          getFlatpickrRef=(action (mut flatpickrRef))
+    data-test-vl-datepicker-input
+    classNames="vl-input-field vl-input-field--block"
+    locale="nl"
+    enable=datesToEnable
+    enableTime=enableTime
+    time_24hr=true
+    date=(readonly selectedDate)
+    onChange=(action "dateChanged")
+    defaultHour=defaultHour
+    defaultMinute=defaultMinute
+    getFlatpickrRef=(action (mut flatpickrRef))
   }}
   <button
           class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"

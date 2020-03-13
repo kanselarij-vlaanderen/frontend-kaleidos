@@ -20,8 +20,8 @@
     {{else}}
       <div class="vl-loader" role="alert" aria-busy="true">
         {{#attach-popover
-                placement="bottom"
-                class="ember-attacher-popper ember-attacher-popper-small"
+          placement="bottom"
+          class="ember-attacher-popper ember-attacher-popper-small"
         }}
           {{t "nota-loading-text"}}
         {{/attach-popover}}
@@ -51,9 +51,9 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "decision-in-newsletter")}}
     {{web-components/vl-rdfa-editor
-            isLarge=isExpanded
-            richtext=(await agendaitem.subcase.newsletterInfo.richtext)
-            handleRdfaEditorInit=(action "handleRdfaEditorInit")
+      isLarge=isExpanded
+      richtext=(await agendaitem.subcase.newsletterInfo.richtext)
+      handleRdfaEditorInit=(action "handleRdfaEditorInit")
     }}
   </div>
   <div class="vlc-input-field-block vl-u-text--capitalize">
@@ -75,19 +75,19 @@
     {{t "cancel"}}
   </a>
   {{web-components/vl-save-button
-          text=(t "save")
-          isLoading=isLoading
-          saveAction=(action "trySaveChanges")
+    text=(t "save")
+    isLoading=isLoading
+    saveAction=(action "trySaveChanges")
   }}
 </div>
 {{#if isTryingToSave}}
   {{web-components/vl-modal-verify
-          title=(t "no-themes-selected")
-          message=(t "no-themes-selected-message")
-          cancel=(action "cancelSaveChanges")
-          verify=(action "saveChanges")
-          buttonText="save"
-          buttonType="warning"
-          showIcon=false
+    title=(t "no-themes-selected")
+    message=(t "no-themes-selected-message")
+    cancel=(action "cancelSaveChanges")
+    verify=(action "saveChanges")
+    buttonText="save"
+    buttonType="warning"
+    showIcon=false
   }}
 {{/if}}

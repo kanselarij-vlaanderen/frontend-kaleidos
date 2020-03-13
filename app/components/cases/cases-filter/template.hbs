@@ -7,23 +7,23 @@
       <span onclick={{action "openPopover"}} class="vl-icon vl-icon--small vl-vi vl-vi-info-filled vlc-u-cursor-pointer"
             aria-hidden="true">
         {{#attach-popover
-                showOn="click"
-                placement="right"
-                hideOn="clickout"
-                isShown=popoverShown
-                renderInPlace=true
-                class="ember-attacher-popper vlc-search-legend-popover vlc-u-cursor-default"
+          showOn="click"
+          placement="right"
+          hideOn="clickout"
+          isShown=popoverShown
+          renderInPlace=true
+          class="ember-attacher-popper vlc-search-legend-popover vlc-u-cursor-default"
         }}
           {{utils/search-legend userClickedClose=(action "closePopover")}}
         {{/attach-popover}}
       </span>
     </div>
     {{input
-            class="vl-input-field vl-input-field--block"
-            type="text"
-            id="dossierId"
-            value=searchText
-            key-up=(perform searchTask)
+      class="vl-input-field vl-input-field--block"
+      type="text"
+      id="dossierId"
+      value=searchText
+      key-up=(perform searchTask)
     }}
   </div>
   <div class="vlc-input-field-block vl-col--4-12">
@@ -31,11 +31,11 @@
       {{t "minister"}}
     </label>
     {{input
-            class="vl-input-field vl-input-field--block"
-            type="text"
-            id="ministerName"
-            value=ministerName
-            key-press=(perform searchTask)
+      class="vl-input-field vl-input-field--block"
+      type="text"
+      id="ministerName"
+      value=ministerName
+      key-press=(perform searchTask)
     }}
   </div>
 </div>
@@ -43,8 +43,8 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "from-date")}}
     {{web-components/vl-datepicker
-            selectedDate=dateFrom
-            dateChanged=(action "selectDateFrom")
+      selectedDate=dateFrom
+      dateChanged=(action "selectDateFrom")
     }}
     {{#if dateFrom}}
       <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
@@ -56,8 +56,8 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "until-date")}}
     {{web-components/vl-datepicker
-            selectedDate=dateTo
-            dateChanged=(action "selectDateTo")
+      selectedDate=dateTo
+      dateChanged=(action "selectDateTo")
     }}
     {{#if dateTo}}
       <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
@@ -71,8 +71,8 @@
       {{t "search-in-decisions-only"}}
     </label>
     {{web-components/vl-toggle
-            valueChanged=(perform searchTask)
-            value=searchInDecisionsOnly
+      valueChanged=(perform searchTask)
+      value=searchInDecisionsOnly
     }}
   </div>
 </div>

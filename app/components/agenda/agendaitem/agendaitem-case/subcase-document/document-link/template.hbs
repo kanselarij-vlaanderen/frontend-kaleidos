@@ -12,7 +12,9 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
             {{#if lastDocumentVersion}}
-              {{access-level-pill item=lastDocumentVersion}}
+              {{access-level-pill
+                item=lastDocumentVersion
+              }}
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -20,11 +22,12 @@
               <button class="vl-button vl-button--link vl-button--icon">
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
                 {{#attach-popover
-                        class="ember-attacher-popper"
-                        hideOn="clickout click"
-                        showOn="click"
-                        animation="shift"
-                        placement="bottom" as |attacher|
+                  class="ember-attacher-popper"
+                  hideOn="clickout click"
+                  showOn="click"
+                  animation="shift"
+                  placement="bottom"
+                as |attacher|
                 }}
                   <ul class="vlc-dropdown-menu">
                     <li class="vlc-dropdown-menu__item">
@@ -80,9 +83,9 @@
           {{else}}
             <div class="vl-u-display-flex vl-u-display-flex-align-center">
               {{input
-                      type="text"
-                      class="vl-input-field vl-input-field--block"
-                      value=nameBuffer
+                type="text"
+                class="vl-input-field vl-input-field--block"
+                value=nameBuffer
               }}
               <button
                       class="vl-button vl-button--link vl-button--icon"
@@ -133,14 +136,13 @@
         {{#if isShowingVersions}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
-              {{#each
-                      (await
-                              myReverseSortedVersions
-                      ) as |documentVersion|
-              }}
+               {{#each
+                 (await myReverseSortedVersions)
+               as |documentVersion|
+               }}
                 {{web-components/vl-document
-                        documentVersion=documentVersion
-                        item=item
+                  documentVersion=documentVersion
+                  item=item
                 }}
               {{/each}}
             </div>
@@ -152,9 +154,9 @@
 </div>
 {{#if isUploadingNewVersion}}
   {{#web-components/vl-modal
-          closeModal=(action "cancelUploadVersion")
-          isOverlay=true
-          title=(t "new-document-version")
+    closeModal=(action "cancelUploadVersion")
+    isOverlay=true
+    title=(t "new-document-version")
   }}
     <div class="vl-modal-dialog__content">
       {{#if (not uploadedFile)}}
@@ -162,38 +164,38 @@
       {{else}}
         {{web-components/vl-form-label value=(t "name")}}
         {{web-components/vl-form-input
-                value=documentContainer.lastDocument.name
-                width=4
+          value=documentContainer.lastDocument.name
+          width=4
         }}
         {{ember-kaleidos-webuniversum/vl-uploaded-document
-                name=documentContainer.lastDocument.file.filename
-                extension=documentContainer.lastDocument.file.extension
-                size=documentContainer.lastDocument.file.size
-                downloadName=documentContainer.lastDocument.file.filename
-                downloadLink=(concat
-                        documentContainer.lastDocument.file.downloadLink
-                        "?name="
-                        documentContainer.lastDocument.file.filename
-                )
-                delete=(action "delete" documentContainer.lastDocument)
+          name=documentContainer.lastDocument.file.filename
+          extension=documentContainer.lastDocument.file.extension
+          size=documentContainer.lastDocument.file.size
+          downloadName=documentContainer.lastDocument.file.filename
+          downloadLink=(concat
+                  documentContainer.lastDocument.file.downloadLink
+                  "?name="
+                  documentContainer.lastDocument.file.filename
+          )
+          delete=(action "delete" documentContainer.lastDocument)
         }}
       {{/if}}
     </div>
     {{web-components/vl-modal-footer
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "add")
-            isLoading=isLoading
-            cancelAction=(action "cancelUploadVersion")
-            saveAction=(action "saveDocuments")
-            disableSave=(not uploadedFile)
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add")
+      isLoading=isLoading
+      cancelAction=(action "cancelUploadVersion")
+      saveAction=(action "saveDocuments")
+      disableSave=(not uploadedFile)
     }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isVerifyingDelete}}
   {{web-components/vl-modal-verify
-          title=(t "document-delete")
-          message=(t "delete-document-message")
-          cancel=(action "cancel")
-          verify=(action "verify")
+    title=(t "document-delete")
+    message=(t "delete-document-message")
+    cancel=(action "cancel")
+    verify=(action "verify")
   }}
 {{/if}}

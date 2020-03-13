@@ -11,14 +11,14 @@
     {{else}}
       <div class="vl-form__input" style="width:75%">
         {{utils/model-selector
-                modelName="access-level"
-                allowClear=true
-                searchField="label"
-                propertyToShow="label"
-                readOnly=item.confidential
-                sortField="priority"
-                selectedItems=accessLevel
-                selectModel=(action "chooseAccessLevel")
+          modelName="access-level"
+          allowClear=true
+          searchField="label"
+          propertyToShow="label"
+          readOnly=item.confidential
+          sortField="priority"
+          selectedItems=accessLevel
+          selectModel=(action "chooseAccessLevel")
         }}
       </div>
       <button class="vl-button vl-button--link vl-button--icon"

@@ -5,9 +5,9 @@
       {{web-components/vl-loader text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))}}
     {{else}}
       {{web-components/vl-datepicker
-              dateObjectsToEnable=(await dateObjectsToEnable)
-              datePropertyToUse="plannedStart"
-              dateChanged=(action "selectStartDate")
+        dateObjectsToEnable=(await dateObjectsToEnable)
+        datePropertyToUse="plannedStart"
+        dateChanged=(action "selectStartDate")
       }}
     {{/if}}
   </div>

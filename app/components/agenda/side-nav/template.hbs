@@ -38,9 +38,9 @@
         {{#each (await agendas) as |agenda|}}
           <li class="vlc-side-nav-item
               {{active-class
-                  agenda
-                  currentAgenda
-                  class="vlc-side-nav-item--active"
+                agenda
+                currentAgenda
+                class="vlc-side-nav-item--active"
           }}"
           >
             <a {{action "setCurrentAgenda" agenda}}>

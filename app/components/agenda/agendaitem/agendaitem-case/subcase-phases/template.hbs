@@ -34,13 +34,13 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "phases")}}
         {{utils/model-selector
-                modelName="subcase-phase-code"
-                searchField="label"
-                propertyToShow="label"
-                multiSelect=false
-                sortField="label"
-                selectedItems=selectedPhase
-                selectModel=(action "choosePhase")
+          modelName="subcase-phase-code"
+          searchField="label"
+          propertyToShow="label"
+          multiSelect=false
+          sortField="label"
+          selectedItems=selectedPhase
+          selectModel=(action "choosePhase")
         }}
       </div>
     </div>
@@ -49,9 +49,9 @@
         {{t "cancel"}}
       </a>
       {{web-components/vl-save-button
-              text=(t "save")
-              isLoading=isLoading
-              saveAction=(action "saveChanges")
+        text=(t "save")
+        isLoading=isLoading
+        saveAction=(action "saveChanges")
       }}
     </div>
   </div>

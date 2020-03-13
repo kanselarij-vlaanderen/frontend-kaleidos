@@ -1,18 +1,18 @@
 {{#web-components/vl-modal
-        isOverlay=true
-        title=(t "manage-alerts")
-        closeModal=(action "close")
+  isOverlay=true
+  title=(t "manage-alerts")
+  closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
         {{utils/model-selector
-                modelName="alert"
-                searchField="title"
-                propertyToShow="title"
-                sortField="title"
-                selectedItems=selectedAlert
-                selectModel=(action "selectAlert")
+          modelName="alert"
+          searchField="title"
+          propertyToShow="title"
+          sortField="title"
+          selectedItems=selectedAlert
+          selectModel=(action "selectAlert")
         }}
       </div>
     </div>
@@ -87,21 +87,21 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "severity")}}
         {{utils/model-selector
-                modelName="alert-type"
-                searchField="label"
-                propertyToShow="label"
-                sortField="label"
-                selectedItems=type
-                selectModel=(action "selectType")
+          modelName="alert-type"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=type
+          selectModel=(action "selectType")
         }}
       </div>
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "add")
-            cancelAction=(action "toggleIsAdding")
-            saveAction=(action "createAlert")
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "add")
+      cancelAction=(action "toggleIsAdding")
+      saveAction=(action "createAlert")
     }}
   {{/if}}
   {{#if isEditing}}
@@ -111,15 +111,15 @@
         <div class="vlc-input-field-block vl-col--2-4">
           {{web-components/vl-form-label value=(t "start-date")}}
           {{web-components/vl-datepicker
-                  date=selectedAlert.beginDate
-                  dateChanged=(action "selectBeginDate")
+            date=selectedAlert.beginDate
+            dateChanged=(action "selectBeginDate")
           }}
         </div>
         <div class="vlc-input-field-block vl-col--2-4">
           {{web-components/vl-form-label value=(t "end-date")}}
           {{web-components/vl-datepicker
-                  date=selectedAlert.endDate
-                  dateChanged=(action "selectEndDate")
+            date=selectedAlert.endDate
+            dateChanged=(action "selectEndDate")
           }}
         </div>
       </div>
@@ -130,29 +130,29 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "message")}}
         {{textarea
-                rows="2"
-                class="vl-textarea vl-textarea--block"
-                value=selectedAlert.message
+          rows="2"
+          class="vl-textarea vl-textarea--block"
+          value=selectedAlert.message
         }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "severity")}}
         {{utils/model-selector
-                modelName="alert-type"
-                searchField="label"
-                propertyToShow="label"
-                sortField="label"
-                selectedItems=type
-                selectModel=(action "selectType")
+          modelName="alert-type"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=type
+          selectModel=(action "selectType")
         }}
       </div>
     </div>
     {{web-components/vl-modal-footer
-            isLoading=isLoading
-            cancelButtonText=(t "cancel")
-            saveButtonText=(t "save")
-            cancelAction=(action "toggleIsEditing")
-            saveAction=(action "editAlert")
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "save")
+      cancelAction=(action "toggleIsEditing")
+      saveAction=(action "editAlert")
     }}
   {{/if}}
 {{/web-components/vl-modal}}

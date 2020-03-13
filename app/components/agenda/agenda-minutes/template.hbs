@@ -61,8 +61,8 @@
               </div>
               {{#if agendaitem.isEditing}}
                 {{agenda/agendaitem/agendaitem-minutes-edit
-                        isEditing=agendaitem.isEditing
-                        agendaitem=agendaitem
+                  isEditing=agendaitem.isEditing
+                  agendaitem=agendaitem
                 }}
               {{else}}
                 <div class="vl-typography">
@@ -107,7 +107,7 @@
             </div>
             {{#if (not allowEditing)}}
               {{web-components/vl-signature
-                      signature=currentSession.defaultSignature
+                signature=currentSession.defaultSignature
               }}
             {{/if}}
           </div>

@@ -1,8 +1,8 @@
 {{#if isEditing}}
   {{utils/edit-mandatee
-          mandateeToEdit=(await mandateeToEdit)
-          closeModal=(action "toggleIsEditing")
-          mandateesUpdated= (action "mandateesUpdated")
+    mandateeToEdit=(await mandateeToEdit)
+    closeModal=(action "toggleIsEditing")
+    mandateesUpdated= (action "mandateesUpdated")
   }}
 {{/if}}
 {{#if isResigning}}
@@ -14,8 +14,8 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "new-person")}}
       {{utils/create-person-selector
-              selectedItems=selectedPerson
-              selectModel=(action "personSelected")
+        selectedItems=selectedPerson
+        selectModel=(action "personSelected")
       }}
     </div>
 
@@ -27,10 +27,10 @@
     {{/if}}
   </div>
   {{web-components/vl-modal-footer
-          isLoading=isLoading
-          cancelButtonText=(t "cancel")
-          saveButtonText=(t "save-resignation")
-          cancelAction=(action "toggleIsResigning")
-          saveAction=(action "saveResignation")
+    isLoading=isLoading
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "save-resignation")
+    cancelAction=(action "toggleIsResigning")
+    saveAction=(action "saveResignation")
   }}
 {{/if}}

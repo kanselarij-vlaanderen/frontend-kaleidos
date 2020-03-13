@@ -20,10 +20,10 @@
       <div class="vl-u-spacer-extended-bottom-s">
         {{#if (not (is-pending subcase))}}
           {{#link-to
-                  "cases.case.subcases.subcase.overview"
-                  (await subcase.case.id)
-                  (await subcase.id)
-                  class="vl-title vl-title--h6"
+            "cases.case.subcases.subcase.overview"
+            (await subcase.case.id)
+            (await subcase.id)
+            class="vl-title vl-title--h6"
           }}
             {{await subcase.nameToShow}}
           {{/link-to}}
@@ -49,10 +49,10 @@
               <div class="vlc-status-timeline__dot"></div>
               <div class="vlc-status-timeline__text">
                 {{subcase-timeline-item-text
-                        label=(await phase.code.label)
-                        phase=phase
-                        onAgendaInfo=(await subcase.onAgendaInfo)
-                        isPostponed=(await subcase.isPostponed)
+                  label=(await phase.code.label)
+                  phase=phase
+                  onAgendaInfo=(await subcase.onAgendaInfo)
+                  isPostponed=(await subcase.isPostponed)
                 }}
               </div>
             </li>

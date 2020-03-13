@@ -12,6 +12,7 @@
         {{#if isEditor}}
           <div class="vlc-toolbar__item">
             <button data-test-vlc-agenda-createnewagendabutton
+                    type="button"
                     class="vl-button vl-button--narrow vl-button--icon-before"
               {{action "createNewSession"}}>
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
@@ -26,13 +27,13 @@
 {{outlet}}
 {{#if creatingNewSession}}
   {{#web-components/vl-modal
-          isOverlay=true
-          title=(t "new-agenda")
-          closeModal=(action "cancelNewSessionForm")
+    isOverlay=true
+    title=(t "new-agenda")
+    closeModal=(action "cancelNewSessionForm")
   }}
     {{sessions/forms/new-session
-            successfullyAdded=(action "successfullyAdded")
-            cancelForm=(action "cancelNewSessionForm")
+      successfullyAdded=(action "successfullyAdded")
+      cancelForm=(action "cancelNewSessionForm")
     }}
   {{/web-components/vl-modal}}
 {{/if}}

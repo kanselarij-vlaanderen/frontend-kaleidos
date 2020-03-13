@@ -5,7 +5,7 @@ module.exports = {
 
   rules: {
     "no-bare-strings": true,
-    "attribute-indentation": true,
+    "attribute-indentation": {'indentation': 2},
     "no-inline-styles": false,
     "block-indentation": false,
     "quotes": false,
