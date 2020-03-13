@@ -27,7 +27,7 @@ function login(name){
   cy.server();
   cy.route('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login');
-  cy.get('.grid', { timeout: 12000 }).within(() => {
+  cy.get('.grid', { timeout: 20000 }).within(() => {
     cy.contains(name).click()
       .wait('@mockLogin');
   });

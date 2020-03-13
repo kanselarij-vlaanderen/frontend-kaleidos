@@ -25,7 +25,7 @@ export default ModelWithToasts.extend({
       }
 
       case 'deleted': {
-        break;
+        return parentSave.call(this, ...arguments);
       }
       case undefined: {
         await this.preEditOrSaveCheck();
