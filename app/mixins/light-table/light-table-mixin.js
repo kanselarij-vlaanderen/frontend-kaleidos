@@ -25,7 +25,9 @@ export default Mixin.create({
 
   initialiseTableBasedOnModel() {
     this.set("page", 0);
-    let table = new Table(this.get("columns"), [], {
+    let table = Table.create({
+      columns: this.get("columns"),
+      rows: [],
       enableSync: this.get("enableSync")
     });
     table.addRows(this.get("model").filter((item)=> !item.isApproval));
