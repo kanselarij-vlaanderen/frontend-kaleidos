@@ -75,7 +75,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       if (!this.isEditor) {
         return;
       }
-      this.set('nameBuffer', this.get('document.lastDocumentVersion.name'));
+      this.set('nameBuffer', this.get('lastDocumentVersion.name'));
       this.set('isEditing', true);
     },
 

@@ -41,6 +41,15 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     });
   },
 
+  async getDocumentNames(model) {
+    return $.ajax({
+      method: 'GET',
+      url: `/lazy-loading/documentNames?uuid=${model.id}`,
+    }).then((result) => {
+      return result.body.documentNames;
+    });
+  },
+
   async approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
     if (!oldAgenda) {
       return oldAgenda;
