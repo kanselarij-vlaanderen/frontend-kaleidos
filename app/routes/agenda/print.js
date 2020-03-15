@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
-import { task } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 
 export default Route.extend({
   async model(params) {
@@ -15,9 +15,9 @@ export default Route.extend({
       include: 'mandatees',
     });
     const notas = agendaitems.filter((item) => !item.showAsRemark).sortBy('priority');
-    await this.ensureDocuments(notas);
+    await this.ensureDocuments.perform(notas);
     const announcements = agendaitems.filter((item) => item.showAsRemark).sortBy('priority');
-    await this.ensureDocuments(announcements);
+    await this.ensureDocuments.perform(announcements);
 
     return hash({
       meeting,
@@ -26,16 +26,18 @@ export default Route.extend({
     });
   },
 
-  async ensureDocuments(agendaItems) {
+  ensureDocuments: task(function*(agendaItems) {
+    const tasks = []
     for (var item of agendaItems) {
       if (!item.hasMany('documentVersions').value()) {
-        await this.loadDocuments.perform(item);
+        tasks.push(this.loadDocuments.perform(item));
       }
     }
-  },
+    yield all(tasks);
+  }),
 
   loadDocuments: task(function*(agendaItem) {
     yield agendaItem.hasMany('documentVersions').reload();
-  }).maxConcurrency(2).enqueue(),
+  }).maxConcurrency(2).enqueue()
 
 });
