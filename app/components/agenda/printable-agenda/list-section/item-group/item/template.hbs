@@ -1,0 +1,11 @@
+<div class="vl-u-spacer-extended-bottom-s">
+  <h4>
+    {{if this.item.shortTitle this.item.shortTitle this.item.title}}{{!-- Fallback for legacy data that doesn't have a short title --}}
+  </h4>
+  <p>
+    {{this.item.title}}
+  </p>
+</div>
+{{#each this.item.sortedDocumentVersions as |document|}}
+  ({{document.name}})
+{{/each}}

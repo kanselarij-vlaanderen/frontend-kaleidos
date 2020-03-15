@@ -1,0 +1,8 @@
+{{agenda/printable-agenda/list-section/item-group/item-group-header
+  mandatees=items.firstObject.sortedMandatees
+}}
+{{#each items as |agendaitem|}}
+  {{agenda/printable-agenda/list-section/item-group/item
+    item=agendaitem
+  }}
+{{/each}}
