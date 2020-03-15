@@ -14,7 +14,7 @@ export default class VRDocumentName {
 
   static get looseRegex () {
     const g = VRDocumentName.regexGroups;
-    return new RegExp(`VR ${g.date} ${g.docType}\\.${g.caseNr}(/|-${g.index})?`);
+    return new RegExp(`VR ${g.date} ${g.docType}\\.${g.caseNr}([/-]${g.index})?`);
   }
 
   static get strictRegex () {
