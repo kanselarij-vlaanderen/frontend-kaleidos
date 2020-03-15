@@ -6,6 +6,8 @@
     {{this.item.title}}
   </p>
 </div>
-{{#each this.item.sortedDocumentVersions as |document|}}
-  ({{document.name}})
-{{/each}}
+<ul class="vlc-printable-agenda-list__document-list">
+  {{#each this.item.sortedDocumentVersions as |document|}}
+    <li>({{document.name}})</li>
+  {{/each}}
+</ul>

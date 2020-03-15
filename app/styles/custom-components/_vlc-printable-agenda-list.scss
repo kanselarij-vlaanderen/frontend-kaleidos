@@ -8,5 +8,22 @@
   h2.vlc-printable-agenda-list__title {
     margin-top: 0;
     text-align: center;
+  ul.vlc-printable-agenda-list__document-list {
+  	list-style: none;
+
+    margin: 0;
+  	padding: 0;
+  	border: 0;
+  	font-size: 100%;
+  	font: inherit;
+  	vertical-align: baseline;
+    li {
+      margin: 0;
+    	padding: 0;
+    	border: 0;
+    	font-size: 100%;
+    	font: inherit;
+    	vertical-align: baseline;
+    }
   }
 }
