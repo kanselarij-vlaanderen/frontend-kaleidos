@@ -2,9 +2,11 @@
   {{utils/logo-header}}
 
   <h2 class="vlc-page-header__title vlc-page-header__title--bordered vlc-printable-agenda-list__title" data-test-agenda-header-title>
-    {{t "agenda-of"}}
-    {{moment-format this.meeting.plannedStart "DD MMMM YYYY \o\m HH:mm"}}
+    {{t "session-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY \o\m HH:mm"}}
   </h2>
+  <h3 class="vl-u-align-center">
+    {{t "agenda"}}
+  </h3>
 
   {{#if (gt this.notas.length 0)}}
     {{#agenda/printable-agenda/list-section
