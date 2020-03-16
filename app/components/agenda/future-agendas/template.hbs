@@ -73,8 +73,8 @@
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else}}
             {{moment-format
-                    (await meeting.latestAgenda.modified)
-                    "DD-MM-YYYY HH:mm"
+              (await meeting.latestAgenda.modified)
+              "DD-MM-YYYY HH:mm"
             }}
           {{/if}}
         </td>

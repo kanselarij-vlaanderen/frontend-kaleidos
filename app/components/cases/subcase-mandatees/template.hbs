@@ -32,18 +32,20 @@
           </td>
           <td>
             {{web-components/vl-toggle
-                    valueChanged=(action "valueChanged" mandateeRow)
-                    value=(await mandateeRow.isSubmitter)
+              valueChanged=(action "valueChanged" mandateeRow)
+              value=(await mandateeRow.isSubmitter)
             }}
           </td>
           <td class="vl-u-align-right vl-u-flex-align-center">
             {{#if isLoading}}
-              <button class="vl-button vl-button--link vl-button--icon"
+              <button type="button"
+                      class="vl-button vl-button--link vl-button--icon"
                       disabled>
                 <div class="vl-loader" role="alert" aria-busy="true"></div>
               </button>
             {{else}}
-              <button class="vl-button vl-button--link vl-button--icon"
+              <button type="button"
+                      class="vl-button vl-button--link vl-button--icon"
                 {{action "editRow" mandateeRow}}
               >
                 <i class="vl-vi vl-vi-pencil" aria-hidden="true"></i>
@@ -52,7 +54,8 @@
                 </span>
               </button>
             {{/if}}
-            <button class="vl-button vl-button--link vl-button--icon"
+            <button type="button"
+                    class="vl-button vl-button--link vl-button--icon"
               {{action "deleteRow" mandateeRow}}>
               <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
               <span class="vl-u-visually-hidden">

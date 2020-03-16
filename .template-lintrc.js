@@ -13,6 +13,8 @@ module.exports = {
     "no-nested-interactive":false,
     "self-closing-void-elements":false,
     "no-invalid-interactive":false,
+    "no-negated-condition":false,
+    "no-invalid-role": false
   },
 
   ignore: [

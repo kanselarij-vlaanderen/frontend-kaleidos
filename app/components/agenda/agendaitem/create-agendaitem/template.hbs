@@ -33,7 +33,8 @@
                     disabled=showPostponed
                     class="vl-input-field vl-input-field__input"
                   }}
-                  <button class="vl-input-field__submit vl-button"
+                  <button type="button"
+                          class="vl-input-field__submit vl-button"
                           onclick={{perform searchTask}}
                   >
                     <i class="vl-vi vl-vi-magnifier"></i>
@@ -65,9 +66,12 @@
         size=size
         isLoading=findAll.isRunning
         noDataMessage=(t "no-results-found")
-        onClickRow=(action "selectPostponed") as |table|
+        onClickRow=(action "selectPostponed")
+      as |table|
       }}
-        {{#table.content as |c|}}
+        {{#table.content
+        as |c|
+        }}
           {{#c.header}}
             <th></th>
             {{th-sortable

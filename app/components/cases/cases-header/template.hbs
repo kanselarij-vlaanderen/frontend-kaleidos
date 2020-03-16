@@ -11,7 +11,8 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if isEditor}}
-            <button data-test-cases-header-add-case
+            <button type="button"
+                    data-test-cases-header-add-case
                     class="vl-button vl-button--narrow vl-button--icon-before"
               {{action "toggleAddingCase"}}
             >

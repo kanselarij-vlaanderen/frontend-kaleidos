@@ -5,7 +5,7 @@
   {{#if allowEditing}}
     {{#if isEditor}}
       <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -18,7 +18,9 @@
       {{t "date-publication"}}
     </h3>
     <p class="vl-u-text--italic">
-      {{moment-format (await meeting.newsletter.publicationDate) "DD MMMM YYYY - HH:ss"
+      {{moment-format
+        (await meeting.newsletter.publicationDate)
+        "DD MMMM YYYY - HH:ss"
       }}
     </p>
   </div>
@@ -28,8 +30,8 @@
     </h3>
     <p class="vl-u-text--italic">
       {{moment-format
-              (await meeting.newsletter.publicationDocDate)
-              "DD MMMM YYYY - HH:ss"
+        (await meeting.newsletter.publicationDocDate)
+        "DD MMMM YYYY - HH:ss"
       }}
     </p>
   </div>

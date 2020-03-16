@@ -6,7 +6,7 @@
       </h4>
       {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
-          <a class="vl-link" {{action "toggleIsEditing"}}>
+          <a href="" class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
         </div>
@@ -36,12 +36,12 @@
     }}
   {{/if}}
   {{#if (is-pending item.documents)}}
-    <button class="vl-button vl-button--loading vl-button--narrow" disabled>
+    <button type="button" class="vl-button vl-button--loading vl-button--narrow" disabled>
       {{t "please-be-patient"}}
     </button>
   {{else if isEditor}}
     <div class="vl-u-spacer">
-      <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+      <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
         {{action "toggleIsAddingNewDocument"}}>
         <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
         {{t "document-add"}}
@@ -71,12 +71,12 @@
       </div>
     {{/if}}
     {{#if (is-pending item.linkedDocuments)}}
-      <button class="vl-button vl-button--loading vl-button--narrow" disabled>
+      <button type="button" class="vl-button vl-button--loading vl-button--narrow" disabled>
         {{t "please-be-patient"}}
       </button>
     {{else if isEditor}}
       <div class="vl-u-spacer">
-        <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+        <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
           {{action "toggleIsLinkingOldDocument"}}>
           <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
           ></i>

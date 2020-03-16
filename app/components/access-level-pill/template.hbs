@@ -21,7 +21,7 @@
           selectModel=(action "chooseAccessLevel")
         }}
       </div>
-      <button class="vl-button vl-button--link vl-button--icon"
+      <button type="button" class="vl-button vl-button--link vl-button--icon"
         {{action "save"}}
       >
         <i class="vl-vi vl-vi-save vl-button__icon" aria-hidden="true"></i>
@@ -29,7 +29,7 @@
           {{t "more-options"}}
         </span>
       </button>
-      <button class="vl-button vl-button--link vl-button--icon"
+      <button type="button" class="vl-button vl-button--link vl-button--icon"
         {{action "cancelChanges"}}
       >
         <i class="vl-vi vl-vi-cross vl-button__icon" aria-hidden="true"></i>
@@ -39,7 +39,7 @@
       </button>
     {{/if}}
   {{/if}}
-  <button class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+  <button type="button" class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
           disabled={{if isEditor undefined "true"}}
     {{action "toggleConfidential"}}
   >

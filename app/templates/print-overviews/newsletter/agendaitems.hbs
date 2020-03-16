@@ -6,7 +6,8 @@
     filter=filter
     include=include
     size=size
-    columns=columns as |row|
+    columns=columns
+  as |row|
   }}
     {{#if (not row.isApproval)}}
       {{#if (is-pending row.subcase.newsletterInfo)}}
@@ -22,7 +23,7 @@
       {{else}}
         <div class="vl-u-spacer-extended">
           <div class="vl-action-group vl-action-group--align-center">
-            <button class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+            <button type="button" class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
               {{action "addNewsletterInfo" row}}
             >
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"

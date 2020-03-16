@@ -1,6 +1,6 @@
 <ul class="vlc-tabs-reverse" role="tablist">
   <li class="vlc-tabs-reverse__item">
-    <a class="border-left vlc-tabs-reverse__link {{selectedOverviewClass}}"
+    <a href="" class="border-left vlc-tabs-reverse__link {{selectedOverviewClass}}"
       {{action "goToOverview"}}
     >
       {{t "overview"}}
@@ -8,7 +8,7 @@
   </li>
   <li class="vlc-tabs-reverse__item">
     {{#if sessionService.selectedAgendaItem}}
-      <a class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}">
+      <a href="" class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}">
         {{t "detail"}}
       </a>
     {{else}}
@@ -23,13 +23,13 @@
   </li>
   {{#if isEditor}}
     <li class="vlc-tabs-reverse__item">
-      <a class="vlc-tabs-reverse__link {{selectedCompareClass}}" {{action "compareAgendas"}}>
+      <a href="" class="vlc-tabs-reverse__link {{selectedCompareClass}}" {{action "compareAgendas"}}>
         {{t "compare"}}
       </a>
     </li>
   {{/if}}
   <li class="vlc-tabs-reverse__item">
-    <a class="vlc-tabs-reverse__link {{selectedDocumentClass}}" {{action "navigateToDocuments"}}>
+    <a href="" class="vlc-tabs-reverse__link {{selectedDocumentClass}}" {{action "navigateToDocuments"}}>
       {{t "documents"}}
     </a>
   </li>

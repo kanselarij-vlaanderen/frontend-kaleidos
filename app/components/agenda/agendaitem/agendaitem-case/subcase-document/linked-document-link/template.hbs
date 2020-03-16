@@ -21,6 +21,7 @@
           <div class="vlc-toolbar__item">
             {{#if isEditor}}
               <button class="vl-button vl-button--link-muted vl-button--icon"
+                      type="button"
                 {{action "unlinkDocument" document}}
               >
                 <span class="vl-icon vl-vi vl-vi-link-broken vl-u-text--error"
@@ -45,6 +46,7 @@
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
         <button class="vl-toggle vl-link vl-link--bold"
+                type="button"
           {{action "showVersions"}}
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"

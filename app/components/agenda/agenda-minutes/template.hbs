@@ -20,7 +20,7 @@
       {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           {{#if allowEditing}}
-            <a class="vl-link" {{action "toggleIsEditing"}}>
+            <a href="" class="vl-link" {{action "toggleIsEditing"}}>
               {{t "edit"}}
             </a>
           {{/if}}
@@ -70,7 +70,7 @@
                     {{#if isEditor}}
                       <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                         {{#if allowEditing}}
-                          <a class="vl-link"
+                          <a href="" class="vl-link"
                             {{action "toggleIsEditingMeetingRecord" agendaitem}}
                           >
                             {{t "edit"}}
@@ -84,7 +84,8 @@
                           {{sanitize-html raw=true value=(await agendaitem.meetingRecord.richtext)}}
                         </p>
                         {{#each
-                                (await agendaitem.subcase.decisions) as |decision|
+                          (await agendaitem.subcase.decisions)
+                        as |decision|
                         }}
                           {{#if (await decision.signedDocument.name)}}
                             <p class="vl-u-text--muted">

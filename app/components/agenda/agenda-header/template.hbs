@@ -8,7 +8,8 @@
         {{t "at"}}
         {{moment-format currentSession.plannedStart "HH:mm"}}
         <span class="vlc-page-header__subtitle vl-u-text vl-u-text--muted" style="font-size:1.6rem;"> - {{await
-                currentSession.kindToShow.label}}</span>
+          currentSession.kindToShow.label
+        }}</span>
       </h1>
       <div class="vlc-page-header__sub">
         <div class="vlc-toolbar vlc-toolbar--auto">
@@ -37,14 +38,15 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
-            <button class="vl-button vl-button--narrow"
+            <button type="button" class="vl-button vl-button--narrow"
               {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}
               {{t "approve-small"}}
             </button>
           {{/if}}
-          <button data-test-agenda-header-showActionOptions
+          <button type="button"
+                  data-test-agenda-header-showActionOptions
                   class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions"}}
           >
@@ -59,16 +61,18 @@
             {{/if}}
             {{t "actions"}}
             {{#attach-popover
-               class="ember-attacher-popper vlc-hide-on-print"
-               hideOn="clickout click"
-               showOn="click"
-               animation="shift"
-               placement="bottom" as |attacher|
+              class="ember-attacher-popper vlc-hide-on-print"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom"
+            as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
                 {{#if (and isEditor (eq currentAgenda.name "Ontwerpagenda"))}}
                   <li class="vlc-dropdown-menu__item">
-                    <a data-test-agenda-header-navigateToSubCases
+                    <a href=""
+                       data-test-agenda-header-navigateToSubCases
                        class="vl-link vl-link--block"
                       {{action attacher.hide}}
                       {{action "navigateToSubCases"}}
@@ -77,7 +81,8 @@
                     </a>
                   </li>
                   <li class="vlc-dropdown-menu__item">
-                    <a data-test-agenda-header-announcement
+                    <a href=""
+                       data-test-agenda-header-announcement
                        class="vl-link vl-link--block"
                       {{action attacher.hide}}
                       {{action "toggleIsAddingAnnouncement"}}
@@ -88,7 +93,8 @@
                   <li class="vlc-dropdown-menu__separator" role="none"></li>
                 {{/if}}
                 <li class="vlc-dropdown-menu__item">
-                  <a data-test-agenda-header-navigateToDecisions
+                  <a href=""
+                     data-test-agenda-header-navigateToDecisions
                      class="vl-link vl-link--block"
                     {{action attacher.hide}}
                     {{action "navigateToDecisions"}}
@@ -97,7 +103,8 @@
                   </a>
                 </li>
                 <li class="vlc-dropdown-menu__item">
-                  <a data-test-agenda-header-navigateToNewsletter
+                  <a href=""
+                     data-test-agenda-header-navigateToNewsletter
                      class="vl-link vl-link--block"
                     {{action attacher.hide}}
                     {{action "navigateToNewsletter"}}
@@ -106,7 +113,8 @@
                   </a>
                 </li>
                 <li class="vlc-dropdown-menu__item">
-                  <a data-test-agenda-header-navigateToNotes
+                  <a href=""
+                     data-test-agenda-header-navigateToNotes
                      class="vl-link vl-link--block"
                     {{action "navigateToNotes"}}
                   >
@@ -114,7 +122,8 @@
                   </a>
                 </li>
                 <li class="vlc-dropdown-menu__item">
-                  <a data-test-agenda-header-navigateToPressAgenda
+                  <a href=""
+                     data-test-agenda-header-navigateToPressAgenda
                      class="vl-link vl-link--block"
                     {{action "navigateToPressAgenda"}}
                     {{action attacher.hide}}
@@ -124,14 +133,16 @@
                 </li>
                 {{#if showPrintButton}}
                   <li class="vlc-dropdown-menu__item">
-                    {{#link-to "agenda.agendaitems"
-                               class="vl-link vl-link--block"
+                    {{#link-to
+                      "agenda.agendaitems"
+                      class="vl-link vl-link--block"
                     }}
                       {{t "agenda-view"}}
                     {{/link-to}}
                   </li>
                   <li class="vlc-dropdown-menu__item">
-                    <a data-test-agenda-header-navigateToPressAgenda
+                    <a href=""
+                       data-test-agenda-header-navigateToPressAgenda
                        class="vl-link vl-link--block"
                       {{action attacher.hide}}
                       {{action "print"}}
@@ -141,8 +152,9 @@
                   </li>
                 {{else}}
                   <li class="vlc-dropdown-menu__item">
-                    {{#link-to "agenda.print"
-                               class="vl-link vl-link--block"
+                    {{#link-to
+                      "agenda.print"
+                      class="vl-link vl-link--block"
                     }}
                       {{t "printable-version"}}
                     {{/link-to}}
@@ -151,7 +163,8 @@
                 {{#if isEditor}}
                   <li class="vlc-dropdown-menu__separator" role="none"></li>
                   <li class="vlc-dropdown-menu__item">
-                    <a data-test-agenda-header-toggleEditingSession
+                    <a href=""
+                       data-test-agenda-header-toggleEditingSession
                        class="vl-link vl-link--block"
                       {{action "toggleEditingSession"}}
                       {{action attacher.hide}}
@@ -160,7 +173,8 @@
                     </a>
                   </li>
                   <li class="vlc-dropdown-menu__item">
-                    <a data-test-agenda-header-selectSignature
+                    <a href=""
+                       data-test-agenda-header-selectSignature
                        class="vl-link vl-link--block"
                       {{action "selectSignature"}}
                       {{action attacher.hide}}
@@ -170,7 +184,8 @@
                   </li>
                 {{/if}}
                 <li class="vlc-dropdown-menu__item">
-                  <a data-test-agenda-header-downloaddDocuments
+                  <a href=""
+                     data-test-agenda-header-downloaddDocuments
                      class="vl-link vl-link--block"
                     {{action attacher.hide}}
                     {{action "downloadAllDocuments"}}
@@ -183,7 +198,8 @@
                   <li class="vlc-dropdown-menu__item">
                     {{#if (not currentSession.isFinal)}}
                       {{#if (await hasMultipleAgendas)}}
-                        <a data-test-agenda-header-lockAgenda
+                        <a href=""
+                           data-test-agenda-header-lockAgenda
                            class="vl-link vl-link--block vl-u-text--error"
                           {{action "lockAgenda" currentAgenda}}
                           {{action attacher.hide}}
@@ -192,7 +208,8 @@
                         </a>
                       {{/if}}
                     {{else}}
-                      <a data-test-agenda-header-unlockAgenda
+                      <a href=""
+                         data-test-agenda-header-unlockAgenda
                          class="vl-link vl-link--block"
                         {{action "unlockAgenda"}}
                         {{action attacher.hide}}
@@ -203,7 +220,8 @@
                   </li>
                   <li class="vlc-dropdown-menu__item">
                     {{#if currentSession.canReleaseDecisions}}
-                      <a data-test-agenda-header-releaseDecisions
+                      <a href=""
+                         data-test-agenda-header-releaseDecisions
                          class="vl-link vl-link--block vl-u-text--error"
                         {{action "releaseDecisions"}}
                         {{action attacher.hide}}
@@ -211,7 +229,8 @@
                         {{t "agenda-release-decisions"}}
                       </a>
                     {{else if currentSession.canReleaseDocuments}}
-                      <a data-test-agenda-header-releaseDocuments
+                      <a href=""
+                         data-test-agenda-header-releaseDocuments
                          class="vl-link vl-link--block vl-u-text--error"
                         {{action "releaseDocuments"}}
                         {{action attacher.hide}}
@@ -223,12 +242,13 @@
                   <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                   >
                     {{#if
-                            (or
+                      (or
                                     (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
                                     (and isAdmin (await currentAgendaIsLast))
-                            )
+                      )
                     }}
-                      <a data-test-agenda-header-deleteAgenda
+                      <a href=""
+                         data-test-agenda-header-deleteAgenda
                          class="vl-link vl-u-text--error"
                         {{action "deleteAgenda" currentAgenda}}
                         {{action attacher.hide}}
@@ -236,11 +256,14 @@
                         {{t "agenda-delete"}}
                       </a>
                     {{/if}}
-                    {{#if (and
+                    {{#if
+                      (and
                                   (not (await designAgendaPresent))
                                   (not (await currentSession.isFinal))
-                          )}}
-                      <a data-test-agenda-header-createNewDesignAgenda
+                      )
+                    }}
+                      <a href=""
+                         data-test-agenda-header-createNewDesignAgenda
                          class="vl-link vl-link--block"
                         {{action "createNewDesignAgenda" currentSession}}
                         {{action attacher.hide}}

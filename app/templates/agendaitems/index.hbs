@@ -25,7 +25,8 @@
             options=sizeOptions
             selected=size
             searchEnabled=false
-            onchange=(action "selectSize") as |sizeValue|
+            onchange=(action "selectSize")
+          as |sizeValue|
           }}
             {{sizeValue}}
           {{/power-select}}
@@ -39,7 +40,8 @@
       class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
       onClickRow=(action "navigateToAgendaitem")
       noDataMessage=(t "agendaitems-empty-result")
-      isLoading=isLoadingModel as |table|
+      isLoading=isLoadingModel
+    as |table|
     }}
       {{#table.content as |c|}}
         {{#c.header}}
@@ -91,8 +93,10 @@
           <td class="vl-u-align-right">
             {{#link-to
               "agenda.agendaitems.agendaitem"
-              row.meetingId row.id
-              (query-params selectedAgenda=row.agendaId)
+              row.meetingId
+              row.id
+              (
+               query-params selectedAgenda=row.agendaId)
               class="vl-button vl-button--link vl-button--icon"
             }}
               <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>

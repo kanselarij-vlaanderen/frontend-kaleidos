@@ -5,7 +5,7 @@
     </h3>
     {{#if isEditor}}
       <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -71,10 +71,12 @@
           {{t "is-on-agenda"}}
         </span>
         <span class="vl-description-data__value">
-          {{#if (or
+          {{#if
+            (or
                         (is-pending subcase.isPostponed)
                         (is-pending subcase.onAgendaInfo)
-                )}}
+            )
+          }}
             <div class="vl-loader"></div>
           {{else}}
             {{#if (await subcase.isPostponed)}}
@@ -125,10 +127,10 @@
         </span>
         <span class="vl-description-data__value">
           {{#if
-                  (or
+            (or
                           (is-pending subcase.requestedBy)
                           (is-pending subcase.requestedBy.person)
-                  )
+            )
           }}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else if subcase.requestedBy}}
@@ -172,7 +174,7 @@
     </div>
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__right">
-        <a class="vl-link" {{action "cancelEditing"}}>
+        <a href="" class="vl-link" {{action "cancelEditing"}}>
           {{t "cancel"}}
         </a>
       </div>

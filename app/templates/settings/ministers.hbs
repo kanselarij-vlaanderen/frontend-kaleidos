@@ -2,6 +2,7 @@
 <div class="vl-u-display-flex vl-u-flex-space-between">
   <h4 class="vl-title vl-title--h4"></h4>
   <button data-test-minister-add
+          type="button"
           class="vl-button vl-button--narrow vl-button--icon-before"
     {{action "toggleIsAdding"}}
   >
@@ -57,9 +58,13 @@
     {{#sortable-group
       data-test-ministers-sortable-group
       tagName="tbody"
-      onChange=(action "reorderItems" model) as |sortableGroup|
+      onChange=(action "reorderItems" model)
+    as |sortableGroup|
     }}
-      {{#each model as |mandatee index|}}
+      {{#each
+        model
+      as |mandatee index|
+      }}
         {{#sortable-item
           tagName="tr"
           model=mandatee
@@ -87,24 +92,27 @@
           <td class="vl-u-align-center">
             <div class="vl-action-group vl-action-group--align-center">
               <button data-test-mandatee-edit={{index}}
+                      type="button"
                       class="vl-button vl-button--link vl-button--icon"
                 {{action "toggleProperty" "isEditingMandatee" mandatee}}
               >
                 <i class="vl-button__icon vl-vi vl-vi-edit"></i>
               </button>
-              <button data-test-mandatee-resign={{index}}
+              <button type="button"
+                      data-test-mandatee-resign={{index}}
                       class="vl-button vl-button--link vl-button--icon"
                 {{action "toggleProperty" "isResigningMandatee" mandatee}}
               >
                 <i class="vl-button__icon vl-vi vl-vi-cog"></i>
                 {{#attach-popover
-                        placement="bottom"
-                        class="ember-attacher-popper ember-attacher-popper-small"
+                  placement="bottom"
+                  class="ember-attacher-popper ember-attacher-popper-small"
                 }}
                   {{t "resign"}}
                 {{/attach-popover}}
               </button>
-              <button data-test-mandatee-delete={{index}}
+              <button type="button"
+                      data-test-mandatee-delete={{index}}
                       class="vl-button vl-button--link vl-button--icon vl-u-text--error"
                 {{action "toggleProperty" "isDeletingMandatee" mandatee}}
               >
@@ -152,10 +160,11 @@
     title=(t "manage-ministers")
     closeModal=(action "toggleIsAdding")
   }}
-    {{utils/create-mandatee model=model
-      closeModal=(action "toggleIsAdding")
-      mandateesUpdated=(action "mandateesUpdated")
-    }}
+  {{utils/create-mandatee
+    model=model
+    closeModal=(action "toggleIsAdding")
+    mandateesUpdated=(action "mandateesUpdated")
+  }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isDeletingMandatee}}

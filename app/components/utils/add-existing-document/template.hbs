@@ -11,7 +11,8 @@
               key-press=(perform searchTask)
               class="vl-input-field vl-input-field__input"
             }}
-            <button class="vl-input-field__submit vl-button"
+            <button type="button"
+                    class="vl-input-field__submit vl-button"
                     onclick={{perform searchTask}}
             >
               <i class="vl-vi vl-vi-magnifier"></i>
@@ -34,9 +35,12 @@
   size=size
   noDataMessage=(t "no-results-found")
   isLoading=findAll.isRunning
-  onClickRow=(action "select") as |table|
+  onClickRow=(action "select")
+as |table|
 }}
-  {{#table.content as |c|}}
+  {{#table.content
+  as |c|
+  }}
     {{#c.header}}
       <th></th>
       <th><span class="">{{t "title-document"}}</span></th>

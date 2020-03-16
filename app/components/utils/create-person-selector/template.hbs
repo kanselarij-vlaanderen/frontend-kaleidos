@@ -11,7 +11,8 @@
       searchMessage=searchMessage
       search=(perform searchTask)
       oninput=(action "resetValueIfEmpty")
-      onchange=(action "selectModel") as |model|
+      onchange=(action "selectModel")
+    as |model|
     }}
       {{await (model-property-to-show model propertyToShow)}}
     {{/power-select}}
@@ -38,7 +39,7 @@
       </div>
     </div>
     <div class="vl-action-group vl-action-group--align-right">
-      <a class="vl-link" {{action "resetValuesAndCancelCreation"}}>
+      <a href="" class="vl-link" {{action "resetValuesAndCancelCreation"}}>
         {{t "cancel"}}
       </a>
       {{web-components/vl-save-button

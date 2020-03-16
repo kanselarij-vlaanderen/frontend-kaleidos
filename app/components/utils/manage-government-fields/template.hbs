@@ -20,7 +20,7 @@
       <div class="vlc-toolbar">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
-            <button class="vl-button vl-button--link vl-button--narrow"
+            <button type="button" class="vl-button vl-button--link vl-button--narrow"
               {{action "close"}}
             >
               {{t "cancel"}}
@@ -29,7 +29,7 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+            <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
               {{action "toggleIsAdding"}}
             >
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
@@ -37,14 +37,14 @@
               {{t "add"}}
             </button>
             {{#if item}}
-              <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "toggleIsEditing"}}
               >
                 <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "edit"}}
               </button>
-              <button class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
                 {{action "removeModel"}}
               >
                 <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"

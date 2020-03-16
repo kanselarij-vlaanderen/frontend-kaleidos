@@ -1,8 +1,8 @@
 <div class="vl-modal">
   <div class={{backdropClass}}>
     {{#click-outside
-            action=(action "clickOutside")
-            except-selector=".flatpickr-calendar"
+      action=(action "clickOutside")
+      except-selector=".flatpickr-calendar"
     }}
       <div class="vl-modal-dialog {{sizeClass}}" tabindex="-2" role="dialog" data-test-vl-modal-dialog>
         <div class="vlc-navbar vlc-navbar--bordered-bottom">
@@ -16,7 +16,7 @@
             </div>
             <div class="vlc-toolbar__right">
               <div class="vlc-toolbar__item">
-                <button data-test-vl-modal-close
+                <button type="button" data-test-vl-modal-close
                         class="vl-button vl-button--link-muted vl-button--icon"
                   {{action "close"}}
                 >

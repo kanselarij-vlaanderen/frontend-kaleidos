@@ -6,7 +6,8 @@
   placeholder=placeholder
   search=(perform searchTask)
   oninput=(action "resetValueIfEmpty")
-  onchange=(action "selectModel") as |user|
+  onchange=(action "selectModel")
+as |user|
 }}
   {{user.firstName}} {{user.lastName}}
 {{/power-select}}

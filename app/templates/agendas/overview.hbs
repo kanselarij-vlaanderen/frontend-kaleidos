@@ -14,7 +14,8 @@
         {{changes-alert
           message=(t "filtered-agendas")
           buttonText=(t "clear-filter")
-          clearAction=(action "clearFilter")}}
+          clearAction=(action "clearFilter")
+        }}
       {{/if}}
 
 
@@ -65,7 +66,8 @@
                 sort=sort
                 isLoading=isLoadingModel
                 noDataMessage=(t "no-results-found")
-                onClickRow=(action "onClickRow") as |table|
+                onClickRow=(action "onClickRow")
+              as |table|
               }}
                 {{#table.content as |c|}}
                   {{#c.header}}
@@ -123,8 +125,8 @@
                           ></div>
                         {{else}}
                           {{moment-format
-                                  (await meeting.latestAgenda.modified)
-                                  "DD-MM-YYYY HH:mm"
+                            (await meeting.latestAgenda.modified)
+                            "DD-MM-YYYY HH:mm"
                           }}
                         {{/if}}
                       </td>
@@ -140,9 +142,9 @@
                       </td>
                       <td class="vl-u-align-center">
                         {{#link-to
-                                "agenda.agendaitems"
-                                meeting.id
-                                class="vl-button vl-button--link vl-button--icon"
+                          "agenda.agendaitems"
+                          meeting.id
+                          class="vl-button vl-button--link vl-button--icon"
                         }}
                           <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
                         {{/link-to}}

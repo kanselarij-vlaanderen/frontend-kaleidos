@@ -11,7 +11,8 @@
     {{#power-select
       options=options
       selected=selectedFormallyOk
-      onchange=(action "setAction") as |option|
+      onchange=(action "setAction")
+    as |option|
     }}
       {{option.label}}
     {{/power-select}}
