@@ -1,6 +1,6 @@
 <div class="vl-u-spacer-extended-bottom-s">
-  <h4 class="vlc-printable-agenda-list__title">{{{if this.item.shortTitle this.item.shortTitle this.item.title}}}</h4>{{!-- Fallback for legacy data that doesn't have a short title --}}
-  <p class="vlc-printable-agenda-list__description">{{{this.item.title}}}</p>
+  <h4 class="vlc-printable-agenda-list__title">{{sanitize-html raw=true value=(if this.item.shortTitle this.item.shortTitle this.item.title)}}</h4>{{!-- Fallback for legacy data that doesn't have a short title --}}
+  <p class="vlc-printable-agenda-list__description">{{sanitize-html raw=true value=this.item.title}}</p>
 </div>
 <ul class="vlc-printable-agenda-list__document-list">
   {{#each this.item.sortedDocumentVersions as |document|}}
