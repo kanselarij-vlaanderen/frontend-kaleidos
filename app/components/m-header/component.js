@@ -4,9 +4,6 @@ import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vl-u-display-block'],
-  options: null,
-  selectedOption: null,
-  isOc: null,
 
   init() {
     this._super(...arguments);
@@ -30,9 +27,6 @@ export default Component.extend(isAuthenticatedMixin, {
   actions: {
     async logout() {
       await this.logoutUser();
-    },
-    setAction(option) {
-      this.navigateToRoute(option);
-    },
+    }
   },
 });

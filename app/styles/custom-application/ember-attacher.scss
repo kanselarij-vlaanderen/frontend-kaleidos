@@ -10,7 +10,6 @@
   width: 23rem;
   min-width: 23rem;
   max-width: 90vw;
-  max-height: 300px;
   z-index: 11000;
 
   @include respond-to(small) {
@@ -32,8 +31,6 @@
     position: absolute;
     right: 12px;
     top: -10px;
-    border: 12px solid transparent;
-    border-bottom-color: $page-bg;
     border-top-width: 0;
   }
 

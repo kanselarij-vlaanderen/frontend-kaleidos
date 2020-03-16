@@ -7,16 +7,18 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   sessionService: inject(),
+  agendaService: inject(),
   globalError: inject(),
   classNameBindings: [
     'isActive:vlc-agenda-items__sub-item--active',
     'isClickable::not-clickable',
-    'agendaitem.retracted:transparant',
-    'isPostponed:transparant',
+    'agendaitem.retracted:vlc-u-opacity-lighter',
+    'isPostponed:vlc-u-opacity-lighter',
     'isNew:vlc-agenda-items__sub-item--added-item'
   ],
   tagName: 'a',
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  currentAgenda: alias('sessionService.currentAgenda'),
   isClickable: true,
   hideLabel: true,
   isShowingChanges: null,
@@ -67,6 +69,12 @@ export default Component.extend(isAuthenticatedMixin, {
     if (this.agendaitem) {
       return this.agendaitem.get('aboutToDelete');
     }
+  }),
+
+  // get document names to show on all agendaitems, regardless of lazy loading
+  documentNames: computed('agendaitem', async function() {
+    const names = await this.agendaService.getDocumentNames(this.get('agendaitem'));
+    return names;
   }),
 
   /* Begin lazy partial rendering

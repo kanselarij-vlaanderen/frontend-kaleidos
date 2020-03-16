@@ -28,7 +28,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   aboutToDelete: computed('document.aboutToDelete', function() {
     if (this.document) {
       if (this.document.get('aboutToDelete')) {
-        return 'deleted-state';
+        return 'vlc-document--deleted-state';
       }
     }
   }),
@@ -81,7 +81,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       if(!this.isEditor){
         return;
       }
-      this.set('nameBuffer', this.get('document.lastDocumentVersion.name'));
+      this.set('nameBuffer', this.get('lastDocumentVersion.name'));
       this.set('isEditing', true);
     },
 

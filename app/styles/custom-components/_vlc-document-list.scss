@@ -54,3 +54,12 @@
     background: rgba($green-light, 0.2);
   }
 }
+
+/* Loading state
+   ========================================================================== */
+
+.vlc-document-list__item--loading {
+  span {
+    opacity: 0.2;
+  }
+} 

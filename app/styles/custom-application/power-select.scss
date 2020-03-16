@@ -18,7 +18,7 @@
   display: block;
   position: relative;
   width: 100%;
-  padding: 0.7rem 0 0.5rem 3.2rem;
+  padding: 0.7rem 0 0.5rem 1rem;
   color: $black;
   font-size: 1.6rem;
   font-weight: normal;
@@ -200,6 +200,17 @@
 
 .ember-power-select-clear-btn {
   margin-right:0.2em;
-  line-height: 1.2em; 
+  line-height: 1.2em;
   font-size:2.6rem;
+}
+
+.ember-power-select-status-icon {
+  display: none;
+}
+
+/* Custom overrides
+	 ========================================================================== */
+
+.ember-power-select-trigger {
+  width: 100%;
 }

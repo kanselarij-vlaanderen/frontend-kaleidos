@@ -40,7 +40,7 @@
       <div class="vl-u-display-flex vl-u-display-flex-align-center vl-col-4-4">
         {{#if (not isEditing)}}
           {{utils/model-selector
-            class="full-width-selector"
+            class="vlc-u-box-model-maximize-width"
             modelName="shortcut"
             searchField="label"
             propertyToShow="label"
@@ -67,7 +67,7 @@
             value=subcaseName
           }}
           <button
-            class="vl-button vl-button--secondary vl-button--icon js-vl-popover__toggle"
+            class="vl-button vl-button--secondary vl-button--icon"
             type="button"
             {{action "toggleIsEditing"}}
           >
