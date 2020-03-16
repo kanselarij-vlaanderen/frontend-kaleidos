@@ -41,7 +41,6 @@ Router.map(function () {
       this.route('user', { path: "/:id"});
     });
     this.route('errors', { path: "/errors"});
-    this.route('logs', { path: "/logs"});
   });
   this.route('loading', { path: '/laden' });
   this.route('mock-login');
