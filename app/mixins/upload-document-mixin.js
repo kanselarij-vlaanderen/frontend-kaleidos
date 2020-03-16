@@ -158,7 +158,7 @@ export default Mixin.create({
       newDocument.set('created', creationDate);
       newDocument.set('modified', creationDate);
       if (this.documentContainer) { // Adding new version to existing container
-        const docs = await this.documentContainer.get('documents')
+        const docs = await this.documentContainer.get('documents');
         docs.pushObject(newDocument);
         newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
         const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);

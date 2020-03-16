@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach*/
+/*global context, before, it, cy, Cypress, beforeEach*/
 /// <reference types="Cypress" />
 
 import {formCancelButtonSelector, formSaveSelector} from "../../selectors/formSelectors/formSelectors";
@@ -185,6 +185,8 @@ context('Tests for cancelling CRUD operations on document and document-versions'
   });
 
   it('Cancelling when adding new document-version should not skip a version the next time', () => {
+    cy.route('DELETE', '/files/**').as('deleteFile');
+    cy.route('POST', '/document-versions').as('createNewDocumentVersion');
     const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: cancelling a new document version - ' + currentTimestamp();
@@ -214,8 +216,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
 
       uploadFileToCancel(file);
-      cy.get(formCancelButtonSelector).click();
-      cy.wait(1000);
+      cy.get(formCancelButtonSelector).click().wait('@deleteFile');
 
       cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
       cy.get(modalDialogSelector).should('not.be.visible');
@@ -226,8 +227,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
 
       uploadFileToCancel(file);
-      cy.get(modalDialogCloseModalSelector).click();
-      cy.wait(1000); //removing the file is not instant
+      cy.get(modalDialogCloseModalSelector).click().wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
 
       cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
       cy.get(modalDialogSelector).should('not.be.visible');
@@ -237,16 +237,13 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         });
       });
 
-      cy.route('PATCH', `/subcases/**`).as('patchSubcase');
-      cy.route('PATCH', `/agendaitems/**`).as('patchAgendaitem');
-
       uploadFileToCancel(file);
-      cy.get(modalDocumentVersionDeleteSelector).should('exist').click();
-      cy.wait(1000); //removing the file is not instant
+      cy.get(modalDocumentVersionDeleteSelector).should('exist').click().wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
       cy.get(modalDialogSelector).within(() => {
         cy.get(formSaveSelector).should('be.disabled');
         cy.uploadFile(file.folder, file.fileName, file.fileExtension);
         cy.get(formSaveSelector).should('not.be.disabled').click();
+        cy.wait('@createNewDocumentVersion', { timeout: 12000 });
         cy.wait('@patchSubcase', { timeout: 12000 });
         cy.wait('@patchAgendaitem', { timeout: 12000 });
       });

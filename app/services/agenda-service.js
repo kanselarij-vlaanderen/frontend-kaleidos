@@ -227,8 +227,11 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     await itemToDelete.destroyRecord();
   },
 
-  async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {
+  async deleteAgendaitemFromMeeting(agendaitem) {
     let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
+    const currentAgenda = await itemToDelete.get('agenda');
+    const currentMeeting = await currentAgenda.get('createdFor');
+    const currentMeetingId = await currentMeeting.get('id');
     if (this.isAdmin) {
       itemToDelete.set('aboutToDelete', true);
       const subcase = await itemToDelete.get('subcase');

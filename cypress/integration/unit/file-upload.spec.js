@@ -26,14 +26,14 @@ context('Add files to an agenda', () => {
         });
       });
 
-      cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'}, 'agendas');
+      cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
           cy.get('.vl-title--h6 > span').contains(/BIS/);
         });
       });
 
-      cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'}, 'agendas');
+      cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
           cy.get('.vl-title--h6 > span').contains(/TER/);

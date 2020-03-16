@@ -7,5 +7,6 @@
       "KALEIDOS_PROJECT": "../kaleidos-project"
     },
     "viewportHeight": 720,
-    "viewportWidth": 1280
+    "viewportWidth": 1280,
+    "video": false
 }

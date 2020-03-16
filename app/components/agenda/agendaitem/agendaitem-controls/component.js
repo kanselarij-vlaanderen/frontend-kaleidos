@@ -14,10 +14,6 @@ export default Component.extend(isAuthenticatedMixin, {
   agendaitem: null,
   lastDefiniteAgenda: null,
 
-  currentMeeting: computed("currentAgenda.createdFor", function () {
-    return this.currentAgenda.get("createdFor");
-  }),
-
   isPostPonable: computed("sessionService.agendas.@each", "agendaitem.subcase", async function () {
     const subcase = await this.agendaitem.get('subcase');
     if (!subcase) {
@@ -55,8 +51,7 @@ export default Component.extend(isAuthenticatedMixin, {
     if (await this.get('isDeletable')) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
-      const currentMeetingId = await this.get('currentMeeting.id');
-      await this.agendaService.deleteAgendaitemFromMeeting(agendaitem, currentMeetingId);
+      await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
     }
     this.set('sessionService.selectedAgendaItem', null);
     this.refreshRoute(id);

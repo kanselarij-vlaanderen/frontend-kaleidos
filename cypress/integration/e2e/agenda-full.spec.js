@@ -114,7 +114,7 @@ context('Full test', () => {
     // cy.approveCoAgendaitem(case_2_TitleShort); // TODO approvals have low prior and need a refactor
 
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
-    cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'}, 'agendas');
+    cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
 
     cy.addRemarkToAgenda('Titel mededeling',

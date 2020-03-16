@@ -51,11 +51,14 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     const uploadedFile = this.get('uploadedFile');
     if (uploadedFile && uploadedFile.id) {
       const versionInCreation = await uploadedFile.get('documentVersion');
+      const container = this.get('documentContainer');
+      container.rollbackAttributes();
       if (versionInCreation) {
         await this.fileService.deleteDocumentVersion(versionInCreation);
       } else {
-        await this.fileService.removeFile(uploadedFile.id);
+        await this.fileService.deleteFile(uploadedFile);
       }
+
       if (!this.isDestroyed) {
         this.set('uploadedFile', null);
       }
@@ -121,9 +124,17 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       if (uploadedFile) {
         const container = this.get('documentContainer');
         const doc = await this.get('documentContainer.lastDocumentVersion');
-        doc.rollbackAttributes()
+        await doc.rollbackAttributes();
+        // await container.rollbackAttributes();
         container.rollbackAttributes();
-        await uploadedFile.destroyRecord();
+        doc.rollbackAttributes();
+        const versionInCreation = await uploadedFile.get('documentVersion');
+        if (versionInCreation) {
+          await this.fileService.deleteDocumentVersion(versionInCreation);
+        } else {
+          await this.fileService.deleteFile(uploadedFile);
+        }
+        
         this.set('uploadedFile', null);
       }
       this.set('isUploadingNewVersion', false);

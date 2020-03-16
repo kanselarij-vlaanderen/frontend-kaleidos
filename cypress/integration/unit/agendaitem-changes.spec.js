@@ -52,8 +52,6 @@ context('Agendaitem changes tests', () => {
 
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
-    cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
-    cy.wait( '@patchAgendaItem');
     cy.wait(1000); //Computeds are not reloaded yet , maybe 
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);
