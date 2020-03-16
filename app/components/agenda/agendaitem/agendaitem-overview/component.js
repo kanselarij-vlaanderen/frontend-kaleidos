@@ -1,7 +1,7 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed, observer } from '@ember/object';
-import { alias } from '@ember/object/computed';
+import {inject} from '@ember/service';
+import {computed, observer} from '@ember/object';
+import {alias} from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import DS from 'ember-data';
 
@@ -43,7 +43,7 @@ export default Component.extend(isAuthenticatedMixin, {
       if (subcase) {
         const newDecision = this.store.createRecord('decision', {
           approved: false, subcase
-        })
+        });
         await newDecision.save();
         await subcase.get('decisions').addObject(newDecision);
       }
