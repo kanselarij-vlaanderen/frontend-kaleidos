@@ -2,14 +2,14 @@ import Route from '@ember/routing/route';
 import SortedAgendaItemsRouteMixin from 'fe-redpencil/mixins/sorted-agenda-items-route-mixin';
 
 export default Route.extend(SortedAgendaItemsRouteMixin, {
-	type: 'newsletter',
-	include: 'newsletter-info',
+  type: 'newsletter',
+  include: 'newsletter-info',
 
-	queryParams: {
-		definite: { refreshModel: true }
-	},
+  queryParams: {
+    definite: { refreshModel: true }
+  },
 
-  filterAnnouncements: function(announcements){
+  filterAnnouncements: function (announcements) {
     return announcements.filter((item) => {
       return item.showInNewsletter;
     });
@@ -17,16 +17,16 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
 
   allowEmptyGroups: true,
 
-  filterAgendaitems: async function(items, params){
-    if(params.definite !== "true"){
+  filterAgendaitems: async function (items, params) {
+    if (params.definite !== 'true') {
       return items;
     }
-    let newsLetterByIndex = await Promise.all(items.map((item)=> {
-      if(!item) return;
+    let newsLetterByIndex = await Promise.all(items.map((item) => {
+      if (!item) return;
       return item.get('subcase').then((subcase) => {
-        if(!subcase) return;
+        if (!subcase) return;
         return subcase.get('newsletterInfo').then((newsletter) => {
-          if(!newsletter) {
+          if (!newsletter) {
             return;
           }
           return newsletter.inNewsletter;
@@ -35,7 +35,7 @@ export default Route.extend(SortedAgendaItemsRouteMixin, {
     }));
     let filtered = [];
     items.map((item, index) => {
-      if(newsLetterByIndex[index]){
+      if (newsLetterByIndex[index]) {
         filtered.push(item);
       }
     });

@@ -4,8 +4,7 @@
   </h6>
   {{access-level-pill item=documentVersion}}
   {{#if (await documentVersion.file.downloadLink)}}
-    <button
-      class="vl-button vl-button--link vl-button--icon"
+    <button type="button" class="vl-button vl-button--link vl-button--icon"
       {{action "showDocumentVersionViewer" documentVersion}}
     >
       <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
@@ -13,20 +12,18 @@
         {{t "download"}}
       </span>
     </button>
-    <a
-      class="vl-button vl-button--link vl-button--icon"
-      href={{concat
-      (await documentVersion.file.downloadLink)
-      "?name="
-      (await documentVersion.downloadFilename)
-    }}
+    <a class="vl-button vl-button--link vl-button--icon"
+       href={{concat
+         (await documentVersion.file.downloadLink)
+         "?name="
+         (await documentVersion.downloadFilename)
+       }}
       {{!-- download --}}
       {{! 'download' attribute doesn't specify a filename, as this gets overruled by
       the filename received in the "Content-Disposition HTTP header" }}
     >
-      <i
-        class="vl-vi vl-vi-download-harddisk vl-button__icon"
-        aria-hidden="true"
+      <i class="vl-vi vl-vi-download-harddisk vl-button__icon"
+         aria-hidden="true"
       ></i>
       <span class="vl-u-visually-hidden">
         {{t "download"}}
@@ -35,8 +32,7 @@
   {{/if}}
 
   {{#if isEditor}}
-    <button
-      class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
+    <button type="button" class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
       {{action "deleteDocumentVersion" documentVersion}}
     >
       <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>
@@ -55,9 +51,8 @@
   </div>
 {{/if}}
 <div class="vlc-document-card-item__icon">
-  <span
-    class="vl-icon vl-icon--large vl-vi vl-vi-timeline"
-    aria-hidden="true"
+  <span class="vl-icon vl-icon--large vl-vi vl-vi-timeline"
+        aria-hidden="true"
   ></span>
 </div>
 {{#if isVerifyingDelete}}

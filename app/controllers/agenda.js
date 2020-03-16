@@ -18,7 +18,7 @@ export default Controller.extend(isAuthenticatedMixin, {
   isLoading: false,
   isPrintingDecisions: false,
 
-  selectedAgendaObserver: observer('selectedAgenda', async function() {
+  selectedAgendaObserver: observer('selectedAgenda', async function () {
     const session = await this.get('sessionService.currentSession');
     const agenda = await this.get('sessionService.currentAgenda');
 
@@ -31,18 +31,18 @@ export default Controller.extend(isAuthenticatedMixin, {
     }
   }),
 
-  documentTitle: computed('currentAgenda', 'currentSession', function() {
+  documentTitle: computed('currentAgenda', 'currentSession', function () {
     const { currentSession, currentAgenda } = this;
     const agendaName = currentAgenda ? currentAgenda.get('agendaName') : '';
     const dateToDisplay = moment(currentSession.get('plannedStart')).format('DD/MM/YYYY HH:mm');
     return `${agendaName} van ${dateToDisplay}`;
   }),
 
-  shouldHideNav: computed('router.currentRouteName', function() {
+  shouldHideNav: computed('router.currentRouteName', function () {
     return this.get('router.currentRouteName') === 'agenda.compare';
   }),
 
-  showPrintButton: computed('router.currentRouteName', function() {
+  showPrintButton: computed('router.currentRouteName', function () {
     return get(this, 'router.currentRouteName') === 'agenda.print';
   }),
 
@@ -54,7 +54,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   create_UUID() {
     var dt = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = (dt + Math.random() * 16) % 16 | 0;
       dt = Math.floor(dt / 16);
       return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);

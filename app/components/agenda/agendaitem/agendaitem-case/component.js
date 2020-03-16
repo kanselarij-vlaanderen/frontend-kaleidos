@@ -38,7 +38,7 @@ export default Component.extend(EditAgendaitemOrSubcase, {
       this.toggleProperty('isEditing');
     },
     toggleConfidential(value) {
-      this.set("item.confidential", value);
+      this.set('item.confidential', value);
     },
     chooseConfidentiality(confidentiality) {
       this.get('item').set('confidentiality', confidentiality);

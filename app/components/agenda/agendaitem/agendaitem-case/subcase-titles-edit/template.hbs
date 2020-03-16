@@ -22,21 +22,32 @@
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "name-subcase")}}
-    {{textarea rows="2" class="vl-textarea vl-textarea--block" value=shortTitle
+    {{textarea
+      rows="2"
+      class="vl-textarea vl-textarea--block"
+      value=shortTitle
     }}
   </div>
 </div>
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block" data-test-vl-subcase-titles-edit-title-subcase>
     {{web-components/vl-form-label value=(t "title-subcase")}}
-    {{textarea rows="4" class="vl-textarea vl-textarea--block" value=title}}
+    {{textarea
+      rows="4"
+      class="vl-textarea vl-textarea--block"
+      value=title
+    }}
   </div>
 </div>
 {{#if isAgendaItem}}
   <div class="vl-u-spacer">
     <div class="vlc-input-field-block" data-test-vl-subcase-titles-edit-explanation>
       {{web-components/vl-form-label value=(t "remark-title")}}
-      {{textarea rows="2" class="vl-textarea vl-textarea--block" value=item.explanation}}
+      {{textarea
+        rows="2"
+        class="vl-textarea vl-textarea--block"
+        value=item.explanation
+      }}
     </div>
   </div>
 {{/if}}
@@ -49,8 +60,7 @@
   </div>
 {{/if}}
 <div class="vl-action-group vl-action-group--align-right">
-  <a
-    class="vl-button vl-button--tertiary vl-button--narrow"
+  <a href="" class="vl-button vl-button--tertiary vl-button--narrow"
     {{action "cancelEditing"}}
   >
     {{t "cancel"}}

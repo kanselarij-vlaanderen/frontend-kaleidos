@@ -10,9 +10,9 @@ export const downloadFilePrompt = function (context, file, filename) {
     .then((content) => context.saveFileAs(filename, content, file.get('contentType')));
 };
 
-export const removeFile = function(file) {
+export const removeFile = function (file) {
   return $.ajax({
-    method: "DELETE",
+    method: 'DELETE',
     url: '/files/' + file.id
   });
 };

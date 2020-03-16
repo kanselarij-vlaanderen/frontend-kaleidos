@@ -22,9 +22,7 @@
       </div>
       <div class="vlc-toolbar__right">
         {{#if (eq (await comment.author.id) (await user.id))}}
-          <button
-            class="vl-button vl-button--link vl-button--icon"
-          >
+          <button type="button" class="vl-button vl-button--link vl-button--icon">
             <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
             <span class="vl-u-visually-hidden">
               {{t "more-options"}}
@@ -34,12 +32,12 @@
               hideOn="clickout click"
               showOn="click"
               animation="shift"
-              placement="bottom" as |attacher|
+              placement="bottom"
+            as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
                 <li class="vlc-dropdown-menu__item">
-                  <button
-                    class="vl-link vl-u-text--error"
+                  <button type="button" class="vl-link vl-u-text--error"
                     {{action attacher.hide}}
                     {{action "deleteComment" comment}}
                   >

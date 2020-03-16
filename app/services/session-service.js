@@ -9,7 +9,7 @@ export default Service.extend({
   currentSession: null,
   selectedAgendaItem: null,
 
-  agendas: computed('currentSession.agendas.@each', function() {
+  agendas: computed('currentSession.agendas.@each', function () {
     if (!this.get('currentSession')) {
       return [];
     }
@@ -18,7 +18,7 @@ export default Service.extend({
     });
   }),
 
-  currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
+  currentAgendaItems: computed('currentAgenda.agendaitems.@each', function () {
     let currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       return this.store.query('agendaitem', {
@@ -41,7 +41,7 @@ export default Service.extend({
       return result.body;
     });
   },
-  announcements: computed('currentAgenda.announcements.@each', function() {
+  announcements: computed('currentAgenda.announcements.@each', function () {
     let currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       let announcements = this.store.query('announcement', {
@@ -55,13 +55,13 @@ export default Service.extend({
     }
   }),
 
-  definiteAgendas: computed('agendas', function() {
+  definiteAgendas: computed('agendas', function () {
     return this.get('agendas').then((agendas) => {
       return agendas.filter((agenda) => agenda.name != 'Ontwerpagenda').sortBy('-name');
     });
   }),
 
-  latestDefiniteAgendas: computed('agendas', function() {
+  latestDefiniteAgendas: computed('agendas', function () {
     return this.get('agendas').then((agendas) => {
       return agendas
         .filter((agenda) => agenda.name != 'Ontwerpagenda')
@@ -88,10 +88,10 @@ export default Service.extend({
 
   async deleteSession(session) {
     const newsletter = await session.get('newsletter');
-    if(newsletter){
+    if (newsletter) {
       await newsletter.destroyRecord();
     }
-    
+
     await session.destroyRecord();
     this.router.transitionTo('agendas');
   },

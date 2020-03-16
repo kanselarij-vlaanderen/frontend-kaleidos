@@ -13,8 +13,9 @@ export default Component.extend({
     this.set('fileQueue.files', A([]));
   },
 
-  uploadFile: task(function*(file) {
-    file.readAsDataURL().then(() => {});
+  uploadFile: task(function* (file) {
+    file.readAsDataURL().then(() => {
+    });
     let response = yield file.upload('/user-management-service/import-users');
     this.uploadedFile(response);
   }).enqueue(),

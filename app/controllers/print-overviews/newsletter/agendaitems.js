@@ -6,7 +6,7 @@ export default Controller.extend({
   intl: inject(),
   newsletterService: inject(),
 
-  columns: computed(function() {
+  columns: computed(function () {
     return [
       {
         label: '#',
@@ -33,7 +33,7 @@ export default Controller.extend({
         cellComponent: 'web-components/vl-mandatees-column',
       },
       {
-        label: this.intl.t("in-newsletter"),
+        label: this.intl.t('in-newsletter'),
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
         breakpoints: ['mobile', 'tablet', 'desktop'],

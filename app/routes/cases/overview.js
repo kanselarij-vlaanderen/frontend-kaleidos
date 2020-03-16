@@ -51,7 +51,7 @@ export default Route.extend(DataTableRouteMixin, {
     return !isEmpty(params.searchText);
   },
 
-  postProcessDates: function(_case) {
+  postProcessDates: function (_case) {
     const sessionDates = _case.get('sessionDates');
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
@@ -94,10 +94,10 @@ export default Route.extend(DataTableRouteMixin, {
     }
     const postProcessDates = this.postProcessDates;
     return this.muSearch.query(searchDocumentType,
-                               queryParams,
-                               this.get('modelName'),
-                               {'session-dates': 'sessionDates'})
-      .then(function(res) {
+      queryParams,
+      this.get('modelName'),
+      { 'session-dates': 'sessionDates' })
+      .then(function (res) {
         that.set('isLoading', false);
         res.forEach(postProcessDates);
         return res;

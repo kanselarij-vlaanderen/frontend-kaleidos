@@ -5,12 +5,12 @@ import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
-	store: inject(),
-	classNames: ["vl-u-spacer-extended-bottom-l"],
-	item: null,
-	propertiesToSet: Object.freeze(['themes']),
+  store: inject(),
+  classNames: ['vl-u-spacer-extended-bottom-l'],
+  item: null,
+  propertiesToSet: Object.freeze(['themes']),
 
-	themes: computed('item.themes', {
+  themes: computed('item.themes', {
     async get() {
       const { item } = this;
       if (item) {

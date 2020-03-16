@@ -4,33 +4,33 @@ import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-	sessionService: inject(),
-	classNames: ["vlc-panel-layout__agenda-history"],
+  sessionService: inject(),
+  classNames: ['vlc-panel-layout__agenda-history'],
 
-	classNameBindings: ['getClassNames'],
+  classNameBindings: ['getClassNames'],
 
-	getClassNames: computed('agendaMenuOpened', function () {
-		if (this.get('agendaMenuOpened')) {
-			return "vlc-panel-layout__agenda-history--collapsed"
-		}
-	}),
+  getClassNames: computed('agendaMenuOpened', function () {
+    if (this.get('agendaMenuOpened')) {
+      return 'vlc-panel-layout__agenda-history--collapsed'
+    }
+  }),
 
-	agendaMenuOpened: false,
+  agendaMenuOpened: false,
 
-	currentAgenda: alias('sessionService.currentAgenda'),
-	currentSession: alias('sessionService.currentSession'),
+  currentAgenda: alias('sessionService.currentAgenda'),
+  currentSession: alias('sessionService.currentSession'),
 
-	actions: {
-		collapseSideMenu() {
-			this.toggleProperty('agendaMenuOpened');
-		},
+  actions: {
+    collapseSideMenu() {
+      this.toggleProperty('agendaMenuOpened');
+    },
 
-		compareAgendas() {
-			this.compareAgendas();
-		},
+    compareAgendas() {
+      this.compareAgendas();
+    },
 
-		setCurrentAgenda(agenda) {
-			this.selectAgenda(agenda);
-		}
-	},
+    setCurrentAgenda(agenda) {
+      this.selectAgenda(agenda);
+    }
+  },
 });

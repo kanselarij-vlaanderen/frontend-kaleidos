@@ -6,8 +6,8 @@ let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
 
 export default Model.extend({
   intl: inject(),
-  richtext: attr("string"),
-  shortTitle: attr("string"),
+  richtext: attr('string'),
+  shortTitle: attr('string'),
   approved: attr('boolean'),
   archived: attr('boolean'),
   title: attr('string'),
@@ -20,11 +20,11 @@ export default Model.extend({
   documentVersions: hasMany('document-version', { inverse: null }),
   signedDocument: belongsTo('document'),
 
-  decisionApproval: computed('signedDocument', function() {
+  decisionApproval: computed('signedDocument', function () {
     return this.intl.t('signed-document-decision', { name: this.get('signedDocument.name') });
   }),
 
-  documents: computed('documentVersions.@each', function() {
+  documents: computed('documentVersions.@each', function () {
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.length > 0) {

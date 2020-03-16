@@ -20,7 +20,7 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   },
 
-  showEnvironmentName: computed('environmentName', function() {
+  showEnvironmentName: computed('environmentName', function () {
     return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
   }),
 
