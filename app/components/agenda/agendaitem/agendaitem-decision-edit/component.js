@@ -1,12 +1,12 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
-import {getCachedProperty} from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
-  classNames: ["vl-form__group vl-u-bg-porcelain"],
+  classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze(['approved', 'richtext']),
   approved: getCachedProperty('approved'),
   initValue: getCachedProperty('richtext'),
@@ -16,7 +16,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     const subcase = await this.get('subcase')
 
     const foundDecidedPhases = await this.store.query('subcase-phase', {
-      filter: {code: {id: CONFIG.decidedCodeId}, subcase: {id: subcase.get('id')}}
+      filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } }
     });
 
     if (foundDecidedPhases && foundDecidedPhases.length > 0) {
@@ -37,7 +37,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     async saveChanges() {
       this._super.call(this);
       this.set('isLoading', true);
-      const {isAgendaItem} = this;
+      const { isAgendaItem } = this;
       const item = await this.get('item');
       item.set('modified', moment().utc().toDate());
 

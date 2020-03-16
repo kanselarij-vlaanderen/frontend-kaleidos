@@ -6,7 +6,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import DS from 'ember-data';
 
 export default Component.extend(isAuthenticatedMixin, {
-  classNames: ["vlc-panel-layout__main-content"],
+  classNames: ['vlc-panel-layout__main-content'],
   currentAgenda: alias('sessionService.currentAgenda'),
   sessionService: inject(),
   store: inject(),
@@ -50,7 +50,7 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     setAgendaItemSection(section) {
-      this.set("activeAgendaItemSection", section);
+      this.set('activeAgendaItemSection', section);
     },
 
     refreshRoute(id) {

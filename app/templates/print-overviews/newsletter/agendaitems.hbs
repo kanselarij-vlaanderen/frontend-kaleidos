@@ -6,40 +6,39 @@
     filter=filter
     include=include
     size=size
-    columns=columns as |row|
+    columns=columns
+  as |row|
   }}
-  {{#if (not row.isApproval)}}
-    {{#if (is-pending row.subcase.newsletterInfo)}}
-      {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
-    {{else if (await row.subcase.newsletterInfo)}}
-      <div class="vlc-container-center">
-        {{news-item/edit-item
-          agendaitem=row
-          item=(await row.subcase.newsletterInfo)
-          isEditing=row.expanded
-        }}
-      </div>
-    {{else}}
-      <div class="vl-u-spacer-extended">
-        <div class="vl-action-group vl-action-group--align-center">
-          <button
-            class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
-            {{action "addNewsletterInfo" row}}
-          >
-            <i
-              class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-            ></i>
-            {{t "create-newsletter-info"}}
-          </button>
+    {{#if (not row.isApproval)}}
+      {{#if (is-pending row.subcase.newsletterInfo)}}
+        {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
+      {{else if (await row.subcase.newsletterInfo)}}
+        <div class="vlc-container-center">
+          {{news-item/edit-item
+            agendaitem=row
+            item=(await row.subcase.newsletterInfo)
+            isEditing=row.expanded
+          }}
         </div>
-      </div>
-      <div class="vl-u-align-center vl-typography">
-        <p class="vl-u-text--muted">
-          {{t "no-newsletter-info"}}
-        </p>
-      </div>
+      {{else}}
+        <div class="vl-u-spacer-extended">
+          <div class="vl-action-group vl-action-group--align-center">
+            <button type="button" class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+              {{action "addNewsletterInfo" row}}
+            >
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+              ></i>
+              {{t "create-newsletter-info"}}
+            </button>
+          </div>
+        </div>
+        <div class="vl-u-align-center vl-typography">
+          <p class="vl-u-text--muted">
+            {{t "no-newsletter-info"}}
+          </p>
+        </div>
+      {{/if}}
     {{/if}}
-  {{/if}}
   {{/utils/agendaitem-table}}
 </div>
 {{outlet}}

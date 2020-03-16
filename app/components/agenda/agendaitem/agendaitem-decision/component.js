@@ -1,7 +1,7 @@
 import Component from '@ember/component';
-import {inject} from '@ember/service';
+import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import {computed} from '@ember/object'
+import { computed } from '@ember/object'
 import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
@@ -18,7 +18,7 @@ export default Component.extend(isAuthenticatedMixin, {
   }),
 
   async addDecision(subcase) {
-    let decision = this.store.createRecord("decision", {
+    let decision = this.store.createRecord('decision', {
       subcase: await subcase,
       title: await subcase.get('title'),
       shortTitle: await subcase.get('shortTitle'),
@@ -29,11 +29,11 @@ export default Component.extend(isAuthenticatedMixin, {
 
   actions: {
     async toggleIsEditing() {
-      const {subcase} = this;
+      const { subcase } = this;
       const decision = await subcase.get('decision');
       if (!decision) {
         await this.addDecision(subcase);
-      } else if (decision.get('title') === "") {
+      } else if (decision.get('title') === '') {
         decision.set('title', subcase.get('title'));
       }
       this.toggleProperty('isEditing');

@@ -3,7 +3,8 @@
     {{#power-select-multiple
       options=domains
       selected=selectedDomains
-      onchange=(action "chooseDomain") as |domain|
+      onchange=(action "chooseDomain")
+    as |domain|
     }}
       {{domain.label}}
     {{/power-select-multiple}}
@@ -13,7 +14,8 @@
       selected=selectedDomains
       search=(perform searchDomain)
       oninput=(action "resetValueIfEmpty")
-      onchange=(action "chooseDomain") as |domain|
+      onchange=(action "chooseDomain")
+    as |domain|
     }}
       {{domain.label}}
     {{/power-select-multiple}}
@@ -24,7 +26,8 @@
     selected=selectedDomains
     search=(perform searchDomain)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "chooseDomain") as |domain|
+    onchange=(action "chooseDomain")
+  as |domain|
   }}
     {{domain.label}}
   {{/power-select}}

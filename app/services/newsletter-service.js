@@ -89,7 +89,7 @@ export default Service.extend(isAuthenticatedMixin, {
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForSubcase(subcase, agendaitem, inNewsletter = false) {
-    if(this.isEditor) {
+    if (this.isEditor) {
       const news = this.store.createRecord('newsletter-info', {
         subcase: await subcase,
         title: agendaitem ? await agendaitem.get('shortTitle') : await subcase.get('shortTitle'),
@@ -102,10 +102,10 @@ export default Service.extend(isAuthenticatedMixin, {
   },
 
   async createNewsItemForMeeting(meeting) {
-    if(this.isEditor) {
+    if (this.isEditor) {
       const plannedStart = await meeting.get('plannedStart');
-      const pubDate = moment(plannedStart).set({hour:14,minute:0});
-      const pubDocDate = moment(plannedStart).weekday(7).set({hour:14,minute:0});
+      const pubDate = moment(plannedStart).set({ hour: 14, minute: 0 });
+      const pubDocDate = moment(plannedStart).weekday(7).set({ hour: 14, minute: 0 });
       const newsletter = this.store.createRecord('newsletter-info', {
         meeting: meeting,
         finished: false,

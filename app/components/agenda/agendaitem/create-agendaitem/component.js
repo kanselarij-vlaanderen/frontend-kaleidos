@@ -1,20 +1,20 @@
-import Component from "@ember/component";
-import { inject } from "@ember/service";
-import { alias } from "@ember/object/computed";
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
-import DefaultQueryParamsMixin from "ember-data-table/mixins/default-query-params";
+import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
-import { computed, observer } from "@ember/object";
-import { task, timeout } from "ember-concurrency";
+import { computed, observer } from '@ember/object';
+import { task, timeout } from 'ember-concurrency';
 
-export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
+export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
   availableSubcases: null,
   showPostponed: null,
   noItemsSelected: true,
 
-  currentSession: alias("sessionService.currentSession"),
-  selectedAgenda: alias("sessionService.currentAgenda"),
-  agendas: alias("sessionService.agendas"),
+  currentSession: alias('sessionService.currentSession'),
+  selectedAgenda: alias('sessionService.currentAgenda'),
+  agendas: alias('sessionService.agendas'),
 
   store: inject(),
   subcasesService: inject(),
@@ -24,8 +24,8 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
   modelName: 'subcase',
 
   size: 10,
-  sort: "short-title",
-  queryOptions: computed("sort", "filter", "page", function() {
+  sort: 'short-title',
+  queryOptions: computed('sort', 'filter', 'page', function () {
     const { page, filter, size, sort } = this;
     let options = {
       sort: sort,
@@ -34,80 +34,80 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
         size: size
       },
       filter: {
-        ":has-no:agendaitems": "yes",
-        ":not:is-archived": "true",
+        ':has-no:agendaitems': 'yes',
+        ':not:is-archived': 'true',
       }
     };
 
     if (filter) {
-      options["filter"]["short-title"] = filter;
+      options['filter']['short-title'] = filter;
     }
     return options;
   }),
 
   // dirty observers to make use of the datatable actions
-  pageObserver: observer("page", "sort",  function() {
+  pageObserver: observer('page', 'sort', function () {
     this.findAll.perform();
   }),
 
   // dirty observers to make use of the datatable actions
-  filterObserver: observer("filter", function() {
-    if (this.filter == "") {
+  filterObserver: observer('filter', function () {
+    if (this.filter == '') {
       this.findAll.perform();
     }
   }),
 
-  model: computed("items.@each", function() {
-    (this.get("items") || []).map(item => item.set("selected", false));
+  model: computed('items.@each', function () {
+    (this.get('items') || []).map(item => item.set('selected', false));
     return this.items;
   }),
 
 
   setFocus() {
-    document.getElementById("searchId").focus();
+    document.getElementById('searchId').focus();
   },
 
-  findAll: task(function*() {
+  findAll: task(function* () {
     const { queryOptions } = this;
-    const items = yield this.store.query("subcase", queryOptions);
-    this.set("items", items);
+    const items = yield this.store.query('subcase', queryOptions);
+    this.set('items', items);
     yield timeout(100);
     this.setFocus();
   }),
 
-  findPostponed: task(function*() {
-    const ids = yield this.get("subcasesService").getPostPonedSubcaseIds();
+  findPostponed: task(function* () {
+    const ids = yield this.get('subcasesService').getPostPonedSubcaseIds();
     let postPonedSubcases = [];
 
     if (ids && ids.length > 0) {
-      postPonedSubcases = yield this.store.query("subcase", {
+      postPonedSubcases = yield this.store.query('subcase', {
         filter: {
           id: ids.toString()
         }
       });
     }
-    this.set("items", postPonedSubcases);
+    this.set('items', postPonedSubcases);
   }),
 
-  searchTask: task(function*() {
+  searchTask: task(function* () {
     yield timeout(300);
     const { queryOptions } = this;
-    const items = yield this.store.query("subcase", queryOptions);
-    this.set("items", items);
+    const items = yield this.store.query('subcase', queryOptions);
+    this.set('items', items);
     yield timeout(100);
     this.setFocus();
   }).restartable(),
 
   async didInsertElement() {
     this._super(...arguments);
-    this.set("availableSubcases", []);
-    this.set("postponedSubcases", []);
+    this.set('availableSubcases', []);
+    this.set('postponedSubcases', []);
     this.findAll.perform();
   },
 
   actions: {
     close() {
-      this.set("isAddingAgendaitems", false);
+      this.set('isAddingAgendaitems', false);
     },
 
     checkShowPostponedValue() {
@@ -123,20 +123,20 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
       if (event) {
         event.stopPropagation();
       }
-      let action = "add";
+      let action = 'add';
       if (subcase.selected) {
-        subcase.set("selected", false);
-        action = "remove";
+        subcase.set('selected', false);
+        action = 'remove';
       } else {
-        subcase.set("selected", true);
-        action = "add";
+        subcase.set('selected', true);
+        action = 'add';
         this.set('noItemsSelected', false);
       }
-      const postponed = await this.get("postponedSubcases");
+      const postponed = await this.get('postponedSubcases');
 
-      if (action === "add") {
+      if (action === 'add') {
         postponed.pushObject(subcase);
-      } else if (action === "remove") {
+      } else if (action === 'remove') {
         const index = postponed.indexOf(subcase);
         if (index > -1) {
           postponed.splice(index, 1);
@@ -152,20 +152,20 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
         event.stopPropagation();
       }
 
-      let action = "add";
+      let action = 'add';
       if (subcase.selected) {
-        subcase.set("selected", false);
-        action = "remove";
+        subcase.set('selected', false);
+        action = 'remove';
       } else {
-        subcase.set("selected", true);
-        action = "add";
+        subcase.set('selected', true);
+        action = 'add';
       }
 
-      const available = await this.get("availableSubcases");
+      const available = await this.get('availableSubcases');
 
-      if (action === "add") {
+      if (action === 'add') {
         available.pushObject(subcase);
-      } else if (action === "remove") {
+      } else if (action === 'remove') {
         const index = available.indexOf(subcase);
         if (index > -1) {
           available.splice(index, 1);
@@ -178,7 +178,7 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
     },
 
     async addSubcasesToAgenda() {
-      this.set("loading", true);
+      this.set('loading', true);
       const {
         selectedAgenda,
         availableSubcases,
@@ -195,7 +195,7 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
       let promise = Promise.all(
         itemsToAdd.map(async subCase => {
           if (subCase.selected) {
-            if(subCase.showAsRemark) {
+            if (subCase.showAsRemark) {
               announcementCounter++;
               index = announcementCounter;
             } else {
@@ -208,10 +208,10 @@ export default Component.extend(DefaultQueryParamsMixin,DataTableRouteMixin, {
       );
 
       promise.then(async () => {
-        this.set("loading", false);
-        this.set("isAddingAgendaitems", false);
-        this.set("sessionService.selectedAgendaItem", null);
-        this.reloadRoute(selectedAgenda.get("id"));
+        this.set('loading', false);
+        this.set('isAddingAgendaitems', false);
+        this.set('sessionService.selectedAgendaItem', null);
+        this.reloadRoute(selectedAgenda.get('id'));
       });
     }
   }

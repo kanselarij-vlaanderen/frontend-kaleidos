@@ -1,5 +1,5 @@
 import Mixin from '@ember/object/mixin';
-import DS from "ember-data";
+import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
 import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
@@ -7,7 +7,7 @@ import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-
 let { PromiseArray, PromiseObject } = DS;
 
 export default Mixin.create({
-  linkedDocuments: computed('linkedDocumentVersions.@each', function() {
+  linkedDocuments: computed('linkedDocumentVersions.@each', function () {
     return PromiseArray.create({
       promise: this.get('linkedDocumentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
@@ -56,7 +56,7 @@ export default Mixin.create({
     });
   }),
 
-  linkedDocumentsLength: computed('linkedDocuments', function() {
+  linkedDocumentsLength: computed('linkedDocuments', function () {
     return PromiseObject.create({
       promise: this.get('linkedDocuments').then((documents) => {
         return documents ? documents.get('length') : 0;

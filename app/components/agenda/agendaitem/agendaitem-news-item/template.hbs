@@ -14,7 +14,7 @@
       </h3>
       {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
-          <a class="vl-link" {{action "toggleIsEditing"}}>
+          <a href="" class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
         </div>
@@ -72,9 +72,9 @@
 
 {{else}}
   {{news-item/edit-item
-          subcase=(await subcase)
-          item=(await subcase.newsletterInfo)
-          agendaitem=agendaitem
-          isEditing=isEditing
+    subcase=(await subcase)
+    item=(await subcase.newsletterInfo)
+    agendaitem=agendaitem
+    isEditing=isEditing
   }}
 {{/if}}

@@ -1,8 +1,8 @@
 import DS from 'ember-data';
-import {inject} from '@ember/service';
+import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
 
-let {Model, attr, belongsTo} = DS;
+let { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
   currentSession: inject(),
@@ -30,7 +30,7 @@ export default Model.extend({
         if (this.checkIfCreatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
           this.globalError.showToast.perform(EmberObject.create({
             title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('successfully-created', {type: this.translateAndParseSuccesType(this.get('constructor.modelName'))}),
+            message: this.intl.t('successfully-created', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
             type: 'success'
           }));
         }
@@ -39,7 +39,7 @@ export default Model.extend({
         if (this.checkIfUpdatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
           this.globalError.showToast.perform(EmberObject.create({
             title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('successfully-saved-type', {type: this.translateAndParseSuccesType(this.get('constructor.modelName'))}),
+            message: this.intl.t('successfully-saved-type', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
             type: 'success'
           }));
         }

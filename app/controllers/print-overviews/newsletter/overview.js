@@ -9,7 +9,7 @@ export default Controller.extend({
   page: 0,
   size: 100,
 
-  title: computed('model.meeting', async function() {
+  title: computed('model.meeting', async function () {
     const date = await this.get('model.meeting.plannedStart');
     const procedure = await this.get('model.meeting.kindToShow.procedure');
 
@@ -18,19 +18,19 @@ export default Controller.extend({
     )}${procedure} van ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
-  links: computed('model.links', function() {
+  links: computed('model.links', function () {
     return this.get('model.links');
   }),
 
-  nbOfItems: computed('model.amountShowed', function() {
+  nbOfItems: computed('model.amountShowed', function () {
     return this.get('model.amountShowed');
   }),
 
-  total: computed('model.amountOfItems', function() {
+  total: computed('model.amountOfItems', function () {
     return this.get('model.amountOfItems');
   }),
 
-  documentTitle: computed('model.currentAgenda.createdFor', 'definite', function() {
+  documentTitle: computed('model.currentAgenda.createdFor', 'definite', function () {
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
     let prefix = '';
 

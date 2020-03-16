@@ -6,9 +6,9 @@ export default Route.extend({
       {
         reload: true
       }).then((subcase) => {
-        subcase.hasMany('phases').reload();
-        return subcase;
-      });
+      subcase.hasMany('phases').reload();
+      return subcase;
+    });
   },
 
   actions: {

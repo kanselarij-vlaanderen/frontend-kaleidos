@@ -11,7 +11,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
   // This computed property is only for role-based views.
   // Should show the template the user is an editor or if the meeting is final.
-  shouldShowFinishedDetails: computed('isEditor', 'currentAgenda.createdFor', async function() {
+  shouldShowFinishedDetails: computed('isEditor', 'currentAgenda.createdFor', async function () {
     const { isEditor, currentAgenda } = this;
     if (isEditor) {
       return true;
@@ -22,16 +22,16 @@ export default Component.extend(isAuthenticatedMixin, {
 
   defaultTabs: Object.freeze([
     {
-      name: "details",
-      label: "agendaitem-case"
+      name: 'details',
+      label: 'agendaitem-case'
     },
     {
-      name: "documents",
-      label: "documents"
+      name: 'documents',
+      label: 'documents'
     }
   ]),
 
-  activeTabs: computed('isEditor', 'agendaitem.{subcase,remarks.length}', 'shouldShowFinishedDetails', async function(){
+  activeTabs: computed('isEditor', 'agendaitem.{subcase,remarks.length}', 'shouldShowFinishedDetails', async function () {
     const activeTabs = [];
     activeTabs.push(...this.defaultTabs);
 
@@ -46,40 +46,40 @@ export default Component.extend(isAuthenticatedMixin, {
 
     const isEditor = this.isEditor;
 
-    if(isEditor){
+    if (isEditor) {
       activeTabs.push({
-        name: "comments",
-        label: "agendaitem-comment",
+        name: 'comments',
+        label: 'agendaitem-comment',
         pillText: promises.commentCount
       });
     }
-    if(!promises.shouldShowFinishedDetails || !promises.subcase) {
+    if (!promises.shouldShowFinishedDetails || !promises.subcase) {
       return activeTabs;
     }
 
-    if(isEditor || promises.decisions){
+    if (isEditor || promises.decisions) {
       activeTabs.push({
-        name: "decision",
-        label: "agendaitem-decision"
+        name: 'decision',
+        label: 'agendaitem-decision'
       })
     }
-    if(isEditor || promises.minutes){
+    if (isEditor || promises.minutes) {
       activeTabs.push({
-        name: "minutes",
-        label: "agendaitem-notes"
+        name: 'minutes',
+        label: 'agendaitem-notes'
       })
     }
-    if(isEditor || promises.newsItems){
+    if (isEditor || promises.newsItems) {
       activeTabs.push({
-        name: "news-item",
-        label: "agendaitem-bestek"
+        name: 'news-item',
+        label: 'agendaitem-bestek'
       });
     }
 
-    if(isEditor || this.get('agendaitem.titlePress') && this.get('agendaitem.textPress')){
+    if (isEditor || this.get('agendaitem.titlePress') && this.get('agendaitem.textPress')) {
       activeTabs.push({
-        name: "press-agenda",
-        label: "agendaitem-press-agenda"
+        name: 'press-agenda',
+        label: 'agendaitem-press-agenda'
       });
     }
 

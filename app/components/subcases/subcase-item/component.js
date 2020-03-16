@@ -3,13 +3,13 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, {
-	classNames: ["vlc-procedure-step"],
-	classNameBindings: ["getClassNames"],
+  classNames: ['vlc-procedure-step'],
+  classNameBindings: ['getClassNames'],
 
-	getClassNames: computed('isMinimal', function () {
-		const { isMinimal } = this;
-		if (isMinimal) {
-			return 'vlc-procedure-step--minimal';
-		}
-	})
+  getClassNames: computed('isMinimal', function () {
+    const { isMinimal } = this;
+    if (isMinimal) {
+      return 'vlc-procedure-step--minimal';
+    }
+  })
 });

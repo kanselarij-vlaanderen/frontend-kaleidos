@@ -1,21 +1,21 @@
 import Component from '@ember/component';
-import {inject} from "@ember/service";
+import { inject } from '@ember/service';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
-import {isEmpty} from '@ember/utils';
+import { isEmpty } from '@ember/utils';
 import DS from 'ember-data';
-import { get, set, observer } from "@ember/object";
-import moment from "moment";
+import { get, set, observer } from '@ember/object';
+import moment from 'moment';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import { debounce } from '@ember/runloop';
-import _ from "lodash";
+import _ from 'lodash';
 import { A } from '@ember/array';
 
 export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
   store: inject(),
   muSearch: inject(),
   size: 5,
-  sort: "title",
-  action: "",
+  sort: 'title',
+  action: '',
   onSelect: null,
   textSearchFields: A(['title', 'shortTitle', 'data', 'subcaseTitle', 'subcaseSubTitle']),
   isLoading: false,
@@ -36,7 +36,7 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
     debounce(this, this.debouncedSearch, 500);
   }),
 
-  debouncedSearch: function() {
+  debouncedSearch: function () {
     this.send('performSearch', get(this, 'searchText'));
   },
 
@@ -72,10 +72,10 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
             },
             sort: this.sort // Currently only "sessionDates available in search config"
           };
-          if(!searchTerm) {
+          if (!searchTerm) {
             _.merge(queryParams, this.mergeQueryOptions(queryParams));
             this.set('isLoading', false);
-            return this.get('store').query("case",queryParams);
+            return this.get('store').query('case', queryParams);
           }
           queryParams.filter[searchModifier + textSearchKey] = searchTerm;
 
@@ -92,8 +92,8 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
           const postProcessDates = this.postProcessDates;
           return this.muSearch.query(searchDocumentType,
             queryParams,
-            "case",
-            {'session-dates': 'sessionDates'})
+            'case',
+            { 'session-dates': 'sessionDates' })
             .then((res) => {
               this.set('isLoading', false);
               res.forEach(postProcessDates);

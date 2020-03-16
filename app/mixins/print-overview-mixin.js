@@ -9,7 +9,7 @@ export default Mixin.create({
   titleTranslationKey: null,
   titlePrintKey: null,
 
-  title: computed('model.createdFor', 'titleTranslationKey', function() {
+  title: computed('model.createdFor', 'titleTranslationKey', function () {
     const date = this.get('model.createdFor.plannedStart');
     return `${this.intl.t(
       `${this.titleTranslationKey}`
