@@ -1,10 +1,16 @@
 {{#if showNewsItemIsEditedWarning}}
-  {{changes-alert message=(t "newsitem-changed-message") buttonText=(t "close")
-                  clearAction=(action "clearShowNewsItemIsEditedWarning")}}
+  {{changes-alert
+    message=(t "newsitem-changed-message")
+    buttonText=(t "close")
+    clearAction=(action "clearShowNewsItemIsEditedWarning")
+  }}
 {{/if}}
 {{#if showNoNotaIsAddedWarning}}
-  {{changes-alert message=(t "newsitem-changed-no-note-message") buttonText=(t "close")
-                  clearAction=(action "clearShowNoNotaIsAddedWarning")}}
+  {{changes-alert
+    message=(t "newsitem-changed-no-note-message")
+    buttonText=(t "close")
+    clearAction=(action "clearShowNoNotaIsAddedWarning")
+  }}
 {{/if}}
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
@@ -32,7 +38,10 @@
         {{await subcase.newsletterInfo.newsletterProposal}}
       </p>
       <p>
-        {{sanitize-html raw=true value=(await subcase.newsletterInfo.richtext)}}
+        {{sanitize-html
+          raw=true
+          value=(await subcase.newsletterInfo.richtext)
+        }}
       </p>
     </div>
   </div>
@@ -44,7 +53,10 @@
       {{web-components/vl-loader text=(t "themes-loading-text")}}
     {{else if (gt (await agendaitem.themes.length) 0)}}
       <ul>
-        {{#each (await agendaitem.themes) as |theme|}}
+        {{#each
+          (await agendaitem.themes)
+        as |theme|
+        }}
           <li class="vl-pill">
             {{theme.label}}
           </li>
