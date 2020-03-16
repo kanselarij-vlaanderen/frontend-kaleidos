@@ -31,7 +31,7 @@ module.exports = function (environment) {
         'acmidm-oauth2': {
           apiKey: 'b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d',
           baseUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/auth',
-          scope: 'vo profile openid dkbkaleidos',
+          scope: 'vo profile openid dkbkaleidos phone',
           redirectUri: 'https://kaleidos-dev.vlaanderen.be/authorization/callback',
           logoutUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/logout'
         }

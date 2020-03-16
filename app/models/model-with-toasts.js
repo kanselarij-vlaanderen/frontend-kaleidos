@@ -20,8 +20,7 @@ export default Model.extend({
     return !(modelListToNotShowNotificationFor.includes(type));
   },
   translateAndParseSuccesType(type) {
-    const singular = type.slice(0, -1)
-    return this.intl.t(singular).toLowerCase();
+    return this.intl.t(type).toLowerCase();
   },
 
   async save() {
