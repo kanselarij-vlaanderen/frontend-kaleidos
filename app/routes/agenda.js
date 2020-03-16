@@ -23,19 +23,20 @@ export default Route.extend(AuthenticatedRouteMixin, {
     });
   },
 
-  afterModel(model, transition) {
-    const selectedAgendaId = transition.queryParams.selectedAgenda;
-    return this.get('sessionService.agendas').then(agendas => {
-      if (selectedAgendaId) {
-        const selectedAgenda = agendas.find((agenda) => agenda.id === selectedAgendaId);
-        if (selectedAgenda) {
-          this.set('sessionService.currentAgenda', selectedAgenda);
-        }
-      } else {
-        this.set('sessionService.currentAgenda', agendas.get('firstObject'));
-      }
-    });
-  },
+	afterModel() {
+		const { selectedAgenda: selectedAgendaId } = this.paramsFor('agenda');
+
+		return this.get('sessionService.agendas').then(agendas => {
+			if (selectedAgendaId) {
+				const selectedAgenda = agendas.find((agenda) => agenda.id === selectedAgendaId);
+				if (selectedAgenda) {
+					this.set('sessionService.currentAgenda', selectedAgenda);
+				}
+			} else {
+				this.set('sessionService.currentAgenda', agendas.get('firstObject'));
+			}
+		});
+	},
 
   actions: {
     refresh() {
