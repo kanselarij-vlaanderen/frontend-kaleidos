@@ -6,7 +6,7 @@ export default Route.extend({
 
   model() {
     return this.store.query('user', {
-      include: 'group',
+      include: 'group,organization',
       sort: 'first-name'
     }).then(users => users.toArray());
   },
