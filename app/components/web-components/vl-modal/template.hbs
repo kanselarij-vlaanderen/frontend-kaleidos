@@ -5,9 +5,7 @@
       except-selector=".flatpickr-calendar"
     }}
       <div class="vl-modal-dialog {{sizeClass}}" tabindex="-2" role="dialog" data-test-vl-modal-dialog>
-        <div
-          class="vlc-navbar vlc-navbar--bordered-bottom"
-        >
+        <div class="vlc-navbar vlc-navbar--bordered-bottom">
           <div class="vlc-toolbar">
             <div class="vlc-toolbar__left">
               <div class="vlc-toolbar__item">
@@ -18,13 +16,12 @@
             </div>
             <div class="vlc-toolbar__right">
               <div class="vlc-toolbar__item">
-                <button data-test-vl-modal-close
-                  class="vl-button vl-button--link-muted vl-button--icon"
+                <button type="button" data-test-vl-modal-close
+                        class="vl-button vl-button--link-muted vl-button--icon"
                   {{action "close"}}
                 >
-                  <i
-                    class="vl-button__icon vl-vi vl-vi-close-light"
-                    aria-hidden="true"
+                  <i class="vl-button__icon vl-vi vl-vi-close-light"
+                     aria-hidden="true"
                   ></i>
                   <span class="vl-u-visually-hidden">
                     {{t "close"}}

@@ -34,20 +34,20 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         })
       }
     },
-    set: function(key, value) {
+    set: function (key, value) {
       return value;
     },
   }),
 
 
   hasNota: computed('agendaitem', async function () {
-		const nota = await this.agendaitem.get('nota');
-		if (nota) {
-			return true;
-		} else {
-			return false;
-		}
-	}),
+    const nota = await this.agendaitem.get('nota');
+    if (nota) {
+      return true;
+    } else {
+      return false;
+    }
+  }),
   async saveChanges() {
     this.set('isLoading', true);
     const item = await this.get('item');
@@ -105,12 +105,12 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     },
 
     async openDocument(agendaitem) {
-			const nota = await agendaitem.get('nota');
-			if (!nota) {
-				return;
-			}
-			const documentVersion = await nota.get('lastDocumentVersion');
-			window.open(`/document/${documentVersion.get('id')}`);
-		}
+      const nota = await agendaitem.get('nota');
+      if (!nota) {
+        return;
+      }
+      const documentVersion = await nota.get('lastDocumentVersion');
+      window.open(`/document/${documentVersion.get('id')}`);
+    }
   },
 });

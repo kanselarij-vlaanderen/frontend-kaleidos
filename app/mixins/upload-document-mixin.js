@@ -25,11 +25,11 @@ export default Mixin.create({
     this._super(...arguments);
     this.set('documentsInCreation', A([]));
     const accessLevels = await this.store.findAll('access-level');
-    try{
+    try {
       this.set('defaultAccessLevel', accessLevels.find((item) => {
         return item.id == config.internRegeringAccessLevelId;
       }));
-    } catch(e) {
+    } catch (e) {
       // TODO error during cypress tests:
       // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
     }
@@ -66,8 +66,8 @@ export default Mixin.create({
   },
 
   async saveDocumentContainers() {
-    if (arguments.length > 0){
-      deprecate("The function 'saveDocumentContainers' takes no arguments, 'confidential' should be set on individual document level", true);
+    if (arguments.length > 0) {
+      deprecate('The function \'saveDocumentContainers\' takes no arguments, \'confidential\' should be set on individual document level', true);
     }
     this.set('isLoading', true);
     const docs = this.get('documentsInCreation');
@@ -88,7 +88,7 @@ export default Mixin.create({
   },
 
   async saveDocuments() {
-    deprecate("'saveDocuments' is deprecated by saveDocumentContainers", true);
+    deprecate('\'saveDocuments\' is deprecated by saveDocumentContainers', true);
     return this.saveDocumentContainers(...arguments);
   },
 
@@ -112,7 +112,7 @@ export default Mixin.create({
   },
 
   async attachDocumentVersionsToModel() {
-    deprecate("'attachDocumentVersionsToModel' is deprecated by attachDocumentsToModel", true);
+    deprecate('\'attachDocumentVersionsToModel\' is deprecated by attachDocumentsToModel', true);
     return this.attachDocumentsToModel(...arguments);
   },
 

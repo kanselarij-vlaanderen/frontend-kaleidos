@@ -18,48 +18,47 @@
     </div>
   {{else}}
     <div class="vl-modal-dialog__content">
-       <div
-      class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
-    >
-    <div class="vl-col--8-12 vl-col--1-1--s">
-        <div class="vlc-toolbar vlc-toolbar--auto">
-        <div class="vlc-toolbar__justified custom-table-search">
-          <div class="vlc-toolbar__item" style="width:100%;">
-            <div class="vl-input-field--inline" data-test-vl-create-agendaItem-search>
-              {{input
-                value=filter
-                elementId="searchId"
-                placeholder="Zoeken.."
-                key-press=(perform searchTask)
-                disabled=showPostponed
-                class="vl-input-field vl-input-field__input"
-              }}
-              <button
-                class="vl-input-field__submit vl-button"
-                onclick={{perform searchTask}}
-              >
-                <i class="vl-vi vl-vi-magnifier"></i>
-              </button>
+      <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s"
+      >
+        <div class="vl-col--8-12 vl-col--1-1--s">
+          <div class="vlc-toolbar vlc-toolbar--auto">
+            <div class="vlc-toolbar__justified custom-table-search">
+              <div class="vlc-toolbar__item" style="width:100%;">
+                <div class="vl-input-field--inline" data-test-vl-create-agendaItem-search>
+                  {{input
+                    value=filter
+                    elementId="searchId"
+                    placeholder="Zoeken.."
+                    key-press=(perform searchTask)
+                    disabled=showPostponed
+                    class="vl-input-field vl-input-field__input"
+                  }}
+                  <button type="button"
+                          class="vl-input-field__submit vl-button"
+                          onclick={{perform searchTask}}
+                  >
+                    <i class="vl-vi vl-vi-magnifier"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      </div>
-      <div class="vl-col--3-12 vl-col--1-1--s">
-        <div class="vlc-input-field-block">
-          {{web-components/vl-form-label value=(t "title-postponed-subcases")}}
-          {{web-components/vl-toggle
-            value=showPostponed
-            valueChanged=(action "checkShowPostponedValue")
-          }}
+        <div class="vl-col--3-12 vl-col--1-1--s">
+          <div class="vlc-input-field-block">
+            {{web-components/vl-form-label value=(t "title-postponed-subcases")}}
+            {{web-components/vl-toggle
+              value=showPostponed
+              valueChanged=(action "checkShowPostponedValue")
+            }}
+          </div>
+        </div>
+        <div class="vl-col--3-12 vl-col--1-1--s">
+          {{#if searchTask.isRunning}}
+            <div class="vl-loader" role="alert" aria-busy="true"></div>
+          {{/if}}
         </div>
       </div>
-      <div class="vl-col--3-12 vl-col--1-1--s">
-        {{#if searchTask.isRunning}}
-          <div class="vl-loader" role="alert" aria-busy="true"></div>
-        {{/if}}
-      </div>
-       </div>
       {{#data-table
         content=model
         sort=sort
@@ -67,15 +66,18 @@
         size=size
         isLoading=findAll.isRunning
         noDataMessage=(t "no-results-found")
-        onClickRow=(action "selectPostponed") as |table|
+        onClickRow=(action "selectPostponed")
+      as |table|
       }}
-        {{#table.content as |c|}}
+        {{#table.content
+        as |c|
+        }}
           {{#c.header}}
             <th></th>
             {{th-sortable
-                    field="shortTitle"
-                    currentSorting=sort
-                    label=(t "short-title-case")
+              field="shortTitle"
+              currentSorting=sort
+              label=(t "short-title-case")
             }}
             <th></th>
           {{/c.header}}
@@ -90,7 +92,7 @@
               {{row.shortTitle}}
               <br>
               <p class="vl-u-text--muted">
-              {{row.subcaseName}}
+                {{row.subcaseName}}
               </p>
             </td>
           {{/c.body}}

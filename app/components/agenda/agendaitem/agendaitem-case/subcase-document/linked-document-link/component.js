@@ -16,7 +16,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   isEditing: false,
   documentToDelete: null,
 
-  openClass: computed('isShowingVersions', function() {
+  openClass: computed('isShowingVersions', function () {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }

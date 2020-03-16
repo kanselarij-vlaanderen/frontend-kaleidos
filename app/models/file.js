@@ -5,10 +5,10 @@ import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 
 export default Model.extend({
-	documentVersion: belongsTo('document-version'),
-	signature: belongsTo('signature', { inverse: null }),
+  documentVersion: belongsTo('document-version'),
+  signature: belongsTo('signature', { inverse: null }),
 
-	filename: attr('string'),
+  filename: attr('string'),
   filenameWithoutExtension: computed('filename', {
     get() {
       const ext = this.get('extension');
@@ -22,13 +22,13 @@ export default Model.extend({
     }
   }),
 
-	format: attr('string'),
-	size: attr('number'),
-	extension: attr('string'),
-	created: attr('datetime'),
-	contentType: attr('string'),
-  downloadLink: computed('id', function() {
+  format: attr('string'),
+  size: attr('number'),
+  extension: attr('string'),
+  created: attr('datetime'),
+  contentType: attr('string'),
+  downloadLink: computed('id', function () {
     return `/files/${this.get('id')}/download`
   }),
-	name: alias('filename') // Compatibility. Use of 'name' should be refactored out.
+  name: alias('filename') // Compatibility. Use of 'name' should be refactored out.
 });

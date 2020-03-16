@@ -6,7 +6,7 @@ import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcas
 export default Component.extend({
   store: inject(),
 
-  item: computed('mandateeToEdit', function() {
+  item: computed('mandateeToEdit', function () {
     return this.get('mandateeToEdit');
   }),
 

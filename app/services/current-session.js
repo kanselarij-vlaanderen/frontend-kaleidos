@@ -85,20 +85,20 @@ export default Service.extend({
   },
 
   // constructs a task which resolves in the promise
-  makePropertyPromise: task(function*(property) {
+  makePropertyPromise: task(function* (property) {
     yield waitForProperty(this, property);
     return this.get(property);
   }),
   // this is a promise
-  account: computed('_account', function() {
+  account: computed('_account', function () {
     return this.makePropertyPromise.perform('_account');
   }),
   // this contains a promise
-  user: computed('_user', function() {
+  user: computed('_user', function () {
     return this.makePropertyPromise.perform('_user');
   }),
   // this contains a promise
-  group: computed('_group', function() {
+  group: computed('_group', function () {
     return this.makePropertyPromise.perform('_group');
   }),
 });

@@ -4,14 +4,14 @@
     <div class="vl-u-spacer-extended-bottom-l">
       <h1 class="vl-title vl-title--h2">
         {{await title}}
-        <br />
+        <br/>
         <span class="vl-u-spacer-extended-top-s vl-u-text--muted">
           {{t "agenda"}}
         </span>
       </h1>
     </div>
     <div class="vl-u-spacer-extended-bottom-l">
-      <hr class="vlc-hr" />
+      <hr class="vlc-hr"/>
     </div>
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
       <h3 class="vl-title vl-title--h3">
@@ -20,7 +20,7 @@
       {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           {{#if allowEditing}}
-            <a class="vl-link" {{action "toggleIsEditing"}}>
+            <a href="" class="vl-link" {{action "toggleIsEditing"}}>
               {{t "edit"}}
             </a>
           {{/if}}
@@ -35,16 +35,14 @@
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
           <div class="vl-u-display-flex vl-u-flex-justify-center">
             <div class="print-only vl-u-spacer-extended-top-l">
-              <img
-                style="margin:-75px 0px -50px 0px; width:200px"
-                src="/assets/logo_vlaamse_regering.svg"
-                alt={{t "flemish-government"}}
-               />
-
+              <img style="margin:-75px 0px -50px 0px; width:200px"
+                   src="/assets/logo_vlaamse_regering.svg"
+                   alt={{t "flemish-government"}}
+              />
               <p class="vl-u-text--bold vl-u-text--capitalized">
                 {{await title}}
               </p>
-              <hr class="vlc-hr" />
+              <hr class="vlc-hr"/>
             </div>
           </div>
           <div style="page-break-after:always;">
@@ -72,8 +70,7 @@
                     {{#if isEditor}}
                       <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                         {{#if allowEditing}}
-                          <a
-                            class="vl-link"
+                          <a href="" class="vl-link"
                             {{action "toggleIsEditingMeetingRecord" agendaitem}}
                           >
                             {{t "edit"}}
@@ -87,7 +84,8 @@
                           {{sanitize-html raw=true value=(await agendaitem.meetingRecord.richtext)}}
                         </p>
                         {{#each
-                          (await agendaitem.subcase.decisions) as |decision|
+                          (await agendaitem.subcase.decisions)
+                        as |decision|
                         }}
                           {{#if (await decision.signedDocument.name)}}
                             <p class="vl-u-text--muted">

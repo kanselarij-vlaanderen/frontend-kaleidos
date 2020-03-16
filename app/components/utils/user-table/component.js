@@ -22,7 +22,7 @@ export default Component.extend(LightTableMixin, {
   }),
 
   filterObserver: observer('filter', function () {
-    this.get("fetchRecords").perform();
+    this.get('fetchRecords').perform();
   }),
 
   loadingText: computed('intl', function () {

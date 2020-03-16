@@ -22,7 +22,7 @@ export default Component.extend({
 
   actions: {
     async createCase($event) {
-      this.set('isLoading', true)
+      this.set('isLoading', true);
       $event.preventDefault();
       const newDate = moment().utc().toDate();
       const caze = this.createCase(newDate);

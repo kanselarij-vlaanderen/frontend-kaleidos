@@ -7,11 +7,11 @@ export default Component.extend({
   fileService: inject(),
   signatureToEdit: null,
 
-  uploadedFile: computed('signatureToEdit.file', function() {
+  uploadedFile: computed('signatureToEdit.file', function () {
     return this.signatureToEdit.get('file');
   }),
 
-  downloadUrl: computed('signatureToEdit.file', function() {
+  downloadUrl: computed('signatureToEdit.file', function () {
     return `/files/${this.signatureToEdit.get('file.id')}/download`;
   }),
 

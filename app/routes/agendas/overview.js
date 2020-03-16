@@ -4,7 +4,7 @@ import moment from 'moment';
 import { inject } from '@ember/service';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
-export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin,{
+export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   agendaService: inject(),
   authenticationRoute: 'login',
   modelName: 'meeting',
@@ -29,11 +29,11 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin,{
     return options;
   },
 
-	actions: {
-		refreshRoute() {
-			this._super(...arguments);
-			this.refresh();
-		}
-	}
+  actions: {
+    refreshRoute() {
+      this._super(...arguments);
+      this.refresh();
+    }
+  }
 
 });

@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   documentVersion: null,
   isEditingAccessLevel: false,
 
-  aboutToDelete: computed('documentVersion.aboutToDelete', function() {
+  aboutToDelete: computed('documentVersion.aboutToDelete', function () {
     if (this.documentVersion) {
       if (this.documentVersion.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
@@ -29,7 +29,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 
   preferredAccessLevel: null,
 
-  resetPreferredAccessLevel: async function() {
+  resetPreferredAccessLevel: async function () {
     this.set('preferredAccessLevel', await this.documentVersion.get('accessLevel'));
   },
 
@@ -83,12 +83,12 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     const { documentVersionToDelete, item } = this;
     const document = await documentVersionToDelete.get('document');
     const documentVersions = await document.get('documentVersions');
-    if(documentVersions.length > 1) {
+    if (documentVersions.length > 1) {
       await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
-    }else {
+    } else {
       const documentToDelete = document;
       await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
-        if(!item.aboutToDelete && documentVersions) {
+        if (!item.aboutToDelete && documentVersions) {
           item.hasMany('documentVersions').reload();
         }
       });
