@@ -35,14 +35,14 @@ export default Controller.extend({
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'account.phone',
+        valuePath: 'phone',
       },
       {
         label: this.intl.t('email'),
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'account.voEmail',
+        valuePath: 'email',
       },
       {
         label: this.intl.t('group'),
