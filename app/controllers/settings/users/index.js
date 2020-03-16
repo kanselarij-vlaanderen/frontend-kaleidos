@@ -42,7 +42,7 @@ export default Controller.extend({
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'account.voId',
+        valuePath: 'organization.identifier',
       },
       {
         label: this.intl.t('group'),
