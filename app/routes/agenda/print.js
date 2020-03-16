@@ -37,7 +37,7 @@ export default Route.extend({
   }),
 
   loadDocuments: task(function*(agendaItem) {
-    yield agendaItem.hasMany('documentVersions').reload();
+    yield agendaItem.hasMany('documentVersions').reload({ adapterOptions: { namesOnly: true}});
   }).maxConcurrency(2).enqueue()
 
 });
