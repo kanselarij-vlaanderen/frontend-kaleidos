@@ -6,23 +6,21 @@
     {{#each model as |item index|}}
       <label class="vl-radio">
         {{#if (is-equal index 0)}}
-          <input
-            class="vl-radio__toggle"
-            value={{item.id}}
-            type="radio"
-            name={{title}}
-            checked=""
-            onchange={{action "modelChanged"}}
-           />
+          <input class="vl-radio__toggle"
+                 value={{item.id}}
+                 type="radio"
+                 name={{title}}
+                 checked=""
+                 onchange={{action "modelChanged"}}
+          />
 
         {{else}}
-          <input
-            class="vl-radio__toggle"
-            value={{item.id}}
-            type="radio"
-            name={{title}}
-            onchange={{action "modelChanged"}}
-           />
+          <input class="vl-radio__toggle"
+                 value={{item.id}}
+                 type="radio"
+                 name={{title}}
+                 onchange={{action "modelChanged"}}
+          />
 
         {{/if}}
         <div class="vl-radio__label">

@@ -1,6 +1,6 @@
 import Component from '@ember/component';
-import {computed} from '@ember/object';
-import {inject} from '@ember/service';
+import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Component.extend({
   item: null,
@@ -8,7 +8,7 @@ export default Component.extend({
   store: inject(),
 
   lastDocumentVersions: computed('item.documents.@each', 'itemWithDocuments.documentVersions.@each', async function () {
-    const {itemWithDocuments, item} = this;
+    const { itemWithDocuments, item } = this;
     const documents = await item.get('documents');
     const documentVersionsAddedAlready = await itemWithDocuments.get('documentVersions');
 

@@ -2,38 +2,38 @@ import Mixin from '@ember/object/mixin';
 import { inject } from '@ember/service';
 
 export default Mixin.create({
-	store: inject(),
+  store: inject(),
 
-	isAdding: false,
-	isEditing: false,
+  isAdding: false,
+  isEditing: false,
 
-	actions: {
-		close() {
-			this.close();
-		},
+  actions: {
+    close() {
+      this.close();
+    },
 
-		selectModel(model) {
-			this.set('item', model);
-		},
+    selectModel(model) {
+      this.set('item', model);
+    },
 
-		toggleIsAdding() {
-			this.toggleProperty('isAdding');
-		},
+    toggleIsAdding() {
+      this.toggleProperty('isAdding');
+    },
 
-		toggleIsEditing() {
-			this.toggleProperty('isEditing');
-		},
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
 
-		chooseDomain(domain) {
-			this.set('domain', domain);
-		},
+    chooseDomain(domain) {
+      this.set('domain', domain);
+    },
 
-		chooseField(field) {
-			this.set('field', field);
-		},
+    chooseField(field) {
+      this.set('field', field);
+    },
 
-		removeModel() {
-			alert('This action is not allowed. Please contact the system administrator.');
-		},
-	}
+    removeModel() {
+      alert('This action is not allowed. Please contact the system administrator.');
+    },
+  }
 });

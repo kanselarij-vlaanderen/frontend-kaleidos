@@ -8,13 +8,13 @@ export default Component.extend({
   isLoading: null,
   hideLabel: null,
 
-  options: computed(function() {
+  options: computed(function () {
     return CONFIG.kinds.map(item => {
       return EmberObject.create(item);
     });
   }),
 
-  selectedkind: computed('options', 'kind', function() {
+  selectedkind: computed('options', 'kind', function () {
     return this.options.find(kind => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');
   }),
 

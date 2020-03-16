@@ -15,9 +15,9 @@ export default Component.extend(isAuthenticatedMixin, {
   agendaitems: null,
   isEditingOverview: null,
   isShowingChanges: null,
-  dragHandleClass: ".vlc-agenda-items__sub-item",
+  dragHandleClass: '.vlc-agenda-items__sub-item',
 
-  getClassNames: computed('selectedAgendaItem', function() {
+  getClassNames: computed('selectedAgendaItem', function () {
     if (this.get('selectedAgendaItem')) {
       return 'vlc-agenda-items--small';
     } else {
@@ -25,7 +25,7 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   }),
 
-  reAssignPriorities: task(function*(agendaitems) {
+  reAssignPriorities: task(function* (agendaitems) {
     yield agendaitems.map((item) => {
       if (isPresent(item.changedAttributes().priority)) {
         return item.save();
@@ -47,7 +47,7 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     reorderItems(itemModels) {
-      if(!this.isEditor){
+      if (!this.isEditor) {
         return;
       }
       itemModels.map((item, index) => {
@@ -58,7 +58,7 @@ export default Component.extend(isAuthenticatedMixin, {
     },
 
     reorderAnnouncements(itemModels) {
-      if(!this.isEditor){
+      if (!this.isEditor) {
         return;
       }
       itemModels.map((item, index) => {

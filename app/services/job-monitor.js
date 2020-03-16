@@ -15,7 +15,7 @@ export default Service.extend({
     this.monitorJobProgress.perform(job);
   },
 
-  monitorJobProgress: task(function * (job) {
+  monitorJobProgress: task(function* (job) {
     while (!job.hasEnded) {
       yield timeout(1000);
       yield job.reload();

@@ -8,8 +8,7 @@
         {{name}}
       </h6>
       {{#if view}}
-        <button
-          class="vl-button vl-button--link vl-button--icon"
+        <button type="button" class="vl-button vl-button--link vl-button--icon"
           {{action "view"}}
         >
           <i class="vl-vi vl-vi-content-book vl-button__icon" aria-hidden="true"></i>
@@ -19,27 +18,23 @@
         </button>
       {{/if}}
       {{#if download}}
-        <button
-          class="vl-button vl-button--^link vl-button--icon"
+        <button type="button" class="vl-button vl-button--^link vl-button--icon"
           {{action "download"}}
         >
-          <i
-            class="vl-vi vl-vi-download-harddisk vl-button__icon"
-            aria-hidden="true"
+          <i class="vl-vi vl-vi-download-harddisk vl-button__icon"
+             aria-hidden="true"
           ></i>
           <span class="vl-u-visually-hidden">
             {{t "download"}}
           </span>
         </button>
       {{else if downloadLink}}
-        <a
-          class="vl-button vl-button--link vl-button--icon"
-          href={{downloadLink}}
-          download={{if downloadName downloadName name}}
+        <a class="vl-button vl-button--link vl-button--icon"
+           href={{downloadLink}}
+           download={{if downloadName downloadName name}}
         >
-          <i
-            class="vl-vi vl-vi-download-harddisk vl-button__icon"
-            aria-hidden="true"
+          <i class="vl-vi vl-vi-download-harddisk vl-button__icon"
+             aria-hidden="true"
           ></i>
           <span class="vl-u-visually-hidden">
             {{t "download"}}
@@ -47,9 +42,9 @@
         </a>
       {{/if}}
       {{#if delete}}
-        <button
-          data-test-vl-uploaded-document-deleteversion
-          class="vl-button vl-button--link vl-button--icon"
+        <button type="button"
+                data-test-vl-uploaded-document-deleteversion
+                class="vl-button vl-button--link vl-button--icon"
           {{action "delete"}}
         >
           <i class="vl-vi vl-vi-trash vl-button__icon" aria-hidden="true"></i>

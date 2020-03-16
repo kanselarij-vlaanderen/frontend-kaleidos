@@ -1,8 +1,10 @@
+<div class="vl-u-spacer-extended-l">
 {{title (t "manage-ministers")}}
 <div class="vl-u-display-flex vl-u-flex-space-between">
   <h4 class="vl-title vl-title--h4"></h4>
   <button data-test-minister-add
-    class="vl-button vl-button--narrow vl-button--icon-before"
+          type="button"
+          class="vl-button vl-button--narrow vl-button--icon-before"
     {{action "toggleIsAdding"}}
   >
     <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
@@ -10,59 +12,60 @@
   </button>
 </div>
 {{#if (await model)}}
-  {{!-- "tbody" tagname in the "sortable-group"-helper --}}
-  {{!-- template-lint-disable table-groups  --}}
+{{!-- "tbody" tagname in the "sortable-group"-helper --}}
+{{!-- template-lint-disable table-groups  --}}
   <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
     <thead>
-      <tr>
-        <th class="vl-data-table-col-6 vl-data-table__header-title">
-          <a
-            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
-            href="#"
-          ></a>
-          <a class="vl-data-table__header-title--sortable" href="#">
-            <div class="vl-u-display-flex vl-u-flex-align-center">
+    <tr>
+      <th class="vl-data-table-col-6 vl-data-table__header-title">
+        <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+           href="#"
+        ></a>
+        <a class="vl-data-table__header-title--sortable" href="#">
+          <div class="vl-u-display-flex vl-u-flex-align-center">
               <span>
                 {{t "minister"}}
               </span>
-            </div>
-          </a>
-        </th>
-        <th class="vl-data-table-col-3 vl-data-table__header-title">
-          <a
-            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
-            href="#"
-          ></a>
-          <a class="vl-data-table__header-title--sortable" href="#">
-            <div class="vl-u-display-flex vl-u-flex-align-center">
+          </div>
+        </a>
+      </th>
+      <th class="vl-data-table-col-3 vl-data-table__header-title">
+        <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+           href="#"
+        ></a>
+        <a class="vl-data-table__header-title--sortable" href="#">
+          <div class="vl-u-display-flex vl-u-flex-align-center">
               <span>
                 {{t "nick-name"}}
               </span>
-            </div>
-          </a>
-        </th>
-        <th class="vl-data-table-col-1 vl-data-table__header-title">
-          <a
-            class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
-            href="#"
-          ></a>
-          <a class="vl-data-table__header-title--sortable" href="#">
-            <div class="vl-u-display-flex vl-u-flex-align-center">
+          </div>
+        </a>
+      </th>
+      <th class="vl-data-table-col-1 vl-data-table__header-title">
+        <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+           href="#"
+        ></a>
+        <a class="vl-data-table__header-title--sortable" href="#">
+          <div class="vl-u-display-flex vl-u-flex-align-center">
               <span>
                 {{t "priority"}}
               </span>
-            </div>
-          </a>
-        </th>
-        <th class="vl-data-table-col-2"></th>
-      </tr>
+          </div>
+        </a>
+      </th>
+      <th class="vl-data-table-col-2"></th>
+    </tr>
     </thead>
     {{#sortable-group
-            data-test-ministers-sortable-group
+      data-test-ministers-sortable-group
       tagName="tbody"
-      onChange=(action "reorderItems" model) as |sortableGroup|
+      onChange=(action "reorderItems" model)
+    as |sortableGroup|
     }}
-      {{#each model as |mandatee index|}}
+      {{#each
+        model
+      as |mandatee index|
+      }}
         {{#sortable-item
           tagName="tr"
           model=mandatee
@@ -90,13 +93,15 @@
           <td class="vl-u-align-center">
             <div class="vl-action-group vl-action-group--align-center">
               <button data-test-mandatee-edit={{index}}
-                class="vl-button vl-button--link vl-button--icon"
+                      type="button"
+                      class="vl-button vl-button--link vl-button--icon"
                 {{action "toggleProperty" "isEditingMandatee" mandatee}}
               >
                 <i class="vl-button__icon vl-vi vl-vi-edit"></i>
               </button>
-              <button data-test-mandatee-resign={{index}}
-                class="vl-button vl-button--link vl-button--icon"
+              <button type="button"
+                      data-test-mandatee-resign={{index}}
+                      class="vl-button vl-button--link vl-button--icon"
                 {{action "toggleProperty" "isResigningMandatee" mandatee}}
               >
                 <i class="vl-button__icon vl-vi vl-vi-cog"></i>
@@ -107,8 +112,9 @@
                   {{t "resign"}}
                 {{/attach-popover}}
               </button>
-              <button data-test-mandatee-delete={{index}}
-                class="vl-button vl-button--link vl-button--icon vl-u-text--error"
+              <button type="button"
+                      data-test-mandatee-delete={{index}}
+                      class="vl-button vl-button--link vl-button--icon vl-u-text--error"
                 {{action "toggleProperty" "isDeletingMandatee" mandatee}}
               >
                 <i class="vl-button__icon vl-vi vl-vi-trash"></i>
@@ -119,7 +125,7 @@
       {{/each}}
     {{/sortable-group}}
   </table>
-  {{!-- template-lint-enable table-groups --}}
+{{!-- template-lint-enable table-groups --}}
 {{/if}}
 {{#if isEditingMandatee}}
   {{#web-components/vl-modal
@@ -155,10 +161,11 @@
     title=(t "manage-ministers")
     closeModal=(action "toggleIsAdding")
   }}
-    {{utils/create-mandatee model=model
-      closeModal=(action "toggleIsAdding")
-      mandateesUpdated=(action "mandateesUpdated")
-    }}
+  {{utils/create-mandatee
+    model=model
+    closeModal=(action "toggleIsAdding")
+    mandateesUpdated=(action "mandateesUpdated")
+  }}
   {{/web-components/vl-modal}}
 {{/if}}
 {{#if isDeletingMandatee}}
@@ -172,3 +179,4 @@
   }}
 {{/if}}
 {{outlet}}
+</div>

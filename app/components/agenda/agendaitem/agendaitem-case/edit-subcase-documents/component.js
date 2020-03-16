@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 
 export default Component.extend(UploadDocumentMixin, {
-  classNames: ["vl-form__group vl-u-bg-porcelain"],
+  classNames: ['vl-form__group vl-u-bg-porcelain'],
 
   actions: {
     async saveChanges() {
@@ -24,13 +24,13 @@ export default Component.extend(UploadDocumentMixin, {
 
     async cancelEditing() {
       const { documents } = this;
-        documents.map(async (document) => {
-          const version = await document.get('lastDocumentVersion');
-          version.rollbackAttributes();
-          version.belongsTo('accessLevel').reload();
-          document.rollbackAttributes();
-          document.belongsTo('type').reload();
-        });
+      documents.map(async (document) => {
+        const version = await document.get('lastDocumentVersion');
+        version.rollbackAttributes();
+        version.belongsTo('accessLevel').reload();
+        document.rollbackAttributes();
+        document.belongsTo('type').reload();
+      });
       this.cancelForm();
     },
   }

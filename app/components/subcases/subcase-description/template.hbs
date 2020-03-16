@@ -5,7 +5,7 @@
     </h3>
     {{#if isEditor}}
       <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -17,8 +17,7 @@
     </p>
     <ul class="vlc-status-timeline">
       {{#each subcase.sortedPhases as |phase|}}
-        <li
-          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         >
           <div class="vlc-status-timeline__dot"></div>
           {{#if (is-pending phase.code)}}
@@ -26,10 +25,10 @@
           {{else}}
             <div class="vlc-status-timeline__text">
               {{subcase-timeline-item-text
-                      label=(await phase.code.label)
-                      phase=phase
-                      onAgendaInfo=(await subcase.onAgendaInfo)
-                      isPostponed=(await subcase.isPostponed)
+                label=(await phase.code.label)
+                phase=phase
+                onAgendaInfo=(await subcase.onAgendaInfo)
+                isPostponed=(await subcase.isPostponed)
               }}
             </div>
           {{/if}}
@@ -72,22 +71,24 @@
           {{t "is-on-agenda"}}
         </span>
         <span class="vl-description-data__value">
-          {{#if (or
-                    (is-pending subcase.isPostponed)
-                    (is-pending subcase.onAgendaInfo)
-                )}}
-              <div class="vl-loader"></div>
+          {{#if
+            (or
+                        (is-pending subcase.isPostponed)
+                        (is-pending subcase.onAgendaInfo)
+            )
+          }}
+            <div class="vl-loader"></div>
           {{else}}
             {{#if (await subcase.isPostponed)}}
               {{t "postponed-subcase"}}
             {{else}}
               {{#if (await subcase.onAgendaInfo)}}
                 {{#link-to
-                        "agenda.agendaitems.agendaitem"
-                        (await latestMeetingId)
-                        (await latestAgendaItemId)
-                        (query-params selectedAgenda=(await latestAgendaId))
-                        class="vl-link"
+                  "agenda.agendaitems.agendaitem"
+                  (await latestMeetingId)
+                  (await latestAgendaItemId)
+                  (query-params selectedAgenda=(await latestAgendaId))
+                  class="vl-link"
                 }}
                   {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
                 {{/link-to}}
@@ -127,8 +128,8 @@
         <span class="vl-description-data__value">
           {{#if
             (or
-              (is-pending subcase.requestedBy)
-              (is-pending subcase.requestedBy.person)
+                          (is-pending subcase.requestedBy)
+                          (is-pending subcase.requestedBy.person)
             )
           }}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -173,7 +174,7 @@
     </div>
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__right">
-        <a class="vl-link" {{action "cancelEditing"}}>
+        <a href="" class="vl-link" {{action "cancelEditing"}}>
           {{t "cancel"}}
         </a>
       </div>

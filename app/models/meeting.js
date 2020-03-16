@@ -3,10 +3,11 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
+
 const { Model, attr, hasMany, belongsTo, PromiseObject } = DS;
 import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
 
-export default Model.extend(DocumentModelMixin,{
+export default Model.extend(DocumentModelMixin, {
   intl: inject(),
   plannedStart: attr('datetime'),
   startedOn: attr('datetime'),
@@ -29,17 +30,17 @@ export default Model.extend(DocumentModelMixin,{
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
   mailCampaign: belongsTo('mail-campaign'),
-  agenda: belongsTo('agenda', { inverse:null }),
+  agenda: belongsTo('agenda', { inverse: null }),
 
-  canReleaseDecisions: computed('isFinal', 'releasedDecisions', function(){
+  canReleaseDecisions: computed('isFinal', 'releasedDecisions', function () {
     return this.isFinal && !this.releasedDecisions;
   }),
 
-  canReleaseDocuments: computed('isFinal', 'releasedDocuments', function(){
+  canReleaseDocuments: computed('isFinal', 'releasedDocuments', function () {
     return this.isFinal && !this.releasedDocuments;
   }),
 
-  latestAgenda: computed('agendas.@each', function() {
+  latestAgenda: computed('agendas.@each', function () {
     return DS.PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {
         const sortedAgendas = agendas.sortBy('agendaName').reverse();
@@ -48,13 +49,13 @@ export default Model.extend(DocumentModelMixin,{
     });
   }),
 
-  sortedAgendas: computed('agendas.@each', function() {
+  sortedAgendas: computed('agendas.@each', function () {
     return this.agendas.sortBy('agendaName').reverse();
   }),
 
-  latestAgendaName: computed('latestAgenda', 'agendas', 'intl', function() {
+  latestAgendaName: computed('latestAgenda', 'agendas', 'intl', function () {
     return this.get('latestAgenda').then((agenda) => {
-      if (!agenda) return this.intl.t("no-agenda");
+      if (!agenda) return this.intl.t('no-agenda');
       const agendaLength = this.get('agendas.length');
       const agendaName = agenda.name;
       if (agendaName !== 'Ontwerpagenda') {
@@ -65,7 +66,7 @@ export default Model.extend(DocumentModelMixin,{
     });
   }),
 
-  defaultSignature: computed('signature', async function() {
+  defaultSignature: computed('signature', async function () {
     const signature = await this.get('signature');
     if (!signature) {
       return DS.PromiseObject.create({
@@ -80,7 +81,7 @@ export default Model.extend(DocumentModelMixin,{
     }
   }),
 
-  kindToShow: computed('kind', function() {
+  kindToShow: computed('kind', function () {
     const options = CONFIG.kinds;
     const { kind } = this;
     const foundOption = options.find((kindOption) => kindOption.uri === kind);

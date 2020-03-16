@@ -12,24 +12,28 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
             {{#if lastDocumentVersion}}
-              {{access-level-pill item=lastDocumentVersion}}
+              {{access-level-pill
+                item=lastDocumentVersion
+              }}
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if isEditor}}
-              <button class="vl-button vl-button--link vl-button--icon">
+              <button class="vl-button vl-button--link vl-button--icon"
+                      type="button">
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
                 {{#attach-popover
                   class="ember-attacher-popper"
                   hideOn="clickout click"
                   showOn="click"
                   animation="shift"
-                  placement="bottom" as |attacher|
+                  placement="bottom"
+                as |attacher|
                 }}
                   <ul class="vlc-dropdown-menu">
                     <li class="vlc-dropdown-menu__item">
-                      <a
-                        class="vl-link vl-link--block"
+                      <a class="vl-link vl-link--block"
+                         href=""
                         {{action attacher.hide}}
                         {{action "openUploadDialog" document}}
                       >
@@ -37,8 +41,8 @@
                       </a>
                     </li>
                     <li class="vlc-dropdown-menu__item">
-                      <a
-                        class="vl-link vl-link--block"
+                      <a class="vl-link vl-link--block"
+                         href=""
                         {{action attacher.hide}}
                         {{action "startEditingName"}}
                       >
@@ -47,8 +51,8 @@
                     </li>
                     <li class="vlc-dropdown-menu__separator" role="none"></li>
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                      <a
-                        class="vl-link vl-link--block vl-u-text--error"
+                      <a class="vl-link vl-link--block vl-u-text--error"
+                         href=""
                         {{action attacher.hide}}
                         {{action "deleteDocument" document}}
                       >
@@ -63,60 +67,58 @@
         </div>
       </div>
       <div class="vl-u-display-flex">
-        <div
-          class="vlc-document-card__badge
+        <div class="vlc-document-card__badge
             {{if
               document.checkAdded
               "vlc-document-list__item vlc-document-list__item--active"
             }}"
         >
-          <div
-            class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
-          >
+          <div class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
             <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
           </div>
         </div>
-
         <div class="vl-u-display-flex vl-u-flex-direction-column vlc-u-box-model-maximize-width">
-            {{#if (not isEditing)}}
+          {{#if (not isEditing)}}
             <h6 class="vl-title vl-title--h6">
               <span {{action "startEditingName"}}>
                 {{lastDocumentVersion.name}}
               </span>
             </h6>
-            {{else}}
-              <div class="vl-u-display-flex vl-u-display-flex-align-center">
-                  {{input
-                    type="text"
-                    class="vl-input-field vl-input-field--block"
-                    value=nameBuffer
-                  }}
-                <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  {{action "saveNameChange" lastDocumentVersion}}
-                >
-                  <i
-                    class="vl-vi vl-vi-save vl-button__icon"
-                    aria-hidden="true"
-                  ></i>
-                  <span class="vl-u-visually-hidden">
-                    {{t "more-options"}}
-                  </span>
-                </button>
-                <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  {{action "cancelEditingName"}}
-                >
-                  <i
-                    class="vl-vi vl-vi-cross vl-button__icon"
-                    aria-hidden="true"
-                  ></i>
-                  <span class="vl-u-visually-hidden">
-                    {{t "more-options"}}
-                  </span>
-                </button>
-              </div>
-            {{/if}}
+          {{else}}
+            <div class="vl-u-display-flex vl-u-display-flex-align-center">
+              {{input
+                type="text"
+                class="vl-input-field vl-input-field--block"
+                value=nameBuffer
+              }}
+              <button
+                      class="vl-button vl-button--link vl-button--icon"
+                      type="button"
+                {{action "saveNameChange" lastDocumentVersion}}
+              >
+                <i
+                        class="vl-vi vl-vi-save vl-button__icon"
+                        aria-hidden="true"
+                ></i>
+                <span class="vl-u-visually-hidden">
+                  {{t "more-options"}}
+                </span>
+              </button>
+              <button
+                      class="vl-button vl-button--link vl-button--icon"
+                      type="button"
+                {{action "cancelEditingName"}}
+              >
+                <i
+                        class="vl-vi vl-vi-cross vl-button__icon"
+                        aria-hidden="true"
+                ></i>
+                <span class="vl-u-visually-hidden">
+                  {{t "more-options"}}
+                </span>
+              </button>
+            </div>
+          {{/if}}
           <div class="vlc-document-card-content__meta">
             {{t "uploaded-at"}}
             {{moment-format (await lastDocumentVersion.created)}}
@@ -130,23 +132,21 @@
   {{#if (gt (await numberOfDocumentVersions) 0)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
-        <button
-          class="vl-toggle vl-link vl-link--bold"
+        <button class="vl-toggle vl-link vl-link--bold"
+                type="button"
           {{action "showVersions"}}
         >
-          <i
-            class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
+          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
           ></i>
           {{t "show-versions"}}
         </button>
         {{#if isShowingVersions}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
-              {{#each
-                (await
-                  myReverseSortedVersions
-                ) as |documentVersion|
-              }}
+               {{#each
+                 (await myReverseSortedVersions)
+               as |documentVersion|
+               }}
                 {{web-components/vl-document
                   documentVersion=documentVersion
                   item=item
@@ -180,9 +180,9 @@
           size=documentContainer.lastDocument.file.size
           downloadName=documentContainer.lastDocument.file.filename
           downloadLink=(concat
-            documentContainer.lastDocument.file.downloadLink
-            "?name="
-            documentContainer.lastDocument.file.filename
+                  documentContainer.lastDocument.file.downloadLink
+                  "?name="
+                  documentContainer.lastDocument.file.filename
           )
           delete=(action "delete" documentContainer.lastDocument)
         }}

@@ -30,23 +30,23 @@
         <span onclick={{action "openPopover"}}
               class="vl-icon vl-icon--small vl-vi vl-vi-info-filled vlc-u-cursor-pointer" aria-hidden="true">
           {{#attach-popover
-                  placement="right"
-                  isShown=popoverShown
-                  renderInPlace=true
-                  showOn="click"
-                  hideOn="clickout"
-                  class="ember-attacher-popper vlc-search-legend-popover vlc-u-cursor-default"
+            placement="right"
+            isShown=popoverShown
+            renderInPlace=true
+            showOn="click"
+            hideOn="clickout"
+            class="ember-attacher-popper vlc-search-legend-popover vlc-u-cursor-default"
           }}
             {{utils/search-legend userClickedClose=(action "closePopover")}}
           {{/attach-popover}}
         </span>
       </div>
       {{input
-              class="vl-input-field vl-input-field--block"
-              type="text"
-              id="agendaItemId"
-              value=searchText
-              key-up=(perform searchTask)
+        class="vl-input-field vl-input-field--block"
+        type="text"
+        id="agendaItemId"
+        value=searchText
+        key-up=(perform searchTask)
       }}
     </div>
     <div class="vlc-input-field-block vl-col--4-12">
@@ -54,11 +54,11 @@
         {{t "minister"}}
       </label>
       {{input
-              class="vl-input-field vl-input-field--block"
-              type="text"
-              id="ministerName"
-              value=ministerName
-              key-press=(perform searchTask)
+        class="vl-input-field vl-input-field--block"
+        type="text"
+        id="ministerName"
+        value=ministerName
+        key-press=(perform searchTask)
       }}
     </div>
   {{else}}
@@ -67,11 +67,11 @@
         {{t "agendaitem-field-label"}}
       </label>
       {{input
-              class="vl-input-field vl-input-field--block"
-              type="text"
-              id="agendaItemId"
-              value=searchText
-              key-up=(perform searchTask)
+        class="vl-input-field vl-input-field--block"
+        type="text"
+        id="agendaItemId"
+        value=searchText
+        key-up=(perform searchTask)
       }}
     </div>
     <div class="vl-col--0-12 vl-col--1-1--s">
@@ -84,7 +84,7 @@
       </button>
     </div>
     <div class="vl-col--2-12 vl-col--1-1--s">
-      <button
+      <button type="button"
               class="vl-button vl-button--link vl-button--narrow"
               href="#"
               onclick={{action "toggleAdvanced"}}
@@ -101,11 +101,11 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "from-date")}}
       {{web-components/vl-datepicker
-              selectedDate=dateFrom
-              dateChanged=(action "selectDateFrom")
+        selectedDate=dateFrom
+        dateChanged=(action "selectDateFrom")
       }}
       {{#if dateFrom}}
-        <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+        <button type="button" class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
                 onclick={{action "selectDateFrom" null}}>
           <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
         </button>
@@ -114,11 +114,11 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "until-date")}}
       {{web-components/vl-datepicker
-              selectedDate=dateTo
-              dateChanged=(action "selectDateTo")
+        selectedDate=dateTo
+        dateChanged=(action "selectDateTo")
       }}
       {{#if dateTo}}
-        <button class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+        <button type="button" class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
                 onclick={{action "selectDateTo" null}}>
           <i class="vl-button__icon vl-vi vl-vi-close-light" aria-hidden="true"></i>
         </button>
@@ -129,8 +129,8 @@
         {{t "search-in-announcements-only"}}
       </label>
       {{web-components/vl-toggle
-              valueChanged=(perform searchTask)
-              value=announcementsOnly
+        valueChanged=(perform searchTask)
+        value=announcementsOnly
       }}
     </div>
   </div>

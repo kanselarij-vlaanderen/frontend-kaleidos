@@ -6,7 +6,7 @@ export default Component.extend(LightTableMixin, {
   modelName: 'agendaitem',
   isScrolling: false,
 
-  didInsertElement: function() {
+  didInsertElement: function () {
     this._super(...arguments);
   },
 });

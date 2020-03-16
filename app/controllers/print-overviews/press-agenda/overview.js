@@ -7,12 +7,12 @@ export default Controller.extend({
   intl: inject(),
   queryParams: ['definite'],
 
-  title: computed('model.currentAgenda.createdFor', function() {
+  title: computed('model.currentAgenda.createdFor', function () {
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
     return `${this.intl.t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
-  documentTitle: computed('model.currentAgenda.createdFor', 'definite', function() {
+  documentTitle: computed('model.currentAgenda.createdFor', 'definite', function () {
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
     let prefix = '';
 
@@ -22,7 +22,7 @@ export default Controller.extend({
     return `${prefix}${this.intl.t('agendaitem-press-agenda')} van ${moment(date).format('DD-MM-YYYY')}`;
   }),
 
-  filteredGroups: computed('model', 'definite', async function() {
+  filteredGroups: computed('model', 'definite', async function () {
     return this.model.get('groups').then(agenda => {
       agenda.groups.map(group => {
         group.agendaitems.filter(item => item.forPress);

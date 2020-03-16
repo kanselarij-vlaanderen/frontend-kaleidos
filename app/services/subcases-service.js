@@ -11,7 +11,7 @@ export default Service.extend({
         headers: {
           'Content-Type': 'application/vnd.api+json'
         },
-        method: "GET",
+        method: 'GET',
         url: `/custom-subcases`,
       }
     ).then(({ data }) => {
@@ -22,7 +22,7 @@ export default Service.extend({
   setNewMandateeToRelatedOpenSubcases(old_mandatee, new_mandatee) {
     return $.ajax(
       {
-        method: "POST",
+        method: 'POST',
         url: `/minister-jurisdiction-service/transfer/procedures`,
         data: {
           old_mandatee: old_mandatee,

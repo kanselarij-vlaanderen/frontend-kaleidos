@@ -1,12 +1,12 @@
 import DS from 'ember-data';
-import {inject} from '@ember/service';
-import moment from "moment";
+import { inject } from '@ember/service';
+import moment from 'moment';
 import EmberObject from '@ember/object';
 import ModelWithToasts from 'fe-redpencil/models/model-with-toasts';
 import fetch from 'fetch';
-import ModifiedOldDataError from "../errors/modified-old-data-error";
+import ModifiedOldDataError from '../errors/modified-old-data-error';
 
-let {attr, belongsTo} = DS;
+let { attr, belongsTo } = DS;
 
 export default ModelWithToasts.extend({
   currentSession: inject(),
@@ -39,7 +39,7 @@ export default ModelWithToasts.extend({
           .queryRecord(this.store, this.get('constructor'),
             {
               filter:
-                {id: this.get('id')}
+                { id: this.get('id') }
             });
         const oldModelModifiedMoment = moment.utc(oldModelData.data[0].attributes.modified);
 
@@ -69,7 +69,7 @@ export default ModelWithToasts.extend({
             message: this.intl.t('changes-could-not-be-saved-message', {
               firstname: vals['first-name'],
               lastname: vals['last-name'],
-              time: oldModelModifiedMoment.locale("nl").fromNow()
+              time: oldModelModifiedMoment.locale('nl').fromNow()
             }),
             type: 'error'
           }), 600000);
