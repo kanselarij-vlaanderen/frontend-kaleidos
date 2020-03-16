@@ -103,10 +103,12 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-page-header';
 @import 'custom-components/vlc-panel-layout';
 @import 'custom-components/vlc-pill';
+@import 'custom-components/vlc-printable-agenda-list';
 @import 'custom-components/vlc-preview-container';
 @import 'custom-components/vlc-procedure-step';
 @import 'custom-components/vlc-radio-inline';
 @import 'custom-components/vlc-scroll-wrapper';
+@import 'custom-components/vlc-search-legend';
 @import 'custom-components/vlc-side-nav';
 @import 'custom-components/vlc-status-timeline';
 @import 'custom-components/vlc-subline';
@@ -114,6 +116,8 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-themes-selector';
 @import 'custom-components/vlc-toolbar';
 @import 'custom-components/vlc-user';
+@import 'custom-components/vlc-user-management-table';
+@import 'custom-components/vlc-link-actions';
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -132,6 +136,7 @@ $icon-font-location: '/fonts/';
 
 // Custom utilities
 @import 'custom-utilities/_box-model';
+@import 'custom-utilities/_cursors';
 @import 'custom-utilities/_extended-spacer';
 @import 'custom-utilities/_spacing';
 @import 'custom-utilities/_reset';
