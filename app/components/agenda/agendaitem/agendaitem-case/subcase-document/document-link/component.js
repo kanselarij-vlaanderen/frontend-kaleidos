@@ -42,7 +42,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
 
   async destroyApprovalsOfAgendaitem(agendaitem) {
     const approvals = await agendaitem.get('approvals');
-    if(approvals) {
+    if (approvals) {
       await Promise.all(approvals.map(approval => approval.destroyRecord()));
     }
   },
@@ -53,6 +53,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       const versionInCreation = await uploadedFile.get('documentVersion');
       const container = this.get('documentContainer');
       container.rollbackAttributes();
+      doc.rollbackAttributes();
       if (versionInCreation) {
         await this.fileService.deleteDocumentVersion(versionInCreation);
       } else {
@@ -108,7 +109,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
 
     async openUploadDialog() {
       const itemType = this.item.get('constructor.modelName');
-      if(itemType === "agendaitem" || itemType === "subcase") {
+      if (itemType === "agendaitem" || itemType === "subcase") {
         await this.item.preEditOrSaveCheck();
       }
       this.toggleProperty('isUploadingNewVersion');
@@ -124,8 +125,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       if (uploadedFile) {
         const container = this.get('documentContainer');
         const doc = await this.get('documentContainer.lastDocumentVersion');
-        await doc.rollbackAttributes();
-        // await container.rollbackAttributes();
         container.rollbackAttributes();
         doc.rollbackAttributes();
         const versionInCreation = await uploadedFile.get('documentVersion');
@@ -134,7 +133,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
         } else {
           await this.fileService.deleteFile(uploadedFile);
         }
-        
         this.set('uploadedFile', null);
       }
       this.set('isUploadingNewVersion', false);
@@ -164,7 +162,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
           this.setNotYetFormallyOk(item);
         }
         await item.save();
-      } catch(error) {
+      } catch (error) {
         await this.deleteUploadedDocument();
         throw error;
       } finally {

@@ -102,15 +102,15 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
     }
   },
 
-	async setNewPropertiesToModel(model) {
-		await this.parseDomainsAndMandatees();
-		const { selectedMandatees, selectedIseCodes, submitter } = this;
-		model.set('formallyOk', CONFIG.notYetFormallyOk);
-		model.set('mandatees', selectedMandatees);
-		model.set('iseCodes', selectedIseCodes);
-		model.set('requestedBy', submitter);
-		return await model.save();
-	},
+  async setNewPropertiesToModel(model) {
+    await this.parseDomainsAndMandatees();
+    const { selectedMandatees, selectedIseCodes, submitter } = this;
+    model.set('formallyOk', CONFIG.notYetFormallyOk);
+    model.set('mandatees', selectedMandatees);
+    model.set('iseCodes', selectedIseCodes);
+    model.set('requestedBy', submitter);
+    return await model.save();
+  },
 
   async parseDomainsAndMandatees() {
     const mandateeRows = await this.get('mandateeRows');

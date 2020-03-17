@@ -52,7 +52,7 @@ export default ModelWithToasts.extend({
     if (await this.isModifiedRecently()) {
       // TODO, should something happen ? reverse if
     } else {
-      const { oldModelData, oldModelModifiedMoment} = await this.getOldModelData();
+      const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
       const userId = oldModelData.data[0]['relationships']['modified-by']['links']['self'];
       const userData = await fetch(userId);
       const userDataFields = await userData.json();

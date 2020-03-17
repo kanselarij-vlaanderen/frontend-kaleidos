@@ -146,7 +146,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     return checkAdded || hasAddedDocuments;
   }),
 
-  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', async function() {
+  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', async function () {
     const documents = await this.get('documents');
     return documents && documents.some((document) => document.checkAdded);
   }),
