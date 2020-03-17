@@ -4,7 +4,7 @@ import moment from "moment";
 import EmberObject from '@ember/object';
 import ModelWithToasts from 'fe-redpencil/models/model-with-toasts';
 import fetch from 'fetch';
-import ModifiedOldDataError from "../errors/modified-old-data-error";
+import ModifiedOldDataError from '../errors/modified-old-data-error';
 
 let { attr, belongsTo } = DS;
 

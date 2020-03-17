@@ -1,19 +1,19 @@
 import Mixin from '@ember/object/mixin';
-import {computed} from '@ember/object';
-import {not} from '@ember/object/computed';
-import {inject} from '@ember/service';
+import { computed } from '@ember/object';
+import { not } from '@ember/object/computed';
+import { inject } from '@ember/service';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import CONFIG from 'fe-redpencil/utils/config';
 
 const getCachedProperty = function (property) {
   return computed(`item.${property}`, {
     get() {
-      const {item} = this;
+      const { item } = this;
       if (item)
         return item.get(property);
     },
     set: function (key, value) {
-      const {item} = this;
+      const { item } = this;
       if (item) {
         this.item.set(property, value);
       }
@@ -29,14 +29,14 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
   isEditing: false,
 
   isAgendaItem: computed('item.contructor', function () {
-    const {item} = this;
+    const { item } = this;
     return item.get('modelName') === 'agendaitem';
   }),
 
   isSubcase: not('isAgendaItem'),
 
   async setNewPropertiesToModel(model, resetFormallyOk = true) {
-    const {propertiesToSet} = this;
+    const { propertiesToSet } = this;
 
     if (resetFormallyOk) {
       if (model.get('formallyOk') && (this.get('formallyOk') != CONFIG.notYetFormallyOk)) {
@@ -77,7 +77,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
     async saveChanges() {
       this.set('isLoading', true);
-      const {isAgendaItem} = this;
+      const { isAgendaItem } = this;
       const item = await this.get('item');
       let resetFormallyOk = true;
       if (isAgendaItem && !item.showAsRemark) {
@@ -139,4 +139,4 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
   }
 })
 
-export {getCachedProperty, EditAgendaitemOrSubcase}
+export { getCachedProperty, EditAgendaitemOrSubcase }

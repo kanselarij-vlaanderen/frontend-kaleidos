@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
+
 const { Model, attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 import { deprecatingAlias } from '@ember/object/computed';
 import { A } from '@ember/array';
@@ -12,7 +13,7 @@ export default Model.extend({
   agendaService: inject(),
 
   addedDocuments: alias('agendaService.addedDocuments'),
-  uri:attr('string'),
+  uri: attr('string'),
 
   created: attr('datetime'),
 
@@ -23,18 +24,18 @@ export default Model.extend({
   }),
 
 
-	type: belongsTo('document-type'),
+  type: belongsTo('document-type'),
   signedDecision: belongsTo('decision', { inverse: null }),
   signedMinutes: belongsTo('meeting-record', { inverse: null }),
 
-  sortedDocuments: computed('documents.@each', function() {
+  sortedDocuments: computed('documents.@each', function () {
     return PromiseArray.create({
       promise: this.get('documents').then(async (docs) => {
-        const heads = docs.filter(async function(doc) {
+        const heads = docs.filter(async function (doc) {
           const previousVersion = await doc.get('previousVersion');
           return !previousVersion;
         })
-        if ( heads.length <= 1 ) {
+        if (heads.length <= 1) {
           const head = heads.get('firstObject');
           const l = [];
           let next = head;
@@ -60,7 +61,7 @@ export default Model.extend({
   lastDocument: computed(
     'sortedDocuments.@each',
     'documents.@each', // Why? TODO: Comment
-    function() {
+    function () {
       return PromiseObject.create({
         promise: this.get('sortedDocuments').then((sortedDocuments) => {
           return sortedDocuments.get('lastObject');
@@ -73,7 +74,7 @@ export default Model.extend({
     until: '?'
   }),
 
-  reverseSortedDocuments: computed('sortedDocuments', function() {
+  reverseSortedDocuments: computed('sortedDocuments', function () {
     return PromiseArray.create({
       promise: this.get('sortedDocuments').then((sortedDocuments) => {
         return sortedDocuments.reverse();
@@ -85,7 +86,7 @@ export default Model.extend({
     until: '?'
   }),
 
-  checkAdded: computed('uri', 'addedDocuments.@each', function() {
+  checkAdded: computed('uri', 'addedDocuments.@each', function () {
     if (this.addedDocuments) return this.addedDocuments.includes(this.get('uri'));
   })
 });

@@ -42,7 +42,7 @@ export default Component.extend({
       documentVersions: [],
       themes: [],
       approvals: [],
-      isApproval:true
+      isApproval: true
     });
     return await agendaitem.save();
   },

@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   documentVersion: null,
   isEditingAccessLevel: false,
 
-  aboutToDelete: computed('documentVersion.aboutToDelete', function() {
+  aboutToDelete: computed('documentVersion.aboutToDelete', function () {
     if (this.documentVersion) {
       if (this.documentVersion.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
@@ -29,7 +29,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 
   preferredAccessLevel: null,
 
-  resetPreferredAccessLevel: async function() {
+  resetPreferredAccessLevel: async function () {
     this.set('preferredAccessLevel', await this.documentVersion.get('accessLevel'));
   },
 

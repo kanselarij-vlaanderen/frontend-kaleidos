@@ -1,4 +1,5 @@
-<div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--no-padding vlc-navbar--bg-alt vlc-navbar--auto" id="c-main-nav">
+<div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--no-padding vlc-navbar--bg-alt vlc-navbar--auto"
+     id="c-main-nav">
   <div class="vlc-toolbar vlc-toolbar--auto vlc-toolbar--slide-in">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
@@ -42,14 +43,14 @@
       </div>
     </div>
     <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__right">
-          {{#if showEnvironmentName}}
-              <div class="vlc-environment-pill">
-                {{environmentName}}
-                {{capitalize (t "environment")}}
-              </div>
-          {{/if}}
-        </div>
+      <div class="vlc-toolbar__right">
+        {{#if showEnvironmentName}}
+          <div class="vlc-environment-pill">
+            {{environmentName}}
+            {{capitalize (t "environment")}}
+          </div>
+        {{/if}}
+      </div>
       <div class="vlc-toolbar__item">
         {{#if user}}
           <div class="vlc-user">
@@ -58,7 +59,7 @@
               {{user.lastName}}
               ({{role}})
             </div>
-            <a class="vlc-user__action" {{action "logout"}}>
+            <a href="" class="vlc-user__action" {{action "logout"}}>
               {{t "sign-out"}}
             </a>
           </div>

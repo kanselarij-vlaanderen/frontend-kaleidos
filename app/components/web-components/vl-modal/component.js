@@ -20,10 +20,10 @@ const FOCUSABLE_ELEMENTS = [
 ];
 
 export default Component.extend({
-	isOverlay: null,
-	large: false,
-	clickOutside: false,
-	isDocumentViewer: null,
+  isOverlay: null,
+  large: false,
+  clickOutside: false,
+  isDocumentViewer: null,
 
   didInsertElement() {
     const focusableNodes = this.getFocusableNodes();
@@ -34,31 +34,31 @@ export default Component.extend({
     }
   },
 
-  keyDown: function(event) {
-    if(event.key === 'Escape') {
+  keyDown: function (event) {
+    if (event.key === 'Escape') {
       this.closeModal();
     }
-    if(event.key === 'Tab') {
+    if (event.key === 'Tab') {
       this.maintainFocus(event);
     }
   },
 
-	backdropClass: computed('isOverlay', function () {
-		const { isOverlay } = this;
-		if (isOverlay) {
-			return "vl-modal__backdrop";
-		}
-	}),
+  backdropClass: computed('isOverlay', function () {
+    const { isOverlay } = this;
+    if (isOverlay) {
+      return 'vl-modal__backdrop';
+    }
+  }),
 
-	sizeClass: computed('large', 'isDocumentViewer', function () {
-		const { large, isDocumentViewer } = this;
-		if (large) {
-			return "vl-modal-dialog--large";
-		}
-		if (isDocumentViewer) {
-			return "vl-modal-dialog full-height";
-		}
-	}),
+  sizeClass: computed('large', 'isDocumentViewer', function () {
+    const { large, isDocumentViewer } = this;
+    if (large) {
+      return 'vl-modal-dialog--large';
+    }
+    if (isDocumentViewer) {
+      return 'vl-modal-dialog full-height';
+    }
+  }),
 
   getFocusableNodes() {
     const nodes = this.get('element').querySelectorAll(FOCUSABLE_ELEMENTS);
@@ -66,7 +66,7 @@ export default Component.extend({
   },
 
 // credit: https://github.com/ghosh/Micromodal/blob/master/lib/src/index.js#L151
-  maintainFocus (event) {
+  maintainFocus(event) {
     const focusableNodes = this.getFocusableNodes();
 
     // if disableFocus is true
@@ -87,15 +87,15 @@ export default Component.extend({
     }
   },
 
-	actions: {
-		close() {
-			this.closeModal();
-		},
+  actions: {
+    close() {
+      this.closeModal();
+    },
 
-		clickOutside() {
-			if (this.clickOutside) {
-				this.closeModal();
-			}
-		}
-	}
+    clickOutside() {
+      if (this.clickOutside) {
+        this.closeModal();
+      }
+    }
+  }
 });

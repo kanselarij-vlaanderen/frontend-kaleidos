@@ -2,12 +2,12 @@ import Component from '@ember/component';
 import ManageMinisterMixin from 'fe-redpencil/mixins/manage-minister-mixin';
 
 export default Component.extend(ManageMinisterMixin,
-	{
-		selectedMandatee: null,
+  {
+    selectedMandatee: null,
 
-		actions: {
-			cancel() {
-				this.cancel();
-			}
-		}
-	});
+    actions: {
+      cancel() {
+        this.cancel();
+      }
+    }
+  });

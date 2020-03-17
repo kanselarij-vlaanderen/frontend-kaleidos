@@ -31,18 +31,18 @@ export default Controller.extend({
         valuePath: 'lastName',
       },
       {
-        label: this.intl.t('phone'),
-        classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-        cellClassNames: ['vl-data-table-col-2'],
-        breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'phone',
-      },
-      {
         label: this.intl.t('email'),
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
         valuePath: 'email',
+      },
+      {
+        label: this.intl.t('ovo-code'),
+        classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
+        cellClassNames: ['vl-data-table-col-2'],
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        valuePath: 'organization.identifier',
       },
       {
         label: this.intl.t('group'),
@@ -67,7 +67,7 @@ export default Controller.extend({
     if (isEmpty(searchText)) {
       return null;
     }
-    return { "last-name": searchText };
+    return { 'last-name': searchText };
   }),
 
   actions: {

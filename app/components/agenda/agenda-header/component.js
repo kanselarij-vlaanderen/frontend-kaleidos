@@ -1,13 +1,17 @@
 import Component from '@ember/component';
-import {inject} from '@ember/service';
-import {alias, filter} from '@ember/object/computed';
-import {computed} from '@ember/object';
+import { inject } from '@ember/service';
+import { alias, filter } from '@ember/object/computed';
+import { computed } from '@ember/object';
 import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import EmberObject from '@ember/object';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { constructArchiveName, fetchArchivingJobForAgenda, fileDownloadUrlFromJob } from 'fe-redpencil/utils/zip-agenda-files';
+import {
+  constructArchiveName,
+  fetchArchivingJobForAgenda,
+  fileDownloadUrlFromJob
+} from 'fe-redpencil/utils/zip-agenda-files';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
@@ -72,7 +76,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     if (this.isLockingAgenda) {
       return this.intl.t('agenda-lock');
     }
-    return "";
+    return '';
   }),
 
   async createDesignAgenda() {
@@ -105,7 +109,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       await session.save();
       await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems.index', session.id, {
-        queryParams: {selectedAgenda: previousAgenda.get('id')}
+        queryParams: { selectedAgenda: previousAgenda.get('id') }
       });
     } else {
       await this.sessionService.deleteSession(session);
@@ -139,22 +143,22 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     navigateToNotes() {
-      const {currentSession, currentAgenda} = this;
+      const { currentSession, currentAgenda } = this;
       this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToPressAgenda() {
-      const {currentSession, currentAgenda} = this;
+      const { currentSession, currentAgenda } = this;
       this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToNewsletter() {
-      const {currentSession, currentAgenda} = this;
+      const { currentSession, currentAgenda } = this;
       this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToDecisions() {
-      const {currentSession, currentAgenda} = this;
+      const { currentSession, currentAgenda } = this;
       this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
     },
 
@@ -206,7 +210,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         await this.deleteAgenda(designAgenda);
       }
       if (!this.isDestroyed) {
-      this.set('isLockingAgenda', false);
+        this.set('isLockingAgenda', false);
       }
     },
 
@@ -392,9 +396,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           this.set('sessionService.currentAgenda', newAgenda);
           this.reloadRoute(newAgenda.get('id'));
         }).finally(() => {
-          this.set('sessionService.selectedAgendaItem', null);
-          this.changeLoading();
-          this.set('isApprovingAgenda', false);
+        this.set('sessionService.selectedAgendaItem', null);
+        this.changeLoading();
+        this.set('isApprovingAgenda', false);
       });
     });
   },
