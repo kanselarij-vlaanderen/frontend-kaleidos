@@ -53,7 +53,6 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       const versionInCreation = await uploadedFile.get('documentVersion');
       const container = this.get('documentContainer');
       container.rollbackAttributes();
-      doc.rollbackAttributes();
       if (versionInCreation) {
         await this.fileService.deleteDocumentVersion(versionInCreation);
       } else {
