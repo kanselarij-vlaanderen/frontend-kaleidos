@@ -16,7 +16,7 @@
 </h4>
 {{#if (not aboutToDelete)}}
   {{#if (not selectedAgendaItem)}}
-    {{#if agendaitem.showAsRemark}} {{!-- What is this test for? Determining if announcement better through "showAsRemark"? --}}
+    {{#if (not agendaitem.isApproval)}}
       {{#if agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
         <pre class="vl-u-text">
           {{agendaitem.title}}
