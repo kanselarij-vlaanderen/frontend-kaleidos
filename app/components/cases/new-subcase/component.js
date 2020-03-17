@@ -41,7 +41,7 @@ export default Component.extend({
     subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
 
-    return subcase.save();
+    return await subcase.save();
   },
 
   async copyNewsletterInfo(subcase, newsletterInfo) {
@@ -57,7 +57,7 @@ export default Component.extend({
       publicationDate: newsletterInfo.get('publicationDate'),
       publicationDocDate: newsletterInfo.get('publicationDocDate')
     });
-    return newsletterInfoToCreate.save();
+    return await newsletterInfoToCreate.save();
   },
 
   async copyDecisions(subcase, decisions) {

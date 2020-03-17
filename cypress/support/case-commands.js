@@ -55,7 +55,7 @@ function createCase(confidential, shortTitle) {
   cy.wait('@createNewCase', { timeout: 20000 })
   .then((res) => {
     caseId = res.responseBody.data.id;
-  }).verifyAlertSuccess()
+  })
   .then(() => {
     return new Cypress.Promise((resolve) => {
       resolve(caseId);
@@ -105,7 +105,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the long title
   cy.get('.vlc-input-field-block').eq(2).within(() => {
-    cy.get('.vl-textarea').click().type(longTitle);
+    cy.get('.vl-textarea').click().clear().type(longTitle);
   });
 
   // Set the step type
@@ -130,11 +130,11 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   let subcaseId;
 
-  cy.wait('@createNewSubcase', { timeout: 10000 })
+  cy.wait('@createNewsletter', { timeout: 10000 })
   .then((res) => {
     subcaseId = res.responseBody.data.id;
-  }).verifyAlertSuccess();
-  cy.wait('@createNewsletter', { timeout: 10000 })
+  });
+  cy.wait('@createNewSubcase', { timeout: 10000 })
   .then(() => {
     return new Cypress.Promise((resolve) => {
       resolve(subcaseId);

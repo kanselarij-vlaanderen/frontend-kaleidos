@@ -69,7 +69,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
         subcase.set('isArchived', false);
         return subcase.save();
       }));
-      caze.save();
+      await caze.save();
     },
 
     requestArchiveCase(caze) {

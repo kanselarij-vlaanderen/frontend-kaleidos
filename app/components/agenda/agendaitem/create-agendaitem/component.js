@@ -64,7 +64,10 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
 
 
   setFocus() {
-    document.getElementById('searchId').focus();
+    const element = document.getElementById("searchId");
+    if (element) {
+      element.focus();
+    }
   },
 
   findAll: task(function* () {

@@ -73,13 +73,9 @@ context('Full test', () => {
     const subcase_2_Type='In voorbereiding';
     const subcase_2_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, case_2_TitleShort).then(() => {
-      cy.verifyAlertSuccess();
-    });
+    cy.createCase(false, case_2_TitleShort);
 
-    cy.addSubcase(type_2,newSubcase_2_TitleShort,subcase_2_TitleLong, subcase_2_Type, subcase_2_Name).then(() => {
-      cy.verifyAlertSuccess();
-    });
+    cy.addSubcase(type_2,newSubcase_2_TitleShort,subcase_2_TitleLong, subcase_2_Type, subcase_2_Name);
     cy.openSubcase(0);
     cy.changeSubcaseAccessLevel(false, case_2_TitleShort, false, 'Intern Overheid');
     cy.addSubcaseThemes([2, 4 , 6]);
@@ -99,13 +95,9 @@ context('Full test', () => {
     const subcase_3_Type='In voorbereiding';
     const subcase_3_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, caseTitle_3_Short).then(() => {
-      cy.verifyAlertSuccess();
-    });
+    cy.createCase(false, caseTitle_3_Short);
 
-    cy.addSubcase(type_3,newSubcase_3_TitleShort,subcase_3_TitleLong, subcase_3_Type, subcase_3_Name).then(() => {
-      cy.verifyAlertSuccess();
-    });
+    cy.addSubcase(type_3,newSubcase_3_TitleShort,subcase_3_TitleLong, subcase_3_Type, subcase_3_Name);
 
     cy.openSubcase();
     cy.changeSubcaseAccessLevel(true, caseTitle_3_Short, false, 'Intern Overheid');
@@ -119,10 +111,10 @@ context('Full test', () => {
 
     cy.setFormalOkOnAllItems();
 
-    cy.approveCoAgendaitem(case_2_TitleShort);
+    // cy.approveCoAgendaitem(case_2_TitleShort); // TODO approvals have low prior and need a refactor
 
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
-    cy.addNewDocumentVersion('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+    cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
 
     cy.addRemarkToAgenda('Titel mededeling',

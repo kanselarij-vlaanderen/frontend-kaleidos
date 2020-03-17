@@ -11,7 +11,7 @@ export default Component.extend({
     async chooseAccountGroup(newGroup) {
       let foundUser = await this.store.findRecord('user', this.get('user.id'));
       foundUser.set('group', newGroup);
-      foundUser.save();
+      await foundUser.save();
     },
   }
 });

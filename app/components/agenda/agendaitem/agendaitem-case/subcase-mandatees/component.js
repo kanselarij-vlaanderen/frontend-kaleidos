@@ -109,7 +109,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
     model.set('mandatees', selectedMandatees);
     model.set('iseCodes', selectedIseCodes);
     model.set('requestedBy', submitter);
-    return model.save();
+    return await model.save();
   },
 
   async parseDomainsAndMandatees() {

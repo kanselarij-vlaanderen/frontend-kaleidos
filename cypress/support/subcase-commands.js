@@ -10,6 +10,7 @@ Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
 Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
 Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
 Cypress.Commands.add('deleteSubcase', deleteSubcase);
+Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);
 
 // ***********************************************
 // Functions
@@ -30,7 +31,7 @@ function openSubcase(index=0){
   cy.get('.vlc-procedure-step').as('subcasesList');
   cy.get('@subcasesList').eq(index).within(() => {
     cy.wait(1000); //sorry, link is not loaded most of the time
-    cy.get('.vl-title').click();
+    cy.get('.vl-title').eq(0).click();
   })
   // cy.wait('@getCaseSubcases', { timeout: 12000 });
 }
@@ -162,11 +163,13 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
 
   cy.get('.vlc-box a').contains('Minister toevoegen').click();
   cy.get('.mandatee-selector-container').children('.ember-power-select-trigger').click();
+  cy.get('.ember-power-select-search-input').type('g').clear(); //TODO added this because default data does not have active ministers
   cy.wait('@getMandatees', { timeout: 12000 });
+  cy.get('.ember-power-select-option--search-message', { timeout: 10000 }).should('not.exist'); //TODO added this because default data does not have active ministers
   cy.get('.ember-power-select-option', { timeout: 10000 }).should('exist').then(() => {
     cy.get('.ember-power-select-option').eq(mandateeNumber).click();
   });
-  //TODO loading the isecodes and government fields takes time to load, are they be cached for reuse ?
+  //TODO loading the isecodes and government fields takes time, are they not cacheble ?
   cy.wait('@getIseCodes', { timeout: 20000 });
   cy.wait('@getGovernmentFields', { timeout: 20000 });
   cy.get('.vlc-checkbox-tree', { timeout: 20000 }).should('exist').eq(fieldNumber).within(() => {
@@ -222,12 +225,12 @@ function deleteSubcase() {
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
-  cy.get('.vl-popover__link-list__item > .vl-link')
+  cy.get('.vlc-dropdown-menu__item > .vl-link')
     .contains('Procedurestap verwijderen')
     .click()
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
-    cy.get('button').contains('Procedurestap verwijderen').click();
+    cy.get('button').contains('Verwijderen').click();
   })
   cy.wait('@deleteSubcase', { timeout: 20000 });
 }
@@ -241,7 +244,7 @@ function deleteSubcase() {
  * @param {number} month the number of the month to translate (from moment so starts from 0)
  * @returns the month in dutch
  */
-function getTranslatedMonth(month){
+function getTranslatedMonth(month) {
   switch(month) {
     case 0:
       return 'januari';

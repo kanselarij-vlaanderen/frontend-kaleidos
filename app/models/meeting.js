@@ -3,8 +3,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject from '@ember/object';
-
-const { Model, attr, hasMany, belongsTo, PromiseObject } = DS;
+const { Model, attr, hasMany, belongsTo } = DS;
 import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
 
 export default Model.extend(DocumentModelMixin, {
@@ -89,11 +88,4 @@ export default Model.extend(DocumentModelMixin, {
     return EmberObject.create(foundOption);
   }),
 
-  documentsLength: computed('documents', function () {
-    return PromiseObject.create({
-      promise: this.get('documents').then((documents) => {
-        return documents.get('length');
-      })
-    });
-  }),
 });

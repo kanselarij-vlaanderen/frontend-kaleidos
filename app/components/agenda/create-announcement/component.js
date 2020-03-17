@@ -67,6 +67,6 @@ export default Component.extend(UploadDocumentMixin, {
         return this.attachDocumentVersionsToModel(documentVersions, agendaitem);
       })
     );
-    return agendaitem.save();
+    return await agendaitem.save();
   },
 });

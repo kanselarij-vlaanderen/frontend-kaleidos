@@ -141,12 +141,16 @@ export default Mixin.create({
     } else {
       model.set('linkedDocumentVersions', A([]));
     }
-    return model.save();
+    return await model.save();
   },
 
   actions: {
     async uploadedFile(uploadedFile) {
       const creationDate = moment().utc().toDate();
+      if (this.documentContainer) {
+        await this.documentContainer.reload();
+        await this.documentContainer.hasMany('documents').reload();
+      }
       const previousVersion = this.documentContainer ? (await this.documentContainer.get('lastDocumentVersion')) : null;
       const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
         accessLevel: this.defaultAccessLevel,
@@ -154,7 +158,7 @@ export default Mixin.create({
       newDocument.set('created', creationDate);
       newDocument.set('modified', creationDate);
       if (this.documentContainer) { // Adding new version to existing container
-        const docs = await this.documentContainer.get('documents')
+        const docs = await this.documentContainer.get('documents');
         docs.pushObject(newDocument);
         newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
         const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
