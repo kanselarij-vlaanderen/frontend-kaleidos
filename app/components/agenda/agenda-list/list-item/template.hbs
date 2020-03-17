@@ -92,9 +92,9 @@
       {{#if (await agendaitem.documents)}}
         <div class="vlc-hr"></div>
         {{utils/documents-list-for-item
-                isClickable=isDocumentClickable
-                item=agendaitem
-                agendaitem=agendaitem
+          isClickable=isDocumentClickable
+          item=agendaitem
+          agendaitem=agendaitem
         }}
       {{else}}
         {{#if (await documentNames)}}

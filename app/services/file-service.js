@@ -34,7 +34,7 @@ export default Service.extend({
     }
   },
 
-  deleteDocumentWithUndo: task(function*(documentToDelete) {
+  deleteDocumentWithUndo: task(function* (documentToDelete) {
     this.objectsToDelete.push(documentToDelete);
     documentToDelete.set('aboutToDelete', true);
     yield timeout(10000);
@@ -46,7 +46,7 @@ export default Service.extend({
     this.globalError.set('shouldUndoChanges', false);
   }),
 
-  deleteDocumentVersionWithUndo: task(function*(documentVersionToDelete) {
+  deleteDocumentVersionWithUndo: task(function* (documentVersionToDelete) {
     this.objectsToDelete.push(documentVersionToDelete);
     documentVersionToDelete.set('aboutToDelete', true);
     yield timeout(10000);

@@ -1,6 +1,6 @@
 {{#if (not multiSelect)}}
   {{#power-select
-          options=items
+    options=items
     selected=selectedItems
     disabled=readOnly
     allowClear=allowClear
@@ -11,7 +11,8 @@
     searchMessage=null
     search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "selectModel") as |model|
+    onchange=(action "selectModel")
+  as |model|
   }}
     {{await (model-property-to-show model propertyToShow)}}
   {{/power-select}}
@@ -28,7 +29,8 @@
     closeOnSelect=false
     search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "selectModel") as |model|
+    onchange=(action "selectModel")
+  as |model|
   }}
     {{await (model-property-to-show model propertyToShow)}}
   {{/power-select-multiple}}

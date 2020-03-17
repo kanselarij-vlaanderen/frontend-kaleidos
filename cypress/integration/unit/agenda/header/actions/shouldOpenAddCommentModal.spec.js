@@ -1,8 +1,8 @@
-/*global context, it, cy,beforeEach*/
+/*global context, it, cy, Cypress, beforeEach*/
 /// <reference types="Cypress" />
 
 import {addAnnouncementSelector} from "../../../../../selectors/agenda/actionModalSelectors";
-import {formFooterSaveSelector, formInputSelector} from "../../../../../selectors/formSelectors/formSelectors";
+import {formSaveSelector, formInputSelector} from "../../../../../selectors/formSelectors/formSelectors";
 import {
   createAnnouncementTitleSubcaseSelector
 } from "../../../../../selectors/models/modelSelectors";
@@ -23,7 +23,8 @@ context('Model action', () => {
     const YEAR = '2020';
     const DAY = '13';
     cy.createDefaultAgenda(KIND,YEAR,JANUARI,DAY,PLACE);
-    cy.openAgenda(1,"13 januari 2020", "10:00");
+    const agendaDate = Cypress.moment("2020-01-13").set({"hour": 10, "minute": 10});
+    cy.openAgendaForDate(agendaDate);
     cy.openActionModal();
     cy.get(addAnnouncementSelector).click();
     cy.get(formInputSelector).type('Dit is een korte titel');
@@ -34,7 +35,7 @@ context('Model action', () => {
         {fileContent, fileName: "test.pdf", mimeType: 'application/pdf'},
         {uploadType: 'input'});
       cy.wait('@createNewFile');
-      cy.get(formFooterSaveSelector).click();
+      cy.get(formSaveSelector).click();
     });
   });
 });

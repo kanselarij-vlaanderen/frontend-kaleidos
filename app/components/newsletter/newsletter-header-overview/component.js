@@ -14,7 +14,7 @@ export default Component.extend(isAuthenticatedMixin, {
   agenda: null,
   isVerifying: null,
 
-  shouldShowPrintButton: computed('routing.currentRouteName', function() {
+  shouldShowPrintButton: computed('routing.currentRouteName', function () {
     return this.routing.get('currentRouteName').includes(`newsletter.overview`);
   }),
 
@@ -50,7 +50,7 @@ export default Component.extend(isAuthenticatedMixin, {
       mailCampaign.destroyRecord();
       meeting.set('mailCampaign', null);
       this.set('mailCampaign', null);
-      meeting.save();
+      await meeting.save();
       this.set('isLoading', false);
     },
 
@@ -60,11 +60,11 @@ export default Component.extend(isAuthenticatedMixin, {
       const meeting = await agenda.get('createdFor');
       const mailCampaign = await meeting.get('mailCampaign');
 
-      if(!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
+      if (!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
         return;
       }
-      
-       await this.newsletterService.sendCampaign(mailCampaign.campaignId, agenda.id).catch(() => {
+
+      await this.newsletterService.sendCampaign(mailCampaign.campaignId, agenda.id).catch(() => {
         this.globalError.showToast.perform(EmberObject.create({
           title: this.intl.t('warning-title'),
           message: this.intl.t('error-send-newsletter'),
@@ -75,7 +75,7 @@ export default Component.extend(isAuthenticatedMixin, {
       mailCampaign.set('sentAt', moment().utc().toDate());
       await mailCampaign.save();
       await meeting.belongsTo('mailCampaign').reload();
-      this.set('isVerifying',false);
+      this.set('isVerifying', false);
     },
 
     showMultipleOptions() {
@@ -88,7 +88,7 @@ export default Component.extend(isAuthenticatedMixin, {
       const meeting = await agenda.get('createdFor');
       const mailCampaign = await meeting.get('mailCampaign');
 
-      if(!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
+      if (!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
         this.set('newsletterHTML', html.body);
         this.set('testCampaignIsLoading', false);
         return;

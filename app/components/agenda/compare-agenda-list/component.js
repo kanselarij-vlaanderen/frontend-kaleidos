@@ -3,6 +3,7 @@ import { computed, observer, get } from '@ember/object';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
 import { alias } from '@ember/object/computed';
+
 export default Component.extend({
   store: inject(),
   sessionService: inject(),
@@ -21,7 +22,7 @@ export default Component.extend({
     'isLoadingAgendaOne',
     'isLoadingAgendaTwo',
     'isLoadingComparison',
-    function() {
+    function () {
       if (this.isLoadingAgendaOne || this.isLoadingAgendaTwo || this.isLoadingComparison) {
         return true;
       }
@@ -29,7 +30,7 @@ export default Component.extend({
     }
   ),
 
-  bothAgendasSelectedObserver: observer('agendaOne.id', 'agendaTwo.id', async function() {
+  bothAgendasSelectedObserver: observer('agendaOne.id', 'agendaTwo.id', async function () {
     const { agendaOne, agendaTwo, agendaitemsLeft, agendaitemsRight } = this;
     const bothAgendasSelected = agendaOne && agendaTwo;
 

@@ -1,10 +1,10 @@
 import Component from '@ember/component';
-import {inject} from '@ember/service';
+import { inject } from '@ember/service';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
-import {alias} from '@ember/object/computed';
-import {A} from '@ember/array';
+import { alias } from '@ember/object/computed';
+import { A } from '@ember/array';
 
 export default Component.extend(UploadDocumentMixin, {
   store: inject(),
@@ -36,7 +36,7 @@ export default Component.extend(UploadDocumentMixin, {
 
     async createAnnouncement() {
       this.toggleProperty('creatingAnnouncement');
-      const {title, text, currentAgenda} = this;
+      const { title, text, currentAgenda } = this;
       const date = moment()
         .utc()
         .toDate();
@@ -67,6 +67,6 @@ export default Component.extend(UploadDocumentMixin, {
         return this.attachDocumentVersionsToModel(documentVersions, agendaitem);
       })
     );
-    return agendaitem.save();
+    return await agendaitem.save();
   },
 });

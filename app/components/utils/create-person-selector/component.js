@@ -1,30 +1,30 @@
-import Component from "@ember/component";
-import ModelSelectorMixin from "fe-redpencil/mixins/model-selector-mixin";
+import Component from '@ember/component';
+import ModelSelectorMixin from 'fe-redpencil/mixins/model-selector-mixin';
 
 export default Component.extend(ModelSelectorMixin, {
-  classNames: ["vlc-input-field-block"],
+  classNames: ['vlc-input-field-block'],
   classNameBindings: [
-    "isCreatingPerson:vl-u-bg-alt",
-    "isCreatingPerson:vlc-u-no-margin",
-    "isCreatingPerson:vlc-u-padding-2"
+    'isCreatingPerson:vl-u-bg-alt',
+    'isCreatingPerson:vlc-u-no-margin',
+    'isCreatingPerson:vlc-u-padding-2'
   ],
-  searchField: "first-name",
-  modelName: "person",
-  propertyToShow: "nameToDisplay",
+  searchField: 'first-name',
+  modelName: 'person',
+  propertyToShow: 'nameToDisplay',
   isCreatingPerson: false,
   firstName: null,
   lastName: null,
 
   clearValues() {
-    this.set("isCreatingPerson", false);
-    this.set("firstName", null);
-    this.set("lastName", null);
-    this.set("isLoading", false);
+    this.set('isCreatingPerson', false);
+    this.set('firstName', null);
+    this.set('lastName', null);
+    this.set('isLoading', false);
   },
 
   actions: {
     toggleIsCreatingPerson() {
-      this.toggleProperty("isCreatingPerson");
+      this.toggleProperty('isCreatingPerson');
     },
 
     resetValuesAndCancelCreation() {
@@ -33,7 +33,7 @@ export default Component.extend(ModelSelectorMixin, {
 
     createPerson() {
       const { firstName, lastName } = this;
-      const person = this.store.createRecord("person", {
+      const person = this.store.createRecord('person', {
         firstName,
         lastName
       });

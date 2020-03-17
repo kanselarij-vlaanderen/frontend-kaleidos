@@ -1,13 +1,13 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
     {{agendaitems/agendaitems-filter
-        size=size
-        searchText=(readonly searchText)
-        ministerName=(readonly mandatees)
-        dateFrom=(or dateFrom null)
-        dateTo=(or dateTo null)
-        announcementsOnly=(readonly announcementsOnly)
-        filter=(action "filterAgendaitems")
+      size=size
+      searchText=(readonly searchText)
+      ministerName=(readonly mandatees)
+      dateFrom=(or dateFrom null)
+      dateTo=(or dateTo null)
+      announcementsOnly=(readonly announcementsOnly)
+      filter=(action "filterAgendaitems")
     }}
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
@@ -18,14 +18,15 @@
 
       <div class="vlc-toolbar__right">
         <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
-          <label class="vl-form__label vl-u-spacer-extended-right-s" for="agenditemPageNumber">
+          <label class="vl-form__label vl-u-spacer-extended-right-s vl-u-text--nowrap" for="agenditemPageNumber">
             {{t "agendaitems-page-size"}}
           </label>
           {{#power-select
-               options=sizeOptions
-               selected=size
-               searchEnabled=false
-               onchange=(action "selectSize") as |sizeValue|
+            options=sizeOptions
+            selected=size
+            searchEnabled=false
+            onchange=(action "selectSize")
+          as |sizeValue|
           }}
             {{sizeValue}}
           {{/power-select}}
@@ -33,26 +34,27 @@
       </div>
     </div>
     {{#data-table
-         content=model
-         page=page
-         size=size
-         class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-         onClickRow=(action "navigateToAgendaitem")
-         noDataMessage=(t "agendaitems-empty-result")
-         isLoading=isLoadingModel as |table|
+      content=model
+      page=page
+      size=size
+      class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+      onClickRow=(action "navigateToAgendaitem")
+      noDataMessage=(t "agendaitems-empty-result")
+      isLoading=isLoadingModel
+    as |table|
     }}
       {{#table.content as |c|}}
         {{#c.header}}
           <th
-            class="vl-data-table-col-7 vl-data-table__header-title">
+                  class="vl-data-table-col-7 vl-data-table__header-title">
             {{t "agendaitem-table-header"}}
           </th>
           <th
-            class="vl-data-table-col-1 vl-data-table__header-title">
+                  class="vl-data-table-col-1 vl-data-table__header-title">
             {{t "agendaitem-type"}}
           </th>
           <th
-            class="vl-data-table-col-1 vl-data-table__header-title">
+                  class="vl-data-table-col-1 vl-data-table__header-title">
             {{t "agenda-version"}}
           </th>
           {{th-sortable
@@ -90,10 +92,12 @@
           </td>
           <td class="vl-u-align-right">
             {{#link-to
-                 "agenda.agendaitems.agendaitem"
-                 row.meetingId row.id
-                 (query-params selectedAgenda=row.agendaId)
-                 class="vl-button vl-button--link vl-button--icon"
+              "agenda.agendaitems.agendaitem"
+              row.meetingId
+              row.id
+              (
+               query-params selectedAgenda=row.agendaId)
+              class="vl-button vl-button--link vl-button--icon"
             }}
               <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
             {{/link-to}}

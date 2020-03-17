@@ -11,7 +11,8 @@
     noMatchesMessage=noMatchesMessage
     search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "selectModel") as |model|
+    onchange=(action "selectModel")
+  as |model|
   }}
     {{model.label}}
     {{#attach-popover

@@ -14,8 +14,12 @@ context('Case test', () => {
   });
 
   it('should create a new case', () => {
-    const caseTitleShort= 'Cypress test: new case - ' + cy.currentTimestamp();
+    const caseTitleShort= 'Cypress test: new case - ' + currentTimestamp();
     cy.createCase(false, caseTitleShort);
 
   });
+  
+  function currentTimestamp() {
+    return Cypress.moment().unix();
+  }
 });

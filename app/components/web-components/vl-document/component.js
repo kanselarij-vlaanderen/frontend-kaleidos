@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   documentVersion: null,
   isEditingAccessLevel: false,
 
-  aboutToDelete: computed('documentVersion.aboutToDelete', function() {
+  aboutToDelete: computed('documentVersion.aboutToDelete', function () {
     if (this.documentVersion) {
       if (this.documentVersion.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
@@ -29,7 +29,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 
   preferredAccessLevel: null,
 
-  resetPreferredAccessLevel: async function() {
+  resetPreferredAccessLevel: async function () {
     this.set('preferredAccessLevel', await this.documentVersion.get('accessLevel'));
   },
 
@@ -58,9 +58,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.set('isVerifyingDelete', true);
     },
 
-    toggleConfidential(document) {
+    async toggleConfidential(document) {
       document.toggleProperty('confidential');
-      document.save();
+      await document.save();
     },
 
     chooseAccessLevel(accessLevel) {
@@ -80,19 +80,22 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   },
 
   async deleteDocumentVersionWithUndo() {
-    const { documentVersionToDelete, item } = this;
-    const document = await documentVersionToDelete.get('document');
-    const documentVersions = await document.get('documentVersions');
-    if(documentVersions.length > 1) {
-      await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
-    }else {
-      const documentToDelete = document;
-      await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
-        if(!item.aboutToDelete && documentVersions) {
-          item.hasMany('documentVersions').reload();
-        }
-      });
-    }
+    const documentVersionToDelete = this.get('documentVersionToDelete');
 
+    // TODO somehow this no longer works, document returns null or undefined 
+    // const document = await documentVersionToDelete.get('documentContainer');
+    // const documentVersions = await document.get('documents');
+
+    // TODO fix the deletion of document-container when last version is deleted so it doesn't become an orphan
+    // if(documentVersions.length > 1) {
+      await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
+    // }else {
+    //   const documentToDelete = document;
+    //   await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
+    //     if(!this.item.aboutToDelete && documentVersions) {
+    //       this.item.hasMany('documentVersions').reload();
+    //     }
+    //   });
+    // }
   },
 });
