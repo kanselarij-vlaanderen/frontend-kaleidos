@@ -67,6 +67,15 @@ $alert-padding-large: 5rem 5.5rem;
     }
   }
 
+  // Alert loader
+  &__loader {
+    margin-right: $alert-padding;
+
+    @include respond-to(small) {
+      margin-right: $alert-padding-small;
+    }
+  }
+
   &__icon + &__content {
     min-height: 4rem;
 

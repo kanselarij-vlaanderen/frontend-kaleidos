@@ -1,22 +1,17 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
 
-export default Component.extend({
-  classNames: ['vl-alert'],
-  classNameBindings: ['getClassNames'],
-  type: null,
-  getClassNames: computed('type', function () {
-    const type = this.type;
-    if (type === 'danger') {
-      return 'vl-alert--error';
-    } else if (type === 'warning') {
-      return 'vl-alert--warning';
-    } else if (type === 'success') {
-      return 'vl-alert--success';
+export default class extends Component {
+  get typeClass() {
+    const t = this.args.type;
+    if (['success', 'error', 'warning'].includes(t)) {
+      return `vl-alert--${t}`;
+    } else {
+      return null;
     }
-  }),
+  }
 
-  iconClass: computed('small', function () {
-    return 'vl-vi vl-vi-alert-circle';
-  })
-});
+  close() {
+    this.onClose(...arguments);
+  }
+
+}
