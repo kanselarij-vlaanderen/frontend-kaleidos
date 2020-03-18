@@ -35,6 +35,7 @@ export default Controller.extend({
         classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
         cellClassNames: ['vl-data-table-col-2'],
         breakpoints: ['mobile', 'tablet', 'desktop'],
+        sortable: false, // Should be able to display 'email' and sort on 'emailLink'. This doesn't seem possible with ember-light-table. Sort disabled for now.
         valuePath: 'email',
       },
       {
