@@ -1,0 +1,21 @@
+<ClickOutside @action={{@onClose}}>
+<div class="vl-modal">
+    <WebComponents::VlAlert
+      class="vl-alert-relative vl-alert-relative--center-mid"
+      aria-live="assertive"
+      @type="success"
+      @title="Bestand downloaden"
+      @closeable={{true}}
+      @onClose={{@onClose}}
+    >
+      <div class="vl-alert__message vl-u-text--capitalize">
+        <a class="vl-button vl-button--link"
+           href={{@downloadLink}}
+           download
+        >
+          {{t "download"}}
+        </a>
+      </div>
+    </WebComponents::VlAlert>
+  </div>
+</ClickOutside>

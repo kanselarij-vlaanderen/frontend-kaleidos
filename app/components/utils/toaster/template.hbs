@@ -1,0 +1,13 @@
+{{#if (gt (await @toasts.length) 0)}}
+  <div class="toasts-container">
+    {{#each @toasts as |toast|}}
+      {{#if (eq toast.type "revert-action")}}
+        <Utils::Toaster::RevertActionToast ...toast />
+      {{else if (eq toast.type "download-file")}}
+        <Utils::Toaster::DownloadFileToast ...toast />
+      {{else}}
+        <Utils::Toaster::Toast ...toast />
+      {{/if}}
+    {{/each}}
+  </div>
+{{/if}}

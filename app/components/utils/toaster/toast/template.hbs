@@ -1,0 +1,12 @@
+<ClickOutside @action={{@onClose}}>
+  <div class="vl-modal">
+      <WebComponents::VlAlert
+        aria-live="assertive"
+        @type={{@type}}
+        @title={{@title}}
+        @message={{@message}}
+        @closeable={{true}}
+        @onClose={{@onClose}}
+      />
+  </div>
+</ClickOutside>
