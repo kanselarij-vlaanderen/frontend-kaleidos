@@ -89,7 +89,6 @@ export const compareFunction = function(a, b) {
     try { // Both names parse
       const metaB = b.parseMeta();
       return (metaA.date - metaB.date) ||
-        metaA.docType.localeCompare(metaB.docType) ||
         (metaA.caseNr - metaB.caseNr) ||
         (metaA.index - metaB.index);
     } catch (e) { // Only a parses
