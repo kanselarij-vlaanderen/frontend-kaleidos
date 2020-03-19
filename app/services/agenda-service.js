@@ -1,5 +1,4 @@
 import Service from '@ember/service';
-import $ from 'jquery';
 import { inject } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';

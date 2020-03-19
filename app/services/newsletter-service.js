@@ -1,7 +1,6 @@
 import Service from '@ember/service';
 import { inject } from '@ember/service';
 import { ajax } from 'fe-redpencil/utils/ajax';
-import $ from 'jquery';
 import EmberObject from '@ember/object';
 import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
