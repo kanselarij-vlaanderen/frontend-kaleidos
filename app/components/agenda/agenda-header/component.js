@@ -243,10 +243,11 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async downloadAllDocuments() {
-      const fileDownloadMessage = EmberObject.create({
+      const fileDownloadToast = {
         title: this.intl.t('file-ready'),
-        type: 'file-download'
-      });
+        type: 'file-download',
+        options: { timeOut: 10 * 1000 }
+      };
 
       const namePromise = constructArchiveName(this.currentAgenda);
       debug('Checking if archive exists ...');
@@ -264,9 +265,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           if (status === job.SUCCESS) {
             const url = await fileDownloadUrlFromJob(job, name);
             debug(`Archive ready. Prompting for download now (${url})`);
-            fileDownloadMessage.downloadLink = url;
-            fileDownloadMessage.fileName = name;
-            this.globalError.showToast.perform(fileDownloadMessage);
+            fileDownloadToast.options.downloadLink = url;
+            fileDownloadToast.options.fileName = name;
+            this.toaster.displayToast.perform(fileDownloadToast);
           } else {
             debug('Something went wrong while generating archive.');
             this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
@@ -275,9 +276,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       } else {
         const url = await fileDownloadUrlFromJob(job, name);
         debug(`Archive ready. Prompting for download now (${url})`);
-        fileDownloadMessage.downloadLink = url;
-        fileDownloadMessage.fileName = name;
-        this.globalError.showToast.perform(fileDownloadMessage);
+        fileDownloadToast.options.downloadLink = url;
+        fileDownloadToast.options.fileName = name;
+        this.toaster.displayToast.perform(fileDownloadToast);
       }
     },
 
