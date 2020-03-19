@@ -1,12 +1,12 @@
 import Service from '@ember/service';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { warn } from '@ember/debug';
 import { task, timeout } from 'ember-concurrency';
 import $ from 'jquery';
 
 export default Service.extend({
-  globalError: inject(),
-  store: inject(),
+  toaster: service(),
+  store: service(),
   shouldUndoChanges: false,
 
   init() {
@@ -43,7 +43,6 @@ export default Service.extend({
     } else {
       documentToDelete.set('aboutToDelete', false);
     }
-    this.globalError.set('shouldUndoChanges', false);
   }),
 
   deleteDocumentVersionWithUndo: task(function* (documentVersionToDelete) {
@@ -55,7 +54,6 @@ export default Service.extend({
     } else {
       documentVersionToDelete.set('aboutToDelete', false);
     }
-    this.globalError.set('shouldUndoChanges', false);
   }),
 
   async deleteDocument(document) {
