@@ -39,10 +39,10 @@ context('NewsletterInfo: Switching the finished switch', () => {
     cy.get('table > tbody').get('.lt-body').should('contain.text', 'Nog geen kort bestek voor dit agendapunt.').click();
     cy.wait('@getThemes');
     cy.get('.vl-checkbox--switch__label').last().scrollIntoView();
-    cy.get('.vl-checkbox--switch__label').last().click();
+    cy.get('.vl-checkbox--switch__label').last().click(); //TODO, clicking the switch triggers a PATCH call, wait for that instead
     cy.wait(3000);
-    cy.get('table > tbody').get('.lt-body').should('contain.text', 'Nog geen kort bestek voor dit agendapunt.').click();
-    cy.wait('@getThemes');
+    cy.get('table > tbody').get('.lt-body').should('contain.text', 'Nog geen kort bestek voor dit agendapunt.');
+    // cy.wait('@getThemes');
     cy.get('.vl-checkbox--switch__label').last().scrollIntoView();
     cy.get('.vl-checkbox--switch__label').last().click();
   });

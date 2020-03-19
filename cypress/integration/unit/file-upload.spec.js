@@ -49,16 +49,16 @@ context('Add files to an agenda', () => {
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
       cy.openAgendaForDate(agendaDate,meetingId);
 
-      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2018 1010 DOC.0005/1 - 1e', fileType: 'Nota'}]);
-      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/1 - 2e', fileType: 'Nota'}]);
-      // TODO fix the sorting algorithm, dos /3 /4 /6 are not in the correct order
+      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2018 1010 DOC.0005-1 - 1e', fileType: 'Nota'}]);
+      cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-1 - 2e', fileType: 'Nota'}]);
+      // TODO The sorting is fixed in agenda print branch using "/ gave a different result then "-
       cy.addDocuments(
         [
-        // {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/6 - 6e', fileType: 'Nota'},
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-6 - 6e', fileType: 'Nota'},
         {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'no vr number - 7e', fileType: 'Nota'},
-        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/2 - 3e', fileType: 'Nota'},
-        // {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/4 - 5e', fileType: 'Nota'},
-        // {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005/3 - 4e', fileType: 'Nota'}
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-2 - 3e', fileType: 'Nota'},
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-4 - 5e', fileType: 'Nota'},
+        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-3 - 4e', fileType: 'Nota'}
         ]
       );
 
@@ -73,18 +73,18 @@ context('Add files to an agenda', () => {
         cy.get('@docCards').eq(2).within(() => {
           cy.get('.vl-title--h6 > span').contains(/3e/);
         });
-        // cy.get('@docCards').eq(3).within(() => {
-        //   cy.get('.vl-title--h6 > span').contains(/4e/);
-        // });
-        // cy.get('@docCards').eq(4).within(() => {
-        //   cy.get('.vl-title--h6 > span').contains(/5e/);
-        // });
-        // cy.get('@docCards').eq(5).within(() => {
-        //   cy.get('.vl-title--h6 > span').contains(/6e/);
-        // });
-        // cy.get('@docCards').eq(6).within(() => {
-        //   cy.get('.vl-title--h6 > span').contains(/7e/);
-        // });
+        cy.get('@docCards').eq(3).within(() => {
+          cy.get('.vl-title--h6 > span').contains(/4e/);
+        });
+        cy.get('@docCards').eq(4).within(() => {
+          cy.get('.vl-title--h6 > span').contains(/5e/);
+        });
+        cy.get('@docCards').eq(5).within(() => {
+          cy.get('.vl-title--h6 > span').contains(/6e/);
+        });
+        cy.get('@docCards').eq(6).within(() => {
+          cy.get('.vl-title--h6 > span').contains(/7e/);
+        });
       });
     });
   });
