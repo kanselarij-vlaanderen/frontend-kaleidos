@@ -49,9 +49,7 @@ export default ModelWithToasts.extend({
   },
 
   async preEditOrSaveCheck() {
-    if (await this.isModifiedRecently()) {
-      // TODO, should something happen ? reverse if
-    } else {
+    if (! await this.saveAllowed()) {
       const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
       const userId = oldModelData.data[0]['relationships']['modified-by']['links']['self'];
       const userData = await fetch(userId);
@@ -72,20 +70,24 @@ export default ModelWithToasts.extend({
     }
   },
 
-
-  async isModifiedRecently() {
+  async saveAllowed() {
     const modified = this.get('modified');
     const modifiedBy = await this.get('modifiedBy');
     const currentModifiedModel = moment.utc(this.get('modified'));
-
     const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
-
-    return (typeof modified == 'undefined' || modifiedBy == null ||
+    // Deze test test eigenlijk of het item hetzelfde is:
+    // item is hetzelfde
+    // Indien modified nog niet bestaat (old data)
+    // Indien modifiedBy nog niet bestaat (old data)
+    // Indien    de modified van het huidige model currentModifiedModel
+    //           == de modified van het model op DB oldModelModifiedMoment
+    const allowSave = (typeof modified == 'undefined' || modifiedBy == null ||
       (
         typeof modified != 'undefined'
         && currentModifiedModel.isSame(oldModelModifiedMoment)
         && typeof oldModelData.data[0]['relationships']['modified-by'] != 'undefined')
-    )
+    );
+    return allowSave;
   },
 
   async getOldModelData() {
