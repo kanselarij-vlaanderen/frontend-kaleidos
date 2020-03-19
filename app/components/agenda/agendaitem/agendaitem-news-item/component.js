@@ -14,7 +14,6 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   isEditing: false,
   intl: inject(),
   showNewsItemIsEditedWarning: false,
-  showNoNotaIsAddedWarning: false,
 
   didInsertElement() {
     this._super(...arguments);
@@ -29,7 +28,6 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
     const newsletterInfoForSubcase = await this.subcase.get('newsletterInfo');
     const documents = await this.get('subcase.documents');
     if (!documents) {
-      this.set('showNoNotaIsAddedWarning', true);
       return;
     }
     const documentsOfTypeNota = [];
@@ -85,8 +83,5 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
     async clearShowNewsItemIsEditedWarning() {
       this.set('showNewsItemIsEditedWarning', false);
     },
-    async clearShowNoNotaIsAddedWarning() {
-      this.set('showNoNotaIsAddedWarning', false);
-    }
   }
 });

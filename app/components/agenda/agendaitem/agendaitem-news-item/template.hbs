@@ -5,13 +5,6 @@
     clearAction=(action "clearShowNewsItemIsEditedWarning")
   }}
 {{/if}}
-{{#if showNoNotaIsAddedWarning}}
-  {{changes-alert
-    message=(t "newsitem-changed-no-note-message")
-    buttonText=(t "close")
-    clearAction=(action "clearShowNoNotaIsAddedWarning")
-  }}
-{{/if}}
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
