@@ -2,11 +2,22 @@
   <div class="toasts-container">
     {{#each @toasts as |toast|}}
       {{#if (eq toast.type "revert-action")}}
-        <Utils::Toaster::RevertActionToast ...toast />
+        <Utils::Toaster::RevertActionToast
+          @title={{toast.title}}
+          @message={{toast.message}}
+          @options={{toast.options}}
+        />
       {{else if (eq toast.type "download-file")}}
-        <Utils::Toaster::DownloadFileToast ...toast />
+        <Utils::Toaster::DownloadFileToast
+          @title={{toast.title}}
+          @message={{toast.message}}
+          @options={{toast.options}}
+        />
       {{else}}
-        <Utils::Toaster::Toast ...toast />
+        <Utils::Toaster::Toast
+          @title={{toast.title}}
+          @message={{toast.message}}
+        />
       {{/if}}
     {{/each}}
   </div>
