@@ -1,3 +1,4 @@
+import { ajax } from 'fe-redpencil/utils/ajax';
 import $ from 'jquery';
 
 export const downloadFilePrompt = function (context, file, filename) {
@@ -11,7 +12,7 @@ export const downloadFilePrompt = function (context, file, filename) {
 };
 
 export const removeFile = function (file) {
-  return $.ajax({
+  return ajax({
     method: 'DELETE',
     url: '/files/' + file.id
   });
