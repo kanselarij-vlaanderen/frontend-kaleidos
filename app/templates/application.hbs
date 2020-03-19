@@ -32,15 +32,8 @@
       </button>
     </div>
   {{/if}}
-  {{#if (gt (await messages.length) 0)}}
-    <div class="toasts-container">
-      {{#each messages as |errorMessage|}}
-        {{utils/custom-messages-toasts
-          errorMessage=errorMessage
-          closeErrorMessage=(action "closeErrorMessage")
-        }}
-      {{/each}}
-    </div>
+  {{#if this.toaster.toasts.length}}
+    <Utils::Toaster @toasts={{this.toaster.toasts}} />
   {{/if}}
   {{#if showHeader}}
     {{m-header

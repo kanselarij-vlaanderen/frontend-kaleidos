@@ -1,13 +1,12 @@
 import DS from 'ember-data';
-import { inject } from '@ember/service';
-import EmberObject from '@ember/object';
+import { inject as service } from '@ember/service';
 
 let { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
-  currentSession: inject(),
-  intl: inject(),
-  globalError: inject(),
+  currentSession: service(),
+  intl: service(),
+  toaster: service(),
   modified: attr('datetime'),
   modifiedBy: belongsTo('user'),
 
@@ -28,28 +27,17 @@ export default Model.extend({
     switch (dirtyType) {
       case 'created':
         if (this.checkIfCreatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
-          this.globalError.showToast.perform(EmberObject.create({
-            title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('successfully-created', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
-            type: 'success'
-          }));
+          this.toaster.success(this.intl.t('successfully-created'), this.intl.t('successfully-created-title'));
         }
         break;
       case 'updated':
         if (this.checkIfUpdatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
-          this.globalError.showToast.perform(EmberObject.create({
-            title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('successfully-saved-type', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
-            type: 'success'
-          }));
+          this.toaster.success(this.intl.t('successfully-saved-type', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
+            this.intl.t('successfully-created-title'));
         }
         break;
       case 'deleted':
-        this.globalError.showToast.perform(EmberObject.create({
-          title: this.intl.t('successfully-created-title'),
-          message: this.intl.t('successfully-deleted'),
-          type: 'success'
-        }));
+        this.toaster.success(this.intl.t('successfully-deleted'), this.intl.t('successfully-created-title'));
         break;
     }
     return this._super(...arguments);
