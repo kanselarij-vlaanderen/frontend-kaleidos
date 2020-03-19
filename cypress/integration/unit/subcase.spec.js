@@ -138,8 +138,6 @@ context('Subcase tests', () => {
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
-    cy.route('GET', 'agendaitems?filter**').as('getFilteredAgendaitem');
-    cy.wait('@getFilteredAgendaitem');
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
     const formattedDate = agendaDate.date() + ' ' + monthDutch + ' ' + agendaDate.year();

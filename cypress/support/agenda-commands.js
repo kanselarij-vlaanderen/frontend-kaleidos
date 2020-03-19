@@ -48,7 +48,7 @@ Cypress.Commands.add('openAgenda', openAgenda);
  * @returns {Promise<String>} the id of the created agenda
  */
   function createAgenda(kind, plusMonths, date, location) {
-    cy.visit('');
+
     cy.route('GET', '/meetings**').as('getMeetings');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
@@ -56,7 +56,8 @@ Cypress.Commands.add('openAgenda', openAgenda);
     cy.route('POST', '/newsletter-infos').as('createNewsletter');
     cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
-    cy.wait('@getMeetings', {timeout: 20000});
+    cy.visit('')
+      .wait('@getMeetings', {timeout: 20000});
     cy.get('.vlc-toolbar__item > .vl-button')
       .contains('Nieuwe agenda aanmaken')
       .click();
@@ -377,7 +378,7 @@ function approveDesignAgenda() {
  */
   function addAgendaitemToAgenda(caseTitle, postponed) {
     cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
-    cy.route('GET', '/agendaitems/**').as('getAgendaitems');
+    cy.route('GET', '/agendaitems**').as('getAgendaitems');
     cy.route('POST', '/agendaitems').as('createNewAgendaitem');
     cy.route('POST', '/subcase-phases').as('createSubcasePhase');
     cy.route('PATCH', '/subcases/**').as('patchSubcase');
@@ -420,12 +421,11 @@ function approveDesignAgenda() {
       cy.get('@rows', {timeout: 12000}).eq(0).click().get('[type="checkbox"]').should('be.checked');
       cy.get('.vl-button').contains('Agendapunt toevoegen').click();
     });
-    cy.wait('@createNewAgendaitem', {timeout: 20000});
-    cy.wait('@patchSubcase', {timeout: 20000});
-
-    cy.wait('@createSubcasePhase', {timeout: 20000});
-    cy.wait('@patchAgenda', {timeout: 20000});
-    cy.wait('@getAgendaitems', {timeout: 20000});
+    cy.wait('@createNewAgendaitem', {timeout: 20000})
+      .wait('@patchSubcase', {timeout: 20000})
+      .wait('@createSubcasePhase', {timeout: 20000})
+      .wait('@patchAgenda', {timeout: 20000})
+      .wait('@getAgendaitems', {timeout: 20000});
   }
 
 /**
