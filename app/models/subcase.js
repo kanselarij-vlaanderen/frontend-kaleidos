@@ -182,7 +182,6 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
 
   latestAgendaItem: computed('latestAgenda.agendaitems.@each.postponedTo', async function () {
     const latestAgenda = await this.get('latestAgenda');
-    // latestAgenda.hasMany('agendaitems').reload();
     const latestAgendaItems = await latestAgenda.get('agendaitems');
     const agendaitems = await this.agendaitems;
 

@@ -228,7 +228,6 @@ context('Tests for cancelling CRUD operations on document and document-versions'
 
       uploadFileToCancel(file);
       cy.get(modalDialogCloseModalSelector).click().wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
-
       cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
       cy.get(modalDialogSelector).should('not.be.visible');
       cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -242,6 +241,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       cy.get(modalDialogSelector).within(() => {
         cy.get(formSaveSelector).should('be.disabled');
         cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+        cy.wait(1000);
         cy.get(formSaveSelector).should('not.be.disabled').click();
         cy.wait('@createNewDocumentVersion', { timeout: 12000 });
         cy.wait('@patchSubcase', { timeout: 12000 });
@@ -320,5 +320,6 @@ function uploadFileToCancel(file) {
   cy.get(modalDialogSelector).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(modalDocumentVersionUploadedFilenameSelector).should('contain', file.fileName);
+    cy.wait(1000);
   });
 }

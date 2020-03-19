@@ -547,7 +547,7 @@
   "manage-users-general-info": "Algemene informatie",
   "manage-users-technical-info": "Technische informatie",
   "manage-user": "Gebruiker: {firstName} {lastName}",
-  "changes-could-not-be-saved-title": "Je wijzigingen werden niet opgeslagen.",
+  "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
   "monitoring-id": "ID",
   "monitoring-type": "Type",
   "monitoring-service": "Service",
