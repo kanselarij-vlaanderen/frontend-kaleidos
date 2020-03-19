@@ -13,6 +13,7 @@ export const ajax = ({
   url,
   data,
   error,
+  dataType,
 }) => {
   // Using the native fetch API...
   return fetch(url, {
@@ -20,9 +21,13 @@ export const ajax = ({
     data,
   }).then(handleErrors)
     .then((response) => {
-      // Auto-convert all responses to JSON
-      // TODO if in the future we want to support other response types, we need to expand this code a bit
-      return response.json();
+      switch (dataType) {
+        case 'blob':
+          return response.blob();
+        default:
+          // Auto-convert all responses to JSON
+          return response.json();
+      }
     }, (response) => {
       if (error) {
         // If an error handler was present (jQuery style) use that one
