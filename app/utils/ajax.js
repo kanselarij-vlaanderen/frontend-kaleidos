@@ -2,11 +2,12 @@
  * jQuery AJAX interface and fetch API wrapper
  * Will do your jQuery format ajax request in native JS
  * Works good if you want to step it down from jQuery
- * @param  {String}     method  GET, POST, PUT, ...
- * @param  {String}     url     The URL for the request
- * @param  {Function}   error   Error handler (jQuery style)
- * @param  {Object}     data    Data that will be JSON stringified and sent
- * @return {Promise}            A Promise that resolves with the success/error of the request
+ * @param  {String}     method    GET, POST, PUT, ...
+ * @param  {String}     url       The URL for the request
+ * @param  {Object}     data      Data that will be JSON stringified and sent
+ * @param  {Function}   error     Error handler (jQuery style)
+ * @param  {String}     dataType  Data that will be JSON stringified and sent
+ * @return {Promise}              A Promise that resolves with the success/error of the request
  */
 export const ajax = ({
   method = 'GET',
