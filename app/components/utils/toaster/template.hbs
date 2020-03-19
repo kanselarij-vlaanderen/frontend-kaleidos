@@ -1,4 +1,4 @@
-{{#if (gt (await @toasts.length) 0)}}
+{{#if @toasts.length}}
   <div class="toasts-container">
     {{#each @toasts as |toast|}}
       {{#if (eq toast.type "revert-action")}}
