@@ -1,13 +1,12 @@
 import Component from '@ember/component';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import EmberObject from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
-  globalError: inject(),
-  fileService: inject(),
+  toaster: service(),
+  fileService: service(),
 
   async didInsertElement() {
     this._super(...arguments);
@@ -40,14 +39,16 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     verify() {
-      this.globalError.showToast.perform(
-        EmberObject.create({
-          title: 'Opgelet!',
-          message: 'Documentversie wordt verwijderd.',
-          type: 'warning-undo',
-          modelIdToDelete: this.documentVersionToDelete.get('id'),
-        })
-      );
+      const verificationToast = {
+        type: 'revert-action',
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('document-being-deleted'),
+        options: {
+          onUndo: () => this.fileService.reverseDelete(this.documentVersionToDelete.get('id')),
+          timeOut: 15000
+        }
+      };
+      this.toaster.displayToast.perform(verificationToast);
       this.deleteDocumentVersionWithUndo();
       this.set('isVerifyingDelete', false);
       this.set('documentVersionToDelete', null);
