@@ -12,7 +12,7 @@ export default Component.extend({
   files: null,
   uploadedFileLength: null,
   multipleFiles: true,
-  
+
   didInsertElement() {
     this._super(...arguments);
     this.set('isLoading', false);
@@ -20,7 +20,7 @@ export default Component.extend({
     this.set('fileQueue.files', A([]));
   },
 
-  isNotLoading: observer('fileQueue.files.@each', function() {
+  isNotLoading: observer('fileQueue.files.@each', function () {
     const length = this.fileQueue.get('files.length');
     if (length === 0) {
       this.set('isLoading', false);
@@ -28,10 +28,11 @@ export default Component.extend({
     }
   }),
 
-  uploadFile: task(function*(file) {
+  uploadFile: task(function* (file) {
     try {
       this.set('isLoading', true);
-      file.readAsDataURL().then(() => {});
+      file.readAsDataURL().then(() => {
+      });
       let response = yield file.upload('/files');
       let fileTest = yield this.store.findRecord('file', response.body.data.id);
       this.uploadedFile(fileTest);

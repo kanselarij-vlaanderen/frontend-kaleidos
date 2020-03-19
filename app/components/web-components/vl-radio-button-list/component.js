@@ -1,17 +1,18 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
+
 export default Component.extend({
   store: inject(),
   classNames: ['vl-u-spacer'],
   modelName: null,
   selectedModel: null,
 
-  model: computed('modelName', 'store', function() {
+  model: computed('modelName', 'store', function () {
     return this.store.query(this.modelName, {
       sort: '-label',
       filter: {
-        deprecated:false,
+        deprecated: false,
       },
     });
   }),

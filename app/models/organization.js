@@ -1,10 +1,12 @@
 import DS from 'ember-data';
-
-const { Model, attr, hasMany, belongsTo } = DS;
+const { Model, attr, hasMany } = DS;
+import { alias } from '@ember/object/computed';
 
 export default Model.extend({
-	name: attr('string'),
-	site: belongsTo('site'),
-	contactpoints: hasMany('contact-point'),
-	posts: hasMany('post')
+  uri: attr(),
+  name: attr(),
+  identifier: attr(), // OVO-code
+  member: hasMany('user'),
+
+  subjectPage: alias('uri')
 });

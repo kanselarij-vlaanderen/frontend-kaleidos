@@ -7,12 +7,12 @@ export default Controller.extend({
   intl: inject(),
   queryParams: ['definite'],
 
-  title: computed('model.currentAgenda.createdFor', function() {
+  title: computed('model.currentAgenda.createdFor', function () {
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
     return `${this.intl.t('decisions-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
-  documentTitle: computed('model.currentAgenda.createdFor', 'definite', function() {
+  documentTitle: computed('model.currentAgenda.createdFor', 'definite', function () {
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
     let prefix = '';
 

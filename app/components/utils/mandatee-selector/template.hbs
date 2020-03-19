@@ -6,7 +6,8 @@
     closeOnSelect=false
     search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "chooseMandatee") as |mandatee|
+    onchange=(action "chooseMandatee")
+  as |mandatee|
   }}
     {{await mandatee.fullDisplayName}}
   {{/power-select-multiple}}
@@ -17,7 +18,8 @@
     disabled=readOnly
     search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
-    onchange=(action "chooseMandatee") as |mandatee|
+    onchange=(action "chooseMandatee")
+  as |mandatee|
   }}
     {{await mandatee.fullDisplayName}}
   {{/power-select}}

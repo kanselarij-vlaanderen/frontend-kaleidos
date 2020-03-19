@@ -15,7 +15,7 @@ export default Component.extend({
   startDate: null,
   extraInfo: null,
 
-  date: computed('startDate', function() {
+  date: computed('startDate', function () {
     return A([this.startDate])
   }),
 

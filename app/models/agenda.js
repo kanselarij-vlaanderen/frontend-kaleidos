@@ -13,11 +13,11 @@ export default Model.extend({
   isAccepted: attr('boolean'),
   modified: attr('datetime'),
 
-  isDesignAgenda: computed('name', function() {
+  isDesignAgenda: computed('name', function () {
     return this.name == 'Ontwerpagenda';
   }),
 
-  agendaName: computed('name', function() {
+  agendaName: computed('name', function () {
     if (this.get('name.length') > 2) {
       return this.name;
     } else {
@@ -25,7 +25,7 @@ export default Model.extend({
     }
   }),
 
-  isApprovable: computed('agendaitems.@each', function() {
+  isApprovable: computed('agendaitems.@each', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaItems = agendaitems.filter((agendaitem) =>
         this.checkFormallyOkStatus(agendaitem)
@@ -34,7 +34,7 @@ export default Model.extend({
     });
   }),
 
-  isPassable: computed('agendaitems.@each', function() {
+  isPassable: computed('agendaitems.@each', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaItems = agendaitems.filter((agendaitem) =>
         this.checkPassable(agendaitem)
@@ -43,7 +43,7 @@ export default Model.extend({
     });
   }),
 
-  lastAgendaitemPriority: computed('agendaitems.@each', function() {
+  lastAgendaitemPriority: computed('agendaitems.@each', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const filteredAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
       if (filteredAgendaitems.length == 0) {
@@ -53,7 +53,7 @@ export default Model.extend({
     });
   }),
 
-  lastAnnouncementPriority: computed('agendaitems.@each', function() {
+  lastAnnouncementPriority: computed('agendaitems.@each', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const announcements = agendaitems.filter((item) => item.showAsRemark);
       if (announcements.length == 0) {
@@ -74,7 +74,7 @@ export default Model.extend({
     );
   },
 
-  firstAgendaItem: computed('agendaitems.@each', function() {
+  firstAgendaItem: computed('agendaitems.@each', function () {
     return DS.PromiseObject.create({
       promise: this.get('agendaitems').then((agendaitems) => {
         return agendaitems.sortBy('priority').get('firstObject');

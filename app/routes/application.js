@@ -24,7 +24,7 @@ export default Route.extend(ApplicationRouteMixin, {
     const isFirefox = typeof InstallTrigger !== 'undefined';
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     const isChrome = window.chrome;
-    const isCypress = !!window.Cypress && (window.Cypress.browser.family === "chrome" || window.Cypress.browser.family === "electron" );
+    const isCypress = !!window.Cypress && (window.Cypress.browser.family === 'chrome' || window.Cypress.browser.family === 'electron' || window.Cypress.browser.family === 'chromium');
     return isFirefox || isChrome || isSafari || isCypress;
   },
 
@@ -38,8 +38,8 @@ export default Route.extend(ApplicationRouteMixin, {
     window.location.replace(logoutUrl);
   },
 
-  model(){
-    if(!this.checkSupportedBrowser()) {
+  model() {
+    if (!this.checkSupportedBrowser()) {
       this.transitionTo('not-supported');
     }
     return this.checkSupportedBrowser();
@@ -50,7 +50,7 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   actions: {
-    willTransition: function(transition) {
+    willTransition: function (transition) {
       if (
         this.fileService.get('deleteDocumentWithUndo.isRunning') &&
         confirm(this.intl.t('leave-page-message'))

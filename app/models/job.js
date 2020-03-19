@@ -16,7 +16,7 @@ export default DS.Model.extend(Evented, {
     return this.status === this.SUCCESS || this.status === this.FAILED;
   }),
 
-  statusObserver: observer('hasEnded', function() {
+  statusObserver: observer('hasEnded', function () {
     if (this.hasEnded) {
       this.trigger('didEnd', this.status);
     }

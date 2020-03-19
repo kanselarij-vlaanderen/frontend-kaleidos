@@ -8,9 +8,9 @@ export default Route.extend(AuthenticatedRouteMixin, {
   },
 
   actions: {
-		refreshRoute() {
-			this._super(...arguments);
-			this.refresh();
-		}
-	}
+    refreshRoute() {
+      this._super(...arguments);
+      this.refresh();
+    }
+  }
 });

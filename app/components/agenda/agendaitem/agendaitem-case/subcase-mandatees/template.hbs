@@ -5,7 +5,7 @@
     </h4>
     {{#if (and isEditor (not isEditing))}}
       <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -39,23 +39,19 @@
     }}
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__left">
-        <a
-          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+        <a href="" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
           {{action "addRow"}}
         >
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
-            aria-hidden="true"
+          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+             aria-hidden="true"
           ></i>
           {{t "add-minister"}}
         </a>
       </div>
       <div class="vlc-toolbar__right">
         <div class="vl-action-group vl-action-group--align-right">
-          <a
-            class="vl-button vl-button--tertiary vl-button--narrow"
-            {{action "cancelEditing"}}
-          >
+          <a href="" class="vl-button vl-button--tertiary vl-button--narrow"
+            {{action "cancelEditing"}}>
             {{t "cancel"}}
           </a>
           {{web-components/vl-save-button

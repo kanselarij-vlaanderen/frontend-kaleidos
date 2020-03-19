@@ -5,10 +5,10 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   store: inject(),
-  classNames: ["checkbox-list-selector"],
+  classNames: ['checkbox-list-selector'],
   selectedThemes: null,
 
-  selectedThemesObserver: observer('selectedThemes', 'themes', function() {
+  selectedThemesObserver: observer('selectedThemes', 'themes', function () {
     const { themes, selectedThemes } = this;
     if (themes && selectedThemes) {
       themes.map(theme => theme.set('selected', false));
@@ -26,13 +26,13 @@ export default Component.extend({
     },
   },
 
-	init() {
-		this._super(...arguments);
-		this.findAll.perform();
-		if (!this.selectedThemes) {
-			this.set('selectedThemes', [])
-		}
-	},
+  init() {
+    this._super(...arguments);
+    this.findAll.perform();
+    if (!this.selectedThemes) {
+      this.set('selectedThemes', [])
+    }
+  },
 
   findAll: task(function* () {
     const themes = yield this.store.query('theme', {}); // Query to make sure you get all themes from the API instead
@@ -43,7 +43,7 @@ export default Component.extend({
     if (selectedThemes && selectedThemes.length > 0) {
       selectedThemes.map((selectedTheme) => {
         const foundTheme = themes.find((theme) => theme.get('label') === selectedTheme.get('label'));
-        if(foundTheme) {
+        if (foundTheme) {
           foundTheme.set('selected', true);
         }
       })

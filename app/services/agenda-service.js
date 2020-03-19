@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 import $ from 'jquery';
-import {inject} from '@ember/service';
-import {notifyPropertyChange} from '@ember/object';
+import { inject } from '@ember/service';
+import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
@@ -59,7 +59,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
-        agendaName: "Ontwerpagenda",
+        agendaName: 'Ontwerpagenda',
         createdFor: currentSession.id,
         oldAgendaId: oldAgenda.id,
       },
@@ -82,7 +82,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
         agendaToDeleteId: agendaToDelete.id,
       },
     });
-    if(result.statusCode != 200) {
+    if (result.statusCode != 200) {
       this.globalError.showToast.perform(EmberObject.create({
         title: this.intl.t('warning-title'),
         message: this.intl.t('error-delete-agenda'),
@@ -107,7 +107,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   async createNewAgendaItem(selectedAgenda, subcase, index) {
-    await selectedAgenda.hasMany("agendaitems").reload();
+    await selectedAgenda.hasMany('agendaitems').reload();
     let priorityToAssign = 0;
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');
@@ -150,16 +150,16 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
 
     const meeting = await selectedAgenda.get('createdFor');
     await subcase.hasMany('agendaitems').reload();
+    await selectedAgenda.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
     await this.assignSubcasePhase(subcase);
     await subcase.hasMany('phases').reload();
-    await selectedAgenda.hasMany("agendaitems").reload();
     await this.updateModifiedProperty(selectedAgenda);
   },
 
   async assignSubcasePhase(subcase) {
-    const phasesCodes = await this.store.query('subcase-phase-code', {filter: {label: 'Ingediend voor agendering'}});
+    const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
     const phaseCode = phasesCodes.get('firstObject');
     if (phaseCode) {
       const phase = this.store.createRecord('subcase-phase', {
@@ -201,7 +201,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   async deleteAgendaitem(agendaitem) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     itemToDelete.set('aboutToDelete', true);
     await itemToDelete.belongsTo('subcase').reload();
     const subcase = await itemToDelete.get('subcase');
@@ -227,8 +227,11 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     await itemToDelete.destroyRecord();
   },
 
-  async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {
+  async deleteAgendaitemFromMeeting(agendaitem) {
     let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
+    const currentAgenda = await itemToDelete.get('agenda');
+    const currentMeeting = await currentAgenda.get('createdFor');
+    const currentMeetingId = await currentMeeting.get('id');
     if (this.isAdmin) {
       itemToDelete.set('aboutToDelete', true);
       const subcase = await itemToDelete.get('subcase');

@@ -11,7 +11,7 @@ export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
   isAddingDocument: null,
   isLoading: null,
 
-  documentTypeToAssign: computed('modelToAddDocumentVersionTo', function() {
+  documentTypeToAssign: computed('modelToAddDocumentVersionTo', function () {
     const { modelToAddDocumentVersionTo } = this;
     if (modelToAddDocumentVersionTo == 'signedMinutes') {
       return this.store.findRecord('document-type', CONFIG.minuteDocumentTypeId);

@@ -31,8 +31,8 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "ise-code")}}
     {{utils/model-selector
-            data-test-model-selector-iseCodes
-            modelName="ise-code"
+      data-test-model-selector-iseCodes
+      modelName="ise-code"
       searchField="name"
       propertyToShow="nameToShow"
       sortField="name"
@@ -46,8 +46,7 @@
   <div class="vlc-toolbar">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
-        <button
-          class="vl-button vl-button--link vl-button--narrow"
+        <button type="button" class="vl-button vl-button--link vl-button--narrow"
           {{action "closeModal"}}
         >
           {{t "cancel"}}

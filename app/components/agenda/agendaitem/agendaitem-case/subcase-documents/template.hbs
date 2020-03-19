@@ -6,7 +6,7 @@
       </h4>
       {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
-          <a class="vl-link" {{action "toggleIsEditing"}}>
+          <a href="" class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
         </div>
@@ -36,15 +36,13 @@
     }}
   {{/if}}
   {{#if (is-pending item.documents)}}
-    <button class="vl-button vl-button--loading vl-button--narrow" disabled>
+    <button type="button" class="vl-button vl-button--loading vl-button--narrow" disabled>
       {{t "please-be-patient"}}
     </button>
   {{else if isEditor}}
     <div class="vl-u-spacer">
-      <button
-        class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-        {{action "toggleIsAddingNewDocument"}}
-      >
+      <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+        {{action "toggleIsAddingNewDocument"}}>
         <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
         {{t "document-add"}}
       </button>
@@ -73,17 +71,14 @@
       </div>
     {{/if}}
     {{#if (is-pending item.linkedDocuments)}}
-      <button class="vl-button vl-button--loading vl-button--narrow" disabled>
+      <button type="button" class="vl-button vl-button--loading vl-button--narrow" disabled>
         {{t "please-be-patient"}}
       </button>
     {{else if isEditor}}
       <div class="vl-u-spacer">
-        <button
-          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-          {{action "toggleIsLinkingOldDocument"}}
-        >
-          <i
-            class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
+        <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          {{action "toggleIsLinkingOldDocument"}}>
+          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
           ></i>
           {{t "document-link-old"}}
         </button>
@@ -120,9 +115,9 @@
               size=doc.file.size
               downloadName=doc.file.filename
               downloadLink=(concat
-                doc.file.downloadLink
-                "?name="
-                doc.file.filename
+                      doc.file.downloadLink
+                      "?name="
+                      doc.file.filename
               )
               delete=(action "delete" doc)
             }}
@@ -137,13 +132,13 @@
                 <div class="vlc-input-field-block">
                   {{web-components/vl-form-label value=(t "document-type")}}
                   {{utils/model-selector
-                  modelName="document-type"
-                  searchField="label"
-                  propertyToShow="label"
-                  sortField="priority"
-                  selectedItems=doc.documentContainer.type
-                  selectModel=(action "chooseDocumentType" doc.documentContainer)
-                }}
+                    modelName="document-type"
+                    searchField="label"
+                    propertyToShow="label"
+                    sortField="priority"
+                    selectedItems=doc.documentContainer.type
+                    selectModel=(action "chooseDocumentType" doc.documentContainer)
+                  }}
                 </div>
               </div>
             {{/ember-kaleidos-webuniversum/vl-uploaded-document}}

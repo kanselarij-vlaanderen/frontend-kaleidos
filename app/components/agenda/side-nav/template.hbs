@@ -13,20 +13,16 @@
           </div>
           <div class="vlc-toolbar__right">
             {{#if agendaMenuOpened}}
-              <button
-                class="vl-button vl-button--link vl-button--icon default"
-                {{action "collapseSideMenu"}}
-              >
+              <button type="button" class="vl-button vl-button--link vl-button--icon default"
+                {{action "collapseSideMenu"}}>
                 <i class="vl-vi vl-vi-arrow-right-fat"></i>
                 <span class="vl-u-visually-hidden">
                   {{t "toggle"}}
                 </span>
               </button>
             {{else}}
-              <button
-                class="vl-button vl-button--link vl-button--icon collapsed"
-                {{action "collapseSideMenu"}}
-              >
+              <button type="button" class="vl-button vl-button--link vl-button--icon collapsed"
+                {{action "collapseSideMenu"}}>
                 <i class="vl-vi vl-vi-arrow-left-fat"></i>
                 <span class="vl-u-visually-hidden">
                   {{t "toggle"}}
@@ -40,15 +36,14 @@
     <div class="vlc-scroll-wrapper__body">
       <ul>
         {{#each (await agendas) as |agenda|}}
-          <li
-            class="vlc-side-nav-item
+          <li class="vlc-side-nav-item
               {{active-class
                 agenda
                 currentAgenda
                 class="vlc-side-nav-item--active"
               }}"
           >
-            <a {{action "setCurrentAgenda" agenda}}>
+            <a href="" {{action "setCurrentAgenda" agenda}}>
               <div class="vlc-side-nav-item__label">
                 <span>
                   {{agenda.agendaName}}
@@ -57,11 +52,11 @@
               <div class="vlc-side-nav-item__meta">
                 {{#if (not-eq agenda.name "Ontwerpagenda")}}
                   {{t "created-on"}}
-                  <br />
+                  <br/>
                   {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
                 {{else}}
                   {{t "latest-modified"}}
-                  <br />
+                  <br/>
                   {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
                 {{/if}}
               </div>

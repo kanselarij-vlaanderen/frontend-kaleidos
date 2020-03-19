@@ -10,7 +10,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   store: inject(),
   formatter: inject(),
 
-  sortedRemarks: sort('item.remarks', function(a, b) {
+  sortedRemarks: sort('item.remarks', function (a, b) {
     if (a.created < b.created) {
       return 1;
     } else if (a.created > b.created) {

@@ -2,15 +2,17 @@
 /// <reference types="Cypress" />
 
 import 'cypress-file-upload';
+import {modalDocumentVersionUploadedFilenameSelector} from "../selectors/documents/documentSelectors";
 // ***********************************************
 // Commands
 
 Cypress.Commands.add('addDocuments', addDocumentsToAgenda);
 Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda);
 Cypress.Commands.add('addDocumentsToAgendaItem', addDocumentsToAgendaItem);
-Cypress.Commands.add('addNewDocumentVersion', addNewDocumentVersionToAgenda);
-Cypress.Commands.add('addNewDocumentVersionToAgenda', addNewDocumentVersionToAgenda);
+Cypress.Commands.add('addNewDocumentVersion', addNewDocumentVersion);
+Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMeeting);
 Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
+Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
 Cypress.Commands.add('uploadFile', uploadFile);
 
 // ***********************************************
@@ -29,16 +31,16 @@ function addDocumentsToAgenda(files) {
 }
 
 /**
- * @description Add a new documentversion to an agenda.
- * @name addNewDocumentVersionToAgenda
+ * @description Add a new documentversion to an meeting.
+ * @name addNewDocumentVersionToMeeting
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string} oldFileName
  * @param {string} file
  */
-function addNewDocumentVersionToAgenda(oldFileName, file) {
+function addNewDocumentVersionToMeeting(oldFileName, file) {
   cy.clickReverseTab('Documenten');
-  return addNewDocumentVersion(oldFileName, file)
+  return addNewDocumentVersion(oldFileName, file, 'meetings')
 }
 
 /**
@@ -65,13 +67,27 @@ function addDocumentsToAgendaItem(agendaItemTitle, files) {
  */
 function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
   openAgendaItemDocumentTab(agendaItemTitle, true);
-  return addNewDocumentVersion(oldFileName, file)
+  return addNewDocumentVersion(oldFileName, file, 'agendaitems')
+}
+
+/**
+ * @description Add a new documentversion to a subcase
+ * @name addNewDocumentVersionToSubcase
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {string} oldFileName
+ * @param {string} file
+ */
+function addNewDocumentVersionToSubcase(oldFileName, file) {
+  cy.clickReverseTab('Documenten');
+  return addNewDocumentVersion(oldFileName, file, 'subcases')
 }
 
 /**
  * @description Opens agendaitem with agendaitemTitle and clicks the document link.
  * @name openAgendaItemDocumentTab
- * @memberOf Cypress.Chainable#
+ * @memberOf Cypress.Chainable#.
  * @function
  * @param {string} agendaItemTitle
  * @param {boolean} alreadyHasDocs
@@ -142,7 +158,7 @@ function addDocuments(files) {
 
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
   cy.wait('@createNewDocument', { timeout: 12000 });
-  cy.wait('@patchModel', { timeout: 12000  + 4000 * files.length });
+  cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
 }
 
 /**
@@ -153,11 +169,20 @@ function addDocuments(files) {
  * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
  * @param {String} file - The name of the file without the extension
  */
-function addNewDocumentVersion(oldFileName, file) {
+function addNewDocumentVersion(oldFileName, file, modelToPatch) {
 
   cy.route('GET', 'document-types?**').as('getDocumentTypes');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
-  cy.route('PATCH', '**').as('patchModel');
+  if (modelToPatch) {
+    if(modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
+      cy.route('PATCH', `/subcases/**`).as('patchSubcase');
+      cy.route('PATCH', `/agendaitems/**`).as('patchAgendaitem');
+    } else {
+      cy.route('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
+    }
+  } else {
+    cy.route('PATCH', '**').as('patchAnyModel');
+  }
 
   cy.get('.vlc-document-card__content .vl-title--h6', { timeout: 12000 })
     .contains(oldFileName, { timeout: 12000 })
@@ -175,14 +200,28 @@ function addNewDocumentVersion(oldFileName, file) {
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(modalDocumentVersionUploadedFilenameSelector).should('contain', file.fileName);
   });
+  cy.wait(1000); //Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
     cy.get('.vl-button').contains('Toevoegen').click();
   });
-
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
-  cy.wait('@patchModel', { timeout: 12000 });
+  
+
+  // for agendaitems and subcases both are patched, not waiting causes flaky tests
+  if (modelToPatch) {
+    if (modelToPatch === 'agendaitems') {
+      cy.wait('@patchSubcase', { timeout: 12000 }).wait('@patchAgendaitem', { timeout: 12000 });
+    } else if(modelToPatch === 'subcases') {
+      cy.wait('@patchAgendaitem', { timeout: 12000 }).wait('@patchSubcase', { timeout: 12000 });
+    } else {
+      cy.wait('@patchSpecificModel', { timeout: 12000 });
+    }
+  } else {
+    cy.wait('@patchAnyModel', { timeout: 12000 });
+  }
 }
 
 /**
@@ -196,6 +235,7 @@ function addNewDocumentVersion(oldFileName, file) {
  */
 function uploadFile(folder, fileName, extension) {
   cy.route('POST', 'files').as('createNewFile');
+  cy.route('GET', 'files/**').as('getNewFile');
 
   const fileFullName = fileName + '.' + extension;
   const filePath = folder + '/' + fileFullName;
@@ -212,4 +252,5 @@ function uploadFile(folder, fileName, extension) {
     );
   });
   cy.wait('@createNewFile');
+  cy.wait('@getNewFile');
 }

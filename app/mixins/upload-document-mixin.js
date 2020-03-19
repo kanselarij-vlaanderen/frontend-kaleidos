@@ -25,11 +25,11 @@ export default Mixin.create({
     this._super(...arguments);
     this.set('documentsInCreation', A([]));
     const accessLevels = await this.store.findAll('access-level');
-    try{
+    try {
       this.set('defaultAccessLevel', accessLevels.find((item) => {
         return item.id == config.internRegeringAccessLevelId;
       }));
-    } catch(e) {
+    } catch (e) {
       // TODO error during cypress tests:
       // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
     }
@@ -66,8 +66,8 @@ export default Mixin.create({
   },
 
   async saveDocumentContainers() {
-    if (arguments.length > 0){
-      deprecate("The function 'saveDocumentContainers' takes no arguments, 'confidential' should be set on individual document level", true);
+    if (arguments.length > 0) {
+      deprecate('The function \'saveDocumentContainers\' takes no arguments, \'confidential\' should be set on individual document level', true);
     }
     this.set('isLoading', true);
     const docs = this.get('documentsInCreation');
@@ -88,7 +88,7 @@ export default Mixin.create({
   },
 
   async saveDocuments() {
-    deprecate("'saveDocuments' is deprecated by saveDocumentContainers", true);
+    deprecate('\'saveDocuments\' is deprecated by saveDocumentContainers', true);
     return this.saveDocumentContainers(...arguments);
   },
 
@@ -112,7 +112,7 @@ export default Mixin.create({
   },
 
   async attachDocumentVersionsToModel() {
-    deprecate("'attachDocumentVersionsToModel' is deprecated by attachDocumentsToModel", true);
+    deprecate('\'attachDocumentVersionsToModel\' is deprecated by attachDocumentsToModel', true);
     return this.attachDocumentsToModel(...arguments);
   },
 
@@ -141,12 +141,16 @@ export default Mixin.create({
     } else {
       model.set('linkedDocumentVersions', A([]));
     }
-    return model.save();
+    return await model.save();
   },
 
   actions: {
     async uploadedFile(uploadedFile) {
       const creationDate = moment().utc().toDate();
+      if (this.documentContainer) {
+        await this.documentContainer.reload();
+        await this.documentContainer.hasMany('documents').reload();
+      }
       const previousVersion = this.documentContainer ? (await this.documentContainer.get('lastDocumentVersion')) : null;
       const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
         accessLevel: this.defaultAccessLevel,
@@ -154,7 +158,7 @@ export default Mixin.create({
       newDocument.set('created', creationDate);
       newDocument.set('modified', creationDate);
       if (this.documentContainer) { // Adding new version to existing container
-        const docs = await this.documentContainer.get('documents')
+        const docs = await this.documentContainer.get('documents');
         docs.pushObject(newDocument);
         newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
         const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
