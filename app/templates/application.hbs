@@ -2,35 +2,14 @@
   {{title (t "page-title")}}
   {{head-layout}}
   {{#if (await alert)}}
-    <div class="vl-alert vl-alert-relative vl-alert-relative--center
-        {{await type}}"
-         role="alert">
-      <div class="vl-alert__icon">
-        <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
-      </div>
-      <button class="vl-alert__close" type="button">
-        <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
-        <span class="vl-u-visually-hidden">
-          {{t "close"}}
-        </span>
-      </button>
-      <div class="vl-alert__content">
-        <p class="vl-alert__title">
-          {{await alert.title}}
-        </p>
-        <div class="vl-alert__message">
-          <p>
-            {{await alert.message}}
-          </p>
-        </div>
-      </div>
-      <button class="vl-alert__close" type="button" {{action "close"}}>
-        <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
-        <span class="vl-u-visually-hidden">
-          {{t "close"}}
-        </span>
-      </button>
-    </div>
+    <WebComponents::VlAlert
+      class="vl-alert-relative vl-alert-relative--center {{await type}}"
+      aria-live="assertive"
+      @title={{await alert.title}}
+      @message={{await alert.message}}
+      @closeable={{true}}
+      @onClose={{action "close"}}
+    />
   {{/if}}
   {{#if this.toaster.toasts.length}}
     <Utils::Toaster @toasts={{this.toaster.toasts}} />
