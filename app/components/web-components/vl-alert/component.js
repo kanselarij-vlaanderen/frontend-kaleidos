@@ -24,7 +24,7 @@ export default class extends Component {
   }
 
   close() {
-    this.onClose(...arguments);
+    this.args.onClose(...arguments);
   }
 
 }
