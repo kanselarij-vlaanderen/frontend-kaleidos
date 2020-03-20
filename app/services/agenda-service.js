@@ -151,11 +151,11 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
 
     const meeting = await selectedAgenda.get('createdFor');
     await subcase.hasMany('agendaitems').reload();
+    await selectedAgenda.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
     await this.assignSubcasePhase(subcase);
     await subcase.hasMany('phases').reload();
-    await selectedAgenda.hasMany('agendaitems').reload();
     await this.updateModifiedProperty(selectedAgenda);
   },
 
