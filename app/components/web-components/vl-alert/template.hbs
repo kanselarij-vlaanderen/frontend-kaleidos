@@ -1,11 +1,11 @@
-<div class="vl-alert {{this.typeClass}} {{if @small "vl-alert--small"}}" role="alert">
+<div role="alert">
   {{#if (eq @type "loading")}}
     <div class="vl-alert__loader">
       <div class="vl-loader" role="alert" aria-busy="true"></div>
     </div>
   {{else}}
     <div class="vl-alert__icon">
-      <i class="vl-vi vl-vi-alert-circle" aria-hidden="true"></i>
+      <i class={{this.iconClass}} aria-hidden="true"></i>
     </div>
   {{/if}}
   {{#if @closeable}}
