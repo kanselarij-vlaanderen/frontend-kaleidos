@@ -8,6 +8,7 @@ export default Service.extend({
   router: inject(),
   currentSession: null,
   selectedAgendaItem: null,
+  showNewsItemIsEditedWarning: null,
 
   agendas: computed('currentSession.agendas.@each', function () {
     if (!this.get('currentSession')) {
