@@ -245,7 +245,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     async downloadAllDocuments() {
       const fileDownloadToast = {
         title: this.intl.t('file-ready'),
-        type: 'file-download',
+        type: 'download-file',
         options: { timeOut: 10 * 1000 }
       };
 
