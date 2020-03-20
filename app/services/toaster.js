@@ -7,6 +7,7 @@ export default class ToasterService extends Service {
   toasts = A([]);
 
   @(task(function * (toast) {
+    toast.options.onClose = toast.options.onClose || (() => this.toasts.removeObject(toast));
     this.toasts.pushObject(toast);
     yield timeout(toast.options.timeOut);
     if (this.toasts.includes(toast)) {
