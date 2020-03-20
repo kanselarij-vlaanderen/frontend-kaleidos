@@ -1,12 +1,6 @@
 import Component from '@glimmer/component';
 
 export default class extends Component {
-  classNames = ['vl-alert'];
-  classNameBindings = [
-    'typeClass',
-    'args.small:vl-alert--small'
-  ];
-
   get typeClass() {
     const t = this.args.type;
     if (['success', 'error', 'warning'].includes(t)) {
