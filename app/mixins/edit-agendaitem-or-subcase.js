@@ -79,6 +79,10 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
       this.set('isLoading', true);
       const { isAgendaItem } = this;
       const item = await this.get('item');
+      await this.item.preEditOrSaveCheck().catch((e) => {
+        this.set('isLoading', false);
+        throw(e);
+      });
       let resetFormallyOk = true;
       if (isAgendaItem && !item.showAsRemark) {
         if (Object.keys(item.changedAttributes()).length == 2 && item.changedAttributes()['explanation']) {
@@ -87,6 +91,10 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
         const isDesignAgenda = await item.get('isDesignAgenda');
         const agendaitemSubcase = await item.get('subcase');
         if (isDesignAgenda && agendaitemSubcase) {
+          await agendaitemSubcase.preEditOrSaveCheck().catch((e) => {
+            this.set('isLoading', false);
+            throw(e);
+          });
           await this.setNewPropertiesToModel(agendaitemSubcase, resetFormallyOk).catch((e) => {
             this.set('isLoading', false);
             throw(e);

@@ -554,7 +554,7 @@
   "monitoring-timestamp": "Timestamp",
   "monitoring-state": "Status",
   "monitoring-error": "Error",
-  "changes-could-not-be-saved-message": "Het item werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
+  "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "newsitem-changed-message": "Opgelet, de nota is aangepast!",
   "newsitem-changed-no-note-message": "Opgelet, er is nog geen nota aanwezig!"
 }

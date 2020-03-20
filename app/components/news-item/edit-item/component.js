@@ -71,18 +71,23 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         })
       );
     }
-    this.setNewPropertiesToModel(item).then((newModel) => {
+    this.setNewPropertiesToModel(item).then(async (newModel) => {
       newModel.reload();
       if (themes) {
         agendaitem.set('themes', themes);
-        agendaitem.save().then(() => {
+        const subcase = await item.get('subcase');
+        subcase.set('themes', themes);
+        try {
+          await agendaitem.save();
+          await subcase.save();
+        } catch(e) {
+          throw(e);
+        } finally {
           this.set('isLoading', false);
-          this.toggleProperty('isEditing');
-        });
-      } else {
-        this.set('isLoading', false);
-        this.toggleProperty('isEditing');
+        }
       }
+      this.set('isLoading', false);
+      this.toggleProperty('isEditing');
     });
   },
 
