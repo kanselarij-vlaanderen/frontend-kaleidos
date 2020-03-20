@@ -1,5 +1,6 @@
 {{#if @toasts.length}}
   <div class="toasts-container">
+    {{!-- TODO: fix z-index for all toasts. A toast should appear on top of most other things (z-index/rendering location?) --}}
     {{#each @toasts as |toast|}}
       {{#if (eq toast.type "revert-action")}}
         <Utils::Toaster::RevertActionToast
