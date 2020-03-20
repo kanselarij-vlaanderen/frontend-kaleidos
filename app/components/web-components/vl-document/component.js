@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
+  intl: service(),
   toaster: service(),
   fileService: service(),
 
@@ -43,15 +44,15 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
         type: 'revert-action',
         title: this.intl.t('warning-title'),
         message: this.intl.t('document-being-deleted'),
-        options: {
-          onUndo: () => this.fileService.reverseDelete(this.documentVersionToDelete.get('id')),
-          timeOut: 15000
-        }
+        options: { timeOut: 15000 }
+      };
+      verificationToast.options.onUndo = () => {
+        this.fileService.reverseDelete(this.documentVersionToDelete.get('id'));
+        this.toaster.toasts.removeObject(verificationToast);
       };
       this.toaster.displayToast.perform(verificationToast);
       this.deleteDocumentVersionWithUndo();
       this.set('isVerifyingDelete', false);
-      this.set('documentVersionToDelete', null);
     },
 
     deleteDocumentVersion(document) {

@@ -182,15 +182,15 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
         type: 'revert-action',
         title: this.intl.t('warning-title'),
         message: this.intl.t('document-being-deleted'),
-        options: {
-          onUndo: () => this.fileService.reverseDelete(this.documentToDelete.get('id')),
-          timeOut: 15000
-        }
+        options: { timeOut: 15000 }
+      };
+      verificationToast.options.onUndo = () => {
+        this.fileService.reverseDelete(this.documentToDelete.get('id'));
+        this.toaster.toasts.removeObject(verificationToast);
       };
       this.toaster.displayToast.perform(verificationToast);
       this.deleteDocumentWithUndo();
       this.set('isVerifyingDelete', false);
-      this.set('documentToDelete', null);
     },
 
     deleteDocument(document) {
