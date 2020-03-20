@@ -6,12 +6,13 @@
       @type="success"
       @title="Bestand downloaden"
       @closeable={{true}}
-      @onClose={{@onClose}}
+      @onClose={{@options.onClose}}
     >
       <div class="vl-alert__message vl-u-text--capitalize">
         <a class="vl-button vl-button--link"
            href={{@options.downloadLink}}
            download
+           {{on "click" @options.onClose}}
         >
           {{t "download"}}
         </a>
