@@ -15,6 +15,7 @@
         />
       {{else}}
         <Utils::Toaster::Toast
+          @type={{toast.options.type}}
           @title={{toast.title}}
           @message={{toast.message}}
         />
