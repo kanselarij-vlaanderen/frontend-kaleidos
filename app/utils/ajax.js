@@ -16,10 +16,10 @@ export const ajax = ({
   error,
   dataType,
 }) => {
-  // We use url encoded form data for the API
   let body = null;
   let headers = null;
 
+  // We use url encoded form data for the API
   if (data) {
     body = new URLSearchParams();
     Object.keys(data).forEach((key) => {
