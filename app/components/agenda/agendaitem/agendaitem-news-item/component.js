@@ -9,18 +9,21 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   classNames: ['vlc-padding-bottom--large'],
   store: inject(),
   newsletterService: inject(),
+  agendaService: inject(),
   sessionService: inject(),
   subcase: null,
   agendaitem: null,
   isEditing: false,
   intl: inject(),
-  @tracked showNewsItemIsEditedWarning: null,
+  @tracked showNewsItemIsEditedWarning: false,
   item: computed('subcase.newsletterInfo', function () {
     return this.get('subcase.newsletterInfo');
   }),
 
-  didInsertElement() {
-    this.showNewsItemIsEditedWarning = this.sessionService.get('showNewsItemIsEditedWarning');
+
+  async didUpdateAttrs() {
+    const sub = await this.get('subcase');
+    this.showNewsItemIsEditedWarning = await this.agendaService.shouldShowEditedWarning(sub);
   },
 
   actions: {
@@ -46,7 +49,8 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       })
     },
     async clearShowNewsItemIsEditedWarning() {
-      this.set('showNewsItemIsEditedWarning', false);
+      // this.set('showNewsItemIsEditedWarning', false);
+      this.showNewsItemIsEditedWarning = false;
     },
   }
 });
