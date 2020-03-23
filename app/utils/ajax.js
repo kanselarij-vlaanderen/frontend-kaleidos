@@ -16,10 +16,27 @@ export const ajax = ({
   error,
   dataType,
 }) => {
+  // We use url encoded form data for the API
+  let body = null;
+  let headers = null;
+
+  if (data) {
+    body = new URLSearchParams();
+    Object.keys(data).forEach((key) => {
+      const value = data[key];
+
+      body.append(key, value);
+    });
+
+    headers = new Headers()
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+  }
+
   // Using the native fetch API...
   return fetch(url, {
     method,
-    data,
+    body,
+    headers,
   }).then(handleErrors)
     .then((response) => {
       switch (dataType) {
