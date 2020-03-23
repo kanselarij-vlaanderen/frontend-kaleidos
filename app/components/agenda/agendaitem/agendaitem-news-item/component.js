@@ -49,7 +49,6 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       })
     },
     async clearShowNewsItemIsEditedWarning() {
-      // this.set('showNewsItemIsEditedWarning', false);
       this.showNewsItemIsEditedWarning = false;
     },
   }

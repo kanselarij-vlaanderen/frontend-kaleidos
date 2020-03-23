@@ -55,7 +55,7 @@
           {{t "requested-for-session"}}
         </span>
         <span class="vl-description-data__value">
-          {{#if (await subcase.requestedForMeeting)}}
+          {{#if (await subcase.requestedForMeeting.plannedStart)}}
             {{t "requested-for-agenda"}}
             {{moment-format
               subcase.requestedForMeeting.plannedStart
