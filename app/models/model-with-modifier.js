@@ -53,6 +53,7 @@ export default ModelWithToasts.extend({
       // TODO, should something happen ? reverse if
     } else {
       const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
+      this.set('mustRefresh', true);
       const userId = oldModelData.data[0]['relationships']['modified-by']['links']['self'];
       const userData = await fetch(userId);
       const userDataFields = await userData.json();
@@ -60,6 +61,7 @@ export default ModelWithToasts.extend({
       this.globalError.showToast.perform(EmberObject.create({
         title: this.intl.t('changes-could-not-be-saved-title'),
         message: this.intl.t('changes-could-not-be-saved-message', {
+          item: this.intl.t(this.get('constructor.modelName')),
           firstname: vals['first-name'],
           lastname: vals['last-name'],
           time: oldModelModifiedMoment.locale("nl").fromNow()
@@ -77,6 +79,10 @@ export default ModelWithToasts.extend({
     const modified = this.get('modified');
     const modifiedBy = await this.get('modifiedBy');
     const currentModifiedModel = moment.utc(this.get('modified'));
+    const mustRefresh = this.get('mustRefresh');
+    if(mustRefresh){
+      return false;
+    }
 
     const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
 
