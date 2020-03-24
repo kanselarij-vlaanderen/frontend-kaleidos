@@ -13,7 +13,7 @@ export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   agendaService: inject(),
   activeAgendaItemSection: 'details',
-  @tracked showNewsItemIsEditedWarning:false,
+  @tracked timestampForMostRecentNota:null,
 
   checkAgendaItemSubcase: observer('subcase', function () {
     this.get('subcase').then((subcase) => {
@@ -55,7 +55,7 @@ export default Component.extend(isAuthenticatedMixin, {
     async setAgendaItemSection(section) {
       if(section==='news-item') {
         const agendaItem = await this.get('agendaitem');
-        this.showNewsItemIsEditedWarning = await this.agendaService.shouldShowEditedWarning(agendaItem);
+        this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(agendaItem);
       }
       this.set('activeAgendaItemSection', section);
     },

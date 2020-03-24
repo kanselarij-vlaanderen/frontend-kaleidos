@@ -269,16 +269,16 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     }
   },
 
-  async shouldShowEditedWarning(agendaItem) {
+  async retrieveModifiedDateFromNota(agendaItem) {
     const newsletterInfoForSubcase = await agendaItem.get('subcase.newsletterInfo');
     const documents = await agendaItem.get('subcase.documents');
     if (!documents) {
-      return false;
+      return null;
     }
 
     const nota = await agendaItem.get('nota');
     if(!nota) {
-      return false;
+      return null;
     }
 
     const documentVersion = await nota.get('lastDocumentVersion');
@@ -286,12 +286,12 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
     if (newsletterInfoOnSubcaseLastModifiedTime) {
       if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-        return true;
+        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
       } else {
-        return false;
+        return null;
       }
     } else {
-      return true;
+      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
     }
   }
 });

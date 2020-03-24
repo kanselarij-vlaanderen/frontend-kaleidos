@@ -4,6 +4,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import {computed} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   classNames: ['vlc-padding-bottom--large'],
@@ -15,14 +16,21 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
   agendaitem: null,
   isEditing: false,
   intl: inject(),
-  @tracked showNewsItemIsEditedWarning: false,
+  @tracked timestampForMostRecentNota: null,
   item: computed('subcase.newsletterInfo', function () {
     return this.get('subcase.newsletterInfo');
   }),
 
+  get dateOfMostRecentNota() {
+    return moment(this.timestampForMostRecentNota).format("D MMMM YYYY");
+  },
+
+  get timeOfMostRecentNota() {
+    return moment(this.timestampForMostRecentNota).format("H:mm");
+  },
 
   async didUpdateAttrs() {
-    this.showNewsItemIsEditedWarning = await this.agendaService.shouldShowEditedWarning(this.agendaitem);
+    this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(this.agendaitem);
   },
 
   actions: {
@@ -47,8 +55,8 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
         this.toggleProperty('isEditing');
       })
     },
-    async clearShowNewsItemIsEditedWarning() {
-      this.showNewsItemIsEditedWarning = false;
+    async clearTimestampForMostRecentNota() {
+      this.timestampForMostRecentNota = false;
     },
   }
 });

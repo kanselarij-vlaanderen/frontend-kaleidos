@@ -1,8 +1,8 @@
-{{#if showNewsItemIsEditedWarning}}
+{{#if timestampForMostRecentNota}}
   {{changes-alert
-    message=(t "newsitem-changed-message")
+    message=(t "newsitem-changed-message" date=dateOfMostRecentNota time=timeOfMostRecentNota)
     buttonText=(t "close")
-    clearAction=(action "clearShowNewsItemIsEditedWarning")
+    clearAction=(action "clearTimestampForMostRecentNota")
   }}
 {{/if}}
 {{#if (not isEditing)}}
