@@ -73,16 +73,16 @@
         <span class="vl-description-data__value">
           {{#if
             (or
-                        (is-pending subcase.isPostponed)
-                        (is-pending subcase.onAgendaInfo)
+              (is-pending subcase.isPostponed)
+              (is-pending subcase.onAgendaInfo)
             )
           }}
             <div class="vl-loader"></div>
           {{else}}
-            {{#if (await subcase.isPostponed)}}
-              {{t "postponed-subcase"}}
-            {{else}}
-              {{#if (await subcase.onAgendaInfo)}}
+            {{#if (await subcase.onAgendaInfo)}}
+              {{#if (await subcase.isPostponed)}}
+                {{t "postponed-subcase"}}
+              {{/if}}
                 {{#link-to
                   "agenda.agendaitems.agendaitem"
                   (await latestMeetingId)
@@ -92,9 +92,8 @@
                 }}
                   {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
                 {{/link-to}}
-              {{else}}
-                {{t "not-yet-on-agenda"}}
-              {{/if}}
+            {{else}}
+              {{t "not-yet-on-agenda"}}
             {{/if}}
           {{/if}}
         </span>
@@ -112,9 +111,9 @@
           {{t "decided-on"}}
         </span>
         <span class="vl-description-data__value">
-          {{#if (is-pending subcase.decision.approved)}}
+          {{#if (is-pending subcase.approved)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-          {{else if (await subcase.decision.approved)}}
+          {{else if (await subcase.approved)}}
             {{moment-format (await subcase.decidedInfo) "DD.MM.YYYY"}}
           {{else}}
             {{t "not-yet-decided"}}
@@ -128,8 +127,8 @@
         <span class="vl-description-data__value">
           {{#if
             (or
-                          (is-pending subcase.requestedBy)
-                          (is-pending subcase.requestedBy.person)
+              (is-pending subcase.requestedBy)
+              (is-pending subcase.requestedBy.person)
             )
           }}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
