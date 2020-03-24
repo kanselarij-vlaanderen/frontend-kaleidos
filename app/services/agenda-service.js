@@ -284,22 +284,26 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       })
     }));
 
-    const lastVersionOfNotas = await Promise.all(documentsOfTypeNota.map((nota) => {
-      return nota.get('lastDocumentVersion');
-    }));
+    if (documentsOfTypeNota.length > 0) {
+      const lastVersionOfNotas = await Promise.all(documentsOfTypeNota.map((nota) => {
+        return nota.get('lastDocumentVersion');
+      }));
 
-    const mostRecentlyAddedNotaDocumentVersion = lastVersionOfNotas.sortBy('lastModified').lastObject;
-    const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = mostRecentlyAddedNotaDocumentVersion.modified;
+      const mostRecentlyAddedNotaDocumentVersion = lastVersionOfNotas.sortBy('lastModified').lastObject;
+      const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = mostRecentlyAddedNotaDocumentVersion.modified;
 
-    const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
-    if (newsletterInfoOnSubcaseLastModifiedTime) {
-      if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-        return true;
+      const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
+      if (newsletterInfoOnSubcaseLastModifiedTime) {
+        if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
-        return false;
+        return true;
       }
     } else {
-      return true;
+      return false;
     }
   }
 });
