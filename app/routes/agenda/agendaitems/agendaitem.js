@@ -4,7 +4,6 @@ import { inject } from '@ember/service';
 
 export default Route.extend({
   sessionService: inject(),
-  agendaService: inject(),
 
   model(params) {
     const agendaitem_id = params.agendaitem_id;
@@ -13,11 +12,11 @@ export default Route.extend({
     });
   },
 
-  async afterModel(model) {
+  afterModel(model) {
     this.set('sessionService.selectedAgendaItem', model);
   },
 
-    actions: {
+  actions: {
     refreshRoute() {
       this._super(...arguments);
       this.refresh();

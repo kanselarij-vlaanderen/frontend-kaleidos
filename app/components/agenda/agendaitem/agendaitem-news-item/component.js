@@ -22,8 +22,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
 
 
   async didUpdateAttrs() {
-    const sub = await this.get('subcase');
-    this.showNewsItemIsEditedWarning = await this.agendaService.shouldShowEditedWarning(sub);
+    this.showNewsItemIsEditedWarning = await this.agendaService.shouldShowEditedWarning(this.agendaitem);
   },
 
   actions: {

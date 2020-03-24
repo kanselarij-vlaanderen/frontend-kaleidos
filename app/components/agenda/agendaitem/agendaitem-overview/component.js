@@ -54,8 +54,8 @@ export default Component.extend(isAuthenticatedMixin, {
 
     async setAgendaItemSection(section) {
       if(section==='news-item') {
-        const subcase = await this.get('subcase');
-        this.showNewsItemIsEditedWarning = await this.agendaService.shouldShowEditedWarning(subcase);
+        const agendaItem = await this.get('agendaitem');
+        this.showNewsItemIsEditedWarning = await this.agendaService.shouldShowEditedWarning(agendaItem);
       }
       this.set('activeAgendaItemSection', section);
     },

@@ -269,41 +269,29 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     }
   },
 
-  async shouldShowEditedWarning(subcase) {
-    const newsletterInfoForSubcase = await subcase.get('newsletterInfo');
-    const documents = await subcase.get('documents');
+  async shouldShowEditedWarning(agendaItem) {
+    const newsletterInfoForSubcase = await agendaItem.get('subcase.newsletterInfo');
+    const documents = await agendaItem.get('subcase.documents');
     if (!documents) {
       return false;
     }
-    const documentsOfTypeNota = [];
-    await Promise.all(documents.map(document => {
-      return document.get('type').then((type) => {
-        if (type.label === 'Nota') {
-          documentsOfTypeNota.push(document);
-        }
-      })
-    }));
 
-    if (documentsOfTypeNota.length > 0) {
-      const lastVersionOfNotas = await Promise.all(documentsOfTypeNota.map((nota) => {
-        return nota.get('lastDocumentVersion');
-      }));
+    const nota = await agendaItem.get('nota');
+    if(!nota) {
+      return false;
+    }
 
-      const mostRecentlyAddedNotaDocumentVersion = lastVersionOfNotas.sortBy('lastModified').lastObject;
-      const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = mostRecentlyAddedNotaDocumentVersion.modified;
-
-      const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
-      if (newsletterInfoOnSubcaseLastModifiedTime) {
-        if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
+    const documentVersion = await nota.get('lastDocumentVersion');
+    const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.modified;
+    const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
+    if (newsletterInfoOnSubcaseLastModifiedTime) {
+      if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
         return true;
+      } else {
+        return false;
       }
     } else {
-      return false;
+      return true;
     }
   }
 });
