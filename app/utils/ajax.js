@@ -17,7 +17,7 @@ export const ajax = ({
   dataType,
 }) => {
   let body = null;
-  let headers = null;
+  let headers = new Headers();
 
   // We use url encoded form data for the API
   if (data) {
@@ -28,8 +28,7 @@ export const ajax = ({
       body.append(key, value);
     });
 
-    headers = new Headers()
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.set('Content-Type', 'application/x-www-form-urlencoded');
   }
 
   // Using the native fetch API...
