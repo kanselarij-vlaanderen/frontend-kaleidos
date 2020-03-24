@@ -72,7 +72,7 @@ export default Controller.extend(isAuthenticatedMixin, DefaultQueryParamsMixin, 
     clearFilter() {
       this.set('to', null);
       this.set('from', null);
-      this.set('dateFilter','')
+      this.set('dateFilter','');
     },
 
     onClickRow(meeting) {
