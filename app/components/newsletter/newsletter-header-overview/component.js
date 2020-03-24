@@ -7,6 +7,8 @@ import EmberObject from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
+  globalError: inject(),
+  intl: inject(),
   session: inject(),
   routing: inject('-routing'),
   newsletterService: inject(),

@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import $ from 'jquery';
+import { ajax } from 'fe-redpencil/utils/ajax';
 import { inject } from '@ember/service';
 import { A } from '@ember/array';
 import ArrayProxy from '@ember/array/proxy';
@@ -65,7 +65,7 @@ export default Service.extend({
   },
 
   querySearch(type, params, sortMapping) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: this.urlForQuery(params, type, sortMapping)
     });

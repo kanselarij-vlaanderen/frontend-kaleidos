@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { inject } from '@ember/service';
 import { warn } from '@ember/debug';
 import { task, timeout } from 'ember-concurrency';
-import $ from 'jquery';
+import { ajax } from 'fe-redpencil/utils/ajax';
 
 export default Service.extend({
   globalError: inject(),
@@ -16,7 +16,7 @@ export default Service.extend({
 
   convertDocumentVersion(documentVersion) {
     try {
-      $.ajax({
+      ajax({
         headers: {
           Accept: 'application/json',
         },
@@ -99,7 +99,7 @@ export default Service.extend({
   },
 
   removeFile(id) {
-    return $.ajax({
+    return ajax({
       method: 'DELETE',
       url: '/files/' + id,
     });
