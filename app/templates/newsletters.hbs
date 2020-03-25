@@ -13,7 +13,7 @@
           enableSizes=true
           isLoading=isLoadingModel
           noDataMessage=(t "no-results-found")
-          onClickRow=(action "navigateToNewsletter")
+          onClickRow=(action "navigateToNewsletter") 
         as |table|
         }}
           {{#table.content as |c|}}
@@ -24,15 +24,12 @@
                 field="planned-start"
                 label=(t "newsletter")
               }}
-              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
-              >
-                {{!--TODO: should sort on field agendas but does not return all 10 results --}}
+              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable">
+                {{!TODO: should sort on field agendas but does not return all 10 results }}
                 {{concat (t "newsletter") " " (t "sent-at")}}
               </th>
-              <th
-                      class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
-              >
-                {{!--TODO: should sort on latest modified agenda --}}
+              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable">
+                {{!TODO: should sort on latest modified agenda }}
                 {{t "latest-modified"}}
               </th>
               <th class="vl-data-table-col-1"></th>
@@ -40,20 +37,25 @@
             {{#c.body class="tr-hover" as |meeting|}}
               <td>
                 {{#if (is-pending meeting)}}
-                  <div class="skeletal-loader"
-                       role="alert"
-                       aria-busy="true"
+                  <div
+                    class="skeletal-loader"
+                    role="alert"
+                    aria-busy="true"
                   ></div>
                 {{else}}
-                  {{t "newsletter-for-meeting-of"}}
+                  {{t
+                    "newsletter-for-meeting-of"
+                    kind=(lowercase meeting.kindToShow.fullProcedure)
+                  }}
                   {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                 {{/if}}
               </td>
               <td>
                 {{#if (is-pending meeting.mailCampaign)}}
-                  <div class="skeletal-loader"
-                       role="alert"
-                       aria-busy="true"
+                  <div
+                    class="skeletal-loader"
+                    role="alert"
+                    aria-busy="true"
                   ></div>
                 {{else if (await meeting.mailCampaign)}}
                   {{#if (await meeting.mailCampaign.isSent)}}
@@ -70,9 +72,10 @@
               </td>
               <td>
                 {{#if (is-pending meeting.latestAgenda)}}
-                  <div class="skeletal-loader"
-                       role="alert"
-                       aria-busy="true"
+                  <div
+                    class="skeletal-loader"
+                    role="alert"
+                    aria-busy="true"
                   ></div>
                 {{else}}
                   {{moment-format
