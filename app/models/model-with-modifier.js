@@ -1,12 +1,12 @@
 import DS from 'ember-data';
-import { inject } from '@ember/service';
+import {inject} from '@ember/service';
 import moment from "moment";
 import EmberObject from '@ember/object';
 import ModelWithToasts from 'fe-redpencil/models/model-with-toasts';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
-let { attr, belongsTo } = DS;
+let {attr, belongsTo} = DS;
 
 export default ModelWithToasts.extend({
   currentSession: inject(),
@@ -49,8 +49,9 @@ export default ModelWithToasts.extend({
   },
 
   async preEditOrSaveCheck() {
-    if (! await this.saveAllowed()) {
-      const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
+    if (!await this.saveAllowed()) {
+      const {oldModelData, oldModelModifiedMoment} = await this.getOldModelData();
+      this.set('mustRefresh', true);
       const userId = oldModelData.data[0]['relationships']['modified-by']['links']['self'];
       const userData = await fetch(userId);
       const userDataFields = await userData.json();
@@ -58,6 +59,7 @@ export default ModelWithToasts.extend({
       this.globalError.showToast.perform(EmberObject.create({
         title: this.intl.t('changes-could-not-be-saved-title'),
         message: this.intl.t('changes-could-not-be-saved-message', {
+          item: this.intl.t(this.get('constructor.modelName')),
           firstname: vals['first-name'],
           lastname: vals['last-name'],
           time: oldModelModifiedMoment.locale("nl").fromNow()
@@ -74,7 +76,12 @@ export default ModelWithToasts.extend({
     const modified = this.get('modified');
     const modifiedBy = await this.get('modifiedBy');
     const currentModifiedModel = moment.utc(this.get('modified'));
-    const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
+    const mustRefresh = this.get('mustRefresh');
+    if (mustRefresh) {
+      return false;
+    }
+
+    const {oldModelData, oldModelModifiedMoment} = await this.getOldModelData();
     // Deze test test eigenlijk of het item hetzelfde is:
     // item is hetzelfde
     // Indien modified nog niet bestaat (old data)
@@ -95,9 +102,9 @@ export default ModelWithToasts.extend({
       .queryRecord(this.store, this.get('constructor'),
         {
           filter:
-            { id: this.get('id') }
+            {id: this.get('id')}
         });
     const oldModelModifiedMoment = moment.utc(oldModelData.data[0].attributes.modified);
-    return { oldModelData, oldModelModifiedMoment };
+    return {oldModelData, oldModelModifiedMoment};
   }
 });

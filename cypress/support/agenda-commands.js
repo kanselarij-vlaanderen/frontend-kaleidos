@@ -202,16 +202,16 @@ function deleteAgenda(meetingId, lastAgenda) {
   } else {
     cy.route('DELETE', '/meetings/**').as('deleteMeeting');
   }
-  cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
+  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda'); //Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
 
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
   cy.get(deleteAgendaSelector).click();
-  cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
-    cy.get('.vl-modal').should('not.exist');
-  });
+  // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
+  cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
+  // });
   if(lastAgenda) {
     cy.wait('@deleteNewsletter', { timeout: 20000 });
     cy.wait('@deleteMeeting', { timeout: 20000 });
@@ -305,7 +305,7 @@ function deleteAgenda(meetingId, lastAgenda) {
  */
 function approveDesignAgenda() {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
-  cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
+  // cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
   cy.route('GET', '/agendaitems/**').as('getAgendaitems');
 
     //TODO add boolean for when not all items are formally ok, click through the confirmation modal
@@ -316,7 +316,7 @@ function approveDesignAgenda() {
     });
 
   cy.wait('@patchAgenda', { timeout: 12000 });
-  cy.wait('@createApprovedAgenda', { timeout: 12000 });
+  // cy.wait('@createApprovedAgenda', { timeout: 12000 });
   cy.wait('@getAgendaitems', { timeout: 12000 });
 }
 
@@ -437,7 +437,7 @@ function approveDesignAgenda() {
  */
   function toggleShowChanges(refresh) {
     cy.route('GET', '/agendaitems/**').as('getAgendaitems');
-    cy.route('GET', '/agenda-sort/agenda-with-changes**').as('getChanges');
+    // cy.route('GET', '/agenda-sort/agenda-with-changes**').as('getChanges');
 
     if (refresh) {
       cy.get('.vlc-side-nav-item', {timeout: 12000})
@@ -447,7 +447,7 @@ function approveDesignAgenda() {
       cy.get('.vlc-side-nav-item', {timeout: 12000})
         .first({timeout: 12000})
         .click();
-      cy.wait('@getChanges', {timeout: 20000});
+      // cy.wait('@getChanges', {timeout: 20000});
     }
     else {
       cy.clickReverseTab('Overzicht');
@@ -490,14 +490,14 @@ function approveDesignAgenda() {
  * @function
  */
 function closeAgenda() {
-  cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
+  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
 
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
   cy.get(lockAgendaSelector).click();
-  cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
-    cy.get('.vl-modal').should('not.exist');
-  });
+  // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
+  cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
+  // });
 
   }
