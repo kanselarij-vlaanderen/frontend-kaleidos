@@ -49,12 +49,12 @@
     {{await subcase.newsletterInfo.displayRemark}}
   </p>
   <div class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s">
-    {{#if (is-pending agendaitem.themes)}}
+    {{#if (is-pending subcase.newsletterInfo.themes)}}
       {{web-components/vl-loader text=(t "themes-loading-text")}}
-    {{else if (gt (await agendaitem.themes.length) 0)}}
+    {{else if (gt (await subcase.newsletterInfo.themes.length) 0)}}
       <ul>
         {{#each
-          (await agendaitem.themes)
+          (await subcase.newsletterInfo.themes)
         as |theme|
         }}
           <li class="vl-pill">

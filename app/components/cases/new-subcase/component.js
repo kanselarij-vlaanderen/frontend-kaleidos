@@ -20,7 +20,7 @@ export default Component.extend({
   async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
     const mandatees = await latestSubcase.get('mandatees');
     const iseCodes = await latestSubcase.get('iseCodes');
-    const themes = await latestSubcase.get('themes');
+
     const requestedBy = await latestSubcase.get('requestedBy');
     const documentVersions = await latestSubcase.get('documentVersions');
 
@@ -55,7 +55,10 @@ export default Component.extend({
       inNewsletter: false,
       mandateeProposal: null,
       publicationDate: newsletterInfo.get('publicationDate'),
-      publicationDocDate: newsletterInfo.get('publicationDocDate')
+      publicationDocDate: newsletterInfo.get('publicationDocDate'),
+      themes: newsletterInfo.get('themes')
+      //const themes = await latestSubcase.get('themes');
+      // Add themes here van vorige.
     });
     return await newsletterInfoToCreate.save();
   },
