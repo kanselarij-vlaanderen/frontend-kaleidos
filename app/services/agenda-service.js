@@ -271,18 +271,13 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
 
   async retrieveModifiedDateFromNota(agendaItem) {
     const newsletterInfoForSubcase = await agendaItem.get('subcase.newsletterInfo');
-    const documents = await agendaItem.get('subcase.documents');
-    if (!documents) {
-      return null;
-    }
-
     const nota = await agendaItem.get('nota');
     if(!nota) {
       return null;
     }
 
     const documentVersion = await nota.get('lastDocumentVersion');
-    const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.modified;
+    const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
     const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
     if (newsletterInfoOnSubcaseLastModifiedTime) {
       if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
