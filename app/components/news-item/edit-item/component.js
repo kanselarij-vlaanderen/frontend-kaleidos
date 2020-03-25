@@ -31,6 +31,8 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         return await agendaitem.get('subcase.newsletterInfo.themes').then((themes) => {
           return themes.toArray();
         })
+      } else {
+        return [];
       }
     },
     set: function (key, value) {
@@ -51,10 +53,8 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     const item = await this.get('item');
     const documentVersionsSelected = this.get('documentVersionsSelected');
     const itemDocumentsToEdit = await item.get('documentVersions');
-    // const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
-    // const newsletterInfo = await this.store.findRecord('newsletter-info', this.get('agendaitem.subcase.newsletterInfo.id'));
-    //const themes = newsletterInfo.get('themes');
-    //const themes = await this.themes;
+    item.set('themes', await this.themes);
+
     if (documentVersionsSelected) {
       await Promise.all(
         documentVersionsSelected.map(async (documentVersion) => {
@@ -72,20 +72,6 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
       );
     }
     this.setNewPropertiesToModel(item).then(async () => {
-      // newModel.reload();
-      // if (themes) {
-      //   agendaitem.set('themes', themes);
-      //   const subcase = await item.get('subcase');
-      //   subcase.set('themes', themes);
-      //   try {
-      //     await agendaitem.save();
-      //     await subcase.save();
-      //   } catch(e) {
-      //     throw(e);
-      //   } finally {
-      //     this.set('isLoading', false);
-      //   }
-      // }
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     });
