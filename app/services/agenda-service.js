@@ -145,7 +145,6 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       mandatees: mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
-      themes: await subcase.get('themes'),
     });
     await agendaitem.save();
 

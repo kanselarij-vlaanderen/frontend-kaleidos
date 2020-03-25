@@ -35,7 +35,6 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
-  themes: hasMany('theme'),
   mandatees: hasMany('mandatee'),
   decisions: hasMany('decision'),
 
@@ -102,10 +101,6 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
 
   sortedMandatees: computed('mandatees.@each', function () {
     return this.get('mandatees').sortBy('priority');
-  }),
-
-  sortedThemes: computed('themes', function () {
-    return this.get('themes').sortBy('label');
   }),
 
   sortedPhases: computed('phases.@each', 'isPostponed', function () {

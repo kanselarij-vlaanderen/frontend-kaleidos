@@ -38,9 +38,7 @@ export default Component.extend({
 
     subcase.set('mandatees', mandatees);
     subcase.set('iseCodes', iseCodes);
-    subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
-
     return await subcase.save();
   },
 
@@ -57,8 +55,6 @@ export default Component.extend({
       publicationDate: newsletterInfo.get('publicationDate'),
       publicationDocDate: newsletterInfo.get('publicationDocDate'),
       themes: newsletterInfo.get('themes')
-      //const themes = await latestSubcase.get('themes');
-      // Add themes here van vorige.
     });
     return await newsletterInfoToCreate.save();
   },
