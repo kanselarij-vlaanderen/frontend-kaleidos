@@ -34,6 +34,26 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
     return this.intl.t('unarchive-case');
   }),
 
+  deSerializedDateFrom: computed('dateFrom', {
+    get() {
+      return this.dateFrom && moment(this.dateFrom, "DD-MM-YYYY").toDate();
+    },
+    set(key, value) {
+      this.set('dateFrom', value && moment(value).format('DD-MM-YYYY'));
+      return value;
+    }
+  }),
+
+  deSerializedDateTo: computed('dateTo', {
+    get() {
+      return this.dateTo && moment(this.dateTo, "DD-MM-YYYY").toDate();
+    },
+    set(key, value) {
+      this.set('dateTo', value && moment(value).format('DD-MM-YYYY'));
+      return value;
+    }
+  }),
+
   actions: {
     selectSize(size) {
       this.set('size', size);
@@ -102,8 +122,8 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       } else {
         this.set('searchText', filter.searchText);
         this.set('mandatees', filter.mandatees);
-        this.set('dateFrom', filter.dateFrom);
-        this.set('dateTo',  filter.dateTo && moment(filter.dateTo).endOf('day').utc().toISOString()); // "To" interpreted as inclusive
+        this.set('deSerializedDateFrom', filter.dateFrom);
+        this.set('deSerializedDateTo', filter.dateTo);
         this.set('decisionsOnly', filter.searchInDecisionsOnly);
         this.set('sort', '-session-dates');
       }
