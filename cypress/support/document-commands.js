@@ -14,6 +14,7 @@ Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMe
 Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
 Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
 Cypress.Commands.add('uploadFile', uploadFile);
+Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
 
 // ***********************************************
 // Functions
@@ -208,7 +209,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     cy.get('.vl-button').contains('Toevoegen').click();
   });
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
-  
+
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
