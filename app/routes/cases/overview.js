@@ -13,16 +13,19 @@ export default Route.extend(DataTableRouteMixin, {
       refreshModel: true
     },
     searchText: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'zoekterm'
     },
     mandatees: {
       refreshModel: true
     },
     dateFrom: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'vanaf'
     },
     dateTo: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'tot'
     },
     decisionsOnly: {
       refreshModel: true,

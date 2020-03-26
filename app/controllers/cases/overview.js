@@ -6,7 +6,14 @@ import { inject } from '@ember/service';
 import moment from 'moment';
 
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
-  queryParams: ['isArchived', 'searchText', 'mandatees', 'dateFrom', 'dateTo', 'decisionsOnly'],
+  queryParams: [
+    'isArchived',
+    { searchText: 'zoekterm' },
+    'mandatees',
+    { dateFrom: 'vanaf' },
+    { dateTo: 'tot' },
+    'decisionsOnly'
+  ],
   sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
   size: 10,
 
