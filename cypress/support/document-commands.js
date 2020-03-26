@@ -3,6 +3,7 @@
 
 import 'cypress-file-upload';
 import {modalDocumentVersionUploadedFilenameSelector} from "../selectors/documents/documentSelectors";
+import { agendaAgendaItemDocumentsTabSelector } from '../selectors/agenda/agendaSelectors';
 // ***********************************************
 // Commands
 
@@ -76,7 +77,6 @@ function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
  * @name addNewDocumentVersionToSubcase
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemTitle
  * @param {string} oldFileName
  * @param {string} file
  */
@@ -99,8 +99,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
     .contains(agendaItemTitle)
     .click()
     .wait(2000); // sorry
-  cy.get('.vl-tab > a.vl-tab__link')
-    .contains('Documenten')
+  cy.get(agendaAgendaItemDocumentsTabSelector)
     .should('be.visible')
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead

@@ -16,7 +16,6 @@ context('Show no warning in Newsletterinfo', () => {
   });
 
   it('Should show no warning in kortbestek view', () => {
-
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
     const plusMonths = 1;
     const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);

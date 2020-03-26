@@ -1,5 +1,6 @@
 {{#if timestampForMostRecentNota}}
   {{changes-alert
+    data-test-changes-alert
     message=(t "newsitem-changed-message" date=dateOfMostRecentNota time=timeOfMostRecentNota)
     buttonText=(t "close")
     clearAction=(action "clearTimestampForMostRecentNota")
