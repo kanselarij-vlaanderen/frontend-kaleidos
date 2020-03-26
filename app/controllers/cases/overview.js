@@ -3,6 +3,7 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
+import moment from 'moment';
 
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
   queryParams: ['isArchived', 'searchText', 'mandatees', 'dateFrom', 'dateTo', 'decisionsOnly'],
@@ -102,7 +103,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
         this.set('searchText', filter.searchText);
         this.set('mandatees', filter.mandatees);
         this.set('dateFrom', filter.dateFrom);
-        this.set('dateTo', filter.dateTo);
+        this.set('dateTo',  filter.dateTo && moment(filter.dateTo).endOf('day').utc().toISOString()); // "To" interpreted as inclusive
         this.set('decisionsOnly', filter.searchInDecisionsOnly);
         this.set('sort', '-session-dates');
       }

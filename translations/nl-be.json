@@ -439,7 +439,7 @@
   "notification-loading-text": "De notificatie wordt geladen.",
   "new-agendaitem": "Nieuw agendapunt",
   "from-date": "Vanaf datum",
-  "until-date": "Tot datum",
+  "until-date": "Tot en met datum",
   "search-in-decisions-only": "Zoek enkel in beslissingen",
   "search-in-announcements-only": "Zoek enkel in mededelingen",
   "find-mandatee-label": "Mandataris",
