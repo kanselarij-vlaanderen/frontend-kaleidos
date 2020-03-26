@@ -8,7 +8,7 @@ export default Component.extend({
   ministerName: null,
   dateFrom: null,
   dateTo: null,
-  so: false,
+  searchInDecisionsOnly: false,
   popoverShown: false,
 
   searchTask: task(function* () {
