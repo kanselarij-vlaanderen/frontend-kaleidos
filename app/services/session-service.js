@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import $ from 'jquery';
+import { ajax } from 'fe-redpencil/utils/ajax';
 
 export default Service.extend({
   store: inject(),
@@ -34,7 +34,7 @@ export default Service.extend({
   }),
 
   lockMeeting(agendaId) {
-    return $.ajax({
+    return ajax({
       method: 'POST',
       url: `/close-meeting?agendaId=${agendaId}`,
     }).then((result) => {

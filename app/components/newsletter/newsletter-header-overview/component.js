@@ -6,10 +6,13 @@ import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
+
+  intl: service(),
   session: service(),
   routing: service('-routing'),
   toaster: service(),
   newsletterService: service(),
+
   isShowingOptions: null,
   agenda: null,
   isVerifying: null,

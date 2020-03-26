@@ -1,8 +1,8 @@
 import Service from '@ember/service';
-import $ from 'jquery';
 import { inject as service } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
+import { ajax } from 'fe-redpencil/utils/ajax';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
@@ -16,14 +16,14 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   addedAgendaitems: null,
 
   assignNewSessionNumbers() {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/session-service/assignNewSessionNumbers`,
     });
   },
 
   getClosestMeetingAndAgendaId(date) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/session-service/closestMeeting?date=${date}`,
     }).then((result) => {
@@ -32,7 +32,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   getActiveAgendas(date) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/session-service/activeAgendas?date=${date}`,
     }).then((result) => {
@@ -41,7 +41,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   async getDocumentNames(model) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/lazy-loading/documentNames?uuid=${model.id}`,
     }).then((result) => {
@@ -54,7 +54,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       return oldAgenda;
     }
     // Use approveagendaService to duoplicate AgendaItems into new agenda.
-    let result = await $.ajax({
+    let result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
@@ -73,21 +73,22 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     if (!agendaToDelete) {
       return;
     }
-    // Use approveagendaService to delete agendaitems and agenda.
-    let result = await $.ajax({
-      method: 'POST',
-      url: '/agenda-approve/deleteAgenda',
-      data: {
-        agendaToDeleteId: agendaToDelete.id,
-      },
-    });
-    if (result.statusCode != 200) {
+    try {
+      // Use approveagendaService to delete agendaitems and agenda.
+      await ajax({
+        method: 'POST',
+        url: '/agenda-approve/deleteAgenda',
+        data: {
+          agendaToDeleteId: agendaToDelete.id,
+        },
+      });
+    } catch (error) {
       this.toaster.error(this.intl.t('error-delete-agenda'), this.intl.t('warning-title'));
     }
   },
 
   agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
     })
