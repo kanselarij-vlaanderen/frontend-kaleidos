@@ -27,7 +27,8 @@ export default Model.extend({
     switch (dirtyType) {
       case 'created':
         if (this.checkIfCreatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
-          this.toaster.success(this.intl.t('successfully-created'), this.intl.t('successfully-created-title'));
+          this.toaster.success(this.intl.t('successfully-created', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
+            this.intl.t('successfully-created-title'));
         }
         break;
       case 'updated':
