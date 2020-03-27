@@ -131,7 +131,8 @@ export default Service.extend({
   serializeFilterParams(filter) {
     let params = [];
     for (const param in filter) {
-      params.push(`filter[${param}]=${filter[param]}`);
+      // The encodeURIComponent below is a patch. Proper solution is to move away from this service and use utils/mu-search
+      params.push(`filter[${param}]=${encodeURIComponent(filter[param])}`);
     }
     return params;
   },
