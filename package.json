@@ -92,7 +92,6 @@
     "node": "10.* || >= 12"
   },
   "dependencies": {
-    "4": "0.0.0",
     "ember-test-selectors": "^3.0.0"
   }
 }
