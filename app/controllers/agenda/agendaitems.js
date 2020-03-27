@@ -5,7 +5,6 @@ import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
   queryParams: ['filter'],
-
   routing: inject('-routing'),
   filter: null,
   sessionService: inject(),
