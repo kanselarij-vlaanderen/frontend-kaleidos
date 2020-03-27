@@ -75,8 +75,8 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     });
   }),
 
-  isDesignAgenda: computed('agenda', function () {
-    const agendaName = this.get('agenda.name');
+  isDesignAgenda: computed('agenda', async function () {
+    const agendaName = await this.get('agenda.name');
     if (agendaName === 'Ontwerpagenda') {
       return true;
     } else {
