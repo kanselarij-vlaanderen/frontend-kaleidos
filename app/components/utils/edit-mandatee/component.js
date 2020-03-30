@@ -42,7 +42,7 @@ export default Component.extend({
     selectStartDate(val) {
       this.set('startDate', val);
     },
-    async selectEndDate(val) {
+    selectEndDate(val) {
       this.set('endDate', val);
     },
 
@@ -80,7 +80,6 @@ export default Component.extend({
     async triggerPopUp(mandateeToEdit) {
       const queryTime = moment(mandateeToEdit.end).format("YYYYMMDD");
       this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(queryTime, mandateeToEdit.id);
-      debugger;
       if(!this.showVerificationPopup) {
         this.saveChanges();
       }
