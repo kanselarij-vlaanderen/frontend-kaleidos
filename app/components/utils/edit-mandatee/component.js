@@ -2,16 +2,18 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import moment from 'moment';
+import { tracked } from '@glimmer/tracking';
 
 export default Component.extend({
   store: inject(),
-
+  mandateeService: inject(),
   item: computed('mandateeToEdit', function () {
     return this.get('mandateeToEdit');
   }),
 
   mandateesUpdated: null,
-
+  @tracked showVerificationPopup: false,
   startDate: getCachedProperty('start'),
   endDate: getCachedProperty('end'),
   iseCodes: getCachedProperty('iseCodes'),
@@ -19,11 +21,28 @@ export default Component.extend({
   shortTitle: getCachedProperty('shortTitle'),
   nickName: getCachedProperty('nickName'),
 
+  async saveChanges() {
+    this.set('isLoading', true);
+    const { startDate, endDate, title, shortTitle, mandateeToEdit, iseCodes, nickName } = this;
+    const mandatee = await this.store.findRecord('mandatee', mandateeToEdit.get('id'));
+    mandatee.set('end', endDate);
+    mandatee.set('title', title);
+    mandatee.set('shortTitle', shortTitle);
+    mandatee.set('iseCodes', iseCodes);
+    mandatee.set('start', startDate);
+    mandatee.set('nickName', nickName);
+    mandatee.save().then(() => {
+      this.set('isLoading', false);
+      this.closeModal();
+      this.mandateesUpdated();
+    });
+  },
+
   actions: {
     selectStartDate(val) {
       this.set('startDate', val);
     },
-    selectEndDate(val) {
+    async selectEndDate(val) {
       this.set('endDate', val);
     },
 
@@ -36,7 +55,7 @@ export default Component.extend({
     },
 
     async chooseDomain(domains) {
-      this.set('selectedDomains', domains)
+      this.set('selectedDomains', domains);
       this.chooseDomain(domains);
     },
 
@@ -44,21 +63,29 @@ export default Component.extend({
       this.set('mandateeToEdit.person', person);
     },
 
-    async saveChanges() {
-      this.set('isLoading', true);
-      const { startDate, endDate, title, shortTitle, mandateeToEdit, iseCodes, nickName } = this;
-      const mandatee = await this.store.findRecord('mandatee', mandateeToEdit.get('id'));
-      mandatee.set('end', endDate);
-      mandatee.set('title', title);
-      mandatee.set('shortTitle', shortTitle);
-      mandatee.set('iseCodes', iseCodes);
-      mandatee.set('start', startDate);
-      mandatee.set('nickName', nickName);
-      mandatee.save().then(() => {
-        this.set('isLoading', false);
-        this.closeModal();
-        this.mandateesUpdated();
-      });
+    verify() {
+      this.showVerificationPopup = !this.showVerificationPopup;
+    },
+
+    cancel() {
+      this.showVerificationPopup = !this.showVerificationPopup;
+    },
+
+    keyDown: function (event) {
+      if (event.key === 'Escape') {
+        this.cancel();
+      }
+    },
+
+    async triggerPopUp(mandateeToEdit) {
+      const queryTime = moment(mandateeToEdit.end).format("YYYYMMDD");
+      this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(queryTime);
+      if(!this.showVerificationPopup) {
+        this.saveChanges();
+      }
+    },
+    saveChanges() {
+      this.saveChanges();
     }
-  }
+   },
 });

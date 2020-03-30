@@ -1,3 +1,12 @@
+{{#if showVerificationPopup}}
+  {{web-components/vl-modal-verify
+          title=(t "delete-comment")
+          message=(t "change-mandatee-end-date")
+          cancel=(action "cancel")
+          verify=(action "saveChanges")
+          verifyButtonText=(t "change-mandatee-change-end-date")
+  }}
+{{/if}}
 <div class="vl-modal-dialog__content">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "title")}}
@@ -59,7 +68,7 @@
           text=(t "save")
           isLoading=isLoading
           data-test-vl-save=true
-          saveAction=(action "saveChanges" mandateeToEdit)
+          saveAction=(action "triggerPopUp" mandateeToEdit)
         }}
       </div>
     </div>

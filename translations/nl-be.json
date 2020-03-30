@@ -557,5 +557,7 @@
   "monitoring-error": "Error",
   "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "newsitem-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
-  "newsitem-changed-no-note-message": "Opgelet, er is nog geen nota aanwezig!"
+  "newsitem-changed-no-note-message": "Opgelet, er is nog geen nota aanwezig!",
+  "change-mandatee-end-date": "Bent u zeker dat u de einddatum wenst aan te passen? Deze minister staat nog geagendeerd op agendapunten.",
+  "change-mandatee-change-end-date": "Eindatum aanpassen"
 }
