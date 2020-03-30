@@ -1,13 +1,29 @@
-<div class="vl-alert__icon">
-  <i class={{iconClass}} aria-hidden="true"></i>
-</div>
-<div class="vl-alert__content">
-  <p class="vl-alert__title">
-    {{title}}
-  </p>
-  <div class="vl-alert__message">
-    <p>
-      {{message}}
-    </p>
+<div class="vl-alert {{this.typeClass}} {{if @small "vl-alert--small"}}" ...attributes role="alert">
+  {{#if (eq @type "loading")}}
+    <div class="vl-alert__loader">
+      <div class="vl-loader" role="alert" aria-busy="true"></div>
+    </div>
+  {{else}}
+    <div class="vl-alert__icon">
+      <i class={{this.iconClass}} aria-hidden="true"></i>
+    </div>
+  {{/if}}
+  {{#if @closeable}}
+    <button class="vl-alert__close" type="button" {{action "close"}}>
+      <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
+      <span class="vl-u-visually-hidden">{{t "close"}}</span>
+    </button>
+  {{/if}}
+  <div class="vl-alert__content">
+    {{#if @title}}
+      <p class="vl-alert__title">{{@title}}</p>
+    {{/if}}
+    {{#if (has-block)}}
+      {{yield}}
+    {{else}}
+      <div class="vl-alert__message">
+        {{@message}}
+      </div>
+    {{/if}}
   </div>
 </div>
