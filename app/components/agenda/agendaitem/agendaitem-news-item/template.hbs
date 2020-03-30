@@ -1,17 +1,11 @@
-{{!-- {{#if showNewsItemIsEditedWarning}}
+{{#if timestampForMostRecentNota}}
   {{changes-alert
-    message=(t "newsitem-changed-message")
+    data-test-changes-alert
+    message=(t "newsitem-changed-message" date=dateOfMostRecentNota time=timeOfMostRecentNota)
     buttonText=(t "close")
-    clearAction=(action "clearShowNewsItemIsEditedWarning")
+    clearAction=(action "clearTimestampForMostRecentNota")
   }}
 {{/if}}
-{{#if showNoNotaIsAddedWarning}}
-  {{changes-alert
-    message=(t "newsitem-changed-no-note-message")
-    buttonText=(t "close")
-    clearAction=(action "clearShowNoNotaIsAddedWarning")
-  }}
-{{/if}} --}}
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
@@ -20,7 +14,7 @@
       </h3>
       {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
-          <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+          <a href="" data-test-newsletter-edit class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
         </div>

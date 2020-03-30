@@ -52,6 +52,7 @@
               {{#if showVerify}}
                 <div class="vlc-toolbar__item">
                   {{#web-components/vl-save-button
+                    data-test-vl-modal-verify-save
                     class=buttonClass
                     isLoading=isLoading
                     saveAction=(action "verify")

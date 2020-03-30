@@ -3,6 +3,7 @@
 
 import 'cypress-file-upload';
 import {modalDocumentVersionUploadedFilenameSelector} from "../selectors/documents/documentSelectors";
+import { agendaAgendaItemDocumentsTabSelector } from '../selectors/agenda/agendaSelectors';
 // ***********************************************
 // Commands
 
@@ -14,6 +15,7 @@ Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMe
 Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
 Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
 Cypress.Commands.add('uploadFile', uploadFile);
+Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
 
 // ***********************************************
 // Functions
@@ -75,7 +77,6 @@ function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
  * @name addNewDocumentVersionToSubcase
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemTitle
  * @param {string} oldFileName
  * @param {string} file
  */
@@ -98,8 +99,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
     .contains(agendaItemTitle)
     .click()
     .wait(2000); // sorry
-  cy.get('.vl-tab > a.vl-tab__link')
-    .contains('Documenten')
+  cy.get(agendaAgendaItemDocumentsTabSelector)
     .should('be.visible')
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
@@ -208,7 +208,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     cy.get('.vl-button').contains('Toevoegen').click();
   });
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
-  
+
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
