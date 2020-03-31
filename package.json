@@ -28,7 +28,7 @@
     "@lblod/ember-rdfa-editor": "~0.23.2",
     "@lblod/ember-rdfa-editor-plugin-system-dispatcher": "^0.5.8",
     "@lblod/ember-vo-webuniversum": "^0.19.12",
-    "@lblod/ember-vo-webuniversum-data-table": "^0.2.16",
+    "@lblod/ember-vo-webuniversum-data-table": "^0.2.17",
     "babel-eslint": "^10.0.3",
     "broccoli-asset-rev": "^3.0.0",
     "cypress": "^4.2.0",
