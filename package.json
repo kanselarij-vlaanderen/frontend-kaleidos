@@ -30,7 +30,7 @@
     "@lblod/ember-rdfa-editor": "~0.23.2",
     "@lblod/ember-rdfa-editor-plugin-system-dispatcher": "^0.5.8",
     "@lblod/ember-vo-webuniversum": "^0.19.12",
-    "@lblod/ember-vo-webuniversum-data-table": "git+https://github.com/kanselarij-vlaanderen/ember-vo-webuniversum-data-table.git#2f5b391ead408ffb8c5eeb798efb6610f649a414",
+    "@lblod/ember-vo-webuniversum-data-table": "git+https://github.com/kanselarij-vlaanderen/ember-vo-webuniversum-data-table.git#abdfb0a93473ee910ebc9223b90b6d9487ed35c9",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "cypress": "^4.2.0",
