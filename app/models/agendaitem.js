@@ -69,8 +69,9 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
       promise: this.store.query('decision', {
         filter: {
           subcase: { id: this.subcase.get('id') },
-        },
-        sort: 'approved',
+        }
+      }).then((decisions) =>  {
+        return decisions.sortBy('approved');
       }),
     });
   }),

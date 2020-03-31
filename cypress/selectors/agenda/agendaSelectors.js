@@ -9,4 +9,6 @@ export const inputNumInputCurYearSelector = 'input.numInput.cur-year';
 export const flatpickrDaySelector = '.flatpickr-day';
 export const buttonSelector = 'button';
 export const agendaOverviewTitleSelector = '[data-test-agendas-title]';
-export const agendaListListItemDocumentsSelector ='[data-test-agenda-list-list-item-documents]'
+export const agendaListListItemDocumentsSelector ='[data-test-agenda-list-list-item-documents]';
+export const agendaAgendaItemKortBestekTabSelector ='[data-test-agenda-agendaitem-tab=agendaitem-bestek]';
+export const agendaAgendaItemDocumentsTabSelector ='[data-test-agenda-agendaitem-tab=documents]';

@@ -4,13 +4,16 @@ import {computed, observer} from '@ember/object';
 import {alias} from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import DS from 'ember-data';
+import { tracked } from '@glimmer/tracking';
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-panel-layout__main-content'],
   currentAgenda: alias('sessionService.currentAgenda'),
   sessionService: inject(),
   store: inject(),
+  agendaService: inject(),
   activeAgendaItemSection: 'details',
+  @tracked timestampForMostRecentNota:null,
 
   checkAgendaItemSubcase: observer('subcase', function () {
     this.get('subcase').then((subcase) => {
@@ -49,7 +52,11 @@ export default Component.extend(isAuthenticatedMixin, {
       }
     },
 
-    setAgendaItemSection(section) {
+    async setAgendaItemSection(section) {
+      if(section==='news-item') {
+        const agendaItem = await this.get('agendaitem');
+        this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(agendaItem);
+      }
       this.set('activeAgendaItemSection', section);
     },
 
