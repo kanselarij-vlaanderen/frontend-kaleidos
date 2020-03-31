@@ -37,4 +37,14 @@
     	vertical-align: baseline;
     }
   }
+
+  ol.vlc-printable-agenda-list__item-list {
+  	list-style: none;
+
+    li::before {
+      content: attr(value);
+      font-size: 2rem;
+      font-weight: 500;
+    }
+  }
 }
