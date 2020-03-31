@@ -264,7 +264,7 @@
   "phases": "Fases",
   "postpone": "Uitstellen",
   "postponed-item": "Dit punt is uitgesteld.",
-  "postponed-subcase": "Deze stap is uitgesteld.",
+  "postponed-subcase": "Deze procedurestap is uitgesteld op ",
   "postpone-item": "Agendapunt uitstellen",
   "postpone-until": "Uitstellen tot",
   "postponed-until": "Uitgesteld, aanvraag voor de zitting op ",
@@ -557,5 +557,6 @@
   "monitoring-error": "Error",
   "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "newsitem-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
-  "newsitem-changed-no-note-message": "Opgelet, er is nog geen nota aanwezig!"
+  "newsitem-changed-no-note-message": "Opgelet, er is nog geen nota aanwezig!",
+  "select-minister": "Selecteer een minister"
 }
