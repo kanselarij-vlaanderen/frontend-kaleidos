@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { isEmpty } from '@ember/utils';
-import $ from 'jquery';
+import { ajax } from 'fe-redpencil/utils/ajax';
 import { inject } from '@ember/service';
 
 export default Route.extend({
@@ -40,12 +40,12 @@ export default Route.extend({
     }
   },
 
-  matchingAgendaItems: async function(filter) {
+  matchingAgendaItems: async function (filter) {
     if (isEmpty(filter)) {
       return {};
     }
     const meetingId = await this.get('sessionService.currentSession.id');
-    const searchResults = await $.ajax({
+    const searchResults = await ajax({
       method: 'GET',
       url: `/agendaitems/search?filter[meetingId]=${meetingId}&filter[data,title,shortTitle,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`,
     });

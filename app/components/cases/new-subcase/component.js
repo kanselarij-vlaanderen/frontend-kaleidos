@@ -1,6 +1,6 @@
 import Component from '@ember/component';
-import {computed} from '@ember/object';
-import {inject} from '@ember/service';
+import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 
@@ -23,7 +23,7 @@ export default Component.extend({
     const themes = await latestSubcase.get('themes');
     const requestedBy = await latestSubcase.get('requestedBy');
     const documentVersions = await latestSubcase.get('documentVersions');
-    
+
     if (copyFullSubcase) {
       const subcaseName = await latestSubcase.get('subcaseName');
       const linkedDocumentVersions = await latestSubcase.get('linkedDocumentVersions');
@@ -41,7 +41,7 @@ export default Component.extend({
     subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
 
-    return subcase.save();
+    return await subcase.save();
   },
 
   async copyNewsletterInfo(subcase, newsletterInfo) {
@@ -57,7 +57,7 @@ export default Component.extend({
       publicationDate: newsletterInfo.get('publicationDate'),
       publicationDocDate: newsletterInfo.get('publicationDocDate')
     });
-    return newsletterInfoToCreate.save();
+    return await newsletterInfoToCreate.save();
   },
 
   async copyDecisions(subcase, decisions) {
@@ -76,7 +76,7 @@ export default Component.extend({
   },
 
   createSubcaseObject(newCase, newDate) {
-    const {type, title, shortTitle, confidential, showAsRemark} = this;
+    const { type, title, shortTitle, confidential, showAsRemark } = this;
     return this.store.createRecord('subcase', {
       type,
       shortTitle,
@@ -89,7 +89,7 @@ export default Component.extend({
       isArchived: false,
       formallyOk: false,
       phases: []
-  });
+    });
   },
 
   async copySubcase(fullCopy = false) {

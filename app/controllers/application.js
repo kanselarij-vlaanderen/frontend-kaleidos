@@ -1,8 +1,7 @@
 import Controller from '@ember/controller';
 import { computed, observer } from '@ember/object';
-import { alias } from '@ember/object/computed';
 import { on } from '@ember/object/evented';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { A } from '@ember/array';
 import { later } from '@ember/runloop';
@@ -10,23 +9,23 @@ import { later } from '@ember/runloop';
 const timeout = 60000;
 
 export default Controller.extend(isAuthenticatedMixin, {
-  currentSession: inject(),
-  session: inject(),
-  router: inject(),
-  globalError: inject(),
+  currentSession: service(),
+  session: service(),
+  router: service(),
+  toaster: service(),
 
-  messages: alias('globalError.messages'),
   options: A([
     { key: 'flemish-government', route: 'agendas' },
   ]),
 
-  selectedOption: computed('options', function() {
+  selectedOption: computed('options', function () {
     return this.options.get('firstObject');
   }),
 
   async init() {
     this._super(...arguments);
-    document.addEventListener('wheel', () => {}, {
+    document.addEventListener('wheel', () => {
+    }, {
       capture: true,
       passive: true,
     });
@@ -86,7 +85,7 @@ export default Controller.extend(isAuthenticatedMixin, {
       'router.currentRouteName',
       'currentSession.userRole',
       'session.isAuthenticated',
-      function() {
+      function () {
         const { router } = this;
         if (!router || !router.currentRouteName) {
           return;
@@ -97,12 +96,12 @@ export default Controller.extend(isAuthenticatedMixin, {
     )
   ),
 
-  showHeader: computed('role', function() {
+  showHeader: computed('role', function () {
     let role = this.get('role');
     return role && role !== '' && role !== 'no-access';
   }),
 
-  type: computed('alert', async function() {
+  type: computed('alert', async function () {
     const { alert } = this;
     if (!alert) {
       return;
@@ -122,10 +121,6 @@ export default Controller.extend(isAuthenticatedMixin, {
 
     navigateToLogin() {
       this.transitionToRoute('login');
-    },
-
-    closeErrorMessage(errorMessage) {
-      this.get('globalError.messages').removeObject(errorMessage);
     },
 
     navigateToRoute(option) {

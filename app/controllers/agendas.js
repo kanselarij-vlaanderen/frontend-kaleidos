@@ -4,7 +4,7 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
   creatingNewSession: null,
-  
+
   actions: {
     createNewSession() {
       this.toggleProperty('creatingNewSession');

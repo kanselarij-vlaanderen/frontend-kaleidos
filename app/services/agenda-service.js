@@ -1,30 +1,29 @@
 import Service from '@ember/service';
-import $ from 'jquery';
-import {inject} from '@ember/service';
-import {notifyPropertyChange} from '@ember/object';
+import { inject as service } from '@ember/service';
+import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
+import { ajax } from 'fe-redpencil/utils/ajax';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import EmberObject from '@ember/object';
 
 export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
-  store: inject(),
-  globalError: inject(),
-  intl: inject(),
+  store: service(),
+  toaster: service(),
+  intl: service(),
   addedDocuments: null,
   addedAgendaitems: null,
 
   assignNewSessionNumbers() {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/session-service/assignNewSessionNumbers`,
     });
   },
 
   getClosestMeetingAndAgendaId(date) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/session-service/closestMeeting?date=${date}`,
     }).then((result) => {
@@ -33,7 +32,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   getActiveAgendas(date) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/session-service/activeAgendas?date=${date}`,
     }).then((result) => {
@@ -42,7 +41,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   async getDocumentNames(model) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/lazy-loading/documentNames?uuid=${model.id}`,
     }).then((result) => {
@@ -55,11 +54,11 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       return oldAgenda;
     }
     // Use approveagendaService to duoplicate AgendaItems into new agenda.
-    let result = await $.ajax({
+    let result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
-        agendaName: "Ontwerpagenda",
+        agendaName: 'Ontwerpagenda',
         createdFor: currentSession.id,
         oldAgendaId: oldAgenda.id,
       },
@@ -74,25 +73,22 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     if (!agendaToDelete) {
       return;
     }
-    // Use approveagendaService to delete agendaitems and agenda.
-    let result = await $.ajax({
-      method: 'POST',
-      url: '/agenda-approve/deleteAgenda',
-      data: {
-        agendaToDeleteId: agendaToDelete.id,
-      },
-    });
-    if(result.statusCode != 200) {
-      this.globalError.showToast.perform(EmberObject.create({
-        title: this.intl.t('warning-title'),
-        message: this.intl.t('error-delete-agenda'),
-        type: 'error'
-      }));
+    try {
+      // Use approveagendaService to delete agendaitems and agenda.
+      await ajax({
+        method: 'POST',
+        url: '/agenda-approve/deleteAgenda',
+        data: {
+          agendaToDeleteId: agendaToDelete.id,
+        },
+      });
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-delete-agenda'), this.intl.t('warning-title'));
     }
   },
 
   agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    return $.ajax({
+    return ajax({
       method: 'GET',
       url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
     })
@@ -107,7 +103,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   async createNewAgendaItem(selectedAgenda, subcase, index) {
-    await selectedAgenda.hasMany("agendaitems").reload();
+    await selectedAgenda.hasMany('agendaitems').reload();
     let priorityToAssign = 0;
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');
@@ -150,16 +146,16 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
 
     const meeting = await selectedAgenda.get('createdFor');
     await subcase.hasMany('agendaitems').reload();
+    await selectedAgenda.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
     await this.assignSubcasePhase(subcase);
     await subcase.hasMany('phases').reload();
-    await selectedAgenda.hasMany("agendaitems").reload();
     await this.updateModifiedProperty(selectedAgenda);
   },
 
   async assignSubcasePhase(subcase) {
-    const phasesCodes = await this.store.query('subcase-phase-code', {filter: {label: 'Ingediend voor agendering'}});
+    const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
     const phaseCode = phasesCodes.get('firstObject');
     if (phaseCode) {
       const phase = this.store.createRecord('subcase-phase', {
@@ -201,7 +197,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   async deleteAgendaitem(agendaitem) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     itemToDelete.set('aboutToDelete', true);
     await itemToDelete.belongsTo('subcase').reload();
     const subcase = await itemToDelete.get('subcase');
@@ -227,8 +223,11 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     await itemToDelete.destroyRecord();
   },
 
-  async deleteAgendaitemFromMeeting(agendaitem, currentMeetingId) {
+  async deleteAgendaitemFromMeeting(agendaitem) {
     let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
+    const currentAgenda = await itemToDelete.get('agenda');
+    const currentMeeting = await currentAgenda.get('createdFor');
+    const currentMeetingId = await currentMeeting.get('id');
     if (this.isAdmin) {
       itemToDelete.set('aboutToDelete', true);
       const subcase = await itemToDelete.get('subcase');
@@ -258,11 +257,28 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       }
 
     } else {
-      this.globalError.showToast.perform(EmberObject.create({
-        title: this.intl.t('warning-title'),
-        message: this.intl.t('action-not-allowed'),
-        type: 'error'
-      }));
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+    }
+  },
+
+  async retrieveModifiedDateFromNota(agendaItem) {
+    const newsletterInfoForSubcase = await agendaItem.get('subcase.newsletterInfo');
+    const nota = await agendaItem.get('nota');
+    if(!nota) {
+      return null;
+    }
+
+    const documentVersion = await nota.get('lastDocumentVersion');
+    const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
+    const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
+    if (newsletterInfoOnSubcaseLastModifiedTime) {
+      if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
+        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+      } else {
+        return null;
+      }
+    } else {
+      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
     }
   }
 });

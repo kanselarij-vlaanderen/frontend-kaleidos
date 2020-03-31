@@ -3,7 +3,7 @@ import moment from 'moment';
 
 export default Service.extend({
   /**
-   * @param date: if date is not empty it will be formatted, otherwise it returns 								an empty date object.
+   * @param date: if date is not empty it will be formatted, otherwise it returns                an empty date object.
    */
   formatDate(date) {
     if (!date) {

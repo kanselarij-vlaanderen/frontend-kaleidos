@@ -6,7 +6,6 @@ import { inject } from '@ember/service';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
 
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDocumentVersions, {
-  globalError: inject(),
   fileService: inject(),
   classNames: ['vl-u-spacer-extended-bottom-s'],
   classNameBindings: ['aboutToDelete'],
@@ -16,7 +15,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   isEditing: false,
   documentToDelete: null,
 
-  openClass: computed('isShowingVersions', function() {
+  openClass: computed('isShowingVersions', function () {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }

@@ -2,15 +2,14 @@
   <div class="vlc-toolbar">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
-        <h1 class="vlc-page-header__title vlc-u-padding-bottom-5">
+        <h1 class="vlc-page-header__title vlc-u-padding-bottom-5" data-test-print-overview-template-header-title>
           {{await title}}
         </h1>
         <div class="vlc-page-header__sub">
           <div class="vlc-toolbar vlc-toolbar--auto">
             <div class="vlc-toolbar__left">
               <div class="vlc-toolbar__item">
-                <a
-                  class="vlc-backlink vl-link vl-link--bold"
+                <a href="" class="vlc-backlink vl-link vl-link--bold"
                   {{action "navigateBackToAgenda"}}
                 >
                   {{!-- template-lint-disable no-bare-strings  --}}
@@ -42,17 +41,17 @@
                         {{t "design"}}
                       {{/link-to}}
                     </li>
-                  <li class="vlc-tabs-reverse__item">
-                    {{#link-to
-                      routeModelOverview
-                      (await model.id)
-                      (query-params definite=true)
-                      class="vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
-                    }}
-                      {{t "definite"}}
-                    {{/link-to}}
-                  </li>
+                    <li class="vlc-tabs-reverse__item">
+                      {{#link-to
+                        routeModelOverview
+                        (await model.id)
+                        (query-params definite=true)
+                        class="vlc-tabs-reverse__link"
+                        activeClass="vlc-tabs-reverse__link--active"
+                      }}
+                        {{t "definite"}}
+                      {{/link-to}}
+                    </li>
                   {{/if}}
                 </ul>
               </div>
@@ -65,13 +64,11 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if shouldShowPrintButton}}
-            <button
-              class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
               {{action "print"}}
             >
-              <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
-                aria-hidden="true"
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"
+                 aria-hidden="true"
               ></i>
               {{t "print"}}
             </button>

@@ -99,6 +99,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-input-field-block';
 @import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-minister';
+@import 'custom-components/vlc-mock-login';
 @import 'custom-components/vlc-navbar';
 @import 'custom-components/vlc-page-header';
 @import 'custom-components/vlc-panel-layout';
@@ -116,6 +117,8 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-themes-selector';
 @import 'custom-components/vlc-toolbar';
 @import 'custom-components/vlc-user';
+@import 'custom-components/vlc-user-management-table';
+@import 'custom-components/vlc-link-actions';
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";

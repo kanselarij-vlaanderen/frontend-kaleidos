@@ -1,13 +1,13 @@
 import Component from '@ember/component';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import EmberObject from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
-  globalError: inject(),
-  fileService: inject(),
+  intl: service(),
+  toaster: service(),
+  fileService: service(),
 
   async didInsertElement() {
     this._super(...arguments);
@@ -19,7 +19,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   documentVersion: null,
   isEditingAccessLevel: false,
 
-  aboutToDelete: computed('documentVersion.aboutToDelete', function() {
+  aboutToDelete: computed('documentVersion.aboutToDelete', function () {
     if (this.documentVersion) {
       if (this.documentVersion.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
@@ -29,7 +29,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
 
   preferredAccessLevel: null,
 
-  resetPreferredAccessLevel: async function() {
+  resetPreferredAccessLevel: async function () {
     this.set('preferredAccessLevel', await this.documentVersion.get('accessLevel'));
   },
 
@@ -40,17 +40,19 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     },
 
     verify() {
-      this.globalError.showToast.perform(
-        EmberObject.create({
-          title: 'Opgelet!',
-          message: 'Documentversie wordt verwijderd.',
-          type: 'warning-undo',
-          modelIdToDelete: this.documentVersionToDelete.get('id'),
-        })
-      );
+      const verificationToast = {
+        type: 'revert-action',
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('document-being-deleted'),
+        options: { timeOut: 15000 }
+      };
+      verificationToast.options.onUndo = () => {
+        this.fileService.reverseDelete(this.documentVersionToDelete.get('id'));
+        this.toaster.toasts.removeObject(verificationToast);
+      };
+      this.toaster.displayToast.perform(verificationToast);
       this.deleteDocumentVersionWithUndo();
       this.set('isVerifyingDelete', false);
-      this.set('documentVersionToDelete', null);
     },
 
     deleteDocumentVersion(document) {
@@ -58,9 +60,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.set('isVerifyingDelete', true);
     },
 
-    toggleConfidential(document) {
+    async toggleConfidential(document) {
       document.toggleProperty('confidential');
-      document.save();
+      await document.save();
     },
 
     chooseAccessLevel(accessLevel) {
@@ -80,19 +82,22 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   },
 
   async deleteDocumentVersionWithUndo() {
-    const { documentVersionToDelete, item } = this;
-    const document = await documentVersionToDelete.get('document');
-    const documentVersions = await document.get('documentVersions');
-    if(documentVersions.length > 1) {
-      await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
-    }else {
-      const documentToDelete = document;
-      await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
-        if(!item.aboutToDelete && documentVersions) {
-          item.hasMany('documentVersions').reload();
-        }
-      });
-    }
+    const documentVersionToDelete = this.get('documentVersionToDelete');
 
+    // TODO somehow this no longer works, document returns null or undefined 
+    // const document = await documentVersionToDelete.get('documentContainer');
+    // const documentVersions = await document.get('documents');
+
+    // TODO fix the deletion of document-container when last version is deleted so it doesn't become an orphan
+    // if(documentVersions.length > 1) {
+      await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
+    // }else {
+    //   const documentToDelete = document;
+    //   await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
+    //     if(!this.item.aboutToDelete && documentVersions) {
+    //       this.item.hasMany('documentVersions').reload();
+    //     }
+    //   });
+    // }
   },
 });

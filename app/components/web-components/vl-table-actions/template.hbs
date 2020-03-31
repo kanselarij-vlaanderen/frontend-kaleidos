@@ -1,12 +1,11 @@
 <div class="vl-u-flex-space-between">
-  <button class="vl-button vl-button--link vl-button--icon">
+  <button type="button" class="vl-button vl-button--link vl-button--icon">
     <i class="vl-button__icon vl-vi vl-vi-pencil"></i>
   </button>
   {{#if (not (is-pending (await row.nota)))}}
     {{#if (not (await row.nota))}}
-      <button
-        class="vl-button vl-button--link vl-button--icon"
-        style="opacity:0.3;"
+      <button type="button" class="vl-button vl-button--link vl-button--icon"
+              style="opacity:0.3;"
         {{action "openDocument" row bubbles=false}}
       >
         <i class="vl-button__icon vl-vi vl-vi-document"></i>
@@ -18,8 +17,7 @@
         {{/attach-popover}}
       </button>
     {{else}}
-      <button
-        class="vl-button vl-button--link vl-button--icon"
+      <button type="button" class="vl-button vl-button--link vl-button--icon"
         {{action "openDocument" row bubbles=false}}
       >
         <i class="vl-button__icon vl-vi vl-vi-document"></i>

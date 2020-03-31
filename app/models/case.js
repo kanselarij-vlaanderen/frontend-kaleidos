@@ -26,7 +26,7 @@ export default Model.extend({
   creators: hasMany('person'),
   mandatees: hasMany('mandatee'),
 
-  latestSubcase: computed('subcases.@each', function() {
+  latestSubcase: computed('subcases.@each', function () {
     return PromiseObject.create({
       promise:
         this.get('subcases').then((subcases) => {
@@ -36,7 +36,7 @@ export default Model.extend({
     })
   }),
 
-  subcaseDocumentVersions: computed('subcases.@each', async function() {
+  subcaseDocumentVersions: computed('subcases.@each', async function () {
     const subcases = await this.get('subcases');
 
     const documentVersions = await Promise.all(subcases.map(subcase => subcase.get('documentVersions')));
@@ -44,7 +44,7 @@ export default Model.extend({
     return documentVersions.reduce((all, curr) => all.concat(curr.toArray()), A([]))
   }),
 
-  mandateesOfSubcase: computed('subcases', function() {
+  mandateesOfSubcase: computed('subcases', function () {
     const subcases = this.get('subcases');
     if (subcases && subcases.length > 0) {
       const currentSubcase = subcases.sortBy('created').get('lastObject');
@@ -60,7 +60,7 @@ export default Model.extend({
         case: { id: this.get('id') },
         type: { id: id }
       },
-      include: "type",
+      include: 'type',
       sort: 'created'
     });
   },

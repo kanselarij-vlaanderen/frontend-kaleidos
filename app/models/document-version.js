@@ -34,18 +34,18 @@ export default Model.extend({
   newsletter: belongsTo('newsletter-info'),
   meeting: belongsTo('meeting', { inverse: null }),
 
-  downloadFilename: computed('name', 'file.extension', async function() {
+  downloadFilename: computed('name', 'file.extension', async function () {
     let filename = `${await this.get('name')}.${await this.get('file.extension')}`;
-    return sanitize(filename, {replacement: '_'});
+    return sanitize(filename, { replacement: '_' });
   }),
 
-  storeAccessLevel(accessLevel){
+  storeAccessLevel(accessLevel) {
     this.set('modified', moment().toDate());
     this.set('accessLevel', accessLevel);
     return this.save();
   },
 
-  toggleConfidential: async function(){
+  toggleConfidential: async function () {
     this.set('modified', moment().toDate());
     this.toggleProperty('confidential');
     await this.save();

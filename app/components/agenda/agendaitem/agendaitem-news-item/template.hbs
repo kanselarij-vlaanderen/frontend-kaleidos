@@ -1,3 +1,11 @@
+{{#if timestampForMostRecentNota}}
+  {{changes-alert
+    data-test-changes-alert
+    message=(t "newsitem-changed-message" date=dateOfMostRecentNota time=timeOfMostRecentNota)
+    buttonText=(t "close")
+    clearAction=(action "clearTimestampForMostRecentNota")
+  }}
+{{/if}}
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
@@ -6,7 +14,7 @@
       </h3>
       {{#if isEditor}}
         <div class="vl-u-spacer-extended-left-s">
-          <a class="vl-link" {{action "toggleIsEditing"}}>
+          <a href="" data-test-newsletter-edit class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
         </div>
@@ -19,14 +27,17 @@
     </h3>
   </div>
   <div class="vl-u-spacer-extended-bottom-s">
-      <div class="vl-typography">
-          <p class="vl-u-text--italic">
-            {{await subcase.newsletterInfo.newsletterProposal}}
-          </p>
-          <p>
-            {{sanitize-html raw=true value=(await subcase.newsletterInfo.richtext)}}
-          </p>
-      </div>
+    <div class="vl-typography">
+      <p class="vl-u-text--italic">
+        {{await subcase.newsletterInfo.newsletterProposal}}
+      </p>
+      <p>
+        {{sanitize-html
+          raw=true
+          value=(await subcase.newsletterInfo.richtext)
+        }}
+      </p>
+    </div>
   </div>
   <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
     {{await subcase.newsletterInfo.displayRemark}}
@@ -35,17 +46,20 @@
     {{#if (is-pending agendaitem.themes)}}
       {{web-components/vl-loader text=(t "themes-loading-text")}}
     {{else if (gt (await agendaitem.themes.length) 0)}}
-        <ul>
-          {{#each (await agendaitem.themes) as |theme|}}
-              <li class="vl-pill">
-                {{theme.label}}
-              </li>
-          {{/each}}
-        </ul>
+      <ul>
+        {{#each
+          (await agendaitem.themes)
+        as |theme|
+        }}
+          <li class="vl-pill">
+            {{theme.label}}
+          </li>
+        {{/each}}
+      </ul>
     {{else}}
-        <div class="vl-u-spacer-extended-top-s">
-          {{web-components/vl-alert message=(t "no-themes-yet")}}
-        </div>
+      <div class="vl-u-spacer-extended-top-s">
+        {{web-components/vl-alert message=(t "no-themes-yet")}}
+      </div>
     {{/if}}
   </div>
 
@@ -64,9 +78,9 @@
 
 {{else}}
   {{news-item/edit-item
-          subcase=(await subcase)
-          item=(await subcase.newsletterInfo)
-          agendaitem=agendaitem
-          isEditing=isEditing
+    subcase=(await subcase)
+    item=(await subcase.newsletterInfo)
+    agendaitem=agendaitem
+    isEditing=isEditing
   }}
 {{/if}}

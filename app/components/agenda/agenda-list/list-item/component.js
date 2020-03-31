@@ -1,14 +1,14 @@
 import Component from '@ember/component';
 import { computed, observer } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(isAuthenticatedMixin, {
-  store: inject(),
-  sessionService: inject(),
-  agendaService: inject(),
-  globalError: inject(),
+  store: service(),
+  sessionService: service(),
+  agendaService: service(),
+  toaster: service(),
   classNameBindings: [
     'isActive:vlc-agenda-items__sub-item--active',
     'isClickable::not-clickable',
@@ -27,7 +27,7 @@ export default Component.extend(isAuthenticatedMixin, {
     this._super(...arguments);
     observer(
       'agendaitem.postponedTo',
-      async function() {
+      async function () {
         const postponed = await this.get('agendaitem.postponedTo');
         if (!this.get('isDestroyed')) {
           this.set('isPostponed', !!postponed);
@@ -36,22 +36,22 @@ export default Component.extend(isAuthenticatedMixin, {
     );
   },
 
-  formallyOk: computed('agendaitem.formallyOk', function() {
+  formallyOk: computed('agendaitem.formallyOk', function () {
     return this.agendaitem.get('formallyOk');
   }),
 
-  agenda: computed('agendaitem', function() {
+  agenda: computed('agendaitem', function () {
     return this.get('agendaitem.agenda.name');
   }),
 
-  documents: computed('agendaitem.documentVersions.@each', function() {
+  documents: computed('agendaitem.documentVersions.@each', function () {
     if (this.get('selectedAgendaItem')) {
       return;
     }
     return this.get('agendaitem.documents');
   }),
 
-  isActive: computed('agendaitem.id', 'selectedAgendaItem.id', function() {
+  isActive: computed('agendaitem.id', 'selectedAgendaItem.id', function () {
     return this.get('agendaitem.id') === this.get('selectedAgendaItem.id');
   }),
 
@@ -65,7 +65,7 @@ export default Component.extend(isAuthenticatedMixin, {
   },
 
   // Disable lazy partial rendering when deleting
-  aboutToDelete: computed('agendaitem.aboutToDelete', function() {
+  aboutToDelete: computed('agendaitem.aboutToDelete', function () {
     if (this.agendaitem) {
       return this.agendaitem.get('aboutToDelete');
     }
@@ -87,23 +87,23 @@ export default Component.extend(isAuthenticatedMixin, {
    */
   renderDetails: false,
   didEnterViewport() {
-    this.set("renderDetails", true);
+    this.set('renderDetails', true);
   },
   didExitViewport() {
-    this.set("renderDetails", false);
+    this.set('renderDetails', false);
   },
   didInsertElement() {
     try {
       let options = {
-        root: document.querySelector("body"),
-        rootMargin: "5px",
-        threshold: [0,1]
+        root: document.querySelector('body'),
+        rootMargin: '5px',
+        threshold: [0, 1]
       };
 
       let intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
       this.set('intersectionObserver', intersectionObserver);
       intersectionObserver.observe(this.element);
-    } catch(e) {
+    } catch (e) {
       this.set('renderDetails', true);
     }
   },
@@ -111,8 +111,8 @@ export default Component.extend(isAuthenticatedMixin, {
     this.get('intersectionObserver').unobserve(this.element);
   },
   checkElementPosition(entries) {
-    for( let entry of entries ) {
-      if( entry.isIntersecting ) {
+    for (let entry of entries) {
+      if (entry.isIntersecting) {
         this.didEnterViewport();
       } else {
         this.didExitViewport();
@@ -128,8 +128,8 @@ export default Component.extend(isAuthenticatedMixin, {
       this.agendaitem.set('formallyOk', uri);
       this.agendaitem
         .save()
-        .catch((error) => {
-          this.globalError.handleError(error);
+        .catch(() => {
+          this.toaster.error();
         });
     },
   },

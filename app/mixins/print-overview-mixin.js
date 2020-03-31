@@ -6,14 +6,20 @@ import moment from 'moment';
 export default Mixin.create({
   intl: inject(),
 
+  titleTranslationParams: null,
   titleTranslationKey: null,
   titlePrintKey: null,
 
-  title: computed('model.createdFor', 'titleTranslationKey', function() {
+  title: computed('model.createdFor', 'titleTranslationKey', async function () {
     const date = this.get('model.createdFor.plannedStart');
-    return `${this.intl.t(
-      `${this.titleTranslationKey}`
-    )} ${moment(date).format('dddd DD-MM-YYYY')}`;
+    if (this.titleTranslationParams) {
+      const translatedTitle = this.intl.t(this.titleTranslationKey, this.titleTranslationParams);
+      return `${translatedTitle} ${moment(date).format('dddd DD-MM-YYYY')}`;
+    } else {
+      return `${this.intl.t(
+        `${this.titleTranslationKey}`
+      )} ${moment(date).format('dddd DD-MM-YYYY')}`;
+    }
   }),
 
   actions: {

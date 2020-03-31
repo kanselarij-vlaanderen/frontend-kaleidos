@@ -2,7 +2,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export default class VRDocumentName {
-  static get regexGroups () {
+  static get regexGroups() {
     return Object.freeze({
       date: '([12][90][0-9]{2} [0-3][0-9][01][0-9])',
       docType: '((DOC)|(DEC)|(MED))',
@@ -12,12 +12,12 @@ export default class VRDocumentName {
     });
   }
 
-  static get looseRegex () {
+  static get looseRegex() {
     const g = VRDocumentName.regexGroups;
     return new RegExp(`VR ${g.date} ${g.docType}\\.${g.caseNr}([/-]${g.index})?`);
   }
 
-  static get strictRegex () {
+  static get strictRegex() {
     const g = VRDocumentName.regexGroups;
     return new RegExp(`^VR ${g.date} ${g.docType}\\.${g.caseNr}(/${g.index})?${g.versionSuffix}?$`);
   }
@@ -30,21 +30,21 @@ export default class VRDocumentName {
     }
   }
 
-  toString () {
+  toString() {
     return this.name;
   }
 
-  get regex () {
+  get regex() {
     return this.strict ? VRDocumentName.strictRegex : VRDocumentName.looseRegex;
   }
 
-  parseMeta () {
+  parseMeta() {
     const match = this.regex.exec(this.name);
     if (!match) {
       throw new Error(`Couldn't parse VR Document Name "${this.name}" (${this.strict ? 'strict' : 'loose'} parsing mode)`);
     }
     const meta = {
-      date: moment(match[1], "YYYY DDMM").toDate(),
+      date: moment(match[1], 'YYYY DDMM').toDate(),
       docType: match[2],
       caseNr: parseInt(match[6]),
       index: parseInt(match[8]),
@@ -78,20 +78,19 @@ export default class VRDocumentName {
     return this.name.replace(new RegExp(VRDocumentName.regexGroups.versionSuffix + '$', 'ui'), '');
   }
 
-  withOtherVersionSuffix (versionNr) {
+  withOtherVersionSuffix(versionNr) {
     return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[versionNr].toUpperCase()}`
   }
 }
 
-export const compareFunction = function(a, b) {
+export const compareFunction = function (a, b) {
   try {
     const metaA = a.parseMeta();
     try { // Both names parse
       const metaB = b.parseMeta();
-      return (metaA.date - metaB.date) ||
-        metaA.docType.localeCompare(metaB.docType) ||
-        (metaA.caseNr - metaB.caseNr) ||
-        (metaA.index - metaB.index);
+      return (metaB.caseNr - metaA.caseNr) || // Case number descending (newest first)
+        (metaA.index - metaB.index) || // Index ascending
+        (metaB.date - metaA.date); // Date descending (newest first)
     } catch (e) { // Only a parses
       return -1;
     }

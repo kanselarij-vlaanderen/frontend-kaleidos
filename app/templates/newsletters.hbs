@@ -13,7 +13,8 @@
           enableSizes=true
           isLoading=isLoadingModel
           noDataMessage=(t "no-results-found")
-          onClickRow=(action "navigateToNewsletter") as |table|
+          onClickRow=(action "navigateToNewsletter") 
+        as |table|
         }}
           {{#table.content as |c|}}
             {{#c.header}}
@@ -23,16 +24,12 @@
                 field="planned-start"
                 label=(t "newsletter")
               }}
-              <th
-                class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
-              >
-                {{!--TODO: should sort on field agendas but does not return all 10 results --}}
+              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable">
+                {{!TODO: should sort on field agendas but does not return all 10 results }}
                 {{concat (t "newsletter") " " (t "sent-at")}}
               </th>
-              <th
-                class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable"
-              >
-                {{!--TODO: should sort on latest modified agenda --}}
+              <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable">
+                {{!TODO: should sort on latest modified agenda }}
                 {{t "latest-modified"}}
               </th>
               <th class="vl-data-table-col-1"></th>
@@ -46,7 +43,10 @@
                     aria-busy="true"
                   ></div>
                 {{else}}
-                  {{t "newsletter-for-meeting-of"}}
+                  {{t
+                    "newsletter-for-meeting-of"
+                    kind=(lowercase meeting.kindToShow.fullProcedure)
+                  }}
                   {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                 {{/if}}
               </td>

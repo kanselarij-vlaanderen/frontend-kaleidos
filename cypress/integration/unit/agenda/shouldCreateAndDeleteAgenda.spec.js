@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach*/
+/*global context, before, it, cy, Cypress, beforeEach*/
 /// <reference types="Cypress" />
 
 
@@ -20,7 +20,8 @@ context('Agenda tests', () => {
     const YEAR = '2020';
     const DAY = '13';
     cy.createDefaultAgenda(KIND,YEAR,JANUARI,DAY,PLACE);
-    cy.openAgenda(1,"13 januari 2020", "10:00");
+    const agendaDate = Cypress.moment("2020-01-13").set({"hour": 10, "minute": 10});
+    cy.openAgendaForDate(agendaDate);
   });
 
 });

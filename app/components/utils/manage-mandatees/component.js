@@ -1,93 +1,89 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
-import EmberObject from '@ember/object';
+import { inject as service } from '@ember/service';
 import moment from 'moment';
+
 export default Component.extend({
-	store: inject(),
-	subcasesService: inject(),
-  globalError: inject(),
+  store: service(),
+  subcasesService: service(),
+  toaster: service(),
   isResigning: false,
-	isEditing: false,
-	selectedStartDate: null,
-	selectedEndDate: null,
-	mandateesUpdated: null,
+  isEditing: false,
+  selectedStartDate: null,
+  selectedEndDate: null,
+  mandateesUpdated: null,
 
-	actions: {
-		closeModal() {
-			this.closeModal();
-		},
-		
-		mandateesUpdated () {
-			this.mandateesUpdated();
-		},
+  actions: {
+    closeModal() {
+      this.closeModal();
+    },
 
-		selectMandatee(mandatee) {
-			this.set('mandateeToEdit', mandatee);
-		},
+    mandateesUpdated() {
+      this.mandateesUpdated();
+    },
 
-		toggleIsEditing() {
-			this.toggleProperty('isEditing');
-		},
+    selectMandatee(mandatee) {
+      this.set('mandateeToEdit', mandatee);
+    },
 
-		toggleIsResigning() {
-			this.toggleProperty('isResigning');
-		},
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
 
-		selectEndDate(date) {
-			this.set('selectedEndDate', date);
-		},
+    toggleIsResigning() {
+      this.toggleProperty('isResigning');
+    },
 
-		selectNewStartDate(date) {
-			this.set('selectedStartDate', date)
-		},
+    selectEndDate(date) {
+      this.set('selectedEndDate', date);
+    },
 
-		personSelected(person) {
-			this.set('selectedPerson', person);
-		},
+    selectNewStartDate(date) {
+      this.set('selectedStartDate', date)
+    },
 
-		resignMandatee(mandateeToEdit) {
-			this.set('mandateeToResign', mandateeToEdit);
-			this.toggleProperty('isResigning');
-		},
+    personSelected(person) {
+      this.set('selectedPerson', person);
+    },
 
-		async saveResignation() {
+    resignMandatee(mandateeToEdit) {
+      this.set('mandateeToResign', mandateeToEdit);
+      this.toggleProperty('isResigning');
+    },
+
+    async saveResignation() {
       const selectedPerson = this.get('selectedPerson');
-      if(!selectedPerson){
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: 'Opgelet!',
-            message: 'Het mandaat wordt beëindigd, maar er is geen nieuwe mandataris gekozen.',
-            type: 'warning-undo'
-          })
-        );
+      if (!selectedPerson) {
+        const message = 'Het mandaat wordt beëindigd, maar er is geen nieuwe mandataris gekozen.';
+        const title = 'Opgelet!';
+        this.toaster.warning(message, title);
       }
-			this.set('isLoading', true);
-			const oldMandatee = this.get('mandateeToEdit');
-			const domains = await oldMandatee.get('governmentDomains');
-			const holds = await oldMandatee.get('holds');
+      this.set('isLoading', true);
+      const oldMandatee = this.get('mandateeToEdit');
+      const domains = await oldMandatee.get('governmentDomains');
+      const holds = await oldMandatee.get('holds');
 
-			oldMandatee.set('end', this.get('selectedEndDate') || moment().toDate());
-			oldMandatee.save().then(() => {
-        if(!selectedPerson){
+      oldMandatee.set('end', this.get('selectedEndDate') || moment().toDate());
+      oldMandatee.save().then(() => {
+        if (!selectedPerson) {
           return;
         }
-				const newMandatee = this.store.createRecord('mandatee', {
-					title: oldMandatee.get('title'),
-					start: this.get('selectedStartDate') || moment().toDate(),
-					end: moment().add(5, 'years').toDate(),
-					person: selectedPerson,
-					holds: holds,
-					governmentDomains: domains,
-					priority: oldMandatee.get('priority')
-				});
-				return newMandatee.save().then(() => {
-					this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
-				});
-			}).then(() => {
+        const newMandatee = this.store.createRecord('mandatee', {
+          title: oldMandatee.get('title'),
+          start: this.get('selectedStartDate') || moment().toDate(),
+          end: moment().add(5, 'years').toDate(),
+          person: selectedPerson,
+          holds: holds,
+          governmentDomains: domains,
+          priority: oldMandatee.get('priority')
+        });
+        return newMandatee.save().then(() => {
+          this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
+        });
+      }).then(() => {
         this.mandateesUpdated();
         this.set('isLoading', false);
         this.closeModal();
-			});
-		}
-	}
+      });
+    }
+  }
 });

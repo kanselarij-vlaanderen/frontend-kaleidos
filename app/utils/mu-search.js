@@ -17,8 +17,10 @@ function stripSort(sort) {
   return sort.replace(/(^\+)|(^-)/g, '');
 }
 
-function snakeToCamel(s){
-  return s.replace(/(-\w)/g, function(m){return m[1].toUpperCase();});
+function snakeToCamel(s) {
+  return s.replace(/(-\w)/g, function (m) {
+    return m[1].toUpperCase();
+  });
 }
 
 async function muSearch(index, page, size, sort, filter, dataMapping) {

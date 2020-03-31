@@ -1,6 +1,6 @@
 import Mixin from '@ember/object/mixin';
-import {inject} from '@ember/service';
-import {hash} from 'rsvp';
+import { inject } from '@ember/service';
+import { hash } from 'rsvp';
 import EmberObject from '@ember/object';
 
 export default Mixin.create({
@@ -56,15 +56,15 @@ export default Mixin.create({
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
     let agendaitems = await this.store.query('agendaitem', {
-      filter: {agenda: {id: agenda.get('id')}},
+      filter: { agenda: { id: agenda.get('id') } },
       include: 'mandatees',
-      sort: "priority"
+      sort: 'priority'
     });
     const announcements = this.filterAnnouncements(agendaitems.filter((item) => {
       return item.showAsRemark;
     }), params);
 
-    const {draftAgendaitems, groupedAgendaitems} = await this.parseAgendaItems(
+    const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
       agendaitems, params
     );
 

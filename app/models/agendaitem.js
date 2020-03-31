@@ -62,28 +62,29 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     }
   }),
 
-  sortedThemes: computed('themes', function() {
+  sortedThemes: computed('themes', function () {
     return this.get('themes').sortBy('label');
   }),
 
-  isPostponed: computed('retracted', 'postponedTo', function() {
+  isPostponed: computed('retracted', 'postponedTo', function () {
     return this.get('postponedTo').then((session) => {
       return !!session || this.get('retracted');
     });
   }),
 
-  decisions: computed('subcase.decisions', function() {
+  decisions: computed('subcase.decisions', function () {
     return PromiseArray.create({
       promise: this.store.query('decision', {
         filter: {
           subcase: { id: this.subcase.get('id') },
-        },
-        sort: 'approved',
+        }
+      }).then((decisions) =>  {
+        return decisions.sortBy('approved');
       }),
     });
   }),
 
-  isDesignAgenda: computed('agenda', function() {
+  isDesignAgenda: computed('agenda', function () {
     const agendaName = this.get('agenda.name');
     if (agendaName === 'Ontwerpagenda') {
       return true;
@@ -92,7 +93,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     }
   }),
 
-  nota: computed('documentVersions', function() {
+  nota: computed('documentVersions', function () {
     return PromiseObject.create({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
@@ -114,18 +115,18 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     });
   }),
 
-  sortedMandatees: computed('mandatees.@each', function() {
+  sortedMandatees: computed('mandatees.@each', function () {
     return this.get('mandatees').sortBy('priority');
   }),
 
-  subcasesFromCase: computed('subcase', function() {
+  subcasesFromCase: computed('subcase', function () {
     if (!this.get('subcase.id')) {
       return [];
     }
     return this.subcase.get('subcasesFromCase');
   }),
 
-  formallyOkToShow: computed('formallyOk', function() {
+  formallyOkToShow: computed('formallyOk', function () {
     const options = CONFIG.formallyOkOptions;
     const { formallyOk } = this;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
@@ -133,7 +134,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     return EmberObject.create(foundOption);
   }),
 
-  requestedBy: computed('subcase.requestedBy', function() {
+  requestedBy: computed('subcase.requestedBy', function () {
     return PromiseObject.create({
       promise: this.get('subcase.requestedBy').then((requestedBy) => {
         return requestedBy;
@@ -141,25 +142,25 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     });
   }),
 
-  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
+  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function () {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
     return wasAdded;
   }),
 
   isAdded: alias('checkAdded'),
 
-  hasChanges: computed('checkAdded', 'hasAddedDocuments', async function() {
+  hasChanges: computed('checkAdded', 'hasAddedDocuments', async function () {
     const hasAddedDocuments = await this.hasAddedDocuments;
     const checkAdded = await this.checkAdded;
     return checkAdded || hasAddedDocuments;
   }),
 
-  hasAddedDocuments: computed('documents.@each', async function() {
+  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', async function () {
     const documents = await this.get('documents');
     return documents && documents.some((document) => document.checkAdded);
   }),
 
-  sortedApprovals: computed('approvals.@each', async function() {
+  sortedApprovals: computed('approvals.@each', async function () {
     return PromiseArray.create({
       promise: this.store.query('approval', {
         filter: {

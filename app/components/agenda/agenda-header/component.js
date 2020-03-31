@@ -1,27 +1,31 @@
 import Component from '@ember/component';
-import {inject} from '@ember/service';
-import {alias, filter} from '@ember/object/computed';
-import {computed} from '@ember/object';
+import { inject as service } from '@ember/service';
+import { alias, filter } from '@ember/object/computed';
+import { computed } from '@ember/object';
 import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import EmberObject from '@ember/object';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { constructArchiveName, fetchArchivingJobForAgenda, fileDownloadUrlFromJob } from 'fe-redpencil/utils/zip-agenda-files';
+import {
+  constructArchiveName,
+  fetchArchivingJobForAgenda,
+  fileDownloadUrlFromJob
+} from 'fe-redpencil/utils/zip-agenda-files';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   classNames: ['vlc-page-header'],
 
-  store: inject(),
-  sessionService: inject(),
-  agendaService: inject(),
-  fileService: inject(),
-  router: inject(),
-  intl: inject(),
-  jobMonitor: inject(),
-  globalError: inject(),
+  store: service(),
+  sessionService: service(),
+  agendaService: service(),
+  fileService: service(),
+  router: service(),
+  intl: service(),
+  jobMonitor: service(),
+  toaster: service(),
 
   isShowingOptions: false,
   isPrintingNotes: false,
@@ -72,7 +76,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     if (this.isLockingAgenda) {
       return this.intl.t('agenda-lock');
     }
-    return "";
+    return '';
   }),
 
   async createDesignAgenda() {
@@ -80,7 +84,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     const session = this.get('currentSession');
     session.set('isFinal', false);
     session.set('agenda', null);
-    session.save();
+    await session.save();
     const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
@@ -105,7 +109,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       await session.save();
       await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems.index', session.id, {
-        queryParams: {selectedAgenda: previousAgenda.get('id')}
+        queryParams: { selectedAgenda: previousAgenda.get('id') }
       });
     } else {
       await this.sessionService.deleteSession(session);
@@ -139,22 +143,22 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     navigateToNotes() {
-      const {currentSession, currentAgenda} = this;
+      const { currentSession, currentAgenda } = this;
       this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToPressAgenda() {
-      const {currentSession, currentAgenda} = this;
+      const { currentSession, currentAgenda } = this;
       this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToNewsletter() {
-      const {currentSession, currentAgenda} = this;
+      const { currentSession, currentAgenda } = this;
       this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToDecisions() {
-      const {currentSession, currentAgenda} = this;
+      const { currentSession, currentAgenda } = this;
       this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
     },
 
@@ -206,7 +210,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
         await this.deleteAgenda(designAgenda);
       }
       if (!this.isDestroyed) {
-      this.set('isLockingAgenda', false);
+        this.set('isLockingAgenda', false);
       }
     },
 
@@ -239,15 +243,11 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async downloadAllDocuments() {
-      const inCreationMessage = Object.freeze(EmberObject.create({
-        title: this.intl.t('archive-in-creation-title'),
-        message: this.intl.t('archive-in-creation-message'),
-        type: 'success'
-      }));
-      const fileDownloadMessage = EmberObject.create({
+      const fileDownloadToast = {
         title: this.intl.t('file-ready'),
-        type: 'file-download'
-      });
+        type: 'download-file',
+        options: { timeOut: 10 * 1000 }
+      };
 
       const namePromise = constructArchiveName(this.currentAgenda);
       debug('Checking if archive exists ...');
@@ -255,33 +255,30 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       const [name, job] = await Promise.all([namePromise, jobPromise]);
       if (!job.hasEnded) {
         debug('Archive in creation ...');
-        this.globalError.showToast.perform(inCreationMessage, 3 * 60 * 1000);
+        const inCreationToast = this.toaster.loading(this.intl.t('archive-in-creation-message'),
+          this.intl.t('archive-in-creation-title'), { timeOut: 3 * 60 * 1000 });
         this.jobMonitor.register(job);
         job.on('didEnd', this, async function (status) {
-          if (this.globalError.messages.includes(inCreationMessage)) {
-            this.globalError.messages.removeObject(inCreationMessage);
+          if (this.toaster.toasts.includes(inCreationToast)) {
+            this.toaster.toasts.removeObject(inCreationToast);
           }
           if (status === job.SUCCESS) {
             const url = await fileDownloadUrlFromJob(job, name);
             debug(`Archive ready. Prompting for download now (${url})`);
-            fileDownloadMessage.downloadLink = url;
-            fileDownloadMessage.fileName = name;
-            this.globalError.showToast.perform(fileDownloadMessage);
+            fileDownloadToast.options.downloadLink = url;
+            fileDownloadToast.options.fileName = name;
+            this.toaster.displayToast.perform(fileDownloadToast);
           } else {
             debug('Something went wrong while generating archive.');
-            this.globalError.showToast.perform(EmberObject.create({
-              title: this.intl.t('warning-title'),
-              message: this.intl.t('error'),
-              type: 'error'
-            }));
+            this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
           }
         });
       } else {
         const url = await fileDownloadUrlFromJob(job, name);
         debug(`Archive ready. Prompting for download now (${url})`);
-        fileDownloadMessage.downloadLink = url;
-        fileDownloadMessage.fileName = name;
-        this.globalError.showToast.perform(fileDownloadMessage);
+        fileDownloadToast.options.downloadLink = url;
+        fileDownloadToast.options.fileName = name;
+        this.toaster.displayToast.perform(fileDownloadToast);
       }
     },
 
@@ -392,9 +389,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           this.set('sessionService.currentAgenda', newAgenda);
           this.reloadRoute(newAgenda.get('id'));
         }).finally(() => {
-          this.set('sessionService.selectedAgendaItem', null);
-          this.changeLoading();
-          this.set('isApprovingAgenda', false);
+        this.set('sessionService.selectedAgendaItem', null);
+        this.changeLoading();
+        this.set('isApprovingAgenda', false);
       });
     });
   },

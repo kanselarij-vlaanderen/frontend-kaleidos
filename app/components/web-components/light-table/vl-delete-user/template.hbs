@@ -1,7 +1,4 @@
-<button
-        class="vl-button vl-button--link vl-button--icon"
-  {{action "toggleIsVerifying" bubbles=false}}
->
+<button type="button" class="vl-button vl-button--link vl-button--icon vlc-link-pointer" {{action "toggleIsVerifying" bubbles=false}}>
     <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
     <span class="vl-u-visually-hidden">
       {{t "delete"}}
@@ -9,9 +6,9 @@
 </button>
 {{#if isVerifying}}
   {{web-components/vl-modal-verify
-          title=(t "delete-account")
-          message=(t "delete-account-message")
-          cancel=(action "toggleIsVerifying")
-          verify=(action "deleteAccount")
+    title=(t "delete-account")
+    message=(t "delete-account-message")
+    cancel=(action "toggleIsVerifying")
+    verify=(action "deleteAccount")
   }}
 {{/if}}

@@ -1,11 +1,11 @@
-import Controller from "@ember/controller";
-import moment from "moment";
-import isAuthenticatedMixin from "fe-redpencil/mixins/is-authenticated-mixin";
+import Controller from '@ember/controller';
+import moment from 'moment';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
-import { inject } from "@ember/service";
-import { computed } from "@ember/object";
+import { inject } from '@ember/service';
+import { computed } from '@ember/object';
 
-export default Controller.extend(isAuthenticatedMixin,DefaultQueryParamsMixin, {
+export default Controller.extend(isAuthenticatedMixin, DefaultQueryParamsMixin, {
   sessionService: inject(),
   intl: inject(),
   agendaService: inject(),
@@ -18,14 +18,15 @@ export default Controller.extend(isAuthenticatedMixin,DefaultQueryParamsMixin, {
   sort: '-planned-start',
   size: 10,
 
-  activeAgendas: computed("model", async function() {
+  activeAgendas: computed('model', async function () {
     const dateOfToday = moment().seconds(0)
       .milliseconds(0).minutes(0).hours(0).utc().subtract(1, 'weeks').format();
     const meetings = await this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
       },
-      sort: 'planned-start' });
+      sort: 'planned-start'
+    });
     const activeAgendas = await this.agendaService.getActiveAgendas(dateOfToday);
 
     return meetings.filter((meeting) => this.checkIfAgendaIsPresent(activeAgendas, meeting));
@@ -71,10 +72,11 @@ export default Controller.extend(isAuthenticatedMixin,DefaultQueryParamsMixin, {
     clearFilter() {
       this.set('to', null);
       this.set('from', null);
+      this.set('dateFilter','');
     },
 
     onClickRow(meeting) {
-      this.transitionToRoute("agenda.agendaitems", meeting.id);
+      this.transitionToRoute('agenda.agendaitems', meeting.id);
     }
   }
 });

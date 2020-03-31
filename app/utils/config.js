@@ -73,18 +73,21 @@ export default EmberObject.create({
     {
       label: 'Ministerraad',
       procedure: '',
+      fullProcedure: 'Ministerraad',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
     },
     {
       label: 'Elektronische procedure',
       procedure: ' via elektronische procedure',
+      fullProcedure: 'Ministerraad via elektronische procedure',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/406F2ECA-524D-47DC-B889-651893135456',
     },
     {
       label: 'Bijzondere ministerraad',
       procedure: '',
+      fullProcedure: 'Bijzondere ministerraad',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
     },
@@ -96,7 +99,7 @@ export default EmberObject.create({
   formallyOk:
     'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
 
-    latinAdverbialNumberals: {
+  latinAdverbialNumberals: {
     1: '',
     2: 'bis',
     3: 'ter',
@@ -113,11 +116,11 @@ export default EmberObject.create({
     14: 'quater decies',
     15: 'quindecies',
   },
-  adminId:"71c068e6-d2f0-43de-93ab-cd1e7156ac4b",
-  kanselarijId:"50f4c79c-902d-4ad2-bca1-0f37a69f0c13",
-  priviligedId:"3e824494-bbe7-45cf-aed8-5828970a10dc",
-  ministerId:"1cc0710c-1b28-4e23-b3ff-399c8089bc71",
-  kabinetId:"7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb",
-  usersId:"450915b2-4c64-4b03-9caa-71180400f831",
-  internRegeringAccessLevelId: "d335f7e3-aefd-4f93-81a2-1629c2edafa3"
+  adminId: '71c068e6-d2f0-43de-93ab-cd1e7156ac4b',
+  kanselarijId: '50f4c79c-902d-4ad2-bca1-0f37a69f0c13',
+  priviligedId: '3e824494-bbe7-45cf-aed8-5828970a10dc',
+  ministerId: '1cc0710c-1b28-4e23-b3ff-399c8089bc71',
+  kabinetId: '7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb',
+  usersId: '450915b2-4c64-4b03-9caa-71180400f831',
+  internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3'
 });

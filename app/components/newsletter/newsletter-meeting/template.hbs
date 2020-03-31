@@ -1,11 +1,11 @@
 <div class="vl-u-display-flex vl-u-flex-space-between">
-  <h4 class="vl-title vl-title--h3 vl-u-text--capitalize">
+  <h4 class="vl-title vl-title--h3 vl-u-text--capitalize" data-test-newsletter-meeting-header-title>
     {{await title}}
   </h4>
   {{#if allowEditing}}
     {{#if isEditor}}
       <div class="vl-u-spacer-extended-left-s">
-        <a class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -18,7 +18,9 @@
       {{t "date-publication"}}
     </h3>
     <p class="vl-u-text--italic">
-      {{moment-format (await meeting.newsletter.publicationDate) "DD MMMM YYYY - HH:ss"
+      {{moment-format
+        (await meeting.newsletter.publicationDate)
+        "DD MMMM YYYY - HH:ss"
       }}
     </p>
   </div>
@@ -47,4 +49,4 @@
     }}
   {{/web-components/vl-modal}}
 {{/if}}
-<hr class="vlc-hr" />
+<hr class="vlc-hr"/>

@@ -1,17 +1,17 @@
 import Service from '@ember/service';
-import $ from 'jquery';
+import { ajax } from 'fe-redpencil/utils/ajax';
 import { inject } from '@ember/service';
 
 export default Service.extend({
   store: inject(),
 
   getPostPonedSubcaseIds() {
-    return $.ajax(
+    return ajax(
       {
         headers: {
           'Content-Type': 'application/vnd.api+json'
         },
-        method: "GET",
+        method: 'GET',
         url: `/custom-subcases`,
       }
     ).then(({ data }) => {
@@ -20,9 +20,9 @@ export default Service.extend({
   },
 
   setNewMandateeToRelatedOpenSubcases(old_mandatee, new_mandatee) {
-    return $.ajax(
+    return ajax(
       {
-        method: "POST",
+        method: 'POST',
         url: `/minister-jurisdiction-service/transfer/procedures`,
         data: {
           old_mandatee: old_mandatee,

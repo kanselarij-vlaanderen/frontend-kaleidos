@@ -1,16 +1,16 @@
 import Component from '@ember/component';
-import EmberObject, { computed } from '@ember/object';
+import { computed } from '@ember/object';
 import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDocumentVersions, {
-  globalError: inject(),
-  fileService: inject(),
-  intl: inject(),
+  toaster: service(),
+  fileService: service(),
+  intl: service(),
   classNames: ['vl-u-spacer-extended-bottom-s'],
   classNameBindings: ['aboutToDelete'],
   isShowingVersions: false,
@@ -20,12 +20,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   documentToDelete: null,
   nameBuffer: '',
 
-  isSubcase: computed('item.contructor', function () {
-		const { item } = this;
-		return item.get('modelName') === 'subcase';
-	}),
-
-  aboutToDelete: computed('document.aboutToDelete', function() {
+  aboutToDelete: computed('document.aboutToDelete', function () {
     if (this.document) {
       if (this.document.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
@@ -33,38 +28,40 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     }
   }),
 
-  openClass: computed('isShowingVersions', function() {
+  openClass: computed('isShowingVersions', function () {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }
   }),
 
-  async resetFormallyOk() {
-    const doc = await this.get('document');
-    const subcases = await Promise.all(doc.get('documentVersions').map(docVer => docVer.subcase));
+  setNotYetFormallyOk(itemToSet) {
+    if (itemToSet.get('formallyOk') != CONFIG.notYetFormallyOk) {
+      itemToSet.set('formallyOk', CONFIG.notYetFormallyOk);
+    }
+  },
 
-    const agendaitemsOnDesignAgendas = await Promise.all(subcases.filter(subcase => !!subcase).map(subcase => subcase.agendaitemsOnDesignAgendaToEdit))
-      .then(agendaItemArrays => agendaItemArrays.reduce((prev, curr) => prev.concat(curr.toArray()), []));
-
-    await Promise.all(agendaitemsOnDesignAgendas
-      .map(async agendaitem => {
-        agendaitem.set('formallyOk', CONFIG.notYetFormallyOk);
-        const approvals = await agendaitem.get('approvals');
-        await Promise.all(approvals.map(approval =>  approval.destroyRecord()));
-        agendaitem.save();
-      }))
+  async destroyApprovalsOfAgendaitem(agendaitem) {
+    const approvals = await agendaitem.get('approvals');
+    if (approvals) {
+      await Promise.all(approvals.map(approval => approval.destroyRecord()));
+    }
   },
 
   async deleteUploadedDocument() {
     const uploadedFile = this.get('uploadedFile');
     if (uploadedFile && uploadedFile.id) {
       const versionInCreation = await uploadedFile.get('documentVersion');
+      const container = this.get('documentContainer');
+      container.rollbackAttributes();
       if (versionInCreation) {
         await this.fileService.deleteDocumentVersion(versionInCreation);
       } else {
-        await this.fileService.removeFile(uploadedFile.id);
+        await this.fileService.deleteFile(uploadedFile);
       }
-      this.set('uploadedFile', null);
+
+      if (!this.isDestroyed) {
+        this.set('uploadedFile', null);
+      }
     }
   },
 
@@ -78,7 +75,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     startEditingName() {
-      if(!this.isEditor){
+      if (!this.isEditor) {
         return;
       }
       this.set('nameBuffer', this.get('lastDocumentVersion.name'));
@@ -110,6 +107,10 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     async openUploadDialog() {
+      const itemType = this.item.get('constructor.modelName');
+      if (itemType === "agendaitem" || itemType === "subcase") {
+        await this.item.preEditOrSaveCheck();
+      }
       this.toggleProperty('isUploadingNewVersion');
     },
 
@@ -123,9 +124,14 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       if (uploadedFile) {
         const container = this.get('documentContainer');
         const doc = await this.get('documentContainer.lastDocumentVersion');
-        doc.rollbackAttributes()
         container.rollbackAttributes();
-        await uploadedFile.destroyRecord();
+        doc.rollbackAttributes();
+        const versionInCreation = await uploadedFile.get('documentVersion');
+        if (versionInCreation) {
+          await this.fileService.deleteDocumentVersion(versionInCreation);
+        } else {
+          await this.fileService.deleteFile(uploadedFile);
+        }
         this.set('uploadedFile', null);
       }
       this.set('isUploadingNewVersion', false);
@@ -136,26 +142,34 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       const documentVersion = await this.get('documentContainer.lastDocumentVersion');
       await documentVersion.save();
       const item = await this.get('item');
+      await item.hasMany('documentVersions').reload();
       const itemType = item.get('constructor.modelName');
       const subcase = await item.get('subcase');
-      const { isSubcase } = this;
       const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
-
-      if (itemType !== "decision" && subcase) {
-        await this.attachDocumentVersionsToModel([documentVersion], subcase).then(item => item.save());
-      } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-        await this.addDocumentVersionsToAgendaitems([documentVersion], agendaitemsOnDesignAgenda);
+      try {
+        if (itemType !== "decision" && subcase) {
+          await subcase.hasMany('documentVersions').reload();
+          await this.attachDocumentVersionsToModel([documentVersion], subcase).then(async item => {
+            this.setNotYetFormallyOk(item);
+            await item.save();
+          });
+        } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+          await this.addDocumentVersionsToAgendaitems([documentVersion], agendaitemsOnDesignAgenda);
+        }
+        await this.attachDocumentVersionsToModel([documentVersion], item);
+        if (subcase || itemType === 'subcase') {
+          this.setNotYetFormallyOk(item);
+        }
+        await item.save();
+      } catch (error) {
+        await this.deleteUploadedDocument();
+        throw error;
+      } finally {
+        if (!this.isDestroyed) {
+          this.set('isLoading', false);
+          this.set('isUploadingNewVersion', false);
+        }
       }
-      await this.attachDocumentVersionsToModel([documentVersion], item);
-
-      await item.save().then(() => {
-        if(subcase || isSubcase) this.resetFormallyOk();
-      });
-      if(!this.isDestroyed){
-        this.set('isLoading', false);
-        this.set('isUploadingNewVersion', false);
-      }
-
     },
 
     cancel() {
@@ -164,17 +178,19 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     verify() {
-      this.globalError.showToast.perform(
-        EmberObject.create({
-          title: this.intl.t('warning-title'),
-          message: this.intl.t('document-being-deleted'),
-          type: 'warning-undo',
-          modelIdToDelete: this.documentToDelete.get('id'),
-        })
-      );
+      const verificationToast = {
+        type: 'revert-action',
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('document-being-deleted'),
+        options: { timeOut: 15000 }
+      };
+      verificationToast.options.onUndo = () => {
+        this.fileService.reverseDelete(this.documentToDelete.get('id'));
+        this.toaster.toasts.removeObject(verificationToast);
+      };
+      this.toaster.displayToast.perform(verificationToast);
       this.deleteDocumentWithUndo();
       this.set('isVerifyingDelete', false);
-      this.set('documentToDelete', null);
     },
 
     deleteDocument(document) {
@@ -191,7 +207,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     const { item } = this;
     const documentVersions = item.get('documentVersions');
     await this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete).then(() => {
-      if(!item.aboutToDelete && documentVersions) {
+      if (!item.aboutToDelete && documentVersions) {
         item.hasMany('documentVersions').reload();
       }
     });
@@ -200,7 +216,10 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   async addDocumentVersionsToAgendaitems(documentVersions, agendaitems) {
     return Promise.all(
       agendaitems.map(async (agendaitem) => {
+        await agendaitem.hasMany('documentVersions').reload();
         await this.attachDocumentVersionsToModel(documentVersions, agendaitem);
+        this.setNotYetFormallyOk(agendaitem);
+        await this.destroyApprovalsOfAgendaitem(agendaitem);
         return await agendaitem.save();
       })
     );

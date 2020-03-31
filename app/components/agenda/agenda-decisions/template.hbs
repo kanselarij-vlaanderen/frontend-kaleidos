@@ -1,8 +1,8 @@
 <div class="vlc-container-center">
   <div class="vl-u-spacer-extended-top-l no-print">
-    <h3 class="vl-title vl-title--h3">
+    <h3 class="vl-title vl-title--h3" data-test-print-overview-decisions-title>
       {{await title}}
-      <br />
+      <br/>
     </h3>
   </div>
   <div class="vl-u-spacer-extended-bottom-l no-print">
@@ -13,16 +13,15 @@
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
           <div class="vl-u-display-flex vl-u-flex-justify-center">
             <div class="print-only vl-u-spacer-extended-top-l">
-              <img
-                style="margin:-75px 0px -50px 0px; width:200px"
-                src="/assets/logo_vlaamse_regering.svg"
-                alt={{t "flemish-government"}}
-               />
+              <img style="margin:-75px 0px -50px 0px; width:200px"
+                   src="/assets/logo_vlaamse_regering.svg"
+                   alt={{t "flemish-government"}}
+              />
 
               <p class="vl-u-text--bold vl-u-text--capitalized">
                 {{await title}}
               </p>
-              <hr class="vlc-hr" />
+              <hr class="vlc-hr"/>
             </div>
           </div>
           <div style="page-break-after:always;">
@@ -52,8 +51,7 @@
                       {{else if isEditor}}
                         <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                           {{#if allowEditing}}
-                            <a
-                              class="vl-link"
+                            <a href="" class="vl-link"
                               {{action "toggleIsEditing" decision}}
                             >
                               {{t "edit"}}

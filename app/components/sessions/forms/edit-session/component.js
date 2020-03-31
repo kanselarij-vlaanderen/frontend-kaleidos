@@ -1,21 +1,21 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject, { computed } from '@ember/object';
 import { A } from '@ember/array';
 
 
 export default Component.extend({
-  store: inject(),
-  agendaService: inject(),
-  globalError: inject(),
-  formatter: inject(),
+  store: service(),
+  agendaService: service(),
+  toaster: service(),
+  formatter: service(),
   kind: null,
   selectedKindUri: null,
   startDate: null,
   extraInfo: null,
 
-  date: computed('startDate', function() {
+  date: computed('startDate', function () {
     return A([this.startDate])
   }),
 
@@ -43,8 +43,8 @@ export default Component.extend({
       await meeting.set('kind', kindUriToAdd);
 
       meeting.save()
-        .catch((error) => {
-          this.globalError.handleError(error);
+        .catch(() => {
+          this.toaster.error();
         })
         .finally(() => {
           this.set('isLoading', false);

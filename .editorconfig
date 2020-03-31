@@ -2,14 +2,15 @@
 # coding styles between different editors and IDEs
 # editorconfig.org
 
-root = true
+# Below config is the default for Ember.js projects. Do not edit without team discussion!
 
+root = true
 
 [*]
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
-insert_final_newline = true
+insert_final_newline = false
 indent_style = space
 indent_size = 2
 

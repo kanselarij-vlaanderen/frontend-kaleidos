@@ -3,9 +3,9 @@ import DS from 'ember-data';
 const { Model, attr, hasMany } = DS;
 
 export default Model.extend({
-	label: attr('string'),
-	scopeNote: attr('string'),
-	altLabel: attr('string'),
+  label: attr('string'),
+  scopeNote: attr('string'),
+  altLabel: attr('string'),
 
-	cases: hasMany('case', { inverse: null })
+  cases: hasMany('case', { inverse: null })
 });

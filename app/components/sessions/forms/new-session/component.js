@@ -1,18 +1,18 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export default Component.extend({
-  store: inject(),
-  agendaService: inject(),
-  newsletterService: inject(),
-  globalError: inject(),
-  formatter: inject(),
+  store: service(),
+  agendaService: service(),
+  newsletterService: service(),
+  toaster: service(),
+  formatter: service(),
   kind: null,
   selectedKindUri: null,
 
-  createAgenda(meeting, date) {
+  async createAgenda(meeting, date) {
     const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
       name: 'Ontwerpagenda',
@@ -21,10 +21,10 @@ export default Component.extend({
       modified: date || fallBackDate,
     });
 
-    return agenda.save();
+    return await agenda.save();
   },
 
-  createAgendaItemToApproveMinutes(agenda, closestMeeting) {
+  async createAgendaItemToApproveMinutes(agenda, closestMeeting) {
     if (!closestMeeting) {
       return;
     }
@@ -42,9 +42,9 @@ export default Component.extend({
       documentVersions: [],
       themes: [],
       approvals: [],
-      isApproval:true
+      isApproval: true
     });
-    return agendaitem.save();
+    return await agendaitem.save();
   },
 
   actions: {
@@ -73,8 +73,8 @@ export default Component.extend({
           // TODO: Should fix sessionNrBug
           // await this.agendaService.assignNewSessionNumbers();
         })
-        .catch((error) => {
-          this.globalError.handleError(error);
+        .catch(() => {
+          this.toaster.error();
         })
         .finally(() => {
           this.set('isLoading', false);

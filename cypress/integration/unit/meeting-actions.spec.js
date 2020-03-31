@@ -2,11 +2,10 @@
 /// <reference types="Cypress" />
 
 context('meeting actions tests', () => {
-  // const testStart = cy.currentMoment();
 
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
-  // const caseTitle = 'Cypress test: meeting actions - ' + cy.currentTimestamp();
+  const caseTitle = 'Cypress test: meeting actions - ' + currentTimestamp();
 
   before(() => {
     cy.server();
@@ -24,7 +23,7 @@ context('meeting actions tests', () => {
 
   it('should perform action delete agenda with agendaitems on designagenda', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: delete agenda - ' + cy.currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: delete agenda - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het verwijderen van een agenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -61,7 +60,7 @@ context('meeting actions tests', () => {
 
   it('should perform action close agenda with agendaitems on designagenda', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: close agenda - ' + cy.currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: close agenda - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het sluiten van een agenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -97,7 +96,7 @@ context('meeting actions tests', () => {
     cy.logout();
     cy.login('Kanselarij');
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: delete approve agenda Kanselarij - ' + cy.currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: delete approve agenda Kanselarij - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het sluiten van een agenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -128,7 +127,7 @@ context('meeting actions tests', () => {
 
   it('should be able to delete approved agendaitem from designagenda with profile: admin', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - ' + cy.currentTimestamp();
+    const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het sluiten van een agenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -182,3 +181,8 @@ context('meeting actions tests', () => {
   });
 
 });
+
+
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}

@@ -34,20 +34,20 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         })
       }
     },
-    set: function(key, value) {
+    set: function (key, value) {
       return value;
     },
   }),
 
 
   hasNota: computed('agendaitem', async function () {
-		const nota = await this.agendaitem.get('nota');
-		if (nota) {
-			return true;
-		} else {
-			return false;
-		}
-	}),
+    const nota = await this.agendaitem.get('nota');
+    if (nota) {
+      return true;
+    } else {
+      return false;
+    }
+  }),
   async saveChanges() {
     this.set('isLoading', true);
     const item = await this.get('item');
@@ -71,18 +71,23 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         })
       );
     }
-    this.setNewPropertiesToModel(item).then((newModel) => {
+    this.setNewPropertiesToModel(item).then(async (newModel) => {
       newModel.reload();
       if (themes) {
         agendaitem.set('themes', themes);
-        agendaitem.save().then(() => {
+        const subcase = await item.get('subcase');
+        subcase.set('themes', themes);
+        try {
+          await agendaitem.save();
+          await subcase.save();
+        } catch(e) {
+          throw(e);
+        } finally {
           this.set('isLoading', false);
-          this.toggleProperty('isEditing');
-        });
-      } else {
-        this.set('isLoading', false);
-        this.toggleProperty('isEditing');
+        }
       }
+      this.set('isLoading', false);
+      this.toggleProperty('isEditing');
     });
   },
 
@@ -105,12 +110,12 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     },
 
     async openDocument(agendaitem) {
-			const nota = await agendaitem.get('nota');
-			if (!nota) {
-				return;
-			}
-			const documentVersion = await nota.get('lastDocumentVersion');
-			window.open(`/document/${documentVersion.get('id')}`);
-		}
+      const nota = await agendaitem.get('nota');
+      if (!nota) {
+        return;
+      }
+      const documentVersion = await nota.get('lastDocumentVersion');
+      window.open(`/document/${documentVersion.get('id')}`);
+    }
   },
 });
