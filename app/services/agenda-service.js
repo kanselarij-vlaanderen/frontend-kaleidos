@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'fe-redpencil/utils/ajax';
@@ -7,12 +7,11 @@ import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import EmberObject from '@ember/object';
 
 export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
-  store: inject(),
-  globalError: inject(),
-  intl: inject(),
+  store: service(),
+  toaster: service(),
+  intl: service(),
   addedDocuments: null,
   addedAgendaitems: null,
 
@@ -84,11 +83,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
         },
       });
     } catch (error) {
-      this.globalError.showToast.perform(EmberObject.create({
-        title: this.intl.t('warning-title'),
-        message: this.intl.t('error-delete-agenda'),
-        type: 'error'
-      }));
+      this.toaster.error(this.intl.t('error-delete-agenda'), this.intl.t('warning-title'));
     }
   },
 
@@ -262,11 +257,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       }
 
     } else {
-      this.globalError.showToast.perform(EmberObject.create({
-        title: this.intl.t('warning-title'),
-        message: this.intl.t('action-not-allowed'),
-        type: 'error'
-      }));
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
     }
   },
 

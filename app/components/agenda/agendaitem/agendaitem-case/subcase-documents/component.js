@@ -3,7 +3,6 @@ import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
-import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 
@@ -13,7 +12,6 @@ export default Component.extend(
   ModifiedMixin,
   uploadDocumentMixin,
   {
-    globalError: inject(),
     classNames: ['vl-u-spacer--large'],
     isAddingNewDocument: false,
     isEditing: false,

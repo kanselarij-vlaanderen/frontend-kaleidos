@@ -1,12 +1,11 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
-import EmberObject from '@ember/object';
+import { inject as service } from '@ember/service';
 import moment from 'moment';
 
 export default Component.extend({
-  store: inject(),
-  subcasesService: inject(),
-  globalError: inject(),
+  store: service(),
+  subcasesService: service(),
+  toaster: service(),
   isResigning: false,
   isEditing: false,
   selectedStartDate: null,
@@ -54,13 +53,9 @@ export default Component.extend({
     async saveResignation() {
       const selectedPerson = this.get('selectedPerson');
       if (!selectedPerson) {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: 'Opgelet!',
-            message: 'Het mandaat wordt beëindigd, maar er is geen nieuwe mandataris gekozen.',
-            type: 'warning-undo'
-          })
-        );
+        const message = 'Het mandaat wordt beëindigd, maar er is geen nieuwe mandataris gekozen.';
+        const title = 'Opgelet!';
+        this.toaster.warning(message, title);
       }
       this.set('isLoading', true);
       const oldMandatee = this.get('mandateeToEdit');
