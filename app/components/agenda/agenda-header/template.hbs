@@ -152,12 +152,13 @@
                   </li>
                 {{else}}
                   <li class="vlc-dropdown-menu__item">
-                    {{#link-to
-                      "agenda.print"
+                    <LinkTo
                       class="vl-link vl-link--block"
-                    }}
+                      @route="agenda.print"
+                      @query={{hash selectedAgenda=currentAgenda.id}}
+                    >
                       {{t "printable-version"}}
-                    {{/link-to}}
+                    </LinkTo>
                   </li>
                 {{/if}}
                 {{#if isEditor}}
