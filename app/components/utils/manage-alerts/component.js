@@ -4,6 +4,12 @@ import { computed } from '@ember/object';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 
 export default Component.extend({
+  /*
+   * TODO: The disabled linter rules below say it all: poor state handling. This component contains
+   * state management logic for a "view"-state, an "edit"-state as well as a "create" state.
+   * The easiest way to think of cleaning this up, is to divide in separate CRUD routes.
+   */
+
   store: inject(),
   isManagingAlerts: null,
   isAdding: false,
