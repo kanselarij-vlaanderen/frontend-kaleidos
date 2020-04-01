@@ -84,4 +84,13 @@
   .vlc-panel-layout {
     display: block;
   }
+
+  .vlc-hide-scrollbar-on-print {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
