@@ -2,23 +2,38 @@
 	 Printable agenda list
 	 ========================================================================== */
 
+$indentation-spacing: 3rem;
+
 .vlc-printable-agenda-list {
   padding: 4rem;
 
-  h2.vlc-printable-agenda-list__title {
-    margin-top: 0;
-    text-align: center;
+  .indented {
+    padding-left: $indentation-spacing;
   }
 
-  h4.vlc-printable-agenda-list__title {
+  .vlc-printable-agenda-list__session-title {
+    margin-top: 0;
+    text-align: center;
+    text-decoration: underline;
+    text-transform: uppercase;
+    font-size: 2.4rem;
+  }
+
+  .vlc-printable-agenda-list__title, .vlc-printable-agenda-list__group-title .vlc-printable-agenda-list__description {
     white-space: pre-line;
   }
 
-  p.vlc-printable-agenda-list__description {
-  	white-space: pre-line;
+  .vlc-printable-agenda-list__item-number, .vlc-printable-agenda-list__item-letter {
+    min-width: $indentation-spacing;
   }
 
-  ul.vlc-printable-agenda-list__document-list {
+  .vlc-printable-agenda-list__item-letter, .vlc-printable-agenda-list__item-number {
+    font-weight: 500;
+    font-size: 2rem;
+    line-height: 2.4rem;
+  }
+
+  .vlc-printable-agenda-list__document-list {
   	list-style: none;
 
     // CSS reset for list elements to appear as plain new lines, as per example
@@ -28,6 +43,11 @@
   	font-size: 100%;
   	font: inherit;
   	vertical-align: baseline;
+
+    &.indented {
+      padding-left: $indentation-spacing;
+    }
+
     li {
       margin: 0;
     	padding: 0;
@@ -35,16 +55,6 @@
     	font-size: 100%;
     	font: inherit;
     	vertical-align: baseline;
-    }
-  }
-
-  ol.vlc-printable-agenda-list__item-list {
-  	list-style: none;
-
-    li::before {
-      content: attr(value);
-      font-size: 2rem;
-      font-weight: 500;
     }
   }
 }
