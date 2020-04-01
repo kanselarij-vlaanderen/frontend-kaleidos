@@ -62,7 +62,6 @@ export default Component.extend(isAuthenticatedMixin, {
   },
 
   async constructMandateeRows() {
-    // const { isAgendaItem } = this;
     const isAgendaItem = this.item.get('modelName') === 'agendaitem';
     let subcase;
     if (isAgendaItem) {
@@ -121,25 +120,20 @@ export default Component.extend(isAuthenticatedMixin, {
   async parseDomainsAndMandatees() {
     const mandateeRows = await this.get('mandateeRows');
     const mandatees = [];
-    let selectedIseCodes = [];
-    let submitter = null;
+    let iseCodes = [];
+    let requestedBy = null;
     if (mandateeRows && mandateeRows.get('length') > 0) {
       mandateeRows.map(row => {
         if (row.get('isSubmitter')) {
-          submitter = row.get('mandatee');
+          requestedBy = row.get('mandatee');
         }
         mandatees.push(row.get('mandatee'));
-        const iseCodes = row.get('iseCodes');
-        iseCodes.map((code) => {
-          selectedIseCodes.push(code);
+        const rowIseCodes = row.get('iseCodes');
+        rowIseCodes.map((code) => {
+          iseCodes.push(code);
         })
       })
     }
-    const iseCodes = selectedIseCodes;
-    const requestedBy = submitter
-    // this.set('selectedMandatees', mandatees);
-    // this.set('selectedIseCodes', selectedIseCodes);
-    // this.set('submitter', submitter);
     return { mandatees, iseCodes , requestedBy };
   },
 

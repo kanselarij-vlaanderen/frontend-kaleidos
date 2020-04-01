@@ -6,6 +6,6 @@ export default Model.extend({
   label: attr('string'),
   scopeNote: attr('string'),
   altLabel: attr('string'),
-  iseCode: hasMany('ise-code'), // TODO HASMANY, zonder inverse ?
+  iseCodes: hasMany('ise-code'),
   domain: belongsTo('government-domain', { inverse: null })
 });
