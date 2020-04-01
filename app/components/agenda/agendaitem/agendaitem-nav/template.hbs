@@ -1,5 +1,5 @@
 {{#each (if (is-pending activeTabs) defaultTabs (await activeTabs)) as |tab|}}
-  <li class="vl-tab">
+  <li class="vl-tab"  data-test-agenda-agendaitem-tab={{tab.label}}>
     <a href="" class="vl-tab__link
       {{active-class activeAgendaItemSection tab.name class="active"}}"
       {{action "setAgendaItemSection" tab.name}}>

@@ -5,14 +5,14 @@
 // Commands
 
 import {
+  agendaAgendaItemKortBestekTabSelector,
   buttonSelector,
   emberPowerSelectOptionSelector,
   emberPowerSelectTriggerSelector,
   newAgendaButtonSelector
-} from "../selectors/agenda/agendaSelectors";
+} from '../selectors/agenda/agendaSelectors';
 
-import {showActionOptions, navigatetosubcases,announcement,navigatetodecisions, navigatetonewsletter,
-  navigatetonotes,navigatetopressagenda, toggleeditingsession, selectsignature, downloadddocuments, deleteAgendaSelector, lockAgendaSelector
+import {navigatetosubcases,announcement,deleteAgendaSelector, lockAgendaSelector
 } from "../selectors/agenda/actionModalSelectors";
 
 import {formInputSelector} from "../selectors/formSelectors/formSelectors";
@@ -31,6 +31,7 @@ Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
 Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgenda', openAgenda);
+Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
 
 // ***********************************************
 // Functions
@@ -187,6 +188,25 @@ Cypress.Commands.add('openAgenda', openAgenda);
       cy.get('.data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
     }
   }
+
+/**
+ * Create a default agenda
+ * @memberOf Cypress.Chainable#
+ * @name createDefaultAgenda
+ * @function
+ * @param {String} agendaItemTitle - title of the agenda
+ */
+function openAgendaItemKortBestekTab(agendaItemTitle) {
+  // cy.route('GET', 'documents**').as('getDocuments');
+  cy.get('li.vlc-agenda-items__sub-item h4')
+    .contains(agendaItemTitle)
+    .click()
+    .wait(2000); // sorry
+  cy.get(agendaAgendaItemKortBestekTabSelector)
+    .should('be.visible')
+    .click()
+    .wait(2000); //Access-levels GET occured earlier, general wait instead
+}
 
 /**
  * @description Deletes the current **open agenda**, either a design or an approved one
@@ -476,7 +496,7 @@ function approveDesignAgenda() {
  * @name changeSelectedAgenda
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemName - name of the agenda item
+ * @param {string} agendaName - name of the agenda item
  */
   function changeSelectedAgenda(agendaName) {
     cy.get('.vlc-side-nav-item').children()

@@ -1,14 +1,14 @@
 import Component from '@ember/component';
 import { computed, observer } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Component.extend(isAuthenticatedMixin, {
-  store: inject(),
-  sessionService: inject(),
-  agendaService: inject(),
-  globalError: inject(),
+  store: service(),
+  sessionService: service(),
+  agendaService: service(),
+  toaster: service(),
   classNameBindings: [
     'isActive:vlc-agenda-items__sub-item--active',
     'isClickable::not-clickable',
@@ -128,8 +128,8 @@ export default Component.extend(isAuthenticatedMixin, {
       this.agendaitem.set('formallyOk', uri);
       this.agendaitem
         .save()
-        .catch((error) => {
-          this.globalError.handleError(error);
+        .catch(() => {
+          this.toaster.error();
         });
     },
   },

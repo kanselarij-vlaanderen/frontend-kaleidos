@@ -44,8 +44,10 @@ export default Mixin.create({
 
   findAll: task(function* () {
     const { modelName, queryOptions } = this;
-    const items = yield this.store.query(modelName, queryOptions);
-    this.set('items', items);
+    if (modelName) {
+      const items = yield this.store.query(modelName, queryOptions);
+      this.set('items', items);
+    }
   }),
 
   init() {

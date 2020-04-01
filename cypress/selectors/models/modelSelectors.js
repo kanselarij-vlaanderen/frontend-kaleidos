@@ -9,3 +9,6 @@ export const modalManagerCloseSelector = '[data-test-vl-model-manager-close]';
 export const modalManagerAddSelector = '[data-test-vl-model-manager-add]';
 export const modalManagerEditSelector = '[data-test-vl-model-manager-edit]';
 export const modalManagerDeleteSelector = '[data-test-vl-model-manager-delete]';
+
+// Modal verify
+export const modalVerifySaveSelector = '[data-test-vl-modal-verify-save]';

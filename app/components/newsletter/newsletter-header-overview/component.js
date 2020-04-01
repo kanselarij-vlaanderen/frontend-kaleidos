@@ -1,17 +1,18 @@
 import Component from '@ember/component';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
-import EmberObject from '@ember/object';
 
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
-  globalError: inject(),
-  intl: inject(),
-  session: inject(),
-  routing: inject('-routing'),
-  newsletterService: inject(),
+
+  intl: service(),
+  session: service(),
+  routing: service('-routing'),
+  toaster: service(),
+  newsletterService: service(),
+
   isShowingOptions: null,
   agenda: null,
   isVerifying: null,
@@ -67,11 +68,7 @@ export default Component.extend(isAuthenticatedMixin, {
       }
 
       await this.newsletterService.sendCampaign(mailCampaign.campaignId, agenda.id).catch(() => {
-        this.globalError.showToast.perform(EmberObject.create({
-          title: this.intl.t('warning-title'),
-          message: this.intl.t('error-send-newsletter'),
-          type: 'error'
-        }));
+        this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       });
       this.set('isLoading', false);
       mailCampaign.set('sentAt', moment().utc().toDate());
@@ -97,11 +94,7 @@ export default Component.extend(isAuthenticatedMixin, {
       }
 
       const html = await this.newsletterService.getMailCampaign(mailCampaign.campaignId).catch(() => {
-        this.globalError.showToast.perform(EmberObject.create({
-          title: this.intl.t('warning-title'),
-          message: this.intl.t('error-send-newsletter'),
-          type: 'error'
-        }));
+        this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       });
       this.set('newsletterHTML', html.body);
       this.set('testCampaignIsLoading', false);

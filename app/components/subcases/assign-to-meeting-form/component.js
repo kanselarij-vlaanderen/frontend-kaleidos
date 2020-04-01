@@ -1,12 +1,12 @@
 import Component from '@ember/component';
-import EmberObject, { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import moment from 'moment';
 
 export default Component.extend({
-  store: inject(),
-  globalError: inject(),
-  intl: inject(),
+  store: service(),
+  toaster: service(),
+  intl: service(),
 
   dateObjectsToEnable: computed(function () {
     const dateOfToday = moment().utc().subtract(1, 'weeks').format();
@@ -37,13 +37,7 @@ export default Component.extend({
         this.closeModal();
         await this.proposeForAgenda(selectedSubcase, meetingToAssignTo);
       } else {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error'),
-            type: 'error',
-          })
-        );
+        this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
       }
     },
 
