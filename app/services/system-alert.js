@@ -9,7 +9,7 @@ export default class SystemAlertService extends Service {
   @service store;
 
   @tracked alerts = A([]);
-  updateInterval = 10000;
+  updateInterval = 60 * 1000;
 
   get currentAlerts () {
     const now = new Date();
