@@ -33,7 +33,6 @@ export default Component.extend({
       created: fallBackDate,
       agenda: agenda,
       priority: 1,
-      title: `${closestMeeting.meeting_id}/${closestMeeting.agenda_id}`,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
         closestMeeting.plannedstart
       ).format('dddd DD-MM-YYYY')}.`,
