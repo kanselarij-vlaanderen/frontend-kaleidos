@@ -45,6 +45,10 @@ export default class SystemAlertService extends Service {
   }
 
   async updateAlerts() {
+    /*
+     * Below query fetches all alerts with end date greater then start of the day.
+     * This makes for only 1 unique request per day, which is good for request caching.
+     */
     const today = moment().startOf('day').format();
     const alerts = await this.store.query('alert', {
       filter: {
