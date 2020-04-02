@@ -1,5 +1,11 @@
 /*global context, before, it, cy*/
 /// <reference types="Cypress" />
+import {
+  navigateToPrintableAgendaSelector,
+  agendaPrintContainerSelector,
+  agendaPrintHeaderTitleSelector,
+} from '../../selectors/agenda/agendaSelectors';
+import { showActionOptions } from '../../selectors/agenda/actionModalSelectors';
 
 context('Agendaitem changes tests', () => {
 
@@ -52,10 +58,23 @@ context('Agendaitem changes tests', () => {
 
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
-    cy.wait(1000); //Computeds are not reloaded yet , maybe 
+    cy.wait(1000); //Computeds are not reloaded yet , maybe
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);
 
+    // when navigating to print view, should contain all relevant info
+    cy.get(showActionOptions).click();
+    cy.get(navigateToPrintableAgendaSelector).click();
+
+    cy.get(agendaPrintHeaderTitleSelector).should('exist').should('be.visible');
+    cy.get(agendaPrintHeaderTitleSelector).contains('Vergadering van');
+    cy.get(agendaPrintHeaderTitleSelector).contains('zaterdag 02 mei 2020 om 20:20');
+
+    cy.get(agendaPrintContainerSelector).should('exist').should('be.visible');
+    cy.get(agendaPrintContainerSelector).contains('Goedkeuring van het verslag van de vergadering van vrijdag 22-11-2019.');
+    cy.get(agendaPrintContainerSelector).contains(subcaseTitle1);
+    cy.get(agendaPrintContainerSelector).contains(subcaseTitle2);
+    cy.get(agendaPrintContainerSelector).contains('Cypress test voor het testen van toegevoegde documenten');
   });
 });
 
