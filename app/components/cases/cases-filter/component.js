@@ -1,35 +1,23 @@
 import Component from '@ember/component';
 import { task, timeout } from 'ember-concurrency';
-import moment from 'moment';
 
 export default Component.extend({
   classNames: ['vl-form vl-u-spacer-extended-bottom-l vlc-box'],
   searchText: null,
   disableAdvanced: false,
   ministerName: null,
-  dateFrom: undefined,
-  dateTo: undefined,
+  dateFrom: null,
+  dateTo: null,
   searchInDecisionsOnly: false,
   popoverShown: false,
-
-  init() {
-    this._super(...arguments);
-    if (this.dateFrom) {
-      this.set('dateFrom', moment(this.dateFrom).toDate());
-    }
-    if (this.dateTo) {
-      this.set('dateTo', moment(this.dateTo).toDate());
-    }
-  },
-
 
   searchTask: task(function* () {
     yield timeout(600);
     this.filter({
       searchText: this.searchText,
       mandatees: this.ministerName,
-      dateFrom: this.dateFrom && moment(this.dateFrom).utc().format(),
-      dateTo: this.dateTo && moment(this.dateTo).utc().format(),
+      dateFrom: this.dateFrom,
+      dateTo: this.dateTo,
       searchInDecisionsOnly: this.searchInDecisionsOnly
     });
   }).restartable(),

@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { task, timeout } from 'ember-concurrency';
-import moment from 'moment';
 
 export default Component.extend({
   classNames: ['vl-form vl-u-spacer-extended-bottom-l'],
@@ -9,23 +8,16 @@ export default Component.extend({
   showAdvanced: false,
   searchText: null,
   ministerName: null,
-  dateFrom: undefined,
-  dateTo: undefined,
+  dateFrom: null,
+  dateTo: null,
   announcementsOnly: false,
   popoverShown: false,
 
   init() {
     this._super(...arguments);
-
-    if (this.dateFrom) {
-      this.set('dateFrom', moment(this.dateFrom).toDate());
-    }
-    if (this.dateTo) {
-      this.set('dateTo', moment(this.dateTo).toDate());
-    }
-
-    if (this.ministerName || this.dateFrom || this.dateTo || this.announcementsOnly)
+    if (this.ministerName || this.dateFrom || this.dateTo || this.announcementsOnly) {
       this.set('showAdvanced', true);
+    }
   },
 
   searchTask: task(function* () {
@@ -33,8 +25,8 @@ export default Component.extend({
     this.filter({
       searchText: this.searchText,
       mandatees: this.ministerName,
-      dateFrom: this.dateFrom && moment(this.dateFrom).utc().format(),
-      dateTo: this.dateTo && moment(this.dateTo).utc().format(),
+      dateFrom: this.dateFrom,
+      dateTo: this.dateTo,
       announcementsOnly: this.announcementsOnly
     });
   }).restartable(),
