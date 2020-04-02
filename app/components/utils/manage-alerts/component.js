@@ -21,8 +21,8 @@ export default Component.extend({
 
   title: getCachedProperty('title'),
   message: getCachedProperty('message'),
-  beginDate: getCachedProperty('beginDate') && new Date(), // eslint-disable-line ember/avoid-leaking-state-in-ember-objects
-  endDate: getCachedProperty('endDate') && new Date(), // eslint-disable-line ember/avoid-leaking-state-in-ember-objects
+  beginDate: getCachedProperty('beginDate') || new Date(), // eslint-disable-line ember/avoid-leaking-state-in-ember-objects
+  endDate: getCachedProperty('endDate') || new Date(), // eslint-disable-line ember/avoid-leaking-state-in-ember-objects
   type: getCachedProperty('type'),
 
   clearProperties() {
