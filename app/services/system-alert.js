@@ -22,7 +22,7 @@ export default class SystemAlertService extends Service {
   }
 
   get unconfirmedAlerts () {
-    return A(this.alerts.filter((a) => !a.confirmed));
+    return A(this.currentAlerts.filter((a) => !a.confirmed));
   }
 
   constructor () {
