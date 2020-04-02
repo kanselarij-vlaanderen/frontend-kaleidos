@@ -76,6 +76,12 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     });
   }),
 
+  // get document names to show on agendaview when not in the viewport to assist lazy loading
+  documentNames: computed('documentVersions', async function() {
+    const names = await this.agendaService.getDocumentNames(this);
+    return names;
+  }),
+
   isDesignAgenda: computed('agenda', function () {
     const agendaName = this.get('agenda.name');
     if (agendaName === 'Ontwerpagenda') {
