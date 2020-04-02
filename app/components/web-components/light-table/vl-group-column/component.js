@@ -1,17 +1,18 @@
 import Component from '@ember/component';
 import { alias } from '@ember/object/computed';
 import { inject } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+
 
 export default Component.extend({
   group: alias('value'),
-  user: alias('row'),
+  @tracked user: alias('row'),
   store: inject(),
 
   actions: {
     async chooseAccountGroup(newGroup) {
-      let foundUser = await this.store.findRecord('user', this.get('user.id'));
-      foundUser.set('group', newGroup);
-      await foundUser.save();
+      this.user.set('group', newGroup);
+      await this.user.save();
     },
   }
 });
