@@ -13,16 +13,19 @@ export default Route.extend(DataTableRouteMixin, {
       refreshModel: true
     },
     searchText: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'zoekterm'
     },
     mandatees: {
       refreshModel: true
     },
     dateFrom: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'vanaf'
     },
     dateTo: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'tot'
     },
     decisionsOnly: {
       refreshModel: true,
@@ -87,10 +90,12 @@ export default Route.extend(DataTableRouteMixin, {
       queryParams.filter['creators,mandatees'] = params.mandatees;
     }
     if (!isEmpty(params.dateFrom)) {
-      queryParams.filter[':gte:sessionDates'] = params.dateFrom;
+      const date = moment(params.dateFrom, "DD-MM-YYYY").startOf('day');
+      queryParams.filter[':gte:sessionDates'] = date.utc().toISOString();
     }
     if (!isEmpty(params.dateTo)) {
-      queryParams.filter[':lte:sessionDates'] = params.dateTo;
+      const date = moment(params.dateTo, "DD-MM-YYYY").endOf('day');  // "To" interpreted as inclusive
+      queryParams.filter[':lte:sessionDates'] = date.utc().toISOString();
     }
     const postProcessDates = this.postProcessDates;
     return this.muSearch.query(searchDocumentType,
