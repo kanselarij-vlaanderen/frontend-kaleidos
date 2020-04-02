@@ -1,7 +1,7 @@
-<div class="vlc-container-center vl-typography vlc-printable-agenda-list">
+<div data-test-agenda-printContainer class="vlc-container-center vl-typography vlc-printable-agenda-list">
   {{utils/logo-header}}
 
-  <h4 class="vlc-printable-agenda-list__session-title" data-test-agenda-header-title>
+  <h4 class="vlc-printable-agenda-list__session-title" data-test-agenda-print-header-title>
     {{t "session-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY \o\m HH:mm"}}
   </h4>
   <h4 class="vlc-printable-agenda-list__session-title">
