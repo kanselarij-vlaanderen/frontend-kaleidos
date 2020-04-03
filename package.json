@@ -58,7 +58,7 @@
     "ember-data": "~3.17.0",
     "ember-export-application-global": "^2.0.1",
     "ember-fetch": "^7.0.1",
-    "ember-file-upload": "^2.5.3",
+    "ember-file-upload": "^2.7.1",
     "ember-flatpickr": "^2.15.0",
     "ember-intl": "^4.2.3",
     "ember-light-table": "git+https://github.com/MikiDi/ember-light-table.git#baa87b0677d112ce868eb502dc77f179f0d13c79",
