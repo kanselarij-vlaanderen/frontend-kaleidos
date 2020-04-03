@@ -101,9 +101,10 @@ export default Component.extend(isAuthenticatedMixin, {
 
     async saveChanges() {
       this.set('isLoading', true);
-      const propertiesToSet = await this.parseDomainsAndMandatees();
+      const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
+      const propertiesToSetOnAgendaitem = {'mandatees': propertiesToSetOnSubcase['mandatees']}
       const resetFormallyOk = true;
-      this.editAgendaitemOrSubcaseService.saveChanges(this.item, propertiesToSet, resetFormallyOk).then(() => {
+      this.editAgendaitemOrSubcaseService.saveChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk).then(() => {
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
       }).catch((e) => {

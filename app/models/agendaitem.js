@@ -77,12 +77,8 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   }),
 
   isDesignAgenda: computed('agenda', async function () {
-    const agendaName = await this.get('agenda.name');
-    if (agendaName === 'Ontwerpagenda') {
-      return true;
-    } else {
-      return false;
-    }
+    const agenda = await this.get('agenda');
+    return await agenda.get('isDesignAgenda');
   }),
 
   nota: computed('documentVersions', function () {

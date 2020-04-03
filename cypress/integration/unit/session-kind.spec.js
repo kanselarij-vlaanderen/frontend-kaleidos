@@ -10,7 +10,7 @@ import {printoverviewTemplateHeaderTitle, printoverviewDecisionsHeaderTitle
 import {newslettersMeetingTitleSelector, newslettersoverviewTitleSelector
 } from "../../selectors/newsletters/newsletterSelector";
 
-context('Formally ok/nok tests', () => {
+context('Different session kinds should show different titles', () => {
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
   const agendaDateSpecial = Cypress.moment().add('month', plusMonths).set('date', 3).set('hour', 20).set('minute', 20);

@@ -17,9 +17,9 @@ export default class EditAgendaitemOrSubcaseService extends Service {
     if (resetFormallyOk) {
       this.setNotYetFormallyOk(model);
     }
-
     const keys = Object.keys(propertiesToSet);
-    keys.forEach(function (key) {
+    keys.forEach(async function (key) {
+      await model.get(key);
       model.set(key, propertiesToSet[key]);
     });
 
@@ -29,6 +29,14 @@ export default class EditAgendaitemOrSubcaseService extends Service {
     }).catch((e) => {
       throw(e);
     });
+  }
+
+  async setModifiedOnAgendaOfAgendaitem(agendaitem) {
+    const agenda = await agendaitem.get('agenda');
+    if (agenda) {
+      agenda.set('modified', moment().utc().toDate());
+      agenda.save();
+    }
   }
 
   getCachedProperty(property) {
@@ -51,40 +59,28 @@ export default class EditAgendaitemOrSubcaseService extends Service {
     })
   }
 
-  async saveChanges(agendaitemOrSubcase, propertiesToSet, resetFormallyOk) {
+  async saveChanges(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) {
     const item = agendaitemOrSubcase;
     const isAgendaItem = item.get('modelName') === 'agendaitem';
     try {
       await item.preEditOrSaveCheck();
-      if (isAgendaItem && !item.showAsRemark) {
+      if (isAgendaItem) { // why use !item.showAsRemark ?
         const isDesignAgenda = await item.get('isDesignAgenda');
         const agendaitemSubcase = await item.get('subcase');
         if (isDesignAgenda && agendaitemSubcase) {
           await agendaitemSubcase.preEditOrSaveCheck();
-          await this.setNewPropertiesToModel(agendaitemSubcase, propertiesToSet, resetFormallyOk);
+          await this.setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, resetFormallyOk);
         }
-        await this.setNewPropertiesToModel(item, propertiesToSet, resetFormallyOk).then(async () => {
-          const agenda = await item.get('agenda');
-          if (agenda) {
-            agenda.set('modified', moment().utc().toDate()); //TODO mixin was used to update modified, make service or keep like this ?
-            agenda.save();
-          }
-          item.reload(); //WHY ?
-        });
+        await this.setNewPropertiesToModel(item, propertiesToSetOnAgendaitem, resetFormallyOk);
+        await this.setModifiedOnAgendaOfAgendaitem(item);
       } else {
-        await this.setNewPropertiesToModel(item, propertiesToSet, resetFormallyOk);
+        await this.setNewPropertiesToModel(item, propertiesToSetOnSubcase, resetFormallyOk);
   
         const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
         if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
           await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
-            await this.setNewPropertiesToModel(agendaitem, propertiesToSet, resetFormallyOk).then(async () => {
-              const agenda = await agendaitem.get('agenda');
-              if (agenda) {
-                agenda.set('modified', moment().utc().toDate()); //TODO mixin was used to update modified, make service or keep like this ?
-                agenda.save();
-              }
-              item.reload();
-            })
+            await this.setNewPropertiesToModel(agendaitem, propertiesToSetOnAgendaitem, resetFormallyOk);
+            await this.setModifiedOnAgendaOfAgendaitem(agendaitem);
           }));
         }
       }

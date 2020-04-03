@@ -145,7 +145,7 @@ function addSubcaseThemes(themes) {
  * @memberOf Cypress.Chainable#
  * @function
  * @param {Number} mandateeNumber - The list index of the mandatee
- * @param {Number} fieldNumber - The list index of the field
+ * @param {Number} fieldNumber - The list index of the field, -1 means no field/domain should be selected
  * @param {Number} domainNumber - The list index of the domain
  */
 function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
@@ -172,9 +172,11 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
   //TODO loading the isecodes and government fields takes time, are they not cacheble ?
   cy.wait('@getIseCodes', { timeout: 20000 });
   cy.wait('@getGovernmentFields', { timeout: 20000 });
-  cy.get('.vlc-checkbox-tree', { timeout: 20000 }).should('exist').eq(fieldNumber).within(() => {
-    cy.get('.vl-checkbox').eq(domainNumber).click();
-  });
+  if(fieldNumber >= 0) {
+    cy.get('.vlc-checkbox-tree', { timeout: 20000 }).should('exist').eq(fieldNumber).within(() => {
+      cy.get('.vl-checkbox').eq(domainNumber).click();
+    });
+  }
   cy.get('.vlc-toolbar').within(() => {
     cy.contains('Toevoegen').click();
   });
