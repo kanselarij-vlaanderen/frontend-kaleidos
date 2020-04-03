@@ -22,13 +22,15 @@
     right: 2%;
     & button.vl-alert__close {
       font-size: 1.3em;
+      top: 1.3rem;
+      right: 1.3rem;
     }
   }
 
   &:hover {
     opacity: 1;
   }
- 
+
 }
 
 .toasts-container {
@@ -50,6 +52,8 @@
       right: 2%;
       & button.vl-alert__close {
         font-size: 1.3em;
+        top: 1.3rem;
+        right: 1.3rem;
       }
     }
   }
