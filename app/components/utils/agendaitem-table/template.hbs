@@ -31,3 +31,8 @@ as |tab|
     </span>
   </button>
 {{/if}}
+{{#if (and model (gte model.length 10))}}
+  <button type="button" class="vl-button vl-button--secondary vlc-u-margin-top-10" onclick={{action "onScrolledToBottom"}}>
+    {{t "load-more"}}
+  </button>
+{{/if}}
