@@ -1,4 +1,6 @@
 export const generalSettingsSelector = '[data-test-settings-generalSettings]';
+export const settingsUserUploadFileField = '[data-test-settings-user-file-upload]';
+export const settingsUserTable = '[data-test-settings-user-table]';
 export const manageMinistersSelector = '[data-test-settings-manageMinisters]';
 export const manageUsersSelector = '[data-test-settings-manageUsers]';
 export const manageGovermentDomainsSelector = '[data-test-manage-goverment-domains]';
