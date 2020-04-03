@@ -15,6 +15,7 @@ Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMe
 Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
 Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
 Cypress.Commands.add('uploadFile', uploadFile);
+Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
 
 // ***********************************************
@@ -249,6 +250,31 @@ function uploadFile(folder, fileName, extension) {
     cy.get('[type=file]').upload(
         {fileContent, fileName: fileFullName, mimeType: 'application/pdf'},
         {uploadType: 'input'},
+    );
+  });
+  cy.wait('@createNewFile');
+  cy.wait('@getNewFile');
+}
+
+/**
+ * @description Uploads a csv file with users..
+ * @name uploadUsersFile
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} folder - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ * @param {String} fileName - The name of the file without the extension
+ * @param {String} extension - The extension of the file
+ */
+function uploadUsersFile(folder, fileName, extension) {
+  cy.route('POST', 'user-management-service/import-users').as('createNewFile');
+  cy.route('GET', 'users?**').as('getNewFile');
+  const fileFullName = fileName + '.' + extension;
+  const filePath = folder + '/' + fileFullName;
+
+  cy.fixture(filePath).then(fileContent => {
+    cy.get('[type=file]').upload(
+      {fileContent, fileName: fileFullName, mimeType: 'application/pdf'},
+      {uploadType: 'input'},
     );
   });
   cy.wait('@createNewFile');

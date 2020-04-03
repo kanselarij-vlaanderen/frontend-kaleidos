@@ -74,4 +74,15 @@ context('Settings overview page tests', () => {
     cy.openSettingsModal(manageSignaturesSelector);
     cy.closeSettingsModal();
   });
+
+  it('Upload a users CSV', () => {
+    cy.route('/');
+    cy.get(settingsSelector).click();
+    cy.url().should('include','instellingen/overzicht');
+    cy.get('.vlc-toolbar__left').contains('Gebruikersbeheer').click();
+    cy.url().should('include','instellingen/gebruikers');
+    cy.contains('Gebruikers importeren').click()
+    cy.uploadUsersFile('files','test', 'csv');
+    cy.get('.vl-data-table').contains('Wendy');
+  });
 });
