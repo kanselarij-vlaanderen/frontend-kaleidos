@@ -3,7 +3,7 @@
 
 import {
   generalSettingsSelector,
-  settingsUserTable, settingsUserUploadFileField,
+  settingsUserTable,
   manageAlertsSelector, manageCaseTypesSelector, manageDocumentTypesSelector,
   manageGovermentDomainsSelector,
   manageGovermentFieldsSelector,
@@ -80,7 +80,7 @@ context('Settings overview page tests', () => {
     cy.route('/');
     cy.get(settingsSelector).click();
     cy.url().should('include','instellingen/overzicht');
-    cy.get(settingsUserUploadFileField).contains('Gebruikersbeheer').click();
+    cy.get(manageUsersSelector).contains('Gebruikersbeheer').click();
     cy.url().should('include','instellingen/gebruikers');
     cy.contains('Gebruikers importeren').click()
     cy.uploadUsersFile('files','test', 'csv');
