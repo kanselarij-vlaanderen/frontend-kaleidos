@@ -62,7 +62,7 @@
     {{/if}}
     {{#if (is-pending decision.signedDocument)}}
       {{web-components/vl-loader text=(t "decision-document-loading-text")}}
-    {{else if (not (await decision.signedDocument))}}
+    {{else if (not (await signedDocument))}}
       {{utils/add-signed-documents
         item=decision
         defaultType=defaultType
