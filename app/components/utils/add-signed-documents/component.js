@@ -4,11 +4,13 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { tracked } from '@glimmer/tracking';
 
 export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
   store: inject(),
   classNames: ['vl-u-spacer'],
   isAddingDocument: null,
+  @tracked isAddingNewDocument: null,
   isLoading: null,
 
   documentTypeToAssign: computed('modelToAddDocumentVersionTo', function () {
@@ -21,6 +23,10 @@ export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
       return null;
     }
   }),
+
+  hideAddDocumentModal() {
+    this.isAddingNewDocument =false;
+  },
 
   actions: {
     toggleIsAddingNewDocument() {
@@ -41,6 +47,7 @@ export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
         })
       );
       await item.save();
+      this.hideAddDocumentModal();
     },
 
     delete() {
