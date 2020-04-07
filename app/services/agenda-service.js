@@ -270,15 +270,19 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
 
     const documentVersion = await nota.get('lastDocumentVersion');
     const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
-    const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
-    if (newsletterInfoOnSubcaseLastModifiedTime) {
-      if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+    const notaDocumentVersions = await nota.get('documentVersions');
+    if(notaDocumentVersions.length > 1) {
+      const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
+      if (newsletterInfoOnSubcaseLastModifiedTime) {
+        if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
+          return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+        } else {
+          return null;
+        }
       } else {
-        return null;
+        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
       }
-    } else {
-      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
     }
+    return null;
   }
 });
