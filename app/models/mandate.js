@@ -4,5 +4,4 @@ const { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
   numberOfMandatees: attr('number'),
-  function: belongsTo('government-function')
 });
