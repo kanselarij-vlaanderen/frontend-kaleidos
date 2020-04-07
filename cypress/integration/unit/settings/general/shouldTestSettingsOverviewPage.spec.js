@@ -3,6 +3,7 @@
 
 import {
   generalSettingsSelector,
+  settingsUserTable,
   manageAlertsSelector, manageCaseTypesSelector, manageDocumentTypesSelector,
   manageGovermentDomainsSelector,
   manageGovermentFieldsSelector,
@@ -73,5 +74,16 @@ context('Settings overview page tests', () => {
   it('Should open the model behind manage signatures and close it', () => {
     cy.openSettingsModal(manageSignaturesSelector);
     cy.closeSettingsModal();
+  });
+
+  it('Upload a users CSV', () => {
+    cy.route('/');
+    cy.get(settingsSelector).click();
+    cy.url().should('include','instellingen/overzicht');
+    cy.get(manageUsersSelector).contains('Gebruikersbeheer').click();
+    cy.url().should('include','instellingen/gebruikers');
+    cy.contains('Gebruikers importeren').click()
+    cy.uploadUsersFile('files','test', 'csv');
+    cy.get(settingsUserTable).contains('Wendy');
   });
 });
