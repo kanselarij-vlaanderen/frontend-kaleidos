@@ -85,6 +85,9 @@ context('Show warning in newsletterinfo', () => {
     cy.wait('@createNewDocumentVersion', { timeout: 12000 });
     cy.wait('@createNewDocument', { timeout: 12000 });
     cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
+    cy.route('/');
+    cy.openAgendaForDate(agendaDate);
+    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
 
     cy.get(agendaAgendaItemKortBestekTabSelector)
       .should('be.visible')
@@ -92,7 +95,6 @@ context('Show warning in newsletterinfo', () => {
       .wait(2000); //Access-levels GET occured earlier, general wait instead
     cy.get(changesAlertComponentSelector).should('be.visible');
   })
-
 });
 
 function currentMoment() {

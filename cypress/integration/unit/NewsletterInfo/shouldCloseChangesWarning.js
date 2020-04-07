@@ -84,11 +84,12 @@ context('Show warning in newsletterinfo', () => {
     cy.get('@fileUploadDialog').within(() => {
       cy.get('.vl-button').contains('Documenten toevoegen').click();
     });
-
     cy.wait('@createNewDocumentVersion', { timeout: 12000 });
     cy.wait('@createNewDocument', { timeout: 12000 });
     cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
-
+    cy.route('/');
+    cy.openAgendaForDate(agendaDate);
+    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
     cy.get(agendaAgendaItemKortBestekTabSelector)
       .should('be.visible')
       .click()
@@ -97,7 +98,6 @@ context('Show warning in newsletterinfo', () => {
     cy.get(changesAlertComponentCloseButtonSelector).click();
     cy.get(changesAlertComponentSelector).should('not.be.visible');
   })
-
 });
 
 function currentMoment() {
