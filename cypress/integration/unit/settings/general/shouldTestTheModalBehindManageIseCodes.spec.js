@@ -23,6 +23,7 @@ context('Manage ISE codes tests', () => {
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
     cy.get(settings.manageIseCodes).click();
+    cy.wait(200);
     cy.get(modal.modalManager.add).should('be.visible');
     cy.get(modal.modalManager.close).click();
     cy.get(modal.modalManager.add).should('not.be.visible');

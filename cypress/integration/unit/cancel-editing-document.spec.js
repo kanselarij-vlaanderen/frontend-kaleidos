@@ -40,7 +40,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.setFormalOkOnAllItems();
       cy.agendaItemExists(SubcaseTitleShort).click();
-
+      cy.wait(1000);
       cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -208,6 +208,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       cy.openAgendaForDate(agendaDate,meetingId);
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.agendaItemExists(SubcaseTitleShort).click();
+      cy.wait(1000);
       cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {

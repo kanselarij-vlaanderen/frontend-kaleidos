@@ -24,7 +24,7 @@ context('Model action', () => {
     const agendaDate = Cypress.moment("2020-01-13").set({"hour": 10, "minute": 10});
     cy.openAgendaForDate(agendaDate);
     cy.openActionModal();
-    cy.get(actionModal.addAnnouncement).click();
+    cy.get(actionModal.announcement).click();
     cy.get(form.formInput).type('Dit is een korte titel');
     cy.get(modal.createAnnouncement.titleSubcase).type('Dit is de subcasetitle')
     cy.get('.vl-upload__element__button__container').click();

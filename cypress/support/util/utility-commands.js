@@ -6,7 +6,7 @@
 
 // Commands
 import agenda from "../../selectors/agenda.selectors";
-import actionModal from "../../selectors/modal.selectors";
+import actionModal from "../../selectors/action-modal.selectors";
 import modal from "../../selectors/modal.selectors";
 
 Cypress.Commands.add('selectDate', selectDate);
@@ -72,7 +72,7 @@ function openActionModal() {
 
   const BE_VISIBLE = 'be.visible';
 
-  cy.get(actionModal.showActionOptions).click();
+  cy.get(actionModal.showActionOptions).should('be.visible').click();
   cy.get(actionModal.navigatetosubcases).should(BE_VISIBLE);
   cy.get(actionModal.announcement).should(BE_VISIBLE);
   cy.get(actionModal.navigatetodecisions).should(BE_VISIBLE);
