@@ -95,6 +95,18 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
       .should('be.visible')
       .click()
       .wait(2000); //Access-levels GET occured earlier, general wait instead
+    cy.get(changesAlertComponentSelector).should('not.be.visible');
+
+    // Upload another file
+    cy.route('/');
+    cy.openAgendaForDate(agendaDate);
+    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
+
+    cy.get(agendaAgendaItemKortBestekTabSelector)
+      .should('be.visible')
+      .click()
+      .wait(2000); //Access-levels GET occured earlier, general wait instead
+
     cy.get(changesAlertComponentSelector).should('be.visible');
     cy.get(changesAlertComponentCloseButtonSelector).click();
     cy.get(changesAlertComponentSelector).should('not.be.visible');
@@ -102,7 +114,9 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.get(newsletterEditSelector).should('be.visible').click();
     cy.get(newsletterRdfaEditorSelector).type('Aanpassing');
     cy.get(newsletterEditSave).type('Aanpassing');
+    cy.wait(2000);
     cy.get(modalVerifySaveSelector).click();
+    cy.wait(5000);
     cy.get(agendaAgendaItemDocumentsTabSelector).should('be.visible').click();
     cy.get(agendaAgendaItemKortBestekTabSelector).should('be.visible').click();
     cy.get(changesAlertComponentSelector).should('not.be.visible');

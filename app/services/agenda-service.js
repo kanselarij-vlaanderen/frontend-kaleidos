@@ -224,7 +224,7 @@ export default Service.extend(isAuthenticatedMixin, {
   },
 
   async deleteAgendaitemFromMeeting(agendaitem) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     const currentAgenda = await itemToDelete.get('agenda');
     const currentMeeting = await currentAgenda.get('createdFor');
     const currentMeetingId = await currentMeeting.get('id');
@@ -264,21 +264,25 @@ export default Service.extend(isAuthenticatedMixin, {
   async retrieveModifiedDateFromNota(agendaItem) {
     const newsletterInfoForSubcase = await agendaItem.get('subcase.newsletterInfo');
     const nota = await agendaItem.get('nota');
-    if(!nota) {
+    if (!nota) {
       return null;
     }
 
     const documentVersion = await nota.get('lastDocumentVersion');
     const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
-    const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
-    if (newsletterInfoOnSubcaseLastModifiedTime) {
-      if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+    const notaDocumentVersions = await nota.get('documentVersions');
+    if (notaDocumentVersions.length > 1) {
+      const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
+      if (newsletterInfoOnSubcaseLastModifiedTime) {
+        if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
+          return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+        } else {
+          return null;
+        }
       } else {
-        return null;
+        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
       }
-    } else {
-      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
     }
+    return null;
   }
 });
