@@ -5,7 +5,6 @@ import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
   queryParams: ['filter'],
-
   routing: inject('-routing'),
   filter: null,
   sessionService: inject(),
@@ -38,6 +37,11 @@ export default Controller.extend({
     } else {
       return 'vlc-panel-layout-agenda__detail vl-u-bg-porcelain';
     }
+  }),
+
+  isOverviewWindow: computed('routing.currentRouteName', function () {
+    const { routing } = this;
+    return routing.get('currentRouteName') === 'agenda.agendaitems.index';
   }),
 
   actions: {

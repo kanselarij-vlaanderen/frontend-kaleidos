@@ -51,6 +51,7 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "decision-in-newsletter")}}
     {{web-components/vl-rdfa-editor
+      data-test-rdfa-editor
       isLarge=isExpanded
       richtext=(await agendaitem.subcase.newsletterInfo.richtext)
       handleRdfaEditorInit=(action "handleRdfaEditorInit")
@@ -75,6 +76,7 @@
     {{t "cancel"}}
   </a>
   {{web-components/vl-save-button
+    data-test-newsletter-edit-save
     text=(t "save")
     isLoading=isLoading
     saveAction=(action "trySaveChanges")

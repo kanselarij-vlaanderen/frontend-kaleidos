@@ -6,6 +6,8 @@ import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
 import LinkedDocumentModelMixin from 'fe-redpencil/mixins/models/linked-document-model-mixin';
+import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import { A } from '@ember/array';
 
 let { attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
@@ -45,7 +47,13 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   phases: hasMany('subcase-phase'),
   themes: hasMany('theme'),
 
-  number: computed('displayPriority', 'priority', function () {
+  sortedDocumentVersions: computed('documentVersions.@each.name', function() {
+    return A(this.get('documentVersions').toArray()).sort((a, b) => {
+      return compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name')));
+    });
+  }),
+
+  number: computed('displayPriority', 'priority', function() {
     const { priority, displayPriority } = this;
     if (!priority) {
       return displayPriority;

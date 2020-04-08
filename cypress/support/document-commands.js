@@ -2,7 +2,13 @@
 /// <reference types="Cypress" />
 
 import 'cypress-file-upload';
-import {modalDocumentVersionUploadedFilenameSelector} from "../selectors/documents/documentSelectors";
+import {
+  documentUploadNewVersionSelector, documentUploadShowMoreSelector,
+  modalDocumentVersionUploadedFilenameSelector
+} from '../selectors/documents/documentSelectors';
+import { agendaAgendaItemDocumentsTabSelector } from '../selectors/agenda/agendaSelectors';
+import { formSaveSelector } from '../selectors/formSelectors/formSelectors';
+import { modalDialogSelector } from '../selectors/models/modelSelectors';
 // ***********************************************
 // Commands
 
@@ -14,6 +20,7 @@ Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMe
 Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
 Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
 Cypress.Commands.add('uploadFile', uploadFile);
+Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
 
 // ***********************************************
 // Functions
@@ -75,7 +82,6 @@ function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
  * @name addNewDocumentVersionToSubcase
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemTitle
  * @param {string} oldFileName
  * @param {string} file
  */
@@ -98,8 +104,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
     .contains(agendaItemTitle)
     .click()
     .wait(2000); // sorry
-  cy.get('.vl-tab > a.vl-tab__link')
-    .contains('Documenten')
+  cy.get(agendaAgendaItemDocumentsTabSelector)
     .should('be.visible')
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
@@ -189,14 +194,13 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     .parents('.vlc-document-card').as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get('.vl-vi-nav-show-more-horizontal').click();
+    cy.get(documentUploadShowMoreSelector).click();
   });
-  cy.get('.vl-link--block')
-    .contains('Nieuwe versie uploaden', { timeout: 12000 })
+  cy.get(documentUploadNewVersionSelector)
     .should('be.visible')
     .click();
 
-  cy.get('.vl-modal-dialog').as('fileUploadDialog');
+  cy.get(modalDialogSelector).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -205,10 +209,10 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
   cy.wait(1000); //Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get('.vl-button').contains('Toevoegen').click();
+    cy.get(formSaveSelector).click();
   });
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
-  
+
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {

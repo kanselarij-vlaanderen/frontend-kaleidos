@@ -1,21 +1,25 @@
 import Route from '@ember/routing/route';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import { isEmpty } from '@ember/utils';
+import moment from 'moment';
 import search from '../../utils/mu-search';
 
 export default Route.extend(DataTableRouteMixin, {
   queryParams: {
     searchText: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'zoekterm'
     },
     mandatees: {
       refreshModel: true
     },
     dateFrom: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'vanaf'
     },
     dateTo: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'tot'
     },
     announcementsOnly: {
       refreshModel: true,
@@ -40,10 +44,12 @@ export default Route.extend(DataTableRouteMixin, {
       filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
     }
     if (!isEmpty(params.dateFrom)) {
-      filter[':gte:sessionDates'] = params.dateFrom;
+      const date = moment(params.dateFrom, "DD-MM-YYYY").startOf('day');
+      filter[':gte:sessionDates'] = date.utc().toISOString();
     }
     if (!isEmpty(params.dateTo)) {
-      filter[':lte:sessionDates'] = params.dateTo;
+      const date = moment(params.dateTo, "DD-MM-YYYY").endOf('day');  // "To" interpreted as inclusive
+      filter[':lte:sessionDates'] = date.utc().toISOString();
     }
 
     if (params.announcementsOnly) {

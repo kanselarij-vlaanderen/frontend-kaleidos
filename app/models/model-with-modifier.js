@@ -1,7 +1,6 @@
 import DS from 'ember-data';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import moment from "moment";
-import EmberObject from '@ember/object';
 import ModelWithToasts from 'fe-redpencil/models/model-with-toasts';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
@@ -9,9 +8,9 @@ import ModifiedOldDataError from '../errors/modified-old-data-error';
 let { attr, belongsTo } = DS;
 
 export default ModelWithToasts.extend({
-  currentSession: inject(),
-  intl: inject(),
-  globalError: inject(),
+  currentSession: service(),
+  intl: service(),
+  toaster: service(),
   modified: attr('datetime'),
   modifiedBy: belongsTo('user'),
 
@@ -33,11 +32,7 @@ export default ModelWithToasts.extend({
       }
       case 'updated': {
         await this.preEditOrSaveCheck();
-        this.globalError.showToast.perform(EmberObject.create({
-          title: this.intl.t('successfully-created-title'),
-          message: this.intl.t('successfully-saved'),
-          type: 'success'
-        }));
+        this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
         break;
       }
     }
@@ -58,16 +53,16 @@ export default ModelWithToasts.extend({
       const userData = await fetch(userId);
       const userDataFields = await userData.json();
       const vals = userDataFields.data.attributes;
-      this.globalError.showToast.perform(EmberObject.create({
-        title: this.intl.t('changes-could-not-be-saved-title'),
-        message: this.intl.t('changes-could-not-be-saved-message', {
-          item: this.intl.t(this.get('constructor.modelName')),
-          firstname: vals['first-name'],
-          lastname: vals['last-name'],
-          time: oldModelModifiedMoment.locale("nl").fromNow()
-        }),
-        type: 'error'
-      }), 600000);
+      const errorMessage = this.intl.t('changes-could-not-be-saved-message', {
+        item: this.intl.t(this.get('constructor.modelName')),
+        firstname: vals['first-name'],
+        lastname: vals['last-name'],
+        time: oldModelModifiedMoment.locale("nl").fromNow()
+      });
+      this.toaster.error(errorMessage,
+        this.intl.t('changes-could-not-be-saved-title'),
+        { timeOut: 600000 }
+      );
       let e = new ModifiedOldDataError();
       e.message = 'Editing concurrency protection. Data in the db was altered under your feet.';
       throw (e);

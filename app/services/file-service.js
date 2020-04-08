@@ -1,12 +1,12 @@
 import Service from '@ember/service';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { warn } from '@ember/debug';
 import { task, timeout } from 'ember-concurrency';
-import $ from 'jquery';
+import { ajax } from 'fe-redpencil/utils/ajax';
 
 export default Service.extend({
-  globalError: inject(),
-  store: inject(),
+  toaster: service(),
+  store: service(),
   shouldUndoChanges: false,
 
   init() {
@@ -16,7 +16,7 @@ export default Service.extend({
 
   convertDocumentVersion(documentVersion) {
     try {
-      $.ajax({
+      ajax({
         headers: {
           Accept: 'application/json',
         },
@@ -37,25 +37,23 @@ export default Service.extend({
   deleteDocumentWithUndo: task(function* (documentToDelete) {
     this.objectsToDelete.push(documentToDelete);
     documentToDelete.set('aboutToDelete', true);
-    yield timeout(10000);
+    yield timeout(15000);
     if (this.findObjectToDelete(documentToDelete.get('id'))) {
       yield this.deleteDocument(documentToDelete);
     } else {
       documentToDelete.set('aboutToDelete', false);
     }
-    this.globalError.set('shouldUndoChanges', false);
   }),
 
   deleteDocumentVersionWithUndo: task(function* (documentVersionToDelete) {
     this.objectsToDelete.push(documentVersionToDelete);
     documentVersionToDelete.set('aboutToDelete', true);
-    yield timeout(10000);
+    yield timeout(15000);
     if (this.findObjectToDelete(documentVersionToDelete.get('id'))) {
       yield this.deleteDocumentVersion(documentVersionToDelete);
     } else {
       documentVersionToDelete.set('aboutToDelete', false);
     }
-    this.globalError.set('shouldUndoChanges', false);
   }),
 
   async deleteDocument(document) {
@@ -99,7 +97,7 @@ export default Service.extend({
   },
 
   removeFile(id) {
-    return $.ajax({
+    return ajax({
       method: 'DELETE',
       url: '/files/' + id,
     });

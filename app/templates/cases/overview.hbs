@@ -6,8 +6,8 @@
       size=size
       searchText=(readonly searchText)
       searchInDecisionsOnly=(readonly decisionsOnly)
-      dateFrom=(or dateFrom null)
-      dateTo=(or dateTo null)
+      dateFrom=(or deSerializedDateFrom null)
+      dateTo=(or deSerializedDateTo null)
       ministerName=(readonly mandatees)
       filter=(action "filterCases")
     }}
@@ -95,7 +95,8 @@
           {{/if}}
           <td class="vl-u-align-right">
             {{#if isEditor}}
-              <button type="button" class="vl-button vl-button--link vl-button--icon">
+              <button type="button"
+                      class="vl-button vl-button--link vl-button--icon">
                 <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
                 ></i>
                 {{#attach-popover

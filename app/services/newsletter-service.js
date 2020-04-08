@@ -1,90 +1,70 @@
 import Service from '@ember/service';
-import { inject } from '@ember/service';
-import $ from 'jquery';
-import EmberObject from '@ember/object';
+import { inject as service } from '@ember/service';
+import { ajax } from 'fe-redpencil/utils/ajax';
 import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Service.extend(isAuthenticatedMixin, {
-  store: inject(),
-  globalError: inject(),
-  intl: inject(),
-  formatter: inject(),
+  store: service(),
+  toaster: service(),
+  intl: service(),
+  formatter: service(),
 
-  createCampaign(agenda, meeting) {
-    return $.ajax({
-      method: 'POST',
-      url: `/newsletter/createCampaign?agendaId=${agenda.get('id')}`,
-      success: (result) => {
-        const { body } = result;
-        const mailCampaign = this.store.createRecord('mail-campaign', {
-          campaignId: body.campaign_id,
-          campaignWebId: body.campaign_web_id,
-          archiveUrl: body.archive_url,
-        });
-        mailCampaign.save().then((savedCampaign) => {
-          meeting.set('mailCampaign', savedCampaign);
-          return meeting.save();
-        });
-      },
-      error: () => {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error-create-newsletter'),
-            type: 'error',
-          })
-        );
-      },
-    });
+  async createCampaign(agenda, meeting) {
+    try {
+      const result = await ajax({
+        method: 'POST',
+        url: `/newsletter/createCampaign?agendaId=${agenda.get('id')}`,
+      });
+
+      const { body } = result;
+
+      const mailCampaign = this.store.createRecord('mail-campaign', {
+        campaignId: body.campaign_id,
+        campaignWebId: body.campaign_web_id,
+        archiveUrl: body.archive_url,
+      });
+
+      mailCampaign.save().then((savedCampaign) => {
+        meeting.set('mailCampaign', savedCampaign);
+        return meeting.save();
+      });
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-create-newsletter'), this.intl.t('warning-title'));
+    }
   },
 
   async deleteCampaign(id) {
-    return $.ajax({
-      method: 'DELETE',
-      url: `/newsletter/deleteCampaign/${id}`,
-      error: () => {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error-delete-newsletter'),
-            type: 'error',
-          })
-        );
-      },
-    });
+    try {
+      return ajax({
+        method: 'DELETE',
+        url: `/newsletter/deleteCampaign/${id}`,
+      });
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
+    }
   },
 
-  sendCampaign(id, agendaId) {
-    return $.ajax({
-      method: 'POST',
-      url: `/newsletter/sendCampaign/${id}?agendaId=${agendaId}`,
-      error: () => {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error-send-newsletter'),
-            type: 'error',
-          })
-        );
-      },
-    });
+  sendCampaign(id, agendaId) { // TODO: this and below method are sync, while 2 methods above async?
+    try {
+      return ajax({
+        method: 'POST',
+        url: `/newsletter/sendCampaign/${id}?agendaId=${agendaId}`,
+      });
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+    }
   },
 
   getMailCampaign(id) {
-    return $.ajax({
-      method: 'GET',
-      url: `/newsletter/fetchTestCampaign/${id}`,
-      error: () => {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error-send-newsletter'),
-            type: 'error',
-          })
-        );
-      },
-    });
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/fetchTestCampaign/${id}`,
+      });
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+    }
   },
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed

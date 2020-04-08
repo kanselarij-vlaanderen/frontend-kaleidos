@@ -15,6 +15,10 @@ export default Component.extend({
     return this.intl.t(this.get('buttonText'));
   }),
 
+  didInsertElement() {
+      this.get('element').querySelector('[role="dialog"]').focus();
+  },
+
   showIcon: computed('buttonType', function () {
     if (this.buttonType === 'warning') {
       return false;
@@ -30,6 +34,12 @@ export default Component.extend({
       return 'vl-button vl-button--narrow vl-button--error'
     }
   }),
+
+  keyDown: function (event) {
+    if (event.key === 'Escape') {
+      this.cancel();
+    }
+  },
 
   actions: {
     verify() {
