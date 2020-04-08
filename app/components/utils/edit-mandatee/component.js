@@ -68,7 +68,7 @@ export default Component.extend({
     },
 
     cancel() {
-      this.showVerificationPopup = !this.showVerificationPopup;
+      this.showVerificationPopup = false;
     },
 
     keyDown: function (event) {
@@ -78,14 +78,14 @@ export default Component.extend({
     },
 
     async triggerPopUp(mandateeToEdit) {
-      const queryTime = moment(mandateeToEdit.end).format("YYYYMMDD");
+      const queryTime = moment(mandateeToEdit.end).format('YYYYMMDD');
       this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(queryTime, mandateeToEdit.id);
-      if(!this.showVerificationPopup) {
+      if (!this.showVerificationPopup) {
         this.saveChanges();
       }
     },
     saveChanges() {
       this.saveChanges();
     }
-   },
+  },
 });
