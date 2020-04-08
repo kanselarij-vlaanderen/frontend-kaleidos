@@ -79,6 +79,7 @@
               {{#if (await canDelete)}}
                 <li class="vlc-dropdown-menu__item">
                   <a href="" class="vl-link"
+                     data-test-delete-subcase
                     {{action attacher.hide}}
                     {{action "requestDeleteSubcase" subcase}}
                   >

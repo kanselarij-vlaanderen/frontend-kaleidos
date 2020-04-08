@@ -1,9 +1,10 @@
 /*global context, before, it, cy, Cypress, beforeEach*/
 /// <reference types="Cypress" />
 
-import {formCancelButtonSelector, formSaveSelector} from "../../selectors/formSelectors/formSelectors";
-import {modalDialogCloseModalSelector, modalDialogSelector} from "../../selectors/models/modelSelectors";
-import {modalDocumentVersionDeleteSelector, modalDocumentVersionUploadedFilenameSelector} from "../../selectors/documents/documentSelectors";
+import form from "../../selectors/form.selectors";
+import modal from "../../selectors/modal.selectors";
+import document from "../../selectors/document.selectors";
+import agenda from '../../selectors/agenda.selectors';
 
 context('Tests for cancelling CRUD operations on document and document-versions' , () => {
   before(() => {
@@ -40,7 +41,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       cy.setFormalOkOnAllItems();
       cy.agendaItemExists(SubcaseTitleShort).click();
 
-      cy.clickAgendaitemTab('Documenten');
+      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -207,7 +208,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       cy.openAgendaForDate(agendaDate,meetingId);
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.clickAgendaitemTab('Documenten');
+      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -216,10 +217,10 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
 
       uploadFileToCancel(file);
-      cy.get(formCancelButtonSelector).click().wait('@deleteFile');
+      cy.get(form.formCancelButton).click().wait('@deleteFile');
 
       cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
-      cy.get(modalDialogSelector).should('not.be.visible');
+      cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
           cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
@@ -227,9 +228,9 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
 
       uploadFileToCancel(file);
-      cy.get(modalDialogCloseModalSelector).click().wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
+      cy.get(modal.createAnnouncement.modalDialogCloseModal).click().wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
       cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
-      cy.get(modalDialogSelector).should('not.be.visible');
+      cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
           cy.get('.vl-title--h6 > span').contains(file.newFileName + 'TER');
@@ -237,17 +238,17 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
 
       uploadFileToCancel(file);
-      cy.get(modalDocumentVersionDeleteSelector).should('exist').click().wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
-      cy.get(modalDialogSelector).within(() => {
-        cy.get(formSaveSelector).should('be.disabled');
+      cy.get(document.modalDocumentVersionDelete).should('exist').click().wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
+      cy.get(modal.createAnnouncement.modalDialog).within(() => {
+        cy.get(form.formSave).should('be.disabled');
         cy.uploadFile(file.folder, file.fileName, file.fileExtension);
         cy.wait(1000);
-        cy.get(formSaveSelector).should('not.be.disabled').click();
+        cy.get(form.formSave).should('not.be.disabled').click();
         cy.wait('@createNewDocumentVersion', { timeout: 12000 });
         cy.wait('@patchSubcase', { timeout: 12000 });
         cy.wait('@patchAgendaitem', { timeout: 12000 });
       });
-      cy.get(modalDialogSelector).should('not.be.visible');
+      cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
           cy.get('.vl-title--h6 > span').contains(file.newFileName + 'QUATER');
@@ -317,9 +318,9 @@ function uploadFileToCancel(file) {
     .should('be.visible')
     .click();
 
-  cy.get(modalDialogSelector).within(() => {
+  cy.get(modal.createAnnouncement.modalDialog).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(modalDocumentVersionUploadedFilenameSelector).should('contain', file.fileName);
+    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
     cy.wait(1000);
   });
 }

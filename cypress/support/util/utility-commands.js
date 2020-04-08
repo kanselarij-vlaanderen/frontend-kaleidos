@@ -5,15 +5,9 @@
 // ***********************************************
 
 // Commands
-import {
-  datepickerButtonSelector,
-  flatpickrDaySelector,
-  flatpickrMonthDropdownMonthsSelector, inputNumInputCurYearSelector, numInputWrapperSelector
-} from "../../selectors/agenda/agendaSelectors";
-import {showActionOptions, navigatetosubcases,announcement,navigatetodecisions, navigatetonewsletter,
-  navigatetonotes,navigatetopressagenda, toggleeditingsession, selectsignature, downloadddocuments, deleteAgendaSelector
-} from "../../selectors/agenda/actionModalSelectors";
-import {modalDialogCloseModalSelector, modalDialogSelector} from "../../selectors/models/modelSelectors";
+import agenda from "../../selectors/agenda.selectors";
+import actionModal from "../../selectors/modal.selectors";
+import modal from "../../selectors/modal.selectors";
 
 Cypress.Commands.add('selectDate', selectDate);
 Cypress.Commands.add('selectAction', selectAction);
@@ -42,15 +36,15 @@ function selectDate(year,month,day, index) {
   let element;
 
   if(index !== undefined) {
-    element = cy.get(datepickerButtonSelector).eq(index).click();
-    element.get(flatpickrMonthDropdownMonthsSelector).eq(index).select(month);
-    element.get(numInputWrapperSelector).get(inputNumInputCurYearSelector).eq(index).clear().type(year, {delay: 300});
-    element.get(flatpickrDaySelector).should('be.visible').contains(day).click();
+    element = cy.get(agenda.datepickerButton).eq(index).click();
+    element.get(agenda.flatpickrMonthDropdownMonths).eq(index).select(month);
+    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(index).clear().type(year, {delay: 300});
+    element.get(agenda.flatpickrDay).should('be.visible').contains(day).click();
   } else {
-    element = cy.get(datepickerButtonSelector).click();
-    element.get(flatpickrMonthDropdownMonthsSelector).select(month);
-    element.get(numInputWrapperSelector).get(inputNumInputCurYearSelector).clear().type(year, {delay: 300});
-    element.get(flatpickrDaySelector).contains(day).click();
+    element = cy.get(agenda.datepickerButton).click();
+    element.get(agenda.flatpickrMonthDropdownMonths).select(month);
+    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).clear().type(year, {delay: 300});
+    element.get(agenda.flatpickrDay).contains(day).click();
   }
 }
 
@@ -78,17 +72,17 @@ function openActionModal() {
 
   const BE_VISIBLE = 'be.visible';
 
-  cy.get(showActionOptions).click();
-  cy.get(navigatetosubcases).should(BE_VISIBLE);
-  cy.get(announcement).should(BE_VISIBLE);
-  cy.get(navigatetodecisions).should(BE_VISIBLE);
-  cy.get(navigatetonewsletter).should(BE_VISIBLE);
-  cy.get(navigatetonotes).should(BE_VISIBLE);
-  cy.get(navigatetopressagenda).should(BE_VISIBLE);
-  cy.get(toggleeditingsession).should(BE_VISIBLE);
-  cy.get(selectsignature).should(BE_VISIBLE);
+  cy.get(actionModal.showActionOptions).click();
+  cy.get(actionModal.navigatetosubcases).should(BE_VISIBLE);
+  cy.get(actionModal.announcement).should(BE_VISIBLE);
+  cy.get(actionModal.navigatetodecisions).should(BE_VISIBLE);
+  cy.get(actionModal.navigatetonewsletter).should(BE_VISIBLE);
+  cy.get(actionModal.navigatetonotes).should(BE_VISIBLE);
+  cy.get(actionModal.navigatetopressagenda).should(BE_VISIBLE);
+  cy.get(actionModal.toggleeditingsession).should(BE_VISIBLE);
+  cy.get(actionModal.selectsignature).should(BE_VISIBLE);
   // cy.get(downloadddocuments).should(BE_VISIBLE); // TODO reenable when feature is fixed
-  cy.get(deleteAgendaSelector).should(BE_VISIBLE);
+  cy.get(actionModal.agendaHeaderDeleteAgenda).should(BE_VISIBLE);
 }
 
 /**
@@ -114,7 +108,7 @@ function validateDropdownElements(elementIndex, textContent) {
  */
 function openSettingsModal(selector) {
   cy.get(selector).click();
-  cy.get(modalDialogSelector).should('be.visible');
+  cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
 }
 
 /**
@@ -124,8 +118,8 @@ function openSettingsModal(selector) {
  * @function
  */
 function closeSettingsModal() {
-  cy.get(modalDialogCloseModalSelector).click();
-  cy.get(modalDialogSelector).should('not.be.visible');
+  cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
+  cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
 }
 
 

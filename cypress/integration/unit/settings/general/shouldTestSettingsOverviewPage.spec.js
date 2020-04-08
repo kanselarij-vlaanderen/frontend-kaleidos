@@ -1,89 +1,80 @@
 /*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
-import {
-  generalSettingsSelector,
-  settingsUserTable,
-  manageAlertsSelector, manageCaseTypesSelector, manageDocumentTypesSelector,
-  manageGovermentDomainsSelector,
-  manageGovermentFieldsSelector,
-  manageIseCodesSelector,
-  manageMinistersSelector, manageSignaturesSelector, manageSubcaseTypesSelector,
-  manageUsersSelector
-} from "../../../../selectors/settings/settingsSelectors";
-import {settingsSelector} from "../../../../selectors/toolbar/toolbarSelectors";
+import settings from "../../../../selectors/settings.selectors";
+import toolbar from "../../../../selectors/toolbar.selectors";
 
 context('Settings overview page tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
     cy.route('/');
-    cy.get(settingsSelector).click();
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
   });
 
   it('Should open settings page and see all fields from the general settings tab', () => {
-    cy.get(generalSettingsSelector).should('be.visible');
-    cy.get(manageMinistersSelector).should('be.visible');
-    cy.get(manageUsersSelector).should('be.visible');
-    cy.get(manageGovermentDomainsSelector).should('be.visible');
-    cy.get(manageGovermentFieldsSelector).should('be.visible');
-    cy.get(manageIseCodesSelector).should('be.visible');
-    cy.get(manageAlertsSelector).should('be.visible');
-    cy.get(manageDocumentTypesSelector).should('be.visible');
-    cy.get(manageCaseTypesSelector).should('be.visible');
-    cy.get(manageSubcaseTypesSelector).should('be.visible');
-    cy.get(manageSignaturesSelector).should('be.visible');
+    cy.get(settings.generalSettings).should('be.visible');
+    cy.get(settings.manageMinisters).should('be.visible');
+    cy.get(settings.manageUsers).should('be.visible');
+    cy.get(settings.manageGovermentDomains).should('be.visible');
+    cy.get(settings.manageGovermentFields).should('be.visible');
+    cy.get(settings.manageIseCodes).should('be.visible');
+    cy.get(settings.manageAlerts).should('be.visible');
+    cy.get(settings.manageDocumentTypes).should('be.visible');
+    cy.get(settings.manageCaseTypes).should('be.visible');
+    cy.get(settings.manageSubcaseTypes).should('be.visible');
+    cy.get(settings.manageSignatures).should('be.visible');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
-    cy.openSettingsModal(manageGovermentDomainsSelector);
+    cy.openSettingsModal(settings.manageGovermentDomains);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage goverment fields and close it', () => {
-    cy.openSettingsModal(manageGovermentFieldsSelector);
+    cy.openSettingsModal(settings.manageGovermentFields);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage ISE codes and close it', () => {
-    cy.openSettingsModal(manageIseCodesSelector);
+    cy.openSettingsModal(settings.manageIseCodes);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage alerts and close it', () => {
-    cy.openSettingsModal(manageAlertsSelector);
+    cy.openSettingsModal(settings.manageAlerts);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage document types and close it', () => {
-    cy.openSettingsModal(manageDocumentTypesSelector);
+    cy.openSettingsModal(settings.manageDocumentTypes);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage case types and close it', () => {
-    cy.openSettingsModal(manageCaseTypesSelector);
+    cy.openSettingsModal(settings.manageCaseTypes);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage subcase types and close it', () => {
-    cy.openSettingsModal(manageSubcaseTypesSelector);
+    cy.openSettingsModal(settings.manageSubcaseTypes);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage signatures and close it', () => {
-    cy.openSettingsModal(manageSignaturesSelector);
+    cy.openSettingsModal(settings.manageSignatures);
     cy.closeSettingsModal();
   });
 
   it('Upload a users CSV', () => {
     cy.route('/');
-    cy.get(settingsSelector).click();
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
-    cy.get(manageUsersSelector).contains('Gebruikersbeheer').click();
+    cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
     cy.url().should('include','instellingen/gebruikers');
-    cy.contains('Gebruikers importeren').click()
+    cy.contains('Gebruikers importeren').click();
     cy.uploadUsersFile('files','test', 'csv');
-    cy.get(settingsUserTable).contains('Wendy');
+    cy.get(settings.settingsUserTable).contains('Wendy');
   });
 });

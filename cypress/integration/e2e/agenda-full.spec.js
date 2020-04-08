@@ -13,7 +13,7 @@ context('Full test', () => {
   });
 
   it('Scenario where a complete agenda is created', () => {
-    testId = 'testId=' + cy.currentTimestamp() + ': ';
+    testId = 'testId=' + currentTimestamp() + ': ';
 
     //#region routes to be reused
     cy.route('GET', '/cases?**').as('getCases');
@@ -146,4 +146,14 @@ context('Full test', () => {
 
   });
 
+  /**
+   * @description returns the current time in unix timestamp
+   * @name currentTimestamp
+   * @memberOf Cypress.Chainable#
+   * @function
+   * @returns {number} The current time in unix timestamp
+   */
+  function currentTimestamp() {
+    return Cypress.moment().unix();
+  }
 });

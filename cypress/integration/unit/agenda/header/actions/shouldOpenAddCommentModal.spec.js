@@ -1,11 +1,9 @@
 /*global context, it, cy, Cypress, beforeEach*/
 /// <reference types="Cypress" />
 
-import {addAnnouncementSelector} from "../../../../../selectors/agenda/actionModalSelectors";
-import {formSaveSelector, formInputSelector} from "../../../../../selectors/formSelectors/formSelectors";
-import {
-  createAnnouncementTitleSubcaseSelector
-} from "../../../../../selectors/models/modelSelectors";
+import actionModal from "../../../../../selectors/action-modal.selectors";
+import form from "../../../../../selectors/form.selectors";
+import modal from "../../../../../selectors/modal.selectors";
 
 context('Model action', () => {
 
@@ -26,16 +24,16 @@ context('Model action', () => {
     const agendaDate = Cypress.moment("2020-01-13").set({"hour": 10, "minute": 10});
     cy.openAgendaForDate(agendaDate);
     cy.openActionModal();
-    cy.get(addAnnouncementSelector).click();
-    cy.get(formInputSelector).type('Dit is een korte titel');
-    cy.get(createAnnouncementTitleSubcaseSelector).type('Dit is de subcasetitle')
+    cy.get(actionModal.addAnnouncement).click();
+    cy.get(form.formInput).type('Dit is een korte titel');
+    cy.get(modal.createAnnouncement.titleSubcase).type('Dit is de subcasetitle')
     cy.get('.vl-upload__element__button__container').click();
     cy.fixture("files/test.pdf").then(fileContent => {
       cy.get('[type=file]').upload(
         {fileContent, fileName: "test.pdf", mimeType: 'application/pdf'},
         {uploadType: 'input'});
       cy.wait('@createNewFile');
-      cy.get(formSaveSelector).click();
+      cy.get(form.formSave).click();
     });
   });
 });

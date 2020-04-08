@@ -1,8 +1,8 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
-import { changesAlertComponentSelector } from '../../../selectors/components/changesAlertSelectors';
-import { agendaAgendaItemKortBestekTabSelector } from '../../../selectors/agenda/agendaSelectors';
+import alert from '../../../selectors/alert.selectors';
+import agenda from '../../../selectors/agenda.selectors';
 
 context('Show warning in newsletterinfo', () => {
 
@@ -89,11 +89,11 @@ context('Show warning in newsletterinfo', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
 
-    cy.get(agendaAgendaItemKortBestekTabSelector)
+    cy.get(agenda.agendaItemKortBestekTab)
       .should('be.visible')
       .click()
       .wait(2000); //Access-levels GET occured earlier, general wait instead
-    cy.get(changesAlertComponentSelector).should('be.visible');
+    cy.get(alert.changesAlertComponent).should('be.visible');
   })
 });
 

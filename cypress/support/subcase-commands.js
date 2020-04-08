@@ -1,8 +1,12 @@
 /*global  cy, Cypress*/
 /// <reference types="Cypress" />
 
+
+
 // ***********************************************
 // Commands
+
+import cases from "../selectors/case.selectors"
 
 Cypress.Commands.add('openSubcase', openSubcase);
 Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
@@ -225,9 +229,9 @@ function deleteSubcase() {
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
-  cy.get('.vlc-dropdown-menu__item > .vl-link')
+  cy.get(cases.deleteSubcase)
     .contains('Procedurestap verwijderen')
-    .click()
+    .click();
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
     cy.get('button').contains('Verwijderen').click();

@@ -1,12 +1,9 @@
 /*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
-
-import {
-   manageIseCodesSelector
-} from "../../../../selectors/settings/settingsSelectors";
-import {settingsSelector} from "../../../../selectors/toolbar/toolbarSelectors";
-import {modalDialogCloseModalSelector, modalDialogSelector} from "../../../../selectors/models/modelSelectors";
+import settings from "../../../../selectors/settings.selectors";
+import toolbar from "../../../../selectors/toolbar.selectors";
+import modal from "../../../../selectors/modal.selectors";
 
 context('Manage ISE codes tests', () => {
   beforeEach(() => {
@@ -16,18 +13,18 @@ context('Manage ISE codes tests', () => {
   });
 
   it('Should open the model behind manage ISE codes', () => {
-    cy.get(settingsSelector).click();
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
-    cy.get(manageIseCodesSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
+    cy.get(settings.manageIseCodes).click();
+    cy.get(modal.modalManager.add).should('be.visible');
   });
 
   it('Should open the model behind manage ISE codes and close it', () => {
-    cy.get(settingsSelector).click();
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
-    cy.get(manageIseCodesSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
-    cy.get(modalDialogCloseModalSelector).click();
-    cy.get(modalDialogSelector).should('not.be.visible');
+    cy.get(settings.manageIseCodes).click();
+    cy.get(modal.modalManager.add).should('be.visible');
+    cy.get(modal.modalManager.close).click();
+    cy.get(modal.modalManager.add).should('not.be.visible');
   });
 });
