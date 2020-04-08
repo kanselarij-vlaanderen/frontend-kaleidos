@@ -1,9 +1,10 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import CONFIG from 'fe-redpencil/utils/config';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import moment from 'moment';
 
-export default Component.extend(ModifiedMixin, {
+export default Component.extend({
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   isTableRow: false,
   store: inject(),
@@ -23,9 +24,9 @@ export default Component.extend(ModifiedMixin, {
         agendaitemToUpdate = await agendaitem;
       }
       agendaitemToUpdate.set('modified', moment().utc().toDate());
-      this.changeFormallyOkPropertyIfNotSetOnTrue(agendaitemToUpdate);
+      agendaitemToUpdate.set('formallyOk', CONFIG.notYetFormallyOk);
       await agendaitemToUpdate.save().then(() => {
-        this.updateModifiedProperty(agenda);
+        updateModifiedProperty(agenda);
         if (this.isTableRow) {
           agendaitem.set('expanded', false);
         }

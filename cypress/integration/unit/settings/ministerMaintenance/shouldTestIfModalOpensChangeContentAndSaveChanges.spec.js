@@ -1,22 +1,8 @@
 /*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
-
-import {
-  iseCodesSelector, manageMinistersSelector,
-  mandateeEditSelector,
-  mandateeFullDisplayNameSelector,
-  ministerAddSelector,
-  sortableGroupRowSelector,
-  sortableGroupSelector
-} from "../../../../selectors/settings/settingsSelectors";
-import {
-  datepickerInputSelector,
-  formInputSelector,
-  formSaveSelector
-} from "../../../../selectors/formSelectors/formSelectors";
-import {settingsSelector} from "../../../../selectors/toolbar/toolbarSelectors";
-
+import settings from "../../../../selectors/settings.selectors";
+import toolbar from "../../../../selectors/toolbar.selectors";
 
 context('Settings: Maintain ministers', () => {
 
@@ -62,14 +48,14 @@ context('Settings: Maintain ministers', () => {
     cy.server();
     cy.login('Admin');
     cy.route('/');
-    cy.get(settingsSelector).click();
-    cy.get(manageMinistersSelector).click();
+    cy.get(toolbar.settings).click();
+    cy.get(settings.manageMinisters).click();
     cy.url().should('include','instellingen/ministers');
   });
 
   it('Should open the edit window on each element, change the content and save, reopen and validate that changes have been saved', () => {
 
-    cy.get(ministerAddSelector).should('be.visible');
+    cy.get(settings.addMinister).should('be.visible');
     // TODO all of this is data dependant, the default selection filters out old ministers so this list is blank with current data set
     // cy.get(sortableGroupSelector).should('be.visible');
     // cy.get(sortableGroupRowSelector).should('have.length', 9);

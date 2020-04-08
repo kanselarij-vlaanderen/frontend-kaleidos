@@ -3,9 +3,17 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
+import moment from 'moment';
 
 export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
-  queryParams: ['isArchived', 'searchText', 'mandatees', 'dateFrom', 'dateTo', 'decisionsOnly'],
+  queryParams: [
+    'isArchived',
+    { searchText: 'zoekterm' },
+    'mandatees',
+    { dateFrom: 'vanaf' },
+    { dateTo: 'tot' },
+    'decisionsOnly'
+  ],
   sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
   size: 10,
 
@@ -31,6 +39,26 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
 
   unArchiveCase: computed('intl', function () {
     return this.intl.t('unarchive-case');
+  }),
+
+  deSerializedDateFrom: computed('dateFrom', {
+    get() {
+      return this.dateFrom && moment(this.dateFrom, "DD-MM-YYYY").toDate();
+    },
+    set(key, value) {
+      this.set('dateFrom', value && moment(value).format('DD-MM-YYYY'));
+      return value;
+    }
+  }),
+
+  deSerializedDateTo: computed('dateTo', {
+    get() {
+      return this.dateTo && moment(this.dateTo, "DD-MM-YYYY").toDate();
+    },
+    set(key, value) {
+      this.set('dateTo', value && moment(value).format('DD-MM-YYYY'));
+      return value;
+    }
   }),
 
   actions: {
@@ -101,8 +129,8 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
       } else {
         this.set('searchText', filter.searchText);
         this.set('mandatees', filter.mandatees);
-        this.set('dateFrom', filter.dateFrom);
-        this.set('dateTo', filter.dateTo);
+        this.set('deSerializedDateFrom', filter.dateFrom);
+        this.set('deSerializedDateTo', filter.dateTo);
         this.set('decisionsOnly', filter.searchInDecisionsOnly);
         this.set('sort', '-session-dates');
       }

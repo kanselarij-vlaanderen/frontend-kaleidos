@@ -1,2 +1,0 @@
-export const modalDocumentVersionDeleteSelector = '[data-test-vl-uploaded-document-deleteversion]';
-export const modalDocumentVersionUploadedFilenameSelector = '[data-test-vl-uploaded-document-filename]';

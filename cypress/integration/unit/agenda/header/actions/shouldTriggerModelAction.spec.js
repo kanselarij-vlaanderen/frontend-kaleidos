@@ -1,7 +1,7 @@
 /*global context, it, cy, Cypress, beforeEach*/
 /// <reference types="Cypress" />
 
-import {navigatetosubcases} from "../../../../../selectors/agenda/actionModalSelectors";
+import actionModal from "../../../../../selectors/action-modal.selectors";
 
 context('Trigger model actions for action dropdown', () => {
 
@@ -21,6 +21,6 @@ context('Trigger model actions for action dropdown', () => {
     const agendaDate = Cypress.moment("2020-01-13").set({"hour": 10, "minute": 10});
     cy.openAgendaForDate(agendaDate);
     cy.openActionModal();
-    cy.get(navigatetosubcases).click();
+    cy.get(actionModal.navigatetosubcases).click();
   });
 });

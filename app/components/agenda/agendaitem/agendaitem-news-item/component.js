@@ -1,12 +1,12 @@
 import Component from '@ember/component';
 import {inject} from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
-import {computed} from '@ember/object';
+import { computed } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
+export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-padding-bottom--large'],
   store: inject(),
   newsletterService: inject(),
@@ -50,7 +50,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       const newsItem = await subcase.get('newsletterInfo');
 
       await newsItem.save().then(async () => {
-        await this.updateModifiedProperty(await this.get('agendaitem.agenda'));
+        await updateModifiedProperty(await this.get('agendaitem.agenda'));
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
       })

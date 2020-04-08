@@ -2,11 +2,9 @@
 /// <reference types="Cypress" />
 
 
-import {
-  manageSignaturesSelector
-} from "../../../../selectors/settings/settingsSelectors";
-import {settingsSelector} from "../../../../selectors/toolbar/toolbarSelectors";
-import {modalDialogCloseModalSelector, modalDialogSelector} from "../../../../selectors/models/modelSelectors";
+import settings from "../../../../selectors/settings.selectors";
+import toolbar from "../../../../selectors/toolbar.selectors";
+import modal from "../../../../selectors/modal.selectors";
 
 context('Manage signatures tests', () => {
   beforeEach(() => {
@@ -16,18 +14,18 @@ context('Manage signatures tests', () => {
   });
 
   it('Should open the model behind manage signatures', () => {
-    cy.get(settingsSelector).click();
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
-    cy.get(manageSignaturesSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
+    cy.get(settings.manageSignatures).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
   });
 
   it('Should open the model behind manage signatures and close it', () => {
-    cy.get(settingsSelector).click();
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
-    cy.get(manageSignaturesSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
-    cy.get(modalDialogCloseModalSelector).click();
-    cy.get(modalDialogSelector).should('not.be.visible');
+    cy.get(settings.manageSignatures).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
   });
 });
