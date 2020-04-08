@@ -1,9 +1,9 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 
-export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
+export default Component.extend(isAuthenticatedMixin, {
   agendaitem: null,
   isEditing: false,
 
@@ -30,7 +30,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
         const pressText = `${agendaitem.get('shortTitle')}\n${titles.join('\n')}\n${phase}`
         agendaitem.set('textPress', pressText);
         await agendaitem.save().then(() => {
-          this.updateModifiedProperty(agenda);
+          updateModifiedProperty(agenda);
         });
       }
       this.toggleProperty('isEditing');
