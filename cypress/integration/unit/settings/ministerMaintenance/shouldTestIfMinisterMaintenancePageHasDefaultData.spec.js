@@ -1,17 +1,8 @@
 /*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
-import {settingsSelector} from "../../../../selectors/toolbar/toolbarSelectors";
-import {
-  manageMinistersSelector, mandateeDeleteSelector,
-  mandateeEditSelector,
-  mandateeFullDisplayNameSelector,
-  mandateeNicknameSelector,
-  mandateePrioritySelector, mandateeResignSelector,
-  ministerAddSelector,
-  sortableGroupRowSelector,
-  sortableGroupSelector
-} from "../../../../selectors/settings/settingsSelectors";
+import toolbar from "../../../../selectors/toolbar.selectors";
+import settings from "../../../../selectors/settings.selectors";
 
 context('Settings: Maintain ministers', () => {
 
@@ -31,14 +22,14 @@ context('Settings: Maintain ministers', () => {
     cy.server();
     cy.login('Admin');
     cy.route('/');
-    cy.get(settingsSelector).click();
-    cy.get(manageMinistersSelector).click();
+    cy.get(toolbar.settings).click();
+    cy.get(settings.manageMinisters).click();
     cy.url().should('include','instellingen/ministers');
   });
 
   it('Should check if the page has loaded successfully', () => {
 
-    cy.get(ministerAddSelector).should('be.visible');
+    cy.get(settings.addMinister).should('be.visible');
     // TODO all of this is data dependant, the default selection filters out old ministers so this list is blank with current data set
     // cy.get(sortableGroupSelector).should('be.visible');
     // cy.get(sortableGroupRowSelector).should('have.length',9);
@@ -51,9 +42,4 @@ context('Settings: Maintain ministers', () => {
     //   cy.get(sortableGroupRowSelector).eq(index).get(mandateeDeleteSelector).eq(index).should('be.visible');
     // }
   });
-
-
-
-
-
 });

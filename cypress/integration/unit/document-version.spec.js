@@ -1,6 +1,8 @@
 /*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
+import agenda from '../../selectors/agenda.selectors';
+
 context('Tests for KAS-1076', () => {
 
   before(() => {
@@ -71,7 +73,6 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
     });
-
   });
 
   it('Adding new document-version to agendaitem on designagenda should reset formally ok and update the subcase', () => {
@@ -96,7 +97,8 @@ context('Tests for KAS-1076', () => {
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.setFormalOkOnAllItems();
       cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.clickAgendaitemTab('Documenten');
+      cy.wait(200);
+      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -151,7 +153,8 @@ context('Tests for KAS-1076', () => {
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.setFormalOkOnAllItems();
       cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.clickAgendaitemTab('Documenten');
+      cy.wait(1000);
+      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -172,7 +175,8 @@ context('Tests for KAS-1076', () => {
 
       cy.openAgendaForDate(agendaDate,meetingId);
       cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.clickAgendaitemTab('Documenten');
+      cy.wait(1000);
+      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
           cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');

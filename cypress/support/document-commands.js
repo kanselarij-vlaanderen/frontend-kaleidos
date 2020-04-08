@@ -2,13 +2,11 @@
 /// <reference types="Cypress" />
 
 import 'cypress-file-upload';
-import {
-  documentUploadNewVersionSelector, documentUploadShowMoreSelector,
-  modalDocumentVersionUploadedFilenameSelector
-} from '../selectors/documents/documentSelectors';
-import { agendaAgendaItemDocumentsTabSelector } from '../selectors/agenda/agendaSelectors';
-import { formSaveSelector } from '../selectors/formSelectors/formSelectors';
-import { modalDialogSelector } from '../selectors/models/modelSelectors';
+import document from '../selectors/document.selectors';
+
+import agenda  from '../selectors/agenda.selectors';
+import form  from '../selectors/form.selectors';
+import modal  from '../selectors/modal.selectors';
 // ***********************************************
 // Commands
 
@@ -105,8 +103,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
     .contains(agendaItemTitle)
     .click()
     .wait(2000); // sorry
-  cy.get(agendaAgendaItemDocumentsTabSelector)
-    .should('be.visible')
+  cy.get(agenda.agendaItemDocumentsTab)
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
   if (alreadyHasDocs) {
@@ -195,22 +192,22 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     .parents('.vlc-document-card').as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(documentUploadShowMoreSelector).click();
+    cy.get(document.documentUploadShowMore).click();
   });
-  cy.get(documentUploadNewVersionSelector)
+  cy.get(document.documentUploadNewVersion)
     .should('be.visible')
     .click();
 
-  cy.get(modalDialogSelector).as('fileUploadDialog');
+  cy.get(modal.createAnnouncement.modalDialog).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(modalDocumentVersionUploadedFilenameSelector).should('contain', file.fileName);
+    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
   });
   cy.wait(1000); //Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(formSaveSelector).click();
+    cy.get(form.formSave).click();
   });
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
 

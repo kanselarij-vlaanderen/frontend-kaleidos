@@ -1,11 +1,7 @@
 /*global context, before, it, cy*/
 /// <reference types="Cypress" />
-import {
-  navigateToPrintableAgendaSelector,
-  agendaPrintContainerSelector,
-  agendaPrintHeaderTitleSelector,
-} from '../../selectors/agenda/agendaSelectors';
-import { showActionOptions } from '../../selectors/agenda/actionModalSelectors';
+import agenda from '../../selectors/agenda.selectors';
+import actionModal from '../../selectors/action-modal.selectors';
 
 context('Agendaitem changes tests', () => {
 
@@ -63,18 +59,18 @@ context('Agendaitem changes tests', () => {
     cy.agendaItemExists(subcaseTitle1);
 
     // when navigating to print view, should contain all relevant info
-    cy.get(showActionOptions).click();
-    cy.get(navigateToPrintableAgendaSelector).click();
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(agenda.navigateToPrintableAgenda).click();
 
-    cy.get(agendaPrintHeaderTitleSelector).should('exist').should('be.visible');
-    cy.get(agendaPrintHeaderTitleSelector).contains('Vergadering van');
-    cy.get(agendaPrintHeaderTitleSelector).contains('zaterdag 02 mei 2020 om 20:20');
+    cy.get(agenda.printHeaderTitle).should('exist').should('be.visible');
+    cy.get(agenda.printHeaderTitle).contains('Vergadering van');
+    cy.get(agenda.printHeaderTitle).contains('zaterdag 02 mei 2020 om 20:20');
 
-    cy.get(agendaPrintContainerSelector).should('exist').should('be.visible');
-    cy.get(agendaPrintContainerSelector).contains('Goedkeuring van het verslag van de vergadering van vrijdag 22-11-2019.');
-    cy.get(agendaPrintContainerSelector).contains(subcaseTitle1);
-    cy.get(agendaPrintContainerSelector).contains(subcaseTitle2);
-    cy.get(agendaPrintContainerSelector).contains('Cypress test voor het testen van toegevoegde documenten');
+    cy.get(agenda.printContainer).should('exist').should('be.visible');
+    cy.get(agenda.printContainer).contains('Goedkeuring van het verslag van de vergadering van vrijdag 22-11-2019.');
+    cy.get(agenda.printContainer).contains(subcaseTitle1);
+    cy.get(agenda.printContainer).contains(subcaseTitle2);
+    cy.get(agenda.printContainer).contains('Cypress test voor het testen van toegevoegde documenten');
   });
 });
 
