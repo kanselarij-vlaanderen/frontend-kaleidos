@@ -1,11 +1,12 @@
 import Component from '@ember/component';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { getCachedProperty, EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
-import { computed } from '@ember/object';
+import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { computed, get, set } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject } from '@ember/service';
+import { saveChanges as saveSubcaseDescription } from 'fe-redpencil/utils/agenda-item-utils';
 
-export default Component.extend(isAuthenticatedMixin, EditAgendaitemOrSubcase, {
+export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   classNames: ['vl-u-spacer-extended-bottom-l'],
   propertiesToSet: Object.freeze(['subcaseName', 'type', 'showAsRemark']),
@@ -35,6 +36,24 @@ export default Component.extend(isAuthenticatedMixin, EditAgendaitemOrSubcase, {
   }),
 
   actions: {
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
+
+    async cancelEditing() {
+      const item = await this.get('item');
+      if (item.get('hasDirtyAttributes')) {
+        item.rollbackAttributes();
+      }
+      if (this.isSubcase) {
+        item.belongsTo('type').reload();
+        item.belongsTo('accessLevel').reload();
+      }
+      item.reload();
+      this.propertiesToSet.forEach(prop => item.notifyPropertyChange(prop));
+      this.toggleProperty('isEditing');
+    },
+
     async selectType(type) {
       const subcase = this.get('subcase');
       const caze = await subcase.get('case');
@@ -51,5 +70,13 @@ export default Component.extend(isAuthenticatedMixin, EditAgendaitemOrSubcase, {
         this.set('showAsRemark', false);
       }
     },
+
+    async saveChanges() {
+      const resetFormallyOk = true;
+      set(this, 'isLoading', true);
+      await saveSubcaseDescription(get(this, 'item'), get(this, 'propertiesToSet'), get(this, 'propertiesToSet'), resetFormallyOk);
+      set(this, 'isLoading', false);
+      this.toggleProperty('isEditing');
+    }
   }
 });
