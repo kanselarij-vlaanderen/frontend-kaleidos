@@ -78,8 +78,7 @@ export default Component.extend({
     },
 
     async triggerPopUp(mandateeToEdit) {
-      const queryTime = moment(mandateeToEdit.end).format('YYYYMMDD');
-      this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(queryTime, mandateeToEdit.id);
+      this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(mandateeToEdit.end, mandateeToEdit.id);
       if (!this.showVerificationPopup) {
         this.saveChanges();
       }
