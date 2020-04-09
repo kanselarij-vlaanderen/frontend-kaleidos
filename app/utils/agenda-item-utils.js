@@ -34,26 +34,6 @@ export const setModifiedOnAgendaOfAgendaitem = async (agendaitem) => {
   }
 }
 
-// export const getCachedProperty = (property) => {
-//   return computed(`item.${property}`, {
-//     get() {
-//       const { item } = this;
-//       if (item) {
-//         return item.get(property);
-//       } else {
-//         return;
-//       }
-//     },
-//     set: function (key, value) {
-//       const { item } = this;
-//       if (item) {
-//         this.item.set(property, value);
-//       }
-//       return value;
-//     }
-//   })
-// }
-
 export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
   const item = agendaitemOrSubcase;
   const isAgendaItem = item.get('modelName') === 'agendaitem';
