@@ -1,9 +1,9 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
-import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
-import { computed } from '@ember/object';
+import {getCachedProperty} from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import {computed} from '@ember/object';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
-import { inject } from '@ember/service';
+import {inject} from '@ember/service';
 
 export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   intl: inject(),
@@ -24,21 +24,21 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   remark: getCachedProperty('remark'),
   mandateeProposal: getCachedProperty('newsletterProposal'),
   isTryingToSave: false,
-
-  themes: computed(`agendaitem.themes`, {
+  themes: computed(`agendaitem.subcase.newsletterInfo.themes`, {
     async get() {
-      const { agendaitem } = this;
+      const {agendaitem} = this;
       if (agendaitem) {
-        return await agendaitem.get('themes').then((themes) => {
+        return await agendaitem.get('subcase.newsletterInfo.themes').then((themes) => {
           return themes.toArray();
         })
+      } else {
+        return [];
       }
     },
     set: function (key, value) {
       return value;
     },
   }),
-
 
   hasNota: computed('agendaitem', async function () {
     const nota = await this.agendaitem.get('nota');
@@ -53,8 +53,8 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     const item = await this.get('item');
     const documentVersionsSelected = this.get('documentVersionsSelected');
     const itemDocumentsToEdit = await item.get('documentVersions');
-    const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
-    const themes = await this.themes;
+    item.set('themes', await this.themes);
+
     if (documentVersionsSelected) {
       await Promise.all(
         documentVersionsSelected.map(async (documentVersion) => {
@@ -71,21 +71,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         })
       );
     }
-    this.setNewPropertiesToModel(item).then(async (newModel) => {
-      newModel.reload();
-      if (themes) {
-        agendaitem.set('themes', themes);
-        const subcase = await item.get('subcase');
-        subcase.set('themes', themes);
-        try {
-          await agendaitem.save();
-          await subcase.save();
-        } catch(e) {
-          throw(e);
-        } finally {
-          this.set('isLoading', false);
-        }
-      }
+    this.setNewPropertiesToModel(item).then(async () => {
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     });
@@ -93,7 +79,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 
   actions: {
     async trySaveChanges() {
-      const themes = await this.themes;
+      const themes = await this.get('themes');
       if (themes.length > 0) {
         return this.saveChanges()
       }
