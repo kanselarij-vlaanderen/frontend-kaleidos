@@ -3,13 +3,10 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
-import { getOwner } from '@ember/application';
 
 export default Component.extend(isAuthenticatedMixin, {
-  get editAgendaitemOrSubcaseService() {
-    return getOwner(this).lookup('service:edit-agendaitem-or-subcase');
-  },
   store: inject(),
   classNames: ['vl-u-spacer-extended-bottom-l'],
   item: null,
@@ -104,7 +101,7 @@ export default Component.extend(isAuthenticatedMixin, {
       const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
       const propertiesToSetOnAgendaitem = {'mandatees': propertiesToSetOnSubcase['mandatees']}
       const resetFormallyOk = true;
-      this.editAgendaitemOrSubcaseService.saveChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk).then(() => {
+      saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk).then(() => {
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
       }).catch((e) => {
