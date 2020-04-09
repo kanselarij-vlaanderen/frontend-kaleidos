@@ -2,10 +2,11 @@ import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export const cancelEdit = (item, propertiesToSet) => {
+  const isSubcase = item.get('modelName') === 'subcase';
   if (item.get('hasDirtyAttributes')) {
     item.rollbackAttributes();
   }
-  if (this.isSubcase) {
+  if (isSubcase) {
     item.belongsTo('type').reload();
     item.belongsTo('accessLevel').reload();
   }
