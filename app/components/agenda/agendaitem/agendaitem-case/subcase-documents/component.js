@@ -1,12 +1,10 @@
 import Component from '@ember/component';
-import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 
 export default Component.extend(
-  EditAgendaitemOrSubcase,
   isAuthenticatedMixin,
   uploadDocumentMixin,
   {
