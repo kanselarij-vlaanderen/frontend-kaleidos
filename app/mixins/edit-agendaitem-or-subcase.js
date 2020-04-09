@@ -2,7 +2,7 @@ import Mixin from '@ember/object/mixin';
 import { computed } from '@ember/object';
 import { not } from '@ember/object/computed';
 import { inject } from '@ember/service';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import CONFIG from 'fe-redpencil/utils/config';
 
 const getCachedProperty = function (property) {
@@ -22,7 +22,7 @@ const getCachedProperty = function (property) {
   })
 };
 
-const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
+const EditAgendaitemOrSubcase = Mixin.create({
   // XOR
   store: inject(),
   item: null,
@@ -40,7 +40,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
 
     if (resetFormallyOk) {
       if (model.get('formallyOk') && (this.get('formallyOk') != CONFIG.notYetFormallyOk)) {
-        this.changeFormallyOkPropertyIfNotSetOnTrue(model);
+        model.set('formallyOk', CONFIG.notYetFormallyOk);
       }
     }
 
@@ -103,7 +103,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
         await this.setNewPropertiesToModel(item, resetFormallyOk).then(async () => {
           const agenda = await item.get('agenda');
           if (agenda) {
-            await this.updateModifiedProperty(agenda);
+            await updateModifiedProperty(agenda);
           }
           item.reload();
         }).catch((e) => {
@@ -131,7 +131,7 @@ const EditAgendaitemOrSubcase = Mixin.create(ModifiedMixin, {
             await this.setNewPropertiesToModel(agendaitem, resetFormallyOk).then(async () => {
               const agenda = await item.get('agenda');
               if (agenda) {
-                await this.updateModifiedProperty(agenda);
+                await updateModifiedProperty(agenda);
               }
               item.reload();
             }).catch((e) => {

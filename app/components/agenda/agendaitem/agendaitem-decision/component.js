@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { computed } from '@ember/object'
+import { computed } from '@ember/object';
 import moment from 'moment';
 
 export default Component.extend(isAuthenticatedMixin, {
@@ -15,6 +15,10 @@ export default Component.extend(isAuthenticatedMixin, {
 
   item: computed('subcase.decision', function () {
     return this.get('subcase.decision');
+  }),
+
+  signedDocument: computed('decision.signedDocument', async function () {
+    return await this.get('decision.signedDocument');
   }),
 
   async addDecision(subcase) {

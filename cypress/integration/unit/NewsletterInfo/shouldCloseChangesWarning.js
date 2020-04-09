@@ -1,11 +1,8 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
-import {
-  changesAlertComponentCloseButtonSelector,
-  changesAlertComponentSelector
-} from '../../../selectors/components/changesAlertSelectors';
-import { agendaAgendaItemKortBestekTabSelector } from '../../../selectors/agenda/agendaSelectors';
+import alert from '../../../selectors/alert.selectors';
+import agenda from '../../../selectors/agenda.selectors';
 
 context('Show warning in newsletterinfo', () => {
 
@@ -84,20 +81,20 @@ context('Show warning in newsletterinfo', () => {
     cy.get('@fileUploadDialog').within(() => {
       cy.get('.vl-button').contains('Documenten toevoegen').click();
     });
-
     cy.wait('@createNewDocumentVersion', { timeout: 12000 });
     cy.wait('@createNewDocument', { timeout: 12000 });
     cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
-
-    cy.get(agendaAgendaItemKortBestekTabSelector)
+    cy.route('/');
+    cy.openAgendaForDate(agendaDate);
+    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
+    cy.get(agenda.agendaItemKortBestekTab)
       .should('be.visible')
       .click()
       .wait(2000); //Access-levels GET occured earlier, general wait instead
-    cy.get(changesAlertComponentSelector).should('be.visible');
-    cy.get(changesAlertComponentCloseButtonSelector).click();
-    cy.get(changesAlertComponentSelector).should('not.be.visible');
+    cy.get(alert.changesAlertComponent).should('be.visible');
+    cy.get(alert.changesAlertComponentCloseButton).click();
+    cy.get(alert.changesAlertComponent).should('not.be.visible');
   })
-
 });
 
 function currentMoment() {

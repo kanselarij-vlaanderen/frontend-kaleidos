@@ -1,19 +1,11 @@
 /*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
-import {
-  agendaSelector,
-  casesSelector,
-  newslettersSelector,
-  settingsSelector
-} from "../../../selectors/toolbar/toolbarSelectors";
-import {agendaOverviewTitleSelector} from "../../../selectors/agenda/agendaSelectors";
-import {
-  newslettersTitleSelector
-} from "../../../selectors/newsletters/newsletterSelector";
-import {generalSettingsSelector} from "../../../selectors/settings/settingsSelectors";
-import {casesOverviewTitleSelector} from "../../../selectors/cases/caseSelectors";
-
+import toolbar from "../../../selectors/toolbar.selectors";
+import settings from "../../../selectors/settings.selectors";
+import cases from "../../../selectors/case.selectors";
+import agenda from "../../../selectors/agenda.selectors";
+import newsletter from "../../../selectors/newsletter.selector";
 
 context('Testing the toolbar as Overheid user', () => {
 
@@ -23,35 +15,35 @@ context('Testing the toolbar as Overheid user', () => {
   });
 
   it('Should have meeting, Case, Newsletter in toolbar', () => {
-    cy.get(agendaSelector).should('exist');
-    cy.get(casesSelector).should('exist');
-    cy.get(newslettersSelector).should('exist');
-    cy.get(settingsSelector).should('not.exist');
+    cy.get(toolbar.agenda).should('exist');
+    cy.get(toolbar.cases).should('exist');
+    cy.get(toolbar.newsletters).should('exist');
+    cy.get(toolbar.settings).should('not.exist');
   });
 
   it('Should switch to Agenda tab when agenda is clicked as overheid', () => {
-    cy.get(agendaSelector).click();
-    cy.get(agendaOverviewTitleSelector).should('exist');
-    cy.get(casesOverviewTitleSelector).should('not.exist');
-    cy.get(newslettersTitleSelector).should('not.exist');
-    cy.get(settingsSelector).should('not.exist');
+    cy.get(toolbar.agenda).click();
+    cy.get(agenda.overviewTitle).should('exist');
+    cy.get(cases.casesOverviewTitle).should('not.exist');
+    cy.get(newsletter.overviewTitle).should('not.exist');
+    cy.get(toolbar.settings).should('not.exist');
   });
 
   it('Should switch to cases tab when cases is clicked as overheid', () => {
-    cy.get(casesSelector).click();
-    cy.get(agendaOverviewTitleSelector).should('not.exist');
-    cy.get(casesOverviewTitleSelector).should('not.exist');
-    cy.get(newslettersTitleSelector).should('not.exist');
-    cy.get(generalSettingsSelector).should('not.exist');
-    cy.get(settingsSelector).should('not.exist');
+    cy.get(toolbar.cases).click();
+    cy.get(agenda.overviewTitle).should('not.exist');
+    cy.get(cases.casesOverviewTitle).should('not.exist');
+    cy.get(newsletter.overviewTitle).should('not.exist');
+    cy.get(settings.generalSettings).should('not.exist');
+    cy.get(toolbar.settings).should('not.exist');
   });
 
   it('Should switch to newsletter tab when newsletter is clicked as overheid', () => {
-    cy.get(newslettersSelector).click();
-    cy.get(agendaOverviewTitleSelector).should('not.exist');
-    cy.get(casesOverviewTitleSelector).should('not.exist');
-    cy.get(newslettersTitleSelector).should('exist');
-    cy.get(generalSettingsSelector).should('not.exist');
-    cy.get(settingsSelector).should('not.exist');
+    cy.get(toolbar.newsletters).click();
+    cy.get(agenda.overviewTitle).should('not.exist');
+    cy.get(cases.casesOverviewTitle).should('not.exist');
+    cy.get(newsletter.title).should('exist');
+    cy.get(settings.generalSettings).should('not.exist');
+    cy.get(toolbar.settings).should('not.exist');
   });
 });

@@ -30,6 +30,7 @@
       </div>
       <div class="vlc-toolbar__item">
         {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
+          {{#if overviewEnabled}}
           <div class="vl-u-spacer-extended-left-s">
             <a href=""
                class="vlc-agenda-items-section-header__link"
@@ -38,6 +39,7 @@
               {{t "edit"}}
             </a>
           </div>
+          {{/if}}
         {{/if}}
       </div>
     </div>

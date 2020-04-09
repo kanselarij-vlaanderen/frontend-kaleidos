@@ -20,6 +20,7 @@
           <div class="vlc-toolbar__item">
             {{#if isEditor}}
               <button class="vl-button vl-button--link vl-button--icon"
+                      data-test-documents-show-more
                       type="button">
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
                 {{#attach-popover
@@ -34,6 +35,7 @@
                     <li class="vlc-dropdown-menu__item">
                       <a class="vl-link vl-link--block"
                          href=""
+                         data-test-document-upload-new-version
                         {{action attacher.hide}}
                         {{action "openUploadDialog" document}}
                       >
