@@ -91,13 +91,10 @@ function clickReverseTab(tabName){
  * @if class="vlc-tabs"
  * @memberOf Cypress.Chainable#
  * @function
- * @param {String} tabName The name of the tab to click on, case sensitive
+ * @param {String} selector The name of the tab to click on, case sensitive
  */
-function clickAgendaitemTab(tabName){
-  cy.get('.vl-tabs', { timeout: 12000 }).should('exist').within(() =>{
-    cy.wait(1000); //tabs are not loaded...
-    cy.contains(tabName).click();
-  });
+function clickAgendaitemTab(selector){
+  cy.get(selector).should('be.visible').click();
 }
 
 /**

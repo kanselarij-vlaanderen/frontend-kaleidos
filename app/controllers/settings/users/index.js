@@ -1,8 +1,8 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
-import { later } from '@ember/runloop';
+import {computed} from '@ember/object';
+import {inject as service} from '@ember/service';
+import {isEmpty} from '@ember/utils';
+import {later} from '@ember/runloop';
 
 export default Controller.extend({
   intl: service(),
@@ -67,7 +67,7 @@ export default Controller.extend({
     if (isEmpty(searchText)) {
       return null;
     }
-    return { 'last-name': searchText };
+    return searchText;
   }),
 
   actions: {

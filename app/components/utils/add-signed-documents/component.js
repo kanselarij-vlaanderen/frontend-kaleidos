@@ -9,6 +9,7 @@ export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
   store: inject(),
   classNames: ['vl-u-spacer'],
   isAddingDocument: null,
+  isAddingNewDocument: null,
   isLoading: null,
 
   documentTypeToAssign: computed('modelToAddDocumentVersionTo', function () {
@@ -21,6 +22,10 @@ export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
       return null;
     }
   }),
+
+  hideAddDocumentModal() {
+    this.isAddingNewDocument = false;
+  },
 
   actions: {
     toggleIsAddingNewDocument() {
@@ -41,6 +46,7 @@ export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
         })
       );
       await item.save();
+      this.hideAddDocumentModal();
     },
 
     delete() {

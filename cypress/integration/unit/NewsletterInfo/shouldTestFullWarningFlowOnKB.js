@@ -1,20 +1,10 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
-import {
-  changesAlertComponentCloseButtonSelector,
-  changesAlertComponentSelector
-} from '../../../selectors/components/changesAlertSelectors';
-import {
-  agendaAgendaItemDocumentsTabSelector,
-  agendaAgendaItemKortBestekTabSelector
-} from '../../../selectors/agenda/agendaSelectors';
-import {
-  newsletterEditSave,
-  newsletterEditSelector,
-  newsletterRdfaEditorSelector
-} from '../../../selectors/newsletters/newsletterSelector';
-import { modalVerifySaveSelector } from '../../../selectors/models/modelSelectors';
+import alert from '../../../selectors/alert.selectors';
+import agenda from '../../../selectors/agenda.selectors';
+import newsletter from '../../../selectors/newsletter.selector';
+import modal from '../../../selectors/modal.selectors';
 
 context('Should upload nota, see the warning, close warning, edit KB and see no warning when revisiting', () => {
   before(() => {
@@ -91,21 +81,35 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.wait('@createNewDocument', { timeout: 12000 });
     cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
 
-    cy.get(agendaAgendaItemKortBestekTabSelector)
+    cy.get(agenda.agendaItemKortBestekTab)
       .should('be.visible')
       .click()
       .wait(2000); //Access-levels GET occured earlier, general wait instead
-    cy.get(changesAlertComponentSelector).should('be.visible');
-    cy.get(changesAlertComponentCloseButtonSelector).click();
-    cy.get(changesAlertComponentSelector).should('not.be.visible');
+    cy.get(alert.changesAlertComponent).should('not.be.visible');
+
+    // Upload another file
+    cy.route('/');
+    cy.openAgendaForDate(agendaDate);
+    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
+
+    cy.get(agenda.agendaItemKortBestekTab)
+      .should('be.visible')
+      .click()
+      .wait(2000); //Access-levels GET occured earlier, general wait instead
+
+    cy.get(alert.changesAlertComponent).should('be.visible');
+    cy.get(alert.changesAlertComponentCloseButton).click();
+    cy.get(alert.changesAlertComponent).should('not.be.visible');
     //Edit KB
-    cy.get(newsletterEditSelector).should('be.visible').click();
-    cy.get(newsletterRdfaEditorSelector).type('Aanpassing');
-    cy.get(newsletterEditSave).type('Aanpassing');
-    cy.get(modalVerifySaveSelector).click();
-    cy.get(agendaAgendaItemDocumentsTabSelector).should('be.visible').click();
-    cy.get(agendaAgendaItemKortBestekTabSelector).should('be.visible').click();
-    cy.get(changesAlertComponentSelector).should('not.be.visible');
+    cy.get(newsletter.edit).should('be.visible').click();
+    cy.get(newsletter.rdfaEditor).type('Aanpassing');
+    cy.get(newsletter.editSave).type('Aanpassing');
+    cy.wait(2000);
+    cy.get(modal.verify.save).click();
+    cy.wait(5000);
+    cy.get(agenda.agendaItemDocumentsTab).should('be.visible').click();
+    cy.get(agenda.agendaItemKortBestekTab).should('be.visible').click();
+    cy.get(alert.changesAlertComponent).should('not.be.visible');
   })
 });
 

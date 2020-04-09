@@ -1,6 +1,5 @@
 <ClickOutside @action={{@onClose}}>
   <div class="vl-modal">
-    {{!-- TODO: revise custom CSS classes that get loaded on top of generic alert classes --}}
     <WebComponents::VlAlert
       class="vl-alert-relative vl-alert-relative--center-mid"
       aria-live="assertive"
@@ -10,8 +9,8 @@
       @onClose={{@options.onClose}}
     >
       <div class="vl-alert__message vl-u-text--capitalize">
-        {{!-- TODO: Extra CSS, so the button has an outline within the alert --}}
-        <a class="vl-button vl-button--link"
+        <p>{{t "agenda-documents-download-ready"}}</p>
+        <a class="vl-button vl-button--link vlc-toaster-button"
            href={{@options.downloadLink}}
            download
            {{on "click" @options.onClose}}

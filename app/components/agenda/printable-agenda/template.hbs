@@ -1,0 +1,36 @@
+<div data-test-agenda-printContainer class="vlc-container-center vl-typography vlc-printable-agenda-list">
+  {{utils/logo-header}}
+
+  <h4 class="vlc-printable-agenda-list__session-title" data-test-agenda-print-header-title>
+    {{t "session-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY \o\m HH:mm"}}
+  </h4>
+  <h4 class="vlc-printable-agenda-list__session-title">
+    {{t "agenda"}}
+  </h4>
+
+  {{#if (gt this.notas.length 0)}}
+    {{#agenda/printable-agenda/list-section
+      letter="A"
+      title=(t "agendaitems")
+    }}
+      {{#each this.notas as |notaGroup|}}
+        {{agenda/printable-agenda/list-section/item-group
+          items=notaGroup
+        }}
+      {{/each}}
+    {{/agenda/printable-agenda/list-section}}
+  {{/if}}
+
+  {{#if (gt announcements.length 0)}}
+    {{#agenda/printable-agenda/list-section
+      letter="B"
+      title=(t "announcements-subtitle")
+    }}
+      {{#each announcements as |announcement|}}
+        {{agenda/printable-agenda/list-section/item-group/item
+          item=announcement
+        }}
+      {{/each}}
+    {{/agenda/printable-agenda/list-section}}
+  {{/if}}
+</div>

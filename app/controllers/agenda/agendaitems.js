@@ -39,6 +39,11 @@ export default Controller.extend({
     }
   }),
 
+  isOverviewWindow: computed('routing.currentRouteName', function () {
+    const { routing } = this;
+    return routing.get('currentRouteName') === 'agenda.agendaitems.index';
+  }),
+
   actions: {
     selectAgendaItem(agendaitem) {
       this.set('sessionService.selectedAgendaItem', agendaitem);

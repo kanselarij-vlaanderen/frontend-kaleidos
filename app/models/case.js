@@ -20,7 +20,6 @@ export default Model.extend({
   submitter: belongsTo('submitter'),
 
   remark: hasMany('remark'),
-  themes: hasMany('theme'),
   subcases: hasMany('subcase'),
   related: hasMany('case'),
   creators: hasMany('person'),
