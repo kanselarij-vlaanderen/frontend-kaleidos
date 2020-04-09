@@ -1,11 +1,10 @@
 import DS from 'ember-data';
-import {inject} from '@ember/service';
-import EmberObject from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default DS.JSONAPIAdapter.extend({
   defaultSerializer: 'JSONAPISerializer',
-  intl: inject(),
-  globalError: inject(),
+  intl: service(),
+  toaster: service(),
 
   translateAndParseSuccesType(type) {
     const singular = type.slice(0, -1)
@@ -16,25 +15,13 @@ export default DS.JSONAPIAdapter.extend({
     if (!this.isSuccess(status, headers, payload)) {
       switch (status) {
         case 400:
-          this.globalError.showToast.perform(EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error-bad-request'),
-            type: 'error'
-          }));
+          this.toaster.error(this.intl.t('error-bad-request'), this.intl.t('warning-title'));
           break;
         case 404:
-          this.globalError.showToast.perform(EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error-not-found'),
-            type: 'error'
-          }));
+          this.toaster.error(this.intl.t('error-not-found'), this.intl.t('warning-title'));
           break;
         case 500:
-          this.globalError.showToast.perform(EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error'),
-            type: 'error'
-          }));
+          this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
           break;
         default:
           return new DS.InvalidError(status);
@@ -43,37 +30,21 @@ export default DS.JSONAPIAdapter.extend({
       switch (status) {
         case 201:
           if (payload && payload.data && this.checkIfNotificationShouldBeShown(payload.data.type)) {
-            this.globalError.showToast.perform(EmberObject.create({
-              title: this.intl.t('successfully-created-title'),
-              message: this.intl.t('successfully-created', {type: this.translateAndParseSuccesType(payload.data.type)}),
-              type: 'success'
-            }));
+            this.toaster.success(this.intl.t('successfully-created', {type: this.translateAndParseSuccesType(payload.data.type)}),
+              this.intl.t('successfully-created-title'));
           }
           break;
         case 204:
           if (requestData && requestData.method === "DELETE") {
-            this.globalError.showToast.perform(EmberObject.create({
-              title: this.intl.t('successfully-created-title'),
-              message: this.intl.t('successfully-deleted'),
-              type: 'success'
-            }));
+            this.toaster.success(this.intl.t('successfully-deleted'), this.intl.t('successfully-created-title'));
           } else if (requestData && requestData.method === "PATCH") {
             // Toast for newer models (with modifier locking) are thrown from the model.
             // Not form here.
             if (!this.checkIfNotificationShouldBeShownInModel(requestData.url)) {
-              this.globalError.showToast.perform(EmberObject.create({
-                title: this.intl.t('successfully-created-title'),
-                message: this.intl.t('successfully-saved'),
-                type: 'success'
-              }));
+              this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
             }
           } else {
-            this.globalError.showToast.perform(EmberObject.create({
-              title: this.intl.t('successfully-created-title'),
-              message: this.intl.t('successfully-saved'),
-              type: 'success'
-            }));
-
+            this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
           }
           break;
         default:

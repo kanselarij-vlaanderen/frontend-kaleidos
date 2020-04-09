@@ -6,6 +6,8 @@ import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
 import LinkedDocumentModelMixin from 'fe-redpencil/mixins/models/linked-document-model-mixin';
+import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import { A } from '@ember/array';
 
 let { attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
@@ -44,7 +46,13 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   linkedDocumentVersions: hasMany('document-version'),
   phases: hasMany('subcase-phase'),
 
-  number: computed('displayPriority', 'priority', function () {
+  sortedDocumentVersions: computed('documentVersions.@each.name', function() {
+    return A(this.get('documentVersions').toArray()).sort((a, b) => {
+      return compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name')));
+    });
+  }),
+
+  number: computed('displayPriority', 'priority', function() {
     const { priority, displayPriority } = this;
     if (!priority) {
       return displayPriority;
@@ -64,8 +72,9 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
       promise: this.store.query('decision', {
         filter: {
           subcase: { id: this.subcase.get('id') },
-        },
-        sort: 'approved',
+        }
+      }).then((decisions) =>  {
+        return decisions.sortBy('approved');
       }),
     });
   }),

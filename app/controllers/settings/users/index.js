@@ -1,13 +1,12 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
-import { isEmpty } from '@ember/utils';
-import EmberObject from '@ember/object';
-import { later } from '@ember/runloop';
+import {computed} from '@ember/object';
+import {inject as service} from '@ember/service';
+import {isEmpty} from '@ember/utils';
+import {later} from '@ember/runloop';
 
 export default Controller.extend({
-  intl: inject(),
-  globalError: inject(),
+  intl: service(),
+  toaster: service(),
   isUploadingFile: null,
   shouldRefreshTableModel: null,
   filterText: null,
@@ -68,7 +67,7 @@ export default Controller.extend({
     if (isEmpty(searchText)) {
       return null;
     }
-    return { 'last-name': searchText };
+    return searchText;
   }),
 
   actions: {
@@ -77,25 +76,13 @@ export default Controller.extend({
     },
     uploaded(response) {
       if (response && response.status == 200) {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: this.intl.t('successfully-created-title'),
-            message: this.intl.t('import-users-success'),
-            type: 'success',
-          })
-        );
+        this.toaster.success(this.intl.t('import-users-success'), this.intl.t('successfully-created-title'));
         later(() => {
           this.send('refresh');
           this.set('shouldRefreshTableModel', true);
         }, 2000);
       } else {
-        this.globalError.showToast.perform(
-          EmberObject.create({
-            title: this.intl.t('warning-title'),
-            message: this.intl.t('error'),
-            type: 'error',
-          })
-        );
+        this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
       }
     },
   }

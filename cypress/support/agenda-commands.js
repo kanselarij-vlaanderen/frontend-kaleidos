@@ -4,18 +4,11 @@
 // ***********************************************
 // Commands
 
-import {
-  buttonSelector,
-  emberPowerSelectOptionSelector,
-  emberPowerSelectTriggerSelector,
-  newAgendaButtonSelector
-} from "../selectors/agenda/agendaSelectors";
+import agenda from '../selectors/agenda.selectors';
 
-import {showActionOptions, navigatetosubcases,announcement,navigatetodecisions, navigatetonewsletter,
-  navigatetonotes,navigatetopressagenda, toggleeditingsession, selectsignature, downloadddocuments, deleteAgendaSelector, lockAgendaSelector
-} from "../selectors/agenda/actionModalSelectors";
+import actionModel from '../selectors/action-modal.selectors';
 
-import {formInputSelector} from "../selectors/formSelectors/formSelectors";
+import form from "../selectors/form.selectors";
 
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
@@ -31,6 +24,7 @@ Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
 Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgenda', openAgenda);
+Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
 
 // ***********************************************
 // Functions
@@ -129,12 +123,12 @@ Cypress.Commands.add('openAgenda', openAgenda);
 
     const TOEVOEGEN = 'Toevoegen';
 
-    cy.get(newAgendaButtonSelector).click();
-    cy.get(emberPowerSelectTriggerSelector).click();
-    cy.get(emberPowerSelectOptionSelector).contains(kindOfAgenda).click();
+    cy.get(agenda.newAgendaButton).click();
+    cy.get(agenda.emberPowerSelectTrigger).click();
+    cy.get(agenda.emberPowerSelectOption).contains(kindOfAgenda).click();
     cy.selectDate(year, month, day);
-    cy.get(formInputSelector).type(location);
-    cy.get(buttonSelector).contains(TOEVOEGEN).click();
+    cy.get(form.formInput).type(location);
+    cy.get(agenda.button).contains(TOEVOEGEN).click();
 
     cy.wait('@createNewMeeting', {timeout: 20000})
     cy.wait('@createNewAgenda', {timeout: 20000});
@@ -189,6 +183,25 @@ Cypress.Commands.add('openAgenda', openAgenda);
   }
 
 /**
+ * Create a default agenda
+ * @memberOf Cypress.Chainable#
+ * @name createDefaultAgenda
+ * @function
+ * @param {String} agendaItemTitle - title of the agenda
+ */
+function openAgendaItemKortBestekTab(agendaItemTitle) {
+  // cy.route('GET', 'documents**').as('getDocuments');
+  cy.get('li.vlc-agenda-items__sub-item h4')
+    .contains(agendaItemTitle)
+    .click()
+    .wait(2000); // sorry
+  cy.get(agenda.agendaItemKortBestekTab)
+    .should('be.visible')
+    .click()
+    .wait(2000); //Access-levels GET occured earlier, general wait instead
+}
+
+/**
  * @description Deletes the current **open agenda**, either a design or an approved one
  * @name deleteAgenda
  * @memberOf Cypress.Chainable#
@@ -205,10 +218,8 @@ function deleteAgenda(meetingId, lastAgenda) {
   // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda'); //Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
 
-  cy.get('.vl-button--icon-before')
-    .contains('Acties')
-    .click();
-  cy.get(deleteAgendaSelector).click();
+  cy.get(actionModel.showActionOptions).click();
+  cy.get(actionModel.agendaHeaderDeleteAgenda).click();
   // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
   cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
   // });
@@ -336,7 +347,7 @@ function approveDesignAgenda() {
     cy.get('.vl-button--icon-before', {timeout: 10000}).should('exist')
       .contains('Acties')
       .click();
-    cy.get(announcement)
+    cy.get(actionModel.announcement)
       .contains('Mededeling toevoegen')
       .click();
 
@@ -387,8 +398,7 @@ function approveDesignAgenda() {
     cy.get('.vl-button--icon-before', {timeout: 10000}).should('exist')
       .contains('Acties')
       .click();
-    cy.get(navigatetosubcases)
-      .contains('Agendapunt toevoegen')
+    cy.get(actionModel.navigatetosubcases)
       .should('be.visible')
       .click();
     cy.wait('@getSubcasesFiltered', {timeout: 20000});
@@ -476,7 +486,7 @@ function approveDesignAgenda() {
  * @name changeSelectedAgenda
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemName - name of the agenda item
+ * @param {string} agendaName - name of the agenda item
  */
   function changeSelectedAgenda(agendaName) {
     cy.get('.vlc-side-nav-item').children()
@@ -495,7 +505,7 @@ function closeAgenda() {
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
-  cy.get(lockAgendaSelector).click();
+  cy.get(actionModel.lockAgenda).click();
   // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
   cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
   // });

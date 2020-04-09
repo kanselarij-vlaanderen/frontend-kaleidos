@@ -1,15 +1,14 @@
 import Service from '@ember/service';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { ajax } from 'fe-redpencil/utils/ajax';
-import EmberObject from '@ember/object';
 import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
 export default Service.extend(isAuthenticatedMixin, {
-  store: inject(),
-  globalError: inject(),
-  intl: inject(),
-  formatter: inject(),
+  store: service(),
+  toaster: service(),
+  intl: service(),
+  formatter: service(),
 
   async createCampaign(agenda, meeting) {
     try {
@@ -31,13 +30,7 @@ export default Service.extend(isAuthenticatedMixin, {
         return meeting.save();
       });
     } catch (error) {
-      this.globalError.showToast.perform(
-        EmberObject.create({
-          title: this.intl.t('warning-title'),
-          message: this.intl.t('error-create-newsletter'),
-          type: 'error',
-        })
-      );
+      this.toaster.error(this.intl.t('error-create-newsletter'), this.intl.t('warning-title'));
     }
   },
 
@@ -48,30 +41,18 @@ export default Service.extend(isAuthenticatedMixin, {
         url: `/newsletter/deleteCampaign/${id}`,
       });
     } catch (error) {
-      this.globalError.showToast.perform(
-        EmberObject.create({
-          title: this.intl.t('warning-title'),
-          message: this.intl.t('error-delete-newsletter'),
-          type: 'error',
-        })
-      );
+      this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
     }
   },
 
-  sendCampaign(id, agendaId) {
+  sendCampaign(id, agendaId) { // TODO: this and below method are sync, while 2 methods above async?
     try {
       return ajax({
         method: 'POST',
         url: `/newsletter/sendCampaign/${id}?agendaId=${agendaId}`,
       });
     } catch (error) {
-      this.globalError.showToast.perform(
-        EmberObject.create({
-          title: this.intl.t('warning-title'),
-          message: this.intl.t('error-send-newsletter'),
-          type: 'error',
-        })
-      );
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
     }
   },
 
@@ -82,13 +63,7 @@ export default Service.extend(isAuthenticatedMixin, {
         url: `/newsletter/fetchTestCampaign/${id}`,
       });
     } catch (error) {
-      this.globalError.showToast.perform(
-        EmberObject.create({
-          title: this.intl.t('warning-title'),
-          message: this.intl.t('error-send-newsletter'),
-          type: 'error',
-        })
-      );
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
     }
   },
 

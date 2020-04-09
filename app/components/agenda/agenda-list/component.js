@@ -15,8 +15,8 @@ export default Component.extend(isAuthenticatedMixin, {
   agendaitems: null,
   isEditingOverview: null,
   isShowingChanges: null,
+  overviewEnabled: null,
   dragHandleClass: '.vlc-agenda-items__sub-item',
-
   getClassNames: computed('selectedAgendaItem', function () {
     if (this.get('selectedAgendaItem')) {
       return 'vlc-agenda-items--small';

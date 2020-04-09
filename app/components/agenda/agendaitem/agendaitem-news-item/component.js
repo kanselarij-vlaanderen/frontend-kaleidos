@@ -1,64 +1,37 @@
 import Component from '@ember/component';
 import {inject} from '@ember/service';
+import { computed } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
-import {computed} from '@ember/object';
-// import moment from 'moment';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
+export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vlc-padding-bottom--large'],
   store: inject(),
   newsletterService: inject(),
+  agendaService: inject(),
+  sessionService: inject(),
   subcase: null,
   agendaitem: null,
   isEditing: false,
   intl: inject(),
-  // showNewsItemIsEditedWarning: false,
-  // showNoNotaIsAddedWarning: false,
-
-  didInsertElement() {
-    this._super(...arguments);
-    // this.shouldShowEditedWarning();
-  },
-
+  @tracked timestampForMostRecentNota: null,
   item: computed('subcase.newsletterInfo', function () {
     return this.get('subcase.newsletterInfo');
   }),
 
-  // async shouldShowEditedWarning() {
-  //   const newsletterInfoForSubcase = await this.subcase.get('newsletterInfo');
-  //   const documents = await this.get('subcase.documents');
-  //   if (!documents) {
-  //     this.set('showNoNotaIsAddedWarning', true);
-  //     return;
-  //   }
-  //   const documentsOfTypeNota = [];
-  //   await Promise.all(documents.map(document => {
-  //     return document.get('type').then((type) => {
-  //       if (type && type.label === 'Nota') {
-  //         documentsOfTypeNota.push(document);
-  //       }
-  //     })
-  //   }));
+  get dateOfMostRecentNota() {
+    return moment(this.timestampForMostRecentNota).format("D MMMM YYYY");
+  },
 
-  //   const lastVersionOfNotas = await Promise.all(documentsOfTypeNota.map((nota) => {
-  //     return nota.get('lastDocumentVersion');
-  //   }));
+  get timeOfMostRecentNota() {
+    return moment(this.timestampForMostRecentNota).format("H:mm");
+  },
 
-  //   const mostRecentlyAddedNotaDocumentVersion = lastVersionOfNotas.sortBy('lastModified').lastObject;
-  //   const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = mostRecentlyAddedNotaDocumentVersion.modified;
-
-  //   const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
-  //   if (newsletterInfoOnSubcaseLastModifiedTime) {
-  //     if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-  //       this.set('showNewsItemIsEditedWarning', true);
-  //     } else {
-  //       this.set('showNewsItemIsEditedWarning', false);
-  //     }
-  //   } else {
-  //     this.set('showNewsItemIsEditedWarning', true);
-  //   }
-  // },
+  async didUpdateAttrs() {
+    this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(this.agendaitem);
+  },
 
   actions: {
     async toggleIsEditing() {
@@ -77,16 +50,13 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
       const newsItem = await subcase.get('newsletterInfo');
 
       await newsItem.save().then(async () => {
-        await this.updateModifiedProperty(await this.get('agendaitem.agenda'));
+        await updateModifiedProperty(await this.get('agendaitem.agenda'));
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
       })
     },
-    // async clearShowNewsItemIsEditedWarning() {
-    //   this.set('showNewsItemIsEditedWarning', false);
-    // },
-    // async clearShowNoNotaIsAddedWarning() {
-    //   this.set('showNoNotaIsAddedWarning', false);
-    // }
+    async clearTimestampForMostRecentNota() {
+      this.timestampForMostRecentNota = false;
+    },
   }
 });

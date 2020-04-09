@@ -21,6 +21,7 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <button type="button" class="vl-button vl-button--link vl-button--narrow"
+                    data-test-vl-model-manager-close
               {{action "close"}}
             >
               {{t "cancel"}}
@@ -30,6 +31,7 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
             <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                    data-test-vl-model-manager-add
               {{action "toggleIsAdding"}}
             >
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
@@ -37,14 +39,18 @@
               {{t "add"}}
             </button>
             {{#if item}}
-              <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              <button type="button"
+                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      data-test-vl-model-manager-edit
                 {{action "toggleIsEditing"}}
               >
                 <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
                 ></i>
                 {{t "edit"}}
               </button>
-              <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              <button type="button"
+                      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                      data-test-vl-model-manager-delete
                 {{action "removeModel"}}
               >
                 <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
