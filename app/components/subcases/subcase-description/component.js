@@ -4,7 +4,7 @@ import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcas
 import { computed, get, set } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject } from '@ember/service';
-import { saveChanges as saveSubcaseDescription } from 'fe-redpencil/utils/agenda-item-utils';
+import { saveChanges as saveSubcaseDescription, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
@@ -42,16 +42,8 @@ export default Component.extend(isAuthenticatedMixin, {
 
     async cancelEditing() {
       const item = await this.get('item');
-      if (item.get('hasDirtyAttributes')) {
-        item.rollbackAttributes();
-      }
-      if (this.isSubcase) {
-        item.belongsTo('type').reload();
-        item.belongsTo('accessLevel').reload();
-      }
-      item.reload();
-      this.propertiesToSet.forEach(prop => item.notifyPropertyChange(prop));
-      this.toggleProperty('isEditing');
+      cancelEdit(item, get(this, 'propertiesToSet'));
+      set(this, 'isEditing', false);
     },
 
     async selectType(type) {

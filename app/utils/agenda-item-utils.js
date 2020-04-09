@@ -1,6 +1,18 @@
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
+export const cancelEdit = (item, propertiesToSet) => {
+  if (item.get('hasDirtyAttributes')) {
+    item.rollbackAttributes();
+  }
+  if (this.isSubcase) {
+    item.belongsTo('type').reload();
+    item.belongsTo('accessLevel').reload();
+  }
+  item.reload();
+  propertiesToSet.forEach(prop => item.notifyPropertyChange(prop));
+}
+
 export const setNotYetFormallyOk = (itemToSet) => {
   if (itemToSet.get('formallyOk') != CONFIG.notYetFormallyOk) {
     itemToSet.set('formallyOk', CONFIG.notYetFormallyOk);

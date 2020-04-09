@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { computed, get, set } from '@ember/object';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
-import { saveChanges } from 'fe-redpencil/utils/agenda-item-utils';
+import { saveChanges, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Component.extend({
   store: inject(),
@@ -25,15 +25,7 @@ export default Component.extend({
   actions: {
     async cancelEditing() {
       const item = await this.get('item');
-      if (item.get('hasDirtyAttributes')) {
-        item.rollbackAttributes();
-      }
-      if (this.isSubcase) {
-        item.belongsTo('type').reload();
-        item.belongsTo('accessLevel').reload();
-      }
-      item.reload();
-      this.propertiesToSet.forEach(prop => item.notifyPropertyChange(prop));
+      cancelEdit(item, get(this, 'propertiesToSet'));
       this.toggleProperty('isEditing');
     },
 
