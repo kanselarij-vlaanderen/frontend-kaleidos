@@ -123,6 +123,7 @@ context('meeting actions tests', () => {
         });
       });
     });
+    cy.logout();
   });
 
   it('should be able to delete approved agendaitem from designagenda with profile: admin', () => {

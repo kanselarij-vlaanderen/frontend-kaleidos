@@ -55,7 +55,6 @@ context('Full test', () => {
     cy.openSubcase(0);
 
     cy.changeSubcaseAccessLevel(false, case_1_TitleShort, true, 'Intern Overheid');
-    cy.addSubcaseThemes([0, 1, 5, 10, 15, 20]);
     cy.addSubcaseMandatee(0, 0, 0);
 
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota'}]);
@@ -78,7 +77,6 @@ context('Full test', () => {
     cy.addSubcase(type_2,newSubcase_2_TitleShort,subcase_2_TitleLong, subcase_2_Type, subcase_2_Name);
     cy.openSubcase(0);
     cy.changeSubcaseAccessLevel(false, case_2_TitleShort, false, 'Intern Overheid');
-    cy.addSubcaseThemes([2, 4 , 6]);
     cy.addSubcaseMandatee(1, 0, 0);
     cy.addSubcaseMandatee(2, 0, 0);
 

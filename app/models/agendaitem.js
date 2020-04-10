@@ -45,7 +45,6 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
   phases: hasMany('subcase-phase'),
-  themes: hasMany('theme'),
 
   sortedDocumentVersions: computed('documentVersions.@each.name', function() {
     return A(this.get('documentVersions').toArray()).sort((a, b) => {
@@ -60,10 +59,6 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     } else {
       return priority;
     }
-  }),
-
-  sortedThemes: computed('themes', function () {
-    return this.get('themes').sortBy('label');
   }),
 
   isPostponed: computed('retracted', 'postponedTo', function () {

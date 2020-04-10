@@ -490,7 +490,9 @@ function approveDesignAgenda() {
  */
   function changeSelectedAgenda(agendaName) {
     cy.get('.vlc-side-nav-item').children()
-      .contains(agendaName).click();
+      .contains(agendaName, {timeout: 12000})
+      .should('exist')
+      .click();
   }
 
 /**
