@@ -1,4 +1,5 @@
 version: 2.1
+on: [push]
 orbs:
   cypress: cypress-io/cypress@1
 workflows:
@@ -13,4 +14,5 @@ workflows:
           parallelism: 2
           group: 2 machines
           start: npm run start-ci
+          wait-on: 'http://localhost:4200'
 
