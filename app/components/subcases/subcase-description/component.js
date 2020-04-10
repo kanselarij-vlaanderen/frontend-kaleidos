@@ -1,9 +1,9 @@
 import Component from '@ember/component';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import { computed, get, set } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject } from '@ember/service';
+import { cached } from 'fe-redpencil/decorators/cached';
 import { saveChanges as saveSubcaseDescription, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Component.extend(isAuthenticatedMixin, {
@@ -15,9 +15,9 @@ export default Component.extend(isAuthenticatedMixin, {
     return this.get('subcase');
   }),
 
-  subcaseName: getCachedProperty('subcaseName'),
-  type: getCachedProperty('type'),
-  showAsRemark: getCachedProperty('showAsRemark'),
+  subcaseName: cached('subcaseName'), // TODO in class syntax use as a decorator instead
+  type: cached('type'), // TODO in class syntax use as a decorator instead
+  showAsRemark: cached('showAsRemark'), // TODO in class syntax use as a decorator instead
 
   remarkType: computed('subcase.remarkType', function () {
     return this.subcase.get('remarkType');

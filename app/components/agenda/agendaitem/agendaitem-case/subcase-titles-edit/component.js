@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { computed, action, get, set } from '@ember/object';
 import { cached } from 'fe-redpencil/decorators/cached';
-import { saveChanges, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
+import { saveChanges as saveSubcaseTitles, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default class SubcaseTitlesEdit extends Component {
   @service store;
@@ -38,7 +38,7 @@ export default class SubcaseTitlesEdit extends Component {
   @action
   async saveChanges() {
     set(this, 'isLoading', true);
-    await saveChanges(get(this, 'item'), get(this, 'propertiesToSet'), get(this, 'propertiesToSet'), true);
+    await saveSubcaseTitles(get(this, 'item'), get(this, 'propertiesToSet'), get(this, 'propertiesToSet'), true);
     set(this, 'isLoading', false);
     this.toggleProperty('isEditing');
   }
