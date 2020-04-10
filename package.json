@@ -16,6 +16,7 @@
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "start": "ember serve --proxy=http://localhost:80",
+    "start-ci": "ember serve --proxy=https://kaleidos-dev.vlaanderen.be",
     "test": "npm-run-all lint:* test:*",
     "test:ember": "ember test",
     "cypress-local": "./node_modules/.bin/cypress open",
