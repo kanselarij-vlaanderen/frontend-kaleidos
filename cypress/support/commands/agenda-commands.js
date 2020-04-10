@@ -4,11 +4,9 @@
 // ***********************************************
 // Commands
 
-import agenda from '../selectors/agenda.selectors';
-
-import actionModel from '../selectors/action-modal.selectors';
-
-import form from "../selectors/form.selectors";
+import agenda from '../../selectors/agenda.selectors';
+import actionModel from '../../selectors/action-modal.selectors';
+import form from "../../selectors/form.selectors";
 
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
@@ -25,6 +23,7 @@ Cypress.Commands.add('closeAgenda', closeAgenda);
 Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgenda', openAgenda);
 Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
+Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 
 // ***********************************************
 // Functions
@@ -123,14 +122,14 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
 
     const TOEVOEGEN = 'Toevoegen';
 
-    cy.get(agenda.newAgendaButton).click();
+    cy.get(agenda.createNewAgendaButton).click();
     cy.get(agenda.emberPowerSelectTrigger).click();
     cy.get(agenda.emberPowerSelectOption).contains(kindOfAgenda).click();
     cy.selectDate(year, month, day);
     cy.get(form.formInput).type(location);
     cy.get(agenda.button).contains(TOEVOEGEN).click();
 
-    cy.wait('@createNewMeeting', {timeout: 20000})
+    cy.wait('@createNewMeeting', {timeout: 20000});
     cy.wait('@createNewAgenda', {timeout: 20000});
     cy.wait('@createNewAgendaItems', {timeout: 20000});
     cy.wait('@createNewsletter', {timeout: 20000});
@@ -513,3 +512,15 @@ function closeAgenda() {
   // });
 
   }
+
+/**
+ * @description Clicks on the specified agendaitem tab for navigating
+ * @name clickAgendaitemTab
+ * @if class="vlc-tabs"
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} selector The name of the tab to click on, case sensitive
+ */
+function clickAgendaitemTab(selector){
+  cy.get(selector).should('be.visible').click();
+}

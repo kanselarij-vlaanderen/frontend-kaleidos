@@ -1,5 +1,5 @@
 const selectors = {
-  newAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
+  createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
   emberPowerSelectTrigger:'.ember-power-select-trigger',
   emberPowerSelectOption:'.ember-power-select-option',
   datepickerButton: '[data-test-vlc-vl-datepickerButton]',

@@ -6,7 +6,7 @@
 // ***********************************************
 // Commands
 
-import cases from "../selectors/case.selectors"
+import cases from "../../selectors/case.selectors"
 
 Cypress.Commands.add('openSubcase', openSubcase);
 Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
