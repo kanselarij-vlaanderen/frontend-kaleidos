@@ -10,8 +10,6 @@ workflows:
           requires:
             - cypress/install
           record: true
-          parallel: true
-          parallelism: 2
           group: 2 machines
           start: npm run start-ci
           wait-on: 'http://localhost:4200'
