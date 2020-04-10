@@ -36,9 +36,9 @@ export const sortDocuments = (model, containers) => {
   });
 };
 
-export const getDocumentsLength = (model) => {
+export const getDocumentsLength = (model, property) => {
   return PromiseObject.create({
-    promise: model.get('documents').then((documents) => {
+    promise: model.get(property).then((documents) => {
       return documents ? documents.get('length') : 0;
     })
   });

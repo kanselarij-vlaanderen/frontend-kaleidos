@@ -5,13 +5,12 @@ import CONFIG from 'fe-redpencil/utils/config';
 import {alias} from '@ember/object/computed';
 import {A} from '@ember/array';
 import moment from 'moment';
-import LinkedDocumentModelMixin from 'fe-redpencil/mixins/models/linked-document-model-mixin';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import {sortDocuments, getDocumentsLength} from 'fe-redpencil/utils/documents';
 
 const {attr, hasMany, belongsTo, PromiseArray, PromiseObject} = DS;
 
-export default ModelWithModifier.extend(LinkedDocumentModelMixin, {
+export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   store: inject(),
   intl: inject(),
@@ -46,12 +45,37 @@ export default ModelWithModifier.extend(LinkedDocumentModelMixin, {
   accessLevel: belongsTo('access-level'),
 
   documentsLength: computed('documents', function () {
-    return getDocumentsLength(this);
+    return getDocumentsLength(this, 'documents');
+  }),
+
+  linkedDocumentsLength: computed('linkedDocuments', function () {
+    return getDocumentsLength(this, 'linkedDocuments');
   }),
 
   documents: computed('documentVersions.@each.name', function () {
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.mapBy('id').join(',');
+          return this.store.query('document', {
+            filter: {
+              'documents': {id: documentVersionIds},
+            },
+            page: {
+              size: documentVersions.get('length'), // # documents will always be <= # document versions
+            },
+            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
+          }).then((containers) => {
+            return sortDocuments(this, containers);
+          });
+        }
+      })
+    });
+  }),
+
+  linkedDocuments: computed('linkedDocumentVersions.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('linkedDocumentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {

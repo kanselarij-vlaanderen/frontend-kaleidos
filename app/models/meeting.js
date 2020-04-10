@@ -33,7 +33,7 @@ export default Model.extend({
   agenda: belongsTo('agenda', {inverse: null}),
 
   documentsLength: computed('documents', function () {
-    return getDocumentsLength(this);
+    return getDocumentsLength(this, 'documents');
   }),
 
   documents: computed('documentVersions.@each.name', function () {
