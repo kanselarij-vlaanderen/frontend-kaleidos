@@ -8,6 +8,7 @@ executors:
       - image: 'cypress/base:10'
     environment:
       JOBS: 1
+      EXTERNAL_TESTING: 'circleci'
 workflows:
   build:
     jobs:

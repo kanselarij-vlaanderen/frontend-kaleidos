@@ -124,9 +124,11 @@ function resetDB() {
       kaleidosProject + '/docker-compose.override.yml'
   };
 
-  cy.exec('docker-compose kill triplestore elasticsearch file cache resource', { env })
-    .exec(`rm -rf ${kaleidosProject}/testdata`)
-    .exec(`unzip -o ${kaleidosProject}/testdata.zip -d ${kaleidosProject}`)
-    .exec('docker-compose up -d', { env })
-    .wait(5000)
+  if (!Cypress.env('EXTERNAL_TESTING') || Cypress.env('EXTERNAL_TESTING') !== 'circleci') {
+    cy.exec('docker-compose kill triplestore elasticsearch file cache resource', { env })
+      .exec(`rm -rf ${kaleidosProject}/testdata`)
+      .exec(`unzip -o ${kaleidosProject}/testdata.zip -d ${kaleidosProject}`)
+      .exec('docker-compose up -d', { env })
+      .wait(5000)
+  }
 }
