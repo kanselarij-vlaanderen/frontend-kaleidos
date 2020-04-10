@@ -13,5 +13,6 @@ workflows:
           group: 2 machines
           start: npm run start-ci
           wait-on: 'http://localhost:4200'
-
+          environment:
+            JOBS: 1
 
