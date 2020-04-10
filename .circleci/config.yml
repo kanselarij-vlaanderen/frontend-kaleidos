@@ -1,7 +1,13 @@
 version: 2.1
 on: [push]
 orbs:
-  cypress: cypress-io/cypress@1
+  cypress: cypress-io/cypress@1.19.1
+executors:
+  base10:
+    docker:
+      - image: 'cypress/base:10'
+    environment:
+      JOBS: 1
 workflows:
   build:
     jobs:
@@ -9,10 +15,11 @@ workflows:
       - cypress/run:
           requires:
             - cypress/install
+          executor: base10
           record: true
           group: 2 machines
           start: npm run start-ci
           wait-on: 'http://localhost:4200'
           environment:
-            JOBS: 1
+
 
