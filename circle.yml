@@ -23,5 +23,5 @@ jobs:
           paths:
             - ~/.npm
             - ~/.cache
-      - run: $(npm bin)/cypress run --record --key $cypress_key
+      - run: $(npm bin)/cypress run --record --key $cypress_key --config baseUrl=https://kaleidos-dev.vlaanderen.be
 
