@@ -23,9 +23,9 @@ export default class EditAgendaitemOrSubcaseService extends Service {
       model.set(key, propertiesToSet[key]);
     });
 
-    try { 
+    try {
       await model.save();
-    } catch(e) {
+    } catch (e) {
       throw e;
     }
   }
@@ -63,7 +63,7 @@ export default class EditAgendaitemOrSubcaseService extends Service {
     const isAgendaItem = item.get('modelName') === 'agendaitem';
     try {
       await item.preEditOrSaveCheck();
-      if (isAgendaItem) { // why use !item.showAsRemark ?
+      if (isAgendaItem) {
         const isDesignAgenda = await item.get('isDesignAgenda');
         const agendaitemSubcase = await item.get('subcase');
         if (isDesignAgenda && agendaitemSubcase) {
@@ -74,7 +74,7 @@ export default class EditAgendaitemOrSubcaseService extends Service {
         await this.setModifiedOnAgendaOfAgendaitem(item);
       } else {
         await this.setNewPropertiesToModel(item, propertiesToSetOnSubcase, resetFormallyOk);
-  
+
         const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
         if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
           await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
@@ -83,7 +83,7 @@ export default class EditAgendaitemOrSubcaseService extends Service {
           }));
         }
       }
-    } catch(e) {
+    } catch (e) {
       throw e;
     }
   }

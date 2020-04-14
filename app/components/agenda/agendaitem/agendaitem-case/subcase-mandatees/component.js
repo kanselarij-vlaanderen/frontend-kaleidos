@@ -103,21 +103,21 @@ export default Component.extend(isAuthenticatedMixin, {
       this.set('isLoading', true);
       if (this.item.get('modelName') === 'agendaitem') {
         const subcase = await this.get('item.subcase');
-        if(subcase) {
+        if (subcase) {
           //Without this, saving mandatees on agendaitem do not always persist to the subcase
           await subcase.get('mandatees');
         }
       }
       const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
-      const propertiesToSetOnAgendaitem = {'mandatees': propertiesToSetOnSubcase['mandatees']}
+      const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] }
       const resetFormallyOk = true;
       try {
         await this.editAgendaitemOrSubcaseService.saveChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
-      } catch(e) {
+      } catch (e) {
         this.set('isLoading', false);
-        throw(e);
+        throw (e);
       }
     },
 
@@ -143,7 +143,7 @@ export default Component.extend(isAuthenticatedMixin, {
         })
       })
     }
-    return { mandatees, iseCodes , requestedBy };
+    return { mandatees, iseCodes, requestedBy };
   },
 
 });
