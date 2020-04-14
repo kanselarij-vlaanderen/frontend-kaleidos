@@ -22,5 +22,7 @@ const selectors = {
   agendaItemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
   addDecision: '[data-test-add-decision]',
   uploadDecisionFile: '[data-test-upload-decision-file]',
+  accessLevelPill: '[data-test-access-level-pill]',
+  accessLevelSave: '[data-test-access-level-save]',
 };
 export default selectors;

@@ -2,14 +2,15 @@
 /// <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import modal from '../../selectors/modal.selectors';
 import form from '../../selectors/form.selectors';
+import actionModel from '../../selectors/action-modal.selectors';
+import modal from '../../selectors/modal.selectors';
 
 context('Agenda tests', () => {
 
-  before(() => {
-    cy.resetDB();
-  });
+  // before(() => {
+  //   cy.resetDB();
+  // });
 
   beforeEach(() => {
     cy.server();
@@ -60,7 +61,29 @@ context('Agenda tests', () => {
       });
     });
     cy.get(form.formSave).click();
+    cy.get(agenda.accessLevelPill).click();
+    cy.existsAndVisible('.ember-power-select-trigger')
+      .click();
+    cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid').click().then(() => {
+      cy.get(agenda.accessLevelSave).click().then(() => {
+        cy.get(actionModel.showActionOptions).click().then(() => {
+          cy.existsAndVisible(agenda.lockAgenda).click().then(() => {
+            cy.get(actionModel.showActionOptions).click().then(() => {
+              cy.existsAndVisible(actionModel.releaseDecisions).click().then(() => {
+                cy.existsAndVisible(modal.verifyModal.save).click();
+              });
+            })
+          });
+        });
+      });
+    })
   });
+
+  it('STEP 1: Create new agenda', () => {
+  })
+
+
+
 });
 
 function currentTimestamp() {
