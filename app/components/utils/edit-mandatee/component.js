@@ -12,12 +12,12 @@ export default Component.extend({
 
   mandateesUpdated: null,
 
-  startDate: cached('start'), // TODO in class syntax use as a decorator instead
-  endDate: cached('end'), // TODO in class syntax use as a decorator instead
-  iseCodes: cached('iseCodes'), // TODO in class syntax use as a decorator instead
-  title: cached('title'), // TODO in class syntax use as a decorator instead
-  shortTitle: cached('shortTitle'), // TODO in class syntax use as a decorator instead
-  nickName: cached('nickName'), // TODO in class syntax use as a decorator instead
+  startDate: cached('item.start'), // TODO in class syntax use as a decorator instead
+  endDate: cached('item.end'), // TODO in class syntax use as a decorator instead
+  iseCodes: cached('item.iseCodes'), // TODO in class syntax use as a decorator instead
+  title: cached('item.title'), // TODO in class syntax use as a decorator instead
+  shortTitle: cached('item.shortTitle'), // TODO in class syntax use as a decorator instead
+  nickName: cached('item.nickName'), // TODO in class syntax use as a decorator instead
 
   actions: {
     selectStartDate(val) {

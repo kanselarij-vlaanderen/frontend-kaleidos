@@ -13,7 +13,7 @@ export default Component.extend(RdfaEditorMixin, {
     return this.get('agendaitem.meetingRecord');
   }),
 
-  initValue: cached('richtext'), // TODO in class syntax use as a decorator instead
+  initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
 
   actions: {
     async saveChanges(agendaitem) {

@@ -9,8 +9,8 @@ import moment from 'moment';
 export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze(['approved', 'richtext']),
-  approved: cached('approved'), // TODO in class syntax use as a decorator instead
-  initValue: cached('richtext'), // TODO in class syntax use as a decorator instead
+  approved: cached('item.approved'), // TODO in class syntax use as a decorator instead
+  initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
 
   async setDecisionPhaseToSubcase() {
     const approved = await this.get('approved');

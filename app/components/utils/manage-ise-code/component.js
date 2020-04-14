@@ -6,9 +6,9 @@ export default Component.extend(ModelManageMixin, {
   classNames: ['vl-u-spacer'],
   modelName: null,
 
-  name: cached('name'), // TODO in class syntax use as a decorator instead
-  code: cached('code'), // TODO in class syntax use as a decorator instead
-  field: cached('field'), // TODO in class syntax use as a decorator instead
+  name: cached('item.name'), // TODO in class syntax use as a decorator instead
+  code: cached('item.code'), // TODO in class syntax use as a decorator instead
+  field: cached('item.field'), // TODO in class syntax use as a decorator instead
 
   actions: {
     async editModel() {

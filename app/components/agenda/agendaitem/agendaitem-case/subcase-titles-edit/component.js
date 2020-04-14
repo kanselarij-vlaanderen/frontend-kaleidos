@@ -17,11 +17,11 @@ export default class SubcaseTitlesEdit extends Component {
     return 'agendaitem' == this.get('item.modelName');
   }
 
-  @cached('title') title;
-  @cached('accessLevel') accessLevel;
-  @cached('shortTitle') shortTitle;
-  @cached('confidential') confidential;
-  @cached('showInNewsletter') showInNewsletter;
+  @cached('item.title') title;
+  @cached('item.accessLevel') accessLevel;
+  @cached('item.shortTitle') shortTitle;
+  @cached('item.confidential') confidential;
+  @cached('item.showInNewsletter') showInNewsletter;
 
   @action
   async cancelEditing() {

@@ -6,9 +6,9 @@ export default Component.extend(ModelManageMixin, {
   classNames: ['vl-u-spacer'],
   modelName: null,
 
-  label: cached('label'), // TODO in class syntax use as a decorator instead
-  domain: cached('domain'), // TODO in class syntax use as a decorator instead
-  iseCode: cached('iseCode'), // TODO in class syntax use as a decorator instead
+  label: cached('item.label'), // TODO in class syntax use as a decorator instead
+  domain: cached('item.domain'), // TODO in class syntax use as a decorator instead
+  iseCode: cached('item.iseCode'), // TODO in class syntax use as a decorator instead
 
   isAdding: false,
   isEditing: false,

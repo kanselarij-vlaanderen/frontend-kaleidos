@@ -13,11 +13,11 @@ export default Component.extend({
     return this.get('selectedAlert') || this.store.createRecord('alert', {});
   }),
 
-  title: cached('title'), // TODO in class syntax use as a decorator instead
-  message: cached('message'), // TODO in class syntax use as a decorator instead
-  beginDate: cached('beginDate'), // TODO in class syntax use as a decorator instead
-  endDate: cached('endDate'), // TODO in class syntax use as a decorator instead
-  type: cached('type'), // TODO in class syntax use as a decorator instead
+  title: cached('item.title'), // TODO in class syntax use as a decorator instead
+  message: cached('item.message'), // TODO in class syntax use as a decorator instead
+  beginDate: cached('item.beginDate'), // TODO in class syntax use as a decorator instead
+  endDate: cached('item.endDate'), // TODO in class syntax use as a decorator instead
+  type: cached('item.type'), // TODO in class syntax use as a decorator instead
 
   clearProperties() {
     this.set('title', null);

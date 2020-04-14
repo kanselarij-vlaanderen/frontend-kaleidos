@@ -1,20 +1,29 @@
-import { computed } from '@ember/object';
+import { computed, get, set } from '@ember/object';
 
+/**
+ * Gets a certain property on a component/class so as to prevent it from making calls
+ * TODO: We need to discuss this decorator's usage and perhaps approach the problem this tries to fix in a different way.
+ * @param  {String} property    Path to the property on the class
+ * @return {Any}                The value on the given property path
+ */
 export const cached = (property) => {
-  return computed(`item.${property}`, {
+  return computed(property, {
     get() {
-      const { item } = this;
-      if (item) {
-        return item.get(property);
+      try {
+        return get(this, property);
+      } catch(e) {
+        console.warn(`Cached property at ${property} was not available, skipping.`);
       }
 
       return null;
     },
-    set: function (key, value) {
-      const { item } = this;
-      if (item) {
-        this.item.set(property, value);
+    set(key, value) {
+      try {
+        set(this, property, value);
+      } catch(e) {
+        console.warn(`Could not set cached property at ${property}`);
       }
+
       return value;
     }
   });

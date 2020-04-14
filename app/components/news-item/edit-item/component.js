@@ -18,12 +18,12 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     'remark',
   ]),
 
-  subtitle: cached('subtitle'), // TODO in class syntax use as a decorator instead
-  text: cached('text'), // TODO in class syntax use as a decorator instead
-  title: cached('title'), // TODO in class syntax use as a decorator instead
-  finished: cached('finished'), // TODO in class syntax use as a decorator instead
-  remark: cached('remark'), // TODO in class syntax use as a decorator instead
-  mandateeProposal: cached('newsletterProposal'), // TODO in class syntax use as a decorator instead
+  subtitle: cached('item.subtitle'), // TODO in class syntax use as a decorator instead
+  text: cached('item.text'), // TODO in class syntax use as a decorator instead
+  title: cached('item.title'), // TODO in class syntax use as a decorator instead
+  finished: cached('item.finished'), // TODO in class syntax use as a decorator instead
+  remark: cached('item.remark'), // TODO in class syntax use as a decorator instead
+  mandateeProposal: cached('item.newsletterProposal'), // TODO in class syntax use as a decorator instead
 
   isTryingToSave: false,
   themes: computed(`agendaitem.subcase.newsletterInfo.themes`, {

@@ -15,9 +15,9 @@ export default Component.extend(isAuthenticatedMixin, {
     return this.get('subcase');
   }),
 
-  subcaseName: cached('subcaseName'), // TODO in class syntax use as a decorator instead
-  type: cached('type'), // TODO in class syntax use as a decorator instead
-  showAsRemark: cached('showAsRemark'), // TODO in class syntax use as a decorator instead
+  subcaseName: cached('item.subcaseName'), // TODO in class syntax use as a decorator instead
+  type: cached('item.type'), // TODO in class syntax use as a decorator instead
+  showAsRemark: cached('item.showAsRemark'), // TODO in class syntax use as a decorator instead
 
   remarkType: computed('subcase.remarkType', function () {
     return this.subcase.get('remarkType');
