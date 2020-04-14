@@ -37,8 +37,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
-    cy.addSubcaseMandatee(1, -1, -1); // -1 means select nothing
-    cy.addSubcaseMandatee(2, 0, 0);
+    cy.addSubcaseMandatee(0, -1, -1); // -1 means select nothing
+    cy.addSubcaseMandatee(1, 0, 0);
 
     cy.get(mandateeLinkListItemSelector).as('listItems');
     cy.get('@listItems').should('have.length', 2);
@@ -57,7 +57,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
-    cy.contains(SubcaseTitleShort).click();
+    cy.agendaItemExists(SubcaseTitleShort).click();
 
     cy.get(mandateeLinkListItemSelector).as('listItems');
     cy.get('@listItems').should('have.length', 2);
@@ -87,7 +87,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(3, 0, 0);
+    cy.addSubcaseMandatee(2, 0, 0);
     cy.get(mandateeLinkListItemSelector).as('listItems');
     cy.get('@listItems').should('have.length', 3);
     cy.get('@listItems').eq(0).within(() => {
@@ -105,7 +105,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
-    cy.contains(SubcaseTitleShort).click();
+    cy.agendaItemExists(SubcaseTitleShort).click();
 
     cy.get(mandateeLinkListItemSelector).as('listItems');
     cy.get('@listItems').should('have.length', 3);
@@ -134,11 +134,12 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.openAgendaForDate(agendaDate);
 
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.contains(SubcaseTitleShort).click();
+    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.wait(1000);
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(4, 0, 0);
+    cy.addSubcaseMandatee(3, 0, 0);
     cy.get(mandateeLinkListItemSelector).as('listItems');
     cy.get('@listItems').should('have.length', 4);
     cy.get('@listItems').eq(0).within(() => {
@@ -152,6 +153,29 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
     cy.get('@listItems').eq(3).within(() => {
       cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+    });
+
+    cy.reload();
+    cy.agendaItemExists(SubcaseTitleShort).click();
+
+    // Add 1 more
+    cy.addSubcaseMandatee(5, -1, -1);
+    cy.get(mandateeLinkListItemSelector).as('listItems');
+    cy.get('@listItems').should('have.length', 5);
+    cy.get('@listItems').eq(0).within(() => {
+      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+    });
+    cy.get('@listItems').eq(1).within(() => {
+      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+    });
+    cy.get('@listItems').eq(2).within(() => {
+      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+    });
+    cy.get('@listItems').eq(3).within(() => {
+      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+    });
+    cy.get('@listItems').eq(4).within(() => {
+      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
     });
 
     // Check if subcase has the same amount of mandatees
@@ -159,7 +183,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.openSubcase(0);
 
     cy.get(mandateeLinkListItemSelector).as('listItems');
-    cy.get('@listItems').should('have.length', 4);
+    cy.get('@listItems').should('have.length', 5);
     cy.get('@listItems').eq(0).within(() => {
       cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
     });
@@ -171,6 +195,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
     cy.get('@listItems').eq(3).within(() => {
       cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+    });
+    cy.get('@listItems').eq(4).within(() => {
+      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
     });
 
     cy.get(isecodesListSelector).should('exist')

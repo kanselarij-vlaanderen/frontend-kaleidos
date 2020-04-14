@@ -23,12 +23,11 @@ export default class EditAgendaitemOrSubcaseService extends Service {
       model.set(key, propertiesToSet[key]);
     });
 
-    return model.save().then((item) => {
-      item.reload();
-      return true;
-    }).catch((e) => {
-      throw(e);
-    });
+    try { 
+      await model.save();
+    } catch(e) {
+      throw e;
+    }
   }
 
   async setModifiedOnAgendaOfAgendaitem(agendaitem) {

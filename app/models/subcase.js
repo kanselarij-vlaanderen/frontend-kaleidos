@@ -135,8 +135,8 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     })
   }),
 
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', function () {
-    return this.store.query('agendaitem', {
+  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', async function () {
+    return await this.store.query('agendaitem', {
       filter: {
         subcase: { id: this.get('id') },
         agenda: { name: 'Ontwerpagenda' }
