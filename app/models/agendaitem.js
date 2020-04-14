@@ -129,13 +129,9 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  isDesignAgenda: computed('agenda', function () {
-    const agendaName = this.get('agenda.name');
-    if (agendaName === 'Ontwerpagenda') {
-      return true;
-    } else {
-      return false;
-    }
+  isDesignAgenda: computed('agenda', async function () {
+    const agenda = await this.get('agenda');
+    return await agenda.get('isDesignAgenda');
   }),
 
   nota: computed('documentVersions', function () {
