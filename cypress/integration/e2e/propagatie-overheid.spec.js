@@ -1,17 +1,15 @@
 /*global context, before, it, cy, Cypress, beforeEach*/
 /// <reference types="Cypress" />
 
-
 import agenda from '../../selectors/agenda.selectors';
 import modal from '../../selectors/modal.selectors';
-import utils from '../../selectors/utils.selectors';
 import form from '../../selectors/form.selectors';
 
 context('Agenda tests', () => {
 
-  // before(() => {
-  //   cy.resetDB();
-  // });
+  before(() => {
+    cy.resetDB();
+  });
 
   beforeEach(() => {
     cy.server();
@@ -19,35 +17,55 @@ context('Agenda tests', () => {
   });
 
   it('STEP 1: Create new agenda', () => {
-    cy.visit('/overzicht').then(() => {
-      // Wait for all calls to finish before we continue the activities.
-      cy.route('GET','/meetings/**').as('meetings');
-      cy.wait('@meetings').its('status').should('to.equal', 200)
-        .then(() => {
-          cy.existsAndVisible(agenda.createNewAgendaButton)
-          .click()
-          .then(() => {
-            cy.existsAndInvisible(modal.vlModalComponents.createNewAgendaModal);
-            cy.existsAndInvisible(modal.baseModal.container);
-            cy.existsAndVisible(modal.baseModal.dialogWindow);
-            return cy.existsAndVisible('.ember-power-select-trigger')
-              .click()
-              .then(() => {
-                return cy.selectOptionInSelectByText("Ministerraad");
-            }).then(() => {
-                cy.existsAndVisible(utils.datePickerIcon)
-                  .click()
-                  .then(() => {
-                    cy.setYearMonthDayHourMinuteInFlatPicker(2019, "augustus","5",'15',"30");
-                  });
-            });
-        })
-            .then(() => {
-              cy.existsAndVisible(form.formInput).type('Plaats van de vergadering').then(() => {
-                cy.existsAndVisible(form.formSave).click();
-              })
-            });
+
+
+    const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
+    const plusMonths = 1;
+    const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
+    const subcaseTitle1 = caseTitle + ' test stap 1';
+    const subcaseTitle2 = caseTitle + ' test stap 2';
+    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
+    const files = [file];
+    cy.createCase(false, caseTitle);
+    cy.addSubcase('Nota',
+      subcaseTitle1,
+      'Cypress test voor het testen van toegevoegde documenten',
+      'In voorbereiding',
+      'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.openCase(caseTitle);
+    cy.addSubcase('Nota',
+      subcaseTitle2,
+      'Cypress test voor het testen van toegevoegde agendapunten',
+      'In voorbereiding',
+      'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+
+    // when toggling show changes  the agendaitem with a document added should show
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(subcaseTitle1, false);
+
+    cy.setFormalOkOnAllItems();
+    cy.approveDesignAgenda();
+    cy.agendaItemExists(subcaseTitle1).click();
+    cy.get(agenda.agendaItemDecisionTab).click();
+    cy.get(agenda.addDecision).click();
+    cy.get(agenda.uploadDecisionFile).click();
+
+    cy.contains('Documenten opladen').click();
+    cy.get('.vl-modal-dialog').as('fileUploadDialog');
+
+    files.forEach((file, index) => {
+      cy.get('@fileUploadDialog').within(() => {
+        cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       });
     });
+    cy.get(form.formSave).click();
   });
 });
+
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
+function currentMoment() {
+  return Cypress.moment();
+}

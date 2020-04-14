@@ -15,6 +15,12 @@ const selectors = {
   agendaItemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
   printContainer: '[data-test-agenda-printContainer]',
-  printHeaderTitle: '[data-test-agenda-print-header-title]'
+  printHeaderTitle: '[data-test-agenda-print-header-title]',
+  agendaActions: '[data-test-agenda-header-showActionOptions]',
+  approveAgenda: '[data-test-agenda-header-approveAgenda]',
+  lockAgenda: '[data-test-agenda-header-lockagenda]',
+  agendaItemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
+  addDecision: '[data-test-add-decision]',
+  uploadDecisionFile: '[data-test-upload-decision-file]',
 };
 export default selectors;

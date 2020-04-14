@@ -39,6 +39,7 @@
         <div class="vl-action-group">
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
             <button type="button" class="vl-button vl-button--narrow"
+                    data-test-agenda-header-approveAgenda
               {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}
