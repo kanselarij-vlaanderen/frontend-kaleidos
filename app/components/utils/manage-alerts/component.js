@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
-import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { cached } from 'fe-redpencil/decorators/cached';
 
 export default Component.extend({
   store: inject(),
@@ -13,11 +13,11 @@ export default Component.extend({
     return this.get('selectedAlert') || this.store.createRecord('alert', {});
   }),
 
-  title: getCachedProperty('title'),
-  message: getCachedProperty('message'),
-  beginDate: getCachedProperty('beginDate'),
-  endDate: getCachedProperty('endDate'),
-  type: getCachedProperty('type'),
+  title: cached('item.title'), // TODO in class syntax use as a decorator instead
+  message: cached('item.message'), // TODO in class syntax use as a decorator instead
+  beginDate: cached('item.beginDate'), // TODO in class syntax use as a decorator instead
+  endDate: cached('item.endDate'), // TODO in class syntax use as a decorator instead
+  type: cached('item.type'), // TODO in class syntax use as a decorator instead
 
   clearProperties() {
     this.set('title', null);
