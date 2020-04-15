@@ -6,7 +6,7 @@ export default class ToasterService extends Service {
   @service intl;
   toasts = A([]);
 
-  @(task(function * (toast) {
+  @(task(function* (toast) {
     toast.options.onClose = toast.options.onClose || (() => this.toasts.removeObject(toast));
     this.toasts.pushObject(toast);
     yield timeout(toast.options.timeOut);
@@ -18,7 +18,9 @@ export default class ToasterService extends Service {
   notify(message, title, options) {
     options = options || {};
     options.type = options.type || 'success';
-    options.timeOut = 3000;
+    if (typeof options.timeOut == 'undefined') {
+      options.timeOut = 3000;
+    }
     const toast = {
       title,
       message,
@@ -30,28 +32,36 @@ export default class ToasterService extends Service {
 
   info(message, title, options) {
     options = options || {};
-    options.timeOut = 2000;
+    if (typeof options.timeOut == 'undefined') {
+      options.timeOut = 2000;
+    }
     return this.notify(message, title, options);
   }
 
   success(message, title, options) {
     options = options || {};
     options.type = 'success';
-    options.timeOut = 2000;
+    if (typeof options.timeOut == 'undefined') {
+      options.timeOut = 2000;
+    }
     return this.notify(message, title, options);
   }
 
   warning(message, title, options) {
     options = options || {};
     options.type = 'warning';
-    options.timeOut = 3000;
+    if (typeof options.timeOut == 'undefined') {
+      options.timeOut = 3000;
+    }
     return this.notify(message, title, options);
   }
 
   error(message, title, options) {
     options = options || {};
     options.type = 'error';
-    options.timeOut = 3000;
+    if (typeof options.timeOut == 'undefined') {
+      options.timeOut = 3000;
+    }
     if (!(message || title)) { // TODO: revise naming/defaults, taken over from legacy global-error
       message = this.intl.t('error');
       title = this.intl.t('warning-title');
@@ -62,7 +72,9 @@ export default class ToasterService extends Service {
   loading(message, title, options) {
     options = options || {};
     options.type = 'loading';
-    options.timeOut = 10000;
+    if (typeof options.timeOut == 'undefined') {
+      options.timeOut = 10000;
+    }
     return this.notify(message, title, options);
   }
 
