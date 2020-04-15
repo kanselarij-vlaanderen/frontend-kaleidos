@@ -1,10 +1,28 @@
 .vlc-environment-pill {
   pointer-events: none;
-  background: #FFF7BB;
-  border: 1px solid #E5D34F;
+  background: #fefefe;
+  border: 1px solid #e2e2e2;
   border-radius: 2.2rem;
-  padding: 0.6rem 1.2rem;
+  padding: 0.2rem 1.2rem;
   font-weight: bold;
   font-size: 1.3rem;
   z-index: 99999;
+}
+
+.vlc-environment-pill--local {
+  background-color: $environment-local-color;
+  border-color: darken($environment-local-color, 7%);
+  color: white;
+}
+
+.vlc-environment-pill--dev {
+  background-color: $environment-dev-color;
+  border-color: darken($environment-dev-color, 7%);
+  color: white;
+}
+
+.vlc-environment-pill--test {
+  background-color: $environment-test-color;
+  border-color: darken($environment-test-color, 30%);
+  color: black;
 }
