@@ -5,14 +5,73 @@ import agenda from '../../selectors/agenda.selectors';
 
 context('Tests for KAS-1076', () => {
 
+  const plusMonths = 1;
+  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
+
   before(() => {
     cy.server();
     cy.resetDB();
+    cy.login('Admin');
+    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.logout();
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
+    const caseTitleSingle = 'Cypress test: document versions agendaitem - ' + currentTimestamp();
+    const type = 'Nota';
+    const SubcaseTitleShort = 'Cypress test: 20+ documents agendaitem with subcase - ' + currentTimestamp();
+    const subcaseTitleLong = 'Cypress test voor het toevoegen van meer dan 20 documenten in agendaitem';
+    const subcaseType = 'In voorbereiding';
+    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    cy.createCase(false, caseTitleSingle);
+    cy.openCase(caseTitleSingle);
+    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
+    cy.agendaItemExists(SubcaseTitleShort).click();
+
+    // This works but takes 300 or more seconds...
+   const files = [
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-1', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-2', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-3', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-4', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-5', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-6', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-7', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-8', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-9', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-10', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-11', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-12', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-13', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-14', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-15', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-16', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-17', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-18', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-19', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-20', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-21', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-22', fileType: 'Nota'},
+    ]
+
+    cy.addDocumentsToAgendaItem(SubcaseTitleShort, files);
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
+    });
+
+    cy.openCase(caseTitleSingle);
+    cy.openSubcase(0);
+    cy.clickReverseTab('Documenten');
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
+    });
   });
 
   it('Adding more then 20 document-versions to subcase should show all', () => {
@@ -28,9 +87,7 @@ context('Tests for KAS-1076', () => {
     cy.openSubcase(0);
     cy.route('GET', '**/document-versions?page*size*=9999').as('getPage9999');
 
-    cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
-      cy.contains('Documenten').click();
-    });
+    cy.clickReverseTab('Documenten');
 
     // This works but takes 300 or more seconds...
     cy.addDocuments(
@@ -67,9 +124,7 @@ context('Tests for KAS-1076', () => {
     cy.openSubcase(0);
     cy.route('GET', '**/linkedDocument-versions?page*size*=9999').as('getPage9999');
 
-    cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
-      cy.contains('Documenten').click().wait('@getPage9999');
-    });
+    cy.clickReverseTab('Documenten').wait('@getPage9999');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
     });
