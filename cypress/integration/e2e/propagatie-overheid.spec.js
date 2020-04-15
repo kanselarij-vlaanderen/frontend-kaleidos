@@ -5,20 +5,23 @@ import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import actionModel from '../../selectors/action-modal.selectors';
 import modal from '../../selectors/modal.selectors';
+import documents from '../../selectors/document.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('Agenda tests', () => {
 
-  // before(() => {
-  //   cy.resetDB();
-  // });
-
-  beforeEach(() => {
-    cy.server();
-    cy.login('Admin');
+  before(() => {
+    cy.resetDB();
+  cy.server();
   });
+
+  // beforeEach(() => {
+  //   cy.server();
+  // });
 
   it('STEP 1: Create new agenda', () => {
 
+    cy.login('Admin');
 
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
     const plusMonths = 1;
@@ -66,21 +69,40 @@ context('Agenda tests', () => {
       .click();
     cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid').click().then(() => {
       cy.get(agenda.accessLevelSave).click().then(() => {
-        cy.get(actionModel.showActionOptions).click().then(() => {
-          cy.existsAndVisible(agenda.lockAgenda).click().then(() => {
-            cy.get(actionModel.showActionOptions).click().then(() => {
-              cy.existsAndVisible(actionModel.releaseDecisions).click().then(() => {
-                cy.existsAndVisible(modal.verifyModal.save).click();
+        cy.existsAndVisible(agenda.agendaItemDocumentsTab).click().then(() => {
+          cy.existsAndVisible(documents.addLinkedDocuments).click().then(() => {
+            cy.existsAndVisible(utils.checkboxLabel).then(() => {
+              cy.existsAndVisible('.vl-checkbox__box').click().then(() => {
+                cy.existsAndVisible(form.formSave).click();
               });
             })
-          });
+            //TODO: continue here
+          })
         });
+        // cy.get(actionModel.showActionOptions).click().then(() => {
+        //   cy.existsAndVisible(agenda.lockAgenda).click().then(() => {
+        //     cy.get(actionModel.showActionOptions).click().then(() => {
+        //       cy.existsAndVisible(actionModel.releaseDecisions).click().then(() => {
+        //         cy.existsAndVisible(modal.verifyModal.save).click();
+        //       });
+        //     })
+        //   });
+        // });
       });
     })
   });
 
-  it('STEP 1: Create new agenda', () => {
-  })
+  // it('STEP 2: overheid', () => {
+  //   cy.login('Overheid');
+  //     const plusMonths = 1;
+  //   const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
+  //   cy.openAgendaForDate(agendaDate);
+  //   cy.agendaItemExists("testId=1586897818: Cypress test dossier 1 test stap 1").click();
+  //   cy.existsAndVisible(agenda.agendaItemDecisionTab);
+  //
+  //
+  //
+  // })
 
 
 
