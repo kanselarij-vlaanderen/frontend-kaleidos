@@ -106,7 +106,7 @@ export default Component.extend(isAuthenticatedMixin, {
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
       await designAgenda.reload(); //ensures latest state is pulled
-      if (designAgenda.get('name') === 'Ontwerpagenda') {
+      if (designAgenda.get('isDesignAgenda')) {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
       await subcase.hasMany('agendaitems').reload();

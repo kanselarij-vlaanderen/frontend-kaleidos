@@ -1,28 +1,33 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
+import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 
 const { Model, attr, belongsTo, hasMany } = DS;
 
-export default Model.extend({
-  name: attr('string'),
+export default Model.extend(LoadableModel, {
+  name: computed.alias('serialnumber'),
+  type: attr('string'),
+  serialnumber: attr('string'),
   issued: attr('datetime'),
   createdFor: belongsTo('meeting'),
+  status: belongsTo('agendastatus', {inverse: null}),
   agendaitems: hasMany('agendaitem', { inverse: null, serialize: false }),
   created: attr('date'),
   isAccepted: attr('boolean'),
   modified: attr('datetime'),
 
-  isDesignAgenda: computed('name', function () {
-    return this.name == 'Ontwerpagenda';
+  isDesignAgenda: computed('status.isDesignAgenda', function () {
+    return this.get('status.isDesignAgenda');
   }),
 
-  agendaName: computed('name', function () {
-    if (this.get('name.length') > 2) {
-      return this.name;
-    } else {
-      return 'Agenda ' + this.name;
+  agendaName: computed('serialnumber', 'status', function () {
+    const isDesignAgenda = this.get('status.isDesignAgenda');
+    let prefix = "Agenda ";
+    if(isDesignAgenda){
+      prefix = 'Ontwerpagenda ';
     }
+    return `${prefix} ${this.serialnumber}`;
   }),
 
   isApprovable: computed('agendaitems.@each', function () {

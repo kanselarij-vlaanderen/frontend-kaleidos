@@ -4,7 +4,7 @@ import { alias, filter } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-import EmberObject from '@ember/object';
+import { all } from 'rsvp';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import {
@@ -50,8 +50,8 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     return await this.currentSession.get('sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
-  designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {
-    return agenda.get('name') === 'Ontwerpagenda';
+  designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', function (agenda) {
+    return agenda.get('isDesignAgenda');
   }),
 
   shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function () {
@@ -193,12 +193,12 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       this.set('isLockingAgenda', true);
       const agendas = await this.get('agendas');
       const designAgenda = agendas
-        .filter((agenda) => agenda.name === 'Ontwerpagenda')
-        .sortBy('-name')
+        .filter((agenda) => agenda.get('isDesignAgenda'))
+        .sortBy('-serialnumber')
         .get('firstObject');
       const lastAgenda = agendas
-        .filter((agenda) => agenda.name !== 'Ontwerpagenda')
-        .sortBy('-name')
+        .filter((agenda) => !agenda.get('isDesignAgenda'))
+        .sortBy('-serialnumber')
         .get('firstObject');
 
       const session = await lastAgenda.get('createdFor');
@@ -343,7 +343,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     this.set('isApprovingAgenda', true);
     this.changeLoading();
     let agendas = await this.get('agendas');
-    let agendaToLock = await agendas.find((agenda) => agenda.name == 'Ontwerpagenda');
+    let agendaToLock = await agendas.find((agenda) => agenda.get('isDesignAgenda'));
     if (agendaToLock) {
       agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
     }
