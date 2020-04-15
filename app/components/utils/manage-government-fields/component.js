@@ -1,14 +1,14 @@
 import Component from '@ember/component';
-import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { cached } from 'fe-redpencil/decorators/cached';
 import ModelManageMixin from 'fe-redpencil/mixins/model-manage-mixin';
 
 export default Component.extend(ModelManageMixin, {
   classNames: ['vl-u-spacer'],
   modelName: null,
 
-  label: getCachedProperty('label'),
-  domain: getCachedProperty('domain'),
-  iseCode: getCachedProperty('iseCode'),
+  label: cached('item.label'), // TODO in class syntax use as a decorator instead
+  domain: cached('item.domain'), // TODO in class syntax use as a decorator instead
+  iseCode: cached('item.iseCode'), // TODO in class syntax use as a decorator instead
 
   isAdding: false,
   isEditing: false,

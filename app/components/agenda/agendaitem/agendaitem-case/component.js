@@ -1,10 +1,9 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
-import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { alias, not } from '@ember/object/computed';
+import { computed, set } from '@ember/object';
 
-export default Component.extend(EditAgendaitemOrSubcase, {
+export default Component.extend({
   store: inject(),
   sessionService: inject(),
   currentSession: alias('sessionService.currentSession'),
@@ -13,6 +12,14 @@ export default Component.extend(EditAgendaitemOrSubcase, {
   agendaitem: null,
   subcase: null,
   isRemark: alias('item.showAsRemark'),
+  isEditing: false,
+
+  isAgendaItem: computed('item.contructor', function () {
+    const { item } = this;
+    return item.get('modelName') === 'agendaitem';
+  }),
+
+  isSubcase: not('isAgendaItem'),
 
   item: computed('agendaitem', 'subcase', function () {
     const { agendaitem, subcase } = this;
@@ -31,15 +38,23 @@ export default Component.extend(EditAgendaitemOrSubcase, {
     } else if (isSubcase) {
       return this.get('item.subcasesFromCase');
     }
+
+    return null;
   }),
 
   actions: {
     cancelEditing() {
-      this.toggleProperty('isEditing');
+      set(this, 'isEditing', false);
     },
+
     toggleConfidential(value) {
       this.set('item.confidential', value);
     },
+
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
+
     chooseConfidentiality(confidentiality) {
       this.get('item').set('confidentiality', confidentiality);
     },
