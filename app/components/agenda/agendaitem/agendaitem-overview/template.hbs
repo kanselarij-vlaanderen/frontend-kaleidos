@@ -34,7 +34,6 @@
           {{else if (eq activeAgendaItemSection "documents")}}
             {{agenda/agendaitem/agendaitem-case/subcase-documents
               item=agendaitem
-              isDesignAgenda=(eq currentAgenda.name "Ontwerpagenda")
               modelToAddDocumentVersionTo="agendaitem"
             }}
           {{else if (eq activeAgendaItemSection "comments")}}

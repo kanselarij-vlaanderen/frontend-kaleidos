@@ -1,7 +1,9 @@
 import Service from '@ember/service';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import { ajax } from 'fe-redpencil/utils/ajax';
+import DS from 'ember-data';
+let { PromiseArray } = DS;
+import { all } from 'rsvp';
 
 export default Service.extend({
   store: inject(),
@@ -13,8 +15,13 @@ export default Service.extend({
     if (!this.get('currentSession')) {
       return [];
     }
-    return this.get('currentSession.agendas').then((agendas) => {
-      return agendas.sortBy('agendaName').reverse();
+    return PromiseArray.create({
+      promise: this.get('currentSession.agendas').then( async (agendas) => {
+        await all(agendas.map((agenda) => {
+          return agenda.load('status');
+        }));
+        return agendas.sortBy('serialnumber').reverse();
+      })
     });
   }),
 
@@ -33,14 +40,6 @@ export default Service.extend({
     }
   }),
 
-  lockMeeting(agendaId) {
-    return ajax({
-      method: 'POST',
-      url: `/close-meeting?agendaId=${agendaId}`,
-    }).then((result) => {
-      return result.body;
-    });
-  },
   announcements: computed('currentAgenda.announcements.@each', function () {
     let currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
@@ -56,18 +55,7 @@ export default Service.extend({
   }),
 
   definiteAgendas: computed('agendas', function () {
-    return this.get('agendas').then((agendas) => {
-      return agendas.filter((agenda) => agenda.name != 'Ontwerpagenda').sortBy('-name');
-    });
-  }),
-
-  latestDefiniteAgendas: computed('agendas', function () {
-    return this.get('agendas').then((agendas) => {
-      return agendas
-        .filter((agenda) => agenda.name != 'Ontwerpagenda')
-        .sortBy('-name')
-        .get('firstObject');
-    });
+    return this.get('agendas').filter((agenda) => !agenda.get('isDesignAgenda')).sortBy('-name');
   }),
 
   async findPreviousAgendaOfSession(session, agenda) {

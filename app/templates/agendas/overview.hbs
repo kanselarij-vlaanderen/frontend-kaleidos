@@ -108,14 +108,7 @@
                         {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                       </td>
                       <td>
-                        {{#if (is-pending meeting.latestAgendaName)}}
-                          <div class="skeletal-loader"
-                               role="alert"
-                               aria-busy="true"
-                          ></div>
-                        {{else}}
-                          {{await meeting.latestAgendaName}}
-                        {{/if}}
+                        {{utils/delayed-property model=meeting path="latestAgendaName" waitFor="agenda.status"}}
                       </td>
                       <td>
                         {{#if (is-pending meeting.latestAgenda)}}

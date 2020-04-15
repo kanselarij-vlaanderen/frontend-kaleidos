@@ -15,7 +15,7 @@ export default Component.extend({
   async createAgenda(meeting, date) {
     const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
-      name: 'Ontwerpagenda',
+      serialnumber: 'A',
       createdFor: meeting,
       created: date || fallBackDate,
       modified: date || fallBackDate,
