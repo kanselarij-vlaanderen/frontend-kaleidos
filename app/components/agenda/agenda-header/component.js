@@ -87,7 +87,9 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     await session.save();
     const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
-
+    const approved = await this.store.findRecord('agendastatus', 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1');
+    lastDefiniteAgenda.set('status', approved);
+    await lastDefiniteAgenda.save();
     this.get('agendaService')
       .approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda)
       .then((newAgenda) => {
@@ -204,7 +206,11 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       const session = await lastAgenda.get('createdFor');
       session.set('isFinal', true);
       session.set('agenda', lastAgenda);
+
       await session.save();
+      const closed = this.store.findRecord('agendastatus', 'f06f2b9f-b3e5-4315-8892-501b00650101');
+      lastAgenda.set('agendastatus', closed);
+      await lastAgenda.save();
 
       if (designAgenda) {
         await this.deleteAgenda(designAgenda);
@@ -347,28 +353,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     if (agendaToLock) {
       agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
     }
-    let definiteAgendas = await this.get('definiteAgendas');
-    let lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
-    if (!lastDefiniteAgenda) {
-      agendaToLock.set('name', CONFIG.alphabet[0]);
-    } else {
-      if (definiteAgendas) {
-        const agendaLength = definiteAgendas.length;
-
-        if (agendaLength && CONFIG.alphabet[agendaLength]) {
-          if (agendaLength < CONFIG.alphabet.get('length') - 1) {
-            agendaToLock.set('name', CONFIG.alphabet[agendaLength]);
-          }
-        } else {
-          agendaToLock.set('name', agendaLength + 1);
-        }
-      } else {
-        agendaToLock.set('name', agendas.get('length') + 1);
-      }
-    }
-
-    agendaToLock.set('isAccepted', true);
     agendaToLock.set(
       'modified',
       moment()

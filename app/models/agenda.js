@@ -15,7 +15,6 @@ export default Model.extend(LoadableModel, {
   status: belongsTo('agendastatus', {inverse: null}),
   agendaitems: hasMany('agendaitem', { inverse: null, serialize: false }),
   created: attr('date'),
-  isAccepted: attr('boolean'),
   modified: attr('datetime'),
 
   isDesignAgenda: computed('status.isDesignAgenda', function () {
