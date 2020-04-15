@@ -7,6 +7,7 @@ const { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend(LoadableModel, {
   name: computed.alias('serialnumber'),
+  title: attr('string'),
   type: attr('string'),
   serialnumber: attr('string'),
   issued: attr('datetime'),
