@@ -1,11 +1,11 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { computed } from '@ember/object';
-import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { cached } from 'fe-redpencil/decorators/cached';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 
-export default Component.extend(ModifiedMixin, RdfaEditorMixin, {
+export default Component.extend(RdfaEditorMixin, {
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   store: inject(),
 
@@ -13,7 +13,7 @@ export default Component.extend(ModifiedMixin, RdfaEditorMixin, {
     return this.get('agendaitem.meetingRecord');
   }),
 
-  initValue: getCachedProperty('richtext'),
+  initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
 
   actions: {
     async saveChanges(agendaitem) {
@@ -25,7 +25,7 @@ export default Component.extend(ModifiedMixin, RdfaEditorMixin, {
       recordToSave.set('richtext', richtext);
       await recordToSave.save();
 
-      await this.updateModifiedProperty(agenda);
+      await updateModifiedProperty(agenda);
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     },

@@ -1,12 +1,12 @@
 import Component from '@ember/component';
-import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { cached } from 'fe-redpencil/decorators/cached';
 import ModelManageMixin from 'fe-redpencil/mixins/model-manage-mixin';
 
 export default Component.extend(ModelManageMixin, {
   classNames: ['vl-u-spacer'],
   modelName: null,
 
-  title: getCachedProperty('label'),
+  title: cached('item.label'), // TODO in class syntax use as a decorator instead
 
   actions: {
     async editModel() {

@@ -1,11 +1,10 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed, get } from '@ember/object';
 import moment from 'moment';
 
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
+export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vl-u-spacer-extended-bottom-l'],
   store: inject(),
 

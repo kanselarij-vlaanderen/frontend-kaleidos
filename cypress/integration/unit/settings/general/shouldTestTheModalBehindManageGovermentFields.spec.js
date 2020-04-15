@@ -1,11 +1,9 @@
 /*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
-import {
-  manageGovermentFieldsSelector
-} from "../../../../selectors/settings/settingsSelectors";
-import {settingsSelector} from "../../../../selectors/toolbar/toolbarSelectors";
-import {modalDialogCloseModalSelector, modalDialogSelector} from "../../../../selectors/models/modelSelectors";
+import settings from "../../../../selectors/settings.selectors";
+import toolbar from "../../../../selectors/toolbar.selectors";
+import modal from "../../../../selectors/modal.selectors";
 
 context('Manage goverment field tests', () => {
   beforeEach(() => {
@@ -15,18 +13,18 @@ context('Manage goverment field tests', () => {
   });
 
   it('Should open the model behind manage goverment fields', () => {
-    cy.get(settingsSelector).click();
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
-    cy.get(manageGovermentFieldsSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
+    cy.get(settings.manageGovermentFields).click();
+    cy.get(modal.modalManager.add).should('be.visible');
   });
 
   it('Should open the model behind manage goverment fields and close it', () => {
-    cy.get(settingsSelector).click();
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
-    cy.get(manageGovermentFieldsSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
-    cy.get(modalDialogCloseModalSelector).click();
-    cy.get(modalDialogSelector).should('not.be.visible');
+    cy.get(settings.manageGovermentFields).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
   });
 });
