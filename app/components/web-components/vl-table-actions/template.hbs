@@ -9,12 +9,14 @@
         {{action "openDocument" row bubbles=false}}
       >
         <i class="vl-button__icon vl-vi vl-vi-document"></i>
-        {{#attach-popover
+        {{#attach-tooltip
+          arrow="true"
+          animation="shift"
           placement="bottom"
-          class="ember-attacher-popper ember-attacher-popper-small"
+          class="ember-attacher-tooltip"
         }}
           {{t "no-nota"}}
-        {{/attach-popover}}
+        {{/attach-tooltip}}
       </button>
     {{else}}
       <button type="button" class="vl-button vl-button--link vl-button--icon"
@@ -25,12 +27,14 @@
     {{/if}}
   {{else}}
     <div class="vl-loader" role="alert" aria-busy="true">
-      {{#attach-popover
+      {{#attach-tooltip
+        arrow="true"
+        animation="shift"
         placement="bottom"
-        class="ember-attacher-popper ember-attacher-popper-small"
+        class="ember-attacher-tooltip"
       }}
         {{t "nota-loading-text"}}
-      {{/attach-popover}}
+      {{/attach-tooltip}}
     </div>
   {{/if}}
   {{#link-to

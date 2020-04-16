@@ -15,6 +15,7 @@
   as |model|
   }}
     {{model.label}}
+    {{!-- Disabled for the time being, because this makes for horrible UX (decision Johan Ronsse KAS-1171)
     {{#attach-popover
       placement="top"
       class="ember-attacher-popper ember-attacher-popper-wide"
@@ -22,6 +23,6 @@
       <p>
         {{sanitize-html raw=true value=model.description}}
       </p>
-    {{/attach-popover}}
+    {{/attach-popover--}}
   {{/power-select}}
 </div>
