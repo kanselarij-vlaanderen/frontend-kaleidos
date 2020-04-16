@@ -215,9 +215,9 @@ function proposeSubcaseForAgenda (agendaDate) {
     cy.contains(formattedDate).click();
   });
   cy.wait('@createNewAgendaitem', { timeout: 12000 });
-  cy.wait('@patchAgenda', { timeout: 12000 });
   cy.wait('@patchSubcase', { timeout: 12000 });
   cy.wait('@createSubcasePhase', { timeout: 12000 });
+  cy.wait('@patchAgenda', { timeout: 12000 });
 }
 
 /**

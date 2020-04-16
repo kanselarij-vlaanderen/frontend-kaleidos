@@ -7,7 +7,7 @@ context('Show no warning in Newsletterinfo', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {
@@ -26,7 +26,6 @@ context('Show no warning in Newsletterinfo', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.openCase(caseTitle);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);

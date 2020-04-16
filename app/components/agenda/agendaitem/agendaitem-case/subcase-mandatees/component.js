@@ -109,7 +109,7 @@ export default Component.extend(isAuthenticatedMixin, {
       const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] }
       const resetFormallyOk = true;
       try {
-        await this.editAgendaitemOrSubcaseService.saveChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
+        await saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
       } catch (e) {

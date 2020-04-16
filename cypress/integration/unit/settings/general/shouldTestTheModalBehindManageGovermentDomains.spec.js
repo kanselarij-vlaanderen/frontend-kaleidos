@@ -91,7 +91,7 @@ context('Settings page tests', () => {
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length + 1);
     // Should clean the database after to get rid of the added elements and so that the other tests can run smooth.
-    cy.resetDB();
+    cy.resetCache();
   });
 
   // it('Should open the modal, select the first element and edit it to Edited then edit it back to the standard', () => {

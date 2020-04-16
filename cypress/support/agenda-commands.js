@@ -395,6 +395,7 @@ function approveDesignAgenda() {
     cy.route('PATCH', '/subcases/**').as('patchSubcase');
     cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
+    cy.contains('Pagina is aan het laden').should('not.exist');
     cy.get('.vl-button--icon-before', {timeout: 10000}).should('exist')
       .contains('Acties')
       .click();

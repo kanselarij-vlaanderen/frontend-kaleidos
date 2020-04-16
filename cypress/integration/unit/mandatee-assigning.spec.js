@@ -12,7 +12,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.createCase(false, caseTitle);
