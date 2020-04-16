@@ -29,6 +29,11 @@ export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
   },
 
   actions: {
+    closeModal() {
+      this.hideAddDocumentModal();
+      this.clearAllDocuments();
+    },
+
     toggleIsAddingNewDocument() {
       this.toggleProperty('isAddingNewDocument');
     },
