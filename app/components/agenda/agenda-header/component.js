@@ -1,10 +1,9 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import { computed, set } from '@ember/object';
 import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-import EmberObject from '@ember/object';
 
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import {
@@ -186,6 +185,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async doApproveAgenda(session) {
+      set(this, 'showWarning', false);
       await this.approveAgenda(session)
     },
 
