@@ -52,7 +52,7 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
   const isAgendaItem = item.get('modelName') === 'agendaitem';
 
   await item.preEditOrSaveCheck();
-  if (isAgendaItem) { // why use !item.showAsRemark ?
+  if (isAgendaItem) {
     const isDesignAgenda = await item.get('isDesignAgenda');
     const agendaitemSubcase = await item.get('subcase');
     if (isDesignAgenda && agendaitemSubcase) {

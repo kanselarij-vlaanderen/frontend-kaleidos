@@ -4,7 +4,7 @@
 context('Agenda tests', () => {
 
   before(() => {
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {

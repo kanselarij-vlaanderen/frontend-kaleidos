@@ -3,18 +3,13 @@
 
 import alert from '../../../selectors/alert.selectors';
 import agenda from '../../../selectors/agenda.selectors';
+import newsletter from '../../../selectors/newsletter.selector';
+import modal from '../../../selectors/modal.selectors';
 
-context('Show warning in newsletterinfo', () => {
-
-  //TODO: Create agenda
-  //TODO: Create procedurestap
-  //TODO: Add procedurestap to agenda
-  //TODO: Switch to kortbestek tab
-  //TODO: Warning should be there
-
+context('Should upload nota, see the warning, close warning, edit KB and see no warning when revisiting', () => {
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {
@@ -22,7 +17,7 @@ context('Show warning in newsletterinfo', () => {
     cy.login('Admin');
   });
 
-  it('Should show warning in kortbestek view', () => {
+  it('Test full warning flow on KB', () => {
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
     const plusMonths = 1;
     const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
@@ -37,7 +32,6 @@ context('Show warning in newsletterinfo', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.openCase(caseTitle);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
@@ -85,6 +79,14 @@ context('Show warning in newsletterinfo', () => {
     cy.wait('@createNewDocumentVersion', { timeout: 12000 });
     cy.wait('@createNewDocument', { timeout: 12000 });
     cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
+
+    cy.get(agenda.agendaItemKortBestekTab)
+      .should('be.visible')
+      .click()
+      .wait(2000); //Access-levels GET occured earlier, general wait instead
+    cy.get(alert.changesAlertComponent).should('not.be.visible');
+
+    // Upload another file
     cy.route('/');
     cy.openAgendaForDate(agendaDate);
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
@@ -93,7 +95,20 @@ context('Show warning in newsletterinfo', () => {
       .should('be.visible')
       .click()
       .wait(2000); //Access-levels GET occured earlier, general wait instead
+
     cy.get(alert.changesAlertComponent).should('be.visible');
+    cy.get(alert.changesAlertComponentCloseButton).click();
+    cy.get(alert.changesAlertComponent).should('not.be.visible');
+    //Edit KB
+    cy.get(newsletter.edit).should('be.visible').click();
+    cy.get(newsletter.rdfaEditor).type('Aanpassing');
+    cy.get(newsletter.editSave).type('Aanpassing');
+    cy.wait(2000);
+    cy.get(modal.verify.save).click();
+    cy.wait(5000);
+    cy.get(agenda.agendaItemDocumentsTab).should('be.visible').click();
+    cy.get(agenda.agendaItemKortBestekTab).should('be.visible').click();
+    cy.get(alert.changesAlertComponent).should('not.be.visible');
   })
 });
 

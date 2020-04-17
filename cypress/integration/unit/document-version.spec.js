@@ -10,7 +10,7 @@ context('Tests for KAS-1076', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
@@ -81,8 +81,7 @@ context('Tests for KAS-1076', () => {
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.createCase(false, caseTitleSingle);
-    cy.openCase(caseTitleSingle);
+    cy.createCase(false, caseTitleSingle)
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.route('GET', '**/document-versions?page*size*=9999').as('getPage9999');
@@ -140,7 +139,6 @@ context('Tests for KAS-1076', () => {
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
     const files = [file];
     cy.createCase(false, caseTitle);
-    cy.openCase(caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
@@ -152,7 +150,7 @@ context('Tests for KAS-1076', () => {
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.setFormalOkOnAllItems();
       cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.wait(200);
+      cy.wait(1000);
       cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -196,7 +194,6 @@ context('Tests for KAS-1076', () => {
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
     const files = [file];
     cy.createCase(false, caseTitle);
-    cy.openCase(caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);

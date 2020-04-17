@@ -65,7 +65,7 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
       cy.get('.ember-power-select-trigger').click();
     });
     cy.get('.ember-power-select-option', {timeout: 5000}).should('exist').then(() => {
-      cy.contains(kind).click();
+      cy.contains(kind).trigger('mouseover').click();
     });
 
     //Set the start date
@@ -316,24 +316,24 @@ function deleteAgenda(meetingId, lastAgenda) {
  */
 function approveDesignAgenda() {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
-  // cy.route('POST', '/agenda-approve/approveAgenda').as('createApprovedAgenda');
-  cy.route('GET', '/agendaitems/**').as('getAgendaitems');
+  cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
+  cy.route('GET', '/agendas/**').as('getAgendas');
 
-    //TODO add boolean for when not all items are formally ok, click through the confirmation modal
-    cy.get('.vlc-toolbar').within(() => {
-      cy.get('.vl-button--narrow')
-        .contains('Ontwerpagenda')
-        .click();
-    });
-
-  cy.wait('@patchAgenda', { timeout: 12000 });
-  // cy.wait('@createApprovedAgenda', { timeout: 12000 });
-  cy.wait('@getAgendaitems', { timeout: 12000 });
+  //TODO add boolean for when not all items are formally ok, click through the confirmation modal
+  //TODO use test selector
+  cy.get('.vlc-toolbar').within(() => {
+    cy.get('.vl-button--narrow')
+      .contains('Ontwerpagenda')
+      .click()
+      .wait('@patchAgenda', { timeout: 12000 })
+      .wait('@getAgendaitems', { timeout: 12000 })
+      .wait('@getAgendas', { timeout: 12000 });
+  });
 }
 
 /**
  * @description Creates a remark for an agenda and attaches any file in the files array
- * @name approveDesignAgenda
+ * @name addRemarkToAgenda
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} title - The title of the remark
@@ -395,6 +395,7 @@ function approveDesignAgenda() {
     cy.route('PATCH', '/subcases/**').as('patchSubcase');
     cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
+    cy.contains('Pagina is aan het laden').should('not.exist');
     cy.get('.vl-button--icon-before', {timeout: 10000}).should('exist')
       .contains('Acties')
       .click();
