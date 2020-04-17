@@ -7,7 +7,7 @@ export default Mixin.create(isAuthenticatedMixin, {
   filter: null,
   sort: null,
   page: 0,
-  size: 10,
+  size: 9999,
   include: null,
   shouldFilterRemarks: true,
 

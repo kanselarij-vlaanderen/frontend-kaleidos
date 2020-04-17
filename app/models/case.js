@@ -17,10 +17,8 @@ export default Model.extend({
 
   type: belongsTo('case-type'),
   relatedMeeting: belongsTo('meeting'),
-  submitter: belongsTo('submitter'),
 
   remark: hasMany('remark'),
-  themes: hasMany('theme'),
   subcases: hasMany('subcase'),
   related: hasMany('case'),
   creators: hasMany('person'),

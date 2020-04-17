@@ -8,9 +8,9 @@
 {{#if (is-pending item.iseCodes)}}
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else if (gt (await item.iseCodes.length) 0)}}
-  <ul>
+  <ul data-test-subcase-ise-codes-list>
     {{#each (await item.iseCodes) as |iseCode|}}
-      <li class="vl-pill">
+      <li class="vl-pill" data-test-subcase-ise-codes-list-item>
         {{iseCode.name}}
         {{!-- ({{iseCode.code}}) --}}
       </li>
