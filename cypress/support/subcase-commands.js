@@ -177,7 +177,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
   cy.wait('@getIseCodes', { timeout: 20000 });
   cy.wait('@getGovernmentFields', { timeout: 20000 });
   if(fieldNumber >= 0) {
-    cy.get('.vlc-checkbox-tree', { timeout: 20000 }).should('exist').eq(fieldNumber).within(() => {
+    cy.get('.vlc-checkbox-tree', { timeout: 30000 }).should('exist').eq(fieldNumber).within(() => {
       cy.get('.vl-checkbox').eq(domainNumber).click();
     });
   }
