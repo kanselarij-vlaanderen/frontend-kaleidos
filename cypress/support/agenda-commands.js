@@ -65,7 +65,7 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
       cy.get('.ember-power-select-trigger').click();
     });
     cy.get('.ember-power-select-option', {timeout: 5000}).should('exist').then(() => {
-      cy.contains(kind).parent().trigger('mouseover').click();
+      cy.contains(kind).trigger('mouseover').click();
     });
 
     //Set the start date
