@@ -107,7 +107,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(step).click();
+    cy.contains(step).trigger('mouseover').click();
   });
 
   // Set the step name
@@ -115,7 +115,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(stepName).click();
+    cy.contains(stepName).trigger('mouseover').click();
   });
 
   cy.get('.vlc-toolbar').within(() => {
