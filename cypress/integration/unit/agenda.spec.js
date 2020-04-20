@@ -1,6 +1,8 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
+import modal from '../../selectors/modal.selectors';
+
 context('Agenda tests', () => {
   const testStart =  Cypress.moment();
 
@@ -35,6 +37,7 @@ context('Agenda tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();
+    cy.get(modal.container).should('not.be.visible')
   });
 
   it('should add a remark with documents to an agenda', () => {

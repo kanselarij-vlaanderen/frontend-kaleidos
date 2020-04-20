@@ -11,7 +11,8 @@ const selectors = {
     delete: '[data-test-vl-model-manager-delete]'
   },
   verify: {
-    save: '[data-test-vl-modal-verify-save]'
+    save: '[data-test-vl-modal-verify-save]',
+    container: '[data-test-vl-modal-verify]'
   }
 };
 export default selectors;
