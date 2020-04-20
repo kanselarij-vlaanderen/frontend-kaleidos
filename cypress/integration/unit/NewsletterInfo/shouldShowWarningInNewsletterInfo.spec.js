@@ -14,7 +14,7 @@ context('Show warning in newsletterinfo', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ context('Show warning in newsletterinfo', () => {
     cy.login('Admin');
   });
 
-  it('Should close warning in kortbestek view when nota is added but KB is not updated', () => {
+  it('Should show warning in kortbestek view', () => {
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
     const plusMonths = 1;
     const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
@@ -37,7 +37,6 @@ context('Show warning in newsletterinfo', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.openCase(caseTitle);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
@@ -81,19 +80,19 @@ context('Show warning in newsletterinfo', () => {
     cy.get('@fileUploadDialog').within(() => {
       cy.get('.vl-button').contains('Documenten toevoegen').click();
     });
+
     cy.wait('@createNewDocumentVersion', { timeout: 12000 });
     cy.wait('@createNewDocument', { timeout: 12000 });
     cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
     cy.route('/');
     cy.openAgendaForDate(agendaDate);
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
+
     cy.get(agenda.agendaItemKortBestekTab)
       .should('be.visible')
       .click()
       .wait(2000); //Access-levels GET occured earlier, general wait instead
     cy.get(alert.changesAlertComponent).should('be.visible');
-    cy.get(alert.changesAlertComponentCloseButton).click();
-    cy.get(alert.changesAlertComponent).should('not.be.visible');
   })
 });
 

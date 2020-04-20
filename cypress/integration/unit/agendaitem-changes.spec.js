@@ -7,7 +7,7 @@ context('Agendaitem changes tests', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
   });
 
@@ -25,7 +25,6 @@ context('Agendaitem changes tests', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.openCase(caseTitle);
     cy.addSubcase('Nota',
       subcaseTitle2,
       'Cypress test voor het testen van toegevoegde agendapunten',

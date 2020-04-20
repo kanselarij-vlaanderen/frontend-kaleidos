@@ -9,7 +9,7 @@ import agenda from '../../selectors/agenda.selectors';
 context('Tests for cancelling CRUD operations on document and document-versions' , () => {
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {
@@ -28,7 +28,6 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName, fileType: 'Nota'};
     const files = [file];
     cy.createCase(false, caseTitle);
-    cy.openCase(caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
@@ -185,7 +184,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     });
   });
 
-  it('Cancelling when adding new document-version should not skip a version the next time', () => {
+  it.only('Cancelling when adding new document-version should not skip a version the next time', () => {
     cy.route('DELETE', '/files/**').as('deleteFile');
     cy.route('POST', '/document-versions').as('createNewDocumentVersion');
     const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
@@ -197,7 +196,6 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
     const files = [file];
     cy.createCase(false, caseTitle);
-    cy.openCase(caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
