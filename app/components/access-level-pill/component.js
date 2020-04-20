@@ -1,14 +1,14 @@
 import Component from '@ember/component';
 import EmberObject from '@ember/object';
 import { computed } from '@ember/object';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject as service } from '@ember/service';
 import DS from 'ember-data';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   confidential: false,
   editing: false,
   intl: service(),
+  session: service('current-session'),
   classNameBindings: [':vl-u-display-flex', ':vl-u-flex-align-center'],
 
   accessLevel: computed('item.accessLevel', function () {
@@ -59,7 +59,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
   actions: {
     toggleEdit() {
-      if (this.get('isEditor')) {
+      if (this.get('session.isEditor')) {
         this.toggleProperty('editing');
       }
     },
@@ -71,7 +71,7 @@ export default Component.extend(isAuthenticatedMixin, {
       this.set('accessLevel', accessLevel);
     },
     toggleConfidential: function () {
-      if (!this.get('isEditor')) {
+      if (!this.get('session.isEditor')) {
         return;
       }
 
