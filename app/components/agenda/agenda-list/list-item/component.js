@@ -71,12 +71,6 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   }),
 
-  // get document names to show on all agendaitems, regardless of lazy loading
-  documentNames: computed('agendaitem', async function() {
-    const names = await this.agendaService.getDocumentNames(this.get('agendaitem'));
-    return names;
-  }),
-
   /* Begin lazy partial rendering
 
      This implementation of lazy partial rendering uses an
