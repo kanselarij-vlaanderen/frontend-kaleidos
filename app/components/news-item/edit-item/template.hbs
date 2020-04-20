@@ -19,12 +19,16 @@
       {{/if}}
     {{else}}
       <div class="vl-loader" role="alert" aria-busy="true">
-        {{#attach-popover
-          placement="bottom"
-          class="ember-attacher-popper ember-attacher-popper-small"
-        }}
-          {{t "nota-loading-text"}}
-        {{/attach-popover}}
+        <div class="vl-loader" role="alert" aria-busy="true">
+          {{#attach-tooltip
+            arrow="true"
+            animation="shift"
+            placement="bottom"
+            class="ember-attacher-tooltip"
+          }}
+            {{t "nota-loading-text"}}
+          {{/attach-tooltip}}
+        </div>
       </div>
     {{/if}}
   </div>
