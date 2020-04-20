@@ -1,4 +1,7 @@
 const selectors = {
+  agenda: {
+    approveAgenda: '[data-test-agenda-approve-modal]',
+  },
   createAnnouncement: {
     titleSubcase: '[data-test-vl-create-announcement-title-subcase]',
     modalDialog: '[data-test-vl-modal-dialog]',
