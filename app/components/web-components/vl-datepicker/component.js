@@ -21,11 +21,7 @@ export default Component.extend({
   selectedDate: computed('date', function () {
     const date = this.get('date');
     if (date) {
-      if (date instanceof Date) {
-        return date;
-      } else {
-        return this.formatter.formatDate(date.get('firstObject'));
-      }
+      return this.formatter.formatDate(date.get('firstObject'));
     } else {
       const defaultDate = this.formatter.formatDate(null);
       if (this.defaultHour != null && !isNaN(this.defaultHour)) {
