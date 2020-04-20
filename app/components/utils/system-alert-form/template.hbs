@@ -1,0 +1,43 @@
+<div class="vlc-input-field-block">
+  <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
+    <div class="vlc-input-field-block vl-col--2-4">
+      {{web-components/vl-form-label value=(t "start-date")}}
+      {{web-components/vl-datepicker
+        date=(array (moment-format this.alert.beginDate "YYYY-MM-DDTHH:mm:ssZ"))
+        dateChanged=(action "selectBeginDate")
+        enableTime=true
+      }}
+    </div>
+    <div class="vlc-input-field-block vl-col--2-4">
+      {{web-components/vl-form-label value=(t "end-date")}}
+      {{web-components/vl-datepicker
+        date=(array (moment-format this.alert.endDate "YYYY-MM-DDTHH:mm:ssZ"))
+        dateChanged=(action "selectEndDate")
+        enableTime=true
+      }}
+    </div>
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "title")}}
+    {{web-components/vl-form-input width="4" value=this.alert.title}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "message")}}
+    {{textarea
+      rows="2"
+      class="vl-textarea vl-textarea--block"
+      value=this.alert.message
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "severity")}}
+    {{utils/model-selector
+      modelName="alert-type"
+      searchField="label"
+      propertyToShow="label"
+      sortField="label"
+      selectedItems=this.alert.type
+      selectModel=(action "selectType")
+    }}
+  </div>
+</div>

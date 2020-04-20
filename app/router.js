@@ -40,6 +40,10 @@ Router.map(function () {
     this.route('users', { path:"/gebruikers"}, function() {
       this.route('user', { path: "/:id"});
     });
+    this.route('system-alerts', { path: '/systeemmeldingen' }, function() {
+      this.route('edit', { path:'/:alert_id' });
+      this.route('new', { path:'/nieuw' });
+    });
   });
   this.route('loading', { path: '/laden' });
   this.route('mock-login');

@@ -4,7 +4,6 @@ export default Controller.extend({
   isAddingNewMinister: false,
   isAddingMandate: false,
   isEditingMandatee: false,
-  isManagingAlerts: false,
   isManagingDocumentTypes: false,
   isManagingSubcaseTypes: false,
   isManagingIseCodes: false,
