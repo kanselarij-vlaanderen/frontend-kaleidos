@@ -24,7 +24,7 @@
       {{/if}}
     {{/if}}
   {{/if}}
-  {{#if renderDetails}}
+  {{#if (or renderDetails isEditingOverview)}}
     <div class="vlc-agenda-meta vl-u-display-flex vl-u-flex-space-between">
       {{#if (and selectedAgendaItem isEditingOverview)}}
         <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
@@ -97,18 +97,18 @@
           agendaitem=agendaitem
         }}
       {{else}}
-        {{#if (await documentNames)}}
+        {{#if (await agendaitem.documentNames)}}
           <div class="vlc-hr"></div>
           {{utils/documents-list-lazy-loaded
-            documentNames=documentNames
+            documentNames=agendaitem.documentNames
           }}
         {{/if}}
       {{/if}}
     {{else}}
-      {{#if (await documentNames)}}
+      {{#if (await agendaitem.documentNames)}}
         <div class="vlc-hr"></div>
         {{utils/documents-list-lazy-loaded
-          documentNames=documentNames
+          documentNames=agendaitem.documentNames
         }}
       {{/if}}
     {{/if}}
