@@ -26,11 +26,10 @@
   {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
 {{else if
   (or
-        (and isAgendaItem (await item.subcase))
-        isSubcase
+    (and isAgendaItem (await item.subcase))
+    isSubcase
   )
 }}
-  {{agenda/agendaitem/agendaitem-case/subcase-themes item=item}}
   {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
   {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item}}
   {{#if isAgendaItem}}

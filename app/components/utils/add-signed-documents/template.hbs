@@ -14,7 +14,7 @@
 {{/if}}
 {{#if isAddingNewDocument}}
   {{#web-components/vl-modal
-    closeModal=(action "toggleIsAddingNewDocument")
+    closeModal=(action "closeModal")
     isOverlay=true
     large=true
     title=(t "document-add")
@@ -52,7 +52,7 @@
       isLoading=isLoading
       cancelButtonText=(t "cancel")
       saveButtonText=(t "document-add")
-      cancelAction=(action "toggleIsAddingNewDocument")
+      cancelAction=(action "closeModal")
       saveAction=(action "uploadNewDocument")
       disableSave=(eq documentsInCreation.length 0)
     }}
