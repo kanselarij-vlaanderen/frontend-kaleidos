@@ -553,5 +553,6 @@
   "newsitem-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
   "change-mandatee-end-date": "Bent u zeker dat u de einddatum wenst aan te passen? Deze minister staat nog geagendeerd op agendapunten.",
   "change-mandatee-change-end-date": "Eindatum aanpassen",
-  "select-minister": "Selecteer een minister"
+  "select-minister": "Selecteer een minister",
+  "show-active-minister-alert": "Opgelet de actieve minister staat nog geagendeerd op één of meerdere toekomstige agenda's."
 }
