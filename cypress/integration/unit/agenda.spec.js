@@ -3,6 +3,8 @@ import modal from "../../selectors/modal.selectors";
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
+import modal from '../../selectors/modal.selectors';
+
 context('Agenda tests', () => {
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 20).set('minute', 20);
