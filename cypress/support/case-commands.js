@@ -107,7 +107,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(step).click();
+    cy.contains(step).trigger('mouseover').click();
   });
 
   // Set the step name
@@ -115,7 +115,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(stepName).click();
+    cy.contains(stepName).trigger('mouseover').click();
   });
 
   cy.get('.vlc-toolbar').within(() => {
@@ -146,10 +146,10 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 function openCase(caseTitle) {
   cy.visit('dossiers');
   cy.get('#dossierId').type(caseTitle);
-  cy.route('GET', '/cases/search?**').as('getCases');
+  cy.route('GET', `/cases/search?**${caseTitle.split(" ", 1)}**`).as('getCaseSearchResult');
   cy.contains('zoeken')
     .click()
-    .wait('@getCases');
+    .wait('@getCaseSearchResult');
   cy.contains('Aan het laden...').should('not.exist');
   cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
   cy.get('@rows').within(() => {

@@ -128,7 +128,7 @@ function resetCache() {
     .exec(`rm -rf ${kaleidosProject}/testdata/db && rm -rf ${kaleidosProject}/testdata/files`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -x "elasticsearch/*" -d ${kaleidosProject}`)
     .exec('docker-compose up -d', { env })
-    .wait(5000)
+    .wait(3000)
 }
 
 /**

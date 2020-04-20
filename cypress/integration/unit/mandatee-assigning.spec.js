@@ -15,7 +15,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.createCase(false, caseTitle);
     cy.logout();
   });
 
@@ -31,9 +30,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.openCase(caseTitle);
-
+    cy.createCase(false, caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
