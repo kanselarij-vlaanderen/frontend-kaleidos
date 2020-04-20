@@ -2,13 +2,11 @@
 /// <reference types="Cypress" />
 
 import 'cypress-file-upload';
-import {
-  documentUploadNewVersionSelector, documentUploadShowMoreSelector,
-  modalDocumentVersionUploadedFilenameSelector
-} from '../selectors/documents/documentSelectors';
-import { agendaAgendaItemDocumentsTabSelector } from '../selectors/agenda/agendaSelectors';
-import { formSaveSelector } from '../selectors/formSelectors/formSelectors';
-import { modalDialogSelector } from '../selectors/models/modelSelectors';
+import document from '../selectors/document.selectors';
+
+import agenda  from '../selectors/agenda.selectors';
+import form  from '../selectors/form.selectors';
+import modal  from '../selectors/modal.selectors';
 // ***********************************************
 // Commands
 
@@ -20,6 +18,7 @@ Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMe
 Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
 Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
 Cypress.Commands.add('uploadFile', uploadFile);
+Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
 
 // ***********************************************
@@ -104,8 +103,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
     .contains(agendaItemTitle)
     .click()
     .wait(2000); // sorry
-  cy.get(agendaAgendaItemDocumentsTabSelector)
-    .should('be.visible')
+  cy.get(agenda.agendaItemDocumentsTab)
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
   if (alreadyHasDocs) {
@@ -194,22 +192,22 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     .parents('.vlc-document-card').as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(documentUploadShowMoreSelector).click();
+    cy.get(document.documentUploadShowMore).click();
   });
-  cy.get(documentUploadNewVersionSelector)
+  cy.get(document.documentUploadNewVersion)
     .should('be.visible')
     .click();
 
-  cy.get(modalDialogSelector).as('fileUploadDialog');
+  cy.get(modal.createAnnouncement.modalDialog).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(modalDocumentVersionUploadedFilenameSelector).should('contain', file.fileName);
+    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
   });
   cy.wait(1000); //Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(formSaveSelector).click();
+    cy.get(form.formSave).click();
   });
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
 
@@ -253,6 +251,31 @@ function uploadFile(folder, fileName, extension) {
     cy.get('[type=file]').upload(
         {fileContent, fileName: fileFullName, mimeType: 'application/pdf'},
         {uploadType: 'input'},
+    );
+  });
+  cy.wait('@createNewFile');
+  cy.wait('@getNewFile');
+}
+
+/**
+ * @description Uploads a csv file with users..
+ * @name uploadUsersFile
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} folder - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ * @param {String} fileName - The name of the file without the extension
+ * @param {String} extension - The extension of the file
+ */
+function uploadUsersFile(folder, fileName, extension) {
+  cy.route('POST', 'user-management-service/import-users').as('createNewFile');
+  cy.route('GET', 'users?**').as('getNewFile');
+  const fileFullName = fileName + '.' + extension;
+  const filePath = folder + '/' + fileFullName;
+
+  cy.fixture(filePath).then(fileContent => {
+    cy.get('[type=file]').upload(
+      {fileContent, fileName: fileFullName, mimeType: 'application/pdf'},
+      {uploadType: 'input'},
     );
   });
   cy.wait('@createNewFile');

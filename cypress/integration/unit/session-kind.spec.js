@@ -1,14 +1,11 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
-import {showActionOptions, navigatetodecisions, navigatetonewsletter
-} from "../../selectors/agenda/actionModalSelectors";
+import actionModal from "../../selectors/action-modal.selectors";
 
-import {printoverviewTemplateHeaderTitle, printoverviewDecisionsHeaderTitle
-} from "../../selectors/print-overview/templateSelectors";
+import printOverview from "../../selectors/print-overview.selectors";
 
-import {newslettersMeetingTitleSelector, newslettersoverviewTitleSelector
-} from "../../selectors/newsletters/newsletterSelector";
+import newsletter from "../../selectors/newsletter.selector";
 
 context('Formally ok/nok tests', () => {
   const plusMonths = 1;
@@ -34,37 +31,37 @@ context('Formally ok/nok tests', () => {
   it('should show the correct translations for normal session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad van';
     cy.openAgendaForDate(agendaDate);
-    cy.get(showActionOptions).click();
-    cy.get(navigatetodecisions).click();
-    cy.get(printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(actionModal.navigatetodecisions).click();
+    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
     cy.clickReverseTab('Klad');
-    cy.get(printoverviewDecisionsHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
     cy.clickReverseTab('Definitief');
-    cy.get(printoverviewDecisionsHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for special session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad van';
     cy.openAgendaForDate(agendaDateSpecial);
-    cy.get(showActionOptions).click();
-    cy.get(navigatetodecisions).click();
-    cy.get(printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(actionModal.navigatetodecisions).click();
+    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
     cy.clickReverseTab('Klad');
-    cy.get(printoverviewDecisionsHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
     cy.clickReverseTab('Definitief');
-    cy.get(printoverviewDecisionsHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for electronic session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure van';
     cy.openAgendaForDate(agendaDateElectronic);
-    cy.get(showActionOptions).click();
-    cy.get(navigatetodecisions).click();
-    cy.get(printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(actionModal.navigatetodecisions).click();
+    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
     cy.clickReverseTab('Klad');
-    cy.get(printoverviewDecisionsHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
     cy.clickReverseTab('Definitief');
-    cy.get(printoverviewDecisionsHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {
@@ -80,37 +77,37 @@ context('Formally ok/nok tests', () => {
   it('should show the correct translations for normal session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad';
     cy.openAgendaForDate(agendaDate);
-    cy.get(showActionOptions).click();
-    cy.get(navigatetonewsletter).click();
-    cy.get(newslettersoverviewTitleSelector).contains(textToDisplay);
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(actionModal.navigatetonewsletter).click();
+    cy.get(newsletter.overviewTitle).contains(textToDisplay);
     cy.clickReverseTab('Klad');
-    cy.get(newslettersMeetingTitleSelector).contains(textToDisplay);
+    cy.get(newsletter.meetingTitle).contains(textToDisplay);
     cy.clickReverseTab('Definitief');
-    cy.get(newslettersMeetingTitleSelector).contains(textToDisplay);
+    cy.get(newsletter.meetingTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for special session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad';
     cy.openAgendaForDate(agendaDateSpecial);
-    cy.get(showActionOptions).click();
-    cy.get(navigatetonewsletter).click();
-    cy.get(newslettersoverviewTitleSelector).contains(textToDisplay);
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(actionModal.navigatetonewsletter).click();
+    cy.get(newsletter.overviewTitle).contains(textToDisplay);
     cy.clickReverseTab('Klad');
-    cy.get(newslettersMeetingTitleSelector).contains(textToDisplay);
+    cy.get(newsletter.meetingTitle).contains(textToDisplay);
     cy.clickReverseTab('Definitief');
-    cy.get(newslettersMeetingTitleSelector).contains(textToDisplay);
+    cy.get(newsletter.meetingTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for electronic session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure';
     cy.openAgendaForDate(agendaDateElectronic);
-    cy.get(showActionOptions).click();
-    cy.get(navigatetonewsletter).click();
-    cy.get(newslettersoverviewTitleSelector).contains('Beslissingen van de Vlaamse Regering - Elektronische procedure');
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(actionModal.navigatetonewsletter).click();
+    cy.get(newsletter.overviewTitle).contains('Beslissingen van de Vlaamse Regering - Elektronische procedure');
     cy.clickReverseTab('Klad');
-    cy.get(newslettersMeetingTitleSelector).contains(textToDisplay);
+    cy.get(newsletter.meetingTitle).contains(textToDisplay);
     cy.clickReverseTab('Definitief');
-    cy.get(newslettersMeetingTitleSelector).contains(textToDisplay);
+    cy.get(newsletter.meetingTitle).contains(textToDisplay);
   });
 
 });

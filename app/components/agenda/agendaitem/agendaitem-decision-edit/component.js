@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
@@ -54,7 +55,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         }
         await this.setNewPropertiesToModel(item).then(async () => {
           const agenda = await item.get('agenda');
-          this.updateModifiedProperty(agenda);
+          updateModifiedProperty(agenda);
           item.reload();
         }).catch((e) => {
           this.set('isLoading', false);
@@ -70,7 +71,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
           await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
             await this.setNewPropertiesToModel(agendaitem).then(async () => {
               const agenda = await item.get('agenda');
-              this.updateModifiedProperty(agenda).then((agenda) => {
+              updateModifiedProperty(agenda).then((agenda) => {
                 agenda.reload();
               });
               await item.reload();

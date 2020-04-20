@@ -1,7 +1,7 @@
 /*global Cypress, context, before, it, cy, beforeEach*/
 /// <reference types="Cypress" />
 
-import { changesAlertComponentSelector } from '../../../selectors/components/changesAlertSelectors';
+import alert from '../../../selectors/alert.selectors';
 
 context('Show no warning in Newsletterinfo', () => {
 
@@ -31,7 +31,7 @@ context('Show no warning in Newsletterinfo', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
     cy.openAgendaItemKortBestekTab(subcaseTitle1);
-    cy.get(changesAlertComponentSelector).should('not.be.visible');
+    cy.get(alert.changesAlertComponent).should('not.be.visible');
   });
 
   function currentMoment() {
