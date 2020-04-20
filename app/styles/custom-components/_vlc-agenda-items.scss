@@ -33,7 +33,7 @@
 .vlc-agenda-items__sub-item > span { // a
   display: block;
   position: relative;
-  padding: 2rem 1.5rem 2rem 3.5rem;
+  padding: 2rem 1.5rem;
   font-size: 1.3rem;
   text-decoration: none;
   color: $black;
@@ -80,6 +80,10 @@ a.vlc-agenda-items__sub-item--active:focus {
   background: darken($science-blue, 5%);
 }
 
+.vlc-agenda-meta {
+  padding-left: 3rem;
+}
+
 .vlc-agenda-meta__times-passed {
   opacity: 0.65;
 }
@@ -88,7 +92,7 @@ a.vlc-agenda-items__sub-item--active:focus {
 .vlc-agenda-items__subject {
   display: flex;
   justify-content: flex-start;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1.1;
   margin: 0 0 1rem;
   font-weight: 500;
@@ -116,7 +120,7 @@ a.vlc-agenda-items__sub-item--active:focus {
 }
 
 .vlc-agenda-items-sub-item__numbering {
-  padding-right: 0.75rem
+  min-width: 3rem;
 }
 
 /* Agenda items compare view
