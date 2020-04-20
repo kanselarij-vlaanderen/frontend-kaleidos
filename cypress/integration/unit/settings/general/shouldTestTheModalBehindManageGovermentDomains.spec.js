@@ -1,17 +1,10 @@
 /*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
-
-import {
-  manageGovermentDomainsSelector
-} from "../../../../selectors/settings/settingsSelectors";
-import {settingsSelector} from "../../../../selectors/toolbar/toolbarSelectors";
-import {
-  modalDialogCloseModalSelector,
-  modalDialogSelector,
-  modalManagerAddSelector, modalManagerCloseSelector, modalManagerDeleteSelector, modalManagerEditSelector
-} from "../../../../selectors/models/modelSelectors";
-import {formInputSelector, formSaveSelector} from "../../../../selectors/formSelectors/formSelectors";
+import settings from "../../../../selectors/settings.selectors";
+import toolbar from "../../../../selectors/toolbar.selectors";
+import modal from "../../../../selectors/modal.selectors";
+import form from "../../../../selectors/form.selectors";
 
 context('Settings page tests', () => {
 
@@ -33,33 +26,33 @@ context('Settings page tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.route('/')
-    cy.get(settingsSelector).click();
+    cy.route('/');
+    cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
   });
 
   it('Should open the model behind manage goverment domains', () => {
-    cy.get(manageGovermentDomainsSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
+    cy.get(settings.manageGovermentDomains).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
-    cy.get(manageGovermentDomainsSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
-    cy.get(modalDialogCloseModalSelector).click();
-    cy.get(modalDialogSelector).should('not.be.visible');
+    cy.get(settings.manageGovermentDomains).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
   });
 
   it('Should open the dropdown in the modal', () => {
-    cy.get(manageGovermentDomainsSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
+    cy.get(settings.manageGovermentDomains).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
   });
 
   it('Should open the dropdown in the modal and see each item', () => {
-    cy.get(manageGovermentDomainsSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
+    cy.get(settings.manageGovermentDomains).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
 
@@ -69,36 +62,36 @@ context('Settings page tests', () => {
   });
 
   it('Should open the dropdown in the modal and selecting the first element should show advanced model', () => {
-    cy.get(manageGovermentDomainsSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
+    cy.get(settings.manageGovermentDomains).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length.greaterThan', 0);
     cy.get('.ember-power-select-option').eq(0).should('contain.text', "Cultuur, jeugd, sport & media");
     cy.get('.ember-power-select-option').eq(0).click();
-    cy.get('.ember-power-select-selected-item').should('contain.text',"Cultuur, jeugd, sport & media");
-    cy.get(modalManagerAddSelector).should('be.visible');
-    cy.get(modalManagerEditSelector).should('be.visible');
-    cy.get(modalManagerDeleteSelector).should('be.visible');
-    cy.get(modalManagerCloseSelector).should('be.visible');
+    cy.get('.ember-power-select-selected-item').should('contain.text',"Cultuur, jeugd, sport & media").wait(200);
+    cy.get(modal.modalManager.add).should('be.visible');
+    cy.get(modal.modalManager.edit).should('be.visible');
+    cy.get(modal.modalManager.delete).should('be.visible');
+    cy.get(modal.modalManager.close).should('be.visible');
   });
 
   it('Should open the dropdown in the modal and selecting the each element should show advanced model with that element in the dropdown span', () => {
-    cy.get(manageGovermentDomainsSelector).click();
-    cy.get(modalDialogSelector).should('be.visible');
+    cy.get(settings.manageGovermentDomains).click();
+    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
     for(let i = 0; i<govermentDomains.length;i++) {
       cy.validateDropdownElements(i,govermentDomains[i]);
     }
   });
 
   it('Should open the modal and add a new item in the list', () => {
-    cy.get(manageGovermentDomainsSelector).click();
-    cy.get(modalManagerAddSelector).click();
-    cy.get(formInputSelector).type('Andere zaken', {delay: 300});
-    cy.get(formSaveSelector).click();
+    cy.get(settings.manageGovermentDomains).click();
+    cy.get(modal.modalManager.add).click();
+    cy.get(form.formInput).type('Andere zaken');
+    cy.get(form.formSave).click();
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length + 1);
     // Should clean the database after to get rid of the added elements and so that the other tests can run smooth.
-    cy.resetDB();
+    cy.resetCache();
   });
 
   // it('Should open the modal, select the first element and edit it to Edited then edit it back to the standard', () => {

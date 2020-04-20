@@ -5,10 +5,10 @@ import { bind } from '@ember/runloop';
 import { ajax } from 'fe-redpencil/utils/ajax';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
+export default Service.extend(isAuthenticatedMixin, {
   store: service(),
   toaster: service(),
   intl: service(),
@@ -140,7 +140,6 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       mandatees: mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
-      themes: await subcase.get('themes'),
     });
     await agendaitem.save();
 
@@ -151,7 +150,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     await subcase.save();
     await this.assignSubcasePhase(subcase);
     await subcase.hasMany('phases').reload();
-    await this.updateModifiedProperty(selectedAgenda);
+    await updateModifiedProperty(selectedAgenda);
   },
 
   async assignSubcasePhase(subcase) {
@@ -224,7 +223,7 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   },
 
   async deleteAgendaitemFromMeeting(agendaitem) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {reload: true});
+    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     const currentAgenda = await itemToDelete.get('agenda');
     const currentMeeting = await currentAgenda.get('createdFor');
     const currentMeetingId = await currentMeeting.get('id');
@@ -264,21 +263,25 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
   async retrieveModifiedDateFromNota(agendaItem) {
     const newsletterInfoForSubcase = await agendaItem.get('subcase.newsletterInfo');
     const nota = await agendaItem.get('nota');
-    if(!nota) {
+    if (!nota) {
       return null;
     }
 
     const documentVersion = await nota.get('lastDocumentVersion');
     const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
-    const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
-    if (newsletterInfoOnSubcaseLastModifiedTime) {
-      if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+    const notaDocumentVersions = await nota.get('documentVersions');
+    if (notaDocumentVersions.length > 1) {
+      const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
+      if (newsletterInfoOnSubcaseLastModifiedTime) {
+        if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
+          return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+        } else {
+          return null;
+        }
       } else {
-        return null;
+        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
       }
-    } else {
-      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
     }
+    return null;
   }
 });

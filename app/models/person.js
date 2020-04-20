@@ -9,10 +9,7 @@ export default Model.extend({
   firstName: attr('string'),
 
   mandatees: hasMany('mandatee', { inverse: null }),
-
-  birth: belongsTo('birth'),
   mandatee: belongsTo('mandatee', { inverse: null }),
-  gender: belongsTo('gender'),
   signature: belongsTo('signature'),
 
   nameToDisplay: computed('mandatee', 'alternativeName', 'firstName', 'lastName', function () {

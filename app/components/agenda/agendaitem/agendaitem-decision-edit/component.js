@@ -1,15 +1,16 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
-import { getCachedProperty } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { cached } from 'fe-redpencil/decorators/cached';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze(['approved', 'richtext']),
-  approved: getCachedProperty('approved'),
-  initValue: getCachedProperty('richtext'),
+  approved: cached('item.approved'), // TODO in class syntax use as a decorator instead
+  initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
 
   async setDecisionPhaseToSubcase() {
     const approved = await this.get('approved');
@@ -54,7 +55,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         }
         await this.setNewPropertiesToModel(item).then(async () => {
           const agenda = await item.get('agenda');
-          this.updateModifiedProperty(agenda);
+          updateModifiedProperty(agenda);
           item.reload();
         }).catch((e) => {
           this.set('isLoading', false);
@@ -70,7 +71,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
           await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
             await this.setNewPropertiesToModel(agendaitem).then(async () => {
               const agenda = await item.get('agenda');
-              this.updateModifiedProperty(agenda).then((agenda) => {
+              updateModifiedProperty(agenda).then((agenda) => {
                 agenda.reload();
               });
               await item.reload();

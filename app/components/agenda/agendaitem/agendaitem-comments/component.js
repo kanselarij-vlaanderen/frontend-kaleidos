@@ -2,9 +2,9 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { sort } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
+import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 
-export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
+export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vl-grid'],
   elementId: 'agendaitem-comments',
   store: inject(),
@@ -39,7 +39,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
         item.hasMany('remarks').reload();
         this.set('text', '');
         if (agenda) {
-          this.updateModifiedProperty(agenda);
+          updateModifiedProperty(agenda);
         }
       });
     },
@@ -56,7 +56,7 @@ export default Component.extend(isAuthenticatedMixin, ModifiedMixin, {
         comment.get('answers').addObject(savedComment);
         comment.set('answer', '');
         if (agenda) {
-          this.updateModifiedProperty(agenda);
+          updateModifiedProperty(agenda);
         }
         comment.save();
       });

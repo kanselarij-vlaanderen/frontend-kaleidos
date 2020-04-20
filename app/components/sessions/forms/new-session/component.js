@@ -39,7 +39,6 @@ export default Component.extend({
       formallyOk: CONFIG.notYetFormallyOk,
       mandatees: [],
       documentVersions: [],
-      themes: [],
       approvals: [],
       isApproval: true
     });

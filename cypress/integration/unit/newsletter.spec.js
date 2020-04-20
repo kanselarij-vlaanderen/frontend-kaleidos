@@ -4,7 +4,7 @@
 context('Test the KB functionality', () => {
     before(() => {
       cy.server();
-      cy.resetDB();
+      cy.resetCache();
     });
 
     beforeEach(() => {

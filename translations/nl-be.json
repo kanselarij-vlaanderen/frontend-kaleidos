@@ -30,6 +30,7 @@
   "agenda-release-decisions": "Beslissingen vrijgeven",
   "agenda-release-documents": "Documenten vrijgeven",
   "agenda-version": "Agenda versie",
+  "agenda-documents-download-ready": "Uw archiefbestand is klaar",
   "agendaitem-bestek": "Kort bestek",
   "agendaitem-case": "Dossier",
   "agendaitem-comment": "Opmerkingen",
@@ -250,6 +251,7 @@
   "notes-for": "Notulen voor",
   "notes-of-agendaitem": "Notulen van agendapunt",
   "notes-of-session": "Vergadering van",
+  "session-of": "Vergadering van",
   "notifications": "Meldingen",
   "number-session": "Nummer vergadering: ",
   "of": "van",
@@ -549,6 +551,5 @@
   "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
   "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "newsitem-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
-  "newsitem-changed-no-note-message": "Opgelet, er is nog geen nota aanwezig!",
   "select-minister": "Selecteer een minister"
 }

@@ -15,7 +15,6 @@ export default Model.extend({
   numberVr: attr('string'),
 
   subcase: belongsTo('subcase', { inverse: null }),
-  publication: belongsTo('publication'),
   documentType: belongsTo('document-type'),
   documentVersions: hasMany('document-version', { inverse: null }),
   signedDocument: belongsTo('document'),

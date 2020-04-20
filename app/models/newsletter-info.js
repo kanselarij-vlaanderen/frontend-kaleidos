@@ -23,6 +23,7 @@ export default ModelWithModifier.extend({
   subcase: belongsTo('subcase'),
   meeting: belongsTo('meeting', { inverse: null }),
   documentVersions: hasMany('document-version', { inverse: null }),
+  themes: hasMany('themes', { inverse: null }),
 
   displayRemark: computed('remark', 'intl', function () {
     const remark = this.get('remark');

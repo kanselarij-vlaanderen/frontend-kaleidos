@@ -1,11 +1,13 @@
 /*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
+import agenda from '../../selectors/agenda.selectors';
+
 context('Tests for KAS-1076', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {
@@ -20,8 +22,7 @@ context('Tests for KAS-1076', () => {
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.createCase(false, caseTitleSingle);
-    cy.openCase(caseTitleSingle);
+    cy.createCase(false, caseTitleSingle)
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.route('GET', '**/document-versions?page*size*=9999').as('getPage9999');
@@ -71,7 +72,6 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
     });
-
   });
 
   it('Adding new document-version to agendaitem on designagenda should reset formally ok and update the subcase', () => {
@@ -84,7 +84,6 @@ context('Tests for KAS-1076', () => {
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
     const files = [file];
     cy.createCase(false, caseTitle);
-    cy.openCase(caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
@@ -96,7 +95,8 @@ context('Tests for KAS-1076', () => {
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.setFormalOkOnAllItems();
       cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.clickAgendaitemTab('Documenten');
+      cy.wait(1000);
+      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -139,7 +139,6 @@ context('Tests for KAS-1076', () => {
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
     const files = [file];
     cy.createCase(false, caseTitle);
-    cy.openCase(caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
@@ -151,7 +150,8 @@ context('Tests for KAS-1076', () => {
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
       cy.setFormalOkOnAllItems();
       cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.clickAgendaitemTab('Documenten');
+      cy.wait(1000);
+      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -172,7 +172,8 @@ context('Tests for KAS-1076', () => {
 
       cy.openAgendaForDate(agendaDate,meetingId);
       cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.clickAgendaitemTab('Documenten');
+      cy.wait(1000);
+      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
           cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');

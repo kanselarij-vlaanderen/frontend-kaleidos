@@ -10,10 +10,9 @@ context('Subcase tests', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.createCase(false, caseTitle);
     cy.logout();
   });
 
@@ -29,14 +28,11 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.openCase(caseTitle);
-
+    cy.createCase(false, caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
     cy.changeSubcaseAccessLevel(false, SubcaseTitleShort, true, 'Intern Overheid', SubcaseTitleShort, 'Cypress test nieuwere lange titel');
-    cy.addSubcaseThemes([0, 5 , 10]);
     cy.addSubcaseMandatee(1, 0, 0);
     cy.addSubcaseMandatee(2, 0, 0);
 

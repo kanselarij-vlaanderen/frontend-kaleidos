@@ -1,7 +1,7 @@
 <div class="vlc-scroll-wrapper vlc-u-box-model-maximize-width vl-u-scroll-scrollable vlc-hide-scrollbar-on-print">
-  {{agenda/printable-agenda-list
-    agendaitems=(await sortedAgendaitems)
-    announcements=(await sortedAnnouncements)
-    currentSession=currentSession
+  {{agenda/printable-agenda
+    meeting=model.meeting
+    notas=this.notaGroups
+    announcements=model.announcements
   }}
 </div>

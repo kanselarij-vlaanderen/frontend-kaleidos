@@ -5,7 +5,7 @@ import ModelWithToasts from 'fe-redpencil/models/model-with-toasts';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
-let { attr, belongsTo } = DS;
+let {attr, belongsTo} = DS;
 
 export default ModelWithToasts.extend({
   currentSession: service(),
@@ -44,10 +44,8 @@ export default ModelWithToasts.extend({
   },
 
   async preEditOrSaveCheck() {
-    if (await this.isModifiedRecently()) {
-      // TODO, should something happen ? reverse if
-    } else {
-      const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
+    if (!await this.saveAllowed()) {
+      const {oldModelData, oldModelModifiedMoment} = await this.getOldModelData();
       this.set('mustRefresh', true);
       const userId = oldModelData.data[0]['relationships']['modified-by']['links']['self'];
       const userData = await fetch(userId);
@@ -69,24 +67,29 @@ export default ModelWithToasts.extend({
     }
   },
 
-
-  async isModifiedRecently() {
+  async saveAllowed() {
     const modified = this.get('modified');
     const modifiedBy = await this.get('modifiedBy');
     const currentModifiedModel = moment.utc(this.get('modified'));
     const mustRefresh = this.get('mustRefresh');
-    if(mustRefresh){
+    if (mustRefresh) {
       return false;
     }
 
-    const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
-
-    return (typeof modified == 'undefined' || modifiedBy == null ||
+    const {oldModelData, oldModelModifiedMoment} = await this.getOldModelData();
+    // Deze test test eigenlijk of het item hetzelfde is:
+    // item is hetzelfde
+    // Indien modified nog niet bestaat (old data)
+    // Indien modifiedBy nog niet bestaat (old data)
+    // Indien    de modified van het huidige model currentModifiedModel
+    //           == de modified van het model op DB oldModelModifiedMoment
+    const allowSave = (typeof modified == 'undefined' || modifiedBy == null ||
       (
         typeof modified != 'undefined'
         && currentModifiedModel.isSame(oldModelModifiedMoment)
         && typeof oldModelData.data[0]['relationships']['modified-by'] != 'undefined')
-    )
+    );
+    return allowSave;
   },
 
   async getOldModelData() {
@@ -94,9 +97,9 @@ export default ModelWithToasts.extend({
       .queryRecord(this.store, this.get('constructor'),
         {
           filter:
-            { id: this.get('id') }
+            {id: this.get('id')}
         });
     const oldModelModifiedMoment = moment.utc(oldModelData.data[0].attributes.modified);
-    return { oldModelData, oldModelModifiedMoment };
+    return {oldModelData, oldModelModifiedMoment};
   }
 });
