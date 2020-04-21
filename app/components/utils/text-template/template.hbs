@@ -15,13 +15,5 @@
   as |model|
   }}
     {{model.label}}
-    {{#attach-popover
-      placement="top"
-      class="ember-attacher-popper ember-attacher-popper-wide"
-    }}
-      <p>
-        {{sanitize-html raw=true value=model.description}}
-      </p>
-    {{/attach-popover}}
   {{/power-select}}
 </div>

@@ -129,6 +129,13 @@ export default ModelWithModifier.extend({
     });
   }),
 
+
+  // get document names to show on agendaview when not in the viewport to assist lazy loading
+  documentNames: computed('documentVersions', async function() {
+    const names = await this.agendaService.getDocumentNames(this);
+    return names;
+  }),
+
   isDesignAgenda: computed('agenda', async function () {
     const agenda = await this.get('agenda');
     return await agenda.get('isDesignAgenda');
