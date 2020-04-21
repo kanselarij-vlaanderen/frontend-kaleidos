@@ -85,7 +85,7 @@ export default Controller.extend({
         this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
       }
     },
-    refreshAccount() {
+    refreshRoute() {
       this.send('refresh');
     }
   }
