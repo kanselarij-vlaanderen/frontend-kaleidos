@@ -4,8 +4,6 @@ import { alias, filter } from '@ember/object/computed';
 import { computed, set } from '@ember/object';
 import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
-
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
@@ -14,11 +12,11 @@ import {
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
+export default Component.extend(FileSaverMixin, {
   classNames: ['vlc-page-header'],
 
   store: service(),
-  sessionService: service(),
+  session: service('session-service'),
   agendaService: service(),
   fileService: service(),
   router: service(),
@@ -34,12 +32,12 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   isDeletingAgenda: false,
   isLockingAgenda: false,
 
-  currentAgendaItems: alias('sessionService.currentAgendaItems'),
-  currentSession: alias('sessionService.currentSession'),
-  currentAgenda: alias('sessionService.currentAgenda'),
-  agendas: alias('sessionService.agendas'),
-  selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
-  definiteAgendas: alias('sessionService.definiteAgendas'),
+  currentAgendaItems: alias('session.currentAgendaItems'),
+  currentSession: alias('session.currentSession'),
+  currentAgenda: alias('session.currentAgenda'),
+  agendas: alias('session.agendas'),
+  selectedAgendaItem: alias('session.selectedAgendaItem'),
+  definiteAgendas: alias('session.definiteAgendas'),
 
   hasMultipleAgendas: computed('agendas.@each', async function () {
     return this.agendas && this.agendas.then(agendas => agendas.length > 1);
@@ -91,7 +89,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       .approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda)
       .then((newAgenda) => {
         this.changeLoading();
-        this.set('sessionService.currentAgenda', newAgenda);
+        this.set('session.currentAgenda', newAgenda);
         this.reloadRoute(newAgenda.get('id'));
       });
   },
@@ -102,16 +100,16 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       //TODO possible dead code, there is always an agenda ?
       return;
     }
-    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
+    const previousAgenda = await this.session.findPreviousAgendaOfSession(session, agenda);
     await this.agendaService.deleteAgenda(agenda);
     if (previousAgenda) {
       await session.save();
-      await this.set('sessionService.currentAgenda', previousAgenda);
+      await this.set('session.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems.index', session.id, {
         queryParams: { selectedAgenda: previousAgenda.get('id') }
       });
     } else {
-      await this.sessionService.deleteSession(session);
+      await this.session.deleteSession(session);
     }
   },
 
@@ -386,10 +384,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           return newAgenda;
         })
         .then((newAgenda) => {
-          this.set('sessionService.currentAgenda', newAgenda);
+          this.set('session.currentAgenda', newAgenda);
           this.reloadRoute(newAgenda.get('id'));
         }).finally(() => {
-        this.set('sessionService.selectedAgendaItem', null);
+        this.set('session.selectedAgendaItem', null);
         this.changeLoading();
         this.set('isApprovingAgenda', false);
       });
