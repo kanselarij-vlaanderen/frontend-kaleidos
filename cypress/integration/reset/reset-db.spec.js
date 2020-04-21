@@ -7,6 +7,6 @@ context('Reset the database', () => {
   });
 
   it('Reset the database', () => {
-    cy.resetDB();
+    cy.resetCache();
   });
 });

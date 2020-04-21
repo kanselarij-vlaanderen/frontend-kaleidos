@@ -2,6 +2,14 @@ const selectors = {
   vlModalComponents: {
     createNewAgendaModal: '[data-test-vl-modal="createNewAgendaModal"]'
   },
+  agenda: {
+    approveAgenda: '[data-test-agenda-approve-modal]',
+  },
+  createAnnouncement: {
+    titleSubcase: '[data-test-vl-create-announcement-title-subcase]',
+    modalDialog: '[data-test-vl-modal-dialog]',
+    modalDialogCloseModal: '[data-test-vl-modal-close]',
+  },
   baseModal: {
     container: '[data-test-vl-modal-container]', //
     dialogWindow: '[data-test-vl-modal-dialogwindow]',

@@ -173,8 +173,6 @@ function addDocuments(files) {
  * @param {String} file - The name of the file without the extension
  */
 function addNewDocumentVersion(oldFileName, file, modelToPatch) {
-
-  cy.route('GET', 'document-types?**').as('getDocumentTypes');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
   if (modelToPatch) {
     if(modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {

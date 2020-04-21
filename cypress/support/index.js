@@ -34,6 +34,27 @@ Cypress.on('uncaught:exception', (err, runnable) => {
   return !err.message.includes('calling set on destroyed object')
 });
 
+before(() => {
+  cy.resetSearch();
+});
+
+// workaround for issue DOES NOT WORK!!
+// CypressError: Timed out after waiting '60000ms' for your remote page to load.
+// Your page did not fire its 'load' event within '60000ms'.
+Cypress.on('window:before:load', function (win) {
+  const original = win.EventTarget.prototype.addEventListener
+  win.EventTarget.prototype.addEventListener = function () {
+    if (arguments && arguments[0] === 'beforeunload') {
+      return
+    }
+    return original.apply(this, arguments)
+  }
+
+  Object.defineProperty(win, 'onbeforeunload', {
+    get: function () { },
+    set: function () { }
+  })
+})
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

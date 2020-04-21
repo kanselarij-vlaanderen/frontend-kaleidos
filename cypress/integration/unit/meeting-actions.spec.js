@@ -9,10 +9,9 @@ context('meeting actions tests', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.createCase(false, caseTitle);
     cy.logout();
   });
 
@@ -27,7 +26,7 @@ context('meeting actions tests', () => {
     const subcaseTitleLong = 'Cypress test voor het verwijderen van een agenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.openCase(caseTitle);
+    cy.createCase(false, caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
 
     const plusMonths = 1;
@@ -113,6 +112,7 @@ context('meeting actions tests', () => {
       cy.setFormalOkOnAllItems();
       cy.approveDesignAgenda();
       // Verify agendaitem exists and has subcase on design agenda and agenda A
+      cy.agendaItemExists(SubcaseTitleShort); //this makes sure the page is reloaded after approving the agenda
       cy.changeSelectedAgenda('Ontwerpagenda');
 
       cy.agendaItemExists(SubcaseTitleShort).click();
@@ -132,6 +132,7 @@ context('meeting actions tests', () => {
     const subcaseTitleLong = 'Cypress test voor het sluiten van een agenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    // cy.createCase(false, caseTitle); //TODO remove this is temp
     cy.openCase(caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
 
@@ -144,6 +145,7 @@ context('meeting actions tests', () => {
 
       cy.setFormalOkOnAllItems();
       cy.approveDesignAgenda();
+      cy.agendaItemExists(SubcaseTitleShort); //this makes sure the page is reloaded after approving the agenda
       // Verify agendaitem exists and has subcase on design agenda and agenda A
       cy.changeSelectedAgenda('Agenda A');
       cy.agendaItemExists(SubcaseTitleShort).click();

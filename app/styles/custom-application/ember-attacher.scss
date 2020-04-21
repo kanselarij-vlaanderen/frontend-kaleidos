@@ -12,6 +12,17 @@
   max-width: 90vw;
   z-index: 11000;
 
+  &.ember-attacher-tooltip {
+    background-color: $tooltip-dark-color;
+    min-width: unset;
+    width: unset;
+
+    & > div[x-arrow] {
+      background-color: $tooltip-dark-color;
+      border-color: $tooltip-dark-color;
+    }
+  }
+
   @include respond-to(small) {
     max-height: 65vh;
     width: 100%;

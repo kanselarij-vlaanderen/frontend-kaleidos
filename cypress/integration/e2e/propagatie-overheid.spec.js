@@ -11,8 +11,8 @@ import utils from '../../selectors/utils.selectors';
 context('Agenda tests', () => {
 
   before(() => {
-    cy.resetDB();
-  cy.server();
+    cy.resetCache();
+    cy.server();
   });
 
   // beforeEach(() => {
@@ -36,7 +36,6 @@ context('Agenda tests', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.openCase(caseTitle);
     cy.addSubcase('Nota',
       subcaseTitle2,
       'Cypress test voor het testen van toegevoegde agendapunten',

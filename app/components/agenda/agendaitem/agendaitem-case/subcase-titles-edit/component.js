@@ -10,7 +10,7 @@ export default class SubcaseTitlesEdit extends Component {
   classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'accessLevel', 'confidential', 'showInNewsletter']);
 
-  isRemark = alias('item.showAsRemark');
+  @alias('item.showAsRemark') isRemark;
 
   @computed('item.modelName')
   get isAgendaItem() {

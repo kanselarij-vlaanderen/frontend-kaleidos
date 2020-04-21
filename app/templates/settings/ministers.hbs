@@ -105,12 +105,14 @@
                 {{action "toggleProperty" "isResigningMandatee" mandatee}}
               >
                 <i class="vl-button__icon vl-vi vl-vi-cog"></i>
-                {{#attach-popover
+                {{#attach-tooltip
+                  arrow="true"
+                  animation="shift"
                   placement="bottom"
-                  class="ember-attacher-popper ember-attacher-popper-small"
+                  class="ember-attacher-tooltip"
                 }}
                   {{t "resign"}}
-                {{/attach-popover}}
+                {{/attach-tooltip}}
               </button>
               <button type="button"
                       data-test-mandatee-delete={{index}}

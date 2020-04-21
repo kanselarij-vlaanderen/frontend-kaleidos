@@ -15,7 +15,7 @@ context('Different session kinds should show different titles', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.createAgenda('Bijzondere ministerraad', plusMonths, agendaDateSpecial, 'Zaal oxford bij Cronos Leuven');
