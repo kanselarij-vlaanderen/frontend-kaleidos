@@ -42,11 +42,11 @@
                     {{#each (await agendaitem.decisions) as |decision|}}
                       {{#if decision.isEditing}}
                         <Agenda::Agendaitem::AgendaitemDecisionEdit
-                          isEditing={{decision.isEditing}}
-                          item={{decision}}
-                          subcase={{await agendaitem.subcase}}
-                          isTableRow={{isTableRow}}
-                          agendaitem={{agendaitem}} />
+                          @isEditing={{decision.isEditing}}
+                          @item={{decision}}
+                          @subcase={{await agendaitem.subcase}}
+                          @isTableRow={{isTableRow}}
+                          @agendaitem={{agendaitem}} />
                       {{else if session.isEditor}}
                         <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                           {{#if allowEditing}}
@@ -76,7 +76,7 @@
               </div>
             </div>
             {{#if (not allowEditing)}}
-              <WebComponents::VlSignature signature={{meeting.defaultSignature}} />
+              <WebComponents::VlSignature @signature={{meeting.defaultSignature}} />
             {{/if}}
           </div>
         {{/each}}
