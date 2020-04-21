@@ -20,6 +20,8 @@ Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSu
 Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
+Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
+
 
 // ***********************************************
 // Functions
@@ -110,6 +112,25 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
     // cy.wait('@getDocuments')
     cy.wait(2000); //documents GET occured earlier, general wait instead
   }
+}
+
+/**
+ * @description Opens agendaitem with agendaitemTitle and clicks the document link.
+ * @name openAgendaItemDossierTab
+ * @memberOf Cypress.Chainable#.
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {boolean} alreadyHasDocs
+ */
+function openAgendaItemDossierTab(agendaItemTitle) {
+  // cy.route('GET', 'documents**').as('getDocuments');
+  cy.get('li.vlc-agenda-items__sub-item h4')
+    .contains(agendaItemTitle)
+    .click()
+    .wait(100); // sorry
+  cy.get(agenda.agendaItemDossierTab)
+    .click()
+    .wait(100); //Access-levels GET occured earlier, general wait instead
 }
 
 /**

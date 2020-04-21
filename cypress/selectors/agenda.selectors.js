@@ -13,8 +13,10 @@ const selectors = {
   agendaListListItemDocuments: '[data-test-agenda-list-list-item-documents]',
   agendaItemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
   agendaItemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
+  agendaItemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
   printContainer: '[data-test-agenda-printContainer]',
-  printHeaderTitle: '[data-test-agenda-print-header-title]'
+  printHeaderTitle: '[data-test-agenda-print-header-title]',
+  subCaseHiddenPill: '[data-test-agenda-subcasehidden-pill]'
 };
 export default selectors;

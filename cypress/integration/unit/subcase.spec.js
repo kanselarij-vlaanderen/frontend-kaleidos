@@ -1,7 +1,6 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
-
-
+import agenda  from '../../selectors/agenda.selectors';
 
 context('Subcase tests', () => {
   const plusMonths = 1;
@@ -147,6 +146,76 @@ context('Subcase tests', () => {
     cy.url().should('contain', '/agendapunten/');
     cy.url().should('not.contain', '/dossier/');
   });
+
+  it('Changes to agendaItem should propagate to subcase', () => {
+    const type = 'Mededeling';
+    const SubcaseTitleShort = 'Cypress test: Mededeling - ' + currentTimestamp();
+    const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
+    const subcaseType = 'In voorbereiding';
+    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    // Aanmaken Dossier
+
+    cy.createCase(false, 'Cypress mededeling test');
+
+    // Aanmaken subcase.
+    cy.route('GET', '/subcases/*/decisions').as('getSubcaseDecisions');
+    cy.route('GET', '/subcases/*/agendaitems').as('getSubcaseAgendaItems');
+    cy.route('GET', '/subcases/*/case').as('getSubcaseCase');
+    cy.route('GET', '/access-levels').as('getAccessLevels');
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName)
+      .then((subCaseId) => {
+        console.log(subCaseId);
+    });
+    cy.wait('@getSubcaseDecisions');
+    cy.wait('@getSubcaseAgendaItems');
+    cy.wait('@getSubcaseCase');
+    cy.wait('@getAccessLevels');
+
+    // Aanmaken agendaItem
+    // cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
+    cy.openAgendaItemDossierTab(SubcaseTitleShort,false);
+
+    // Status is hidden
+    cy.get('.pill-container').contains('Verborgen in kort bestek');
+    cy.get('.vlc-panel-layout__main-content a').contains('Naar procedurestap').click();
+
+    // Assert status also hidden
+    cy.get('.pill-container').contains('Verborgen in kort bestek');
+
+    //"Go to agendaItem
+    cy.route('GET', '/meetings/**').as('getMeetings');
+    cy.route('GET', '/agendas/**').as('getAgendas');
+    cy.get('[data-test-subcase-agenda-link] a').click();
+    cy.wait('@getMeetings');
+    cy.wait('@getAgendas');
+
+    // Click the "wijzigen link.
+    cy.get('[data-test-agendaitem-edit-link] a').click();
+
+    // Check the checkbox (toggle this invisible motafoka).
+    cy.get('[data-test-vl-subcase-titles-edit-show-in-newsletter]')
+      .find('label.vl-checkbox--switch__label') // Because who uses checkboxes anyway?
+      .click();
+
+    // Save the changes setting
+    cy.route('PATCH', '/agendas/**').as('patchAgenda');
+    cy.get('.vl-action-group button').contains('Opslaan').click();
+    cy.wait('@patchAgenda');
+
+    // Assert status shown
+    cy.get('.pill-container').contains('Zichtbaar in kort bestek');
+
+    // Go to kort bestek
+    cy.route('GET', '/subcases/*/phases').as('getSubcasePhases');
+    cy.get('.vlc-panel-layout__main-content a').contains('Naar procedurestap').click();
+    cy.wait('@getSubcasePhases');
+
+    // Assert status also shown. This is da 💣
+    cy.get('.pill-container').contains('Zichtbaar in kort bestek');
+
+  });
 });
 
 function currentTimestamp() {
@@ -154,7 +223,7 @@ function currentTimestamp() {
 }
 
 function getTranslatedMonth(month) {
-  switch(month) {
+  switch (month) {
     case 0:
       return 'januari';
     case 1:
