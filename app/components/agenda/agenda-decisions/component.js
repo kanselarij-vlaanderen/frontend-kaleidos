@@ -1,21 +1,23 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import { computed, action } from '@ember/object';
 
-export default Component.extend({
-  isEditing: false,
-  session: service('current-session'),
+export default class AgendaDecisions extends Component {
+  isEditing = false;
+  @service('current-session') session;
 
-  allowEditing: computed('definite', function () {
+  @computed('definite')
+  get allowEditing() {
     return this.definite === 'false';
-  }),
-
-  actions: {
-    close() {
-      this.closeModal();
-    },
-    toggleIsEditing(decision) {
-      decision.toggleProperty('isEditing');
-    }
   }
-});
+
+  @action
+  close() {
+    this.closeModal();
+  }
+
+  @action
+  toggleIsEditing(decision) {
+    decision.toggleProperty('isEditing');
+  }
+}
