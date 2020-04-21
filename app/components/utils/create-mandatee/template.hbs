@@ -1,11 +1,11 @@
 <div class="vl-modal-dialog__content">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "title")}}
-    {{web-components/vl-form-input width="4" value=title}}
+    {{web-components/vl-form-input data-test-mandatee-title-container width="4" value=title}}
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "nick-name")}}
-    {{web-components/vl-form-input width="4" value=nickName}}
+    {{web-components/vl-form-input data-test-mandatee-nick-name width="4" value=nickName}}
   </div>
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "add-people")}}
@@ -17,6 +17,7 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "ise-code")}}
     {{utils/model-selector
+      data-test-ise-code-dropdown
       modelName="ise-code"
       searchField="name"
       propertyToShow="name"
