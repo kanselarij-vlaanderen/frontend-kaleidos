@@ -85,10 +85,10 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
       <span class="vlc-pill
-          {{if item.showInNewsletter "vlc-pill--success" "vlc-pill--error"}}
+          {{if (await item.showInNewsletter) "vlc-pill--success" "vlc-pill--error"}}
            vl-u-spacer-extended-right-s"
       >
-        {{#if item.showInNewsletter}}
+        {{#if (await item.showInNewsletter)}}
           <span>
             {{t "visible-in-newsletter"}}
           </span>
