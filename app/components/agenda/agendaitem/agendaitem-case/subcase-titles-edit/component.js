@@ -42,8 +42,6 @@ export default class SubcaseTitlesEdit extends Component {
     const propertiesToSetOnAgendaitem = {
       'title': this.get('title'),
       'shortTitle': this.get('shortTitle'),
-      'accessLevel': this.get('accessLevel'),
-      'confidential': this.get('confidential'),
       'showInNewsletter': this.get('showInNewsletter')
     };
     const propertiesToSetOnSubcase = {
@@ -51,7 +49,6 @@ export default class SubcaseTitlesEdit extends Component {
       'shortTitle': this.get('shortTitle'),
       'accessLevel': this.get('accessLevel'),
       'confidential': this.get('confidential'),
-      'showInNewsletter': this.get('showInNewsletter')
     };
 
     await saveSubcaseTitles(get(this, 'item'), propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
