@@ -16,7 +16,8 @@ export default Component.extend(FileSaverMixin, {
   classNames: ['vlc-page-header'],
 
   store: service(),
-  session: service('session-service'),
+  sessionService: service('session-service'),
+  currentSessionService: service('current-session'),
   agendaService: service(),
   fileService: service(),
   router: service(),
@@ -32,22 +33,22 @@ export default Component.extend(FileSaverMixin, {
   isDeletingAgenda: false,
   isLockingAgenda: false,
 
-  currentAgendaItems: alias('session.currentAgendaItems'),
-  currentSession: alias('session.currentSession'),
-  currentAgenda: alias('session.currentAgenda'),
-  agendas: alias('session.agendas'),
-  selectedAgendaItem: alias('session.selectedAgendaItem'),
-  definiteAgendas: alias('session.definiteAgendas'),
+  currentAgendaItems: alias('sessionService.currentAgendaItems'),
+  currentSession: alias('sessionService.currentSession'),
+  currentAgenda: alias('sessionService.currentAgenda'),
+  agendas: alias('sessionService.agendas'),
+  selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  definiteAgendas: alias('sessionService.definiteAgendas'),
 
   hasMultipleAgendas: computed('agendas.@each', async function () {
     return this.agendas && this.agendas.then(agendas => agendas.length > 1);
   }),
 
-  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function () {
-    return await this.currentSession.get('sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
+  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentsessionService.agendas.@each', async function () {
+    return await this.currentsessionService.get('sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
-  designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {
+  designAgendaPresent: filter('currentsessionService.agendas.@each.name', function (agenda) {
     return agenda.get('name') === 'Ontwerpagenda';
   }),
 
@@ -79,9 +80,9 @@ export default Component.extend(FileSaverMixin, {
   async createDesignAgenda() {
     this.changeLoading();
     const session = this.get('currentSession');
-    session.set('isFinal', false);
-    session.set('agenda', null);
-    await session.save();
+    sessionService.set('isFinal', false);
+    sessionService.set('agenda', null);
+    await sessionService.save();
     const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
 
@@ -89,7 +90,7 @@ export default Component.extend(FileSaverMixin, {
       .approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda)
       .then((newAgenda) => {
         this.changeLoading();
-        this.set('session.currentAgenda', newAgenda);
+        this.set('sessionService.currentAgenda', newAgenda);
         this.reloadRoute(newAgenda.get('id'));
       });
   },
@@ -100,16 +101,16 @@ export default Component.extend(FileSaverMixin, {
       //TODO possible dead code, there is always an agenda ?
       return;
     }
-    const previousAgenda = await this.session.findPreviousAgendaOfSession(session, agenda);
+    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
     await this.agendaService.deleteAgenda(agenda);
     if (previousAgenda) {
-      await session.save();
-      await this.set('session.currentAgenda', previousAgenda);
-      this.router.transitionTo('agenda.agendaitems.index', session.id, {
+      await sessionService.save();
+      await this.set('sessionService.currentAgenda', previousAgenda);
+      this.router.transitionTo('agenda.agendaitems.index', sessionService.id, {
         queryParams: { selectedAgenda: previousAgenda.get('id') }
       });
     } else {
-      await this.session.deleteSession(session);
+      await this.sessionService.deleteSession(session);
     }
   },
 
@@ -141,22 +142,22 @@ export default Component.extend(FileSaverMixin, {
 
     navigateToNotes() {
       const { currentSession, currentAgenda } = this;
-      this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
+      this.navigateToNotes(currentsessionService.get('id'), currentAgenda.get('id'));
     },
 
     navigateToPressAgenda() {
       const { currentSession, currentAgenda } = this;
-      this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
+      this.navigateToPressAgenda(currentsessionService.get('id'), currentAgenda.get('id'));
     },
 
     navigateToNewsletter() {
       const { currentSession, currentAgenda } = this;
-      this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
+      this.navigateToNewsletter(currentsessionService.get('id'), currentAgenda.get('id'));
     },
 
     navigateToDecisions() {
       const { currentSession, currentAgenda } = this;
-      this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
+      this.navigateToDecisions(currentsessionService.get('id'), currentAgenda.get('id'));
     },
 
     clearSelectedAgendaItem() {
@@ -200,9 +201,9 @@ export default Component.extend(FileSaverMixin, {
         .get('firstObject');
 
       const session = await lastAgenda.get('createdFor');
-      session.set('isFinal', true);
-      session.set('agenda', lastAgenda);
-      await session.save();
+      sessionService.set('isFinal', true);
+      sessionService.set('agenda', lastAgenda);
+      await sessionService.save();
 
       if (designAgenda) {
         await this.deleteAgenda(designAgenda);
@@ -304,16 +305,16 @@ export default Component.extend(FileSaverMixin, {
     },
     confirmReleaseDecisions() {
       this.set('releasingDecisions', false);
-      this.currentSession.set('releasedDecisions', moment().utc().toDate());
-      this.currentSession.save();
+      this.currentsessionService.set('releasedDecisions', moment().utc().toDate());
+      this.currentsessionService.save();
     },
     releaseDocuments() {
       this.set('releasingDocuments', true);
     },
     confirmReleaseDocuments() {
       this.set('releasingDocuments', false);
-      this.currentSession.set('releasedDocuments', moment().utc().toDate());
-      this.currentSession.save();
+      this.currentsessionService.set('releasedDocuments', moment().utc().toDate());
+      this.currentsessionService.save();
     },
     toggleEditingSession() {
       this.toggleProperty('editingSession')
@@ -384,10 +385,10 @@ export default Component.extend(FileSaverMixin, {
           return newAgenda;
         })
         .then((newAgenda) => {
-          this.set('session.currentAgenda', newAgenda);
+          this.set('sessionService.currentAgenda', newAgenda);
           this.reloadRoute(newAgenda.get('id'));
         }).finally(() => {
-        this.set('session.selectedAgendaItem', null);
+        this.set('sessionService.selectedAgendaItem', null);
         this.changeLoading();
         this.set('isApprovingAgenda', false);
       });
