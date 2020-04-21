@@ -1,13 +1,12 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import EmberObject from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
-import CONFIG from 'fe-redpencil/utils/config';
 
-export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
+export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   classNames: ['vl-u-spacer-extended-bottom-l'],
   item: null,
@@ -60,7 +59,7 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
   },
 
   async constructMandateeRows() {
-    const { isAgendaItem } = this;
+    const isAgendaItem = this.item.get('modelName') === 'agendaitem';
     let subcase;
     if (isAgendaItem) {
       subcase = await this.get('item.subcase');
@@ -97,40 +96,51 @@ export default Component.extend(EditAgendaitemOrSubcase, isAuthenticatedMixin, {
       this.toggleProperty('isEditing');
     },
 
+    async saveChanges() {
+      this.set('isLoading', true);
+      if (this.item.get('modelName') === 'agendaitem') {
+        const subcase = await this.get('item.subcase');
+        if (subcase) {
+          //Without this, saving mandatees on agendaitem do not always persist to the subcase
+          await subcase.get('mandatees');
+        }
+      }
+      const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
+      const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] }
+      const resetFormallyOk = true;
+      try {
+        await saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
+        this.set('isLoading', false);
+        this.toggleProperty('isEditing');
+      } catch (e) {
+        this.set('isLoading', false);
+        throw (e);
+      }
+    },
+
     addRow() {
       this.toggleProperty('isAdding');
     }
   },
 
-  async setNewPropertiesToModel(model) {
-    await this.parseDomainsAndMandatees();
-    const { selectedMandatees, selectedIseCodes, submitter } = this;
-    model.set('formallyOk', CONFIG.notYetFormallyOk);
-    model.set('mandatees', selectedMandatees);
-    model.set('iseCodes', selectedIseCodes);
-    model.set('requestedBy', submitter);
-    return await model.save();
-  },
-
   async parseDomainsAndMandatees() {
     const mandateeRows = await this.get('mandateeRows');
     const mandatees = [];
-    let selectedIseCodes = [];
-    let submitter = null;
+    let iseCodes = [];
+    let requestedBy = null;
     if (mandateeRows && mandateeRows.get('length') > 0) {
       mandateeRows.map(row => {
         if (row.get('isSubmitter')) {
-          submitter = row.get('mandatee');
+          requestedBy = row.get('mandatee');
         }
         mandatees.push(row.get('mandatee'));
-        const iseCodes = row.get('iseCodes');
-        iseCodes.map((code) => {
-          selectedIseCodes.push(code);
+        const rowIseCodes = row.get('iseCodes');
+        rowIseCodes.map((code) => {
+          iseCodes.push(code);
         })
       })
     }
-    this.set('selectedMandatees', mandatees);
-    this.set('selectedIseCodes', selectedIseCodes);
-    this.set('submitter', submitter);
-  }
+    return { mandatees, iseCodes, requestedBy };
+  },
+
 });

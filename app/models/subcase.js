@@ -1,17 +1,16 @@
 import DS from 'ember-data';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import {computed} from '@ember/object';
+import {inject} from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-import { alias } from '@ember/object/computed';
-import { A } from '@ember/array';
+import {alias} from '@ember/object/computed';
+import {A} from '@ember/array';
 import moment from 'moment';
-import DocumentModelMixin from 'fe-redpencil/mixins/models/document-model-mixin';
-import LinkedDocumentModelMixin from 'fe-redpencil/mixins/models/linked-document-model-mixin';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
+import {sortDocuments, getDocumentsLength} from 'fe-redpencil/utils/documents';
 
-const { attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
+const {attr, hasMany, belongsTo, PromiseArray, PromiseObject} = DS;
 
-export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelMixin, {
+export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   store: inject(),
   intl: inject(),
@@ -28,10 +27,10 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   concluded: attr('boolean'),
   subcaseName: attr('string'),
 
-  phases: hasMany('subcase-phase', { inverse: null }),
-  consulationRequests: hasMany('consulation-request', { inverse: null }),
+  phases: hasMany('subcase-phase', {inverse: null}),
+  consulationRequests: hasMany('consulation-request', {inverse: null}),
   iseCodes: hasMany('ise-code'),
-  agendaitems: hasMany('agendaitem', { inverse: null }),
+  agendaitems: hasMany('agendaitem', {inverse: null}),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
@@ -39,17 +38,67 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   decisions: hasMany('decision'),
 
   type: belongsTo('subcase-type'),
-  case: belongsTo('case', { inverse: null }),
-  requestedForMeeting: belongsTo('meeting', { inverse: null }),
+  case: belongsTo('case', {inverse: null}),
+  requestedForMeeting: belongsTo('meeting', {inverse: null}),
   newsletterInfo: belongsTo('newsletter-info'),
-  requestedBy: belongsTo('mandatee', { inverse: null }),
+  requestedBy: belongsTo('mandatee', {inverse: null}),
   accessLevel: belongsTo('access-level'),
+
+  documentsLength: computed('documents', function () {
+    return getDocumentsLength(this, 'documents');
+  }),
+
+  linkedDocumentsLength: computed('linkedDocuments', function () {
+    return getDocumentsLength(this, 'linkedDocuments');
+  }),
+
+  documents: computed('documentVersions.@each.name', function () {
+    return PromiseArray.create({
+      promise: this.get('documentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.mapBy('id').join(',');
+          return this.store.query('document', {
+            filter: {
+              'documents': {id: documentVersionIds},
+            },
+            page: {
+              size: documentVersions.get('length'), // # documents will always be <= # document versions
+            },
+            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
+          }).then((containers) => {
+            return sortDocuments(this, containers);
+          });
+        }
+      })
+    });
+  }),
+
+  linkedDocuments: computed('linkedDocumentVersions.@each', function () {
+    return PromiseArray.create({
+      promise: this.get('linkedDocumentVersions').then((documentVersions) => {
+        if (documentVersions && documentVersions.get('length') > 0) {
+          const documentVersionIds = documentVersions.mapBy('id').join(',');
+          return this.store.query('document', {
+            filter: {
+              'documents': {id: documentVersionIds},
+            },
+            page: {
+              size: documentVersions.get('length'), // # documents will always be <= # document versions
+            },
+            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
+          }).then((containers) => {
+            return sortDocuments(this, containers);
+          });
+        }
+      })
+    });
+  }),
 
   firstPhase: computed('phases.@each', function () {
     return PromiseObject.create({
       promise: this.store.query('subcase-phase', {
         filter: {
-          subcase: { id: this.get('id') }
+          subcase: {id: this.get('id')}
         },
         sort: 'date',
         include: 'code'
@@ -63,8 +112,8 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     return this.store
       .query('subcase-phase', {
         filter: {
-          subcase: { id: this.get('id') },
-          code: { id: CONFIG.postponedCodeId }
+          subcase: {id: this.get('id')},
+          code: {id: CONFIG.postponedCodeId}
         }
       })
       .then(subcasePhases => {
@@ -73,7 +122,7 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   }),
 
   nameToShow: computed('subcaseName', function () {
-    const { subcaseName, title, shortTitle } = this;
+    const {subcaseName, title, shortTitle} = this;
     if (subcaseName) {
       return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
     } else if (shortTitle) {
@@ -112,10 +161,10 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
   }),
 
   hasAgendaItem: computed('agendaitems.@each', function () {
-    const { id, store } = this;
+    const {id, store} = this;
     return PromiseObject.create({
       promise: store.query('agendaitem', {
-        filter: { subcase: { id: id } },
+        filter: {subcase: {id: id}},
         sort: '-created'
       }).then((agendaitems) => {
         const lastAgendaItem = agendaitems.get('firstObject');
@@ -135,11 +184,11 @@ export default ModelWithModifier.extend(DocumentModelMixin, LinkedDocumentModelM
     })
   }),
 
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', function () {
-    return this.store.query('agendaitem', {
+  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', async function () {
+    return await this.store.query('agendaitem', {
       filter: {
-        subcase: { id: this.get('id') },
-        agenda: { name: 'Ontwerpagenda' }
+        subcase: {id: this.get('id')},
+        agenda: {name: 'Ontwerpagenda'}
       }
     })
   }),

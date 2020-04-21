@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-new-mixins */
 import Mixin from '@ember/object/mixin';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
@@ -16,7 +17,7 @@ export default Mixin.create({
 
     const rowToShow = EmberObject.create({
       domains: [...new Set(domains)],
-      fields: [...new Set(fields)],
+      fields: [...new Set(fields)]
     });
     rowToShow.get('domains').map((domain) => domain.set('selected', false));
     rowToShow.get('fields').map((domain) => domain.set('selected', false));
@@ -63,14 +64,20 @@ export default Mixin.create({
 
       const selectedDomains = [...new Set(domains.filter((domain) => domain.selected))];
       const selectedFields = fields.filter((field) => field.selected);
-      const selectedIseCodeLists = await Promise.all(selectedFields.map((field) => field.get('iseCode')));
+      const allIseCodes = await selectedMandatee.get('iseCodes');
+      let filteredIseCodes = (await Promise.all(allIseCodes.map((iseCode) => {
+        const foundField = (selectedFields.find((field) => field.get('id') === iseCode.get('field.id')));
+        if (foundField) {
+          return iseCode;
+        }
+      }))).filter((item) => item);
 
       const newRow = EmberObject.create({
         mandatee: selectedMandatee,
         mandateePriority: selectedMandatee.get('priority'),
         fields: selectedFields,
         domains: selectedDomains,
-        iseCodes: selectedIseCodeLists
+        iseCodes: filteredIseCodes
       });
 
       if (rowToShow.get('isSubmitter')) {

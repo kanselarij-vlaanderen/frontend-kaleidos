@@ -5,7 +5,7 @@
 context('NewsletterInfo: Switching the finished switch', () => {
 
   before(() => {
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {

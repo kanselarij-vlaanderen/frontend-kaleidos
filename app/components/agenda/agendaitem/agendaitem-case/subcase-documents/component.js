@@ -1,12 +1,10 @@
 import Component from '@ember/component';
-import { EditAgendaitemOrSubcase } from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 
 export default Component.extend(
-  EditAgendaitemOrSubcase,
   isAuthenticatedMixin,
   uploadDocumentMixin,
   {
@@ -86,8 +84,8 @@ export default Component.extend(
         document.set('type', type);
       },
 
-      async saveDocuments() {
-        const documents = await this.saveDocuments(null);
+      async saveDocumentContainers() {
+        const documentContainers = await this.saveDocumentContainers();
         this.set('isLoading', true);
         const item = await this.get('item');
 
@@ -95,22 +93,27 @@ export default Component.extend(
         const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
 
         try {
+          let documentsToAttach = [];
           await Promise.all(
-            documents.map(async (document) => {
-              const documentVersions = await document.get('documentVersions');
-              if (subcase) {
-                await this.addDocumentVersionsToSubcase(documentVersions, subcase);
-              } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-                await this.addDocumentVersionsToAgendaitems(
-                  documentVersions,
-                  agendaitemsOnDesignAgenda
-                );
-              }
-              return await this.attachDocumentVersionsToModel(documentVersions, item);
+            documentContainers.map(async (container) => {
+              const documents = await container.get('documentVersions');
+              documents.map((document) => {
+                documentsToAttach.push(document);
+              })
             })
           );
-
-          await item.save();
+          if (documentsToAttach) {
+            if (subcase) {
+              await this.addDocumentsToSubcase(documentsToAttach, subcase);
+            } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+              await this.addDocumentsToAgendaitems(
+                documentsToAttach,
+                agendaitemsOnDesignAgenda
+              );
+            }
+            await this.attachDocumentsToModel(documentsToAttach, item);
+            await item.save();
+          }
         } catch(error) {
           this.deleteAll();
           throw error;
@@ -135,55 +138,62 @@ export default Component.extend(
       async linkDocuments() {
         const documents = await this.get('documentsToLink');
         const item = await this.get('item');
-
         const subcase = await item.get('subcase');
         const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
+        try {
+          let documentsToAttach = [];
+          await Promise.all(
+            documents.map(async (document) => {
+              const documentContainer = await document.get('documentContainer');
+              const documents = await documentContainer.get('documentVersions');
+              documents.map((document) => {
+                documentsToAttach.push(document);
+              })
+            })
+          );
 
-        await Promise.all(
-          documents.map(async (document) => {
-            const documentContainer = await document.get('documentContainer');
-            const documentVersions = await documentContainer.get('documentVersions');
-            if (subcase) {
-              await this.linkDocumentVersionsToSubcase(documentVersions, subcase);
-            } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-              await this.linkDocumentVersionsToAgendaitems(documentVersions, agendaitemsOnDesignAgenda);
-            }
-            return await this.attachDocumentVersionsToModel(documentVersions, item, 'linkedDocumentVersions');
-          })
-        );
+          if (subcase) {
+            await this.linkDocumentsToSubcase(documentsToAttach, subcase);
+          } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+            await this.linkDocumentsToAgendaitems(documentsToAttach, agendaitemsOnDesignAgenda);
+          }
+          await this.attachDocumentsToModel(documentsToAttach, item, 'linkedDocumentVersions');
+          await item.save();
 
-        await item.save().then(() => {
+        } catch(error) {
+          throw error;
+        } finally {
           this.set('isLinkingOldDocument', false);
           this.set('documentsToLink', A([]));
-        });
+        }
       },
     },
 
-    async addDocumentVersionsToAgendaitems(documentVersions, agendaitems) {
+    async addDocumentsToAgendaitems(documents, agendaitems) {
       return Promise.all(
         agendaitems.map(async (agendaitem) => {
-          await this.attachDocumentVersionsToModel(documentVersions, agendaitem);
+          await this.attachDocumentsToModel(documents, agendaitem);
           return await agendaitem.save();
         })
       );
     },
 
-    async addDocumentVersionsToSubcase(documentVersions, subcase) {
-      await this.attachDocumentVersionsToModel(documentVersions, subcase);
+    async addDocumentsToSubcase(documents, subcase) {
+      await this.attachDocumentsToModel(documents, subcase);
       return await subcase.save();
     },
 
-    async linkDocumentVersionsToAgendaitems(documentVersions, agendaitems) {
+    async linkDocumentsToAgendaitems(documents, agendaitems) {
       return Promise.all(
         agendaitems.map(async (agendaitem) => {
-          await this.attachDocumentVersionsToModel(documentVersions, agendaitem, 'linkedDocumentVersions');
+          await this.attachDocumentsToModel(documents, agendaitem, 'linkedDocumentVersions');
           return await agendaitem.save();
         })
       );
     },
 
-    async linkDocumentVersionsToSubcase(documentVersions, subcase) {
-      await this.attachDocumentVersionsToModel(documentVersions, subcase, 'linkedDocumentVersions');
+    async linkDocumentsToSubcase(documents, subcase) {
+      await this.attachDocumentsToModel(documents, subcase, 'linkedDocumentVersions');
       return await subcase.save();
     }
   }

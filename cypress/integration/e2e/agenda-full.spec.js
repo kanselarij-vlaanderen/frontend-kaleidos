@@ -8,7 +8,7 @@ context('Full test', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
   });
 
@@ -16,7 +16,6 @@ context('Full test', () => {
     testId = 'testId=' + currentTimestamp() + ': ';
 
     //#region routes to be reused
-    cy.route('GET', '/cases?**').as('getCases');
     cy.route('GET', '/subcases?**').as('getSubcases');
     cy.route('GET', '/mandatees?**').as('getMandatees');
     cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');

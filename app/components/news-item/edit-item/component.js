@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
-import {getCachedProperty} from 'fe-redpencil/mixins/edit-agendaitem-or-subcase';
+import { cached } from 'fe-redpencil/decorators/cached';
 import {computed} from '@ember/object';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import {inject} from '@ember/service';
@@ -17,12 +17,14 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     'mandateeProposal',
     'remark',
   ]),
-  subtitle: getCachedProperty('subtitle'),
-  text: getCachedProperty('text'),
-  title: getCachedProperty('title'),
-  finished: getCachedProperty('finished'),
-  remark: getCachedProperty('remark'),
-  mandateeProposal: getCachedProperty('newsletterProposal'),
+
+  subtitle: cached('item.subtitle'), // TODO in class syntax use as a decorator instead
+  text: cached('item.text'), // TODO in class syntax use as a decorator instead
+  title: cached('item.title'), // TODO in class syntax use as a decorator instead
+  finished: cached('item.finished'), // TODO in class syntax use as a decorator instead
+  remark: cached('item.remark'), // TODO in class syntax use as a decorator instead
+  mandateeProposal: cached('item.newsletterProposal'), // TODO in class syntax use as a decorator instead
+
   isTryingToSave: false,
   themes: computed(`agendaitem.subcase.newsletterInfo.themes`, {
     async get() {

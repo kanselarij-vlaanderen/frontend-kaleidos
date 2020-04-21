@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import moment from 'moment';
 import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import { A } from '@ember/array';
+import { set } from '@ember/object';
 import config from '../utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
 import { deprecate } from '@ember/debug';
@@ -14,10 +15,15 @@ export default Mixin.create({
 
   documentsInCreation: A([]), // When creating new documents
 
+  clearAllDocuments() {
+    set(this, 'documentsInCreation', A([]));
+  },
+
   document: deprecatingAlias('documentContainer', {
     id: 'model-refactor.documents',
     until: '?'
   }),
+
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
 

@@ -20,22 +20,19 @@ Cypress.Commands.add('openCase', openCase);
  * @returns {Promise<String>} the id of the created case
  */
 function createCase(confidential, shortTitle) {
-  cy.route('GET', '/cases?**').as('getCases');
   cy.route('POST', '/cases').as('createNewCase');
-
   cy.visit('/dossiers');
-  cy.wait('@getCases', { timeout: 12000 });
 
   cy.get('.vlc-toolbar__item .vl-button')
-  .contains('Nieuw dossier aanmaken')
-  .click();
+    .contains('Nieuw dossier aanmaken')
+    .click();
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
     cy.get('.vlc-input-field-block').as('newCaseForm').should('have.length', 2);
   });
 
   // Set confidentiality
-  if(confidential){
+  if (confidential) {
     cy.get('@newCaseForm').eq(0).within(() => {
       cy.get('.vl-checkbox--switch__label').click();
     });
@@ -46,21 +43,21 @@ function createCase(confidential, shortTitle) {
     cy.get('.vl-textarea').click().type(shortTitle);
   });
 
-  cy.get('@dialog').within(()=> {
+  cy.get('@dialog').within(() => {
     cy.get('.vlc-toolbar__item > .vl-button').contains('Dossier aanmaken').click();
   });
 
   let caseId;
 
   cy.wait('@createNewCase', { timeout: 20000 })
-  .then((res) => {
-    caseId = res.responseBody.data.id;
-  })
-  .then(() => {
-    return new Cypress.Promise((resolve) => {
-      resolve(caseId);
+    .then((res) => {
+      caseId = res.responseBody.data.id;
+    })
+    .then(() => {
+      return new Cypress.Promise((resolve) => {
+        resolve(caseId);
+      });
     });
-  });
 }
 
 
@@ -77,12 +74,9 @@ function createCase(confidential, shortTitle) {
  * @returns {Promise<String>} the id of the created subcase
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
-  cy.route('GET', '/cases?*').as('getCases');
-  // cy.route('GET', '/subcases?*').as('getSubcases');
   cy.route('POST', '/subcases').as('createNewSubcase');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
 
-  // cy.wait('@getSubcases',{ timeout: 12000 });
   cy.wait(2000);
 
   cy.get('.vlc-toolbar__item .vl-button')
@@ -97,7 +91,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   });
 
   // Set the short title
-  if(newShortTitle) {
+  if (newShortTitle) {
     cy.get('.vlc-input-field-block').eq(1).within(() => {
       cy.get('.vl-textarea').click().clear().type(newShortTitle);
     });
@@ -113,7 +107,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(step).click();
+    cy.contains(step).trigger('mouseover').click();
   });
 
   // Set the step name
@@ -121,7 +115,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(stepName).click();
+    cy.contains(stepName).trigger('mouseover').click();
   });
 
   cy.get('.vlc-toolbar').within(() => {
@@ -131,15 +125,15 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   let subcaseId;
 
   cy.wait('@createNewsletter', { timeout: 10000 })
-  .then((res) => {
-    subcaseId = res.responseBody.data.id;
-  });
-  cy.wait('@createNewSubcase', { timeout: 10000 })
-  .then(() => {
-    return new Cypress.Promise((resolve) => {
-      resolve(subcaseId);
+    .then((res) => {
+      subcaseId = res.responseBody.data.id;
     });
-  });
+  cy.wait('@createNewSubcase', { timeout: 10000 })
+    .then(() => {
+      return new Cypress.Promise((resolve) => {
+        resolve(subcaseId);
+      });
+    });
 }
 
 /**
@@ -150,12 +144,15 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
  * @param {String} caseTitle The title to search in the list of cases, should be unique
  */
 function openCase(caseTitle) {
-  //TODO use search function instead ?
-  cy.visit('dossiers?size=100');
+  cy.visit('dossiers');
+  cy.get('#dossierId').type(caseTitle);
+  cy.route('GET', `/cases/search?**${caseTitle.split(" ", 1)}**`).as('getCaseSearchResult');
+  cy.contains('zoeken')
+    .click()
+    .wait('@getCaseSearchResult');
+  cy.contains('Aan het laden...').should('not.exist');
   cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
   cy.get('@rows').within(() => {
-    cy.contains(caseTitle).parents('tr').within(() => {
-      cy.get('.vl-vi-nav-right').click();
-    });
+    cy.contains(caseTitle).parents('tr').click();
   });
 }

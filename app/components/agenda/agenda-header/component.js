@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { alias, filter } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import { computed, set } from '@ember/object';
 import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
@@ -119,7 +119,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   },
 
   reloadAgendaitemsOfSubcases(agendaItems) {
-    return Promise.all(agendaItems.map(async agendaitem => {
+    return all(agendaItems.map(async agendaitem => {
       const subcase = await agendaitem.get('subcase');
       if (subcase) {
         await subcase.hasMany('agendaitems').reload();
@@ -131,7 +131,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   },
 
   destroyAgendaitemsList(agendaitems) {
-    return Promise.all(agendaitems.map(agendaitem => {
+    return all(agendaitems.map(agendaitem => {
       if (!agendaitem) {
         return;
       }
@@ -188,6 +188,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     },
 
     async doApproveAgenda(session) {
+      set(this, 'showWarning', false);
       await this.approveAgenda(session)
     },
 
@@ -258,7 +259,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       const namePromise = constructArchiveName(this.currentAgenda);
       debug('Checking if archive exists ...');
       const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
-      const [name, job] = await Promise.all([namePromise, jobPromise]);
+      const [name, job] = await all([namePromise, jobPromise]);
       if (!job.hasEnded) {
         debug('Archive in creation ...');
         const inCreationToast = this.toaster.loading(this.intl.t('archive-in-creation-message'),

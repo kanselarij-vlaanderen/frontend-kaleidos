@@ -10,7 +10,7 @@ context('Formally ok/nok tests', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
