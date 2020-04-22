@@ -40,7 +40,7 @@ context('Full test', () => {
 
     //#endregion
 
-    // #region create the 1st case and subcase
+    //#region create the 1st case and subcase
 
     const case_1_TitleShort= testId + 'Cypress test dossier 1';
     const type_1= 'Nota';
@@ -101,25 +101,25 @@ context('Full test', () => {
     cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
-    // #endregion
+    //#endregion
 
-    // #region check and approve the agenda > A
+    //#region check and approve the agenda > A
     cy.openAgendaForDate(agendaDate);
 
-    // cy.setFormalOkOnAllItems();
-    //
-    // // cy.approveCoAgendaitem(case_2_TitleShort); // TODO approvals have low prior and need a refactor
-    //
-    // cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
-    // cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
-    //
-    //
-    // cy.addRemarkToAgenda('Titel mededeling',
-    //   'mededeling omschrijving',
-    //   [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
-    // cy.addAgendaitemToAgenda();
-    // cy.setFormalOkOnAllItems();
-    // cy.approveDesignAgenda();
+    cy.setFormalOkOnAllItems();
+
+    // cy.approveCoAgendaitem(case_2_TitleShort); // TODO approvals have low prior and need a refactor
+
+    cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
+    cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+
+
+    cy.addRemarkToAgenda('Titel mededeling',
+      'mededeling omschrijving',
+      [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
+    cy.addAgendaitemToAgenda();
+    cy.setFormalOkOnAllItems();
+    cy.approveDesignAgenda();
     //#endregion
 
     //#endregion
