@@ -9,6 +9,7 @@ import agenda from '../selectors/agenda.selectors';
 import actionModel from '../selectors/action-modal.selectors';
 
 import form from "../selectors/form.selectors";
+import modal from "../selectors/modal.selectors";
 
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
@@ -324,10 +325,10 @@ function approveDesignAgenda() {
   cy.get('.vlc-toolbar').within(() => {
     cy.get('.vl-button--narrow')
       .contains('Ontwerpagenda')
-      .click()
-      .wait('@patchAgenda', { timeout: 12000 })
-      .wait('@getAgendaitems', { timeout: 12000 })
-      .wait('@getAgendas', { timeout: 12000 });
+      .click();
+      cy.wait('@patchAgenda', { timeout: 12000 });
+      cy.wait('@getAgendaitems', { timeout: 12000 });
+      cy.wait('@getAgendas', { timeout: 12000 });
   });
 }
 

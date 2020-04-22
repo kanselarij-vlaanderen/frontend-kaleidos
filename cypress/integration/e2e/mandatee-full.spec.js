@@ -5,31 +5,37 @@ import toolbar from '../../selectors/toolbar.selectors';
 import settings from '../../selectors/settings.selectors';
 import form from '../../selectors/form.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
+import cases from '../../selectors/case.selectors';
 import modal from '../../selectors/modal.selectors';
+import agenda from '../../selectors/agenda.selectors';
 
 context('Full test', () => {
   before(() => {
     cy.server();
-    // cy.resetCache();
-    // cy.resetSearch();
+    cy.resetCache();
+    cy.resetSearch();
     cy.login('Admin');
   });
 
   it('should Add new minister', () => {
     const testId = 'testId=' + currentTimestamp() + ': ';
 
+    cy.route('GET', ' /ise-codes/**').as('getIsecodes');
+    cy.route('GET', ' /government-fields/**').as('getGovernmentfields');
+
     const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
-    const JANUARI = 'maart';
+    const MONTH = 'maart';
     const YEAR = '2020';
     const DAY = '3';
+    const agendaDate = Cypress.moment("2020-03-03").set({"hour": 10, "minute": 10});
+    const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
+    const subcaseTitle1 = caseTitle + ' test stap 1';
+    const subcaseTitle2 = caseTitle + ' test stap 2';
+    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
+    const files = [file];
 
-    const caseTitle_3_Short= testId + 'Cypress test dossier 3';
-    const type_3= 'Mededeling';
-    const newSubcase_3_TitleShort= caseTitle_3_Short + ' procedure';
-    const subcase_3_TitleLong= testId + 'Cypress test voor het aanmaken van een dossier (3) en procedurestap';
-    const subcase_3_Type='In voorbereiding';
-    const subcase_3_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
+
 
     cy.route('/');
     cy.get(toolbar.settings).click();
@@ -61,15 +67,33 @@ context('Full test', () => {
     cy.selectDate('2020','maart','1');
     cy.get(form.formSave).should('exist').should('be.visible').click();
     cy.visit('/').then(()=> {
-      cy.createDefaultAgenda(KIND,YEAR,JANUARI,DAY,PLACE).then(() => {
-        const agendaDate = Cypress.moment("2020-03-03").set({"hour": 10, "minute": 10});
-        cy.openAgendaForDate(agendaDate);
-      });
+      cy.createCase(false, caseTitle);
+      cy.addSubcase('Nota',
+        subcaseTitle1,
+        'Cypress test voor het testen van toegevoegde documenten',
+        'In voorbereiding',
+        'Principiële goedkeuring m.h.o. op adviesaanvraag');
+      cy.addSubcase('Nota',
+        subcaseTitle2,
+        'Cypress test voor het testen van toegevoegde agendapunten',
+        'In voorbereiding',
+        'Principiële goedkeuring m.h.o. op adviesaanvraag');
+      cy.visit('/');
+      cy.createDefaultAgenda(KIND, YEAR, MONTH, DAY, PLACE);
+
+      // when toggling show changes  the agendaitem with a document added should show
+      cy.openAgendaForDate(agendaDate);
+      cy.addAgendaitemToAgenda(subcaseTitle1, false);
+      cy.agendaItemExists(subcaseTitle1).click();
+      cy.addSubcaseMandatee(0,-1,-1);
+     cy.get(agenda.approveDesignAgenda).click();
+      cy.get(modal.verify.save).click();
     });
-
-    cy.createCase(false, caseTitle_3_Short);
-    cy.addSubcase(type_3,newSubcase_3_TitleShort,subcase_3_TitleLong, subcase_3_Type, subcase_3_Name);
-
+    cy.get(toolbar.settings).click();
+    cy.get(settings.manageMinisters).click();
+    cy.url().should('include','instellingen/ministers');
+    cy.get('[data-test-mandatee-edit="0"]').click();
+    cy.selectDate('2020','maart','2',1)
   });
 
 
@@ -82,6 +106,10 @@ context('Full test', () => {
    */
   function currentTimestamp() {
     return Cypress.moment().unix();
+  }
+
+  function currentMoment() {
+    return Cypress.moment();
   }
 
 });
