@@ -30,6 +30,8 @@ export default Model.extend(LoadableModel, {
     return `${prefix} ${this.serialnumber}`;
   }),
 
+  isFinal: computed.alias('status.isFinal'),
+
   isApprovable: computed('agendaitems.@each', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaItems = agendaitems.filter((agendaitem) =>

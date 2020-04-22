@@ -23,7 +23,7 @@ export default Component.extend({
         this.set('value', result);
       })
       .catch((error) => {
-        console.error(`failed to render delayed property '${this.path}'`);
+        console.error(`failed to render delayed property '${this.path}': ${error}`);
       })
       .then(() => {
         this.set('loading', false);

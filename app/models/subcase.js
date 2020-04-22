@@ -188,9 +188,9 @@ export default ModelWithModifier.extend({
     return await this.store.query('agendaitem', {
       filter: {
         subcase: {id: this.get('id')},
-        agenda: {name: 'Ontwerpagenda'}
+        agenda: {status: {id: '2735d084-63d1-499f-86f4-9b69eb33727f'}}
       }
-    })
+    });
   }),
 
   meetings: computed('agendaitems.@each', async function () {
