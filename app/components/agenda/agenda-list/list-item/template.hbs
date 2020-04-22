@@ -24,7 +24,7 @@
       {{/if}}
     {{/if}}
   {{/if}}
-  {{#if renderDetails}}
+  {{#if (or renderDetails isEditingOverview)}}
     <div class="vl-u-display-flex vl-u-flex-space-between">
       {{#if (and selectedAgendaItem isEditingOverview)}}
         <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
@@ -38,14 +38,16 @@
         <span class="added-tag vlc-agenda-meta__recently-added">
           {{#if (await agendaitem.checkAdded)}}
             <i class="vl-link__icon vl-vi vl-vi-calendar-add"></i>
-            {{#attach-popover
+            {{#attach-tooltip
+              arrow="true"
+              animation="shift"
               placement="top"
-              class="ember-attacher-popper ember-attacher-popper-wide"
+              class="ember-attacher-tooltip"
             }}
               <p>
                 {{t "added-agendaitem-text"}}
               </p>
-            {{/attach-popover}}
+            {{/attach-tooltip}}
           {{/if}}
         </span>
         {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
@@ -97,18 +99,18 @@
           agendaitem=agendaitem
         }}
       {{else}}
-        {{#if (await documentNames)}}
+        {{#if (await agendaitem.documentNames)}}
           <div class="vlc-hr"></div>
           {{utils/documents-list-lazy-loaded
-            documentNames=documentNames
+            documentNames=agendaitem.documentNames
           }}
         {{/if}}
       {{/if}}
     {{else}}
-      {{#if (await documentNames)}}
+      {{#if (await agendaitem.documentNames)}}
         <div class="vlc-hr"></div>
         {{utils/documents-list-lazy-loaded
-          documentNames=documentNames
+          documentNames=agendaitem.documentNames
         }}
       {{/if}}
     {{/if}}
