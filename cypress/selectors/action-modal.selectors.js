@@ -13,6 +13,7 @@ const selectors = {
   // addAnnouncement: '[data-test-agenda-header-announcement]',
   lockAgenda: '[data-test-agenda-header-lockAgenda]',
   unlockAgenda: '[data-test-agenda-header-unlockAgenda]',
-  releaseDecisions: '[data-test-agenda-header-releasedecisions]',
+  releaseDecisions: '[data-test-agenda-header-releaseDecisions]',
+  releaseDocuments: '[data-test-agenda-header-releaseDocuments]',
 };
 export default selectors;

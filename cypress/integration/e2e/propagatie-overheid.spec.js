@@ -15,11 +15,7 @@ context('Agenda tests', () => {
     cy.server();
   });
 
-  // beforeEach(() => {
-  //   cy.server();
-  // });
-
-  it('STEP 1: Create new agenda', () => {
+  it('Propagate decisions and documents to overheid graph by releasing them', () => {
 
     cy.login('Admin');
 
@@ -28,82 +24,87 @@ context('Agenda tests', () => {
     const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
     const subcaseTitle1 = caseTitle + ' test stap 1';
     const subcaseTitle2 = caseTitle + ' test stap 2';
-    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
-    const files = [file];
+    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
+    const files = [
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota'},
+      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet'}
+    ];
     cy.createCase(false, caseTitle);
     cy.addSubcase('Nota',
       subcaseTitle1,
-      'Cypress test voor het testen van toegevoegde documenten',
-      'In voorbereiding',
-      'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.addSubcase('Nota',
-      subcaseTitle2,
-      'Cypress test voor het testen van toegevoegde agendapunten',
+      'Cypress test voor het propageren naar overheid',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
-    // when toggling show changes  the agendaitem with a document added should show
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
+    cy.agendaItemExists(subcaseTitle1).click();
+    cy.wait(1000);
+    cy.get(agenda.agendaItemDocumentsTab).click();
+    cy.addDocumentsToAgendaItem(subcaseTitle1,files);
 
     cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();
+    cy.closeAgenda();
+
     cy.agendaItemExists(subcaseTitle1).click();
     cy.get(agenda.agendaItemDecisionTab).click();
     cy.get(agenda.addDecision).click();
     cy.get(agenda.uploadDecisionFile).click();
-
     cy.contains('Documenten opladen').click();
     cy.get('.vl-modal-dialog').as('fileUploadDialog');
 
-    files.forEach((file, index) => {
-      cy.get('@fileUploadDialog').within(() => {
-        cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-      });
+    cy.get('@fileUploadDialog').within(() => {
+      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
+
     cy.get(form.formSave).click();
     cy.get(agenda.accessLevelPill).click();
-    cy.existsAndVisible('.ember-power-select-trigger')
-      .click();
-    cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid').click().then(() => {
-      cy.get(agenda.accessLevelSave).click().then(() => {
-        cy.existsAndVisible(agenda.agendaItemDocumentsTab).click().then(() => {
-          cy.existsAndVisible(documents.addLinkedDocuments).click().then(() => {
-            cy.existsAndVisible(utils.checkboxLabel).then(() => {
-              cy.existsAndVisible('.vl-checkbox__box').click().then(() => {
-                cy.existsAndVisible(form.formSave).click();
-              });
-            })
-            //TODO: continue here
-          })
-        });
-        // cy.get(actionModel.showActionOptions).click().then(() => {
-        //   cy.existsAndVisible(agenda.lockAgenda).click().then(() => {
-        //     cy.get(actionModel.showActionOptions).click().then(() => {
-        //       cy.existsAndVisible(actionModel.releaseDecisions).click().then(() => {
-        //         cy.existsAndVisible(modal.verifyModal.save).click();
-        //       });
-        //     })
-        //   });
-        // });
-      });
+    cy.existsAndVisible('.ember-power-select-trigger').click();
+    cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid').click();
+    cy.get(agenda.accessLevelSave).click();
+
+    cy.contains('Wijzigen').click();
+    cy.get('.vl-form__group').as('editDecision');
+    cy.get('@editDecision').within(() => {
+      cy.get('.vl-checkbox--switch__label').click();
     })
+
+    cy.contains('Opslaan').click();
+
+    cy.releaseDecisions();
+
+    cy.wait(45000);
+    cy.logout();
+    cy.login('Overheid');
+    cy.openAgendaForDate(agendaDate);
+    cy.agendaItemExists(subcaseTitle1).click();
+    cy.get(agenda.agendaItemDecisionTab).click();
+    cy.get('.vlc-document-card').eq(0).within(() => {
+      cy.get('.vl-title--h6 > span').contains(file.fileName);
+    });
+    cy.get(agenda.agendaItemDocumentsTab).click();
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').as('docCards').should('have.length', 0);
+    });
+
+    cy.logout();
+    cy.login('Admin');
+    cy.openAgendaForDate(agendaDate);
+    cy.releaseDocuments();
+    cy.wait(45000);
+    
+    cy.logout();
+    cy.login('Overheid');
+    cy.openAgendaForDate(agendaDate);
+    cy.agendaItemExists(subcaseTitle1).click();
+    cy.wait(1000);
+    cy.get(agenda.agendaItemDocumentsTab).click();
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').as('docCards').should('have.length', 2);
+    });
   });
-
-  // it('STEP 2: overheid', () => {
-  //   cy.login('Overheid');
-  //     const plusMonths = 1;
-  //   const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
-  //   cy.openAgendaForDate(agendaDate);
-  //   cy.agendaItemExists("testId=1586897818: Cypress test dossier 1 test stap 1").click();
-  //   cy.existsAndVisible(agenda.agendaItemDecisionTab);
-  //
-  //
-  //
-  // })
-
-
 
 });
 

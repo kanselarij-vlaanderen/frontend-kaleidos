@@ -23,6 +23,8 @@ Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
 Cypress.Commands.add('agendaItemExists', agendaItemExists);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
+Cypress.Commands.add('releaseDecisions', releaseDecisions);
+Cypress.Commands.add('releaseDocuments', releaseDocuments);
 Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
@@ -547,16 +549,46 @@ function changeSelectedAgenda(agendaName) {
  * @function
  */
 function closeAgenda() {
-  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
-
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
   cy.get(actionModel.lockAgenda).click();
-  // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
   cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
-  // });
 
+}
+
+/**
+ * @description releases the decisions of the current meeting
+ * @name releaseDecisions
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function releaseDecisions() {
+  cy.get('.vl-button--icon-before')
+    .contains('Acties')
+    .click();
+  cy.get(actionModel.releaseDecisions).click();
+  cy.get('.vl-modal').within(() => {
+    cy.get('.vl-button').contains('Vrijgeven').click();
+  });
+  cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
+}
+
+/**
+ * @description releases the documents of the current meeting
+ * @name releaseDocuments
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function releaseDocuments() {
+  cy.get('.vl-button--icon-before')
+    .contains('Acties')
+    .click();
+  cy.get(actionModel.releaseDocuments).click();
+  cy.get('.vl-modal').within(() => {
+    cy.get('.vl-button').contains('Vrijgeven').click();
+  });
+  cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
 }
 
 /**
