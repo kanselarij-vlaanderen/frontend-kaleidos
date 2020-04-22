@@ -11,7 +11,7 @@ context('Full test', () => {
   before(() => {
     cy.server();
     // cy.resetCache();
-    cy.resetSearch();
+    // cy.resetSearch();
     cy.login('Admin');
   });
 
