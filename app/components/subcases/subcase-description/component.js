@@ -66,6 +66,9 @@ export default Component.extend(isAuthenticatedMixin, {
     async saveChanges() {
       const resetFormallyOk = true;
       set(this, 'isLoading', true);
+
+      //TODO: Dit kan niet werken
+
       await saveSubcaseDescription(get(this, 'item'), get(this, 'propertiesToSet'), get(this, 'propertiesToSet'), resetFormallyOk);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
