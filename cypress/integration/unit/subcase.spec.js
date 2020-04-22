@@ -10,6 +10,7 @@ context('Subcase tests', () => {
   before(() => {
     cy.server();
     cy.resetCache();
+    //cy.resetSearch();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
@@ -173,7 +174,7 @@ context('Subcase tests', () => {
     cy.wait('@getAccessLevels');
 
     // Aanmaken agendaItem
-    // cy.openAgendaForDate(agendaDate);
+     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openAgendaItemDossierTab(SubcaseTitleShort,false);
 
