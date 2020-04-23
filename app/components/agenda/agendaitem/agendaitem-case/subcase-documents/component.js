@@ -1,13 +1,13 @@
 import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject } from '@ember/service';
 import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 
 export default Component.extend(
-  isAuthenticatedMixin,
   uploadDocumentMixin,
   {
+    currentSession: inject(),
     classNames: ['vl-u-spacer--large'],
     isAddingNewDocument: false,
     isEditing: false,
