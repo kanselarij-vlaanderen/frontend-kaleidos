@@ -17,7 +17,7 @@ const selectors = {
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
   printContainer: '[data-test-agenda-printContainer]',
   printHeaderTitle: '[data-test-agenda-print-header-title]',
-  pillContainer: '[data-test-agenda-subcasehidden-pill]',
+  pillContainer: '.pill-container',
   toProcedureStapLink: '.vlc-panel-layout__main-content a',
   subcase: {
     agendaLink: '[data-test-subcase-agenda-link] a',
