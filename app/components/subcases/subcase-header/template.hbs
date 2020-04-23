@@ -105,13 +105,14 @@
     {{/if}}
   </div>
 </div>
-{{# if promptDeleteCase}}
+{{#if promptDeleteCase}}
   {{web-components/vl-modal-verify
-    title="REPLACEME delete dossier ?"
-    verifyButtonText="REPLACEME: delete dossier BUTN?"
-    message="REPLACEME: delete dossier MSG?"
+    title="Leeg dossier verwijderen?"
+    verifyButtonText="Verwijderen"
+    message=(concat "Dossier '" this.caseToDelete.shortTitle "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?")
     cancel=(action "cancelDeleteCase")
-    verify=(action "deleteCase")
+    verify=(perform this.deleteCase this.caseToDelete)
+    isLoading=this.deleteCase.isRunning
   }}
 {{/if}}
 

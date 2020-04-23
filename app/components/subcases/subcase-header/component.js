@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
+import { task } from 'ember-concurrency';
 import moment from 'moment';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
@@ -65,7 +66,7 @@ export default Component.extend(isAuthenticatedMixin, {
     await itemToDelete.destroyRecord();
   },
 
-  async triggerDeleteCaseDialog() {
+  triggerDeleteCaseDialog() {
     this.set('promptDeleteCase', true);
   },
 
@@ -81,6 +82,13 @@ export default Component.extend(isAuthenticatedMixin, {
     this.set('isLoading', false);
     this.set('isAssigningToOtherCase', false);
   },
+
+  deleteCase: task(function * (_case) {
+    yield _case.destroyRecord();
+    this.set('promptDeleteCase', false);
+    this.set('caseToDelete', null);
+    this.get('router').transitionTo('cases');
+  }),
 
   actions: {
     cancel() {
@@ -128,6 +136,10 @@ export default Component.extend(isAuthenticatedMixin, {
       }
       this.navigateToSubcaseOverview(caze);
     },
+    cancelDeleteSubcase() {
+      this.set('isDeletingSubcase', false);
+    },
+
     triggerMoveSubcaseDialog() {
       this.set('isAssigningToOtherCase', true);
     },
@@ -138,25 +150,19 @@ export default Component.extend(isAuthenticatedMixin, {
       this.subcase.set('case', edCase);
       await this.subcase.save();
       this.set('isAssigningToOtherCase', false);
-      let caze = this.subcase.get('case');
-      caze = await this.store.findRecord('case', caze.get('id'));
-      caze.hasMany('subcases').reload();
-      this.set('caseToDelete', caze);
-      const subCases = caze.get('subcases');
+
+      const subCases = await oldCase.hasMany('subcases').reload();
       if (subCases.length > 0) {
         this.get('router').transitionTo('cases.case.subcases');
       } else {
-        this.get('router').transitionTo('cases.case.subcases');
-        // Prompt the user to Delete the case.
-        // This works fine, but if the delete is done, there are indexing issues.
-        //this.triggerDeleteCaseDialog();
+        this.set('caseToDelete', oldCase);
+        this.triggerDeleteCaseDialog();
       }
     },
-    cancelDeleteSubcase() {
-      this.set('isDeletingSubcase', false);
-    },
+
     cancelDeleteCase() {
       this.set('promptDeleteCase', false);
+      this.set('caseToDelete', null);
       this.get('router').transitionTo('cases.case.subcases');
     }
   },
