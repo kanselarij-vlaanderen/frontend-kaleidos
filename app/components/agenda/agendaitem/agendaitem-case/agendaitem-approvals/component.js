@@ -1,10 +1,9 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed, get } from '@ember/object';
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   classNames: ['vl-u-spacer-extended-bottom-l'],
   store: inject(),
   currentSession: inject(),
