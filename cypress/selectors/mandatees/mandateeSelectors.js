@@ -8,5 +8,7 @@ const selectors = {
   createPerson: '[data-test-create-person]',
   createPersonLastnameContainer: '[data-test-create-person-firstname]',
   createPersonfirstnameContainer: '[data-test-create-person-lastname]',
+  mandateeEditCancel: '[data-test-edit-mandatee-cancel]',
+  manageMandateeChangesAlert: '[data-test-manage-mandatee-changes-alert]',
 };
 export default selectors;

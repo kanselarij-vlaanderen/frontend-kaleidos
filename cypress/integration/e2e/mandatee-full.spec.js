@@ -5,7 +5,6 @@ import toolbar from '../../selectors/toolbar.selectors';
 import settings from '../../selectors/settings.selectors';
 import form from '../../selectors/form.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
-import cases from '../../selectors/case.selectors';
 import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 
@@ -18,24 +17,13 @@ context('Full test', () => {
   });
 
   it('should Add new minister', () => {
-    const testId = 'testId=' + currentTimestamp() + ': ';
-
-    cy.route('GET', ' /ise-codes/**').as('getIsecodes');
-    cy.route('GET', ' /government-fields/**').as('getGovernmentfields');
-
-    const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
-    const MONTH = 'maart';
-    const YEAR = '2020';
-    const DAY = '3';
-    const agendaDate = Cypress.moment("2020-03-03").set({"hour": 10, "minute": 10});
+    const plusMonths = 3;
+
+    const agendaDate = currentMoment().add('month', plusMonths).set('date', 3).set('hour', 20).set('minute', 20);
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
     const subcaseTitle1 = caseTitle + ' test stap 1';
     const subcaseTitle2 = caseTitle + ' test stap 2';
-    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
-    const files = [file];
-
-
 
     cy.route('/');
     cy.get(toolbar.settings).click();
@@ -64,7 +52,8 @@ context('Full test', () => {
         cy.get('.ember-power-select-trigger').click();
       });
     });
-    cy.selectDate('2020','maart','1');
+    cy.get('.vl-datepicker').eq(0).click();
+    cy.setDateInFlatpickr(agendaDate, plusMonths);
     cy.get(form.formSave).should('exist').should('be.visible').click();
     cy.visit('/').then(()=> {
       cy.createCase(false, caseTitle);
@@ -79,7 +68,7 @@ context('Full test', () => {
         'In voorbereiding',
         'Principiële goedkeuring m.h.o. op adviesaanvraag');
       cy.visit('/');
-      cy.createDefaultAgenda(KIND, YEAR, MONTH, DAY, PLACE);
+      cy.createAgenda(KIND,3,agendaDate,"locatie");
 
       // when toggling show changes  the agendaitem with a document added should show
       cy.openAgendaForDate(agendaDate);
@@ -93,9 +82,28 @@ context('Full test', () => {
     cy.get(settings.manageMinisters).click();
     cy.url().should('include','instellingen/ministers');
     cy.get('[data-test-mandatee-edit="0"]').click();
-    cy.selectDate('2020','maart','2',1)
+    const enddateForMandatee = Cypress.moment("2020-03-02").set({"hour": 10, "minute": 10});
+    cy.get('.vl-datepicker').eq(1).click();
+    cy.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(1).clear().type(enddateForMandatee.year(), {delay: 300});
+    cy.get('.flatpickr-months').eq(1).within(() => {
+      for (let n = 0; n < plusMonths; n++) {
+        cy.get('.flatpickr-next-month').click();
+      }
+    });
+    cy.get('.flatpickr-days').eq(1).within(() => {
+      cy.get('.flatpickr-day').not('.prevMonthDay').not('.nextMonthDay').contains(enddateForMandatee.date()).click();
+    });
+    cy.get(form.formSave).should('exist').should('be.visible').click();
+    cy.get(modal.verify.save).should('exist').should('be.visible').contains('Eindatum aanpassen');
+    cy.get(modal.verify.cancel).should('exist').should('be.visible').click();
+    cy.get(mandatee.mandateeEditCancel).should('exist').should('be.visible').click();
+    cy.route('/');
+    cy.get(toolbar.settings).click();
+    cy.get(settings.manageMinisters).click();
+    cy.url().should('include','instellingen/ministers');
+    cy.get('[data-test-mandatee-resign="0"]').click();
+    cy.get(mandatee.manageMandateeChangesAlert).should('exist').should('be.visible');
   });
-
 
   /**
    * @description returns the current time in unix timestamp

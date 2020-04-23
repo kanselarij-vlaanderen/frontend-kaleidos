@@ -74,7 +74,7 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
       cy.get('.vl-datepicker').click();
     });
     //TODO get months by calculating instead
-    cy.setDateInFlatpickr(date, plusMonths);
+    cy.setDateAndTimeInFlatpickr(date, plusMonths);
 
     //Set the location
     cy.get('@newAgendaForm').eq(2).within(() => {

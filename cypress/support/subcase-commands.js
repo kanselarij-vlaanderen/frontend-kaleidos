@@ -247,7 +247,7 @@ function deleteSubcase() {
  * @name getTranslatedMonth
  * @memberOf Cypress.Chainable#
  * @function
- * @param {number} month the number of the month to translate (from moment so starts from 0)
+ * @param month {number}  the number of the month to translate (from moment so starts from 0)
  * @returns the month in dutch
  */
 function getTranslatedMonth(month) {
