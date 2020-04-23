@@ -19,6 +19,10 @@ run-cypress-tests:
 	-	make reset-elastic-and-cache
 	- npx cypress run
 
+run-cypress-spec-files: 
+	-	make reset-elastic-and-cache
+	- npx cypress run --spec ${SPECS}
+
 open-cypress-tests:
 	-	make reset-elastic-and-cache
 	-	./node_modules/.bin/cypress open
