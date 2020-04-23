@@ -185,10 +185,10 @@ context('Subcase tests', () => {
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
 
     //"Go to agendaItem
-    cy.route('GET', '/meetings/**').as('getMeetings');
+    cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();
-    cy.wait('@getMeetings');
+    cy.wait('@getMeetingsRequest');
     cy.wait('@getAgendas');
 
     // Click the "wijzigen link.
