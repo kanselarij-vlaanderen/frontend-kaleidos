@@ -7,6 +7,7 @@ import moment from 'moment';
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vl-u-spacer-extended-bottom-l'],
   store: inject(),
+  currentSession: inject(),
 
   mandateeApprovals: computed('item.{mandatees.[],approvals.@each.mandatee}', async function () {
     const mandatees = await get(this, 'item.mandatees');
