@@ -1,10 +1,10 @@
 const selectors = {
   newAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
-  emberPowerSelectTrigger:'.ember-power-select-trigger',
-  emberPowerSelectOption:'.ember-power-select-option',
+  emberPowerSelectTrigger: '.ember-power-select-trigger',
+  emberPowerSelectOption: '.ember-power-select-option',
   datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
-  flatpickrMonthDropdownMonths:  '.flatpickr-monthDropdown-months',
+  flatpickrMonthDropdownMonths: '.flatpickr-monthDropdown-months',
   numInputWrapper: '.numInputWrapper',
   inputNumInputCurYear: 'input.numInput.cur-year',
   flatpickrDay: '.flatpickr-day',
@@ -17,6 +17,16 @@ const selectors = {
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
   printContainer: '[data-test-agenda-printContainer]',
   printHeaderTitle: '[data-test-agenda-print-header-title]',
-  subCaseHiddenPill: '[data-test-agenda-subcasehidden-pill]'
+  pillContainer: '[data-test-agenda-subcasehidden-pill]',
+  toProcedureStapLink: '.vlc-panel-layout__main-content a',
+  subcase: {
+    agendaLink: '[data-test-subcase-agenda-link] a',
+  },
+  item: {
+    editLink: '[data-test-agendaitem-edit-link] a',
+    showInNewsLetter: '[data-test-vl-subcase-titles-edit-show-in-newsletter]',
+    checkBoxLabel: 'label.vl-checkbox--switch__label',
+    actionButton: '.vl-action-group button'
+  }
 };
 export default selectors;
