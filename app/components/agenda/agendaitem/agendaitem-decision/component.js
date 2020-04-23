@@ -7,6 +7,7 @@ import moment from 'moment';
 export default Component.extend(isAuthenticatedMixin, {
   classNames: ['vl-u-spacer'],
   store: inject(),
+  currentSession: inject(),
   isEditing: false,
   agendaitem: null,
   subcase: null,
