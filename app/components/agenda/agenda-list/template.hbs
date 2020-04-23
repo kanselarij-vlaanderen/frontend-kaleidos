@@ -1,9 +1,8 @@
 {{#if isEditingOverview}}
-  {{changes-alert
-    message=(t "editing-agenda-overview")
-    buttonText=(t "end-editing-overview")
-    clearAction=(action "toggleIsEditingOverview")
-  }}
+  <ChangesAlert
+    @message={{t "editing-agenda-overview"}}
+    @buttonText={{t "end-editing-overview"}}
+    @clearAction={{action "toggleIsEditingOverview"}} />
 {{/if}}
 <div class="vlc-toolbar vlc-agenda-items-section-header">
 
@@ -84,11 +83,10 @@
           distance=30
           handle=dragHandleClass
         }}
-          {{agenda/agenda-list/list-item
-            agendaitem=agendaitem
-            isEditingOverview=isEditingOverview
-            selectAgendaItem=(action "selectAgendaItemAction")
-          }}
+          <Agenda::AgendaList::ListItem
+            @agendaitem={{agendaitem}}
+            @isEditingOverview={{isEditingOverview}}
+            @selectAgendaItem={{action "selectAgendaItemAction"}} />
         {{/sortable-item}}
       {{/each}}
     {{/sortable-group}}
@@ -111,11 +109,10 @@
           (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
         }}
           <li class="vlc-agenda-items__sub-item">
-            {{agenda/agenda-list/list-item
-              agendaitem=agendaitem
-              isEditingOverview=isEditingOverview
-              selectAgendaItem=(action "selectAgendaItemAction")
-            }}
+            <Agenda::AgendaList::ListItem
+              @agendaitem={{agendaitem}}
+              @isEditingOverview={{isEditingOverview}}
+              @selectAgendaItem={{action "selectAgendaItemAction"}} />
           </li>
         {{/if}}
       {{/each}}
@@ -155,11 +152,10 @@
             distance=30
             handle=dragHandleClass
           }}
-            {{agenda/agenda-list/list-item
-              agendaitem=announcement
-              isEditingOverview=isEditingOverview
-              selectAgendaItem=(action "selectAgendaItemAction")
-            }}
+            <Agenda::AgendaList::ListItem
+              @agendaitem={{announcement}}
+              @isEditingOverview={{isEditingOverview}}
+              @selectAgendaItem={{action "selectAgendaItemAction"}} />
           {{/sortable-item}}
         {{/each}}
       {{/sortable-group}}
@@ -169,15 +165,14 @@
       as |announcement|
       }}
         <div class="vlc-agenda-items__sub-item">
-          {{agenda/agenda-list/list-item
-            agendaitem=announcement
-            isEditingOverview=isEditingOverview
-            selectAgendaItem=(action "selectAgendaItemAction")
-          }}
+          <Agenda::AgendaList::ListItem
+            @agendaitem={{announcement}}
+            @isEditingOverview={{isEditingOverview}}
+            @selectAgendaItem={{action "selectAgendaItemAction"}} />
         </div>
       {{/each}}
     {{/if}}
   {{else}}
-    {{web-components/vl-alert message=(t "no-announcements-yet")}}
+    <WebComponents::VlAlert @message={{t "no-announcements-yet"}} />
   {{/if}}
 </div>
