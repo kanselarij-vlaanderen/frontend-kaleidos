@@ -1,6 +1,6 @@
 <div class="vlc-container-center">
   <div style="page-break-after:always;">
-    {{utils/logo-header}}
+    <Utils::LogoHeader />
     <div class="vl-u-spacer-extended-bottom-l">
       <h1 class="vl-title vl-title--h2">
         {{await title}}
@@ -17,7 +17,7 @@
       <h3 class="vl-title vl-title--h3">
         {{t "notes"}}
       </h3>
-      {{#if isEditor}}
+      {{#if currentSession.isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           {{#if allowEditing}}
             <a href="" class="vl-link" {{action "toggleIsEditing"}}>
@@ -27,7 +27,9 @@
         </div>
       {{/if}}
     </div>
-    {{sessions/session-notes currentSession=currentSession isEditing=isEditing}}
+    <Sessions::SessionNotes
+      @currentSession={{currentSession}}
+      @isEditing={{isEditing}} />
   </div>
   <div class="vl-u-spacer-extended-bottom">
     {{#each (await agendaitemGroups) as |group|}}
@@ -60,14 +62,13 @@
                 </pre>
               </div>
               {{#if agendaitem.isEditing}}
-                {{agenda/agendaitem/agendaitem-minutes-edit
-                  isEditing=agendaitem.isEditing
-                  agendaitem=agendaitem
-                }}
+                <Agenda::Agendaitem::AgendaitemMinutesEdit
+                  @isEditing={{agendaitem.isEditing}}
+                  @agendaitem={{agendaitem}} />
               {{else}}
                 <div class="vl-typography">
                   <ul>
-                    {{#if isEditor}}
+                    {{#if currentSession.isEditor}}
                       <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                         {{#if allowEditing}}
                           <a href="" class="vl-link"
@@ -107,9 +108,8 @@
               {{/if}}
             </div>
             {{#if (not allowEditing)}}
-              {{web-components/vl-signature
-                signature=currentSession.defaultSignature
-              }}
+              <WebComponents::VlSignature
+                @signature={{currentSession.defaultSignature}} />
             {{/if}}
           </div>
         {{/each}}
