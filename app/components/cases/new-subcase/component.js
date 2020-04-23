@@ -54,7 +54,7 @@ export default Component.extend({
       mandateeProposal: null,
       publicationDate: newsletterInfo.get('publicationDate'),
       publicationDocDate: newsletterInfo.get('publicationDocDate'),
-      themes: newsletterInfo.get('themes')
+      themes: await newsletterInfo.get('themes')
     });
     return await newsletterInfoToCreate.save();
   },
