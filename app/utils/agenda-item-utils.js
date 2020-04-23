@@ -17,7 +17,10 @@ export const cancelEdit = (item, propertiesToSet) => {
     item.belongsTo('accessLevel').reload();
   }
   item.reload();
-  propertiesToSet.forEach(prop => item.notifyPropertyChange(prop));
+  const keys = Object.keys(propertiesToSet);
+  keys.forEach(async function (key) {
+    keys.forEach(prop => item.notifyPropertyChange(prop));
+  });
 };
 
 /**

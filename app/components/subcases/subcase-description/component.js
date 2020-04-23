@@ -41,7 +41,12 @@ export default Component.extend(isAuthenticatedMixin, {
 
     async cancelEditing() {
       const item = await this.get('item');
-      cancelEdit(item, get(this, 'propertiesToSet'));
+      const propertiesToSetOnSubCase = {
+        'subcaseName': this.get('subcaseName'),
+        'type': this.get('type'),
+        'showAsRemark': this.get('showAsRemark')
+      };
+      cancelEdit(item, propertiesToSetOnSubCase);
       set(this, 'isEditing', false);
     },
 
