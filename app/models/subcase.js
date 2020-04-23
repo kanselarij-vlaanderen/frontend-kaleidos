@@ -298,10 +298,10 @@ export default ModelWithModifier.extend({
     return false;
   }),
 
-  showInNewsletter: computed('latestAgendaItem', 'latestAgendaItem.showInNewsletter', async function () {
+  showInNewsletter: computed('agendaitems.@each.showInNewsletter', async function () {
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
-      return latestAgendaItem.showInNewsletter;
+      return await latestAgendaItem.get('showInNewsletter');
     }
     return false;
   }),
