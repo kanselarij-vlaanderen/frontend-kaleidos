@@ -90,7 +90,7 @@
                       {{t "create-announcement"}}
                     </a>
                   </li>
-                  <li class="vlc-dropdown-menu__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                 {{/if}}
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
@@ -163,7 +163,7 @@
                   </li>
                 {{/if}}
                 {{#if isEditor}}
-                  <li class="vlc-dropdown-menu__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
                        data-test-agenda-header-toggleEditingSession
@@ -196,7 +196,7 @@
                   </a>
                 </li>
                 {{#if isEditor}}
-                  <li class="vlc-dropdown-menu__separator" role="none"></li>
+                  <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
                     {{#if (not currentSession.isFinal)}}
                       {{#if (await hasMultipleAgendas)}}
