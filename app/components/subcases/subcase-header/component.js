@@ -132,9 +132,11 @@ export default Component.extend(isAuthenticatedMixin, {
       this.set('isAssigningToOtherCase', true);
     },
     async moveSubcase(newCase) {
-      this.subcase.set('case', newCase);
-      await this.subcase.save();
+      const edCase = await this.store.findRecord('case', newCase.id); // ensure we have an ember-data case
 
+      const oldCase = await this.subcase.get('case');
+      this.subcase.set('case', edCase);
+      await this.subcase.save();
       this.set('isAssigningToOtherCase', false);
       let caze = this.subcase.get('case');
       caze = await this.store.findRecord('case', caze.get('id'));
