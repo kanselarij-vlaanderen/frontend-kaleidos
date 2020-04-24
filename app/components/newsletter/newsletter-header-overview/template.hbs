@@ -1,12 +1,12 @@
 <div class="vlc-toolbar">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <h1 
+      <h1
         class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width vlc-u-padding-bottom-5"
         data-test-newsletter-overview-header-title
       >
         {{t "newsletter-overview-pdf-name"}}
-         - 
+         -
         {{await agenda.createdFor.kindToShow.label}}
         {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
       </h1>
@@ -14,49 +14,45 @@
         <div class="vlc-toolbar vlc-toolbar--auto">
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
-              {{#link-to
-                "newsletters"
-                class="vlc-backlink vl-link vl-link--bold"
-              }}
+              <LinkTo
+                @route="newsletters"
+                class="vlc-backlink vl-link vl-link--bold" >
               {{!-- template-lint-disable no-bare-strings  --}}
                 &#8629;
               {{!-- template-lint-enable no-bare-strings  --}}
-              {{/link-to}}
+            </LinkTo>
             </div>
-            {{#if isEditor}}
+            {{#if currentSession.isEditor}}
               <div class="vlc-toolbar__item">
                 <ul class="vlc-tabs-reverse" role="tablist">
                   <li class="vlc-tabs-reverse__item">
-                    {{#link-to
-                      "print-overviews.newsletter.agendaitems"
-                      agenda
+                    <LinkTo
+                      @route="print-overviews.newsletter.agendaitems"
+                      @model={{agenda}}
                       class="border-left vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
-                    }}
+                      @activeClass="vlc-tabs-reverse__link--active" >
                       {{t "overview"}}
-                    {{/link-to}}
+                    </LinkTo>
                   </li>
                   <li class="vlc-tabs-reverse__item">
-                    {{#link-to
-                      "print-overviews.newsletter.overview"
-                      agenda.id
-                      (query-params definite=false)
+                    <LinkTo
+                      @route="print-overviews.newsletter.overview"
+                      @model={{agenda.id}}
+                      @query={{hash definite=false}}
                       class="vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
-                    }}
+                      @activeClass="vlc-tabs-reverse__link--active" >
                       {{t "design"}}
-                    {{/link-to}}
+                    </LinkTo>
                   </li>
                   <li class="vlc-tabs-reverse__item">
-                    {{#link-to
-                      "print-overviews.newsletter.overview"
-                      agenda.id
-                      (query-params definite=true)
+                    <LinkTo
+                      @route="print-overviews.newsletter.overview"
+                      @model={{agenda.id}}
+                      @query={{hash definite=true}}
                       class="vlc-tabs-reverse__link"
-                      activeClass="vlc-tabs-reverse__link--active"
-                    }}
+                      @activeClass="vlc-tabs-reverse__link--active" >
                       {{t "definite"}}
-                    {{/link-to}}
+                    </LinkTo>
                   </li>
                 </ul>
               </div>
@@ -70,20 +66,20 @@
     <div class="vlc-toolbar__item">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          {{#if isEditor}}
+          {{#if currentSession.isEditor}}
           {{/if}}
           <button type="button"
-                  class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+            class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions"}}
           >
             {{#if (not isShowingOptions)}}
               <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{else}}
               <i
-                      class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{/if}}
@@ -97,16 +93,16 @@
             as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
-                {{#if isEditor}}
+                {{#if currentSession.isEditor}}
                   {{#if
                     (or (is-pending agenda.createdFor.mailCampaign) isLoading)
                   }}
                     <li class="vlc-dropdown-menu__item">
                       <div class="vl-loader-link">
                         <div
-                                class="vl-loader"
-                                role="alert"
-                                aria-busy="true"
+                          class="vl-loader"
+                          role="alert"
+                          aria-busy="true"
                         ></div>
                         {{t "newsletter-loading-text"}}
                       </div>
@@ -132,19 +128,19 @@
                         </a>
                       </li>
                       <li
-                              class="vlc-dropdown-menu__separator"
-                              role="none"
+                        class="vlc-dropdown-menu__separator"
+                        role="none"
                       ></li>
                     {{/if}}
                     <li class="vlc-dropdown-menu__item">
                       <a
-                              class="vl-link vl-link--block"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              href={{concat
-                                "/newsletter/xml-newsletter/"
-                                agenda.id
-                              }}
+                        class="vl-link vl-link--block"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={{concat
+                          "/newsletter/xml-newsletter/"
+                          agenda.id
+                        }}
                         download={{concat
                           "/newsletter/xml-newsletter/"
                           agenda.id
@@ -154,8 +150,8 @@
                       </a>
                     </li>
                     <li
-                            class="vlc-dropdown-menu__separator"
-                            role="none"
+                      class="vlc-dropdown-menu__separator"
+                      role="none"
                     ></li>
                     <li class="vlc-dropdown-menu__item">
                       <a href=""
@@ -197,28 +193,26 @@
   </div>
 </div>
 {{#if isVerifying}}
-  {{web-components/vl-modal-verify
-    title=(t "send-campaign")
-    buttonType="warning"
-    isLoading=isLoading
-    verifyButtonText=(t "send-campaign")
-    message=(t "send-campaign-warning")
-    cancel=(action "toggleIsVerifying")
-    verify=(action "sendCampaign")
-  }}
+  <WebComponents::VlModalVerify
+    @title={{t "send-campaign"}}
+    @buttonType="warning"
+    @isLoading={{isLoading}}
+    @verifyButtonText={{t "send-campaign"}}
+    @message={{t "send-campaign-warning"}}
+    @cancel={{action "toggleIsVerifying"}}
+    @verify={{action "sendCampaign"}} />
 {{/if}}
 {{#if (or testCampaignIsLoading newsletterHTML)}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "send-test-campaign")
-    closeModal=(action "clearNewsletterHTML")
-  }}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @title={{t "send-test-campaign"}}
+    @closeModal={{action "clearNewsletterHTML"}} >
     <div class="vl-modal-dialog__content">
       {{#if testCampaignIsLoading}}
-        {{web-components/vl-loader text=(t "preview-loading-text")}}
+        <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}
         {{sanitize-html raw=true value=newsletterHTML}}
       {{/if}}
     </div>
-  {{/web-components/vl-modal}}
+  </WebComponents::VlModal>
 {{/if}}
