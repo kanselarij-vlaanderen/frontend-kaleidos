@@ -74,6 +74,3 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
   }
 };
 
-export const trimText = (text) => {
-    return text.trim();
-};

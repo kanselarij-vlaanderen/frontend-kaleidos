@@ -4,7 +4,6 @@ import { alias } from '@ember/object/computed';
 import { computed, action, get, set } from '@ember/object';
 import { cached } from 'fe-redpencil/decorators/cached';
 import { saveChanges as saveSubcaseTitles, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
-import { trimText } from '../../../../../utils/agenda-item-utils';
 
 export default class SubcaseTitlesEdit extends Component {
   @service store;
@@ -36,15 +35,21 @@ export default class SubcaseTitlesEdit extends Component {
     this.set('accessLevel', accessLevel);
   }
 
+  trimText = (text) => {
+    return text.trim();
+  };
+
   @action
   async saveChanges() {
+    console.log('triigering savechanges');
     set(this, 'isLoading', true);
     const item = await this.get('item');
-    item.set('title', trimText(await item.get('title')));
-    item.set('shortTitle', trimText(await item.get('shortTitle')));
+    item.set('title', this.trimText(await item.get('title')));
+    item.set('shortTitle', this.trimText(await item.get('shortTitle')));
 
     await saveSubcaseTitles(get(this, 'item'), get(this, 'propertiesToSet'), get(this, 'propertiesToSet'), true);
     set(this, 'isLoading', false);
     this.toggleProperty('isEditing');
   }
 }
+

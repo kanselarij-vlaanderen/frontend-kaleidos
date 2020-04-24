@@ -21,37 +21,37 @@ context('Agenda tests', () => {
     cy.login('Admin');
   });
 
-  // it('should create a new agenda and then delete it', () => {
-  //   const plusMonthsSingleTest = 1;
-  //   const agendaDateSingleTest = Cypress.moment().add('month', plusMonthsSingleTest).set('date', 16).set('hour', 16).set('minute', 16);
-  //
-  //   cy.createAgenda('Elektronische procedure', plusMonthsSingleTest, agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven')
-  //   .then((meetingId) => {
-  //     cy.openAgendaForDate(agendaDateSingleTest, meetingId);
-  //     cy.deleteAgenda(meetingId, true);
-  //   });
-  // });
-  //
-  // it('should set formal ok on all agendaitems and approve it', () => {
-  //   cy.openAgendaForDate(agendaDate);
-  //   cy.setFormalOkOnAllItems();
-  //   cy.approveDesignAgenda();
-  //   cy.get(modal.agenda.approveAgenda).should('not.exist');
-  // });
-  //
-  // it('should add a remark with documents to an agenda', () => {
-  //     cy.openAgendaForDate(agendaDate);
-  //     cy.addRemarkToAgenda('Titel mededeling',
-  //     'mededeling omschrijving',
-  //     [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
-  // });
-  //
-  // it('should add an agendaitem to an agenda', () => {
-  //     cy.openAgendaForDate(agendaDate);
-  //     cy.addAgendaitemToAgenda(false);
-  // });
+  it('should create a new agenda and then delete it', () => {
+    const plusMonthsSingleTest = 1;
+    const agendaDateSingleTest = Cypress.moment().add('month', plusMonthsSingleTest).set('date', 16).set('hour', 16).set('minute', 16);
 
-  it('should edit nota on agendaitem and trim whitespaces', () => {
+    cy.createAgenda('Elektronische procedure', plusMonthsSingleTest, agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven')
+    .then((meetingId) => {
+      cy.openAgendaForDate(agendaDateSingleTest, meetingId);
+      cy.deleteAgenda(meetingId, true);
+    });
+  });
+
+  it('should set formal ok on all agendaitems and approve it', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.setFormalOkOnAllItems();
+    cy.approveDesignAgenda();
+    cy.get(modal.agenda.approveAgenda).should('not.exist');
+  });
+
+  it('should add a remark with documents to an agenda', () => {
+      cy.openAgendaForDate(agendaDate);
+      cy.addRemarkToAgenda('Titel mededeling',
+      'mededeling omschrijving',
+      [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
+  });
+
+  it('should add an agendaitem to an agenda', () => {
+      cy.openAgendaForDate(agendaDate);
+      cy.addAgendaitemToAgenda(false);
+  });
+
+  it.only('should edit nota on agendaitem and trim whitespaces', () => {
     const testId = 'testId=' + currentTimestamp() + ': ';
 
     const PLACE = 'Brussel';
