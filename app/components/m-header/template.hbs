@@ -32,7 +32,7 @@
               {{t "newsletter"}}
             {{/link-to}}
           </li>
-          {{#if isEditor}}
+          {{#if currentSession.isEditor}}
             <li class="vl-tab" data-test-m-header-settings>
               {{#link-to "settings.overview" class="vl-tab__link"}}
                 {{t "settings"}}
