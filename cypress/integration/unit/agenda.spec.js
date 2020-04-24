@@ -51,7 +51,7 @@ context('Agenda tests', () => {
       cy.addAgendaitemToAgenda(false);
   });
 
-  it.only('should edit nota on agendaitem and trim whitespaces', () => {
+  it('should edit nota on agendaitem and trim whitespaces', () => {
     const testId = 'testId=' + currentTimestamp() + ': ';
 
     const PLACE = 'Brussel';
@@ -63,7 +63,7 @@ context('Agenda tests', () => {
     const case_1_TitleShort= testId + 'Cypress test dossier 1';
     const type_1= 'Nota';
     const newSubcase_1_TitleShort= 'dit is de korte titel\n\n';
-    const subcase_1_TitleLong='dit is de lange title\n\n';
+    const subcase_1_TitleLong='dit is de lange titel\n\n';
     const subcase_1_Type='In voorbereiding';
     const subcase_1_Name='Principiële goedkeuring m.h.o. op adviesaanvraag';
 
@@ -74,12 +74,20 @@ context('Agenda tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
     cy.visit('/');
     cy.openAgendaForDate(agendaDate);
-    cy.contains(subcase_1_TitleLong).click();
+    cy.contains("dit is de lange titel").click();
+    cy.contains('dit is de korte titel');
+    cy.contains('dit is de lange titel');
     cy.get(agenda.subcaseTitlesEdit).should('exist').should('be.visible').click();
+    cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).clear();
+    cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).type("dit is de korte titel\n\n");
+
+    cy.get(agenda.subcaseTitlesEditTitleOfSubcase).clear();
+    cy.get(agenda.subcaseTitlesEditTitleOfSubcase).type("dit is de lange titel\n\n");
+
     cy.get(agenda.subcaseTitlesEditSave).should('exist').should('be.visible').click();
     cy.get(agenda.subcaseTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
-    cy.contains('dit is de lange title');
+    cy.contains('dit is de lange titel');
   })
 
 });
