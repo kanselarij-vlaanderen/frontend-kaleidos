@@ -49,8 +49,6 @@ export const setModifiedOnAgendaOfAgendaitem = async (agendaitem) => {
 
 export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
   const item = agendaitemOrSubcase;
-
-
   const isAgendaItem = item.get('modelName') === 'agendaitem';
 
   await item.preEditOrSaveCheck();
