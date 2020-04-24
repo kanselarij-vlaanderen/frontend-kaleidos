@@ -2,19 +2,19 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   classNames: ['vl-u-spacer-extended-bottom-l'],
   isEditing: false,
   intl: inject(),
+  currentSession: inject(),
   newsletterService: inject(),
 
   async init() {
     this._super(...arguments);
     const meeting = await this.get('meeting');
     const newsletter = await meeting.get('newsletter');
-    if (!newsletter && this.isEditor) {
+    if (!newsletter && this.currentSession.isEditor) {
       await this.newsletterService.createNewsItemForMeeting(meeting);
     }
   },
@@ -32,7 +32,7 @@ export default Component.extend(isAuthenticatedMixin, {
     async toggleIsEditing() {
       const meeting = await this.get('meeting');
       const newsletter = await meeting.get('newsletter');
-      if (!newsletter && this.isEditor) {
+      if (!newsletter && this.currentSession.isEditor) {
         await this.newsletterService.createNewsItemForMeeting(meeting);
       }
 

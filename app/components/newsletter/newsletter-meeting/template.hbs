@@ -3,7 +3,7 @@
     {{await title}}
   </h4>
   {{#if allowEditing}}
-    {{#if isEditor}}
+    {{#if currentSession.isEditor}}
       <div class="vl-u-spacer-extended-left-s">
         <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
