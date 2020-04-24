@@ -19,8 +19,10 @@ const selectors = {
   printHeaderTitle: '[data-test-agenda-print-header-title]',
   pillContainer: '.pill-container',
   toProcedureStapLink: '.vlc-panel-layout__main-content a',
+  confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
   subcase: {
     agendaLink: '[data-test-subcase-agenda-link] a',
+    confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input'
   },
   item: {
     editLink: '[data-test-agendaitem-edit-link] a',

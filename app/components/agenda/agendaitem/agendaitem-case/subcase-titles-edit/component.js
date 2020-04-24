@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { computed, action, get, set } from '@ember/object';
-import { cached } from 'fe-redpencil/decorators/cached';
 import { saveChanges as saveSubcaseTitles, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default class SubcaseTitlesEdit extends Component {
@@ -10,18 +9,16 @@ export default class SubcaseTitlesEdit extends Component {
   classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'accessLevel', 'confidential', 'showInNewsletter']);
 
-  @alias('item.showAsRemark') isRemark;
-
   @computed('item.modelName')
   get isAgendaItem() {
     return 'agendaitem' == this.get('item.modelName');
   }
 
-  @cached('item.title') title;
-  @cached('item.accessLevel') accessLevel;
-  @cached('item.shortTitle') shortTitle;
-  @cached('item.confidential') confidential;
-  @cached('item.showInNewsletter') showInNewsletter;
+  @alias('item.showAsRemark') isRemark;
+  @alias('item.title') title;
+  @alias('item.shortTitle') shortTitle;
+  @alias('item.accessLevel') accessLevel;
+  @alias('item.confidential') confidential;
 
   @action
   async cancelEditing() {
@@ -42,17 +39,31 @@ export default class SubcaseTitlesEdit extends Component {
     const propertiesToSetOnAgendaitem = {
       'title': this.get('title'),
       'shortTitle': this.get('shortTitle'),
-      'showInNewsletter': this.get('showInNewsletter')
     };
     const propertiesToSetOnSubcase = {
       'title': this.get('title'),
       'shortTitle': this.get('shortTitle'),
-      'accessLevel': this.get('accessLevel'),
-      'confidential': this.get('confidential'),
     };
+
+    if (await this.get('showInNewsletter') != null || await this.get('showInNewsletter') != undefined){
+      //This means the value has changed, get the local one
+      propertiesToSetOnAgendaitem['showInNewsletter'] = await this.get('showInNewsletter'); 
+    } 
+
+    // TODO These await ARE necessary, Ember doesn't think so
+    if (!this.isAgendaItem) {
+      propertiesToSetOnSubcase['accessLevel'] = await this.get('accessLevel');
+      propertiesToSetOnSubcase['confidential'] = await this.get('confidential');
+    }
 
     await saveSubcaseTitles(get(this, 'item'), propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
     set(this, 'isLoading', false);
     this.toggleProperty('isEditing');
+  }
+
+  @action
+  async toggleShowInNewsletter(item){
+    const value = await item.get('showInNewsletter');
+    this.set('showInNewsletter',!value);
   }
 }

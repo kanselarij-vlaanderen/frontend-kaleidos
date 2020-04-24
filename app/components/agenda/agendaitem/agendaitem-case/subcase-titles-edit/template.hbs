@@ -14,7 +14,7 @@
       propertyToShow="label"
       readOnly=confidential
       sortField="label"
-      selectedItems=accessLevel
+      selectedItems=(await accessLevel)
       selectModel=(action "setAccessLevel")
     }}
   </div>
@@ -52,12 +52,14 @@
   </div>
 {{/if}}
 {{#if isRemark}}
-  <div class="vl-u-spacer">
-    <div class="vlc-input-field-block" data-test-vl-subcase-titles-edit-show-in-newsletter>
-      {{web-components/vl-form-label value=(t "show-in-newsletter")}}
-      {{web-components/vl-toggle value=showInNewsletter}}
+  {{#if (not-eq null (await item.showInNewsletter))}}
+    <div class="vl-u-spacer">
+      <div class="vlc-input-field-block" data-test-vl-subcase-titles-edit-show-in-newsletter>
+        {{web-components/vl-form-label value=(t "show-in-newsletter")}}
+        {{web-components/vl-toggle value=(await item.showInNewsletter) valueChanged=(action "toggleShowInNewsletter" (await item))}}
+      </div>
     </div>
-  </div>
+  {{/if}}
 {{/if}}
 <div class="vl-action-group vl-action-group--align-right">
   <a href="" class="vl-button vl-button--tertiary vl-button--narrow"
