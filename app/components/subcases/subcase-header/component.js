@@ -2,12 +2,12 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   store: inject(),
   agendaService: inject(),
   router: inject(),
+  currentSession: inject(),
   classNames: ['vlc-page-header'],
   isAssigningToOtherAgenda: false,
   isAssigningToOtherCase: false,
