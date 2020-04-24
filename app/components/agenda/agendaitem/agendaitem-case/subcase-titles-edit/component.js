@@ -45,10 +45,10 @@ export default class SubcaseTitlesEdit extends Component {
       'shortTitle': this.get('shortTitle'),
     };
 
-    if (await this.get('showInNewsletter') != null || await this.get('showInNewsletter') != undefined){
+    if (await this.get('showInNewsletter') != null || await this.get('showInNewsletter') != undefined) {
       //This means the value has changed, get the local one
-      propertiesToSetOnAgendaitem['showInNewsletter'] = await this.get('showInNewsletter'); 
-    } 
+      propertiesToSetOnAgendaitem['showInNewsletter'] = await this.get('showInNewsletter');
+    }
 
     // TODO These await ARE necessary, Ember doesn't think so
     if (!this.isAgendaItem) {
@@ -62,8 +62,8 @@ export default class SubcaseTitlesEdit extends Component {
   }
 
   @action
-  async toggleShowInNewsletter(item){
+  async toggleShowInNewsletter(item) {
     const value = await item.get('showInNewsletter');
-    this.set('showInNewsletter',!value);
+    this.set('showInNewsletter', !value);
   }
 }

@@ -148,7 +148,7 @@ context('Subcase tests', () => {
     cy.url().should('not.contain', '/dossier/');
   });
 
-  it.only('Changes to agendaitem should propagate to subcase', () => {
+  it('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
     const SubcaseTitleShort = 'Cypress test: Mededeling - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
