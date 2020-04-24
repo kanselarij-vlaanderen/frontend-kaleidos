@@ -1,6 +1,9 @@
 <div class="vlc-input-field-block">
   <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
-    <div class="vlc-input-field-block vl-col--2-4">
+    <div
+      data-test-system-alert-form-from-date
+      class="vlc-input-field-block vl-col--2-4"
+    >
       {{web-components/vl-form-label value=(t "start-date")}}
       {{web-components/vl-datepicker
         date=(array (moment-format this.alert.beginDate "YYYY-MM-DDTHH:mm:ssZ"))
@@ -8,7 +11,10 @@
         enableTime=true
       }}
     </div>
-    <div class="vlc-input-field-block vl-col--2-4">
+    <div
+      data-test-system-alert-form-to-date
+      class="vlc-input-field-block vl-col--2-4"
+    >
       {{web-components/vl-form-label value=(t "end-date")}}
       {{web-components/vl-datepicker
         date=(array (moment-format this.alert.endDate "YYYY-MM-DDTHH:mm:ssZ"))
@@ -17,11 +23,17 @@
       }}
     </div>
   </div>
-  <div class="vlc-input-field-block">
+  <div
+    data-test-system-alert-form-title
+    class="vlc-input-field-block"
+  >
     {{web-components/vl-form-label value=(t "title")}}
     {{web-components/vl-form-input width="4" value=this.alert.title}}
   </div>
-  <div class="vlc-input-field-block">
+  <div
+    data-test-system-alert-form-message
+    class="vlc-input-field-block"
+  >
     {{web-components/vl-form-label value=(t "message")}}
     {{textarea
       rows="2"
