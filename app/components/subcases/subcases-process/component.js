@@ -1,8 +1,7 @@
 import Component from '@ember/component';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
+export default Component.extend(UploadDocumentMixin, {
   classNames: ['vl-u-spacer-extended-l'],
   actions: {
     toggleIsShowingDocuments(subcase) {
