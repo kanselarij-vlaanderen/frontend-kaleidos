@@ -9,7 +9,7 @@
           {{user-initials user=(await currentSession.user)}}
         </span>
       </div>
-      <Utils::CustomTexterea
+      <Utils::CustomTextarea
         @rows="2"
         class="vl-input-field vl-input-field--block"
         @value={{text}}
@@ -40,7 +40,7 @@
             </span>
           </div>
         {{/if}}
-        <Utils::CustomTexterea
+        <Utils::CustomTextarea
           @rows="2"
           class="vl-input-field vl-input-field--block"
           @value={{comment.answer}}
