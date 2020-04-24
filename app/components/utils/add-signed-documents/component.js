@@ -8,6 +8,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
   store: inject(),
+  currentSession: inject(),
   classNames: ['vl-u-spacer'],
   @tracked isAddingDocument: null,
   @tracked isAddingNewDocument: null,
