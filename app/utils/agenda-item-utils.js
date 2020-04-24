@@ -73,3 +73,10 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
     }
   }
 }
+
+export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
+  const approvals = await agendaitem.get('approvals');
+  if (approvals) {
+    await Promise.all(approvals.map(approval => approval.destroyRecord()));
+  }
+}
