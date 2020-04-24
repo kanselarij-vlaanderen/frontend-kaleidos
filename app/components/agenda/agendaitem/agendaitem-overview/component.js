@@ -12,6 +12,7 @@ export default Component.extend(isAuthenticatedMixin, {
   sessionService: inject(),
   store: inject(),
   agendaService: inject(),
+  currentSession: inject(),
   activeAgendaItemSection: 'details',
   @tracked timestampForMostRecentNota:null,
 
