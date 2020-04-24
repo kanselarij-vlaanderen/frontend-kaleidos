@@ -214,9 +214,118 @@ context('Subcase tests', () => {
 
     // Assert status also shown. This is da 💣
     cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
+  });
 
+
+  it.only('Changes to agenda item Themas propagate properly', () => {
+    // Open agenda
+    cy.openAgendaForDate(agendaDate);
+
+    // Are there Themes in this agenda? Should be none
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.get('[data-test-agenda-news-item-themes]').should('be.empty');
+
+    // open themes ediging pane.
+    cy.route('GET', '/themes').as('getAgendaItemThemes');
+    cy.get('[data-test-agenda-news-item-view] [data-test-newsletter-edit]').click();
+    cy.wait('@getAgendaItemThemes');
+
+    // Toggle some themes.
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Wonen').click();
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Sport ').click();
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Toerisme ').click();
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Overheid ').click();
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Innovatie ').click();
+
+    // Save this stuff.
+    cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
+    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
+    cy.route('GET', '/newsletter-infos/**').as('newsletterInfosGet');
+    cy.get('[data-agenda-item-news-edit] [data-test-newsletter-edit-save]').click();
+    cy.wait('@documentVersions');
+    cy.wait('@newsletterInfosPatch');
+    cy.wait('@newsletterInfosGet');
+
+    // Assert the save is done.
+    cy.get('[data-test-agenda-news-item-themes]').contains('Wonen');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Sport');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Toerisme');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Overheid');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Innovatie');
+
+    // Go via kort-bestek view
+    cy.route('GET', '/meetings**').as('getMeetings');
+    cy.get('.vlc-editor').contains('Kort bestek').click();
+    cy.wait('@getMeetings');
+
+    // TODO AANPASSSEN NAAR JUISTE COPY!
+    //meetings/agendas/agendaitems
+    cy.route('GET', '/meetings**').as('getMeetings');
+    cy.route('GET', '/agendas**').as('getAgendas');
+    cy.route('GET', '/agendaitems**').as('getAgendaItems');
+    cy.get('.vl-data-table--zebra').contains('Kort bestek voor de ministerraad van 17.04.2020' + agendaDate.format('DD.MM.YYYY'));
+    cy.wait('@getMeetings');
+    cy.wait('@getAgendas');
+    cy.wait('@getAgendaItems');
+
+    // open the themes editor.
+    cy.route('GET', '/themes').as('getKortBestekThemes');
+    cy.get('.vl-data-table').find('.vl-vi-pencil').click()
+    cy.wait('@getKortBestekThemes');
+
+    // Validate already inputted data.
+    cy.get('[data-test-themes-selector] input:checked').parent('label').contains('Wonen');
+    cy.get('[data-test-themes-selector] input:checked').parent('label').contains('Sport');
+    cy.get('[data-test-themes-selector] input:checked').parent('label').contains('Toerisme');
+    cy.get('[data-test-themes-selector] input:checked').parent('label').contains('Overheid');
+    cy.get('[data-test-themes-selector] input:checked').parent('label').contains('Innovatie');
+
+    // uncheck 2
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Wonen').click();
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Toerisme').click();
+
+    // check 3   others
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Jeugd').click();
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Cultuur').click();
+    cy.get('[data-agenda-item-news-edit] [data-test-themes-selector]').contains('Media').click();
+
+
+    // Save this stuff.
+    cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
+    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
+    cy.route('GET', '/newsletter-infos/**').as('newsletterInfosGet');
+    cy.get('[data-agenda-item-news-edit] [data-test-newsletter-edit-save]').click();
+    cy.wait('@documentVersions');
+    cy.wait('@newsletterInfosPatch');
+    cy.wait('@newsletterInfosGet');
+
+    //dont open links in new windows.
+
+    cy.get('a').invoke('removeAttr', 'target');
+    cy.get('.vl-data-table').find('[data-test-link-to-subcase-overview]').click();
+
+    //"Go to agendaItem
+    cy.route('GET', '/meetings/**').as('getMeetingsRequest');
+    cy.route('GET', '/agendas/**').as('getAgendas');
+    cy.get(agenda.subcase.agendaLink).click();
+    cy.wait('@getMeetingsRequest');
+    cy.wait('@getAgendas');
+
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+
+    cy.get('[data-test-agenda-news-item-themes]').contains('Sport');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Overheid');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Innovatie');
+
+    cy.get('[data-test-agenda-news-item-themes]').contains('Jeugd');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Cultuur');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Media');
+
+    cy.get('[data-test-agenda-news-item-themes]').contains('Toerisme').should('not.exist');
+    cy.get('[data-test-agenda-news-item-themes]').contains('Wonen').should('not.exist');
   });
 });
+
 
 function currentTimestamp() {
   return Cypress.moment().unix();
