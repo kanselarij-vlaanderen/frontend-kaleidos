@@ -41,7 +41,6 @@ export default class SubcaseTitlesEdit extends Component {
 
   @action
   async saveChanges() {
-    console.log('triigering savechanges');
     set(this, 'isLoading', true);
     const item = await this.get('item');
     item.set('title', this.trimText(await item.get('title')));
