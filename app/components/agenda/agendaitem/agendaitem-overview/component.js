@@ -2,11 +2,10 @@ import Component from '@ember/component';
 import {inject} from '@ember/service';
 import {computed, observer} from '@ember/object';
 import {alias} from '@ember/object/computed';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import DS from 'ember-data';
 import { tracked } from '@glimmer/tracking';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   classNames: ['vlc-panel-layout__main-content'],
   currentAgenda: alias('sessionService.currentAgenda'),
   sessionService: inject(),
