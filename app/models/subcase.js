@@ -298,6 +298,14 @@ export default ModelWithModifier.extend({
     return false;
   }),
 
+  showInNewsletter: computed('agendaitems.@each.showInNewsletter', async function () {
+    const latestAgendaItem = await this.get('latestAgendaItem');
+    if (latestAgendaItem) {
+      return await latestAgendaItem.get('showInNewsletter');
+    }
+    return false;
+  }),
+
   async findPhaseDateByCodeId(codeId) {
     const subcasePhases = await this.get('phases');
     const foundPhase = subcasePhases.find(async (phase) => {

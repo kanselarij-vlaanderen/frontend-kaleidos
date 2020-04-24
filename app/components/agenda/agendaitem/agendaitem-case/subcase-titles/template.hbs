@@ -2,10 +2,10 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vl-u-flex-align-baseline">
       {{#link-to
-        "cases.case.subcases.subcase.overview"
-        (await item.subcase.case.id)
-        (await item.subcase.id)
-        class="vl-link"
+              "cases.case.subcases.subcase.overview"
+              (await item.subcase.case.id)
+              (await item.subcase.id)
+              class="vl-link"
       }}
         {{t "to-subcase"}}
       {{/link-to}}
@@ -22,7 +22,7 @@
       {{/if}}
     </h2>
     {{#if isEditor}}
-      <div class="vl-u-spacer-extended-left-s">
+      <div class="vl-u-spacer-extended-left-s" data-test-agendaitem-edit-link>
         <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
@@ -54,7 +54,7 @@
     {{/if}}
   </div>
   <div class="vl-u-spacer-extended-bottom-s">
-    <div class="pill-container vl-u-display-flex">
+    <div class="pill-container vl-u-display-flex" data-test-agenda-subcasehidden-pill>
       {{#if isAgendaItem}}
         {{#if (and isEditor (await item.formallyOkToShow))}}
           <span class="{{item.formallyOkToShow.pillClassNames}}
@@ -85,10 +85,10 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
       <span class="vlc-pill
-          {{if item.showInNewsletter "vlc-pill--success" "vlc-pill--error"}}
+          {{if (await item.showInNewsletter) "vlc-pill--success" "vlc-pill--error"}}
            vl-u-spacer-extended-right-s"
       >
-        {{#if item.showInNewsletter}}
+        {{#if (await item.showInNewsletter)}}
           <span>
             {{t "visible-in-newsletter"}}
           </span>

@@ -38,7 +38,20 @@ export default class SubcaseTitlesEdit extends Component {
   @action
   async saveChanges() {
     set(this, 'isLoading', true);
-    await saveSubcaseTitles(get(this, 'item'), get(this, 'propertiesToSet'), get(this, 'propertiesToSet'), true);
+
+    const propertiesToSetOnAgendaitem = {
+      'title': this.get('title'),
+      'shortTitle': this.get('shortTitle'),
+      'showInNewsletter': this.get('showInNewsletter')
+    };
+    const propertiesToSetOnSubcase = {
+      'title': this.get('title'),
+      'shortTitle': this.get('shortTitle'),
+      'accessLevel': this.get('accessLevel'),
+      'confidential': this.get('confidential'),
+    };
+
+    await saveSubcaseTitles(get(this, 'item'), propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
     set(this, 'isLoading', false);
     this.toggleProperty('isEditing');
   }
