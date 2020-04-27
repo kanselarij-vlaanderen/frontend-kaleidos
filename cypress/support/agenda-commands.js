@@ -191,14 +191,18 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
  */
 function openAgendaItemKortBestekTab(agendaItemTitle) {
   // cy.route('GET', 'documents**').as('getDocuments');
+  cy.server();
+
   cy.get('li.vlc-agenda-items__sub-item h4')
     .contains(agendaItemTitle)
     .click()
     .wait(2000); // sorry
+
   cy.get(agenda.agendaItemKortBestekTab)
     .should('be.visible')
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
+
 }
 
 /**
