@@ -26,9 +26,7 @@ export default Mixin.create({
     async navigateBackToAgenda() {
       const currentSessionId = await this.get('model.createdFor.id');
       const selectedAgendaid = await this.get('model.id');
-      this.transitionToRoute('agenda.agendaitems', currentSessionId, {
-        queryParams: { selectedAgenda: selectedAgendaid }
-      });
+      this.transitionToRoute('agenda.agendaitems', currentSessionId, selectedAgendaid);
     },
     print() {
       // var tempTitle = window.document.title;
