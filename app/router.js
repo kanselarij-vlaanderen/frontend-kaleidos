@@ -10,7 +10,7 @@ Router.map(function () {
   this.route('agendas', { path: '/' }, function () {
     this.route('overview', { path: '/overzicht' });
   });
-  this.route('agenda', { path: '/agenda/:id' }, function() {
+  this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id' }, function() {
     this.route('print', { path: '/afdrukken' });
     this.route('agendaitems', { path: '/agendapunten' }, function() {
       this.route('agendaitem', { path: '/:agendaitem_id' });
