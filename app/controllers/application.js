@@ -3,14 +3,12 @@ import { computed, observer } from '@ember/object';
 import { on } from '@ember/object/evented';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import { later } from '@ember/runloop';
-
-const timeout = 60000;
 
 export default Controller.extend({
   currentSession: service(),
   session: service(),
   router: service(),
+  systemAlert: service(),
   toaster: service(),
 
   options: A([
@@ -28,38 +26,6 @@ export default Controller.extend({
       capture: true,
       passive: true,
     });
-
-    this.startCheckingAlert();
-  },
-
-  async startCheckingAlert() {
-    const today = `${new Date().toISOString().substr(0, 11)}00:00:00`;
-    try {
-      const alerts = await this.store.query('alert', {
-        filter: {
-          ':gte:end-date': today,
-        },
-        sort: '-begin-date',
-        include: 'type',
-        page: { size: 10 }
-      });
-      if (alerts.length) {
-        const now = new Date();
-        const activeAlert = alerts.find(a => a.endDate > now);
-        if (activeAlert)
-          this.set('alert', activeAlert);
-      }
-    } catch (e) {
-      // No alerts. Nothing should happen
-    } finally {
-      later(
-        this,
-        () => {
-          this.startCheckingAlert();
-        },
-        timeout
-      );
-    }
   },
 
   async checkAccountlessUser(currentRouteName) {
@@ -100,24 +66,7 @@ export default Controller.extend({
     return role && role !== '' && role !== 'no-access';
   }),
 
-  type: computed('alert', async function () {
-    const { alert } = this;
-    if (!alert) {
-      return;
-    }
-    const type = await alert.get('type.label');
-    if (type === 'Waarschuwing') {
-      return 'vl-alert--warning';
-    } else if (type === 'Dringend') {
-      return 'vl-alert--error';
-    }
-  }),
-
   actions: {
-    close() {
-      this.set('alert', null);
-    },
-
     navigateToLogin() {
       this.transitionToRoute('login');
     },
