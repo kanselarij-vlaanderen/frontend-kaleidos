@@ -293,18 +293,18 @@ context('Subcase tests', () => {
 
 
     // Save this stuff.
-    cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
+    //cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.route('GET', '/newsletter-infos/**').as('newsletterInfosGet');
     cy.get(agenda.item.news.saveButton).click();
-    cy.wait('@documentVersions');
+    //cy.wait('@documentVersions');
     cy.wait('@newsletterInfosPatch');
     cy.wait('@newsletterInfosGet');
 
     //dont open links in new windows.
 
     cy.get('a').invoke('removeAttr', 'target');
-    cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]').click();
+    cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]').first().click();
 
     //"Go to agendaItem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
