@@ -15,6 +15,11 @@ const selectors = {
   agendaItemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
   printContainer: '[data-test-agenda-printContainer]',
-  printHeaderTitle: '[data-test-agenda-print-header-title]'
+  printHeaderTitle: '[data-test-agenda-print-header-title]',
+  subcaseTitlesEdit: '[data-test-subcase-titles-edit]',
+  subcaseTitlesEditTitleOfSubcase: '[data-test-subcase-titles-edit-title-subcase]',
+  subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
+  subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
+  approveDesignAgenda: '[data-test-approve-design-agenda]',
 };
 export default selectors;

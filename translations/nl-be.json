@@ -551,5 +551,13 @@
   "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
   "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "newsitem-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
-  "select-minister": "Selecteer een minister"
+  "change-mandatee-end-date": "Bent u zeker dat u de einddatum wenst aan te passen? Deze minister staat nog geagendeerd op agendapunten.",
+  "change-mandatee-change-end-date": "Eindatum aanpassen",
+  "show-active-minister-alert": "Opgelet de actieve minister staat nog geagendeerd op één of meerdere toekomstige agenda's."
+  "select-minister": "Selecteer een minister",
+  "kaleidos-login-info": "Een webapplicatie die helpt bij het plannen en opvolgen van de agenda van de Vlaamse Regering.",
+  "kaleidos-login-info2": "Lukt het aanmelden niet? Neem contact op met uw interne beheerder. Indien er zich een probleem voordoet, contacteer ",
+  "kaleidos-login-info-gebruikersbeheer-vlaanderen": "gebruikersbeheer Vlaanderen ",
+  "kaleidos-login-info-popup-message": "Het aanmelden gebeurt in een pop-up; zorg dat de instellingen van uw browser correct staan indien deze niet verschijnt.",
+  "kaleidos": "Kaleidos"
 }

@@ -3,6 +3,7 @@
 
 import settings from "../../../../selectors/settings.selectors";
 import toolbar from "../../../../selectors/toolbar.selectors";
+import modal from "../../../../selectors/modal.selectors";
 
 context('Settings overview page tests', () => {
   beforeEach(() => {
@@ -77,4 +78,18 @@ context('Settings overview page tests', () => {
     cy.uploadUsersFile('files','test', 'csv');
     cy.get(settings.settingsUserTable).contains('Wendy');
   });
+
+  it('Should delete user', () => {
+
+    cy.route('GET', '/users/*').as('getUsers');
+
+
+    cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
+    cy.url().should('include','instellingen/gebruikers');
+    cy.get(settings.deleteUser).should('exist').should('be.visible').eq(1).click();
+    cy.get(modal.verify.save).should('exist').should('be.visible').click();
+    cy.wait('@getUsers').then(() => {
+      cy.get(settings.settingsUserTable).should('not.have.value','Greta');
+    });
+  })
 });

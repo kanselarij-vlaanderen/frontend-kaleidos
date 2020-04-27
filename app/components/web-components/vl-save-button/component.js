@@ -7,9 +7,9 @@ export default Component.extend({
   tagName: 'button',
   classNames: ['vl-button', 'vl-button--narrow'],
   type: 'button',
-  attributeBindings: ['isLoading:disabled', 'disabled:disabled'],
+  attributeBindings: ['isLoading:disabled', 'disabled:disabled', 'testTag:data-test-save-button'],
   classNameBindings: ['isLoading:vl-button--loading', 'disabled:vl-button--disabled'],
-
+  testTag: true, // Hack to show a value-less attribute for testing
 
   loadingText: computed('intl', function () {
     return this.intl.t('please-be-patient');

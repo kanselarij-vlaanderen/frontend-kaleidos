@@ -35,11 +35,20 @@ export default class SubcaseTitlesEdit extends Component {
     this.set('accessLevel', accessLevel);
   }
 
+  trimText = (text) => {
+    return text.trim();
+  };
+
   @action
   async saveChanges() {
     set(this, 'isLoading', true);
+    const item = await this.get('item');
+    item.set('title', this.trimText(await item.get('title')));
+    item.set('shortTitle', this.trimText(await item.get('shortTitle')));
+
     await saveSubcaseTitles(get(this, 'item'), get(this, 'propertiesToSet'), get(this, 'propertiesToSet'), true);
     set(this, 'isLoading', false);
     this.toggleProperty('isEditing');
   }
 }
+
