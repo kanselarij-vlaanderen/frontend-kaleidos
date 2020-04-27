@@ -1,11 +1,12 @@
-import DS from 'ember-data';
+import Model, { attr, belongsTo } from '@ember-data/model';
+import { tracked } from '@glimmer/tracking';
 
-const { attr, Model, belongsTo } = DS;
+export default class PersonModel extends Model {
+  @attr('datetime') beginDate;
+  @attr('datetime') endDate;
+  @attr title;
+  @attr message;
+  @belongsTo('alert-type') type;
 
-export default Model.extend({
-  beginDate: attr('datetime'),
-  endDate: attr('datetime'),
-  title: attr('string'),
-  message: attr('string'),
-  type: belongsTo('alert-type'),
-});
+  @tracked confirmed;
+}
