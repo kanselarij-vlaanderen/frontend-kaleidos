@@ -20,13 +20,13 @@
 </div>
 {{#if (not isLoading)}}
   <div class="vlc-panel-layout">
-    {{#if (not shouldHideNav)}}
+    {{#unless shouldHideNav}}
       {{agenda/side-nav
         agendas=this.model.meeting.agendas
         currentAgenda=this.model.agenda
         selectAgenda=(action "selectAgenda")
       }}
-    {{/if}}
+    {{/unless}}
     {{outlet}}
   </div>
 {{else}}
