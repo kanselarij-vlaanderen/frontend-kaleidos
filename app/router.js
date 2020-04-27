@@ -80,6 +80,7 @@ Router.map(function () {
 
   this.route('not-supported');
   this.route('help');
+  this.route('manual', { path: '/handleiding' });
 });
 
 export default Router;
