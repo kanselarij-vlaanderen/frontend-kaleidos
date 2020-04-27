@@ -72,4 +72,5 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
       }));
     }
   }
-}
+};
+
