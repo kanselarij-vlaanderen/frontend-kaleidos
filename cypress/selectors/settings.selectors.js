@@ -21,5 +21,6 @@ const selectors = {
   mandateeResign: '[data-test-mandatee-resign]',
   mandateeDelete: '[data-test-mandatee-delete]',
   iseCodes: '[data-test-model-selector-iseCodes]',
+  deleteUser: '[data-test-delete-user]'
 };
 export default selectors;
