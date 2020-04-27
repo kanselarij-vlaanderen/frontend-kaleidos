@@ -262,17 +262,17 @@ context('Subcase tests', () => {
 
     // TODO AANPASSSEN NAAR JUISTE COPY!
     //meetings/agendas/agendaitems
-    cy.route('GET', '/meetings**').as('getMeetings');
-    cy.route('GET', '/agendas**').as('getAgendas');
+    cy.route('GET', '/meetings/**').as('getMeetingsDetail');
+    //cy.route('GET', '/agendas**').as('getAgendas');
     cy.route('GET', '/agendaitems**').as('getAgendaItems');
     cy.get(agenda.dataTableZebra).contains('van ' + Cypress.moment(agendaDate).format('DD.MM.YYYY')).click();
-    cy.wait('@getMeetings');
-    cy.wait('@getAgendas');
+    cy.wait('@getMeetingsDetail');
+    //cy.wait('@getAgendas');
     cy.wait('@getAgendaItems');
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
-    cy.get(agenda.dataTable).find('.vl-vi-pencil').click()
+    cy.get(agenda.dataTable).find('.vl-vi-pencil').first().click()
     cy.wait('@getKortBestekThemes');
 
     // Validate already inputted data.
