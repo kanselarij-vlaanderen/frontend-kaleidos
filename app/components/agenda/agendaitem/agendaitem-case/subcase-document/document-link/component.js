@@ -17,7 +17,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
   isUploadingNewVersion: false,
   uploadedFile: null,
   isEditing: false,
-  documentToDelete: null,
+  documentContainerToDelete: null,
   nameBuffer: '',
 
   aboutToDelete: computed('document.aboutToDelete', function () {
@@ -110,9 +110,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
       const uploadedFile = this.get('uploadedFile');
       if (uploadedFile) {
         const container = this.get('documentContainer');
-        const doc = await this.get('documentContainer.lastDocumentVersion');
+        const document = await this.get('documentContainer.lastDocumentVersion');
         container.rollbackAttributes();
-        doc.rollbackAttributes();
+        document.rollbackAttributes();
         const versionInCreation = await uploadedFile.get('documentVersion');
         if (versionInCreation) {
           await this.fileService.deleteDocumentVersion(versionInCreation);
@@ -153,7 +153,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     cancel() {
-      this.set('documentToDelete', null);
+      this.set('documentContainerToDelete', null);
       this.set('isVerifyingDelete', false);
     },
 
@@ -165,36 +165,34 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
         options: { timeOut: 15000 }
       };
       verificationToast.options.onUndo = () => {
-        this.fileService.reverseDelete(this.documentToDelete.get('id'));
+        this.fileService.reverseDelete(this.documentContainerToDelete.get('id'));
         this.toaster.toasts.removeObject(verificationToast);
       };
       this.toaster.displayToast.perform(verificationToast);
-      this.deleteDocumentWithUndo();
+      this.deleteDocumentContainerWithUndo();
       this.set('isVerifyingDelete', false);
     },
 
     deleteDocument(document) {
-      this.set('documentToDelete', document);
+      this.set('documentContainerToDelete', document);
       this.set('isVerifyingDelete', true);
     },
 
   },
 
-  async deleteDocumentWithUndo() {
+  async deleteDocumentContainerWithUndo() {
     const { item } = this;
-    const documentVersions = item.get('documentVersions');
+    const documents = item.get('documentVersions');
     const itemType = item.get('constructor.modelName');
     if (itemType === 'document') {
-      await item.hasMany('documents').reload();
-      await this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete);
+      await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
     } else {
-      await this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete).then(() => {
-        if (!item.aboutToDelete && documentVersions) {
+      await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete).then(() => {
+        if (!item.aboutToDelete && documents) {
           item.hasMany('documentVersions').reload();
         }
       });
     }
-    
   },
 
   async addDocumentToAgendaitems(documents, agendaitems) {
