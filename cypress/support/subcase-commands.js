@@ -158,7 +158,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
   cy.route('PATCH','/subcases/*').as('patchSubcase');
 
-  cy.get('.vl-title--h4').contains(`Ministers en beleidsvelden`).parents('.vl-u-spacer-extended-bottom-l').as('subcaseMandatees');
+  cy.contains(`Ministers en beleidsvelden`).parents('.vl-u-spacer-extended-bottom-l').as('subcaseMandatees');
   cy.get('@subcaseMandatees').within(() => {
     cy.get('.vl-u-spacer-extended-left-s', { timeout: 5000 }).should('exist').then(() => {
       cy.contains('Wijzigen').click();
@@ -247,7 +247,7 @@ function deleteSubcase() {
  * @name getTranslatedMonth
  * @memberOf Cypress.Chainable#
  * @function
- * @param {number} month the number of the month to translate (from moment so starts from 0)
+ * @param month {number}  the number of the month to translate (from moment so starts from 0)
  * @returns the month in dutch
  */
 function getTranslatedMonth(month) {
