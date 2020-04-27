@@ -30,14 +30,16 @@
     </button>
   </div>
   <div class="vl-u-spacer-extended-s">
-    <button data-test-manage-alerts
-            type="button"
-            class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
-      {{action "toggleProperty" "isManagingAlerts"}}
+    <LinkTo
+      data-test-manage-alerts
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+      @route="settings.system-alerts"
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-alerts"}}
-    </button>
+    </LinkTo>
   </div>
   <div class="vl-u-spacer-extended-s">
     <button data-test-manage-document-types
