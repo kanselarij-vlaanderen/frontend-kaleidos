@@ -15,6 +15,7 @@ const selectors = {
   agendaItemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
   printContainer: '[data-test-agenda-printContainer]',
-  printHeaderTitle: '[data-test-agenda-print-header-title]'
+  printHeaderTitle: '[data-test-agenda-print-header-title]',
+  approveDesignAgenda: '[data-test-approve-design-agenda]',
 };
 export default selectors;

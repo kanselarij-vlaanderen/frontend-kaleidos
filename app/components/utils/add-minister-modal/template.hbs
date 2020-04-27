@@ -7,6 +7,7 @@
     <label>{{t "select-minister"}}</label>
     <div class="vl-u-spacer-extended-bottom-l">
       {{utils/mandatee-selector
+        data-test-mandatee-selector
         singleSelect=true
         selectedMandatees=selectedMandatee
         chooseMandatee=(action "mandateeSelected")

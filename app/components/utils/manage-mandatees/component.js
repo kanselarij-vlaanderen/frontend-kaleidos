@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
+import { tracked } from '@glimmer/tracking';
 
 export default Component.extend({
   store: service(),
@@ -11,6 +12,13 @@ export default Component.extend({
   selectedStartDate: null,
   selectedEndDate: null,
   mandateesUpdated: null,
+  @tracked showVerificationPopup: null,
+  mandateeService: service(),
+
+  async didInsertElement (){
+    let today = moment();
+    this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(today, this.mandateeToEdit.id);
+  },
 
   actions: {
     closeModal() {
@@ -84,6 +92,9 @@ export default Component.extend({
         this.set('isLoading', false);
         this.closeModal();
       });
+    },
+    close() {
+      this.showVerificationPopup = false;
     }
   }
 });
