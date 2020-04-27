@@ -43,11 +43,19 @@ export default Route.extend(DataTableRouteMixin, {
     if (!isEmpty(params.mandatees)) {
       filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
     }
-    if (!isEmpty(params.dateFrom)) {
+
+    /* A closed range is treated as something different than 2 open ranges because
+     * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
+     * returns an off-by-one result (1 to many) in case of two open ranges combined.
+     */
+    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
+      const from = moment(params.dateFrom, "DD-MM-YYYY").startOf('day');
+      const to = moment(params.dateTo, "DD-MM-YYYY").endOf('day');  // "To" interpreted as inclusive
+      filter[':lte,gte:sessionDates'] = [to.utc().toISOString(),from.utc().toISOString()].join(',');
+    } else if (!isEmpty(params.dateFrom)) {
       const date = moment(params.dateFrom, "DD-MM-YYYY").startOf('day');
       filter[':gte:sessionDates'] = date.utc().toISOString();
-    }
-    if (!isEmpty(params.dateTo)) {
+    } else if (!isEmpty(params.dateTo)) {
       const date = moment(params.dateTo, "DD-MM-YYYY").endOf('day');  // "To" interpreted as inclusive
       filter[':lte:sessionDates'] = date.utc().toISOString();
     }
