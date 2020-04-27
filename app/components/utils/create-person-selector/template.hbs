@@ -32,11 +32,19 @@
     <div class="vl-u-spacer-extended-s">
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "first-name")}}
-        {{web-components/vl-form-input data-test-create-person-firstname width="4" value=firstName}}
+        {{web-components/vl-form-input
+          data-test-create-person-firstname
+          width="4"
+          value=firstName
+        }}
       </div>
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "name")}}
-        {{web-components/vl-form-input data-test-create-person-lastname width="4" value=lastName}}
+        {{web-components/vl-form-input
+          data-test-create-person-lastname
+          width="4"
+          value=lastName
+        }}
       </div>
     </div>
     <div class="vl-action-group vl-action-group--align-right">
