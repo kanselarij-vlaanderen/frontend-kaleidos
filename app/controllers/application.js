@@ -2,13 +2,12 @@ import Controller from '@ember/controller';
 import { computed, observer } from '@ember/object';
 import { on } from '@ember/object/evented';
 import { inject as service } from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { A } from '@ember/array';
 import { later } from '@ember/runloop';
 
 const timeout = 60000;
 
-export default Controller.extend(isAuthenticatedMixin, {
+export default Controller.extend({
   currentSession: service(),
   session: service(),
   router: service(),
@@ -96,8 +95,8 @@ export default Controller.extend(isAuthenticatedMixin, {
     )
   ),
 
-  showHeader: computed('role', function () {
-    let role = this.get('role');
+  showHeader: computed('currentSession.userRole', function () {
+    let role = this.get('currentSession.userRole');
     return role && role !== '' && role !== 'no-access';
   }),
 
