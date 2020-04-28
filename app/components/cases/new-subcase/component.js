@@ -54,7 +54,7 @@ export default Component.extend({
       mandateeProposal: null,
       publicationDate: newsletterInfo.get('publicationDate'),
       publicationDocDate: newsletterInfo.get('publicationDocDate'),
-      themes: newsletterInfo.get('themes')
+      themes: await newsletterInfo.get('themes')
     });
     return await newsletterInfoToCreate.save();
   },
@@ -75,11 +75,11 @@ export default Component.extend({
   },
 
   createSubcaseObject(newCase, newDate) {
-    const { type, title, shortTitle, confidential, showAsRemark } = this;
+    let { type, title, shortTitle, confidential, showAsRemark } = this;
     return this.store.createRecord('subcase', {
       type,
-      shortTitle,
-      title,
+      shortTitle: shortTitle.trim(),
+      title: title.trim(),
       confidential,
       showAsRemark,
       case: newCase,

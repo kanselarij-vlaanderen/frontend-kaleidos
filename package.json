@@ -11,6 +11,7 @@
     "test": "tests"
   },
   "scripts": {
+    "prestart": "ember-template-lint .",
     "build": "ember build --environment=production",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
     "lint:hbs": "ember-template-lint .",
@@ -18,7 +19,7 @@
     "start": "ember serve --proxy=http://localhost:80",
     "test": "npm-run-all lint:* test:*",
     "test:ember": "ember test",
-    "cypress-local": "./node_modules/.bin/cypress open",
+    "cypress-local": "make open-cypress-tests",
     "cypress-dev": "./node_modules/.bin/cypress open --config baseUrl=https://kaleidos-dev.vlaanderen.be"
   },
   "devDependencies": {
