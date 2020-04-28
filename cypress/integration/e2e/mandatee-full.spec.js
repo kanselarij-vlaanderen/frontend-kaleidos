@@ -17,6 +17,7 @@ context('Full test', () => {
   });
 
   it('should Add new minister', () => {
+    cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaItem');
     const KIND = 'Ministerraad';
     const plusMonths = 3;
 
@@ -94,6 +95,7 @@ context('Full test', () => {
       cy.get('.flatpickr-day').not('.prevMonthDay').not('.nextMonthDay').contains(enddateForMandatee.date()).click();
     });
     cy.get(form.formSave).should('exist').should('be.visible').click();
+    cy.wait(3000);
     cy.get(modal.verify.save).should('exist').should('be.visible').contains('Eindatum aanpassen');
     cy.get(modal.verify.cancel).should('exist').should('be.visible').click();
     cy.get(mandatee.mandateeEditCancel).should('exist').should('be.visible').click();
@@ -102,6 +104,7 @@ context('Full test', () => {
     cy.get(settings.manageMinisters).click();
     cy.url().should('include','instellingen/ministers');
     cy.get('[data-test-mandatee-resign="0"]').click();
+    cy.wait(3000);
     cy.get(mandatee.manageMandateeChangesAlert).should('exist').should('be.visible');
   });
 
