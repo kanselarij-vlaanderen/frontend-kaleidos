@@ -21,5 +21,8 @@ const selectors = {
   subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
   subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
   approveDesignAgenda: '[data-test-approve-design-agenda]',
+  subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
+  documentType: '[data-test-document-type]',
+  documentAccessLevel: '[data-test-document-accesslevel]',
 };
 export default selectors;
