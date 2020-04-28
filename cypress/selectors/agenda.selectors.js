@@ -24,5 +24,9 @@ const selectors = {
   uploadDecisionFile: '[data-test-upload-decision-file]',
   accessLevelPill: '[data-test-access-level-pill]',
   accessLevelSave: '[data-test-access-level-save]',
+  subcaseTitlesEdit: '[data-test-subcase-titles-edit]',
+  subcaseTitlesEditTitleOfSubcase: '[data-test-subcase-titles-edit-title-subcase]',
+  subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
+  subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
 };
 export default selectors;

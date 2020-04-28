@@ -3,18 +3,20 @@
 // ***********************************************
 
 // Commands
-Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
+// Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
+Cypress.Commands.add('setDateAndTimeInFlatpickr', setDateAndTimeInFlatpickr);
 Cypress.Commands.add('setYearMonthDayHourMinuteInFlatPicker', setYearMonthDayHourMinuteInFlatPicker);
+Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
 
 /**
  * @description Sets the date and time in an **open vl-flatpickr**
- * @name setDateInFlatpickr
+ * @name setDateAndTimeInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
  * @param {Object} date the Cypress.moment with the date to set
  * @param {number} plusMonths The positive amount of months from today to advance in the vl-flatpickr
  */
-function setDateInFlatpickr(date, plusMonths) {
+function setDateAndTimeInFlatpickr(date, plusMonths) {
   cy.get('.flatpickr-months').within(() => {
     for (let n = 0; n < plusMonths; n++) {
       cy.get('.flatpickr-next-month').click();
@@ -30,8 +32,28 @@ function setDateInFlatpickr(date, plusMonths) {
 }
 
 /**
+ * @description Sets the date in an **open vl-flatpickr**
+ * @name setDateInFlatpickr
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {Object} date the Cypress.moment with the date to set
+ * @param {number} plusMonths The positive amount of months from today to advance in the vl-flatpickr
+ * @param {number} index element to select
+ */
+function setDateInFlatpickr(date, plusMonths) {
+  cy.get('.flatpickr-months').within(() => {
+    for (let n = 0; n < plusMonths; n++) {
+      cy.get('.flatpickr-next-month').click();
+    }
+  });
+  cy.get('.flatpickr-days').within(() => {
+    cy.get('.flatpickr-day').not('.prevMonthDay').not('.nextMonthDay').contains(date.date()).click();
+  });
+}
+
+/**
  * @description Sets the date and time in an **open vl-flatpickr** to today
- * @name setDateInFlatPicker
+ * @name setYearMonthDayHourMinuteInFlatPicker
  * @memberOf Cypress.Chainable#
  * @function
  */

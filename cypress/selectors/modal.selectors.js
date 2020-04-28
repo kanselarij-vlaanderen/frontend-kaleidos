@@ -11,7 +11,7 @@ const selectors = {
     modalDialogCloseModal: '[data-test-vl-modal-close]',
   },
   baseModal: {
-    container: '[data-test-vl-modal-container]', //
+    container: '[data-test-vl-modal-container]',
     dialogWindow: '[data-test-vl-modal-dialogwindow]',
     close: '[data-test-vl-modal-close]',
   },
@@ -23,7 +23,7 @@ const selectors = {
     edit:  '[data-test-vl-model-manager-edit]',
     delete: '[data-test-vl-model-manager-delete]'
   },
-  verifyModal: {
+  verify: {
     container: '[data-test-vl-modal-verify-container]',
     close: '[data-test-vl-modal-verify-close]',
     cancel: '[data-test-vl-modal-verify-cancel]',
