@@ -51,9 +51,12 @@ function login(name){
  * @function
  */
 function logout(){
-  cy.server();
-  cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
-  cy.visit('/');
+  cy.request({
+    method: 'DELETE',
+    url: '/mock/sessions/current',
+  }).then(() => {
+    cy.visit('/');
+  });
 }
 
 /**
