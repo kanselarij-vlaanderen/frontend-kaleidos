@@ -137,6 +137,8 @@ function verifyAlertSuccess() {
  * @function
  */
 function resetCache() {
+  // TODOkarel not doing this anymore
+  return;
   const kaleidosProject = Cypress.env('KALEIDOS_PROJECT');
   const env = {
     COMPOSE_FILE: kaleidosProject + '/docker-compose.yml:' +
@@ -159,6 +161,8 @@ function resetCache() {
  * @function
  */
 function resetSearch() {
+  // TODOkarel not doing this anymore
+  return;
   const kaleidosProject = Cypress.env('KALEIDOS_PROJECT');
   const env = {
     COMPOSE_FILE: kaleidosProject + '/docker-compose.yml:' +
