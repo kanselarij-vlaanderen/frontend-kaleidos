@@ -25,12 +25,23 @@ Cypress.Commands.add('resetSearch', resetSearch);
  * @param {String} name the profile to log in with, case sensitive
  */
 function login(name){
-  cy.server();
-  cy.route('POST', '/mock/sessions').as('mockLogin');
-  cy.visit('mock-login');
-  cy.get('.grid', { timeout: 20000 }).within(() => {
-    cy.contains(name).click()
-      .wait('@mockLogin');
+  const EMBER_SIMPLE_AUTH_LS_KEY = 'ember_simple_auth-session';
+  cy.fixture('mock-login').then((loginUsers) => {
+    cy.request({
+      method: 'POST',
+      url: '/mock/sessions',
+      body: loginUsers[name],
+      headers: { 'Content-Type': 'application/vnd.api+json' }
+    }).then((resp) => {
+      window.localStorage.setItem(EMBER_SIMPLE_AUTH_LS_KEY, JSON.stringify({
+        authenticated: {
+          authenticator: 'authenticator:mock-login',
+          links: resp.body.links,
+          data: resp.body.data,
+          relationships: resp.body.relationships
+        }
+      }));
+    });
   });
 }
 
@@ -41,11 +52,12 @@ function login(name){
  * @function
  */
 function logout(){
-  cy.server();
-  cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
-  cy.visit('');
-  cy.contains('Afmelden', { timeout: 12000 }).click({force: true});
-  cy.wait('@mockLogout');
+  cy.request({
+    method: 'DELETE',
+    url: '/mock/sessions/current',
+  }).then(() => {
+    cy.visit('/');
+  });
 }
 
 /**
