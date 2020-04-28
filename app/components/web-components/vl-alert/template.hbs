@@ -1,4 +1,9 @@
-<div class="vl-alert {{this.typeClass}} {{if @small "vl-alert--small"}}" ...attributes role="alert">
+<div
+  data-test-alert
+  class="vl-alert {{this.typeClass}} {{if @small "vl-alert--small"}}"
+  ...attributes
+  role="alert"
+>
   {{#if (eq @type "loading")}}
     <div class="vl-alert__loader">
       <div class="vl-loader" role="alert" aria-busy="true"></div>
@@ -9,19 +14,27 @@
     </div>
   {{/if}}
   {{#if @closeable}}
-    <button class="vl-alert__close" type="button" {{action "close"}}>
+    <button data-test-alert-close-button class="vl-alert__close" type="button" {{action "close"}}>
       <i class="vl-vi vl-vi-cross" aria-hidden="true"></i>
       <span class="vl-u-visually-hidden">{{t "close"}}</span>
     </button>
   {{/if}}
   <div class="vl-alert__content">
     {{#if @title}}
-      <p class="vl-alert__title">{{@title}}</p>
+      <p
+        data-test-alert-title
+        class="vl-alert__title"
+      >
+        {{@title}}
+      </p>
     {{/if}}
     {{#if (has-block)}}
       {{yield}}
     {{else}}
-      <div class="vl-alert__message">
+      <div
+        data-test-alert-message
+        class="vl-alert__message"
+      >
         {{@message}}
       </div>
     {{/if}}

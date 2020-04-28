@@ -32,17 +32,21 @@ export default class SubcaseTitlesEdit extends Component {
     this.set('accessLevel', accessLevel);
   }
 
+  trimText = (text) => {
+    return text.trim();
+  };
+
   @action
   async saveChanges() {
     set(this, 'isLoading', true);
-
+    
     const propertiesToSetOnAgendaitem = {
-      'title': this.get('title'),
-      'shortTitle': this.get('shortTitle'),
+      'title': this.trimText(this.get('title')),
+      'shortTitle': this.trimText(this.get('shortTitle')),
     };
     const propertiesToSetOnSubcase = {
-      'title': this.get('title'),
-      'shortTitle': this.get('shortTitle'),
+      'title': tthis.trimText(this.get('title')),
+      'shortTitle': this.trimText(this.get('shortTitle')),
     };
 
     if (await this.get('showInNewsletter') != null || await this.get('showInNewsletter') != undefined) {
@@ -67,3 +71,4 @@ export default class SubcaseTitlesEdit extends Component {
     this.set('showInNewsletter', !value);
   }
 }
+

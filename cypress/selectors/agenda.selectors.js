@@ -29,6 +29,11 @@ const selectors = {
     showInNewsLetter: '[data-test-vl-subcase-titles-edit-show-in-newsletter]',
     checkBoxLabel: 'label.vl-checkbox--switch__label',
     actionButton: '.vl-action-group button'
-  }
+  },
+  subcaseTitlesEdit: '[data-test-subcase-titles-edit]',
+  subcaseTitlesEditTitleOfSubcase: '[data-test-subcase-titles-edit-title-subcase]',
+  subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
+  subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
+  approveDesignAgenda: '[data-test-approve-design-agenda]',
 };
 export default selectors;
