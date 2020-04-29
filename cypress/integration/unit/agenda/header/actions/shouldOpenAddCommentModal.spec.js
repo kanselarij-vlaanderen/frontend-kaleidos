@@ -26,7 +26,7 @@ context('Model action', () => {
     cy.openActionModal();
     cy.get(actionModal.announcement).click();
     cy.get(form.formInput).type('Dit is een korte titel');
-    cy.get(modal.createAnnouncementModal.longTitleSubcase).type('Dit is de lange subcasetitle');
+    cy.get(modal.createNewAnnouncementModal.longTitleSubcase).type('Dit is de lange subcasetitle');
     cy.get('.vl-upload__element__button__container').click();
     cy.fixture("files/test.pdf").then(fileContent => {
       cy.get('[type=file]').upload(

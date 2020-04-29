@@ -45,7 +45,7 @@ export default class SubcaseTitlesEdit extends Component {
       'shortTitle': this.trimText(this.get('shortTitle')),
     };
     const propertiesToSetOnSubcase = {
-      'title': tthis.trimText(this.get('title')),
+      'title': this.trimText(this.get('title')),
       'shortTitle': this.trimText(this.get('shortTitle')),
     };
 

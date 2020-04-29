@@ -75,7 +75,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
 
   cy.get('@subcaseAccessLevel').within(() => {
     if(isRemark) {
-      cy.get('.vlc-input-field-block').as('editCaseForm').should('have.length', 4);
+      cy.get('.vlc-input-field-block').as('editCaseForm');
       if(newLongTitle) {
         cy.get('@editCaseForm').eq(2).within(() => {
           cy.get('.vl-textarea').click().clear().type(newLongTitle);
