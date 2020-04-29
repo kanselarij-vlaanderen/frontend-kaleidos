@@ -59,7 +59,6 @@ export default Component.extend(isAuthenticatedMixin, {
       } else {
         agendaitemToUpdate = await this.get('agendaitem');
       }
-      agendaitemToUpdate.set('modified', moment().utc().toDate());
       await agendaitemToUpdate.save();
     },
 
