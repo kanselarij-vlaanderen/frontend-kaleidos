@@ -1,7 +1,7 @@
 const selectors = {
-  newAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
   emberPowerSelectTrigger: '.ember-power-select-trigger',
   emberPowerSelectOption: '.ember-power-select-option',
+  createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
   datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
   flatpickrMonthDropdownMonths: '.flatpickr-monthDropdown-months',
@@ -30,10 +30,17 @@ const selectors = {
     checkBoxLabel: 'label.vl-checkbox--switch__label',
     actionButton: '.vl-action-group button'
   },
+  agendaActions: '[data-test-agenda-header-showActionOptions]',
+  approveAgenda: '[data-test-agenda-header-approveAgenda]',
+  lockAgenda: '[data-test-agenda-header-lockagenda]',
+  agendaItemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
+  addDecision: '[data-test-add-decision]',
+  uploadDecisionFile: '[data-test-upload-decision-file]',
+  accessLevelPill: '[data-test-access-level-pill]',
+  accessLevelSave: '[data-test-access-level-save]',
   subcaseTitlesEdit: '[data-test-subcase-titles-edit]',
   subcaseTitlesEditTitleOfSubcase: '[data-test-subcase-titles-edit-title-subcase]',
   subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
   subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
-  approveDesignAgenda: '[data-test-approve-design-agenda]',
 };
 export default selectors;
