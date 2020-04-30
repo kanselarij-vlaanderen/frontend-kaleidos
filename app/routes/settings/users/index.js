@@ -1,28 +1,28 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
-export default Route.extend(DataTableRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   modelName: 'user',
   router: service(),
 
   queryParams: {
-    firstname: {
-      refreshModel: true,
-    },
-  },
-
-  model() {
-    return this.store.query('user', {
-      include: 'group,organization',
-      sort: 'first-name'
-    }).then(users => users.toArray());
+    filter: {
+      refreshModel: true
+    }
   },
 
   mergeQueryOptions(params) {
-    return {
-      'filter[first-name]': params.firstname
+    const filter = params.filter;
+    const options = {
+      include: 'group,organization',
     };
+
+    if(filter) {
+      options.filter = filter;
+    }
+    return options;
   },
 
   actions: {
