@@ -83,7 +83,6 @@ context('Settings overview page tests', () => {
 
     cy.route('GET', '/users/*').as('getUsers');
 
-
     cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
     cy.url().should('include','instellingen/gebruikers');
     cy.get(settings.deleteUser).should('exist').should('be.visible').eq(1).click();
@@ -91,5 +90,41 @@ context('Settings overview page tests', () => {
     cy.wait('@getUsers').then(() => {
       cy.get(settings.settingsUserTable).should('not.have.value','Greta');
     });
+  });
+
+  it('Should test the search of a user', () => {
+
+    cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
+    cy.url().should('include','instellingen/gebruikers');
+    cy.get(settings.userSearchInput).should('exist').should('be.visible').type("Minister");
+      cy.get(settings.settingsUserTable).should('not.have.value','Greta');
+      cy.get(settings.settingsUserTable).should('contain','Minister');
+  });
+
+  it('Should trigger search when clicking on search icon', () => {
+    cy.route('GET', '/users?filter=**').as('filterUsers');
+
+    cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
+    cy.url().should('include','instellingen/gebruikers');
+    cy.get(settings.userSearchInput).should('exist').should('be.visible').type("Minister");
+    cy.get(settings.settingsUserTable).should('not.have.value','Greta');
+    cy.get(settings.settingsUserTable).should('contain','Minister');
+    cy.get(settings.userSearchButton).click().then(() => {
+      cy.wait('@filterUsers');
+      cy.get(settings.settingsUserTable).should('not.have.value','Greta');
+      cy.get(settings.settingsUserTable).should('contain','Minister');
+    })
+  });
+
+  it.only('Should navigate to detailview from user', () => {
+
+    cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
+    cy.url().should('include','instellingen/gebruikers');
+    cy.get(settings.userSearchInput).should('exist').should('be.visible').type("Minister");
+    cy.get(settings.settingsUserTable).should('not.have.value','Greta');
+    cy.get(settings.settingsUserTable).should('contain','Minister');
+    cy.get(settings.goToUserDetail).should('exist').should('be.visible').click();
+    cy.contains('Gebruiker: Minister Test');
+    cy.contains('Algemene informatie');
   })
 });

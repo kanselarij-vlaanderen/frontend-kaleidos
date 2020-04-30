@@ -11,12 +11,13 @@
         <div class="vl-u-spacer--large">
           <div class="vlc-input-field-group vlc-input-field-group--gmeeting">
             <Input
+             data-test-user-search-input
              class="vl-input-field"
              type="search"
-             placeholder="Achternaam"
              @value={{this.filterText}}
             />
             <button
+             data-test-user-search-button
              class="vl-button vl-button--secondary vl-button--icon"
              type="submit"
              {{on "click" (action "refreshRoute")}}
