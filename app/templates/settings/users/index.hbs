@@ -9,24 +9,39 @@
     <div class="vl-u-spacer-extended-l">
       <div class="vl-u-spacer--large">
         <div class="vl-u-spacer--large">
-          <div class="vlc-input-field-group vlc-input-field-group--gmeeting">
-            <Input
-             data-test-user-search-input
-             class="vl-input-field"
-             type="search"
-             @value={{this.filterText}}
-            />
-            <button
-             data-test-user-search-button
-             class="vl-button vl-button--secondary vl-button--icon"
-             type="submit"
-             {{on "click" (action "refreshRoute")}}
-            >
-              <i class="vl-vi vl-vi-magnifier"></i>
-            </button>
-          </div>
-
           <div class="vl-u-spacer-extended-bottom-l">
+            <div class="vlc-input-field-group vlc-input-field-group--gmeeting">
+              <div class="vlc-toolbar">
+                <div class="vlc-toolbar__left">
+                  <Input
+                          data-test-user-search-input
+                          class="vl-input-field"
+                          type="search"
+                          @value={{this.filterText}}
+                  />
+                  <button
+                          data-test-user-search-button
+                          class="vl-button vl-button--secondary vl-button--icon"
+                          type="submit"
+                    {{on "click" (action "refreshRoute")}}
+                  >
+                    <i class="vl-vi vl-vi-magnifier"></i>
+                  </button>
+                </div>
+                <div class="vlc-toolbar__right" style="max-width: 15rem">
+                  {{#power-select
+                          options=sizeOptions
+                          selected=size
+                          searchEnabled=false
+                          onchange=(action "selectSize")
+                  as |sizeValue|
+                  }}
+                    {{sizeValue}}
+                  {{/power-select}}
+                </div>
+              </div>
+
+            </div>
             {{#if (await model)}}
               {{#data-table
                 data-test-settings-user-table

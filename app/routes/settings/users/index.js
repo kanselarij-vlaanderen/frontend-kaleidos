@@ -10,17 +10,25 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   queryParams: {
     filter: {
       refreshModel: true
+    },
+    size: {
+      refreshModel: true
     }
   },
 
   mergeQueryOptions(params) {
     const filter = params.filter;
+    const size = params.size;
     const options = {
       include: 'group,organization',
     };
 
     if(filter) {
       options.filter = filter;
+    }
+
+    if(size){
+      options.size = size;
     }
     return options;
   },

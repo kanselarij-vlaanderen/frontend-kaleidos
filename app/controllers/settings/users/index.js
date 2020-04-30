@@ -9,9 +9,10 @@ import { action } from '@ember/object';
 export default class UsersSettingsController extends Controller {
   @service intl;
   @service toaster;
+  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
   isUploadingFile = null;
-  size = 10;
+  @tracked size = 10;
   page = 0;
   queryParams = ['filter'];
   @tracked filterText = '';
@@ -22,6 +23,11 @@ export default class UsersSettingsController extends Controller {
       return null;
     }
     return searchText;
+  }
+
+  @action
+  selectSize(size) {
+   this.size = size;
   }
 
   set filter(param) {
