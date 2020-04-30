@@ -16,16 +16,15 @@
               placeholder="Achternaam"
               @value={{this.filterText}}
             />
-          </div>
-          <div class="vlc-input-field-group">
             <button
-              class="vl-button vl-button--secondary vl-button--icon"
-              type="submit"
+                    class="vl-button vl-button--secondary vl-button--icon"
+                    type="submit"
               {{on "click" (action "refreshRoute")}}
             >
               <i class="vl-vi vl-vi-magnifier"></i>
             </button>
           </div>
+
           <div class="vl-u-spacer-extended-bottom-l">
             {{#if (await model)}}
               {{#data-table
