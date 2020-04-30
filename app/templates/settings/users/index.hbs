@@ -11,15 +11,15 @@
         <div class="vl-u-spacer--large">
           <div class="vlc-input-field-group vlc-input-field-group--gmeeting">
             <Input
-              class="vl-input-field"
-              type="search"
-              placeholder="Achternaam"
-              @value={{this.filterText}}
+             class="vl-input-field"
+             type="search"
+             placeholder="Achternaam"
+             @value={{this.filterText}}
             />
             <button
-                    class="vl-button vl-button--secondary vl-button--icon"
-                    type="submit"
-              {{on "click" (action "refreshRoute")}}
+             class="vl-button vl-button--secondary vl-button--icon"
+             type="submit"
+             {{on "click" (action "refreshRoute")}}
             >
               <i class="vl-vi vl-vi-magnifier"></i>
             </button>
