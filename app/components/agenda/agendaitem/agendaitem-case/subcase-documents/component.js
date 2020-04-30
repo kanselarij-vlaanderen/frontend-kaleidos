@@ -3,12 +3,16 @@ import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
+import { inject as service } from '@ember/service';
 
 export default Component.extend(
   isAuthenticatedMixin,
   uploadDocumentMixin,
   {
     classNames: ['vl-u-spacer--large'],
+
+    store: service(),
+
     isAddingNewDocument: false,
     isEditing: false,
     isLoading: false,
@@ -21,6 +25,9 @@ export default Component.extend(
     init() {
       this._super(...arguments);
       this.set('model', A([]));
+      this.store.query('document-type', { sort: 'priority', size: 50 }).then(types => {
+        this.set('documentTypes', types);
+      });
     },
 
     async deleteAll() {
