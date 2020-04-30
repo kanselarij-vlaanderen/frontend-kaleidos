@@ -1,0 +1,119 @@
+<h4 class="vlc-agenda-items__subject">
+  <span class="vlc-agenda-items-sub-item__numbering">
+    {{#if agendaitem.number}}
+      {{agendaitem.number}}.
+    {{else}}
+      {{add index 1}}.
+    {{/if}}
+  </span>
+  <pre>
+    {{#if agendaitem.shortTitle}}
+      {{agendaitem.shortTitle}}
+    {{else}}
+      {{agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
+    {{/if}}
+  </pre>
+</h4>
+{{#if (not aboutToDelete)}}
+  {{#if (not selectedAgendaItem)}}
+    {{#if (not agendaitem.isApproval)}}
+      {{#if agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
+        <pre class="vl-u-text">
+          {{agendaitem.title}}
+        </pre>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+  {{#if (or renderDetails isEditingOverview)}}
+    <div class="vl-u-display-flex vl-u-flex-space-between">
+      {{#if (and selectedAgendaItem isEditingOverview)}}
+        <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
+        </span>
+      {{else}}
+        <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vl-u-flex-grow">
+          {{await agendaitem.subcase.subcaseName}}
+        </span>
+      {{/if}}
+      <div class="vlc-agenda-meta__status-holder">
+        <span class="added-tag vlc-agenda-meta__recently-added">
+          {{#if (await agendaitem.checkAdded)}}
+            <i class="vl-link__icon vl-vi vl-vi-calendar-add"></i>
+            {{#attach-tooltip
+                    arrow="true"
+                    animation="shift"
+                    placement="top"
+                    class="ember-attacher-tooltip"
+            }}
+              <p>
+                {{t "added-agendaitem-text"}}
+              </p>
+            {{/attach-tooltip}}
+          {{/if}}
+        </span>
+        {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
+          {{#if (not isEditingOverview)}}
+            {{#if agendaitem.formallyOkToShow.approved}}
+              <p class="{{agendaitem.formallyOkToShow.classNames}}">
+                {{agendaitem.formallyOkToShow.label}}
+                <i class="vl-vi vl-vi-check-small" aria-hidden="true"></i>
+              </p>
+            {{else}}
+              <p class="{{agendaitem.formallyOkToShow.classNames}}">
+                {{agendaitem.formallyOkToShow.label}}
+              </p>
+            {{/if}}
+          {{else}}
+            {{utils/formally-ok-selector
+                    formallyOk=formallyOk
+                    isLoading=isLoading
+                    hideLabel=hideLabel
+                    setAction=(action "setAction")
+            }}
+          {{/if}}
+        {{/if}}
+        {{#if (and agendaitem.showAsRemark (not agendaitem.showInNewsletter))}}
+          <i class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s opacity-lighter"></i>
+        {{/if}}
+        {{#if (await agendaitem.subcase.confidential)}}
+          <span
+                  class="vl-icon vl-vi vl-vi-lock vl-u-text--error vl-u-spacer-extended-left-s"
+                  data-test-icon-agenda-confidentiality-locked
+          ></span>
+        {{/if}}
+      </div>
+    </div>
+    {{#if (not isEditingOverview)}}
+      {{#if (and isViewer agendaitem.explanation)}}
+        <span class="vl-u-text--bold vlc-agenda-items__remark">{{ t "remark-title" }}: </span> {{agendaitem.explanation}}
+      {{/if}}
+    {{/if}}
+  {{/if}}
+{{/if}}
+{{#if (not aboutToDelete)}}
+  {{#if (not selectedAgendaItem)}}
+    {{#if renderDetails }}
+      {{#if (await agendaitem.documents)}}
+        <div class="vlc-hr"></div>
+        {{utils/documents-list-for-item
+                isClickable=isDocumentClickable
+                item=agendaitem
+                agendaitem=agendaitem
+        }}
+      {{else}}
+        {{#if (await agendaitem.documentNames)}}
+          <div class="vlc-hr"></div>
+          {{utils/documents-list-lazy-loaded
+                  documentNames=agendaitem.documentNames
+          }}
+        {{/if}}
+      {{/if}}
+    {{else}}
+      {{#if (await agendaitem.documentNames)}}
+        <div class="vlc-hr"></div>
+        {{utils/documents-list-lazy-loaded
+                documentNames=agendaitem.documentNames
+        }}
+      {{/if}}
+    {{/if}}
+  {{/if}}
+{{/if}}

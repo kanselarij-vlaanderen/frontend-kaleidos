@@ -1,8 +1,8 @@
 {{#if isEditingOverview}}
   {{changes-alert
-          message=(t "editing-agenda-overview")
-          buttonText=(t "end-editing-overview")
-          clearAction=(action "toggleIsEditingOverview")
+    message=(t "editing-agenda-overview")
+    buttonText=(t "end-editing-overview")
+    clearAction=(action "toggleIsEditingOverview")
   }}
 {{/if}}
 <div class="vlc-toolbar vlc-agenda-items-section-header">
@@ -53,8 +53,8 @@
 <div class="{{spacerClass}}">
   {{#if (and isEditor (not isShowingChanges))}}
     {{#sortable-group
-            tagName="ul"
-            onChange=(action "reorderItems")
+      tagName="ul"
+      onChange=(action "reorderItems")
     as |sortableGroup|
     }}
       {{#each
@@ -71,17 +71,17 @@
           </div>
         {{/if}}
         {{#sortable-item
-                tagName="li"
-                class="vlc-agenda-items__sub-item"
-                model=agendaitem
-                group=sortableGroup
-                distance=30
-                handle=dragHandleClass
+          tagName="li"
+          class="vlc-agenda-items__sub-item"
+          model=agendaitem
+          group=sortableGroup
+          distance=30
+          handle=dragHandleClass
         }}
-          {{agenda/agenda-list/list-item
-                  agendaitem=agendaitem
-                  isEditingOverview=isEditingOverview
-                  selectAgendaItem=(action "selectAgendaItem")
+          {{agenda/agenda-detail/sidebar-item
+            agendaitem=agendaitem
+            isEditingOverview=isEditingOverview
+            selectAgendaItem=(action "selectAgendaItem")
           }}
         {{/sortable-item}}
       {{/each}}
@@ -105,10 +105,10 @@
                 (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
         }}
           <li class="vlc-agenda-items__sub-item">
-            {{agenda/agenda-list/list-item
-                    agendaitem=agendaitem
-                    isEditingOverview=isEditingOverview
-                    selectAgendaItem=(action "selectAgendaItem")
+            {{agenda/agenda-detail/sidebar-item
+              agendaitem=agendaitem
+              isEditingOverview=isEditingOverview
+              selectAgendaItem=(action "selectAgendaItem")
             }}
           </li>
         {{/if}}
@@ -133,8 +133,8 @@
   {{#if (gt (await announcements.length) 0)}}
     {{#if isEditor}}
       {{#sortable-group
-              tagName="ul"
-              onChange=(action "reorderAnnouncements")
+        tagName="ul"
+        onChange=(action "reorderAnnouncements")
       as |sortableAnnouncements|
       }}
         {{#each
@@ -142,17 +142,17 @@
         as |announcement|
         }}
           {{#sortable-item
-                  tagName="li"
-                  class="vlc-agenda-items__sub-item"
-                  model=announcement
-                  group=sortableAnnouncements
-                  distance=30
-                  handle=dragHandleClass
+            tagName="li"
+            class="vlc-agenda-items__sub-item"
+            model=announcement
+            group=sortableAnnouncements
+            distance=30
+            handle=dragHandleClass
           }}
-            {{agenda/agenda-list/list-item
-                    agendaitem=announcement
-                    isEditingOverview=isEditingOverview
-                    selectAgendaItem=(action "selectAgendaItem")
+            {{agenda/agenda-detail/sidebar-item
+              agendaitem=announcement
+              isEditingOverview=isEditingOverview
+              selectAgendaItem=(action "selectAgendaItem")
             }}
           {{/sortable-item}}
         {{/each}}
@@ -163,10 +163,10 @@
       as |announcement|
       }}
         <div class="vlc-agenda-items__sub-item">
-          {{agenda/agenda-list/list-item
-                  agendaitem=announcement
-                  isEditingOverview=isEditingOverview
-                  selectAgendaItem=(action "selectAgendaItem")
+          {{agenda/agenda-detail/sidebar-item
+            agendaitem=announcement
+            isEditingOverview=isEditingOverview
+            selectAgendaItem=(action "selectAgendaItem")
           }}
         </div>
       {{/each}}
