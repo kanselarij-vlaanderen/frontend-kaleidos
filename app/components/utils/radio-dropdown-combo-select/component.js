@@ -52,6 +52,9 @@ export default class RadioDropdownComboSelectComponent extends Component {
 
   @action
   showOthers () {
+    if (this.args.onSelect) {
+      this.args.onSelect(null); // Clicking "others" must behave as an unselect
+    }
     this.selectedOption = null;
     this.othersShown = true;
   }
