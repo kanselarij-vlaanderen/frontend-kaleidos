@@ -1,0 +1,39 @@
+{{#each this.radioOptions as |opt index|}}
+  {{#let (concat this.radioName "-" index) as |radioId|}}
+    <label class="vl-radio" for={{radioId}}>
+      <Input
+        class="vl-radio__toggle"
+        id={{radioId}}
+        name={{this.radioName}}
+        @type="radio"
+        value={{get opt this.labelKey}}
+        checked={{eq opt this.selectedOption}}
+        {{on "input" (fn this.select opt)}}
+      />
+      <div class="vl-radio__label">{{get opt this.labelKey}}</div>
+    </label>
+  {{/let}}
+{{/each}}
+{{#let (concat this.radioName "-" "others") as |radioId|}}
+  <label class="vl-radio" for={{radioId}}>
+    <Input
+      class="vl-radio__toggle"
+      id={{radioId}}
+      name={{this.radioName}}
+      @type="radio"
+      value="Andere"
+      checked={{this.selectedIsInOthers}}
+      {{on "input" this.showOthers}}
+    />
+    <div class="vl-radio__label">Andere</div>
+  </label>
+{{/let}}
+{{#if this.othersShown}}
+  <PowerSelect
+    @options={{this.otherOptions}}
+    @selected={{this.selectedOption}}
+    @onchange={{this.select}}
+  as |opt|>
+    {{get opt this.labelKey}}
+  </PowerSelect>
+{{/if}}
