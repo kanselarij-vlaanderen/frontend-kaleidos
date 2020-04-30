@@ -16,15 +16,15 @@ context('Manage document tests', () => {
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
     cy.get(settings.manageDocumentTypes).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
   });
 
   it('Should open the model behind manage document types and close it', () => {
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
     cy.get(settings.manageDocumentTypes).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
-    cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(modal.baseModal.close).click();
+    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
   });
 });

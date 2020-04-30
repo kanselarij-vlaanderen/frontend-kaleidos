@@ -22,8 +22,13 @@
       {{/if}}
     </h2>
     {{#if isEditor}}
-      <div class="vl-u-spacer-extended-left-s">
-        <a data-test-subcase-titles-edit href="" class="vl-link" {{action "toggleIsEditing"}}>
+      <div class="vl-u-spacer-extended-left-s" data-test-agendaitem-edit-link>
+        <a
+          data-test-subcase-titles-edit
+          href=""
+          class="vl-link"
+          {{action "toggleIsEditing"}}
+        >
           {{t "edit"}}
         </a>
       </div>
@@ -54,11 +59,15 @@
     {{/if}}
   </div>
   <div class="vl-u-spacer-extended-bottom-s">
-    <div class="pill-container vl-u-display-flex">
+    <div
+      class="pill-container vl-u-display-flex"
+      data-test-agenda-subcasehidden-pill
+    >
       {{#if isAgendaItem}}
         {{#if (and isEditor (await item.formallyOkToShow))}}
-          <span class="{{item.formallyOkToShow.pillClassNames}}
-               vl-u-spacer-extended-right-s"
+          <span
+            class="{{item.formallyOkToShow.pillClassNames}}
+             vl-u-spacer-extended-right-s"
           >
             {{item.formallyOkToShow.label}}
           </span>
@@ -67,7 +76,8 @@
       {{#if (await confidential)}}
         <span class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
       {{else}}
-        <span class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+        <span
+          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
         ></span>
       {{/if}}
     </div>
@@ -84,24 +94,29 @@
 {{else}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
-      <span class="vlc-pill
-          {{if item.showInNewsletter "vlc-pill--success" "vlc-pill--error"}}
-           vl-u-spacer-extended-right-s"
-      >
-        {{#if item.showInNewsletter}}
-          <span>
-            {{t "visible-in-newsletter"}}
-          </span>
-          <i class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
-          ></i>
-        {{else}}
-          <span>
-            {{t "hidden-in-newsletter"}}
-          </span>
-          <i class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
-          ></i>
-        {{/if}}
-      </span>
+      {{#if (not-eq null (await item.showInNewsletter))}}
+        <span
+          class="vlc-pill
+          {{if (await item.showInNewsletter) "vlc-pill--success" "vlc-pill--error"}}
+          vl-u-spacer-extended-right-s"
+        >
+          {{#if (await item.showInNewsletter)}}
+            <span>
+              {{t "visible-in-newsletter"}}
+            </span>
+            <i
+              class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
+            ></i>
+          {{else}}
+            <span>
+              {{t "hidden-in-newsletter"}}
+            </span>
+            <i
+              class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
+            ></i>
+          {{/if}}
+        </span>
+      {{/if}}
     </div>
   </div>
 {{/if}}
@@ -110,8 +125,8 @@
   <div class="vl-u-spacer-extended-bottom-s">
     {{#if item.explanation}}
       <pre class="vl-u-text--muted vl-u-flex-inline-flex vlc-u-pre-line-wrap">
-      {{t "remark-title"}}: {{await item.explanation}}
-    </pre>
+        {{t "remark-title"}}: {{await item.explanation}}
+      </pre>
     {{/if}}
   </div>
 {{/if}}

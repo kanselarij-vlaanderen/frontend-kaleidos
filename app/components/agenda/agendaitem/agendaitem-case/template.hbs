@@ -2,7 +2,9 @@
   <div class="confidentialities">
     <div class="confidential">
       {{web-components/vl-checkbox
+        data-test-vl-subcase-titles-edit-confidentiality
         value=item.confidential
+        disabled=true
         label=(t "confidential")
         toggle=(action "toggleConfidential")
       }}
