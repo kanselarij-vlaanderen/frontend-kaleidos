@@ -14,26 +14,29 @@
               <div class="vlc-toolbar">
                 <div class="vlc-toolbar__left">
                   <Input
-                          data-test-user-search-input
-                          class="vl-input-field"
-                          type="search"
-                          @value={{this.filterText}}
+                    data-test-user-search-input
+                    class="vl-input-field"
+                    type="search"
+                    @value={{this.filterText}}
                   />
                   <button
-                          data-test-user-search-button
-                          class="vl-button vl-button--secondary vl-button--icon"
-                          type="submit"
+                    data-test-user-search-button
+                    class="vl-button vl-button--secondary vl-button--icon"
+                    type="submit"
                     {{on "click" (action "refreshRoute")}}
                   >
                     <i class="vl-vi vl-vi-magnifier"></i>
                   </button>
                 </div>
-                <div class="vlc-toolbar__right" style="max-width: 15rem">
+                <div class="vlc-toolbar__right">
+                  <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap">
+                    {{t "amount-per-page"}}
+                  </label>
                   {{#power-select
-                          options=sizeOptions
-                          selected=size
-                          searchEnabled=false
-                          onchange=(action "selectSize")
+                    options=sizeOptions
+                    selected=size
+                    searchEnabled=false
+                    onchange=(action "selectSize")
                   as |sizeValue|
                   }}
                     {{sizeValue}}
