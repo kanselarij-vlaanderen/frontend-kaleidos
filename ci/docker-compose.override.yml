@@ -36,6 +36,3 @@ services:
   database-healthcheck:
     entrypoint: "echo 'service disabled'"
     restart: "no"
-  kibana:
-    entrypoint: "echo 'service disabled'"
-    restart: "no"
