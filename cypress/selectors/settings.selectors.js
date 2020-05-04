@@ -21,6 +21,11 @@ const selectors = {
   mandateeResign: '[data-test-mandatee-resign]',
   mandateeDelete: '[data-test-mandatee-delete]',
   iseCodes: '[data-test-model-selector-iseCodes]',
-  deleteUser: '[data-test-delete-user]'
+  deleteUser: '[data-test-delete-user]',
+  userSearchInput: '[data-test-user-search-input]',
+  userSearchButton: '[data-test-user-search-button]',
+  goToUserDetail: '[data-test-go-to-user-detail]',
+  emberPowerSelectTrigger: '.ember-power-select-trigger',
+  emberPowerSelectOption: '.ember-power-select-option',
 };
 export default selectors;
