@@ -16,6 +16,7 @@ pipeline {
     stages {
         stage('Build image') {
             steps {
+                sh "rm -rf kaleidos-project 2> /dev/null"
                 sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
                 sh "cd kaleidos-project"
                 sh "docker-compose -p ${projectName} up -d"
