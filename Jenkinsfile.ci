@@ -16,13 +16,17 @@ pipeline {
     stages {
         stage('Build image') {
             steps {
+                sh ""git clone https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
+                sh "cd kaleidos-project"
+                sh "docker-compose -p ${projectName} up -d"
+                sh "cd .."
                 // sh "cp init/cypress/ci/cypress.json cypress.json"
                 // sh "cp init/docker/ci/docker-compose.yml docker-compose.yml"
                 // sh "cp -r init/docker/ci/keys keys"
                 // sh "cp .dist.env .env"
                 // sh "cp init/npm/ci/package.* ."
                 // sh "cp .dist.env .env"
-                 sh "npm i"
+                 //sh "npm i"
                 // sh "docker-compose -p ${projectName} up -d"
                 // sh "docker-compose -p ${projectName} exec -T -e COMPOSER_CACHE_DIR=/composer/cache web composer install --no-progress --no-suggest"
                 // sh "docker-compose -p ${projectName} exec -T web npm i"
@@ -91,7 +95,9 @@ pipeline {
         //}
 
         cleanup {
+          sh "cd kaleidos-project"
           sh "docker-compose -p ${projectName} down -v"
+          sh "docker-compose -p ${projectName} kill"
           sh "docker rmi -f `docker images | grep -i ${projectName} | tr -s ' ' | cut -d ' ' -f 3`"
         }
     }
