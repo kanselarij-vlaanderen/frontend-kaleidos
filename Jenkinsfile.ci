@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sh "rm -rf kaleidos-project 2> /dev/null"
                 sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
-                sh "cd cd kaleidos-project && docker-compose -p ${projectName} up -d"
+                sh "cd kaleidos-project && docker-compose -p ${projectName} up -d"
                 // sh "cp init/cypress/ci/cypress.json cypress.json"
                 // sh "cp init/docker/ci/docker-compose.yml docker-compose.yml"
                 // sh "cp -r init/docker/ci/keys keys"
