@@ -1,7 +1,7 @@
 const selectors = {
-  newAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
   emberPowerSelectTrigger: '.ember-power-select-trigger',
   emberPowerSelectOption: '.ember-power-select-option',
+  createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
   datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
   flatpickrMonthDropdownMonths: '.flatpickr-monthDropdown-months',
@@ -21,8 +21,10 @@ const selectors = {
   dataTable: '.vl-data-table',
   dataTableZebra: '.vl-data-table--zebra',
   toProcedureStapLink: '.vlc-panel-layout__main-content a',
+  confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
   subcase: {
     agendaLink: '[data-test-subcase-agenda-link] a',
+    confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input'
   },
   item: {
     editLink: '[data-test-agendaitem-edit-link] a',
@@ -36,6 +38,18 @@ const selectors = {
       checkedThemes: '[data-test-themes-selector] input:checked',
       themesSelector: '[data-agenda-item-news-edit] [data-test-themes-selector]'
     }
-  }
+  },
+  agendaActions: '[data-test-agenda-header-showActionOptions]',
+  approveAgenda: '[data-test-agenda-header-approveAgenda]',
+  lockAgenda: '[data-test-agenda-header-lockagenda]',
+  agendaItemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
+  addDecision: '[data-test-add-decision]',
+  uploadDecisionFile: '[data-test-upload-decision-file]',
+  accessLevelPill: '[data-test-access-level-pill]',
+  accessLevelSave: '[data-test-access-level-save]',
+  subcaseTitlesEdit: '[data-test-subcase-titles-edit]',
+  subcaseTitlesEditTitleOfSubcase: '[data-test-subcase-titles-edit-title-subcase]',
+  subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
+  subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
 };
 export default selectors;

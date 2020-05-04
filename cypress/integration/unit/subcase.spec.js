@@ -148,7 +148,7 @@ context('Subcase tests', () => {
     cy.url().should('not.contain', '/dossier/');
   });
 
-  it('Changes to agendaItem should propagate to subcase', () => {
+  it('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
     const SubcaseTitleShort = 'Cypress test: Mededeling - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
@@ -164,9 +164,7 @@ context('Subcase tests', () => {
     cy.route('GET', '/subcases/*/agendaitems').as('getSubcaseAgendaItems');
     cy.route('GET', '/subcases/*/case').as('getSubcaseCase');
     cy.route('GET', '/access-levels').as('getAccessLevels');
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName)
-      .then((subCaseId) => {
-      });
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.wait('@getSubcaseDecisions');
     cy.wait('@getSubcaseAgendaItems');
     cy.wait('@getSubcaseCase');
@@ -183,6 +181,9 @@ context('Subcase tests', () => {
 
     // Assert status also hidden
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
+    cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
+    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid'); //CHECK na save in agendaitem
+    cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
     //"Go to agendaItem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
@@ -190,6 +191,7 @@ context('Subcase tests', () => {
     cy.get(agenda.subcase.agendaLink).click();
     cy.wait('@getMeetingsRequest');
     cy.wait('@getAgendas');
+    cy.get(agenda.confidentialityIcon).should('be.visible');
 
     // Click the "wijzigen link.
     cy.get(agenda.item.editLink).click();
@@ -204,8 +206,11 @@ context('Subcase tests', () => {
     cy.get(agenda.item.actionButton).contains('Opslaan').click();
     cy.wait('@patchAgenda');
 
-    // Assert status shown
+    // Assert status shown & confidentiality icon is visible
     cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
+
+    // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
+    cy.get(agenda.confidentialityIcon).should('be.visible');
 
     // Go to kort bestek
     cy.route('GET', '/subcases/*/phases').as('getSubcasePhases');
@@ -214,6 +219,10 @@ context('Subcase tests', () => {
 
     // Assert status also shown. This is da 💣
     cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
+
+    // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
+    cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
+
   });
 
 

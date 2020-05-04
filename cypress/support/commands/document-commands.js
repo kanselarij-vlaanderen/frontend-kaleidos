@@ -2,11 +2,11 @@
 /// <reference types="Cypress" />
 
 import 'cypress-file-upload';
-import document from '../selectors/document.selectors';
+import document from '../../selectors/document.selectors';
 
-import agenda  from '../selectors/agenda.selectors';
-import form  from '../selectors/form.selectors';
-import modal  from '../selectors/modal.selectors';
+import agenda  from '../../selectors/agenda.selectors';
+import form  from '../../selectors/form.selectors';
+import modal  from '../../selectors/modal.selectors';
 // ***********************************************
 // Commands
 
@@ -217,7 +217,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     .should('be.visible')
     .click();
 
-  cy.get(modal.createAnnouncement.modalDialog).as('fileUploadDialog');
+  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);

@@ -302,8 +302,9 @@ export default ModelWithModifier.extend({
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
       return await latestAgendaItem.get('showInNewsletter');
+    } else {
+      return null;
     }
-    return false;
   }),
 
   async findPhaseDateByCodeId(codeId) {
