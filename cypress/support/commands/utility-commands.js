@@ -6,17 +6,15 @@
 
 // Commands
 import agenda from "../../selectors/agenda.selectors";
-import actionModal from "../../selectors/action-modal.selectors";
-import modal from "../../selectors/modal.selectors";
-
 Cypress.Commands.add('selectDate', selectDate);
 Cypress.Commands.add('selectAction', selectAction);
-Cypress.Commands.add('openActionModal', openActionModal);
 Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
-Cypress.Commands.add('openSettingsModal', openSettingsModal);
-Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
+
 Cypress.Commands.add('currentMoment', currentMoment);
 Cypress.Commands.add('currentTimestamp', currentTimestamp);
+Cypress.Commands.add('existsAndVisible', existsAndVisible);
+Cypress.Commands.add('existsAndInvisible', existsAndInvisible);
+
 
 // ***********************************************
 // Functions
@@ -62,28 +60,7 @@ function selectAction(elementToSelect, textToContain) {
   cy.get(elementToSelect).should('contain.text',textToContain)
 }
 
-/**
- * Open the action modal of the agenda page
- * @memberOf Cypress.Chainable#
- * @name openActionModal
- * @function
- */
-function openActionModal() {
 
-  const BE_VISIBLE = 'be.visible';
-
-  cy.get(actionModal.showActionOptions).should('be.visible').click();
-  cy.get(actionModal.navigatetosubcases).should(BE_VISIBLE);
-  cy.get(actionModal.announcement).should(BE_VISIBLE);
-  cy.get(actionModal.navigatetodecisions).should(BE_VISIBLE);
-  cy.get(actionModal.navigatetonewsletter).should(BE_VISIBLE);
-  cy.get(actionModal.navigatetonotes).should(BE_VISIBLE);
-  cy.get(actionModal.navigatetopressagenda).should(BE_VISIBLE);
-  cy.get(actionModal.toggleeditingsession).should(BE_VISIBLE);
-  cy.get(actionModal.selectsignature).should(BE_VISIBLE);
-  // cy.get(downloadddocuments).should(BE_VISIBLE); // TODO reenable when feature is fixed
-  cy.get(actionModal.agendaHeaderDeleteAgenda).should(BE_VISIBLE);
-}
 
 /**
  * Validate the content of the dropdown
@@ -99,28 +76,7 @@ function validateDropdownElements(elementIndex, textContent) {
   cy.get('.ember-power-select-option').eq(elementIndex).click();
 }
 
-/**
- * Validate the content of the dropdown
- * @memberOf Cypress.Chainable#
- * @name openSettingsModal
- * @function
- * @param selector: selector that needs to be used.
- */
-function openSettingsModal(selector) {
-  cy.get(selector).click();
-  cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
-}
 
-/**
- * Validate the content of the dropdown
- * @memberOf Cypress.Chainable#
- * @name closeSettingsModal
- * @function
- */
-function closeSettingsModal() {
-  cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
-  cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
-}
 
 
 /**
@@ -144,3 +100,36 @@ function currentMoment() {
 function currentTimestamp() {
   return Cypress.moment().unix();
 }
+
+/**
+ * @description check if element exists and is visible
+ * @memberOf Cypress.Chainable#
+ * @name existsAndVisible
+ * @function
+ * @returns {Chainable<JQuery<any>>} returns a chainable element
+ * @param {String} element - The element where the action has to be made on
+ */
+function existsAndVisible(element) {
+  return cy.get(element)
+    .should('exist')
+    .should('be.visible');
+}
+
+/**
+ * @description check if element exists and is not visible
+ * @memberOf Cypress.Chainable#
+ * @name existsAndInvisible
+ * @function
+ * @returns {Chainable<JQuery<any>>} returns a chainable element
+ * @param {String} element - The element where the action has to be made on
+ */
+function existsAndInvisible(element) {
+  return cy.get(element)
+    .should('exist')
+    .should('not.be.visible');
+}
+
+
+
+
+
