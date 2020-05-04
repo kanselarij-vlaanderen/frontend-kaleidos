@@ -89,6 +89,7 @@ pipeline {
           sh "cd kaleidos-project && docker-compose -p ${projectName} down -v"
           sh "cd kaleidos-project && docker-compose -p ${projectName} kill"
           //sh "cd kaleidos-project && docker rmi -f `docker images | grep -i ${projectName} | tr -s ' ' | cut -d ' ' -f 3`"
+          cleanWs()
         }
     }
 }
