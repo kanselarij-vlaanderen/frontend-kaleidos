@@ -14,11 +14,6 @@ pipeline {
     }
 
     stages {
-        stage('Empty folder') {
-            steps {
-                sh "rm -rf ./*"
-            }
-        }
         stage('Checkout project') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
