@@ -58,7 +58,7 @@ pipeline {
         //    steps {
                 // sh "docker-compose -p ${projectName} exec -T web tar -zcf deploy.tar.gz web vendor private migration config scripts storage init/database init/files/media-icons build.xml composer.json"
                 // sh "docker cp `docker-compose -p ${projectName} ps -q web`:/var/www/project/deploy.tar.gz ${WORKSPACE}"
-                 archiveArtifacts artifacts: "deploy.tar.gz"
+        //         archiveArtifacts artifacts: "deploy.tar.gz"
         //    }
         //}
     }
