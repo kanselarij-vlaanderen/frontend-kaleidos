@@ -23,6 +23,14 @@
         {{action "openDocument" row bubbles=false}}
       >
         <i class="vl-button__icon vl-vi vl-vi-document"></i>
+        {{#attach-tooltip
+                arrow="true"
+                animation="shift"
+                placement="bottom"
+                class="ember-attacher-tooltip"
+        }}
+          {{t "open-note"}}
+        {{/attach-tooltip}}
       </button>
     {{/if}}
   {{else}}
