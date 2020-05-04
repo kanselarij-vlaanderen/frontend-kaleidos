@@ -44,7 +44,7 @@
     as |sortableGroup|
     }}
       {{#each
-              agendaitems
+        agendaitems
       as |agendaitem|
       }}
         {{#if agendaitem.groupName}}
@@ -75,7 +75,7 @@
   {{else}}
     <ul>
       {{#each
-              agendaitems
+        agendaitems
       as |agendaitem|
       }}
         {{#if (and agendaitem.groupName (not isShowingChanges))}}
@@ -88,7 +88,7 @@
           </div>
         {{/if}}
         {{#if
-                (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
+          (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
         }}
           <li class="vlc-agenda-items__sub-item">
             {{agenda/agenda-detail/sidebar-item
@@ -124,7 +124,7 @@
       as |sortableAnnouncements|
       }}
         {{#each
-                (await announcements)
+          (await announcements)
         as |announcement|
         }}
           {{#sortable-item
@@ -145,7 +145,7 @@
       {{/sortable-group}}
     {{else}}
       {{#each
-              (await announcements)
+        (await announcements)
       as |announcement|
       }}
         <div class="vlc-agenda-items__sub-item">
