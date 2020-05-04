@@ -269,8 +269,6 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsMail');
     cy.wait('@getMeetingsfilter');
 
-    // TODO AANPASSSEN NAAR JUISTE COPY!
-    //meetings/agendas/agendaitems
     cy.route('GET', '/meetings/**').as('getMeetingsDetail');
     //cy.route('GET', '/agendas**').as('getAgendas');
     cy.route('GET', '/agendaitems**').as('getAgendaItems');
