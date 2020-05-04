@@ -38,3 +38,9 @@ services:
   database-healthcheck:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+  database:
+    user: ${HOST_UID_GID}
+  elasticsearch:
+    user: ${HOST_UID_GID}
+  musearch:
+    user: ${HOST_UID_GID}
