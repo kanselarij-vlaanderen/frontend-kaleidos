@@ -17,19 +17,9 @@ pipeline {
         stage('Checkout project') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                sh "cp .dist.env .env"
                 sh "rm -rf kaleidos-project 2> /dev/null"
                 sh "eval `ssh-agent -s` && ssh-add /var/lib/jenkins/.ssh/id_rsa_github_kaleidos && git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
-                // sh "cp init/cypress/ci/cypress.json cypress.json"
-                // sh "cp init/docker/ci/docker-compose.yml docker-compose.yml"
-                // sh "cp -r init/docker/ci/keys keys"
-                // sh "cp .dist.env .env"
-                // sh "cp init/npm/ci/package.* ."
-                // sh "cp .dist.env .env"
-                // sh "npm i"
-                // sh "docker-compose -p ${projectName} up -d"
-                // sh "docker-compose -p ${projectName} exec -T -e COMPOSER_CACHE_DIR=/composer/cache web composer install --no-progress --no-suggest"
-                // sh "docker-compose -p ${projectName} exec -T web npm i"
-                // sh "docker-compose -p ${projectName} exec -T web gulp --cwd=web/themes/custom/mytheme styles"
             }
         }
         stage('Prepare for automated tests') {
@@ -44,13 +34,13 @@ pipeline {
                 // sh "docker-compose -p ${projectName} exec -T --user=www-data web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing initialize-search-index"
             }
         }
-        //stage('Automated tests: Cypress') {
-        //    steps {
+        stage('Automated tests: Cypress') {
+            steps {
                 // Dump an up-to-date database to the cypress fixtures folder, to be used to reset state between test suites
                 // sh "docker-compose -p ${projectName} exec -T web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing dump-clean-database-for-cypress"
-                // sh "docker-compose -p ${projectName} exec -T web cypress run"
-        //    }
-        //}
+                sh "cd kaleidos-project && docker-compose -p ${projectName} exec -T  exec -T web /wait-for.sh database:3306 -s -t 90  -- docker-compose -p ${projectName} exec  frontend make run-cypress-spec-files"
+            }
+        }
         //stage('Create deployable artifact') {
         //    when {
         //        not {
