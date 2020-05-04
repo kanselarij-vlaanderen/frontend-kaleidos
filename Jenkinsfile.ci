@@ -18,6 +18,7 @@ pipeline {
             steps {
                 sh "rm -rf kaleidos-project 2> /dev/null"
                 sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
+                sh "cp ci/docker-compose.override.yml kaleidos-project/docker-compose.override.yml"
                 sh "cd kaleidos-project && docker-compose -p ${projectName} up -d"
                 // sh "cp init/cypress/ci/cypress.json cypress.json"
                 // sh "cp init/docker/ci/docker-compose.yml docker-compose.yml"

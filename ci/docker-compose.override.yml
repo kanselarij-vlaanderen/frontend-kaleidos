@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   frontend:
-    image: kanselarij/frontend-kaleidos
+    image: kanselarij/frontend-kaleidos:development
     ports:
       - 127.0.0.1:80:80
     #  frontend:
