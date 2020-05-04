@@ -26,7 +26,7 @@ pipeline {
                 // sh "cp .dist.env .env"
                 // sh "cp init/npm/ci/package.* ."
                 // sh "cp .dist.env .env"
-                 //sh "npm i"
+                // sh "npm i"
                 // sh "docker-compose -p ${projectName} up -d"
                 // sh "docker-compose -p ${projectName} exec -T -e COMPOSER_CACHE_DIR=/composer/cache web composer install --no-progress --no-suggest"
                 // sh "docker-compose -p ${projectName} exec -T web npm i"
