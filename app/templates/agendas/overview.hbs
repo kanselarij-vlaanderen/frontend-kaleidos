@@ -40,6 +40,7 @@
                   {{input
                     type="text"
                     id=id
+                    data-test-agendas-filter-input=true
                     class="vl-input-field"
                     value=dateFilter
                     placeholder="bv. 02/2018"
@@ -48,6 +49,7 @@
                 <div class="vlc-input-field-group">
                   <button class="vl-button vl-button--secondary vl-button--icon"
                           type="submit"
+                          data-test-agendas-filter-button
                           onclick={{action "setDateFilter" dateFilter}}
                   >
                     <i class="vl-vi vl-vi-magnifier"></i>

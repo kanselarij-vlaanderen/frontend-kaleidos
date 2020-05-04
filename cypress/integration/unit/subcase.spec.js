@@ -1,7 +1,6 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
-
-
+import agenda from '../../selectors/agenda.selectors';
 
 context('Subcase tests', () => {
   const plusMonths = 1;
@@ -11,6 +10,7 @@ context('Subcase tests', () => {
   before(() => {
     cy.server();
     cy.resetCache();
+    //cy.resetSearch();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
@@ -29,7 +29,7 @@ context('Subcase tests', () => {
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.createCase(false, caseTitle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
     cy.changeSubcaseAccessLevel(false, SubcaseTitleShort, true, 'Intern Overheid', SubcaseTitleShort, 'Cypress test nieuwere lange titel');
@@ -40,7 +40,7 @@ context('Subcase tests', () => {
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
     const dateFormat = agendaDate.date() + ' ' + monthDutch + ' ' + agendaDate.year();
-    const dateRegex = new RegExp(".?"+Cypress.moment(agendaDate).date()+".\\w+."+Cypress.moment(agendaDate).year());
+    const dateRegex = new RegExp(".?" + Cypress.moment(agendaDate).date() + ".\\w+." + Cypress.moment(agendaDate).year());
 
     cy.get('.vlc-status-timeline > li').eq(0).contains(/Ingediend voor agendering/);
     cy.get('.vl-description-data').within(() => {
@@ -77,7 +77,7 @@ context('Subcase tests', () => {
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.openCase(caseTitle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.deleteSubcase();
   });
@@ -89,18 +89,18 @@ context('Subcase tests', () => {
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.openCase(caseTitle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
     cy.get('.vl-button--icon-before')
-    .contains('Acties')
-    .click();
+      .contains('Acties')
+      .click();
     cy.get('.vlc-dropdown-menu__item > .vl-link')
       .contains('Procedurestap verwijderen')
       .should("not.exist");
-    });
+  });
 
-    //TODO Yggdrasil needs to be triggered or default data needs to be available for minister
+  //TODO Yggdrasil needs to be triggered or default data needs to be available for minister
   xit('should be able to open a subcase with user profile: Minister', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: Non-editor profiles can open subcase - ' + currentTimestamp();
@@ -108,7 +108,7 @@ context('Subcase tests', () => {
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.openCase(caseTitle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.logout();
     cy.login('Minister');
     cy.openCase(caseTitle);
@@ -127,11 +127,11 @@ context('Subcase tests', () => {
   it('Clickable link should go to the agenda right after proposing to agenda', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: Link to agenda item ok - ' + currentTimestamp();
-    const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap' ;
+    const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.openCase(caseTitle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -147,6 +147,83 @@ context('Subcase tests', () => {
     cy.url().should('contain', '/agendapunten/');
     cy.url().should('not.contain', '/dossier/');
   });
+
+  it('Changes to agendaitem should propagate to subcase', () => {
+    const type = 'Mededeling';
+    const SubcaseTitleShort = 'Cypress test: Mededeling - ' + currentTimestamp();
+    const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
+    const subcaseType = 'In voorbereiding';
+    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    // Aanmaken Dossier
+
+    cy.createCase(false, 'Cypress mededeling test');
+
+    // Aanmaken subcase.
+    cy.route('GET', '/subcases/*/decisions').as('getSubcaseDecisions');
+    cy.route('GET', '/subcases/*/agendaitems').as('getSubcaseAgendaItems');
+    cy.route('GET', '/subcases/*/case').as('getSubcaseCase');
+    cy.route('GET', '/access-levels').as('getAccessLevels');
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+    cy.wait('@getSubcaseDecisions');
+    cy.wait('@getSubcaseAgendaItems');
+    cy.wait('@getSubcaseCase');
+    cy.wait('@getAccessLevels');
+
+    // Aanmaken agendaItem
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
+    cy.openAgendaItemDossierTab(SubcaseTitleShort, false);
+
+    // Status is hidden
+    cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
+    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
+
+    // Assert status also hidden
+    cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
+    cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
+    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid'); //CHECK na save in agendaitem
+    cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
+
+    //"Go to agendaItem
+    cy.route('GET', '/meetings/**').as('getMeetingsRequest');
+    cy.route('GET', '/agendas/**').as('getAgendas');
+    cy.get(agenda.subcase.agendaLink).click();
+    cy.wait('@getMeetingsRequest');
+    cy.wait('@getAgendas');
+    cy.get(agenda.confidentialityIcon).should('be.visible');
+
+    // Click the "wijzigen link.
+    cy.get(agenda.item.editLink).click();
+
+    // Check the checkbox (toggle this invisible motafoka).
+    cy.get(agenda.item.showInNewsLetter)
+      .find(agenda.item.checkBoxLabel) // Because who uses checkboxes anyway?
+      .click();
+
+    // Save the changes setting
+    cy.route('PATCH', '/agendas/**').as('patchAgenda');
+    cy.get(agenda.item.actionButton).contains('Opslaan').click();
+    cy.wait('@patchAgenda');
+
+    // Assert status shown & confidentiality icon is visible
+    cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
+
+    // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
+    cy.get(agenda.confidentialityIcon).should('be.visible');
+
+    // Go to kort bestek
+    cy.route('GET', '/subcases/*/phases').as('getSubcasePhases');
+    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
+    cy.wait('@getSubcasePhases');
+
+    // Assert status also shown. This is da 💣
+    cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
+
+    // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
+    cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
+
+  });
 });
 
 function currentTimestamp() {
@@ -154,7 +231,7 @@ function currentTimestamp() {
 }
 
 function getTranslatedMonth(month) {
-  switch(month) {
+  switch (month) {
     case 0:
       return 'januari';
     case 1:

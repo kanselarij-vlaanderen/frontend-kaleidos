@@ -1,3 +1,5 @@
-// subcase-ise-codes component list
-export const isecodesListSelector = '[data-test-subcase-ise-codes-list]';
-export const isecodesListItemSelector = '[data-test-subcase-ise-codes-list-item]';
+const selectors = {
+  isecodesList: '[data-test-subcase-ise-codes-list]',
+  isecodesListItem: '[data-test-subcase-ise-codes-list-item]',
+};
+export default selectors;

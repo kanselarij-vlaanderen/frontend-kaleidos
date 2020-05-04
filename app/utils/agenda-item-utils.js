@@ -1,6 +1,12 @@
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
+/**
+ * Cancel the Edit.
+ *
+ * @param item
+ * @param propertiesToSet
+ */
 export const cancelEdit = (item, propertiesToSet) => {
   const isSubcase = item.get('modelName') === 'subcase';
   if (item.get('hasDirtyAttributes')) {
@@ -11,15 +17,31 @@ export const cancelEdit = (item, propertiesToSet) => {
     item.belongsTo('accessLevel').reload();
   }
   item.reload();
-  propertiesToSet.forEach(prop => item.notifyPropertyChange(prop));
-}
+  const keys = Object.keys(propertiesToSet);
+  keys.forEach(async function (key) {
+    keys.forEach(prop => item.notifyPropertyChange(prop));
+  });
+};
 
+/**
+ * Set an item to not yet formally ok.
+ *
+ * @param itemToSet
+ */
 export const setNotYetFormallyOk = (itemToSet) => {
   if (itemToSet.get('formallyOk') != CONFIG.notYetFormallyOk) {
     itemToSet.set('formallyOk', CONFIG.notYetFormallyOk);
   }
-}
+};
 
+/**
+ * Set some properties on a model.
+ *
+ * @param model
+ * @param propertiesToSet
+ * @param resetFormallyOk
+ * @returns {Promise<*>}
+ */
 export const setNewPropertiesToModel = async (model, propertiesToSet, resetFormallyOk = true) => {
   if (resetFormallyOk) {
     setNotYetFormallyOk(model);
@@ -37,16 +59,31 @@ export const setNewPropertiesToModel = async (model, propertiesToSet, resetForma
   }).catch((e) => {
     throw(e);
   });
-}
+};
 
+/**
+ * Set modified on Agenda of AgendaItem.
+ *
+ * @param agendaitem
+ * @returns {Promise<void>}
+ */
 export const setModifiedOnAgendaOfAgendaitem = async (agendaitem) => {
   const agenda = await agendaitem.get('agenda');
   if (agenda) {
     agenda.set('modified', moment().utc().toDate());
     agenda.save();
   }
-}
+};
 
+/**
+ * Save Changes on agenda item or subcase.
+ *
+ * @param agendaitemOrSubcase
+ * @param propertiesToSetOnAgendaitem
+ * @param propertiesToSetOnSubcase
+ * @param resetFormallyOk
+ * @returns {Promise<void>}
+ */
 export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
   const item = agendaitemOrSubcase;
   const isAgendaItem = item.get('modelName') === 'agendaitem';
@@ -72,4 +109,4 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
       }));
     }
   }
-}
+};

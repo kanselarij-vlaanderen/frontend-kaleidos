@@ -5,7 +5,7 @@
     </h4>
     {{#if (and isEditor (not isEditing))}}
       <div class="vl-u-spacer-extended-left-s">
-        <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" data-test-subcase-mandatees-edit class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -42,6 +42,7 @@
       <div class="vlc-toolbar__left">
         <a
           href=""
+          data-test-subcase-mandatees-add-mandatee
           class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
           {{action "addRow"}}
         >
@@ -55,6 +56,7 @@
       <div class="vlc-toolbar__right">
         <div class="vl-action-group vl-action-group--align-right">
           <a
+            data-test-subcase-mandatees-edit-cancel
             href=""
             class="vl-button vl-button--tertiary vl-button--narrow"
             {{action "cancelEditing"}}
