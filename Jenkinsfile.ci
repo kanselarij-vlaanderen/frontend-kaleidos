@@ -38,7 +38,7 @@ pipeline {
             steps {
                 // Dump an up-to-date database to the cypress fixtures folder, to be used to reset state between test suites
                 // sh "docker-compose -p ${projectName} exec -T web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing dump-clean-database-for-cypress"
-                sh "cd kaleidos-project && docker-compose -p ${projectName} exec -T  exec -T web /wait-for.sh database:3306 -s -t 90  -- docker-compose -p ${projectName} exec  frontend make run-cypress-spec-files"
+                sh "cd kaleidos-project && docker-compose -p ${projectName} exec -T  exec -T web /wait-for.sh database:8890 -s -t 90  -- docker-compose -p ${projectName} exec frontend make run-cypress-spec-files"
             }
         }
         //stage('Create deployable artifact') {
