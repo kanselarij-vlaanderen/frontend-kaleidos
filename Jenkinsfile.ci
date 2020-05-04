@@ -24,9 +24,6 @@ pipeline {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "rm -rf kaleidos-project 2> /dev/null"
                 sh "eval `ssh-agent -s` && ssh-add /var/lib/jenkins/.ssh/id_rsa_github_kaleidos && git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
-                sh "cp ci/docker-compose.override.yml kaleidos-project/docker-compose.override.yml"
-                sh "cd kaleidos-project && docker-compose -p ${projectName} up -d"
-
                 // sh "cp init/cypress/ci/cypress.json cypress.json"
                 // sh "cp init/docker/ci/docker-compose.yml docker-compose.yml"
                 // sh "cp -r init/docker/ci/keys keys"
@@ -40,16 +37,18 @@ pipeline {
                 // sh "docker-compose -p ${projectName} exec -T web gulp --cwd=web/themes/custom/mytheme styles"
             }
         }
-        //stage('Prepare for automated tests') {
-            //steps {
+        stage('Prepare for automated tests') {
+            steps {
+                sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
+                sh "cd kaleidos-project && docker-compose -p ${projectName} up -d"
                 // sh "docker-compose -p ${projectName} exec -T web mkdir /var/www/project/web/sites/default/files || true"
                 // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/web/sites/default/files"
                 // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/storage/php"
                 // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/private/files"
                 // sh "docker-compose -p ${projectName} exec -T --user=www-data web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing update"
                 // sh "docker-compose -p ${projectName} exec -T --user=www-data web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing initialize-search-index"
-            //}
-        //}
+            }
+        }
         //stage('Automated tests: Cypress') {
         //    steps {
                 // Dump an up-to-date database to the cypress fixtures folder, to be used to reset state between test suites
