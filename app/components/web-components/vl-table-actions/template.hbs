@@ -46,13 +46,13 @@
     </div>
   {{/if}}
   {{#link-to
+    data-test-link-to-subcase-overview
     "cases.case.subcases.subcase.overview"
     (await row.subcase.case.id)
     (await row.subcase.id)
     target="_blank"
     bubbles=false
     class="vl-button vl-button--link vl-button--icon"
-    data-test-link-to-subcase-overview=""
   }}
     <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
   {{/link-to}}
