@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Checkout project') {
             steps {
-                sh "export HOST_UID_GID=$(id -u):$(id -g)"
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "rm -rf kaleidos-project 2> /dev/null"
                 sh "eval `ssh-agent -s` && ssh-add /var/lib/jenkins/.ssh/id_rsa_github_kaleidos && git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
                 sh "cp ci/docker-compose.override.yml kaleidos-project/docker-compose.override.yml"
