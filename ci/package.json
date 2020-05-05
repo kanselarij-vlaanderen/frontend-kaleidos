@@ -2,11 +2,11 @@
   "name": "kaleidos-cypress",
   "version": "1.0.0",
   "description": "",
-  "dependencies": {},
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
     "browser-sync": "^2.26.3",
-    "cypress": "^3.3.1",
-    "cypress-file-upload": "^3.3.1"
+    "cypress": "^4.2.0",
+    "cypress-file-upload": "^3.5.3"
   },
   "repository": {
     "type": "git",
