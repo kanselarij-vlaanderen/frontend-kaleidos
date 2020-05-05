@@ -39,7 +39,8 @@ pipeline {
                 // sh "docker-compose -p ${projectName} exec -T --user=www-data web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing initialize-search-index"
 
                 sh "cp cypress.test.json cypress.json"
-                sh "npm i"
+                sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
+                sh "npm i --production"
             }
         }
         stage('Automated tests: Cypress') {
