@@ -40,6 +40,7 @@ pipeline {
 
                 sh "cp cypress.test.json cypress.json"
                 sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
+                sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
                 sh "npm i --production"
             }
         }
