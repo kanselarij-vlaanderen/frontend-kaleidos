@@ -17,8 +17,7 @@ services:
     #      - LETSENCRYPT_HOST=kaleidos-dev.vlaanderen.be # dev-kaleidos-frontend.kanselarij-dev.s.redpencil.io
     networks:
       - default
-    volumes:
-      - ../:/app
+    build: ../
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
