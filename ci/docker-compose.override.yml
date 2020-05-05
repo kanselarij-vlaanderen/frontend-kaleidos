@@ -18,9 +18,7 @@ services:
     volumes:
       - ../:/app
     networks:
-      kaleidos:
-          aliases:
-            - "frontend.${BASE_HOSTNAME}"
+      - default
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
@@ -55,5 +53,5 @@ services:
     user: ${HOST_UID_GID}
 
 networks:
-  kaleidos:
-    driver: bridge
+  default:
+    driver: host
