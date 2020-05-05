@@ -5,10 +5,10 @@
     clearAction=(action "toggleIsEditingOverview")
   }}
 {{/if}}
-<div class="vlc-toolbar vlc-agenda-items-section-header">
+<div class="vlc-toolbar vlc-agenda-detail-sidebar-section-header">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
+      <h3 class="vl-title--h3 vlc-agenda-detail-sidebar-section-header__title">
         {{t "agendaitems-subtitle"}}
       </h3>
     </div>
@@ -17,7 +17,7 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <a href=""
-           class="vlc-agenda-items-section-header__link"
+           class="vlc-agenda-detail-sidebar-section-header__link"
           {{action "toggleChangesOnly"}}
         >
           {{#if (not isShowingChanges)}}
@@ -58,7 +58,7 @@
         {{/if}}
         {{#sortable-item
           tagName="li"
-          class="vlc-agenda-items__sub-item"
+          class="vlc-agenda-detail-sidebar__sub-item"
           model=agendaitem
           group=sortableGroup
           distance=30
@@ -90,7 +90,7 @@
         {{#if
           (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
         }}
-          <li class="vlc-agenda-items__sub-item">
+          <li class="vlc-agenda-detail-sidebar__sub-item">
             {{agenda/agenda-detail/sidebar-item
               agendaitem=agendaitem
               isEditingOverview=isEditingOverview
@@ -103,14 +103,14 @@
   {{/if}}
 </div>
 {{#if (not selectedAgendaItem)}}
-  <div class="vlc-agenda-items-section-header">
-    <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
+  <div class="vlc-agenda-detail-sidebar-section-header">
+    <h3 class="vl-title--h3 vlc-agenda-detail-sidebar-section-header__title">
       {{t "announcements-subtitle"}}
     </h3>
   </div>
 {{else}}
-  <div class="vlc-agenda-items-section-header">
-    <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
+  <div class="vlc-agenda-detail-sidebar-section-header">
+    <h3 class="vl-title--h3 vlc-agenda-detail-sidebar-section-header__title">
       {{t "announcements-subtitle"}}
     </h3>
   </div>
@@ -129,7 +129,7 @@
         }}
           {{#sortable-item
             tagName="li"
-            class="vlc-agenda-items__sub-item"
+            class="vlc-agenda-detail-sidebar__sub-item"
             model=announcement
             group=sortableAnnouncements
             distance=30
@@ -148,7 +148,7 @@
         (await announcements)
       as |announcement|
       }}
-        <div class="vlc-agenda-items__sub-item">
+        <div class="vlc-agenda-detail-sidebar__sub-item">
           {{agenda/agenda-detail/sidebar-item
             agendaitem=announcement
             isEditingOverview=isEditingOverview
