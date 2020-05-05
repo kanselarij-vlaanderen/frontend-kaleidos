@@ -52,12 +52,12 @@
         {{/if}}
       </div>
       <div class="vlc-toolbar__item">
-        {{#if user}}
+        {{#if currentSession.userContent}}
           <div class="vlc-user">
             <div class="vlc-user__username">
-              {{user.firstName}}
-              {{user.lastName}}
-              ({{role}})
+              {{currentSession.userContent.firstName}}
+              {{currentSession.userContent.lastName}}
+              ({{currentSession.userRole}})
             </div>
             <a href="" class="vlc-user__action" {{action "logout"}}>
               {{t "sign-out"}}
