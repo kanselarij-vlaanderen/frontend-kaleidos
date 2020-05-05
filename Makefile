@@ -16,10 +16,10 @@ reset-elastic-and-cache:
 	- sleep 60
 
 reset-elastic-and-cache-jenkins:
-	- docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource
+	- cd kaleidos-project &&  docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource
 	- rm -rf ${PROJECT_PATH}/testdata
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
-	- docker-compose -p ${projectName} up -d
+	- cd kaleidos-project && docker-compose -p ${projectName} up -d
 	- sleep 60
 
 run-cypress-tests-jenkins:
