@@ -44,7 +44,7 @@ pipeline {
             steps {
                 // sh "docker-compose -p ${projectName} exec -T web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing dump-clean-database-for-cypress"
                 //sh "cd kaleidos-project && docker-compose -p ${projectName} exec -T frontend /wait-for.sh database:8890 -s -t 90  -- docker-compose -p ${projectName} exec -T frontend make run-cypress-spec-files"
-                sh "make run-cypress-spec-files"
+                sh "make run-cypress-tests-jenkins"
             }
         }
         //stage('Create deployable artifact') {
