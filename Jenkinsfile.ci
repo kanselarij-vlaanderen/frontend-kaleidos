@@ -33,6 +33,8 @@ pipeline {
                 // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/private/files"
                 // sh "docker-compose -p ${projectName} exec -T --user=www-data web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing update"
                 // sh "docker-compose -p ${projectName} exec -T --user=www-data web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing initialize-search-index"
+
+                sh "cp cypress.test.json cypress.json"
             }
         }
         stage('Automated tests: Cypress') {
