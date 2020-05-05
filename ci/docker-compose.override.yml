@@ -17,8 +17,7 @@ services:
     #      - LETSENCRYPT_HOST=kaleidos-dev.vlaanderen.be # dev-kaleidos-frontend.kanselarij-dev.s.redpencil.io
     volumes:
       - ../:/app
-    networks:
-      - default
+    network_mode: host
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
@@ -51,7 +50,3 @@ services:
     user: ${HOST_UID_GID}
   elasticsearch:
     user: ${HOST_UID_GID}
-
-networks:
-  default:
-    driver: host
