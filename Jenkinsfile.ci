@@ -64,7 +64,7 @@ pipeline {
         //    }
         //}
     }
-    post {
+    //post {
         //always {
 
             // sh "docker cp `docker-compose -p ${projectName} ps -q web`:/var/www/project/reports/. ${WORKSPACE}/reports"
@@ -97,5 +97,5 @@ pipeline {
           //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} rm -f"
           //sh "cd ${WORKSPACE}/kaleidos-project && docker rmi -f `docker images | grep -i ${projectName} | tr -s ' ' | cut -d ' ' -f 3`"
         //}
-    }
+    //}
 }
