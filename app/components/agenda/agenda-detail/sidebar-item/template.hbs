@@ -6,7 +6,7 @@
       {{add index 1}}.
     {{/if}}
   </span>
-  <div>
+  <div class="vlc-agenda-detail-sidebar__text-container">
     <h4 class="vlc-agenda-detail-sidebar__subject">
     <pre>
       {{#if agendaitem.shortTitle}}
@@ -47,10 +47,10 @@
           {{#if (await agendaitem.checkAdded)}}
             <i class="vl-link__icon vl-vi vl-vi-calendar-add"></i>
             {{#attach-tooltip
-                    arrow="true"
-                    animation="shift"
-                    placement="top"
-                    class="ember-attacher-tooltip"
+              arrow="true"
+              animation="shift"
+              placement="top"
+              class="ember-attacher-tooltip"
             }}
               <p>
                 {{t "added-agendaitem-text"}}
@@ -60,22 +60,15 @@
         </span>
             {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
               {{#if (not isEditingOverview)}}
-                {{#if agendaitem.formallyOkToShow.approved}}
-                  <p class="{{agendaitem.formallyOkToShow.classNames}}">
-                    <i class="vl-vi vl-vi-check-thin" aria-hidden="true"></i>
-                    {{agendaitem.formallyOkToShow.label}}
-                  </p>
-                {{else}}
-                  <p class="{{agendaitem.formallyOkToShow.classNames}}">
-                    {{agendaitem.formallyOkToShow.label}}
-                  </p>
-                {{/if}}
+                <p class="{{agendaitem.formallyOkToShow.classNames}} {{agendaitem.formallyOkToShow.iconClassNames}}">
+                  {{agendaitem.formallyOkToShow.label}}
+                </p>
               {{else}}
                 {{utils/formally-ok-selector
-                        formallyOk=formallyOk
-                        isLoading=isLoading
-                        hideLabel=hideLabel
-                        setAction=(action "setAction")
+                  formallyOk=formallyOk
+                  isLoading=isLoading
+                  hideLabel=hideLabel
+                  setAction=(action "setAction")
                 }}
               {{/if}}
             {{/if}}

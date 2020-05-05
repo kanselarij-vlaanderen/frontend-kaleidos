@@ -82,6 +82,9 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   margin: 0 0 1rem;
 }
 
+.vlc-agenda-detail-sidebar__text-container {
+  width: calc(100% - 3rem);
+}
 
 
 // Content: the longer description

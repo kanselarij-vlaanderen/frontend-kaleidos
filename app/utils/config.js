@@ -51,13 +51,15 @@ export default EmberObject.create({
       classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive',
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
+      iconClassNames: 'vl-vi vl-vi-check-thin'
     },
     {
       label: 'Formeel niet OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
-      classNames: 'vlc-agenda-items__status vl-u-text--error vl-vi vl-vi-cross',
+      classNames: 'vlc-agenda-items__status vl-u-text--error',
       pillClassNames: 'vlc-pill vlc-pill--error',
+      iconClassNames: 'vl-vi vl-vi-cross'
     },
     {
       label: 'Nog niet formeel OK',
