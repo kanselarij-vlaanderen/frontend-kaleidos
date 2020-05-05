@@ -22,12 +22,21 @@ services:
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+  triplestore:
+    user: ${HOST_UID_GID}
+  file:
+    user: ${HOST_UID_GID}
+  musearch:
+    user: ${HOST_UID_GID}
   cache:
+    user: ${HOST_UID_GID}
     image: semtech/mu-cache:latest
     links:
       - resource:backend
     restart: always
+    user: ${HOST_UID_GID}
   resource:
+    user: ${HOST_UID_GID}
     image: semtech/mu-cl-resources:latest
     links:
       - database:database
@@ -41,6 +50,4 @@ services:
   database:
     user: ${HOST_UID_GID}
   elasticsearch:
-    user: ${HOST_UID_GID}
-  musearch:
     user: ${HOST_UID_GID}
