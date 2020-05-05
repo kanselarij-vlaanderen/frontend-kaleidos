@@ -30,13 +30,13 @@
         {{#if (eq (await comment.author.id) (await currentSession.user.id))}}
           <div class="vl-badge vl-badge--initials vl-badge--action">
             <span>
-              <UserInitials @user={{await comment.author}} />
+              {{user-initials user=(await comment.author)}}
             </span>
           </div>
         {{else}}
           <div class="vl-badge vl-badge--initials vl-badge--accent">
             <span>
-              <UserInitials @user={{await comment.author}} />
+              {{user-initials user=(await comment.author)}}
             </span>
           </div>
         {{/if}}

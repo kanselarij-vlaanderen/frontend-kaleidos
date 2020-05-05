@@ -105,7 +105,7 @@
       {{#if (not isLoading)}}
         <div class="upload-container">
           {{#each documentsInCreation as |doc|}}
-            <EmberKaleidosWebuniversum::VlUploadDocument
+            <EmberKaleidosWebuniversum::VlUploadedDocument
               @name={{doc.file.filename}}
               @extension={{doc.file.extension}}
               @size={{doc.file.size}}
@@ -118,13 +118,13 @@
               @delete={{action "delete" doc}} >
               <div class="metadata-container">
                 <div class="vlc-input-field-block">
-                  <Webcomponents::VlFormLabel @value={{t "document-name"}} />
-                  <Webcomponents::VlFormInput
+                  <WebComponents::VlFormLabel @value={{t "document-name"}} />
+                  <WebComponents::VlFormInput
                     @width="4"
                     @value={{mut doc.name}} />
                 </div>
                 <div class="vlc-input-field-block">
-                  <Webcomponents::VlFormLabel @value={{t "document-type"}} />
+                  <WebComponents::VlFormLabel @value={{t "document-type"}} />
                   <Utils::ModelSelector
                     @modelName="document-type"
                     @searchField="label"
@@ -134,7 +134,7 @@
                     @selectModel={{action "chooseDocumentType" doc.documentContainer}} />
                 </div>
               </div>
-            </EmberKaleidosWebuniversum::VlUploadDocument>
+            </EmberKaleidosWebuniversum::VlUploadedDocument>
           {{/each}}
         </div>
       {{else}}
@@ -157,7 +157,7 @@
     @large={{true}}
     @title={{t "document-link-old"}} >
     <div class="vl-modal-dialog__content">
-      <Components::Utils::AddExistingDocuments
+      <Components::Utils::AddExistingDocument
         @add={{action "link"}}
         @delete={{action "unlink"}} />
     </div>

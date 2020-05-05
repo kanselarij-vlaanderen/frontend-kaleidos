@@ -87,45 +87,6 @@ export default class SubcaseMandatees extends Component {
     }))
   }
 
-  @action
-  toggleIsEditing() {
-    this.toggleProperty('isEditing');
-  }
-
-  @action
-  async cancelEditing() {
-    this.set('mandateeRows', await this.constructMandateeRows());
-    this.toggleProperty('isEditing');
-  }
-
-  @action
-  async saveChanges() {
-    this.set('isLoading', true);
-    if (this.item.get('modelName') === 'agendaitem') {
-      const subcase = await this.get('item.subcase');
-      if (subcase) {
-        //Without this, saving mandatees on agendaitem do not always persist to the subcase
-        await subcase.get('mandatees');
-      }
-    }
-    const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
-    const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] };
-    const resetFormallyOk = true;
-    try {
-      await saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
-      this.set('isLoading', false);
-      this.toggleProperty('isEditing');
-    } catch (e) {
-      this.set('isLoading', false);
-      throw (e);
-    }
-  }
-
-  @action
-  addRow() {
-    this.toggleProperty('isAdding');
-  }
-
   async parseDomainsAndMandatees() {
     const mandateeRows = await this.get('mandateeRows');
     const mandatees = [];
