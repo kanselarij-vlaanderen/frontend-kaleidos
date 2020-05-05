@@ -21,6 +21,7 @@ function login(name){
     cy.contains(name).click()
       .wait('@mockLogin');
   });
+  cy.visit('/');
 }
 
 
