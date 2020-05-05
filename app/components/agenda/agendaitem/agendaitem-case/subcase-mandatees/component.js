@@ -87,6 +87,43 @@ export default class SubcaseMandatees extends Component {
     }))
   }
 
+  actions: {
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
+
+    async cancelEditing() {
+      this.set('mandateeRows', await this.constructMandateeRows());
+      this.toggleProperty('isEditing');
+    },
+
+    async saveChanges() {
+      this.set('isLoading', true);
+      if (this.item.get('modelName') === 'agendaitem') {
+        const subcase = await this.get('item.subcase');
+        if (subcase) {
+          //Without this, saving mandatees on agendaitem do not always persist to the subcase
+          await subcase.get('mandatees');
+        }
+      }
+      const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
+      const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] };
+      const resetFormallyOk = true;
+      try {
+        await saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
+        this.set('isLoading', false);
+        this.toggleProperty('isEditing');
+      } catch (e) {
+        this.set('isLoading', false);
+        throw (e);
+      }
+    },
+
+    addRow() {
+      this.toggleProperty('isAdding');
+    }
+  },
+
   async parseDomainsAndMandatees() {
     const mandateeRows = await this.get('mandateeRows');
     const mandatees = [];
@@ -101,8 +138,8 @@ export default class SubcaseMandatees extends Component {
         const rowIseCodes = row.get('iseCodes');
         rowIseCodes.map((code) => {
           iseCodes.push(code);
-        })
-      })
+        });
+      });
     }
     return { mandatees, iseCodes, requestedBy };
   }

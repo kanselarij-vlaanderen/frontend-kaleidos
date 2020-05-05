@@ -4,7 +4,7 @@ import moment from 'moment';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
 import { inject as service } from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
+import { destroyApprovalsOfAgendaitem, setNotYetFormallyOk } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
   toaster: service(),
@@ -17,7 +17,7 @@ export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
   isUploadingNewVersion: false,
   uploadedFile: null,
   isEditing: false,
-  documentToDelete: null,
+  documentContainerToDelete: null,
   nameBuffer: '',
 
   aboutToDelete: computed('document.aboutToDelete', function () {
@@ -33,19 +33,6 @@ export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
       return 'js-vl-accordion--open';
     }
   }),
-
-  setNotYetFormallyOk(itemToSet) {
-    if (itemToSet.get('formallyOk') != CONFIG.notYetFormallyOk) {
-      itemToSet.set('formallyOk', CONFIG.notYetFormallyOk);
-    }
-  },
-
-  async destroyApprovalsOfAgendaitem(agendaitem) {
-    const approvals = await agendaitem.get('approvals');
-    if (approvals) {
-      await Promise.all(approvals.map(approval => approval.destroyRecord()));
-    }
-  },
 
   async deleteUploadedDocument() {
     const uploadedFile = this.get('uploadedFile');
@@ -123,9 +110,9 @@ export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
       const uploadedFile = this.get('uploadedFile');
       if (uploadedFile) {
         const container = this.get('documentContainer');
-        const doc = await this.get('documentContainer.lastDocumentVersion');
+        const document = await this.get('documentContainer.lastDocumentVersion');
         container.rollbackAttributes();
-        doc.rollbackAttributes();
+        document.rollbackAttributes();
         const versionInCreation = await uploadedFile.get('documentVersion');
         if (versionInCreation) {
           await this.fileService.deleteDocumentVersion(versionInCreation);
@@ -137,35 +124,28 @@ export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
       this.set('isUploadingNewVersion', false);
     },
 
-    async saveDocuments() {
+    async saveDocument() {
+      // TODO this component/method is used for agendaitem, subcase, session (AND for decision/meetingRecord but we pass in document model)
+      // TODO should we seperate this logic to make the addition of a version more generic ? 
       this.set('isLoading', true);
-      const documentVersion = await this.get('documentContainer.lastDocumentVersion');
-      await documentVersion.save();
+      const document = await this.get('documentContainer.lastDocumentVersion');
+      await document.save();
       const item = await this.get('item');
-      await item.hasMany('documentVersions').reload();
-      const itemType = item.get('constructor.modelName');
       const subcase = await item.get('subcase');
       const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
       try {
-        if (itemType !== "decision" && subcase) {
-          await subcase.hasMany('documentVersions').reload();
-          await this.attachDocumentVersionsToModel([documentVersion], subcase).then(async item => {
-            this.setNotYetFormallyOk(item);
-            await item.save();
-          });
+        if (subcase) {
+          await this.addDocumentToSubcase([document], subcase);
         } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-          await this.addDocumentVersionsToAgendaitems([documentVersion], agendaitemsOnDesignAgenda);
+          await this.addDocumentToAgendaitems([document], agendaitemsOnDesignAgenda);
         }
-        await this.attachDocumentVersionsToModel([documentVersion], item);
-        if (subcase || itemType === 'subcase') {
-          this.setNotYetFormallyOk(item);
-        }
-        await item.save();
+        await this.addDocumentToAnyModel([document], item);
       } catch (error) {
         await this.deleteUploadedDocument();
         throw error;
       } finally {
         if (!this.isDestroyed) {
+          this.set('uploadedFile', null);
           this.set('isLoading', false);
           this.set('isUploadingNewVersion', false);
         }
@@ -173,7 +153,7 @@ export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
     },
 
     cancel() {
-      this.set('documentToDelete', null);
+      this.set('documentContainerToDelete', null);
       this.set('isVerifyingDelete', false);
     },
 
@@ -185,43 +165,65 @@ export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
         options: { timeOut: 15000 }
       };
       verificationToast.options.onUndo = () => {
-        this.fileService.reverseDelete(this.documentToDelete.get('id'));
+        this.fileService.reverseDelete(this.documentContainerToDelete.get('id'));
         this.toaster.toasts.removeObject(verificationToast);
       };
       this.toaster.displayToast.perform(verificationToast);
-      this.deleteDocumentWithUndo();
+      this.deleteDocumentContainerWithUndo();
       this.set('isVerifyingDelete', false);
     },
 
     deleteDocument(document) {
-      this.set('documentToDelete', document);
+      this.set('documentContainerToDelete', document);
       this.set('isVerifyingDelete', true);
     },
 
-    async toggleConfidential() {
-
-    },
   },
 
-  async deleteDocumentWithUndo() {
+  async deleteDocumentContainerWithUndo() {
     const { item } = this;
-    const documentVersions = item.get('documentVersions');
-    await this.fileService.get('deleteDocumentWithUndo').perform(this.documentToDelete).then(() => {
-      if (!item.aboutToDelete && documentVersions) {
-        item.hasMany('documentVersions').reload();
-      }
-    });
+    const documents = item.get('documentVersions');
+    const itemType = item.get('constructor.modelName');
+    if (itemType === 'document') {
+      await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
+    } else {
+      await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete).then(() => {
+        if (!item.aboutToDelete && documents) {
+          item.hasMany('documentVersions').reload();
+        }
+      });
+    }
   },
 
-  async addDocumentVersionsToAgendaitems(documentVersions, agendaitems) {
+  async addDocumentToAgendaitems(documents, agendaitems) {
     return Promise.all(
       agendaitems.map(async (agendaitem) => {
         await agendaitem.hasMany('documentVersions').reload();
-        await this.attachDocumentVersionsToModel(documentVersions, agendaitem);
-        this.setNotYetFormallyOk(agendaitem);
-        await this.destroyApprovalsOfAgendaitem(agendaitem);
+        await this.attachDocumentsToModel(documents, agendaitem);
+        setNotYetFormallyOk(agendaitem);
+        await destroyApprovalsOfAgendaitem(agendaitem);
         return await agendaitem.save();
       })
     );
+  },
+  async addDocumentToSubcase(documents, subcase) {
+    await subcase.hasMany('documentVersions').reload();
+    await this.attachDocumentsToModel(documents, subcase);
+    setNotYetFormallyOk(subcase);
+    return await subcase.save();
+  },
+
+  async addDocumentToAnyModel(documents, item) {
+    const itemType = item.get('constructor.modelName');
+    if (itemType === 'document') {
+      // The document is already saved in this case
+      return;
+    }
+    await item.hasMany('documentVersions').reload();
+    await this.attachDocumentsToModel(documents, item);
+    if (itemType === 'subcase' || itemType === 'agendaitem') {
+      setNotYetFormallyOk(item);
+    }
+    return await item.save();
   },
 });

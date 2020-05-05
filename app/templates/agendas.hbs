@@ -28,6 +28,7 @@
 {{#if creatingNewSession}}
   {{#web-components/vl-modal
     isOverlay=true
+    data-test-vl-modal='createNewAgendaModal'
     title=(t "new-agenda")
     closeModal=(action "cancelNewSessionForm")
   }}

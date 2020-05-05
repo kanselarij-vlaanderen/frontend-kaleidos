@@ -19,9 +19,11 @@
           </div>
           <div class="vlc-toolbar__item">
             {{#if currentSession.isEditor}}
-              <button class="vl-button vl-button--link vl-button--icon"
-                      data-test-documents-show-more
-                      type="button">
+              <button 
+                class="vl-button vl-button--link vl-button--icon"
+                data-test-documents-show-more
+                type="button"
+              >
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
                 {{#attach-popover
                   class="ember-attacher-popper"
@@ -51,7 +53,7 @@
                         {{t "document-title-edit"}}
                       </a>
                     </li>
-                    <li class="vlc-dropdown-menu__separator" role="none"></li>
+                    <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                       <a class="vl-link vl-link--block vl-u-text--error"
                          href=""
@@ -73,7 +75,8 @@
           {{if
             document.checkAdded
             "vlc-document-list__item vlc-document-list__item--active"
-          }}" >
+          }}"
+        >
           <div class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
             <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
           </div>
@@ -133,8 +136,9 @@
   {{#if (gt (await numberOfDocumentVersions) 0)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
-        <button class="vl-toggle vl-link vl-link--bold"
-                type="button"
+        <button 
+          class="vl-toggle vl-link vl-link--bold"
+          type="button"
           {{action "showVersions"}}
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
@@ -172,17 +176,18 @@
         <WebComponents::VlFormInput
           @value={{documentContainer.lastDocument.name}}
           @width={{4}} />
-        <EmberKaleidosWebuniversum::VlUploadedDocument
-          @name={{documentContainer.lastDocument.file.filename}}
-          @extension={{documentContainer.lastDocument.file.extension}}
-          @size={{documentContainer.lastDocument.file.size}}
-          @downloadName={{documentContainer.lastDocument.file.filename}}
-          @downloadLink={{concat
+        {{ember-kaleidos-webuniversum/vl-uploaded-document
+          name=documentContainer.lastDocument.file.filename
+          extension=documentContainer.lastDocument.file.extension
+          size=documentContainer.lastDocument.file.size
+          downloadName=documentContainer.lastDocument.file.filename
+          downloadLink=(concat
             documentContainer.lastDocument.file.downloadLink
             "?name="
             documentContainer.lastDocument.file.filename
-          }}
-          @delete={{action "delete" documentContainer.lastDocument}} />
+          )
+          delete=(action "delete" documentContainer.lastDocument)
+        }}
       {{/if}}
     </div>
     <WebComponents::VlModalFooter
