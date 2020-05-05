@@ -26,6 +26,7 @@ pipeline {
             steps {
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
                 sh "mkdir ${WORKSPACE}/kaleidos-project/data"
+                sh "chmod 777 ${WORKSPACE}/kaleidos-project/data"
                 sh "mkdir ${WORKSPACE}/kaleidos-project/data/db"
                 sh "mkdir ${WORKSPACE}/kaleidos-project/data/elasticsearch"
                 sh "mkdir ${WORKSPACE}/kaleidos-project/data/files"
