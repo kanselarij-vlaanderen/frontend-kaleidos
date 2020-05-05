@@ -25,8 +25,11 @@ pipeline {
         stage('Prepare for automated tests') {
             steps {
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
+                sh "mkdir ${WORKSPACE}/kaleidos-project/data"
+                sh "mkdir ${WORKSPACE}/kaleidos-project/data/db"
+                sh "mkdir ${WORKSPACE}/kaleidos-project/data/elasticsearch"
+                sh "mkdir ${WORKSPACE}/kaleidos-project/data/files"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T triplestore chmod -R 777 /var/www/project/data"
                 // sh "docker-compose -p ${projectName} exec -T web mkdir /var/www/project/web/sites/default/files || true"
                 // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/web/sites/default/files"
                 // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/storage/php"
