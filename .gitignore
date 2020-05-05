@@ -31,4 +31,7 @@
 /cypress/videos/
 /cypress/screenshots/
 
+# icon-font
+/icon-font/output/
+
 *~
