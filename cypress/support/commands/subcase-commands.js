@@ -6,7 +6,7 @@
 // ***********************************************
 // Commands
 
-import cases from "../selectors/case.selectors"
+import cases from "../../selectors/case.selectors"
 
 Cypress.Commands.add('openSubcase', openSubcase);
 Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
@@ -75,7 +75,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
 
   cy.get('@subcaseAccessLevel').within(() => {
     if(isRemark) {
-      cy.get('.vlc-input-field-block').as('editCaseForm').should('have.length', 4);
+      cy.get('.vlc-input-field-block').as('editCaseForm');
       if(newLongTitle) {
         cy.get('@editCaseForm').eq(2).within(() => {
           cy.get('.vl-textarea').click().clear().type(newLongTitle);

@@ -2,11 +2,11 @@
 /// <reference types="Cypress" />
 
 import 'cypress-file-upload';
-import document from '../selectors/document.selectors';
+import document from '../../selectors/document.selectors';
 
-import agenda  from '../selectors/agenda.selectors';
-import form  from '../selectors/form.selectors';
-import modal  from '../selectors/modal.selectors';
+import agenda  from '../../selectors/agenda.selectors';
+import form  from '../../selectors/form.selectors';
+import modal  from '../../selectors/modal.selectors';
 // ***********************************************
 // Commands
 
@@ -21,6 +21,8 @@ Cypress.Commands.add('addNewDocumentVersionToSignedDocument', addNewDocumentVers
 Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
+Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
+
 
 // ***********************************************
 // Functions
@@ -114,6 +116,25 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
 }
 
 /**
+ * @description Opens agendaitem with agendaitemTitle and clicks the document link.
+ * @name openAgendaItemDossierTab
+ * @memberOf Cypress.Chainable#.
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {boolean} alreadyHasDocs
+ */
+function openAgendaItemDossierTab(agendaItemTitle) {
+  // cy.route('GET', 'documents**').as('getDocuments');
+  cy.get('li.vlc-agenda-items__sub-item h4')
+    .contains(agendaItemTitle)
+    .click()
+    .wait(100); // sorry
+  cy.get(agenda.agendaItemDossierTab)
+    .click()
+    .wait(100); //Access-levels GET occured earlier, general wait instead
+}
+
+/**
  * @description Opens the document add dialog and adds each file in the files array
  * @name addDocuments
  * @memberOf Cypress.Chainable#
@@ -197,7 +218,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     .should('be.visible')
     .click();
 
-  cy.get(modal.createAnnouncement.modalDialog).as('fileUploadDialog');
+  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);

@@ -10,9 +10,10 @@
           {{web-components/vl-form-label value=(t "name-subcase")}}
           {{web-components/vl-form-input width="4" value=title}}
         </div>
-        <div class="vlc-input-field-block" data-test-vl-create-announcement-title-subcase>
+        <div class="vlc-input-field-block">
           {{web-components/vl-form-label value=(t "title-subcase")}}
           {{textarea
+            data-test-vl-create-announcement-long-title-subcase=true
             class="vl-textarea vl-textarea--block"
             rows="2"
             value=text
