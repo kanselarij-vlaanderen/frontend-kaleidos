@@ -33,5 +33,5 @@ me-a-sandwich:
 lint-html:
 	- ./node_modules/.bin/ember-template-lint .
 
-generate-icon-font:
+icon-font:
 	- ./generate-icon-font.sh
