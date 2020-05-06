@@ -22,7 +22,9 @@
   font-size: 1.3rem;
   text-decoration: none;
   color: $black;
-  background: #FFF;
+  background: $porcelain;
+  border-top: 0.01rem solid $ghost;
+  border-bottom: 0.01rem solid $ghost;
 }
 
 .vlc-agenda-detail-sidebar__sub-item a {

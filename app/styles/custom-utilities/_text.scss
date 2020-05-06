@@ -17,3 +17,31 @@
 .vlc-u-font-weight-normal {
   font-weight: normal;
 }
+
+.vlc-u-font-weight-500 {
+  font-weight: 500;
+}
+
+.vlc-u-font-color-dove-gray {
+  color: $dove-gray;
+}
+
+.vl-vi-check-thin::before {
+  padding-right: 0.5rem;
+}
+
+.vl-vi-question-mark::before {
+  padding-right: 0.5rem;
+}
+
+.vl-vi-cross::before {
+  padding-right: 0.5rem;
+}
+
+.vl-vi::before {
+  font-weight: 700;
+}
+
+.vlc-u-opacity-50 {
+  opacity: 50%;
+}

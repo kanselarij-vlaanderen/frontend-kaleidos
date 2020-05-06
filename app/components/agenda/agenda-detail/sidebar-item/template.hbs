@@ -35,18 +35,10 @@
             : </span> {{agendaitem.explanation}}
         {{/if}}
         <div class="vl-u-display-flex vlc-u-flex-space-between">
-          <div class="u-padding--top--small vlc-u-display-flex-align-items-flex-end">
-              {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
-                <p class="{{agendaitem.formallyOkToShow.classNames}} {{agendaitem.formallyOkToShow.iconClassNames}}">
-                  {{agendaitem.formallyOkToShow.label}}
-                </p>
-              {{/if}}
-          </div>
-
           <div class="vl-u-display-flex vlc-u-display-flex-align-items-flex-end">
             {{#if (await agendaitem.checkAdded)}}
                 <span class="added-tag vlc-agenda-meta__recently-added">
-                   <i class="vl-link__icon vl-vi vl-vi-calendar-add"></i>
+                   <i class="vl-link__icon vl-vi vl-vi-calendar-add vlc-u-opacity-50"></i>
                   {{#attach-tooltip
                     arrow="true"
                     animation="shift"
@@ -61,14 +53,22 @@
             {{/if}}
 
             {{#if (and agendaitem.showAsRemark (not agendaitem.showInNewsletter))}}
-                <i class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s opacity-lighter"></i>
+                <i class="vl-button__icon vl-vi vl-vi-hide vlc-u-opacity-50 vl-u-spacer-extended-left-s opacity-lighter"></i>
             {{/if}}
 
             {{#if (await agendaitem.subcase.confidential)}}
              <span
-               class="vl-icon vl-vi vl-vi-lock vl-u-text--error vl-u-spacer-extended-left-s"
+               class="vl-icon vl-vi vl-vi-lock vl-vi-no-font-weight vlc-u-opacity-50 vl-u-spacer-extended-left-s"
                data-test-icon-agenda-confidentiality-locked
              ></span>
+            {{/if}}
+          </div>
+
+          <div class="u-padding--top--small vlc-u-display-flex-align-items-flex-end">
+            {{#if (and isEditor (await currentAgenda.isDesignAgenda))}}
+              <p class="{{agendaitem.formallyOkToShow.classNames}} {{agendaitem.formallyOkToShow.iconClassNames}}">
+                {{agendaitem.formallyOkToShow.label}}
+              </p>
             {{/if}}
           </div>
         </div>
