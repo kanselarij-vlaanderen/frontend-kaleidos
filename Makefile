@@ -32,3 +32,20 @@ me-a-sandwich:
 
 lint-html:
 	- ./node_modules/.bin/ember-template-lint .
+
+generate-icon-font:
+	- npx icon-font-generator "./icon-font-svg-files/*.svg" \
+		--out "./public/fonts" \
+		--csspath "./app/styles/_icon-font.css" \
+		--cssfontsurl "/fonts/" \
+		--name "kaleidos-icons" \
+		--htmlpath "./tmp/icons-temp.html" \
+		--prefix "ki" \
+		--height=1000
+	- sed -i '' -e 's/\<br\>/\<br \/\>/g' "tmp/icons-temp.html"
+	- sed -i '' -e 's/\<meta charset="UTF-8"\>/\<meta charset="UTF-8"\/\>/g' "tmp/icons-temp.html"
+	- echo "{{!-- template-lint-disable  --}}" > "app/templates/icons.hbs" \
+			&& echo "<div class=\"icons-page\">" >> "app/templates/icons.hbs" \
+			&& xmllint --xpath "//body/child::*" "tmp/icons-temp.html" >> "app/templates/icons.hbs" \
+			&& printf "\n</div>" >> "app/templates/icons.hbs"
+	- sed -i '' -e 's/"label"\>/"label"\>ki-/g' "app/templates/icons.hbs"

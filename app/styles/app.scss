@@ -8,8 +8,8 @@
    ========================================================================== */
 
 @import '_colors';
-@import '_icon-font';
 $icon-font-location: '/fonts/';
+@import '_icon-font';
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/core/_setting.scss';
@@ -159,5 +159,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/editor';
 @import 'custom-application/ember-attacher';
 @import 'custom-application/file-uploader';
+@import 'custom-application/icons-overview';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';

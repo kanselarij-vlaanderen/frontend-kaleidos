@@ -1,60 +1,13 @@
-.icons-page {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 10px 20px;
-    text-align: center;
-}
-
-.preview {
-    width: 100px;
-    display: inline-block;
-    margin: 10px;
-}
-
-.preview .inner {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    background: #f5f5f5;
-    -webkit-border-radius: 3px 3px 0 0;
-    -moz-border-radius: 3px 3px 0 0;
-    border-radius: 3px 3px 0 0;
-}
-
-.preview .inner i {
-    line-height: 85px;
-    font-size: 40px;
-    color: #333;
-}
-
-.label {
-    display: inline-block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
-    font-size: 10px;
-    font-family: Monaco, monospace;
-    color: #666;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    background: #ddd;
-    -webkit-border-radius: 0 0 3px 3px;
-    -moz-border-radius: 0 0 3px 3px;
-    border-radius: 0 0 3px 3px;
-    color: #666;
-}
-
 @font-face {
     font-family: "kaleidos-icons";
-    src: url("../../kaleidos-icons.eot?56aefe2733be9651ab5a0a8814a7505e?#iefix") format("embedded-opentype"),
-url("../../kaleidos-icons.woff2?56aefe2733be9651ab5a0a8814a7505e") format("woff2"),
-url("../../kaleidos-icons.woff?56aefe2733be9651ab5a0a8814a7505e") format("woff"),
-url("../../kaleidos-icons.ttf?56aefe2733be9651ab5a0a8814a7505e") format("truetype"),
-url("../../kaleidos-icons.svg?56aefe2733be9651ab5a0a8814a7505e#kaleidos-icons") format("svg");
+    src: url("/fonts/kaleidos-icons.eot?cdeab50653b2c628ad42c0aa0cded5a6?#iefix") format("embedded-opentype"),
+url("/fonts/kaleidos-icons.woff2?cdeab50653b2c628ad42c0aa0cded5a6") format("woff2"),
+url("/fonts/kaleidos-icons.woff?cdeab50653b2c628ad42c0aa0cded5a6") format("woff"),
+url("/fonts/kaleidos-icons.ttf?cdeab50653b2c628ad42c0aa0cded5a6") format("truetype"),
+url("/fonts/kaleidos-icons.svg?cdeab50653b2c628ad42c0aa0cded5a6#kaleidos-icons") format("svg");
 }
 
-i[class^="kaleidos-icon-"]:before, i[class*=" kaleidos-icon-"]:before {
+i[class^="ki-"]:before, i[class*=" ki-"]:before {
     font-family: kaleidos-icons !important;
     font-style: normal;
     font-weight: normal !important;
@@ -65,69 +18,69 @@ i[class^="kaleidos-icon-"]:before, i[class*=" kaleidos-icon-"]:before {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.kaleidos-icon-add:before {
+.ki-add:before {
     content: "\f101";
 }
-.kaleidos-icon-alert-triangle:before {
+.ki-alert-triangle:before {
     content: "\f102";
 }
-.kaleidos-icon-arrow-down:before {
+.ki-arrow-down:before {
     content: "\f103";
 }
-.kaleidos-icon-arrow-left:before {
+.ki-arrow-left:before {
     content: "\f104";
 }
-.kaleidos-icon-arrow-right:before {
+.ki-arrow-right:before {
     content: "\f105";
 }
-.kaleidos-icon-arrow-up:before {
+.ki-arrow-up:before {
     content: "\f106";
 }
-.kaleidos-icon-bin:before {
+.ki-bin:before {
     content: "\f107";
 }
-.kaleidos-icon-calendar:before {
+.ki-calendar:before {
     content: "\f108";
 }
-.kaleidos-icon-check-small:before {
+.ki-check-small:before {
     content: "\f109";
 }
-.kaleidos-icon-cross:before {
+.ki-cross:before {
     content: "\f10a";
 }
-.kaleidos-icon-hierarchical-back:before {
+.ki-hierarchical-back:before {
     content: "\f10b";
 }
-.kaleidos-icon-info-circle:before {
+.ki-info-circle:before {
     content: "\f10c";
 }
-.kaleidos-icon-nav-down:before {
+.ki-nav-down:before {
     content: "\f10d";
 }
-.kaleidos-icon-nav-left:before {
+.ki-nav-left:before {
     content: "\f10e";
 }
-.kaleidos-icon-nav-right:before {
+.ki-nav-right:before {
     content: "\f10f";
 }
-.kaleidos-icon-nav-up:before {
+.ki-nav-up:before {
     content: "\f110";
 }
-.kaleidos-icon-pencil:before {
+.ki-pencil:before {
     content: "\f111";
 }
-.kaleidos-icon-question-mark:before {
+.ki-question-mark:before {
     content: "\f112";
 }
-.kaleidos-icon-redo:before {
+.ki-redo:before {
     content: "\f113";
 }
-.kaleidos-icon-search:before {
+.ki-search:before {
     content: "\f114";
 }
-.kaleidos-icon-sitemap:before {
+.ki-sitemap:before {
     content: "\f115";
 }
-.kaleidos-icon-user:before {
+.ki-user:before {
     content: "\f116";
 }
