@@ -4,7 +4,7 @@
 context("Table Row Click tests", () => {
 
   before(() => {
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {
@@ -23,10 +23,10 @@ context("Table Row Click tests", () => {
 	});
 
 	it("should open a case after clicking a row", () => {
-		cy.route('GET', '/cases**').as('getCases');
+		cy.route('GET', '/cases/search**').as('getCases');
 		cy.visit('/dossiers');
-		cy.wait('@getCases', {timeout: 12000});
-		cy.get('.data-table > tbody').children().as('rows').eq(0).click();
+    cy.wait('@getCases', {timeout: 12000});
+    cy.openCase('Eerste dossier');
 		cy.url().should('contain', 'deeldossiers');
 	});
 

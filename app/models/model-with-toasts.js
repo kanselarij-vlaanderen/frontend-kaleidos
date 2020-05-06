@@ -1,14 +1,11 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 
-let { Model, attr, belongsTo } = DS;
+let { Model } = DS;
 
 export default Model.extend({
-  currentSession: service(),
   intl: service(),
   toaster: service(),
-  modified: attr('datetime'),
-  modifiedBy: belongsTo('user'),
 
   checkIfCreatedNotificationShouldBeShown(type) {
     const modelListToNotShowNotificationFor = ['subcase-phase-codes', 'genders', 'formally-oks', 'confidentialities', 'approvals', 'alert-types', 'subcase-phases', 'meetings', 'postponeds'];

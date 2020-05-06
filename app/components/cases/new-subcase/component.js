@@ -20,7 +20,7 @@ export default Component.extend({
   async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
     const mandatees = await latestSubcase.get('mandatees');
     const iseCodes = await latestSubcase.get('iseCodes');
-    const themes = await latestSubcase.get('themes');
+
     const requestedBy = await latestSubcase.get('requestedBy');
     const documentVersions = await latestSubcase.get('documentVersions');
 
@@ -38,9 +38,7 @@ export default Component.extend({
 
     subcase.set('mandatees', mandatees);
     subcase.set('iseCodes', iseCodes);
-    subcase.set('themes', themes);
     subcase.set('requestedBy', requestedBy);
-
     return await subcase.save();
   },
 
@@ -55,7 +53,8 @@ export default Component.extend({
       inNewsletter: false,
       mandateeProposal: null,
       publicationDate: newsletterInfo.get('publicationDate'),
-      publicationDocDate: newsletterInfo.get('publicationDocDate')
+      publicationDocDate: newsletterInfo.get('publicationDocDate'),
+      themes: await newsletterInfo.get('themes')
     });
     return await newsletterInfoToCreate.save();
   },
@@ -76,11 +75,11 @@ export default Component.extend({
   },
 
   createSubcaseObject(newCase, newDate) {
-    const { type, title, shortTitle, confidential, showAsRemark } = this;
+    let { type, title, shortTitle, confidential, showAsRemark } = this;
     return this.store.createRecord('subcase', {
       type,
-      shortTitle,
-      title,
+      shortTitle: shortTitle.trim(),
+      title: title.trim(),
       confidential,
       showAsRemark,
       case: newCase,

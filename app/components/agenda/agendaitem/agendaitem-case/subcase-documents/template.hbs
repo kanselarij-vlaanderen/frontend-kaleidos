@@ -77,6 +77,7 @@
     {{else if isEditor}}
       <div class="vl-u-spacer">
         <button type="button" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+                data-test-add-linked-documents
           {{action "toggleIsLinkingOldDocument"}}>
           <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
           ></i>
@@ -153,7 +154,7 @@
       cancelButtonText=(t "cancel")
       saveButtonText=(t "document-add")
       cancelAction=(action "deleteAll")
-      saveAction=(action "saveDocuments")
+      saveAction=(action "saveDocumentContainers")
       disableSave=(eq model.length 0)
     }}
   {{/web-components/vl-modal}}

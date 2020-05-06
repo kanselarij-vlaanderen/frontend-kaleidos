@@ -5,7 +5,7 @@
 context('Case test', () => {
 
   before(() => {
-    cy.resetDB();
+    cy.resetCache();
   });
 
   beforeEach(() => {

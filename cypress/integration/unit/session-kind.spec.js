@@ -7,7 +7,7 @@ import printOverview from "../../selectors/print-overview.selectors";
 
 import newsletter from "../../selectors/newsletter.selector";
 
-context('Formally ok/nok tests', () => {
+context('Different session kinds should show different titles', () => {
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
   const agendaDateSpecial = Cypress.moment().add('month', plusMonths).set('date', 3).set('hour', 20).set('minute', 20);
@@ -15,7 +15,7 @@ context('Formally ok/nok tests', () => {
 
   before(() => {
     cy.server();
-    cy.resetDB();
+    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.createAgenda('Bijzondere ministerraad', plusMonths, agendaDateSpecial, 'Zaal oxford bij Cronos Leuven');

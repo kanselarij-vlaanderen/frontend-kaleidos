@@ -14,7 +14,7 @@ export default Model.extend({
   modified: attr('datetime'),
 
   isDesignAgenda: computed('name', function () {
-    return this.name == 'Ontwerpagenda';
+    return this.name === 'Ontwerpagenda';
   }),
 
   agendaName: computed('name', function () {

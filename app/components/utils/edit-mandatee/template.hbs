@@ -1,3 +1,12 @@
+{{#if showVerificationPopup}}
+  {{web-components/vl-modal-verify
+    title=(t "change-mandatee-change-end-date")
+    message=(t "change-mandatee-end-date")
+    cancel=(action "cancel")
+    verify=(action "saveChanges")
+    verifyButtonText=(t "change-mandatee-change-end-date")
+  }}
+{{/if}}
 <div class="vl-modal-dialog__content">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "title")}}
@@ -46,7 +55,8 @@
   <div class="vlc-toolbar">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
-        <button type="button" class="vl-button vl-button--link vl-button--narrow"
+        <button data-test-edit-mandatee-cancel
+                type="button" class="vl-button vl-button--link vl-button--narrow"
           {{action "closeModal"}}
         >
           {{t "cancel"}}
@@ -59,7 +69,7 @@
           text=(t "save")
           isLoading=isLoading
           data-test-vl-save=true
-          saveAction=(action "saveChanges" mandateeToEdit)
+          saveAction=(action "triggerPopUp" mandateeToEdit)
         }}
       </div>
     </div>
