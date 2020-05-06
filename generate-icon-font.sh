@@ -1,7 +1,16 @@
 #!/bin/sh
 
-# Get all variables from env file
-export $(grep -v '^#' .env.icon.font | xargs)
+# Effectively the prefix used in all classes, don't change this unless you plan a refactor!
+FONT_PREFIX=ki
+
+# The name of the font files [woff, eot, ...]
+FONT_NAME=kaleidos-icons
+
+# The location of the overview page for the icons in Ember
+OVERVIEW_PAGE_PATH=app/templates/icons.hbs
+
+# The folder containing all the SVG icons you intend to convert to the font
+PATH_TO_SVG_FILES=./icon-font-svg-files
 
 # Generate the font using the npm package
 npx icon-font-generator $PATH_TO_SVG_FILES"/*.svg" \
@@ -27,6 +36,3 @@ echo "{{!-- template-lint-disable  --}}" > $OVERVIEW_PAGE_PATH \
 
 # Modify the overview page so that the prefix is included, that allows us to just copy paste icons from the overview
 sed -i '' -e "s/\"label\"\>/\"label\"\>$FONT_PREFIX-/g" $OVERVIEW_PAGE_PATH
-
-# Clear all loaded variables to keep it local
-unset $(grep -v '^#' .env.icon.font | sed -E 's/(.*)=.*/\1/' | xargs)
