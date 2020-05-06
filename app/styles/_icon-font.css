@@ -1,0 +1,133 @@
+.icons-page {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.preview {
+    width: 100px;
+    display: inline-block;
+    margin: 10px;
+}
+
+.preview .inner {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    background: #f5f5f5;
+    -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+}
+
+.preview .inner i {
+    line-height: 85px;
+    font-size: 40px;
+    color: #333;
+}
+
+.label {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    font-size: 10px;
+    font-family: Monaco, monospace;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: #ddd;
+    -webkit-border-radius: 0 0 3px 3px;
+    -moz-border-radius: 0 0 3px 3px;
+    border-radius: 0 0 3px 3px;
+    color: #666;
+}
+
+@font-face {
+    font-family: "kaleidos-icons";
+    src: url("../../kaleidos-icons.eot?56aefe2733be9651ab5a0a8814a7505e?#iefix") format("embedded-opentype"),
+url("../../kaleidos-icons.woff2?56aefe2733be9651ab5a0a8814a7505e") format("woff2"),
+url("../../kaleidos-icons.woff?56aefe2733be9651ab5a0a8814a7505e") format("woff"),
+url("../../kaleidos-icons.ttf?56aefe2733be9651ab5a0a8814a7505e") format("truetype"),
+url("../../kaleidos-icons.svg?56aefe2733be9651ab5a0a8814a7505e#kaleidos-icons") format("svg");
+}
+
+i[class^="kaleidos-icon-"]:before, i[class*=" kaleidos-icon-"]:before {
+    font-family: kaleidos-icons !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.kaleidos-icon-add:before {
+    content: "\f101";
+}
+.kaleidos-icon-alert-triangle:before {
+    content: "\f102";
+}
+.kaleidos-icon-arrow-down:before {
+    content: "\f103";
+}
+.kaleidos-icon-arrow-left:before {
+    content: "\f104";
+}
+.kaleidos-icon-arrow-right:before {
+    content: "\f105";
+}
+.kaleidos-icon-arrow-up:before {
+    content: "\f106";
+}
+.kaleidos-icon-bin:before {
+    content: "\f107";
+}
+.kaleidos-icon-calendar:before {
+    content: "\f108";
+}
+.kaleidos-icon-check-small:before {
+    content: "\f109";
+}
+.kaleidos-icon-cross:before {
+    content: "\f10a";
+}
+.kaleidos-icon-hierarchical-back:before {
+    content: "\f10b";
+}
+.kaleidos-icon-info-circle:before {
+    content: "\f10c";
+}
+.kaleidos-icon-nav-down:before {
+    content: "\f10d";
+}
+.kaleidos-icon-nav-left:before {
+    content: "\f10e";
+}
+.kaleidos-icon-nav-right:before {
+    content: "\f10f";
+}
+.kaleidos-icon-nav-up:before {
+    content: "\f110";
+}
+.kaleidos-icon-pencil:before {
+    content: "\f111";
+}
+.kaleidos-icon-question-mark:before {
+    content: "\f112";
+}
+.kaleidos-icon-redo:before {
+    content: "\f113";
+}
+.kaleidos-icon-search:before {
+    content: "\f114";
+}
+.kaleidos-icon-sitemap:before {
+    content: "\f115";
+}
+.kaleidos-icon-user:before {
+    content: "\f116";
+}
