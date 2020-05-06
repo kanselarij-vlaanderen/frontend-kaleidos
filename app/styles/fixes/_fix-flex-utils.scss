@@ -3,27 +3,27 @@
   related to https://github.com/mono-company/digikan/issues/37
    ========================================================================== */
 
-.vl-u-flex-space-between {
+.vlc-u-flex-space-between {
   justify-content: space-between !important;
 }
 
-.vl-u-flex-align-baseline {
+.vlc-u-flex-align-baseline {
   align-items: baseline !important;
 }
 
-.vl-u-display-flex-align-center {
+.vlc-u-display-flex-align-center {
   align-items: center;
 }
 
-.vl-u-flex-justify-center {
+.vlc-u-flex-justify-center {
   justify-content: center !important;
 }
 
-.vl-u-flex-justify-flex-end {
+.vlc-u-flex-justify-flex-end {
   justify-content: flex-end !important;
 }
 
-.vl-u-flex-direction-column {
+.vlc-u-flex-direction-column {
   flex-direction: column !important;
 }
 
@@ -31,10 +31,18 @@
   flex-wrap: wrap;
 }
 
-.vl-u-flex-grow {
+.vlc-u-flex-grow {
   flex-grow: 1;
 }
 
-.vl-u-flex-inline-flex {
+.vlc-u-flex-inline-flex {
   display: inline-flex;
+}
+
+.vlc-u-display-flex-align-items-flex-end {
+  align-items: flex-end;
+}
+
+.vlc-u-flex-justify-space-evenly {
+  justify-content: space-evenly;
 }
