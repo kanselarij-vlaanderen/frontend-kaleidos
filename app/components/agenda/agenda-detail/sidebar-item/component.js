@@ -10,7 +10,7 @@ export default Component.extend(isAuthenticatedMixin, {
   agendaService: service(),
   toaster: service(),
   classNameBindings: [
-    'isActive:vlc-agenda-items__sub-item--active',
+    'isActive:vlc-agenda-detail-sidebar__sub-item--active',
     'isClickable::not-clickable',
     'agendaitem.retracted:vlc-u-opacity-lighter',
     'isPostponed:vlc-u-opacity-lighter',

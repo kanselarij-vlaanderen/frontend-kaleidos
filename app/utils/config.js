@@ -65,7 +65,7 @@ export default EmberObject.create({
       label: 'Nog niet formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
-      classNames: 'vlc-agenda-items__status vlc-u-font-weight-500 vlc-u-font-color-dove-gray vl-u-display-flex',
+      classNames: 'vlc-agenda-items__status vlc-u-font-weight-500  vl-u-display-flex',
       pillClassNames: 'vlc-pill',
       iconClassNames: 'vl-vi vl-vi-question-mark',
     },

@@ -21,10 +21,14 @@
   padding: 2rem 1.5rem;
   font-size: 1.3rem;
   text-decoration: none;
-  color: $black;
+  color: $dove-gray;
   background: $porcelain;
   border-top: 0.01rem solid $ghost;
   border-bottom: 0.01rem solid $ghost;
+}
+
+.vl-u-text-color-agenda-list {
+  color: $mine-shaft;
 }
 
 .vlc-agenda-detail-sidebar__sub-item a {
@@ -60,6 +64,12 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
   }
   .ember-power-select-selected-item{
     color:#000;
+  }
+  pre {
+    color: #fff
+  }
+  p {
+    color: #fff
   }
 }
 
@@ -97,12 +107,19 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   margin: 1rem 0;
 }
 
+.vlc-agenda-detail-sidebar__remark__content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis
+}
+
 .vlc-agenda-detail-sidebar__sub-item--active a,
 .vlc-agenda-detail-sidebar__sub-item--active a:hover,
 .vlc-agenda-detail-sidebar__sub-item--active a:active {
   background: $science-blue;
   color: #FFF;
 }
+
 
 .vlc-agenda-detail-sidebar__sub-item--active a:focus {
   background: darken($science-blue, 5%);

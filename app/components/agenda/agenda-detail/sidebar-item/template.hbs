@@ -8,7 +8,7 @@
   </span>
   <div class="vlc-agenda-detail-sidebar__text-container">
     <h4 class="vlc-agenda-detail-sidebar__subject">
-    <pre>
+    <pre class="vl-u-text-color-agenda-list">
       {{#if agendaitem.shortTitle}}
         {{agendaitem.shortTitle}}
       {{else}}
@@ -27,13 +27,7 @@
         {{/if}}
       {{/if}}
       <div>
-            <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize vlc-u-flex-grow">
-              {{await agendaitem.subcase.subcaseName}}
-            </span>
-        {{#if (and isViewer agendaitem.explanation)}}
-          <span class="vl-u-text--bold vlc-agenda-detail-sidebar__remark">{{ t "remark-title" }}
-            : </span> {{agendaitem.explanation}}
-        {{/if}}
+
         <div class="vl-u-display-flex vlc-u-flex-space-between">
           <div class="vl-u-display-flex vlc-u-display-flex-align-items-flex-end">
             {{#if (await agendaitem.checkAdded)}}
@@ -74,6 +68,5 @@
         </div>
       </div>
     {{/if}}
-
   </div>
 </div>
