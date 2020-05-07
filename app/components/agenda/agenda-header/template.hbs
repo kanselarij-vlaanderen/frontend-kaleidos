@@ -38,7 +38,7 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
-            <button data-test-approve-design-agenda type="button" class="vl-button vl-button--narrow"
+            <button data-test-agenda-header-approveAgenda type="button" class="vl-button vl-button--narrow"
               {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}

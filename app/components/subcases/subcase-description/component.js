@@ -9,7 +9,6 @@ import { saveChanges as saveSubcaseDescription, cancelEdit } from 'fe-redpencil/
 export default Component.extend(isAuthenticatedMixin, {
   store: inject(),
   classNames: ['vl-u-spacer-extended-bottom-l'],
-  propertiesToSet: Object.freeze(['subcaseName', 'type', 'showAsRemark']),
 
   item: computed('subcase', function () {
     return this.get('subcase');
@@ -42,7 +41,12 @@ export default Component.extend(isAuthenticatedMixin, {
 
     async cancelEditing() {
       const item = await this.get('item');
-      cancelEdit(item, get(this, 'propertiesToSet'));
+      const propertiesToSetOnSubCase = {
+        'subcaseName': this.get('subcaseName'),
+        'type': this.get('type'),
+        'showAsRemark': this.get('showAsRemark')
+      };
+      cancelEdit(item, propertiesToSetOnSubCase);
       set(this, 'isEditing', false);
     },
 
@@ -66,7 +70,18 @@ export default Component.extend(isAuthenticatedMixin, {
     async saveChanges() {
       const resetFormallyOk = true;
       set(this, 'isLoading', true);
-      await saveSubcaseDescription(get(this, 'item'), get(this, 'propertiesToSet'), get(this, 'propertiesToSet'), resetFormallyOk);
+
+
+      const propertiesToSetOnAgendaItem = {
+        'showAsRemark': this.get('showAsRemark')
+      };
+
+      const propertiesToSetOnSubCase = {
+        'subcaseName': this.get('subcaseName'),
+        'type': this.get('type'),
+        'showAsRemark': this.get('showAsRemark')
+      };
+      await saveSubcaseDescription(get(this, 'item'), propertiesToSetOnAgendaItem, propertiesToSetOnSubCase, resetFormallyOk);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
     }

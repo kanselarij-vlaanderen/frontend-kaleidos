@@ -76,7 +76,7 @@ context('Full test', () => {
       cy.addAgendaitemToAgenda(subcaseTitle1, false);
       cy.agendaItemExists(subcaseTitle1).click();
       cy.addSubcaseMandatee(0,-1,-1);
-     cy.get(agenda.approveDesignAgenda).click();
+     cy.get(agenda.approveAgenda).click();
       cy.get(modal.verify.save).click();
     });
     cy.get(toolbar.settings).click();
