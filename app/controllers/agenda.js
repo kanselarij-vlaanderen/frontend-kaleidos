@@ -15,7 +15,7 @@ export default Controller.extend(isAuthenticatedMixin, {
     this.set('agendaService.addedDocuments', []);
 
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(this.model.meeting, this.model.agenda); // Should soon be accesible through a relation on the agenda model
-    if (previousAgenda && this.model.meeting && thjis.model.agenda) {
+    if (previousAgenda && this.model.meeting && this.model.agenda) {
       await this.agendaService.agendaWithChanges(this.model.agenda.get('id'), previousAgenda.get('id'));
     }
   }),
