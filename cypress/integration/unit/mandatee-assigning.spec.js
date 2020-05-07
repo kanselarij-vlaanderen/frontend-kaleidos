@@ -153,7 +153,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
 
     cy.reload();
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.agendaItemExistsInDetail(SubcaseTitleShort).click();
 
     // Add 1 more
     cy.addSubcaseMandatee(5, -1, -1);

@@ -51,5 +51,6 @@ const selectors = {
   subcaseTitlesEditTitleOfSubcase: '[data-test-subcase-titles-edit-title-subcase]',
   subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
   subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
+  agendaDetailSidebarSubitem :'[data-test-agenda-detail-sidebar-sub-item]'
 };
 export default selectors;

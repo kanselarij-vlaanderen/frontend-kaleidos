@@ -94,7 +94,7 @@ context('Agenda tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
     cy.wait(45000);
-    
+
     cy.logout();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);

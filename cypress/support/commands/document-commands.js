@@ -61,7 +61,7 @@ function addNewDocumentVersionToMeeting(oldFileName, file) {
  * @param {string} files
  */
 function addDocumentsToAgendaItem(agendaItemTitle, files) {
-  openAgendaItemDocumentTab(agendaItemTitle);
+  openAgendaItemDocumentTab(agendaItemTitle,false,true);
   return addDocuments(files)
 }
 
@@ -75,7 +75,7 @@ function addDocumentsToAgendaItem(agendaItemTitle, files) {
  * @param {string} file
  */
 function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
-  openAgendaItemDocumentTab(agendaItemTitle, true);
+  openAgendaItemDocumentTab(agendaItemTitle, true,true);
   return addNewDocumentVersion(oldFileName, file, 'agendaitems')
 }
 
@@ -100,12 +100,19 @@ function addNewDocumentVersionToSubcase(oldFileName, file) {
  * @param {string} agendaItemTitle
  * @param {boolean} alreadyHasDocs
  */
-function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
+function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDetailView = false) {
   // cy.route('GET', 'documents**').as('getDocuments');
-  cy.get('li.vlc-agenda-items__sub-item h4')
-    .contains(agendaItemTitle)
-    .click()
-    .wait(2000); // sorry
+  if(isDetailView) {
+    cy.get(agenda.agendaDetailSidebarSubitem)
+      .contains(agendaItemTitle)
+      .click()
+      .wait(2000); // sorry
+  } else {
+    cy.get('li.vlc-agenda-items__sub-item h4')
+      .contains(agendaItemTitle)
+      .click()
+      .wait(2000); // sorry
+  }
   cy.get(agenda.agendaItemDocumentsTab)
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
@@ -324,7 +331,7 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
     .should('be.visible')
     .click();
 
-  cy.get(modal.createAnnouncement.modalDialog).as('fileUploadDialog');
+  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);

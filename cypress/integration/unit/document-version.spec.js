@@ -183,7 +183,7 @@ context('Tests for KAS-1076', () => {
       });
     });
 
-  it('Adding new document-version to subcase should reset formally ok and update the agendaitem on designagendas', () => {
+  it.only('Adding new document-version to subcase should reset formally ok and update the agendaitem on designagendas', () => {
     const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: new document version on procedurestap - ' + currentTimestamp();

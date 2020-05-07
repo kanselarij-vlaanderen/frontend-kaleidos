@@ -29,6 +29,7 @@ Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
+Cypress.Commands.add('agendaItemExistsInDetail', agendaItemExistsInDetail);
 
 // ***********************************************
 // Functions
@@ -235,13 +236,22 @@ function openAgendaForDate(agendaDate, meetingId) {
  * @name createDefaultAgenda
  * @function
  * @param {String} agendaItemTitle - title of the agenda
+ * @param {boolean} isDetailView - View is agenda
  */
-function openAgendaItemKortBestekTab(agendaItemTitle) {
+function openAgendaItemKortBestekTab(agendaItemTitle, isDetailView = false) {
   // cy.route('GET', 'documents**').as('getDocuments');
-  cy.get('li.vlc-agenda-items__sub-item h4')
-    .contains(agendaItemTitle)
-    .click()
-    .wait(2000); // sorry
+  if(isDetailView) {
+    cy.get(agenda.agendaDetailSidebarSubitem)
+      .contains(agendaItemTitle)
+      .click()
+      .wait(2000); // sorry
+  } else {
+    cy.get('li.vlc-agenda-items__sub-item h4')
+      .contains(agendaItemTitle)
+      .click()
+      .wait(2000); // sorry
+  }
+
   cy.get(agenda.agendaItemKortBestekTab)
     .should('be.visible')
     .click()
@@ -524,6 +534,19 @@ function toggleShowChanges(refresh) {
  */
 function agendaItemExists(agendaItemName) {
   cy.get('li.vlc-agenda-items__sub-item h4')
+    .contains(agendaItemName, { timeout: 12000 })
+    .should('exist');
+}
+
+/**
+ * @description Checks if a case with a specific name exists on an agenda
+ * @name agendaItemExistsInDetail
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemName - boolean to check if a refresh needs to happen.
+ */
+function agendaItemExistsInDetail(agendaItemName) {
+  cy.get(agenda.agendaDetailSidebarSubitem)
     .contains(agendaItemName, { timeout: 12000 })
     .should('exist');
 }

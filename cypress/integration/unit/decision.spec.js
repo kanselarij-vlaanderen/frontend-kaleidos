@@ -1,5 +1,6 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
+import agenda  from '../../selectors/agenda.selectors';
 
 context('Add files to an agenda', () => {
   const plusMonths = 1;
@@ -34,7 +35,7 @@ context('Add files to an agenda', () => {
     cy.openAgendaForDate(agendaDate);
     cy.agendaItemExists(SubcaseTitleShort).click();
     cy.wait(1000);
-    cy.get('.vl-tab > a').contains('Beslissing').click();
+    cy.get(agenda.agendaItemDecisionTab).click();
     cy.contains('Voeg beslissing toe').click();
     cy.contains('Beslissingsfiche uploaden').click();
     // TODO change to this after merging of KAS-1416
@@ -71,7 +72,7 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').should('have.length', 1);
 
     cy.addNewDocumentVersionToSignedDocument('test', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
-    
+
     cy.get('@docCards').eq(0).within(() => {
       cy.get('.vl-title--h6 > span').contains(/BIS/);
       cy.get('.vl-vi-nav-show-more-horizontal').click();
