@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
+import { computed } from '@ember/object';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import moment from 'moment';
 
@@ -11,6 +12,10 @@ export default Component.extend(isAuthenticatedMixin, {
   isEditing: false,
 
   currentSession: alias('sessionService.currentSession'),
+
+  signedDocument: computed('agendaitem.meetingRecord.signedDocument', async function () {
+    return await this.get('agendaitem.meetingRecord.signedDocument');
+  }),
 
   actions: {
     async toggleIsEditing() {
