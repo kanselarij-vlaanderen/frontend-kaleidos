@@ -46,8 +46,13 @@ export default Controller.extend({
 
   actions: {
     selectAgendaItem(agendaitem) {
+      const { currentAgenda } = this;
       this.set('sessionService.selectedAgendaItem', agendaitem);
-      this.transitionToRoute('agenda.agendaitems.agendaitem', agendaitem.get('id'));
+      this.transitionToRoute('agenda.agendaitems.agendaitem', agendaitem.get('id'), {
+        queryParams: {
+          selectedAgenda: currentAgenda.id
+        },
+      });
     },
     searchAgendaItems(value) {
       this.set('filter', value);
