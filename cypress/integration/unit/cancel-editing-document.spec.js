@@ -184,7 +184,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     });
   });
 
-  it.only('Cancelling when adding new document-version should not skip a version the next time', () => {
+  it('Cancelling when adding new document-version should not skip a version the next time', () => {
     cy.route('DELETE', '/files/**').as('deleteFile');
     cy.route('POST', '/document-versions').as('createNewDocumentVersion');
     const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
