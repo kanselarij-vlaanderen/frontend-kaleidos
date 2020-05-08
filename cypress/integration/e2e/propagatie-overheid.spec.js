@@ -42,7 +42,7 @@ context('Agenda tests', () => {
     cy.agendaItemExists(subcaseTitle1).click();
     cy.wait(1000);
     cy.get(agenda.agendaItemDocumentsTab).click();
-    cy.addDocumentsToAgendaItem(subcaseTitle1,files);
+    cy.addDocumentsToAgendaItem(subcaseTitle1,files,true);
 
     cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();

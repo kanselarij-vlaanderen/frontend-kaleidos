@@ -59,9 +59,10 @@ function addNewDocumentVersionToMeeting(oldFileName, file) {
  * @function
  * @param {string} agendaItemTitle
  * @param {string} files
+ * @param {boolean} isDetailView
  */
-function addDocumentsToAgendaItem(agendaItemTitle, files) {
-  openAgendaItemDocumentTab(agendaItemTitle,false,true);
+function addDocumentsToAgendaItem(agendaItemTitle, files,isDetailView=false) {
+  openAgendaItemDocumentTab(agendaItemTitle,false,isDetailView);
   return addDocuments(files)
 }
 

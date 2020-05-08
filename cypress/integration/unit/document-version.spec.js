@@ -60,7 +60,7 @@ context('Tests for KAS-1076', () => {
       {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-22', fileType: 'Nota'},
     ]
 
-    cy.addDocumentsToAgendaItem(SubcaseTitleShort, files);
+    cy.addDocumentsToAgendaItem(SubcaseTitleShort, files,true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
     });

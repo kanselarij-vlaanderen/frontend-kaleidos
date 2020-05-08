@@ -39,7 +39,7 @@ context('Agendaitem changes tests', () => {
     cy.setFormalOkOnAllItems();
     cy.approveDesignAgenda();
 
-    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
+    cy.addDocumentsToAgendaItem(subcaseTitle1, files,false);
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);
 
