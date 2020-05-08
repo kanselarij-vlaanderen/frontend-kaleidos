@@ -324,7 +324,7 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
     .should('be.visible')
     .click();
 
-  cy.get(modal.createAnnouncement.modalDialog).as('fileUploadDialog');
+  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
