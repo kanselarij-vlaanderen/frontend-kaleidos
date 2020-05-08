@@ -18,9 +18,7 @@ Router.map(function () {
     this.route('compare', { path: '/vergelijken' });
     this.route('documents', { path: '/documenten' });
   });
-  this.route('agendaitems', { path: '/agendaitems' }, function () {
-
-  });
+  this.route('agendaitems');
   this.route('cases', { path: '/dossiers' }, function () {
     this.route('case', { path: ':id' }, function () {
       this.route('subcases', { path: '/deeldossiers' }, function () {
@@ -35,10 +33,14 @@ Router.map(function () {
     this.route('overview', { path: '' });
   });
   this.route('settings', { path: '/instellingen' }, function () {
-    this.route('ministers', { path: '/ministers' });
+    this.route('ministers');
     this.route('overview', { path: '/overzicht' });
     this.route('users', { path:"/gebruikers"}, function() {
       this.route('user', { path: "/:id"});
+    });
+    this.route('system-alerts', { path: '/systeemmeldingen' }, function() {
+      this.route('edit', { path:'/:alert_id' });
+      this.route('new', { path:'/nieuw' });
     });
   });
   this.route('loading', { path: '/laden' });
@@ -76,6 +78,8 @@ Router.map(function () {
 
   this.route('not-supported');
   this.route('help');
+  this.route('manual', { path: '/handleiding' });
+  this.route('icons');
 });
 
 export default Router;

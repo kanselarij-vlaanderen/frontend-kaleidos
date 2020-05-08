@@ -1,0 +1,19 @@
+<WebComponents::VlModal
+  @isOverlay={{true}}
+  @title={{t "manage-alerts"}}
+  @closeModal={{action "cancel"}}
+>
+  <div class="vl-modal-dialog__content">
+    <Utils::SystemAlertForm
+      @alert={{this.model}}
+      @onCancel={{action "cancel"}}
+    />
+  </div>
+  <WebComponents::VlModalFooter
+    @isLoading={{save.isRunning}}
+    @cancelButtonText={{t "cancel"}}
+    @saveButtonText={{t "save"}}
+    @cancelAction={{action "cancel"}}
+    @saveAction={{perform save this.model}}
+  />
+</WebComponents::VlModal>

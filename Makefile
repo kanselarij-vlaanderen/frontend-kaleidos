@@ -15,11 +15,11 @@ reset-elastic-and-cache:
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 60
 
-run-cypress-tests: 
+run-cypress-tests:
 	-	make reset-elastic-and-cache
 	- npx cypress run
 
-run-cypress-spec-files: 
+run-cypress-spec-files:
 	-	make reset-elastic-and-cache
 	- npx cypress run --spec ${SPECS}
 
@@ -29,3 +29,9 @@ open-cypress-tests:
 
 me-a-sandwich:
 	@echo making you a choco sandwich
+
+lint-html:
+	- ./node_modules/.bin/ember-template-lint .
+
+icon-font:
+	- ./generate-icon-font.sh

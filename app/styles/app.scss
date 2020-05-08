@@ -9,6 +9,7 @@
 
 @import '_colors';
 $icon-font-location: '/fonts/';
+@import '_icon-font';
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/core/_setting.scss';
@@ -120,6 +121,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-user';
 @import 'custom-components/vlc-user-management-table';
 @import 'custom-components/vlc-link-actions';
+@import 'custom-components/vlc-login';
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -157,5 +159,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/editor';
 @import 'custom-application/ember-attacher';
 @import 'custom-application/file-uploader';
+@import 'custom-application/icons-overview';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';

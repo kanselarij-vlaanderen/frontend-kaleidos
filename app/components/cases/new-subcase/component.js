@@ -75,11 +75,11 @@ export default Component.extend({
   },
 
   createSubcaseObject(newCase, newDate) {
-    const { type, title, shortTitle, confidential, showAsRemark } = this;
+    let { type, title, shortTitle, confidential, showAsRemark } = this;
     return this.store.createRecord('subcase', {
       type,
-      shortTitle,
-      title,
+      shortTitle: shortTitle.trim(),
+      title: title.trim(),
       confidential,
       showAsRemark,
       case: newCase,
