@@ -45,7 +45,7 @@
           class="vl-input-field vl-input-field--block"
           @value={{comment.answer}}
           @placeholder={{t "agenda-comment-type-here"}}
-          @enter={{action "addComment" comment}} />
+          @enter={{fn this.addAnswer comment}} />
       </div>
     {{/each}}
   {{/if}}
