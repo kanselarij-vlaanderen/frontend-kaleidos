@@ -13,7 +13,7 @@
       {{/if}}
     </div>
   </div>
-  {{#if (not currentSession.isEditing)}}
+  {{#if (not isEditing)}}
     {{#if (is-pending item.documents)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
     {{else if (gt (await item.documentsLength) 0)}}
@@ -105,17 +105,18 @@
       {{#if (not isLoading)}}
         <div class="upload-container">
           {{#each documentsInCreation as |doc|}}
-            <EmberKaleidosWebuniversum::VlUploadedDocument
-              @name={{doc.file.filename}}
-              @extension={{doc.file.extension}}
-              @size={{doc.file.size}}
-              @downloadName={{doc.file.filename}}
-              @downloadLink={{concat
-                doc.file.downloadLink
-                "?name="
-                doc.file.filename
-              }}
-              @delete={{action "delete" doc}} >
+            {{#ember-kaleidos-webuniversum/vl-uploaded-document
+                    name=doc.file.filename
+                    extension=doc.file.extension
+                    size=doc.file.size
+                    downloadName=doc.file.filename
+                    downloadLink=(concat
+                            doc.file.downloadLink
+                            "?name="
+                            doc.file.filename
+                    )
+                    delete=(action "delete" doc)
+            }}
               <div class="metadata-container">
                 <div class="vlc-input-field-block">
                   <WebComponents::VlFormLabel @value={{t "document-name"}} />
@@ -134,7 +135,7 @@
                     @selectModel={{action "chooseDocumentType" doc.documentContainer}} />
                 </div>
               </div>
-            </EmberKaleidosWebuniversum::VlUploadedDocument>
+            {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
           {{/each}}
         </div>
       {{else}}
