@@ -158,7 +158,7 @@ context('Tests for KAS-1076', () => {
         });
       });
       cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 0);
-      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file, true);
 
       // Verify agendaitem is updated
       cy.get('.vlc-scroll-wrapper__body').within(() => {

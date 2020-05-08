@@ -73,9 +73,10 @@ function addDocumentsToAgendaItem(agendaItemTitle, files) {
  * @param {string} agendaItemTitle
  * @param {string} oldFileName
  * @param {string} file
+ * @param {boolean} isDetailView
  */
-function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
-  openAgendaItemDocumentTab(agendaItemTitle, true,true);
+function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file,isDetailView = false) {
+  openAgendaItemDocumentTab(agendaItemTitle, true,isDetailView);
   return addNewDocumentVersion(oldFileName, file, 'agendaitems')
 }
 

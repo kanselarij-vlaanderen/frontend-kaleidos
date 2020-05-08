@@ -48,7 +48,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         });
       });
 
-      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file,true);
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -218,7 +218,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       uploadFileToCancel(file);
       cy.get(form.formCancelButton).click().wait('@deleteFile');
 
-      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file,true);
       cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
@@ -228,7 +228,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
 
       uploadFileToCancel(file);
       cy.get(modal.baseModal.close).click().wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
-      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file,true);
       cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get('.vlc-document-card').eq(0).within(() => {
