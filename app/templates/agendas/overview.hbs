@@ -43,7 +43,7 @@
                     data-test-agendas-filter-input=true
                     class="vl-input-field"
                     value=dateFilter
-                    placeholder="bv. 02/2018"
+                    placeholder="bv. 01/2020"
                   }}
                 </div>
                 <div class="vlc-input-field-group">
@@ -146,6 +146,7 @@
                         {{#link-to
                           "agenda.agendaitems"
                           meeting.id
+                          meeting.latestAgenda.id
                           class="vl-button vl-button--link vl-button--icon"
                         }}
                           <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
