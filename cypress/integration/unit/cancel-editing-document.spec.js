@@ -15,6 +15,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('Editing of a document or document-version but cancelling should show old data', () => {

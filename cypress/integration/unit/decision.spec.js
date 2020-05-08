@@ -16,11 +16,13 @@ context('Add files to an agenda', () => {
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
+    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('should test the document CRUD for a decision', () => {
@@ -70,7 +72,7 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').should('have.length', 1);
 
     cy.addNewDocumentVersionToSignedDocument('test', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
-    
+
     cy.get('@docCards').eq(0).within(() => {
       cy.get('.vl-title--h6 > span').contains(/BIS/);
       cy.get('.vl-vi-nav-show-more-horizontal').click();
@@ -101,7 +103,7 @@ context('Add files to an agenda', () => {
     cy.get('.toasts-container > .vl-alert--error' , { timeout: 12000 }).should('not.exist');
     cy.get(agenda.decisionContainer).should('not.exist');
   });
-  
+
 });
 
 function currentTimestamp() {
