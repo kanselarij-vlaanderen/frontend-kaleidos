@@ -19,7 +19,7 @@
           </div>
           <div class="vlc-toolbar__item">
             {{#if currentSession.isEditor}}
-              <button 
+              <button
                 class="vl-button vl-button--link vl-button--icon"
                 data-test-documents-show-more
                 type="button"
@@ -136,7 +136,7 @@
   {{#if (gt (await numberOfDocumentVersions) 0)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
-        <button 
+        <button
           class="vl-toggle vl-link vl-link--bold"
           type="button"
           {{action "showVersions"}}
@@ -195,7 +195,7 @@
       @saveButtonText={{t "add"}}
       @isLoading={{isLoading}}
       @cancelAction={{action "cancelUploadVersion"}}
-      @saveAction={{action "saveDocuments"}}
+      @saveAction={{action "saveDocument"}}
       @disableSave={{not uploadedFile}} />
   </WebComponents::VlModal>
 {{/if}}
