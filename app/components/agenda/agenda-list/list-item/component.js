@@ -120,7 +120,7 @@ export default Component.extend(isAuthenticatedMixin, {
       // this.set('isLoading', true);
       const uri = item.get('uri');
       this.agendaitem.set('formallyOk', uri);
-      this.agendaitem
+      await this.agendaitem
         .save()
         .catch(() => {
           this.toaster.error();

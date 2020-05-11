@@ -11,6 +11,7 @@ context('Agenda tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('should create a new agenda of kind ministerraad with 2020-01-13 10:00 as startdate and Brussel as place', () => {

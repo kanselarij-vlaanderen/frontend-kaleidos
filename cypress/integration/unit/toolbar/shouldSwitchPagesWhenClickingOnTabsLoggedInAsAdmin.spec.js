@@ -12,6 +12,7 @@ context('Testing the toolbar as Admin user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('Should have meeting, Case, Newsletter and Settings in toolbar', () => {

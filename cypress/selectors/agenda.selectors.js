@@ -18,6 +18,8 @@ const selectors = {
   printContainer: '[data-test-agenda-printContainer]',
   printHeaderTitle: '[data-test-agenda-print-header-title]',
   pillContainer: '.pill-container',
+  dataTable: '.vl-data-table',
+  dataTableZebra: '.vl-data-table--zebra',
   toProcedureStapLink: '.vlc-panel-layout__main-content a',
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
   subcase: {
@@ -28,13 +30,22 @@ const selectors = {
     editLink: '[data-test-agendaitem-edit-link] a',
     showInNewsLetter: '[data-test-vl-subcase-titles-edit-show-in-newsletter]',
     checkBoxLabel: 'label.vl-checkbox--switch__label',
-    actionButton: '.vl-action-group button'
+    actionButton: '.vl-action-group button',
+    themes: '[data-test-agenda-news-item-themes]',
+    news: {
+      editLink: '[data-test-agenda-news-item-view] [data-test-newsletter-edit]',
+      saveButton: '[data-test-newsletter-edit-save]',
+      checkedThemes: '[data-test-themes-selector] input:checked',
+      themesSelector: '[data-agenda-item-news-edit] [data-test-themes-selector]'
+    }
   },
   agendaActions: '[data-test-agenda-header-showActionOptions]',
   approveAgenda: '[data-test-agenda-header-approveAgenda]',
   lockAgenda: '[data-test-agenda-header-lockagenda]',
   agendaItemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
   addDecision: '[data-test-add-decision]',
+  decisionContainer: '[data-test-decision-container]',
+  deleteDecision: '[data-test-delete-decision]',
   uploadDecisionFile: '[data-test-upload-decision-file]',
   accessLevelPill: '[data-test-access-level-pill]',
   accessLevelSave: '[data-test-access-level-save]',
@@ -42,5 +53,9 @@ const selectors = {
   subcaseTitlesEditTitleOfSubcase: '[data-test-subcase-titles-edit-title-subcase]',
   subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
   subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
+  approveDesignAgenda: '[data-test-approve-design-agenda]',
+  subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
+  documentType: '[data-test-document-type]',
+  documentAccessLevel: '[data-test-document-accesslevel]',
 };
 export default selectors;

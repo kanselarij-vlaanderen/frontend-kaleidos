@@ -6,6 +6,7 @@ context('Subcase tests', () => {
   const plusMonths = 1;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
   const caseTitle = 'Cypress test: subcases - ' + currentTimestamp();
+  const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
 
   before(() => {
     cy.server();
@@ -14,17 +15,18 @@ context('Subcase tests', () => {
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
+    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('should open an existing case and add a subcase', () => {
 
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -224,7 +226,117 @@ context('Subcase tests', () => {
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
   });
+
+
+  it('Changes to agenda item Themas propagate properly', () => {
+    // Open agenda
+    cy.route('GET', '/agendas/**').as('getAgenda');
+    cy.openAgendaForDate(agendaDate);
+    cy.wait('@getAgenda');
+
+    // Are there Themes in this agenda? Should be none
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.get(agenda.item.themes).contains('Er zijn nog geen thema\'s toegevoegd.');
+
+    // open themes ediging pane.
+    cy.route('GET', '**/themes').as('getAgendaItemThemes');
+    cy.get(agenda.item.news.editLink).click();
+    cy.wait('@getAgendaItemThemes');
+
+    // Toggle some themes.
+    cy.get(agenda.item.news.themesSelector).contains('Wonen').click();
+    cy.get(agenda.item.news.themesSelector).contains('Sport ').click();
+    cy.get(agenda.item.news.themesSelector).contains('Toerisme ').click();
+    cy.get(agenda.item.news.themesSelector).contains('Overheid ').click();
+    cy.get(agenda.item.news.themesSelector).contains('Innovatie ').click();
+
+    // Save this stuff.
+    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
+    cy.route('GET', '/newsletter-infos/**').as('newsletterInfosGet');
+    cy.get(agenda.item.news.saveButton).click();
+    cy.wait('@newsletterInfosPatch');
+    cy.wait('@newsletterInfosGet');
+
+    // Assert the save is done.
+    cy.get(agenda.item.themes).contains('Wonen');
+    cy.get(agenda.item.themes).contains('Sport');
+    cy.get(agenda.item.themes).contains('Toerisme');
+    cy.get(agenda.item.themes).contains('Overheid');
+    cy.get(agenda.item.themes).contains('Innovatie');
+
+    // Go via kort-bestek view
+    cy.route('GET', '/meetings/**/mail-campaign').as('getMeetingsMail');
+    cy.route('GET', '/meetings?**').as('getMeetingsfilter');
+    cy.get('.vlc-toolbar').contains('Kort bestek').click();
+    cy.wait('@getMeetingsMail');
+    cy.wait('@getMeetingsfilter');
+
+    cy.route('GET', '/meetings/**').as('getMeetingsDetail');
+    //cy.route('GET', '/agendas**').as('getAgendas');
+    cy.route('GET', '/agendaitems**').as('getAgendaItems');
+    cy.get(agenda.dataTableZebra).contains('van ' + Cypress.moment(agendaDate).format('DD.MM.YYYY')).click();
+    cy.wait('@getMeetingsDetail');
+    //cy.wait('@getAgendas');
+    cy.wait('@getAgendaItems');
+
+    // open the themes editor.
+    cy.route('GET', '**/themes').as('getKortBestekThemes');
+    cy.get(agenda.dataTable).find('.vl-vi-pencil').first().click()
+    cy.wait('@getKortBestekThemes');
+
+    // Validate already inputted data.
+    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Wonen');
+    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Sport');
+    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Toerisme');
+    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Overheid');
+    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Innovatie');
+
+    // uncheck 2
+    cy.get(agenda.item.news.themesSelector).contains('Wonen').click();
+    cy.get(agenda.item.news.themesSelector).contains('Toerisme').click();
+
+    // check 3   others
+    cy.get(agenda.item.news.themesSelector).contains('Jeugd').click();
+    cy.get(agenda.item.news.themesSelector).contains('Cultuur').click();
+    cy.get(agenda.item.news.themesSelector).contains('Media').click();
+
+
+    // Save this stuff.
+    //cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
+    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
+    cy.route('GET', '/newsletter-infos/**').as('newsletterInfosGet');
+    cy.get(agenda.item.news.saveButton).click();
+    //cy.wait('@documentVersions');
+    cy.wait('@newsletterInfosPatch');
+    cy.wait('@newsletterInfosGet');
+
+    //dont open links in new windows.
+
+    cy.get('a').invoke('removeAttr', 'target');
+    cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]').first().click();
+
+    //"Go to agendaItem
+    cy.route('GET', '/meetings/**').as('getMeetingsRequest');
+    cy.route('GET', '/agendas/**').as('getAgendas');
+    cy.get(agenda.subcase.agendaLink).click();
+    cy.wait('@getMeetingsRequest');
+    cy.wait('@getAgendas');
+
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+
+    cy.get(agenda.item.themes).contains('Sport');
+    cy.get(agenda.item.themes).contains('Overheid');
+    cy.get(agenda.item.themes).contains('Innovatie');
+
+    cy.get(agenda.item.themes).contains('Jeugd');
+    cy.get(agenda.item.themes).contains('Cultuur');
+    cy.get(agenda.item.themes).contains('Media');
+
+    cy.get(agenda.item.themes).contains('Toerisme').should('not.exist');
+    cy.get(agenda.item.themes).contains('Wonen').should('not.exist');
+  });
 });
+
 
 function currentTimestamp() {
   return Cypress.moment().unix();

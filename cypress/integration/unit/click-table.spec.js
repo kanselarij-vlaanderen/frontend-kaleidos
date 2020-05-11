@@ -10,6 +10,7 @@ context("Table Row Click tests", () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it("should open an agenda after clicking a row", () => {

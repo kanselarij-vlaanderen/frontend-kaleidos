@@ -7,7 +7,7 @@ context('KB: Edit decision in newsletter-info', () => {
     cy.resetCache();
     cy.server();
     cy.login('Admin');
-    cy.route('/')
+    cy.visit('/');
   });
 
   it('Should edit decision in newsletter-info', () => {
