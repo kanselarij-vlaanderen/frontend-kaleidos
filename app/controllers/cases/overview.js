@@ -79,9 +79,9 @@ export default Controller.extend(DefaultQueryParamsMixin, {
       const caseModel = await this.store.findRecord('case', this.get('selectedCase.id'));
       caseModel.set('isArchived', true);
       const subcases = await caseModel.subcases;
-      await Promise.all(subcases.map(subcase => {
+      await Promise.all(subcases.map(async subcase => {
         subcase.set('isArchived', true);
-        return subcase.save();
+        return await subcase.save();
       }));
       caseModel.save().then(() => {
         this.set('selectedCase', null);
@@ -93,9 +93,9 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     async unarchiveCase(caze) {
       caze.set('isArchived', false);
       const subcases = await caze.subcases;
-      await Promise.all(subcases.map(subcase => {
+      await Promise.all(subcases.map(async subcase => {
         subcase.set('isArchived', false);
-        return subcase.save();
+        return await subcase.save();
       }));
       await caze.save();
     },

@@ -26,7 +26,7 @@ context('Settings page tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.route('/');
+    cy.visit('/');
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
   });

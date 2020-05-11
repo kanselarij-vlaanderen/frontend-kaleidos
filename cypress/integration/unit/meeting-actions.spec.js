@@ -11,13 +11,16 @@ context('meeting actions tests', () => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
+    cy.visit('/');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
+    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('should perform action delete agenda with agendaitems on designagenda', () => {

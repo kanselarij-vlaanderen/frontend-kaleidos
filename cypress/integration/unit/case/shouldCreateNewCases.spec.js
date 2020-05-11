@@ -10,6 +10,7 @@ context('Create case as Admin user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('Create a case with empty values', () => {

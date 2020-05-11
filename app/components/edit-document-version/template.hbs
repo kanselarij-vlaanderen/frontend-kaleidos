@@ -10,23 +10,25 @@
 </td>
 <td>
   {{utils/model-selector
+    data-test-document-type
     modelName="document-type"
     searchField="label"
     propertyToShow="label"
     sortField="priority"
-    selectedItems=(await document.type)
+    selectedItems=document.type
     selectModel=(action "chooseDocumentType" document)
   }}
 </td>
 <td>
   {{utils/model-selector
+    data-test-document-accesslevel
     modelName="access-level"
     searchField="label"
     allowClear=true
     propertyToShow="label"
     readOnly=document.confidential
     sortField="label"
-    selectedItems=(await document.lastDocumentVersion.accessLevel)
+    selectedItems=document.lastDocumentVersion.accessLevel
     selectModel=(action "chooseAccessLevel" document)
   }}
 </td>

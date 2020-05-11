@@ -10,6 +10,7 @@ context('Full test', () => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('Scenario where a complete agenda is created', () => {
