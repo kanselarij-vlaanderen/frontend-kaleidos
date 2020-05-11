@@ -14,13 +14,16 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.server();
     cy.resetCache();
     cy.login('Admin');
+    cy.visit('/');
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
+    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {

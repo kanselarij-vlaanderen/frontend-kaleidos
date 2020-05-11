@@ -1,0 +1,86 @@
+@font-face {
+    font-family: "kaleidos-icons";
+    src: url("/fonts/kaleidos-icons.eot?cdeab50653b2c628ad42c0aa0cded5a6?#iefix") format("embedded-opentype"),
+url("/fonts/kaleidos-icons.woff2?cdeab50653b2c628ad42c0aa0cded5a6") format("woff2"),
+url("/fonts/kaleidos-icons.woff?cdeab50653b2c628ad42c0aa0cded5a6") format("woff"),
+url("/fonts/kaleidos-icons.ttf?cdeab50653b2c628ad42c0aa0cded5a6") format("truetype"),
+url("/fonts/kaleidos-icons.svg?cdeab50653b2c628ad42c0aa0cded5a6#kaleidos-icons") format("svg");
+}
+
+i[class^="ki-"]:before, i[class*=" ki-"]:before {
+    font-family: kaleidos-icons !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ki-add:before {
+    content: "\f101";
+}
+.ki-alert-triangle:before {
+    content: "\f102";
+}
+.ki-arrow-down:before {
+    content: "\f103";
+}
+.ki-arrow-left:before {
+    content: "\f104";
+}
+.ki-arrow-right:before {
+    content: "\f105";
+}
+.ki-arrow-up:before {
+    content: "\f106";
+}
+.ki-bin:before {
+    content: "\f107";
+}
+.ki-calendar:before {
+    content: "\f108";
+}
+.ki-check-small:before {
+    content: "\f109";
+}
+.ki-cross:before {
+    content: "\f10a";
+}
+.ki-hierarchical-back:before {
+    content: "\f10b";
+}
+.ki-info-circle:before {
+    content: "\f10c";
+}
+.ki-nav-down:before {
+    content: "\f10d";
+}
+.ki-nav-left:before {
+    content: "\f10e";
+}
+.ki-nav-right:before {
+    content: "\f10f";
+}
+.ki-nav-up:before {
+    content: "\f110";
+}
+.ki-pencil:before {
+    content: "\f111";
+}
+.ki-question-mark:before {
+    content: "\f112";
+}
+.ki-redo:before {
+    content: "\f113";
+}
+.ki-search:before {
+    content: "\f114";
+}
+.ki-sitemap:before {
+    content: "\f115";
+}
+.ki-user:before {
+    content: "\f116";
+}

@@ -2,14 +2,14 @@
   <div class="vl-u-spacer-extended-l">
     {{#if (not isEditing)}}
       {{agenda/agendaitem/agendaitem-case/subcase-documents
-        documents=(await model.documents)
-        item=model
+        documents=(await model.meeting.documents)
+        item=(await model.meeting)
         shouldShowLinkedDocuments=false
       }}
     {{else}}
       {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
-        documents=(await model.documents)
-        item=model
+        documents=(await model.meeting.documents)
+        item=(await model.meeting)
         cancelForm=(action "cancelEditing")
       }}
     {{/if}}

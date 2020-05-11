@@ -14,6 +14,7 @@ context('Full test', () => {
     cy.resetCache();
     cy.resetSearch();
     cy.login('Admin');
+    cy.visit('/')
   });
 
   it('should Add new minister', () => {

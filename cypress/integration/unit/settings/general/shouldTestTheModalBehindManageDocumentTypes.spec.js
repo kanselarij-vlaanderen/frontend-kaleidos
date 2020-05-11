@@ -9,7 +9,7 @@ context('Manage document tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.route('/')
+    cy.visit('/');
   });
 
   it('Should open the model behind manage document types', () => {

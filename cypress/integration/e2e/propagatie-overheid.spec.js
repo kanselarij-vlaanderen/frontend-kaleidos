@@ -18,6 +18,7 @@ context('Agenda tests', () => {
   it('Propagate decisions and documents to overheid graph by releasing them', () => {
 
     cy.login('Admin');
+    cy.visit('/');
 
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
     const plusMonths = 1;

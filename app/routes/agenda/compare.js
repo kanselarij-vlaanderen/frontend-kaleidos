@@ -15,7 +15,7 @@ export default Route.extend({
     this.set('agendaService.addedAgendaitems', []);
     this.set('sessionService.selectedAgendaItem', null);
     const agenda = await this.get('sessionService.currentAgenda');
-    const session = this.modelFor('agenda');
+    const session = this.modelFor('agenda').meeting;
     const agendas = await session.get('agendas');
     const index = agendas.lastIndexOf(agenda);
     let agendaToCompare;

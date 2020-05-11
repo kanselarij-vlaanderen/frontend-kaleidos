@@ -20,6 +20,7 @@ context('Show warning in newsletterinfo', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('Should close warning in kortbestek view when nota is added but KB is not updated', () => {
