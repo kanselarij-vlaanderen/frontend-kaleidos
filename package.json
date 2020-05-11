@@ -10,6 +10,12 @@
     "doc": "doc",
     "test": "tests"
   },
+  "browserslist": [
+    "defaults",
+    "Firefox ESR",
+    "Safari > 10",
+    "not ie <= 11"
+  ],
   "scripts": {
     "prestart": "ember-template-lint .",
     "build": "ember build --environment=production",
@@ -43,6 +49,7 @@
     "ember-changeset": "^1.6.0",
     "ember-cli": "~3.17.0",
     "ember-cli-app-version": "^3.2.0",
+    "ember-cli-autoprefixer": "^1.0.0",
     "ember-cli-babel": "^7.18.0",
     "ember-cli-cjs-transform": "^2.0.0",
     "ember-cli-dependency-checker": "^3.2.0",
