@@ -85,7 +85,11 @@ Router.map(function () {
     this.route('typography');
     this.route('buttons');
     this.route('icons');
+    this.route('pills');
+    this.route('components');
   });
+  this.route('pills');
+  this.route('components');
 });
 
 export default Router;
