@@ -9,8 +9,8 @@ export default class RadioDropdownComboSelectComponent extends Component {
 
   constructor() {
     super(...arguments);
-    if (this.args.default) {
-      this.selectedOption = this.args.default;
+    if (this.args.selected) {
+      this.selectedOption = this.args.selected;
     }
     this.othersShown = this.selectedIsInOthers;
   }
