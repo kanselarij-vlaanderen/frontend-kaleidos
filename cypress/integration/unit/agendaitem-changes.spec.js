@@ -9,6 +9,7 @@ context('Agendaitem changes tests', () => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('should add an agendaitem to an agenda and should highlight as added', () => {

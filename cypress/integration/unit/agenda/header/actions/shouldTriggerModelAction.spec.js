@@ -8,7 +8,7 @@ context('Trigger model actions for action dropdown', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-
+    cy.visit('/');
   });
 
   it('Should open navigateToSubcases modal when clicking on navigateToSubcases', () => {
