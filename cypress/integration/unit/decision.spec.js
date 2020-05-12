@@ -4,7 +4,6 @@
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
-import alert from '../../selectors/system-wide/alert.selectors';
 
 context('Add files to an agenda', () => {
   const plusMonths = 1;

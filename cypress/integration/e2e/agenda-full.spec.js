@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+/*global context, before, it, cy, Cypress*/
 /// <reference types="Cypress" />
 
 context('Full test', () => {
@@ -8,7 +9,7 @@ context('Full test', () => {
 
   before(() => {
     cy.server();
-    cy.resetCache();
+    // cy.resetCache();
     cy.login('Admin');
     cy.visit('/');
   });
