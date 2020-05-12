@@ -82,14 +82,15 @@
     "eslint": "^6.8.0",
     "eslint-plugin-ember": "^7.10.1",
     "eslint-plugin-node": "^11.0.0",
+    "icon-font-generator": "^2.1.10",
     "kaleidos-viewer": "git+https://github.com/kanselarij-vlaanderen/kaleidos-viewer.git",
     "liquid-fire": "^0.30.0",
     "loader.js": "^4.7.0",
+    "moment": "2.24.0",
     "npm-run-all": "^4.1.5",
     "qunit-dom": "^1.1.0",
     "sanitize-filename": "^1.6.3",
-    "sass": "^1.23.7",
-    "moment": "2.24.0"
+    "sass": "^1.23.7"
   },
   "engines": {
     "node": "10.* || >= 12"

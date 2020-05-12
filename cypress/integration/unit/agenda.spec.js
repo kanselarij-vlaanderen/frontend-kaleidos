@@ -19,6 +19,7 @@ context('Agenda tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('should create a new agenda and then delete it', () => {

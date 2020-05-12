@@ -9,6 +9,7 @@ context('Test the KB functionality', () => {
 
     beforeEach(() => {
       cy.login('Admin');
+      cy.visit('/');
     });
 
     it('should test the newsletter of an agenda', () => {

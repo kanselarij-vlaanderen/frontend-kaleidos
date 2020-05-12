@@ -1,4 +1,8 @@
-{{title documentTitle}}
+{{title
+  this.model.agenda.agendaName
+  " van "
+  (moment-format this.model.meeting.plannedStart 'DD/MM/YYYY HH:mm')
+}}
 <div class="vl-u-bg-alt">
   {{agenda/agenda-header
     compareAgendas=(action "compareAgendas")
@@ -16,13 +20,13 @@
 </div>
 {{#if (not isLoading)}}
   <div class="vlc-panel-layout">
-    {{#if (not shouldHideNav)}}
+    {{#unless shouldHideNav}}
       {{agenda/side-nav
-        agendas=agendas
-        currentAgenda=currentAgenda
+        agendas=this.model.meeting.sortedAgendas
+        currentAgenda=this.model.agenda
         selectAgenda=(action "selectAgenda")
       }}
-    {{/if}}
+    {{/unless}}
     {{outlet}}
   </div>
 {{else}}

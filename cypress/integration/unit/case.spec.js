@@ -11,6 +11,7 @@ context('Case test', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('should create a new case', () => {
@@ -18,7 +19,7 @@ context('Case test', () => {
     cy.createCase(false, caseTitleShort);
 
   });
-  
+
   function currentTimestamp() {
     return Cypress.moment().unix();
   }

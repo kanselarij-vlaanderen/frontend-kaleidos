@@ -4,17 +4,8 @@ import { task, all } from 'ember-concurrency';
 
 export default Route.extend({
   async model() {
-    const meeting = this.modelFor('agenda');
-    let agendaId = this.paramsFor('agenda').selectedAgenda;
-		if (!agendaId) {
-      const allAgendas = await meeting.get('agendas');
-      agendaId = allAgendas.get('firstObject').id;
-		}
-    /*
-     * TODO: Above logic is for fetching the right agenda. This should be handled by
-     * the parent of this route, called "agenda". The "agenda" route model should contain an
-     * agenda instead of a meeting. See KAS-1284.
-     */
+    const meeting = this.modelFor('agenda').meeting;
+    let agendaId = this.paramsFor('agenda').agenda;
     let agendaitems = await this.store.query('agendaitem', {
       filter: { agenda: { id: agendaId } },
       include: 'mandatees',

@@ -21,7 +21,7 @@ context('Settings: Maintain ministers', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.route('/');
+    cy.visit('/');
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include','instellingen/ministers');
