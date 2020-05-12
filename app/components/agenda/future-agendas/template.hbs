@@ -50,7 +50,13 @@
     </thead>
     <tbody class="tr-hover" data-test-future-agenda-table-body>
     {{#each (await items) as |meeting|}}
-      {{#link-to "agenda.agendaitems" meeting.id tagName="tr" classNames="tr-hover"}}
+      {{#link-to
+        "agenda.agendaitems"
+        meeting.id
+        meeting.latestAgenda.id
+        tagName="tr"
+        classNames="tr-hover"
+      }}
         <td>
           {{#if (is-pending meeting)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -92,6 +98,7 @@
           {{#link-to
             "agenda.agendaitems"
             meeting.id
+            meeting.latestAgenda.id
             class="vl-button vl-button--link vl-button--icon"
             bubbles=false
           }}

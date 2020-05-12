@@ -9,7 +9,7 @@ context('Manage goverment field tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.route('/')
+    cy.visit('/');
   });
 
   it('Should open the model behind manage goverment fields', () => {

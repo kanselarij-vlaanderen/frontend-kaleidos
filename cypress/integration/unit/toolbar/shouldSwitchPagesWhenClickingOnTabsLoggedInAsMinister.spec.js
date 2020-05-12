@@ -13,6 +13,7 @@ context('Testing the toolbar as Minister user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Minister');
+    cy.visit('/');
   });
 
   it('Should have meeting, Case, Newsletter in toolbar', () => {

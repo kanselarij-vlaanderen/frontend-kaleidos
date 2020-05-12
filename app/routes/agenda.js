@@ -3,40 +3,22 @@ import { inject } from '@ember/service';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Route.extend(AuthenticatedRouteMixin, {
-  authenticationRoute: 'login',
   sessionService: inject(),
   router: inject(),
 
-  queryParams: {
-    selectedAgenda: {
-      refreshModel: true
-    }
+  async model(params) {
+    const meetingId = params.meeting_id;
+    const meeting = await this.store.findRecord('meeting', meetingId, { include: 'agendas', reload: true });
+    this.set('sessionService.selectedAgendaItem', null);
+    this.set('sessionService.currentSession', meeting);
+    const agendaId = params.agenda_id;
+    const agenda = await meeting.get('agendas').findBy('id', agendaId);
+    this.set('sessionService.currentAgenda', agenda);
+    return {
+      meeting,
+      agenda
+    };
   },
-
-  model(params) {
-    const id = params.id;
-    return this.store.findRecord('meeting', id, { include: 'agendas' }).then((meeting) => {
-      this.set('sessionService.selectedAgendaItem', null);
-      this.set('sessionService.currentSession', null);
-      this.set('sessionService.currentSession', meeting);
-      return meeting;
-    });
-  },
-
-	afterModel() {
-		const { selectedAgenda: selectedAgendaId } = this.paramsFor('agenda');
-
-		return this.get('sessionService.agendas').then(agendas => {
-			if (selectedAgendaId) {
-				const selectedAgenda = agendas.find((agenda) => agenda.id === selectedAgendaId);
-				if (selectedAgenda) {
-					this.set('sessionService.currentAgenda', selectedAgenda);
-				}
-			} else {
-				this.set('sessionService.currentAgenda', agendas.get('firstObject'));
-			}
-		});
-	},
 
   actions: {
     refresh() {
