@@ -4,66 +4,7 @@
 
 /* Modifiers on main object
    ========================================================================== */
-.vlc-kitchensink-sample {
-  border: 1px solid #DDD;
-  padding: 4rem;
-  margin: 0 0 2rem;
-}
-.vlc-nested-kitchensink-sample{
-  border: 1px solid #DDD;
-  padding: 4rem;
-  margin: 0 0 2rem;
-}
-
-
-.links {
-  border: #CBD2DA solid 0.1rem;
-  width: 286px;
-  height: 100%;
-  left: 0px;
-  top: 44px;
-  background: #F3F5F6;
-}
-
-.vlc-styleguide-list {
-  margin-left: 10px;
-  margin-top: calc(20% - 24px / 2);
-  line-height: 150%;
-}
-.vlc-styleguide-header{
-  font-family: Flanders Art Serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 29px;
-
-  color: #000000;
-}
-.vlc-styleguide-list {
-  color: black;
-  text-decoration: none;
-}
-
-.vlc-styleguide-list:active {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 150%;
-  /* identical to box height, or 24px */
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.vlc-styleguide-list :hover {
-  color: black;
-  text-decoration: #0A6C9B underline;
-}
-
-.links h3 {
-  margin-left: 1rem;
-  margin-bottom: 1rem;
-}
-
-.vlc-styleguide-main-container {
+.vlc-kitchensink__container {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -76,9 +17,74 @@
   height: 100%;
 }
 
-.style-main {
+.vlc-kitchensink__container--main {
   height: 100%;
   width: 100%;
   overflow-y: scroll;
   text-align: left;
 }
+
+.vlc-kitchensink__header {
+  font-family: Flanders Art,"Serif";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+
+  color: #000000;
+}
+
+/* Modifiers on kitchensink sample
+   ========================================================================== */
+.vlc-kitchensink__sample {
+  border: 1px solid #DDD;
+  padding: 4rem;
+  margin: 0 0 2rem;
+}
+
+.vlc-kitchensink__sample--nested {
+  border: 2px solid #DDD;
+  padding: 4rem;
+  margin: 0 0 2rem;
+}
+
+/* Modifiers on navigation object
+   ========================================================================== */
+.vlc-kitchensink__navigation {
+  border: #CBD2DA solid 0.1rem;
+  width: 286px;
+  height: 100%;
+  left: 0px;
+  top: 44px;
+  background: #F3F5F6;
+}
+
+.vlc-kitchensink__navigation_list {
+  margin-left: 10px;
+  margin-top: calc(20% - 24px / 2);
+  line-height: 150%;
+  color: black;
+  text-decoration: none;
+}
+
+
+.vlc-kitchensink__navigation_list:active {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  /* identical to box height, or 24px */
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.vlc-kitchensink__navigation_list :hover {
+  color: black;
+  text-decoration: #0A6C9B underline;
+}
+
+.vlc-kitchensink__navigation--header {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+
