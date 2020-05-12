@@ -159,9 +159,10 @@ function addDocuments(files) {
     cy.get('.vl-button').contains('Documenten toevoegen').click();
   });
 
-  cy.wait('@createNewDocumentVersion', { timeout: 12000 });
-  cy.wait('@createNewDocument', { timeout: 12000 });
+  cy.wait('@createNewDocumentVersion', { timeout: 24000 });
+  cy.wait('@createNewDocument', { timeout: 24000 });
   cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
+  cy.get(modal.modalDialog).should('not.exist');
 }
 
 /**

@@ -9,6 +9,7 @@ context('Manage ISE codes tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
     cy.route('/')
   });
 

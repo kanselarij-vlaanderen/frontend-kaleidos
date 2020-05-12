@@ -65,7 +65,6 @@ export default Controller.extend(isAuthenticatedMixin, {
   actions: {
     selectAgenda(agenda) {
       const { currentSession } = this;
-      this.set('sessionService.selectedAgendaItem', null);
       this.transitionToRoute('agenda.agendaitems', currentSession.id, {
         queryParams: { selectedAgenda: agenda.get('id') }
       });

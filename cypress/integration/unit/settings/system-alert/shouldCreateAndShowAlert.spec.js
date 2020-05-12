@@ -16,10 +16,6 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.server();
   });
 
-  afterEach(() => {
-    cy.logout();
-  });
-
   it('Should create & Should pop up to the user once polling picks it up', () => {
     // # It creates
     cy.get(systemAlert.managementModal.add).click();
@@ -28,17 +24,19 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(systemAlert.formFields.title).type('System alert title');
     cy.get(systemAlert.formFields.message).type('System alert message');
 
-    cy.route('GET', '/alerts?**').as('getAlerts');
+    cy.route('GET', '/alerts**').as('getAlerts');
     cy.get('[data-test-save-button]').click();
     cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 3000 }); // Wait for a polling-cycle to pass
     cy.get(systemAlert.alert).should('exist');
   });
 
   it('Should close and stay closed', () => {
-    cy.route('GET', '/alerts?**').as('getAlerts');
+    cy.route('GET', '/alerts').as('getAlerts');
     cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 3000 }); // Wait for a polling-cycle to pass
 
-    cy.get(alert.closeButton).click();
+    cy.get(alert.alertMessageCloseButton).each((button) => {
+      button.click();
+    });
     cy.get(systemAlert.alert).should('not.exist');
 
     cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 3000 }); // Wait for another polling-cycle to pass

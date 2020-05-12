@@ -11,6 +11,7 @@ context('Open Action model in agenda', () => {
   });
 
   it('Should click on Action button and show the possabilities for the user Admin', () => {
+    cy.route('/');
     const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
     const JANUARI = 'januari';

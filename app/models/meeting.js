@@ -75,7 +75,11 @@ export default Model.extend({
   }),
 
   sortedAgendas: computed('agendas.@each', function () {
-    return this.agendas.sortBy('agendaName').reverse();
+    return PromiseArray.create({
+      promise: this.get('agendas').then((agendas) => {
+        return agendas.sortBy('agendaName').reverse();
+      })
+    });
   }),
 
   latestAgendaName: computed('latestAgenda.status.isDesignAgenda', 'agendas', 'intl', async function () {

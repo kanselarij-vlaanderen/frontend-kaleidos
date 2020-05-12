@@ -9,6 +9,7 @@ context('Settings overview page tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
     cy.route('/');
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');

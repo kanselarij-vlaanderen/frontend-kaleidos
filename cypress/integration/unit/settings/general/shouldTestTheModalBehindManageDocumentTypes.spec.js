@@ -9,6 +9,7 @@ context('Manage document tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
     cy.route('/')
   });
 

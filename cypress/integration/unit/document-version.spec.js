@@ -5,35 +5,17 @@ import agenda from '../../selectors/agenda.selectors';
 
 context('Tests for KAS-1076', () => {
 
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
-
-  before(() => {
-    cy.server();
-    cy.resetCache();
-    cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.logout();
-  });
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
   });
 
   it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
-    const caseTitleSingle = 'Cypress test: document versions agendaitem - ' + currentTimestamp();
-    const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: 20+ documents agendaitem with subcase - ' + currentTimestamp();
-    const subcaseTitleLong = 'Cypress test voor het toevoegen van meer dan 20 documenten in agendaitem';
-    const subcaseType = 'In voorbereiding';
-    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.createCase(false, caseTitleSingle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
-    cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    return;
+    const caseTitleSingle = 'Cypress test: document versions agendaitem - 1589286110';
+    const SubcaseTitleShort = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
 
+    cy.visit('/agenda/5EBA94D7751CF70008000001/agendapunten?selectedAgenda=5EBA94D8751CF70008000002');
     // This works but takes 300 or more seconds...
    const files = [
       {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-1', fileType: 'Nota'},
@@ -74,19 +56,7 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding more then 20 document-versions to subcase should show all', () => {
-    const caseTitleSingle = 'Cypress test: document versions - ' + currentTimestamp();
-    const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: 20+ documents subcase - ' + currentTimestamp();
-    const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
-    const subcaseType = 'In voorbereiding';
-    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.createCase(false, caseTitleSingle)
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
-    cy.route('GET', '**/document-versions?page*size*=9999').as('getPage9999');
-
-    cy.clickReverseTab('Documenten');
-
+    cy.visit('/dossiers/5EBA9528751CF7000800000A/deeldossiers/5EBA953A751CF7000800000C/documenten');
     // This works but takes 300 or more seconds...
     cy.addDocuments(
       [
@@ -115,126 +85,77 @@ context('Tests for KAS-1076', () => {
       ]
     );
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
+      cy.get('.vlc-document-card').as('docCards').should('have.length', 20);
     });
     cy.get('.vlc-backlink').click();
-    cy.addSubcase(type,SubcaseTitleShort + " part 2",subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
-    cy.route('GET', '**/linkedDocument-versions?page*size*=9999').as('getPage9999');
+    const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
+    const subcaseType = 'In voorbereiding';
+    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.clickReverseTab('Documenten').wait('@getPage9999');
+    cy.addSubcase('Nota', "cypress test: 20+ documents subcase - 1589286177 part 2",subcaseTitleLong, subcaseType, subcaseName);
+    cy.openSubcase(0);
+
+    cy.clickReverseTab('Documenten');
+    cy.get('[data-test-vl-loader]');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
+      cy.get('.vlc-document-card').as('docCards').should('have.length', 20);
     });
   });
 
   it('Adding new document-version to agendaitem on designagenda should reset formally ok and update the subcase', () => {
-    const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
-    const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: new document version on agendaitem - ' + currentTimestamp();
-    const subcaseTitleLong = 'Cypress test voor het toevoegen van een nieuwe document versie aan een agendaitem';
-    const subcaseType = 'In voorbereiding';
-    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    return ;
+    const caseTitle = 'Cypress test: document versions - 1589286212';
+    const SubcaseTitleShort = 'Cypress test: new document version on agendaitem - 1589286212';
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
-    const files = [file];
-    cy.createCase(false, caseTitle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
-    cy.addDocuments(files);
-    const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
-      cy.openAgendaForDate(agendaDate,meetingId);
-      cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-      cy.setFormalOkOnAllItems();
-      cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.wait(1500);
-      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
+    cy.visit('/agenda/5EBA9588751CF70008000012/agendapunten/5EBA95A2751CF70008000016')
+    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
 
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName);
-        });
-      });
-      cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 0);
-      cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
-
-      // Verify agendaitem is updated
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
-        });
-      });
-
-      // Verify formally ok is reset
-      cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
-
-      // Verify subcase is updated
-      cy.openCase(caseTitle);
-      cy.openSubcase(0);
-      cy.clickReverseTab('Documenten');
-      // cy.wait(1000);
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
-        });
-      });
+    // Verify agendaitem is updated
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').eq(0).within(() => {
+        cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
       });
     });
 
-  it('Adding new document-version to subcase should reset formally ok and update the agendaitem on designagendas', () => {
-    const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
-    const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: new document version on procedurestap - ' + currentTimestamp();
-    const subcaseTitleLong = 'Cypress test voor het toevoegen van een nieuwe document versie aan een procedurestap';
-    const subcaseType = 'In voorbereiding';
-    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
-    const files = [file];
-    cy.createCase(false, caseTitle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    // Verify formally ok is reset
+    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
+
+    // Verify subcase is updated
+    cy.openCase(caseTitle);
     cy.openSubcase(0);
-    cy.addDocuments(files);
-    const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
-
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen').then((meetingId) => {
-      cy.openAgendaForDate(agendaDate,meetingId);
-      cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-      cy.setFormalOkOnAllItems();
-      cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.wait(1000);
-      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
-
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName);
-        });
+    cy.clickReverseTab('Documenten');
+    // cy.wait(1000);
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').eq(0).within(() => {
+        cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
       });
-      cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 0);
+    });
+  });
 
-      cy.openCase(caseTitle);
-      cy.openSubcase(0);
-      cy.clickReverseTab('Documenten');
-      cy.addNewDocumentVersionToSubcase('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
-        });
-      });
+  it('Adding new document-version to subcase should reset formally ok and update the agendaitem on designagendas', () => {
+    return;
+    const SubcaseTitleShort = 'Cypress test: new document version on procedurestap - 1589286338';
+    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
 
-      cy.openAgendaForDate(agendaDate,meetingId);
-      cy.agendaItemExists(SubcaseTitleShort).click();
-      cy.wait(1000);
-      cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').eq(0).within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
-        });
+    cy.visit('/dossiers/5EBA95CA751CF70008000018/deeldossiers/5EBA95E1751CF7000800001A/documenten');
+    cy.addNewDocumentVersionToSubcase('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').eq(0).within(() => {
+        cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
       });
-      cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
+    });
+
+    cy.visit('/agenda/5EBA960A751CF7000800001D/agendapunten');
+    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.wait(1000);
+    cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
+    cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.vlc-document-card').eq(0).within(() => {
+        cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
       });
+    });
+    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
   });
 });
 

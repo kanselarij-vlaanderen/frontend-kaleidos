@@ -16,6 +16,7 @@ const selectors = {
   verify: {
     save: '[data-test-vl-modal-verify-save]',
     cancel: '[data-test-vl-modal-verify-save-cancel]'
-  }
+  },
+  modalDialog: '[data-test-vl-modal-dialog]'
 };
 export default selectors;

@@ -94,7 +94,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       .approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda)
       .then((newAgenda) => {
         this.changeLoading();
-        this.set('sessionService.currentAgenda', newAgenda);
         this.reloadRoute(newAgenda.get('id'));
       });
   },
@@ -105,11 +104,13 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       //TODO possible dead code, there is always an agenda ?
       return;
     }
+    // need to have agendas loaded before we can check stuff
+    await session.get('agendas');
+    debugger
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
     await this.agendaService.deleteAgenda(agenda);
     if (previousAgenda) {
       await session.save();
-      await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems.index', session.id, {
         queryParams: { selectedAgenda: previousAgenda.get('id') }
       });
@@ -372,7 +373,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
           return newAgenda;
         })
         .then((newAgenda) => {
-          this.set('sessionService.currentAgenda', newAgenda);
           this.reloadRoute(newAgenda.get('id'));
         }).finally(() => {
         this.set('sessionService.selectedAgendaItem', null);

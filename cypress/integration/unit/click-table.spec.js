@@ -13,6 +13,7 @@ context("Table Row Click tests", () => {
   });
 
   it("should open an agenda after clicking a row", () => {
+    cy.visit('/');
 		cy.route('GET', '/meetings?**').as('getMeetings');
 		cy.route('GET', '/agendas/**/agendaitems').as('getAgendas');
 

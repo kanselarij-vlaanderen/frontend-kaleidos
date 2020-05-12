@@ -48,7 +48,7 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
     cy.route('POST', '/agendaitems').as('createNewAgendaItems');
-    cy.route('POST', '/newsletter-infos').as('createNewsletter');
+    cy.route('POST', '/newsletter-infos').as('createAgenda-createNewsletter');
     cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
     cy.visit('')
@@ -94,7 +94,7 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
 
     cy.wait('@createNewAgenda', {timeout: 20000});
     cy.wait('@createNewAgendaItems', {timeout: 20000});
-    cy.wait('@createNewsletter', {timeout: 20000});
+    cy.wait('@createAgenda-createNewsletter', {timeout: 20000});
     cy.wait('@patchMeetings', {timeout: 20000})
       .then(() => {
         return new Cypress.Promise((resolve) => {
@@ -119,8 +119,9 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
     cy.route('POST', '/agendaitems').as('createNewAgendaItems');
-    cy.route('POST', '/newsletter-infos').as('createNewsletter');
+    cy.route('POST', '/newsletter-infos').as('createDefaultAgenda-createNewsletter');
     cy.route('PATCH', '/meetings/**').as('patchMeetings');
+    cy.visit('');
 
     const TOEVOEGEN = 'Toevoegen';
 
@@ -134,7 +135,7 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
     cy.wait('@createNewMeeting', {timeout: 20000})
     cy.wait('@createNewAgenda', {timeout: 20000});
     cy.wait('@createNewAgendaItems', {timeout: 20000});
-    cy.wait('@createNewsletter', {timeout: 20000});
+    cy.wait('@createDefaultAgenda-createNewsletter', {timeout: 20000});
     cy.wait('@patchMeetings', {timeout: 20000})
   }
 
@@ -222,7 +223,7 @@ function deleteAgenda(meetingId, lastAgenda) {
   cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
   // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
-  cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
+  cy.get('.vl-modal', { timeout: 40000 }).should('not.exist');
   // });
   if(lastAgenda) {
     cy.wait('@deleteNewsletter', { timeout: 20000 });
@@ -317,7 +318,6 @@ function deleteAgenda(meetingId, lastAgenda) {
  */
 function approveDesignAgenda() {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
-  cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
   cy.route('GET', '/agendas/**').as('getAgendas');
 
   //TODO add boolean for when not all items are formally ok, click through the confirmation modal
@@ -327,7 +327,6 @@ function approveDesignAgenda() {
       .contains('Ontwerpagenda')
       .click();
       cy.wait('@patchAgenda', { timeout: 12000 });
-      cy.wait('@getAgendaitems', { timeout: 12000 });
       cy.wait('@getAgendas', { timeout: 12000 });
   });
 }
@@ -341,44 +340,44 @@ function approveDesignAgenda() {
  * @param {String} remark - The remark
  * @param {{folder: String, fileName: String, fileExtension: String}[]} file
  */
-  function addRemarkToAgenda(title, remark, files) {
-    cy.route('POST', '/agendaitems').as('createNewAgendaitem');
-    cy.route('PATCH', '**').as('patchModel');
+function addRemarkToAgenda(title, remark, files) {
+  cy.route('POST', '/agendaitems').as('createNewAgendaitem');
+  cy.route('PATCH', '**').as('patchModel');
 
-    cy.get('.vl-button--icon-before', {timeout: 10000}).should('exist')
-      .contains('Acties')
-      .click();
-    cy.get(actionModel.announcement)
-      .contains('Mededeling toevoegen')
-      .click();
+  cy.get('.vl-button--icon-before', {timeout: 10000}).should('exist')
+  .contains('Acties')
+  .click();
+  cy.get(actionModel.announcement)
+  .contains('Mededeling toevoegen')
+  .click();
 
-    cy.get('.vl-modal-dialog').as('dialog').within(() => {
-      cy.get('.vlc-input-field-block').as('newRemarkForm').should('have.length', 3);
+  cy.get('.vl-modal-dialog').as('dialog').within(() => {
+    cy.get('.vlc-input-field-block').as('newRemarkForm').should('have.length', 3);
 
-      //Set title
-      cy.get('@newRemarkForm').eq(0).within(() => {
-        cy.get('.vl-input-field').click().type(title);
-      });
+    //Set title
+    cy.get('@newRemarkForm').eq(0).within(() => {
+      cy.get('.vl-input-field').click().type(title);
+    });
 
-      //Set remark
-      cy.get('@newRemarkForm').eq(1).within(() => {
-        cy.get('.vl-textarea').click().type(remark);
-      });
+    //Set remark
+    cy.get('@newRemarkForm').eq(1).within(() => {
+      cy.get('.vl-textarea').click().type(remark);
+    });
 
-      //add file
-      cy.get('@newRemarkForm').eq(2).within(() => {
-        files.forEach((file) => {
-          cy.get('@dialog').within(() => {
-            cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-          });
+    //add file
+    cy.get('@newRemarkForm').eq(2).within(() => {
+      files.forEach((file) => {
+        cy.get('@dialog').within(() => {
+          cy.uploadFile(file.folder, file.fileName, file.fileExtension);
         });
       });
-      cy.get('.vl-button').contains('Mededeling toevoegen').click();
     });
-    cy.wait('@createNewAgendaitem', {timeout: 20000})
-    //TODO patchmodel does not happen ??
-    // cy.wait('@patchModel', { timeout: 20000 }).verifyAlertSuccess();
-  }
+    cy.get('.vl-button').contains('Mededeling toevoegen').click();
+  });
+  cy.wait('@createNewAgendaitem', {timeout: 20000})
+  //TODO patchmodel does not happen ??
+  // cy.wait('@patchModel', { timeout: 20000 }).verifyAlertSuccess();
+}
 
 /**
  * @description Add a new case to the agenda
@@ -388,57 +387,58 @@ function approveDesignAgenda() {
  * @param {String} caseTitle - The title of the case
  * @param {boolean} postponed - The remark
  */
-  function addAgendaitemToAgenda(caseTitle, postponed) {
-    cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
-    cy.route('GET', '/agendaitems**').as('getAgendaitems');
+function addAgendaitemToAgenda(caseTitle, postponed) {
+
+  cy.contains('Pagina is aan het laden').should('not.exist');
+  cy.get('.vl-button--icon-before', {timeout: 10000}).should('exist')
+  .contains('Acties')
+  .click();
+  cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
+  cy.get(actionModel.navigatetosubcases)
+  .should('be.visible')
+  .click();
+  cy.wait('@getSubcasesFiltered', {timeout: 20000});
+
+  cy.get('.vl-modal-dialog').as('dialog').within(() => {
+    cy.get('.vl-form-grid').children().as('formGrid');
+
+    if (postponed) {
+      cy.get('@formGrid').eq(1).within(() => {
+        cy.get('.vl-checkbox--switch__label').click();
+      });
+    }
+    cy.get('.is-loading-data', {timeout: 12000}).should('not.exist');
+
+    // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
+    // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFilteredBetter');
+
+
+    if (caseTitle) {
+      cy.get('@formGrid').eq(0).within(() => {
+        cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
+        cy.get('.vl-input-field').clear().type(caseTitle, {force: true});
+        cy.wait('@getSubcasesFiltered', {timeout: 12000});
+      });
+      cy.get('table > tbody > tr',).as('rows');
+    } else {
+      cy.get('table > tbody > tr',).as('rows');
+      cy.get('@rows', {timeout: 12000}).should('not.have.length', 1)
+    }
+    cy.get('@rows', {timeout: 12000}).eq(0).click().get('[type="checkbox"]').should('be.checked');
+    cy.route('GET', '/agendaitems**').as('getAgendaitems-after-add');
     cy.route('POST', '/agendaitems').as('createNewAgendaitem');
     cy.route('POST', '/subcase-phases').as('createSubcasePhase');
     cy.route('PATCH', '/subcases/**').as('patchSubcase');
     cy.route('PATCH', '/agendas/**').as('patchAgenda');
-
-    cy.contains('Pagina is aan het laden').should('not.exist');
-    cy.get('.vl-button--icon-before', {timeout: 10000}).should('exist')
-      .contains('Acties')
-      .click();
-    cy.get(actionModel.navigatetosubcases)
-      .should('be.visible')
-      .click();
-    cy.wait('@getSubcasesFiltered', {timeout: 20000});
-
-    cy.get('.vl-modal-dialog').as('dialog').within(() => {
-      cy.get('.vl-form-grid').children().as('formGrid');
-
-      if (postponed) {
-        cy.get('@formGrid').eq(1).within(() => {
-          cy.get('.vl-checkbox--switch__label').click();
-        });
-      }
-      cy.get('.is-loading-data', {timeout: 12000}).should('not.exist');
-
-      // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
-      // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFilteredBetter');
-
-
-      if (caseTitle) {
-        cy.get('@formGrid').eq(0).within(() => {
-          cy.get('.vl-input-field').clear().type(caseTitle, {force: true});
-          cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
-          cy.wait('@getSubcasesFiltered', {timeout: 12000});
-        });
-        cy.get('table > tbody > tr',).as('rows');
-      } else {
-        cy.get('table > tbody > tr',).as('rows');
-        cy.get('@rows', {timeout: 12000}).should('not.have.length', 1)
-      }
-      cy.get('@rows', {timeout: 12000}).eq(0).click().get('[type="checkbox"]').should('be.checked');
-      cy.get('.vl-button').contains('Agendapunt toevoegen').click();
-    });
+    cy.get('.vl-button').contains('Agendapunt toevoegen').click();
     cy.wait('@createNewAgendaitem', {timeout: 20000})
-      .wait('@patchSubcase', {timeout: 20000})
-      .wait('@createSubcasePhase', {timeout: 20000})
-      .wait('@patchAgenda', {timeout: 20000})
-      .wait('@getAgendaitems', {timeout: 20000});
-  }
+    cy.wait('@getAgendaitems-after-add', {timeout: 20000});
+    cy.wait('@patchSubcase', {timeout: 20000})
+    cy.wait('@createSubcasePhase', {timeout: 20000})
+    cy.wait('@patchAgenda', {timeout: 20000})
+  })
+};
+
 
 /**
  * @description Toggles the show changes
@@ -448,14 +448,17 @@ function approveDesignAgenda() {
  * @param {boolean} refresh - boolean to check if a refresh needs to happen.
  */
   function toggleShowChanges(refresh) {
-    cy.route('GET', '/agendaitems/**').as('getAgendaitems');
+    cy.server();
+    let reqId = (new Date()).getTime();
+    let reqName = `getAgendaItems-${reqId}`;
     // cy.route('GET', '/agenda-sort/agenda-with-changes**').as('getChanges');
 
     if (refresh) {
+      cy.route('GET', '/agendaitems/**').as(reqName);
       cy.get('.vlc-side-nav-item', {timeout: 12000})
         .last({timeout: 12000})
         .click();
-      cy.wait('@getAgendaitems', {timeout: 20000});
+      cy.wait(`@${reqName}`, {timeout: 20000});
       cy.get('.vlc-side-nav-item', {timeout: 12000})
         .first({timeout: 12000})
         .click();
@@ -495,6 +498,8 @@ function approveDesignAgenda() {
       .contains(agendaName, {timeout: 12000})
       .should('exist')
       .click();
+    // wait for url change and update of active agenda
+    cy.get('.vlc-side-nav-item--active').children().contains(agendaName, {timeout: 12000});
   }
 
 /**

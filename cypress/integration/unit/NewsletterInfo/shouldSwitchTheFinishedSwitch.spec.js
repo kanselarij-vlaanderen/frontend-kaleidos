@@ -11,6 +11,7 @@ context('NewsletterInfo: Switching the finished switch', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+    cy.visit('/');
     cy.route('/')
   });
 

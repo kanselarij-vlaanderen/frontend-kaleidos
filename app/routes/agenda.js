@@ -16,30 +16,28 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
   model(params) {
     const id = params.id;
-    return this.store.findRecord('meeting', id, { include: 'agendas' }).then(async (meeting) => {
+    return this.store.findRecord('meeting', id, { reload: true, include: 'agendas' }).then(async (meeting) => {
       this.set('sessionService.selectedAgendaItem', null);
-      this.set('sessionService.currentSession', null);
       this.set('sessionService.currentSession', meeting);
+      this.get('sessionService').notifyPropertyChange('agendas');
       await all(meeting.get('agendas').map((agenda) => {
         return agenda.load('status');
       }));
 
-      return meeting;
-    });
-  },
+      const { selectedAgenda: selectedAgendaId } = params;
 
-  afterModel() {
-    const { selectedAgenda: selectedAgendaId } = this.paramsFor('agenda');
-
-    return this.get('sessionService.agendas').then(agendas => {
-      if (selectedAgendaId) {
-        const selectedAgenda = agendas.find((agenda) => agenda.id === selectedAgendaId);
-        if (selectedAgenda) {
-          this.set('sessionService.currentAgenda', selectedAgenda);
+      await meeting.get('agendas').then(agendas => {
+        if (selectedAgendaId) {
+          const selectedAgenda = agendas.find((agenda) => agenda.id === selectedAgendaId);
+          if (selectedAgenda) {
+            this.set('sessionService.currentAgenda', selectedAgenda);
+          }
+        } else {
+          this.set('sessionService.currentAgenda', agendas.get('firstObject'));
         }
-      } else {
-        this.set('sessionService.currentAgenda', agendas.get('firstObject'));
-      }
+      });
+
+      return meeting;
     });
   },
 

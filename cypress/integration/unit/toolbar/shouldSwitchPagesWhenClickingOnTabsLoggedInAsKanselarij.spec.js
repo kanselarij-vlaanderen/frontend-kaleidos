@@ -12,6 +12,7 @@ context('Testing the toolbar as Kanselarij user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Kanselarij');
+    cy.visit('/');
   });
 
   it('Should have meeting, Case, Newsletter, Settings in toolbar', () => {
@@ -29,7 +30,7 @@ context('Testing the toolbar as Kanselarij user', () => {
   });
 
   it('Should switch to cases tab when cases is clicked as Kanselarij', () => {
-    cy.get(toolbar.agenda).click();
+    cy.get(toolbar.cases).click();
     cy.get(agenda.overviewTitle).should('not.exist');
     cy.get(cases.casesOverviewTitle).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
