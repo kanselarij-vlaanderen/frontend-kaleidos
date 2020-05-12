@@ -295,13 +295,13 @@
 {{#if isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @isAddingAgendaitems={{isAddingAgendaitems}}
-    @reloadRoute={{action "reloadRoute"}} />
+    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
 {{/if}}
 {{#if isAddingAnnouncement}}
   <Agenda::CreateAnnouncement
     @isAddingAnnouncement={{isAddingAnnouncement}}
     @currentAgenda={{currentAgenda}}
-    @reloadRoute={{action "reloadRoute"}} />
+    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
 {{/if}}
 {{#if isAssigningSignature}}
   <Session::SelectSignature
