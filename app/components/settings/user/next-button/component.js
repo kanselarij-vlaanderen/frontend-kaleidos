@@ -1,14 +1,15 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject } from '@ember/service';
+import { action } from '@ember/object';
 
-export default Component.extend({
-  router: inject(),
-  actions: {
-    async onRowClick() {
-      const account = await this.get('row.account');
-      const user = await account.get('user');
-      const userId = await user.get('id');
-      this.router.transitionTo('settings.users.user', userId);
-    },
+export default class NextButton extends Component {
+  router = inject();
+
+  @action
+  async onRowClick() {
+    const account = await this.args.row.account;
+    const user = await account.user;
+    const userId = await user.id;
+    this.args.goToRoute('settings.users.user',userId);
   }
-});
+}
