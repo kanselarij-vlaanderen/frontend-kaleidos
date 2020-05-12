@@ -1,22 +1,23 @@
 <style xmlns="http://www.w3.org/1999/html">
   .vlc-kitchensink-sample {
     border: 1px solid #DDD;
-    margin: auto;
     padding: 4rem;
     margin: 0 0 2rem;
-    width: 80%;
+  }
+  .vlc-nested-kitchensink-sample{
+    border: 1px solid #DDD;
+    padding: 4rem;
+    margin: 0 0 2rem;
   }
 
 
-
   .links {
-    position: absolute;
+    border: #CBD2DA solid 0.1rem;
     width: 286px;
     height: 100%;
     left: 0px;
     top: 44px;
-    background: #E5E5E5;
-    float: left;
+    background: #F3F5F6;
   }
 
   .vlc-styleguide-list {
@@ -24,13 +25,21 @@
     margin-top: calc(20% - 24px / 2);
     line-height: 150%;
   }
+  .vlc-styleguide-header{
+    font-family: Flanders Art Serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
 
-  .vlc-styleguide-list li a {
+    color: #000000;
+  }
+  .vlc-styleguide-list {
     color: black;
     text-decoration: none;
   }
 
-  .vlc-styleguide-list li a:active {
+  .vlc-styleguide-list:active {
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
@@ -39,17 +48,20 @@
     text-transform: uppercase;
   }
 
-  .vlc-styleguide-list li a:hover {
+  .vlc-styleguide-list :hover {
     color: black;
     text-decoration: #0A6C9B underline;
   }
 
-  .links h2 {
+  .links h3 {
     margin-left: 1rem;
     margin-bottom: 1rem;
   }
 
   .vlc-styleguide-main-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     margin: auto;
     font-family: "Flanders Art Sans", sans-serif;
     font-style: normal;
@@ -60,20 +72,10 @@
   }
 
   .style-main {
-    margin-left: 28.6rem;
     height: 100%;
     width: 100%;
-    display: inline-block;
-    overflow: scroll;
-  }
-
-  section {
-    align-items: center;
-  }
-
-  section h1 {
-    font-weight: 500;
-    font-size: 24px;
+    overflow-y: scroll;
+    text-align: left;
   }
 </style>
 <div class="vlc-styleguide-main-container">
@@ -88,19 +90,24 @@
             <li>
               <LinkTo class="vlc-styleguide-list" @route="styleguide.buttons">{{t "buttons"}}</LinkTo>
             </li>
+            <li>
+              <LinkTo class="vlc-styleguide-list" @route="styleguide.icons">{{t "icons"}}</LinkTo>
+            </li>
           </ul>
         </h3>
         <ul>
-          <h3>{{t "components"}}</h3>
-          <li>
-            <LinkTo class="vlc-styleguide-list" @route="styleguide.components">{{t "components"}}</LinkTo>
-          </li>
+          <h3>{{t "components"}}
+            <li>
+              <LinkTo class="vlc-styleguide-list" @route="styleguide.components">{{t "components"}}</LinkTo>
+            </li>
+          </h3>
         </ul>
         <ul>
-          <h3>{{t "pills"}}</h3>
-          <li>
-            <LinkTo class="vlc-styleguide-list" @route="styleguide.pills">{{t "pills"}}</LinkTo>
-          </li>
+          <h3>{{t "pills"}}
+            <li>
+              <LinkTo class="vlc-styleguide-list" @route="styleguide.pills">{{t "pills"}}</LinkTo>
+            </li>
+          </h3>
         </ul>
         <ul>
           <li>{{t "panels"}}</li>
@@ -114,8 +121,9 @@
       <div class="vl-typography" style="margin: 0 0 2.5rem;">
         <h1 style="margin: 0 0 1.2rem;">{{t "style-guide"}}</h1>
       </div>
+        {{outlet}}
 
-      {{outlet}}
+
 
     </div>
   </div>
