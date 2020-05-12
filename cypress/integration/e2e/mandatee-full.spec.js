@@ -75,7 +75,7 @@ context('Full test', () => {
       // when toggling show changes  the agendaitem with a document added should show
       cy.openAgendaForDate(agendaDate);
       cy.addAgendaitemToAgenda(subcaseTitle1, false);
-      cy.agendaItemExists(subcaseTitle1).click();
+      cy.openDetailOfAgendaitem(subcaseTitle1);
       cy.addSubcaseMandatee(0,-1,-1);
      cy.get(agenda.approveAgenda).click();
       cy.get(modal.verify.save).click();

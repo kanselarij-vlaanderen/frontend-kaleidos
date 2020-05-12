@@ -17,7 +17,7 @@ context('Test the KB functionality', () => {
       const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 18).set('hour', 18).set('minute', 18);
 
       cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test Kort bestek toevoegen').then((meetingId) => {
-        cy.openAgendaForDate(agendaDate,meetingId);
+        cy.openAgendaForDate(agendaDate);
 
         //WIP
 

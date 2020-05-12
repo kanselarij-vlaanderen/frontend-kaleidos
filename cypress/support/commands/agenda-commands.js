@@ -21,6 +21,7 @@ Cypress.Commands.add('addRemarkToAgenda', addRemarkToAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
 Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
 Cypress.Commands.add('agendaItemExists', agendaItemExists);
+Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
 Cypress.Commands.add('releaseDecisions', releaseDecisions);
@@ -208,27 +209,23 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
  * @memberOf Cypress.Chainable#
  * @function
  * @param {*} agendaDate A cypress.moment object with the date to search
- * @param {*} [meetingId] If known, use the meetingId to open the meeting with a direct route instead of searching
  */
-function openAgendaForDate(agendaDate, meetingId) {
-  if (meetingId) {
-    cy.visit(`agenda/${meetingId}/agendapunten`);
-  } else {
-    const searchDate = agendaDate.date() + '/' + (agendaDate.month() + 1) + '/' + agendaDate.year();
-    cy.route('GET', '/meetings/**').as('getMeetings');
-    cy.route('GET', '/meetings?filter**').as('getFilteredMeetings');
+function openAgendaForDate(agendaDate) {
+  const searchDate = agendaDate.date() + '/' + (agendaDate.month() + 1) + '/' + agendaDate.year();
+  cy.route('GET', '/meetings/**').as('getMeetings');
+  cy.route('GET', '/meetings?filter**').as('getFilteredMeetings');
 
-    cy.visit('');
-    cy.wait('@getMeetings', { timeout: 20000 });
-    cy.get('.vlc-input-field-group-wrapper--inline', { timeout: 10000 }).should('exist').within(() => {
-      cy.get(agendaOverview.agendaFilterInput).type(searchDate);
-      cy.get(agendaOverview.agendaFilterButton).click();
-    });
-    cy.wait('@getFilteredMeetings', { timeout: 20000 });
-    cy.get('.data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
-  }
+  cy.visit('');
+  cy.wait('@getMeetings', { timeout: 20000 });
+  cy.get('.vlc-input-field-group-wrapper--inline', { timeout: 10000 }).should('exist').within(() => {
+    cy.get(agendaOverview.agendaFilterInput).type(searchDate);
+    cy.get(agendaOverview.agendaFilterButton).click();
+  });
+  cy.wait('@getFilteredMeetings', { timeout: 20000 });
+  cy.get('.data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
+  
+  cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');
-  cy.url().should('include', '/agendapunten');
 }
 
 /**
@@ -485,7 +482,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     .wait('@patchSubcase', { timeout: 20000 })
     .wait('@createSubcasePhase', { timeout: 20000 })
     .wait('@patchAgenda', { timeout: 20000 })
-    .wait('@getAgendaitems', { timeout: 20000 });
 }
 
 /**
@@ -518,7 +514,7 @@ function toggleShowChanges(refresh) {
 }
 
 /**
- * @description Checks if a case with a specific name exists on an agenda
+ * @description Checks if an agendaitem with a specific name exists on an agenda
  * @name agendaItemExists
  * @memberOf Cypress.Chainable#
  * @function
@@ -531,7 +527,24 @@ function agendaItemExists(agendaItemName) {
 }
 
 /**
- * @description Checks if a case with a specific name exists on an agenda
+ * @description Checks if an agendaitem with a specific name exists on the open agenda and opens it
+ * @name openDetailOfAgendaitem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemName - title of the agendaitem.
+*  @param {boolean} hasSubcase - optional boolean to indicate if this agendaitem has a subcase 
+ */
+function openDetailOfAgendaitem(agendaItemName, hasSubcase = true) {
+  cy.agendaItemExists(agendaItemName).click();
+  if (hasSubcase) {
+    cy.contains('Naar procedurestap', { timeout: 12000 });
+  } else {
+    cy.wait(2000);
+  }
+}
+
+/**
+ * @description Changes the selected agenda to the one matching the given name
  * @name changeSelectedAgenda
  * @memberOf Cypress.Chainable#
  * @function

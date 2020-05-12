@@ -298,6 +298,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       this.reloadRoute(id);
     },
 
+    reloadRouteWithRefreshId(id) {
+      this.reloadRouteWithRefreshId(id);
+    },
+
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
     },
@@ -334,6 +338,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
   reloadRoute(id) {
     this.reloadRouteWithNewAgenda(id);
+  },
+
+  reloadRouteWithRefreshId(id) {
+    this.reloadRouteWithNewAgendaitem(id);
   },
 
   async approveAgenda(session) {
