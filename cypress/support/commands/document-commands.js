@@ -102,10 +102,7 @@ function addNewDocumentVersionToSubcase(oldFileName, file) {
  */
 function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
   // cy.route('GET', 'documents**').as('getDocuments');
-  cy.get('li.vlc-agenda-items__sub-item h4')
-    .contains(agendaItemTitle)
-    .click()
-    .wait(2000); // sorry
+  cy.openDetailOfAgendaitem(agendaItemTitle);
   cy.get(agenda.agendaItemDocumentsTab)
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
@@ -125,10 +122,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
  */
 function openAgendaItemDossierTab(agendaItemTitle) {
   // cy.route('GET', 'documents**').as('getDocuments');
-  cy.get('li.vlc-agenda-items__sub-item h4')
-    .contains(agendaItemTitle)
-    .click()
-    .wait(100); // sorry
+  cy.openDetailOfAgendaitem(agendaItemTitle);
   cy.get(agenda.agendaItemDossierTab)
     .click()
     .wait(100); //Access-levels GET occured earlier, general wait instead

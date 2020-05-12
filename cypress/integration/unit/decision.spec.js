@@ -16,13 +16,11 @@ context('Add files to an agenda', () => {
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should test the document CRUD for a decision', () => {

@@ -15,7 +15,6 @@ context('Tests for cancelling CRUD operations on document and document-versions'
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('Editing of a document or document-version but cancelling should show old data', () => {
@@ -38,7 +37,8 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test annuleren van editeren documenten');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 

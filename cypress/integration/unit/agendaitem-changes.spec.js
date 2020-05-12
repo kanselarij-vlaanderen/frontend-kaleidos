@@ -9,7 +9,6 @@ context('Agendaitem changes tests', () => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should add an agendaitem to an agenda and should highlight as added', () => {
@@ -37,7 +36,8 @@ context('Agendaitem changes tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
 
     cy.addDocumentsToAgendaItem(subcaseTitle1, files);
@@ -52,7 +52,7 @@ context('Agendaitem changes tests', () => {
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle2);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(2);
     cy.approveDesignAgenda();
 
     // when toggling show changes  the agendaitem with a new document version should show
