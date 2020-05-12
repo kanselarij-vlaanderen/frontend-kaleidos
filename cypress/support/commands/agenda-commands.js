@@ -435,7 +435,6 @@ function addRemarkToAgenda(title, remark, files) {
  */
 function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
-  cy.route('GET', '/agendaitems**').as('getAgendaitems');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
   cy.route('POST', '/subcase-phases').as('createSubcasePhase');
   cy.route('PATCH', '/subcases/**').as('patchSubcase');

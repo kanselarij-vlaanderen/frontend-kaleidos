@@ -75,8 +75,10 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     },
 
     onClickRow(meeting) {
-      const latestAgendaId = meeting.latestAgenda.get('id');
-      this.transitionToRoute('agenda.agendaitems', meeting.id, latestAgendaId);
+      meeting.get('latestAgenda').then((latestAgenda) => {
+        const latestAgendaId = latestAgenda.get('id');
+        this.transitionToRoute('agenda.agendaitems', meeting.id, latestAgendaId);
+      });
     }
   }
 });

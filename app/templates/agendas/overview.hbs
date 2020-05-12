@@ -146,7 +146,7 @@
                         {{#link-to
                           "agenda.agendaitems"
                           meeting.id
-                          meeting.latestAgenda.id
+                          (await meeting.latestAgenda.id)
                           class="vl-button vl-button--link vl-button--icon"
                         }}
                           <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
