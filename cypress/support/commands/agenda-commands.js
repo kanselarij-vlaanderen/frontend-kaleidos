@@ -30,6 +30,7 @@ Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
+Cypress.Commands.add('agendaItemExistsInDetail', agendaItemExistsInDetail);
 
 // ***********************************************
 // Functions
@@ -235,9 +236,18 @@ function openAgendaForDate(agendaDate) {
  * @function
  * @param {String} agendaItemTitle - title of the agendaitem
  */
-function openAgendaItemKortBestekTab(agendaItemTitle) {
+function openAgendaItemKortBestekTab(agendaItemTitle, isDetailView = false) {
   // cy.route('GET', 'documents**').as('getDocuments');
   cy.openDetailOfAgendaitem(agendaItemTitle);
+  if(isDetailView) {
+    cy.get(agenda.agendaDetailSidebarSubitem)
+      .contains(agendaItemTitle)
+      .click()
+      .wait(2000); // sorry
+  } else {
+    cy.openDetailOfAgendaitem(agendaItemTitle);
+  }
+
   cy.get(agenda.agendaItemKortBestekTab)
     .should('be.visible')
     .click()
@@ -516,12 +526,25 @@ function agendaItemExists(agendaItemName) {
 }
 
 /**
+ * @description Checks if a case with a specific name exists on an agenda
+ * @name agendaItemExistsInDetail
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemName - boolean to check if a refresh needs to happen.
+ */
+function agendaItemExistsInDetail(agendaItemName) {
+  cy.get(agenda.agendaDetailSidebarSubitem)
+    .contains(agendaItemName, { timeout: 12000 })
+    .should('exist');
+}
+
+/**
  * @description Checks if an agendaitem with a specific name exists on the open agenda and opens it
  * @name openDetailOfAgendaitem
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string} agendaItemName - title of the agendaitem.
-*  @param {boolean} hasSubcase - optional boolean to indicate if this agendaitem has a subcase 
+*  @param {boolean} hasSubcase - optional boolean to indicate if this agendaitem has a subcase
  */
 function openDetailOfAgendaitem(agendaItemName, hasSubcase = true) {
   cy.agendaItemExists(agendaItemName).click();

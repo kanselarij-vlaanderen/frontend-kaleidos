@@ -99,9 +99,9 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
           agendaitemToUpdate = await this.agendaitem;
         }
         await agendaitemToUpdate.save();
+        this.set('isLoading', false);
+        this.toggleProperty('isEditing');
       }
-      this.set('isLoading', false);
-      this.toggleProperty('isEditing');
     },
 
     descriptionUpdated(val) {

@@ -128,7 +128,7 @@ context('Settings overview page tests', () => {
     cy.contains('Algemene informatie');
   });
 
-  it('Should change the group of the user from the detailpage', () => {
+  it.only('Should change the group of the user from the detailpage', () => {
     cy.route('GET', '/users/**').as('getUsers');
     cy.route('GET', '/users?filter=**').as('filterUsers');
 
@@ -144,7 +144,9 @@ context('Settings overview page tests', () => {
         cy.contains('Algemene informatie');
         cy.get(settings.emberPowerSelectTrigger).click();
         cy.get(agenda.emberPowerSelectOption).contains("kabinet").click();
+        cy.wait(5000);
         cy.get(utils.generalBackButton).should('exist').should('be.visible').click();
+        cy.wait(3000);
         cy.contains('kabinet');
     });
   });

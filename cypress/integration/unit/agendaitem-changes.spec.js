@@ -1,4 +1,4 @@
-/*global context, before, it, cy*/
+/*global context, before, it, cy, Cypress*/
 /// <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
@@ -40,7 +40,7 @@ context('Agendaitem changes tests', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
 
-    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
+    cy.addDocumentsToAgendaItem(subcaseTitle1, files,false);
     // TODO we should not have to "refresh" to see the changes. The checking for changes is set to an observer
     // TODO This observer is not triggering during initial opening of the agenda, so as a 'hack', we switch agendas to trigger it in the tests
     cy.changeSelectedAgenda('Ontwerpagenda');
@@ -59,6 +59,7 @@ context('Agendaitem changes tests', () => {
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
     // TODO we should not have to "refresh" to see the changes. The checking for changes is set to an observer
     // TODO This observer is not triggering during initial opening of the agenda, so as a 'hack', we switch agendas to trigger it in the tests
+    cy.wait(1000); //Computeds are not reloaded yet , maybe
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);
