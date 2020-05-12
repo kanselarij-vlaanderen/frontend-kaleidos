@@ -26,7 +26,7 @@
   <div class="vlc-hr"></div>
   {{#if (is-pending agendaitem.meetingRecord.signedDocument)}}
     {{web-components/vl-loader text=(t "minutes-document-loading-text")}}
-  {{else if (not (await agendaitem.meetingRecord.signedDocument))}}
+  {{else if (not (await signedDocument))}}
     {{utils/add-signed-documents
       item=agendaitem.meetingRecord
       modelToAddDocumentVersionTo="signedMinutes"

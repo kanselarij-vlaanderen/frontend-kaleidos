@@ -10,6 +10,7 @@ context('Full test', () => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
+    cy.visit('/');
   });
 
   it('Scenario where a complete agenda is created', () => {
@@ -34,9 +35,8 @@ context('Full test', () => {
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then((meetingId) => {
-      // cy.openAgendaForDate(agendaDate, meetingId);
-    });
+    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location);
+    // cy.openAgendaForDate(agendaDate);
 
     //#endregion
 

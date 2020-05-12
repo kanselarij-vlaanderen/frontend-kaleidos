@@ -26,9 +26,9 @@ export default Component.extend(isAuthenticatedMixin, {
   }),
 
   reAssignPriorities: task(function* (agendaitems) {
-    yield agendaitems.map((item) => {
+    yield agendaitems.map(async (item) => {
       if (isPresent(item.changedAttributes().priority)) {
-        return item.save();
+        return await item.save();
       }
     });
   }).restartable(),
