@@ -1,6 +1,6 @@
 {{#if allowEditing}}
   <div class="vl-u-spacer-extended-bottom-s">
-    <div class="vl-u-display-flex vl-u-flex-space-between">
+    <div class="vl-u-display-flex vlc-u-flex-space-between">
       <h4>
         {{await numberToShow}}
         {{#if (not (await agendaitem.subcase.newsletterInfo))}}
@@ -10,7 +10,7 @@
         {{/if}}
       </h4>
       {{#if (and currentSession.isEditor (await agendaitem.subcase.newsletterInfo))}}
-        <div class="vl-u-display-flex vl-u-flex-space-between">
+        <div class="vl-u-display-flex vlc-u-flex-space-between">
           <div class="vl-u-spacer-extended-left-s">
             <a href="" class="vl-link" {{action "toggleIsEditing"}}>
               {{t "edit"}}
