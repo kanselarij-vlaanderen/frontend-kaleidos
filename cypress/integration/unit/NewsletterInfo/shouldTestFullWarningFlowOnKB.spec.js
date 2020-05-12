@@ -15,7 +15,6 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('Test full warning flow on KB', () => {

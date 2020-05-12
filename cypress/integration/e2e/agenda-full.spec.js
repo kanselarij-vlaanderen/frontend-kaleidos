@@ -11,7 +11,6 @@ context('Full test', () => {
     cy.server();
     // cy.resetCache();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('Scenario where a complete agenda is created', () => {
@@ -107,7 +106,10 @@ context('Full test', () => {
     //#region check and approve the agenda > A
     cy.openAgendaForDate(agendaDate);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.setFormalOkOnItemWithIndex(2);
+    cy.setFormalOkOnItemWithIndex(3);
 
     // cy.approveCoAgendaitem(case_2_TitleShort); // TODO approvals have low prior and need a refactor
 
@@ -119,7 +121,8 @@ context('Full test', () => {
       'mededeling omschrijving',
       [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
     cy.addAgendaitemToAgenda();
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(3); //new agendaitem 
+    cy.setFormalOkOnItemWithIndex(5);
     cy.approveDesignAgenda();
     //#endregion
 
