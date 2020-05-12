@@ -238,7 +238,6 @@ function openAgendaForDate(agendaDate) {
  */
 function openAgendaItemKortBestekTab(agendaItemTitle, isDetailView = false) {
   // cy.route('GET', 'documents**').as('getDocuments');
-  cy.openDetailOfAgendaitem(agendaItemTitle);
   if(isDetailView) {
     cy.get(agenda.agendaDetailSidebarSubitem)
       .contains(agendaItemTitle)
