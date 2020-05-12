@@ -50,7 +50,8 @@ export default Controller.extend({
       this.set('sessionService.selectedAgendaItem', agendaitem);
       this.transitionToRoute('agenda.agendaitems.agendaitem', agendaitem.get('id'), {
         queryParams: {
-          selectedAgenda: currentAgenda.id
+          selectedAgenda: currentAgenda.id,
+          refresh: null
         },
       });
     },
