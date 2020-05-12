@@ -1,10 +1,3 @@
-{{#if isEditingOverview}}
-  {{changes-alert
-    message=(t "editing-agenda-overview")
-    buttonText=(t "end-editing-overview")
-    clearAction=(action "toggleIsEditingOverview")
-  }}
-{{/if}}
 <div class="vlc-toolbar vlc-agenda-detail-sidebar-section-header vlc-agenda-detail-sidebar-section-header--border-bottom">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
@@ -13,22 +6,20 @@
       </h3>
     </div>
   </div>
-  {{#if (not isEditingOverview)}}
-    <div class="vlc-toolbar__right">
-      <div class="vlc-toolbar__item">
-        <a href=""
-           class="vlc-agenda-detail-sidebar-section-header__link"
-          {{action "toggleChangesOnly"}}
-        >
-          {{#if (not isShowingChanges)}}
-            {{t "show-changes"}}
-          {{else}}
-            {{t "show-all"}}
-          {{/if}}
-        </a>
-      </div>
+  <div class="vlc-toolbar__right">
+    <div class="vlc-toolbar__item">
+      <a href=""
+         class="vlc-agenda-detail-sidebar-section-header__link"
+        {{action "toggleChangesOnly"}}
+      >
+        {{#if (not isShowingChanges)}}
+          {{t "show-changes"}}
+        {{else}}
+          {{t "show-all"}}
+        {{/if}}
+      </a>
     </div>
-  {{/if}}
+  </div>
 </div>
 
 {{#if (is-empty agendaitems)}}
@@ -67,7 +58,6 @@
         }}
           {{agenda/agenda-detail/sidebar-item
             agendaitem=agendaitem
-            isEditingOverview=isEditingOverview
             selectAgendaItem=(action "selectAgendaItem")
           }}
         {{/sortable-item}}
@@ -94,7 +84,6 @@
           <li class="vlc-agenda-detail-sidebar__sub-item">
             {{agenda/agenda-detail/sidebar-item
               agendaitem=agendaitem
-              isEditingOverview=isEditingOverview
               selectAgendaItem=(action "selectAgendaItem")
             }}
           </li>
@@ -138,7 +127,6 @@
           }}
             {{agenda/agenda-detail/sidebar-item
               agendaitem=announcement
-              isEditingOverview=isEditingOverview
               selectAgendaItem=(action "selectAgendaItem")
             }}
           {{/sortable-item}}
@@ -152,7 +140,6 @@
         <div class="vlc-agenda-detail-sidebar__sub-item">
           {{agenda/agenda-detail/sidebar-item
             agendaitem=announcement
-            isEditingOverview=isEditingOverview
             selectAgendaItem=(action "selectAgendaItem")
           }}
         </div>

@@ -13,7 +13,6 @@ export default Component.extend(isAuthenticatedMixin, {
   classNameBindings: ['getClassNames'],
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   agendaitems: null,
-  isEditingOverview: null,
   isShowingChanges: null,
   overviewEnabled: null,
   dragHandleClass: '.vlc-agenda-detail-sidebar__sub-item',
@@ -36,10 +35,6 @@ export default Component.extend(isAuthenticatedMixin, {
   actions: {
     selectAgendaItem(agendaitem) {
       this.selectAgendaItem(agendaitem);
-    },
-
-    toggleIsEditingOverview() {
-      this.toggleProperty('isEditingOverview');
     },
 
     toggleChangesOnly() {

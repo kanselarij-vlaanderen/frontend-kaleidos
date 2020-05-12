@@ -223,6 +223,12 @@ $i: 0;
   color: $napier-green;
 }
 
-.vlc-agenda-detail-sidebar-padding-top-smallest {
+.vlc-agenda-detail-sidebar__formally-ok-label {
   padding-top: 1.5rem;
+
+  .formally-ok-icon::before {
+    margin-right: 0.5rem;
+    font-weight: 700;
+  }
 }
+
