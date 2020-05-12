@@ -8,7 +8,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
   async model(params) {
     const meetingId = params.meeting_id;
-    const meeting = await this.store.findRecord('meeting', meetingId, { include: 'agendas' });
+    const meeting = await this.store.findRecord('meeting', meetingId, { include: 'agendas', reload: true });
     this.set('sessionService.selectedAgendaItem', null);
     this.set('sessionService.currentSession', meeting);
     const agendaId = params.agenda_id;
