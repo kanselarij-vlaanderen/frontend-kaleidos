@@ -24,20 +24,20 @@ reset-elastic-and-cache-jenkins:
 	- sleep 60
 
 run-cypress-tests-jenkins:
-	-	make reset-elastic-and-cache-jenkins
+	- make reset-elastic-and-cache-jenkins
 	- npx cypress run
 
 run-cypress-tests:
-	-	make reset-elastic-and-cache
+	- make reset-elastic-and-cache
 	- npx cypress run
 
 run-cypress-spec-files:
-	-	make reset-elastic-and-cache
+	- make reset-elastic-and-cache
 	- npx cypress run --spec ${SPECS}
 
 open-cypress-tests:
-	-	make reset-elastic-and-cache
-	-	./node_modules/.bin/cypress open
+	- make reset-elastic-and-cache
+	- ./node_modules/.bin/cypress open
 
 me-a-sandwich:
 	@echo making you a choco sandwich

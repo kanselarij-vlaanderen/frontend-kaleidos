@@ -47,7 +47,6 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
  * @returns {Promise<String>} the id of the created agenda
  */
 function createAgenda(kind, plusMonths, date, location) {
-
   cy.route('GET', '/meetings**').as('getMeetings');
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
@@ -223,7 +222,7 @@ function openAgendaForDate(agendaDate) {
   });
   cy.wait('@getFilteredMeetings', { timeout: 20000 });
   cy.get('.data-table > tbody > :nth-child(1) > .vl-u-align-center > .vl-button > .vl-button__icon').click();
-  
+
   cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');
 }
@@ -531,7 +530,7 @@ function agendaItemExists(agendaItemName) {
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string} agendaItemName - title of the agendaitem.
-*  @param {boolean} hasSubcase - optional boolean to indicate if this agendaitem has a subcase 
+*  @param {boolean} hasSubcase - optional boolean to indicate if this agendaitem has a subcase
  */
 function openDetailOfAgendaitem(agendaItemName, hasSubcase = true) {
   cy.agendaItemExists(agendaItemName).click();

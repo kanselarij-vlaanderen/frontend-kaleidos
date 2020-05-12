@@ -1,0 +1,52 @@
+version: '3.4'
+services:
+  frontend:
+    image: kanselarij/frontend-kaleidos:development
+    ports:
+      - 127.0.0.1:4201:80
+    #  frontend:
+    #    # image: kanselarij/frontend-kaleidos:1.2.4
+    #    image: kanselarij/frontend-kaleidos:development
+    #    ports:
+    #      - 127.0.0.1:88:80
+    #    environment:
+    #      - EMBER_ENV=development
+    #      - VIRTUAL_HOST=kaleidos-dev.vlaanderen.be  # dev-kaleidos-frontend.kanselarij-dev.s.redpencil.io
+    #      - VIRTUAL_PORT=80
+    #      - BACKEND=development-kaleidos_backend
+    #      - LETSENCRYPT_HOST=kaleidos-dev.vlaanderen.be # dev-kaleidos-frontend.kanselarij-dev.s.redpencil.io
+    networks:
+      - default
+    build: ../
+  login:
+    entrypoint: "echo 'service disabled'"
+    restart: "no"
+  triplestore:
+    user: ${HOST_UID_GID}
+  file:
+    user: ${HOST_UID_GID}
+  musearch:
+    user: ${HOST_UID_GID}
+  cache:
+    user: ${HOST_UID_GID}
+    image: semtech/mu-cache:latest
+    links:
+      - resource:backend
+    restart: always
+    user: ${HOST_UID_GID}
+  resource:
+    user: ${HOST_UID_GID}
+    image: semtech/mu-cl-resources:latest
+    links:
+      - database:database
+    environment:
+      CACHE_CLEAR_PATH: "http://cache/.mu/clear-keys"
+    volumes:
+      - ./config/resources:/config
+  database-healthcheck:
+    entrypoint: "echo 'service disabled'"
+    restart: "no"
+  database:
+    user: ${HOST_UID_GID}
+  elasticsearch:
+    user: ${HOST_UID_GID}

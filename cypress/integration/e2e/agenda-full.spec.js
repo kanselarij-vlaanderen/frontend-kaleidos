@@ -22,7 +22,6 @@ context('Full test', () => {
     cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
     cy.route('POST', '/cases').as('createNewCase');
     cy.route('POST', '/subcases').as('createNewSubcase');
     cy.route('PATCH','/subcases/*').as('patchSubcase');
