@@ -15,13 +15,13 @@ context('Subcase tests', () => {
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    cy.visit('/');
+    // cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
+    // cy.visit('/');
   });
 
   it('should open an existing case and add a subcase', () => {

@@ -35,9 +35,8 @@ context('Full test', () => {
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then((meetingId) => {
-      // cy.openAgendaForDate(agendaDate, meetingId);
-    });
+    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location);
+    // cy.openAgendaForDate(agendaDate);
 
     //#endregion
 
