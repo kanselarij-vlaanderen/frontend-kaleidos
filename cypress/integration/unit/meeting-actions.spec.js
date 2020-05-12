@@ -4,7 +4,7 @@
 context('meeting actions tests', () => {
 
   const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
+  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 10).set('hour', 20).set('minute', 20);
   const caseTitle = 'Cypress test: meeting actions - ' + currentTimestamp();
 
   before(() => {
@@ -30,7 +30,7 @@ context('meeting actions tests', () => {
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 11).set('hour', 20).set('minute', 20);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven').then((meetingId) => {
       cy.openAgendaForDate(agendaDate);
 
@@ -68,7 +68,7 @@ context('meeting actions tests', () => {
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 11).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
 
@@ -104,7 +104,7 @@ context('meeting actions tests', () => {
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 13).set('hour', 20).set('minute', 20);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
 
@@ -136,7 +136,7 @@ context('meeting actions tests', () => {
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 13).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 14).set('hour', 20).set('minute', 20);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven')
     cy.openAgendaForDate(agendaDate);
 

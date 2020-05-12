@@ -238,7 +238,6 @@ function openAgendaForDate(agendaDate) {
  */
 function openAgendaItemKortBestekTab(agendaItemTitle, isDetailView = false) {
   // cy.route('GET', 'documents**').as('getDocuments');
-  cy.openDetailOfAgendaitem(agendaItemTitle);
   if(isDetailView) {
     cy.get(agenda.agendaDetailSidebarSubitem)
       .contains(agendaItemTitle)
@@ -277,8 +276,8 @@ function deleteAgenda(meetingId, lastAgenda) {
   cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
   // });
   if (lastAgenda) {
-    cy.wait('@deleteNewsletter', { timeout: 20000 });
-    cy.wait('@deleteMeeting', { timeout: 20000 });
+    cy.wait('@deleteNewsletter', { timeout: 20000 })
+      .wait('@deleteMeeting', { timeout: 20000 });
   }
   //TODO should patches happen when deleting a design agenda ?
 }
