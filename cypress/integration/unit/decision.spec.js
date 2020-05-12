@@ -38,8 +38,7 @@ context('Add files to an agenda', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     cy.openAgendaForDate(agendaDate);
-    cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.wait(1000);
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaItemDecisionTab).click();
     cy.get(agenda.addDecision).click();
     cy.get(agenda.uploadDecisionFile).click();

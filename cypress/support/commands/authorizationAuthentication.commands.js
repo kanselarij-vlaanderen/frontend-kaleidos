@@ -14,6 +14,7 @@ Cypress.Commands.add('logout',logout);
  * @param {String} name the profile to log in with, case sensitive
  */
 function login(name){
+  cy.route('GET', '/mock/sessions/current').as('getCurrentSession');
   const EMBER_SIMPLE_AUTH_LS_KEY = 'ember_simple_auth-session';
   cy.fixture('mock-login').then((loginUsers) => {
     cy.request({
@@ -32,6 +33,7 @@ function login(name){
       }));
     });
   });
+  cy.visit('').wait('@getCurrentSession'); // Sorry, now this works like a charm...
 }
 
 

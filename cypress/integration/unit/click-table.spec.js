@@ -10,14 +10,11 @@ context("Table Row Click tests", () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it("should open an agenda after clicking a row", () => {
-		cy.route('GET', '/meetings?**').as('getMeetings');
 		cy.route('GET', '/agendas/**/agendaitems').as('getAgendas');
 
-		cy.wait('@getMeetings');
 		cy.get('.data-table > tbody').children().as('rows').eq(0).click();
 		cy.wait('@getAgendas');
 		cy.url().should('contain', 'agendapunten');
