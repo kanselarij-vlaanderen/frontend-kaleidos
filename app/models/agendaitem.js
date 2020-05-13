@@ -117,7 +117,7 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  decisions: computed('subcase.decisions', function () {
+  decisions: computed('subcase.decisions.@each', function () {
     return PromiseArray.create({
       promise: this.store.query('decision', {
         filter: {

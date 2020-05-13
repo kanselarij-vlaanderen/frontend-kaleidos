@@ -41,7 +41,7 @@
           {{else if (eq activeAgendaItemSection "press-agenda")}}
             {{agenda/agendaitem/agenda-item-press agendaitem=agendaitem}}
           {{else if (eq activeAgendaItemSection "decision")}}
-            <div class="vl-u-display-flex vl-u-flex-space-between">
+            <div class="vl-u-display-flex vlc-u-flex-space-between">
               <h3 class="vl-title vl-title--h3">
                 {{t "decision-title"}}
               </h3>
@@ -49,6 +49,7 @@
             {{#if isEditor}}
               <div class="vl-action-group">
                 <button type="button" class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
+                  data-test-add-decision
                   {{action "addDecision"}}
                 >
                   <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>

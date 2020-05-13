@@ -1,8 +1,9 @@
 /*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
-import { mandateeLinkFieldsToggleSelector, mandateeLinkListItemSelector } from "../../selectors/mandatees/mandateeSelectors";
-import { isecodesListSelector, isecodesListItemSelector } from "../../selectors/isecodes/isecodesSelectors";
+import mandatee from '../../selectors/mandatees/mandateeSelectors';
+import isecodes from "../../selectors/isecodes/isecodesSelectors";
+import agenda  from '../../selectors/agenda.selectors';
 
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
@@ -37,33 +38,33 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcaseMandatee(0, -1, -1); // -1 means select nothing
     cy.addSubcaseMandatee(1, 0, 0);
 
-    cy.get(mandateeLinkListItemSelector).as('listItems');
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 2);
 
     cy.get('@listItems').eq(0).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
     cy.get('@listItems').eq(1).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
 
-    cy.get(isecodesListSelector).should('exist')
-    cy.get(isecodesListItemSelector).should('have.length.greaterThan', 0);
+    cy.get(isecodes.isecodesList).should('exist')
+    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
-    cy.get(mandateeLinkListItemSelector).as('listItems');
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 2);
 
     cy.get('@listItems').eq(0).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
     cy.get('@listItems').eq(1).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
 
   });
@@ -85,36 +86,36 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
 
     cy.addSubcaseMandatee(2, 0, 0);
-    cy.get(mandateeLinkListItemSelector).as('listItems');
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 3);
     cy.get('@listItems').eq(0).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
     cy.get('@listItems').eq(1).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(2).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
 
-    cy.get(isecodesListSelector).should('exist')
-    cy.get(isecodesListItemSelector).should('have.length.greaterThan', 0);
+    cy.get(isecodes.isecodesList).should('exist')
+    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
-    cy.get(mandateeLinkListItemSelector).as('listItems');
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 3);
 
     cy.get('@listItems').eq(0).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
     cy.get('@listItems').eq(1).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(2).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
 
   });
@@ -131,74 +132,76 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.openAgendaForDate(agendaDate);
 
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.wait(1000);
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
 
     cy.addSubcaseMandatee(3, 0, 0);
-    cy.get(mandateeLinkListItemSelector).as('listItems');
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 4);
     cy.get('@listItems').eq(0).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
     cy.get('@listItems').eq(1).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(2).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(3).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
 
     cy.reload();
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    // cy.openDetailOfAgendaitem(SubcaseTitleShort);
+    cy.get(agenda.agendaDetailSidebarSubitem)
+      .contains(SubcaseTitleShort)
+      .click()
 
     // Add 1 more
     cy.addSubcaseMandatee(5, -1, -1);
-    cy.get(mandateeLinkListItemSelector).as('listItems');
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 5);
     cy.get('@listItems').eq(0).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
     cy.get('@listItems').eq(1).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(2).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(3).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(4).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
 
     // Check if subcase has the same amount of mandatees
     cy.openCase(caseTitle);
     cy.openSubcase(0);
 
-    cy.get(mandateeLinkListItemSelector).as('listItems');
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 5);
     cy.get('@listItems').eq(0).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
     cy.get('@listItems').eq(1).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(2).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(3).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
     cy.get('@listItems').eq(4).within(() => {
-      cy.get(mandateeLinkFieldsToggleSelector).should('not.exist');
+      cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
 
-    cy.get(isecodesListSelector).should('exist')
-    cy.get(isecodesListItemSelector).should('have.length.greaterThan', 0);
+    cy.get(isecodes.isecodesList).should('exist')
+    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
   });
 
 });

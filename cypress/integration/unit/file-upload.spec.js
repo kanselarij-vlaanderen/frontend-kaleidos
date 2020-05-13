@@ -21,14 +21,14 @@ context('Add files to an agenda', () => {
       });
     });
 
-    cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+    cy.addNewDocumentVersionToMeeting('test pdf', { folder: 'files', fileName: 'test', fileExtension: 'pdf' });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0).within(() => {
         cy.get('.vl-title--h6 > span').contains(/BIS/);
       });
     });
 
-    cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+    cy.addNewDocumentVersionToMeeting('test pdf', { folder: 'files', fileName: 'test', fileExtension: 'pdf' });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0).within(() => {
         cy.get('.vl-title--h6 > span').contains(/TER/);
@@ -43,11 +43,11 @@ context('Add files to an agenda', () => {
     // TODO The sorting is fixed in agenda print branch using "/ gave a different result then "-
     cy.addDocuments(
       [
-        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-6 - 6e', fileType: 'Nota'},
-        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'no vr number - 7e', fileType: 'Nota'},
-        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-3 - 3e', fileType: 'Nota'},
-        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-5 - 5e', fileType: 'Nota'},
-        {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-4 - 4e', fileType: 'Nota'}
+        { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-6 - 6e', fileType: 'Nota' },
+        { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'no vr number - 7e', fileType: 'Nota' },
+        { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-3 - 3e', fileType: 'Nota' },
+        { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-5 - 5e', fileType: 'Nota' },
+        { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-4 - 4e', fileType: 'Nota' }
       ]
     );
 

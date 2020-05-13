@@ -18,7 +18,7 @@ context('Case test', () => {
     cy.createCase(false, caseTitleShort);
 
   });
-  
+
   function currentTimestamp() {
     return Cypress.moment().unix();
   }

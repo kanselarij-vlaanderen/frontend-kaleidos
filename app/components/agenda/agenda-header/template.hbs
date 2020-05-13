@@ -38,7 +38,7 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if (and currentAgenda.isDesignAgenda isEditor)}}
-            <button data-test-approve-design-agenda type="button" class="vl-button vl-button--narrow"
+            <button data-test-agenda-header-approveAgenda type="button" class="vl-button vl-button--narrow"
               {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}
@@ -286,14 +286,14 @@
 {{#if isAddingAgendaitems}}
   {{agenda/agendaitem/create-agendaitem
     isAddingAgendaitems=isAddingAgendaitems
-    reloadRoute=(action "reloadRoute")
+    reloadRouteWithRefreshId=(action "reloadRouteWithRefreshId")
   }}
 {{/if}}
 {{#if isAddingAnnouncement}}
   {{agenda/create-announcement
     isAddingAnnouncement=isAddingAnnouncement
     currentAgenda=currentAgenda
-    reloadRoute=(action "reloadRoute")
+    reloadRouteWithRefreshId=(action "reloadRouteWithRefreshId")
   }}
 {{/if}}
 {{#if isAssigningSignature}}

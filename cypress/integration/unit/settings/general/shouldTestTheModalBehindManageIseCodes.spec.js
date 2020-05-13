@@ -9,15 +9,13 @@ context('Manage ISE codes tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
-    cy.route('/')
   });
 
   it('Should open the model behind manage ISE codes', () => {
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
     cy.get(settings.manageIseCodes).click();
-    cy.get(modal.modalManager.add).should('be.visible');
+    cy.get(modal.manageInSettingsModal.add).should('be.visible');
   });
 
   it('Should open the model behind manage ISE codes and close it', () => {
@@ -25,8 +23,8 @@ context('Manage ISE codes tests', () => {
     cy.url().should('include','instellingen/overzicht');
     cy.get(settings.manageIseCodes).click();
     cy.wait(200);
-    cy.get(modal.modalManager.add).should('be.visible');
-    cy.get(modal.modalManager.close).click();
-    cy.get(modal.modalManager.add).should('not.be.visible');
+    cy.get(modal.manageInSettingsModal.add).should('be.visible');
+    cy.get(modal.baseModal.close).click();
+    cy.get(modal.manageInSettingsModal.add).should('not.be.visible');
   });
 });

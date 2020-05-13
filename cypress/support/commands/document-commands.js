@@ -2,11 +2,11 @@
 /// <reference types="Cypress" />
 
 import 'cypress-file-upload';
-import document from '../selectors/document.selectors';
+import document from '../../selectors/document.selectors';
 
-import agenda  from '../selectors/agenda.selectors';
-import form  from '../selectors/form.selectors';
-import modal  from '../selectors/modal.selectors';
+import agenda  from '../../selectors/agenda.selectors';
+import form  from '../../selectors/form.selectors';
+import modal  from '../../selectors/modal.selectors';
 // ***********************************************
 // Commands
 
@@ -17,9 +17,12 @@ Cypress.Commands.add('addNewDocumentVersion', addNewDocumentVersion);
 Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMeeting);
 Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
 Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
+Cypress.Commands.add('addNewDocumentVersionToSignedDocument', addNewDocumentVersionToSignedDocument);
 Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
+Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
+
 
 // ***********************************************
 // Functions
@@ -56,9 +59,10 @@ function addNewDocumentVersionToMeeting(oldFileName, file) {
  * @function
  * @param {string} agendaItemTitle
  * @param {string} files
+ * @param {boolean} isDetailView
  */
-function addDocumentsToAgendaItem(agendaItemTitle, files) {
-  openAgendaItemDocumentTab(agendaItemTitle);
+function addDocumentsToAgendaItem(agendaItemTitle, files,isDetailView=false) {
+  openAgendaItemDocumentTab(agendaItemTitle,false,isDetailView);
   return addDocuments(files)
 }
 
@@ -70,9 +74,10 @@ function addDocumentsToAgendaItem(agendaItemTitle, files) {
  * @param {string} agendaItemTitle
  * @param {string} oldFileName
  * @param {string} file
+ * @param {boolean} isDetailView
  */
-function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
-  openAgendaItemDocumentTab(agendaItemTitle, true);
+function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file,isDetailView = false) {
+  openAgendaItemDocumentTab(agendaItemTitle, true,isDetailView);
   return addNewDocumentVersion(oldFileName, file, 'agendaitems')
 }
 
@@ -97,12 +102,16 @@ function addNewDocumentVersionToSubcase(oldFileName, file) {
  * @param {string} agendaItemTitle
  * @param {boolean} alreadyHasDocs
  */
-function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
+function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDetailView = false) {
   // cy.route('GET', 'documents**').as('getDocuments');
-  cy.get('li.vlc-agenda-items__sub-item h4')
-    .contains(agendaItemTitle)
-    .click()
-    .wait(2000); // sorry
+  if(isDetailView) {
+    cy.get(agenda.agendaDetailSidebarSubitem)
+      .contains(agendaItemTitle)
+      .click()
+      .wait(2000); // sorry
+  } else {
+    cy.openDetailOfAgendaitem(agendaItemTitle);
+  }
   cy.get(agenda.agendaItemDocumentsTab)
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
@@ -110,6 +119,22 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
     // cy.wait('@getDocuments')
     cy.wait(2000); //documents GET occured earlier, general wait instead
   }
+}
+
+/**
+ * @description Opens agendaitem with agendaitemTitle and clicks the document link.
+ * @name openAgendaItemDossierTab
+ * @memberOf Cypress.Chainable#.
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {boolean} alreadyHasDocs
+ */
+function openAgendaItemDossierTab(agendaItemTitle) {
+  // cy.route('GET', 'documents**').as('getDocuments');
+  cy.openDetailOfAgendaitem(agendaItemTitle);
+  cy.get(agenda.agendaItemDossierTab)
+    .click()
+    .wait(100); //Access-levels GET occured earlier, general wait instead
 }
 
 /**
@@ -197,7 +222,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     .should('be.visible')
     .click();
 
-  cy.get(modal.createAnnouncement.modalDialog).as('fileUploadDialog');
+  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -279,4 +304,40 @@ function uploadUsersFile(folder, fileName, extension) {
   });
   cy.wait('@createNewFile');
   cy.wait('@getNewFile');
+}
+
+/**
+ * @description Opens the new document version dialog and adds the file when it is a signed document.
+ * @name addNewDocumentVersionToSignedDocument
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ * @param {String} file - The name of the file without the extension
+ */
+function addNewDocumentVersionToSignedDocument(oldFileName, file) {
+  cy.route('POST', 'document-versions').as('createNewDocumentVersion');
+
+  cy.get('.vlc-document-card__content .vl-title--h6', { timeout: 12000 })
+    .contains(oldFileName, { timeout: 12000 })
+    .parents('.vlc-document-card').as('documentCard');
+
+  cy.get('@documentCard').within(() => {
+    cy.get(document.documentUploadShowMore).click();
+  });
+  cy.get(document.documentUploadNewVersion)
+    .should('be.visible')
+    .click();
+
+  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+
+  cy.get('@fileUploadDialog').within(() => {
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
+  });
+  cy.wait(1000); //Cypress is too fast
+
+  cy.get('@fileUploadDialog').within(() => {
+    cy.get(form.formSave).click();
+  });
+  cy.wait('@createNewDocumentVersion', { timeout: 12000 });
 }

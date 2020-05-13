@@ -3,7 +3,7 @@
     {{t "agendaitem-comment"}}
   </h2>
   {{#if (or (not agendaitem.retracted) (not agendaitem.postponedTo))}}
-    <div class="vlc-comment-input vl-u-display-flex vl-u-display-flex-align-center">
+    <div class="vlc-comment-input vl-u-display-flex vlc-u-display-flex-align-center">
       <div class="vl-badge vl-badge--initials vl-badge--action">
         <span>
           {{user-initials user=(await user)}}
@@ -28,7 +28,7 @@
           }}
         {{/each}}
       {{/if}}
-      <div class="vlc-comment-input vlc-comment-input--response vl-u-display-flex vl-u-display-flex-align-center">
+      <div class="vlc-comment-input vlc-comment-input--response vl-u-display-flex vlc-u-display-flex-align-center">
         {{#if (eq (await comment.author.id) (await user.id))}}
           <div class="vl-badge vl-badge--initials vl-badge--action">
             <span>

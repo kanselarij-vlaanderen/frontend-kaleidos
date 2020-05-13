@@ -26,34 +26,32 @@ context('Settings page tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
-    cy.route('/');
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
   });
 
   it('Should open the model behind manage goverment domains', () => {
     cy.get(settings.manageGovermentDomains).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
     cy.get(settings.manageGovermentDomains).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
-    cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(modal.baseModal.close).click();
+    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
   });
 
   it('Should open the dropdown in the modal', () => {
     cy.get(settings.manageGovermentDomains).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
   });
 
   it('Should open the dropdown in the modal and see each item', () => {
     cy.get(settings.manageGovermentDomains).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
 
@@ -64,21 +62,21 @@ context('Settings page tests', () => {
 
   it('Should open the dropdown in the modal and selecting the first element should show advanced model', () => {
     cy.get(settings.manageGovermentDomains).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length.greaterThan', 0);
     cy.get('.ember-power-select-option').eq(0).should('contain.text', "Cultuur, jeugd, sport & media");
     cy.get('.ember-power-select-option').eq(0).click();
     cy.get('.ember-power-select-selected-item').should('contain.text',"Cultuur, jeugd, sport & media").wait(200);
-    cy.get(modal.modalManager.add).should('be.visible');
-    cy.get(modal.modalManager.edit).should('be.visible');
-    cy.get(modal.modalManager.delete).should('be.visible');
-    cy.get(modal.modalManager.close).should('be.visible');
+    cy.get(modal.manageInSettingsModal.add).should('be.visible');
+    cy.get(modal.manageInSettingsModal.edit).should('be.visible');
+    cy.get(modal.manageInSettingsModal.delete).should('be.visible');
+    cy.get(modal.baseModal.close).should('be.visible');
   });
 
   it('Should open the dropdown in the modal and selecting the each element should show advanced model with that element in the dropdown span', () => {
     cy.get(settings.manageGovermentDomains).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
     for(let i = 0; i<govermentDomains.length;i++) {
       cy.validateDropdownElements(i,govermentDomains[i]);
     }
@@ -86,7 +84,7 @@ context('Settings page tests', () => {
 
   it('Should open the modal and add a new item in the list', () => {
     cy.get(settings.manageGovermentDomains).click();
-    cy.get(modal.modalManager.add).click();
+    cy.get(modal.manageInSettingsModal.add).click();
     cy.get(form.formInput).type('Andere zaken');
     cy.get(form.formSave).click();
     cy.get('.ember-power-select-trigger').click();

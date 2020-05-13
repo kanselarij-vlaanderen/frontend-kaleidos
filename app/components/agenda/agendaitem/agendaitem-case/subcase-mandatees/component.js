@@ -106,7 +106,7 @@ export default Component.extend(isAuthenticatedMixin, {
         }
       }
       const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
-      const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] }
+      const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] };
       const resetFormallyOk = true;
       try {
         await saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
@@ -137,8 +137,8 @@ export default Component.extend(isAuthenticatedMixin, {
         const rowIseCodes = row.get('iseCodes');
         rowIseCodes.map((code) => {
           iseCodes.push(code);
-        })
-      })
+        });
+      });
     }
     return { mandatees, iseCodes, requestedBy };
   },

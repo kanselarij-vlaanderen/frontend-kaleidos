@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
-import moment from 'moment';
 
 export default Component.extend({
   classNames: ['vl-form__group vl-u-bg-porcelain'],
@@ -23,7 +22,6 @@ export default Component.extend({
       } else {
         agendaitemToUpdate = await agendaitem;
       }
-      agendaitemToUpdate.set('modified', moment().utc().toDate());
       agendaitemToUpdate.set('formallyOk', CONFIG.notYetFormallyOk);
       await agendaitemToUpdate.save().then(() => {
         updateModifiedProperty(agenda);

@@ -7,8 +7,9 @@
   }}
 {{/if}}
 {{#if (not isEditing)}}
+<div data-test-agenda-news-item-view>
   <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-flex-align-baseline">
+    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <h3 class="vl-title vl-title--h3">
         {{t "newsletter-title"}}
       </h3>
@@ -42,7 +43,9 @@
   <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
     {{await subcase.newsletterInfo.displayRemark}}
   </p>
-  <div class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s">
+  <div
+          class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s"
+          data-test-agenda-news-item-themes>
     {{#if (is-pending subcase.newsletterInfo.themes)}}
       {{web-components/vl-loader text=(t "themes-loading-text")}}
     {{else if (gt (await subcase.newsletterInfo.themes.length) 0)}}
@@ -51,7 +54,7 @@
           (await subcase.newsletterInfo.themes)
         as |theme|
         }}
-          <li class="vl-pill">
+          <li class="vl-pill" data-test-agenda-news-item-theme>
             {{theme.label}}
           </li>
         {{/each}}
@@ -75,7 +78,7 @@
       </div>
     {{/if}}
   </div>
-
+</div>
 {{else}}
   {{news-item/edit-item
     subcase=(await subcase)

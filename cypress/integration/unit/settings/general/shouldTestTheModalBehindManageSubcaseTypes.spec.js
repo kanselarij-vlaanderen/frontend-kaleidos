@@ -9,23 +9,21 @@ context('Manage Sub codes tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
-    cy.route('/')
   });
 
   it('Should open the model behind manage subcase types', () => {
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
     cy.get(settings.manageSubcaseTypes).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
   });
 
   it('Should open the model behind manage subcase types and close it', () => {
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
     cy.get(settings.manageSubcaseTypes).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
-    cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(modal.baseModal.close).click();
+    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
   });
 });

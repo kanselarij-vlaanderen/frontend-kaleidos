@@ -1,6 +1,6 @@
 {{#if (not (is-pending (await item)))}}
   {{#if (not isEditing)}}
-    <div class="vl-u-spacer vl-typography">
+    <div data-test-decision-container class="vl-u-spacer vl-typography">
       <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
         {{#if isEditor}}
           <a href="" class="vl-link" {{action "toggleIsEditing"}}>
@@ -18,7 +18,10 @@
             }}
               <ul class="vlc-dropdown-menu">
                 <li class="vlc-dropdown-menu__item">
-                  <button type="button" class="vl-link vl-u-text--error"
+                  <button 
+                    data-test-delete-decision
+                    type="button" 
+                    class="vl-link vl-u-text--error"
                     {{action attacher.hide}}
                     {{action "deleteDecision" decision}}
                   >

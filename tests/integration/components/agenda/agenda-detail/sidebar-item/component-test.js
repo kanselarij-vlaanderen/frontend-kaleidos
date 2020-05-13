@@ -1,24 +1,24 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
+import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | utils/user-table', function(hooks) {
+module('Integration | Component | agenda/agenda-detail/sidebar-item', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{utils/user-table}}`);
+    await render(hbs`<Agenda::AgendaDetail::SidebarItem />`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      {{#utils/user-table}}
+      <Agenda::AgendaDetail::SidebarItem>
         template block text
-      {{/utils/user-table}}
+      </Agenda::AgendaDetail::SidebarItem>
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

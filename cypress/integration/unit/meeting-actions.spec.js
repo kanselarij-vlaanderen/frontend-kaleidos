@@ -2,10 +2,6 @@
 /// <reference types="Cypress" />
 
 context('meeting actions tests', () => {
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
-  const caseTitle = 'Cypress test: meeting actions - 1588758417';
-
 
   beforeEach(() => {
     cy.server();
@@ -13,8 +9,6 @@ context('meeting actions tests', () => {
   });
 
   it('should perform action delete agenda with agendaitems on designagenda', () => {
-    return;
-
     cy.visit('/agenda/5EB287CDF359DD0009000008/agendapunten?selectedAgenda=c7b045ce-3976-459c-aeaa-d0e8597b96d8');
     cy.deleteAgenda('5EB287CDF359DD0009000008');
 
@@ -27,7 +21,6 @@ context('meeting actions tests', () => {
   });
 
   it('should perform action close agenda with agendaitems on designagenda', () => {
-    return;
     const SubcaseTitleShort = 'Cypress test: close agenda - 1588775338';
     cy.visit('/agenda/5EB2C9CBF5E1260009000005/agendapunten?selectedAgenda=74e87383-80a4-4616-8814-5883cafa6da0');
     cy.agendaItemExists(SubcaseTitleShort).click();
@@ -39,7 +32,6 @@ context('meeting actions tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.closeAgenda();
 
-    // Verify subcase is still ok on agenda A after closing the agenda (designagenda is deleted if present)
     cy.agendaItemExists(SubcaseTitleShort).click();
     cy.contains('Naar procedurestap', { timeout: 12000});
   });
@@ -52,8 +44,7 @@ context('meeting actions tests', () => {
     cy.agendaItemExists(SubcaseTitleShort); //this makes sure the page is reloaded after approving the agenda
     cy.changeSelectedAgenda('Ontwerpagenda');
 
-    cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.contains('Naar procedurestap', { timeout: 12000});
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get('.vlc-panel-layout__main-content').within(() => {
       cy.get('.vl-action-group').within(() => {
         cy.contains('Verwijderen').should('not.exist');
@@ -94,14 +85,13 @@ context('meeting actions tests', () => {
     // Verify subcase is no longer on designagenda after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
     cy.get('li.vlc-agenda-items__sub-item h4')
-    .contains(SubcaseTitleShort, { imeout: 2500 })
-    .should('not.exist');
+      .contains(SubcaseTitleShort, { timeout: 2500 })
+      .should('not.exist');
     // Verify subcase is no longer on agenda A after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
     cy.get('li.vlc-agenda-items__sub-item h4')
-    .contains(SubcaseTitleShort, { timeout: 2500 })
-    .should('not.exist');
-
+      .contains(SubcaseTitleShort, { timeout: 2500 })
+      .should('not.exist');
   });
 
 });

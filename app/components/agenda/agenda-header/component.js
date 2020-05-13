@@ -111,9 +111,8 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     await this.agendaService.deleteAgenda(agenda);
     if (previousAgenda) {
       await session.save();
-      this.router.transitionTo('agenda.agendaitems.index', session.id, {
-        queryParams: { selectedAgenda: previousAgenda.get('id') }
-      });
+      await this.set('sessionService.currentAgenda', previousAgenda);
+      this.router.transitionTo('agenda.agendaitems', session.id, previousAgenda.get('id'));
     } else {
       await this.sessionService.deleteSession(session);
     }
@@ -306,6 +305,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       this.reloadRoute(id);
     },
 
+    reloadRouteWithRefreshId(id) {
+      this.reloadRouteWithRefreshId(id);
+    },
+
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
     },
@@ -342,6 +345,10 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
   reloadRoute(id) {
     this.reloadRouteWithNewAgenda(id);
+  },
+
+  reloadRouteWithRefreshId(id) {
+    this.reloadRouteWithNewAgendaitem(id);
   },
 
   async approveAgenda(session) {

@@ -9,21 +9,19 @@ context('Manage alerts tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
-    cy.route('/');
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
   });
 
   it('Should open the model behind manage alerts', () => {
     cy.get(settings.manageAlerts).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
   });
 
   it('Should open the model behind manage alerts and close it', () => {
     cy.get(settings.manageAlerts).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('be.visible');
-    cy.get(modal.createAnnouncement.modalDialogCloseModal).click();
-    cy.get(modal.createAnnouncement.modalDialog).should('not.be.visible');
+    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(modal.baseModal.close).click();
+    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
   });
 });

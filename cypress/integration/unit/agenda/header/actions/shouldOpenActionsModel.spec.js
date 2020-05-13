@@ -7,7 +7,6 @@ context('Open Action model in agenda', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-
   });
 
   it('Should click on Action button and show the possabilities for the user Admin', () => {

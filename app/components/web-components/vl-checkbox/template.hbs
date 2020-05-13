@@ -1,8 +1,9 @@
-<label class="vl-checkbox">
+<label data-test-vl-checkbox-label class="vl-checkbox">
   {{input
     class="vl-checkbox__toggle"
     type="checkbox"
     checked=value
+    disabled=disabled
     data-test-vl-checkbox=true
     input=(action "toggle")
   }}

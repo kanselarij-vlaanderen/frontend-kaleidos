@@ -1,6 +1,6 @@
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-flex-align-baseline">
+    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <h2 class="vl-title vl-title--h3">
         {{t "prepared-text-minutes"}}
       </h2>
@@ -26,7 +26,7 @@
   <div class="vlc-hr"></div>
   {{#if (is-pending agendaitem.meetingRecord.signedDocument)}}
     {{web-components/vl-loader text=(t "minutes-document-loading-text")}}
-  {{else if (not (await agendaitem.meetingRecord.signedDocument))}}
+  {{else if (not (await signedDocument))}}
     {{utils/add-signed-documents
       item=agendaitem.meetingRecord
       modelToAddDocumentVersionTo="signedMinutes"

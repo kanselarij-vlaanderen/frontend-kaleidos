@@ -6,7 +6,6 @@ context('Agenda acties testen', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-
   });
 
   it('Create an agenda and open it', () => {
