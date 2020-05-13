@@ -1,13 +1,13 @@
 import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed, get, set } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject } from '@ember/service';
 import { cached } from 'fe-redpencil/decorators/cached';
 import { saveChanges as saveSubcaseDescription, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   store: inject(),
+  currentSession: inject(),
   classNames: ['vl-u-spacer-extended-bottom-l'],
 
   item: computed('subcase', function () {

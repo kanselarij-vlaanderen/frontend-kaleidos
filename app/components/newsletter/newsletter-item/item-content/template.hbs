@@ -9,7 +9,7 @@
           {{await agendaitem.subcase.newsletterInfo.title}}
         {{/if}}
       </h4>
-      {{#if (and isEditor (await agendaitem.subcase.newsletterInfo))}}
+      {{#if (and currentSession.isEditor (await agendaitem.subcase.newsletterInfo))}}
         <div class="vl-u-display-flex vlc-u-flex-space-between">
           <div class="vl-u-spacer-extended-left-s">
             <a href="" class="vl-link" {{action "toggleIsEditing"}}>

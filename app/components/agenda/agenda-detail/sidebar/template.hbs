@@ -28,7 +28,7 @@
   </div>
 {{/if}}
 <div class="{{spacerClass}}">
-  {{#if (and isEditor (not isShowingChanges))}}
+  {{#if (and currentSessionService.isEditor (not isShowingChanges))}}
     {{#sortable-group
       tagName="ul"
       onChange=(action "reorderItems")
@@ -92,6 +92,7 @@
     </ul>
   {{/if}}
 </div>
+
 {{#if (not selectedAgendaItem)}}
   <div class="vlc-agenda-detail-sidebar-section-header">
     <h3 class="vl-title--h3 vlc-agenda-detail-sidebar-section-header__title">
@@ -107,7 +108,7 @@
 {{/if}}
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
-    {{#if isEditor}}
+    {{#if currentSessionService.isEditor}}
       {{#sortable-group
         tagName="ul"
         onChange=(action "reorderAnnouncements")

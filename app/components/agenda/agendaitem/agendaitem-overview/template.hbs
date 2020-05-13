@@ -17,7 +17,7 @@
         <div class="vl-u-spacer--small">
           {{#if (eq activeAgendaItemSection "details")}}
             <div class="vl-action-group vl-action-group--align-right">
-              {{#if isEditor}}
+              {{#if currentSession.isEditor}}
                 {{#if (not currentAgenda.isFinal)}}
                   {{agenda/agendaitem/agendaitem-controls
                     agendaitem=agendaitem
@@ -47,7 +47,7 @@
                 {{t "decision-title"}}
               </h3>
             </div>
-            {{#if isEditor}}
+            {{#if currentSession.isEditor}}
               <div class="vl-action-group">
                 <button type="button" class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before"
                   data-test-add-decision
