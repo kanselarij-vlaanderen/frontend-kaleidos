@@ -6,11 +6,11 @@ module.exports = function(defaults) {
     autoprefixer: {
       enabled: true,
       cascade: true,
-      sourcemap: true
+      sourcemap: process.env.DEPLOY_ENV !== 'production',
     },
     sassOptions: {
       extension: 'scss',
-      sourceMapEmbed: true
+      sourceMapEmbed: process.env.DEPLOY_ENV !== 'production',
     },
     flatpickr: {
       locales: ['nl']
