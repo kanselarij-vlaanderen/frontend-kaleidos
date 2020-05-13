@@ -30,7 +30,7 @@ export default Component.extend({
 
   actions: {
     async logout() {
-      await this.logoutUser();
+      await this.currentSession.logout();
     }
   },
 });
