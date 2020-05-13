@@ -3,6 +3,7 @@
 
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import isecodes from "../../selectors/isecodes/isecodesSelectors";
+import agenda  from '../../selectors/agenda.selectors';
 
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
@@ -14,16 +15,13 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.visit('/');
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {
@@ -57,7 +55,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 2);
@@ -105,7 +103,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     cy.get(mandatee.mandateeLinkListItem).as('listItems');
     cy.get('@listItems').should('have.length', 3);
@@ -134,8 +132,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.openAgendaForDate(agendaDate);
 
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.wait(1000);
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
 
@@ -156,7 +153,10 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
 
     cy.reload();
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    // cy.openDetailOfAgendaitem(SubcaseTitleShort);
+    cy.get(agenda.agendaDetailSidebarSubitem)
+      .contains(SubcaseTitleShort)
+      .click()
 
     // Add 1 more
     cy.addSubcaseMandatee(5, -1, -1);

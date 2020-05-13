@@ -1,5 +1,9 @@
 <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
   <div class="vlc-scroll-wrapper__body full-height">
-    {{kaleidos-viewer documentVersion=model}}
+    {{#if (eq this.model.file.extension "pdf")}}
+      {{pdf-view filePath=(concat "/files/" this.model.file.id "/download")}}
+    {{else}}
+      {{t "document-viewer-message-before-type"}} <i>{{this.model.file.extension}}</i> {{t "document-viewer-message-after-type"}}
+    {{/if}}
   </div>
 </div>

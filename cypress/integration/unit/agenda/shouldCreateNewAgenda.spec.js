@@ -10,7 +10,6 @@ context('Agenda tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
   // TODO there is no verification if the correct kind of agenda was saved as expected.
 

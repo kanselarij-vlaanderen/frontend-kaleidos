@@ -4,7 +4,6 @@
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
-import alert from '../../selectors/system-wide/alert.selectors';
 
 context('Add files to an agenda', () => {
   const plusMonths = 1;
@@ -16,13 +15,11 @@ context('Add files to an agenda', () => {
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should test the document CRUD for a decision', () => {
@@ -39,8 +36,7 @@ context('Add files to an agenda', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     cy.openAgendaForDate(agendaDate);
-    cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.wait(1000);
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaItemDecisionTab).click();
     cy.get(agenda.addDecision).click();
     cy.get(agenda.uploadDecisionFile).click();

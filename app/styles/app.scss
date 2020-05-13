@@ -82,6 +82,8 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/additions/_typography';
 
 // Custom components
+@import 'custom-components/vlc-agenda-detail-sidebar';
+@import 'custom-components/vlc-agenda-detail-sidebar-section-header';
 @import 'custom-components/vlc-agenda-items-section-header';
 @import 'custom-components/vlc-agenda-items';
 @import 'custom-components/vlc-agenda-meta';
