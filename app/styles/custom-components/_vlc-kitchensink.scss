@@ -28,6 +28,7 @@
   font-weight: 500;
   font-size: 2.4rem;
   line-height: 2.9rem;
+  margin-bottom: 2rem;
   color: #000000;
 }
 
@@ -51,8 +52,7 @@
   border: #CBD2DA solid 0.1rem;
   width: 28.6rem;
   height: 100%;
-  left: 0rem;
-  top: 4.4rem;
+  padding-top: 1.6rem;
   background: #F3F5F6;
 }
 .vlc-kitchensink__navigation--item{
@@ -61,22 +61,21 @@
 }
 
 .vlc-kitchensink__navigation--link {
-  color: black;
+  color: #333332;
   text-decoration: none;
   letter-spacing: 0.05rem;
 }
 
 .vlc-kitchensink__navigation--link:hover {
-  color: black;
+  color: #333332;
   text-decoration: #0A6C9B underline;
 }
 .vlc-kitchensink__navigation--item:active {
-  color: black;
+  color: #333332;
 }
 
 .vlc-kitchensink__navigation--header {
   margin-left: 1rem;
-  margin-top: 1.6rem;
   font-weight: bold;
   text-transform: uppercase;
 }
