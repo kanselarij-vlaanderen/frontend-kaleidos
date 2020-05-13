@@ -4,10 +4,11 @@
 
 Cypress.Commands.add('login',login);
 Cypress.Commands.add('logout',logout);
-
+Cypress.Commands.add('loginFlow',loginFlow);
+Cypress.Commands.add('logoutFlow',logoutFlow);
 
 /**
- * @description Goes to the mock-login page and selects the profile that matches the given name.
+ * @description Bypasses the mock-login and inserts a localstorage item
  * @name login
  * @memberOf Cypress.Chainable#
  * @function
@@ -50,4 +51,36 @@ function logout(){
   }).then(() => {
     cy.visit('/');
   });
+}
+
+/**
+ * @description Goes to the mock-login page and selects the profile that matches the given name.
+ * @name loginFlow
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} name the profile to log in with, case sensitive
+ */
+function loginFlow(name){
+  cy.server();
+  cy.route('POST', '/mock/sessions').as('mockLogin');
+  cy.visit('mock-login');
+  cy.get('.grid', { timeout: 12000 }).within(() => {
+    cy.contains(name).click()
+      .wait('@mockLogin');
+  });
+}
+
+
+/**
+ * @description Goes to the mock-login page and selects the profile that matches the given name.
+ * @name logoutFlow
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function logoutFlow(){
+  cy.server();
+  cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
+  cy.visit('');
+  cy.contains('Afmelden', { timeout: 12000 }).click({force: true});
+  cy.wait('@mockLogout');
 }
