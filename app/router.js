@@ -87,6 +87,7 @@ Router.map(function () {
     this.route('pills');
     this.route('components');
     this.route('icons');
+    this.route('panels');
   });
 });
 
