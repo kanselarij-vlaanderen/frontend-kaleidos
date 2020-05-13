@@ -564,5 +564,13 @@
   "kaleidos": "Kaleidos",
   "amount-per-page": "Aantal items per pagina",
   "document-viewer-message-before-type": "Documenten van het type ",
-  "document-viewer-message-after-type": " worden momenteel niet ondersteund om te bekijken."
+  "document-viewer-message-after-type": " worden momenteel niet ondersteund om te bekijken.",
+  "style-guide-basic": "Basics",
+  "style-guide-typography": "Typography",
+  "style-guide-components": "Components",
+  "style-guide-buttons": "Buttons",
+  "style-guide-pills": "Pills",
+  "style-guide-panels": "Panels",
+  "style-guide-title": "Style guide",
+  "style-guide-icons": "Icons"
 }
