@@ -16,10 +16,10 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            {{access-level-pill item=lastDocumentVersion}}
+            <AccessLevelPill @item={{lastDocumentVersion}} />
           </div>
           <div class="vlc-toolbar__item">
-            {{#if isEditor}}
+            {{#if currentSession.isEditor}}
               <button class="vl-button vl-button--link-muted vl-button--icon"
                       type="button"
                 {{action "unlinkDocument" document}}
@@ -70,11 +70,10 @@
   {{/if}}
 </div>
 {{#if isVerifyingUnlink}}
-  {{web-components/vl-modal-verify
-    title=(t "document-unlink")
-    message=(t "unlink-document-message")
-    cancel=(action "cancel")
-    verify=(action "verify")
-    verifyButtonText=(t "unlink")
-  }}
+  <WebComponents::VlModalVerify
+    @title={{t "document-unlink"}}
+    @message={{t "unlink-document-message"}}
+    @cancel={{action "cancel"}}
+    @verify={{action "verify"}}
+    @verifyButtonText={{t "unlink"}} />
 {{/if}}

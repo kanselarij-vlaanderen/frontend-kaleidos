@@ -1,11 +1,13 @@
 import Route from '@ember/routing/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject as service } from '@ember/service';
 
-export default Route.extend(AuthenticatedRouteMixin,isAuthenticatedMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
+	currentSession: service(),
+
 	authenticationRoute: 'login',
   redirect() {
-		if (!this.isEditor) {
+		if (!this.currentSession.isEditor) {
 			this.transitionTo('');
 		}
 	}

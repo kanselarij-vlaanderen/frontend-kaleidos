@@ -33,13 +33,16 @@ export default class SubcaseTitlesEdit extends Component {
   }
 
   trimText = (text) => {
-    return text.trim();
+    if(text) {
+      return text.trim();
+    }
+    return text;
   };
 
   @action
   async saveChanges() {
     set(this, 'isLoading', true);
-    
+
     const propertiesToSetOnAgendaitem = {
       'title': this.trimText(this.get('title')),
       'shortTitle': this.trimText(this.get('shortTitle')),

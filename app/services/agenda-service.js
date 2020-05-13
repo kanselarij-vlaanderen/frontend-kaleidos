@@ -6,12 +6,13 @@ import { ajax } from 'fe-redpencil/utils/ajax';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Service.extend(isAuthenticatedMixin, {
+export default Service.extend({
   store: service(),
   toaster: service(),
   intl: service(),
+  currentSession: service(),
+
   addedDocuments: null,
   addedAgendaitems: null,
 
@@ -227,7 +228,7 @@ export default Service.extend(isAuthenticatedMixin, {
     const currentAgenda = await itemToDelete.get('agenda');
     const currentMeeting = await currentAgenda.get('createdFor');
     const currentMeetingId = await currentMeeting.get('id');
-    if (this.isAdmin) {
+    if (this.currentSession.isAdmin) {
       itemToDelete.set('aboutToDelete', true);
       const subcase = await itemToDelete.get('subcase');
       const agendaitems = await subcase.get('agendaitems');

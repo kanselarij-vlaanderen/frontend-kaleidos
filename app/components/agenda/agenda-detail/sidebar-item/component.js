@@ -2,9 +2,8 @@ import Component from '@ember/component';
 import { computed, observer } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend( {
   store: service(),
   sessionService: service(),
   agendaService: service(),

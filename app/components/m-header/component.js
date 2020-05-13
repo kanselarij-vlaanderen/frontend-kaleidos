@@ -1,8 +1,9 @@
 import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
+  currentSession: service(),
   classNames: ['vl-u-display-block'],
 
   init() {

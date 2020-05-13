@@ -1,15 +1,15 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import moment from 'moment';
-import { inject } from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject as service } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default Component.extend(isAuthenticatedMixin, {
-  store: inject(),
-  intl: inject(),
-  sessionService: inject(),
-  agendaService: inject(),
+export default Component.extend({
+  store: service(),
+  intl: service(),
+  sessionService: service(),
+  agendaService: service(),
+  currentSession: service(),
   currentAgenda: null,
   agendaitem: null,
   lastDefiniteAgenda: null,
@@ -60,7 +60,7 @@ export default Component.extend(isAuthenticatedMixin, {
   deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function () {
     if (await this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
-    } else if (this.isAdmin) {
+    } else if (this.currentSession.isAdmin) {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
   }),
@@ -118,7 +118,7 @@ export default Component.extend(isAuthenticatedMixin, {
     async tryToDeleteItem(agendaitem) {
       if (await this.isDeletable) {
         this.deleteItem(agendaitem);
-      } else if (this.isAdmin) {
+      } else if (this.currentSession.isAdmin) {
         this.toggleProperty('isVerifying');
       }
     },

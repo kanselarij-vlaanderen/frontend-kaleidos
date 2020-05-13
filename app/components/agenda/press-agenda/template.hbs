@@ -1,5 +1,5 @@
 <div class="vlc-container-center">
-  {{utils/logo-header}}
+  <Utils::LogoHeader />
   <div class="vl-u-spacer-extended-bottom-l">
     <h1 class="vl-title vl-title--h2">
       {{await title}}
@@ -33,7 +33,7 @@
                     {{agendaitem.titlePress}}
                   </h3>
                   {{#if (eq definite "false")}}
-                    {{#if isEditor}}
+                    {{#if currentSession.isEditor}}
                       <div class="vl-u-spacer-extended-left-s">
                         <a href="" class="vl-link"
                           {{action "toggleIsEditing" agendaitem}}>
@@ -53,10 +53,9 @@
                 <p></p>
               </div>
             {{else}}
-              {{agendaitem-press-edit
-                agendaitem=agendaitem
-                isEditing=agendaitem.isEditing
-              }}
+              <AgendaitemPressEdit
+                @agendaitem={{agendaitem}}
+                @isEditing={{agendaitem.isEditing}} />
             {{/if}}
           {{/each}}
           <div class="vl-u-spacer-extended-bottom-l">
