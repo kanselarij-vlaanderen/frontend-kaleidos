@@ -6,30 +6,28 @@
     <div class="vlc-comment-input vl-u-display-flex vlc-u-display-flex-align-center">
       <div class="vl-badge vl-badge--initials vl-badge--action">
         <span>
-          {{user-initials user=(await user)}}
+          {{user-initials user=(await currentSession.user)}}
         </span>
       </div>
-      {{utils/custom-textarea
-        rows="2"
+      <Utils::CustomTextarea
+        @rows="2"
         class="vl-input-field vl-input-field--block"
-        value=text
-        placeholder="Type hier jouw opmerking..."
-        enter=(action "addComment")
-      }}
+        @value={{text}}
+        @placeholder={{t "agenda-comment-type-here"}}
+        @enter={{action "addComment"}} />
     </div>
     {{#each (await sortedRemarks) as |comment|}}
-      {{utils/agendaitem-comment comment=comment user=(await user)}}
+      <Utils::AgendaitemComment @comment={{comment}} @user={{await currentSession.user}} />
       {{#if (await comment.answers)}}
         {{#each (await comment.answers) as |answer|}}
-          {{utils/agendaitem-comment
-            comment=answer
-            isAnswer=true
-            user=(await user)
-          }}
+          <Utils::AgendaitemComment
+            @comment={{answer}}
+            @isAnswer={{true}}
+            @user={{await currentSession.user}} />
         {{/each}}
       {{/if}}
       <div class="vlc-comment-input vlc-comment-input--response vl-u-display-flex vlc-u-display-flex-align-center">
-        {{#if (eq (await comment.author.id) (await user.id))}}
+        {{#if (eq (await comment.author.id) (await currentSession.user.id))}}
           <div class="vl-badge vl-badge--initials vl-badge--action">
             <span>
               {{user-initials user=(await comment.author)}}
@@ -42,13 +40,12 @@
             </span>
           </div>
         {{/if}}
-        {{utils/custom-textarea
-          rows="2"
+        <Utils::CustomTextarea
+          @rows="2"
           class="vl-input-field vl-input-field--block"
-          value=comment.answer
-          placeholder="Type hier jouw opmerking..."
-          enter=(action "addAnswer" comment)
-        }}
+          @value={{comment.answer}}
+          @placeholder={{t "agenda-comment-type-here"}}
+          @enter={{fn this.addAnswer comment}} />
       </div>
     {{/each}}
   {{/if}}

@@ -1,60 +1,51 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject as service } from '@ember/service';
+import { action, computed } from '@ember/object';
 import DS from 'ember-data';
 
-export default Component.extend(isAuthenticatedMixin, {
-  classNames: ['vl-u-spacer-extended-bottom-l'],
+export default class SubcaseTitles extends Component {
+  classNames = ['vl-u-spacer-extended-bottom-l'];
+  @service currentSession;
 
-  agendaId: computed('item', 'shouldShowDetails', function () {
+  @computed('item', 'shouldShowDetails')
+  get agendaId() {
     const { item } = this;
     if (item.get('title')) {
       const values = item.get('title').split('/');
       return values.get('lastObject');
     }
-  }),
 
-  meetingId: computed('item', 'shouldShowDetails', function () {
+    return null;
+  }
+
+  @computed('item', 'shouldShowDetails')
+  get meetingId() {
     const { item } = this;
     if (item.get('title')) {
       const values = item.get('title').split('/');
       return values.get('firstObject');
     }
-  }),
 
-  isAgendaItem: computed('item.modelName', function () {
+    return null;
+  }
+
+  @computed('item.modelName')
+  get isAgendaItem() {
     return 'agendaitem' == this.get('item.modelName');
-  }),
+  }
 
-  subcaseName: computed('item.{subcaseName,subcase.subcaseName}', async function () {
-    const item = await this.get('item');
-    const subcase = await this.get('item.subcase');
+  @computed('item.{subcaseName,subcase.subcaseName}')
+  get subcaseName() {
+    return this.getSubcaseName();
+  }
 
-    if (!subcase) {
-      return item.get('subcaseName');
-    }
+  @computed('subcaseName', 'item.{subcase.approved,approved}')
+  get pillClass() {
+    return this.getPillClass();
+  }
 
-    const subcaseName = await subcase.get('subcaseName');
-    if (!subcaseName) {
-      return;
-    }
-    return subcaseName;
-  }),
-
-  pillClass: computed('subcaseName', 'item.{subcase.approved,approved}', async function () {
-    let baseClass = 'vl-pill vl-u-text--capitalize';
-    if (!await this.subcaseName) {
-      return baseClass;
-    }
-    const approved = await this.get('item.subcase.approved');
-    const itemApproved = await this.get('item.approved');
-    if (approved || itemApproved) {
-      return baseClass + ' vl-pill--success';
-    }
-    return baseClass;
-  }),
-
-  confidential: computed('item.{subcase.confidential,confidential}', function () {
+  @computed('item.{subcase.confidential,confidential}')
+  get confidential() {
     const { isAgendaItem, item } = this;
     if (isAgendaItem) {
       return DS.PromiseObject.create({
@@ -65,9 +56,10 @@ export default Component.extend(isAuthenticatedMixin, {
     } else {
       return item.get('confidential');
     }
-  }),
+  }
 
-  accessLevel: computed('item', 'item.subcase', function () {
+  @computed('item', 'item.subcase')
+  get accessLevel() {
     const { isAgendaItem, item } = this;
     if (isAgendaItem) {
       return DS.PromiseObject.create({
@@ -80,20 +72,48 @@ export default Component.extend(isAuthenticatedMixin, {
         promise: item.get('accessLevel'),
       });
     }
-  }),
+  }
 
-  case: computed('item', function () {
+  @computed('item')
+  get case() {
     const item = this.get('item');
     const caze = item.get('case');
     if (caze) {
       return caze;
     }
     return item.get('subcase.case');
-  }),
+  }
 
-  actions: {
-    toggleIsEditing() {
-      this.toggleIsEditing();
-    },
-  },
-});
+  async getSubcaseName() {
+    const item = await this.get('item');
+    const subcase = await this.get('item.subcase');
+
+    if (!subcase) {
+      return item.get('subcaseName');
+    }
+
+    const subcaseName = await subcase.get('subcaseName');
+    if (!subcaseName) {
+      return;
+    }
+    return subcaseName;
+  }
+
+  async getPillClass() {
+    let baseClass = 'vl-pill vl-u-text--capitalize';
+    if (!await this.subcaseName) {
+      return baseClass;
+    }
+    const approved = await this.get('item.subcase.approved');
+    const itemApproved = await this.get('item.approved');
+    if (approved || itemApproved) {
+      return baseClass + ' vl-pill--success';
+    }
+    return baseClass;
+  }
+
+  @action
+  toggleIsEditingAction() {
+    this.toggleIsEditing();
+  }
+}

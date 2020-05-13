@@ -1,9 +1,11 @@
 import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { hash } from 'rsvp';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
+  currentSession: service(),
+
   classNames: ['vl-tabs', 'vl-u-reset-margin'],
   tagName: 'ul',
   activeAgendaItemSection: null,
@@ -11,12 +13,12 @@ export default Component.extend(isAuthenticatedMixin, {
 
   // This computed property is only for role-based views.
   // Should show the template the user is an editor or if the meeting is final.
-  shouldShowFinishedDetails: computed('isEditor', 'currentAgenda.createdFor', async function () {
-    const { isEditor, currentAgenda } = this;
-    if (isEditor) {
+  shouldShowFinishedDetails: computed('currentSession.isEditor', 'currentAgenda.createdFor', async function () {
+    if (this.get('currentSession.isEditor')) {
       return true;
     }
-    const meeting = await currentAgenda.get('createdFor');
+
+    const meeting = await this.get('currentAgenda.createdFor');
     return meeting.isFinal;
   }),
 
@@ -31,7 +33,7 @@ export default Component.extend(isAuthenticatedMixin, {
     }
   ]),
 
-  activeTabs: computed('isEditor', 'agendaitem.{subcase,remarks.length}', 'shouldShowFinishedDetails', async function () {
+  activeTabs: computed('currentSession.isEditor', 'agendaitem.{subcase,remarks.length}', 'shouldShowFinishedDetails', async function () {
     const activeTabs = [];
     activeTabs.push(...this.defaultTabs);
 
@@ -44,7 +46,7 @@ export default Component.extend(isAuthenticatedMixin, {
       newsItems: this.get('agendaitem.subcase.newsletterInfo'),
     });
 
-    const isEditor = this.isEditor;
+    const isEditor = this.currentSession.isEditor;
 
     if (isEditor) {
       activeTabs.push({

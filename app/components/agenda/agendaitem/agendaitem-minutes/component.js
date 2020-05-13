@@ -2,12 +2,13 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   store: inject(),
   sessionService: inject(),
+  currentSessionService: inject('current-session'),
   classNames: ['vlc-padding-bottom--large'],
   isEditing: false,
 

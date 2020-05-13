@@ -2,12 +2,12 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject } from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend( {
   sessionService: inject(),
+  currentSessionService: inject('current-session'),
   agendaService: inject(),
   classNames: ['vlc-agenda-items'],
   classNameBindings: ['getClassNames'],

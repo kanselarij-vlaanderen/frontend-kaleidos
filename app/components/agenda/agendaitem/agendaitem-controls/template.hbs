@@ -13,7 +13,7 @@
         </button>
       {{/if}}
     {{/if}}
-    {{#if (or isAdmin (await isDeletable))}}
+    {{#if (or currentSession.isAdmin (await isDeletable))}}
       <button type="button" class="vl-button vl-button--tertiary vl-button--narrow"
         {{action "toggleIsVerifying"}}>
         {{t "delete"}}
@@ -23,11 +23,10 @@
     <div class="vl-loader"></div>
   {{/if}}
   {{#if isVerifying}}
-    {{web-components/vl-modal-verify
-      title=(t "delete-agendaitem")
-      message=(await deleteWarningText)
-      cancel=(action "toggleIsVerifying")
-      verify=(action "verifyDelete" agendaitem)
-    }}
+    <WebComponents::VlModalVerify
+      @title={{t "delete-agendaitem"}}
+      @message={{await deleteWarningText}}
+      @cancel={{action "toggleIsVerifying"}}
+      @verify={{action "verifyDelete" agendaitem}} />
   {{/if}}
 {{/if}}

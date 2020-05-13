@@ -1,7 +1,9 @@
 import Mixin from '@ember/object/mixin';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject as service } from '@ember/service';
 
-export default Mixin.create(isAuthenticatedMixin, {
+export default Mixin.create({
+  currentSession: service(),
+
   routeNamePrefix: null,
   modelName: 'agendaitem',
   filter: null,
@@ -44,7 +46,7 @@ export default Mixin.create(isAuthenticatedMixin, {
   },
 
   redirect() {
-    if (!this.isEditor) {
+    if (!this.currentSession.isEditor) {
       this.transitionTo(`print-overviews.${this.routeNamePrefix}.overview`, {
         queryParams: { definite: true },
       });

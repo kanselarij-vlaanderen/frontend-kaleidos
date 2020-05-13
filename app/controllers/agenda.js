@@ -1,13 +1,13 @@
 import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed, observer, get } from '@ember/object';
 
-export default Controller.extend(isAuthenticatedMixin, {
+export default Controller.extend({
   sessionService: inject(),
   agendaService: inject(),
   router: inject(),
+  currentSession: inject(),
   isLoading: false,
 
   selectedAgendaObserver: observer('this.model.agenda', async function () {

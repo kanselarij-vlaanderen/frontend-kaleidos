@@ -1,11 +1,10 @@
 import Controller from '@ember/controller';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import { computed } from '@ember/object';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
 import moment from 'moment';
 
-export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
+export default Controller.extend(DefaultQueryParamsMixin, {
   queryParams: [
     'isArchived',
     { searchText: 'zoekterm' },
@@ -18,6 +17,7 @@ export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, 
   size: 10,
 
   intl: inject(),
+  currentSession: inject(),
   sort: '-created',
   selectedCase: null,
   isEditingRow: false,

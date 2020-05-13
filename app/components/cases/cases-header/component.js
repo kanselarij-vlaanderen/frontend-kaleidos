@@ -1,16 +1,21 @@
 import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-export default Component.extend(isAuthenticatedMixin, {
-  classNames: ['vlc-page-header', 'vl-u-bg-alt'],
-  isAddingCase: false,
-  actions: {
-    toggleAddingCase() {
-      this.toggleProperty('isAddingCase');
-    },
-    close(caze) {
-      this.toggleProperty('isAddingCase');
-      this.close(caze);
-    }
+export default class CasesHeader extends Component {
+  @service currentSession;
+
+  classNames = ['vlc-page-header', 'vl-u-bg-alt'];
+  isAddingCase = false;
+
+  @action
+  toggleAddingCase() {
+    this.toggleProperty('isAddingCase');
   }
-});
+
+  @action
+  closeAction(caze) {
+    this.toggleProperty('isAddingCase');
+    this.close(caze);
+  }
+}
