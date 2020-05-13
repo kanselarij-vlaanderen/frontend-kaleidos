@@ -6,6 +6,7 @@ import { alias } from '@ember/object/computed';
 export default Component.extend( {
   store: service(),
   sessionService: service(),
+  currentSessionService: service('current-session'),
   agendaService: service(),
   toaster: service(),
   classNameBindings: [
