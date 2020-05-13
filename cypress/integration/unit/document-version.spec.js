@@ -11,7 +11,6 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
-    return;
     const caseTitleSingle = 'Cypress test: document versions agendaitem - 1589286110';
     const SubcaseTitleShort = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
 
@@ -103,7 +102,6 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding new document-version to agendaitem on designagenda should reset formally ok and update the subcase', () => {
-    return ;
     const caseTitle = 'Cypress test: document versions - 1589286212';
     const SubcaseTitleShort = 'Cypress test: new document version on agendaitem - 1589286212';
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
@@ -134,7 +132,6 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding new document-version to subcase should reset formally ok and update the agendaitem on designagendas', () => {
-    return;
     const SubcaseTitleShort = 'Cypress test: new document version on procedurestap - 1589286338';
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
 

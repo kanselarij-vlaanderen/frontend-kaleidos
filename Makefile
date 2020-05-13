@@ -20,6 +20,10 @@ run-cypress-tests:
 	-	make reset-elastic-and-cache
 	- npx cypress run
 
+run-cypress-tests-headless:
+	-	make reset-elastic-and-cache
+	- npx cypress run --headless
+
 run-cypress-spec-files:
 	-	make reset-elastic-and-cache
 	- npx cypress run --spec ${SPECS}
