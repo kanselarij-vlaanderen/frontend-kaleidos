@@ -561,6 +561,8 @@
   "kaleidos-login-info-popup-message": "Het aanmelden gebeurt in een pop-up; zorg dat de instellingen van uw browser correct staan indien deze niet verschijnt.",
   "kaleidos": "Kaleidos",
   "amount-per-page": "Aantal items per pagina",
+  "document-viewer-message-before-type": "Documenten van het type ",
+  "document-viewer-message-after-type": " worden momenteel niet ondersteund om te bekijken.",
   "basic": "Basis",
   "typography": "Typography",
   "components": "Componenten",

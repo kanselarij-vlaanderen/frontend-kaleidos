@@ -6,16 +6,29 @@
       search=(action "searchAgendaItems")
     }}
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
-      {{agenda/agenda-list
-        announcements=(await sortedAnnouncements)
-        agendaitems=(await sortedAgendaitems)
-        currentAgenda=(await model.currentAgenda)
-        selectedAgendaItem=selectedAgendaItem
-        filteredAgendaItems=filteredAgendaItems
-        selectAgendaItem=(action "selectAgendaItem")
-        refresh=(action "refresh")
-        overviewEnabled=isOverviewWindow
-      }}
+      {{#if isOverviewWindow }}
+        {{agenda/agenda-list
+          announcements=(await sortedAnnouncements)
+          agendaitems=(await sortedAgendaitems)
+          currentAgenda=(await model.currentAgenda)
+          selectedAgendaItem=selectedAgendaItem
+          filteredAgendaItems=filteredAgendaItems
+          selectAgendaItem=(action "selectAgendaItem")
+          refresh=(action "refresh")
+          overviewEnabled=isOverviewWindow
+        }}
+      {{else}}
+        {{agenda/agenda-detail/sidebar
+          announcements=(await sortedAnnouncements)
+          agendaitems=(await sortedAgendaitems)
+          currentAgenda=(await model.currentAgenda)
+          selectedAgendaItem=selectedAgendaItem
+          filteredAgendaItems=filteredAgendaItems
+          selectAgendaItem=(action "selectAgendaItem")
+          refresh=(action "refresh")
+          overviewEnabled=isOverviewWindow
+        }}
+      {{/if}}
     </div>
   </div>
 </div>
