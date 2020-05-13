@@ -21,7 +21,7 @@
 
       <div class="vl-u-spacer--large">
         <div class="vl-u-spacer--large">
-          <div class="vl-u-display-flex vl-u-flex-space-between">
+          <div class="vl-u-display-flex vlc-u-flex-space-between">
             <h2 class="vl-title vl-title--h3">
               {{t "history"}}
               {{#if (or from to)}}
@@ -146,7 +146,7 @@
                         {{#link-to
                           "agenda.agendaitems"
                           meeting.id
-                          meeting.latestAgenda.id
+                          (await meeting.latestAgenda.id)
                           class="vl-button vl-button--link vl-button--icon"
                         }}
                           <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>

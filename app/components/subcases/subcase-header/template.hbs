@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="vlc-toolbar__right">
-    {{#if isEditor}}
+    {{#if currentSession.isEditor}}
       <div class="vlc-toolbar__item">
         {{#if (is-pending canPropose)}}
           <div class="vl-loader"></div>

@@ -7,17 +7,14 @@ const ALERT_POLL_INTERVAL = 60000;
 
 context('Settings: Create a system-alert and verify if it gets shown and closes', () => {
   before(() => {
+    cy.server();
     cy.resetCache();
   });
 
   beforeEach(() => {
+    cy.server();
     cy.login('Admin');
     cy.visit('instellingen/systeemmeldingen');
-    cy.server();
-  });
-
-  afterEach(() => {
-    cy.logout();
   });
 
   it('Should create & Should pop up to the user once polling picks it up', () => {
@@ -30,18 +27,19 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
 
     cy.route('GET', '/alerts?**').as('getAlerts');
     cy.get('[data-test-save-button]').click();
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 3000 }); // Wait for a polling-cycle to pass
+    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 30000 }); // Wait for a polling-cycle to pass
     cy.get(systemAlert.alert).should('exist');
+    cy.logou
   });
 
   it('Should close and stay closed', () => {
     cy.route('GET', '/alerts?**').as('getAlerts');
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 3000 }); // Wait for a polling-cycle to pass
+    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 30000 }); // Wait for a polling-cycle to pass
 
     cy.get(alert.closeButton).click();
     cy.get(systemAlert.alert).should('not.exist');
 
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 3000 }); // Wait for another polling-cycle to pass
+    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 30000 }); // Wait for another polling-cycle to pass
     cy.get(systemAlert.alert).should('not.exist');
   });
 });

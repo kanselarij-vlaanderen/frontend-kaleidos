@@ -1,18 +1,20 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import { action, computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import EmberObject from '@ember/object';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
 
-export default Component.extend(isAuthenticatedMixin, {
-  store: inject(),
-  classNames: ['vl-u-spacer-extended-bottom-l'],
-  item: null,
-  propertiesToSet: Object.freeze(['mandatees', 'governmentDomains']),
+export default class SubcaseMandatees extends Component {
+  @service store;
+  @service currentSession;
 
-  mandateeRows: computed('item', 'item.subcase', 'mandatees.@each', function () {
+  classNames = ['vl-u-spacer-extended-bottom-l'];
+  item = null;
+  propertiesToSet = Object.freeze(['mandatees', 'governmentDomains']);
+
+  @computed('item', 'item.subcase', 'mandatees.@each')
+  get mandateeRows() {
     return DS.PromiseArray.create({
       promise: this.constructMandateeRows().then((rows) => {
         return this.get('item.requestedBy').then((requestedBy) => {
@@ -27,8 +29,8 @@ export default Component.extend(isAuthenticatedMixin, {
           return rows.sortBy('mandateePriority');
         });
       })
-    })
-  }),
+    });
+  }
 
   async createMandateeRow(mandatee, iseCodes) {
     const fields = [...new Set(await Promise.all(iseCodes.map((iseCode) => iseCode.get('field'))))];
@@ -37,17 +39,16 @@ export default Component.extend(isAuthenticatedMixin, {
     const domainsToShow = domains.map((domain) => domain.get('label')).join(', ');
     const fieldsToShow = fields.map((field) => field.get('label')).join(', ');
 
-    return EmberObject.create(
-      {
-        fieldsToShow,
-        domainsToShow,
-        mandatee: mandatee,
-        mandateePriority: mandatee.get('priority'),
-        domains: domains,
-        fields: fields,
-        iseCodes: iseCodes,
-      })
-  },
+    return EmberObject.create({
+      fieldsToShow,
+      domainsToShow,
+      mandatee: mandatee,
+      mandateePriority: mandatee.get('priority'),
+      domains: domains,
+      fields: fields,
+      iseCodes: iseCodes,
+    });
+  }
 
   async getIseCodesOfMandatee(iseCodes, mandatee) {
     const iseCodesOfMandatee = await mandatee.get('iseCodes');
@@ -55,8 +56,8 @@ export default Component.extend(isAuthenticatedMixin, {
       const foundIseCode = iseCodesOfMandatee.find((iseCode) => iseCode.get('id') === iseCodeOfMandatee.get('id'));
 
       return !!foundIseCode;
-    })
-  },
+    });
+  }
 
   async constructMandateeRows() {
     const isAgendaItem = this.item.get('modelName') === 'agendaitem';
@@ -84,44 +85,7 @@ export default Component.extend(isAuthenticatedMixin, {
       }
       return row;
     }))
-  },
-
-  actions: {
-    toggleIsEditing() {
-      this.toggleProperty('isEditing');
-    },
-
-    async cancelEditing() {
-      this.set('mandateeRows', await this.constructMandateeRows());
-      this.toggleProperty('isEditing');
-    },
-
-    async saveChanges() {
-      this.set('isLoading', true);
-      if (this.item.get('modelName') === 'agendaitem') {
-        const subcase = await this.get('item.subcase');
-        if (subcase) {
-          //Without this, saving mandatees on agendaitem do not always persist to the subcase
-          await subcase.get('mandatees');
-        }
-      }
-      const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
-      const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] };
-      const resetFormallyOk = true;
-      try {
-        await saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
-        this.set('isLoading', false);
-        this.toggleProperty('isEditing');
-      } catch (e) {
-        this.set('isLoading', false);
-        throw (e);
-      }
-    },
-
-    addRow() {
-      this.toggleProperty('isAdding');
-    }
-  },
+  }
 
   async parseDomainsAndMandatees() {
     const mandateeRows = await this.get('mandateeRows');
@@ -141,6 +105,44 @@ export default Component.extend(isAuthenticatedMixin, {
       });
     }
     return { mandatees, iseCodes, requestedBy };
-  },
+  }
 
-});
+  @action
+  toggleIsEditing() {
+    this.toggleProperty('isEditing');
+  }
+
+  @action
+  async cancelEditing() {
+    this.set('mandateeRows', await this.constructMandateeRows());
+    this.toggleProperty('isEditing');
+  }
+
+  @action
+  async saveChanges() {
+    this.set('isLoading', true);
+    if (this.item.get('modelName') === 'agendaitem') {
+      const subcase = await this.get('item.subcase');
+      if (subcase) {
+        //Without this, saving mandatees on agendaitem do not always persist to the subcase
+        await subcase.get('mandatees');
+      }
+    }
+    const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
+    const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] }
+    const resetFormallyOk = true;
+    try {
+      await saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
+      this.set('isLoading', false);
+      this.toggleProperty('isEditing');
+    } catch (e) {
+      this.set('isLoading', false);
+      throw (e);
+    }
+  }
+
+  @action
+  addRow() {
+    this.toggleProperty('isAdding');
+  }
+}

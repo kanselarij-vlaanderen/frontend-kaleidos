@@ -18,8 +18,8 @@
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
-            {{#if isEditor}}
-              <button 
+            {{#if currentSession.isEditor}}
+              <button
                 class="vl-button vl-button--link vl-button--icon"
                 data-test-documents-show-more
                 type="button"
@@ -81,7 +81,7 @@
             <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
           </div>
         </div>
-        <div class="vl-u-display-flex vl-u-flex-direction-column vlc-u-box-model-maximize-width">
+        <div class="vl-u-display-flex vlc-u-flex-direction-column vlc-u-box-model-maximize-width">
           {{#if (not isEditing)}}
             <h6 class="vl-title vl-title--h6">
               <span {{action "startEditingName"}}>
@@ -89,7 +89,7 @@
               </span>
             </h6>
           {{else}}
-            <div class="vl-u-display-flex vl-u-display-flex-align-center">
+            <div class="vl-u-display-flex vlc-u-display-flex-align-center">
               {{input
                 type="text"
                 class="vl-input-field vl-input-field--block"
@@ -136,7 +136,7 @@
   {{#if (gt (await numberOfDocumentVersions) 0)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
-        <button 
+        <button
           class="vl-toggle vl-link vl-link--bold"
           type="button"
           {{action "showVersions"}}
@@ -152,10 +152,9 @@
                  (await myReverseSortedVersions)
                as |documentVersion|
                }}
-                {{web-components/vl-document
-                  documentVersion=documentVersion
-                  item=item
-                }}
+                <WebComponents::VlDocument
+                  @documentVersion={{documentVersion}}
+                  @item={{item}} />
               {{/each}}
             </div>
           </div>
@@ -165,20 +164,18 @@
   {{/if}}
 </div>
 {{#if isUploadingNewVersion}}
-  {{#web-components/vl-modal
-    closeModal=(action "cancelUploadVersion")
-    isOverlay=true
-    title=(t "new-document-version")
-  }}
+  <WebComponents::VlModal
+    @closeModal={{action "cancelUploadVersion"}}
+    @isOverlay={{true}}
+    @title={{t "new-document-version"}}>
     <div class="vl-modal-dialog__content">
       {{#if (not uploadedFile)}}
         {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
       {{else}}
-        {{web-components/vl-form-label value=(t "name")}}
-        {{web-components/vl-form-input
-          value=documentContainer.lastDocument.name
-          width=4
-        }}
+        <WebComponents::VlFormLabel @value={{t "name"}} />
+        <WebComponents::VlFormInput
+          @value={{documentContainer.lastDocument.name}}
+          @width={{4}} />
         {{ember-kaleidos-webuniversum/vl-uploaded-document
           name=documentContainer.lastDocument.file.filename
           extension=documentContainer.lastDocument.file.extension
@@ -193,21 +190,19 @@
         }}
       {{/if}}
     </div>
-    {{web-components/vl-modal-footer
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "add")
-      isLoading=isLoading
-      cancelAction=(action "cancelUploadVersion")
-      saveAction=(action "saveDocument")
-      disableSave=(not uploadedFile)
-    }}
-  {{/web-components/vl-modal}}
+    <WebComponents::VlModalFooter
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "add"}}
+      @isLoading={{isLoading}}
+      @cancelAction={{action "cancelUploadVersion"}}
+      @saveAction={{action "saveDocument"}}
+      @disableSave={{not uploadedFile}} />
+  </WebComponents::VlModal>
 {{/if}}
 {{#if isVerifyingDelete}}
-  {{web-components/vl-modal-verify
-    title=(t "document-delete")
-    message=(t "delete-document-message")
-    cancel=(action "cancel")
-    verify=(action "verify")
-  }}
+  <WebComponents::VlModalVerify
+    @title={{t "document-delete"}}
+    @message={{t "delete-document-message"}}
+    @cancel={{action "cancel"}}
+    @verify={{action "verify"}} />
 {{/if}}

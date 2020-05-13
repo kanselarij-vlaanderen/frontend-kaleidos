@@ -31,7 +31,7 @@
     </a>
   {{/if}}
 
-  {{#if isEditor}}
+  {{#if currentSession.isEditor}}
     <button type="button" class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
       {{action "deleteDocumentVersion" documentVersion}}
     >
@@ -42,7 +42,7 @@
     </button>
   {{/if}}
 </div>
-{{#if isEditor}}
+{{#if currentSession.isEditor}}
   <div class="vlc-document-card-item__meta">
     {{t "uploaded-at"}}
     {{moment-format documentVersion.created "DD.MM.YYYY"}}

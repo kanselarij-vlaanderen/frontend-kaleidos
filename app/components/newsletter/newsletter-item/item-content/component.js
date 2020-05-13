@@ -1,12 +1,12 @@
 import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   classNames: ['vl-typography'],
   classNameBindings: ['isFlandersArt:vl-typography--definite'],
   newsletterService: inject(),
+  currentSession: inject(),
   isShowingVersions: false,
 
   isFlandersArt: computed('allowEditing', function () {

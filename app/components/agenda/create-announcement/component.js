@@ -52,8 +52,8 @@ export default Component.extend(UploadDocumentMixin, {
         priority: lastAnnouncementPriority + 1,
       });
       await this.addDocumentVersions(agendaitem);
-      currentAgenda.hasMany('agendaitems').reload();
-      this.reloadRoute(agenda.get('id'));
+      await currentAgenda.hasMany('agendaitems').reload();
+      this.reloadRouteWithRefreshId(agendaitem.get('id'));
       this.toggleProperty('isAddingAnnouncement');
       this.toggleProperty('creatingAnnouncement');
     },

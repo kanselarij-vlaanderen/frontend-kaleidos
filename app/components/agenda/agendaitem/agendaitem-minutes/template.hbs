@@ -1,10 +1,10 @@
 {{#if (not isEditing)}}
   <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-flex-align-baseline">
+    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <h2 class="vl-title vl-title--h3">
         {{t "prepared-text-minutes"}}
       </h2>
-      {{#if isEditor}}
+      {{#if currentSession.isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           <a href="" class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
@@ -25,22 +25,19 @@
   </div>
   <div class="vlc-hr"></div>
   {{#if (is-pending agendaitem.meetingRecord.signedDocument)}}
-    {{web-components/vl-loader text=(t "minutes-document-loading-text")}}
+    <WebComponents::VlLoader @text={{t "minutes-document-loading-text"}} />
   {{else if (not (await signedDocument))}}
-    {{utils/add-signed-documents
-      item=agendaitem.meetingRecord
-      modelToAddDocumentVersionTo="signedMinutes"
-      title=(t "signed-notes-add")
-    }}
+    <Utils::AddSignedDocuments
+      @item={{agendaitem.meetingRecord}}
+      @modelToAddDocumentVersionTo="signedMinutes"
+      @title={{t "signed-notes-add"}} />
   {{else}}
-    {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-      document=(await agendaitem.meetingRecord.signedDocument)
-      item=(await agendaitem.meetingRecord.signedDocument)
-    }}
+    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
+      @document={{await agendaitem.meetingRecord.signedDocument}}
+      @item={{await agendaitem.meetingRecord.signedDocument}} />
   {{/if}}
 {{else}}
-  {{agenda/agendaitem/agendaitem-minutes-edit
-    isEditing=isEditing
-    agendaitem=agendaitem
-  }}
+  <Agenda::Agendaitem::AgendaitemMinutesEdit
+    @isEditing={{isEditing}}
+    @agendaitem={{agendaitem}} />
 {{/if}}

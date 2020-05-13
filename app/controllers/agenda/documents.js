@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend(isAuthenticatedMixin, {
+export default Controller.extend({
   isEditing: false,
 
   actions: {

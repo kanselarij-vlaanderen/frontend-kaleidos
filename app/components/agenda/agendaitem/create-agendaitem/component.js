@@ -180,6 +180,10 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
       this.reloadRoute(id);
     },
 
+    reloadRouteWithRefreshId(id) {
+      this.reloadRouteWithRefreshId(id);
+    },
+
     async addSubcasesToAgenda() {
       this.set('loading', true);
       const {
@@ -214,7 +218,8 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
         this.set('sessionService.selectedAgendaItem', null);
-        this.reloadRoute(selectedAgenda.get('id'));
+        const newAgendaitemId = itemsToAdd.get('firstObject').agendaitems.get('firstObject').id;
+        this.reloadRouteWithRefreshId(newAgendaitemId);
       });
     }
   }

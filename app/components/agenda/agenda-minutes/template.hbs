@@ -1,6 +1,6 @@
 <div class="vlc-container-center">
   <div style="page-break-after:always;">
-    {{utils/logo-header}}
+    <Utils::LogoHeader />
     <div class="vl-u-spacer-extended-bottom-l">
       <h1 class="vl-title vl-title--h2">
         {{await title}}
@@ -13,11 +13,11 @@
     <div class="vl-u-spacer-extended-bottom-l">
       <hr class="vlc-hr"/>
     </div>
-    <div class="vl-u-display-flex vl-u-flex-align-baseline">
+    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <h3 class="vl-title vl-title--h3">
         {{t "notes"}}
       </h3>
-      {{#if isEditor}}
+      {{#if currentSession.isEditor}}
         <div class="vl-u-spacer-extended-left-s">
           {{#if allowEditing}}
             <a href="" class="vl-link" {{action "toggleIsEditing"}}>
@@ -27,13 +27,15 @@
         </div>
       {{/if}}
     </div>
-    {{sessions/session-notes currentSession=currentSession isEditing=isEditing}}
+    <Sessions::SessionNotes
+      @currentSession={{currentSession}}
+      @isEditing={{isEditing}} />
   </div>
   <div class="vl-u-spacer-extended-bottom">
     {{#each (await agendaitemGroups) as |group|}}
       {{#each group.groups as |agendaitemGroup|}}
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-          <div class="vl-u-display-flex vl-u-flex-justify-center">
+          <div class="vl-u-display-flex vlc-u-flex-justify-center">
             <div class="print-only vl-u-spacer-extended-top-l">
               <img style="margin:-75px 0px -50px 0px; width:200px"
                    src="/assets/logo_vlaamse_regering.svg"
@@ -53,21 +55,20 @@
                   .
                   {{agendaitem.shortTitle}}
                 </h3>
-                <pre class="vl-u-flex-inline-flex vlc-u-pre-line-wrap">
+                <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
                   {{!-- template-lint-disable no-triple-curlies  --}}
                   {{{agendaitem.title}}}
                   {{!-- template-lint-enable no-triple-curlies  --}}
                 </pre>
               </div>
               {{#if agendaitem.isEditing}}
-                {{agenda/agendaitem/agendaitem-minutes-edit
-                  isEditing=agendaitem.isEditing
-                  agendaitem=agendaitem
-                }}
+                <Agenda::Agendaitem::AgendaitemMinutesEdit
+                  @isEditing={{agendaitem.isEditing}}
+                  @agendaitem={{agendaitem}} />
               {{else}}
                 <div class="vl-typography">
                   <ul>
-                    {{#if isEditor}}
+                    {{#if currentSession.isEditor}}
                       <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                         {{#if allowEditing}}
                           <a href="" class="vl-link"
@@ -107,9 +108,8 @@
               {{/if}}
             </div>
             {{#if (not allowEditing)}}
-              {{web-components/vl-signature
-                signature=currentSession.defaultSignature
-              }}
+              <WebComponents::VlSignature
+                @signature={{currentSession.defaultSignature}} />
             {{/if}}
           </div>
         {{/each}}

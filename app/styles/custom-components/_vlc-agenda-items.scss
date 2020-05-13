@@ -5,24 +5,9 @@
 /* Modifiers on main object
    ========================================================================== */
 
-.vlc-agenda-items--bordered {
-  .vlc-agenda-items__sub-item {
-    border-bottom: 1px solid $ghost;
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-}
-
 .vlc-agenda-items--spaced {
   .vlc-agenda-items__sub-item {
     margin-bottom: 0.4rem;
-  }
-  .vlc-agenda-items__main-item {
-    margin-top: 2.4rem;
-    &:first-child {
-      margin: 0;
-    }
   }
 }
 

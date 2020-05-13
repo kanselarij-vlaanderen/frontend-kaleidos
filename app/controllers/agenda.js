@@ -1,13 +1,13 @@
 import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed, observer, get } from '@ember/object';
 
-export default Controller.extend(isAuthenticatedMixin, {
+export default Controller.extend({
   sessionService: inject(),
   agendaService: inject(),
   router: inject(),
+  currentSession: inject(),
   isLoading: false,
 
   selectedAgendaObserver: observer('this.model.agenda', async function () {
@@ -79,6 +79,12 @@ export default Controller.extend(isAuthenticatedMixin, {
 
     reloadRouteWithNewAgenda(selectedAgendaId) {
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, selectedAgendaId);
+    },
+
+    reloadRouteWithNewAgendaitem(newAgendaitemId) {
+      this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, this.model.agenda.id, {
+        queryParams: { refresh: newAgendaitemId }
+      });
     },
 
     compareAgendas() {
