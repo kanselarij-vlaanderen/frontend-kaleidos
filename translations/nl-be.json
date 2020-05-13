@@ -565,12 +565,12 @@
   "amount-per-page": "Aantal items per pagina",
   "document-viewer-message-before-type": "Documenten van het type ",
   "document-viewer-message-after-type": " worden momenteel niet ondersteund om te bekijken.",
-  "basic": "Basis",
+  "basic": "Basics",
   "typography": "Typography",
-  "components": "Componenten",
-  "buttons": "Knoppen",
+  "components": "Components",
+  "buttons": "Buttons",
   "pills": "Pills",
   "panels": "Panels",
   "style-guide": "Style guide",
-  "icons": "Iconen"
+  "icons": "Icons"
 }
