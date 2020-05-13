@@ -11,7 +11,6 @@ context('Case test', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should create a new case', () => {

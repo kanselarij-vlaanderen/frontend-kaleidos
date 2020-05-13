@@ -14,13 +14,11 @@ context('Tests for KAS-1076', () => {
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
@@ -149,7 +147,8 @@ context('Tests for KAS-1076', () => {
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
@@ -202,7 +201,8 @@ context('Tests for KAS-1076', () => {
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 

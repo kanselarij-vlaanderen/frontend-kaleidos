@@ -12,7 +12,6 @@ context('Testing the toolbar as user user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('User');
-    cy.visit('/');
   });
 
   it('Should have meeting, Case, Newsletter in toolbar', () => {

@@ -107,9 +107,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
     if (previousAgenda) {
       await session.save();
       await this.set('sessionService.currentAgenda', previousAgenda);
-      this.router.transitionTo('agenda.agendaitems.index', session.id, {
-        queryParams: { selectedAgenda: previousAgenda.get('id') }
-      });
+      this.router.transitionTo('agenda.agendaitems', session.id, previousAgenda.get('id'));
     } else {
       await this.sessionService.deleteSession(session);
     }

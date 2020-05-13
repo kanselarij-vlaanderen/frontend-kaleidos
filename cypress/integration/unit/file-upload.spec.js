@@ -10,7 +10,6 @@ context('Add files to an agenda', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should open an agenda and add documents to it', () => {

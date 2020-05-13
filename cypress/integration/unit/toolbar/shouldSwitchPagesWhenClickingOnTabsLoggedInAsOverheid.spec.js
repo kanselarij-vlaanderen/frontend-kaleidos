@@ -12,7 +12,6 @@ context('Testing the toolbar as Overheid user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Overheid');
-    cy.visit('/');
   });
 
   it('Should have meeting, Case, Newsletter in toolbar', () => {
