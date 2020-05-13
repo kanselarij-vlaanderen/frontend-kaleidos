@@ -27,7 +27,6 @@
         {{/if}}
       {{/if}}
       <div>
-
         <div class="vl-u-display-flex vlc-u-flex-space-between">
           <div class="vl-u-display-flex vlc-u-display-flex-align-items-flex-end">
             {{#if (await agendaitem.checkAdded)}}
@@ -57,7 +56,6 @@
              ></span>
             {{/if}}
           </div>
-
           <div class="vlc-agenda-detail-sidebar__formally-ok-label vlc-u-display-flex-align-items-flex-end">
             {{#if
               (and currentSessionService.isEditor (await currentAgenda.isDesignAgenda))
