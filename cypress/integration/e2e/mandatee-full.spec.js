@@ -30,7 +30,9 @@ context('Full test', () => {
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include','instellingen/ministers');
+    cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
     cy.get(settings.addMinister).should('exist').should('be.visible').click();
+    cy.wait('@getIseCodes');
     cy.get(mandatee.addMandateeTitleContainer).should('exist').should('be.visible').within(() => {
       cy.get(form.formInput).should('exist').should('be.visible').type('Eerste minister van onderhoud');
     });
@@ -47,15 +49,21 @@ context('Full test', () => {
     cy.get(mandatee.addMandateeIseCodeDropdownContainer).should('exist').should('be.visible').within(() => {
       cy.get('.ember-power-select-trigger').click();
     });
+
     cy.get('.ember-power-select-option').should('exist').then(() => {
       cy.contains('Aanvullend net').click();
       cy.get(mandatee.addMandateeIseCodeDropdownContainer).should('exist').should('be.visible').within(() => {
         cy.get('.ember-power-select-trigger').click();
       });
     });
+
     cy.get('.vl-datepicker').eq(0).click();
     cy.setDateInFlatpickr(agendaDate, plusMonths);
+
+    cy.route('POST', '/mandatees').as('postMandateeData');
     cy.get(form.formSave).should('exist').should('be.visible').click();
+    cy.wait('@postMandateeData');
+
     cy.visit('/').then(()=> {
       cy.createCase(false, caseTitle);
       cy.addSubcase('Nota',
@@ -74,7 +82,7 @@ context('Full test', () => {
       // when toggling show changes  the agendaitem with a document added should show
       cy.openAgendaForDate(agendaDate);
       cy.addAgendaitemToAgenda(subcaseTitle1, false);
-      cy.agendaItemExists(subcaseTitle1).click();
+      cy.openDetailOfAgendaitem(subcaseTitle1);
       cy.addSubcaseMandatee(0,-1,-1);
      cy.get(agenda.approveAgenda).click();
       cy.get(modal.verify.save).click();

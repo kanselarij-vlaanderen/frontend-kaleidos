@@ -22,9 +22,9 @@ export default class AgendaList extends Component {
 
   @restartableTask
   reAssignPriorities = function* (agendaitems) {
-    yield agendaitems.map((item) => {
+    yield agendaitems.map(async (item) => {
       if (isPresent(item.changedAttributes().priority)) {
-        return item.save();
+        return await item.save();
       }
     });
   }

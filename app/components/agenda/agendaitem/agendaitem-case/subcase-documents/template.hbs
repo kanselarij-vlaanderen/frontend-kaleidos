@@ -1,19 +1,19 @@
 <div class="vl-u-spacer--large">
   <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vl-u-display-flex-align-center">
+    <div class="vl-u-display-flex vlc-u-display-flex-align-center">
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
       {{#if currentSession.isEditor}}
         <div class="vl-u-spacer-extended-left-s">
-          <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+          <a data-test-subcase-documents-edit href="" class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
         </div>
       {{/if}}
     </div>
   </div>
-  {{#if (not currentSession.isEditing)}}
+  {{#if (not isEditing)}}
     {{#if (is-pending item.documents)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
     {{else if (gt (await item.documentsLength) 0)}}
@@ -48,7 +48,7 @@
   {{/if}}
   {{#if shouldShowLinkedDocuments}}
     <div class="vl-u-spacer">
-      <div class="vl-u-display-flex vl-u-display-flex-align-center">
+      <div class="vl-u-display-flex vlc-u-display-flex-align-center">
         <h4 class="vl-title vl-title--h4">
           {{t "linked-documents"}}
         </h4>
@@ -105,17 +105,18 @@
       {{#if (not isLoading)}}
         <div class="upload-container">
           {{#each documentsInCreation as |doc|}}
-            <EmberKaleidosWebuniversum::VlUploadedDocument
-              @name={{doc.file.filename}}
-              @extension={{doc.file.extension}}
-              @size={{doc.file.size}}
-              @downloadName={{doc.file.filename}}
-              @downloadLink={{concat
-                doc.file.downloadLink
-                "?name="
-                doc.file.filename
-              }}
-              @delete={{action "delete" doc}} >
+            {{#ember-kaleidos-webuniversum/vl-uploaded-document
+              name=doc.file.filename
+              extension=doc.file.extension
+              size=doc.file.size
+              downloadName=doc.file.filename
+              downloadLink=(concat
+                      doc.file.downloadLink
+                      "?name="
+                      doc.file.filename
+              )
+              delete=(action "delete" doc)
+            }}
               <div class="metadata-container">
                 <div class="vlc-input-field-block">
                   <WebComponents::VlFormLabel @value={{t "document-name"}} />
@@ -134,7 +135,7 @@
                     @selectModel={{action "chooseDocumentType" doc.documentContainer}} />
                 </div>
               </div>
-            </EmberKaleidosWebuniversum::VlUploadedDocument>
+            {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
           {{/each}}
         </div>
       {{else}}

@@ -10,7 +10,6 @@ context('Model action', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-
   });
 
   it('Should open the model to add new case to Agenda', () => {

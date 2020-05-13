@@ -8,7 +8,7 @@ context('Authentication tests', () => {
     // cy.route('GET', "https://authenticatie-ti.vlaanderen.be/stb/html/pages?TAM_OP=logout_success").as('logoutURL')
     cy.login('Admin');
     cy.logout();
-    cy.visit('');
+    cy.visit('/');
     cy.contains('Meld u aan');
     // cy.url().should('contain', 'https://authenticatie-ti.vlaanderen.be/stb/html/pages?TAM_OP=logout_success', {timeout : 5000 });
   });

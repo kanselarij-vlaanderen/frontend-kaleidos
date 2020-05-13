@@ -1,0 +1,116 @@
+{
+  "Admin": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "f445824e-69d6-46ff-8803-718137ccbbad",
+            "type": "accounts"
+          }
+        },
+        "group": {
+          "data": {
+            "id": "71c068e6-d2f0-43de-93ab-cd1e7156ac4b",
+            "type": "groups"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Minister": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "d8b2c243-8d17-4d0d-9194-9ed6a0b1b63a",
+            "type": "accounts"
+          }
+        },
+        "group": {
+          "data": {
+            "id": "1cc0710c-1b28-4e23-b3ff-399c8089bc71",
+            "type": "groups"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Overheid": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "0644e559-29b8-4c3c-8e93-3f48a3d8d4ca",
+            "type": "accounts"
+          }
+        },
+        "group": {
+          "data": {
+            "id": "3e824494-bbe7-45cf-aed8-5828970a10dc",
+            "type": "groups"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "User": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "5c57db0a-0d48-4d58-9de6-5603d3f5992e",
+            "type": "accounts"
+          }
+        },
+        "group": {
+          "data": {
+            "id": "450915b2-4c64-4b03-9caa-71180400f831",
+            "type": "groups"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Kanselarij": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "86930340-1be5-4d72-87af-affebfc5b281",
+            "type": "accounts"
+          }
+        },
+        "group": {
+          "data": {
+            "id": "50f4c79c-902d-4ad2-bca1-0f37a69f0c13",
+            "type": "groups"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Kabinet": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "39fbd86f-45d2-41b3-ac21-485e8b285d0e",
+            "type": "accounts"
+          }
+        },
+        "group": {
+          "data": {
+            "id": "7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb",
+            "type": "groups"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  }
+}

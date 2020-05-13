@@ -70,7 +70,7 @@
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-moment": "^7.7.0",
     "ember-page-title": "^5.1.0",
-    "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#73baa4fc16106a33f894b276bf5b3437206be598",
+    "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#5f4d34d2d4ba42df2cf92e07e7465a3d13845a27",
     "ember-power-select": "^2.3.5",
     "ember-promise-helpers": "^1.0.9",
     "ember-qunit": "^4.6.0",
@@ -83,14 +83,14 @@
     "eslint": "^6.8.0",
     "eslint-plugin-ember": "^7.10.1",
     "eslint-plugin-node": "^11.0.0",
-    "kaleidos-viewer": "git+https://github.com/kanselarij-vlaanderen/kaleidos-viewer.git",
+    "icon-font-generator": "^2.1.10",
     "liquid-fire": "^0.30.0",
     "loader.js": "^4.7.0",
+    "moment": "2.24.0",
     "npm-run-all": "^4.1.5",
     "qunit-dom": "^1.1.0",
     "sanitize-filename": "^1.6.3",
-    "sass": "^1.23.7",
-    "moment": "2.24.0"
+    "sass": "^1.23.7"
   },
   "engines": {
     "node": "10.* || >= 12"

@@ -12,7 +12,6 @@ export default Component.extend({
 
     async verify() {
       await this.commentToDelete.destroyRecord();
-      this.set('isVerifyingDelete', false);
     },
 
     cancel() {

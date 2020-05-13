@@ -29,9 +29,9 @@ context('Testing the toolbar as Kanselarij user', () => {
   });
 
   it('Should switch to cases tab when cases is clicked as Kanselarij', () => {
-    cy.get(toolbar.agenda).click();
+    cy.get(toolbar.cases).click();
     cy.get(agenda.overviewTitle).should('not.exist');
-    cy.get(cases.casesOverviewTitle).should('not.exist');
+    cy.get(cases.casesOverviewTitle).should('exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(settings.generalSettings).should('not.exist');
   });

@@ -21,7 +21,7 @@
 
       <div class="vl-u-spacer--large">
         <div class="vl-u-spacer--large">
-          <div class="vl-u-display-flex vl-u-flex-space-between">
+          <div class="vl-u-display-flex vlc-u-flex-space-between">
             <h2 class="vl-title vl-title--h3">
               {{t "history"}}
               {{#if (or from to)}}
@@ -43,7 +43,7 @@
                     data-test-agendas-filter-input=true
                     class="vl-input-field"
                     value=dateFilter
-                    placeholder="bv. 02/2018"
+                    placeholder="bv. 01/2020"
                   }}
                 </div>
                 <div class="vlc-input-field-group">
@@ -146,6 +146,7 @@
                         {{#link-to
                           "agenda.agendaitems"
                           meeting.id
+                          (await meeting.latestAgenda.id)
                           class="vl-button vl-button--link vl-button--icon"
                         }}
                           <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>

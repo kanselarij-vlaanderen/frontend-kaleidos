@@ -9,7 +9,6 @@ context('Manage alerts tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.route('/');
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
   });

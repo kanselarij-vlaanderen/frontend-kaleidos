@@ -1,6 +1,6 @@
 {{#if (and (await item.subcase.case.id) currentSession.isEditor)}}
   <div class="vl-u-spacer-extended-bottom-s">
-    <div class="vl-u-display-flex vl-u-flex-align-baseline">
+    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
         @models={{array (await item.subcase.case.id) (await item.subcase.id)}}
@@ -11,7 +11,7 @@
   </div>
 {{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
-  <div class="vl-u-display-flex vl-u-display-flex-align-center">
+  <div class="vl-u-display-flex vlc-u-display-flex-align-center">
     <h2 class="vlc-subline">
       {{#if (not item.showAsRemark)}}
         {{t "note"}}
@@ -42,7 +42,7 @@
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
   {{#if (await shouldShowDetails)}}
-    <pre class="vl-u-flex-inline-flex vlc-u-pre-line-wrap">
+    <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
       {{await item.title}}
     </pre>
   {{/if}}
@@ -122,7 +122,7 @@
 {{#if isAgendaItem}}
   <div class="vl-u-spacer-extended-bottom-s">
     {{#if item.explanation}}
-      <pre class="vl-u-text--muted vl-u-flex-inline-flex vlc-u-pre-line-wrap">
+      <pre class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
         {{t "remark-title"}}: {{await item.explanation}}
       </pre>
     {{/if}}

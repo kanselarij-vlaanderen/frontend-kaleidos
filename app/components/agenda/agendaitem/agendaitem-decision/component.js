@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
-import moment from 'moment';
 
 export default Component.extend({
   classNames: ['vl-u-spacer'],
@@ -52,15 +51,18 @@ export default Component.extend({
       await this.decisionToDelete.destroyRecord();
       let agendaitemToUpdate;
 
+      const subcase = await this.agendaitem.get('subcase');
+      await subcase.get('decisions').reload();
+
       if (this.isTableRow) {
-        const subcase = await this.agendaitem.get('subcase');
-        (await subcase.get('decisions')).reload();
         agendaitemToUpdate = await this.agendaitem.content;
       } else {
         agendaitemToUpdate = await this.get('agendaitem');
       }
-      agendaitemToUpdate.set('modified', moment().utc().toDate());
       await agendaitemToUpdate.save();
+      if (!this.isDestroyed) {
+        this.set('isVerifyingDelete', false);
+      }
     },
 
     cancel() {

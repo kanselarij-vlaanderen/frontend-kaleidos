@@ -11,7 +11,6 @@ context('Subcase tests', () => {
   before(() => {
     cy.server();
     cy.resetCache();
-    //cy.resetSearch();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
@@ -320,7 +319,7 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsRequest');
     cy.wait('@getAgendas');
 
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort,true);
 
     cy.get(agenda.item.themes).contains('Sport');
     cy.get(agenda.item.themes).contains('Overheid');

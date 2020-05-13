@@ -35,18 +35,20 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   },
 
   actions: {
+    // TODO refactor this, most of this code is dead
     async saveChanges() {
       this._super.call(this);
       this.set('isLoading', true);
-      const { isAgendaItem } = this;
+      const { isAgendaItem } = this; // always undefined
+      // This item is always of type decision
       const item = await this.get('item');
       item.set('modified', moment().utc().toDate());
 
       if (isAgendaItem && !item.showAsRemark) {
+        // dead code because item is decision
         const isDesignAgenda = await item.get('isDesignAgenda');
         if (isDesignAgenda) {
           const agendaitemSubcase = await item.get('subcase');
-          agendaitemSubcase.set('modified', moment().utc().toDate());
           await this.setNewPropertiesToModel(agendaitemSubcase).catch((e) => {
             this.set('isLoading', false);
             throw(e);
@@ -62,10 +64,12 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
           throw(e);
         });
       } else {
+        // alive code
         await this.setNewPropertiesToModel(item).catch((e) => {
           this.set('isLoading', false);
           throw(e);
         });
+        // dead code because item is decision
         const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
         if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
           await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
@@ -94,12 +98,10 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
         } else {
           agendaitemToUpdate = await this.agendaitem;
         }
-        agendaitemToUpdate.set('modified', moment().utc().toDate())
-
         await agendaitemToUpdate.save();
+        this.set('isLoading', false);
+        this.toggleProperty('isEditing');
       }
-      this.set('isLoading', false);
-      this.toggleProperty('isEditing');
     },
 
     descriptionUpdated(val) {

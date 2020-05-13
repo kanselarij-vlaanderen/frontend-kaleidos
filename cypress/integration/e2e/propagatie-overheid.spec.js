@@ -39,16 +39,14 @@ context('Agenda tests', () => {
 
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
-    cy.agendaItemExists(subcaseTitle1).click();
-    cy.wait(1000);
-    cy.get(agenda.agendaItemDocumentsTab).click();
     cy.addDocumentsToAgendaItem(subcaseTitle1,files);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
     cy.closeAgenda();
 
-    cy.agendaItemExists(subcaseTitle1).click();
+    cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.get(agenda.agendaItemDecisionTab).click();
     cy.get(agenda.addDecision).click();
     cy.get(agenda.uploadDecisionFile).click();
@@ -75,11 +73,11 @@ context('Agenda tests', () => {
 
     cy.releaseDecisions();
 
-    cy.wait(45000);
+    cy.wait(60000);
     cy.logout();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
-    cy.agendaItemExists(subcaseTitle1).click();
+    cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaItemDecisionTab).click();
     cy.get('.vlc-document-card').eq(0).within(() => {
       cy.get('.vl-title--h6 > span').contains(file.fileName);
@@ -93,13 +91,12 @@ context('Agenda tests', () => {
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
-    cy.wait(45000);
-    
+    cy.wait(60000);
+
     cy.logout();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
-    cy.agendaItemExists(subcaseTitle1).click();
-    cy.wait(1000);
+    cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaItemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 2);

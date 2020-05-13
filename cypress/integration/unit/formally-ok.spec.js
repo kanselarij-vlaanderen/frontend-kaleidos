@@ -23,7 +23,7 @@ context('Formally ok/nok tests', () => {
 
   it('should not show "formallyOk" status of agendaitems on approved agenda', () => {
     cy.openAgendaForDate(agendaDate);
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda();
 
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);

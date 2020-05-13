@@ -295,13 +295,13 @@
 {{#if isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @isAddingAgendaitems={{isAddingAgendaitems}}
-    @reloadRoute={{action "reloadRoute"}} />
+    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
 {{/if}}
 {{#if isAddingAnnouncement}}
   <Agenda::CreateAnnouncement
     @isAddingAnnouncement={{isAddingAnnouncement}}
     @currentAgenda={{currentAgenda}}
-    @reloadRoute={{action "reloadRoute"}} />
+    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
 {{/if}}
 {{#if isAssigningSignature}}
   <Session::SelectSignature
@@ -365,6 +365,6 @@
   <WebComponents::VlModal
     @isOverlay={{true}}
     @title={{loaderTitle}} >
-    <Webcomponents::VlLoader @text={{loaderText}} />
+    <WebComponents::VlLoader @text={{loaderText}} />
   </WebComponents::VlModal>
 {{/if}}

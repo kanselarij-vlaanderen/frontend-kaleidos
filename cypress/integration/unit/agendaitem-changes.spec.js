@@ -1,4 +1,4 @@
-/*global context, before, it, cy*/
+/*global context, before, it, cy, Cypress*/
 /// <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
@@ -36,10 +36,14 @@ context('Agendaitem changes tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
 
-    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
+    cy.addDocumentsToAgendaItem(subcaseTitle1, files,false);
+    // TODO we should not have to "refresh" to see the changes. The checking for changes is set to an observer
+    // TODO This observer is not triggering during initial opening of the agenda, so as a 'hack', we switch agendas to trigger it in the tests
+    cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);
 
@@ -48,12 +52,15 @@ context('Agendaitem changes tests', () => {
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle2);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(2);
     cy.approveDesignAgenda();
 
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
+    // TODO we should not have to "refresh" to see the changes. The checking for changes is set to an observer
+    // TODO This observer is not triggering during initial opening of the agenda, so as a 'hack', we switch agendas to trigger it in the tests
     cy.wait(1000); //Computeds are not reloaded yet , maybe
+    cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);
 
@@ -61,12 +68,17 @@ context('Agendaitem changes tests', () => {
     cy.get(actionModal.showActionOptions).click();
     cy.get(agenda.navigateToPrintableAgenda).click();
 
+    const monthDutch = getTranslatedMonth(agendaDate.month());
+    const dateRegex = new RegExp('Vergadering van' + '.\\w+ ' + '.?'+ Cypress.moment(agendaDate).date() + " " + monthDutch + " " + Cypress.moment(agendaDate).year() + " om " + "20:20");
+
     cy.get(agenda.printHeaderTitle).should('exist').should('be.visible');
-    cy.get(agenda.printHeaderTitle).contains('Vergadering van');
-    cy.get(agenda.printHeaderTitle).contains('zaterdag 02 mei 2020 om 20:20');
+    cy.get(agenda.printHeaderTitle).contains(dateRegex);
 
     cy.get(agenda.printContainer).should('exist').should('be.visible');
-    cy.get(agenda.printContainer).contains('Goedkeuring van het verslag van de vergadering van vrijdag 22-11-2019.');
+
+    // this could fail with more or changed default data, you need at least 1 previous agenda when starting this test
+    cy.get(agenda.printContainer).contains('Goedkeuring van het verslag van de vergadering van ');
+
     cy.get(agenda.printContainer).contains(subcaseTitle1);
     cy.get(agenda.printContainer).contains(subcaseTitle2);
     cy.get(agenda.printContainer).contains('Cypress test voor het testen van toegevoegde documenten');
@@ -79,4 +91,35 @@ function currentMoment() {
 
 function currentTimestamp() {
   return Cypress.moment().unix();
+}
+
+function getTranslatedMonth(month) {
+  switch (month) {
+    case 0:
+      return 'januari';
+    case 1:
+      return 'februari';
+    case 2:
+      return 'maart';
+    case 3:
+      return 'april';
+    case 4:
+      return 'mei';
+    case 5:
+      return 'juni';
+    case 6:
+      return 'juli';
+    case 7:
+      return 'augustus';
+    case 8:
+      return 'september';
+    case 9:
+      return 'oktober';
+    case 10:
+      return 'november';
+    case 11:
+      return 'december';
+    default:
+      break;
+  }
 }
