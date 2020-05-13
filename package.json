@@ -11,10 +11,9 @@
     "test": "tests"
   },
   "browserslist": [
-    "defaults",
-    "Firefox ESR",
-    "Safari > 10",
-    "not ie <= 11"
+    "last 1 Chrome versions",
+    "last 1 Firefox versions",
+    "last 1 Safari versions"
   ],
   "scripts": {
     "prestart": "ember-template-lint .",
