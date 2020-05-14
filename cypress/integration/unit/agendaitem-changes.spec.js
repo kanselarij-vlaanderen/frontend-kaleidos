@@ -49,14 +49,16 @@ context('Agendaitem changes tests', () => {
 
     // when toggling show changes  the agendaitem added since current agenda should show
     cy.addAgendaitemToAgenda(subcaseTitle2, false);
+    cy.setFormalOkOnItemWithIndex(2);
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle2);
 
-    cy.setFormalOkOnItemWithIndex(2);
     cy.approveDesignAgenda();
 
+    cy.openDetailOfAgendaitem(subcaseTitle2);
+
     // when toggling show changes  the agendaitem with a new document version should show
-    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
+    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file, true);
     // TODO we should not have to "refresh" to see the changes. The checking for changes is set to an observer
     // TODO This observer is not triggering during initial opening of the agenda, so as a 'hack', we switch agendas to trigger it in the tests
     cy.wait(1000); //Computeds are not reloaded yet , maybe

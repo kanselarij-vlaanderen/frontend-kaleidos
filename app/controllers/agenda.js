@@ -10,7 +10,7 @@ export default Controller.extend({
   currentSession: inject(),
   isLoading: false,
 
-  selectedAgendaObserver: observer('this.model.agenda', async function () {
+  selectedAgendaObserver: observer('model.agenda', async function () {
     this.set('agendaService.addedAgendaitems', []);
     this.set('agendaService.addedDocuments', []);
 
