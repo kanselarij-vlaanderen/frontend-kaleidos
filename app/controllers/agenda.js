@@ -2,23 +2,13 @@ import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { computed, observer, get } from '@ember/object';
+import { computed, get } from '@ember/object';
 
 export default Controller.extend(isAuthenticatedMixin, {
   sessionService: inject(),
   agendaService: inject(),
   router: inject(),
   isLoading: false,
-
-  selectedAgendaObserver: observer('this.model.agenda', async function () {
-    this.set('agendaService.addedAgendaitems', []);
-    this.set('agendaService.addedDocuments', []);
-
-    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(this.model.meeting, this.model.agenda); // Should soon be accesible through a relation on the agenda model
-    if (previousAgenda && this.model.meeting && this.model.agenda) {
-      await this.agendaService.agendaWithChanges(this.model.agenda.get('id'), previousAgenda.get('id'));
-    }
-  }),
 
   shouldHideNav: computed('router.currentRouteName', function () {
     return this.get('router.currentRouteName') === 'agenda.compare';

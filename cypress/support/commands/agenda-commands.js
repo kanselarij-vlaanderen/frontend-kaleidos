@@ -372,7 +372,7 @@ function approveDesignAgenda() {
       // .wait('@getAgendaitems', { timeout: 12000 })
       .wait('@getAgendas', { timeout: 12000 });
   });
-  cy.get('.vl-loader').should('not.exist');
+  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {verbose: true, timeout: 60000});
 }
 
 /**

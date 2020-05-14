@@ -112,6 +112,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDe
   } else {
     cy.openDetailOfAgendaitem(agendaItemTitle);
   }
+  cy.get(agenda.agendaItemOpmerkingenTab)
   cy.get(agenda.agendaItemDocumentsTab)
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
