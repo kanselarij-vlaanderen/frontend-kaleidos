@@ -1,10 +1,8 @@
 /* eslint-disable ember/no-new-mixins */
 import Mixin from '@ember/object/mixin';
-import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
 
 export default Mixin.create({
-  store: inject(),
   rowToShow: null,
   selectedMandatee: null,
 
@@ -86,10 +84,6 @@ export default Mixin.create({
 
       this.saveChanges(selectedMandatee, newRow);
       this.set('isLoading', false);
-      this.cancel();
-    },
-
-    cancel() {
       this.cancel();
     },
   }

@@ -5,7 +5,8 @@ import EmberObject from '@ember/object';
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
 
-export default class SubcaseMandatees extends Component {
+export default class
+SubcaseMandatees extends Component {
   @service store;
   @service currentSession;
 
