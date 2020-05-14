@@ -80,7 +80,7 @@ export default Component.extend({
       await Promise.all(totalIseCodes.map(async (iseCode) => {
         const field = await this.getFieldOfIseCode(iseCode);
         const domain = await this.getDomainOfField(field);
-        const findSelectedIseCode = mandateeRow.iseCodes.find((codeToCheck) => codeToCheck.get('id') === iseCode.get('id'))
+        const findSelectedIseCode = mandateeRow.iseCodes.find(async (codeToCheck) => await codeToCheck.get('id') === iseCode.get('id'));
         if (findSelectedIseCode) {
           field.set('selected', true);
           domain.set('selected', true);
@@ -88,7 +88,7 @@ export default Component.extend({
         totalDomains.push(domain);
         totalFields.push(field);
         return iseCode;
-      }))
+      }));
 
       const rowToShow = EmberObject.create({
         mandatee: mandatee,
