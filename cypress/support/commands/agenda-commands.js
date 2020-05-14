@@ -373,6 +373,7 @@ function approveDesignAgenda() {
       .wait('@getAgendas', { timeout: 12000 });
   });
   cy.get('.vl-loader').should('not.exist');
+  cy.wait(2000); //After approving the agenda, some data is reloaded and waiting reduces flakyness
 }
 
 /**
@@ -501,6 +502,7 @@ function toggleShowChanges(refresh) {
     cy.get('.vlc-side-nav-item', { timeout: 12000 })
       .first({ timeout: 12000 })
       .click();
+      cy.wait(2000); //a lot of data is being reloaded
     // cy.wait('@getChanges', {timeout: 20000});
   } else {
     cy.clickReverseTab('Overzicht');
@@ -509,6 +511,7 @@ function toggleShowChanges(refresh) {
   cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
     .first()
     .click();
+  cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
 }
 
 /**
