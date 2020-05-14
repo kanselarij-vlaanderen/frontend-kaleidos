@@ -21,13 +21,11 @@ context('Different session kinds should show different titles', () => {
     cy.createAgenda('Bijzondere ministerraad', plusMonths, agendaDateSpecial, 'Zaal oxford bij Cronos Leuven');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDateElectronic, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should show the correct translations for normal session in decision print overview', () => {

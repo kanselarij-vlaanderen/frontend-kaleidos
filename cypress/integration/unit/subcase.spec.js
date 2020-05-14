@@ -11,17 +11,14 @@ context('Subcase tests', () => {
   before(() => {
     cy.server();
     cy.resetCache();
-    //cy.resetSearch();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    // cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    // cy.visit('/');
   });
 
   it('should open an existing case and add a subcase', () => {
@@ -184,7 +181,10 @@ context('Subcase tests', () => {
     // Assert status also hidden
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
-    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid'); //CHECK na save in agendaitem
+    cy.route('PATCH','/agendaitems/*').as('patchAgendaitem');
+    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') //CHECK na save in agendaitem
+      .wait('@patchAgendaitem'); 
+
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
     //"Go to agendaItem
@@ -322,7 +322,7 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsRequest');
     cy.wait('@getAgendas');
 
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort,true);
 
     cy.get(agenda.item.themes).contains('Sport');
     cy.get(agenda.item.themes).contains('Overheid');

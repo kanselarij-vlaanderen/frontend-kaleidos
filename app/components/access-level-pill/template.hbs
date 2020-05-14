@@ -10,17 +10,16 @@
       </div>
     {{else}}
       <div class="vl-form__input" style="width:75%">
-        {{utils/model-selector
+        <Utils::ModelSelector
           data-test-model-selector
-          modelName="access-level"
-          allowClear=true
-          searchField="label"
-          propertyToShow="label"
-          readOnly=item.confidential
-          sortField="priority"
-          selectedItems=accessLevel
-          selectModel=(action "chooseAccessLevel")
-        }}
+          @modelName="access-level"
+          @allowClear={{true}}
+          @searchField="label"
+          @propertyToShow="label"
+          @readOnly={{item.confidential}}
+          @sortField="priority"
+          @selectedItems={{accessLevel}}
+          @selectModel={{action "chooseAccessLevel"}} />
       </div>
       <button data-test-access-level-save type="button" class="vl-button vl-button--link vl-button--icon"
         {{action "save"}}
@@ -41,7 +40,7 @@
     {{/if}}
   {{/if}}
   <button type="button" class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
-          disabled={{if isEditor undefined "true"}}
+          disabled={{if session.isEditor undefined "true"}}
     {{action "toggleConfidential"}}
   >
     {{#if item.confidential}}

@@ -3,6 +3,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
+import { trimText } from '../../../utils/trim-util';
 
 export default Component.extend({
   store: inject(),
@@ -78,8 +79,8 @@ export default Component.extend({
     let { type, title, shortTitle, confidential, showAsRemark } = this;
     return this.store.createRecord('subcase', {
       type,
-      shortTitle: shortTitle.trim(),
-      title: title.trim(),
+      shortTitle: trimText(shortTitle),
+      title: trimText(title),
       confidential,
       showAsRemark,
       case: newCase,

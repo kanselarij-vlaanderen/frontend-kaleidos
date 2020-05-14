@@ -3,11 +3,11 @@ import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { inject } from '@ember/service';
 import { computed, set } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { tracked } from '@glimmer/tracking';
 
-export default Component.extend(UploadDocumentMixin, isAuthenticatedMixin, {
+export default Component.extend(UploadDocumentMixin, {
   store: inject(),
+  currentSession: inject(),
   classNames: ['vl-u-spacer'],
   @tracked isAddingDocument: null,
   @tracked isAddingNewDocument: null,

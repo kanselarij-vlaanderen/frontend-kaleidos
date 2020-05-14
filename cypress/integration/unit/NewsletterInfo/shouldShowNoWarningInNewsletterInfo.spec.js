@@ -13,7 +13,6 @@ context('Show no warning in Newsletterinfo', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('Should show no warning in kortbestek view', () => {

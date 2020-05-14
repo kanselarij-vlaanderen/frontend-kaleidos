@@ -3,5 +3,7 @@
     row=row
     refreshRoute=tableActions.refreshRoute
   }}
-  {{components/settings/user/next-button row=row}}
+  <Settings::User::NextButton
+          @row={{row}}
+          @goToRoute={{goToRoute}}/>
 </div>

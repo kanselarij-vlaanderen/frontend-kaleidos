@@ -1,13 +1,13 @@
 import Component from '@ember/component';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
-export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
+export default Component.extend(UploadDocumentMixin, {
   intl: service(),
   toaster: service(),
   fileService: service(),
+  currentSession: service(),
 
   async didInsertElement() {
     this._super(...arguments);
@@ -84,7 +84,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
   async deleteDocumentVersionWithUndo() {
     const documentVersionToDelete = this.get('documentVersionToDelete');
 
-    // TODO somehow this no longer works, document returns null or undefined 
+    // TODO somehow this no longer works, document returns null or undefined
     // const document = await documentVersionToDelete.get('documentContainer');
     // const documentVersions = await document.get('documents');
 

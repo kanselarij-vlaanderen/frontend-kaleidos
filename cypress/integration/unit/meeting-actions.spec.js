@@ -4,23 +4,20 @@
 context('meeting actions tests', () => {
 
   const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
+  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 10).set('hour', 20).set('minute', 20);
   const caseTitle = 'Cypress test: meeting actions - ' + currentTimestamp();
 
   before(() => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.visit('/');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should perform action delete agenda with agendaitems on designagenda', () => {
@@ -33,13 +30,14 @@ context('meeting actions tests', () => {
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 11).set('hour', 20).set('minute', 20);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven').then((meetingId) => {
       cy.openAgendaForDate(agendaDate);
 
       cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
 
-      cy.setFormalOkOnAllItems();
+      cy.setFormalOkOnItemWithIndex(0);
+      cy.setFormalOkOnItemWithIndex(1);
       cy.approveDesignAgenda();
       // Verify agendaitem exists and has subcase on design agenda and agenda A
       cy.openDetailOfAgendaitem(SubcaseTitleShort);
@@ -70,13 +68,14 @@ context('meeting actions tests', () => {
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 13).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 12).set('hour', 20).set('minute', 20);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
 
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
     // Verify agendaitem exists and has subcase on design agenda and agenda A
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
@@ -111,7 +110,8 @@ context('meeting actions tests', () => {
 
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
     // Verify agendaitem exists and has subcase on design agenda and agenda A
     cy.agendaItemExists(SubcaseTitleShort); //this makes sure the page is reloaded after approving the agenda
@@ -132,18 +132,18 @@ context('meeting actions tests', () => {
     const subcaseTitleLong = 'Cypress test voor het sluiten van een agenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    // cy.createCase(false, caseTitle); //TODO remove this is temp
     cy.openCase(caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
 
     const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 13).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 14).set('hour', 20).set('minute', 20);
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven')
     cy.openAgendaForDate(agendaDate);
 
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
     cy.agendaItemExists(SubcaseTitleShort); //this makes sure the page is reloaded after approving the agenda
     // Verify agendaitem exists and has subcase on design agenda and agenda A

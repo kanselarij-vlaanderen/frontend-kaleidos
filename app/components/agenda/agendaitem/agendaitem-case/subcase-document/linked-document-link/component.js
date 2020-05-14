@@ -1,12 +1,12 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { inject } from '@ember/service';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
 
-export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDocumentVersions, {
+export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
   fileService: inject(),
+  currentSession: inject(),
   classNames: ['vl-u-spacer-extended-bottom-s'],
   classNameBindings: ['aboutToDelete'],
   isShowingVersions: false,

@@ -1,42 +1,51 @@
 import Component from '@ember/component';
 import EmberObject from '@ember/object';
-import { computed } from '@ember/object';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { action, computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import DS from 'ember-data';
 
-export default Component.extend(isAuthenticatedMixin, {
-  confidential: false,
-  editing: false,
-  intl: service(),
-  classNameBindings: [':vl-u-display-flex', ':vl-u-flex-align-center'],
+export default class AccessLevelPill extends Component {
+  confidential = false;
+  editing = false;
+  @service() intl;
+  @service('current-session') session;
+  classNameBindings = [':vl-u-display-flex', ':vl-u-flex-align-center'];
 
-  accessLevel: computed('item.accessLevel', function () {
+  @alias('accessLevel.isPending') loading;
+
+  @computed('item.accessLevel')
+  get accessLevel() {
     const accessLevel = this.get('item.accessLevel');
+
     if (!accessLevel) {
       return null;
     }
+
     return DS.PromiseObject.create({
       promise: accessLevel.then((access) => {
         return access;
       })
-    })
-  }),
-  originalAccessLevel: computed('item.accessLevel', function () {
+    });
+  }
+
+  @computed('item.accessLevel')
+  get originalAccessLevel() {
     const accessLevel = this.get('item.accessLevel');
+
     if (!accessLevel) {
       return null;
     }
+
     return DS.PromiseObject.create({
       promise: accessLevel.then((access) => {
         return access;
       })
-    })
-  }),
+    });
+  }
 
-  loading: computed.alias('accessLevel.isPending'),
-
-  accessLevelClass: computed('accessLevelId', function () {
+  @computed('accessLevelId')
+  get accessLevelClass() {
     switch (this.accessLevelId) {
       case '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e':
         return 'vlc-pill--success';
@@ -47,41 +56,50 @@ export default Component.extend(isAuthenticatedMixin, {
       default:
         return '';
     }
-  }),
+  }
 
-  accessLevelId: computed('accessLevel.id', function () {
+  @computed('accessLevel.id')
+  get accessLevelId() {
     return (this.get('accessLevel') || EmberObject.create()).get('id');
-  }),
+  }
 
-  accessLevelLabel: computed('accessLevel.label', function () {
+  @computed('accessLevel.label')
+  get accessLevelLabel() {
     return (this.get('accessLevel') || EmberObject.create()).get('label') || this.intl.t('no-accessLevel');
-  }),
+  }
 
-  actions: {
-    toggleEdit() {
-      if (this.get('isEditor')) {
-        this.toggleProperty('editing');
-      }
-    },
-    cancelChanges() {
-      this.set('accessLevel', this.originalAccessLevel);
-      this.set('editing', false);
-    },
-    chooseAccessLevel(accessLevel) {
-      this.set('accessLevel', accessLevel);
-    },
-    toggleConfidential: function () {
-      if (!this.get('isEditor')) {
-        return;
-      }
-
-      this.item.toggleConfidential();
-    },
-    save: async function () {
-      this.set('loading', true);
-      await this.item.storeAccessLevel(this.get('accessLevel'));
-      this.set('loading', false);
-      this.set('editing', false);
+  @action
+  toggleEdit() {
+    if (this.get('session.isEditor')) {
+      this.toggleProperty('editing');
     }
   }
-});
+
+  @action
+  cancelChanges() {
+    this.set('accessLevel', this.originalAccessLevel);
+    this.set('editing', false);
+  }
+
+  @action
+  chooseAccessLevel(accessLevel) {
+    this.set('accessLevel', accessLevel);
+  }
+
+  @action
+  toggleConfidential() {
+    if (!this.get('session.isEditor')) {
+      return;
+    }
+
+    this.item.toggleConfidential();
+  }
+
+  @action
+  async save() {
+    this.set('loading', true);
+    await this.item.storeAccessLevel(this.get('accessLevel'));
+    this.set('loading', false);
+    this.set('editing', false);
+  }
+}
