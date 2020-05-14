@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { action, computed } from '@ember/object';
+import { oneWay } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { dasherize } from '@ember/string';
 import Table from 'ember-light-table';
@@ -7,28 +8,44 @@ import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 
 export default class AgendaitemTable extends Component {
-  store = service();
+  @service store;
   classNames = ['container-flex'];
   modelName = 'agendaitem';
   isScrolling = false;
   dir = 'asc';
-  isLoading = computed.oneWay('fetchRecords.isRunning');
+  @oneWay('fetchRecords.isRunning') isLoading;
   canLoadMore = true;
   enableSync = true;
   include = null;
   row = null;
   meta = null;
-  table = null;
   size = 10;
+  page = 0;
   previousFilter = null;
 
-  constructor() {
-    super(...arguments);
-    this.initialiseTableBasedOnModel();
+  @computed('model.[]')
+  get table() {
+    let table = Table.create({
+      columns: this.columns,
+      rows: [],
+      enableSync: this.enableSync
+    });
+
+    table.addRows(this.model.filter((item) => !item.isApproval));
+    let sortColumn = table
+      .get('allColumns')
+      .findBy('valuePath', this.get('sort'));
+
+    if (sortColumn) {
+      sortColumn.set('sorted', true);
+    }
+
+    this.setRowsPostponed(table.rows, this.model);
+    return table;
   }
 
   @computed('dir', 'sort')
-  sortBy() {
+  get sortBy() {
     const dir = this.dir;
     if (dir === 'asc') {
       return this.sort;
@@ -55,7 +72,7 @@ export default class AgendaitemTable extends Component {
     if (!this.filter) {
       delete queryOptions.filter;
     }
-    let records = yield this.get('store').query(
+    let records = yield this.store.query(
       `${this.modelName}`,
       queryOptions
     );
@@ -64,7 +81,7 @@ export default class AgendaitemTable extends Component {
     this.set('meta', records.get('meta'));
     this.set('canLoadMore', records.get('meta.count') > this.get('model.length'));
     this.get('table').addRows(this.get('model').filter((item) => !item.isApproval));
-    this.checkRowClasses();
+    this.setRowsPostponed(this.table.rows, this.model);
   }
 
   @restartableTask
@@ -74,35 +91,17 @@ export default class AgendaitemTable extends Component {
     this.get('table').setRowsSynced(rows);
   }
 
-  checkRowClasses() {
-    const rows = this.table.rows;
-    const postponedItems = this.model.filter(item => item.get('retracted'));
-    postponedItems.map(postponedItem => {
-      const myRow = rows.find(
-        row => row.content.get('id') === postponedItem.get('id')
+  setRowsPostponed(tableRows, model) {
+    const rowsCurrentlyInTable = tableRows;
+    const postponedItems = model.filter(item => item.get('retracted'));
+    postponedItems.forEach(postponedItem => {
+      const postponedRowInTable = rowsCurrentlyInTable.find(
+        rowFromTable => rowFromTable.content.get('id') === postponedItem.get('id')
       );
-      if (myRow) {
-        myRow.set('classNames', 'postponed');
+      if (postponedRowInTable) {
+        postponedRowInTable.set('classNames', 'postponed');
       }
     });
-  }
-
-  initialiseTableBasedOnModel() {
-    this.set("page", 0);
-    let table = Table.create({
-      columns: this.get("columns"),
-      rows: [],
-      enableSync: this.get("enableSync")
-    });
-    table.addRows(this.get('model').filter((item) => !item.isApproval));
-    let sortColumn = table
-      .get('allColumns')
-      .findBy('valuePath', this.get('sort'));
-    if (sortColumn) {
-      sortColumn.set('sorted', true);
-    }
-    this.set('table', table);
-    this.checkRowClasses();
   }
 
   @action
