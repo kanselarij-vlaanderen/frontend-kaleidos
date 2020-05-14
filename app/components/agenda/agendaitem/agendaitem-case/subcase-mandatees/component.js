@@ -94,12 +94,12 @@ SubcaseMandatees extends Component {
     let iseCodes = [];
     let requestedBy = null;
     if (mandateeRows && mandateeRows.get('length') > 0) {
-      mandateeRows.map(row => {
+      mandateeRows.map( async row => {
         if (row.get('isSubmitter')) {
           requestedBy = row.get('mandatee');
         }
         mandatees.push(row.get('mandatee'));
-        const rowIseCodes = row.get('iseCodes');
+        const rowIseCodes = await row.get('iseCodes');
         rowIseCodes.map((code) => {
           iseCodes.push(code);
         });

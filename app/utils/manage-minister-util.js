@@ -36,3 +36,50 @@ export const selectField = async (rowToShowDomains, domain, value) => {
     }
   }
 };
+
+export const filterIseCodesFromMandatee = async (mandatee) => {
+  const iseCodes = await mandatee.get('iseCodes');
+  return iseCodes.filter((item) => item);
+};
+
+export const filterFieldsFromIseCodes = async (iseCodes) => {
+  const fieldsFromIseCodes = await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')));
+  return fieldsFromIseCodes.filter((item) => item);
+};
+
+export const getSelectedIseCodesWithFields = async (allIseCodesInApp, selectedFieldsByUser) => {
+  return (await Promise.all(allIseCodesInApp.map((iseCode) => {
+    const foundField = (selectedFieldsByUser.find((field) => field.get('id') === iseCode.get('field.id')));
+    if (foundField) {
+      return iseCode;
+    }
+  }))).filter((item) => item);
+};
+
+export const createMandateeRow = async (selectedMandatee, rowToShow) => {
+    const fields = await rowToShow.get('fields');
+    const domains = await rowToShow.get('domains');
+
+    const selectedDomains = [...new Set(domains.filter((domain) => domain.selected))];
+    const selectedFields = fields.filter((field) => field.selected);
+    const allIseCodes = await selectedMandatee.get('iseCodes');
+    let filteredIseCodes = getSelectedIseCodesWithFields(allIseCodes, selectedFields);
+
+
+    const selectedEmployeePriority = await selectedMandatee.get('priority');
+    const newRow = EmberObject.create({
+      mandatee: selectedMandatee,
+      mandateePriority: selectedEmployeePriority,
+      fields: selectedFields,
+      domains: selectedDomains,
+      iseCodes: filteredIseCodes
+    });
+
+    if (rowToShow.get('isSubmitter')) {
+      newRow.set('isSubmitter', true);
+    }
+    return newRow;
+};
+
+
+

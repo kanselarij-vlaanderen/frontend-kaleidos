@@ -1,9 +1,9 @@
 import Component from '@ember/component';
-import EmberObject from '@ember/object';
 import {
   refreshData,
   selectDomain,
-  selectField
+  selectField,
+  createMandateeRow
 } from '../../../utils/manage-minister-util';
 export default Component.extend({
 
@@ -14,34 +14,9 @@ export default Component.extend({
 
     async saveChanges() {
       this.set('isLoading', true);
-
       const { selectedMandatee, rowToShow } = this;
-      const fields = rowToShow.get('fields');
-      const domains = rowToShow.get('domains');
-
-      const selectedDomains = [...new Set(domains.filter((domain) => domain.selected))];
-      const selectedFields = fields.filter((field) => field.selected);
-      const allIseCodes = await selectedMandatee.get('iseCodes');
-      let filteredIseCodes = (await Promise.all(allIseCodes.map((iseCode) => {
-        const foundField = (selectedFields.find((field) => field.get('id') === iseCode.get('field.id')));
-        if (foundField) {
-          return iseCode;
-        }
-      }))).filter((item) => item);
-
-      const newRow = EmberObject.create({
-        mandatee: selectedMandatee,
-        mandateePriority: selectedMandatee.get('priority'),
-        fields: selectedFields,
-        domains: selectedDomains,
-        iseCodes: filteredIseCodes
-      });
-
-      if (rowToShow.get('isSubmitter')) {
-        newRow.set('isSubmitter', true);
-      }
-
-      this.saveChanges(selectedMandatee, newRow);
+      const newMinisterRow = await createMandateeRow(selectedMandatee,rowToShow);
+      this.saveChanges(selectedMandatee, newMinisterRow);
       this.set('isLoading', false);
       this.cancel();
     },
@@ -68,5 +43,4 @@ export default Component.extend({
       this.cancel();
     }
   }
-
 });
