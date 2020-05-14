@@ -1,9 +1,8 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import EmberObject from '@ember/object';
-import ManageMinisterMixin from 'fe-redpencil/mixins/manage-minister-mixin';
 
-export default Component.extend(ManageMinisterMixin, {
+export default Component.extend({
   store: inject(),
   classNames: ['vlc-input-field-block'],
   isAdding: false,
@@ -26,7 +25,15 @@ export default Component.extend(ManageMinisterMixin, {
 
   actions: {
     async saveChanges(mandatee, newRow) {
-      const rowToShow = await this.get('rowToShow');
+      const iseCodes = (await mandatee.get('iseCodes')).filter((item) => item);
+      const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((item) => item);
+      const domains = await Promise.all(fields.map((field) => field.get('domain')));
+
+      const rowToShow = EmberObject.create({
+        domains: [...new Set(domains)],
+        fields: [...new Set(fields)]
+      });
+
       const mandateeRows = await this.get('mandateeRows');
       const domainsToShow = newRow.domains.map((domain) => domain.get('label')).join(', ');
       const fieldsToShow = newRow.fields.map((field) => field.get('label')).join(', ');
