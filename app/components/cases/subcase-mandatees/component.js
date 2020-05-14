@@ -37,8 +37,8 @@ export default Component.extend({
       const mandateeRows = await this.get('mandateeRows');
       const domainsToShow = newRow.domains.map((domain) => domain.get('label')).join(', ');
       const fieldsToShow = newRow.fields.map((field) => field.get('label')).join(', ');
-      if (rowToShow) {
-        let rowToEdit = mandateeRows.find((row) => row.mandatee.id === mandatee.id);
+      let rowToEdit = mandateeRows.find((row) => row.mandatee.id === mandatee.id);
+      if (rowToShow && rowToEdit) {
         rowToEdit.set('domains', newRow.domains);
         rowToEdit.set('fields', newRow.fields);
         rowToEdit.set('iseCodes', newRow.iseCodes);
