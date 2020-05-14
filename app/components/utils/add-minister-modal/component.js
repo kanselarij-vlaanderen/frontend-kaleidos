@@ -1,7 +1,9 @@
 import Component from '@ember/component';
 import EmberObject from '@ember/object';
 import {
-  refreshData
+  refreshData,
+  selectDomain,
+  selectField
 } from '../../../utils/manage-minister-util';
 export default Component.extend({
 
@@ -45,17 +47,8 @@ export default Component.extend({
     },
 
     async selectField(domain, value) {
-      const foundDomain = this.get('rowToShow.domains').find((item) => item.id == domain.id);
-      const fields = await domain.get('governmentFields');
-      const selectedFields = fields.filter((field) => field.selected);
-
-      if (value) {
-        foundDomain.set('selected', value);
-      } else {
-        if (selectedFields.length === 1) {
-          foundDomain.set('selected', value);
-        }
-      }
+      const foundDomain = await this.get('rowToShow.domains');
+      await selectField(foundDomain,domain, value);
     },
 
     async mandateeSelected(mandatee) {
@@ -67,8 +60,8 @@ export default Component.extend({
     },
 
     async selectDomain(domain, value) {
-      const fields = await this.get('rowToShow.fields').filter((field) => field.get('domain.id') === domain.id);
-      fields.map((field) => field.set('selected', value));
+      const rowToShowFields = await this.get('rowToShow.fields');
+      await selectDomain(rowToShowFields,domain,value);
     },
 
     cancel() {

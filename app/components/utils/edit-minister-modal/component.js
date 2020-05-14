@@ -4,27 +4,27 @@ import EmberObject from '@ember/object';
 export default Component.extend({
     selectedMandatee: null,
 
-  // async refreshData(mandatee) {
-  //   this.set('isLoading', true);
-  //
-  //   const iseCodes = (await mandatee.get('iseCodes')).filter((item) => item);
-  //   const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((item) => item);
-  //   const domains = await Promise.all(fields.map((field) => field.get('domain')));
-  //
-  //   const rowToShow = EmberObject.create({
-  //     domains: [...new Set(domains)],
-  //     fields: [...new Set(fields)]
-  //   });
-  //   rowToShow.get('domains').map((domain) => domain.set('selected', false));
-  //   rowToShow.get('fields').map((domain) => domain.set('selected', false));
-  //   const mandateeRows = await this.get('mandateeRows');
-  //
-  //   if (!mandateeRows) {
-  //     rowToShow.set('isSubmitter', true);
-  //   }
-  //   this.set('isLoading', false);
-  //   return rowToShow;
-  // },
+  async refreshData(mandatee) {
+    this.set('isLoading', true);
+
+    const iseCodes = (await mandatee.get('iseCodes')).filter((item) => item);
+    const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((item) => item);
+    const domains = await Promise.all(fields.map((field) => field.get('domain')));
+
+    const rowToShow = EmberObject.create({
+      domains: [...new Set(domains)],
+      fields: [...new Set(fields)]
+    });
+    rowToShow.get('domains').map((domain) => domain.set('selected', false));
+    rowToShow.get('fields').map((domain) => domain.set('selected', false));
+    const mandateeRows = await this.get('mandateeRows');
+
+    if (!mandateeRows) {
+      rowToShow.set('isSubmitter', true);
+    }
+    this.set('isLoading', false);
+    return rowToShow;
+  },
 
 
     actions: {
@@ -80,7 +80,7 @@ export default Component.extend({
         const fields = await this.get('rowToShow.fields').filter((field) => field.get('domain.id') === domain.id);
         fields.map((field) => field.set('selected', value));
       },
-      
+
       cancel() {
         this.cancel();
       }
