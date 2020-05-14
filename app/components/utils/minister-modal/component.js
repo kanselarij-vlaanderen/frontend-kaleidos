@@ -5,12 +5,24 @@ import {
   selectField,
   createMandateeRow
 } from '../../../utils/manage-minister-util';
-export default Component.extend({
+import { inject } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
+
+export default Component.extend({
+  intl: inject(),
   rowToShow: null,
   selectedMandatee: null,
-  isAddingMinister: true,
-  
+  @tracked title: '',
+
+  willRender() {
+    if(this.isAddingMinister) {
+      this.title = this.intl.t('add-minister');
+    } else {
+      this.title = this.intl.t('edit-minister');
+    }
+  },
+
   actions: {
 
     async saveChanges() {

@@ -63,7 +63,7 @@ export const createMandateeRow = async (selectedMandatee, rowToShow) => {
     const selectedDomains = [...new Set(domains.filter((domain) => domain.selected))];
     const selectedFields = fields.filter((field) => field.selected);
     const allIseCodes = await selectedMandatee.get('iseCodes');
-    let filteredIseCodes = getSelectedIseCodesWithFields(allIseCodes, selectedFields);
+    let filteredIseCodes = await getSelectedIseCodesWithFields(allIseCodes, selectedFields);
 
 
     const selectedEmployeePriority = await selectedMandatee.get('priority');
