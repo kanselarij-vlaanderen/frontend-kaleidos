@@ -1,54 +1,44 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import { action, computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { dasherize } from '@ember/string';
 import Table from 'ember-light-table';
-import { task, timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency-decorators';
+import { timeout } from 'ember-concurrency';
 
-export default Component.extend({
-  store: service(),
-  classNames: ['container-flex'],
-  modelName: 'agendaitem',
-  isScrolling: false,
-  dir: 'asc',
-  isLoading: computed.oneWay('fetchRecords.isRunning'),
-  canLoadMore: true,
-  enableSync: true,
-  include: null,
-  row: null,
-  meta: null,
-  table: null,
-  size: 10,
+export default class AgendaitemTable extends Component {
+  store = service();
+  classNames = ['container-flex'];
+  modelName = 'agendaitem';
+  isScrolling = false;
+  dir = 'asc';
+  isLoading = computed.oneWay('fetchRecords.isRunning');
+  canLoadMore = true;
+  enableSync = true;
+  include = null;
+  row = null;
+  meta = null;
+  table = null;
+  size = 10;
+  previousFilter = null;
 
-  init() {
-    this._super(...arguments);
+  constructor() {
+    super(...arguments);
     this.initialiseTableBasedOnModel();
-  },
+  }
 
-  didInsertElement: function () {
-    this._super(...arguments);
-  },
-
-  initialiseTableBasedOnModel() {
-    this.set("page", 0);
-    let table = Table.create({
-      columns: this.get("columns"),
-      rows: [],
-      enableSync: this.get("enableSync")
-    });
-    table.addRows(this.get('model').filter((item) => !item.isApproval));
-    let sortColumn = table
-      .get('allColumns')
-      .findBy('valuePath', this.get('sort'));
-    if (sortColumn) {
-      sortColumn.set('sorted', true);
+  @computed('dir', 'sort')
+  sortBy() {
+    const dir = this.dir;
+    if (dir === 'asc') {
+      return this.sort;
+    } else {
+      return `-${this.sort}`;
     }
-    this.set('table', table);
-    this.checkRowClasses();
-  },
+  }
 
-  previousFilter: null,
-  fetchRecords: task(function* () {
+  @restartableTask
+  fetchRecords = function* () {
     yield timeout(500);
     if (this.previousFilter !== this.filter) {
       this.set('previousFilter', this.filter);
@@ -75,7 +65,14 @@ export default Component.extend({
     this.set('canLoadMore', records.get('meta.count') > this.get('model.length'));
     this.get('table').addRows(this.get('model').filter((item) => !item.isApproval));
     this.checkRowClasses();
-  }).restartable(),
+  }
+
+  @restartableTask
+  setRows = function* (rows) {
+    this.get('table').setRowsSynced([]);
+    yield timeout(100); // Allows isLoading state to be shown
+    this.get('table').setRowsSynced(rows);
+  }
 
   checkRowClasses() {
     const rows = this.table.rows;
@@ -88,45 +85,48 @@ export default Component.extend({
         myRow.set('classNames', 'postponed');
       }
     });
-  },
+  }
 
-  sortBy: computed('dir', 'sort', function () {
-    const dir = this.dir;
-    if (dir === 'asc') {
-      return this.sort;
-    } else {
-      return `-${this.sort}`;
+  initialiseTableBasedOnModel() {
+    this.set("page", 0);
+    let table = Table.create({
+      columns: this.get("columns"),
+      rows: [],
+      enableSync: this.get("enableSync")
+    });
+    table.addRows(this.get('model').filter((item) => !item.isApproval));
+    let sortColumn = table
+      .get('allColumns')
+      .findBy('valuePath', this.get('sort'));
+    if (sortColumn) {
+      sortColumn.set('sorted', true);
     }
-  }).readOnly(),
+    this.set('table', table);
+    this.checkRowClasses();
+  }
 
-  setRows: task(function* (rows) {
-    this.get('table').setRowsSynced([]);
-    yield timeout(100); // Allows isLoading state to be shown
-    this.get('table').setRowsSynced(rows);
-  }).restartable(),
-
-  actions: {
-    onScrolledToBottom() {
-      if (this.get('canLoadMore')) {
-        if (!this.isLoading) {
-          this.incrementProperty('page');
-          this.get('fetchRecords').perform();
-        }
-      }
-    },
-
-    onColumnClick(column) {
-      if (column.sorted) {
-        this.setProperties({
-          dir: column.ascending ? 'asc' : 'desc',
-          sort: dasherize(column.get('valuePath')),
-          canLoadMore: true,
-          page: 0
-        });
-        this.get('model').clear();
-        this.get('setRows').perform([]);
+  @action
+  onScrolledToBottom() {
+    if (this.get('canLoadMore')) {
+      if (!this.isLoading) {
+        this.incrementProperty('page');
         this.get('fetchRecords').perform();
       }
     }
   }
-});
+
+  @action
+  onColumnClick(column) {
+    if (column.sorted) {
+      this.setProperties({
+        dir: column.ascending ? 'asc' : 'desc',
+        sort: dasherize(column.get('valuePath')),
+        canLoadMore: true,
+        page: 0
+      });
+      this.get('model').clear();
+      this.get('setRows').perform([]);
+      this.get('fetchRecords').perform();
+    }
+  }
+}
