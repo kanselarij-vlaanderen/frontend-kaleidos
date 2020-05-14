@@ -8,14 +8,14 @@ export default Component.extend({
   isAdding: false,
   isEditingMandateeRow: false,
 
-  getDomainOfField(field) {
+  async getDomainOfField(field) {
     if (field)
-      return field.get('domain');
+      return await field.get('domain');
   },
 
-  getFieldOfIseCode(iseCode) {
+  async getFieldOfIseCode(iseCode) {
     if (iseCode)
-      return iseCode.get('field');
+      return await iseCode.get('field');
   },
 
   checkMandateeRowsForSubmitter(mandateeRows) {
@@ -80,7 +80,8 @@ export default Component.extend({
       await Promise.all(totalIseCodes.map(async (iseCode) => {
         const field = await this.getFieldOfIseCode(iseCode);
         const domain = await this.getDomainOfField(field);
-        const findSelectedIseCode = mandateeRow.iseCodes.find(async (codeToCheck) => await codeToCheck.get('id') === iseCode.get('id'));
+        const iseCodes = await mandateeRow.iseCodes;
+        const findSelectedIseCode = iseCodes.find(async (codeToCheck) => await codeToCheck.get('id') === await iseCode.get('id'));
         if (findSelectedIseCode) {
           field.set('selected', true);
           domain.set('selected', true);

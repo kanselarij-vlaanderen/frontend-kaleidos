@@ -3,11 +3,9 @@ import { createMandateeRow, selectDomain, selectField } from '../../../utils/man
 
 export default Component.extend({
     selectedMandatee: null,
-
-    actions: {
+  actions: {
       async saveChanges() {
         this.set('isLoading', true);
-
         const { selectedMandatee, rowToShow } = this;
         const newMinisterRow = await createMandateeRow(selectedMandatee,rowToShow);
         this.saveChanges(selectedMandatee, newMinisterRow);
