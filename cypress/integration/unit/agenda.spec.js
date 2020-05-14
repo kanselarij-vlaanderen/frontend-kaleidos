@@ -19,7 +19,6 @@ context('Agenda tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should create a new agenda and then delete it', () => {
@@ -35,7 +34,7 @@ context('Agenda tests', () => {
 
   it('should set formal ok on all agendaitems and approve it', () => {
     cy.openAgendaForDate(agendaDate);
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda();
     cy.get(modal.agenda.approveAgenda).should('not.exist');
   });
@@ -73,7 +72,6 @@ context('Agenda tests', () => {
     cy.openSubcase(0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
-    cy.visit('/');
     cy.openAgendaForDate(agendaDate);
     cy.contains("dit is de lange titel").click();
     cy.contains('dit is de korte titel');

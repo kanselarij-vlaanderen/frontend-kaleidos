@@ -14,13 +14,11 @@ context('Tests for KAS-1076', () => {
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
-    cy.visit('/');
   });
 
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
@@ -62,7 +60,7 @@ context('Tests for KAS-1076', () => {
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-22', fileType: 'Nota' },
     ]
 
-    cy.addDocumentsToAgendaItem(SubcaseTitleShort, files);
+    cy.addDocumentsToAgendaItem(SubcaseTitleShort, files,true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
     });
@@ -149,7 +147,8 @@ context('Tests for KAS-1076', () => {
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 
@@ -159,7 +158,7 @@ context('Tests for KAS-1076', () => {
       });
     });
     cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 0);
-    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file, true);
 
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -202,7 +201,8 @@ context('Tests for KAS-1076', () => {
     cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test documenten toevoegen');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
 

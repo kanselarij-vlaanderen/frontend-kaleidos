@@ -1,9 +1,9 @@
 {{#if (not isEditing)}}
-  <div class="vl-u-display-flex vl-u-flex-align-baseline">
+  <div class="vl-u-display-flex vlc-u-flex-align-baseline">
     <h3 class="vl-title vl-title--h3">
       {{t "subcase"}}
     </h3>
-    {{#if isEditor}}
+    {{#if currentSession.isEditor}}
       <div class="vl-u-spacer-extended-left-s">
         <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}

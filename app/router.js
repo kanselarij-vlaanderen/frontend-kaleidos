@@ -79,7 +79,16 @@ Router.map(function () {
   this.route('not-supported');
   this.route('help');
   this.route('manual', { path: '/handleiding' });
-  this.route('icons');
+
+
+  this.route('styleguide', function() {
+    this.route('typography');
+    this.route('buttons');
+    this.route('pills');
+    this.route('components');
+    this.route('icons');
+    this.route('panels');
+  });
 });
 
 export default Router;

@@ -17,27 +17,31 @@
             <div class="vlc-toolbar__item">
               {{!-- TODO: Fix this symbol into a custom icon based of the figma file --}}
               {{!-- template-lint-disable no-bare-strings  --}}
-              {{#link-to "agendas.overview" class="vlc-backlink vl-link vl-link--bold"}}
+              <LinkTo @route="agendas.overview" class="vlc-backlink vl-link vl-link--bold">
                 &#8629;
-              {{/link-to}}
+              </LinkTo>
               {{!-- template-lint-enable no-bare-strings  --}}
             </div>
-            {{sessions/session-agenda-nav
-              currentAgenda=currentAgenda
-              compareAgendas=(action "compareAgendas")
-              navigateToDocuments=(action "navigateToDocuments")
-              clearSelectedAgendaItem=(action "clearSelectedAgendaItem")
-            }}
+            <Sessions::SessionAgendaNav
+              @currentAgenda={{currentAgenda}}
+              @compareAgendas={{action "compareAgendas"}}
+              @navigateToDocuments={{action "navigateToDocuments"}}
+              @clearSelectedAgendaItem={{action "clearSelectedAgendaItem"}} />
           </div>
         </div>
       </div>
     </div>
   </div>
-  {{#if isViewer}}
+  {{#if currentSessionService.isViewer}}
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          {{#if (and (eq currentAgenda.name "Ontwerpagenda") isEditor)}}
+          {{#if
+            (and
+              (eq currentAgenda.name "Ontwerpagenda")
+              currentSessionService.isEditor
+            )
+          }}
             <button data-test-agenda-header-approveAgenda type="button" class="vl-button vl-button--narrow"
               {{action "tryToApproveAgenda" currentSession}}
             >
@@ -69,7 +73,12 @@
             as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
-                {{#if (and isEditor (eq currentAgenda.name "Ontwerpagenda"))}}
+                {{#if
+                  (and
+                  currentSessionService.isEditor
+                  (eq currentAgenda.name "Ontwerpagenda")
+                  )
+                }}
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
                        data-test-agenda-header-navigateToSubCases
@@ -162,7 +171,7 @@
                     </LinkTo>
                   </li>
                 {{/if}}
-                {{#if isEditor}}
+                {{#if currentSessionService.isEditor}}
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
@@ -195,7 +204,7 @@
                     {{t "download-documents"}}
                   </a>
                 </li>
-                {{#if isEditor}}
+                {{#if currentSessionService.isEditor}}
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
                     {{#if (not currentSession.isFinal)}}
@@ -245,8 +254,8 @@
                   >
                     {{#if
                       (or
-                                    (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
-                                    (and isAdmin (await currentAgendaIsLast))
+                        (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
+                        (and currentSessionService.isAdmin (await currentAgendaIsLast))
                       )
                     }}
                       <a href=""
@@ -260,8 +269,8 @@
                     {{/if}}
                     {{#if
                       (and
-                                  (not (await designAgendaPresent))
-                                  (not (await currentSession.isFinal))
+                        (not (await designAgendaPresent))
+                        (not (await currentSession.isFinal))
                       )
                     }}
                       <a href=""
@@ -284,75 +293,78 @@
   {{/if}}
 </div>
 {{#if isAddingAgendaitems}}
-  {{agenda/agendaitem/create-agendaitem
-    isAddingAgendaitems=isAddingAgendaitems
-    reloadRouteWithRefreshId=(action "reloadRouteWithRefreshId")
-  }}
+  <Agenda::Agendaitem::CreateAgendaitem
+    @isAddingAgendaitems={{isAddingAgendaitems}}
+    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
 {{/if}}
 {{#if isAddingAnnouncement}}
-  {{agenda/create-announcement
-    isAddingAnnouncement=isAddingAnnouncement
-    currentAgenda=currentAgenda
-    reloadRouteWithRefreshId=(action "reloadRouteWithRefreshId")
-  }}
+  <Agenda::CreateAnnouncement
+    @isAddingAnnouncement={{isAddingAnnouncement}}
+    @currentAgenda={{currentAgenda}}
+    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
 {{/if}}
 {{#if isAssigningSignature}}
-  {{sessions/select-signature
-    meeting=currentSession
-    closeDialog=(action "selectSignature")
-  }}
+  <Session::SelectSignature
+    @meeting={{currentSession}}
+    @closeDialog={{action "selectSignature"}} />
 {{/if}}
 {{#if showWarning}}
-  {{web-components/vl-modal-verify
+  <WebComponents::VlModalVerify
     data-test-agenda-approve-modal
-    title=(t "warning-title")
-    buttonType="warning"
-    isLoading=isApprovingAgenda
-    verifyButtonText=(t "continue")
-    message=(if (and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable))) (t "approve-agenda-passable") (t "approve-agenda-warning"))
-    cancel=(action "cancel")
-    verify=(action "doApproveAgenda" currentSession)
-    showVerify=(and (await currentAgenda.isPassable) (not (await currentAgenda.isApprovable)))
-  }}
+    @title={{t "warning-title"}}
+    @buttonType="warning"
+    @isLoading={{isApprovingAgenda}}
+    @verifyButtonText={{t "continue"}}
+    @message={{if
+      (and
+        (await currentAgenda.isPassable)
+        (not (await currentAgenda.isApprovable) )
+      )
+      (t "approve-agenda-passable")
+      (t "approve-agenda-warning")
+    }}
+    @cancel={{action "cancel"}}
+    @verify={{action "doApproveAgenda" currentSession}}
+    @showVerify={{and
+      (await currentAgenda.isPassable)
+      (not (await currentAgenda.isApprovable)
+      )
+    }} />
 {{/if}}
 {{#if releasingDocuments}}
-  {{web-components/vl-modal-verify
-    title=(t "agenda-release-documents")
-    buttonType="warning"
-    verifyButtonText=(t "releaseToPublicButton")
-    message=(t "release-documents-message")
-    cancel=(action "cancel")
-    verify=(action "confirmReleaseDocuments")
-  }}
+  <WebComponents::VlModalVerify
+    @title={{t "agenda-release-documents"}}
+    @buttonType="warning"
+    @verifyButtonText={{t "releaseToPublicButton"}}
+    @message={{t "release-documents-message"}}
+    @cancel={{action "cancel"}}
+    @verify={{action "confirmReleaseDocuments"}}
+  />
 {{/if}}
 {{#if releasingDecisions}}
-  {{web-components/vl-modal-verify
-    title=(t "agenda-release-decisions")
-    buttonType="warning"
-    verifyButtonText=(t "releaseToPublicButton")
-    message=(t "release-decisions-message")
-    cancel=(action "cancel")
-    verify=(action "confirmReleaseDecisions")
-  }}
+  <WebComponents::VlModalVerify
+    @title={{t "agenda-release-decisions"}}
+    @buttonType="warning"
+    @verifyButtonText={{t "releaseToPublicButton"}}
+    @message={{t "release-decisions-message"}}
+    @cancel={{action "cancel"}}
+    @verify={{action "confirmReleaseDecisions"}} />
 {{/if}}
 {{#if editingSession}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "edit-session")
-    closeModal=(action "cancelEditSessionForm")
-  }}
-    {{sessions/forms/edit-session
-      meeting=currentSession
-      successfullyEdited=(action "successfullyEdited")
-      cancelForm=(action "cancelEditSessionForm")
-    }}
-  {{/web-components/vl-modal}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @title={{t "edit-session"}}
+    @closeModal={{action "cancelEditSessionForm"}} >
+    <Sessions::Forms::EditSession
+      @meeting={{currentSession}}
+      @successfullyEdited={{action "successfullyEdited"}}
+      @cancelForm={{action "cancelEditSessionForm"}} />
+  </WebComponents::VlModal>
 {{/if}}
 {{#if shouldShowLoader}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=loaderTitle
-  }}
-    {{web-components/vl-loader text=loaderText}}
-  {{/web-components/vl-modal}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @title={{loaderTitle}} >
+    <WebComponents::VlLoader @text={{loaderText}} />
+  </WebComponents::VlModal>
 {{/if}}

@@ -1,0 +1,39 @@
+<div class="vlc-kitchensink__container">
+  <div class="vlc-kitchensink__navigation">
+    <nav>
+      <ul>
+        <lh class="vlc-kitchensink__navigation--header">{{t "style-guide-basic"}}</lh>
+        <li class="vlc-kitchensink__navigation--item">
+          <LinkTo class="vlc-kitchensink__navigation--link" @route="styleguide.typography">{{t "style-guide-typography"}}</LinkTo>
+        </li>
+        <li class="vlc-kitchensink__navigation--item">
+          <LinkTo class="vlc-kitchensink__navigation--link" @route="styleguide.buttons">{{t "style-guide-buttons"}}</LinkTo>
+        </li>
+        <li class="vlc-kitchensink__navigation--item">
+          <LinkTo class="vlc-kitchensink__navigation--link" @route="styleguide.icons">{{t "style-guide-icons"}}</LinkTo>
+        </li>
+        <li class="vlc-kitchensink__navigation--item">
+          <LinkTo class="vlc-kitchensink__navigation--link" @route="styleguide.components">{{t "style-guide-components"}}</LinkTo>
+        </li>
+
+
+        <li class="vlc-kitchensink__navigation--item">
+          <LinkTo class="vlc-kitchensink__navigation--link" @route="styleguide.pills">{{t "style-guide-pills"}}</LinkTo>
+        </li>
+
+        <li class="vlc-kitchensink__navigation--item">
+          <LinkTo class="vlc-kitchensink__navigation--link" @route="styleguide.panels">{{t "style-guide-panels"}}</LinkTo>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="vlc-kitchensink__container--main">
+    <div style="padding: 2rem;">
+      <div class="vl-typography" style="margin: 0 0 2.5rem;">
+        <h1 style="margin: 0 0 1.2rem;">{{t "style-guide-title"}}</h1>
+      </div>
+      {{outlet}}
+    </div>
+  </div>
+</div>

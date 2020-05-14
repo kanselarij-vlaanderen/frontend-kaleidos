@@ -1,16 +1,16 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import moment from 'moment';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
 import { inject as service } from '@ember/service';
 import { destroyApprovalsOfAgendaitem, setNotYetFormallyOk } from 'fe-redpencil/utils/agenda-item-utils';
 
-export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDocumentVersions, {
+export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
   toaster: service(),
   fileService: service(),
   intl: service(),
+  currentSession: service(),
   classNames: ['vl-u-spacer-extended-bottom-s'],
   classNameBindings: ['aboutToDelete'],
   isShowingVersions: false,
@@ -62,7 +62,7 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, MyDoc
     },
 
     startEditingName() {
-      if (!this.isEditor) {
+      if (!this.currentSession.isEditor) {
         return;
       }
       this.set('nameBuffer', this.get('lastDocumentVersion.name'));

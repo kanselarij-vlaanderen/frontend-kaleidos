@@ -1,11 +1,11 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { computed } from '@ember/object';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   classNames: ['vl-u-spacer'],
   store: inject(),
+  currentSession: inject(),
   isEditing: false,
   agendaitem: null,
   subcase: null,

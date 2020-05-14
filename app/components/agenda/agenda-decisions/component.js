@@ -1,20 +1,23 @@
 import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { computed, action } from '@ember/object';
 
-export default Component.extend(isAuthenticatedMixin, {
-  isEditing: false,
+export default class AgendaDecisions extends Component {
+  isEditing = false;
+  @service('current-session') session;
 
-  allowEditing: computed('definite', function () {
+  @computed('definite')
+  get allowEditing() {
     return this.definite === 'false';
-  }),
-
-  actions: {
-    close() {
-      this.closeModal();
-    },
-    toggleIsEditing(decision) {
-      decision.toggleProperty('isEditing');
-    }
   }
-});
+
+  @action
+  close() {
+    this.closeModal();
+  }
+
+  @action
+  toggleIsEditing(decision) {
+    decision.toggleProperty('isEditing');
+  }
+}

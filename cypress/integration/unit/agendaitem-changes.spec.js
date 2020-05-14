@@ -1,4 +1,4 @@
-/*global context, before, it, cy*/
+/*global context, before, it, cy, Cypress*/
 /// <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
@@ -9,7 +9,6 @@ context('Agendaitem changes tests', () => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.visit('/');
   });
 
   it('should add an agendaitem to an agenda and should highlight as added', () => {
@@ -37,10 +36,11 @@ context('Agendaitem changes tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
 
-    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
+    cy.addDocumentsToAgendaItem(subcaseTitle1, files,false);
     // TODO we should not have to "refresh" to see the changes. The checking for changes is set to an observer
     // TODO This observer is not triggering during initial opening of the agenda, so as a 'hack', we switch agendas to trigger it in the tests
     cy.changeSelectedAgenda('Ontwerpagenda');
@@ -52,13 +52,14 @@ context('Agendaitem changes tests', () => {
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle2);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(2);
     cy.approveDesignAgenda();
 
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
     // TODO we should not have to "refresh" to see the changes. The checking for changes is set to an observer
     // TODO This observer is not triggering during initial opening of the agenda, so as a 'hack', we switch agendas to trigger it in the tests
+    cy.wait(1000); //Computeds are not reloaded yet , maybe
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);

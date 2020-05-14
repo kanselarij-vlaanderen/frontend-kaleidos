@@ -1,8 +1,10 @@
 import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Controller.extend(DefaultQueryParamsMixin, isAuthenticatedMixin, {
+export default Controller.extend(DefaultQueryParamsMixin, {
+  currentSession: service(),
+
   creatingNewSession: null,
 
   actions: {

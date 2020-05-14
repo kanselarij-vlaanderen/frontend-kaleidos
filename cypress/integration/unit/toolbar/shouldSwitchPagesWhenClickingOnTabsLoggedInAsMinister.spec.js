@@ -13,7 +13,6 @@ context('Testing the toolbar as Minister user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Minister');
-    cy.visit('/');
   });
 
   it('Should have meeting, Case, Newsletter in toolbar', () => {
@@ -34,7 +33,7 @@ context('Testing the toolbar as Minister user', () => {
   it('Should switch to cases tab when cases is clicked as minister', () => {
     cy.get(toolbar.cases).click();
     cy.get(agenda.overviewTitle).should('not.exist');
-    cy.get(cases.casesOverviewTitle).should('not.exist');
+    cy.get(cases.casesOverviewTitle).should('exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(settings.generalSettings).should('not.exist');
     cy.get(toolbar.settings).should('not.exist');
