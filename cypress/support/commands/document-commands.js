@@ -142,7 +142,6 @@ function openAgendaItemDossierTab(agendaItemTitle) {
  * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
  */
 function addDocuments(files) {
-  cy.route('GET', 'document-types?**').as('getDocumentTypes');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
   cy.route('POST', 'documents').as('createNewDocument');
   cy.route('PATCH', '**').as('patchModel');
@@ -166,14 +165,21 @@ function addDocuments(files) {
     if(file.fileType) {
       cy.get('@fileUploadDialog').within(() => {
         cy.get('.vl-uploaded-document').eq(index).within(() => {
-          cy.get('.vlc-input-field-block').eq(1).within(() => {
-            cy.get('.ember-power-select-trigger').click();
-            cy.wait('@getDocumentTypes', { timeout: 12000 });
+          cy.get('.vlc-input-field-block').eq(1).within(($t) => {
+            if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
+              cy.get('input[type="radio"]').check(file.fileType, { force: true }); // CSS has position:fixed, which cypress considers invisible
+            } else {
+              cy.get('input[type="radio"][value="Andere"]').check({ force: true });
+              cy.get('.ember-power-select-trigger')
+                .click()
+                .parents('body').within(() => {
+                  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+                    cy.contains(file.fileType).click();
+                  });
+                });
+            }
           });
         });
-      });
-      cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-        cy.contains(file.fileType).click();
       });
     }
   });
