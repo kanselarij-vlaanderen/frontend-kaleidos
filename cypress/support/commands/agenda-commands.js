@@ -52,7 +52,7 @@ function createAgenda(kind, plusMonths, date, location) {
     // cy.route('GET', '/meetings**').as('getMeetings');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
+    //cy.route('POST', '/agendaitems').as('createNewAgendaItems');
     cy.route('POST', '/newsletter-infos').as('createNewsletter');
     cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
@@ -98,7 +98,7 @@ function createAgenda(kind, plusMonths, date, location) {
         }).verifyAlertSuccess();
 
     cy.wait('@createNewAgenda', { timeout: 20000 })
-        .wait('@createNewAgendaItems', { timeout: 20000 })
+        //.wait('@createNewAgendaItems', { timeout: 20000 })
         .wait('@createNewsletter', { timeout: 20000 })
         .wait('@patchMeetings', { timeout: 20000 })
         .then(() => {
