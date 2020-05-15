@@ -34,6 +34,7 @@
   <PowerSelect
     @options={{this.otherOptions}}
     @selected={{this.selectedOption}}
+    @searchField={{this.labelKey}}
     @onchange={{this.select}}
   as |opt|>
     {{get opt this.labelKey}}
