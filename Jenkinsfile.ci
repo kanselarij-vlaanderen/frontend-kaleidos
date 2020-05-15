@@ -24,6 +24,7 @@ pipeline {
         }
         stage('Prepare for automated tests') {
             steps {
+                sh "cp ${env.WORKSPACE}/Dockerfile.test ${env.WORKSPACE}/Dockerfile"
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
                 sh "mkdir ${WORKSPACE}/kaleidos-project/data"
                 sh "chmod 777 ${WORKSPACE}/kaleidos-project/data"
