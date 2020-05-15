@@ -81,16 +81,14 @@ export default class AgendaitemTable extends Component {
     this.set('meta', records.get('meta'));
     this.set('canLoadMore', records.get('meta.count') > this.get('model.length'));
     this.get('table').addRows(this.get('model').filter((item) => !item.isApproval));
-    this.setRowsPostponed(this.table.rows, this.model);
   }
 
-  @restartableTask
-  setRows = function* (rows) {
-    this.get('table').setRowsSynced([]);
-    yield timeout(100); // Allows isLoading state to be shown
-    this.get('table').setRowsSynced(rows);
-  }
-
+  /**
+   * Will set the postponed classes on all actual table rows that should get the postponed class
+   * It does so based on the current model and table rows that you supply
+   * @param {Table} tableRows       Table object containing rows
+   * @param {EmberArray} model      Model from the route currently active used as a lookup
+   */
   setRowsPostponed(tableRows, model) {
     const rowsCurrentlyInTable = tableRows;
     const postponedItems = model.filter(item => item.get('retracted'));
@@ -124,7 +122,7 @@ export default class AgendaitemTable extends Component {
         page: 0
       });
       this.get('model').clear();
-      this.get('setRows').perform([]);
+      this.get('table').setRowsSynced([]);
       this.get('fetchRecords').perform();
     }
   }
