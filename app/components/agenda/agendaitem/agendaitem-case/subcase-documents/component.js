@@ -25,7 +25,7 @@ export default Component.extend(
     init() {
       this._super(...arguments);
       this.set('model', A([]));
-      this.store.query('document-type', { sort: 'priority', size: 50 }).then(types => {
+      this.store.query('document-type', { sort: 'priority', 'page[size]': 50 }).then(types => {
         this.set('documentTypes', types);
       });
     },
