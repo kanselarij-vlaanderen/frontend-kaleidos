@@ -18,11 +18,9 @@
 .vlc-agenda-items__sub-item > span { // a
   display: block;
   position: relative;
-  padding: 2rem 1.5rem;
   font-size: 1.3rem;
   text-decoration: none;
   color: $black;
-  background: #FFF;
 }
 
 .vlc-agenda-items__sub-item a {
@@ -199,3 +197,13 @@ $i: 0;
   opacity: 1;
   color: $napier-green;
 }
+
+.vlc-agenda-items__body{
+  align-items: center;
+  padding: 1.2rem 1.8rem;
+  .vlc-agenda-items__body-padding{
+    padding-bottom: 1.5rem;
+  }
+}
+
+
