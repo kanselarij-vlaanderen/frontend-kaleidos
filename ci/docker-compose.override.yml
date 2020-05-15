@@ -44,3 +44,7 @@ services:
   musearch:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+  newsletter-service:
+    entrypoint: "echo 'service disabled'"
+    restart: "no"
+
