@@ -1,7 +1,6 @@
 version: '3.4'
 services:
   frontend:
-    image: kanselarij/frontend-kaleidos:development
     ports:
       - 127.0.0.1:4201:80
     #  frontend:
@@ -17,7 +16,7 @@ services:
     #      - LETSENCRYPT_HOST=kaleidos-dev.vlaanderen.be # dev-kaleidos-frontend.kanselarij-dev.s.redpencil.io
     networks:
       - default
-    build: ../
+    build: ../.
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
