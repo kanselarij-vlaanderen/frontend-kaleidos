@@ -15,7 +15,7 @@ export default class RadioDropdownComboSelectComponent extends Component {
     this.othersShown = this.selectedIsInOthers;
   }
 
-  get labelKey () {
+  get labelKey() {
     return this.args.labelKey || 'label';
   }
 
@@ -23,24 +23,24 @@ export default class RadioDropdownComboSelectComponent extends Component {
     return `${guidFor(this)}-radio`;
   }
 
-  get radioOptionsSize () {
+  get radioOptionsSize() {
     return this.args.radioOptionsSize || 5;
   }
 
-  get radioOptions () {
+  get radioOptions() {
     return this.args.options.slice(0, this.radioOptionsSize);
   }
 
-  get otherOptions () {
+  get otherOptions() {
     return this.args.options.slice(this.radioOptionsSize, this.args.options.length);
   }
 
-  get selectedIsInOthers () { // The selected option is one of "otherOptions"
+  get selectedIsInOthers() { // The selected option is one of "otherOptions"
     return this.otherOptions.includes(this.selectedOption);
   }
 
   @action
-  select (opt) {
+  select(opt) {
     if (this.args.onSelect) {
       this.args.onSelect(...arguments);
     }
@@ -51,7 +51,7 @@ export default class RadioDropdownComboSelectComponent extends Component {
   }
 
   @action
-  showOthers () {
+  showOthers() {
     if (this.args.onSelect) {
       this.args.onSelect(null); // Clicking "others" must behave as an unselect
     }
