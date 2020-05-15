@@ -38,12 +38,6 @@ services:
   database-healthcheck:
     entrypoint: "echo 'service disabled'"
     restart: "no"
-  elasticsearch:
-    entrypoint: "echo 'service disabled'"
-    restart: "no"
-  musearch:
-    entrypoint: "echo 'service disabled'"
-    restart: "no"
   newsletter-service:
     entrypoint: "echo 'service disabled'"
     restart: "no"
