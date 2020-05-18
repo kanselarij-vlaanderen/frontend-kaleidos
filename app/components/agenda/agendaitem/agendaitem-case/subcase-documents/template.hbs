@@ -126,13 +126,17 @@
                 </div>
                 <div class="vlc-input-field-block">
                   <WebComponents::VlFormLabel @value={{t "document-type"}} />
-                  <Utils::ModelSelector
-                    @modelName="document-type"
-                    @searchField="label"
-                    @propertyToShow="label"
-                    @sortField="priority"
-                    @selectedItems={{doc.documentContainer.type}}
-                    @selectModel={{action "chooseDocumentType" doc.documentContainer}} />
+                  {{#if
+                    (and
+                    (is-fulfilled doc.documentContainer.type)
+                    this.documentTypes)
+                  }}
+                    <Utils::RadioDropdownComboSelect
+                      @options={{this.documentTypes}}
+                      @onSelect={{action "chooseDocumentType" doc.documentContainer}}
+                      @selected={{get doc.documentContainer.type "content"}} {{!-- content getter and if-fulfilled condition because of computeds retruning promise-proxies --}}
+                    />
+                  {{/if}}
                 </div>
               </div>
             {{/ember-kaleidos-webuniversum/vl-uploaded-document}}
