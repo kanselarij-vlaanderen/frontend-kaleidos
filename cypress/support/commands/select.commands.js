@@ -16,6 +16,7 @@ Cypress.Commands.add('selectOptionInSelectByIndex', selectOptionInSelectByIndex)
  * @param {String} text - The option that has to be selected in the select
  */
 function selectOptionInSelectByIndex( option, text) {
+  cy.log('selectOptionInSelectByIndex');
   return cy.get('.ember-power-select-option', {timeout: 5000})
     .should('exist')
     .then(() => {
@@ -35,6 +36,7 @@ function selectOptionInSelectByIndex( option, text) {
  * @param {String} text - The option that has to be selected in the select
  */
 function selectOptionInSelectByText(text) {
+  cy.log('selectOptionInSelectByText');
   return cy.get('.ember-power-select-option', {timeout: 5000})
     .should('exist')
     .then(() => {

@@ -17,6 +17,7 @@ Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
  * @param {number} plusMonths The positive amount of months from today to advance in the vl-flatpickr
  */
 function setDateAndTimeInFlatpickr(date, plusMonths) {
+  cy.log('setDateAndTimeInFlatpickr');
   cy.get('.flatpickr-months').within(() => {
     for (let n = 0; n < plusMonths; n++) {
       cy.get('.flatpickr-next-month').click();
@@ -29,6 +30,7 @@ function setDateAndTimeInFlatpickr(date, plusMonths) {
     cy.get('.flatpickr-hour').type(date.hour());
     cy.get('.flatpickr-minute').type(date.minutes());
   });
+  cy.log('/setDateAndTimeInFlatpickr');
 }
 
 /**
@@ -41,6 +43,7 @@ function setDateAndTimeInFlatpickr(date, plusMonths) {
  * @param {number} index element to select
  */
 function setDateInFlatpickr(date, plusMonths) {
+  cy.log('setDateInFlatpickr');
   cy.get('.flatpickr-months').within(() => {
     for (let n = 0; n < plusMonths; n++) {
       cy.get('.flatpickr-next-month').click();
@@ -49,6 +52,7 @@ function setDateInFlatpickr(date, plusMonths) {
   cy.get('.flatpickr-days').within(() => {
     cy.get('.flatpickr-day').not('.prevMonthDay').not('.nextMonthDay').contains(date.date()).click();
   });
+  cy.log('/setDateInFlatpickr');
 }
 
 /**
@@ -58,6 +62,7 @@ function setDateInFlatpickr(date, plusMonths) {
  * @function
  */
 function setYearMonthDayHourMinuteInFlatPicker(year, month, day, hour, minute) {
+  cy.log('setYearMonthDayHourMinuteInFlatPicker');
   return cy.existsAndVisible('input.numInput.cur-year')
     .type(year)
     .then(() => {
@@ -66,5 +71,6 @@ function setYearMonthDayHourMinuteInFlatPicker(year, month, day, hour, minute) {
     cy.existsAndVisible('.flatpickr-day').contains(day).click();
     cy.existsAndVisible('input.numInput.flatpickr-hour').type(hour).click();
     return cy.existsAndVisible('input.numInput.flatpickr-minute').type(minute).click();
-  })
+  });
+  cy.log('/setYearMonthDayHourMinuteInFlatPicker');
 }
