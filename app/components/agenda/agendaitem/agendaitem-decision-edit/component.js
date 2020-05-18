@@ -1,16 +1,27 @@
 import Component from '@ember/component';
-import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { cached } from 'fe-redpencil/decorators/cached';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
-export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
+export default Component.extend(RdfaEditorMixin, {
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze(['approved', 'richtext']),
   approved: cached('item.approved'), // TODO in class syntax use as a decorator instead
   initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
+  documentVersionsSelected: null,
+  isEditing: false,
+
+  async setNewPropertiesToModel(model) {
+    const { propertiesToSet } = this;
+    await Promise.all(
+      propertiesToSet.map(async property => {
+        model.set(property, await this.get(property));
+      })
+    );
+    return model.save().then(model => model.reload());
+  },
 
   async setDecisionPhaseToSubcase() {
     const approved = await this.get('approved');
@@ -35,6 +46,20 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
   },
 
   actions: {
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
+
+    async selectDocument(documents) {
+      this.set('documentVersionsSelected', documents);
+    },
+
+    async cancelEditing() {
+      const item = await this.get('item');
+      item.rollbackAttributes();
+      this.toggleProperty('isEditing');
+    },
+
     // TODO refactor this, most of this code is dead
     async saveChanges() {
       this._super.call(this);
