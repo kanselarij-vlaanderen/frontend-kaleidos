@@ -24,7 +24,7 @@ export const selectDomain = async (rowToShowFields, domain, value) => {
 };
 
 export const selectField = async (rowToShowDomains, domain, value) => {
-  const foundDomain = rowToShowDomains.find((item) => item.get('id') == domain.get('id'));
+  const foundDomain = rowToShowDomains.find((item) => item.get('id') === domain.get('id'));
   const fields = await domain.get('governmentFields');
   const selectedFields = fields.filter((field) => field.selected);
 
@@ -46,11 +46,9 @@ export const getSelectedIseCodesWithFields = async (allIseCodesInApp, selectedFi
   }))).filter((item) => item);
 };
 
-export const createMandateeRow = async (selectedMandatee, rowToShow) => {
+export const prepareMandateeRowAfterEdit = async (selectedMandatee, rowToShow) => {
     const fields = await rowToShow.get('fields');
-    console.log('fields:', fields);
     const domains = await rowToShow.get('domains');
-  console.log('domains:', domains);
 
     const selectedDomains = [...new Set(domains.filter((domain) => domain.get('selected')))];
     const selectedFields = fields.filter((field) => field.get('selected'));
