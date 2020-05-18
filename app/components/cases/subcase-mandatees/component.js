@@ -80,8 +80,8 @@ export default Component.extend({
       await Promise.all(totalIseCodes.map(async (iseCode) => {
         const field = await this.getFieldOfIseCode(iseCode);
         const domain = await this.getDomainOfField(field);
-        const iseCodes = await mandateeRow.iseCodes;
-        const findSelectedIseCode = iseCodes.find(async (codeToCheck) => await codeToCheck.get('id') === await iseCode.get('id'));
+        const iseCodes = mandateeRow.iseCodes;
+        const findSelectedIseCode = iseCodes.find((codeToCheck) => codeToCheck.get('id') === iseCode.get('id'));
         if (findSelectedIseCode) {
           field.set('selected', true);
           domain.set('selected', true);

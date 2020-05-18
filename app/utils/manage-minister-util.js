@@ -19,12 +19,12 @@ export const refreshData = async(mandatee, mandateeRows) => {
 };
 
 export const selectDomain = async (rowToShowFields, domain, value) => {
-  const fields = await rowToShowFields.filter((field) => field.get('domain.id') === domain.id);
+  const fields = await rowToShowFields.filter((field) => field.get('domain.id') === domain.get('id'));
   fields.map((field) => field.set('selected', value));
 };
 
 export const selectField = async (rowToShowDomains, domain, value) => {
-  const foundDomain = rowToShowDomains.find((item) => item.id == domain.id);
+  const foundDomain = rowToShowDomains.find((item) => item.get('id') == domain.get('id'));
   const fields = await domain.get('governmentFields');
   const selectedFields = fields.filter((field) => field.selected);
 
@@ -48,10 +48,12 @@ export const getSelectedIseCodesWithFields = async (allIseCodesInApp, selectedFi
 
 export const createMandateeRow = async (selectedMandatee, rowToShow) => {
     const fields = await rowToShow.get('fields');
+    console.log('fields:', fields);
     const domains = await rowToShow.get('domains');
+  console.log('domains:', domains);
 
-    const selectedDomains = [...new Set(domains.filter((domain) => domain.selected))];
-    const selectedFields = fields.filter((field) => field.selected);
+    const selectedDomains = [...new Set(domains.filter((domain) => domain.get('selected')))];
+    const selectedFields = fields.filter((field) => field.get('selected'));
     const allIseCodes = await selectedMandatee.get('iseCodes');
     let filteredIseCodes = await getSelectedIseCodesWithFields(allIseCodes, selectedFields);
 
