@@ -26,10 +26,6 @@ pipeline {
             steps {
                 sh "cp ${env.WORKSPACE}/Dockerfile.test ${env.WORKSPACE}/Dockerfile"
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
-                sh "chmod 777 ${WORKSPACE}/kaleidos-project/testdata"
-                sh "mkdir ${WORKSPACE}/kaleidos-project/testdata/db"
-                sh "mkdir ${WORKSPACE}/kaleidos-project/testdata/elasticsearch"
-                sh "mkdir ${WORKSPACE}/kaleidos-project/testdata/files"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
                 // sh "docker-compose -p ${projectName} exec -T web mkdir /var/www/project/web/sites/default/files || true"
                 // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/web/sites/default/files"
