@@ -39,13 +39,6 @@ context('Agenda tests', () => {
     cy.get(modal.agenda.approveAgenda).should('not.exist');
   });
 
-  it('should add a remark with documents to an agenda', () => {
-    cy.openAgendaForDate(agendaDate);
-    cy.addRemarkToAgenda('Titel mededeling',
-      'mededeling omschrijving',
-      [{ folder: 'files', fileName: 'test', fileExtension: 'pdf' }, { folder: 'files', fileName: 'test', fileExtension: 'txt' }]);
-  });
-
   it('should add an agendaitem to an agenda', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(false);

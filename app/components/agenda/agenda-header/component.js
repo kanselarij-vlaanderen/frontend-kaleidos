@@ -27,7 +27,6 @@ export default Component.extend(FileSaverMixin, {
 
   isShowingOptions: false,
   isPrintingNotes: false,
-  isAddingAnnouncement: false,
   isAddingAgendaitems: false,
   isApprovingAgenda: false,
   isDeletingAgenda: false,
@@ -225,14 +224,6 @@ export default Component.extend(FileSaverMixin, {
 
     navigateToSubCases() {
       this.set('isAddingAgendaitems', true);
-    },
-
-    toggleIsAddingAnnouncement() {
-      this.toggleProperty('isAddingAnnouncement');
-    },
-
-    navigateToCreateAnnouncement() {
-      this.set('addingAnnouncement', true);
     },
 
     navigateToDocuments() {
