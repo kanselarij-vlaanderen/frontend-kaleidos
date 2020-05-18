@@ -116,13 +116,8 @@ context('Full test', () => {
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
-
-    cy.addRemarkToAgenda('Titel mededeling',
-      'mededeling omschrijving',
-      [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
     cy.addAgendaitemToAgenda();
     cy.setFormalOkOnItemWithIndex(3); //new agendaitem 
-    cy.setFormalOkOnItemWithIndex(5);
     cy.approveDesignAgenda();
     //#endregion
 
