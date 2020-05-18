@@ -40,29 +40,9 @@ services:
   newsletter-service:
     entrypoint: "echo 'service disabled'"
     restart: "no"
-  triplestore:
-    volumes:
-      - ./testdata/db:/data
   musearch:
-    volumes:
-      - ./testdata/files:/data
     environment:
       UPDATE_WAIT_INTERVAL_MINUTES: 0
-  elasticsearch:
-    volumes:
-      - ./testdata/elasticsearch/:/usr/share/elasticsearch/data
-  file:
-    volumes:
-      - ./testdata/files:/share
-  # range-file:
-  #   volumes:
-  #     - ./testdata/files:/share
-  # document-conversion:
-  #   volumes:
-  #     - ./testdata/files:/share
-  file-bundling-service:
-    volumes:
-      - ./testdata/files:/share
   # The DELTA_TIMEOUT is the value that yggdrasil waits between runs in milliseconds
   # Default is 5 minutes but results in 10 minutes between runs
   yggdrasil:
