@@ -30,9 +30,9 @@ context('Full test', () => {
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include','instellingen/ministers');
-    cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
+    cy.route('GET', '/ise-codes?sort=name').as('getIseCodesMinister');
     cy.get(settings.addMinister).should('exist').should('be.visible').click();
-    cy.wait('@getIseCodes');
+    cy.wait('@getIseCodesMinister', { timeout: 60000 });
     cy.get(mandatee.addMandateeTitleContainer).should('exist').should('be.visible').within(() => {
       cy.get(form.formInput).should('exist').should('be.visible').type('Eerste minister van onderhoud');
     });
