@@ -48,7 +48,7 @@ Cypress.Commands.add('agendaItemExistsInDetail', agendaItemExistsInDetail);
  * @returns {Promise<String>} the id of the created agenda
  */
 function createAgenda(kind, plusMonths, date, location) {
-
+    cy.log('createAgenda');
     // cy.route('GET', '/meetings**').as('getMeetings');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
@@ -120,7 +120,7 @@ function createAgenda(kind, plusMonths, date, location) {
  * @param {String} location - Location that the event is taking place
  */
 function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
-
+  cy.log('createDefaultAgenda');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
     cy.route('POST', '/agendaitems').as('createNewAgendaItems');
@@ -158,6 +158,7 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
  * @param {String} location - Location that the event is taking place
  */
 function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, location) {
+  cy.log('createAgendaOnDate');
     // Wait for all calls to finish before we continue the activities.
     cy.route('GET', '/meetings/**').as('meetings');
     // Create agenda backend calls
@@ -212,6 +213,7 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
  * @param {*} agendaDate A cypress.moment object with the date to search
  */
 function openAgendaForDate(agendaDate) {
+    cy.log('openAgendaForDate');
     const searchDate = agendaDate.date() + '/' + (agendaDate.month() + 1) + '/' + agendaDate.year();
     // cy.route('GET', '/meetings/**').as('getMeetings');
     cy.route('GET', '/meetings?filter**').as('getFilteredMeetings');
@@ -237,6 +239,7 @@ function openAgendaForDate(agendaDate) {
  * @param {String} agendaItemTitle - title of the agendaitem
  */
 function openAgendaItemKortBestekTab(agendaItemTitle, isDetailView = false) {
+  cy.log('openAgendaItemKortBestekTab');
     // cy.route('GET', 'documents**').as('getDocuments');
     if (isDetailView) {
         cy.get(agenda.agendaDetailSidebarSubitem)
@@ -262,6 +265,7 @@ function openAgendaItemKortBestekTab(agendaItemTitle, isDetailView = false) {
  * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
  */
 function deleteAgenda(meetingId, lastAgenda) {
+  cy.log('deleteAgenda');
     if (meetingId) {
         cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
     } else {
@@ -289,6 +293,7 @@ function deleteAgenda(meetingId, lastAgenda) {
  * @function
  */
 function setFormalOkOnItemWithIndex(indexOfItem) {
+  cy.log('setFormalOkOnItemWithIndex');
     //TODO set only some items to formally ok with list as parameter
     cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
 
@@ -321,6 +326,7 @@ function setFormalOkOnItemWithIndex(indexOfItem) {
  * @param {String} agendaitemShortTitle - The short title of the case with coapprovals, must be unique in an agenda.
  */
 function approveCoAgendaitem(agendaitemShortTitle) {
+  cy.log('approveCoAgendaitem');
     cy.route('GET', '/ise-codes/**').as('getIseCodes');
     cy.route('GET', '/government-fields/**').as('getGovernmentFields');
     cy.route('PATCH', '/approvals/**').as('patchApprovals');
@@ -358,6 +364,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
  * @function
  */
 function approveDesignAgenda() {
+  cy.log('approveDesignAgenda');
     cy.route('PATCH', '/agendas/**').as('patchAgenda');
     // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
     cy.route('GET', '/agendas/**').as('getAgendas');
@@ -386,6 +393,7 @@ function approveDesignAgenda() {
  * @param {{folder: String, fileName: String, fileExtension: String}[]} file
  */
 function addRemarkToAgenda(title, remark, files) {
+  cy.log('addRemarkToAgenda');
     cy.route('POST', '/agendaitems').as('createNewAgendaitem');
     cy.route('PATCH', '**').as('patchModel');
 
@@ -433,6 +441,8 @@ function addRemarkToAgenda(title, remark, files) {
  * @param {boolean} postponed - The remark
  */
 function addAgendaitemToAgenda(caseTitle, postponed) {
+  cy.log('addAgendaitemToAgenda');
+    cy.log('addAgendaitemToAgenda');
     cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
     cy.route('POST', '/agendaitems').as('createNewAgendaitem');
     cy.route('POST', '/subcase-phases').as('createSubcasePhase');
@@ -491,6 +501,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
  * @param {boolean} refresh - boolean to check if a refresh needs to happen.
  */
 function toggleShowChanges(refresh) {
+  cy.log('toggleShowChanges');
     cy.route('GET', '/agendaitems?filter**').as('getAgendaitems');
     // cy.route('GET', '/agenda-sort/agenda-with-changes**').as('getChanges');
 
@@ -522,6 +533,7 @@ function toggleShowChanges(refresh) {
  * @param {string} agendaItemName - boolean to check if a refresh needs to happen.
  */
 function agendaItemExists(agendaItemName) {
+  cy.log('agendaItemExists');
     cy.get('li.vlc-agenda-items__sub-item h4')
         .contains(agendaItemName, { timeout: 12000 })
         .should('exist');
@@ -535,6 +547,7 @@ function agendaItemExists(agendaItemName) {
  * @param {string} agendaItemName - boolean to check if a refresh needs to happen.
  */
 function agendaItemExistsInDetail(agendaItemName) {
+  cy.log('agendaItemExistsInDetail');
     cy.get(agenda.agendaDetailSidebarSubitem)
         .contains(agendaItemName, { timeout: 12000 })
         .should('exist');
@@ -549,6 +562,7 @@ function agendaItemExistsInDetail(agendaItemName) {
  *  @param {boolean} hasSubcase - optional boolean to indicate if this agendaitem has a subcase
  */
 function openDetailOfAgendaitem(agendaItemName, hasSubcase = true) {
+  cy.log('openDetailOfAgendaitem');
     cy.agendaItemExists(agendaItemName).click();
     if (hasSubcase) {
         cy.contains('Naar procedurestap', { timeout: 12000 });
@@ -565,6 +579,7 @@ function openDetailOfAgendaitem(agendaItemName, hasSubcase = true) {
  * @param {string} agendaName - name of the agenda item
  */
 function changeSelectedAgenda(agendaName) {
+  cy.log('changeSelectedAgenda');
     cy.get('.vlc-side-nav-item').children()
         .contains(agendaName, { timeout: 12000 })
         .should('exist')
@@ -578,6 +593,7 @@ function changeSelectedAgenda(agendaName) {
  * @function
  */
 function closeAgenda() {
+  cy.log('closeAgenda');
     cy.get('.vl-button--icon-before')
         .contains('Acties')
         .click();
@@ -593,6 +609,7 @@ function closeAgenda() {
  * @function
  */
 function releaseDecisions() {
+  cy.log('releaseDecisions');
     cy.get('.vl-button--icon-before')
         .contains('Acties')
         .click();
@@ -610,6 +627,7 @@ function releaseDecisions() {
  * @function
  */
 function releaseDocuments() {
+  cy.log('releaseDocuments');
     cy.get('.vl-button--icon-before')
         .contains('Acties')
         .click();
@@ -629,5 +647,6 @@ function releaseDocuments() {
  * @param {String} selector The name of the tab to click on, case sensitive
  */
 function clickAgendaitemTab(selector) {
+  cy.log('clickAgendaitemTab');
     cy.get(selector).should('be.visible').click();
 }
