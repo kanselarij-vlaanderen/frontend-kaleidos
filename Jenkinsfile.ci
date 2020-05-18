@@ -44,15 +44,23 @@ pipeline {
                 sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
                 sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
                 sh "npm i --production"
+
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 777 /usr/share/elasticsearch/data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource"
+                sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata"
+                sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
+                sh "cd ${WORKSPACE}/kaleidos-project && mv testdata/* data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d
+                sh "sleep 60"
             }
         }
         stage('Automated tests: Cypress') {
             steps {
-                // sh "docker-compose -p ${projectName} exec -T web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing dump-clean-database-for-cypress"
-                //sh "cd kaleidos-project && docker-compose -p ${projectName} exec -T frontend /wait-for.sh database:8890 -s -t 90  -- docker-compose -p ${projectName} exec -T frontend make run-cypress-spec-files"
-                sh "make run-cypress-tests-jenkins"
+                sh "npx cypress run"
             }
         }
+
+
         //stage('Create deployable artifact') {
         //    when {
         //        not {
