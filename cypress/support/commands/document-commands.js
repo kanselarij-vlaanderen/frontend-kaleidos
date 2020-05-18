@@ -35,8 +35,9 @@ Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
  * @param {string[]} files
  */
 function addDocumentsToAgenda(files) {
+  cy.log('addDocumentsToAgenda');
   cy.clickReverseTab('Documenten');
-  return addDocuments(files)
+  return addDocuments(files);
 }
 
 /**
@@ -48,6 +49,7 @@ function addDocumentsToAgenda(files) {
  * @param {string} file
  */
 function addNewDocumentVersionToMeeting(oldFileName, file) {
+  cy.log('addNewDocumentVersionToMeeting');
   cy.clickReverseTab('Documenten');
   return addNewDocumentVersion(oldFileName, file, 'meetings')
 }
@@ -62,6 +64,7 @@ function addNewDocumentVersionToMeeting(oldFileName, file) {
  * @param {boolean} isDetailView
  */
 function addDocumentsToAgendaItem(agendaItemTitle, files,isDetailView=false) {
+  cy.log('addDocumentsToAgendaItem');
   openAgendaItemDocumentTab(agendaItemTitle,false,isDetailView);
   return addDocuments(files)
 }
@@ -77,6 +80,7 @@ function addDocumentsToAgendaItem(agendaItemTitle, files,isDetailView=false) {
  * @param {boolean} isDetailView
  */
 function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file,isDetailView = false) {
+  cy.log('addNewDocumentVersionToAgendaItem');
   openAgendaItemDocumentTab(agendaItemTitle, true,isDetailView);
   return addNewDocumentVersion(oldFileName, file, 'agendaitems')
 }
@@ -90,6 +94,7 @@ function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file,is
  * @param {string} file
  */
 function addNewDocumentVersionToSubcase(oldFileName, file) {
+  cy.log('addNewDocumentVersionToSubcase');
   cy.clickReverseTab('Documenten');
   return addNewDocumentVersion(oldFileName, file, 'subcases')
 }
@@ -103,6 +108,7 @@ function addNewDocumentVersionToSubcase(oldFileName, file) {
  * @param {boolean} alreadyHasDocs
  */
 function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDetailView = false) {
+  cy.log('openAgendaItemDocumentTab');
   // cy.route('GET', 'documents**').as('getDocuments');
   if(isDetailView) {
     cy.get(agenda.agendaDetailSidebarSubitem)
@@ -119,6 +125,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDe
     // cy.wait('@getDocuments')
     cy.wait(2000); //documents GET occured earlier, general wait instead
   }
+  cy.log('/openAgendaItemDocumentTab');
 }
 
 /**
@@ -130,11 +137,13 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDe
  * @param {boolean} alreadyHasDocs
  */
 function openAgendaItemDossierTab(agendaItemTitle) {
+  cy.log('openAgendaItemDossierTab');
   // cy.route('GET', 'documents**').as('getDocuments');
   cy.openDetailOfAgendaitem(agendaItemTitle);
   cy.get(agenda.agendaItemDossierTab)
     .click()
     .wait(100); //Access-levels GET occured earlier, general wait instead
+  cy.log('/openAgendaItemDossierTab');
 }
 
 /**
@@ -145,6 +154,7 @@ function openAgendaItemDossierTab(agendaItemTitle) {
  * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
  */
 function addDocuments(files) {
+  cy.log('addDocuments');
   cy.route('GET', 'document-types?**').as('getDocumentTypes');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
   cy.route('POST', 'documents').as('createNewDocument');
@@ -187,6 +197,7 @@ function addDocuments(files) {
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
   cy.wait('@createNewDocument', { timeout: 12000 });
   cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
+  cy.log('/addDocuments');
 }
 
 /**
@@ -198,6 +209,7 @@ function addDocuments(files) {
  * @param {String} file - The name of the file without the extension
  */
 function addNewDocumentVersion(oldFileName, file, modelToPatch) {
+  cy.log('addNewDocumentVersion');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
   if (modelToPatch) {
     if(modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
@@ -247,6 +259,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
   } else {
     cy.wait('@patchAnyModel', { timeout: 12000 });
   }
+  cy.log('/addNewDocumentVersion');
 }
 
 /**
@@ -259,6 +272,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
  * @param {String} extension - The extension of the file
  */
 function uploadFile(folder, fileName, extension) {
+  cy.log('uploadFile');
   cy.route('POST', 'files').as('createNewFile');
   cy.route('GET', 'files/**').as('getNewFile');
 
@@ -278,6 +292,7 @@ function uploadFile(folder, fileName, extension) {
   });
   cy.wait('@createNewFile');
   cy.wait('@getNewFile');
+  cy.log('/uploadFile');
 }
 
 /**
@@ -290,6 +305,7 @@ function uploadFile(folder, fileName, extension) {
  * @param {String} extension - The extension of the file
  */
 function uploadUsersFile(folder, fileName, extension) {
+  cy.log('uploadUsersFile');
   cy.route('POST', 'user-management-service/import-users').as('createNewFile');
   cy.route('GET', 'users?**').as('getNewFile');
   const fileFullName = fileName + '.' + extension;
@@ -303,6 +319,7 @@ function uploadUsersFile(folder, fileName, extension) {
   });
   cy.wait('@createNewFile');
   cy.wait('@getNewFile');
+  cy.log('/uploadUsersFile');
 }
 
 /**
@@ -314,6 +331,7 @@ function uploadUsersFile(folder, fileName, extension) {
  * @param {String} file - The name of the file without the extension
  */
 function addNewDocumentVersionToSignedDocument(oldFileName, file) {
+  cy.log('addNewDocumentVersionToSignedDocument');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
 
   cy.get('.vlc-document-card__content .vl-title--h6', { timeout: 12000 })
@@ -339,4 +357,5 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
     cy.get(form.formSave).click();
   });
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
+  cy.log('/addNewDocumentVersionToSignedDocument');
 }

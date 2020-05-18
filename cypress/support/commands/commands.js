@@ -13,6 +13,8 @@ Cypress.Commands.add('verifyAlertSuccess', verifyAlertSuccess);
  * @param {String} tabName The name of the tab to click on, case sensitive
  */
 function verifyAlertSuccess() {
+  cy.log('verifyAlertSuccess');
   cy.get('.toasts-container', { timeout: 12000 }).contains('Gelukt').should('be.visible');
+  cy.log('/verifyAlertSuccess');
 }
 
