@@ -62,58 +62,18 @@ export default Component.extend(RdfaEditorMixin, {
       this.toggleProperty('isEditing');
     },
 
-    // TODO refactor this, most of this code is dead
     async saveChanges() {
       this._super.call(this);
       this.set('isLoading', true);
-      const { isAgendaItem } = this; // always undefined
-      // This item is always of type decision
-      const item = await this.get('item');
-      item.set('modified', moment().utc().toDate());
 
-      if (isAgendaItem && !item.showAsRemark) {
-        // dead code because item is decision
-        const isDesignAgenda = await item.get('isDesignAgenda');
-        if (isDesignAgenda) {
-          const agendaitemSubcase = await item.get('subcase');
-          await this.setNewPropertiesToModel(agendaitemSubcase).catch((e) => {
-            this.set('isLoading', false);
-            throw(e);
-          });
-          agendaitemSubcase.reload();
-        }
-        await this.setNewPropertiesToModel(item).then(async () => {
-          const agenda = await item.get('agenda');
-          updateModifiedProperty(agenda);
-          item.reload();
-        }).catch((e) => {
-          this.set('isLoading', false);
-          throw(e);
-        });
-      } else {
-        // alive code
-        await this.setNewPropertiesToModel(item).catch((e) => {
-          this.set('isLoading', false);
-          throw(e);
-        });
-        // dead code because item is decision
-        const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
-        if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
-          await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
-            await this.setNewPropertiesToModel(agendaitem).then(async () => {
-              const agenda = await item.get('agenda');
-              updateModifiedProperty(agenda).then((agenda) => {
-                agenda.reload();
-              });
-              await item.reload();
-              item.notifyPropertyChanged('decisions');
-            }).catch((e) => {
-              this.set('isLoading', false);
-              throw(e);
-            });
-          }));
-        }
-      }
+      const decision = await this.get('item');
+      decision.set('modified', moment().utc().toDate());
+
+      await this.setNewPropertiesToModel(decision).catch((e) => {
+        this.set('isLoading', false);
+        throw(e);
+      });
+
       await this.setDecisionPhaseToSubcase();
 
       if (!this.get('isDestroyed')) {
