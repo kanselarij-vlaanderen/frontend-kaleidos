@@ -16,6 +16,8 @@ export default Component.extend(RdfaEditorMixin, {
     'mandateeProposal',
     'remark',
   ]),
+  documentVersionsSelected: null,
+  isEditing: false,
 
   subtitle: cached('item.subtitle'), // TODO in class syntax use as a decorator instead
   text: cached('item.text'), // TODO in class syntax use as a decorator instead
@@ -50,6 +52,7 @@ export default Component.extend(RdfaEditorMixin, {
       return false;
     }
   }),
+
   async saveChanges() {
     this.set('isLoading', true);
     const item = await this.get('item');
