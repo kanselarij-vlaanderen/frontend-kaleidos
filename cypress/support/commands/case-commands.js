@@ -22,7 +22,9 @@ Cypress.Commands.add('openCase', openCase);
 function createCase(confidential, shortTitle) {
   cy.log('createCase');
   cy.route('POST', '/cases').as('createNewCase');
+  cy.route('GET', '/cases/search').as('getCases');
   cy.visit('/dossiers');
+  cy.wait('@getCases');
 
   cy.get('.vlc-toolbar__item .vl-button')
     .contains('Nieuw dossier aanmaken')
