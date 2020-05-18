@@ -13,7 +13,7 @@ context('Create case as Admin user', () => {
   });
 
   it('Create a case with empty values', () => {
-    cy.route('GET', '/cases/search').as('getCases');
+    cy.route('GET', '/cases/search**').as('getCases');
     cy.visit('/dossiers');
     cy.wait('@getCases');
       cy.get(cases.casesHeaderAddCase).click();
@@ -22,7 +22,7 @@ context('Create case as Admin user', () => {
   });
 
   it('Create a case with confidentiality', () => {
-    cy.route('GET', '/cases/search').as('getCases');
+    cy.route('GET', '/cases/search**').as('getCases');
     cy.visit('/dossiers');
     cy.wait('@getCases');
     cy.get(cases.casesHeaderAddCase).click();
@@ -32,7 +32,7 @@ context('Create case as Admin user', () => {
   });
 
   it('Create a case with confidentiality and short title', () => {
-    cy.route('GET', '/cases/search').as('getCases');
+    cy.route('GET', '/cases/search**').as('getCases');
     cy.visit('/dossiers');
     cy.wait('@getCases');
     cy.get(cases.casesHeaderAddCase).click();
@@ -42,7 +42,7 @@ context('Create case as Admin user', () => {
   });
 
   it('Create a case with short title', () => {
-    cy.route('GET', '/cases/search').as('getCases');
+    cy.route('GET', '/cases/search**').as('getCases');
     cy.visit('/dossiers');
     cy.wait('@getCases');
     cy.get(cases.casesHeaderAddCase).click();
@@ -51,7 +51,7 @@ context('Create case as Admin user', () => {
   });
 
   it('Hitting cancel should hide the model', () => {
-    cy.route('GET', '/cases/search').as('getCases');
+    cy.route('GET', '/cases/search**').as('getCases');
     cy.visit('/dossiers');
     cy.wait('@getCases');
     cy.get(cases.casesHeaderAddCase).click();
