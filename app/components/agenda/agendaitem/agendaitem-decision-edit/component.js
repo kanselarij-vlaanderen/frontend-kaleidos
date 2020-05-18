@@ -2,10 +2,12 @@ import Component from '@ember/component';
 import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { cached } from 'fe-redpencil/decorators/cached';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import { inject as service } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export default Component.extend(RdfaEditorMixin, {
+  store: service(),
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze(['approved', 'richtext']),
   approved: cached('item.approved'), // TODO in class syntax use as a decorator instead
