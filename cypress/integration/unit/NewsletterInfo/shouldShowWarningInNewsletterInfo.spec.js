@@ -40,50 +40,8 @@ context('Show warning in newsletterinfo', () => {
     cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
-    cy.openAgendaItemDocumentTab(subcaseTitle1,false);
-    // cy.addDocuments(files);
-    cy.route('GET', 'document-types?**').as('getDocumentTypes');
-    cy.route('POST', 'document-versions').as('createNewDocumentVersion');
-    cy.route('POST', 'documents').as('createNewDocument');
-    cy.route('PATCH', '**').as('patchModel');
-
-    cy.contains('Documenten toevoegen').click();
-    cy.get('.vl-modal-dialog').as('fileUploadDialog');
-
-    files.forEach((file, index) => {
-      cy.get('@fileUploadDialog').within(() => {
-        cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-
-        cy.get('.vl-uploaded-document', { timeout: 10000 }).should('have.length', index+1).eq(index).within(() => {
-          if(file.newFileName) {
-            cy.get('.vlc-input-field-block').eq(0).within(() => {
-              cy.get('.vl-input-field').clear().type(file.newFileName);
-            });
-          }
-        });
-      });
-
-      if(file.fileType) {
-        cy.get('@fileUploadDialog').within(() => {
-          cy.get('.vl-uploaded-document').eq(index).within(() => {
-            cy.get('.vlc-input-field-block').eq(1).within(() => {
-              cy.get('.ember-power-select-trigger').click();
-              cy.wait('@getDocumentTypes', { timeout: 12000 });
-            });
-          });
-        });
-        cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-          cy.contains(file.fileType).click();
-        });
-      }
-    });
-    cy.get('@fileUploadDialog').within(() => {
-      cy.get('.vl-button').contains('Documenten toevoegen').click();
-    });
-
-    cy.wait('@createNewDocumentVersion', { timeout: 12000 });
-    cy.wait('@createNewDocument', { timeout: 12000 });
-    cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
+    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
+    
     cy.route('/');
     cy.openAgendaForDate(agendaDate);
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);

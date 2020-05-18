@@ -10,9 +10,6 @@ const selectors = {
     dialogWindow: '[data-test-vl-modal-dialogwindow]',
     close: '[data-test-vl-modal-close]',
   },
-  createNewAnnouncementModal: {
-    longTitleSubcase: '[data-test-vl-create-announcement-long-title-subcase]',
-  },
   manageInSettingsModal: {
     add: '[data-test-vl-model-manager-add]',
     edit:  '[data-test-vl-model-manager-edit]',
