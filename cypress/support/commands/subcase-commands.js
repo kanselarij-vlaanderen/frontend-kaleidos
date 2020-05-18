@@ -28,6 +28,7 @@ Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);
  * @param {number} [index] The list index of the subcase to select, default 0
  */
 function openSubcase(index=0){
+  cy.log('openSubcase');
   // cy.route('GET', '/subcases?**').as('getSubcases');
   // cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
   // cy.wait('@getSubcases', { timeout: 12000 });
@@ -38,6 +39,7 @@ function openSubcase(index=0){
     cy.get('.vl-title').eq(0).click();
   })
   // cy.wait('@getCaseSubcases', { timeout: 12000 });
+  cy.log('/openSubcase');
 }
 
 /**
@@ -55,6 +57,7 @@ function openSubcase(index=0){
  * @param {boolean} [inNewsletter] - Will toggle "in newsletter" if true
  */
 function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
+  cy.log('changeSubcaseAccessLevel');
   cy.route('PATCH','/subcases/*').as('patchSubcase');
 
   cy.get('.vl-title--h4').contains(shortTitle).parents('.vl-u-spacer-extended-bottom-l').within(() => {
@@ -107,6 +110,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
       .click();
   });
   cy.wait('@patchSubcase', { timeout: 20000 });
+  cy.log('/changeSubcaseAccessLevel');
 }
 
 
@@ -118,6 +122,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
  * @param {Array<Number|String>} themes - An array of theme names that must match exactly or an array of numbers that correspond to the checkboxes in themes
  */
 function addSubcaseThemes(themes) {
+  cy.log('addSubcaseThemes');
   cy.route('GET', '/themes').as('getThemes');
   cy.route('PATCH','/subcases/*').as('patchSubcase');
   cy.get('.vl-title--h4').contains(`Thema's`).parents('.vl-u-spacer-extended-bottom-l').as('subcaseTheme');
@@ -139,6 +144,7 @@ function addSubcaseThemes(themes) {
       .click();
   });
   cy.wait('@patchSubcase', { timeout: 20000 });
+  cy.log('/addSubcaseThemes');
 }
 
 //TODO use arrays of fields and domains, search on mandatee name
@@ -153,6 +159,7 @@ function addSubcaseThemes(themes) {
  * @param {Number} domainNumber - The list index of the domain
  */
 function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
+  cy.log('addSubcaseMandatee');
   cy.route('GET', '/mandatees?**').as('getMandatees');
   cy.route('GET', '/ise-codes/**').as('getIseCodes');
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
@@ -190,6 +197,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
     .click();
   });
   cy.wait('@patchSubcase', { timeout: 20000 });
+  cy.log('/addSubcaseMandatee');
 }
 
 /**
@@ -199,6 +207,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
  * @param {date} agendaDate - The list index of the mandatee
  */
 function proposeSubcaseForAgenda (agendaDate) {
+  cy.log('proposeSubcaseForAgenda');
   cy.route('POST','/agendaitems').as('createNewAgendaitem');
   cy.route('PATCH','/agendas/*').as('patchAgenda');
   cy.route('PATCH','/subcases/*').as('patchSubcase');
@@ -218,6 +227,7 @@ function proposeSubcaseForAgenda (agendaDate) {
   cy.wait('@patchSubcase', { timeout: 12000 });
   cy.wait('@createSubcasePhase', { timeout: 12000 });
   cy.wait('@patchAgenda', { timeout: 12000 });
+  cy.log('/proposeSubcaseForAgenda');
 }
 
 /**
@@ -227,6 +237,7 @@ function proposeSubcaseForAgenda (agendaDate) {
  * @function
  */
 function deleteSubcase() {
+  cy.log('deleteSubcase');
   cy.route('DELETE', '/subcases/**').as('deleteSubcase');
   cy.get('.vl-button--icon-before')
     .contains('Acties')
@@ -239,6 +250,7 @@ function deleteSubcase() {
     cy.get('button').contains('Verwijderen').click();
   })
   cy.wait('@deleteSubcase', { timeout: 20000 });
+  cy.log('/deleteSubcase');
 }
 
 
@@ -251,6 +263,7 @@ function deleteSubcase() {
  * @returns the month in dutch
  */
 function getTranslatedMonth(month) {
+  cy.log('getTranslatedMonth');
   switch(month) {
     case 0:
       return 'januari';
@@ -279,4 +292,5 @@ function getTranslatedMonth(month) {
     default:
       break;
   }
+  cy.log('/getTranslatedMonth');
 }
