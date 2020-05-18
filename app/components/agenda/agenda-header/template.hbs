@@ -198,7 +198,7 @@
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
                     {{#if (not currentSession.isFinal)}}
-                      {{#if (await hasMultipleAgendas)}}
+                      {{#if (await isLockable)}}
                         <a href=""
                            data-test-agenda-header-lockAgenda
                            class="vl-link vl-link--block vl-u-text--error"

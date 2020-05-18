@@ -39,8 +39,16 @@ export default Component.extend(FileSaverMixin, {
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
-  hasMultipleAgendas: computed('agendas.@each', async function () {
-    return this.agendas && this.agendas.then(agendas => agendas.length > 1);
+  isLockable: computed('agendas.@each', async function () {
+    if (this.agendas && this.agendas.then(agendas => agendas.length > 1)) {
+      return true;
+    } else {
+      if (this.agendas.get('firstObject.isDesignAgenda')) {
+        return false;
+      } else {
+        return true;
+      }
+    }
   }),
 
   currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function () {
@@ -48,7 +56,7 @@ export default Component.extend(FileSaverMixin, {
   }),
 
   designAgendaPresent: filter('currentSession.agendas.@each.name', function (agenda) {
-    return agenda.get('name') === 'Ontwerpagenda';
+    return agenda.get('isDesignAgenda');
   }),
 
   shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function () {
