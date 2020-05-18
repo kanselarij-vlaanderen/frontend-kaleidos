@@ -23,7 +23,6 @@
   text-decoration: none;
   color: $dove-gray;
   background: $porcelain;
-  border-top: 0.01rem solid $ghost;
   border-bottom: 0.01rem solid $ghost;
 }
 
@@ -55,6 +54,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active,
 a.vlc-agenda-detail-sidebar__sub-item--active:hover,
 a.vlc-agenda-detail-sidebar__sub-item--active:active {
   background: $science-blue;
+  border: none;
   color: #fff;
   span {
     color: #fff;
@@ -129,6 +129,31 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   text-align: right;
   margin-right: 0.5rem;
   line-height: 140%;
+}
+
+// 'No items available' item
+.vlc-agenda-detail-sidebar__no-items-message {
+  display: flex;
+  padding: 1.8rem 1.5rem;
+}
+
+.vlc-agenda-detail-sidebar__info-bubble {
+  margin-right: 1.5rem;
+
+  width: 3.5rem;
+  height: 3.5rem;
+
+  text-align: center;
+  line-height: 4rem;
+  font-size: 1.7rem;
+
+  background-color: #E8EBEE;
+  color: #666666;
+  border-radius: 3.5rem;
+}
+
+.vlc-agenda-detail-sidebar__no-items-text {
+  line-height: 3.5rem;
 }
 
 /* Agenda items compare view
@@ -212,7 +237,6 @@ $i: 0;
   $i: $i + 1;
 }
 
-//
 .vlc-agenda-detail-sidebar-compare__item.agenda-2-item-3 {
   opacity: 0.30;
 }
@@ -231,4 +255,3 @@ $i: 0;
     font-weight: 700;
   }
 }
-

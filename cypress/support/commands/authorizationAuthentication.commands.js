@@ -35,6 +35,7 @@ function login(name){
       }));
     });
   });
+  cy.visit('').wait('@getCurrentSession'); // Sorry, now this works like a charm...
   cy.log('/login');
 }
 
