@@ -9,7 +9,6 @@ const selectors = {
   selectsignature: '[data-test-agenda-header-selectsignature]',
   downloadddocuments: '[data-test-agenda-header-downloadddocuments]',
   agendaHeaderDeleteAgenda: '[data-test-agenda-header-deleteAgenda]',
-  // addAnnouncement: '[data-test-agenda-header-announcement]',
   lockAgenda: '[data-test-agenda-header-lockAgenda]',
   unlockAgenda: '[data-test-agenda-header-unlockAgenda]',
   releaseDecisions: '[data-test-agenda-header-releaseDecisions]',
