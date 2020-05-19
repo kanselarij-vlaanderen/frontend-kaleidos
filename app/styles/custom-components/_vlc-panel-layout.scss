@@ -52,3 +52,34 @@
   height: 100%;
   min-width: 0;
 }
+
+.vlc-panel-layout-border {
+  border: 1px solid #C6CDD3;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+.vlc-panel-layout-header {
+  border: 1px solid #C6CDD3;
+  box-sizing: border-box;
+  padding: 1rem;
+  justify-content: space-between;
+
+  .vlc-panel-layout-button-seperator {
+    margin-left: 1.5rem;
+  }
+}
+
+.vlc-panel-layout-no-border-bottom {
+  border-bottom: unset;
+}
+
+.vlc-panel-layout-footer {
+  justify-content: flex-end;
+}
+
+.vlc-panel-layout-padding {
+  padding: 1.5rem;
+}
+
+

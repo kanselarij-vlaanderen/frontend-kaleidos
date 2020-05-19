@@ -23,12 +23,13 @@
 </div>
 
 {{#if (is-empty agendaitems)}}
-  <div class="vl-u-spacer-extended-top-s">
-    {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
+  <div class="vlc-agenda-detail-sidebar__no-items-message">
+    <span class="vlc-agenda-detail-sidebar__info-bubble"><i class="ki-info-circle" /></span>
+    <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
   </div>
 {{/if}}
 <div class="{{spacerClass}}">
-  {{#if (and isEditor (not isShowingChanges))}}
+  {{#if (and currentSessionService.isEditor (not isShowingChanges))}}
     {{#sortable-group
       tagName="ul"
       onChange=(action "reorderItems")
@@ -92,6 +93,7 @@
     </ul>
   {{/if}}
 </div>
+
 {{#if (not selectedAgendaItem)}}
   <div class="vlc-agenda-detail-sidebar-section-header">
     <h3 class="vl-title--h3 vlc-agenda-detail-sidebar-section-header__title">
@@ -107,7 +109,7 @@
 {{/if}}
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
-    {{#if isEditor}}
+    {{#if currentSessionService.isEditor}}
       {{#sortable-group
         tagName="ul"
         onChange=(action "reorderAnnouncements")
@@ -146,6 +148,9 @@
       {{/each}}
     {{/if}}
   {{else}}
-    {{web-components/vl-alert message=(t "no-announcements-yet")}}
+    <div class="vlc-agenda-detail-sidebar__no-items-message">
+      <span class="vlc-agenda-detail-sidebar__info-bubble"><i class="ki-info-circle" /></span>
+      <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-announcements-yet"}}</p>
+    </div>
   {{/if}}
 </div>

@@ -4,16 +4,18 @@
 
 Cypress.Commands.add('login',login);
 Cypress.Commands.add('logout',logout);
-
+Cypress.Commands.add('loginFlow',loginFlow);
+Cypress.Commands.add('logoutFlow',logoutFlow);
 
 /**
- * @description Goes to the mock-login page and selects the profile that matches the given name.
+ * @description Bypasses the mock-login and inserts a localstorage item
  * @name login
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} name the profile to log in with, case sensitive
  */
 function login(name){
+  cy.log('login');
   cy.route('GET', '/mock/sessions/current').as('getCurrentSession');
   const EMBER_SIMPLE_AUTH_LS_KEY = 'ember_simple_auth-session';
   cy.fixture('mock-login').then((loginUsers) => {
@@ -34,6 +36,7 @@ function login(name){
     });
   });
   cy.visit('').wait('@getCurrentSession'); // Sorry, now this works like a charm...
+  cy.log('/login');
 }
 
 
@@ -44,10 +47,48 @@ function login(name){
  * @function
  */
 function logout(){
+  cy.log('logout');
   cy.request({
     method: 'DELETE',
     url: '/mock/sessions/current',
   }).then(() => {
     cy.visit('/');
   });
+  cy.log('/logout');
+}
+
+/**
+ * @description Goes to the mock-login page and selects the profile that matches the given name.
+ * @name loginFlow
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} name the profile to log in with, case sensitive
+ */
+function loginFlow(name){
+  cy.log('loginFlow');
+  cy.server();
+  cy.route('POST', '/mock/sessions').as('mockLogin');
+  cy.visit('mock-login');
+  cy.get('.grid', { timeout: 12000 }).within(() => {
+    cy.contains(name).click()
+      .wait('@mockLogin');
+  });
+  cy.log('/loginFlow');
+}
+
+
+/**
+ * @description Goes to the mock-login page and selects the profile that matches the given name.
+ * @name logoutFlow
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function logoutFlow(){
+  cy.log('logoutFlow');
+  cy.server();
+  cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
+  cy.visit('');
+  cy.contains('Afmelden', { timeout: 12000 }).click({force: true});
+  cy.wait('@mockLogout');
+  cy.log('/logoutFlow');
 }

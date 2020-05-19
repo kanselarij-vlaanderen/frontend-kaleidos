@@ -29,6 +29,7 @@ context('Agendaitem changes tests', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
     // when toggling show changes  the agendaitem added since current agenda should show
     cy.addAgendaitemToAgenda(subcaseTitle2, false);
+    cy.setFormalOkOnItemWithIndex(2);
     cy.toggleShowChanges(true);
     cy.get('li.vlc-agenda-items__sub-item').should('have.length', 3).then(() => {
       cy.agendaItemExists(subcaseTitle2);

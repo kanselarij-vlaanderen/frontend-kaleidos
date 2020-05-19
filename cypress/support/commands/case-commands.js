@@ -20,6 +20,7 @@ Cypress.Commands.add('openCase', openCase);
  * @returns {Promise<String>} the id of the created case
  */
 function createCase(confidential, shortTitle) {
+  cy.log('createCase');
   cy.route('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
@@ -58,6 +59,7 @@ function createCase(confidential, shortTitle) {
         resolve(caseId);
       });
     });
+  cy.log('/createCase');
 }
 
 
@@ -75,6 +77,7 @@ function createCase(confidential, shortTitle) {
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.server();
+  cy.log('addSubcase');
   cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
   cy.route('POST', '/newsletter-infos').as('addSubcase-createNewsletter');
 
@@ -135,6 +138,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
         resolve(subcaseId);
       });
     });
+  cy.log('/addSubcase');
 }
 
 /**
@@ -145,6 +149,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
  * @param {String} caseTitle The title to search in the list of cases, should be unique
  */
 function openCase(caseTitle) {
+  cy.log('openCase');
   cy.visit('dossiers');
   cy.get('#dossierId').type(caseTitle);
   cy.route('GET', `/cases/search?**${caseTitle.split(" ", 1)}**`).as('getCaseSearchResult');
@@ -156,4 +161,5 @@ function openCase(caseTitle) {
   cy.get('@rows').within(() => {
     cy.contains(caseTitle).parents('tr').click();
   });
+  cy.log('/openCase');
 }

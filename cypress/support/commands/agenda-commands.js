@@ -17,7 +17,6 @@ Cypress.Commands.add('deleteAgenda', deleteAgenda);
 Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
 Cypress.Commands.add('approveCoAgendaitem', approveCoAgendaitem);
 Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
-Cypress.Commands.add('addRemarkToAgenda', addRemarkToAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
 Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
 Cypress.Commands.add('agendaItemExists', agendaItemExists);
@@ -376,54 +375,6 @@ function approveDesignAgenda() {
 }
 
 /**
- * @description Creates a remark for an agenda and attaches any file in the files array
- * @name addRemarkToAgenda
- * @memberOf Cypress.Chainable#
- * @function
- * @param {String} title - The title of the remark
- * @param {String} remark - The remark
- * @param {{folder: String, fileName: String, fileExtension: String}[]} file
- */
-function addRemarkToAgenda(title, remark, files) {
-  cy.route('POST', '/agendaitems').as('createNewAgendaitem');
-  cy.route('PATCH', '**').as('patchModel');
-
-  cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
-    .contains('Acties')
-    .click();
-  cy.get(actionModel.announcement)
-    .contains('Mededeling toevoegen')
-    .click();
-
-  cy.get('.vl-modal-dialog').as('dialog').within(() => {
-    cy.get('.vlc-input-field-block').as('newRemarkForm').should('have.length', 3);
-
-    //Set title
-    cy.get('@newRemarkForm').eq(0).within(() => {
-      cy.get('.vl-input-field').click().type(title);
-    });
-
-    //Set remark
-    cy.get('@newRemarkForm').eq(1).within(() => {
-      cy.get('.vl-textarea').click().type(remark);
-    });
-
-    //add file
-    cy.get('@newRemarkForm').eq(2).within(() => {
-      files.forEach((file) => {
-        cy.get('@dialog').within(() => {
-          cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-        });
-      });
-    });
-    cy.get('.vl-button').contains('Mededeling toevoegen').click();
-  });
-  cy.wait('@createNewAgendaitem', { timeout: 20000 })
-  //TODO patchmodel does not happen ??
-  // cy.wait('@patchModel', { timeout: 20000 }).verifyAlertSuccess();
-}
-
-/**
  * @description Add a new case to the agenda
  * @name addAgendaitemToAgenda
  * @memberOf Cypress.Chainable#
@@ -501,6 +452,7 @@ function toggleShowChanges(refresh) {
     cy.get('.vlc-side-nav-item', { timeout: 12000 })
       .first({ timeout: 12000 })
       .click();
+      cy.wait(2000); //a lot of data is being reloaded
     // cy.wait('@getChanges', {timeout: 20000});
   } else {
     cy.clickReverseTab('Overzicht');
@@ -509,6 +461,7 @@ function toggleShowChanges(refresh) {
   cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
     .first()
     .click();
+  cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
 }
 
 /**

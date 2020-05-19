@@ -1,10 +1,9 @@
 import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
 
   intl: service(),
@@ -12,6 +11,7 @@ export default Component.extend(isAuthenticatedMixin, {
   routing: service('-routing'),
   toaster: service(),
   newsletterService: service(),
+  currentSession: service(),
 
   isShowingOptions: null,
   agenda: null,

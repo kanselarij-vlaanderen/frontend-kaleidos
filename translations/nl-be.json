@@ -77,7 +77,6 @@
   "contact-person": "Contactpersoon",
   "content": "Inhoud",
   "create": "Aanmaken",
-  "create-announcement": "Mededeling toevoegen",
   "create-case": "Dossier aanmaken",
   "create-comment": "Opmerking aanmaken",
   "create-mandatee": "Minister toevoegen",
@@ -551,6 +550,8 @@
   "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
   "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "newsitem-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
+  "select-minister": "Selecteer een minister",
+  "agenda-comment-type-here": "Typ hier jouw opmerking...",
   "change-mandatee-end-date": "Bent u zeker dat u de einddatum wenst aan te passen? Deze minister staat nog geagendeerd op agendapunten.",
   "change-mandatee-change-end-date": "Eindatum aanpassen",
   "show-active-minister-alert": "Opgelet de actieve minister staat nog geagendeerd op één of meerdere toekomstige agenda's.",
@@ -562,5 +563,14 @@
   "kaleidos": "Kaleidos",
   "amount-per-page": "Aantal items per pagina",
   "document-viewer-message-before-type": "Documenten van het type ",
-  "document-viewer-message-after-type": " worden momenteel niet ondersteund om te bekijken."
+  "document-viewer-message-after-type": " worden momenteel niet ondersteund om te bekijken.",
+  "style-guide-basic": "Basics",
+  "style-guide-typography": "Typography",
+  "style-guide-components": "Components",
+  "style-guide-buttons": "Buttons",
+  "style-guide-pills": "Pills",
+  "style-guide-panels": "Panels",
+  "style-guide-title": "Style guide",
+  "style-guide-icons": "Icons",
+  "option-others": "Andere"
 }

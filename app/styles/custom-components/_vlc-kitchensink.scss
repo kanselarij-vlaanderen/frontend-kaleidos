@@ -1,0 +1,83 @@
+/* ==========================================================================
+  Kitchensink
+   ========================================================================== */
+
+/* Modifiers on main object
+   ========================================================================== */
+.vlc-kitchensink__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: auto;
+  font-family: "Flanders Art Sans", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.6rem;
+  width: 100%;
+  height: 100%;
+}
+
+.vlc-kitchensink__container--main {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  text-align: left;
+}
+
+.vlc-kitchensink__header {
+  font-weight: 500;
+  font-size: 2.4rem;
+  line-height: 2.9rem;
+  margin-bottom: 2rem;
+  color: #000000;
+}
+
+/* Modifiers on kitchensink sample
+   ========================================================================== */
+.vlc-kitchensink__sample {
+  border: 1px solid #DDD;
+  padding: 4rem;
+  margin: 0 0 2rem;
+}
+
+.vlc-kitchensink__sample--nested {
+  border: 2px solid #DDD;
+  padding: 4rem;
+  margin: 0 0 2rem;
+}
+
+/* Modifiers on navigation object
+   ========================================================================== */
+.vlc-kitchensink__navigation {
+  border: #CBD2DA solid 0.1rem;
+  width: 28.6rem;
+  height: 100%;
+  padding-top: 1.6rem;
+  background: #F3F5F6;
+}
+.vlc-kitchensink__navigation--item{
+  margin-left: 1rem;
+  margin-top: calc(20% - 2.4rem / 2);
+}
+
+.vlc-kitchensink__navigation--link {
+  color: #333332;
+  text-decoration: none;
+  letter-spacing: 0.05rem;
+}
+
+.vlc-kitchensink__navigation--link:hover {
+  color: #333332;
+  text-decoration: #0A6C9B underline;
+}
+.vlc-kitchensink__navigation--item:active {
+  color: #333332;
+}
+
+.vlc-kitchensink__navigation--header {
+  margin-left: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+

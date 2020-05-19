@@ -6,7 +6,6 @@ import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
 
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
@@ -15,11 +14,12 @@ import {
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
+export default Component.extend(FileSaverMixin, {
   classNames: ['vlc-page-header'],
 
   store: service(),
-  sessionService: service(),
+  sessionService: service('session-service'),
+  currentSessionService: service('current-session'),
   agendaService: service(),
   fileService: service(),
   router: service(),
@@ -29,7 +29,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
   isShowingOptions: false,
   isPrintingNotes: false,
-  isAddingAnnouncement: false,
   isAddingAgendaitems: false,
   isApprovingAgenda: false,
   isDeletingAgenda: false,
@@ -47,7 +46,7 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
   }),
 
   currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function () {
-    return await this.currentSession.get('sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
+    return await this.get('currentSession.sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
   designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', function (agenda) {
@@ -104,17 +103,15 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
       //TODO possible dead code, there is always an agenda ?
       return;
     }
-    // need to have agendas loaded before we can check stuff
     await session.get('agendas');
-    debugger
-    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(session, agenda);
+    const previousAgenda = await this.get('sessionService').findPreviousAgendaOfSession(session, agenda);
     await this.agendaService.deleteAgenda(agenda);
     if (previousAgenda) {
       await session.save();
       await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems', session.id, previousAgenda.get('id'));
     } else {
-      await this.sessionService.deleteSession(session);
+      await this.get('sessionService').deleteSession(session);
     }
   },
 
@@ -235,14 +232,6 @@ export default Component.extend(isAuthenticatedMixin, FileSaverMixin, {
 
     navigateToSubCases() {
       this.set('isAddingAgendaitems', true);
-    },
-
-    toggleIsAddingAnnouncement() {
-      this.toggleProperty('isAddingAnnouncement');
-    },
-
-    navigateToCreateAnnouncement() {
-      this.set('addingAnnouncement', true);
     },
 
     navigateToDocuments() {

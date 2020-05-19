@@ -181,7 +181,10 @@ context('Subcase tests', () => {
     // Assert status also hidden
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
-    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid'); //CHECK na save in agendaitem
+    cy.route('PATCH','/agendaitems/*').as('patchAgendaitem');
+    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') //CHECK na save in agendaitem
+      .wait('@patchAgendaitem'); 
+
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
     //"Go to agendaItem
