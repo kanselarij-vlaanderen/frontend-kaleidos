@@ -22,6 +22,15 @@ export default Component.extend({
     return this.subcase.get('remarkType');
   }),
 
+  caseTypes: computed('store', async function () {
+    return await this.store.query('case-type', {
+      sort: '-label',
+      filter: {
+        deprecated: false,
+      },
+    });
+  }),
+
   latestMeetingId: computed('subcase.latestMeeting', function () {
     return this.subcase.get('latestMeeting').then(meeting => meeting.id);
   }),
@@ -53,14 +62,13 @@ export default Component.extend({
     async selectType(type) {
       const subcase = this.get('subcase');
       const caze = await subcase.get('case');
-      const subcaseName = await caze.getNameForNextSubcase(subcase, type);
+      const subcaseName = type.get('label');
       this.set('type', type);
       this.set('subcaseName', subcaseName);
     },
 
-    selectRemarkType(item) {
-      this.set('remarkType', item);
-      if (item.get('id') === CONFIG.remarkId) {
+    selectRemarkType(id) {
+      if (id === CONFIG.remarkId) {
         this.set('showAsRemark', true);
       } else {
         this.set('showAsRemark', false);
@@ -70,7 +78,6 @@ export default Component.extend({
     async saveChanges() {
       const resetFormallyOk = true;
       set(this, 'isLoading', true);
-
 
       const propertiesToSetOnAgendaItem = {
         'showAsRemark': this.get('showAsRemark')

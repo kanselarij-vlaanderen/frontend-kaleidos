@@ -3,8 +3,7 @@
     <div class="vl-u-display-flex vlc-u-flex-space-between vl-col-4-4">
       {{web-components/vl-radio-button-list
         title=(t "subcase-type")
-        modelName="case-type"
-        selectedModel=remarkType
+        optionList=(await caseTypes)
         modelChanged=(action "typeChanged")
       }}
       <div class="vl-action-group vl-action-group--align-right">

@@ -18,6 +18,15 @@ export default Component.extend({
     return this.get('case.confidential');
   }),
 
+  caseTypes: computed('store', async function () {
+    return await this.store.query('case-type', {
+      sort: '-label',
+      filter: {
+        deprecated: false,
+      },
+    });
+  }),
+
   async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
     const mandatees = await latestSubcase.get('mandatees');
     const iseCodes = await latestSubcase.get('iseCodes');
