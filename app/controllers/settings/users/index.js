@@ -13,7 +13,7 @@ export default class UsersSettingsController extends Controller {
 
   isUploadingFile = null;
   @tracked size = 10;
-  page = 0;
+  @tracked page = 0;
   queryParams = ['filter'];
   @tracked filterText = '';
 
@@ -31,6 +31,7 @@ export default class UsersSettingsController extends Controller {
   }
 
   set filter(param) {
+    this.page = 0;
     this.filterText = param;
   }
 
