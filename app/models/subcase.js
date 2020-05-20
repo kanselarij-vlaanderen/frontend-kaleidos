@@ -241,16 +241,6 @@ export default ModelWithModifier.extend({
     return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
   }),
 
-  submitter: computed('case.submitter', function () {
-    return PromiseObject.create({
-      promise: this.get('case').then((caze) => {
-        return caze.get('submitter').then((submitter) => {
-          return submitter;
-        });
-      })
-    });
-  }),
-
   approved: computed('decisions', function () {
     return PromiseObject.create({
       promise: this.get('decisions').then((decisions) => {
