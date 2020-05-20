@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
@@ -13,7 +12,6 @@ import { deprecate } from '@ember/debug';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 
 export default Component.extend(
-  uploadDocumentMixin,
   {
     currentSession: inject(),
     classNames: ['vl-u-spacer--large'],
