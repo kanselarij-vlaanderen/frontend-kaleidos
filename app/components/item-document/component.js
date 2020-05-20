@@ -5,7 +5,7 @@ import moment from 'moment';
 import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import { A } from '@ember/array';
 import { set } from '@ember/object';
-import config from '../utils/config';
+import config from 'fe-redpencil/utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
 import { deprecate } from '@ember/debug';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
