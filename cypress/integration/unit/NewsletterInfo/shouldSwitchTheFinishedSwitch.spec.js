@@ -14,30 +14,23 @@ context('NewsletterInfo: Switching the finished switch', () => {
     cy.visit('/');
   });
 
-  it('Should switch the switch to the right', () => {
-    cy.route('GET', '/meetings/**').as('getMeetings');
-    cy.route('GET', '/agendas/**').as('getAgendas');
+  const goToKortBestek = () => {
+    cy.log('going to kort bestek');
     cy.route('GET', '/themes').as('getThemes');
-    cy.get('.vl-tab > a')
-      .contains('Kort bestek').click();
-    cy.wait('@getMeetings');
-    cy.get('.data-table > tbody > tr').first().click(); //TODO this test could fail if more data is in the default test set, search for specific date
+    cy.visit('/overzicht/5EBA9588751CF70008000012/kort-bestek/5EBA9589751CF70008000013/agendapunten');
     cy.get('table > tbody').get('.lt-body').should('contain.text', 'Nog geen kort bestek voor dit agendapunt.').click();
     cy.wait('@getThemes');
+    cy.log('went to kort bestek');
+  }
+
+  it('Should switch the switch to the right', () => {
+    goToKortBestek();
     cy.get('.vl-checkbox--switch__label').last().scrollIntoView();
     cy.get('.vl-checkbox--switch__label').last().click();
   });
 
   it('Should switch the switch to the right, then to the left', () => {
-    cy.route('GET', '/meetings/**').as('getMeetings');
-    cy.route('GET', '/agendas/**').as('getAgendas');
-    cy.route('GET', '/themes').as('getThemes');
-    cy.get('.vl-tab > a')
-      .contains('Kort bestek').click();
-    cy.wait('@getMeetings');
-    cy.get('.data-table > tbody > tr').first().click(); //TODO this test could fail if more data is in the default test set, search for specific date
-    cy.get('table > tbody').get('.lt-body').should('contain.text', 'Nog geen kort bestek voor dit agendapunt.').click();
-    cy.wait('@getThemes');
+    goToKortBestek();
     cy.get('.vl-checkbox--switch__label').last().scrollIntoView();
     cy.get('.vl-checkbox--switch__label').last().click(); //TODO, clicking the switch triggers a PATCH call, wait for that instead
     cy.wait(3000);

@@ -13,7 +13,7 @@ context('Add files to an agenda', () => {
   });
 
   it('should open an agenda and add documents to it', () => {
-    cy.visit('/agenda/5EBA8CB1DAB6BB0009000001/agendapunten');
+    cy.visit('/vergadering/5EBA8CB1DAB6BB0009000001/agenda/5EBA8CB2DAB6BB0009000002/agendapunten');
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0).within(() => {
@@ -37,7 +37,7 @@ context('Add files to an agenda', () => {
   });
 
   it('should add several documents that should be sorted', () => {
-    cy.visit('/agenda/5EBA8CCADAB6BB0009000005/agendapunten');
+    cy.visit('/vergadering/5EBA8CCADAB6BB0009000005/agenda/5EBA8CCCDAB6BB0009000006/agendapunten');
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2018 1010 DOC.0005-2 - 2e', fileType: 'Nota'}]);
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-1 - 1e', fileType: 'Nota'}]);
     // TODO The sorting is fixed in agenda print branch using "/ gave a different result then "-
@@ -78,7 +78,7 @@ context('Add files to an agenda', () => {
   });
 
   it('should delete documents, document-versions and files', () => {
-    cy.visit('/agenda/5EBA8CE1DAB6BB0009000009/documenten');
+    cy.visit('/vergadering/5EBA8CE1DAB6BB0009000009/agenda/5EBA8CE3DAB6BB000900000A/documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards');
     });

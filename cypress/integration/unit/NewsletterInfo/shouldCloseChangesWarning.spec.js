@@ -22,7 +22,7 @@ context('Show warning in newsletterinfo', () => {
 
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
 
-    cy.visit('/agenda/5EBA48CF95A2760008000006/agendapunten');
+    cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
     cy.get(agenda.agendaItemKortBestekTab)
       .should('be.visible')

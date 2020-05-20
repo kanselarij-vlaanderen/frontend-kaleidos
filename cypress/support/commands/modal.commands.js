@@ -47,7 +47,6 @@ function openActionModal() {
 
   cy.get(actionModal.showActionOptions).should('be.visible').click();
   cy.get(actionModal.navigatetosubcases).should(BE_VISIBLE);
-  cy.get(actionModal.announcement).should(BE_VISIBLE);
   cy.get(actionModal.navigatetodecisions).should(BE_VISIBLE);
   cy.get(actionModal.navigatetonewsletter).should(BE_VISIBLE);
   cy.get(actionModal.navigatetonotes).should(BE_VISIBLE);
