@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import EmberObject from '@ember/object';
 import { action, computed } from '@ember/object';
-import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import DS from 'ember-data';
 
@@ -11,8 +10,7 @@ export default class AccessLevelPill extends Component {
   @service() intl;
   @service('current-session') session;
   classNameBindings = [':vl-u-display-flex', ':vl-u-flex-align-center'];
-
-  @alias('accessLevel.isPending') loading;
+  loading = false;
 
   @computed('item.accessLevel')
   get accessLevel() {
@@ -97,9 +95,11 @@ export default class AccessLevelPill extends Component {
 
   @action
   async save() {
-    this.set('loading', true);
-    await this.item.storeAccessLevel(this.get('accessLevel'));
-    this.set('loading', false);
-    this.set('editing', false);
+    if (this.get('accessLevel')) {
+      this.set('loading', true);
+      await this.get('item').storeAccessLevel(this.get('accessLevel'));
+      this.set('loading', false);
+      this.set('editing', false);
+    }
   }
 }
