@@ -13,7 +13,9 @@ Router.map(function () {
   this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id' }, function() {
     this.route('print', { path: '/afdrukken' });
     this.route('agendaitems', { path: '/agendapunten' }, function() {
-      this.route('agendaitem', { path: '/:agendaitem_id' });
+      this.route('agendaitem', { path: '/:agendaitem_id' }, function() {
+        this.route('index', { path: '/' });
+      });
     });
     this.route('compare', { path: '/vergelijken' });
     this.route('documents', { path: '/documenten' });

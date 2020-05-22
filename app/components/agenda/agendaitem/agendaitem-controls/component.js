@@ -12,7 +12,6 @@ export default Component.extend({
   currentSession: service(),
   currentAgenda: null,
   agendaitem: null,
-  lastDefiniteAgenda: null,
 
   isPostPonable: computed("sessionService.agendas.@each", "agendaitem.subcase", async function () {
     const subcase = await this.agendaitem.get('subcase');
