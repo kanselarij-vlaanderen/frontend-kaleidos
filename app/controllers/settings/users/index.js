@@ -57,12 +57,7 @@ export default class UsersSettingsController extends Controller {
   refreshRoute() {
     this.send('refresh');
   }
-
-  @action
-  onKeyUp(){
-    this.page = 0;
-  }
-
+  
   @action
   goToRoute(route, param) {
     this.transitionToRoute(route, param);
