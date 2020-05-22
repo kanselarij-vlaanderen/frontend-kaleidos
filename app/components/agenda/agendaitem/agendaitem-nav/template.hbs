@@ -5,7 +5,7 @@
       @route="agenda.agendaitems.agendaitem.index"
       @activeClass="active"
     >
-      {{t "detail"}}
+      {{capitalize (t "detail")}}
     </LinkTo>
   </li>
   <li class="vl-tab" data-test-agenda-agendaitem-tab="documents">
@@ -14,7 +14,7 @@
       @route="agenda.agendaitems.agendaitem.documents"
       @activeClass="active"
     >
-      {{t "documents"}}
+      {{capitalize (t "documents")}}
     </LinkTo>
   </li>
   {{#if this.currentSession.isEditor}}
@@ -24,7 +24,7 @@
         @route="agenda.agendaitems.agendaitem.comments"
         @activeClass="active"
       >
-        {{t "comments"}}
+        {{capitalize (t "comments")}}
         {{!-- TODO number of comments pill --}}
         {{!-- <button class="vl-pill vl-pill--clickable" type="button">
           0
@@ -43,7 +43,7 @@
         @route="agenda.agendaitems.agendaitem.documents"
         @activeClass="active"
       >
-        {{t "decision"}}
+        {{capitalize (t "decision")}}
       </LinkTo>
     </li>
   {{/if}}
@@ -59,7 +59,7 @@
           @route="agenda.agendaitems.agendaitem.minutes"
           @activeClass="active"
         >
-          {{t "meeting-minutes"}}
+          {{capitalize (t "meeting-minutes")}}
         </LinkTo>
       </li>
     {{/if}}
@@ -74,7 +74,7 @@
           @route="agenda.agendaitems.agendaitem.news-item"
           @activeClass="active"
         >
-          {{t "newsletter"}}
+          {{capitalize (t "newsletter")}}
         </LinkTo>
       </li>
     {{/if}}
@@ -90,7 +90,7 @@
         @route="agenda.agendaitems.agendaitem.press-agenda"
         @activeClass="active"
       >
-        {{t "agendaitem-press-agenda"}}
+        {{capitalize (t "agendaitem-press-agenda")}}
       </LinkTo>
     </li>
   {{/if}}
