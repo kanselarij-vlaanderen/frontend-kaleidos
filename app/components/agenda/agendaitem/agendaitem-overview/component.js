@@ -7,7 +7,6 @@ import { tracked } from '@glimmer/tracking';
 
 export default Component.extend({
   classNames: ['vlc-panel-layout__main-content'],
-  currentAgenda: alias('sessionService.currentAgenda'),
   sessionService: inject(),
   store: inject(),
   agendaService: inject(),
