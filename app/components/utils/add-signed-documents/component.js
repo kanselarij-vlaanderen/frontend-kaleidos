@@ -52,7 +52,7 @@ export default Component.extend(UploadDocumentMixin, {
     },
 
     delete() {
-      // TODO: fix me
+      this.clearAllDocuments();
     },
   },
 });
