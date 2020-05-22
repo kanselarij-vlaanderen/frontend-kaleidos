@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Effectively the prefix used in all classes, don't change this unless you plan a refactor!
 FONT_PREFIX=ki
