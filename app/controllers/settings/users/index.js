@@ -25,14 +25,14 @@ export default class UsersSettingsController extends Controller {
     return searchText;
   }
 
-  @action
-  selectSize(size) {
-   this.size = size;
-  }
-
   set filter(param) {
     this.page = 0;
     this.filterText = param;
+  }
+
+  @action
+  selectSize(size) {
+   this.size = size;
   }
 
   @action
@@ -56,6 +56,11 @@ export default class UsersSettingsController extends Controller {
   @action
   refreshRoute() {
     this.send('refresh');
+  }
+
+  @action
+  onKeyUp(){
+    this.page = 0;
   }
 
   @action
