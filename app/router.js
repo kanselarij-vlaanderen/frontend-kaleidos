@@ -15,6 +15,7 @@ Router.map(function () {
     this.route('agendaitems', { path: '/agendapunten' }, function() {
       this.route('agendaitem', { path: '/:agendaitem_id' }, function() {
         this.route('index', { path: '/' });
+        this.route('documents', { path: '/documenten' });
       });
     });
     this.route('compare', { path: '/vergelijken' });
