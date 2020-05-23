@@ -17,6 +17,7 @@ Router.map(function () {
         this.route('index', { path: '/' });
         this.route('documents', { path: '/documenten' });
         this.route('comments', { path: '/opmerkingen' });
+        this.route('decisions', { path: '/beslissingen' });
       });
     });
     this.route('compare', { path: '/vergelijken' });
