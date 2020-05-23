@@ -16,6 +16,7 @@ Router.map(function () {
       this.route('agendaitem', { path: '/:agendaitem_id' }, function() {
         this.route('index', { path: '/' });
         this.route('documents', { path: '/documenten' });
+        this.route('comments', { path: '/opmerkingen' });
       });
     });
     this.route('compare', { path: '/vergelijken' });
