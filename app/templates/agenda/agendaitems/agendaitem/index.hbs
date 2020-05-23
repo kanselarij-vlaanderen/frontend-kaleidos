@@ -4,8 +4,8 @@
       <Agenda::Agendaitem::AgendaitemControls
         @agendaitem={{this.model}}
         @currentAgenda={{this.agenda}}
+        @onDeleteAgendaItem={{this.navigateToNeighbouringItem}}
       />
-      {{!-- TODO:  refreshRoute=(action "refreshRoute") --}}
     {{/if}}
   {{/if}}
 </div>
