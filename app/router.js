@@ -20,6 +20,7 @@ Router.map(function () {
         this.route('decisions', { path: '/beslissingen' });
         this.route('minutes', { path: '/notulen' });
         this.route('news-item', { path: '/kort-bestek' });
+        this.route('press-agenda', { path: '/persagenda' });
       });
     });
     this.route('compare', { path: '/vergelijken' });
