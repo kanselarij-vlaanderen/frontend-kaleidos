@@ -65,14 +65,12 @@ export default Component.extend(
           await previousDocument.getWithDefault(key, defaults[key]) :
           defaults[key]
         );
-      })
+      });
       newDocument.set('file', uploadedFile);
       newDocument.set('previousVersion', previousDocument);
       newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
       return newDocument;
     },
-
-
 
     async deleteAll() {
       await Promise.all(
@@ -87,8 +85,6 @@ export default Component.extend(
       this.get('documentsInCreation').clear();
       this.set('isAddingNewDocument', false);
     },
-
-
 
     async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
       const modelName = await model.get('constructor.modelName');
@@ -297,7 +293,6 @@ export default Component.extend(
           }
           await this.attachDocumentsToModel(documentsToAttach, item, 'linkedDocumentVersions');
           await item.save();
-
         } catch(error) {
           throw error;
         } finally {
