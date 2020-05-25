@@ -52,7 +52,7 @@ export default Component.extend(MyDocumentVersions, {
     }
     return await model.save();
   },
-  
+
   actions: {
     showVersions() {
       this.toggleProperty('isShowingVersions');
