@@ -26,6 +26,7 @@ context('Agendaitem changes tests', () => {
 
   it('should add an agendaitem and highlight it as changed', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
+    cy.wait(2000);
     // when toggling show changes  the agendaitem added since current agenda should show
     cy.addAgendaitemToAgenda(subcaseTitle2, false);
     cy.setFormalOkOnItemWithIndex(2);
@@ -39,6 +40,7 @@ context('Agendaitem changes tests', () => {
   });
   it('should add a document version to an item and highlight it as changed', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
+    cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
     cy.wait(waitTime); //Computeds are not reloaded yet , maybe
@@ -49,11 +51,10 @@ context('Agendaitem changes tests', () => {
     // when navigating to print view, should contain all relevant info
     cy.get(actionModal.showActionOptions).click();
     cy.get(agenda.navigateToPrintableAgenda).click();
-
-
-    cy.get(agenda.printHeaderTitle).should('exist', {timeout: 40000}).should('be.visible');
+    cy.wait(1000);
+    cy.get(agenda.printHeaderTitle, {timeout: 80000}).should('exist').should('be.visible');
     cy.get(agenda.printHeaderTitle).contains('Vergadering van');
-    cy.get(agenda.printHeaderTitle).contains('dinsdag 02 juni 2020 om 20:20');
+    cy.get(agenda.printHeaderTitle).contains('donderdag 02 april 2020 om 14:00');
 
     cy.get(agenda.printContainer).should('exist').should('be.visible');
 
