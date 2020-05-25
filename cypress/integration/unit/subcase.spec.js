@@ -3,7 +3,7 @@
 import agenda from '../../selectors/agenda.selectors';
 
 context('Subcase tests', () => {
-  const plusMonths = 1;
+  const plusMonths = 2;
   const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
   const caseTitle = 'Cypress test: subcases - ' + currentTimestamp();
   const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
@@ -22,7 +22,6 @@ context('Subcase tests', () => {
   });
 
   it('should open an existing case and add a subcase', () => {
-
     const type = 'Nota';
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
@@ -183,7 +182,7 @@ context('Subcase tests', () => {
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
     cy.route('PATCH','/agendaitems/*').as('patchAgendaitem');
     cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') //CHECK na save in agendaitem
-      .wait('@patchAgendaitem'); 
+      .wait('@patchAgendaitem');
 
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
@@ -229,6 +228,7 @@ context('Subcase tests', () => {
 
 
   it('Changes to agenda item Themas propagate properly', () => {
+
     // Open agenda
     cy.route('GET', '/agendas/**').as('getAgenda');
     cy.openAgendaForDate(agendaDate);

@@ -18,7 +18,7 @@ Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);
 
 // ***********************************************
 // Functions
-
+//TODO needs setupping to be sure to succeed.
 
 /**
  * Open the subcase of the specified index.
@@ -196,7 +196,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
     .contains('Opslaan')
     .click();
   });
-  cy.wait('@patchSubcase', { timeout: 20000 });
+  cy.wait('@patchSubcase', { timeout: 40000 });
   cy.log('/addSubcaseMandatee');
 }
 
@@ -224,9 +224,9 @@ function proposeSubcaseForAgenda (agendaDate) {
     cy.contains(formattedDate).click();
   });
   cy.wait('@createNewAgendaitem', { timeout: 12000 });
-  cy.wait('@patchSubcase', { timeout: 12000 });
-  cy.wait('@createSubcasePhase', { timeout: 12000 });
-  cy.wait('@patchAgenda', { timeout: 12000 });
+  cy.wait('@patchSubcase', { timeout: 24000 });
+  cy.wait('@createSubcasePhase', { timeout: 24000 });
+  cy.wait('@patchAgenda', { timeout: 24000 });
   cy.log('/proposeSubcaseForAgenda');
 }
 

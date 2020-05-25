@@ -90,16 +90,13 @@
             {{moment-format row.sessionDates "DD-MM-YYYY"}}
           </td>
           <td class="vl-u-align-right">
-            {{#link-to
-              "agenda.agendaitems.agendaitem"
-              row.meetingId
-              row.id
-              (
-               query-params selectedAgenda=row.agendaId)
+            <LinkTo
               class="vl-button vl-button--link vl-button--icon"
-            }}
+              @route="agenda.agendaitems.agendaitem"
+              @models={{array row.meetingId row.agendaId row.id}}
+            >
               <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-            {{/link-to}}
+            </LinkTo>
           </td>
         {{/c.body}}
       {{/table.content}}

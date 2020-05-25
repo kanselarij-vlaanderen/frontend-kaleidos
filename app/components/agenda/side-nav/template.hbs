@@ -46,11 +46,11 @@
             <a href="" {{action "setCurrentAgenda" agenda}}>
               <div class="vlc-side-nav-item__label">
                 <span>
-                  {{agenda.agendaName}}
+                  {{utils/delayed-property model=agenda path="agendaName" waitFor="status"}}
                 </span>
               </div>
               <div class="vlc-side-nav-item__meta">
-                {{#if (not-eq agenda.name "Ontwerpagenda")}}
+                {{#if (not agenda.isDesignAgenda)}}
                   {{t "created-on"}}
                   <br/>
                   {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
@@ -62,7 +62,7 @@
               </div>
               <div class="vlc-side-nav-item__meta--small">
                 <h3 class="vl-title vl-title--h6">
-                  {{#if (not-eq agenda.name "Ontwerpagenda")}}
+                  {{#if (not agenda.isDesignAgenda)}}
                     {{agenda.name}}
                   {{else}}
                     *

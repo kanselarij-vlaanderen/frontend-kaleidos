@@ -11,12 +11,11 @@ import agenda from '../../selectors/agenda.selectors';
 context('Full test', () => {
   before(() => {
     cy.server();
-    cy.resetCache();
-    cy.resetSearch();
     cy.login('Admin');
   });
 
   it('should Add new minister', () => {
+    cy.visit('/');
     cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaItem');
     const KIND = 'Ministerraad';
     const plusMonths = 3;
@@ -26,7 +25,6 @@ context('Full test', () => {
     const subcaseTitle1 = caseTitle + ' test stap 1';
     const subcaseTitle2 = caseTitle + ' test stap 2';
 
-    cy.route('/');
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include','instellingen/ministers');
