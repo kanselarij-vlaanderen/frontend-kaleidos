@@ -5,7 +5,6 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
 import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
-import { set } from '@ember/object';
 import config from 'fe-redpencil/utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
 import { deprecate } from '@ember/debug';
@@ -57,22 +56,6 @@ export default Component.extend(
       }
     },
 
-    clearAllDocuments() {
-      set(this, 'documentsInCreation', A([]));
-    },
-
-    async deleteDocument(document) {
-      await this.fileService.deleteDocument(document)
-    },
-
-    async deleteDocumentVersion(documentVersion) {
-      await this.fileService.deleteDocumentVersion(documentVersion);
-    },
-
-    async deleteFile(file) {
-      await this.fileService.deleteFile(file);
-    },
-
     createNewDocument(uploadedFile, previousDocument, defaults) {
       const propsFromPrevious = [
         'accessLevel',
@@ -107,27 +90,56 @@ export default Component.extend(
       this.set('isAddingNewDocument', false);
     },
 
+
+
+    async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
+      const modelName = await model.get('constructor.modelName');
+      // Don't do anything for these models
+      if (['meeting-record', 'decision'].includes(modelName)) {
+        return model;
+      }
+
+      const modelDocumentVersions = await model.get(propertyName);
+      if (modelDocumentVersions) {
+        model.set(
+          propertyName,
+          A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray()))
+        );
+      } else {
+        model.set(propertyName, documents);
+      }
+      return model;
+    },
+
+    async addDocumentsToAgendaitems(documents, agendaitems) {
+      return Promise.all(
+        agendaitems.map(async (agendaitem) => {
+          await this.attachDocumentsToModel(documents, agendaitem);
+          return await agendaitem.save();
+        })
+      );
+    },
+
+    async addDocumentsToSubcase(documents, subcase) {
+      await this.attachDocumentsToModel(documents, subcase);
+      return await subcase.save();
+    },
+
+    async linkDocumentsToAgendaitems(documents, agendaitems) {
+      return Promise.all(
+        agendaitems.map(async (agendaitem) => {
+          await this.attachDocumentsToModel(documents, agendaitem, 'linkedDocumentVersions');
+          return await agendaitem.save();
+        })
+      );
+    },
+
+    async linkDocumentsToSubcase(documents, subcase) {
+      await this.attachDocumentsToModel(documents, subcase, 'linkedDocumentVersions');
+      return await subcase.save();
+    },
+
     actions: {
-
-      async showDocumentVersionViewer(documentVersion) {
-        window.open(`/document/${(await documentVersion).get('id')}`);
-      },
-
-      async downloadFile(version) {
-        const doc = await version;
-        let file = await doc.get('file');
-        downloadFilePrompt(this, file, doc.get('name'));
-      },
-
-      async removeDocument(documentContainer) {
-        const file = await documentContainer.get('documents.firstObject.file');
-        if (file.get('id')) {
-          file.destroyRecord();
-        }
-        documentContainer.get('documents.firstObject').rollbackAttributes();
-        documentContainer.rollbackAttributes();
-      },
-
       async uploadedFile(uploadedFile) {
         const creationDate = moment().utc().toDate();
         if (this.documentContainer) {
@@ -194,17 +206,8 @@ export default Component.extend(
         this.toggleProperty('isEditing');
       },
 
-      refreshRoute() {
-        this.send('refresh');
-      },
-
       chooseDocumentType(document, type) {
         document.set('type', type);
-      },
-
-      async saveDocuments() {
-        deprecate('\'saveDocuments\' is deprecated by saveDocumentContainers', true);
-        return this.saveDocumentContainers(...arguments);
       },
 
       async saveDocumentContainers() {
@@ -289,7 +292,6 @@ export default Component.extend(
               })
             })
           );
-
           if (subcase) {
             await this.linkDocumentsToSubcase(documentsToAttach, subcase);
           } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
@@ -306,85 +308,5 @@ export default Component.extend(
         }
       },
     },
-
-    async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
-      const modelName = await model.get('constructor.modelName');
-      // Don't do anything for these models
-      if (['meeting-record', 'decision'].includes(modelName)) {
-        return model;
-      }
-
-      const modelDocumentVersions = await model.get(propertyName);
-      if (modelDocumentVersions) {
-        model.set(
-          propertyName,
-          A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray()))
-        );
-      } else {
-        model.set(propertyName, documents);
-      }
-      return model;
-    },
-
-    async attachDocumentVersionsToModel() {
-      deprecate('\'attachDocumentVersionsToModel\' is deprecated by attachDocumentsToModel', true);
-      return this.attachDocumentsToModel(...arguments);
-    },
-
-    // TODO: refactor model/code in function of "reeds aangeleverde documenten"
-    async unlinkDocumentVersions(documentVersions, model) {
-      const modelName = await model.get('constructor.modelName');
-      // Don't do anything for these models
-      if (['meeting-record', 'decision'].includes(modelName)) {
-        return model;
-      }
-      const subcase = await model.get('subcase');
-      const agendaitemsOnDesignAgenda = await model.get('agendaitemsOnDesignAgendaToEdit');
-      if (subcase) {
-        await this.unlinkDocumentVersionsFromModel(subcase, documentVersions);
-      } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-        await Promise.all(agendaitemsOnDesignAgenda.map(agendaitem => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
-      }
-      return await this.unlinkDocumentVersionsFromModel(model, documentVersions);
-    },
-
-    async addDocumentsToAgendaitems(documents, agendaitems) {
-      return Promise.all(
-        agendaitems.map(async (agendaitem) => {
-          await this.attachDocumentsToModel(documents, agendaitem);
-          return await agendaitem.save();
-        })
-      );
-    },
-
-    async addDocumentsToSubcase(documents, subcase) {
-      await this.attachDocumentsToModel(documents, subcase);
-      return await subcase.save();
-    },
-
-    async linkDocumentsToAgendaitems(documents, agendaitems) {
-      return Promise.all(
-        agendaitems.map(async (agendaitem) => {
-          await this.attachDocumentsToModel(documents, agendaitem, 'linkedDocumentVersions');
-          return await agendaitem.save();
-        })
-      );
-    },
-
-    // TODO: refactor model/code in function of "reeds aangeleverde documenten"
-    async unlinkDocumentVersionsFromModel(model, documentVersions) {
-      const modelDocumentVersions = await model.get('linkedDocumentVersions');
-      if (modelDocumentVersions) {
-        documentVersions.forEach(documentVersion => modelDocumentVersions.removeObject(documentVersion))
-      } else {
-        model.set('linkedDocumentVersions', A([]));
-      }
-      return await model.save();
-    },
-
-    async linkDocumentsToSubcase(documents, subcase) {
-      await this.attachDocumentsToModel(documents, subcase, 'linkedDocumentVersions');
-      return await subcase.save();
-    }
   }
 );
