@@ -371,8 +371,7 @@ function approveDesignAgenda() {
       // .wait('@getAgendaitems', { timeout: 12000 })
       .wait('@getAgendas', { timeout: 12000 });
   });
-  cy.get('.vl-loader').should('not.exist');
-  cy.wait(2000); //After approving the agenda, some data is reloaded and waiting reduces flakyness
+  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {verbose: true, timeout: 60000});
 }
 
 /**
