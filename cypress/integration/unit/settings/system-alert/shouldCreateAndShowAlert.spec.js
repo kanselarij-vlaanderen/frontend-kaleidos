@@ -33,7 +33,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
 
   it('Should close and stay closed', () => {
     cy.route('GET', '/alerts?**').as('getAlerts');
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 60000 }); // Wait for a polling-cycle to pass
+    cy.wait('@getAlerts', { timeout: ALERT_POLL _INTERVAL + 60000 }); // Wait for a polling-cycle to pass
 
     cy.get(alert.alertMessageCloseButton).each((button) => {
       button.click();

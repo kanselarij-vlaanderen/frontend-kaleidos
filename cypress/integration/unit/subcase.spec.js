@@ -3,8 +3,8 @@
 import agenda from '../../selectors/agenda.selectors';
 
 context('Subcase tests', () => {
-  const plusMonths = 3;
-  const agendaDate = Cypress.moment().add('week', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
+  const plusMonths = 2;
+  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
   const caseTitle = 'Cypress test: subcases - ' + currentTimestamp();
   const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
 
