@@ -12,33 +12,12 @@ export default Component.extend({
   isVerifyingDelete: null,
   decisionToDelete: null,
 
-  item: computed('subcase.decision', function () {
-    return this.get('subcase.decision');
-  }),
-
   signedDocument: computed('decision.signedDocument', async function () {
     return await this.get('decision.signedDocument');
   }),
 
-  async addDecision(subcase) {
-    let decision = this.store.createRecord('decision', {
-      subcase: await subcase,
-      title: await subcase.get('title'),
-      shortTitle: await subcase.get('shortTitle'),
-      approved: false
-    });
-    subcase.set('decision', decision);
-  },
-
   actions: {
     async toggleIsEditing() {
-      const { subcase } = this;
-      const decision = await subcase.get('decision');
-      if (!decision) {
-        await this.addDecision(subcase);
-      } else if (decision.get('title') === '') {
-        decision.set('title', subcase.get('title'));
-      }
       this.toggleProperty('isEditing');
     },
 
