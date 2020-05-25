@@ -37,7 +37,6 @@ context('meeting actions tests', () => {
   });
 
   it('should not be able to delete approved agendaitem from designagenda with profile: Kanselarij', () => {
-    return;
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Kanselarij - 1588775768';
     cy.visit('/vergadering/5EB2CB8FF5E126000900000D/agenda/5EB2CB91F5E126000900000E/agendapunten');
     cy.changeSelectedAgenda('Ontwerpagenda');

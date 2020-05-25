@@ -11,7 +11,6 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
-    return
     const caseTitleSingle = 'Cypress test: document versions agendaitem - 1589286110';
     const SubcaseTitleShort = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
 
@@ -56,7 +55,6 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding more then 20 document-versions to subcase should show all', () => {
-    return
     cy.visit('/dossiers/5EBA9528751CF7000800000A/deeldossiers/5EBA953A751CF7000800000C/documenten');
     // This works but takes 300 or more seconds...
     cy.addDocuments(
@@ -104,7 +102,6 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding new document-version to agendaitem on designagenda should reset formally ok and update the subcase', () => {
-    return;
     const caseTitle = 'Cypress test: document versions - 1589286212';
     const SubcaseTitleShort = 'Cypress test: new document version on agendaitem - 1589286212';
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
