@@ -59,7 +59,6 @@ export default Service.extend({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
-        agendaName: 'Ontwerpagenda',
         createdFor: currentSession.id,
         oldAgendaId: oldAgenda.id,
       },

@@ -32,14 +32,6 @@ export default Component.extend({
     })
   }),
 
-  lastDefiniteAgenda: computed('sessionService.definiteAgendas.@each', function () {
-    return DS.PromiseObject.create({
-      promise: this.get('sessionService.definiteAgendas').then((definiteAgendas) => {
-        return definiteAgendas.get('lastObject');
-      })
-    })
-  }),
-
   actions: {
     async addDecision() {
       const subcase = await this.get('subcase');

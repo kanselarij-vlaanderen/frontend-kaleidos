@@ -27,10 +27,10 @@ export default Component.extend({
 
   isDeletable: computed(
     'agendaitem.{subcase,subcase.agendaitems}', 'currentAgenda.name', async function () {
-      const currentAgendaName = await this.get('currentAgenda.name');
+      const designAgenda = await this.get('currentAgenda.isDesignAgenda');
       const agendaitemSubcase = await this.get('agendaitem.subcase');
       const agendaitems = await this.get('agendaitem.subcase.agendaitems');
-      if (currentAgendaName && currentAgendaName !== 'Ontwerpagenda') {
+      if (!designAgenda) {
         return false;
       } else if (agendaitemSubcase) {
         return !(agendaitems && agendaitems.length > 1);

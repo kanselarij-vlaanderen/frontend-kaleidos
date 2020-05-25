@@ -4,7 +4,7 @@
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import isecodes from "../../selectors/isecodes/isecodesSelectors";
 import agenda  from '../../selectors/agenda.selectors';
-
+//TODO karel rerun
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
   const plusMonths = 1;
