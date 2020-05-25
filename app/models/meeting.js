@@ -65,16 +65,11 @@ export default Model.extend({
     return this.isFinal && !this.releasedDocuments;
   }),
 
-  latestAgenda: computed('agendas.@each', function () {
-    return DS.PromiseObject.create({
-      promise: this.get('agendas').then((agendas) => {
-        const sortedAgendas = agendas.sortBy('agendaName').reverse();
-        return sortedAgendas.get('firstObject');
-      }),
-    });
+  latestAgenda: computed('sortedAgendas.@each', function () {
+    return this.sortedAgendas.get('firstObject');
   }),
 
-  sortedAgendas: computed('agendas.@each', function () {
+  sortedAgendas: computed('agendas.@each.agendaName', function () {
     return PromiseArray.create({
       promise: this.get('agendas').then((agendas) => {
         return agendas.sortBy('agendaName').reverse();

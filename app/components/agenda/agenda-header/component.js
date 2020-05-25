@@ -103,15 +103,20 @@ export default Component.extend(FileSaverMixin, {
       //TODO possible dead code, there is always an agenda ?
       return;
     }
-    await session.get('agendas');
+    const agendas = await session.get('agendas');
+    const agendasLength = agendas.length;
+
     const previousAgenda = await this.get('sessionService').findPreviousAgendaOfSession(session, agenda);
     await this.agendaService.deleteAgenda(agenda);
     if (previousAgenda) {
       await session.save();
       await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems', session.id, previousAgenda.get('id'));
-    } else {
+    } else if (agendasLength == 1) {
       await this.get('sessionService').deleteSession(session);
+      this.router.transitionTo('agendas');
+    } else { // dead code, this should not be reachable unless previousAgenda failed to resolve
+      throw new Error('Something went wrong when deleting the agenda, contact developers');
     }
   },
 
