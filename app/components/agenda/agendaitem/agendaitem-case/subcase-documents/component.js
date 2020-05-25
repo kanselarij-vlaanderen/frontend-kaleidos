@@ -4,7 +4,6 @@ import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import config from 'fe-redpencil/utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
 import { deprecate } from '@ember/debug';
@@ -16,7 +15,6 @@ export default Component.extend(
     classNames: ['vl-u-spacer--large'],
 
     store: service(),
-    fileService: service(),
     documentsInCreation: A([]), // When creating new documents
 
     isAddingNewDocument: false,
