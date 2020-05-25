@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Effectively the prefix used in all classes, don't change this unless you plan a refactor!
 FONT_PREFIX=ki
@@ -23,16 +23,35 @@ npx icon-font-generator $PATH_TO_SVG_FILES"/*.svg" \
   --height=1000
 
 # The two following fixes are performed so that xmllint doesn't argue about broken tags...
-# Fix all broken <br> tags that were generated
-sed -i '' -e 's/\<br\>/\<br \/\>/g' "tmp/icons-temp.html"
+# Fixing broken <br> tags to become <br />
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  # Linux
+  sed -i -e 's/<br>/<br \/>/g' "tmp/icons-temp.html"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  # Mac OSX
+  sed -i '' -e 's/\<br\>/\<br \/\>/g' "tmp/icons-temp.html"
+fi
+
 # Fix the broken meta tag that was generated
-sed -i '' -e 's/\<meta charset="UTF-8"\>/\<meta charset="UTF-8"\/\>/g' "tmp/icons-temp.html"
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  # Linux
+  sed -i -e 's/<meta charset="UTF-8">/<meta charset="UTF-8"\/>/g' "tmp/icons-temp.html" "tmp/icons-temp.html"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  # Mac OSX
+  sed -i '' -e 's/\<meta charset="UTF-8"\>/\<meta charset="UTF-8"\/\>/g' "tmp/icons-temp.html"
+fi
 
 # Make the new overview page - disable linting, add an icons-page class wrapper, and copy the generated contents into this template
-echo "{{!-- template-lint-disable  --}}" > $OVERVIEW_PAGE_PATH \
-		&& echo "<div class=\"icons-page\">" >> $OVERVIEW_PAGE_PATH \
+echo '{{!-- template-lint-disable  --}}' > $OVERVIEW_PAGE_PATH \
+		&& echo '<div class="icons-page">' >> $OVERVIEW_PAGE_PATH \
 		&& xmllint --xpath "//body/child::*" "tmp/icons-temp.html" >> $OVERVIEW_PAGE_PATH \
 		&& printf "\n</div>" >> $OVERVIEW_PAGE_PATH
 
 # Modify the overview page so that the prefix is included, that allows us to just copy paste icons from the overview
-sed -i '' -e "s/\"label\"\>/\"label\"\>$FONT_PREFIX-/g" $OVERVIEW_PAGE_PATH
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  # Linux
+  sed -i -e "s/\"label\">/\"label\">test-/g" app/components/styleguide/script-icons/template.hbs
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  # Mac OSX
+  sed -i '' -e "s/\"label\"\>/\"label\"\>$FONT_PREFIX-/g" $OVERVIEW_PAGE_PATH
+fi
