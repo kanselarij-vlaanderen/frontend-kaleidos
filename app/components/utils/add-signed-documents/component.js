@@ -8,6 +8,7 @@ import { tracked } from '@glimmer/tracking';
 export default Component.extend(UploadDocumentMixin, {
   store: inject(),
   currentSession: inject(),
+  fileService: inject(),
   classNames: ['vl-u-spacer'],
   @tracked isAddingDocument: null,
   @tracked isAddingNewDocument: null,
@@ -51,7 +52,10 @@ export default Component.extend(UploadDocumentMixin, {
       await item.save();
     },
 
-    delete() {
+    async delete(document) {
+      const deleteDocument = await document
+      console.log(await deleteDocument)
+      await this.fileService.removeFile(await deleteDocument.get('id'))
       this.clearAllDocuments();
     },
   },

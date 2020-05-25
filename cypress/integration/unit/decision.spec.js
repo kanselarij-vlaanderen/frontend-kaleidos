@@ -4,6 +4,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
+import document from "../../selectors/document.selectors";
 
 context('Add files to an agenda', () => {
   const plusMonths = 1;
@@ -47,6 +48,11 @@ context('Add files to an agenda', () => {
     cy.get('@fileUploadDialog').within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
+
+    cy.route('DELETE', 'files/*').as('deleteFile');
+    cy.get(document.modalDocumentVersionDelete).click();
+    cy.wait('@deleteFile',{timeout: 12000})
+    cy.get(modal.baseModal.dialogWindow).contains('test').should('not.exist');
 
     cy.route('POST', 'document-versions').as('createNewDocumentVersion');
     cy.route('POST', 'documents').as('createNewDocument');
