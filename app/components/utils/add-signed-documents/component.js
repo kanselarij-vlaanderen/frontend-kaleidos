@@ -5,7 +5,6 @@ import CONFIG from 'fe-redpencil/utils/config';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import { downloadFilePrompt } from 'fe-redpencil/utils/file-utils';
 import { A } from '@ember/array';
 import { set } from '@ember/object';
 import config from 'fe-redpencil/utils/config';
@@ -58,18 +57,6 @@ export default Component.extend({
     set(this, 'documentsInCreation', A([]));
   },
 
-  async deleteDocument(document) {
-    await this.fileService.deleteDocument(document)
-  },
-
-  async deleteDocumentVersion(documentVersion) {
-    await this.fileService.deleteDocumentVersion(documentVersion);
-  },
-
-  async deleteFile(file) {
-    await this.fileService.deleteFile(file);
-  },
-
   createNewDocument(uploadedFile, previousDocument, defaults) {
     const propsFromPrevious = [
       'accessLevel',
@@ -113,58 +100,6 @@ export default Component.extend({
   async saveDocuments() {
     deprecate('\'saveDocuments\' is deprecated by saveDocumentContainers', true);
     return this.saveDocumentContainers(...arguments);
-  },
-
-  async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
-    const modelName = await model.get('constructor.modelName');
-    // Don't do anything for these models
-    if (['meeting-record', 'decision'].includes(modelName)) {
-      return model;
-    }
-
-    const modelDocumentVersions = await model.get(propertyName);
-    if (modelDocumentVersions) {
-      model.set(
-        propertyName,
-        A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray()))
-      );
-    } else {
-      model.set(propertyName, documents);
-    }
-    return model;
-  },
-
-  async attachDocumentVersionsToModel() {
-    deprecate('\'attachDocumentVersionsToModel\' is deprecated by attachDocumentsToModel', true);
-    return this.attachDocumentsToModel(...arguments);
-  },
-
-  // TODO: refactor model/code in function of "reeds aangeleverde documenten"
-  async unlinkDocumentVersions(documentVersions, model) {
-    const modelName = await model.get('constructor.modelName');
-    // Don't do anything for these models
-    if (['meeting-record', 'decision'].includes(modelName)) {
-      return model;
-    }
-    const subcase = await model.get('subcase');
-    const agendaitemsOnDesignAgenda = await model.get('agendaitemsOnDesignAgendaToEdit');
-    if (subcase) {
-      await this.unlinkDocumentVersionsFromModel(subcase, documentVersions);
-    } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-      await Promise.all(agendaitemsOnDesignAgenda.map(agendaitem => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
-    }
-    return await this.unlinkDocumentVersionsFromModel(model, documentVersions);
-  },
-
-  // TODO: refactor model/code in function of "reeds aangeleverde documenten"
-  async unlinkDocumentVersionsFromModel(model, documentVersions) {
-    const modelDocumentVersions = await model.get('linkedDocumentVersions');
-    if (modelDocumentVersions) {
-      documentVersions.forEach(documentVersion => modelDocumentVersions.removeObject(documentVersion))
-    } else {
-      model.set('linkedDocumentVersions', A([]));
-    }
-    return await model.save();
   },
 
   actions: {
@@ -224,25 +159,6 @@ export default Component.extend({
         newDocument.set('documentContainer', newContainer);
         this.get('documentsInCreation').pushObject(newDocument);
       }
-    },
-
-    async downloadFile(version) {
-      const doc = await version;
-      let file = await doc.get('file');
-      downloadFilePrompt(this, file, doc.get('name'));
-    },
-
-    async removeDocument(documentContainer) {
-      const file = await documentContainer.get('documents.firstObject.file');
-      if (file.get('id')) {
-        file.destroyRecord();
-      }
-      documentContainer.get('documents.firstObject').rollbackAttributes();
-      documentContainer.rollbackAttributes();
-    },
-
-    async showDocumentVersionViewer(documentVersion) {
-      window.open(`/document/${(await documentVersion).get('id')}`);
     },
   },
 });
