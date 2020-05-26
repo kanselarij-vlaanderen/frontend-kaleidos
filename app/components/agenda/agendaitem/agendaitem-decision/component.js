@@ -1,52 +1,42 @@
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend({
-  classNames: ['vl-u-spacer'],
-  store: inject(),
-  currentSession: inject(),
-  isEditing: false,
-  agendaitem: null,
-  subcase: null,
-  isVerifyingDelete: null,
-  decisionToDelete: null,
+export default class AgendaItemDecisionComponent extends Component {
+  @service currentSession;
 
-  signedDocument: computed('decision.signedDocument', async function () {
-    return await this.get('decision.signedDocument');
-  }),
+  @tracked isEditing = false;
+  @tracked isVerifyingDelete = null;
+  @tracked decisionToDelete = null;
 
-  actions: {
-    async toggleIsEditing() {
-      this.toggleProperty('isEditing');
-    },
-
-    async deleteDecision(decision) {
-      this.set('decisionToDelete', await decision);
-      this.set('isVerifyingDelete', true);
-    },
-
-    async verify() {
-      await this.decisionToDelete.destroyRecord();
-      let agendaitemToUpdate;
-
-      const subcase = await this.agendaitem.get('subcase');
-      await subcase.get('decisions').reload();
-
-      if (this.isTableRow) {
-        agendaitemToUpdate = await this.agendaitem.content;
-      } else {
-        agendaitemToUpdate = await this.get('agendaitem');
-      }
-      await agendaitemToUpdate.save();
-      if (!this.isDestroyed) {
-        this.set('isVerifyingDelete', false);
-      }
-    },
-
-    cancel() {
-      this.set('decisionToDelete', null);
-      this.set('isVerifyingDelete', false);
-    }
+  get decision () {
+    return this.args.decision;
   }
-});
+
+  @action
+  toggleIsEditing () {
+    this.toggleProperty('isEditing');
+  }
+
+  @action
+  promptDeleteDecision (decision) {
+    this.decisionToDelete = decision;
+    this.isVerifyingDelete = true;
+  }
+
+  @action
+  async deleteDecision () {
+    await this.decisionToDelete.destroyRecord();
+    if (this.args.onDeleteDecision) {
+      await this.args.onDeleteDecision(this.decisionToDelete);
+    }
+    this.isVerifyingDelete = false;
+  }
+
+  @action
+  cancel() {
+    this.decisionToDelete = null;
+    this.isVerifyingDelete = false;
+  }
+}

@@ -14,7 +14,12 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
         subcase: this.subcase
       });
       await newDecision.save();
-      this.model.reload();
+      this.refresh();
     }
+  }
+
+  @action
+  refresh() {
+    this.send('reloadModel');
   }
 }
