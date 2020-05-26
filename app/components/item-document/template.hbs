@@ -16,8 +16,7 @@
 {{else}}
   <span>
     <i class="vl-badge__icon
-      {{if document.checkAdded "ki-document-added"}}
-      {{if (await lastDocumentVersion.confidential) "vl-vi-lock" "ki-document"}}">
+      {{if document.checkAdded "ki-document-added" "ki-document"}}">
     </i>
     {{await lastDocumentVersionName}}
   </span>

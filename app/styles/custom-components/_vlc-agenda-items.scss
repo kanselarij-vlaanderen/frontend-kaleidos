@@ -194,7 +194,8 @@ $i: 0;
 }
 
 .vlc-agenda-items__body {
-  align-items: center;
+  display: flex;
+  flex-direction: row;
   padding: 2rem;
 }
 
@@ -225,14 +226,6 @@ $i: 0;
   align-items: center;
 }
 
-.vlc-agenda-items__body--flex {
-  display: flex;
-  flex-direction: row;
-}
-.vlc-agenda-items__body--number {
-  justify-content: flex-start;
-}
-
-.vlc-agenda-items__body--text {
+.vlc-agenda-items__text {
   width: 100%;
 }
