@@ -10,23 +10,29 @@ export default class AgendaItemDecisionComponent extends Component {
   @tracked isVerifyingDelete = null;
   @tracked decisionToDelete = null;
 
-  get decision () {
+  get decision() {
     return this.args.decision;
   }
 
   @action
-  toggleIsEditing () {
+  reloadDocuments() {
+    this.decision.belongsTo('signedDocument').reload();
+    this.args.onAddSignedDocument();
+  }
+
+  @action
+  toggleIsEditing() {
     this.toggleProperty('isEditing');
   }
 
   @action
-  promptDeleteDecision (decision) {
+  promptDeleteDecision(decision) {
     this.decisionToDelete = decision;
     this.isVerifyingDelete = true;
   }
 
   @action
-  async deleteDecision () {
+  async deleteDecision() {
     await this.decisionToDelete.destroyRecord();
     if (this.args.onDeleteDecision) {
       await this.args.onDeleteDecision(this.decisionToDelete);

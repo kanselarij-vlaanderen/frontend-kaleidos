@@ -3,6 +3,7 @@
     <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
       {{#if this.currentSession.isEditor}}
         <a
+          href="javascript://"
           class="vl-link"
           {{on "click" this.toggleIsEditing}}
         >
@@ -66,11 +67,12 @@
   {{/if}}
   {{#if (is-pending this.decision.signedDocument)}}
     <WebComponents::VlLoader @text={{t "decision-document-loading-text"}}/>
-  {{else if (not (await signedDocument))}}
+  {{else if (not (await this.decision.signedDocument))}}
     <Utils::AddSignedDocuments
       @item={{this.decision}}
       @defaultType={{this.defaultType}}
       @modelToAddDocumentVersionTo="signedDecision"
+      @onAddSignedDocument={{this.reloadDocuments}}
       @title={{t "signed-decision-add"}}
     />
   {{else}}
