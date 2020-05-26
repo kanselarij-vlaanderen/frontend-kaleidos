@@ -50,9 +50,6 @@ export default Component.extend(UploadDocumentMixin, {
         })
       );
       await item.save();
-      if (this.onAddSignedDocument) {
-        this.onAddSignedDocument();
-      }
     },
 
     delete() {
