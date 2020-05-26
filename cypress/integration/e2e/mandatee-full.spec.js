@@ -27,7 +27,7 @@ context('Full test', () => {
 
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
-    cy.url().should('include','instellingen/ministers');
+    cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
     cy.get(settings.addMinister).should('exist').should('be.visible').click();
     cy.wait('@getIseCodes');
@@ -62,36 +62,35 @@ context('Full test', () => {
     cy.get(form.formSave).should('exist').should('be.visible').click();
     cy.wait('@postMandateeData');
 
-    cy.visit('/').then(()=> {
-      cy.createCase(false, caseTitle);
-      cy.addSubcase('Nota',
-        subcaseTitle1,
-        'Cypress test voor het testen van toegevoegde documenten',
-        'In voorbereiding',
-        'Principiële goedkeuring m.h.o. op adviesaanvraag');
-      cy.addSubcase('Nota',
-        subcaseTitle2,
-        'Cypress test voor het testen van toegevoegde agendapunten',
-        'In voorbereiding',
-        'Principiële goedkeuring m.h.o. op adviesaanvraag');
-      cy.visit('/');
-      cy.createAgenda(KIND,3,agendaDate,"locatie");
+    cy.createCase(false, caseTitle);
+    cy.addSubcase('Nota',
+      subcaseTitle1,
+      'Cypress test voor het testen van toegevoegde documenten',
+      'In voorbereiding',
+      'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.addSubcase('Nota',
+      subcaseTitle2,
+      'Cypress test voor het testen van toegevoegde agendapunten',
+      'In voorbereiding',
+      'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.createAgenda(KIND, 3, agendaDate, "locatie");
 
-      // when toggling show changes  the agendaitem with a document added should show
-      cy.openAgendaForDate(agendaDate);
-      cy.addAgendaitemToAgenda(subcaseTitle1, false);
-      cy.openDetailOfAgendaitem(subcaseTitle1);
-      cy.addSubcaseMandatee(0,-1,-1);
-     cy.get(agenda.approveAgenda).click();
-      cy.get(modal.verify.save).click();
-    });
+    // when toggling show changes  the agendaitem with a document added should show
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(subcaseTitle1, false);
+    cy.openDetailOfAgendaitem(subcaseTitle1);
+    cy.addSubcaseMandatee(0, -1, -1);
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.approveDesignAgenda()
+
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
-    cy.url().should('include','instellingen/ministers');
+    cy.url().should('include', 'instellingen/ministers');
     cy.get('[data-test-mandatee-edit="0"]').click();
-    const enddateForMandatee = Cypress.moment("2020-03-02").set({"hour": 10, "minute": 10});
+    const enddateForMandatee = Cypress.moment("2020-03-02").set({ "hour": 10, "minute": 10 });
     cy.get('.vl-datepicker').eq(1).click();
-    cy.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(1).clear().type(enddateForMandatee.year(), {delay: 300});
+    cy.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(1).clear().type(enddateForMandatee.year(), { delay: 300 });
     cy.get('.flatpickr-months').eq(1).within(() => {
       for (let n = 0; n < plusMonths; n++) {
         cy.get('.flatpickr-next-month').click();
@@ -105,13 +104,16 @@ context('Full test', () => {
     cy.get(modal.verify.save).should('exist').should('be.visible').contains('Eindatum aanpassen');
     cy.get(modal.verify.cancel).should('exist').should('be.visible').click();
     cy.get(mandatee.mandateeEditCancel).should('exist').should('be.visible').click();
-    cy.route('/');
+    cy.visit('/');
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
-    cy.url().should('include','instellingen/ministers');
+    cy.url().should('include', 'instellingen/ministers');
     cy.get('[data-test-mandatee-resign="0"]').click();
     cy.wait(3000);
     cy.get(mandatee.manageMandateeChangesAlert).should('exist').should('be.visible');
+    cy.get(form.formCancelButton).click();
+    cy.get(settings.mandateeDelete).click();
+    cy.get(modal.verify.save).click();
   });
 
   /**
