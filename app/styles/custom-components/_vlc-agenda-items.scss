@@ -197,6 +197,11 @@ $i: 0;
   display: flex;
   flex-direction: row;
   padding: 2rem;
+
+  // Override HR spacing
+  .vlc-hr {
+    margin: 1.5rem 0;
+  }
 }
 
 .vlc-agenda-items__body-padding {
@@ -210,20 +215,26 @@ $i: 0;
   width: 100%;
 }
 
-.vlc-agenda-items__icons::before {
-  color: #FFF;
-}
-
 .vlc-agenda-items__icons {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  .vl-link__icon {
+    color: #666;
+    font-size: 1.7rem;
+  }
 }
 
-.vlc-agenda-items__confidentiality-button span {
-  color: #FFFFFF;
-  margin-right: 0.1rem;
+.vlc-agenda-items__confidentiality-button {
+  margin-left: 1rem;
   align-items: center;
+  color: white;
+}
+
+.vlc-agenda-items__sub-item a:hover .vlc-agenda-items__confidentiality-button,
+.vlc-agenda-items__sub-item a:hover .vlc-agenda-items__confidentiality-button .vlc-agenda-items__icons {
+  color: white;
 }
 
 .vlc-agenda-items__text {

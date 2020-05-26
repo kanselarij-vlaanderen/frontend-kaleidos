@@ -133,9 +133,9 @@
                       {{/attach-tooltip}}
                     {{/if}}
                     {{#if (await agendaitem.subcase.confidential)}}
-                      <span type="button" class="vlc-pill vlc-pill--error">
+                      <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
                       <span
-                              class="vl-icon vl-vi vl-vi-lock vl-u-text--error vlc-agenda-items__icons"
+                              class="vl-icon vl-vi vl-vi-lock vlc-agenda-items__icons"
                               data-test-icon-agenda-confidentiality-locked
                       ></span>
                         {{t "confidential"}}
