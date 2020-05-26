@@ -65,30 +65,30 @@ export default Model.extend({
     return this.isFinal && !this.releasedDocuments;
   }),
 
-  latestAgenda: computed('agendas.@each', function () {
-    return DS.PromiseObject.create({
+  latestAgenda: computed('sortedAgendas.@each', function () {
+    return this.sortedAgendas.get('firstObject');
+  }),
+
+  sortedAgendas: computed('agendas.@each.agendaName', function () {
+    return PromiseArray.create({
       promise: this.get('agendas').then((agendas) => {
-        const sortedAgendas = agendas.sortBy('agendaName').reverse();
-        return sortedAgendas.get('firstObject');
-      }),
+        return agendas.sortBy('agendaName').reverse();
+      })
     });
   }),
 
-  sortedAgendas: computed('agendas.@each', function () {
-    return this.agendas.sortBy('agendaName').reverse();
-  }),
+  latestAgendaName: computed('latestAgenda.status.isDesignAgenda', 'agendas', 'intl', async function () {
+    const agenda = await this.get('latestAgenda');
+    if (!agenda) return this.intl.t('no-agenda');
 
-  latestAgendaName: computed('latestAgenda', 'agendas', 'intl', function () {
-    return this.get('latestAgenda').then((agenda) => {
-      if (!agenda) return this.intl.t('no-agenda');
-      const agendaLength = this.get('agendas.length');
-      const agendaName = agenda.name;
-      if (agendaName !== 'Ontwerpagenda') {
-        return `Agenda ${agendaName}`;
-      } else {
-        return `${agendaName} ${CONFIG.alphabet[agendaLength - 1]}`;
-      }
-    });
+    const status = await agenda.get('status');
+
+    const agendaName = agenda.serialnumber;
+    let prefix = 'Agenda';
+    if(status.isDesignAgenda) {
+      prefix = 'Ontwerpagenda';
+    }
+    return `${prefix} ${agendaName}`;
   }),
 
   defaultSignature: computed('signature', async function () {

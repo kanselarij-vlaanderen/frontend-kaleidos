@@ -8,19 +8,14 @@ import printOverview from "../../selectors/print-overview.selectors";
 import newsletter from "../../selectors/newsletter.selector";
 
 context('Different session kinds should show different titles', () => {
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
-  const agendaDateSpecial = Cypress.moment().add('month', plusMonths).set('date', 3).set('hour', 20).set('minute', 20);
-  const agendaDateElectronic = Cypress.moment().add('month', plusMonths).set('date', 4).set('hour', 20).set('minute', 20);
+  const plusMonths = 2;
+  const regular = '/vergadering/5EC5258C5B08050008000001/agenda/5EC5258D5B08050008000002/agendapunten';
+  const special = '/vergadering/5EC525AC5B08050008000005/agenda/5EC525AD5B08050008000006/agendapunten';
+  const electronic = '/vergadering/5EC525CB5B08050008000009/agenda/5EC525CC5B0805000800000A/agendapunten';
 
   before(() => {
     cy.server();
-    cy.resetCache();
     cy.login('Admin');
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.createAgenda('Bijzondere ministerraad', plusMonths, agendaDateSpecial, 'Zaal oxford bij Cronos Leuven');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDateElectronic, 'Zaal oxford bij Cronos Leuven');
-    cy.logout();
   });
 
   beforeEach(() => {
@@ -30,7 +25,7 @@ context('Different session kinds should show different titles', () => {
 
   it('should show the correct translations for normal session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad van';
-    cy.openAgendaForDate(agendaDate);
+    cy.visit(regular);
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetodecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
@@ -42,7 +37,7 @@ context('Different session kinds should show different titles', () => {
 
   it('should show the correct translations for special session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad van';
-    cy.openAgendaForDate(agendaDateSpecial);
+    cy.visit(special);
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetodecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
@@ -54,7 +49,7 @@ context('Different session kinds should show different titles', () => {
 
   it('should show the correct translations for electronic session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure van';
-    cy.openAgendaForDate(agendaDateElectronic);
+    cy.visit(electronic);
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetodecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
@@ -65,7 +60,7 @@ context('Different session kinds should show different titles', () => {
   });
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {
-    cy.visit('/kort-bestek');
+    cy.visit('/kort-bestek?size=100');
     cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
     cy.get('@rows').within(() => {
       cy.contains(`Kort bestek voor de ministerraad van`);
@@ -76,7 +71,7 @@ context('Different session kinds should show different titles', () => {
 
   it('should show the correct translations for normal session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad';
-    cy.openAgendaForDate(agendaDate);
+    cy.visit(regular);
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetonewsletter).click();
     cy.get(newsletter.overviewTitle).contains(textToDisplay);
@@ -88,7 +83,7 @@ context('Different session kinds should show different titles', () => {
 
   it('should show the correct translations for special session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad';
-    cy.openAgendaForDate(agendaDateSpecial);
+    cy.visit(special);
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetonewsletter).click();
     cy.get(newsletter.overviewTitle).contains(textToDisplay);
@@ -100,7 +95,7 @@ context('Different session kinds should show different titles', () => {
 
   it('should show the correct translations for electronic session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure';
-    cy.openAgendaForDate(agendaDateElectronic);
+    cy.visit(electronic);
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetonewsletter).click();
     cy.get(newsletter.overviewTitle).contains('Beslissingen van de Vlaamse Regering - Elektronische procedure');

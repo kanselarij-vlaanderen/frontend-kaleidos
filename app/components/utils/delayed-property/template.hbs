@@ -1,0 +1,10 @@
+{{#if loading}}
+  <div class="skeletal-loader"
+       role="alert"
+       aria-busy="true"
+  ></div>
+{{else if (has-block)}}
+  {{yield value}}
+{{else}}
+  {{value}}
+{{/if}}

@@ -118,6 +118,7 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDe
   } else {
     cy.openDetailOfAgendaitem(agendaItemTitle);
   }
+  cy.get(agenda.agendaItemOpmerkingenTab)
   cy.get(agenda.agendaItemDocumentsTab)
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
@@ -201,9 +202,10 @@ function addDocuments(files) {
     cy.get('.vl-button').contains('Documenten toevoegen').click();
   });
 
-  cy.wait('@createNewDocumentVersion', { timeout: 12000 });
-  cy.wait('@createNewDocument', { timeout: 12000 });
+  cy.wait('@createNewDocumentVersion', { timeout: 24000 });
+  cy.wait('@createNewDocument', { timeout: 24000 });
   cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
+  cy.get(modal.modalDialog).should('not.exist');
   cy.log('/addDocuments');
 }
 
