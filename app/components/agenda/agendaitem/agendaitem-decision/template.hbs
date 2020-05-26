@@ -65,20 +65,18 @@
       </div>
     </div>
   {{/if}}
-  {{#if (is-pending this.decision.signedDocument)}}
-    <WebComponents::VlLoader @text={{t "decision-document-loading-text"}}/>
-  {{else if (not (await this.decision.signedDocument))}}
+  {{#if this.decision.signedDocument}}
+    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
+      @document={{this.decision.signedDocument}}
+      @item={{this.decision.signedDocument}}
+    />
+  {{else}}
     <Utils::AddSignedDocuments
       @item={{this.decision}}
       @defaultType={{this.defaultType}}
       @modelToAddDocumentVersionTo="signedDecision"
-      @onAddSignedDocument={{this.reloadDocuments}}
+      @onAddSignedDocument={{@onAddSignedDocument}}
       @title={{t "signed-decision-add"}}
-    />
-  {{else}}
-    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-      @document={{await this.decision.signedDocument}}
-      @item={{await this.decision.signedDocument}}
     />
   {{/if}}
 {{else}}

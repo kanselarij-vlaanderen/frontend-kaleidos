@@ -15,12 +15,6 @@ export default class AgendaItemDecisionComponent extends Component {
   }
 
   @action
-  reloadDocuments() {
-    this.decision.belongsTo('signedDocument').reload();
-    this.args.onAddSignedDocument();
-  }
-
-  @action
   toggleIsEditing() {
     this.toggleProperty('isEditing');
   }

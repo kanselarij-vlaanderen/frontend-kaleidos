@@ -3,10 +3,12 @@ import { action } from '@ember/object';
 
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
-    const agendaItem = this.modelFor('agenda.agendaitems.agendaitem')
+    const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
     const subcase = await agendaItem.subcase;
-    const decisions = await subcase.hasMany('decisions').reload();
-    return decisions;
+    return this.store.query('decision', {
+      'filter[subcase][:id:]': subcase.id,
+      'include': 'signed-document'
+    });
   }
 
   async setupController(controller, model) {
