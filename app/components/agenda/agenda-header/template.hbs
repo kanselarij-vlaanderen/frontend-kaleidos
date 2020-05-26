@@ -36,12 +36,7 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          {{#if
-            (and
-              (eq currentAgenda.name "Ontwerpagenda")
-              currentSessionService.isEditor
-            )
-          }}
+          {{#if (and currentAgenda.isDesignAgenda currentSessionService.isEditor)}}
             <button data-test-agenda-header-approveAgenda type="button" class="vl-button vl-button--narrow"
               {{action "tryToApproveAgenda" currentSession}}
             >
@@ -73,12 +68,7 @@
             as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
-                {{#if
-                  (and
-                  currentSessionService.isEditor
-                  (eq currentAgenda.name "Ontwerpagenda")
-                  )
-                }}
+                {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
                        data-test-agenda-header-navigateToSubCases
@@ -244,7 +234,7 @@
                   >
                     {{#if
                       (or
-                        (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
+                        (and currentAgenda currentAgenda.isDesignAgenda)
                         (and currentSessionService.isAdmin (await currentAgendaIsLast))
                       )
                     }}
