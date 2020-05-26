@@ -6,6 +6,11 @@ export default Controller.extend({
   sessionService: inject(),
   currentAgenda: alias('sessionService.currentAgenda'),
   currentSession: alias('sessionService.currentSession'),
+  activeAgendaItemSection: 'details',
+
+  setActiveAgendaitemSection(agendatItemSection) {
+    this.set('activeAgendaItemSection',agendatItemSection);
+  },
 
   actions: {
     refresh(id) {
