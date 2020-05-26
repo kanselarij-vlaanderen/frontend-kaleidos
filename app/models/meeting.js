@@ -65,8 +65,13 @@ export default Model.extend({
     return this.isFinal && !this.releasedDocuments;
   }),
 
-  latestAgenda: computed('sortedAgendas.@each', function () {
-    return this.sortedAgendas.get('firstObject');
+  latestAgenda: computed('agendas.@each', function () {
+    return DS.PromiseObject.create({
+      promise: this.get('agendas').then((agendas) => {
+        const sortedAgendas = agendas.sortBy('agendaName').reverse();
+        return sortedAgendas.get('firstObject');
+      }),
+    });
   }),
 
   sortedAgendas: computed('agendas.@each.agendaName', function () {
@@ -77,7 +82,7 @@ export default Model.extend({
     });
   }),
 
-  latestAgendaName: computed('latestAgenda.status.isDesignAgenda', 'agendas', 'intl', async function () {
+  latestAgendaName: computed('latestAgenda.status', 'agendas', 'intl', async function () {
     const agenda = await this.get('latestAgenda');
     if (!agenda) return this.intl.t('no-agenda');
 

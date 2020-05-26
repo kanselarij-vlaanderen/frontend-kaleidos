@@ -26,7 +26,9 @@ export default Component.extend({
         console.error(`failed to render delayed property '${this.path}': ${error}`);
       })
       .then(() => {
-        this.set('loading', false);
+        if (!this.isDestroying) {
+          this.set('loading', false);
+        }
       });
     });
   }
