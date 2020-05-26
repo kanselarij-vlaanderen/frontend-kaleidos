@@ -13,7 +13,7 @@ export default class UsersSettingsController extends Controller {
 
   isUploadingFile = null;
   @tracked size = 10;
-  page = 0;
+  @tracked page = 0;
   queryParams = ['filter'];
   @tracked filterText = '';
 
@@ -25,13 +25,14 @@ export default class UsersSettingsController extends Controller {
     return searchText;
   }
 
+  set filter(param) {
+    this.page = 0;
+    this.filterText = param;
+  }
+
   @action
   selectSize(size) {
    this.size = size;
-  }
-
-  set filter(param) {
-    this.filterText = param;
   }
 
   @action
@@ -56,7 +57,7 @@ export default class UsersSettingsController extends Controller {
   refreshRoute() {
     this.send('refresh');
   }
-
+  
   @action
   goToRoute(route, param) {
     this.transitionToRoute(route, param);

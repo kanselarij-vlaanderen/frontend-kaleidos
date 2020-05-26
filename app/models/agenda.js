@@ -21,6 +21,12 @@ export default Model.extend(LoadableModel, {
     return this.get('status.isDesignAgenda');
   }),
 
+  async asyncCheckIfDesignAgenda(){
+    await this.get('status');
+
+    return this.get('isDesignAgenda');
+  },
+
   agendaName: computed('serialnumber', 'status', function () {
     const isDesignAgenda = this.get('status.isDesignAgenda');
     let prefix = "Agenda ";
