@@ -75,6 +75,11 @@
   border-bottom: unset;
 }
 
+.vlc-panel-layout-only-border-bottom {
+  border-bottom: 1px solid #C6CDD3;
+  box-sizing: border-box;
+}
+
 .vlc-panel-layout-no-border {
   border: unset;
 }

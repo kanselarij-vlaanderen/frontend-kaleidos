@@ -7,7 +7,7 @@
 
 .vlc-agenda-items--spaced {
   .vlc-agenda-items__sub-item {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.2rem;
   }
 }
 
@@ -196,10 +196,10 @@ $i: 0;
 .vlc-agenda-items__body {
   align-items: center;
   padding: 1.2rem 1.8rem;
+}
 
-  .vlc-agenda-items__body-padding {
-    padding-bottom: 1.5rem;
-  }
+.vlc-agenda-items__body-padding {
+  padding-bottom: 1.5rem;
 }
 
 .vlc-agenda-items__remarks {
@@ -209,17 +209,17 @@ $i: 0;
   width: 100%;
 }
 
+.vlc-agenda-items__icons::before {
+  color: #FFF;
+}
+
 .vlc-agenda-items__icons {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  .vlc-agenda-items__icons::before {
-    color: #FFF;
-  }
 }
 
-.vlc-agenda-items__confidentialityButton span {
+.vlc-agenda-items__confidentiality-button span {
   color: #FFFFFF;
   margin-right: 0.1rem;
   align-items: center;
@@ -228,14 +228,13 @@ $i: 0;
 .vlc-agenda-items__body--flex {
   display: flex;
   flex-direction: row;
+}
+.vlc-agenda-items__body--number {
+  justify-content: flex-start;
+}
 
-  .vlc-agenda-items__body--number {
-    justify-content: flex-start;
-  }
-
-  .vlc-agenda-items__body--text {
-    width: 100%;
-  }
+.vlc-agenda-items__body--text {
+  width: 100%;
 }
 
 
