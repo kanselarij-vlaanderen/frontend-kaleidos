@@ -74,7 +74,7 @@ export default Model.extend({
     });
   }),
 
-  sortedAgendas: computed('agendas.@each', function () {
+  sortedAgendas: computed('agendas.@each.agendaName', function () {
     return PromiseArray.create({
       promise: this.get('agendas').then((agendas) => {
         return agendas.sortBy('agendaName').reverse();
@@ -82,7 +82,7 @@ export default Model.extend({
     });
   }),
 
-  latestAgendaName: computed('latestAgenda.status.isDesignAgenda', 'agendas', 'intl', async function () {
+  latestAgendaName: computed('latestAgenda.status', 'agendas', 'intl', async function () {
     const agenda = await this.get('latestAgenda');
     if (!agenda) return this.intl.t('no-agenda');
 

@@ -81,7 +81,6 @@ export default Service.extend({
     }
 
     await session.destroyRecord();
-    this.router.transitionTo('agendas');
   },
 
 });
