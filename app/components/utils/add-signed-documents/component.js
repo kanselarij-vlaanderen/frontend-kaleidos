@@ -36,15 +36,16 @@ export default Component.extend(UploadDocumentMixin, {
     },
 
     async uploadNewDocument() {
-      // TODO:fix-type
       const item = await this.get('item');
       const documents = await this.saveDocuments(null);
-      // const documentType = await this.get('documentTypeToAssign');
+      const documentType = await this.get('documentTypeToAssign');
       this.send('closeModal');
 
       await Promise.all(
         documents.map(async (document) => {
-          // document.set('type', documentType);
+          if (documentType) {
+            document.set('type', documentType);
+          }
           document.set(this.modelToAddDocumentVersionTo, item);
           item.set('signedDocument', document);
         })
