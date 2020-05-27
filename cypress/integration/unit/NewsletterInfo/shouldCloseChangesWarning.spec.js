@@ -6,12 +6,6 @@ import agenda from '../../../selectors/agenda.selectors';
 
 context('Show warning in newsletterinfo', () => {
 
-  //TODO: Create agenda
-  //TODO: Create procedurestap
-  //TODO: Add procedurestap to agenda
-  //TODO: Switch to kortbestek tab
-  //TODO: Warning should be there
-
   before(() => {
     cy.server();
     cy.resetCache();
@@ -23,26 +17,12 @@ context('Show warning in newsletterinfo', () => {
   });
 
   it('Should close warning in kortbestek view when nota is added but KB is not updated', () => {
-    const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
+    const caseTitle = 'testId=1589276690: Cypress test dossier 1';
     const subcaseTitle1 = caseTitle + ' test stap 1';
 
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
-    const files = [file];
 
-    cy.createCase(false, caseTitle);
-    cy.addSubcase('Nota',
-      subcaseTitle1,
-      'Cypress test voor het testen van toegevoegde documenten',
-      'In voorbereiding',
-      'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(subcaseTitle1, false);
-    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
-    cy.route('/');
-    cy.openAgendaForDate(agendaDate);
+    cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
     cy.get(agenda.agendaItemKortBestekTab)
       .should('be.visible')

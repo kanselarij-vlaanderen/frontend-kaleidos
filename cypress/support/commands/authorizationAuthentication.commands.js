@@ -2,10 +2,10 @@
 /*global cy, Cypress*/
 /// <reference types="Cypress" />
 
-Cypress.Commands.add('login',login);
-Cypress.Commands.add('logout',logout);
-Cypress.Commands.add('loginFlow',loginFlow);
-Cypress.Commands.add('logoutFlow',logoutFlow);
+Cypress.Commands.add('login', login);
+Cypress.Commands.add('logout', logout);
+Cypress.Commands.add('loginFlow', loginFlow);
+Cypress.Commands.add('logoutFlow', logoutFlow);
 
 /**
  * @description Bypasses the mock-login and inserts a localstorage item
@@ -14,7 +14,7 @@ Cypress.Commands.add('logoutFlow',logoutFlow);
  * @function
  * @param {String} name the profile to log in with, case sensitive
  */
-function login(name){
+function login(name, retries = 0) {
   cy.log('login');
   cy.route('GET', '/mock/sessions/current').as('getCurrentSession');
   const EMBER_SIMPLE_AUTH_LS_KEY = 'ember_simple_auth-session';
@@ -35,7 +35,17 @@ function login(name){
       }));
     });
   });
-  cy.visit('').wait('@getCurrentSession'); // Sorry, now this works like a charm...
+  cy.visit('').wait('@getCurrentSession').then((xhr) => {
+    if (xhr.status == 400) {
+      if (retries < 5) {
+        cy.log('login failed, trying again');
+        cy.login(name, retries +1);
+      } else {
+        cy.log('login failed after 5 attempts');
+        return;
+      }
+    }
+  });
   cy.log('/login');
 }
 
@@ -46,7 +56,7 @@ function login(name){
  * @memberOf Cypress.Chainable#
  * @function
  */
-function logout(){
+function logout() {
   cy.log('logout');
   cy.request({
     method: 'DELETE',
@@ -64,7 +74,7 @@ function logout(){
  * @function
  * @param {String} name the profile to log in with, case sensitive
  */
-function loginFlow(name){
+function loginFlow(name) {
   cy.log('loginFlow');
   cy.server();
   cy.route('POST', '/mock/sessions').as('mockLogin');
@@ -83,12 +93,12 @@ function loginFlow(name){
  * @memberOf Cypress.Chainable#
  * @function
  */
-function logoutFlow(){
+function logoutFlow() {
   cy.log('logoutFlow');
   cy.server();
   cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('');
-  cy.contains('Afmelden', { timeout: 12000 }).click({force: true});
+  cy.contains('Afmelden', { timeout: 12000 }).click({ force: true });
   cy.wait('@mockLogout');
   cy.log('/logoutFlow');
 }

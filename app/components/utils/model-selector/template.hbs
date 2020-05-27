@@ -12,6 +12,7 @@
     search=(perform searchTask)
     oninput=(action "resetValueIfEmpty")
     onchange=(action "selectModel")
+    searchEnabled=(not hideSearch)
   as |model|
   }}
     {{await (model-property-to-show model propertyToShow)}}

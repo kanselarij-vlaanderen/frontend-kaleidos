@@ -42,7 +42,7 @@ export default Component.extend( {
     },
 
     reorderItems(itemModels) {
-      if (!this.isEditor) {
+      if (!this.currentSessionService.isEditor) {
         return;
       }
       itemModels.map((item, index) => {
@@ -53,7 +53,7 @@ export default Component.extend( {
     },
 
     reorderAnnouncements(itemModels) {
-      if (!this.isEditor) {
+      if (!this.currentSessionService.isEditor) {
         return;
       }
       itemModels.map((item, index) => {

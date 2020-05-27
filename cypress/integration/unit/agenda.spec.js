@@ -2,7 +2,7 @@ import modal from "../../selectors/modal.selectors";
 import agenda from '../../selectors/agenda.selectors';
 import actionModel from '../../selectors/action-modal.selectors';
 
-/*global context, before, it, cy,beforeEach, Cypress*/
+/*global context, before, it, cy,beforeEach, afterEach, Cypress*/
 /// <reference types="Cypress" />
 
 context('Agenda tests', () => {
@@ -22,6 +22,9 @@ context('Agenda tests', () => {
     cy.login('Admin');
   });
 
+  afterEach(() => {
+    cy.logout();
+  });
   it('should create a new agenda and then delete it', () => {
     const plusMonthsSingleTest = 1;
     const agendaDateSingleTest = Cypress.moment().add('month', plusMonthsSingleTest).set('date', 16).set('hour', 16).set('minute', 16);
