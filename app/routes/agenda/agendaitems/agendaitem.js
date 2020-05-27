@@ -6,9 +6,14 @@ export default Route.extend({
 
   model(params) {
     const agendaitem_id = params.agendaitem_id;
+    let activeAGendaItemSection = localStorage.getItem('activeAgendaItemSection');
+    if (!activeAGendaItemSection) {
+      localStorage.setItem('activeAgendaItemSection', 'details');
+    }
     return this.store.findRecord('agendaitem', agendaitem_id, {
       include: 'subcase'
     });
+
   },
 
   afterModel(model) {
