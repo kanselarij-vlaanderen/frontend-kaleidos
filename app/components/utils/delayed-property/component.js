@@ -20,7 +20,9 @@ export default Component.extend({
     })).then(() => {
       const value = Promise.resolve(this.model.get(this.path));
       value.then((result) => {
-        this.set('value', result);
+        if (!this.isDestroying) {
+          this.set('value', result);
+        }
       })
       .catch((error) => {
         console.error(`failed to render delayed property '${this.path}': ${error}`);
