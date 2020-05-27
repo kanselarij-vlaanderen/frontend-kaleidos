@@ -14,7 +14,7 @@ Cypress.Commands.add('logoutFlow', logoutFlow);
  * @function
  * @param {String} name the profile to log in with, case sensitive
  */
-function login(name) {
+function login(name, retries = 0) {
   cy.log('login');
   cy.route('GET', '/mock/sessions/current').as('getCurrentSession');
   const EMBER_SIMPLE_AUTH_LS_KEY = 'ember_simple_auth-session';
@@ -33,8 +33,18 @@ function login(name) {
           relationships: resp.body.relationships
         }
       }));
-      cy.visit('').wait('@getCurrentSession');
     });
+  });
+  cy.visit('').wait('@getCurrentSession').then((xhr) => {
+    if (xhr.status == 400) {
+      if (retries < 5) {
+        cy.log('login failed, trying again');
+        cy.login(name, retries +1);
+      } else {
+        cy.log('login failed after 5 attempts');
+        return;
+      }
+    }
   });
   cy.log('/login');
 }

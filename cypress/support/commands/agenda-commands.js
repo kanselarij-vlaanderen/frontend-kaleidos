@@ -137,7 +137,7 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
 
   cy.wait('@createNewMeeting', { timeout: 20000 });
   cy.wait('@createNewAgenda', { timeout: 20000 });
-  cy.wait('@createNewAgendaItems', { timeout: 20000 });
+  // cy.wait('@createNewAgendaItems', { timeout: 20000 }); // This fails if there is no older agenda (verslag vorige vergadering)  
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
 }
