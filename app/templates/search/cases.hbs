@@ -1,0 +1,65 @@
+<div class="vl-grid vl-u-spacer-extended-bottom-s">
+
+  <div class="vl-col--2-12">
+    <div class="vlc-box">
+    </div>
+  </div>
+  <div class="vl-col--10-12">
+    <div>
+      <DataTable
+        @content={{this.model}}
+        @page={{this.page}}
+        @noDataMessage={{t "no-results-found"}}
+        @size={{this.size}}
+        @sort={{this.sort}}
+        @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+        @isLoading={{this.isLoadingModel}}
+      as |table|
+      >
+        <table.content as |c|>
+          <c.header>
+            <th class="vl-data-table-col-9 vl-data-table__header-title">
+              {{t "case-name"}}
+            </th>
+            <th class="vl-data-table-col-1 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+            <ThSortable
+              @class="vl-data-table-col-1 vl-data-table__header-title"
+              @currentSorting={{this.sort}}
+              @field="sessionDates"
+              @label={{t "on-agenda-of"}}
+            />
+            <th class="vl-data-table-col-1"></th>
+          </c.header>
+          <c.body class="tr-hover" as |row|>
+            <td>
+              <p>
+                {{#if row.shortTitle}}
+                  {{row.shortTitle}}
+                {{else}}
+                  {{row.title}}
+                {{/if}}
+              </p>
+            </td>
+            <td>
+              {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+            </td>
+            <td>
+              {{moment-format row.sessionDates "DD-MM-YYYY"}}
+            </td>
+            <td class="vl-u-align-right">
+              <LinkTo
+                class="vl-button vl-button--link vl-button--icon"
+                @route="cases.case.subcases"
+                @model={{row.id}}
+              >
+                <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+              </LinkTo>
+            </td>
+          </c.body>
+        </table.content>
+      </DataTable>
+    </div>
+  </div>
+</div>

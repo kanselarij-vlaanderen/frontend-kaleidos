@@ -91,6 +91,10 @@ Router.map(function () {
     this.route('icons');
     this.route('panels');
   });
+
+  this.route('search', function() {
+    this.route('cases');
+  });
 });
 
 export default Router;
