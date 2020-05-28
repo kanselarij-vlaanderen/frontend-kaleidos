@@ -572,5 +572,7 @@
   "style-guide-panels": "Panels",
   "style-guide-title": "Style guide",
   "style-guide-icons": "Icons",
-  "option-others": "Andere"
+  "option-others": "Andere",
+  "reassign-agendaitem-priorities-title": "Aanpassen van agendapunten",
+  "reassign-agendaitem-priorities-message": "Uw aanpassing wordt opgeslagen."
 }

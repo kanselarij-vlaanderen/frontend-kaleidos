@@ -1,4 +1,4 @@
-{{#if (eq currentAgenda.name "Ontwerpagenda")}}
+{{#if currentAgenda.isDesignAgenda}}
   {{#if (and (not (is-pending isDeletable)) (not (is-pending isPostPonable)))}}
     {{#if (await isPostPonable)}}
       {{#if (or agendaitem.retracted (await agendaitem.postponedTo))}}

@@ -12,6 +12,7 @@ const selectors = {
   overviewTitle: '[data-test-agendas-title]',
   agendaListListItemDocuments: '[data-test-agenda-list-list-item-documents]',
   agendaItemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
+  agendaItemOpmerkingenTab: '[data-test-agenda-agendaitem-tab="agendaitem-comment"]',
   agendaItemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
   agendaItemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',

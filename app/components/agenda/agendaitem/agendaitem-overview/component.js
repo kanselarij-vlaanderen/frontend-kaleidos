@@ -12,7 +12,6 @@ export default Component.extend({
   store: inject(),
   agendaService: inject(),
   currentSession: inject(),
-  activeAgendaItemSection: 'details',
   @tracked timestampForMostRecentNota:null,
 
   checkAgendaItemSubcase: observer('subcase', function () {
@@ -28,14 +27,6 @@ export default Component.extend({
     return DS.PromiseObject.create({
       promise: this.get('agendaitem.subcase').then((subcase) => {
         return subcase;
-      })
-    })
-  }),
-
-  lastDefiniteAgenda: computed('sessionService.definiteAgendas.@each', function () {
-    return DS.PromiseObject.create({
-      promise: this.get('sessionService.definiteAgendas').then((definiteAgendas) => {
-        return definiteAgendas.get('lastObject');
       })
     })
   }),
@@ -57,7 +48,7 @@ export default Component.extend({
         const agendaItem = await this.get('agendaitem');
         this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(agendaItem);
       }
-      this.set('activeAgendaItemSection', section);
+      this.setActiveAgendaitemSection(section);
     },
 
     refreshRoute(id) {

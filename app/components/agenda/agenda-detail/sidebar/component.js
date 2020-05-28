@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
 
-export default Component.extend( {
+export default Component.extend({
   sessionService: inject(),
   currentSessionService: inject('current-session'),
   agendaService: inject(),
@@ -15,6 +15,7 @@ export default Component.extend( {
   agendaitems: null,
   isShowingChanges: null,
   overviewEnabled: null,
+  isReAssigningPriorities: null,
   dragHandleClass: '.vlc-agenda-detail-sidebar__sub-item',
   getClassNames: computed('selectedAgendaItem', function () {
     if (this.get('selectedAgendaItem')) {
@@ -25,9 +26,13 @@ export default Component.extend( {
   }),
 
   reAssignPriorities: task(function* (agendaitems) {
-    yield agendaitems.map((item) => {
+    yield agendaitems.map(async (item) => {
       if (isPresent(item.changedAttributes().priority)) {
-        return item.save();
+        this.set('isReAssigningPriorities', true);
+        await item.save();
+        if (!this.isDestroyed) {
+          this.set('isReAssigningPriorities', false);
+        }
       }
     });
   }).restartable(),
@@ -42,7 +47,7 @@ export default Component.extend( {
     },
 
     reorderItems(itemModels) {
-      if (!this.isEditor) {
+      if (!this.currentSessionService.isEditor) {
         return;
       }
       itemModels.map((item, index) => {
@@ -53,7 +58,7 @@ export default Component.extend( {
     },
 
     reorderAnnouncements(itemModels) {
-      if (!this.isEditor) {
+      if (!this.currentSessionService.isEditor) {
         return;
       }
       itemModels.map((item, index) => {

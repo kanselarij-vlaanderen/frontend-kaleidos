@@ -21,7 +21,6 @@ export default Component.extend({
       await foundUser.destroyRecord();
       this.isDeleting = false;
       this.isVerifying = false;
-      this.refreshRoute();
     },
     toggleIsVerifying() {
       this.toggleProperty('isVerifying')

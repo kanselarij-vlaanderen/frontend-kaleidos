@@ -24,8 +24,8 @@ context('Show warning in newsletterinfo', () => {
 
   it('Should show warning in kortbestek view', () => {
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
+    const plusMonths = 2;
+    const agendaDate = currentMoment().add('month', plusMonths).set('date', 4).set('hour', 20).set('minute', 20);
     const subcaseTitle1 = caseTitle + ' test stap 1';
 
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
