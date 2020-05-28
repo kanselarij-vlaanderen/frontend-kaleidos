@@ -1,0 +1,15 @@
+{{! template-lint-disable no-bare-strings }}
+
+<h1 class="vlc-kitchensink__header">{{t "style-guide-alerts"}}</h1>
+
+<h2>Alerts</h2>
+<div class="vlc-kitchensink__sample">
+  <h3>Loading</h3>
+  <WebComponents::VlAlert @type="loading"/>
+  <h3>Closeable</h3>
+  <WebComponents::VlAlert @closeable="false"/>
+  <h3>With title</h3>
+  <WebComponents::VlAlert @title="Causion!"/>
+  <h3>Changes alert</h3>
+  <ChangesAlert @message="The document has changed!"></ChangesAlert>
+</div>
