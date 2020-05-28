@@ -15,6 +15,7 @@
               </div>
             </div>
             <div class="vlc-toolbar__right">
+              {{#if showCloseButton}}
               <div class="vlc-toolbar__item">
                 <button type="button" data-test-vl-modal-close
                         class="vl-button vl-button--link-muted vl-button--icon"
@@ -28,6 +29,7 @@
                   </span>
                 </button>
               </div>
+              {{/if}}
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import modal from "../../selectors/modal.selectors";
 import agenda from '../../selectors/agenda.selectors';
+import actionModel from '../../selectors/action-modal.selectors';
 
 /*global context, before, it, cy,beforeEach, afterEach, Cypress*/
 /// <reference types="Cypress" />
@@ -45,6 +46,27 @@ context('Agenda tests', () => {
   it('should add an agendaitem to an agenda', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(false);
+  });
+
+  it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
+    const agendaDate = Cypress.moment().add('month', 1).set('date', 10).set('hour', 20).set('minute', 20);
+    cy.createAgenda('Elektronische procedure', 1, agendaDate, 'Daar').then((meetingId) => {
+      cy.openAgendaForDate(agendaDate);
+      cy.setFormalOkOnItemWithIndex(0);
+      cy.approveDesignAgenda();
+      cy.deleteAgenda(meetingId);
+      cy.closeAgenda();
+    });
+  });
+
+  it('Should not be able to close a session with only a design agenda, cfr. KAS-1551', () => {
+    const agendaDate = Cypress.moment().add('month', 1).set('date', 11).set('hour', 20).set('minute', 20);
+    cy.createAgenda('Elektronische procedure', 1, agendaDate, 'Daar');
+    cy.openAgendaForDate(agendaDate);
+    cy.get('.vl-button--icon-before')
+      .contains('Acties')
+      .click();
+    cy.get(actionModel.lockAgenda).should('not.exist');
   });
 
   it('should edit nota on agendaitem and trim whitespaces', () => {

@@ -41,8 +41,18 @@ export default Component.extend(FileSaverMixin, {
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
-  hasMultipleAgendas: computed('agendas.@each', async function () {
-    return this.agendas && this.agendas.then(agendas => agendas.length > 1);
+  isLockable: computed('agendas.@each', async function () {
+    const agendas = await this.get('agendas');
+    if (agendas && agendas.length > 1) {
+      return true;
+    } else {
+      const onlyAgenda = await agendas.get('firstObject');
+      if (onlyAgenda.get('isDesignAgenda')) {
+        return false;
+      } else {
+        return true;
+      }
+    }
   }),
 
   currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function () {
@@ -376,10 +386,10 @@ export default Component.extend(FileSaverMixin, {
         .then((newAgenda) => {
           this.reloadRoute(newAgenda.get('id'));
         }).finally(() => {
-        this.set('sessionService.selectedAgendaItem', null);
-        this.changeLoading();
-        this.set('isApprovingAgenda', false);
-      });
+          this.set('sessionService.selectedAgendaItem', null);
+          this.changeLoading();
+          this.set('isApprovingAgenda', false);
+        });
     });
   },
 });
