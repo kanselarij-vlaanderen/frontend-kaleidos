@@ -55,29 +55,37 @@
   padding-top: 1.6rem;
   background: #F3F5F6;
 }
-.vlc-kitchensink__navigation--item{
-  margin-left: 1rem;
-  margin-top: calc(20% - 2.4rem / 2);
+.vlc-kitchensink__navigation-item {
+  .active {
+    color: #0055CC;
+    background-color: #E8EBEE;
+  }
 }
 
-.vlc-kitchensink__navigation--link {
+.vlc-kitchensink__navigation-link {
+  width: 100%;
+  display: block;
   color: #333332;
   text-decoration: none;
   letter-spacing: 0.05rem;
+  padding: 1.5rem 2rem;
 }
 
-.vlc-kitchensink__navigation--link:hover {
-  color: #333332;
-  text-decoration: #0A6C9B underline;
+.vlc-kitchensink__navigation-link:hover {
+  color: #0055CC;
 }
-.vlc-kitchensink__navigation--item:active {
+.vlc-kitchensink__navigation-item:active {
   color: #333332;
 }
 
-.vlc-kitchensink__navigation--header {
-  margin-left: 1rem;
+.vlc-kitchensink__navigation-header {
+  margin: 2rem 1rem;
   font-weight: bold;
   text-transform: uppercase;
+
+  &:first-child {
+    margin: 0rem 1rem 2rem;
+  }
 }
 
 
