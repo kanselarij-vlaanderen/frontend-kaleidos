@@ -1,10 +1,10 @@
 @font-face {
     font-family: "kaleidos-icons";
-    src: url("/fonts/kaleidos-icons.eot?9894a3cd00f0aca874e77f22e1b91937?#iefix") format("embedded-opentype"),
-url("/fonts/kaleidos-icons.woff2?9894a3cd00f0aca874e77f22e1b91937") format("woff2"),
-url("/fonts/kaleidos-icons.woff?9894a3cd00f0aca874e77f22e1b91937") format("woff"),
-url("/fonts/kaleidos-icons.ttf?9894a3cd00f0aca874e77f22e1b91937") format("truetype"),
-url("/fonts/kaleidos-icons.svg?9894a3cd00f0aca874e77f22e1b91937#kaleidos-icons") format("svg");
+    src: url("/fonts/kaleidos-icons.eot?7e177c8954da8366b2b53d0fe3ba2713?#iefix") format("embedded-opentype"),
+url("/fonts/kaleidos-icons.woff2?7e177c8954da8366b2b53d0fe3ba2713") format("woff2"),
+url("/fonts/kaleidos-icons.woff?7e177c8954da8366b2b53d0fe3ba2713") format("woff"),
+url("/fonts/kaleidos-icons.ttf?7e177c8954da8366b2b53d0fe3ba2713") format("truetype"),
+url("/fonts/kaleidos-icons.svg?7e177c8954da8366b2b53d0fe3ba2713#kaleidos-icons") format("svg");
 }
 
 i[class^="ki-"]:before, i[class*=" ki-"]:before {
@@ -21,39 +21,45 @@ i[class^="ki-"]:before, i[class*=" ki-"]:before {
 .ki-cross:before {
     content: "\f101";
 }
-.ki-hierarchical-back:before {
+.ki-document-added:before {
     content: "\f102";
 }
-.ki-info-circle:before {
+.ki-document:before {
     content: "\f103";
 }
-.ki-nav-down:before {
+.ki-hierarchical-back:before {
     content: "\f104";
 }
-.ki-nav-left:before {
+.ki-info-circle:before {
     content: "\f105";
 }
-.ki-nav-right:before {
+.ki-nav-down:before {
     content: "\f106";
 }
-.ki-nav-up:before {
+.ki-nav-left:before {
     content: "\f107";
 }
-.ki-pencil:before {
+.ki-nav-right:before {
     content: "\f108";
 }
-.ki-question-mark:before {
+.ki-nav-up:before {
     content: "\f109";
 }
-.ki-redo:before {
+.ki-pencil:before {
     content: "\f10a";
 }
-.ki-search:before {
+.ki-question-mark:before {
     content: "\f10b";
 }
-.ki-sitemap:before {
+.ki-redo:before {
     content: "\f10c";
 }
-.ki-user:before {
+.ki-search:before {
     content: "\f10d";
+}
+.ki-sitemap:before {
+    content: "\f10e";
+}
+.ki-user:before {
+    content: "\f10f";
 }

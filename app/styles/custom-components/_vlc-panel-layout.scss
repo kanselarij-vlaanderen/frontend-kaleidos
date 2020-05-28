@@ -64,6 +64,7 @@
   box-sizing: border-box;
   padding: 1rem;
   justify-content: space-between;
+  background: #FFF;
 
   .vlc-panel-layout-button-seperator {
     margin-left: 1.5rem;
@@ -74,8 +75,22 @@
   border-bottom: unset;
 }
 
+.vlc-panel-layout-only-border-bottom {
+  border-bottom: 1px solid #C6CDD3;
+  box-sizing: border-box;
+}
+
+.vlc-panel-layout-no-border {
+  border: unset;
+}
+
 .vlc-panel-layout-footer {
   justify-content: flex-end;
+  background: #FFF;
+}
+
+.vlc-panel-layout-body {
+  background: #FFF;
 }
 
 .vlc-panel-layout-padding {
