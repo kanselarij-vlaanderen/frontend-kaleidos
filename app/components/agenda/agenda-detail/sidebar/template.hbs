@@ -160,6 +160,13 @@
     @isOverlay={{true}}
     @showCloseButton={{false}}
     @title={{t "reassign-agendaitem-priorities-title"}} >
-    <WebComponents::VlLoader @text={{concat (t "reassign-agendaitem-priorities-message") " " (t "please-be-patient")}} />
+    <WebComponents::VlLoader
+    @text=
+      {{concat
+        (t "reassign-agendaitem-priorities-message")
+        " "
+        (t "please-be-patient")
+      }}
+    />
   </WebComponents::VlModal>
 {{/if}}
