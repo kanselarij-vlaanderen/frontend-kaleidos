@@ -86,7 +86,6 @@ Router.map(function () {
     this.route('alerts');
     this.route('buttons');
     this.route('documents');
-    this.route('components');
     this.route('icons');
     this.route('inputs');
     this.route('panels');
