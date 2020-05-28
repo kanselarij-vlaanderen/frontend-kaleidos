@@ -27,7 +27,9 @@ export default class AgendaList extends Component {
       if (isPresent(item.changedAttributes().priority)) {
         this.set('isReAssigningPriorities', true);
         await item.save();
-        this.set('isReAssigningPriorities', false);
+        if (!this.isDestroyed) {
+          this.set('isReAssigningPriorities', false);
+        }
       }
     });
   }

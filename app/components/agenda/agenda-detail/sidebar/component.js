@@ -30,7 +30,9 @@ export default Component.extend({
       if (isPresent(item.changedAttributes().priority)) {
         this.set('isReAssigningPriorities', true);
         await item.save();
-        this.set('isReAssigningPriorities', false);
+        if (!this.isDestroyed) {
+          this.set('isReAssigningPriorities', false);
+        }
       }
     });
   }).restartable(),
