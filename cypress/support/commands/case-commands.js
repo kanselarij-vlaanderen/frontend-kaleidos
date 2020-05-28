@@ -78,9 +78,10 @@ function createCase(confidential, shortTitle) {
  * @returns {Promise<String>} the id of the created subcase
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
+  cy.server();
   cy.log('addSubcase');
-  cy.route('POST', '/subcases').as('createNewSubcase');
-  cy.route('POST', '/newsletter-infos').as('createNewsletter');
+  cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
+  cy.route('POST', '/newsletter-infos').as('addSubcase-createNewsletter');
 
   cy.wait(2000);
 
@@ -129,11 +130,11 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   let subcaseId;
 
-  cy.wait('@createNewsletter', { timeout: 10000 })
+  cy.wait('@addSubcase-createNewsletter', { timeout: 10000 })
     .then((res) => {
       subcaseId = res.responseBody.data.id;
     });
-  cy.wait('@createNewSubcase', { timeout: 10000 })
+  cy.wait('@addSubcase-createNewSubcase', { timeout: 10000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
         resolve(subcaseId);
