@@ -7,6 +7,7 @@ import { destroyApprovalsOfAgendaitem, setNotYetFormallyOk } from 'fe-redpencil/
 import config from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 import { deprecatingAlias } from '@ember/object/computed';
+import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 
 export default Component.extend(MyDocumentVersions, {
   toaster: service(),
@@ -161,6 +162,35 @@ export default Component.extend(MyDocumentVersions, {
   },
 
   actions: {
+
+    async uploadedFile(uploadedFile) {
+      const creationDate = moment().utc().toDate();
+      if (this.documentContainer) {
+        await this.documentContainer.reload();
+        await this.documentContainer.hasMany('documents').reload();
+      }
+      const previousVersion = this.documentContainer ? (await this.documentContainer.get('lastDocumentVersion')) : null;
+      const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
+        accessLevel: this.defaultAccessLevel,
+      });
+      newDocument.set('created', creationDate);
+      newDocument.set('modified', creationDate);
+      if (this.documentContainer) { // Adding new version to existing container
+        const docs = await this.documentContainer.get('documents');
+        docs.pushObject(newDocument);
+        newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
+        const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
+        newDocument.set('name', newName);
+        this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
+      } else { // Adding new version, new container
+        const newContainer = this.store.createRecord('document', {
+          'created': creationDate
+        });
+        newDocument.set('documentContainer', newContainer);
+        this.get('documentsInCreation').pushObject(newDocument);
+      }
+    },
+
     showVersions() {
       this.toggleProperty('isShowingVersions');
     },
