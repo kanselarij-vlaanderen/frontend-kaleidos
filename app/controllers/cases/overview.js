@@ -1,10 +1,7 @@
 import Controller from '@ember/controller';
-import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
-import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import moment from 'moment';
 
-export default Controller.extend(DefaultQueryParamsMixin, {
+export default Controller.extend({
   queryParams: [
     { page: { type: 'number'} },
     { size: { type: 'number'} },
@@ -12,9 +9,9 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     { showArchived:  { type: 'boolean'} }
   ],
   sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
+  page: 0,
   size: 10,
 
-  intl: inject(),
   currentSession: inject(),
   sort: '-created',
   selectedCase: null,
