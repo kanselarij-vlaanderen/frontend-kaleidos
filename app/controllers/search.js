@@ -4,6 +4,13 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class SearchController extends Controller {
+  queryParams = {
+    searchText: { type: 'string'},
+    mandatees: { type: 'string'},
+    dateFrom: { type: 'string'},
+    dateTo: { type: 'string'}
+  };
+
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
   @tracked searchText = '';
@@ -11,18 +18,16 @@ export default class SearchController extends Controller {
   @tracked dateFrom;
   @tracked dateTo;
 
-  get dateFrom () {
-      return this.dateFromBuffer && moment(this.dateFromBuffer, "DD-MM-YYYY").toDate();
-  }
-  set dateFrom (value) {
-      this.dateFromBuffer = value && moment(value).format('DD-MM-YYYY');
-  }
+  @tracked searchTextBuffer = '';
+  @tracked mandateesBuffer;
+  @tracked dateFromBuffer;
+  @tracked dateToBuffer;
 
-  get dateTo () {
-      return this.dateToBuffer && moment(this.dateToBuffer, "DD-MM-YYYY").toDate();
+  deserializeDate (date) {
+    return date && moment(date, "DD-MM-YYYY").toDate();
   }
-  set dateTo (value) {
-      this.dateToBuffer = value && moment(value).format('DD-MM-YYYY');
+  serializeDate (date) {
+    return date && moment(date).format('DD-MM-YYYY');
   }
 
   @action
@@ -39,8 +44,8 @@ export default class SearchController extends Controller {
   search () {
     this.searchText = this.searchTextBuffer;
     this.mandatees = this.mandateesBuffer;
-    this.dateFrom = this.dateFromBuffer;
-    this.dateTo = this.dateToBuffer;
+    this.dateFrom = this.serializeDate(this.dateFromBuffer);
+    this.dateTo = this.serializeDate(this.dateToBuffer);
   }
 
   @action
