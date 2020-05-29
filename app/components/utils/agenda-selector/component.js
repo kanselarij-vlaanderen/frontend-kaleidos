@@ -42,6 +42,21 @@ export default Component.extend( {
     return this.store.query(modelName, queryOptions);
   }),
 
+  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
+    let options = {};
+    const { filter, sortField, includeField } = this;
+    if (sortField) {
+      options['sort'] = sortField;
+    }
+    if (filter) {
+      options['filter'] = filter;
+    }
+    if (includeField) {
+      options['include'] = includeField;
+    }
+    return options;
+  }),
+
   items: computed('sessionService.agendas', function () {
     return this.sessionService.get('agendas');
   }),
