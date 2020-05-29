@@ -30,6 +30,11 @@ export default class CasesSearchController extends Controller {
   }
 
   @action
+  toggleDesisionsOnly() {
+    this.toggleProperty('desicionsOnly');
+  }
+
+  @action
   navigateToCase(_case) {
     this.transitionToRoute('cases.case.subcases', _case.id);
   }

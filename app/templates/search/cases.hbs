@@ -2,6 +2,14 @@
 
   <div class="vl-col--2-12">
     <div class="vlc-box">
+      <WebComponents::VlFormLabel @value="Filters"/>
+      <WebComponents::VlFormLabel @value="Type"/>
+      <WebComponents::VlCheckbox
+        @value={{this.decisionsOnly}}
+        @label="Zoek enkel in beslissingen"
+        @toggle={{this.toggleDesisionsOnly}}
+      />
+
     </div>
   </div>
   <div class="vl-col--10-12">
