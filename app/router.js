@@ -94,6 +94,7 @@ Router.map(function () {
 
   this.route('search', function() {
     this.route('cases');
+    this.route('agenda-items', { path: '/agendapunten' });
   });
 });
 

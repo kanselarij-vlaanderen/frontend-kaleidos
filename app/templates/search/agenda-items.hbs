@@ -1,0 +1,94 @@
+<div class="vl-grid vl-u-spacer-extended-bottom-s">
+
+  <div class="vl-col--2-12">
+    <div class="vlc-box">
+      <WebComponents::VlFormLabel @value="Filters"/>
+      <WebComponents::VlFormLabel @value="Type"/>
+      <WebComponents::VlCheckbox
+        @value={{this.includeNotas}}
+        @label="Nota"
+        @toggle={{this.toggleIncludeNotas}}
+      />
+      <WebComponents::VlCheckbox
+        @value={{this.includeMededelingen}}
+        @label="Mededeling"
+        @toggle={{this.toggleIncludeMededelingen}}
+      />
+    </div>
+  </div>
+  <div class="vl-col--10-12">
+    <div>
+      <DataTable
+        @content={{this.model}}
+        @page={{this.page}}
+        @noDataMessage={{t "no-results-found"}}
+        @size={{this.size}}
+        @sort={{this.sort}}
+        @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+        @isLoading={{this.isLoadingModel}}
+      as |table|
+      >
+        <table.content as |c|>
+          <c.header>
+            <th
+                    class="vl-data-table-col-7 vl-data-table__header-title">
+              {{t "agendaitem-table-header"}}
+            </th>
+            <th
+                    class="vl-data-table-col-1 vl-data-table__header-title">
+              {{t "agendaitem-type"}}
+            </th>
+            <th
+                    class="vl-data-table-col-1 vl-data-table__header-title">
+              {{t "agenda-version"}}
+            </th>
+            <ThSortable
+              @class="vl-data-table-col-1 vl-data-table__header-title"
+              @currentSorting={{this.sort}}
+              @field="sessionDates"
+              @label={{t "on-agenda-of"}}
+            />
+            <th class="vl-data-table-col-1"></th>
+          </c.header>
+          <c.body class="tr-hover" as |row|>
+            <td>
+              <p>
+                {{#if row.shortTitle}}
+                  {{row.shortTitle}}
+                {{else}}
+                  {{row.title}}
+                {{/if}}
+              </p>
+            </td>
+            <td>
+              {{#if (eq row.showAsAnnouncement "true")}}
+                {{capitalize (t "announcement")}}
+              {{else}}
+                {{t "note"}}
+              {{/if}}
+            </td>
+            <td>
+              {{#if (eq row.agendaName.length 1)}}
+                {{t "agenda"}} {{row.agendaName}}
+              {{else}}
+                {{row.agendaName}}
+              {{/if}}
+            </td>
+            <td>
+              {{moment-format row.sessionDates "DD-MM-YYYY"}}
+            </td>
+            <td class="vl-u-align-right">
+              <LinkTo
+                class="vl-button vl-button--link vl-button--icon"
+                @route="agenda.agendaitems.agendaitem"
+                @models={{array row.meetingId row.agendaId row.id}}
+              >
+                <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+              </LinkTo>
+            </td>
+          </c.body>
+        </table.content>
+      </DataTable>
+    </div>
+  </div>
+</div>
