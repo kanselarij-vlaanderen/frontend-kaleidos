@@ -13,3 +13,8 @@
 .vlc-list-section-header + .vlc-list-section-header {
   clear: both;
 }
+.vlc-agenda-items--spaced {
+  .vlc-list-section-header {
+    margin-top: 1.5rem;
+  }
+}

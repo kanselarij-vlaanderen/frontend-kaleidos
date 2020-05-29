@@ -24,7 +24,9 @@ export default Controller.extend({
   sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', async function () {
     const announcements = this.get('announcements');
     if (announcements) {
-      return announcements.filter((item) => !item.isDeleted).sortBy('priority');
+      const actualAnnouncementsitems = announcements.filter((item) => !item.isDeleted).sortBy('priority');
+      await this.agendaService.groupAgendaItemsOnGroupName(actualAnnouncementsitems);
+      return actualAnnouncementsitems;
     } else {
       return [];
     }
