@@ -6,7 +6,10 @@ import moment from 'moment';
 
 export default Controller.extend(DefaultQueryParamsMixin, {
   queryParams: [
-    { showArchived: 'gearchiveerd' },
+    { page: { type: 'number'} },
+    { size: { type: 'number'} },
+    { sort: { type: 'number'} },
+    { showArchived:  { type: 'boolean'} }
   ],
   sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
   size: 10,

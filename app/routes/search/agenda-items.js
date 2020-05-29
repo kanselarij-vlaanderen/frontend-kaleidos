@@ -11,14 +11,15 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
     },
     page: {
       refreshModel: true,
-      type: 'number'
+      as: 'pagina'
     },
     size: {
       refreshModel: true,
-      type: 'number'
+      as: 'aantal'
     },
     sort: {
-      refreshModel: true
+      refreshModel: true,
+      as: 'sorteer'
     }
   };
 
