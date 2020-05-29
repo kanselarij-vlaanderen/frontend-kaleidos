@@ -92,8 +92,8 @@ Router.map(function () {
     this.route('panels');
   });
 
-  this.route('search', function() {
-    this.route('cases');
+  this.route('search', { path: '/zoeken' }, function() {
+    this.route('cases', { path: '/dossiers' });
     this.route('agenda-items', { path: '/agendapunten' });
   });
 });
