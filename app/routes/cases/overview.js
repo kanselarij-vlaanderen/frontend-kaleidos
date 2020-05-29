@@ -4,6 +4,12 @@ import { action } from '@ember/object';
 
 export default class OverviewCaseRoute extends Route.extend(DataTableRouteMixin) {
   queryParams = {
+    page: {
+      refreshModel: true
+    },
+    size: {
+      refreshModel: true
+    },
     showArchived: {
       refreshModel: true
     }
