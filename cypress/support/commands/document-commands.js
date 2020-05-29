@@ -61,11 +61,10 @@ function addNewDocumentVersionToMeeting(oldFileName, file) {
  * @function
  * @param {string} agendaItemTitle
  * @param {string} files
- * @param {boolean} isDetailView
  */
-function addDocumentsToAgendaItem(agendaItemTitle, files,isDetailView=false) {
+function addDocumentsToAgendaItem(agendaItemTitle, files) {
   cy.log('addDocumentsToAgendaItem');
-  openAgendaItemDocumentTab(agendaItemTitle,false,isDetailView);
+  openAgendaItemDocumentTab(agendaItemTitle,false);
   return addDocuments(files)
 }
 
@@ -77,11 +76,10 @@ function addDocumentsToAgendaItem(agendaItemTitle, files,isDetailView=false) {
  * @param {string} agendaItemTitle
  * @param {string} oldFileName
  * @param {string} file
- * @param {boolean} isDetailView
  */
-function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file,isDetailView = false) {
+function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
   cy.log('addNewDocumentVersionToAgendaItem');
-  openAgendaItemDocumentTab(agendaItemTitle, true,isDetailView);
+  openAgendaItemDocumentTab(agendaItemTitle, true);
   return addNewDocumentVersion(oldFileName, file, 'agendaitems')
 }
 
@@ -107,23 +105,13 @@ function addNewDocumentVersionToSubcase(oldFileName, file) {
  * @param {string} agendaItemTitle
  * @param {boolean} alreadyHasDocs
  */
-function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDetailView = false) {
+function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
   cy.log('openAgendaItemDocumentTab');
-  // cy.route('GET', 'documents**').as('getDocuments');
-  if(isDetailView) {
-    cy.get(agenda.agendaDetailSidebarSubitem)
-      .contains(agendaItemTitle)
-      .click()
-      .wait(2000); // sorry
-  } else {
-    cy.openDetailOfAgendaitem(agendaItemTitle);
-  }
-  cy.get(agenda.agendaItemOpmerkingenTab)
+  cy.openDetailOfAgendaitem(agendaItemTitle);
   cy.get(agenda.agendaItemDocumentsTab)
     .click()
     .wait(2000); //Access-levels GET occured earlier, general wait instead
   if (alreadyHasDocs) {
-    // cy.wait('@getDocuments')
     cy.wait(2000); //documents GET occured earlier, general wait instead
   }
   cy.log('/openAgendaItemDocumentTab');
@@ -139,11 +127,9 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false, isDe
  */
 function openAgendaItemDossierTab(agendaItemTitle) {
   cy.log('openAgendaItemDossierTab');
-  // cy.route('GET', 'documents**').as('getDocuments');
   cy.openDetailOfAgendaitem(agendaItemTitle);
   cy.get(agenda.agendaItemDossierTab)
-    .click()
-    .wait(100); //Access-levels GET occured earlier, general wait instead
+    .click();
   cy.log('/openAgendaItemDossierTab');
 }
 
