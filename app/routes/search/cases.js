@@ -11,15 +11,13 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
     // },
     decisionsOnly: {
       refreshModel: true,
-      type: 'boolean'
+      as: 'enkel_beslissingen'
     },
     page: {
       refreshModel: true,
-      type: 'number'
     },
     size: {
       refreshModel: true,
-      type: 'number'
     },
     sort: {
       refreshModel: true
