@@ -8,14 +8,14 @@ export default Component.extend({
   isAdding: false,
   isEditingMandateeRow: false,
 
-  async getDomainOfField(field) {
+  getDomainOfField(field) {
     if (field)
-      return await field.get('domain');
+      return field.get('domain');
   },
 
-  async getFieldOfIseCode(iseCode) {
+  getFieldOfIseCode(iseCode) {
     if (iseCode)
-      return await iseCode.get('field');
+      return iseCode.get('field');
   },
 
   checkMandateeRowsForSubmitter(mandateeRows) {
