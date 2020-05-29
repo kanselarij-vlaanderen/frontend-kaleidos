@@ -32,6 +32,15 @@
               {{t "newsletter"}}
             {{/link-to}}
           </li>
+          <li class="vl-tab" data-test-m-header-search>
+            {{#link-to
+              "search"
+              class="vl-tab__link"
+            }}
+              {{!-- TODO: magnifying glass icon --}}
+              {{capitalize (t "search")}}
+            {{/link-to}}
+          </li>
           {{#if currentSession.isEditor}}
             <li class="vl-tab" data-test-m-header-settings>
               {{#link-to "settings.overview" class="vl-tab__link"}}
