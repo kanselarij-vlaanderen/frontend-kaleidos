@@ -1,15 +1,15 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import moment from 'moment';
-import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
 import { inject as service } from '@ember/service';
 import { destroyApprovalsOfAgendaitem, setNotYetFormallyOk } from 'fe-redpencil/utils/agenda-item-utils';
 import config from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 import { deprecatingAlias } from '@ember/object/computed';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
+import DS from 'ember-data';
 
-export default Component.extend(MyDocumentVersions, {
+export default Component.extend({
   toaster: service(),
   fileService: service(),
   intl: service(),
@@ -30,6 +30,48 @@ export default Component.extend(MyDocumentVersions, {
   }),
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
+  myDocumentVersions: computed.alias('item.documentVersions'),
+
+  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function () {
+    const sortedVersions = this.get('mySortedDocumentVersions');
+    return sortedVersions.lastObject;
+  }),
+
+  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function () {
+    return DS.PromiseArray.create({
+      promise: (async () => {
+        const itemVersionIds = {};
+        const versions = await this.get('myDocumentVersions');
+        if (versions) {
+          versions.map((item) => {
+            itemVersionIds[item.get('id')] = true;
+          });
+        }
+        const documentVersions = await this.get('document.sortedDocumentVersions');
+        if (documentVersions) {
+          const matchingVersions = await documentVersions.filter((item) => {
+            return itemVersionIds[item.id];
+          });
+          return matchingVersions;
+        }
+
+        return;
+      })()
+    });
+  }),
+
+  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function () {
+    const reversed = [];
+    this.get('mySortedDocumentVersions').map((item) => {
+      reversed.push(item);
+    });
+    reversed.reverse();
+    return reversed;
+  }),
+
+  numberOfDocumentVersions: computed('mySortedDocumentVersions.@each', function () {
+    return this.get('mySortedDocumentVersions').length;
+  }),
 
   aboutToDelete: computed('document.aboutToDelete', function () {
     if (this.document) {
