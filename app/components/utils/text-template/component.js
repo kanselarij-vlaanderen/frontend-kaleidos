@@ -50,6 +50,21 @@ export default Component.extend( {
     }
   }),
 
+  searchTask: task(function* (searchValue) {
+    yield timeout(300);
+    const { queryOptions, searchField, modelName } = this;
+    if (queryOptions['filter']) {
+      queryOptions['filter'][searchField] = searchValue;
+    } else {
+      let filter = {};
+      filter[searchField] = searchValue;
+      queryOptions['filter'] = filter;
+    }
+
+    return this.store.query(modelName, queryOptions);
+  }),
+
+
   actions: {
     selectModel(items) {
       this.descriptionUpdated(items.get('description'));
