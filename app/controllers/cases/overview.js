@@ -10,7 +10,7 @@ export default Controller.extend({
   ],
   sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
   page: 0,
-  size: 10,
+  size: 20,
 
   currentSession: inject(),
   sort: '-created',
