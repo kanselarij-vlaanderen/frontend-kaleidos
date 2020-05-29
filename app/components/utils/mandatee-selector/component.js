@@ -24,6 +24,21 @@ export default Component.extend( {
     return { ':gte:end': moment().utc().toDate().toISOString() };
   }),
 
+  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
+    let options = {};
+    const { filter, sortField, includeField } = this;
+    if (sortField) {
+      options['sort'] = sortField;
+    }
+    if (filter) {
+      options['filter'] = filter;
+    }
+    if (includeField) {
+      options['include'] = includeField;
+    }
+    return options;
+  }),
+
   findAll: task(function* () {
     const { modelName, queryOptions } = this;
     if (modelName) {
