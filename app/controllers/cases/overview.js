@@ -6,12 +6,7 @@ import moment from 'moment';
 
 export default Controller.extend(DefaultQueryParamsMixin, {
   queryParams: [
-    'isArchived',
-    { searchText: 'zoekterm' },
-    'mandatees',
-    { dateFrom: 'vanaf' },
-    { dateTo: 'tot' },
-    'decisionsOnly'
+    { showArchived: 'gearchiveerd' },
   ],
   sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
   size: 10,
@@ -23,43 +18,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   isEditingRow: false,
   isNotArchived: false,
   isArchivingCase: false,
-  isArchived: false,
-
-  emptyCaseType: computed('intl', function () {
-    return this.intl.t('no-case-type');
-  }),
-
-  editCase: computed('intl', function () {
-    return this.intl.t('edit-case');
-  }),
-
-  archiveCase: computed('intl', function () {
-    return this.intl.t('archive-case');
-  }),
-
-  unArchiveCase: computed('intl', function () {
-    return this.intl.t('unarchive-case');
-  }),
-
-  deSerializedDateFrom: computed('dateFrom', {
-    get() {
-      return this.dateFrom && moment(this.dateFrom, "DD-MM-YYYY").toDate();
-    },
-    set(key, value) {
-      this.set('dateFrom', value && moment(value).format('DD-MM-YYYY'));
-      return value;
-    }
-  }),
-
-  deSerializedDateTo: computed('dateTo', {
-    get() {
-      return this.dateTo && moment(this.dateTo, "DD-MM-YYYY").toDate();
-    },
-    set(key, value) {
-      this.set('dateTo', value && moment(value).format('DD-MM-YYYY'));
-      return value;
-    }
-  }),
+  showArchived: false,
 
   actions: {
     selectSize(size) {
@@ -117,27 +76,8 @@ export default Controller.extend(DefaultQueryParamsMixin, {
       this.transitionToRoute('cases.case.subcases', caze.id);
     },
 
-    filterCases(filter) {
-      this.set('page', 0);
-      const stoppingSearch = Boolean(!filter.searchText);
-      if (stoppingSearch) {
-        this.set('searchText', null);
-        this.set('mandatees', null);
-        this.set('dateFrom', null);
-        this.set('dateTo', null);
-        this.set('sort', '-created');
-      } else {
-        this.set('searchText', filter.searchText);
-        this.set('mandatees', filter.mandatees);
-        this.set('deSerializedDateFrom', filter.dateFrom);
-        this.set('deSerializedDateTo', filter.dateTo);
-        this.set('decisionsOnly', filter.searchInDecisionsOnly);
-        this.set('sort', '-session-dates');
-      }
-    },
-
-    navigateToCase(caze) {
-      this.transitionToRoute('cases.case.subcases', caze.id);
+    navigateToCase(_case) {
+      this.transitionToRoute('cases.case.subcases', _case.id);
     }
   },
 
