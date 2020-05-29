@@ -17,6 +17,8 @@ export default class CasesSearchController extends Controller {
   @tracked sort;
   @tracked decisionsOnly;
 
+  @tracked emptySearch;
+
   constructor () {
     super(...arguments);
     this.page = 0;

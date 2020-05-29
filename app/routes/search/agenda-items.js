@@ -40,6 +40,10 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
   model(params) {
     const searchParams = this.paramsFor('search');
 
+    if (isEmpty(searchParams.searchText)) {
+      return [];
+    }
+
     const searchModifier = ':sqs:';
     const textSearchKey = this.textSearchFields.join(',');
 
@@ -76,14 +80,15 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
       }
     }
 
-    if (Object.keys(filter).length == 0) {
-      filter[':sqs:title'] = '*'; // search without filter
-    }
-
     return search('agendaitems', params.page, params.size, params.sort, filter, function (item) {
       const entry = item.attributes;
       entry.id = item.id;
       return entry;
     });
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
   }
 }

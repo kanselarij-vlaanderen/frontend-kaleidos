@@ -434,6 +434,8 @@
   "notification": "Notificatie",
   "no-notification-yet": "Nog geen notificatie beschikbaar",
   "no-results-found": "Geen resultaten gevonden",
+  "fill-in-search-term": "Gelieve een zoekterm in te vullen.",
+  "no-results-found-modify-term": "Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.",
   "add-notification": "Notificatie toevoegen",
   "notification-loading-text": "De notificatie wordt geladen.",
   "new-agendaitem": "Nieuw agendapunt",

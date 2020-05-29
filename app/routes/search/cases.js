@@ -44,6 +44,10 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
   model(params) {
     const searchParams = this.paramsFor('search');
 
+    if (isEmpty(searchParams.searchText)) {
+      return [];
+    }
+
     const searchModifier = ':sqs:';
     const textSearchKey = this.textSearchFields.join(',');
 
@@ -80,10 +84,6 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
     //   filter['isArchived'] = 'true';
     // }
 
-    if (Object.keys(filter).length == 0) {
-      filter[searchModifier + textSearchKey] = '*'; // search without filter
-    }
-
     const { postProcessDates } = this;
     return search(searchDocumentType, params.page, params.size, params.sort, filter, function (item) {
       const entry = item.attributes;
@@ -91,5 +91,10 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
       postProcessDates(item);
       return entry;
     });
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
   }
 }
