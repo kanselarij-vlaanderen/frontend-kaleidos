@@ -26,12 +26,15 @@
       >
         <table.content as |c|>
           <c.header>
-            <th class="vl-data-table-col-9 vl-data-table__header-title">
+            <th class="vl-data-table-col-8 vl-data-table__header-title">
               {{t "case-name"}}
             </th>
-            <th class="vl-data-table-col-1 vl-data-table__header-title">
-              {{t "created-on"}}
-            </th>
+            <ThSortable
+              @class="vl-data-table-col-2 vl-data-table__header-title"
+              @currentSorting={{this.sort}}
+              @field="created"
+              @label={{t "created-on"}}
+            />
             <ThSortable
               @class="vl-data-table-col-1 vl-data-table__header-title"
               @currentSorting={{this.sort}}
