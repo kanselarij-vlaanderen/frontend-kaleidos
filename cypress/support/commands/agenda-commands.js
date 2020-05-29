@@ -494,10 +494,11 @@ function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
     cy.get('.vl-tabs .active').then((element) => {
       const selectedTab = element[0].text;
       if (!selectedTab.includes('Dossier')) {
-        cy.wait(3000);
-        cy.get(agenda.agendaItemDossierTab).click();;
+        cy.wait(3000); //TODO wait to ensure the page and tabs are loaded, find a better to check this
+        cy.get(agenda.agendaItemDossierTab).click();
       }
       if (isAdmin) {
+        cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
         cy.contains('Naar procedurestap', { timeout: 12000 });
       } else {
         cy.wait(3000); //TODO wait to ensure the page is loaded, find a better way to check this for other profiles
