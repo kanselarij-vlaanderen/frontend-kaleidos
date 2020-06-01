@@ -77,7 +77,7 @@ function validateDropdownElements(elementIndex, textContent) {
   cy.log('validateDropdownElements');
   cy.get('.ember-power-select-trigger').click();
   cy.get('.ember-power-select-option').eq(elementIndex).should('contain.text', textContent);
-  cy.get('.ember-power-select-option').eq(elementIndex).click();
+  cy.get('.ember-power-select-option').eq(elementIndex).scrollIntoView().click();
   cy.log('/validateDropdownElements');
 }
 

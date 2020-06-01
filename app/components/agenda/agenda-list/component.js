@@ -19,12 +19,17 @@ export default class AgendaList extends Component {
   isEditingOverview = null;
   isShowingChanges = null;
   overviewEnabled = null;
+  isReAssigningPriorities = null;
 
   @restartableTask
   reAssignPriorities = function* (agendaitems) {
     yield agendaitems.map(async (item) => {
       if (isPresent(item.changedAttributes().priority)) {
-        return await item.save();
+        this.set('isReAssigningPriorities', true);
+        await item.save();
+        if (!this.isDestroyed) {
+          this.set('isReAssigningPriorities', false);
+        }
       }
     });
   }

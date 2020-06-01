@@ -23,6 +23,7 @@ export default Component.extend({
   isOverlay: null,
   large: false,
   clickOutside: false,
+  showCloseButton: true,
   isDocumentViewer: null,
 
   didInsertElement() {

@@ -90,14 +90,15 @@ Router.map(function () {
   this.route('help');
   this.route('manual', { path: '/handleiding' });
 
-
   this.route('styleguide', function() {
-    this.route('typography');
+    this.route('alerts');
     this.route('buttons');
-    this.route('pills');
-    this.route('components');
+    this.route('documents');
     this.route('icons');
+    this.route('inputs');
     this.route('panels');
+    this.route('pills');
+    this.route('typography');
   });
 });
 
