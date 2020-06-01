@@ -1,14 +1,19 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
-import ModelManageMixin from 'fe-redpencil/mixins/model-manage-mixin';
+import { inject } from '@ember/service';
 
-export default Component.extend(ModelManageMixin, {
+export default Component.extend({
   classNames: ['vl-u-spacer'],
   modelName: null,
 
   name: cached('item.name'), // TODO in class syntax use as a decorator instead
   code: cached('item.code'), // TODO in class syntax use as a decorator instead
   field: cached('item.field'), // TODO in class syntax use as a decorator instead
+
+  store: inject(),
+
+  isAdding: false,
+  isEditing: false,
 
   actions: {
     async editModel() {
@@ -17,7 +22,7 @@ export default Component.extend(ModelManageMixin, {
       const field = await this.get('field');
       model.set('name', this.get('name'));
       model.set('code', this.get('code'));
-      model.set('field', field)
+      model.set('field', field);
       model.save().then(() => {
         this.set('isLoading', false);
         this.set('code', null);
@@ -42,6 +47,29 @@ export default Component.extend(ModelManageMixin, {
         this.set('field', null);
         this.set('isAdding', false);
       });
-    }
+    },
+    close() {
+      this.close();
+    },
+
+    selectModel(model) {
+      this.set('item', model);
+    },
+
+    toggleIsAdding() {
+      this.toggleProperty('isAdding');
+    },
+
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
+
+    chooseField(field) {
+      this.set('field', field);
+    },
+
+    removeModel() {
+      alert('This action is not allowed. Please contact the system administrator.');
+    },
   }
 })

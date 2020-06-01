@@ -58,6 +58,7 @@ const selectors = {
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
   documentType: '[data-test-document-type]',
   documentAccessLevel: '[data-test-document-accesslevel]',
-  agendaDetailSidebarSubitem :'[data-test-agenda-detail-sidebar-sub-item]'
+  agendaDetailSidebarSubitem :'[data-test-agenda-detail-sidebar-sub-item]',
+  agendaOverviewSubitem :'[data-test-agenda-overview-sub-item]'
 };
 export default selectors;

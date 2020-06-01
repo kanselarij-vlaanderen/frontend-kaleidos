@@ -107,7 +107,7 @@ context('Tests for KAS-1076', () => {
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
 
     cy.visit('/vergadering/5EBA9588751CF70008000012/agenda/5EBA9589751CF70008000013/agendapunten/5EBA95A2751CF70008000016')
-    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file, true);
+    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
 
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -145,7 +145,7 @@ context('Tests for KAS-1076', () => {
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.openAgendaItemDocumentTab(SubcaseTitleShort, true,true);
+    cy.openAgendaItemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0).within(() => {
         cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
