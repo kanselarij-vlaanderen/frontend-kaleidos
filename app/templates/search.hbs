@@ -32,7 +32,7 @@
         />
       </div>
       <div class="vlc-input-field-block vl-col--2-12">
-        <WebComponents::VlFormLabel @value={{t "from-date"}}/>
+        <WebComponents::VlFormLabel @value={{t "from"}}/>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateFromBuffer}}
           @dateChanged={{fn (mut this.dateFromBuffer)}}
@@ -48,7 +48,7 @@
         {{/if}}
       </div>
       <div class="vlc-input-field-block vl-col--2-12">
-        <WebComponents::VlFormLabel @value={{t "until-date"}}/>
+        <WebComponents::VlFormLabel @value={{t "until-inclusive"}}/>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateToBuffer}}
           @dateChanged={{fn (mut this.dateToBuffer)}}
