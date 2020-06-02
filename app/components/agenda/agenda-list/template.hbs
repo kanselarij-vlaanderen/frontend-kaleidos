@@ -86,7 +86,8 @@
           <Agenda::AgendaList::ListItem
             @agendaitem={{agendaitem}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action "selectAgendaItemAction"}} />
+            @selectAgendaItem={{action "selectAgendaItemAction"}}
+          />
         {{/sortable-item}}
       {{/each}}
     {{/sortable-group}}
@@ -112,7 +113,8 @@
             <Agenda::AgendaList::ListItem
               @agendaitem={{agendaitem}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action "selectAgendaItemAction"}} />
+              @selectAgendaItem={{action "selectAgendaItemAction"}}
+            />
           </li>
         {{/if}}
       {{/each}}
@@ -144,6 +146,14 @@
           (await announcements)
         as |announcement|
         }}
+
+          <div class="vlc-list-section-header">
+            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+            {{!-- template-lint-disable no-triple-curlies  --}}
+            {{{announcement.groupName}}}
+            {{!-- template-lint-enable no-triple-curlies  --}}
+          </div>
           {{#sortable-item
             tagName="li"
             class="vlc-agenda-items__sub-item"
@@ -155,7 +165,8 @@
             <Agenda::AgendaList::ListItem
               @agendaitem={{announcement}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action "selectAgendaItemAction"}} />
+              @selectAgendaItem={{action "selectAgendaItemAction"}}
+            />
           {{/sortable-item}}
         {{/each}}
       {{/sortable-group}}
@@ -168,7 +179,8 @@
           <Agenda::AgendaList::ListItem
             @agendaitem={{announcement}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action "selectAgendaItemAction"}} />
+            @selectAgendaItem={{action "selectAgendaItemAction"}}
+          />
         </div>
       {{/each}}
     {{/if}}
@@ -181,7 +193,14 @@
   <WebComponents::VlModal
     @isOverlay={{true}}
     @showCloseButton={{false}}
-    @title={{t "reassign-agendaitem-priorities-title"}} >
-    <WebComponents::VlLoader @text={{concat (t "reassign-agendaitem-priorities-message") " " (t "please-be-patient")}} />
+    @title={{t "reassign-agendaitem-priorities-title"}}
+  >
+    <WebComponents::VlLoader
+      @text={{concat
+        (t "reassign-agendaitem-priorities-message")
+        " "
+        (t "please-be-patient")
+      }}
+    />
   </WebComponents::VlModal>
 {{/if}}

@@ -2,6 +2,11 @@
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
   {{#each (await item.documents) as |document|}}
-    {{item-document item=item document=document isClickable=isClickable}}
+    {{item-document
+      item=item
+      document=document
+      isClickable=isClickable
+      useNewIcons=useNewIcons
+    }}
   {{/each}}
 {{/if}}
