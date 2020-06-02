@@ -17,15 +17,18 @@ services:
     networks:
       - default
     build: ../.
+    user: ${HOST_UID_GID}
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+    user: ${HOST_UID_GID}
   cache:
     user: ${HOST_UID_GID}
     image: semtech/mu-cache:latest
     links:
       - resource:backend
     restart: always
+    user: ${HOST_UID_GID}
   resource:
     image: semtech/mu-cl-resources:latest
     links:
@@ -34,18 +37,23 @@ services:
       CACHE_CLEAR_PATH: "http://cache/.mu/clear-keys"
     volumes:
       - ./config/resources:/config
+    user: ${HOST_UID_GID}
   database-healthcheck:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+    user: ${HOST_UID_GID}
   newsletter-service:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+    user: ${HOST_UID_GID}
   musearch:
+    user: ${HOST_UID_GID}
     environment:
       UPDATE_WAIT_INTERVAL_MINUTES: 0
   # The DELTA_TIMEOUT is the value that yggdrasil waits between runs in milliseconds
   # Default is 5 minutes but results in 10 minutes between runs
   yggdrasil:
+    user: ${HOST_UID_GID}
     environment:
       NODE_ENV: "development"
       DEBUG: "true"
