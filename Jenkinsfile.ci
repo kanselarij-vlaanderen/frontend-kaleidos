@@ -55,6 +55,7 @@ pipeline {
                 sh "cd ${WORKSPACE}/kaleidos-project && mv testdata/* data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
                 sh "sleep 60"
+                sh "npm i"
             }
         }
         stage('Automated tests: Cypress') {

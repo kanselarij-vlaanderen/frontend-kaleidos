@@ -42,6 +42,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "cypress": "^4.5.0",
     "cypress-file-upload": "^3.5.3",
+    "cypress-wait-until": "^1.7.1",
     "ember-ajax": "^3.1.0",
     "ember-attacher": "1.0.2",
     "ember-auto-import": "^1.5.3",
