@@ -6,6 +6,20 @@ export default Controller.extend({
   sessionService: inject(),
   currentAgenda: alias('sessionService.currentAgenda'),
   currentSession: alias('sessionService.currentSession'),
+  activeAgendaItemSection: 'details',
+
+  init() {
+    this._super(...arguments);
+    let activeAGendaItemSection = localStorage.getItem('activeAgendaItemSection');
+    if (activeAGendaItemSection) {
+      this.set('activeAgendaItemSection', activeAGendaItemSection)
+    }
+  },
+
+  setActiveAgendaitemSection(agendatItemSection) {
+    localStorage.setItem('activeAgendaItemSection', agendatItemSection);
+    this.set('activeAgendaItemSection', agendatItemSection);
+  },
 
   actions: {
     refresh(id) {

@@ -567,10 +567,15 @@
   "style-guide-basic": "Basics",
   "style-guide-typography": "Typography",
   "style-guide-components": "Components",
+  "style-guide-inputs": "Inputs",
+  "style-guide-alerts": "Alerts",
+  "style-guide-documents": "Documents",
   "style-guide-buttons": "Buttons",
   "style-guide-pills": "Pills",
   "style-guide-panels": "Panels",
   "style-guide-title": "Style guide",
   "style-guide-icons": "Icons",
-  "option-others": "Andere"
+  "option-others": "Andere",
+  "reassign-agendaitem-priorities-title": "Aanpassen van agendapunten",
+  "reassign-agendaitem-priorities-message": "Uw aanpassing wordt opgeslagen."
 }
