@@ -46,7 +46,6 @@ pipeline {
                 sh "cp cypress.test.json cypress.json"
                 sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
                 sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
-                sh "npm i --production"
 
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 777 /usr/share/elasticsearch/data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource"
@@ -60,8 +59,7 @@ pipeline {
         }
         stage('Automated tests: Cypress') {
             steps {
-                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} run e2e-electron"
+                 sh "npx cypress run"
             }
         }
 
