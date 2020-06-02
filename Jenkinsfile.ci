@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Prepare for automated tests') {
             environment {
-                HOST_UID_GID = sh(script: '\$(id -u):\$(id -g)', , returnStdout: true).trim()
+                HOST_UID_GID = sh(script: 'export HOST_UID_GID=\$(id -u):\$(id -g)', , returnStdout: true).trim()
             }
             steps {
                 sh "cp ${env.WORKSPACE}/Dockerfile.test ${env.WORKSPACE}/Dockerfile"
