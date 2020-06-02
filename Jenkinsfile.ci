@@ -61,7 +61,7 @@ pipeline {
         stage('Automated tests: Cypress') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p run e2e-electron"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} run e2e-electron"
             }
         }
 
