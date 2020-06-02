@@ -331,7 +331,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
         })
       });
 
-      cy.get('.vl-action-group > .vl-button--narrow')
+      cy.get('.vl-action-group > .vl-button')
         .contains('Opslaan')
         .click();
     });
@@ -354,7 +354,7 @@ function approveDesignAgenda() {
   //TODO add boolean for when not all items are formally ok, click through the confirmation modal
   //TODO use test selector
   cy.get('.vlc-toolbar').within(() => {
-    cy.get('.vl-button--narrow')
+    cy.get('.vl-button')
       .contains('Ontwerpagenda')
       .click()
       .wait('@patchAgenda', { timeout: 12000 })
