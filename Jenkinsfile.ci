@@ -18,13 +18,44 @@ pipeline {
             steps {
                 sh "cp .dist.env .env"
                 sh "rm -rf kaleidos-project 2> /dev/null"
-                //sh "eval `ssh-agent -s` && ssh-add /var/lib/jenkins/.ssh/id_rsa_github_kaleidos && git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
                 sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
             }
         }
         stage('Prepare for automated tests') {
+            environment {
+                HOST_UID_GID = sh(script: '\$(id -u):\$(id -g)', , returnStdout: true).trim()
+            }
             steps {
-                sh "${WORKSPACE}/ci/start.sh"
+                sh "cp ${env.WORKSPACE}/Dockerfile.test ${env.WORKSPACE}/Dockerfile"
+                sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
+                sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod 777 data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
+
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T triplestore chmod -R 777 /data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod -R 777 /data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod -R 777 /data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T file-bundling-service chmod -R 777 /share"
+
+                // sh "docker-compose -p ${projectName} exec -T web mkdir /var/www/project/web/sites/default/files || true"
+                // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/web/sites/default/files"
+                // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/storage/php"
+                // sh "docker-compose -p ${projectName} exec -T web chown -R www-data:www-data /var/www/project/private/files"
+                // sh "docker-compose -p ${projectName} exec -T --user=www-data web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing update"
+                // sh "docker-compose -p ${projectName} exec -T --user=www-data web /wait-for.sh database:3306 -s -t 90 -- ./vendor/bin/phing initialize-search-index"
+
+                sh "cp cypress.test.json cypress.json"
+                sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
+                sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
+                sh "npm i --production"
+
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 777 /usr/share/elasticsearch/data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource"
+                sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata"
+                sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
+                sh "cd ${WORKSPACE}/kaleidos-project && rm -rf data/*"
+                sh "cd ${WORKSPACE}/kaleidos-project && mv testdata/* data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
+                sh "sleep 60"
             }
         }
         stage('Automated tests: Cypress') {
