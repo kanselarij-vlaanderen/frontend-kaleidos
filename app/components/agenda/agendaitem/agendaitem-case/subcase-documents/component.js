@@ -31,16 +31,7 @@ export default Component.extend(
         this.set('documentTypes', types);
       });
     },
-
-    sortedLinkedDocuments: computed('item.linkedDocuments.@each.{created}', async function () {
-      const documents = this.get('item.linkedDocuments');
-      if (documents) {
-        return documents.sortBy('created').reverse();
-      } else {
-        return [];
-      }
-    }),
-
+    
     async deleteAll() {
       await Promise.all(
         this.get('documentsInCreation').map(async (doc) => {
