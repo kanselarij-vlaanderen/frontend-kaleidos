@@ -1,3 +1,5 @@
 <div class="vlc-toolbar" ...attributes>
-  {{yield}}
+  {{yield (hash
+    Group = (component 'toolbar/group')
+  )}}
 </div>
