@@ -4,29 +4,29 @@
 
 <h3 class="vlc-kitchensink__sample-header">Panel body</h3>
 <div class="vlc-kitchensink__sample">
-  <Panel>
-    <Panel::Body>
+  <Panel as |panel|>
+    <panel.Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
-    </Panel::Body>
+    </panel.Body>
   </Panel>
 </div>
 
 <h3 class="vlc-kitchensink__sample-header">Panel with header</h3>
 <div class="vlc-kitchensink__sample">
-  <Panel>
-    <Panel::Header>
+  <Panel as |panel|>
+    <panel.Header>
       <h4 class="vlc-panel__title">Panel header</h4>
-    </Panel::Header>
-    <Panel::Body>
+    </panel.Header>
+    <panel.Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
-    </Panel::Body>
+    </panel.Body>
   </Panel>
 </div>
 
 <h3 class="vlc-kitchensink__sample-header">Panel with header and action</h3>
 <div class="vlc-kitchensink__sample">
-  <Panel>
-    <Panel::Header>
+  <Panel as |panel|>
+    <panel.Header>
       <Toolbar>
         <Toolbar::Group @side="left">
           <h4 class="vlc-panel__title">Panel header</h4>
@@ -38,17 +38,17 @@
           </button>
         </Toolbar::Group>
       </Toolbar>
-    </Panel::Header>
-    <Panel::Body>
+    </panel.Header>
+    <panel.Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
-    </Panel::Body>
+    </panel.Body>
   </Panel>
 </div>
 
 <h3 class="vlc-kitchensink__sample-header">Panel with header and 2 actions</h3>
 <div class="vlc-kitchensink__sample">
-  <Panel>
-    <Panel::Header>
+  <Panel as |panel|>
+    <panel.Header>
       <Toolbar>
         <Toolbar::Group @side="left">
           <h4 class="vlc-panel__title">Panel header</h4>
@@ -65,17 +65,17 @@
           </div>
         </Toolbar::Group>
       </Toolbar>
-    </Panel::Header>
-    <Panel::Body>
+    </panel.Header>
+    <panel.Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
-    </Panel::Body>
+    </panel.Body>
   </Panel>
 </div>
 
 <h3 class="vlc-kitchensink__sample-header">Panel with header and checkbox</h3>
 <div class="vlc-kitchensink__sample">
-  <Panel>
-    <Panel::Header>
+  <Panel as |panel|>
+    <panel.Header>
       <Toolbar>
         <Toolbar::Group @side="left">
           <h4 class="vlc-panel__title">Panel header</h4>
@@ -84,35 +84,35 @@
           <WebComponents::VlCheckbox @label="Toon opties"/>
         </Toolbar::Group>
       </Toolbar>
-    </Panel::Header>
-    <Panel::Body>
+    </panel.Header>
+    <panel.Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
-    </Panel::Body>
+    </panel.Body>
   </Panel>
 </div>
 
 <h3 class="vlc-kitchensink__sample-header">Panel with double body</h3>
 <div class="vlc-kitchensink__sample">
-  <Panel>
-    <Panel::Header>
+  <Panel as |panel|>
+    <panel.Header>
       <h4 class="vlc-panel__title">Panel header</h4>
-    </Panel::Header>
-    <Panel::Body>
+    </panel.Header>
+    <panel.Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
-    </Panel::Body>
-    <Panel::Body>
+    </panel.Body>
+    <panel.Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
-    </Panel::Body>
+    </panel.Body>
   </Panel>
 </div>
 
 <h3 class="vlc-kitchensink__sample-header">Panel with footer</h3>
 <div class="vlc-kitchensink__sample">
-  <Panel>
-    <Panel::Header>
+  <Panel as |panel|>
+    <panel.Header>
       <h4 class="vlc-panel__title">Panel header</h4>
-    </Panel::Header>
-    <Panel::Body>
+    </panel.Header>
+    <panel.Body>
       <div class="vlc-input-field-block">
         <WebComponents::VlFormLabel @value="Label"/>
         {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
@@ -121,8 +121,8 @@
         <WebComponents::VlFormLabel @value="Label"/>
         {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
       </div>
-    </Panel::Body>
-    <Panel::Footer>
+    </panel.Body>
+    <panel.Footer>
       <Toolbar>
         <Toolbar::Group @side="left">
         </Toolbar::Group>
@@ -137,6 +137,6 @@
           </div>
         </Toolbar::Group>
       </Toolbar>
-    </Panel::Footer>
+    </panel.Footer>
   </Panel>
 </div>

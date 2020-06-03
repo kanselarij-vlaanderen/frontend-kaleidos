@@ -1,3 +1,7 @@
 <div class="vlc-panel" ...attributes>
-  {{yield}}
+  {{yield (hash
+    Body = (component 'panel/body')
+    Header = (component 'panel/header')
+    Footer = (component 'panel/footer')
+  )}}
 </div>
