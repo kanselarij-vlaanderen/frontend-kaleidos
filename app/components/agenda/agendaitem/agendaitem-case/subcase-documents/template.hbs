@@ -57,7 +57,8 @@
     {{#if (is-pending item.linkedDocuments)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
     {{else if (gt (await item.linkedDocumentsLength) 0)}}
-      {{#each (await item.linkedDocuments) as |document|}}
+      {{#each (await sortedLinkedDocuments) as |document|}}
+        {{log "document" document}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::LinkedDocumentLink
           @document={{document}}
           @item={{item}} />

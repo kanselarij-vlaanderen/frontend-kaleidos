@@ -4,6 +4,8 @@ import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import moment from 'moment';
 
 export default Component.extend(
   uploadDocumentMixin,
@@ -29,6 +31,15 @@ export default Component.extend(
         this.set('documentTypes', types);
       });
     },
+
+    sortedLinkedDocuments: computed('item.linkedDocuments.@each.{created}', async function () {
+      const documents = this.get('item.linkedDocuments');
+      if (documents) {
+        return documents.sortBy('created').reverse();
+      } else {
+        return [];
+      }
+    }),
 
     async deleteAll() {
       await Promise.all(
