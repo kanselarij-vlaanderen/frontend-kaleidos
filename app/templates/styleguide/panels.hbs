@@ -32,7 +32,7 @@
           <h4 class="vlc-panel__title">Panel header</h4>
         </Toolbar::Group>
         <Toolbar::Group @side="right">
-          <button type="button" class="vl-button vl-button--secondary vl-button--icon-before">
+          <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before">
             <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
             Bewerken
           </button>
@@ -54,14 +54,15 @@
           <h4 class="vlc-panel__title">Panel header</h4>
         </Toolbar::Group>
         <Toolbar::Group @side="right">
-          <button type="button" class="vl-button vl-button--secondary vl-button--icon-before">
-            <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-            Bewerken
-          </button>
-          <button type="button" class="vl-button vl-button--secondary vl-button--icon-before">
-            <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-nav-show-more-horizontal"></i>
-            Meer
-          </button>
+          <div class="vlc-button-toolbar">
+            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before">
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+              Bewerken
+            </button>
+            <button type="button" class="vl-button vl-button--tertiary vl-button--icon">
+              <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
+            </button>
+          </div>
         </Toolbar::Group>
       </Toolbar>
     </Panel::Header>
@@ -112,24 +113,28 @@
       <h4 class="vlc-panel__title">Panel header</h4>
     </Panel::Header>
     <Panel::Body>
-      <div class="c-form-group">
-        <label class="c-label" for="textarea-2">Label</label>
-        <textarea class="c-textarea" id="textarea-2" name="textarea-2" value="" cols="40" rows="4"></textarea>
+      <div class="vlc-input-field-block">
+        <WebComponents::VlFormLabel @value="Label"/>
+        {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
       </div>
-      <div class="c-form-group">
-        <label class="c-label" for="textarea-2">Label</label>
-        <textarea class="c-textarea" id="textarea-2" name="textarea-2" value="" cols="40" rows="4"></textarea>
+      <div class="vlc-input-field-block">
+        <WebComponents::VlFormLabel @value="Label"/>
+        {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
       </div>
     </Panel::Body>
     <Panel::Footer>
       <Toolbar>
+        <Toolbar::Group @side="left">
+        </Toolbar::Group>
         <Toolbar::Group @side="right">
-          <button type="button" class="vl-button vl-button--link">
-            Annuleren
-          </button>
-          <button type="button" class="vl-button">
-            Opslaan
-          </button>
+          <div class="vlc-button-toolbar">
+            <button type="button" class="vl-button vl-button--link">
+              Annuleren
+            </button>
+            <button type="button" class="vl-button">
+              Opslaan
+            </button>
+          </div>
         </Toolbar::Group>
       </Toolbar>
     </Panel::Footer>
