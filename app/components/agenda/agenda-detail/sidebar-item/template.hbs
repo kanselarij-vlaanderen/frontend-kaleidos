@@ -47,12 +47,12 @@
             {{/if}}
 
             {{#if (and agendaitem.showAsRemark (not agendaitem.showInNewsletter))}}
-                <i class="vl-button__icon vl-vi vl-vi-hide vlc-u-opacity-50 vl-u-spacer-extended-left-s opacity-lighter"></i>
+                <i class="vl-button__icon vl-vi vl-vi-hide  vl-u-spacer-extended-left-s opacity-lighter"></i>
             {{/if}}
 
             {{#if (await agendaitem.subcase.confidential)}}
              <span
-               class="vl-icon vl-vi vl-vi-lock vl-vi-no-font-weight vlc-u-opacity-50 vl-u-spacer-extended-left-s"
+               class="vl-icon vl-vi vl-vi-lock vl-vi-no-font-weight  vl-u-spacer-extended-left-s"
                data-test-icon-agenda-confidentiality-locked
              ></span>
             {{/if}}
