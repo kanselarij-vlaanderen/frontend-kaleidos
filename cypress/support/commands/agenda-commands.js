@@ -53,9 +53,7 @@ function createAgenda(kind, plusMonths, date, location) {
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.visit('')
-  cy.get('.vlc-toolbar__item > .vl-button')
-    .contains('Nieuwe agenda aanmaken')
-    .click();
+  cy.get(agenda.createNewAgendaButton).click();
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
     cy.get('.vlc-input-field-block').as('newAgendaForm').should('have.length', 3);
@@ -331,7 +329,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
         })
       });
 
-      cy.get('.vl-action-group > .vl-button--narrow')
+      cy.get('.vl-action-group > .vl-button')
         .contains('Opslaan')
         .click();
     });
@@ -354,7 +352,7 @@ function approveDesignAgenda() {
   //TODO add boolean for when not all items are formally ok, click through the confirmation modal
   //TODO use test selector
   cy.get('.vlc-toolbar').within(() => {
-    cy.get('.vl-button--narrow')
+    cy.get('.vl-button')
       .contains('Ontwerpagenda')
       .click()
       .wait('@patchAgenda', { timeout: 12000 })

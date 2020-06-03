@@ -9,7 +9,7 @@
       }}
       <div class="vl-action-group vl-action-group--align-right">
         <button type="button"
-                class="vl-button vl-button--secondary vl-button--narrow vl-button--icon-before" {{action
+                class="vl-button vl-button--secondary vl-button--icon-before" {{action
                 "copyFullSubcase"}}>
           <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-copy-paste" aria-hidden="true"></i>{{t
             "clone-previous-subcase"
@@ -87,7 +87,7 @@
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <button type="button"
-                  class="vl-button vl-button--link vl-button--narrow"
+                  class="vl-button vl-button--link"
             {{action "closeModal"}}
           >
             {{t "cancel"}}
@@ -99,7 +99,7 @@
           {{web-components/vl-save-button
             text=(t "new-subcase")
             type="submit"
-            class="vl-button vl-button--narrow"
+            class="vl-button"
             loadingText=(t "creating-subcase")
             isLoading=isLoading
             disabled=isLoading
