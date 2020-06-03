@@ -22,7 +22,7 @@
           <LinkTo
             @tagName="button"
             @type="button"
-            class="vl-button vl-button--link vl-button--narrow"
+            class="vl-button vl-button--link"
             @route="settings"
           >
             {{t "cancel"}}
@@ -35,7 +35,7 @@
             data-test-add-system-alert
             @tagName="button"
             @type="button"
-            class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+            class="vl-button vl-button--tertiary vl-button--icon-before"
             @route="settings.system-alerts.new"
           >
             <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
@@ -47,7 +47,7 @@
               data-test-edit-system-alert
               @tagName="button"
               @type="button"
-              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              class="vl-button vl-button--tertiary vl-button--icon-before"
               @route="settings.system-alerts.edit"
               @model={{this.selectedAlert.id}}
             >
@@ -58,7 +58,7 @@
             <button
               data-test-remove-system-alert
               type="button"
-              class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+              class="vl-button vl-button--tertiary vl-button--icon-before"
               {{on "click" (perform remove this.selectedAlert)}}
             >
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
