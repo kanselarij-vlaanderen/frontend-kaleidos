@@ -1,10 +1,9 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
 import {computed} from '@ember/object';
-import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import {inject} from '@ember/service';
 
-export default Component.extend(RdfaEditorMixin, {
+export default Component.extend({
   intl: inject(),
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze([
@@ -27,6 +26,7 @@ export default Component.extend(RdfaEditorMixin, {
   mandateeProposal: cached('item.newsletterProposal'), // TODO in class syntax use as a decorator instead
 
   isTryingToSave: false,
+  isExpanded: false,
 
   themes: computed(`agendaitem.subcase.newsletterInfo.themes`, {
     async get() {
@@ -92,6 +92,13 @@ export default Component.extend(RdfaEditorMixin, {
     return model.save().then(model => model.reload());
   },
 
+  richtext: computed('editor.currentTextContent', function () {
+    if (!this.editor) {
+      return;
+    }
+    return this.editor.rootNode.innerHTML.htmlSafe();
+  }),
+
   actions: {
     async trySaveChanges() {
       const themes = await this.get('themes');
@@ -151,6 +158,12 @@ export default Component.extend(RdfaEditorMixin, {
       }
       const documentVersion = await nota.get('lastDocumentVersion');
       window.open(`/document/${documentVersion.get('id')}`);
+    },
+    async handleRdfaEditorInit(editorInterface) {
+      this.set('editor', editorInterface);
+    },
+    descriptionUpdated(val) {
+      this.set('initValue', this.richtext + val);
     }
   },
 });

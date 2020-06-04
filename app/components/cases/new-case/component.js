@@ -8,45 +8,25 @@ export default Component.extend({
   confidential: false,
   store: inject(),
 
-  createCase(newDate) {
-    const { title, shortTitle, type, selectedMeeting, submitter, confidential } = this;
-
-    return this.store.createRecord('case',
+  async createCase() {
+    const newDate = moment().utc().toDate();
+    const { title, shortTitle, confidential } = this;
+    const caze = this.store.createRecord('case',
       {
-        title, shortTitle, submitter, type, confidential,
+        title, shortTitle, confidential,
         isArchived: false,
         created: newDate,
-        relatedMeeting: selectedMeeting
       });
+    await caze.save();
+    this.set('isLoading', false);
+    return this.close(caze);
   },
 
   actions: {
     async createCase($event) {
       this.set('isLoading', true);
       $event.preventDefault();
-      const newDate = moment().utc().toDate();
-      const caze = this.createCase(newDate);
-
-      caze.save().then((newCase) => {
-        this.set('isLoading', false);
-        this.close(newCase);
-      });
-    },
-
-    chooseTheme(theme) {
-      this.set('selectedThemes', theme);
-    },
-
-    statusChange(status) {
-      this.set('status', status);
-    },
-
-    submitterChanged(submitter) {
-      this.set('submitter', submitter);
-    },
-
-    selectedMeetingChanged(meeting) {
-      this.set('selectedMeeting', meeting);
+      this.createCase();
     },
 
     close() {

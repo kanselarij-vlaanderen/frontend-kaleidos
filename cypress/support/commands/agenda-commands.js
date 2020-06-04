@@ -53,9 +53,7 @@ function createAgenda(kind, plusMonths, date, location) {
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.visit('')
-  cy.get('.vlc-toolbar__item > .vl-button')
-    .contains('Nieuwe agenda aanmaken')
-    .click();
+  cy.get(agenda.createNewAgendaButton).click();
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
     cy.get('.vlc-input-field-block').as('newAgendaForm').should('have.length', 3);
