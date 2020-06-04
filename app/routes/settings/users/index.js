@@ -24,7 +24,6 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
       include: 'group,organization',
     };
 
-
     if (filter) {
       options.filter = filter;
     }
