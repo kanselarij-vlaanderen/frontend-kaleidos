@@ -24,7 +24,7 @@
 .vlc-panel__body {
   padding: 2rem;
 
-  p {
+  > p:only-child {
     margin: 0;
   }
 

@@ -28,14 +28,18 @@
   <Panel as |pl|>
     <pl.Header>
       <Toolbar as |t|>
-        <t.Group @side="left">
-          <h4 class="vlc-panel__title">Panel header</h4>
+        <t.Group @position="left">
+          <t.Item>
+            <h4 class="vlc-panel__title">Panel header</h4>
+          </t.Item>
         </t.Group>
-        <t.Group @side="right">
-          <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before">
-            <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
-            Bewerken
-          </button>
+        <t.Group @position="right">
+          <t.Item>
+            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before">
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+              Bewerken
+            </button>
+          </t.Item>
         </t.Group>
       </Toolbar>
     </pl.Header>
@@ -50,19 +54,23 @@
   <Panel as |pl|>
     <pl.Header>
       <Toolbar as |t|>
-        <t.Group @side="left">
-          <h4 class="vlc-panel__title">Panel header</h4>
+        <t.Group @position="left">
+          <t.Item>
+            <h4 class="vlc-panel__title">Panel header</h4>
+          </t.Item>
         </t.Group>
-        <t.Group @side="right">
-          <div class="vlc-button-toolbar">
+        <t.Group @position="right">
+          <t.Item>
             <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before">
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
               Bewerken
             </button>
+          </t.Item>
+          <t.Item>
             <button type="button" class="vl-button vl-button--tertiary vl-button--icon">
               <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
             </button>
-          </div>
+          </t.Item>
         </t.Group>
       </Toolbar>
     </pl.Header>
@@ -77,11 +85,15 @@
   <Panel as |pl|>
     <pl.Header>
       <Toolbar as |t|>
-        <t.Group @side="left">
-          <h4 class="vlc-panel__title">Panel header</h4>
+        <t.Group @position="left">
+          <t.Item>
+            <h4 class="vlc-panel__title">Panel header</h4>
+          </t.Item>
         </t.Group>
-        <t.Group @side="right">
-          <WebComponents::VlCheckbox @label="Toon opties"/>
+        <t.Group @position="right">
+          <t.Item>
+            <WebComponents::VlCheckbox @label="Toon opties"/>
+          </t.Item>
         </t.Group>
       </Toolbar>
     </pl.Header>
@@ -124,17 +136,19 @@
     </pl.Body>
     <pl.Footer>
       <Toolbar as |t|>
-        <t.Group @side="left">
+        <t.Group @position="left">
         </t.Group>
-        <t.Group @side="right">
-          <div class="vlc-button-toolbar">
+        <t.Group @position="right">
+          <t.Item>
             <button type="button" class="vl-button vl-button--link">
               Annuleren
             </button>
+          </t.Item>
+          <t.Item>
             <button type="button" class="vl-button">
               Opslaan
             </button>
-          </div>
+          </t.Item>
         </t.Group>
       </Toolbar>
     </pl.Footer>
