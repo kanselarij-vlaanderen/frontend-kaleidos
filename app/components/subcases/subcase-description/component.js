@@ -60,8 +60,6 @@ export default Component.extend({
     },
 
     async selectType(type) {
-      const subcase = this.get('subcase');
-      const caze = await subcase.get('case');
       const subcaseName = type.get('label');
       this.set('type', type);
       this.set('subcaseName', subcaseName);
