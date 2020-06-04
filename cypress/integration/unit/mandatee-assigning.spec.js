@@ -5,15 +5,14 @@ import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import isecodes from "../../selectors/isecodes/isecodesSelectors";
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
   const caseTitle = 'Cypress test: mandatee sync - ' + currentTimestamp();
 
   before(() => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
   });
 

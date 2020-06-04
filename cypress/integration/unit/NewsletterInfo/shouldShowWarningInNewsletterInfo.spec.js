@@ -24,8 +24,7 @@ context('Show warning in newsletterinfo', () => {
 
   it('Should show warning in kortbestek view', () => {
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const plusMonths = 2;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 4).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
     const subcaseTitle1 = caseTitle + ' test stap 1';
 
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
@@ -37,11 +36,11 @@ context('Show warning in newsletterinfo', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
     cy.addDocumentsToAgendaItem(subcaseTitle1, files);
-    
+
     cy.route('/');
     cy.openAgendaForDate(agendaDate);
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
@@ -53,10 +52,6 @@ context('Show warning in newsletterinfo', () => {
     cy.get(alert.changesAlertComponent).should('be.visible');
   })
 });
-
-function currentMoment() {
-  return Cypress.moment();
-}
 
 function currentTimestamp() {
   return Cypress.moment().unix();
