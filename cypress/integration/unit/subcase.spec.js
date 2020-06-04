@@ -171,7 +171,7 @@ context('Subcase tests', () => {
     // Aanmaken agendaItem
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.openAgendaItemDossierTab(SubcaseTitleShort, false);
+    cy.openAgendaItemDossierTab(SubcaseTitleShort);
 
     // Status is hidden
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
@@ -322,7 +322,7 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsRequest');
     cy.wait('@getAgendas');
 
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort,true);
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
 
     cy.get(agenda.item.themes).contains('Sport');
     cy.get(agenda.item.themes).contains('Overheid');
