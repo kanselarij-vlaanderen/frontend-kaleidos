@@ -100,7 +100,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-dropdown-menu';
 @import 'custom-components/vlc-hr';
 @import 'custom-components/vlc-input-field-block';
-@import 'custom-components/vlc-kitchensink';
 @import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-minister';
 @import 'custom-components/vlc-mock-login';
@@ -126,6 +125,15 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-user-management-table';
 @import 'custom-components/vlc-link-actions';
 @import 'custom-components/vlc-login';
+
+
+// Kitchen sink
+@import 'custom-components/_vlc-kitchensink-container';
+@import 'custom-components/_vlc-kitchensink-header';
+@import 'custom-components/_vlc-kitchensink-navigation';
+@import 'custom-components/_vlc-kitchensink-page-header';
+@import 'custom-components/_vlc-kitchensink-sample-header';
+@import 'custom-components/_vlc-kitchensink-sample';
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
