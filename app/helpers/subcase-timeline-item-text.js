@@ -11,6 +11,7 @@ const formatDate = (date) => {
     .format('DD MMMM YYYY');
 }
 
+// TODO KAS-1425
 export function subcaseTimelineItemText(params, values) {
   const label = values.label || '';
   const phase = values.phase;

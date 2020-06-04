@@ -41,7 +41,8 @@
           </p>
         {{/if}}
       </div>
-      <ul class="vlc-status-timeline">
+      {{!-- TODO KAS-1425 --}}
+      {{!-- <ul class="vlc-status-timeline">
         {{#each (await subcase.sortedPhases) as |phase|}}
           {{#if (await phase.code.label)}}
             <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
@@ -58,7 +59,7 @@
             </li>
           {{/if}}
         {{/each}}
-      </ul>
+      </ul> --}}
     </div>
   </div>
 </div>

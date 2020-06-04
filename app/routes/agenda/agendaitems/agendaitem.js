@@ -11,7 +11,7 @@ export default Route.extend({
       localStorage.setItem('activeAgendaItemSection', 'details');
     }
     return this.store.findRecord('agendaitem', agendaitem_id, {
-      include: 'subcase'
+      include: 'agenda-activity,agenda-activity.subcase'
     });
 
   },

@@ -34,7 +34,7 @@ export default ModelWithModifier.extend({
 
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', {inverse: null}),
-  subcase: belongsTo('subcase', {inverse: null}),
+  agendaActivity: belongsTo('agenda-activity', {inverse: null}),
   meetingRecord: belongsTo('meeting-record'),
   showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
@@ -43,7 +43,11 @@ export default ModelWithModifier.extend({
   approvals: hasMany('approval'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
-  phases: hasMany('subcase-phase'),
+
+  // subcase: alias('agendaActivity.subcase'),
+  subcase: computed('agendaActivity.subcase', function () {
+    return this.get('agendaActivity.subcase');
+  }),
 
   sortedDocumentVersions: computed('documentVersions.@each.name', function () {
     return A(this.get('documentVersions').toArray()).sort((a, b) => {

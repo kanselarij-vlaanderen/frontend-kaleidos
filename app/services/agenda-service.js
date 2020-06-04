@@ -123,6 +123,13 @@ export default Service.extend({
     if (index) {
       priorityToAssign += index;
     }
+
+    const agendaActivity = await this.store.createRecord('agenda-activity', {
+      startDate: moment().utc().toDate(),
+      subcase: subcase,
+    });
+    await agendaActivity.save();
+    
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.get('shortTitle'),
@@ -130,7 +137,6 @@ export default Service.extend({
       created: moment()
         .utc()
         .toDate(),
-      subcase: subcase,
       priority: priorityToAssign,
       agenda: selectedAgenda,
       title: subcase.get('title'),
@@ -140,30 +146,15 @@ export default Service.extend({
       mandatees: mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
+      agendaActivity: agendaActivity
     });
     await agendaitem.save();
 
     const meeting = await selectedAgenda.get('createdFor');
-    await subcase.hasMany('agendaitems').reload();
     await selectedAgenda.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
-    await this.assignSubcasePhase(subcase);
-    await subcase.hasMany('phases').reload();
     await updateModifiedProperty(selectedAgenda);
-  },
-
-  async assignSubcasePhase(subcase) {
-    const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
-    const phaseCode = phasesCodes.get('firstObject');
-    if (phaseCode) {
-      const phase = this.store.createRecord('subcase-phase', {
-        date: moment().utc().toDate(),
-        code: phaseCode,
-        subcase: subcase
-      });
-      await phase.save();
-    }
   },
 
   async groupAgendaItemsOnGroupName(agendaitems) {
@@ -194,7 +185,7 @@ export default Service.extend({
       })
     );
   },
-
+// TODO KAS-1425
   async deleteAgendaitem(agendaitem) {
     let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     itemToDelete.set('aboutToDelete', true);

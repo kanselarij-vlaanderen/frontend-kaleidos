@@ -76,6 +76,7 @@ export default Component.extend({
         agendaitem: agendaitem
       });
       const subcase = await agendaitem.get('subcase');
+      // TODO KAS-1425 create postponed or decision ?
       await this.createPostponedPhase(subcase);
 
       postPonedObject.save().then(postponedTo => {
@@ -95,6 +96,7 @@ export default Component.extend({
       );
       const postponedTo = await agendaitem.get('postponedTo');
       const subcase = await agendaitem.get('subcase');
+      // TODO KAS-1425 delete postponed or decision ?
       await this.deletePostponedPhases(subcase);
       if (agendaitem && agendaitem.retracted) {
         agendaitem.set('retracted', false);
@@ -128,6 +130,7 @@ export default Component.extend({
     }
   },
 
+  // TODO KAS-1425 delete postponed or decision ?
   async deletePostponedPhases(subcase) {
     const postponedPhases = await subcase.get('postponedPhases');
     if (postponedPhases && postponedPhases.length) {
@@ -140,6 +143,7 @@ export default Component.extend({
     return subcase;
   },
 
+  // TODO KAS-1425 create postponed or decision ?
   async createPostponedPhase(subcase) {
     const postponedCode = await this.store.findRecord('subcase-phase-code', CONFIG.postponedCodeId);
     const newDecisionPhase = this.store.createRecord('subcase-phase', {

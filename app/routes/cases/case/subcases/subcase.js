@@ -6,7 +6,8 @@ export default Route.extend({
       {
         reload: true
       }).then((subcase) => {
-      subcase.hasMany('phases').reload();
+        // TODO KAS-1425
+      // subcase.hasMany('phases').reload();
       return subcase;
     });
   },

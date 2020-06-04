@@ -82,7 +82,7 @@ export default Component.extend({
         'show-as-remark': false,
       },
       sort: 'priority',
-      include: 'agenda,subcase,mandatees',
+      include: 'agenda,agenda-activity,agenda-activity.subcase,mandatees',
     });
   },
 

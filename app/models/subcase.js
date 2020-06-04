@@ -27,10 +27,10 @@ export default ModelWithModifier.extend({
   concluded: attr('boolean'),
   subcaseName: attr('string'),
 
-  phases: hasMany('subcase-phase', {inverse: null}),
+  // phases: hasMany('subcase-phase', {inverse: null}),
   consulationRequests: hasMany('consulation-request', {inverse: null}),
   iseCodes: hasMany('ise-code'),
-  agendaitems: hasMany('agendaitem', {inverse: null}),
+  agendaActivities: hasMany('agenda-activity'),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
@@ -43,6 +43,20 @@ export default ModelWithModifier.extend({
   newsletterInfo: belongsTo('newsletter-info'),
   requestedBy: belongsTo('mandatee', {inverse: null}),
   accessLevel: belongsTo('access-level'),
+
+  agendaitems: computed('agendaActivities.@each.agendaitems.@each', function () {
+    return this.store.query('agendaitem', {
+      filter: {
+        "agenda-activity": {subcase: {id: this.get('id')}},
+        agenda: {status: {id: '2735d084-63d1-499f-86f4-9b69eb33727f'}}
+      }
+    });
+  }),
+// TODO KAS-1425
+  // phases: computed('agendaActivities.@each', function () {
+  //   // return servicecall
+  //   // 
+  // }),
 
   documentsLength: computed('documents', function () {
     return getDocumentsLength(this, 'documents');
@@ -94,20 +108,7 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  firstPhase: computed('phases.@each', function () {
-    return PromiseObject.create({
-      promise: this.store.query('subcase-phase', {
-        filter: {
-          subcase: {id: this.get('id')}
-        },
-        sort: 'date',
-        include: 'code'
-      }).then((subcasePhases) => {
-        return subcasePhases.get('firstObject');
-      })
-    });
-  }),
-
+  // TODO KAS-1425
   postponedPhases: computed('phases.@each', function () {
     return this.store
       .query('subcase-phase', {
@@ -152,6 +153,7 @@ export default ModelWithModifier.extend({
     return this.get('mandatees').sortBy('priority');
   }),
 
+  // TODO KAS-1425
   sortedPhases: computed('phases.@each', 'isPostponed', function () {
     return PromiseArray.create({
       promise: this.get('phases').then((phases) => {
@@ -160,30 +162,39 @@ export default ModelWithModifier.extend({
     });
   }),
 
+  // TODO KAS-1425 logic for postponed
   hasAgendaItem: computed('agendaitems.@each', function () {
     const {id, store} = this;
     return PromiseObject.create({
-      promise: store.query('agendaitem', {
-        filter: {subcase: {id: id}},
-        sort: '-created'
-      }).then((agendaitems) => {
-        const lastAgendaItem = agendaitems.get('firstObject');
-        if (lastAgendaItem) {
-          return lastAgendaItem.get('postponedTo').then((postPoned) => {
-            const retracted = lastAgendaItem.get('retracted');
-            if (!postPoned && !retracted) {
-              return true;
-            } else {
-              return false;
-            }
-          });
+      promise: store.query('agenda-activity', {
+        filter: {'subcase': {id: id}},
+        sort: '-start-date'
+      }).then((activities) => {
+        const lastActivity = activities.get('firstObject');
+        if (lastActivity) {
+          return true;
         } else {
           return false;
         }
+
+        // const lastAgendaItem = agendaitems.get('firstObject');
+        // if (lastAgendaItem) {
+        //   return lastAgendaItem.get('postponedTo').then((postPoned) => {
+        //     const retracted = lastAgendaItem.get('retracted');
+        //     if (!postPoned && !retracted) {
+        //       return true;
+        //     } else {
+        //       return false;
+        //     }
+        //   });
+        // } else {
+        //   return false;
+        // }
       })
     })
   }),
 
+  // TODO KAS-1425
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', async function () {
     return await this.store.query('agendaitem', {
       filter: {
@@ -193,31 +204,34 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  meetings: computed('agendaitems.@each', async function () {
-    const agendaitems = await this.get('agendaitems');
-    const meetings = await Promise.all(agendaitems.map(async (agendaitem) => {
-      const agenda = await agendaitem.get('agenda');
-      return agenda ? agenda.get('createdFor') : null;
-    }));
-    // find met ===
-    return meetings.reduce((addedMeetings, meeting) => {
-      if (meeting && !addedMeetings.find(adddedMeeting => meeting === adddedMeeting)) {
-        addedMeetings.push(meeting)
-      }
-      return addedMeetings
-    }, A([]))
-  }),
+  //TODO unused after refactor below ? do we want to have this for some reason?
+  // meetings: computed('agendaitems.@each', async function () {
+  //   const agendaitems = await this.get('agendaitems');
+  //   const meetings = await Promise.all(agendaitems.map(async (agendaitem) => {
+  //     const agenda = await agendaitem.get('agenda');
+  //     return agenda ? agenda.get('createdFor') : null;
+  //   }));
+  //   // find met ===
+  //   return meetings.reduce((addedMeetings, meeting) => {
+  //     if (meeting && !addedMeetings.find(adddedMeeting => meeting === adddedMeeting)) {
+  //       addedMeetings.push(meeting)
+  //     }
+  //     return addedMeetings
+  //   }, A([]))
+  // }),
 
-  latestMeeting: computed('meetings.@each', function () {
-    return PromiseObject.create({
-      promise: this.get('meetings').then((meetings) => {
-        return meetings.reduce((meeting1, meeting2) =>
-          moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
-            ? meeting1
-            : meeting2)
-      })
-    })
-  }),
+  //TODO KAS-1425 latestmeeting is always the one set in requestedForMeeting ?
+  latestMeeting: alias('requestedForMeeting'),
+
+    // return PromiseObject.create({
+    //   promise: this.get('meetings').then((meetings) => {
+    //     return meetings.reduce((meeting1, meeting2) =>
+    //       moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
+    //         ? meeting1
+    //         : meeting2)
+    //   })
+    // })
+  // }),
 
   latestAgenda: computed('latestMeeting', async function () {
     const lastMeeting = await this.get('latestMeeting');
@@ -237,6 +251,7 @@ export default ModelWithModifier.extend({
     return latestMeeting.plannedStart;
   }),
 
+  // TODO KAS-1425
   decidedInfo: computed('phases.@each', function () {
     return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
   }),
@@ -307,6 +322,7 @@ export default ModelWithModifier.extend({
     }
   }),
 
+  // TODO KAS-1425
   async findPhaseDateByCodeId(codeId) {
     const subcasePhases = await this.get('phases');
     const foundPhase = subcasePhases.find(async (phase) => {

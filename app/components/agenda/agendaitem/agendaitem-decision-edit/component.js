@@ -25,6 +25,7 @@ export default Component.extend(RdfaEditorMixin, {
     return model.save().then(model => model.reload());
   },
 
+  // TODO KAS-1425 
   async setDecisionPhaseToSubcase() {
     const approved = await this.get('approved');
     const subcase = await this.get('subcase')
@@ -74,6 +75,7 @@ export default Component.extend(RdfaEditorMixin, {
         throw(e);
       });
 
+      // TODO KAS-1425
       await this.setDecisionPhaseToSubcase();
 
       if (!this.get('isDestroyed')) {

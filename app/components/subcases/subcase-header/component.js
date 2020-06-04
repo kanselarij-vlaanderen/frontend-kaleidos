@@ -108,7 +108,7 @@ export default Component.extend({
       this.toggleProperty('isAssigningToOtherAgenda');
       this.set('selectedSubcase', subcase);
     },
-
+    //TODO KAS-1425
     async proposeForAgenda(subcase, meeting) {
       this.set('isLoading', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
@@ -120,7 +120,7 @@ export default Component.extend({
       if (isDesignAgenda) {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
-      await subcase.hasMany('agendaitems').reload();
+      // await subcase.hasMany('agendaitems').reload();
       this.toggleAllPropertiesBackToDefault();
     },
 
