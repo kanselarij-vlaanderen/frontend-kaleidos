@@ -119,3 +119,49 @@ export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
     await Promise.all(approvals.map(approval => approval.destroyRecord()));
   }
 }
+
+export const setCalculatedGroupPriorities = (agendaitems) => {
+  return Promise.all(
+    agendaitems.map(async (item) => {
+      const mandatees = await item.get('mandatees');
+      if (item.isApproval) {
+        return;
+      }
+      if (mandatees.length == 0) {
+        item.set('groupPriority', 20000000);
+        return;
+      }
+      const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
+      const minPrio = Math.min(...mandateePriorities);
+      const minPrioIndex = mandateePriorities.indexOf(minPrio);
+      delete mandateePriorities[minPrioIndex];
+      let calculatedGroupPriority = minPrio;
+      mandateePriorities.forEach((value) => {
+        calculatedGroupPriority += value / 100;
+      });
+      item.set('groupPriority', calculatedGroupPriority);
+    })
+  );
+}
+
+export const groupAgendaitemsByGroupname = (agendaitems) => {
+  let groups = [];
+  agendaitems.map((agendaitem) => {
+    const groupName = agendaitem.get('ownGroupName');
+    const foundItem = groups.find((item) => item.groupName == groupName);
+
+    if (!foundItem) {
+      groups.push({
+        groupName,
+        groupPriority: agendaitem.groupPriority,
+        agendaitems: [agendaitem],
+      });
+    } else {
+      const foundIndex = groups.indexOf(foundItem);
+      if (foundIndex >= 0) {
+        groups[foundIndex].agendaitems.push(agendaitem);
+      }
+    }
+  });
+  return groups;
+}
