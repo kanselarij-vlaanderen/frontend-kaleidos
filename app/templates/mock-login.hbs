@@ -36,13 +36,13 @@
                   isWarning=true
                 }}
               {{/if}}
-              {{#login.each-account accounts=model as |account|}}
-                {{#wu-info-tile class="u-spacer--tiny" as |i|}}
-                  {{#i.content}}
+              <ul>
+                {{#login.each-account accounts=model as |account|}}
+                  <BlockLink>
                     {{account.user.firstName}} {{account.user.lastName}}
-                  {{/i.content}}
-                {{/wu-info-tile}}
-              {{/login.each-account}}
+                  </BlockLink>
+                {{/login.each-account}}
+              </ul>
               {{number-pagination
                 page=page
                 size=size
