@@ -57,7 +57,7 @@ export default class UsersSettingsController extends Controller {
   refreshRoute() {
     this.send('refresh');
   }
-  
+
   @action
   goToRoute(route, param) {
     this.transitionToRoute(route, param);
