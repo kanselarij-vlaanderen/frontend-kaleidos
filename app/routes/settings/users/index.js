@@ -23,7 +23,7 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
     const options = {
       include: 'group,organization',
     };
-    
+
     if (filter) {
       options.filter = filter;
     }
