@@ -18,11 +18,6 @@ services:
       - default
     build: ../.
     user: ${HOST_UID_GID}
-  e2e-electron:
-    image: "cypress/included:4.1.0"
-    volumes:
-      - ../cypress:/cypress
-      - ../cypress.json:/cypress.json
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
