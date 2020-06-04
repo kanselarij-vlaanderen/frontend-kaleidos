@@ -29,9 +29,9 @@ export default Component.extend({
 
   buttonClass: computed('buttonType', function () {
     if (this.buttonType === 'warning') {
-      return 'vl-button vl-button--narrow'
+      return 'vl-button'
     } else if (this.buttonType === 'danger') {
-      return 'vl-button vl-button--narrow vl-button--error'
+      return 'vl-button vl-button--error'
     }
   }),
 
