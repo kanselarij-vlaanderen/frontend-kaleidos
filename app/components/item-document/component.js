@@ -1,16 +1,11 @@
 import Component from '@ember/component';
-import { deprecatingAlias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import DS from 'ember-data';
 
 export default Component.extend({
   isClickable: null,
+  document: null,
   myDocumentVersions: computed.alias('item.documentVersions'),
-
-  document: deprecatingAlias('documentContainer', {
-    id: 'model-refactor.documents',
-    until: '?'
-  }),
 
   lastDocumentVersion: computed('mySortedDocumentVersions.@each', function () {
     const sortedVersions = this.get('mySortedDocumentVersions');

@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { A } from '@ember/array';
-import { deprecatingAlias } from '@ember/object/computed';
 import DS from 'ember-data';
 
 export default Component.extend({
@@ -11,12 +10,7 @@ export default Component.extend({
   classNameBindings: ['aboutToDelete'],
   isShowingVersions: false,
   documentToDelete: null,
-
-  document: deprecatingAlias('documentContainer', {
-    id: 'model-refactor.documents',
-    until: '?'
-  }),
-
+  document: null,
   openClass: computed('isShowingVersions', function () {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';

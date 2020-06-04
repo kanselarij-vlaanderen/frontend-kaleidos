@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 export default Component.extend({
   intl: inject(),
   tagName: 'button',
-  classNames: ['vl-button', 'vl-button--narrow'],
+  classNames: ['vl-button'],
   type: 'button',
   attributeBindings: ['isLoading:disabled', 'disabled:disabled', 'testTag:data-test-save-button'],
   classNameBindings: ['isLoading:vl-button--loading', 'disabled:vl-button--disabled'],

@@ -1,8 +1,6 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import { A } from '@ember/array';
-import { deprecatingAlias } from '@ember/object/computed';
 
 export default Component.extend({
   intl: service(),
@@ -12,7 +10,6 @@ export default Component.extend({
 
   async didInsertElement() {
     this._super(...arguments);
-    await this.resetPreferredAccessLevel();
   },
 
   classNames: ['vlc-document-card-item'],
@@ -26,12 +23,6 @@ export default Component.extend({
       }
     }
   }),
-
-  preferredAccessLevel: null,
-
-  resetPreferredAccessLevel: async function () {
-    this.set('preferredAccessLevel', await this.documentVersion.get('accessLevel'));
-  },
 
   async deleteDocumentVersionWithUndo() {
     const documentVersionToDelete = this.get('documentVersionToDelete');
