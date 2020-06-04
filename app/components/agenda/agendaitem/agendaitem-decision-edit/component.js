@@ -1,12 +1,11 @@
 import Component from '@ember/component';
-import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { cached } from 'fe-redpencil/decorators/cached';
-import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import { inject as service } from '@ember/service';
+import {computed} from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
-export default Component.extend(RdfaEditorMixin, {
+export default Component.extend({
   store: service(),
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze(['approved', 'richtext']),
@@ -14,6 +13,7 @@ export default Component.extend(RdfaEditorMixin, {
   initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
   documentVersionsSelected: null,
   isEditing: false,
+  isExpanded: false,
 
   async setNewPropertiesToModel(model) {
     const { propertiesToSet } = this;
@@ -47,6 +47,12 @@ export default Component.extend(RdfaEditorMixin, {
       return newDecisionPhase.save();
     }
   },
+  richtext: computed('editor.currentTextContent', function () {
+    if (!this.editor) {
+      return;
+    }
+    return this.editor.rootNode.innerHTML.htmlSafe();
+  }),
 
   actions: {
     toggleIsEditing() {
@@ -95,6 +101,10 @@ export default Component.extend(RdfaEditorMixin, {
 
     descriptionUpdated(val) {
       this.set('initValue', this.richtext + val);
-    }
+    },
+    async handleRdfaEditorInit(editorInterface) {
+      this.set('editor', editorInterface);
+    },
+
   }
 });
