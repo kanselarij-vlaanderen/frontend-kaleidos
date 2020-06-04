@@ -1,14 +1,9 @@
 import Component from '@ember/component';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
-import { deprecatingAlias } from '@ember/object/computed';
 
 export default Component.extend(MyDocumentVersions, {
   isClickable: null,
-
-  document: deprecatingAlias('documentContainer', {
-    id: 'model-refactor.documents',
-    until: '?'
-  }),
+  document: null,
 
   actions: {
     async showDocumentVersionViewer(documentVersion) {

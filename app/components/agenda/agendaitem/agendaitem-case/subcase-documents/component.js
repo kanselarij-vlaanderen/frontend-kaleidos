@@ -205,9 +205,6 @@ export default Component.extend(
       },
 
       async saveDocumentContainers() {
-        if (arguments.length > 0) {
-          deprecate('The function \'saveDocumentContainers\' takes no arguments, \'confidential\' should be set on individual document level', true);
-        }
         this.set('isLoading', true);
         const docs = this.get('documentsInCreation');
 

@@ -24,10 +24,7 @@ export default Component.extend(MyDocumentVersions, {
   nameBuffer: '',
   store: service(),
   documentsInCreation: A([]), // When creating new documents
-  document: deprecatingAlias('documentContainer', {
-    id: 'model-refactor.documents',
-    until: '?'
-  }),
+  document: null,
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
 
