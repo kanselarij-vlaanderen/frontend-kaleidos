@@ -15,7 +15,16 @@ export default Component.extend({
 
   selectedAgendaitemClass: computed('routing.currentRouteName', function () {
     const { routing } = this;
-    if (routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem.index') {
+    console.log(routing.get('currentRouteName'));
+    if (
+      routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem.index'
+      || routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem.documents'
+      || routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem.comments'
+      || routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem.decisions'
+      || routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem.minutes'
+      || routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem.news-item'
+      || routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem.press-agenda'
+    ) {
       return 'vlc-tabs-reverse__link--active';
     }
   }),
