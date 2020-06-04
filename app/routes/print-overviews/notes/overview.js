@@ -8,7 +8,10 @@ import {
 
 export default Route.extend({
   type: 'notes',
-  include: 'meeting-record',
+
+  queryParams: {
+    definite: { refreshModel: false }
+  },
 
   async model() {
     const session = await this.modelFor('print-overviews');
@@ -62,8 +65,4 @@ export default Route.extend({
       groupedAgendaitems,
     };
   },
-
-  queryParams: {
-    definite: { refreshModel: false }
-  }
 });

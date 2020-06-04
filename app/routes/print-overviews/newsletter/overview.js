@@ -12,7 +12,6 @@ export default Route.extend({
   agendaService: inject(),
 
   type: 'newsletter',
-  include: 'newsletter-info',
 
   queryParams: {
     definite: { refreshModel: true }

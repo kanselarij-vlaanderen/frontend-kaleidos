@@ -8,7 +8,6 @@ import {
 
 export default Route.extend({
   type: 'press-agenda',
-  include: null,
   allowEmptyGroups: true,
   queryParams: {
     definite: { refreshModel: true }

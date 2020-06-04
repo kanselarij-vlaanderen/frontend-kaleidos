@@ -8,7 +8,6 @@ import {
 
 export default Route.extend({
   type: 'decisions',
-  include: 'decisions',
 
   async model() {
     const session = await this.modelFor('print-overviews');
