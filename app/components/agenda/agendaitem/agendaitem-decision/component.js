@@ -16,7 +16,7 @@ export default class AgendaItemDecisionComponent extends Component {
 
   @action
   toggleIsEditing() {
-    this.toggleProperty('isEditing');
+    this.isEditing = !this.isEditing;
   }
 
   @action
