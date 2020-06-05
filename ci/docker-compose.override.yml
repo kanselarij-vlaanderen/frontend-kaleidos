@@ -18,6 +18,8 @@ services:
     user: ${HOST_UID_GID}
   e2e-electron:
     image: "kanselarij/kaleidos-cypress:latest"
+    environment:
+      NO_COLOR: 1
     links:
       - frontend:frontend
     volumes:
