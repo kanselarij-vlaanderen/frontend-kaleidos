@@ -38,7 +38,7 @@ function setDateAndTimeInFlatpickr(date) {
 function setDateInFlatpickr(date) {
   cy.log('setDateInFlatpickr');
   cy.get('.flatpickr-months > .flatpickr-month > .flatpickr-current-month > .numInputWrapper > input').type(date.year());
-  cy.get('.flatpickr-months > .flatpickr-month > .flatpickr-current-month > select').select(date.month());
+  cy.get('.flatpickr-months > .flatpickr-month > .flatpickr-current-month > select').select(date.month().toString());
   cy.get('.flatpickr-days').within(() => {
     cy.get('.flatpickr-day').not('.prevMonthDay').not('.nextMonthDay').contains(date.date()).click();
   });
