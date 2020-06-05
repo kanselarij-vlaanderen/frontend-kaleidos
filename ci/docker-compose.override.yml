@@ -17,7 +17,7 @@ services:
     build: ../.
     user: ${HOST_UID_GID}
   e2e-electron:
-    image: "cypress/included:4.1.0"
+    image: "kanselarij/kaleidos-cypress:latest"
     links:
       - frontend:frontend
     volumes:
