@@ -45,7 +45,7 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
  * @param {*} location The location of the meeting to enter as input
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, plusMonths, date, location) {
+function createAgenda(kind, date, location) {
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
   cy.route('POST', '/agendaitems').as('createNewAgendaItems');
@@ -75,8 +75,7 @@ function createAgenda(kind, plusMonths, date, location) {
   cy.get('@newAgendaForm').eq(1).within(() => {
     cy.get('.vl-datepicker').click();
   });
-  //TODO get months by calculating instead
-  cy.setDateAndTimeInFlatpickr(date, plusMonths);
+  cy.setDateAndTimeInFlatpickr(date);
 
   //Set the location
   cy.get('@newAgendaForm').eq(2).within(() => {
