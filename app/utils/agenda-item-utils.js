@@ -165,3 +165,17 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
   });
   return groups;
 }
+
+export const parseDraftsAndGroupsFromAgendaitems = async (agendaitems) => {
+  // Drafts are items without an approval or remark
+  const draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
+
+  // Calculate the priorities on the drafts
+  await setCalculatedGroupPriorities(draftAgendaitems);
+
+  const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
+  return {
+    draftAgendaitems,
+    groupedAgendaitems,
+  };
+}

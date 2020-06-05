@@ -2,10 +2,7 @@ import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
 import { hash } from 'rsvp';
 import EmberObject from '@ember/object';
-import {
-  setCalculatedGroupPriorities,
-  groupAgendaitemsByGroupname,
-} from 'fe-redpencil/utils/agenda-item-utils';
+import { parseDraftsAndGroupsFromAgendaitems } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Route.extend({
   agendaService: inject(),
@@ -28,7 +25,7 @@ export default Route.extend({
       return item.showAsRemark;
     });
 
-    const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(agendaitems);
+    const { draftAgendaitems, groupedAgendaitems } = await parseDraftsAndGroupsFromAgendaitems(agendaitems);
 
     await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
 
@@ -55,17 +52,5 @@ export default Route.extend({
       announcements: announcements.sortBy('priority'),
       meeting: session,
     });
-  },
-
-  async parseAgendaItems(agendaitems) {
-    const draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
-
-    await setCalculatedGroupPriorities(draftAgendaitems);
-
-    const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
-    return {
-      draftAgendaitems,
-      groupedAgendaitems,
-    };
   },
 });
