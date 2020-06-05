@@ -33,6 +33,8 @@ export default Route.extend({
       agendaitems, params
     );
 
+    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
+
     let prevIndex = 0;
     let groupsArray = groupedAgendaitems;
     if (!this.allowEmptyGroups) {
@@ -63,7 +65,6 @@ export default Route.extend({
 
     draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
 
-    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
     await setCalculatedGroupPriorities(draftAgendaitems);
 
     const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));

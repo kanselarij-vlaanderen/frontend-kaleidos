@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
 import { hash } from 'rsvp';
 import EmberObject from '@ember/object';
 import {
@@ -7,6 +8,7 @@ import {
 } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Route.extend({
+  agendaService: inject(),
   type: 'notes',
 
   queryParams: {
@@ -27,6 +29,8 @@ export default Route.extend({
     });
 
     const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(agendaitems);
+
+    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
 
     let prevIndex = 0;
     let groupsArray = groupedAgendaitems;
@@ -56,7 +60,6 @@ export default Route.extend({
   async parseAgendaItems(agendaitems) {
     const draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
 
-    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
     await setCalculatedGroupPriorities(draftAgendaitems);
 
     const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
