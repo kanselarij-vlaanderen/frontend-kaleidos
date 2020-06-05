@@ -67,7 +67,7 @@ function createAgenda(kind, plusMonths, date, location) {
     cy.contains(kind).trigger('mouseover').click();
     //TODO Experiment for dropdown flakyness
     // Does the ember-power-select-option fix itself if we wait long enough ?
-    cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible'); 
+    cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
     // Could/Should we verify that the dropdown has closed, and try to repeat the process if not ?
   });
 
@@ -135,7 +135,7 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
 
   cy.wait('@createNewMeeting', { timeout: 20000 });
   cy.wait('@createNewAgenda', { timeout: 20000 });
-  // cy.wait('@createNewAgendaItems', { timeout: 20000 }); // This fails if there is no older agenda (verslag vorige vergadering)  
+  // cy.wait('@createNewAgendaItems', { timeout: 20000 }); // This fails if there is no older agenda (verslag vorige vergadering)
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
 }
@@ -359,7 +359,11 @@ function approveDesignAgenda() {
       // .wait('@getAgendaitems', { timeout: 12000 })
       .wait('@getAgendas', { timeout: 12000 });
   });
-  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {verbose: true, timeout: 60000});
+  //cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {verbose: true, timeout: 60000});
+  cy.wait(5000)
+  //cy.waitUntil(() =>
+  cy.get('.vl-loader').should('not.be.visible')
+  //  , {verbose: true, timeout: 60000});
 }
 
 /**
