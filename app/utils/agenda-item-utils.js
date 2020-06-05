@@ -123,7 +123,7 @@ export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
 /**
  * For a given set of agenda items, will re-order them by their groupPriority
  * ⚠️ Word of caution, this mutates the original set!
- * @param {Array} agendaitems   Will
+ * @param {Array} agendaitems   Agenda items to mutate
  */
 export const setCalculatedGroupPriorities = (agendaitems) => {
   return Promise.all(
