@@ -120,6 +120,11 @@ export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
   }
 }
 
+/**
+ * For a given set of agenda items, will re-order them by their groupPriority
+ * ⚠️ Word of caution, this mutates the original set!
+ * @param {Array} agendaitems   Will
+ */
 export const setCalculatedGroupPriorities = (agendaitems) => {
   return Promise.all(
     agendaitems.map(async (item) => {
@@ -144,6 +149,12 @@ export const setCalculatedGroupPriorities = (agendaitems) => {
   );
 }
 
+/**
+ * For a given set of agendaitems, return an array of groups
+ * Will eventually return the same amount of data
+ * @param  {Array} agendaitems  Agenda items to parse from
+ * @return {Array}              A list of groups
+ */
 export const groupAgendaitemsByGroupname = (agendaitems) => {
   let groups = [];
   agendaitems.map((agendaitem) => {
@@ -166,6 +177,11 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
   return groups;
 }
 
+/**
+ * For a set of agendaitems, will fetch the drafts, and will group them by priority
+ * @param  {Array}  agendaitems   Agenda items to parse from
+ * @return {Object}               An object containing drafts and groups
+ */
 export const parseDraftsAndGroupsFromAgendaitems = async (agendaitems) => {
   // Drafts are items without an approval or remark
   const draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
