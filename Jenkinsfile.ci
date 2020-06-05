@@ -28,7 +28,7 @@ pipeline {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "cp ${env.WORKSPACE}/Dockerfile.ci ${env.WORKSPACE}/Dockerfile"
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
-                sh "npm i"
+
                 sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod 777 data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d --build"
 
@@ -55,7 +55,7 @@ pipeline {
             steps {
                  // sh "npx cypress run"
                  sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose run e2e-electron"
+                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} run e2e-electron"
             }
         }
 
