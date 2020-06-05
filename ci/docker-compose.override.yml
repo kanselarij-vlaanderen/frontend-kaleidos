@@ -18,6 +18,8 @@ services:
     user: ${HOST_UID_GID}
   e2e-electron:
     image: "cypress/included:4.1.0"
+    links:
+      - frontend:frontend
     volumes:
       - ../cypress:/cypress
       - ../cypress.test.json:/cypress.json

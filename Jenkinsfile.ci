@@ -26,7 +26,7 @@ pipeline {
         stage('Prepare for automated tests') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                sh "cp ${env.WORKSPACE}/Dockerfile.test ${env.WORKSPACE}/Dockerfile"
+                sh "cp ${env.WORKSPACE}/Dockerfile.ci ${env.WORKSPACE}/Dockerfile"
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
                 sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod 777 data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d --build"
@@ -46,7 +46,7 @@ pipeline {
                 sh "cd ${WORKSPACE}/kaleidos-project && cp -rf testdata/* data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
                 sh "sleep 60"
-                sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
+                // sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
                 // sh "npm i"
             }
         }

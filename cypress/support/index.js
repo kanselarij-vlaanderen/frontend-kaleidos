@@ -29,6 +29,7 @@ import './commands/select.commands'
 import './commands/navigation.commands'
 import './commands/authorizationAuthentication.commands'
 import './commands/reset-database.commands'
+import 'cypress-file-upload';
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   return !err.message.includes('calling set on destroyed object')
