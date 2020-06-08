@@ -77,7 +77,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
     });
     cy.get('.ember-power-select-option').should('exist').then(() => {
-      cy.contains('Publiek').click();
+      cy.contains('Publiek').scrollIntoView().click();
     });
     cy.get(agenda.documentAccessLevel).should('exist').should('be.visible').contains('Publiek');
     cy.contains('Annuleren').click();
@@ -102,7 +102,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
     });
     cy.get('.ember-power-select-option').should('exist').then(() => {
-      cy.contains('Intern Overheid').click();
+      cy.contains('Intern Overheid').scrollIntoView().click();
     });
     cy.contains('Opslaan').click();
 
