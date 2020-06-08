@@ -471,7 +471,7 @@ function agendaItemExists(agendaItemName) {
         cy.clickReverseTab('Overzicht');
       }
       cy.get(agenda.agendaOverviewSubitem)
-      .contains(agendaItemName, { timeout: 12000 })
+      .contains(agendaItemName, { timeout: 24000 })
       .should('exist');
     }
   });

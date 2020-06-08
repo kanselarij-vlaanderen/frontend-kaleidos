@@ -88,16 +88,10 @@ context('Full test', () => {
     cy.url().should('include', 'instellingen/ministers');
     cy.get('[data-test-mandatee-edit="0"]').click();
     const enddateForMandatee = Cypress.moment("2020-03-02").set({ "hour": 10, "minute": 10 });
+
     cy.get('.vl-datepicker').eq(1).click();
-    cy.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(1).clear().type(enddateForMandatee.year(), { delay: 300 });
-    cy.get('.flatpickr-months').eq(1).within(() => {
-      for (let n = 0; n < plusMonths; n++) {
-        cy.get('.flatpickr-next-month').click();
-      }
-    });
-    cy.get('.flatpickr-days').eq(1).within(() => {
-      cy.get('.flatpickr-day').not('.prevMonthDay').not('.nextMonthDay').contains(enddateForMandatee.date()).click();
-    });
+    cy.setDateInFlatpickr(enddateForMandatee);
+
     cy.get(form.formSave).should('exist').should('be.visible').click();
     cy.wait(3000);
     cy.get(modal.verify.save).should('exist').should('be.visible').contains('Eindatum aanpassen');
