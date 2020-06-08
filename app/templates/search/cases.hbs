@@ -22,6 +22,7 @@
           @sort={{this.sort}}
           @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
           @isLoading={{this.isLoadingModel}}
+          @onClickRow={{this.navigateToCase}}
         as |table|
         >
           <table.content as |c|>
