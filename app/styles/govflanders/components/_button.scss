@@ -10,7 +10,7 @@ $button-border-small: 0.1rem;
   font-size: $form-font-size;
   font-family: $base-font;
   line-height: $form-input-height;
-  padding: 0 4rem;
+  padding: 0 1rem;
   background-color: $action-color;
   text-decoration: none;
   color: $action-fg-color;
@@ -154,16 +154,6 @@ $button-border-small: 0.1rem;
     height: $form-input-height-large;
     line-height: $form-input-height-large;
     font-size: $form-font-size-large;
-  }
-
-  // Wide modifier
-  &--wide {
-    padding: 0 6rem;
-  }
-
-  // Narrow modifier
-  &--narrow {
-    padding: 0 1rem;
   }
 
   // Loading modifier

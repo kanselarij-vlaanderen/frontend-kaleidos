@@ -29,13 +29,12 @@ context('Full test', () => {
 
     //#endregion
 
-    const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 15).set('minute', 15);
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
 
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location);
+    cy.createAgenda('Ministerraad', agendaDate, location);
     // cy.openAgendaForDate(agendaDate);
 
     //#endregion
@@ -117,7 +116,7 @@ context('Full test', () => {
     cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
     cy.addAgendaitemToAgenda();
-    cy.setFormalOkOnItemWithIndex(3); //new agendaitem 
+    cy.setFormalOkOnItemWithIndex(3); //new agendaitem
     cy.approveDesignAgenda();
     //#endregion
 
