@@ -3,9 +3,9 @@
         @accept=".csv"
         @onfileadd={{action "uploadFile"}} as |queue|>
 
-  <span class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before">
+  <span class="vl-button vl-button--tertiary vl-button--icon-before">
     {{#if queue.files.length}}
-      <a href="javascript://" class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before">
+      <a href="javascript://" class="vl-button vl-button--tertiary vl-button--icon-before">
         {{t "import-users-text"}}</a>
     {{else}}
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-cloud-upload"></i>

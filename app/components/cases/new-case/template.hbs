@@ -6,21 +6,17 @@
         {{web-components/vl-toggle value=confidential}}
       </div>
     </div>
-    {{cases/forms/metadata-form
-      submitter=submitter
-      meeting=meeting
-      shortTitle=shortTitle
-      selectedPolicyLevel=selectedPolicyLevel
-      selectedMeetingChanged=(action "selectedMeetingChanged")
-      submitterChanged=(action "submitterChanged")
-    }}
+    <div class="vlc-input-field-block" data-test-metadata-form>
+      {{web-components/vl-form-label value=(t "short-title-case")}}
+      {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
+    </div>
   </div>
   <div class="vlc-navbar vlc-navbar--bordered-top">
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <button type="button" data-test-vl-modal-footer-cancel
-                  class="vl-button vl-button--link vl-button--narrow"
+                  class="vl-button vl-button--link"
             {{action "close"}}>
             {{t "cancel"}}
           </button>

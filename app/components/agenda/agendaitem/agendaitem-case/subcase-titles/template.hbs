@@ -56,30 +56,6 @@
       </span>
     {{/if}}
   </div>
-  <div class="vl-u-spacer-extended-bottom-s">
-    <div
-      class="pill-container vl-u-display-flex"
-      data-test-agenda-subcasehidden-pill
-    >
-      {{#if isAgendaItem}}
-        {{#if (and isEditor (await item.formallyOkToShow))}}
-          <span
-            class="{{item.formallyOkToShow.pillClassNames}}
-             vl-u-spacer-extended-right-s"
-          >
-            {{item.formallyOkToShow.label}}
-          </span>
-        {{/if}}
-      {{/if}}
-      {{#if (await confidential)}}
-        <span class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
-      {{else}}
-        <span
-          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
-        ></span>
-      {{/if}}
-    </div>
-  </div>
   {{#if (await item.isPostponed)}}
     <div class="vl-u-spacer-extended-bottom-s">
       <div class="pill-container vl-u-display-flex">
@@ -118,7 +94,30 @@
     </div>
   </div>
 {{/if}}
-
+<div class="vl-u-spacer-extended-bottom-s">
+  <div
+          class="pill-container vl-u-display-flex"
+          data-test-agenda-subcasehidden-pill
+  >
+    {{#if isAgendaItem}}
+      {{#if (and currentSession.isEditor (await item.formallyOkToShow))}}
+        <span
+                class="{{item.formallyOkToShow.pillClassNames}}
+             vl-u-spacer-extended-right-s"
+        >
+          {{item.formallyOkToShow.label}}
+        </span>
+      {{/if}}
+    {{/if}}
+    {{#if (await confidential)}}
+      <span class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
+    {{else}}
+      <span
+              class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+      ></span>
+    {{/if}}
+  </div>
+</div>
 {{#if isAgendaItem}}
   <div class="vl-u-spacer-extended-bottom-s">
     {{#if item.explanation}}

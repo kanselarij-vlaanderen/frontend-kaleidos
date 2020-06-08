@@ -45,12 +45,12 @@ export default Component.extend({
 
   meetings: computed('store', function () {
     const dateOfToday = moment().utc().subtract(1, 'weeks').format();
-    const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
+    const futureDate = moment().utc().add(6, 'weeks').format();
 
     return this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
-        ':lte:planned-start': dateInTwoWeeks,
+        ':lte:planned-start': futureDate,
         'is-final': false
       },
       sort: 'planned-start'
@@ -113,8 +113,11 @@ export default Component.extend({
       this.set('isLoading', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
-      await designAgenda.reload(); //ensures latest state is pulled
-      if (designAgenda.get('name') === 'Ontwerpagenda') {
+      //ensures latest state is pulled
+      await designAgenda.reload();
+      await designAgenda.belongsTo('status').reload();
+      const isDesignAgenda = designAgenda.get('isDesignAgenda');
+      if (isDesignAgenda) {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
       await subcase.hasMany('agendaitems').reload();

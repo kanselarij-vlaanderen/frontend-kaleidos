@@ -1,20 +1,20 @@
-{{#if (eq currentAgenda.name "Ontwerpagenda")}}
+{{#if currentAgenda.isDesignAgenda}}
   {{#if (and (not (is-pending isDeletable)) (not (is-pending isPostPonable)))}}
     {{#if (await isPostPonable)}}
       {{#if (or agendaitem.retracted (await agendaitem.postponedTo))}}
-        <button type="button" class="vl-button vl-button--tertiary vl-button--narrow"
+        <button type="button" class="vl-button vl-button--tertiary"
           {{action "advanceAgendaitem"}}
         >
           {{t "not-postpone"}}
         </button>
       {{else}}
-        <button type="button" class="vl-button vl-button--tertiary vl-button--narrow" {{action "postponeAgendaItem" agendaitem}}>
+        <button type="button" class="vl-button vl-button--tertiary" {{action "postponeAgendaItem" agendaitem}}>
           {{t "postpone"}}
         </button>
       {{/if}}
     {{/if}}
     {{#if (or currentSession.isAdmin (await isDeletable))}}
-      <button type="button" class="vl-button vl-button--tertiary vl-button--narrow"
+      <button type="button" class="vl-button vl-button--tertiary"
         {{action "toggleIsVerifying"}}>
         {{t "delete"}}
       </button>

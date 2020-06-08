@@ -25,6 +25,10 @@
 
 .vlc-agenda-items__status {
   white-space: nowrap;
+
+  .formally-ok-icon {
+    margin-right: 0.5rem;
+  }
 }
 
 .vlc-agenda-meta__status--positive {

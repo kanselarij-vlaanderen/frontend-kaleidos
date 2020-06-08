@@ -7,14 +7,13 @@ import modal from '../../selectors/modal.selectors';
 import document from "../../selectors/document.selectors";
 
 context('Add files to an agenda', () => {
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 3).set('hour', 20).set('minute', 20);
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
 
   before(() => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
   });
 

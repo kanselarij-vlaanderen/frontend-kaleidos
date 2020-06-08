@@ -12,7 +12,6 @@ export default Component.extend({
   currentSession: service(),
   currentAgenda: null,
   agendaitem: null,
-  lastDefiniteAgenda: null,
 
   isPostPonable: computed("sessionService.agendas.@each", "agendaitem.subcase", async function () {
     const subcase = await this.agendaitem.get('subcase');
@@ -27,10 +26,10 @@ export default Component.extend({
 
   isDeletable: computed(
     'agendaitem.{subcase,subcase.agendaitems}', 'currentAgenda.name', async function () {
-      const currentAgendaName = await this.get('currentAgenda.name');
+      const designAgenda = await this.get('currentAgenda.isDesignAgenda');
       const agendaitemSubcase = await this.get('agendaitem.subcase');
       const agendaitems = await this.get('agendaitem.subcase.agendaitems');
-      if (currentAgendaName && currentAgendaName !== 'Ontwerpagenda') {
+      if (!designAgenda) {
         return false;
       } else if (agendaitemSubcase) {
         return !(agendaitems && agendaitems.length > 1);
@@ -54,7 +53,9 @@ export default Component.extend({
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
     }
     this.set('sessionService.selectedAgendaItem', null);
-    this.refreshRoute(id);
+    if (this.onDeleteAgendaItem) {
+      this.onDeleteAgendaItem(agendaitem);
+    }
   },
 
   deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function () {

@@ -3,8 +3,7 @@
 import agenda from '../../selectors/agenda.selectors';
 
 context('Subcase tests', () => {
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 5).set('hour', 20).set('minute', 20);
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
   const caseTitle = 'Cypress test: subcases - ' + currentTimestamp();
   const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
 
@@ -12,7 +11,7 @@ context('Subcase tests', () => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
   });
 
@@ -22,7 +21,6 @@ context('Subcase tests', () => {
   });
 
   it('should open an existing case and add a subcase', () => {
-
     const type = 'Nota';
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
@@ -172,7 +170,7 @@ context('Subcase tests', () => {
     // Aanmaken agendaItem
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.openAgendaItemDossierTab(SubcaseTitleShort, false);
+    cy.openAgendaItemDossierTab(SubcaseTitleShort);
 
     // Status is hidden
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
@@ -183,7 +181,7 @@ context('Subcase tests', () => {
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
     cy.route('PATCH','/agendaitems/*').as('patchAgendaitem');
     cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') //CHECK na save in agendaitem
-      .wait('@patchAgendaitem'); 
+      .wait('@patchAgendaitem');
 
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
@@ -229,6 +227,7 @@ context('Subcase tests', () => {
 
 
   it('Changes to agenda item Themas propagate properly', () => {
+
     // Open agenda
     cy.route('GET', '/agendas/**').as('getAgenda');
     cy.openAgendaForDate(agendaDate);
@@ -322,7 +321,7 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsRequest');
     cy.wait('@getAgendas');
 
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort,true);
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
 
     cy.get(agenda.item.themes).contains('Sport');
     cy.get(agenda.item.themes).contains('Overheid');
