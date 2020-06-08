@@ -1,18 +1,18 @@
 import modal from "../../selectors/modal.selectors";
 import agenda from '../../selectors/agenda.selectors';
+import actionModel from '../../selectors/action-modal.selectors';
 
-/*global context, before, it, cy,beforeEach, Cypress*/
+/*global context, before, it, cy,beforeEach, afterEach, Cypress*/
 /// <reference types="Cypress" />
 
 context('Agenda tests', () => {
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 20).set('minute', 20);
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
 
   before(() => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
   });
 
@@ -21,11 +21,13 @@ context('Agenda tests', () => {
     cy.login('Admin');
   });
 
+  afterEach(() => {
+    cy.logout();
+  });
   it('should create a new agenda and then delete it', () => {
-    const plusMonthsSingleTest = 1;
-    const agendaDateSingleTest = Cypress.moment().add('month', plusMonthsSingleTest).set('date', 16).set('hour', 16).set('minute', 16);
+    const agendaDateSingleTest = Cypress.moment().add(2, 'weeks').day(5); // Friday in two weeks
 
-    cy.createAgenda('Elektronische procedure', plusMonthsSingleTest, agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven')
+    cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven')
       .then((meetingId) => {
         cy.openAgendaForDate(agendaDateSingleTest);
         cy.deleteAgenda(meetingId, true);
@@ -44,13 +46,34 @@ context('Agenda tests', () => {
     cy.addAgendaitemToAgenda(false);
   });
 
+  it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
+    const agendaDate = Cypress.moment().add(3, 'weeks').day(5); // Friday in three weeks
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Daar').then((meetingId) => {
+      cy.openAgendaForDate(agendaDate);
+      cy.setFormalOkOnItemWithIndex(0);
+      cy.approveDesignAgenda();
+      cy.deleteAgenda(meetingId);
+      cy.closeAgenda();
+    });
+  });
+
+  it('Should not be able to close a session with only a design agenda, cfr. KAS-1551', () => {
+    const agendaDate = Cypress.moment().add(4, 'weeks').day(5); // Friday in four weeks
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Daar');
+    cy.openAgendaForDate(agendaDate);
+    cy.get('.vl-button--icon-before')
+      .contains('Acties')
+      .click();
+    cy.get(actionModel.lockAgenda).should('not.exist');
+  });
+
   it('should edit nota on agendaitem and trim whitespaces', () => {
     const testId = 'testId=' + currentTimestamp() + ': ';
 
     const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
     const agendaDate = Cypress.moment().set({ "hour": 10, "minute": 10 });
-    cy.createAgenda(KIND, 0, agendaDate, PLACE);
+    cy.createAgenda(KIND, agendaDate, PLACE);
     cy.openAgendaForDate(agendaDate);
 
     const case_1_TitleShort = testId + 'Cypress test dossier 1';
@@ -83,10 +106,6 @@ context('Agenda tests', () => {
   })
 
 });
-
-function currentMoment() {
-  return Cypress.moment();
-}
 
 function currentTimestamp() {
   return Cypress.moment().unix();

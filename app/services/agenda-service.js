@@ -50,7 +50,7 @@ export default Service.extend({
     });
   },
 
-  async approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
+  async approveAgendaAndCopyToDesignAgenda(currentMeeting, oldAgenda) {
     if (!oldAgenda) {
       return oldAgenda;
     }
@@ -59,8 +59,7 @@ export default Service.extend({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
-        agendaName: 'Ontwerpagenda',
-        createdFor: currentSession.id,
+        createdFor: currentMeeting.id,
         oldAgendaId: oldAgenda.id,
       },
     });

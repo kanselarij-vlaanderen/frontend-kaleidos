@@ -85,7 +85,7 @@
                       label=(t "agenda-version")
                     }}
                     <th
-                            class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+                      class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
                     >
                       {{t "latest-modified"}}
                     </th>
@@ -110,14 +110,11 @@
                         {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                       </td>
                       <td>
-                        {{#if (is-pending meeting.latestAgendaName)}}
-                          <div class="skeletal-loader"
-                               role="alert"
-                               aria-busy="true"
-                          ></div>
-                        {{else}}
-                          {{await meeting.latestAgendaName}}
-                        {{/if}}
+                        {{utils/delayed-property
+                          model=meeting
+                          path="latestAgendaName"
+                          waitFor="agenda.status"
+                        }}
                       </td>
                       <td>
                         {{#if (is-pending meeting.latestAgenda)}}

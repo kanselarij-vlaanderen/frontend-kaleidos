@@ -1,12 +1,18 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
-import ModelManageMixin from 'fe-redpencil/mixins/model-manage-mixin';
+import { inject } from '@ember/service';
 
-export default Component.extend(ModelManageMixin, {
+export default Component.extend({
   classNames: ['vl-u-spacer'],
   modelName: null,
 
   title: cached('item.label'), // TODO in class syntax use as a decorator instead
+
+  store: inject(),
+
+  isAdding: false,
+  isEditing: false,
+
 
   actions: {
     async editModel() {
@@ -30,6 +36,31 @@ export default Component.extend(ModelManageMixin, {
         this.set('isLoading', false);
         this.set('isAdding', false);
       });
-    }
+    },
+
+    close() {
+      this.close();
+    },
+
+    selectModel(model) {
+      this.set('item', model);
+    },
+
+    toggleIsAdding() {
+      this.toggleProperty('isAdding');
+    },
+
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
+
+    chooseField(field) {
+      this.set('field', field);
+    },
+
+    removeModel() {
+      alert('This action is not allowed. Please contact the system administrator.');
+    },
+
   }
 })

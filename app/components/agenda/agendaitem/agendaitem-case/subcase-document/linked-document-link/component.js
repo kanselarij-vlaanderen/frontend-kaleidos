@@ -1,20 +1,16 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { inject } from '@ember/service';
 import MyDocumentVersions from 'fe-redpencil/mixins/my-document-versions';
+import { A } from '@ember/array';
 
-export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
-  fileService: inject(),
+export default Component.extend(MyDocumentVersions, {
   currentSession: inject(),
   classNames: ['vl-u-spacer-extended-bottom-s'],
   classNameBindings: ['aboutToDelete'],
   isShowingVersions: false,
-  isUploadingNewVersion: false,
-  uploadedFile: null,
-  isEditing: false,
   documentToDelete: null,
-
+  document: null,
   openClass: computed('isShowingVersions', function () {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
@@ -22,6 +18,34 @@ export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
   }),
 
   myDocumentVersions: computed.alias('item.linkedDocumentVersions'),
+
+  // TODO: refactor model/code in function of "reeds aangeleverde documenten"
+  async unlinkDocumentVersions(documentVersions, model) {
+    const modelName = await model.get('constructor.modelName');
+    // Don't do anything for these models
+    if (['meeting-record', 'decision'].includes(modelName)) {
+      return model;
+    }
+    const subcase = await model.get('subcase');
+    const agendaitemsOnDesignAgenda = await model.get('agendaitemsOnDesignAgendaToEdit');
+    if (subcase) {
+      await this.unlinkDocumentVersionsFromModel(subcase, documentVersions);
+    } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+      await Promise.all(agendaitemsOnDesignAgenda.map(agendaitem => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
+    }
+    return await this.unlinkDocumentVersionsFromModel(model, documentVersions);
+  },
+
+  // TODO: refactor model/code in function of "reeds aangeleverde documenten"
+  async unlinkDocumentVersionsFromModel(model, documentVersions) {
+    const modelDocumentVersions = await model.get('linkedDocumentVersions');
+    if (modelDocumentVersions) {
+      documentVersions.forEach(documentVersion => modelDocumentVersions.removeObject(documentVersion))
+    } else {
+      model.set('linkedDocumentVersions', A([]));
+    }
+    return await model.save();
+  },
 
   actions: {
     showVersions() {
@@ -44,6 +68,6 @@ export default Component.extend(UploadDocumentMixin, MyDocumentVersions, {
     unlinkDocument(document) {
       this.set('documentToDelete', document);
       this.set('isVerifyingUnlink', true);
-    }
+    },
   },
 });

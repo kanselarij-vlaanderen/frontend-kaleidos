@@ -1,12 +1,15 @@
 import Component from '@ember/component';
-import ModelSelectorMixin from 'fe-redpencil/mixins/model-selector-mixin';
+import { inject } from '@ember/service';
+import { task, timeout } from 'ember-concurrency';
+import { computed } from '@ember/object';
 
-export default Component.extend(ModelSelectorMixin, {
+export default Component.extend( {
   classNames: ['vlc-input-field-block'],
   classNameBindings: [
     'isCreatingPerson:vl-u-bg-alt',
     'isCreatingPerson:vlc-u-no-margin',
-    'isCreatingPerson:vlc-u-padding-2'
+    'isCreatingPerson:vlc-u-padding-2',
+    'classes'
   ],
   searchField: 'first-name',
   modelName: 'person',
@@ -14,6 +17,18 @@ export default Component.extend(ModelSelectorMixin, {
   isCreatingPerson: false,
   firstName: null,
   lastName: null,
+  store: inject(),
+  placeholder: null,
+  sortField: null,
+  filter: null,
+  loadingMessage: 'Even geduld aub..',
+  noMatchesMessage: 'Geen zoekresultaten gevonden',
+  selectedItems: null,
+
+  init() {
+    this._super(...arguments);
+    this.findAll.perform();
+  },
 
   clearValues() {
     this.set('isCreatingPerson', false);
@@ -21,6 +36,43 @@ export default Component.extend(ModelSelectorMixin, {
     this.set('lastName', null);
     this.set('isLoading', false);
   },
+
+  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
+    let options = {};
+    const { filter, sortField, includeField } = this;
+    if (sortField) {
+      options['sort'] = sortField;
+    }
+    if (filter) {
+      options['filter'] = filter;
+    }
+    if (includeField) {
+      options['include'] = includeField;
+    }
+    return options;
+  }),
+
+  findAll: task(function* () {
+    const { modelName, queryOptions } = this;
+    if (modelName) {
+      const items = yield this.store.query(modelName, queryOptions);
+      this.set('items', items);
+    }
+  }),
+
+  searchTask: task(function* (searchValue) {
+    yield timeout(300);
+    const { queryOptions, searchField, modelName } = this;
+    if (queryOptions['filter']) {
+      queryOptions['filter'][searchField] = searchValue;
+    } else {
+      let filter = {};
+      filter[searchField] = searchValue;
+      queryOptions['filter'] = filter;
+    }
+
+    return this.store.query(modelName, queryOptions);
+  }),
 
   actions: {
     toggleIsCreatingPerson() {
@@ -41,6 +93,17 @@ export default Component.extend(ModelSelectorMixin, {
         this.findAll.perform();
         this.clearValues();
       });
+    },
+
+    selectModel(items) {
+      this.selectModel(items);
+    },
+
+    resetValueIfEmpty(param) {
+      if (param == '') {
+        this.set('queryOptions', { sort: this.sortField });
+        this.findAll.perform();
+      }
     }
   }
 });

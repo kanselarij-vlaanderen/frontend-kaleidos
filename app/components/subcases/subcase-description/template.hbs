@@ -145,14 +145,11 @@
   <div class="vlc-box">
     <div class="vl-u-spacer">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcase-type")}}
-        {{utils/model-selector
-          modelName="case-type"
-          searchField="label"
-          sortField="label"
-          propertyToShow="label"
-          selectedItems=remarkType
-          selectModel=(action "selectRemarkType")
+        {{web-components/vl-radio-button-list
+          title=(t "subcase-type")
+          optionList=(await caseTypes)
+          selectedModel=remarkType
+          modelChanged=(action "selectRemarkType")
         }}
       </div>
       <div class="vlc-input-field-block">
