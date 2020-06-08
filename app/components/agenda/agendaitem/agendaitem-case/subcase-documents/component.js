@@ -4,8 +4,6 @@ import uploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
 import { alias } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
-import moment from 'moment';
 
 export default Component.extend(
   uploadDocumentMixin,
@@ -31,7 +29,7 @@ export default Component.extend(
         this.set('documentTypes', types);
       });
     },
-    
+
     async deleteAll() {
       await Promise.all(
         this.get('documentsInCreation').map(async (doc) => {

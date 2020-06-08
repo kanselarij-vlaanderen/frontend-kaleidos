@@ -1,7 +1,7 @@
-/*global context, before, it, cy,beforeEach*/
+/*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
-import agenda from '../../selectors/agenda.selectors';
+import document from '../../selectors/document.selectors';
 
 context('Tests for KAS-1076', () => {
 
@@ -27,10 +27,10 @@ context('Tests for KAS-1076', () => {
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-8', fileType: 'Nota' },
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-9', fileType: 'Nota' },
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-10', fileType: 'Nota' },
-      { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-11', fileType: 'Nota' },
-      { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-12', fileType: 'Nota' },
-      { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-13', fileType: 'Nota' },
-      { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-14', fileType: 'Nota' },
+      { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-11', fileType: 'Bijlage' },
+      { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-12', fileType: 'IF' },
+      { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-13', fileType: 'BVR' },
+      { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-14', fileType: 'MvT' },
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-15', fileType: 'Nota' },
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-16', fileType: 'Nota' },
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-17', fileType: 'Nota' },
@@ -39,7 +39,7 @@ context('Tests for KAS-1076', () => {
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-20', fileType: 'Nota' },
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-21', fileType: 'Nota' },
       { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-22', fileType: 'Nota' },
-    ]
+    ];
 
     cy.addDocumentsToAgendaItem(SubcaseTitleShort, files,false);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -52,6 +52,20 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
     });
+
+    const linkedDocumentsNames = [
+      'VR 2019 1111 DOC.0001-10',
+      'VR 2019 1111 DOC.0001-11',
+      'VR 2019 1111 DOC.0001-12',
+      'VR 2019 1111 DOC.0001-13',
+      'VR 2019 1111 DOC.0001-14'
+    ];
+    cy.addLinkedDocumentToAgendaItem(linkedDocumentsNames);
+    cy.get(document.linkeddocumentTypeLabel).eq(0).contains("Nota");
+    cy.get(document.linkeddocumentTypeLabel).eq(1).contains("Bijlage");
+    cy.get(document.linkeddocumentTypeLabel).eq(2).contains("IF");
+    cy.get(document.linkeddocumentTypeLabel).eq(3).contains("BVR");
+    cy.get(document.linkeddocumentTypeLabel).eq(4).contains("MvT");
   });
 
   it('Adding more then 20 document-versions to subcase should show all', () => {
@@ -154,12 +168,3 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
   });
 });
-
-function currentMoment() {
-  return Cypress.moment();
-}
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}
-
