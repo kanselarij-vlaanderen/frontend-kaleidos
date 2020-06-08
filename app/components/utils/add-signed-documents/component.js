@@ -16,7 +16,6 @@ export default Component.extend({
   store: inject(),
   fileService: service(),
   currentSession: inject(),
-  fileService: inject(),
   classNames: ['vl-u-spacer'],
   @tracked isAddingDocument: null,
   @tracked isAddingNewDocument: null,
@@ -133,9 +132,8 @@ export default Component.extend({
     },
 
     async delete(document) {
-      const deleteDocument = await document
-      console.log(await deleteDocument)
-      await this.fileService.removeFile(await deleteDocument.get('id'))
+      const deleteDocumentID = await document.get('id')
+      await this.fileService.removeFile(deleteDocumentID)
       this.clearAllDocuments();
     },
 
