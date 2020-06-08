@@ -18,9 +18,8 @@ context('Full test', () => {
     cy.visit('/');
     cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaItem');
     const KIND = 'Ministerraad';
-    const plusMonths = 3;
 
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 3).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
     const subcaseTitle1 = caseTitle + ' test stap 1';
     const subcaseTitle2 = caseTitle + ' test stap 2';
@@ -56,7 +55,7 @@ context('Full test', () => {
     });
 
     cy.get('.vl-datepicker').eq(0).click();
-    cy.setDateInFlatpickr(agendaDate, plusMonths);
+    cy.setDateInFlatpickr(agendaDate);
 
     cy.route('POST', '/mandatees').as('postMandateeData');
     cy.get(form.formSave).should('exist').should('be.visible').click();
@@ -73,7 +72,7 @@ context('Full test', () => {
       'Cypress test voor het testen van toegevoegde agendapunten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.createAgenda(KIND, 3, agendaDate, "locatie");
+    cy.createAgenda(KIND, agendaDate, "locatie");
 
     // when toggling show changes  the agendaitem with a document added should show
     cy.openAgendaForDate(agendaDate);
@@ -89,16 +88,10 @@ context('Full test', () => {
     cy.url().should('include', 'instellingen/ministers');
     cy.get('[data-test-mandatee-edit="0"]').click();
     const enddateForMandatee = Cypress.moment("2020-03-02").set({ "hour": 10, "minute": 10 });
+
     cy.get('.vl-datepicker').eq(1).click();
-    cy.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(1).clear().type(enddateForMandatee.year(), { delay: 300 });
-    cy.get('.flatpickr-months').eq(1).within(() => {
-      for (let n = 0; n < plusMonths; n++) {
-        cy.get('.flatpickr-next-month').click();
-      }
-    });
-    cy.get('.flatpickr-days').eq(1).within(() => {
-      cy.get('.flatpickr-day').not('.prevMonthDay').not('.nextMonthDay').contains(enddateForMandatee.date()).click();
-    });
+    cy.setDateInFlatpickr(enddateForMandatee);
+
     cy.get(form.formSave).should('exist').should('be.visible').click();
     cy.wait(3000);
     cy.get(modal.verify.save).should('exist').should('be.visible').contains('Eindatum aanpassen');
@@ -125,10 +118,6 @@ context('Full test', () => {
    */
   function currentTimestamp() {
     return Cypress.moment().unix();
-  }
-
-  function currentMoment() {
-    return Cypress.moment();
   }
 
 });

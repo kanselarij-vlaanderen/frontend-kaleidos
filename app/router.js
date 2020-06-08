@@ -13,7 +13,15 @@ Router.map(function () {
   this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id' }, function() {
     this.route('print', { path: '/afdrukken' });
     this.route('agendaitems', { path: '/agendapunten' }, function() {
-      this.route('agendaitem', { path: '/:agendaitem_id' });
+      this.route('agendaitem', { path: '/:agendaitem_id' }, function() {
+        this.route('index', { path: '/' });
+        this.route('documents', { path: '/documenten' });
+        this.route('comments', { path: '/opmerkingen' });
+        this.route('decisions', { path: '/beslissingen' });
+        this.route('minutes', { path: '/notulen' });
+        this.route('news-item', { path: '/kort-bestek' });
+        this.route('press-agenda', { path: '/persagenda' });
+      });
     });
     this.route('compare', { path: '/vergelijken' });
     this.route('documents', { path: '/documenten' });
