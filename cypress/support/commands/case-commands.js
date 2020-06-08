@@ -128,11 +128,11 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   let subcaseId;
 
-  cy.wait('@addSubcase-createNewsletter', { timeout: 10000 })
+  cy.wait('@addSubcase-createNewsletter', { timeout: 20000 })
     .then((res) => {
       subcaseId = res.responseBody.data.id;
     });
-  cy.wait('@addSubcase-createNewSubcase', { timeout: 10000 })
+  cy.wait('@addSubcase-createNewSubcase', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
         resolve(subcaseId);
