@@ -34,7 +34,7 @@ export default Controller.extend({
 
   agendaitemsClass: computed('routing.currentRouteName', function () {
     const { routing } = this;
-    if (routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem') {
+    if (routing.get('currentRouteName').startsWith('agenda.agendaitems.agendaitem')) {
       return 'vlc-panel-layout__agenda-items';
     } else {
       return 'vlc-panel-layout-agenda__detail vl-u-bg-porcelain';
@@ -47,15 +47,14 @@ export default Controller.extend({
   }),
 
   actions: {
-    selectAgendaItem(agendaitem) {
-      const { currentAgenda } = this;
-      this.set('sessionService.selectedAgendaItem', agendaitem);
-      this.transitionToRoute('agenda.agendaitems.agendaitem', agendaitem.get('id'), {
-        queryParams: {
-          selectedAgenda: currentAgenda.id,
-          refresh: null
-        },
-      });
+    selectAgendaItem (agendaitem) {
+      const detailRoutePrefix = 'agenda.agendaitems.agendaitem';
+      if (this.routing.currentRouteName.startsWith(detailRoutePrefix)) {
+        this.set('sessionService.selectedAgendaItem', agendaitem); // TODO: get rid of global state
+        this.transitionToRoute(this.routing.currentRouteName, agendaitem.id);
+      } else {
+        this.transitionToRoute(detailRoutePrefix, agendaitem.id);
+      }
     },
     searchAgendaItems(value) {
       this.set('filter', value);

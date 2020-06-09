@@ -1,0 +1,12 @@
+<div class="vl-action-group vl-action-group--align-right">
+  {{#if this.currentSession.isEditor}}
+    {{#if (not this.agenda.isFinal)}}
+      <Agenda::Agendaitem::AgendaitemControls
+        @agendaitem={{this.model}}
+        @currentAgenda={{this.agenda}}
+        @onDeleteAgendaItem={{this.navigateToNeighbouringItem}}
+      />
+    {{/if}}
+  {{/if}}
+</div>
+<Agenda::Agendaitem::AgendaitemCase @agendaitem={{this.model}}/>

@@ -1,12 +1,8 @@
-/*global context, before, it, cy, Cypress, beforeEach*/
+/*global context, before, it, cy, Cypress*/
 /// <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
-import actionModel from '../../selectors/action-modal.selectors';
-import modal from '../../selectors/modal.selectors';
-import documents from '../../selectors/document.selectors';
-import utils from '../../selectors/utils.selectors';
 
 context('Agenda tests', () => {
 
@@ -20,10 +16,8 @@ context('Agenda tests', () => {
     cy.login('Admin');
 
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 2).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
     const subcaseTitle1 = caseTitle + ' test stap 1';
-    const subcaseTitle2 = caseTitle + ' test stap 2';
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
     const files = [
       {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota'},
@@ -35,7 +29,7 @@ context('Agenda tests', () => {
       'Cypress test voor het propageren naar overheid',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
 
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
@@ -107,7 +101,4 @@ context('Agenda tests', () => {
 
 function currentTimestamp() {
   return Cypress.moment().unix();
-}
-function currentMoment() {
-  return Cypress.moment();
 }

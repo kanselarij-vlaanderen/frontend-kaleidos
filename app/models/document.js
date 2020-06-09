@@ -34,7 +34,7 @@ export default Model.extend({
         const heads = docs.filter(async function (doc) {
           const previousVersion = await doc.get('previousVersion');
           return !previousVersion;
-        })
+        });
         if (heads.length <= 1) {
           const head = heads.get('firstObject');
           const l = [];
