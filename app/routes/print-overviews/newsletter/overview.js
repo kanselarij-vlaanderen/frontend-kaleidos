@@ -12,6 +12,7 @@ export default Route.extend({
   agendaService: inject(),
 
   type: 'newsletter',
+  allowEmptyGroups: true,
 
   queryParams: {
     definite: { refreshModel: true }
@@ -65,8 +66,6 @@ export default Route.extend({
       return item.showInNewsletter;
     });
   },
-
-  allowEmptyGroups: true,
 
   filterAgendaitems: async function (items, params) {
     if (params.definite !== 'true') {
