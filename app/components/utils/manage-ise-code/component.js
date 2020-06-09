@@ -25,11 +25,10 @@ export default Component.extend({
       model.set('field', field);
       model.save().then(() => {
         this.set('isLoading', false);
-        this.set('code', null);
-        this.set('name', null);
         this.set('field', null);
         this.set('isEditing', false);
       });
+      this.send('selectModel', null)
     },
 
     async createModel() {

@@ -20,10 +20,10 @@ export default Component.extend({
       const model = await this.get('item');
       model.set('label', this.get('title'));
       model.save().then(() => {
-        this.set('title', null);
         this.set('isLoading', false);
         this.set('isEditing', false);
       });
+      this.send('selectModel', null)
     },
 
     createModel() {
