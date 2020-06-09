@@ -108,7 +108,11 @@
             {{/if}}
             {{#if (not isEditingOverview)}}
               {{#if currentSessionService.isViewer}}
-                <div class="vlc-hr"></div>
+                {{#if
+                  (or (await agendaitem.subcase.confidential) (or (await agendaitem.checkAdded) (or agendaitem.explanation (and agendaitem.showAsRemark (not agendaitem.showInNewsletter)))))
+                }}
+                  <div class="vlc-hr"></div>
+                {{/if}}
                 <div class="vlc-agenda-items__remarks">
                   <div>
                     {{#if agendaitem.explanation}}
