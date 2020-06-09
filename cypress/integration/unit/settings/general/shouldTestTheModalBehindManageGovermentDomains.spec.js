@@ -10,7 +10,7 @@ context('Settings page tests', () => {
   let govermentDomains = [];
 
   function insertData(){
-    govermentDomains.push('Cultuur, jeugd, sport & media',
+    return ['Cultuur, jeugd, sport & media',
       'Economie, wetenschap & innovatie',
       'Financieën & begroting',
       'Internationaal Vlaanderen',
@@ -21,14 +21,13 @@ context('Settings page tests', () => {
       'Onderwijs & vorming',
       'Welzijn, vollksgezondheid & gezin',
       'Werk & sociale economie'
-    );
+    ];
   }
 
 
 
   beforeEach(() => {
-    govermentDomains = [];
-    insertData();
+    govermentDomains = insertData();
     cy.server();
     cy.login('Admin');
     cy.get(toolbar.settings).click();
@@ -52,7 +51,7 @@ context('Settings page tests', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length );
+    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
   });
 
   it('Should open the dropdown in the modal and see each item', () => {
@@ -107,7 +106,7 @@ context('Settings page tests', () => {
     cy.get('.ember-power-select-option').eq(0).should('contain.text', "Andere zaken");
     cy.get('.ember-power-select-option').eq(0).click();
     cy.get(modal.manageInSettingsModal.edit).click();
-    cy.get(form.formInput).clear()
+    cy.get(form.formInput).clear();
     cy.get(form.formInput).type('Test Input');
     cy.get(form.formSave).click();
     cy.get('.ember-power-select-trigger').click();
