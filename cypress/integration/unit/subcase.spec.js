@@ -160,12 +160,12 @@ context('Subcase tests', () => {
     cy.route('GET', '/subcases/*/decisions').as('getSubcaseDecisions');
     cy.route('GET', '/subcases/*/agendaitems').as('getSubcaseAgendaItems');
     cy.route('GET', '/subcases/*/case').as('getSubcaseCase');
-    cy.route('GET', '/access-levels').as('getAccessLevels');
+    //cy.route('GET', '/access-levels').as('getAccessLevels');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.wait('@getSubcaseDecisions');
     cy.wait('@getSubcaseAgendaItems');
     cy.wait('@getSubcaseCase');
-    cy.wait('@getAccessLevels');
+    //cy.wait('@getAccessLevels');
 
     // Aanmaken agendaItem
     cy.openAgendaForDate(agendaDate);
