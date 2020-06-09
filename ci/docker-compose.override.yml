@@ -1,8 +1,6 @@
 version: '3.4'
 services:
   frontend:
-    ports:
-      - 127.0.0.1:4201:80
     #  frontend:
     #    # image: kanselarij/frontend-kaleidos:1.2.4
     #    image: kanselarij/frontend-kaleidos:development
@@ -18,6 +16,15 @@ services:
       - default
     build: ../.
     user: ${HOST_UID_GID}
+  e2e-electron:
+    image: "kanselarij/kaleidos-cypress:latest"
+    environment:
+      NO_COLOR: 1
+    links:
+      - frontend:frontend
+    volumes:
+      - ../cypress:/cypress
+      - ../cypress.test.json:/cypress.json
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
