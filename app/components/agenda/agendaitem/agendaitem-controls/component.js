@@ -12,7 +12,6 @@ export default Component.extend({
   currentSession: service(),
   currentAgenda: null,
   agendaitem: null,
-  lastDefiniteAgenda: null,
 
   isPostPonable: computed("sessionService.agendas.@each", "agendaitem.agendaActivity", async function () {
     const subcase = await this.agendaitem.get('subcase');
@@ -54,7 +53,9 @@ export default Component.extend({
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
     }
     this.set('sessionService.selectedAgendaItem', null);
-    this.refreshRoute(id);
+    if (this.onDeleteAgendaItem) {
+      this.onDeleteAgendaItem(agendaitem);
+    }
   },
 
   deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function () {
