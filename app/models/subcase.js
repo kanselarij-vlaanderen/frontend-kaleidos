@@ -44,19 +44,32 @@ export default ModelWithModifier.extend({
   requestedBy: belongsTo('mandatee', {inverse: null}),
   accessLevel: belongsTo('access-level'),
 
-  agendaitems: computed('agendaActivities.@each.agendaitems.@each', function () {
-    return this.store.query('agendaitem', {
+  agendaitems: computed('agendaActivities','agendaActivities.@each.agendaitems','agendaitems', async function () {
+    return await this.store.query('agendaitem', {
       filter: {
-        "agenda-activity": {subcase: {id: this.get('id')}},
-        agenda: {status: {id: '2735d084-63d1-499f-86f4-9b69eb33727f'}}
+        "agenda-activity": {subcase: {id: this.get('id')}}
       }
     });
   }),
+
+  latestActivity: computed('agendaActivities.@each', async function () {
+    const activities = await this.get('agendaActivities'); //TODO KAS-1425 sortBy not working ?
+    return activities.get('lastObject');
+  }),
+
 // TODO KAS-1425
-  // phases: computed('agendaActivities.@each', function () {
-  //   // return servicecall
-  //   // 
-  // }),
+  phases: computed('agendaActivities.@each', function () {
+    // return servicecall
+    // 
+    return [
+      { label: 'ingediend voor agendering', date: moment.utc().toDate()},
+      { label: CONFIG.onAgendaLabel, date: moment.utc().toDate()},
+      { label: CONFIG.postponedLabel, date: moment.utc().toDate()},
+      { label: CONFIG.decidedLabel, date: moment.utc().toDate()},
+      { label: 'ingediend voor agendering', date: moment.utc().toDate()},
+      { label: CONFIG.onAgendaLabel, date: moment.utc().toDate()},
+    ]
+  }),
 
   documentsLength: computed('documents', function () {
     return getDocumentsLength(this, 'documents');
@@ -153,15 +166,6 @@ export default ModelWithModifier.extend({
     return this.get('mandatees').sortBy('priority');
   }),
 
-  // TODO KAS-1425
-  sortedPhases: computed('phases.@each', 'isPostponed', function () {
-    return PromiseArray.create({
-      promise: this.get('phases').then((phases) => {
-        return phases.sortBy('date');
-      })
-    });
-  }),
-
   // TODO KAS-1425 logic for postponed
   hasAgendaItem: computed('agendaitems.@each', function () {
     const {id, store} = this;
@@ -198,7 +202,7 @@ export default ModelWithModifier.extend({
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', async function () {
     return await this.store.query('agendaitem', {
       filter: {
-        subcase: {id: this.get('id')},
+        "agenda-activity": {subcase: {id: this.get('id')}},
         agenda: {status: {id: '2735d084-63d1-499f-86f4-9b69eb33727f'}}
       }
     });
@@ -238,12 +242,11 @@ export default ModelWithModifier.extend({
     return lastMeeting.get('latestAgenda');
   }),
 
-  latestAgendaItem: computed('latestAgenda.agendaitems.@each.postponedTo', async function () {
-    const latestAgenda = await this.get('latestAgenda');
-    const latestAgendaItems = await latestAgenda.get('agendaitems');
-    const agendaitems = await this.agendaitems;
-
-    return latestAgendaItems.find(item => agendaitems.includes(item));
+  //TODO KAS-1425
+  latestAgendaItem: computed('agendaitems.@each', async function () {
+    const latestActivity = await this.get('latestActivity');
+    const latestItem = await latestActivity.get('latestAgendaitem');
+    return latestItem
   }),
 
   onAgendaInfo: computed('latestMeeting', async function () {
@@ -252,9 +255,9 @@ export default ModelWithModifier.extend({
   }),
 
   // TODO KAS-1425
-  decidedInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
-  }),
+  // decidedInfo: computed('phases.@each', function () {
+  //   return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
+  // }),
 
   approved: computed('decisions', function () {
     return PromiseObject.create({
@@ -313,21 +316,21 @@ export default ModelWithModifier.extend({
   }),
 
   // TODO KAS-1425
-  async findPhaseDateByCodeId(codeId) {
-    const subcasePhases = await this.get('phases');
-    const foundPhase = subcasePhases.find(async (phase) => {
-      const code = await phase.get('code');
-      if (code) {
-        const id = code.get('id');
-        if (id && id === codeId) {
-          return true;
-        }
-      }
-      return false;
-    });
-    if (foundPhase) {
-      return foundPhase.get('date')
-    }
-    return null;
-  }
+//   async findPhaseDateByCodeId(codeId) {
+//     const subcasePhases = await this.get('phases');
+//     const foundPhase = subcasePhases.find(async (phase) => {
+//       const code = await phase.get('code');
+//       if (code) {
+//         const id = code.get('id');
+//         if (id && id === codeId) {
+//           return true;
+//         }
+//       }
+//       return false;
+//     });
+//     if (foundPhase) {
+//       return foundPhase.get('date')
+//     }
+//     return null;
+//   }
 });

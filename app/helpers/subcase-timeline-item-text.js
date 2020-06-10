@@ -18,7 +18,7 @@ export function subcaseTimelineItemText(params, values) {
   const onAgendaInfo = values.onAgendaInfo;
   const isPostponed = values.isPostponed;
   const formattedDate = formatDate(onAgendaInfo);
-  const date = formatDate(phase.get('date'));
+  const date = formatDate(phase.date);
 
   switch (label.toLowerCase()) {
     case CONFIG.onAgendaLabel:

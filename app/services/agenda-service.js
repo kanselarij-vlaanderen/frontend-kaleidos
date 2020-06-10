@@ -149,10 +149,10 @@ export default Service.extend({
       agendaActivity: agendaActivity
     });
     await agendaitem.save();
-
     const meeting = await selectedAgenda.get('createdFor');
     await selectedAgenda.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
+    await subcase.hasMany('agendaActivities').reload();
     await subcase.save();
     await updateModifiedProperty(selectedAgenda);
   },
@@ -189,24 +189,23 @@ export default Service.extend({
   async deleteAgendaitem(agendaitem) {
     let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     itemToDelete.set('aboutToDelete', true);
-    await itemToDelete.belongsTo('subcase').reload();
-    const subcase = await itemToDelete.get('subcase');
+    // await itemToDelete.belongsTo('subcase').reload(); 
+    const agendaActivity = await itemToDelete.get('agendaActivity');
 
-    if (subcase) {
-      await subcase.hasMany('agendaitems').reload();
-      const agendaitemsFromSubcase = await subcase.get('agendaitems');
-      if (agendaitemsFromSubcase.length == 1) {
-        // if only 1 item is found, all phases should be destroyed and the subcase updated before deleting the agendaitem
-        const phases = await subcase.get('phases');
-        await Promise.all(phases.map(async phase => {
-          await phase.destroyRecord();
-        }));
-        await subcase.set('requestedForMeeting', null);
-        await subcase.set('consulationRequests', []);
-        await subcase.set('agendaitems', []);
-        await subcase.save();
+    if (agendaActivity) {
+      const subcase = await agendaActivity.get('subcase');
+      // await subcase.hasMany('agendaitems').reload();
+      const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
+      if (agendaitemsFromActivity.length == 1) {
+        // if only 1 item is found, the activty should be destroyed and the subcase updated before deleting the agendaitem
+        if (subcase) { //TODO KAS-1425 this if should not be needed !
+          await subcase.set('requestedForMeeting', null);
+          await subcase.set('consulationRequests', []); // TODO KAS-1425 do we still need this ?
+          await subcase.save();
+        }
+        await agendaActivity.destroyRecord();
       } else {
-        const foundAgendaitem = agendaitemsFromSubcase.find((agendaitem) => agendaitem.id == itemToDelete.id);
+        const foundAgendaitem = agendaitemsFromActivity.find((agendaitem) => agendaitem.id == itemToDelete.id);
         itemToDelete = foundAgendaitem;
       }
     }

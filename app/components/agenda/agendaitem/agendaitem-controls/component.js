@@ -14,7 +14,7 @@ export default Component.extend({
   agendaitem: null,
   lastDefiniteAgenda: null,
 
-  isPostPonable: computed("sessionService.agendas.@each", "agendaitem.subcase", async function () {
+  isPostPonable: computed("sessionService.agendas.@each", "agendaitem.agendaActivity", async function () {
     const subcase = await this.agendaitem.get('subcase');
     if (!subcase) {
       return;
@@ -46,7 +46,7 @@ export default Component.extend({
     const subcase = await agendaitem.get('subcase');
     if (subcase) {
       // Refresh the agendaitems for isDeletable
-      await subcase.hasMany('agendaitems').reload();
+      // await subcase.hasMany('agendaitems').reload(); //TODO KAS-1425
     }
     if (await this.get('isDeletable')) {
       await this.agendaService.deleteAgendaitem(agendaitem);
@@ -71,12 +71,13 @@ export default Component.extend({
     },
 
     async postponeAgendaItem(agendaitem) {
-      agendaitem.set('retracted', true);
+      agendaitem.set('retracted', true); // TODO KAS-1425 look at decision status to see if postponed // what to do when deleting decision ?
+      // TODO KAS-1425 NO postponed and create decision
       const postPonedObject = this.store.createRecord('postponed', {
         agendaitem: agendaitem
       });
       const subcase = await agendaitem.get('subcase');
-      // TODO KAS-1425 create postponed or decision ?
+      
       await this.createPostponedPhase(subcase);
 
       postPonedObject.save().then(postponedTo => {

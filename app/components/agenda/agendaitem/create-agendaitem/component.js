@@ -33,7 +33,9 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
         number: page,
         size: size
       },
+      // TODO KAS-1425 remove the agendaitems filter
       filter: {
+        ':has-no:agenda-activities': 'yes',
         ':has-no:agendaitems': 'yes',
         ':not:is-archived': 'true',
       }
@@ -218,8 +220,9 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
         this.set('sessionService.selectedAgendaItem', null);
-        const newAgendaitemId = itemsToAdd.get('firstObject').agendaitems.get('firstObject').id;
-        this.reloadRouteWithRefreshId(newAgendaitemId);
+        const anyAddedSubcase = itemsToAdd.get('firstObject');
+        const newAgendaitem = await anyAddedSubcase.get('latestAgendaItem');
+        this.reloadRouteWithRefreshId(newAgendaitem.id);
       });
     }
   }

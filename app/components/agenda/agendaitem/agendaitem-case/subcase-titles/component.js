@@ -48,40 +48,15 @@ export default class SubcaseTitles extends Component {
   get confidential() {
     const { isAgendaItem, item } = this;
     if (isAgendaItem) {
-      return DS.PromiseObject.create({
-        promise: item.get('subcase').then((subcase) => {
-          return subcase.get('confidential');
-        }),
-      });
+      const subcase = item.get('subcase');
+      if (subcase) {
+        return subcase.get('confidential');
+      } else {
+        return false;
+      }
     } else {
       return item.get('confidential');
     }
-  }
-
-  @computed('item', 'item.subcase')
-  get accessLevel() {
-    const { isAgendaItem, item } = this;
-    if (isAgendaItem) {
-      return DS.PromiseObject.create({
-        promise: item.get('subcase').then((subcase) => {
-          return subcase.get('accessLevel');
-        }),
-      });
-    } else {
-      return DS.PromiseObject.create({
-        promise: item.get('accessLevel'),
-      });
-    }
-  }
-
-  @computed('item')
-  get case() {
-    const item = this.get('item');
-    const caze = item.get('case');
-    if (caze) {
-      return caze;
-    }
-    return item.get('subcase.case');
   }
 
   async getSubcaseName() {
