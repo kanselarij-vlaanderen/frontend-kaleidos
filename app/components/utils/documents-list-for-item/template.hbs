@@ -1,12 +1,17 @@
 {{#if (is-pending item.documents)}}
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
-  {{#each (await item.documents) as |document|}}
-    {{item-document
-      item=item
-      document=document
-      isClickable=isClickable
-      useNewIcons=useNewIcons
-    }}
-  {{/each}}
+  <ul class="vlc-document-list">
+    {{#each (await documents) as |document|}}
+      {{item-document
+        item=item
+        document=document
+        isClickable=isClickable
+        useNewIcons=useNewIcons
+      }}
+    {{/each}}
+  </ul>
+  <button type="button">
+    <i />
+  </button>
 {{/if}}

@@ -23,6 +23,7 @@ export default class ListItem extends Component {
   hideLabel = true;
   isShowingChanges = null;
   renderDetails = false;
+  showAll=false;
 
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
   @alias('sessionService.currentAgenda') currentAgenda;
@@ -138,5 +139,15 @@ export default class ListItem extends Component {
       .catch(() => {
         this.toaster.error();
       });
+  }
+
+  @action
+  returnDocumentList(){
+    if(this.showAll){
+      console.log(this.agendaitem.documents)
+      this.agendaitems.documents = this.agendaitem.documents;
+    }else {
+      this.agendaitems.documents = this.agendaitem.documents.slice(0,5);
+    }
   }
 }

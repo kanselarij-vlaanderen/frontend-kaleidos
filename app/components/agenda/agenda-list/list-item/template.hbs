@@ -82,12 +82,11 @@
                 {{#if renderDetails }}
                   {{#if (await agendaitem.documents)}}
                     <div class="vlc-hr"></div>
-                    <Utils::DocumentsListForItem
-                            @isClickable={{isDocumentClickable}}
-                            @item={{agendaitem}}
-                            @agendaitem={{agendaitem}}
-                    />
-
+                      <Utils::DocumentsListForItem
+                              @isClickable={{isDocumentClickable}}
+                              @item={{agendaitem}}
+                              @document={{document}}
+                      />
                   {{else}}
                     {{#if (await agendaitem.documentNames)}}
                       <div class="vlc-hr"></div>
