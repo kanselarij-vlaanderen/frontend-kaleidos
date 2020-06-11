@@ -31,10 +31,9 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
-    const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 19).set('hour', 19).set('minute', 19);
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test annuleren van editeren documenten');
+    cy.createAgenda('Ministerraad', agendaDate, 'Test annuleren van editeren documenten');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
@@ -78,7 +77,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
     });
     cy.get('.ember-power-select-option').should('exist').then(() => {
-      cy.contains('Publiek').click();
+      cy.contains('Publiek').scrollIntoView().click();
     });
     cy.get(agenda.documentAccessLevel).should('exist').should('be.visible').contains('Publiek');
     cy.contains('Annuleren').click();
@@ -103,7 +102,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
     });
     cy.get('.ember-power-select-option').should('exist').then(() => {
-      cy.contains('Intern Overheid').click();
+      cy.contains('Intern Overheid').scrollIntoView().click();
     });
     cy.contains('Opslaan').click();
 
@@ -199,10 +198,9 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
-    const plusMonths = 1;
-    const agendaDate = currentMoment().add('month', plusMonths).set('date', 20).set('hour', 20).set('minute', 20);
+    const agendaDate = Cypress.moment().add(2, 'weeks').day(5); // friday in two weeks
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Test document-versies annuleren');
+    cy.createAgenda('Ministerraad', agendaDate, 'Test document-versies annuleren');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
@@ -292,10 +290,6 @@ context('Tests for cancelling CRUD operations on document and document-versions'
 
   });
 });
-
-function currentMoment() {
-  return Cypress.moment();
-}
 
 function currentTimestamp() {
   return Cypress.moment().unix();

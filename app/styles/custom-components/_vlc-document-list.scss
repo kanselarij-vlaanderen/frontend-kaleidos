@@ -57,3 +57,31 @@
     opacity: 0.2;
   }
 }
+
+/* Document item list show more
+   ========================================================================== */
+.vlc-document-show-more-button {
+  color: $primary-blue;
+  border: none;
+  padding: 0;
+  font-size: 1.6rem;
+  line-height: 1.6rem;
+  display: flex;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.vlc-document-show-more-button__icon {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+  line-height: 2.2rem;
+}
+
+.vlc-document-show-more-button__text {
+  line-height: 1.9rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+}

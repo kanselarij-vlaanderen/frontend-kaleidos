@@ -29,10 +29,10 @@ export default Component.extend({
       model.save().then(() => {
         this.set('isLoading', false);
         this.set('domain', null);
-        this.set('label', null);
         this.set('iseCode', null);
         this.set('isEditing', false);
       });
+      this.send('selectModel', null)
     },
 
     createModel() {

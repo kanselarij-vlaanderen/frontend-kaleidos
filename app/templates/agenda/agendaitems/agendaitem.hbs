@@ -1,6 +1,23 @@
-{{agenda/agendaitem/agendaitem-overview
-  agendaitem=(await model)
-  activeAgendaItemSection=activeAgendaItemSection
-  setActiveAgendaitemSection=setActiveAgendaitemSection
-  refreshRoute=(action "refresh")
-}}
+<div class="vlc-panel-layout__main-content">
+  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    <div class="vlc-scroll-wrapper__header">
+      <div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom">
+        <div class="vl-tabs__wrapper">
+          <Agenda::Agendaitem::AgendaitemNav
+            @agendaItem={{this.model}}
+            @meetingIsConcluded={{this.meeting.isFinal}}
+          />
+        </div>
+      </div>
+    </div>
+    <div class="vlc-scroll-wrapper__body">
+      <div class="vl-u-spacer-extended">
+        <div class="vlc-container">
+          <div class="vl-u-spacer--small">
+            {{outlet}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
