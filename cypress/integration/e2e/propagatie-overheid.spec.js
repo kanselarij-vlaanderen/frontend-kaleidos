@@ -11,7 +11,7 @@ context('Agenda tests', () => {
     cy.server();
   });
 
-  it('Propagate decisions and documents to overheid graph by releasing them', () => {
+  xit('Propagate decisions and documents to overheid graph by releasing them', () => {
 
     cy.login('Admin');
 
