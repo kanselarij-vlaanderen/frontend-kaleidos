@@ -1,4 +1,5 @@
 import CONFIG from 'fe-redpencil/utils/config';
+import EmberObject from '@ember/object';
 import moment from 'moment';
 
 /**
@@ -194,4 +195,30 @@ export const parseDraftsAndGroupsFromAgendaitems = async (agendaitems) => {
     draftAgendaitems,
     groupedAgendaitems,
   };
+}
+
+/**
+ * Given a set of grouped agendaitems, sort them by priority
+ * @param  {Array}   groupedAgendaitems   A set containing all agendaitems grouped (see above functions)
+ * @param  {Boolean} allowEmptyGroups     When true, empty groups are allowed
+ * @return {Array}                        The input set, sorted by priority ASC
+ */
+export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
+  let prevIndex = 0;
+  let groupsArray = groupedAgendaitems;
+  if (!allowEmptyGroups) {
+    groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
+  } else {
+    groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers')
+  }
+
+  groupsArray = groupsArray.sortBy('groupPriority').map((item) => {
+    item.agendaitems.map((agendaitem, index) => {
+      prevIndex = index + prevIndex + 1;
+      agendaitem.set('itemIndex', prevIndex);
+    });
+    return EmberObject.create(item);
+  });
+
+  return groupsArray;
 }

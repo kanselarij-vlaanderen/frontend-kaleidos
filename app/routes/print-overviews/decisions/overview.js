@@ -1,8 +1,10 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
 import { hash } from 'rsvp';
-import EmberObject from '@ember/object';
-import { parseDraftsAndGroupsFromAgendaitems } from 'fe-redpencil/utils/agenda-item-utils';
+import {
+  parseDraftsAndGroupsFromAgendaitems,
+  sortByPriority,
+} from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Route.extend({
   agendaService: inject(),
@@ -29,22 +31,8 @@ export default Route.extend({
 
     await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
 
-    let prevIndex = 0;
-    let groupsArray = groupedAgendaitems;
-    if (!this.allowEmptyGroups) {
-      groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
-    } else {
-      groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers')
-    }
+    const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
 
-    groupsArray = groupsArray.sortBy('groupPriority')
-      .map((item) => {
-        item.agendaitems.map((agendaitem, index) => {
-          prevIndex = index + prevIndex + 1;
-          agendaitem.set('itemIndex', prevIndex);
-        });
-        return EmberObject.create(item);
-      });
     return hash({
       currentAgenda: agenda,
       groups: groupsArray,
