@@ -15,11 +15,11 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    this.store.query('meeting', { sort: '-planned-start', 'page[size]': 1 }).then(meetings => {
+    this.store.query('meeting', { sort: '-number', 'page[size]': 1 }).then(meetings => {
       if (meetings.length) {
         const meetingFirstObject = meetings.get('firstObject');
         if (meetingFirstObject) {
-          this.set('meetingNumber', meetingFirstObject.number + 1);
+          this.set('meetingNumber', meetingFirstObject.get('number') + 1);
         }
       }
     });

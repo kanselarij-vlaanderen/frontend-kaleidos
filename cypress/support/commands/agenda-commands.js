@@ -42,21 +42,22 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
  * @param {*} kind The kind of meeting to select, language and case sensitive
  * @param {*} plusMonths The positive amount of months from today to advance in the vl-datepicker
  * @param {*} date The cypress.moment object with the date and time to set
- * @param {*} location The location of the meeting to enter as input
+ * @param {string} location The location of the meeting to enter as input
+ * @param {number} meetingNumber The location of the meeting to enter as input
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, date, location) {
+function createAgenda(kind, date, location, meetingNumber ) {
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
   cy.route('POST', '/agendaitems').as('createNewAgendaItems');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
-  cy.visit('')
+  cy.visit('');
   cy.get(agenda.createNewAgendaButton).click();
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
-    cy.get('.vlc-input-field-block').as('newAgendaForm').should('have.length', 3);
+    cy.get('.vlc-input-field-block').as('newAgendaForm').should('have.length', 4);
   });
 
   // Set the kind
@@ -77,9 +78,16 @@ function createAgenda(kind, date, location) {
   });
   cy.setDateAndTimeInFlatpickr(date);
 
+  //Set the meetingNumber
+  if(meetingNumber) {
+    cy.get(form.formInput).eq(0).click({force: true}).clear().type(meetingNumber);
+  } else {
+    cy.get(form.formInput).eq(0).click({force: true}).invoke('val').then(sometext => meetingNumber = sometext);
+  }
+
   //Set the location
   cy.get('@newAgendaForm').eq(2).within(() => {
-    cy.get('.vl-input-field').click().type(location);
+    cy.get('.vl-input-field').click({force: true}).type(location);
   });
 
   cy.get('@dialog').within(() => {
@@ -93,13 +101,16 @@ function createAgenda(kind, date, location) {
       meetingId = res.responseBody.data.id;
     }).verifyAlertSuccess();
 
-  cy.wait('@createNewAgenda', { timeout: 20000 });
+  let agendaId;
+  cy.wait('@createNewAgenda', { timeout: 20000 }).then((res) => {
+    agendaId = res.responseBody.data.id;
+  });
   cy.wait('@createNewAgendaItems', { timeout: 20000 });
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
-        resolve(meetingId);
+        resolve({meetingId,meetingNumber, agendaId});
       });
     });
 }
@@ -114,8 +125,9 @@ function createAgenda(kind, date, location) {
  * @param {String} month - month that the agenda should be made on
  * @param {String} day - day that the agenda should be made on
  * @param {String} location - Location that the event is taking place
+ * @param {number} meetingId - id of the meeting
  */
-function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
+function createDefaultAgenda(kindOfAgenda, year, month, day, location, meetingId) {
 
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
@@ -124,12 +136,12 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   const TOEVOEGEN = 'Toevoegen';
-
   cy.get(agenda.createNewAgendaButton).click();
   cy.get(agenda.emberPowerSelectTrigger).click();
   cy.get(agenda.emberPowerSelectOption).contains(kindOfAgenda).click();
   cy.selectDate(year, month, day);
-  cy.get(form.formInput).type(location);
+  cy.get(form.formInput).eq(0).type(meetingId, { force: true });
+  cy.get(form.formInput).eq(1).type(location);
   cy.get(agenda.button).contains(TOEVOEGEN).click();
 
   cy.wait('@createNewMeeting', { timeout: 20000 });
