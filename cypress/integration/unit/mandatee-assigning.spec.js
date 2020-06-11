@@ -5,7 +5,7 @@ import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import isecodes from "../../selectors/isecodes/isecodesSelectors";
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(4); // Next friday
   const caseTitle = 'Cypress test: mandatee sync - ' + currentTimestamp();
 
   before(() => {
