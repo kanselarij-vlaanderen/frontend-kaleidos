@@ -487,10 +487,9 @@ function agendaItemExists(agendaItemName) {
  */
 function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
   cy.agendaItemExists(agendaItemName);
-  cy.server()
-  cy.route('GET','/agendaitems/**/subcase').as('agendaDetailItems');
+
   cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
-  cy.wait('@agendaDetailItems');
+  cy.wait(1000)
   cy.url().should("include",'agendapunten');
   cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
     const selectedTab = element[0].text;

@@ -83,6 +83,7 @@ pipeline {
           sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} down -v"
           sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} rm -f"
           sh "docker network prune -f"
+          cleanWs()
         }
     }
 }

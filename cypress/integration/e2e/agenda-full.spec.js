@@ -29,7 +29,7 @@ context('Full test', () => {
 
     //#endregion
 
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+    const agendaDate = Cypress.moment().add(2, 'weeks').day(3); // Next friday
 
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';

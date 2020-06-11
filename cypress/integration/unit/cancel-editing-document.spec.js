@@ -31,7 +31,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(1);
 
     cy.createAgenda('Ministerraad', agendaDate, 'Test annuleren van editeren documenten');
     cy.openAgendaForDate(agendaDate);
@@ -198,7 +198,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.addDocuments(files);
-    const agendaDate = Cypress.moment().add(2, 'weeks').day(5); // friday in two weeks
+    const agendaDate = Cypress.moment().add(2, 'weeks').day(1); // friday in two weeks
 
     cy.createAgenda('Ministerraad', agendaDate, 'Test document-versies annuleren');
     cy.openAgendaForDate(agendaDate);
