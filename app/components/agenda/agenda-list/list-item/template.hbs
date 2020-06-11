@@ -11,17 +11,18 @@
         </span>
       </h4>
       <div class="vlc-agenda-items__text">
-        <a onclick={{action "click"}}>
           <h4 class="vlc-agenda-items__subject" data-test-agenda-overview-sub-item>
-          <pre>
-            {{#if agendaitem.shortTitle}}
-              {{agendaitem.shortTitle}}
-            {{else}}
-              {{agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
-            {{/if}}
-          </pre>
+            <a href="" onclick={{action "openAgendaItem"}}>
+              <pre>
+                {{#if agendaitem.shortTitle}}
+                  {{agendaitem.shortTitle}}
+                {{else}}
+                  {{agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
+                {{/if}}
+              </pre>
+            </a>
           </h4>
-        </a>
+
 
         {{#if (not aboutToDelete)}}
           {{#if (not selectedAgendaItem)}}

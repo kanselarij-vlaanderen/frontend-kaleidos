@@ -133,7 +133,7 @@ export default class ListItem extends Component {
   }
 
   @action
-  async click() {
+  async openAgendaItem() {
     if (!this.isEditingOverview && !this.isComparing) {
       const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
       this.selectAgendaItem(agendaitem);
