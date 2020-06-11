@@ -4,10 +4,9 @@ import { task, all } from 'ember-concurrency';
 
 export default Route.extend({
   async model() {
-    const meeting = this.modelFor('agenda').meeting;
-    let agendaId = this.paramsFor('agenda').agenda;
+    const { meeting, agenda } = this.modelFor('agenda');
     let agendaitems = await this.store.query('agendaitem', {
-      filter: { agenda: { id: agendaId } },
+      filter: { agenda: { id: agenda.id } },
       include: 'mandatees',
     });
     const notas = agendaitems.filter((item) => !item.showAsRemark).sortBy('priority');
