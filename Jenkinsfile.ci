@@ -39,15 +39,24 @@ pipeline {
 
                 sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
 
+                // Wait for elasticsearch to have cerated the indices and stuff.
+                sh "sleep 10"
+
+                // Make the folders deletable.
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chown -R root:root /usr/share/elasticsearch"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 777 /usr/share/elasticsearch/data"
-                
+
+                // Reset the contents of DB an search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata"
                 sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf data/*"
                 sh "cd ${WORKSPACE}/kaleidos-project && cp -rf testdata/* data"
+
+                // up te system
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
+
+                // Wait for indexation.
                 sh "sleep 60"
                 // sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
                 // sh "npm i"
