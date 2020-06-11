@@ -8,8 +8,12 @@
 {{else if isClickable}}
   <a href="" {{action "showDocumentVersionViewer" lastDocumentVersion}}>
     <i class="vl-badge__icon
-      {{if document.checkAdded "ki-document-added"}}
-      {{if (await lastDocumentVersion.confidential) "vl-vi-lock" "ki-document"}}">
+    {{if
+      (and (not document.checkAdded) (not lastDocumentVersion.confidential))
+      "ki-document"
+    }}
+    {{if document.checkAdded "ki-document-added"}}
+    {{if (await lastDocumentVersion.confidential) "ki-lock-closed"}}">
     </i>
     {{await lastDocumentVersionName}}
   </a>

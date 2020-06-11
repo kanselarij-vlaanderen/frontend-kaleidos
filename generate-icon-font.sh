@@ -50,7 +50,7 @@ echo '{{!-- template-lint-disable  --}}' > $OVERVIEW_PAGE_PATH \
 # Modify the overview page so that the prefix is included, that allows us to just copy paste icons from the overview
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # Linux
-  sed -i -e "s/\"label\">/\"label\">test-/g" $OVERVIEW_PAGE_PATH
+  sed -i -e "s/\"label\">/\"label\">$FONT_PREFIX-/g" $OVERVIEW_PAGE_PATH
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
   sed -i '' -e "s/\"label\"\>/\"label\"\>$FONT_PREFIX-/g" $OVERVIEW_PAGE_PATH
