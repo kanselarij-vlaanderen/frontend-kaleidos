@@ -18,12 +18,11 @@ export default class ListItem extends Component {
     'isNew:vlc-agenda-items__sub-item--added-item'
   ];
 
-  tagName = 'a';
+  tagName = 'div';
   isClickable = true;
   hideLabel = true;
   isShowingChanges = null;
   renderDetails = false;
-  showAll=false;
 
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
   @alias('sessionService.currentAgenda') currentAgenda;
@@ -71,15 +70,7 @@ export default class ListItem extends Component {
     if (this.agendaitem) {
       return this.agendaitem.get('aboutToDelete');
     }
-
     return null;
-  }
-
-  async click() {
-    if (!this.isEditingOverview && !this.isComparing) {
-      const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
-      this.selectAgendaItem(agendaitem);
-    }
   }
 
   /* Begin lazy partial rendering
@@ -142,12 +133,10 @@ export default class ListItem extends Component {
   }
 
   @action
-  returnDocumentList(){
-    if(this.showAll){
-      console.log(this.agendaitem.documents)
-      this.agendaitems.documents = this.agendaitem.documents;
-    }else {
-      this.agendaitems.documents = this.agendaitem.documents.slice(0,5);
+  async click() {
+    if (!this.isEditingOverview && !this.isComparing) {
+      const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
+      this.selectAgendaItem(agendaitem);
     }
   }
 }

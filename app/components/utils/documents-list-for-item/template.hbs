@@ -1,17 +1,28 @@
 {{#if (is-pending item.documents)}}
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
-  <ul class="vlc-document-list">
-    {{#each (await documents) as |document|}}
-      {{item-document
-        item=item
-        document=document
-        isClickable=isClickable
-        useNewIcons=useNewIcons
-      }}
-    {{/each}}
-  </ul>
-  <button type="button">
-    <i />
-  </button>
+  <div class="grid-container">
+
+      {{#each (await documents) as |document|}}
+        {{item-document
+          item=@item
+          document=document
+          isClickable=@isClickable
+          useNewIcons=useNewIcons
+        }}
+      {{/each}}
+
+  </div>
+  {{#if this.moreThan20}}
+    <button class="vlc-document-show-more-button" type="button" {{action "toggleShowingAll"}}>
+      <i class="{{if isShowingAll "vl-vi-minus" "ki-plus"}} vl-icon vl-vi vlc-document-show-more-button__icon "/>
+      <p  class="vlc-document-show-more-button__text">
+        {{#if isShowingAll }}
+          {{t "show-less"}}
+        {{else}}
+          {{t "show-more"}}
+        {{/if}}
+      </p>
+    </button>
+  {{/if}}
 {{/if}}
