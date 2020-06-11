@@ -45,7 +45,7 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
  * @param {*} location The location of the meeting to enter as input
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, plusMonths, date, location) {
+function createAgenda(kind, date, location) {
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
   cy.route('POST', '/agendaitems').as('createNewAgendaItems');
@@ -53,9 +53,7 @@ function createAgenda(kind, plusMonths, date, location) {
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.visit('')
-  cy.get('.vlc-toolbar__item > .vl-button')
-    .contains('Nieuwe agenda aanmaken')
-    .click();
+  cy.get(agenda.createNewAgendaButton).click();
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
     cy.get('.vlc-input-field-block').as('newAgendaForm').should('have.length', 3);
@@ -69,7 +67,7 @@ function createAgenda(kind, plusMonths, date, location) {
     cy.contains(kind).trigger('mouseover').click();
     //TODO Experiment for dropdown flakyness
     // Does the ember-power-select-option fix itself if we wait long enough ?
-    cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible'); 
+    cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
     // Could/Should we verify that the dropdown has closed, and try to repeat the process if not ?
   });
 
@@ -77,8 +75,7 @@ function createAgenda(kind, plusMonths, date, location) {
   cy.get('@newAgendaForm').eq(1).within(() => {
     cy.get('.vl-datepicker').click();
   });
-  //TODO get months by calculating instead
-  cy.setDateAndTimeInFlatpickr(date, plusMonths);
+  cy.setDateAndTimeInFlatpickr(date);
 
   //Set the location
   cy.get('@newAgendaForm').eq(2).within(() => {
@@ -137,7 +134,7 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
 
   cy.wait('@createNewMeeting', { timeout: 20000 });
   cy.wait('@createNewAgenda', { timeout: 20000 });
-  // cy.wait('@createNewAgendaItems', { timeout: 20000 }); // This fails if there is no older agenda (verslag vorige vergadering)  
+  // cy.wait('@createNewAgendaItems', { timeout: 20000 }); // This fails if there is no older agenda (verslag vorige vergadering)
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
 }
@@ -474,7 +471,7 @@ function agendaItemExists(agendaItemName) {
         cy.clickReverseTab('Overzicht');
       }
       cy.get(agenda.agendaOverviewSubitem)
-      .contains(agendaItemName, { timeout: 12000 })
+      .contains(agendaItemName, { timeout: 24000 })
       .should('exist');
     }
   });
@@ -489,22 +486,26 @@ function agendaItemExists(agendaItemName) {
 *  @param {boolean} isAdmin - optional boolean to indicate that we are admin (some profiles can't see the link to subcase)
  */
 function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
-  cy.agendaItemExists(agendaItemName).click();
-  cy.get('.vlc-panel-layout__main-content').within(() => {
-    cy.get('.vl-tabs .active').then((element) => {
-      const selectedTab = element[0].text;
-      if (!selectedTab.includes('Dossier')) {
-        cy.wait(3000); //TODO wait to ensure the page and tabs are loaded, find a better to check this
-        cy.get(agenda.agendaItemDossierTab).click();
-      }
-      if (isAdmin) {
-        cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
-        cy.contains('Naar procedurestap', { timeout: 12000 });
-      } else {
-        cy.wait(3000); //TODO wait to ensure the page is loaded, find a better way to check this for other profiles
-      }
-    });
+  cy.agendaItemExists(agendaItemName);
+  cy.server()
+  cy.route('GET','/agendaitems/**/subcase').as('agendaDetailItems');
+  cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
+  cy.wait('@agendaDetailItems');
+  cy.url().should("include",'agendapunten');
+  cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
+    const selectedTab = element[0].text;
+    if (!selectedTab.includes('Dossier')) {
+      cy.wait(3000); //TODO wait to ensure the page and tabs are loaded, find a better to check this
+      cy.get(agenda.agendaItemDossierTab).click();
+    }
+    if (isAdmin) {
+      cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
+      cy.contains('Naar procedurestap', { timeout: 12000 });
+    } else {
+      cy.wait(3000); //TODO wait to ensure the page is loaded, find a better way to check this for other profiles
+    }
   });
+
 }
 
 /**

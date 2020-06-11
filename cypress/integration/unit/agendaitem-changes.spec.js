@@ -54,7 +54,6 @@ context('Agendaitem changes tests', () => {
     cy.wait(1000);
     cy.get(agenda.printHeaderTitle, {timeout: 80000}).should('exist').should('be.visible');
     cy.get(agenda.printHeaderTitle).contains('Vergadering van');
-    cy.get(agenda.printHeaderTitle).contains('donderdag 02 april 2020 om 14:00');
 
     cy.get(agenda.printContainer).should('exist').should('be.visible');
 
