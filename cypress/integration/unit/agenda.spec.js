@@ -89,9 +89,9 @@ context('Agenda tests', () => {
 
     cy.proposeSubcaseForAgenda(agendaDate);
     cy.openAgendaForDate(agendaDate);
-    cy.contains("dit is de lange titel").click();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
+    cy.contains("dit is de korte titel").click();
     cy.get(agenda.subcaseTitlesEdit).should('exist').should('be.visible').click();
     cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).clear();
     cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).type("dit is de korte titel\n\n");
