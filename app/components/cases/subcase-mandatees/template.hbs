@@ -69,13 +69,15 @@
     </table>
   </div>
 {{else if isAdding}}
-  {{utils/add-minister-modal
+  {{utils/minister-modal
+    isAddingMinister=true
     cancel=(action "cancel")
     saveChanges=(action "saveChanges")
   }}
 {{else if isEditingMandateeRow}}
-  {{utils/edit-minister-modal
+  {{utils/minister-modal
     rowToShow=rowToShow
+    isAddingMinister=false
     selectedMandatee=rowToShow.mandatee
     cancel=(action "cancel")
     saveChanges=(action "saveChanges")

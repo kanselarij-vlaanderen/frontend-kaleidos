@@ -5,7 +5,8 @@ import EmberObject from '@ember/object';
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
 
-export default class SubcaseMandatees extends Component {
+export default class
+SubcaseMandatees extends Component {
   @service store;
   @service currentSession;
 
@@ -93,12 +94,12 @@ export default class SubcaseMandatees extends Component {
     let iseCodes = [];
     let requestedBy = null;
     if (mandateeRows && mandateeRows.get('length') > 0) {
-      mandateeRows.map(row => {
+      mandateeRows.map( async row => {
         if (row.get('isSubmitter')) {
           requestedBy = row.get('mandatee');
         }
         mandatees.push(row.get('mandatee'));
-        const rowIseCodes = row.get('iseCodes');
+        const rowIseCodes = await row.get('iseCodes');
         rowIseCodes.map((code) => {
           iseCodes.push(code);
         });

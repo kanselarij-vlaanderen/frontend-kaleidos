@@ -3,7 +3,7 @@
 import agenda from '../../selectors/agenda.selectors';
 
 context('Subcase tests', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+  const agendaDate = Cypress.moment().add(2, 'weeks').day(4); // Next friday
   const caseTitle = 'Cypress test: subcases - ' + currentTimestamp();
   const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
 
@@ -157,15 +157,7 @@ context('Subcase tests', () => {
     cy.createCase(false, 'Cypress mededeling test');
 
     // Aanmaken subcase.
-    cy.route('GET', '/subcases/*/decisions').as('getSubcaseDecisions');
-    cy.route('GET', '/subcases/*/agendaitems').as('getSubcaseAgendaItems');
-    cy.route('GET', '/subcases/*/case').as('getSubcaseCase');
-    //cy.route('GET', '/access-levels').as('getAccessLevels');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-    cy.wait('@getSubcaseDecisions');
-    cy.wait('@getSubcaseAgendaItems');
-    cy.wait('@getSubcaseCase');
-    //cy.wait('@getAccessLevels');
 
     // Aanmaken agendaItem
     cy.openAgendaForDate(agendaDate);
