@@ -1,19 +1,27 @@
 {{#web-components/vl-modal
   closeModal=(action "cancel")
   isOverlay=true
-  title=(t "add-minister")
+  title=title
 }}
   <div class="vl-modal-dialog__content">
     <label>{{t "select-minister"}}</label>
     <div class="vl-u-spacer-extended-bottom-l">
-      {{utils/mandatee-selector
-        data-test-mandatee-selector
-        singleSelect=true
-        selectedMandatees=selectedMandatee
-        chooseMandatee=(action "mandateeSelected")
-      }}
+      {{#if isAddingMinister}}
+          {{utils/mandatee-selector
+            data-test-mandatee-selector
+            singleSelect=true
+            selectedMandatees=selectedMandatee
+            chooseMandatee=(action "mandateeSelected")
+          }}
+        {{else}}
+          {{utils/mandatee-selector
+            singleSelect=true
+            readOnly=true
+            selectedMandatees=selectedMandatee
+          }}
+        {{/if}}
     </div>
-    {{#if isLoading}}
+    {{#if (and isLoading and isAddingMinister)}}
       {{web-components/vl-loader text=(t "please-be-patient")}}
     {{else}}
       {{#each rowToShow.domains as |domain|}}
@@ -43,7 +51,7 @@
         </ul>
       {{/each}}
     {{/if}}
-  </div>
+</div>
   {{web-components/vl-modal-footer
     isLoading=isLoading
     nonBordered=true
