@@ -20,6 +20,7 @@ services:
     image: "kanselarij/kaleidos-cypress:latest"
     environment:
       NO_COLOR: 1
+      ipc: host
     links:
       - frontend:frontend
     volumes:
