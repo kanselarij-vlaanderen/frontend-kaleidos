@@ -21,7 +21,7 @@ context("Table Row Click tests", () => {
 	});
 
 	it("should open a case after clicking a row", () => {
-		cy.route('GET', '/cases/search**').as('getCases');
+		cy.route('GET', '/cases**').as('getCases');
 		cy.visit('/dossiers');
     cy.wait('@getCases', {timeout: 12000});
     cy.openCase('Eerste dossier');
