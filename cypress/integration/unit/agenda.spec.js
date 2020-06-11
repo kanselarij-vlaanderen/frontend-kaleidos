@@ -72,7 +72,7 @@ context('Agenda tests', () => {
 
     const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
-    const agendaDate = Cypress.moment().set({ "hour": 10, "minute": 10 });
+    const agendaDate = Cypress.moment().add(2, 'weeks').day(1);
     cy.createAgenda(KIND, agendaDate, PLACE);
     cy.openAgendaForDate(agendaDate);
 

@@ -16,7 +16,7 @@ context('Agenda tests', () => {
     cy.login('Admin');
 
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(6); // Next friday
     const subcaseTitle1 = caseTitle + ' test stap 1';
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
     const files = [
