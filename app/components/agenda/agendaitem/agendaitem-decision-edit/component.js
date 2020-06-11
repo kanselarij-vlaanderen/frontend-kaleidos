@@ -1,16 +1,29 @@
 import Component from '@ember/component';
-import DocumentsSelectorMixin from 'fe-redpencil/mixins/documents-selector-mixin';
-import RdfaEditorMixin from 'fe-redpencil/mixins/rdfa-editor-mixin';
 import { cached } from 'fe-redpencil/decorators/cached';
-import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import { inject as service } from '@ember/service';
+import {computed} from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
-export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
+export default Component.extend({
+  store: service(),
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze(['approved', 'richtext']),
   approved: cached('item.approved'), // TODO in class syntax use as a decorator instead
   initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
+  documentVersionsSelected: null,
+  isEditing: false,
+  isExpanded: false,
+
+  async setNewPropertiesToModel(model) {
+    const { propertiesToSet } = this;
+    await Promise.all(
+      propertiesToSet.map(async property => {
+        model.set(property, await this.get(property));
+      })
+    );
+    return model.save().then(model => model.reload());
+  },
 
   async setDecisionPhaseToSubcase() {
     const approved = await this.get('approved');
@@ -33,60 +46,40 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
       return newDecisionPhase.save();
     }
   },
+  richtext: computed('editor.currentTextContent', function () {
+    if (!this.editor) {
+      return;
+    }
+    return this.editor.rootNode.innerHTML.htmlSafe();
+  }),
 
   actions: {
-    // TODO refactor this, most of this code is dead
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
+
+    async selectDocument(documents) {
+      this.set('documentVersionsSelected', documents);
+    },
+
+    async cancelEditing() {
+      const item = await this.get('item');
+      item.rollbackAttributes();
+      this.toggleProperty('isEditing');
+    },
+
     async saveChanges() {
       this._super.call(this);
       this.set('isLoading', true);
-      const { isAgendaItem } = this; // always undefined
-      // This item is always of type decision
-      const item = await this.get('item');
-      item.set('modified', moment().utc().toDate());
 
-      if (isAgendaItem && !item.showAsRemark) {
-        // dead code because item is decision
-        const isDesignAgenda = await item.get('isDesignAgenda');
-        if (isDesignAgenda) {
-          const agendaitemSubcase = await item.get('subcase');
-          await this.setNewPropertiesToModel(agendaitemSubcase).catch((e) => {
-            this.set('isLoading', false);
-            throw(e);
-          });
-          agendaitemSubcase.reload();
-        }
-        await this.setNewPropertiesToModel(item).then(async () => {
-          const agenda = await item.get('agenda');
-          updateModifiedProperty(agenda);
-          item.reload();
-        }).catch((e) => {
-          this.set('isLoading', false);
-          throw(e);
-        });
-      } else {
-        // alive code
-        await this.setNewPropertiesToModel(item).catch((e) => {
-          this.set('isLoading', false);
-          throw(e);
-        });
-        // dead code because item is decision
-        const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
-        if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
-          await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
-            await this.setNewPropertiesToModel(agendaitem).then(async () => {
-              const agenda = await item.get('agenda');
-              updateModifiedProperty(agenda).then((agenda) => {
-                agenda.reload();
-              });
-              await item.reload();
-              item.notifyPropertyChanged('decisions');
-            }).catch((e) => {
-              this.set('isLoading', false);
-              throw(e);
-            });
-          }));
-        }
-      }
+      const decision = await this.get('item');
+      decision.set('modified', moment().utc().toDate());
+
+      await this.setNewPropertiesToModel(decision).catch((e) => {
+        this.set('isLoading', false);
+        throw(e);
+      });
+
       await this.setDecisionPhaseToSubcase();
 
       if (!this.get('isDestroyed')) {
@@ -106,6 +99,10 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
 
     descriptionUpdated(val) {
       this.set('initValue', this.richtext + val);
-    }
+    },
+    async handleRdfaEditorInit(editorInterface) {
+      this.set('editor', editorInterface);
+    },
+
   }
 });

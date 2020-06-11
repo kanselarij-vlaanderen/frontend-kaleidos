@@ -45,12 +45,12 @@ export default Component.extend({
 
   meetings: computed('store', function () {
     const dateOfToday = moment().utc().subtract(1, 'weeks').format();
-    const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
+    const futureDate = moment().utc().add(6, 'weeks').format();
 
     return this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
-        ':lte:planned-start': dateInTwoWeeks,
+        ':lte:planned-start': futureDate,
         'is-final': false
       },
       sort: 'planned-start'

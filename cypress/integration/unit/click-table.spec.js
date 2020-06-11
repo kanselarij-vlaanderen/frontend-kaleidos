@@ -21,7 +21,7 @@ context("Table Row Click tests", () => {
 	});
 
 	it("should open a case after clicking a row", () => {
-		cy.route('GET', '/cases/search**').as('getCases');
+		cy.route('GET', '/cases**').as('getCases');
 		cy.visit('/dossiers');
     cy.wait('@getCases', {timeout: 12000});
     cy.openCase('Eerste dossier');
@@ -44,8 +44,8 @@ context("Table Row Click tests", () => {
     cy.get('.vl-input-field').as('inputField').click().type('02/2019');
     cy.get('.vl-button.vl-button--secondary.vl-button--icon').as('searchButton').click();
     cy.get('.vl-alert__content').should('exist').contains('Deze data is gefilterd.');
-    cy.get('.vl-button.vl-button--narrow.vl-button--reset').should('exist').contains('Reset filter');
-    cy.get('.vl-button.vl-button--narrow.vl-button--reset').contains('Reset filter').click();
+    cy.get('.vl-button.vl-button--reset').should('exist').contains('Reset filter');
+    cy.get('.vl-button.vl-button--reset').contains('Reset filter').click();
     cy.get('td').contains('No data').should('not.exist');
   })
 });

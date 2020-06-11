@@ -128,11 +128,11 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   let subcaseId;
 
-  cy.wait('@addSubcase-createNewsletter', { timeout: 10000 })
+  cy.wait('@addSubcase-createNewsletter', { timeout: 20000 })
     .then((res) => {
       subcaseId = res.responseBody.data.id;
     });
-  cy.wait('@addSubcase-createNewSubcase', { timeout: 10000 })
+  cy.wait('@addSubcase-createNewSubcase', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
         resolve(subcaseId);
@@ -150,7 +150,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
  */
 function openCase(caseTitle) {
   cy.log('openCase');
-  cy.visit('dossiers');
+  cy.visit('zoeken/dossiers');
   cy.get('#dossierId').type(caseTitle);
   cy.route('GET', `/cases/search?**${caseTitle.split(" ", 1)}**`).as('getCaseSearchResult');
   cy.contains('zoeken')
