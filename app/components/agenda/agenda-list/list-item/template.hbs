@@ -11,16 +11,18 @@
         </span>
       </h4>
       <div class="vlc-agenda-items__text">
-        <h4 class="vlc-agenda-items__subject" data-test-agenda-overview-sub-item>
-        <pre>
-          {{#if agendaitem.shortTitle}}
-            {{agendaitem.shortTitle}}
-          {{else}}
-            {{agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
-          {{/if}}
-        </pre>
+          <h4 class="vlc-agenda-items__subject" >
+            <a href="javascript://" onclick={{action "openAgendaItem"}} data-test-agenda-overview-sub-item>
+              <pre>
+                {{#if agendaitem.shortTitle}}
+                  {{agendaitem.shortTitle}}
+                {{else}}
+                  {{agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
+                {{/if}}
+              </pre>
+            </a>
+          </h4>
 
-        </h4>
 
         {{#if (not aboutToDelete)}}
           {{#if (not selectedAgendaItem)}}
@@ -82,12 +84,11 @@
                 {{#if renderDetails }}
                   {{#if (await agendaitem.documents)}}
                     <div class="vlc-hr"></div>
-                    <Utils::DocumentsListForItem
-                            @isClickable={{isDocumentClickable}}
-                            @item={{agendaitem}}
-                            @agendaitem={{agendaitem}}
-                    />
-
+                      <Utils::DocumentsListForItem
+                              @isClickable={{isClickable}}
+                              @item={{agendaitem}}
+                              @document={{document}}
+                      />
                   {{else}}
                     {{#if (await agendaitem.documentNames)}}
                       <div class="vlc-hr"></div>
