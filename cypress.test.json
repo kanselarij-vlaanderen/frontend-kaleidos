@@ -9,6 +9,6 @@
   "viewportHeight": 720,
   "viewportWidth": 1280,
   "video": false,
-  "numTestsKeptInMemory": 25,
+  "numTestsKeptInMemory": 5,
   "pageLoadTimeout": 1200000
 }
