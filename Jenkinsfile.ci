@@ -19,11 +19,10 @@ pipeline {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "cp .dist.env .env"
                 sh "rm -rf kaleidos-project 2> /dev/null"
-                //sh "eval `ssh-agent -s` && ssh-add /var/lib/jenkins/.ssh/id_rsa_github_kaleidos && git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
                 sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
             }
         }
-        stage('Prepare for automated tests') {
+        stage('Build frontend') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "cp ${env.WORKSPACE}/Dockerfile.ci ${env.WORKSPACE}/Dockerfile"
@@ -31,7 +30,11 @@ pipeline {
 
                 sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod -R 777 data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d --build"
-
+            }
+         }
+         stage('Reset data') {
+             steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T triplestore chmod -R 777 /data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod -R 777 /data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod -R 777 /data"
@@ -53,23 +56,25 @@ pipeline {
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf data/*"
                 sh "cd ${WORKSPACE}/kaleidos-project && cp -rf testdata/* data"
 
+             }
+        }
+        stage('Run all docker images and wait for musearch indexation') {
+            steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+
                 // up te system
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
 
                 // Wait for indexation.
                 sh "sleep 60"
-                // sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
-                // sh "npm i"
             }
         }
         stage('Automated tests: Cypress') {
             steps {
-                 // sh "npx cypress run"
                  sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                  sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
             }
         }
-
     }
 
     post {
