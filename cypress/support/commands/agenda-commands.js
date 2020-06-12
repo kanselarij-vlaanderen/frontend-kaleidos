@@ -91,7 +91,8 @@ function createAgenda(kind, date, location) {
   cy.wait('@createNewMeeting', { timeout: 20000 })
     .then((res) => {
       meetingId = res.responseBody.data.id;
-    }).verifyAlertSuccess();
+    //}).verifyAlertSuccess();
+    });
 
   cy.wait('@createNewAgenda', { timeout: 20000 });
   cy.wait('@createNewAgendaItems', { timeout: 20000 });
