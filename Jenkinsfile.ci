@@ -75,11 +75,14 @@ pipeline {
     post {
         always {
             sh "mkdir ${WORKSPACE}/reports"
+            sh "mkdir ${WORKSPACE}/reports/cypress_screenshots/"
+            sh "touch ${WORKSPACE}/reports/cypress_screenshots/test.png"
             sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
+
             // Cypress reports and screenshots
 
             archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
         }
         success {
             rocketSend channel: 'kaleidosbuilds', message: 'Build SUCCESS - ${projectName} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
