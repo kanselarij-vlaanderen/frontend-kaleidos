@@ -96,6 +96,7 @@ context('Different session kinds should show different titles', () => {
   it('should show the correct translations for electronic session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure';
     cy.visit(electronic);
+    cy.wait(1000);
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetonewsletter).click();
     cy.get(newsletter.overviewTitle).contains('Beslissingen van de Vlaamse Regering - Elektronische procedure');

@@ -29,6 +29,7 @@ context('meeting actions tests', () => {
     cy.changeSelectedAgenda('Agenda A');
     cy.agendaItemExists(SubcaseTitleShort).click();
     cy.contains('Naar procedurestap', { timeout: 12000});
+    cy.wait(1000);
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.closeAgenda();
 
