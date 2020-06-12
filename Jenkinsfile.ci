@@ -74,19 +74,21 @@ pipeline {
 
     post {
         always {
-            sh "cp -rf cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
+            sh "mkdir ${WORKSPACE}/reports"
+            sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
             // Cypress reports and screenshots
+
             archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
         }
         success {
-            rocketSend channel: 'kaleidosbuilds', message: 'Build SUCCESS - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
+            rocketSend channel: 'kaleidosbuilds', message: 'Build SUCCESS - ${env.GIT_BRANCH} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
         }
         unstable {
-            rocketSend channel: 'kaleidosbuilds', message: 'Build UNSTABLE - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
+            rocketSend channel: 'kaleidosbuilds', message: 'Build UNSTABLE - ${env.GIT_BRANCH} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
         }
         failure {
-            rocketSend channel: 'kaleidosbuilds', message: 'Build FAILED - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
+            rocketSend channel: 'kaleidosbuilds', message: 'Build FAILED - ${env.GIT_BRANCH}  (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
         }
 
         cleanup {

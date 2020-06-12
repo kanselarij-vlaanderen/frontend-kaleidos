@@ -116,7 +116,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   });
 
-  it('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
+  xit('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister vanuit agendaitem op ontwerpagenda';
