@@ -51,7 +51,7 @@ Router.map(function () {
     });
   });
   this.route('loading', { path: '/laden' });
-  this.route('mocklogin',{ path:'/mock-login' });
+  this.route('mock-login');
   this.route('login', { path: '/aanmelden' });
 
   this.route('route-not-found', {
@@ -80,7 +80,7 @@ Router.map(function () {
     });
     this.route('loading', { path: '/laden' });
   });
-  this.route('accountlessusers', { path: '/onbevoegde-gebruiker' });
+  this.route('accountless-users', { path: '/onbevoegde-gebruiker' });
   this.route('document-viewer', { path: '/document/:document_version_id' });
 
   this.route('not-supported');
