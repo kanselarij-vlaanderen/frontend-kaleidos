@@ -24,6 +24,7 @@ export default Component.extend({
     });
   }),
 
+  //TODO KAS-1425
   isDeletable: computed(
     'agendaitem.{subcase,subcase.agendaitems}', 'currentAgenda.name', async function () {
       const designAgenda = await this.get('currentAgenda.isDesignAgenda');
