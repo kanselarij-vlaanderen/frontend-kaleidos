@@ -99,7 +99,8 @@ function createAgenda(kind, date, location, meetingNumber ) {
   cy.wait('@createNewMeeting', { timeout: 20000 })
     .then((res) => {
       meetingId = res.responseBody.data.id;
-    }).verifyAlertSuccess();
+    //}).verifyAlertSuccess();
+    });
 
   let agendaId;
   cy.wait('@createNewAgenda', { timeout: 20000 }).then((res) => {
@@ -499,10 +500,9 @@ function agendaItemExists(agendaItemName) {
  */
 function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
   cy.agendaItemExists(agendaItemName);
-  cy.server()
-  cy.route('GET','/agendaitems/**/subcase').as('agendaDetailItems');
+
   cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
-  cy.wait('@agendaDetailItems');
+  cy.wait(1000)
   cy.url().should("include",'agendapunten');
   cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
     const selectedTab = element[0].text;
