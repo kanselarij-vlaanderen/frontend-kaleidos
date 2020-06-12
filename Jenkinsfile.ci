@@ -82,13 +82,13 @@ pipeline {
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
         }
         success {
-            rocketSend channel: 'kaleidosbuilds', message: 'Build SUCCESS - ${version} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
+            rocketSend channel: 'kaleidosbuilds', message: 'Build SUCCESS - ${projectName} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
         }
         unstable {
-            rocketSend channel: 'kaleidosbuilds', message: 'Build UNSTABLE - ${version} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
+            rocketSend channel: 'kaleidosbuilds', message: 'Build UNSTABLE - ${projectName} (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
         }
         failure {
-            rocketSend channel: 'kaleidosbuilds', message: 'Build FAILED - ${version}  (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
+            rocketSend channel: 'kaleidosbuilds', message: 'Build FAILED - ${projectName}  (<${env.BUILD_URL}|Open>)', serverUrl: 'https://chat.semte.ch', trustSSL: true
         }
 
         cleanup {
