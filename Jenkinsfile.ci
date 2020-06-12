@@ -75,6 +75,12 @@ pipeline {
                  sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
             }
         }
+        stage('Automated tests: Remove root permissions on files') {
+            steps {
+                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T e2e-electron chmod -R 777 /cypress"
+                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod -R 777 /data"
+            }
+        }
     }
 
     post {
