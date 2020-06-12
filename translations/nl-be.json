@@ -582,5 +582,7 @@
   "option-others": "Andere",
   "reassign-agendaitem-priorities-title": "Aanpassen van agendapunten",
   "reassign-agendaitem-priorities-message": "Uw aanpassing wordt opgeslagen.",
-  "agenda-activity": "Agendering"
+  "agenda-activity": "Agendering",
+  "show-more": "Toon meer",
+  "show-less": "Toon minder"
 }
