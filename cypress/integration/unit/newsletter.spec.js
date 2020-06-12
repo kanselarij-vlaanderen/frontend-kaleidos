@@ -12,7 +12,7 @@ context('Test the KB functionality', () => {
   });
 
   xit('should test the newsletter of an agenda', () => {
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+    const agendaDate = Cypress.moment().add(3, 'weeks').day(4); // Next friday
 
     cy.createAgenda('Ministerraad', agendaDate, 'Test Kort bestek toevoegen').then((meetingId) => {
       cy.openAgendaForDate(agendaDate);

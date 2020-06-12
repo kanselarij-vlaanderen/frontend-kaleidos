@@ -24,7 +24,7 @@ context('Show warning in newsletterinfo', () => {
 
   it('Should show warning in kortbestek view', () => {
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(2); // Next friday
     const subcaseTitle1 = caseTitle + ' test stap 1';
 
     const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};

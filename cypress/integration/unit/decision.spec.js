@@ -7,7 +7,7 @@ import modal from '../../selectors/modal.selectors';
 import document from "../../selectors/document.selectors";
 
 context('Add files to an agenda', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(2); // Next friday
 
   before(() => {
     cy.server();
