@@ -50,13 +50,16 @@ context('Add files to an agenda', () => {
 
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.get(document.modalDocumentVersionDelete).click();
-    cy.wait('@deleteFile',{timeout: 12000})
+    cy.wait('@deleteFile',{timeout: 12000});
     cy.get(modal.baseModal.dialogWindow).contains('test').should('not.exist');
+
+    cy.get('@fileUploadDialog').within(() => {
+      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    });
 
     cy.route('POST', 'document-versions').as('createNewDocumentVersion');
     cy.route('POST', 'documents').as('createNewDocument');
     cy.route('PATCH', 'decisions/**').as('patchDecision');
-    cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'document-versions/*').as('deleteVersion');
     cy.route('DELETE', 'documents/*').as('deleteDocument');
 
