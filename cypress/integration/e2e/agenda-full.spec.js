@@ -22,14 +22,13 @@ context('Full test', () => {
     cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
     cy.route('POST', '/cases').as('createNewCase');
     cy.route('POST', '/subcases').as('createNewSubcase');
     cy.route('PATCH','/subcases/*').as('patchSubcase');
 
     //#endregion
 
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+    const agendaDate = Cypress.moment().add(2, 'weeks').day(3); // Next friday
 
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';

@@ -48,7 +48,6 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
 function createAgenda(kind, date, location) {
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/agendaitems').as('createNewAgendaItems');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
@@ -91,10 +90,10 @@ function createAgenda(kind, date, location) {
   cy.wait('@createNewMeeting', { timeout: 20000 })
     .then((res) => {
       meetingId = res.responseBody.data.id;
-    }).verifyAlertSuccess();
+    //}).verifyAlertSuccess();
+    });
 
   cy.wait('@createNewAgenda', { timeout: 20000 });
-  cy.wait('@createNewAgendaItems', { timeout: 20000 });
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
     .then(() => {
@@ -119,7 +118,6 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
 
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/agendaitems').as('createNewAgendaItems');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
@@ -134,7 +132,6 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
 
   cy.wait('@createNewMeeting', { timeout: 20000 });
   cy.wait('@createNewAgenda', { timeout: 20000 });
-  // cy.wait('@createNewAgendaItems', { timeout: 20000 }); // This fails if there is no older agenda (verslag vorige vergadering)
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
 }
@@ -159,7 +156,6 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
   // Create agenda backend calls
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/agendaitems').as('createNewAgendaItems');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
@@ -188,7 +184,6 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
             return cy.existsAndVisible(form.formSave).click()
               .then(() => {
                 cy.wait('@createNewAgenda').its('status').should('to.equal', 201);
-                cy.wait('@createNewAgendaItems').its('status').should('to.equal', 201);
                 cy.wait('@createNewsletter').its('status').should('to.equal', 201);
                 cy.wait('@patchMeetings').its('status').should('to.equal', 204);
                 return cy.wait('@createNewMeeting').then((xhr) => {
@@ -487,10 +482,9 @@ function agendaItemExists(agendaItemName) {
  */
 function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
   cy.agendaItemExists(agendaItemName);
-  cy.server()
-  cy.route('GET','/agendaitems/**/subcase').as('agendaDetailItems');
+
   cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
-  cy.wait('@agendaDetailItems');
+  cy.wait(1000)
   cy.url().should("include",'agendapunten');
   cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
     const selectedTab = element[0].text;

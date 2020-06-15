@@ -19,7 +19,7 @@ context('Full test', () => {
     cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaItem');
     const KIND = 'Ministerraad';
 
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(3);
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
     const subcaseTitle1 = caseTitle + ' test stap 1';
     const subcaseTitle2 = caseTitle + ' test stap 2';
@@ -37,20 +37,20 @@ context('Full test', () => {
       cy.get(form.formInput).should('exist').should('be.visible').type('Eerste minister');
     });
     cy.get(mandatee.addMandateeDropdownContainer).should('exist').should('be.visible').within(() => {
-      cy.get('.ember-power-select-trigger').click();
+      cy.get('.ember-power-select-trigger').scrollIntoView().click();
     });
     cy.get('.ember-power-select-option').should('exist').then(() => {
-      cy.contains('Liesbeth Homans').click();
+      cy.contains('Liesbeth Homans').scrollIntoView().click();
     });
 
     cy.get(mandatee.addMandateeIseCodeDropdownContainer).should('exist').should('be.visible').within(() => {
-      cy.get('.ember-power-select-trigger').click();
+      cy.get('.ember-power-select-trigger').scrollIntoView().click();
     });
 
     cy.get('.ember-power-select-option').should('exist').then(() => {
       cy.contains('Aanvullend net').click();
       cy.get(mandatee.addMandateeIseCodeDropdownContainer).should('exist').should('be.visible').within(() => {
-        cy.get('.ember-power-select-trigger').click();
+        cy.get('.ember-power-select-trigger').scrollIntoView().click();
       });
     });
 
