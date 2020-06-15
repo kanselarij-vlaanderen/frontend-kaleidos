@@ -10,7 +10,7 @@ context('Tests for KAS-1076', () => {
     cy.login('Admin');
   });
 
-  it.only('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
+  it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
     const caseTitleSingle = 'Cypress test: document versions agendaitem - 1589286110';
     const SubcaseTitleShort = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
 
