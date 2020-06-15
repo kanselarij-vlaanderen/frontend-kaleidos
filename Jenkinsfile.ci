@@ -71,11 +71,27 @@ pipeline {
         }
 
     }
+
     post {
         always {
-            sh "cp -rf cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
+            sh "mkdir ${WORKSPACE}/reports"
+            sh "mkdir ${WORKSPACE}/reports/cypress_screenshots/"
+            sh "touch ${WORKSPACE}/reports/cypress_screenshots/test.png"
+            sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
+
             // Cypress reports and screenshots
+
             archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
+        }
+        success {
+            rocketSend channel: 'kaleidosbuilds', message: "Build SUCCESS - ${projectName} (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'green', avatar: 'https://github.com/fluidicon.png'
+        }
+        unstable {
+            rocketSend channel: 'kaleidosbuilds', message: "Build UNSTABLE - ${projectName} (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'orange', avatar: 'https://github.com/fluidicon.png'
+        }
+        failure {
+            rocketSend channel: 'kaleidosbuilds', message: "Build FAILED - ${projectName}  (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'red',avatar: 'https://github.com/fluidicon.png'
         }
 
         cleanup {
@@ -83,6 +99,7 @@ pipeline {
           sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} down -v"
           sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} rm -f"
           sh "docker network prune -f"
+          cleanWs()
         }
     }
 }
