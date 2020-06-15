@@ -10,7 +10,7 @@ context('Tests for KAS-1076', () => {
     cy.login('Admin');
   });
 
-  it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
+  it.only('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
     const caseTitleSingle = 'Cypress test: document versions agendaitem - 1589286110';
     const SubcaseTitleShort = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
 
@@ -53,19 +53,16 @@ context('Tests for KAS-1076', () => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
     });
 
-    const linkedDocumentsNames = [
-      'VR 2019 1111 DOC.0001-10',
-      'VR 2019 1111 DOC.0001-11',
-      'VR 2019 1111 DOC.0001-12',
-      'VR 2019 1111 DOC.0001-13',
-      'VR 2019 1111 DOC.0001-14'
-    ];
+    const linkedDocumentsNames = files.slice(9,14).map(file => file.newFileName);
+    const linkedDocumentTypes = files.slice(9,14).map(file => file.fileType);
+
+
     cy.addLinkedDocumentToAgendaItem(linkedDocumentsNames);
-    cy.get(document.linkeddocumentTypeLabel).eq(0).contains("Nota");
-    cy.get(document.linkeddocumentTypeLabel).eq(1).contains("Bijlage");
-    cy.get(document.linkeddocumentTypeLabel).eq(2).contains("IF");
-    cy.get(document.linkeddocumentTypeLabel).eq(3).contains("BVR");
-    cy.get(document.linkeddocumentTypeLabel).eq(4).contains("MvT");
+    cy.get(document.linkeddocumentTypeLabel).eq(0).contains(linkedDocumentTypes[0]);
+    cy.get(document.linkeddocumentTypeLabel).eq(1).contains(linkedDocumentTypes[1]);
+    cy.get(document.linkeddocumentTypeLabel).eq(2).contains(linkedDocumentTypes[2]);
+    cy.get(document.linkeddocumentTypeLabel).eq(3).contains(linkedDocumentTypes[3]);
+    cy.get(document.linkeddocumentTypeLabel).eq(4).contains(linkedDocumentTypes[4]);
   });
 
   it('Adding more then 20 document-versions to subcase should show all', () => {
