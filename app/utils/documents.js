@@ -4,7 +4,7 @@ import DS from "ember-data";
 
 let {PromiseObject} = DS;
 
-export const sortDocuments = (documentVersions, containers,) => {
+export const sortDocuments = (documentVersions, containers) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where
   // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
   // some items not being returned. By not having a sort parameter, this doesn't occur.
