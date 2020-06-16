@@ -14,7 +14,7 @@ context('Full test', () => {
     cy.login('Admin');
   });
 
-  it('should Add new minister', () => {
+  xit('should Add new minister', () => {
     cy.visit('/');
     cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaItem');
     const KIND = 'Ministerraad';
