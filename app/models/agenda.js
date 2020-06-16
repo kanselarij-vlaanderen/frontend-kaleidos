@@ -38,7 +38,7 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  isApprovable: computed('agendaitems.@each', function () {
+  isApprovable: computed('agendaitems.@each.formallyOk', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaItems = agendaitems.filter((agendaitem) =>
         this.checkFormallyOkStatus(agendaitem)
