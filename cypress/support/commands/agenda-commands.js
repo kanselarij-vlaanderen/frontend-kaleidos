@@ -49,7 +49,6 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
 function createAgenda(kind, date, location, meetingNumber ) {
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/agendaitems').as('createNewAgendaItems');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
@@ -102,16 +101,12 @@ function createAgenda(kind, date, location, meetingNumber ) {
     //}).verifyAlertSuccess();
     });
 
-  let agendaId;
-  cy.wait('@createNewAgenda', { timeout: 20000 }).then((res) => {
-    agendaId = res.responseBody.data.id;
-  });
-  cy.wait('@createNewAgendaItems', { timeout: 20000 });
+  cy.wait('@createNewAgenda', { timeout: 20000 });
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
-        resolve({meetingId,meetingNumber, agendaId});
+        resolve(meetingId);
       });
     });
 }
@@ -132,7 +127,6 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location, meetingId
 
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/agendaitems').as('createNewAgendaItems');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
@@ -147,11 +141,9 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location, meetingId
 
   cy.wait('@createNewMeeting', { timeout: 20000 });
   cy.wait('@createNewAgenda', { timeout: 20000 });
-  // cy.wait('@createNewAgendaItems', { timeout: 20000 }); // This fails if there is no older agenda (verslag vorige vergadering)
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
 }
-
 
 /**
  * Create a default agenda
@@ -172,7 +164,6 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
   // Create agenda backend calls
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/agendaitems').as('createNewAgendaItems');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
@@ -201,7 +192,6 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
             return cy.existsAndVisible(form.formSave).click()
               .then(() => {
                 cy.wait('@createNewAgenda').its('status').should('to.equal', 201);
-                cy.wait('@createNewAgendaItems').its('status').should('to.equal', 201);
                 cy.wait('@createNewsletter').its('status').should('to.equal', 201);
                 cy.wait('@patchMeetings').its('status').should('to.equal', 204);
                 return cy.wait('@createNewMeeting').then((xhr) => {
