@@ -25,28 +25,6 @@ export default Component.extend({
     return model.save().then(model => model.reload());
   },
 
-  // TODO KAS-1425 
-  async setDecisionPhaseToSubcase() {
-    const approved = await this.get('approved');
-    const subcase = await this.get('subcase')
-
-    const foundDecidedPhases = await this.store.query('subcase-phase', {
-      filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } }
-    });
-
-    if (foundDecidedPhases && foundDecidedPhases.length > 0) {
-      await Promise.all(foundDecidedPhases.map((phase) => phase.destroyRecord()));
-    }
-    if (approved) {
-      const decidedCode = await this.store.findRecord('subcase-phase-code', CONFIG.decidedCodeId);
-      const newDecisionPhase = this.store.createRecord('subcase-phase', {
-        date: moment().utc().toDate(),
-        code: decidedCode,
-        subcase: subcase
-      });
-      return newDecisionPhase.save();
-    }
-  },
   richtext: computed('editor.currentTextContent', function () {
     if (!this.editor) {
       return;
@@ -80,9 +58,6 @@ export default Component.extend({
         this.set('isLoading', false);
         throw(e);
       });
-
-      // TODO KAS-1425
-      await this.setDecisionPhaseToSubcase();
 
       if (!this.get('isDestroyed')) {
         let agendaitemToUpdate;

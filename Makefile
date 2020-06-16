@@ -1,16 +1,21 @@
 include .env.cypress
 export $(shell sed 's/=.*//' .env.cypress)
 
+reset-cache-resource-only:
+	- docker-compose ${COMPOSE_FILE} kill cache resource
+	- docker-compose ${COMPOSE_FILE} up -d cache resource
+	- sleep 5
+
 reset-cache:
-	- docker-compose ${COMPOSE_FILE} kill triplestore file cache resource
+	- docker-compose ${COMPOSE_FILE} kill triplestore file cache resource migrations-service
 	- rm -rf ${PROJECT_PATH}/testdata/db && rm -rf ${PROJECT_PATH}/testdata/files
 	- unzip -o ${PROJECT_PATH}/testdata.zip -x "elasticsearch/*" -d ${PROJECT_PATH}
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 5
 
 reset-elastic-and-cache:
-	- docker-compose ${COMPOSE_FILE} kill triplestore elasticsearch musearch file cache resource
-	- docker-compose ${COMPOSE_FILE} rm -f triplestore elasticsearch musearch file cache resource
+	- docker-compose ${COMPOSE_FILE} kill triplestore elasticsearch musearch file cache resource migrations-service
+	- docker-compose ${COMPOSE_FILE} rm -f triplestore elasticsearch musearch file cache resource migrations-service
 	- rm -rf ${PROJECT_PATH}/testdata
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
 	- docker-compose ${COMPOSE_FILE} up -d

@@ -19,6 +19,19 @@ export default Service.extend({
     })
   },
 
+  //TODO KAS-1425
+  async getSubcasePhases(model) {
+    return ajax({
+      method: 'GET',
+      url: `/agenda-approve/getSubcasePhases?subcaseId=${model.id}`,
+    }).then((result) => {
+      console.log('result', result);
+      return result.body;
+    }).catch((error) => {
+      console.log('error', error);
+    });
+  },
+
   setNewMandateeToRelatedOpenSubcases(old_mandatee, new_mandatee) {
     return ajax(
       {

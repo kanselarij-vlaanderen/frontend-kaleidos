@@ -13,8 +13,7 @@ export default class ListItem extends Component {
   classNameBindings = [
     'isActive:vlc-agenda-items__sub-item--active',
     'isClickable::not-clickable',
-    'agendaitem.retracted:vlc-u-opacity-lighter',
-    'isPostponed:vlc-u-opacity-lighter',
+    'agendaitem.isPostponed:vlc-u-opacity-lighter',
     'isNew:vlc-agenda-items__sub-item--added-item'
   ];
 
@@ -27,19 +26,6 @@ export default class ListItem extends Component {
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
   @alias('sessionService.currentAgenda') currentAgenda;
   @alias('agendaitem.checkAdded') isNew;
-
-  constructor() {
-    super(...arguments);
-    observer(
-      'agendaitem.postponedTo',
-      async function () {
-        const postponed = await this.get('agendaitem.postponedTo');
-        if (!this.get('isDestroyed')) {
-          this.set('isPostponed', !!postponed);
-        }
-      }
-    );
-  }
 
   @computed('agendaitem.formallyOk')
   get formallyOk() {

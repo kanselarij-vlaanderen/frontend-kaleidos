@@ -19,13 +19,13 @@ export default Component.extend({
   subcase: null,
   caseToDelete: null,
 
-  canPropose: computed('subcase.{requestedForMeeting,hasAgendaItem,isPostponed}', 'isAssigningToOtherAgenda', async function () {
+  canPropose: computed('subcase.{requestedForMeeting,hasActivity,isPostponed}', 'isAssigningToOtherAgenda', async function () {
     const { isAssigningToOtherAgenda, isLoading } = this;
     const subcase = await this.get('subcase');
     const requestedForMeeting = await subcase.get('requestedForMeeting');
-    const hasAgendaItem = await subcase.get('hasAgendaItem');
+    const hasActivity = await subcase.get('hasActivity');
 
-    if (hasAgendaItem || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
+    if (hasActivity || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
       return false;
     }
 
@@ -108,7 +108,7 @@ export default Component.extend({
       this.toggleProperty('isAssigningToOtherAgenda');
       this.set('selectedSubcase', subcase);
     },
-    //TODO KAS-1425
+
     async proposeForAgenda(subcase, meeting) {
       this.set('isLoading', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
@@ -120,7 +120,6 @@ export default Component.extend({
       if (isDesignAgenda) {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
-      // await subcase.hasMany('agendaitems').reload();
       this.toggleAllPropertiesBackToDefault();
     },
 

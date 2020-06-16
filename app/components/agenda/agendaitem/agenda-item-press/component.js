@@ -21,17 +21,11 @@ export default class AgendaItemPress extends Component {
     let text = agendaitem.get('textPress');
     if (!text) {
       const mandatees = await agendaitem.get('mandatees');
-      // TODO KAS-1425 get the active phase if we still use the agenda-item-press component
-      // const phases = await agendaitem.get('phases');
-      let phase = '';
-      // if (phases && phases.length > 0) {
-      //   phase = await phases.get('firstObject').get('code.label');
-      // }
       let titles = [];
       if (mandatees) {
         titles = mandatees.map((mandatee) => mandatee.get('title'));
       }
-      const pressText = `${agendaitem.get('shortTitle')}\n${titles.join('\n')}\n${phase}`
+      const pressText = `${agendaitem.get('shortTitle')}\n${titles.join('\n')}`
       agendaitem.set('textPress', pressText);
       await agendaitem.save().then(() => {
         updateModifiedProperty(agenda);

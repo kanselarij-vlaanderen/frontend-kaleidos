@@ -20,7 +20,7 @@ export default ModelWithModifier.extend({
   priority: attr('number'),
   created: attr('datetime'),
   record: attr('string'),
-  retracted: attr('boolean'),
+  retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to decision
   showAsRemark: attr('boolean'),
   modified: attr('datetime'),
   titlePress: attr('string'),
@@ -32,7 +32,6 @@ export default ModelWithModifier.extend({
   isApproval: attr('boolean'),
   explanation: attr('string'),
 
-  postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', {inverse: null}),
   agendaActivity: belongsTo('agenda-activity', {inverse: null}),
   meetingRecord: belongsTo('meeting-record'),
@@ -115,11 +114,8 @@ export default ModelWithModifier.extend({
     }
   }),
 
-  isPostponed: computed('retracted', 'postponedTo', function () {
-    return this.get('postponedTo').then((session) => {
-      return !!session || this.get('retracted');
-    });
-  }),
+  // TODO KAS-1420 move to treatment
+  isPostponed: alias('retracted'),
 
   decisions: computed('subcase.decisions.@each', function () {
     return PromiseArray.create({

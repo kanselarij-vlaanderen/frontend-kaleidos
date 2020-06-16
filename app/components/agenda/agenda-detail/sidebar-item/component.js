@@ -12,8 +12,7 @@ export default Component.extend( {
   classNameBindings: [
     'isActive:vlc-agenda-detail-sidebar__sub-item--active',
     'isClickable::not-clickable',
-    'agendaitem.retracted:vlc-u-opacity-lighter',
-    'isPostponed:vlc-u-opacity-lighter',
+    'agendaitem.isPostponed:vlc-u-opacity-lighter',
     'isNew:vlc-agenda-items__sub-item--added-item'
   ],
   tagName: 'a',
@@ -22,19 +21,6 @@ export default Component.extend( {
   isClickable: true,
   hideLabel: true,
   isShowingChanges: null,
-
-  init() {
-    this._super(...arguments);
-    observer(
-      'agendaitem.postponedTo',
-      async function () {
-        const postponed = await this.get('agendaitem.postponedTo');
-        if (!this.get('isDestroyed')) {
-          this.set('isPostponed', !!postponed);
-        }
-      }
-    );
-  },
 
   formallyOk: computed('agendaitem.formallyOk', function () {
     return this.agendaitem.get('formallyOk');

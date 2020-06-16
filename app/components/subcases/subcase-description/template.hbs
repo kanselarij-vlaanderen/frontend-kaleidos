@@ -17,7 +17,7 @@
     </p>
     {{!-- TODO KAS-1425 --}}
     <ul class="vlc-status-timeline">
-      {{#each subcase.phases as |phase|}}
+      {{#each (await subcase.phases) as |phase|}}
         <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         >
           <div class="vlc-status-timeline__dot"></div>
@@ -44,8 +44,8 @@
           {{t "number-session"}}
         </span>
         <span class="vl-description-data__value">
-          {{#if (await subcase.case.latestMeeting.number)}}
-            {{await subcase.case.latestMeeting.number}}
+          {{#if (await subcase.latestMeeting.number)}}
+            {{await subcase.latestMeeting.number}}
           {{else}}
             {{t "no-number-yet"}}
           {{/if}}

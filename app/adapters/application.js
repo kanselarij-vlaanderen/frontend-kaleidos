@@ -62,7 +62,7 @@ export default DS.JSONAPIAdapter.extend({
   },
 
   checkIfNotificationShouldBeShown(type) {
-    const modelListToNotShowNotificationFor = ['genders', 'formally-oks', 'confidentialities', 'approvals', 'alert-types', 'agenda-activities', 'meetings', 'postponeds'];
+    const modelListToNotShowNotificationFor = ['genders', 'formally-oks', 'confidentialities', 'approvals', 'alert-types', 'agenda-activities', 'meetings'];
     return !(modelListToNotShowNotificationFor.includes(type));
   },
 

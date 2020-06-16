@@ -33,10 +33,8 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
         number: page,
         size: size
       },
-      // TODO KAS-1425 remove the agendaitems filter
       filter: {
         ':has-no:agenda-activities': 'yes',
-        ':has-no:agendaitems': 'yes',
         ':not:is-archived': 'true',
       }
     };

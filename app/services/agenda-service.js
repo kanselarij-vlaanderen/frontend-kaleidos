@@ -154,7 +154,7 @@ export default Service.extend({
     subcase.set('requestedForMeeting', meeting);
     await subcase.hasMany('agendaActivities').reload();
     await subcase.save();
-    await updateModifiedProperty(selectedAgenda);
+    updateModifiedProperty(selectedAgenda);
   },
 
   async groupAgendaItemsOnGroupName(agendaitems) {
@@ -185,77 +185,33 @@ export default Service.extend({
       })
     );
   },
-// TODO KAS-1425
+
   async deleteAgendaitem(agendaitem) {
-    debugger;
     let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     itemToDelete.set('aboutToDelete', true);
-    // await itemToDelete.belongsTo('subcase').reload(); 
     const agendaActivity = await itemToDelete.get('agendaActivity');
 
     if (agendaActivity) {
       const subcase = await agendaActivity.get('subcase');
-      // await subcase.hasMany('agendaitems').reload();
+      await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
-      if (agendaitemsFromActivity.length == 1) {
-        // if only 1 item is found, the activity should be destroyed and the subcase updated before deleting the agendaitem
-        if (subcase) { //TODO KAS-1425 this if should not be needed !
-          await subcase.set('requestedForMeeting', null);
-          await subcase.set('consulationRequests', []); // TODO KAS-1425 do we still need this ?
-          await subcase.save();
-        }
-        await agendaActivity.destroyRecord();
-        await subcase.hasMany('agendaActivity').reload();
-      } else {
-        const foundAgendaitem = agendaitemsFromActivity.find((agendaitem) => agendaitem.id == itemToDelete.id);
-        itemToDelete = foundAgendaitem;
-      }
+      await Promise.all(agendaitemsFromActivity.map(async item => {
+        const agenda = await item.get('agenda');
+        await item.destroyRecord();
+        await agenda.hasMany('agendaitems').reload();
+      }));
+      await agendaActivity.destroyRecord();
+      await subcase.set('requestedForMeeting', null);
+      await subcase.save();
+      await subcase.hasMany('agendaActivities').reload();
+    } else {
+      await itemToDelete.destroyRecord();
     }
-    await itemToDelete.destroyRecord();
   },
 
-  // TODO KAS-1425
   async deleteAgendaitemFromMeeting(agendaitem) {
-    debugger;
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
-    // const currentAgenda = await itemToDelete.get('agenda');
-    // const currentMeeting = await currentAgenda.get('createdFor');
-    // const currentMeetingId = await currentMeeting.get('id');
     if (this.currentSession.isAdmin) {
-      itemToDelete.set('aboutToDelete', true);
-      const agendaActivity = await itemToDelete.get('agendaActivity');
-
-      if (agendaActivity) {
-        // if an activity exists, it should always have 1 subcase and at least 1 agendaitems
-        const subcase = await agendaActivity.get('subcase');
-        const agendaitems = await agendaActivity.get('agendaitems');
-        // We should no longer have to verify the meeting since the agenitems from 1 activity should only ever belong to 1 meeting
-        await Promise.all(agendaitems.map(async item => {
-          // const agenda = await item.get('agenda');
-          // const meeting = await agenda.get('createdFor');
-          // const meetingId = await meeting.get('id');
-          // if (meetingId === currentMeetingId) {
-            await item.destroyRecord();
-          // }
-        }));
-        await agendaActivity.destroyRecord();
-        await subcase.set('requestedForMeeting', null);
-        await subcase.save();
-        await subcase.hasMany('agendaActivity').reload();
-        // await subcase.hasMany('agendaitems').reload();
-        // const agendaitemsFromSubcase = await subcase.get('agendaitems');
-        // if (agendaitemsFromSubcase.length == 0) {
-        //   const phases = await subcase.get('phases');
-        //   await Promise.all(phases.map(async phase => {
-        //     await phase.destroyRecord();
-        //   }));
-        // }
-        // await subcase.set('requestedForMeeting', null);
-        // await subcase.save();
-      } else {
-        await itemToDelete.destroyRecord(); // TODO KAS-1425 This could only happen on legacy data or when the get of activity fails ? ??
-      }
-
+      return await this.deleteAgendaitem(agendaitem);
     } else {
       this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
     }
