@@ -30,6 +30,7 @@ export default Component.extend({
   async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
     const mandatees = await latestSubcase.get('mandatees');
     const iseCodes = await latestSubcase.get('iseCodes');
+    const showAsRemark = await latestSubcase.get('showAsRemark');
 
     const requestedBy = await latestSubcase.get('requestedBy');
     const documentVersions = await latestSubcase.get('documentVersions');
@@ -42,6 +43,7 @@ export default Component.extend({
       subcase.set('linkedDocumentVersions', linkedDocumentVersions);
       subcase.set('subcaseName', subcaseName);
       subcase.set('accessLevel', accessLevel);
+      subcase.set('showAsRemark', showAsRemark);
     } else {
       subcase.set('linkedDocumentVersions', documentVersions);
     }
@@ -91,7 +93,7 @@ export default Component.extend({
       shortTitle: trimText(shortTitle),
       title: trimText(title),
       confidential,
-      showAsRemark,
+      showAsRemark: showAsRemark || false,
       case: newCase,
       created: newDate,
       modified: newDate,
