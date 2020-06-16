@@ -34,8 +34,9 @@
   {{/if}}
   {{#if
     (or
-    this.currentSession.isEditor
-    (and @meetingIsConcluded this.decisionsExist))
+      (and this.currentSession.isEditor this.subcaseExists)
+      (and @meetingIsConcluded this.decisionsExist)
+    )
   }}
     <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-decision">
       <LinkTo
