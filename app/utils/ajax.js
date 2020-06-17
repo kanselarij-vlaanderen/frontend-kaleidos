@@ -38,13 +38,18 @@ export const ajax = ({
     headers,
   }).then(handleErrors)
     .then((response) => {
-      switch (dataType) {
-        case 'blob':
-          return response.blob();
-        default:
-          // Auto-convert all responses to JSON
-          return response.json();
+      if(response.status !== 204){
+        switch (dataType) {
+          case 'blob':
+            return response.blob();
+          default:
+            // Auto-convert all responses to JSON
+            return response.json();
+        }
+      }else {
+        return response.body;
       }
+
     }, (response) => {
       if (error) {
         // If an error handler was present (jQuery style) use that one

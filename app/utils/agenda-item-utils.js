@@ -1,4 +1,5 @@
 import CONFIG from 'fe-redpencil/utils/config';
+import EmberObject from '@ember/object';
 import moment from 'moment';
 
 /**
@@ -118,4 +119,106 @@ export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
   if (approvals) {
     await Promise.all(approvals.map(approval => approval.destroyRecord()));
   }
+}
+
+/**
+ * For a given set of agenda items, will re-order them by their groupPriority
+ * ⚠️ Word of caution, this mutates the original set!
+ * @param {Array} agendaitems   Agenda items to mutate
+ */
+export const setCalculatedGroupPriorities = (agendaitems) => {
+  return Promise.all(
+    agendaitems.map(async (item) => {
+      const mandatees = await item.get('mandatees');
+      if (item.isApproval) {
+        return;
+      }
+      if (mandatees.length == 0) {
+        item.set('groupPriority', 20000000);
+        return;
+      }
+      const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
+      const minPrio = Math.min(...mandateePriorities);
+      const minPrioIndex = mandateePriorities.indexOf(minPrio);
+      delete mandateePriorities[minPrioIndex];
+      let calculatedGroupPriority = minPrio;
+      mandateePriorities.forEach((value) => {
+        calculatedGroupPriority += value / 100;
+      });
+      item.set('groupPriority', calculatedGroupPriority);
+    })
+  );
+}
+
+/**
+ * For a given set of agendaitems, return an array of groups
+ * Will eventually return the same amount of data
+ * @param  {Array} agendaitems  Agenda items to parse from
+ * @return {Array}              A list of groups
+ */
+export const groupAgendaitemsByGroupname = (agendaitems) => {
+  let groups = [];
+  agendaitems.map((agendaitem) => {
+    const groupName = agendaitem.get('ownGroupName');
+    const foundItem = groups.find((item) => item.groupName == groupName);
+
+    if (!foundItem) {
+      groups.push({
+        groupName,
+        groupPriority: agendaitem.groupPriority,
+        agendaitems: [agendaitem],
+      });
+    } else {
+      const foundIndex = groups.indexOf(foundItem);
+      if (foundIndex >= 0) {
+        groups[foundIndex].agendaitems.push(agendaitem);
+      }
+    }
+  });
+  return groups;
+}
+
+/**
+ * For a set of agendaitems, will fetch the drafts, and will group them by priority
+ * @param  {Array}  agendaitems   Agenda items to parse from
+ * @return {Object}               An object containing drafts and groups
+ */
+export const parseDraftsAndGroupsFromAgendaitems = async (agendaitems) => {
+  // Drafts are items without an approval or remark
+  const draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
+
+  // Calculate the priorities on the drafts
+  await setCalculatedGroupPriorities(draftAgendaitems);
+
+  const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
+  return {
+    draftAgendaitems,
+    groupedAgendaitems,
+  };
+}
+
+/**
+ * Given a set of grouped agendaitems, sort them by priority
+ * @param  {Array}   groupedAgendaitems   A set containing all agendaitems grouped (see above functions)
+ * @param  {Boolean} allowEmptyGroups     When true, empty groups are allowed
+ * @return {Array}                        The input set, sorted by priority ASC
+ */
+export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
+  let prevIndex = 0;
+  let groupsArray = groupedAgendaitems;
+  if (!allowEmptyGroups) {
+    groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
+  } else {
+    groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers')
+  }
+
+  groupsArray = groupsArray.sortBy('groupPriority').map((item) => {
+    item.agendaitems.map((agendaitem, index) => {
+      prevIndex = index + prevIndex + 1;
+      agendaitem.set('itemIndex', prevIndex);
+    });
+    return EmberObject.create(item);
+  });
+
+  return groupsArray;
 }
