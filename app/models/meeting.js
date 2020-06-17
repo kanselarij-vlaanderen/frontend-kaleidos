@@ -87,10 +87,12 @@ export default Model.extend({
 
     const status = await agenda.get('status');
 
-    const agendaName = agenda.serialnumber;
-    let prefix = 'Agenda';
-    if(status.isDesignAgenda) {
+    const agendaName = agenda.serialnumber || '';
+    let prefix;
+    if (status.isDesignAgenda) {
       prefix = 'Ontwerpagenda';
+    } else {
+      prefix = 'Agenda';
     }
     return `${prefix} ${agendaName}`;
   }),
