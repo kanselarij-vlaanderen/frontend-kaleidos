@@ -1,0 +1,68 @@
+version: '3.4'
+services:
+  frontend:
+    #  frontend:
+    #    # image: kanselarij/frontend-kaleidos:1.2.4
+    #    image: kanselarij/frontend-kaleidos:development
+    #    ports:
+    #      - 127.0.0.1:88:80
+    #    environment:
+    #      - EMBER_ENV=development
+    #      - VIRTUAL_HOST=kaleidos-dev.vlaanderen.be  # dev-kaleidos-frontend.kanselarij-dev.s.redpencil.io
+    #      - VIRTUAL_PORT=80
+    #      - BACKEND=development-kaleidos_backend
+    #      - LETSENCRYPT_HOST=kaleidos-dev.vlaanderen.be # dev-kaleidos-frontend.kanselarij-dev.s.redpencil.io
+    networks:
+      - default
+    build: ../.
+    user: ${HOST_UID_GID}
+  e2e-electron:
+    image: "kanselarij/kaleidos-cypress:latest"
+    ipc: host
+    environment:
+      NO_COLOR: 1
+    links:
+      - frontend:frontend
+    volumes:
+      - ../cypress:/cypress
+      - ../cypress.test.json:/cypress.json
+  login:
+    entrypoint: "echo 'service disabled'"
+    restart: "no"
+    user: ${HOST_UID_GID}
+  cache:
+    user: ${HOST_UID_GID}
+    image: semtech/mu-cache:latest
+    links:
+      - resource:backend
+    restart: always
+    user: ${HOST_UID_GID}
+  resource:
+    image: semtech/mu-cl-resources:latest
+    links:
+      - database:database
+    environment:
+      CACHE_CLEAR_PATH: "http://cache/.mu/clear-keys"
+    volumes:
+      - ./config/resources:/config
+    user: ${HOST_UID_GID}
+  database-healthcheck:
+    entrypoint: "echo 'service disabled'"
+    restart: "no"
+    user: ${HOST_UID_GID}
+  newsletter-service:
+    entrypoint: "echo 'service disabled'"
+    restart: "no"
+    user: ${HOST_UID_GID}
+  musearch:
+    user: ${HOST_UID_GID}
+    environment:
+      UPDATE_WAIT_INTERVAL_MINUTES: 0
+  # The DELTA_TIMEOUT is the value that yggdrasil waits between runs in milliseconds
+  # Default is 5 minutes but results in 10 minutes between runs
+  yggdrasil:
+    user: ${HOST_UID_GID}
+    environment:
+      NODE_ENV: "development"
+      DEBUG: "true"
+      DELTA_TIMEOUT: 10000

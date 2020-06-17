@@ -13,7 +13,7 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-/*global Cypress*/
+/*global cy, Cypress*/
 /// <reference types="Cypress" />
 
 // Import commands.js using ES2015 syntax:
@@ -29,10 +29,23 @@ import './commands/select.commands'
 import './commands/navigation.commands'
 import './commands/authorizationAuthentication.commands'
 import './commands/reset-database.commands'
+import 'cypress-wait-until';
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   return !err.message.includes('calling set on destroyed object')
 });
+
+Cypress.Commands.overwrite("type", (originalFn, subject, text, options) => {
+  if(!options){
+    options = {};
+  }
+  if(!options.delay){
+    options.delay = 1;
+  }
+  return originalFn(subject, text, options);
+});
+
+
 
 // workaround for issue DOES NOT WORK!!
 // CypressError: Timed out after waiting '60000ms' for your remote page to load.

@@ -3,8 +3,14 @@
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
+    autoprefixer: {
+      enabled: true,
+      cascade: true,
+      sourcemap: process.env.DEPLOY_ENV !== 'production',
+    },
     sassOptions: {
-      extension: 'scss'
+      extension: 'scss',
+      sourceMapEmbed: process.env.DEPLOY_ENV !== 'production',
     },
     flatpickr: {
       locales: ['nl']

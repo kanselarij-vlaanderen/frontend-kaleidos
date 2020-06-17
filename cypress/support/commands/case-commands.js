@@ -20,6 +20,7 @@ Cypress.Commands.add('openCase', openCase);
  * @returns {Promise<String>} the id of the created case
  */
 function createCase(confidential, shortTitle) {
+  cy.log('createCase');
   cy.route('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
@@ -58,6 +59,7 @@ function createCase(confidential, shortTitle) {
         resolve(caseId);
       });
     });
+  cy.log('/createCase');
 }
 
 
@@ -74,8 +76,10 @@ function createCase(confidential, shortTitle) {
  * @returns {Promise<String>} the id of the created subcase
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
-  cy.route('POST', '/subcases').as('createNewSubcase');
-  cy.route('POST', '/newsletter-infos').as('createNewsletter');
+  cy.server();
+  cy.log('addSubcase');
+  cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
+  cy.route('POST', '/newsletter-infos').as('addSubcase-createNewsletter');
 
   cy.wait(2000);
 
@@ -124,16 +128,17 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   let subcaseId;
 
-  cy.wait('@createNewsletter', { timeout: 10000 })
+  cy.wait('@addSubcase-createNewsletter', { timeout: 20000 })
     .then((res) => {
       subcaseId = res.responseBody.data.id;
     });
-  cy.wait('@createNewSubcase', { timeout: 10000 })
+  cy.wait('@addSubcase-createNewSubcase', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
         resolve(subcaseId);
       });
     });
+  cy.log('/addSubcase');
 }
 
 /**
@@ -144,7 +149,8 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
  * @param {String} caseTitle The title to search in the list of cases, should be unique
  */
 function openCase(caseTitle) {
-  cy.visit('dossiers');
+  cy.log('openCase');
+  cy.visit('zoeken/dossiers');
   cy.get('#dossierId').type(caseTitle);
   cy.route('GET', `/cases/search?**${caseTitle.split(" ", 1)}**`).as('getCaseSearchResult');
   cy.contains('zoeken')
@@ -155,4 +161,5 @@ function openCase(caseTitle) {
   cy.get('@rows').within(() => {
     cy.contains(caseTitle).parents('tr').click();
   });
+  cy.log('/openCase');
 }

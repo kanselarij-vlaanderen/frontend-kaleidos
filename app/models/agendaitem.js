@@ -129,6 +129,9 @@ export default ModelWithModifier.extend({
     });
   }),
 
+  isDesignAgenda: computed('agenda.isDesignAgenda', function () {
+    return this.get('agenda.isDesignAgenda');
+  }),
 
   // get document names to show on agendaview when not in the viewport to assist lazy loading
   documentNames: computed('documentVersions', async function() {
@@ -136,10 +139,6 @@ export default ModelWithModifier.extend({
     return names;
   }),
 
-  isDesignAgenda: computed('agenda', async function () {
-    const agenda = await this.get('agenda');
-    return await agenda.get('isDesignAgenda');
-  }),
 
   nota: computed('documentVersions', function () {
     return PromiseObject.create({

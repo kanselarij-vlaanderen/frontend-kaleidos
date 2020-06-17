@@ -5,10 +5,16 @@
   padding: 1.5rem;
   font-size: 1.3rem;
   font-weight: 500;
-  background: $orange-light;
   line-height: 1.33;
+
+  border-bottom: 1px solid #EDD53D;
 }
 
 .vlc-list-section-header + .vlc-list-section-header {
   clear: both;
+}
+.vlc-agenda-items--spaced {
+  .vlc-list-section-header {
+    margin-top: 1.5rem;
+  }
 }

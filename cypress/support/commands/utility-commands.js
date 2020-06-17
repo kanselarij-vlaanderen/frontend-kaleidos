@@ -30,7 +30,7 @@ Cypress.Commands.add('existsAndInvisible', existsAndInvisible);
  * @param {int} index - The day that needs to be selected in the datepicker
  */
 function selectDate(year,month,day, index) {
-
+  cy.log('selectDate');
   let element;
 
   if(index !== undefined) {
@@ -44,6 +44,7 @@ function selectDate(year,month,day, index) {
     element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).clear().type(year, {delay: 300});
     element.get(agenda.flatpickrDay).contains(day).click();
   }
+  cy.log('/selectDate');
 }
 
 /**
@@ -55,9 +56,11 @@ function selectDate(year,month,day, index) {
  * @param {String} textToContain - Tekst that the element should contain that is selected
  */
 function selectAction(elementToSelect, textToContain) {
+  cy.log('selectAction');
   cy.get('[data-test-agenda-header-showactionoptions]').click();
   cy.get(elementToSelect).should('be.visible');
   cy.get(elementToSelect).should('contain.text',textToContain)
+  cy.log('/selectAction');
 }
 
 
@@ -71,9 +74,11 @@ function selectAction(elementToSelect, textToContain) {
  * @param {String} textContent: Text that need to be in the dropdown element
  */
 function validateDropdownElements(elementIndex, textContent) {
+  cy.log('validateDropdownElements');
   cy.get('.ember-power-select-trigger').click();
   cy.get('.ember-power-select-option').eq(elementIndex).should('contain.text', textContent);
-  cy.get('.ember-power-select-option').eq(elementIndex).click();
+  cy.get('.ember-power-select-option').eq(elementIndex).scrollIntoView().click();
+  cy.log('/validateDropdownElements');
 }
 
 

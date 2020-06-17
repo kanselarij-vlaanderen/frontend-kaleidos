@@ -12,6 +12,7 @@ context('Testing the toolbar as Kanselarij user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Kanselarij');
+    cy.visit('/');
   });
 
   it('Should have meeting, Case, Newsletter, Settings in toolbar', () => {

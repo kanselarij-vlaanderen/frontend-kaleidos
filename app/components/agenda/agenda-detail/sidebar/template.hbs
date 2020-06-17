@@ -23,8 +23,9 @@
 </div>
 
 {{#if (is-empty agendaitems)}}
-  <div class="vl-u-spacer-extended-top-s">
-    {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
+  <div class="vlc-agenda-detail-sidebar__no-items-message">
+    <span class="vlc-agenda-detail-sidebar__info-bubble"><i class="ki-info-circle" /></span>
+    <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
   </div>
 {{/if}}
 <div class="{{spacerClass}}">
@@ -147,6 +148,25 @@
       {{/each}}
     {{/if}}
   {{else}}
-    {{web-components/vl-alert message=(t "no-announcements-yet")}}
+    <div class="vlc-agenda-detail-sidebar__no-items-message">
+      <span class="vlc-agenda-detail-sidebar__info-bubble"><i class="ki-info-circle" /></span>
+      <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-announcements-yet"}}</p>
+    </div>
   {{/if}}
 </div>
+
+{{#if (await isReAssigningPriorities)}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @showCloseButton={{false}}
+    @title={{t "reassign-agendaitem-priorities-title"}}
+  >
+    <WebComponents::VlLoader
+      @text={{concat
+        (t "reassign-agendaitem-priorities-message")
+        " "
+        (t "please-be-patient")
+      }}
+    />
+  </WebComponents::VlModal>
+{{/if}}

@@ -4,16 +4,16 @@
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
+import document from "../../selectors/document.selectors";
 
 context('Add files to an agenda', () => {
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 3).set('hour', 20).set('minute', 20);
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(2); // Next friday
 
   before(() => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
   });
 
@@ -22,7 +22,7 @@ context('Add files to an agenda', () => {
     cy.login('Admin');
   });
 
-  it('should test the document CRUD for a decision', () => {
+  xit('should test the document CRUD for a decision', () => {
     const caseTitle = 'Cypress test: Decision documents - ' + currentTimestamp();
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: perform CRUD of documents on decision - ' + currentTimestamp();
@@ -48,10 +48,18 @@ context('Add files to an agenda', () => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
 
+    cy.route('DELETE', 'files/*').as('deleteFile');
+    cy.get(document.modalDocumentVersionDelete).click();
+    cy.wait('@deleteFile',{timeout: 12000});
+    cy.get(modal.baseModal.dialogWindow).contains('test').should('not.exist');
+
+    cy.get('@fileUploadDialog').within(() => {
+      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    });
+
     cy.route('POST', 'document-versions').as('createNewDocumentVersion');
     cy.route('POST', 'documents').as('createNewDocument');
     cy.route('PATCH', 'decisions/**').as('patchDecision');
-    cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'document-versions/*').as('deleteVersion');
     cy.route('DELETE', 'documents/*').as('deleteDocument');
 

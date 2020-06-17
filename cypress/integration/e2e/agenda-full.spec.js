@@ -22,20 +22,18 @@ context('Full test', () => {
     cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/agendaitems').as('createNewAgendaItems');
     cy.route('POST', '/cases').as('createNewCase');
     cy.route('POST', '/subcases').as('createNewSubcase');
     cy.route('PATCH','/subcases/*').as('patchSubcase');
 
     //#endregion
 
-    const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 15).set('minute', 15);
+    const agendaDate = Cypress.moment().add(2, 'weeks').day(3); // Next friday
 
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location);
+    cy.createAgenda('Ministerraad', agendaDate, location);
     // cy.openAgendaForDate(agendaDate);
 
     //#endregion
@@ -116,13 +114,8 @@ context('Full test', () => {
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
-
-    cy.addRemarkToAgenda('Titel mededeling',
-      'mededeling omschrijving',
-      [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
     cy.addAgendaitemToAgenda();
-    cy.setFormalOkOnItemWithIndex(3); //new agendaitem 
-    cy.setFormalOkOnItemWithIndex(5);
+    cy.setFormalOkOnItemWithIndex(3); //new agendaitem
     cy.approveDesignAgenda();
     //#endregion
 

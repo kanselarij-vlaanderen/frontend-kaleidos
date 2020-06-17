@@ -1,8 +1,8 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
-import ModelManageMixin from 'fe-redpencil/mixins/model-manage-mixin';
+import { inject } from '@ember/service';
 
-export default Component.extend(ModelManageMixin, {
+export default Component.extend({
   classNames: ['vl-u-spacer'],
   modelName: null,
 
@@ -12,6 +12,8 @@ export default Component.extend(ModelManageMixin, {
 
   isAdding: false,
   isEditing: false,
+  store: inject(),
+
 
   actions: {
     chooseIseCode(iseCode) {
@@ -23,14 +25,14 @@ export default Component.extend(ModelManageMixin, {
       const model = await this.get('item');
       model.set('label', this.get('label'));
       model.set('domain', this.get('domain'));
-      model.set('iseCode', this.get('iseCode'))
+      model.set('iseCode', this.get('iseCode'));
       model.save().then(() => {
         this.set('isLoading', false);
         this.set('domain', null);
-        this.set('label', null);
         this.set('iseCode', null);
         this.set('isEditing', false);
       });
+      this.send('selectModel', null)
     },
 
     createModel() {
@@ -47,6 +49,29 @@ export default Component.extend(ModelManageMixin, {
         this.set('iseCode', null);
         this.set('isAdding', false);
       });
-    }
+    },
+    close() {
+      this.close();
+    },
+
+    selectModel(model) {
+      this.set('item', model);
+    },
+
+    toggleIsAdding() {
+      this.toggleProperty('isAdding');
+    },
+
+    toggleIsEditing() {
+      this.toggleProperty('isEditing');
+    },
+
+    chooseDomain(domain) {
+      this.set('domain', domain);
+    },
+
+    removeModel() {
+      alert('This action is not allowed. Please contact the system administrator.');
+    },
   }
 })

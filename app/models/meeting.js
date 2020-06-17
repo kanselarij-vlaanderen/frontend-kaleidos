@@ -23,7 +23,6 @@ export default Model.extend({
   agendas: hasMany('agenda', {inverse: null, serialize: false}),
   requestedSubcases: hasMany('subcase'),
   postponeds: hasMany('postponed'),
-  relatedCases: hasMany('case'),
   documentVersions: hasMany('document-version'),
 
   notes: belongsTo('meeting-record'),
@@ -74,21 +73,28 @@ export default Model.extend({
     });
   }),
 
-  sortedAgendas: computed('agendas.@each', function () {
-    return this.agendas.sortBy('agendaName').reverse();
+  sortedAgendas: computed('agendas.@each.agendaName', function () {
+    return PromiseArray.create({
+      promise: this.get('agendas').then((agendas) => {
+        return agendas.sortBy('agendaName').reverse();
+      })
+    });
   }),
 
-  latestAgendaName: computed('latestAgenda', 'agendas', 'intl', function () {
-    return this.get('latestAgenda').then((agenda) => {
-      if (!agenda) return this.intl.t('no-agenda');
-      const agendaLength = this.get('agendas.length');
-      const agendaName = agenda.name;
-      if (agendaName !== 'Ontwerpagenda') {
-        return `Agenda ${agendaName}`;
-      } else {
-        return `${agendaName} ${CONFIG.alphabet[agendaLength - 1]}`;
-      }
-    });
+  latestAgendaName: computed('latestAgenda.status', 'agendas', 'intl', async function () {
+    const agenda = await this.get('latestAgenda');
+    if (!agenda) return this.intl.t('no-agenda');
+
+    const status = await agenda.get('status');
+
+    const agendaName = agenda.serialnumber || '';
+    let prefix;
+    if (status.isDesignAgenda) {
+      prefix = 'Ontwerpagenda';
+    } else {
+      prefix = 'Agenda';
+    }
+    return `${prefix} ${agendaName}`;
   }),
 
   defaultSignature: computed('signature', async function () {

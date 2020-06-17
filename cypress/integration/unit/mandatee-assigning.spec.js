@@ -3,19 +3,16 @@
 
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import isecodes from "../../selectors/isecodes/isecodesSelectors";
-import agenda  from '../../selectors/agenda.selectors';
-
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
-  const plusMonths = 1;
-  const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 20).set('minute', 20);
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(4); // Next friday
   const caseTitle = 'Cypress test: mandatee sync - ' + currentTimestamp();
 
   before(() => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
   });
 
@@ -24,8 +21,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.login('Admin');
   });
 
-  it('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {
-
+  xit('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
@@ -69,7 +65,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   });
 
-  it('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
+  xit('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
 
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
@@ -120,7 +116,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   });
 
-  it('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
+  xit('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister vanuit agendaitem op ontwerpagenda';
@@ -153,10 +149,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
 
     cy.reload();
-    // cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaDetailSidebarSubitem)
-      .contains(SubcaseTitleShort)
-      .click()
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Add 1 more
     cy.addSubcaseMandatee(5, -1, -1);

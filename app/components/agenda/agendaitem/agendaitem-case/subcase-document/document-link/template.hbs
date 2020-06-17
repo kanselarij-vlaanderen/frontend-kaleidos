@@ -12,9 +12,7 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
             {{#if lastDocumentVersion}}
-              {{access-level-pill
-                item=lastDocumentVersion
-              }}
+              <AccessLevelPill @item={{lastDocumentVersion}} />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">

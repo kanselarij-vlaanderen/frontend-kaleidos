@@ -36,13 +36,8 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          {{#if
-            (and
-              (eq currentAgenda.name "Ontwerpagenda")
-              currentSessionService.isEditor
-            )
-          }}
-            <button data-test-agenda-header-approveAgenda type="button" class="vl-button vl-button--narrow"
+          {{#if (and currentAgenda.isDesignAgenda currentSessionService.isEditor)}}
+            <button data-test-agenda-header-approveAgenda type="button" class="vl-button"
               {{action "tryToApproveAgenda" currentSession}}
             >
               {{await currentSession.latestAgendaName}}
@@ -51,7 +46,7 @@
           {{/if}}
           <button type="button"
                   data-test-agenda-header-showActionOptions
-                  class="vl-button vl-button--narrow vl-button--icon-before vl-button--secondary"
+                  class="vl-button vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions"}}
           >
             {{#if (not isShowingOptions)}}
@@ -73,30 +68,15 @@
             as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
-                {{#if
-                  (and
-                  currentSessionService.isEditor
-                  (eq currentAgenda.name "Ontwerpagenda")
-                  )
-                }}
+                {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
                   <li class="vlc-dropdown-menu__item">
-                    <a href=""
+                    <a href="javascript://"
                        data-test-agenda-header-navigateToSubCases
                        class="vl-link vl-link--block"
                       {{action attacher.hide}}
                       {{action "navigateToSubCases"}}
                     >
                       {{t "add-to-agenda"}}
-                    </a>
-                  </li>
-                  <li class="vlc-dropdown-menu__item">
-                    <a href=""
-                       data-test-agenda-header-announcement
-                       class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "toggleIsAddingAnnouncement"}}
-                    >
-                      {{t "create-announcement"}}
                     </a>
                   </li>
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -165,7 +145,6 @@
                       data-test-agenda-header-navigateToPrintableAgenda
                       class="vl-link vl-link--block"
                       @route="agenda.print"
-                      @query={{hash selectedAgenda=currentAgenda.id}}
                     >
                       {{t "printable-version"}}
                     </LinkTo>
@@ -208,7 +187,7 @@
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
                     {{#if (not currentSession.isFinal)}}
-                      {{#if (await hasMultipleAgendas)}}
+                      {{#if (await isLockable)}}
                         <a href=""
                            data-test-agenda-header-lockAgenda
                            class="vl-link vl-link--block vl-u-text--error"
@@ -254,7 +233,7 @@
                   >
                     {{#if
                       (or
-                        (and currentAgenda (eq currentAgenda.name "Ontwerpagenda"))
+                        (and currentAgenda currentAgenda.isDesignAgenda)
                         (and currentSessionService.isAdmin (await currentAgendaIsLast))
                       )
                     }}
@@ -295,12 +274,6 @@
 {{#if isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @isAddingAgendaitems={{isAddingAgendaitems}}
-    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
-{{/if}}
-{{#if isAddingAnnouncement}}
-  <Agenda::CreateAnnouncement
-    @isAddingAnnouncement={{isAddingAnnouncement}}
-    @currentAgenda={{currentAgenda}}
     @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
 {{/if}}
 {{#if isAssigningSignature}}
