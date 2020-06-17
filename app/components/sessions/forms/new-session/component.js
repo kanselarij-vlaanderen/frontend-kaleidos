@@ -11,22 +11,9 @@ export default Component.extend({
   formatter: service(),
   kind: null,
   selectedKindUri: null,
-  meetingNumber: null,
-
-  init() {
-    this._super(...arguments);
-    this.store.query('meeting', { sort: '-number', 'page[size]': 1 }).then(meetings => {
-      if (meetings.length) {
-        const meetingFirstObject = meetings.get('firstObject');
-        if (meetingFirstObject) {
-          this.set('meetingNumber', meetingFirstObject.get('number') + 1);
-        }
-      }
-    });
-  },
 
   async createAgenda(meeting, date) {
-    const status = await this.store.findRecord('agendastatus', '2735d084-63d1-499f-86f4-9b69eb33727f');
+    const status = await this.store.findRecord('agendastatus', "2735d084-63d1-499f-86f4-9b69eb33727f");
     const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
       serialnumber: 'A',
@@ -62,7 +49,7 @@ export default Component.extend({
 
   actions: {
     async createNewSession() {
-      const { isDigital, extraInfo, selectedKindUri, meetingNumber } = this;
+      const { isDigital, extraInfo, selectedKindUri } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
       const date = this.formatter.formatDate(null);
@@ -73,7 +60,6 @@ export default Component.extend({
         plannedStart: startDate,
         created: date,
         kind: kindUriToAdd,
-        number: meetingNumber
       });
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 

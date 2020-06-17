@@ -13,7 +13,7 @@ context('Full test', () => {
     cy.login('Admin');
   });
 
-  it('Scenario where a complete agenda is created', () => {
+  xit('Scenario where a complete agenda is created', () => {
     testId = 'testId=' + currentTimestamp() + ': ';
 
     //#region routes to be reused
