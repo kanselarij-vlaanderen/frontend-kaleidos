@@ -405,8 +405,8 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
 
     if (caseTitle) {
       cy.get('@formGrid').eq(0).within(() => {
-
-        cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered2');
+        cy.server();
+        cy.route('GET', `/subcases?**`).as('getSubcasesFiltered2');
         cy.get('.vl-input-field').clear().type(caseTitle, { force: true });
         cy.wait('@getSubcasesFiltered2', { timeout: 12000 });
       });
