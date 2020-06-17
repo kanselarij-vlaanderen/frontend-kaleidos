@@ -2,7 +2,7 @@ const selectors = {
   emberPowerSelectTrigger: '.ember-power-select-trigger',
   emberPowerSelectOption: '.ember-power-select-option',
   createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
-  datepickerButton: '.open  [data-test-vlc-vl-datepickerButton]',
+  datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
   flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
   numInputWrapper: '.open  .numInputWrapper',
