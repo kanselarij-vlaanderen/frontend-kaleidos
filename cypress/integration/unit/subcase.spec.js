@@ -169,7 +169,6 @@ context('Subcase tests', () => {
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
 
     // Assert status also hidden
-    cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
     cy.route('PATCH','/agendaitems/*').as('patchAgendaitem');
     cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') //CHECK na save in agendaitem
@@ -208,10 +207,7 @@ context('Subcase tests', () => {
     cy.route('GET', '/subcases/*/phases').as('getSubcasePhases');
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
     cy.wait('@getSubcasePhases');
-
-    // Assert status also shown. This is da 💣
-    cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
-
+    
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
