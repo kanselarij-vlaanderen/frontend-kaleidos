@@ -409,8 +409,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered2');
         cy.get('.vl-input-field').clear().type(caseTitle, { force: true });
         cy.wait('@getSubcasesFiltered2', { timeout: 12000 });
-
-        cy.get('.vl-loader').should('not.exist');
       });
       cy.get('table > tbody > tr').as('rows');
     } else {
