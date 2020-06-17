@@ -131,8 +131,10 @@ export default Component.extend({
       await item.save();
     },
 
-    delete() {
-      // TODO: fix me
+    async deleteFile(file) {
+      // const deleteDocumentID = await document.get('id');
+      await this.fileService.deleteFile(file);
+      this.clearAllDocuments();
     },
 
     async uploadedFile(uploadedFile) {
