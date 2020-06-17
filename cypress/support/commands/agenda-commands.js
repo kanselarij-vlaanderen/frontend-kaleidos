@@ -373,7 +373,7 @@ function approveDesignAgenda() {
  * @param {boolean} postponed - The remark
  */
 function addAgendaitemToAgenda(caseTitle, postponed) {
-  cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
+
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
   cy.route('POST', '/subcase-phases').as('createSubcasePhase');
   cy.route('PATCH', '/subcases/**').as('patchSubcase');
@@ -383,6 +383,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.get('.vl-button--icon-before', { timeout: 10000 }).should('exist')
     .contains('Acties')
     .click();
+  cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.get(actionModel.navigatetosubcases)
     .should('be.visible')
     .click();
@@ -404,9 +405,11 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
 
     if (caseTitle) {
       cy.get('@formGrid').eq(0).within(() => {
+
+        cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered2');
         cy.get('.vl-input-field').clear().type(caseTitle, { force: true });
-        cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
-        cy.wait('@getSubcasesFiltered', { timeout: 12000 });
+        cy.wait('@getSubcasesFiltered2', { timeout: 12000 });
+
         cy.get('.vl-loader').should('not.exist');
       });
       cy.get('table > tbody > tr').as('rows');
