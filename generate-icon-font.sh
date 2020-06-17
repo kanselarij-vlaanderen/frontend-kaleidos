@@ -43,7 +43,7 @@ fi
 
 # Make the new overview page - disable linting, add an icons-page class wrapper, and copy the generated contents into this template
 echo '{{!-- template-lint-disable  --}}' > $OVERVIEW_PAGE_PATH \
-		&& echo '<div class="icons-page">' >> $OVERVIEW_PAGE_PATH \
+		&& echo '<div class="c-icons-overview">' >> $OVERVIEW_PAGE_PATH \
 		&& xmllint --xpath "//body/child::*" "tmp/icons-temp.html" >> $OVERVIEW_PAGE_PATH \
 		&& printf "\n</div>" >> $OVERVIEW_PAGE_PATH
 
