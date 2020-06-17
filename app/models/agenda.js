@@ -8,7 +8,6 @@ const { Model, attr, belongsTo, hasMany } = DS;
 export default Model.extend(LoadableModel, {
   name: computed.alias('serialnumber'),
   title: attr('string'),
-  agendatype: attr('string'),
   serialnumber: attr('string'),
   issued: attr('datetime'),
   createdFor: belongsTo('meeting'),
@@ -38,7 +37,7 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  isApprovable: computed('agendaitems.@each', function () {
+  isApprovable: computed('agendaitems.@each.formallyOk', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaItems = agendaitems.filter((agendaitem) =>
         this.checkFormallyOkStatus(agendaitem)
