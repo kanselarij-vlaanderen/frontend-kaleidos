@@ -20,7 +20,7 @@ context('Subcase tests', () => {
     cy.login('Admin');
   });
 
-  it('should open an existing case and add a subcase', () => {
+  xit('should open an existing case and add a subcase', () => {
     const type = 'Nota';
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
@@ -67,7 +67,7 @@ context('Subcase tests', () => {
     });
   });
 
-  it('should add a subcase and then delete it', () => {
+  xit('should add a subcase and then delete it', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete subcase - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
@@ -79,7 +79,7 @@ context('Subcase tests', () => {
     cy.deleteSubcase();
   });
 
-  it('should not be able to delete a subcase with agendaitems', () => {
+  xit('should not be able to delete a subcase with agendaitems', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: delete subcase not possible - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
@@ -121,7 +121,7 @@ context('Subcase tests', () => {
     cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
   });
 
-  it('Clickable link should go to the agenda right after proposing to agenda', () => {
+  xit('Clickable link should go to the agenda right after proposing to agenda', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: Link to agenda item ok - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
@@ -145,7 +145,7 @@ context('Subcase tests', () => {
     cy.url().should('not.contain', '/dossier/');
   });
 
-  it('Changes to agendaitem should propagate to subcase', () => {
+  xit('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
     const SubcaseTitleShort = 'Cypress test: Mededeling - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
@@ -214,7 +214,7 @@ context('Subcase tests', () => {
   });
 
 
-  it('Changes to agenda item Themas propagate properly', () => {
+  xit('Changes to agenda item Themas propagate properly', () => {
 
     // Open agenda
     cy.route('GET', '/agendas/**').as('getAgenda');

@@ -22,7 +22,7 @@ context('Add files to an agenda', () => {
     cy.login('Admin');
   });
 
-  it('should test the document CRUD for a decision', () => {
+  xit('should test the document CRUD for a decision', () => {
     const caseTitle = 'Cypress test: Decision documents - ' + currentTimestamp();
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: perform CRUD of documents on decision - ' + currentTimestamp();
