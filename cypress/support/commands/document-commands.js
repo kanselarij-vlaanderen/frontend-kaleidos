@@ -7,6 +7,7 @@ import document from '../../selectors/document.selectors';
 import agenda  from '../../selectors/agenda.selectors';
 import form  from '../../selectors/form.selectors';
 import modal  from '../../selectors/modal.selectors';
+import utils  from '../../selectors/utils.selectors';
 // ***********************************************
 // Commands
 
@@ -22,6 +23,7 @@ Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
 Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
+Cypress.Commands.add('addLinkedDocumentToAgendaItem', addLinkedDocumentToAgendaItem);
 
 
 // ***********************************************
@@ -353,4 +355,29 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
   });
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
   cy.log('/addNewDocumentVersionToSignedDocument');
+}
+
+/**
+ * @description Adds documents to the already delivered documents list
+ * @name addLinkedDocumentToAgendaItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String[]} filenames - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ */
+function addLinkedDocumentToAgendaItem(filenames){
+  cy.route('GET', 'document-versions').as('createNewDocumentVersion');
+  cy.log('addLinkedDocumentToAgendaItem');
+  cy.get(document.addLinkedDocuments).click();
+  cy.get(document.searchForLinkedDocumentsInput).click();
+
+  filenames.forEach(name => {
+    cy.get(document.searchForLinkedDocumentsInput).type(name);
+    cy.get(document.searchForLinkedDocumentsButton).click();
+    cy.get(document.searchForLinkedDocumentsLoader).should('not.be.visible');
+    cy.get(utils.checkboxLabel).click();
+    cy.get(document.searchForLinkedDocumentsInput).clear();
+  });
+  cy.get(form.formSave).click();
+
+
 }

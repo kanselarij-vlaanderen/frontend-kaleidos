@@ -23,7 +23,7 @@ export default Component.extend({
 
   actions: {
     print() {
-      this.print();
+      window.print();
     },
 
     navigateBackToAgenda() {
