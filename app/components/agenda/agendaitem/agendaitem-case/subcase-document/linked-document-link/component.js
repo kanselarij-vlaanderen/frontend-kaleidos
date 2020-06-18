@@ -29,6 +29,9 @@ export default Component.extend({
     return this.get('lastDocumentVersion.name');
   }),
 
+  // TODO: DUPLICATE CODE IN agenda/agendaitem/agendaitem-case/subcase-document/document-link/component.js
+  // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
+  // TODO: DUPLICATE CODE IN edit-document-version/component.js
   mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function () {
     return DS.PromiseArray.create({
       promise: (async () => {
