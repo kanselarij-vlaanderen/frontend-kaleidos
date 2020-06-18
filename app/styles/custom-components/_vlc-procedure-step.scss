@@ -29,10 +29,10 @@
   display: block;
   position: relative;
   border: 1px solid $border-color;
-  padding: map-get($info-tile, "padding-small");
+  padding: 1.7rem;
 
   @include respond-to(small) {
-    padding: map-get($info-tile, "padding-small--s");
+    padding: 1.7rem;
   }
 
   a.vl-title {
