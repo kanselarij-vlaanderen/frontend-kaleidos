@@ -23,9 +23,7 @@ export default Model.extend({
     until: '?'
   }),
 
-
   type: belongsTo('document-type'),
-  signedDecision: belongsTo('decision', { inverse: null }),
   signedMinutes: belongsTo('meeting-record', { inverse: null }),
 
   sortedDocuments: computed('documents.@each', function () {
