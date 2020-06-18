@@ -4,7 +4,7 @@ export default class ToolbarGroup extends Component {
 
   get position() {
     if (this.args.position)
-      return "vlc-toolbar__"+this.args.position;
+      return "vlc-toolbar__" + this.args.position;
     else
       return "vlc-toolbar__left";
   }
