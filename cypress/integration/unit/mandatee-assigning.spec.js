@@ -21,7 +21,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.login('Admin');
   });
 
-  it('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {
+  xit('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
@@ -65,7 +65,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   });
 
-  it('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
+  xit('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
 
     const type = 'Nota';
     const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
