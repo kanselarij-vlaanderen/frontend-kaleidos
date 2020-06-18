@@ -47,7 +47,6 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
 function createAgenda(kind, date, location) {
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.visit('');
@@ -80,11 +79,13 @@ function createAgenda(kind, date, location) {
     cy.get('.vl-input-field').click().type(location);
   });
 
+  cy.route('POST', '/newsletter-infos').as('createNewsletter'); // FLAKEY tests. Keep routes close to waits.
   cy.get('@dialog').within(() => {
     cy.get('.vlc-toolbar__item').contains('Toevoegen').click();
   });
 
   let meetingId;
+
 
   cy.wait('@createNewMeeting', { timeout: 20000 })
     .then((res) => {
