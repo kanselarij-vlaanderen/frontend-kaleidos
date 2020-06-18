@@ -1,6 +1,5 @@
-/*global context, before, it, cy*/
+/* global context, before, it, cy */
 /// <reference types="Cypress" />
-
 
 import newsletter from '../../../selectors/newsletter.selector';
 import utils from '../../../selectors/utils.selectors';
@@ -25,5 +24,5 @@ context('KB: Edit decision in newsletter-info', () => {
     cy.wait('@decisionNewsletterInfo');
 
     cy.contains(decisionText);
-  })
+  });
 });

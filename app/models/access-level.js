@@ -9,5 +9,5 @@ export default DS.Model.extend({
   scopeNote: attr('string'),
   subcases: hasMany('subcase', { inverse: null }),
   document: hasMany('document', { inverse: null }),
-  cases: hasMany('case')
+  cases: hasMany('case'),
 });

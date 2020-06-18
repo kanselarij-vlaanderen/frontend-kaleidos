@@ -2,7 +2,9 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
-let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
+const {
+  Model, attr, belongsTo, hasMany, PromiseArray,
+} = DS;
 
 export default Model.extend({
   intl: inject(),
@@ -30,13 +32,12 @@ export default Model.extend({
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': { id: documentVersionIds },
+              documents: { id: documentVersionIds },
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((documents) => {
+          }).then((documents) =>
             // Ignore sorting for the time being, as decisions only rarely contain more than one document
-            return documents;
-          });
+            documents);
         }
       }),
     });

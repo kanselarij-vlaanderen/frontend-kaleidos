@@ -10,9 +10,7 @@ export default Component.extend({
 
   defaultSignature: computed('store', function () {
     return DS.PromiseObject.create({
-      promise: this.store.query('signature', { filter: { 'is-active': true } }).then((signatures) => {
-        return signatures.objectAt(0);
-      })
+      promise: this.store.query('signature', { filter: { 'is-active': true } }).then((signatures) => signatures.objectAt(0)),
     });
   }),
 
@@ -37,7 +35,7 @@ export default Component.extend({
         this.set('defaultSignature', newDefault);
         signatureToSetActive.reload();
         if (currentDefault) {
-          currentDefault.reload()
+          currentDefault.reload();
         }
       });
     },
@@ -52,6 +50,6 @@ export default Component.extend({
 
     personSelected(person) {
       this.set('selectedPerson', person);
-    }
-  }
+    },
+  },
 });

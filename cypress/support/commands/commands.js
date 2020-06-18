@@ -1,5 +1,4 @@
-
-/*global cy, Cypress*/
+/* global cy, Cypress */
 /// <reference types="Cypress" />
 import 'cypress-file-upload';
 
@@ -17,4 +16,3 @@ function verifyAlertSuccess() {
   cy.get('.toasts-container', { timeout: 12000 }).contains('Gelukt').should('be.visible');
   cy.log('/verifyAlertSuccess');
 }
-

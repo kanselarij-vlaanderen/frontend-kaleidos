@@ -9,30 +9,43 @@ import { timeout } from 'ember-concurrency';
 
 export default class AgendaitemTable extends Component {
   @service store;
+
   classNames = ['container-flex'];
+
   modelName = 'agendaitem';
+
   isScrolling = false;
+
   dir = 'asc';
+
   @oneWay('fetchRecords.isRunning') isLoading;
+
   canLoadMore = true;
+
   enableSync = true;
+
   include = null;
+
   row = null;
+
   meta = null;
+
   size = 10;
+
   page = 0;
+
   previousFilter = null;
 
   @computed('model.[]')
   get table() {
-    let table = Table.create({
+    const table = Table.create({
       columns: this.columns,
       rows: [],
-      enableSync: this.enableSync
+      enableSync: this.enableSync,
     });
 
     table.addRows(this.model.filter((item) => !item.isApproval));
-    let sortColumn = table
+    const sortColumn = table
       .get('allColumns')
       .findBy('valuePath', this.get('sort'));
 
@@ -46,12 +59,11 @@ export default class AgendaitemTable extends Component {
 
   @computed('dir', 'sort')
   get sortBy() {
-    const dir = this.dir;
+    const { dir } = this;
     if (dir === 'asc') {
       return this.sort;
-    } else {
-      return `-${this.sort}`;
     }
+    return `-${this.sort}`;
   }
 
   @restartableTask
@@ -67,14 +79,14 @@ export default class AgendaitemTable extends Component {
       filter: this.filter,
       sort: this.get('sortBy'),
       page: { number: this.page, size: this.size },
-      include: this.include
+      include: this.include,
     };
     if (!this.filter) {
       delete queryOptions.filter;
     }
-    let records = yield this.store.query(
+    const records = yield this.store.query(
       `${this.modelName}`,
-      queryOptions
+      queryOptions,
     );
 
     this.get('model').pushObjects(records.toArray().filter((item) => !item.isApproval));
@@ -91,10 +103,10 @@ export default class AgendaitemTable extends Component {
    */
   setRowsPostponed(tableRows, model) {
     const rowsCurrentlyInTable = tableRows;
-    const postponedItems = model.filter(item => item.get('retracted'));
-    postponedItems.forEach(postponedItem => {
+    const postponedItems = model.filter((item) => item.get('retracted'));
+    postponedItems.forEach((postponedItem) => {
       const postponedRowInTable = rowsCurrentlyInTable.find(
-        rowFromTable => rowFromTable.content.get('id') === postponedItem.get('id')
+        (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id'),
       );
       if (postponedRowInTable) {
         postponedRowInTable.set('classNames', 'postponed');
@@ -119,7 +131,7 @@ export default class AgendaitemTable extends Component {
         dir: column.ascending ? 'asc' : 'desc',
         sort: dasherize(column.get('valuePath')),
         canLoadMore: true,
-        page: 0
+        page: 0,
       });
       this.get('model').clear();
       this.get('table').setRowsSynced([]);

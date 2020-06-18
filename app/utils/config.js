@@ -29,7 +29,7 @@ export default EmberObject.create({
     'Y',
     'Z',
   ],
-  //TODO translate
+  // TODO translate
   onAgendaCodeId: '3e6dba4f-5c3c-439a-993e-92348ec73642',
   decidedCodeId: '4ea2c010-06c0-4594-966b-2cb9ed1e07b7',
   postponedCodeId: 'F8AB7F8C-2928-4CED-812F-80EF560F6E31',
@@ -49,7 +49,7 @@ export default EmberObject.create({
       classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive vl-u-display-flex',
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
-      iconClassNames: 'vl-vi vl-vi-check-thin formally-ok-icon'
+      iconClassNames: 'vl-vi vl-vi-check-thin formally-ok-icon',
     },
     {
       label: 'Formeel niet OK',
@@ -57,7 +57,7 @@ export default EmberObject.create({
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
       classNames: 'vlc-agenda-items__status vl-u-text--error vlc-u-font-weight-500 vl-u-display-flex',
       pillClassNames: 'vlc-pill vlc-pill--error',
-      iconClassNames: 'vl-vi vl-vi-cross formally-ok-icon'
+      iconClassNames: 'vl-vi vl-vi-cross formally-ok-icon',
     },
     {
       label: 'Nog niet formeel OK',
@@ -123,5 +123,5 @@ export default EmberObject.create({
   ministerId: '1cc0710c-1b28-4e23-b3ff-399c8089bc71',
   kabinetId: '7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb',
   usersId: '450915b2-4c64-4b03-9caa-71180400f831',
-  internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3'
+  internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3',
 });

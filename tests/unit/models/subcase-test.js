@@ -1,13 +1,13 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Model | subcase', function(hooks) {
+module('Unit | Model | subcase', (hooks) => {
   setupTest(hooks);
 
   // Replace this with your real tests.
-  test('it exists', function(assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('subcase', {});
+  test('it exists', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('subcase', {});
     assert.ok(model);
   });
 });

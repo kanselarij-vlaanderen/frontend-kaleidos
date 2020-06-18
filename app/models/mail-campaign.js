@@ -1,7 +1,7 @@
 import DS from 'ember-data';
+import { computed } from '@ember/object';
 
 const { Model, attr, hasMany } = DS;
-import { computed } from '@ember/object';
 
 export default Model.extend({
   campaignId: attr('string'),
@@ -14,5 +14,5 @@ export default Model.extend({
   isSent: computed('sentAt', function () {
     const { sentAt } = this;
     return !!sentAt;
-  })
+  }),
 });

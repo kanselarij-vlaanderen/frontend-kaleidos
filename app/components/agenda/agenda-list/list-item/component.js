@@ -5,9 +5,13 @@ import { alias } from '@ember/object/computed';
 
 export default class ListItem extends Component {
   @service store;
+
   @service sessionService;
+
   @service('current-session') currentSessionService;
+
   @service agendaService;
+
   @service toaster;
 
   classNameBindings = [
@@ -15,17 +19,23 @@ export default class ListItem extends Component {
     'isClickable::not-clickable',
     'agendaitem.retracted:vlc-u-opacity-lighter',
     'isPostponed:vlc-u-opacity-lighter',
-    'isNew:vlc-agenda-items__sub-item--added-item'
+    'isNew:vlc-agenda-items__sub-item--added-item',
   ];
 
   tagName = 'div';
+
   isClickable = true;
+
   hideLabel = true;
+
   isShowingChanges = null;
+
   renderDetails = false;
 
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
+
   @alias('sessionService.currentAgenda') currentAgenda;
+
   @alias('agendaitem.checkAdded') isNew;
 
   constructor() {
@@ -37,7 +47,7 @@ export default class ListItem extends Component {
         if (!this.get('isDestroyed')) {
           this.set('isPostponed', !!postponed);
         }
-      }
+      },
     );
   }
 
@@ -91,13 +101,13 @@ export default class ListItem extends Component {
 
   didInsertElement() {
     try {
-      let options = {
+      const options = {
         root: document.querySelector('body'),
         rootMargin: '5px',
-        threshold: [0, 1]
+        threshold: [0, 1],
       };
 
-      let intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
+      const intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
       this.set('intersectionObserver', intersectionObserver);
       intersectionObserver.observe(this.element);
     } catch (e) {
@@ -110,7 +120,7 @@ export default class ListItem extends Component {
   }
 
   checkElementPosition(entries) {
-    for (let entry of entries) {
+    for (const entry of entries) {
       if (entry.isIntersecting) {
         this.didEnterViewport();
       } else {

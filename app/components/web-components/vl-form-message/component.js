@@ -11,9 +11,8 @@ export default Component.extend({
     const type = this.get('messageType');
     const defaultClass = 'vl-form';
     if (type) {
-      return defaultClass + '__' + type;
-    } else {
-      return defaultClass;
+      return `${defaultClass}__${type}`;
     }
-  })
+    return defaultClass;
+  }),
 });

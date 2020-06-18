@@ -15,23 +15,21 @@ export default Route.extend({
   allowEmptyGroups: true,
 
   queryParams: {
-    definite: { refreshModel: true }
+    definite: { refreshModel: true },
   },
 
   async model(params) {
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
-    let agendaitems = await this.store.query('agendaitem', {
+    const agendaitems = await this.store.query('agendaitem', {
       filter: { agenda: { id: agenda.get('id') } },
       include: 'mandatees',
-      sort: 'priority'
+      sort: 'priority',
     });
-    const announcements = this.filterAnnouncements(agendaitems.filter((item) => {
-      return item.showAsRemark;
-    }), params);
+    const announcements = this.filterAnnouncements(agendaitems.filter((item) => item.showAsRemark), params);
 
     const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
-      agendaitems, params
+      agendaitems, params,
     );
 
     await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
@@ -61,17 +59,15 @@ export default Route.extend({
     };
   },
 
-  filterAnnouncements: function (announcements) {
-    return announcements.filter((item) => {
-      return item.showInNewsletter;
-    });
+  filterAnnouncements(announcements) {
+    return announcements.filter((item) => item.showInNewsletter);
   },
 
-  filterAgendaitems: async function (items, params) {
+  async filterAgendaitems(items, params) {
     if (params.definite !== 'true') {
       return items;
     }
-    let newsLetterByIndex = await Promise.all(items.map((item) => {
+    const newsLetterByIndex = await Promise.all(items.map((item) => {
       if (!item) return;
       return item.get('subcase').then((subcase) => {
         if (!subcase) return;
@@ -83,12 +79,12 @@ export default Route.extend({
         });
       });
     }));
-    let filtered = [];
+    const filtered = [];
     items.map((item, index) => {
       if (newsLetterByIndex[index]) {
         filtered.push(item);
       }
     });
     return filtered;
-  }
+  },
 });

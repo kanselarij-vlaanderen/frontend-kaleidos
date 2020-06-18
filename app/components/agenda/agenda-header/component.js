@@ -9,7 +9,7 @@ import { all } from 'rsvp';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
-  fileDownloadUrlFromJob
+  fileDownloadUrlFromJob,
 } from 'fe-redpencil/utils/zip-agenda-files';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
@@ -45,23 +45,19 @@ export default Component.extend(FileSaverMixin, {
     const agendas = await this.get('agendas');
     if (agendas && agendas.length > 1) {
       return true;
-    } else {
-      const onlyAgenda = await agendas.get('firstObject');
-      if (onlyAgenda.get('isDesignAgenda')) {
-        return false;
-      } else {
-        return true;
-      }
     }
+    const onlyAgenda = await agendas.get('firstObject');
+    if (onlyAgenda.get('isDesignAgenda')) {
+      return false;
+    }
+    return true;
   }),
 
   currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function () {
     return await this.get('currentSession.sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
-  designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', function (agenda) {
-    return agenda.get('isDesignAgenda');
-  }),
+  designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', (agenda) => agenda.get('isDesignAgenda')),
 
   shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function () {
     return this.isDeletingAgenda || this.isLockingAgenda;
@@ -75,7 +71,7 @@ export default Component.extend(FileSaverMixin, {
     if (this.isLockingAgenda) {
       text = this.intl.t('agenda-lock-message');
     }
-    return text + ' ' + this.intl.t('please-be-patient');
+    return `${text} ${this.intl.t('please-be-patient')}`;
   }),
 
   loaderTitle: computed('isDeletingAgenda', 'isLockingAgenda', function () {
@@ -110,7 +106,7 @@ export default Component.extend(FileSaverMixin, {
   async deleteAgenda(agenda) {
     const session = await this.currentSession;
     if (!agenda) {
-      //TODO possible dead code, there is always an agenda ?
+      // TODO possible dead code, there is always an agenda ?
       return;
     }
     const agendas = await session.get('agendas');
@@ -131,7 +127,7 @@ export default Component.extend(FileSaverMixin, {
   },
 
   reloadAgendaitemsOfSubcases(agendaItems) {
-    return all(agendaItems.map(async agendaitem => {
+    return all(agendaItems.map(async (agendaitem) => {
       const subcase = await agendaitem.get('subcase');
       if (subcase) {
         await subcase.hasMany('agendaitems').reload();
@@ -143,7 +139,7 @@ export default Component.extend(FileSaverMixin, {
   },
 
   destroyAgendaitemsList(agendaitems) {
-    return all(agendaitems.map(agendaitem => {
+    return all(agendaitems.map((agendaitem) => {
       if (!agendaitem) {
         return;
       }
@@ -195,13 +191,13 @@ export default Component.extend(FileSaverMixin, {
       if (!isApprovable) {
         this.set('showWarning', true);
       } else {
-        await this.approveAgenda(session)
+        await this.approveAgenda(session);
       }
     },
 
     async doApproveAgenda(session) {
       set(this, 'showWarning', false);
-      await this.approveAgenda(session)
+      await this.approveAgenda(session);
     },
 
     async lockAgenda() {
@@ -257,7 +253,7 @@ export default Component.extend(FileSaverMixin, {
       const fileDownloadToast = {
         title: this.intl.t('file-ready'),
         type: 'download-file',
-        options: { timeOut: 10 * 1000 }
+        options: { timeOut: 10 * 1000 },
       };
 
       const namePromise = constructArchiveName(this.currentAgenda);
@@ -333,14 +329,14 @@ export default Component.extend(FileSaverMixin, {
       this.currentSession.save();
     },
     toggleEditingSession() {
-      this.toggleProperty('editingSession')
+      this.toggleProperty('editingSession');
     },
     successfullyEdited() {
-      this.toggleProperty('editingSession')
+      this.toggleProperty('editingSession');
     },
     cancelEditSessionForm() {
-      this.toggleProperty('editingSession')
-    }
+      this.toggleProperty('editingSession');
+    },
   },
 
   changeLoading() {
@@ -361,7 +357,7 @@ export default Component.extend(FileSaverMixin, {
     }
     this.set('isApprovingAgenda', true);
     this.changeLoading();
-    let agendas = await this.get('agendas');
+    const agendas = await this.get('agendas');
     let agendaToLock = await agendas.find((agenda) => agenda.get('isDesignAgenda'));
     if (agendaToLock) {
       agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
@@ -371,21 +367,22 @@ export default Component.extend(FileSaverMixin, {
       'modified',
       moment()
         .utc()
-        .toDate()
+        .toDate(),
     );
     agendaToLock.save().then((agendaToApprove) => {
       this.get('agendaService')
         .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
-        .then(async newAgenda => {
+        .then(async (newAgenda) => {
           const agendaItems = await agendaToLock.get('agendaitems');
-          const newNotYetOKItems = agendaItems.filter(agendaItem => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
+          const newNotYetOKItems = agendaItems.filter((agendaItem) => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
           await this.reloadAgendaitemsOfSubcases(agendaItems);
           await this.destroyAgendaitemsList(newNotYetOKItems);
           return newAgenda;
         })
         .then((newAgenda) => {
           this.reloadRoute(newAgenda.get('id'));
-        }).finally(() => {
+        })
+        .finally(() => {
           this.set('sessionService.selectedAgendaItem', null);
           this.changeLoading();
           this.set('isApprovingAgenda', false);

@@ -12,8 +12,7 @@ export default Component.extend({
     const width = this.get('width');
     if (width) {
       return `vl-col--${width}-4`;
-    } else {
-      return defaultClassName;
     }
-  })
+    return defaultClassName;
+  }),
 });

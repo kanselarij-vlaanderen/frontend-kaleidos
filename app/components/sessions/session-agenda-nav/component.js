@@ -15,7 +15,7 @@ export default Component.extend({
 
   selectedAgendaitemClass: computed('routing.currentRouteName', function () {
     const { routing } = this;
-    if ( routing.get('currentRouteName').includes('agenda.agendaitems.agendaitem.')) {
+    if (routing.get('currentRouteName').includes('agenda.agendaitems.agendaitem.')) {
       return 'vlc-tabs-reverse__link--active';
     }
     return null;
@@ -57,5 +57,5 @@ export default Component.extend({
     navigateToDocuments() {
       this.navigateToDocuments();
     },
-  }
+  },
 });

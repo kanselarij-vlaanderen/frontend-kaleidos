@@ -22,5 +22,5 @@ export default Controller.extend({
       prefix = 'Klad ';
     }
     return `${prefix}${this.intl.t('decisions-of-kind', { kind: fullProcedure })} ${moment(date).format('DD-MM-YYYY')}`;
-  })
+  }),
 });

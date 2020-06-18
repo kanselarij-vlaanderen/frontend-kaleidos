@@ -1,7 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 
-const { Model, attr, hasMany, belongsTo } = DS;
+const {
+  Model, attr, hasMany, belongsTo,
+} = DS;
 
 export default Model.extend({
   lastName: attr('string'),
@@ -16,10 +18,9 @@ export default Model.extend({
     const { alternativeName, firstName, lastName } = this;
     if (alternativeName) {
       return alternativeName;
-    } else if (firstName && lastName) {
+    } if (firstName && lastName) {
       return `${firstName} ${lastName}`;
-    } else {
-      return '';
     }
-  })
+    return '';
+  }),
 });

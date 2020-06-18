@@ -7,5 +7,5 @@ export default Model.extend({
   scopeNote: attr('string'),
   subcase: hasMany('subcase', { inverse: null }),
   agendaitem: hasMany('subcase', { inverse: null }),
-  deprecated: attr('boolean')
+  deprecated: attr('boolean'),
 });

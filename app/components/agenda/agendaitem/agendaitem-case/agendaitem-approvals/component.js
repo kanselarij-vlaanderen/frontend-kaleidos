@@ -22,17 +22,13 @@ export default Component.extend({
     });
   }),
 
-  getApprovalForMandatee: (mandatee, approvals) => approvals.find((approval) => {
-    return get(approval, 'mandatee.id') === get(mandatee, 'id');
-  }),
+  getApprovalForMandatee: (mandatee, approvals) => approvals.find((approval) => get(approval, 'mandatee.id') === get(mandatee, 'id')),
 
   actions: {
     async saveChanges() {
       this.set('isLoading', true);
 
-      await Promise.all(get(this, 'item.approvals').map(async (approval) => {
-        return await approval.save();
-      }));
+      await Promise.all(get(this, 'item.approvals').map(async (approval) => await approval.save()));
 
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
@@ -75,6 +71,6 @@ export default Component.extend({
 
     async toggleIsEditing() {
       this.toggleProperty('isEditing');
-    }
-  }
+    },
+  },
 });

@@ -1,5 +1,5 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
+
 import { get, computed } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
 import CONFIG from 'fe-redpencil/utils/config';
@@ -15,15 +15,15 @@ export default Service.extend({
 
   async load() {
     if (this.get('session.isAuthenticated')) {
-      const session = this.session;
+      const { session } = this;
       const account = await this.store.find(
         'account',
-        get(session, 'data.authenticated.relationships.account.data.id')
+        get(session, 'data.authenticated.relationships.account.data.id'),
       );
       const user = await account.get('user');
 
       let group = null;
-      let groupId = get(session, 'data.authenticated.relationships.group.data.id');
+      const groupId = get(session, 'data.authenticated.relationships.group.data.id');
       if (groupId) {
         group = await this.store.find('account-group', groupId);
       }
@@ -58,29 +58,33 @@ export default Service.extend({
 
   checkPublicRights() {
     const { userRoleId } = this;
-    const { adminId, kanselarijId, priviligedId, ministerId, usersId, kabinetId } = CONFIG;
-    let roles = [adminId, kanselarijId, priviligedId, ministerId, usersId, kabinetId];
+    const {
+      adminId, kanselarijId, priviligedId, ministerId, usersId, kabinetId,
+    } = CONFIG;
+    const roles = [adminId, kanselarijId, priviligedId, ministerId, usersId, kabinetId];
     return roles.includes(userRoleId);
   },
 
   checkViewRights() {
     const { userRoleId } = this;
-    const { adminId, kanselarijId, priviligedId, ministerId, kabinetId } = CONFIG;
-    let roles = [adminId, kanselarijId, priviligedId, ministerId, kabinetId];
+    const {
+      adminId, kanselarijId, priviligedId, ministerId, kabinetId,
+    } = CONFIG;
+    const roles = [adminId, kanselarijId, priviligedId, ministerId, kabinetId];
     return roles.includes(userRoleId);
   },
 
   checkEditRights() {
     const { userRoleId } = this;
     const { adminId, kanselarijId } = CONFIG;
-    let roles = [adminId, kanselarijId];
+    const roles = [adminId, kanselarijId];
     return roles.includes(userRoleId);
   },
 
   checkAdminRights() {
     const { userRoleId } = this;
     const { adminId } = CONFIG;
-    let roles = [adminId];
+    const roles = [adminId];
     return roles.includes(userRoleId);
   },
 

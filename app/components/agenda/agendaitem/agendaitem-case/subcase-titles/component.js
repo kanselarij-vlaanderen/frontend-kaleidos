@@ -5,6 +5,7 @@ import DS from 'ember-data';
 
 export default class SubcaseTitles extends Component {
   classNames = ['vl-u-spacer-extended-bottom-l'];
+
   @service currentSession;
 
   @computed('item', 'shouldShowDetails')
@@ -31,7 +32,7 @@ export default class SubcaseTitles extends Component {
 
   @computed('item.modelName')
   get isAgendaItem() {
-    return 'agendaitem' == this.get('item.modelName');
+    return this.get('item.modelName') == 'agendaitem';
   }
 
   @computed('item.{subcaseName,subcase.subcaseName}')
@@ -49,13 +50,10 @@ export default class SubcaseTitles extends Component {
     const { isAgendaItem, item } = this;
     if (isAgendaItem) {
       return DS.PromiseObject.create({
-        promise: item.get('subcase').then((subcase) => {
-          return subcase.get('confidential');
-        }),
+        promise: item.get('subcase').then((subcase) => subcase.get('confidential')),
       });
-    } else {
-      return item.get('confidential');
     }
+    return item.get('confidential');
   }
 
   @computed('item', 'item.subcase')
@@ -63,15 +61,12 @@ export default class SubcaseTitles extends Component {
     const { isAgendaItem, item } = this;
     if (isAgendaItem) {
       return DS.PromiseObject.create({
-        promise: item.get('subcase').then((subcase) => {
-          return subcase.get('accessLevel');
-        }),
-      });
-    } else {
-      return DS.PromiseObject.create({
-        promise: item.get('accessLevel'),
+        promise: item.get('subcase').then((subcase) => subcase.get('accessLevel')),
       });
     }
+    return DS.PromiseObject.create({
+      promise: item.get('accessLevel'),
+    });
   }
 
   @computed('item')
@@ -100,14 +95,14 @@ export default class SubcaseTitles extends Component {
   }
 
   async getPillClass() {
-    let baseClass = 'vl-pill vl-u-text--capitalize';
+    const baseClass = 'vl-pill vl-u-text--capitalize';
     if (!await this.subcaseName) {
       return baseClass;
     }
     const approved = await this.get('item.subcase.approved');
     const itemApproved = await this.get('item.approved');
     if (approved || itemApproved) {
-      return baseClass + ' vl-pill--success';
+      return `${baseClass} vl-pill--success`;
     }
     return baseClass;
   }

@@ -6,7 +6,7 @@ export default class AgendaItemAgendaItemsAgendaRoute extends Route {
 
   model(params) {
     return this.store.findRecord('agendaitem', params.agendaitem_id, {
-      include: 'subcase'
+      include: 'subcase',
     });
   }
 
@@ -16,7 +16,7 @@ export default class AgendaItemAgendaItemsAgendaRoute extends Route {
 
   setupController(controller, model) {
     super.setupController(...arguments);
-    const meeting = this.modelFor('agenda').meeting;
+    const { meeting } = this.modelFor('agenda');
     controller.set('meeting', meeting);
     controller.set('model', model);
   }

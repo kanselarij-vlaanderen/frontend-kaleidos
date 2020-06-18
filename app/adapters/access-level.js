@@ -8,11 +8,11 @@ export default ApplicationAdapter.extend({
   // we cache it here, bypassing the no-cache header.
 
   shouldReloadAll(store, snapshot) {
-    return !store.peekAll(snapshot.type.modelName).length
+    return !store.peekAll(snapshot.type.modelName).length;
   },
 
-  shouldBackgroundReloadAll: function (store, snapshot) {
-    return !store.peekAll(snapshot.type.modelName).length
+  shouldBackgroundReloadAll(store, snapshot) {
+    return !store.peekAll(snapshot.type.modelName).length;
   },
 
 });

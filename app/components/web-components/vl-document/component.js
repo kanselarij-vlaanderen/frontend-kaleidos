@@ -56,7 +56,7 @@ export default Component.extend({
         type: 'revert-action',
         title: this.intl.t('warning-title'),
         message: this.intl.t('document-being-deleted'),
-        options: { timeOut: 15000 }
+        options: { timeOut: 15000 },
       };
       verificationToast.options.onUndo = () => {
         this.fileService.reverseDelete(this.documentVersionToDelete.get('id'));

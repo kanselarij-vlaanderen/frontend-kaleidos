@@ -1,7 +1,7 @@
-/*global context, it, cy,before,beforeEach*/
+/* global context, it, cy,before,beforeEach */
 /// <reference types="Cypress" />
-import * as alert from "../../../../selectors/system-wide/alert.selectors";
-import * as systemAlert from "../../../../selectors/settings/system-alert.selectors";
+import * as alert from '../../../../selectors/system-wide/alert.selectors';
+import * as systemAlert from '../../../../selectors/settings/system-alert.selectors';
 
 const ALERT_POLL_INTERVAL = 60000;
 

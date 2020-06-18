@@ -5,5 +5,5 @@ const { Model, attr } = DS;
 export default Model.extend({
   label: attr('string'),
   scopeNote: attr('string'),
-  altLabel: attr('string')
+  altLabel: attr('string'),
 });

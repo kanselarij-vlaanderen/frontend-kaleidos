@@ -9,13 +9,13 @@ const formatDate = (date) => {
   return moment(date)
     .utc()
     .format('DD MMMM YYYY');
-}
+};
 
 export function subcaseTimelineItemText(params, values) {
   const label = values.label || '';
-  const phase = values.phase;
-  const onAgendaInfo = values.onAgendaInfo;
-  const isPostponed = values.isPostponed;
+  const { phase } = values;
+  const { onAgendaInfo } = values;
+  const { isPostponed } = values;
   const formattedDate = formatDate(onAgendaInfo);
   const date = formatDate(phase.get('date'));
 
@@ -24,7 +24,7 @@ export function subcaseTimelineItemText(params, values) {
       return `Geagendeerd op de agenda van ${formattedDate}`;
     case CONFIG.decidedLabel:
       if (isPostponed) {
-        return `Er is beslist om dit agendapunt uit te stellen.`;
+        return 'Er is beslist om dit agendapunt uit te stellen.';
       }
       return `Beslist op de vergadering van ${formattedDate}`;
     case CONFIG.postponedLabel:
@@ -35,6 +35,5 @@ export function subcaseTimelineItemText(params, values) {
       return label;
   }
 }
-
 
 export default helper(subcaseTimelineItemText);

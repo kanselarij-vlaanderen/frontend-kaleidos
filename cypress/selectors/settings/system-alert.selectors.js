@@ -1,7 +1,7 @@
 const managementModal = {
   add: '[data-test-add-system-alert]',
   edit: '[data-test-edit-system-alert]',
-  remove: '[data-test-remove-system-alert]'
+  remove: '[data-test-remove-system-alert]',
 };
 
 const formFields = {
@@ -16,5 +16,5 @@ const alert = '[data-test-system-alert]';
 export {
   managementModal,
   formFields,
-  alert
+  alert,
 };

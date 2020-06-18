@@ -7,7 +7,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
 
   setupController(controller, model) {
     super.setupController(...arguments);
-    const agenda = this.modelFor('agenda').agenda;
+    const { agenda } = this.modelFor('agenda');
     controller.set('agenda', agenda);
     controller.set('model', model);
   }

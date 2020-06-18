@@ -21,5 +21,5 @@ export default Service.extend({
       yield job.reload();
     }
     return job;
-  })
+  }),
 });

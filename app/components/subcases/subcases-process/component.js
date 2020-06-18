@@ -7,5 +7,5 @@ export default Component.extend({
     toggleIsShowingDocuments(subcase) {
       subcase.toggleProperty('isShowingDocuments');
     },
-  }
+  },
 });

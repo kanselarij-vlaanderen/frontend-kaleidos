@@ -13,15 +13,13 @@ export default Component.extend({
   currentAgenda: null,
   agendaitem: null,
 
-  isPostPonable: computed("sessionService.agendas.@each", "agendaitem.subcase", async function () {
+  isPostPonable: computed('sessionService.agendas.@each', 'agendaitem.subcase', async function () {
     const subcase = await this.agendaitem.get('subcase');
     if (!subcase) {
       return;
     }
 
-    return this.get('sessionService.agendas').then(agendas => {
-      return !!(agendas && agendas.get('length') > 1);
-    });
+    return this.get('sessionService.agendas').then((agendas) => !!(agendas && agendas.get('length') > 1));
   }),
 
   isDeletable: computed(
@@ -31,12 +29,11 @@ export default Component.extend({
       const agendaitems = await this.get('agendaitem.subcase.agendaitems');
       if (!designAgenda) {
         return false;
-      } else if (agendaitemSubcase) {
+      } if (agendaitemSubcase) {
         return !(agendaitems && agendaitems.length > 1);
-      } else {
-        return true;
       }
-    }
+      return true;
+    },
   ),
 
   async deleteItem(agendaitem) {
@@ -60,7 +57,7 @@ export default Component.extend({
   deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function () {
     if (await this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
-    } else if (this.currentSession.isAdmin) {
+    } if (this.currentSession.isAdmin) {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
     return null;
@@ -74,12 +71,12 @@ export default Component.extend({
     async postponeAgendaItem(agendaitem) {
       agendaitem.set('retracted', true);
       const postPonedObject = this.store.createRecord('postponed', {
-        agendaitem: agendaitem
+        agendaitem,
       });
       const subcase = await agendaitem.get('subcase');
       await this.createPostponedPhase(subcase);
 
-      postPonedObject.save().then(postponedTo => {
+      postPonedObject.save().then((postponedTo) => {
         agendaitem.set('postponed', postponedTo);
       });
       await subcase.notifyPropertyChange('isPostponed');
@@ -92,7 +89,7 @@ export default Component.extend({
     async advanceAgendaitem() {
       const agendaitem = await this.store.findRecord(
         'agendaitem',
-        this.agendaitem.get('id')
+        this.agendaitem.get('id'),
       );
       const postponedTo = await agendaitem.get('postponedTo');
       const subcase = await agendaitem.get('subcase');
@@ -126,16 +123,16 @@ export default Component.extend({
 
     verifyDelete(agendaitem) {
       this.deleteItem(agendaitem);
-    }
+    },
   },
 
   async deletePostponedPhases(subcase) {
     const postponedPhases = await subcase.get('postponedPhases');
     if (postponedPhases && postponedPhases.length) {
       await Promise.all(
-        postponedPhases.map(phase => {
+        postponedPhases.map((phase) => {
           phase.destroyRecord();
-        })
+        }),
       );
     }
     return subcase;
@@ -148,8 +145,8 @@ export default Component.extend({
         .utc()
         .toDate(),
       code: postponedCode,
-      subcase: subcase
+      subcase,
     });
     return newDecisionPhase.save();
-  }
+  },
 });

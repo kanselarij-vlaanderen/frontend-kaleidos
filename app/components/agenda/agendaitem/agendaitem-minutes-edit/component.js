@@ -48,5 +48,5 @@ export default Component.extend({
     async handleRdfaEditorInit(editorInterface) {
       this.set('editor', editorInterface);
     },
-  }
+  },
 });

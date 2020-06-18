@@ -19,7 +19,7 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   },
 
   mergeQueryOptions(params) {
-    let options = {};
+    const options = {};
     if (params.from) {
       options['filter[:gte:planned-start]'] = moment(params.from, 'YYYY-MM-DD').utc().format();
     }
@@ -33,7 +33,7 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
     refreshRoute() {
       this._super(...arguments);
       this.refresh();
-    }
-  }
+    },
+  },
 
 });

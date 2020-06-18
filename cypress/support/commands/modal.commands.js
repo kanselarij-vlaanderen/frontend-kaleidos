@@ -1,4 +1,4 @@
-/*global cy, Cypress*/
+/* global cy, Cypress */
 /// <reference types="Cypress" />
 
 import modal from '../../selectors/modal.selectors';

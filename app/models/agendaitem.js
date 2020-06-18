@@ -1,14 +1,16 @@
 import DS from 'ember-data';
-import EmberObject, {computed} from '@ember/object';
-import {inject} from '@ember/service';
+import EmberObject, { computed } from '@ember/object';
+import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-import {alias} from '@ember/object/computed';
+import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
-import VRDocumentName, {compareFunction} from 'fe-redpencil/utils/vr-document-name';
-import {A} from '@ember/array';
-import {sortDocuments, getDocumentsLength} from 'fe-redpencil/utils/documents';
+import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import { A } from '@ember/array';
+import { sortDocuments, getDocumentsLength } from 'fe-redpencil/utils/documents';
 
-let {attr, belongsTo, hasMany, PromiseArray, PromiseObject} = DS;
+const {
+  attr, belongsTo, hasMany, PromiseArray, PromiseObject,
+} = DS;
 
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
@@ -33,8 +35,8 @@ export default ModelWithModifier.extend({
   explanation: attr('string'),
 
   postponedTo: belongsTo('postponed'),
-  agenda: belongsTo('agenda', {inverse: null}),
-  subcase: belongsTo('subcase', {inverse: null}),
+  agenda: belongsTo('agenda', { inverse: null }),
+  subcase: belongsTo('subcase', { inverse: null }),
   meetingRecord: belongsTo('meeting-record'),
   showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
@@ -46,9 +48,7 @@ export default ModelWithModifier.extend({
   phases: hasMany('subcase-phase'),
 
   sortedDocumentVersions: computed('documentVersions.@each.name', function () {
-    return A(this.get('documentVersions').toArray()).sort((a, b) => {
-      return compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name')));
-    });
+    return A(this.get('documentVersions').toArray()).sort((a, b) => compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name'))));
   }),
 
   documentsLength: computed('documents', function () {
@@ -66,17 +66,15 @@ export default ModelWithModifier.extend({
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': {id: documentVersionIds},
+              documents: { id: documentVersionIds },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => {
-            return sortDocuments(this.get('documentVersions'), containers);
-          });
+          }).then((containers) => sortDocuments(this.get('documentVersions'), containers));
         }
-      })
+      }),
     });
   }),
 
@@ -87,45 +85,37 @@ export default ModelWithModifier.extend({
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': {id: documentVersionIds},
+              documents: { id: documentVersionIds },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => {
-            return sortDocuments(this.get('linkedDocumentVersions'), containers);
-          });
+          }).then((containers) => sortDocuments(this.get('linkedDocumentVersions'), containers));
         }
-      })
+      }),
     });
   }),
 
-
   number: computed('displayPriority', 'priority', function () {
-    const {priority, displayPriority} = this;
+    const { priority, displayPriority } = this;
     if (!priority) {
       return displayPriority;
-    } else {
-      return priority;
     }
+    return priority;
   }),
 
   isPostponed: computed('retracted', 'postponedTo', function () {
-    return this.get('postponedTo').then((session) => {
-      return !!session || this.get('retracted');
-    });
+    return this.get('postponedTo').then((session) => !!session || this.get('retracted'));
   }),
 
   decisions: computed('subcase.decisions.@each', function () {
     return PromiseArray.create({
       promise: this.store.query('decision', {
         filter: {
-          subcase: {id: this.subcase.get('id')},
-        }
-      }).then((decisions) => {
-        return decisions.sortBy('approved');
-      }),
+          subcase: { id: this.subcase.get('id') },
+        },
+      }).then((decisions) => decisions.sortBy('approved')),
     });
   }),
 
@@ -134,11 +124,10 @@ export default ModelWithModifier.extend({
   }),
 
   // get document names to show on agendaview when not in the viewport to assist lazy loading
-  documentNames: computed('documentVersions', async function() {
+  documentNames: computed('documentVersions', async function () {
     const names = await this.agendaService.getDocumentNames(this);
     return names;
   }),
-
 
   nota: computed('documentVersions', function () {
     return PromiseObject.create({
@@ -149,14 +138,12 @@ export default ModelWithModifier.extend({
           return this.store
             .query('document', {
               filter: {
-                'documents': {id: documentVersionIds},
-                type: {id: CONFIG.notaID},
+                documents: { id: documentVersionIds },
+                type: { id: CONFIG.notaID },
               },
               include: 'documents,type,documents.access-level',
             })
-            .then((notas) => {
-              return notas.get('firstObject');
-            });
+            .then((notas) => notas.get('firstObject'));
         }
       }),
     });
@@ -175,7 +162,7 @@ export default ModelWithModifier.extend({
 
   formallyOkToShow: computed('formallyOk', function () {
     const options = CONFIG.formallyOkOptions;
-    const {formallyOk} = this;
+    const { formallyOk } = this;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
 
     return EmberObject.create(foundOption);
@@ -183,9 +170,7 @@ export default ModelWithModifier.extend({
 
   requestedBy: computed('subcase.requestedBy', function () {
     return PromiseObject.create({
-      promise: this.get('subcase.requestedBy').then((requestedBy) => {
-        return requestedBy;
-      }),
+      promise: this.get('subcase.requestedBy').then((requestedBy) => requestedBy),
     });
   }),
 
@@ -211,7 +196,7 @@ export default ModelWithModifier.extend({
     return PromiseArray.create({
       promise: this.store.query('approval', {
         filter: {
-          agendaitem: {id: this.get('id')},
+          agendaitem: { id: this.get('id') },
         },
         sort: 'mandatee.priority',
       }),

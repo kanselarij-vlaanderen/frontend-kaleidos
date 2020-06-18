@@ -4,6 +4,7 @@ import { computed, action } from '@ember/object';
 
 export default class AgendaDecisions extends Component {
   isEditing = false;
+
   @service('current-session') session;
 
   @computed('definite')

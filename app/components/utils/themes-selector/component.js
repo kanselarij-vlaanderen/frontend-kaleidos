@@ -11,7 +11,7 @@ export default Component.extend({
   selectedThemesObserver: observer('selectedThemes', 'themes', function () {
     const { themes, selectedThemes } = this;
     if (themes && selectedThemes) {
-      themes.map(theme => theme.set('selected', false));
+      themes.map((theme) => theme.set('selected', false));
       this.checkSelectedThemes(selectedThemes, themes);
     }
   }),
@@ -30,7 +30,7 @@ export default Component.extend({
     this._super(...arguments);
     this.findAll.perform();
     if (!this.selectedThemes) {
-      this.set('selectedThemes', [])
+      this.set('selectedThemes', []);
     }
   },
 
@@ -46,7 +46,7 @@ export default Component.extend({
         if (foundTheme) {
           foundTheme.set('selected', true);
         }
-      })
+      });
     }
-  }
+  },
 });

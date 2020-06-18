@@ -25,7 +25,7 @@ export default Component.extend({
       this.set('isLoading', true);
       const signature = await this.store.findRecord(
         'signature',
-        await this.signatureToEdit.get('id')
+        await this.signatureToEdit.get('id'),
       );
       if (this.get('uploadedFile')) {
         signature.set('file', await this.get('uploadedFile'));

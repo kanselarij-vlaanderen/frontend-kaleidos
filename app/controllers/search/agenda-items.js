@@ -9,19 +9,22 @@ export default class AgendaItemsSearchController extends Controller {
     types: { type: 'array' },
     page: { type: 'number' },
     size: { type: 'number' },
-    sort: { type: 'string' }
+    sort: { type: 'string' },
   };
 
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
   @tracked page;
+
   @tracked size;
+
   @tracked sort;
+
   @tracked types;
 
   @tracked emptySearch;
 
-  constructor () {
+  constructor() {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
@@ -29,11 +32,11 @@ export default class AgendaItemsSearchController extends Controller {
     this.types = A(['nota', 'mededeling']);
   }
 
-  get includeNotas () {
+  get includeNotas() {
     return this.types.includes('nota');
   }
 
-  set includeNotas (value) {
+  set includeNotas(value) {
     if (value === true) {
       if (!this.types.includes('nota')) {
         this.types.addObject('nota');
@@ -44,11 +47,11 @@ export default class AgendaItemsSearchController extends Controller {
     return value;
   }
 
-  get includeMededelingen () {
+  get includeMededelingen() {
     return this.types.includes('mededeling');
   }
 
-  set includeMededelingen (value) {
+  set includeMededelingen(value) {
     if (value === true) {
       if (!this.types.includes('mededeling')) {
         this.types.addObject('mededeling');
@@ -60,22 +63,22 @@ export default class AgendaItemsSearchController extends Controller {
   }
 
   @action
-  selectSize (size) {
+  selectSize(size) {
     this.size = size;
   }
 
   @action
-  toggleIncludeNotas () {
-    this.toggleProperty('includeNotas')
+  toggleIncludeNotas() {
+    this.toggleProperty('includeNotas');
   }
 
   @action
-  toggleIncludeMededelingen () {
-    this.toggleProperty('includeMededelingen')
+  toggleIncludeMededelingen() {
+    this.toggleProperty('includeMededelingen');
   }
 
   @action
-  navigateToAgendaitem (searchEntry) {
+  navigateToAgendaitem(searchEntry) {
     if (searchEntry.meetingId) {
       this.transitionToRoute('agenda.agendaitems.agendaitem',
         searchEntry.meetingId, searchEntry.agendaId, searchEntry.id);

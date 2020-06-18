@@ -22,7 +22,9 @@ export default Component.extend({
 
   async saveChanges() {
     this.set('isLoading', true);
-    const { startDate, endDate, title, shortTitle, mandateeToEdit, iseCodes, nickName } = this;
+    const {
+      startDate, endDate, title, shortTitle, mandateeToEdit, iseCodes, nickName,
+    } = this;
     const mandatee = await this.store.findRecord('mandatee', mandateeToEdit.get('id'));
     mandatee.set('end', endDate);
     mandatee.set('title', title);
@@ -70,7 +72,7 @@ export default Component.extend({
       this.showVerificationPopup = false;
     },
 
-    keyDown: function (event) {
+    keyDown(event) {
       if (event.key === 'Escape') {
         this.cancel();
       }
@@ -84,6 +86,6 @@ export default Component.extend({
     },
     saveChanges() {
       this.saveChanges();
-    }
+    },
   },
 });

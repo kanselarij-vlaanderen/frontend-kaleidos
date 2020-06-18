@@ -9,7 +9,7 @@ export default Controller.extend({
   title: computed('model.createdFor', function () {
     const date = this.get('model.createdFor.plannedStart');
     return `${this.intl.t(
-      `newsletter-overview-pdf-name`
+      'newsletter-overview-pdf-name',
     )} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 });

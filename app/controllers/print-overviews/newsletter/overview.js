@@ -14,7 +14,7 @@ export default Controller.extend({
     const fullProcedure = await this.get('model.meeting.kindToShow.fullProcedure');
 
     return `${this.intl.t(
-      `newsletter-overview-pdf-name`
+      'newsletter-overview-pdf-name',
     )} - ${fullProcedure} van ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 

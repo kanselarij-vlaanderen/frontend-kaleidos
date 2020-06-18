@@ -7,18 +7,27 @@ import { isPresent } from '@ember/utils';
 
 export default class AgendaList extends Component {
   @service sessionService;
+
   @service agendaService;
+
   @service('current-session') currentSessionService;
 
   classNames = ['vlc-agenda-items'];
+
   classNameBindings = ['getClassNames'];
+
   selectedAgendaItem = alias('sessionService.selectedAgendaItem');
+
   dragHandleClass = '.vlc-agenda-items__sub-item';
 
   agendaitems = null;
+
   isEditingOverview = null;
+
   isShowingChanges = null;
+
   overviewEnabled = null;
+
   isReAssigningPriorities = null;
 
   @restartableTask
@@ -38,9 +47,8 @@ export default class AgendaList extends Component {
   get getClassNames() {
     if (this.get('selectedAgendaItem')) {
       return 'vlc-agenda-items--small';
-    } else {
-      return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
     }
+    return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
   }
 
   @action

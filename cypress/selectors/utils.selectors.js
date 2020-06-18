@@ -4,4 +4,4 @@ const selectors = {
   checkboxLabel: '[data-test-vl-checkbox-label]',
   generalBackButton: '[data-test-general-back-button]',
 };
-export default selectors
+export default selectors;

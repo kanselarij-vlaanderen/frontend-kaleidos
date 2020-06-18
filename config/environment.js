@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (environment) {
-  let ENV = {
+  const ENV = {
     modulePrefix: 'fe-redpencil',
     environment,
     rootURL: '/',
@@ -9,7 +9,7 @@ module.exports = function (environment) {
     moment: {
       includeLocales: ['nl'],
       allowEmpty: true,
-      outputFormat: 'L'
+      outputFormat: 'L',
     },
     EmberENV: {
       FEATURES: {
@@ -18,8 +18,8 @@ module.exports = function (environment) {
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
     APP: {
       // Here you can pass flags/options to your application instance
@@ -34,11 +34,11 @@ module.exports = function (environment) {
             'profile',
             'openid',
             'dkbkaleidos',
-            'phone'
-          ].join(' ')
-        }
-      }
-    }
+            'phone',
+          ].join(' '),
+        },
+      },
+    },
   };
 
   if (environment === 'development') {
@@ -48,7 +48,6 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
   }
-
 
   if (environment === 'test') { // Ember framework integrated tests
     // Testem prefers this...
@@ -67,30 +66,29 @@ module.exports = function (environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
-    ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = '/mock-login';
+    ENV.torii.providers['acmidm-oauth2'].logoutUrl = '/mock-login';
   }
-
 
   if (environment === 'production') {
     if (!process.env.DEPLOY_ENV) { //  === 'development'
-      ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = 'b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d';
-      ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
-      ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos-dev.vlaanderen.be/authorization/callback';
-      ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
+      ENV.torii.providers['acmidm-oauth2'].apiKey = 'b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d';
+      ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
+      ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos-dev.vlaanderen.be/authorization/callback';
+      ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
     }
 
     if (process.env.DEPLOY_ENV === 'test') {
-      ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = '556bc0c9-d04e-45c8-b465-09e68071ed0a';
-      ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
-      ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos-test.vlaanderen.be/authorization/callback';
-      ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
+      ENV.torii.providers['acmidm-oauth2'].apiKey = '556bc0c9-d04e-45c8-b465-09e68071ed0a';
+      ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
+      ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos-test.vlaanderen.be/authorization/callback';
+      ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
     }
 
     if (process.env.DEPLOY_ENV === 'production') {
-      ENV['torii']['providers']['acmidm-oauth2']['apiKey'] = 'cb70a19f-4189-4af3-b88f-9d3adaa1aca1';
-      ENV['torii']['providers']['acmidm-oauth2']['baseUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/auth';
-      ENV['torii']['providers']['acmidm-oauth2']['redirectUri'] = 'https://kaleidos.vlaanderen.be/authorization/callback';
-      ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'] = 'https://authenticatie.vlaanderen.be/op/v1/logout';
+      ENV.torii.providers['acmidm-oauth2'].apiKey = 'cb70a19f-4189-4af3-b88f-9d3adaa1aca1';
+      ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie.vlaanderen.be/op/v1/auth';
+      ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos.vlaanderen.be/authorization/callback';
+      ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie.vlaanderen.be/op/v1/logout';
     }
   }
 

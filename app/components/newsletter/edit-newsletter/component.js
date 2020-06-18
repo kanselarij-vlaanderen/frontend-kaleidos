@@ -39,6 +39,6 @@ export default Component.extend({
     async selectDocDate(date) {
       const newsletter = await this.get('newsletter');
       await newsletter.set('publicationDocDate', moment(date).utc().toDate());
-    }
-  }
+    },
+  },
 });

@@ -1,8 +1,8 @@
 import Component from '@ember/component';
 import { task } from 'ember-concurrency';
-import { get } from '@ember/object';
+import { get, observer } from '@ember/object';
 import { inject } from '@ember/service';
-import { observer } from '@ember/object';
+
 import { A } from '@ember/array';
 
 export default Component.extend({
@@ -33,8 +33,8 @@ export default Component.extend({
       this.set('isLoading', true);
       file.readAsDataURL().then(() => {
       });
-      let response = yield file.upload('/files');
-      let fileTest = yield this.store.findRecord('file', response.body.data.id);
+      const response = yield file.upload('/files');
+      const fileTest = yield this.store.findRecord('file', response.body.data.id);
       this.uploadedFile(fileTest);
       this.incrementProperty('uploadedFileLength');
     } catch (e) {

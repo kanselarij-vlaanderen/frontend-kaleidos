@@ -3,7 +3,7 @@ import { computed, observer } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 
-export default Component.extend( {
+export default Component.extend({
   store: service(),
   sessionService: service(),
   currentSessionService: service('current-session'),
@@ -14,7 +14,7 @@ export default Component.extend( {
     'isClickable::not-clickable',
     'agendaitem.retracted:vlc-u-opacity-lighter',
     'isPostponed:vlc-u-opacity-lighter',
-    'isNew:vlc-agenda-items__sub-item--added-item'
+    'isNew:vlc-agenda-items__sub-item--added-item',
   ],
   tagName: 'a',
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
@@ -32,7 +32,7 @@ export default Component.extend( {
         if (!this.get('isDestroyed')) {
           this.set('isPostponed', !!postponed);
         }
-      }
+      },
     );
   },
 
@@ -89,13 +89,13 @@ export default Component.extend( {
   },
   didInsertElement() {
     try {
-      let options = {
+      const options = {
         root: document.querySelector('body'),
         rootMargin: '5px',
-        threshold: [0, 1]
+        threshold: [0, 1],
       };
 
-      let intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
+      const intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
       this.set('intersectionObserver', intersectionObserver);
       intersectionObserver.observe(this.element);
     } catch (e) {
@@ -106,7 +106,7 @@ export default Component.extend( {
     this.get('intersectionObserver').unobserve(this.element);
   },
   checkElementPosition(entries) {
-    for (let entry of entries) {
+    for (const entry of entries) {
       if (entry.isIntersecting) {
         this.didEnterViewport();
       } else {

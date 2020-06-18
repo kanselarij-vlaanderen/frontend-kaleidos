@@ -1,4 +1,4 @@
-/*global cy,Cypress*/
+/* global cy,Cypress */
 /// <reference types="Cypress" />
 
 // ***********************************************
@@ -54,14 +54,11 @@ function createCase(confidential, shortTitle) {
     .then((res) => {
       caseId = res.responseBody.data.id;
     })
-    .then(() => {
-      return new Cypress.Promise((resolve) => {
-        resolve(caseId);
-      });
-    });
+    .then(() => new Cypress.Promise((resolve) => {
+      resolve(caseId);
+    }));
   cy.log('/createCase');
 }
-
 
 /**
  * @description Creates a new subcase from an open case overview.
@@ -89,7 +86,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   cy.get('.vlc-input-field-block').should('have.length', 5);
 
-  //Set the type
+  // Set the type
   cy.get('.vlc-input-field-block').eq(0).within(() => {
     cy.contains(type).scrollIntoView().click();
   });
@@ -133,11 +130,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       subcaseId = res.responseBody.data.id;
     });
   cy.wait('@addSubcase-createNewSubcase', { timeout: 20000 })
-    .then(() => {
-      return new Cypress.Promise((resolve) => {
-        resolve(subcaseId);
-      });
-    });
+    .then(() => new Cypress.Promise((resolve) => {
+      resolve(subcaseId);
+    }));
   cy.log('/addSubcase');
 }
 
@@ -152,7 +147,7 @@ function openCase(caseTitle) {
   cy.log('openCase');
   cy.visit('zoeken/dossiers');
   cy.get('#dossierId').type(caseTitle);
-  cy.route('GET', `/cases/search?**${caseTitle.split(" ", 1)}**`).as('getCaseSearchResult');
+  cy.route('GET', `/cases/search?**${caseTitle.split(' ', 1)}**`).as('getCaseSearchResult');
   cy.contains('zoeken')
     .click()
     .wait('@getCaseSearchResult');

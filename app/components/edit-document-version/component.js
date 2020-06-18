@@ -30,14 +30,10 @@ export default Component.extend({
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
         if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => {
-            return itemVersionIds[item.id];
-          });
+          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
           return matchingVersions;
         }
-
-        return;
-      })()
+      })(),
     });
   }),
 
@@ -51,8 +47,8 @@ export default Component.extend({
     },
 
     async chooseAccessLevel(document, accessLevel) {
-      let documentVersion = await document.get('lastDocumentVersion');
+      const documentVersion = await document.get('lastDocumentVersion');
       documentVersion.set('accessLevel', accessLevel);
-    }
-  }
+    },
+  },
 });

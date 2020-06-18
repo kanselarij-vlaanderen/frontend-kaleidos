@@ -9,13 +9,11 @@ export default Component.extend({
   isEditingMandateeRow: false,
 
   getDomainOfField(field) {
-    if (field)
-      return field.get('domain');
+    if (field) return field.get('domain');
   },
 
   getFieldOfIseCode(iseCode) {
-    if (iseCode)
-      return iseCode.get('field');
+    if (iseCode) return iseCode.get('field');
   },
 
   checkMandateeRowsForSubmitter(mandateeRows) {
@@ -31,13 +29,13 @@ export default Component.extend({
 
       const rowToShow = EmberObject.create({
         domains: [...new Set(domains)],
-        fields: [...new Set(fields)]
+        fields: [...new Set(fields)],
       });
 
       const mandateeRows = await this.get('mandateeRows');
       const domainsToShow = newRow.domains.map((domain) => domain.get('label')).join(', ');
       const fieldsToShow = newRow.fields.map((field) => field.get('label')).join(', ');
-      let rowToEdit = mandateeRows.find((row) => row.mandatee.id === mandatee.id);
+      const rowToEdit = mandateeRows.find((row) => row.mandatee.id === mandatee.id);
       if (rowToShow && rowToEdit) {
         rowToEdit.set('domains', newRow.domains);
         rowToEdit.set('fields', newRow.fields);
@@ -52,9 +50,11 @@ export default Component.extend({
         }
         mandateeRows.addObject(EmberObject.create(
           {
-            fieldsToShow, domainsToShow,
-            ...newRow
-          }));
+            fieldsToShow,
+            domainsToShow,
+            ...newRow,
+          },
+        ));
         this.set('mandateeRows', mandateeRows.sortBy('mandateePriority'));
       }
     },
@@ -71,7 +71,7 @@ export default Component.extend({
 
     async editRow(mandateeRow) {
       this.set('selectedMandateeRow', await mandateeRow);
-      const mandatee = mandateeRow.mandatee;
+      const { mandatee } = mandateeRow;
       this.set('isLoading', true);
       const totalIseCodes = await mandatee.get('iseCodes');
       const totalFields = [];
@@ -80,7 +80,7 @@ export default Component.extend({
       await Promise.all(totalIseCodes.map(async (iseCode) => {
         const field = await this.getFieldOfIseCode(iseCode);
         const domain = await this.getDomainOfField(field);
-        const iseCodes = mandateeRow.iseCodes;
+        const { iseCodes } = mandateeRow;
         const findSelectedIseCode = iseCodes.find((codeToCheck) => codeToCheck.get('id') === iseCode.get('id'));
         if (findSelectedIseCode) {
           field.set('selected', true);
@@ -92,9 +92,9 @@ export default Component.extend({
       }));
 
       const rowToShow = EmberObject.create({
-        mandatee: mandatee,
+        mandatee,
         domains: [...new Set(totalDomains.filter((item) => item))],
-        fields: [...new Set(totalFields.filter((item) => item))]
+        fields: [...new Set(totalFields.filter((item) => item))],
       });
       this.set('isLoading', false);
       this.set('rowToShow', rowToShow);
@@ -112,6 +112,6 @@ export default Component.extend({
         return item;
       });
       this.set('mandateeRows', newRows);
-    }
+    },
   },
 });

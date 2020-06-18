@@ -10,9 +10,8 @@ export default Component.extend({
         const remark = newsletter.get('remark');
         if (remark && remark != '') {
           return `${this.intl.t('remark')}: ${newsletter.get('remark')}`;
-        } else {
-          return '';
         }
+        return '';
       }
     });
   }),

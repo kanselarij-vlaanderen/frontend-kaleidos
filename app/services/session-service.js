@@ -1,9 +1,10 @@
-import Service from '@ember/service';
+import Service, { inject } from '@ember/service';
 import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+
 import DS from 'ember-data';
-let { PromiseArray } = DS;
 import { all } from 'rsvp';
+
+const { PromiseArray } = DS;
 
 export default Service.extend({
   store: inject(),
@@ -16,17 +17,15 @@ export default Service.extend({
       return [];
     }
     return PromiseArray.create({
-      promise: this.get('currentSession.agendas').then( async (agendas) => {
-        await all(agendas.map((agenda) => {
-          return agenda.load('status');
-        }));
+      promise: this.get('currentSession.agendas').then(async (agendas) => {
+        await all(agendas.map((agenda) => agenda.load('status')));
         return agendas.sortBy('serialnumber').reverse();
-      })
+      }),
     });
   }),
 
   currentAgendaItems: computed('currentAgenda.agendaitems.@each', function () {
-    let currentAgenda = this.get('currentAgenda');
+    const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       return this.store.query('agendaitem', {
         filter: {
@@ -35,23 +34,21 @@ export default Service.extend({
         include: ['subcase,subcase.case'],
         sort: 'priority',
       });
-    } else {
-      return [];
     }
+    return [];
   }),
 
   announcements: computed('currentAgenda.announcements.@each', function () {
-    let currentAgenda = this.get('currentAgenda');
+    const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
-      let announcements = this.store.query('announcement', {
+      const announcements = this.store.query('announcement', {
         filter: {
           agenda: { id: currentAgenda.id },
         },
       });
       return announcements;
-    } else {
-      return [];
     }
+    return [];
   }),
 
   definiteAgendas: computed('agendas', function () {
@@ -66,12 +63,10 @@ export default Service.extend({
       if (foundIndex + 1 != agendasLength) {
         const previousAgenda = agendas.objectAt(foundIndex + 1);
         return previousAgenda;
-      } else {
-        return null;
       }
-    } else {
       return null;
     }
+    return null;
   },
 
   async deleteSession(session) {

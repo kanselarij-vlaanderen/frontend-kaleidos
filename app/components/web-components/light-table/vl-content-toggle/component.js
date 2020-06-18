@@ -26,7 +26,7 @@ export default Component.extend({
         const subcase = await row.content.get('subcase');
         itemToUpdate = await subcase.get('newsletterInfo');
         if (itemToUpdate) {
-          itemToUpdate.set(`inNewsletter`, (await this.value));
+          itemToUpdate.set('inNewsletter', (await this.value));
         } else {
           itemToUpdate = await this.newsletterService.createNewsItemForSubcase(subcase, row, this.value);
         }
@@ -36,6 +36,6 @@ export default Component.extend({
         await row.content.reload();
       }
       this.toggleProperty('isLoading');
-    }
-  }
+    },
+  },
 });

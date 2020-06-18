@@ -1,7 +1,7 @@
 import Component from '@ember/component';
-import { computed, observer, get } from '@ember/object';
+import EmberObject, { computed, observer, get } from '@ember/object';
 import { inject } from '@ember/service';
-import EmberObject from '@ember/object';
+
 import { alias } from '@ember/object/computed';
 
 export default Component.extend({
@@ -27,11 +27,13 @@ export default Component.extend({
         return true;
       }
       return false;
-    }
+    },
   ),
 
   bothAgendasSelectedObserver: observer('agendaOne.id', 'agendaTwo.id', async function () {
-    const { agendaOne, agendaTwo, agendaitemsLeft, agendaitemsRight } = this;
+    const {
+      agendaOne, agendaTwo, agendaitemsLeft, agendaitemsRight,
+    } = this;
     const bothAgendasSelected = agendaOne && agendaTwo;
 
     if (bothAgendasSelected) {
@@ -39,8 +41,8 @@ export default Component.extend({
       this.set('combinedItems', []);
 
       const sortedAgendas = await this.sessionService.currentSession.sortedAgendas;
-      let agendaOneIndex = sortedAgendas.indexOf(agendaOne);
-      let agendaTwoIndex = sortedAgendas.indexOf(agendaTwo);
+      const agendaOneIndex = sortedAgendas.indexOf(agendaOne);
+      const agendaTwoIndex = sortedAgendas.indexOf(agendaTwo);
 
       if (agendaOneIndex < agendaTwoIndex) {
         await this.agendaService.agendaWithChanges(agendaOne.get('id'), agendaTwo.get('id'));
@@ -78,7 +80,7 @@ export default Component.extend({
   getAgendaitemsFromAgenda(id) {
     return this.store.query('agendaitem', {
       filter: {
-        agenda: { id: id },
+        agenda: { id },
         'show-as-remark': false,
       },
       sort: 'priority',
@@ -97,8 +99,9 @@ export default Component.extend({
     leftAgendaitems = [].concat(leftAgendaitems.toArray());
     rightAgendaitems = [].concat(rightAgendaitems.toArray());
 
-    let combinedItems = [];
-    let currentLeft, currentRight;
+    const combinedItems = [];
+    let currentLeft; let
+      currentRight;
 
     while (leftAgendaitems.length || rightAgendaitems.length) {
       if (!currentLeft) {

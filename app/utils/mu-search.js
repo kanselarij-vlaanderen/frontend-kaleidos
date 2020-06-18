@@ -1,16 +1,15 @@
 import fetch from 'fetch';
-import getPaginationMetadata from './get-pagination-metadata';
 import ArrayProxy from '@ember/array/proxy';
 import { A } from '@ember/array';
+import getPaginationMetadata from './get-pagination-metadata';
 
 function sortOrder(sort) {
   if (sort.startsWith('-')) {
     return 'desc';
-  } else if (sort.length > 0) {
+  } if (sort.length > 0) {
     return 'asc';
-  } else {
-    return null;
   }
+  return null;
 }
 
 function stripSort(sort) {
@@ -18,9 +17,7 @@ function stripSort(sort) {
 }
 
 function snakeToCamel(s) {
-  return s.replace(/(-\w)/g, function (m) {
-    return m[1].toUpperCase();
-  });
+  return s.replace(/(-\w)/g, (m) => m[1].toUpperCase());
 }
 
 async function muSearch(index, page, size, sort, filter, dataMapping) {
@@ -28,10 +25,10 @@ async function muSearch(index, page, size, sort, filter, dataMapping) {
   const params = new URLSearchParams(Object.entries({
     'page[size]': size,
     'page[number]': page,
-    'collapse_uuids': 't'
+    collapse_uuids: 't',
   }));
 
-  for (let field in filter) {
+  for (const field in filter) {
     params.append(`filter[${field}]`, filter[field]);
   }
 
@@ -47,7 +44,7 @@ async function muSearch(index, page, size, sort, filter, dataMapping) {
 
   return ArrayProxy.create({
     content: entries,
-    meta: { count, pagination }
+    meta: { count, pagination },
   });
 }
 

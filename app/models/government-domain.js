@@ -6,5 +6,5 @@ export default Model.extend({
   label: attr('string'),
   scopeNote: attr('string'),
   altLabel: attr('string'),
-  governmentFields: hasMany('government-field', { inverse: null })
+  governmentFields: hasMany('government-field', { inverse: null }),
 });

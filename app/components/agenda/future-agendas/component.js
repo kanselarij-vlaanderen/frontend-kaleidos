@@ -12,14 +12,13 @@ export default Component.extend({
         return this.meetings;
       }
       return this.meetings.filter((item) => item.get('id') != nearestMeeting.get('id'));
-    } else {
-      return this.meetings;
     }
+    return this.meetings;
   }),
 
   actions: {
     selectAgenda(meeting) {
       this.selectAgenda(meeting);
-    }
-  }
+    },
+  },
 });

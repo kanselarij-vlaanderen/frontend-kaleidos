@@ -19,11 +19,11 @@ export default Route.extend(AuthenticatedRouteMixin, {
     await this.updateSelectedAgenda(meeting, agenda);
     return {
       meeting,
-      agenda
+      agenda,
     };
   },
 
-  updateSelectedAgenda: async function (meeting, agenda) {
+  async updateSelectedAgenda(meeting, agenda) {
     this.set('agendaService.addedAgendaitems', []);
     this.set('agendaService.addedDocuments', []);
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(meeting, agenda);
@@ -35,6 +35,6 @@ export default Route.extend(AuthenticatedRouteMixin, {
   actions: {
     refresh() {
       this.refresh();
-    }
-  }
+    },
+  },
 });

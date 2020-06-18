@@ -3,13 +3,13 @@ import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 import { computed } from '@ember/object';
 
-export default Component.extend( {
+export default Component.extend({
   classNames: ['vlc-input-field-block'],
   classNameBindings: [
     'isCreatingPerson:vl-u-bg-alt',
     'isCreatingPerson:vlc-u-no-margin',
     'isCreatingPerson:vlc-u-padding-2',
-    'classes'
+    'classes',
   ],
   searchField: 'first-name',
   modelName: 'person',
@@ -38,16 +38,16 @@ export default Component.extend( {
   },
 
   queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
-    let options = {};
+    const options = {};
     const { filter, sortField, includeField } = this;
     if (sortField) {
-      options['sort'] = sortField;
+      options.sort = sortField;
     }
     if (filter) {
-      options['filter'] = filter;
+      options.filter = filter;
     }
     if (includeField) {
-      options['include'] = includeField;
+      options.include = includeField;
     }
     return options;
   }),
@@ -63,12 +63,12 @@ export default Component.extend( {
   searchTask: task(function* (searchValue) {
     yield timeout(300);
     const { queryOptions, searchField, modelName } = this;
-    if (queryOptions['filter']) {
-      queryOptions['filter'][searchField] = searchValue;
+    if (queryOptions.filter) {
+      queryOptions.filter[searchField] = searchValue;
     } else {
-      let filter = {};
+      const filter = {};
       filter[searchField] = searchValue;
-      queryOptions['filter'] = filter;
+      queryOptions.filter = filter;
     }
 
     return this.store.query(modelName, queryOptions);
@@ -87,7 +87,7 @@ export default Component.extend( {
       const { firstName, lastName } = this;
       const person = this.store.createRecord('person', {
         firstName,
-        lastName
+        lastName,
       });
       person.save().then(() => {
         this.findAll.perform();
@@ -104,6 +104,6 @@ export default Component.extend( {
         this.set('queryOptions', { sort: this.sortField });
         this.findAll.perform();
       }
-    }
-  }
+    },
+  },
 });

@@ -8,14 +8,16 @@ export default Component.extend({
   actions: {
     createSingleNewsLetter() {
       this.set('isLoading', true);
-      const { title, subtitle, date, docDate, selectedMeeting } = this;
+      const {
+        title, subtitle, date, docDate, selectedMeeting,
+      } = this;
       const newsletter = this.store.createRecord('newsletter-info', {
         meeting: selectedMeeting,
         title,
         subtitle,
         mandateeProposal: null,
         publicationDate: this.formatter.formatDate(date),
-        publicationDocDate: this.formatter.formatDate(docDate)
+        publicationDocDate: this.formatter.formatDate(docDate),
       });
       newsletter.save().then(() => {
         this.set('isLoading', false);
@@ -35,6 +37,6 @@ export default Component.extend({
 
     selectDocDate(date) {
       this.set('docDate', date);
-    }
-  }
+    },
+  },
 });

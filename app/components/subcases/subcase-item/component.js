@@ -11,5 +11,5 @@ export default Component.extend({
       return 'vlc-procedure-step--minimal';
     }
     return null;
-  })
+  }),
 });

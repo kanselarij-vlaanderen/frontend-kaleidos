@@ -9,38 +9,38 @@ export default class SystemAlertService extends Service {
   @service store;
 
   @tracked alerts = A([]);
+
   updateInterval = 60 * 1000;
 
-  get currentAlerts () {
+  get currentAlerts() {
     const now = new Date();
-    return A(this.alerts.filter(a => a.beginDate < now && a.endDate > now));
+    return A(this.alerts.filter((a) => a.beginDate < now && a.endDate > now));
   }
 
-  get futureAlerts () {
+  get futureAlerts() {
     const now = new Date();
-    return A(this.alerts.filter(a => a.beginDate > now));
+    return A(this.alerts.filter((a) => a.beginDate > now));
   }
 
-  get unconfirmedAlerts () {
+  get unconfirmedAlerts() {
     return A(this.currentAlerts.filter((a) => !a.confirmed));
   }
 
-  constructor () {
+  constructor() {
     super(...arguments);
     this.lifecycle();
   }
 
-  async lifecycle () {
+  async lifecycle() {
     try {
       await this.updateAlerts();
-    }
-    finally {
+    } finally {
       later(this, this.lifecycle, this.updateInterval);
     }
   }
 
   @action
-  confirmAlert (alert) {
+  confirmAlert(alert) {
     alert.set('confirmed', true);
   }
 
@@ -56,7 +56,7 @@ export default class SystemAlertService extends Service {
       },
       sort: '-begin-date',
       include: 'type',
-      page: { size: 10 }
+      page: { size: 10 },
     });
     // Ensure that the client-local "confirmed" mark doesn't get erased when refreshing
     const confirmedAlertIds = this.alerts.filterBy('confirmed').mapBy('id');

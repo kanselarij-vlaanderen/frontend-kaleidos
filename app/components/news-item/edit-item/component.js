@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
-import {computed} from '@ember/object';
-import {inject} from '@ember/service';
+import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Component.extend({
   intl: inject(),
@@ -28,18 +28,15 @@ export default Component.extend({
   isTryingToSave: false,
   isExpanded: false,
 
-  themes: computed(`agendaitem.subcase.newsletterInfo.themes`, {
+  themes: computed('agendaitem.subcase.newsletterInfo.themes', {
     async get() {
-      const {agendaitem} = this;
+      const { agendaitem } = this;
       if (agendaitem) {
-        return await agendaitem.get('subcase.newsletterInfo.themes').then((themes) => {
-          return themes.toArray();
-        })
-      } else {
-        return [];
+        return await agendaitem.get('subcase.newsletterInfo.themes').then((themes) => themes.toArray());
       }
+      return [];
     },
-    set: function (key, value) {
+    set(key, value) {
       return value;
     },
   }),
@@ -48,9 +45,8 @@ export default Component.extend({
     const nota = await this.agendaitem.get('nota');
     if (nota) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }),
 
   async saveChanges() {
@@ -67,13 +63,13 @@ export default Component.extend({
             item.get('documentVersions').addObject(documentVersion);
           } else {
             const foundDocument = itemDocumentsToEdit.find(
-              (item) => item.get('id') == documentVersion.get('id')
+              (item) => item.get('id') == documentVersion.get('id'),
             );
             if (foundDocument) {
               item.get('documentVersions').removeObject(documentVersion);
             }
           }
-        })
+        }),
       );
     }
     this.setNewPropertiesToModel(item).then(async () => {
@@ -85,11 +81,11 @@ export default Component.extend({
   async setNewPropertiesToModel(model) {
     const { propertiesToSet } = this;
     await Promise.all(
-      propertiesToSet.map(async property => {
+      propertiesToSet.map(async (property) => {
         model.set(property, await this.get(property));
-      })
+      }),
     );
-    return model.save().then(model => model.reload());
+    return model.save().then((model) => model.reload());
   },
 
   richtext: computed('editor.currentTextContent', function () {
@@ -103,7 +99,7 @@ export default Component.extend({
     async trySaveChanges() {
       const themes = await this.get('themes');
       if (themes.length > 0) {
-        return this.saveChanges()
+        return this.saveChanges();
       }
       this.toggleProperty('isTryingToSave');
     },
@@ -129,22 +125,22 @@ export default Component.extend({
 
       if (documentVersionsSelected) {
         await Promise.all(
-          documentVersionsSelected.map(async documentVersion => {
+          documentVersionsSelected.map(async (documentVersion) => {
             if (documentVersion.get('selected')) {
               item.get('documentVersions').addObject(documentVersion);
             } else {
               const foundDocument = itemDocumentsToEdit.find(
-                item => item.get('id') == documentVersion.get('id')
+                (item) => item.get('id') == documentVersion.get('id'),
               );
               if (foundDocument) {
                 item.get('documentVersions').removeObject(documentVersion);
               }
             }
-          })
+          }),
         );
       }
 
-      this.setNewPropertiesToModel(item).then(newModel => {
+      this.setNewPropertiesToModel(item).then((newModel) => {
         newModel.reload();
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
@@ -164,6 +160,6 @@ export default Component.extend({
     },
     descriptionUpdated(val) {
       this.set('initValue', this.richtext + val);
-    }
+    },
   },
 });

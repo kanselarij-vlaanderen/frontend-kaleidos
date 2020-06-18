@@ -1,4 +1,4 @@
-/*global cy, Cypress*/
+/* global cy, Cypress */
 /// <reference types="Cypress" />
 
 // ***********************************************
@@ -33,7 +33,6 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
 // ***********************************************
 // Functions
 
-
 /**
  * @description Goes to the agenda overview and creates a new agenda.
  * @name createAgenda
@@ -51,7 +50,7 @@ function createAgenda(kind, date, location) {
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
-  cy.visit('')
+  cy.visit('');
   cy.get(agenda.createNewAgendaButton).click();
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
@@ -64,19 +63,19 @@ function createAgenda(kind, date, location) {
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
     cy.contains(kind).trigger('mouseover').click();
-    //TODO Experiment for dropdown flakyness
+    // TODO Experiment for dropdown flakyness
     // Does the ember-power-select-option fix itself if we wait long enough ?
     cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
     // Could/Should we verify that the dropdown has closed, and try to repeat the process if not ?
   });
 
-  //Set the start date
+  // Set the start date
   cy.get('@newAgendaForm').eq(1).within(() => {
     cy.get('.vl-datepicker').click();
   });
   cy.setDateAndTimeInFlatpickr(date);
 
-  //Set the location
+  // Set the location
   cy.get('@newAgendaForm').eq(2).within(() => {
     cy.get('.vl-input-field').click().type(location);
   });
@@ -90,17 +89,15 @@ function createAgenda(kind, date, location) {
   cy.wait('@createNewMeeting', { timeout: 20000 })
     .then((res) => {
       meetingId = res.responseBody.data.id;
-    //}).verifyAlertSuccess();
+    // }).verifyAlertSuccess();
     });
 
   cy.wait('@createNewAgenda', { timeout: 20000 });
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
-    .then(() => {
-      return new Cypress.Promise((resolve) => {
-        resolve(meetingId);
-      });
-    });
+    .then(() => new Cypress.Promise((resolve) => {
+      resolve(meetingId);
+    }));
 }
 
 /**
@@ -115,7 +112,6 @@ function createAgenda(kind, date, location) {
  * @param {String} location - Location that the event is taking place
  */
 function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
-
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
@@ -133,9 +129,8 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
   cy.wait('@createNewMeeting', { timeout: 20000 });
   cy.wait('@createNewAgenda', { timeout: 20000 });
   cy.wait('@createNewsletter', { timeout: 20000 });
-  cy.wait('@patchMeetings', { timeout: 20000 })
+  cy.wait('@patchMeetings', { timeout: 20000 });
 }
-
 
 /**
  * Create a default agenda
@@ -160,39 +155,29 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   return cy.wait('@meetings').its('status').should('to.equal', 200)
-    .then(() => {
-      return cy.existsAndVisible(agenda.createNewAgendaButton)
-        .click()
-        .then(() => {
-          cy.existsAndInvisible(modal.vlModalComponents.createNewAgendaModal);
-          cy.existsAndInvisible(modal.baseModal.container);
-          cy.existsAndVisible(modal.baseModal.dialogWindow);
-          return cy.existsAndVisible('.ember-power-select-trigger')
-            .click()
-            .then(() => {
-              return cy.selectOptionInSelectByText(kindOfAgenda);
-            }).then(() => {
-              cy.existsAndVisible(utils.datePickerIcon)
-                .click()
-                .then(() => {
-                  cy.setYearMonthDayHourMinuteInFlatPicker(year, month, day, hour, minute);
-                });
-            });
-        })
-        .then(() => {
-          return cy.existsAndVisible(form.formInput).type(location).then(() => {
-            return cy.existsAndVisible(form.formSave).click()
+    .then(() => cy.existsAndVisible(agenda.createNewAgendaButton)
+      .click()
+      .then(() => {
+        cy.existsAndInvisible(modal.vlModalComponents.createNewAgendaModal);
+        cy.existsAndInvisible(modal.baseModal.container);
+        cy.existsAndVisible(modal.baseModal.dialogWindow);
+        return cy.existsAndVisible('.ember-power-select-trigger')
+          .click()
+          .then(() => cy.selectOptionInSelectByText(kindOfAgenda)).then(() => {
+            cy.existsAndVisible(utils.datePickerIcon)
+              .click()
               .then(() => {
-                cy.wait('@createNewAgenda').its('status').should('to.equal', 201);
-                cy.wait('@createNewsletter').its('status').should('to.equal', 201);
-                cy.wait('@patchMeetings').its('status').should('to.equal', 204);
-                return cy.wait('@createNewMeeting').then((xhr) => {
-                  return xhr.response.body.data.id
-                });
-              })
-          })
-        });
-    });
+                cy.setYearMonthDayHourMinuteInFlatPicker(year, month, day, hour, minute);
+              });
+          });
+      })
+      .then(() => cy.existsAndVisible(form.formInput).type(location).then(() => cy.existsAndVisible(form.formSave).click()
+        .then(() => {
+          cy.wait('@createNewAgenda').its('status').should('to.equal', 201);
+          cy.wait('@createNewsletter').its('status').should('to.equal', 201);
+          cy.wait('@patchMeetings').its('status').should('to.equal', 204);
+          return cy.wait('@createNewMeeting').then((xhr) => xhr.response.body.data.id);
+        }))));
 }
 
 /**
@@ -203,7 +188,7 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
  * @param {*} agendaDate A cypress.moment object with the date to search
  */
 function openAgendaForDate(agendaDate) {
-  const searchDate = agendaDate.date() + '/' + (agendaDate.month() + 1) + '/' + agendaDate.year();
+  const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
   // cy.route('GET', '/meetings/**').as('getMeetings');
   cy.route('GET', '/meetings?filter**').as('getFilteredMeetings');
 
@@ -260,7 +245,7 @@ function deleteAgenda(meetingId, lastAgenda) {
     cy.wait('@deleteNewsletter', { timeout: 20000 })
       .wait('@deleteMeeting', { timeout: 20000 });
   }
-  //TODO should patches happen when deleting a design agenda ?
+  // TODO should patches happen when deleting a design agenda ?
 }
 
 /**
@@ -270,7 +255,7 @@ function deleteAgenda(meetingId, lastAgenda) {
  * @function
  */
 function setFormalOkOnItemWithIndex(indexOfItem) {
-  //TODO set only some items to formally ok with list as parameter
+  // TODO set only some items to formally ok with list as parameter
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
 
   cy.clickReverseTab('Overzicht');
@@ -289,7 +274,8 @@ function setFormalOkOnItemWithIndex(indexOfItem) {
     .click()
     .wait('@patchAgendaItem')
     .wait(1000) // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
-    .get('.ember-power-select-option').should('not.exist')
+    .get('.ember-power-select-option')
+    .should('not.exist');
   cy.get('.vlc-agenda-items .vl-alert button')
     .click();
 }
@@ -311,7 +297,6 @@ function approveCoAgendaitem(agendaitemShortTitle) {
   cy.wait('@getIseCodes', { timeout: 50000 });
   cy.wait('@getGovernmentFields', { timeout: 50000 });
   cy.get('.vlc-panel-layout__main-content').within(() => {
-
     cy.get('.vl-u-spacer-extended-bottom-l').as('detailBlocks');
     cy.get('@detailBlocks').eq(4).within(() => {
       cy.contains('Acties').should('exist');
@@ -320,7 +305,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
       cy.get('@mandatees').each((item) => {
         cy.get(item).within(() => {
           cy.get('.vl-checkbox', { timeout: 10000 }).should('exist').click();
-        })
+        });
       });
 
       cy.get('.vl-action-group > .vl-button')
@@ -343,8 +328,8 @@ function approveDesignAgenda() {
   // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
   cy.route('GET', '/agendas/**').as('getAgendas');
 
-  //TODO add boolean for when not all items are formally ok, click through the confirmation modal
-  //TODO use test selector
+  // TODO add boolean for when not all items are formally ok, click through the confirmation modal
+  // TODO use test selector
   cy.get('.vlc-toolbar').within(() => {
     cy.get('.vl-button')
       .contains('Ontwerpagenda')
@@ -353,7 +338,7 @@ function approveDesignAgenda() {
       // .wait('@getAgendaitems', { timeout: 12000 })
       .wait('@getAgendas', { timeout: 12000 });
   });
-  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {verbose: true, timeout: 60000});
+  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), { verbose: true, timeout: 60000 });
 }
 
 /**
@@ -393,7 +378,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
     // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFilteredBetter');
 
-
     if (caseTitle) {
       cy.get('@formGrid').eq(0).within(() => {
         cy.get('.vl-input-field').clear().type(caseTitle, { force: true });
@@ -404,15 +388,16 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
       cy.get('table > tbody > tr').as('rows');
     } else {
       cy.get('table > tbody > tr').as('rows');
-      cy.get('@rows', { timeout: 12000 }).should('not.have.length', 1)
+      cy.get('@rows', { timeout: 12000 }).should('not.have.length', 1);
     }
-    cy.get('@rows', { timeout: 12000 }).eq(0).click().get('[type="checkbox"]').should('be.checked');
+    cy.get('@rows', { timeout: 12000 }).eq(0).click().get('[type="checkbox"]')
+      .should('be.checked');
     cy.get('.vl-button').contains('Agendapunt toevoegen').click();
   });
   cy.wait('@createNewAgendaitem', { timeout: 20000 })
     .wait('@patchSubcase', { timeout: 20000 })
     .wait('@createSubcasePhase', { timeout: 20000 })
-    .wait('@patchAgenda', { timeout: 20000 })
+    .wait('@patchAgenda', { timeout: 20000 });
 }
 
 /**
@@ -434,7 +419,7 @@ function toggleShowChanges(refresh) {
     cy.get('.vlc-side-nav-item', { timeout: 12000 })
       .first({ timeout: 12000 })
       .click();
-      cy.wait(2000); //a lot of data is being reloaded
+    cy.wait(2000); // a lot of data is being reloaded
     // cy.wait('@getChanges', {timeout: 20000});
   } else {
     cy.clickReverseTab('Overzicht');
@@ -466,8 +451,8 @@ function agendaItemExists(agendaItemName) {
         cy.clickReverseTab('Overzicht');
       }
       cy.get(agenda.agendaOverviewSubitem)
-      .contains(agendaItemName, { timeout: 24000 })
-      .should('exist');
+        .contains(agendaItemName, { timeout: 24000 })
+        .should('exist');
     }
   });
 }
@@ -484,22 +469,21 @@ function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
   cy.agendaItemExists(agendaItemName);
 
   cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
-  cy.wait(1000)
-  cy.url().should("include",'agendapunten');
+  cy.wait(1000);
+  cy.url().should('include', 'agendapunten');
   cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
     const selectedTab = element[0].text;
     if (!selectedTab.includes('Dossier')) {
-      cy.wait(3000); //TODO wait to ensure the page and tabs are loaded, find a better to check this
+      cy.wait(3000); // TODO wait to ensure the page and tabs are loaded, find a better to check this
       cy.get(agenda.agendaItemDossierTab).click();
     }
     if (isAdmin) {
       cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
       cy.contains('Naar procedurestap', { timeout: 12000 });
     } else {
-      cy.wait(3000); //TODO wait to ensure the page is loaded, find a better way to check this for other profiles
+      cy.wait(3000); // TODO wait to ensure the page is loaded, find a better way to check this for other profiles
     }
   });
-
 }
 
 /**
@@ -528,7 +512,6 @@ function closeAgenda() {
     .click();
   cy.get(actionModel.lockAgenda).click();
   cy.get('.vl-modal', { timeout: 20000 }).should('not.exist');
-
 }
 
 /**

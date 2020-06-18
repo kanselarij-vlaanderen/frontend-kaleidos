@@ -40,16 +40,16 @@ export default Component.extend({
         start: moment(this.get('startDate'))
           .utc()
           .toDate(),
-        end: moment().add(5, 'years').toDate()
+        end: moment().add(5, 'years').toDate(),
       });
-      newMandatee.save().then(newMandatee => {
+      newMandatee.save().then((newMandatee) => {
         this.model.addObject(newMandatee);
         this.set('isLoading', false);
         this.clearValues();
         this.closeModal();
         this.mandateesUpdated();
       });
-    }
+    },
   },
 
   clearValues() {
@@ -59,5 +59,5 @@ export default Component.extend({
     this.set('endDate', null);
     this.set('nickName', null);
     this.set('selectedDomains', []);
-  }
+  },
 });

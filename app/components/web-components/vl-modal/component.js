@@ -16,7 +16,7 @@ const FOCUSABLE_ELEMENTS = [
   '[role="textarea"]:not([disabled]):not([aria-hidden])',
   '[role="button"]:not([disabled]):not([aria-hidden])',
   '[contenteditable]',
-  '[tabindex]:not([tabindex^="-"])'
+  '[tabindex]:not([tabindex^="-"])',
 ];
 
 export default Component.extend({
@@ -29,13 +29,13 @@ export default Component.extend({
   didInsertElement() {
     const focusableNodes = this.getFocusableNodes();
     if (focusableNodes.length > 1) {
-      focusableNodes[1].focus()
+      focusableNodes[1].focus();
     } else {
       this.get('element').querySelector('[role="dialog"]').focus();
     }
   },
 
-  keyDown: function (event) {
+  keyDown(event) {
     if (event.key === 'Escape') {
       this.closeModal();
     }
@@ -65,27 +65,27 @@ export default Component.extend({
 
   getFocusableNodes() {
     const nodes = this.get('element').querySelectorAll(FOCUSABLE_ELEMENTS);
-    return Array(...nodes)
+    return Array(...nodes);
   },
 
-// credit: https://github.com/ghosh/Micromodal/blob/master/lib/src/index.js#L151
+  // credit: https://github.com/ghosh/Micromodal/blob/master/lib/src/index.js#L151
   maintainFocus(event) {
     const focusableNodes = this.getFocusableNodes();
 
     // if disableFocus is true
     if (!this.get('element').contains(document.activeElement)) {
-      focusableNodes[0].focus()
+      focusableNodes[0].focus();
     } else {
       const focusedItemIndex = focusableNodes.indexOf(document.activeElement);
 
       if (event.shiftKey && focusedItemIndex === 0) {
         focusableNodes[focusableNodes.length - 1].focus();
-        event.preventDefault()
+        event.preventDefault();
       }
 
       if (!event.shiftKey && focusedItemIndex === focusableNodes.length - 1) {
         focusableNodes[0].focus();
-        event.preventDefault()
+        event.preventDefault();
       }
     }
   },
@@ -99,6 +99,6 @@ export default Component.extend({
       if (this.clickOutside) {
         this.closeModal();
       }
-    }
-  }
+    },
+  },
 });

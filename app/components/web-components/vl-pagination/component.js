@@ -71,6 +71,6 @@ export default Component.extend({
 
     prevPage() {
       this.previousAction();
-    }
-  }
+    },
+  },
 });

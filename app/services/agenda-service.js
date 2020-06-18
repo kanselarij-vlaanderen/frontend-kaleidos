@@ -1,5 +1,5 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
+
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'fe-redpencil/utils/ajax';
@@ -19,7 +19,7 @@ export default Service.extend({
   assignNewSessionNumbers() {
     return ajax({
       method: 'GET',
-      url: `/session-service/assignNewSessionNumbers`,
+      url: '/session-service/assignNewSessionNumbers',
     });
   },
 
@@ -27,27 +27,21 @@ export default Service.extend({
     return ajax({
       method: 'GET',
       url: `/session-service/closestMeeting?date=${date}`,
-    }).then((result) => {
-      return result.body.closestMeeting;
-    });
+    }).then((result) => result.body.closestMeeting);
   },
 
   getActiveAgendas(date) {
     return ajax({
       method: 'GET',
       url: `/session-service/activeAgendas?date=${date}`,
-    }).then((result) => {
-      return result.body.agendas;
-    });
+    }).then((result) => result.body.agendas);
   },
 
   async getDocumentNames(model) {
     return ajax({
       method: 'GET',
       url: `/lazy-loading/documentNames?uuid=${model.id}`,
-    }).then((result) => {
-      return result.body.documentNames;
-    });
+    }).then((result) => result.body.documentNames);
   },
 
   async approveAgendaAndCopyToDesignAgenda(currentMeeting, oldAgenda) {
@@ -55,7 +49,7 @@ export default Service.extend({
       return oldAgenda;
     }
     // Use approveagendaService to duoplicate AgendaItems into new agenda.
-    let result = await ajax({
+    const result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
@@ -64,7 +58,7 @@ export default Service.extend({
       },
     });
     notifyPropertyChange(oldAgenda, 'agendaitems');
-    let newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
+    const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
     notifyPropertyChange(newAgenda, 'agendaitems');
     return newAgenda;
   },
@@ -130,14 +124,14 @@ export default Service.extend({
       created: moment()
         .utc()
         .toDate(),
-      subcase: subcase,
+      subcase,
       priority: priorityToAssign,
       agenda: selectedAgenda,
       title: subcase.get('title'),
       shortTitle: subcase.get('shortTitle'),
       formallyOk: CONFIG.notYetFormallyOk,
       showAsRemark: isAnnouncement,
-      mandatees: mandatees,
+      mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
     });
@@ -160,7 +154,7 @@ export default Service.extend({
       const phase = this.store.createRecord('subcase-phase', {
         date: moment().utc().toDate(),
         code: phaseCode,
-        subcase: subcase
+        subcase,
       });
       await phase.save();
     }
@@ -191,7 +185,7 @@ export default Service.extend({
           item.set('groupName', null);
         }
         item.set('ownGroupName', currentAgendaitemGroupName);
-      })
+      }),
     );
   },
 
@@ -207,7 +201,7 @@ export default Service.extend({
       if (agendaitemsFromSubcase.length == 1) {
         // if only 1 item is found, all phases should be destroyed and the subcase updated before deleting the agendaitem
         const phases = await subcase.get('phases');
-        await Promise.all(phases.map(async phase => {
+        await Promise.all(phases.map(async (phase) => {
           await phase.destroyRecord();
         }));
         await subcase.set('requestedForMeeting', null);
@@ -223,7 +217,7 @@ export default Service.extend({
   },
 
   async deleteAgendaitemFromMeeting(agendaitem) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     const currentAgenda = await itemToDelete.get('agenda');
     const currentMeeting = await currentAgenda.get('createdFor');
     const currentMeetingId = await currentMeeting.get('id');
@@ -233,7 +227,7 @@ export default Service.extend({
       const agendaitems = await subcase.get('agendaitems');
 
       if (subcase) {
-        await Promise.all(agendaitems.map(async item => {
+        await Promise.all(agendaitems.map(async (item) => {
           const agenda = await item.get('agenda');
           const meeting = await agenda.get('createdFor');
           const meetingId = await meeting.get('id');
@@ -245,7 +239,7 @@ export default Service.extend({
         const agendaitemsFromSubcase = await subcase.get('agendaitems');
         if (agendaitemsFromSubcase.length == 0) {
           const phases = await subcase.get('phases');
-          await Promise.all(phases.map(async phase => {
+          await Promise.all(phases.map(async (phase) => {
             await phase.destroyRecord();
           }));
         }
@@ -254,7 +248,6 @@ export default Service.extend({
       } else {
         await itemToDelete.destroyRecord();
       }
-
     } else {
       this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
     }
@@ -275,13 +268,11 @@ export default Service.extend({
       if (newsletterInfoOnSubcaseLastModifiedTime) {
         if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
           return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
-        } else {
-          return null;
         }
-      } else {
-        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+        return null;
       }
+      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
     }
     return null;
-  }
+  },
 });

@@ -25,9 +25,8 @@ export default Component.extend({
     const { agendaitem, subcase } = this;
     if (agendaitem) {
       return agendaitem;
-    } else {
-      return subcase;
     }
+    return subcase;
   }),
 
   subcases: computed('item', async function () {
@@ -35,7 +34,7 @@ export default Component.extend({
     if (isAgendaItem) {
       const subcase = await this.get('item.subcase');
       return subcase.get('subcasesFromCase');
-    } else if (isSubcase) {
+    } if (isSubcase) {
       return this.get('item.subcasesFromCase');
     }
 
@@ -61,6 +60,6 @@ export default Component.extend({
 
     refreshRoute() {
       this.refreshRoute();
-    }
-  }
+    },
+  },
 });

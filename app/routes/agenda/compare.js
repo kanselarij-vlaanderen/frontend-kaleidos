@@ -24,6 +24,6 @@ export default Route.extend({
     } else {
       agendaToCompare = agendas.objectAt(1);
     }
-    return hash({ currentAgenda: agenda, agendaToCompare: agendaToCompare });
+    return hash({ currentAgenda: agenda, agendaToCompare });
   },
 });

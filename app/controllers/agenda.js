@@ -35,7 +35,7 @@ export default Controller.extend({
       this.transitionToRoute(
         'print-overviews.notes.agendaitems',
         currentSessionId,
-        currentAgendaId
+        currentAgendaId,
       );
     },
 
@@ -43,7 +43,7 @@ export default Controller.extend({
       this.transitionToRoute(
         'print-overviews.decisions.agendaitems',
         currentSessionId,
-        currentAgendaId
+        currentAgendaId,
       );
     },
 
@@ -51,7 +51,7 @@ export default Controller.extend({
       this.transitionToRoute(
         'print-overviews.press-agenda.agendaitems',
         currentSessionId,
-        currentAgendaId
+        currentAgendaId,
       );
     },
 
@@ -59,7 +59,7 @@ export default Controller.extend({
       this.transitionToRoute(
         'print-overviews.newsletter.agendaitems',
         currentSessionId,
-        currentAgendaId
+        currentAgendaId,
       );
     },
 
@@ -73,7 +73,7 @@ export default Controller.extend({
 
     reloadRouteWithNewAgendaitem(newAgendaitemId) {
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, this.model.agenda.id, {
-        queryParams: { refresh: newAgendaitemId }
+        queryParams: { refresh: newAgendaitemId },
       });
     },
 
@@ -87,6 +87,6 @@ export default Controller.extend({
 
     loadingAgendaitems() {
       this.toggleProperty('isLoading');
-    }
-  }
+    },
+  },
 });

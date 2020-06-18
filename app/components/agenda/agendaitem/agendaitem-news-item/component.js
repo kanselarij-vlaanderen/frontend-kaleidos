@@ -7,15 +7,23 @@ import moment from 'moment';
 
 export default class AgendaitemNewsItem extends Component {
   @service store;
+
   @service newsletterService;
+
   @service agendaService;
+
   @service sessionService;
+
   @service currentSession;
+
   @service intl;
 
   classNames = ['vlc-padding-bottom--large'];
+
   subcase = null;
+
   agendaitem = null;
+
   isEditing = false;
 
   @tracked timestampForMostRecentNota = null;
@@ -26,11 +34,11 @@ export default class AgendaitemNewsItem extends Component {
   }
 
   get dateOfMostRecentNota() {
-    return moment(this.timestampForMostRecentNota).format("D MMMM YYYY");
+    return moment(this.timestampForMostRecentNota).format('D MMMM YYYY');
   }
 
   get timeOfMostRecentNota() {
-    return moment(this.timestampForMostRecentNota).format("H:mm");
+    return moment(this.timestampForMostRecentNota).format('H:mm');
   }
 
   async didUpdateAttrs() {
@@ -58,7 +66,7 @@ export default class AgendaitemNewsItem extends Component {
       await updateModifiedProperty(await this.get('agendaitem.agenda'));
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
-    })
+    });
   }
 
   @action

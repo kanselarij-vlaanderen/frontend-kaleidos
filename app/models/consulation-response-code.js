@@ -5,5 +5,5 @@ const { Model, attr, hasMany } = DS;
 export default Model.extend({
   label: attr('string'),
   scopeNote: attr('string'),
-  consulationResponses: hasMany('consulation-response')
+  consulationResponses: hasMany('consulation-response'),
 });

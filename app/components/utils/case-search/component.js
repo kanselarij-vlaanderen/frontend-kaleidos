@@ -24,7 +24,7 @@ export default Component.extend(AuthenticatedRouteMixin, {
     debounce(this, this.debouncedSearch, 500);
   }),
 
-  debouncedSearch: function () {
+  debouncedSearch() {
     this.send('performSearch', get(this, 'searchText'));
   },
 
@@ -45,7 +45,7 @@ export default Component.extend(AuthenticatedRouteMixin, {
         filter[':sqs:title'] = '*'; // search without filter
       }
 
-      const results = await search('cases', this.page, this.size, null, filter, function (item) {
+      const results = await search('cases', this.page, this.size, null, filter, (item) => {
         const entry = item.attributes;
         entry.id = item.id;
         return entry;
@@ -74,7 +74,6 @@ export default Component.extend(AuthenticatedRouteMixin, {
       }
       this.onSelect(caseItem);
     },
-  }
-
+  },
 
 });

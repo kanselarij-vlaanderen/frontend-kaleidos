@@ -3,7 +3,6 @@ import { inject } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 import { computed, observer } from '@ember/object';
 
-
 export default Component.extend({
 
   store: inject(),
@@ -12,7 +11,7 @@ export default Component.extend({
   sort: '-created,name',
 
   documents: computed('items.@each', function () {
-    (this.get('items') || []).map(item => item.set('selected', false));
+    (this.get('items') || []).map((item) => item.set('selected', false));
     return this.items;
   }),
 
@@ -22,17 +21,19 @@ export default Component.extend({
   }),
 
   queryOptions: computed('sort', 'filter', 'page', function () {
-    const { page, filter, size, sort } = this;
-    let options = {
-      sort: sort,
+    const {
+      page, filter, size, sort,
+    } = this;
+    const options = {
+      sort,
       page: {
         number: page,
-        size: size
+        size,
       },
       filter: {},
     };
     if (filter) {
-      options['filter']['name'] = filter;
+      options.filter.name = filter;
     }
     return options;
   }),
@@ -66,13 +67,12 @@ export default Component.extend({
       }
       if (document.selected) {
         document.set('selected', false);
-        this.delete(document)
+        this.delete(document);
       } else {
         document.set('selected', true);
-        this.add(document)
+        this.add(document);
       }
-    }
-  }
-
+    },
+  },
 
 });

@@ -1,9 +1,9 @@
-/*global context, before, it, cy, Cypress, beforeEach*/
+/* global context, before, it, cy, Cypress, beforeEach */
 /// <reference types="Cypress" />
 
-import form from "../../selectors/form.selectors";
-import modal from "../../selectors/modal.selectors";
-import document from "../../selectors/document.selectors";
+import form from '../../selectors/form.selectors';
+import modal from '../../selectors/modal.selectors';
+import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
 
 context('Tests for cancelling CRUD operations on document and document-versions', () => {
@@ -18,14 +18,16 @@ context('Tests for cancelling CRUD operations on document and document-versions'
   });
 
   it('Editing of a document or document-version but cancelling should show old data', () => {
-    const caseTitle = 'Cypress test: cancel editing document versions - ' + currentTimestamp();
+    const caseTitle = `Cypress test: cancel editing document versions - ${currentTimestamp()}`;
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: cancel editing of documents on agendaitem - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: cancel editing of documents on agendaitem - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het annuleren van editeren van een document aan een agendaitem';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const fileName = 'test pdf';
-    const file = { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName, fileType: 'Nota' };
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName, fileType: 'Nota',
+    };
     const files = [file];
     cy.createCase(false, caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -49,7 +51,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
+        cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
       });
     });
     cy.get('.js-vl-accordion > button').click();
@@ -82,7 +84,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get(agenda.documentAccessLevel).should('exist').should('be.visible').contains('Publiek');
     cy.contains('Annuleren').click();
 
-    //Verify nothing changed after cancel
+    // Verify nothing changed after cancel
     cy.get('.js-vl-accordion > button').click();
     cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
     cy.get('@versions').each(() => {
@@ -119,7 +121,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
 
     // Cancel/save name in document card
     const extraName = (' - Nota');
-    const savedName = fileName + 'BIS' + extraName;
+    const savedName = `${fileName}BIS${extraName}`;
     cy.get('.vlc-document-card').within(() => {
       cy.get('.vl-title--h6').as('documentName');
       cy.get('@documentName').contains(fileName).click();
@@ -129,8 +131,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       cy.get('@documentName').contains(fileName).click();
       cy.get('.vl-input-field--block').click().type(extraName);
       cy.get('.vl-vi-save').click();
-      //TODO patch happens
-
+      // TODO patch happens
     });
     cy.get('.vlc-document-card').within(() => {
       // assert new value is set
@@ -166,7 +167,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     });
     cy.get('@accessLevelToolbar').within(() => {
       cy.get('.vl-vi-save').click();
-      //TODO patch happens
+      // TODO patch happens
       cy.get('.vlc-pill').contains('Publiek').click();
     });
 
@@ -180,19 +181,20 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       cy.get('.vlc-pill').contains('Intern Regering');
     });
     cy.get('.js-vl-accordion > button').click();
-
   });
 
   it('Cancelling when adding new document-version should not skip a version the next time', () => {
     cy.route('DELETE', '/files/**').as('deleteFile');
     cy.route('POST', '/document-versions').as('createNewDocumentVersion');
-    const caseTitle = 'Cypress test: document versions - ' + currentTimestamp();
+    const caseTitle = `Cypress test: document versions - ${currentTimestamp()}`;
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: cancelling a new document version - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: cancelling a new document version - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het annuleren tijdens toevoegen van een nieuwe document versie';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    const file = { folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota' };
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+    };
     const files = [file];
     cy.createCase(false, caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -219,7 +221,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(file.newFileName + 'BIS');
+        cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
       });
     });
 
@@ -229,7 +231,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(file.newFileName + 'TER');
+        cy.get('.vl-title--h6 > span').contains(`${file.newFileName}TER`);
       });
     });
 
@@ -247,7 +249,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(file.newFileName + 'QUATER');
+        cy.get('.vl-title--h6 > span').contains(`${file.newFileName}QUATER`);
       });
     });
 
@@ -256,13 +258,13 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get('.js-vl-accordion > button').click();
     cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
     cy.get('@versions').eq(0).within(() => {
-      cy.get('.vl-title--h6').contains(file.newFileName + 'QUATER');
+      cy.get('.vl-title--h6').contains(`${file.newFileName}QUATER`);
     });
     cy.get('@versions').eq(1).within(() => {
-      cy.get('.vl-title--h6').contains(file.newFileName + 'TER');
+      cy.get('.vl-title--h6').contains(`${file.newFileName}TER`);
     });
     cy.get('@versions').eq(2).within(() => {
-      cy.get('.vl-title--h6').contains(file.newFileName + 'BIS');
+      cy.get('.vl-title--h6').contains(`${file.newFileName}BIS`);
     });
     cy.get('@versions').eq(3).within(() => {
       cy.get('.vl-title--h6').contains(file.newFileName);
@@ -275,19 +277,18 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get('.js-vl-accordion > button').click();
     cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
     cy.get('@versions').eq(0).within(() => {
-      cy.get('.vl-title--h6').contains(file.newFileName + 'QUATER');
+      cy.get('.vl-title--h6').contains(`${file.newFileName}QUATER`);
     });
     cy.get('@versions').eq(1).within(() => {
-      cy.get('.vl-title--h6').contains(file.newFileName + 'TER');
+      cy.get('.vl-title--h6').contains(`${file.newFileName}TER`);
     });
     cy.get('@versions').eq(2).within(() => {
-      cy.get('.vl-title--h6 ').contains(file.newFileName + 'BIS');
+      cy.get('.vl-title--h6 ').contains(`${file.newFileName}BIS`);
     });
     cy.get('@versions').eq(3).within(() => {
       cy.get('.vl-title--h6').contains(file.newFileName);
     });
     cy.get('.js-vl-accordion > button').click();
-
   });
 });
 

@@ -7,6 +7,7 @@ export default class AgendaItemPress extends Component {
   @service currentSession;
 
   agendaitem = null;
+
   isEditing = false;
 
   @computed('agendaitem')
@@ -18,7 +19,7 @@ export default class AgendaItemPress extends Component {
   async toggleIsEditing() {
     const agendaitem = this.get('agendaitem');
     const agenda = await this.get('agendaitem.agenda');
-    let text = agendaitem.get('textPress');
+    const text = agendaitem.get('textPress');
     if (!text) {
       const mandatees = await agendaitem.get('mandatees');
       const phases = await agendaitem.get('phases');
@@ -30,7 +31,7 @@ export default class AgendaItemPress extends Component {
       if (mandatees) {
         titles = mandatees.map((mandatee) => mandatee.get('title'));
       }
-      const pressText = `${agendaitem.get('shortTitle')}\n${titles.join('\n')}\n${phase}`
+      const pressText = `${agendaitem.get('shortTitle')}\n${titles.join('\n')}\n${phase}`;
       agendaitem.set('textPress', pressText);
       await agendaitem.save().then(() => {
         updateModifiedProperty(agenda);

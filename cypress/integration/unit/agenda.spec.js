@@ -1,8 +1,8 @@
-import modal from "../../selectors/modal.selectors";
+import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import actionModel from '../../selectors/action-modal.selectors';
 
-/*global context, before, it, cy,beforeEach, afterEach, Cypress*/
+/* global context, before, it, cy,beforeEach, afterEach, Cypress */
 /// <reference types="Cypress" />
 
 context('Agenda tests', () => {
@@ -68,7 +68,7 @@ context('Agenda tests', () => {
   });
 
   it('should edit nota on agendaitem and trim whitespaces', () => {
-    const testId = 'testId=' + currentTimestamp() + ': ';
+    const testId = `testId=${currentTimestamp()}: `;
 
     const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
@@ -76,7 +76,7 @@ context('Agenda tests', () => {
     cy.createAgenda(KIND, agendaDate, PLACE);
     cy.openAgendaForDate(agendaDate);
 
-    const case_1_TitleShort = testId + 'Cypress test dossier 1';
+    const case_1_TitleShort = `${testId}Cypress test dossier 1`;
     const type_1 = 'Nota';
     const newSubcase_1_TitleShort = 'dit is de korte titel\n\n';
     const subcase_1_TitleLong = 'dit is de lange titel\n\n';
@@ -91,20 +91,19 @@ context('Agenda tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
-    cy.contains("dit is de korte titel").click();
+    cy.contains('dit is de korte titel').click();
     cy.get(agenda.subcaseTitlesEdit).should('exist').should('be.visible').click();
     cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).clear();
-    cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).type("dit is de korte titel\n\n");
+    cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).type('dit is de korte titel\n\n');
 
     cy.get(agenda.subcaseTitlesEditTitleOfSubcase).clear();
-    cy.get(agenda.subcaseTitlesEditTitleOfSubcase).type("dit is de lange titel\n\n");
+    cy.get(agenda.subcaseTitlesEditTitleOfSubcase).type('dit is de lange titel\n\n');
 
     cy.get(agenda.subcaseTitlesEditSave).should('exist').should('be.visible').click();
     cy.get(agenda.subcaseTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
-  })
-
+  });
 });
 
 function currentTimestamp() {

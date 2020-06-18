@@ -18,10 +18,9 @@ export default Component.extend({
       return '';
     }
     if (this.itemIndex) {
-      return this.itemIndex + '.';
-    } else {
-      return this.agendaitem.get('number') + '.';
+      return `${this.itemIndex}.`;
     }
+    return `${this.agendaitem.get('number')}.`;
   }),
 
   actions: {

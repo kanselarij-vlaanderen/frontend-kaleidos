@@ -18,7 +18,7 @@ export default Component.extend({
   isVerifying: null,
 
   shouldShowPrintButton: computed('routing.currentRouteName', function () {
-    return this.routing.get('currentRouteName').includes(`newsletter.overview`);
+    return this.routing.get('currentRouteName').includes('newsletter.overview');
   }),
 
   actions: {
@@ -39,7 +39,6 @@ export default Component.extend({
       });
       this.set('newsletterHTML', null);
       this.set('testCampaignIsLoading', false);
-
     },
 
     async deleteCampaign() {
@@ -103,6 +102,6 @@ export default Component.extend({
     async clearNewsletterHTML() {
       this.set('newsletterHTML', null);
       this.set('testCampaignIsLoading', false);
-    }
+    },
   },
 });

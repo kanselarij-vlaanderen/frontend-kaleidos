@@ -1,15 +1,20 @@
 import Component from '@ember/component';
-import EmberObject from '@ember/object';
-import { action, computed } from '@ember/object';
+import EmberObject, { action, computed } from '@ember/object';
+
 import { inject as service } from '@ember/service';
 import DS from 'ember-data';
 
 export default class AccessLevelPill extends Component {
   confidential = false;
+
   editing = false;
+
   @service() intl;
+
   @service('current-session') session;
+
   classNameBindings = [':vl-u-display-flex', ':vl-u-flex-align-center'];
+
   loading = false;
 
   @computed('item.accessLevel')
@@ -21,9 +26,7 @@ export default class AccessLevelPill extends Component {
     }
 
     return DS.PromiseObject.create({
-      promise: accessLevel.then((access) => {
-        return access;
-      })
+      promise: accessLevel.then((access) => access),
     });
   }
 
@@ -36,9 +39,7 @@ export default class AccessLevelPill extends Component {
     }
 
     return DS.PromiseObject.create({
-      promise: accessLevel.then((access) => {
-        return access;
-      })
+      promise: accessLevel.then((access) => access),
     });
   }
 

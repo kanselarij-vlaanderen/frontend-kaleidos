@@ -10,10 +10,10 @@ Router.map(function () {
   this.route('agendas', { path: '/' }, function () {
     this.route('overview', { path: '/overzicht' });
   });
-  this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id' }, function() {
+  this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id' }, function () {
     this.route('print', { path: '/afdrukken' });
-    this.route('agendaitems', { path: '/agendapunten' }, function() {
-      this.route('agendaitem', { path: '/:agendaitem_id' }, function() {
+    this.route('agendaitems', { path: '/agendapunten' }, function () {
+      this.route('agendaitem', { path: '/:agendaitem_id' }, function () {
         this.route('index', { path: '/' });
         this.route('documents', { path: '/documenten' });
         this.route('comments', { path: '/opmerkingen' });
@@ -42,12 +42,12 @@ Router.map(function () {
   this.route('settings', { path: '/instellingen' }, function () {
     this.route('ministers');
     this.route('overview', { path: '/overzicht' });
-    this.route('users', { path:"/gebruikers"}, function() {
-      this.route('user', { path: "/:id"});
+    this.route('users', { path: '/gebruikers' }, function () {
+      this.route('user', { path: '/:id' });
     });
-    this.route('system-alerts', { path: '/systeemmeldingen' }, function() {
-      this.route('edit', { path:'/:alert_id' });
-      this.route('new', { path:'/nieuw' });
+    this.route('system-alerts', { path: '/systeemmeldingen' }, function () {
+      this.route('edit', { path: '/:alert_id' });
+      this.route('new', { path: '/nieuw' });
     });
   });
   this.route('loading', { path: '/laden' });
@@ -87,7 +87,7 @@ Router.map(function () {
   this.route('help');
   this.route('manual', { path: '/handleiding' });
 
-  this.route('styleguide', function() {
+  this.route('styleguide', function () {
     this.route('alerts');
     this.route('buttons');
     this.route('documents');
@@ -98,7 +98,7 @@ Router.map(function () {
     this.route('typography');
   });
 
-  this.route('search', { path: '/zoeken' }, function() {
+  this.route('search', { path: '/zoeken' }, function () {
     this.route('cases', { path: '/dossiers' });
     this.route('agenda-items', { path: '/agendapunten' });
   });

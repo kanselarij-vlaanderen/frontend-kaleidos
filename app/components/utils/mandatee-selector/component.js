@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 import moment from 'moment';
 
-export default Component.extend( {
+export default Component.extend({
   classNames: ['mandatee-selector-container'],
   classNameBindings: ['classes'],
   store: inject(),
@@ -20,21 +20,19 @@ export default Component.extend( {
     this.findAll.perform();
   },
 
-  filter: computed(function () {
-    return { ':gte:end': moment().utc().toDate().toISOString() };
-  }),
+  filter: computed(() => ({ ':gte:end': moment().utc().toDate().toISOString() })),
 
   queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
-    let options = {};
+    const options = {};
     const { filter, sortField, includeField } = this;
     if (sortField) {
-      options['sort'] = sortField;
+      options.sort = sortField;
     }
     if (filter) {
-      options['filter'] = filter;
+      options.filter = filter;
     }
     if (includeField) {
-      options['include'] = includeField;
+      options.include = includeField;
     }
     return options;
   }),
@@ -50,12 +48,12 @@ export default Component.extend( {
   searchTask: task(function* (searchValue) {
     yield timeout(300);
     const { queryOptions, searchField, modelName } = this;
-    if (queryOptions['filter']) {
-      queryOptions['filter'][searchField] = searchValue;
+    if (queryOptions.filter) {
+      queryOptions.filter[searchField] = searchValue;
     } else {
-      let filter = {};
+      const filter = {};
       filter[searchField] = searchValue;
-      queryOptions['filter'] = filter;
+      queryOptions.filter = filter;
     }
 
     return this.store.query(modelName, queryOptions);
@@ -72,6 +70,6 @@ export default Component.extend( {
         this.set('queryOptions', { sort: this.sortField });
         this.findAll.perform();
       }
-    }
+    },
   },
 });

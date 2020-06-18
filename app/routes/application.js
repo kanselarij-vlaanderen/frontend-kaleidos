@@ -34,7 +34,7 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   async sessionInvalidated() {
-    const logoutUrl = ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'];
+    const { logoutUrl } = ENV.torii.providers['acmidm-oauth2'];
     window.location.replace(logoutUrl);
   },
 
@@ -50,10 +50,10 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   actions: {
-    willTransition: function (transition) {
+    willTransition(transition) {
       if (
-        this.fileService.get('deleteDocumentWithUndo.isRunning') &&
-        confirm(this.intl.t('leave-page-message'))
+        this.fileService.get('deleteDocumentWithUndo.isRunning')
+        && confirm(this.intl.t('leave-page-message'))
       ) {
         transition.abort();
       } else {

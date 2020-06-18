@@ -19,8 +19,8 @@ export const cancelEdit = (item, propertiesToSet) => {
   }
   item.reload();
   const keys = Object.keys(propertiesToSet);
-  keys.forEach(async function () {
-    keys.forEach(prop => item.notifyPropertyChange(prop));
+  keys.forEach(async () => {
+    keys.forEach((prop) => item.notifyPropertyChange(prop));
   });
 };
 
@@ -49,7 +49,7 @@ export const setNewPropertiesToModel = async (model, propertiesToSet, resetForma
   }
 
   const keys = Object.keys(propertiesToSet);
-  keys.forEach(async function (key) {
+  keys.forEach(async (key) => {
     await model.get(key);
     model.set(key, propertiesToSet[key]);
   });
@@ -58,7 +58,7 @@ export const setNewPropertiesToModel = async (model, propertiesToSet, resetForma
     item.reload();
     return true;
   }).catch((e) => {
-    throw(e);
+    throw (e);
   });
 };
 
@@ -112,43 +112,41 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
       }));
     }
   }
-}
+};
 
 export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
   const approvals = await agendaitem.get('approvals');
   if (approvals) {
-    await Promise.all(approvals.map(approval => approval.destroyRecord()));
+    await Promise.all(approvals.map((approval) => approval.destroyRecord()));
   }
-}
+};
 
 /**
  * For a given set of agenda items, will re-order them by their groupPriority
  * ⚠️ Word of caution, this mutates the original set!
  * @param {Array} agendaitems   Agenda items to mutate
  */
-export const setCalculatedGroupPriorities = (agendaitems) => {
-  return Promise.all(
-    agendaitems.map(async (item) => {
-      const mandatees = await item.get('mandatees');
-      if (item.isApproval) {
-        return;
-      }
-      if (mandatees.length == 0) {
-        item.set('groupPriority', 20000000);
-        return;
-      }
-      const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
-      const minPrio = Math.min(...mandateePriorities);
-      const minPrioIndex = mandateePriorities.indexOf(minPrio);
-      delete mandateePriorities[minPrioIndex];
-      let calculatedGroupPriority = minPrio;
-      mandateePriorities.forEach((value) => {
-        calculatedGroupPriority += value / 100;
-      });
-      item.set('groupPriority', calculatedGroupPriority);
-    })
-  );
-}
+export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
+  agendaitems.map(async (item) => {
+    const mandatees = await item.get('mandatees');
+    if (item.isApproval) {
+      return;
+    }
+    if (mandatees.length == 0) {
+      item.set('groupPriority', 20000000);
+      return;
+    }
+    const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
+    const minPrio = Math.min(...mandateePriorities);
+    const minPrioIndex = mandateePriorities.indexOf(minPrio);
+    delete mandateePriorities[minPrioIndex];
+    let calculatedGroupPriority = minPrio;
+    mandateePriorities.forEach((value) => {
+      calculatedGroupPriority += value / 100;
+    });
+    item.set('groupPriority', calculatedGroupPriority);
+  }),
+);
 
 /**
  * For a given set of agendaitems, return an array of groups
@@ -157,7 +155,7 @@ export const setCalculatedGroupPriorities = (agendaitems) => {
  * @return {Array}              A list of groups
  */
 export const groupAgendaitemsByGroupname = (agendaitems) => {
-  let groups = [];
+  const groups = [];
   agendaitems.map((agendaitem) => {
     const groupName = agendaitem.get('ownGroupName');
     const foundItem = groups.find((item) => item.groupName == groupName);
@@ -176,7 +174,7 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
     }
   });
   return groups;
-}
+};
 
 /**
  * For a set of agendaitems, will fetch the drafts, and will group them by priority
@@ -195,7 +193,7 @@ export const parseDraftsAndGroupsFromAgendaitems = async (agendaitems) => {
     draftAgendaitems,
     groupedAgendaitems,
   };
-}
+};
 
 /**
  * Given a set of grouped agendaitems, sort them by priority
@@ -207,9 +205,9 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
   let prevIndex = 0;
   let groupsArray = groupedAgendaitems;
   if (!allowEmptyGroups) {
-    groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers')
+    groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers');
   } else {
-    groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers')
+    groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers');
   }
 
   groupsArray = groupsArray.sortBy('groupPriority').map((item) => {
@@ -221,4 +219,4 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
   });
 
   return groupsArray;
-}
+};

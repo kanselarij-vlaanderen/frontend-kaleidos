@@ -9,16 +9,16 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
 
   queryParams: {
     filter: {
-      refreshModel: true
+      refreshModel: true,
     },
     size: {
-      refreshModel: true
-    }
+      refreshModel: true,
+    },
   },
 
   mergeQueryOptions(params) {
-    const filter = params.filter;
-    const size = params.size;
+    const { filter } = params;
+    const { size } = params;
 
     const options = {
       include: 'group,organization',
@@ -38,6 +38,6 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
     refresh() {
       this._super(...arguments);
       this.refresh();
-    }
-  }
+    },
+  },
 });

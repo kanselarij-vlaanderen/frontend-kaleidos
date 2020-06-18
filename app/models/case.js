@@ -1,7 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 
-const { Model, attr, hasMany, PromiseObject } = DS;
+const {
+  Model, attr, hasMany, PromiseObject,
+} = DS;
 
 export default Model.extend({
   created: attr('datetime'),
@@ -19,8 +21,8 @@ export default Model.extend({
         this.get('subcases').then((subcases) => {
           const sortedSubcases = subcases.sortBy('created');
           return sortedSubcases.get('lastObject');
-        })
-    })
+        }),
+    });
   }),
 
 });

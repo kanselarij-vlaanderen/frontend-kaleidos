@@ -9,5 +9,5 @@ export default Component.extend({
       const { agenda } = this;
       await this.store.createRecord('comment', { agenda });
     },
-  }
+  },
 });

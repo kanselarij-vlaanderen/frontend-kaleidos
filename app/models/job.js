@@ -1,7 +1,6 @@
 import DS from 'ember-data';
 import Evented from '@ember/object/evented';
-import { observer } from '@ember/object';
-import { computed } from '@ember/object';
+import { observer, computed } from '@ember/object';
 
 export default DS.Model.extend(Evented, {
   RUNNING: Object.freeze('http://vocab.deri.ie/cogs#Running'),
@@ -20,5 +19,5 @@ export default DS.Model.extend(Evented, {
     if (this.hasEnded) {
       this.trigger('didEnd', this.status);
     }
-  })
+  }),
 });

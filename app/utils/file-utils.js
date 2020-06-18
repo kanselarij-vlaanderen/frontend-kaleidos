@@ -11,6 +11,6 @@ export const downloadFilePrompt = function (context, file, filename) {
 export const removeFile = function (file) {
   return ajax({
     method: 'DELETE',
-    url: '/files/' + file.id
+    url: `/files/${file.id}`,
   });
 };

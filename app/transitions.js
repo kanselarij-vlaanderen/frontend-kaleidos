@@ -3,7 +3,6 @@ export default function () {
   this.transition(
     // this.fromRoute(null),
     this.use('toLeft', { duration: 100, easing: 'easeInOut' }),
-    this.reverse('toRight', { duration: 500, easing: 'easeInOut' })
+    this.reverse('toRight', { duration: 500, easing: 'easeInOut' }),
   );
-
 }

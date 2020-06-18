@@ -20,30 +20,30 @@ export default Controller.extend({
       breakpoints: ['mobile', 'tablet', 'desktop'],
       cellComponent: 'web-components/vl-agendaitem-content-column',
     },
-      {
-        label: this.intl.t('ministers'),
-        classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-        cellClassNames: ['vl-data-table-col-2'],
-        sortable: false,
-        breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'sortedMandatees',
-        cellComponent: 'web-components/vl-mandatees-column'
-      },
-      {
-        label: this.intl.t('latest-modified'),
-        classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-        cellClassNames: ['vl-data-table-col-2'],
-        breakpoints: ['mobile', 'tablet', 'desktop'],
-        valuePath: 'modified',
-        sortable: true,
-        cellComponent: 'web-components/vl-modified-column'
-      },
-      {
-        width: '144px',
-        sortable: false,
-        breakpoints: ['mobile', 'tablet', 'desktop'],
-        cellComponent: 'web-components/vl-table-actions'
-      }];
+    {
+      label: this.intl.t('ministers'),
+      classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
+      cellClassNames: ['vl-data-table-col-2'],
+      sortable: false,
+      breakpoints: ['mobile', 'tablet', 'desktop'],
+      valuePath: 'sortedMandatees',
+      cellComponent: 'web-components/vl-mandatees-column',
+    },
+    {
+      label: this.intl.t('latest-modified'),
+      classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
+      cellClassNames: ['vl-data-table-col-2'],
+      breakpoints: ['mobile', 'tablet', 'desktop'],
+      valuePath: 'modified',
+      sortable: true,
+      cellComponent: 'web-components/vl-modified-column',
+    },
+    {
+      width: '144px',
+      sortable: false,
+      breakpoints: ['mobile', 'tablet', 'desktop'],
+      cellComponent: 'web-components/vl-table-actions',
+    }];
   }),
 
   actions: {
@@ -54,9 +54,9 @@ export default Controller.extend({
         modified: date,
         attendees: [],
         agendaitem: await row.content,
-      })
+      });
       await meetingRecord.save();
       await row.get('meetingRecord');
-    }
-  }
+    },
+  },
 });

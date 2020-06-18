@@ -14,8 +14,8 @@ export default Component.extend({
       yield timeout(300);
       return this.store.query('government-domain', {
         filter: {
-          label: searchValue
-        }
+          label: searchValue,
+        },
       });
     }
   }),
@@ -29,7 +29,7 @@ export default Component.extend({
 
   actions: {
     async chooseDomain(domains) {
-      this.set('selectedDomains', domains)
+      this.set('selectedDomains', domains);
       this.chooseDomain(domains);
     },
     async resetValueIfEmpty(param) {
@@ -40,6 +40,6 @@ export default Component.extend({
       } else {
         return this.set('domains', this.get('selectedDomains'));
       }
-    }
-  }
+    },
+  },
 });

@@ -6,5 +6,5 @@ export default Model.extend({
   label: attr('string'),
   description: attr('string'),
   scopeNote: attr('string'),
-  type: attr('string')
+  type: attr('string'),
 });

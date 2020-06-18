@@ -25,6 +25,6 @@ export default Component.extend({
         this.set('isLoading', false);
         this.closeDialog();
       });
-    }
-  }
+    },
+  },
 });

@@ -16,7 +16,7 @@ export default Component.extend({
   }),
 
   didInsertElement() {
-      this.get('element').querySelector('[role="dialog"]').focus();
+    this.get('element').querySelector('[role="dialog"]').focus();
   },
 
   showIcon: computed('buttonType', function () {
@@ -25,14 +25,14 @@ export default Component.extend({
 
   buttonClass: computed('buttonType', function () {
     if (this.buttonType === 'warning') {
-      return 'vl-button'
-    } else if (this.buttonType === 'danger') {
-      return 'vl-button vl-button--error'
+      return 'vl-button';
+    } if (this.buttonType === 'danger') {
+      return 'vl-button vl-button--error';
     }
     return null;
   }),
 
-  keyDown: function (event) {
+  keyDown(event) {
     if (event.key === 'Escape') {
       this.cancel();
     }
@@ -45,6 +45,6 @@ export default Component.extend({
 
     cancel() {
       this.cancel();
-    }
-  }
+    },
+  },
 });

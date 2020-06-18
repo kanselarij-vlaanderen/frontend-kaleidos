@@ -8,9 +8,8 @@ export default Component.extend({
     const approved = await subcase.get('approved');
 
     if (approved) {
-      return `Beslist`;
-    } else {
-      return `Niet beslist`;
+      return 'Beslist';
     }
-  })
+    return 'Niet beslist';
+  }),
 });

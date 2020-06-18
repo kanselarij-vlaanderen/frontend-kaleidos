@@ -13,7 +13,9 @@ export default Component.extend({
     const { title, shortTitle, confidential } = this;
     const caze = this.store.createRecord('case',
       {
-        title, shortTitle, confidential,
+        title,
+        shortTitle,
+        confidential,
         isArchived: false,
         created: newDate,
       });
@@ -31,6 +33,6 @@ export default Component.extend({
 
     close() {
       this.close();
-    }
-  }
+    },
+  },
 });

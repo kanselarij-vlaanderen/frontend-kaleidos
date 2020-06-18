@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 
-export default Component.extend( {
+export default Component.extend({
   sessionService: inject(),
   classNameBindings: ['classes'],
   store: inject(),
@@ -31,28 +31,28 @@ export default Component.extend( {
   searchTask: task(function* (searchValue) {
     yield timeout(300);
     const { queryOptions, searchField, modelName } = this;
-    if (queryOptions['filter']) {
-      queryOptions['filter'][searchField] = searchValue;
+    if (queryOptions.filter) {
+      queryOptions.filter[searchField] = searchValue;
     } else {
-      let filter = {};
+      const filter = {};
       filter[searchField] = searchValue;
-      queryOptions['filter'] = filter;
+      queryOptions.filter = filter;
     }
 
     return this.store.query(modelName, queryOptions);
   }),
 
   queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
-    let options = {};
+    const options = {};
     const { filter, sortField, includeField } = this;
     if (sortField) {
-      options['sort'] = sortField;
+      options.sort = sortField;
     }
     if (filter) {
-      options['filter'] = filter;
+      options.filter = filter;
     }
     if (includeField) {
-      options['include'] = includeField;
+      options.include = includeField;
     }
     return options;
   }),
@@ -70,6 +70,6 @@ export default Component.extend( {
       if (param == '') {
         this.set('items', this.sessionService.get('agendas'));
       }
-    }
+    },
   },
 });

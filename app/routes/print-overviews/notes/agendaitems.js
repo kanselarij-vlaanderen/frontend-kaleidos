@@ -34,9 +34,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
           number: this.get('page'),
         },
       })
-      .then((items) => {
-        return items.toArray();
-      });
+      .then((items) => items.toArray());
   },
 
   setupController(controller) {
@@ -59,5 +57,5 @@ export default Route.extend(AuthenticatedRouteMixin, {
       this._super(...arguments);
       this.refresh();
     },
-  }
+  },
 });

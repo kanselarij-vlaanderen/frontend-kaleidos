@@ -4,14 +4,14 @@ import { hash } from 'rsvp';
 export default Route.extend({
   queryParams: {
     refresh: {
-      refreshModel: true
-    }
+      refreshModel: true,
+    },
   },
 
   async model() {
     const caze = this.modelFor('cases.case');
 
-    let subcases = await this.store.query('subcase', {
+    const subcases = await this.store.query('subcase', {
       filter: {
         case: { id: caze.get('id') },
       },
@@ -20,8 +20,8 @@ export default Route.extend({
     });
 
     return hash({
-      subcases: subcases,
-      case: caze
+      subcases,
+      case: caze,
     });
   },
 
@@ -29,7 +29,7 @@ export default Route.extend({
     refresh() {
       this._super(...arguments);
       this.refresh();
-    }
-  }
+    },
+  },
 
 });

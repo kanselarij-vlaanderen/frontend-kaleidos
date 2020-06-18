@@ -8,7 +8,7 @@ export default class VRDocumentName {
       docType: '((DOC)|(DEC)|(MED))',
       caseNr: '(\\d{4})',
       index: '(\\d{1,3})',
-      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map(s => s.toUpperCase()).join(')|(')}))`.replace('()|', '') // Hack to get out the value for version '0'
+      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((s) => s.toUpperCase()).join(')|(')}))`.replace('()|', ''), // Hack to get out the value for version '0'
     });
   }
 
@@ -53,9 +53,8 @@ export default class VRDocumentName {
     };
     if (this.strict) {
       return meta;
-    } else {
-      return meta;
     }
+    return meta;
   }
 
   // Will only be needed by backend renaming service
@@ -75,11 +74,11 @@ export default class VRDocumentName {
   }
 
   get withoutVersionSuffix() {
-    return this.name.replace(new RegExp(VRDocumentName.regexGroups.versionSuffix + '$', 'ui'), '');
+    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.versionSuffix}$`, 'ui'), '');
   }
 
   withOtherVersionSuffix(versionNr) {
-    return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[versionNr].toUpperCase()}`
+    return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[versionNr].toUpperCase()}`;
   }
 }
 
@@ -88,9 +87,9 @@ export const compareFunction = function (a, b) {
     const metaA = a.parseMeta();
     try { // Both names parse
       const metaB = b.parseMeta();
-      return (metaB.caseNr - metaA.caseNr) || // Case number descending (newest first)
-        (metaA.index - metaB.index) || // Index ascending
-        (metaB.date - metaA.date); // Date descending (newest first)
+      return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
+        || (metaA.index - metaB.index) // Index ascending
+        || (metaB.date - metaA.date); // Date descending (newest first)
     } catch (e) { // Only a parses
       return -1;
     }

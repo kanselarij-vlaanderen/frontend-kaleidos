@@ -1,27 +1,29 @@
-/*global context, before, xit, cy, Cypress*/
+/* global context, before, xit, cy, Cypress */
 /// <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 
 context('Agenda tests', () => {
-
   before(() => {
     cy.resetCache();
     cy.server();
   });
 
   xit('Propagate decisions and documents to overheid graph by releasing them', () => {
-
     cy.login('Admin');
 
-    const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
+    const caseTitle = `testId=${currentTimestamp()}: ` + 'Cypress test dossier 1';
     const agendaDate = Cypress.moment().add(1, 'weeks').day(6); // Next friday
-    const subcaseTitle1 = caseTitle + ' test stap 1';
-    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
+    const subcaseTitle1 = `${caseTitle} test stap 1`;
+    const file = { folder: 'files', fileName: 'test', fileExtension: 'pdf' };
     const files = [
-      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota'},
-      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet'}
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota',
+      },
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet',
+      },
     ];
     cy.createCase(false, caseTitle);
     cy.addSubcase('Nota',
@@ -33,7 +35,7 @@ context('Agenda tests', () => {
 
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
-    cy.addDocumentsToAgendaItem(subcaseTitle1,files);
+    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
 
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
@@ -61,7 +63,7 @@ context('Agenda tests', () => {
     cy.get('.vl-form__group').as('editDecision');
     cy.get('@editDecision').within(() => {
       cy.get('.vl-checkbox--switch__label').click();
-    })
+    });
 
     cy.contains('Opslaan').click();
 
@@ -96,7 +98,6 @@ context('Agenda tests', () => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 2);
     });
   });
-
 });
 
 function currentTimestamp() {

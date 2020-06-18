@@ -1,21 +1,19 @@
-import {A} from '@ember/array';
-import VRDocumentName, {compareFunction} from 'fe-redpencil/utils/vr-document-name';
-import DS from "ember-data";
+import { A } from '@ember/array';
+import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import DS from 'ember-data';
 
-let {PromiseObject} = DS;
+const { PromiseObject } = DS;
 
 export const sortDocuments = (documentVersions, containers) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where
   // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
   // some items not being returned. By not having a sort parameter, this doesn't occur.
-  const sortedDocVers = A(documentVersions.toArray()).sort((a, b) => {
-    return compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name')));
-  });
+  const sortedDocVers = A(documentVersions.toArray()).sort((a, b) => compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name'))));
   /*
     Code below for compatibility towards mixin consumers. Since names are now on each document(version)
     we cans sort on the documents themselves instead of on containers
   */
-  return A(containers.toArray()).sort(function (a, b) {
+  return A(containers.toArray()).sort((a, b) => {
     let matchingdocA = null;
     let matchingdocB = null;
     for (let i = 0; i < a.get('documents.length'); i++) {
@@ -32,18 +30,10 @@ export const sortDocuments = (documentVersions, containers) => {
         break;
       }
     }
-    return sortedDocVers.indexOf(matchingdocA) - sortedDocVers.indexOf(matchingdocB)
+    return sortedDocVers.indexOf(matchingdocA) - sortedDocVers.indexOf(matchingdocB);
   });
 };
 
-export const getDocumentsLength = (model, property) => {
-  return PromiseObject.create({
-    promise: model.get(property).then((documents) => {
-      return documents ? documents.get('length') : 0;
-    })
-  });
-};
-
-
-
-
+export const getDocumentsLength = (model, property) => PromiseObject.create({
+  promise: model.get(property).then((documents) => (documents ? documents.get('length') : 0)),
+});

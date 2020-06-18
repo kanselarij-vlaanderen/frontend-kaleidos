@@ -4,7 +4,6 @@ import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject, { computed } from '@ember/object';
 import { A } from '@ember/array';
 
-
 export default Component.extend({
   store: service(),
   agendaService: service(),
@@ -16,21 +15,22 @@ export default Component.extend({
   extraInfo: null,
 
   date: computed('startDate', function () {
-    return A([this.startDate])
+    return A([this.startDate]);
   }),
-
 
   didInsertElement() {
     this._super(...arguments);
     this.set('selectedKindUri', this.get('meeting.kind'));
     this.set('kind', EmberObject.create(CONFIG.kinds.find((kind) => kind.uri === this.get('selectedKindUri'))));
-    this.set('startDate', this.get('meeting.plannedStart'))
-    this.set('extraInfo', this.get('meeting.extraInfo'))
+    this.set('startDate', this.get('meeting.plannedStart'));
+    this.set('extraInfo', this.get('meeting.extraInfo'));
   },
 
   actions: {
     async updateSession() {
-      const { isDigital, extraInfo, selectedKindUri, meeting } = this;
+      const {
+        isDigital, extraInfo, selectedKindUri, meeting,
+      } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
       const date = this.formatter.formatDate(null);
@@ -68,5 +68,4 @@ export default Component.extend({
       this.successfullyEdited();
     },
   },
-})
-;
+});

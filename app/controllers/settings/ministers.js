@@ -33,7 +33,7 @@ export default Controller.extend({
     },
 
     toggleProperty(prop, mandateeToEdit) {
-      this.set('mandateeToEdit', mandateeToEdit)
+      this.set('mandateeToEdit', mandateeToEdit);
       this.toggleProperty(prop);
     },
 
@@ -54,6 +54,6 @@ export default Controller.extend({
 
     mandateesUpdated() {
       this.send('refreshRoute');
-    }
-  }
+    },
+  },
 });

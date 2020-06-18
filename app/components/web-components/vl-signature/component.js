@@ -8,22 +8,14 @@ export default Component.extend({
   classNames: ['vl-description-data', 'vl-u-spacer-extended-bottom', 'vl-u-spacer-extended-top-l'],
 
   downloadUrl: computed('signature.file', function () {
-    return this.signature.then((signature) => {
-      return signature.get('file').then((file) => {
-        return `/files/${file.get('id')}/download`;
-      })
-    })
+    return this.signature.then((signature) => signature.get('file').then((file) => `/files/${file.get('id')}/download`));
   }),
 
   nameToDisplay: computed('signature.name', function () {
-    return this.signature.then((signature) => {
-      return `${signature.name}${this.intl.t('divider')}`
-    })
+    return this.signature.then((signature) => `${signature.name}${this.intl.t('divider')}`);
   }),
 
   functionToDisplay: computed('signature.function', function () {
-    return this.signature.then((signature) => {
-      return `${signature.function}.`;
-    })
+    return this.signature.then((signature) => `${signature.function}.`);
   }),
 });

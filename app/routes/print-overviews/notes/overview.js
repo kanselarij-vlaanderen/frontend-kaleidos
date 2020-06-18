@@ -11,21 +11,19 @@ export default Route.extend({
   type: 'notes',
 
   queryParams: {
-    definite: { refreshModel: false }
+    definite: { refreshModel: false },
   },
 
   async model() {
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
-    let agendaitems = await this.store.query('agendaitem', {
+    const agendaitems = await this.store.query('agendaitem', {
       filter: { agenda: { id: agenda.get('id') } },
       include: 'mandatees',
-      sort: 'priority'
+      sort: 'priority',
     });
 
-    const announcements = agendaitems.filter((item) => {
-      return item.showAsRemark;
-    });
+    const announcements = agendaitems.filter((item) => item.showAsRemark);
 
     const { draftAgendaitems, groupedAgendaitems } = await parseDraftsAndGroupsFromAgendaitems(agendaitems);
 

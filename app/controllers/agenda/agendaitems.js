@@ -27,18 +27,16 @@ export default Controller.extend({
       const actualAnnouncementsitems = announcements.filter((item) => !item.isDeleted).sortBy('priority');
       await this.agendaService.groupAgendaItemsOnGroupName(actualAnnouncementsitems);
       return actualAnnouncementsitems;
-    } else {
-      return [];
     }
+    return [];
   }),
 
   agendaitemsClass: computed('routing.currentRouteName', function () {
     const { routing } = this;
     if (routing.get('currentRouteName').startsWith('agenda.agendaitems.agendaitem')) {
       return 'vlc-panel-layout__agenda-items';
-    } else {
-      return 'vlc-panel-layout-agenda__detail vl-u-bg-porcelain';
     }
+    return 'vlc-panel-layout-agenda__detail vl-u-bg-porcelain';
   }),
 
   isOverviewWindow: computed('routing.currentRouteName', function () {
@@ -47,7 +45,7 @@ export default Controller.extend({
   }),
 
   actions: {
-    selectAgendaItem (agendaitem) {
+    selectAgendaItem(agendaitem) {
       const detailRoutePrefix = 'agenda.agendaitems.agendaitem';
       if (this.routing.currentRouteName.startsWith(detailRoutePrefix)) {
         this.set('sessionService.selectedAgendaItem', agendaitem); // TODO: get rid of global state
@@ -64,9 +62,9 @@ export default Controller.extend({
       this.transitionToRoute('agenda.agendaitems.index', currentSession.id, {
         queryParams: {
           selectedAgenda: currentAgenda.id,
-          refresh: id
+          refresh: id,
         },
       });
     },
-  }
+  },
 });

@@ -21,7 +21,7 @@ export default Route.extend({
       });
 
       let agendaitems = await this.store.query('agendaitem', {
-        filter: { agenda: { id: id } },
+        filter: { agenda: { id } },
         include: 'mandatees',
       });
       if (!isEmpty(params.filter)) {
@@ -40,7 +40,7 @@ export default Route.extend({
     }
   },
 
-  matchingAgendaItems: async function (filter) {
+  async matchingAgendaItems(filter) {
     if (isEmpty(filter)) {
       return {};
     }

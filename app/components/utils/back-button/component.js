@@ -1,6 +1,5 @@
 import Component from '@ember/component';
-import {inject} from '@ember/service';
-
+import { inject } from '@ember/service';
 
 export default Component.extend({
   router: inject(),
@@ -11,6 +10,6 @@ export default Component.extend({
       if (parentRoute && parentRoute.name !== 'application') {
         this.router.transitionTo(parentRoute.name);
       }
-    }
-  }
+    },
+  },
 });

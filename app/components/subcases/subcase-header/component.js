@@ -51,10 +51,10 @@ export default Component.extend({
       filter: {
         ':gte:planned-start': dateOfToday,
         ':lte:planned-start': futureDate,
-        'is-final': false
+        'is-final': false,
       },
-      sort: 'planned-start'
-    })
+      sort: 'planned-start',
+    });
   }),
 
   async deleteSubcase(subcase) {
@@ -83,7 +83,7 @@ export default Component.extend({
     this.set('isAssigningToOtherCase', false);
   },
 
-  deleteCase: task(function * (_case) {
+  deleteCase: task(function* (_case) {
     yield _case.destroyRecord();
     this.set('promptDeleteCase', false);
     this.set('caseToDelete', null);
@@ -113,7 +113,7 @@ export default Component.extend({
       this.set('isLoading', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
-      //ensures latest state is pulled
+      // ensures latest state is pulled
       await designAgenda.reload();
       await designAgenda.belongsTo('status').reload();
       const isDesignAgenda = designAgenda.get('isDesignAgenda');
@@ -134,9 +134,9 @@ export default Component.extend({
 
       if (agendaitems && agendaitems.length > 0) {
         return;
-      } else {
-        await this.deleteSubcase(subcaseToDelete);
       }
+      await this.deleteSubcase(subcaseToDelete);
+
       this.navigateToSubcaseOverview(caze);
     },
     cancelDeleteSubcase() {
@@ -167,6 +167,6 @@ export default Component.extend({
       this.set('promptDeleteCase', false);
       this.set('caseToDelete', null);
       this.get('router').transitionTo('cases.case.subcases');
-    }
+    },
   },
 });

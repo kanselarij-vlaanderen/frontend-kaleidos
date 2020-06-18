@@ -26,7 +26,7 @@ export default Component.extend({
   documentsInCreation: A([]), // When creating new documents
   document: deprecatingAlias('documentContainer', {
     id: 'model-refactor.documents',
-    until: '?'
+    until: '?',
   }),
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
@@ -52,12 +52,10 @@ export default Component.extend({
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
         if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => {
-            return itemVersionIds[item.id];
-          });
+          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
           return matchingVersions;
         }
-      })()
+      })(),
     });
   }),
 
@@ -96,9 +94,7 @@ export default Component.extend({
     this.set('documentsInCreation', A([]));
     const accessLevels = await this.store.findAll('access-level');
     try {
-      this.set('defaultAccessLevel', accessLevels.find((item) => {
-        return item.id == config.internRegeringAccessLevelId;
-      }));
+      this.set('defaultAccessLevel', accessLevels.find((item) => item.id == config.internRegeringAccessLevelId));
     } catch (e) {
       // TODO error during cypress tests:
       // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
@@ -126,15 +122,14 @@ export default Component.extend({
   createNewDocument(uploadedFile, previousDocument, defaults) {
     const propsFromPrevious = [
       'accessLevel',
-      'confidential'
+      'confidential',
     ];
     const newDocument = this.store.createRecord('document-version', {});
-    propsFromPrevious.forEach(async key => {
-      newDocument.set(key, previousDocument ?
-        await previousDocument.getWithDefault(key, defaults[key]) :
-        defaults[key]
-      );
-    })
+    propsFromPrevious.forEach(async (key) => {
+      newDocument.set(key, previousDocument
+        ? await previousDocument.getWithDefault(key, defaults[key])
+        : defaults[key]);
+    });
     newDocument.set('file', uploadedFile);
     newDocument.set('previousVersion', previousDocument);
     newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
@@ -167,7 +162,7 @@ export default Component.extend({
     if (modelDocumentVersions) {
       model.set(
         propertyName,
-        A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray()))
+        A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray())),
       );
     } else {
       model.set(propertyName, documents);
@@ -183,7 +178,7 @@ export default Component.extend({
         setNotYetFormallyOk(agendaitem);
         await destroyApprovalsOfAgendaitem(agendaitem);
         return await agendaitem.save();
-      })
+      }),
     );
   },
   async addDocumentToSubcase(documents, subcase) {
@@ -230,7 +225,7 @@ export default Component.extend({
         this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
       } else { // Adding new version, new container
         const newContainer = this.store.createRecord('document', {
-          'created': creationDate
+          created: creationDate,
         });
         newDocument.set('documentContainer', newContainer);
         this.get('documentsInCreation').pushObject(newDocument);
@@ -340,7 +335,7 @@ export default Component.extend({
         type: 'revert-action',
         title: this.intl.t('warning-title'),
         message: this.intl.t('document-being-deleted'),
-        options: { timeOut: 15000 }
+        options: { timeOut: 15000 },
       };
       verificationToast.options.onUndo = () => {
         this.fileService.reverseDelete(this.documentContainerToDelete.get('id'));
@@ -355,5 +350,5 @@ export default Component.extend({
       this.set('documentContainerToDelete', document);
       this.set('isVerifyingDelete', true);
     },
-  }
+  },
 });

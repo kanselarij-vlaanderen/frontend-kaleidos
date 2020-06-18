@@ -1,9 +1,7 @@
-/*global context, before, it, cy,beforeEach, Cypress*/
+/* global context, before, it, cy,beforeEach, Cypress */
 /// <reference types="Cypress" />
 
-
 context('Case test', () => {
-
   before(() => {
     cy.resetCache();
   });
@@ -14,9 +12,8 @@ context('Case test', () => {
   });
 
   it('should create a new case', () => {
-    const caseTitleShort= 'Cypress test: new case - ' + currentTimestamp();
+    const caseTitleShort = `Cypress test: new case - ${currentTimestamp()}`;
     cy.createCase(false, caseTitleShort);
-
   });
 
   function currentTimestamp() {

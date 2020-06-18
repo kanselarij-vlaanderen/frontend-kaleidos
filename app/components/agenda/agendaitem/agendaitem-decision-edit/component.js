@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
 import { inject as service } from '@ember/service';
-import {computed} from '@ember/object';
+import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
@@ -18,19 +18,19 @@ export default Component.extend({
   async setNewPropertiesToModel(model) {
     const { propertiesToSet } = this;
     await Promise.all(
-      propertiesToSet.map(async property => {
+      propertiesToSet.map(async (property) => {
         model.set(property, await this.get(property));
-      })
+      }),
     );
-    return model.save().then(model => model.reload());
+    return model.save().then((model) => model.reload());
   },
 
   async setDecisionPhaseToSubcase() {
     const approved = await this.get('approved');
-    const subcase = await this.get('subcase')
+    const subcase = await this.get('subcase');
 
     const foundDecidedPhases = await this.store.query('subcase-phase', {
-      filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } }
+      filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } },
     });
 
     if (foundDecidedPhases && foundDecidedPhases.length > 0) {
@@ -41,7 +41,7 @@ export default Component.extend({
       const newDecisionPhase = this.store.createRecord('subcase-phase', {
         date: moment().utc().toDate(),
         code: decidedCode,
-        subcase: subcase
+        subcase,
       });
       return newDecisionPhase.save();
     }
@@ -77,7 +77,7 @@ export default Component.extend({
 
       await this.setNewPropertiesToModel(decision).catch((e) => {
         this.set('isLoading', false);
-        throw(e);
+        throw (e);
       });
 
       await this.setDecisionPhaseToSubcase();
@@ -104,5 +104,5 @@ export default Component.extend({
       this.set('editor', editorInterface);
     },
 
-  }
+  },
 });

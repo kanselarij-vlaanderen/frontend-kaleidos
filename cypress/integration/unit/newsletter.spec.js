@@ -1,4 +1,4 @@
-/*global context, before, cy,beforeEach, xit, Cypress*/
+/* global context, before, cy,beforeEach, xit, Cypress */
 /// <reference types="Cypress" />
 
 context('Test the KB functionality', () => {
@@ -17,7 +17,7 @@ context('Test the KB functionality', () => {
     cy.createAgenda('Ministerraad', agendaDate, 'Test Kort bestek toevoegen').then((meetingId) => {
       cy.openAgendaForDate(agendaDate);
 
-      //WIP
+      // WIP
 
       cy.deleteAgenda(meetingId, true);
     });

@@ -1,18 +1,19 @@
-/*global context, beforeEach, it, cy*/
+/* global context, beforeEach, it, cy */
 /// <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
 
 context('Agendaitem changes tests', () => {
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
   });
   const caseTitle = 'testId=1589266576: Cypress test dossier 1';
-  const subcaseTitle1 = caseTitle + ' test stap 1';
-  const subcaseTitle2 = caseTitle + ' test stap 2';
-  const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
+  const subcaseTitle1 = `${caseTitle} test stap 1`;
+  const subcaseTitle2 = `${caseTitle} test stap 2`;
+  const file = {
+    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+  };
   const files = [file];
   const waitTime = 3000;
 
@@ -36,14 +37,13 @@ context('Agendaitem changes tests', () => {
       cy.setFormalOkOnItemWithIndex(2);
       cy.approveDesignAgenda();
     });
-
   });
   it('should add a document version to an item and highlight it as changed', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem with a new document version should show
-    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
-    cy.wait(waitTime); //Computeds are not reloaded yet , maybe
+    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName, file);
+    cy.wait(waitTime); // Computeds are not reloaded yet , maybe
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
     cy.agendaItemExists(subcaseTitle1);
@@ -52,7 +52,7 @@ context('Agendaitem changes tests', () => {
     cy.get(actionModal.showActionOptions).click();
     cy.get(agenda.navigateToPrintableAgenda).click();
     cy.wait(1000);
-    cy.get(agenda.printHeaderTitle, {timeout: 80000}).should('exist').should('be.visible');
+    cy.get(agenda.printHeaderTitle, { timeout: 80000 }).should('exist').should('be.visible');
     cy.get(agenda.printHeaderTitle).contains('Vergadering van');
 
     cy.get(agenda.printContainer).should('exist').should('be.visible');

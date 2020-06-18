@@ -1,6 +1,8 @@
 import DS from 'ember-data';
 
-let { Model, attr, belongsTo, hasMany } = DS;
+const {
+  Model, attr, belongsTo, hasMany,
+} = DS;
 
 export default Model.extend({
   text: attr('string'),

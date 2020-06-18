@@ -20,9 +20,8 @@ export default Component.extend({
   getClassNames: computed('selectedAgendaItem', function () {
     if (this.get('selectedAgendaItem')) {
       return 'vlc-agenda-items--small';
-    } else {
-      return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
     }
+    return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
   }),
 
   reAssignPriorities: task(function* (agendaitems) {
@@ -67,6 +66,6 @@ export default Component.extend({
       this.reAssignPriorities.perform(itemModels);
       // this.refresh();
       this.set('announcements', itemModels);
-    }
-  }
+    },
+  },
 });

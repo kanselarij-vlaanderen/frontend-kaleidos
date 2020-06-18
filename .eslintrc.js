@@ -7,24 +7,24 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
     ecmaFeatures: {
-      legacyDecorators: true
-    }
+      legacyDecorators: true,
+    },
   },
   plugins: [
-    'ember'
+    'ember',
   ],
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
-    'airbnb'
+    'airbnb',
   ],
   env: {
-    browser: true
+    browser: true,
   },
   rules: {
     'ember/no-jquery': 'error',
     'ember/no-observers': 'warn',
-    'ember/no-new-mixins': 'warn'
+    'ember/no-new-mixins': 'warn',
   },
   overrides: [
     // node files
@@ -37,25 +37,25 @@ module.exports = {
         'blueprints/*/index.js',
         'config/**/*.js',
         'lib/*/index.js',
-        'server/**/*.js'
+        'server/**/*.js',
       ],
       parserOptions: {
-        sourceType: 'script'
+        sourceType: 'script',
       },
       env: {
         browser: false,
-        node: true
+        node: true,
       },
       rules: {
         'ember/no-on-calls-in-components': 'off',
-        "attribute-indentation": 'off',
-        "block-indentation": 'off',
-        "no-invalid-interactive": 'off',
-        "no-mixed-spaces-and-tabs": 'off',
-        "ember/use-brace-expansion": "off",
-        "table-groups":"off",
-        "no-triple-curlies":"off"
+        'attribute-indentation': 'off',
+        'block-indentation': 'off',
+        'no-invalid-interactive': 'off',
+        'no-mixed-spaces-and-tabs': 'off',
+        'ember/use-brace-expansion': 'off',
+        'table-groups': 'off',
+        'no-triple-curlies': 'off',
       },
-    }
-  ]
+    },
+  ],
 };

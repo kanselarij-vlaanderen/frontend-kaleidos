@@ -25,7 +25,6 @@ export default Component.extend({
     return sortedVersions.lastObject;
   }),
 
-
   lastDocumentVersionName: computed('lastDocumentVersion.name', function () {
     return this.get('lastDocumentVersion.name');
   }),
@@ -45,12 +44,10 @@ export default Component.extend({
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
         if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => {
-            return itemVersionIds[item.id];
-          });
+          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
           return matchingVersions;
         }
-      })()
+      })(),
     });
   }),
 
@@ -75,7 +72,7 @@ export default Component.extend({
     if (subcase) {
       await this.unlinkDocumentVersionsFromModel(subcase, documentVersions);
     } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-      await Promise.all(agendaitemsOnDesignAgenda.map(agendaitem => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
+      await Promise.all(agendaitemsOnDesignAgenda.map((agendaitem) => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
     }
     return await this.unlinkDocumentVersionsFromModel(model, documentVersions);
   },
@@ -84,7 +81,7 @@ export default Component.extend({
   async unlinkDocumentVersionsFromModel(model, documentVersions) {
     const modelDocumentVersions = await model.get('linkedDocumentVersions');
     if (modelDocumentVersions) {
-      documentVersions.forEach(documentVersion => modelDocumentVersions.removeObject(documentVersion))
+      documentVersions.forEach((documentVersion) => modelDocumentVersions.removeObject(documentVersion));
     } else {
       model.set('linkedDocumentVersions', A([]));
     }

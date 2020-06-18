@@ -15,8 +15,8 @@ export default Component.extend({
   @tracked showVerificationPopup: null,
   mandateeService: service(),
 
-  async didInsertElement (){
-    let today = moment();
+  async didInsertElement() {
+    const today = moment();
     this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(today, this.mandateeToEdit.id);
   },
 
@@ -46,7 +46,7 @@ export default Component.extend({
     },
 
     selectNewStartDate(date) {
-      this.set('selectedStartDate', date)
+      this.set('selectedStartDate', date);
     },
 
     personSelected(person) {
@@ -80,9 +80,9 @@ export default Component.extend({
           start: this.get('selectedStartDate') || moment().toDate(),
           end: moment().add(5, 'years').toDate(),
           person: selectedPerson,
-          holds: holds,
+          holds,
           governmentDomains: domains,
-          priority: oldMandatee.get('priority')
+          priority: oldMandatee.get('priority'),
         });
         return newMandatee.save().then(() => {
           this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
@@ -95,6 +95,6 @@ export default Component.extend({
     },
     close() {
       this.showVerificationPopup = false;
-    }
-  }
+    },
+  },
 });

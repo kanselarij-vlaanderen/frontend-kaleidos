@@ -1,11 +1,11 @@
-/*global context, before, cy,beforeEach, xit, Cypress*/
+/* global context, before, cy,beforeEach, xit, Cypress */
 /// <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 
 context('Subcase tests', () => {
   const agendaDate = Cypress.moment().add(2, 'weeks').day(4); // Next friday
-  const caseTitle = 'Cypress test: subcases - ' + currentTimestamp();
-  const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
+  const caseTitle = `Cypress test: subcases - ${currentTimestamp()}`;
+  const SubcaseTitleShort = `Cypress test: add subcase - ${currentTimestamp()}`;
 
   before(() => {
     cy.server();
@@ -36,8 +36,8 @@ context('Subcase tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
-    const dateFormat = agendaDate.date() + ' ' + monthDutch + ' ' + agendaDate.year();
-    const dateRegex = new RegExp(".?" + Cypress.moment(agendaDate).date() + ".\\w+." + Cypress.moment(agendaDate).year());
+    const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+    const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
     cy.get('.vlc-status-timeline > li').eq(0).contains(/Ingediend voor agendering/);
     cy.get('.vl-description-data').within(() => {
@@ -47,9 +47,8 @@ context('Subcase tests', () => {
       cy.get('@descriptionValue').eq(1).contains(dateRegex);
       cy.get('@descriptionValue').eq(2).contains(dateFormat);
       cy.get('@descriptionValue').eq(4).contains(/Nog niet beslist/);
-      //TODO, know what minister we have selected for durable test.
+      // TODO, know what minister we have selected for durable test.
       cy.get('@descriptionValue').eq(5).contains(/Hilde Crevits/);
-
     });
 
     cy.openAgendaForDate(agendaDate);
@@ -63,13 +62,13 @@ context('Subcase tests', () => {
       cy.get('.vlc-container').as('agendaitemContent');
       cy.get('@agendaitemContent').within(() => {
         cy.contains('Naar procedurestap').should('exist');
-      })
+      });
     });
   });
 
   xit('should add a subcase and then delete it', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: delete subcase - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: delete subcase - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -81,7 +80,7 @@ context('Subcase tests', () => {
 
   xit('should not be able to delete a subcase with agendaitems', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: delete subcase not possible - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: delete subcase not possible - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -94,13 +93,13 @@ context('Subcase tests', () => {
       .click();
     cy.get('.vlc-dropdown-menu__item > .vl-link')
       .contains('Procedurestap verwijderen')
-      .should("not.exist");
+      .should('not.exist');
   });
 
-  //TODO Yggdrasil needs to be triggered or default data needs to be available for minister
+  // TODO Yggdrasil needs to be triggered or default data needs to be available for minister
   xit('should be able to open a subcase with user profile: Minister', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: Non-editor profiles can open subcase - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: Non-editor profiles can open subcase - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het kunnen bekijken van een procedurestap door een ander profiel dan "editor" maar mag geen wijzigingen kunnen doen';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -123,7 +122,7 @@ context('Subcase tests', () => {
 
   xit('Clickable link should go to the agenda right after proposing to agenda', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: Link to agenda item ok - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: Link to agenda item ok - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -133,7 +132,7 @@ context('Subcase tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
-    const formattedDate = agendaDate.date() + ' ' + monthDutch + ' ' + agendaDate.year();
+    const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
     cy.get('.vl-description-data').within(() => {
       cy.get('.vl-description-data__value').as('descriptionValue');
@@ -147,7 +146,7 @@ context('Subcase tests', () => {
 
   xit('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
-    const SubcaseTitleShort = 'Cypress test: Mededeling - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: Mededeling - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -171,13 +170,13 @@ context('Subcase tests', () => {
     // Assert status also hidden
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
-    cy.route('PATCH','/agendaitems/*').as('patchAgendaitem');
-    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') //CHECK na save in agendaitem
+    cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
+    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') // CHECK na save in agendaitem
       .wait('@patchAgendaitem');
 
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
-    //"Go to agendaItem
+    // "Go to agendaItem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();
@@ -214,12 +213,9 @@ context('Subcase tests', () => {
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
-
   });
 
-
   xit('Changes to agenda item Themas propagate properly', () => {
-
     // Open agenda
     cy.route('GET', '/agendas/**').as('getAgenda');
     cy.openAgendaForDate(agendaDate);
@@ -263,16 +259,16 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsfilter');
 
     cy.route('GET', '/meetings/**').as('getMeetingsDetail');
-    //cy.route('GET', '/agendas**').as('getAgendas');
+    // cy.route('GET', '/agendas**').as('getAgendas');
     cy.route('GET', '/agendaitems**').as('getAgendaItems');
-    cy.get(agenda.dataTableZebra).contains('van ' + Cypress.moment(agendaDate).format('DD.MM.YYYY')).click();
+    cy.get(agenda.dataTableZebra).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`).click();
     cy.wait('@getMeetingsDetail');
-    //cy.wait('@getAgendas');
+    // cy.wait('@getAgendas');
     cy.wait('@getAgendaItems');
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
-    cy.get(agenda.dataTable).find('.vl-vi-pencil').first().click()
+    cy.get(agenda.dataTable).find('.vl-vi-pencil').first().click();
     cy.wait('@getKortBestekThemes');
 
     // Validate already inputted data.
@@ -291,22 +287,21 @@ context('Subcase tests', () => {
     cy.get(agenda.item.news.themesSelector).contains('Cultuur').click();
     cy.get(agenda.item.news.themesSelector).contains('Media').click();
 
-
     // Save this stuff.
-    //cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
+    // cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.route('GET', '/newsletter-infos/**').as('newsletterInfosGet');
     cy.get(agenda.item.news.saveButton).click();
-    //cy.wait('@documentVersions');
+    // cy.wait('@documentVersions');
     cy.wait('@newsletterInfosPatch');
     cy.wait('@newsletterInfosGet');
 
-    //dont open links in new windows.
+    // dont open links in new windows.
 
     cy.get('a').invoke('removeAttr', 'target');
     cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]').first().click();
 
-    //"Go to agendaItem
+    // "Go to agendaItem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();
@@ -327,7 +322,6 @@ context('Subcase tests', () => {
     cy.get(agenda.item.themes).contains('Wonen').should('not.exist');
   });
 });
-
 
 function currentTimestamp() {
   return Cypress.moment().unix();

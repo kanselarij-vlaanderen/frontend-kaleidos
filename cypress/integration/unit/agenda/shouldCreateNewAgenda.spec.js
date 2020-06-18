@@ -1,8 +1,7 @@
-/*global context, it, cy,beforeEach*/
+/* global context, it, cy,beforeEach */
 /// <reference types="Cypress" />
 
 context('Agenda tests', () => {
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
@@ -14,7 +13,7 @@ context('Agenda tests', () => {
     const JANUARI = 'januari';
     const YEAR = '2020';
     const DAY = '13';
-    cy.createDefaultAgenda(KIND,YEAR,JANUARI,DAY,PLACE)
+    cy.createDefaultAgenda(KIND, YEAR, JANUARI, DAY, PLACE);
   });
 
   it('should create a new agenda of kind Elektronische procedure with 2020-01-13 10:00 as startdate and Brussel as place', () => {
@@ -23,7 +22,7 @@ context('Agenda tests', () => {
     const JANUARI = 'januari';
     const YEAR = '2020';
     const DAY = '13';
-    cy.createDefaultAgenda(KIND,YEAR,JANUARI,DAY,PLACE)
+    cy.createDefaultAgenda(KIND, YEAR, JANUARI, DAY, PLACE);
   });
 
   it('should create a new agenda of kind Bijzondere ministerraad with 2020-01-13 10:00 as startdate and Brussel as place', () => {
@@ -32,7 +31,6 @@ context('Agenda tests', () => {
     const JANUARI = 'januari';
     const YEAR = '2020';
     const DAY = '13';
-    cy.createDefaultAgenda(KIND,YEAR,JANUARI,DAY,PLACE)
+    cy.createDefaultAgenda(KIND, YEAR, JANUARI, DAY, PLACE);
   });
-
 });

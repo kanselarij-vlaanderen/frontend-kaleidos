@@ -7,5 +7,5 @@ export default Model.extend({
   scopeNote: attr('string'),
   altLabel: attr('string'),
 
-  cases: hasMany('case', { inverse: null })
+  cases: hasMany('case', { inverse: null }),
 });

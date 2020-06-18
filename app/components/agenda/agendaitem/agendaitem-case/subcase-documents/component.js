@@ -1,11 +1,11 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { alias } from '@ember/object/computed';
+import { inject, inject as service } from '@ember/service';
+import { alias, deprecatingAlias } from '@ember/object/computed';
 import { A } from '@ember/array';
-import { inject as service } from '@ember/service';
+
 import moment from 'moment';
 import config from 'fe-redpencil/utils/config';
-import { deprecatingAlias } from '@ember/object/computed';
+
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 
 export default Component.extend(
@@ -26,7 +26,7 @@ export default Component.extend(
 
     document: deprecatingAlias('documentContainer', {
       id: 'model-refactor.documents',
-      until: '?'
+      until: '?',
     }),
     documentContainer: null, // When adding a new version to an existing document
     defaultAccessLevel: null, // when creating a new document
@@ -34,7 +34,7 @@ export default Component.extend(
     init() {
       this._super(...arguments);
       this.set('model', A([]));
-      this.store.query('document-type', { sort: 'priority', 'page[size]': 50 }).then(types => {
+      this.store.query('document-type', { sort: 'priority', 'page[size]': 50 }).then((types) => {
         this.set('documentTypes', types);
       });
     },
@@ -44,9 +44,7 @@ export default Component.extend(
       this.set('documentsInCreation', A([]));
       const accessLevels = await this.store.findAll('access-level');
       try {
-        this.set('defaultAccessLevel', accessLevels.find((item) => {
-          return item.id == config.internRegeringAccessLevelId;
-        }));
+        this.set('defaultAccessLevel', accessLevels.find((item) => item.id == config.internRegeringAccessLevelId));
       } catch (e) {
         // TODO error during cypress tests:
         // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
@@ -56,14 +54,13 @@ export default Component.extend(
     createNewDocument(uploadedFile, previousDocument, defaults) {
       const propsFromPrevious = [
         'accessLevel',
-        'confidential'
+        'confidential',
       ];
       const newDocument = this.store.createRecord('document-version', {});
-      propsFromPrevious.forEach(async key => {
-        newDocument.set(key, previousDocument ?
-          await previousDocument.getWithDefault(key, defaults[key]) :
-          defaults[key]
-        );
+      propsFromPrevious.forEach(async (key) => {
+        newDocument.set(key, previousDocument
+          ? await previousDocument.getWithDefault(key, defaults[key])
+          : defaults[key]);
       });
       newDocument.set('file', uploadedFile);
       newDocument.set('previousVersion', previousDocument);
@@ -79,7 +76,7 @@ export default Component.extend(
           const container = doc.get('documentContainer.content');
           container.deleteRecord();
           doc.deleteRecord();
-        })
+        }),
       );
       this.get('documentsInCreation').clear();
       this.set('isAddingNewDocument', false);
@@ -96,7 +93,7 @@ export default Component.extend(
       if (modelDocumentVersions) {
         model.set(
           propertyName,
-          A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray()))
+          A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray())),
         );
       } else {
         model.set(propertyName, documents);
@@ -109,7 +106,7 @@ export default Component.extend(
         agendaitems.map(async (agendaitem) => {
           await this.attachDocumentsToModel(documents, agendaitem);
           return await agendaitem.save();
-        })
+        }),
       );
     },
 
@@ -123,7 +120,7 @@ export default Component.extend(
         agendaitems.map(async (agendaitem) => {
           await this.attachDocumentsToModel(documents, agendaitem, 'linkedDocumentVersions');
           return await agendaitem.save();
-        })
+        }),
       );
     },
 
@@ -154,7 +151,7 @@ export default Component.extend(
           this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
         } else { // Adding new version, new container
           const newContainer = this.store.createRecord('document', {
-            'created': creationDate
+            created: creationDate,
           });
           newDocument.set('documentContainer', newContainer);
           this.get('documentsInCreation').pushObject(newDocument);
@@ -181,7 +178,7 @@ export default Component.extend(
 
       async toggleIsAddingNewDocument() {
         const itemType = this.item.get('constructor.modelName');
-        if(itemType === "agendaitem" || itemType === "subcase") {
+        if (itemType === 'agendaitem' || itemType === 'subcase') {
           await this.item.preEditOrSaveCheck();
         }
         this.toggleProperty('isAddingNewDocument');
@@ -189,7 +186,7 @@ export default Component.extend(
 
       async toggleIsEditing() {
         const itemType = this.item.get('constructor.modelName');
-        if(itemType === "agendaitem" || itemType === "subcase") {
+        if (itemType === 'agendaitem' || itemType === 'subcase') {
           await this.item.preEditOrSaveCheck();
         }
         this.toggleProperty('isEditing');
@@ -210,11 +207,11 @@ export default Component.extend(
         const documentContainers = await Promise.all(
           docs.map(async (doc) => {
             doc = await doc.save();
-            let container = doc.get('documentContainer.content'); // TODO: cannot use .content
+            const container = doc.get('documentContainer.content'); // TODO: cannot use .content
             container.set('documents', A([doc]));
             await container.save();
             return container;
-          })
+          }),
         );
 
         this.get('documentsInCreation').clear();
@@ -224,14 +221,14 @@ export default Component.extend(
         const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
 
         try {
-          let documentsToAttach = [];
+          const documentsToAttach = [];
           await Promise.all(
             documentContainers.map(async (container) => {
               const documents = await container.get('documentVersions');
               documents.map((document) => {
                 documentsToAttach.push(document);
-              })
-            })
+              });
+            }),
           );
           if (documentsToAttach) {
             if (subcase) {
@@ -239,13 +236,13 @@ export default Component.extend(
             } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
               await this.addDocumentsToAgendaitems(
                 documentsToAttach,
-                agendaitemsOnDesignAgenda
+                agendaitemsOnDesignAgenda,
               );
             }
             await this.attachDocumentsToModel(documentsToAttach, item);
             await item.save();
           }
-        } catch(error) {
+        } catch (error) {
           this.deleteAll();
           throw error;
         } finally {
@@ -272,15 +269,15 @@ export default Component.extend(
         const subcase = await item.get('subcase');
         const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
         try {
-          let documentsToAttach = [];
+          const documentsToAttach = [];
           await Promise.all(
             documents.map(async (document) => {
               const documentContainer = await document.get('documentContainer');
               const documents = await documentContainer.get('documentVersions');
               documents.map((document) => {
                 documentsToAttach.push(document);
-              })
-            })
+              });
+            }),
           );
           if (subcase) {
             await this.linkDocumentsToSubcase(documentsToAttach, subcase);
@@ -295,5 +292,5 @@ export default Component.extend(
         }
       },
     },
-  }
+  },
 );

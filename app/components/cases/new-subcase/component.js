@@ -64,28 +64,30 @@ export default Component.extend({
       mandateeProposal: null,
       publicationDate: newsletterInfo.get('publicationDate'),
       publicationDocDate: newsletterInfo.get('publicationDocDate'),
-      themes: await newsletterInfo.get('themes')
+      themes: await newsletterInfo.get('themes'),
     });
     return await newsletterInfoToCreate.save();
   },
 
   async copyDecisions(subcase, decisions) {
     return Promise.all(
-      decisions.map(decision => {
+      decisions.map((decision) => {
         const newDecision = this.store.createRecord('decision', {
           title: decision.get('title'),
           shortTitle: decision.get('shortTitle'),
           approved: false,
           description: decision.get('description'),
-          subcase
+          subcase,
         });
         return newDecision.save();
-      })
+      }),
     );
   },
 
   createSubcaseObject(newCase, newDate) {
-    let { type, title, shortTitle, confidential, showAsRemark } = this;
+    const {
+      type, title, shortTitle, confidential, showAsRemark,
+    } = this;
     return this.store.createRecord('subcase', {
       type,
       shortTitle: trimText(shortTitle),
@@ -97,7 +99,7 @@ export default Component.extend({
       modified: newDate,
       isArchived: false,
       formallyOk: false,
-      phases: []
+      phases: [],
     });
   },
 
@@ -165,6 +167,6 @@ export default Component.extend({
     selectModel(items) {
       this.set('selectedSubcaseName', items);
       this.set('subcaseName', items.get('label'));
-    }
-  }
+    },
+  },
 });

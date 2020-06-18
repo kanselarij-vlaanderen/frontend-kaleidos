@@ -5,9 +5,8 @@ export default class VlAlertComponent extends Component {
     const t = this.args.type;
     if (['success', 'error', 'warning'].includes(t)) {
       return `vl-alert--${t}`;
-    } else {
-      return null;
     }
+    return null;
   }
 
   get iconClass() {
@@ -26,5 +25,4 @@ export default class VlAlertComponent extends Component {
   close() {
     this.args.onClose(...arguments);
   }
-
 }

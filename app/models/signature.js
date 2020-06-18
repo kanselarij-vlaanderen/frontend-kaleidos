@@ -1,6 +1,8 @@
 import DS from 'ember-data';
 
-const { Model, attr, belongsTo, hasMany } = DS;
+const {
+  Model, attr, belongsTo, hasMany,
+} = DS;
 
 export default Model.extend({
   name: attr('string'),
@@ -9,5 +11,5 @@ export default Model.extend({
 
   file: belongsTo('file'),
   person: belongsTo('person'),
-  meetings: hasMany('meeting', { inverse: null })
-})
+  meetings: hasMany('meeting', { inverse: null }),
+});

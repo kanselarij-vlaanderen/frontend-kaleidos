@@ -1,13 +1,13 @@
-/*global cy, Cypress*/
+/* global cy, Cypress */
 /// <reference types="Cypress" />
 
 import 'cypress-file-upload';
 import document from '../../selectors/document.selectors';
 
-import agenda  from '../../selectors/agenda.selectors';
-import form  from '../../selectors/form.selectors';
-import modal  from '../../selectors/modal.selectors';
-import utils  from '../../selectors/utils.selectors';
+import agenda from '../../selectors/agenda.selectors';
+import form from '../../selectors/form.selectors';
+import modal from '../../selectors/modal.selectors';
+import utils from '../../selectors/utils.selectors';
 // ***********************************************
 // Commands
 
@@ -24,7 +24,6 @@ Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
 Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
 Cypress.Commands.add('addLinkedDocumentToAgendaItem', addLinkedDocumentToAgendaItem);
-
 
 // ***********************************************
 // Functions
@@ -53,7 +52,7 @@ function addDocumentsToAgenda(files) {
 function addNewDocumentVersionToMeeting(oldFileName, file) {
   cy.log('addNewDocumentVersionToMeeting');
   cy.clickReverseTab('Documenten');
-  return addNewDocumentVersion(oldFileName, file, 'meetings')
+  return addNewDocumentVersion(oldFileName, file, 'meetings');
 }
 
 /**
@@ -66,8 +65,8 @@ function addNewDocumentVersionToMeeting(oldFileName, file) {
  */
 function addDocumentsToAgendaItem(agendaItemTitle, files) {
   cy.log('addDocumentsToAgendaItem');
-  openAgendaItemDocumentTab(agendaItemTitle,false);
-  return addDocuments(files)
+  openAgendaItemDocumentTab(agendaItemTitle, false);
+  return addDocuments(files);
 }
 
 /**
@@ -82,7 +81,7 @@ function addDocumentsToAgendaItem(agendaItemTitle, files) {
 function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
   cy.log('addNewDocumentVersionToAgendaItem');
   openAgendaItemDocumentTab(agendaItemTitle, true);
-  return addNewDocumentVersion(oldFileName, file, 'agendaitems')
+  return addNewDocumentVersion(oldFileName, file, 'agendaitems');
 }
 
 /**
@@ -96,7 +95,7 @@ function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
 function addNewDocumentVersionToSubcase(oldFileName, file) {
   cy.log('addNewDocumentVersionToSubcase');
   cy.clickReverseTab('Documenten');
-  return addNewDocumentVersion(oldFileName, file, 'subcases')
+  return addNewDocumentVersion(oldFileName, file, 'subcases');
 }
 
 /**
@@ -112,9 +111,9 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
   cy.openDetailOfAgendaitem(agendaItemTitle);
   cy.get(agenda.agendaItemDocumentsTab)
     .click()
-    .wait(2000); //Access-levels GET occured earlier, general wait instead
+    .wait(2000); // Access-levels GET occured earlier, general wait instead
   if (alreadyHasDocs) {
-    cy.wait(2000); //documents GET occured earlier, general wait instead
+    cy.wait(2000); // documents GET occured earlier, general wait instead
   }
   cy.log('/openAgendaItemDocumentTab');
 }
@@ -155,8 +154,8 @@ function addDocuments(files) {
     cy.get('@fileUploadDialog').within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
 
-      cy.get('.vl-uploaded-document', { timeout: 10000 }).should('have.length', index+1).eq(index).within(() => {
-        if(file.newFileName) {
+      cy.get('.vl-uploaded-document', { timeout: 10000 }).should('have.length', index + 1).eq(index).within(() => {
+        if (file.newFileName) {
           cy.get('.vlc-input-field-block').eq(0).within(() => {
             cy.get('.vl-input-field').clear().type(file.newFileName);
           });
@@ -164,7 +163,7 @@ function addDocuments(files) {
       });
     });
 
-    if(file.fileType) {
+    if (file.fileType) {
       cy.get('@fileUploadDialog').within(() => {
         cy.get('.vl-uploaded-document').eq(index).within(() => {
           cy.get('input[type="radio"]').should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
@@ -192,7 +191,7 @@ function addDocuments(files) {
 
   cy.wait('@createNewDocumentVersion', { timeout: 24000 });
   cy.wait('@createNewDocument', { timeout: 24000 });
-  cy.wait('@patchModel', { timeout: 12000  + 6000 * files.length });
+  cy.wait('@patchModel', { timeout: 12000 + 6000 * files.length });
   cy.get(modal.modalDialog).should('not.exist');
   cy.log('/addDocuments');
 }
@@ -209,9 +208,9 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
   cy.log('addNewDocumentVersion');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
   if (modelToPatch) {
-    if(modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
-      cy.route('PATCH', `/subcases/**`).as('patchSubcase');
-      cy.route('PATCH', `/agendaitems/**`).as('patchAgendaitem');
+    if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
+      cy.route('PATCH', '/subcases/**').as('patchSubcase');
+      cy.route('PATCH', '/agendaitems/**').as('patchAgendaitem');
     } else {
       cy.route('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
     }
@@ -236,19 +235,18 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
   });
-  cy.wait(1000); //Cypress is too fast
+  cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
     cy.get(form.formSave).click();
   });
   cy.wait('@createNewDocumentVersion', { timeout: 12000 });
 
-
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
       cy.wait('@patchSubcase', { timeout: 12000 }).wait('@patchAgendaitem', { timeout: 12000 });
-    } else if(modelToPatch === 'subcases') {
+    } else if (modelToPatch === 'subcases') {
       cy.wait('@patchAgendaitem', { timeout: 12000 }).wait('@patchSubcase', { timeout: 12000 });
     } else {
       cy.wait('@patchSpecificModel', { timeout: 12000 });
@@ -273,18 +271,18 @@ function uploadFile(folder, fileName, extension) {
   cy.route('POST', 'files').as('createNewFile');
   cy.route('GET', 'files/**').as('getNewFile');
 
-  const fileFullName = fileName + '.' + extension;
-  const filePath = folder + '/' + fileFullName;
-  //TODO pdf is uploaded but all pages are blank, encoding issue? Irrelevant for test
+  const fileFullName = `${fileName}.${extension}`;
+  const filePath = `${folder}/${fileFullName}`;
+  // TODO pdf is uploaded but all pages are blank, encoding issue? Irrelevant for test
   // let mimeType = 'text/plain';
   // if(extension == 'pdf'){
   //   mimeType = 'application/pdf';
   // }
 
-  cy.fixture(filePath).then(fileContent => {
+  cy.fixture(filePath).then((fileContent) => {
     cy.get('[type=file]').upload(
-        {fileContent, fileName: fileFullName, mimeType: 'application/pdf'},
-        {uploadType: 'input'},
+      { fileContent, fileName: fileFullName, mimeType: 'application/pdf' },
+      { uploadType: 'input' },
     );
   });
   cy.wait('@createNewFile');
@@ -305,13 +303,13 @@ function uploadUsersFile(folder, fileName, extension) {
   cy.log('uploadUsersFile');
   cy.route('POST', 'user-management-service/import-users').as('createNewFile');
   cy.route('GET', 'users?**').as('getNewFile');
-  const fileFullName = fileName + '.' + extension;
-  const filePath = folder + '/' + fileFullName;
+  const fileFullName = `${fileName}.${extension}`;
+  const filePath = `${folder}/${fileFullName}`;
 
-  cy.fixture(filePath).then(fileContent => {
+  cy.fixture(filePath).then((fileContent) => {
     cy.get('[type=file]').upload(
-      {fileContent, fileName: fileFullName, mimeType: 'application/pdf'},
-      {uploadType: 'input'},
+      { fileContent, fileName: fileFullName, mimeType: 'application/pdf' },
+      { uploadType: 'input' },
     );
   });
   cy.wait('@createNewFile');
@@ -348,7 +346,7 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
   });
-  cy.wait(1000); //Cypress is too fast
+  cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
     cy.get(form.formSave).click();
@@ -364,13 +362,13 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
  * @function
  * @param {String[]} filenames - The relative path to the file in the cypress/fixtures folder excluding the fileName
  */
-function addLinkedDocumentToAgendaItem(filenames){
+function addLinkedDocumentToAgendaItem(filenames) {
   cy.route('GET', 'document-versions').as('createNewDocumentVersion');
   cy.log('addLinkedDocumentToAgendaItem');
   cy.get(document.addLinkedDocuments).click();
   cy.get(document.searchForLinkedDocumentsInput).click();
 
-  filenames.forEach(name => {
+  filenames.forEach((name) => {
     cy.get(document.searchForLinkedDocumentsInput).type(name);
     cy.get(document.searchForLinkedDocumentsButton).click();
     cy.get(document.searchForLinkedDocumentsLoader).should('not.be.visible');
@@ -378,6 +376,4 @@ function addLinkedDocumentToAgendaItem(filenames){
     cy.get(document.searchForLinkedDocumentsInput).clear();
   });
   cy.get(form.formSave).click();
-
-
 }

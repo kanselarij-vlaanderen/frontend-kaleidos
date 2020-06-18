@@ -31,9 +31,9 @@ export default Component.extend({
           description: '',
           attendees: [],
           agendaitem: await this.get('agendaitem'),
-          meeting: null
-        })
-        await meetingRecord.save()
+          meeting: null,
+        });
+        await meetingRecord.save();
       }
       this.toggleProperty('isEditing');
     },
@@ -42,6 +42,6 @@ export default Component.extend({
       const recordToSave = this.store.peekRecord('meeting-record', meetingRecord.get('id'));
       await recordToSave.save();
       this.toggleProperty('isEditing');
-    }
-  }
+    },
+  },
 });

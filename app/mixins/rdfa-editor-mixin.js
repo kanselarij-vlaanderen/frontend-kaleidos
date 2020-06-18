@@ -21,6 +21,6 @@ export default Mixin.create({
     },
     descriptionUpdated(val) {
       this.set('initValue', this.richtext + val);
-    }
-  }
+    },
+  },
 });

@@ -13,6 +13,6 @@ export default Controller.extend({
   actions: {
     toggleProperty(prop) {
       this.toggleProperty(prop);
-    }
-  }
+    },
+  },
 });

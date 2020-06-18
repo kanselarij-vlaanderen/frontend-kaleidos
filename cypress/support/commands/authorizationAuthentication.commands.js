@@ -1,5 +1,4 @@
-
-/*global cy, Cypress*/
+/* global cy, Cypress */
 /// <reference types="Cypress" />
 
 Cypress.Commands.add('login', login);
@@ -23,15 +22,15 @@ function login(name, retries = 0) {
       method: 'POST',
       url: '/mock/sessions',
       body: loginUsers[name],
-      headers: { 'Content-Type': 'application/vnd.api+json' }
+      headers: { 'Content-Type': 'application/vnd.api+json' },
     }).then((resp) => {
       window.localStorage.setItem(EMBER_SIMPLE_AUTH_LS_KEY, JSON.stringify({
         authenticated: {
           authenticator: 'authenticator:mock-login',
           links: resp.body.links,
           data: resp.body.data,
-          relationships: resp.body.relationships
-        }
+          relationships: resp.body.relationships,
+        },
       }));
     });
   });
@@ -39,16 +38,14 @@ function login(name, retries = 0) {
     if (xhr.status == 400) {
       if (retries < 5) {
         cy.log('login failed, trying again');
-        cy.login(name, retries +1);
+        cy.login(name, retries + 1);
       } else {
         cy.log('login failed after 5 attempts');
-        return;
       }
     }
   });
   cy.log('/login');
 }
-
 
 /**
  * @description Logs out the current user and end the mocked session
@@ -85,7 +82,6 @@ function loginFlow(name) {
   });
   cy.log('/loginFlow');
 }
-
 
 /**
  * @description Goes to the mock-login page and selects the profile that matches the given name.

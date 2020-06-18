@@ -1,8 +1,7 @@
-/*global context, it, cy,beforeEach*/
+/* global context, it, cy,beforeEach */
 /// <reference types="Cypress" />
 
 context('meeting actions tests', () => {
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
@@ -13,28 +12,28 @@ context('meeting actions tests', () => {
     cy.deleteAgenda('5EB287CDF359DD0009000008');
 
     // Verify subcase is still ok on agenda A after delete designagenda
-    cy.agendaItemExists("Cypress test: delete agenda - 1588758436").click();
-    cy.contains('Naar procedurestap', { timeout: 12000});
+    cy.agendaItemExists('Cypress test: delete agenda - 1588758436').click();
+    cy.contains('Naar procedurestap', { timeout: 12000 });
 
     // Verify delete agenda A works
-    cy.deleteAgenda("5EB287CDF359DD0009000008",true);
+    cy.deleteAgenda('5EB287CDF359DD0009000008', true);
   });
 
   it('should perform action close agenda with agendaitems on designagenda', () => {
     const SubcaseTitleShort = 'Cypress test: close agenda - 1588775338';
     cy.visit('/vergadering/5EB2C9CBF5E1260009000005/agenda/74e87383-80a4-4616-8814-5883cafa6da0/agendapunten');
     cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.contains('Naar procedurestap', { timeout: 12000});
+    cy.contains('Naar procedurestap', { timeout: 12000 });
 
     cy.changeSelectedAgenda('Agenda A');
     cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.contains('Naar procedurestap', { timeout: 12000});
+    cy.contains('Naar procedurestap', { timeout: 12000 });
     cy.wait(1000);
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.closeAgenda();
 
     cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.contains('Naar procedurestap', { timeout: 12000});
+    cy.contains('Naar procedurestap', { timeout: 12000 });
   });
 
   it('should not be able to delete approved agendaitem from designagenda with profile: Kanselarij', () => {
@@ -56,14 +55,14 @@ context('meeting actions tests', () => {
   it('should be able to delete approved agendaitem from designagenda with profile: admin', () => {
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - 1588776224';
     cy.visit('/vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
-    cy.agendaItemExists(SubcaseTitleShort); //this makes sure the page is reloaded after approving the agenda
+    cy.agendaItemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
     // Verify agendaitem exists and has subcase on design agenda and agenda A
     cy.changeSelectedAgenda('Agenda A');
     cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.contains('Naar procedurestap', { timeout: 12000});
+    cy.contains('Naar procedurestap', { timeout: 12000 });
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.agendaItemExists(SubcaseTitleShort).click();
-    cy.contains('Naar procedurestap', { timeout: 12000});
+    cy.contains('Naar procedurestap', { timeout: 12000 });
     cy.get('.vlc-panel-layout__main-content').within(() => {
       cy.get('.vl-action-group').within(() => {
         cy.contains('Verwijderen').click();
@@ -76,8 +75,8 @@ context('meeting actions tests', () => {
     cy.route('DELETE', 'agendaitems/**').as('deleteAgendaitem');
     cy.route('DELETE', 'subcase-phases/**').as('deleteSubcasePhase');
     cy.route('PATCH', 'subcases/**').as('patchSubcase');
-    cy.wait('@deleteAgendaitem', {timeout: 12000 }); // 2 of these happen
-    cy.wait('@deleteSubcasePhase', {timeout: 12000 }); // 2 of these happen
+    cy.wait('@deleteAgendaitem', { timeout: 12000 }); // 2 of these happen
+    cy.wait('@deleteSubcasePhase', { timeout: 12000 }); // 2 of these happen
     cy.wait('@patchSubcase', { timeout: 12000 });
     cy.get('.vl-modal').should('not.be.visible');
 

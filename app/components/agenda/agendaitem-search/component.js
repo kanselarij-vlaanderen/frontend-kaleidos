@@ -19,6 +19,6 @@ export default Component.extend({
       if (val == '') {
         this.searchTask.perform();
       }
-    }
-  }
+    },
+  },
 });

@@ -9,13 +9,12 @@ export default Controller.extend({
 
   queryStore: task(function* () {
     const filter = { provider: 'https://github.com/kanselarij-vlaanderen/mock-login-service' };
-    if (this.role)
-      filter.user = { 'last-name': this.role };
+    if (this.role) filter.user = { 'last-name': this.role };
     const accounts = yield this.store.query('account', {
       include: 'user,user.groups',
-      filter: filter,
+      filter,
       page: { size: this.size, number: this.page },
-      sort: 'user.last-name'
+      sort: 'user.last-name',
     });
     return accounts;
   }),
@@ -25,5 +24,5 @@ export default Controller.extend({
     this.set('role', value);
     const model = yield this.queryStore.perform();
     this.set('model', model);
-  }).restartable()
+  }).restartable(),
 });

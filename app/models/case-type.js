@@ -5,5 +5,5 @@ const { Model, attr } = DS;
 export default Model.extend({
   label: attr('string'),
   scopeNote: attr('string'),
-  deprecated: attr('boolean')
+  deprecated: attr('boolean'),
 });

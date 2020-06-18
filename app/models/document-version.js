@@ -12,7 +12,7 @@ export default Model.extend({
   modified: attr('datetime'),
   chosenFileName: deprecatingAlias('name', {
     id: 'model-refactor.documents',
-    until: '?'
+    until: '?',
   }),
   confidential: attr('boolean'),
   accessLevel: belongsTo('access-level'),
@@ -23,7 +23,7 @@ export default Model.extend({
   documentContainer: belongsTo('document', { inverse: null }),
   document: deprecatingAlias('documentContainer', {
     id: 'model-refactor.documents',
-    until: '?'
+    until: '?',
   }),
   nextVersion: belongsTo('document-version', { inverse: 'previousVersion' }),
   previousVersion: belongsTo('document-version', { inverse: 'nextVersion' }),
@@ -35,7 +35,7 @@ export default Model.extend({
   meeting: belongsTo('meeting', { inverse: null }),
 
   downloadFilename: computed('name', 'file.extension', async function () {
-    let filename = `${await this.get('name')}.${await this.get('file.extension')}`;
+    const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
     return sanitize(filename, { replacement: '_' });
   }),
 
@@ -45,10 +45,10 @@ export default Model.extend({
     return this.save();
   },
 
-  toggleConfidential: async function () {
+  async toggleConfidential() {
     this.set('modified', moment().toDate());
     this.toggleProperty('confidential');
     await this.save();
-  }
+  },
 
 });

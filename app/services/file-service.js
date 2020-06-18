@@ -1,5 +1,5 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
+
 import { task, timeout } from 'ember-concurrency';
 import { ajax } from 'fe-redpencil/utils/ajax';
 
@@ -22,14 +22,10 @@ export default Service.extend({
         method: 'GET',
         url: `/document-versions/${documentVersion.get('id')}/convert`,
       })
-        .then((result) => {
-          return result;
-        })
-        .catch((err) => {
-          return err;
-        });
+        .then((result) => result)
+        .catch((err) => err);
     } catch (e) {
-      //warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
+      // warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
     }
   },
 
@@ -60,9 +56,7 @@ export default Service.extend({
     if (!documentToDelete) return;
     const documentVersions = await documentToDelete.get('documentVersions');
     await Promise.all(
-      documentVersions.map(async (documentVersion) => {
-        return this.deleteDocumentVersion(documentVersion);
-      })
+      documentVersions.map(async (documentVersion) => this.deleteDocumentVersion(documentVersion)),
     );
     documentToDelete.destroyRecord();
   },
@@ -86,7 +80,7 @@ export default Service.extend({
     this.objectsToDelete.removeObject(foundDocumentToDelete);
     const record = await this.store.findRecord(
       foundDocumentToDelete.get('constructor.modelName'),
-      id
+      id,
     );
     record.set('aboutToDelete', false);
   },
@@ -98,7 +92,7 @@ export default Service.extend({
   removeFile(id) {
     return ajax({
       method: 'DELETE',
-      url: '/files/' + id,
+      url: `/files/${id}`,
     });
-  }
+  },
 });

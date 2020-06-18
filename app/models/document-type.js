@@ -1,6 +1,8 @@
 import DS from 'ember-data';
 
-const { Model, attr, hasMany, belongsTo } = DS;
+const {
+  Model, attr, hasMany, belongsTo,
+} = DS;
 
 export default Model.extend({
   label: attr('string'),
@@ -9,5 +11,5 @@ export default Model.extend({
 
   documents: hasMany('document', { inverse: null }),
   subtypes: hasMany('document-type', { inverse: null }),
-  superType: belongsTo('document-type', { inverse: null })
+  superType: belongsTo('document-type', { inverse: null }),
 });

@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 
-let { Model } = DS;
+const { Model } = DS;
 
 export default Model.extend({
   intl: service(),
@@ -39,5 +39,5 @@ export default Model.extend({
         break;
     }
     return this._super(...arguments);
-  }
+  },
 });

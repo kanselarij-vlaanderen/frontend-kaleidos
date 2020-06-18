@@ -1,10 +1,10 @@
-/*global context, before, xit, cy,beforeEach, Cypress*/
+/* global context, before, xit, cy,beforeEach, Cypress */
 /// <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
-import document from "../../selectors/document.selectors";
+import document from '../../selectors/document.selectors';
 
 context('Add files to an agenda', () => {
   const agendaDate = Cypress.moment().add(1, 'weeks').day(2); // Next friday
@@ -23,15 +23,15 @@ context('Add files to an agenda', () => {
   });
 
   xit('should test the document CRUD for a decision', () => {
-    const caseTitle = 'Cypress test: Decision documents - ' + currentTimestamp();
+    const caseTitle = `Cypress test: Decision documents - ${currentTimestamp()}`;
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: perform CRUD of documents on decision - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: perform CRUD of documents on decision - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toevoegen van een beslissingsfiche en algemene CRUD operaties van deze fiche';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
+    const file = { folder: 'files', fileName: 'test', fileExtension: 'pdf' };
     cy.createCase(false, caseTitle);
-    cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -50,7 +50,7 @@ context('Add files to an agenda', () => {
 
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.get(document.modalDocumentVersionDelete).click();
-    cy.wait('@deleteFile',{timeout: 12000});
+    cy.wait('@deleteFile', { timeout: 12000 });
     cy.get(modal.baseModal.dialogWindow).contains('test').should('not.exist');
 
     cy.get('@fileUploadDialog').within(() => {
@@ -75,7 +75,7 @@ context('Add files to an agenda', () => {
 
     cy.get('@docCards').should('have.length', 1);
 
-    cy.addNewDocumentVersionToSignedDocument('test', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
+    cy.addNewDocumentVersionToSignedDocument('test', { folder: 'files', fileName: 'test', fileExtension: 'pdf' });
 
     cy.get('@docCards').eq(0).within(() => {
       cy.get('.vl-title--h6 > span').contains(/BIS/);
@@ -104,10 +104,9 @@ context('Add files to an agenda', () => {
     });
 
     cy.get(modal.verify.container).should('not.exist');
-    cy.get('.toasts-container > .vl-alert--error' , { timeout: 12000 }).should('not.exist');
+    cy.get('.toasts-container > .vl-alert--error', { timeout: 12000 }).should('not.exist');
     cy.get(agenda.decisionContainer).should('not.exist');
   });
-
 });
 
 function currentTimestamp() {

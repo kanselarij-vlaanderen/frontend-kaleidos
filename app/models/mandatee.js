@@ -1,7 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 
-const { Model, attr, hasMany, belongsTo } = DS;
+const {
+  Model, attr, hasMany, belongsTo,
+} = DS;
 
 export default Model.extend({
   title: attr('string'),
@@ -28,8 +30,7 @@ export default Model.extend({
     const nameToDisplay = this.get('person.nameToDisplay');
     if (nameToDisplay) {
       return `${nameToDisplay}, ${this.get('title')}`;
-    } else {
-      return `${this.get('title')}`;
     }
-  })
+    return `${this.get('title')}`;
+  }),
 });

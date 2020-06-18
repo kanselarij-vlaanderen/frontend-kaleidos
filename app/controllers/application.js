@@ -57,12 +57,12 @@ export default Controller.extend({
         }
         const currentRouteName = router.get('currentRouteName');
         this.checkAccountlessUser(currentRouteName);
-      }
-    )
+      },
+    ),
   ),
 
   showHeader: computed('currentSession.userRole', function () {
-    let role = this.get('currentSession.userRole');
+    const role = this.get('currentSession.userRole');
     return role && role !== '' && role !== 'no-access';
   }),
 

@@ -13,13 +13,13 @@ export default Component.extend({
   selectedKindUri: null,
 
   async createAgenda(meeting, date) {
-    const status = await this.store.findRecord('agendastatus', "2735d084-63d1-499f-86f4-9b69eb33727f");
+    const status = await this.store.findRecord('agendastatus', '2735d084-63d1-499f-86f4-9b69eb33727f');
     const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
       serialnumber: 'A',
       title: `Agenda A voor zitting ${moment(meeting.plannedStart).format('D-M-YYYY')}`,
       createdFor: meeting,
-      status: status,
+      status,
       created: date || fallBackDate,
       modified: date || fallBackDate,
     });
@@ -33,16 +33,16 @@ export default Component.extend({
     const fallBackDate = this.formatter.formatDate(null);
     const agendaitem = this.store.createRecord('agendaitem', {
       created: fallBackDate,
-      agenda: agenda,
+      agenda,
       priority: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
-        closestMeeting.plannedstart
+        closestMeeting.plannedstart,
       ).format('dddd DD-MM-YYYY')}.`,
       formallyOk: CONFIG.notYetFormallyOk,
       mandatees: [],
       documentVersions: [],
       approvals: [],
-      isApproval: true
+      isApproval: true,
     });
     return await agendaitem.save();
   },

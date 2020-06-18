@@ -6,16 +6,19 @@ import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 
 export default class AgendaitemComments extends Component {
   @service store;
+
   @service formatter;
+
   @service currentSession;
 
   classNames = ['vl-grid'];
+
   elementId = 'agendaitem-comments';
 
-  @sort('item.remarks', function (a, b) {
+  @sort('item.remarks', (a, b) => {
     if (a.created < b.created) {
       return 1;
-    } else if (a.created > b.created) {
+    } if (a.created > b.created) {
       return -1;
     }
     return 0;
@@ -30,7 +33,7 @@ export default class AgendaitemComments extends Component {
     const comment = this.store.createRecord('remark', {
       text: event,
       created: this.formatter.formatDate(null),
-      author: user
+      author: user,
     });
     const modelName = await item.get('modelName');
     if (modelName == 'newsletter-info') {
@@ -54,9 +57,9 @@ export default class AgendaitemComments extends Component {
     const newComment = this.store.createRecord('remark', {
       text: comment.get('answer'),
       created: this.formatter.formatDate(null),
-      author: user
+      author: user,
     });
-    newComment.save().then(savedComment => {
+    newComment.save().then((savedComment) => {
       comment.get('answers').addObject(savedComment);
       comment.set('answer', '');
       if (agenda) {

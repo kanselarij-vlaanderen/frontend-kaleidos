@@ -21,5 +21,5 @@ export default Controller.extend({
       prefix = 'Klad ';
     }
     return `${prefix}${this.intl.t('agenda-notes')} ${moment(date).format('DD-MM-YYYY')}`;
-  })
+  }),
 });

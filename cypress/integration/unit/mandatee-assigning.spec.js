@@ -1,12 +1,12 @@
-/*global context, before, xit, cy,beforeEach, Cypress*/
+/* global context, before, xit, cy,beforeEach, Cypress */
 /// <reference types="Cypress" />
 
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
-import isecodes from "../../selectors/isecodes/isecodesSelectors";
+import isecodes from '../../selectors/isecodes/isecodesSelectors';
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
   const agendaDate = Cypress.moment().add(1, 'weeks').day(4); // Next friday
-  const caseTitle = 'Cypress test: mandatee sync - ' + currentTimestamp();
+  const caseTitle = `Cypress test: mandatee sync - ${currentTimestamp()}`;
 
   before(() => {
     cy.server();
@@ -23,7 +23,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   xit('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -44,7 +44,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
 
-    cy.get(isecodes.isecodesList).should('exist')
+    cy.get(isecodes.isecodesList).should('exist');
     cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -62,13 +62,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(1).within(() => {
       cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
-
   });
 
   xit('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
-
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister na agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -94,7 +92,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
 
-    cy.get(isecodes.isecodesList).should('exist')
+    cy.get(isecodes.isecodesList).should('exist');
     cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
 
     // Check if agendaitem has the same amount of mandatees
@@ -113,12 +111,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(2).within(() => {
       cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
     });
-
   });
 
   xit('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress test: assign mandatee - ' + currentTimestamp();
+    const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister vanuit agendaitem op ontwerpagenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -193,10 +190,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
     });
 
-    cy.get(isecodes.isecodesList).should('exist')
+    cy.get(isecodes.isecodesList).should('exist');
     cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
   });
-
 });
 
 function currentTimestamp() {

@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 import { isEmpty } from '@ember/utils';
 import moment from 'moment';
-import search from '../../utils/mu-search';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
+import search from '../../utils/mu-search';
 
 export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) {
   queryParams = {
@@ -11,22 +11,22 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
     },
     page: {
       refreshModel: true,
-      as: 'pagina'
+      as: 'pagina',
     },
     size: {
       refreshModel: true,
-      as: 'aantal'
+      as: 'aantal',
     },
     sort: {
       refreshModel: true,
-      as: 'sorteer'
-    }
+      as: 'sorteer',
+    },
   };
 
   textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'titlePress', 'textPress']);
 
-  postProcessDates (_case) {
-    const sessionDates = _case.attributes.sessionDates;
+  postProcessDates(_case) {
+    const { sessionDates } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
         const sorted = sessionDates.sort();
@@ -61,26 +61,26 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
     if (!isEmpty(searchParams.dateFrom) && !isEmpty(searchParams.dateTo)) {
-      const from = moment(searchParams.dateFrom, "DD-MM-YYYY").startOf('day');
-      const to = moment(searchParams.dateTo, "DD-MM-YYYY").endOf('day');  // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.utc().toISOString(),from.utc().toISOString()].join(',');
+      const from = moment(searchParams.dateFrom, 'DD-MM-YYYY').startOf('day');
+      const to = moment(searchParams.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
+      filter[':lte,gte:sessionDates'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
     } else if (!isEmpty(searchParams.dateFrom)) {
-      const date = moment(searchParams.dateFrom, "DD-MM-YYYY").startOf('day');
+      const date = moment(searchParams.dateFrom, 'DD-MM-YYYY').startOf('day');
       filter[':gte:sessionDates'] = date.utc().toISOString();
     } else if (!isEmpty(searchParams.dateTo)) {
-      const date = moment(searchParams.dateTo, "DD-MM-YYYY").endOf('day');  // "To" interpreted as inclusive
+      const date = moment(searchParams.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte:sessionDates'] = date.utc().toISOString();
     }
 
     if (params.types.length) {
       if (params.types.includes('nota') && !params.types.includes('mededeling')) {
-        filter['showAsAnnouncement'] = false;
+        filter.showAsAnnouncement = false;
       } else if (params.types.includes('mededeling') && !params.types.includes('nota')) {
-        filter['showAsAnnouncement'] = true;
+        filter.showAsAnnouncement = true;
       }
     }
 
-    return search('agendaitems', params.page, params.size, params.sort, filter, function (item) {
+    return search('agendaitems', params.page, params.size, params.sort, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
       return entry;

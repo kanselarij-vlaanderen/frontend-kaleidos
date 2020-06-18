@@ -6,7 +6,7 @@ export default Component.extend({
   fileService: service(),
 
   async deleteDocument(document) {
-    await this.fileService.deleteDocument(document)
+    await this.fileService.deleteDocument(document);
   },
 
   actions: {
@@ -17,12 +17,12 @@ export default Component.extend({
         documents.map((document) => {
           if (document.get('deleted')) {
             return this.deleteDocument(document);
-          } else {
-            return document.save()
-              .then(document => document.get('documentVersions'))
-              .then(versions => Promise.all(versions.map(version => version.save())));
           }
-        }));
+          return document.save()
+            .then((document) => document.get('documentVersions'))
+            .then((versions) => Promise.all(versions.map((version) => version.save())));
+        }),
+      );
       this.set('isLoading', false);
       this.cancelForm();
     },

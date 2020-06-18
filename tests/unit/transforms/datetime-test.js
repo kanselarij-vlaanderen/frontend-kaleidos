@@ -1,12 +1,12 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Transform | datetime', function(hooks) {
+module('Unit | Transform | datetime', (hooks) => {
   setupTest(hooks);
 
   // Replace this with your real tests.
-  test('it exists', function(assert) {
-    let transform = this.owner.lookup('transform:datetime');
+  test('it exists', function (assert) {
+    const transform = this.owner.lookup('transform:datetime');
     assert.ok(transform);
   });
 });

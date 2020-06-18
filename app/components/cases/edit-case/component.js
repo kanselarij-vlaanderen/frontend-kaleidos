@@ -13,6 +13,6 @@ export default Component.extend({
         this.cancelEditing();
         this.set('isLoading', false);
       });
-    }
-  }
+    },
+  },
 });

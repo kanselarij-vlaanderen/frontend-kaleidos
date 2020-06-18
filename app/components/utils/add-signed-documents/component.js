@@ -1,12 +1,12 @@
 import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import { inject, inject as service } from '@ember/service';
+import { computed, set } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+
 import moment from 'moment';
 import { A } from '@ember/array';
-import { set } from '@ember/object';
+
 import config from 'fe-redpencil/utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
 import { deprecate } from '@ember/debug';
@@ -26,15 +26,14 @@ export default Component.extend({
     const { modelToAddDocumentVersionTo } = this;
     if (modelToAddDocumentVersionTo == 'signedMinutes') {
       return this.store.findRecord('document-type', CONFIG.minuteDocumentTypeId);
-    } else if (modelToAddDocumentVersionTo == 'signedDecision') {
+    } if (modelToAddDocumentVersionTo == 'signedDecision') {
       return this.store.findRecord('document-type', CONFIG.decisionDocumentTypeId);
-    } else {
-      return null;
     }
+    return null;
   }),
   document: deprecatingAlias('documentContainer', {
     id: 'model-refactor.documents',
-    until: '?'
+    until: '?',
   }),
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
@@ -44,9 +43,7 @@ export default Component.extend({
     this.set('documentsInCreation', A([]));
     const accessLevels = await this.store.findAll('access-level');
     try {
-      this.set('defaultAccessLevel', accessLevels.find((item) => {
-        return item.id == config.internRegeringAccessLevelId;
-      }));
+      this.set('defaultAccessLevel', accessLevels.find((item) => item.id == config.internRegeringAccessLevelId));
     } catch (e) {
       // TODO error during cypress tests:
       // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
@@ -60,15 +57,14 @@ export default Component.extend({
   createNewDocument(uploadedFile, previousDocument, defaults) {
     const propsFromPrevious = [
       'accessLevel',
-      'confidential'
+      'confidential',
     ];
     const newDocument = this.store.createRecord('document-version', {});
-    propsFromPrevious.forEach(async key => {
-      newDocument.set(key, previousDocument ?
-        await previousDocument.getWithDefault(key, defaults[key]) :
-        defaults[key]
-      );
-    })
+    propsFromPrevious.forEach(async (key) => {
+      newDocument.set(key, previousDocument
+        ? await previousDocument.getWithDefault(key, defaults[key])
+        : defaults[key]);
+    });
     newDocument.set('file', uploadedFile);
     newDocument.set('previousVersion', previousDocument);
     newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
@@ -85,11 +81,11 @@ export default Component.extend({
     const savedDocuments = await Promise.all(
       docs.map(async (doc) => {
         doc = await doc.save();
-        let container = doc.get('documentContainer.content'); // TODO: cannot use .content
+        const container = doc.get('documentContainer.content'); // TODO: cannot use .content
         container.set('documents', A([doc]));
         await container.save();
         return container;
-      })
+      }),
     );
 
     this.get('documentsInCreation').clear();
@@ -101,7 +97,6 @@ export default Component.extend({
     deprecate('\'saveDocuments\' is deprecated by saveDocumentContainers', true);
     return this.saveDocumentContainers(...arguments);
   },
-
 
   actions: {
     closeModal() {
@@ -126,7 +121,7 @@ export default Component.extend({
           }
           document.set(this.modelToAddDocumentVersionTo, item);
           item.set('signedDocument', document);
-        })
+        }),
       );
       await item.save();
     },
@@ -158,7 +153,7 @@ export default Component.extend({
         this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
       } else { // Adding new version, new container
         const newContainer = this.store.createRecord('document', {
-          'created': creationDate
+          created: creationDate,
         });
         newDocument.set('documentContainer', newContainer);
         this.get('documentsInCreation').pushObject(newDocument);

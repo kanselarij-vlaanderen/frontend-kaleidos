@@ -19,9 +19,9 @@ context('Full test', () => {
     const KIND = 'Ministerraad';
 
     const agendaDate = Cypress.moment().add(1, 'weeks').day(3);
-    const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const subcaseTitle1 = caseTitle + ' test stap 1';
-    const subcaseTitle2 = caseTitle + ' test stap 2';
+    const caseTitle = `testId=${currentTimestamp()}: ` + 'Cypress test dossier 1';
+    const subcaseTitle1 = `${caseTitle} test stap 1`;
+    const subcaseTitle2 = `${caseTitle} test stap 2`;
 
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
@@ -71,7 +71,7 @@ context('Full test', () => {
       'Cypress test voor het testen van toegevoegde agendapunten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.createAgenda(KIND, agendaDate, "locatie");
+    cy.createAgenda(KIND, agendaDate, 'locatie');
 
     // when toggling show changes  the agendaitem with a document added should show
     cy.openAgendaForDate(agendaDate);
@@ -80,13 +80,13 @@ context('Full test', () => {
     cy.addSubcaseMandatee(0, -1, -1);
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
-    cy.approveDesignAgenda()
+    cy.approveDesignAgenda();
 
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.get('[data-test-mandatee-edit="0"]').click();
-    const enddateForMandatee = Cypress.moment("2020-03-02").set({ "hour": 10, "minute": 10 });
+    const enddateForMandatee = Cypress.moment('2020-03-02').set({ hour: 10, minute: 10 });
 
     cy.get('.vl-datepicker').eq(1).click();
     cy.setDateInFlatpickr(enddateForMandatee);

@@ -29,9 +29,8 @@ export default ModelWithModifier.extend({
     const remark = this.get('remark');
     if (remark && remark != '') {
       return `${this.intl.t('remark')}: ${this.get('remark')}`;
-    } else {
-      return '';
     }
+    return '';
   }),
 
   newsletterProposal: computed('mandateeProposal', async function () {
@@ -42,8 +41,8 @@ export default ModelWithModifier.extend({
     const seperatorComma = ', ';
     const seperatorAnd = ' en ';
     if (sortedMandatees && sortedMandatees.length > 1) {
-      for (var i = 0; i < sortedMandatees.length; i++) {
-        let mandatee = sortedMandatees.objectAt(i);
+      for (let i = 0; i < sortedMandatees.length; i++) {
+        const mandatee = sortedMandatees.objectAt(i);
         const nickName = await mandatee.get('nickName');
         if (i > 0) {
           if (sortedMandatees.length - 1 == i) {
@@ -59,20 +58,18 @@ export default ModelWithModifier.extend({
         }
       }// end for loop
       return proposalText;
-    } else {
-      const requestedBy = await subcase.get('requestedBy');
-      if (requestedBy) {
-        const nickName = await requestedBy.get('nickName');
-        if (nickName) {
-          proposalText = `${proposalText}${nickName}`;
-        } else {
-          proposalText = `${proposalText}${requestedBy.get('title')}`;
-        }
-        return proposalText;
-      } else {
-        return null;
-      }
     }
+    const requestedBy = await subcase.get('requestedBy');
+    if (requestedBy) {
+      const nickName = await requestedBy.get('nickName');
+      if (nickName) {
+        proposalText = `${proposalText}${nickName}`;
+      } else {
+        proposalText = `${proposalText}${requestedBy.get('title')}`;
+      }
+      return proposalText;
+    }
+    return null;
   }),
 
 });

@@ -14,7 +14,6 @@ export default Component.extend({
   isEditing: false,
   store: inject(),
 
-
   actions: {
     chooseIseCode(iseCode) {
       this.set('iseCode', iseCode);
@@ -32,7 +31,7 @@ export default Component.extend({
         this.set('iseCode', null);
         this.set('isEditing', false);
       });
-      this.send('selectModel', null)
+      this.send('selectModel', null);
     },
 
     createModel() {
@@ -40,7 +39,7 @@ export default Component.extend({
       const governmentDomain = this.store.createRecord('government-field', {
         label: this.get('label'),
         domain: this.get('domain'),
-        iseCode: this.get('iseCode')
+        iseCode: this.get('iseCode'),
       });
       governmentDomain.save().then(() => {
         this.set('isLoading', false);
@@ -73,5 +72,5 @@ export default Component.extend({
     removeModel() {
       alert('This action is not allowed. Please contact the system administrator.');
     },
-  }
-})
+  },
+});

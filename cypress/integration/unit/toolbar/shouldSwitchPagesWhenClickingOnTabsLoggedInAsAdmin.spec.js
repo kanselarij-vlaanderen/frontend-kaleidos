@@ -1,14 +1,13 @@
-/*global context, it, cy,beforeEach*/
+/* global context, it, cy,beforeEach */
 /// <reference types="Cypress" />
 
-import toolbar from "../../../selectors/toolbar.selectors";
-import settings from "../../../selectors/settings.selectors";
-import cases from "../../../selectors/case.selectors";
-import agenda from "../../../selectors/agenda.selectors";
-import newsletter from "../../../selectors/newsletter.selector";
+import toolbar from '../../../selectors/toolbar.selectors';
+import settings from '../../../selectors/settings.selectors';
+import cases from '../../../selectors/case.selectors';
+import agenda from '../../../selectors/agenda.selectors';
+import newsletter from '../../../selectors/newsletter.selector';
 
 context('Testing the toolbar as Admin user', () => {
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
@@ -21,7 +20,6 @@ context('Testing the toolbar as Admin user', () => {
     cy.get(toolbar.newsletters).should('exist');
     cy.get(toolbar.settings).should('exist');
   });
-
 
   it('Should switch to Agenda tab when agenda is clicked', () => {
     cy.get(toolbar.agenda).click();

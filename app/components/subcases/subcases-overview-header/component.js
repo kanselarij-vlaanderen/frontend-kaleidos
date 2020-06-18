@@ -49,5 +49,5 @@ export default Component.extend({
       this.set('isShowingProcess', true);
     },
 
-  }
+  },
 });

@@ -14,11 +14,11 @@ export default Component.extend({
   }),
 
   routeModelAgendaitems: computed('routeModelPrefix', function () {
-    return this.routeModelPrefix + '.agendaitems';
+    return `${this.routeModelPrefix}.agendaitems`;
   }),
 
   routeModelOverview: computed('routeModelPrefix', function () {
-    return this.routeModelPrefix + '.overview';
+    return `${this.routeModelPrefix}.overview`;
   }),
 
   actions: {
@@ -28,6 +28,6 @@ export default Component.extend({
 
     navigateBackToAgenda() {
       this.navigateBackToAgenda();
-    }
-  }
+    },
+  },
 });

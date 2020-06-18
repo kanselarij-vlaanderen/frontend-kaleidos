@@ -1,10 +1,8 @@
-
-/*global cy, Cypress*/
+/* global cy, Cypress */
 /// <reference types="Cypress" />
 
 Cypress.Commands.add('selectOptionInSelectByText', selectOptionInSelectByText);
 Cypress.Commands.add('selectOptionInSelectByIndex', selectOptionInSelectByIndex);
-
 
 /**
  * @description Select an option in the select control
@@ -14,16 +12,14 @@ Cypress.Commands.add('selectOptionInSelectByIndex', selectOptionInSelectByIndex)
  * @returns {Chainable<JQuery<any>>} returns a chainable element
  * @param {number} option - The index of the option that has to be selected in the select
  */
-function selectOptionInSelectByIndex( option) {
+function selectOptionInSelectByIndex(option) {
   cy.log('selectOptionInSelectByIndex');
-  return cy.get('.ember-power-select-option', {timeout: 5000})
+  return cy.get('.ember-power-select-option', { timeout: 5000 })
     .should('exist')
-    .then(() => {
-      return  cy.get(`li[data-option-index="${option}"]`)
-        .should('exist')
-        .should('be.visible')
-        .click();
-    });
+    .then(() => cy.get(`li[data-option-index="${option}"]`)
+      .should('exist')
+      .should('be.visible')
+      .click());
 }
 
 /**
@@ -36,13 +32,11 @@ function selectOptionInSelectByIndex( option) {
  */
 function selectOptionInSelectByText(text) {
   cy.log('selectOptionInSelectByText');
-  return cy.get('.ember-power-select-option', {timeout: 5000})
+  return cy.get('.ember-power-select-option', { timeout: 5000 })
     .should('exist')
-    .then(() => {
-      return cy.get('.ember-power-select-option')
-        .should('exist')
-        .should('be.visible')
-        .contains(text)
-        .click();
-    });
+    .then(() => cy.get('.ember-power-select-option')
+      .should('exist')
+      .should('be.visible')
+      .contains(text)
+      .click());
 }

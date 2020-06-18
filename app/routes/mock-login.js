@@ -4,8 +4,8 @@ import { inject as service } from '@ember/service';
 export default Route.extend({
   queryParams: {
     page: {
-      refreshModel: true
-    }
+      refreshModel: true,
+    },
   },
 
   currentSession: service(),
@@ -27,8 +27,8 @@ export default Route.extend({
     }
     return this.store.query('account', {
       include: 'user,user.group',
-      filter: filter,
-      sort: 'user.last-name'
+      filter,
+      sort: 'user.last-name',
     });
-  }
+  },
 });

@@ -5,7 +5,7 @@ import { task, all } from 'ember-concurrency';
 export default Route.extend({
   async model() {
     const { meeting, agenda } = this.modelFor('agenda');
-    let agendaitems = await this.store.query('agendaitem', {
+    const agendaitems = await this.store.query('agendaitem', {
       filter: { agenda: { id: agenda.id } },
       include: 'mandatees',
     });
@@ -21,9 +21,9 @@ export default Route.extend({
     });
   },
 
-  ensureDocuments: task(function*(agendaItems) {
-    const tasks = []
-    for (var item of agendaItems) {
+  ensureDocuments: task(function* (agendaItems) {
+    const tasks = [];
+    for (const item of agendaItems) {
       if (!item.hasMany('documentVersions').value()) {
         tasks.push(this.loadDocuments.perform(item));
       }
@@ -31,8 +31,8 @@ export default Route.extend({
     yield all(tasks);
   }),
 
-  loadDocuments: task(function*(agendaItem) {
-    yield agendaItem.hasMany('documentVersions').reload({ adapterOptions: { namesOnly: true}});
-  }).maxConcurrency(2).enqueue()
+  loadDocuments: task(function* (agendaItem) {
+    yield agendaItem.hasMany('documentVersions').reload({ adapterOptions: { namesOnly: true } });
+  }).maxConcurrency(2).enqueue(),
 
 });

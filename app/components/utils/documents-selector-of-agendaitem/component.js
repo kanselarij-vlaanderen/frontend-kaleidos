@@ -30,5 +30,5 @@ export default Component.extend({
     async selectForPublication() {
       this.selectDocument(await this.get('lastDocumentVersions'));
     },
-  }
+  },
 });

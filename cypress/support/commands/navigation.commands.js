@@ -1,5 +1,4 @@
-
-/*global cy, Cypress*/
+/* global cy, Cypress */
 /// <reference types="Cypress" />
 
 Cypress.Commands.add('clickReverseTab', clickReverseTab);
@@ -12,9 +11,9 @@ Cypress.Commands.add('clickReverseTab', clickReverseTab);
  * @function
  * @param {String} tabName The name of the tab to click on, case sensitive
  */
-function clickReverseTab(tabName){
+function clickReverseTab(tabName) {
   cy.log('clickReverseTab');
-  cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() =>{
+  cy.get('.vlc-tabs-reverse', { timeout: 12000 }).should('exist').within(() => {
     // cy.wait(1000);
     cy.contains(tabName).click();
   });

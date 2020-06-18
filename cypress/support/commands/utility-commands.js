@@ -1,11 +1,10 @@
-
-
 /* eslint-disable no-undef */
 
 // ***********************************************
 
 // Commands
-import agenda from "../../selectors/agenda.selectors";
+import agenda from '../../selectors/agenda.selectors';
+
 Cypress.Commands.add('selectDate', selectDate);
 Cypress.Commands.add('selectAction', selectAction);
 Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
@@ -14,7 +13,6 @@ Cypress.Commands.add('currentMoment', currentMoment);
 Cypress.Commands.add('currentTimestamp', currentTimestamp);
 Cypress.Commands.add('existsAndVisible', existsAndVisible);
 Cypress.Commands.add('existsAndInvisible', existsAndInvisible);
-
 
 // ***********************************************
 // Functions
@@ -29,19 +27,20 @@ Cypress.Commands.add('existsAndInvisible', existsAndInvisible);
  * @param {String} day - The day that needs to be selected in the datepicker
  * @param {int} index - The day that needs to be selected in the datepicker
  */
-function selectDate(year,month,day, index) {
+function selectDate(year, month, day, index) {
   cy.log('selectDate');
   let element;
 
-  if(index !== undefined) {
+  if (index !== undefined) {
     element = cy.get(agenda.datepickerButton).eq(index).click();
     element.get(agenda.flatpickrMonthDropdownMonths).eq(index).select(month);
-    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(index).clear().type(year, {delay: 300});
+    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(index).clear()
+      .type(year, { delay: 300 });
     element.get(agenda.flatpickrDay).should('be.visible').contains(day).click();
   } else {
     element = cy.get(agenda.datepickerButton).click();
     element.get(agenda.flatpickrMonthDropdownMonths).select(month);
-    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).clear().type(year, {delay: 300});
+    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).clear().type(year, { delay: 300 });
     element.get(agenda.flatpickrDay).contains(day).click();
   }
   cy.log('/selectDate');
@@ -59,11 +58,9 @@ function selectAction(elementToSelect, textToContain) {
   cy.log('selectAction');
   cy.get('[data-test-agenda-header-showactionoptions]').click();
   cy.get(elementToSelect).should('be.visible');
-  cy.get(elementToSelect).should('contain.text',textToContain)
+  cy.get(elementToSelect).should('contain.text', textToContain);
   cy.log('/selectAction');
 }
-
-
 
 /**
  * Validate the content of the dropdown
@@ -80,9 +77,6 @@ function validateDropdownElements(elementIndex, textContent) {
   cy.get('.ember-power-select-option').eq(elementIndex).scrollIntoView().click();
   cy.log('/validateDropdownElements');
 }
-
-
-
 
 /**
  * @description Returns the current moment in Cypress
@@ -133,8 +127,3 @@ function existsAndInvisible(element) {
     .should('exist')
     .should('not.be.visible');
 }
-
-
-
-
-
