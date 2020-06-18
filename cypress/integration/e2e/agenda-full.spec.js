@@ -3,8 +3,7 @@
 /// <reference types="Cypress" />
 
 context('Full test', () => {
-  const testStart =  Cypress.moment();
-
+  Cypress.moment();
   let testId;
 
   before(() => {

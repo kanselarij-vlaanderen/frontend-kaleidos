@@ -87,6 +87,9 @@ export default Model.extend({
   }),
 
   checkAdded: computed('uri', 'addedDocuments.@each', function () {
-    if (this.addedDocuments) return this.addedDocuments.includes(this.get('uri'));
+    if (this.addedDocuments) {
+      return this.addedDocuments.includes(this.get('uri'));
+    }
+    return null;
   })
 });

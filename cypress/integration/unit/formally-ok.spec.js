@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach, Cypress*/
+/*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 
@@ -19,5 +19,4 @@ context('Formally ok/nok tests', () => {
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
     cy.get('.vlc-agenda-items__status').should('not.contain', 'Formeel OK');
   });
-
 });

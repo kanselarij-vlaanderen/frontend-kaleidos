@@ -24,6 +24,7 @@ export default Component.extend({
     if (!this.get('selectedDomainsOnly')) {
       return this.store.findAll('government-domain');
     }
+    return null;
   }),
 
   actions: {

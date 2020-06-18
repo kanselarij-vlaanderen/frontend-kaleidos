@@ -1,4 +1,4 @@
-/*global context, it, cy,before,beforeEach,afterEach*/
+/*global context, it, cy,before,beforeEach*/
 /// <reference types="Cypress" />
 import * as alert from "../../../../selectors/system-wide/alert.selectors";
 import * as systemAlert from "../../../../selectors/settings/system-alert.selectors";

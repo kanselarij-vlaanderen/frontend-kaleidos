@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach, Cypress*/
+/*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 context('meeting actions tests', () => {
@@ -92,10 +92,4 @@ context('meeting actions tests', () => {
       .contains(SubcaseTitleShort, { timeout: 2500 })
       .should('not.exist');
   });
-
 });
-
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

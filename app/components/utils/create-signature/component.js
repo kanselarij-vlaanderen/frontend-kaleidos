@@ -11,6 +11,7 @@ export default Component.extend({
     if (this.selectedPerson) {
       return this.selectedPerson.get('nameToDisplay');
     }
+    return null;
   }),
 
   downloadUrl: computed('uploadedFile', function () {

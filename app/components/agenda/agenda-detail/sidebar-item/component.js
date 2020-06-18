@@ -69,6 +69,7 @@ export default Component.extend( {
     if (this.agendaitem) {
       return this.agendaitem.get('aboutToDelete');
     }
+    return null;
   }),
 
   /* Begin lazy partial rendering

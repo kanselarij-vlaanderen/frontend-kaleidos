@@ -16,12 +16,14 @@ export default Component.extend({
     if (this.get('isLastPage')) {
       return 'disabled vl-u-text--muted';
     }
+    return null;
   }),
 
   disabledPrev: computed('isFirstPage', function () {
     if (this.get('isFirstPage')) {
       return 'disabled vl-u-text--muted';
     }
+    return null;
   }),
 
   totalNbOfItems: computed('total', function () {

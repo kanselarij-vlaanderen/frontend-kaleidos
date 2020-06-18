@@ -1,4 +1,4 @@
-/*global context, before, it, cy, Cypress*/
+/*global context, before, xit, cy, Cypress*/
 /// <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';

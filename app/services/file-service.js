@@ -1,6 +1,5 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import { warn } from '@ember/debug';
 import { task, timeout } from 'ember-concurrency';
 import { ajax } from 'fe-redpencil/utils/ajax';
 
@@ -30,7 +29,7 @@ export default Service.extend({
           return err;
         });
     } catch (e) {
-      warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
+      //warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
     }
   },
 

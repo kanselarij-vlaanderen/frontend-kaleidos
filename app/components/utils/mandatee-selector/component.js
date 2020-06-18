@@ -47,21 +47,6 @@ export default Component.extend( {
     }
   }),
 
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
-    let options = {};
-    const { filter, sortField, includeField } = this;
-    if (sortField) {
-      options['sort'] = sortField;
-    }
-    if (filter) {
-      options['filter'] = filter;
-    }
-    if (includeField) {
-      options['include'] = includeField;
-    }
-    return options;
-  }),
-
   searchTask: task(function* (searchValue) {
     yield timeout(300);
     const { queryOptions, searchField, modelName } = this;

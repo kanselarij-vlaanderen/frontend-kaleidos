@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach, Cypress*/
+/*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 import actionModal from "../../selectors/action-modal.selectors";
@@ -8,7 +8,6 @@ import printOverview from "../../selectors/print-overview.selectors";
 import newsletter from "../../selectors/newsletter.selector";
 
 context('Different session kinds should show different titles', () => {
-  const plusMonths = 2;
   const regular = '/vergadering/5EC5258C5B08050008000001/agenda/5EC5258D5B08050008000002/agendapunten';
   const special = '/vergadering/5EC525AC5B08050008000005/agenda/5EC525AD5B08050008000006/agendapunten';
   const electronic = '/vergadering/5EC525CB5B08050008000009/agenda/5EC525CC5B0805000800000A/agendapunten';

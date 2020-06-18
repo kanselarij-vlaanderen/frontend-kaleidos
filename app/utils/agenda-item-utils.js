@@ -19,7 +19,7 @@ export const cancelEdit = (item, propertiesToSet) => {
   }
   item.reload();
   const keys = Object.keys(propertiesToSet);
-  keys.forEach(async function (key) {
+  keys.forEach(async function () {
     keys.forEach(prop => item.notifyPropertyChange(prop));
   });
 };

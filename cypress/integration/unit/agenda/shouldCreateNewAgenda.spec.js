@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach*/
+/*global context, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 context('Agenda tests', () => {

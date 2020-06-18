@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
 import moment from 'moment';
 import config from 'fe-redpencil/utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
-import { deprecate } from '@ember/debug';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 
 export default Component.extend(
@@ -290,8 +289,6 @@ export default Component.extend(
           }
           await this.attachDocumentsToModel(documentsToAttach, item, 'linkedDocumentVersions');
           await item.save();
-        } catch(error) {
-          throw error;
         } finally {
           this.set('isLinkingOldDocument', false);
           this.set('documentsToLink', A([]));

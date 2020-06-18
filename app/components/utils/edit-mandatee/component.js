@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import moment from 'moment';
 import { tracked } from '@glimmer/tracking';
 import { cached } from 'fe-redpencil/decorators/cached';
 

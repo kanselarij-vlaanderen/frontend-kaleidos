@@ -13,9 +13,8 @@ Cypress.Commands.add('selectOptionInSelectByIndex', selectOptionInSelectByIndex)
  * @function
  * @returns {Chainable<JQuery<any>>} returns a chainable element
  * @param {number} option - The index of the option that has to be selected in the select
- * @param {String} text - The option that has to be selected in the select
  */
-function selectOptionInSelectByIndex( option, text) {
+function selectOptionInSelectByIndex( option) {
   cy.log('selectOptionInSelectByIndex');
   return cy.get('.ember-power-select-option', {timeout: 5000})
     .should('exist')

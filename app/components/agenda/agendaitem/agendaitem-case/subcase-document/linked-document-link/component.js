@@ -15,6 +15,7 @@ export default Component.extend({
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }
+    return null;
   }),
 
   myDocumentVersions: computed.alias('item.linkedDocumentVersions'),
@@ -49,8 +50,6 @@ export default Component.extend({
           });
           return matchingVersions;
         }
-
-        return;
       })()
     });
   }),

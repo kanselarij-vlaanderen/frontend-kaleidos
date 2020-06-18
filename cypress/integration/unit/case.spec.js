@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach*/
+/*global context, before, it, cy,beforeEach, Cypress*/
 /// <reference types="Cypress" />
 
 

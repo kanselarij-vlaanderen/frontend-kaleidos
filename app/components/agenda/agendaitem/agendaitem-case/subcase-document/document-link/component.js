@@ -57,8 +57,6 @@ export default Component.extend({
           });
           return matchingVersions;
         }
-
-        return;
       })()
     });
   }),
@@ -81,13 +79,16 @@ export default Component.extend({
       if (this.document.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
       }
+      return null;
     }
+    return null;
   }),
 
   openClass: computed('isShowingVersions', function () {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }
+    return null;
   }),
 
   async didInsertElement() {

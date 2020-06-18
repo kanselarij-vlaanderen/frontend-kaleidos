@@ -10,5 +10,6 @@ export default Component.extend({
     if (isMinimal) {
       return 'vlc-procedure-step--minimal';
     }
+    return null;
   })
 });

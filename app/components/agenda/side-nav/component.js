@@ -13,6 +13,7 @@ export default Component.extend({
     if (this.get('agendaMenuOpened')) {
       return 'vlc-panel-layout__agenda-history--collapsed'
     }
+    return null;
   }),
 
   agendaMenuOpened: false,

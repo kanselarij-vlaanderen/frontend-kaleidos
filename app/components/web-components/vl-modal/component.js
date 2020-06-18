@@ -49,6 +49,7 @@ export default Component.extend({
     if (isOverlay) {
       return 'vl-modal__backdrop';
     }
+    return null;
   }),
 
   sizeClass: computed('large', 'isDocumentViewer', function () {
@@ -59,6 +60,7 @@ export default Component.extend({
     if (isDocumentViewer) {
       return 'vl-modal-dialog full-height';
     }
+    return null;
   }),
 
   getFocusableNodes() {

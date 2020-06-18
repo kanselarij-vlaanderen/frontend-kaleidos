@@ -41,7 +41,6 @@ export default Component.extend({
 
   async deleteItem(agendaitem) {
     this.toggleProperty('isVerifying');
-    const id = await agendaitem.get('id');
     const subcase = await agendaitem.get('subcase');
     if (subcase) {
       // Refresh the agendaitems for isDeletable
@@ -64,6 +63,7 @@ export default Component.extend({
     } else if (this.currentSession.isAdmin) {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
+    return null;
   }),
 
   actions: {

@@ -18,6 +18,7 @@ export default Component.extend({
     if ( routing.get('currentRouteName').includes('agenda.agendaitems.agendaitem.')) {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
   selectedOverviewClass: computed('routing.currentRouteName', function () {
@@ -25,6 +26,7 @@ export default Component.extend({
     if (routing.get('currentRouteName') === 'agenda.agendaitems.index') {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
   selectedCompareClass: computed('routing.currentRouteName', function () {
@@ -32,6 +34,7 @@ export default Component.extend({
     if (routing.get('currentRouteName') === 'agenda.compare') {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
   selectedDocumentClass: computed('routing.currentRouteName', function () {
@@ -39,6 +42,7 @@ export default Component.extend({
     if (routing.get('currentRouteName') === 'agenda.documents') {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
   actions: {

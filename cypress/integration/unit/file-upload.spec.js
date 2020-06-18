@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach, Cypress*/
+/*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 context('Add files to an agenda', () => {

@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
+import { warn } from '@ember/debug';
 
 export default class AgendaItemsSearchController extends Controller {
   queryParams = {

@@ -1,4 +1,4 @@
-/*global context, before, it, cy, Cypress*/
+/*global context, beforeEach, it, cy*/
 /// <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
@@ -65,42 +65,3 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.printContainer).contains('Cypress test voor het testen van toegevoegde documenten');
   });
 });
-
-function currentMoment() {
-  return Cypress.moment();
-}
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}
-
-function getTranslatedMonth(month) {
-  switch (month) {
-    case 0:
-      return 'januari';
-    case 1:
-      return 'februari';
-    case 2:
-      return 'maart';
-    case 3:
-      return 'april';
-    case 4:
-      return 'mei';
-    case 5:
-      return 'juni';
-    case 6:
-      return 'juli';
-    case 7:
-      return 'augustus';
-    case 8:
-      return 'september';
-    case 9:
-      return 'oktober';
-    case 10:
-      return 'november';
-    case 11:
-      return 'december';
-    default:
-      break;
-  }
-}

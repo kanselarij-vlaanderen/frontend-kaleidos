@@ -1,4 +1,4 @@
-/*global context, before, it, cy,beforeEach, Cypress*/
+/*global context, before, it, cy,beforeEach*/
 /// <reference types="Cypress" />
 
 import alert from '../../../selectors/alert.selectors';
@@ -44,11 +44,3 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.get(alert.changesAlertComponent).should('not.be.visible');
   })
 });
-
-function currentMoment() {
-  return Cypress.moment();
-}
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

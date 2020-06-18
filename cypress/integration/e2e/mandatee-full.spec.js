@@ -6,7 +6,6 @@ import settings from '../../selectors/settings.selectors';
 import form from '../../selectors/form.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import modal from '../../selectors/modal.selectors';
-import agenda from '../../selectors/agenda.selectors';
 
 context('Full test', () => {
   before(() => {
@@ -119,5 +118,4 @@ context('Full test', () => {
   function currentTimestamp() {
     return Cypress.moment().unix();
   }
-
 });

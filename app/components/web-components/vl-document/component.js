@@ -22,6 +22,7 @@ export default Component.extend({
         return 'vlc-document--deleted-state';
       }
     }
+    return null;
   }),
 
   async deleteDocumentVersionWithUndo() {

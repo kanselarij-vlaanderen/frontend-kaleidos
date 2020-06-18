@@ -20,11 +20,7 @@ export default Component.extend({
   },
 
   showIcon: computed('buttonType', function () {
-    if (this.buttonType === 'warning') {
-      return false;
-    } else {
-      return true;
-    }
+    return this.buttonType !== 'warning';
   }),
 
   buttonClass: computed('buttonType', function () {
@@ -33,6 +29,7 @@ export default Component.extend({
     } else if (this.buttonType === 'danger') {
       return 'vl-button vl-button--error'
     }
+    return null;
   }),
 
   keyDown: function (event) {
