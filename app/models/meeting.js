@@ -49,7 +49,7 @@ export default Model.extend({
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
           }).then((containers) => {
-            return sortDocuments(this, containers);
+            return sortDocuments(this.get('documentVersions'), containers);
           });
         }
       })
