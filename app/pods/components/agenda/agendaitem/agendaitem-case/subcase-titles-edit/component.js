@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { computed, action, get, set } from '@ember/object';
 import { saveChanges as saveSubcaseTitles, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
-import { trimText } from '../../../../../utils/trim-util';
+import { trimText } from 'fe-redpencil/utils/trim-util';
 
 export default class SubcaseTitlesEdit extends Component {
   @service store;
@@ -73,4 +73,3 @@ export default class SubcaseTitlesEdit extends Component {
     set(this, 'showInNewsletter', !value);
   }
 }
-

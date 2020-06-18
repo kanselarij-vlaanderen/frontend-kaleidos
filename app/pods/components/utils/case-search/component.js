@@ -4,7 +4,7 @@ import { isEmpty } from '@ember/utils';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import { debounce } from '@ember/runloop';
 import { A } from '@ember/array';
-import search from '../../../utils/mu-search';
+import search from 'fe-redpencil/utils/mu-search';
 
 export default Component.extend(AuthenticatedRouteMixin, {
   size: 5,

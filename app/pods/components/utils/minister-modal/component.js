@@ -4,7 +4,7 @@ import {
   selectDomain,
   selectField,
   prepareMandateeRowAfterEdit
-} from '../../../utils/manage-minister-util';
+} from 'fe-redpencil/utils/manage-minister-util';
 import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 

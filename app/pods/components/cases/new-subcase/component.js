@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
-import { trimText } from '../../../utils/trim-util';
+import { trimText } from 'fe-redpencil/utils/trim-util';
 
 export default Component.extend({
   store: inject(),
