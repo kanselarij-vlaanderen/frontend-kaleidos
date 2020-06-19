@@ -33,7 +33,6 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/components/_form-message';
 @import 'govflanders/components/_form-structure';
 @import 'govflanders/components/_icon';
-@import 'govflanders/components/_info-tile';
 @import 'govflanders/components/_input-addon';
 @import 'govflanders/components/_input-field';
 @import 'govflanders/components/_input-group';
@@ -89,6 +88,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-agenda-items';
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-backlink';
+@import 'custom-components/vlc-block-link';
 @import 'custom-components/vlc-box';
 @import 'custom-components/vlc-button-in-input';
 @import 'custom-components/vlc-button-toolbar';
@@ -101,13 +101,14 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-dropdown-menu';
 @import 'custom-components/vlc-hr';
 @import 'custom-components/vlc-input-field-block';
-@import 'custom-components/vlc-kitchensink';
+@import 'custom-components/vlc-key-value';
 @import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-minister';
 @import 'custom-components/vlc-mock-login';
 @import 'custom-components/vlc-navbar';
 @import 'custom-components/vlc-page-header';
 @import 'custom-components/vlc-panel-layout';
+@import 'custom-components/vlc-panel';
 @import 'custom-components/vlc-pill';
 @import 'custom-components/vlc-printable-agenda-list';
 @import 'custom-components/vlc-preview-container';
@@ -126,6 +127,15 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-user-management-table';
 @import 'custom-components/vlc-link-actions';
 @import 'custom-components/vlc-login';
+
+
+// Kitchen sink
+@import 'custom-components/_vlc-kitchensink-container';
+@import 'custom-components/_vlc-kitchensink-header';
+@import 'custom-components/_vlc-kitchensink-navigation';
+@import 'custom-components/_vlc-kitchensink-page-header';
+@import 'custom-components/_vlc-kitchensink-sample-header';
+@import 'custom-components/_vlc-kitchensink-sample';
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";

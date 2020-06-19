@@ -46,10 +46,7 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
  * @returns {Promise<String>} the id of the created agenda
  */
 function createAgenda(kind, date, location) {
-  cy.route('POST', '/meetings').as('createNewMeeting');
-  cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/newsletter-infos').as('createNewsletter');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
+
 
   cy.visit('')
   cy.get(agenda.createNewAgendaButton).click();
@@ -81,6 +78,9 @@ function createAgenda(kind, date, location) {
     cy.get('.vl-input-field').click().type(location);
   });
 
+  cy.route('POST', '/meetings').as('createNewMeeting');
+  cy.route('POST', '/agendas').as('createNewAgenda');
+  cy.route('PATCH', '/meetings/**').as('patchMeetings');
   cy.get('@dialog').within(() => {
     cy.get('.vlc-toolbar__item').contains('Toevoegen').click();
   });
@@ -94,7 +94,6 @@ function createAgenda(kind, date, location) {
     });
 
   cy.wait('@createNewAgenda', { timeout: 20000 });
-  cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
@@ -269,27 +268,31 @@ function deleteAgenda(meetingId, lastAgenda) {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function setFormalOkOnItemWithIndex(indexOfItem) {
+function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = "Formeel OK") {
   //TODO set only some items to formally ok with list as parameter
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
 
-  cy.clickReverseTab('Overzicht');
+  if(!fromWithinAgendaOverview) {
+    cy.clickReverseTab('Overzicht');
 
-  cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
-    .last().as('editFormality');
+    cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
+      .last().as('editFormality');
 
-  cy.get('@editFormality').click();
+    cy.get('@editFormality').click();
+  } else {
+    cy.get(agendaOverview.agendaEditFormallyOkButton).click();
+  }
 
   cy.get('li.vlc-agenda-items__sub-item').as('agendaitems');
   cy.get('@agendaitems').eq(indexOfItem).scrollIntoView().within(() => {
     cy.get('.vl-u-spacer-extended-bottom-s').click();
   });
   cy.get('.ember-power-select-option')
-    .contains('Formeel OK')
+    .contains(formalityStatus)
     .click()
     .wait('@patchAgendaItem')
     .wait(1000) // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
-    .get('.ember-power-select-option').should('not.exist')
+    .get('.ember-power-select-option').should('not.exist');
   cy.get('.vlc-agenda-items .vl-alert button')
     .click();
 }
