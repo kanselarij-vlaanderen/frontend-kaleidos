@@ -40,6 +40,7 @@ export default Component.extend({
         if (versions) {
           versions.map((item) => {
             itemVersionIds[item.get('id')] = true;
+            return item;
           });
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
@@ -55,6 +56,7 @@ export default Component.extend({
     const reversed = [];
     this.get('mySortedDocumentVersions').map((item) => {
       reversed.push(item);
+      return item;
     });
     reversed.reverse();
     return reversed;
@@ -72,20 +74,25 @@ export default Component.extend({
     if (subcase) {
       await this.unlinkDocumentVersionsFromModel(subcase, documentVersions);
     } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-      await Promise.all(agendaitemsOnDesignAgenda.map((agendaitem) => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
+      await Promise.all(agendaitemsOnDesignAgenda
+        .map((agendaitem) => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
     }
-    return await this.unlinkDocumentVersionsFromModel(model, documentVersions);
+    const unlinkDocumentVersionsFromModelPromise = await
+    this.unlinkDocumentVersionsFromModel(model, documentVersions);
+    return unlinkDocumentVersionsFromModelPromise;
   },
 
   // TODO: refactor model/code in function of "reeds aangeleverde documenten"
   async unlinkDocumentVersionsFromModel(model, documentVersions) {
     const modelDocumentVersions = await model.get('linkedDocumentVersions');
     if (modelDocumentVersions) {
-      documentVersions.forEach((documentVersion) => modelDocumentVersions.removeObject(documentVersion));
+      documentVersions
+        .forEach((documentVersion) => modelDocumentVersions.removeObject(documentVersion));
     } else {
       model.set('linkedDocumentVersions', A([]));
     }
-    return await model.save();
+    const savedModalPromise = model.save();
+    return savedModalPromise;
   },
 
   actions: {
