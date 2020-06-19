@@ -168,13 +168,14 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
               });
           });
       })
-      .then(() => cy.existsAndVisible(form.formInput).type(location).then(() => cy.existsAndVisible(form.formSave).click()
-        .then(() => {
-          cy.wait('@createNewAgenda').its('status').should('to.equal', 201);
-          cy.wait('@createNewsletter').its('status').should('to.equal', 201);
-          cy.wait('@patchMeetings').its('status').should('to.equal', 204);
-          return cy.wait('@createNewMeeting').then((xhr) => xhr.response.body.data.id);
-        }))));
+      .then(() => cy.existsAndVisible(form.formInput).type(location)
+        .then(() => cy.existsAndVisible(form.formSave).click()
+          .then(() => {
+            cy.wait('@createNewAgenda').its('status').should('to.equal', 201);
+            cy.wait('@createNewsletter').its('status').should('to.equal', 201);
+            cy.wait('@patchMeetings').its('status').should('to.equal', 204);
+            return cy.wait('@createNewMeeting').then((xhr) => xhr.response.body.data.id);
+          }))));
 }
 
 /**
@@ -230,7 +231,8 @@ function deleteAgenda(meetingId, lastAgenda) {
   } else {
     cy.route('DELETE', '/meetings/**').as('deleteMeeting');
   }
-  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda'); //Call is made but cypress doesn't see it
+  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
+  // Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
 
   cy.get(actionModel.showActionOptions).click();
