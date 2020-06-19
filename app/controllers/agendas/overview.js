@@ -53,15 +53,15 @@ export default Controller.extend(DefaultQueryParamsMixin, {
         this.set('to', undefined);
         return;
       }
-      const min = moment(parseInt(match[3]), 'YYYY', true);
+      const min = moment(parseInt(match[3], 10), 'YYYY', true);
       let unitToAdd;
       if (match[1] && match[2]) {
         unitToAdd = 'day';
-        min.set('date', parseInt(match[1]));
-        min.set('month', parseInt(match[2]) - 1); // Count starts from 0
+        min.set('date', parseInt(match[1], 10));
+        min.set('month', parseInt(match[2], 10) - 1); // Count starts from 0
       } else if (match[1]) {
         unitToAdd = 'month';
-        min.set('month', parseInt(match[1]) - 1);
+        min.set('month', parseInt(match[1], 10) - 1);
       } else {
         unitToAdd = 'year';
       }
