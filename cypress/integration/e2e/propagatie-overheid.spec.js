@@ -66,6 +66,7 @@ context('Agenda tests', () => {
   });
 
   it('Test as Overheid', () => {
+    cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
@@ -81,6 +82,7 @@ context('Agenda tests', () => {
   });
 
   it('Test as Admin', () => {
+    cy.server();
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
@@ -90,6 +92,7 @@ context('Agenda tests', () => {
   });
 
   it('Test as Overheid', () => {
+    cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
