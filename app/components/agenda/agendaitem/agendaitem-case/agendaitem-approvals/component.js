@@ -28,7 +28,10 @@ export default Component.extend({
     async saveChanges() {
       this.set('isLoading', true);
 
-      await Promise.all(get(this, 'item.approvals').map(async (approval) => await approval.save()));
+      await Promise.all(get(this, 'item.approvals').map(async (approval) => {
+        const savedApproval = await approval.save();
+        return savedApproval;
+      }));
 
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
@@ -64,6 +67,7 @@ export default Component.extend({
       const approvals = await item.get('approvals');
       approvals.map((approval) => {
         approval.rollbackAttributes();
+        return approval;
       });
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
