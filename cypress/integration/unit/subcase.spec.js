@@ -205,9 +205,9 @@ context('Subcase tests', () => {
     cy.get(agenda.confidentialityIcon).should('be.visible');
 
     // Go to kort bestek
-    cy.route('GET', '/subcases/*/phases').as('getSubcasePhases');
+    //cy.route('GET', '/subcases/*/phases').as('getSubcasePhases'); //TODO KAS-1425 how to wait for the phases ?
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
-    cy.wait('@getSubcasePhases');
+    //cy.wait('@getSubcasePhases'); //TODO KAS-1425
 
     // Assert status also shown. This is da 💣
     cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');

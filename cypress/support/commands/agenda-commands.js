@@ -86,19 +86,22 @@ function createAgenda(kind, date, location) {
   });
 
   let meetingId;
+  let agendaId;
 
   cy.wait('@createNewMeeting', { timeout: 20000 })
     .then((res) => {
       meetingId = res.responseBody.data.id;
-    //}).verifyAlertSuccess();
     });
 
-  cy.wait('@createNewAgenda', { timeout: 20000 });
+  cy.wait('@createNewAgenda', { timeout: 20000 })
+    .then((res) => {
+      agendaId = res.responseBody.data.id;
+    });
   cy.wait('@createNewsletter', { timeout: 20000 });
   cy.wait('@patchMeetings', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
-        resolve(meetingId);
+        resolve([meetingId, agendaId]);
       });
     });
 }
@@ -371,7 +374,7 @@ function approveDesignAgenda() {
 function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
-  cy.route('POST', '/subcase-phases').as('createSubcasePhase');
+  cy.route('POST', '/agenda-activities').as('createAgendaActivity');
   cy.route('PATCH', '/subcases/**').as('patchSubcase');
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
@@ -413,9 +416,9 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     cy.get('@rows', { timeout: 12000 }).eq(0).click().get('[type="checkbox"]').should('be.checked');
     cy.get('.vl-button').contains('Agendapunt toevoegen').click();
   });
-  cy.wait('@createNewAgendaitem', { timeout: 20000 })
+  cy.wait('@createAgendaActivity', { timeout: 20000 })
+    .wait('@createNewAgendaitem', { timeout: 20000 })
     .wait('@patchSubcase', { timeout: 20000 })
-    .wait('@createSubcasePhase', { timeout: 20000 })
     .wait('@patchAgenda', { timeout: 20000 })
 }
 

@@ -211,7 +211,7 @@ function proposeSubcaseForAgenda (agendaDate) {
   cy.route('POST','/agendaitems').as('createNewAgendaitem');
   cy.route('PATCH','/agendas/*').as('patchAgenda');
   cy.route('PATCH','/subcases/*').as('patchSubcase');
-  cy.route('POST','/subcase-phases').as('createSubcasePhase');
+  cy.route('POST', '/agenda-activities').as('createAgendaActivity');
   const monthDutch = getTranslatedMonth(agendaDate.month());
   const formattedDate = agendaDate.date() + ' ' + monthDutch + ' ' + agendaDate.year();
 
@@ -223,10 +223,10 @@ function proposeSubcaseForAgenda (agendaDate) {
   cy.get('.ember-attacher-show').within(() => {
     cy.contains(formattedDate).click();
   });
-  cy.wait('@createNewAgendaitem', { timeout: 12000 });
-  cy.wait('@patchSubcase', { timeout: 24000 });
-  cy.wait('@createSubcasePhase', { timeout: 24000 });
-  cy.wait('@patchAgenda', { timeout: 24000 });
+  cy.wait('@createAgendaActivity', { timeout: 20000 })
+    .wait('@createNewAgendaitem', { timeout: 20000 })
+    .wait('@patchSubcase', { timeout: 24000 })
+    .wait('@patchAgenda', { timeout: 24000 });
   cy.log('/proposeSubcaseForAgenda');
 }
 
