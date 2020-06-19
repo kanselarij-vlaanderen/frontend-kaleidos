@@ -29,6 +29,7 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/extensions': 'off',
+    'max-len': 'warn',
   },
   overrides: [
     // node files
