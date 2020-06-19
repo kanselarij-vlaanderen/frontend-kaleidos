@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
   root: true,
   parser: 'babel-eslint',
@@ -25,6 +23,10 @@ module.exports = {
     'ember/no-jquery': 'error',
     'ember/no-observers': 'warn',
     'ember/no-new-mixins': 'warn',
+    'no-param-reassign': 'off',
+    'no-underscore-dangle': 'off',
+    'prefer-rest-params': 'off',
+    'import/no-unresolved': 'off',
   },
   overrides: [
     // node files
@@ -55,6 +57,7 @@ module.exports = {
         'ember/use-brace-expansion': 'off',
         'table-groups': 'off',
         'no-triple-curlies': 'off',
+        'import/no-extraneous-dependencies': 'off',
       },
     },
   ],
