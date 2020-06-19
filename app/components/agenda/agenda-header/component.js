@@ -118,7 +118,7 @@ export default Component.extend(FileSaverMixin, {
       await session.save();
       await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems', session.id, previousAgenda.get('id'));
-    } else if (agendasLength == 1) {
+    } else if (agendasLength === 1) {
       await this.get('sessionService').deleteSession(session);
       this.router.transitionTo('agendas');
     } else { // dead code, this should not be reachable unless previousAgenda failed to resolve
@@ -141,7 +141,7 @@ export default Component.extend(FileSaverMixin, {
   destroyAgendaitemsList(agendaitems) {
     return all(agendaitems.map((agendaitem) => {
       if (!agendaitem) {
-        return;
+        return null;
       }
       return agendaitem.destroyRecord().catch(() => warn('Something went wrong while deleting the agendaitem.', { id: 'agenda-item-reloading' }));
     }));
