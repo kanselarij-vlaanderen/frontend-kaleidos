@@ -18,7 +18,7 @@ export default Controller.extend({
     const fullProcedure = this.get('model.currentAgenda.createdFor.kindToShow.fullProcedure');
     let prefix = '';
 
-    if (this.definite == 'false') {
+    if (this.definite === 'false') {
       prefix = 'Klad ';
     }
     return `${prefix}${this.intl.t('decisions-of-kind', { kind: fullProcedure })} ${moment(date).format('DD-MM-YYYY')}`;
