@@ -34,7 +34,7 @@ export default Controller.extend({
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
     let prefix = '';
 
-    if (this.definite == 'false') {
+    if (this.definite === 'false') {
       prefix = 'Klad ';
     }
     return `${prefix}${this.intl.t('newsletter-overview-pdf-name')} ${moment(date).format('DD-MM-YYYY')}`;
