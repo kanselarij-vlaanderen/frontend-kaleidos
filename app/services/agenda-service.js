@@ -110,7 +110,7 @@ export default Service.extend({
       priorityToAssign = (await selectedAgenda.get('lastAgendaitemPriority')) + 1;
     }
 
-    if (isNaN(priorityToAssign)) {
+    if (typeof priorityToAssign === 'number') {
       priorityToAssign = 1;
     }
 
@@ -170,7 +170,7 @@ export default Service.extend({
           item.set('ownGroupName', null);
           return;
         }
-        if (mandatees.length == 0) {
+        if (mandatees.length === 0) {
           item.set('groupName', 'Geen toegekende ministers');
           return;
         }
@@ -178,7 +178,7 @@ export default Service.extend({
           .map((mandatee) => mandatee.title)
           .join('<br/>');
 
-        if (currentAgendaitemGroupName != previousAgendaitemGroupName) {
+        if (currentAgendaitemGroupName !== previousAgendaitemGroupName) {
           previousAgendaitemGroupName = currentAgendaitemGroupName;
           item.set('groupName', currentAgendaitemGroupName);
         } else {
@@ -198,8 +198,9 @@ export default Service.extend({
     if (subcase) {
       await subcase.hasMany('agendaitems').reload();
       const agendaitemsFromSubcase = await subcase.get('agendaitems');
-      if (agendaitemsFromSubcase.length == 1) {
-        // if only 1 item is found, all phases should be destroyed and the subcase updated before deleting the agendaitem
+      if (agendaitemsFromSubcase.length === 1) {
+        // if only 1 item is found, all phases should be destroyed
+        // and the subcase updated before deleting the agendaitem
         const phases = await subcase.get('phases');
         await Promise.all(phases.map(async (phase) => {
           await phase.destroyRecord();
@@ -209,7 +210,8 @@ export default Service.extend({
         await subcase.set('agendaitems', []);
         await subcase.save();
       } else {
-        const foundAgendaitem = agendaitemsFromSubcase.find((agendaitem) => agendaitem.id == itemToDelete.id);
+        const foundAgendaitem = agendaitemsFromSubcase
+          .find((agendaitemFromSubcase) => agendaitemFromSubcase.id == itemToDelete.id);
         itemToDelete = foundAgendaitem;
       }
     }
@@ -237,7 +239,7 @@ export default Service.extend({
         }));
         await subcase.hasMany('agendaitems').reload();
         const agendaitemsFromSubcase = await subcase.get('agendaitems');
-        if (agendaitemsFromSubcase.length == 0) {
+        if (agendaitemsFromSubcase.length === 0) {
           const phases = await subcase.get('phases');
           await Promise.all(phases.map(async (phase) => {
             await phase.destroyRecord();
@@ -266,7 +268,8 @@ export default Service.extend({
     if (notaDocumentVersions.length > 1) {
       const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
       if (newsletterInfoOnSubcaseLastModifiedTime) {
-        if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
+        if (moment(newsletterInfoOnSubcaseLastModifiedTime)
+          .isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
           return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
         }
         return null;
