@@ -30,6 +30,14 @@ export default class AgendaList extends Component {
 
   isReAssigningPriorities = null;
 
+  @computed('selectedAgendaItem')
+  get getClassNames() {
+    if (this.get('selectedAgendaItem')) {
+      return 'vlc-agenda-items--small';
+    }
+    return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
+  }
+
   @restartableTask
   reAssignPriorities = function* (agendaitems) {
     yield agendaitems.map(async (item) => {
@@ -41,15 +49,7 @@ export default class AgendaList extends Component {
         }
       }
     });
-  }
-
-  @computed('selectedAgendaItem')
-  get getClassNames() {
-    if (this.get('selectedAgendaItem')) {
-      return 'vlc-agenda-items--small';
-    }
-    return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
-  }
+  };
 
   @action
   selectAgendaItemAction(agendaitem) {
@@ -73,6 +73,7 @@ export default class AgendaList extends Component {
     }
     itemModels.map((item, index) => {
       item.set('priority', index + 1);
+      return item;
     });
     this.reAssignPriorities.perform(itemModels);
     this.agendaService.groupAgendaItemsOnGroupName(itemModels);
@@ -85,6 +86,7 @@ export default class AgendaList extends Component {
     }
     itemModels.map((item, index) => {
       item.set('priority', index + 1);
+      return item;
     });
     this.reAssignPriorities.perform(itemModels);
     // this.refresh();
