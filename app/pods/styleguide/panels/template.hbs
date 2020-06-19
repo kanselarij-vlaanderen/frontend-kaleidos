@@ -1,0 +1,156 @@
+{{! template-lint-disable no-bare-strings }}
+
+<h1 class="vlc-kitchensink-header">Panels</h1>
+
+<h3 class="vlc-kitchensink-sample-header">Panel body</h3>
+<div class="vlc-kitchensink-sample">
+  <Panel as |pl|>
+    <pl.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
+    </pl.Body>
+  </Panel>
+</div>
+
+<h3 class="vlc-kitchensink-sample-header">Panel with header</h3>
+<div class="vlc-kitchensink-sample">
+  <Panel as |pl|>
+    <pl.Header>
+      <h4 class="vlc-panel__title">Panel header</h4>
+    </pl.Header>
+    <pl.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
+    </pl.Body>
+  </Panel>
+</div>
+
+<h3 class="vlc-kitchensink-sample-header">Panel with header and action</h3>
+<div class="vlc-kitchensink-sample">
+  <Panel as |pl|>
+    <pl.Header>
+      <Toolbar as |t|>
+        <t.Group @position="left">
+          <t.Item>
+            <h4 class="vlc-panel__title">Panel header</h4>
+          </t.Item>
+        </t.Group>
+        <t.Group @position="right">
+          <t.Item>
+            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before">
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+              Bewerken
+            </button>
+          </t.Item>
+        </t.Group>
+      </Toolbar>
+    </pl.Header>
+    <pl.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
+    </pl.Body>
+  </Panel>
+</div>
+
+<h3 class="vlc-kitchensink-sample-header">Panel with header and 2 actions</h3>
+<div class="vlc-kitchensink-sample">
+  <Panel as |pl|>
+    <pl.Header>
+      <Toolbar as |t|>
+        <t.Group @position="left">
+          <t.Item>
+            <h4 class="vlc-panel__title">Panel header</h4>
+          </t.Item>
+        </t.Group>
+        <t.Group @position="right">
+          <t.Item>
+            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before">
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+              Bewerken
+            </button>
+          </t.Item>
+          <t.Item>
+            <button type="button" class="vl-button vl-button--tertiary vl-button--icon">
+              <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
+            </button>
+          </t.Item>
+        </t.Group>
+      </Toolbar>
+    </pl.Header>
+    <pl.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
+    </pl.Body>
+  </Panel>
+</div>
+
+<h3 class="vlc-kitchensink-sample-header">Panel with header and checkbox</h3>
+<div class="vlc-kitchensink-sample">
+  <Panel as |pl|>
+    <pl.Header>
+      <Toolbar as |t|>
+        <t.Group @position="left">
+          <t.Item>
+            <h4 class="vlc-panel__title">Panel header</h4>
+          </t.Item>
+        </t.Group>
+        <t.Group @position="right">
+          <t.Item>
+            <WebComponents::VlCheckbox @label="Toon opties"/>
+          </t.Item>
+        </t.Group>
+      </Toolbar>
+    </pl.Header>
+    <pl.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
+    </pl.Body>
+  </Panel>
+</div>
+
+<h3 class="vlc-kitchensink-sample-header">Panel with double body</h3>
+<div class="vlc-kitchensink-sample">
+  <Panel as |pl|>
+    <pl.Header>
+      <h4 class="vlc-panel__title">Panel header</h4>
+    </pl.Header>
+    <pl.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
+    </pl.Body>
+    <pl.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
+    </pl.Body>
+  </Panel>
+</div>
+
+<h3 class="vlc-kitchensink-sample-header">Panel with footer</h3>
+<div class="vlc-kitchensink-sample">
+  <Panel as |pl|>
+    <pl.Header>
+      <h4 class="vlc-panel__title">Panel header</h4>
+    </pl.Header>
+    <pl.Body>
+      <div class="vlc-input-field-block">
+        <WebComponents::VlFormLabel @value="Label"/>
+        {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
+      </div>
+      <div class="vlc-input-field-block">
+        <WebComponents::VlFormLabel @value="Label"/>
+        {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
+      </div>
+    </pl.Body>
+    <pl.Footer>
+      <Toolbar as |t|>
+        <t.Group @position="left">
+        </t.Group>
+        <t.Group @position="right">
+          <t.Item>
+            <button type="button" class="vl-button vl-button--link">
+              Annuleren
+            </button>
+          </t.Item>
+          <t.Item>
+            <button type="button" class="vl-button">
+              Opslaan
+            </button>
+          </t.Item>
+        </t.Group>
+      </Toolbar>
+    </pl.Footer>
+  </Panel>
+</div>
