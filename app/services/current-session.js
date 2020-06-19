@@ -84,6 +84,24 @@ export default Service.extend({
     return roles.includes(userRoleId);
   },
 
+  checkIsDeveloper() {
+    // The keys in this whitelist are only indicative
+    // They are not used, but use them to describe who the id belongs to
+    // Get these from https://kaleidos.vlaanderen.be, and then check the user id via the ember data tab
+    const whitelist = {
+      rafael: 'cbdd9b60-3b97-11ea-a194-f970e0c7187e',
+    };
+
+    const user = this.get('user');
+
+    return Object.keys(whitelist).some((developer) => {
+      const whitelistedDeveloperId = whitelist[developer];
+      const currentUserId = user.get('id');
+
+      return currentUserId === whitelistedDeveloperId;
+    });
+  },
+
   // constructs a task which resolves in the promise
   makePropertyPromise: task(function* (property) {
     yield waitForProperty(this, property);
