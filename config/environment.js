@@ -3,6 +3,7 @@
 module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'fe-redpencil',
+    podModulePrefix: 'fe-redpencil/pods',
     environment,
     rootURL: '/',
     locationType: 'auto',

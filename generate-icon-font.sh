@@ -7,7 +7,7 @@ FONT_PREFIX=ki
 FONT_NAME=kaleidos-icons
 
 # The location of the overview page for the icons in Ember
-OVERVIEW_PAGE_PATH=app/components/styleguide/script-icons/template.hbs
+OVERVIEW_PAGE_PATH=app/pods/components/styleguide/script-icons/template.hbs
 
 # The folder containing all the SVG icons you intend to convert to the font
 PATH_TO_SVG_FILES=./icon-font-svg-files
