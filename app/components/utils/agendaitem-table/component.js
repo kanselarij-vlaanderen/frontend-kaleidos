@@ -91,7 +91,7 @@ export default class AgendaitemTable extends Component {
    */
   setRowsPostponed(tableRows, model) {
     const rowsCurrentlyInTable = tableRows;
-    const postponedItems = model.filter(item => item.get('isPostponed'));
+    const postponedItems = model.filter(item => item.get('retracted'));
     postponedItems.forEach(postponedItem => {
       const postponedRowInTable = rowsCurrentlyInTable.find(
         rowFromTable => rowFromTable.content.get('id') === postponedItem.get('id')

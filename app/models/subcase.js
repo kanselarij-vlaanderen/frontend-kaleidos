@@ -42,6 +42,7 @@ export default ModelWithModifier.extend({
   requestedBy: belongsTo('mandatee', {inverse: null}),
   accessLevel: belongsTo('access-level'),
 
+  // TODO KAS-1425 refactor all subcase.agendaitems to subcase.activity.agendaitems
   agendaitems: computed('agendaActivities','agendaActivities.@each.agendaitems','agendaitems', async function () {
     return await this.store.query('agendaitem', {
       filter: {
@@ -61,23 +62,15 @@ export default ModelWithModifier.extend({
     }
   }),
 
-// TODO KAS-1425
-  phases: computed('agendaActivities.@each', async function () {
-    const phases = await this.get('subcasesService').getSubcasePhases(this);
+// TODO KAS-1425   computed recalculation rate , refresh after edit
+  phases: computed('agendaActivities.@each','agendaActivities.agendaitems.@each.retracted', async function () {
+    const activities = await this.get('agendaActivities');
+    if (activities && activities.length != 0) {
+      const phases = await this.get('subcasesService').getSubcasePhases(this);
     return phases;
-    // if (this.agendaActivities.length > 0) {
-
-    // }
-    // return servicecall
-    // 
-    // return [
-    //   { label: 'ingediend voor agendering', date: moment.utc().toDate()},
-    //   { label: CONFIG.onAgendaLabel, date: moment.utc().toDate()},
-    //   { label: CONFIG.postponedLabel, date: moment.utc().toDate()},
-    //   { label: CONFIG.decidedLabel, date: moment.utc().toDate()},
-    //   { label: 'ingediend voor agendering', date: moment.utc().toDate()},
-    //   { label: CONFIG.onAgendaLabel, date: moment.utc().toDate()},
-    // ]
+    } else {
+      return null;
+    }
   }),
 
   documentsLength: computed('documents', function () {
@@ -240,10 +233,10 @@ export default ModelWithModifier.extend({
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestAgendaItem', 'latestAgendaItem.isPostponed', async function () {
+  isRetracted: computed('latestAgendaItem', 'latestAgendaItem.retracted', async function () {
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
-      return latestAgendaItem.isPostponed;
+      return latestAgendaItem.retracted;
     } else {
       return false;
     }

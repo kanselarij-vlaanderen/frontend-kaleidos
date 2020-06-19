@@ -332,7 +332,6 @@
   "sub-title": "titel",
   "subcase": "Procedurestap",
   "subcase-name": "Procedurestap naam",
-  "subcase-phase": "Fase",
   "subcase-type": "Procedurestap type",
   "subcase-type-dropdown": "Procedurestap",
   "subcases": "Procedurestappen",
@@ -405,7 +404,6 @@
   "government-function": "beleidsfunctie",
   "identification": "identificatie",
   "newsletter-info": "kort bestek",
-  "subcase-phase-code": "procedurestap type code",
   "theme": "thema",
   "time-period": "tijdsspanne",
   "signature": "handtekening",
@@ -578,7 +576,14 @@
   "option-others": "Andere",
   "reassign-agendaitem-priorities-title": "Aanpassen van agendapunten",
   "reassign-agendaitem-priorities-message": "Uw aanpassing wordt opgeslagen.",
+  "saving-retraced-agendaitem-title": "Aanpassen van uitstelling",
+  "saving-retraced-agendaitem-message": "Uw aanpassing wordt opgeslagen.",
   "agenda-activity": "Agendering",
   "show-more": "Toon meer",
-  "show-less": "Toon minder"
+  "show-less": "Toon minder",
+  "activity-phase-proposed-for-agenda": "Ingediend voor agendering op",
+  "activity-phase-approved-on-agenda": "Geagendeerd op de agenda van",
+  "activity-phase-postponed-on-agenda": "Uitgesteld op de agenda van",
+  "activity-phase-decided-on-agenda": "Beslist op de agenda van",
+  "activity-phase-postponed-is-decided": "Er is beslist om dit agendapunt uit te stellen"
 }

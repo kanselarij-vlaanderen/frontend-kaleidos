@@ -1,7 +1,7 @@
 {{#if currentAgenda.isDesignAgenda}}
   {{#if (and (not (is-pending isDeletable)) (not (is-pending isPostPonable)))}}
     {{#if (await isPostPonable)}}
-      {{#if agendaitem.isPostPoned}}
+      {{#if agendaitem.retracted}}
         <button type="button" class="vl-button vl-button--tertiary"
           {{action "advanceAgendaitem" agendaitem}}
         >
@@ -29,4 +29,19 @@
       @cancel={{action "toggleIsVerifying"}}
       @verify={{action "verifyDelete" agendaitem}} />
   {{/if}}
+{{/if}}
+{{#if (await isSavingRetracted)}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @showCloseButton={{false}}
+    @title={{t "saving-retraced-agendaitem-title"}}
+  >
+    <WebComponents::VlLoader
+      @text={{concat
+        (t "saving-retraced-agendaitem-message")
+        " "
+        (t "please-be-patient")
+      }}
+    />
+  </WebComponents::VlModal>
 {{/if}}

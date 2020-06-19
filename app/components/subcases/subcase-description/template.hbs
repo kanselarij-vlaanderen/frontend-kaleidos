@@ -15,7 +15,6 @@
     <p class="vl-u-text--capitalize">
       {{await subcase.subcaseName}}
     </p>
-    {{!-- TODO KAS-1425 --}}
     <ul class="vlc-status-timeline">
       {{#each (await subcase.phases) as |phase|}}
         <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
@@ -26,10 +25,7 @@
           {{else}}
             <div class="vlc-status-timeline__text">
               {{subcase-timeline-item-text
-                label=(await phase.label)
                 phase=phase
-                onAgendaInfo=(await subcase.onAgendaInfo)
-                isPostponed=(await subcase.isPostponed)
               }}
             </div>
           {{/if}}
@@ -74,14 +70,14 @@
         <span class="vl-description-data__value" data-test-subcase-agenda-link>
           {{#if
             (or
-              (is-pending subcase.isPostponed)
+              (is-pending subcase.isRetracted)
               (is-pending subcase.onAgendaInfo)
             )
           }}
             <div class="vl-loader"></div>
           {{else}}
             {{#if (await subcase.onAgendaInfo)}}
-              {{#if (await subcase.isPostponed)}}
+              {{#if (await subcase.isRetracted)}}
                 {{t "postponed-subcase"}}
               {{/if}}
                 {{#link-to

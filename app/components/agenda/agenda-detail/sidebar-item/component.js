@@ -12,7 +12,7 @@ export default Component.extend( {
   classNameBindings: [
     'isActive:vlc-agenda-detail-sidebar__sub-item--active',
     'isClickable::not-clickable',
-    'agendaitem.isPostponed:vlc-u-opacity-lighter',
+    'agendaitem.retracted:vlc-u-opacity-lighter',
     'isNew:vlc-agenda-items__sub-item--added-item'
   ],
   tagName: 'a',

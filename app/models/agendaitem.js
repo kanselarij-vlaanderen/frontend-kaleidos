@@ -20,7 +20,7 @@ export default ModelWithModifier.extend({
   priority: attr('number'),
   created: attr('datetime'),
   record: attr('string'),
-  retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to decision
+  retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to treatment
   showAsRemark: attr('boolean'),
   modified: attr('datetime'),
   titlePress: attr('string'),
@@ -43,7 +43,7 @@ export default ModelWithModifier.extend({
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
 
-  // subcase: alias('agendaActivity.subcase'),
+  // TODO KAS-1425 refactor all agendaitem.subcase to agendaitem.activity.subcase
   subcase: computed('agendaActivity.subcase', function () {
     return this.get('agendaActivity.subcase');
   }),
@@ -113,9 +113,6 @@ export default ModelWithModifier.extend({
       return priority;
     }
   }),
-
-  // TODO KAS-1420 move to treatment
-  isPostponed: alias('retracted'),
 
   decisions: computed('subcase.decisions.@each', function () {
     return PromiseArray.create({

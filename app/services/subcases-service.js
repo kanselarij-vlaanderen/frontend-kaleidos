@@ -4,6 +4,7 @@ import { inject } from '@ember/service';
 
 export default Service.extend({
   store: inject(),
+  intl: inject(),
 
   getPostPonedSubcaseIds() {
     return ajax(
@@ -12,21 +13,21 @@ export default Service.extend({
           'Content-Type': 'application/vnd.api+json'
         },
         method: 'GET',
-        url: `/custom-subcases`,
+        url: `/custom-subcases/getPostponedSubcases`,
       }
     ).then(({ data }) => {
-      return data;
+      return data.map((object) => {
+        return object.id;
+      });
     })
   },
 
-  //TODO KAS-1425
   async getSubcasePhases(model) {
     return ajax({
       method: 'GET',
-      url: `/agenda-approve/getSubcasePhases?subcaseId=${model.id}`,
+      url: `/custom-subcases/getSubcasePhases?subcaseId=${model.id}`,
     }).then((result) => {
-      console.log('result', result);
-      return result.body;
+      return this.processSubcasePhases(result.body);
     }).catch((error) => {
       console.log('error', error);
     });
@@ -45,6 +46,34 @@ export default Service.extend({
     ).then(({ data }) => {
       return data;
     })
+  },
+
+  processSubcasePhases(activities) {
+    //KAS1425 sort activities? done in the micro service atm.
+    let phases = []
+    activities.map((activityData) => {
+      if (activityData.startDatum) {
+        phases.push({ label: this.intl.t('activity-phase-proposed-for-agenda'), date: moment.utc(activityData.startDatum).toDate() });
+      }
+      if (activityData.phaseData) {
+        const phaseData = activityData.phaseData;
+        if (phaseData.geplandeStart) {
+          const geplandeStart = moment.utc(phaseData.geplandeStart).toDate();
+          phases.push({ label: this.intl.t('activity-phase-approved-on-agenda'), date: geplandeStart });
+          if (phaseData.postponed && phaseData.postponed == 'true') {
+            phases.push({ label: this.intl.t('activity-phase-postponed-on-agenda'), date: geplandeStart });
+            if (phaseData.approved && phaseData.approved == 'true') {
+              phases.push({ label: this.intl.t('activity-phase-postponed-is-decided') });
+            }
+          } else {
+            if (phaseData.approved && phaseData.approved == 'true') {
+              phases.push({ label: this.intl.t('activity-phase-decided-on-agenda'), date: geplandeStart });
+            }
+          }
+        }
+      }
+    });
+    return phases;
   }
 
 });

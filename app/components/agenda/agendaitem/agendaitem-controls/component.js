@@ -10,8 +10,9 @@ export default Component.extend({
   currentSession: service(),
   currentAgenda: null,
   agendaitem: null,
+  isSavingRetracted: null,
 
-  isPostPonable: computed("sessionService.agendas.@each", "agendaitem.agendaActivity", async function () {
+  isPostPonable: computed("sessionService.agendas.@each", "agendaitem.agendaActivity", "agendaitem.retracted", async function () {
     const agendaActivity = await this.get('agendaitem.agendaActivity');
     if (!agendaActivity) {
       // In case of legacy agendaitems without a link to subcase (old) or agenda-activity
@@ -66,18 +67,22 @@ export default Component.extend({
     },
 
     async postponeAgendaItem(agendaitem) {
-      agendaitem.set('retracted', true); 
+      this.set('isSavingRetracted', true);
+      agendaitem.set('retracted', true);
       // TODO KAS-1420 change property on treatment during model rework
       // TODO KAS-1420 create treatment ?
       await agendaitem.save();
+      this.set('isSavingRetracted', false);
     },
 
     async advanceAgendaitem(agendaitem) {
+      this.set('isSavingRetracted', true);
       // TODO KAS-1420 change property on treatment during model rework
       // TODO KAS-1420 delete postponed treatment ?
       // what to do when deleting treatment ?
       agendaitem.set('retracted', false);
       await agendaitem.save();
+      this.set('isSavingRetracted', false);
     },
 
     toggleIsVerifying() {
