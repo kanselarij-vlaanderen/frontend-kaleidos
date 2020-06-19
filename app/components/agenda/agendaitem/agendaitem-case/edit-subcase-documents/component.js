@@ -19,7 +19,7 @@ export default Component.extend({
             return this.deleteDocument(document);
           }
           return document.save()
-            .then((document) => document.get('documentVersions'))
+            .then((savedDocument) => savedDocument.get('documentVersions'))
             .then((versions) => Promise.all(versions.map((version) => version.save())));
         }),
       );
