@@ -124,7 +124,6 @@ function createAgenda(kind, date, location, meetingNumber ) {
  * @param {String} month - month that the agenda should be made on
  * @param {String} day - day that the agenda should be made on
  * @param {String} location - Location that the event is taking place
- * @param {number} meetingId - id of the meeting
  */
 function createDefaultAgenda(kindOfAgenda, year, month, day, location, meetingId) {
 
@@ -134,6 +133,7 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location, meetingId
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   const TOEVOEGEN = 'Toevoegen';
+
   cy.get(agenda.createNewAgendaButton).click();
   cy.get(agenda.emberPowerSelectTrigger).click();
   cy.get(agenda.emberPowerSelectOption).contains(kindOfAgenda).click();
@@ -281,27 +281,31 @@ function deleteAgenda(meetingId, lastAgenda) {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function setFormalOkOnItemWithIndex(indexOfItem) {
+function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = "Formeel OK") {
   //TODO set only some items to formally ok with list as parameter
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
 
-  cy.clickReverseTab('Overzicht');
+  if(!fromWithinAgendaOverview) {
+    cy.clickReverseTab('Overzicht');
 
-  cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
-    .last().as('editFormality');
+    cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
+      .last().as('editFormality');
 
-  cy.get('@editFormality').click();
+    cy.get('@editFormality').click();
+  } else {
+    cy.get(agendaOverview.agendaEditFormallyOkButton).click();
+  }
 
   cy.get('li.vlc-agenda-items__sub-item').as('agendaitems');
   cy.get('@agendaitems').eq(indexOfItem).scrollIntoView().within(() => {
     cy.get('.vl-u-spacer-extended-bottom-s').click();
   });
   cy.get('.ember-power-select-option')
-    .contains('Formeel OK')
+    .contains(formalityStatus)
     .click()
     .wait('@patchAgendaItem')
     .wait(1000) // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
-    .get('.ember-power-select-option').should('not.exist')
+    .get('.ember-power-select-option').should('not.exist');
   cy.get('.vlc-agenda-items .vl-alert button')
     .click();
 }
