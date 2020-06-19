@@ -50,7 +50,6 @@ export default DS.JSONAPIAdapter.extend({
         default:
           return this._super(...arguments);
       }
-
       return this._super(...arguments);
     }
   },
@@ -66,28 +65,26 @@ export default DS.JSONAPIAdapter.extend({
 
   ajax() {
     const args = [].slice.call(arguments);
-    let originalData;
     if (args[1] === 'DELETE') {
       return this._super.apply(this, args);
     }
-    originalData = args[2] && args[2].data;
+    const originalData = args[2] && args[2].data;
 
     const original = this._super;
     let retries = 0;
     const retry = (error) => {
       if (retries < 3) {
-        retries++;
+        retries += 1;
         const originalResult = original.apply(this, args);
-        return originalResult.catch((error) => {
+        return originalResult.catch((catchError) => {
           if (originalData) {
             args[2].data = typeof originalData === 'string' ? JSON.parse(originalData) : originalData;
           }
-          return retry(error);
+          return retry(catchError);
         });
       }
       return Promise.reject(error);
     };
-
     return retry();
   }
   ,
