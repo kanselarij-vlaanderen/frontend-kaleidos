@@ -4,11 +4,11 @@ import DS from "ember-data";
 
 let {PromiseObject} = DS;
 
-export const sortDocuments = (model, containers) => {
+export const sortDocuments = (documentVersions, containers) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where
   // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
   // some items not being returned. By not having a sort parameter, this doesn't occur.
-  const sortedDocVers = A(model.get('documentVersions').toArray()).sort((a, b) => {
+  const sortedDocVers = A(documentVersions.toArray()).sort((a, b) => {
     return compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name')));
   });
   /*
