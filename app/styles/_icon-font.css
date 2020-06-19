@@ -1,10 +1,10 @@
 @font-face {
     font-family: "kaleidos-icons";
-    src: url("/fonts/kaleidos-icons.eot?0f41d031dc8c316cffcd1fb24d2f6cef?#iefix") format("embedded-opentype"),
-url("/fonts/kaleidos-icons.woff2?0f41d031dc8c316cffcd1fb24d2f6cef") format("woff2"),
-url("/fonts/kaleidos-icons.woff?0f41d031dc8c316cffcd1fb24d2f6cef") format("woff"),
-url("/fonts/kaleidos-icons.ttf?0f41d031dc8c316cffcd1fb24d2f6cef") format("truetype"),
-url("/fonts/kaleidos-icons.svg?0f41d031dc8c316cffcd1fb24d2f6cef#kaleidos-icons") format("svg");
+    src: url("/fonts/kaleidos-icons.eot?b25a13795b21f28c15d488dd952eaa3b?#iefix") format("embedded-opentype"),
+url("/fonts/kaleidos-icons.woff2?b25a13795b21f28c15d488dd952eaa3b") format("woff2"),
+url("/fonts/kaleidos-icons.woff?b25a13795b21f28c15d488dd952eaa3b") format("woff"),
+url("/fonts/kaleidos-icons.ttf?b25a13795b21f28c15d488dd952eaa3b") format("truetype"),
+url("/fonts/kaleidos-icons.svg?b25a13795b21f28c15d488dd952eaa3b#kaleidos-icons") format("svg");
 }
 
 i[class^="ki-"]:before, i[class*=" ki-"]:before {
@@ -18,63 +18,174 @@ i[class^="ki-"]:before, i[class*=" ki-"]:before {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.ki-calendar-plus:before {
+.ki-add:before {
     content: "\f101";
 }
-.ki-cross:before {
+.ki-alert-triangle:before {
     content: "\f102";
 }
-.ki-document-added:before {
+.ki-arrow-down:before {
     content: "\f103";
 }
-.ki-document:before {
+.ki-arrow-left:before {
     content: "\f104";
 }
-.ki-hide:before {
+.ki-arrow-right:before {
     content: "\f105";
 }
-.ki-hierarchical-back:before {
+.ki-arrow-up:before {
     content: "\f106";
 }
-.ki-info-circle:before {
+.ki-back:before {
     content: "\f107";
 }
-.ki-lock-closed:before {
+.ki-calendar-plus:before {
     content: "\f108";
 }
-.ki-min:before {
+.ki-calendar:before {
     content: "\f109";
 }
-.ki-nav-down:before {
+.ki-check:before {
     content: "\f10a";
 }
-.ki-nav-left:before {
+.ki-chevron-down:before {
     content: "\f10b";
 }
-.ki-nav-right:before {
+.ki-chevron-left:before {
     content: "\f10c";
 }
-.ki-nav-up:before {
+.ki-chevron-right:before {
     content: "\f10d";
 }
-.ki-pencil:before {
+.ki-chevron-up:before {
     content: "\f10e";
 }
-.ki-plus:before {
+.ki-circle-check:before {
     content: "\f10f";
 }
-.ki-question-mark:before {
+.ki-circle-info:before {
     content: "\f110";
 }
-.ki-redo:before {
+.ki-circle-question:before {
     content: "\f111";
 }
-.ki-search:before {
+.ki-clock:before {
     content: "\f112";
 }
-.ki-sitemap:before {
+.ki-close:before {
     content: "\f113";
 }
-.ki-user:before {
+.ki-comment:before {
     content: "\f114";
+}
+.ki-cross:before {
+    content: "\f115";
+}
+.ki-delete:before {
+    content: "\f116";
+}
+.ki-document-added:before {
+    content: "\f117";
+}
+.ki-document:before {
+    content: "\f118";
+}
+.ki-download:before {
+    content: "\f119";
+}
+.ki-drag-handle-18:before {
+    content: "\f11a";
+}
+.ki-drag-handle-2:before {
+    content: "\f11b";
+}
+.ki-drag-handle:before {
+    content: "\f11c";
+}
+.ki-edit:before {
+    content: "\f11d";
+}
+.ki-external-link:before {
+    content: "\f11e";
+}
+.ki-file:before {
+    content: "\f11f";
+}
+.ki-filter:before {
+    content: "\f120";
+}
+.ki-hide:before {
+    content: "\f121";
+}
+.ki-hierarchical-back:before {
+    content: "\f122";
+}
+.ki-import:before {
+    content: "\f123";
+}
+.ki-info-circle:before {
+    content: "\f124";
+}
+.ki-lock-closed:before {
+    content: "\f125";
+}
+.ki-lock-open:before {
+    content: "\f126";
+}
+.ki-min:before {
+    content: "\f127";
+}
+.ki-more:before {
+    content: "\f128";
+}
+.ki-nav-down:before {
+    content: "\f129";
+}
+.ki-nav-left:before {
+    content: "\f12a";
+}
+.ki-nav-right:before {
+    content: "\f12b";
+}
+.ki-nav-up:before {
+    content: "\f12c";
+}
+.ki-not-visible:before {
+    content: "\f12d";
+}
+.ki-paperclip:before {
+    content: "\f12e";
+}
+.ki-pencil:before {
+    content: "\f12f";
+}
+.ki-plus:before {
+    content: "\f130";
+}
+.ki-question-mark:before {
+    content: "\f131";
+}
+.ki-redo:before {
+    content: "\f132";
+}
+.ki-remove:before {
+    content: "\f133";
+}
+.ki-search:before {
+    content: "\f134";
+}
+.ki-settings:before {
+    content: "\f135";
+}
+.ki-sitemap:before {
+    content: "\f136";
+}
+.ki-upload:before {
+    content: "\f137";
+}
+.ki-user:before {
+    content: "\f138";
+}
+.ki-visible:before {
+    content: "\f139";
 }
