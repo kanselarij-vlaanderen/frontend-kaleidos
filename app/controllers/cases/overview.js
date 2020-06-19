@@ -40,7 +40,8 @@ export default Controller.extend({
       const subcases = await caseModel.subcases;
       await Promise.all(subcases.map(async (subcase) => {
         subcase.set('isArchived', true);
-        return await subcase.save();
+        const savedSubcase = await subcase.save();
+        return savedSubcase;
       }));
       caseModel.save().then(() => {
         this.set('selectedCase', null);
@@ -54,7 +55,8 @@ export default Controller.extend({
       const subcases = await caze.subcases;
       await Promise.all(subcases.map(async (subcase) => {
         subcase.set('isArchived', false);
-        return await subcase.save();
+        const savedSubcase = await subcase.save();
+        return savedSubcase;
       }));
       await caze.save();
     },
