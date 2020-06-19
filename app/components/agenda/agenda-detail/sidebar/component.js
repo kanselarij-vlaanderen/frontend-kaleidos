@@ -51,6 +51,7 @@ export default Component.extend({
       }
       itemModels.map((item, index) => {
         item.set('priority', index + 1);
+        return item;
       });
       this.reAssignPriorities.perform(itemModels);
       this.agendaService.groupAgendaItemsOnGroupName(itemModels);
@@ -62,6 +63,7 @@ export default Component.extend({
       }
       itemModels.map((item, index) => {
         item.set('priority', index + 1);
+        return item;
       });
       this.reAssignPriorities.perform(itemModels);
       // this.refresh();

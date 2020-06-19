@@ -95,7 +95,8 @@ export default Component.extend({
         threshold: [0, 1],
       };
 
-      const intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
+      const intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this),
+        options);
       this.set('intersectionObserver', intersectionObserver);
       intersectionObserver.observe(this.element);
     } catch (e) {
@@ -106,13 +107,13 @@ export default Component.extend({
     this.get('intersectionObserver').unobserve(this.element);
   },
   checkElementPosition(entries) {
-    for (const entry of entries) {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         this.didEnterViewport();
       } else {
         this.didExitViewport();
       }
-    }
+    });
   },
   // End lazy partial rendering
 

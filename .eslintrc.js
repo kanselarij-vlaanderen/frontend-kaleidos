@@ -27,6 +27,8 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'prefer-rest-params': 'off',
     'import/no-unresolved': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    'import/extensions': 'off',
   },
   overrides: [
     // node files
@@ -57,7 +59,6 @@ module.exports = {
         'ember/use-brace-expansion': 'off',
         'table-groups': 'off',
         'no-triple-curlies': 'off',
-        'import/no-extraneous-dependencies': 'off',
       },
     },
   ],
