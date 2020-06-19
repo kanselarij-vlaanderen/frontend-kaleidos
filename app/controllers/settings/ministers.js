@@ -14,6 +14,7 @@ export default Controller.extend({
       if (isPresent(item.changedAttributes().priority)) {
         return item.save();
       }
+      return item;
     });
   }).restartable(),
 
