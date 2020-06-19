@@ -51,7 +51,7 @@ Router.map(function () {
     });
   });
   this.route('loading', { path: '/laden' });
-  this.route('mock-login');
+  this.route('mock-login-route', { path: '/mock-login' });
   this.route('login', { path: '/aanmelden' });
 
   this.route('route-not-found', {
