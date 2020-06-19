@@ -1,15 +1,37 @@
 import Controller from '@ember/controller';
-import PrintOverviewMixin from 'fe-redpencil/mixins/print-overview-mixin';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
+import { getPrintOverviewTitle } from 'fe-redpencil/utils/print-overview-util';
 
-export default Controller.extend(PrintOverviewMixin, {
+
+export default Controller.extend({
   titleTranslationKey: 'decisions-of-kind',
   titlePrintKey: 'decisions-pdf-name',
   routeModel: 'print-overviews.decisions',
+  intl: inject(),
+
+  title: computed('model.createdFor', 'titleTranslationKey', async function () {
+    const date = this.get('model.createdFor.plannedStart');
+    if (this.titleTranslationParams) {
+      const translatedTitleWithParams = this.intl.t(this.titleTranslationKey, this.titleTranslationParams);
+      return getPrintOverviewTitle(translatedTitleWithParams,date);
+    } else {
+      const translatedTitle = this.intl.t(this.titleTranslationKey);
+      return getPrintOverviewTitle(translatedTitle,date);
+    }
+  }),
 
   titleTranslationParams: computed('model.createdFor', function () {
-    const meeting = this.get('model.createdFor')
+    const meeting = this.get('model.createdFor');
     const fullProcedure = meeting.get('kindToShow.fullProcedure');
     return { kind: fullProcedure };
   }),
+
+  actions: {
+    async navigateBackToAgenda() {
+      const currentSessionId = await this.get('model.createdFor.id');
+      const selectedAgendaid = await this.get('model.id');
+      this.transitionToRoute('agenda.agendaitems', currentSessionId, selectedAgendaid);
+    },
+  }
 });
