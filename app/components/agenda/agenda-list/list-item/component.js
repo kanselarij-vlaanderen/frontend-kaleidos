@@ -83,6 +83,26 @@ export default class ListItem extends Component {
     return null;
   }
 
+  @action
+  async setAction(item) {
+    // this.set('isLoading', true);
+    const uri = item.get('uri');
+    this.agendaitem.set('formallyOk', uri);
+    await this.agendaitem
+      .save()
+      .catch(() => {
+        this.toaster.error();
+      });
+  }
+
+  @action
+  async openAgendaItem() {
+    if (!this.isEditingOverview && !this.isComparing) {
+      const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
+      this.selectAgendaItem(agendaitem);
+    }
+  }
+
   /* Begin lazy partial rendering
 
      This implementation of lazy partial rendering uses an
@@ -107,7 +127,8 @@ export default class ListItem extends Component {
         threshold: [0, 1],
       };
 
-      const intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
+      const intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this),
+        options);
       this.set('intersectionObserver', intersectionObserver);
       intersectionObserver.observe(this.element);
     } catch (e) {
@@ -120,33 +141,13 @@ export default class ListItem extends Component {
   }
 
   checkElementPosition(entries) {
-    for (const entry of entries) {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         this.didEnterViewport();
       } else {
         this.didExitViewport();
       }
-    }
+    });
   }
   // End lazy partial rendering
-
-  @action
-  async setAction(item) {
-    // this.set('isLoading', true);
-    const uri = item.get('uri');
-    this.agendaitem.set('formallyOk', uri);
-    await this.agendaitem
-      .save()
-      .catch(() => {
-        this.toaster.error();
-      });
-  }
-
-  @action
-  async openAgendaItem() {
-    if (!this.isEditingOverview && !this.isComparing) {
-      const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
-      this.selectAgendaItem(agendaitem);
-    }
-  }
 }
