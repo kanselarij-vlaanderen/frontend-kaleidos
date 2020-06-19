@@ -36,7 +36,7 @@
     as |sortableGroup|
     }}
       {{#each
-        agendaitems
+        @agendaitems
       as |agendaitem|
       }}
         {{#if agendaitem.groupName}}
@@ -59,7 +59,7 @@
         }}
           {{agenda/agenda-detail/sidebar-item
             agendaitem=agendaitem
-            selectAgendaItem=(action "selectAgendaItem")
+            selectAgendaItem=(action "selectAgendaItemAction")
           }}
         {{/sortable-item}}
       {{/each}}
@@ -67,7 +67,7 @@
   {{else}}
     <ul>
       {{#each
-        agendaitems
+        @agendaitems
       as |agendaitem|
       }}
         {{#if (and agendaitem.groupName (not isShowingChanges))}}
@@ -85,7 +85,7 @@
           <li class="vlc-agenda-detail-sidebar__sub-item">
             {{agenda/agenda-detail/sidebar-item
               agendaitem=agendaitem
-              selectAgendaItem=(action "selectAgendaItem")
+              selectAgendaItem=(action "selectAgendaItemAction")
             }}
           </li>
         {{/if}}
@@ -116,7 +116,7 @@
       as |sortableAnnouncements|
       }}
         {{#each
-          (await announcements)
+          (await @announcements)
         as |announcement|
         }}
           {{#sortable-item
@@ -129,20 +129,20 @@
           }}
             {{agenda/agenda-detail/sidebar-item
               agendaitem=announcement
-              selectAgendaItem=(action "selectAgendaItem")
+              selectAgendaItem=(action "selectAgendaItemAction")
             }}
           {{/sortable-item}}
         {{/each}}
       {{/sortable-group}}
     {{else}}
       {{#each
-        (await announcements)
+        (await @announcements)
       as |announcement|
       }}
         <div class="vlc-agenda-detail-sidebar__sub-item">
           {{agenda/agenda-detail/sidebar-item
             agendaitem=announcement
-            selectAgendaItem=(action "selectAgendaItem")
+            selectAgendaItem=(action "selectAgendaItemAction")
           }}
         </div>
       {{/each}}
