@@ -1,6 +1,11 @@
 import fetch from 'fetch';
 import moment from 'moment';
 
+function registerJobToStore(job, store) {
+  store.pushPayload(job);
+  return store.peekRecord('file-bundling-job', job.data.id);
+}
+
 function prettifyAgendaName(agenda) {
   if (agenda.get('isDesignAgenda')) {
     return 'ontwerpagenda';
@@ -28,11 +33,6 @@ async function fetchArchivingJobForAgenda(agenda, store) {
   let job = await fetchArchivingJob(agenda);
   job = registerJobToStore(job, store);
   return job;
-}
-
-function registerJobToStore(job, store) {
-  store.pushPayload(job);
-  return store.peekRecord('file-bundling-job', job.data.id);
 }
 
 async function fileDownloadUrlFromJob(job, archiveName) {
