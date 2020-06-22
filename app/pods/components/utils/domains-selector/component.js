@@ -32,14 +32,14 @@ export default Component.extend({
       this.set('selectedDomains', domains);
       this.chooseDomain(domains);
     },
-    async resetValueIfEmpty(param) {
+    resetValueIfEmpty(param) {
       if (!this.get('selectedDomainsOnly')) {
         if (param === '') {
-          this.set('domains', this.store.findAll('government-domain'));
+          return this.set('domains', this.store.findAll('government-domain'));
         }
-      } else {
-        return this.set('domains', this.get('selectedDomains'));
+        return null;
       }
+      return this.set('domains', this.get('selectedDomains'));
     },
   },
 });
