@@ -42,8 +42,8 @@ export default Component.extend({
           .toDate(),
         end: moment().add(5, 'years').toDate(),
       });
-      newMandatee.save().then((newMandatee) => {
-        this.model.addObject(newMandatee);
+      newMandatee.save().then((savedNewMandatee) => {
+        this.model.addObject(savedNewMandatee);
         this.set('isLoading', false);
         this.clearValues();
         this.closeModal();
