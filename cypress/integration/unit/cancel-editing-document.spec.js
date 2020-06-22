@@ -6,6 +6,30 @@ import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
 
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
+
+function uploadFileToCancel(file) {
+  cy.get('.vlc-document-card__content .vl-title--h6', { timeout: 12000 })
+    .contains(file.fileName, { timeout: 12000 })
+    .parents('.vlc-document-card').as('documentCard');
+
+  cy.get('@documentCard').within(() => {
+    cy.get('.vl-vi-nav-show-more-horizontal').click();
+  });
+  cy.get('.vl-link--block')
+    .contains('Nieuwe versie uploaden', { timeout: 12000 })
+    .should('be.visible')
+    .click();
+
+  cy.get(modal.baseModal.dialogWindow).within(() => {
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
+    cy.wait(1000);
+  });
+}
+
 context('Tests for cancelling CRUD operations on document and document-versions', () => {
   before(() => {
     cy.server();
@@ -291,27 +315,3 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get('.js-vl-accordion > button').click();
   });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}
-
-function uploadFileToCancel(file) {
-  cy.get('.vlc-document-card__content .vl-title--h6', { timeout: 12000 })
-    .contains(file.fileName, { timeout: 12000 })
-    .parents('.vlc-document-card').as('documentCard');
-
-  cy.get('@documentCard').within(() => {
-    cy.get('.vl-vi-nav-show-more-horizontal').click();
-  });
-  cy.get('.vl-link--block')
-    .contains('Nieuwe versie uploaden', { timeout: 12000 })
-    .should('be.visible')
-    .click();
-
-  cy.get(modal.baseModal.dialogWindow).within(() => {
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
-    cy.wait(1000);
-  });
-}
