@@ -26,7 +26,8 @@ export default Route.extend({
       include: 'mandatees',
       sort: 'priority',
     });
-    const announcements = this.filterAnnouncements(agendaitems.filter((item) => item.showAsRemark), params);
+    const announcements = this.filterAnnouncements(agendaitems.filter((item) => item.showAsRemark),
+      params);
 
     const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
       agendaitems, params,
@@ -68,22 +69,27 @@ export default Route.extend({
       return items;
     }
     const newsLetterByIndex = await Promise.all(items.map((item) => {
-      if (!item) return;
+      if (!item) {
+        return null;
+      }
       return item.get('subcase').then((subcase) => {
-        if (!subcase) return;
+        if (!subcase) {
+          return null;
+        }
         return subcase.get('newsletterInfo').then((newsletter) => {
           if (!newsletter) {
-            return;
+            return null;
           }
           return newsletter.inNewsletter;
         });
       });
     }));
     const filtered = [];
-    items.map((item, index) => {
+    items.map((item, index) => { // TODO: rewrite to foreach
       if (newsLetterByIndex[index]) {
         filtered.push(item);
       }
+      return null;
     });
     return filtered;
   },
