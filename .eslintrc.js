@@ -30,6 +30,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'import/extensions': 'off',
     'max-len': 'warn',
+    'react/prefer-stateless-function': 'off',
   },
   overrides: [
     // node files
