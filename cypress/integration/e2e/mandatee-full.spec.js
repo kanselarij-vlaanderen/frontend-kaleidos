@@ -8,6 +8,17 @@ import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import modal from '../../selectors/modal.selectors';
 
 context('Full test', () => {
+  /**
+   * @description returns the current time in unix timestamp
+   * @name currentTimestamp
+   * @memberOf Cypress.Chainable#
+   * @function
+   * @returns {number} The current time in unix timestamp
+   */
+  function currentTimestamp() {
+    return Cypress.moment().unix();
+  }
+
   before(() => {
     cy.server();
     cy.login('Admin');
@@ -19,7 +30,7 @@ context('Full test', () => {
     const KIND = 'Ministerraad';
 
     const agendaDate = Cypress.moment().add(1, 'weeks').day(3);
-    const caseTitle = `testId=${currentTimestamp()}: ` + 'Cypress test dossier 1';
+    const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
     const subcaseTitle1 = `${caseTitle} test stap 1`;
     const subcaseTitle2 = `${caseTitle} test stap 2`;
 
@@ -107,15 +118,4 @@ context('Full test', () => {
     cy.get(settings.mandateeDelete).click();
     cy.get(modal.verify.save).click();
   });
-
-  /**
-   * @description returns the current time in unix timestamp
-   * @name currentTimestamp
-   * @memberOf Cypress.Chainable#
-   * @function
-   * @returns {number} The current time in unix timestamp
-   */
-  function currentTimestamp() {
-    return Cypress.moment().unix();
-  }
 });

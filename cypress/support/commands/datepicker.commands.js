@@ -2,38 +2,12 @@
 
 // ***********************************************
 
-// Commands
-// Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
-Cypress.Commands.add('setDateAndTimeInFlatpickr', setDateAndTimeInFlatpickr);
-Cypress.Commands.add('setYearMonthDayHourMinuteInFlatPicker', setYearMonthDayHourMinuteInFlatPicker);
-Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
-
-/**
- * @description Sets the date and time in an **open vl-flatpickr**
- * @name setDateAndTimeInFlatpickr
- * @memberOf Cypress.Chainable#
- * @function
- * @param {Object} date the Cypress.moment with the date to set
- * @param {number} plusMonths The positive amount of months from today to advance in the vl-flatpickr
- */
-function setDateAndTimeInFlatpickr(date) {
-  cy.log('setDateAndTimeInFlatpickr');
-  setDateInFlatpickr(date);
-  cy.get('.flatpickr-time').within(() => {
-    cy.get('.flatpickr-hour').type(date.hour());
-    cy.get('.flatpickr-minute').type(date.minutes());
-  });
-  cy.log('/setDateAndTimeInFlatpickr');
-}
-
 /**
  * @description Sets the date in an **open vl-flatpickr**
  * @name setDateInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
  * @param {Object} date the Cypress.moment with the date to set
- * @param {number} plusMonths The positive amount of months from today to advance in the vl-flatpickr
- * @param {number} index element to select
  */
 function setDateInFlatpickr(date) {
   cy.log('setDateInFlatpickr');
@@ -48,9 +22,31 @@ function setDateInFlatpickr(date) {
 
 /**
  * @description Sets the date and time in an **open vl-flatpickr**
+ * @name setDateAndTimeInFlatpickr
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {Object} date the Cypress.moment with the date to set
+ */
+function setDateAndTimeInFlatpickr(date) {
+  cy.log('setDateAndTimeInFlatpickr');
+  setDateInFlatpickr(date);
+  cy.get('.flatpickr-time').within(() => {
+    cy.get('.flatpickr-hour').type(date.hour());
+    cy.get('.flatpickr-minute').type(date.minutes());
+  });
+  cy.log('/setDateAndTimeInFlatpickr');
+}
+
+/**
+ * @description Sets the date and time in an **open vl-flatpickr**
  * @name setYearMonthDayHourMinuteInFlatPicker
  * @memberOf Cypress.Chainable#
  * @function
+ * @param {number} year The year to set
+ * @param {number} month The year to set
+ * @param {number} day The year to set
+ * @param {number} hour The year to set
+ * @param {number} minute The year to set
  */
 function setYearMonthDayHourMinuteInFlatPicker(year, month, day, hour, minute) {
   cy.log('setYearMonthDayHourMinuteInFlatPicker');
@@ -59,3 +55,8 @@ function setYearMonthDayHourMinuteInFlatPicker(year, month, day, hour, minute) {
     .minute(minute));
   cy.log('/setYearMonthDayHourMinuteInFlatPicker');
 }
+
+// Commands
+Cypress.Commands.add('setDateAndTimeInFlatpickr', setDateAndTimeInFlatpickr);
+Cypress.Commands.add('setYearMonthDayHourMinuteInFlatPicker', setYearMonthDayHourMinuteInFlatPicker);
+Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);

@@ -9,130 +9,9 @@ import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 // ***********************************************
-// Commands
-
-Cypress.Commands.add('addDocuments', addDocumentsToAgenda);
-Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda);
-Cypress.Commands.add('addDocumentsToAgendaItem', addDocumentsToAgendaItem);
-Cypress.Commands.add('addNewDocumentVersion', addNewDocumentVersion);
-Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMeeting);
-Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
-Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
-Cypress.Commands.add('addNewDocumentVersionToSignedDocument', addNewDocumentVersionToSignedDocument);
-Cypress.Commands.add('uploadFile', uploadFile);
-Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
-Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
-Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
-Cypress.Commands.add('addLinkedDocumentToAgendaItem', addLinkedDocumentToAgendaItem);
 
 // ***********************************************
 // Functions
-
-/**
- * @description Add document to agenda.
- * @name addDocumentsToAgenda
- * @memberOf Cypress.Chainable#
- * @function
- * @param {string[]} files
- */
-function addDocumentsToAgenda(files) {
-  cy.log('addDocumentsToAgenda');
-  cy.clickReverseTab('Documenten');
-  return addDocuments(files);
-}
-
-/**
- * @description Add a new documentversion to an meeting.
- * @name addNewDocumentVersionToMeeting
- * @memberOf Cypress.Chainable#
- * @function
- * @param {string} oldFileName
- * @param {string} file
- */
-function addNewDocumentVersionToMeeting(oldFileName, file) {
-  cy.log('addNewDocumentVersionToMeeting');
-  cy.clickReverseTab('Documenten');
-  return addNewDocumentVersion(oldFileName, file, 'meetings');
-}
-
-/**
- * @description Add a new document to an agendaitem.
- * @name addDocumentsToAgendaItem
- * @memberOf Cypress.Chainable#
- * @function
- * @param {string} agendaItemTitle
- * @param {string} files
- */
-function addDocumentsToAgendaItem(agendaItemTitle, files) {
-  cy.log('addDocumentsToAgendaItem');
-  openAgendaItemDocumentTab(agendaItemTitle, false);
-  return addDocuments(files);
-}
-
-/**
- * @description Add a new documentversion to an agendaitem
- * @name addNewDocumentVersionToAgendaItem
- * @memberOf Cypress.Chainable#
- * @function
- * @param {string} agendaItemTitle
- * @param {string} oldFileName
- * @param {string} file
- */
-function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
-  cy.log('addNewDocumentVersionToAgendaItem');
-  openAgendaItemDocumentTab(agendaItemTitle, true);
-  return addNewDocumentVersion(oldFileName, file, 'agendaitems');
-}
-
-/**
- * @description Add a new documentversion to a subcase
- * @name addNewDocumentVersionToSubcase
- * @memberOf Cypress.Chainable#
- * @function
- * @param {string} oldFileName
- * @param {string} file
- */
-function addNewDocumentVersionToSubcase(oldFileName, file) {
-  cy.log('addNewDocumentVersionToSubcase');
-  cy.clickReverseTab('Documenten');
-  return addNewDocumentVersion(oldFileName, file, 'subcases');
-}
-
-/**
- * @description Opens agendaitem with agendaitemTitle and clicks the document link.
- * @name openAgendaItemDocumentTab
- * @memberOf Cypress.Chainable#.
- * @function
- * @param {string} agendaItemTitle
- * @param {boolean} alreadyHasDocs
- */
-function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
-  cy.log('openAgendaItemDocumentTab');
-  cy.openDetailOfAgendaitem(agendaItemTitle);
-  cy.get(agenda.agendaItemDocumentsTab)
-    .click()
-    .wait(2000); // Access-levels GET occured earlier, general wait instead
-  if (alreadyHasDocs) {
-    cy.wait(2000); // documents GET occured earlier, general wait instead
-  }
-  cy.log('/openAgendaItemDocumentTab');
-}
-
-/**
- * @description Opens agendaitem with agendaitemTitle and clicks the document link.
- * @name openAgendaItemDossierTab
- * @memberOf Cypress.Chainable#.
- * @function
- * @param {string} agendaItemTitle
- * @param {boolean} alreadyHasDocs
- */
-function openAgendaItemDossierTab(agendaItemTitle) {
-  cy.log('openAgendaItemDossierTab');
-  cy.openDetailOfAgendaitem(agendaItemTitle);
-  cy.get(agenda.agendaItemDossierTab)
-    .click();
-  cy.log('/openAgendaItemDossierTab');
-}
 
 /**
  * @description Opens the document add dialog and adds each file in the files array
@@ -258,6 +137,111 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
 }
 
 /**
+ * @description Add document to agenda.
+ * @name addDocumentsToAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string[]} files
+ */
+function addDocumentsToAgenda(files) {
+  cy.log('addDocumentsToAgenda');
+  cy.clickReverseTab('Documenten');
+  return addDocuments(files);
+}
+
+/**
+ * @description Add a new documentversion to an meeting.
+ * @name addNewDocumentVersionToMeeting
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} oldFileName
+ * @param {string} file
+ */
+function addNewDocumentVersionToMeeting(oldFileName, file) {
+  cy.log('addNewDocumentVersionToMeeting');
+  cy.clickReverseTab('Documenten');
+  return addNewDocumentVersion(oldFileName, file, 'meetings');
+}
+
+/**
+ * @description Opens agendaitem with agendaitemTitle and clicks the document link.
+ * @name openAgendaItemDocumentTab
+ * @memberOf Cypress.Chainable#.
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {boolean} alreadyHasDocs
+ */
+function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
+  cy.log('openAgendaItemDocumentTab');
+  cy.openDetailOfAgendaitem(agendaItemTitle);
+  cy.get(agenda.agendaItemDocumentsTab)
+    .click()
+    .wait(2000); // Access-levels GET occured earlier, general wait instead
+  if (alreadyHasDocs) {
+    cy.wait(2000); // documents GET occured earlier, general wait instead
+  }
+  cy.log('/openAgendaItemDocumentTab');
+}
+
+/**
+ * @description Add a new document to an agendaitem.
+ * @name addDocumentsToAgendaItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {string} files
+ */
+function addDocumentsToAgendaItem(agendaItemTitle, files) {
+  cy.log('addDocumentsToAgendaItem');
+  openAgendaItemDocumentTab(agendaItemTitle, false);
+  return addDocuments(files);
+}
+
+/**
+ * @description Add a new documentversion to an agendaitem
+ * @name addNewDocumentVersionToAgendaItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaItemTitle
+ * @param {string} oldFileName
+ * @param {string} file
+ */
+function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
+  cy.log('addNewDocumentVersionToAgendaItem');
+  openAgendaItemDocumentTab(agendaItemTitle, true);
+  return addNewDocumentVersion(oldFileName, file, 'agendaitems');
+}
+
+/**
+ * @description Add a new documentversion to a subcase
+ * @name addNewDocumentVersionToSubcase
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} oldFileName
+ * @param {string} file
+ */
+function addNewDocumentVersionToSubcase(oldFileName, file) {
+  cy.log('addNewDocumentVersionToSubcase');
+  cy.clickReverseTab('Documenten');
+  return addNewDocumentVersion(oldFileName, file, 'subcases');
+}
+
+/**
+ * @description Opens agendaitem with agendaitemTitle and clicks the document link.
+ * @name openAgendaItemDossierTab
+ * @memberOf Cypress.Chainable#.
+ * @function
+ * @param {string} agendaItemTitle
+ */
+function openAgendaItemDossierTab(agendaItemTitle) {
+  cy.log('openAgendaItemDossierTab');
+  cy.openDetailOfAgendaitem(agendaItemTitle);
+  cy.get(agenda.agendaItemDossierTab)
+    .click();
+  cy.log('/openAgendaItemDossierTab');
+}
+
+/**
  * @description Uploads a file to an open document dialog window.
  * @name uploadFile
  * @memberOf Cypress.Chainable#
@@ -377,3 +361,17 @@ function addLinkedDocumentToAgendaItem(filenames) {
   });
   cy.get(form.formSave).click();
 }
+
+Cypress.Commands.add('addDocuments', addDocumentsToAgenda);
+Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda);
+Cypress.Commands.add('addDocumentsToAgendaItem', addDocumentsToAgendaItem);
+Cypress.Commands.add('addNewDocumentVersion', addNewDocumentVersion);
+Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMeeting);
+Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
+Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
+Cypress.Commands.add('addNewDocumentVersionToSignedDocument', addNewDocumentVersionToSignedDocument);
+Cypress.Commands.add('uploadFile', uploadFile);
+Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
+Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
+Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
+Cypress.Commands.add('addLinkedDocumentToAgendaItem', addLinkedDocumentToAgendaItem);

@@ -6,6 +6,10 @@ import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
+
 context('Add files to an agenda', () => {
   const agendaDate = Cypress.moment().add(1, 'weeks').day(2); // Next friday
 
@@ -108,7 +112,3 @@ context('Add files to an agenda', () => {
     cy.get(agenda.decisionContainer).should('not.exist');
   });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

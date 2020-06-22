@@ -11,25 +11,6 @@ import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 import agendaOverview from '../../selectors/agenda-overview.selectors';
 
-Cypress.Commands.add('createAgenda', createAgenda);
-Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
-Cypress.Commands.add('deleteAgenda', deleteAgenda);
-Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
-Cypress.Commands.add('approveCoAgendaitem', approveCoAgendaitem);
-Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
-Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
-Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
-Cypress.Commands.add('agendaItemExists', agendaItemExists);
-Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
-Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
-Cypress.Commands.add('closeAgenda', closeAgenda);
-Cypress.Commands.add('releaseDecisions', releaseDecisions);
-Cypress.Commands.add('releaseDocuments', releaseDocuments);
-Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
-Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
-Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
-Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
-
 // ***********************************************
 // Functions
 
@@ -39,7 +20,6 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
  * @memberOf Cypress.Chainable#
  * @function
  * @param {*} kind The kind of meeting to select, language and case sensitive
- * @param {*} plusMonths The positive amount of months from today to advance in the vl-datepicker
  * @param {*} date The cypress.moment object with the date and time to set
  * @param {*} location The location of the meeting to enter as input
  * @returns {Promise<String>} the id of the created agenda
@@ -253,11 +233,11 @@ function deleteAgenda(meetingId, lastAgenda) {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = "Formeel OK") {
+function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = 'Formeel OK') {
   // TODO set only some items to formally ok with list as parameter
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
 
-  if(!fromWithinAgendaOverview) {
+  if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
 
     cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
@@ -562,3 +542,22 @@ function releaseDocuments() {
 function clickAgendaitemTab(selector) {
   cy.get(selector).should('be.visible').click();
 }
+
+Cypress.Commands.add('createAgenda', createAgenda);
+Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
+Cypress.Commands.add('deleteAgenda', deleteAgenda);
+Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
+Cypress.Commands.add('approveCoAgendaitem', approveCoAgendaitem);
+Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
+Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
+Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
+Cypress.Commands.add('agendaItemExists', agendaItemExists);
+Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
+Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
+Cypress.Commands.add('closeAgenda', closeAgenda);
+Cypress.Commands.add('releaseDecisions', releaseDecisions);
+Cypress.Commands.add('releaseDocuments', releaseDocuments);
+Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
+Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
+Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
+Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);

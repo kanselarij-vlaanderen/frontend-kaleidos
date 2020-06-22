@@ -2,11 +2,7 @@
 /// <reference types="Cypress" />
 
 // ***********************************************
-// Commands
 
-Cypress.Commands.add('createCase', createCase);
-Cypress.Commands.add('addSubcase', addSubcase);
-Cypress.Commands.add('openCase', openCase);
 // ***********************************************
 // Functions
 
@@ -158,3 +154,9 @@ function openCase(caseTitle) {
   });
   cy.log('/openCase');
 }
+
+// Commands
+
+Cypress.Commands.add('createCase', createCase);
+Cypress.Commands.add('addSubcase', addSubcase);
+Cypress.Commands.add('openCase', openCase);

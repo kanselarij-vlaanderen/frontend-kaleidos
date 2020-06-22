@@ -4,10 +4,6 @@
 import modal from '../../selectors/modal.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
 
-Cypress.Commands.add('openActionModal', openActionModal);
-Cypress.Commands.add('openSettingsModal', openSettingsModal);
-Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
-
 /**
  * Validate the content of the dropdown
  * @memberOf Cypress.Chainable#
@@ -57,3 +53,7 @@ function openActionModal() {
   cy.get(actionModal.agendaHeaderDeleteAgenda).should(BE_VISIBLE);
   cy.log('/openActionModal');
 }
+
+Cypress.Commands.add('openActionModal', openActionModal);
+Cypress.Commands.add('openSettingsModal', openSettingsModal);
+Cypress.Commands.add('closeSettingsModal', closeSettingsModal);

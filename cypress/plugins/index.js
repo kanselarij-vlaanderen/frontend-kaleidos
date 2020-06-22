@@ -1,5 +1,3 @@
-/* global module */
-
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //

@@ -1,8 +1,6 @@
 /* global cy, Cypress */
 /// <reference types="Cypress" />
 
-Cypress.Commands.add('clickReverseTab', clickReverseTab);
-
 /**
  * @description Clicks on the specified reverse tab for navigating
  * @name clickReverseTab
@@ -19,3 +17,5 @@ function clickReverseTab(tabName) {
   });
   cy.log('/clickReverseTab');
 }
+
+Cypress.Commands.add('clickReverseTab', clickReverseTab);

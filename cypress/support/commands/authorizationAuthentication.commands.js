@@ -1,17 +1,13 @@
 /* global cy, Cypress */
 /// <reference types="Cypress" />
 
-Cypress.Commands.add('login', login);
-Cypress.Commands.add('logout', logout);
-Cypress.Commands.add('loginFlow', loginFlow);
-Cypress.Commands.add('logoutFlow', logoutFlow);
-
 /**
  * @description Bypasses the mock-login and inserts a localstorage item
  * @name login
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} name the profile to log in with, case sensitive
+ * @param {number} retries The amount of retries it can do
  */
 function login(name, retries = 0) {
   cy.log('login');
@@ -35,7 +31,7 @@ function login(name, retries = 0) {
     });
   });
   cy.visit('').wait('@getCurrentSession').then((xhr) => {
-    if (xhr.status == 400) {
+    if (xhr.status === 400) {
       if (retries < 5) {
         cy.log('login failed, trying again');
         cy.login(name, retries + 1);
@@ -98,3 +94,8 @@ function logoutFlow() {
   cy.wait('@mockLogout');
   cy.log('/logoutFlow');
 }
+
+Cypress.Commands.add('login', login);
+Cypress.Commands.add('logout', logout);
+Cypress.Commands.add('loginFlow', loginFlow);
+Cypress.Commands.add('logoutFlow', logoutFlow);

@@ -5,6 +5,10 @@ import actionModel from '../../selectors/action-modal.selectors';
 /* global context, before, it, cy,beforeEach, afterEach, Cypress */
 /// <reference types="Cypress" />
 
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
+
 context('Agenda tests', () => {
   const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
 
@@ -47,9 +51,9 @@ context('Agenda tests', () => {
   });
 
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
-    const agendaDate = Cypress.moment().add(3, 'weeks').day(5); // Friday in three weeks
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks').day(5); // Friday in three weeks
     cy.createAgenda('Elektronische procedure', agendaDate, 'Daar').then((meetingId) => {
-      cy.openAgendaForDate(agendaDate);
+      cy.openAgendaForDate(dateToCreateAgenda);
       cy.setFormalOkOnItemWithIndex(0);
       cy.approveDesignAgenda();
       cy.deleteAgenda(meetingId);
@@ -58,9 +62,9 @@ context('Agenda tests', () => {
   });
 
   it('Should not be able to close a session with only a design agenda, cfr. KAS-1551', () => {
-    const agendaDate = Cypress.moment().add(4, 'weeks').day(5); // Friday in four weeks
+    const dateToCreateAgenda = Cypress.moment().add(4, 'weeks').day(5); // Friday in four weeks
     cy.createAgenda('Elektronische procedure', agendaDate, 'Daar');
-    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaForDate(dateToCreateAgenda);
     cy.get('.vl-button--icon-before')
       .contains('Acties')
       .click();
@@ -72,22 +76,22 @@ context('Agenda tests', () => {
 
     const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
-    const agendaDate = Cypress.moment().add(2, 'weeks').day(1);
+    const dateToCreateAgenda = Cypress.moment().add(2, 'weeks').day(1);
     cy.createAgenda(KIND, agendaDate, PLACE);
     cy.openAgendaForDate(agendaDate);
 
-    const case_1_TitleShort = `${testId}Cypress test dossier 1`;
-    const type_1 = 'Nota';
-    const newSubcase_1_TitleShort = 'dit is de korte titel\n\n';
-    const subcase_1_TitleLong = 'dit is de lange titel\n\n';
-    const subcase_1_Type = 'In voorbereiding';
-    const subcase_1_Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const case1TitleShort = `${testId}Cypress test dossier 1`;
+    const type1 = 'Nota';
+    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
+    const subcase1TitleLong = 'dit is de lange titel\n\n';
+    const subcase1Type = 'In voorbereiding';
+    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, case_1_TitleShort);
-    cy.addSubcase(type_1, newSubcase_1_TitleShort, subcase_1_TitleLong, subcase_1_Type, subcase_1_Name);
+    cy.createCase(false, case1TitleShort);
+    cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
     cy.openSubcase(0);
 
-    cy.proposeSubcaseForAgenda(agendaDate);
+    cy.proposeSubcaseForAgenda(dateToCreateAgenda);
     cy.openAgendaForDate(agendaDate);
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
@@ -105,7 +109,3 @@ context('Agenda tests', () => {
     cy.contains('dit is de lange titel');
   });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

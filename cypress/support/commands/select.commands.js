@@ -1,9 +1,6 @@
 /* global cy, Cypress */
 /// <reference types="Cypress" />
 
-Cypress.Commands.add('selectOptionInSelectByText', selectOptionInSelectByText);
-Cypress.Commands.add('selectOptionInSelectByIndex', selectOptionInSelectByIndex);
-
 /**
  * @description Select an option in the select control
  * @memberOf Cypress.Chainable#
@@ -40,3 +37,6 @@ function selectOptionInSelectByText(text) {
       .contains(text)
       .click());
 }
+
+Cypress.Commands.add('selectOptionInSelectByText', selectOptionInSelectByText);
+Cypress.Commands.add('selectOptionInSelectByIndex', selectOptionInSelectByIndex);

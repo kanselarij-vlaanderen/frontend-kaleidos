@@ -4,6 +4,10 @@
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
+
 context('Agenda tests', () => {
   before(() => {
     cy.resetCache();
@@ -13,7 +17,7 @@ context('Agenda tests', () => {
   xit('Propagate decisions and documents to overheid graph by releasing them', () => {
     cy.login('Admin');
 
-    const caseTitle = `testId=${currentTimestamp()}: ` + 'Cypress test dossier 1';
+    const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
     const agendaDate = Cypress.moment().add(1, 'weeks').day(6); // Next friday
     const subcaseTitle1 = `${caseTitle} test stap 1`;
     const file = { folder: 'files', fileName: 'test', fileExtension: 'pdf' };
@@ -99,7 +103,3 @@ context('Agenda tests', () => {
     });
   });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}
