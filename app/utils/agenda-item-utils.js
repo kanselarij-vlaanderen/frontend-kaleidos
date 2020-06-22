@@ -158,7 +158,7 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
   const groups = [];
   agendaitems.map((agendaitem) => {
     const groupName = agendaitem.get('ownGroupName');
-    const foundItem = groups.find((item) => item.groupName == groupName);
+    const foundItem = groups.find((item) => item.groupName === groupName);
 
     if (!foundItem) {
       groups.push({
