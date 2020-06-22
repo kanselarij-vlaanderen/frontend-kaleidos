@@ -134,7 +134,7 @@ export default ModelWithModifier.extend({
     const targetDocument = await version.get('document');
     let foundIndex;
     sortedDocuments.map((document, index) => {
-      if (document == targetDocument) {
+      if (document === targetDocument) {
         foundIndex = index;
       }
     });
@@ -162,10 +162,7 @@ export default ModelWithModifier.extend({
         if (lastAgendaItem) {
           return lastAgendaItem.get('postponedTo').then((postPoned) => {
             const retracted = lastAgendaItem.get('retracted');
-            if (!postPoned && !retracted) {
-              return true;
-            }
-            return false;
+            return !postPoned && !retracted;
           });
         }
         return false;
@@ -235,18 +232,17 @@ export default ModelWithModifier.extend({
           return false;
         }
         const foundNonApprovedDecision = approvedDecisions.includes(false);
-        if (foundNonApprovedDecision) {
-          return false;
-        }
-        return true;
+        return !foundNonApprovedDecision;
       }),
     });
   }),
 
   subcasesFromCase: computed('case.subcases.@each', function () {
     return PromiseArray.create({
-      promise: this.get('case').then((caze) => caze.get('subcases').then((subcases) => subcases.filter((item) => item.get('id') != this.id).sort((a, b) => b.created - a.created, //  We want to sort descending on date the subcase was concluded. In practice, sorting on created will be close
-      ))),
+      //  We want to sort descending on date the subcase was concluded.
+      //  In practice, sorting on created will be close
+      promise: this.get('case').then((caze) => caze.get('subcases')
+        .then((subcases) => subcases.filter((item) => item.get('id') !== this.id).sort((a, b) => b.created - a.created))),
     });
   }),
 
