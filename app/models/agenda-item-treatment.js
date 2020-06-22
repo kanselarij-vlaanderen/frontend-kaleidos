@@ -6,8 +6,6 @@ let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
 
 export default Model.extend({
   intl: inject(),
-  result: attr('string'),//NOT SURE.
-
   agendaitem: belongsTo('agendaitem'),//{ inverse: null } ?
   documentContainer: belongsTo('document', { inverse: null }),
   newsletterInfo: belongsTo('newsletter-info'),

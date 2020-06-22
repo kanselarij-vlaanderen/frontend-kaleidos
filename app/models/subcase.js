@@ -35,6 +35,7 @@ export default ModelWithModifier.extend({
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
   mandatees: hasMany('mandatee'),
+  // TODO tocheck
   decisions: hasMany('decision'),
 
   type: belongsTo('subcase-type'),
@@ -241,6 +242,7 @@ export default ModelWithModifier.extend({
     return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
   }),
 
+  // TODO tocheck
   approved: computed('decisions', function () {
     return PromiseObject.create({
       promise: this.get('decisions').then((decisions) => {

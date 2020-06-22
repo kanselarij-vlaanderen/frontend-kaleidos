@@ -119,6 +119,7 @@ export default ModelWithModifier.extend({
 
   decisions: computed('subcase.decisions.@each', function () {
     return PromiseArray.create({
+      //TODO to check
       promise: this.store.query('decision', {
         filter: {
           subcase: {id: this.subcase.get('id')},
