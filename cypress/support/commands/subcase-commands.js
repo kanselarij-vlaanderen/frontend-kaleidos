@@ -6,17 +6,49 @@
 
 import cases from '../../selectors/case.selectors';
 
-Cypress.Commands.add('openSubcase', openSubcase);
-Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
-Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
-Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
-Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
-Cypress.Commands.add('deleteSubcase', deleteSubcase);
-Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);
-
 // ***********************************************
 // Functions
 // TODO needs setupping to be sure to succeed.
+
+/**
+ * @description Translates a month number to a dutch month in lowercase.
+ * @name getTranslatedMonth
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param month {number}  the number of the month to translate (from moment so starts from 0)
+ * @returns {string} the month in dutch
+ */
+function getTranslatedMonth(month) {
+  cy.log('getTranslatedMonth');
+  switch (month) {
+    case 0:
+      return 'januari';
+    case 1:
+      return 'februari';
+    case 2:
+      return 'maart';
+    case 3:
+      return 'april';
+    case 4:
+      return 'mei';
+    case 5:
+      return 'juni';
+    case 6:
+      return 'juli';
+    case 7:
+      return 'augustus';
+    case 8:
+      return 'september';
+    case 9:
+      return 'oktober';
+    case 10:
+      return 'november';
+    case 11:
+      return 'december';
+    default:
+      return '';
+  }
+}
 
 /**
  * Open the subcase of the specified index.
@@ -246,43 +278,10 @@ function deleteSubcase() {
   cy.log('/deleteSubcase');
 }
 
-/**
- * @description Translates a month number to a dutch month in lowercase.
- * @name getTranslatedMonth
- * @memberOf Cypress.Chainable#
- * @function
- * @param month {number}  the number of the month to translate (from moment so starts from 0)
- * @returns the month in dutch
- */
-function getTranslatedMonth(month) {
-  cy.log('getTranslatedMonth');
-  switch (month) {
-    case 0:
-      return 'januari';
-    case 1:
-      return 'februari';
-    case 2:
-      return 'maart';
-    case 3:
-      return 'april';
-    case 4:
-      return 'mei';
-    case 5:
-      return 'juni';
-    case 6:
-      return 'juli';
-    case 7:
-      return 'augustus';
-    case 8:
-      return 'september';
-    case 9:
-      return 'oktober';
-    case 10:
-      return 'november';
-    case 11:
-      return 'december';
-    default:
-      break;
-  }
-  cy.log('/getTranslatedMonth');
-}
+Cypress.Commands.add('openSubcase', openSubcase);
+Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
+Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
+Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
+Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
+Cypress.Commands.add('deleteSubcase', deleteSubcase);
+Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);

@@ -1,22 +1,10 @@
 /* eslint-disable no-undef */
 
-// ***********************************************
-
 // Commands
 import agenda from '../../selectors/agenda.selectors';
-
-Cypress.Commands.add('selectDate', selectDate);
-Cypress.Commands.add('selectAction', selectAction);
-Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
-
-Cypress.Commands.add('currentMoment', currentMoment);
-Cypress.Commands.add('currentTimestamp', currentTimestamp);
-Cypress.Commands.add('existsAndVisible', existsAndVisible);
-Cypress.Commands.add('existsAndInvisible', existsAndInvisible);
-
 // ***********************************************
-// Functions
 
+// Functions
 /**
  * Select a date in the flatpickrCalendar
  * @memberOf Cypress.Chainable#
@@ -40,7 +28,10 @@ function selectDate(year, month, day, index) {
   } else {
     element = cy.get(agenda.datepickerButton).click();
     element.get(agenda.flatpickrMonthDropdownMonths).select(month);
-    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).clear().type(year, { delay: 300 });
+    element.get(agenda.numInputWrapper)
+      .get(agenda.inputNumInputCurYear)
+      .clear()
+      .type(year, { delay: 300 });
     element.get(agenda.flatpickrDay).contains(day).click();
   }
   cy.log('/selectDate');
@@ -127,3 +118,12 @@ function existsAndInvisible(element) {
     .should('exist')
     .should('not.be.visible');
 }
+
+Cypress.Commands.add('selectDate', selectDate);
+Cypress.Commands.add('selectAction', selectAction);
+Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
+
+Cypress.Commands.add('currentMoment', currentMoment);
+Cypress.Commands.add('currentTimestamp', currentTimestamp);
+Cypress.Commands.add('existsAndVisible', existsAndVisible);
+Cypress.Commands.add('existsAndInvisible', existsAndInvisible);
