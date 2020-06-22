@@ -42,6 +42,7 @@ export default Service.extend({
       });
     } catch (error) {
       this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
+      return null;
     }
   },
 
@@ -53,6 +54,7 @@ export default Service.extend({
       });
     } catch (error) {
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      return null;
     }
   },
 
@@ -64,6 +66,7 @@ export default Service.extend({
       });
     } catch (error) {
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      return null;
     }
   },
 
