@@ -46,8 +46,8 @@ export default class VRDocumentName {
     const meta = {
       date: moment(match[1], 'YYYY DDMM').toDate(),
       docType: match[2],
-      caseNr: parseInt(match[6]),
-      index: parseInt(match[8]),
+      caseNr: parseInt(match[6], 10),
+      index: parseInt(match[8], 10),
       // versionSuffix: TODO
       // versionNr: TODO
     };
@@ -97,7 +97,7 @@ export const compareFunction = function (a, b) {
     try { // Only b parses
       b.parseMeta();
       return 1;
-    } catch (e) { // Both don't parse
+    } catch (ex) { // Both don't parse
       return a.name.localeCompare(b.name);
     }
   }
