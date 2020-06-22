@@ -30,7 +30,7 @@ export const cancelEdit = (item, propertiesToSet) => {
  * @param itemToSet
  */
 export const setNotYetFormallyOk = (itemToSet) => {
-  if (itemToSet.get('formallyOk') != CONFIG.notYetFormallyOk) {
+  if (itemToSet.get('formallyOk') !== CONFIG.notYetFormallyOk) {
     itemToSet.set('formallyOk', CONFIG.notYetFormallyOk);
   }
 };
@@ -132,7 +132,7 @@ export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
     if (item.isApproval) {
       return;
     }
-    if (mandatees.length == 0) {
+    if (mandatees.length === 0) {
       item.set('groupPriority', 20000000);
       return;
     }
@@ -205,9 +205,9 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
   let prevIndex = 0;
   let groupsArray = groupedAgendaitems;
   if (!allowEmptyGroups) {
-    groupsArray = groupsArray.filter((group) => group.groupName && group.groupname != 'Geen toegekende ministers');
+    groupsArray = groupsArray.filter((group) => group.groupName && group.groupname !== 'Geen toegekende ministers');
   } else {
-    groupsArray = groupsArray.filter((group) => group.groupname != 'Geen toegekende ministers');
+    groupsArray = groupsArray.filter((group) => group.groupname !== 'Geen toegekende ministers');
   }
 
   groupsArray = groupsArray.sortBy('groupPriority').map((item) => {
