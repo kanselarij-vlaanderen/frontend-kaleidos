@@ -20,7 +20,7 @@ module.exports = {
     browser: true,
   },
   rules: {
-    'ember/no-jquery': 'error',
+    'ember/no-jquery': 'warn',
     'ember/no-observers': 'warn',
     'ember/no-new-mixins': 'warn',
     'no-param-reassign': 'off',
@@ -29,9 +29,10 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/extensions': 'off',
-    'max-len': 'warn',
+    'max-len': 'off',
     'react/prefer-stateless-function': 'off',
     'no-plusplus': 'off',
+    'func-names': 'off',
   },
   overrides: [
     // node files
