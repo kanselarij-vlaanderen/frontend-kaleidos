@@ -63,7 +63,7 @@ export default Component.extend({
             item.get('documentVersions').addObject(documentVersion);
           } else {
             const foundDocument = itemDocumentsToEdit.find(
-              (item) => item.get('id') == documentVersion.get('id'),
+              (foundItem) => foundItem.get('id') === documentVersion.get('id'),
             );
             if (foundDocument) {
               item.get('documentVersions').removeObject(documentVersion);
@@ -85,7 +85,7 @@ export default Component.extend({
         model.set(property, await this.get(property));
       }),
     );
-    return model.save().then((model) => model.reload());
+    return model.save().then((savedModel) => savedModel.reload());
   },
 
   richtext: computed('editor.currentTextContent', function () {
@@ -130,7 +130,7 @@ export default Component.extend({
               item.get('documentVersions').addObject(documentVersion);
             } else {
               const foundDocument = itemDocumentsToEdit.find(
-                (item) => item.get('id') == documentVersion.get('id'),
+                (foundItem) => foundItem.get('id') === documentVersion.get('id'),
               );
               if (foundDocument) {
                 item.get('documentVersions').removeObject(documentVersion);
