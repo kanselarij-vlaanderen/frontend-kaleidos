@@ -1,0 +1,10 @@
+{{title (await title)}}
+{{utils/print-overviews-header
+  title=(await title)
+  model=(await model)
+  routeModelPrefix=routeModel
+  navigateBackToAgenda=(action "navigateBackToAgenda")
+}}
+<div class="vlc-scroll-wrapper__body">
+  {{outlet}}
+</div>
