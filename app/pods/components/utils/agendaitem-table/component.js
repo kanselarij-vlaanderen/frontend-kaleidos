@@ -66,6 +66,50 @@ export default class AgendaitemTable extends Component {
     return `-${this.sort}`;
   }
 
+  @action
+  onScrolledToBottom() {
+    if (this.get('canLoadMore')) {
+      if (!this.isLoading) {
+        this.incrementProperty('page');
+        this.get('fetchRecords').perform();
+      }
+    }
+  }
+
+  @action
+  onColumnClick(column) {
+    if (column.sorted) {
+      this.setProperties({
+        dir: column.ascending ? 'asc' : 'desc',
+        sort: dasherize(column.get('valuePath')),
+        canLoadMore: true,
+        page: 0,
+      });
+      this.get('model').clear();
+      this.get('table').setRowsSynced([]);
+      this.get('fetchRecords').perform();
+    }
+  }
+
+  /**
+   * Will set the postponed classes on all actual table rows that should get the postponed class
+   * It does so based on the current model and table rows that you supply
+   * @param {Table} tableRows       Table object containing rows
+   * @param {EmberArray} model      Model from the route currently active used as a lookup
+   */
+  setRowsPostponed(tableRows, model) {
+    const rowsCurrentlyInTable = tableRows;
+    const postponedItems = model.filter((item) => item.get('retracted'));
+    postponedItems.forEach((postponedItem) => {
+      const postponedRowInTable = rowsCurrentlyInTable.find(
+        (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id'),
+      );
+      if (postponedRowInTable) {
+        postponedRowInTable.set('classNames', 'postponed');
+      }
+    });
+  }
+
   @restartableTask
   fetchRecords = function* () {
     yield timeout(500);
@@ -93,49 +137,5 @@ export default class AgendaitemTable extends Component {
     this.set('meta', records.get('meta'));
     this.set('canLoadMore', records.get('meta.count') > this.get('model.length'));
     this.get('table').addRows(this.get('model').filter((item) => !item.isApproval));
-  }
-
-  /**
-   * Will set the postponed classes on all actual table rows that should get the postponed class
-   * It does so based on the current model and table rows that you supply
-   * @param {Table} tableRows       Table object containing rows
-   * @param {EmberArray} model      Model from the route currently active used as a lookup
-   */
-  setRowsPostponed(tableRows, model) {
-    const rowsCurrentlyInTable = tableRows;
-    const postponedItems = model.filter((item) => item.get('retracted'));
-    postponedItems.forEach((postponedItem) => {
-      const postponedRowInTable = rowsCurrentlyInTable.find(
-        (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id'),
-      );
-      if (postponedRowInTable) {
-        postponedRowInTable.set('classNames', 'postponed');
-      }
-    });
-  }
-
-  @action
-  onScrolledToBottom() {
-    if (this.get('canLoadMore')) {
-      if (!this.isLoading) {
-        this.incrementProperty('page');
-        this.get('fetchRecords').perform();
-      }
-    }
-  }
-
-  @action
-  onColumnClick(column) {
-    if (column.sorted) {
-      this.setProperties({
-        dir: column.ascending ? 'asc' : 'desc',
-        sort: dasherize(column.get('valuePath')),
-        canLoadMore: true,
-        page: 0,
-      });
-      this.get('model').clear();
-      this.get('table').setRowsSynced([]);
-      this.get('fetchRecords').perform();
-    }
-  }
+  };
 }
