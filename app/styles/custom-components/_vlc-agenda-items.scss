@@ -197,6 +197,8 @@ $i: 0;
   display: flex;
   flex-direction: row;
   padding: 2rem;
+  background-color: #FFF;
+  border-bottom: .1rem solid $border-color;
 
   // Override HR spacing
   .vlc-hr {
