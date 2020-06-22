@@ -3,8 +3,8 @@ export default function getPaginationMetadata(pageNumber, size, total) {
 
   pagination.first = { number: 0, size };
 
-  const lastPageNumber = total % size == 0 ? Math.floor(total / size) - 1 : Math.floor(total / size);
-  const lastPageSize = total % size == 0 ? size : total % size;
+  const lastPageNumber = total % size === 0 ? Math.floor(total / size) - 1 : Math.floor(total / size);
+  const lastPageSize = total % size === 0 ? size : total % size;
   pagination.last = { number: lastPageNumber, size: lastPageSize };
 
   pagination.self = { number: pageNumber, size };
@@ -14,7 +14,7 @@ export default function getPaginationMetadata(pageNumber, size, total) {
   }
 
   if (pageNumber < lastPageNumber) {
-    const nextPageSize = pageNumber + 1 == lastPageNumber ? lastPageSize : size;
+    const nextPageSize = pageNumber + 1 === lastPageNumber ? lastPageSize : size;
     pagination.next = { number: pageNumber + 1, size: nextPageSize };
   }
 
