@@ -68,7 +68,7 @@ context('Agenda tests', () => {
     cy.releaseDecisions();
 
     cy.wait(60000);
-    cy.logout();
+    cy.logoutFlow();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
@@ -81,13 +81,13 @@ context('Agenda tests', () => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 0);
     });
 
-    cy.logout();
+    cy.logoutFlow();
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
     cy.wait(60000);
 
-    cy.logout();
+    cy.logoutFlow();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);

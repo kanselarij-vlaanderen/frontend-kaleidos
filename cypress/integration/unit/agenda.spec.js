@@ -24,13 +24,12 @@ context('Agenda tests', () => {
   afterEach(() => {
     cy.logout();
   });
+  
   it('should create a new agenda and then delete it', () => {
     const agendaDateSingleTest = Cypress.moment().add(2, 'weeks').day(5); // Friday in two weeks
-
-    cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven')
-      .then((meetingId) => {
-        cy.openAgendaForDate(agendaDateSingleTest);
-        cy.deleteAgenda(meetingId, true);
+    cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((data) => {
+      cy.visit(`/vergadering/${data[0]}/agenda/${data[1]}/agendapunten`);
+        cy.deleteAgenda(data[0], true);
       });
   });
 
@@ -48,11 +47,12 @@ context('Agenda tests', () => {
 
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
     const agendaDate = Cypress.moment().add(3, 'weeks').day(5); // Friday in three weeks
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Daar').then((meetingId) => {
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Daar').then((data) => {
+      cy.visit(`/vergadering/${data[0]}/agenda/${data[1]}/agendapunten`);
       cy.openAgendaForDate(agendaDate);
       cy.setFormalOkOnItemWithIndex(0);
       cy.approveDesignAgenda();
-      cy.deleteAgenda(meetingId);
+      cy.deleteAgenda(data[0]);
       cy.closeAgenda();
     });
   });

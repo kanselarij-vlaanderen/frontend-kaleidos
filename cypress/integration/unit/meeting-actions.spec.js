@@ -74,7 +74,7 @@ context('meeting actions tests', () => {
       cy.get('.vl-button').contains('Verwijderen').click();
     });
     cy.route('DELETE', 'agendaitems/**').as('deleteAgendaitem');
-    cy.route('DELETE', 'agenda-activities').as('deleteAgendaActivity');
+    cy.route('DELETE', 'agenda-activities/**').as('deleteAgendaActivity');
     cy.route('PATCH', 'subcases/**').as('patchSubcase');
     cy.wait('@deleteAgendaitem', {timeout: 12000 }); // 2 of these happen
     cy.wait('@deleteAgendaActivity', {timeout: 12000 }); 

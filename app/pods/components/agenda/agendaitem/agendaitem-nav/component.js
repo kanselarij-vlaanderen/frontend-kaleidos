@@ -23,6 +23,7 @@ export default class AgendaItemNav extends Component {
 
   @action
   async checkExistance() {
+    // await agendaItem.get('agendaActivity.subcase') returns undefined
     const agendaActivity = await this.agendaItem.get('agendaActivity');
     const subcase = await agendaActivity.get('subcase');
     this.subcaseExists = isPresent(subcase);

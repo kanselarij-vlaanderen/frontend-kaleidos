@@ -60,7 +60,7 @@ function createAgenda(kind, date, location) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(kind).trigger('mouseover').click();
+    cy.contains(kind).scrollIntoView().trigger('mouseover').click();
     //TODO Experiment for dropdown flakyness
     // Does the ember-power-select-option fix itself if we wait long enough ?
     cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
@@ -486,9 +486,9 @@ function agendaItemExists(agendaItemName) {
 *  @param {boolean} isAdmin - optional boolean to indicate that we are admin (some profiles can't see the link to subcase)
  */
 function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
-  cy.agendaItemExists(agendaItemName);
+  cy.agendaItemExists(agendaItemName).click();
 
-  cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
+  // cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
   cy.wait(1000)
   cy.url().should("include",'agendapunten');
   cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
