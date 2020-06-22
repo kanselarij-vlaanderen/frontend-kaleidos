@@ -2,6 +2,41 @@
 /// <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
+
+function getTranslatedMonth(month) {
+  switch (month) {
+    case 0:
+      return 'januari';
+    case 1:
+      return 'februari';
+    case 2:
+      return 'maart';
+    case 3:
+      return 'april';
+    case 4:
+      return 'mei';
+    case 5:
+      return 'juni';
+    case 6:
+      return 'juli';
+    case 7:
+      return 'augustus';
+    case 8:
+      return 'september';
+    case 9:
+      return 'oktober';
+    case 10:
+      return 'november';
+    case 11:
+      return 'december';
+    default:
+      return '';
+  }
+}
+
 context('Subcase tests', () => {
   const agendaDate = Cypress.moment().add(2, 'weeks').day(4); // Next friday
   const caseTitle = `Cypress test: subcases - ${currentTimestamp()}`;
@@ -68,24 +103,24 @@ context('Subcase tests', () => {
 
   xit('should add a subcase and then delete it', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = `Cypress test: delete subcase - ${currentTimestamp()}`;
+    const shortSubcaseTitle = `Cypress test: delete subcase - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.openCase(caseTitle);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.deleteSubcase();
   });
 
   xit('should not be able to delete a subcase with agendaitems', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = `Cypress test: delete subcase not possible - ${currentTimestamp()}`;
+    const shortSubcaseTitle = `Cypress test: delete subcase not possible - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.openCase(caseTitle);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
     cy.get('.vl-button--icon-before')
@@ -99,12 +134,12 @@ context('Subcase tests', () => {
   // TODO Yggdrasil needs to be triggered or default data needs to be available for minister
   xit('should be able to open a subcase with user profile: Minister', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = `Cypress test: Non-editor profiles can open subcase - ${currentTimestamp()}`;
+    const shortSubcaseTitle = `Cypress test: Non-editor profiles can open subcase - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het kunnen bekijken van een procedurestap door een ander profiel dan "editor" maar mag geen wijzigingen kunnen doen';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.openCase(caseTitle);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.logout();
     cy.login('Minister');
     cy.openCase(caseTitle);
@@ -122,12 +157,12 @@ context('Subcase tests', () => {
 
   xit('Clickable link should go to the agenda right after proposing to agenda', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = `Cypress test: Link to agenda item ok - ${currentTimestamp()}`;
+    const shortSubcaseTitle = `Cypress test: Link to agenda item ok - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.openCase(caseTitle);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -146,7 +181,7 @@ context('Subcase tests', () => {
 
   xit('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
-    const SubcaseTitleShort = `Cypress test: Mededeling - ${currentTimestamp()}`;
+    const shortSubcaseTitle = `Cypress test: Mededeling - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -156,12 +191,12 @@ context('Subcase tests', () => {
     cy.createCase(false, 'Cypress mededeling test');
 
     // Aanmaken subcase.
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
 
     // Aanmaken agendaItem
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
-    cy.openAgendaItemDossierTab(SubcaseTitleShort);
+    cy.addAgendaitemToAgenda(shortSubcaseTitle, false);
+    cy.openAgendaItemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
@@ -171,7 +206,7 @@ context('Subcase tests', () => {
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
     cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
-    cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') // CHECK na save in agendaitem
+    cy.changeSubcaseAccessLevel(true, shortSubcaseTitle, true, 'Intern Overheid') // CHECK na save in agendaitem
       .wait('@patchAgendaitem');
 
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
@@ -322,38 +357,3 @@ context('Subcase tests', () => {
     cy.get(agenda.item.themes).contains('Wonen').should('not.exist');
   });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}
-
-function getTranslatedMonth(month) {
-  switch (month) {
-    case 0:
-      return 'januari';
-    case 1:
-      return 'februari';
-    case 2:
-      return 'maart';
-    case 3:
-      return 'april';
-    case 4:
-      return 'mei';
-    case 5:
-      return 'juni';
-    case 6:
-      return 'juli';
-    case 7:
-      return 'augustus';
-    case 8:
-      return 'september';
-    case 9:
-      return 'oktober';
-    case 10:
-      return 'november';
-    case 11:
-      return 'december';
-    default:
-      break;
-  }
-}
