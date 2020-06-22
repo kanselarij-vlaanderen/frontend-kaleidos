@@ -32,7 +32,7 @@ export default class SubcaseTitles extends Component {
 
   @computed('item.modelName')
   get isAgendaItem() {
-    return this.get('item.modelName') == 'agendaitem';
+    return this.get('item.modelName') === 'agendaitem';
   }
 
   @computed('item.{subcaseName,subcase.subcaseName}')
@@ -89,7 +89,7 @@ export default class SubcaseTitles extends Component {
 
     const subcaseName = await subcase.get('subcaseName');
     if (!subcaseName) {
-      return;
+      return null;
     }
     return subcaseName;
   }
