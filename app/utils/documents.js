@@ -10,7 +10,8 @@ export const sortDocuments = (documentVersions, containers) => {
   // some items not being returned. By not having a sort parameter, this doesn't occur.
   const sortedDocVers = A(documentVersions.toArray()).sort((a, b) => compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name'))));
   /*
-    Code below for compatibility towards mixin consumers. Since names are now on each document(version)
+    Code below for compatibility towards mixin consumers.
+    Since names are now on each document(version)
     we cans sort on the documents themselves instead of on containers
   */
   return A(containers.toArray()).sort((a, b) => {
