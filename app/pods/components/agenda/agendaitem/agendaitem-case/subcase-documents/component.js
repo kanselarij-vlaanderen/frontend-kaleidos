@@ -44,7 +44,7 @@ export default Component.extend(
       this.set('documentsInCreation', A([]));
       const accessLevels = await this.store.findAll('access-level');
       try {
-        this.set('defaultAccessLevel', accessLevels.find((item) => item.id == config.internRegeringAccessLevelId));
+        this.set('defaultAccessLevel', accessLevels.find((item) => item.id === config.internRegeringAccessLevelId));
       } catch (e) {
         // TODO error during cypress tests:
         // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
@@ -273,9 +273,9 @@ export default Component.extend(
           await Promise.all(
             documents.map(async (document) => {
               const documentContainer = await document.get('documentContainer');
-              const documents = await documentContainer.get('documentVersions');
-              documents.map((document) => {
-                documentsToAttach.push(document);
+              const documentVersionsFromContainer = await documentContainer.get('documentVersions');
+              documentVersionsFromContainer.map((doc) => {
+                documentsToAttach.push(doc);
               });
             }),
           );
