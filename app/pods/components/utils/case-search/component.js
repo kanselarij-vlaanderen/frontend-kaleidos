@@ -41,7 +41,7 @@ export default Component.extend(AuthenticatedRouteMixin, {
         filter[searchModifier + textSearchKey] = searchTerm;
       }
 
-      if (Object.keys(filter).length == 0) {
+      if (Object.keys(filter).length === 0) {
         filter[':sqs:title'] = '*'; // search without filter
       }
 
