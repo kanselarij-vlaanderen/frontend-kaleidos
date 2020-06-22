@@ -47,7 +47,7 @@ export default class UsersSettingsController extends Controller {
 
   @action
   uploaded(response) {
-    if (response && response.status == 200) {
+    if (response && response.status === 200) {
       this.toaster.success(this.intl.t('import-users-success'), this.intl.t('successfully-created-title'));
       later(() => {
         this.send('refresh');
