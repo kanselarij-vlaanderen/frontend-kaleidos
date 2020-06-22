@@ -4,6 +4,10 @@
 import alert from '../../../selectors/alert.selectors';
 import agenda from '../../../selectors/agenda.selectors';
 
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
+
 context('Show warning in newsletterinfo', () => {
   // TODO: Create agenda
   // TODO: Create procedurestap
@@ -22,7 +26,7 @@ context('Show warning in newsletterinfo', () => {
   });
 
   it('Should show warning in kortbestek view', () => {
-    const caseTitle = `testId=${currentTimestamp()}: ` + 'Cypress test dossier 1';
+    const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
     const agendaDate = Cypress.moment().add(1, 'weeks').day(2); // Next friday
     const subcaseTitle1 = `${caseTitle} test stap 1`;
 
@@ -53,7 +57,3 @@ context('Show warning in newsletterinfo', () => {
     cy.get(alert.changesAlertComponent).should('be.visible');
   });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}
