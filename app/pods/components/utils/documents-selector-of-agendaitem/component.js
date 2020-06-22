@@ -18,7 +18,7 @@ export default Component.extend({
       // Document is not updated for the version.
       // Set diplay property for the type.
       lastDocumentVersion.set('typeLabel', typeLabel);
-      const foundDocument = documentVersionsAddedAlready.find((documentVersionToSearch) => documentVersionToSearch.get('id') == lastDocumentVersion.get('id'));
+      const foundDocument = documentVersionsAddedAlready.find((documentVersionToSearch) => documentVersionToSearch.get('id') === lastDocumentVersion.get('id'));
       if (foundDocument) {
         lastDocumentVersion.set('selected', true);
       }

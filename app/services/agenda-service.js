@@ -211,7 +211,7 @@ export default Service.extend({
         await subcase.save();
       } else {
         const foundAgendaitem = agendaitemsFromSubcase
-          .find((agendaitemFromSubcase) => agendaitemFromSubcase.id == itemToDelete.id);
+          .find((agendaitemFromSubcase) => agendaitemFromSubcase.id === itemToDelete.id);
         itemToDelete = foundAgendaitem;
       }
     }

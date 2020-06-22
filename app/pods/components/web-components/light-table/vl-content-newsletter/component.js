@@ -8,7 +8,7 @@ export default Component.extend({
     return this.value.get('newsletterInfo').then((newsletter) => {
       if (newsletter) {
         const remark = newsletter.get('remark');
-        if (remark && remark != '') {
+        if (remark && remark !== '') {
           return `${this.intl.t('remark')}: ${newsletter.get('remark')}`;
         }
         return '';

@@ -54,7 +54,7 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
 
   // dirty observers to make use of the datatable actions
   filterObserver: observer('filter', function () {
-    if (this.filter == '') {
+    if (this.filter === '') {
       this.findAll.perform();
     }
   }),

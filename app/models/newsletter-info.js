@@ -27,7 +27,7 @@ export default ModelWithModifier.extend({
 
   displayRemark: computed('remark', 'intl', function () {
     const remark = this.get('remark');
-    if (remark && remark != '') {
+    if (remark && remark !== '') {
       return `${this.intl.t('remark')}: ${this.get('remark')}`;
     }
     return '';
@@ -45,7 +45,7 @@ export default ModelWithModifier.extend({
         const mandatee = sortedMandatees.objectAt(i);
         const nickName = await mandatee.get('nickName');
         if (i > 0) {
-          if (sortedMandatees.length - 1 == i) {
+          if (sortedMandatees.length - 1 === i) {
             proposalText = `${proposalText}${seperatorAnd}`;
           } else {
             proposalText = `${proposalText}${seperatorComma}`;

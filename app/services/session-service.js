@@ -60,7 +60,7 @@ export default Service.extend({
     if (agendas) {
       const foundIndex = agendas.indexOf(agenda);
       const agendasLength = agendas.get('length');
-      if (foundIndex + 1 != agendasLength) {
+      if (foundIndex + 1 !== agendasLength) {
         const previousAgenda = agendas.objectAt(foundIndex + 1);
         return previousAgenda;
       }

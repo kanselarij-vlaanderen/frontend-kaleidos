@@ -67,7 +67,7 @@ export default Component.extend({
     },
 
     resetValueIfEmpty(param) {
-      if (param == '') {
+      if (param === '') {
         this.set('items', this.sessionService.get('agendas'));
       }
     },

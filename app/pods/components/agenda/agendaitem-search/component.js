@@ -16,7 +16,7 @@ export default Component.extend({
       this.searchTask.perform();
     },
     emptySearchTask(val) {
-      if (val == '') {
+      if (val === '') {
         this.searchTask.perform();
       }
     },

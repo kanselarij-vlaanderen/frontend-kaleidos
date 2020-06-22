@@ -91,7 +91,7 @@ export default Component.extend({
   async compareSubcase(left, right) {
     const leftSubcaseId = await left.get('subcase.id');
     const rightSubcaseId = await right.get('subcase.id');
-    return leftSubcaseId == rightSubcaseId;
+    return leftSubcaseId === rightSubcaseId;
   },
 
   async createComparisonList(leftAgendaitems, rightAgendaitems) {
@@ -160,6 +160,6 @@ export default Component.extend({
   },
 
   findItemBySubcase(item, list) {
-    return list.find((possibleMatch) => possibleMatch.get('subcase.id') == item.get('subcase.id'));
+    return list.find((possibleMatch) => possibleMatch.get('subcase.id') === item.get('subcase.id'));
   },
 });

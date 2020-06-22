@@ -16,7 +16,7 @@ export default class SubcaseTitlesEdit extends Component {
 
   @computed('item.modelName')
   get isAgendaItem() {
-    return get(this, 'item.modelName') == 'agendaitem';
+    return get(this, 'item.modelName') === 'agendaitem';
   }
 
   @alias('item.showAsRemark') isRemark;

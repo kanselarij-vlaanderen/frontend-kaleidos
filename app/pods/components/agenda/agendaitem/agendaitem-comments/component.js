@@ -36,7 +36,7 @@ export default class AgendaitemComments extends Component {
       author: user,
     });
     const modelName = await item.get('modelName');
-    if (modelName == 'newsletter-info') {
+    if (modelName === 'newsletter-info') {
       comment.set('newsletterInfo', item);
     } else {
       comment.set(modelName, item);

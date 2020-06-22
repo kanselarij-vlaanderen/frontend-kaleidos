@@ -9,7 +9,7 @@ export function activeClass(elements, objects) {
     if (currentItem.id === selectedItem.id) {
       return className;
     }
-  } else if (currentItem == selectedItem) {
+  } else if (currentItem === selectedItem) {
     return className;
   }
 }

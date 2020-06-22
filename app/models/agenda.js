@@ -56,7 +56,7 @@ export default Model.extend(LoadableModel, {
   lastAgendaitemPriority: computed('agendaitems.@each', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const filteredAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
-      if (filteredAgendaitems.length == 0) {
+      if (filteredAgendaitems.length === 0) {
         return 0;
       }
       return Math.max(...filteredAgendaitems.map((item) => item.priority || 0));
@@ -66,7 +66,7 @@ export default Model.extend(LoadableModel, {
   lastAnnouncementPriority: computed('agendaitems.@each', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const announcements = agendaitems.filter((item) => item.showAsRemark);
-      if (announcements.length == 0) {
+      if (announcements.length === 0) {
         return 0;
       }
       return Math.max(...announcements.map((item) => item.priority || 0));

@@ -64,7 +64,7 @@ export default Component.extend({
     },
 
     resetValueIfEmpty(param) {
-      if (param == '') {
+      if (param === '') {
         this.set('queryOptions', { sort: this.sortField });
         this.findAll.perform();
       }
