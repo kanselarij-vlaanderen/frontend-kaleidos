@@ -13,7 +13,7 @@ export default Route.extend({
   store: service(),
 
   beforeModel() {
-    if (this.currentSession.userRole == '') {
+    if (this.currentSession.userRole === '') {
       this.transitionTo('accountless-users');
     }
     if (this.session.isAuthenticated) {
