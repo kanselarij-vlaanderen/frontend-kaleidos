@@ -35,9 +35,7 @@ export default Model.extend({
               documents: { id: documentVersionIds },
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((documents) =>
-            // Ignore sorting for the time being, as decisions only rarely contain more than one document
-            documents);
+          }).then((documents) => documents);// Ignore sorting for the time being, as decisions only rarely contain more than one document
         }
       }),
     });
