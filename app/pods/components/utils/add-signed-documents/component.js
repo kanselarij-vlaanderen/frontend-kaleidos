@@ -7,7 +7,6 @@ import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 import { A } from '@ember/array';
 
-import config from 'fe-redpencil/utils/config';
 import { deprecatingAlias } from '@ember/object/computed';
 import { deprecate } from '@ember/debug';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
@@ -24,9 +23,9 @@ export default Component.extend({
 
   documentTypeToAssign: computed('modelToAddDocumentVersionTo', function () {
     const { modelToAddDocumentVersionTo } = this;
-    if (modelToAddDocumentVersionTo == 'signedMinutes') {
+    if (modelToAddDocumentVersionTo === 'signedMinutes') {
       return this.store.findRecord('document-type', CONFIG.minuteDocumentTypeId);
-    } if (modelToAddDocumentVersionTo == 'signedDecision') {
+    } if (modelToAddDocumentVersionTo === 'signedDecision') {
       return this.store.findRecord('document-type', CONFIG.decisionDocumentTypeId);
     }
     return null;
@@ -43,7 +42,7 @@ export default Component.extend({
     this.set('documentsInCreation', A([]));
     const accessLevels = await this.store.findAll('access-level');
     try {
-      this.set('defaultAccessLevel', accessLevels.find((item) => item.id == config.internRegeringAccessLevelId));
+      this.set('defaultAccessLevel', accessLevels.find((item) => item.id === CONFIG.internRegeringAccessLevelId));
     } catch (e) {
       // TODO error during cypress tests:
       // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
