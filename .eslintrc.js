@@ -31,6 +31,7 @@ module.exports = {
     'import/extensions': 'off',
     'max-len': 'warn',
     'react/prefer-stateless-function': 'off',
+    'no-plusplus': 'off',
   },
   overrides: [
     // node files
