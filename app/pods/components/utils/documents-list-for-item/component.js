@@ -10,15 +10,16 @@ export default class DocumentListForItem extends Component {
 
 
   get documents() {
-    if(this.item.documents.length > 20){
+    const documents = this.item.get('documents');
+    if(documents.length > 20){
       this.moreThan20 = true;
     }else {
       this.moreThan20 = false;
     }
     if (this.isShowingAll) {
-      return this.item.documents;
+      return documents;
     } else {
-      return this.item.documents.slice(0, 20);
+      return documents.slice(0, 20);
     }
   }
 
