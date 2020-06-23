@@ -13,10 +13,9 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const subcase = await agendaItem.subcase;
-    return this.store.query('decision', {
-      'filter[subcase][:id:]': subcase.id,
-      'include': 'signed-document'
+    return this.store.query('agenda-item-treatment', {
+      'filter[agendaitem][:id:]': agendaItem.id,
+      'include': 'report'
     });
   }
 

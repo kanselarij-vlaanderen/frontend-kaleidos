@@ -25,7 +25,7 @@
                   type="button"
                   class="vl-link vl-u-text--error"
                   {{on "click" attacher.hide}}
-                  {{on "click" (fn this.promptDeleteDecision decision)}}
+                  {{on "click" (fn this.promptDeleteTreatment this.treatment)}}
                 >
                   {{t "delete-decision"}}
                 </button>
@@ -35,54 +35,50 @@
         </button>
       {{/if}}
     </div>
-    <p>
-      {{sanitize-html raw=true value=(await decision.richtext)}}
-    </p>
-    <hr/>
+
     <div class="vl-u-spacer-extended-top-s">
-      {{#if this.decision.approved}}
-        <div class="vlc-pill vlc-pill--success">
-          {{t "decided"}}
-        </div>
-      {{else}}
-        <div class="vlc-pill vlc-pill--warning">
-          {{t "not-decided"}}
+      {{#if this.treatment.decisionResultCode}}
+        <div class="vlc-pill">
+          {{ this.treatment.decisionResultCode.label }}
         </div>
       {{/if}}
     </div>
   </div>
-  {{#if this.decision.documentVersions.length}}
+
+  {{#if this.treatment.report.documentVersions.length}}
     <div class="vl-u-spacer">
       <h4 class="vl-title vl-title--h6">
         {{t "documents-attached-to"}}
       </h4>
       <div class="vl-u-spacer-extended-top-s">
         <Utils::DocumentsListForItem
-          @item={{this.decision}}
-          @agendaitem={{@subcase}}
+          @item={{this.treatment.report}}
+          @agendaitem={{@agendaItem}}
           @isClickable={{true}}
         />
       </div>
     </div>
   {{/if}}
-  {{#if this.decision.signedDocument}}
+
+  {{#if this.treatment.signedDocument}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-      @document={{await this.decision.signedDocument}}
-      @item={{await this.decision.signedDocument}}
+      @document={{await this.treatment.signedDocument}}
+      @item={{await this.treatment.signedDocument}}
     />
   {{else}}
     <Utils::AddSignedDocuments
-      @item={{this.decision}}
+      @item={{this.treatment}}
       @defaultType={{this.defaultType}}
-      @modelToAddDocumentVersionTo="signedDecision"
+      @modelToAddDocumentVersionTo="agendaItemTreatment"
       @title={{t "signed-decision-add"}}
     />
   {{/if}}
 {{else}}
+
   <Agenda::Agendaitem::AgendaitemDecisionEdit
     @isEditing={{this.isEditing}}
     @item={{this.decision}}
-    @subcase={{@subcase}}
+    @subcase={{@agendaItem}}
     @agendaitem={{@agendaItem}}
   />
 {{/if}}
@@ -91,6 +87,6 @@
     @title={{t "delete-decision"}}
     @message={{t "delete-decision-message"}}
     @cancel={{this.cancel}}
-    @verify={{this.deleteDecision}}
+    @verify={{this.deleteTreatment}}
   />
 {{/if}}

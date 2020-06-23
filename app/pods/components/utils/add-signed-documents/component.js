@@ -125,7 +125,7 @@ export default Component.extend({
             document.set('type', documentType);
           }
           document.set(this.modelToAddDocumentVersionTo, item);
-          item.set('signedDocument', document);
+          item.set('report', document);
         })
       );
       await item.save();
