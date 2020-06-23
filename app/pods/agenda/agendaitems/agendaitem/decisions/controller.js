@@ -9,9 +9,9 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
   @action
   async addDecision() {
     if (this.subcase) {
-      const newDecision = this.store.createRecord('decision', {
-        approved: false,
-        subcase: this.subcase
+      const newDecision = this.store.createRecord('agenda-item-treatment', {
+        //status: false,
+        agendaItem: this.agendaItem
       });
       await newDecision.save();
       this.refresh();
