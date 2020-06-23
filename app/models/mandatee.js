@@ -16,8 +16,7 @@ export default Model.extend({
   person: belongsTo('person'),
 
   iseCodes: hasMany('ise-code', { inverse: null }),
-  //TODO to check
-  decisions: hasMany('decision'),
+
   cases: hasMany('case'),
   meetingsAttended: hasMany('meeting-record'),
   approvals: hasMany('approval'),

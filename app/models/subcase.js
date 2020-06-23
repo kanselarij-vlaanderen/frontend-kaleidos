@@ -36,7 +36,7 @@ export default ModelWithModifier.extend({
   linkedDocumentVersions: hasMany('document-version'),
   mandatees: hasMany('mandatee'),
   // TODO tocheck
-  decisions: hasMany('decision'),
+  //decisions: hasMany('decision'),
 
   type: belongsTo('subcase-type'),
   case: belongsTo('case', {inverse: null}),

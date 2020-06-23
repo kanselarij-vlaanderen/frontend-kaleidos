@@ -7,9 +7,11 @@ let { Model, attr, belongsTo, hasMany, PromiseArray } = DS;
 export default Model.extend({
   intl: inject(),
   agendaitem: belongsTo('agendaitem'),//{ inverse: null } ?
-  documentContainer: belongsTo('document', { inverse: null }),
+  report: belongsTo('document', { inverse: null }),
   newsletterInfo: belongsTo('newsletter-info'),
   decisionResultCode: belongsTo('decision-result-code'),
+  modified: attr('datetime'),
+  created: attr('datetime'),
 
   // decisionApproval: computed('signedDocument', function () {
   //   return this.intl.t('signed-document-decision', { name: this.get('signedDocument.name') });
