@@ -15,12 +15,28 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    this.store.query('meeting', { sort: '-number', 'page[size]': 1 }).then(meetings => {
+    const currentYear = moment().year();
+    this.store.query('meeting',
+      {
+        sort: '-planned-start'
+      }).then(meetings => {
+        let meetingsFromThisYear = null;
       if (meetings.length) {
-        const meetingFirstObject = meetings.get('firstObject');
-        if (meetingFirstObject) {
-          this.set('meetingNumber', meetingFirstObject.get('number') + 1);
-        }
+
+        meetingsFromThisYear = meetings.map(meeting => {
+         if (moment(meeting.plannedStart).year() === currentYear) {
+           return meeting;
+         }
+        }).filter(meeting => meeting); // Filter undefineds out of results..
+
+        let id = 0;
+        meetingsFromThisYear.forEach(meeting => {
+          const number = meeting.get('number');
+          if(number > id) {
+            id = number;
+          }
+        });
+         this.set('meetingNumber', id + 1);
       }
     });
   },
