@@ -129,7 +129,7 @@ export default Component.extend( {
 
     conditionallyScrollIntoView () {
       if (this.isActive) {
-        this.element.scrollIntoView({ behavior: "smooth", block: "center" });
+        this.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
   },
