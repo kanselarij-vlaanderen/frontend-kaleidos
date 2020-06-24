@@ -29,13 +29,14 @@ pipeline {
                 sh "cp ${env.WORKSPACE}/Dockerfile.ci ${env.WORKSPACE}/Dockerfile"
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
 
-                sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod -R 1777 data"
+                sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod 1777 -R data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d --build"
 
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T triplestore chmod -R 1777 /data"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod -R 1777 /data"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T elasticsearch chmod -R 1777 /usr/share/elasticsearch/data"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T file-bundling-service chmod -R 777 /share"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod 1777 -R /data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T elasticsearch chown -R 1000:root /usr/share/elasticsearch/data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T file-bundling-service chmod 777 -R /share"
 
                 sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
 
@@ -43,7 +44,7 @@ pipeline {
                 sh "sleep 10"
 
                 // Make the folders deletable.
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 1777 /usr/share/elasticsearch/data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
 
                 // Reset the contents of DB an search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource"
@@ -54,7 +55,7 @@ pipeline {
 
                 // up te system
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 1777 /usr/share/elasticsearch/data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
 
                 // Wait for indexation.
                 sh "sleep 30"
