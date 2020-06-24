@@ -25,11 +25,13 @@ export default class AgendaItemNav extends Component {
   async checkExistance() {
     // await agendaItem.get('agendaActivity.subcase') returns undefined
     const agendaActivity = await this.agendaItem.get('agendaActivity');
-    const subcase = await agendaActivity.get('subcase');
-    this.subcaseExists = isPresent(subcase);
-    this.decisionsExist = isPresent(await subcase.get('decisions'));
+    if (agendaActivity) {
+      const subcase = await agendaActivity.get('subcase');
+      this.subcaseExists = isPresent(subcase);
+      this.decisionsExist = isPresent(await subcase.get('decisions'));
+      this.newsItemExists = isPresent((await subcase.get('newsletterInfo')));
+    }
     this.meetingMinutesExist = isPresent(await this.agendaItem.get('meetingRecord'));
-    this.newsItemExists = isPresent((await subcase.get('newsletterInfo')));
     this.pressAgendaItemExists = isPresent((this.agendaItem.titlePress && this.agendaItem.textPress));
   }
 }

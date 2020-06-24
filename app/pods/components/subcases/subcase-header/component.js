@@ -128,10 +128,10 @@ export default Component.extend({
       const subcaseToDelete = await this.get('subcaseToDelete');
       const caze = await subcaseToDelete.get('case');
 
-      subcaseToDelete.hasMany('agendaitems').reload();
-      const agendaitems = await subcaseToDelete.get('agendaitems');
+      subcaseToDelete.hasMany('agendaActivities').reload();
+      const agendaActivities = await subcaseToDelete.get('agendaActivities');
 
-      if (agendaitems && agendaitems.length > 0) {
+      if (agendaActivities && agendaActivities.length > 0) {
         return;
       } else {
         await this.deleteSubcase(subcaseToDelete);

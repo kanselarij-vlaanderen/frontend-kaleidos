@@ -12,7 +12,6 @@ context('Agenda tests', () => {
   });
 
   it('Propagate decisions and documents to overheid graph by releasing them', () => {
-
     cy.login('Admin');
 
     const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
@@ -95,6 +94,22 @@ context('Agenda tests', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 2);
     });
+
+    // TODO KAS-1425 yggdrasil needs to rebuild graphs in the testdata zip !!!
+    //TODO TEST AS MINISTER, we need seperate tests to verify wat/when other profiles can see data
+    cy.logoutFlow();
+    cy.login('Minister');
+    cy.openCase(caseTitle);
+    cy.openSubcase(0);
+    cy.url().should('contain', '/deeldossiers/');
+    cy.url().should('contain', '/overzicht');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Acties').should('not.exist');
+    cy.contains('Indienen voor agendering').should('not.exist');
+    cy.clickReverseTab('Documenten');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Documenten toevoegen').should('not.exist');
+    cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
   });
 
 });

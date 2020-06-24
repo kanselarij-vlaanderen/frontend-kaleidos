@@ -156,11 +156,16 @@ function openCase(caseTitle) {
   cy.log('openCase');
   cy.visit('zoeken/dossiers');
   cy.get('#dossierId').type(caseTitle);
-  cy.route('GET', `/cases/search?**${caseTitle.split(" ", 1)}**`).as('getCaseSearchResult');
+  const splitCaseTitle =  "" + caseTitle.split(" ", 1);
+  // this new part is required to translate 'testId=xxxx:' into its encoded form for url
+  const encodedCaseTitle = splitCaseTitle.replace('=', '%3D').replace(':','%3A');
+
+  cy.route('GET', `/cases/search?**${splitCaseTitle}**`).as('getCaseSearchResult');
   cy.contains('zoeken')
     .click()
     .wait('@getCaseSearchResult');
   cy.contains('Aan het laden...').should('not.exist');
+  cy.url().should('include', `?zoekterm=${encodedCaseTitle}`);
   cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
   cy.get('@rows').within(() => {
     cy.contains(caseTitle).parents('tr').click();

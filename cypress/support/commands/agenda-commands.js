@@ -417,7 +417,8 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.wait('@createAgendaActivity', { timeout: 20000 })
     .wait('@createNewAgendaitem', { timeout: 20000 })
     .wait('@patchSubcase', { timeout: 20000 })
-    .wait('@patchAgenda', { timeout: 20000 })
+    .wait('@patchAgenda', { timeout: 20000 });
+  cy.url().should('include', '?refresh=');
 }
 
 /**

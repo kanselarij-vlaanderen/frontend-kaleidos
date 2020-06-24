@@ -111,7 +111,7 @@
           {{#if (is-pending subcase.approved)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else if (await subcase.approved)}}
-            {{moment-format (await subcase.requestedForMeeting) "DD.MM.YYYY"}}
+            {{moment-format (await subcase.requestedForMeeting.plannedStart) "DD.MM.YYYY"}}
           {{else}}
             {{t "not-yet-decided"}}
           {{/if}}

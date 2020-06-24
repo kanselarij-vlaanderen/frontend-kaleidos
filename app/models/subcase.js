@@ -51,11 +51,11 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  latestActivity: computed('agendaActivities.@each', async function () {
+  latestActivity: computed('agendaActivities','agendaActivities.@each', async function () {
     const activities = await this.get('agendaActivities').then(activities => {
       return activities.sortBy('startDate');
     });
-    if (activities) {
+    if (activities && activities.length > 0) {
       return activities.get('lastObject');
     } else {
       return null;
@@ -65,7 +65,7 @@ export default ModelWithModifier.extend({
 // TODO KAS-1425   computed recalculation rate , refresh after edit
   phases: computed('agendaActivities.@each','agendaActivities.agendaitems.@each.retracted', async function () {
     const activities = await this.get('agendaActivities');
-    if (activities && activities.length != 0) {
+    if (activities && activities.length > 0) {
       const phases = await this.get('subcasesService').getSubcasePhases(this);
     return phases;
     } else {
@@ -154,9 +154,9 @@ export default ModelWithModifier.extend({
     return this.get('mandatees').sortBy('priority');
   }),
 
-  hasActivity: computed('activities.@each', async function () {
-    const activities = await this.get('activities');
-    if (activities) {
+  hasActivity: computed('agendaActivities','agendaActivities.@each', async function () {
+    const activities = await this.get('agendaActivities');
+    if (activities && activities.length > 0) {
       return true;
     } else {
       return false;
@@ -242,7 +242,7 @@ export default ModelWithModifier.extend({
     }
   }),
 
-  showInNewsletter: computed('agendaActivities.@each.agendaitems','agendaitems.@each.showInNewsletter', async function () {
+  showInNewsletter: computed('agendaActivities.@each.agendaitems','latestActivity.agendaitems.@each.showInNewsletter', async function () {
     const latestAgendaItem = await this.get('latestAgendaItem');
     if (latestAgendaItem) {
       return await latestAgendaItem.get('showInNewsletter');
