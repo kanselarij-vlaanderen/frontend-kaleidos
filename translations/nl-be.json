@@ -583,5 +583,6 @@
   "reassign-agendaitem-priorities-title": "Aanpassen van agendapunten",
   "reassign-agendaitem-priorities-message": "Uw aanpassing wordt opgeslagen.",
   "show-more": "Toon meer",
-  "show-less": "Toon minder"
+  "show-less": "Toon minder",
+  "loading-active-agendas": "De actieve agendas worden geladen."
 }
