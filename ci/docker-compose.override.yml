@@ -17,7 +17,7 @@ services:
     build: ../.
     user: ${HOST_UID_GID}
   elasticsearch:
-    user: $USER
+    user: ${HOST_UID_GID}
   e2e-electron:
     image: "kanselarij/kaleidos-cypress:latest"
     ipc: host
