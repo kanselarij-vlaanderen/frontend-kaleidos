@@ -1,20 +1,22 @@
 import Component from '@glimmer/component';
 import { action, computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import {restartableTask} from "ember-concurrency-decorators";
+import {tracked} from "@glimmer/tracking";
 
 export default class AgendaSidebar extends Component{
-  @inject sessionService;
-  @inject('current-session') currentSessionService;
-  @inject agendaService;
+  @service sessionService;
+  @service('current-session') currentSessionService;
+  @service agendaService;
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
+  @tracked isShowingChanges = null;
+
   classNames = ['vlc-agenda-items'];
   classNameBindings = ['getClassNames'];
 
   agendaitems = null;
-  isShowingChanges = null;
   overviewEnabled = null;
   isReAssigningPriorities = null;
   dragHandleClass = '.vlc-agenda-detail-sidebar__sub-item';
@@ -39,11 +41,11 @@ export default class AgendaSidebar extends Component{
 
   @action
   selectAgendaItemAction(agendaitem){
-    this.selectAgendaItem(agendaitem);
+    this.args.selectAgendaItem(agendaitem);
   }
   @action
   toggleChangesOnly() {
-    this.toggleProperty('isShowingChanges');
+    this.isShowingChanges = !this.isShowingChanges;
   }
 
   @action
