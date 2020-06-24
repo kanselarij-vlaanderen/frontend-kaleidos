@@ -44,7 +44,7 @@ pipeline {
 
                 // Make the folders deletable.
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chown -R root:root /usr/share/elasticsearch"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 777 /usr/share/elasticsearch/data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 777 /usr/share/elasticsearch"
 
                 // Reset the contents of DB an search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource"
