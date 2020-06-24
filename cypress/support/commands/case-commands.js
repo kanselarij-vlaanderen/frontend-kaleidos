@@ -53,6 +53,8 @@ function createCase(confidential, shortTitle) {
   cy.wait('@createNewCase', { timeout: 20000 })
     .then((res) => {
       caseId = res.responseBody.data.id;
+      cy.log('Case id', caseId);
+      console.log('Case id', caseId);
     })
     .then(() => {
       return new Cypress.Promise((resolve) => {
