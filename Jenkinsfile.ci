@@ -29,10 +29,11 @@ pipeline {
                 sh "cp ${env.WORKSPACE}/Dockerfile.ci ${env.WORKSPACE}/Dockerfile"
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
 
-                sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod -R 1777 data"
+                sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod -R 777 data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d --build"
 
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T triplestore chmod -R 777 /data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod -R 777 /data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T elasticsearch chmod -R 1777 /usr/share/elasticsearch/data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T file-bundling-service chmod -R 777 /share"
 
@@ -42,6 +43,7 @@ pipeline {
                 sh "sleep 10"
 
                 // Make the folders deletable.
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chown -R root:root /usr/share/elasticsearch"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 1777 /usr/share/elasticsearch/data"
 
                 // Reset the contents of DB an search
@@ -53,12 +55,10 @@ pipeline {
 
                 // up te system
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
-
-                // Do it again
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 1777 /usr/share/elasticsearch/data"
 
                 // Wait for indexation.
-                sh "sleep 60"
+                sh "sleep 90"
                 // sh "cp ${WORKSPACE}/ci/package.* ${WORKSPACE}/"
                 // sh "npm i"
             }
