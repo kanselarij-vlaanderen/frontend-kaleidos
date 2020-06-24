@@ -42,6 +42,10 @@ pipeline {
                 // Wait for elasticsearch to have cerated the indices and stuff.
                 sh "sleep 10"
 
+                // Make the folders deletable.
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chown -R root:root /usr/share/elasticsearch"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 1777 /usr/share/elasticsearch"
+
                 // Reset the contents of DB an search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata"
@@ -51,7 +55,8 @@ pipeline {
 
                 // up te system
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
-                // Make the folders deletable.
+
+                // Do it again
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chown -R root:root /usr/share/elasticsearch"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod -R 1777 /usr/share/elasticsearch"
 
