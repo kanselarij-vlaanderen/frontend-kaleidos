@@ -42,7 +42,7 @@ pipeline {
                 // Wait for elasticsearch to have cerated the indices and stuff.
                 sh "sleep 10"
 
-                / Reset the contents of DB an search
+                // Reset the contents of DB an search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore elasticsearch musearch file cache resource"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata"
                 sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
