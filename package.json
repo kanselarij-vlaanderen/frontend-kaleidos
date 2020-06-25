@@ -82,7 +82,7 @@
     "ember-moment": "^7.7.0",
     "ember-page-title": "^5.1.0",
     "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#5f4d34d2d4ba42df2cf92e07e7465a3d13845a27",
-    "ember-power-select": "^2.3.5",
+    "ember-power-select": "^4.0.0",
     "ember-promise-helpers": "^1.0.9",
     "ember-qunit": "^4.6.0",
     "ember-rdfa-helpers": "^0.2.1",

@@ -32,6 +32,7 @@ export default ModelWithModifier.extend({
   isApproval: attr('boolean'),
   explanation: attr('string'),
 
+  treatments: hasMany('agenda-item-treatment'),
   postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', {inverse: null}),
   subcase: belongsTo('subcase', {inverse: null}),
@@ -114,19 +115,6 @@ export default ModelWithModifier.extend({
   isPostponed: computed('retracted', 'postponedTo', function () {
     return this.get('postponedTo').then((session) => {
       return !!session || this.get('retracted');
-    });
-  }),
-
-  decisions: computed('subcase.decisions.@each', function () {
-    return PromiseArray.create({
-      //TODO to check
-      promise: this.store.query('decision', {
-        filter: {
-          subcase: {id: this.subcase.get('id')},
-        }
-      }).then((decisions) => {
-        return decisions.sortBy('approved');
-      }),
     });
   }),
 

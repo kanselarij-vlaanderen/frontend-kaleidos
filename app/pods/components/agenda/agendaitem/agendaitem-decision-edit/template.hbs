@@ -1,30 +1,30 @@
-
-<div class="vlc-input-field vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "decided")}}
-  <PowerSelect @options={{this.decisionresultCodes}} @onchange={{this.changeDecisionResultCode}} as |resultCode|>
-    {{ resultCode.label }}
-  </PowerSelect>
-
+<div class="vl-form__group vl-u-bg-porcelain">
+  {{!-- Editor with annotated decision  text will come somwhere around here in the future --}}
+  <div class="vlc-input-field vlc-input-field-block vl-u-spacer-extended-bottom">
+    <WebComponents::VlFormLabel @value={{t "result-decision"}}/>
+    {{#if (not decisionResultCodes.isRunning)}}
+      <PowerSelect
+        @options={{this.decisionResultCodes.lastSuccessful.value}}
+        @searchEnabled={{false}}
+        @selected={{this.treatment.decisionResultCode}}
+        @onChange={{this.changeDecisionResultCode}}
+      as |resultCode|>
+        {{resultCode.label}}
+      </PowerSelect>
+    {{/if}}
+  </div>
+  <div class="vl-action-group vl-action-group--align-right">
+    <a
+      href="javascript://"
+      class="vl-link"
+      {{on "click" this.cancelEdit}}
+    >
+      {{t "cancel"}}
+    </a>
+    <WebComponents::VlSaveButton
+      @text={{t "save"}}
+      @isLoading={{this.saveTreatment.isRunning}}
+      @saveAction={{perform this.saveTreatment}}
+    />
+  </div>
 </div>
-
-<div class="vlc-input-field-block">
-{{!--  {{utils/documents-selector-of-agendaitem
-    item=agendaitem
-    title=(t "documents-attached-to")
-    itemWithDocuments=(await item)
-    selectDocument=(action "selectDocument")
-  }}
-  --}}
-</div>
-{{!--
-<div class="vl-action-group vl-action-group--align-right">
-  <a href="" class="vl-link" {{action "cancelEditing"}}>
-    {{t "cancel"}}
-  </a>
-  {{web-components/vl-save-button
-    text=(t "save")
-    isLoading=isLoading
-    saveAction=(action "saveChanges")
-  }}
-</div>
---}}

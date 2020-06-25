@@ -5,7 +5,7 @@
         <a
           href="javascript://"
           class="vl-link"
-          {{on "click" this.toggleIsEditing}}
+          {{on "click" this.openEditingWindow}}
         >
           {{t "edit"}}
         </a>
@@ -44,22 +44,6 @@
       {{/if}}
     </div>
   </div>
-
-  {{#if this.treatment.report.documentVersions.length}}
-    <div class="vl-u-spacer">
-      <h4 class="vl-title vl-title--h6">
-        {{t "documents-attached-to"}}
-      </h4>
-      <div class="vl-u-spacer-extended-top-s">
-        <Utils::DocumentsListForItem
-          @item={{this.treatment.report}}
-          @agendaitem={{@agendaItem}}
-          @isClickable={{true}}
-        />
-      </div>
-    </div>
-  {{/if}}
-
   {{#if this.treatment.signedDocument}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
       @document={{await this.treatment.signedDocument}}
@@ -74,12 +58,10 @@
     />
   {{/if}}
 {{else}}
-
   <Agenda::Agendaitem::AgendaitemDecisionEdit
-    @isEditing={{this.isEditing}}
-    @item={{this.decision}}
-    @subcase={{@agendaItem}}
-    @agendaitem={{@agendaItem}}
+    @agendaItemTreatment={{this.treatment}}
+    @onSave={{this.closeEditingWindow}}
+    @onCancel={{this.closeEditingWindow}}
   />
 {{/if}}
 {{#if this.isVerifyingDelete}}

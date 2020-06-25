@@ -1,53 +1,42 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { task } from 'ember-concurrency';
 
 export default class AgendaItemDecisionEditComponent extends Component {
   @service store;
 
+  get treatment () {
+    return this.args.agendaItemTreatment;
+  }
+
   constructor() {
     super(...arguments);
-    this.decisionresultCodes = this.store.findAll('decision-result-code');
-    console.log('this.decisionresultCodes', this.decisionresultCodes);
+    this.decisionResultCodes.perform(); // Load codelist
   }
+
+  @(task(function * () {
+    return yield this.store.findAll('decision-result-code');
+  })) decisionResultCodes;
 
   @action
   changeDecisionResultCode(resultCode) {
-    console.log('changeDecisionResultCode', resultCode);
+    this.treatment.set('decisionResultCode', resultCode);
   }
 
-  // @tracked isEditing = false;
-  // @tracked isVerifyingDelete = null;
-  // @tracked treatmentToDelete = null;
-  //
-  // get treatment() {
-  //   return this.args.treatment;
-  // }
-  //
-  // @action
-  // toggleIsEditing() {
-  //   this.isEditing = !this.isEditing;
-  // }
-  //
-  // @action
-  // promptDeleteTreatment(treatment) {
-  //   this.treatmentToDelete = treatment;
-  //   this.isVerifyingDelete = true;
-  // }
-  //
-  // @action
-  // async deleteTreatment() {
-  //   await this.treatmentToDelete.destroyRecord();
-  //   if (this.args.onDeleteTreatment) {
-  //     await this.args.onDeleteTreatment(this.treatmentToDelete);
-  //   }
-  //   this.isVerifyingDelete = false;
-  // }
-  //
-  // @action
-  // cancel() {
-  //   this.treatmentToDelete = null;
-  //   this.isVerifyingDelete = false;
-  // }
+  @(task(function * () {
+    yield this.treatment.save();
+    if (this.args.onSave) {
+      this.args.onSave();
+    }
+  })) saveTreatment;
+
+  @action
+  cancelEdit () {
+    this.treatment.belongsTo('decisionResultCode').reload(); // "rollback relationship"
+    if (this.args.onCancel) {
+      this.args.onCancel();
+    }
+    return this.treatment;
+  }
 }

@@ -15,8 +15,13 @@ export default class AgendaItemDecisionComponent extends Component {
   }
 
   @action
-  toggleIsEditing() {
-    this.isEditing = !this.isEditing;
+  openEditingWindow() {
+    this.isEditing = true;
+  }
+
+  @action
+  closeEditingWindow() {
+    this.isEditing = false;
   }
 
   @action

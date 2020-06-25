@@ -9,7 +9,7 @@ export default Model.extend({
   agendaitem: belongsTo('agendaitem'),//{ inverse: null } ?
   report: belongsTo('document', { inverse: null }),
   newsletterInfo: belongsTo('newsletter-info'),
-  decisionResultCode: belongsTo('decision-result-code'),
+  decisionResultCode: belongsTo('decision-result-code', { inverse: null }),
   modified: attr('datetime'),
   created: attr('datetime'),
 
