@@ -5,12 +5,7 @@ export default class AgendaItemAgendaItemsAgendaRoute extends Route {
   @service sessionService;
 
   model(params) {
-    const agendaitem_id = params.agendaitem_id;
-    let activeAGendaItemSection = localStorage.getItem('activeAgendaItemSection');
-    if (!activeAGendaItemSection) {
-      localStorage.setItem('activeAgendaItemSection', 'details');
-    }
-    return this.store.findRecord('agendaitem', agendaitem_id, {
+    return this.store.findRecord('agendaitem', params.agendaitem_id, {
       include: 'agenda-activity,agenda-activity.subcase'
     });
   }
