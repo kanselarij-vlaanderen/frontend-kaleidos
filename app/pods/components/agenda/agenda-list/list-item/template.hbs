@@ -39,9 +39,9 @@
     </span>
 
           {{else}}
-            {{#if agendaitem.subcase.subcaseName}}
+            {{#if (await subcase.subcaseName)}}
               <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
-                {{await agendaitem.subcase.subcaseName}}
+                {{await subcase.subcaseName}}
               </span>
             {{else}}
               <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize">
@@ -108,7 +108,7 @@
         {{#if (not isEditingOverview)}}
           {{#if currentSessionService.isViewer}}
             {{#if
-              (or (await agendaitem.subcase.confidential) (or (await agendaitem.checkAdded) (or agendaitem.explanation (and agendaitem.showAsRemark (not agendaitem.showInNewsletter)))))
+              (or (await subcase.confidential) (or (await agendaitem.checkAdded) (or agendaitem.explanation (and agendaitem.showAsRemark (not agendaitem.showInNewsletter)))))
             }}
               <div class="vlc-hr"></div>
             {{/if}}
@@ -139,7 +139,7 @@
                     </i>
                   {{/if}}
                 </div>
-                {{#if (await agendaitem.subcase.confidential)}}
+                {{#if (await subcase.confidential)}}
                   <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
                   <i class="vl-icon vl-vi ki-lock-closed vlc-agenda-items__icons"
                       data-test-icon-agenda-confidentiality-locked

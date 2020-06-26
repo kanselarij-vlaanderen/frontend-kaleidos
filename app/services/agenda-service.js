@@ -217,13 +217,15 @@ export default Service.extend({
     }
   },
 
-  async retrieveModifiedDateFromNota(agendaItem) {
-    const newsletterInfoForSubcase = await agendaItem.get('subcase.newsletterInfo');
-    const nota = await agendaItem.get('nota');
+  async retrieveModifiedDateFromNota(agendaitem, subcase) {
+    if (!subcase) {
+      return null;
+    }
+    const nota = await agendaitem.get('nota');
     if (!nota) {
       return null;
     }
-
+    const newsletterInfoForSubcase = await subcase.get('newsletterInfo');
     const documentVersion = await nota.get('lastDocumentVersion');
     const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
     const notaDocumentVersions = await nota.get('documentVersions');

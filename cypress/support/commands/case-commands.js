@@ -56,6 +56,8 @@ function createCase(confidential, shortTitle) {
       cy.log('Case id', caseId);
       console.log('Case id', caseId);
     })
+    .wait(2000)
+    .visit(`/dossiers/${caseId}/deeldossiers`) // TODO after a successfull post, the get sometimes fails
     .then(() => {
       return new Cypress.Promise((resolve) => {
         resolve(caseId);

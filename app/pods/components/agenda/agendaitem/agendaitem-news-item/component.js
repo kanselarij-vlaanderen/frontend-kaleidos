@@ -34,13 +34,13 @@ export default class AgendaitemNewsItem extends Component {
   }
 
   async didUpdateAttrs() {
-    this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(this.agendaitem);
+    this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(this.agendaitem, this.subcase);
   }
 
   @action
   async toggleIsEditing() {
     this.set('isLoading', true);
-    const subcase = await this.get('subcase');
+    const subcase = this.subcase;
     const newsletter = await subcase.get('newsletterInfo');
     if (!newsletter) {
       await this.newsletterService.createNewsItemForSubcase(subcase, this.agendaitem);

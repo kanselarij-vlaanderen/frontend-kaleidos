@@ -25,8 +25,9 @@ export default Component.extend({
     });
   }),
 
+  // TODO KAS-1425
   isDeletable: computed(
-    'agendaitem.{subcase,subcase.agendaitems}', 'currentAgenda.name', async function () {
+    'agendaitem.agendaActivity', 'currentAgenda.name', async function () {
       const designAgenda = await this.get('currentAgenda.isDesignAgenda');
       const agendaActivity = await this.get('agendaitem.agendaActivity');
       if (!designAgenda) {
@@ -53,7 +54,7 @@ export default Component.extend({
     }
   },
 
-  deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function () {
+  deleteWarningText: computed('agendaitem.agendaActivity', async function () {
     if (await this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
     } else if (this.currentSession.isAdmin) {

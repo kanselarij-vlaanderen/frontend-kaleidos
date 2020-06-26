@@ -5,6 +5,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 import {alias} from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import {sortDocuments, getDocumentsLength} from 'fe-redpencil/utils/documents';
+import { deprecatingAlias } from '@ember/object/computed';
 
 const {attr, hasMany, belongsTo, PromiseArray, PromiseObject} = DS;
 
@@ -42,13 +43,19 @@ export default ModelWithModifier.extend({
   requestedBy: belongsTo('mandatee', {inverse: null}),
   accessLevel: belongsTo('access-level'),
 
-  // TODO KAS-1425 refactor all subcase.agendaitems to subcase.activity.agendaitems
-  agendaitems: computed('agendaActivities','agendaActivities.@each.agendaitems','agendaitems', async function () {
-    return await this.store.query('agendaitem', {
-      filter: {
-        "agenda-activity": {subcase: {id: this.get('id')}}
-      }
-    });
+  // TODO DELETE this after no occurence of the error
+  agendaitemsViaActivity: computed('agendaitems', async function () {
+    throw new Error('We are trying to access agendaitems directly. But we should go via the agendaActivities instead');
+    // return await this.store.query('agendaitem', {
+    //   filter: {
+    //     "agenda-activity": {subcase: {id: this.get('id')}}
+    //   }
+    // });
+  }),
+
+  agendaitems: deprecatingAlias('agendaitemsViaActivity', {
+    id: 'model-refactor.activity',
+    until: '?'
   }),
 
   latestActivity: computed('agendaActivities','agendaActivities.@each', async function () {
@@ -63,7 +70,7 @@ export default ModelWithModifier.extend({
   }),
 
 // TODO KAS-1425   computed recalculation rate , refresh after edit
-  phases: computed('agendaActivities.@each','agendaActivities.agendaitems.@each.retracted', async function () {
+  phases: computed('agendaActivities.agendaitems','agendaActivities.agendaitems.@each','latestActivity.agendaitems.@each.retracted','approved', async function () {
     const activities = await this.get('agendaActivities');
     if (activities && activities.length > 0) {
       const phases = await this.get('subcasesService').getSubcasePhases(this);
@@ -163,7 +170,7 @@ export default ModelWithModifier.extend({
     }
   }),
 
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', async function () {
+  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function () {
     return await this.store.query('agendaitem', {
       filter: {
         "agenda-activity": {subcase: {id: this.get('id')}},
@@ -179,7 +186,7 @@ export default ModelWithModifier.extend({
     return await lastMeeting.get('latestAgenda');
   }),
 
-  latestAgendaItem: computed('agendaitems.@each', 'agendaActivities.@each.agendaitems', async function () {
+  latestAgendaItem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function () {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
       const latestItem = await latestActivity.get('latestAgendaitem');

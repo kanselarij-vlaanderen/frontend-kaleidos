@@ -1,9 +1,14 @@
-{{#if (and (await item.subcase.case.id) currentSession.isEditor)}}
+{{#if 
+  (and (await subcase.case.id) currentSession.isEditor)
+}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
-        @models={{array (await item.subcase.case.id) (await item.subcase.id)}}
+        @models={{array 
+          (await subcase.case.id) 
+          (await subcase.id)
+        }}
         class="vl-link" >
         {{t "to-subcase"}}
       </LinkTo>
@@ -13,7 +18,7 @@
 <div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-display-flex vlc-u-display-flex-align-center">
     <h2 class="vlc-subline">
-      {{#if (not item.showAsRemark)}}
+      {{#if (not agendaitem.showAsRemark)}}
         {{t "note"}}
       {{else}}
         {{t "text"}}
@@ -36,27 +41,27 @@
 <div class="vl-u-spacer-extended-bottom-s">
   <h4 class="vl-title vl-title--h4">
     <pre>
-      {{await item.shortTitle}}
+      {{await agendaitem.shortTitle}}
     </pre>
   </h4>
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
   {{#if (await shouldShowDetails)}}
     <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
-      {{await item.title}}
+      {{await agendaitem.title}}
     </pre>
   {{/if}}
 </div>
 
-{{#if (not item.showAsRemark)}}
+{{#if (not agendaitem.showAsRemark)}}
   <div class="vl-u-spacer-extended-bottom-s">
-    {{#if (await subcaseName)}}
+    {{#if (await subcase.subcaseName)}}
       <span class={{await pillClass}}>
-        {{await subcaseName}}
+        {{await subcase.subcaseName}}
       </span>
     {{/if}}
   </div>
-  {{#if (await item.retracted)}}
+  {{#if (await agendaitem.retracted)}}
     <div class="vl-u-spacer-extended-bottom-s">
       <div class="pill-container vl-u-display-flex">
         <span class="vl-pill vl-u-text--capitalize">
@@ -68,13 +73,13 @@
 {{else}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
-      {{#if (not-eq null (await item.showInNewsletter))}}
+      {{#if (not-eq null (await agendaitem.showInNewsletter))}}
         <span
           class="vlc-pill
-          {{if (await item.showInNewsletter) "vlc-pill--success" "vlc-pill--error"}}
+          {{if (await agendaitem.showInNewsletter) "vlc-pill--success" "vlc-pill--error"}}
           vl-u-spacer-extended-right-s"
         >
-          {{#if (await item.showInNewsletter)}}
+          {{#if (await agendaitem.showInNewsletter)}}
             <span>
               {{t "visible-in-newsletter"}}
             </span>
@@ -96,34 +101,30 @@
 {{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
   <div
-          class="pill-container vl-u-display-flex"
-          data-test-agenda-subcasehidden-pill
+    class="pill-container vl-u-display-flex"
+    data-test-agenda-subcasehidden-pill
   >
-    {{#if isAgendaItem}}
-      {{#if (and currentSession.isEditor (await item.formallyOkToShow))}}
-        <span
-                class="{{item.formallyOkToShow.pillClassNames}}
-             vl-u-spacer-extended-right-s"
-        >
-          {{item.formallyOkToShow.label}}
-        </span>
-      {{/if}}
+    {{#if (and currentSession.isEditor (await agendaitem.formallyOkToShow))}}
+      <span
+        class="{{agendaitem.formallyOkToShow.pillClassNames}}
+        vl-u-spacer-extended-right-s"
+      >
+        {{agendaitem.formallyOkToShow.label}}
+      </span>
     {{/if}}
-    {{#if (await confidential)}}
+    {{#if (await subcase.confidential)}}
       <span class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
     {{else}}
       <span
-              class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+        class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
       ></span>
     {{/if}}
   </div>
 </div>
-{{#if isAgendaItem}}
   <div class="vl-u-spacer-extended-bottom-s">
-    {{#if item.explanation}}
+    {{#if agendaitem.explanation}}
       <pre class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
-        {{t "remark-title"}}: {{await item.explanation}}
+        {{t "remark-title"}}: {{await agendaitem.explanation}}
       </pre>
     {{/if}}
   </div>
-{{/if}}

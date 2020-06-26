@@ -23,7 +23,8 @@ export default Component.extend({
         itemToUpdate = row.content;
         itemToUpdate.set(`${this.key}`, (await this.value));
       } else if (key === 'subcase.newsletterInfo.inNewsletter') {
-        const subcase = await row.content.get('subcase');
+        const agendaActivity = await row.content.get('agendaActivity');
+        const subcase = await agendaActivity.get('subcase');
         itemToUpdate = await subcase.get('newsletterInfo');
         if (itemToUpdate) {
           itemToUpdate.set(`inNewsletter`, (await this.value));

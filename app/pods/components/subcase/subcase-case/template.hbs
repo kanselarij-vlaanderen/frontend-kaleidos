@@ -1,0 +1,33 @@
+{{#if authentication.isEditor}}
+  <div class="confidentialities">
+    <div class="confidential">
+      {{web-components/vl-checkbox
+        data-test-vl-subcase-titles-edit-confidentiality
+        value=subcase.confidential
+        disabled=true
+        label=(t "confidential")
+        toggle=(action "toggleConfidential")
+      }}
+    </div>
+  </div>
+{{/if}}
+{{#if (not isEditing)}}
+  {{subcase/subcase-case/subcase-titles
+    subcase=subcase
+    shouldShowDetails=true
+    toggleIsEditing=(action "toggleIsEditing")
+  }}
+{{else}}
+  {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
+    item=subcase
+    isEditing=isEditing
+  }}
+{{/if}}
+{{#if subcase.showAsRemark}}
+  {{subcase/subcase-case/subcase-mandatees subcase=subcase}}
+  {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
+{{else}}
+  {{subcase/subcase-case/subcase-mandatees subcase=subcase}}
+  {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=subcase}}
+  {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
+{{/if}}

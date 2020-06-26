@@ -37,6 +37,11 @@ export default class ListItem extends Component {
     return this.get('agendaitem.agenda.name');
   }
 
+  @computed('agendaitem')
+  get subcase() {
+    return this.getSubcase();
+  }
+
   @computed('agendaitem.documentVersions.@each')
   get documents() {
     if (this.get('selectedAgendaItem')) {
@@ -57,6 +62,15 @@ export default class ListItem extends Component {
       return this.agendaitem.get('aboutToDelete');
     }
     return null;
+  }
+
+  async getSubcase() {
+    const agendaActivity = await this.agendaitem.get('agendaActivity');
+    if (agendaActivity) {
+      return await agendaActivity.get('subcase');
+    } else {
+      return null;
+    }
   }
 
   /* Begin lazy partial rendering

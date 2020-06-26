@@ -44,7 +44,7 @@
                         <Agenda::Agendaitem::AgendaitemDecisionEdit
                           @isEditing={{decision.isEditing}}
                           @item={{decision}}
-                          @subcase={{await agendaitem.subcase}}
+                          @subcase={{await agendaitem.agendaActivity.subcase}}
                           @isTableRow={{isTableRow}}
                           @agendaitem={{agendaitem}} />
                       {{else if session.isEditor}}
@@ -71,7 +71,7 @@
                   {{/if}}
                 </ul>
                 <p class="vl-u-text--capitalize">
-                  {{agendaitem.subcase.subcaseName}}
+                  {{agendaitem.agendaActivity.subcase.subcaseName}}
                 </p>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { computed, get, set } from '@ember/object';
+import { computed, set } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject } from '@ember/service';
 import { cached } from 'fe-redpencil/decorators/cached';
@@ -10,13 +10,9 @@ export default Component.extend({
   currentSession: inject(),
   classNames: ['vl-u-spacer-extended-bottom-l'],
 
-  item: computed('subcase', function () {
-    return this.get('subcase');
-  }),
-
-  subcaseName: cached('item.subcaseName'), // TODO in class syntax use as a decorator instead
-  type: cached('item.type'), // TODO in class syntax use as a decorator instead
-  showAsRemark: cached('item.showAsRemark'), // TODO in class syntax use as a decorator instead
+  subcaseName: cached('subcase.subcaseName'), // TODO in class syntax use as a decorator instead
+  type: cached('subcase.type'), // TODO in class syntax use as a decorator instead
+  showAsRemark: cached('subcase.showAsRemark'), // TODO in class syntax use as a decorator instead
 
   remarkType: computed('subcase.remarkType', function () {
     return this.subcase.get('remarkType');
@@ -49,13 +45,12 @@ export default Component.extend({
     },
 
     async cancelEditing() {
-      const item = await this.get('item');
       const propertiesToSetOnSubCase = {
         'subcaseName': this.get('subcaseName'),
         'type': this.get('type'),
         'showAsRemark': this.get('showAsRemark')
       };
-      cancelEdit(item, propertiesToSetOnSubCase);
+      cancelEdit(this.subcase, propertiesToSetOnSubCase);
       set(this, 'isEditing', false);
     },
 
@@ -86,7 +81,7 @@ export default Component.extend({
         'type': this.get('type'),
         'showAsRemark': this.get('showAsRemark')
       };
-      await saveSubcaseDescription(get(this, 'item'), propertiesToSetOnAgendaItem, propertiesToSetOnSubCase, resetFormallyOk);
+      await saveSubcaseDescription(this.subcase, propertiesToSetOnAgendaItem, propertiesToSetOnSubCase, resetFormallyOk);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
     }

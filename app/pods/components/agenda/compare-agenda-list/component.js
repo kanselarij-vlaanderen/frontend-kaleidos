@@ -87,8 +87,16 @@ export default Component.extend({
   },
 
   async compareSubcase(left, right) {
-    const leftSubcaseId = await left.get('subcase.id');
-    const rightSubcaseId = await right.get('subcase.id');
+    const leftAgendaActivity = await left.get('agendaActivity');
+    let leftSubcaseId = null;
+    if (leftAgendaActivity) {
+      leftSubcaseId = await leftAgendaActivity.get('subcase.id');
+    }
+    const rightAgendaActivity = await right.get('agendaActivity');
+    let rightSubcaseId = null;
+    if (rightAgendaActivity) {
+      rightSubcaseId = await rightAgendaActivity.get('subcase.id');
+    }
     return leftSubcaseId == rightSubcaseId;
   },
 

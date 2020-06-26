@@ -1,8 +1,8 @@
-{{#if (is-pending agendaitem.subcase.newsletterInfo)}}
+{{#if (is-pending agendaitem.agendaActivity.subcase.newsletterInfo)}}
   {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
 {{else if (not isEditing)}}
   {{#if (not allowEditing)}}
-    {{#if (await agendaitem.subcase.newsletterInfo.inNewsletter)}}
+    {{#if (await agendaitem.agendaActivity.subcase.newsletterInfo.inNewsletter)}}
       {{newsletter/newsletter-item/item-content
         allowEditing=allowEditing
         itemIndex=itemIndex
@@ -30,7 +30,7 @@
   {{news-item/edit-item
     agendaitem=agendaitem
     isLoading=isLoading
-    item=(await agendaitem.subcase.newsletterInfo)
+    item=(await agendaitem.agendaActivity.subcase.newsletterInfo)
     isEditing=isEditing
   }}
 {{/if}}

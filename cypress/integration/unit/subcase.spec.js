@@ -11,6 +11,7 @@ context('Subcase tests', () => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
+    cy.createCase(false, caseTitle);
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
   });
@@ -25,7 +26,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.createCase(false, caseTitle);
+    cy.openCase(caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -180,8 +181,8 @@ context('Subcase tests', () => {
     cy.get(agenda.confidentialityIcon).should('be.visible');
 
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
-    // TODO this does not work anymore
-    // TODO there is a ticket on the backlog to remove this option from subcase, this will remove the need for most of this test.
+    // TODO this does not work anymore, a page refresh is needed
+    // TODO there is a ticket on the backlog to remove this option from subcase, this will remove the need for half of this test.
     // Assert status also shown. This is da 💣
     cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek'); 
 

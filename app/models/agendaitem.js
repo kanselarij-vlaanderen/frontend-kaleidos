@@ -7,6 +7,7 @@ import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import VRDocumentName, {compareFunction} from 'fe-redpencil/utils/vr-document-name';
 import {A} from '@ember/array';
 import {sortDocuments, getDocumentsLength} from 'fe-redpencil/utils/documents';
+import { deprecatingAlias } from '@ember/object/computed';
 
 let {attr, belongsTo, hasMany, PromiseArray, PromiseObject} = DS;
 
@@ -43,9 +44,14 @@ export default ModelWithModifier.extend({
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
 
-  // TODO KAS-1425 refactor all agendaitem.subcase to agendaitem.activity.subcase
-  subcase: computed('agendaActivity.subcase', function () {
-    return this.get('agendaActivity.subcase');
+  // TODO DELETE this after no occurence of the error
+  subcase: deprecatingAlias('subcaseViaActivity', {
+    id: 'model-refactor.activity',
+    until: '?'
+  }),
+
+  subcaseViaActivity: computed('agendaActivity.subcase', function () {
+    throw new Error('We are trying to access subcase directly. But we should go via agendaActivity instead');
   }),
 
   sortedDocumentVersions: computed('documentVersions.@each.name', function () {
@@ -114,18 +120,6 @@ export default ModelWithModifier.extend({
     }
   }),
 
-  decisions: computed('subcase.decisions.@each', function () {
-    return PromiseArray.create({
-      promise: this.store.query('decision', {
-        filter: {
-          subcase: {id: this.subcase.get('id')},
-        }
-      }).then((decisions) => {
-        return decisions.sortBy('approved');
-      }),
-    });
-  }),
-
   isDesignAgenda: computed('agenda.isDesignAgenda', function () {
     return this.get('agenda.isDesignAgenda');
   }),
@@ -163,27 +157,12 @@ export default ModelWithModifier.extend({
     return this.get('mandatees').sortBy('priority');
   }),
 
-  subcasesFromCase: computed('subcase', function () {
-    if (!this.get('subcase.id')) {
-      return [];
-    }
-    return this.subcase.get('subcasesFromCase');
-  }),
-
   formallyOkToShow: computed('formallyOk', function () {
     const options = CONFIG.formallyOkOptions;
     const {formallyOk} = this;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
 
     return EmberObject.create(foundOption);
-  }),
-
-  requestedBy: computed('subcase.requestedBy', function () {
-    return PromiseObject.create({
-      promise: this.get('subcase.requestedBy').then((requestedBy) => {
-        return requestedBy;
-      }),
-    });
   }),
 
   checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function () {
