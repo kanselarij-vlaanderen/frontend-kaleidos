@@ -95,7 +95,6 @@ context('Agenda tests', () => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 2);
     });
 
-    // TODO KAS-1425 yggdrasil needs to rebuild graphs in the testdata zip !!!
     //TODO TEST AS MINISTER, we need seperate tests to verify wat/when other profiles can see data
     cy.logoutFlow();
     cy.login('Minister');

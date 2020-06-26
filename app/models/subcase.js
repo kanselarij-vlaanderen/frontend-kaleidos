@@ -69,7 +69,6 @@ export default ModelWithModifier.extend({
     }
   }),
 
-// TODO KAS-1425   computed recalculation rate , refresh after edit
   phases: computed('agendaActivities.agendaitems','agendaActivities.agendaitems.@each','latestActivity.agendaitems.@each.retracted','approved', async function () {
     const activities = await this.get('agendaActivities');
     if (activities && activities.length > 0) {
