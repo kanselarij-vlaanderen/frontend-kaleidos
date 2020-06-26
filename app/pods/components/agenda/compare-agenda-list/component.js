@@ -165,6 +165,6 @@ export default Component.extend({
   },
 
   findItemBySubcase(item, list) {
-    return list.find((possibleMatch) => possibleMatch.get('subcase.id') == item.get('subcase.id'));
+    return list.find((possibleMatch) => possibleMatch.get('agendaActivity.subcase.id') == item.get('agendaActivity.subcase.id'));
   },
 });

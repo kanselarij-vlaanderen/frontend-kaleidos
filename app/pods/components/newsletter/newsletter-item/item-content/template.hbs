@@ -3,16 +3,16 @@
     <div class="vl-u-display-flex vlc-u-flex-space-between">
       <h4>
         {{await numberToShow}}
-        {{#if (not (await agendaitem.agendaActivity.subcase.newsletterInfo))}}
+        {{#if (not newsletterInfo)}}
           {{agendaitem.shortTitle}}
         {{else}}
-          {{await agendaitem.agendaActivity.subcase.newsletterInfo.title}}
+          {{newsletterInfo.title}}
         {{/if}}
       </h4>
       {{#if 
         (and 
           currentSession.isEditor 
-          (await agendaitem.agendaActivity.subcase.newsletterInfo)
+          newsletterInfo
         )
       }}
         <div class="vl-u-display-flex vlc-u-flex-space-between">
@@ -24,7 +24,7 @@
         </div>
       {{/if}}
     </div>
-    {{#if (not (await agendaitem.agendaActivity.subcase.newsletterInfo))}}
+    {{#if (not newsletterInfo)}}
       <p>
         {{agendaitem.title}}
       </p>
@@ -36,13 +36,13 @@
 {{else}}
   <div>
     <h4>
-      {{#if (not (await agendaitem.agendaActivity.subcase.newsletterInfo))}}
+      {{#if (not newsletterInfo)}}
         {{agendaitem.shortTitle}}
       {{else}}
-        {{await agendaitem.agendaActivity.subcase.newsletterInfo.title}}
+        {{newsletterInfo.title}}
       {{/if}}
     </h4>
-    {{#if (not (await agendaitem.agendaActivity.subcase.newsletterInfo))}}
+    {{#if (not newsletterInfo)}}
       <p>
         {{agendaitem.title}}
       </p>
@@ -51,20 +51,20 @@
 {{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
   <p>
-    {{await agendaitem.agendaActivity.subcase.newsletterInfo.newsletterProposal}}
+    {{await newsletterInfo.newsletterProposal}}
   </p>
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-text">
     {{#if (not agendaitem.showAsRemark)}}
-      {{#if (not (await agendaitem.agendaActivity.subcase.newsletterInfo.richtext))}}
+      {{#if (not newsletterInfo.richtext)}}
         <p class="vl-u-text vl-u-text--italic vl-u-text--muted">
           {{t "no-newsletter-info"}}
         </p>
       {{else}}
         {{sanitize-html
           raw=true
-          value=(await agendaitem.agendaActivity.subcase.newsletterInfo.richtext)
+          value=newsletterInfo.richtext
         }}
       {{/if}}
     {{/if}}
@@ -72,17 +72,17 @@
 </div>
 {{#if allowEditing}}
   <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-    {{await agendaitem.agendaActivity.subcase.newsletterInfo.displayRemark}}
+    {{await newsletterInfo.displayRemark}}
   </p>
 {{/if}}
 {{#if 
-  (gt (await agendaitem.agendaActivity.subcase.newsletterInfo.themes.length) 0)
+  (gt (await newsletterInfo.themes.length) 0)
 }}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-spacer-extended-top-s">
       <ul class="newsletter-themes vlc-u-no-padding vlc-u-no-margin">
         {{#each 
-          (await agendaitem.agendaActivity.subcase.newsletterInfo.themes) 
+          (await newsletterInfo.themes) 
         as |theme|
         }}
           <li class="vl-pill">
@@ -102,7 +102,7 @@
 <div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-spacer-extended-top-s">
     {{utils/documents-list-for-item
-      item=(await agendaitem.agendaActivity.subcase.newsletterInfo)
+      item=newsletterInfo
       agendaitem=agendaitem
       isClickable=true
     }}

@@ -17,7 +17,7 @@ export default Component.extend({
   }),
 
   subcases: computed('agendaitem', async function () {
-    const subcase = await this.get('subcase');
+    const subcase = await this.subcase;
     return await subcase.get('subcasesFromCase');
   }),
 

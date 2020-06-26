@@ -21,7 +21,7 @@ export default Component.extend({
 
   canPropose: computed('subcase.{requestedForMeeting,hasActivity,isRetracted}', 'isAssigningToOtherAgenda', async function () {
     const { isAssigningToOtherAgenda, isLoading } = this;
-    const subcase = await this.get('subcase');
+    const subcase = this.subcase;
     const requestedForMeeting = await subcase.get('requestedForMeeting');
     const hasActivity = await subcase.get('hasActivity');
 

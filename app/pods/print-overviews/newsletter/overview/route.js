@@ -71,17 +71,15 @@ export default Route.extend({
     if (params.definite !== 'true') {
       return items;
     }
-    let newsLetterByIndex = await Promise.all(items.map((item) => {
-      if (!item) return;
-      return item.get('subcase').then((subcase) => {
-        if (!subcase) return;
-        return subcase.get('newsletterInfo').then((newsletter) => {
-          if (!newsletter) {
-            return;
-          }
-          return newsletter.inNewsletter;
-        });
-      });
+    let newsLetterByIndex = await Promise.all(items.map(async (item) => {
+      try {
+        const agendaActivity = await item.get('agendaActivity');
+        const subcase = await agendaActivity.get('subcase');
+        const newsletterInfo = await subcase.get('newsletterInfo');
+        return newsletterInfo.inNewsletter;
+      } catch (e) {
+        return false;
+      }
     }));
     let filtered = [];
     items.map((item, index) => {

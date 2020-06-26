@@ -11,7 +11,7 @@ export default class AgendaItemPress extends Component {
 
   @computed('agendaitem')
   get title() {
-    return this.agendaitem.get('subcase.title');
+    return this.agendaitem.get('title');
   }
 
   @action

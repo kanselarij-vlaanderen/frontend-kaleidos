@@ -25,7 +25,7 @@ export default Component.extend({
     },
 
     chooseConfidentiality(confidentiality) {
-      this.get('subcase').set('confidentiality', confidentiality);
+      this.subcase.set('confidentiality', confidentiality);
     },
   }
 });

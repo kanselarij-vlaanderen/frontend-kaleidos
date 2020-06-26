@@ -22,7 +22,7 @@ export default class AgendaitemNewsItem extends Component {
 
   @computed('subcase.newsletterInfo')
   get item() {
-    return this.get('subcase.newsletterInfo');
+    return this.subcase.get('newsletterInfo');
   }
 
   get dateOfMostRecentNota() {

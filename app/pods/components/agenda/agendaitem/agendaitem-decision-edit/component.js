@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
 import { inject as service } from '@ember/service';
 import {computed} from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export default Component.extend({
@@ -62,9 +61,12 @@ export default Component.extend({
       if (!this.get('isDestroyed')) {
         let agendaitemToUpdate;
         if (this.isTableRow) {
-          const subcase = await this.agendaitem.get('subcase');
-          (await subcase.get('decisions')).reload();
-          agendaitemToUpdate = await this.agendaitem.content;
+          const agendaActivity = await this.agendaitem.get('agendaActivity');
+          if (agendaActivity) {
+            const subcase = await agendaActivity.get('subcase');
+            (await subcase.get('decisions')).reload();
+            agendaitemToUpdate = await this.agendaitem.content;
+          }
         } else {
           agendaitemToUpdate = await this.agendaitem;
         }

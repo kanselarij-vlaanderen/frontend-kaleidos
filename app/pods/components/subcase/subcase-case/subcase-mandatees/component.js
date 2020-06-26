@@ -64,7 +64,7 @@ SubcaseMandatees extends Component {
   async constructMandateeRows() {
     const subcase = await this.subcase;
     const iseCodes = await subcase.get('iseCodes');
-    let mandatees = await (await this.get('subcase.mandatees')).sortBy('priority');
+    let mandatees = await (await subcase.get('mandatees')).sortBy('priority');
     let selectedMandatee = await subcase.get('requestedBy');
     const mandateeLength = mandatees.get('length');
     if (mandateeLength === 1) {

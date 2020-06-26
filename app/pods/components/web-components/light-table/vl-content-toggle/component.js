@@ -19,10 +19,11 @@ export default Component.extend({
       this.toggleProperty('value');
 
       let itemToUpdate;
+      // TODO refactor this code, this is not the right place
       if (key === 'forPress') {
         itemToUpdate = row.content;
         itemToUpdate.set(`${this.key}`, (await this.value));
-      } else if (key === 'subcase.newsletterInfo.inNewsletter') {
+      } else if (key === 'agendaActivity.subcase.newsletterInfo.inNewsletter') {
         const agendaActivity = await row.content.get('agendaActivity');
         const subcase = await agendaActivity.get('subcase');
         itemToUpdate = await subcase.get('newsletterInfo');

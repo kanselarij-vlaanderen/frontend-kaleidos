@@ -1,13 +1,14 @@
-{{#if (is-pending agendaitem.agendaActivity.subcase.newsletterInfo)}}
+{{#if (is-pending newsletterInfo)}}
   {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
 {{else if (not isEditing)}}
   {{#if (not allowEditing)}}
-    {{#if (await agendaitem.agendaActivity.subcase.newsletterInfo.inNewsletter)}}
+    {{#if (await newsletterInfo.inNewsletter)}}
       {{newsletter/newsletter-item/item-content
         allowEditing=allowEditing
         itemIndex=itemIndex
         isEditing=isEditing
         agendaitem=agendaitem
+        newsletterInfo=newsletterInfo
       }}
     {{else if agendaitem.showAsRemark}}
       {{newsletter/newsletter-item/item-content
@@ -16,6 +17,7 @@
         itemIndex=itemIndex
         isEditing=isEditing
         agendaitem=agendaitem
+        newsletterInfo=newsletterInfo
       }}
     {{/if}}
   {{else}}
@@ -24,13 +26,14 @@
       definite=definite
       isEditing=isEditing
       agendaitem=agendaitem
+      newsletterInfo=newsletterInfo
     }}
   {{/if}}
 {{else}}
   {{news-item/edit-item
     agendaitem=agendaitem
     isLoading=isLoading
-    item=(await agendaitem.agendaActivity.subcase.newsletterInfo)
+    item=newsletterInfo
     isEditing=isEditing
   }}
 {{/if}}
