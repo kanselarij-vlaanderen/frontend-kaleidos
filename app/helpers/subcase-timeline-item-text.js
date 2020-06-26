@@ -13,9 +13,9 @@ const formatDate = (date) => {
 export function subcaseTimelineItemText(params, values) {
   const label = values.phase.label || '';
   const phaseDate = values.phase.date;
-  let textToShow = `${label}`
+  let textToShow = `${label}`;
   if (phaseDate) {
-    textToShow += ` ${formatDate(phaseDate)}`
+    textToShow += ` ${formatDate(phaseDate)}`;
   }
   return textToShow;
 }
