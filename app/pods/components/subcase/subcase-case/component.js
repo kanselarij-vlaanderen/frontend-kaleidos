@@ -17,7 +17,7 @@ export default Component.extend({
     },
 
     toggleConfidential(value) {
-      this.set('subcase.confidential', value);
+      this.subcase.set('confidential', value);
     },
 
     toggleIsEditing() {
