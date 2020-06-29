@@ -2,22 +2,38 @@
 
 <h1 class="vlc-kitchensink-header">{{t "style-guide-alerts"}}</h1>
 
-<h3 class="vlc-kitchensink-sample-header">Loading</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Loading"
+  @snippet="loading.hbs"
+>
+  {{!-- BEGIN-SNIPPET loading --}}
   <WebComponents::VlAlert @type="loading"/>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
 
-<h3 class="vlc-kitchensink-sample-header">Closeable</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Closeable"
+  @snippet="closeable.hbs"
+>
+  {{!-- BEGIN-SNIPPET closeable --}}
   <WebComponents::VlAlert @closeable="false"/>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
 
-<h3 class="vlc-kitchensink-sample-header">Caution</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Caution"
+  @snippet="caution.hbs"
+>
+  {{!-- BEGIN-SNIPPET caution --}}
   <WebComponents::VlAlert @title="Caution!"/>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
 
-<h3 class="vlc-kitchensink-sample-header">Changes alert</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Changes alert"
+  @snippet="changes.hbs"
+>
+  {{!-- BEGIN-SNIPPET changes --}}
   <ChangesAlert @message="The document has changed!"></ChangesAlert>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
