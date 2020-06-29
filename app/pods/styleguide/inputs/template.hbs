@@ -2,34 +2,56 @@
 
 <h1 class="vlc-kitchensink-header">{{t "style-guide-inputs"}}</h1>
 
-<h3 class="vlc-kitchensink-sample-header">Message</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Message"
+  @snippet="message.hbs"
+>
+  {{!-- BEGIN-SNIPPET message --}}
   <WebComponents::VlFormMessage @message="message example"/>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
 
-<h3 class="vlc-kitchensink-sample-header">Label</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Label"
+  @snippet="label.hbs"
+>
+  {{!-- BEGIN-SNIPPET label --}}
   <WebComponents::VlFormLabel @value="label example"/>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
 
-<h3 class="vlc-kitchensink-sample-header">Input</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Input"
+  @snippet="input.hbs"
+>
+  {{!-- BEGIN-SNIPPET input --}}
   <WebComponents::VlFormInput/>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
 
-
-<h3 class="vlc-kitchensink-sample-header">Checkbox</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Checkbox"
+  @snippet="checkbox.hbs"
+>
+  {{!-- BEGIN-SNIPPET checkbox --}}
   <WebComponents::VlCheckbox @label="label"/>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
 
-
-<h3 class="vlc-kitchensink-sample-header">Toggle</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Toggle"
+  @snippet="toggle.hbs"
+>
+  {{!-- BEGIN-SNIPPET toggle --}}
   <WebComponents::VlToggle />
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
 
-<h3 class="vlc-kitchensink-sample-header">Datepicker</h3>
-<div class="vlc-kitchensink-sample">
+<Styleguide::KitchensinkSample
+  @title="Datepicker"
+  @snippet="datepicker.hbs"
+>
+  {{!-- BEGIN-SNIPPET datepicker --}}
   <WebComponents::VlDatepicker/>
-</div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>

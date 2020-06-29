@@ -10,15 +10,12 @@ context('Agenda tests', () => {
     cy.resetCache();
     cy.server();
   });
-
-  xit('Propagate decisions and documents to overheid graph by releasing them', () => {
-
+  const agendaDate = Cypress.moment().add(1, 'weeks').day(6); // Next friday
+  const subcaseTitle1 = caseTitle + ' test stap 1';
+  const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
+  const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
+  it('Propagate decisions and documents to overheid graph by releasing them', () => {
     cy.login('Admin');
-
-    const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(6); // Next friday
-    const subcaseTitle1 = caseTitle + ' test stap 1';
-    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
     const files = [
       {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota'},
       {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet'}
@@ -61,14 +58,15 @@ context('Agenda tests', () => {
     cy.get('.vl-form__group').as('editDecision');
     cy.get('@editDecision').within(() => {
       cy.get('.vl-checkbox--switch__label').click();
-    })
-
+    });
     cy.contains('Opslaan').click();
-
     cy.releaseDecisions();
-
     cy.wait(60000);
     cy.logout();
+  });
+
+  it('Test as Overheid', () => {
+    cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
@@ -80,14 +78,21 @@ context('Agenda tests', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 0);
     });
-
     cy.logout();
+  });
+
+  it('Test as Admin', () => {
+    cy.server();
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
     cy.wait(60000);
 
     cy.logout();
+  });
+
+  it('Test as Overheid', () => {
+    cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
