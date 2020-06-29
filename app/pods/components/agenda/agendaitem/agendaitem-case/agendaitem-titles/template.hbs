@@ -15,9 +15,10 @@
     </div>
   </div>
 {{/if}}
+
 <div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-display-flex vlc-u-display-flex-align-center">
-    <h2 class="vlc-subline">
+    <h2 class="vlc-subline" data-test-subcase-type>
       {{#if (not agendaitem.showAsRemark)}}
         {{t "note"}}
       {{else}}
@@ -38,6 +39,7 @@
     {{/if}}
   </div>
 </div>
+
 <div class="vl-u-spacer-extended-bottom-s">
   <h4 class="vl-title vl-title--h4">
     <pre>
@@ -45,6 +47,7 @@
     </pre>
   </h4>
 </div>
+
 <div class="vl-u-spacer-extended-bottom-s">
   {{#if (await shouldShowDetails)}}
     <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
@@ -73,26 +76,26 @@
 {{else}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
-      {{#if (not-eq null (await agendaitem.showInNewsletter))}}
+      {{#if agendaitem.showInNewsletter}}
         <span
           class="vlc-pill
-          {{if (await agendaitem.showInNewsletter) "vlc-pill--success" "vlc-pill--error"}}
+          {{if agendaitem.showInNewsletter "vlc-pill--success" "vlc-pill--error"}}
           vl-u-spacer-extended-right-s"
         >
-          {{#if (await agendaitem.showInNewsletter)}}
-            <span>
-              {{t "visible-in-newsletter"}}
-            </span>
-            <i
-              class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
-            ></i>
+        {{#if agendaitem.showInNewsletter}}
+          <span>
+            {{t "visible-in-newsletter"}}
+          </span>
+          <i
+            class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
+          ></i>
           {{else}}
             <span>
               {{t "hidden-in-newsletter"}}
             </span>
-            <i
-              class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
-            ></i>
+          <i
+            class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
+          ></i>
           {{/if}}
         </span>
       {{/if}}
@@ -121,10 +124,10 @@
     {{/if}}
   </div>
 </div>
-  <div class="vl-u-spacer-extended-bottom-s">
-    {{#if agendaitem.explanation}}
-      <pre class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
-        {{t "remark-title"}}: {{await agendaitem.explanation}}
-      </pre>
-    {{/if}}
-  </div>
+<div class="vl-u-spacer-extended-bottom-s">
+  {{#if agendaitem.explanation}}
+    <pre class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+      {{t "remark-title"}}: {{await agendaitem.explanation}}
+    </pre>
+  {{/if}}
+</div>

@@ -44,34 +44,6 @@
       </span>
     {{/if}}
   </div>
-{{else}}
-  <div class="vl-u-spacer-extended-bottom-s">
-    <div class="pill-container vl-u-display-flex">
-      {{#if (not-eq null (await subcase.showInNewsletter))}}
-        <span
-          class="vlc-pill
-          {{if (await subcase.showInNewsletter) "vlc-pill--success" "vlc-pill--error"}}
-          vl-u-spacer-extended-right-s"
-        >
-          {{#if (await subcase.showInNewsletter)}}
-            <span>
-              {{t "visible-in-newsletter"}}
-            </span>
-            <i
-              class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
-            ></i>
-          {{else}}
-            <span>
-              {{t "hidden-in-newsletter"}}
-            </span>
-            <i
-              class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
-            ></i>
-          {{/if}}
-        </span>
-      {{/if}}
-    </div>
-  </div>
 {{/if}}
 <div class="vl-u-spacer-extended-bottom-s">
   <div

@@ -232,13 +232,4 @@ export default ModelWithModifier.extend({
     }
   }),
 
-  showInNewsletter: computed('agendaActivities.@each.agendaitems', 'latestActivity.agendaitems.@each.showInNewsletter', async function () {
-    const latestAgendaItem = await this.get('latestAgendaItem');
-    if (latestAgendaItem) {
-      return await latestAgendaItem.get('showInNewsletter');
-    } else {
-      return null;
-    }
-  }),
-
 });

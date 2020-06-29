@@ -26,7 +26,7 @@
       data-test-subcase-titles-edit-shorttitle
       rows="2"
       class="vl-textarea vl-textarea--block"
-      value=shortTitle
+      value=item.shortTitle
     }}
   </div>
 </div>
@@ -37,7 +37,7 @@
       data-test-subcase-titles-edit-title-subcase
       rows="4"
       class="vl-textarea vl-textarea--block"
-      value=title
+      value=item.title
     }}
   </div>
 </div>
@@ -53,14 +53,14 @@
     </div>
   </div>
 {{/if}}
-{{#if isRemark}}
-  {{#if (not-eq null (await item.showInNewsletter))}}
+{{#if (and isAgendaItem isRemark)}}
+  {{#if item.showInNewsletter}}
     <div class="vl-u-spacer">
       <div class="vlc-input-field-block" data-test-vl-subcase-titles-edit-show-in-newsletter>
         {{web-components/vl-form-label value=(t "show-in-newsletter")}}
-        {{web-components/vl-toggle 
-          value=(await item.showInNewsletter) 
-          valueChanged=(action "toggleShowInNewsletter" (await item))
+        {{web-components/vl-toggle
+          value=item.showInNewsletter
+          valueChanged=(action "toggleShowInNewsletter" item)
         }}
       </div>
     </div>

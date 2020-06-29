@@ -146,7 +146,8 @@ export default Service.extend({
       mandatees: mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
-      agendaActivity: agendaActivity
+      agendaActivity: agendaActivity,
+      showInNewsletter: true
     });
     await agendaitem.save();
     const meeting = await selectedAgenda.get('createdFor');

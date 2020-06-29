@@ -92,9 +92,11 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.get('.vlc-input-field-block').should('have.length', 5);
 
   //Set the type
-  cy.get('.vlc-input-field-block').eq(0).within(() => {
-    cy.contains(type).scrollIntoView().click();
-  });
+  if(type) {
+    cy.get('.vlc-input-field-block').eq(0).within(() => {
+      cy.contains(type).scrollIntoView().click();
+    });
+  }
 
   // Set the short title
   if (newShortTitle) {
@@ -104,29 +106,35 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   }
 
   // Set the long title
-  cy.get('.vlc-input-field-block').eq(2).within(() => {
-    cy.get('.vl-textarea').click().clear().type(longTitle);
-  });
+  if(longTitle) {
+    cy.get('.vlc-input-field-block').eq(2).within(() => {
+      cy.get('.vl-textarea').click().clear().type(longTitle);
+    });
+  }
 
   // Set the step type
-  cy.get('.vlc-input-field-block').eq(3).within(() => {
-    cy.get('.ember-power-select-trigger').click();
-  });
-  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(step).scrollIntoView().trigger('mouseover').click();
-    //TODO Experiment for dropdown flakyness
-    cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
-  });
+  if(step) {
+    cy.get('.vlc-input-field-block').eq(3).within(() => {
+      cy.get('.ember-power-select-trigger').click();
+    });
+    cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+      cy.contains(step).scrollIntoView().trigger('mouseover').click();
+      //TODO Experiment for dropdown flakyness
+      cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
+    });
+  }
 
   // Set the step name
-  cy.get('.vlc-input-field-block').eq(4).within(() => {
-    cy.get('.ember-power-select-trigger').click();
-  });
-  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(stepName).scrollIntoView().trigger('mouseover').click();
-    //TODO Experiment for dropdown flakyness
-    cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
-  });
+  if(stepName) {
+    cy.get('.vlc-input-field-block').eq(4).within(() => {
+      cy.get('.ember-power-select-trigger').click();
+    });
+    cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+      cy.contains(stepName).scrollIntoView().trigger('mouseover').click();
+      //TODO Experiment for dropdown flakyness
+      cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
+    });
+  }
 
   cy.get('.vlc-toolbar').within(() => {
     cy.contains('Procedurestap aanmaken').click();

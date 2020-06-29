@@ -585,5 +585,6 @@
   "activity-phase-approved-on-agenda": "Geagendeerd op de agenda van",
   "activity-phase-postponed-on-agenda": "Uitgesteld op de agenda van",
   "activity-phase-decided-on-agenda": "Beslist op de agenda van",
-  "activity-phase-postponed-is-decided": "Er is beslist om dit agendapunt uit te stellen"
+  "activity-phase-postponed-is-decided": "Er is beslist om dit agendapunt uit te stellen",
+  "loading-active-agendas": "De actieve agendas worden geladen."
 }

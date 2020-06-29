@@ -121,7 +121,7 @@ context('Subcase tests', () => {
     cy.url().should('not.contain', '/dossier/');
   });
 
-  xit('Changes to agendaitem should propagate to subcase', () => {
+  it('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
     const SubcaseTitleShort = 'Cypress test: Mededeling - ' + currentTimestamp();
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
@@ -141,11 +141,10 @@ context('Subcase tests', () => {
     cy.openAgendaItemDossierTab(SubcaseTitleShort);
 
     // Status is hidden
-    cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
+    cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
 
     // Assert status also hidden
-    cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
     cy.route('PATCH','/agendaitems/*').as('patchAgendaitem');
     cy.changeSubcaseAccessLevel(true, SubcaseTitleShort, true, 'Intern Overheid') //CHECK na save in agendaitem
@@ -175,16 +174,12 @@ context('Subcase tests', () => {
     cy.wait('@patchAgenda');
 
     // Assert status shown & confidentiality icon is visible
-    cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
+    cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.confidentialityIcon).should('be.visible');
 
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
-    // TODO this does not work anymore, a page refresh is needed
-    // TODO there is a ticket on the backlog to remove this option from subcase, this will remove the need for half of this test.
-    // Assert status also shown. This is da 💣
-    cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek'); 
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');

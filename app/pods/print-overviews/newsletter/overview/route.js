@@ -26,8 +26,8 @@ export default Route.extend({
       include: 'mandatees',
       sort: 'priority'
     });
-    const announcements = this.filterAnnouncements(agendaitems.filter((item) => {
-      return item.showAsRemark;
+    const announcements = this.filterAnnouncements(agendaitems.filter((agendaitem) => {
+      return agendaitem.showAsRemark;
     }), params);
 
     const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
@@ -48,7 +48,7 @@ export default Route.extend({
   },
 
   async parseAgendaItems(agendaitems, params) {
-    let draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
+    let draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
 
     draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
 
@@ -62,18 +62,18 @@ export default Route.extend({
   },
 
   filterAnnouncements: function (announcements) {
-    return announcements.filter((item) => {
-      return item.showInNewsletter;
+    return announcements.filter((agendaitem) => {
+      return agendaitem.showInNewsletter;
     });
   },
 
-  filterAgendaitems: async function (items, params) {
+  filterAgendaitems: async function (agendaitems, params) {
     if (params.definite !== 'true') {
-      return items;
+      return agendaitems;
     }
-    let newsLetterByIndex = await Promise.all(items.map(async (item) => {
+    let newsLetterByIndex = await Promise.all(agendaitems.map(async (agendaitem) => {
       try {
-        const agendaActivity = await item.get('agendaActivity');
+        const agendaActivity = await agendaitem.get('agendaActivity');
         const subcase = await agendaActivity.get('subcase');
         const newsletterInfo = await subcase.get('newsletterInfo');
         return newsletterInfo.inNewsletter;
@@ -82,9 +82,9 @@ export default Route.extend({
       }
     }));
     let filtered = [];
-    items.map((item, index) => {
+    agendaitems.map((agendaitem, index) => {
       if (newsLetterByIndex[index]) {
-        filtered.push(item);
+        filtered.push(agendaitem);
       }
     });
     return filtered;
