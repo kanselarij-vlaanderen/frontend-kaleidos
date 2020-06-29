@@ -70,8 +70,6 @@ context('Settings overview page tests', () => {
   });
 
   it('Upload a CSV and delete a user', () => {
-    cy.route('GET','/users/*').as('getUsers')
-    cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.visit('/');
     cy.get(toolbar.settings).click();
     cy.url().should('include','instellingen/overzicht');
@@ -80,11 +78,13 @@ context('Settings overview page tests', () => {
     cy.contains('Gebruikers importeren').click();
     cy.uploadUsersFile('files','importUsers', 'csv');
     cy.get(settings.userSearchInput).type("Wendy");
+    cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.userSearchButton).click().wait('@filterUsers');
     cy.get(settings.settingsUserTable).contains('Wendy').parents('tr').within(() => {
       cy.get(settings.deleteUser).should('exist').should('be.visible').click();
     });
     cy.get(modal.verify.save).should('exist').should('be.visible').click();
+    cy.route('GET','/users/*').as('getUsers');
     cy.wait('@getUsers').then(() => {
       cy.get(settings.settingsUserTable).should('not.have.value','Wendy');
     });
@@ -94,6 +94,7 @@ context('Settings overview page tests', () => {
     });
     cy.uploadUsersFile('files','updateUserGroup', 'csv');
     cy.get(settings.userSearchInput).type("Greta");
+    cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.userSearchButton).click().wait('@filterUsers');
     cy.get('tbody > tr').should('have.length', '1');
     cy.get(settings.settingsUserTable).contains('Greta').parents('tr').within(() => {
