@@ -25,7 +25,7 @@ export default class ListItem extends Component {
   hideLabel = true;
   isShowingChanges = null;
 
-  @tracked renderDetails = true;
+  @tracked renderDetails = null;
   @tracked retracted = this.args.agendaitem.get('retracted');
   @tracked isPostponed = this.args.agendaitem.postponedTo.get('postponed');
   @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
@@ -48,11 +48,23 @@ export default class ListItem extends Component {
   }
 
   @action
+  onEnter(){
+    setTimeout(() => {
+      this.renderDetails = true;
+    }, 1000)
+  }
+
+  @action
+  onExit(){
+    this.renderDetails = false;
+  }
+
+  @action
   async setAction(item) {
     // this.set('isLoading', true);
     const uri = item.get('uri');
     this.args.agendaitem.formallyOk = uri;
-    await this.agendaitem
+    await this.args.agendaitem
       .save()
       .catch(() => {
         this.toaster.error();
