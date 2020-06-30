@@ -43,7 +43,6 @@ export default class FileUploader extends Component{
     }
   }
 
-
   @action
   uploadFile(file) {
     get(this, 'uploadFileTask').perform(file);
