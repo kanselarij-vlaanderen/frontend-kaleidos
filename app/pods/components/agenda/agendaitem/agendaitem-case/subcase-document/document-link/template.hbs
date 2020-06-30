@@ -168,7 +168,7 @@
     @title={{t "new-document-version"}}>
     <div class="vl-modal-dialog__content">
       {{#if (not uploadedFile)}}
-        {{file-uploader multipleFiles=false uploadedFile=(action "add")}}
+        {{file-uploader multipleFiles=false uploadedFileAction=(action "add")}}
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
