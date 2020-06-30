@@ -9,11 +9,11 @@
         </h1>
       </div>
       <div class="vlc-toolbar__right">
-        {{#if isEditor}}
+        {{#if currentSession.isEditor}}
           <div class="vlc-toolbar__item">
             <button data-test-vlc-agenda-createnewagendabutton
                     type="button"
-                    class="vl-button vl-button--narrow vl-button--icon-before"
+                    class="vl-button vl-button--icon-before"
               {{action "createNewSession"}}>
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
               {{t "new-agenda"}}

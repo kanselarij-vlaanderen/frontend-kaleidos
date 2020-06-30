@@ -1,0 +1,96 @@
+/* ==========================================================================
+  Kitchensink
+   ========================================================================== */
+
+/* Modifiers on main object
+   ========================================================================== */
+.vlc-kitchensink__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: auto;
+  font-family: "Flanders Art Sans", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.6rem;
+  width: 100%;
+  height: 100%;
+}
+
+.vlc-kitchensink__container--main {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  text-align: left;
+}
+
+.vlc-kitchensink__header {
+  font-family: flanders-serif, serif;
+  font-size: 3.4rem;
+  margin: 2rem 0;
+  color: #000000;
+}
+
+/* Modifiers on kitchensink sample
+   ========================================================================== */
+.vlc-kitchensink__sample {
+  border: 1px solid #DDD;
+  padding: 4rem;
+  margin: 0 0 2rem;
+}
+
+.vlc-kitchensink__sample-header {
+  font-weight: 500;
+  font-size: 2rem;
+  margin: 3rem 0 2rem;
+}
+
+.vlc-kitchensink__sample--nested {
+  border: 2px solid #DDD;
+  padding: 4rem;
+  margin: 0 0 2rem;
+}
+
+/* Modifiers on navigation object
+   ========================================================================== */
+.vlc-kitchensink__navigation {
+  border: #CBD2DA solid 0.1rem;
+  width: 28.6rem;
+  height: 100%;
+  padding-top: 1.6rem;
+  background: #F3F5F6;
+}
+.vlc-kitchensink__navigation-item {
+  .active {
+    color: #0055CC;
+    background-color: #E8EBEE;
+  }
+}
+
+.vlc-kitchensink__navigation-link {
+  width: 100%;
+  display: block;
+  color: #333332;
+  text-decoration: none;
+  letter-spacing: 0.05rem;
+  padding: 1.5rem 2rem;
+}
+
+.vlc-kitchensink__navigation-link:hover {
+  color: #0055CC;
+}
+.vlc-kitchensink__navigation-item:active {
+  color: #333332;
+}
+
+.vlc-kitchensink__navigation-header {
+  margin: 2rem 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  &:first-child {
+    margin: 0rem 1rem 2rem;
+  }
+}
+
+

@@ -1,31 +1,46 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
+import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 
 const { Model, attr, belongsTo, hasMany } = DS;
 
-export default Model.extend({
-  name: attr('string'),
+export default Model.extend(LoadableModel, {
+  name: computed.alias('serialnumber'),
+  title: attr('string'),
+  serialnumber: attr('string'),
   issued: attr('datetime'),
   createdFor: belongsTo('meeting'),
+  status: belongsTo('agendastatus', {inverse: null}),
   agendaitems: hasMany('agendaitem', { inverse: null, serialize: false }),
   created: attr('date'),
-  isAccepted: attr('boolean'),
   modified: attr('datetime'),
 
-  isDesignAgenda: computed('name', function () {
-    return this.name === 'Ontwerpagenda';
+  isDesignAgenda: computed('status.isDesignAgenda', function () {
+    return this.get('status.isDesignAgenda');
   }),
 
-  agendaName: computed('name', function () {
-    if (this.get('name.length') > 2) {
-      return this.name;
+  async asyncCheckIfDesignAgenda(){
+    await this.get('status');
+
+    return this.get('isDesignAgenda');
+  },
+
+  agendaName: computed('serialnumber', 'status', function () {
+    const isDesignAgenda = this.get('status.isDesignAgenda');
+    const agendaName = this.serialnumber || '';
+    let prefix;
+    if (isDesignAgenda) {
+      prefix = 'Ontwerpagenda';
     } else {
-      return 'Agenda ' + this.name;
+      prefix = 'Agenda';
     }
+    return `${prefix} ${agendaName}`;
   }),
 
-  isApprovable: computed('agendaitems.@each', function () {
+  isFinal: computed.alias('status.isFinal'),
+
+  isApprovable: computed('agendaitems.@each.formallyOk', function () {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaItems = agendaitems.filter((agendaitem) =>
         this.checkFormallyOkStatus(agendaitem)

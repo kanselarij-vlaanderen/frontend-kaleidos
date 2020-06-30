@@ -1,9 +1,9 @@
 {{#if (not isEditing)}}
-  <div class="vl-u-display-flex vl-u-flex-align-baseline">
+  <div class="vl-u-display-flex vlc-u-flex-align-baseline">
     <h3 class="vl-title vl-title--h3">
       {{t "subcase"}}
     </h3>
-    {{#if isEditor}}
+    {{#if currentSession.isEditor}}
       <div class="vl-u-spacer-extended-left-s">
         <a href="" class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
@@ -86,8 +86,8 @@
                 {{#link-to
                   "agenda.agendaitems.agendaitem"
                   (await latestMeetingId)
+                  (await latestAgendaId)
                   (await latestAgendaItemId)
-                  (query-params selectedAgenda=(await latestAgendaId))
                   class="vl-link"
                 }}
                   {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
@@ -145,14 +145,11 @@
   <div class="vlc-box">
     <div class="vl-u-spacer">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcase-type")}}
-        {{utils/model-selector
-          modelName="case-type"
-          searchField="label"
-          sortField="label"
-          propertyToShow="label"
-          selectedItems=remarkType
-          selectModel=(action "selectRemarkType")
+        {{web-components/vl-radio-button-list
+          title=(t "subcase-type")
+          optionList=(await caseTypes)
+          selectedModel=remarkType
+          modelChanged=(action "selectRemarkType")
         }}
       </div>
       <div class="vlc-input-field-block">

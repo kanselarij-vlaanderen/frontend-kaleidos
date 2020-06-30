@@ -1,0 +1,172 @@
+<div class="vlc-toolbar vlc-agenda-detail-sidebar-section-header vlc-agenda-detail-sidebar-section-header--border-bottom">
+  <div class="vlc-toolbar__left">
+    <div class="vlc-toolbar__item">
+      <h3 class="vl-title--h3 vlc-agenda-detail-sidebar-section-header__title">
+        {{t "agendaitems-subtitle"}}
+      </h3>
+    </div>
+  </div>
+  <div class="vlc-toolbar__right">
+    <div class="vlc-toolbar__item">
+      <a href=""
+         class="vlc-agenda-detail-sidebar-section-header__link"
+        {{action "toggleChangesOnly"}}
+      >
+        {{#if (not isShowingChanges)}}
+          {{t "show-changes"}}
+        {{else}}
+          {{t "show-all"}}
+        {{/if}}
+      </a>
+    </div>
+  </div>
+</div>
+
+{{#if (is-empty agendaitems)}}
+  <div class="vlc-agenda-detail-sidebar__no-items-message">
+    <span class="vlc-agenda-detail-sidebar__info-bubble"><i class="ki-info-circle" /></span>
+    <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
+  </div>
+{{/if}}
+<div class="{{spacerClass}}">
+  {{#if (and currentSessionService.isEditor (not isShowingChanges))}}
+    {{#sortable-group
+      tagName="ul"
+      onChange=(action "reorderItems")
+    as |sortableGroup|
+    }}
+      {{#each
+        agendaitems
+      as |agendaitem|
+      }}
+        {{#if agendaitem.groupName}}
+          <div class="vlc-list-section-header">
+            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+            {{!-- template-lint-disable no-triple-curlies  --}}
+            {{{agendaitem.groupName}}}
+            {{!-- template-lint-enable no-triple-curlies  --}}
+          </div>
+        {{/if}}
+        {{#sortable-item
+          data-test-agenda-detail-sidebar-sub-item
+          tagName="li"
+          class="vlc-agenda-detail-sidebar__sub-item"
+          model=agendaitem
+          group=sortableGroup
+          distance=30
+          handle=dragHandleClass
+        }}
+          {{agenda/agenda-detail/sidebar-item
+            agendaitem=agendaitem
+            selectAgendaItem=(action "selectAgendaItem")
+          }}
+        {{/sortable-item}}
+      {{/each}}
+    {{/sortable-group}}
+  {{else}}
+    <ul>
+      {{#each
+        agendaitems
+      as |agendaitem|
+      }}
+        {{#if (and agendaitem.groupName (not isShowingChanges))}}
+          <div class="vlc-list-section-header">
+            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+            {{!-- template-lint-disable no-triple-curlies  --}}
+            {{{agendaitem.groupName}}}
+            {{!-- template-lint-enable no-triple-curlies  --}}
+          </div>
+        {{/if}}
+        {{#if
+          (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
+        }}
+          <li class="vlc-agenda-detail-sidebar__sub-item">
+            {{agenda/agenda-detail/sidebar-item
+              agendaitem=agendaitem
+              selectAgendaItem=(action "selectAgendaItem")
+            }}
+          </li>
+        {{/if}}
+      {{/each}}
+    </ul>
+  {{/if}}
+</div>
+
+{{#if (not selectedAgendaItem)}}
+  <div class="vlc-agenda-detail-sidebar-section-header">
+    <h3 class="vl-title--h3 vlc-agenda-detail-sidebar-section-header__title">
+      {{t "announcements-subtitle"}}
+    </h3>
+  </div>
+{{else}}
+  <div class="vlc-agenda-detail-sidebar-section-header vlc-agenda-detail-sidebar-section-header--border-bottom">
+    <h3 class="vl-title--h3 vlc-agenda-detail-sidebar-section-header__title">
+      {{t "announcements-subtitle"}}
+    </h3>
+  </div>
+{{/if}}
+<div class="vl-u-spacer">
+  {{#if (gt (await announcements.length) 0)}}
+    {{#if currentSessionService.isEditor}}
+      {{#sortable-group
+        tagName="ul"
+        onChange=(action "reorderAnnouncements")
+      as |sortableAnnouncements|
+      }}
+        {{#each
+          (await announcements)
+        as |announcement|
+        }}
+          {{#sortable-item
+            tagName="li"
+            class="vlc-agenda-detail-sidebar__sub-item"
+            model=announcement
+            group=sortableAnnouncements
+            distance=30
+            handle=dragHandleClass
+          }}
+            {{agenda/agenda-detail/sidebar-item
+              agendaitem=announcement
+              selectAgendaItem=(action "selectAgendaItem")
+            }}
+          {{/sortable-item}}
+        {{/each}}
+      {{/sortable-group}}
+    {{else}}
+      {{#each
+        (await announcements)
+      as |announcement|
+      }}
+        <div class="vlc-agenda-detail-sidebar__sub-item">
+          {{agenda/agenda-detail/sidebar-item
+            agendaitem=announcement
+            selectAgendaItem=(action "selectAgendaItem")
+          }}
+        </div>
+      {{/each}}
+    {{/if}}
+  {{else}}
+    <div class="vlc-agenda-detail-sidebar__no-items-message">
+      <span class="vlc-agenda-detail-sidebar__info-bubble"><i class="ki-info-circle" /></span>
+      <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-announcements-yet"}}</p>
+    </div>
+  {{/if}}
+</div>
+
+{{#if (await isReAssigningPriorities)}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @showCloseButton={{false}}
+    @title={{t "reassign-agendaitem-priorities-title"}}
+  >
+    <WebComponents::VlLoader
+      @text={{concat
+        (t "reassign-agendaitem-priorities-message")
+        " "
+        (t "please-be-patient")
+      }}
+    />
+  </WebComponents::VlModal>
+{{/if}}

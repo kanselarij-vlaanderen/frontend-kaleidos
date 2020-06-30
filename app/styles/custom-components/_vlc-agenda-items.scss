@@ -5,24 +5,9 @@
 /* Modifiers on main object
    ========================================================================== */
 
-.vlc-agenda-items--bordered {
-  .vlc-agenda-items__sub-item {
-    border-bottom: 1px solid $ghost;
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-}
-
 .vlc-agenda-items--spaced {
   .vlc-agenda-items__sub-item {
-    margin-bottom: 0.4rem;
-  }
-  .vlc-agenda-items__main-item {
-    margin-top: 2.4rem;
-    &:first-child {
-      margin: 0;
-    }
+    margin-bottom: 0.2rem;
   }
 }
 
@@ -33,11 +18,9 @@
 .vlc-agenda-items__sub-item > span { // a
   display: block;
   position: relative;
-  padding: 2rem 1.5rem;
   font-size: 1.3rem;
   text-decoration: none;
   color: $black;
-  background: #FFF;
 }
 
 .vlc-agenda-items__sub-item a {
@@ -65,14 +48,17 @@ a.vlc-agenda-items__sub-item--active:hover,
 a.vlc-agenda-items__sub-item--active:active {
   background: $science-blue;
   color: #fff;
+
   span {
     color: #fff;
   }
+
   .vlc-agenda-items__status--positive {
     color: #fff;
   }
-  .ember-power-select-selected-item{
-    color:#000;
+
+  .ember-power-select-selected-item {
+    color: #000;
   }
 }
 
@@ -97,7 +83,6 @@ a.vlc-agenda-items__sub-item--active:focus {
   margin: 0 0 1rem;
   font-weight: 500;
 }
-
 
 
 // Content: the longer description
@@ -131,19 +116,12 @@ a.vlc-agenda-items__sub-item--active:focus {
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: minmax(10px, auto);
   grid-column-gap: 4.8rem;
-  grid-template-areas:
-  "agenda-1 agenda-2"
-  "speaker-1 speaker-2"
-  "agenda-1-item-1 agenda-2-item-1"
-  "agenda-1-item-2 agenda-2-item-2"
-  "agenda-1-item-3 agenda-2-item-3"
-  "agenda-1-item-4 agenda-2-item-4"
-  "empty agenda-2-item-5"
-  "agenda-1-item-5 agenda-2-item-6";
+  grid-template-areas: "agenda-1 agenda-2" "speaker-1 speaker-2" "agenda-1-item-1 agenda-2-item-1" "agenda-1-item-2 agenda-2-item-2" "agenda-1-item-3 agenda-2-item-3" "agenda-1-item-4 agenda-2-item-4" "empty agenda-2-item-5" "agenda-1-item-5 agenda-2-item-6";
 
-  .vlc-agenda-items-compare__item  {
+  .vlc-agenda-items-compare__item {
     .vlc-agenda-items__sub-item {
-        height: 100%;
+      height: 100%;
+
       .vlc-agenda-items__sub-item-content {
         height: 100%;
         display: flex;
@@ -178,7 +156,7 @@ a.vlc-agenda-items__sub-item--active:focus {
 
 $i: 0;
 
-@while($i < 6) {
+@while ($i < 6) {
   .agenda-1-item-#{$i} {
     grid-area: agenda-1-item-#{$i};
   }
@@ -197,7 +175,7 @@ $i: 0;
 
 $i: 0;
 
-@while($i < 7) {
+@while ($i < 7) {
   .agenda-2-item-#{$i} {
     grid-area: agenda-2-item-#{$i};
   }
@@ -213,4 +191,56 @@ $i: 0;
   font-weight: 500;
   opacity: 1;
   color: $napier-green;
+}
+
+.vlc-agenda-items__body {
+  display: flex;
+  flex-direction: row;
+  padding: 2rem;
+
+  // Override HR spacing
+  .vlc-hr {
+    margin: 1.5rem 0;
+  }
+}
+
+.vlc-agenda-items__body-padding {
+  padding-bottom: 1.5rem;
+}
+
+.vlc-agenda-items__remarks {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.vlc-agenda-items__icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .vl-link__icon {
+    color: $dove-gray;
+    font-size: 1.7rem;
+  }
+
+  .vlc-agenda-item__icons--margin {
+    margin-left: 1rem;
+  }
+}
+
+.vlc-agenda-items__confidentiality-button {
+  margin-left: 1rem;
+  align-items: center;
+  color: white;
+}
+
+.vlc-agenda-items__sub-item a:hover .vlc-agenda-items__confidentiality-button,
+.vlc-agenda-items__sub-item a:hover .vlc-agenda-items__confidentiality-button .vlc-agenda-items__icons {
+  color: white;
+}
+
+.vlc-agenda-items__text {
+  width: 100%;
 }

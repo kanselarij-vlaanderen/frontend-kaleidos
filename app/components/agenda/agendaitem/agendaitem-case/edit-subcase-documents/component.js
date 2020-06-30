@@ -1,8 +1,13 @@
 import Component from '@ember/component';
-import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
+import { inject as service } from '@ember/service';
 
-export default Component.extend(UploadDocumentMixin, {
+export default Component.extend({
   classNames: ['vl-form__group vl-u-bg-porcelain'],
+  fileService: service(),
+
+  async deleteDocument(document) {
+    await this.fileService.deleteDocument(document)
+  },
 
   actions: {
     async saveChanges() {
@@ -33,5 +38,5 @@ export default Component.extend(UploadDocumentMixin, {
       });
       this.cancelForm();
     },
-  }
+  },
 });

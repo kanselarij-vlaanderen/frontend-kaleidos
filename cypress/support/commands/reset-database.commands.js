@@ -12,6 +12,7 @@ Cypress.Commands.add('resetSearch', resetSearch);
  * @function
  */
 function resetCache() {
+  return;
   const kaleidosProject = Cypress.env('KALEIDOS_PROJECT');
   const env = {
     COMPOSE_FILE: kaleidosProject + '/docker-compose.yml:' +

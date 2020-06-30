@@ -1,9 +1,9 @@
 <div class="vl-u-spacer-extended-bottom-s">
-  <div class="vl-u-display-flex vl-u-display-flex-align-center">
+  <div class="vl-u-display-flex vlc-u-display-flex-align-center">
     <h4 class="vl-title vl-title--h4">
       {{t "manage-ministers-title"}}
     </h4>
-    {{#if (and isEditor (not isEditing))}}
+    {{#if (and currentSession.isEditor (not isEditing))}}
       <div class="vl-u-spacer-extended-left-s">
         <a href="" data-test-subcase-mandatees-edit class="vl-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
@@ -43,7 +43,7 @@
         <a
           href=""
           data-test-subcase-mandatees-add-mandatee
-          class="vl-button vl-button--tertiary vl-button--narrow vl-button--icon-before"
+          class="vl-button vl-button--tertiary vl-button--icon-before"
           {{action "addRow"}}
         >
           <i
@@ -58,7 +58,7 @@
           <a
             data-test-subcase-mandatees-edit-cancel
             href=""
-            class="vl-button vl-button--tertiary vl-button--narrow"
+            class="vl-button vl-button--tertiary"
             {{action "cancelEditing"}}
           >
             {{t "cancel"}}

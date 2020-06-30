@@ -2,13 +2,13 @@ import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import { ajax } from 'fe-redpencil/utils/ajax';
 import moment from 'moment';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Service.extend(isAuthenticatedMixin, {
+export default Service.extend({
   store: service(),
   toaster: service(),
   intl: service(),
   formatter: service(),
+  currentSession: service(),
 
   async createCampaign(agenda, meeting) {
     try {
@@ -69,7 +69,7 @@ export default Service.extend(isAuthenticatedMixin, {
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForSubcase(subcase, agendaitem, inNewsletter = false) {
-    if (this.isEditor) {
+    if (this.currentSession.isEditor) {
       const news = this.store.createRecord('newsletter-info', {
         subcase: await subcase,
         title: agendaitem ? await agendaitem.get('shortTitle') : await subcase.get('shortTitle'),
@@ -82,7 +82,7 @@ export default Service.extend(isAuthenticatedMixin, {
   },
 
   async createNewsItemForMeeting(meeting) {
-    if (this.isEditor) {
+    if (this.currentSession.isEditor) {
       const plannedStart = await meeting.get('plannedStart');
       const pubDate = moment(plannedStart).set({ hour: 14, minute: 0 });
       const pubDocDate = moment(plannedStart).weekday(7).set({ hour: 14, minute: 0 });

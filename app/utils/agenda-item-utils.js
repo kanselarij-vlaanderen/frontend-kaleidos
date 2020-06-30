@@ -90,7 +90,9 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
 
   await item.preEditOrSaveCheck();
   if (isAgendaItem) {
-    const isDesignAgenda = await item.get('isDesignAgenda');
+    const agenda = await item.get('agenda');
+    const isDesignAgenda = await agenda.asyncCheckIfDesignAgenda();
+
     const agendaitemSubcase = await item.get('subcase');
     if (isDesignAgenda && agendaitemSubcase) {
       await agendaitemSubcase.preEditOrSaveCheck();
@@ -109,4 +111,11 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
       }));
     }
   }
-};
+}
+
+export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
+  const approvals = await agendaitem.get('approvals');
+  if (approvals) {
+    await Promise.all(approvals.map(approval => approval.destroyRecord()));
+  }
+}

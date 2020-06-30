@@ -188,9 +188,9 @@ export default ModelWithModifier.extend({
     return await this.store.query('agendaitem', {
       filter: {
         subcase: {id: this.get('id')},
-        agenda: {name: 'Ontwerpagenda'}
+        agenda: {status: {id: '2735d084-63d1-499f-86f4-9b69eb33727f'}}
       }
-    })
+    });
   }),
 
   meetings: computed('agendaitems.@each', async function () {
@@ -239,16 +239,6 @@ export default ModelWithModifier.extend({
 
   decidedInfo: computed('phases.@each', function () {
     return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
-  }),
-
-  submitter: computed('case.submitter', function () {
-    return PromiseObject.create({
-      promise: this.get('case').then((caze) => {
-        return caze.get('submitter').then((submitter) => {
-          return submitter;
-        });
-      })
-    });
   }),
 
   approved: computed('decisions', function () {

@@ -1,23 +1,20 @@
 import Component from '@ember/component';
-import UploadDocumentMixin from 'fe-redpencil/mixins/upload-document-mixin';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
-export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
+export default Component.extend({
   intl: service(),
   toaster: service(),
   fileService: service(),
+  currentSession: service(),
 
   async didInsertElement() {
     this._super(...arguments);
-    await this.resetPreferredAccessLevel();
   },
 
   classNames: ['vlc-document-card-item'],
   classNameBindings: ['aboutToDelete'],
   documentVersion: null,
-  isEditingAccessLevel: false,
 
   aboutToDelete: computed('documentVersion.aboutToDelete', function () {
     if (this.documentVersion) {
@@ -27,10 +24,24 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
     }
   }),
 
-  preferredAccessLevel: null,
+  async deleteDocumentVersionWithUndo() {
+    const documentVersionToDelete = this.get('documentVersionToDelete');
 
-  resetPreferredAccessLevel: async function () {
-    this.set('preferredAccessLevel', await this.documentVersion.get('accessLevel'));
+    // TODO somehow this no longer works, document returns null or undefined
+    // const document = await documentVersionToDelete.get('documentContainer');
+    // const documentVersions = await document.get('documents');
+
+    // TODO fix the deletion of document-container when last version is deleted so it doesn't become an orphan
+    // if(documentVersions.length > 1) {
+    await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
+    // }else {
+    //   const documentToDelete = document;
+    //   await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
+    //     if(!this.item.aboutToDelete && documentVersions) {
+    //       this.item.hasMany('documentVersions').reload();
+    //     }
+    //   });
+    // }
   },
 
   actions: {
@@ -60,44 +71,9 @@ export default Component.extend(isAuthenticatedMixin, UploadDocumentMixin, {
       this.set('isVerifyingDelete', true);
     },
 
-    async toggleConfidential(document) {
-      document.toggleProperty('confidential');
-      await document.save();
-    },
-
-    chooseAccessLevel(accessLevel) {
-      this.set('preferredAccessLevel', accessLevel);
-    },
-
-    async saveChanges() {
-      let preferredAccessLevel = this.get('preferredAccessLevel');
-      this.toggleProperty('isEditingAccessLevel');
-      let documentVersion = this.get('documentVersion');
-      if (preferredAccessLevel) {
-        await documentVersion.set('accessLevel', preferredAccessLevel);
-        await documentVersion.save();
-      }
-      this.resetPreferredAccessLevel();
+    async showDocumentVersionViewer(documentVersion) {
+      window.open(`/document/${(await documentVersion).get('id')}`);
     },
   },
 
-  async deleteDocumentVersionWithUndo() {
-    const documentVersionToDelete = this.get('documentVersionToDelete');
-
-    // TODO somehow this no longer works, document returns null or undefined 
-    // const document = await documentVersionToDelete.get('documentContainer');
-    // const documentVersions = await document.get('documents');
-
-    // TODO fix the deletion of document-container when last version is deleted so it doesn't become an orphan
-    // if(documentVersions.length > 1) {
-      await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
-    // }else {
-    //   const documentToDelete = document;
-    //   await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
-    //     if(!this.item.aboutToDelete && documentVersions) {
-    //       this.item.hasMany('documentVersions').reload();
-    //     }
-    //   });
-    // }
-  },
 });

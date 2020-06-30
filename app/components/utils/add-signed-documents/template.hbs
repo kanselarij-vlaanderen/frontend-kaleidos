@@ -4,8 +4,8 @@
     item=(await item.signedDocument)
   }}
 {{else if (await item)}}
-  {{#if isEditor}}
-    <button type="button" class="vl-button vl-button--tertiary vl-button--narrow"
+  {{#if currentSession.isEditor}}
+    <button type="button" class="vl-button vl-button--tertiary"
       data-test-upload-decision-file
       {{action "toggleIsAddingNewDocument"}}
     >

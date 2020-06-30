@@ -9,6 +9,7 @@
 
 @import '_colors';
 $icon-font-location: '/fonts/';
+@import '_icon-font';
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/core/_setting.scss';
@@ -81,6 +82,9 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/additions/_typography';
 
 // Custom components
+@import 'custom-components/vlc-agenda-detail-sidebar';
+@import 'custom-components/vlc-agenda-detail-sidebar-item';
+@import 'custom-components/vlc-agenda-detail-sidebar-section-header';
 @import 'custom-components/vlc-agenda-items-section-header';
 @import 'custom-components/vlc-agenda-items';
 @import 'custom-components/vlc-agenda-meta';
@@ -97,6 +101,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-dropdown-menu';
 @import 'custom-components/vlc-hr';
 @import 'custom-components/vlc-input-field-block';
+@import 'custom-components/vlc-kitchensink';
 @import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-minister';
 @import 'custom-components/vlc-mock-login';
@@ -158,5 +163,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/editor';
 @import 'custom-application/ember-attacher';
 @import 'custom-application/file-uploader';
+@import 'custom-application/icons-overview';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';

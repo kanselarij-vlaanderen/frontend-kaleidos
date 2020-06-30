@@ -1,11 +1,11 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   routing: inject('-routing'),
   sessionService: inject(),
+  currentSession: inject(),
   tagName: 'ul',
   classNames: ['vlc-toolbar__item'],
 
@@ -15,7 +15,7 @@ export default Component.extend(isAuthenticatedMixin, {
 
   selectedAgendaitemClass: computed('routing.currentRouteName', function () {
     const { routing } = this;
-    if (routing.get('currentRouteName') === 'agenda.agendaitems.agendaitem') {
+    if ( routing.get('currentRouteName').includes('agenda.agendaitems.agendaitem.')) {
       return 'vlc-tabs-reverse__link--active';
     }
   }),

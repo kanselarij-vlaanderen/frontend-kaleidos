@@ -19,7 +19,7 @@
               </div>
               <div class="vlc-toolbar__item">
                 <ul class="vlc-tabs-reverse" role="tablist">
-                  {{#if isEditor}}
+                  {{#if currentSession.isEditor}}
                     <li class="vlc-tabs-reverse__item">
                       {{#link-to
                         routeModelAgendaitems
@@ -64,7 +64,7 @@
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
           {{#if shouldShowPrintButton}}
-            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before vl-button--narrow"
+            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
               {{action "print"}}
             >
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-printer-view"

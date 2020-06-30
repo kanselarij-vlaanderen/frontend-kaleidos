@@ -2,15 +2,6 @@
 {{cases/cases-header isAddingCase=isAddingCase close=(action "close")}}
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
-    {{cases/cases-filter
-      size=size
-      searchText=(readonly searchText)
-      searchInDecisionsOnly=(readonly decisionsOnly)
-      dateFrom=(or deSerializedDateFrom null)
-      dateTo=(or deSerializedDateTo null)
-      ministerName=(readonly mandatees)
-      filter=(action "filterCases")
-    }}
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
@@ -19,16 +10,14 @@
       </div>
 
       <div class="vlc-toolbar__right">
-        {{!-- Filtering on "isArchived" disabled since this param isn't indexed in search yet
-        {{#if isEditor}}
+        {{#if this.currentSession.isEditor}}
           <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
             <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap" for="isArchived">
               {{t "show-archived"}}
             </label>
-            {{web-components/vl-toggle value=isArchived}}
+            {{web-components/vl-toggle value=this.showArchived}}
           </div>
         {{/if}}
-        --}}
         <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
           <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap" for="dossierId">
             {{t "amount-showed"}}
@@ -60,14 +49,11 @@
           <th class="vl-data-table-col-9 vl-data-table__header-title">
             {{t "case-name"}}
           </th>
-          <th class="vl-data-table-col-1 vl-data-table__header-title">
-            {{t "created-on"}}
-          </th>
           {{th-sortable
             class="vl-data-table-col-1 vl-data-table__header-title"
-            currentSorting=sort
-            field="sessionDates"
-            label=(t "on-agenda-of")
+            currentSorting=this.sort
+            field="created"
+            label=(t "created-on")
           }}
           <th class="vl-data-table-col-1"></th>
         {{/c.header}}
@@ -84,11 +70,8 @@
           <td onclick={{action "navigateToCase" row}}>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
-          <td onclick={{action "navigateToCase" row}}>
-            {{moment-format row.sessionDates "DD-MM-YYYY"}}
-          </td>
           <td class="vl-u-align-right">
-            {{#if isEditor}}
+            {{#if currentSession.isEditor}}
               <button type="button"
                       class="vl-button vl-button--link vl-button--icon">
                 <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"
@@ -107,7 +90,7 @@
                         {{action attacher.hide}}
                         {{action "editRow" row}}
                       >
-                        {{editCase}}
+                        {{t "edit-case"}}
                       </button>
                     </li>
                     <li class="vlc-dropdown-menu__item">
@@ -116,14 +99,14 @@
                           {{action attacher.hide}}
                           {{action "requestArchiveCase" row}}
                         >
-                          {{archiveCase}}
+                          {{t "archive-case"}}
                         </a>
                       {{else}}
                         <a href="" class="vl-link vl-link--block"
                           {{action attacher.hide}}
                           {{action "unarchiveCase" row}}
                         >
-                          {{unArchiveCase}}
+                          {{t "unarchive-case"}}
                         </a>
                       {{/if}}
                     </li>

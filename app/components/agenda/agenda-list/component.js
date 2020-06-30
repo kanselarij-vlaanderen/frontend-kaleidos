@@ -1,72 +1,85 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import { computed, action } from '@ember/object';
 import { alias } from '@ember/object/computed';
-import { inject } from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
+import { restartableTask } from 'ember-concurrency-decorators';
 import { isPresent } from '@ember/utils';
 
-export default Component.extend(isAuthenticatedMixin, {
-  sessionService: inject(),
-  agendaService: inject(),
-  classNames: ['vlc-agenda-items'],
-  classNameBindings: ['getClassNames'],
-  selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
-  agendaitems: null,
-  isEditingOverview: null,
-  isShowingChanges: null,
-  overviewEnabled: null,
-  dragHandleClass: '.vlc-agenda-items__sub-item',
-  getClassNames: computed('selectedAgendaItem', function () {
+export default class AgendaList extends Component {
+  @service sessionService;
+  @service agendaService;
+  @service('current-session') currentSessionService;
+
+  classNames = ['vlc-agenda-items'];
+  classNameBindings = ['getClassNames'];
+  selectedAgendaItem = alias('sessionService.selectedAgendaItem');
+  dragHandleClass = '.vlc-agenda-items__sub-item';
+
+  agendaitems = null;
+  isEditingOverview = null;
+  isShowingChanges = null;
+  overviewEnabled = null;
+  isReAssigningPriorities = null;
+
+  @restartableTask
+  reAssignPriorities = function* (agendaitems) {
+    yield agendaitems.map(async (item) => {
+      if (isPresent(item.changedAttributes().priority)) {
+        this.set('isReAssigningPriorities', true);
+        await item.save();
+        if (!this.isDestroyed) {
+          this.set('isReAssigningPriorities', false);
+        }
+      }
+    });
+  }
+
+  @computed('selectedAgendaItem')
+  get getClassNames() {
     if (this.get('selectedAgendaItem')) {
       return 'vlc-agenda-items--small';
     } else {
       return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
     }
-  }),
-
-  reAssignPriorities: task(function* (agendaitems) {
-    yield agendaitems.map((item) => {
-      if (isPresent(item.changedAttributes().priority)) {
-        return item.save();
-      }
-    });
-  }).restartable(),
-
-  actions: {
-    selectAgendaItem(agendaitem) {
-      this.selectAgendaItem(agendaitem);
-    },
-
-    toggleIsEditingOverview() {
-      this.toggleProperty('isEditingOverview');
-    },
-
-    toggleChangesOnly() {
-      this.toggleProperty('isShowingChanges');
-    },
-
-    reorderItems(itemModels) {
-      if (!this.isEditor) {
-        return;
-      }
-      itemModels.map((item, index) => {
-        item.set('priority', index + 1);
-      });
-      this.reAssignPriorities.perform(itemModels);
-      this.agendaService.groupAgendaItemsOnGroupName(itemModels);
-    },
-
-    reorderAnnouncements(itemModels) {
-      if (!this.isEditor) {
-        return;
-      }
-      itemModels.map((item, index) => {
-        item.set('priority', index + 1);
-      });
-      this.reAssignPriorities.perform(itemModels);
-      // this.refresh();
-      this.set('announcements', itemModels);
-    }
   }
-});
+
+  @action
+  selectAgendaItemAction(agendaitem) {
+    this.selectAgendaItem(agendaitem);
+  }
+
+  @action
+  toggleIsEditingOverview() {
+    this.toggleProperty('isEditingOverview');
+  }
+
+  @action
+  toggleChangesOnly() {
+    this.toggleProperty('isShowingChanges');
+  }
+
+  @action
+  reorderItems(itemModels) {
+    if (!this.currentSessionService.isEditor) {
+      return;
+    }
+    itemModels.map((item, index) => {
+      item.set('priority', index + 1);
+    });
+    this.reAssignPriorities.perform(itemModels);
+    this.agendaService.groupAgendaItemsOnGroupName(itemModels);
+  }
+
+  @action
+  reorderAnnouncements(itemModels) {
+    if (!this.currentSessionService.isEditor) {
+      return;
+    }
+    itemModels.map((item, index) => {
+      item.set('priority', index + 1);
+    });
+    this.reAssignPriorities.perform(itemModels);
+    // this.refresh();
+    this.set('announcements', itemModels);
+  }
+}

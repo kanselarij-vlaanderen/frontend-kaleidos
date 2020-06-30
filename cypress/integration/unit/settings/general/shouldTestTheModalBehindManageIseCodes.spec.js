@@ -9,7 +9,6 @@ context('Manage ISE codes tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.route('/')
   });
 
   it('Should open the model behind manage ISE codes', () => {

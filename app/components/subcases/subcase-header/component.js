@@ -3,12 +3,12 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 import moment from 'moment';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   store: inject(),
   agendaService: inject(),
   router: inject(),
+  currentSession: inject(),
   classNames: ['vlc-page-header'],
   isAssigningToOtherAgenda: false,
   isAssigningToOtherCase: false,
@@ -45,12 +45,12 @@ export default Component.extend(isAuthenticatedMixin, {
 
   meetings: computed('store', function () {
     const dateOfToday = moment().utc().subtract(1, 'weeks').format();
-    const dateInTwoWeeks = moment().utc().add(6, 'weeks').format();
+    const futureDate = moment().utc().add(6, 'weeks').format();
 
     return this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
-        ':lte:planned-start': dateInTwoWeeks,
+        ':lte:planned-start': futureDate,
         'is-final': false
       },
       sort: 'planned-start'
@@ -113,8 +113,11 @@ export default Component.extend(isAuthenticatedMixin, {
       this.set('isLoading', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
-      await designAgenda.reload(); //ensures latest state is pulled
-      if (designAgenda.get('name') === 'Ontwerpagenda') {
+      //ensures latest state is pulled
+      await designAgenda.reload();
+      await designAgenda.belongsTo('status').reload();
+      const isDesignAgenda = designAgenda.get('isDesignAgenda');
+      if (isDesignAgenda) {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
       await subcase.hasMany('agendaitems').reload();

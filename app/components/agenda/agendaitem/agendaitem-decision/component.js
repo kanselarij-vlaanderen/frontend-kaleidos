@@ -1,71 +1,42 @@
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { computed } from '@ember/object';
-import moment from 'moment';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend(isAuthenticatedMixin, {
-  classNames: ['vl-u-spacer'],
-  store: inject(),
-  isEditing: false,
-  agendaitem: null,
-  subcase: null,
-  isVerifyingDelete: null,
-  decisionToDelete: null,
+export default class AgendaItemDecisionComponent extends Component {
+  @service currentSession;
 
-  item: computed('subcase.decision', function () {
-    return this.get('subcase.decision');
-  }),
+  @tracked isEditing = false;
+  @tracked isVerifyingDelete = null;
+  @tracked decisionToDelete = null;
 
-  signedDocument: computed('decision.signedDocument', async function () {
-    return await this.get('decision.signedDocument');
-  }),
-
-  async addDecision(subcase) {
-    let decision = this.store.createRecord('decision', {
-      subcase: await subcase,
-      title: await subcase.get('title'),
-      shortTitle: await subcase.get('shortTitle'),
-      approved: false
-    });
-    subcase.set('decision', decision);
-  },
-
-  actions: {
-    async toggleIsEditing() {
-      const { subcase } = this;
-      const decision = await subcase.get('decision');
-      if (!decision) {
-        await this.addDecision(subcase);
-      } else if (decision.get('title') === '') {
-        decision.set('title', subcase.get('title'));
-      }
-      this.toggleProperty('isEditing');
-    },
-
-    async deleteDecision(decision) {
-      this.set('decisionToDelete', await decision);
-      this.set('isVerifyingDelete', true);
-    },
-
-    async verify() {
-      await this.decisionToDelete.destroyRecord();
-      let agendaitemToUpdate;
-
-      if (this.isTableRow) {
-        const subcase = await this.agendaitem.get('subcase');
-        (await subcase.get('decisions')).reload();
-        agendaitemToUpdate = await this.agendaitem.content;
-      } else {
-        agendaitemToUpdate = await this.get('agendaitem');
-      }
-      agendaitemToUpdate.set('modified', moment().utc().toDate());
-      await agendaitemToUpdate.save();
-    },
-
-    cancel() {
-      this.set('decisionToDelete', null);
-      this.set('isVerifyingDelete', false);
-    }
+  get decision() {
+    return this.args.decision;
   }
-});
+
+  @action
+  toggleIsEditing() {
+    this.isEditing = !this.isEditing;
+  }
+
+  @action
+  promptDeleteDecision(decision) {
+    this.decisionToDelete = decision;
+    this.isVerifyingDelete = true;
+  }
+
+  @action
+  async deleteDecision() {
+    await this.decisionToDelete.destroyRecord();
+    if (this.args.onDeleteDecision) {
+      await this.args.onDeleteDecision(this.decisionToDelete);
+    }
+    this.isVerifyingDelete = false;
+  }
+
+  @action
+  cancel() {
+    this.decisionToDelete = null;
+    this.isVerifyingDelete = false;
+  }
+}

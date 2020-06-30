@@ -10,10 +10,10 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          {{#if isEditor}}
+          {{#if currentSession.isEditor}}
             <button type="button"
                     data-test-cases-header-add-case
-                    class="vl-button vl-button--narrow vl-button--icon-before"
+                    class="vl-button vl-button--icon-before"
               {{action "toggleAddingCase"}}
             >
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
@@ -27,11 +27,10 @@
     </div>
   </div>
 {{else}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    closeModal=(action "toggleAddingCase")
-    title=(t "new-case")
-  }}
-    {{cases/new-case close=(action "close")}}
-  {{/web-components/vl-modal}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @closeModal={{action "toggleAddingCase"}}
+    @title={{t "new-case"}} >
+    <Cases::NewCase @close={{action "closeAction"}} />
+  </WebComponents::VlModal>
 {{/if}}

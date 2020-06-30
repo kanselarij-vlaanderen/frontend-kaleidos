@@ -1,16 +1,22 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { computed } from '@ember/object';
+
 import moment from 'moment';
 
-export default Component.extend(isAuthenticatedMixin, {
+export default Component.extend({
   store: inject(),
   sessionService: inject(),
+  currentSessionService: inject('current-session'),
   classNames: ['vlc-padding-bottom--large'],
   isEditing: false,
 
   currentSession: alias('sessionService.currentSession'),
+
+  signedDocument: computed('agendaitem.meetingRecord.signedDocument', async function () {
+    return await this.get('agendaitem.meetingRecord.signedDocument');
+  }),
 
   actions: {
     async toggleIsEditing() {

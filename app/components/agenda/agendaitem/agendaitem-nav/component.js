@@ -1,94 +1,33 @@
-import Component from '@ember/component';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
-import { computed } from '@ember/object';
-import { hash } from 'rsvp';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 
-export default Component.extend(isAuthenticatedMixin, {
-  classNames: ['vl-tabs', 'vl-u-reset-margin'],
-  tagName: 'ul',
-  activeAgendaItemSection: null,
-  currentAgenda: null,
+export default class AgendaItemNav extends Component {
+  @service currentSession;
 
-  // This computed property is only for role-based views.
-  // Should show the template the user is an editor or if the meeting is final.
-  shouldShowFinishedDetails: computed('isEditor', 'currentAgenda.createdFor', async function () {
-    const { isEditor, currentAgenda } = this;
-    if (isEditor) {
-      return true;
-    }
-    const meeting = await currentAgenda.get('createdFor');
-    return meeting.isFinal;
-  }),
+  @tracked subcaseExists = false;
+  @tracked decisionsExist = false;
+  @tracked meetingMinutesExist = false;
+  @tracked newsItemExists = false;
+  @tracked pressAgendaItemExists = false;
 
-  defaultTabs: Object.freeze([
-    {
-      name: 'details',
-      label: 'agendaitem-case'
-    },
-    {
-      name: 'documents',
-      label: 'documents'
-    }
-  ]),
+  get agendaItem() {
+    return this.args.agendaItem;
+  }
 
-  activeTabs: computed('isEditor', 'agendaitem.{subcase,remarks.length}', 'shouldShowFinishedDetails', async function () {
-    const activeTabs = [];
-    activeTabs.push(...this.defaultTabs);
+  constructor() {
+    super(...arguments);
+    this.checkExistance();
+  }
 
-    let promises = await hash({
-      commentCount: this.get('agendaitem.remarks.length'),
-      shouldShowFinishedDetails: this.get('shouldShowFinishedDetails'),
-      subcase: this.get('agendaitem.subcase'),
-      decisions: this.get('agendaitem.subcase.decisions'),
-      minutes: this.get('agendaitem.meetingRecord'),
-      newsItems: this.get('agendaitem.subcase.newsletterInfo'),
-    });
-
-    const isEditor = this.isEditor;
-
-    if (isEditor) {
-      activeTabs.push({
-        name: 'comments',
-        label: 'agendaitem-comment',
-        pillText: promises.commentCount
-      });
-    }
-    if (!promises.shouldShowFinishedDetails || !promises.subcase) {
-      return activeTabs;
-    }
-
-    if (isEditor || promises.decisions) {
-      activeTabs.push({
-        name: 'decision',
-        label: 'agendaitem-decision'
-      })
-    }
-    if (isEditor || promises.minutes) {
-      activeTabs.push({
-        name: 'minutes',
-        label: 'agendaitem-notes'
-      })
-    }
-    if (isEditor || promises.newsItems) {
-      activeTabs.push({
-        name: 'news-item',
-        label: 'agendaitem-bestek'
-      });
-    }
-
-    if (isEditor || this.get('agendaitem.titlePress') && this.get('agendaitem.textPress')) {
-      activeTabs.push({
-        name: 'press-agenda',
-        label: 'agendaitem-press-agenda'
-      });
-    }
-
-    return activeTabs;
-  }),
-
-  actions: {
-    setAgendaItemSection(value) {
-      this.setAgendaItemSection(value);
-    },
-  },
-});
+  @action
+  async checkExistance() {
+    this.subcaseExists = isPresent(await this.agendaItem.get('subcase'));
+    this.decisionsExist = isPresent(await this.agendaItem.get('subcase.decisions'));
+    this.meetingMinutesExist = isPresent(await this.agendaItem.get('meetingRecord'));
+    this.newsItemExists = isPresent((await this.agendaItem.get('subcase.newsletterInfo')));
+    this.pressAgendaItemExists = isPresent((this.agendaItem.titlePress && this.agendaItem.textPress));
+  }
+}

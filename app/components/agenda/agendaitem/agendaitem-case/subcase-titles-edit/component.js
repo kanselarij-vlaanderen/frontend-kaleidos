@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { computed, action, get, set } from '@ember/object';
 import { saveChanges as saveSubcaseTitles, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
+import { trimText } from '../../../../../utils/trim-util';
 
 export default class SubcaseTitlesEdit extends Component {
   @service store;
@@ -11,7 +12,7 @@ export default class SubcaseTitlesEdit extends Component {
 
   @computed('item.modelName')
   get isAgendaItem() {
-    return 'agendaitem' == this.get('item.modelName');
+    return 'agendaitem' == get(this, 'item.modelName');
   }
 
   @alias('item.showAsRemark') isRemark;
@@ -22,53 +23,54 @@ export default class SubcaseTitlesEdit extends Component {
 
   @action
   async cancelEditing() {
-    const item = await this.get('item');
+    const item = await get(this, 'item');
     cancelEdit(item, get(this, 'propertiesToSet'));
     this.toggleProperty('isEditing');
   }
 
   @action
   setAccessLevel(accessLevel) {
-    this.set('accessLevel', accessLevel);
+    set(this, 'accessLevel', accessLevel);
   }
-
-  trimText = (text) => {
-    return text.trim();
-  };
 
   @action
   async saveChanges() {
     set(this, 'isLoading', true);
-    
+
     const propertiesToSetOnAgendaitem = {
-      'title': this.trimText(this.get('title')),
-      'shortTitle': this.trimText(this.get('shortTitle')),
+      'title': trimText(get(this, 'title')),
+      'shortTitle': trimText(get(this, 'shortTitle')),
     };
     const propertiesToSetOnSubcase = {
-      'title': this.trimText(this.get('title')),
-      'shortTitle': this.trimText(this.get('shortTitle')),
+      'title': trimText(get(this, 'title')),
+      'shortTitle': trimText(get(this, 'shortTitle')),
     };
 
-    if (await this.get('showInNewsletter') != null || await this.get('showInNewsletter') != undefined) {
+    if (await get(this, 'showInNewsletter') != null || await get(this, 'showInNewsletter') != undefined) {
       //This means the value has changed, get the local one
-      propertiesToSetOnAgendaitem['showInNewsletter'] = await this.get('showInNewsletter');
+      propertiesToSetOnAgendaitem['showInNewsletter'] = await get(this, 'showInNewsletter');
     }
 
     // TODO These await ARE necessary, Ember doesn't think so
     if (!this.isAgendaItem) {
-      propertiesToSetOnSubcase['accessLevel'] = await this.get('accessLevel');
-      propertiesToSetOnSubcase['confidential'] = await this.get('confidential');
+      propertiesToSetOnSubcase['accessLevel'] = await get(this, 'accessLevel');
+      propertiesToSetOnSubcase['confidential'] = await get(this, 'confidential');
     }
 
-    await saveSubcaseTitles(get(this, 'item'), propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
-    set(this, 'isLoading', false);
-    this.toggleProperty('isEditing');
+    try {
+      await saveSubcaseTitles(get(this, 'item'), propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+      set(this, 'isLoading', false);
+      this.toggleProperty('isEditing');
+    } catch (e) {
+      set(this, 'isLoading', false);
+      throw (e);
+    }
   }
 
   @action
   async toggleShowInNewsletter(item) {
-    const value = await item.get('showInNewsletter');
-    this.set('showInNewsletter', !value);
+    const value = await get(item, 'showInNewsletter');
+    set(this, 'showInNewsletter', !value);
   }
 }
 

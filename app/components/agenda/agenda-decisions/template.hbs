@@ -11,7 +11,7 @@
     {{#each (await agendaitemGroups) as |group|}}
       {{#each group.groups as |agendaitemGroup|}}
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-          <div class="vl-u-display-flex vl-u-flex-justify-center">
+          <div class="vl-u-display-flex vlc-u-flex-justify-center">
             <div class="print-only vl-u-spacer-extended-top-l">
               <img style="margin:-75px 0px -50px 0px; width:200px"
                    src="/assets/logo_vlaamse_regering.svg"
@@ -32,7 +32,7 @@
                   .
                   {{agendaitem.shortTitle}}
                 </h3>
-                <pre class="vl-u-flex-inline-flex vlc-u-pre-line-wrap">
+                <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
                   {{agendaitem.title}}
                 </pre>
               </div>
@@ -41,14 +41,13 @@
                   {{#if (gt agendaitem.decisions.length 0)}}
                     {{#each (await agendaitem.decisions) as |decision|}}
                       {{#if decision.isEditing}}
-                        {{agenda/agendaitem/agendaitem-decision-edit
-                          isEditing=decision.isEditing
-                          item=decision
-                          subcase=(await agendaitem.subcase)
-                          isTableRow=isTableRow
-                          agendaitem=agendaitem
-                        }}
-                      {{else if isEditor}}
+                        <Agenda::Agendaitem::AgendaitemDecisionEdit
+                          @isEditing={{decision.isEditing}}
+                          @item={{decision}}
+                          @subcase={{await agendaitem.subcase}}
+                          @isTableRow={{isTableRow}}
+                          @agendaitem={{agendaitem}} />
+                      {{else if session.isEditor}}
                         <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                           {{#if allowEditing}}
                             <a href="" class="vl-link"
@@ -77,7 +76,7 @@
               </div>
             </div>
             {{#if (not allowEditing)}}
-              {{web-components/vl-signature signature=meeting.defaultSignature}}
+              <WebComponents::VlSignature @signature={{meeting.defaultSignature}} />
             {{/if}}
           </div>
         {{/each}}

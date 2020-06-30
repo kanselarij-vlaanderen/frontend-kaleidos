@@ -3,25 +3,26 @@
     {{title}}
   </label>
   <div class="vlc-radio-inline">
-    {{#each model as |item index|}}
+    {{#each optionList as |item index|}}
       <label class="vl-radio">
-        {{#if (is-equal index 0)}}
-          <input class="vl-radio__toggle"
-                 value={{item.id}}
-                 type="radio"
-                 name={{title}}
-                 checked=""
-                 onchange={{action "modelChanged"}}
+        {{#if selectedModel}}
+          <input
+            class="vl-radio__toggle"
+            value={{item.id}}
+            type="radio"
+            name={{title}}
+            checked={{eq item.id selectedModel.id}}
+            onchange={{action "modelChanged"}}
           />
-
         {{else}}
-          <input class="vl-radio__toggle"
-                 value={{item.id}}
-                 type="radio"
-                 name={{title}}
-                 onchange={{action "modelChanged"}}
+          <input
+            class="vl-radio__toggle"
+            value={{item.id}}
+            type="radio"
+            name={{title}}
+            checked={{eq index 0}}
+            onchange={{action "modelChanged"}}
           />
-
         {{/if}}
         <div class="vl-radio__label">
           {{item.label}}

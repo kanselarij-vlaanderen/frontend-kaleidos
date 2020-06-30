@@ -16,8 +16,10 @@ Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
  * @param selector: selector that needs to be used.
  */
 function openSettingsModal(selector) {
+  cy.log('openSettingsModal');
   cy.get(selector).click();
   cy.get(modal.baseModal.dialogWindow).should('be.visible');
+  cy.log('/openSettingsModal');
 }
 
 /**
@@ -27,8 +29,10 @@ function openSettingsModal(selector) {
  * @function
  */
 function closeSettingsModal() {
+  cy.log('closeSettingsModal');
   cy.get(modal.baseModal.close).click();
   cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
+  cy.log('/closeSettingsModal');
 }
 
 /**
@@ -38,12 +42,11 @@ function closeSettingsModal() {
  * @function
  */
 function openActionModal() {
-
+  cy.log('openActionModal');
   const BE_VISIBLE = 'be.visible';
 
   cy.get(actionModal.showActionOptions).should('be.visible').click();
   cy.get(actionModal.navigatetosubcases).should(BE_VISIBLE);
-  cy.get(actionModal.announcement).should(BE_VISIBLE);
   cy.get(actionModal.navigatetodecisions).should(BE_VISIBLE);
   cy.get(actionModal.navigatetonewsletter).should(BE_VISIBLE);
   cy.get(actionModal.navigatetonotes).should(BE_VISIBLE);
@@ -52,4 +55,5 @@ function openActionModal() {
   cy.get(actionModal.selectsignature).should(BE_VISIBLE);
   // cy.get(downloadddocuments).should(BE_VISIBLE); // TODO reenable when feature is fixed
   cy.get(actionModal.agendaHeaderDeleteAgenda).should(BE_VISIBLE);
+  cy.log('/openActionModal');
 }

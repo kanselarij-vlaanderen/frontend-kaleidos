@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+/*global context, before, it, cy, Cypress*/
 /// <reference types="Cypress" />
 
 context('Full test', () => {
@@ -8,7 +9,7 @@ context('Full test', () => {
 
   before(() => {
     cy.server();
-    cy.resetCache();
+    // cy.resetCache();
     cy.login('Admin');
   });
 
@@ -28,15 +29,13 @@ context('Full test', () => {
 
     //#endregion
 
-    const plusMonths = 1;
-    const agendaDate = Cypress.moment().add('month', plusMonths).set('date', 1).set('hour', 15).set('minute', 15);
+    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
 
     //#region create the meeting/agenda
     const location = testId + 'Zaal cypress in de wetstraat';
 
-    cy.createAgenda('Ministerraad', plusMonths, agendaDate, location).then((meetingId) => {
-      // cy.openAgendaForDate(agendaDate, meetingId);
-    });
+    cy.createAgenda('Ministerraad', agendaDate, location);
+    // cy.openAgendaForDate(agendaDate);
 
     //#endregion
 
@@ -106,19 +105,18 @@ context('Full test', () => {
     //#region check and approve the agenda > A
     cy.openAgendaForDate(agendaDate);
 
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.setFormalOkOnItemWithIndex(2);
+    cy.setFormalOkOnItemWithIndex(3);
 
     // cy.approveCoAgendaitem(case_2_TitleShort); // TODO approvals have low prior and need a refactor
 
     cy.addDocuments([{folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'}]);
     cy.addNewDocumentVersionToMeeting('test pdf', {folder: 'files', fileName: 'test', fileExtension: 'pdf'});
 
-
-    cy.addRemarkToAgenda('Titel mededeling',
-      'mededeling omschrijving',
-      [{folder: 'files', fileName: 'test', fileExtension: 'pdf'}, {folder: 'files', fileName: 'test', fileExtension: 'txt'}]);
     cy.addAgendaitemToAgenda();
-    cy.setFormalOkOnAllItems();
+    cy.setFormalOkOnItemWithIndex(3); //new agendaitem
     cy.approveDesignAgenda();
     //#endregion
 

@@ -1,9 +1,11 @@
 import Controller from '@ember/controller';
-import isAuthenticatedMixin from 'fe-redpencil/mixins/is-authenticated-mixin';
+import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
 
-export default Controller.extend(isAuthenticatedMixin, {
+export default Controller.extend({
+  currentSession: service(),
+
   isEditingMandatee: false,
   isAddingMandatee: false,
   isResigningMandatee: false,
@@ -17,7 +19,7 @@ export default Controller.extend(isAuthenticatedMixin, {
 
   actions: {
     async reorderItems(model, reOrderedModel) {
-      if (this.isEditor) {
+      if (this.currentSession.isEditor) {
         const firstPrio = 1;
         for (let i = 0; i < reOrderedModel.get('length'); i++) {
           const reOrderedMandatee = reOrderedModel.objectAt(i);
@@ -53,7 +55,5 @@ export default Controller.extend(isAuthenticatedMixin, {
     mandateesUpdated() {
       this.send('refreshRoute');
     }
-
-
   }
 });

@@ -30,8 +30,6 @@ export default EmberObject.create({
     'Z',
   ],
   //TODO translate
-  resultSubcaseName: '1ste principiële goedkeuring',
-  principalApprovalId: '7b90b3a6-2787-4b41-8a1d-886fc5abbb33',
   onAgendaCodeId: '3e6dba4f-5c3c-439a-993e-92348ec73642',
   decidedCodeId: '4ea2c010-06c0-4594-966b-2cb9ed1e07b7',
   postponedCodeId: 'F8AB7F8C-2928-4CED-812F-80EF560F6E31',
@@ -48,23 +46,26 @@ export default EmberObject.create({
       label: 'Formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
-      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive',
+      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive vl-u-display-flex',
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
+      iconClassNames: 'vl-vi vl-vi-check-thin formally-ok-icon'
     },
     {
       label: 'Formeel niet OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
-      classNames: 'vlc-agenda-items__status vl-u-text--error',
+      classNames: 'vlc-agenda-items__status vl-u-text--error vlc-u-font-weight-500 vl-u-display-flex',
       pillClassNames: 'vlc-pill vlc-pill--error',
+      iconClassNames: 'vl-vi vl-vi-cross formally-ok-icon'
     },
     {
       label: 'Nog niet formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
-      classNames: 'vlc-agenda-items__status',
+      classNames: 'vlc-agenda-items__status vlc-u-font-weight-500  vl-u-display-flex',
       pillClassNames: 'vlc-pill',
+      iconClassNames: 'vl-vi vl-vi-question-mark formally-ok-icon',
     },
   ],
   defaultKindUri:

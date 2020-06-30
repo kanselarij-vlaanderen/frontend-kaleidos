@@ -1,0 +1,47 @@
+{{! template-lint-disable no-bare-strings }}
+
+<h1 class="vlc-kitchensink__header">Panels</h1>
+  <Panel>
+    <div class="vlc-kitchensink__sample">
+      <Panel::PanelHeader>
+        <div>
+          <p class="vl-u-flex-v-center vlc-u-font-weight-bold">Dit is de header</p>
+        </div>
+        <div class="vl-u-display-flex vl-u-flex-align-center">
+          <button type="button"
+                  class="vl-button vl-button--tertiary vl-button--icon-before">
+            <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"
+            ></i>
+            Bewerken
+          </button>
+          <button type="button"
+                  class="vl-button vl-button--tertiary vlc-panel-layout-button-seperator">
+           ...
+          </button>
+        </div>
+      </Panel::PanelHeader>
+      <Panel::PanelBody>
+        <div>
+          <div class="vlc-panel-layout-padding">
+            <p>Dit is een lang stukje tekst</p>
+          </div>
+        </div>
+
+      </Panel::PanelBody>
+      <Panel::PanelFooter>
+        <button type="button" data-test-vl-modal-footer-cancel
+                class="vl-button vl-button--link">
+          Cancel
+        </button>
+        {{web-components/vl-save-button
+          text="Save"
+          loadingText=(t "please-be-patient")
+          isLoading=isLoading
+          data-test-vl-save=true
+          disabled=disableSave
+        }}
+      </Panel::PanelFooter>
+    </div>
+  </Panel>
+
+

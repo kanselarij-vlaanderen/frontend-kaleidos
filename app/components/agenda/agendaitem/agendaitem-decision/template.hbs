@@ -1,95 +1,96 @@
-{{#if (not (is-pending (await item)))}}
-  {{#if (not isEditing)}}
-    <div class="vl-u-spacer vl-typography">
-      <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
-        {{#if isEditor}}
-          <a href="" class="vl-link" {{action "toggleIsEditing"}}>
-            {{t "edit"}}
-          </a>
-          <button type="button" class="vl-button vl-button--link vl-button--icon">
-            <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
-            {{#attach-popover
-              class="ember-attacher-popper"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom"
-            as |attacher|
-            }}
-              <ul class="vlc-dropdown-menu">
-                <li class="vlc-dropdown-menu__item">
-                  <button type="button" class="vl-link vl-u-text--error"
-                    {{action attacher.hide}}
-                    {{action "deleteDecision" decision}}
-                  >
-                    {{t "delete-decision"}}
-                  </button>
-                </li>
-              </ul>
-            {{/attach-popover}}
-          </button>
-        {{/if}}
-      </div>
-      <p>
-        {{sanitize-html raw=true value=(await decision.richtext)}}
-      </p>
-      <hr/>
+{{#if (not this.isEditing)}}
+  <div data-test-decision-container class="vl-u-spacer vl-typography">
+    <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
+      {{#if this.currentSession.isEditor}}
+        <a
+          href="javascript://"
+          class="vl-link"
+          {{on "click" this.toggleIsEditing}}
+        >
+          {{t "edit"}}
+        </a>
+        <button type="button" class="vl-button vl-button--link vl-button--icon">
+          <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
+          <AttachPopover
+            @class="ember-attacher-popper"
+            @hideOn="clickout click"
+            @showOn="click"
+            @animation="shift"
+            @placement="bottom"
+          as |attacher|>
+            <ul class="vlc-dropdown-menu">
+              <li class="vlc-dropdown-menu__item">
+                <button
+                  data-test-delete-decision
+                  type="button"
+                  class="vl-link vl-u-text--error"
+                  {{on "click" attacher.hide}}
+                  {{on "click" (fn this.promptDeleteDecision decision)}}
+                >
+                  {{t "delete-decision"}}
+                </button>
+              </li>
+            </ul>
+          </AttachPopover>
+        </button>
+      {{/if}}
+    </div>
+    <p>
+      {{sanitize-html raw=true value=(await decision.richtext)}}
+    </p>
+    <hr/>
+    <div class="vl-u-spacer-extended-top-s">
+      {{#if this.decision.approved}}
+        <div class="vlc-pill vlc-pill--success">
+          {{t "decided"}}
+        </div>
+      {{else}}
+        <div class="vlc-pill vlc-pill--warning">
+          {{t "not-decided"}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  {{#if this.decision.documentVersions.length}}
+    <div class="vl-u-spacer">
+      <h4 class="vl-title vl-title--h6">
+        {{t "documents-attached-to"}}
+      </h4>
       <div class="vl-u-spacer-extended-top-s">
-        {{#if (await decision.approved)}}
-          <div class="vlc-pill vlc-pill--success">
-            {{t "decided"}}
-          </div>
-        {{else}}
-          <div class="vlc-pill vlc-pill--warning">
-            {{t "not-decided"}}
-          </div>
-        {{/if}}
+        <Utils::DocumentsListForItem
+          @item={{this.decision}}
+          @agendaitem={{@subcase}}
+          @isClickable={{true}}
+        />
       </div>
     </div>
-    {{#if (gt (await decision.documentVersions.length) 0)}}
-      <div class="vl-u-spacer">
-        <h4 class="vl-title vl-title--h6">
-          {{t "documents-attached-to"}}
-        </h4>
-        <div class="vl-u-spacer-extended-top-s">
-          {{utils/documents-list-for-item
-            item=decision
-            agendaitem=subcase
-            isClickable=true
-          }}
-        </div>
-      </div>
-    {{/if}}
-    {{#if (is-pending decision.signedDocument)}}
-      {{web-components/vl-loader text=(t "decision-document-loading-text")}}
-    {{else if (not (await signedDocument))}}
-      {{utils/add-signed-documents
-        item=decision
-        defaultType=defaultType
-        modelToAddDocumentVersionTo="signedDecision"
-        title=(t "signed-decision-add")
-      }}
-    {{else}}
-      {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-        document=(await decision.signedDocument)
-        item=(await decision.signedDocument)
-      }}
-    {{/if}}
-  {{else}}
-    {{agenda/agendaitem/agendaitem-decision-edit
-      isEditing=isEditing
-      item=decision
-      isTableRow=isTableRow
-      subcase=subcase
-      agendaitem=agendaitem
-    }}
   {{/if}}
+  {{#if this.decision.signedDocument}}
+    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
+      @document={{await this.decision.signedDocument}}
+      @item={{await this.decision.signedDocument}}
+    />
+  {{else}}
+    <Utils::AddSignedDocuments
+      @item={{this.decision}}
+      @defaultType={{this.defaultType}}
+      @modelToAddDocumentVersionTo="signedDecision"
+      @title={{t "signed-decision-add"}}
+    />
+  {{/if}}
+{{else}}
+  <Agenda::Agendaitem::AgendaitemDecisionEdit
+    @isEditing={{this.isEditing}}
+    @item={{this.decision}}
+    @subcase={{@subcase}}
+    @agendaitem={{@agendaItem}}
+  />
 {{/if}}
-{{#if isVerifyingDelete}}
-  {{web-components/vl-modal-verify
-    title=(t "delete-decision")
-    message=(t "delete-decision-message")
-    cancel=(action "cancel")
-    verify=(action "verify")
-  }}
+{{#if this.isVerifyingDelete}}
+  <WebComponents::VlModalVerify
+    @title={{t "delete-decision"}}
+    @message={{t "delete-decision-message"}}
+    @cancel={{this.cancel}}
+    @verify={{this.deleteDecision}}
+  />
 {{/if}}

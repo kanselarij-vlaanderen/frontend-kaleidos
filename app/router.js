@@ -10,16 +10,21 @@ Router.map(function () {
   this.route('agendas', { path: '/' }, function () {
     this.route('overview', { path: '/overzicht' });
   });
-  this.route('agenda', { path: '/agenda/:id' }, function() {
+  this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id' }, function() {
     this.route('print', { path: '/afdrukken' });
     this.route('agendaitems', { path: '/agendapunten' }, function() {
-      this.route('agendaitem', { path: '/:agendaitem_id' });
+      this.route('agendaitem', { path: '/:agendaitem_id' }, function() {
+        this.route('index', { path: '/' });
+        this.route('documents', { path: '/documenten' });
+        this.route('comments', { path: '/opmerkingen' });
+        this.route('decisions', { path: '/beslissingen' });
+        this.route('minutes', { path: '/notulen' });
+        this.route('news-item', { path: '/kort-bestek' });
+        this.route('press-agenda', { path: '/persagenda' });
+      });
     });
     this.route('compare', { path: '/vergelijken' });
     this.route('documents', { path: '/documenten' });
-  });
-  this.route('agendaitems', { path: '/agendaitems' }, function () {
-
   });
   this.route('cases', { path: '/dossiers' }, function () {
     this.route('case', { path: ':id' }, function () {
@@ -35,7 +40,7 @@ Router.map(function () {
     this.route('overview', { path: '' });
   });
   this.route('settings', { path: '/instellingen' }, function () {
-    this.route('ministers', { path: '/ministers' });
+    this.route('ministers');
     this.route('overview', { path: '/overzicht' });
     this.route('users', { path:"/gebruikers"}, function() {
       this.route('user', { path: "/:id"});
@@ -81,6 +86,22 @@ Router.map(function () {
   this.route('not-supported');
   this.route('help');
   this.route('manual', { path: '/handleiding' });
+
+  this.route('styleguide', function() {
+    this.route('alerts');
+    this.route('buttons');
+    this.route('documents');
+    this.route('icons');
+    this.route('inputs');
+    this.route('panels');
+    this.route('pills');
+    this.route('typography');
+  });
+
+  this.route('search', { path: '/zoeken' }, function() {
+    this.route('cases', { path: '/dossiers' });
+    this.route('agenda-items', { path: '/agendapunten' });
+  });
 });
 
 export default Router;
