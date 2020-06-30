@@ -140,6 +140,7 @@ export default Service.extend({
       mandatees: mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
+      showInNewsletter: true
     });
     await agendaitem.save();
 
