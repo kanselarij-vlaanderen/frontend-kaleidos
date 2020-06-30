@@ -83,8 +83,8 @@ context('Settings overview page tests', () => {
     cy.get(settings.settingsUserTable).contains('Wendy').parents('tr').within(() => {
       cy.get(settings.deleteUser).should('exist').should('be.visible').click();
     });
-    cy.get(modal.verify.save).should('exist').should('be.visible').click();
     cy.route('GET','/users/*').as('getUsers');
+    cy.get(modal.verify.save).should('exist').should('be.visible').click();
     cy.wait('@getUsers').then(() => {
       cy.get(settings.settingsUserTable).should('not.have.value','Wendy');
     });
