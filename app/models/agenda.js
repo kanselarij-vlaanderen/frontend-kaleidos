@@ -30,11 +30,14 @@ export default Model.extend(LoadableModel, {
 
   agendaName: computed('serialnumber', 'status', function () {
     const isDesignAgenda = this.get('status.isDesignAgenda');
-    let prefix = 'Agenda ';
+    const agendaName = this.serialnumber || '';
+    let prefix;
     if (isDesignAgenda) {
-      prefix = 'Ontwerpagenda ';
+      prefix = 'Ontwerpagenda';
+    } else {
+      prefix = 'Agenda';
     }
-    return `${prefix} ${this.serialnumber}`;
+    return `${prefix} ${agendaName}`;
   }),
 
   isFinal: computed.alias('status.isFinal'),

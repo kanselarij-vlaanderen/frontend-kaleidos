@@ -22,6 +22,12 @@ export default Component.extend({
       this.set('environmentName', 'TEST');
       this.set('environmentClass', 'vlc-environment-pill--test');
     }
+
+    if (window.location.href.indexOf('https://kaleidos.vlaanderen.be') == 0
+      && this.currentSession.checkIsDeveloper()) {
+      this.set('environmentName', 'PROD');
+      this.set('environmentClass', 'vlc-environment-pill--prod');
+    }
   },
 
   showEnvironmentName: computed('environmentName', function () {

@@ -6,5 +6,8 @@ const selectors = {
   editSubcaseMandatees: '[data-test-subcase-mandatees-edit]',
   addMandateeToSubcaseMandatees: '[data-test-subcase-mandatees-add-mandatee]',
   cancelEditSubcaseMandatees: '[data-test-subcase-mandatees-edit-cancel]',
+  createSubcaseButton: '[data-test-case-create-subcase-button]',
+  clonePreviousSubcaseButton: '[data-test-clone-previous-subcase]',
+  subcaseType: '[data-test-subcase-type]',
 };
 export default selectors;

@@ -13,6 +13,7 @@ export default Component.extend({
   subcase: null,
   isRemark: alias('item.showAsRemark'),
   isEditing: false,
+  isSubcaseView: false,
 
   isAgendaItem: computed('item.contructor', function () {
     const { item } = this;

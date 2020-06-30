@@ -81,18 +81,11 @@ export default Model.extend({
 
   latestAgendaName: computed('latestAgenda.status', 'agendas', 'intl', async function () {
     const agenda = await this.get('latestAgenda');
-    if (!agenda) return this.intl.t('no-agenda');
-
-    const status = await agenda.get('status');
-
-    const agendaName = agenda.serialnumber || '';
-    let prefix;
-    if (status.isDesignAgenda) {
-      prefix = 'Ontwerpagenda';
+    if (!agenda) {
+      return this.intl.t('no-agenda');
     } else {
-      prefix = 'Agenda';
+      return agenda.get('agendaName');
     }
-    return `${prefix} ${agendaName}`;
   }),
 
   defaultSignature: computed('signature', async function () {

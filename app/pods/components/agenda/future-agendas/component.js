@@ -16,6 +16,14 @@ export default Component.extend({
     return this.meetings;
   }),
 
+  hasActiveAgendas: computed('meetings', async function () {
+    const meetings = await this.get('meetings');
+    if (meetings && meetings.length > 0) {
+      return true;
+    }
+    return false;
+  }),
+
   actions: {
     selectAgenda(meeting) {
       this.selectAgenda(meeting);

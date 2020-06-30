@@ -9,18 +9,23 @@ export default class DocumentListForItem extends Component {
 
   @tracked item = this.args.item;
 
-  @tracked moreThan20 = null
+  @tracked moreThan20 = null;
 
   get documents() {
-    if (this.item.documents.length > 20) {
-      this.moreThan20 = true;
+    if (this.item.documents) {
+      if (this.item.documents.length > 20) {
+        this.moreThan20 = true;
+      } else {
+        this.moreThan20 = false;
+      }
+      if (this.isShowingAll) {
+        return this.item.documents;
+      } else {
+        return this.item.documents.slice(0, 20);
+      }
     } else {
-      this.moreThan20 = false;
+      return null;
     }
-    if (this.isShowingAll) {
-      return this.item.documents;
-    }
-    return this.item.documents.slice(0, 20);
   }
 
   @action
