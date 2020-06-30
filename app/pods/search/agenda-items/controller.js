@@ -24,6 +24,7 @@ export default class AgendaItemsSearchController extends Controller {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
+    this.sort = "-session-dates";
     this.decisionsOnly = false;
     this.types = A(['nota', 'mededeling']);
   }
