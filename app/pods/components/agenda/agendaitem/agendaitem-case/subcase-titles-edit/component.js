@@ -21,10 +21,6 @@ export default class SubcaseTitlesEdit extends Component {
 
   @alias('item.showAsRemark') isRemark;
 
-  @alias('item.title') title;
-
-  @alias('item.shortTitle') shortTitle;
-
   @alias('item.accessLevel') accessLevel;
 
   @alias('item.confidential') confidential;
@@ -44,14 +40,18 @@ export default class SubcaseTitlesEdit extends Component {
   @action
   async saveChanges() {
     set(this, 'isLoading', true);
+    let shouldResetFormallyOk = true;
+    if (!this.item.get('hasDirtyAttributes')) {
+      shouldResetFormallyOk = false;
+    }
 
     const propertiesToSetOnAgendaitem = {
-      title: trimText(get(this, 'title')),
-      shortTitle: trimText(get(this, 'shortTitle')),
+      'title': trimText(this.item.title),
+      'shortTitle': trimText(this.item.shortTitle),
     };
     const propertiesToSetOnSubcase = {
-      title: trimText(get(this, 'title')),
-      shortTitle: trimText(get(this, 'shortTitle')),
+      'title': trimText(this.item.title),
+      'shortTitle': trimText(this.item.shortTitle),
     };
 
     if (await get(this, 'showInNewsletter') != null || await get(this, 'showInNewsletter') != undefined) {
@@ -66,7 +66,7 @@ export default class SubcaseTitlesEdit extends Component {
     }
 
     try {
-      await saveSubcaseTitles(get(this, 'item'), propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+      await saveSubcaseTitles(get(this, 'item'), propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
     } catch (e) {
