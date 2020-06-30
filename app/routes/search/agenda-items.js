@@ -4,7 +4,7 @@ import moment from 'moment';
 import search from '../../utils/mu-search';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
-export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) {
+export default class AgendaitemSearchRoute extends Route.extend(DataTableRouteMixin) {
   queryParams = {
     types: {
       refreshModel: true,
