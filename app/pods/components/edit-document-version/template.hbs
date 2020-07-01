@@ -34,8 +34,7 @@
 </td>
 <td>
   {{web-components/vl-toggle
-    value=(mut document.confidential)
-    valueChanged=(action "toggleConfidential" document)
+    value=(mut document.lastDocumentVersion.confidential)
   }}
 </td>
 <td class="vl-u-align-right">

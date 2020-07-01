@@ -54,10 +54,5 @@ export default Component.extend({
       let documentVersion = await document.get('lastDocumentVersion');
       documentVersion.set('accessLevel', accessLevel);
     },
-
-    async toggleConfidential(document) {
-      const value = document.get('lastDocumentVersion.confidential');
-      document.set('lastDocumentVersion.confidential', !value);
-    }
   }
 });
