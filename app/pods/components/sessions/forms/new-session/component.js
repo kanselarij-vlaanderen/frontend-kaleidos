@@ -16,6 +16,7 @@ export default Component.extend({
   init() {
     this._super(...arguments);
     const currentYear = moment().year();
+    // TODO: Improve samen met Michael of Sven
     this.store.query('meeting',
       {
         sort: '-planned-start'
