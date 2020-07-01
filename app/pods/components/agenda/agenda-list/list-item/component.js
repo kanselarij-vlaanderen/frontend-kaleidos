@@ -34,7 +34,7 @@ export default class ListItem extends Component {
   @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
   @tracked formallyOk = this.args.agendaitem.formallyOk || null;
 
-  get classNameBinding() {
+  get classNameBindings() {
     return `
     ${this.isActive ? 'vlc-agenda-items__sub-item--active' : ''}
     ${this.isClickable ? '' : 'not-clickable'}
