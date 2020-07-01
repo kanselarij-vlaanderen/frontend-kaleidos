@@ -15,7 +15,6 @@ context('Agenda tests', () => {
   const subcaseTitle1 = caseTitle + ' test stap 1';
   const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
 
-  
   it('Propagate decisions and documents to overheid graph by releasing them', () => {
     cy.login('Admin');
     const files = [
