@@ -33,11 +33,11 @@ export default class SubcaseTitlesEdit extends Component {
       'shortTitle': trimText(this.subcase.shortTitle),
     };
 
-    propertiesToSetOnSubcase['accessLevel'] = await subcase.get('accessLevel');
-    propertiesToSetOnSubcase['confidential'] = await subcase.get('confidential');
+    propertiesToSetOnSubcase['accessLevel'] = await this.subcase.get('accessLevel');
+    propertiesToSetOnSubcase['confidential'] = await this.subcase.get('confidential');
 
     try {
-      await saveSubcaseTitles(get(this, 'item'), propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+      await saveSubcaseTitles(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
     } catch (e) {
