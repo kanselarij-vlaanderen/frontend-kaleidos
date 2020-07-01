@@ -33,7 +33,10 @@
   }}
 </td>
 <td>
-  {{web-components/vl-toggle value=(mut document.confidential)}}
+  {{web-components/vl-toggle
+    value=(mut document.confidential)
+    valueChanged=(action "toggleConfidential" document)
+  }}
 </td>
 <td class="vl-u-align-right">
   <button type="button" class="vl-button vl-button--link"
