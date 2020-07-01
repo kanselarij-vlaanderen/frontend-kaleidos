@@ -4,6 +4,7 @@ import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { restartableTask } from 'ember-concurrency-decorators';
 import { isPresent } from '@ember/utils';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default class AgendaList extends Component {
   @service sessionService;
@@ -32,7 +33,7 @@ export default class AgendaList extends Component {
         }
       }
     });
-  }
+  };
 
   @computed('selectedAgendaItem')
   get getClassNames() {
@@ -60,26 +61,33 @@ export default class AgendaList extends Component {
 
   @action
   reorderItems(itemModels) {
-    if (!this.currentSessionService.isEditor) {
-      return;
-    }
-    itemModels.map((item, index) => {
-      item.set('priority', index + 1);
+    this.currentAgenda.get('status').then((res) => {
+      const isAgendaClosed = (res.uri === CONFIG.agendaClosedStatus);
+
+      if (!this.currentSessionService.isEditor || isAgendaClosed) {
+        return;
+      }
+      itemModels.map((item, index) => {
+        item.set('priority', index + 1);
+      });
+      this.reAssignPriorities.perform(itemModels);
+      this.agendaService.groupAgendaItemsOnGroupName(itemModels);
     });
-    this.reAssignPriorities.perform(itemModels);
-    this.agendaService.groupAgendaItemsOnGroupName(itemModels);
   }
 
   @action
   reorderAnnouncements(itemModels) {
-    if (!this.currentSessionService.isEditor) {
-      return;
-    }
-    itemModels.map((item, index) => {
-      item.set('priority', index + 1);
-    });
-    this.reAssignPriorities.perform(itemModels);
-    // this.refresh();
-    this.set('announcements', itemModels);
+    this.currentAgenda.get('status').then((res) => {
+      const isAgendaClosed = (res.uri === CONFIG.agendaClosedStatus);
+      if (!this.currentSessionService.isEditor || isAgendaClosed) {
+        return;
+      }
+      itemModels.map((item, index) => {
+        item.set('priority', index + 1);
+      });
+      this.reAssignPriorities.perform(itemModels);
+      // this.refresh();
+      this.set('announcements', itemModels);
+    })
   }
 }
