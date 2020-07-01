@@ -92,15 +92,15 @@ context('Agenda tests', () => {
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
     cy.contains("dit is de korte titel").click();
-    cy.get(agenda.subcaseTitlesEdit).should('exist').should('be.visible').click();
-    cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).clear();
-    cy.get(agenda.subcaseTitlesEditShorttitleOfSubcase).type("dit is de korte titel\n\n");
+    cy.get(agenda.agendaitemTitlesEdit).should('exist').should('be.visible').click();
+    cy.get(agenda.agendaitemTitlesEditShorttitle).clear();
+    cy.get(agenda.agendaitemTitlesEditShorttitle).type("dit is de korte titel\n\n");
 
-    cy.get(agenda.subcaseTitlesEditTitleOfSubcase).clear();
-    cy.get(agenda.subcaseTitlesEditTitleOfSubcase).type("dit is de lange titel\n\n");
+    cy.get(agenda.agendaitemTitlesEditTitle).clear();
+    cy.get(agenda.agendaitemTitlesEditTitle).type("dit is de lange titel\n\n");
 
-    cy.get(agenda.subcaseTitlesEditSave).should('exist').should('be.visible').click();
-    cy.get(agenda.subcaseTitlesEdit).scrollIntoView();
+    cy.get(agenda.agendaitemTitlesEditSave).should('exist').should('be.visible').click();
+    cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
   })

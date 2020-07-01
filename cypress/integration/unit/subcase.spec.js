@@ -164,7 +164,7 @@ context('Subcase tests', () => {
     cy.get(agenda.item.editLink).click();
 
     // Check the checkbox (toggle this invisible motafoka).
-    cy.get(agenda.item.showInNewsLetter)
+    cy.get(agenda.agendaitemTitlesEditShowInNewsletter)
       .find(agenda.item.checkBoxLabel) // Because who uses checkboxes anyway?
       .click();
 
