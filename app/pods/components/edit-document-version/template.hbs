@@ -5,7 +5,7 @@
     ></i>
   </div>
   <p>
-    {{await lastDocumentVersionName}}
+    {{await myLastDocumentName}}
   </p>
 </td>
 <td>
@@ -15,8 +15,8 @@
     searchField="label"
     propertyToShow="label"
     sortField="priority"
-    selectedItems=document.type
-    selectModel=(action "chooseDocumentType" document)
+    selectedItems=documentContainer.type
+    selectModel=(action "chooseDocumentType" documentContainer)
   }}
 </td>
 <td>
@@ -26,20 +26,20 @@
     searchField="label"
     allowClear=true
     propertyToShow="label"
-    readOnly=document.confidential
+    readOnly=myLastDocument.confidential
     sortField="label"
-    selectedItems=document.lastDocumentVersion.accessLevel
-    selectModel=(action "chooseAccessLevel" document)
+    selectedItems=myLastDocument.accessLevel
+    selectModel=(action "chooseAccessLevel" myLastDocument)
   }}
 </td>
 <td>
   {{web-components/vl-toggle
-    value=(mut document.lastDocumentVersion.confidential)
+    value=(mut myLastDocument.confidential)
   }}
 </td>
 <td class="vl-u-align-right">
   <button type="button" class="vl-button vl-button--link"
-    {{action "deleteRow" document}}
+    {{action "deleteRow" documentContainer}}
   >
     <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
     <span class="vl-u-visually-hidden">
