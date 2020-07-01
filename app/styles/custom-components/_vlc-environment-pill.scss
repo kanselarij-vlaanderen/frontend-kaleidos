@@ -26,3 +26,17 @@
   border-color: darken($environment-test-color, 30%);
   color: black;
 }
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.vlc-environment-pill--prod {
+  background-color: $environment-prod-color;
+  border-color: darken($environment-prod-color, 7%);
+  color: white;
+
+  animation: blink 1s cubic-bezier(1,-0.09, 0, 0.99) infinite;
+}

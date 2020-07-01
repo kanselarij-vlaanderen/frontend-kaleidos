@@ -1,8 +1,10 @@
 
 /*global cy, Cypress*/
 /// <reference types="Cypress" />
+import utils from '../../selectors/utils.selectors';
 
 Cypress.Commands.add('clickReverseTab', clickReverseTab);
+Cypress.Commands.add('navigateBack', navigateBack);
 
 /**
  * @description Clicks on the specified reverse tab for navigating
@@ -20,3 +22,17 @@ function clickReverseTab(tabName){
   });
   cy.log('/clickReverseTab');
 }
+
+/**
+ * @description Navigate one path up
+ * @name navigateBack
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function navigateBack(){
+  cy.log('navigateBack');
+  cy.get(utils.navigationWalkUp).click();
+  cy.log('/navigateBack');
+}
+
+

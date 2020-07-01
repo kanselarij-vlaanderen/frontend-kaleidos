@@ -584,5 +584,6 @@
   "reassign-agendaitem-priorities-message": "Uw aanpassing wordt opgeslagen.",
   "show-more": "Toon meer",
   "show-less": "Toon minder",
-  "meeting-number": "Nummer van de vergadering"
+  "meeting-number": "Nummer van de vergadering",
+  "loading-active-agendas": "De actieve agendas worden geladen."
 }
