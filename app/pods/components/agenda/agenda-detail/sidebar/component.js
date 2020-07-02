@@ -12,18 +12,11 @@ export default class AgendaSidebar extends Component {
   @service agendaService;
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
 
-  @tracked isShowingChanges = null;
-  @tracked isReAssigningPriorities = null;
   @tracked announcements = this.args.announcements;
 
   classNames = ['vlc-agenda-items'];
   overviewEnabled = null;
   dragHandleClass = '.vlc-agenda-detail-sidebar__sub-item';
-
-  get currentAnnouncements(){
-    debugger
-    return this.args.announcements
-  }
 
   @restartableTask
   reAssignPriorities = function* (agendaitems) {
@@ -41,7 +34,7 @@ export default class AgendaSidebar extends Component {
 
   @action
   toggleChangesOnly() {
-    this.isShowingChanges = !this.isShowingChanges;
+    this.isShowingChanges = !this.state.isShowingChanges;
   }
 
   @action
@@ -69,6 +62,6 @@ export default class AgendaSidebar extends Component {
     });
     this.reAssignPriorities.perform(itemModels);
     this.announcements = itemModels;
-    this.isReAssigningPriorities = false ;
+    this.isReAssigningPriorities = false;
   }
 }
