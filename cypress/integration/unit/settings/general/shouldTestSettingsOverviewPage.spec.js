@@ -76,24 +76,24 @@ context('Settings overview page tests', () => {
     cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
     cy.url().should('include', 'instellingen/gebruikers');
     cy.contains('Gebruikers importeren').click();
-    cy.uploadUsersFile('files','importUsers', 'csv');
-    cy.get(settings.userSearchInput).type("Wendy");
+    cy.uploadUsersFile('files', 'importUsers', 'csv');
+    cy.get(settings.userSearchInput).type('Wendy');
     cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.userSearchButton).click().wait('@filterUsers');
     cy.get(settings.settingsUserTable).contains('Wendy').parents('tr').within(() => {
       cy.get(settings.deleteUser).should('exist').should('be.visible').click();
     });
-    cy.route('GET','/users/*').as('getUsers');
+    cy.route('GET', '/users/*').as('getUsers');
     cy.get(modal.verify.save).should('exist').should('be.visible').click();
     cy.wait('@getUsers').then(() => {
-      cy.get(settings.settingsUserTable).should('not.have.value','Wendy');
+      cy.get(settings.settingsUserTable).should('not.have.value', 'Wendy');
     });
     cy.get(settings.userSearchInput).clear();
     cy.get(settings.settingsUserTable).contains('Greta').parents('tr').within(() => {
       cy.contains('overheid');
     });
-    cy.uploadUsersFile('files','updateUserGroup', 'csv');
-    cy.get(settings.userSearchInput).type("Greta");
+    cy.uploadUsersFile('files', 'updateUserGroup', 'csv');
+    cy.get(settings.userSearchInput).type('Greta');
     cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.userSearchButton).click().wait('@filterUsers');
     cy.get('tbody > tr').should('have.length', '1');
@@ -104,30 +104,30 @@ context('Settings overview page tests', () => {
 
   it('Should test the search of a user', () => {
     cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
-    cy.url().should('include','instellingen/gebruikers');
-    cy.get(settings.userSearchInput).should('exist').should('be.visible').type("Minister");
-      cy.get(settings.settingsUserTable).should('contain','Minister');
+    cy.url().should('include', 'instellingen/gebruikers');
+    cy.get(settings.userSearchInput).should('exist').should('be.visible').type('Minister');
+    cy.get(settings.settingsUserTable).should('contain', 'Minister');
   });
 
   it('Should trigger search when clicking on search icon', () => {
     cy.route('GET', '/users?filter=**').as('filterUsers');
 
     cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
-    cy.url().should('include','instellingen/gebruikers');
-    cy.get(settings.userSearchInput).should('exist').should('be.visible').type("Minister");
+    cy.url().should('include', 'instellingen/gebruikers');
+    cy.get(settings.userSearchInput).should('exist').should('be.visible').type('Minister');
 
-    cy.get(settings.settingsUserTable).should('contain','Minister');
+    cy.get(settings.settingsUserTable).should('contain', 'Minister');
     cy.get(settings.userSearchButton).click().then(() => {
       cy.wait('@filterUsers');
-      cy.get(settings.settingsUserTable).should('contain','Minister');
-    })
+      cy.get(settings.settingsUserTable).should('contain', 'Minister');
+    });
   });
 
   it('Should navigate to detailview from user', () => {
     cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
-    cy.url().should('include','instellingen/gebruikers');
-    cy.get(settings.userSearchInput).should('exist').should('be.visible').type("Minister");
-    cy.get(settings.settingsUserTable).should('contain','Minister');
+    cy.url().should('include', 'instellingen/gebruikers');
+    cy.get(settings.userSearchInput).should('exist').should('be.visible').type('Minister');
+    cy.get(settings.settingsUserTable).should('contain', 'Minister');
     cy.get(settings.goToUserDetail).should('exist').should('be.visible').click();
     cy.contains('Gebruiker: Minister Test');
     cy.contains('Algemene informatie');
@@ -140,8 +140,8 @@ context('Settings overview page tests', () => {
     cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
     cy.url().should('include', 'instellingen/gebruikers');
     cy.wait('@getUsers').then(() => {
-      cy.get(settings.userSearchInput).should('exist').should('be.visible').type("Minister");
-      cy.get(settings.settingsUserTable).should('contain','Minister');
+      cy.get(settings.userSearchInput).should('exist').should('be.visible').type('Minister');
+      cy.get(settings.settingsUserTable).should('contain', 'Minister');
       cy.wait(3000);
       cy.get(settings.goToUserDetail).click();
       cy.contains('Gebruiker: Minister Test');

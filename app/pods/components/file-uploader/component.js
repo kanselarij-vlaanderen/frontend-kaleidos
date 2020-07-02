@@ -7,27 +7,33 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { alias } from '@ember/object/computed';
 
-export default class FileUploader extends Component{
+export default class FileUploader extends Component {
   @service store;
+
   @service fileQueue;
+
   tagName = 'span';
+
   @tracked uploadedFileLength = null;
+
   multipleFiles = true;
+
   @tracked isLoading = null;
+
   @tracked filesInQueue = alias('fileQueue.files');
+
   uploadedFileAction = this.args.uploadedFileAction;
 
   @action
   insertElementInDom() {
-    this.isLoading =  false;
+    this.isLoading = false;
     this.uploadedFileLength = 0;
     this.filesInQueue = A([]);
   }
 
   @enqueueTask({
     maxConcurrency: 3,
-  })
-  *uploadFileTask(file) {
+  })* uploadFileTask(file) {
     try {
       this.isLoading = true;
       file.readAsDataURL().then(() => {

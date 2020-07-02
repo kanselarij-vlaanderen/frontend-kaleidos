@@ -241,7 +241,6 @@ context('Subcase tests', () => {
     cy.route('GET', '/subcases/*/phases').as('getSubcasePhases');
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
     cy.wait('@getSubcasePhases');
-    
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
   });

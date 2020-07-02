@@ -36,27 +36,6 @@ export default class AgendaitemTable extends Component {
 
   previousFilter = null;
 
-  @computed('model.[]')
-  get table() {
-    const table = Table.create({
-      columns: this.columns,
-      rows: [],
-      enableSync: this.enableSync,
-    });
-
-    table.addRows(this.model.filter((item) => !item.isApproval));
-    const sortColumn = table
-      .get('allColumns')
-      .findBy('valuePath', this.get('sort'));
-
-    if (sortColumn) {
-      sortColumn.set('sorted', true);
-    }
-
-    this.setRowsPostponed(table.rows, this.model);
-    return table;
-  }
-
   @computed('dir', 'sort')
   get sortBy() {
     const { dir } = this;
@@ -89,6 +68,27 @@ export default class AgendaitemTable extends Component {
       this.get('table').setRowsSynced([]);
       this.get('fetchRecords').perform();
     }
+  }
+
+  @computed('model.[]')
+  get table() {
+    const table = Table.create({
+      columns: this.columns,
+      rows: [],
+      enableSync: this.enableSync,
+    });
+
+    table.addRows(this.model.filter((item) => !item.isApproval));
+    const sortColumn = table
+      .get('allColumns')
+      .findBy('valuePath', this.get('sort'));
+
+    if (sortColumn) {
+      sortColumn.set('sorted', true);
+    }
+
+    this.setRowsPostponed(table.rows, this.model);
+    return table;
   }
 
   /**

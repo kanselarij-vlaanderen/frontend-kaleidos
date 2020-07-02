@@ -14,27 +14,27 @@ export default class SubcaseTitlesEdit extends Component {
 
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'accessLevel', 'confidential', 'showInNewsletter']);
 
-  @computed('item.modelName')
-  get isAgendaItem() {
-    return get(this, 'item.modelName') === 'agendaitem';
-  }
-
   @alias('item.showAsRemark') isRemark;
 
   @alias('item.accessLevel') accessLevel;
 
   @alias('item.confidential') confidential;
 
-  @action
-  async cancelEditing() {
-    const item = await get(this, 'item');
-    cancelEdit(item, get(this, 'propertiesToSet'));
-    this.toggleProperty('isEditing');
+  @computed('item.modelName')
+  get isAgendaItem() {
+    return get(this, 'item.modelName') === 'agendaitem';
   }
 
   @action
   setAccessLevel(accessLevel) {
     set(this, 'accessLevel', accessLevel);
+  }
+
+  @action
+  async cancelEditing() {
+    const item = await get(this, 'item');
+    cancelEdit(item, get(this, 'propertiesToSet'));
+    this.toggleProperty('isEditing');
   }
 
   @action
@@ -46,15 +46,15 @@ export default class SubcaseTitlesEdit extends Component {
     }
 
     const propertiesToSetOnAgendaitem = {
-      'title': trimText(this.item.title),
-      'shortTitle': trimText(this.item.shortTitle),
+      title: trimText(this.item.title),
+      shortTitle: trimText(this.item.shortTitle),
     };
     const propertiesToSetOnSubcase = {
-      'title': trimText(this.item.title),
-      'shortTitle': trimText(this.item.shortTitle),
+      title: trimText(this.item.title),
+      shortTitle: trimText(this.item.shortTitle),
     };
 
-    if (await get(this, 'showInNewsletter') != null || await get(this, 'showInNewsletter') != undefined) {
+    if (await get(this, 'showInNewsletter') != null || await get(this, 'showInNewsletter') !== undefined) {
       // This means the value has changed, get the local one
       propertiesToSetOnAgendaitem.showInNewsletter = await get(this, 'showInNewsletter');
     }

@@ -24,9 +24,10 @@ export default class ListItem extends Component {
   @service toaster;
 
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
-  @alias('sessionService.currentAgenda') currentAgenda;
-  @alias('args.agendaitem.checkAdded') isNew;
 
+  @alias('sessionService.currentAgenda') currentAgenda;
+
+  @alias('args.agendaitem.checkAdded') isNew;
 
   isClickable = true;
 
@@ -35,18 +36,25 @@ export default class ListItem extends Component {
   isShowingChanges = null;
 
   @tracked renderDetails = null;
+
   @tracked retracted = this.args.agendaitem.get('retracted');
+
   @tracked isPostponed = this.args.agendaitem.postponedTo.get('postponed');
+
   @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
+
   @tracked formallyOk = this.args.agendaitem.formallyOk || null;
 
-  get classNameBindings() {
-    return `
-    ${this.isActive ? 'vlc-agenda-items__sub-item--active' : ''}
-    ${this.isClickable ? '' : 'not-clickable'}
-    ${this.retracted || this.isPostponed ? 'vlc-u-opacity-lighter' : ''}
-    ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
-    `
+  @action
+  onEnter() {
+    setTimeout(() => {
+      this.renderDetails = true;
+    }, 500);
+  }
+
+  @action
+  onExit() {
+    this.renderDetails = false;
   }
 
   get isActive() {
@@ -56,16 +64,13 @@ export default class ListItem extends Component {
     return null;
   }
 
-  @action
-  onEnter() {
-    setTimeout(() => {
-      this.renderDetails = true;
-    }, 500)
-  }
-
-  @action
-  onExit() {
-    this.renderDetails = false;
+  get classNameBindings() {
+    return `
+    ${this.isActive ? 'vlc-agenda-items__sub-item--active' : ''}
+    ${this.isClickable ? '' : 'not-clickable'}
+    ${this.retracted || this.isPostponed ? 'vlc-u-opacity-lighter' : ''}
+    ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
+    `;
   }
 
   @action

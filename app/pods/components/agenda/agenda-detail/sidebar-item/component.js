@@ -46,7 +46,7 @@ export default Component.extend({
 
   documents: computed('agendaitem.documentVersions.@each', function () {
     if (this.get('selectedAgendaItem')) {
-      return;
+      return null;
     }
     return this.get('agendaitem.documents');
   }),
@@ -129,10 +129,10 @@ export default Component.extend({
         });
     },
 
-    conditionallyScrollIntoView () {
+    conditionallyScrollIntoView() {
       if (this.isActive) {
         this.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-    }
+    },
   },
 });

@@ -10,7 +10,6 @@ context('Create case as Admin user', () => {
     cy.login('Admin');
   });
 
-
   it('Create a case with confidentiality and short title', () => {
     cy.visit('/dossiers');
     cy.get(cases.casesHeaderAddCase).click();
@@ -40,7 +39,7 @@ context('Create case as Admin user', () => {
     cy.get(cases.casesHeaderAddCase).click();
     cy.get('button').contains('Dossier aanmaken').click();
 
-    cy.addSubcase("Mededeling","","", null, null);
+    cy.addSubcase('Mededeling', '', '', null, null);
     cy.openSubcase(0);
     cy.get(cases.subcaseType).contains('Mededeling');
     cy.navigateBack();
@@ -50,5 +49,5 @@ context('Create case as Admin user', () => {
     cy.wait('@addSubcase-createNewsletter');
     cy.openSubcase(0);
     cy.get(cases.subcaseType).contains('Mededeling');
-  })
+  });
 });

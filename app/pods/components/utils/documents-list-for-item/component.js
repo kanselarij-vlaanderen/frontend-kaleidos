@@ -12,7 +12,7 @@ export default class DocumentListForItem extends Component {
   @tracked moreThan20 = null;
 
   get documents() {
-    if(!this.item) {
+    if (!this.item) {
       return null;
     }
     if (this.item.documents) {
@@ -23,12 +23,10 @@ export default class DocumentListForItem extends Component {
       }
       if (this.isShowingAll) {
         return this.item.documents;
-      } else {
-        return this.item.documents.slice(0, 20);
       }
-    } else {
-      return null;
+      return this.item.documents.slice(0, 20);
     }
+    return null;
   }
 
   @action

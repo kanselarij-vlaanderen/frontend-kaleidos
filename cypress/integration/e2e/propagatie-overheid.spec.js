@@ -1,4 +1,4 @@
-/* global context, before, xit, cy, Cypress */
+/* global context, before, it, cy, Cypress */
 /// <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -14,9 +14,9 @@ context('Agenda tests', () => {
     cy.server();
   });
   const agendaDate = Cypress.moment().add(1, 'weeks').day(6); // Next friday
-  const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-  const subcaseTitle1 = caseTitle + ' test stap 1';
-  const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
+  const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
+  const subcaseTitle1 = `${caseTitle} test stap 1`;
+  const file = { folder: 'files', fileName: 'test', fileExtension: 'pdf' };
 
   it('Propagate decisions and documents to overheid graph by releasing them', () => {
     cy.login('Admin');

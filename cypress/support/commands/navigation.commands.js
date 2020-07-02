@@ -25,7 +25,7 @@ function clickReverseTab(tabName) {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function navigateBack(){
+function navigateBack() {
   cy.log('navigateBack');
   cy.get(utils.navigationWalkUp).click();
   cy.log('/navigateBack');
