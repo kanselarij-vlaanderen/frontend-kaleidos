@@ -71,17 +71,19 @@ export default Component.extend({
     return await newsletterInfoToCreate.save();
   },
 
-  async copyDecisions(subcase, decisions) {
+  async copyTreatments(subcase, treatments) {
     return Promise.all(
-      decisions.map(decision => {
-        const newDecision = this.store.createRecord('decision', {
-          title: decision.get('title'),
-          shortTitle: decision.get('shortTitle'),
-          approved: false,
-          description: decision.get('description'),
+      treatments.map(treatment => {
+        const newTreatment = this.store.createRecord('agenda-item-treatment', {
+          // TODO check met @michael
+          // title: treatment.get('title'),
+          // shortTitle: treatment.get('shortTitle'),
+          //approved: false,
+          decisionResultCode: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
+          // description: treatment.get('description'),
           subcase
         });
-        return newDecision.save();
+        return newTreatment.save();
       })
     );
   },
@@ -112,7 +114,7 @@ export default Component.extend({
 
     if (latestSubcase) {
       subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
-      await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
+      await this.copyTreatments(subcase, await latestSubcase.get('treatments'));
       const newsletterInfo = await latestSubcase.get('newsletterInfo');
       if (newsletterInfo) {
         await this.copyNewsletterInfo(subcase, newsletterInfo);

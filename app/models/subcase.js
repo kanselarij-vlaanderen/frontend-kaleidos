@@ -1,14 +1,14 @@
 import DS from 'ember-data';
-import {computed} from '@ember/object';
-import {inject} from '@ember/service';
+import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-import {alias} from '@ember/object/computed';
-import {A} from '@ember/array';
+import { alias } from '@ember/object/computed';
+import { A } from '@ember/array';
 import moment from 'moment';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
-import {sortDocuments, getDocumentsLength} from 'fe-redpencil/utils/documents';
+import { sortDocuments, getDocumentsLength } from 'fe-redpencil/utils/documents';
 
-const {attr, hasMany, belongsTo, PromiseArray, PromiseObject} = DS;
+const { attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
 
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
@@ -27,22 +27,21 @@ export default ModelWithModifier.extend({
   concluded: attr('boolean'),
   subcaseName: attr('string'),
 
-  phases: hasMany('subcase-phase', {inverse: null}),
-  consulationRequests: hasMany('consulation-request', {inverse: null}),
+  phases: hasMany('subcase-phase', { inverse: null }),
+  consulationRequests: hasMany('consulation-request', { inverse: null }),
   iseCodes: hasMany('ise-code'),
-  agendaitems: hasMany('agendaitem', {inverse: null}),
+  agendaitems: hasMany('agendaitem', { inverse: null }),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
   mandatees: hasMany('mandatee'),
-  // TODO tocheck
-  //decisions: hasMany('decision'),
+  treatments: hasMany('agenda-item-treatment'),
 
   type: belongsTo('subcase-type'),
-  case: belongsTo('case', {inverse: null}),
-  requestedForMeeting: belongsTo('meeting', {inverse: null}),
+  case: belongsTo('case', { inverse: null }),
+  requestedForMeeting: belongsTo('meeting', { inverse: null }),
   newsletterInfo: belongsTo('newsletter-info'),
-  requestedBy: belongsTo('mandatee', {inverse: null}),
+  requestedBy: belongsTo('mandatee', { inverse: null }),
   accessLevel: belongsTo('access-level'),
 
   documentsLength: computed('documents', function () {
@@ -60,7 +59,7 @@ export default ModelWithModifier.extend({
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': {id: documentVersionIds},
+              'documents': { id: documentVersionIds },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
@@ -81,7 +80,7 @@ export default ModelWithModifier.extend({
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': {id: documentVersionIds},
+              'documents': { id: documentVersionIds },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
@@ -99,7 +98,7 @@ export default ModelWithModifier.extend({
     return PromiseObject.create({
       promise: this.store.query('subcase-phase', {
         filter: {
-          subcase: {id: this.get('id')}
+          subcase: { id: this.get('id') }
         },
         sort: 'date',
         include: 'code'
@@ -113,8 +112,8 @@ export default ModelWithModifier.extend({
     return this.store
       .query('subcase-phase', {
         filter: {
-          subcase: {id: this.get('id')},
-          code: {id: CONFIG.postponedCodeId}
+          subcase: { id: this.get('id') },
+          code: { id: CONFIG.postponedCodeId }
         }
       })
       .then(subcasePhases => {
@@ -123,7 +122,7 @@ export default ModelWithModifier.extend({
   }),
 
   nameToShow: computed('subcaseName', function () {
-    const {subcaseName, title, shortTitle} = this;
+    const { subcaseName, title, shortTitle } = this;
     if (subcaseName) {
       return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
     } else if (shortTitle) {
@@ -162,10 +161,10 @@ export default ModelWithModifier.extend({
   }),
 
   hasAgendaItem: computed('agendaitems.@each', function () {
-    const {id, store} = this;
+    const { id, store } = this;
     return PromiseObject.create({
       promise: store.query('agendaitem', {
-        filter: {subcase: {id: id}},
+        filter: { subcase: { id: id } },
         sort: '-created'
       }).then((agendaitems) => {
         const lastAgendaItem = agendaitems.get('firstObject');
@@ -188,8 +187,8 @@ export default ModelWithModifier.extend({
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', async function () {
     return await this.store.query('agendaitem', {
       filter: {
-        subcase: {id: this.get('id')},
-        agenda: {status: {id: '2735d084-63d1-499f-86f4-9b69eb33727f'}}
+        subcase: { id: this.get('id') },
+        agenda: { status: { id: '2735d084-63d1-499f-86f4-9b69eb33727f' } }
       }
     });
   }),
@@ -242,16 +241,21 @@ export default ModelWithModifier.extend({
     return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
   }),
 
-  // TODO tocheck
-  approved: computed('decisions', function () {
+  // TODO tocheck @michael treatments.length is hier 0 - not sure yet why.
+
+  approved: computed('treatments', function () {
+    console.log(this.get('treatments'));
     return PromiseObject.create({
-      promise: this.get('decisions').then((decisions) => {
-        const approvedDecisions = decisions.map((decision) => decision.get('approved'));
-        if (approvedDecisions && approvedDecisions.length === 0) {
+      promise: this.get('treatments').then((treatments) => {
+        const approvedTreatments = treatments.map((treatment) => {
+            return treatment.get('decisionResultCode').get('uri') == 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd';
+          }
+        );
+        if (approvedTreatments && approvedTreatments.length === 0) {
           return false;
         }
-        const foundNonApprovedDecision = approvedDecisions.includes(false);
-        if (foundNonApprovedDecision) {
+        const foundNonApprovedTreatment = approvedTreatments.includes(false);
+        if (foundNonApprovedTreatment) {
           return false;
         } else {
           return true;

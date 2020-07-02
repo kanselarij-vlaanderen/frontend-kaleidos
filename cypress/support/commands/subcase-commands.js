@@ -37,7 +37,7 @@ function openSubcase(index=0){
   cy.get('@subcasesList').eq(index).within(() => {
     cy.wait(1000); //sorry, link is not loaded most of the time
     cy.get('.vl-title').eq(0).click();
-  })
+  });
   // cy.wait('@getCaseSubcases', { timeout: 12000 });
   cy.log('/openSubcase');
 }

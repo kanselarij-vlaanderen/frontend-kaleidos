@@ -55,14 +55,15 @@ export default Controller.extend({
   actions: {
     async addDecision(row) {
       const subcase = await row.get('subcase');
-      let decision = this.store.createRecord('decision', {
+      // TODO @michael checkup.
+      let treatment = this.store.createRecord('agenda-item-treatment', {
         subcase: subcase,
-        title: subcase.get('title'),
-        shortTitle: subcase.get('shortTitle'),
-        approved: false
+        //title: subcase.get('title'),
+        //shortTitle: subcase.get('shortTitle'),
+        decisionResultCode: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
       });
-      const savedDecision = await decision.save();
-      (await subcase.get('decisions')).addObject(savedDecision);
+      const savedTreatment = await treatment.save();
+      (await subcase.get('treatments')).addObject(savedTreatment);
     },
   }
 });
