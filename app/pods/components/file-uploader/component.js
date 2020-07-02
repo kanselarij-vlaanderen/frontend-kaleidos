@@ -1,58 +1,50 @@
-import Component from '@ember/component';
-import { task } from 'ember-concurrency';
-import { get, observer } from '@ember/object';
-import { inject } from '@ember/service';
-
+import Component from '@glimmer/component';
+import { enqueueTask } from 'ember-concurrency-decorators';
+import { get } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { alias } from '@ember/object/computed';
 
-export default Component.extend({
-  store: inject(),
-  fileQueue: inject(),
-  tagName: 'span',
-  files: null,
-  uploadedFileLength: null,
-  multipleFiles: true,
+export default class FileUploader extends Component{
+  @service store;
+  @service fileQueue;
+  tagName = 'span';
+  @tracked uploadedFileLength = null;
+  multipleFiles = true;
+  @tracked isLoading = null;
+  @tracked filesInQueue = alias('fileQueue.files');
+  uploadedFileAction = this.args.uploadedFileAction;
 
-  didInsertElement() {
-    this._super(...arguments);
-    this.set('isLoading', false);
-    this.set('uploadedFileLength', 0);
-    this.set('fileQueue.files', A([]));
-  },
+  @action
+  insertElementInDom() {
+    this.isLoading =  false;
+    this.uploadedFileLength = 0;
+    this.filesInQueue = A([]);
+  }
 
-  isNotLoading: observer('fileQueue.files.@each', function () {
-    const length = this.fileQueue.get('files.length');
-    if (length === 0) {
-      this.set('isLoading', false);
-      this.set('uploadedFileLength', 0);
-    }
-  }),
-
-  uploadFile: task(function* (file) {
+  @enqueueTask({
+    maxConcurrency: 3,
+  })
+  *uploadFileTask(file) {
     try {
-      this.set('isLoading', true);
+      this.isLoading = true;
       file.readAsDataURL().then(() => {
       });
       const response = yield file.upload('/files');
       const fileTest = yield this.store.findRecord('file', response.body.data.id);
-      this.uploadedFile(fileTest);
-      this.incrementProperty('uploadedFileLength');
+      this.uploadedFileAction(fileTest);
+      this.uploadedFileLength += 1;
     } catch (e) {
-      this.set('isLoading', false);
+      this.isLoading = false;
     } finally {
-      this.set('isLoading', false);
+      this.isLoading = false;
     }
-  })
-    .maxConcurrency(3)
-    .enqueue(),
+  }
 
-  actions: {
-    uploadFile(file) {
-      get(this, 'uploadFile').perform(file);
-    },
-
-    uploadedFile(uploadedFile) {
-      this.uploadedFile(uploadedFile);
-    },
-  },
-});
+  @action
+  uploadFile(file) {
+    get(this, 'uploadFileTask').perform(file);
+  }
+}

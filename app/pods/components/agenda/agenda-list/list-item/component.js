@@ -1,9 +1,18 @@
-import Component from '@ember/component';
-import { action, computed, observer } from '@ember/object';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
+import { tracked } from '@glimmer/tracking';
 
 export default class ListItem extends Component {
+  /**
+   * INFO arguments from parent.
+   *
+   * @agendaitem={{agendaitem}}
+   * @isEditingOverview={{isEditingOverview}}
+   * @selectAgendaItem={{action "selectAgendaItemAction"}}
+   */
+
   @service store;
 
   @service sessionService;
@@ -14,15 +23,10 @@ export default class ListItem extends Component {
 
   @service toaster;
 
-  classNameBindings = [
-    'isActive:vlc-agenda-items__sub-item--active',
-    'isClickable::not-clickable',
-    'agendaitem.retracted:vlc-u-opacity-lighter',
-    'isPostponed:vlc-u-opacity-lighter',
-    'isNew:vlc-agenda-items__sub-item--added-item',
-  ];
+  @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
+  @alias('sessionService.currentAgenda') currentAgenda;
+  @alias('args.agendaitem.checkAdded') isNew;
 
-  tagName = 'div';
 
   isClickable = true;
 
@@ -30,65 +34,45 @@ export default class ListItem extends Component {
 
   isShowingChanges = null;
 
-  renderDetails = false;
+  @tracked renderDetails = null;
+  @tracked retracted = this.args.agendaitem.get('retracted');
+  @tracked isPostponed = this.args.agendaitem.postponedTo.get('postponed');
+  @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
+  @tracked formallyOk = this.args.agendaitem.formallyOk || null;
 
-  @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
-
-  @alias('sessionService.currentAgenda') currentAgenda;
-
-  @alias('agendaitem.checkAdded') isNew;
-
-  constructor() {
-    super(...arguments);
-    observer(
-      'agendaitem.postponedTo',
-      async function () {
-        const postponed = await this.get('agendaitem.postponedTo');
-        if (!this.get('isDestroyed')) {
-          this.set('isPostponed', !!postponed);
-        }
-      },
-    );
+  get classNameBindings() {
+    return `
+    ${this.isActive ? 'vlc-agenda-items__sub-item--active' : ''}
+    ${this.isClickable ? '' : 'not-clickable'}
+    ${this.retracted || this.isPostponed ? 'vlc-u-opacity-lighter' : ''}
+    ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
+    `
   }
 
-  @computed('agendaitem.formallyOk')
-  get formallyOk() {
-    return this.agendaitem.get('formallyOk');
-  }
-
-  @computed('agendaitem')
-  get agenda() {
-    return this.get('agendaitem.agenda.name');
-  }
-
-  @computed('agendaitem.documentVersions.@each')
-  get documents() {
-    if (this.get('selectedAgendaItem')) {
-      return null;
-    }
-    return this.get('agendaitem.documents');
-  }
-
-  @computed('agendaitem.id', 'selectedAgendaItem.id')
   get isActive() {
-    return this.get('agendaitem.id') === this.get('selectedAgendaItem.id');
-  }
-
-  // Disable lazy partial rendering when deleting
-  @computed('agendaitem.aboutToDelete')
-  get aboutToDelete() {
-    if (this.agendaitem) {
-      return this.agendaitem.get('aboutToDelete');
+    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaItem) {
+      return this.args.agendaitem === this.selectedAgendaItem.id;
     }
     return null;
   }
 
   @action
+  onEnter() {
+    setTimeout(() => {
+      this.renderDetails = true;
+    }, 500)
+  }
+
+  @action
+  onExit() {
+    this.renderDetails = false;
+  }
+
+  @action
   async setAction(item) {
-    // this.set('isLoading', true);
     const uri = item.get('uri');
-    this.agendaitem.set('formallyOk', uri);
-    await this.agendaitem
+    this.args.agendaitem.formallyOk = uri;
+    await this.args.agendaitem
       .save()
       .catch(() => {
         this.toaster.error();
@@ -98,56 +82,8 @@ export default class ListItem extends Component {
   @action
   async openAgendaItem() {
     if (!this.isEditingOverview && !this.isComparing) {
-      const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
-      this.selectAgendaItem(agendaitem);
+      const agendaitem = await this.store.findRecord('agendaitem', this.args.agendaitem.id);
+      this.args.selectAgendaItem(agendaitem);
     }
   }
-
-  /* Begin lazy partial rendering
-
-     This implementation of lazy partial rendering uses an
-     IntersectionObserver to figure out if we're currently rendering.
-     Part of the content is hidden when we are not in view to easen
-     the browser's load and to substantially limit the amount of calls
-     happening to the backend on largerAgenda’s.
-   */
-  didEnterViewport() {
-    this.set('renderDetails', true);
-  }
-
-  didExitViewport() {
-    this.set('renderDetails', false);
-  }
-
-  didInsertElement() {
-    try {
-      const options = {
-        root: document.querySelector('body'),
-        rootMargin: '5px',
-        threshold: [0, 1],
-      };
-
-      const intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this),
-        options);
-      this.set('intersectionObserver', intersectionObserver);
-      intersectionObserver.observe(this.element);
-    } catch (e) {
-      this.set('renderDetails', true);
-    }
-  }
-
-  willDestroyElement() {
-    this.get('intersectionObserver').unobserve(this.element);
-  }
-
-  checkElementPosition(entries) {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        this.didEnterViewport();
-      } else {
-        this.didExitViewport();
-      }
-    });
-  }
-  // End lazy partial rendering
 }

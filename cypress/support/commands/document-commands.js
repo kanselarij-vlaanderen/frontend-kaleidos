@@ -286,7 +286,7 @@ function uploadFile(folder, fileName, extension) {
 function uploadUsersFile(folder, fileName, extension) {
   cy.log('uploadUsersFile');
   cy.route('POST', 'user-management-service/import-users').as('createNewFile');
-  cy.route('GET', 'users?**').as('getNewFile');
+  cy.route('GET', 'users?include**').as('getNewFile');
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
 

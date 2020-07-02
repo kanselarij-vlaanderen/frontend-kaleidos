@@ -128,5 +128,11 @@ export default Component.extend({
           this.toaster.error();
         });
     },
+
+    conditionallyScrollIntoView () {
+      if (this.isActive) {
+        this.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   },
 });
