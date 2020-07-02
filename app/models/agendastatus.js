@@ -10,5 +10,8 @@ export default Model.extend({
   }),
   isFinal: computed('uri', function(){
     return this.uri == "http://kanselarij.vo.data.gift/id/agendastatus/f06f2b9f-b3e5-4315-8892-501b00650101";
+  }),
+  isClosed: computed('uri', function(){
+    return this.uri === 'http://kanselarij.vo.data.gift/id/agendastatus/ff0539e6-3e63-450b-a9b7-cc6463a0d3d1';
   })
 });
