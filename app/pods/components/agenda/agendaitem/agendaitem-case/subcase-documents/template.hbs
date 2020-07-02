@@ -101,9 +101,9 @@
           </LinkTo>
         </div>
       {{/if}}
-      {{file-uploader 
-        isLoading=isLoading 
-        multipleFiles=true 
+      {{file-uploader
+        isLoading=isLoading
+        multipleFiles=true
         uploadedFileAction=(action "add")
       }}
       {{#if (not isLoading)}}
