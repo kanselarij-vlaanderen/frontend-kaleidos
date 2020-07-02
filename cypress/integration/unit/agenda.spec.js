@@ -105,7 +105,7 @@ context('Agenda tests', () => {
     cy.contains('dit is de lange titel');
   });
 
-  it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
+  it.only('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
     const agendaDate = Cypress.moment().add(1, 'week').day(6);
     cy.createAgenda('Ministerraad', agendaDate, "Brussel", 1);
     cy.createAgenda('Ministerraad', agendaDate, "Brussel").then((result) => {
@@ -114,9 +114,8 @@ context('Agenda tests', () => {
       cy.get(actionModel.toggleeditingsession).click();
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
       cy.visit('/');
-      cy.route('GET', '/meetings?page[size]=1&sort=-number').as('getLatestMeetingId');
       cy.get(agenda.createNewAgendaButton).click();
-      cy.wait('@getLatestMeetingId');
+      cy.wait(500);
       cy.get('input[type="number"]').should('have.value',(parseInt(result.meetingNumber) + 1).toString());
     });
   });
