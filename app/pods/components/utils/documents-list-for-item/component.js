@@ -6,20 +6,23 @@ export default class DocumentListForItem extends Component {
   @tracked isClickable = this.args.isClickable;
   @tracked isShowingAll = false;
   @tracked item = this.args.item;
-  @tracked moreThan20 = null
-
+  @tracked moreThan20 = null;
 
   get documents() {
     const documents = this.item.get('documents');
-    if(documents.length > 20){
-      this.moreThan20 = true;
-    }else {
-      this.moreThan20 = false;
-    }
-    if (this.isShowingAll) {
-      return documents;
+    if (documents) {
+      if (documents.length > 20) {
+        this.moreThan20 = true;
+      } else {
+        this.moreThan20 = false;
+      }
+      if (this.isShowingAll) {
+        return documents;
+      } else {
+        return documents.slice(0, 20);
+      }
     } else {
-      return documents.slice(0, 20);
+      return null;
     }
   }
 
