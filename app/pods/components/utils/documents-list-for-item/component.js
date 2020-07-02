@@ -9,6 +9,9 @@ export default class DocumentListForItem extends Component {
   @tracked moreThan20 = null;
 
   get documents() {
+    if(!this.item) {
+      return null;
+    }
     const documents = this.item.get('documents');
     if (documents) {
       if (documents.length > 20) {
