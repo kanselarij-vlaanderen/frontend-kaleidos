@@ -19,7 +19,7 @@
     {{#if (not uploadedFile)}}
       {{file-uploader
         multipleFiles=false
-        uploadedFile=(action "getUploadedFile")
+        uploadedFileAction=(action "getUploadedFile")
       }}
     {{else}}
       <div class="vlc-preview-container">
