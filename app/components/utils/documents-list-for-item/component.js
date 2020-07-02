@@ -10,6 +10,9 @@ export default class DocumentListForItem extends Component {
 
 
   get documents() {
+    if(!this.item) {
+      return null;
+    }
     if(this.item.documents.length > 20){
       this.moreThan20 = true;
     }else {
