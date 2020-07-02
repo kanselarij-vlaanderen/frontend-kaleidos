@@ -1,52 +1,51 @@
 import Component from '@ember/component';
 import { task } from 'ember-concurrency';
-import { observer } from '@ember/object';
-import { inject } from '@ember/service';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
-export default Component.extend({
-  store: inject(),
-  classNames: ['checkbox-list-selector'],
-  selectedThemes: null,
+export default class ThemesSelector extends Component {
+  @service store;
+  selectedThemes = null;
 
-  selectedThemesObserver: observer('selectedThemes', 'themes', function () {
-    const { themes, selectedThemes } = this;
-    if (themes && selectedThemes) {
-      themes.map(theme => theme.set('selected', false));
-      this.checkSelectedThemes(selectedThemes, themes);
-    }
-  }),
-
-  actions: {
-    selectModel(theme) {
-      if (!theme.get('selected')) {
-        this.selectedThemes.addObject(theme);
-      } else {
-        this.selectedThemes.removeObject(theme);
-      }
-    },
-  },
-
-  init() {
-    this._super(...arguments);
+  constructor() {
+    super(...arguments);
     this.findAll.perform();
     if (!this.selectedThemes) {
       this.set('selectedThemes', [])
     }
-  },
+  }
 
-  findAll: task(function* () {
+  // This will load all the themes from the API
+  @task(function* () {
     const themes = yield this.store.query('theme', {}); // Query to make sure you get all themes from the API instead
     this.set('themes', themes.sortBy('label').filter((item) => !item.deprecated));
-  }),
+    this.checkSelectedThemes(this.selectedThemes, this.themes);
+  }) findAll;
 
+  /**
+   * Synchronises the selected themes from the checkboxes with the underlying models
+   * @param  {Array}  selectedThemes    The themes currently selected in the checkboxes
+   * @param  {Array}  themes            The themes in the data store
+   */
   checkSelectedThemes(selectedThemes, themes) {
     if (selectedThemes && selectedThemes.length > 0) {
-      selectedThemes.map((selectedTheme) => {
+      selectedThemes.forEach((selectedTheme) => {
         const foundTheme = themes.find((theme) => theme.get('label') === selectedTheme.get('label'));
         if (foundTheme) {
           foundTheme.set('selected', true);
         }
-      })
+      });
     }
   }
-});
+
+  @action
+  selectModel(theme) {
+    if (!theme.get('selected')) {
+      this.selectedThemes.addObject(theme);
+    } else {
+      this.selectedThemes.removeObject(theme);
+    }
+
+    this.checkSelectedThemes(this.selectedThemes, this.themes);
+  }
+}
