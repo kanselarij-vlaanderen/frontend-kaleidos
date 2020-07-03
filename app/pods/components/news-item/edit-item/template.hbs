@@ -69,10 +69,12 @@
     {{web-components/vl-form-label value=(t "finished")}}
     {{web-components/vl-toggle value=finished}}
   </div>
-  <div class="vlc-input-field-block" data-test-themes-selector>
-    {{web-components/vl-form-label value=(t "themes")}}
-    {{utils/themes-selector selectedThemes=(await themes)}}
-  </div>
+  {{#if selectedThemes.length}}
+    <div class="vlc-input-field-block" data-test-themes-selector>
+      {{web-components/vl-form-label value=(t "themes")}}
+      <Utils::ThemesSelector @selectedThemes={{selectedThemes}} />
+    </div>
+  {{/if}}
 
 </div>
 <div class="vl-action-group vl-action-group--align-right">
