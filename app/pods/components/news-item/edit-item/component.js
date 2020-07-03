@@ -18,30 +18,22 @@ export default Component.extend({
   documentVersionsSelected: null,
   isEditing: false,
 
-  subtitle: cached('item.subtitle'), // TODO in class syntax use as a decorator instead
-  text: cached('item.text'), // TODO in class syntax use as a decorator instead
-  title: cached('item.title'), // TODO in class syntax use as a decorator instead
-  finished: cached('item.finished'), // TODO in class syntax use as a decorator instead
-  remark: cached('item.remark'), // TODO in class syntax use as a decorator instead
-  mandateeProposal: cached('item.newsletterProposal'), // TODO in class syntax use as a decorator instead
+  subtitle: cached('newsletterInfo.subtitle'), // TODO in class syntax use as a decorator instead
+  text: cached('newsletterInfo.text'), // TODO in class syntax use as a decorator instead
+  title: cached('newsletterInfo.title'), // TODO in class syntax use as a decorator instead
+  finished: cached('newsletterInfo.finished'), // TODO in class syntax use as a decorator instead
+  remark: cached('newsletterInfo.remark'), // TODO in class syntax use as a decorator instead
+  mandateeProposal: cached('newsletterInfo.newsletterProposal'), // TODO in class syntax use as a decorator instead
 
   isTryingToSave: false,
   isExpanded: false,
 
-  themes: computed(`agendaitem.subcase.newsletterInfo.themes`, {
-    async get() {
-      const {agendaitem} = this;
-      if (agendaitem) {
-        return await agendaitem.get('subcase.newsletterInfo.themes').then((themes) => {
-          return themes.toArray();
-        })
-      } else {
-        return [];
-      }
-    },
-    set: function (key, value) {
-      return value;
-    },
+  selectedThemes: computed('newsletterInfo.themes', function() {
+    if (this.get('newsletterInfo.themes')) {
+      return this.get('newsletterInfo.themes').toArray();
+    } else {
+      return [];
+    }
   }),
 
   hasNota: computed('agendaitem', async function () {
@@ -55,28 +47,10 @@ export default Component.extend({
 
   async saveChanges() {
     this.set('isLoading', true);
-    const item = await this.get('item');
-    const documentVersionsSelected = this.get('documentVersionsSelected');
-    const itemDocumentsToEdit = await item.get('documentVersions');
-    item.set('themes', await this.themes);
+    const newsletterInfo = this.get('newsletterInfo');
+    newsletterInfo.set('themes', this.selectedThemes);
 
-    if (documentVersionsSelected) {
-      await Promise.all(
-        documentVersionsSelected.map(async (documentVersion) => {
-          if (documentVersion.get('selected')) {
-            item.get('documentVersions').addObject(documentVersion);
-          } else {
-            const foundDocument = itemDocumentsToEdit.find(
-              (item) => item.get('id') == documentVersion.get('id')
-            );
-            if (foundDocument) {
-              item.get('documentVersions').removeObject(documentVersion);
-            }
-          }
-        })
-      );
-    }
-    this.setNewPropertiesToModel(item).then(async () => {
+    this.setNewPropertiesToModel(newsletterInfo).then(async () => {
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     });
