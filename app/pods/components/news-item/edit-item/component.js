@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
-import {computed} from '@ember/object';
+import { computed } from '@ember/object';
 import {inject} from '@ember/service';
 
 export default Component.extend({
@@ -75,8 +75,8 @@ export default Component.extend({
 
   actions: {
     async trySaveChanges() {
-      const themes = await this.get('themes');
-      if (themes.length > 0) {
+      const selectedTheme = await this.get('selectedThemes');
+      if (selectedTheme.length > 0) {
         return this.saveChanges()
       }
       this.toggleProperty('isTryingToSave');
