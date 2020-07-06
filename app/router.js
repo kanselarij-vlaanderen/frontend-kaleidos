@@ -52,6 +52,7 @@ Router.map(function () {
     this.route('government-domains', function() {});
     this.route('government-fields', function() {});
     this.route('ise-codes', function() {});
+    this.route('document-types', function() {});
   });
   this.route('loading', { path: '/laden' });
   this.route('mock-login-route', { path: '/mock-login' });
