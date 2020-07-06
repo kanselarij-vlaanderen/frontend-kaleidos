@@ -60,6 +60,7 @@ function createAgenda(kind, date, location) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
+    cy.wait(500); // TODO Experiment for dropdown flakyness, see if waiting before helps
     cy.contains(kind).scrollIntoView().trigger('mouseover').click();
     //TODO Experiment for dropdown flakyness
     // Does the ember-power-select-option fix itself if we wait long enough ?

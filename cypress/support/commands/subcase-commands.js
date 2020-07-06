@@ -198,7 +198,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     }
   });
   //TODO loading the isecodes and government fields takes time, are they not cacheble ?
-  cy.wait('@getIseCodes', { timeout: 20000 });
+  cy.wait('@getIseCodes', { timeout: 50000 });
   cy.wait('@getGovernmentFields', { timeout: 20000 });
   if(fieldNumber >= 0) {
     cy.get('.vlc-checkbox-tree', { timeout: 30000 }).should('exist').eq(fieldNumber).within(() => {

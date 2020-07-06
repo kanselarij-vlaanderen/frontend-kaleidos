@@ -4,14 +4,13 @@ import agenda from '../../selectors/agenda.selectors';
 
 context('Subcase tests', () => {
   const agendaDate = Cypress.moment().add(2, 'weeks').day(4); // Next friday
-  const caseTitle = 'Cypress test: subcases - ' + currentTimestamp();
+  // const caseTitle = 'Cypress test: subcases - 1594024946'; // The case is in the default data set with id 5F02E3F87DE3FC0008000002
   const SubcaseTitleShort = 'Cypress test: add subcase - ' + currentTimestamp();
 
   before(() => {
     cy.server();
     cy.resetCache();
     cy.login('Admin');
-    cy.createCase(false, caseTitle);
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logout();
   });
@@ -26,9 +25,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    // TODO case is not indexed yet.... creating here sometimes fails
-    cy.wait(10000);
-    cy.openCase(caseTitle);
+    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -75,7 +72,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.openCase(caseTitle);
+    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.deleteSubcase();
@@ -87,7 +84,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.openCase(caseTitle);
+    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -105,7 +102,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.openCase(caseTitle);
+    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -179,7 +176,7 @@ context('Subcase tests', () => {
     cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
-    cy.get(agenda.confidentialityIcon).should('be.visible');
+    cy.get(agenda.confidentialityIcon).should('exist');
 
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
 
