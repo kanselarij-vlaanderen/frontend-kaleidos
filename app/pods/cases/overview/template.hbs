@@ -35,7 +35,7 @@
       </div>
     </div>
     {{#data-table
-      content=model
+      content=(await model)
       page=page
       noDataMessage=(t "no-results-found")
       size=size

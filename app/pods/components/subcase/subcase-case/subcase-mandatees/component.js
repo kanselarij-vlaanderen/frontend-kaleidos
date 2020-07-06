@@ -5,20 +5,21 @@ import EmberObject from '@ember/object';
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
 
+//TODO code cuplication with agendaitem-case/agendaitem-mandatees
 export default class
 SubcaseMandatees extends Component {
   @service store;
   @service currentSession;
 
   classNames = ['vl-u-spacer-extended-bottom-l'];
-  item = null;
+  subcase = null;
   propertiesToSet = Object.freeze(['mandatees', 'governmentDomains']);
 
-  @computed('item', 'item.subcase', 'mandatees.@each')
+  @computed('subcase', 'mandatees.@each')
   get mandateeRows() {
     return DS.PromiseArray.create({
       promise: this.constructMandateeRows().then((rows) => {
-        return this.get('item.requestedBy').then((requestedBy) => {
+        return this.get('subcase.requestedBy').then((requestedBy) => {
           if (!requestedBy && rows.get('length') > 0) {
             rows.get('firstObject').set('isSubmitter', true);
           } else {
@@ -61,16 +62,9 @@ SubcaseMandatees extends Component {
   }
 
   async constructMandateeRows() {
-    const isAgendaItem = this.item.get('modelName') === 'agendaitem';
-    let subcase;
-    if (isAgendaItem) {
-      subcase = await this.get('item.subcase');
-    } else {
-      subcase = await this.get('item');
-    }
-
+    const subcase = await this.subcase;
     const iseCodes = await subcase.get('iseCodes');
-    const mandatees = await (await this.get('item.mandatees')).sortBy('priority');
+    let mandatees = await (await subcase.get('mandatees')).sortBy('priority');
     let selectedMandatee = await subcase.get('requestedBy');
     const mandateeLength = mandatees.get('length');
     if (mandateeLength === 1) {
@@ -122,18 +116,11 @@ SubcaseMandatees extends Component {
   @action
   async saveChanges() {
     this.set('isLoading', true);
-    if (this.item.get('modelName') === 'agendaitem') {
-      const subcase = await this.get('item.subcase');
-      if (subcase) {
-        //Without this, saving mandatees on agendaitem do not always persist to the subcase
-        await subcase.get('mandatees');
-      }
-    }
     const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
     const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] }
     const resetFormallyOk = true;
     try {
-      await saveMandateeChanges(this.item, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
+      await saveMandateeChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     } catch (e) {

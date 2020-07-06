@@ -19,6 +19,7 @@
               itemIndex=agendaitem.itemIndex
               definite=definite
               agendaitem=agendaitem
+              newsletterInfo=(await agendaitem.agendaActivity.subcase.newsletterInfo)
             }}
           {{/each}}
         {{/each}}
@@ -28,6 +29,7 @@
             agenda=(await model.agenda)
             definite=definite
             agendaitem=agendaitem
+            newsletterInfo=(await agendaitem.agendaActivity.subcase.newsletterInfo)
           }}
         {{/each}}
       {{/if}}
@@ -40,6 +42,7 @@
             agenda=(await model.agenda)
             definite=definite
             agendaitem=announcement
+            newsletterInfo=(await agendaitem.agendaActivity.subcase.newsletterInfo)
           }}
         {{/each}}
       {{/if}}
