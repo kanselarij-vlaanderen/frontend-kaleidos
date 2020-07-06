@@ -49,6 +49,7 @@ Router.map(function () {
       this.route('edit', { path:'/:alert_id' });
       this.route('new', { path:'/nieuw' });
     });
+    this.route('government-domains', function() {});
   });
   this.route('loading', { path: '/laden' });
   this.route('mock-login-route', { path: '/mock-login' });
