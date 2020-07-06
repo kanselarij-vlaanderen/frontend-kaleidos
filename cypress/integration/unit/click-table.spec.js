@@ -24,7 +24,7 @@ context("Table Row Click tests", () => {
 		cy.route('GET', '/cases**').as('getCases');
 		cy.visit('/dossiers');
     cy.wait('@getCases', {timeout: 12000});
-    cy.openCase('Eerste dossier');
+    cy.get('.data-table > tbody').children().as('rows').eq(0).click();
 		cy.url().should('contain', 'deeldossiers');
 	});
 

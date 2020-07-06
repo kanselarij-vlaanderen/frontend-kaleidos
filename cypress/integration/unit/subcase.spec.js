@@ -26,6 +26,8 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    // TODO case is not indexed yet.... creating here sometimes fails
+    cy.wait(10000);
     cy.openCase(caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
@@ -158,7 +160,7 @@ context('Subcase tests', () => {
     cy.get(agenda.subcase.agendaLink).click();
     cy.wait('@getMeetingsRequest');
     cy.wait('@getAgendas');
-    cy.get(agenda.confidentialityIcon).should('be.visible');
+    cy.get(agenda.confidentialityIcon).should('exist');
 
     // Click the "wijzigen link.
     cy.get(agenda.item.editLink).click();

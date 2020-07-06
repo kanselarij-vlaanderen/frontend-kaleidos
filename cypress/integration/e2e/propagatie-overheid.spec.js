@@ -109,7 +109,7 @@ context('Agenda tests', () => {
   it('Test as Minister', () => {
     cy.server();
     cy.login('Minister');
-    cy.openCase(caseTitle);
+    cy.searchCase(caseTitle);
     cy.openSubcase(0);
     cy.url().should('contain', '/deeldossiers/');
     cy.url().should('contain', '/overzicht');

@@ -20,6 +20,7 @@ export default class SidebarItem extends Component {
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
   @alias('sessionService.currentAgenda') currentAgenda;
   @alias('args.agendaitem.checkAdded') isNew;
+  @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
   hideLabel = true;
   isShowingChanges = null;

@@ -35,8 +35,8 @@ export default Component.extend({
       this.toggleProperty('isShowingVersions');
     },
     async toggleIsEditing() {
-      const subcase = await this.newsletter.get('subcase');
-      if (!this.newsletter) {
+      const subcase = await this.newsletterInfo.get('subcase');
+      if (!this.newsletterInfo) {
         await this.newsletterService.createNewsItemForSubcase(subcase, this.agendaitem);
       } else {
         this.toggleProperty('isEditing');

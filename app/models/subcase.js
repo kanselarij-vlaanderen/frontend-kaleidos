@@ -156,7 +156,7 @@ export default ModelWithModifier.extend({
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function () {
     return await this.store.query('agendaitem', {
       filter: {
-        "agenda-activity": { subcase: { id: this.get('id') } },
+        'agenda-activity': { subcase: { id: this.get('id') } },
         agenda: { status: { id: '2735d084-63d1-499f-86f4-9b69eb33727f' } }
       }
     });
@@ -221,15 +221,6 @@ export default ModelWithModifier.extend({
       id = CONFIG.notaCaseTypeID;
     }
     return this.store.findRecord('case-type', id);
-  }),
-
-  isRetracted: computed('latestAgendaItem', 'latestAgendaItem.retracted', async function () {
-    const latestAgendaItem = await this.get('latestAgendaItem');
-    if (latestAgendaItem) {
-      return latestAgendaItem.retracted;
-    } else {
-      return false;
-    }
   }),
 
 });

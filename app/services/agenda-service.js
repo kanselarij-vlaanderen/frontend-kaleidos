@@ -196,9 +196,9 @@ export default Service.extend({
       const subcase = await agendaActivity.get('subcase');
       await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
-      await Promise.all(agendaitemsFromActivity.map(async item => {
-        const agenda = await item.get('agenda');
-        await item.destroyRecord();
+      await Promise.all(agendaitemsFromActivity.map(async agendaitem => {
+        const agenda = await agendaitem.get('agenda');
+        await agendaitem.destroyRecord();
         await agenda.hasMany('agendaitems').reload();
       }));
       await agendaActivity.destroyRecord();

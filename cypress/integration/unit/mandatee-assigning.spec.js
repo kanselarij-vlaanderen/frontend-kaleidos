@@ -28,6 +28,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    // TODO case is not indexed yet.... + creating here sometimes fails
+    cy.wait(10000);
     cy.openCase(caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);

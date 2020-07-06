@@ -9,6 +9,7 @@ export default Component.extend({
   store: inject(),
   currentSession: inject(),
   classNames: ['vl-u-spacer-extended-bottom-l'],
+  subcase: null,
 
   subcaseName: cached('subcase.subcaseName'), // TODO in class syntax use as a decorator instead
   type: cached('subcase.type'), // TODO in class syntax use as a decorator instead
@@ -37,6 +38,10 @@ export default Component.extend({
 
   latestAgendaItemId: computed('subcase.latestAgendaItem', function () {
     return this.subcase.get('latestAgendaItem').then(item => item.id);
+  }),
+
+  isRetracted: computed('subcase.latestAgendaItem', function () {
+    return this.subcase.get('latestAgendaItem').then(item => item.retracted);
   }),
 
   actions: {

@@ -22,10 +22,10 @@ export default Service.extend({
     })
   },
 
-  async getSubcasePhases(model) {
+  async getSubcasePhases(subcase) {
     return ajax({
       method: 'GET',
-      url: `/custom-subcases/getSubcasePhases?subcaseId=${model.id}`,
+      url: `/custom-subcases/getSubcasePhases?subcaseId=${subcase.id}`,
     }).then((result) => {
       return this.processSubcasePhases(result.body);
     }).catch((error) => {
@@ -54,7 +54,7 @@ export default Service.extend({
       console.log(activities);
       return null;
     } else {
-      let phases = []
+      let phases = [];
       activities.map((activityData) => {
         if (activityData.startDatum) {
           phases.push({ label: this.intl.t('activity-phase-proposed-for-agenda'), date: moment.utc(activityData.startDatum).toDate() });

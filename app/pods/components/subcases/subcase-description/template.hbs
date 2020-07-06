@@ -70,14 +70,16 @@
         <span class="vl-description-data__value" data-test-subcase-agenda-link>
           {{#if
             (or
-              (is-pending subcase.isRetracted)
+              (is-pending isRetracted)
               (is-pending subcase.onAgendaInfo)
             )
           }}
             <div class="vl-loader"></div>
           {{else}}
             {{#if (await subcase.onAgendaInfo)}}
-              {{#if (await subcase.isRetracted)}}
+              {{#if  
+                (await isRetracted)
+              }}
                 {{t "postponed-subcase"}}
               {{/if}}
                 {{#link-to
