@@ -24,14 +24,16 @@
     </LinkTo>
   </div>
   <div class="vl-u-spacer-extended-s">
-    <button data-test-manage-ise-codes
-            type="button"
-            class="vl-button vl-button--tertiary vl-button--icon-before"
-      {{action "toggleProperty" "isManagingIseCodes"}}
+    <LinkTo
+      data-test-manage-alerts
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.ise-codes"
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-ise-codes"}}
-    </button>
+    </LinkTo>
   </div>
   <div class="vl-u-spacer-extended-s">
     <LinkTo
@@ -86,12 +88,6 @@
     </button>
   </div>
 </div>
-{{#if isManagingIseCodes}}
-  {{utils/manage-ise-code
-    modalTitle=(t "manage-ise-codes")
-    close=(action "toggleProperty" "isManagingIseCodes")
-  }}
-{{/if}}
 {{#if isManagingDocumentTypes}}
   {{utils/model-manager
     modalTitle=(t "manage-document-types")
