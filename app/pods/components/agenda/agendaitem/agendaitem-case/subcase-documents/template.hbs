@@ -101,7 +101,11 @@
           </LinkTo>
         </div>
       {{/if}}
-      {{file-uploader isLoading=isLoading uploadedFile=(action "add")}}
+      {{file-uploader
+        isLoading=isLoading
+        multipleFiles=true
+        uploadedFileAction=(action "add")
+      }}
       {{#if (not isLoading)}}
         <div class="upload-container">
           {{#each documentsInCreation as |doc|}}
