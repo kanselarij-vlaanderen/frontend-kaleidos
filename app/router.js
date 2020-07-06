@@ -55,6 +55,7 @@ Router.map(function () {
     this.route('document-types', function() {});
     this.route('case-types', function() {});
     this.route('subcase-types', function() {});
+    this.route('signature', function() {});
   });
   this.route('loading', { path: '/laden' });
   this.route('mock-login-route', { path: '/mock-login' });
