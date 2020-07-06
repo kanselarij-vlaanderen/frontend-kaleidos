@@ -85,7 +85,7 @@
                           {{sanitize-html raw=true value=(await agendaitem.meetingRecord.richtext)}}
                         </p>
                         {{#each
-                          (await agendaitem.subcase.decisions)
+                          (await agendaitem.agendaActivity.subcase.decisions)
                         as |decision|
                         }}
                           {{#if (await decision.signedDocument.name)}}
@@ -102,7 +102,7 @@
                     </li>
                   </ul>
                   <p>
-                    {{agendaitem.subcase.subcaseName}}
+                    {{agendaitem.agendaActivity.subcase.subcaseName}}
                   </p>
                 </div>
               {{/if}}

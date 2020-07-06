@@ -3,8 +3,6 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
-import { A } from '@ember/array';
-import moment from 'moment';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import { sortDocuments, getDocumentsLength } from 'fe-redpencil/utils/documents';
 
@@ -14,6 +12,7 @@ export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   store: inject(),
   intl: inject(),
+  subcasesService: inject(),
 
   created: attr('datetime'),
   modified: attr('datetime'),
@@ -27,10 +26,9 @@ export default ModelWithModifier.extend({
   concluded: attr('boolean'),
   subcaseName: attr('string'),
 
-  phases: hasMany('subcase-phase', { inverse: null }),
   consulationRequests: hasMany('consulation-request', { inverse: null }),
   iseCodes: hasMany('ise-code'),
-  agendaitems: hasMany('agendaitem', { inverse: null }),
+  agendaActivities: hasMany('agenda-activity', { inverse: null }),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
@@ -43,6 +41,27 @@ export default ModelWithModifier.extend({
   newsletterInfo: belongsTo('newsletter-info'),
   requestedBy: belongsTo('mandatee', { inverse: null }),
   accessLevel: belongsTo('access-level'),
+
+  latestActivity: computed('agendaActivities', 'agendaActivities.@each', async function () {
+    const activities = await this.get('agendaActivities').then(activities => {
+      return activities.sortBy('startDate');
+    });
+    if (activities && activities.length > 0) {
+      return activities.get('lastObject');
+    } else {
+      return null;
+    }
+  }),
+
+  phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.@each', 'latestActivity.agendaitems.@each.retracted', 'approved', async function () {
+    const activities = await this.get('agendaActivities');
+    if (activities && activities.length > 0) {
+      const phases = await this.get('subcasesService').getSubcasePhases(this);
+      return phases;
+    } else {
+      return null;
+    }
+  }),
 
   documentsLength: computed('documents', function () {
     return getDocumentsLength(this, 'documents');
@@ -94,33 +113,6 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  firstPhase: computed('phases.@each', function () {
-    return PromiseObject.create({
-      promise: this.store.query('subcase-phase', {
-        filter: {
-          subcase: { id: this.get('id') }
-        },
-        sort: 'date',
-        include: 'code'
-      }).then((subcasePhases) => {
-        return subcasePhases.get('firstObject');
-      })
-    });
-  }),
-
-  postponedPhases: computed('phases.@each', function () {
-    return this.store
-      .query('subcase-phase', {
-        filter: {
-          subcase: { id: this.get('id') },
-          code: { id: CONFIG.postponedCodeId }
-        }
-      })
-      .then(subcasePhases => {
-        return subcasePhases;
-      });
-  }),
-
   nameToShow: computed('subcaseName', function () {
     const { subcaseName, title, shortTitle } = this;
     if (subcaseName) {
@@ -130,7 +122,7 @@ export default ModelWithModifier.extend({
     } else if (title) {
       return title;
     } else {
-      return `No name found.`
+      return `No name found.`;
     }
   }),
 
@@ -152,84 +144,39 @@ export default ModelWithModifier.extend({
     return this.get('mandatees').sortBy('priority');
   }),
 
-  sortedPhases: computed('phases.@each', 'isPostponed', function () {
-    return PromiseArray.create({
-      promise: this.get('phases').then((phases) => {
-        return phases.sortBy('date');
-      })
-    });
+  hasActivity: computed('agendaActivities', 'agendaActivities.@each', async function () {
+    const activities = await this.get('agendaActivities');
+    if (activities && activities.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }),
 
-  hasAgendaItem: computed('agendaitems.@each', function () {
-    const { id, store } = this;
-    return PromiseObject.create({
-      promise: store.query('agendaitem', {
-        filter: { subcase: { id: id } },
-        sort: '-created'
-      }).then((agendaitems) => {
-        const lastAgendaItem = agendaitems.get('firstObject');
-        if (lastAgendaItem) {
-          return lastAgendaItem.get('postponedTo').then((postPoned) => {
-            const retracted = lastAgendaItem.get('retracted');
-            if (!postPoned && !retracted) {
-              return true;
-            } else {
-              return false;
-            }
-          });
-        } else {
-          return false;
-        }
-      })
-    })
-  }),
-
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', async function () {
+  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function () {
     return await this.store.query('agendaitem', {
       filter: {
-        subcase: { id: this.get('id') },
+        'agenda-activity': { subcase: { id: this.get('id') } },
         agenda: { status: { id: '2735d084-63d1-499f-86f4-9b69eb33727f' } }
       }
     });
   }),
 
-  meetings: computed('agendaitems.@each', async function () {
-    const agendaitems = await this.get('agendaitems');
-    const meetings = await Promise.all(agendaitems.map(async (agendaitem) => {
-      const agenda = await agendaitem.get('agenda');
-      return agenda ? agenda.get('createdFor') : null;
-    }));
-    // find met ===
-    return meetings.reduce((addedMeetings, meeting) => {
-      if (meeting && !addedMeetings.find(adddedMeeting => meeting === adddedMeeting)) {
-        addedMeetings.push(meeting)
-      }
-      return addedMeetings
-    }, A([]))
-  }),
-
-  latestMeeting: computed('meetings.@each', function () {
-    return PromiseObject.create({
-      promise: this.get('meetings').then((meetings) => {
-        return meetings.reduce((meeting1, meeting2) =>
-          moment(meeting1.plannedStart).isAfter(moment(meeting2.plannedStart))
-            ? meeting1
-            : meeting2)
-      })
-    })
-  }),
+  latestMeeting: alias('requestedForMeeting'),
 
   latestAgenda: computed('latestMeeting', async function () {
     const lastMeeting = await this.get('latestMeeting');
-    return lastMeeting.get('latestAgenda');
+    return await lastMeeting.get('latestAgenda');
   }),
 
-  latestAgendaItem: computed('latestAgenda.agendaitems.@each.postponedTo', async function () {
-    const latestAgenda = await this.get('latestAgenda');
-    const latestAgendaItems = await latestAgenda.get('agendaitems');
-    const agendaitems = await this.agendaitems;
-
-    return latestAgendaItems.find(item => agendaitems.includes(item));
+  latestAgendaItem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function () {
+    const latestActivity = await this.get('latestActivity');
+    if (latestActivity) {
+      const latestItem = await latestActivity.get('latestAgendaitem');
+      return latestItem;
+    } else {
+      return null;
+    }
   }),
 
   onAgendaInfo: computed('latestMeeting', async function () {
@@ -237,14 +184,7 @@ export default ModelWithModifier.extend({
     return latestMeeting.plannedStart;
   }),
 
-  decidedInfo: computed('phases.@each', function () {
-    return this.findPhaseDateByCodeId(CONFIG.decidedCodeId);
-  }),
-
-  // TODO tocheck @michael treatments.length is hier 0 - not sure yet why.
-
   approved: computed('treatments', function () {
-    console.log(this.get('treatments'));
     return PromiseObject.create({
       promise: this.get('treatments').then((treatments) => {
         const approvedTreatments = treatments.map((treatment) => {
@@ -286,38 +226,4 @@ export default ModelWithModifier.extend({
     return this.store.findRecord('case-type', id);
   }),
 
-  isPostponed: computed('latestAgendaItem', 'latestAgendaItem.isPostponed', async function () {
-    const latestAgendaItem = await this.get('latestAgendaItem');
-    if (latestAgendaItem) {
-      return latestAgendaItem.isPostponed;
-    }
-    return false;
-  }),
-
-  showInNewsletter: computed('agendaitems.@each.showInNewsletter', async function () {
-    const latestAgendaItem = await this.get('latestAgendaItem');
-    if (latestAgendaItem) {
-      return await latestAgendaItem.get('showInNewsletter');
-    } else {
-      return null;
-    }
-  }),
-
-  async findPhaseDateByCodeId(codeId) {
-    const subcasePhases = await this.get('phases');
-    const foundPhase = subcasePhases.find(async (phase) => {
-      const code = await phase.get('code');
-      if (code) {
-        const id = code.get('id');
-        if (id && id === codeId) {
-          return true;
-        }
-      }
-      return false;
-    });
-    if (foundPhase) {
-      return foundPhase.get('date')
-    }
-    return null;
-  }
 });

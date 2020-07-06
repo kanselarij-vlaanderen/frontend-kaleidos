@@ -5,14 +5,15 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async beforeModel() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const subcase = await agendaItem.subcase;
-    if (!subcase) {
+    const agendaActivity = await agendaItem.get('agendaActivity');
+    if (!agendaActivity) {
       this.transitionTo('agenda.agendaitems.agendaitem.index')
     }
   }
 
   async model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
+    //const agendaActivity = await agendaItem.get('agendaActivity');
     return this.store.query('agenda-item-treatment', {
       'filter[agendaitem][:id:]': agendaItem.id,
       'include': 'report,decision-result-code'
@@ -22,7 +23,8 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
   async setupController(controller, model) {
     super.setupController(...arguments);
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const subcase = await agendaItem.subcase;
+    const agendaActivity = await agendaItem.get('agendaActivity');
+    const subcase = await agendaActivity.get('subcase');
     controller.agendaItem = agendaItem;
     controller.subcase = subcase;
     controller.model = model;

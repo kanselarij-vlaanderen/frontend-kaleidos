@@ -12,9 +12,9 @@ context('Add files to an agenda', () => {
   before(() => {
     cy.server();
     cy.resetCache();
-    cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.logout();
+    // cy.login('Admin');
+    // cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    // cy.logout();
   });
 
   beforeEach(() => {
@@ -33,9 +33,12 @@ context('Add files to an agenda', () => {
     cy.createCase(false, caseTitle);
     cy.addSubcase(type,SubcaseTitleShort,subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
-    cy.proposeSubcaseForAgenda(agendaDate);
 
-    cy.openAgendaForDate(agendaDate);
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven').then((data) => {
+      cy.visit(`/vergadering/${data[0]}/agenda/${data[1]}/agendapunten`);
+    });
+    // cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaItemDecisionTab).click();
     cy.get(agenda.addDecision).click();
