@@ -72,14 +72,16 @@
     </LinkTo>
   </div>
   <div class="vl-u-spacer-extended-s">
-    <button data-test-manage-subcase-types
-            type="button"
-            class="vl-button vl-button--tertiary vl-button--icon-before"
-      {{action "toggleProperty" "isManagingSubcaseTypes"}}
+    <LinkTo
+      data-test-manage-case-types
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.subcase-types"
     >
       <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
       {{t "manage-subcase-types"}}
-    </button>
+    </LinkTo>
   </div>
   <div class="vl-u-spacer-extended-s">
     <button data-test-manage-signatures
@@ -94,13 +96,6 @@
 </div>
 {{#if isManagingAlerts}}
   {{utils/manage-alerts isManagingAlerts=isManagingAlerts}}
-{{/if}}
-{{#if isManagingSubcaseTypes}}
-  {{utils/model-manager
-    modalTitle=(t "manage-subcase-types")
-    modelName="subcase-type"
-    close=(action "toggleProperty" "isManagingSubcaseTypes")
-  }}
 {{/if}}
 {{#if isManagingSignature}}
   {{#web-components/vl-modal
