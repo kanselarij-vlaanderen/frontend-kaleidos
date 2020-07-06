@@ -1,19 +1,23 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import moment from "moment";
 
 export default class DecisionAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;
   @service store;
 
   @action
-  async addDecision() {
-    if (this.subcase) {
-      const newDecision = this.store.createRecord('agenda-item-treatment', {
+  async addTreatment() {
+    debugger;
+    if (this.agendaItem) {
+      const newTreatment = this.store.createRecord('agenda-item-treatment', {
         //status: false,
+        created: moment().utc().toDate(),
+        modified: moment().utc().toDate(),
         agendaItem: this.agendaItem
       });
-      await newDecision.save();
+      await newTreatment.save();
       this.refresh();
     }
   }

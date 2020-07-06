@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import moment from "moment";
 
 export default Controller.extend({
   intl: inject(),
@@ -53,11 +54,15 @@ export default Controller.extend({
   }),
 
   actions: {
-    async addDecision(row) {
+    async addTreatment(row) {
       const subcase = await row.get('subcase');
+      const agendaitem = await subcase.get('agendaitem');
+      debugger;
       // TODO @michael checkup.
       let treatment = this.store.createRecord('agenda-item-treatment', {
-        subcase: subcase,
+        agendaitem: agendaitem,
+        created: moment().utc().toDate(),
+        modified: moment().utc().toDate(),
         //title: subcase.get('title'),
         //shortTitle: subcase.get('shortTitle'),
         decisionResultCode: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
