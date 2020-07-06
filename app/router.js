@@ -50,6 +50,7 @@ Router.map(function () {
       this.route('new', { path:'/nieuw' });
     });
     this.route('government-domains', function() {});
+    this.route('government-fields', function() {});
   });
   this.route('loading', { path: '/laden' });
   this.route('mock-login-route', { path: '/mock-login' });
