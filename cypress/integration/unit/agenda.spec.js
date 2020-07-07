@@ -30,7 +30,7 @@ context('Agenda tests', () => {
     cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.deleteAgenda(result.meetingId, true);
-      });
+    });
   });
 
   it('should set formal ok on all agendaitems and approve it', () => {
@@ -47,12 +47,12 @@ context('Agenda tests', () => {
 
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
     const agendaDate = Cypress.moment().add(3, 'weeks').day(5); // Friday in three weeks
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Daar').then((data) => {
-      cy.visit(`/vergadering/${data[0]}/agenda/${data[1]}/agendapunten`);
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Daar').then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.openAgendaForDate(agendaDate);
       cy.setFormalOkOnItemWithIndex(0);
       cy.approveDesignAgenda();
-      cy.deleteAgenda(data[0]);
+      cy.deleteAgenda(result.meetingId);
       cy.closeAgenda();
     });
   });
