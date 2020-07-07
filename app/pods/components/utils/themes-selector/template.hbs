@@ -2,7 +2,7 @@
   {{#if this.themes.length }}
     {{#each this.themes as |theme|}}
       <WebComponents::VlCheckbox
-        @value={{action this.checkSelectedThemes theme}}
+        @value={{theme.selected}}
         @label={{theme.label}}
         @toggle={{fn this.selectModel theme}}
       />

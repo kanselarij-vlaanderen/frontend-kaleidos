@@ -22,7 +22,7 @@ export default class ThemesSelector extends Component {
     set(this, 'themes', fetchedThemes.sortBy('label').filter((item) => !item.deprecated));
 
     console.log('%cSELECTED THEMES IN THEMESELECTOR', 'background-color: #c43b64; padding: 5px; border-radius: 3px; font-weight: bold; color: white', this.selectedThemes);
-    // this.checkSelectedThemes(this.selectedThemes, fetchedThemes)
+    this.checkSelectedThemes()
   }
 
   @action
@@ -35,12 +35,13 @@ export default class ThemesSelector extends Component {
   }
 
   @action
-  checkSelectedThemes(theme) {
+  checkSelectedThemes() {
+    //TODO loop over themes
     console.log('%ccheckSelectedThemes', 'background-color: #e9b329; padding: 5px; border-radius: 3px; font-weight: bold; color: white');
     if (this.selectedThemes && this.selectedThemes.length > 0) {
       this.selectedThemes.forEach((selectedTheme) => {
-        console.log('%cDEBUG', 'background-color: #1962dd; padding: 5px; border-radius: 3px; font-weight: bold; color: white', theme.get('label'), selectedTheme.get('label'));
-        return theme.get('label') === selectedTheme.get('label');
+        console.log('%cDEBUG', 'background-color: #1962dd; padding: 5px; border-radius: 3px; font-weight: bold; color: white', this.theme.get('label'), selectedTheme.get('label'));
+        return this.themes.get('label') === selectedTheme.get('label');
       });
     }
 
