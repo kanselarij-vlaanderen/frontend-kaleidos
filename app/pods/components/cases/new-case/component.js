@@ -28,7 +28,7 @@ export default Component.extend({
     async createCase($event) {
       this.set('isLoading', true);
       $event.preventDefault();
-      this.createCase();
+      await this.createCase();
     },
 
     close() {

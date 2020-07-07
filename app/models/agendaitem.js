@@ -22,7 +22,7 @@ export default ModelWithModifier.extend({
   priority: attr('number'),
   created: attr('datetime'),
   record: attr('string'),
-  retracted: attr('boolean'),
+  retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to treatment
   showAsRemark: attr('boolean'),
   modified: attr('datetime'),
   titlePress: attr('string'),
@@ -34,9 +34,8 @@ export default ModelWithModifier.extend({
   isApproval: attr('boolean'),
   explanation: attr('string'),
 
-  postponedTo: belongsTo('postponed'),
   agenda: belongsTo('agenda', { inverse: null }),
-  subcase: belongsTo('subcase', { inverse: null }),
+  agendaActivity: belongsTo('agenda-activity', { inverse: null }),
   meetingRecord: belongsTo('meeting-record'),
   showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
@@ -45,7 +44,6 @@ export default ModelWithModifier.extend({
   approvals: hasMany('approval'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
-  phases: hasMany('subcase-phase'),
 
   sortedDocumentVersions: computed('documentVersions.@each.name', function () {
     return A(this.get('documentVersions').toArray()).sort((a, b) => compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name'))));
@@ -105,20 +103,6 @@ export default ModelWithModifier.extend({
     return priority;
   }),
 
-  isPostponed: computed('retracted', 'postponedTo', function () {
-    return this.get('postponedTo').then((session) => !!session || this.get('retracted'));
-  }),
-
-  decisions: computed('subcase.decisions.@each', function () {
-    return PromiseArray.create({
-      promise: this.store.query('decision', {
-        filter: {
-          subcase: { id: this.subcase.get('id') },
-        },
-      }).then((decisions) => decisions.sortBy('approved')),
-    });
-  }),
-
   isDesignAgenda: computed('agenda.isDesignAgenda', function () {
     return this.get('agenda.isDesignAgenda');
   }),
@@ -153,25 +137,12 @@ export default ModelWithModifier.extend({
     return this.get('mandatees').sortBy('priority');
   }),
 
-  subcasesFromCase: computed('subcase', function () {
-    if (!this.get('subcase.id')) {
-      return [];
-    }
-    return this.subcase.get('subcasesFromCase');
-  }),
-
   formallyOkToShow: computed('formallyOk', function () {
     const options = CONFIG.formallyOkOptions;
     const { formallyOk } = this;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
 
     return EmberObject.create(foundOption);
-  }),
-
-  requestedBy: computed('subcase.requestedBy', function () {
-    return PromiseObject.create({
-      promise: this.get('subcase.requestedBy').then((requestedBy) => requestedBy),
-    });
   }),
 
   checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function () {

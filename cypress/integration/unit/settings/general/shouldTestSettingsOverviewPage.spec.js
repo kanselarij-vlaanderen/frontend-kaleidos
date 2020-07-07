@@ -115,7 +115,6 @@ context('Settings overview page tests', () => {
     cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
     cy.url().should('include', 'instellingen/gebruikers');
     cy.get(settings.userSearchInput).should('exist').should('be.visible').type('Minister');
-
     cy.get(settings.settingsUserTable).should('contain', 'Minister');
     cy.get(settings.userSearchButton).click().then(() => {
       cy.wait('@filterUsers');

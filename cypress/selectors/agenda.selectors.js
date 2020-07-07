@@ -29,7 +29,6 @@ const selectors = {
   },
   item: {
     editLink: '[data-test-agendaitem-edit-link] a',
-    showInNewsLetter: '[data-test-vl-subcase-titles-edit-show-in-newsletter]',
     checkBoxLabel: 'label.vl-checkbox--switch__label',
     actionButton: '.vl-action-group button',
     themes: '[data-test-agenda-news-item-themes]',
@@ -50,10 +49,21 @@ const selectors = {
   uploadDecisionFile: '[data-test-upload-decision-file]',
   accessLevelPill: '[data-test-access-level-pill]',
   accessLevelSave: '[data-test-access-level-save]',
+
   subcaseTitlesEdit: '[data-test-subcase-titles-edit]',
-  subcaseTitlesEditTitleOfSubcase: '[data-test-subcase-titles-edit-title-subcase]',
-  subcaseTitlesEditShorttitleOfSubcase: '[data-test-subcase-titles-edit-shorttitle]',
+  subcaseTitlesEditTitle: '[data-test-subcase-titles-edit-title]',
+  subcaseTitlesEditShorttitle: '[data-test-subcase-titles-edit-shorttitle]',
+  subcaseTitlesEditAccessLevel: '[data-test-subcase-titles-edit-accessLevel]',
+  subcaseTitlesEditConfidential: '[data-test-subcase-titles-edit-confidential ]',
   subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
+
+  agendaitemTitlesEdit: '[data-test-agendaitem-titles-edit]',
+  agendaitemTitlesEditTitle: '[data-test-agendaitem-titles-edit-title]',
+  agendaitemTitlesEditShorttitle: '[data-test-agendaitem-titles-edit-shorttitle]',
+  agendaitemTitlesEditExplanation: '[data-test-agendaitem-titles-edit-explanation]',
+  agendaitemTitlesEditShowInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
+  agendaitemTitlesEditSave: '[data-test-agendaitem-titles-edit-save]',
+
   approveDesignAgenda: '[data-test-approve-design-agenda]',
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
   documentType: '[data-test-document-type]',

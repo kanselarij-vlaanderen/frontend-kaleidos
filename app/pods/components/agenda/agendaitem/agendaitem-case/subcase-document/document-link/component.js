@@ -305,10 +305,11 @@ export default Component.extend({
       const document = await this.get('documentContainer.lastDocumentVersion');
       await document.save();
       const item = await this.get('item');
-      const subcase = await item.get('subcase');
-      const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
+      const agendaActivity = await item.get('agendaActivity'); // when item = agendaitem
+      const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
       try {
-        if (subcase) {
+        if (agendaActivity) {
+          const subcase = await agendaActivity.get('subcase');
           await this.addDocumentToSubcase([document], subcase);
         } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
           await this.addDocumentToAgendaitems([document], agendaitemsOnDesignAgenda);

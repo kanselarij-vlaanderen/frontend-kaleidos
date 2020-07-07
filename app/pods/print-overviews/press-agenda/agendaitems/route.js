@@ -6,7 +6,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
   authenticationRoute: 'login',
   routeNamePrefix: 'press-agenda',
   sort: 'priority',
-  include: 'subcase',
+  include: 'agenda-activity,agenda-activity.subcase',
   shouldFilterRemarks: true,
   currentSession: service(),
   modelName: 'agendaitem',

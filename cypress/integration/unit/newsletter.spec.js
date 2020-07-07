@@ -14,12 +14,12 @@ context('Test the KB functionality', () => {
   xit('should test the newsletter of an agenda', () => {
     const agendaDate = Cypress.moment().add(3, 'weeks').day(4); // Next friday
 
-    cy.createAgenda('Ministerraad', agendaDate, 'Test Kort bestek toevoegen').then((meetingId) => {
-      cy.openAgendaForDate(agendaDate);
+    cy.createAgenda('Ministerraad', agendaDate, 'Test Kort bestek toevoegen').then((data) => {
+      cy.visit(`/vergadering/${data[0]}/agenda/${data[1]}/agendapunten`);
 
       // WIP
 
-      cy.deleteAgenda(meetingId, true);
+      cy.deleteAgenda(data[0], true);
     });
   });
 });

@@ -4,34 +4,35 @@ import DS from 'ember-data';
 
 export default Component.extend({
   tagName: 'tr',
-  myDocumentVersions: computed.alias('item.documentVersions'),
+  myDocuments: computed.alias('item.documentVersions'),
 
-  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function () {
-    const sortedVersions = this.get('mySortedDocumentVersions');
-    return sortedVersions.lastObject;
+  myLastDocument: computed('mySortedDocuments.@each', function () {
+    const mySortedDocuments = this.get('mySortedDocuments');
+    return mySortedDocuments.lastObject;
   }),
 
-  lastDocumentVersionName: computed('lastDocumentVersion.name', function () {
-    return this.get('lastDocumentVersion.name');
+  myLastDocumentName: computed('myLastDocument.name', function () {
+    return this.get('myLastDocument.name');
   }),
 
   // TODO: DUPLICATE CODE IN agenda/agendaitem/agendaitem-case/subcase-document/document-link/component.js
   // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
   // TODO: DUPLICATE CODE IN edit-document-version/component.js
-  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function () {
+  // TODO: THIS CODE HAS BEEN REFACTORED TO USE BETTER VARIABLE NAMES
+  mySortedDocuments: computed('myDocuments.@each', 'documentContainer.sortedDocuments.@each', function () {
     return DS.PromiseArray.create({
       promise: (async () => {
-        const itemVersionIds = {};
-        const versions = await this.get('myDocumentVersions');
-        if (versions) {
-          versions.map((item) => {
-            itemVersionIds[item.get('id')] = true;
+        const documentIds = {};
+        const myDocuments = await this.get('myDocuments');
+        if (myDocuments) {
+          myDocuments.map((document) => {
+            documentIds[document.get('id')] = true;
           });
         }
-        const documentVersions = await this.get('document.sortedDocumentVersions');
-        if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
-          return matchingVersions;
+        const documentsFromContainer = await this.get('documentContainer.sortedDocuments');
+        if (documentsFromContainer) {
+          const matchingDocuments = await documentsFromContainer.filter((document) => documentIds[document.id]);
+          return matchingDocuments;
         }
       })(),
     });
@@ -39,16 +40,15 @@ export default Component.extend({
 
   actions: {
 
-    deleteRow(document) {
-      document.set('deleted', true);
+    deleteRow(documentContainer) {
+      documentContainer.set('deleted', true);
     },
-    chooseDocumentType(document, type) {
-      document.set('type', type);
+    chooseDocumentType(documentContainer, type) {
+      documentContainer.set('type', type);
     },
 
     async chooseAccessLevel(document, accessLevel) {
-      const documentVersion = await document.get('lastDocumentVersion');
-      documentVersion.set('accessLevel', accessLevel);
+      document.set('accessLevel', accessLevel);
     },
-  },
+  }
 });

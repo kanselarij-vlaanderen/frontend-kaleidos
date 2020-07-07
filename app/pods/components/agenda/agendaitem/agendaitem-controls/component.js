@@ -1,8 +1,6 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import moment from 'moment';
 import { inject as service } from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
 
 export default Component.extend({
   store: service(),
@@ -12,24 +10,28 @@ export default Component.extend({
   currentSession: service(),
   currentAgenda: null,
   agendaitem: null,
+  isSavingRetracted: null,
 
-  isPostPonable: computed('sessionService.agendas.@each', 'agendaitem.subcase', async function () {
-    const subcase = await this.agendaitem.get('subcase');
-    if (!subcase) {
-      return;
+  isPostPonable: computed('sessionService.agendas.@each', 'agendaitem.agendaActivity', 'agendaitem.retracted', async function () {
+    const agendaActivity = await this.get('agendaitem.agendaActivity');
+    if (!agendaActivity) {
+      // In case of legacy agendaitems without a link to subcase (old) or agenda-activity
+      // Or in case of the agendaitem to approve minutes ("verslag vorige vergadering")
+      return false;
     }
-
     return this.get('sessionService.agendas').then((agendas) => !!(agendas && agendas.get('length') > 1));
   }),
 
+  //TODO verbose logic
   isDeletable: computed(
-    'agendaitem.{subcase,subcase.agendaitems}', 'currentAgenda.name', async function () {
+    'agendaitem.agendaActivity', 'currentAgenda.name', async function () {
       const designAgenda = await this.get('currentAgenda.isDesignAgenda');
-      const agendaitemSubcase = await this.get('agendaitem.subcase');
-      const agendaitems = await this.get('agendaitem.subcase.agendaitems');
+      const agendaActivity = await this.get('agendaitem.agendaActivity');
       if (!designAgenda) {
         return false;
-      } if (agendaitemSubcase) {
+      }
+      if (agendaActivity) {
+        const agendaitems = await agendaActivity.get('agendaitems');
         return !(agendaitems && agendaitems.length > 1);
       }
       return true;
@@ -38,11 +40,6 @@ export default Component.extend({
 
   async deleteItem(agendaitem) {
     this.toggleProperty('isVerifying');
-    const subcase = await agendaitem.get('subcase');
-    if (subcase) {
-      // Refresh the agendaitems for isDeletable
-      await subcase.hasMany('agendaitems').reload();
-    }
     if (await this.get('isDeletable')) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
@@ -54,7 +51,7 @@ export default Component.extend({
     }
   },
 
-  deleteWarningText: computed('agendaitem.{subcase,subcase.agendaitems}', async function () {
+  deleteWarningText: computed('agendaitem.agendaActivity', async function () {
     if (await this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
     } if (this.currentSession.isAdmin) {
@@ -69,44 +66,22 @@ export default Component.extend({
     },
 
     async postponeAgendaItem(agendaitem) {
+      this.set('isSavingRetracted', true);
       agendaitem.set('retracted', true);
-      const postPonedObject = this.store.createRecord('postponed', {
-        agendaitem,
-      });
-      const subcase = await agendaitem.get('subcase');
-      await this.createPostponedPhase(subcase);
-
-      postPonedObject.save().then((postponedTo) => {
-        agendaitem.set('postponed', postponedTo);
-      });
-      await subcase.notifyPropertyChange('isPostponed');
-      await subcase.hasMany('phases').reload();
+      // TODO KAS-1420 change property on treatment during model rework
+      // TODO KAS-1420 create treatment ?
       await agendaitem.save();
-      await agendaitem.reload();
-      await subcase.reload();
+      this.set('isSavingRetracted', false);
     },
 
-    async advanceAgendaitem() {
-      const agendaitem = await this.store.findRecord(
-        'agendaitem',
-        this.agendaitem.get('id'),
-      );
-      const postponedTo = await agendaitem.get('postponedTo');
-      const subcase = await agendaitem.get('subcase');
-      await this.deletePostponedPhases(subcase);
-      if (agendaitem && agendaitem.retracted) {
-        agendaitem.set('retracted', false);
-      }
-
-      if (agendaitem && postponedTo) {
-        await postponedTo.destroyRecord();
-      }
+    async advanceAgendaitem(agendaitem) {
+      this.set('isSavingRetracted', true);
+      // TODO KAS-1420 change property on treatment during model rework
+      // TODO KAS-1420 delete postponed treatment ?
+      // what to do when deleting treatment ?
+      agendaitem.set('retracted', false);
       await agendaitem.save();
-      await agendaitem.reload();
-      await subcase.hasMany('phases').reload();
-      await subcase.notifyPropertyChange('isPostponed');
-      await subcase.reload();
-      await agendaitem.subcase.reload();
+      this.set('isSavingRetracted', false);
     },
 
     toggleIsVerifying() {
@@ -124,29 +99,5 @@ export default Component.extend({
     verifyDelete(agendaitem) {
       this.deleteItem(agendaitem);
     },
-  },
-
-  async deletePostponedPhases(subcase) {
-    const postponedPhases = await subcase.get('postponedPhases');
-    if (postponedPhases && postponedPhases.length) {
-      await Promise.all(
-        postponedPhases.map((phase) => {
-          phase.destroyRecord();
-        }),
-      );
-    }
-    return subcase;
-  },
-
-  async createPostponedPhase(subcase) {
-    const postponedCode = await this.store.findRecord('subcase-phase-code', CONFIG.postponedCodeId);
-    const newDecisionPhase = this.store.createRecord('subcase-phase', {
-      date: moment()
-        .utc()
-        .toDate(),
-      code: postponedCode,
-      subcase,
-    });
-    return newDecisionPhase.save();
   },
 });

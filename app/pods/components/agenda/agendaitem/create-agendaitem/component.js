@@ -36,7 +36,7 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
         size,
       },
       filter: {
-        ':has-no:agendaitems': 'yes',
+        ':has-no:agenda-activities': 'yes',
         ':not:is-archived': 'true',
       },
     };
@@ -193,7 +193,7 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
         postponedSubcases,
         agendaService,
       } = this;
-      const itemsToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
+      const subcasesToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
 
       // These counters are needed to set an init counter for the agendaitems that are being added to an empty agenda.
       let index;
@@ -210,7 +210,7 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
               agendaitemCounter++;
               index = agendaitemCounter;
             }
-            return await agendaService.createNewAgendaItem(selectedAgenda, subCase, index);
+            return await agendaService.createNewAgendaItem(selectedAgenda, subcase, index);
           }
         }),
       );
@@ -219,8 +219,9 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
         this.set('sessionService.selectedAgendaItem', null);
-        const newAgendaitemId = itemsToAdd.get('firstObject').agendaitems.get('firstObject').id;
-        this.reloadRouteWithRefreshId(newAgendaitemId);
+        const anyAddedSubcase = subcasesToAdd.get('firstObject');
+        const newAgendaitem = await anyAddedSubcase.get('latestAgendaItem');
+        this.reloadRouteWithRefreshId(newAgendaitem.id);
       });
     },
   },

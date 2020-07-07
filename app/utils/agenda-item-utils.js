@@ -94,8 +94,9 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
     const agenda = await item.get('agenda');
     const isDesignAgenda = await agenda.asyncCheckIfDesignAgenda();
 
-    const agendaitemSubcase = await item.get('subcase');
-    if (isDesignAgenda && agendaitemSubcase) {
+    const agendaActivity = await item.get('agendaActivity');
+    if (isDesignAgenda && agendaActivity) {
+      const agendaitemSubcase = await agendaActivity.get('subcase');
       await agendaitemSubcase.preEditOrSaveCheck();
       await setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, resetFormallyOk);
     }

@@ -24,7 +24,6 @@ export default Model.extend({
 
   agendas: hasMany('agenda', { inverse: null, serialize: false }),
   requestedSubcases: hasMany('subcase'),
-  postponeds: hasMany('postponed'),
   documentVersions: hasMany('document-version'),
 
   notes: belongsTo('meeting-record'),

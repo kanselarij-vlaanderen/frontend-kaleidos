@@ -117,6 +117,13 @@ export default Service.extend({
     if (index) {
       priorityToAssign += index;
     }
+
+    const agendaActivity = await this.store.createRecord('agenda-activity', {
+      startDate: moment().utc().toDate(),
+      subcase: subcase,
+    });
+    await agendaActivity.save();
+    
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.get('shortTitle'),
@@ -124,7 +131,6 @@ export default Service.extend({
       created: moment()
         .utc()
         .toDate(),
-      subcase,
       priority: priorityToAssign,
       agenda: selectedAgenda,
       title: subcase.get('title'),
@@ -134,31 +140,16 @@ export default Service.extend({
       mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
+      agendaActivity: agendaActivity,
       showInNewsletter: true,
     });
     await agendaitem.save();
-
     const meeting = await selectedAgenda.get('createdFor');
-    await subcase.hasMany('agendaitems').reload();
     await selectedAgenda.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
+    await subcase.hasMany('agendaActivities').reload();
     await subcase.save();
-    await this.assignSubcasePhase(subcase);
-    await subcase.hasMany('phases').reload();
-    await updateModifiedProperty(selectedAgenda);
-  },
-
-  async assignSubcasePhase(subcase) {
-    const phasesCodes = await this.store.query('subcase-phase-code', { filter: { label: 'Ingediend voor agendering' } });
-    const phaseCode = phasesCodes.get('firstObject');
-    if (phaseCode) {
-      const phase = this.store.createRecord('subcase-phase', {
-        date: moment().utc().toDate(),
-        code: phaseCode,
-        subcase,
-      });
-      await phase.save();
-    }
+    updateModifiedProperty(selectedAgenda);
   },
 
   async groupAgendaItemsOnGroupName(agendaitems) {
@@ -191,78 +182,44 @@ export default Service.extend({
   },
 
   async deleteAgendaitem(agendaitem) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
     itemToDelete.set('aboutToDelete', true);
-    await itemToDelete.belongsTo('subcase').reload();
-    const subcase = await itemToDelete.get('subcase');
+    const agendaActivity = await itemToDelete.get('agendaActivity');
 
-    if (subcase) {
-      await subcase.hasMany('agendaitems').reload();
-      const agendaitemsFromSubcase = await subcase.get('agendaitems');
-      if (agendaitemsFromSubcase.length === 1) {
-        // if only 1 item is found, all phases should be destroyed
-        // and the subcase updated before deleting the agendaitem
-        const phases = await subcase.get('phases');
-        await Promise.all(phases.map(async (phase) => {
-          await phase.destroyRecord();
-        }));
-        await subcase.set('requestedForMeeting', null);
-        await subcase.set('consulationRequests', []);
-        await subcase.set('agendaitems', []);
-        await subcase.save();
-      } else {
-        const foundAgendaitem = agendaitemsFromSubcase
-          .find((agendaitemFromSubcase) => agendaitemFromSubcase.id === itemToDelete.id);
-        itemToDelete = foundAgendaitem;
-      }
+    if (agendaActivity) {
+      const subcase = await agendaActivity.get('subcase');
+      await agendaActivity.hasMany('agendaitems').reload();
+      const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
+      await Promise.all(agendaitemsFromActivity.map(async agendaitem => {
+        const agenda = await agendaitem.get('agenda');
+        await agendaitem.destroyRecord();
+        await agenda.hasMany('agendaitems').reload();
+      }));
+      await agendaActivity.destroyRecord();
+      await subcase.set('requestedForMeeting', null);
+      await subcase.save();
+      await subcase.hasMany('agendaActivities').reload();
+    } else {
+      await itemToDelete.destroyRecord();
     }
-    await itemToDelete.destroyRecord();
   },
 
   async deleteAgendaitemFromMeeting(agendaitem) {
-    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
-    const currentAgenda = await itemToDelete.get('agenda');
-    const currentMeeting = await currentAgenda.get('createdFor');
-    const currentMeetingId = await currentMeeting.get('id');
     if (this.currentSession.isAdmin) {
-      itemToDelete.set('aboutToDelete', true);
-      const subcase = await itemToDelete.get('subcase');
-      const agendaitems = await subcase.get('agendaitems');
-
-      if (subcase) {
-        await Promise.all(agendaitems.map(async (item) => {
-          const agenda = await item.get('agenda');
-          const meeting = await agenda.get('createdFor');
-          const meetingId = await meeting.get('id');
-          if (meetingId === currentMeetingId) {
-            await item.destroyRecord();
-          }
-        }));
-        await subcase.hasMany('agendaitems').reload();
-        const agendaitemsFromSubcase = await subcase.get('agendaitems');
-        if (agendaitemsFromSubcase.length === 0) {
-          const phases = await subcase.get('phases');
-          await Promise.all(phases.map(async (phase) => {
-            await phase.destroyRecord();
-          }));
-        }
-        await subcase.set('requestedForMeeting', null);
-        await subcase.save();
-      } else {
-        await itemToDelete.destroyRecord();
-      }
-    } else {
-      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return await this.deleteAgendaitem(agendaitem);
     }
+    this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
   },
 
-  async retrieveModifiedDateFromNota(agendaItem) {
-    const newsletterInfoForSubcase = await agendaItem.get('subcase.newsletterInfo');
-    const nota = await agendaItem.get('nota');
+  async retrieveModifiedDateFromNota(agendaitem, subcase) {
+    if (!subcase) {
+      return null;
+    }
+    const nota = await agendaitem.get('nota');
     if (!nota) {
       return null;
     }
-
+    const newsletterInfoForSubcase = await subcase.get('newsletterInfo');
     const documentVersion = await nota.get('lastDocumentVersion');
     const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
     const notaDocumentVersions = await nota.get('documentVersions');

@@ -216,9 +216,8 @@ export default Component.extend(
 
         this.get('documentsInCreation').clear();
         const item = await this.get('item');
-
-        const subcase = await item.get('subcase');
-        const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
+        const agendaActivity = await item.get('agendaActivity'); // when item = agendaitem
+        const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
 
         try {
           const documentsToAttach = [];
@@ -231,7 +230,8 @@ export default Component.extend(
             }),
           );
           if (documentsToAttach) {
-            if (subcase) {
+            if (agendaActivity) {
+              const subcase = await agendaActivity.get('subcase');
               await this.addDocumentsToSubcase(documentsToAttach, subcase);
             } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
               await this.addDocumentsToAgendaitems(
@@ -266,8 +266,8 @@ export default Component.extend(
       async linkDocuments() {
         const documents = await this.get('documentsToLink');
         const item = await this.get('item');
-        const subcase = await item.get('subcase');
-        const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit');
+        const agendaActivity = await item.get('agendaActivity'); // when item = agendaitem
+        const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
         try {
           const documentsToAttach = [];
           await Promise.all(
@@ -279,7 +279,8 @@ export default Component.extend(
               });
             }),
           );
-          if (subcase) {
+          if (agendaActivity) {
+            const subcase = await agendaActivity.get('subcase');
             await this.linkDocumentsToSubcase(documentsToAttach, subcase);
           } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
             await this.linkDocumentsToAgendaitems(documentsToAttach, agendaitemsOnDesignAgenda);

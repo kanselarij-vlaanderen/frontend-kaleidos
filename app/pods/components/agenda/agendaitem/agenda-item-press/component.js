@@ -12,7 +12,7 @@ export default class AgendaItemPress extends Component {
 
   @computed('agendaitem')
   get title() {
-    return this.agendaitem.get('subcase.title');
+    return this.agendaitem.get('title');
   }
 
   @action
@@ -22,16 +22,11 @@ export default class AgendaItemPress extends Component {
     const text = agendaitem.get('textPress');
     if (!text) {
       const mandatees = await agendaitem.get('mandatees');
-      const phases = await agendaitem.get('phases');
-      let phase = '';
-      if (phases && phases.length > 0) {
-        phase = await phases.get('firstObject').get('code.label');
-      }
       let titles = [];
       if (mandatees) {
         titles = mandatees.map((mandatee) => mandatee.get('title'));
       }
-      const pressText = `${agendaitem.get('shortTitle')}\n${titles.join('\n')}\n${phase}`;
+      const pressText = `${agendaitem.get('shortTitle')}\n${titles.join('\n')}`;
       agendaitem.set('textPress', pressText);
       await agendaitem.save().then(() => {
         updateModifiedProperty(agenda);

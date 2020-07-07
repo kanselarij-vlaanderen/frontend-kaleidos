@@ -12,7 +12,7 @@ export default Model.extend({
   filenameWithoutExtension: computed('filename', {
     get() {
       const ext = this.get('extension');
-      const regex = new RegExp(`\\.${ext}$`);
+      const regex = new RegExp(`\.${ext}$`);
       return this.get('filename').replace(regex, '');
     },
     set(key, value) {

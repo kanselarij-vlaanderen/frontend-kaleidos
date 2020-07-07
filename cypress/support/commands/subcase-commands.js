@@ -177,16 +177,24 @@ function addSubcaseThemes(themes) {
 
 /**
  * Adds a mandatees with field and domain to a sucase when used in the subcase view (/dossiers/..id../overzicht)
+ * Pass the title of the mandatee to get a specific person
  * @name addSubcaseThemes
  * @memberOf Cypress.Chainable#
  * @function
  * @param {Number} mandateeNumber - The list index of the mandatee
  * @param {Number} fieldNumber - The list index of the field, -1 means no field/domain should be selected
  * @param {Number} domainNumber - The list index of the domain
+ * @param {String} mandateeSearchText - Search on the minister title (name does not work)
  */
-function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
+function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText) {
   cy.log('addSubcaseMandatee');
-  cy.route('GET', '/mandatees?**').as('getMandatees');
+
+  if (mandateeSearchText) {
+    cy.route('GET', `/mandatees?filter**filter**${mandateeSearchText.split(" ", 1)}**`).as('getFilteredMandatees');
+  } else {
+    cy.route('GET', '/mandatees?**').as('getMandatees');
+  }
+  
   cy.route('GET', '/ise-codes/**').as('getIseCodes');
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
@@ -200,14 +208,23 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber) {
 
   cy.get('.vlc-box a').contains('Minister toevoegen').click();
   cy.get('.mandatee-selector-container').children('.ember-power-select-trigger').click();
-  cy.get('.ember-power-select-search-input').type('g').clear(); // TODO added this because default data does not have active ministers
-  cy.wait('@getMandatees', { timeout: 12000 });
+  // cy.get('.ember-power-select-search-input').type('g').clear(); // TODO added this because default data does not have active ministers
+  if (mandateeSearchText) {
+    cy.get('.ember-power-select-search-input').type(mandateeSearchText);
+    cy.wait('@getFilteredMandatees', { timeout: 12000 });
+  } else {
+    cy.wait('@getMandatees', { timeout: 12000 });
+  }
   cy.get('.ember-power-select-option--search-message', { timeout: 10000 }).should('not.exist'); // TODO added this because default data does not have active ministers
   cy.get('.ember-power-select-option', { timeout: 10000 }).should('exist').then(() => {
-    cy.get('.ember-power-select-option').eq(mandateeNumber).click();
+    if (mandateeSearchText) {
+      cy.get('.ember-power-select-option').eq(0).click();
+    } else {
+      cy.get('.ember-power-select-option').eq(mandateeNumber).click();
+    }
   });
   // TODO loading the isecodes and government fields takes time, are they not cacheble ?
-  cy.wait('@getIseCodes', { timeout: 20000 });
+  cy.wait('@getIseCodes', { timeout: 50000 });
   cy.wait('@getGovernmentFields', { timeout: 20000 });
   if (fieldNumber >= 0) {
     cy.get('.vlc-checkbox-tree', { timeout: 30000 }).should('exist').eq(fieldNumber).within(() => {
@@ -237,7 +254,7 @@ function proposeSubcaseForAgenda(agendaDate) {
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
   cy.route('PATCH', '/agendas/*').as('patchAgenda');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
-  cy.route('POST', '/subcase-phases').as('createSubcasePhase');
+  cy.route('POST', '/agenda-activities').as('createAgendaActivity');
   const monthDutch = getTranslatedMonth(agendaDate.month());
   const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
@@ -248,10 +265,10 @@ function proposeSubcaseForAgenda(agendaDate) {
   cy.get('.ember-attacher-show').within(() => {
     cy.contains(formattedDate).click();
   });
-  cy.wait('@createNewAgendaitem', { timeout: 12000 });
-  cy.wait('@patchSubcase', { timeout: 24000 });
-  cy.wait('@createSubcasePhase', { timeout: 24000 });
-  cy.wait('@patchAgenda', { timeout: 24000 });
+  cy.wait('@createAgendaActivity', { timeout: 20000 })
+    .wait('@createNewAgendaitem', { timeout: 20000 })
+    .wait('@patchSubcase', { timeout: 24000 })
+    .wait('@patchAgenda', { timeout: 24000 });
   cy.log('/proposeSubcaseForAgenda');
 }
 

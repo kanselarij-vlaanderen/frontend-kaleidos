@@ -70,7 +70,7 @@ context('Agenda tests', () => {
     cy.contains('Opslaan').click();
     cy.releaseDecisions();
     cy.wait(60000);
-    cy.logout();
+    cy.logoutFlow();
   });
 
   it('Test as Overheid', () => {
@@ -86,7 +86,7 @@ context('Agenda tests', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 0);
     });
-    cy.logout();
+    cy.logoutFlow();
   });
 
   it('Test as Admin', () => {
@@ -96,7 +96,7 @@ context('Agenda tests', () => {
     cy.releaseDocuments();
     cy.wait(60000);
 
-    cy.logout();
+    cy.logoutFlow();
   });
 
   it('Test as Overheid', () => {
@@ -108,5 +108,24 @@ context('Agenda tests', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards').should('have.length', 2);
     });
+
+    cy.logoutFlow();
+  });
+
+  // TODO TEST AS MINISTER, we need seperate tests to verify wat/when other profiles can see data
+  it('Test as Minister', () => {
+    cy.server();
+    cy.login('Minister');
+    cy.searchCase(caseTitle);
+    cy.openSubcase(0);
+    cy.url().should('contain', '/deeldossiers/');
+    cy.url().should('contain', '/overzicht');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Acties').should('not.exist');
+    cy.contains('Indienen voor agendering').should('not.exist');
+    cy.clickReverseTab('Documenten');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Documenten toevoegen').should('not.exist');
+    cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
   });
 });

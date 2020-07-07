@@ -8,9 +8,9 @@
     include=include
     size=size
     columns=columns
-  as |row|
+  as |agendaitemRow|
   }}
-    {{#if (is-pending row.decisions)}}
+    {{#if (is-pending agendaitemRow.agendaActivity.subcase.decisions)}}
       {{web-components/vl-loader text=(t "decisions-loading-text")}}
     {{else}}
       <div class="vl-u-spacer-extended-l">
@@ -18,7 +18,7 @@
           <div class="vl-action-group vl-action-group--align-center">
             <button type="button" class="vl-button vl-button--secondary vl-button--icon-before"
               data-test-add-decision
-              {{action "addDecision" row}}
+              {{action "addDecision" agendaitemRow}}
             >
               <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
               ></i>
@@ -26,12 +26,12 @@
             </button>
           </div>
         </div>
-        {{#each (await row.decisions) as |decision|}}
+        {{#each (await agendaitemRow.agendaActivity.subcase.decisions) as |decision|}}
           {{agenda/agendaitem/agendaitem-decision
-            subcase=(await row.subcase)
+            subcase=(await agendaitemRow.agendaActivity.subcase)
             isTableRow=true
             decision=decision
-            agendaitem=row
+            agendaitem=agendaitemRow
           }}
         {{/each}}
       </div>

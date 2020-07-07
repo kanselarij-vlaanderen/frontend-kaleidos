@@ -86,14 +86,14 @@ context('Tests for KAS-1076', () => {
 
     cy.addDocumentsToAgendaItem(SubcaseTitleShort, files, false);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
+      cy.get('.vlc-document-card',{ timeout: 60000 }).as('docCards').should('have.length', 22);
     });
 
     cy.openCase(caseTitleSingle);
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
+      cy.get('.vlc-document-card',{ timeout: 60000 }).as('docCards').should('have.length', 22);
     });
 
     const linkedDocumentsNames = files.slice(9, 14).map((file) => file.newFileName);
