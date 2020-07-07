@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
 import { inject as service } from '@ember/service';
 import {computed} from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 
 export default Component.extend({
@@ -25,27 +24,6 @@ export default Component.extend({
     return model.save().then(model => model.reload());
   },
 
-  async setDecisionPhaseToSubcase() {
-    const approved = await this.get('approved');
-    const subcase = await this.get('subcase')
-
-    const foundDecidedPhases = await this.store.query('subcase-phase', {
-      filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } }
-    });
-
-    if (foundDecidedPhases && foundDecidedPhases.length > 0) {
-      await Promise.all(foundDecidedPhases.map((phase) => phase.destroyRecord()));
-    }
-    if (approved) {
-      const decidedCode = await this.store.findRecord('subcase-phase-code', CONFIG.decidedCodeId);
-      const newDecisionPhase = this.store.createRecord('subcase-phase', {
-        date: moment().utc().toDate(),
-        code: decidedCode,
-        subcase: subcase
-      });
-      return newDecisionPhase.save();
-    }
-  },
   richtext: computed('editor.currentTextContent', function () {
     if (!this.editor) {
       return;
@@ -80,14 +58,15 @@ export default Component.extend({
         throw(e);
       });
 
-      await this.setDecisionPhaseToSubcase();
-
       if (!this.get('isDestroyed')) {
         let agendaitemToUpdate;
         if (this.isTableRow) {
-          const subcase = await this.agendaitem.get('subcase');
-          (await subcase.get('decisions')).reload();
-          agendaitemToUpdate = await this.agendaitem.content;
+          const agendaActivity = await this.agendaitem.get('agendaActivity');
+          if (agendaActivity) {
+            const subcase = await agendaActivity.get('subcase');
+            (await subcase.get('decisions')).reload();
+            agendaitemToUpdate = await this.agendaitem.content;
+          }
         } else {
           agendaitemToUpdate = await this.agendaitem;
         }

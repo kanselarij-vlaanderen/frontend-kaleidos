@@ -9,7 +9,7 @@ export default Component.extend({
     createSingleNewsLetter() {
       this.set('isLoading', true);
       const { title, subtitle, date, docDate, selectedMeeting } = this;
-      const newsletter = this.store.createRecord('newsletter-info', {
+      const newsletterInfo = this.store.createRecord('newsletter-info', {
         meeting: selectedMeeting,
         title,
         subtitle,
@@ -17,7 +17,7 @@ export default Component.extend({
         publicationDate: this.formatter.formatDate(date),
         publicationDocDate: this.formatter.formatDate(docDate)
       });
-      newsletter.save().then(() => {
+      newsletterInfo.save().then(() => {
         this.set('isLoading', false);
         this.close();
       });

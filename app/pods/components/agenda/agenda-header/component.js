@@ -132,9 +132,9 @@ export default Component.extend(FileSaverMixin, {
 
   reloadAgendaitemsOfSubcases(agendaItems) {
     return all(agendaItems.map(async agendaitem => {
-      const subcase = await agendaitem.get('subcase');
-      if (subcase) {
-        await subcase.hasMany('agendaitems').reload();
+      const agendaActivity = await agendaitem.get('agendaActivity');
+      if (agendaActivity) {
+        await agendaActivity.hasMany('agendaitems').reload();
       }
       return agendaitem;
     })).catch(() => {
