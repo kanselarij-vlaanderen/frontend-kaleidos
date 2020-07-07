@@ -6,8 +6,8 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async beforeModel() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const subcase = await agendaItem.subcase;
-    if (!subcase) {
+    const agendaActivity = await agendaItem.get('agendaActivity');
+    if (!agendaActivity) {
       this.transitionTo('agenda.agendaitems.agendaitem.index')
     }
   }
@@ -15,9 +15,13 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     super.setupController(...arguments);
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
     controller.set('agendaItem', agendaItem);
-    const subcase = await agendaItem.get('subcase');
+    const agendaActivity = await agendaItem.get('agendaActivity');
+    let subcase = null;
+    if (agendaActivity) {
+      subcase = await agendaActivity.get('subcase');
+    }
     controller.set('subcase', subcase);
-    const timestamp = await this.agendaService.retrieveModifiedDateFromNota(agendaItem);
+    const timestamp = await this.agendaService.retrieveModifiedDateFromNota(agendaItem, subcase);
     controller.set('timestampForMostRecentNota', timestamp);
     controller.set('model', model);
   }

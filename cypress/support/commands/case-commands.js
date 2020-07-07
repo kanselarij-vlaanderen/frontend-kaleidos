@@ -7,6 +7,7 @@
 Cypress.Commands.add('createCase', createCase);
 Cypress.Commands.add('addSubcase', addSubcase);
 Cypress.Commands.add('openCase', openCase);
+Cypress.Commands.add('searchCase', searchCase);
 // ***********************************************
 // Functions
 
@@ -53,7 +54,9 @@ function createCase(confidential, shortTitle) {
   cy.wait('@createNewCase', { timeout: 20000 })
     .then((res) => {
       caseId = res.responseBody.data.id;
+      cy.visit(`/dossiers/${caseId}/deeldossiers`); 
     })
+// TODO after a successfull post, the get sometimes fails
     .then(() => {
       return new Cypress.Promise((resolve) => {
         resolve(caseId);
@@ -116,7 +119,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       cy.get('.ember-power-select-trigger').click();
     });
     cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-      cy.contains(step).trigger('mouseover').click();
+      cy.contains(step).scrollIntoView().trigger('mouseover').click();
+      //TODO Experiment for dropdown flakyness
+      cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
     });
   }
 
@@ -126,7 +131,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       cy.get('.ember-power-select-trigger').click();
     });
     cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-      cy.contains(stepName).trigger('mouseover').click();
+      cy.contains(stepName).scrollIntoView().trigger('mouseover').click();
+      //TODO Experiment for dropdown flakyness
+      cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
     });
   }
 
@@ -158,16 +165,39 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
  */
 function openCase(caseTitle) {
   cy.log('openCase');
-  cy.visit('zoeken/dossiers');
-  cy.get('#dossierId').type(caseTitle);
-  cy.route('GET', `/cases/search?**${caseTitle.split(" ", 1)}**`).as('getCaseSearchResult');
-  cy.contains('zoeken')
-    .click()
-    .wait('@getCaseSearchResult');
-  cy.contains('Aan het laden...').should('not.exist');
+  cy.visit('dossiers?aantal=50');
   cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
   cy.get('@rows').within(() => {
     cy.contains(caseTitle).parents('tr').click();
   });
   cy.log('/openCase');
 }
+
+/**
+ * @description Navigates to the dossier search route with page and searches for the specified case.
+ * @name searchCase
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} caseTitle The title to search in the list of cases, should be unique
+ */
+function searchCase(caseTitle) {
+  cy.log('seachCsearchCasease');
+  cy.visit('zoeken/dossiers');
+  cy.get('#dossierId').type(caseTitle);
+  const splitCaseTitle =  "" + caseTitle.split(" ", 1);
+  // this new part is required to translate 'testId=xxxx:' into its encoded form for url
+  const encodedCaseTitle = splitCaseTitle.replace('=', '%3D').replace(':','%3A');
+
+  cy.route('GET', `/cases/search?**${splitCaseTitle}**`).as('getCaseSearchResult');
+  cy.contains('zoeken')
+    .click()
+    .wait('@getCaseSearchResult');
+  cy.contains('Aan het laden...').should('not.exist');
+  cy.url().should('include', `?zoekterm=${encodedCaseTitle}`);
+  cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
+  cy.get('@rows').within(() => {
+    cy.contains(caseTitle).parents('tr').click();
+  });
+  cy.log('/searchCase');
+}
+

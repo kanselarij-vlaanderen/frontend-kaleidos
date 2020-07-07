@@ -53,8 +53,9 @@ export default Controller.extend({
   }),
 
   actions: {
-    async addDecision(row) {
-      const subcase = await row.get('subcase');
+    async addDecision(agendaitemRow) {
+      const agendaActivity = await agendaitemRow.get('agendaActivity');
+      const subcase = await agendaActivity.get('subcase');
       let decision = this.store.createRecord('decision', {
         subcase: subcase,
         title: subcase.get('title'),
