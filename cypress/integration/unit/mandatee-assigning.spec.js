@@ -1,4 +1,4 @@
-/* global context, before, xit, cy,beforeEach, Cypress */
+/* global context, before, it, cy,beforeEach, Cypress */
 /// <reference types="Cypress" />
 
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
@@ -6,7 +6,7 @@ import isecodes from '../../selectors/isecodes/isecodesSelectors';
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
   const agendaDate = Cypress.moment().add(1, 'weeks').day(4); // Next friday
-  const caseTitle = `Cypress test: mandatee sync - ${currentTimestamp()}`;
+  // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
 
   before(() => {
     cy.server();
@@ -21,13 +21,13 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.login('Admin');
   });
 
-  xit('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {
+  it('should add mandatees to a subcase before assigning to agenda, agendaitem should have the same mandatees', () => {
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.createCase(false, caseTitle);
+    cy.visit('dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -64,15 +64,13 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
   });
 
-  xit('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
+  it('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister na agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.openCase(caseTitle);
-
+    cy.visit('dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -113,14 +111,13 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
   });
 
-  xit('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
+ it('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister vanuit agendaitem op ontwerpagenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.openCase(caseTitle);
+    cy.visit('dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openAgendaForDate(agendaDate);
 
@@ -169,7 +166,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
 
     // Check if subcase has the same amount of mandatees
-    cy.openCase(caseTitle);
+    cy.visit('dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.openSubcase(0);
 
     cy.get(mandatee.mandateeLinkListItem).as('listItems');

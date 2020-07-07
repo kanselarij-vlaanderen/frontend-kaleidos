@@ -8,6 +8,12 @@ export default Component.extend({
   newsletterService: inject(),
   currentSession: inject(),
   isShowingVersions: false,
+  allowEditing: false,
+  definite: false,
+  itemIndex: 0,
+  isEditing: false,
+  agendaitem: null,
+  newsletterInfo: null,
 
   isFlandersArt: computed('allowEditing', function () {
     return !this.allowEditing;
@@ -28,11 +34,9 @@ export default Component.extend({
       this.toggleProperty('isShowingVersions');
     },
     async toggleIsEditing() {
-      const { agendaitem } = this;
-      const subcase = await agendaitem.get('subcase');
-      const newsletter = await subcase.get('newsletterInfo');
-      if (!newsletter) {
-        await this.newsletterService.createNewsItemForSubcase(subcase, agendaitem);
+      const subcase = await this.newsletterInfo.get('subcase');
+      if (!this.newsletterInfo) {
+        await this.newsletterService.createNewsItemForSubcase(subcase, this.agendaitem);
       } else {
         this.toggleProperty('isEditing');
       }

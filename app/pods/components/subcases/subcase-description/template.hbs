@@ -16,19 +16,16 @@
       {{await subcase.subcaseName}}
     </p>
     <ul class="vlc-status-timeline">
-      {{#each subcase.sortedPhases as |phase|}}
+      {{#each (await subcase.phases) as |phase|}}
         <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         >
           <div class="vlc-status-timeline__dot"></div>
-          {{#if (is-pending phase.code)}}
+          {{#if (is-pending phase)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else}}
             <div class="vlc-status-timeline__text">
               {{subcase-timeline-item-text
-                label=(await phase.code.label)
                 phase=phase
-                onAgendaInfo=(await subcase.onAgendaInfo)
-                isPostponed=(await subcase.isPostponed)
               }}
             </div>
           {{/if}}
@@ -43,8 +40,8 @@
           {{t "number-session"}}
         </span>
         <span class="vl-description-data__value">
-          {{#if (await subcase.case.latestMeeting.number)}}
-            {{await subcase.case.latestMeeting.number}}
+          {{#if (await subcase.latestMeeting.number)}}
+            {{await subcase.latestMeeting.number}}
           {{else}}
             {{t "no-number-yet"}}
           {{/if}}
@@ -73,14 +70,16 @@
         <span class="vl-description-data__value" data-test-subcase-agenda-link>
           {{#if
             (or
-              (is-pending subcase.isPostponed)
+              (is-pending isRetracted)
               (is-pending subcase.onAgendaInfo)
             )
           }}
             <div class="vl-loader"></div>
           {{else}}
             {{#if (await subcase.onAgendaInfo)}}
-              {{#if (await subcase.isPostponed)}}
+              {{#if  
+                (await isRetracted)
+              }}
                 {{t "postponed-subcase"}}
               {{/if}}
                 {{#link-to
@@ -114,7 +113,7 @@
           {{#if (is-pending subcase.approved)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else if (await subcase.approved)}}
-            {{moment-format (await subcase.decidedInfo) "DD.MM.YYYY"}}
+            {{moment-format (await subcase.requestedForMeeting.plannedStart) "DD.MM.YYYY"}}
           {{else}}
             {{t "not-yet-decided"}}
           {{/if}}

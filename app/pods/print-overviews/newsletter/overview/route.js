@@ -26,7 +26,7 @@ export default Route.extend({
       include: 'mandatees',
       sort: 'priority',
     });
-    const announcements = this.filterAnnouncements(agendaitems.filter((item) => item.showAsRemark), params);
+    const announcements = this.filterAnnouncements(agendaitems.filter((agendaitem) => agendaitem.showAsRemark), params);
 
     const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
       agendaitems, params,
@@ -46,7 +46,7 @@ export default Route.extend({
   },
 
   async parseAgendaItems(agendaitems, params) {
-    let draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
+    let draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
 
     draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
 
@@ -60,29 +60,27 @@ export default Route.extend({
   },
 
   filterAnnouncements(announcements) {
-    return announcements.filter((item) => item.showInNewsletter);
+    return announcements.filter((agendaitem) => agendaitem.showInNewsletter);
   },
 
-  async filterAgendaitems(items, params) {
+  async filterAgendaitems(agendaitems, params) {
     if (params.definite !== 'true') {
-      return items;
+      return agendaitems;
     }
-    const newsLetterByIndex = await Promise.all(items.map((item) => {
-      if (!item) return;
-      return item.get('subcase').then((subcase) => {
-        if (!subcase) return;
-        return subcase.get('newsletterInfo').then((newsletter) => {
-          if (!newsletter) {
-            return;
-          }
-          return newsletter.inNewsletter;
-        });
-      });
+    let newsLetterByIndex = await Promise.all(agendaitems.map(async (agendaitem) => {
+      try {
+        const agendaActivity = await agendaitem.get('agendaActivity');
+        const subcase = await agendaActivity.get('subcase');
+        const newsletterInfo = await subcase.get('newsletterInfo');
+        return newsletterInfo.inNewsletter;
+      } catch (e) {
+        return false;
+      }
     }));
-    const filtered = [];
-    items.map((item, index) => {
+    let filtered = [];
+    agendaitems.map((agendaitem, index) => {
       if (newsLetterByIndex[index]) {
-        filtered.push(item);
+        filtered.push(agendaitem);
       }
     });
     return filtered;

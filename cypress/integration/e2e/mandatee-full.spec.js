@@ -21,19 +21,21 @@ context('Full test', () => {
     const agendaDate = Cypress.moment().add(1, 'weeks').day(3);
     const caseTitle = `testId=${currentTimestamp()}: ` + 'Cypress test dossier 1';
     const subcaseTitle1 = `${caseTitle} test stap 1`;
-    const subcaseTitle2 = `${caseTitle} test stap 2`;
+    // const subcaseTitle2 = `${caseTitle} test stap 2`;
+    const ministerTitle = 'Eerste minister van onderhoud';
+    const ministerNickName = 'Eerste minister';
 
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
     cy.get(settings.addMinister).should('exist').should('be.visible').click();
-    cy.wait('@getIseCodes');
+    cy.wait('@getIseCodes', {timeout: 30000});
     cy.get(mandatee.addMandateeTitleContainer).should('exist').should('be.visible').within(() => {
-      cy.get(form.formInput).should('exist').should('be.visible').type('Eerste minister van onderhoud');
+      cy.get(form.formInput).should('exist').should('be.visible').type(ministerTitle);
     });
     cy.get(mandatee.addMandateeNicknameContainer).should('exist').should('be.visible').within(() => {
-      cy.get(form.formInput).should('exist').should('be.visible').type('Eerste minister');
+      cy.get(form.formInput).should('exist').should('be.visible').type(ministerNickName);
     });
     cy.get(mandatee.addMandateeDropdownContainer).should('exist').should('be.visible').within(() => {
       cy.get('.ember-power-select-trigger').scrollIntoView().click();
@@ -66,18 +68,17 @@ context('Full test', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.addSubcase('Nota',
-      subcaseTitle2,
-      'Cypress test voor het testen van toegevoegde agendapunten',
-      'In voorbereiding',
-      'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.createAgenda(KIND, agendaDate, 'locatie');
+    // cy.addSubcase('Nota',
+    //   subcaseTitle2,
+    //   'Cypress test voor het testen van toegevoegde agendapunten',
+    //   'In voorbereiding',
+    //   'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.createAgenda(KIND, agendaDate, "locatie");
 
-    // when toggling show changes  the agendaitem with a document added should show
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
     cy.openDetailOfAgendaitem(subcaseTitle1);
-    cy.addSubcaseMandatee(0, -1, -1);
+    cy.addSubcaseMandatee(0, -1, -1, ministerTitle);
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
@@ -85,8 +86,10 @@ context('Full test', () => {
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    cy.get('[data-test-mandatee-edit="0"]').click();
-    const enddateForMandatee = Cypress.moment('2020-03-02').set({ hour: 10, minute: 10 });
+    cy.contains(ministerNickName).parents('tr').within(() => {
+      cy.get(settings.mandateeEdit).click();
+    });
+    const enddateForMandatee = Cypress.moment('2020-03-02').set({ 'hour': 10, 'minute': 10 });
 
     cy.get('.vl-datepicker').eq(1).click();
     cy.setDateInFlatpickr(enddateForMandatee);
@@ -100,11 +103,14 @@ context('Full test', () => {
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
+    // TODO index is risky business
     cy.get('[data-test-mandatee-resign="0"]').click();
     cy.wait(3000);
     cy.get(mandatee.manageMandateeChangesAlert).should('exist').should('be.visible');
     cy.get(form.formCancelButton).click();
-    cy.get(settings.mandateeDelete).click();
+    cy.contains(ministerNickName).parents('tr').within(() => {
+      cy.get(settings.mandateeDelete).click();
+    });
     cy.get(modal.verify.save).click();
   });
 

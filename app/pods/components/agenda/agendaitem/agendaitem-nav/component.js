@@ -20,7 +20,6 @@ export default class AgendaItemNav extends Component {
   get agendaItem() {
     return this.args.agendaItem;
   }
-
   constructor() {
     super(...arguments);
     this.checkExistance();
@@ -28,10 +27,19 @@ export default class AgendaItemNav extends Component {
 
   @action
   async checkExistance() {
-    this.subcaseExists = isPresent(await this.agendaItem.get('subcase'));
-    this.decisionsExist = isPresent(await this.agendaItem.get('subcase.decisions'));
+    // await agendaItem.get('agendaActivity.subcase') returns undefined
+    const agendaActivity = await this.agendaItem.get('agendaActivity');
+    if (agendaActivity) {
+      const subcase = await agendaActivity.get('subcase');
+      this.subcaseExists = isPresent(subcase);
+      this.decisionsExist = isPresent(await subcase.get('decisions'));
+      this.newsItemExists = isPresent((await subcase.get('newsletterInfo')));
+    } else {
+      this.subcaseExists = false;
+      this.decisionsExist = false;
+      this.newsItemExists = false;
+    }
     this.meetingMinutesExist = isPresent(await this.agendaItem.get('meetingRecord'));
-    this.newsItemExists = isPresent((await this.agendaItem.get('subcase.newsletterInfo')));
     this.pressAgendaItemExists = isPresent((this.agendaItem.titlePress && this.agendaItem.textPress));
   }
 }

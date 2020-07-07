@@ -1,131 +1,61 @@
-import Component from '@ember/component';
-import { computed, observer } from '@ember/object';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend({
-  store: service(),
-  sessionService: service(),
-  currentSessionService: service('current-session'),
-  agendaService: service(),
-  toaster: service(),
-  classNameBindings: [
-    'isActive:vlc-agenda-detail-sidebar__sub-item--active',
-    'isClickable::not-clickable',
-    'agendaitem.retracted:vlc-u-opacity-lighter',
-    'isPostponed:vlc-u-opacity-lighter',
-    'isNew:vlc-agenda-items__sub-item--added-item',
-  ],
-  tagName: 'a',
-  selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
-  currentAgenda: alias('sessionService.currentAgenda'),
-  isClickable: true,
-  hideLabel: true,
-  isShowingChanges: null,
+export default class SidebarItem extends Component {
+  /**
+   * INFO arguments from parent.
+   * @agendaitem={{agendaitem}}
+   * @selectAgendaItem={{action "selectAgendaItemAction"}}
+   */
 
-  init() {
-    this._super(...arguments);
-    observer(
-      'agendaitem.postponedTo',
-      async function () {
-        const postponed = await this.get('agendaitem.postponedTo');
-        if (!this.get('isDestroyed')) {
-          this.set('isPostponed', !!postponed);
-        }
-      },
-    );
-  },
+  @service store;
+  @service sessionService;
+  @service('current-session') currentSessionService;
+  @service agendaService;
+  @service toaster;
 
-  formallyOk: computed('agendaitem.formallyOk', function () {
-    return this.agendaitem.get('formallyOk');
-  }),
+  @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
+  @alias('sessionService.currentAgenda') currentAgenda;
+  @alias('args.agendaitem.checkAdded') isNew;
+  @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
-  agenda: computed('agendaitem', function () {
-    return this.get('agendaitem.agenda.name');
-  }),
+  hideLabel = true;
+  isShowingChanges = null;
 
-  documents: computed('agendaitem.documentVersions.@each', function () {
-    if (this.get('selectedAgendaItem')) {
-      return;
-    }
-    return this.get('agendaitem.documents');
-  }),
+  @tracked isClickable = true;
+  @tracked isRetracted = this.args.agendaitem.retracted;
 
-  isActive: computed('agendaitem.id', 'selectedAgendaItem.id', function () {
-    return this.get('agendaitem.id') === this.get('selectedAgendaItem.id');
-  }),
+  get classNameBindings() {
+    return `
+      ${this.isActive ? 'vlc-agenda-detail-sidebar__sub-item--active' : ''}
+      ${this.isClickable ? '' : 'not-clickable'}
+      ${this.isRetracted ? 'vlc-u-opacity-lighter' : ''}
+      ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
+    `;
+  }
 
-  isNew: alias('agendaitem.checkAdded'),
-
-  async click() {
-    if (!this.isEditingOverview && !this.isComparing) {
-      const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
-      this.selectAgendaItem(agendaitem);
-    }
-  },
-
-  // Disable lazy partial rendering when deleting
-  aboutToDelete: computed('agendaitem.aboutToDelete', function () {
-    if (this.agendaitem) {
-      return this.agendaitem.get('aboutToDelete');
+  get isActive() {
+    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaItem) {
+      return this.args.agendaitem.id === this.selectedAgendaItem.id;
     }
     return null;
-  }),
+  }
 
-  /* Begin lazy partial rendering
-
-     This implementation of lazy partial rendering uses an
-     IntersectionObserver to figure out if we're currently rendering.
-     Part of the content is hidden when we are not in view to easen
-     the browser's load and to substantially limit the amount of calls
-     happening to the backend on largerAgenda’s.
-   */
-  renderDetails: false,
-  didEnterViewport() {
-    this.set('renderDetails', true);
-  },
-  didExitViewport() {
-    this.set('renderDetails', false);
-  },
-  didInsertElement() {
-    try {
-      const options = {
-        root: document.querySelector('body'),
-        rootMargin: '5px',
-        threshold: [0, 1],
-      };
-
-      const intersectionObserver = new IntersectionObserver(this.checkElementPosition.bind(this), options);
-      this.set('intersectionObserver', intersectionObserver);
-      intersectionObserver.observe(this.element);
-    } catch (e) {
-      this.set('renderDetails', true);
+  @action
+  async openDetailPage() {
+    if (!this.isEditingOverview && !this.isComparing) {
+      const agendaitem = await this.store.findRecord('agendaitem', this.args.agendaitem.id);
+      this.args.selectAgendaItem(agendaitem);
     }
-  },
-  willDestroyElement() {
-    this.get('intersectionObserver').unobserve(this.element);
-  },
-  checkElementPosition(entries) {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        this.didEnterViewport();
-      } else {
-        this.didExitViewport();
-      }
-    }
-  },
-  // End lazy partial rendering
+  }
 
-  actions: {
-    async setAction(item) {
-      // this.set('isLoading', true);
-      const uri = item.get('uri');
-      this.agendaitem.set('formallyOk', uri);
-      this.agendaitem
-        .save()
-        .catch(() => {
-          this.toaster.error();
-        });
-    },
-  },
-});
+  @action
+  conditionallyScrollIntoView(element) {
+    if (this.isActive) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+}

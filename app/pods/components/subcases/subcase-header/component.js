@@ -19,13 +19,13 @@ export default Component.extend({
   subcase: null,
   caseToDelete: null,
 
-  canPropose: computed('subcase.{requestedForMeeting,hasAgendaItem,isPostponed}', 'isAssigningToOtherAgenda', async function () {
+  canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function () {
     const { isAssigningToOtherAgenda, isLoading } = this;
-    const subcase = await this.get('subcase');
+    const subcase = this.subcase;
     const requestedForMeeting = await subcase.get('requestedForMeeting');
-    const hasAgendaItem = await subcase.get('hasAgendaItem');
+    const hasActivity = await subcase.get('hasActivity');
 
-    if (hasAgendaItem || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
+    if (hasActivity || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
       return false;
     }
 
@@ -120,7 +120,6 @@ export default Component.extend({
       if (isDesignAgenda) {
         await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
       }
-      await subcase.hasMany('agendaitems').reload();
       this.toggleAllPropertiesBackToDefault();
     },
 
@@ -129,10 +128,10 @@ export default Component.extend({
       const subcaseToDelete = await this.get('subcaseToDelete');
       const caze = await subcaseToDelete.get('case');
 
-      subcaseToDelete.hasMany('agendaitems').reload();
-      const agendaitems = await subcaseToDelete.get('agendaitems');
+      subcaseToDelete.hasMany('agendaActivities').reload();
+      const agendaActivities = await subcaseToDelete.get('agendaActivities');
 
-      if (agendaitems && agendaitems.length > 0) {
+      if (agendaActivities && agendaActivities.length > 0) {
         return;
       }
       await this.deleteSubcase(subcaseToDelete);

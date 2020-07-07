@@ -7,7 +7,7 @@ Cypress.Commands.add('selectOptionInSelectByIndex', selectOptionInSelectByIndex)
 /**
  * @description Select an option in the select control
  * @memberOf Cypress.Chainable#
- * @name existsAndInvisible
+ * @name selectOptionInSelectByIndex
  * @function
  * @returns {Chainable<JQuery<any>>} returns a chainable element
  * @param {number} option - The index of the option that has to be selected in the select
@@ -19,13 +19,14 @@ function selectOptionInSelectByIndex(option) {
     .then(() => cy.get(`li[data-option-index="${option}"]`)
       .should('exist')
       .should('be.visible')
-      .click());
+      .click()
+      .log('/selectOptionInSelectByIndex'));
 }
 
 /**
  * @description Select an option in the select control
  * @memberOf Cypress.Chainable#
- * @name existsAndInvisible
+ * @name selectOptionInSelectByText
  * @function
  * @returns {Chainable<JQuery<any>>} returns a chainable element
  * @param {String} text - The option that has to be selected in the select

@@ -8,24 +8,24 @@
       include=include
       size=size
       columns=columns
-    as |row|
+    as |agendaitemRow|
     }}
-      {{#if (not row.isApproval)}}
-        {{#if (is-pending row.subcase.newsletterInfo)}}
+      {{#if (not agendaitemRow.isApproval)}}
+        {{#if (is-pending agendaitemRow.agendaActivity.subcase.newsletterInfo)}}
           {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
-        {{else if (await row.subcase.newsletterInfo)}}
+        {{else if (await agendaitemRow.agendaActivity.subcase.newsletterInfo)}}
           <div class="vlc-container-center">
             {{news-item/edit-item
-              agendaitem=row
-              item=(await row.subcase.newsletterInfo)
-              isEditing=row.expanded
+              agendaitem=agendaitemRow
+              item=(await agendaitemRow.agendaActivity.subcase.newsletterInfo)
+              isEditing=agendaitemRow.expanded
             }}
           </div>
         {{else}}
           <div class="vl-u-spacer-extended">
             <div class="vl-action-group vl-action-group--align-center">
               <button type="button" class="vl-button vl-button--secondary vl-button--icon-before"
-                {{action "addNewsletterInfo" row}}
+                {{action "addNewsletterInfo" agendaitemRow}}
               >
                 <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"
                 ></i>

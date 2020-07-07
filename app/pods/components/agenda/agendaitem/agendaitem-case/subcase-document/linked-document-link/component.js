@@ -67,9 +67,10 @@ export default Component.extend({
     if (['meeting-record', 'decision'].includes(modelName)) {
       return model;
     }
-    const subcase = await model.get('subcase');
-    const agendaitemsOnDesignAgenda = await model.get('agendaitemsOnDesignAgendaToEdit');
-    if (subcase) {
+    const agendaActivity = await model.get('agendaActivity'); // when model = agendaitem
+    const agendaitemsOnDesignAgenda = await model.get('agendaitemsOnDesignAgendaToEdit'); // when model = subcase
+    if (agendaActivity) {
+      const subcase = await agendaActivity.get('subcase');
       await this.unlinkDocumentVersionsFromModel(subcase, documentVersions);
     } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
       await Promise.all(agendaitemsOnDesignAgenda.map((agendaitem) => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));

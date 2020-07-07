@@ -55,8 +55,6 @@ export default Component.extend({
 
   async didInsertElement() {
     this._super(...arguments);
-    this.set('availableSubcases', []);
-    this.set('postponedSubcases', []);
     this.findAll.perform();
   },
 

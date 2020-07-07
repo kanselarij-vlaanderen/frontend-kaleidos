@@ -84,13 +84,21 @@ export default Component.extend({
         'show-as-remark': false,
       },
       sort: 'priority',
-      include: 'agenda,subcase,mandatees',
+      include: 'agenda,agenda-activity,agenda-activity.subcase,mandatees',
     });
   },
 
   async compareSubcase(left, right) {
-    const leftSubcaseId = await left.get('subcase.id');
-    const rightSubcaseId = await right.get('subcase.id');
+    const leftAgendaActivity = await left.get('agendaActivity');
+    let leftSubcaseId = null;
+    if (leftAgendaActivity) {
+      leftSubcaseId = await leftAgendaActivity.get('subcase.id');
+    }
+    const rightAgendaActivity = await right.get('agendaActivity');
+    let rightSubcaseId = null;
+    if (rightAgendaActivity) {
+      rightSubcaseId = await rightAgendaActivity.get('subcase.id');
+    }
     return leftSubcaseId == rightSubcaseId;
   },
 
@@ -160,6 +168,6 @@ export default Component.extend({
   },
 
   findItemBySubcase(item, list) {
-    return list.find((possibleMatch) => possibleMatch.get('subcase.id') == item.get('subcase.id'));
+    return list.find((possibleMatch) => possibleMatch.get('agendaActivity.subcase.id') == item.get('agendaActivity.subcase.id'));
   },
 });

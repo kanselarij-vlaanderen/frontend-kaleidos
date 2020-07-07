@@ -20,13 +20,13 @@ context('Table Row Click tests', () => {
     cy.url().should('contain', 'agendapunten');
   });
 
-  it('should open a case after clicking a row', () => {
-    cy.route('GET', '/cases**').as('getCases');
-    cy.visit('/dossiers');
-    cy.wait('@getCases', { timeout: 12000 });
-    cy.openCase('Eerste dossier');
-    cy.url().should('contain', 'deeldossiers');
-  });
+	it('should open a case after clicking a row', () => {
+		cy.route('GET', '/cases**').as('getCases');
+		cy.visit('/dossiers');
+    cy.wait('@getCases', {timeout: 12000});
+    cy.get('.data-table > tbody').children().as('rows').eq(0).click();
+		cy.url().should('contain', 'deeldossiers');
+	});
 
   it('should open a newsletter-info after clicking a row', () => {
     cy.route('GET', '/meetings?**').as('getMeetings');
