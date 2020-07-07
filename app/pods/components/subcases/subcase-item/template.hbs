@@ -42,17 +42,14 @@
         {{/if}}
       </div>
       <ul class="vlc-status-timeline">
-        {{#each (await subcase.sortedPhases) as |phase|}}
-          {{#if (await phase.code.label)}}
+        {{#each (await subcase.phases) as |phase|}}
+          {{#if (await phase.label)}}
             <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
             >
               <div class="vlc-status-timeline__dot"></div>
               <div class="vlc-status-timeline__text">
                 {{subcase-timeline-item-text
-                  label=(await phase.code.label)
                   phase=phase
-                  onAgendaInfo=(await subcase.onAgendaInfo)
-                  isPostponed=(await subcase.isPostponed)
                 }}
               </div>
             </li>

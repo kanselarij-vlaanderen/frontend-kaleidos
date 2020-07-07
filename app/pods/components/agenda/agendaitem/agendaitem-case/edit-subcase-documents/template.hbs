@@ -19,11 +19,11 @@
       </tr>
       </thead>
       <tbody>
-      {{#each (await documents) as |document|}}
+      {{#each (await documents) as |documentContainer|}}
         {{#if
-          (and (not document.deleted) (await document.lastDocumentVersion))
+          (and (not documentContainer.deleted) (await documentContainer.lastDocumentVersion))
         }}
-          {{edit-document-version document=document item=item}}
+          {{edit-document-version documentContainer=documentContainer item=item}}
         {{/if}}
       {{/each}}
       </tbody>

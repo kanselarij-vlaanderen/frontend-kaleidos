@@ -57,9 +57,10 @@
         {{t "documents-attached-to"}}
       </h4>
       <div class="vl-u-spacer-extended-top-s">
+        {{!-- TODO KAS-1420 @agendaitem={{@subcase}} ??  --}}
         <Utils::DocumentsListForItem
           @item={{this.decision}}
-          @agendaitem={{@subcase}}
+          @agendaitem={{@subcase}} 
           @isClickable={{true}}
         />
       </div>

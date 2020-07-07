@@ -1,43 +1,33 @@
-{{#if (and subcase authentication.isEditor)}}
-  <div class="confidentialities">
-    <div class="confidential">
-      {{web-components/vl-checkbox
-        data-test-vl-subcase-titles-edit-confidentiality
-        value=item.confidential
-        disabled=true
-        label=(t "confidential")
-        toggle=(action "toggleConfidential")
-      }}
-    </div>
-  </div>
-{{/if}}
 {{#if (not isEditing)}}
-  {{agenda/agendaitem/agendaitem-case/subcase-titles
-    item=item
-    isSubcaseView=isSubcaseView
-    shouldShowDetails=(or isRemark (and isAgendaItem (await item.subcase)) isSubcase)
+{{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
+  {{agenda/agendaitem/agendaitem-case/agendaitem-titles
+    agendaitem=agendaitem
+    subcase=(await subcase)
+    shouldShowDetails=(or agendaitem.showAsRemark (await agendaitem.agendaActivity)) 
     toggleIsEditing=(action "toggleIsEditing")
   }}
 {{else}}
-  {{agenda/agendaitem/agendaitem-case/subcase-titles-edit
-    item=item
-    isSubcaseView=isSubcaseView
+  {{agenda/agendaitem/agendaitem-case/agendaitem-titles-edit
+    agendaitem=agendaitem
     isEditing=isEditing
   }}
 {{/if}}
-{{#if item.showAsRemark}}
-  {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
+{{#if agendaitem.showAsRemark}}
+  {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees 
+    agendaitem=agendaitem 
+    subcase=(await subcase)
+  }}
   {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
-{{else if
-  (or
-    (and isAgendaItem (await item.subcase))
-    isSubcase
-  )
-}}
-  {{agenda/agendaitem/agendaitem-case/subcase-mandatees item=item}}
-  {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=item}}
-  {{#if isAgendaItem}}
-    {{agenda/agendaitem/agendaitem-case/agendaitem-approvals item=item}}
+{{else}} 
+  {{#if (await agendaitem.agendaActivity)}}
+    {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees
+      agendaitem=agendaitem 
+      subcase=(await subcase)
+    }}
+    {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
+    {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
+    {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=agendaitem}}
+    {{agenda/agendaitem/agendaitem-case/agendaitem-approvals item=agendaitem}}
+    {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
   {{/if}}
-  {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
 {{/if}}
