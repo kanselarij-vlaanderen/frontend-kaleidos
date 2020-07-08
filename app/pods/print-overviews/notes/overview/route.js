@@ -9,6 +9,7 @@ import {
 export default Route.extend({
   agendaService: inject(),
   type: 'notes',
+  allowEmptyGroups: true,
 
   queryParams: {
     definite: { refreshModel: false }

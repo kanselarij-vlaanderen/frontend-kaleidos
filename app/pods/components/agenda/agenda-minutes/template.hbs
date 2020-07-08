@@ -33,8 +33,7 @@
   </div>
   <div class="vl-u-spacer-extended-bottom">
     {{#each (await agendaitemGroups) as |group|}}
-      {{#each group.groups as |agendaitemGroup|}}
-        {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+        {{#each group.agendaitems as |agendaitem|}}
           <div class="vl-u-display-flex vlc-u-flex-justify-center">
             <div class="print-only vl-u-spacer-extended-top-l">
               <img style="margin:-75px 0px -50px 0px; width:200px"
@@ -85,12 +84,12 @@
                           {{sanitize-html raw=true value=(await agendaitem.meetingRecord.richtext)}}
                         </p>
                         {{#each
-                          (await agendaitem.agendaActivity.subcase.decisions)
-                        as |decision|
+                          (await agendaitem.treatments)
+                        as |treatment|
                         }}
-                          {{#if (await decision.signedDocument.name)}}
+                          {{#if (await treatment.report.lastDocument.name)}}
                             <p class="vl-u-text--muted">
-                              {{await decision.decisionApproval}}
+                              {{await treatment.treatmentApproval}}
                             </p>
                           {{/if}}
                         {{/each}}
@@ -113,7 +112,6 @@
             {{/if}}
           </div>
         {{/each}}
-      {{/each}}
     {{/each}}
   </div>
 </div>

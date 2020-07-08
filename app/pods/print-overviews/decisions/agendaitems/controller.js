@@ -59,17 +59,12 @@ export default Controller.extend({
         include: 'agenda-activity,agenda-activity.subcase'
       });
       const agendaActivity = await agendaitem.get('agendaActivity');
-      const subcase = await agendaActivity.get('subcase');
-      //const decisionResultCode = await this.store.findRecord('decision-result-code', 'a29b3ffd-0839-45cb-b8f4-e1760f7aacaa');
-
       let treatment = this.store.createRecord('agenda-item-treatment', {
         created: moment().utc().toDate(),
         modified: moment().utc().toDate(),
         agendaitem: agendaitem,
-        //decisionResultCode,
       });
-      const savedTreatment = await treatment.save();
-      //(await subcase.get('treatments')).addObject(savedTreatment);
+      await treatment.save();
     },
   }
 });
