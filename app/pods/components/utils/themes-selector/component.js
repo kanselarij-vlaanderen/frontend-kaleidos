@@ -1,28 +1,49 @@
 import Component from '@glimmer/component';
-import { action, set } from '@ember/object';
+import { action, computed } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
 export default class ThemesSelector extends Component {
   @service store;
+  @service themesService;
 
-  @tracked selectedThemes = this.args.selectedThemes;
   @tracked foundTheme = null;
-
-  themes = null;
 
   constructor() {
     super(...arguments);
 
-    this.fetchThemes();
   }
 
-  async fetchThemes() {
-    const fetchedThemes = await this.store.query('theme', {}); // Query to make sure you get all themes from the API instead
-    set(this, 'themes', fetchedThemes.sortBy('label').filter((item) => !item.deprecated));
+  // These are effectively all available themes in the store
+  @computed('themesService.themes.[]')
+  get themes() {
+    if (this.themesService.themes) {
+      return this.themesService.themes;
+    }
 
-    console.log('%cSELECTED THEMES IN THEMESELECTOR', 'background-color: #c43b64; padding: 5px; border-radius: 3px; font-weight: bold; color: white', this.selectedThemes);
-    this.checkSelectedThemes()
+    return [];
+  }
+
+  // These are the checkboxes we will render (these are not models!)
+  @computed('themes', 'args.selectedThemes')
+  get checkBoxes() {
+    const selectedThemesDict = {};
+
+    this.args.selectedThemes.forEach((selectedTheme) => {
+      selectedThemesDict[selectedTheme.label] = selectedTheme;
+    });
+
+    if (this.themes.length && selectedThemesDict) {
+      return this.themes.map((theme) => {
+        const selectedTheme = selectedThemesDict[theme.label];
+        return {
+          selected: selectedTheme !== undefined,
+          label: theme.label,
+        };
+      });
+    }
+
+    return [];
   }
 
   @action
@@ -37,10 +58,8 @@ export default class ThemesSelector extends Component {
   @action
   checkSelectedThemes() {
     //TODO loop over themes
-    console.log('%ccheckSelectedThemes', 'background-color: #e9b329; padding: 5px; border-radius: 3px; font-weight: bold; color: white');
     if (this.selectedThemes && this.selectedThemes.length > 0) {
       this.selectedThemes.forEach((selectedTheme) => {
-        console.log('%cDEBUG', 'background-color: #1962dd; padding: 5px; border-radius: 3px; font-weight: bold; color: white', this.theme.get('label'), selectedTheme.get('label'));
         return this.themes.get('label') === selectedTheme.get('label');
       });
     }
