@@ -66,7 +66,6 @@ Router.map(function () {
       this.route('agendaitems', { path: '/agendapunten' });
     });
     this.route('decisions', { path: '/beslissingen/:agenda_id' }, function () {
-      this.route('overview', { path: '/klad' });
       this.route('agendaitems', { path: '/agendapunten' });
     });
     this.route('press-agenda', { path: '/persagenda/:agenda_id' }, function () {

@@ -52,18 +52,17 @@
       <div class="vl-u-spacer-extended-top-s">
         {{!-- TODO KAS-1420 @agendaitem={{@subcase}} ??  --}}
         <Utils::DocumentsListForItem
-          @item={{this.decision}}
-          @agendaitem={{@subcase}}
-          @isClickable={{true}}
+                @item={{this.reatment}}
+                @agendaitem={{@subcase}}
+                @isClickable={{true}}
         />
       </div>
     </div>
   {{/if}}
-  {{#if this.decision.signedDocument}}
-  {{#if this.treatment.signedDocument}}
+  {{#if this.treatment.report}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-      @document={{await this.treatment.signedDocument}}
-      @item={{await this.treatment.signedDocument}}
+      @document={{await this.treatment.report}}
+      @item={{await this.treatment.report}}
     />
   {{else}}
     <Utils::AddSignedDocuments

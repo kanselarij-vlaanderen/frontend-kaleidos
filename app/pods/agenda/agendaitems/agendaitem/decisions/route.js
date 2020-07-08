@@ -16,7 +16,7 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
     //const agendaActivity = await agendaItem.get('agendaActivity');
     return this.store.query('agenda-item-treatment', {
       'filter[agendaitem][:id:]': agendaItem.id,
-      'include': 'report,decision-result-code'
+      'include': 'report'
     });
   }
 

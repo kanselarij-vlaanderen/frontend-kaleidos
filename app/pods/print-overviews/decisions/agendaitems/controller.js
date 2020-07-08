@@ -54,22 +54,22 @@ export default Controller.extend({
   }),
 
   actions: {
-    async addDecision(agendaitemRow) {
-      const agendaActivity = await agendaitemRow.get('agendaActivity');
+    async addTreatment(agendaitemRow) {
+      const agendaitem =  await this.store.findRecord('agendaitem', agendaitemRow.content.id, {
+        include: 'agenda-activity,agenda-activity.subcase'
+      });
+      const agendaActivity = await agendaitem.get('agendaActivity');
       const subcase = await agendaActivity.get('subcase');
-      //const agendaitem = await subcase.get('agendaitem');
+      //const decisionResultCode = await this.store.findRecord('decision-result-code', 'a29b3ffd-0839-45cb-b8f4-e1760f7aacaa');
+
       let treatment = this.store.createRecord('agenda-item-treatment', {
         created: moment().utc().toDate(),
         modified: moment().utc().toDate(),
-//        subcase: subcase,
-        agendaitem: agendaitemRow,
-        // title: subcase.get('title'),
-        // shortTitle: subcase.get('shortTitle'),
-        // approved: false
-        decisionResultCode: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
+        agendaitem: agendaitem,
+        //decisionResultCode,
       });
       const savedTreatment = await treatment.save();
-      (await subcase.get('treatments')).addObject(savedTreatment);
+      //(await subcase.get('treatments')).addObject(savedTreatment);
     },
   }
 });

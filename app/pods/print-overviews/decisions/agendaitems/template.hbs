@@ -1,7 +1,7 @@
 <div class="vl-u-spacer-extended-l">
   <div class=""></div>
   {{#utils/agendaitem-table
-    model=model
+    model=(await model)
     sort=sort
     page=page
     filter=filter
@@ -10,7 +10,7 @@
     columns=columns
   as |agendaitemRow|
   }}
-    {{#if (is-pending agendaitemRow.agendaActivity.subcase.decisions)}}
+    {{#if (is-pending agendaitemRow.treatments)}}
       {{web-components/vl-loader text=(t "decisions-loading-text")}}
     {{else}}
       <div class="vl-u-spacer-extended-l">
@@ -26,11 +26,11 @@
             </button>
           </div>
         </div>
-        {{#each (await agendaitemRow.agendaActivity.subcase.decisions) as |decision|}}
+        {{#each (await agendaitemRow.treatments) as |treatment|}}
           {{agenda/agendaitem/agendaitem-decision
             subcase=(await agendaitemRow.agendaActivity.subcase)
             isTableRow=true
-            decision=decision
+            treatment=treatment
             agendaitem=agendaitemRow
           }}
         {{/each}}

@@ -26,7 +26,7 @@ export default Component.extend({
     const { modelToAddDocumentVersionTo } = this;
     if (modelToAddDocumentVersionTo == 'signedMinutes') {
       return this.store.findRecord('document-type', CONFIG.minuteDocumentTypeId);
-    } else if (modelToAddDocumentVersionTo == 'signedDecision') {
+    } else if (modelToAddDocumentVersionTo == 'agendaItemTreatment') {
       return this.store.findRecord('document-type', CONFIG.decisionDocumentTypeId);
     } else {
       return null;

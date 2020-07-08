@@ -8,9 +8,8 @@
   <div class="vl-u-spacer-extended-bottom-l no-print">
   </div>
   <div class="vl-u-spacer-extended-bottom vl-u-spacer-extended-top-l">
-    {{#each (await agendaitemGroups) as |group|}}
-      {{#each group.groups as |agendaitemGroup|}}
-        {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+    {{#each (await @agendaitemGroups) as |group|}}
+        {{#each group.agendaitems as |agendaitem|}}
           <div class="vl-u-display-flex vlc-u-flex-justify-center">
             <div class="print-only vl-u-spacer-extended-top-l">
               <img style="margin:-75px 0px -50px 0px; width:200px"
@@ -38,12 +37,12 @@
               </div>
               <div class="vl-typography">
                 <ul>
-                  {{#if (gt agendaitem.decisions.length 0)}}
-                    {{#each (await agendaitem.decisions) as |decision|}}
-                      {{#if decision.isEditing}}
+                  {{#if (gt agendaitem.treatments.length 0)}}
+                    {{#each (await agendaitem.treatments) as |treatment|}}
+                      {{#if treatment.isEditing}}
                         <Agenda::Agendaitem::AgendaitemDecisionEdit
-                          @isEditing={{decision.isEditing}}
-                          @item={{decision}}
+                          @isEditing={{treatment.isEditing}}
+                          @agendaItemTreatment={{treatment}}
                           @subcase={{await agendaitem.agendaActivity.subcase}}
                           @isTableRow={{isTableRow}}
                           @agendaitem={{agendaitem}} />
@@ -51,7 +50,7 @@
                         <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
                           {{#if allowEditing}}
                             <a href="" class="vl-link"
-                              {{action "toggleIsEditing" decision}}
+                              {{action "toggleIsEditing" treatment}}
                             >
                               {{t "edit"}}
                             </a>
@@ -59,9 +58,10 @@
                         </div>
                       {{/if}}
                       <li>
-                        {{sanitize-html raw=true value=decision.richtext}}
+                        TEST richtext treatment
+                        {{sanitize-html raw=true value=treatment.richtext}}
                       </li>
-                    {{/each}}
+                  {{/each}}
                   {{else}}
                     <li>
                       <p class="vl-u-text--muted">
@@ -81,7 +81,6 @@
             {{/if}}
           </div>
         {{/each}}
-      {{/each}}
     {{/each}}
   </div>
 </div>

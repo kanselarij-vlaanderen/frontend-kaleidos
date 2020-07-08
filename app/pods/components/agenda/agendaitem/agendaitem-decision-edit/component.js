@@ -2,29 +2,33 @@ import Component from "@glimmer/component";
 import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { task } from 'ember-concurrency';
+import { tracked } from "@glimmer/tracking";
 
 export default class AgendaItemDecisionEditComponent extends Component {
   @service store;
-
-  get treatment () {
-    return this.args.agendaItemTreatment;
-  }
+  @tracked treatment = this.args.agendaItemTreatment;
+  @tracked decisionResultCodes = [];
+  @tracked decisionResultCodesLoaded = false;
 
   constructor() {
     super(...arguments);
-    this.decisionResultCodes.perform(); // Load codelist
+    this.store.findAll('decision-result-code', { reload: true }).then(codes => {
+      this.decisionResultCodes = codes;
+      this.decisionResultCodesLoaded = true;
+    });
   }
 
-  @(task(function * () {
-    return yield this.store.findAll('decision-result-code');
-  })) decisionResultCodes;
+  @action
+  fetchDecisionResultCodes() {
+    this.findDecisionResultCodes.perform(); // Load codelist
+  }
 
   @action
   changeDecisionResultCode(resultCode) {
     this.treatment.set('decisionResultCode', resultCode);
   }
 
-  @(task(function * () {
+  @(task(function* () {
     yield this.treatment.save();
     if (this.args.onSave) {
       this.args.onSave();
@@ -32,7 +36,7 @@ export default class AgendaItemDecisionEditComponent extends Component {
   })) saveTreatment;
 
   @action
-  cancelEdit () {
+  cancelEdit() {
     this.treatment.belongsTo('decisionResultCode').reload(); // "rollback relationship"
     if (this.args.onCancel) {
       this.args.onCancel();

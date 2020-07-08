@@ -12,27 +12,5 @@ export default Model.extend({
   decisionResultCode: belongsTo('decision-result-code', { inverse: null }),
   modified: attr('datetime'),
   created: attr('datetime'),
-
-  // decisionApproval: computed('signedDocument', function () {
-  //   return this.intl.t('signed-document-decision', { name: this.get('signedDocument.name') });
-  // }),
-  //
-  // documents: computed('documentVersions.@each', function () {
-  //   return PromiseArray.create({
-  //     promise: this.get('documentVersions').then((documentVersions) => {
-  //       if (documentVersions && documentVersions.length > 0) {
-  //         const documentVersionIds = documentVersions.mapBy('id').join(',');
-  //         return this.store.query('document', {
-  //           filter: {
-  //             'documents': { id: documentVersionIds },
-  //           },
-  //           include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-  //         }).then((documents) => {
-  //           // Ignore sorting for the time being, as decisions only rarely contain more than one document
-  //           return documents;
-  //         });
-  //       }
-  //     }),
-  //   });
-  // }),
+  //documentVersions: hasMany('document-version', { inverse: null }),
 });
