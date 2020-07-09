@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { get, set, observer } from '@ember/object';
+import { get, set } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import { debounce } from '@ember/runloop';
@@ -20,18 +20,18 @@ export default Component.extend(AuthenticatedRouteMixin, {
     this.send('performSearch');
   },
 
-  searchChanged: observer('searchText', function () {
-    debounce(this, this.debouncedSearch, 500);
-  }),
-
   debouncedSearch: function () {
     this.send('performSearch', get(this, 'searchText'));
   },
 
   actions: {
+    updateSearchText(text) {
+      this.set('searchText', text.target.value);
+      debounce(this, this.debouncedSearch, 500);
+    },
+
     async performSearch(searchTerm) {
       set(this, 'isLoading', true);
-      // let params = {};
       const searchModifier = ':sqs:';
 
       const textSearchKey = this.textSearchFields.join(',');
