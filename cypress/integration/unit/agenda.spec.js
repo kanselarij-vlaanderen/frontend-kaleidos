@@ -1,5 +1,6 @@
 import modal from "../../selectors/modal.selectors";
 import agenda from '../../selectors/agenda.selectors';
+import form from '../../selectors/form.selectors';
 import actionModel from '../../selectors/action-modal.selectors';
 
 /*global context, before, it, cy,beforeEach, afterEach, Cypress*/
@@ -24,7 +25,7 @@ context('Agenda tests', () => {
   afterEach(() => {
     cy.logout();
   });
-  
+
   it('should create a new agenda and then delete it', () => {
     const agendaDateSingleTest = Cypress.moment().add(2, 'weeks').day(5); // Friday in two weeks
     cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((data) => {
@@ -67,7 +68,7 @@ context('Agenda tests', () => {
     cy.get(actionModel.lockAgenda).should('not.exist');
   });
 
-  it('should edit nota on agendaitem and trim whitespaces', () => {
+  it.only('should edit nota on agendaitem and trim whitespaces', () => {
     const testId = 'testId=' + currentTimestamp() + ': ';
 
     const PLACE = 'Brussel';
@@ -93,6 +94,9 @@ context('Agenda tests', () => {
     cy.contains('dit is de lange titel');
     cy.contains("dit is de korte titel").click();
     cy.get(agenda.agendaitemTitlesEdit).should('exist').should('be.visible').click();
+
+    cy.get(form.formVlToggle).should('exist').click();
+
     cy.get(agenda.agendaitemTitlesEditShorttitle).clear();
     cy.get(agenda.agendaitemTitlesEditShorttitle).type("dit is de korte titel\n\n");
 
@@ -103,6 +107,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
+    cy.get(agenda.agendaitemTitelsConfidential).should('exist').should('be.visible');
   })
 
 });
