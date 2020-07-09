@@ -1,80 +1,83 @@
-import Component from '@ember/component';
-import { get, set } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import { debounce } from '@ember/runloop';
-import { A } from '@ember/array';
 import search from 'fe-redpencil/utils/mu-search';
 
-export default Component.extend(AuthenticatedRouteMixin, {
-  size: 5,
-  action: '',
-  onSelect: null,
-  textSearchFields: A(['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle']),
-  isLoading: false,
-  searchText: null,
-  page: 0,
-  results: null,
+export default class CaseSearch extends Component {
+  size = 5;
+  textSearchFields = null;
 
-  didReceiveAttrs() {
-    this.send('performSearch');
-  },
+  @tracked results = null;
+  @tracked isLoading = false;
+  @tracked searchText = null;
+  @tracked page = 0;
 
-  debouncedSearch: function () {
-    this.send('performSearch', get(this, 'searchText'));
-  },
+  constructor() {
+    super(...arguments);
 
-  actions: {
-    updateSearchText(text) {
-      this.set('searchText', text.target.value);
-      debounce(this, this.debouncedSearch, 500);
-    },
-
-    async performSearch(searchTerm) {
-      set(this, 'isLoading', true);
-      const searchModifier = ':sqs:';
-
-      const textSearchKey = this.textSearchFields.join(',');
-
-      const filter = {};
-      if (!isEmpty(searchTerm)) {
-        filter[searchModifier + textSearchKey] = searchTerm;
-      }
-
-      if (Object.keys(filter).length == 0) {
-        filter[':sqs:title'] = '*'; // search without filter
-      }
-
-      const results = await search('cases', this.page, this.size, null, filter, function (item) {
-        const entry = item.attributes;
-        entry.id = item.id;
-        return entry;
-      });
-      set(this, 'results', results);
-      set(this, 'isLoading', false);
-    },
-
-    prevPage() {
-      if (get(this, 'page') > 0) {
-        set(this, 'page', get(this, 'page') - 1);
-        this.send('performSearch', get(this, 'searchText'));
-      }
-    },
-
-    nextPage() {
-      set(this, 'page', get(this, 'page') + 1);
-      this.send('performSearch', get(this, 'searchText'));
-    },
-
-    async selectCase(caseItem, event) {
-      // We never set loading to false, because the component closes after this action
-      set(this, 'isLoading', true);
-      if (event) {
-        event.stopPropagation();
-      }
-      this.onSelect(caseItem);
-    },
+    this.textSearchFields = ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'];
+    this.performSearch();
   }
 
+  debouncedSearch() {
+    this.performSearch(this.searchText);
+  }
 
-});
+  async performSearch(searchTerm) {
+    this.loading = true;
+    const searchModifier = ':sqs:';
+
+    const textSearchKey = this.textSearchFields.join(',');
+
+    const filter = {};
+    if (!isEmpty(searchTerm)) {
+      filter[searchModifier + textSearchKey] = searchTerm;
+    }
+
+    if (Object.keys(filter).length == 0) {
+      filter[':sqs:title'] = '*'; // search without filter
+    }
+
+    const results = await search('cases', this.page, this.size, null, filter, function (item) {
+      const entry = item.attributes;
+      entry.id = item.id;
+      return entry;
+    });
+
+    this.results = results;
+    this.isLoading = false;
+  }
+
+  @action
+  updateSearchText(text) {
+    this.searchText = text.target.value;
+    debounce(this, this.debouncedSearch, 500);
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+      this.performSearch(this.searchText);
+    }
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+    this.performSearch(this.searchText);
+  }
+
+  @action
+  async selectCase(caseItem, event) {
+    // We never set loading to false, because the component closes after this action
+    this.isLoading = true;
+    if (event) {
+      event.stopPropagation();
+    }
+
+    this.args.onSelect(caseItem);
+  }
+}
