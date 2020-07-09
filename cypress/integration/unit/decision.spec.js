@@ -62,7 +62,7 @@ context('Add files to an agenda', () => {
 
     cy.route('POST', 'document-versions').as('createNewDocumentVersion');
     cy.route('POST', 'documents').as('createNewDocument');
-    cy.route('PATCH', 'decisions/**').as('patchDecision');
+    cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
     cy.route('DELETE', 'document-versions/*').as('deleteVersion');
     cy.route('DELETE', 'documents/*').as('deleteDocument');
 
@@ -70,7 +70,7 @@ context('Add files to an agenda', () => {
 
     cy.wait('@createNewDocumentVersion', { timeout: 12000 });
     cy.wait('@createNewDocument', { timeout: 12000 });
-    cy.wait('@patchDecision', { timeout: 12000 });
+    cy.wait('@patchTreatments', { timeout: 12000 });
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards');

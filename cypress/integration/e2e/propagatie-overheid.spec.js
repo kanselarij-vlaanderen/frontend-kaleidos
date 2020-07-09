@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
+import mandatee from "../../selectors/mandatees/mandateeSelectors";
 
 context('Agenda tests', () => {
 
@@ -58,7 +59,12 @@ context('Agenda tests', () => {
     cy.contains('Wijzigen').click();
     cy.get('.vl-form__group').as('editDecision');
     cy.get('@editDecision').within(() => {
-      cy.get('.vl-checkbox--switch__label').click();
+      cy.get(agenda.decisionPowerSelectContainer).should('exist').should('be.visible').within(() => {
+        cy.get('.ember-power-select-trigger').scrollIntoView().click();
+      });
+    });
+    cy.get('.ember-power-select-option').should('exist').then(() => {
+      cy.contains('Goedgekeurd').scrollIntoView().click();
     });
     cy.contains('Opslaan').click();
     cy.releaseDecisions();

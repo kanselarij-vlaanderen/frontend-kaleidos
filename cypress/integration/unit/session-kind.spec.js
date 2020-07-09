@@ -29,10 +29,6 @@ context('Different session kinds should show different titles', () => {
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetodecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
-    cy.clickReverseTab('Klad');
-    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
-    cy.clickReverseTab('Definitief');
-    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for special session in decision print overview', () => {
@@ -41,10 +37,6 @@ context('Different session kinds should show different titles', () => {
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetodecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
-    cy.clickReverseTab('Klad');
-    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
-    cy.clickReverseTab('Definitief');
-    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for electronic session in decision print overview', () => {
@@ -53,10 +45,6 @@ context('Different session kinds should show different titles', () => {
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetodecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
-    cy.clickReverseTab('Klad');
-    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
-    cy.clickReverseTab('Definitief');
-    cy.get(printOverview.printoverviewDecisionsHeaderTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {
@@ -75,10 +63,6 @@ context('Different session kinds should show different titles', () => {
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetonewsletter).click();
     cy.get(newsletter.overviewTitle).contains(textToDisplay);
-    cy.clickReverseTab('Klad');
-    cy.get(newsletter.meetingTitle).contains(textToDisplay);
-    cy.clickReverseTab('Definitief');
-    cy.get(newsletter.meetingTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for special session in newsletter-info print overview', () => {
