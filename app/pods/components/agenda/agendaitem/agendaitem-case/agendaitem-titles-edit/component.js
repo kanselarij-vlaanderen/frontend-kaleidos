@@ -8,6 +8,7 @@ export default class SubcaseTitlesEdit extends Component {
   @service store;
   classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation', 'showInNewsletter']);
+  subcase = null;
 
   @action
   async cancelEditing() {
@@ -19,7 +20,7 @@ export default class SubcaseTitlesEdit extends Component {
   async saveChanges() {
     set(this, 'isLoading', true);
     let shouldResetFormallyOk = false;
-    
+
     if (this.agendaitem.get('hasDirtyAttributes')) {
       shouldResetFormallyOk = true;
       // If only the showInNewsletter attribute has changed, the formally ok should not be reset
@@ -37,6 +38,7 @@ export default class SubcaseTitlesEdit extends Component {
       'title': trimText(this.agendaitem.title),
       'shortTitle': trimText(this.agendaitem.shortTitle),
     };
+    propertiesToSetOnSubcase['confidential'] = await this.subcase.get('confidential');
 
     try {
       await saveSubcaseTitles(this.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);

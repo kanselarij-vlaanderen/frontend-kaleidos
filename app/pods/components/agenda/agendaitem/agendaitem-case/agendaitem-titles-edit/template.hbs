@@ -1,5 +1,12 @@
 <div class="vl-u-spacer">
   <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "confidential")}}
+    {{web-components/vl-toggle
+      data-test-subcase-titles-edit-confidential
+      value=subcase.confidential
+    }}
+  </div>
+  <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "name-subcase")}}
     {{textarea
       data-test-agendaitem-titles-edit-shorttitle
