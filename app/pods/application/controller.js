@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
-import { computed, observer } from '@ember/object';
-import { on } from '@ember/object/evented';
+import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 
@@ -27,39 +26,6 @@ export default Controller.extend({
       passive: true,
     });
   },
-
-  async checkAccountlessUser(currentRouteName) {
-    if (currentRouteName.includes('loading')) {
-      return;
-    }
-
-    const user = await this.get('session.isAuthenticated');
-    if (!user) {
-      return;
-    }
-
-    const role = await this.get('currentSession.userRole');
-    if (role == 'no-access' || role === 'users') {
-      this.transitionToRoute('accountless-users');
-    }
-  },
-
-  shouldNavigateObserver: on(
-    'init',
-    observer(
-      'router.currentRouteName',
-      'currentSession.userRole',
-      'session.isAuthenticated',
-      function () {
-        const { router } = this;
-        if (!router || !router.currentRouteName) {
-          return;
-        }
-        const currentRouteName = router.get('currentRouteName');
-        this.checkAccountlessUser(currentRouteName);
-      }
-    )
-  ),
 
   showHeader: computed('currentSession.userRole', function () {
     let role = this.get('currentSession.userRole');
