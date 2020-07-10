@@ -1,6 +1,5 @@
 import DS from 'ember-data';
 import Evented from '@ember/object/evented';
-import { observer } from '@ember/object';
 import { computed } from '@ember/object';
 
 export default DS.Model.extend(Evented, {
@@ -13,12 +12,10 @@ export default DS.Model.extend(Evented, {
   timeStarted: DS.attr(),
   timeEnded: DS.attr(),
   hasEnded: computed('status', function () {
-    return this.status === this.SUCCESS || this.status === this.FAILED;
-  }),
-
-  statusObserver: observer('hasEnded', function () {
-    if (this.hasEnded) {
+    const isSuccess = this.status === this.SUCCESS || this.status === this.FAILED;
+    if(isSuccess) {
       this.trigger('didEnd', this.status);
     }
-  })
+    return isSuccess;
+  }),
 });
