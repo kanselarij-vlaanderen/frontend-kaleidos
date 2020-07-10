@@ -1,76 +1,82 @@
-import Component from '@ember/component';
-import { inject } from '@ember/service';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
-import { computed, observer } from '@ember/object';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking'
 
+export default class AddExistingDocument extends Component {
+  @service store;
+  @tracked page = 0;
+  @tracked filter = '';
+  @tracked items = [];
 
-export default Component.extend({
+  size = 5;
+  sort = ['-created', 'name'];
 
-  store: inject(),
-
-  size: 5,
-  sort: '-created,name',
-
-  documents: computed('items.@each', function () {
-    (this.get('items') || []).map(item => item.set('selected', false));
-    return this.items;
-  }),
-
-  // dirty observers to make use of the datatable actions
-  pageObserver: observer('page', function () {
+  constructor() {
+    super(...arguments);
     this.findAll.perform();
-  }),
+  }
 
-  queryOptions: computed('sort', 'filter', 'page', function () {
-    const { page, filter, size, sort } = this;
+  get pageParam() {
+    return this.page;
+  }
+
+  set pageParam(page) {
+    if (page === undefined) {
+      this.page = 0;
+    } else {
+      this.page = page;
+    }
+    this.findAll.perform();
+  }
+
+  setSelectedToFalse() {
+    this.items.map(item => item.set('selected', false));
+  }
+
+  queryOptions() {
     let options = {
-      sort: sort,
+      sort: this.sort,
       page: {
-        number: page,
-        size: size
+        number: this.page,
+        size: this.size
       },
       filter: {},
     };
-    if (filter) {
-      options['filter']['name'] = filter;
+    if (this.filter) {
+      options['filter']['name'] = this.filter;
     }
     return options;
-  }),
-
-  findAll: task(function* () {
-    const { queryOptions } = this;
-    const documents = yield this.store.query('document-version', queryOptions);
-    this.set('items', documents);
-    yield timeout(100);
-  }),
-
-  searchTask: task(function* () {
-    yield timeout(300);
-    const { queryOptions } = this;
-    const documents = yield this.store.query('document-version', queryOptions);
-    this.set('items', documents);
-    yield timeout(100);
-  }).restartable(),
-
-  async didInsertElement() {
-    this._super(...arguments);
-    this.findAll.perform();
-  },
-
-  actions: {
-    async select(document, event) {
-      if (event) {
-        event.stopPropagation();
-      }
-      if (document.selected) {
-        document.set('selected', false);
-        this.delete(document)
-      } else {
-        document.set('selected', true);
-        this.add(document)
-      }
-    }
   }
 
+  @task(function* () {
+    yield timeout(300);
+    const documents = yield this.store.query('document-version', this.queryOptions());
+    this.items = documents;
+    yield timeout(100);
+    this.setSelectedToFalse();
+  })findAll;
 
-});
+  @task(function* () {
+    yield timeout(300);
+    const documents = yield this.store.query('document-version', this.queryOptions());
+    this.items = documents
+    this.page = 0;
+    yield timeout(100);
+  })searchTask;
+
+  @action
+  async select(document, event) {
+    if (event) {
+      event.stopPropagation();
+    }
+    if (document.selected) {
+      document.set('selected', false);
+      this.args.delete(document)
+    } else {
+      document.set('selected', true);
+      this.args.add(document)
+    }
+  }
+}
