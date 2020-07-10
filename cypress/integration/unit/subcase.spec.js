@@ -42,7 +42,7 @@ context('Subcase tests', () => {
     cy.get('.vlc-status-timeline > li').eq(0).contains(/Ingediend voor agendering/);
     cy.get('.vl-description-data').within(() => {
       cy.get('.vl-description-data__value').as('descriptionValue');
-      cy.get('@descriptionValue').eq(0).contains(/Nog geen nummer/);
+      // cy.get('@descriptionValue').eq(0).contains(/Nog geen nummer/); // zitting number is a thing now, can we know this value ?
       cy.get('@descriptionValue').eq(1).contains(/Ingediend voor de agenda van/);
       cy.get('@descriptionValue').eq(1).contains(dateRegex);
       cy.get('@descriptionValue').eq(2).contains(dateFormat);
