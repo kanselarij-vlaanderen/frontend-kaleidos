@@ -30,6 +30,14 @@ Check the file `Makefile` for specifics.
 To make these tests work you will need checkout of the [project](https://github.com/kanselarij-vlaanderen/kaleidos-project) next to the frontend folder.
 There you will need some customsations in your docker-compose.override.yml
 
+```
+  frontend:
+    image: kanselarij/frontend-kaleidos:development
+    ports:
+      - 127.0.0.1:80:80
+    networks:
+      - default
+
 
 ### Running the full suite:
 * `make run-cypress-tests-headless` will prepare the database, search and cache and run  all specs headless. This is the one you want.
