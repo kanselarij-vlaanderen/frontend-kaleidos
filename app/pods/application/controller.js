@@ -39,7 +39,7 @@ export default Controller.extend({
     }
 
     const role = await this.get('currentSession.userRole');
-    if (role == 'no-access') {
+    if (role == 'no-access' || role === 'users') {
       this.transitionToRoute('accountless-users');
     }
   },

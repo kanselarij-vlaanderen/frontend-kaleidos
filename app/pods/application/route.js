@@ -1,15 +1,16 @@
 import Route from '@ember/routing/route';
-import { inject } from '@ember/service';
 import ENV from 'fe-redpencil/config/environment';
-
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 
 export default Route.extend(ApplicationRouteMixin, {
-  moment: inject(),
-  intl: inject(),
-  currentSession: inject(),
-  fileService: inject(),
+  moment: service(),
+  intl: service(),
+  currentSession: service(),
+  fileService: service(),
   routeAfterAuthentication: 'agendas',
+  router: service(),
 
   beforeModel() {
     this._super(...arguments);
@@ -38,7 +39,46 @@ export default Route.extend(ApplicationRouteMixin, {
     window.location.replace(logoutUrl);
   },
 
-  model() {
+  async userHasValidGroup(currentRouteName) {
+    if (currentRouteName.includes('loading')) {
+      return false;
+    }
+
+    const user = await this.get('session.isAuthenticated');
+    if (!user) {
+      return false;
+    }
+
+    const role = await this.get('currentSession.userRole');
+    if (role !== 'no-access' && role !== 'users') {
+      return true;
+    }
+    return false;
+  },
+
+  isValidUser: computed('router.{currentRouteName,rootUrl}', 'currentSession.userRole', 'session.isAuthenticated', async function (){
+    if (!this.router) {
+      return false;
+    }
+    const currentRouteName = this.router.currentRouteName;
+
+    if(currentRouteName) {
+      return this.userHasValidGroup(currentRouteName);
+    }
+
+    if(this.router.rootURL) {
+      return this.userHasValidGroup(this.router.rootURL);
+    }
+
+    return false;
+  }),
+
+  async model() {
+
+    if( !await this.isValidUser) {
+      this.transitionTo('accountless-users');
+    }
+
     if (!this.checkSupportedBrowser()) {
       this.transitionTo('not-supported');
     }
@@ -50,7 +90,10 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   actions: {
-    willTransition: function (transition) {
+    willTransition: async function (transition) {
+      if(!await this.isValidUser) {
+        this.transitionTo('accountless-users');
+      }
       if (
         this.fileService.get('deleteDocumentWithUndo.isRunning') &&
         confirm(this.intl.t('leave-page-message'))
