@@ -22,7 +22,6 @@ export default Model.extend({
 
   agendas: hasMany('agenda', {inverse: null, serialize: false}),
   requestedSubcases: hasMany('subcase'),
-  postponeds: hasMany('postponed'),
   documentVersions: hasMany('document-version'),
 
   notes: belongsTo('meeting-record'),
@@ -86,7 +85,7 @@ export default Model.extend({
     if (!agenda) {
       return this.intl.t('no-agenda');
     } else {
-      return agenda.get('agendaName');
+      return await agenda.get('agendaName');
     }
   }),
 

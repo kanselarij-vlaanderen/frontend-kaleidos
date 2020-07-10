@@ -81,18 +81,18 @@
             }}
             <th></th>
           {{/c.header}}
-          {{#c.body as |row|}}
+          {{#c.body as |subcase|}}
             <td class="vl-data-table-col-1">
               {{web-components/vl-checkbox
-                value=row.selected
-                toggle=(action "selectAvailableSubcase" row)
+                value=subcase.selected
+                toggle=(action "selectAvailableSubcase" subcase)
               }}
             </td>
             <td class="vl-data-table-col-11">
-              {{row.shortTitle}}
+              {{subcase.shortTitle}}
               <br>
               <p class="vl-u-text--muted">
-                {{row.subcaseName}}
+                {{subcase.subcaseName}}
               </p>
             </td>
           {{/c.body}}

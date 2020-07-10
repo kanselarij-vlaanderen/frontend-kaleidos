@@ -1,14 +1,14 @@
 import DS from 'ember-data';
-import EmberObject, {computed} from '@ember/object';
-import {inject} from '@ember/service';
+import EmberObject, { computed } from '@ember/object';
+import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-import {alias} from '@ember/object/computed';
+import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
-import VRDocumentName, {compareFunction} from 'fe-redpencil/utils/vr-document-name';
-import {A} from '@ember/array';
-import {sortDocuments, getDocumentsLength} from 'fe-redpencil/utils/documents';
+import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import { A } from '@ember/array';
+import { sortDocuments, getDocumentsLength } from 'fe-redpencil/utils/documents';
 
-let {attr, belongsTo, hasMany, PromiseArray, PromiseObject} = DS;
+let { attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
 
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
@@ -20,7 +20,7 @@ export default ModelWithModifier.extend({
   priority: attr('number'),
   created: attr('datetime'),
   record: attr('string'),
-  retracted: attr('boolean'),
+  retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to treatment
   showAsRemark: attr('boolean'),
   modified: attr('datetime'),
   titlePress: attr('string'),
@@ -32,9 +32,8 @@ export default ModelWithModifier.extend({
   isApproval: attr('boolean'),
   explanation: attr('string'),
 
-  postponedTo: belongsTo('postponed'),
-  agenda: belongsTo('agenda', {inverse: null}),
-  subcase: belongsTo('subcase', {inverse: null}),
+  agenda: belongsTo('agenda', { inverse: null }),
+  agendaActivity: belongsTo('agenda-activity', { inverse: null }),
   meetingRecord: belongsTo('meeting-record'),
   showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
@@ -43,7 +42,6 @@ export default ModelWithModifier.extend({
   approvals: hasMany('approval'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
-  phases: hasMany('subcase-phase'),
 
   sortedDocumentVersions: computed('documentVersions.@each.name', function () {
     return A(this.get('documentVersions').toArray()).sort((a, b) => {
@@ -66,7 +64,7 @@ export default ModelWithModifier.extend({
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': {id: documentVersionIds},
+              'documents': { id: documentVersionIds },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
@@ -87,7 +85,7 @@ export default ModelWithModifier.extend({
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': {id: documentVersionIds},
+              'documents': { id: documentVersionIds },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
@@ -103,7 +101,7 @@ export default ModelWithModifier.extend({
 
 
   number: computed('displayPriority', 'priority', function () {
-    const {priority, displayPriority} = this;
+    const { priority, displayPriority } = this;
     if (!priority) {
       return displayPriority;
     } else {
@@ -111,30 +109,12 @@ export default ModelWithModifier.extend({
     }
   }),
 
-  isPostponed: computed('retracted', 'postponedTo', function () {
-    return this.get('postponedTo').then((session) => {
-      return !!session || this.get('retracted');
-    });
-  }),
-
-  decisions: computed('subcase.decisions.@each', function () {
-    return PromiseArray.create({
-      promise: this.store.query('decision', {
-        filter: {
-          subcase: {id: this.subcase.get('id')},
-        }
-      }).then((decisions) => {
-        return decisions.sortBy('approved');
-      }),
-    });
-  }),
-
   isDesignAgenda: computed('agenda.isDesignAgenda', function () {
     return this.get('agenda.isDesignAgenda');
   }),
 
   // get document names to show on agendaview when not in the viewport to assist lazy loading
-  documentNames: computed('documentVersions', async function() {
+  documentNames: computed('documentVersions', async function () {
     const names = await this.agendaService.getDocumentNames(this);
     return names;
   }),
@@ -149,8 +129,8 @@ export default ModelWithModifier.extend({
           return this.store
             .query('document', {
               filter: {
-                'documents': {id: documentVersionIds},
-                type: {id: CONFIG.notaID},
+                'documents': { id: documentVersionIds },
+                type: { id: CONFIG.notaID },
               },
               include: 'documents,type,documents.access-level',
             })
@@ -166,27 +146,12 @@ export default ModelWithModifier.extend({
     return this.get('mandatees').sortBy('priority');
   }),
 
-  subcasesFromCase: computed('subcase', function () {
-    if (!this.get('subcase.id')) {
-      return [];
-    }
-    return this.subcase.get('subcasesFromCase');
-  }),
-
   formallyOkToShow: computed('formallyOk', function () {
     const options = CONFIG.formallyOkOptions;
-    const {formallyOk} = this;
+    const { formallyOk } = this;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
 
     return EmberObject.create(foundOption);
-  }),
-
-  requestedBy: computed('subcase.requestedBy', function () {
-    return PromiseObject.create({
-      promise: this.get('subcase.requestedBy').then((requestedBy) => {
-        return requestedBy;
-      }),
-    });
   }),
 
   checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function () {
@@ -211,7 +176,7 @@ export default ModelWithModifier.extend({
     return PromiseArray.create({
       promise: this.store.query('approval', {
         filter: {
-          agendaitem: {id: this.get('id')},
+          agendaitem: { id: this.get('id') },
         },
         sort: 'mandatee.priority',
       }),

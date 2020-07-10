@@ -42,17 +42,21 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
  * @param {*} kind The kind of meeting to select, language and case sensitive
  * @param {*} plusMonths The positive amount of months from today to advance in the vl-datepicker
  * @param {*} date The cypress.moment object with the date and time to set
- * @param {*} location The location of the meeting to enter as input
+ * @param {string} location The location of the meeting to enter as input
+ * @param {number} meetingNumber The location of the meeting to enter as input
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, date, location) {
+function createAgenda(kind, date, location, meetingNumber ) {
+  cy.route('POST', '/meetings').as('createNewMeeting');
+  cy.route('POST', '/agendas').as('createNewAgenda');
+  cy.route('POST', '/newsletter-infos').as('createNewsletter');
+  cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
-
-  cy.visit('')
+  cy.visit('');
   cy.get(agenda.createNewAgendaButton).click();
 
   cy.get('.vl-modal-dialog').as('dialog').within(() => {
-    cy.get('.vlc-input-field-block').as('newAgendaForm').should('have.length', 3);
+    cy.get('.vlc-input-field-block').as('newAgendaForm').should('have.length', 4);
   });
 
   // Set the kind
@@ -60,7 +64,8 @@ function createAgenda(kind, date, location) {
     cy.get('.ember-power-select-trigger').click();
   });
   cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-    cy.contains(kind).trigger('mouseover').click();
+    cy.wait(500); // TODO Experiment for dropdown flakyness, see if waiting before helps
+    cy.contains(kind).scrollIntoView().trigger('mouseover').click( {force:true} );
     //TODO Experiment for dropdown flakyness
     // Does the ember-power-select-option fix itself if we wait long enough ?
     cy.get('.ember-power-select-option', { timeout: 15000 }).should('not.be.visible');
@@ -73,31 +78,37 @@ function createAgenda(kind, date, location) {
   });
   cy.setDateAndTimeInFlatpickr(date);
 
+  //Set the meetingNumber
+  if(meetingNumber) {
+    cy.get(form.formInput).eq(0).click({force: true}).clear().type(meetingNumber);
+  } else {
+    cy.get(form.formInput).eq(0).click({force: true}).invoke('val').then(sometext => meetingNumber = sometext);
+  }
+
   //Set the location
   cy.get('@newAgendaForm').eq(2).within(() => {
-    cy.get('.vl-input-field').click().type(location);
+    cy.get('.vl-input-field').click({force: true}).type(location);
   });
 
-  cy.route('POST', '/meetings').as('createNewMeeting');
-  cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
   cy.get('@dialog').within(() => {
     cy.get('.vlc-toolbar__item').contains('Toevoegen').click();
   });
 
   let meetingId;
+  let agendaId;
 
   cy.wait('@createNewMeeting', { timeout: 20000 })
     .then((res) => {
       meetingId = res.responseBody.data.id;
-    //}).verifyAlertSuccess();
     });
-
-  cy.wait('@createNewAgenda', { timeout: 20000 });
+  cy.wait('@createNewAgenda', { timeout: 20000 })
+    .then((res) => {
+      agendaId = res.responseBody.data.id;
+    });
   cy.wait('@patchMeetings', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
-        resolve(meetingId);
+        resolve({meetingId, meetingNumber, agendaId});
       });
     });
 }
@@ -113,7 +124,7 @@ function createAgenda(kind, date, location) {
  * @param {String} day - day that the agenda should be made on
  * @param {String} location - Location that the event is taking place
  */
-function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
+function createDefaultAgenda(kindOfAgenda, year, month, day, location, meetingId) {
 
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
@@ -126,7 +137,8 @@ function createDefaultAgenda(kindOfAgenda, year, month, day, location) {
   cy.get(agenda.emberPowerSelectTrigger).click();
   cy.get(agenda.emberPowerSelectOption).contains(kindOfAgenda).click();
   cy.selectDate(year, month, day);
-  cy.get(form.formInput).type(location);
+  cy.get(form.formInput).eq(0).type(meetingId, { force: true });
+  cy.get(form.formInput).eq(1).type(location);
   cy.get(agenda.button).contains(TOEVOEGEN).click();
 
   cy.wait('@createNewMeeting', { timeout: 20000 });
@@ -370,7 +382,7 @@ function approveDesignAgenda() {
 function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
-  cy.route('POST', '/subcase-phases').as('createSubcasePhase');
+  cy.route('POST', '/agenda-activities').as('createAgendaActivity');
   cy.route('PATCH', '/subcases/**').as('patchSubcase');
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
@@ -412,10 +424,11 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     cy.get('@rows', { timeout: 12000 }).eq(0).click().get('[type="checkbox"]').should('be.checked');
     cy.get('.vl-button').contains('Agendapunt toevoegen').click();
   });
-  cy.wait('@createNewAgendaitem', { timeout: 20000 })
+  cy.wait('@createAgendaActivity', { timeout: 20000 })
+    .wait('@createNewAgendaitem', { timeout: 20000 })
     .wait('@patchSubcase', { timeout: 20000 })
-    .wait('@createSubcasePhase', { timeout: 20000 })
-    .wait('@patchAgenda', { timeout: 20000 })
+    .wait('@patchAgenda', { timeout: 20000 });
+  cy.url().should('include', '?refresh=');
 }
 
 /**
@@ -484,9 +497,9 @@ function agendaItemExists(agendaItemName) {
 *  @param {boolean} isAdmin - optional boolean to indicate that we are admin (some profiles can't see the link to subcase)
  */
 function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
-  cy.agendaItemExists(agendaItemName);
+  cy.agendaItemExists(agendaItemName).click();
 
-  cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
+  // cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
   cy.wait(1000)
   cy.url().should("include",'agendapunten');
   cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {

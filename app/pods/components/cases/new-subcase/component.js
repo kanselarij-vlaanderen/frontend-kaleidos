@@ -99,7 +99,7 @@ export default Component.extend({
       modified: newDate,
       isArchived: false,
       formallyOk: false,
-      phases: []
+      agendaActivities: []
     });
   },
 
