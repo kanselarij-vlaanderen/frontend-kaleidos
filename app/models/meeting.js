@@ -85,7 +85,7 @@ export default Model.extend({
     if (!agenda) {
       return this.intl.t('no-agenda');
     } else {
-      return agenda.get('agendaName');
+      return await agenda.get('agendaName');
     }
   }),
 
