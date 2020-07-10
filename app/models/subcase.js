@@ -194,12 +194,7 @@ export default ModelWithModifier.extend({
         if (approvedTreatments && approvedTreatments.length === 0) {
           return false;
         }
-        const foundNonApprovedTreatment = approvedTreatments.includes(false);
-        if (foundNonApprovedTreatment) {
-          return false;
-        } else {
-          return true;
-        }
+        return !approvedTreatments.includes(false);
       })
     })
   }),
