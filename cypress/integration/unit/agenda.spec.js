@@ -13,7 +13,7 @@ context('Agenda tests', () => {
     cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.logout();
+    cy.logoutFlow();
   });
 
   beforeEach(() => {

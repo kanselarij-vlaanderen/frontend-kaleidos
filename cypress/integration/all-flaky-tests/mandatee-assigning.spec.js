@@ -13,7 +13,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.logout();
+    cy.logoutFlow();
   });
 
   beforeEach(() => {
