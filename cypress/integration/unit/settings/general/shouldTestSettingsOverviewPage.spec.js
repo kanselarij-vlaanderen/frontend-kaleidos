@@ -125,11 +125,15 @@ context('Settings overview page tests', () => {
   });
 
   it('Should navigate to detailview from user', () => {
+    cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.manageUsers).contains('Gebruikersbeheer').click();
     cy.url().should('include','instellingen/gebruikers');
     cy.get(settings.userSearchInput).should('exist').should('be.visible').type("Minister");
     cy.get(settings.settingsUserTable).should('contain','Minister');
-    cy.get(settings.goToUserDetail).should('exist').should('be.visible').click();
+    cy.get(settings.userSearchButton).click().then(() => {
+      cy.wait('@filterUsers');
+      cy.get(settings.goToUserDetail).should('exist').should('be.visible').click();
+    })
     cy.contains('Gebruiker: Minister Test');
     cy.contains('Algemene informatie');
   });
