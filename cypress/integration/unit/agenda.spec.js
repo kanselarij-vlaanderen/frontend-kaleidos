@@ -68,7 +68,7 @@ context('Agenda tests', () => {
     cy.get(actionModel.lockAgenda).should('not.exist');
   });
 
-  it.only('should edit nota on agendaitem and trim whitespaces', () => {
+  it('should edit nota on agendaitem and trim whitespaces', () => {
     const testId = 'testId=' + currentTimestamp() + ': ';
 
     const PLACE = 'Brussel';
