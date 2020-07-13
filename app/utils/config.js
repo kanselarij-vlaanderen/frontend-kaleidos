@@ -117,5 +117,5 @@ export default EmberObject.create({
   ministerId: '1cc0710c-1b28-4e23-b3ff-399c8089bc71',
   kabinetId: '7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb',
   usersId: '450915b2-4c64-4b03-9caa-71180400f831',
-  internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3'
+  internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3',
 });
