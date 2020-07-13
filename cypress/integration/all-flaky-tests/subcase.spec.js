@@ -12,7 +12,7 @@ context('Subcase tests', () => {
     cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.logout();
+    cy.logoutFlow();
   });
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -42,7 +42,7 @@ context('Subcase tests', () => {
     cy.get('.vlc-status-timeline > li').eq(0).contains(/Ingediend voor agendering/);
     cy.get('.vl-description-data').within(() => {
       cy.get('.vl-description-data__value').as('descriptionValue');
-      cy.get('@descriptionValue').eq(0).contains(/Nog geen nummer/);
+      // cy.get('@descriptionValue').eq(0).contains(/Nog geen nummer/); // zitting number is a thing now, can we know this value ?
       cy.get('@descriptionValue').eq(1).contains(/Ingediend voor de agenda van/);
       cy.get('@descriptionValue').eq(1).contains(dateRegex);
       cy.get('@descriptionValue').eq(2).contains(dateFormat);
@@ -72,7 +72,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.deleteSubcase();
@@ -84,7 +84,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -102,7 +102,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
