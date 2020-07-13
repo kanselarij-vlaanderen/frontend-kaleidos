@@ -25,7 +25,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -72,7 +72,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.deleteSubcase();
@@ -84,7 +84,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -102,7 +102,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
