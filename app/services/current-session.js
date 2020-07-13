@@ -53,7 +53,15 @@ export default Service.extend({
       this.set('isViewer', this.checkViewRights());
       this.set('isEditor', this.checkEditRights());
       this.set('isAdmin', this.checkAdminRights());
+      this.set('isOverheid', this.checkOverheidRights());
     }
+  },
+
+  checkOverheidRights() {
+    const { userRoleId } = this;
+    const { priviligedId } = CONFIG;
+    let roles = [priviligedId];
+    return roles.includes(userRoleId);
   },
 
   checkPublicRights() {

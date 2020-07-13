@@ -78,7 +78,8 @@
           </div>
           {{#if (not aboutToDelete)}}
             {{#if (not selectedAgendaItem)}}
-              {{#if renderDetails}}
+              {{#if overheidCanViewDocuments}}
+                {{#if renderDetails}}
                 {{#if (await @agendaitem.documents)}}
                   <div class="vlc-hr"></div>
                     <Components::Utils::DocumentsListForItem
@@ -102,6 +103,7 @@
                           @documentNames={{@agendaitem.documentNames}}
                   />
                 {{/if}}
+              {{/if}}
               {{/if}}
             {{/if}}
           {{/if}}
