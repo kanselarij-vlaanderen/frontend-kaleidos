@@ -38,8 +38,8 @@ context('Add files to an agenda', () => {
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven').then((data) => {
-      cy.visit(`/vergadering/${data[0]}/agenda/${data[1]}/agendapunten`);
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven').then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
     });
     // cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);

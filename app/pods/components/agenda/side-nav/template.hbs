@@ -46,7 +46,7 @@
             <a href="" {{action "setCurrentAgenda" agenda}}>
               <div class="vlc-side-nav-item__label">
                 <span>
-                  {{utils/delayed-property model=agenda path="agendaName" waitFor="status"}}
+                  {{await agenda.agendaName}}
                 </span>
               </div>
               <div class="vlc-side-nav-item__meta">

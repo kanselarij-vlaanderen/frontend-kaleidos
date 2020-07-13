@@ -22,6 +22,10 @@ export default Model.extend(LoadableModel, {
     return this.get('status.isDesignAgenda');
   }),
 
+  isClosed: computed('status.isClosed', function () {
+    return this.get('status.isClosed');
+  }),
+
   async asyncCheckIfDesignAgenda() {
     await this.get('status');
 

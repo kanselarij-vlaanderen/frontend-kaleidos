@@ -218,7 +218,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
   cy.get('.ember-power-select-option--search-message', { timeout: 10000 }).should('not.exist'); // TODO added this because default data does not have active ministers
   cy.get('.ember-power-select-option', { timeout: 10000 }).should('exist').then(() => {
     if (mandateeSearchText) {
-      cy.get('.ember-power-select-option').eq(0).click();
+      cy.get('.ember-power-select-option').contains(mandateeSearchText).click();
     } else {
       cy.get('.ember-power-select-option').eq(mandateeNumber).click();
     }

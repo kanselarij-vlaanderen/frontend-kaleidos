@@ -17,7 +17,7 @@ context('Agenda tests', () => {
     cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.logout();
+    cy.logoutFlow();
   });
 
   beforeEach(() => {
@@ -31,10 +31,10 @@ context('Agenda tests', () => {
   
   it('should create a new agenda and then delete it', () => {
     const agendaDateSingleTest = Cypress.moment().add(2, 'weeks').day(5); // Friday in two weeks
-    cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((data) => {
-      cy.visit(`/vergadering/${data[0]}/agenda/${data[1]}/agendapunten`);
-        cy.deleteAgenda(data[0], true);
-      });
+    cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.deleteAgenda(result.meetingId, true);
+    });
   });
 
   it('should set formal ok on all agendaitems and approve it', () => {
@@ -51,12 +51,12 @@ context('Agenda tests', () => {
 
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks').day(5); // Friday in three weeks
-    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar').then((data) => {
-      cy.visit(`/vergadering/${data[0]}/agenda/${data[1]}/agendapunten`);
+    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar').then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.openAgendaForDate(dateToCreateAgenda);
       cy.setFormalOkOnItemWithIndex(0);
       cy.approveDesignAgenda();
-      cy.deleteAgenda(data[0]);
+      cy.deleteAgenda(result.meetingId);
       cy.closeAgenda();
     });
   });
@@ -107,5 +107,20 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
+  });
+
+  it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
+    const agendaDate = Cypress.moment().add(1, 'week').day(6);
+    cy.createAgenda('Ministerraad', agendaDate, "Brussel", 1);
+    cy.createAgenda('Ministerraad', agendaDate, "Brussel").then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.get(actionModel.showActionOptions).click();
+      cy.get(actionModel.toggleeditingsession).click();
+      cy.get('input[type="number"]').should('have.value', result.meetingNumber);
+      cy.visit('/');
+      cy.get(agenda.createNewAgendaButton).click();
+      cy.wait(500);
+      cy.get('input[type="number"]').should('have.value',(parseInt(result.meetingNumber) + 1).toString());
+    });
   });
 });

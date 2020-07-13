@@ -6,6 +6,7 @@ export default Component.extend({
   width: null,
   id: null,
   value: null,
+  type: "text",
 
   getClassNames: computed('width', function () {
     const defaultClassName = 'vl-col--3-4';

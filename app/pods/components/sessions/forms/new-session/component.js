@@ -11,6 +11,36 @@ export default Component.extend({
   formatter: service(),
   kind: null,
   selectedKindUri: null,
+  meetingNumber: null,
+
+  init() {
+    this._super(...arguments);
+    const currentYear = moment().year();
+    // TODO: Improve samen met Michael of Sven
+    this.store.query('meeting',
+      {
+        sort: '-planned-start'
+      }).then(meetings => {
+        let meetingsFromThisYear = null;
+      if (meetings.length) {
+
+        meetingsFromThisYear = meetings.map(meeting => {
+         if (moment(meeting.plannedStart).year() === currentYear) {
+           return meeting;
+         }
+        }).filter(meeting => meeting); // Filter undefineds out of results..
+
+        let id = 0;
+        meetingsFromThisYear.forEach(meeting => {
+          const number = meeting.get('number');
+          if(number > id) {
+            id = number;
+          }
+        });
+         this.set('meetingNumber', id + 1);
+      }
+    });
+  },
 
   async createAgenda(meeting, date) {
     const status = await this.store.findRecord('agendastatus', '2735d084-63d1-499f-86f4-9b69eb33727f');
@@ -51,7 +81,7 @@ export default Component.extend({
 
   actions: {
     async createNewSession() {
-      const { isDigital, extraInfo, selectedKindUri } = this;
+      const { isDigital, extraInfo, selectedKindUri, meetingNumber } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
       const date = this.formatter.formatDate(null);
@@ -62,6 +92,7 @@ export default Component.extend({
         plannedStart: startDate,
         created: date,
         kind: kindUriToAdd,
+        number: meetingNumber
       });
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 

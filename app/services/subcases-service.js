@@ -46,7 +46,6 @@ export default Service.extend({
   processSubcasePhases(activities) {
     //KAS-1425 sort activities? done in the micro service atm.
     if (typeof activities === 'string') {    
-      console.log(activities);
       return null;
     } else {
       let phases = [];

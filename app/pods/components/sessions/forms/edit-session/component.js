@@ -13,6 +13,7 @@ export default Component.extend({
   selectedKindUri: null,
   startDate: null,
   extraInfo: null,
+  meetingNumber: null,
 
   date: computed('startDate', function () {
     return A([this.startDate]);
@@ -24,12 +25,13 @@ export default Component.extend({
     this.set('kind', EmberObject.create(CONFIG.kinds.find((kind) => kind.uri === this.get('selectedKindUri'))));
     this.set('startDate', this.get('meeting.plannedStart'));
     this.set('extraInfo', this.get('meeting.extraInfo'));
+    this.set('meetingNumber', this.get('meeting.number'));
   },
 
   actions: {
     async updateSession() {
-      const {
-        isDigital, extraInfo, selectedKindUri, meeting,
+      const { 
+        isDigital, extraInfo, selectedKindUri, meeting, meetingNumber 
       } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
@@ -41,6 +43,7 @@ export default Component.extend({
       await meeting.set('plannedStart', startDate);
       await meeting.set('created', date);
       await meeting.set('kind', kindUriToAdd);
+      await meeting.set('number', meetingNumber);
 
       meeting.save()
         .catch(() => {
