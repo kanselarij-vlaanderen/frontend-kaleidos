@@ -21,7 +21,7 @@ async function fetchArchivingJob(agenda) {
   const fetchedJob = await fetch(url, {
     method: 'post',
     headers: { 'Content-type': 'application/vnd.api+json' }
-  })
+  });
   if (fetchedJob.status > 201) {
     alert('De vergadering heeft geen documenten om te zippen.');
     return null;
