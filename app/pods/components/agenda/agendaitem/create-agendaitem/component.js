@@ -201,9 +201,9 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
       let announcementCounter = -1;
 
       const promise = Promise.all(
-        itemsToAdd.map(async (subCase) => {
-          if (subCase.selected) {
-            if (subCase.showAsRemark) {
+        subcasesToAdd.map(async (subcase) => {
+          if (subcase.selected) {
+            if (subcase.showAsRemark) {
               announcementCounter++;
               index = announcementCounter;
             } else {
