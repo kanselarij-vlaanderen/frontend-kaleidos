@@ -18,19 +18,15 @@ async function constructArchiveName(agenda) {
 
 async function fetchArchivingJob(agenda) {
   const url = `/agendas/${agenda.id}/agendaitems/documents/files/archive`;
-  return await fetch(url, {
+  const fetchedJob = await fetch(url, {
     method: 'post',
     headers: { 'Content-type': 'application/vnd.api+json' }
-  }).then((fetchedJob) => {
-    if (fetchedJob.status > 201) {
-      alert('De vergadering heeft geen documenten om te zippen.');
-      return null;
-    }
-    return fetchedJob.json();
-  }).catch((error) => {
+  })
+  if (fetchedJob.status > 201) {
+    alert('De vergadering heeft geen documenten om te zippen.');
     return null;
-  });
-
+  }
+  return fetchedJob.json();
 }
 
 async function fetchArchivingJobForAgenda(agenda, store) {
