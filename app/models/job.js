@@ -13,7 +13,7 @@ export default DS.Model.extend(Evented, {
   timeEnded: DS.attr(),
   hasEnded: computed('status', function () {
     const isSuccess = this.status === this.SUCCESS || this.status === this.FAILED;
-    if(isSuccess) {
+    if (isSuccess) {
       this.trigger('didEnd', this.status);
     }
     return isSuccess;
