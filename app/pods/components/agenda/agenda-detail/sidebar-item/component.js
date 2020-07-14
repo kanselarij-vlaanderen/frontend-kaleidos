@@ -22,7 +22,6 @@ export default class SidebarItem extends Component {
   @alias('args.agendaitem.checkAdded') isNew;
 
   hideLabel = true;
-  isShowingChanges = null;
 
   @tracked isClickable = true;
   @tracked isPostponed = this.args.agendaitem.postponedTo.get('postponed');
