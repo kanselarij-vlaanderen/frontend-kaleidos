@@ -27,7 +27,7 @@ export default Component.extend({
 
   async setDecisionPhaseToSubcase() {
     const approved = await this.get('approved');
-    const subcase = await this.get('subcase')
+    const subcase = await this.get('subcase');
 
     const foundDecidedPhases = await this.store.query('subcase-phase', {
       filter: { code: { id: CONFIG.decidedCodeId }, subcase: { id: subcase.get('id') } }
@@ -81,17 +81,15 @@ export default Component.extend({
       });
 
       await this.setDecisionPhaseToSubcase();
-
-      if (!this.get('isDestroyed')) {
         let agendaitemToUpdate;
         if (this.isTableRow) {
-          const subcase = await this.agendaitem.get('subcase');
-          (await subcase.get('decisions')).reload();
-          agendaitemToUpdate = await this.agendaitem.content;
+          await this.subcase.get('decisions').reload();
+          agendaitemToUpdate = this.agendaitem;
         } else {
           agendaitemToUpdate = await this.agendaitem;
         }
         await agendaitemToUpdate.save();
+      if (!this.get('isDestroyed')) {
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
       }

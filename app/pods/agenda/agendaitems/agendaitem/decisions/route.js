@@ -4,29 +4,25 @@ import { action } from '@ember/object';
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async beforeModel() {
-    const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const subcase = await agendaItem.subcase;
+    const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
+    const subcase = await agendaitem.subcase;
     if (!subcase) {
       this.transitionTo('agenda.agendaitems.agendaitem.index')
     }
   }
 
-  async model() {
-    const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const subcase = await agendaItem.subcase;
-    return this.store.query('decision', {
+  async setupController(controller, model) {
+    super.setupController(...arguments);
+    const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
+    const subcase = await agendaitem.subcase;
+    const decisions = await this.store.query('decision', {
       'filter[subcase][:id:]': subcase.id,
       'include': 'signed-document'
     });
-  }
-
-  async setupController(controller, model) {
-    super.setupController(...arguments);
-    const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const subcase = await agendaItem.subcase;
-    controller.agendaItem = agendaItem;
-    controller.subcase = subcase;
-    controller.model = model;
+    controller.set('agendaitem', agendaitem);
+    controller.set('subcase', subcase);
+    controller.set('decisions', decisions);
+    controller.set('model', model);
   }
 
   @action
