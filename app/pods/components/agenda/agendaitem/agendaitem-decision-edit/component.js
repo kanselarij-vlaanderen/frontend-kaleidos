@@ -48,6 +48,8 @@ export default Component.extend({
 
     async saveChanges() {
       this._super.call(this);
+      debugger;
+
       this.set('isLoading', true);
 
       const decision = await this.get('item');
@@ -61,14 +63,14 @@ export default Component.extend({
       if (!this.get('isDestroyed')) {
         let agendaitemToUpdate;
         if (this.isTableRow) {
-          const agendaActivity = await this.agendaitem.get('agendaActivity');
+          const agendaActivity = await this.agendaitem.content.get('agendaActivity');
           if (agendaActivity) {
             const subcase = await agendaActivity.get('subcase');
             (await subcase.get('decisions')).reload();
             agendaitemToUpdate = await this.agendaitem.content;
           }
         } else {
-          agendaitemToUpdate = await this.agendaitem;
+          agendaitemToUpdate = await this.agendaitem.content;
         }
         await agendaitemToUpdate.save();
         this.set('isLoading', false);
