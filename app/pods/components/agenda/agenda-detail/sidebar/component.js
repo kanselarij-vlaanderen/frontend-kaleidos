@@ -13,6 +13,7 @@ export default class AgendaSidebar extends Component {
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
 
   @tracked announcements = this.args.announcements;
+  @tracked isShowingChanges = false;
 
   classNames = ['vlc-agenda-items'];
   overviewEnabled = null;
@@ -34,7 +35,7 @@ export default class AgendaSidebar extends Component {
 
   @action
   toggleChangesOnly() {
-    this.isShowingChanges = !this.state.isShowingChanges;
+    this.isShowingChanges = !this.isShowingChanges;
   }
 
   @action

@@ -23,7 +23,6 @@ export default class SidebarItem extends Component {
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
   hideLabel = true;
-  isShowingChanges = null;
 
   @tracked isClickable = true;
   @tracked isRetracted = this.args.agendaitem.retracted;
