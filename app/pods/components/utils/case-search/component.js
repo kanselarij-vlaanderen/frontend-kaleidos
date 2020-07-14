@@ -33,7 +33,7 @@ export default class CaseSearch extends Component {
 
     const filter = {};
     if (!isEmpty(searchTerm)) {
-      filter[searchModifier + textSearchKey] = searchTerm;
+      filter[`${searchModifier}${textSearchKey}`] = searchTerm;
     }
 
     if (Object.keys(filter).length == 0) {
