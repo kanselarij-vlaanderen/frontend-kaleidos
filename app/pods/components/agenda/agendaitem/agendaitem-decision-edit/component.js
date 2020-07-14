@@ -48,8 +48,6 @@ export default Component.extend({
 
     async saveChanges() {
       this._super.call(this);
-      debugger;
-
       this.set('isLoading', true);
 
       const decision = await this.get('item');
