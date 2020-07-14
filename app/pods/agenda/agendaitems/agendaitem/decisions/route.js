@@ -9,16 +9,14 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
     if (!subcase) {
       this.transitionTo('agenda.agendaitems.agendaitem.index')
     }
+    subcase.hasMany('decisions').reload();
   }
 
   async setupController(controller, model) {
     super.setupController(...arguments);
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     const subcase = await agendaitem.subcase;
-    const decisions = await this.store.query('decision', {
-      'filter[subcase][:id:]': subcase.id,
-      'include': 'signed-document'
-    });
+    const decisions = await subcase.get('decisions');
     controller.set('agendaitem', agendaitem);
     controller.set('subcase', subcase);
     controller.set('decisions', decisions);
