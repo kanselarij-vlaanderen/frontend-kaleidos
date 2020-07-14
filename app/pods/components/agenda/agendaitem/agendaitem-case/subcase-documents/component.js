@@ -37,12 +37,12 @@ export default Component.extend(
       const isSubcase = this.item.get('modelName') === 'subcase';
       const isOverheid = this.currentSession.isOverheid;
 
-      if(isAgendaItem) {
+      if (isAgendaItem) {
         const documentsAreReleased = this.item.get('agenda.createdFor.releasedDocuments');
         return !(isOverheid && !documentsAreReleased);
       }
 
-      if(isSubcase) {
+      if (isSubcase) {
         const documentsAreReleased = this.item.get('requestedForMeeting.releasedDocuments');
         return !(isOverheid && !documentsAreReleased);
       }
