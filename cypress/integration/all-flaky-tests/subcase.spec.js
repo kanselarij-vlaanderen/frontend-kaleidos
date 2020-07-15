@@ -211,10 +211,8 @@ context('Subcase tests', () => {
 
     // Save this stuff.
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
-    cy.route('GET', '/newsletter-infos/**').as('newsletterInfosGet');
-    cy.get(agenda.item.news.saveButton).click();
-    cy.wait('@newsletterInfosPatch');
-    cy.wait('@newsletterInfosGet');
+    cy.get(agenda.item.news.saveButton).click()
+      .wait('@newsletterInfosPatch');
 
     // Assert the save is done.
     cy.get(agenda.item.themes).contains('Wonen');
@@ -263,11 +261,9 @@ context('Subcase tests', () => {
     // Save this stuff.
     //cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
-    cy.route('GET', '/newsletter-infos/**').as('newsletterInfosGet');
-    cy.get(agenda.item.news.saveButton).click();
+    cy.get(agenda.item.news.saveButton).click()
+      .wait('@newsletterInfosPatch');
     //cy.wait('@documentVersions');
-    cy.wait('@newsletterInfosPatch');
-    cy.wait('@newsletterInfosGet');
 
     //dont open links in new windows.
 
