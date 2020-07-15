@@ -58,14 +58,16 @@ function createAgenda(kind, date, location, meetingNumber ) {
   cy.setDateAndTimeInFlatpickr(date);
 
   //Set the meetingNumber
-  if (meetingNumber) {
-    cy.get(form.formInput).eq(0).click({force: true}).clear().type(meetingNumber);
-  } else {
-    cy.get(form.formInput).eq(0).click({force: true}).invoke('val').then(sometext => meetingNumber = sometext);
-  }
+  cy.get('@newAgendaForm').eq(2).within(() => {
+    if(meetingNumber) {
+      cy.get('.vl-input-field').click({force: true}).clear().type(meetingNumber);
+    } else {
+      cy.get('.vl-input-field').click({force: true}).invoke('val').then(sometext => meetingNumber = sometext);
+    }
+  });
 
   //Set the location
-  cy.get('@newAgendaForm').eq(2).within(() => {
+  cy.get('@newAgendaForm').eq(3).within(() => {
     cy.get('.vl-input-field').click({force: true}).type(location);
   });
 

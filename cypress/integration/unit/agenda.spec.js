@@ -63,7 +63,7 @@ context('Agenda tests', () => {
 
   it('Should not be able to close a session with only a design agenda, cfr. KAS-1551', () => {
     const dateToCreateAgenda = Cypress.moment().add(4, 'weeks').day(5); // Friday in four weeks
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Daar');
+    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar');
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.get('.vl-button--icon-before')
       .contains('Acties')
@@ -77,8 +77,8 @@ context('Agenda tests', () => {
     const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
     const dateToCreateAgenda = Cypress.moment().add(2, 'weeks').day(1);
-    cy.createAgenda(KIND, agendaDate, PLACE);
-    cy.openAgendaForDate(agendaDate);
+    cy.createAgenda(KIND, dateToCreateAgenda, PLACE);
+    cy.openAgendaForDate(dateToCreateAgenda);
 
     const case1TitleShort = `${testId}Cypress test dossier 1`;
     const type1 = 'Nota';
@@ -92,7 +92,7 @@ context('Agenda tests', () => {
     cy.openSubcase(0);
 
     cy.proposeSubcaseForAgenda(dateToCreateAgenda);
-    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaForDate(dateToCreateAgenda);
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
     cy.contains('dit is de korte titel').click();
@@ -110,9 +110,9 @@ context('Agenda tests', () => {
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
-    const agendaDate = Cypress.moment().add(1, 'week').day(6);
-    cy.createAgenda('Ministerraad', agendaDate, "Brussel", 1);
-    cy.createAgenda('Ministerraad', agendaDate, "Brussel").then((result) => {
+    const dateToCreateAgenda = Cypress.moment().add(1, 'week').day(6);
+    cy.createAgenda('Ministerraad', dateToCreateAgenda, "Brussel", 1);
+    cy.createAgenda('Ministerraad', dateToCreateAgenda, "Brussel").then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.toggleeditingsession).click();
