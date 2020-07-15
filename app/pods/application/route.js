@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import ENV from 'fe-redpencil/config/environment';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
 
 export default Route.extend(ApplicationRouteMixin, {
   moment: service(),
@@ -39,52 +38,36 @@ export default Route.extend(ApplicationRouteMixin, {
     window.location.replace(logoutUrl);
   },
 
-  userRoleOfSession: computed('currentSession.userRole', async function() {
+  async userRoleOfSession() {
     const role = await this.get('currentSession.userRole');
     if (role) {
       return role;
     }
     return null;
-  }),
+  },
 
-  async userHasValidGroup(role) {
+  userHasValidGroup(role) {
     if (role !== 'no-access' && role !== 'users') {
       return true;
     }
     return false;
   },
 
-  isUserLoggedIn: computed('session.isAuthenticated', async function(){
-    const isAuthenticated = await this.get('session.isAuthenticated');
-    return isAuthenticated;
-  }),
+  async isUserLoggedIn(){
+    return await this.get('session.isAuthenticated');
+  },
 
-  currentRouteName: computed('router.currentRouteName', function() {
-    if (!this.router) {
-      return true;
-    }
-    const currentRouteName = this.router.currentRouteName;
-    return currentRouteName;
-  }),
-
-  isValidUser: computed('currentSession.userRole', 'session.isAuthenticated', async function (){
-    const userRoleOfSession = await this.userRoleOfSession;
-    if(this.currentRouteName) {
-      return await this.userHasValidGroup(userRoleOfSession);
-    }
-
-    if(this.router.rootURL) {
-      return await this.userHasValidGroup(userRoleOfSession);
-    }
-    return true;
-  }),
+  async isValidUser(){
+    const userRoleOfSession = await this.userRoleOfSession();
+    return this.userHasValidGroup(userRoleOfSession);
+    },
 
   async model() {
-    const userIsLoggedIn = await this.isUserLoggedIn;
+    const userIsLoggedIn = await this.isUserLoggedIn();
     if(userIsLoggedIn) {
-      const userRoleOfSession = await this.userRoleOfSession;
+      const userRoleOfSession = await this.userRoleOfSession();
       if(userRoleOfSession != null) {
-        const validUser = await this.isValidUser;
+        const validUser = await this.isValidUser();
         if(!validUser) {
           this.transitionTo('accountless-users');
         }
@@ -102,8 +85,8 @@ export default Route.extend(ApplicationRouteMixin, {
 
   actions: {
     willTransition: async function (transition) {
-      const userRoleOfSession = await this.userRoleOfSession;
-      const validUser = await this.isValidUser;
+      const userRoleOfSession = await this.userRoleOfSession();
+      const validUser = await this.isValidUser();
       if(userRoleOfSession != null) {
         if(!validUser) {
           this.transitionTo('accountless-users');
