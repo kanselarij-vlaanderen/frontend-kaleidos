@@ -4,10 +4,10 @@
 context('meeting actions tests', () => {
   beforeEach(() => {
     cy.server();
-    cy.login('Admin');
   });
 
   it('should perform action delete agenda with agendaitems on designagenda', () => {
+    cy.login('Admin');
     cy.visit('/vergadering/5EB287CDF359DD0009000008/agenda/c7b045ce-3976-459c-aeaa-d0e8597b96d8/agendapunten');
     cy.deleteAgenda('5EB287CDF359DD0009000008');
 
@@ -20,6 +20,7 @@ context('meeting actions tests', () => {
   });
 
   it('should perform action close agenda with agendaitems on designagenda', () => {
+    cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: close agenda - 1588775338';
     cy.visit('/vergadering/5EB2C9CBF5E1260009000005/agenda/74e87383-80a4-4616-8814-5883cafa6da0/agendapunten');
     cy.agendaItemExists(SubcaseTitleShort).click();
@@ -38,7 +39,6 @@ context('meeting actions tests', () => {
 
   it('should not be able to delete approved agendaitem from designagenda with profile: Kanselarij', () => {
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Kanselarij - 1588775768';
-    cy.logoutFlow();
     cy.login('Kanselarij');
     cy.visit('/vergadering/5EB2CB8FF5E126000900000D/agenda/5EB2CB91F5E126000900000E/agendapunten');
     cy.changeSelectedAgenda('Ontwerpagenda');
@@ -49,10 +49,10 @@ context('meeting actions tests', () => {
         cy.contains('Verwijderen').should('not.exist');
       });
     });
-    cy.logout();
   });
 
   it('should be able to delete approved agendaitem from designagenda with profile: admin', () => {
+    cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - 1588776224';
     cy.visit('/vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
     cy.agendaItemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda

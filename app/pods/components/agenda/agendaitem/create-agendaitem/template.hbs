@@ -26,7 +26,7 @@
               <div class="vlc-toolbar__item" style="width:100%;">
                 <div class="vl-input-field--inline" data-test-vl-create-agendaItem-search>
                   {{input
-                    value=filter
+                    value=filterParam
                     id="searchId"
                     placeholder="Zoeken.."
                     key-press=(perform searchTask)
@@ -61,8 +61,8 @@
       </div>
       {{#data-table
         content=model
-        sort=sort
-        page=page
+        sort=sortParam
+        page=pageParam
         size=size
         isLoading=findAll.isRunning
         noDataMessage=(t "no-results-found")
@@ -76,7 +76,7 @@
             <th></th>
             {{th-sortable
               field="shortTitle"
-              currentSorting=sort
+              currentSorting=sortParam
               label=(t "short-title-case")
             }}
             <th></th>
