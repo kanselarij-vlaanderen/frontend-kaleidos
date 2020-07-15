@@ -85,7 +85,7 @@
 {{else}}
   <NewsItem::EditItem
     @subcase={{await subcase}}
-    @item={{await subcase.newsletterInfo}}
+    @newsletterInfo={{await subcase.newsletterInfo}}
     @agendaitem={{agendaitem}}
     @isEditing={{isEditing}} />
 {{/if}}

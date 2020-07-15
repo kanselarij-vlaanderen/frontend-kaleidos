@@ -2,12 +2,11 @@
   {{#if findAll.isRunning}}
     <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
   {{else}}
-    {{#each themes as |theme|}}
+    {{#each this.selectedThemesReload as |theme|}}
       <WebComponents::VlCheckbox
         @value={{theme.selected}}
         @label={{theme.label}}
         @toggle={{action "selectModel" theme}}
-        @selectedThemes={{selectedThemes}}
       />
     {{/each}}
   {{/if}}

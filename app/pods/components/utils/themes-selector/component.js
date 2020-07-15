@@ -1,51 +1,54 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class ThemesSelector extends Component {
   @service store;
-  selectedThemes = null;
+  @tracked themeLabels; // a key value pair with keys label and selected.
+  @tracked selectedThemes = this.args.selectedThemes || []; //the themes from newsletterinfo. This can be undefined or null so we default to an empty list
 
   constructor() {
     super(...arguments);
     this.findAll.perform();
-    if (!this.selectedThemes) {
-      this.set('selectedThemes', [])
-    }
   }
 
   // This will load all the themes from the API once invoked
   @task(function* () {
     const themes = yield this.store.query('theme', {}); // Query to make sure you get all themes from the API instead
-    this.set('themes', themes.sortBy('label').filter((item) => !item.deprecated));
-    this.checkSelectedThemes(this.selectedThemes, this.themes);
+    this.themes = themes.sortBy('label').filter((item) => !item.deprecated);
+    this.themeLabels = this.themes.map((theme) => { return {label: theme.label, selected: false}});
   }) findAll;
 
   /**
-   * Synchronises the selected themes from the checkboxes with the underlying models
-   * @param  {Array}  selectedThemes    The themes currently selected in the checkboxes
-   * @param  {Array}  themes            The themes in the data store
+   * Synchronises the selected themes from the checkboxes with a key-value list extracted from the theme models
    */
-  checkSelectedThemes(selectedThemes, themes) {
-    if (selectedThemes && selectedThemes.length > 0) {
-      selectedThemes.forEach((selectedTheme) => {
-        const foundTheme = themes.find((theme) => theme.get('label') === selectedTheme.get('label'));
+  checkSelectedLabels() {
+    if (this.selectedThemes && this.selectedThemes.length > 0) {
+      this.selectedThemes.forEach((selectedTheme) => {
+        const foundTheme = this.themeLabels.find((theme) => theme.label === selectedTheme.get('label'));
         if (foundTheme) {
-          foundTheme.set('selected', true);
+          foundTheme.selected = true;
         }
       });
     }
   }
+  get selectedThemesReload() {
+    if (this.args.selectedThemes && this.args.selectedThemes.length > 0) {
+      this.selectedThemes = this.args.selectedThemes;
+      this.themeLabels = this.themes.map((theme) => { return {label: theme.label, selected: false}});
+      this.checkSelectedLabels();
+    }
+    return this.themeLabels;
+  }
 
   @action
-  selectModel(theme) {
-    if (!theme.get('selected')) {
-      this.selectedThemes.addObject(theme);
+  selectModel(themeLabel) {
+    if (!themeLabel.selected) {
+      this.selectedThemes.addObject(this.themes.find((theme) => theme.label === themeLabel.label));
     } else {
-      this.selectedThemes.removeObject(theme);
+      this.selectedThemes.removeObject(this.themes.find((theme) => theme.label === themeLabel.label));
     }
-
-    this.checkSelectedThemes(this.selectedThemes, this.themes);
   }
 }
