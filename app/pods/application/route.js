@@ -39,46 +39,57 @@ export default Route.extend(ApplicationRouteMixin, {
     window.location.replace(logoutUrl);
   },
 
-  async userHasValidGroup(currentRouteName) {
-    if (currentRouteName.includes('loading')) {
-      return false;
-    }
-
-    const user = await this.get('session.isAuthenticated');
-    if (!user) {
-      return false;
-    }
-
+  userRoleOfSession: computed('currentSession.userRole', async function() {
     const role = await this.get('currentSession.userRole');
+    if (role) {
+      return role;
+    }
+    return null;
+  }),
+
+  async userHasValidGroup(role) {
     if (role !== 'no-access' && role !== 'users') {
       return true;
     }
     return false;
   },
 
-  isValidUser: computed('router.{currentRouteName,rootUrl}', 'currentSession.userRole', 'session.isAuthenticated', async function (){
+  isUserLoggedIn: computed('session.isAuthenticated', async function(){
+    const isAuthenticated = await this.get('session.isAuthenticated');
+    return isAuthenticated;
+  }),
+
+  currentRouteName: computed('router.currentRouteName', function() {
     if (!this.router) {
-      return false;
+      return true;
     }
     const currentRouteName = this.router.currentRouteName;
+    return currentRouteName;
+  }),
 
-    if(currentRouteName) {
-      return this.userHasValidGroup(currentRouteName);
+  isValidUser: computed('currentSession.userRole', 'session.isAuthenticated', async function (){
+    const userRoleOfSession = await this.userRoleOfSession;
+    if(this.currentRouteName) {
+      return await this.userHasValidGroup(userRoleOfSession);
     }
 
     if(this.router.rootURL) {
-      return this.userHasValidGroup(this.router.rootURL);
+      return await this.userHasValidGroup(userRoleOfSession);
     }
-
-    return false;
+    return true;
   }),
 
   async model() {
-
-    if( !await this.isValidUser) {
-      this.transitionTo('accountless-users');
+    const userIsLoggedIn = await this.isUserLoggedIn;
+    if(userIsLoggedIn) {
+      const userRoleOfSession = await this.userRoleOfSession;
+      if(userRoleOfSession != null) {
+        const validUser = await this.isValidUser;
+        if(!validUser) {
+          this.transitionTo('accountless-users');
+        }
+      }
     }
-
     if (!this.checkSupportedBrowser()) {
       this.transitionTo('not-supported');
     }
@@ -91,9 +102,14 @@ export default Route.extend(ApplicationRouteMixin, {
 
   actions: {
     willTransition: async function (transition) {
-      if(!await this.isValidUser) {
-        this.transitionTo('accountless-users');
+      const userRoleOfSession = await this.userRoleOfSession;
+      const validUser = await this.isValidUser;
+      if(userRoleOfSession != null) {
+        if(!validUser) {
+          this.transitionTo('accountless-users');
+        }
       }
+
       if (
         this.fileService.get('deleteDocumentWithUndo.isRunning') &&
         confirm(this.intl.t('leave-page-message'))
