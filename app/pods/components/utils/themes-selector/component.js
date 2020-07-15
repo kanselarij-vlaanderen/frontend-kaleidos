@@ -21,9 +21,6 @@ export default class ThemesSelector extends Component {
     this.themeLabels = this.themes.map((theme) => { return {label: theme.label, selected: false}});
   }) findAll;
 
-  /**
-   * Synchronises the selected themes from the checkboxes with a key-value list extracted from the theme models
-   */
   checkSelectedLabels() {
     if (this.selectedThemes && this.selectedThemes.length > 0) {
       this.selectedThemes.forEach((selectedTheme) => {

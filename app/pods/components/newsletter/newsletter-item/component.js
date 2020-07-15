@@ -11,7 +11,6 @@ export default Component.extend({
   newsletterInfo: null,
 
   allowEditing: computed('definite', function () {
-    debugger;
     return this.definite === 'false';
   }),
 
