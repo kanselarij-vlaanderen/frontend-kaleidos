@@ -1,13 +1,11 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-
-import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
-import { computed, observer } from '@ember/object';
+import { computed } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 
-export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
+export default Component.extend(DataTableRouteMixin, {
   availableSubcases: null,
   showPostponed: null,
   noItemsSelected: true,
@@ -22,8 +20,9 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
   sessionService: inject(),
 
   modelName: 'subcase',
-
+  page: 0,
   size: 10,
+  filter: '',
   sort: 'short-title',
   queryOptions: computed('sort', 'filter', 'page', function () {
     const { page, filter, size, sort } = this;
@@ -45,17 +44,32 @@ export default Component.extend(DefaultQueryParamsMixin, DataTableRouteMixin, {
     return options;
   }),
 
-  // dirty observers to make use of the datatable actions
-  pageObserver: observer('page', 'sort', function () {
-    this.findAll.perform();
-  }),
+  get pageParam() {
+    return this.page;
+  },
 
-  // dirty observers to make use of the datatable actions
-  filterObserver: observer('filter', function () {
-    if (this.filter == '') {
-      this.findAll.perform();
-    }
-  }),
+  set pageParam(page) {
+    this.set('page',page);
+    this.findAll.perform();
+  },
+
+  get filterParam() {
+    return this.filter;
+  },
+
+  set filterParam(filter) {
+    this.set('filter',filter);
+    this.set('page', 0);
+  },
+
+  get sortParam() {
+    return this.sort;
+  },
+
+  set sortParam(sort) {
+    this.set('sort', sort);
+    this.findAll.perform();
+  },
 
   model: computed('items.@each', function () {
     (this.get('items') || []).map(item => item.set('selected', false));
