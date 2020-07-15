@@ -110,11 +110,7 @@
                         {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                       </td>
                       <td>
-                        {{utils/delayed-property
-                          model=meeting
-                          path="latestAgendaName"
-                          waitFor="agenda.status"
-                        }}
+                        {{await meeting.latestAgendaName}}
                       </td>
                       <td>
                         {{#if (is-pending meeting.latestAgenda)}}
