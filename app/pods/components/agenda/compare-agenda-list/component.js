@@ -150,8 +150,8 @@ export default class CompareAgendaList extends Component {
 
   setCombinedGroupNames(list) {
     list.map((combinedItem) => {
-      const leftGroupName = get(combinedItem, 'left.groupName');
-      const rightGroupName = get(combinedItem, 'right.groupName');
+      const leftGroupName = combinedItem.get('left.groupName');
+      const rightGroupName = combinedItem.get( 'right.groupName');
       if (!leftGroupName && !rightGroupName) {
         return;
       }
