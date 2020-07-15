@@ -1,15 +1,15 @@
 <div class="vlc-scroll-wrapper__body vl-modal-dialog__content">
   <div class="vl-u-spacer-extended-l">
     <div class="vl-u-display-flex vl-u-flex-align-center">
-      {{input
-        value=searchText
-        placeholder=(t "search-agenda-items")
-        class="vl-input-field vl-input-field__input vlc-u-box-model-maximize-width"
-      }}
+      <Input
+        @value={{searchText}}
+        @placeholder={{t "search-agenda-items"}}
+        @class="vl-input-field vl-input-field__input vlc-u-box-model-maximize-width"
+        @input={{action "updateSearchText"}} />
     </div>
 
     {{#if isLoading}}
-      {{web-components/vl-loader text=(t "please-be-patient")}}
+      <WebComponents::VlLoader @text={{t "please-be-patient"}} />
     {{else}}
       <table class="vl-data-table tr-hover vl-data-table--zebra">
         <thead>
@@ -42,14 +42,13 @@
         </tbody>
       </table>
       <div class="vl-u-spacer--small"></div>
-      {{web-components/vl-pagination
-        page=page
-        nbOfItems=results.length
-        size=size
-        nextAction=(action 'nextPage')
-        previousAction=(action 'prevPage')
-        total=results.meta.count
-      }}
+      <WebComponents::VlPagination
+        @page={{page}}
+        @nbOfItems={{results.length}}
+        @size={{size}}
+        @nextAction={{action 'nextPage'}}
+        @previousAction={{action 'prevPage'}}
+        @total={{results.meta.count}} />
     {{/if}}
   </div>
 </div>
