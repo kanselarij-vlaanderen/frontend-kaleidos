@@ -22,7 +22,6 @@
         </a>
       </h4>
 
-
       {{#if (not aboutToDelete)}}
         {{#if (not selectedAgendaItem)}}
           {{#if (not @agendaitem.isApproval)}}
@@ -37,12 +36,11 @@
           <div class="vl-u-display-flex vlc-u-flex-space-between">
             {{#if (and selectedAgendaItem @isEditingOverview)}}
               <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
-    </span>
-
+              </span>
             {{else}}
-              {{#if @agendaitem.subcase.subcaseName}}
+              {{#if subcase.subcaseName}}
                 <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
-                  {{await @agendaitem.subcase.subcaseName}}
+                  {{subcase.subcaseName}}
                 </span>
               {{else}}
                 <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize">
@@ -52,8 +50,8 @@
             <div class="vlc-agenda-meta__status-holder">
               {{#if
                 (and
-                    currentSessionService.isEditor
-                    (await currentAgenda.isDesignAgenda)
+                  currentSessionService.isEditor
+                  (await currentAgenda.isDesignAgenda)
                 )
               }}
                 {{#if (not @isEditingOverview)}}
@@ -80,11 +78,11 @@
           </div>
           {{#if (not aboutToDelete)}}
             {{#if (not selectedAgendaItem)}}
-              {{#if renderDetails }}
+              {{#if renderDetails}}
                 {{#if (await @agendaitem.documents)}}
                   <div class="vlc-hr"></div>
                     <Components::Utils::DocumentsListForItem
-                            @isClickable={{isClickable}}
+                            @isClickable={{true}}
                             @item={{@agendaitem}}
                             @document={{@agendaitem.document}}
                     />
@@ -106,12 +104,11 @@
                 {{/if}}
               {{/if}}
             {{/if}}
-
           {{/if}}
           {{#if (not @isEditingOverview)}}
             {{#if currentSessionService.isViewer}}
               {{#if
-                (or (await @agendaitem.subcase.confidential) (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (and @agendaitem.showAsRemark (not @agendaitem.showInNewsletter)))))
+                (or subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (and @agendaitem.showAsRemark (not @agendaitem.showInNewsletter)))))
               }}
                 <div class="vlc-hr"></div>
               {{/if}}
@@ -142,7 +139,7 @@
                       </i>
                     {{/if}}
                   </div>
-                  {{#if (await @agendaitem.subcase.confidential)}}
+                  {{#if subcase.confidential}}
                     <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
                   <i class="vl-icon vl-vi ki-lock-closed vlc-agenda-items__icons"
                      data-test-icon-agenda-confidentiality-locked

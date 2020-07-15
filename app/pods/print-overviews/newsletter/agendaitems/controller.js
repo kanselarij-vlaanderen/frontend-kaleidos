@@ -21,7 +21,7 @@ export default Controller.extend({
         sortable: false,
         breakpoints: ['mobile', 'tablet', 'desktop'],
         cellComponent: 'web-components/light-table/vl-content-newsletter',
-        valuePath: 'subcase',
+        valuePath: 'agendaActivity.subcase',
       },
       {
         label: this.intl.t('ministers'),
@@ -39,7 +39,7 @@ export default Controller.extend({
         breakpoints: ['mobile', 'tablet', 'desktop'],
         sortable: true,
         cellComponent: 'web-components/light-table/vl-content-toggle',
-        valuePath: 'subcase.newsletterInfo.inNewsletter',
+        valuePath: 'agendaActivity.subcase.newsletterInfo.inNewsletter',
       },
       {
         width: '144px',
@@ -52,7 +52,8 @@ export default Controller.extend({
 
   actions: {
     async addNewsletterInfo(agendaitem) {
-      const subcase = await agendaitem.get('subcase');
+      const agendaActivity = await agendaitem.get('agendaActivity');
+      const subcase = await agendaActivity.get('subcase');
       await this.newsletterService.createNewsItemForSubcase(subcase, agendaitem);
       await subcase.get('meetingRecord');
     },

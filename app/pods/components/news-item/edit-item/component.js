@@ -28,13 +28,17 @@ export default Component.extend({
   isTryingToSave: false,
   isExpanded: false,
 
-  themes: computed(`agendaitem.subcase.newsletterInfo.themes`, {
+  themes: computed(`agendaitem.agendaActivity.subcase.newsletterInfo.themes`, {
     async get() {
-      const {agendaitem} = this;
-      if (agendaitem) {
-        return await agendaitem.get('subcase.newsletterInfo.themes').then((themes) => {
-          return themes.toArray();
-        })
+      if (this.agendaitem) {
+        const agendaActivity = await this.agendaitem.get('agendaActivity');
+        if (agendaActivity) {
+          return await agendaActivity.get('subcase.newsletterInfo.themes').then((themes) => {
+            return themes.toArray();
+          });
+        } else {
+          return [];
+        }
       } else {
         return [];
       }

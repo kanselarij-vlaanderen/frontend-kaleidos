@@ -20,19 +20,19 @@ export default class SidebarItem extends Component {
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
   @alias('sessionService.currentAgenda') currentAgenda;
   @alias('args.agendaitem.checkAdded') isNew;
+  @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
   hideLabel = true;
   isShowingChanges = null;
 
   @tracked isClickable = true;
-  @tracked isPostponed = this.args.agendaitem.postponedTo.get('postponed');
   @tracked isRetracted = this.args.agendaitem.retracted;
 
   get classNameBindings() {
     return `
       ${this.isActive ? 'vlc-agenda-detail-sidebar__sub-item--active' : ''}
       ${this.isClickable ? '' : 'not-clickable'}
-      ${this.isPostponed || this.isRetracted ? 'vlc-u-opacity-lighter' : ''}
+      ${this.isRetracted ? 'vlc-u-opacity-lighter' : ''}
       ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
     `;
   }

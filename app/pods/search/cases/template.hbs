@@ -15,7 +15,7 @@
     <div>
       {{#if this.model.length}}
         <DataTable
-          @content={{this.model}}
+          @content={{await this.model}}
           @page={{this.page}}
           @noDataMessage={{t "no-results-found"}}
           @size={{this.size}}

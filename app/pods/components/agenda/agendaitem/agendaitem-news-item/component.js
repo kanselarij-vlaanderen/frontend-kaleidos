@@ -22,7 +22,7 @@ export default class AgendaitemNewsItem extends Component {
 
   @computed('subcase.newsletterInfo')
   get item() {
-    return this.get('subcase.newsletterInfo');
+    return this.subcase.get('newsletterInfo');
   }
 
   get dateOfMostRecentNota() {
@@ -34,15 +34,14 @@ export default class AgendaitemNewsItem extends Component {
   }
 
   async didUpdateAttrs() {
-    this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(this.agendaitem);
+    this.timestampForMostRecentNota = await this.agendaService.retrieveModifiedDateFromNota(this.agendaitem, this.subcase);
   }
 
   @action
   async toggleIsEditing() {
     this.set('isLoading', true);
-    const subcase = await this.get('subcase');
-    const newsletter = await subcase.get('newsletterInfo');
-    if (!newsletter) {
+    const newsletterInfo = await this.subcase.get('newsletterInfo');
+    if (!newsletterInfo) {
       await this.newsletterService.createNewsItemForSubcase(subcase, this.agendaitem);
     }
     this.set('isLoading', false);
@@ -52,9 +51,9 @@ export default class AgendaitemNewsItem extends Component {
   @action
   async saveChanges(subcase) {
     this.set('isLoading', true);
-    const newsItem = await subcase.get('newsletterInfo');
+    const newsletterInfo = await subcase.get('newsletterInfo');
 
-    await newsItem.save().then(async () => {
+    await newsletterInfo.save().then(async () => {
       await updateModifiedProperty(await this.get('agendaitem.agenda'));
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
