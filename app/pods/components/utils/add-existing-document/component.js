@@ -32,7 +32,7 @@ export default Component.extend({
       filter: {},
     };
     if (filter) {
-      options['filter']['name'] = filter;
+      options.filter.name = filter;
     }
     return options;
   }),
@@ -64,10 +64,10 @@ export default Component.extend({
       }
       if (document.selected) {
         document.set('selected', false);
-        this.delete(document)
+        this.delete(document);
       } else {
         document.set('selected', true);
-        this.add(document)
+        this.add(document);
       }
     }
   }
