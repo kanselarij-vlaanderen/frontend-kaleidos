@@ -16,12 +16,12 @@
     </button>
   </div>
 {{/if}}
-{{#each this.model as |decision|}}
+{{#each this.decisions as |decision|}}
   <div class ="vl-u-spacer">
     <Agenda::Agendaitem::AgendaitemDecision
       @subcase={{this.subcase}}
       @decision={{decision}}
-      @agendaItem={{this.agendaItem}}
+      @agendaitem={{this.agendaitem}}
       @onDeleteDecision={{this.refresh}}
     />
   </div>

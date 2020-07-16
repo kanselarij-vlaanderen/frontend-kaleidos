@@ -1,12 +1,12 @@
-{{#if 
+{{#if
   (and (await subcase.case.id) currentSession.isEditor)
 }}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
-        @models={{array 
-          (await subcase.case.id) 
+        @models={{array
+          (await subcase.case.id)
           (await subcase.id)
         }}
         class="vl-link" >
@@ -114,7 +114,7 @@
       </span>
     {{/if}}
     {{#if (await subcase.confidential)}}
-      <span class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
+      <span data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
     {{else}}
       <span
         class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"

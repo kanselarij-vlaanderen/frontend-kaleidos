@@ -58,19 +58,15 @@ export default Component.extend({
         throw(e);
       });
 
+      let agendaitemToUpdate;
+      if (this.isTableRow) {
+        await this.subcase.get('decisions').reload();
+        agendaitemToUpdate = this.agendaitem;
+      } else {
+        agendaitemToUpdate = await this.agendaitem;
+      }
+      await agendaitemToUpdate.save();
       if (!this.get('isDestroyed')) {
-        let agendaitemToUpdate;
-        if (this.isTableRow) {
-          const agendaActivity = await this.agendaitem.get('agendaActivity');
-          if (agendaActivity) {
-            const subcase = await agendaActivity.get('subcase');
-            (await subcase.get('decisions')).reload();
-            agendaitemToUpdate = await this.agendaitem.content;
-          }
-        } else {
-          agendaitemToUpdate = await this.agendaitem;
-        }
-        await agendaitemToUpdate.save();
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
       }

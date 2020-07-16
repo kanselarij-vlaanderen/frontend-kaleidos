@@ -4,10 +4,10 @@ const selectors = {
   createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
   datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
-  flatpickrMonthDropdownMonths: '.flatpickr-monthDropdown-months',
-  numInputWrapper: '.numInputWrapper',
-  inputNumInputCurYear: 'input.numInput.cur-year',
-  flatpickrDay: '.flatpickr-day',
+  flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
+  numInputWrapper: '.open  .numInputWrapper',
+  inputNumInputCurYear: '.open  input.numInput.cur-year',
+  flatpickrDay: '.open  .flatpickr-day',
   button: 'button',
   overviewTitle: '[data-test-agendas-title]',
   agendaListListItemDocuments: '[data-test-agenda-list-list-item-documents]',
@@ -63,12 +63,14 @@ const selectors = {
   agendaitemTitlesEditExplanation: '[data-test-agendaitem-titles-edit-explanation]',
   agendaitemTitlesEditShowInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
   agendaitemTitlesEditSave: '[data-test-agendaitem-titles-edit-save]',
+  agendaitemTitlesEditConfidential: '[data-test-agendaitem-titles-edit-confidential]',
 
   approveDesignAgenda: '[data-test-approve-design-agenda]',
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
   documentType: '[data-test-document-type]',
   documentAccessLevel: '[data-test-document-accesslevel]',
   agendaDetailSidebarSubitem :'[data-test-agenda-detail-sidebar-sub-item]',
-  agendaOverviewSubitem :'[data-test-agenda-overview-sub-item]'
+  agendaOverviewSubitem :'[data-test-agenda-overview-sub-item]',
+  agendaitemTitelsConfidential: '[data-test-agenda-subcase-confidential]'
 };
 export default selectors;
