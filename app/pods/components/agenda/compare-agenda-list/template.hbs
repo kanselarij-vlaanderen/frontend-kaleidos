@@ -6,8 +6,8 @@
       placeholder=(t "select-agenda")
       multiSelect=false
       sortField="label"
-      selectedItems=agendaOne
-      selectModel=(action "chooseAgendaOne")
+      selectedItems=this.agendaOne
+      selectModel=(action this.chooseAgendaOne)
     }}
   </div>
   <div class="compare-right-column">
@@ -17,13 +17,13 @@
       placeholder=(t "select-agenda")
       multiSelect=false
       sortField="label"
-      selectedItems=agendaTwo
-      selectModel=(action "chooseAgendaTwo")
+      selectedItems=this.agendaTwo
+      selectModel=(action this.chooseAgendaTwo)
     }}
   </div>
 </div>
-{{#if (await combinedItems)}}
-  {{#each (await combinedItems) as |combinedItem|}}
+{{#if (await this.combinedItems)}}
+  {{#each (await this.combinedItems) as |combinedItem|}}
     <div class="compare-grid-container">
       {{#if combinedItem.groupName}}
         <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
@@ -64,9 +64,11 @@
       </div>
     </div>
   {{/each}}
-{{else if isLoadingAgendaitems}}
+{{else if
+  (or this.isLoadingAgendaOne this.isLoadingAgendaTwo this.isLoadingComparison)
+}}
   {{web-components/vl-loader text=(t "please-be-patient")}}
-{{else if (and agendaOne agendaTwo)}}
+{{else if (and this.agendaOne this.agendaTwo)}}
   <div class="vl-u-spacer-extended-top-s">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
   </div>
