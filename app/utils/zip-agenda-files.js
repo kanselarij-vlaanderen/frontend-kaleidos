@@ -18,17 +18,22 @@ async function constructArchiveName(agenda) {
 
 async function fetchArchivingJob(agenda) {
   const url = `/agendas/${agenda.id}/agendaitems/documents/files/archive`;
-  let job = (await fetch(url, {
+  const fetchedJob = await fetch(url, {
     method: 'post',
     headers: { 'Content-type': 'application/vnd.api+json' }
-  })).json();
-  return job;
+  });
+  if (fetchedJob.status > 201) {
+    return null;
+  }
+  return fetchedJob.json();
 }
 
 async function fetchArchivingJobForAgenda(agenda, store) {
   let job = await fetchArchivingJob(agenda);
-  job = registerJobToStore(job, store);
-  return job;
+  if (job) {
+    return registerJobToStore(job, store);
+  }
+  return null;
 }
 
 function registerJobToStore(job, store) {
