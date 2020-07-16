@@ -12,6 +12,9 @@ module.exports = function (environment) {
       allowEmpty: true,
       outputFormat: 'L'
     },
+    featureFlags: {
+      'editor-html-paste': true,
+    },
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build

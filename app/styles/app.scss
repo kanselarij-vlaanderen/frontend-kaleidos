@@ -1,5 +1,7 @@
 @import 'ember-power-select';
 @import 'ember-vo-webuniversum-data-table';
+@import 'ember-rdfa-editor';
+
 /* ==========================================================================
    CSS file for Digikan
    ========================================================================== */
@@ -114,6 +116,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-preview-container';
 @import 'custom-components/vlc-procedure-step';
 @import 'custom-components/vlc-radio-inline';
+@import 'custom-components/vlc-rdfa-editor';
 @import 'custom-components/vlc-scroll-wrapper';
 @import 'custom-components/vlc-search-legend';
 @import 'custom-components/vlc-side-nav';

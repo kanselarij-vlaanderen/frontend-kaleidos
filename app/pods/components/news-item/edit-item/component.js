@@ -96,11 +96,11 @@ export default Component.extend({
     return model.save().then(model => model.reload());
   },
 
-  richtext: computed('editor.currentTextContent', function () {
+  richtext: computed('editor.htmlContent', function () {
     if (!this.editor) {
       return;
     }
-    return this.editor.rootNode.innerHTML.htmlSafe();
+    return this.editor.htmlContent;
   }),
 
   actions: {
@@ -164,10 +164,12 @@ export default Component.extend({
       window.open(`/document/${documentVersion.get('id')}`);
     },
     async handleRdfaEditorInit(editorInterface) {
+      const newsLetterInfoText = await this.get('agendaitem.agendaActivity.subcase.newsletterInfo.richtext');
+      editorInterface.setHtmlContent(newsLetterInfoText);
       this.set('editor', editorInterface);
     },
     descriptionUpdated(val) {
-      this.set('initValue', this.richtext + val);
+      this.set('initValue', this.get('initValue') + val);
     }
   },
 });

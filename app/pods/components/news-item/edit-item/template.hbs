@@ -56,8 +56,6 @@
     {{web-components/vl-form-label value=(t "decision-in-newsletter")}}
     {{web-components/vl-rdfa-editor
       data-test-rdfa-editor
-      isLarge=isExpanded
-      richtext=(await agendaitem.agendaActivity.subcase.newsletterInfo.richtext)
       handleRdfaEditorInit=(action "handleRdfaEditorInit")
     }}
   </div>
