@@ -258,7 +258,7 @@ export default Component.extend(FileSaverMixin, {
       const fileDownloadToast = {
         title: this.intl.t('file-ready'),
         type: 'download-file',
-        options: { timeOut: 60 * 10 * 1000 } 
+        options: { timeOut: 60 * 10 * 1000 }
       };
 
       const namePromise = constructArchiveName(this.currentAgenda);
@@ -266,6 +266,7 @@ export default Component.extend(FileSaverMixin, {
       const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
       const [name, job] = await all([namePromise, jobPromise]);
       if (!job) {
+        this.toaster.warning(this.intl.t('no-documents-to-download-warning-text'), this.intl.t('no-documents-to-download-warning-title'),{ timeOut: 10000 });
         return;
       }
       if (!job.hasEnded) {
