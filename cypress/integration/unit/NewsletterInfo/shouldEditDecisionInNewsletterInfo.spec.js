@@ -17,7 +17,7 @@ context('KB: Edit decision in newsletter-info', () => {
     cy.get('table > tbody').get('.lt-body').should('contain.text', 'Nog geen kort bestek voor dit agendapunt.').click();
 
     // cy.get('.editor__paper').clear(); //TODO triggers error:  "Cannot read property 'nodeType" of null from RDFA editor
-    cy.get('.editor__paper').type(decisionText);
+    cy.get('.say-editor__inner').type(decisionText);
 
     cy.route('/newsletter-infos/*').as('decisionNewsletterInfo');
     cy.get(utils.checkboxLabel).eq(0).click();
