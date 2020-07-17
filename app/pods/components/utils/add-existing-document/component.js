@@ -52,16 +52,14 @@ export default class AddExistingDocument extends Component {
 
   @task(function* () {
     yield timeout(300);
-    const documents = yield this.store.query('document-version', this.queryOptions());
-    this.items = documents;
+    this.items = yield this.store.query('document-version', this.queryOptions());
     yield timeout(100);
     this.setSelectedToFalse();
   })findAll;
 
   @task(function* () {
     yield timeout(300);
-    const documents = yield this.store.query('document-version', this.queryOptions());
-    this.items = documents
+    this.items = yield this.store.query('document-version', this.queryOptions());
     this.page = 0;
     yield timeout(100);
   })searchTask;
