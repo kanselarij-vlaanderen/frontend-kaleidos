@@ -110,7 +110,7 @@ export default Service.extend({
       priorityToAssign = (await selectedAgenda.get('lastAgendaitemPriority')) + 1;
     }
 
-    if (typeof priorityToAssign === 'number') {
+    if (Number.isNaN(priorityToAssign)) {
       priorityToAssign = 1;
     }
 

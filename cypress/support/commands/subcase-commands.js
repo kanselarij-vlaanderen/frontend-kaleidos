@@ -159,7 +159,7 @@ function addSubcaseThemes(themes) {
     // cy.wait('@getThemes', { timeout: 12000 });
     cy.get('.vl-checkbox', { timeout: 12000 }).should('exist').end();
     themes.forEach((element) => {
-      if (typeof element === 'number') {
+      if (Number.isNaN(element)) {
         cy.get('.vl-checkbox').contains(element).click();
       } else {
         cy.get('.vl-checkbox').eq(element).click();

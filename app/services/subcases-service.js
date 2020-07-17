@@ -1,5 +1,6 @@
 import Service, { inject } from '@ember/service';
 import { ajax } from 'fe-redpencil/utils/ajax';
+import moment from 'moment';
 
 export default Service.extend({
   store: inject(),
