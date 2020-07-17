@@ -2,10 +2,6 @@
 /// <reference types="Cypress" />
 
 import toolbar from "../../../selectors/toolbar.selectors";
-import settings from "../../../selectors/settings.selectors";
-import cases from "../../../selectors/case.selectors";
-import agenda from "../../../selectors/agenda.selectors";
-import newsletter from "../../../selectors/newsletter.selector";
 
 context('Testing the toolbar as user user', () => {
 
@@ -22,7 +18,7 @@ context('Testing the toolbar as user user', () => {
     cy.get(toolbar.settings).should('not.exist');
   });
 
-  it.only('Should switch to Agenda tab when agenda is clicked as user', () => {
+  it('Should switch to Agenda tab when agenda is clicked as user', () => {
     cy.get(toolbar.agenda).click();
     cy.contains('Geen rechten');
     cy.get(toolbar.settings).should('not.exist');
