@@ -31,6 +31,7 @@ export default class ThemesSelector extends Component {
       });
     }
   }
+  
   get selectedThemesReload() {
     if (this.args.selectedThemes && this.args.selectedThemes.length > 0) {
       this.selectedThemes = this.args.selectedThemes;
