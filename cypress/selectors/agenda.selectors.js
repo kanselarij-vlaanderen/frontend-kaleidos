@@ -10,7 +10,7 @@ const selectors = {
   flatpickrDay: '.open  .flatpickr-day',
   button: 'button',
   overviewTitle: '[data-test-agendas-title]',
-  agendaListListItemDocuments: '[data-test-agenda-list-list-item-documents]',
+  agendaListListItemDocuments: '[data-test-agenda-overview-agenda-overview-item-documents]',
   agendaItemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
   agendaItemOpmerkingenTab: '[data-test-agenda-agendaitem-tab="agendaitem-comment"]',
   agendaItemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
