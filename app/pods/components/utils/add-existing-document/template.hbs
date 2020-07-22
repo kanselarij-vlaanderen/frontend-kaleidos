@@ -4,18 +4,18 @@
       <div class="vlc-toolbar__justified custom-table-search">
         <div class="vlc-toolbar__item" style="width:100%;">
           <div class="vl-input-field--inline">
-            {{input
+            <Input
               data-test-search-exisiting-document
-              value=filter
-              id="searchId"
-              placeholder="Zoeken.."
-              key-press=(perform searchTask)
-              class="vl-input-field vl-input-field__input"
-            }}
+              @value={{this.filter}}
+              @id="searchId"
+              @placeholder="Zoeken.."
+              @input={{perform this.searchTask}}
+              @class="vl-input-field vl-input-field__input"
+            />
             <button type="button"
                     data-test-search-exisiting-document-button
                     class="vl-input-field__submit vl-button"
-                    onclick={{perform searchTask}}
+                    onclick={{perform this.searchTask}}
             >
               <i class="vl-vi vl-vi-magnifier"></i>
             </button>
@@ -25,18 +25,18 @@
     </div>
   </div>
   <div class="vl-col--3-12 vl-col--1-1--s">
-    {{#if searchTask.isRunning}}
+    {{#if this.performSearch.isRunning}}
       <div data-test-search-loader class="vl-loader" role="alert" aria-busy="true"></div>
     {{/if}}
   </div>
 </div>
 {{#data-table
-  content=documents
-  sort=sort
-  page=page
+  content=this.items
+  sort=this.sort
+  page=this.pageParam
   size=size
   noDataMessage=(t "no-results-found")
-  isLoading=findAll.isRunning
+  isLoading=this.findAll.isRunning
   onClickRow=(action "select")
 as |table|
 }}
