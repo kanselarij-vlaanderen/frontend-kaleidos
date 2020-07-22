@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Component from '@ember/component';
 import EmberObject, {
   action, computed
@@ -129,9 +130,9 @@ export default class SubcaseMandatees extends Component {
       await saveMandateeChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
-    } catch (e) {
+    } catch (exception) {
       this.set('isLoading', false);
-      throw (e);
+      throw (exception);
     }
   }
 

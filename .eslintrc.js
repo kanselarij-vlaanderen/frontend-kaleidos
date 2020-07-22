@@ -136,7 +136,7 @@ module.exports = {
 
       ]
     }],
-    "new-cap": "error",
+    "new-cap": "warn",
     "no-restricted-globals": ["error"]
   },
   overrides: [

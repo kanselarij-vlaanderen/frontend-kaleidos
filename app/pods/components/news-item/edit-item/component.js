@@ -38,6 +38,7 @@ export default Component.extend({
       }
       return [];
     },
+    // eslint-disable-next-line no-unused-vars
     set(key, value) {
       return value;
     },

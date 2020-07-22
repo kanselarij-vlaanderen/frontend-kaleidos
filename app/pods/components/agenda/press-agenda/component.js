@@ -10,6 +10,7 @@ export default class PressAgenda extends Component {
   isEditing = false;
 
   @action
+  // eslint-disable-next-line class-methods-use-this
   toggleIsEditing(agendaitem) {
     agendaitem.set('isEditing', true);
   }

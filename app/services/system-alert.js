@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Service, { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import moment from 'moment';
@@ -14,16 +15,16 @@ export default class SystemAlertService extends Service {
 
   get currentAlerts() {
     const now = new Date();
-    return A(this.alerts.filter((a) => a.beginDate < now && a.endDate > now));
+    return A(this.alerts.filter((alert) => alert.beginDate < now && alert.endDate > now));
   }
 
   get futureAlerts() {
     const now = new Date();
-    return A(this.alerts.filter((a) => a.beginDate > now));
+    return A(this.alerts.filter((alert) => alert.beginDate > now));
   }
 
   get unconfirmedAlerts() {
-    return A(this.currentAlerts.filter((a) => !a.confirmed));
+    return A(this.currentAlerts.filter((alert) => !alert.confirmed));
   }
 
   constructor() {
@@ -63,7 +64,7 @@ export default class SystemAlertService extends Service {
     });
     // Ensure that the client-local "confirmed" mark doesn't get erased when refreshing
     const confirmedAlertIds = this.alerts.filterBy('confirmed').mapBy('id');
-    const prevConfirmedAlerts = alerts.filter((a) => confirmedAlertIds.includes(a.id));
+    const prevConfirmedAlerts = alerts.filter((alert) => confirmedAlertIds.includes(alert.id));
     prevConfirmedAlerts.setEach('confirmed', true);
 
     this.alerts = A(alerts);

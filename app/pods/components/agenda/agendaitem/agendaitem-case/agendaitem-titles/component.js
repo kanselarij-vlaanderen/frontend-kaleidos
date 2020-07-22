@@ -11,6 +11,7 @@ export default class AgendaitemTitles extends Component {
   subcase = null;
   shouldShowDetails = false;
 
+  // eslint-disable-next-line ember/use-brace-expansion
   @computed('subcase.subcaseName', 'subcase.approved')
   get pillClass() {
     return this.getPillClass();

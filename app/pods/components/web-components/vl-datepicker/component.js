@@ -24,10 +24,10 @@ export default Component.extend({
       return this.formatter.formatDate(date.get('firstObject'));
     }
     const defaultDate = this.formatter.formatDate(null);
-    if (this.defaultHour != null && !isNaN(this.defaultHour)) {
+    if (this.defaultHour !== null && !isNaN(this.defaultHour)) {
       defaultDate.setHours(this.defaultHour);
     }
-    if (this.defaultMinute != null && !isNaN(this.defaultMinute)) {
+    if (this.defaultMinute !== null && !isNaN(this.defaultMinute)) {
       defaultDate.setMinutes(this.defaultMinute);
     }
     return defaultDate;

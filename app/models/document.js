@@ -44,13 +44,13 @@ export default Model.extend({
         });
         if (heads.length <= 1) {
           const head = heads.get('firstObject');
-          const l = [];
+          const sortedHeads = [];
           let next = head;
           while (next) {
-            l.push(next);
+            sortedHeads.push(next);
             next = await next.get('nextVersion');
           }
-          return A(l);
+          return A(sortedHeads);
         }
         warn('More than 1 possible head for linked list. Linked list data possibly is broken. Falling back to sorting by document creation date', heads.length > 1, {
           id: 'multiple-possible-linked-list-heads',

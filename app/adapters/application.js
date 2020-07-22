@@ -68,6 +68,7 @@ export default DS.JSONAPIAdapter.extend({
   ajax() {
     const args = [].slice.call(arguments);
     if (args[1] === 'DELETE') {
+      // eslint-disable-next-line prefer-spread
       return this._super.apply(this, args);
     }
     const originalData = args[2] && args[2].data;

@@ -52,7 +52,7 @@ export default class AgendaitemNewsItem extends Component {
     this.set('isLoading', true);
     const newsletterInfo = await this.subcase.get('newsletterInfo');
     if (!newsletterInfo) {
-      await this.newsletterService.createNewsItemForSubcase(subcase, this.agendaitem);
+      await this.newsletterService.createNewsItemForSubcase(this.subcase, this.agendaitem);
     }
     this.set('isLoading', false);
     this.toggleProperty('isEditing');

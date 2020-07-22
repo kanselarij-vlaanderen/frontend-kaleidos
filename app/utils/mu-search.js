@@ -16,8 +16,8 @@ function stripSort(sort) {
   return sort.replace(/(^\+)|(^-)/g, '');
 }
 
-function snakeToCamel(s) {
-  return s.replace(/(-\w)/g, (m) => m[1].toUpperCase());
+function snakeToCamel(text) {
+  return text.replace(/(-\w)/g, (entry) => entry[1].toUpperCase());
 }
 
 async function muSearch(index, page, size, sort, filter, dataMapping) {
@@ -25,6 +25,7 @@ async function muSearch(index, page, size, sort, filter, dataMapping) {
   const params = new URLSearchParams(Object.entries({
     'page[size]': size,
     'page[number]': page,
+    // eslint-disable-next-line camelcase
     collapse_uuids: 't',
   }));
 

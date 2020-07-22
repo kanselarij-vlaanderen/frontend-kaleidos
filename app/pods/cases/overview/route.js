@@ -24,6 +24,7 @@ export default class OverviewCaseRoute extends Route.extend(DataTableRouteMixin)
 
   modelName = 'case';
 
+  // eslint-disable-next-line class-methods-use-this
   mergeQueryOptions(params) {
     if (!params.showArchived) {
       return {

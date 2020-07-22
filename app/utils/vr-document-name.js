@@ -8,19 +8,19 @@ export default class VRDocumentName {
       docType: '((DOC)|(DEC)|(MED))',
       caseNr: '(\\d{4})',
       index: '(\\d{1,3})',
-      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((s) => s.toUpperCase())
+      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for version '0'
     });
   }
 
   static get looseRegex() {
-    const g = VRDocumentName.regexGroups;
-    return new RegExp(`VR ${g.date} ${g.docType}\\.${g.caseNr}([/-]${g.index})?`);
+    const regexGroup = VRDocumentName.regexGroups;
+    return new RegExp(`VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?`);
   }
 
   static get strictRegex() {
-    const g = VRDocumentName.regexGroups;
-    return new RegExp(`^VR ${g.date} ${g.docType}\\.${g.caseNr}(/${g.index})?${g.versionSuffix}?$`);
+    const regexGroup = VRDocumentName.regexGroups;
+    return new RegExp(`^VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.versionSuffix}?$`);
   }
 
   constructor(name, options) {
@@ -83,23 +83,26 @@ export default class VRDocumentName {
   }
 }
 
-export const compareFunction = function(a, b) {
+export const compareFunction = function(parameterA, parameterB) {
   try {
-    const metaA = a.parseMeta();
+    const metaA = parameterA.parseMeta();
     try { // Both names parse
-      const metaB = b.parseMeta();
+      const metaB = parameterB.parseMeta();
       return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
         || (metaA.index - metaB.index) // Index ascending
         || (metaB.date - metaA.date); // Date descending (newest first)
-    } catch (e) { // Only a parses
+    } catch (exception) { // Only a parses
+      console.warn('An exception occurred', exception);
       return -1;
     }
-  } catch (e) {
+  } catch (exception) {
+    console.warn('An exception occurred', exception);
     try { // Only b parses
-      b.parseMeta();
+      parameterB.parseMeta();
       return 1;
     } catch (ex) { // Both don't parse
-      return a.name.localeCompare(b.name);
+      console.warn('An exception occurred', ex);
+      return parameterA.name.localeCompare(parameterB.name);
     }
   }
 };

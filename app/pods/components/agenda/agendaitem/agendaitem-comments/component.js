@@ -15,10 +15,10 @@ export default class AgendaitemComments extends Component {
 
   elementId = 'agendaitem-comments';
 
-  @sort('item.remarks', (a, b) => {
-    if (a.created < b.created) {
+  @sort('item.remarks', (remarkA, remarkB) => {
+    if (remarkA.created < remarkB.created) {
       return 1;
-    } if (a.created > b.created) {
+    } if (remarkA.created > remarkB.created) {
       return -1;
     }
     return 0;

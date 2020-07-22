@@ -16,6 +16,6 @@ export default Component.extend({
   }),
 
   functionToDisplay: computed('signature.function', function() {
-    return this.signature.then((signature) => `${signature['function']}.`);
+    return this.signature.then((signature) => `${signature.function}.`);
   }),
 });

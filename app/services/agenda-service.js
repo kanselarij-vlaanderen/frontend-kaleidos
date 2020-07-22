@@ -77,6 +77,7 @@ export default Service.extend({
         },
       });
     } catch (error) {
+      console.warn('An error ocurred: ', error);
       this.toaster.error(this.intl.t('error-delete-agenda'), this.intl.t('warning-title'));
     }
   },

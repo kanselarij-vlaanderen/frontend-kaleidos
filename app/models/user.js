@@ -20,6 +20,7 @@ export default Model.extend({
     get() {
       return this.emailLink && this.emailLink.replace(/^mailto:/, '');
     },
+    // eslint-disable-next-line no-unused-vars
     set(key, value) {
       this.set('emailLink', `mailto:${value}`);
       return value;
@@ -29,6 +30,7 @@ export default Model.extend({
     get() {
       return this.phoneLink && this.phoneLink.replace(/^tel:/, '');
     },
+    // eslint-disable-next-line no-unused-vars
     set(key, value) {
       this.set('phoneLink', `tel:${value.replace(/[/ .]/, '')}`);
       return value;

@@ -52,7 +52,7 @@ export default ModelWithModifier.extend({
   linkedDocumentVersions: hasMany('document-version'),
 
   sortedDocumentVersions: computed('documentVersions.@each.name', function() {
-    return A(this.get('documentVersions').toArray()).sort((a, b) => compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name'))));
+    return A(this.get('documentVersions').toArray()).sort((documentA, documentB) => compareFunction(new VRDocumentName(documentA.get('name')), new VRDocumentName(documentB.get('name'))));
   }),
 
   documentsLength: computed('documents', function() {

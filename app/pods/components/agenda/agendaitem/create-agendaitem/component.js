@@ -173,6 +173,7 @@ export default Component.extend(DataTableRouteMixin, {
       }
     },
 
+    // eslint-disable-next-line no-unused-vars
     async selectAvailableSubcase(subcase, destination, event) {
       if (event) {
         event.stopPropagation();

@@ -137,7 +137,7 @@ context('Agenda tests', () => {
       cy.visit('/');
       cy.get(agenda.createNewAgendaButton).click();
       cy.wait(500);
-      cy.get('input[type="number"]').should('have.value', (parseInt(result.meetingNumber) + 1).toString());
+      cy.get('input[type="number"]').should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });
   });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import Route from '@ember/routing/route';
 
 export default Route.extend({
@@ -6,8 +7,7 @@ export default Route.extend({
       agenda_id,
     } = params;
     if (agenda_id) {
-      const agenda = this.store.findRecord('agenda', agenda_id);
-      return agenda;
+      return this.store.findRecord('agenda', agenda_id);
     }
   },
 });

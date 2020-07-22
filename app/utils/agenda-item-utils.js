@@ -58,8 +58,8 @@ export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormal
     item.reload();
     return true;
   })
-    .catch((e) => {
-      throw (e);
+    .catch((exception) => {
+      throw (exception);
     });
 };
 

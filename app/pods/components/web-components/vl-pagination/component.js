@@ -56,7 +56,7 @@ export default Component.extend({
     if (get(this, 'nbOfItems') === 0) {
       return 0;
     }
-    return get(this, 'size') * get(this, 'currentPage') + 1;
+    return (get(this, 'size') * get(this, 'currentPage')) + 1;
   }),
 
   endItem: computed('startItem', 'nbOfItems', function() {

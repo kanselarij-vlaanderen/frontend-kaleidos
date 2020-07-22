@@ -43,8 +43,9 @@ export default class FileUploader extends Component {
       const fileTest = yield this.store.findRecord('file', response.body.data.id);
       this.uploadedFileAction(fileTest);
       this.uploadedFileLength += 1;
-    } catch (e) {
+    } catch (exception) {
       this.isLoading = false;
+      console.warn('An exception occurred', exception);
     } finally {
       this.isLoading = false;
     }

@@ -3,6 +3,7 @@ import DataTableSerializerMixin from 'ember-data-table/mixins/serializer';
 
 export default DS.JSONAPISerializer.extend(DataTableSerializerMixin, {
 
+  // eslint-disable-next-line no-unused-vars
   shouldSerializeHasMany(snapshot, key, relationshipType) {
     const shouldSerialize = this._super(...arguments);
     const serializeOption = relationshipType.options || {

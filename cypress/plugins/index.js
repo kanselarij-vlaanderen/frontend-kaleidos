@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars,no-undef */
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //

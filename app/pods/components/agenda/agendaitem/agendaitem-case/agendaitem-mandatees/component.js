@@ -1,9 +1,11 @@
+/* eslint-disable class-methods-use-this */
 import Component from '@ember/component';
 import {
-  action, computed
+  action,
+  computed,
+  EmberObject
 } from '@ember/object';
 import { inject as service } from '@ember/service';
-import EmberObject from '@ember/object';
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
 
@@ -144,9 +146,9 @@ AgendaitemMandatees extends Component {
       await saveMandateeChanges(itemToSave, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
-    } catch (e) {
+    } catch (exception) {
       this.set('isLoading', false);
-      throw (e);
+      throw (exception);
     }
   }
 

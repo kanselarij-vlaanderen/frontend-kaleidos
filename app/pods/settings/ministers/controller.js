@@ -22,10 +22,10 @@ export default Controller.extend({
     async reorderItems(model, reOrderedModel) {
       if (this.currentSession.isEditor) {
         const firstPrio = 1;
-        for (let i = 0; i < reOrderedModel.get('length'); i++) {
-          const reOrderedMandatee = reOrderedModel.objectAt(i);
+        for (let index = 0; index < reOrderedModel.get('length'); index++) {
+          const reOrderedMandatee = reOrderedModel.objectAt(index);
           const mandatee = model.find((item) => item.id === reOrderedMandatee.get('id'));
-          const newPrio = (i + firstPrio);
+          const newPrio = (index + firstPrio);
           mandatee.set('priority', newPrio);
         }
         this.reAssignPriorities.perform(model);

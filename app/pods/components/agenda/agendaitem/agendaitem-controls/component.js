@@ -12,6 +12,7 @@ export default Component.extend({
   agendaitem: null,
   isSavingRetracted: null,
 
+  // eslint-disable-next-line ember/use-brace-expansion
   isPostPonable: computed('sessionService.agendas.@each', 'agendaitem.agendaActivity', 'agendaitem.retracted', async function() {
     const agendaActivity = await this.get('agendaitem.agendaActivity');
     if (!agendaActivity) {

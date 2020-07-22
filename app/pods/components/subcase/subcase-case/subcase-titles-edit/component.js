@@ -44,9 +44,9 @@ export default class SubcaseTitlesEdit extends Component {
       await saveSubcaseTitles(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
-    } catch (e) {
+    } catch (exception) {
       set(this, 'isLoading', false);
-      throw (e);
+      throw (exception);
     }
   }
 }

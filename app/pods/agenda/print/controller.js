@@ -2,9 +2,9 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
 
-function equalContentArrays(a, b) {
-  if (a.length === b.length) {
-    return a.every((elem) => b.includes(elem));
+function equalContentArrays(array1, array2) {
+  if (array1.length === array2.length) {
+    return array1.every((elem) => array2.includes(elem));
   }
   return false;
 }
@@ -18,8 +18,8 @@ export default Controller.extend({
       let currentItemArray = A([]);
       const groups = [];
       groups.pushObject(currentItemArray);
-      for (let i = 0; i < agendaItems.length; i++) {
-        const item = agendaItems.objectAt(i);
+      for (let index = 0; index < agendaItems.length; index++) {
+        const item = agendaItems.objectAt(index);
         const subm = item.sortedMandatees;
         if (equalContentArrays(currentSubmittersArray, subm)) {
           currentItemArray.pushObject(item);

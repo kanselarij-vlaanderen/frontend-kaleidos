@@ -16,9 +16,11 @@ export default Model.extend({
   filenameWithoutExtension: computed('filename', {
     get() {
       const ext = this.get('extension');
+      // eslint-disable-next-line no-useless-escape
       const regex = new RegExp(`\.${ext}$`);
       return this.get('filename').replace(regex, '');
     },
+    // eslint-disable-next-line no-unused-vars
     set(key, value) {
       const filename = `${value}.${this.get('extension')}`;
       this.set('filename', filename);

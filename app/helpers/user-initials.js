@@ -1,5 +1,6 @@
 import { helper } from '@ember/component/helper';
 
+// eslint-disable-next-line no-unused-vars
 export function userInitials(params, values) {
   const {
     user,

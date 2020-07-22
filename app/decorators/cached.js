@@ -12,17 +12,18 @@ export const cached = (property) => computed(property, {
   get() {
     try {
       return get(this, property);
-    } catch (e) {
-      console.warn(`Cached property at ${property} was not available, skipping.`);
+    } catch (exception) {
+      console.warn(`Cached property at ${property} was not available, skipping.`, exception);
     }
 
     return null;
   },
+  // eslint-disable-next-line no-unused-vars
   set(key, value) {
     try {
       set(this, property, value);
-    } catch (e) {
-      console.warn(`Could not set cached property at ${property}`);
+    } catch (exception) {
+      console.warn(`Could not set cached property at ${property}`, exception);
     }
 
     return value;

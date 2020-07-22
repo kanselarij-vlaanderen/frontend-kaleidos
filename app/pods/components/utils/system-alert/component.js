@@ -2,10 +2,10 @@ import Component from '@glimmer/component';
 
 export default class extends Component {
   get type() {
-    const t = this.args.type;
-    if (t === 'Waarschuwing') {
+    const currentType = this.args.type;
+    if (currentType === 'Waarschuwing') {
       return 'warning';
-    } if (t === 'Dringend') {
+    } if (currentType === 'Dringend') {
       return 'error';
     }
     return null;

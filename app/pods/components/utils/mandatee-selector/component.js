@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-arrow-function-computed-properties */
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';

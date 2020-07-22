@@ -108,7 +108,7 @@ export default Component.extend({
   },
 
   async copySubcase(fullCopy = false) {
-    const caze = await this.store.findRecord('case', this['case'].id);
+    const caze = await this.store.findRecord('case', this.case.id);
     const latestSubcase = await caze.get('latestSubcase');
     const date = moment().utc()
       .toDate();

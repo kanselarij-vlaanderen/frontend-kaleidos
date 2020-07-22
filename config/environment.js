@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 module.exports = function(environment) {
   const ENV = {
     modulePrefix: 'fe-redpencil',

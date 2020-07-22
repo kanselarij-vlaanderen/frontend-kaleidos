@@ -32,6 +32,7 @@ export default Service.extend({
         return meeting.save();
       });
     } catch (error) {
+      console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-create-newsletter'), this.intl.t('warning-title'));
     }
   },
@@ -43,6 +44,7 @@ export default Service.extend({
         url: `/newsletter/deleteCampaign/${id}`,
       });
     } catch (error) {
+      console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
       return null;
     }
@@ -55,6 +57,7 @@ export default Service.extend({
         url: `/newsletter/sendCampaign/${id}?agendaId=${agendaId}`,
       });
     } catch (error) {
+      console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       return null;
     }
@@ -67,6 +70,7 @@ export default Service.extend({
         url: `/newsletter/fetchTestCampaign/${id}`,
       });
     } catch (error) {
+      console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       return null;
     }

@@ -57,10 +57,10 @@ context('Settings page tests', () => {
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
 
-    for (let i = 0; i < govermentDomains.length; i++) {
-      cy.get('.ember-power-select-option').eq(i)
+    for (let index = 0; index < govermentDomains.length; index++) {
+      cy.get('.ember-power-select-option').eq(index)
         .scrollIntoView()
-        .should('contain.text', govermentDomains[i]);
+        .should('contain.text', govermentDomains[index]);
     }
   });
 
@@ -77,15 +77,15 @@ context('Settings page tests', () => {
       .wait(200);
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
     cy.get(modal.manageInSettingsModal.edit).should('be.visible');
-    cy.get(modal.manageInSettingsModal['delete']).should('be.visible');
+    cy.get(modal.manageInSettingsModal.delete).should('be.visible');
     cy.get(modal.baseModal.close).should('be.visible');
   });
 
   it('Should open the dropdown in the modal and selecting the each element should show advanced model with that element in the dropdown span', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
-    for (let i = 0; i < govermentDomains.length; i++) {
-      cy.validateDropdownElements(i, govermentDomains[i]);
+    for (let index = 0; index < govermentDomains.length; index++) {
+      cy.validateDropdownElements(index, govermentDomains[index]);
     }
   });
 

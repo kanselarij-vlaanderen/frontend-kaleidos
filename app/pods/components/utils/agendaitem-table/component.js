@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Component from '@ember/component';
 import {
   action, computed

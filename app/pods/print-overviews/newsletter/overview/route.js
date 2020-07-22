@@ -81,7 +81,8 @@ export default Route.extend({
         const subcase = await agendaActivity.get('subcase');
         const newsletterInfo = await subcase.get('newsletterInfo');
         return newsletterInfo.inNewsletter;
-      } catch (e) {
+      } catch (exception) {
+        console.warn('An exception occurred: ', exception);
         return false;
       }
     }));

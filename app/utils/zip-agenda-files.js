@@ -24,7 +24,9 @@ async function fetchArchivingJob(agenda) {
   const url = `/agendas/${agenda.id}/agendaitems/documents/files/archive`;
   const fetchedJob = await fetch(url, {
     method: 'post',
-    headers: { 'Content-type': 'application/vnd.api+json' }
+    headers: {
+      'Content-type': 'application/vnd.api+json',
+    },
   });
   if (fetchedJob.status > 201) {
     return null;
@@ -33,7 +35,7 @@ async function fetchArchivingJob(agenda) {
 }
 
 async function fetchArchivingJobForAgenda(agenda, store) {
-  let job = await fetchArchivingJob(agenda);
+  const job = await fetchArchivingJob(agenda);
   if (job) {
     return registerJobToStore(job, store);
   }
@@ -46,8 +48,7 @@ async function fileDownloadUrlFromJob(job, archiveName) {
     await job.reload();
     file = await job.get('generated');
   }
-  const url = `${file.downloadLink}?name=${archiveName}`;
-  return url;
+  return `${file.downloadLink}?name=${archiveName}`;
 }
 
 export {

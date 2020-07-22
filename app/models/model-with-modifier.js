@@ -67,9 +67,9 @@ export default ModelWithToasts.extend({
         {
           timeOut: 600000,
         });
-      const e = new ModifiedOldDataError();
-      e.message = 'Editing concurrency protection. Data in the db was altered under your feet.';
-      throw (e);
+      const modifiedOldDataErrorException = new ModifiedOldDataError();
+      modifiedOldDataErrorException.message = 'Editing concurrency protection. Data in the db was altered under your feet.';
+      throw (modifiedOldDataErrorException);
     }
   },
 
@@ -91,7 +91,7 @@ export default ModelWithToasts.extend({
     // Indien modifiedBy nog niet bestaat (old data)
     // Indien    de modified van het huidige model currentModifiedModel
     //           == de modified van het model op DB oldModelModifiedMoment
-    const allowSave = (typeof modified === 'undefined' || modifiedBy == null
+    const allowSave = (typeof modified === 'undefined' || modifiedBy === null
       || (
         typeof modified !== 'undefined'
         && currentModifiedModel.isSame(oldModelModifiedMoment)

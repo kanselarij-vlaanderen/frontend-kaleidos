@@ -64,6 +64,7 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
+  // eslint-disable-next-line ember/use-brace-expansion
   phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.@each', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
     const activities = await this.get('agendaActivities');
     if (activities && activities.length > 0) {
@@ -219,7 +220,7 @@ export default ModelWithModifier.extend({
       //  We want to sort descending on date the subcase was concluded.
       //  In practice, sorting on created will be close
       promise: this.get('case').then((caze) => caze.get('subcases')
-        .then((subcases) => subcases.filter((item) => item.get('id') !== this.id).sort((a, b) => b.created - a.created))),
+        .then((subcases) => subcases.filter((item) => item.get('id') !== this.id).sort((documentA, documentB) => documentB.created - documentA.created))),
     });
   }),
 

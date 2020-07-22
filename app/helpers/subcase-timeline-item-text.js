@@ -11,6 +11,7 @@ const formatDate = (date) => {
 };
 
 // TODO KAS-1674 params mag weg ?
+// eslint-disable-next-line no-unused-vars
 export function subcaseTimelineItemText(params, values) {
   const label = values.phase.label || '';
   const phaseDate = values.phase.date;

@@ -92,7 +92,7 @@ function addDocuments(files) {
     timeout: 24000,
   });
   cy.wait('@patchModel', {
-    timeout: 12000 + 6000 * files.length,
+    timeout: 12000 + (6000 * files.length),
   });
   cy.get(modal.modalDialog).should('not.exist');
   cy.log('/addDocuments');

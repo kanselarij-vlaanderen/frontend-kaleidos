@@ -26,7 +26,8 @@ export default Service.extend({
       })
         .then((result) => result)
         .catch((err) => err);
-    } catch (e) {
+    } catch (exception) {
+      console.warn('An exception occurred: ', exception);
       // warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
     }
   },

@@ -49,11 +49,11 @@ export default ModelWithModifier.extend({
     const seperatorComma = ', ';
     const seperatorAnd = ' en ';
     if (sortedMandatees && sortedMandatees.length > 1) {
-      for (let i = 0; i < sortedMandatees.length; i++) {
-        const mandatee = sortedMandatees.objectAt(i);
+      for (let index = 0; index < sortedMandatees.length; index++) {
+        const mandatee = sortedMandatees.objectAt(index);
         const nickName = await mandatee.get('nickName');
-        if (i > 0) {
-          if (sortedMandatees.length - 1 === i) {
+        if (index > 0) {
+          if (sortedMandatees.length - 1 === index) {
             proposalText = `${proposalText}${seperatorAnd}`;
           } else {
             proposalText = `${proposalText}${seperatorComma}`;

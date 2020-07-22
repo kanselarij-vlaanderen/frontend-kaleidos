@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
 import { isEmpty } from '@ember/utils';
 import moment from 'moment';

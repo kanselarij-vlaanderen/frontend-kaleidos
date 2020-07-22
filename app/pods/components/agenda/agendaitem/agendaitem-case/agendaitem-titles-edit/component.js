@@ -28,7 +28,7 @@ export default class SubcaseTitlesEdit extends Component {
     if (this.agendaitem.get('hasDirtyAttributes')) {
       shouldResetFormallyOk = true;
       // If only the showInNewsletter attribute has changed, the formally ok should not be reset
-      if ((Object.keys(this.agendaitem.changedAttributes()).length == 1) && this.agendaitem.changedAttributes().showInNewsletter) {
+      if ((Object.keys(this.agendaitem.changedAttributes()).length === 1) && this.agendaitem.changedAttributes().showInNewsletter) {
         shouldResetFormallyOk = false;
       }
     }
@@ -48,9 +48,9 @@ export default class SubcaseTitlesEdit extends Component {
       await saveSubcaseTitles(this.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
-    } catch (e) {
+    } catch (exception) {
       set(this, 'isLoading', false);
-      throw (e);
+      throw (exception);
     }
   }
 }
