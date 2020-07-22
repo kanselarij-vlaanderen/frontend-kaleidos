@@ -149,7 +149,7 @@ export default Component.extend(FileSaverMixin, {
       if (!agendaitem) {
         return null;
       }
-      return agendaitem.destroyRecord()['catch'](() => warn('Something went wrong while deleting the agendaitem.', {
+      return agendaitem.destroyRecord().catch(() => warn('Something went wrong while deleting the agendaitem.', {
         id: 'agenda-item-reloading',
       }));
     }));

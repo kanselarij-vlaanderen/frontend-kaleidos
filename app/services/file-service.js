@@ -25,7 +25,7 @@ export default Service.extend({
         url: `/document-versions/${documentVersion.get('id')}/convert`,
       })
         .then((result) => result)
-        ['catch']((err) => err);
+        .catch((err) => err);
     } catch (e) {
       // warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
     }

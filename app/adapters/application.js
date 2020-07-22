@@ -78,7 +78,7 @@ export default DS.JSONAPIAdapter.extend({
       if (retries < 3) {
         retries += 1;
         const originalResult = original.apply(this, args);
-        return originalResult['catch']((catchError) => {
+        return originalResult.catch((catchError) => {
           if (originalData) {
             args[2].data = typeof originalData === 'string' ? JSON.parse(originalData) : originalData;
           }

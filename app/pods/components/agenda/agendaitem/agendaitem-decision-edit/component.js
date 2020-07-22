@@ -56,7 +56,7 @@ export default Component.extend({
       decision.set('modified', moment().utc()
         .toDate());
 
-      await this.setNewPropertiesToModel(decision)['catch']((e) => {
+      await this.setNewPropertiesToModel(decision).catch((e) => {
         this.set('isLoading', false);
         throw (e);
       });
