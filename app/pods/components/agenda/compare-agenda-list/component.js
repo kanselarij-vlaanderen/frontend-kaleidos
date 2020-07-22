@@ -1,9 +1,8 @@
 /* eslint-disable class-methods-use-this */
 import Component from '@glimmer/component';
-import {
-  action,
-  EmberObject
-} from '@ember/object';
+import { action } from '@ember/object';
+// eslint-disable-next-line no-duplicate-imports
+import EmberObject from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';

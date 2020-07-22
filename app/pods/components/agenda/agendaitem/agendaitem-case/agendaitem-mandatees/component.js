@@ -2,9 +2,10 @@
 import Component from '@ember/component';
 import {
   action,
-  computed,
-  EmberObject
+  computed
 } from '@ember/object';
+// eslint-disable-next-line no-duplicate-imports
+import EmberObject from '@ember/object';
 import { inject as service } from '@ember/service';
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
