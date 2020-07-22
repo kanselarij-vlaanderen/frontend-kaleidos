@@ -111,7 +111,7 @@ module.exports = {
     "object-curly-spacing": ["error", "always"],
     "block-spacing": ["error", "always"],
     "comma-spacing": ["error", { "before": false, "after": true }],
-    "computed-property-spacing": ["error", "always"],
+    "computed-property-spacing": ["error", "never"],
     "func-call-spacing": ["error", "never"],
     "key-spacing": ["error", { "beforeColon": false, "afterColon": true, "mode": "strict" }],
     "no-trailing-spaces": "error",
