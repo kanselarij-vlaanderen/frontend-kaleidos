@@ -27,7 +27,7 @@ export default EmberObject.create({
     'W',
     'X',
     'Y',
-    'Z',
+    'Z'
   ],
   // TODO translate
   notaID: '9e5b1230-f3ad-438f-9c68-9d7b1b2d875d',
@@ -60,7 +60,7 @@ export default EmberObject.create({
       classNames: 'vlc-agenda-items__status vlc-u-font-weight-500  vl-u-display-flex',
       pillClassNames: 'vlc-pill',
       iconClassNames: 'vl-vi vl-vi-question-mark formally-ok-icon',
-    },
+    }
   ],
   defaultKindUri:
     'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
@@ -85,7 +85,7 @@ export default EmberObject.create({
       fullProcedure: 'Bijzondere ministerraad',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
-    },
+    }
   ],
   notYetFormallyOk:
     'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',

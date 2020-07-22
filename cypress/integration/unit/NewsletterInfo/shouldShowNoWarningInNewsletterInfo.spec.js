@@ -1,5 +1,5 @@
 /* global Cypress, context, before, it, cy, beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import alert from '../../../selectors/alert.selectors';
 
@@ -20,7 +20,8 @@ context('Show no warning in Newsletterinfo', () => {
 
   it('Should show no warning in kortbestek view', () => {
     const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
-    const agendaDate = Cypress.moment().add(3, 'weeks').day(3); // Next friday
+    const agendaDate = Cypress.moment().add(3, 'weeks')
+      .day(3); // Next friday
     const subcaseTitle1 = `${caseTitle} test stap 1`;
     cy.createCase(false, caseTitle);
     cy.addSubcase('Nota',

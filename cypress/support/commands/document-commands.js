@@ -1,5 +1,5 @@
 /* global cy, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import 'cypress-file-upload';
 import document from '../../selectors/document.selectors';
@@ -33,44 +33,67 @@ function addDocuments(files) {
     cy.get('@fileUploadDialog').within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
 
-      cy.get('.vl-uploaded-document', { timeout: 10000 }).should('have.length', index + 1).eq(index).within(() => {
-        if (file.newFileName) {
-          cy.get('.vlc-input-field-block').eq(0).within(() => {
-            cy.get('.vl-input-field').clear().type(file.newFileName);
-          });
-        }
-      });
+      cy.get('.vl-uploaded-document', {
+        timeout: 10000,
+      }).should('have.length', index + 1)
+        .eq(index)
+        .within(() => {
+          if (file.newFileName) {
+            cy.get('.vlc-input-field-block').eq(0)
+              .within(() => {
+                cy.get('.vl-input-field').clear()
+                  .type(file.newFileName);
+              });
+          }
+        });
     });
 
     if (file.fileType) {
       cy.get('@fileUploadDialog').within(() => {
-        cy.get('.vl-uploaded-document').eq(index).within(() => {
-          cy.get('input[type="radio"]').should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-          cy.get('.vlc-input-field-block').eq(1).within(($t) => {
-            if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
-              cy.get('input[type="radio"]').check(file.fileType, { force: true }); // CSS has position:fixed, which cypress considers invisible
-            } else {
-              cy.get('input[type="radio"][value="Andere"]').check({ force: true });
-              cy.get('.ember-power-select-trigger')
-                .click()
-                .parents('body').within(() => {
-                  cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-                    cy.contains(file.fileType).click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
+        cy.get('.vl-uploaded-document').eq(index)
+          .within(() => {
+            cy.get('input[type="radio"]').should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
+            cy.get('.vlc-input-field-block').eq(1)
+              .within(($t) => {
+                if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
+                  cy.get('input[type="radio"]').check(file.fileType, {
+                    force: true,
+                  }); // CSS has position:fixed, which cypress considers invisible
+                } else {
+                  cy.get('input[type="radio"][value="Andere"]').check({
+                    force: true,
                   });
-                });
-            }
+                  cy.get('.ember-power-select-trigger')
+                    .click()
+                    .parents('body')
+                    .within(() => {
+                      cy.get('.ember-power-select-option', {
+                        timeout: 5000,
+                      }).should('exist')
+                        .then(() => {
+                          cy.contains(file.fileType).click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
+                        });
+                    });
+                }
+              });
           });
-        });
       });
     }
   });
   cy.get('@fileUploadDialog').within(() => {
-    cy.get('.vl-button').contains('Documenten toevoegen').click();
+    cy.get('.vl-button').contains('Documenten toevoegen')
+      .click();
   });
 
-  cy.wait('@createNewDocumentVersion', { timeout: 24000 });
-  cy.wait('@createNewDocument', { timeout: 24000 });
-  cy.wait('@patchModel', { timeout: 12000 + 6000 * files.length });
+  cy.wait('@createNewDocumentVersion', {
+    timeout: 24000,
+  });
+  cy.wait('@createNewDocument', {
+    timeout: 24000,
+  });
+  cy.wait('@patchModel', {
+    timeout: 12000 + 6000 * files.length,
+  });
   cy.get(modal.modalDialog).should('not.exist');
   cy.log('/addDocuments');
 }
@@ -97,9 +120,14 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     cy.route('PATCH', '**').as('patchAnyModel');
   }
 
-  cy.get('.vlc-document-card__content .vl-title--h6', { timeout: 12000 })
-    .contains(oldFileName, { timeout: 12000 })
-    .parents('.vlc-document-card').as('documentCard');
+  cy.get('.vlc-document-card__content .vl-title--h6', {
+    timeout: 12000,
+  })
+    .contains(oldFileName, {
+      timeout: 12000,
+    })
+    .parents('.vlc-document-card')
+    .as('documentCard');
 
   cy.get('@documentCard').within(() => {
     cy.get(document.documentUploadShowMore).click();
@@ -119,19 +147,33 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
   cy.get('@fileUploadDialog').within(() => {
     cy.get(form.formSave).click();
   });
-  cy.wait('@createNewDocumentVersion', { timeout: 12000 });
+  cy.wait('@createNewDocumentVersion', {
+    timeout: 12000,
+  });
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
-      cy.wait('@patchSubcase', { timeout: 12000 }).wait('@patchAgendaitem', { timeout: 12000 });
+      cy.wait('@patchSubcase', {
+        timeout: 12000,
+      }).wait('@patchAgendaitem', {
+        timeout: 12000,
+      });
     } else if (modelToPatch === 'subcases') {
-      cy.wait('@patchAgendaitem', { timeout: 12000 }).wait('@patchSubcase', { timeout: 12000 });
+      cy.wait('@patchAgendaitem', {
+        timeout: 12000,
+      }).wait('@patchSubcase', {
+        timeout: 12000,
+      });
     } else {
-      cy.wait('@patchSpecificModel', { timeout: 12000 });
+      cy.wait('@patchSpecificModel', {
+        timeout: 12000,
+      });
     }
   } else {
-    cy.wait('@patchAnyModel', { timeout: 12000 });
+    cy.wait('@patchAnyModel', {
+      timeout: 12000,
+    });
   }
   cy.log('/addNewDocumentVersion');
 }
@@ -265,8 +307,12 @@ function uploadFile(folder, fileName, extension) {
 
   cy.fixture(filePath).then((fileContent) => {
     cy.get('[type=file]').upload(
-      { fileContent, fileName: fileFullName, mimeType: 'application/pdf' },
-      { uploadType: 'input' },
+      {
+        fileContent, fileName: fileFullName, mimeType: 'application/pdf',
+      },
+      {
+        uploadType: 'input',
+      }
     );
   });
   cy.wait('@createNewFile');
@@ -292,8 +338,12 @@ function uploadUsersFile(folder, fileName, extension) {
 
   cy.fixture(filePath).then((fileContent) => {
     cy.get('[type=file]').upload(
-      { fileContent, fileName: fileFullName, mimeType: 'application/pdf' },
-      { uploadType: 'input' },
+      {
+        fileContent, fileName: fileFullName, mimeType: 'application/pdf',
+      },
+      {
+        uploadType: 'input',
+      }
     );
   });
   cy.wait('@createNewFile');
@@ -313,9 +363,14 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
   cy.log('addNewDocumentVersionToSignedDocument');
   cy.route('POST', 'document-versions').as('createNewDocumentVersion');
 
-  cy.get('.vlc-document-card__content .vl-title--h6', { timeout: 12000 })
-    .contains(oldFileName, { timeout: 12000 })
-    .parents('.vlc-document-card').as('documentCard');
+  cy.get('.vlc-document-card__content .vl-title--h6', {
+    timeout: 12000,
+  })
+    .contains(oldFileName, {
+      timeout: 12000,
+    })
+    .parents('.vlc-document-card')
+    .as('documentCard');
 
   cy.get('@documentCard').within(() => {
     cy.get(document.documentUploadShowMore).click();
@@ -335,7 +390,9 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
   cy.get('@fileUploadDialog').within(() => {
     cy.get(form.formSave).click();
   });
-  cy.wait('@createNewDocumentVersion', { timeout: 12000 });
+  cy.wait('@createNewDocumentVersion', {
+    timeout: 12000,
+  });
   cy.log('/addNewDocumentVersionToSignedDocument');
 }
 

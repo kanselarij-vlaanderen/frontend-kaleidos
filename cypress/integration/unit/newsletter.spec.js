@@ -1,5 +1,5 @@
 /* global context, before, cy,beforeEach, xit, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 context('Test the KB functionality', () => {
   before(() => {
@@ -12,7 +12,8 @@ context('Test the KB functionality', () => {
   });
 
   xit('should test the newsletter of an agenda', () => {
-    const agendaDate = Cypress.moment().add(3, 'weeks').day(4); // Next friday
+    const agendaDate = Cypress.moment().add(3, 'weeks')
+      .day(4); // Next friday
 
     cy.createAgenda('Ministerraad', agendaDate, 'Test Kort bestek toevoegen').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);

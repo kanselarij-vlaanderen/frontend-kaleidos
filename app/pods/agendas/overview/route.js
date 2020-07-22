@@ -21,10 +21,12 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   mergeQueryOptions(params) {
     const options = {};
     if (params.from) {
-      options['filter[:gte:planned-start]'] = moment(params.from, 'YYYY-MM-DD').utc().format();
+      options['filter[:gte:planned-start]'] = moment(params.from, 'YYYY-MM-DD').utc()
+        .format();
     }
     if (params.to) {
-      options['filter[:lte:planned-start]'] = moment(params.to, 'YYYY-MM-DD').utc().format();
+      options['filter[:lte:planned-start]'] = moment(params.to, 'YYYY-MM-DD').utc()
+        .format();
     }
     return options;
   },

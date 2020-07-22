@@ -5,7 +5,9 @@ import ModelWithToasts from 'fe-redpencil/models/model-with-toasts';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
-const { attr, belongsTo } = DS;
+const {
+  attr, belongsTo,
+} = DS;
 
 export default ModelWithToasts.extend({
   currentSession: service(),
@@ -19,24 +21,25 @@ export default ModelWithToasts.extend({
     const dirtyType = this.get('dirtyType');
 
     switch (dirtyType) {
-      case 'created': {
-        break;
-      }
-
-      case 'deleted': {
-        return parentSave.call(this, ...arguments);
-      }
-      case undefined: {
-        await this.preEditOrSaveCheck();
-        break;
-      }
-      case 'updated': {
-        await this.preEditOrSaveCheck();
-        this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
-        break;
-      }
+    case 'created': {
+      break;
     }
-    this.set('modified', moment().utc().toDate());
+
+    case 'deleted': {
+      return parentSave.call(this, ...arguments);
+    }
+    case undefined: {
+      await this.preEditOrSaveCheck();
+      break;
+    }
+    case 'updated': {
+      await this.preEditOrSaveCheck();
+      this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
+      break;
+    }
+    }
+    this.set('modified', moment().utc()
+      .toDate());
     await this.currentSession.get('user').then((user) => {
       this.set('modifiedBy', user);
     });
@@ -45,7 +48,9 @@ export default ModelWithToasts.extend({
 
   async preEditOrSaveCheck() {
     if (!await this.saveAllowed()) {
-      const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
+      const {
+        oldModelData, oldModelModifiedMoment,
+      } = await this.getOldModelData();
       this.set('mustRefresh', true);
       const userId = oldModelData.data[0].relationships['modified-by'].links.self;
       const userData = await fetch(userId);
@@ -59,7 +64,9 @@ export default ModelWithToasts.extend({
       });
       this.toaster.error(errorMessage,
         this.intl.t('changes-could-not-be-saved-title'),
-        { timeOut: 600000 });
+        {
+          timeOut: 600000,
+        });
       const e = new ModifiedOldDataError();
       e.message = 'Editing concurrency protection. Data in the db was altered under your feet.';
       throw (e);
@@ -75,7 +82,9 @@ export default ModelWithToasts.extend({
       return false;
     }
 
-    const { oldModelData, oldModelModifiedMoment } = await this.getOldModelData();
+    const {
+      oldModelData, oldModelModifiedMoment,
+    } = await this.getOldModelData();
     // Deze test test eigenlijk of het item hetzelfde is:
     // item is hetzelfde
     // Indien modified nog niet bestaat (old data)
@@ -96,9 +105,13 @@ export default ModelWithToasts.extend({
       .queryRecord(this.store, this.get('constructor'),
         {
           filter:
-            { id: this.get('id') },
+            {
+              id: this.get('id'),
+            },
         });
     const oldModelModifiedMoment = moment.utc(oldModelData.data[0].attributes.modified);
-    return { oldModelData, oldModelModifiedMoment };
+    return {
+      oldModelData, oldModelModifiedMoment,
+    };
   },
 });

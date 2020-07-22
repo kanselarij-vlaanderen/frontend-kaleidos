@@ -21,9 +21,13 @@ export default Route.extend({
     }
   },
   model(params) {
-    const filter = { provider: 'https://github.com/kanselarij-vlaanderen/mock-login-service' };
+    const filter = {
+      provider: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
+    };
     if (params.role) {
-      filter.user = { 'last-name': params.role };
+      filter.user = {
+        'last-name': params.role,
+      };
     }
     return this.store.query('account', {
       include: 'user,user.group',

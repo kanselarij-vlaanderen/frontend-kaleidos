@@ -40,7 +40,7 @@ export default class CaseSearch extends Component {
       filter[':sqs:title'] = '*'; // search without filter
     }
 
-    const results = await search('cases', this.page, this.size, null, filter, function (item) {
+    const results = await search('cases', this.page, this.size, null, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
       return entry;

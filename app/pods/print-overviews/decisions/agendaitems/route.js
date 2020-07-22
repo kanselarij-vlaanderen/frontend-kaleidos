@@ -47,7 +47,9 @@ export default Route.extend(AuthenticatedRouteMixin, {
   redirect() {
     if (!this.currentSession.isEditor) {
       this.transitionTo(`print-overviews.${this.routeNamePrefix}.overview`, {
-        queryParams: { definite: true },
+        queryParams: {
+          definite: true,
+        },
       });
     }
   },

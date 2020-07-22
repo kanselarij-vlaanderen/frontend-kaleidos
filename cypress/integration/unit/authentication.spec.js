@@ -1,5 +1,5 @@
 /* global context, it, cy */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 context('Authentication tests', () => {
   it('should logout using authentication.vlaanderen', () => {

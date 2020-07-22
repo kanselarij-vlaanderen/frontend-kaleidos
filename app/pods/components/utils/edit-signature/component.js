@@ -7,11 +7,11 @@ export default Component.extend({
   fileService: inject(),
   signatureToEdit: null,
 
-  uploadedFile: computed('signatureToEdit.file', function () {
+  uploadedFile: computed('signatureToEdit.file', function() {
     return this.signatureToEdit.get('file');
   }),
 
-  downloadUrl: computed('signatureToEdit.file', function () {
+  downloadUrl: computed('signatureToEdit.file', function() {
     return `/files/${this.signatureToEdit.get('file.id')}/download`;
   }),
 
@@ -25,7 +25,7 @@ export default Component.extend({
       this.set('isLoading', true);
       const signature = await this.store.findRecord(
         'signature',
-        await this.signatureToEdit.get('id'),
+        await this.signatureToEdit.get('id')
       );
       if (this.get('uploadedFile')) {
         signature.set('file', await this.get('uploadedFile'));

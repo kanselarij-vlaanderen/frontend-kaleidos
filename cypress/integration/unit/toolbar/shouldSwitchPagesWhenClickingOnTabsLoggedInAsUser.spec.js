@@ -1,5 +1,5 @@
 /* global context, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import toolbar from '../../../selectors/toolbar.selectors';
 import settings from '../../../selectors/settings.selectors';

@@ -24,7 +24,9 @@ async function fetchArchivingJob(agenda) {
   const url = `/agendas/${agenda.id}/agendaitems/documents/files/archive`;
   const job = (await fetch(url, {
     method: 'post',
-    headers: { 'Content-type': 'application/vnd.api+json' },
+    headers: {
+      'Content-type': 'application/vnd.api+json',
+    },
   })).json();
   return job;
 }
@@ -48,5 +50,5 @@ async function fileDownloadUrlFromJob(job, archiveName) {
 export {
   constructArchiveName,
   fetchArchivingJobForAgenda,
-  fileDownloadUrlFromJob,
+  fileDownloadUrlFromJob
 };

@@ -9,7 +9,7 @@ export default Controller.extend({
   routeModel: 'print-overviews.decisions',
   intl: inject(),
 
-  title: computed('model.createdFor', 'titleTranslationKey', async function () {
+  title: computed('model.createdFor', 'titleTranslationKey', async function() {
     const date = this.get('model.createdFor.plannedStart');
     if (this.titleTranslationParams) {
       const translatedTitleWithParams = this.intl.t(this.titleTranslationKey, this.titleTranslationParams);
@@ -19,10 +19,12 @@ export default Controller.extend({
     return getPrintOverviewTitle(translatedTitle, date);
   }),
 
-  titleTranslationParams: computed('model.createdFor', function () {
+  titleTranslationParams: computed('model.createdFor', function() {
     const meeting = this.get('model.createdFor');
     const fullProcedure = meeting.get('kindToShow.fullProcedure');
-    return { kind: fullProcedure };
+    return {
+      kind: fullProcedure,
+    };
   }),
 
   actions: {

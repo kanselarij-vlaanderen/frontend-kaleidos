@@ -1,5 +1,5 @@
 /* global context, before, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import alert from '../../../selectors/alert.selectors';
 import agenda from '../../../selectors/agenda.selectors';
@@ -35,14 +35,17 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.get(alert.changesAlertComponentCloseButton).click();
     cy.get(alert.changesAlertComponent).should('not.be.visible');
     // Edit KB
-    cy.get(newsletter.edit).should('be.visible').click();
+    cy.get(newsletter.edit).should('be.visible')
+      .click();
     cy.get(newsletter.rdfaEditor).type('Aanpassing');
     cy.get(newsletter.editSave).type('Aanpassing');
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(5000);
-    cy.get(agenda.agendaItemDocumentsTab).should('be.visible').click();
-    cy.get(agenda.agendaItemKortBestekTab).should('be.visible').click();
+    cy.get(agenda.agendaItemDocumentsTab).should('be.visible')
+      .click();
+    cy.get(agenda.agendaItemKortBestekTab).should('be.visible')
+      .click();
     cy.get(alert.changesAlertComponent).should('not.be.visible');
   });
 });

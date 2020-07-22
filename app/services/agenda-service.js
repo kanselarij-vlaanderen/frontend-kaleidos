@@ -119,11 +119,12 @@ export default Service.extend({
     }
 
     const agendaActivity = await this.store.createRecord('agenda-activity', {
-      startDate: moment().utc().toDate(),
-      subcase: subcase,
+      startDate: moment().utc()
+        .toDate(),
+      subcase,
     });
     await agendaActivity.save();
-    
+
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.get('shortTitle'),
@@ -140,7 +141,7 @@ export default Service.extend({
       mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
-      agendaActivity: agendaActivity,
+      agendaActivity,
       showInNewsletter: true,
     });
     await agendaitem.save();
@@ -155,7 +156,7 @@ export default Service.extend({
   async groupAgendaItemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
-      agendaitems.map(async (item) => {
+      agendaitems.map(async(item) => {
         const mandatees = await item.get('sortedMandatees');
         if (item.isApproval) {
           item.set('groupName', null);
@@ -177,12 +178,14 @@ export default Service.extend({
           item.set('groupName', null);
         }
         item.set('ownGroupName', currentAgendaitemGroupName);
-      }),
+      })
     );
   },
 
   async deleteAgendaitem(agendaitem) {
-    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
+      reload: true,
+    });
     itemToDelete.set('aboutToDelete', true);
     const agendaActivity = await itemToDelete.get('agendaActivity');
 
@@ -190,7 +193,7 @@ export default Service.extend({
       const subcase = await agendaActivity.get('subcase');
       await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
-      await Promise.all(agendaitemsFromActivity.map(async agendaitem => {
+      await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
         const agenda = await agendaitem.get('agenda');
         await agendaitem.destroyRecord();
         await agenda.hasMany('agendaitems').reload();

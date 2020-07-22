@@ -1,6 +1,8 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { computed, action } from '@ember/object';
+import {
+  computed, action
+} from '@ember/object';
 
 export default class AgendaDecisions extends Component {
   isEditing = false;

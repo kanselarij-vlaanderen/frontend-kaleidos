@@ -15,7 +15,7 @@ export default Model.extend({
 
   subcases: hasMany('subcase'),
 
-  latestSubcase: computed('subcases.@each', function () {
+  latestSubcase: computed('subcases.@each', function() {
     return PromiseObject.create({
       promise:
         this.get('subcases').then((subcases) => {

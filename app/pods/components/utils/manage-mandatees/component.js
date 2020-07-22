@@ -78,7 +78,8 @@ export default Component.extend({
         const newMandatee = this.store.createRecord('mandatee', {
           title: oldMandatee.get('title'),
           start: this.get('selectedStartDate') || moment().toDate(),
-          end: moment().add(5, 'years').toDate(),
+          end: moment().add(5, 'years')
+            .toDate(),
           person: selectedPerson,
           holds,
           governmentDomains: domains,
@@ -87,11 +88,12 @@ export default Component.extend({
         return newMandatee.save().then(() => {
           this.get('subcasesService').setNewMandateeToRelatedOpenSubcases(oldMandatee.get('id'), newMandatee.get('id'));
         });
-      }).then(() => {
-        this.mandateesUpdated();
-        this.set('isLoading', false);
-        this.closeModal();
-      });
+      })
+        .then(() => {
+          this.mandateesUpdated();
+          this.set('isLoading', false);
+          this.closeModal();
+        });
     },
     close() {
       this.showVerificationPopup = false;

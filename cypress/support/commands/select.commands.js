@@ -1,5 +1,5 @@
 /* global cy, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 /**
  * @description Select an option in the select control
@@ -11,7 +11,9 @@
  */
 function selectOptionInSelectByIndex(option) {
   cy.log('selectOptionInSelectByIndex');
-  return cy.get('.ember-power-select-option', { timeout: 5000 })
+  return cy.get('.ember-power-select-option', {
+    timeout: 5000,
+  })
     .should('exist')
     .then(() => cy.get(`li[data-option-index="${option}"]`)
       .should('exist')
@@ -30,7 +32,9 @@ function selectOptionInSelectByIndex(option) {
  */
 function selectOptionInSelectByText(text) {
   cy.log('selectOptionInSelectByText');
-  return cy.get('.ember-power-select-option', { timeout: 5000 })
+  return cy.get('.ember-power-select-option', {
+    timeout: 5000,
+  })
     .should('exist')
     .then(() => cy.get('.ember-power-select-option')
       .should('exist')

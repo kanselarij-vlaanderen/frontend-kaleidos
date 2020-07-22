@@ -1,7 +1,11 @@
 import DS from 'ember-data';
 import { alias } from '@ember/object/computed';
 
-const { Model, belongsTo, attr } = DS;
+const {
+  Model,
+  belongsTo,
+  attr,
+} = DS;
 
 export default Model.extend({
   user: belongsTo('person'),

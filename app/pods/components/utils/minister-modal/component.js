@@ -3,7 +3,7 @@ import {
   refreshData,
   selectDomain,
   selectField,
-  prepareMandateeRowAfterEdit,
+  prepareMandateeRowAfterEdit
 } from 'fe-redpencil/utils/manage-minister-util';
 import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -26,7 +26,9 @@ export default Component.extend({
 
     async saveChanges() {
       this.set('isLoading', true);
-      const { selectedMandatee, rowToShow } = this;
+      const {
+        selectedMandatee, rowToShow,
+      } = this;
       const newMinisterRow = await prepareMandateeRowAfterEdit(selectedMandatee, rowToShow);
       this.saveChanges(selectedMandatee, newMinisterRow);
       this.set('isLoading', false);

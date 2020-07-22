@@ -16,9 +16,11 @@ export default Model.extend({
   signedDocument: belongsTo('document'),
   agendaitem: belongsTo('agendaitem'),
   meeting: belongsTo('meeting'),
-  documentVersions: hasMany('document-version', { inverse: null }),
+  documentVersions: hasMany('document-version', {
+    inverse: null,
+  }),
 
-  sortedAttendees: computed('attendees.@each', function () {
+  sortedAttendees: computed('attendees.@each', function() {
     return PromiseArray.create({
       promise: this.get('attendees').then((attendees) => attendees.sortBy('priority')),
     });

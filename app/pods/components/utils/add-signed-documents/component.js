@@ -1,6 +1,10 @@
 import Component from '@ember/component';
-import { inject, inject as service } from '@ember/service';
-import { computed, set } from '@ember/object';
+import {
+  inject, inject as service
+} from '@ember/service';
+import {
+  computed, set
+} from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { tracked } from '@glimmer/tracking';
 
@@ -21,8 +25,10 @@ export default Component.extend({
   isLoading: null,
   documentsInCreation: A([]), // When creating new documents
 
-  documentTypeToAssign: computed('modelToAddDocumentVersionTo', function () {
-    const { modelToAddDocumentVersionTo } = this;
+  documentTypeToAssign: computed('modelToAddDocumentVersionTo', function() {
+    const {
+      modelToAddDocumentVersionTo,
+    } = this;
     if (modelToAddDocumentVersionTo === 'signedMinutes') {
       return this.store.findRecord('document-type', CONFIG.minuteDocumentTypeId);
     } if (modelToAddDocumentVersionTo === 'signedDecision') {
@@ -56,10 +62,10 @@ export default Component.extend({
   createNewDocument(uploadedFile, previousDocument, defaults) {
     const propsFromPrevious = [
       'accessLevel',
-      'confidential',
+      'confidential'
     ];
     const newDocument = this.store.createRecord('document-version', {});
-    propsFromPrevious.forEach(async (key) => {
+    propsFromPrevious.forEach(async(key) => {
       newDocument.set(key, previousDocument
         ? await previousDocument.getWithDefault(key, defaults[key])
         : defaults[key]);
@@ -78,13 +84,13 @@ export default Component.extend({
     const docs = this.get('documentsInCreation');
 
     const savedDocuments = await Promise.all(
-      docs.map(async (doc) => {
+      docs.map(async(doc) => {
         doc = await doc.save();
         const container = doc.get('documentContainer.content'); // TODO: cannot use .content
         container.set('documents', A([doc]));
         await container.save();
         return container;
-      }),
+      })
     );
 
     this.get('documentsInCreation').clear();
@@ -114,13 +120,13 @@ export default Component.extend({
       this.send('closeModal');
 
       await Promise.all(
-        documents.map(async (document) => {
+        documents.map(async(document) => {
           if (documentType) {
             document.set('type', documentType);
           }
           document.set(this.modelToAddDocumentVersionTo, item);
           item.set('signedDocument', document);
-        }),
+        })
       );
       await item.save();
     },
@@ -132,7 +138,8 @@ export default Component.extend({
     },
 
     async uploadedFile(uploadedFile) {
-      const creationDate = moment().utc().toDate();
+      const creationDate = moment().utc()
+        .toDate();
       if (this.documentContainer) {
         await this.documentContainer.reload();
         await this.documentContainer.hasMany('documents').reload();

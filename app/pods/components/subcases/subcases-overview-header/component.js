@@ -10,7 +10,7 @@ export default Component.extend({
   title: null,
   shortTitle: null,
 
-  activeProcess: computed('isShowingProcess', function () {
+  activeProcess: computed('isShowingProcess', function() {
     if (this.get('isShowingProcess')) {
       return 'vlc-tabs-reverse__link--active';
     }

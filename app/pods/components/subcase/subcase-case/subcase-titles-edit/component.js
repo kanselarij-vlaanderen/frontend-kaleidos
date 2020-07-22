@@ -1,7 +1,11 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { action, get, set } from '@ember/object';
-import { saveChanges as saveSubcaseTitles, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
+import {
+  action, get, set
+} from '@ember/object';
+import {
+  saveChanges as saveSubcaseTitles, cancelEdit
+} from 'fe-redpencil/utils/agenda-item-utils';
 import { trimText } from 'fe-redpencil/utils/trim-util';
 
 export default class SubcaseTitlesEdit extends Component {
@@ -25,16 +29,16 @@ export default class SubcaseTitlesEdit extends Component {
     set(this, 'isLoading', true);
 
     const propertiesToSetOnAgendaitem = {
-      'title': trimText(this.subcase.title),
-      'shortTitle': trimText(this.subcase.shortTitle),
+      title: trimText(this.subcase.title),
+      shortTitle: trimText(this.subcase.shortTitle),
     };
     const propertiesToSetOnSubcase = {
-      'title': trimText(this.subcase.title),
-      'shortTitle': trimText(this.subcase.shortTitle),
+      title: trimText(this.subcase.title),
+      shortTitle: trimText(this.subcase.shortTitle),
     };
 
-    propertiesToSetOnSubcase['accessLevel'] = await this.subcase.get('accessLevel');
-    propertiesToSetOnSubcase['confidential'] = await this.subcase.get('confidential');
+    propertiesToSetOnSubcase.accessLevel = await this.subcase.get('accessLevel');
+    propertiesToSetOnSubcase.confidential = await this.subcase.get('confidential');
 
     try {
       await saveSubcaseTitles(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
@@ -45,5 +49,4 @@ export default class SubcaseTitlesEdit extends Component {
       throw (e);
     }
   }
-
 }

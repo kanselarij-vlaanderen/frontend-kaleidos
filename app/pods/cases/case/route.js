@@ -3,7 +3,9 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Route.extend(AuthenticatedRouteMixin, {
   model(params) {
-    return this.store.findRecord('case', params.id, { reload: true });
+    return this.store.findRecord('case', params.id, {
+      reload: true,
+    });
   },
 
 });

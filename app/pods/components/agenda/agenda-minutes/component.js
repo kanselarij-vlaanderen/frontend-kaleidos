@@ -1,6 +1,8 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { action, computed } from '@ember/object';
+import {
+  action, computed
+} from '@ember/object';
 import moment from 'moment';
 
 export default class AgendaMinutes extends Component {
@@ -21,7 +23,8 @@ export default class AgendaMinutes extends Component {
   async toggleIsEditing() {
     const meetingNotes = await this.get('currentSession.notes');
     if (!meetingNotes) {
-      const date = moment().utc().toDate();
+      const date = moment().utc()
+        .toDate();
       const meetingRecord = this.store.createRecord('meeting-record',
         {
           created: date,
@@ -37,7 +40,8 @@ export default class AgendaMinutes extends Component {
   async toggleIsEditingMeetingRecord(agendaitem) {
     const notes = await agendaitem.get('meetingRecord');
     if (!notes) {
-      const date = moment().utc().toDate();
+      const date = moment().utc()
+        .toDate();
       const meetingRecord = this.store.createRecord('meeting-record',
         {
           created: date,

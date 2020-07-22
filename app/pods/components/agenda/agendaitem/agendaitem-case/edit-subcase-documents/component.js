@@ -12,7 +12,9 @@ export default Component.extend({
   actions: {
     async saveChanges() {
       this.set('isLoading', true);
-      const { documents } = this;
+      const {
+        documents,
+      } = this;
       await Promise.all(
         documents.map((document) => {
           if (document.get('deleted')) {
@@ -21,15 +23,17 @@ export default Component.extend({
           return document.save()
             .then((savedDocument) => savedDocument.get('documentVersions'))
             .then((versions) => Promise.all(versions.map((version) => version.save())));
-        }),
+        })
       );
       this.set('isLoading', false);
       this.cancelForm();
     },
 
     async cancelEditing() {
-      const { documents } = this;
-      documents.map(async (document) => {
+      const {
+        documents,
+      } = this;
+      documents.map(async(document) => {
         const version = await document.get('lastDocumentVersion');
         version.rollbackAttributes();
         version.belongsTo('accessLevel').reload();

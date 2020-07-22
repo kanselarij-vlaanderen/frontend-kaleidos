@@ -11,7 +11,7 @@ export default class SystemAlertsController extends Controller {
     this.selectedAlert = alert;
   }
 
-  @(task(function* (model) {
+  @(task(function *(model) {
     yield model.destroyRecord();
     this.selectedAlert = null;
     return model;

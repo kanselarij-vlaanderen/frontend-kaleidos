@@ -19,7 +19,7 @@ export const cancelEdit = (item, propertiesToSet) => {
   }
   item.reload();
   const keys = Object.keys(propertiesToSet);
-  keys.forEach(async () => {
+  keys.forEach(async() => {
     keys.forEach((prop) => item.notifyPropertyChange(prop));
   });
 };
@@ -43,13 +43,13 @@ export const setNotYetFormallyOk = (itemToSet) => {
  * @param resetFormallyOk
  * @returns {Promise<*>}
  */
-export const setNewPropertiesToModel = async (model, propertiesToSet, resetFormallyOk = true) => {
+export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = true) => {
   if (resetFormallyOk) {
     setNotYetFormallyOk(model);
   }
 
   const keys = Object.keys(propertiesToSet);
-  keys.forEach(async (key) => {
+  keys.forEach(async(key) => {
     await model.get(key);
     model.set(key, propertiesToSet[key]);
   });
@@ -57,9 +57,10 @@ export const setNewPropertiesToModel = async (model, propertiesToSet, resetForma
   return model.save().then((item) => {
     item.reload();
     return true;
-  }).catch((e) => {
-    throw (e);
-  });
+  })
+    .catch((e) => {
+      throw (e);
+    });
 };
 
 /**
@@ -68,10 +69,11 @@ export const setNewPropertiesToModel = async (model, propertiesToSet, resetForma
  * @param agendaitem
  * @returns {Promise<void>}
  */
-export const setModifiedOnAgendaOfAgendaitem = async (agendaitem) => {
+export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
   const agenda = await agendaitem.get('agenda');
   if (agenda) {
-    agenda.set('modified', moment().utc().toDate());
+    agenda.set('modified', moment().utc()
+      .toDate());
     agenda.save();
   }
 };
@@ -85,7 +87,7 @@ export const setModifiedOnAgendaOfAgendaitem = async (agendaitem) => {
  * @param resetFormallyOk
  * @returns {Promise<void>}
  */
-export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
+export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
   const item = agendaitemOrSubcase;
   const isAgendaItem = item.get('modelName') === 'agendaitem';
 
@@ -107,7 +109,7 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
 
     const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
     if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
-      await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
+      await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async(agendaitem) => {
         await setNewPropertiesToModel(agendaitem, propertiesToSetOnAgendaitem, resetFormallyOk);
         await setModifiedOnAgendaOfAgendaitem(agendaitem);
       }));
@@ -115,7 +117,7 @@ export const saveChanges = async (agendaitemOrSubcase, propertiesToSetOnAgendait
   }
 };
 
-export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
+export const destroyApprovalsOfAgendaitem = async(agendaitem) => {
   const approvals = await agendaitem.get('approvals');
   if (approvals) {
     await Promise.all(approvals.map((approval) => approval.destroyRecord()));
@@ -128,7 +130,7 @@ export const destroyApprovalsOfAgendaitem = async (agendaitem) => {
  * @param {Array} agendaitems   Agenda items to mutate
  */
 export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
-  agendaitems.map(async (item) => {
+  agendaitems.map(async(item) => {
     const mandatees = await item.get('mandatees');
     if (item.isApproval) {
       return;
@@ -146,7 +148,7 @@ export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
       calculatedGroupPriority += value / 100;
     });
     item.set('groupPriority', calculatedGroupPriority);
-  }),
+  })
 );
 
 /**
@@ -182,7 +184,7 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
  * @param  {Array}  agendaitems   Agenda items to parse from
  * @return {Object}               An object containing drafts and groups
  */
-export const parseDraftsAndGroupsFromAgendaitems = async (agendaitems) => {
+export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
   // Drafts are items without an approval or remark
   const draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
 

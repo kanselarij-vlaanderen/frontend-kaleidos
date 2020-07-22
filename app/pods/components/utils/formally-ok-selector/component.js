@@ -9,7 +9,7 @@ export default Component.extend({
 
   options: computed(() => CONFIG.formallyOkOptions.map((item) => EmberObject.create(item))),
 
-  selectedFormallyOk: computed('options', 'formallyOk', function () {
+  selectedFormallyOk: computed('options', 'formallyOk', function() {
     const formallyOk = this.get('formallyOk');
     if (!formallyOk) {
       return this.options.find((option) => option.get('uri') === CONFIG.notYetFormallyOk);

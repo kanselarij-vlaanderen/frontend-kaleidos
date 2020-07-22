@@ -1,7 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import { alias, deprecatingAlias } from '@ember/object/computed';
+import {
+  alias, deprecatingAlias
+} from '@ember/object/computed';
 
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
@@ -26,13 +28,17 @@ export default Model.extend({
   }),
 
   type: belongsTo('document-type'),
-  signedDecision: belongsTo('decision', { inverse: null }),
-  signedMinutes: belongsTo('meeting-record', { inverse: null }),
+  signedDecision: belongsTo('decision', {
+    inverse: null,
+  }),
+  signedMinutes: belongsTo('meeting-record', {
+    inverse: null,
+  }),
 
-  sortedDocuments: computed('documents.@each', function () {
+  sortedDocuments: computed('documents.@each', function() {
     return PromiseArray.create({
-      promise: this.get('documents').then(async (docs) => {
-        const heads = docs.filter(async (doc) => {
+      promise: this.get('documents').then(async(docs) => {
+        const heads = docs.filter(async(doc) => {
           const previousVersion = await doc.get('previousVersion');
           return !previousVersion;
         });
@@ -61,18 +67,18 @@ export default Model.extend({
   lastDocument: computed(
     'sortedDocuments.@each',
     'documents.@each', // Why? TODO: Comment
-    function () {
+    function() {
       return PromiseObject.create({
         promise: this.get('sortedDocuments').then((sortedDocuments) => sortedDocuments.get('lastObject')),
       });
-    },
+    }
   ),
   lastDocumentVersion: deprecatingAlias('lastDocument', {
     id: 'model-refactor.documents',
     until: '?',
   }),
 
-  reverseSortedDocuments: computed('sortedDocuments', function () {
+  reverseSortedDocuments: computed('sortedDocuments', function() {
     return PromiseArray.create({
       promise: this.get('sortedDocuments').then((sortedDocuments) => sortedDocuments.reverse()),
     });
@@ -82,7 +88,7 @@ export default Model.extend({
     until: '?',
   }),
 
-  checkAdded: computed('uri', 'addedDocuments.@each', function () {
+  checkAdded: computed('uri', 'addedDocuments.@each', function() {
     if (this.addedDocuments) {
       return this.addedDocuments.includes(this.get('uri'));
     }

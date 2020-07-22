@@ -15,7 +15,7 @@ export default Component.extend({
   extraInfo: null,
   meetingNumber: null,
 
-  date: computed('startDate', function () {
+  date: computed('startDate', function() {
     return A([this.startDate]);
   }),
 
@@ -30,8 +30,8 @@ export default Component.extend({
 
   actions: {
     async updateSession() {
-      const { 
-        isDigital, extraInfo, selectedKindUri, meeting, meetingNumber 
+      const {
+        isDigital, extraInfo, selectedKindUri, meeting, meetingNumber,
       } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;

@@ -1,7 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 
-const { Model, attr, belongsTo } = DS;
+const {
+  Model, attr, belongsTo,
+} = DS;
 
 export default Model.extend({
   firstName: attr('string'),
@@ -9,7 +11,9 @@ export default Model.extend({
   emailLink: attr(),
   phoneLink: attr(),
   account: belongsTo('account'),
-  group: belongsTo('account-group', { inverse: null }),
+  group: belongsTo('account-group', {
+    inverse: null,
+  }),
   organization: belongsTo('organization'),
 
   email: computed('emailLink', {

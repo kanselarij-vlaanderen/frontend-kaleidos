@@ -1,4 +1,6 @@
-import { computed, get, set } from '@ember/object';
+import {
+  computed, get, set
+} from '@ember/object';
 
 /**
  * Gets a certain property on a component/class so as to prevent it from making calls

@@ -1,5 +1,7 @@
 import Component from '@ember/component';
-import { computed, action } from '@ember/object';
+import {
+  computed, action
+} from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { restartableTask } from 'ember-concurrency-decorators';
@@ -19,7 +21,7 @@ export default class AgendaList extends Component {
   selectedAgendaItem = alias('sessionService.selectedAgendaItem');
 
   dragHandleClass = '.vlc-agenda-items__sub-item';
-  
+
   agendaitems = null;
 
   isEditingOverview = null;
@@ -39,8 +41,8 @@ export default class AgendaList extends Component {
   }
 
   @restartableTask
-  reAssignPriorities = function* (agendaitems) {
-    yield agendaitems.map(async (item) => {
+  reAssignPriorities = function *(agendaitems) {
+    yield agendaitems.map(async(item) => {
       if (isPresent(item.changedAttributes().priority)) {
         this.set('isReAssigningPriorities', true);
         await item.save();

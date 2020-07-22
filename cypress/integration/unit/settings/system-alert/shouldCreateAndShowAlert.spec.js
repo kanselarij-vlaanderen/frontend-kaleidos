@@ -1,5 +1,5 @@
 /* global context, it, cy,before,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 import * as alert from '../../../../selectors/system-wide/alert.selectors';
 import * as systemAlert from '../../../../selectors/settings/system-alert.selectors';
 
@@ -27,33 +27,45 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
 
     cy.route('GET', '/alerts?**').as('getAlerts');
     cy.get('[data-test-save-button]').click();
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 60000 }); // Wait for a polling-cycle to pass
-    cy.get(systemAlert.alert).should('exist', { timeout: ALERT_POLL_INTERVAL + 60000 });
+    cy.wait('@getAlerts', {
+      timeout: ALERT_POLL_INTERVAL + 60000,
+    }); // Wait for a polling-cycle to pass
+    cy.get(systemAlert.alert).should('exist', {
+      timeout: ALERT_POLL_INTERVAL + 60000,
+    });
   });
 
   it('Should close and stay closed', () => {
     cy.route('GET', '/alerts?**').as('getAlerts');
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 60000 }); // Wait for a polling-cycle to pass
+    cy.wait('@getAlerts', {
+      timeout: ALERT_POLL_INTERVAL + 60000,
+    }); // Wait for a polling-cycle to pass
 
     cy.get(alert.alertMessageCloseButton).each((button) => {
       button.click();
     });
     cy.get(systemAlert.alert).should('not.exist');
 
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 60000 }); // Wait for another polling-cycle to pass
+    cy.wait('@getAlerts', {
+      timeout: ALERT_POLL_INTERVAL + 60000,
+    }); // Wait for another polling-cycle to pass
     cy.get(systemAlert.alert).should('not.exist');
   });
 
   it('Should delete the alert created', () => {
     cy.route('GET', '/alerts**').as('getAlerts');
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 60000 }); // Wait for a polling-cycle to pass
+    cy.wait('@getAlerts', {
+      timeout: ALERT_POLL_INTERVAL + 60000,
+    }); // Wait for a polling-cycle to pass
     cy.get(systemAlert.alert).should('exist');
 
     cy.get('[data-test-vl-modal-dialogwindow] .vlc-input-field-block').click();
     cy.get('.ember-power-select-option').click();
     cy.route('GET', '/alerts**').as('getAlerts');
     cy.get('[data-test-remove-system-alert]').click();
-    cy.wait('@getAlerts', { timeout: ALERT_POLL_INTERVAL + 60000 }); // Wait for a polling-cycle to pass
+    cy.wait('@getAlerts', {
+      timeout: ALERT_POLL_INTERVAL + 60000,
+    }); // Wait for a polling-cycle to pass
     cy.get(systemAlert.alert).should('not.exist');
   });
 });

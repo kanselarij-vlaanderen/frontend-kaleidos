@@ -34,7 +34,9 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   async sessionInvalidated() {
-    const { logoutUrl } = ENV.torii.providers['acmidm-oauth2'];
+    const {
+      logoutUrl,
+    } = ENV.torii.providers['acmidm-oauth2'];
     window.location.replace(logoutUrl);
   },
 

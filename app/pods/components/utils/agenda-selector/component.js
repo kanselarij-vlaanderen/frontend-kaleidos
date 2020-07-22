@@ -1,7 +1,9 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
-import { task, timeout } from 'ember-concurrency';
+import {
+  task, timeout
+} from 'ember-concurrency';
 
 export default Component.extend({
   sessionService: inject(),
@@ -20,17 +22,21 @@ export default Component.extend({
     this.findAll.perform();
   },
 
-  findAll: task(function* () {
-    const { modelName, queryOptions } = this;
+  findAll: task(function *() {
+    const {
+      modelName, queryOptions,
+    } = this;
     if (modelName) {
       const items = yield this.store.query(modelName, queryOptions);
       this.set('items', items);
     }
   }),
 
-  searchTask: task(function* (searchValue) {
+  searchTask: task(function *(searchValue) {
     yield timeout(300);
-    const { queryOptions, searchField, modelName } = this;
+    const {
+      queryOptions, searchField, modelName,
+    } = this;
     if (queryOptions.filter) {
       queryOptions.filter[searchField] = searchValue;
     } else {
@@ -42,9 +48,11 @@ export default Component.extend({
     return this.store.query(modelName, queryOptions);
   }),
 
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
+  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {
     const options = {};
-    const { filter, sortField, includeField } = this;
+    const {
+      filter, sortField, includeField,
+    } = this;
     if (sortField) {
       options.sort = sortField;
     }
@@ -57,7 +65,7 @@ export default Component.extend({
     return options;
   }),
 
-  items: computed('sessionService.agendas', function () {
+  items: computed('sessionService.agendas', function() {
     return this.sessionService.get('agendas');
   }),
 

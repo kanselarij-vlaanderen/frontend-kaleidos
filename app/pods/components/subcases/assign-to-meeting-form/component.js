@@ -8,8 +8,10 @@ export default Component.extend({
   toaster: service(),
   intl: service(),
 
-  dateObjectsToEnable: computed(function () {
-    const dateOfToday = moment().utc().subtract(1, 'weeks').format();
+  dateObjectsToEnable: computed(function() {
+    const dateOfToday = moment().utc()
+      .subtract(1, 'weeks')
+      .format();
     return this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
@@ -25,11 +27,14 @@ export default Component.extend({
     },
 
     async assignToMeeting(subcase) {
-      const { startDate, dateObjectsToEnable } = this;
+      const {
+        startDate, dateObjectsToEnable,
+      } = this;
       const meetings = dateObjectsToEnable;
 
       // Using format('L') (DD/MM/YYYY) to only compare the dates since the startDate time will always be 0:00
-      const meetingToAssignTo = meetings.find((meeting) => moment(meeting.get('plannedStart')).utc().format('L') === moment(startDate).format('L'));
+      const meetingToAssignTo = meetings.find((meeting) => moment(meeting.get('plannedStart')).utc()
+        .format('L') === moment(startDate).format('L'));
       const selectedSubcase = await this.store.findRecord('subcase', subcase.get('id'));
       if (selectedSubcase && meetingToAssignTo) {
         // Closing modal happens first because a user is able to click assign button multiple times during proposing

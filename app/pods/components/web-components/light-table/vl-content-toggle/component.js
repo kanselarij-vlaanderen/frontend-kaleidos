@@ -8,13 +8,15 @@ export default Component.extend({
   value: null,
   isLoading: false,
 
-  key: computed('row', 'value', 'column', function () {
+  key: computed('row', 'value', 'column', function() {
     return this.column.get('valuePath');
   }),
 
   actions: {
     async valueChanged(row) {
-      const { key } = this;
+      const {
+        key,
+      } = this;
       this.toggleProperty('isLoading');
       this.toggleProperty('value');
 

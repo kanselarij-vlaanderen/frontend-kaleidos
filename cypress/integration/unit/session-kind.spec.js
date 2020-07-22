@@ -1,5 +1,5 @@
 /* global context, before, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import actionModal from '../../selectors/action-modal.selectors';
 
@@ -60,7 +60,10 @@ context('Different session kinds should show different titles', () => {
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {
     cy.visit('/kort-bestek?size=100');
-    cy.get('.data-table > tbody', { timeout: 20000 }).children().as('rows');
+    cy.get('.data-table > tbody', {
+      timeout: 20000,
+    }).children()
+      .as('rows');
     cy.get('@rows').within(() => {
       cy.contains('Kort bestek voor de ministerraad van');
       cy.contains('Kort bestek voor de ministerraad via elektronische procedure van');

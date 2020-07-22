@@ -2,7 +2,9 @@ import Component from '@glimmer/component';
 import { enqueueTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import { action, get } from '@ember/object';
+import {
+  action, get
+} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { alias } from '@ember/object/computed';
 
@@ -32,7 +34,7 @@ export default class FileUploader extends Component {
 
   @enqueueTask({
     maxConcurrency: 3,
-  })* uploadFileTask(file) {
+  }) *uploadFileTask(file) {
     try {
       this.isLoading = true;
       file.readAsDataURL().then(() => {

@@ -2,11 +2,15 @@ import DS from 'ember-data';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 
-const { Model, attr, belongsTo } = DS;
+const {
+  Model, attr, belongsTo,
+} = DS;
 
 export default Model.extend({
   documentVersion: belongsTo('document-version'),
-  signature: belongsTo('signature', { inverse: null }),
+  signature: belongsTo('signature', {
+    inverse: null,
+  }),
 
   filename: attr('string'),
   filenameWithoutExtension: computed('filename', {
@@ -27,7 +31,7 @@ export default Model.extend({
   extension: attr('string'),
   created: attr('datetime'),
   contentType: attr('string'),
-  downloadLink: computed('id', function () {
+  downloadLink: computed('id', function() {
     return `/files/${this.get('id')}/download`;
   }),
   name: alias('filename'), // Compatibility. Use of 'name' should be refactored out.

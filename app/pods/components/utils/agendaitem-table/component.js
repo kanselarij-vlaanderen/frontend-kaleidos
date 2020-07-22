@@ -1,5 +1,7 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember/object';
+import {
+  action, computed
+} from '@ember/object';
 import { oneWay } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { dasherize } from '@ember/string';
@@ -38,7 +40,9 @@ export default class AgendaitemTable extends Component {
 
   @computed('dir', 'sort')
   get sortBy() {
-    const { dir } = this;
+    const {
+      dir,
+    } = this;
     if (dir === 'asc') {
       return this.sort;
     }
@@ -102,7 +106,7 @@ export default class AgendaitemTable extends Component {
     const postponedItems = model.filter((item) => item.get('retracted'));
     postponedItems.forEach((postponedItem) => {
       const postponedRowInTable = rowsCurrentlyInTable.find(
-        (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id'),
+        (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id')
       );
       if (postponedRowInTable) {
         postponedRowInTable.set('classNames', 'postponed');
@@ -111,7 +115,7 @@ export default class AgendaitemTable extends Component {
   }
 
   @restartableTask
-  fetchRecords = function* () {
+  fetchRecords = function *() {
     yield timeout(500);
     if (this.previousFilter !== this.filter) {
       this.set('previousFilter', this.filter);
@@ -122,7 +126,9 @@ export default class AgendaitemTable extends Component {
     const queryOptions = {
       filter: this.filter,
       sort: this.get('sortBy'),
-      page: { number: this.page, size: this.size },
+      page: {
+        number: this.page, size: this.size,
+      },
       include: this.include,
     };
     if (!this.filter) {
@@ -130,7 +136,7 @@ export default class AgendaitemTable extends Component {
     }
     const records = yield this.store.query(
       `${this.modelName}`,
-      queryOptions,
+      queryOptions
     );
 
     this.get('model').pushObjects(records.toArray().filter((item) => !item.isApproval));

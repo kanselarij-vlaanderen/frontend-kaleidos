@@ -19,9 +19,13 @@ export default Component.extend({
   subcase: null,
   caseToDelete: null,
 
-  canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function () {
-    const { isAssigningToOtherAgenda, isLoading } = this;
-    const subcase = this.subcase;
+  canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function() {
+    const {
+      isAssigningToOtherAgenda, isLoading,
+    } = this;
+    const {
+      subcase,
+    } = this;
     const requestedForMeeting = await subcase.get('requestedForMeeting');
     const hasActivity = await subcase.get('hasActivity');
 
@@ -32,9 +36,11 @@ export default Component.extend({
     return true;
   }),
 
-  canDelete: computed('canPropose', 'isAssigningToOtherAgenda', async function () {
+  canDelete: computed('canPropose', 'isAssigningToOtherAgenda', async function() {
     const canPropose = await this.get('canPropose');
-    const { isAssigningToOtherAgenda } = this;
+    const {
+      isAssigningToOtherAgenda,
+    } = this;
 
     if (canPropose && !isAssigningToOtherAgenda) {
       return true;
@@ -43,9 +49,13 @@ export default Component.extend({
     return false;
   }),
 
-  meetings: computed('store', function () {
-    const dateOfToday = moment().utc().subtract(1, 'weeks').format();
-    const futureDate = moment().utc().add(6, 'weeks').format();
+  meetings: computed('store', function() {
+    const dateOfToday = moment().utc()
+      .subtract(1, 'weeks')
+      .format();
+    const futureDate = moment().utc()
+      .add(6, 'weeks')
+      .format();
 
     return this.store.query('meeting', {
       filter: {
@@ -58,7 +68,9 @@ export default Component.extend({
   }),
 
   async deleteSubcase(subcase) {
-    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), { reload: true });
+    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), {
+      reload: true,
+    });
     const newsletterInfo = await itemToDelete.get('newsletterInfo');
     if (newsletterInfo) {
       await newsletterInfo.destroyRecord();
@@ -83,7 +95,7 @@ export default Component.extend({
     this.set('isAssigningToOtherCase', false);
   },
 
-  deleteCase: task(function* (_case) {
+  deleteCase: task(function *(_case) {
     yield _case.destroyRecord();
     this.set('promptDeleteCase', false);
     this.set('caseToDelete', null);

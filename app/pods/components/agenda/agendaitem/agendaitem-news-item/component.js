@@ -1,6 +1,8 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { action, computed } from '@ember/object';
+import {
+  action, computed
+} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import moment from 'moment';
@@ -61,7 +63,7 @@ export default class AgendaitemNewsItem extends Component {
     this.set('isLoading', true);
     const newsletterInfo = await subcase.get('newsletterInfo');
 
-    await newsletterInfo.save().then(async () => {
+    await newsletterInfo.save().then(async() => {
       await updateModifiedProperty(await this.get('agendaitem.agenda'));
       this.set('isLoading', false);
       this.toggleProperty('isEditing');

@@ -3,10 +3,26 @@ import { inject } from '@ember/service';
 
 export default Controller.extend({
   queryParams: [
-    { page: { type: 'number' } },
-    { size: { type: 'number' } },
-    { sort: { type: 'number' } },
-    { showArchived: { type: 'boolean' } },
+    {
+      page: {
+        type: 'number',
+      },
+    },
+    {
+      size: {
+        type: 'number',
+      },
+    },
+    {
+      sort: {
+        type: 'number',
+      },
+    },
+    {
+      showArchived: {
+        type: 'boolean',
+      },
+    }
   ],
   sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
   page: 0,
@@ -38,7 +54,7 @@ export default Controller.extend({
       const caseModel = await this.store.findRecord('case', this.get('selectedCase.id'));
       caseModel.set('isArchived', true);
       const subcases = await caseModel.subcases;
-      await Promise.all(subcases.map(async (subcase) => {
+      await Promise.all(subcases.map(async(subcase) => {
         subcase.set('isArchived', true);
         const savedSubcase = await subcase.save();
         return savedSubcase;
@@ -53,7 +69,7 @@ export default Controller.extend({
     async unarchiveCase(caze) {
       caze.set('isArchived', false);
       const subcases = await caze.subcases;
-      await Promise.all(subcases.map(async (subcase) => {
+      await Promise.all(subcases.map(async(subcase) => {
         subcase.set('isArchived', false);
         const savedSubcase = await subcase.save();
         return savedSubcase;

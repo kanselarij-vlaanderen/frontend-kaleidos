@@ -17,9 +17,10 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   sort: '-planned-start',
   size: 10,
 
-  activeAgendas: computed('model', async function () {
+  activeAgendas: computed('model', async function() {
     const dateOfToday = moment().seconds(0)
-      .milliseconds(0).minutes(0)
+      .milliseconds(0)
+      .minutes(0)
       .hours(0)
       .utc()
       .subtract(1, 'weeks')

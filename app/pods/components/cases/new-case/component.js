@@ -9,8 +9,11 @@ export default Component.extend({
   store: inject(),
 
   async createCase() {
-    const newDate = moment().utc().toDate();
-    const { title, shortTitle, confidential } = this;
+    const newDate = moment().utc()
+      .toDate();
+    const {
+      title, shortTitle, confidential,
+    } = this;
     const caze = this.store.createRecord('case',
       {
         title,

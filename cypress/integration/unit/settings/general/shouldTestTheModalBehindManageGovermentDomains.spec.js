@@ -1,5 +1,5 @@
 /* global context, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
@@ -20,7 +20,7 @@ context('Settings page tests', () => {
       'Omgeving',
       'Onderwijs & vorming',
       'Welzijn, vollksgezondheid & gezin',
-      'Werk & sociale economie',
+      'Werk & sociale economie'
     ];
   }
 
@@ -58,7 +58,9 @@ context('Settings page tests', () => {
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
 
     for (let i = 0; i < govermentDomains.length; i++) {
-      cy.get('.ember-power-select-option').eq(i).scrollIntoView().should('contain.text', govermentDomains[i]);
+      cy.get('.ember-power-select-option').eq(i)
+        .scrollIntoView()
+        .should('contain.text', govermentDomains[i]);
     }
   });
 
@@ -67,12 +69,15 @@ context('Settings page tests', () => {
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
-    cy.get('.ember-power-select-option').eq(0).should('contain.text', 'Cultuur, jeugd, sport & media');
-    cy.get('.ember-power-select-option').eq(0).click();
-    cy.get('.ember-power-select-selected-item').should('contain.text', 'Cultuur, jeugd, sport & media').wait(200);
+    cy.get('.ember-power-select-option').eq(0)
+      .should('contain.text', 'Cultuur, jeugd, sport & media');
+    cy.get('.ember-power-select-option').eq(0)
+      .click();
+    cy.get('.ember-power-select-selected-item').should('contain.text', 'Cultuur, jeugd, sport & media')
+      .wait(200);
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
     cy.get(modal.manageInSettingsModal.edit).should('be.visible');
-    cy.get(modal.manageInSettingsModal.delete).should('be.visible');
+    cy.get(modal.manageInSettingsModal['delete']).should('be.visible');
     cy.get(modal.baseModal.close).should('be.visible');
   });
 
@@ -100,8 +105,10 @@ context('Settings page tests', () => {
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length.greaterThan', 0);
-    cy.get('.ember-power-select-option').eq(0).should('contain.text', 'Andere zaken');
-    cy.get('.ember-power-select-option').eq(0).click();
+    cy.get('.ember-power-select-option').eq(0)
+      .should('contain.text', 'Andere zaken');
+    cy.get('.ember-power-select-option').eq(0)
+      .click();
     cy.get(modal.manageInSettingsModal.edit).click();
     cy.get(form.formInput).clear();
     cy.get(form.formInput).type('Test Input');

@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 export default Controller.extend({
   intl: inject(),
 
-  columns: computed(function () {
+  columns: computed(function() {
     return [{
       label: '#',
       width: '50px',

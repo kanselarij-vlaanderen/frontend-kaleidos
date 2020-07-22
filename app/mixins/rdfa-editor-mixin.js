@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 export default Mixin.create({
   isExpanded: false,
 
-  richtext: computed('editor.currentTextContent', function () {
+  richtext: computed('editor.currentTextContent', function() {
     if (!this.editor) {
       return;
     }

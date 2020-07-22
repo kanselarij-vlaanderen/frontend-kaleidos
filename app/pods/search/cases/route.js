@@ -30,7 +30,9 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
   textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'subcaseTitle', 'subcaseSubTitle']);
 
   postProcessDates(_case) {
-    const { sessionDates } = _case.attributes;
+    const {
+      sessionDates,
+    } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
         const sorted = sessionDates.sort();
@@ -84,7 +86,9 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
     //   filter['isArchived'] = 'true';
     // }
 
-    const { postProcessDates } = this;
+    const {
+      postProcessDates,
+    } = this;
     return search(searchDocumentType, params.page, params.size, params.sort, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;

@@ -32,14 +32,14 @@ export default class ListItem extends Component {
   @tracked retracted = this.args.agendaitem.retracted || false;
 
   @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
-  
+
   @tracked formallyOk = this.args.agendaitem.formallyOk || null;
 
   get classNameBindings() {
     return `
     ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
     ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
-    `
+    `;
   }
 
   @action

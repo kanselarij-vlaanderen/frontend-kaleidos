@@ -7,7 +7,7 @@ import { cached } from 'fe-redpencil/decorators/cached';
 export default Component.extend({
   store: inject(),
   mandateeService: inject(),
-  item: computed('mandateeToEdit', function () {
+  item: computed('mandateeToEdit', function() {
     return this.get('mandateeToEdit');
   }),
 

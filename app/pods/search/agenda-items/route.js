@@ -26,7 +26,9 @@ export default class AgendaitemSearchRoute extends Route.extend(DataTableRouteMi
   textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'titlePress', 'textPress']);
 
   postProcessDates(_case) {
-    const { sessionDates } = _case.attributes;
+    const {
+      sessionDates,
+    } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
         const sorted = sessionDates.sort();

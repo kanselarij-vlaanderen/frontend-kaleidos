@@ -14,19 +14,29 @@ export default Model.extend({
   dateSwornIn: attr('datetime'),
   dateDecree: attr('datetime'),
 
-  holds: belongsTo('mandate', { inverse: null }),
+  holds: belongsTo('mandate', {
+    inverse: null,
+  }),
   person: belongsTo('person'),
 
-  iseCodes: hasMany('ise-code', { inverse: null }),
+  iseCodes: hasMany('ise-code', {
+    inverse: null,
+  }),
   decisions: hasMany('decision'),
   cases: hasMany('case'),
   meetingsAttended: hasMany('meeting-record'),
   approvals: hasMany('approval'),
-  subcases: hasMany('subcase', { inverse: null }),
-  requestedSubcases: hasMany('subcase', { inverse: null }),
-  agendaitems: hasMany('agendaitem', { inverse: null }),
+  subcases: hasMany('subcase', {
+    inverse: null,
+  }),
+  requestedSubcases: hasMany('subcase', {
+    inverse: null,
+  }),
+  agendaitems: hasMany('agendaitem', {
+    inverse: null,
+  }),
 
-  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function () {
+  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
     const nameToDisplay = this.get('person.nameToDisplay');
     if (nameToDisplay) {
       return `${nameToDisplay}, ${this.get('title')}`;

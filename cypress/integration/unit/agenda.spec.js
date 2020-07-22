@@ -4,14 +4,15 @@ import form from '../../selectors/form.selectors';
 import actionModel from '../../selectors/action-modal.selectors';
 
 /* global context, before, it, cy,beforeEach, afterEach, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 function currentTimestamp() {
   return Cypress.moment().unix();
 }
 
 context('Agenda tests', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
+  const agendaDate = Cypress.moment().add(1, 'weeks')
+    .day(5); // Next friday
 
   before(() => {
     cy.server();
@@ -31,7 +32,8 @@ context('Agenda tests', () => {
   });
 
   it('should create a new agenda and then delete it', () => {
-    const agendaDateSingleTest = Cypress.moment().add(2, 'weeks').day(5); // Friday in two weeks
+    const agendaDateSingleTest = Cypress.moment().add(2, 'weeks')
+      .day(5); // Friday in two weeks
     cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.deleteAgenda(result.meetingId, true);
@@ -51,7 +53,8 @@ context('Agenda tests', () => {
   });
 
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks').day(5); // Friday in three weeks
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+      .day(5); // Friday in three weeks
     cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.openAgendaForDate(dateToCreateAgenda);
@@ -63,7 +66,8 @@ context('Agenda tests', () => {
   });
 
   it('Should not be able to close a session with only a design agenda, cfr. KAS-1551', () => {
-    const dateToCreateAgenda = Cypress.moment().add(4, 'weeks').day(5); // Friday in four weeks
+    const dateToCreateAgenda = Cypress.moment().add(4, 'weeks')
+      .day(5); // Friday in four weeks
     cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar');
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.get('.vl-button--icon-before')
@@ -77,7 +81,8 @@ context('Agenda tests', () => {
 
     const PLACE = 'Brussel';
     const KIND = 'Ministerraad';
-    const dateToCreateAgenda = Cypress.moment().add(2, 'weeks').day(1);
+    const dateToCreateAgenda = Cypress.moment().add(2, 'weeks')
+      .day(1);
     cy.createAgenda(KIND, dateToCreateAgenda, PLACE);
     cy.openAgendaForDate(dateToCreateAgenda);
 
@@ -97,9 +102,12 @@ context('Agenda tests', () => {
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
     cy.contains('dit is de korte titel').click();
-    cy.get(agenda.agendaitemTitlesEdit).should('exist').should('be.visible').click();
+    cy.get(agenda.agendaitemTitlesEdit).should('exist')
+      .should('be.visible')
+      .click();
 
-    cy.get(form.formVlToggle).should('exist').click();
+    cy.get(form.formVlToggle).should('exist')
+      .click();
 
     cy.get(agenda.agendaitemTitlesEditShorttitle).clear();
     cy.get(agenda.agendaitemTitlesEditShorttitle).type('dit is de korte titel\n\n');
@@ -107,17 +115,21 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEditTitle).clear();
     cy.get(agenda.agendaitemTitlesEditTitle).type('dit is de lange titel\n\n');
 
-    cy.get(agenda.agendaitemTitlesEditSave).should('exist').should('be.visible').click();
+    cy.get(agenda.agendaitemTitlesEditSave).should('exist')
+      .should('be.visible')
+      .click();
     cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
-    cy.get(agenda.agendaitemTitelsConfidential).should('exist').should('be.visible');
-  })
+    cy.get(agenda.agendaitemTitelsConfidential).should('exist')
+      .should('be.visible');
+  });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
-    const dateToCreateAgenda = Cypress.moment().add(1, 'week').day(6);
-    cy.createAgenda('Ministerraad', dateToCreateAgenda, "Brussel", 1);
-    cy.createAgenda('Ministerraad', dateToCreateAgenda, "Brussel").then((result) => {
+    const dateToCreateAgenda = Cypress.moment().add(1, 'week')
+      .day(6);
+    cy.createAgenda('Ministerraad', dateToCreateAgenda, 'Brussel', 1);
+    cy.createAgenda('Ministerraad', dateToCreateAgenda, 'Brussel').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.toggleeditingsession).click();
@@ -125,7 +137,7 @@ context('Agenda tests', () => {
       cy.visit('/');
       cy.get(agenda.createNewAgendaButton).click();
       cy.wait(500);
-      cy.get('input[type="number"]').should('have.value',(parseInt(result.meetingNumber) + 1).toString());
+      cy.get('input[type="number"]').should('have.value', (parseInt(result.meetingNumber) + 1).toString());
     });
   });
 });

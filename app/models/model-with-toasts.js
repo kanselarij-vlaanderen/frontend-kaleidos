@@ -1,7 +1,9 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 
-const { Model } = DS;
+const {
+  Model,
+} = DS;
 
 export default Model.extend({
   intl: service(),
@@ -22,21 +24,25 @@ export default Model.extend({
   async save() {
     const dirtyType = this.get('dirtyType');
     switch (dirtyType) {
-      case 'created':
-        if (this.checkIfCreatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
-          this.toaster.success(this.intl.t('successfully-created', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
-            this.intl.t('successfully-created-title'));
-        }
-        break;
-      case 'updated':
-        if (this.checkIfUpdatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
-          this.toaster.success(this.intl.t('successfully-saved-type', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
-            this.intl.t('successfully-created-title'));
-        }
-        break;
-      case 'deleted':
-        this.toaster.success(this.intl.t('successfully-deleted'), this.intl.t('successfully-created-title'));
-        break;
+    case 'created':
+      if (this.checkIfCreatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
+        this.toaster.success(this.intl.t('successfully-created', {
+          type: this.translateAndParseSuccesType(this.get('constructor.modelName')),
+        }),
+        this.intl.t('successfully-created-title'));
+      }
+      break;
+    case 'updated':
+      if (this.checkIfUpdatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
+        this.toaster.success(this.intl.t('successfully-saved-type', {
+          type: this.translateAndParseSuccesType(this.get('constructor.modelName')),
+        }),
+        this.intl.t('successfully-created-title'));
+      }
+      break;
+    case 'deleted':
+      this.toaster.success(this.intl.t('successfully-deleted'), this.intl.t('successfully-created-title'));
+      break;
     }
     return this._super(...arguments);
   },

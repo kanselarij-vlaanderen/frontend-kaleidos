@@ -76,7 +76,7 @@ module.exports = {
     "no-iterator": "error",
     "no-restricted-syntax": "error",
     "generator-star-spacing": "error", // Als we de no-iterator (generators) manueel disablen dan zorgt deze ervoor dat de syntax wel goed is, anders kan dit issues geven bij ES5 transpiling
-    "dot-notation": ["error", { "allowKeywords": false }], // voor keywords moet je de ["keyword"] notatie gebruiken
+    "dot-notation": ["error", { "allowKeywords": true }], // voor keywords moet je de ["keyword"] notatie gebruiken
     "no-restricted-properties": "error",
     "no-undef": ["error", {"typeof": true}],
     "one-var": ["error", "never"],

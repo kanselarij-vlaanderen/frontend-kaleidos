@@ -1,5 +1,5 @@
 /* global context, before, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import alert from '../../../selectors/alert.selectors';
 import agenda from '../../../selectors/agenda.selectors';

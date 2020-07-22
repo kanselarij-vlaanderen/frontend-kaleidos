@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
-import { computed, observer } from '@ember/object';
+import {
+  computed, observer
+} from '@ember/object';
 import { on } from '@ember/object/evented';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
@@ -12,10 +14,12 @@ export default Controller.extend({
   toaster: service(),
 
   options: A([
-    { key: 'flemish-government', route: 'agendas' },
+    {
+      key: 'flemish-government', route: 'agendas',
+    }
   ]),
 
-  selectedOption: computed('options', function () {
+  selectedOption: computed('options', function() {
     return this.options.get('firstObject');
   }),
 
@@ -50,18 +54,20 @@ export default Controller.extend({
       'router.currentRouteName',
       'currentSession.userRole',
       'session.isAuthenticated',
-      function () {
-        const { router } = this;
+      function() {
+        const {
+          router,
+        } = this;
         if (!router || !router.currentRouteName) {
           return;
         }
         const currentRouteName = router.get('currentRouteName');
         this.checkAccountlessUser(currentRouteName);
-      },
-    ),
+      }
+    )
   ),
 
-  showHeader: computed('currentSession.userRole', function () {
+  showHeader: computed('currentSession.userRole', function() {
     const role = this.get('currentSession.userRole');
     return role && role !== '' && role !== 'no-access';
   }),

@@ -7,7 +7,7 @@ export default Component.extend({
   classNameBindings: ['getClassNames'],
   tagName: 'p',
 
-  getClassNames: computed('messageType', function () {
+  getClassNames: computed('messageType', function() {
     const type = this.get('messageType');
     const defaultClass = 'vl-form';
     if (type) {

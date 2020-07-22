@@ -1,4 +1,6 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, {
+  attr, belongsTo
+} from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
 export default class PersonModel extends Model {

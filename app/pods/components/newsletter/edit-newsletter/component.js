@@ -6,14 +6,20 @@ import moment from 'moment';
 export default Component.extend({
   store: inject(),
 
-  date: computed('newsletter.publicationDate', function () {
-    const { selectedMeeting } = this;
-    return moment(selectedMeeting.get('newsletter.publicationDate')).utc().toDate();
+  date: computed('newsletter.publicationDate', function() {
+    const {
+      selectedMeeting,
+    } = this;
+    return moment(selectedMeeting.get('newsletter.publicationDate')).utc()
+      .toDate();
   }),
 
-  docDate: computed('newsletter.publicationDocDate', function () {
-    const { selectedMeeting } = this;
-    return moment(selectedMeeting.get('newsletter.publicationDocDate')).utc().toDate();
+  docDate: computed('newsletter.publicationDocDate', function() {
+    const {
+      selectedMeeting,
+    } = this;
+    return moment(selectedMeeting.get('newsletter.publicationDocDate')).utc()
+      .toDate();
   }),
 
   actions: {
@@ -25,7 +31,9 @@ export default Component.extend({
     },
 
     async close() {
-      const { selectedMeeting } = this;
+      const {
+        selectedMeeting,
+      } = this;
       const newsletter = await selectedMeeting.get('newsletter');
       newsletter.rollbackAttributes();
       this.close();
@@ -33,12 +41,14 @@ export default Component.extend({
 
     async selectDate(date) {
       const newsletter = await this.get('newsletter');
-      await newsletter.set('publicationDate', moment(date).utc().toDate());
+      await newsletter.set('publicationDate', moment(date).utc()
+        .toDate());
     },
 
     async selectDocDate(date) {
       const newsletter = await this.get('newsletter');
-      await newsletter.set('publicationDocDate', moment(date).utc().toDate());
+      await newsletter.set('publicationDocDate', moment(date).utc()
+        .toDate());
     },
   },
 });

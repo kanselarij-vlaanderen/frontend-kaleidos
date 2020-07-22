@@ -26,7 +26,9 @@ export default Component.extend({
     },
 
     close() {
-      const { selectedMeeting } = this;
+      const {
+        selectedMeeting,
+      } = this;
       selectedMeeting.rollbackAttributes();
       this.close();
     },

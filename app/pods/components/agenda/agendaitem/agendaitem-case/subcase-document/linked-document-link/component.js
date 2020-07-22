@@ -11,7 +11,7 @@ export default Component.extend({
   isShowingVersions: false,
   documentToDelete: null,
   document: null,
-  openClass: computed('isShowingVersions', function () {
+  openClass: computed('isShowingVersions', function() {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }
@@ -20,21 +20,21 @@ export default Component.extend({
 
   myDocumentVersions: computed.alias('item.linkedDocumentVersions'),
 
-  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function () {
+  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');
     return sortedVersions.lastObject;
   }),
 
-  lastDocumentVersionName: computed('lastDocumentVersion.name', function () {
+  lastDocumentVersionName: computed('lastDocumentVersion.name', function() {
     return this.get('lastDocumentVersion.name');
   }),
 
   // TODO: DUPLICATE CODE IN agenda/agendaitem/agendaitem-case/subcase-document/document-link/component.js
   // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
   // TODO: DUPLICATE CODE IN edit-document-version/component.js
-  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function () {
+  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function() {
     return DS.PromiseArray.create({
-      promise: (async () => {
+      promise: (async() => {
         const itemVersionIds = {};
         const versions = await this.get('myDocumentVersions');
         if (versions) {
@@ -52,7 +52,7 @@ export default Component.extend({
     });
   }),
 
-  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function () {
+  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function() {
     const reversed = [];
     this.get('mySortedDocumentVersions').map((item) => {
       reversed.push(item);

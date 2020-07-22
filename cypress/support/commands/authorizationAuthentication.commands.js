@@ -1,5 +1,5 @@
 /* global cy, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 /**
  * @description Bypasses the mock-login and inserts a localstorage item
@@ -18,7 +18,9 @@ function login(name, retries = 0) {
       method: 'POST',
       url: '/mock/sessions',
       body: loginUsers[name],
-      headers: { 'Content-Type': 'application/vnd.api+json' },
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
     }).then((resp) => {
       window.localStorage.setItem(EMBER_SIMPLE_AUTH_LS_KEY, JSON.stringify({
         authenticated: {
@@ -30,16 +32,17 @@ function login(name, retries = 0) {
       }));
     });
   });
-  cy.visit('').wait('@getCurrentSession').then((xhr) => {
-    if (xhr.status === 400) {
-      if (retries < 5) {
-        cy.log('login failed, trying again');
-        cy.login(name, retries + 1);
-      } else {
-        cy.log('login failed after 5 attempts');
+  cy.visit('').wait('@getCurrentSession')
+    .then((xhr) => {
+      if (xhr.status === 400) {
+        if (retries < 5) {
+          cy.log('login failed, trying again');
+          cy.login(name, retries + 1);
+        } else {
+          cy.log('login failed after 5 attempts');
+        }
       }
-    }
-  });
+    });
   cy.log('/login');
 }
 
@@ -72,7 +75,9 @@ function loginFlow(name) {
   cy.server();
   cy.route('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login');
-  cy.get('.grid', { timeout: 12000 }).within(() => {
+  cy.get('.grid', {
+    timeout: 12000,
+  }).within(() => {
     cy.contains(name).click()
       .wait('@mockLogin');
   });
@@ -90,7 +95,11 @@ function logoutFlow() {
   cy.server();
   cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('');
-  cy.contains('Afmelden', { timeout: 12000 }).click({ force: true });
+  cy.contains('Afmelden', {
+    timeout: 12000,
+  }).click({
+    force: true,
+  });
   cy.wait('@mockLogout');
   cy.log('/logoutFlow');
 }

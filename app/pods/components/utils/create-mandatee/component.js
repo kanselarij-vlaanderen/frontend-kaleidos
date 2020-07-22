@@ -30,7 +30,9 @@ export default Component.extend({
 
     async createMandatee() {
       this.set('isLoading', true);
-      const { nickName, title } = this;
+      const {
+        nickName, title,
+      } = this;
       const person = await this.get('selectedPerson');
       const newMandatee = this.store.createRecord('mandatee', {
         title,
@@ -40,7 +42,8 @@ export default Component.extend({
         start: moment(this.get('startDate'))
           .utc()
           .toDate(),
-        end: moment().add(5, 'years').toDate(),
+        end: moment().add(5, 'years')
+          .toDate(),
       });
       newMandatee.save().then((savedNewMandatee) => {
         this.model.addObject(savedNewMandatee);

@@ -16,7 +16,7 @@ const FOCUSABLE_ELEMENTS = [
   '[role="textarea"]:not([disabled]):not([aria-hidden])',
   '[role="button"]:not([disabled]):not([aria-hidden])',
   '[contenteditable]',
-  '[tabindex]:not([tabindex^="-"])',
+  '[tabindex]:not([tabindex^="-"])'
 ];
 
 export default Component.extend({
@@ -31,7 +31,8 @@ export default Component.extend({
     if (focusableNodes.length > 1) {
       focusableNodes[1].focus();
     } else {
-      this.get('element').querySelector('[role="dialog"]').focus();
+      this.get('element').querySelector('[role="dialog"]')
+        .focus();
     }
   },
 
@@ -44,16 +45,20 @@ export default Component.extend({
     }
   },
 
-  backdropClass: computed('isOverlay', function () {
-    const { isOverlay } = this;
+  backdropClass: computed('isOverlay', function() {
+    const {
+      isOverlay,
+    } = this;
     if (isOverlay) {
       return 'vl-modal__backdrop';
     }
     return null;
   }),
 
-  sizeClass: computed('large', 'isDocumentViewer', function () {
-    const { large, isDocumentViewer } = this;
+  sizeClass: computed('large', 'isDocumentViewer', function() {
+    const {
+      large, isDocumentViewer,
+    } = this;
     if (large) {
       return 'vl-modal-dialog--large';
     }

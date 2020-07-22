@@ -1,9 +1,13 @@
 import Component from '@ember/component';
-import { computed, set } from '@ember/object';
+import {
+  computed, set
+} from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject } from '@ember/service';
 import { cached } from 'fe-redpencil/decorators/cached';
-import { saveChanges as saveSubcaseDescription, cancelEdit } from 'fe-redpencil/utils/agenda-item-utils';
+import {
+  saveChanges as saveSubcaseDescription, cancelEdit
+} from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Component.extend({
   store: inject(),
@@ -15,11 +19,11 @@ export default Component.extend({
   type: cached('subcase.type'), // TODO in class syntax use as a decorator instead
   showAsRemark: cached('subcase.showAsRemark'), // TODO in class syntax use as a decorator instead
 
-  remarkType: computed('subcase.remarkType', function () {
+  remarkType: computed('subcase.remarkType', function() {
     return this.subcase.get('remarkType');
   }),
 
-  caseTypes: computed('store', async function () {
+  caseTypes: computed('store', async function() {
     return await this.store.query('case-type', {
       sort: '-label',
       filter: {
@@ -28,20 +32,20 @@ export default Component.extend({
     });
   }),
 
-  latestMeetingId: computed('subcase.latestMeeting', function () {
+  latestMeetingId: computed('subcase.latestMeeting', function() {
     return this.subcase.get('latestMeeting').then((meeting) => meeting.id);
   }),
 
-  latestAgendaId: computed('subcase.latestAgenda', function () {
+  latestAgendaId: computed('subcase.latestAgenda', function() {
     return this.subcase.get('latestAgenda').then((agenda) => agenda.id);
   }),
 
-  latestAgendaItemId: computed('subcase.latestAgendaItem', function () {
+  latestAgendaItemId: computed('subcase.latestAgendaItem', function() {
     return this.subcase.get('latestAgendaItem').then((item) => item.id);
   }),
 
-  isRetracted: computed('subcase.latestAgendaItem', function () {
-    return this.subcase.get('latestAgendaItem').then(item => item.retracted);
+  isRetracted: computed('subcase.latestAgendaItem', function() {
+    return this.subcase.get('latestAgendaItem').then((item) => item.retracted);
   }),
 
   actions: {

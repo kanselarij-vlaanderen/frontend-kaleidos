@@ -6,10 +6,18 @@ import { warn } from '@ember/debug';
 
 export default class AgendaItemsSearchController extends Controller {
   queryParams = {
-    types: { type: 'array' },
-    page: { type: 'number' },
-    size: { type: 'number' },
-    sort: { type: 'string' },
+    types: {
+      type: 'array',
+    },
+    page: {
+      type: 'number',
+    },
+    size: {
+      type: 'number',
+    },
+    sort: {
+      type: 'string',
+    },
   };
 
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
@@ -84,7 +92,9 @@ export default class AgendaItemsSearchController extends Controller {
       this.transitionToRoute('agenda.agendaitems.agendaitem',
         searchEntry.meetingId, searchEntry.agendaId, searchEntry.id);
     } else {
-      warn(`Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, { id: 'agendaitem.no-meeting' });
+      warn(`Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, {
+        id: 'agendaitem.no-meeting',
+      });
     }
   }
 }

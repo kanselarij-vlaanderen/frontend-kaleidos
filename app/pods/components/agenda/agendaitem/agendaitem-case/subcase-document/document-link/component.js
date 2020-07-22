@@ -2,7 +2,9 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
-import { destroyApprovalsOfAgendaitem, setNotYetFormallyOk } from 'fe-redpencil/utils/agenda-item-utils';
+import {
+  destroyApprovalsOfAgendaitem, setNotYetFormallyOk
+} from 'fe-redpencil/utils/agenda-item-utils';
 import config from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 import { deprecatingAlias } from '@ember/object/computed';
@@ -32,7 +34,7 @@ export default Component.extend({
   defaultAccessLevel: null, // when creating a new document
   myDocumentVersions: computed.alias('item.documentVersions'),
 
-  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function () {
+  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');
     return sortedVersions.lastObject;
   }),
@@ -40,9 +42,9 @@ export default Component.extend({
   // TODO: DUPLICATE CODE IN agenda/agendaitem/agendaitem-case/subcase-document/document-link/component.js
   // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
   // TODO: DUPLICATE CODE IN edit-document-version/component.js
-  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function () {
+  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function() {
     return DS.PromiseArray.create({
-      promise: (async () => {
+      promise: (async() => {
         const itemVersionIds = {};
         const versions = await this.get('myDocumentVersions');
         if (versions) {
@@ -59,7 +61,7 @@ export default Component.extend({
     });
   }),
 
-  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function () {
+  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function() {
     const reversed = [];
     this.get('mySortedDocumentVersions').map((item) => {
       reversed.push(item);
@@ -68,11 +70,11 @@ export default Component.extend({
     return reversed;
   }),
 
-  numberOfDocumentVersions: computed('mySortedDocumentVersions.@each', function () {
+  numberOfDocumentVersions: computed('mySortedDocumentVersions.@each', function() {
     return this.get('mySortedDocumentVersions').length;
   }),
 
-  aboutToDelete: computed('document.aboutToDelete', function () {
+  aboutToDelete: computed('document.aboutToDelete', function() {
     if (this.document) {
       if (this.document.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
@@ -82,7 +84,7 @@ export default Component.extend({
     return null;
   }),
 
-  openClass: computed('isShowingVersions', function () {
+  openClass: computed('isShowingVersions', function() {
     if (this.get('isShowingVersions')) {
       return 'js-vl-accordion--open';
     }
@@ -122,10 +124,10 @@ export default Component.extend({
   createNewDocument(uploadedFile, previousDocument, defaults) {
     const propsFromPrevious = [
       'accessLevel',
-      'confidential',
+      'confidential'
     ];
     const newDocument = this.store.createRecord('document-version', {});
-    propsFromPrevious.forEach(async (key) => {
+    propsFromPrevious.forEach(async(key) => {
       newDocument.set(key, previousDocument
         ? await previousDocument.getWithDefault(key, defaults[key])
         : defaults[key]);
@@ -137,17 +139,20 @@ export default Component.extend({
   },
 
   async deleteDocumentContainerWithUndo() {
-    const { item } = this;
+    const {
+      item,
+    } = this;
     const documents = item.get('documentVersions');
     const itemType = item.get('constructor.modelName');
     if (itemType === 'document') {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
     } else {
-      await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete).then(() => {
-        if (!item.aboutToDelete && documents) {
-          item.hasMany('documentVersions').reload();
-        }
-      });
+      await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete)
+        .then(() => {
+          if (!item.aboutToDelete && documents) {
+            item.hasMany('documentVersions').reload();
+          }
+        });
     }
   },
 
@@ -162,7 +167,7 @@ export default Component.extend({
     if (modelDocumentVersions) {
       model.set(
         propertyName,
-        A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray())),
+        A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray()))
       );
     } else {
       model.set(propertyName, documents);
@@ -172,13 +177,13 @@ export default Component.extend({
 
   async addDocumentToAgendaitems(documents, agendaitems) {
     return Promise.all(
-      agendaitems.map(async (agendaitem) => {
+      agendaitems.map(async(agendaitem) => {
         await agendaitem.hasMany('documentVersions').reload();
         await this.attachDocumentsToModel(documents, agendaitem);
         setNotYetFormallyOk(agendaitem);
         await destroyApprovalsOfAgendaitem(agendaitem);
         return await agendaitem.save();
-      }),
+      })
     );
   },
   async addDocumentToSubcase(documents, subcase) {
@@ -205,7 +210,8 @@ export default Component.extend({
   actions: {
 
     async uploadedFile(uploadedFile) {
-      const creationDate = moment().utc().toDate();
+      const creationDate = moment().utc()
+        .toDate();
       if (this.documentContainer) {
         await this.documentContainer.reload();
         await this.documentContainer.hasMany('documents').reload();
@@ -336,7 +342,9 @@ export default Component.extend({
         type: 'revert-action',
         title: this.intl.t('warning-title'),
         message: this.intl.t('document-being-deleted'),
-        options: { timeOut: 15000 },
+        options: {
+          timeOut: 15000,
+        },
       };
       verificationToast.options.onUndo = () => {
         this.fileService.reverseDelete(this.documentContainerToDelete.get('id'));

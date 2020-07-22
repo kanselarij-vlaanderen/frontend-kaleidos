@@ -6,5 +6,5 @@ function trimText(text) {
 }
 
 export {
-  trimText,
+  trimText
 };

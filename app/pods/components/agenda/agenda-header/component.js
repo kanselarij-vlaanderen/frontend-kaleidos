@@ -1,15 +1,21 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { alias, filter } from '@ember/object/computed';
-import { computed, set } from '@ember/object';
-import { warn, debug } from '@ember/debug';
+import {
+  alias, filter
+} from '@ember/object/computed';
+import {
+  computed, set
+} from '@ember/object';
+import {
+  warn, debug
+} from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
 
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
-  fileDownloadUrlFromJob,
+  fileDownloadUrlFromJob
 } from 'fe-redpencil/utils/zip-agenda-files';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
@@ -41,7 +47,7 @@ export default Component.extend(FileSaverMixin, {
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
-  isLockable: computed('agendas.@each', async function () {
+  isLockable: computed('agendas.@each', async function() {
     const agendas = await this.get('agendas');
     if (agendas && agendas.length > 1) {
       return true;
@@ -53,17 +59,17 @@ export default Component.extend(FileSaverMixin, {
     return true;
   }),
 
-  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function () {
+  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function() {
     return await this.get('currentSession.sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
   designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', (agenda) => agenda.get('isDesignAgenda')),
 
-  shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function () {
+  shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function() {
     return this.isDeletingAgenda || this.isLockingAgenda;
   }),
 
-  loaderText: computed('isDeletingAgenda', 'isLockingAgenda', function () {
+  loaderText: computed('isDeletingAgenda', 'isLockingAgenda', function() {
     let text = '';
     if (this.isDeletingAgenda) {
       text = this.intl.t('agenda-delete-message');
@@ -74,7 +80,7 @@ export default Component.extend(FileSaverMixin, {
     return `${text} ${this.intl.t('please-be-patient')}`;
   }),
 
-  loaderTitle: computed('isDeletingAgenda', 'isLockingAgenda', function () {
+  loaderTitle: computed('isDeletingAgenda', 'isLockingAgenda', function() {
     if (this.isDeletingAgenda) {
       return this.intl.t('agenda-delete');
     }
@@ -127,7 +133,7 @@ export default Component.extend(FileSaverMixin, {
   },
 
   reloadAgendaitemsOfSubcases(agendaItems) {
-    return all(agendaItems.map(async (agendaitem) => {
+    return all(agendaItems.map(async(agendaitem) => {
       const agendaActivity = await agendaitem.get('agendaActivity');
       if (agendaActivity) {
         await agendaActivity.hasMany('agendaitems').reload();
@@ -143,7 +149,9 @@ export default Component.extend(FileSaverMixin, {
       if (!agendaitem) {
         return null;
       }
-      return agendaitem.destroyRecord().catch(() => warn('Something went wrong while deleting the agendaitem.', { id: 'agenda-item-reloading' }));
+      return agendaitem.destroyRecord()['catch'](() => warn('Something went wrong while deleting the agendaitem.', {
+        id: 'agenda-item-reloading',
+      }));
     }));
   },
 
@@ -153,22 +161,30 @@ export default Component.extend(FileSaverMixin, {
     },
 
     navigateToNotes() {
-      const { currentSession, currentAgenda } = this;
+      const {
+        currentSession, currentAgenda,
+      } = this;
       this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToPressAgenda() {
-      const { currentSession, currentAgenda } = this;
+      const {
+        currentSession, currentAgenda,
+      } = this;
       this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToNewsletter() {
-      const { currentSession, currentAgenda } = this;
+      const {
+        currentSession, currentAgenda,
+      } = this;
       this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToDecisions() {
-      const { currentSession, currentAgenda } = this;
+      const {
+        currentSession, currentAgenda,
+      } = this;
       this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
     },
 
@@ -253,7 +269,9 @@ export default Component.extend(FileSaverMixin, {
       const fileDownloadToast = {
         title: this.intl.t('file-ready'),
         type: 'download-file',
-        options: { timeOut: 10 * 1000 },
+        options: {
+          timeOut: 10 * 1000,
+        },
       };
 
       const namePromise = constructArchiveName(this.currentAgenda);
@@ -263,9 +281,11 @@ export default Component.extend(FileSaverMixin, {
       if (!job.hasEnded) {
         debug('Archive in creation ...');
         const inCreationToast = this.toaster.loading(this.intl.t('archive-in-creation-message'),
-          this.intl.t('archive-in-creation-title'), { timeOut: 3 * 60 * 1000 });
+          this.intl.t('archive-in-creation-title'), {
+            timeOut: 3 * 60 * 1000,
+          });
         this.jobMonitor.register(job);
-        job.on('didEnd', this, async function (status) {
+        job.on('didEnd', this, async function(status) {
           if (this.toaster.toasts.includes(inCreationToast)) {
             this.toaster.toasts.removeObject(inCreationToast);
           }
@@ -317,7 +337,8 @@ export default Component.extend(FileSaverMixin, {
     },
     confirmReleaseDecisions() {
       this.set('releasingDecisions', false);
-      this.currentSession.set('releasedDecisions', moment().utc().toDate());
+      this.currentSession.set('releasedDecisions', moment().utc()
+        .toDate());
       this.currentSession.save();
     },
     releaseDocuments() {
@@ -325,7 +346,8 @@ export default Component.extend(FileSaverMixin, {
     },
     confirmReleaseDocuments() {
       this.set('releasingDocuments', false);
-      this.currentSession.set('releasedDocuments', moment().utc().toDate());
+      this.currentSession.set('releasedDocuments', moment().utc()
+        .toDate());
       this.currentSession.save();
     },
     toggleEditingSession() {
@@ -367,12 +389,12 @@ export default Component.extend(FileSaverMixin, {
       'modified',
       moment()
         .utc()
-        .toDate(),
+        .toDate()
     );
     agendaToLock.save().then((agendaToApprove) => {
       this.get('agendaService')
         .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
-        .then(async (newAgenda) => {
+        .then(async(newAgenda) => {
           const agendaItems = await agendaToLock.get('agendaitems');
           const newNotYetOKItems = agendaItems.filter((agendaItem) => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
           await this.reloadAgendaitemsOfSubcases(agendaItems);

@@ -9,15 +9,15 @@ export default Component.extend({
   title: null,
   routeModelPrefix: null,
 
-  shouldShowPrintButton: computed('routing.currentRouteName', function () {
+  shouldShowPrintButton: computed('routing.currentRouteName', function() {
     return this.routing.get('currentRouteName').includes(`${this.routeModelPrefix}.overview`);
   }),
 
-  routeModelAgendaitems: computed('routeModelPrefix', function () {
+  routeModelAgendaitems: computed('routeModelPrefix', function() {
     return `${this.routeModelPrefix}.agendaitems`;
   }),
 
-  routeModelOverview: computed('routeModelPrefix', function () {
+  routeModelOverview: computed('routeModelPrefix', function() {
     return `${this.routeModelPrefix}.overview`;
   }),
 

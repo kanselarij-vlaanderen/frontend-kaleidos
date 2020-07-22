@@ -1,5 +1,5 @@
 /* global context, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import document from '../../selectors/document.selectors';
 
@@ -81,30 +81,41 @@ context('Tests for KAS-1076', () => {
       },
       {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-22', fileType: 'Nota',
-      },
+      }
     ];
 
     cy.addDocumentsToAgendaItem(SubcaseTitleShort, files, false);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card',{ timeout: 60000 }).as('docCards').should('have.length', 22);
+      cy.get('.vlc-document-card', {
+        timeout: 60000,
+      }).as('docCards')
+        .should('have.length', 22);
     });
 
     cy.openCase(caseTitleSingle);
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card',{ timeout: 60000 }).as('docCards').should('have.length', 22);
+      cy.get('.vlc-document-card', {
+        timeout: 60000,
+      }).as('docCards')
+        .should('have.length', 22);
     });
 
     const linkedDocumentsNames = files.slice(9, 14).map((file) => file.newFileName);
     const linkedDocumentTypes = files.slice(9, 14).map((file) => file.fileType);
 
     cy.addLinkedDocumentToAgendaItem(linkedDocumentsNames);
-    cy.get(document.linkeddocumentTypeLabel).eq(0).contains(linkedDocumentTypes[0]);
-    cy.get(document.linkeddocumentTypeLabel).eq(1).contains(linkedDocumentTypes[1]);
-    cy.get(document.linkeddocumentTypeLabel).eq(2).contains(linkedDocumentTypes[2]);
-    cy.get(document.linkeddocumentTypeLabel).eq(3).contains(linkedDocumentTypes[3]);
-    cy.get(document.linkeddocumentTypeLabel).eq(4).contains(linkedDocumentTypes[4]);
+    cy.get(document.linkeddocumentTypeLabel).eq(0)
+      .contains(linkedDocumentTypes[0]);
+    cy.get(document.linkeddocumentTypeLabel).eq(1)
+      .contains(linkedDocumentTypes[1]);
+    cy.get(document.linkeddocumentTypeLabel).eq(2)
+      .contains(linkedDocumentTypes[2]);
+    cy.get(document.linkeddocumentTypeLabel).eq(3)
+      .contains(linkedDocumentTypes[3]);
+    cy.get(document.linkeddocumentTypeLabel).eq(4)
+      .contains(linkedDocumentTypes[4]);
   });
 
   it('Adding more then 20 document-versions to subcase should show all', () => {
@@ -177,11 +188,12 @@ context('Tests for KAS-1076', () => {
         },
         {
           folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-22', fileType: 'Nota',
-        },
-      ],
+        }
+      ]
     );
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
+      cy.get('.vlc-document-card').as('docCards')
+        .should('have.length', 22);
     });
     cy.get('.vlc-backlink').click();
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
@@ -194,7 +206,8 @@ context('Tests for KAS-1076', () => {
     cy.clickReverseTab('Documenten');
     cy.get('[data-test-vl-loader]');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 22);
+      cy.get('.vlc-document-card').as('docCards')
+        .should('have.length', 22);
     });
   });
 
@@ -210,13 +223,15 @@ context('Tests for KAS-1076', () => {
 
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
-      });
+      cy.get('.vlc-document-card').eq(0)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+        });
     });
 
     // Verify formally ok is reset
-    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
+    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
+      .should('have.length', 1);
 
     // Verify subcase is updated
     cy.openCase(caseTitle);
@@ -224,9 +239,10 @@ context('Tests for KAS-1076', () => {
     cy.clickReverseTab('Documenten');
     // cy.wait(1000);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
-      });
+      cy.get('.vlc-document-card').eq(0)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+        });
     });
   });
 
@@ -237,21 +253,26 @@ context('Tests for KAS-1076', () => {
     };
 
     cy.visit('/dossiers/5EBA95CA751CF70008000018/deeldossiers/5EBA95E1751CF7000800001A/documenten');
-    cy.addNewDocumentVersionToSubcase('test pdf', { folder: 'files', fileName: 'test', fileExtension: 'pdf' });
+    cy.addNewDocumentVersionToSubcase('test pdf', {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
-      });
+      cy.get('.vlc-document-card').eq(0)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+        });
     });
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.agendaItemExists(SubcaseTitleShort).click();
     cy.openAgendaItemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
-      });
+      cy.get('.vlc-document-card').eq(0)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+        });
     });
-    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK').should('have.length', 1);
+    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
+      .should('have.length', 1);
   });
 });

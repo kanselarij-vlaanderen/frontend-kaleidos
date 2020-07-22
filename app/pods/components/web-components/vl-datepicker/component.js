@@ -11,12 +11,14 @@ export default Component.extend({
   defaultHour: null,
   defaultMinute: null,
 
-  datesToEnable: computed('dateObjectsToEnable', function () {
-    const { dateObjectsToEnable, datePropertyToUse } = this;
+  datesToEnable: computed('dateObjectsToEnable', function() {
+    const {
+      dateObjectsToEnable, datePropertyToUse,
+    } = this;
     return dateObjectsToEnable.map((object) => this.formatter.formatDate(object.get(datePropertyToUse)));
   }),
 
-  selectedDate: computed('date', function () {
+  selectedDate: computed('date', function() {
     const date = this.get('date');
     if (date) {
       return this.formatter.formatDate(date.get('firstObject'));

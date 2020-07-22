@@ -1,6 +1,10 @@
 import Component from '@ember/component';
-import { inject, inject as service } from '@ember/service';
-import { alias, deprecatingAlias } from '@ember/object/computed';
+import {
+  inject, inject as service
+} from '@ember/service';
+import {
+  alias, deprecatingAlias
+} from '@ember/object/computed';
 import { A } from '@ember/array';
 
 import moment from 'moment';
@@ -34,7 +38,9 @@ export default Component.extend(
     init() {
       this._super(...arguments);
       this.set('model', A([]));
-      this.store.query('document-type', { sort: 'priority', 'page[size]': 50 }).then((types) => {
+      this.store.query('document-type', {
+        sort: 'priority', 'page[size]': 50,
+      }).then((types) => {
         this.set('documentTypes', types);
       });
     },
@@ -54,10 +60,10 @@ export default Component.extend(
     createNewDocument(uploadedFile, previousDocument, defaults) {
       const propsFromPrevious = [
         'accessLevel',
-        'confidential',
+        'confidential'
       ];
       const newDocument = this.store.createRecord('document-version', {});
-      propsFromPrevious.forEach(async (key) => {
+      propsFromPrevious.forEach(async(key) => {
         newDocument.set(key, previousDocument
           ? await previousDocument.getWithDefault(key, defaults[key])
           : defaults[key]);
@@ -70,13 +76,13 @@ export default Component.extend(
 
     async deleteAll() {
       await Promise.all(
-        this.get('documentsInCreation').map(async (doc) => {
+        this.get('documentsInCreation').map(async(doc) => {
           const file = await doc.get('file');
           file.destroyRecord();
           const container = doc.get('documentContainer.content');
           container.deleteRecord();
           doc.deleteRecord();
-        }),
+        })
       );
       this.get('documentsInCreation').clear();
       this.set('isAddingNewDocument', false);
@@ -93,7 +99,7 @@ export default Component.extend(
       if (modelDocumentVersions) {
         model.set(
           propertyName,
-          A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray())),
+          A(Array.prototype.concat(modelDocumentVersions.toArray(), documents.toArray()))
         );
       } else {
         model.set(propertyName, documents);
@@ -103,10 +109,10 @@ export default Component.extend(
 
     async addDocumentsToAgendaitems(documents, agendaitems) {
       return Promise.all(
-        agendaitems.map(async (agendaitem) => {
+        agendaitems.map(async(agendaitem) => {
           await this.attachDocumentsToModel(documents, agendaitem);
           return await agendaitem.save();
-        }),
+        })
       );
     },
 
@@ -117,10 +123,10 @@ export default Component.extend(
 
     async linkDocumentsToAgendaitems(documents, agendaitems) {
       return Promise.all(
-        agendaitems.map(async (agendaitem) => {
+        agendaitems.map(async(agendaitem) => {
           await this.attachDocumentsToModel(documents, agendaitem, 'linkedDocumentVersions');
           return await agendaitem.save();
-        }),
+        })
       );
     },
 
@@ -131,7 +137,8 @@ export default Component.extend(
 
     actions: {
       async uploadedFile(uploadedFile) {
-        const creationDate = moment().utc().toDate();
+        const creationDate = moment().utc()
+          .toDate();
         if (this.documentContainer) {
           await this.documentContainer.reload();
           await this.documentContainer.hasMany('documents').reload();
@@ -205,13 +212,13 @@ export default Component.extend(
         const docs = this.get('documentsInCreation');
 
         const documentContainers = await Promise.all(
-          docs.map(async (doc) => {
+          docs.map(async(doc) => {
             doc = await doc.save();
             const container = doc.get('documentContainer.content'); // TODO: cannot use .content
             container.set('documents', A([doc]));
             await container.save();
             return container;
-          }),
+          })
         );
 
         this.get('documentsInCreation').clear();
@@ -222,12 +229,12 @@ export default Component.extend(
         try {
           const documentsToAttach = [];
           await Promise.all(
-            documentContainers.map(async (container) => {
+            documentContainers.map(async(container) => {
               const documents = await container.get('documentVersions');
               documents.map((document) => {
                 documentsToAttach.push(document);
               });
-            }),
+            })
           );
           if (documentsToAttach) {
             if (agendaActivity) {
@@ -236,7 +243,7 @@ export default Component.extend(
             } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
               await this.addDocumentsToAgendaitems(
                 documentsToAttach,
-                agendaitemsOnDesignAgenda,
+                agendaitemsOnDesignAgenda
               );
             }
             await this.attachDocumentsToModel(documentsToAttach, item);
@@ -271,13 +278,13 @@ export default Component.extend(
         try {
           const documentsToAttach = [];
           await Promise.all(
-            documents.map(async (document) => {
+            documents.map(async(document) => {
               const documentContainer = await document.get('documentContainer');
               const documentVersionsFromContainer = await documentContainer.get('documentVersions');
               documentVersionsFromContainer.map((doc) => {
                 documentsToAttach.push(doc);
               });
-            }),
+            })
           );
           if (agendaActivity) {
             const subcase = await agendaActivity.get('subcase');
@@ -293,5 +300,5 @@ export default Component.extend(
         }
       },
     },
-  },
+  }
 );

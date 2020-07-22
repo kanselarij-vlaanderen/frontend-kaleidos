@@ -1,6 +1,6 @@
 import EmberObject from '@ember/object';
 
-export const refreshData = async (mandatee, mandateeRows) => {
+export const refreshData = async(mandatee, mandateeRows) => {
   const iseCodes = (await mandatee.get('iseCodes')).filter((item) => item);
   const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((item) => item);
   const domains = await Promise.all(fields.map((field) => field.get('domain')));
@@ -18,12 +18,12 @@ export const refreshData = async (mandatee, mandateeRows) => {
   return mandateeRow;
 };
 
-export const selectDomain = async (rowToShowFields, domain, value) => {
+export const selectDomain = async(rowToShowFields, domain, value) => {
   const fields = await rowToShowFields.filter((field) => field.get('domain.id') === domain.get('id'));
   fields.map((field) => field.set('selected', value));
 };
 
-export const selectField = async (rowToShowDomains, domain, value) => {
+export const selectField = async(rowToShowDomains, domain, value) => {
   const foundDomain = rowToShowDomains.find((item) => item.get('id') === domain.get('id'));
   const fields = await domain.get('governmentFields');
   const selectedFields = fields.filter((field) => field.selected);
@@ -35,14 +35,14 @@ export const selectField = async (rowToShowDomains, domain, value) => {
   }
 };
 
-export const getSelectedIseCodesWithFields = async (allIseCodesInApp, selectedFieldsByUser) => (await Promise.all(allIseCodesInApp.map((iseCode) => {
+export const getSelectedIseCodesWithFields = async(allIseCodesInApp, selectedFieldsByUser) => (await Promise.all(allIseCodesInApp.map((iseCode) => {
   const foundField = (selectedFieldsByUser.find((field) => field.get('id') === iseCode.get('field.id')));
   if (foundField) {
     return iseCode;
   }
 }))).filter((item) => item);
 
-export const prepareMandateeRowAfterEdit = async (selectedMandatee, rowToShow) => {
+export const prepareMandateeRowAfterEdit = async(selectedMandatee, rowToShow) => {
   const fields = await rowToShow.get('fields');
   const domains = await rowToShow.get('domains');
 

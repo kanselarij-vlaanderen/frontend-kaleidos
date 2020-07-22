@@ -8,7 +8,8 @@ export default class VRDocumentName {
       docType: '((DOC)|(DEC)|(MED))',
       caseNr: '(\\d{4})',
       index: '(\\d{1,3})',
-      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((s) => s.toUpperCase()).join(')|(')}))`.replace('()|', ''), // Hack to get out the value for version '0'
+      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((s) => s.toUpperCase())
+        .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for version '0'
     });
   }
 
@@ -82,7 +83,7 @@ export default class VRDocumentName {
   }
 }
 
-export const compareFunction = function (a, b) {
+export const compareFunction = function(a, b) {
   try {
     const metaA = a.parseMeta();
     try { // Both names parse

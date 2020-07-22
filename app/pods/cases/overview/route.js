@@ -26,7 +26,9 @@ export default class OverviewCaseRoute extends Route.extend(DataTableRouteMixin)
 
   mergeQueryOptions(params) {
     if (!params.showArchived) {
-      return { 'filter[is-archived]': false };
+      return {
+        'filter[is-archived]': false,
+      };
     }
   }
 

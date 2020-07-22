@@ -1,5 +1,5 @@
 /* global cy, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import modal from '../../selectors/modal.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
@@ -41,7 +41,8 @@ function openActionModal() {
   cy.log('openActionModal');
   const BE_VISIBLE = 'be.visible';
 
-  cy.get(actionModal.showActionOptions).should('be.visible').click();
+  cy.get(actionModal.showActionOptions).should('be.visible')
+    .click();
   cy.get(actionModal.navigatetosubcases).should(BE_VISIBLE);
   cy.get(actionModal.navigatetodecisions).should(BE_VISIBLE);
   cy.get(actionModal.navigatetonewsletter).should(BE_VISIBLE);

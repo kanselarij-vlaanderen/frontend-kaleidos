@@ -2,7 +2,9 @@ import { A } from '@ember/array';
 import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
 import DS from 'ember-data';
 
-const { PromiseObject } = DS;
+const {
+  PromiseObject,
+} = DS;
 
 export const sortDocuments = (documentVersions, containers) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where

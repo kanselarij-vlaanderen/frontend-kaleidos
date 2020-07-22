@@ -11,9 +11,13 @@ export default Component.extend({
 
   actions: {
     async deleteAccount() {
-      if (this.isDeleting) return;
+      if (this.isDeleting) {
+        return;
+      }
       this.isDeleting = true;
-      const foundUser = await this.store.findRecord('user', await this.get('user.id'), { reload: true });
+      const foundUser = await this.store.findRecord('user', await this.get('user.id'), {
+        reload: true,
+      });
       const account = await foundUser.get('account');
       if (account) {
         await account.destroyRecord();

@@ -17,8 +17,12 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   },
 
   mergeQueryOptions(params) {
-    const { filter } = params;
-    const { size } = params;
+    const {
+      filter,
+    } = params;
+    const {
+      size,
+    } = params;
 
     const options = {
       include: 'group,organization',

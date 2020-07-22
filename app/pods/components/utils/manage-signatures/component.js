@@ -8,9 +8,13 @@ export default Component.extend({
   isAdding: false,
   isEditing: false,
 
-  defaultSignature: computed('store', function () {
+  defaultSignature: computed('store', function() {
     return DS.PromiseObject.create({
-      promise: this.store.query('signature', { filter: { 'is-active': true } }).then((signatures) => signatures.objectAt(0)),
+      promise: this.store.query('signature', {
+        filter: {
+          'is-active': true,
+        },
+      }).then((signatures) => signatures.objectAt(0)),
     });
   }),
 

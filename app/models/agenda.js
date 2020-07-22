@@ -4,7 +4,10 @@ import CONFIG from 'fe-redpencil/utils/config';
 import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 
 const {
-  Model, attr, belongsTo, hasMany,
+  Model,
+  attr,
+  belongsTo,
+  hasMany,
 } = DS;
 
 export default Model.extend(LoadableModel, {
@@ -13,16 +16,21 @@ export default Model.extend(LoadableModel, {
   serialnumber: attr('string'),
   issued: attr('datetime'),
   createdFor: belongsTo('meeting'),
-  status: belongsTo('agendastatus', { inverse: null }),
-  agendaitems: hasMany('agendaitem', { inverse: null, serialize: false }),
+  status: belongsTo('agendastatus', {
+    inverse: null,
+  }),
+  agendaitems: hasMany('agendaitem', {
+    inverse: null,
+    serialize: false,
+  }),
   created: attr('date'),
   modified: attr('datetime'),
 
-  isDesignAgenda: computed('status.isDesignAgenda', function () {
+  isDesignAgenda: computed('status.isDesignAgenda', function() {
     return this.get('status.isDesignAgenda');
   }),
 
-  isClosed: computed('status.isClosed', function () {
+  isClosed: computed('status.isClosed', function() {
     return this.get('status.isClosed');
   }),
 
@@ -32,7 +40,7 @@ export default Model.extend(LoadableModel, {
     return this.get('isDesignAgenda');
   },
 
-  agendaName: computed('serialnumber', 'status', function () {
+  agendaName: computed('serialnumber', 'status', function() {
     const isDesignAgenda = this.get('status.isDesignAgenda');
     const agendaName = this.serialnumber || '';
     let prefix;
@@ -46,21 +54,21 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  isApprovable: computed('agendaitems.@each.formallyOk', function () {
+  isApprovable: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaItems = agendaitems.filter((agendaitem) => this.checkFormallyOkStatus(agendaitem));
       return approvedAgendaItems.get('length') === agendaitems.get('length');
     });
   }),
 
-  isPassable: computed('agendaitems.@each', function () {
+  isPassable: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaItems = agendaitems.filter((agendaitem) => this.checkPassable(agendaitem));
       return approvedAgendaItems.get('length') === agendaitems.get('length');
     });
   }),
 
-  lastAgendaitemPriority: computed('agendaitems.@each', function () {
+  lastAgendaitemPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const filteredAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
       if (filteredAgendaitems.length === 0) {
@@ -70,7 +78,7 @@ export default Model.extend(LoadableModel, {
     });
   }),
 
-  lastAnnouncementPriority: computed('agendaitems.@each', function () {
+  lastAnnouncementPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const announcements = agendaitems.filter((item) => item.showAsRemark);
       if (announcements.length === 0) {
@@ -91,7 +99,7 @@ export default Model.extend(LoadableModel, {
     );
   },
 
-  firstAgendaItem: computed('agendaitems.@each', function () {
+  firstAgendaItem: computed('agendaitems.@each', function() {
     return DS.PromiseObject.create({
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });

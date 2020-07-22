@@ -9,7 +9,7 @@ export default Component.extend({
 
   options: computed(() => CONFIG.kinds.map((item) => EmberObject.create(item))),
 
-  selectedkind: computed('options', 'kind', function () {
+  selectedkind: computed('options', 'kind', function() {
     return this.options.find((kind) => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');
   }),
 

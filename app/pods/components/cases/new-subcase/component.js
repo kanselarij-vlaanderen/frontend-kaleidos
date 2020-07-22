@@ -12,13 +12,15 @@ export default Component.extend({
   confidentiality: null,
   title: null,
   shortTitle: null,
-  filter: Object.freeze({ type: 'subcase-name' }),
+  filter: Object.freeze({
+    type: 'subcase-name',
+  }),
 
-  confidential: computed('case', function () {
+  confidential: computed('case', function() {
     return this.get('case.confidential');
   }),
 
-  caseTypes: computed('store', async function () {
+  caseTypes: computed('store', async function() {
     return await this.store.query('case-type', {
       sort: '-label',
       filter: {
@@ -82,7 +84,7 @@ export default Component.extend({
           subcase,
         });
         return newDecision.save();
-      }),
+      })
     );
   },
 
@@ -106,9 +108,10 @@ export default Component.extend({
   },
 
   async copySubcase(fullCopy = false) {
-    const caze = await this.store.findRecord('case', this.case.id);
+    const caze = await this.store.findRecord('case', this['case'].id);
     const latestSubcase = await caze.get('latestSubcase');
-    const date = moment().utc().toDate();
+    const date = moment().utc()
+      .toDate();
     let subcase = await this.createSubcaseObject(caze, date);
     subcase.set('subcaseName', this.subcaseName);
 

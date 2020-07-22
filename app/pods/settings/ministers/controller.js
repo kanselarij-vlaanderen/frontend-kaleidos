@@ -9,7 +9,7 @@ export default Controller.extend({
   isEditingMandatee: false,
   isAddingMandatee: false,
   isResigningMandatee: false,
-  reAssignPriorities: task(function* (model) {
+  reAssignPriorities: task(function *(model) {
     yield model.map((item) => {
       if (isPresent(item.changedAttributes().priority)) {
         return item.save();

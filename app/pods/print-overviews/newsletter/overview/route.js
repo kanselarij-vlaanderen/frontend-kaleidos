@@ -4,7 +4,7 @@ import { inject } from '@ember/service';
 import {
   setCalculatedGroupPriorities,
   groupAgendaitemsByGroupname,
-  sortByPriority,
+  sortByPriority
 } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Route.extend({
@@ -15,21 +15,29 @@ export default Route.extend({
   allowEmptyGroups: true,
 
   queryParams: {
-    definite: { refreshModel: true },
+    definite: {
+      refreshModel: true,
+    },
   },
 
   async model(params) {
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
     const agendaitems = await this.store.query('agendaitem', {
-      filter: { agenda: { id: agenda.get('id') } },
+      filter: {
+        agenda: {
+          id: agenda.get('id'),
+        },
+      },
       include: 'mandatees',
       sort: 'priority',
     });
     const announcements = this.filterAnnouncements(agendaitems.filter((agendaitem) => agendaitem.showAsRemark), params);
 
-    const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
-      agendaitems, params,
+    const {
+      draftAgendaitems, groupedAgendaitems,
+    } = await this.parseAgendaItems(
+      agendaitems, params
     );
 
     await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
@@ -67,7 +75,7 @@ export default Route.extend({
     if (params.definite !== 'true') {
       return agendaitems;
     }
-    const newsLetterByIndex = await Promise.all(agendaitems.map(async (agendaitem) => {
+    const newsLetterByIndex = await Promise.all(agendaitems.map(async(agendaitem) => {
       try {
         const agendaActivity = await agendaitem.get('agendaActivity');
         const subcase = await agendaActivity.get('subcase');
@@ -77,7 +85,7 @@ export default Route.extend({
         return false;
       }
     }));
-    let filtered = [];
+    const filtered = [];
     agendaitems.map((agendaitem, index) => {
       if (newsLetterByIndex[index]) {
         filtered.push(agendaitem);

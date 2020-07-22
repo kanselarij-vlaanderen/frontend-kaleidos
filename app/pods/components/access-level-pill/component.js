@@ -1,5 +1,7 @@
 import Component from '@ember/component';
-import EmberObject, { action, computed } from '@ember/object';
+import EmberObject, {
+  action, computed
+} from '@ember/object';
 
 import { inject as service } from '@ember/service';
 import DS from 'ember-data';
@@ -46,14 +48,14 @@ export default class AccessLevelPill extends Component {
   @computed('accessLevelId')
   get accessLevelClass() {
     switch (this.accessLevelId) {
-      case '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e':
-        return 'vlc-pill--success';
-      case 'abe4c18d-13a9-45f0-8cdd-c493eabbbe29':
-        return 'vlc-pill--warning';
-      case 'd335f7e3-aefd-4f93-81a2-1629c2edafa3':
-        return 'vlc-pill--error';
-      default:
-        return '';
+    case '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e':
+      return 'vlc-pill--success';
+    case 'abe4c18d-13a9-45f0-8cdd-c493eabbbe29':
+      return 'vlc-pill--warning';
+    case 'd335f7e3-aefd-4f93-81a2-1629c2edafa3':
+      return 'vlc-pill--error';
+    default:
+      return '';
     }
   }
 

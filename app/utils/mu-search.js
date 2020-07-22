@@ -38,13 +38,17 @@ async function muSearch(index, page, size, sort, filter, dataMapping) {
 
   endpoint.search = params.toString();
 
-  const { count, data } = await (await fetch(endpoint)).json();
+  const {
+    count, data,
+  } = await (await fetch(endpoint)).json();
   const pagination = getPaginationMetadata(page, size, count);
   const entries = A(data.map(dataMapping));
 
   return ArrayProxy.create({
     content: entries,
-    meta: { count, pagination },
+    meta: {
+      count, pagination,
+    },
   });
 }
 

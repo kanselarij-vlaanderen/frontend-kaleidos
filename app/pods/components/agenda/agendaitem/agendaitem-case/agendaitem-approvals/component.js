@@ -1,6 +1,8 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { computed, get } from '@ember/object';
+import {
+  computed, get
+} from '@ember/object';
 import moment from 'moment';
 
 export default Component.extend({
@@ -8,7 +10,7 @@ export default Component.extend({
   store: inject(),
   currentSession: inject(),
 
-  mandateeApprovals: computed('item.{mandatees.[],approvals.@each.mandatee}', async function () {
+  mandateeApprovals: computed('item.{mandatees.[],approvals.@each.mandatee}', async function() {
     const mandatees = await get(this, 'item.mandatees');
     const approvals = await get(this, 'item.approvals');
     return mandatees.map((mandatee) => {
@@ -28,7 +30,7 @@ export default Component.extend({
     async saveChanges() {
       this.set('isLoading', true);
 
-      await Promise.all(get(this, 'item.approvals').map(async (approval) => {
+      await Promise.all(get(this, 'item.approvals').map(async(approval) => {
         const savedApproval = await approval.save();
         return savedApproval;
       }));
@@ -53,7 +55,8 @@ export default Component.extend({
       } else {
         const approvalToCreate = get(this, 'store').createRecord('approval', {
           mandatee,
-          created: moment().utc().toDate(),
+          created: moment().utc()
+            .toDate(),
           agendaitem: get(this, 'item'),
         });
 
@@ -63,7 +66,9 @@ export default Component.extend({
 
     async cancelEditing() {
       this.set('isLoading', true);
-      const { item } = this;
+      const {
+        item,
+      } = this;
       const approvals = await item.get('approvals');
       approvals.map((approval) => {
         approval.rollbackAttributes();

@@ -14,7 +14,9 @@ function setDateInFlatpickr(date) {
   cy.get('.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > .numInputWrapper > input').type(date.year());
   cy.get('.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > select').select(date.month().toString());
   cy.get('.open .flatpickr-days').within(() => {
-    cy.get('.flatpickr-day').not('.prevMonthDay').not('.nextMonthDay').contains(date.date())
+    cy.get('.flatpickr-day').not('.prevMonthDay')
+      .not('.nextMonthDay')
+      .contains(date.date())
       .click();
   });
   cy.log('/setDateInFlatpickr');
@@ -50,7 +52,9 @@ function setDateAndTimeInFlatpickr(date) {
  */
 function setYearMonthDayHourMinuteInFlatPicker(year, month, day, hour, minute) {
   cy.log('setYearMonthDayHourMinuteInFlatPicker');
-  setDateAndTimeInFlatpickr(Cypress.moment().year(year).month(month).date(day)
+  setDateAndTimeInFlatpickr(Cypress.moment().year(year)
+    .month(month)
+    .date(day)
     .hour(hour)
     .minute(minute));
   cy.log('/setYearMonthDayHourMinuteInFlatPicker');

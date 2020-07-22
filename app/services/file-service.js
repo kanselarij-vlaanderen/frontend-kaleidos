@@ -1,6 +1,8 @@
 import Service, { inject as service } from '@ember/service';
 
-import { task, timeout } from 'ember-concurrency';
+import {
+  task, timeout
+} from 'ember-concurrency';
 import { ajax } from 'fe-redpencil/utils/ajax';
 
 export default Service.extend({
@@ -23,13 +25,13 @@ export default Service.extend({
         url: `/document-versions/${documentVersion.get('id')}/convert`,
       })
         .then((result) => result)
-        .catch((err) => err);
+        ['catch']((err) => err);
     } catch (e) {
       // warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
     }
   },
 
-  deleteDocumentWithUndo: task(function* (documentToDelete) {
+  deleteDocumentWithUndo: task(function *(documentToDelete) {
     this.objectsToDelete.push(documentToDelete);
     documentToDelete.set('aboutToDelete', true);
     yield timeout(15000);
@@ -40,7 +42,7 @@ export default Service.extend({
     }
   }),
 
-  deleteDocumentVersionWithUndo: task(function* (documentVersionToDelete) {
+  deleteDocumentVersionWithUndo: task(function *(documentVersionToDelete) {
     this.objectsToDelete.push(documentVersionToDelete);
     documentVersionToDelete.set('aboutToDelete', true);
     yield timeout(15000);
@@ -53,17 +55,21 @@ export default Service.extend({
 
   async deleteDocument(document) {
     const documentToDelete = await document;
-    if (!documentToDelete) return;
+    if (!documentToDelete) {
+      return;
+    }
     const documentVersions = await documentToDelete.get('documentVersions');
     await Promise.all(
-      documentVersions.map(async (documentVersion) => this.deleteDocumentVersion(documentVersion)),
+      documentVersions.map(async(documentVersion) => this.deleteDocumentVersion(documentVersion))
     );
     documentToDelete.destroyRecord();
   },
 
   async deleteDocumentVersion(documentVersion) {
     const documentVersionToDelete = await documentVersion;
-    if (!documentVersionToDelete) return;
+    if (!documentVersionToDelete) {
+      return;
+    }
     const file = documentVersionToDelete.get('file');
     await this.deleteFile(file);
     return documentVersionToDelete.destroyRecord();
@@ -71,7 +77,9 @@ export default Service.extend({
 
   async deleteFile(file) {
     const fileToDelete = await file;
-    if (!fileToDelete) return;
+    if (!fileToDelete) {
+      return;
+    }
     return fileToDelete.destroyRecord();
   },
 
@@ -80,7 +88,7 @@ export default Service.extend({
     this.objectsToDelete.removeObject(foundDocumentToDelete);
     const record = await this.store.findRecord(
       foundDocumentToDelete.get('constructor.modelName'),
-      id,
+      id
     );
     record.set('aboutToDelete', false);
   },

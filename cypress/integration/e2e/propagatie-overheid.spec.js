@@ -1,5 +1,5 @@
 /* global context, before, it, cy, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
@@ -13,10 +13,13 @@ context('Agenda tests', () => {
     cy.resetCache();
     cy.server();
   });
-  const agendaDate = Cypress.moment().add(1, 'weeks').day(6); // Next friday
+  const agendaDate = Cypress.moment().add(1, 'weeks')
+    .day(6); // Next friday
   const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
   const subcaseTitle1 = `${caseTitle} test stap 1`;
-  const file = { folder: 'files', fileName: 'test', fileExtension: 'pdf' };
+  const file = {
+    folder: 'files', fileName: 'test', fileExtension: 'pdf',
+  };
 
   it('Propagate decisions and documents to overheid graph by releasing them', () => {
     cy.login('Admin');
@@ -26,7 +29,7 @@ context('Agenda tests', () => {
       },
       {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet',
-      },
+      }
     ];
     cy.createCase(false, caseTitle);
     cy.addSubcase('Nota',
@@ -59,7 +62,8 @@ context('Agenda tests', () => {
     cy.get(form.formSave).click();
     cy.get(agenda.accessLevelPill).click();
     cy.existsAndVisible('.ember-power-select-trigger').click();
-    cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid').click();
+    cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid')
+      .click();
     cy.get(agenda.accessLevelSave).click();
 
     cy.contains('Wijzigen').click();
@@ -79,12 +83,14 @@ context('Agenda tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaItemDecisionTab).click();
-    cy.get('.vlc-document-card').eq(0).within(() => {
-      cy.get('.vl-title--h6 > span').contains(file.fileName);
-    });
+    cy.get('.vlc-document-card').eq(0)
+      .within(() => {
+        cy.get('.vl-title--h6 > span').contains(file.fileName);
+      });
     cy.get(agenda.agendaItemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 0);
+      cy.get('.vlc-document-card').as('docCards')
+        .should('have.length', 0);
     });
     cy.logoutFlow();
   });
@@ -106,7 +112,8 @@ context('Agenda tests', () => {
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaItemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 2);
+      cy.get('.vlc-document-card').as('docCards')
+        .should('have.length', 2);
     });
 
     cy.logoutFlow();

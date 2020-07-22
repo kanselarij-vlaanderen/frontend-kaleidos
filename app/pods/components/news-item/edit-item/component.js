@@ -13,7 +13,7 @@ export default Component.extend({
     'text',
     'richtext',
     'mandateeProposal',
-    'remark',
+    'remark'
   ]),
   documentVersionsSelected: null,
   isEditing: false,
@@ -28,14 +28,12 @@ export default Component.extend({
   isTryingToSave: false,
   isExpanded: false,
 
-  themes: computed(`agendaitem.agendaActivity.subcase.newsletterInfo.themes`, {
+  themes: computed('agendaitem.agendaActivity.subcase.newsletterInfo.themes', {
     async get() {
       if (this.agendaitem) {
         const agendaActivity = await this.agendaitem.get('agendaActivity');
         if (agendaActivity) {
-          return await agendaActivity.get('subcase.newsletterInfo.themes').then((themes) => {
-            return themes.toArray();
-          });
+          return await agendaActivity.get('subcase.newsletterInfo.themes').then((themes) => themes.toArray());
         }
       }
       return [];
@@ -45,7 +43,7 @@ export default Component.extend({
     },
   }),
 
-  hasNota: computed('agendaitem', async function () {
+  hasNota: computed('agendaitem', async function() {
     const nota = await this.agendaitem.get('nota');
     if (nota) {
       return true;
@@ -62,37 +60,39 @@ export default Component.extend({
 
     if (documentVersionsSelected) {
       await Promise.all(
-        documentVersionsSelected.map(async (documentVersion) => {
+        documentVersionsSelected.map(async(documentVersion) => {
           if (documentVersion.get('selected')) {
             item.get('documentVersions').addObject(documentVersion);
           } else {
             const foundDocument = itemDocumentsToEdit.find(
-              (foundItem) => foundItem.get('id') === documentVersion.get('id'),
+              (foundItem) => foundItem.get('id') === documentVersion.get('id')
             );
             if (foundDocument) {
               item.get('documentVersions').removeObject(documentVersion);
             }
           }
-        }),
+        })
       );
     }
-    this.setNewPropertiesToModel(item).then(async () => {
+    this.setNewPropertiesToModel(item).then(async() => {
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     });
   },
 
   async setNewPropertiesToModel(model) {
-    const { propertiesToSet } = this;
+    const {
+      propertiesToSet,
+    } = this;
     await Promise.all(
-      propertiesToSet.map(async (property) => {
+      propertiesToSet.map(async(property) => {
         model.set(property, await this.get(property));
-      }),
+      })
     );
     return model.save().then((savedModel) => savedModel.reload());
   },
 
-  richtext: computed('editor.currentTextContent', function () {
+  richtext: computed('editor.currentTextContent', function() {
     if (!this.editor) {
       return;
     }
@@ -129,18 +129,18 @@ export default Component.extend({
 
       if (documentVersionsSelected) {
         await Promise.all(
-          documentVersionsSelected.map(async (documentVersion) => {
+          documentVersionsSelected.map(async(documentVersion) => {
             if (documentVersion.get('selected')) {
               item.get('documentVersions').addObject(documentVersion);
             } else {
               const foundDocument = itemDocumentsToEdit.find(
-                (foundItem) => foundItem.get('id') === documentVersion.get('id'),
+                (foundItem) => foundItem.get('id') === documentVersion.get('id')
               );
               if (foundDocument) {
                 item.get('documentVersions').removeObject(documentVersion);
               }
             }
-          }),
+          })
         );
       }
 

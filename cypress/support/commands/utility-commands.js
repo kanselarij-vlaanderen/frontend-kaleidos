@@ -20,19 +20,30 @@ function selectDate(year, month, day, index) {
   let element;
 
   if (index !== undefined) {
-    element = cy.get(agenda.datepickerButton).eq(index).click();
-    element.get(agenda.flatpickrMonthDropdownMonths).eq(index).select(month);
-    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear).eq(index).clear()
-      .type(year, { delay: 300 });
-    element.get(agenda.flatpickrDay).should('be.visible').contains(day).click();
+    element = cy.get(agenda.datepickerButton).eq(index)
+      .click();
+    element.get(agenda.flatpickrMonthDropdownMonths).eq(index)
+      .select(month);
+    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear)
+      .eq(index)
+      .clear()
+      .type(year, {
+        delay: 300,
+      });
+    element.get(agenda.flatpickrDay).should('be.visible')
+      .contains(day)
+      .click();
   } else {
     element = cy.get(agenda.datepickerButton).click();
     element.get(agenda.flatpickrMonthDropdownMonths).select(month);
     element.get(agenda.numInputWrapper)
       .get(agenda.inputNumInputCurYear)
       .clear()
-      .type(year, { delay: 300 });
-    element.get(agenda.flatpickrDay).contains(day).click();
+      .type(year, {
+        delay: 300,
+      });
+    element.get(agenda.flatpickrDay).contains(day)
+      .click();
   }
   cy.log('/selectDate');
 }
@@ -64,8 +75,11 @@ function selectAction(elementToSelect, textToContain) {
 function validateDropdownElements(elementIndex, textContent) {
   cy.log('validateDropdownElements');
   cy.get('.ember-power-select-trigger').click();
-  cy.get('.ember-power-select-option').eq(elementIndex).should('contain.text', textContent);
-  cy.get('.ember-power-select-option').eq(elementIndex).scrollIntoView().click();
+  cy.get('.ember-power-select-option').eq(elementIndex)
+    .should('contain.text', textContent);
+  cy.get('.ember-power-select-option').eq(elementIndex)
+    .scrollIntoView()
+    .click();
   cy.log('/validateDropdownElements');
 }
 

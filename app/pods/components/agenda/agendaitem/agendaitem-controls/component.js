@@ -12,7 +12,7 @@ export default Component.extend({
   agendaitem: null,
   isSavingRetracted: null,
 
-  isPostPonable: computed('sessionService.agendas.@each', 'agendaitem.agendaActivity', 'agendaitem.retracted', async function () {
+  isPostPonable: computed('sessionService.agendas.@each', 'agendaitem.agendaActivity', 'agendaitem.retracted', async function() {
     const agendaActivity = await this.get('agendaitem.agendaActivity');
     if (!agendaActivity) {
       // In case of legacy agendaitems without a link to subcase (old) or agenda-activity
@@ -22,9 +22,9 @@ export default Component.extend({
     return this.get('sessionService.agendas').then((agendas) => !!(agendas && agendas.get('length') > 1));
   }),
 
-  //TODO verbose logic
+  // TODO verbose logic
   isDeletable: computed(
-    'agendaitem.agendaActivity', 'currentAgenda.name', async function () {
+    'agendaitem.agendaActivity', 'currentAgenda.name', async function() {
       const designAgenda = await this.get('currentAgenda.isDesignAgenda');
       const agendaActivity = await this.get('agendaitem.agendaActivity');
       if (!designAgenda) {
@@ -35,7 +35,7 @@ export default Component.extend({
         return !(agendaitems && agendaitems.length > 1);
       }
       return true;
-    },
+    }
   ),
 
   async deleteItem(agendaitem) {
@@ -51,7 +51,7 @@ export default Component.extend({
     }
   },
 
-  deleteWarningText: computed('agendaitem.agendaActivity', async function () {
+  deleteWarningText: computed('agendaitem.agendaActivity', async function() {
     if (await this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
     } if (this.currentSession.isAdmin) {

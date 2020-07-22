@@ -1,4 +1,4 @@
-module.exports = function (environment) {
+module.exports = function(environment) {
   const ENV = {
     modulePrefix: 'fe-redpencil',
     podModulePrefix: 'fe-redpencil/pods',
@@ -33,7 +33,7 @@ module.exports = function (environment) {
             'profile',
             'openid',
             'dkbkaleidos',
-            'phone',
+            'phone'
           ].join(' '),
         },
       },

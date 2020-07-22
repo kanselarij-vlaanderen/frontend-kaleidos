@@ -1,3 +1,4 @@
+/* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function (defaults) {
@@ -26,13 +27,16 @@ module.exports = function (defaults) {
       ],
     },
     'ember-test-selectors': {
-      strip: false,
+      strip: false
     },
   });
 
   app.import('node_modules/sanitize-filename/index.js', {
     using: [
-      { transformation: 'cjs', as: 'sanitize-filename' },
+      {
+        transformation: 'cjs',
+        as: 'sanitize-filename'
+      },
     ],
   });
 

@@ -5,7 +5,7 @@ export default Component.extend({
   classNames: ['vl-u-spacer--large'],
   selectedMeeting: null,
 
-  items: computed('meetings', 'type', 'nearestMeeting', function () {
+  items: computed('meetings', 'type', 'nearestMeeting', function() {
     if (this.type === 'future') {
       const nearestMeeting = this.get('nearestMeeting.firstObject');
       if (!nearestMeeting) {
@@ -16,7 +16,7 @@ export default Component.extend({
     return this.meetings;
   }),
 
-  hasActiveAgendas: computed('meetings', async function () {
+  hasActiveAgendas: computed('meetings', async function() {
     const meetings = await this.get('meetings');
     if (meetings && meetings.length > 0) {
       return true;

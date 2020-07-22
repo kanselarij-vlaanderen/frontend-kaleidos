@@ -1,11 +1,13 @@
 import Component from '@ember/component';
-import EmberObject, { action, computed } from '@ember/object';
+import EmberObject, {
+  action, computed
+} from '@ember/object';
 import { inject as service } from '@ember/service';
 
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
 
-//TODO code cuplication with agendaitem-case/agendaitem-mandatees
+// TODO code cuplication with agendaitem-case/agendaitem-mandatees
 export default class SubcaseMandatees extends Component {
   @service store;
 
@@ -64,13 +66,13 @@ export default class SubcaseMandatees extends Component {
   async constructMandateeRows() {
     const subcase = await this.subcase;
     const iseCodes = await subcase.get('iseCodes');
-    let mandatees = await (await subcase.get('mandatees')).sortBy('priority');
+    const mandatees = await (await subcase.get('mandatees')).sortBy('priority');
     let selectedMandatee = await subcase.get('requestedBy');
     const mandateeLength = mandatees.get('length');
     if (mandateeLength === 1) {
       selectedMandatee = mandatees.get('firstObject');
     }
-    return Promise.all(mandatees.map(async (mandatee) => {
+    return Promise.all(mandatees.map(async(mandatee) => {
       const filteredIseCodes = await this.getIseCodesOfMandatee(iseCodes, mandatee);
       const row = await this.createMandateeRow(mandatee, filteredIseCodes);
       if (selectedMandatee && mandatee.get('id') === selectedMandatee.get('id')) {
@@ -88,7 +90,7 @@ export default class SubcaseMandatees extends Component {
     const iseCodes = [];
     let requestedBy = null;
     if (mandateeRows && mandateeRows.get('length') > 0) {
-      mandateeRows.map(async (row) => {
+      mandateeRows.map(async(row) => {
         if (row.get('isSubmitter')) {
           requestedBy = row.get('mandatee');
         }
@@ -99,7 +101,9 @@ export default class SubcaseMandatees extends Component {
         });
       });
     }
-    return { mandatees, iseCodes, requestedBy };
+    return {
+      mandatees, iseCodes, requestedBy,
+    };
   }
 
   @action
@@ -117,7 +121,9 @@ export default class SubcaseMandatees extends Component {
   async saveChanges() {
     this.set('isLoading', true);
     const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
-    const propertiesToSetOnAgendaitem = { mandatees: propertiesToSetOnSubcase.mandatees };
+    const propertiesToSetOnAgendaitem = {
+      mandatees: propertiesToSetOnSubcase.mandatees,
+    };
     const resetFormallyOk = true;
     try {
       await saveMandateeChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);

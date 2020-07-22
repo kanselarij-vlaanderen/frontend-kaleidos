@@ -1,6 +1,8 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+import {
+  task, timeout
+} from 'ember-concurrency';
 import { computed } from '@ember/object';
 
 export default Component.extend({
@@ -9,7 +11,7 @@ export default Component.extend({
     'isCreatingPerson:vl-u-bg-alt',
     'isCreatingPerson:vlc-u-no-margin',
     'isCreatingPerson:vlc-u-padding-2',
-    'classes',
+    'classes'
   ],
   searchField: 'first-name',
   modelName: 'person',
@@ -37,9 +39,11 @@ export default Component.extend({
     this.set('isLoading', false);
   },
 
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function () {
+  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {
     const options = {};
-    const { filter, sortField, includeField } = this;
+    const {
+      filter, sortField, includeField,
+    } = this;
     if (sortField) {
       options.sort = sortField;
     }
@@ -52,17 +56,21 @@ export default Component.extend({
     return options;
   }),
 
-  findAll: task(function* () {
-    const { modelName, queryOptions } = this;
+  findAll: task(function *() {
+    const {
+      modelName, queryOptions,
+    } = this;
     if (modelName) {
       const items = yield this.store.query(modelName, queryOptions);
       this.set('items', items);
     }
   }),
 
-  searchTask: task(function* (searchValue) {
+  searchTask: task(function *(searchValue) {
     yield timeout(300);
-    const { queryOptions, searchField, modelName } = this;
+    const {
+      queryOptions, searchField, modelName,
+    } = this;
     if (queryOptions.filter) {
       queryOptions.filter[searchField] = searchValue;
     } else {
@@ -84,7 +92,9 @@ export default Component.extend({
     },
 
     createPerson() {
-      const { firstName, lastName } = this;
+      const {
+        firstName, lastName,
+      } = this;
       const person = this.store.createRecord('person', {
         firstName,
         lastName,
@@ -101,7 +111,9 @@ export default Component.extend({
 
     resetValueIfEmpty(param) {
       if (param === '') {
-        this.set('queryOptions', { sort: this.sortField });
+        this.set('queryOptions', {
+          sort: this.sortField,
+        });
         this.findAll.perform();
       }
     },

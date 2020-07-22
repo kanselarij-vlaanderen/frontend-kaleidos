@@ -1,7 +1,9 @@
 import DS from 'ember-data';
 import { alias } from '@ember/object/computed';
 
-const { Model, attr, hasMany } = DS;
+const {
+  Model, attr, hasMany,
+} = DS;
 
 export default Model.extend({
   uri: attr(),

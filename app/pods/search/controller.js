@@ -5,10 +5,18 @@ import { tracked } from '@glimmer/tracking';
 
 export default class SearchController extends Controller {
   queryParams = {
-    searchText: { type: 'string' },
-    mandatees: { type: 'string' },
-    dateFrom: { type: 'string' },
-    dateTo: { type: 'string' },
+    searchText: {
+      type: 'string',
+    },
+    mandatees: {
+      type: 'string',
+    },
+    dateFrom: {
+      type: 'string',
+    },
+    dateTo: {
+      type: 'string',
+    },
   };
 
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);

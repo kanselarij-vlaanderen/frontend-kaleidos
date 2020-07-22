@@ -49,14 +49,17 @@ export default class SystemAlertService extends Service {
      * Below query fetches all alerts with end date greater then start of the day.
      * This makes for only 1 unique request per day, which is good for request caching.
      */
-    const today = moment().startOf('day').format();
+    const today = moment().startOf('day')
+      .format();
     const alerts = await this.store.query('alert', {
       filter: {
         ':gte:end-date': today,
       },
       sort: '-begin-date',
       include: 'type',
-      page: { size: 10 },
+      page: {
+        size: 10,
+      },
     });
     // Ensure that the client-local "confirmed" mark doesn't get erased when refreshing
     const confirmedAlertIds = this.alerts.filterBy('confirmed').mapBy('id');

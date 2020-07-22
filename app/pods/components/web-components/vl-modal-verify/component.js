@@ -11,19 +11,20 @@ export default Component.extend({
   showVerify: true,
   buttonText: 'delete',
 
-  verifyButtonText: computed('intl', 'buttonText', function () {
+  verifyButtonText: computed('intl', 'buttonText', function() {
     return this.intl.t(this.get('buttonText'));
   }),
 
   didInsertElement() {
-    this.get('element').querySelector('[role="dialog"]').focus();
+    this.get('element').querySelector('[role="dialog"]')
+      .focus();
   },
 
-  showIcon: computed('buttonType', function () {
+  showIcon: computed('buttonType', function() {
     return this.buttonType !== 'warning';
   }),
 
-  buttonClass: computed('buttonType', function () {
+  buttonClass: computed('buttonType', function() {
     if (this.buttonType === 'warning') {
       return 'vl-button';
     } if (this.buttonType === 'danger') {

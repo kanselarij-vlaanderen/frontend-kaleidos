@@ -1,5 +1,7 @@
 import Service, { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+import {
+  task, timeout
+} from 'ember-concurrency';
 import { A } from '@ember/array';
 
 export default class ToasterService extends Service {
@@ -7,7 +9,7 @@ export default class ToasterService extends Service {
 
   toasts = A([]);
 
-  @(task(function* (toast) {
+  @(task(function *(toast) {
     toast.options.onClose = toast.options.onClose || (() => this.toasts.removeObject(toast));
     this.toasts.pushObject(toast);
     yield timeout(toast.options.timeOut);

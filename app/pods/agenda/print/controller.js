@@ -11,7 +11,7 @@ function equalContentArrays(a, b) {
 
 export default Controller.extend({
 
-  notaGroups: computed('model.notas.@each.sortedMandatees', function () {
+  notaGroups: computed('model.notas.@each.sortedMandatees', function() {
     const agendaItems = this.get('model.notas');
     if (agendaItems.length > 0) {
       let currentSubmittersArray = agendaItems.firstObject.sortedMandatees;

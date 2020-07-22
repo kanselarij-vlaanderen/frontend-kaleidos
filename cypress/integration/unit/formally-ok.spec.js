@@ -1,5 +1,5 @@
 /* global context, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import modal from '../../selectors/modal.selectors';
 
@@ -19,7 +19,8 @@ context('Formally ok/nok tests', () => {
     cy.get(modal.verify.cancel).click();
     cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
     cy.get('.vlc-side-nav-item').as('agendas');
-    cy.get('@agendas').eq(1).click();
+    cy.get('@agendas').eq(1)
+      .click();
     cy.wait(2000); // Make sure the formally ok can load (false positive if testing immediately)
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
     cy.get('.vlc-agenda-items__status').should('not.contain', 'Formeel OK');

@@ -5,7 +5,9 @@ export default DS.JSONAPISerializer.extend(DataTableSerializerMixin, {
 
   shouldSerializeHasMany(snapshot, key, relationshipType) {
     const shouldSerialize = this._super(...arguments);
-    const serializeOption = relationshipType.options || { serialize: true };
+    const serializeOption = relationshipType.options || {
+      serialize: true,
+    };
     if (typeof serializeOption.serialize !== 'undefined') {
       return shouldSerialize && serializeOption.serialize;
     }

@@ -9,11 +9,15 @@ export default Component.extend({
   isEditingMandateeRow: false,
 
   getDomainOfField(field) {
-    if (field) return field.get('domain');
+    if (field) {
+      return field.get('domain');
+    }
   },
 
   getFieldOfIseCode(iseCode) {
-    if (iseCode) return iseCode.get('field');
+    if (iseCode) {
+      return iseCode.get('field');
+    }
   },
 
   checkMandateeRowsForSubmitter(mandateeRows) {
@@ -53,7 +57,7 @@ export default Component.extend({
             fieldsToShow,
             domainsToShow,
             ...newRow,
-          },
+          }
         ));
         this.set('mandateeRows', mandateeRows.sortBy('mandateePriority'));
       }
@@ -71,16 +75,20 @@ export default Component.extend({
 
     async editRow(mandateeRow) {
       this.set('selectedMandateeRow', await mandateeRow);
-      const { mandatee } = mandateeRow;
+      const {
+        mandatee,
+      } = mandateeRow;
       this.set('isLoading', true);
       const totalIseCodes = await mandatee.get('iseCodes');
       const totalFields = [];
       const totalDomains = [];
 
-      await Promise.all(totalIseCodes.map(async (iseCode) => {
+      await Promise.all(totalIseCodes.map(async(iseCode) => {
         const field = await this.getFieldOfIseCode(iseCode);
         const domain = await this.getDomainOfField(field);
-        const { iseCodes } = mandateeRow;
+        const {
+          iseCodes,
+        } = mandateeRow;
         const findSelectedIseCode = iseCodes.find((codeToCheck) => codeToCheck.get('id') === iseCode.get('id'));
         if (findSelectedIseCode) {
           field.set('selected', true);

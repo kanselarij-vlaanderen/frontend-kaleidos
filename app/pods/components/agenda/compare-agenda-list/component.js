@@ -1,5 +1,7 @@
 import Component from '@ember/component';
-import EmberObject, { computed, observer, get } from '@ember/object';
+import EmberObject, {
+  computed, observer, get
+} from '@ember/object';
 import { inject } from '@ember/service';
 
 import { alias } from '@ember/object/computed';
@@ -22,15 +24,15 @@ export default Component.extend({
     'isLoadingAgendaOne',
     'isLoadingAgendaTwo',
     'isLoadingComparison',
-    function () {
+    function() {
       if (this.isLoadingAgendaOne || this.isLoadingAgendaTwo || this.isLoadingComparison) {
         return true;
       }
       return false;
-    },
+    }
   ),
 
-  bothAgendasSelectedObserver: observer('agendaOne.id', 'agendaTwo.id', async function () {
+  bothAgendasSelectedObserver: observer('agendaOne.id', 'agendaTwo.id', async function() {
     const {
       agendaOne, agendaTwo, agendaitemsLeft, agendaitemsRight,
     } = this;
@@ -80,7 +82,9 @@ export default Component.extend({
   getAgendaitemsFromAgenda(id) {
     return this.store.query('agendaitem', {
       filter: {
-        agenda: { id },
+        agenda: {
+          id,
+        },
         'show-as-remark': false,
       },
       sort: 'priority',
@@ -120,21 +124,27 @@ export default Component.extend({
       }
 
       if (!currentLeft || !currentRight || (await this.compareSubcase(currentLeft, currentRight))) {
-        combinedItems.push(EmberObject.create({ left: currentLeft, right: currentRight }));
+        combinedItems.push(EmberObject.create({
+          left: currentLeft, right: currentRight,
+        }));
         currentLeft = null;
         currentRight = null;
         continue;
       }
 
       if (addedAgendaitems.indexOf(currentRight.id) >= 0) {
-        combinedItems.push(EmberObject.create({ left: null, right: currentRight }));
+        combinedItems.push(EmberObject.create({
+          left: null, right: currentRight,
+        }));
         currentRight = null;
         continue;
       }
       const foundLeftItem = this.findItemBySubcase(currentLeft, rightAgendaitems);
 
       if (!foundLeftItem) {
-        combinedItems.push(EmberObject.create({ left: currentLeft, right: null }));
+        combinedItems.push(EmberObject.create({
+          left: currentLeft, right: null,
+        }));
         currentLeft = null;
         continue;
       }
@@ -142,12 +152,16 @@ export default Component.extend({
       const foundRightItem = this.findItemBySubcase(currentRight, leftAgendaitems);
 
       if (!foundRightItem) {
-        combinedItems.push(EmberObject.create({ left: null, right: currentRight }));
+        combinedItems.push(EmberObject.create({
+          left: null, right: currentRight,
+        }));
         currentLeft = null;
         continue;
       }
 
-      combinedItems.push(EmberObject.create({ left: currentLeft, right: currentRight }));
+      combinedItems.push(EmberObject.create({
+        left: currentLeft, right: currentRight,
+      }));
       currentLeft = null;
       currentRight = null;
     }

@@ -1,7 +1,11 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
-import { computed, observer } from '@ember/object';
+import {
+  task, timeout
+} from 'ember-concurrency';
+import {
+  computed, observer
+} from '@ember/object';
 
 export default Component.extend({
 
@@ -10,17 +14,17 @@ export default Component.extend({
   size: 5,
   sort: '-created,name',
 
-  documents: computed('items.@each', function () {
+  documents: computed('items.@each', function() {
     (this.get('items') || []).map((item) => item.set('selected', false));
     return this.items;
   }),
 
   // dirty observers to make use of the datatable actions
-  pageObserver: observer('page', function () {
+  pageObserver: observer('page', function() {
     this.findAll.perform();
   }),
 
-  queryOptions: computed('sort', 'filter', 'page', function () {
+  queryOptions: computed('sort', 'filter', 'page', function() {
     const {
       page, filter, size, sort,
     } = this;
@@ -38,16 +42,20 @@ export default Component.extend({
     return options;
   }),
 
-  findAll: task(function* () {
-    const { queryOptions } = this;
+  findAll: task(function *() {
+    const {
+      queryOptions,
+    } = this;
     const documents = yield this.store.query('document-version', queryOptions);
     this.set('items', documents);
     yield timeout(100);
   }),
 
-  searchTask: task(function* () {
+  searchTask: task(function *() {
     yield timeout(300);
-    const { queryOptions } = this;
+    const {
+      queryOptions,
+    } = this;
     const documents = yield this.store.query('document-version', queryOptions);
     this.set('items', documents);
     yield timeout(100);

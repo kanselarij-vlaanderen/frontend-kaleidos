@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* global context, before, it, cy, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 /**
  * @description returns the current time in unix timestamp
@@ -38,7 +38,8 @@ context('Full test', () => {
 
     // #endregion
 
-    const agendaDate = Cypress.moment().add(2, 'weeks').day(3); // Next friday
+    const agendaDate = Cypress.moment().add(2, 'weeks')
+      .day(3); // Next friday
 
     // #region create the meeting/agenda
     const location = `${testId}Zaal cypress in de wetstraat`;
@@ -126,7 +127,9 @@ context('Full test', () => {
     cy.addDocuments([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }]);
-    cy.addNewDocumentVersionToMeeting('test pdf', { folder: 'files', fileName: 'test', fileExtension: 'pdf' });
+    cy.addNewDocumentVersionToMeeting('test pdf', {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    });
 
     cy.addAgendaitemToAgenda();
     cy.setFormalOkOnItemWithIndex(3); // new agendaitem

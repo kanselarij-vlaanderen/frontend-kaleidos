@@ -1,5 +1,5 @@
 /* global context, beforeEach, it, cy */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
 
@@ -32,11 +32,12 @@ context('Agendaitem changes tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle2, false);
     cy.setFormalOkOnItemWithIndex(2);
     cy.toggleShowChanges(true);
-    cy.get('li.vlc-agenda-items__sub-item').should('have.length', 3).then(() => {
-      cy.agendaItemExists(subcaseTitle2);
-      cy.setFormalOkOnItemWithIndex(2);
-      cy.approveDesignAgenda();
-    });
+    cy.get('li.vlc-agenda-items__sub-item').should('have.length', 3)
+      .then(() => {
+        cy.agendaItemExists(subcaseTitle2);
+        cy.setFormalOkOnItemWithIndex(2);
+        cy.approveDesignAgenda();
+      });
   });
   it('should add a document version to an item and highlight it as changed', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
@@ -52,10 +53,14 @@ context('Agendaitem changes tests', () => {
     cy.get(actionModal.showActionOptions).click();
     cy.get(agenda.navigateToPrintableAgenda).click();
     cy.wait(1000);
-    cy.get(agenda.printHeaderTitle, { timeout: 80000 }).should('exist').should('be.visible');
+    cy.get(agenda.printHeaderTitle, {
+      timeout: 80000,
+    }).should('exist')
+      .should('be.visible');
     cy.get(agenda.printHeaderTitle).contains('Vergadering van');
 
-    cy.get(agenda.printContainer).should('exist').should('be.visible');
+    cy.get(agenda.printContainer).should('exist')
+      .should('be.visible');
 
     // this could fail with more or changed default data, you need at least 1 previous agenda when starting this test
     cy.get(agenda.printContainer).contains('Goedkeuring van het verslag van de vergadering van ');

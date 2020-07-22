@@ -1,5 +1,7 @@
 import Component from '@ember/component';
-import { computed, get } from '@ember/object';
+import {
+  computed, get
+} from '@ember/object';
 import { alias } from '@ember/object/computed';
 
 export default Component.extend({
@@ -12,21 +14,21 @@ export default Component.extend({
   currentPage: alias('page'),
   firstPage: alias('pageOffset'),
 
-  disabledNext: computed('isLastPage', function () {
+  disabledNext: computed('isLastPage', function() {
     if (this.get('isLastPage')) {
       return 'disabled vl-u-text--muted';
     }
     return null;
   }),
 
-  disabledPrev: computed('isFirstPage', function () {
+  disabledPrev: computed('isFirstPage', function() {
     if (this.get('isFirstPage')) {
       return 'disabled vl-u-text--muted';
     }
     return null;
   }),
 
-  totalNbOfItems: computed('total', function () {
+  totalNbOfItems: computed('total', function() {
     if (!get(this, 'total')) {
       return 0;
     }
@@ -34,30 +36,30 @@ export default Component.extend({
     return get(this, 'total');
   }),
 
-  lastPage: computed('size', 'total', function () {
+  lastPage: computed('size', 'total', function() {
     return Math.ceil(get(this, 'total') / get(this, 'size')) - 1;
   }),
 
-  isFirstPage: computed('firstPage', 'currentPage', function () {
+  isFirstPage: computed('firstPage', 'currentPage', function() {
     return get(this, 'firstPage') === get(this, 'currentPage');
   }),
 
-  isLastPage: computed('lastPage', 'currentPage', function () {
+  isLastPage: computed('lastPage', 'currentPage', function() {
     return get(this, 'lastPage') === get(this, 'currentPage');
   }),
 
-  hasMultiplePages: computed('lastPage', function () {
+  hasMultiplePages: computed('lastPage', function() {
     return get(this, 'lastPage') > 0;
   }),
 
-  startItem: computed('size', 'currentPage', 'nbOfItems', function () {
+  startItem: computed('size', 'currentPage', 'nbOfItems', function() {
     if (get(this, 'nbOfItems') === 0) {
       return 0;
     }
     return get(this, 'size') * get(this, 'currentPage') + 1;
   }),
 
-  endItem: computed('startItem', 'nbOfItems', function () {
+  endItem: computed('startItem', 'nbOfItems', function() {
     if (get(this, 'nbOfItems') === 0) {
       return 0;
     }

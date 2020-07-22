@@ -6,7 +6,7 @@ import { inject } from '@ember/service';
 export default Controller.extend({
   intl: inject(),
 
-  columns: computed(function () {
+  columns: computed(function() {
     return [{
       label: '#',
       width: '50px',
@@ -48,7 +48,8 @@ export default Controller.extend({
 
   actions: {
     async addMeetingRecord(row) {
-      const date = moment().utc().toDate();
+      const date = moment().utc()
+        .toDate();
       const meetingRecord = this.store.createRecord('meeting-record', {
         created: date,
         modified: date,

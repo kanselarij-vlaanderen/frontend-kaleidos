@@ -7,12 +7,14 @@ export default Component.extend({
   itemWithDocuments: null,
   store: inject(),
 
-  lastDocumentVersions: computed('item.documents.@each', 'itemWithDocuments.documentVersions.@each', async function () {
-    const { itemWithDocuments, item } = this;
+  lastDocumentVersions: computed('item.documents.@each', 'itemWithDocuments.documentVersions.@each', async function() {
+    const {
+      itemWithDocuments, item,
+    } = this;
     const documents = await item.get('documents');
     const documentVersionsAddedAlready = await itemWithDocuments.get('documentVersions');
 
-    return Promise.all(documents.map(async (document) => {
+    return Promise.all(documents.map(async(document) => {
       const typeLabel = await document.get('type.label');
       const lastDocumentVersion = await document.get('lastDocumentVersion');
       // Document is not updated for the version.

@@ -1,5 +1,5 @@
 /* global context, before, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 context('Add files to an agenda', () => {
   before(() => {
@@ -18,23 +18,30 @@ context('Add files to an agenda', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }]);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains('test pdf');
-      });
+      cy.get('.vlc-document-card').eq(0)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains('test pdf');
+        });
     });
 
-    cy.addNewDocumentVersionToMeeting('test pdf', { folder: 'files', fileName: 'test', fileExtension: 'pdf' });
+    cy.addNewDocumentVersionToMeeting('test pdf', {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/BIS/);
-      });
+      cy.get('.vlc-document-card').eq(0)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/BIS/);
+        });
     });
 
-    cy.addNewDocumentVersionToMeeting('test pdf', { folder: 'files', fileName: 'test', fileExtension: 'pdf' });
+    cy.addNewDocumentVersionToMeeting('test pdf', {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/TER/);
-      });
+      cy.get('.vlc-document-card').eq(0)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/TER/);
+        });
     });
   });
 
@@ -63,33 +70,40 @@ context('Add files to an agenda', () => {
         },
         {
           folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-4 - 4e', fileType: 'Nota',
-        },
-      ],
+        }
+      ]
     );
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards');
-      cy.get('@docCards').eq(0).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/1e/);
-      });
-      cy.get('@docCards').eq(1).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/2e/);
-      });
-      cy.get('@docCards').eq(2).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/3e/);
-      });
-      cy.get('@docCards').eq(3).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/4e/);
-      });
-      cy.get('@docCards').eq(4).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/5e/);
-      });
-      cy.get('@docCards').eq(5).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/6e/);
-      });
-      cy.get('@docCards').eq(6).within(() => {
-        cy.get('.vl-title--h6 > span').contains(/7e/);
-      });
+      cy.get('@docCards').eq(0)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/1e/);
+        });
+      cy.get('@docCards').eq(1)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/2e/);
+        });
+      cy.get('@docCards').eq(2)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/3e/);
+        });
+      cy.get('@docCards').eq(3)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/4e/);
+        });
+      cy.get('@docCards').eq(4)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/5e/);
+        });
+      cy.get('@docCards').eq(5)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/6e/);
+        });
+      cy.get('@docCards').eq(6)
+        .within(() => {
+          cy.get('.vl-title--h6 > span').contains(/7e/);
+        });
     });
   });
 
@@ -99,44 +113,60 @@ context('Add files to an agenda', () => {
       cy.get('.vlc-document-card').as('docCards');
     });
     cy.get('@docCards').should('have.length', 2);
-    cy.get('@docCards').eq(0).within(() => {
-      cy.get('.vl-title--h6 > span').contains(/1e/);
-      cy.get('.vl-vi-nav-show-more-horizontal').click();
-    });
+    cy.get('@docCards').eq(0)
+      .within(() => {
+        cy.get('.vl-title--h6 > span').contains(/1e/);
+        cy.get('.vl-vi-nav-show-more-horizontal').click();
+      });
     cy.get('.vlc-dropdown-menu').within(() => {
-      cy.get('.vl-u-text--error').contains('Document verwijderen').click();
+      cy.get('.vl-u-text--error').contains('Document verwijderen')
+        .click();
     });
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'document-versions/*').as('deleteVersion');
     cy.route('DELETE', 'documents/*').as('deleteDocument');
 
     cy.get('.vl-modal').within(() => {
-      cy.get('button').contains('Verwijderen').click();
+      cy.get('button').contains('Verwijderen')
+        .click();
     });
 
-    cy.wait('@deleteFile', { timeout: 20000 });
-    cy.wait('@deleteVersion', { timeout: 20000 });
-    cy.wait('@deleteDocument', { timeout: 20000 });
+    cy.wait('@deleteFile', {
+      timeout: 20000,
+    });
+    cy.wait('@deleteVersion', {
+      timeout: 20000,
+    });
+    cy.wait('@deleteDocument', {
+      timeout: 20000,
+    });
 
     cy.get('@docCards').should('have.length', 1);
-    cy.get('@docCards').eq(0).within(() => {
-      cy.get('.vl-title--h6 > span').contains(/2e/);
-      cy.get('.js-vl-accordion > button').click();
-      cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-      cy.get('@versions').eq(0).within(() => {
-        cy.get('.vl-vi-trash').click();
+    cy.get('@docCards').eq(0)
+      .within(() => {
+        cy.get('.vl-title--h6 > span').contains(/2e/);
+        cy.get('.js-vl-accordion > button').click();
+        cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
+        cy.get('@versions').eq(0)
+          .within(() => {
+            cy.get('.vl-vi-trash').click();
+          });
       });
-    });
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'document-versions/*').as('deleteVersion');
     cy.route('DELETE', 'documents/*').as('deleteDocument');
 
     cy.get('.vl-modal').within(() => {
-      cy.get('button').contains('Verwijderen').click();
+      cy.get('button').contains('Verwijderen')
+        .click();
     });
 
-    cy.wait('@deleteFile', { timeout: 20000 });
-    cy.wait('@deleteVersion', { timeout: 20000 });
+    cy.wait('@deleteFile', {
+      timeout: 20000,
+    });
+    cy.wait('@deleteVersion', {
+      timeout: 20000,
+    });
     // cy.wait('@deleteDocument', { timeout: 20000 }); // TODO fix the deletion of document in vl-document component
 
     cy.get('@docCards').should('have.length', 0);

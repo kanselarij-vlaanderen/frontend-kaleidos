@@ -13,11 +13,11 @@ export default Service.extend({
           'Content-Type': 'application/vnd.api+json',
         },
         method: 'GET',
-        url: `/custom-subcases/getPostponedSubcases`,
+        url: '/custom-subcases/getPostponedSubcases',
       }
-    ).then(({ data }) => {
-      return data.map((object) => object.id);
-    });
+    ).then(({
+      data,
+    }) => data.map((object) => object.id));
   },
 
   async getSubcasePhases(subcase) {
@@ -40,40 +40,53 @@ export default Service.extend({
           old_mandatee,
           new_mandatee,
         },
-      },
-    ).then(({ data }) => data);
+      }
+    ).then(({
+      data,
+    }) => data);
   },
 
   processSubcasePhases(activities) {
-    //KAS-1425 sort activities? done in the micro service atm.
-    if (typeof activities === 'string') {    
+    // KAS-1425 sort activities? done in the micro service atm.
+    if (typeof activities === 'string') {
       return null;
-    } else {
-      let phases = [];
-      activities.map((activityData) => {
-        if (activityData.startDatum) {
-          phases.push({ label: this.intl.t('activity-phase-proposed-for-agenda'), date: moment.utc(activityData.startDatum).toDate() });
-        }
-        if (activityData.phaseData) {
-          const phaseData = activityData.phaseData;
-          if (phaseData.geplandeStart) {
-            const geplandeStart = moment.utc(phaseData.geplandeStart).toDate();
-            phases.push({ label: this.intl.t('activity-phase-approved-on-agenda'), date: geplandeStart });
-            if (phaseData.postponed && phaseData.postponed == 'true') {
-              phases.push({ label: this.intl.t('activity-phase-postponed-on-agenda'), date: geplandeStart });
-              if (phaseData.approved && phaseData.approved == 'true') {
-                phases.push({ label: this.intl.t('activity-phase-postponed-is-decided') });
-              }
-            } else {
-              if (phaseData.approved && phaseData.approved == 'true') {
-                phases.push({ label: this.intl.t('activity-phase-decided-on-agenda'), date: geplandeStart });
-              }
+    }
+    const phases = [];
+    activities.map((activityData) => {
+      if (activityData.startDatum) {
+        phases.push({
+          label: this.intl.t('activity-phase-proposed-for-agenda'), date: moment.utc(activityData.startDatum).toDate(),
+        });
+      }
+      if (activityData.phaseData) {
+        const {
+          phaseData,
+        } = activityData;
+        if (phaseData.geplandeStart) {
+          const geplandeStart = moment.utc(phaseData.geplandeStart).toDate();
+          phases.push({
+            label: this.intl.t('activity-phase-approved-on-agenda'), date: geplandeStart,
+          });
+          if (phaseData.postponed && phaseData.postponed == 'true') {
+            phases.push({
+              label: this.intl.t('activity-phase-postponed-on-agenda'), date: geplandeStart,
+            });
+            if (phaseData.approved && phaseData.approved == 'true') {
+              phases.push({
+                label: this.intl.t('activity-phase-postponed-is-decided'),
+              });
+            }
+          } else {
+            if (phaseData.approved && phaseData.approved == 'true') {
+              phases.push({
+                label: this.intl.t('activity-phase-decided-on-agenda'), date: geplandeStart,
+              });
             }
           }
         }
-      });
-      return phases;
-    }
-  }
+      }
+    });
+    return phases;
+  },
 
 });

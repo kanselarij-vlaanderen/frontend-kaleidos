@@ -9,7 +9,7 @@ export default Component.extend({
 
   classNameBindings: ['getClassNames'],
 
-  getClassNames: computed('agendaMenuOpened', function () {
+  getClassNames: computed('agendaMenuOpened', function() {
     if (this.get('agendaMenuOpened')) {
       return 'vlc-panel-layout__agenda-history--collapsed';
     }

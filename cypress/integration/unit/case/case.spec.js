@@ -1,5 +1,5 @@
 /* global context, it, cy,beforeEach */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import cases from '../../../selectors/case.selectors';
 import form from '../../../selectors/form.selectors';
@@ -13,16 +13,19 @@ context('Create case as Admin user', () => {
   it('Create a case with confidentiality and short title', () => {
     cy.visit('/dossiers');
     cy.get(cases.casesHeaderAddCase).click();
-    cy.get(form.formVlToggle).eq(0).click();
+    cy.get(form.formVlToggle).eq(0)
+      .click();
     cy.get(cases.metadataForm).type('Dit is een dossier met confidentiality en een korte titel');
-    cy.get('button').contains('Dossier aanmaken').click();
+    cy.get('button').contains('Dossier aanmaken')
+      .click();
   });
 
   it('Create a case with short title', () => {
     cy.visit('/dossiers');
     cy.get(cases.casesHeaderAddCase).click();
     cy.get(cases.metadataForm).type('Dit is een dossier met een korte titel');
-    cy.get('button').contains('Dossier aanmaken').click();
+    cy.get('button').contains('Dossier aanmaken')
+      .click();
   });
 
   it('Hitting cancel should hide the model', () => {
@@ -37,7 +40,8 @@ context('Create case as Admin user', () => {
     cy.visit('/dossiers');
 
     cy.get(cases.casesHeaderAddCase).click();
-    cy.get('button').contains('Dossier aanmaken').click();
+    cy.get('button').contains('Dossier aanmaken')
+      .click();
 
     cy.addSubcase('Mededeling', '', '', null, null);
     cy.openSubcase(0);

@@ -20,12 +20,12 @@ export default class AgendaSidebar extends Component {
   dragHandleClass = '.vlc-agenda-detail-sidebar__sub-item';
 
   @restartableTask
-  reAssignPriorities = function* (agendaitems) {
-    yield agendaitems.map(async (item) => {
+  reAssignPriorities = function *(agendaitems) {
+    yield agendaitems.map(async(item) => {
       if (isPresent(item.changedAttributes().priority)) {
         return item.save();
       }
-    })
+    });
   }
 
   @action

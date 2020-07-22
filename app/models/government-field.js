@@ -9,5 +9,7 @@ export default Model.extend({
   scopeNote: attr('string'),
   altLabel: attr('string'),
   iseCodes: hasMany('ise-code'),
-  domain: belongsTo('government-domain', { inverse: null }),
+  domain: belongsTo('government-domain', {
+    inverse: null,
+  }),
 });

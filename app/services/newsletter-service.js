@@ -17,7 +17,9 @@ export default Service.extend({
         url: `/newsletter/createCampaign?agendaId=${agenda.get('id')}`,
       });
 
-      const { body } = result;
+      const {
+        body,
+      } = result;
 
       const mailCampaign = this.store.createRecord('mail-campaign', {
         campaignId: body.campaign_id,
@@ -87,8 +89,13 @@ export default Service.extend({
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {
       const plannedStart = await meeting.get('plannedStart');
-      const pubDate = moment(plannedStart).set({ hour: 14, minute: 0 });
-      const pubDocDate = moment(plannedStart).weekday(7).set({ hour: 14, minute: 0 });
+      const pubDate = moment(plannedStart).set({
+        hour: 14, minute: 0,
+      });
+      const pubDocDate = moment(plannedStart).weekday(7)
+        .set({
+          hour: 14, minute: 0,
+        });
       const newsletter = this.store.createRecord('newsletter-info', {
         meeting,
         finished: false,

@@ -15,16 +15,18 @@ export default Component.extend({
   isExpanded: false,
 
   async setNewPropertiesToModel(model) {
-    const { propertiesToSet } = this;
+    const {
+      propertiesToSet,
+    } = this;
     await Promise.all(
-      propertiesToSet.map(async (property) => {
+      propertiesToSet.map(async(property) => {
         model.set(property, await this.get(property));
-      }),
+      })
     );
     return model.save().then((model) => model.reload());
   },
 
-  richtext: computed('editor.currentTextContent', function () {
+  richtext: computed('editor.currentTextContent', function() {
     if (!this.editor) {
       return;
     }
@@ -51,9 +53,10 @@ export default Component.extend({
       this.set('isLoading', true);
 
       const decision = await this.get('item');
-      decision.set('modified', moment().utc().toDate());
+      decision.set('modified', moment().utc()
+        .toDate());
 
-      await this.setNewPropertiesToModel(decision).catch((e) => {
+      await this.setNewPropertiesToModel(decision)['catch']((e) => {
         this.set('isLoading', false);
         throw (e);
       });

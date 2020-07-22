@@ -1,5 +1,5 @@
 /* global context, before, cy,beforeEach, xit, Cypress */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 
 function currentTimestamp() {
@@ -8,37 +8,38 @@ function currentTimestamp() {
 
 function getTranslatedMonth(month) {
   switch (month) {
-    case 0:
-      return 'januari';
-    case 1:
-      return 'februari';
-    case 2:
-      return 'maart';
-    case 3:
-      return 'april';
-    case 4:
-      return 'mei';
-    case 5:
-      return 'juni';
-    case 6:
-      return 'juli';
-    case 7:
-      return 'augustus';
-    case 8:
-      return 'september';
-    case 9:
-      return 'oktober';
-    case 10:
-      return 'november';
-    case 11:
-      return 'december';
-    default:
-      return '';
+  case 0:
+    return 'januari';
+  case 1:
+    return 'februari';
+  case 2:
+    return 'maart';
+  case 3:
+    return 'april';
+  case 4:
+    return 'mei';
+  case 5:
+    return 'juni';
+  case 6:
+    return 'juli';
+  case 7:
+    return 'augustus';
+  case 8:
+    return 'september';
+  case 9:
+    return 'oktober';
+  case 10:
+    return 'november';
+  case 11:
+    return 'december';
+  default:
+    return '';
   }
 }
 
 context('Subcase tests', () => {
-  const agendaDate = Cypress.moment().add(2, 'weeks').day(4); // Next friday
+  const agendaDate = Cypress.moment().add(2, 'weeks')
+    .day(4); // Next friday
   // const caseTitle = 'Cypress test: subcases - 1594024946'; // The case is in the default data set with id 5F02E3F87DE3FC0008000002
   const SubcaseTitleShort = `Cypress test: add subcase - ${currentTimestamp()}`;
 
@@ -74,15 +75,21 @@ context('Subcase tests', () => {
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
-    cy.get('.vlc-status-timeline > li').eq(0).contains(/Ingediend voor agendering/);
+    cy.get('.vlc-status-timeline > li').eq(0)
+      .contains(/Ingediend voor agendering/);
     cy.get('.vl-description-data').within(() => {
       cy.get('.vl-description-data__value').as('descriptionValue');
       // cy.get('@descriptionValue').eq(0).contains(/Nog geen nummer/); // zitting number is a thing now, can we know this value ?
-      cy.get('@descriptionValue').eq(1).contains(/Ingediend voor de agenda van/);
-      cy.get('@descriptionValue').eq(1).contains(dateRegex);
-      cy.get('@descriptionValue').eq(2).contains(dateFormat);
-      cy.get('@descriptionValue').eq(4).contains(/Nog niet beslist/);
-      cy.get('@descriptionValue').eq(5).contains(/Hilde Crevits/);
+      cy.get('@descriptionValue').eq(1)
+        .contains(/Ingediend voor de agenda van/);
+      cy.get('@descriptionValue').eq(1)
+        .contains(dateRegex);
+      cy.get('@descriptionValue').eq(2)
+        .contains(dateFormat);
+      cy.get('@descriptionValue').eq(4)
+        .contains(/Nog niet beslist/);
+      cy.get('@descriptionValue').eq(5)
+        .contains(/Hilde Crevits/);
     });
 
     cy.openAgendaForDate(agendaDate);
@@ -91,7 +98,9 @@ context('Subcase tests', () => {
     cy.get('.vlc-panel-layout__main-content').within(() => {
       cy.wait('@getCaseSubcases');
       cy.get('.vl-tab').as('agendaitemTabs');
-      cy.get('@agendaitemTabs').eq(0).should('contain', 'Dossier').click();
+      cy.get('@agendaitemTabs').eq(0)
+        .should('contain', 'Dossier')
+        .click();
 
       cy.get('.vlc-container').as('agendaitemContent');
       cy.get('@agendaitemContent').within(() => {
@@ -146,8 +155,11 @@ context('Subcase tests', () => {
 
     cy.get('.vl-description-data').within(() => {
       cy.get('.vl-description-data__value').as('descriptionValue');
-      cy.get('@descriptionValue').eq(2).contains(formattedDate);
-      cy.get('@descriptionValue').eq(2).get('.vl-link').click();
+      cy.get('@descriptionValue').eq(2)
+        .contains(formattedDate);
+      cy.get('@descriptionValue').eq(2)
+        .get('.vl-link')
+        .click();
     });
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
@@ -175,7 +187,8 @@ context('Subcase tests', () => {
 
     // Status is hidden
     cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
-    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
+    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
+      .click();
 
     // Assert status also hidden
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
@@ -203,7 +216,8 @@ context('Subcase tests', () => {
 
     // Save the changes setting
     cy.route('PATCH', '/agendas/**').as('patchAgenda');
-    cy.get(agenda.item.actionButton).contains('Opslaan').click();
+    cy.get(agenda.item.actionButton).contains('Opslaan')
+      .click();
     cy.wait('@patchAgenda');
 
     // Assert status shown & confidentiality icon is visible
@@ -212,7 +226,8 @@ context('Subcase tests', () => {
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.confidentialityIcon).should('exist');
 
-    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap').click();
+    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
+      .click();
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
   });
@@ -233,11 +248,16 @@ context('Subcase tests', () => {
     cy.wait('@getAgendaItemThemes');
 
     // Toggle some themes.
-    cy.get(agenda.item.news.themesSelector).contains('Wonen').click();
-    cy.get(agenda.item.news.themesSelector).contains('Sport ').click();
-    cy.get(agenda.item.news.themesSelector).contains('Toerisme ').click();
-    cy.get(agenda.item.news.themesSelector).contains('Overheid ').click();
-    cy.get(agenda.item.news.themesSelector).contains('Innovatie ').click();
+    cy.get(agenda.item.news.themesSelector).contains('Wonen')
+      .click();
+    cy.get(agenda.item.news.themesSelector).contains('Sport ')
+      .click();
+    cy.get(agenda.item.news.themesSelector).contains('Toerisme ')
+      .click();
+    cy.get(agenda.item.news.themesSelector).contains('Overheid ')
+      .click();
+    cy.get(agenda.item.news.themesSelector).contains('Innovatie ')
+      .click();
 
     // Save this stuff.
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
@@ -256,38 +276,52 @@ context('Subcase tests', () => {
     // Go via kort-bestek view
     cy.route('GET', '/meetings/**/mail-campaign').as('getMeetingsMail');
     cy.route('GET', '/meetings?**').as('getMeetingsfilter');
-    cy.get('.vlc-toolbar').contains('Kort bestek').click();
+    cy.get('.vlc-toolbar').contains('Kort bestek')
+      .click();
     cy.wait('@getMeetingsMail');
     cy.wait('@getMeetingsfilter');
 
     cy.route('GET', '/meetings/**').as('getMeetingsDetail');
     // cy.route('GET', '/agendas**').as('getAgendas');
     cy.route('GET', '/agendaitems**').as('getAgendaItems');
-    cy.get(agenda.dataTableZebra).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`).click();
+    cy.get(agenda.dataTableZebra).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
+      .click();
     cy.wait('@getMeetingsDetail');
     // cy.wait('@getAgendas');
     cy.wait('@getAgendaItems');
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
-    cy.get(agenda.dataTable).find('.vl-vi-pencil').first().click();
+    cy.get(agenda.dataTable).find('.vl-vi-pencil')
+      .first()
+      .click();
     cy.wait('@getKortBestekThemes');
 
     // Validate already inputted data.
-    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Wonen');
-    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Sport');
-    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Toerisme');
-    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Overheid');
-    cy.get(agenda.item.news.checkedThemes).parent('label').contains('Innovatie');
+    cy.get(agenda.item.news.checkedThemes).parent('label')
+      .contains('Wonen');
+    cy.get(agenda.item.news.checkedThemes).parent('label')
+      .contains('Sport');
+    cy.get(agenda.item.news.checkedThemes).parent('label')
+      .contains('Toerisme');
+    cy.get(agenda.item.news.checkedThemes).parent('label')
+      .contains('Overheid');
+    cy.get(agenda.item.news.checkedThemes).parent('label')
+      .contains('Innovatie');
 
     // uncheck 2
-    cy.get(agenda.item.news.themesSelector).contains('Wonen').click();
-    cy.get(agenda.item.news.themesSelector).contains('Toerisme').click();
+    cy.get(agenda.item.news.themesSelector).contains('Wonen')
+      .click();
+    cy.get(agenda.item.news.themesSelector).contains('Toerisme')
+      .click();
 
     // check 3   others
-    cy.get(agenda.item.news.themesSelector).contains('Jeugd').click();
-    cy.get(agenda.item.news.themesSelector).contains('Cultuur').click();
-    cy.get(agenda.item.news.themesSelector).contains('Media').click();
+    cy.get(agenda.item.news.themesSelector).contains('Jeugd')
+      .click();
+    cy.get(agenda.item.news.themesSelector).contains('Cultuur')
+      .click();
+    cy.get(agenda.item.news.themesSelector).contains('Media')
+      .click();
 
     // Save this stuff.
     // cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
@@ -301,7 +335,9 @@ context('Subcase tests', () => {
     // dont open links in new windows.
 
     cy.get('a').invoke('removeAttr', 'target');
-    cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]').first().click();
+    cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]')
+      .first()
+      .click();
 
     // "Go to agendaItem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
@@ -320,7 +356,9 @@ context('Subcase tests', () => {
     cy.get(agenda.item.themes).contains('Cultuur');
     cy.get(agenda.item.themes).contains('Media');
 
-    cy.get(agenda.item.themes).contains('Toerisme').should('not.exist');
-    cy.get(agenda.item.themes).contains('Wonen').should('not.exist');
+    cy.get(agenda.item.themes).contains('Toerisme')
+      .should('not.exist');
+    cy.get(agenda.item.themes).contains('Wonen')
+      .should('not.exist');
   });
 });

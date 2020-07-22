@@ -16,5 +16,5 @@ const alert = '[data-test-system-alert]';
 export {
   managementModal,
   formFields,
-  alert,
+  alert
 };

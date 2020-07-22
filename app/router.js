@@ -6,88 +6,194 @@ const Router = EmberRouter.extend({
   rootURL: config.rootURL,
 });
 
-Router.map(function () {
-  this.route('agendas', { path: '/' }, function () {
-    this.route('overview', { path: '/overzicht' });
-  });
-  this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id' }, function () {
-    this.route('print', { path: '/afdrukken' });
-    this.route('agendaitems', { path: '/agendapunten' }, function () {
-      this.route('agendaitem', { path: '/:agendaitem_id' }, function () {
-        this.route('index', { path: '/' });
-        this.route('documents', { path: '/documenten' });
-        this.route('comments', { path: '/opmerkingen' });
-        this.route('decisions', { path: '/beslissingen' });
-        this.route('minutes', { path: '/notulen' });
-        this.route('news-item', { path: '/kort-bestek' });
-        this.route('press-agenda', { path: '/persagenda' });
-      });
+Router.map(function() {
+  this.route('agendas', {
+    path: '/',
+  }, function() {
+    this.route('overview', {
+      path: '/overzicht',
     });
-    this.route('compare', { path: '/vergelijken' });
-    this.route('documents', { path: '/documenten' });
   });
-  this.route('cases', { path: '/dossiers' }, function () {
-    this.route('case', { path: ':id' }, function () {
-      this.route('subcases', { path: '/deeldossiers' }, function () {
-        this.route('overview', { path: '' });
-        this.route('subcase', { path: ':subcase_id' }, function () {
-          this.route('documents', { path: '/documenten' });
-          this.route('overview', { path: '/overzicht' });
+  this.route('agenda', {
+    path: '/vergadering/:meeting_id/agenda/:agenda_id',
+  }, function() {
+    this.route('print', {
+      path: '/afdrukken',
+    });
+    this.route('agendaitems', {
+      path: '/agendapunten',
+    }, function() {
+      this.route('agendaitem', {
+        path: '/:agendaitem_id',
+      }, function() {
+        this.route('index', {
+          path: '/',
         });
-        this.route('loading', { path: '/laden' });
+        this.route('documents', {
+          path: '/documenten',
+        });
+        this.route('comments', {
+          path: '/opmerkingen',
+        });
+        this.route('decisions', {
+          path: '/beslissingen',
+        });
+        this.route('minutes', {
+          path: '/notulen',
+        });
+        this.route('news-item', {
+          path: '/kort-bestek',
+        });
+        this.route('press-agenda', {
+          path: '/persagenda',
+        });
       });
     });
-    this.route('overview', { path: '' });
+    this.route('compare', {
+      path: '/vergelijken',
+    });
+    this.route('documents', {
+      path: '/documenten',
+    });
   });
-  this.route('settings', { path: '/instellingen' }, function () {
+  this.route('cases', {
+    path: '/dossiers',
+  }, function() {
+    this.route('case', {
+      path: ':id',
+    }, function() {
+      this.route('subcases', {
+        path: '/deeldossiers',
+      }, function() {
+        this.route('overview', {
+          path: '',
+        });
+        this.route('subcase', {
+          path: ':subcase_id',
+        }, function() {
+          this.route('documents', {
+            path: '/documenten',
+          });
+          this.route('overview', {
+            path: '/overzicht',
+          });
+        });
+        this.route('loading', {
+          path: '/laden',
+        });
+      });
+    });
+    this.route('overview', {
+      path: '',
+    });
+  });
+  this.route('settings', {
+    path: '/instellingen',
+  }, function() {
     this.route('ministers');
-    this.route('overview', { path: '/overzicht' });
-    this.route('users', { path: '/gebruikers' }, function () {
-      this.route('user', { path: '/:id' });
+    this.route('overview', {
+      path: '/overzicht',
     });
-    this.route('system-alerts', { path: '/systeemmeldingen' }, function () {
-      this.route('edit', { path: '/:alert_id' });
-      this.route('new', { path: '/nieuw' });
+    this.route('users', {
+      path: '/gebruikers',
+    }, function() {
+      this.route('user', {
+        path: '/:id',
+      });
+    });
+    this.route('system-alerts', {
+      path: '/systeemmeldingen',
+    }, function() {
+      this.route('edit', {
+        path: '/:alert_id',
+      });
+      this.route('new', {
+        path: '/nieuw',
+      });
     });
   });
-  this.route('loading', { path: '/laden' });
-  this.route('mock-login-route', { path: '/mock-login' });
-  this.route('login', { path: '/aanmelden' });
+  this.route('loading', {
+    path: '/laden',
+  });
+  this.route('mock-login-route', {
+    path: '/mock-login',
+  });
+  this.route('login', {
+    path: '/aanmelden',
+  });
 
   this.route('route-not-found', {
     path: '/*wildcard',
   });
 
-  this.route('newsletters', { path: '/kort-bestek' });
-
-  this.route('print-overviews', { path: '/overzicht/:meeting_id' }, function () {
-    this.route('notes', { path: '/notulen/:agenda_id' }, function () {
-      this.route('overview', { path: '/klad' });
-      this.route('agendaitems', { path: '/agendapunten' });
-    });
-    this.route('decisions', { path: '/beslissingen/:agenda_id' }, function () {
-      this.route('overview', { path: '/klad' });
-      this.route('agendaitems', { path: '/agendapunten' });
-    });
-    this.route('press-agenda', { path: '/persagenda/:agenda_id' }, function () {
-      this.route('overview', { path: '/klad' });
-      this.route('agendaitems', { path: '/agendapunten' });
-    });
-    this.route('newsletter', { path: '/kort-bestek/:agenda_id' }, function () {
-      this.route('agendaitems', { path: '/agendapunten' });
-      this.route('overview', { path: '/klad' });
-      this.route('loading', { path: '/laden' });
-    });
-    this.route('loading', { path: '/laden' });
+  this.route('newsletters', {
+    path: '/kort-bestek',
   });
-  this.route('accountless-users', { path: '/onbevoegde-gebruiker' });
-  this.route('document-viewer', { path: '/document/:document_version_id' });
+
+  this.route('print-overviews', {
+    path: '/overzicht/:meeting_id',
+  }, function() {
+    this.route('notes', {
+      path: '/notulen/:agenda_id',
+    }, function() {
+      this.route('overview', {
+        path: '/klad',
+      });
+      this.route('agendaitems', {
+        path: '/agendapunten',
+      });
+    });
+    this.route('decisions', {
+      path: '/beslissingen/:agenda_id',
+    }, function() {
+      this.route('overview', {
+        path: '/klad',
+      });
+      this.route('agendaitems', {
+        path: '/agendapunten',
+      });
+    });
+    this.route('press-agenda', {
+      path: '/persagenda/:agenda_id',
+    }, function() {
+      this.route('overview', {
+        path: '/klad',
+      });
+      this.route('agendaitems', {
+        path: '/agendapunten',
+      });
+    });
+    this.route('newsletter', {
+      path: '/kort-bestek/:agenda_id',
+    }, function() {
+      this.route('agendaitems', {
+        path: '/agendapunten',
+      });
+      this.route('overview', {
+        path: '/klad',
+      });
+      this.route('loading', {
+        path: '/laden',
+      });
+    });
+    this.route('loading', {
+      path: '/laden',
+    });
+  });
+  this.route('accountless-users', {
+    path: '/onbevoegde-gebruiker',
+  });
+  this.route('document-viewer', {
+    path: '/document/:document_version_id',
+  });
 
   this.route('not-supported');
   this.route('help');
-  this.route('manual', { path: '/handleiding' });
+  this.route('manual', {
+    path: '/handleiding',
+  });
 
-  this.route('styleguide', function () {
+  this.route('styleguide', function() {
     this.route('alerts');
     this.route('buttons');
     this.route('documents');
@@ -98,9 +204,15 @@ Router.map(function () {
     this.route('typography');
   });
 
-  this.route('search', { path: '/zoeken' }, function () {
-    this.route('cases', { path: '/dossiers' });
-    this.route('agenda-items', { path: '/agendapunten' });
+  this.route('search', {
+    path: '/zoeken',
+  }, function() {
+    this.route('cases', {
+      path: '/dossiers',
+    });
+    this.route('agenda-items', {
+      path: '/agendapunten',
+    });
   });
 });
 

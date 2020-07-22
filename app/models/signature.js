@@ -11,5 +11,7 @@ export default Model.extend({
 
   file: belongsTo('file'),
   person: belongsTo('person'),
-  meetings: hasMany('meeting', { inverse: null }),
+  meetings: hasMany('meeting', {
+    inverse: null,
+  }),
 });

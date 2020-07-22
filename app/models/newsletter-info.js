@@ -4,7 +4,9 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 
-const { attr, hasMany, belongsTo } = DS;
+const {
+  attr, hasMany, belongsTo,
+} = DS;
 
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
@@ -21,11 +23,17 @@ export default ModelWithModifier.extend({
   remark: attr('string'),
 
   subcase: belongsTo('subcase'),
-  meeting: belongsTo('meeting', { inverse: null }),
-  documentVersions: hasMany('document-version', { inverse: null }),
-  themes: hasMany('themes', { inverse: null }),
+  meeting: belongsTo('meeting', {
+    inverse: null,
+  }),
+  documentVersions: hasMany('document-version', {
+    inverse: null,
+  }),
+  themes: hasMany('themes', {
+    inverse: null,
+  }),
 
-  displayRemark: computed('remark', 'intl', function () {
+  displayRemark: computed('remark', 'intl', function() {
     const remark = this.get('remark');
     if (remark && remark !== '') {
       return `${this.intl.t('remark')}: ${this.get('remark')}`;
@@ -33,7 +41,7 @@ export default ModelWithModifier.extend({
     return '';
   }),
 
-  newsletterProposal: computed('mandateeProposal', async function () {
+  newsletterProposal: computed('mandateeProposal', async function() {
     const subcase = await this.get('subcase');
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');

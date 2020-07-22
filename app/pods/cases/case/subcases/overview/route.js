@@ -12,7 +12,9 @@ export default Route.extend({
 
     const subcases = await this.store.query('subcase', {
       filter: {
-        case: { id: caze.get('id') },
+        case: {
+          id: caze.get('id'),
+        },
       },
       sort: '-created',
     });

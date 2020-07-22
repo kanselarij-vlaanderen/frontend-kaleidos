@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-  hasNota: computed('row', async function () {
+  hasNota: computed('row', async function() {
     const nota = await this.row.get('nota');
     if (nota) {
       return true;

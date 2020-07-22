@@ -3,7 +3,9 @@ module.exports = {
 
   rules: {
     'no-bare-strings': true,
-    'attribute-indentation': { indentation: 2 },
+    'attribute-indentation': {
+      indentation: 2,
+    },
     'no-inline-styles': false,
     'block-indentation': false,
     quotes: false,
@@ -15,6 +17,6 @@ module.exports = {
   },
 
   ignore: [
-    'addon/**',
+    'addon/**'
   ],
 };

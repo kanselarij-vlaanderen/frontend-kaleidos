@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 
 export default class IndexSearchRoute extends Route {
-  beforeModel () {
+  beforeModel() {
     this.transitionTo('search.agenda-items');
   }
 }
