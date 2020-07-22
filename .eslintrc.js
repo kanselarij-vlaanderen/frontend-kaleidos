@@ -117,7 +117,7 @@ module.exports = {
     "no-trailing-spaces": "error",
     "comma-style": ["error", "last"],
     "comma-dangle": ["error", {
-      "arrays": "always",
+      "arrays": "never",
       "objects": "always",
       "imports": "never",
       "exports": "never",
