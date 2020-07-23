@@ -50,6 +50,22 @@ export default Service.extend({
     });
   },
 
+  async approveAgenda(currentMeeting, agendaToApprove){
+    if (!agendaToApprove) {
+      return agendaToApprove;
+    }
+    // Triggers the agendaApproveService to approve the agenda.
+    await ajax({
+      method: 'POST',
+      url: '/agenda-approve/onlyApprove',
+      data: {
+        createdForMeetingWithId: currentMeeting.id,
+        idOfAgendaToApprove: agendaToApprove.id,
+      },
+    });
+    notifyPropertyChange(agendaToApprove, 'agendaitems');
+  },
+
   async approveAgendaAndCopyToDesignAgenda(currentMeeting, oldAgenda) {
     if (!oldAgenda) {
       return oldAgenda;
@@ -129,7 +145,7 @@ export default Service.extend({
       subcase: subcase,
     });
     await agendaActivity.save();
-    
+
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.get('shortTitle'),

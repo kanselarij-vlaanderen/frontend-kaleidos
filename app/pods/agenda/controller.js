@@ -20,6 +20,8 @@ export default Controller.extend({
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
 
+
+
   actions: {
     selectAgenda(agenda) {
       this.set('sessionService.selectedAgendaItem', null);
@@ -87,6 +89,6 @@ export default Controller.extend({
 
     loadingAgendaitems() {
       this.toggleProperty('isLoading');
-    }
+    },
   }
 });

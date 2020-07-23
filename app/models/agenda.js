@@ -11,7 +11,7 @@ export default Model.extend(LoadableModel, {
   serialnumber: attr('string'),
   issued: attr('datetime'),
   createdFor: belongsTo('meeting'),
-  status: belongsTo('agendastatus', {inverse: null}),
+  status: belongsTo('agendastatus', {inverse: null, async: false}),
   agendaitems: hasMany('agendaitem', { inverse: null, serialize: false }),
   created: attr('date'),
   modified: attr('datetime'),

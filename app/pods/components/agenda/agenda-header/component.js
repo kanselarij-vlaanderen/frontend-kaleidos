@@ -5,6 +5,7 @@ import { computed, set } from '@ember/object';
 import { warn, debug } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
+import { notifyPropertyChange } from '@ember/object';
 
 import {
   constructArchiveName,
@@ -33,6 +34,7 @@ export default Component.extend(FileSaverMixin, {
   isApprovingAgenda: false,
   isDeletingAgenda: false,
   isLockingAgenda: false,
+  isShowingAgendaActions: false,
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -151,7 +153,36 @@ export default Component.extend(FileSaverMixin, {
     }));
   },
 
+  async lockAgenda2() {
+    this.set('isLockingAgenda', true);
+    const agendas = await this.get('agendas');
+    const designAgenda = agendas
+      .filter((agenda) => agenda.get('isDesignAgenda'))
+      .sortBy('-serialnumber')
+      .get('firstObject');
+    const lastAgenda = agendas
+      .filter((agenda) => !agenda.get('isDesignAgenda'))
+      .sortBy('-serialnumber')
+      .get('firstObject');
+
+    const session = await lastAgenda.get('createdFor');
+    session.set('isFinal', true);
+    session.set('agenda', lastAgenda);
+    await session.save();
+    const closed = await this.store.findRecord('agendastatus', 'f06f2b9f-b3e5-4315-8892-501b00650101');
+    lastAgenda.set('status', closed);
+    await lastAgenda.save();
+
+    if (designAgenda) {
+      await this.deleteAgenda(designAgenda);
+    }
+    if (!this.isDestroyed) {
+      this.set('isLockingAgenda', false);
+    }
+  },
+
   actions: {
+
     print() {
       window.print();
     },
@@ -204,6 +235,41 @@ export default Component.extend(FileSaverMixin, {
       await this.approveAgenda(session)
     },
 
+    async approveAndCloseAgenda(session){
+      const isApprovable = await this.currentAgenda.get('isApprovable');
+      if (!isApprovable) {
+        this.set('showWarning', true);
+      } else {
+        if (this.get('isApprovingAgenda')) {
+          return;
+        }
+        this.set('isApprovingAgenda', true);
+        this.changeLoading();
+        let agendas = await this.get('agendas');
+        let agendaToLock = await agendas.find((agenda) => agenda.get('isDesignAgenda'));
+
+        agendaToLock.set(
+          'modified',
+          moment()
+            .utc()
+            .toDate()
+        );
+        agendaToLock.save().then(async (agendaToApprove) => {
+          await this.agendaService.approveAgenda(session, agendaToApprove);
+          return agendaToApprove;
+        }).then(async () => {
+          debugger;
+         await this.lockAgenda2();
+        }).finally(() => {
+          this.set('sessionService.selectedAgendaItem', null);
+          this.changeLoading();
+          this.set('isApprovingAgenda', false);
+        });
+      }
+    },
+
+
+
     async lockAgenda() {
       this.set('isLockingAgenda', true);
       const agendas = await this.get('agendas');
@@ -221,8 +287,8 @@ export default Component.extend(FileSaverMixin, {
       session.set('agenda', lastAgenda);
 
       await session.save();
-      const closed = this.store.findRecord('agendastatus', 'f06f2b9f-b3e5-4315-8892-501b00650101');
-      lastAgenda.set('agendastatus', closed);
+      const closed = await this.store.findRecord('agendastatus', 'f06f2b9f-b3e5-4315-8892-501b00650101'); // Async call
+      lastAgenda.set('status', closed);
       await lastAgenda.save();
 
       if (designAgenda) {
@@ -233,12 +299,22 @@ export default Component.extend(FileSaverMixin, {
       }
     },
 
+
+    // TODO: Refactor to use deleteDesginAgenda and
+    async deleteDesignAgendaAndLockAgenda() {
+      this.lockAgenda();
+    },
+
     async unlockAgenda() {
       await this.createDesignAgenda();
     },
 
     showMultipleOptions() {
       this.toggleProperty('isShowingOptions');
+    },
+
+    showAgendaActions() {
+      this.toggleProperty('isShowingAgendaActions');
     },
 
     compareAgendas() {
