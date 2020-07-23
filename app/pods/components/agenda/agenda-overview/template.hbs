@@ -86,7 +86,7 @@
           distance=30
           handle=dragHandleClass
         }}
-          <Agenda::AgendaList::ListItem
+          <Agenda::AgendaOverview::AgendaOverviewItem
             @agendaitem={{agendaitem}}
             @isEditingOverview={{isEditingOverview}}
             @selectAgendaItem={{action "selectAgendaItemAction"}}
@@ -113,7 +113,7 @@
           (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
         }}
           <li class="vlc-agenda-items__sub-item">
-            <Agenda::AgendaList::ListItem
+            <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{agendaitem}}
               @isEditingOverview={{isEditingOverview}}
               @selectAgendaItem={{action "selectAgendaItemAction"}}
@@ -157,7 +157,7 @@
             distance=30
             handle=dragHandleClass
           }}
-            <Agenda::AgendaList::ListItem
+            <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{announcement}}
               @isEditingOverview={{isEditingOverview}}
               @selectAgendaItem={{action "selectAgendaItemAction"}}
@@ -171,7 +171,7 @@
       as |announcement|
       }}
         <div class="vlc-agenda-items__sub-item">
-          <Agenda::AgendaList::ListItem
+          <Agenda::AgendaOverview::AgendaOverviewItem
             @agendaitem={{announcement}}
             @isEditingOverview={{isEditingOverview}}
             @selectAgendaItem={{action "selectAgendaItemAction"}}

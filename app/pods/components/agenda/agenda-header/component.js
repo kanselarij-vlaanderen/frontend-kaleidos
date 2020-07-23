@@ -254,16 +254,21 @@ export default Component.extend(FileSaverMixin, {
     },
 
     async downloadAllDocuments() {
+      // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
       const fileDownloadToast = {
         title: this.intl.t('file-ready'),
         type: 'download-file',
-        options: { timeOut: 10 * 1000 }
+        options: { timeOut: 60 * 10 * 1000 }
       };
 
       const namePromise = constructArchiveName(this.currentAgenda);
       debug('Checking if archive exists ...');
       const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
       const [name, job] = await all([namePromise, jobPromise]);
+      if (!job) {
+        this.toaster.warning(this.intl.t('no-documents-to-download-warning-text'), this.intl.t('no-documents-to-download-warning-title'),{ timeOut: 10000 });
+        return;
+      }
       if (!job.hasEnded) {
         debug('Archive in creation ...');
         const inCreationToast = this.toaster.loading(this.intl.t('archive-in-creation-message'),
