@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 
-export default class ListItem extends Component {
+export default class AgendaOverviewItem extends Component {
   /**
    * INFO arguments from parent.
    *

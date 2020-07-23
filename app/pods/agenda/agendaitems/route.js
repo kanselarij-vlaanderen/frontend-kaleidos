@@ -57,7 +57,7 @@ export default Route.extend({
     const meetingId = await this.get('sessionService.currentSession.id');
     const searchResults = await ajax({
       method: 'GET',
-      url: `/agendaitems/search?filter[meetingId]=${meetingId}&filter[data,title,shortTitle,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`,
+      url: `/agendaitems/search?filter[meetingId]=${meetingId}&filter[:sqs:title,shortTitle,data,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`,
     });
     const searchMap = {};
     searchResults.data.map((item) => {

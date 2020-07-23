@@ -7,7 +7,7 @@ import { inject as service } from '@ember/service';
 import { restartableTask } from 'ember-concurrency-decorators';
 import { isPresent } from '@ember/utils';
 
-export default class AgendaList extends Component {
+export default class AgendaOverview extends Component {
   @service sessionService;
 
   @service agendaService;
