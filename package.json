@@ -16,10 +16,10 @@
     "last 1 Safari versions"
   ],
   "scripts": {
-    "prestart": "ember-template-lint .",
+    "prestart": "npm-run-all lint:hbs lint:js",
     "build": "ember build --environment=production",
     "design": "ember serve --proxy=https://kaleidos-dev.vlaanderen.be",
-    "design-all": "npm-run-all lint:hbs design",
+    "design-all": "npm-run-all lint:hbs lint:js design",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",

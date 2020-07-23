@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import Evented from '@ember/object/evented';
+// eslint-disable-next-line ember/no-observers
 import {
   observer, computed
 } from '@ember/object';
@@ -17,6 +18,7 @@ export default DS.Model.extend(Evented, {
     return this.status === this.SUCCESS || this.status === this.FAILED;
   }),
 
+  // eslint-disable-next-line ember/no-observers
   statusObserver: observer('hasEnded', function() {
     if (this.hasEnded) {
       this.trigger('didEnd', this.status);
