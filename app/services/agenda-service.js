@@ -44,7 +44,7 @@ export default Service.extend({
     }).then((result) => result.body.documentNames);
   },
 
-  async approveAgenda(currentMeeting, agendaToApprove){
+  async approveAgenda(currentMeeting, agendaToApprove) {
     if (!agendaToApprove) {
       return agendaToApprove;
     }

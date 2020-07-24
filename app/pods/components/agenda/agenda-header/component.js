@@ -43,7 +43,8 @@ export default Component.extend(FileSaverMixin, {
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
-  // currentAgenda: alias('sessionService.currentAgenda'),
+  currentAgenda: alias('sessionService.currentAgenda'),
+  agendas: alias('sessionService.agendas'),
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
@@ -96,7 +97,7 @@ export default Component.extend(FileSaverMixin, {
     session.set('isFinal', false);
     session.set('agenda', null);
     await session.save();
-    const definiteAgendas = await session.get('definiteAgendas');
+    const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
     const approved = await this.store.findRecord('agendastatus', 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1');
     lastDefiniteAgenda.set('status', approved);
@@ -157,25 +158,20 @@ export default Component.extend(FileSaverMixin, {
     }));
   },
 
-  async lockAgenda() {
+  async lockAgenda(lastAgenda) {
     this.set('isLockingAgenda', true);
     const meetingOfAgenda = await this.currentAgenda.get('createdFor');
-    const agendasOfMeeting = await meetingOfAgenda.get('sortedAgendas');
-    debugger;
-    const lastAgenda = agendasOfMeeting
-      .filter((agenda) => !agenda.get('isDesignAgenda'))
-      .sortBy('-serialnumber')
-      .get('firstObject');
+    // Als je deze reload niet doet dan refreshed de interface niet (Ember).
+    await meetingOfAgenda.hasMany('agendas').reload();
 
-    const session = await lastAgenda.get('createdFor');
-    session.set('isFinal', true);
-    session.set('agenda', lastAgenda);
-    await session.save();
-    await session.hasMany('agendas').reload();
+    meetingOfAgenda.set('isFinal', true);
+    meetingOfAgenda.set('agenda', lastAgenda);
+    await meetingOfAgenda.save();
 
     const closed = await this.store.findRecord('agendastatus', 'f06f2b9f-b3e5-4315-8892-501b00650101');
     lastAgenda.set('status', closed);
     await lastAgenda.save();
+    this.set('sessionService.currentSession.agendas', meetingOfAgenda.agendas);
 
     if (!this.isDestroyed) {
       this.set('isLockingAgenda', false);
@@ -268,8 +264,12 @@ export default Component.extend(FileSaverMixin, {
           await this.agendaService.approveAgenda(session, agendaToApprove);
           return agendaToApprove;
         })
-          .then(async() => {
-            await this.lockAgenda();
+          .then(async(agendaToApprove) => {
+            // We reloaden de agenda hier om de recente changes m.b.t. het approven van de agenda binnen te halen
+            const reloadedAgenda = await this.store.findRecord('agenda', agendaToApprove.get('id'), {
+              reload: true,
+            });
+            await this.lockAgenda(reloadedAgenda);
           })
           .finally(() => {
             this.set('sessionService.selectedAgendaItem', null);
