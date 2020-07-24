@@ -163,7 +163,6 @@ export default Component.extend(FileSaverMixin, {
     const meetingOfAgenda = await this.currentAgenda.get('createdFor');
     // Als je deze reload niet doet dan refreshed de interface niet (Ember).
     await meetingOfAgenda.hasMany('agendas').reload();
-
     meetingOfAgenda.set('isFinal', true);
     meetingOfAgenda.set('agenda', lastAgenda);
     await meetingOfAgenda.save();
@@ -268,6 +267,7 @@ export default Component.extend(FileSaverMixin, {
             // We reloaden de agenda hier om de recente changes m.b.t. het approven van de agenda binnen te halen
             const reloadedAgenda = await this.store.findRecord('agenda', agendaToApprove.get('id'), {
               reload: true,
+              include: 'status',
             });
             await this.lockAgenda(reloadedAgenda);
           })
