@@ -40,11 +40,11 @@ export const ajax = ({
     .then((response) => {
       if (response.status !== 204) {
         switch (dataType) {
-        case 'blob':
-          return response.blob();
-        default:
+          case 'blob':
+            return response.blob();
+          default:
           // Auto-convert all responses to JSON
-          return response.json();
+            return response.json();
         }
       } else {
         return response.body;
