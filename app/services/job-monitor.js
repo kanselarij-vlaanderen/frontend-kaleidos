@@ -1,6 +1,8 @@
 import Service from '@ember/service';
 import { A } from '@ember/array';
-import { task, timeout } from 'ember-concurrency';
+import {
+  task, timeout
+} from 'ember-concurrency';
 
 export default Service.extend({
   jobs: null,
@@ -15,11 +17,11 @@ export default Service.extend({
     this.monitorJobProgress.perform(job);
   },
 
-  monitorJobProgress: task(function* (job) {
+  monitorJobProgress: task(function *(job) {
     while (!job.hasEnded) {
       yield timeout(1000);
       yield job.reload();
     }
     return job;
-  })
+  }),
 });

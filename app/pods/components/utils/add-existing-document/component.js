@@ -1,8 +1,11 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+import {
+  task,
+  timeout
+} from 'ember-concurrency';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking'
+import { tracked } from '@glimmer/tracking';
 
 export default class AddExistingDocument extends Component {
   @service store;
@@ -32,15 +35,15 @@ export default class AddExistingDocument extends Component {
   }
 
   setSelectedToFalse() {
-    this.items.map(item => item.set('selected', false));
+    this.items.map((item) => item.set('selected', false));
   }
 
   queryOptions() {
-    let options = {
+    const options = {
       sort: this.sort,
       page: {
         number: this.page,
-        size: this.size
+        size: this.size,
       },
       filter: {},
     };
@@ -50,14 +53,14 @@ export default class AddExistingDocument extends Component {
     return options;
   }
 
-  @task(function* () {
+  @task(function *() {
     yield timeout(300);
     this.items = yield this.store.query('document-version', this.queryOptions());
     yield timeout(100);
     this.setSelectedToFalse();
   })findAll;
 
-  @task(function* () {
+  @task(function *() {
     yield timeout(300);
     this.items = yield this.store.query('document-version', this.queryOptions());
     this.page = 0;

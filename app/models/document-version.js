@@ -4,7 +4,9 @@ import sanitize from 'sanitize-filename';
 import { deprecatingAlias } from '@ember/object/computed';
 import moment from 'moment';
 
-const { Model, attr, belongsTo } = DS;
+const {
+  Model, attr, belongsTo,
+} = DS;
 
 export default Model.extend({
   name: attr('string'),
@@ -12,31 +14,47 @@ export default Model.extend({
   modified: attr('datetime'),
   chosenFileName: deprecatingAlias('name', {
     id: 'model-refactor.documents',
-    until: '?'
+    until: '?',
   }),
   confidential: attr('boolean'),
   accessLevel: belongsTo('access-level'),
 
   file: belongsTo('file'),
-  convertedFile: belongsTo('file', { inverse: null }),
+  convertedFile: belongsTo('file', {
+    inverse: null,
+  }),
 
-  documentContainer: belongsTo('document', { inverse: null }),
+  documentContainer: belongsTo('document', {
+    inverse: null,
+  }),
   document: deprecatingAlias('documentContainer', {
     id: 'model-refactor.documents',
-    until: '?'
+    until: '?',
   }),
-  nextVersion: belongsTo('document-version', { inverse: 'previousVersion' }),
-  previousVersion: belongsTo('document-version', { inverse: 'nextVersion' }),
+  nextVersion: belongsTo('document-version', {
+    inverse: 'previousVersion',
+  }),
+  previousVersion: belongsTo('document-version', {
+    inverse: 'nextVersion',
+  }),
 
-  subcase: belongsTo('subcase', { inverse: null }),
-  agendaitem: belongsTo('agendaitem', { inverse: null }),
+  subcase: belongsTo('subcase', {
+    inverse: null,
+  }),
+  agendaitem: belongsTo('agendaitem', {
+    inverse: null,
+  }),
   announcement: belongsTo('announcement'),
   newsletter: belongsTo('newsletter-info'),
-  meeting: belongsTo('meeting', { inverse: null }),
+  meeting: belongsTo('meeting', {
+    inverse: null,
+  }),
 
-  downloadFilename: computed('name', 'file.extension', async function () {
-    let filename = `${await this.get('name')}.${await this.get('file.extension')}`;
-    return sanitize(filename, { replacement: '_' });
+  downloadFilename: computed('name', 'file.extension', async function() {
+    const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
+    return sanitize(filename, {
+      replacement: '_',
+    });
   }),
 
   storeAccessLevel(accessLevel) {
@@ -45,10 +63,10 @@ export default Model.extend({
     return this.save();
   },
 
-  toggleConfidential: async function () {
+  async toggleConfidential() {
     this.set('modified', moment().toDate());
     this.toggleProperty('confidential');
     await this.save();
-  }
+  },
 
 });

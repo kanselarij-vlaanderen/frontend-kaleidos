@@ -6,6 +6,6 @@ export default Component.extend({
   actions: {
     removeDocument(document) {
       this.removeDocument(document);
-    }
-  }
+    },
+  },
 });

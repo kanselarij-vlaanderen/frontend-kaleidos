@@ -6,7 +6,7 @@ export default Controller.extend({
   intl: inject(),
   newsletterService: inject(),
 
-  columns: computed(function () {
+  columns: computed(function() {
     return [
       {
         label: '#',
@@ -46,7 +46,7 @@ export default Controller.extend({
         sortable: false,
         breakpoints: ['mobile', 'tablet', 'desktop'],
         cellComponent: 'web-components/vl-table-actions',
-      },
+      }
     ];
   }),
 

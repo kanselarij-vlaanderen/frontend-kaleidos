@@ -1,36 +1,39 @@
+/* eslint-disable class-methods-use-this */
 import Component from '@ember/component';
-import { action, computed } from '@ember/object';
+import EmberObject, {
+  action, computed
+} from '@ember/object';
 import { inject as service } from '@ember/service';
-import EmberObject from '@ember/object';
+
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
 
-//TODO code cuplication with agendaitem-case/agendaitem-mandatees
-export default class
-SubcaseMandatees extends Component {
+// TODO code cuplication with agendaitem-case/agendaitem-mandatees
+export default class SubcaseMandatees extends Component {
   @service store;
+
   @service currentSession;
 
   classNames = ['vl-u-spacer-extended-bottom-l'];
+
   subcase = null;
+
   propertiesToSet = Object.freeze(['mandatees', 'governmentDomains']);
 
   @computed('subcase', 'mandatees.@each')
   get mandateeRows() {
     return DS.PromiseArray.create({
-      promise: this.constructMandateeRows().then((rows) => {
-        return this.get('subcase.requestedBy').then((requestedBy) => {
-          if (!requestedBy && rows.get('length') > 0) {
-            rows.get('firstObject').set('isSubmitter', true);
-          } else {
-            const foundMandatee = rows.find((row) => row.get('mandatee.id') === requestedBy.get('id'));
-            if (foundMandatee) {
-              foundMandatee.set('isSubmitter', true);
-            }
+      promise: this.constructMandateeRows().then((rows) => this.get('subcase.requestedBy').then((requestedBy) => {
+        if (!requestedBy && rows.get('length') > 0) {
+          rows.get('firstObject').set('isSubmitter', true);
+        } else {
+          const foundMandatee = rows.find((row) => row.get('mandatee.id') === requestedBy.get('id'));
+          if (foundMandatee) {
+            foundMandatee.set('isSubmitter', true);
           }
-          return rows.sortBy('mandateePriority');
-        });
-      })
+        }
+        return rows.sortBy('mandateePriority');
+      })),
     });
   }
 
@@ -44,11 +47,11 @@ SubcaseMandatees extends Component {
     return EmberObject.create({
       fieldsToShow,
       domainsToShow,
-      mandatee: mandatee,
+      mandatee,
       mandateePriority: mandatee.get('priority'),
-      domains: domains,
-      fields: fields,
-      iseCodes: iseCodes,
+      domains,
+      fields,
+      iseCodes,
     });
   }
 
@@ -64,13 +67,13 @@ SubcaseMandatees extends Component {
   async constructMandateeRows() {
     const subcase = await this.subcase;
     const iseCodes = await subcase.get('iseCodes');
-    let mandatees = await (await subcase.get('mandatees')).sortBy('priority');
+    const mandatees = await (await subcase.get('mandatees')).sortBy('priority');
     let selectedMandatee = await subcase.get('requestedBy');
     const mandateeLength = mandatees.get('length');
     if (mandateeLength === 1) {
       selectedMandatee = mandatees.get('firstObject');
     }
-    return Promise.all(mandatees.map(async (mandatee) => {
+    return Promise.all(mandatees.map(async(mandatee) => {
       const filteredIseCodes = await this.getIseCodesOfMandatee(iseCodes, mandatee);
       const row = await this.createMandateeRow(mandatee, filteredIseCodes);
       if (selectedMandatee && mandatee.get('id') === selectedMandatee.get('id')) {
@@ -79,16 +82,16 @@ SubcaseMandatees extends Component {
         row.set('isSubmitter', true);
       }
       return row;
-    }))
+    }));
   }
 
   async parseDomainsAndMandatees() {
     const mandateeRows = await this.get('mandateeRows');
     const mandatees = [];
-    let iseCodes = [];
+    const iseCodes = [];
     let requestedBy = null;
     if (mandateeRows && mandateeRows.get('length') > 0) {
-      mandateeRows.map( async row => {
+      mandateeRows.map(async(row) => {
         if (row.get('isSubmitter')) {
           requestedBy = row.get('mandatee');
         }
@@ -99,7 +102,9 @@ SubcaseMandatees extends Component {
         });
       });
     }
-    return { mandatees, iseCodes, requestedBy };
+    return {
+      mandatees, iseCodes, requestedBy,
+    };
   }
 
   @action
@@ -117,15 +122,17 @@ SubcaseMandatees extends Component {
   async saveChanges() {
     this.set('isLoading', true);
     const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
-    const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] }
+    const propertiesToSetOnAgendaitem = {
+      mandatees: propertiesToSetOnSubcase.mandatees,
+    };
     const resetFormallyOk = true;
     try {
       await saveMandateeChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
-    } catch (e) {
+    } catch (exception) {
       this.set('isLoading', false);
-      throw (e);
+      throw (exception);
     }
   }
 

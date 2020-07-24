@@ -11,6 +11,6 @@ export default Route.extend(AuthenticatedRouteMixin, {
     refreshRoute() {
       this._super(...arguments);
       this.refresh();
-    }
-  }
+    },
+  },
 });

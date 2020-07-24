@@ -14,14 +14,15 @@ export default Component.extend({
 
   currentSession: alias('sessionService.currentSession'),
 
-  signedDocument: computed('agendaitem.meetingRecord.signedDocument', async function () {
+  signedDocument: computed('agendaitem.meetingRecord.signedDocument', async function() {
     return await this.get('agendaitem.meetingRecord.signedDocument');
   }),
 
   actions: {
     async toggleIsEditing() {
       const agendaitemNotes = await this.get('agendaitem.meetingRecord');
-      const date = moment().utc().toDate();
+      const date = moment().utc()
+        .toDate();
       if (!agendaitemNotes) {
         const meetingRecord = this.store.createRecord('meeting-record', {
           created: date,
@@ -31,9 +32,9 @@ export default Component.extend({
           description: '',
           attendees: [],
           agendaitem: await this.get('agendaitem'),
-          meeting: null
-        })
-        await meetingRecord.save()
+          meeting: null,
+        });
+        await meetingRecord.save();
       }
       this.toggleProperty('isEditing');
     },
@@ -42,6 +43,6 @@ export default Component.extend({
       const recordToSave = this.store.peekRecord('meeting-record', meetingRecord.get('id'));
       await recordToSave.save();
       this.toggleProperty('isEditing');
-    }
-  }
+    },
+  },
 });

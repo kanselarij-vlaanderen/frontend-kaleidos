@@ -4,7 +4,7 @@ import { inject } from '@ember/service';
 import {
   setCalculatedGroupPriorities,
   groupAgendaitemsByGroupname,
-  sortByPriority,
+  sortByPriority
 } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default Route.extend({
@@ -15,22 +15,28 @@ export default Route.extend({
   allowEmptyGroups: true,
 
   queryParams: {
-    definite: { refreshModel: true }
+    definite: {
+      refreshModel: true,
+    },
   },
 
   async model(params) {
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
-    let agendaitems = await this.store.query('agendaitem', {
-      filter: { agenda: { id: agenda.get('id') } },
+    const agendaitems = await this.store.query('agendaitem', {
+      filter: {
+        agenda: {
+          id: agenda.get('id'),
+        },
+      },
       include: 'mandatees',
-      sort: 'priority'
+      sort: 'priority',
     });
-    const announcements = this.filterAnnouncements(agendaitems.filter((agendaitem) => {
-      return agendaitem.showAsRemark;
-    }), params);
+    const announcements = this.filterAnnouncements(agendaitems.filter((agendaitem) => agendaitem.showAsRemark), params);
 
-    const { draftAgendaitems, groupedAgendaitems } = await this.parseAgendaItems(
+    const {
+      draftAgendaitems, groupedAgendaitems,
+    } = await this.parseAgendaItems(
       agendaitems, params
     );
 
@@ -61,32 +67,32 @@ export default Route.extend({
     };
   },
 
-  filterAnnouncements: function (announcements) {
-    return announcements.filter((agendaitem) => {
-      return agendaitem.showInNewsletter;
-    });
+  filterAnnouncements(announcements) {
+    return announcements.filter((agendaitem) => agendaitem.showInNewsletter);
   },
 
-  filterAgendaitems: async function (agendaitems, params) {
+  async filterAgendaitems(agendaitems, params) {
     if (params.definite !== 'true') {
       return agendaitems;
     }
-    let newsLetterByIndex = await Promise.all(agendaitems.map(async (agendaitem) => {
+    const newsLetterByIndex = await Promise.all(agendaitems.map(async(agendaitem) => {
       try {
         const agendaActivity = await agendaitem.get('agendaActivity');
         const subcase = await agendaActivity.get('subcase');
         const newsletterInfo = await subcase.get('newsletterInfo');
         return newsletterInfo.inNewsletter;
-      } catch (e) {
+      } catch (exception) {
+        console.warn('An exception occurred: ', exception);
         return false;
       }
     }));
-    let filtered = [];
+    const filtered = [];
     agendaitems.map((agendaitem, index) => {
       if (newsLetterByIndex[index]) {
         filtered.push(agendaitem);
       }
+      return null;
     });
     return filtered;
-  }
+  },
 });

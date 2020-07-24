@@ -1,9 +1,9 @@
-/*global context, it, cy,beforeEach*/
-/// <reference types="Cypress" />
+/* global context, it, cy,beforeEach */
+// / <reference types="Cypress" />
 
-import settings from "../../../../selectors/settings.selectors";
-import toolbar from "../../../../selectors/toolbar.selectors";
-import modal from "../../../../selectors/modal.selectors";
+import settings from '../../../../selectors/settings.selectors';
+import toolbar from '../../../../selectors/toolbar.selectors';
+import modal from '../../../../selectors/modal.selectors';
 
 context('Manage ISE codes tests', () => {
   beforeEach(() => {
@@ -13,14 +13,14 @@ context('Manage ISE codes tests', () => {
 
   it('Should open the model behind manage ISE codes', () => {
     cy.get(toolbar.settings).click();
-    cy.url().should('include','instellingen/overzicht');
+    cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.manageIseCodes).click();
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
   });
 
   it('Should open the model behind manage ISE codes and close it', () => {
     cy.get(toolbar.settings).click();
-    cy.url().should('include','instellingen/overzicht');
+    cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.manageIseCodes).click();
     cy.wait(200);
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
