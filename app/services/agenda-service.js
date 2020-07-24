@@ -1,5 +1,5 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
+
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'fe-redpencil/utils/ajax';
@@ -19,7 +19,7 @@ export default Service.extend({
   assignNewSessionNumbers() {
     return ajax({
       method: 'GET',
-      url: `/session-service/assignNewSessionNumbers`,
+      url: '/session-service/assignNewSessionNumbers',
     });
   },
 
@@ -27,27 +27,21 @@ export default Service.extend({
     return ajax({
       method: 'GET',
       url: `/session-service/closestMeeting?date=${date}`,
-    }).then((result) => {
-      return result.body.closestMeeting;
-    });
+    }).then((result) => result.body.closestMeeting);
   },
 
   getActiveAgendas(date) {
     return ajax({
       method: 'GET',
       url: `/session-service/activeAgendas?date=${date}`,
-    }).then((result) => {
-      return result.body.agendas;
-    });
+    }).then((result) => result.body.agendas);
   },
 
   async getDocumentNames(model) {
     return ajax({
       method: 'GET',
       url: `/lazy-loading/documentNames?uuid=${model.id}`,
-    }).then((result) => {
-      return result.body.documentNames;
-    });
+    }).then((result) => result.body.documentNames);
   },
 
   async approveAgenda(currentMeeting, agendaToApprove){
@@ -71,7 +65,7 @@ export default Service.extend({
       return oldAgenda;
     }
     // Use approveagendaService to duoplicate AgendaItems into new agenda.
-    let result = await ajax({
+    const result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
@@ -80,7 +74,7 @@ export default Service.extend({
       },
     });
     notifyPropertyChange(oldAgenda, 'agendaitems');
-    let newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
+    const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
     notifyPropertyChange(newAgenda, 'agendaitems');
     return newAgenda;
   },
@@ -99,6 +93,7 @@ export default Service.extend({
         },
       });
     } catch (error) {
+      console.warn('An error ocurred: ', error);
       this.toaster.error(this.intl.t('error-delete-agenda'), this.intl.t('warning-title'));
     }
   },
@@ -132,7 +127,7 @@ export default Service.extend({
       priorityToAssign = (await selectedAgenda.get('lastAgendaitemPriority')) + 1;
     }
 
-    if (isNaN(priorityToAssign)) {
+    if (Number.isNaN(priorityToAssign)) {
       priorityToAssign = 1;
     }
 
@@ -141,8 +136,9 @@ export default Service.extend({
     }
 
     const agendaActivity = await this.store.createRecord('agenda-activity', {
-      startDate: moment().utc().toDate(),
-      subcase: subcase,
+      startDate: moment().utc()
+        .toDate(),
+      subcase,
     });
     await agendaActivity.save();
 
@@ -159,11 +155,11 @@ export default Service.extend({
       shortTitle: subcase.get('shortTitle'),
       formallyOk: CONFIG.notYetFormallyOk,
       showAsRemark: isAnnouncement,
-      mandatees: mandatees,
+      mandatees,
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
-      agendaActivity: agendaActivity,
-      showInNewsletter: true
+      agendaActivity,
+      showInNewsletter: true,
     });
     await agendaitem.save();
     const meeting = await selectedAgenda.get('createdFor');
@@ -177,14 +173,14 @@ export default Service.extend({
   async groupAgendaItemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
-      agendaitems.map(async (item) => {
+      agendaitems.map(async(item) => {
         const mandatees = await item.get('sortedMandatees');
         if (item.isApproval) {
           item.set('groupName', null);
           item.set('ownGroupName', null);
           return;
         }
-        if (mandatees.length == 0) {
+        if (mandatees.length === 0) {
           item.set('groupName', 'Geen toegekende ministers');
           return;
         }
@@ -192,7 +188,7 @@ export default Service.extend({
           .map((mandatee) => mandatee.title)
           .join('<br/>');
 
-        if (currentAgendaitemGroupName != previousAgendaitemGroupName) {
+        if (currentAgendaitemGroupName !== previousAgendaitemGroupName) {
           previousAgendaitemGroupName = currentAgendaitemGroupName;
           item.set('groupName', currentAgendaitemGroupName);
         } else {
@@ -204,7 +200,9 @@ export default Service.extend({
   },
 
   async deleteAgendaitem(agendaitem) {
-    let itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), { reload: true });
+    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
+      reload: true,
+    });
     itemToDelete.set('aboutToDelete', true);
     const agendaActivity = await itemToDelete.get('agendaActivity');
 
@@ -212,7 +210,7 @@ export default Service.extend({
       const subcase = await agendaActivity.get('subcase');
       await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
-      await Promise.all(agendaitemsFromActivity.map(async agendaitem => {
+      await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
         const agenda = await agendaitem.get('agenda');
         await agendaitem.destroyRecord();
         await agenda.hasMany('agendaitems').reload();
@@ -229,9 +227,8 @@ export default Service.extend({
   async deleteAgendaitemFromMeeting(agendaitem) {
     if (this.currentSession.isAdmin) {
       return await this.deleteAgendaitem(agendaitem);
-    } else {
-      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
     }
+    this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
   },
 
   async retrieveModifiedDateFromNota(agendaitem, subcase) {
@@ -249,15 +246,14 @@ export default Service.extend({
     if (notaDocumentVersions.length > 1) {
       const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
       if (newsletterInfoOnSubcaseLastModifiedTime) {
-        if (moment(newsletterInfoOnSubcaseLastModifiedTime).isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
+        if (moment(newsletterInfoOnSubcaseLastModifiedTime)
+          .isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
           return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
-        } else {
-          return null;
         }
-      } else {
-        return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+        return null;
       }
+      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
     }
     return null;
-  }
+  },
 });

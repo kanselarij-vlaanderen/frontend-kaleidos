@@ -6,9 +6,13 @@ import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
 import { A } from '@ember/array';
-import { sortDocuments, getDocumentsLength } from 'fe-redpencil/utils/documents';
+import {
+  sortDocuments, getDocumentsLength
+} from 'fe-redpencil/utils/documents';
 
-let { attr, belongsTo, hasMany, PromiseArray, PromiseObject } = DS;
+const {
+  attr, belongsTo, hasMany, PromiseArray, PromiseObject,
+} = DS;
 
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
@@ -32,8 +36,12 @@ export default ModelWithModifier.extend({
   isApproval: attr('boolean'),
   explanation: attr('string'),
 
-  agenda: belongsTo('agenda', { inverse: null }),
-  agendaActivity: belongsTo('agenda-activity', { inverse: null }),
+  agenda: belongsTo('agenda', {
+    inverse: null,
+  }),
+  agendaActivity: belongsTo('agenda-activity', {
+    inverse: null,
+  }),
   meetingRecord: belongsTo('meeting-record'),
   showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
@@ -43,84 +51,81 @@ export default ModelWithModifier.extend({
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
 
-  sortedDocumentVersions: computed('documentVersions.@each.name', function () {
-    return A(this.get('documentVersions').toArray()).sort((a, b) => {
-      return compareFunction(new VRDocumentName(a.get('name')), new VRDocumentName(b.get('name')));
-    });
+  sortedDocumentVersions: computed('documentVersions.@each.name', function() {
+    return A(this.get('documentVersions').toArray()).sort((documentA, documentB) => compareFunction(new VRDocumentName(documentA.get('name')), new VRDocumentName(documentB.get('name'))));
   }),
 
-  documentsLength: computed('documents', function () {
+  documentsLength: computed('documents', function() {
     return getDocumentsLength(this, 'documents');
   }),
 
-  linkedDocumentsLength: computed('linkedDocuments', function () {
+  linkedDocumentsLength: computed('linkedDocuments', function() {
     return getDocumentsLength(this, 'linkedDocuments');
   }),
 
-  documents: computed('documentVersions.@each.name', function () {
+  documents: computed('documentVersions.@each.name', function() {
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': { id: documentVersionIds },
+              documents: {
+                id: documentVersionIds,
+              },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => {
-            return sortDocuments(this.get('documentVersions'), containers);
-          });
+          }).then((containers) => sortDocuments(this.get('documentVersions'), containers));
         }
-      })
+      }),
     });
   }),
 
-  linkedDocuments: computed('linkedDocumentVersions.@each', function () {
+  linkedDocuments: computed('linkedDocumentVersions.@each', function() {
     return PromiseArray.create({
       promise: this.get('linkedDocumentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': { id: documentVersionIds },
+              documents: {
+                id: documentVersionIds,
+              },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => {
-            return sortDocuments(this.get('linkedDocumentVersions'), containers);
-          });
+          }).then((containers) => sortDocuments(this.get('linkedDocumentVersions'), containers));
         }
-      })
+      }),
     });
   }),
 
-
-  number: computed('displayPriority', 'priority', function () {
-    const { priority, displayPriority } = this;
+  number: computed('displayPriority', 'priority', function() {
+    const {
+      priority, displayPriority,
+    } = this;
     if (!priority) {
       return displayPriority;
-    } else {
-      return priority;
     }
+    return priority;
   }),
 
-  isDesignAgenda: computed('agenda.isDesignAgenda', function () {
+  isDesignAgenda: computed('agenda.isDesignAgenda', function() {
     return this.get('agenda.isDesignAgenda');
   }),
 
   // get document names to show on agendaview when not in the viewport to assist lazy loading
-  documentNames: computed('documentVersions', async function () {
+  documentNames: computed('documentVersions', async function() {
     const names = await this.agendaService.getDocumentNames(this);
     return names;
   }),
 
-
-  nota: computed('documentVersions', function () {
+  nota: computed('documentVersions', function() {
     return PromiseObject.create({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
@@ -129,54 +134,60 @@ export default ModelWithModifier.extend({
           return this.store
             .query('document', {
               filter: {
-                'documents': { id: documentVersionIds },
-                type: { id: CONFIG.notaID },
+                documents: {
+                  id: documentVersionIds,
+                },
+                type: {
+                  id: CONFIG.notaID,
+                },
               },
               include: 'documents,type,documents.access-level',
             })
-            .then((notas) => {
-              return notas.get('firstObject');
-            });
+            .then((notas) => notas.get('firstObject'));
         }
       }),
     });
   }),
 
-  sortedMandatees: computed('mandatees.@each', function () {
+  sortedMandatees: computed('mandatees.@each', function() {
     return this.get('mandatees').sortBy('priority');
   }),
 
-  formallyOkToShow: computed('formallyOk', function () {
+  formallyOkToShow: computed('formallyOk', function() {
     const options = CONFIG.formallyOkOptions;
-    const { formallyOk } = this;
+    const {
+      formallyOk,
+    } = this;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
 
     return EmberObject.create(foundOption);
   }),
 
-  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function () {
+  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
     return wasAdded;
   }),
 
   isAdded: alias('checkAdded'),
 
-  hasChanges: computed('checkAdded', 'hasAddedDocuments', async function () {
+  hasChanges: computed('checkAdded', 'hasAddedDocuments', async function() {
     const hasAddedDocuments = await this.hasAddedDocuments;
     const checkAdded = await this.checkAdded;
     return checkAdded || hasAddedDocuments;
   }),
 
-  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', async function () {
+  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', async function() {
     const documents = await this.get('documents');
     return documents && documents.some((document) => document.checkAdded);
   }),
 
-  sortedApprovals: computed('approvals.@each', async function () {
+  sortedApprovals: computed('approvals.@each', async function() {
     return PromiseArray.create({
       promise: this.store.query('approval', {
         filter: {
-          agendaitem: { id: this.get('id') },
+          agendaitem: {
+            id: this.get('id'),
+          },
         },
         sort: 'mandatee.priority',
       }),

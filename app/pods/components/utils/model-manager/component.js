@@ -13,7 +13,6 @@ export default Component.extend({
   isAdding: false,
   isEditing: false,
 
-
   actions: {
     async editModel() {
       this.set('isLoading', true);
@@ -23,13 +22,13 @@ export default Component.extend({
         this.set('isLoading', false);
         this.set('isEditing', false);
       });
-      this.send('selectModel', null)
+      this.send('selectModel', null);
     },
 
     createModel() {
       this.set('isLoading', true);
       const governmentDomain = this.store.createRecord(this.get('modelName'), {
-        label: this.get('title')
+        label: this.get('title'),
       });
       governmentDomain.save().then(() => {
         this.set('title', null);
@@ -62,5 +61,5 @@ export default Component.extend({
       alert('This action is not allowed. Please contact the system administrator.');
     },
 
-  }
-})
+  },
+});

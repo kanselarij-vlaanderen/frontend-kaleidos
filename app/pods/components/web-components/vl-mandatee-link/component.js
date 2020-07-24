@@ -11,13 +11,13 @@ export default Component.extend({
   subcaseIseCodes: null,
   codesToShow: null,
 
-  titleToShow: computed('mandatee.person', function () {
+  titleToShow: computed('mandatee.person', function() {
     return `${this.mandatee.get('person.nameToDisplay')}${this.intl.t('divider')}${this.mandatee.get('title')}`;
   }),
 
   actions: {
     toggleShowDetails() {
       this.toggleProperty('showDetails');
-    }
-  }
+    },
+  },
 });

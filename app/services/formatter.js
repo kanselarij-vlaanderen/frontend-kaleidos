@@ -14,5 +14,5 @@ export default Service.extend({
     return moment(date)
       .utc()
       .toDate();
-  }
+  },
 });

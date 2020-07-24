@@ -1,15 +1,18 @@
 import Component from '@glimmer/component';
-import { tracked } from "@glimmer/tracking";
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class DocumentListForItem extends Component {
   @tracked isClickable = this.args.isClickable;
+
   @tracked isShowingAll = false;
+
   @tracked item = this.args.item;
+
   @tracked moreThan20 = null;
 
   get documents() {
-    if(!this.item) {
+    if (!this.item) {
       return null;
     }
     if (this.item.documents) {
@@ -20,12 +23,10 @@ export default class DocumentListForItem extends Component {
       }
       if (this.isShowingAll) {
         return this.item.documents;
-      } else {
-        return this.item.documents.slice(0, 20);
       }
-    } else {
-      return null;
+      return this.item.documents.slice(0, 20);
     }
+    return null;
   }
 
   @action

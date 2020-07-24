@@ -1,10 +1,9 @@
-/*global context, it, cy,beforeEach*/
-/// <reference types="Cypress" />
+/* global context, it, cy,beforeEach */
+// / <reference types="Cypress" />
 
-import toolbar from "../../../selectors/toolbar.selectors";
+import toolbar from '../../../selectors/toolbar.selectors';
 
 context('Testing the toolbar as user user', () => {
-
   beforeEach(() => {
     cy.server();
     cy.login('User');

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars,no-undef */
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -11,9 +12,6 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-//Do not convert to an ES6 module (suggested by extensions), not supported!
+// Do not convert to an ES6 module (suggested by extensions), not supported!
 
-module.exports = (on, config) => {
-  return config
-};
-
+module.exports = (on, config) => config;

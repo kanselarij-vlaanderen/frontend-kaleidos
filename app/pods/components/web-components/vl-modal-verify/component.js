@@ -11,31 +11,29 @@ export default Component.extend({
   showVerify: true,
   buttonText: 'delete',
 
-  verifyButtonText: computed('intl', 'buttonText', function () {
+  verifyButtonText: computed('intl', 'buttonText', function() {
     return this.intl.t(this.get('buttonText'));
   }),
 
   didInsertElement() {
-      this.get('element').querySelector('[role="dialog"]').focus();
+    this.get('element').querySelector('[role="dialog"]')
+      .focus();
   },
 
-  showIcon: computed('buttonType', function () {
-    if (this.buttonType === 'warning') {
-      return false;
-    } else {
-      return true;
-    }
+  showIcon: computed('buttonType', function() {
+    return this.buttonType !== 'warning';
   }),
 
-  buttonClass: computed('buttonType', function () {
+  buttonClass: computed('buttonType', function() {
     if (this.buttonType === 'warning') {
-      return 'vl-button'
-    } else if (this.buttonType === 'danger') {
-      return 'vl-button vl-button--error'
+      return 'vl-button';
+    } if (this.buttonType === 'danger') {
+      return 'vl-button vl-button--error';
     }
+    return null;
   }),
 
-  keyDown: function (event) {
+  keyDown(event) {
     if (event.key === 'Escape') {
       this.cancel();
     }
@@ -48,6 +46,6 @@ export default Component.extend({
 
     cancel() {
       this.cancel();
-    }
-  }
+    },
+  },
 });

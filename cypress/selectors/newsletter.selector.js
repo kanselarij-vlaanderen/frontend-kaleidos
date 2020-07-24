@@ -4,6 +4,6 @@ const selectors = {
   rdfaEditor: '[data-test-rdfa-editor]',
   editSave: '[data-test-newsletter-edit-save]',
   meetingTitle: '[data-test-newsletter-meeting-header-title]',
-  overviewTitle: '[data-test-newsletter-overview-header-title]'
+  overviewTitle: '[data-test-newsletter-overview-header-title]',
 };
 export default selectors;

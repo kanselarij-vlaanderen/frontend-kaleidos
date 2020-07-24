@@ -21,6 +21,7 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   checkSupportedBrowser() {
+    // eslint-disable-next-line no-undef
     const isFirefox = typeof InstallTrigger !== 'undefined';
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     const isChrome = window.chrome;
@@ -34,7 +35,9 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   async sessionInvalidated() {
-    const logoutUrl = ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'];
+    const {
+      logoutUrl,
+    } = ENV.torii.providers['acmidm-oauth2'];
     window.location.replace(logoutUrl);
   },
 
@@ -53,22 +56,22 @@ export default Route.extend(ApplicationRouteMixin, {
     return false;
   },
 
-  async isUserLoggedIn(){
+  async isUserLoggedIn() {
     return await this.get('session.isAuthenticated');
   },
 
-  async isValidUser(){
+  async isValidUser() {
     const userRoleOfSession = await this.userRoleOfSession();
     return this.userHasValidGroup(userRoleOfSession);
-    },
+  },
 
   async model() {
     const userIsLoggedIn = await this.isUserLoggedIn();
-    if(userIsLoggedIn) {
+    if (userIsLoggedIn) {
       const userRoleOfSession = await this.userRoleOfSession();
-      if(userRoleOfSession != null) {
+      if (userRoleOfSession !== null) {
         const validUser = await this.isValidUser();
-        if(!validUser) {
+        if (!validUser) {
           this.transitionTo('accountless-users');
         }
       }
@@ -84,18 +87,19 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   actions: {
-    willTransition: async function (transition) {
+    // eslint-disable-next-line object-shorthand
+    willTransition: async function(transition) {
       const userRoleOfSession = await this.userRoleOfSession();
       const validUser = await this.isValidUser();
-      if(userRoleOfSession != null) {
-        if(!validUser) {
+      if (userRoleOfSession !== null) {
+        if (!validUser) {
           this.transitionTo('accountless-users');
         }
       }
 
       if (
-        this.fileService.get('deleteDocumentWithUndo.isRunning') &&
-        confirm(this.intl.t('leave-page-message'))
+        this.fileService.get('deleteDocumentWithUndo.isRunning')
+        && confirm(this.intl.t('leave-page-message'))
       ) {
         transition.abort();
       } else {

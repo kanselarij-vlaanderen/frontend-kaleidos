@@ -1,7 +1,9 @@
 import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import { computed, get } from '@ember/object';
+import {
+  computed, get
+} from '@ember/object';
 
 export default Controller.extend({
   sessionService: inject(),
@@ -10,17 +12,15 @@ export default Controller.extend({
   currentSession: inject(),
   isLoading: false,
 
-  shouldHideNav: computed('router.currentRouteName', function () {
+  shouldHideNav: computed('router.currentRouteName', function() {
     return this.get('router.currentRouteName') === 'agenda.compare';
   }),
 
-  showPrintButton: computed('router.currentRouteName', function () {
+  showPrintButton: computed('router.currentRouteName', function() {
     return get(this, 'router.currentRouteName') === 'agenda.print';
   }),
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
-
-
 
   actions: {
     selectAgenda(agenda) {
@@ -75,7 +75,9 @@ export default Controller.extend({
 
     reloadRouteWithNewAgendaitem(newAgendaitemId) {
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, this.model.agenda.id, {
-        queryParams: { refresh: newAgendaitemId }
+        queryParams: {
+          refresh: newAgendaitemId,
+        },
       });
     },
 
@@ -90,5 +92,5 @@ export default Controller.extend({
     loadingAgendaitems() {
       this.toggleProperty('isLoading');
     },
-  }
+  },
 });

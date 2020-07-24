@@ -12,6 +12,6 @@ export default Component.extend({
 
     saveAction() {
       this.saveAction();
-    }
-  }
+    },
+  },
 });

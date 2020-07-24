@@ -1,24 +1,54 @@
-/*global  cy, Cypress*/
-/// <reference types="Cypress" />
-
-
+/* global  cy, Cypress */
+// / <reference types="Cypress" />
 
 // ***********************************************
 // Commands
 
-import cases from "../../selectors/case.selectors"
-
-Cypress.Commands.add('openSubcase', openSubcase);
-Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
-Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
-Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
-Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
-Cypress.Commands.add('deleteSubcase', deleteSubcase);
-Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);
+import cases from '../../selectors/case.selectors';
 
 // ***********************************************
 // Functions
-//TODO needs setupping to be sure to succeed.
+// TODO needs setupping to be sure to succeed.
+
+/**
+ * @description Translates a month number to a dutch month in lowercase.
+ * @name getTranslatedMonth
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param month {number}  the number of the month to translate (from moment so starts from 0)
+ * @returns {string} the month in dutch
+ */
+function getTranslatedMonth(month) {
+  cy.log('getTranslatedMonth');
+  switch (month) {
+  case 0:
+    return 'januari';
+  case 1:
+    return 'februari';
+  case 2:
+    return 'maart';
+  case 3:
+    return 'april';
+  case 4:
+    return 'mei';
+  case 5:
+    return 'juni';
+  case 6:
+    return 'juli';
+  case 7:
+    return 'augustus';
+  case 8:
+    return 'september';
+  case 9:
+    return 'oktober';
+  case 10:
+    return 'november';
+  case 11:
+    return 'december';
+  default:
+    return '';
+  }
+}
 
 /**
  * Open the subcase of the specified index.
@@ -27,17 +57,19 @@ Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);
  * @function
  * @param {number} [index] The list index of the subcase to select, default 0
  */
-function openSubcase(index=0){
+function openSubcase(index = 0) {
   cy.log('openSubcase');
   // cy.route('GET', '/subcases?**').as('getSubcases');
   // cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
   // cy.wait('@getSubcases', { timeout: 12000 });
-  cy.wait(2000); //link does not always work (not visible or click does nothing unless we wait)
+  cy.wait(2000); // link does not always work (not visible or click does nothing unless we wait)
   cy.get('.vlc-procedure-step').as('subcasesList');
-  cy.get('@subcasesList').eq(index).within(() => {
-    cy.wait(1000); //sorry, link is not loaded most of the time
-    cy.get('.vl-title').eq(0).click();
-  })
+  cy.get('@subcasesList').eq(index)
+    .within(() => {
+      cy.wait(1000); // sorry, link is not loaded most of the time
+      cy.get('.vl-title').eq(0)
+        .click();
+    });
   // cy.wait('@getCaseSubcases', { timeout: 12000 });
   cy.log('/openSubcase');
 }
@@ -58,61 +90,76 @@ function openSubcase(index=0){
  */
 function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
   cy.log('changeSubcaseAccessLevel');
-  cy.route('PATCH','/subcases/*').as('patchSubcase');
+  cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.get('.vl-title--h4').contains(shortTitle).parents('.vl-u-spacer-extended-bottom-l').within(() => {
-    cy.get('a').click();
-  });
+  cy.get('.vl-title--h4').contains(shortTitle)
+    .parents('.vl-u-spacer-extended-bottom-l')
+    .within(() => {
+      cy.get('a').click();
+    });
 
   cy.get('.vl-form__group').as('subcaseAccessLevel');
 
-  if(accessLevel) {
+  if (accessLevel) {
     cy.get('@subcaseAccessLevel').within(() => {
       cy.get('.ember-power-select-trigger').click();
     });
-    cy.get('.ember-power-select-option', { timeout: 5000 }).should('exist').then(() => {
-      cy.contains(accessLevel).click();
-    });
-
+    cy.get('.ember-power-select-option', {
+      timeout: 5000,
+    }).should('exist')
+      .then(() => {
+        cy.contains(accessLevel).click();
+      });
   }
 
   cy.get('@subcaseAccessLevel').within(() => {
-    if(isRemark) {
+    if (isRemark) {
       cy.get('.vlc-input-field-block').as('editCaseForm');
-      if(newLongTitle) {
-        cy.get('@editCaseForm').eq(2).within(() => {
-          cy.get('.vl-textarea').click().clear().type(newLongTitle);
-        });
+      if (newLongTitle) {
+        cy.get('@editCaseForm').eq(2)
+          .within(() => {
+            cy.get('.vl-textarea').click()
+              .clear()
+              .type(newLongTitle);
+          });
       }
     } else {
-      cy.get('.vlc-input-field-block').as('editCaseForm').should('have.length', 3);
+      cy.get('.vlc-input-field-block').as('editCaseForm')
+        .should('have.length', 3);
     }
 
-
-    if(confidentialityChange) {
-      cy.get('@editCaseForm').eq(0).within(() => {
-        cy.get('.vl-checkbox--switch__label').click();
-      });
+    if (confidentialityChange) {
+      cy.get('@editCaseForm').eq(0)
+        .within(() => {
+          cy.get('.vl-checkbox--switch__label').click();
+        });
     }
-    if(newShortTitle) {
-      cy.get('@editCaseForm').eq(1).within(() => {
-        cy.get('.vl-textarea').click().clear().type(newShortTitle);
-      });
+    if (newShortTitle) {
+      cy.get('@editCaseForm').eq(1)
+        .within(() => {
+          cy.get('.vl-textarea').click()
+            .clear()
+            .type(newShortTitle);
+        });
     }
-    if(newLongTitle) {
-      cy.get('@editCaseForm').eq(2).within(() => {
-        cy.get('.vl-textarea').click().clear().type(newLongTitle);
-      });
+    if (newLongTitle) {
+      cy.get('@editCaseForm').eq(2)
+        .within(() => {
+          cy.get('.vl-textarea').click()
+            .clear()
+            .type(newLongTitle);
+        });
     }
 
     cy.get('.vl-action-group > .vl-button')
       .contains('Opslaan')
       .click();
   });
-  cy.wait('@patchSubcase', { timeout: 20000 });
+  cy.wait('@patchSubcase', {
+    timeout: 20000,
+  });
   cy.log('/changeSubcaseAccessLevel');
 }
-
 
 /**
  * Changes the themes of a sucase when used in the subcase view (/dossiers/..id../overzicht)
@@ -124,30 +171,38 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
 function addSubcaseThemes(themes) {
   cy.log('addSubcaseThemes');
   cy.route('GET', '/themes').as('getThemes');
-  cy.route('PATCH','/subcases/*').as('patchSubcase');
-  cy.get('.vl-title--h4').contains(`Thema's`).parents('.vl-u-spacer-extended-bottom-l').as('subcaseTheme');
+  cy.route('PATCH', '/subcases/*').as('patchSubcase');
+  cy.get('.vl-title--h4').contains('Thema\'s')
+    .parents('.vl-u-spacer-extended-bottom-l')
+    .as('subcaseTheme');
 
   cy.get('@subcaseTheme').within(() => {
     cy.get('a').click();
     // cy.wait('@getThemes', { timeout: 12000 });
-    cy.get('.vl-checkbox', { timeout: 12000 }).should('exist').end();
-    themes.forEach(element => {
-      if(isNaN(element)){
-        cy.get('.vl-checkbox').contains(element).click();
+    cy.get('.vl-checkbox', {
+      timeout: 12000,
+    }).should('exist')
+      .end();
+    themes.forEach((element) => {
+      if (Number.isNaN(element)) {
+        cy.get('.vl-checkbox').contains(element)
+          .click();
       } else {
-        cy.get('.vl-checkbox').eq(element).click();
+        cy.get('.vl-checkbox').eq(element)
+          .click();
       }
-
     });
     cy.get('.vl-action-group > .vl-button')
       .contains('Opslaan')
       .click();
   });
-  cy.wait('@patchSubcase', { timeout: 20000 });
+  cy.wait('@patchSubcase', {
+    timeout: 20000,
+  });
   cy.log('/addSubcaseThemes');
 }
 
-//TODO use arrays of fields and domains, search on mandatee name
+// TODO use arrays of fields and domains, search on mandatee name
 
 /**
  * Adds a mandatees with field and domain to a sucase when used in the subcase view (/dossiers/..id../overzicht)
@@ -164,56 +219,84 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
   cy.log('addSubcaseMandatee');
 
   if (mandateeSearchText) {
-    cy.route('GET', `/mandatees?filter**filter**${mandateeSearchText.split(" ", 1)}**`).as('getFilteredMandatees');
+    cy.route('GET', `/mandatees?filter**filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   } else {
     cy.route('GET', '/mandatees?**').as('getMandatees');
   }
-  
+
   cy.route('GET', '/ise-codes/**').as('getIseCodes');
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
-  cy.route('PATCH','/subcases/*').as('patchSubcase');
+  cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.contains(`Ministers en beleidsvelden`).parents('.vl-u-spacer-extended-bottom-l').as('subcaseMandatees');
+  cy.contains('Ministers en beleidsvelden').parents('.vl-u-spacer-extended-bottom-l')
+    .as('subcaseMandatees');
   cy.get('@subcaseMandatees').within(() => {
-    cy.get('.vl-u-spacer-extended-left-s', { timeout: 5000 }).should('exist').then(() => {
-      cy.contains('Wijzigen').click();
-    });
+    cy.get('.vl-u-spacer-extended-left-s', {
+      timeout: 5000,
+    }).should('exist')
+      .then(() => {
+        cy.contains('Wijzigen').click();
+      });
   });
 
-  cy.get('.vlc-box a').contains('Minister toevoegen').click();
-  cy.get('.mandatee-selector-container').children('.ember-power-select-trigger').click();
-  // cy.get('.ember-power-select-search-input').type('g').clear(); //TODO added this because default data does not have active ministers
+  cy.get('.vlc-box a').contains('Minister toevoegen')
+    .click();
+  cy.get('.mandatee-selector-container').children('.ember-power-select-trigger')
+    .click();
+  // cy.get('.ember-power-select-search-input').type('g').clear(); // TODO added this because default data does not have active ministers
   if (mandateeSearchText) {
     cy.get('.ember-power-select-search-input').type(mandateeSearchText);
-    cy.wait('@getFilteredMandatees', { timeout: 12000 });
-  } else {
-    cy.wait('@getMandatees', { timeout: 12000 });
-  }
-  cy.get('.ember-power-select-option--search-message', { timeout: 10000 }).should('not.exist'); //TODO added this because default data does not have active ministers
-  cy.get('.ember-power-select-option', { timeout: 10000 }).should('exist').then(() => {
-    if (mandateeSearchText) {
-      cy.get('.ember-power-select-option').contains(mandateeSearchText).click();
-    } else {
-      cy.get('.ember-power-select-option').eq(mandateeNumber).click();
-    }
-  });
-  //TODO loading the isecodes and government fields takes time, are they not cacheble ?
-  cy.wait('@getIseCodes', { timeout: 50000 });
-  cy.wait('@getGovernmentFields', { timeout: 20000 });
-  if(fieldNumber >= 0) {
-    cy.get('.vlc-checkbox-tree', { timeout: 30000 }).should('exist').eq(fieldNumber).within(() => {
-      cy.get('.vl-checkbox').eq(domainNumber).click();
+    cy.wait('@getFilteredMandatees', {
+      timeout: 12000,
     });
+  } else {
+    cy.wait('@getMandatees', {
+      timeout: 12000,
+    });
+  }
+  cy.get('.ember-power-select-option--search-message', {
+    timeout: 10000,
+  }).should('not.exist'); // TODO added this because default data does not have active ministers
+  cy.get('.ember-power-select-option', {
+    timeout: 10000,
+  }).should('exist')
+    .then(() => {
+      if (mandateeSearchText) {
+        cy.get('.ember-power-select-option').contains(mandateeSearchText)
+          .click();
+      } else {
+        cy.get('.ember-power-select-option').eq(mandateeNumber)
+          .click();
+      }
+    });
+  // TODO loading the isecodes and government fields takes time, are they not cacheble ?
+  cy.wait('@getIseCodes', {
+    timeout: 50000,
+  });
+  cy.wait('@getGovernmentFields', {
+    timeout: 20000,
+  });
+  if (fieldNumber >= 0) {
+    cy.get('.vlc-checkbox-tree', {
+      timeout: 30000,
+    }).should('exist')
+      .eq(fieldNumber)
+      .within(() => {
+        cy.get('.vl-checkbox').eq(domainNumber)
+          .click();
+      });
   }
   cy.get('.vlc-toolbar').within(() => {
     cy.contains('Toevoegen').click();
   });
   cy.get('@subcaseMandatees').within(() => {
     cy.get('.vlc-toolbar')
-    .contains('Opslaan')
-    .click();
+      .contains('Opslaan')
+      .click();
   });
-  cy.wait('@patchSubcase', { timeout: 40000 });
+  cy.wait('@patchSubcase', {
+    timeout: 40000,
+  });
   cy.log('/addSubcaseMandatee');
 }
 
@@ -223,27 +306,38 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
  * @function
  * @param {date} agendaDate - The list index of the mandatee
  */
-function proposeSubcaseForAgenda (agendaDate) {
+function proposeSubcaseForAgenda(agendaDate) {
   cy.log('proposeSubcaseForAgenda');
-  cy.route('POST','/agendaitems').as('createNewAgendaitem');
-  cy.route('PATCH','/agendas/*').as('patchAgenda');
-  cy.route('PATCH','/subcases/*').as('patchSubcase');
+  cy.route('POST', '/agendaitems').as('createNewAgendaitem');
+  cy.route('PATCH', '/agendas/*').as('patchAgenda');
+  cy.route('PATCH', '/subcases/*').as('patchSubcase');
   cy.route('POST', '/agenda-activities').as('createAgendaActivity');
   const monthDutch = getTranslatedMonth(agendaDate.month());
-  const formattedDate = agendaDate.date() + ' ' + monthDutch + ' ' + agendaDate.year();
+  const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
   cy.get('.vlc-page-header').within(() => {
-    cy.get('.vl-button', { timeout: 12000 }).should('have.length', 2);
-    cy.get('.vl-button').contains('Indienen voor agendering').should('exist').click();
-
+    cy.get('.vl-button', {
+      timeout: 12000,
+    }).should('have.length', 2);
+    cy.get('.vl-button').contains('Indienen voor agendering')
+      .should('exist')
+      .click();
   });
   cy.get('.ember-attacher-show').within(() => {
     cy.contains(formattedDate).click();
   });
-  cy.wait('@createAgendaActivity', { timeout: 20000 })
-    .wait('@createNewAgendaitem', { timeout: 20000 })
-    .wait('@patchSubcase', { timeout: 24000 })
-    .wait('@patchAgenda', { timeout: 24000 });
+  cy.wait('@createAgendaActivity', {
+    timeout: 20000,
+  })
+    .wait('@createNewAgendaitem', {
+      timeout: 20000,
+    })
+    .wait('@patchSubcase', {
+      timeout: 24000,
+    })
+    .wait('@patchAgenda', {
+      timeout: 24000,
+    });
   cy.log('/proposeSubcaseForAgenda');
 }
 
@@ -263,51 +357,21 @@ function deleteSubcase() {
     .contains('Procedurestap verwijderen')
     .click();
 
-  cy.get('.vl-modal-dialog').as('dialog').within(() => {
-    cy.get('button').contains('Verwijderen').click();
-  })
-  cy.wait('@deleteSubcase', { timeout: 20000 });
+  cy.get('.vl-modal-dialog').as('dialog')
+    .within(() => {
+      cy.get('button').contains('Verwijderen')
+        .click();
+    });
+  cy.wait('@deleteSubcase', {
+    timeout: 20000,
+  });
   cy.log('/deleteSubcase');
 }
 
-
-/**
- * @description Translates a month number to a dutch month in lowercase.
- * @name getTranslatedMonth
- * @memberOf Cypress.Chainable#
- * @function
- * @param month {number}  the number of the month to translate (from moment so starts from 0)
- * @returns the month in dutch
- */
-function getTranslatedMonth(month) {
-  cy.log('getTranslatedMonth');
-  switch(month) {
-    case 0:
-      return 'januari';
-    case 1:
-      return 'februari';
-    case 2:
-      return 'maart';
-    case 3:
-      return 'april';
-    case 4:
-      return 'mei';
-    case 5:
-      return 'juni';
-    case 6:
-      return 'juli';
-    case 7:
-      return 'augustus';
-    case 8:
-      return 'september';
-    case 9:
-      return 'oktober';
-    case 10:
-      return 'november';
-    case 11:
-      return 'december';
-    default:
-      break;
-  }
-  cy.log('/getTranslatedMonth');
-}
+Cypress.Commands.add('openSubcase', openSubcase);
+Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
+Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
+Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
+Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
+Cypress.Commands.add('deleteSubcase', deleteSubcase);
+Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);

@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 
 export default class DecisionAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;
+
   @service store;
 
   @action
@@ -11,7 +12,7 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
     if (this.subcase) {
       const newDecision = this.store.createRecord('decision', {
         approved: false,
-        subcase: this.subcase
+        subcase: this.subcase,
       });
       await newDecision.save();
       this.refresh();

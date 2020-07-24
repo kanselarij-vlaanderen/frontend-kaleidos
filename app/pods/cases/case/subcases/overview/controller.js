@@ -9,7 +9,7 @@ export default Controller.extend({
 
   actions: {
     refresh() {
-      this.toggleProperty('refresh')
+      this.toggleProperty('refresh');
     },
-  }
+  },
 });
