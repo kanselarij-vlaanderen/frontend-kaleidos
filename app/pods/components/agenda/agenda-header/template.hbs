@@ -53,11 +53,11 @@
               {{/if}}
               {{t "agendaApproveActions"}}
               {{#attach-popover
-                      class="ember-attacher-popper vlc-hide-on-print"
-                      hideOn="clickout click"
-                      showOn="click"
-                      animation="shift"
-                      placement="bottom"
+                class="ember-attacher-popper vlc-hide-on-print"
+                hideOn="clickout click"
+                showOn="click"
+                animation="shift"
+                placement="bottom"
               as |attacher|
               }}
                 <ul class="vlc-dropdown-menu">
@@ -235,7 +235,7 @@
                         <a href=""
                            data-test-agenda-header-lockAgenda
                            class="vl-link vl-link--block vl-u-text--error"
-                          {{action "lockAgenda" currentAgenda}}
+                          {{action "lockAgendaAction" currentAgenda}}
                           {{action attacher.hide}}
                         >
                           {{t "agenda-lock"}}
