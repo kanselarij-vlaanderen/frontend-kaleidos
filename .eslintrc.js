@@ -98,7 +98,9 @@ module.exports = {
     "brace-style": ["error", "1tbs"],
     "no-else-return": "error",
     "spaced-comment": ["error", "always"],
-    "indent": ["error", 2],
+    "indent": ["error", 2, {
+      "SwitchCase": 1
+    }],
     "keyword-spacing": ["error", { "before": true, "after": true }],
     "space-infix-ops": "error",
     "eol-last": ["error"],

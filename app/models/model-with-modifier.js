@@ -21,22 +21,22 @@ export default ModelWithToasts.extend({
     const dirtyType = this.get('dirtyType');
 
     switch (dirtyType) {
-    case 'created': {
-      break;
-    }
+      case 'created': {
+        break;
+      }
 
-    case 'deleted': {
-      return parentSave.call(this, ...arguments);
-    }
-    case undefined: {
-      await this.preEditOrSaveCheck();
-      break;
-    }
-    case 'updated': {
-      await this.preEditOrSaveCheck();
-      this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
-      break;
-    }
+      case 'deleted': {
+        return parentSave.call(this, ...arguments);
+      }
+      case undefined: {
+        await this.preEditOrSaveCheck();
+        break;
+      }
+      case 'updated': {
+        await this.preEditOrSaveCheck();
+        this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
+        break;
+      }
     }
     this.set('modified', moment().utc()
       .toDate());
