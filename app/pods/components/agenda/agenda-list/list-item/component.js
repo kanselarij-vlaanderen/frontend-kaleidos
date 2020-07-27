@@ -50,12 +50,7 @@ export default class ListItem extends Component {
   @action
   async setAction(item) {
     const uri = item.get('uri');
-    this.args.agendaitem.formallyOk = uri;
-    await this.args.agendaitem
-      .save()
-      .catch(() => {
-        this.toaster.error();
-      });
+    this.args.setFormallyOkAction(uri);
   }
 
   @action
