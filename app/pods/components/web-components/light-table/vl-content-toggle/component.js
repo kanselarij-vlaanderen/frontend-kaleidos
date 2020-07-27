@@ -8,13 +8,15 @@ export default Component.extend({
   value: null,
   isLoading: false,
 
-  key: computed('row', 'value', 'column', function () {
+  key: computed('row', 'value', 'column', function() {
     return this.column.get('valuePath');
   }),
 
   actions: {
     async valueChanged(row) {
-      const { key } = this;
+      const {
+        key,
+      } = this;
       this.toggleProperty('isLoading');
       this.toggleProperty('value');
 
@@ -28,7 +30,7 @@ export default Component.extend({
         const subcase = await agendaActivity.get('subcase');
         itemToUpdate = await subcase.get('newsletterInfo');
         if (itemToUpdate) {
-          itemToUpdate.set(`inNewsletter`, (await this.value));
+          itemToUpdate.set('inNewsletter', (await this.value));
         } else {
           itemToUpdate = await this.newsletterService.createNewsItemForSubcase(subcase, row, this.value);
         }
@@ -38,6 +40,6 @@ export default Component.extend({
         await row.content.reload();
       }
       this.toggleProperty('isLoading');
-    }
-  }
+    },
+  },
 });

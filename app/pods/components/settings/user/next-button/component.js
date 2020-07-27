@@ -10,6 +10,6 @@ export default class NextButton extends Component {
     const account = await this.args.row.account;
     const user = await account.user;
     const userId = await user.id;
-    this.args.goToRoute('settings.users.user',userId);
+    this.args.goToRoute('settings.users.user', userId);
   }
 }

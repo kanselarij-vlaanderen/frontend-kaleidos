@@ -10,6 +10,6 @@ export default Component.extend({
     },
     close() {
       this.toggleProperty('isAddingSingleNewsLetter');
-    }
-  }
+    },
+  },
 });

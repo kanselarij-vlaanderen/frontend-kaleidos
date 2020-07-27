@@ -9,36 +9,48 @@ export default Component.extend({
   tagName: 'ul',
   classNames: ['vlc-toolbar__item'],
 
-  firstAgendaItemOfAgenda: computed('currentAgenda.firstAgendaItem', function () {
+  firstAgendaItemOfAgenda: computed('currentAgenda.firstAgendaItem', function() {
     return this.get('currentAgenda.firstAgendaItem');
   }),
 
-  selectedAgendaitemClass: computed('routing.currentRouteName', function () {
-    const { routing } = this;
-    if ( routing.get('currentRouteName').includes('agenda.agendaitems.agendaitem.')) {
+  selectedAgendaitemClass: computed('routing.currentRouteName', function() {
+    const {
+      routing,
+    } = this;
+    if (routing.get('currentRouteName').includes('agenda.agendaitems.agendaitem.')) {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
-  selectedOverviewClass: computed('routing.currentRouteName', function () {
-    const { routing } = this;
+  selectedOverviewClass: computed('routing.currentRouteName', function() {
+    const {
+      routing,
+    } = this;
     if (routing.get('currentRouteName') === 'agenda.agendaitems.index') {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
-  selectedCompareClass: computed('routing.currentRouteName', function () {
-    const { routing } = this;
+  selectedCompareClass: computed('routing.currentRouteName', function() {
+    const {
+      routing,
+    } = this;
     if (routing.get('currentRouteName') === 'agenda.compare') {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
-  selectedDocumentClass: computed('routing.currentRouteName', function () {
-    const { routing } = this;
+  selectedDocumentClass: computed('routing.currentRouteName', function() {
+    const {
+      routing,
+    } = this;
     if (routing.get('currentRouteName') === 'agenda.documents') {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
   actions: {
@@ -53,5 +65,5 @@ export default Component.extend({
     navigateToDocuments() {
       this.navigateToDocuments();
     },
-  }
+  },
 });

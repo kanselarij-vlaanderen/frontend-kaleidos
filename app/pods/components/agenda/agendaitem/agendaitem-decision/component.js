@@ -7,7 +7,9 @@ export default class AgendaItemDecisionComponent extends Component {
   @service currentSession;
 
   @tracked isEditing = false;
+
   @tracked isVerifyingDelete = null;
+
   @tracked decisionToDelete = null;
 
   get decision() {

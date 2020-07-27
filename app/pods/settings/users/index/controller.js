@@ -1,20 +1,25 @@
 import Controller from '@ember/controller';
-import {inject as service} from '@ember/service';
-import {later} from '@ember/runloop';
+import { inject as service } from '@ember/service';
+import { later } from '@ember/runloop';
 import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-
 export default class UsersSettingsController extends Controller {
   @service intl;
+
   @service toaster;
+
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
   isUploadingFile = null;
+
   @tracked size = 10;
+
   @tracked page = 0;
+
   queryParams = ['filter'];
+
   @tracked filterText = '';
 
   get filter() {
@@ -32,7 +37,7 @@ export default class UsersSettingsController extends Controller {
 
   @action
   selectSize(size) {
-   this.size = size;
+    this.size = size;
   }
 
   @action
@@ -42,7 +47,7 @@ export default class UsersSettingsController extends Controller {
 
   @action
   uploaded(response) {
-    if (response && response.status == 200) {
+    if (response && response.status === 200) {
       this.toaster.success(this.intl.t('import-users-success'), this.intl.t('successfully-created-title'));
       later(() => {
         this.send('refresh');

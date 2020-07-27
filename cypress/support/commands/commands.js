@@ -1,9 +1,6 @@
-
-/*global cy, Cypress*/
-/// <reference types="Cypress" />
+/* global cy, Cypress */
+// / <reference types="Cypress" />
 import 'cypress-file-upload';
-
-Cypress.Commands.add('verifyAlertSuccess', verifyAlertSuccess);
 /**
  * @description Watch if the verification alert popup appears on successful network calls
  * use in a .then() of the sent request
@@ -14,7 +11,11 @@ Cypress.Commands.add('verifyAlertSuccess', verifyAlertSuccess);
  */
 function verifyAlertSuccess() {
   cy.log('verifyAlertSuccess');
-  cy.get('.toasts-container', { timeout: 12000 }).contains('Gelukt').should('be.visible');
+  cy.get('.toasts-container', {
+    timeout: 12000,
+  }).contains('Gelukt')
+    .should('be.visible');
   cy.log('/verifyAlertSuccess');
 }
 
+Cypress.Commands.add('verifyAlertSuccess', verifyAlertSuccess);

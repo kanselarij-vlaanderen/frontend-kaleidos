@@ -1,11 +1,5 @@
-
-/*global cy, Cypress*/
-/// <reference types="Cypress" />
-
-Cypress.Commands.add('login', login);
-Cypress.Commands.add('logout', logout);
-Cypress.Commands.add('loginFlow', loginFlow);
-Cypress.Commands.add('logoutFlow', logoutFlow);
+/* global cy, Cypress */
+// / <reference types="Cypress" />
 
 /**
  * @description Bypasses the mock-login and inserts a localstorage item
@@ -13,6 +7,7 @@ Cypress.Commands.add('logoutFlow', logoutFlow);
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} name the profile to log in with, case sensitive
+ * @param {number} retries The amount of retries it can do
  */
 function login(name, retries = 0) {
   cy.log('login');
@@ -23,32 +18,33 @@ function login(name, retries = 0) {
       method: 'POST',
       url: '/mock/sessions',
       body: loginUsers[name],
-      headers: { 'Content-Type': 'application/vnd.api+json' }
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
     }).then((resp) => {
       window.localStorage.setItem(EMBER_SIMPLE_AUTH_LS_KEY, JSON.stringify({
         authenticated: {
           authenticator: 'authenticator:mock-login',
           links: resp.body.links,
           data: resp.body.data,
-          relationships: resp.body.relationships
-        }
+          relationships: resp.body.relationships,
+        },
       }));
     });
   });
-  cy.visit('').wait('@getCurrentSession').then((xhr) => {
-    if (xhr.status == 400) {
-      if (retries < 5) {
-        cy.log('login failed, trying again');
-        cy.login(name, retries +1);
-      } else {
-        cy.log('login failed after 5 attempts');
-        return;
+  cy.visit('').wait('@getCurrentSession')
+    .then((xhr) => {
+      if (xhr.status === 400) {
+        if (retries < 5) {
+          cy.log('login failed, trying again');
+          cy.login(name, retries + 1);
+        } else {
+          cy.log('login failed after 5 attempts');
+        }
       }
-    }
-  });
+    });
   cy.log('/login');
 }
-
 
 /**
  * @description Logs out the current user and end the mocked session
@@ -79,13 +75,14 @@ function loginFlow(name) {
   cy.server();
   cy.route('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login');
-  cy.get('.grid', { timeout: 12000 }).within(() => {
+  cy.get('.grid', {
+    timeout: 12000,
+  }).within(() => {
     cy.contains(name).click()
       .wait('@mockLogin');
   });
   cy.log('/loginFlow');
 }
-
 
 /**
  * @description Goes to the mock-login page and selects the profile that matches the given name.
@@ -98,7 +95,16 @@ function logoutFlow() {
   cy.server();
   cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('');
-  cy.contains('Afmelden', { timeout: 12000 }).click({ force: true });
+  cy.contains('Afmelden', {
+    timeout: 12000,
+  }).click({
+    force: true,
+  });
   cy.wait('@mockLogout');
   cy.log('/logoutFlow');
 }
+
+Cypress.Commands.add('login', login);
+Cypress.Commands.add('logout', logout);
+Cypress.Commands.add('loginFlow', loginFlow);
+Cypress.Commands.add('logoutFlow', logoutFlow);

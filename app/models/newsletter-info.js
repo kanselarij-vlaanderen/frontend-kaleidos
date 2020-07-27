@@ -4,7 +4,9 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 
-const { attr, hasMany, belongsTo } = DS;
+const {
+  attr, hasMany, belongsTo,
+} = DS;
 
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
@@ -21,20 +23,25 @@ export default ModelWithModifier.extend({
   remark: attr('string'),
 
   subcase: belongsTo('subcase'),
-  meeting: belongsTo('meeting', { inverse: null }),
-  documentVersions: hasMany('document-version', { inverse: null }),
-  themes: hasMany('themes', { inverse: null }),
-
-  displayRemark: computed('remark', 'intl', function () {
-    const remark = this.get('remark');
-    if (remark && remark != '') {
-      return `${this.intl.t('remark')}: ${this.get('remark')}`;
-    } else {
-      return '';
-    }
+  meeting: belongsTo('meeting', {
+    inverse: null,
+  }),
+  documentVersions: hasMany('document-version', {
+    inverse: null,
+  }),
+  themes: hasMany('themes', {
+    inverse: null,
   }),
 
-  newsletterProposal: computed('mandateeProposal', async function () {
+  displayRemark: computed('remark', 'intl', function() {
+    const remark = this.get('remark');
+    if (remark && remark !== '') {
+      return `${this.intl.t('remark')}: ${this.get('remark')}`;
+    }
+    return '';
+  }),
+
+  newsletterProposal: computed('mandateeProposal', async function() {
     const subcase = await this.get('subcase');
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');
@@ -42,11 +49,11 @@ export default ModelWithModifier.extend({
     const seperatorComma = ', ';
     const seperatorAnd = ' en ';
     if (sortedMandatees && sortedMandatees.length > 1) {
-      for (var i = 0; i < sortedMandatees.length; i++) {
-        let mandatee = sortedMandatees.objectAt(i);
+      for (let index = 0; index < sortedMandatees.length; index++) {
+        const mandatee = sortedMandatees.objectAt(index);
         const nickName = await mandatee.get('nickName');
-        if (i > 0) {
-          if (sortedMandatees.length - 1 == i) {
+        if (index > 0) {
+          if (sortedMandatees.length - 1 === index) {
             proposalText = `${proposalText}${seperatorAnd}`;
           } else {
             proposalText = `${proposalText}${seperatorComma}`;
@@ -59,20 +66,18 @@ export default ModelWithModifier.extend({
         }
       }// end for loop
       return proposalText;
-    } else {
-      const requestedBy = await subcase.get('requestedBy');
-      if (requestedBy) {
-        const nickName = await requestedBy.get('nickName');
-        if (nickName) {
-          proposalText = `${proposalText}${nickName}`;
-        } else {
-          proposalText = `${proposalText}${requestedBy.get('title')}`;
-        }
-        return proposalText;
-      } else {
-        return null;
-      }
     }
+    const requestedBy = await subcase.get('requestedBy');
+    if (requestedBy) {
+      const nickName = await requestedBy.get('nickName');
+      if (nickName) {
+        proposalText = `${proposalText}${nickName}`;
+      } else {
+        proposalText = `${proposalText}${requestedBy.get('title')}`;
+      }
+      return proposalText;
+    }
+    return null;
   }),
 
 });

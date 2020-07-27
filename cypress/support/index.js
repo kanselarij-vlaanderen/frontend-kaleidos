@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -13,7 +15,7 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-/*global cy, Cypress*/
+/*global Cypress*/
 /// <reference types="Cypress" />
 
 // Import commands.js using ES2015 syntax:
@@ -31,7 +33,7 @@ import './commands/authorizationAuthentication.commands'
 import './commands/reset-database.commands'
 import 'cypress-wait-until';
 
-Cypress.on('uncaught:exception', (err, runnable) => {
+Cypress.on('uncaught:exception', (err) => {
   return !err.message.includes('calling set on destroyed object')
 });
 

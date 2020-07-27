@@ -1,3 +1,4 @@
+/* eslint-disable */
 
 /*global cy, Cypress*/
 /// <reference types="Cypress" />
