@@ -17,6 +17,7 @@ export default Model.extend({
     until: '?',
   }),
   confidential: attr('boolean'),
+  publicSince: attr('datetime'),
   accessLevel: belongsTo('access-level'),
 
   file: belongsTo('file'),
@@ -57,16 +58,27 @@ export default Model.extend({
     });
   }),
 
-  storeAccessLevel(accessLevel) {
-    this.set('modified', moment().toDate());
-    this.set('accessLevel', accessLevel);
-    return this.save();
+  changePublicSince() {
+    if (this.get('accessLevel').get('id') === '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e' && !this.get('confidential') && !this.get('publicSince')) {
+      this.set('publicSince', moment().utc()
+        .toDate());
+    }
+    if (this.get('accessLevel').get('id') !== '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e' || this.get('confidential')) {
+      this.set('publicSince', undefined);
+    }
   },
+  async save() {
+    const parentSave = this._super;
+    const dirtyType = await this.get('dirtyType');
+    switch (dirtyType) {
+      case 'deleted':
+        break;
+      default:
+        this.changePublicSince();
+        break;
+    }
 
-  async toggleConfidential() {
-    this.set('modified', moment().toDate());
-    this.toggleProperty('confidential');
-    await this.save();
+    return parentSave.call(this, ...arguments);
   },
 
 });

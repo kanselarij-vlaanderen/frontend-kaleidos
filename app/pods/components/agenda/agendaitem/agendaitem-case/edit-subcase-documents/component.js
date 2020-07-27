@@ -22,7 +22,10 @@ export default Component.extend({
           }
           return document.save()
             .then((savedDocument) => savedDocument.get('documentVersions'))
-            .then((versions) => Promise.all(versions.map((version) => version.save())));
+            .then((versions) => Promise.all(versions.map((version) => version.save())))
+            .catch((er) => {
+              console.error(er);
+            });
         })
       );
       this.set('isLoading', false);

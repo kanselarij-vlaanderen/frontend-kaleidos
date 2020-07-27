@@ -589,5 +589,6 @@
   "activity-phase-postponed-is-decided": "Er is beslist om dit agendapunt uit te stellen",
   "loading-active-agendas": "De actieve agendas worden geladen.",
   "no-documents-to-download-warning-text": "De vergadering heeft geen documenten om te downloaden.",
-  "no-documents-to-download-warning-title": "Download afgebroken"
+  "no-documents-to-download-warning-title": "Download afgebroken",
+  "changed-privileges": "Rechten gewijzigd op"
 }
