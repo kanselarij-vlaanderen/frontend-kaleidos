@@ -49,15 +49,14 @@ export default class AgendaList extends Component {
 
   @action
   async setFormallyOkAction(agendaItem, formallyOkUri) {
-    //Disable interface
     this.set('showLoader', true);
     agendaItem.formallyOk = formallyOkUri;
     await agendaItem
       .save()
       .catch(() => {
         this.toaster.error();
-      }).finally(() => {
-        //re-enable interface
+      })
+      .finally(() => {
         this.set('showLoader', false);
       });
   }

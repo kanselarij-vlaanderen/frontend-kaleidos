@@ -117,7 +117,7 @@
             <Agenda::AgendaList::ListItem
               @agendaitem={{agendaitem}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action "selectAgendaItemAction"}}
+              @selectAgendaItem={{action this.selectAgendaItemAction}}
             />
           </li>
         {{/if}}
@@ -161,7 +161,7 @@
             <Agenda::AgendaList::ListItem
               @agendaitem={{announcement}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action "selectAgendaItemAction"}}
+              @selectAgendaItem={{action this.selectAgendaItemAction}}
             />
           {{/sortable-item}}
         {{/each}}
@@ -175,7 +175,7 @@
           <Agenda::AgendaList::ListItem
             @agendaitem={{announcement}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action "selectAgendaItemAction"}}
+            @selectAgendaItem={{action this.selectAgendaItemAction}}
           />
         </div>
       {{/each}}
