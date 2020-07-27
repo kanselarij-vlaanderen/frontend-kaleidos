@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
 import { inject as service } from '@ember/service';
-import {computed} from '@ember/object';
+import { computed } from '@ember/object';
 import moment from 'moment';
 
 export default Component.extend({
@@ -15,16 +15,18 @@ export default Component.extend({
   isExpanded: false,
 
   async setNewPropertiesToModel(model) {
-    const { propertiesToSet } = this;
+    const {
+      propertiesToSet,
+    } = this;
     await Promise.all(
-      propertiesToSet.map(async property => {
+      propertiesToSet.map(async(property) => {
         model.set(property, await this.get(property));
       })
     );
-    return model.save().then(model => model.reload());
+    return model.save().then((model) => model.reload());
   },
 
-  richtext: computed('editor.currentTextContent', function () {
+  richtext: computed('editor.currentTextContent', function() {
     if (!this.editor) {
       return;
     }
@@ -51,26 +53,23 @@ export default Component.extend({
       this.set('isLoading', true);
 
       const decision = await this.get('item');
-      decision.set('modified', moment().utc().toDate());
+      decision.set('modified', moment().utc()
+        .toDate());
 
-      await this.setNewPropertiesToModel(decision).catch((e) => {
+      await this.setNewPropertiesToModel(decision).catch((exception) => {
         this.set('isLoading', false);
-        throw(e);
+        throw (exception);
       });
 
+      let agendaitemToUpdate;
+      if (this.isTableRow) {
+        await this.subcase.get('decisions').reload();
+        agendaitemToUpdate = this.agendaitem;
+      } else {
+        agendaitemToUpdate = await this.agendaitem;
+      }
+      await agendaitemToUpdate.save();
       if (!this.get('isDestroyed')) {
-        let agendaitemToUpdate;
-        if (this.isTableRow) {
-          const agendaActivity = await this.agendaitem.get('agendaActivity');
-          if (agendaActivity) {
-            const subcase = await agendaActivity.get('subcase');
-            (await subcase.get('decisions')).reload();
-            agendaitemToUpdate = await this.agendaitem.content;
-          }
-        } else {
-          agendaitemToUpdate = await this.agendaitem;
-        }
-        await agendaitemToUpdate.save();
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
       }
@@ -83,5 +82,5 @@ export default Component.extend({
       this.set('editor', editorInterface);
     },
 
-  }
+  },
 });

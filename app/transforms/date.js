@@ -5,10 +5,9 @@ export default DS.DateTransform.extend({
   serialize(date) {
     if (date instanceof Date && !isNaN(date)) {
       return moment(date).format('YYYY-MM-DD');
-    } else if (moment.isMoment(date)) {
+    } if (moment.isMoment(date)) {
       return date.format('YYYY-MM-DD');
-    } else {
-      return null;
     }
+    return null;
   },
 });

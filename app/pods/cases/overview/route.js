@@ -6,26 +6,30 @@ export default class OverviewCaseRoute extends Route.extend(DataTableRouteMixin)
   queryParams = {
     page: {
       refreshModel: true,
-      as: 'pagina'
+      as: 'pagina',
     },
     size: {
       refreshModel: true,
-      as: 'aantal'
+      as: 'aantal',
     },
     sort: {
       refreshModel: true,
-      as: 'sorteer'
+      as: 'sorteer',
     },
     showArchived: {
       refreshModel: true,
-      as: 'toon_gearchiveerd'
-    }
+      as: 'toon_gearchiveerd',
+    },
   };
+
   modelName = 'case';
 
-  mergeQueryOptions (params) {
+  // eslint-disable-next-line class-methods-use-this
+  mergeQueryOptions(params) {
     if (!params.showArchived) {
-      return { 'filter[is-archived]': false };
+      return {
+        'filter[is-archived]': false,
+      };
     }
   }
 

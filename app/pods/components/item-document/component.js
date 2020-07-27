@@ -7,18 +7,18 @@ export default Component.extend({
   document: null,
   myDocumentVersions: computed.alias('item.documentVersions'),
 
-  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function () {
+  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');
     return sortedVersions.lastObject;
   }),
 
-  lastDocumentVersionName: computed('lastDocumentVersion.name', function () {
+  lastDocumentVersionName: computed('lastDocumentVersion.name', function() {
     return this.get('lastDocumentVersion.name');
   }),
 
-  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function () {
+  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function() {
     return DS.PromiseArray.create({
-      promise: (async () => {
+      promise: (async() => {
         const itemVersionIds = {};
         const versions = await this.get('myDocumentVersions');
         if (versions) {
@@ -28,14 +28,10 @@ export default Component.extend({
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
         if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => {
-            return itemVersionIds[item.id];
-          });
+          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
           return matchingVersions;
         }
-
-        return;
-      })()
+      })(),
     });
   }),
 

@@ -456,7 +456,7 @@
   "not-digital-text": "Deze zitting is niet digitaal.",
   "normal-meeting": "Niet-elektronisch",
   "flemish-government": "Vlaamse Regering",
-  "added-agendaitem-text": "Dit punt is toegevoegd sinds de vorige agenda.",
+  "added-agendaitem-text": "Nieuw agendapunt",
   "show-changes": "Toon aangepaste punten",
   "show-all": "Toon alle punten",
   "national-number": "VO-ID",
@@ -587,5 +587,7 @@
   "activity-phase-postponed-on-agenda": "Uitgesteld op de agenda van",
   "activity-phase-decided-on-agenda": "Beslist op de agenda van",
   "activity-phase-postponed-is-decided": "Er is beslist om dit agendapunt uit te stellen",
-  "loading-active-agendas": "De actieve agendas worden geladen."
+  "loading-active-agendas": "De actieve agendas worden geladen.",
+  "no-documents-to-download-warning-text": "De vergadering heeft geen documenten om te downloaden.",
+  "no-documents-to-download-warning-title": "Download afgebroken"
 }

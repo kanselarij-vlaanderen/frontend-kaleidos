@@ -6,6 +6,7 @@ export default class CasesHeader extends Component {
   @service currentSession;
 
   classNames = ['vlc-page-header', 'vl-u-bg-alt'];
+
   isAddingCase = false;
 
   @action

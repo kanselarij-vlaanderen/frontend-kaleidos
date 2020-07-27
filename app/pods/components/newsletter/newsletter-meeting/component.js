@@ -19,11 +19,11 @@ export default Component.extend({
     }
   },
 
-  allowEditing: computed('definite', function () {
+  allowEditing: computed('definite', function() {
     return this.definite === 'false';
   }),
 
-  editTitle: computed('meeting', function () {
+  editTitle: computed('meeting', function() {
     const date = this.get('meeting.plannedStart');
     return `${this.get('intl').t('newsletter-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
@@ -40,6 +40,6 @@ export default Component.extend({
     },
     close() {
       this.toggleProperty('isEditing');
-    }
-  }
+    },
+  },
 });

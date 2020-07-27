@@ -16,12 +16,13 @@ export default Component.extend({
   classNameBindings: ['aboutToDelete'],
   documentVersion: null,
 
-  aboutToDelete: computed('documentVersion.aboutToDelete', function () {
+  aboutToDelete: computed('documentVersion.aboutToDelete', function() {
     if (this.documentVersion) {
       if (this.documentVersion.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
       }
     }
+    return null;
   }),
 
   async deleteDocumentVersionWithUndo() {
@@ -55,7 +56,9 @@ export default Component.extend({
         type: 'revert-action',
         title: this.intl.t('warning-title'),
         message: this.intl.t('document-being-deleted'),
-        options: { timeOut: 15000 }
+        options: {
+          timeOut: 15000,
+        },
       };
       verificationToast.options.onUndo = () => {
         this.fileService.reverseDelete(this.documentVersionToDelete.get('id'));

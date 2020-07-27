@@ -1,12 +1,14 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+import {
+  task, timeout
+} from 'ember-concurrency';
 
 export default Component.extend({
   classNames: ['vlc-scroll-wrapper__header'],
   store: inject(),
 
-  searchTask: task(function* () {
+  searchTask: task(function *() {
     yield timeout(600);
     this.search(this.get('value'));
   }).restartable(),
@@ -16,9 +18,9 @@ export default Component.extend({
       this.searchTask.perform();
     },
     emptySearchTask(val) {
-      if (val == '') {
+      if (val === '') {
         this.searchTask.perform();
       }
-    }
-  }
+    },
+  },
 });

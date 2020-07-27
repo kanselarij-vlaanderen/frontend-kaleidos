@@ -1,6 +1,8 @@
 import DS from 'ember-data';
 
-const { Model, attr, hasMany, belongsTo } = DS;
+const {
+  Model, attr, hasMany, belongsTo,
+} = DS;
 
 export default Model.extend({
   date: attr('datetime'),
@@ -8,5 +10,5 @@ export default Model.extend({
   result: belongsTo('consulation-response-code'),
   consulationRequest: belongsTo('consulation-request'),
   remarks: hasMany('remark'),
-  documents: hasMany('document')
+  documents: hasMany('document'),
 });

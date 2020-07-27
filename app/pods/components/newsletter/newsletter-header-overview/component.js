@@ -17,8 +17,8 @@ export default Component.extend({
   agenda: null,
   isVerifying: null,
 
-  shouldShowPrintButton: computed('routing.currentRouteName', function () {
-    return this.routing.get('currentRouteName').includes(`newsletter.overview`);
+  shouldShowPrintButton: computed('routing.currentRouteName', function() {
+    return this.routing.get('currentRouteName').includes('newsletter.overview');
   }),
 
   actions: {
@@ -39,7 +39,6 @@ export default Component.extend({
       });
       this.set('newsletterHTML', null);
       this.set('testCampaignIsLoading', false);
-
     },
 
     async deleteCampaign() {
@@ -71,7 +70,8 @@ export default Component.extend({
         this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       });
       this.set('isLoading', false);
-      mailCampaign.set('sentAt', moment().utc().toDate());
+      mailCampaign.set('sentAt', moment().utc()
+        .toDate());
       await mailCampaign.save();
       await meeting.belongsTo('mailCampaign').reload();
       this.set('isVerifying', false);
@@ -103,6 +103,6 @@ export default Component.extend({
     async clearNewsletterHTML() {
       this.set('newsletterHTML', null);
       this.set('testCampaignIsLoading', false);
-    }
+    },
   },
 });

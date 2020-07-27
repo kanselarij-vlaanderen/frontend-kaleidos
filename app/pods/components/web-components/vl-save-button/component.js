@@ -11,15 +11,15 @@ export default Component.extend({
   classNameBindings: ['isLoading:vl-button--loading', 'disabled:vl-button--disabled'],
   testTag: true, // Hack to show a value-less attribute for testing
 
-  loadingText: computed('intl', function () {
+  loadingText: computed('intl', function() {
     return this.intl.t('please-be-patient');
   }),
 
-  focus: computed('isLoading', function () {
+  focus: computed('isLoading', function() {
     return !this.isLoading;
   }),
 
-  textToDisplay: computed('text', 'isLoading', 'loadingText', function () {
+  textToDisplay: computed('text', 'isLoading', 'loadingText', function() {
     if (this.isLoading) {
       return this.loadingText;
     }
@@ -32,5 +32,5 @@ export default Component.extend({
         this.saveAction();
       }
     }
-  }
+  },
 });
