@@ -41,8 +41,8 @@ export default class AgendaOverview extends Component {
   }
 
   @restartableTask
-  reAssignPriorities = function *(agendaitems) {
-    yield agendaitems.map(async(item) => {
+  reAssignPriorities = function* (agendaitems) {
+    yield agendaitems.map(async (item) => {
       if (isPresent(item.changedAttributes().priority)) {
         this.set('showLoader', true);
         await item.save();
@@ -60,15 +60,14 @@ export default class AgendaOverview extends Component {
 
   @action
   async setFormallyOkAction(agendaItem, formallyOkUri) {
-    //Disable interface
     this.set('showLoader', true);
     agendaItem.formallyOk = formallyOkUri;
     await agendaItem
       .save()
       .catch(() => {
         this.toaster.error();
-      }).finally(() => {
-        //re-enable interface
+      })
+      .finally(() => {
         this.set('showLoader', false);
       });
   }
