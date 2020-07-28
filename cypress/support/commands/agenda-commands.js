@@ -281,9 +281,6 @@ function deleteAgenda(meetingId, lastAgenda) {
  * @function
  */
 function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = "Formeel OK") {
-  //TODO set only some items to formally ok with list as parameter
-  cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
-
   if(!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
 
@@ -299,12 +296,14 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.get('@agendaitems').eq(indexOfItem).scrollIntoView().within(() => {
     cy.get('.vl-u-spacer-extended-bottom-s').click();
   });
+  const int = Math.floor(Math.random() * Math.floor(10000));
+  cy.route('PATCH', '/agendaitems/**').as(`patchAgendaItem_${int}`);
   cy.get('.ember-power-select-option')
     .contains(formalityStatus)
-    .click()
-    .wait('@patchAgendaItem')
-    .wait(1000) // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
-    .get('.ember-power-select-option').should('not.exist');
+    .click();
+  cy.wait(`@patchAgendaItem_${int}`)
+    .wait(1000); // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
+  // .get('.ember-power-select-option').should('not.exist');
   cy.get('.vlc-agenda-items .vl-alert button')
     .click();
 }

@@ -88,8 +88,9 @@
         }}
           <Agenda::AgendaList::ListItem
             @agendaitem={{agendaitem}}
+            @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action "selectAgendaItemAction"}}
+            @selectAgendaItem={{action this.selectAgendaItemAction}}
           />
         {{/sortable-item}}
       {{/each}}
@@ -115,8 +116,9 @@
           <li class="vlc-agenda-items__sub-item">
             <Agenda::AgendaList::ListItem
               @agendaitem={{agendaitem}}
+              @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action "selectAgendaItemAction"}}
+              @selectAgendaItem={{action this.selectAgendaItemAction}}
             />
           </li>
         {{/if}}
@@ -159,8 +161,9 @@
           }}
             <Agenda::AgendaList::ListItem
               @agendaitem={{announcement}}
+              @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action "selectAgendaItemAction"}}
+              @selectAgendaItem={{action this.selectAgendaItemAction}}
             />
           {{/sortable-item}}
         {{/each}}
@@ -173,8 +176,9 @@
         <div class="vlc-agenda-items__sub-item">
           <Agenda::AgendaList::ListItem
             @agendaitem={{announcement}}
+            @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action "selectAgendaItemAction"}}
+            @selectAgendaItem={{action this.selectAgendaItemAction}}
           />
         </div>
       {{/each}}
@@ -184,15 +188,15 @@
   {{/if}}
 </div>
 
-{{#if (await isReAssigningPriorities)}}
+{{#if (await showLoader)}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @showCloseButton={{false}}
-    @title={{t "reassign-agendaitem-priorities-title"}}
+    @title={{t "saving-agendaitem-title-message"}}
   >
     <WebComponents::VlLoader
       @text={{concat
-        (t "reassign-agendaitem-priorities-message")
+        (t "saving-agendaitem-message")
         " "
         (t "please-be-patient")
       }}

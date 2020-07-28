@@ -18,16 +18,16 @@ export default class AgendaList extends Component {
   isEditingOverview = null;
   isShowingChanges = null;
   overviewEnabled = null;
-  isReAssigningPriorities = null;
+  showLoader = null;
 
   @restartableTask
   reAssignPriorities = function* (agendaitems) {
     yield agendaitems.map(async (item) => {
       if (isPresent(item.changedAttributes().priority)) {
-        this.set('isReAssigningPriorities', true);
+        this.set('showLoader', true);
         await item.save();
         if (!this.isDestroyed) {
-          this.set('isReAssigningPriorities', false);
+          this.set('showLoader', false);
         }
       }
     });
@@ -45,6 +45,20 @@ export default class AgendaList extends Component {
   @action
   selectAgendaItemAction(agendaitem) {
     this.selectAgendaItem(agendaitem);
+  }
+
+  @action
+  async setFormallyOkAction(agendaItem, formallyOkUri) {
+    this.set('showLoader', true);
+    agendaItem.formallyOk = formallyOkUri;
+    await agendaItem
+      .save()
+      .catch(() => {
+        this.toaster.error();
+      })
+      .finally(() => {
+        this.set('showLoader', false);
+      });
   }
 
   @action
