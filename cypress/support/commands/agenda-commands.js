@@ -316,7 +316,7 @@ function deleteAgenda(meetingId, lastAgenda) {
  */
 function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = 'Formeel OK') {
   // TODO set only some items to formally ok with list as parameter
-  cy.route('PATCH', '/agendaitems/**').as('patchAgendaItem');
+  cy.route('PATCH', '/agendaitems/**').as('setFormalOkOnItemWithIndex-patchAgendaItem');
 
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
@@ -339,7 +339,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.get('.ember-power-select-option')
     .contains(formalityStatus)
     .click()
-    .wait('@patchAgendaItem')
+    .wait('@setFormalOkOnItemWithIndex-patchAgendaItem')
     .wait(1000) // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
     .get('.ember-power-select-option')
     .should('not.exist');
@@ -402,7 +402,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function approveDesignAgenda() {
+const approveDesignAgenda = () => {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
   // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
   cy.route('GET', '/agendas/**').as('getAgendas');
@@ -410,21 +410,51 @@ function approveDesignAgenda() {
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   // TODO use test selector
   cy.get('.vlc-toolbar').within(() => {
-    cy.get('.vl-button')
-      .contains('Ontwerpagenda')
-      .click()
-      .wait('@patchAgenda', {
-        timeout: 12000,
-      })
-      // .wait('@getAgendaitems', { timeout: 12000 })
-      .wait('@getAgendas', {
-        timeout: 12000,
-      });
+    cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
+  cy.get(agenda.approveAgenda).click()
+    .wait('@patchAgenda', {
+      timeout: 12000,
+    })
+    // .wait('@getAgendaitems', { timeout: 12000 })
+    .wait('@getAgendas', {
+      timeout: 12000,
+    });
+
   cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
     verbose: true, timeout: 60000,
   });
-}
+};
+
+/**
+ * @description Approve an open agenda when all formally OK's are set ()
+ * @name approveAndCloseDesignAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+const approveAndCloseDesignAgenda = () => {
+  cy.route('PATCH', '/agendas/**').as('patchAgendaAndCloseAgenda');
+  // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
+  cy.route('GET', '/agendas/**').as('getAgendasInCloseDesignAgenda');
+
+  // TODO add boolean for when not all items are formally ok, click through the confirmation modal
+  // TODO use test selector
+  cy.get('.vlc-toolbar').within(() => {
+    cy.get(agenda.agendaHeaderShowAgendaOptions).click();
+  });
+  cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click()
+    .wait('@patchAgendaAndCloseAgenda', {
+      timeout: 12000,
+    })
+  // .wait('@getAgendaitems', { timeout: 12000 })
+    .wait('@getAgendasInCloseDesignAgenda', {
+      timeout: 12000,
+    });
+
+  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
+    verbose: true, timeout: 60000,
+  });
+};
 
 /**
  * @description Add a new case to the agenda
@@ -721,3 +751,4 @@ Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
+Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);

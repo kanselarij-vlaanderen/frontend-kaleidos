@@ -38,7 +38,7 @@
         <div class="vl-action-group">
           {{#if (and currentAgenda.isDesignAgenda currentSessionService.isEditor)}}
             <button type="button"
-                    data-test-agenda-header-showAgendaOOptions
+                    data-test-agenda-header-showAgendaOptions
                     class="vl-button vl-button--icon-before"
               {{action "showAgendaActions"}}
             >
@@ -54,11 +54,11 @@
               {{t "agendaApproveActions"}}
             </button>
             {{#attach-popover
-                    class="ember-attacher-popper vlc-hide-on-print"
-                    hideOn="clickout click"
-                    showOn="click"
-                    animation="shift"
-                    placement="bottom"
+              class="ember-attacher-popper vlc-hide-on-print"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom"
             as |attacher|
             }}
               <ul class="vlc-dropdown-menu">

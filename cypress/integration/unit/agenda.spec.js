@@ -52,6 +52,13 @@ context('Agenda tests', () => {
     cy.addAgendaitemToAgenda(false);
   });
 
+  it('Ontwerpagenda goedkeuren en afsluiten...', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.approveAndCloseDesignAgenda();
+    cy.get(modal.agenda.approveAgenda).should('not.exist');
+  });
+
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(5); // Friday in three weeks

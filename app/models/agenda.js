@@ -18,7 +18,6 @@ export default Model.extend(LoadableModel, {
   createdFor: belongsTo('meeting'),
   status: belongsTo('agendastatus', {
     inverse: null,
-    async: false,
   }),
   agendaitems: hasMany('agendaitem', {
     inverse: null,
