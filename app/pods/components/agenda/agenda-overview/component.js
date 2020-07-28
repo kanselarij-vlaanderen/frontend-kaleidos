@@ -41,8 +41,8 @@ export default class AgendaOverview extends Component {
   }
 
   @restartableTask
-  reAssignPriorities = function* (agendaitems) {
-    yield agendaitems.map(async (item) => {
+  reAssignPriorities = function *(agendaitems) {
+    yield agendaitems.map(async(item) => {
       if (isPresent(item.changedAttributes().priority)) {
         this.set('showLoader', true);
         await item.save();
