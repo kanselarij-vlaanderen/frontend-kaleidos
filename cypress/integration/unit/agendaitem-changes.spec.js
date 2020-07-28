@@ -17,6 +17,7 @@ context('Agendaitem changes tests', () => {
   const files = [file];
   const waitTime = 3000;
 
+
   it('should add a document to an agenda and should highlight as added', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
     cy.addDocumentsToAgendaItem(subcaseTitle1, files);

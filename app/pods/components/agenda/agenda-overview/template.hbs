@@ -116,6 +116,7 @@
           <li class="vlc-agenda-items__sub-item">
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{agendaitem}}
+              @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
               @isEditingOverview={{isEditingOverview}}
               @selectAgendaItem={{action this.selectAgendaItemAction}}
             />
@@ -160,6 +161,7 @@
           }}
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{announcement}}
+              @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
               @isEditingOverview={{isEditingOverview}}
               @selectAgendaItem={{action this.selectAgendaItemAction}}
             />
@@ -174,6 +176,7 @@
         <div class="vlc-agenda-items__sub-item">
           <Agenda::AgendaOverview::AgendaOverviewItem
             @agendaitem={{announcement}}
+            @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
             @isEditingOverview={{isEditingOverview}}
             @selectAgendaItem={{action this.selectAgendaItemAction}}
           />
