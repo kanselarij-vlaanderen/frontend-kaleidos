@@ -166,7 +166,7 @@ export default Component.extend({
       this.set('editor', editorInterface);
     },
     descriptionUpdated(val) {
-      this.set('initValue', this.get('initValue') + val);
+      this.set('initValue', `${this.get('initValue')} ${val}`);
     },
   },
 });
