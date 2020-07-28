@@ -8,10 +8,12 @@ export default Component.extend({
   classNames: ['checkbox-list-selector'],
   selectedThemes: null,
 
-  selectedThemesObserver: observer('selectedThemes', 'themes', function () {
-    const { themes, selectedThemes } = this;
+  selectedThemesObserver: observer('selectedThemes', 'themes', function() {
+    const {
+      themes, selectedThemes,
+    } = this;
     if (themes && selectedThemes) {
-      themes.map(theme => theme.set('selected', false));
+      themes.map((theme) => theme.set('selected', false));
       this.checkSelectedThemes(selectedThemes, themes);
     }
   }),
@@ -30,11 +32,11 @@ export default Component.extend({
     this._super(...arguments);
     this.findAll.perform();
     if (!this.selectedThemes) {
-      this.set('selectedThemes', [])
+      this.set('selectedThemes', []);
     }
   },
 
-  findAll: task(function* () {
+  findAll: task(function *() {
     const themes = yield this.store.query('theme', {}); // Query to make sure you get all themes from the API instead
     this.set('themes', themes.sortBy('label').filter((item) => !item.deprecated));
   }),
@@ -46,7 +48,7 @@ export default Component.extend({
         if (foundTheme) {
           foundTheme.set('selected', true);
         }
-      })
+      });
     }
-  }
+  },
 });

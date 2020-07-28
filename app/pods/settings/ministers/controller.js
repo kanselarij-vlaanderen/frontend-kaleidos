@@ -9,11 +9,12 @@ export default Controller.extend({
   isEditingMandatee: false,
   isAddingMandatee: false,
   isResigningMandatee: false,
-  reAssignPriorities: task(function* (model) {
+  reAssignPriorities: task(function *(model) {
     yield model.map((item) => {
       if (isPresent(item.changedAttributes().priority)) {
         return item.save();
       }
+      return item;
     });
   }).restartable(),
 
@@ -21,10 +22,10 @@ export default Controller.extend({
     async reorderItems(model, reOrderedModel) {
       if (this.currentSession.isEditor) {
         const firstPrio = 1;
-        for (let i = 0; i < reOrderedModel.get('length'); i++) {
-          const reOrderedMandatee = reOrderedModel.objectAt(i);
+        for (let index = 0; index < reOrderedModel.get('length'); index++) {
+          const reOrderedMandatee = reOrderedModel.objectAt(index);
           const mandatee = model.find((item) => item.id === reOrderedMandatee.get('id'));
-          const newPrio = (i + firstPrio);
+          const newPrio = (index + firstPrio);
           mandatee.set('priority', newPrio);
         }
         this.reAssignPriorities.perform(model);
@@ -33,7 +34,7 @@ export default Controller.extend({
     },
 
     toggleProperty(prop, mandateeToEdit) {
-      this.set('mandateeToEdit', mandateeToEdit)
+      this.set('mandateeToEdit', mandateeToEdit);
       this.toggleProperty(prop);
     },
 
@@ -54,6 +55,6 @@ export default Controller.extend({
 
     mandateesUpdated() {
       this.send('refreshRoute');
-    }
-  }
+    },
+  },
 });

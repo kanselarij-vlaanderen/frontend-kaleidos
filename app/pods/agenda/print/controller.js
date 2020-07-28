@@ -2,26 +2,25 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
 
-function equalContentArrays (a, b) {
-  if (a.length === b.length) {
-    return a.every(elem => b.includes(elem));
-  } else {
-    return false;
+function equalContentArrays(array1, array2) {
+  if (array1.length === array2.length) {
+    return array1.every((elem) => array2.includes(elem));
   }
+  return false;
 }
 
 export default Controller.extend({
 
-  notaGroups: computed('model.notas.@each.sortedMandatees', function () {
-    let agendaItems = this.get('model.notas');
+  notaGroups: computed('model.notas.@each.sortedMandatees', function() {
+    const agendaItems = this.get('model.notas');
     if (agendaItems.length > 0) {
       let currentSubmittersArray = agendaItems.firstObject.sortedMandatees;
       let currentItemArray = A([]);
-      let groups = [];
+      const groups = [];
       groups.pushObject(currentItemArray);
-      for (var i = 0; i < agendaItems.length; i++) {
-        let item = agendaItems.objectAt(i);
-        let subm = item.sortedMandatees;
+      for (let index = 0; index < agendaItems.length; index++) {
+        const item = agendaItems.objectAt(index);
+        const subm = item.sortedMandatees;
         if (equalContentArrays(currentSubmittersArray, subm)) {
           currentItemArray.pushObject(item);
         } else {
@@ -31,9 +30,8 @@ export default Controller.extend({
         }
       }
       return groups;
-    } else {
-      return A([]);
     }
+    return A([]);
   }),
 
 });

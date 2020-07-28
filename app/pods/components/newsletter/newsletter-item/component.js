@@ -10,7 +10,7 @@ export default Component.extend({
   agendaitem: null,
   newsletterInfo: null,
 
-  allowEditing: computed('definite', function () {
+  allowEditing: computed('definite', function() {
     return this.definite === 'false';
   }),
 

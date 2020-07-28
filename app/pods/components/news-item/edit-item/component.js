@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { cached } from 'fe-redpencil/decorators/cached';
-import {computed} from '@ember/object';
-import {inject} from '@ember/service';
+import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default Component.extend({
   intl: inject(),
@@ -13,7 +13,7 @@ export default Component.extend({
     'text',
     'richtext',
     'mandateeProposal',
-    'remark',
+    'remark'
   ]),
   documentVersionsSelected: null,
   isEditing: false,
@@ -28,33 +28,28 @@ export default Component.extend({
   isTryingToSave: false,
   isExpanded: false,
 
-  themes: computed(`agendaitem.agendaActivity.subcase.newsletterInfo.themes`, {
+  themes: computed('agendaitem.agendaActivity.subcase.newsletterInfo.themes', {
     async get() {
       if (this.agendaitem) {
         const agendaActivity = await this.agendaitem.get('agendaActivity');
         if (agendaActivity) {
-          return await agendaActivity.get('subcase.newsletterInfo.themes').then((themes) => {
-            return themes.toArray();
-          });
-        } else {
-          return [];
+          return await agendaActivity.get('subcase.newsletterInfo.themes').then((themes) => themes.toArray());
         }
-      } else {
-        return [];
       }
+      return [];
     },
-    set: function (key, value) {
+    // eslint-disable-next-line no-unused-vars
+    set(key, value) {
       return value;
     },
   }),
 
-  hasNota: computed('agendaitem', async function () {
+  hasNota: computed('agendaitem', async function() {
     const nota = await this.agendaitem.get('nota');
     if (nota) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }),
 
   async saveChanges() {
@@ -66,12 +61,12 @@ export default Component.extend({
 
     if (documentVersionsSelected) {
       await Promise.all(
-        documentVersionsSelected.map(async (documentVersion) => {
+        documentVersionsSelected.map(async(documentVersion) => {
           if (documentVersion.get('selected')) {
             item.get('documentVersions').addObject(documentVersion);
           } else {
             const foundDocument = itemDocumentsToEdit.find(
-              (item) => item.get('id') == documentVersion.get('id')
+              (foundItem) => foundItem.get('id') === documentVersion.get('id')
             );
             if (foundDocument) {
               item.get('documentVersions').removeObject(documentVersion);
@@ -80,23 +75,25 @@ export default Component.extend({
         })
       );
     }
-    this.setNewPropertiesToModel(item).then(async () => {
+    this.setNewPropertiesToModel(item).then(async() => {
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     });
   },
 
   async setNewPropertiesToModel(model) {
-    const { propertiesToSet } = this;
+    const {
+      propertiesToSet,
+    } = this;
     await Promise.all(
-      propertiesToSet.map(async property => {
+      propertiesToSet.map(async(property) => {
         model.set(property, await this.get(property));
       })
     );
-    return model.save().then(model => model.reload());
+    return model.save().then((savedModel) => savedModel.reload());
   },
 
-  richtext: computed('editor.htmlContent', function () {
+  richtext: computed('editor.htmlContent', function() {
     if (!this.editor) {
       return;
     }
@@ -107,7 +104,7 @@ export default Component.extend({
     async trySaveChanges() {
       const themes = await this.get('themes');
       if (themes.length > 0) {
-        return this.saveChanges()
+        return this.saveChanges();
       }
       this.toggleProperty('isTryingToSave');
     },
@@ -133,12 +130,12 @@ export default Component.extend({
 
       if (documentVersionsSelected) {
         await Promise.all(
-          documentVersionsSelected.map(async documentVersion => {
+          documentVersionsSelected.map(async(documentVersion) => {
             if (documentVersion.get('selected')) {
               item.get('documentVersions').addObject(documentVersion);
             } else {
               const foundDocument = itemDocumentsToEdit.find(
-                item => item.get('id') == documentVersion.get('id')
+                (foundItem) => foundItem.get('id') === documentVersion.get('id')
               );
               if (foundDocument) {
                 item.get('documentVersions').removeObject(documentVersion);
@@ -148,7 +145,7 @@ export default Component.extend({
         );
       }
 
-      this.setNewPropertiesToModel(item).then(newModel => {
+      this.setNewPropertiesToModel(item).then((newModel) => {
         newModel.reload();
         this.set('isLoading', false);
         this.toggleProperty('isEditing');
@@ -170,6 +167,6 @@ export default Component.extend({
     },
     descriptionUpdated(val) {
       this.set('initValue', this.get('initValue') + val);
-    }
+    },
   },
 });

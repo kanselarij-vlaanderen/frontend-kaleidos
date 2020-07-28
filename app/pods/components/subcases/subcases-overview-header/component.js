@@ -10,10 +10,11 @@ export default Component.extend({
   title: null,
   shortTitle: null,
 
-  activeProcess: computed('isShowingProcess', function () {
+  activeProcess: computed('isShowingProcess', function() {
     if (this.get('isShowingProcess')) {
       return 'vlc-tabs-reverse__link--active';
     }
+    return null;
   }),
 
   // This is needed to give the input-helpers a proper string instead of
@@ -48,5 +49,5 @@ export default Component.extend({
       this.set('isShowingProcess', true);
     },
 
-  }
+  },
 });

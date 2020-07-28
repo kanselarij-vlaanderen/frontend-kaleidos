@@ -33,5 +33,5 @@ export default Component.extend({
         this.delete(...arguments);
       }
     },
-  }
+  },
 });

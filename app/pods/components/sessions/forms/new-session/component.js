@@ -19,25 +19,24 @@ export default Component.extend({
     // TODO: Improve samen met Michael of Sven
     this.store.query('meeting',
       {
-        sort: '-planned-start'
-      }).then(meetings => {
-        let meetingsFromThisYear = null;
+        sort: '-planned-start',
+      }).then((meetings) => {
+      let meetingsFromThisYear = null;
       if (meetings.length) {
-
-        meetingsFromThisYear = meetings.map(meeting => {
-         if (moment(meeting.plannedStart).year() === currentYear) {
-           return meeting;
-         }
-        }).filter(meeting => meeting); // Filter undefineds out of results..
+        meetingsFromThisYear = meetings.map((meeting) => {
+          if (moment(meeting.plannedStart).year() === currentYear) {
+            return meeting;
+          }
+        }).filter((meeting) => meeting); // Filter undefineds out of results..
 
         let id = 0;
-        meetingsFromThisYear.forEach(meeting => {
+        meetingsFromThisYear.forEach((meeting) => {
           const number = meeting.get('number');
-          if(number > id) {
+          if (number > id) {
             id = number;
           }
         });
-         this.set('meetingNumber', id + 1);
+        this.set('meetingNumber', id + 1);
       }
     });
   },
@@ -49,21 +48,22 @@ export default Component.extend({
       serialnumber: 'A',
       title: `Agenda A voor zitting ${moment(meeting.plannedStart).format('D-M-YYYY')}`,
       createdFor: meeting,
-      status: status,
+      status,
       created: date || fallBackDate,
       modified: date || fallBackDate,
     });
-    return await agenda.save();
+    const savedAgenda = await agenda.save();
+    return savedAgenda;
   },
 
   async createAgendaItemToApproveMinutes(agenda, closestMeeting) {
     if (!closestMeeting) {
-      return;
+      return null;
     }
     const fallBackDate = this.formatter.formatDate(null);
     const agendaitem = this.store.createRecord('agendaitem', {
       created: fallBackDate,
-      agenda: agenda,
+      agenda,
       priority: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
         closestMeeting.plannedstart
@@ -72,14 +72,17 @@ export default Component.extend({
       mandatees: [],
       documentVersions: [],
       approvals: [],
-      isApproval: true
+      isApproval: true,
     });
-    return await agendaitem.save();
+    const savedAgendaItem = await agendaitem.save();
+    return savedAgendaItem;
   },
 
   actions: {
     async createNewSession() {
-      const { isDigital, extraInfo, selectedKindUri, meetingNumber } = this;
+      const {
+        isDigital, extraInfo, selectedKindUri, meetingNumber,
+      } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
       const date = this.formatter.formatDate(null);
@@ -90,13 +93,13 @@ export default Component.extend({
         plannedStart: startDate,
         created: date,
         kind: kindUriToAdd,
-        number: meetingNumber
+        number: meetingNumber,
       });
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
       newMeeting
         .save()
-        .then(async (meeting) => {
+        .then(async(meeting) => {
           const agenda = await this.createAgenda(meeting, date);
           await this.createAgendaItemToApproveMinutes(agenda, closestMeeting);
           await this.newsletterService.createNewsItemForMeeting(meeting);

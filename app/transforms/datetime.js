@@ -5,8 +5,7 @@ export default DS.DateTransform.extend({
   serialize(date) {
     if (moment.isMoment(date)) {
       return date.format();
-    } else {
-      return this._super(...arguments);
     }
-  }
+    return this._super(...arguments);
+  },
 });

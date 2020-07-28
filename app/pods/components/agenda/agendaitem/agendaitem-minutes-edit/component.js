@@ -8,13 +8,13 @@ export default Component.extend({
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   store: inject(),
 
-  item: computed('agendaitem.meetingRecord', function () {
+  item: computed('agendaitem.meetingRecord', function() {
     return this.get('agendaitem.meetingRecord');
   }),
   isExpanded: false,
   initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
 
-  richtext: computed('editor.htmlContent', function () {
+  richtext: computed('editor.htmlContent', function() {
     if (!this.editor) {
       return;
     }
@@ -49,5 +49,5 @@ export default Component.extend({
       editorInterface.setHtmlContent(this.get('initValue'));
       this.set('editor', editorInterface);
     },
-  }
+  },
 });

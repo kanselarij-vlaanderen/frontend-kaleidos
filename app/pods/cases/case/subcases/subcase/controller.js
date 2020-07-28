@@ -27,6 +27,6 @@ export default Controller.extend({
 
     refreshRoute() {
       this.send('refresh');
-    }
-  }
+    },
+  },
 });

@@ -36,11 +36,11 @@ export default Component.extend({
     async cancelEditing(agendaitem) {
       if (this.isTableRow) {
         await agendaitem.content.rollbackAttributes();
-        agendaitem.set('expanded', false)
+        agendaitem.set('expanded', false);
       } else {
         agendaitem.rollbackAttributes();
       }
       this.toggleProperty('isEditing');
-    }
-  }
+    },
+  },
 });

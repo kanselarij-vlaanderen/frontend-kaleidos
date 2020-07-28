@@ -1,9 +1,12 @@
-import Service from '@ember/service';
+import Service, { inject } from '@ember/service';
 import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+
 import DS from 'ember-data';
-let { PromiseArray } = DS;
 import { all } from 'rsvp';
+
+const {
+  PromiseArray,
+} = DS;
 
 export default Service.extend({
   store: inject(),
@@ -11,51 +14,52 @@ export default Service.extend({
   currentSession: null,
   selectedAgendaItem: null,
 
-  agendas: computed('currentSession.agendas.@each', function () {
+  agendas: computed('currentSession.agendas.@each', function() {
     if (!this.get('currentSession')) {
       return [];
     }
     return PromiseArray.create({
-      promise: this.get('currentSession.agendas').then( async (agendas) => {
-        await all(agendas.map((agenda) => {
-          return agenda.load('status');
-        }));
+      promise: this.get('currentSession.agendas').then(async(agendas) => {
+        await all(agendas.map((agenda) => agenda.load('status')));
         return agendas.sortBy('serialnumber').reverse();
-      })
+      }),
     });
   }),
 
-  currentAgendaItems: computed('currentAgenda.agendaitems.@each', function () {
-    let currentAgenda = this.get('currentAgenda');
+  currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
+    const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       return this.store.query('agendaitem', {
         filter: {
-          agenda: { id: currentAgenda.id },
+          agenda: {
+            id: currentAgenda.id,
+          },
         },
         include: ['agenda-activity,agenda-activity.subcase,agenda-activity.subcase.case'],
         sort: 'priority',
       });
-    } else {
-      return [];
     }
+    return [];
   }),
 
-  announcements: computed('currentAgenda.announcements.@each', function () {
-    let currentAgenda = this.get('currentAgenda');
+  announcements: computed('currentAgenda.announcements.@each', function() {
+    const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
-      let announcements = this.store.query('announcement', {
+      const announcements = this.store.query('announcement', {
         filter: {
-          agenda: { id: currentAgenda.id },
+          agenda: {
+            id: currentAgenda.id,
+          },
         },
       });
       return announcements;
-    } else {
-      return [];
     }
+    return [];
   }),
 
-  definiteAgendas: computed('agendas', function () {
-    return this.get('agendas').filter((agenda) => !agenda.get('isDesignAgenda')).sortBy('-name');
+  definiteAgendas: computed('agendas', function() {
+    return this.get('agendas').filter((agenda) => !agenda.get('isDesignAgenda'))
+      .sortBy('-name');
   }),
 
   async findPreviousAgendaOfSession(session, agenda) {
@@ -63,15 +67,13 @@ export default Service.extend({
     if (agendas) {
       const foundIndex = agendas.indexOf(agenda);
       const agendasLength = agendas.get('length');
-      if (foundIndex + 1 != agendasLength) {
+      if (foundIndex + 1 !== agendasLength) {
         const previousAgenda = agendas.objectAt(foundIndex + 1);
         return previousAgenda;
-      } else {
-        return null;
       }
-    } else {
       return null;
     }
+    return null;
   },
 
   async deleteSession(session) {
