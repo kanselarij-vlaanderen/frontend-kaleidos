@@ -53,7 +53,7 @@
                 {{#if (not agenda.isDesignAgenda)}}
                   {{t "created-on"}}
                   <br/>
-                  {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
+                  {{moment-format agenda.created "dd DD/MM/YYYY HH:mm"}}
                 {{else}}
                   {{t "latest-modified"}}
                   <br/>
