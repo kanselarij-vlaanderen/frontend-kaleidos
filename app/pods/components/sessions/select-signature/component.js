@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 export default Component.extend({
   meeting: null,
 
-  selectedSignature: computed('meeting.signature', function () {
+  selectedSignature: computed('meeting.signature', function() {
     return this.meeting.get('signature');
   }),
 
@@ -25,6 +25,6 @@ export default Component.extend({
         this.set('isLoading', false);
         this.closeDialog();
       });
-    }
-  }
+    },
+  },
 });

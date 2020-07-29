@@ -1,8 +1,14 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { alias, filter } from '@ember/object/computed';
-import { computed, set } from '@ember/object';
-import { warn, debug } from '@ember/debug';
+import {
+  alias, filter
+} from '@ember/object/computed';
+import {
+  computed, set
+} from '@ember/object';
+import {
+  warn, debug
+} from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
 
@@ -41,33 +47,29 @@ export default Component.extend(FileSaverMixin, {
   selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
-  isLockable: computed('agendas.@each', async function () {
+  isLockable: computed('agendas.@each', async function() {
     const agendas = await this.get('agendas');
     if (agendas && agendas.length > 1) {
       return true;
-    } else {
-      const onlyAgenda = await agendas.get('firstObject');
-      if (onlyAgenda.get('isDesignAgenda')) {
-        return false;
-      } else {
-        return true;
-      }
     }
+    const onlyAgenda = await agendas.get('firstObject');
+    if (onlyAgenda.get('isDesignAgenda')) {
+      return false;
+    }
+    return true;
   }),
 
-  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function () {
+  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function() {
     return await this.get('currentSession.sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
   }),
 
-  designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', function (agenda) {
-    return agenda.get('isDesignAgenda');
-  }),
+  designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', (agenda) => agenda.get('isDesignAgenda')),
 
-  shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function () {
+  shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function() {
     return this.isDeletingAgenda || this.isLockingAgenda;
   }),
 
-  loaderText: computed('isDeletingAgenda', 'isLockingAgenda', function () {
+  loaderText: computed('isDeletingAgenda', 'isLockingAgenda', function() {
     let text = '';
     if (this.isDeletingAgenda) {
       text = this.intl.t('agenda-delete-message');
@@ -75,10 +77,10 @@ export default Component.extend(FileSaverMixin, {
     if (this.isLockingAgenda) {
       text = this.intl.t('agenda-lock-message');
     }
-    return text + ' ' + this.intl.t('please-be-patient');
+    return `${text} ${this.intl.t('please-be-patient')}`;
   }),
 
-  loaderTitle: computed('isDeletingAgenda', 'isLockingAgenda', function () {
+  loaderTitle: computed('isDeletingAgenda', 'isLockingAgenda', function() {
     if (this.isDeletingAgenda) {
       return this.intl.t('agenda-delete');
     }
@@ -110,7 +112,7 @@ export default Component.extend(FileSaverMixin, {
   async deleteAgenda(agenda) {
     const session = await this.currentSession;
     if (!agenda) {
-      //TODO possible dead code, there is always an agenda ?
+      // TODO possible dead code, there is always an agenda ?
       return;
     }
     const agendas = await session.get('agendas');
@@ -122,7 +124,7 @@ export default Component.extend(FileSaverMixin, {
       await session.save();
       await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems', session.id, previousAgenda.get('id'));
-    } else if (agendasLength == 1) {
+    } else if (agendasLength === 1) {
       await this.get('sessionService').deleteSession(session);
       this.router.transitionTo('agendas');
     } else { // dead code, this should not be reachable unless previousAgenda failed to resolve
@@ -131,23 +133,27 @@ export default Component.extend(FileSaverMixin, {
   },
 
   reloadAgendaitemsOfSubcases(agendaItems) {
-    return all(agendaItems.map(async agendaitem => {
+    return all(agendaItems.map(async(agendaitem) => {
       const agendaActivity = await agendaitem.get('agendaActivity');
       if (agendaActivity) {
         await agendaActivity.hasMany('agendaitems').reload();
       }
       return agendaitem;
     })).catch(() => {
-      warn('Something went wrong while reloading the agendaitems of the subcases.', { id: 'subcase-reloading' });
+      warn('Something went wrong while reloading the agendaitems of the subcases.', {
+        id: 'subcase-reloading',
+      });
     });
   },
 
   destroyAgendaitemsList(agendaitems) {
-    return all(agendaitems.map(agendaitem => {
+    return all(agendaitems.map((agendaitem) => {
       if (!agendaitem) {
-        return;
+        return null;
       }
-      return agendaitem.destroyRecord().catch(() => warn('Something went wrong while deleting the agendaitem.', { id: 'agenda-item-reloading' }));
+      return agendaitem.destroyRecord().catch(() => warn('Something went wrong while deleting the agendaitem.', {
+        id: 'agenda-item-reloading',
+      }));
     }));
   },
 
@@ -157,22 +163,30 @@ export default Component.extend(FileSaverMixin, {
     },
 
     navigateToNotes() {
-      const { currentSession, currentAgenda } = this;
+      const {
+        currentSession, currentAgenda,
+      } = this;
       this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToPressAgenda() {
-      const { currentSession, currentAgenda } = this;
+      const {
+        currentSession, currentAgenda,
+      } = this;
       this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToNewsletter() {
-      const { currentSession, currentAgenda } = this;
+      const {
+        currentSession, currentAgenda,
+      } = this;
       this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToDecisions() {
-      const { currentSession, currentAgenda } = this;
+      const {
+        currentSession, currentAgenda,
+      } = this;
       this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
     },
 
@@ -195,13 +209,13 @@ export default Component.extend(FileSaverMixin, {
       if (!isApprovable) {
         this.set('showWarning', true);
       } else {
-        await this.approveAgenda(session)
+        await this.approveAgenda(session);
       }
     },
 
     async doApproveAgenda(session) {
       set(this, 'showWarning', false);
-      await this.approveAgenda(session)
+      await this.approveAgenda(session);
     },
 
     async lockAgenda() {
@@ -254,22 +268,33 @@ export default Component.extend(FileSaverMixin, {
     },
 
     async downloadAllDocuments() {
+      // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
       const fileDownloadToast = {
         title: this.intl.t('file-ready'),
         type: 'download-file',
-        options: { timeOut: 10 * 1000 }
+        options: {
+          timeOut: 60 * 10 * 1000,
+        },
       };
 
       const namePromise = constructArchiveName(this.currentAgenda);
       debug('Checking if archive exists ...');
       const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
       const [name, job] = await all([namePromise, jobPromise]);
+      if (!job) {
+        this.toaster.warning(this.intl.t('no-documents-to-download-warning-text'), this.intl.t('no-documents-to-download-warning-title'), {
+          timeOut: 10000,
+        });
+        return;
+      }
       if (!job.hasEnded) {
         debug('Archive in creation ...');
         const inCreationToast = this.toaster.loading(this.intl.t('archive-in-creation-message'),
-          this.intl.t('archive-in-creation-title'), { timeOut: 3 * 60 * 1000 });
+          this.intl.t('archive-in-creation-title'), {
+            timeOut: 3 * 60 * 1000,
+          });
         this.jobMonitor.register(job);
-        job.on('didEnd', this, async function (status) {
+        job.on('didEnd', this, async function(status) {
           if (this.toaster.toasts.includes(inCreationToast)) {
             this.toaster.toasts.removeObject(inCreationToast);
           }
@@ -321,7 +346,8 @@ export default Component.extend(FileSaverMixin, {
     },
     confirmReleaseDecisions() {
       this.set('releasingDecisions', false);
-      this.currentSession.set('releasedDecisions', moment().utc().toDate());
+      this.currentSession.set('releasedDecisions', moment().utc()
+        .toDate());
       this.currentSession.save();
     },
     releaseDocuments() {
@@ -329,18 +355,19 @@ export default Component.extend(FileSaverMixin, {
     },
     confirmReleaseDocuments() {
       this.set('releasingDocuments', false);
-      this.currentSession.set('releasedDocuments', moment().utc().toDate());
+      this.currentSession.set('releasedDocuments', moment().utc()
+        .toDate());
       this.currentSession.save();
     },
     toggleEditingSession() {
-      this.toggleProperty('editingSession')
+      this.toggleProperty('editingSession');
     },
     successfullyEdited() {
-      this.toggleProperty('editingSession')
+      this.toggleProperty('editingSession');
     },
     cancelEditSessionForm() {
-      this.toggleProperty('editingSession')
-    }
+      this.toggleProperty('editingSession');
+    },
   },
 
   changeLoading() {
@@ -361,7 +388,7 @@ export default Component.extend(FileSaverMixin, {
     }
     this.set('isApprovingAgenda', true);
     this.changeLoading();
-    let agendas = await this.get('agendas');
+    const agendas = await this.get('agendas');
     let agendaToLock = await agendas.find((agenda) => agenda.get('isDesignAgenda'));
     if (agendaToLock) {
       agendaToLock = await this.store.findRecord('agenda', agendaToLock.get('id'));
@@ -376,16 +403,17 @@ export default Component.extend(FileSaverMixin, {
     agendaToLock.save().then((agendaToApprove) => {
       this.get('agendaService')
         .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
-        .then(async newAgenda => {
+        .then(async(newAgenda) => {
           const agendaItems = await agendaToLock.get('agendaitems');
-          const newNotYetOKItems = agendaItems.filter(agendaItem => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
+          const newNotYetOKItems = agendaItems.filter((agendaItem) => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
           await this.reloadAgendaitemsOfSubcases(agendaItems);
           await this.destroyAgendaitemsList(newNotYetOKItems);
           return newAgenda;
         })
         .then((newAgenda) => {
           this.reloadRoute(newAgenda.get('id'));
-        }).finally(() => {
+        })
+        .finally(() => {
           this.set('sessionService.selectedAgendaItem', null);
           this.changeLoading();
           this.set('isApprovingAgenda', false);

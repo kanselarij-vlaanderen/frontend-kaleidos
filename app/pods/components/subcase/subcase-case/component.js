@@ -1,13 +1,15 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { computed, set } from '@ember/object';
+import {
+  computed, set
+} from '@ember/object';
 
 export default Component.extend({
   authentication: inject('currentSession'),
   subcase: null,
   isEditing: false,
 
-  subcases: computed('subcase', async function () {
+  subcases: computed('subcase', async function() {
     return this.get('subcase.subcasesFromCase');
   }),
 
@@ -27,5 +29,5 @@ export default Component.extend({
     chooseConfidentiality(confidentiality) {
       this.subcase.set('confidentiality', confidentiality);
     },
-  }
+  },
 });

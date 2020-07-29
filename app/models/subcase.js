@@ -4,9 +4,13 @@ import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
-import { sortDocuments, getDocumentsLength } from 'fe-redpencil/utils/documents';
+import {
+  sortDocuments, getDocumentsLength
+} from 'fe-redpencil/utils/documents';
 
-const { attr, hasMany, belongsTo, PromiseArray, PromiseObject } = DS;
+const {
+  attr, hasMany, belongsTo, PromiseArray, PromiseObject,
+} = DS;
 
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
@@ -26,9 +30,13 @@ export default ModelWithModifier.extend({
   concluded: attr('boolean'),
   subcaseName: attr('string'),
 
-  consulationRequests: hasMany('consulation-request', { inverse: null }),
+  consulationRequests: hasMany('consulation-request', {
+    inverse: null,
+  }),
   iseCodes: hasMany('ise-code'),
-  agendaActivities: hasMany('agenda-activity', { inverse: null }),
+  agendaActivities: hasMany('agenda-activity', {
+    inverse: null,
+  }),
   remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
@@ -36,94 +44,98 @@ export default ModelWithModifier.extend({
   treatments: hasMany('agenda-item-treatment'),
 
   type: belongsTo('subcase-type'),
-  case: belongsTo('case', { inverse: null }),
-  requestedForMeeting: belongsTo('meeting', { inverse: null }),
+  case: belongsTo('case', {
+    inverse: null,
+  }),
+  requestedForMeeting: belongsTo('meeting', {
+    inverse: null,
+  }),
   newsletterInfo: belongsTo('newsletter-info'),
-  requestedBy: belongsTo('mandatee', { inverse: null }),
+  requestedBy: belongsTo('mandatee', {
+    inverse: null,
+  }),
   accessLevel: belongsTo('access-level'),
 
-  latestActivity: computed('agendaActivities', 'agendaActivities.@each', async function () {
-    const activities = await this.get('agendaActivities').then(activities => {
-      return activities.sortBy('startDate');
-    });
+  latestActivity: computed('agendaActivities', 'agendaActivities.@each', async function() {
+    const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
     if (activities && activities.length > 0) {
       return activities.get('lastObject');
-    } else {
-      return null;
     }
+    return null;
   }),
 
-  phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.@each', 'latestActivity.agendaitems.@each.retracted', 'approved', async function () {
+  // eslint-disable-next-line ember/use-brace-expansion
+  phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.@each', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
     const activities = await this.get('agendaActivities');
     if (activities && activities.length > 0) {
       const phases = await this.get('subcasesService').getSubcasePhases(this);
       return phases;
-    } else {
-      return null;
     }
+    return null;
   }),
 
-  documentsLength: computed('documents', function () {
+  documentsLength: computed('documents', function() {
     return getDocumentsLength(this, 'documents');
   }),
 
-  linkedDocumentsLength: computed('linkedDocuments', function () {
+  linkedDocumentsLength: computed('linkedDocuments', function() {
     return getDocumentsLength(this, 'linkedDocuments');
   }),
 
-  documents: computed('documentVersions.@each.name', function () {
+  documents: computed('documentVersions.@each.name', function() {
     return PromiseArray.create({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': { id: documentVersionIds },
+              documents: {
+                id: documentVersionIds,
+              },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => {
-            return sortDocuments(this.get('documentVersions'), containers);
-          });
+          }).then((containers) => sortDocuments(this.get('documentVersions'), containers));
         }
-      })
+      }),
     });
   }),
 
-  linkedDocuments: computed('linkedDocumentVersions.@each', function () {
+  linkedDocuments: computed('linkedDocumentVersions.@each', function() {
     return PromiseArray.create({
       promise: this.get('linkedDocumentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
           const documentVersionIds = documentVersions.mapBy('id').join(',');
           return this.store.query('document', {
             filter: {
-              'documents': { id: documentVersionIds },
+              documents: {
+                id: documentVersionIds,
+              },
             },
             page: {
               size: documentVersions.get('length'), // # documents will always be <= # document versions
             },
             include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => {
-            return sortDocuments(this.get('linkedDocumentVersions'), containers);
-          });
+          }).then((containers) => sortDocuments(this.get('linkedDocumentVersions'), containers));
         }
-      })
+      }),
     });
   }),
 
-  nameToShow: computed('subcaseName', function () {
-    const { subcaseName, title, shortTitle } = this;
+  nameToShow: computed('subcaseName', function() {
+    const {
+      subcaseName, title, shortTitle,
+    } = this;
     if (subcaseName) {
       return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
-    } else if (shortTitle) {
+    } if (shortTitle) {
       return shortTitle;
-    } else if (title) {
+    } if (title) {
       return title;
-    } else {
-      return `No name found.`;
     }
+    return 'No name found.';
   }),
 
   async documentNumberOfVersion(version) {
@@ -133,53 +145,59 @@ export default ModelWithModifier.extend({
     const targetDocument = await version.get('document');
     let foundIndex;
     sortedDocuments.map((document, index) => {
-      if (document == targetDocument) {
+      if (document === targetDocument) {
         foundIndex = index;
       }
     });
     return foundIndex;
   },
 
-  sortedMandatees: computed('mandatees.@each', function () {
+  sortedMandatees: computed('mandatees.@each', function() {
     return this.get('mandatees').sortBy('priority');
   }),
 
-  hasActivity: computed('agendaActivities', 'agendaActivities.@each', async function () {
+  hasActivity: computed('agendaActivities', 'agendaActivities.@each', async function() {
     const activities = await this.get('agendaActivities');
     if (activities && activities.length > 0) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }),
 
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function () {
+  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function() {
     return await this.store.query('agendaitem', {
       filter: {
-        'agenda-activity': { subcase: { id: this.get('id') } },
-        agenda: { status: { id: '2735d084-63d1-499f-86f4-9b69eb33727f' } }
-      }
+        'agenda-activity': {
+          subcase: {
+            id: this.get('id'),
+          },
+        },
+        agenda: {
+          status: {
+            id: '2735d084-63d1-499f-86f4-9b69eb33727f',
+          },
+        },
+      },
     });
   }),
 
   latestMeeting: alias('requestedForMeeting'),
 
-  latestAgenda: computed('latestMeeting', async function () {
+  latestAgenda: computed('latestMeeting', async function() {
     const lastMeeting = await this.get('latestMeeting');
     return await lastMeeting.get('latestAgenda');
   }),
 
-  latestAgendaItem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function () {
+  latestAgendaItem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function() {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
       const latestItem = await latestActivity.get('latestAgendaitem');
       return latestItem;
-    } else {
-      return null;
     }
+    return null;
   }),
 
-  onAgendaInfo: computed('latestMeeting', async function () {
+  onAgendaInfo: computed('latestMeeting', async function() {
     const latestMeeting = await this.get('latestMeeting');
     return latestMeeting.plannedStart;
   }),
@@ -199,19 +217,16 @@ export default ModelWithModifier.extend({
     })
   }),
 
-  subcasesFromCase: computed('case.subcases.@each', function () {
+  subcasesFromCase: computed('case.subcases.@each', function() {
     return PromiseArray.create({
-      promise: this.get('case').then((caze) => {
-        return caze.get('subcases').then((subcases) => {
-          return subcases.filter((item) => item.get('id') != this.id).sort(function (a, b) {
-            return b.created - a.created; //  We want to sort descending on date the subcase was concluded. In practice, sorting on created will be close
-          });
-        });
-      })
-    })
+      //  We want to sort descending on date the subcase was concluded.
+      //  In practice, sorting on created will be close
+      promise: this.get('case').then((caze) => caze.get('subcases')
+        .then((subcases) => subcases.filter((item) => item.get('id') !== this.id).sort((documentA, documentB) => documentB.created - documentA.created))),
+    });
   }),
 
-  remarkType: computed('showAsRemark', function () {
+  remarkType: computed('showAsRemark', function() {
     let id = '';
     if (this.showAsRemark) {
       id = CONFIG.remarkId;
@@ -220,5 +235,4 @@ export default ModelWithModifier.extend({
     }
     return this.store.findRecord('case-type', id);
   }),
-
 });

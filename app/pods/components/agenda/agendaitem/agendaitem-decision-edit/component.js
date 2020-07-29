@@ -1,8 +1,8 @@
-import Component from "@glimmer/component";
-import { action } from "@ember/object";
-import { inject as service } from "@ember/service";
-import { task } from 'ember-concurrency';
-import { tracked } from "@glimmer/tracking";
+import Component from '@ember/component';
+import {cached} from 'fe-redpencil/decorators/cached';
+import {inject as service} from '@ember/service';
+import {computed} from '@ember/object';
+import moment from 'moment';
 
 export default class AgendaItemDecisionEditComponent extends Component {
   @service store;
@@ -12,16 +12,35 @@ export default class AgendaItemDecisionEditComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.store.findAll('decision-result-code', { reload: true }).then(codes => {
+    this.store.findAll('decision-result-code', {reload: true}).then(codes => {
       this.decisionResultCodes = codes;
       this.decisionResultCodesLoaded = true;
     });
+  }
+
+  async setNewPropertiesToModel(model) {
+    const {
+      propertiesToSet,
+    } = this;
+    await Promise.all(
+      propertiesToSet.map(async (property) => {
+        model.set(property, await this.get(property));
+      })
+    );
+    return model.save().then((model) => model.reload());
   }
 
   @action
   fetchDecisionResultCodes() {
     this.findDecisionResultCodes.perform(); // Load codelist
   }
+
+  richtext: computed('editor.currentTextContent', function() {
+      if (!this.editor) {
+        return;
+      }
+      return this.editor.rootNode.innerHTML.htmlSafe();
+  });
 
   @action
   changeDecisionResultCode(resultCode) {
@@ -42,5 +61,15 @@ export default class AgendaItemDecisionEditComponent extends Component {
       this.args.onCancel();
     }
     return this.treatment;
+  }
+
+  @action
+  descriptionUpdated(val) {
+    this.set('initValue', this.richtext + val);
+  }
+
+  @action
+  async handleRdfaEditorInit(editorInterface) {
+    this.set('editor', editorInterface);
   }
 }

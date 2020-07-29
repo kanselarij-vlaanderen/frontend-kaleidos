@@ -3,25 +3,26 @@
   {{agenda/agendaitem/agendaitem-case/agendaitem-titles
     agendaitem=agendaitem
     subcase=(await subcase)
-    shouldShowDetails=(or agendaitem.showAsRemark (await agendaitem.agendaActivity)) 
+    shouldShowDetails=(or agendaitem.showAsRemark (await agendaitem.agendaActivity))
     toggleIsEditing=(action "toggleIsEditing")
   }}
 {{else}}
   {{agenda/agendaitem/agendaitem-case/agendaitem-titles-edit
     agendaitem=agendaitem
     isEditing=isEditing
+    subcase=(await subcase)
   }}
 {{/if}}
 {{#if agendaitem.showAsRemark}}
-  {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees 
-    agendaitem=agendaitem 
+  {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees
+    agendaitem=agendaitem
     subcase=(await subcase)
   }}
   {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
-{{else}} 
+{{else}}
   {{#if (await agendaitem.agendaActivity)}}
     {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees
-      agendaitem=agendaitem 
+      agendaitem=agendaitem
       subcase=(await subcase)
     }}
     {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}

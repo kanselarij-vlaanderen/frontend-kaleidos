@@ -8,9 +8,10 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
     const agendaActivity = await agendaItem.get('agendaActivity');
     if (!agendaActivity) {
-      this.transitionTo('agenda.agendaitems.agendaitem.index')
+      this.transitionTo('agenda.agendaitems.agendaitem.index');
     }
   }
+
   async setupController(controller, model) {
     super.setupController(...arguments);
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');

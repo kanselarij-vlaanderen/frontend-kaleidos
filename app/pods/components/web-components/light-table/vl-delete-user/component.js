@@ -11,9 +11,13 @@ export default Component.extend({
 
   actions: {
     async deleteAccount() {
-      if (this.isDeleting) return;
+      if (this.isDeleting) {
+        return;
+      }
       this.isDeleting = true;
-      let foundUser = await this.store.findRecord('user', await this.get('user.id'), { reload: true });
+      const foundUser = await this.store.findRecord('user', await this.get('user.id'), {
+        reload: true,
+      });
       const account = await foundUser.get('account');
       if (account) {
         await account.destroyRecord();
@@ -23,7 +27,7 @@ export default Component.extend({
       this.isVerifying = false;
     },
     toggleIsVerifying() {
-      this.toggleProperty('isVerifying')
+      this.toggleProperty('isVerifying');
     },
   },
 });

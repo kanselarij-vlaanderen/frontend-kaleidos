@@ -1,11 +1,16 @@
+/* eslint-disable class-methods-use-this */
 import Component from '@ember/component';
-import { action, computed } from '@ember/object';
-import { inject as service } from '@ember/service';
+import {
+  action,
+  computed
+} from '@ember/object';
+// eslint-disable-next-line no-duplicate-imports
 import EmberObject from '@ember/object';
+import { inject as service } from '@ember/service';
 import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-item-utils';
 import DS from 'ember-data';
 
-//TODO code cuplication with subcase-case/subcase-mandatees
+// TODO code cuplication with subcase-case/subcase-mandatees
 export default class
 AgendaitemMandatees extends Component {
   @service store;
@@ -19,19 +24,17 @@ AgendaitemMandatees extends Component {
   @computed('agendaitem', 'subcase', 'mandatees.@each')
   get mandateeRows() {
     return DS.PromiseArray.create({
-      promise: this.constructMandateeRows().then((rows) => {
-        return this.get('subcase.requestedBy').then((requestedBy) => {
-          if (!requestedBy && rows.get('length') > 0) {
-            rows.get('firstObject').set('isSubmitter', true);
-          } else {
-            const foundMandatee = rows.find((row) => row.get('mandatee.id') === requestedBy.get('id'));
-            if (foundMandatee) {
-              foundMandatee.set('isSubmitter', true);
-            }
+      promise: this.constructMandateeRows().then((rows) => this.get('subcase.requestedBy').then((requestedBy) => {
+        if (!requestedBy && rows.get('length') > 0) {
+          rows.get('firstObject').set('isSubmitter', true);
+        } else {
+          const foundMandatee = rows.find((row) => row.get('mandatee.id') === requestedBy.get('id'));
+          if (foundMandatee) {
+            foundMandatee.set('isSubmitter', true);
           }
-          return rows.sortBy('mandateePriority');
-        });
-      })
+        }
+        return rows.sortBy('mandateePriority');
+      })),
     });
   }
 
@@ -45,11 +48,11 @@ AgendaitemMandatees extends Component {
     return EmberObject.create({
       fieldsToShow,
       domainsToShow,
-      mandatee: mandatee,
+      mandatee,
       mandateePriority: mandatee.get('priority'),
-      domains: domains,
-      fields: fields,
-      iseCodes: iseCodes,
+      domains,
+      fields,
+      iseCodes,
     });
   }
 
@@ -76,7 +79,7 @@ AgendaitemMandatees extends Component {
     if (mandateeLength === 1) {
       selectedMandatee = mandatees.get('firstObject');
     }
-    return Promise.all(mandatees.map(async (mandatee) => {
+    return Promise.all(mandatees.map(async(mandatee) => {
       const filteredIseCodes = await this.getIseCodesOfMandatee(iseCodes, mandatee);
       const row = await this.createMandateeRow(mandatee, filteredIseCodes);
       if (selectedMandatee && mandatee.get('id') === selectedMandatee.get('id')) {
@@ -85,16 +88,16 @@ AgendaitemMandatees extends Component {
         row.set('isSubmitter', true);
       }
       return row;
-    }))
+    }));
   }
 
   async parseDomainsAndMandatees() {
     const mandateeRows = await this.get('mandateeRows');
     const mandatees = [];
-    let iseCodes = [];
+    const iseCodes = [];
     let requestedBy = null;
     if (mandateeRows && mandateeRows.get('length') > 0) {
-      mandateeRows.map( async row => {
+      mandateeRows.map(async(row) => {
         if (row.get('isSubmitter')) {
           requestedBy = row.get('mandatee');
         }
@@ -105,7 +108,9 @@ AgendaitemMandatees extends Component {
         });
       });
     }
-    return { mandatees, iseCodes, requestedBy };
+    return {
+      mandatees, iseCodes, requestedBy,
+    };
   }
 
   @action
@@ -124,25 +129,27 @@ AgendaitemMandatees extends Component {
     this.set('isLoading', true);
     let itemToSave;
 
-    if (this.subcase) {  
+    if (this.subcase) {
       itemToSave = this.subcase;
-    //Without this, saving mandatees on agendaitem do not always persist to the subcase
+      // Without this, saving mandatees on agendaitem do not always persist to the subcase
       await this.subcase.get('mandatees');
     }
     if (this.agendaitem) {
-      itemToSave = this.agendaitem; //the only reason I can think of to 
+      itemToSave = this.agendaitem; // the only reason I can think of to
       await this.agendaitem.get('mandatees');
     }
     const propertiesToSetOnSubcase = await this.parseDomainsAndMandatees();
-    const propertiesToSetOnAgendaitem = { 'mandatees': propertiesToSetOnSubcase['mandatees'] }
+    const propertiesToSetOnAgendaitem = {
+      mandatees: propertiesToSetOnSubcase.mandatees,
+    };
     const resetFormallyOk = true;
     try {
       await saveMandateeChanges(itemToSave, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk);
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
-    } catch (e) {
+    } catch (exception) {
       this.set('isLoading', false);
-      throw (e);
+      throw (exception);
     }
   }
 

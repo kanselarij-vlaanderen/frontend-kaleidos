@@ -28,10 +28,10 @@
         </div>
         {{#each (await agendaitemRow.treatments) as |treatment|}}
           {{agenda/agendaitem/agendaitem-decision
-            subcase=(await agendaitemRow.agendaActivity.subcase)
+            subcase=(await agendaitemRow.content.agendaActivity.subcase)
             isTableRow=true
             treatment=treatment
-            agendaitem=agendaitemRow
+            agendaitem=(await agendaitemRow.content)
           }}
         {{/each}}
       </div>

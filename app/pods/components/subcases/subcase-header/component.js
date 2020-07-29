@@ -19,9 +19,13 @@ export default Component.extend({
   subcase: null,
   caseToDelete: null,
 
-  canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function () {
-    const { isAssigningToOtherAgenda, isLoading } = this;
-    const subcase = this.subcase;
+  canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function() {
+    const {
+      isAssigningToOtherAgenda, isLoading,
+    } = this;
+    const {
+      subcase,
+    } = this;
     const requestedForMeeting = await subcase.get('requestedForMeeting');
     const hasActivity = await subcase.get('hasActivity');
 
@@ -32,9 +36,11 @@ export default Component.extend({
     return true;
   }),
 
-  canDelete: computed('canPropose', 'isAssigningToOtherAgenda', async function () {
+  canDelete: computed('canPropose', 'isAssigningToOtherAgenda', async function() {
     const canPropose = await this.get('canPropose');
-    const { isAssigningToOtherAgenda } = this;
+    const {
+      isAssigningToOtherAgenda,
+    } = this;
 
     if (canPropose && !isAssigningToOtherAgenda) {
       return true;
@@ -43,22 +49,28 @@ export default Component.extend({
     return false;
   }),
 
-  meetings: computed('store', function () {
-    const dateOfToday = moment().utc().subtract(1, 'weeks').format();
-    const futureDate = moment().utc().add(6, 'weeks').format();
+  meetings: computed('store', function() {
+    const dateOfToday = moment().utc()
+      .subtract(1, 'weeks')
+      .format();
+    const futureDate = moment().utc()
+      .add(6, 'weeks')
+      .format();
 
     return this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
         ':lte:planned-start': futureDate,
-        'is-final': false
+        'is-final': false,
       },
-      sort: 'planned-start'
-    })
+      sort: 'planned-start',
+    });
   }),
 
   async deleteSubcase(subcase) {
-    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), { reload: true });
+    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), {
+      reload: true,
+    });
     const newsletterInfo = await itemToDelete.get('newsletterInfo');
     if (newsletterInfo) {
       await newsletterInfo.destroyRecord();
@@ -83,7 +95,7 @@ export default Component.extend({
     this.set('isAssigningToOtherCase', false);
   },
 
-  deleteCase: task(function * (_case) {
+  deleteCase: task(function *(_case) {
     yield _case.destroyRecord();
     this.set('promptDeleteCase', false);
     this.set('caseToDelete', null);
@@ -113,7 +125,7 @@ export default Component.extend({
       this.set('isLoading', true);
       const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
       const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
-      //ensures latest state is pulled
+      // ensures latest state is pulled
       await designAgenda.reload();
       await designAgenda.belongsTo('status').reload();
       const isDesignAgenda = designAgenda.get('isDesignAgenda');
@@ -133,9 +145,9 @@ export default Component.extend({
 
       if (agendaActivities && agendaActivities.length > 0) {
         return;
-      } else {
-        await this.deleteSubcase(subcaseToDelete);
       }
+      await this.deleteSubcase(subcaseToDelete);
+
       this.navigateToSubcaseOverview(caze);
     },
     cancelDeleteSubcase() {
@@ -166,6 +178,6 @@ export default Component.extend({
       this.set('promptDeleteCase', false);
       this.set('caseToDelete', null);
       this.get('router').transitionTo('cases.case.subcases');
-    }
+    },
   },
 });

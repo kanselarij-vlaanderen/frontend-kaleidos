@@ -5,6 +5,7 @@ import moment from "moment";
 
 export default class DecisionAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;
+
   @service store;
 
   @action
@@ -13,7 +14,7 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
       const newTreatment = this.store.createRecord('agenda-item-treatment', {
         created: moment().utc().toDate(),
         modified: moment().utc().toDate(),
-        agendaitem: this.agendaItem
+        agendaitem: this.agendaItem,
       });
       await newTreatment.save();
       this.refresh();

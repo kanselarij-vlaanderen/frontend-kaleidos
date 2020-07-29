@@ -6,6 +6,6 @@ export default Component.extend({
   actions: {
     clearAction() {
       this.clearAction();
-    }
-  }
+    },
+  },
 });

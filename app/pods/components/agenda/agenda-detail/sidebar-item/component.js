@@ -23,7 +23,6 @@ export default class SidebarItem extends Component {
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
   hideLabel = true;
-  isShowingChanges = null;
 
   @tracked isClickable = true;
   @tracked isRetracted = this.args.agendaitem.retracted;
@@ -55,7 +54,9 @@ export default class SidebarItem extends Component {
   @action
   conditionallyScrollIntoView(element) {
     if (this.isActive) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.scrollIntoView({
+        behavior: 'smooth', block: 'center',
+      });
     }
   }
 }

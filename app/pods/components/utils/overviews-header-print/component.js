@@ -9,16 +9,16 @@ export default Component.extend({
   title: null,
   routeModelPrefix: null,
 
-  shouldShowPrintButton: computed('routing.currentRouteName', function () {
+  shouldShowPrintButton: computed('routing.currentRouteName', function() {
     return this.routing.get('currentRouteName').includes(`${this.routeModelPrefix}.overview`);
   }),
 
-  routeModelAgendaitems: computed('routeModelPrefix', function () {
-    return this.routeModelPrefix + '.agendaitems';
+  routeModelAgendaitems: computed('routeModelPrefix', function() {
+    return `${this.routeModelPrefix}.agendaitems`;
   }),
 
-  routeModelOverview: computed('routeModelPrefix', function () {
-    return this.routeModelPrefix + '.overview';
+  routeModelOverview: computed('routeModelPrefix', function() {
+    return `${this.routeModelPrefix}.overview`;
   }),
 
   actions: {
@@ -28,6 +28,6 @@ export default Component.extend({
 
     navigateBackToAgenda() {
       this.navigateBackToAgenda();
-    }
-  }
+    },
+  },
 });
