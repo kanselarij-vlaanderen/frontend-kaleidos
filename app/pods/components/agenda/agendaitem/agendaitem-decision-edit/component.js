@@ -3,9 +3,7 @@ import { inject as service } from '@ember/service';
 import {
   computed, action, tracked
 } from '@ember/object';
-import {
-  task,
-} from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 
 export default class AgendaItemDecisionEditComponent extends Component {
   @service store;
