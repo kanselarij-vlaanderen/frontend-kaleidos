@@ -11,6 +11,10 @@ pipeline {
         appName = "${env.JOB_NAME - ~/\/.*/}"
         version = "${branch}-${env.BUILD_NUMBER}"
         projectName = "${project}--${appName}--${version}"
+        // Override HOME to WORKSPACE
+        HOME = "${WORKSPACE}"
+        // or override default cache directory (~/.npm)
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
     }
 
     stages {
