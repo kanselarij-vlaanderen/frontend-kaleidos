@@ -3,7 +3,6 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
-import mandatee from '../../selectors/mandatees/mandateeSelectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();

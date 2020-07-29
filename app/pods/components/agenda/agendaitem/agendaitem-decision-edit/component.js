@@ -1,12 +1,10 @@
 import Component from '@ember/component';
-import { cached } from 'fe-redpencil/decorators/cached';
 import { inject as service } from '@ember/service';
 import {
-  computed, action
+  computed, action, tracked
 } from '@ember/object';
-import moment from 'moment';
 import {
-  task, timeout
+  task,
 } from 'ember-concurrency';
 
 export default class AgendaItemDecisionEditComponent extends Component {
@@ -45,7 +43,7 @@ export default class AgendaItemDecisionEditComponent extends Component {
   @computed('editor.currentTextContent')
   get richtext() {
     if (!this.editor) {
-      return;
+      return '';
     }
     return this.editor.rootNode.innerHTML.htmlSafe();
   }

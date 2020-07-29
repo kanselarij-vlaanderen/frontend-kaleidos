@@ -205,7 +205,7 @@ export default ModelWithModifier.extend({
   approved: computed('treatments', function() {
     return PromiseObject.create({
       promise: this.get('treatments').then((treatments) => {
-        const approvedTreatments = treatments.map((treatment) => treatment.get('decisionResultCode').get('uri') == 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd'
+        const approvedTreatments = treatments.map((treatment) => treatment.get('decisionResultCode').get('uri') === 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd'
         );
         if (approvedTreatments && approvedTreatments.length === 0) {
           return false;
