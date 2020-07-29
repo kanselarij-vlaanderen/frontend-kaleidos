@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import {
-  action, get, set
+  action, get
 } from '@ember/object';
 import {
   saveChanges as saveSubcaseTitles, cancelEdit
@@ -14,7 +14,6 @@ export default class SubcaseTitlesEdit extends Component {
   @tracked isLoading= false;
   classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation', 'showInNewsletter']);
-  subcase = null;
 
 
   @action
