@@ -75,6 +75,7 @@ export default Component.extend({
 
   async copyTreatments(subcase, treatments) {
     return Promise.all(
+      // eslint-disable-next-line no-unused-vars
       treatments.map((treatment) => {
         const newTreatment = this.store.createRecord('agenda-item-treatment', {
           // TODO check met @michael
@@ -118,7 +119,7 @@ export default Component.extend({
 
     if (latestSubcase) {
       subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
-      await this.copyTreatments(subcase, await latestSubcase.get('treatments'));
+      // await this.copyTreatments(subcase, await latestSubcase.get('treatments'));
       const newsletterInfo = await latestSubcase.get('newsletterInfo');
       if (newsletterInfo) {
         await this.copyNewsletterInfo(subcase, newsletterInfo);

@@ -11,23 +11,23 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
   }
 
   async model() {
-    const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
+    console.log('decisoon route model hook');
+    const agendaItem = await this.modelFor('agenda.agendaitems.agendaitem');
     // const agendaActivity = await agendaItem.get('agendaActivity');
-    return this.store.query('agenda-item-treatment', {
+    return await this.store.query('agenda-item-treatment', {
       'filter[agendaitem][:id:]': agendaItem.id,
       include: 'report',
     });
   }
 
   async setupController(controller, model) {
+    console.log('setupController');
     super.setupController(...arguments);
-    const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
+    const agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
     const agendaActivity = await agendaitem.get('agendaActivity');
     const subcase = await agendaActivity.subcase;
-    const decisions = await subcase.get('decisions');
     controller.set('agendaitem', agendaitem);
     controller.set('subcase', subcase);
-    controller.set('decisions', decisions);
     controller.set('model', model);
   }
 

@@ -10,16 +10,23 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
 
   @action
   async addTreatmentFromController() {
-    if (this.agendaItem) {
+    console.log(this);
+    console.log(this.agendaitem);
+    if (this.agendaitem) {
+      console.log('this.agendaItem exists');
       const newTreatment = this.store.createRecord('agenda-item-treatment', {
         created: moment().utc()
           .toDate(),
         modified: moment().utc()
           .toDate(),
-        agendaitem: this.agendaItem,
+        agendaitem: this.agendaitem,
       });
+      console.log('newtreatment save');
       await newTreatment.save();
+      console.log('newtreatment save done');
       this.refresh();
+    } else {
+      console.error('this.agendaItem does not exist.');
     }
   }
 

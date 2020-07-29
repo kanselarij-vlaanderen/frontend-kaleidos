@@ -1,8 +1,9 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import {
-  computed, action, tracked
+  computed, action
 } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class AgendaItemDecisionEditComponent extends Component {
@@ -52,7 +53,7 @@ export default class AgendaItemDecisionEditComponent extends Component {
   }
 
   @task
-  saveTreatment = function *() {
+  *saveTreatment() {
     yield this.treatment.save();
     if (this.args.onSave) {
       this.args.onSave();
