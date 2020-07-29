@@ -30,7 +30,7 @@ pipeline {
         stage('Lint project') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                sh "npm install"
+                sh "npm install --verbose"
                 sh "npm-run-all lint:hbs lint:js"
             }
         }
