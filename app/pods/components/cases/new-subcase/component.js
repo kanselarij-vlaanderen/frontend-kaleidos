@@ -75,15 +75,14 @@ export default Component.extend({
 
   async copyTreatments(subcase, treatments) {
     return Promise.all(
-      treatments.map(treatment => {
+      treatments.map((treatment) => {
         const newTreatment = this.store.createRecord('agenda-item-treatment', {
           // TODO check met @michael
           // title: treatment.get('title'),
           // shortTitle: treatment.get('shortTitle'),
-          //approved: false,
+          // approved: false,
           decisionResultCode: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
-          // description: treatment.get('description'),
-          subcase
+          subcase,
         });
         return newTreatment.save();
       })

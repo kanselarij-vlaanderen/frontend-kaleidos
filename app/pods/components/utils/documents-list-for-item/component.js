@@ -24,9 +24,8 @@ export default class DocumentListForItem extends Component {
       }
       if (this.isShowingAll) {
         return documents;
-      } else {
-        return documents.slice(0, 20);
       }
+      return documents.slice(0, 20);
     }
     return null;
   }

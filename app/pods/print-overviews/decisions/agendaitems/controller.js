@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import moment from "moment";
+import moment from 'moment';
 
 export default Controller.extend({
   intl: inject(),
@@ -55,13 +55,15 @@ export default Controller.extend({
 
   actions: {
     async addTreatment(agendaitemRow) {
-      const agendaitem =  await this.store.findRecord('agendaitem', agendaitemRow.content.id, {
+      const agendaitem = await this.store.findRecord('agendaitem', agendaitemRow.content.id, {
         include: 'agenda-activity,agenda-activity.subcase',
       });
       const treatment = this.store.createRecord('agenda-item-treatment', {
-        created: moment().utc().toDate(),
-        modified: moment().utc().toDate(),
-        agendaitem: agendaitem,
+        created: moment().utc()
+          .toDate(),
+        modified: moment().utc()
+          .toDate(),
+        agendaitem,
       });
       await treatment.save();
     },

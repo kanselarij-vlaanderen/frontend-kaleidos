@@ -20,17 +20,13 @@ export default Route.extend({
   async model() {
     const session = await this.modelFor('print-overviews');
     const agenda = await this.modelFor(`print-overviews.${this.type}`);
-    let agendaitems = await this.store.query('agendaitem', {
-      filter: { agenda: { id: agenda.get('id') } },
-      include: 'mandatees,treatments',
-      sort: 'priority'
     const agendaitems = await this.store.query('agendaitem', {
       filter: {
         agenda: {
           id: agenda.get('id'),
         },
       },
-      include: 'mandatees',
+      include: 'mandatees,treatments',
       sort: 'priority',
     });
 

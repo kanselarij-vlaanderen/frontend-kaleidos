@@ -1,8 +1,13 @@
 import Component from '@ember/component';
-import {cached} from 'fe-redpencil/decorators/cached';
-import {inject as service} from '@ember/service';
-import {computed} from '@ember/object';
+import { cached } from 'fe-redpencil/decorators/cached';
+import { inject as service } from '@ember/service';
+import {
+  computed, action
+} from '@ember/object';
 import moment from 'moment';
+import {
+  task, timeout
+} from 'ember-concurrency';
 
 export default class AgendaItemDecisionEditComponent extends Component {
   @service store;
@@ -12,7 +17,9 @@ export default class AgendaItemDecisionEditComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.store.findAll('decision-result-code', {reload: true}).then(codes => {
+    this.store.findAll('decision-result-code', {
+      reload: true,
+    }).then((codes) => {
       this.decisionResultCodes = codes;
       this.decisionResultCodesLoaded = true;
     });
@@ -23,7 +30,7 @@ export default class AgendaItemDecisionEditComponent extends Component {
       propertiesToSet,
     } = this;
     await Promise.all(
-      propertiesToSet.map(async (property) => {
+      propertiesToSet.map(async(property) => {
         model.set(property, await this.get(property));
       })
     );
@@ -35,24 +42,26 @@ export default class AgendaItemDecisionEditComponent extends Component {
     this.findDecisionResultCodes.perform(); // Load codelist
   }
 
-  richtext: computed('editor.currentTextContent', function() {
-      if (!this.editor) {
-        return;
-      }
-      return this.editor.rootNode.innerHTML.htmlSafe();
-  });
+  @computed('editor.currentTextContent')
+  get richtext() {
+    if (!this.editor) {
+      return;
+    }
+    return this.editor.rootNode.innerHTML.htmlSafe();
+  }
 
   @action
   changeDecisionResultCode(resultCode) {
     this.treatment.set('decisionResultCode', resultCode);
   }
 
-  @(task(function* () {
+  @task
+  saveTreatment = function *() {
     yield this.treatment.save();
     if (this.args.onSave) {
       this.args.onSave();
     }
-  })) saveTreatment;
+  }
 
   @action
   cancelEdit() {

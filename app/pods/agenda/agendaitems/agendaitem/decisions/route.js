@@ -12,10 +12,10 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    //const agendaActivity = await agendaItem.get('agendaActivity');
+    // const agendaActivity = await agendaItem.get('agendaActivity');
     return this.store.query('agenda-item-treatment', {
       'filter[agendaitem][:id:]': agendaItem.id,
-      'include': 'report'
+      include: 'report',
     });
   }
 
