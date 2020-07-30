@@ -14,6 +14,7 @@ export default Model.extend({
   endedOn: attr('datetime'),
   location: attr('string'),
   number: attr('number'),
+  numberRepresentation: attr('string'),
   isFinal: attr('boolean'),
   extraInfo: attr('string'),
   kind: attr('string'),

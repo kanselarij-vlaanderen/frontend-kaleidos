@@ -12,10 +12,13 @@ export default Component.extend({
   kind: null,
   selectedKindUri: null,
   meetingNumber: null,
+  isEditingFormattedMeetingIdentifier: false,
+  formattedMeetingIdentifier: null,
+  currentYear: moment().year(),
+  meetingNumberPrefix: null,
 
   init() {
     this._super(...arguments);
-    const currentYear = moment().year();
     // TODO: Improve samen met Michael of Sven
     this.store.query('meeting',
       {
@@ -25,7 +28,7 @@ export default Component.extend({
       if (meetings.length) {
 
         meetingsFromThisYear = meetings.map(meeting => {
-         if (moment(meeting.plannedStart).year() === currentYear) {
+         if (moment(meeting.plannedStart).year() === this.currentYear) {
            return meeting;
          }
         }).filter(meeting => meeting); // Filter undefineds out of results..
@@ -38,6 +41,8 @@ export default Component.extend({
           }
         });
          this.set('meetingNumber', id + 1);
+         this.set('meetingNumberPrefix', `VR PV ${this.currentYear}/`);
+        this.set('formattedMeetingIdentifier', `${this.meetingNumberPrefix}${this.meetingNumber}`);
       }
     });
   },
@@ -77,9 +82,13 @@ export default Component.extend({
     return await agendaitem.save();
   },
 
+  test(){
+    console.log('dit is een functie');
+  },
+
   actions: {
     async createNewSession() {
-      const { isDigital, extraInfo, selectedKindUri, meetingNumber } = this;
+      const { isDigital, extraInfo, selectedKindUri, meetingNumber, formattedMeetingIdentifier } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
       const date = this.formatter.formatDate(null);
@@ -90,7 +99,8 @@ export default Component.extend({
         plannedStart: startDate,
         created: date,
         kind: kindUriToAdd,
-        number: meetingNumber
+        number: meetingNumber,
+        numberRepresentation: formattedMeetingIdentifier
       });
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
@@ -128,5 +138,19 @@ export default Component.extend({
     setKind(kind) {
       this.set('selectedKindUri', kind);
     },
+
+    meetingNumberChangedAction(meetingNumber){
+      this.set('meetingNumber', meetingNumber);
+      this.set('formattedMeetingIdentifier', `VR PV ${this.currentYear}/${meetingNumber}`);
+    },
+
+    editFormattedMeetingIdentifier() {
+      this.set('isEditingFormattedMeetingIdentifier', true);
+    },
+
+    saveAction(){
+      this.set('formattedMeetingIdentifier', `${this.get('meetingNumberPrefix')}${this.get('meetingNumber')}`);
+      this.set('isEditingFormattedMeetingIdentifier', false);
+    }
   },
 });
