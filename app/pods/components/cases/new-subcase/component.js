@@ -73,22 +73,18 @@ export default Component.extend({
     return await newsletterInfoToCreate.save();
   },
 
-  async copyTreatments(subcase, treatments) {
-    return Promise.all(
-      // eslint-disable-next-line no-unused-vars
-      treatments.map((treatment) => {
-        const newTreatment = this.store.createRecord('agenda-item-treatment', {
-          // TODO check met @michael
-          // title: treatment.get('title'),
-          // shortTitle: treatment.get('shortTitle'),
-          // approved: false,
-          decisionResultCode: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
-          subcase,
-        });
-        return newTreatment.save();
-      })
-    );
-  },
+  // async copyTreatments(subcase, treatments) {
+  //   return Promise.all(
+  //     // eslint-disable-next-line no-unused-vars
+  //     treatments.map((treatment) => {
+  //       const newTreatment = this.store.createRecord('agenda-item-treatment', {
+  //         decisionResultCode: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
+  //         subcase: subcase,
+  //       });
+  //       return newTreatment.save();
+  //     })
+  //   );
+  // },
 
   createSubcaseObject(newCase, newDate) {
     const {
