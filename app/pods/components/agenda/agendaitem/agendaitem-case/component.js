@@ -1,34 +1,37 @@
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import {
-  computed, set
-} from '@ember/object';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend({
-  authentication: inject('currentSession'),
-  agendaitem: null,
-  isEditing: false,
+export default class AgendaItemCase extends Component {
+  @service('current-session') authentication;
+  @tracked isEditing = false;
 
-  subcase: computed('agendaitem', async function() {
-    const agendaActivity = await this.agendaitem.get('agendaActivity');
-    if (agendaActivity) {
-      return await agendaActivity.get('subcase');
+  get subcase() {
+    if (this.args.agendaitem) {
+      return this.args.agendaitem.agendaActivity.then((agendaActivitySubcase) => agendaActivitySubcase);
     }
     return null;
-  }),
+  }
 
-  subcases: computed('agendaitem', async function() {
-    const subcase = await this.subcase;
-    return await subcase.get('subcasesFromCase');
-  }),
+  get subcases() {
+    return this.subcase.then((subcase) => subcase.subcasesFromCase);
+  }
 
-  actions: {
-    cancelEditing() {
-      set(this, 'isEditing', false);
-    },
+  @action
+  cancelEditing() {
+    this.isEditing = false;
+  }
 
-    toggleIsEditing() {
-      this.toggleProperty('isEditing');
-    },
-  },
-});
+  @action
+  toggleIsEditing() {
+    this.isEditing = !this.isEditing;
+  }
+
+  get shouldShowDetails() {
+    if (this.args.agendaitem.showAsRemark || this.args.agendaitem.agendaActivity) {
+      return true;
+    }
+    return false;
+  }
+}
