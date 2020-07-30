@@ -15,7 +15,12 @@
     <div class="vlc-input-field-block" style="display: flex; flex-direction: column">
       {{web-components/vl-form-label value=(t "meeting-number")}}
       <div class="vlc-new-session__flex">
-        {{web-components/vl-form-input type="number" value=meetingNumber input=(action "meetingNumberChangedAction" meetingNumber) width="2"}}
+        {{web-components/vl-form-input
+          type="number"
+          value=meetingNumber
+          input=(action "meetingNumberChangedAction" meetingNumber)
+          width="2"
+        }}
         <div class="vlc-new-session vlc-new-session__flex">
           <span class="vlc-new-session__label">
             <span class="vlc-new-session__identifier">{{formattedMeetingIdentifier}}</span>
@@ -31,8 +36,15 @@
     {{#if isEditingFormattedMeetingIdentifier}}
       <div class="vlc-new-session__meetingNumberPrefix">
         <div class="vlc-new-session__flex">
-          {{web-components/vl-form-input value=meetingNumberPrefix width="2" class="vlc-new-session__meetingNumberPrefix__container"}}
-          {{web-components/vl-save-button text=(t "save") saveAction=(action "saveAction") }}
+          {{web-components/vl-form-input
+            value=meetingNumberPrefix
+            width="2"
+            class="vlc-new-session__meetingNumberPrefix__container"
+          }}
+          {{web-components/vl-save-button
+            text=(t "save")
+            saveAction=(action "saveAction")
+          }}
         </div>
       </div>
     {{/if}}
