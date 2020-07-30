@@ -38,7 +38,7 @@ module.exports = {
     "no-const-assign": ["error"],
     "no-var": "error",
     "no-new-object": "error",
-    "object-shorthand": "error",
+    "object-shorthand": "warn",
     "quote-props": ["error", "as-needed"],
     "no-prototype-builtins": "error",
     "no-array-constructor": "error",

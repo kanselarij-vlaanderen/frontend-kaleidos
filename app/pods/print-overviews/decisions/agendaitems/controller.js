@@ -63,7 +63,8 @@ export default Controller.extend({
           .toDate(),
         modified: moment().utc()
           .toDate(),
-        agendaitem,
+        agendaitem: agendaitem,
+        subcase: agendaitem.agendaActivity.subcase,
       });
       await treatment.save();
     },

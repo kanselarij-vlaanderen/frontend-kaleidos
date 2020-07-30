@@ -9,6 +9,7 @@ const {
 export default Model.extend({
   intl: inject(),
   agendaitem: belongsTo('agendaitem'), // { inverse: null } ?
+  subcase: belongsTo('subcase'), // { inverse: null } ?
   report: belongsTo('document', {
     inverse: null,
   }),
