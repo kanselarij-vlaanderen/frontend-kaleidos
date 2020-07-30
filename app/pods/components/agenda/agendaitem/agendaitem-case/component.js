@@ -29,9 +29,6 @@ export default class AgendaItemCase extends Component {
   }
 
   get shouldShowDetails() {
-    if (this.args.agendaitem.showAsRemark || this.args.agendaitem.agendaActivity) {
-      return true;
-    }
-    return false;
+    return !!(this.args.agendaitem.showAsRemark || this.args.agendaitem.agendaActivity);
   }
 }
