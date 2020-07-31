@@ -126,14 +126,16 @@ context('Agenda tests', () => {
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
-    const agendaDate = Cypress.moment().add(1, 'week').day(6);
-    cy.createAgenda('Ministerraad', agendaDate, "Brussel", 1);
-    cy.createAgenda('Ministerraad', agendaDate, "Brussel",null,"VV AA 1999/2BIS").then((result) => {
+    const agendaDate = Cypress.moment().add(1, 'week')
+      .day(6);
+    cy.createAgenda('Ministerraad', agendaDate, 'Brussel', 1);
+    cy.createAgenda('Ministerraad', agendaDate, 'Brussel', null, 'VV AA 1999/2BIS').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.toggleeditingsession).click();
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
-      cy.get(form.formInput).eq(1).should('have.value', `${result.meetingNumberVisualRepresentation}`);
+      cy.get(form.formInput).eq(1)
+        .should('have.value', `${result.meetingNumberVisualRepresentation}`);
       cy.visit('/');
       cy.get(agenda.createNewAgendaButton).click();
       cy.wait(500);

@@ -145,7 +145,7 @@ export default Component.extend({
       this.set('isEditingFormattedMeetingIdentifier', true);
     },
 
-    saveAction(){
+    saveAction() {
       this.set('formattedMeetingIdentifier', `${this.get('formattedMeetingIdentifier')}`);
       this.set('isEditingFormattedMeetingIdentifier', false);
     },
