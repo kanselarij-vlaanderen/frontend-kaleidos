@@ -15,7 +15,7 @@ export default Component.extend({
   startDate: null,
   extraInfo: null,
   meetingNumber: null,
-
+  numberRepresentation: null,
   date: computed('startDate', function () {
     return A([this.startDate])
   }),
@@ -28,11 +28,12 @@ export default Component.extend({
     this.set('startDate', this.get('meeting.plannedStart'));
     this.set('extraInfo', this.get('meeting.extraInfo'));
     this.set('meetingNumber', this.get('meeting.number'));
+    this.set('numberRepresentation', this.get('meeting.numberRepresentation'));
   },
 
   actions: {
     async updateSession() {
-      const { isDigital, extraInfo, selectedKindUri, meeting, meetingNumber } = this;
+      const { isDigital, extraInfo, selectedKindUri, meeting, meetingNumber, numberRepresentation } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
       const date = this.formatter.formatDate(null);
@@ -44,6 +45,7 @@ export default Component.extend({
       await meeting.set('created', date);
       await meeting.set('kind', kindUriToAdd);
       await meeting.set('number', meetingNumber);
+      await meeting.set('numberRepresentation', numberRepresentation);
 
       meeting.save()
         .catch(() => {

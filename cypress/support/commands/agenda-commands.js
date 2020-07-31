@@ -43,10 +43,11 @@ Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
  * @param {*} plusMonths The positive amount of months from today to advance in the vl-datepicker
  * @param {*} date The cypress.moment object with the date and time to set
  * @param {string} location The location of the meeting to enter as input
- * @param {number} meetingNumber The location of the meeting to enter as input
+ * @param {number} meetingNumber The number of the meeting to enter as input
+ * @param {string} meetingNumberVisualRepresentation The visual representation of the meetingnumber to enter as input
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, date, location, meetingNumber ) {
+function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation ) {
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
@@ -85,6 +86,16 @@ function createAgenda(kind, date, location, meetingNumber ) {
     cy.get(form.formInput).eq(0).click({force: true}).invoke('val').then(sometext => meetingNumber = sometext);
   }
 
+  //Set the meetingNumber
+  if(meetingNumberVisualRepresentation) {
+    cy.get(form.meeting.meetingEditIdentifierButton).click({force: true});
+    cy.get(form.formInput).eq(1).click().clear().type(meetingNumberVisualRepresentation);
+    cy.get(utils.saveButton).contains('Opslaan').click();
+  } else {
+    cy.get(form.meeting.meetingEditIdentifierButton).click({force: true});
+    cy.get(form.formInput).eq(1).click({force: true}).invoke('val').then(sometext => meetingNumberVisualRepresentation = sometext);
+  }
+
   //Set the location
   cy.get('@newAgendaForm').eq(2).within(() => {
     cy.get('.vl-input-field').click({force: true}).type(location);
@@ -108,7 +119,7 @@ function createAgenda(kind, date, location, meetingNumber ) {
   cy.wait('@patchMeetings', { timeout: 20000 })
     .then(() => {
       return new Cypress.Promise((resolve) => {
-        resolve({meetingId, meetingNumber, agendaId});
+        resolve({meetingId, meetingNumber, agendaId, meetingNumberVisualRepresentation});
       });
     });
 }

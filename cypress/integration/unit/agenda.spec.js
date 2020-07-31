@@ -108,16 +108,17 @@ context('Agenda tests', () => {
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
     cy.get(agenda.agendaitemTitelsConfidential).should('exist').should('be.visible');
-  })
+  });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
     const agendaDate = Cypress.moment().add(1, 'week').day(6);
     cy.createAgenda('Ministerraad', agendaDate, "Brussel", 1);
-    cy.createAgenda('Ministerraad', agendaDate, "Brussel").then((result) => {
+    cy.createAgenda('Ministerraad', agendaDate, "Brussel",null,"VV AA 1999/").then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.toggleeditingsession).click();
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
+      cy.get(form.formInput).eq(1).should('have.value', `${result.meetingNumberVisualRepresentation}${result.meetingNumber}`);
       cy.visit('/');
       cy.get(agenda.createNewAgendaButton).click();
       cy.wait(500);

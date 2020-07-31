@@ -16,8 +16,8 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     },
     successfullyAdded() {
       this.set('creatingNewSession', false);
-      this.send('refreshRoute')
+      this.send('refreshRoute');
       this.transitionToRoute('agendas.overview');
-    }
+    },
   }
 });
