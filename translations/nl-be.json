@@ -581,7 +581,7 @@
   "agenda-activity": "Agendering",
   "show-more": "Toon meer",
   "show-less": "Toon minder",
-  "meeting-number": "Nummer van de vergadering",
+  "meeting-number": "ID van de vergadering",
   "activity-phase-proposed-for-agenda": "Ingediend voor agendering op",
   "activity-phase-approved-on-agenda": "Geagendeerd op de agenda van",
   "activity-phase-postponed-on-agenda": "Uitgesteld op de agenda van",
@@ -589,5 +589,6 @@
   "activity-phase-postponed-is-decided": "Er is beslist om dit agendapunt uit te stellen",
   "loading-active-agendas": "De actieve agendas worden geladen.",
   "no-documents-to-download-warning-text": "De vergadering heeft geen documenten om te downloaden.",
-  "no-documents-to-download-warning-title": "Download afgebroken"
+  "no-documents-to-download-warning-title": "Download afgebroken",
+  "meeting-number-visual-representation": "Nummer van de vergadering"
 }

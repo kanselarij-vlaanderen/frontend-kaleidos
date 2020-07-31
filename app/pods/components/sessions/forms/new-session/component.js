@@ -40,8 +40,8 @@ export default Component.extend({
             id = number;
           }
         });
-         this.set('meetingNumber', id + 1);
-         this.set('meetingNumberPrefix', `VR PV ${this.currentYear}/`);
+        this.set('meetingNumber', id + 1);
+        this.set('meetingNumberPrefix', `VR PV ${this.currentYear}/`);
         this.set('formattedMeetingIdentifier', `${this.meetingNumberPrefix}${this.meetingNumber}`);
       }
     });
@@ -80,10 +80,6 @@ export default Component.extend({
       isApproval: true
     });
     return await agendaitem.save();
-  },
-
-  test(){
-    console.log('dit is een functie');
   },
 
   actions: {

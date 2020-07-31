@@ -4,5 +4,10 @@ const selectors = {
   formCancelButton: '[data-test-vl-modal-footer-cancel]',
   formVlToggle: '[data-test-vl-toggle]',
   datepickerInput: '[data-test-vl-datepicker-input]',
+  meeting: {
+    formattedMeetingIdentifier: '[data-test-meeting-formattedMeetingIdentifier]',
+    formattedMeetingIdentifierEditValue: '[data-test-meeting-formattedMeetingIdentifier-edit-value]',
+    meetingEditIdentifierButton: '[data-test-meeting-edit-identifier-button]'
+  }
 };
 export default selectors;
