@@ -41,8 +41,7 @@ export default Component.extend({
           }
         });
         this.set('meetingNumber', id + 1);
-        this.set('meetingNumberPrefix', `VR PV ${this.currentYear}/`);
-        this.set('formattedMeetingIdentifier', `${this.meetingNumberPrefix}${this.meetingNumber}`);
+        this.set('formattedMeetingIdentifier', `VR PV ${this.currentYear}/${this.meetingNumber}`);
       }
     });
   },
@@ -145,7 +144,7 @@ export default Component.extend({
     },
 
     saveAction(){
-      this.set('formattedMeetingIdentifier', `${this.get('meetingNumberPrefix')}${this.get('meetingNumber')}`);
+      this.set('formattedMeetingIdentifier', `${this.get('formattedMeetingIdentifier')}`);
       this.set('isEditingFormattedMeetingIdentifier', false);
     }
   },
