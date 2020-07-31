@@ -5,19 +5,18 @@ export default Component.extend({
   classNames: ['vl-u-spacer--large'],
   selectedMeeting: null,
 
-  items: computed('meetings', 'type', 'nearestMeeting', function () {
+  items: computed('meetings', 'type', 'nearestMeeting', function() {
     if (this.type === 'future') {
       const nearestMeeting = this.get('nearestMeeting.firstObject');
       if (!nearestMeeting) {
         return this.meetings;
       }
-      return this.meetings.filter((item) => item.get('id') != nearestMeeting.get('id'));
-    } else {
-      return this.meetings;
+      return this.meetings.filter((item) => item.get('id') !== nearestMeeting.get('id'));
     }
+    return this.meetings;
   }),
 
-  hasActiveAgendas: computed('meetings', async function () {
+  hasActiveAgendas: computed('meetings', async function() {
     const meetings = await this.get('meetings');
     if (meetings && meetings.length > 0) {
       return true;
@@ -28,6 +27,6 @@ export default Component.extend({
   actions: {
     selectAgenda(meeting) {
       this.selectAgenda(meeting);
-    }
-  }
+    },
+  },
 });

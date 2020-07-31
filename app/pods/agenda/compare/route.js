@@ -7,7 +7,9 @@ export default Route.extend({
   agendaService: inject(),
 
   queryParams: {
-    filter: { refreshModel: true },
+    filter: {
+      refreshModel: true,
+    },
   },
 
   async model() {
@@ -24,6 +26,8 @@ export default Route.extend({
     } else {
       agendaToCompare = agendas.objectAt(1);
     }
-    return hash({ currentAgenda: agenda, agendaToCompare: agendaToCompare });
+    return hash({
+      currentAgenda: agenda, agendaToCompare,
+    });
   },
 });

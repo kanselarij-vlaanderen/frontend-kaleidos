@@ -6,6 +6,6 @@ export default Controller.extend({
     toggleChangesOnly() {
       this.toggleProperty('isShowingChanges');
     },
-  }
+  },
 
 });

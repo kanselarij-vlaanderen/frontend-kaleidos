@@ -12,31 +12,30 @@ export default Component.extend({
   agendaitem: null,
   isSavingRetracted: null,
 
-  isPostPonable: computed("sessionService.agendas.@each", "agendaitem.agendaActivity", "agendaitem.retracted", async function () {
+  // eslint-disable-next-line ember/use-brace-expansion
+  isPostPonable: computed('sessionService.agendas.@each', 'agendaitem.agendaActivity', 'agendaitem.retracted', async function() {
     const agendaActivity = await this.get('agendaitem.agendaActivity');
     if (!agendaActivity) {
       // In case of legacy agendaitems without a link to subcase (old) or agenda-activity
       // Or in case of the agendaitem to approve minutes ("verslag vorige vergadering")
       return false;
     }
-
-    return this.get('sessionService.agendas').then(agendas => {
-      return !!(agendas && agendas.get('length') > 1);
-    });
+    return this.get('sessionService.agendas').then((agendas) => !!(agendas && agendas.get('length') > 1));
   }),
 
+  // TODO verbose logic
   isDeletable: computed(
-    'agendaitem.agendaActivity', 'currentAgenda.name', async function () {
+    'agendaitem.agendaActivity', 'currentAgenda.name', async function() {
       const designAgenda = await this.get('currentAgenda.isDesignAgenda');
       const agendaActivity = await this.get('agendaitem.agendaActivity');
       if (!designAgenda) {
         return false;
-      } else if (agendaActivity) {
+      }
+      if (agendaActivity) {
         const agendaitems = await agendaActivity.get('agendaitems');
         return !(agendaitems && agendaitems.length > 1);
-      } else {
-        return true;
       }
+      return true;
     }
   ),
 
@@ -53,12 +52,13 @@ export default Component.extend({
     }
   },
 
-  deleteWarningText: computed('agendaitem.agendaActivity', async function () {
+  deleteWarningText: computed('agendaitem.agendaActivity', async function() {
     if (await this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
-    } else if (this.currentSession.isAdmin) {
+    } if (this.currentSession.isAdmin) {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
+    return null;
   }),
 
   actions: {
@@ -99,7 +99,6 @@ export default Component.extend({
 
     verifyDelete(agendaitem) {
       this.deleteItem(agendaitem);
-    }
+    },
   },
-
 });

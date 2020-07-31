@@ -1,7 +1,9 @@
 import DS from 'ember-data';
 import Evented from '@ember/object/evented';
-import { observer } from '@ember/object';
-import { computed } from '@ember/object';
+// eslint-disable-next-line ember/no-observers
+import {
+  observer, computed
+} from '@ember/object';
 
 export default DS.Model.extend(Evented, {
   RUNNING: Object.freeze('http://vocab.deri.ie/cogs#Running'),
@@ -12,13 +14,14 @@ export default DS.Model.extend(Evented, {
   status: DS.attr(),
   timeStarted: DS.attr(),
   timeEnded: DS.attr(),
-  hasEnded: computed('status', function () {
+  hasEnded: computed('status', function() {
     return this.status === this.SUCCESS || this.status === this.FAILED;
   }),
 
-  statusObserver: observer('hasEnded', function () {
+  // eslint-disable-next-line ember/no-observers
+  statusObserver: observer('hasEnded', function() {
     if (this.hasEnded) {
       this.trigger('didEnd', this.status);
     }
-  })
+  }),
 });

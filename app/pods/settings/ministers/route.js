@@ -13,14 +13,12 @@ export default Route.extend(AuthenticatedRouteMixin, {
             .toISOString(),
         },
       })
-      .then((mandatees) => {
-        return mandatees.sortBy('priority');
-      });
+      .then((mandatees) => mandatees.sortBy('priority'));
   },
 
   actions: {
     refreshRoute() {
       this.refresh();
-    }
-  }
+    },
+  },
 });

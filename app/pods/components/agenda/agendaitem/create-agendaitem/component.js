@@ -3,7 +3,9 @@ import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import { computed } from '@ember/object';
-import { task, timeout } from 'ember-concurrency';
+import {
+  task, timeout
+} from 'ember-concurrency';
 
 export default Component.extend(DataTableRouteMixin, {
   availableSubcases: null,
@@ -24,22 +26,24 @@ export default Component.extend(DataTableRouteMixin, {
   size: 10,
   filter: '',
   sort: 'short-title',
-  queryOptions: computed('sort', 'filter', 'page', function () {
-    const { page, filter, size, sort } = this;
-    let options = {
-      sort: sort,
+  queryOptions: computed('sort', 'filter', 'page', function() {
+    const {
+      page, filter, size, sort,
+    } = this;
+    const options = {
+      sort,
       page: {
         number: page,
-        size: size
+        size,
       },
       filter: {
         ':has-no:agenda-activities': 'yes',
         ':not:is-archived': 'true',
-      }
+      },
     };
 
     if (filter) {
-      options['filter']['short-title'] = filter;
+      options.filter['short-title'] = filter;
     }
     return options;
   }),
@@ -49,7 +53,7 @@ export default Component.extend(DataTableRouteMixin, {
   },
 
   set pageParam(page) {
-    this.set('page',page);
+    this.set('page', page);
     this.findAll.perform();
   },
 
@@ -58,7 +62,7 @@ export default Component.extend(DataTableRouteMixin, {
   },
 
   set filterParam(filter) {
-    this.set('filter',filter);
+    this.set('filter', filter);
     this.set('page', 0);
   },
 
@@ -71,44 +75,47 @@ export default Component.extend(DataTableRouteMixin, {
     this.findAll.perform();
   },
 
-  model: computed('items.@each', function () {
-    (this.get('items') || []).map(item => item.set('selected', false));
+  model: computed('items.@each', function() {
+    (this.get('items') || []).map((item) => item.set('selected', false));
     return this.items;
   }),
 
-
   setFocus() {
-    const element = document.getElementById("searchId");
+    const element = document.getElementById('searchId');
     if (element) {
       element.focus();
     }
   },
 
-  findAll: task(function* () {
-    const { queryOptions } = this;
+  findAll: task(function *() {
+    const {
+      queryOptions,
+    } = this;
     const items = yield this.store.query('subcase', queryOptions);
     this.set('items', items);
     yield timeout(100);
     this.setFocus();
   }),
 
-  findPostponed: task(function* () {
+  findPostponed: task(function *() {
     const ids = yield this.get('subcasesService').getPostPonedSubcaseIds();
     let postPonedSubcases = [];
 
     if (ids && ids.length > 0) {
       postPonedSubcases = yield this.store.query('subcase', {
         filter: {
-          id: ids.toString()
-        }
+          id: ids.toString(),
+        },
       });
     }
     this.set('items', postPonedSubcases);
   }),
 
-  searchTask: task(function* () {
+  searchTask: task(function *() {
     yield timeout(300);
-    const { queryOptions } = this;
+    const {
+      queryOptions,
+    } = this;
     const items = yield this.store.query('subcase', queryOptions);
     this.set('items', items);
     yield timeout(100);
@@ -128,7 +135,9 @@ export default Component.extend(DataTableRouteMixin, {
     },
 
     checkShowPostponedValue() {
-      const { showPostponed } = this;
+      const {
+        showPostponed,
+      } = this;
       if (showPostponed) {
         this.findPostponed.perform();
       } else {
@@ -164,6 +173,7 @@ export default Component.extend(DataTableRouteMixin, {
       }
     },
 
+    // eslint-disable-next-line no-unused-vars
     async selectAvailableSubcase(subcase, destination, event) {
       if (event) {
         event.stopPropagation();
@@ -204,7 +214,7 @@ export default Component.extend(DataTableRouteMixin, {
         selectedAgenda,
         availableSubcases,
         postponedSubcases,
-        agendaService
+        agendaService,
       } = this;
       const subcasesToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
 
@@ -213,8 +223,8 @@ export default Component.extend(DataTableRouteMixin, {
       let agendaitemCounter = -1;
       let announcementCounter = -1;
 
-      let promise = Promise.all(
-        subcasesToAdd.map(async subcase => {
+      const promise = Promise.all(
+        subcasesToAdd.map(async(subcase) => {
           if (subcase.selected) {
             if (subcase.showAsRemark) {
               announcementCounter++;
@@ -228,7 +238,7 @@ export default Component.extend(DataTableRouteMixin, {
         })
       );
 
-      promise.then(async () => {
+      promise.then(async() => {
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
         this.set('sessionService.selectedAgendaItem', null);
@@ -236,6 +246,6 @@ export default Component.extend(DataTableRouteMixin, {
         const newAgendaitem = await anyAddedSubcase.get('latestAgendaItem');
         this.reloadRouteWithRefreshId(newAgendaitem.id);
       });
-    }
-  }
+    },
+  },
 });

@@ -5,6 +5,6 @@ export default Component.extend({
   actions: {
     toggle() {
       this.toggle(!this.get('value'));
-    }
-  }
+    },
+  },
 });

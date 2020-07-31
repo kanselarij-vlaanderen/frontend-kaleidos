@@ -5,6 +5,7 @@ import { guidFor } from '@ember/object/internals';
 
 export default class RadioDropdownComboSelectComponent extends Component {
   @tracked othersShown = false;
+
   @tracked selectedOption = null;
 
   constructor() {

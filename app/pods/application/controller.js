@@ -11,10 +11,12 @@ export default Controller.extend({
   toaster: service(),
 
   options: A([
-    { key: 'flemish-government', route: 'agendas' },
+    {
+      key: 'flemish-government', route: 'agendas',
+    }
   ]),
 
-  selectedOption: computed('options', function () {
+  selectedOption: computed('options', function() {
     return this.options.get('firstObject');
   }),
 
@@ -27,8 +29,8 @@ export default Controller.extend({
     });
   },
 
-  showHeader: computed('currentSession.userRole', function () {
-    let role = this.get('currentSession.userRole');
+  showHeader: computed('currentSession.userRole', function() {
+    const role = this.get('currentSession.userRole');
     return role && role !== '' && role !== 'no-access';
   }),
 

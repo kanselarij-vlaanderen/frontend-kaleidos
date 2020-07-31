@@ -17,6 +17,6 @@ export default Component.extend({
     cancel() {
       this.set('commentToDelete', null);
       this.set('isVerifyingDelete', false);
-    }
-  }
+    },
+  },
 });

@@ -2,12 +2,11 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
-
   async beforeModel() {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     const agendaActivity = await agendaitem.get('agendaActivity');
     if (!agendaActivity) {
-      this.transitionTo('agenda.agendaitems.agendaitem.index')
+      this.transitionTo('agenda.agendaitems.agendaitem.index');
     }
     const subcase = await agendaActivity.subcase;
     subcase.hasMany('decisions').reload();

@@ -1,6 +1,5 @@
-
 function trimText(text) {
-  if(text) {
+  if (text) {
     return text.trim();
   }
   return text;
@@ -8,4 +7,4 @@ function trimText(text) {
 
 export {
   trimText
-}
+};

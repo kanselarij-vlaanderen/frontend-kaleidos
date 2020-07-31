@@ -1,6 +1,8 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { action, computed } from '@ember/object';
+import {
+  action, computed
+} from '@ember/object';
 
 export default class SubcaseTitles extends Component {
   classNames = ['vl-u-spacer-extended-bottom-l'];
@@ -14,10 +16,10 @@ export default class SubcaseTitles extends Component {
   }
 
   async getPillClass() {
-    let baseClass = 'vl-pill vl-u-text--capitalize';
+    const baseClass = 'vl-pill vl-u-text--capitalize';
     const approved = await this.subcase.get('approved');
     if (approved) {
-      return baseClass + ' vl-pill--success';
+      return `${baseClass} vl-pill--success`;
     }
     return baseClass;
   }

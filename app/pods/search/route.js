@@ -5,25 +5,25 @@ export default class SearchRoute extends Route.extend(AuthenticatedRouteMixin) {
   queryParams = {
     searchText: {
       refreshModel: true,
-      as: 'zoekterm'
+      as: 'zoekterm',
     },
     mandatees: {
       refreshModel: true,
-      as: 'minister'
+      as: 'minister',
     },
     dateFrom: {
       refreshModel: true,
-      as: 'vanaf'
+      as: 'vanaf',
     },
     dateTo: {
       refreshModel: true,
-      as: 'tot'
-    }
+      as: 'tot',
+    },
   };
 
   setupController(controller, model) {
     super.setupController(controller, model);
-    const params = this.paramsFor('search')
+    const params = this.paramsFor('search');
     controller.searchTextBuffer = params.searchText;
     controller.mandateesBuffer = params.mandatees;
     controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
