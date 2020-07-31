@@ -110,7 +110,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitelsConfidential).should('exist').should('be.visible');
   });
 
-  it.only('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
+  it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
     const agendaDate = Cypress.moment().add(1, 'week').day(6);
     cy.createAgenda('Ministerraad', agendaDate, "Brussel", 1);
     cy.createAgenda('Ministerraad', agendaDate, "Brussel",null,"VV AA 1999/").then((result) => {
