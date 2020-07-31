@@ -79,8 +79,7 @@ export default Component.extend({
       approvals: [],
       isApproval: true,
     });
-    const savedAgendaItem = await agendaitem.save();
-    return savedAgendaItem;
+    return await agendaitem.save();
   },
 
   actions: {

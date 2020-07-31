@@ -23,8 +23,9 @@
         }}
         <div class="vlc-new-session vlc-new-session__flex">
           <span class="vlc-new-session__label">
-            <span class="vlc-new-session__identifier">{{formattedMeetingIdentifier}}</span>
+            <span class="vlc-new-session__identifier" data-test-meeting-formattedMeetingIdentifier>{{formattedMeetingIdentifier}}</span>
             <button type="button" class="vl-link"
+              data-test-meeting-edit-identifier-button
               {{action "editFormattedMeetingIdentifier"}}
             >
               <small>{{t "edit"}}</small>
@@ -37,6 +38,7 @@
       <div class="vlc-new-session__meetingNumberPrefix">
         <div class="vlc-new-session__flex">
           {{web-components/vl-form-input
+            data-test-meeting-formattedMeetingIdentifier-edit-value
             value=meetingNumberPrefix
             width="2"
             class="vlc-new-session__meetingNumberPrefix__container"
