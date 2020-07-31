@@ -31,7 +31,9 @@ export default Component.extend({
 
   actions: {
     async updateSession() {
-      const { isDigital, extraInfo, selectedKindUri, meeting, meetingNumber, numberRepresentation } = this;
+      const {
+        isDigital, extraInfo, selectedKindUri, meeting, meetingNumber, numberRepresentation,
+      } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
       const date = this.formatter.formatDate(null);
