@@ -1,13 +1,13 @@
 <div {{ in-viewport onEnter=this.onEnter onExit=this.onExit }} class={{classNameBindings}}>
   <div class="vlc-agenda-items__body ">
     <h4 class="vlc-agenda-items__subject">
-    <span class="vlc-agenda-items-sub-item__numbering">
-      {{#if @agendaitem.number}}
-        {{@agendaitem.number}}.
-      {{else}}
-        {{add index 1}}.
-      {{/if}}
-    </span>
+      <span class="vlc-agenda-items-sub-item__numbering">
+        {{#if @agendaitem.number}}
+          {{@agendaitem.number}}.
+        {{else}}
+          {{add index 1}}.
+        {{/if}}
+      </span>
     </h4>
     <div class="vlc-agenda-items__text">
       <h4 class="vlc-agenda-items__subject">
@@ -43,8 +43,7 @@
                   {{subcase.subcaseName}}
                 </span>
               {{else}}
-                <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize">
-            </span>
+                <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize"></span>
               {{/if}}
             {{/if}}
             <div class="vlc-agenda-meta__status-holder">
@@ -81,17 +80,17 @@
               {{#if renderDetails}}
                 {{#if (await @agendaitem.documents)}}
                   <div class="vlc-hr"></div>
-                    <Components::Utils::DocumentsListForItem
-                            @isClickable={{true}}
-                            @item={{@agendaitem}}
-                            @document={{@agendaitem.document}}
-                    />
+                  <Components::Utils::DocumentsListForItem
+                    @isClickable={{true}}
+                    @item={{@agendaitem}}
+                    @document={{@agendaitem.document}}
+                  />
 
                 {{else}}
                   {{#if (await @agendaitem.documentNames)}}
                     <div class="vlc-hr"></div>
                     <Components::Utils::DocumentsListLazyLoaded
-                            @documentNames={{@agendaitem.documentNames}}
+                     @documentNames={{@agendaitem.documentNames}}
                     />
                   {{/if}}
                 {{/if}}
@@ -115,8 +114,9 @@
               <div class="vlc-agenda-items__remarks">
                 <div>
                   {{#if @agendaitem.explanation}}
-                    <span class="vl-u-text--bold">{{ t "remark-title" }}
-                      : </span> {{@agendaitem.explanation}}
+                    <span class="vl-u-text--bold">
+                      {{ t "remark-title" }}:
+                    </span> {{@agendaitem.explanation}}
                   {{/if}}
                 </div>
                 <div class="vlc-agenda-items__icons">
@@ -141,11 +141,11 @@
                   </div>
                   {{#if subcase.confidential}}
                     <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
-                  <i class="vl-icon vl-vi ki-lock-closed vlc-agenda-items__icons"
-                     data-test-icon-agenda-confidentiality-locked
-                  ></i>
+                      <i class="vl-icon vl-vi ki-lock-closed vlc-agenda-items__icons"
+                         data-test-icon-agenda-confidentiality-locked
+                      ></i>
                       {{t "confidential"}}
-                  </span>
+                    </span>
                   {{/if}}
                 </div>
               </div>
