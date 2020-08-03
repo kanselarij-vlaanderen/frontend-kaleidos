@@ -4,9 +4,9 @@
   {{#if (not item.confidential)}}
     {{#if (not editing)}}
       <div class="pill-wrap" data-test-access-level-pill {{action "toggleEdit"}}>
-      <span class="vlc-pill {{accessLevelClass}}">
-        {{accessLevelLabel}}
-      </span>
+        <span class="vlc-pill {{accessLevelClass}}">
+          {{accessLevelLabel}}
+        </span>
       </div>
     {{else}}
       <div class="vl-form__input" style="width:75%">
