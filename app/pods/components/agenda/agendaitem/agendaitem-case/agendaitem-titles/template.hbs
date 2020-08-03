@@ -113,12 +113,14 @@
         {{agendaitem.formallyOkToShow.label}}
       </span>
     {{/if}}
-    {{#if (await subcase.confidential)}}
-      <span data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
-    {{else}}
-      <span
-        class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
-      ></span>
+    {{#if (await subcase)}}
+      {{#if (await subcase.confidential)}}
+        <span data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
+      {{else}}
+        <span
+          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+        ></span>
+      {{/if}}
     {{/if}}
   </div>
 </div>
