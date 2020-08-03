@@ -34,6 +34,6 @@ export default Component.extend({
         notesToSave.hasMany('attendees').reload();
         this.toggleProperty('isEditing');
       });
-    }
-  }
+    },
+  },
 });

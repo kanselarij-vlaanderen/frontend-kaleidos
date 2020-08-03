@@ -51,11 +51,11 @@
               </div>
               <div class="vlc-side-nav-item__meta">
                 {{#if (not agenda.isDesignAgenda)}}
-                  {{t "created-on"}}
+                  {{t "approved-on"}}
                   <br/>
                   {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
                 {{else}}
-                  {{t "latest-modified"}}
+                  {{t "latest-modified-on"}}
                   <br/>
                   {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
                 {{/if}}

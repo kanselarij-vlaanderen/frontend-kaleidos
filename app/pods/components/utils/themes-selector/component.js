@@ -6,8 +6,8 @@ import { tracked } from '@glimmer/tracking';
 
 export default class ThemesSelector extends Component {
   @service store;
-  @tracked themeLabels; // a key value pair with keys label and selected.
-  @tracked selectedThemes = this.args.selectedThemes || []; //the themes from newsletterinfo. This can be undefined or null so we default to an empty list
+  @tracked themeLabels; // A key value pair with keys label and selected.
+  @tracked selectedThemes = this.args.selectedThemes || []; // The themes from newsletterinfo. This can be undefined or null so we default to an empty list
 
   constructor() {
     super(...arguments);
@@ -15,10 +15,13 @@ export default class ThemesSelector extends Component {
   }
 
   // This will load all the themes from the API once invoked
-  @task(function* () {
+  @task(function *() {
     const themes = yield this.store.query('theme', {}); // Query to make sure you get all themes from the API instead
     this.themes = themes.sortBy('label').filter((item) => !item.deprecated);
-    this.themeLabels = this.themes.map((theme) => { return {label: theme.label, selected: false}});
+    this.themeLabels = this.themes.map((theme) => ({
+      label: theme.label,
+      selected: false,
+    }));
   }) findAll;
 
   checkSelectedLabels() {
@@ -31,11 +34,14 @@ export default class ThemesSelector extends Component {
       });
     }
   }
-  
+
   get selectedThemesReload() {
     if (this.args.selectedThemes && this.args.selectedThemes.length > 0) {
       this.selectedThemes = this.args.selectedThemes;
-      this.themeLabels = this.themes.map((theme) => { return {label: theme.label, selected: false}});
+      this.themeLabels = this.themes.map((theme) => ({
+        label: theme.label,
+        selected: false,
+      }));
       this.checkSelectedLabels();
     }
     return this.themeLabels;

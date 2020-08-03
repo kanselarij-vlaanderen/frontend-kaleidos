@@ -6,6 +6,6 @@ export default Component.extend({
   actions: {
     toggleIsShowingDocuments(subcase) {
       subcase.toggleProperty('isShowingDocuments');
-    }
-  }
+    },
+  },
 });

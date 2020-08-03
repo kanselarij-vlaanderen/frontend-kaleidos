@@ -6,8 +6,6 @@ export default Service.extend({
     return ajax({
       method: 'GET',
       url: `/mandatee-service/mandateeIsCompetentOnFutureAgendaItem?date=${date}&mandateeId=${mandateeId}`,
-    }).then((result) => {
-      return result.boolean;
-    });
+    }).then((result) => result.boolean);
   },
 });

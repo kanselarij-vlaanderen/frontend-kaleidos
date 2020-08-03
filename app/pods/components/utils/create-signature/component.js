@@ -7,13 +7,14 @@ export default Component.extend({
   fileService: inject(),
   selectedPerson: null,
 
-  name: computed('selectedPerson', function () {
+  name: computed('selectedPerson', function() {
     if (this.selectedPerson) {
       return this.selectedPerson.get('nameToDisplay');
     }
+    return null;
   }),
 
-  downloadUrl: computed('uploadedFile', function () {
+  downloadUrl: computed('uploadedFile', function() {
     return `/files/${this.uploadedFile.get('id')}/download`;
   }),
 

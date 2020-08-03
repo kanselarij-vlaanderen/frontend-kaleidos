@@ -20,12 +20,12 @@ export default class AgendaSidebar extends Component {
   dragHandleClass = '.vlc-agenda-detail-sidebar__sub-item';
 
   @restartableTask
-  reAssignPriorities = function* (agendaitems) {
-    yield agendaitems.map(async (item) => {
+  reAssignPriorities = function *(agendaitems) {
+    yield agendaitems.map(async(item) => {
       if (isPresent(item.changedAttributes().priority)) {
         return item.save();
       }
-    })
+    });
   }
 
   @action
@@ -41,11 +41,12 @@ export default class AgendaSidebar extends Component {
   @action
   reorderItems(itemModels) {
     if (!this.currentSessionService.isEditor) {
-      return;
+      return null;
     }
-    this.isReAssigningPriorities = true
+    this.isReAssigningPriorities = true;
     itemModels.map((item, index) => {
       item.set('priority', index + 1);
+      return item;
     });
     this.reAssignPriorities.perform(itemModels);
     this.agendaService.groupAgendaItemsOnGroupName(itemModels);
@@ -55,11 +56,12 @@ export default class AgendaSidebar extends Component {
   @action
   reorderAnnouncements(itemModels) {
     if (!this.currentSessionService.isEditor) {
-      return;
+      return null;
     }
-    this.isReAssigningPriorities = true
+    this.isReAssigningPriorities = true;
     itemModels.map((item, index) => {
       item.set('priority', index + 1);
+      return item;
     });
     this.reAssignPriorities.perform(itemModels);
     this.announcements = itemModels;

@@ -6,6 +6,6 @@ export default Controller.extend({
   actions: {
     cancelEditing() {
       this.toggleProperty('isEditing');
-    }
+    },
   },
 });

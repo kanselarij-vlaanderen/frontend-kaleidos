@@ -4,7 +4,6 @@ import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject, { computed } from '@ember/object';
 import { A } from '@ember/array';
 
-
 export default Component.extend({
   store: service(),
   agendaService: service(),
@@ -15,11 +14,10 @@ export default Component.extend({
   startDate: null,
   extraInfo: null,
   meetingNumber: null,
-
-  date: computed('startDate', function () {
-    return A([this.startDate])
+  numberRepresentation: null,
+  date: computed('startDate', function() {
+    return A([this.startDate]);
   }),
-
 
   didInsertElement() {
     this._super(...arguments);
@@ -28,11 +26,14 @@ export default Component.extend({
     this.set('startDate', this.get('meeting.plannedStart'));
     this.set('extraInfo', this.get('meeting.extraInfo'));
     this.set('meetingNumber', this.get('meeting.number'));
+    this.set('numberRepresentation', this.get('meeting.numberRepresentation'));
   },
 
   actions: {
     async updateSession() {
-      const { isDigital, extraInfo, selectedKindUri, meeting, meetingNumber } = this;
+      const {
+        isDigital, extraInfo, selectedKindUri, meeting, meetingNumber, numberRepresentation,
+      } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
       const date = this.formatter.formatDate(null);
@@ -44,6 +45,7 @@ export default Component.extend({
       await meeting.set('created', date);
       await meeting.set('kind', kindUriToAdd);
       await meeting.set('number', meetingNumber);
+      await meeting.set('numberRepresentation', numberRepresentation);
 
       meeting.save()
         .catch(() => {
@@ -71,5 +73,4 @@ export default Component.extend({
       this.successfullyEdited();
     },
   },
-})
-;
+});

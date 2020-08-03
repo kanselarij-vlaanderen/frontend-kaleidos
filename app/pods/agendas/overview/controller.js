@@ -17,14 +17,19 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   sort: '-planned-start',
   size: 10,
 
-  activeAgendas: computed('model', async function () {
+  activeAgendas: computed('model', async function() {
     const dateOfToday = moment().seconds(0)
-      .milliseconds(0).minutes(0).hours(0).utc().subtract(1, 'weeks').format();
+      .milliseconds(0)
+      .minutes(0)
+      .hours(0)
+      .utc()
+      .subtract(1, 'weeks')
+      .format();
     const meetings = await this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
       },
-      sort: 'planned-start'
+      sort: 'planned-start',
     });
     const activeAgendas = await this.agendaService.getActiveAgendas(dateOfToday);
 
@@ -49,19 +54,19 @@ export default Controller.extend(DefaultQueryParamsMixin, {
         this.set('to', undefined);
         return;
       }
-      const min = moment(parseInt(match[3]), 'YYYY', true);
+      const min = moment(parseInt(match[3], 10), 'YYYY', true);
       let unitToAdd;
       if (match[1] && match[2]) {
         unitToAdd = 'day';
-        min.set('date', parseInt(match[1]));
-        min.set('month', parseInt(match[2]) - 1); // Count starts from 0
+        min.set('date', parseInt(match[1], 10));
+        min.set('month', parseInt(match[2], 10) - 1); // Count starts from 0
       } else if (match[1]) {
         unitToAdd = 'month';
-        min.set('month', parseInt(match[1]) - 1);
+        min.set('month', parseInt(match[1], 10) - 1);
       } else {
         unitToAdd = 'year';
       }
-      const max = min.clone().add(1, unitToAdd + 's');
+      const max = min.clone().add(1, `${unitToAdd}s`);
 
       this.set('from', min.format('YYYY-MM-DD'));
       this.set('to', max.format('YYYY-MM-DD'));
@@ -71,7 +76,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     clearFilter() {
       this.set('to', null);
       this.set('from', null);
-      this.set('dateFilter','');
+      this.set('dateFilter', '');
     },
 
     onClickRow(meeting) {
@@ -79,6 +84,6 @@ export default Controller.extend(DefaultQueryParamsMixin, {
         const latestAgendaId = latestAgenda.get('id');
         this.transitionToRoute('agenda.agendaitems', meeting.id, latestAgendaId);
       });
-    }
-  }
+    },
+  },
 });

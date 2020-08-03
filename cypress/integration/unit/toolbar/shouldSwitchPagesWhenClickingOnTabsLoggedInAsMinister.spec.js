@@ -1,15 +1,13 @@
-/*global context, it, cy,beforeEach*/
-/// <reference types="Cypress" />
+/* global context, it, cy,beforeEach */
+// / <reference types="Cypress" />
 
-import toolbar from "../../../selectors/toolbar.selectors";
-import settings from "../../../selectors/settings.selectors";
-import cases from "../../../selectors/case.selectors";
-import agenda from "../../../selectors/agenda.selectors";
-import newsletter from "../../../selectors/newsletter.selector";
-
+import toolbar from '../../../selectors/toolbar.selectors';
+import settings from '../../../selectors/settings.selectors';
+import cases from '../../../selectors/case.selectors';
+import agenda from '../../../selectors/agenda.selectors';
+import newsletter from '../../../selectors/newsletter.selector';
 
 context('Testing the toolbar as Minister user', () => {
-
   beforeEach(() => {
     cy.server();
     cy.login('Minister');

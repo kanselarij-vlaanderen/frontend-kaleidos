@@ -28,7 +28,7 @@ export default Component.extend({
         this.set('field', null);
         this.set('isEditing', false);
       });
-      this.send('selectModel', null)
+      this.send('selectModel', null);
     },
 
     async createModel() {
@@ -37,7 +37,7 @@ export default Component.extend({
       const governmentDomain = this.store.createRecord('ise-code', {
         name: this.get('name'),
         code: this.get('code'),
-        field: field
+        field,
       });
       governmentDomain.save().then(() => {
         this.set('isLoading', false);
@@ -70,5 +70,5 @@ export default Component.extend({
     removeModel() {
       alert('This action is not allowed. Please contact the system administrator.');
     },
-  }
-})
+  },
+});

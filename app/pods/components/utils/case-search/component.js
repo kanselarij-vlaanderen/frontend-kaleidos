@@ -36,17 +36,15 @@ export default class CaseSearch extends Component {
       filter[`${searchModifier}${textSearchKey}`] = searchTerm;
     }
 
-    if (Object.keys(filter).length == 0) {
+    if (Object.keys(filter).length === 0) {
       filter[':sqs:title'] = '*'; // search without filter
     }
 
-    const results = await search('cases', this.page, this.size, null, filter, function (item) {
+    this.results = await search('cases', this.page, this.size, null, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
       return entry;
     });
-
-    this.results = results;
     this.isLoading = false;
   }
 

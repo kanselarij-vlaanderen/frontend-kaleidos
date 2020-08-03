@@ -10,42 +10,40 @@ export default Component.extend({
   isTryingToSave: false,
   isExpanded: false,
 
-  themes: computed(`newsletterInfo.themes`, {
+  themes: computed('newsletterInfo.themes', {
     async get() {
       const newsletterInfo = await this.get('newsletterInfo');
       if (newsletterInfo) {
-        return await this.newsletterInfo.get('themes').then((themes) => {
-          return themes.toArray();
-        });
-      } else {
-        return [];
+        return await this.newsletterInfo.get('themes').then((themes) => themes.toArray());
       }
+
+      return [];
     },
-    set: function (key, value) {
+    // eslint-disable-next-line no-unused-vars
+    set(key, value) {
       return value;
     },
   }),
 
-  hasNota: computed('agendaitem', async function () {
+  hasNota: computed('agendaitem', async function() {
     const nota = await this.agendaitem.get('nota');
     if (nota) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }),
 
   async saveChanges() {
     this.set('isLoading', true);
     const newsletterInfo = await this.get('newsletterInfo');
     newsletterInfo.set('richtext', this.richtext);
-    await newsletterInfo.save().then(async () => {
+    await newsletterInfo.save().then(async() => {
       this.set('isLoading', false);
       this.toggleProperty('isEditing');
     });
   },
 
-  richtext: computed('editor.currentTextContent', function () {
+  richtext: computed('editor.currentTextContent', function() {
     if (!this.editor) {
       return;
     }
@@ -89,6 +87,6 @@ export default Component.extend({
     },
     descriptionUpdated(val) {
       this.set('initValue', this.richtext + val);
-    }
+    },
   },
 });

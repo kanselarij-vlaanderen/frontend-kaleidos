@@ -16,10 +16,10 @@
     "last 1 Safari versions"
   ],
   "scripts": {
-    "prestart": "ember-template-lint .",
+    "prestart": "npm-run-all lint:hbs lint:js",
     "build": "ember build --environment=production",
     "design": "ember serve --proxy=https://kaleidos-dev.vlaanderen.be",
-    "design-all": "npm-run-all lint:hbs design",
+    "design-all": "npm-run-all lint:hbs lint:js design",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
@@ -96,6 +96,7 @@
     "ember-template-lint": "^2.4.0",
     "eslint": "^6.8.0",
     "eslint-plugin-ember": "^7.10.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-node": "^11.0.0",
     "icon-font-generator": "^2.1.10",
     "liquid-fire": "^0.30.0",

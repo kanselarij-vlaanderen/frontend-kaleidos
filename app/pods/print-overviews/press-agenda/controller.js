@@ -9,10 +9,10 @@ export default Controller.extend({
   routeModel: 'print-overviews.press-agenda',
   intl: inject(),
 
-  title: computed('model.createdFor', 'titleTranslationKey', async function () {
+  title: computed('model.createdFor', 'titleTranslationKey', async function() {
     const date = this.get('model.createdFor.plannedStart');
-      const translatedTitle = this.intl.t(this.titleTranslationKey);
-      return getPrintOverviewTitle(translatedTitle,date);
+    const translatedTitle = this.intl.t(this.titleTranslationKey);
+    return getPrintOverviewTitle(translatedTitle, date);
   }),
 
   actions: {
@@ -21,5 +21,5 @@ export default Controller.extend({
       const selectedAgendaid = await this.get('model.id');
       this.transitionToRoute('agenda.agendaitems', currentSessionId, selectedAgendaid);
     },
-  }
+  },
 });

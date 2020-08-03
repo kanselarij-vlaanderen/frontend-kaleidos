@@ -1,7 +1,9 @@
+/* eslint-disable class-methods-use-this */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+// eslint-disable-next-line no-duplicate-imports
 import EmberObject from '@ember/object';
+import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 
@@ -41,8 +43,8 @@ export default class CompareAgendaList extends Component {
       this.isLoadingComparison = true;
 
       const sortedAgendas = await this.sessionService.currentSession.sortedAgendas;
-      let agendaOneIndex = sortedAgendas.indexOf(this.agendaOne);
-      let agendaTwoIndex = sortedAgendas.indexOf(this.agendaTwo);
+      const agendaOneIndex = sortedAgendas.indexOf(this.agendaOne);
+      const agendaTwoIndex = sortedAgendas.indexOf(this.agendaTwo);
 
       if (agendaOneIndex < agendaTwoIndex) {
         await this.agendaService.agendaWithChanges(this.agendaOne.get('id'), this.agendaTwo.get('id'));
@@ -84,7 +86,9 @@ export default class CompareAgendaList extends Component {
   getAgendaitemsFromAgenda(id) {
     return this.store.query('agendaitem', {
       filter: {
-        agenda: { id: id },
+        agenda: {
+          id,
+        },
         'show-as-remark': false,
       },
       sort: 'priority',
@@ -103,15 +107,16 @@ export default class CompareAgendaList extends Component {
     if (rightAgendaActivity) {
       rightSubcaseId = await rightAgendaActivity.get('subcase.id');
     }
-    return leftSubcaseId == rightSubcaseId;
+    return leftSubcaseId === rightSubcaseId;
   }
 
   async createComparisonList(leftAgendaitems, rightAgendaitems) {
     leftAgendaitems = [].concat(leftAgendaitems.toArray());
     rightAgendaitems = [].concat(rightAgendaitems.toArray());
 
-    let combinedItems = [];
-    let currentLeft, currentRight;
+    const combinedItems = [];
+    let currentLeft;
+    let currentRight;
 
     while (leftAgendaitems.length || rightAgendaitems.length) {
       if (!currentLeft) {
@@ -122,21 +127,28 @@ export default class CompareAgendaList extends Component {
       }
 
       if (!currentLeft || !currentRight || (await this.compareSubcase(currentLeft, currentRight))) {
-        combinedItems.push(EmberObject.create({ left: currentLeft, right: currentRight }));
+        combinedItems.push(EmberObject.create({
+          left: currentLeft, right: currentRight,
+        }));
         currentLeft = null;
         currentRight = null;
         continue;
       }
 
       if (this.addedAgendaitems.indexOf(currentRight.id) >= 0) {
-        combinedItems.push(EmberObject.create({ left: null, right: currentRight }));
+        combinedItems.push(EmberObject.create({
+          left: null,
+          right: currentRight,
+        }));
         currentRight = null;
         continue;
       }
       const foundLeftItem = this.findItemBySubcase(currentLeft, rightAgendaitems);
 
       if (!foundLeftItem) {
-        combinedItems.push(EmberObject.create({ left: currentLeft, right: null }));
+        combinedItems.push(EmberObject.create({
+          left: currentLeft, right: null,
+        }));
         currentLeft = null;
         continue;
       }
@@ -144,12 +156,16 @@ export default class CompareAgendaList extends Component {
       const foundRightItem = this.findItemBySubcase(currentRight, leftAgendaitems);
 
       if (!foundRightItem) {
-        combinedItems.push(EmberObject.create({ left: null, right: currentRight }));
+        combinedItems.push(EmberObject.create({
+          left: null, right: currentRight,
+        }));
         currentLeft = null;
         continue;
       }
 
-      combinedItems.push(EmberObject.create({ left: currentLeft, right: currentRight }));
+      combinedItems.push(EmberObject.create({
+        left: currentLeft, right: currentRight,
+      }));
       currentLeft = null;
       currentRight = null;
     }
@@ -159,7 +175,7 @@ export default class CompareAgendaList extends Component {
   setCombinedGroupNames(list) {
     list.map((combinedItem) => {
       const leftGroupName = combinedItem.get('left.groupName');
-      const rightGroupName = combinedItem.get( 'right.groupName');
+      const rightGroupName = combinedItem.get('right.groupName');
       if (!leftGroupName && !rightGroupName) {
         return;
       }
@@ -170,6 +186,6 @@ export default class CompareAgendaList extends Component {
   }
 
   findItemBySubcase(item, list) {
-    return list.find((possibleMatch) => possibleMatch.get('agendaActivity.subcase.id') == item.get('agendaActivity.subcase.id'));
+    return list.find((possibleMatch) => possibleMatch.get('agendaActivity.subcase.id') === item.get('agendaActivity.subcase.id'));
   }
 }

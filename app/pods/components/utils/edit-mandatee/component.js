@@ -1,14 +1,13 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import moment from 'moment';
 import { tracked } from '@glimmer/tracking';
 import { cached } from 'fe-redpencil/decorators/cached';
 
 export default Component.extend({
   store: inject(),
   mandateeService: inject(),
-  item: computed('mandateeToEdit', function () {
+  item: computed('mandateeToEdit', function() {
     return this.get('mandateeToEdit');
   }),
 
@@ -23,7 +22,9 @@ export default Component.extend({
 
   async saveChanges() {
     this.set('isLoading', true);
-    const { startDate, endDate, title, shortTitle, mandateeToEdit, iseCodes, nickName } = this;
+    const {
+      startDate, endDate, title, shortTitle, mandateeToEdit, iseCodes, nickName,
+    } = this;
     const mandatee = await this.store.findRecord('mandatee', mandateeToEdit.get('id'));
     mandatee.set('end', endDate);
     mandatee.set('title', title);
@@ -71,7 +72,7 @@ export default Component.extend({
       this.showVerificationPopup = false;
     },
 
-    keyDown: function (event) {
+    keyDown(event) {
       if (event.key === 'Escape') {
         this.cancel();
       }
@@ -85,6 +86,6 @@ export default Component.extend({
     },
     saveChanges() {
       this.saveChanges();
-    }
+    },
   },
 });
