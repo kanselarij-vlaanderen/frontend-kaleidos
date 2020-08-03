@@ -24,7 +24,7 @@ context('KB: Edit decision in newsletter-info', () => {
     cy.get(utils.checkboxLabel).eq(0)
       .click();
     cy.get(newsletter.editSave).click();
-    cy.wait('@decisionNewsletterInfo');
+    cy.wait('@newsletterInfosPatch');
 
     cy.contains(decisionText);
   });
