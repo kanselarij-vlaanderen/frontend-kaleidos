@@ -81,20 +81,20 @@
         {{if agendaitem.showInNewsletter "vlc-pill--success" "vlc-pill--error"}}
         vl-u-spacer-extended-right-s"
       >
-      {{#if agendaitem.showInNewsletter}}
-        <span>
-          {{t "visible-in-newsletter"}}
-        </span>
-        <i
-          class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
-        ></i>
+        {{#if agendaitem.showInNewsletter}}
+          <span>
+            {{t "visible-in-newsletter"}}
+          </span>
+          <i
+            class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
+          ></i>
         {{else}}
           <span>
             {{t "hidden-in-newsletter"}}
           </span>
-        <i
-          class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
-        ></i>
+          <i
+            class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
+          ></i>
         {{/if}}
       </span>
     </div>
