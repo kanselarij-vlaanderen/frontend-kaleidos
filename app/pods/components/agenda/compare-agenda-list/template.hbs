@@ -1,3 +1,4 @@
+{{!-- template-lint-disable  --}}
 <div class="vl-u-display-flex vlc-u-flex-space-between vl-u-spacer-extended-bottom-s">
   <div class="compare-left-column">
     {{utils/agenda-selector
@@ -64,17 +65,12 @@
       </div>
     </div>
   {{/each}}
-{{else}}
-  {{#if
-    (or this.isLoadingAgendaOne this.isLoadingAgendaTwo this.isLoadingComparison)
-  }}
-    {{web-components/vl-loader text=(t "please-be-patient")}}
-  {{else}}
-    {{#if (and this.agendaOne this.agendaTwo)}}
-      <div class="vl-u-spacer-extended-top-s">
-        {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
-      </div>
-      {{if}}
-    {{/if}}
-  {{/if}}
+{{else if
+  (or this.isLoadingAgendaOne this.isLoadingAgendaTwo this.isLoadingComparison)
+}}
+  {{web-components/vl-loader text=(t "please-be-patient")}}
+{{else if (and this.agendaOne this.agendaTwo)}}
+  <div class="vl-u-spacer-extended-top-s">
+    {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
+  </div>
 {{/if}}
