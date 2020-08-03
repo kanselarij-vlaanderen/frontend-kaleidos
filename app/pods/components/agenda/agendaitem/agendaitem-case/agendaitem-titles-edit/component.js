@@ -34,11 +34,15 @@ export default class SubcaseTitlesEdit extends Component {
       'shortTitle': trimText(this.agendaitem.shortTitle),
       // explanation and showInNewsletter are set directly on the agendaitem, no need to have them in here
     };
+
     const propertiesToSetOnSubcase = {
       'title': trimText(this.agendaitem.title),
       'shortTitle': trimText(this.agendaitem.shortTitle),
     };
-    propertiesToSetOnSubcase.confidential = await this.subcase.get('confidential');
+
+    if (this.subcase) {
+      propertiesToSetOnSubcase.confidential = await this.subcase.get('confidential');
+    }
 
     try {
       await saveSubcaseTitles(this.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
