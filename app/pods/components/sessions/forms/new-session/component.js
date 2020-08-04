@@ -12,10 +12,13 @@ export default Component.extend({
   kind: null,
   selectedKindUri: null,
   meetingNumber: null,
+  isEditingFormattedMeetingIdentifier: false,
+  formattedMeetingIdentifier: null,
+  currentYear: moment().year(),
+  meetingNumberPrefix: null,
 
   init() {
     this._super(...arguments);
-    const currentYear = moment().year();
     // TODO: Improve samen met Michael of Sven
     this.store.query('meeting',
       {
@@ -24,7 +27,7 @@ export default Component.extend({
       let meetingsFromThisYear = null;
       if (meetings.length) {
         meetingsFromThisYear = meetings.map((meeting) => {
-          if (moment(meeting.plannedStart).year() === currentYear) {
+          if (moment(meeting.plannedStart).year() === this.currentYear) {
             return meeting;
           }
         }).filter((meeting) => meeting); // Filter undefineds out of results..
@@ -37,6 +40,7 @@ export default Component.extend({
           }
         });
         this.set('meetingNumber', id + 1);
+        this.set('formattedMeetingIdentifier', `VR PV ${this.currentYear}/${this.meetingNumber}`);
       }
     });
   },
@@ -74,14 +78,13 @@ export default Component.extend({
       approvals: [],
       isApproval: true,
     });
-    const savedAgendaItem = await agendaitem.save();
-    return savedAgendaItem;
+    return await agendaitem.save();
   },
 
   actions: {
     async createNewSession() {
       const {
-        isDigital, extraInfo, selectedKindUri, meetingNumber,
+        isDigital, extraInfo, selectedKindUri, meetingNumber, formattedMeetingIdentifier,
       } = this;
       this.set('isLoading', true);
       const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
@@ -94,6 +97,7 @@ export default Component.extend({
         created: date,
         kind: kindUriToAdd,
         number: meetingNumber,
+        numberRepresentation: formattedMeetingIdentifier,
       });
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
@@ -130,6 +134,20 @@ export default Component.extend({
 
     setKind(kind) {
       this.set('selectedKindUri', kind);
+    },
+
+    meetingNumberChangedAction(meetingNumber) {
+      this.set('meetingNumber', meetingNumber);
+      this.set('formattedMeetingIdentifier', `VR PV ${this.currentYear}/${meetingNumber}`);
+    },
+
+    editFormattedMeetingIdentifier() {
+      this.set('isEditingFormattedMeetingIdentifier', true);
+    },
+
+    saveAction() {
+      this.set('formattedMeetingIdentifier', `${this.get('formattedMeetingIdentifier')}`);
+      this.set('isEditingFormattedMeetingIdentifier', false);
     },
   },
 });

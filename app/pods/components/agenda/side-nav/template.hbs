@@ -43,7 +43,7 @@
                 class="vlc-side-nav-item--active"
               }}"
           >
-            <a href="" {{action "setCurrentAgenda" agenda}}>
+            <a href="javascript://" {{action "setCurrentAgenda" agenda}}>
               <div class="vlc-side-nav-item__label">
                 <span>
                   {{await agenda.agendaName}}
@@ -51,11 +51,11 @@
               </div>
               <div class="vlc-side-nav-item__meta">
                 {{#if (not agenda.isDesignAgenda)}}
-                  {{t "created-on"}}
+                  {{t "approved-on"}}
                   <br/>
                   {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
                 {{else}}
-                  {{t "latest-modified"}}
+                  {{t "latest-modified-on"}}
                   <br/>
                   {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
                 {{/if}}
