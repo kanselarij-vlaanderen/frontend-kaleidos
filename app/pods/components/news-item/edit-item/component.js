@@ -11,7 +11,7 @@ export default Component.extend({
   isExpanded: false,
 
   themes: computed('newsletterInfo.themes', {
-    async get() {
+    get: async function() {
       const newsletterInfo = await this.get('newsletterInfo');
       if (newsletterInfo) {
         return await this.newsletterInfo.get('themes').then((themes) => themes.toArray());
