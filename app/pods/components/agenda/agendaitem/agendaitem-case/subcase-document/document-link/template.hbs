@@ -146,10 +146,10 @@
         {{#if isShowingVersions}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
-               {{#each
-                 (await myReverseSortedVersions)
-               as |documentVersion|
-               }}
+              {{#each
+                (await myReverseSortedVersions)
+              as |documentVersion|
+              }}
                 <WebComponents::VlDocument
                   @documentVersion={{documentVersion}}
                   @item={{item}} />
