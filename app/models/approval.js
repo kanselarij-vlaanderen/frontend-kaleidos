@@ -7,7 +7,7 @@ const {
 } = DS;
 
 export default Model.extend({
-  created: attr('date'),
+  created: attr('datetime'),
   mandatee: belongsTo('mandatee', {
     inverse: null,
   }),

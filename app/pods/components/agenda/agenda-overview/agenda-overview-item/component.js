@@ -20,6 +20,8 @@ export default class AgendaOverviewItem extends Component {
 
   @alias('sessionService.currentAgenda') currentAgenda;
 
+  @alias('sessionService.currentSession') currentSession;
+
   @alias('args.agendaitem.checkAdded') isNew;
 
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
@@ -41,6 +43,13 @@ export default class AgendaOverviewItem extends Component {
     ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
     ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
     `;
+  }
+
+  get overheidCanViewDocuments() {
+    const isOverheid = this.currentSessionService.isOverheid;
+    const documentsAreReleased = this.currentSession.releasedDocuments;
+
+    return !(isOverheid && !documentsAreReleased);
   }
 
   @action
