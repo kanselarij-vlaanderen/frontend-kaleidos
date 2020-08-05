@@ -8,8 +8,8 @@ const {
 export default Model.extend({
   title: attr('string'),
   text: attr('string'),
-  created: attr('date'),
-  modified: attr('date'),
+  created: attr('datetime'),
+  modified: attr('datetime'),
   agenda: belongsTo('agenda'),
   documentVersions: hasMany('document-version'),
 
