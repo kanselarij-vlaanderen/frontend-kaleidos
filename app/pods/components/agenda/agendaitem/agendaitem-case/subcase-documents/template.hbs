@@ -17,9 +17,9 @@
     {{#if (is-pending item.documents)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
     {{else if (not overheidCanViewDocuments)}}
-        <div class="vl-u-spacer-extended-top-s">
-          <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
-        </div>
+      <div class="vl-u-spacer-extended-top-s">
+        <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+      </div>
     {{else if (gt (await item.documentsLength) 0)}}
       {{#each (await item.documents) as |document|}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
