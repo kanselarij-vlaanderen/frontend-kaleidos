@@ -4,18 +4,18 @@
       data-test-decision-edit-power-select-container
   >
     <WebComponents::VlFormLabel @value={{t "result-decision"}}/>
-  {{#if  this.decisionResultCodesLoaded}}
-    <PowerSelect
-            @searchEnabled={{false}}
-            @options={{this.decisionResultCodes}}
-            @selected={{this.treatment.decisionResultCode}}
-            @onchange={{this.changeDecisionResultCode}}
-            as |resultCode|>
-      {{resultCode.label}}
-    </PowerSelect>
-  {{else}}
-    <WebComponents::VlLoader @text={{t "loading-text-inactive"}} />
-  {{/if}}
+    {{#if  this.decisionResultCodesLoaded}}
+      <PowerSelect
+              @searchEnabled={{false}}
+              @options={{this.decisionResultCodes}}
+              @selected={{this.treatment.decisionResultCode}}
+              @onchange={{this.changeDecisionResultCode}}
+              as |resultCode|>
+        {{resultCode.label}}
+      </PowerSelect>
+    {{else}}
+      <WebComponents::VlLoader @text={{t "loading-text-inactive"}} />
+    {{/if}}
   </div>
   <div class="vl-action-group vl-action-group--align-right">
     <a

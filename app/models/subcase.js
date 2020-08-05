@@ -50,11 +50,18 @@ export default ModelWithModifier.extend({
   requestedForMeeting: belongsTo('meeting', {
     inverse: null,
   }),
-  newsletterInfo: belongsTo('newsletter-info'),
   requestedBy: belongsTo('mandatee', {
     inverse: null,
   }),
   accessLevel: belongsTo('access-level'),
+
+  newsletterInfo: computed('treatments', 'treatments.@each', async function() {
+    const treatments = await this.get('treatments').then((treatments) => treatments);
+    if (treatments && treatments.length > 0) {
+      return treatments.get('lastObject.newsletterInfo');
+    }
+    return null;
+  }),
 
   latestActivity: computed('agendaActivities', 'agendaActivities.@each', async function() {
     const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
