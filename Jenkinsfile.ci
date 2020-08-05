@@ -31,7 +31,7 @@ pipeline {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "npm install --verbose"
-                sh "npm-run-all lint:hbs lint:js"
+                sh "npx npm-run-all lint:hbs lint:js"
             }
         }
         stage('Prepare for automated tests') {
