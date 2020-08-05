@@ -20,11 +20,11 @@ context('KB: Edit decision in newsletter-info', () => {
     // cy.get('.editor__paper').clear(); //TODO triggers error:  "Cannot read property 'nodeType" of null from RDFA editor
     cy.get('.say-editor__inner').type(decisionText);
 
-    cy.route('/newsletter-infos/*').as('decisionNewsletterInfo');
+    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.get(utils.checkboxLabel).eq(0)
       .click();
     cy.get(newsletter.editSave).click();
-    cy.wait('@decisionNewsletterInfo');
+    cy.wait('@newsletterInfosPatch');
 
     cy.contains(decisionText);
   });
