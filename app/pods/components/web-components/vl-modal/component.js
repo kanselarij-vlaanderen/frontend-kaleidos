@@ -25,14 +25,17 @@ export default Component.extend({
   clickOutside: false,
   showCloseButton: true,
   isDocumentViewer: null,
+  disableFocus: false,
 
   didInsertElement() {
-    const focusableNodes = this.getFocusableNodes();
-    if (focusableNodes.length > 1) {
-      focusableNodes[1].focus();
-    } else {
-      this.get('element').querySelector('[role="dialog"]')
-        .focus();
+    if (!this.disableFocus) {
+      const focusableNodes = this.getFocusableNodes();
+      if (focusableNodes.length > 1) {
+        focusableNodes[1].focus();
+      } else {
+        this.get('element').querySelector('[role="dialog"]')
+          .focus();
+      }
     }
   },
 

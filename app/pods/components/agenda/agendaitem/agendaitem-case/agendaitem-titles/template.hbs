@@ -81,20 +81,20 @@
         {{if agendaitem.showInNewsletter "vlc-pill--success" "vlc-pill--error"}}
         vl-u-spacer-extended-right-s"
       >
-      {{#if agendaitem.showInNewsletter}}
-        <span>
-          {{t "visible-in-newsletter"}}
-        </span>
-        <i
-          class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
-        ></i>
+        {{#if agendaitem.showInNewsletter}}
+          <span>
+            {{t "visible-in-newsletter"}}
+          </span>
+          <i
+            class="vl-button__icon vl-vi vl-vi-view-add vl-u-spacer-extended-left-s"
+          ></i>
         {{else}}
           <span>
             {{t "hidden-in-newsletter"}}
           </span>
-        <i
-          class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
-        ></i>
+          <i
+            class="vl-button__icon vl-vi vl-vi-hide vl-u-spacer-extended-left-s"
+          ></i>
         {{/if}}
       </span>
     </div>
@@ -113,12 +113,14 @@
         {{agendaitem.formallyOkToShow.label}}
       </span>
     {{/if}}
-    {{#if (await subcase.confidential)}}
-      <span data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
-    {{else}}
-      <span
-        class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
-      ></span>
+    {{#if (await subcase)}}
+      {{#if (await subcase.confidential)}}
+        <span data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
+      {{else}}
+        <span
+          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
+        ></span>
+      {{/if}}
     {{/if}}
   </div>
 </div>

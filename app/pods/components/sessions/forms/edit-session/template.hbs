@@ -18,8 +18,24 @@
   </div>
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "meeting-location")}}
-      {{web-components/vl-form-input width="4" value=extraInfo}}
+      {{web-components/vl-form-label
+        value=(t "meeting-number-visual-representation")
+      }}
+      {{web-components/vl-form-input
+        value=numberRepresentation
+        width="4"
+      }}
+    </div>
+  </div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <div class="vlc-input-field-block">
+      {{web-components/vl-form-label
+        value=(t "meeting-location")
+      }}
+      {{web-components/vl-form-input
+        width="4"
+        value=extraInfo
+      }}
     </div>
   </div>
 </div>

@@ -13,32 +13,32 @@
     {{else}}
       <table class="vl-data-table tr-hover vl-data-table--zebra">
         <thead>
-        <tr>
-          <th class="vl-data-table-col-9 vl-data-table__header-title">
-            {{t "case-name"}}
-          </th>
-          <th class="vl-data-table-col-2 vl-data-table__header-title">
-            {{t "created-on"}}
-          </th>
-        </tr>
+          <tr>
+            <th class="vl-data-table-col-9 vl-data-table__header-title">
+              {{t "case-name"}}
+            </th>
+            <th class="vl-data-table-col-2 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+          </tr>
         </thead>
         <tbody>
-        {{#each (await results) as |row|}}
-          <tr>
-            <td onclick={{action "selectCase" row}}>
-              <p>
-                {{#if row.shortTitle}}
-                  {{row.shortTitle}}
-                {{else}}
-                  {{row.title}}
-                {{/if}}
-              </p>
-            </td>
-            <td onclick={{action "selectCase" row}}>
-              {{moment-format row.created "DD-MM-YYYY HH:mm"}}
-            </td>
-          </tr>
-        {{/each}}
+          {{#each (await results) as |row|}}
+            <tr>
+              <td onclick={{action "selectCase" row}}>
+                <p>
+                  {{#if row.shortTitle}}
+                    {{row.shortTitle}}
+                  {{else}}
+                    {{row.title}}
+                  {{/if}}
+                </p>
+              </td>
+              <td onclick={{action "selectCase" row}}>
+                {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+              </td>
+            </tr>
+          {{/each}}
         </tbody>
       </table>
       <div class="vl-u-spacer--small"></div>

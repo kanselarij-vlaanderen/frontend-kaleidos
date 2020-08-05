@@ -7,7 +7,10 @@ module.exports = {
       indentation: 2,
     },
     'no-inline-styles': false,
-    'block-indentation': false,
+    'block-indentation': {
+      indentation: 2,
+      ignoreComments: true,
+    },
     quotes: false,
     'no-unnecessary-concat': false,
     'no-nested-interactive': false,

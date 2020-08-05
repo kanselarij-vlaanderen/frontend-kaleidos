@@ -3,15 +3,19 @@
     <div class="vlc-printable-agenda-list__item-number">
       {{item.number}}.
     </div>
-    <h4 class="vlc-printable-agenda-list__title vlc-u-no-margin">{{sanitize-html
-      raw=true
-      value=(if this.item.shortTitle this.item.shortTitle this.item.title)
-    }}</h4>{{!-- Fallback for legacy data that doesn't have a short title --}}
+    <h4 class="vlc-printable-agenda-list__title vlc-u-no-margin">
+      {{sanitize-html
+        raw=true
+        value=(if this.item.shortTitle this.item.shortTitle this.item.title)
+      }}
+    </h4>{{!-- Fallback for legacy data that doesn't have a short title --}}
   </div>
-  <p class="vlc-printable-agenda-list__description indented">{{sanitize-html
-    raw=true
-    value=this.item.title
-  }}</p>
+  <p class="vlc-printable-agenda-list__description indented">
+    {{sanitize-html
+      raw=true
+      value=this.item.title
+    }}
+  </p>
 </div>
 <ul class="vlc-printable-agenda-list__document-list indented">
   {{#each this.item.sortedDocumentVersions as |document|}}

@@ -52,6 +52,13 @@ context('Agenda tests', () => {
     cy.addAgendaitemToAgenda(false);
   });
 
+  it('Ontwerpagenda goedkeuren en afsluiten...', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.approveAndCloseDesignAgenda();
+    cy.get(modal.agenda.approveAgenda).should('not.exist');
+  });
+
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(5); // Friday in three weeks
@@ -126,14 +133,16 @@ context('Agenda tests', () => {
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
-    const dateToCreateAgenda = Cypress.moment().add(1, 'week')
+    const agendaDate = Cypress.moment().add(1, 'week')
       .day(6);
-    cy.createAgenda('Ministerraad', dateToCreateAgenda, 'Brussel', 1);
-    cy.createAgenda('Ministerraad', dateToCreateAgenda, 'Brussel').then((result) => {
+    cy.createAgenda('Ministerraad', agendaDate, 'Brussel', 1);
+    cy.createAgenda('Ministerraad', agendaDate, 'Brussel', null, 'VV AA 1999/2BIS').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.toggleeditingsession).click();
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
+      cy.get(form.formInput).eq(1)
+        .should('have.value', `${result.meetingNumberVisualRepresentation}`);
       cy.visit('/');
       cy.get(agenda.createNewAgendaButton).click();
       cy.wait(500);
