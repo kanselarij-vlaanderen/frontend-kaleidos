@@ -112,7 +112,6 @@
   },
   "dependencies": {
     "ember-in-viewport": "^3.7.5",
-    "ember-test-selectors": "^3.0.0",
-    "eslint-config-es": "^3.19.66"
+    "ember-test-selectors": "^3.0.0"
   }
 }
