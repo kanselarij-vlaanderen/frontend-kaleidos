@@ -100,6 +100,7 @@
     "eslint-config-es": "^3.19.66",
     "eslint-plugin-ava": "^10.5.0",
     "eslint-plugin-ember": "^7.10.1",
+    "eslint-plugin-import": "^2.22.0",
     "icon-font-generator": "^2.1.10",
     "liquid-fire": "^0.30.0",
     "loader.js": "^4.7.0",
