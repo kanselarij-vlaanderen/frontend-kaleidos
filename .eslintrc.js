@@ -161,6 +161,7 @@ module.exports = {
       },
       env: {
         browser: false,
+        node: true,
       },
       rules: {
         'ember/no-on-calls-in-components': 'off',
