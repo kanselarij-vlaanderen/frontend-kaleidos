@@ -13,6 +13,7 @@ module.exports = {
     'ember',
   ],
   extends: [
+    'eslint:recommended',
     'plugin:ember/recommended',
   ],
   env: {
@@ -160,7 +161,6 @@ module.exports = {
       },
       env: {
         browser: false,
-        node: true,
       },
       rules: {
         'ember/no-on-calls-in-components': 'off',
