@@ -13,7 +13,6 @@ module.exports = {
     'ember',
   ],
   extends: [
-    'eslint:recommended',
     'plugin:ember/recommended',
   ],
   env: {
