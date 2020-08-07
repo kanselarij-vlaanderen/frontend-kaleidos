@@ -56,36 +56,6 @@ export default Component.extend({
     return await subcase.save();
   },
 
-  async copyNewsletterInfo(subcase, newsletterInfo) {
-    const newsletterInfoToCreate = this.store.createRecord('newsletter-info', {
-      subcase,
-      text: newsletterInfo.get('text'),
-      subtitle: newsletterInfo.get('subtitle'),
-      title: newsletterInfo.get('title'),
-      richtext: newsletterInfo.get('richtext'),
-      finished: false,
-      inNewsletter: false,
-      mandateeProposal: null,
-      publicationDate: newsletterInfo.get('publicationDate'),
-      publicationDocDate: newsletterInfo.get('publicationDocDate'),
-      themes: await newsletterInfo.get('themes'),
-    });
-    return await newsletterInfoToCreate.save();
-  },
-
-  // async copyTreatments(subcase, treatments) {
-  //   return Promise.all(
-  //     // eslint-disable-next-line no-unused-vars
-  //     treatments.map((treatment) => {
-  //       const newTreatment = this.store.createRecord('agenda-item-treatment', {
-  //         decisionResultCode: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
-  //         subcase: subcase,
-  //       });
-  //       return newTreatment.save();
-  //     })
-  //   );
-  // },
-
   createSubcaseObject(newCase, newDate) {
     const {
       type, title, shortTitle, confidential, showAsRemark,
@@ -115,11 +85,6 @@ export default Component.extend({
 
     if (latestSubcase) {
       subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
-      // await this.copyTreatments(subcase, await latestSubcase.get('treatments'));
-      const newsletterInfo = await latestSubcase.get('newsletterInfo');
-      if (newsletterInfo) {
-        await this.copyNewsletterInfo(subcase, newsletterInfo);
-      }
     } else {
       await this.newsletterService.createNewsItemForSubcase(subcase);
       subcase = await subcase.save();

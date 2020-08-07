@@ -22,7 +22,7 @@ export default ModelWithModifier.extend({
   publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
-  subcase: belongsTo('subcase'),
+  agendaItemTreatment: belongsTo('agenda-item-treatment'),
   meeting: belongsTo('meeting', {
     inverse: null,
   }),

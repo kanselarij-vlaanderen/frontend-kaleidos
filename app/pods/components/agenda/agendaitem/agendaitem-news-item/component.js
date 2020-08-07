@@ -1,8 +1,6 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import {
-  action, computed
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import moment from 'moment';
@@ -22,18 +20,13 @@ export default class AgendaitemNewsItem extends Component {
 
   classNames = ['vlc-padding-bottom--large'];
 
-  subcase = null;
+  newsletterInfo = null;
 
   agendaitem = null;
 
   isEditing = false;
 
   @tracked timestampForMostRecentNota = null;
-
-  @computed('subcase.newsletterInfo')
-  get item() {
-    return this.subcase.get('newsletterInfo');
-  }
 
   get dateOfMostRecentNota() {
     return moment(this.timestampForMostRecentNota).format('D MMMM YYYY');
