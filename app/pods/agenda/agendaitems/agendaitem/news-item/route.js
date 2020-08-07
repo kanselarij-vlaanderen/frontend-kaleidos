@@ -14,8 +14,8 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const AgendaItemTreatment = await agendaItem.get('agendaItemTreatment');
-    const newsletterInfo = await AgendaItemTreatment.get('newsletterInfo');
+    const agendaItemTreatment = await agendaItem.get('agendaItemTreatment');
+    const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
     return newsletterInfo;
   }
 
@@ -24,8 +24,8 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
     controller.set('agendaItem', agendaItem);
 
-    const AgendaItemTreatment = await agendaItem.get('agenda-item-treatment');
-    controller.set('AgendaItemTreatment', AgendaItemTreatment);
+    const agendaItemTreatment = await agendaItem.get('agenda-item-treatment');
+    controller.set('agendaItemTreatment', agendaItemTreatment);
 
     const timestamp = await this.agendaService.retrieveModifiedDateFromNota(agendaItem);
     controller.set('timestampForMostRecentNota', timestamp);
