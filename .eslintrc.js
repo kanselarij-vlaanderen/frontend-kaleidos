@@ -147,7 +147,7 @@ module.exports = {
     // node files
     {
       excludedFiles: [
-        "kaleidos-project/**"
+        "data/jenkins/jenkins-data/workspace/*/kaleidos-project/*"
       ],
       files: [
         '.eslintrc.js',
