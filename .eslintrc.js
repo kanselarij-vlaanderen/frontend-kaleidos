@@ -146,9 +146,6 @@ module.exports = {
   overrides: [
     // node files
     {
-      excludedFiles: [
-        "data/jenkins/jenkins-data/workspace/*/kaleidos-project/*"
-      ],
       files: [
         '.eslintrc.js',
         '.template-lintrc.js',

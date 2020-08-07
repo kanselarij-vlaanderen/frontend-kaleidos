@@ -19,3 +19,4 @@
 /bower.json.ember-try
 /package.json.ember-try
 .cache
+kaleidos-project/*
