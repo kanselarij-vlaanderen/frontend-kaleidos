@@ -28,8 +28,6 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaItemTreatment = await agendaItem.get('agenda-item-treatment');
     controller.set('agendaItemTreatment', agendaItemTreatment);
 
-    const timestamp = await this.agendaService.retrieveModifiedDateFromNota(agendaItem); // Nog stuk ... needs subcase
-    controller.set('timestampForMostRecentNota', timestamp);
     controller.set('model', model);
   }
 }

@@ -1,13 +1,13 @@
-{{#if timestampForMostRecentNota}}
+{{#if this.showChangedNotaWarning}}
   <ChangesAlert
     data-test-changes-alert
     @message={{t
-      "newsitem-changed-message"
-      date=dateOfMostRecentNota
-      time=timeOfMostRecentNota
+      "nota-changed-message"
+      date=(moment-format this.modifiedNotaTime "D MMMM YYYY")
+      time=(moment-format this.modifiedNotaTime "H:mm")
     }}
     @buttonText={{t "close"}}
-    @clearAction={{action "clearTimestampForMostRecentNota"}} />
+    @clearAction={{this.hideChangedNotaWarning}} />
 {{/if}}
 {{#if (not isEditing)}}
   <div data-test-agenda-news-item-view>
@@ -16,8 +16,9 @@
         <h3 class="vl-title vl-title--h3">
           {{t "newsletter-title"}}
         </h3>
-        {{#if currentSession.isEditor}}
+        {{#if this.currentSession.isEditor}}
           <div class="vl-u-spacer-extended-left-s">
+            {{!-- TODO: replace by link-styled button --}}
             <a href="" data-test-newsletter-edit class="vl-link" {{action "toggleIsEditing"}}>
               {{t "edit"}}
             </a>
@@ -27,34 +28,34 @@
     </div>
     <div class="vl-u-spacer-extended-bottom-s">
       <h3 class="vl-title vl-title--h6">
-        {{await newsletterInfo.title}}
+        {{@newsletterInfo.title}}
       </h3>
     </div>
     <div class="vl-u-spacer-extended-bottom-s">
       <div class="vl-typography">
         <p class="vl-u-text--italic">
-          {{await newsletterInfo.newsletterProposal}}
+          {{@newsletterInfo.newsletterProposal}}
         </p>
         <p>
           {{sanitize-html
             raw=true
-            value=(await newsletterInfo.richtext)
+            value=@newsletterInfo.richtext
           }}
         </p>
       </div>
     </div>
     <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-      {{await newsletterInfo.displayRemark}}
+      {{@newsletterInfo.displayRemark}}
     </p>
     <div
             class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s"
             data-test-agenda-news-item-themes>
-      {{#if (is-pending newsletterInfo.themes)}}
+      {{#if (is-pending @newsletterInfo.themes)}}
         <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
-      {{else if (gt (await newsletterInfo.themes.length) 0)}}
+      {{else if (gt (await @newsletterInfo.themes.length) 0)}}
         <ul>
           {{#each
-            (await newsletterInfo.themes)
+            (await @newsletterInfo.themes)
           as |theme|
           }}
             <li class="vl-pill" data-test-agenda-news-item-theme>
@@ -71,7 +72,7 @@
 
     <hr/>
     <div class="vl-u-spacer vl-u-spacer-extended-top-s">
-      {{#if (await newsletterInfo.finished)}}
+      {{#if @newsletterInfo.finished}}
         <div class="vlc-pill vlc-pill--success">
           {{t "finished"}}
         </div>
@@ -84,7 +85,7 @@
   </div>
 {{else}}
   <NewsItem::EditItem
-    @newsletterInfo={{newsletterInfo}}
-    @agendaitem={{agendaitem}}
+    @newsletterInfo={{@newsletterInfo}}
+    @agendaitem={{@agendaItem}}
     @isEditing={{isEditing}} />
 {{/if}}

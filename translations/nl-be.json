@@ -551,7 +551,7 @@
   "manage-user": "Gebruiker: {firstName} {lastName}",
   "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
   "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
-  "newsitem-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
+  "nota-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
   "select-minister": "Selecteer een minister",
   "agenda-comment-type-here": "Typ hier jouw opmerking...",
   "change-mandatee-end-date": "Bent u zeker dat u de einddatum wenst aan te passen? Deze minister staat nog geagendeerd op agendapunten.",

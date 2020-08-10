@@ -231,28 +231,16 @@ export default Service.extend({
     this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
   },
 
-  async retrieveModifiedDateFromNota(agendaitem, subcase) {
-    if (!subcase) {
-      return null;
-    }
-    const nota = await agendaitem.get('nota');
+  async retrieveModifiedDateFromNota(agendaItem) {
+    const nota = await agendaItem.get('nota');
     if (!nota) {
       return null;
     }
-    const newsletterInfoForSubcase = await subcase.get('newsletterInfo');
-    const documentVersion = await nota.get('lastDocumentVersion');
-    const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
-    const notaDocumentVersions = await nota.get('documentVersions');
-    if (notaDocumentVersions.length > 1) {
-      const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
-      if (newsletterInfoOnSubcaseLastModifiedTime) {
-        if (moment(newsletterInfoOnSubcaseLastModifiedTime)
-          .isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-          return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
-        }
-        return null;
-      }
-      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+    const versions = await nota.get('documentVersions');
+    const hasRevision = versions.length > 1;
+    if (hasRevision) {
+      const lastVersion = await nota.get('lastDocumentVersion');
+      return lastVersion.created;
     }
     return null;
   },
