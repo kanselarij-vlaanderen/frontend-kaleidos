@@ -6,12 +6,8 @@ import moment from 'moment';
 import { warn } from '@ember/debug';
 
 export default class AgendaitemNewsItem extends Component {
-  @service store;
-  @service newsletterService;
   @service agendaService;
-  @service sessionService;
   @service currentSession;
-  @service intl;
 
   classNames = ['vlc-padding-bottom--large'];
 
