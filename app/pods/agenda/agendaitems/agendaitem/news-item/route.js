@@ -15,7 +15,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
     const agendaItemTreatments = await agendaItem.get('treatments');
-    const agendaItemTreatment = agendaItemTreatments[0]; // TODO: AgendaItem can have many treatments (decisions)
+    const agendaItemTreatment = agendaItemTreatments.firstObject; // TODO: AgendaItem can have many treatments (decisions)
     const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
     return newsletterInfo;
   }
