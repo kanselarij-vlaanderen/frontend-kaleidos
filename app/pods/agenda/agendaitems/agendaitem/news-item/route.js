@@ -14,7 +14,8 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const agendaItemTreatment = await agendaItem.get('agendaItemTreatment');
+    const agendaItemTreatments = await agendaItem.get('treatments');
+    const agendaItemTreatment = agendaItemTreatments[0]; // TODO: AgendaItem can have many treatments (decisions)
     const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
     return newsletterInfo;
   }
@@ -27,7 +28,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaItemTreatment = await agendaItem.get('agenda-item-treatment');
     controller.set('agendaItemTreatment', agendaItemTreatment);
 
-    const timestamp = await this.agendaService.retrieveModifiedDateFromNota(agendaItem);
+    const timestamp = await this.agendaService.retrieveModifiedDateFromNota(agendaItem); // Nog stuk ... needs subcase
     controller.set('timestampForMostRecentNota', timestamp);
     controller.set('model', model);
   }
