@@ -79,19 +79,19 @@ export default Service.extend({
           if (phaseData.approved) {
             let label;
             switch (phaseData.approved) {
-              case 'http://mu.semte.ch/vocabularies/core/56312c4b-9d2a-4735-b0b1-2ff14bb524fd':
+              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd':
                 label = this.intl.t('activity-phase-decided-on-agenda');
                 break;
-              case 'http://mu.semte.ch/vocabularies/core/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa':
+              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa':
                 label = this.intl.t('activity-phase-postponed-is-decided');
                 break;
-              case 'http://mu.semte.ch/vocabularies/core/9f342a88-9485-4a83-87d9-245ed4b504bf':
+              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf':
                 label = this.intl.t('activity-phase-kennisname');
                 break;
-              case 'http://mu.semte.ch/vocabularies/core/e7e44027-fbbb-4285-ba3f-0cdb2264d43c':
+              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/e7e44027-fbbb-4285-ba3f-0cdb2264d43c':
                 label = this.intl.t('activity-phase-decided-voorwaarden');
                 break;
-              case 'http://mu.semte.ch/vocabularies/core/e40d885e-a677-4f1e-bce1-ea17d2aadb40':
+              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/e40d885e-a677-4f1e-bce1-ea17d2aadb40':
                 label = this.intl.t('activity-phase-afgekeurd');
                 break;
             }
