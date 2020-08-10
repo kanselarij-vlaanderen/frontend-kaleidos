@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import moment from 'moment';
 import { warn } from '@ember/debug';
 
