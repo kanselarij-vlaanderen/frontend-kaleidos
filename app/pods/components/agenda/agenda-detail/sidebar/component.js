@@ -12,7 +12,6 @@ export default class AgendaSidebar extends Component {
   @service agendaService;
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
 
-  @tracked announcements = this.args.announcements;
   @tracked isShowingChanges = false;
 
   classNames = ['vlc-agenda-items'];
@@ -40,31 +39,14 @@ export default class AgendaSidebar extends Component {
 
   @action
   reorderItems(itemModels) {
-    if (!this.currentSessionService.isEditor) {
-      return null;
+    if (this.currentSessionService.isEditor || this.currentAgenda.isDesignAgenda) {
+      this.isReAssigningPriorities = true;
+      itemModels.map((item, index) => {
+        item.set('priority', index + 1);
+        return item;
+      });
+      this.reAssignPriorities.perform(itemModels);
+      this.isReAssigningPriorities = false;
     }
-    this.isReAssigningPriorities = true;
-    itemModels.map((item, index) => {
-      item.set('priority', index + 1);
-      return item;
-    });
-    this.reAssignPriorities.perform(itemModels);
-    this.agendaService.groupAgendaItemsOnGroupName(itemModels);
-    this.isReAssigningPriorities = false;
-  }
-
-  @action
-  reorderAnnouncements(itemModels) {
-    if (!this.currentSessionService.isEditor) {
-      return null;
-    }
-    this.isReAssigningPriorities = true;
-    itemModels.map((item, index) => {
-      item.set('priority', index + 1);
-      return item;
-    });
-    this.reAssignPriorities.perform(itemModels);
-    this.announcements = itemModels;
-    this.isReAssigningPriorities = false;
   }
 }

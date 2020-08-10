@@ -90,20 +90,6 @@ export default class AgendaOverview extends Component {
         return item;
       });
       this.reAssignPriorities.perform(itemModels);
-      this.agendaService.groupAgendaItemsOnGroupName(itemModels);
-    }
-  }
-
-  @action
-  reorderAnnouncements(itemModels) {
-    if (this.currentSessionService.isEditor || this.currentAgenda.isDesignAgenda) {
-      itemModels.map((item, index) => {
-        item.set('priority', index + 1);
-        return item;
-      });
-      this.reAssignPriorities.perform(itemModels);
-      // this.refresh();
-      this.set('announcements', itemModels);
     }
   }
 }
