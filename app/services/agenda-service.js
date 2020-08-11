@@ -6,6 +6,7 @@ import { ajax } from 'fe-redpencil/utils/ajax';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import { A } from '@ember/array';
 
 export default Service.extend({
   store: service(),
@@ -135,20 +136,26 @@ export default Service.extend({
       priorityToAssign += index;
     }
 
+    const creationDate = moment().utc()
+      .toDate();
     const agendaActivity = await this.store.createRecord('agenda-activity', {
-      startDate: moment().utc()
-        .toDate(),
+      startDate: creationDate,
       subcase,
     });
     await agendaActivity.save();
+
+    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+      created: creationDate,
+      modified: creationDate,
+      subcase,
+    });
+    await agendaItemTreatment.save();
 
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.get('shortTitle'),
       textPress: pressText,
-      created: moment()
-        .utc()
-        .toDate(),
+      created: creationDate,
       priority: priorityToAssign,
       agenda: selectedAgenda,
       title: subcase.get('title'),
@@ -160,6 +167,7 @@ export default Service.extend({
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       agendaActivity,
       showInNewsletter: true,
+      treatments: A([agendaItemTreatment]),
     });
     await agendaitem.save();
     const meeting = await selectedAgenda.get('createdFor');
