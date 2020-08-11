@@ -100,11 +100,23 @@ context('Agenda tests', () => {
     const subcase1Type = 'In voorbereiding';
     const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
+    const case2TitleShort = `${testId}Cypress test dossier 2`;
+    const type2 = 'Nota';
+    const newSubcase2TitleShort = `${testId} korte titel`;
+    const subcase2TitleLong = `${testId} lange titel`;
+    const subcase2Type = 'In voorbereiding';
+    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
     cy.createCase(false, case1TitleShort);
     cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
     cy.openSubcase(0);
-
     cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
+    cy.createCase(false, case2TitleShort);
+    cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
+    cy.openSubcase(0);
+    cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
@@ -130,6 +142,28 @@ context('Agenda tests', () => {
     cy.contains('dit is de lange titel');
     cy.get(agenda.agendaitemTitelsConfidential).should('exist')
       .should('be.visible');
+    cy.get(agenda.deleteAgendaItemButton).click();
+    cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitem');
+    cy.get(modal.verify.save).click();
+    cy.wait('@deleteAgendaitem');
+    cy.route('DELETE', '/agenda-activities/*').as('deleteAgendaActivities');
+    cy.route('GET', '/subcases').as('getSubcase');
+    cy.route('PATCH', '/subcases/*').as('patchSubcase');
+    cy.route('GET', '/subcases/*/agenda-activities').as('getAgendaActivitiesForSubcase');
+    cy.route('GET', '/agendaitems').as('getAgendaitems');
+    cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
+    cy.route('GET', '/agendaitems/*/meeting-record').as('getMeetingRecordOfAgendaItems');
+    cy.route('GET', '/agendaitems/*').as('getAgendaItemsForAgenda');
+    cy.wait('@deleteAgendaActivities');
+    cy.wait('@patchSubcase');
+    cy.wait('@getAgendaActivitiesForSubcase');
+    cy.wait('@getModifiedByOfAgendaitems');
+    cy.wait('@getMeetingRecordOfAgendaItems');
+    cy.wait('@getAgendaItemsForAgenda');
+    cy.get(agenda.agendaDetailSubItemContainer).within(() => {
+      cy.get(agenda.agendaitemNumber).contains('2.');
+      cy.contains(`${testId} korte titel`);
+    });
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {

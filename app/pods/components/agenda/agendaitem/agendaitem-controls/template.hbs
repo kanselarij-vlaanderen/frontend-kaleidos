@@ -14,7 +14,7 @@
       {{/if}}
     {{/if}}
     {{#if (or currentSession.isAdmin (await isDeletable))}}
-      <button type="button" class="vl-button vl-button--tertiary"
+      <button data-test-delete-agendaitem type="button" class="vl-button vl-button--tertiary"
         {{action "toggleIsVerifying"}}>
         {{t "delete"}}
       </button>
