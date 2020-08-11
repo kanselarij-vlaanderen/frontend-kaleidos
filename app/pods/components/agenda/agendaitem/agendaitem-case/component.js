@@ -7,15 +7,18 @@ export default class AgendaItemCase extends Component {
   @service('current-session') authentication;
   @tracked isEditing = false;
 
-  get agendaActivity() {
+  get subcase() {
     if (this.args.agendaitem) {
-      return this.args.agendaitem.agendaActivity.then((agendaActivitySubcase) => agendaActivitySubcase);
+      return this.args.agendaitem.agendaActivity.then((agendaActivitySubcase) => agendaActivitySubcase.subcase);
     }
     return null;
   }
 
-  get agendaActivities() {
-    return this.agendaActivity.then((agendaActivity) => agendaActivity.subcasesFromCase);
+  get subcases() {
+    if (this.subcase) {
+      return this.subcase.then((agendaActivity) => agendaActivity.subcasesFromCase);
+    }
+    return null;
   }
 
   @action

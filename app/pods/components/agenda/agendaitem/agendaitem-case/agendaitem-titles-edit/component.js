@@ -44,7 +44,7 @@ export default class SubcaseTitlesEdit extends Component {
       title: trimText(this.args.agendaitem.title),
       shortTitle: trimText(this.args.agendaitem.shortTitle),
     };
-    propertiesToSetOnSubcase.confidential = await this.args.agendaActivity.subcase.get('confidential');
+    propertiesToSetOnSubcase.confidential = await this.args.subcase.get('confidential');
 
     try {
       await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
