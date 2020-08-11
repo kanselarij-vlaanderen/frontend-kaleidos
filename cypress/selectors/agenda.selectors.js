@@ -73,5 +73,6 @@ const selectors = {
   agendaitemTitelsConfidential: '[data-test-agenda-subcase-confidential]',
   agendaHeaderShowAgendaOptions: '[data-test-agenda-header-showAgendaOptions]',
   agendaHeaderApproveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda]',
+  agendaitemExplaination: '[data-test-agendaitem-explaination]',
 };
 export default selectors;
