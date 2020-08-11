@@ -33,14 +33,6 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  displayRemark: computed('remark', 'intl', function() {
-    const remark = this.get('remark');
-    if (remark && remark !== '') {
-      return `${this.intl.t('remark')}: ${this.get('remark')}`;
-    }
-    return '';
-  }),
-
   newsletterProposal: computed('mandateeProposal', async function() {
     const subcase = await this.get('subcase');
     const mandatees = await subcase.get('mandatees');

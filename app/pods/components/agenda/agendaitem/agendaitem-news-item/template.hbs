@@ -45,9 +45,11 @@
         </p>
       </div>
     </div>
-    <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-      {{@newsletterInfo.displayRemark}}
-    </p>
+    {{#if @newsletterInfo.remark}}
+      <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+        {{t "remark"}}: {{@newsletterInfo.remark}}
+      </p>
+    {{/if}}
     <div
             class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s"
             data-test-agenda-news-item-themes>

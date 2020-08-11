@@ -71,18 +71,20 @@
   </div>
 </div>
 {{#if allowEditing}}
-  <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-    {{await newsletterInfo.displayRemark}}
-  </p>
+  {{#if (await newsletterInfo.remark)}}
+    <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+      {{t "remark"}}: {{await newsletterInfo.remark}}
+    </p>
+  {{/if}}
 {{/if}}
-{{#if 
+{{#if
   (gt (await newsletterInfo.themes.length) 0)
 }}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-spacer-extended-top-s">
       <ul class="newsletter-themes vlc-u-no-padding vlc-u-no-margin">
-        {{#each 
-          (await newsletterInfo.themes) 
+        {{#each
+          (await newsletterInfo.themes)
         as |theme|
         }}
           <li class="vl-pill">
