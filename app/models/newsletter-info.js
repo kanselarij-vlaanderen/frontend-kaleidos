@@ -33,8 +33,9 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  newsletterProposal: computed('mandateeProposal', async function() {
-    const subcase = await this.get('subcase');
+  newsletterProposal: computed('agendaItemTreatment', async function() {
+    const treatment = await this.get('agendaItemTreatment');
+    const subcase = await treatment.get('subcase');
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');
     let proposalText = this.intl.t('proposal-text');
