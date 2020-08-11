@@ -83,10 +83,9 @@ export default Component.extend({
     let subcase = await this.createSubcaseObject(caze, date);
     subcase.set('subcaseName', this.subcaseName);
 
-    if (latestSubcase) {
+    if (latestSubcase) { // Previous "versions" of this subcase exist
       subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
-    } else {
-      await this.newsletterService.createNewsItemForSubcase(subcase);
+    } else { // This is a plain new subcase
       subcase = await subcase.save();
     }
     await caze.hasMany('subcases').reload();

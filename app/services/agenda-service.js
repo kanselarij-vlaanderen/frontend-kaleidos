@@ -13,6 +13,7 @@ export default Service.extend({
   toaster: service(),
   intl: service(),
   currentSession: service(),
+  newsletterService: service(),
 
   addedDocuments: null,
   addedAgendaitems: null,
@@ -138,12 +139,15 @@ export default Service.extend({
 
     const creationDate = moment().utc()
       .toDate();
+
+    // Placement on agenda activity
     const agendaActivity = await this.store.createRecord('agenda-activity', {
       startDate: creationDate,
       subcase,
     });
     await agendaActivity.save();
 
+    // Treatment of agenda-item / decision activity
     const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
       created: creationDate,
       modified: creationDate,
@@ -176,6 +180,11 @@ export default Service.extend({
     await subcase.hasMany('agendaActivities').reload();
     await subcase.save();
     updateModifiedProperty(selectedAgenda);
+
+    // Create default newsletterInfo for announcements
+    if (agendaitem.showAsRemark) {
+      this.newsletterService.createNewsItemForAgendaItem(agendaitem);
+    }
   },
 
   async groupAgendaItemsOnGroupName(agendaitems) {

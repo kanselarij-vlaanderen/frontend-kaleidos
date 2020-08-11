@@ -77,15 +77,23 @@ export default Service.extend({
   },
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
-  async createNewsItemForSubcase(subcase, agendaitem, inNewsletter = false) {
+  async createNewsItemForAgendaItem(agendaItem, inNewsletter = false) {
     if (this.currentSession.isEditor) {
+      const agendaItemTreatment = (await agendaItem.get('treatments')).firstObject;
       const news = this.store.createRecord('newsletter-info', {
-        subcase: await subcase,
-        title: agendaitem ? await agendaitem.get('shortTitle') : await subcase.get('shortTitle'),
-        subtitle: agendaitem ? await agendaitem.get('title') : await subcase.get('title'),
-        finished: false,
+        agendaItemTreatment,
         inNewsletter,
       });
+      if (agendaItem.showAsRemark) {
+        const content = agendaItem.title;
+        news.set('title', agendaItem.shortTitle || content);
+        news.set('richtext', content);
+        news.set('finished', true);
+      } else {
+        news.set('title', agendaItem.shortTitle);
+        news.set('subtitle', agendaItem.title);
+        news.set('finished', false);
+      }
       return await news.save();
     }
   },

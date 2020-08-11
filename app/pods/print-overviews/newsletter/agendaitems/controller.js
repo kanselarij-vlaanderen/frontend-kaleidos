@@ -52,9 +52,10 @@ export default Controller.extend({
 
   actions: {
     async addNewsletterInfo(agendaitem) {
+      await this.newsletterService.createNewsItemForSubcase(agendaitem);
+      // TODO: not sure what below await for "meetingRecord" is about ...
       const agendaActivity = await agendaitem.get('agendaActivity');
       const subcase = await agendaActivity.get('subcase');
-      await this.newsletterService.createNewsItemForSubcase(subcase, agendaitem);
       await subcase.get('meetingRecord');
     },
   },

@@ -32,7 +32,7 @@ export default Component.extend({
         if (itemToUpdate) {
           itemToUpdate.set('inNewsletter', (await this.value));
         } else {
-          itemToUpdate = await this.newsletterService.createNewsItemForSubcase(subcase, row, this.value);
+          itemToUpdate = await this.newsletterService.createNewsItemForAgendaItem(row, this.value);
         }
       }
       if (itemToUpdate) {
