@@ -223,3 +223,22 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
 
   return groupsArray;
 };
+
+/**
+ * Given a set of agendaitems, set their priority
+ * @name setAgendaItemsPriority
+ * @param  {Array<agendaItem>}   agendaItems  Array of agendaitem objects to set priority on.
+ * @param  {Boolean} isEditor     When true, the user is allowed to edit the trigger a recalculation of the priority.
+ * @param {Boolean} isDesignAgenda  When true, the agenda is a designagenda.
+ */
+export const setAgendaItemsPriority = (agendaItems, isEditor, isDesignAgenda) => {
+  if (isEditor || isDesignAgenda) {
+    return agendaItems.map((item, index) => {
+      item.set('priority', index + 1);
+      item.save();
+      return item;
+    });
+  }
+};
+
+
