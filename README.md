@@ -14,6 +14,7 @@ You will need the following things properly installed on your computer.
 * `git clone <repository-url>` this repository
 * `cd fe-redpencil`
 * `npm install`
+* Run the precommit hook script in `scripts/pre-commit.sh` this will run the linter on all the files you are going to commit, aborting the commit if there are linter errors.
 
 ## Running / Development
 
