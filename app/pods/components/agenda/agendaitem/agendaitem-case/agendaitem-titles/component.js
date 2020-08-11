@@ -8,8 +8,8 @@ export default class AgendaitemTitles extends Component {
 
   get pillClass() {
     const baseClass = 'vl-pill vl-u-text--capitalize';
-    if (this.args.subcase) {
-      if (this.args.subcase.approved) {
+    if (this.args.agendaActivity) {
+      if (this.args.agendaActivity.approved) {
         return `${baseClass} vl-pill--success`;
       }
     }

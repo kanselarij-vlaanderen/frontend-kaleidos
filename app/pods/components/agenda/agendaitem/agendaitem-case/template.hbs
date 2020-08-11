@@ -2,7 +2,7 @@
 {{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
   <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
     @agendaitem={{@agendaitem}}
-    @subcase={{await this.subcase}}
+    @agendaActivity={{await this.agendaActivity}}
     @shouldShowDetails= {{this.shouldShowDetails}}
     @toggleIsEditing={{action this.toggleIsEditing}}
   />
@@ -10,23 +10,23 @@
   <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit
     @agendaitem={{@agendaitem}}
     @isEditing={{@isEditing}}
-    @subcase= {{await this.subcase}}
+    @agendaActivity= {{await this.agendaActivity}}
     @toggleIsEditing={{action this.toggleIsEditing}}
   />
 {{/if}}
 {{#if @agendaitem.showAsRemark}}
   <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
     @agendaitem={{@agendaitem}}
-    @subcase={{await this.subcase}}
+    @agendaActivity={{await this.agendaActivity}}
   />
   <Components::Agenda::Agendaitem::AgendaitemCase::AllSubcases
-    @subcases={{await this.subcases}}
+    @agendaActivities={{await this.agendaActivities}}
   />
 {{else}}
   {{#if @agendaitem.agendaActivity}}
     <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
       @agendaitem={{@agendaitem}}
-      @subcase={{await this.subcase}}
+      @agendaActivity={{await this.agendaActivity}}
     />
     {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
     {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
@@ -37,7 +37,7 @@
       @item={{@agendaitem}}
     />
     <Components::Agenda::Agendaitem::AgendaitemCase::AllSubcases
-      @subcases={{this.subcases}}
+      @agendaActivities={{this.agendaActivities}}
     />
   {{/if}}
 {{/if}}

@@ -11,10 +11,10 @@ import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agenda-it
 import DS from 'ember-data';
 
 // TODO code cuplication with subcase-case/subcase-mandatees
-export default class
-AgendaitemMandatees extends Component {
+export default class AgendaitemMandatees extends Component {
   @service store;
   @service currentSession;
+
 
   classNames = ['vl-u-spacer-extended-bottom-l'];
   subcase = null;

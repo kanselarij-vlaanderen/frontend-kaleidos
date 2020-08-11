@@ -1,13 +1,13 @@
 {{#if
-  (and @subcase.case.id currentSession.isEditor)
+  (and @agendaActivity.case.id currentSession.isEditor)
 }}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
         @models={{array
-          subcase.case.id
-          subcase.id
+        agendaActivity.case.id
+        agendaActivity.id
         }}
         class="vl-link" >
         {{t "to-subcase"}}
@@ -58,9 +58,9 @@
 
 {{#if (not @agendaitem.showAsRemark)}}
   <div class="vl-u-spacer-extended-bottom-s">
-    {{#if @subcase.subcaseName}}
+    {{#if @agendaActivity.subcaseName}}
       <span class={{this.pillClass}}>
-        {{@subcase.subcaseName}}
+        {{@agendaActivity.subcaseName}}
       </span>
     {{/if}}
   </div>
@@ -113,7 +113,7 @@
         {{@agendaitem.formallyOkToShow.label}}
       </span>
     {{/if}}
-    {{#if @subcase.confidential}}
+    {{#if @agendaActivity.confidential}}
       <span data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
     {{else}}
       <span
