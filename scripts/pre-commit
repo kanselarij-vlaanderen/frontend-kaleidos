@@ -8,11 +8,11 @@ TEMPLATE_LINT="$(git rev-parse --show-toplevel)/node_modules/.bin/ember-template
 SHOULD_EXIT_JS=false
 SHOULD_EXIT_TEMPL=false
 
-if [[ "$STAGED_FILES" = "" ]]; then
+if [ "$STAGED_FILES" = "" ]; then
   SHOULD_EXIT_JS=true
 fi
 
-if [[ "$STAGED_TEMPLATE_FILES" = "" ]]; then
+if [ "$STAGED_TEMPLATE_FILES" = "" ]; then
   SHOULD_EXIT_TEMPL=true
 fi
 
@@ -25,12 +25,12 @@ echo "\n#########################################################"
 printf "# \033[32mChecking files for linter issues before committing...\033[0m #\n"
 echo "#########################################################"
 # Check for eslint
-if [[ ! -x "$ESLINT" ]]; then
+if [ ! -x "$ESLINT" ]; then
   printf "\033[41mPlease install ESlint\033[0m (npm i --save-dev eslint)"
   exit 1
 fi
 
-if [[ ! -x "$TEMPLATE_LINT" ]]; then
+if [ ! -x "$TEMPLATE_LINT" ]; then
   printf "\033[41mPlease install ember-template-lint\033[0m (npm i --save-dev ember-template-lint)"
   exit 1
 fi
@@ -39,7 +39,7 @@ for FILE in $STAGED_FILES
 do
   "$ESLINT" "$FILE"
   # $? is het resultaat van het laatst uitgevoerde commando
-  if [[ "$?" == 0 ]]; then
+  if [ "$?" -eq 0 ]; then
   echo "###########################################"
   printf "# \033[32mESLint Passed: $FILE\033[0m #\n"
   echo "###########################################"
@@ -56,7 +56,7 @@ for BESTAND in $STAGED_TEMPLATE_FILES
 do
   "$TEMPLATE_LINT" "$BESTAND"
   # $? is het resultaat van het laatst uitgevoerde commando
-  if [[ "$?" == 0 ]]; then
+  if [ "$?" -eq 0 ]; then
   echo "###########################################"
   printf "# \033[32mEmber-Template-Lint Passed: $BESTAND\033[0m #\n"
   echo "###########################################"
