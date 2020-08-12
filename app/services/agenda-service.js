@@ -155,7 +155,7 @@ export default Service.extend({
     });
     const defaultDecisionResultCodeUri = isAnnouncement ? CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME : CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
     const defaultDecisionResultCode = (await this.store.query('decision-result-code', {
-      uri: defaultDecisionResultCodeUri,
+      'filter[:uri:]': defaultDecisionResultCodeUri,
     })).firstObject;
     agendaItemTreatment.decisionResultCode = defaultDecisionResultCode;
     await agendaItemTreatment.save();
