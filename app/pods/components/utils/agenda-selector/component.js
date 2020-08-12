@@ -10,7 +10,7 @@ export default Component.extend({
   placeholder: null,
   sortField: null,
   filter: null,
-  selectedItems: null,
+  selectedAgenda: null,
 
   agendas: computed('sessionService.agendas', function() {
     return this.sessionService.get('agendas');

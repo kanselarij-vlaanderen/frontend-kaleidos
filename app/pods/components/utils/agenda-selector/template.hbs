@@ -1,7 +1,7 @@
 {{#if (not multiSelect)}}
   {{#power-select
     options=agendas
-    selected=selectedItems
+    selected=selectedAgenda
     disabled=readOnly
     searchEnabled=false
     placeholder=placeholder
@@ -14,7 +14,7 @@
   {{#power-select-multiple
     options=agendas
     searchEnabled=false
-    selected=selectedItems
+    selected=selectedAgenda
     disabled=readOnly
     placeholder=placeholder
     onchange=(action "selectModel")
