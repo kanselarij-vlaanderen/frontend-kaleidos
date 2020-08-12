@@ -48,13 +48,13 @@ export default Component.extend({
         const itemVersionIds = {};
         const versions = await this.get('myDocumentVersions');
         if (versions) {
-          versions.map((item) => {
-            itemVersionIds[item.get('id')] = true;
+          versions.map((myDocumentVersion) => {
+            itemVersionIds[myDocumentVersion.get('id')] = true;
           });
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
         if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
+          const matchingVersions = await documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
           return matchingVersions;
         }
       })(),
@@ -63,8 +63,8 @@ export default Component.extend({
 
   myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function() {
     const reversed = [];
-    this.get('mySortedDocumentVersions').map((item) => {
-      reversed.push(item);
+    this.get('mySortedDocumentVersions').map((mySortedDocumentVersion) => {
+      reversed.push(mySortedDocumentVersion);
     });
     reversed.reverse();
     return reversed;
