@@ -120,4 +120,6 @@ export default EmberObject.create({
   internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3',
   internOverheidAccessLevelId: 'abe4c18d-13a9-45f0-8cdd-c493eabbbe29',
   publiekAccessLevelId: '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e',
+  agendaStatusApprovedId: 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
+  agendaStatusClosedId: 'f06f2b9f-b3e5-4315-8892-501b00650101',
 });
