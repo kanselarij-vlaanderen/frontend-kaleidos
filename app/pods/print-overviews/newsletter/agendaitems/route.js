@@ -3,35 +3,20 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import { inject as service } from '@ember/service';
 
 export default Route.extend(AuthenticatedRouteMixin, {
-  authenticationRoute: 'login',
-  routeNamePrefix: 'newsletter',
-  sort: 'priority',
-  include: 'agenda-activity,agenda-activity.subcase,agenda-activity.subcase.newsletter-info',
-  shouldFilterRemarks: true,
   currentSession: service(),
-  modelName: 'agendaitem',
-  filter: null,
-  page: 0,
-  size: 9999,
+
+  sort: 'priority',
 
   model() {
-    const filter = {
-      agenda: {
-        id: this.modelFor(`print-overviews.${this.routeNamePrefix}`).get('id'),
-      },
-    };
-    if (this.shouldFilterRemarks) {
-      filter['show-as-remark'] = false;
-    }
-    this.set('filter', filter);
     return this.store
-      .query(this.get('modelName'), {
-        filter,
-        include: this.get('include'),
+      .query('agendaitem', {
+        'filter[agenda][:id:]': this.modelFor('print-overviews.newsletter').get('id'),
+        'filter[show-as-remark]': false,
+        include: 'treatments,treatments.newsletter-info',
         sort: this.get('sort'),
         page: {
-          size: this.get('size'),
-          number: this.get('page'),
+          size: 9999,
+          number: 0,
         },
       })
       .then((items) => items.toArray());
@@ -39,24 +24,11 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
   setupController(controller) {
     this._super(...arguments);
-    controller.set('filter', this.filter);
     controller.set('sort', this.sort);
-    controller.set('include', this.include);
-  },
-
-  redirect() {
-    if (!this.currentSession.isEditor) {
-      this.transitionTo(`print-overviews.${this.routeNamePrefix}.overview`, {
-        queryParams: {
-          definite: true,
-        },
-      });
-    }
   },
 
   actions: {
     refresh() {
-      this._super(...arguments);
       this.refresh();
     },
   },

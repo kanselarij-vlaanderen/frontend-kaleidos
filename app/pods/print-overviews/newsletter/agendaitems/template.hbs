@@ -11,13 +11,13 @@
     as |agendaitemRow|
     }}
       {{#if (not agendaitemRow.isApproval)}}
-        {{#if (is-pending agendaitemRow.agendaActivity.subcase.newsletterInfo)}}
+        {{#if (is-pending agendaitemRow.treatments.firstObject.newsletterInfo)}}
           {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
-        {{else if (await agendaitemRow.agendaActivity.subcase.newsletterInfo)}}
+        {{else if (await agendaitemRow.treatments.firstObject.newsletterInfo)}}
           <div class="vlc-container-center">
             {{news-item/edit-item
               agendaitem=agendaitemRow
-              newsletterInfo=(await agendaitemRow.content.agendaActivity.subcase.newsletterInfo)
+              newsletterInfo=(await agendaitemRow.content.treatments.firstObject.newsletterInfo)
               isEditing=agendaitemRow.expanded
             }}
           </div>
