@@ -48,13 +48,14 @@ export default Service.extend({
     }) => data);
   },
 
-  processSubcasePhases(activities) {
+  async processSubcasePhases(activities) {
     // KAS-1425 sort activities? done in the micro service atm.
     if (typeof activities === 'string') {
       return null;
     }
     const phases = [];
-    activities.map((activityData) => {
+    for (let index = 0; index < activities.length; index++) {
+      const activityData = activities[index];
       if (activityData.startDatum) {
         phases.push({
           label: this.intl.t('activity-phase-proposed-for-agenda'), date: moment.utc(activityData.startDatum).toDate(),
@@ -69,39 +70,22 @@ export default Service.extend({
           phases.push({
             label: this.intl.t('activity-phase-approved-on-agenda'), date: geplandeStart,
           });
-          // TODO: Check triple equals
-          // eslint-disable-next-line eqeqeq
-          if (phaseData.postponed && phaseData.postponed == 'true') {
-            phases.push({
-              label: this.intl.t('activity-phase-postponed-on-agenda'), date: geplandeStart,
-            });
-          }
-          if (phaseData.approved) {
-            let label;
-            switch (phaseData.approved) {
-              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd':
-                label = this.intl.t('activity-phase-decided-on-agenda');
-                break;
-              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa':
-                label = this.intl.t('activity-phase-postponed-is-decided');
-                break;
-              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf':
-                label = this.intl.t('activity-phase-kennisname');
-                break;
-              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/e7e44027-fbbb-4285-ba3f-0cdb2264d43c':
-                label = this.intl.t('activity-phase-decided-voorwaarden');
-                break;
-              case 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/e40d885e-a677-4f1e-bce1-ea17d2aadb40':
-                label = this.intl.t('activity-phase-afgekeurd');
-                break;
+          if (phaseData.decisionResultId) {
+            const drc = await this.store.findRecord('decision-result-code', phaseData.decisionResultId);
+            if (drc) {
+              phases.push({
+                label: `${drc.label} ${this.intl.t('decision-activity-result')}`, date: geplandeStart,
+              });
+              if (drc.isPostponed) {
+                phases.push({
+                  label: this.intl.t('decision-activity-result-postponed'),
+                });
+              }
             }
-            phases.push({
-              label: label, date: geplandeStart,
-            });
           }
         }
       }
-    });
+    }
     return phases;
   },
 
