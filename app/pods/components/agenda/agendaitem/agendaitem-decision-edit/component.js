@@ -8,11 +8,12 @@ export default Component.extend({
   store: service(),
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   propertiesToSet: Object.freeze(['approved', 'richtext']),
-  approved: cached('item.approved'), // TODO in class syntax use as a decorator instead
-  initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
+  approved: cached('decision.approved'), // TODO in class syntax use as a decorator instead
+  initValue: cached('decision.richtext'), // TODO in class syntax use as a decorator instead
   documentVersionsSelected: null,
   isEditing: false,
   isExpanded: false,
+  decision: null,
 
   async setNewPropertiesToModel(model) {
     const {
@@ -43,8 +44,8 @@ export default Component.extend({
     },
 
     async cancelEditing() {
-      const item = await this.get('item');
-      item.rollbackAttributes();
+      const decision = await this.get('decision');
+      decision.rollbackAttributes();
       this.toggleProperty('isEditing');
     },
 
@@ -52,7 +53,7 @@ export default Component.extend({
       this._super.call(this);
       this.set('isLoading', true);
 
-      const decision = await this.get('item');
+      const decision = await this.get('decision');
       decision.set('modified', moment().utc()
         .toDate());
 

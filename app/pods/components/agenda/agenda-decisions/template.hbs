@@ -43,7 +43,7 @@
                       {{#if decision.isEditing}}
                         <Agenda::Agendaitem::AgendaitemDecisionEdit
                           @isEditing={{decision.isEditing}}
-                          @item={{decision}}
+                          @decision={{decision}}
                           @subcase={{await agendaitem.agendaActivity.subcase}}
                           @isTableRow={{isTableRow}}
                           @agendaitem={{agendaitem}} />
