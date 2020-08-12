@@ -40,7 +40,7 @@ export default Route.extend({
 
       const announcements = agendaitems.filter((item) => item.showAsRemark);
 
-      this.set('sessionService.selectedAgendaItem', null);
+      this.set('sessionService.selectedAgendaitem', null);
 
       return hash({
         currentAgenda: agenda,

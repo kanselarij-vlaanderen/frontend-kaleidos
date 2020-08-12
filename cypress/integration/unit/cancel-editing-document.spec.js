@@ -71,7 +71,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
+    cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -276,7 +276,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
+    cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)

@@ -59,7 +59,7 @@ export default Component.extend({
     },
 
     goToOverview() {
-      this.clearSelectedAgendaItem();
+      this.clearSelectedAgendaitem();
     },
 
     navigateToDocuments() {

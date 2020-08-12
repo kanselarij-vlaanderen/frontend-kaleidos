@@ -10,7 +10,7 @@ export default class AgendaSidebar extends Component {
   @service sessionService;
   @service('current-session') currentSessionService;
   @service agendaService;
-  @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
+  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
 
   @tracked announcements = this.args.announcements;
   @tracked isShowingChanges = false;
@@ -49,7 +49,7 @@ export default class AgendaSidebar extends Component {
       return item;
     });
     this.reAssignPriorities.perform(itemModels);
-    this.agendaService.groupAgendaItemsOnGroupName(itemModels);
+    this.agendaService.groupAgendaitemsOnGroupName(itemModels);
     this.isReAssigningPriorities = false;
   }
 

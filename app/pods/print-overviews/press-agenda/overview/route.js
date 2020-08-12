@@ -35,7 +35,7 @@ export default Route.extend({
       draftAgendaitems, groupedAgendaitems,
     } = await parseDraftsAndGroupsFromAgendaitems(agendaitems);
 
-    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(draftAgendaitems);
 
     const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
 

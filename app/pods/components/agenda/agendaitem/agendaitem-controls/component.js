@@ -46,9 +46,9 @@ export default Component.extend({
     } else {
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
     }
-    this.set('sessionService.selectedAgendaItem', null);
-    if (this.onDeleteAgendaItem) {
-      this.onDeleteAgendaItem(agendaitem);
+    this.set('sessionService.selectedAgendaitem', null);
+    if (this.onDeleteAgendaitem) {
+      this.onDeleteAgendaitem(agendaitem);
     }
   },
 

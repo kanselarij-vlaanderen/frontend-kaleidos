@@ -62,7 +62,7 @@ export default class CompareAgendaList extends Component {
   async chooseAgendaOne(agenda) {
     this.isLoadingAgendaOne = true;
     const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
-    await this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(agendaitems);
 
     this.agendaitemsLeft = agendaitems;
     this.agendaOne = agenda;
@@ -74,7 +74,7 @@ export default class CompareAgendaList extends Component {
   async chooseAgendaTwo(agenda) {
     this.isLoadingAgendaTwo = true;
     const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
-    await this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(agendaitems);
 
     this.agendaitemsRight = agendaitems;
     this.agendaTwo = agenda;

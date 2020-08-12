@@ -40,7 +40,7 @@ export default Route.extend({
       agendaitems, params
     );
 
-    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(draftAgendaitems);
 
     const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
 

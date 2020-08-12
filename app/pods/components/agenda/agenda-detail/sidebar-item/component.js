@@ -17,7 +17,7 @@ export default class SidebarItem extends Component {
   @service agendaService;
   @service toaster;
 
-  @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
+  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
   @alias('sessionService.currentAgenda') currentAgenda;
   @alias('args.agendaitem.checkAdded') isNew;
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
@@ -37,8 +37,8 @@ export default class SidebarItem extends Component {
   }
 
   get isActive() {
-    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaItem) {
-      return this.args.agendaitem.id === this.selectedAgendaItem.id;
+    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaitem) {
+      return this.args.agendaitem.id === this.selectedAgendaitem.id;
     }
     return null;
   }

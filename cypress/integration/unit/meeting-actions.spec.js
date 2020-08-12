@@ -12,7 +12,7 @@ context('meeting actions tests', () => {
     cy.deleteAgenda('5EB287CDF359DD0009000008');
 
     // Verify subcase is still ok on agenda A after delete designagenda
-    cy.agendaItemExists('Cypress test: delete agenda - 1588758436').click();
+    cy.agendaitemExists('Cypress test: delete agenda - 1588758436').click();
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
@@ -25,13 +25,13 @@ context('meeting actions tests', () => {
     cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: close agenda - 1588775338';
     cy.visit('/vergadering/5EB2C9CBF5E1260009000005/agenda/74e87383-80a4-4616-8814-5883cafa6da0/agendapunten');
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.agendaitemExists(SubcaseTitleShort).click();
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
 
     cy.changeSelectedAgenda('Agenda A');
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.agendaitemExists(SubcaseTitleShort).click();
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
@@ -39,7 +39,7 @@ context('meeting actions tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.closeAgenda();
 
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.agendaitemExists(SubcaseTitleShort).click();
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
@@ -63,15 +63,15 @@ context('meeting actions tests', () => {
     cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - 1588776224';
     cy.visit('/vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
-    cy.agendaItemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
+    cy.agendaitemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
     // Verify agendaitem exists and has subcase on design agenda and agenda A
     cy.changeSelectedAgenda('Agenda A');
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.agendaitemExists(SubcaseTitleShort).click();
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
     cy.changeSelectedAgenda('Ontwerpagenda');
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.agendaitemExists(SubcaseTitleShort).click();
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });

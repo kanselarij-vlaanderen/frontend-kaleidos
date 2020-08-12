@@ -29,9 +29,9 @@ export default Route.extend({
     });
   },
 
-  ensureDocuments: task(function *(agendaItems) {
+  ensureDocuments: task(function *(agendaitems) {
     const tasks = [];
-    for (const item of agendaItems) {
+    for (const item of agendaitems) {
       if (!item.hasMany('documentVersions').value()) {
         tasks.push(this.loadDocuments.perform(item));
       }
@@ -39,8 +39,8 @@ export default Route.extend({
     yield all(tasks);
   }),
 
-  loadDocuments: task(function *(agendaItem) {
-    yield agendaItem.hasMany('documentVersions').reload({
+  loadDocuments: task(function *(agendaitem) {
+    yield agendaitem.hasMany('documentVersions').reload({
       adapterOptions: {
         namesOnly: true,
       },

@@ -285,13 +285,13 @@ function openAgendaForDate(agendaDate) {
 /**
  * Create a default agenda
  * @memberOf Cypress.Chainable#
- * @name openAgendaItemKortBestekTab
+ * @name openAgendaitemKortBestekTab
  * @function
- * @param {String} agendaItemTitle - title of the agendaitem
+ * @param {String} agendaitemTitle - title of the agendaitem
  */
-function openAgendaItemKortBestekTab(agendaItemTitle) {
-  cy.openDetailOfAgendaitem(agendaItemTitle);
-  cy.get(agenda.agendaItemKortBestekTab)
+function openAgendaitemKortBestekTab(agendaitemTitle) {
+  cy.openDetailOfAgendaitem(agendaitemTitle);
+  cy.get(agenda.agendaitemKortBestekTab)
     .should('be.visible')
     .click();
 }
@@ -612,18 +612,18 @@ function toggleShowChanges(refresh) {
 
 /**
  * @description Checks if an agendaitem with a specific name exists on an agenda
- * @name agendaItemExists
+ * @name agendaitemExists
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemName - boolean to check if a refresh needs to happen.
+ * @param {string} agendaitemName - boolean to check if a refresh needs to happen.
  */
-function agendaItemExists(agendaItemName) {
+function agendaitemExists(agendaitemName) {
   // Check which reverse tab is active
   cy.get('.vlc-tabs-reverse__link--active').then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
       cy.get(agenda.agendaDetailSidebarSubitem)
-        .contains(agendaItemName, {
+        .contains(agendaitemName, {
           timeout: 12000,
         })
         .should('exist');
@@ -632,7 +632,7 @@ function agendaItemExists(agendaItemName) {
         cy.clickReverseTab('Overzicht');
       }
       cy.get(agenda.agendaOverviewSubitem)
-        .contains(agendaItemName, {
+        .contains(agendaitemName, {
           timeout: 24000,
         })
         .should('exist');
@@ -645,20 +645,20 @@ function agendaItemExists(agendaItemName) {
  * @name openDetailOfAgendaitem
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemName - title of the agendaitem.
+ * @param {string} agendaitemName - title of the agendaitem.
 *  @param {boolean} isAdmin - optional boolean to indicate that we are admin (some profiles can't see the link to subcase)
  */
-function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
-  cy.agendaItemExists(agendaItemName).click();
+function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
+  cy.agendaitemExists(agendaitemName).click();
 
-  // cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
+  // cy.get(agenda.agendaOverviewSubitem).contains(agendaitemName).click();
   cy.wait(1000);
   cy.url().should('include', 'agendapunten');
   cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
     const selectedTab = element[0].text;
     if (!selectedTab.includes('Dossier')) {
       cy.wait(3000); // TODO wait to ensure the page and tabs are loaded, find a better to check this
-      cy.get(agenda.agendaItemDossierTab).click();
+      cy.get(agenda.agendaitemDossierTab).click();
     }
     if (isAdmin) {
       cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
@@ -764,14 +764,14 @@ Cypress.Commands.add('approveCoAgendaitem', approveCoAgendaitem);
 Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
 Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
-Cypress.Commands.add('agendaItemExists', agendaItemExists);
+Cypress.Commands.add('agendaitemExists', agendaitemExists);
 Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
 Cypress.Commands.add('releaseDecisions', releaseDecisions);
 Cypress.Commands.add('releaseDocuments', releaseDocuments);
 Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
-Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
+Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
 Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);

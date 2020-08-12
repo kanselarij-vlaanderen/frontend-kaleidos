@@ -210,13 +210,13 @@ function addNewDocumentVersionToMeeting(oldFileName, file) {
  * @name openAgendaItemDocumentTab
  * @memberOf Cypress.Chainable#.
  * @function
- * @param {string} agendaItemTitle
+ * @param {string} agendaitemTitle
  * @param {boolean} alreadyHasDocs
  */
-function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
+function openAgendaItemDocumentTab(agendaitemTitle, alreadyHasDocs = false) {
   cy.log('openAgendaItemDocumentTab');
-  cy.openDetailOfAgendaitem(agendaItemTitle);
-  cy.get(agenda.agendaItemDocumentsTab)
+  cy.openDetailOfAgendaitem(agendaitemTitle);
+  cy.get(agenda.agendaitemDocumentsTab)
     .click()
     .wait(2000); // Access-levels GET occured earlier, general wait instead
   if (alreadyHasDocs) {
@@ -227,15 +227,15 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
 
 /**
  * @description Add a new document to an agendaitem.
- * @name addDocumentsToAgendaItem
+ * @name addDocumentsToAgendaitem
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemTitle
+ * @param {string} agendaitemTitle
  * @param {string} files
  */
-function addDocumentsToAgendaItem(agendaItemTitle, files) {
-  cy.log('addDocumentsToAgendaItem');
-  openAgendaItemDocumentTab(agendaItemTitle, false);
+function addDocumentsToAgendaitem(agendaitemTitle, files) {
+  cy.log('addDocumentsToAgendaitem');
+  openAgendaItemDocumentTab(agendaitemTitle, false);
   return addDocuments(files);
 }
 
@@ -244,13 +244,13 @@ function addDocumentsToAgendaItem(agendaItemTitle, files) {
  * @name addNewDocumentVersionToAgendaItem
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemTitle
+ * @param {string} agendaitemTitle
  * @param {string} oldFileName
  * @param {string} file
  */
-function addNewDocumentVersionToAgendaItem(agendaItemTitle, oldFileName, file) {
+function addNewDocumentVersionToAgendaItem(agendaitemTitle, oldFileName, file) {
   cy.log('addNewDocumentVersionToAgendaItem');
-  openAgendaItemDocumentTab(agendaItemTitle, true);
+  openAgendaItemDocumentTab(agendaitemTitle, true);
   return addNewDocumentVersion(oldFileName, file, 'agendaitems');
 }
 
@@ -273,12 +273,12 @@ function addNewDocumentVersionToSubcase(oldFileName, file) {
  * @name openAgendaItemDossierTab
  * @memberOf Cypress.Chainable#.
  * @function
- * @param {string} agendaItemTitle
+ * @param {string} agendaitemTitle
  */
-function openAgendaItemDossierTab(agendaItemTitle) {
+function openAgendaItemDossierTab(agendaitemTitle) {
   cy.log('openAgendaItemDossierTab');
-  cy.openDetailOfAgendaitem(agendaItemTitle);
-  cy.get(agenda.agendaItemDossierTab)
+  cy.openDetailOfAgendaitem(agendaitemTitle);
+  cy.get(agenda.agendaitemDossierTab)
     .click();
   cy.log('/openAgendaItemDossierTab');
 }
@@ -398,14 +398,14 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
 
 /**
  * @description Adds documents to the already delivered documents list
- * @name addLinkedDocumentToAgendaItem
+ * @name addLinkedDocumentToAgendaitem
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String[]} filenames - The relative path to the file in the cypress/fixtures folder excluding the fileName
  */
-function addLinkedDocumentToAgendaItem(filenames) {
+function addLinkedDocumentToAgendaitem(filenames) {
   cy.route('GET', 'document-versions').as('createNewDocumentVersion');
-  cy.log('addLinkedDocumentToAgendaItem');
+  cy.log('addLinkedDocumentToAgendaitem');
   cy.get(document.addLinkedDocuments).click();
   cy.get(document.searchForLinkedDocumentsInput).click();
 
@@ -421,7 +421,7 @@ function addLinkedDocumentToAgendaItem(filenames) {
 
 Cypress.Commands.add('addDocuments', addDocumentsToAgenda);
 Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda);
-Cypress.Commands.add('addDocumentsToAgendaItem', addDocumentsToAgendaItem);
+Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
 Cypress.Commands.add('addNewDocumentVersion', addNewDocumentVersion);
 Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMeeting);
 Cypress.Commands.add('addNewDocumentVersionToAgendaItem', addNewDocumentVersionToAgendaItem);
@@ -431,4 +431,4 @@ Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaItemDocumentTab', openAgendaItemDocumentTab);
 Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
-Cypress.Commands.add('addLinkedDocumentToAgendaItem', addLinkedDocumentToAgendaItem);
+Cypress.Commands.add('addLinkedDocumentToAgendaitem', addLinkedDocumentToAgendaitem);

@@ -170,7 +170,7 @@ export default Service.extend({
     updateModifiedProperty(selectedAgenda);
   },
 
-  async groupAgendaItemsOnGroupName(agendaitems) {
+  async groupAgendaitemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
       agendaitems.map(async(item) => {

@@ -84,7 +84,7 @@ context('Tests for KAS-1076', () => {
       }
     ];
 
-    cy.addDocumentsToAgendaItem(SubcaseTitleShort, files, false);
+    cy.addDocumentsToAgendaitem(SubcaseTitleShort, files, false);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card', {
         timeout: 60000,
@@ -105,7 +105,7 @@ context('Tests for KAS-1076', () => {
     const linkedDocumentsNames = files.slice(9, 14).map((file) => file.newFileName);
     const linkedDocumentTypes = files.slice(9, 14).map((file) => file.fileType);
 
-    cy.addLinkedDocumentToAgendaItem(linkedDocumentsNames);
+    cy.addLinkedDocumentToAgendaitem(linkedDocumentsNames);
     cy.get(document.linkeddocumentTypeLabel).eq(0)
       .contains(linkedDocumentTypes[0]);
     cy.get(document.linkeddocumentTypeLabel).eq(1)
@@ -264,7 +264,7 @@ context('Tests for KAS-1076', () => {
     });
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
-    cy.agendaItemExists(SubcaseTitleShort).click();
+    cy.agendaitemExists(SubcaseTitleShort).click();
     cy.openAgendaItemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)

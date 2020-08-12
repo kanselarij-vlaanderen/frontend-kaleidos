@@ -18,7 +18,7 @@ export default class AgendaOverview extends Component {
 
   classNameBindings = ['getClassNames'];
 
-  selectedAgendaItem = alias('sessionService.selectedAgendaItem');
+  selectedAgendaitem = alias('sessionService.selectedAgendaitem');
 
   dragHandleClass = '.vlc-agenda-items__sub-item';
 
@@ -32,9 +32,9 @@ export default class AgendaOverview extends Component {
 
   showLoader = null;
 
-  @computed('selectedAgendaItem')
+  @computed('selectedAgendaitem')
   get getClassNames() {
-    if (this.get('selectedAgendaItem')) {
+    if (this.get('selectedAgendaitem')) {
       return 'vlc-agenda-items--small';
     }
     return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
@@ -59,10 +59,10 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  async setFormallyOkAction(agendaItem, formallyOkUri) {
+  async setFormallyOkAction(agendaitem, formallyOkUri) {
     this.set('showLoader', true);
-    agendaItem.formallyOk = formallyOkUri;
-    await agendaItem
+    agendaitem.formallyOk = formallyOkUri;
+    await agendaitem
       .save()
       .catch(() => {
         this.toaster.error();
@@ -90,7 +90,7 @@ export default class AgendaOverview extends Component {
         return item;
       });
       this.reAssignPriorities.perform(itemModels);
-      this.agendaService.groupAgendaItemsOnGroupName(itemModels);
+      this.agendaService.groupAgendaitemsOnGroupName(itemModels);
     }
   }
 

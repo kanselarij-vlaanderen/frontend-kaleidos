@@ -180,7 +180,7 @@ context('Subcase tests', () => {
     // Aanmaken subcase.
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
 
-    // Aanmaken agendaItem
+    // Aanmaken agendaitem
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(shortSubcaseTitle, false);
     cy.openAgendaItemDossierTab(shortSubcaseTitle);
@@ -198,7 +198,7 @@ context('Subcase tests', () => {
 
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
 
-    // "Go to agendaItem
+    // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();
@@ -335,7 +335,7 @@ context('Subcase tests', () => {
       .first()
       .click();
 
-    // "Go to agendaItem
+    // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();

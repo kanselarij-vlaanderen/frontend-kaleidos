@@ -11,14 +11,14 @@ export default Controller.extend({
   agendaService: inject(),
   agendaitems: alias('model.agendaitems'),
   announcements: alias('model.announcements'),
-  selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  selectedAgendaitem: alias('sessionService.selectedAgendaitem'),
   currentAgenda: alias('sessionService.currentAgenda'),
   currentSession: alias('sessionService.currentSession'),
 
   sortedAgendaitems: computed('agendaitems.@each.{priority,isDeleted}', async function() {
     const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark && !item.isDeleted)
       .sortBy('priority');
-    await this.agendaService.groupAgendaItemsOnGroupName(actualAgendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(actualAgendaitems);
     return actualAgendaitems;
   }),
 
@@ -26,7 +26,7 @@ export default Controller.extend({
     const announcements = this.get('announcements');
     if (announcements) {
       const actualAnnouncementsitems = announcements.filter((item) => !item.isDeleted).sortBy('priority');
-      await this.agendaService.groupAgendaItemsOnGroupName(actualAnnouncementsitems);
+      await this.agendaService.groupAgendaitemsOnGroupName(actualAnnouncementsitems);
       return actualAnnouncementsitems;
     }
     return [];
@@ -53,7 +53,7 @@ export default Controller.extend({
     selectAgendaItem(agendaitem) {
       const detailRoutePrefix = 'agenda.agendaitems.agendaitem';
       if (this.routing.currentRouteName.startsWith(detailRoutePrefix)) {
-        this.set('sessionService.selectedAgendaItem', agendaitem); // TODO: get rid of global state
+        this.set('sessionService.selectedAgendaitem', agendaitem); // TODO: get rid of global state
         this.transitionToRoute(this.routing.currentRouteName, agendaitem.id);
       } else {
         this.transitionToRoute(detailRoutePrefix, agendaitem.id);

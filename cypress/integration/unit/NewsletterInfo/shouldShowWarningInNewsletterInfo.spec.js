@@ -45,13 +45,13 @@ context('Show warning in newsletterinfo', () => {
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
-    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
+    cy.addDocumentsToAgendaitem(subcaseTitle1, files);
 
     cy.route('/');
     cy.openAgendaForDate(agendaDate);
     cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName, file);
 
-    cy.get(agenda.agendaItemKortBestekTab)
+    cy.get(agenda.agendaitemKortBestekTab)
       .should('be.visible')
       .click()
       .wait(2000); // Access-levels GET occured earlier, general wait instead

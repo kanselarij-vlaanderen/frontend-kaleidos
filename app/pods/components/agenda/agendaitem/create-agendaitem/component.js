@@ -241,7 +241,7 @@ export default Component.extend(DataTableRouteMixin, {
       promise.then(async() => {
         this.set('loading', false);
         this.set('isAddingAgendaitems', false);
-        this.set('sessionService.selectedAgendaItem', null);
+        this.set('sessionService.selectedAgendaitem', null);
         const anyAddedSubcase = subcasesToAdd.get('firstObject');
         const newAgendaitem = await anyAddedSubcase.get('latestAgendaItem');
         this.reloadRouteWithRefreshId(newAgendaitem.id);

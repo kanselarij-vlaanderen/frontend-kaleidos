@@ -8,13 +8,13 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service store;
 
   @action
-  async navigateToNeighbouringItem(agendaItem) {
+  async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
-    const previousNumber = agendaItem.priority - 1;
+    const previousNumber = agendaitem.priority - 1;
     const result = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
-      'filter[show-as-remark]': agendaItem.showAsRemark,
+      'filter[show-as-remark]': agendaitem.showAsRemark,
       'filter[:gte:priority]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
       'page[size]': 1,
     });

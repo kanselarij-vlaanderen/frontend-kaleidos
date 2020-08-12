@@ -65,8 +65,8 @@ export default class AgendaOverviewItem extends Component {
   }
 
   get isActive() {
-    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaItem) {
-      return this.args.agendaitem === this.selectedAgendaItem.id;
+    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaitem) {
+      return this.args.agendaitem === this.selectedAgendaitem.id;
     }
     return null;
   }

@@ -19,10 +19,10 @@ context('Agendaitem changes tests', () => {
 
   it('should add a document to an agenda and should highlight as added', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
-    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
+    cy.addDocumentsToAgendaitem(subcaseTitle1, files);
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
-    cy.agendaItemExists(subcaseTitle1);
+    cy.agendaitemExists(subcaseTitle1);
   });
 
   it('should add an agendaitem and highlight it as changed', () => {
@@ -34,7 +34,7 @@ context('Agendaitem changes tests', () => {
     cy.toggleShowChanges(true);
     cy.get('li.vlc-agenda-items__sub-item').should('have.length', 3)
       .then(() => {
-        cy.agendaItemExists(subcaseTitle2);
+        cy.agendaitemExists(subcaseTitle2);
         cy.setFormalOkOnItemWithIndex(2);
         cy.approveDesignAgenda();
       });
@@ -47,7 +47,7 @@ context('Agendaitem changes tests', () => {
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
-    cy.agendaItemExists(subcaseTitle1);
+    cy.agendaitemExists(subcaseTitle1);
 
     // when navigating to print view, should contain all relevant info
     cy.get(actionModal.showActionOptions).click();
