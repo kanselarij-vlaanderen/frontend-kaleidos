@@ -1,12 +1,10 @@
 {{#if (not multiSelect)}}
   {{#power-select
-    options=items
+    options=agendas
     selected=selectedItems
     disabled=readOnly
-    searchField=searchField
+    searchEnabled=false
     placeholder=placeholder
-    search=(perform searchTask)
-    oninput=(action "resetValueIfEmpty")
     onchange=(action "selectModel")
   as |model|
   }}
@@ -14,13 +12,11 @@
   {{/power-select}}
 {{else}}
   {{#power-select-multiple
-    options=items
+    options=agendas
+    searchEnabled=false
     selected=selectedItems
     disabled=readOnly
-    searchField=searchField
     placeholder=placeholder
-    search=(perform searchTask)
-    oninput=(action "resetValueIfEmpty")
     onchange=(action "selectModel")
   as |model|
   }}
