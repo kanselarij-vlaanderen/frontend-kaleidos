@@ -220,7 +220,7 @@ export default ModelWithModifier.extend({
       //  We want to sort descending on date the subcase was concluded.
       //  In practice, sorting on created will be close
       promise: this.get('case').then((caze) => caze.get('subcases')
-        .then((subcases) => subcases.filter((item) => item.get('id') !== this.id).sort((documentA, documentB) => documentB.created - documentA.created))),
+        .then((subcases) => subcases.filter((subcase) => subcase.get('id') !== this.id).sort((documentA, documentB) => documentB.created - documentA.created))),
     });
   }),
 

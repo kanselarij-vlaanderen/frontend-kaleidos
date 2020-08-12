@@ -21,12 +21,12 @@ export default class AgendaSidebar extends Component {
 
   @restartableTask
   reAssignPriorities = function *(agendaitems) {
-    yield agendaitems.map(async(item) => {
-      if (isPresent(item.changedAttributes().priority)) {
-        return item.save();
+    yield agendaitems.map(async(agendaitem) => {
+      if (isPresent(agendaitem.changedAttributes().priority)) {
+        return agendaitem.save();
       }
     });
-  }
+  };
 
   @action
   selectAgendaItemAction(agendaitem) {
