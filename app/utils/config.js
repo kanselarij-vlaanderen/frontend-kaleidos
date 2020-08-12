@@ -122,4 +122,5 @@ export default EmberObject.create({
   publiekAccessLevelId: '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e',
   agendaStatusApprovedId: 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
   agendaStatusClosedId: 'f06f2b9f-b3e5-4315-8892-501b00650101',
+  agendaStatusDesignAgendaId: '2735d084-63d1-499f-86f4-9b69eb33727f',
 });
