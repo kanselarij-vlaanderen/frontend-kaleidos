@@ -60,7 +60,7 @@
         {{!-- TODO KAS-1420 @agendaitem={{@subcase}} ??  --}}
         <Utils::DocumentsListForItem
           @item={{this.decision}}
-          @agendaitem={{@subcase}} 
+          @agendaitem={{@subcase}}
           @isClickable={{true}}
         />
       </div>
@@ -73,7 +73,7 @@
     />
   {{else}}
     <Utils::AddSignedDocuments
-      @item={{this.decision}}
+      @meetingRecordOrDecision={{this.decision}}
       @defaultType={{this.defaultType}}
       @modelToAddDocumentVersionTo="signedDecision"
       @title={{t "signed-decision-add"}}
