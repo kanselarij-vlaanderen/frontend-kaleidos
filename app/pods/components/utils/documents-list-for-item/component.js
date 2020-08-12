@@ -6,25 +6,25 @@ export default class DocumentListForItem extends Component {
   @tracked isClickable = this.args.isClickable;
 
   @tracked isShowingAll = false;
-
-  @tracked item = this.args.item;
+  // TODO: Is het echt nodig om hier een @tracked te gebruiker? We visualiseren hier enkel?
+  @tracked agendaitemOrSubcase = this.args.agendaitemOrSubcase;
 
   @tracked moreThan20 = null;
 
   get documents() {
-    if (!this.item) {
+    if (!this.agendaitemOrSubcase) {
       return null;
     }
-    if (this.item.documents) {
-      if (this.item.documents.length > 20) {
+    if (this.agendaitemOrSubcase.documents) {
+      if (this.agendaitemOrSubcase.documents.length > 20) {
         this.moreThan20 = true;
       } else {
         this.moreThan20 = false;
       }
       if (this.isShowingAll) {
-        return this.item.documents;
+        return this.agendaitemOrSubcase.documents;
       }
-      return this.item.documents.slice(0, 20);
+      return this.agendaitemOrSubcase.documents.slice(0, 20);
     }
     return null;
   }
