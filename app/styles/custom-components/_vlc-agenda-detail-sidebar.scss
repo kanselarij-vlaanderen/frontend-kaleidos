@@ -56,20 +56,18 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
   background: $science-blue;
   border: none;
   color: #fff;
-  span {
-    color: #fff;
-  }
-  .vlc-agenda-detail-sidebar__status--positive {
-    color: #fff;
-  }
+
   .ember-power-select-selected-item{
     color:#000;
   }
-  pre {
-    color: #fff
-  }
-  p {
-    color: #fff
+
+  span,
+  .vlc-agenda-detail-sidebar__status--positive,
+  .ember-power-select-selected-item,
+  pre,
+  p,
+  i {
+    color: #fff;
   }
 }
 
@@ -248,10 +246,22 @@ $i: 0;
 }
 
 .vlc-agenda-detail-sidebar__formally-ok-label {
+  display: flex;
   padding-top: 1.5rem;
 
-  .formally-ok-icon::before {
-    margin-right: 0.5rem;
-    font-weight: 700;
+  .formally-ok-icon {
+    &::before {
+      margin-right: 0.2rem;
+      height: 100%;
+    }
+
+    &.ki-check::before {
+      line-height: 1.8rem;
+    }
+
+    &.ki-cross::before {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
   }
 }

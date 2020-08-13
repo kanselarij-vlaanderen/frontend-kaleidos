@@ -43,7 +43,7 @@ export default EmberObject.create({
       classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive vl-u-display-flex',
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
-      iconClassNames: 'ki-check-thin formally-ok-icon',
+      iconClassNames: 'ki-check formally-ok-icon',
     },
     {
       label: 'Formeel niet OK',
