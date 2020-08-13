@@ -1,94 +1,59 @@
-{{!-- TODO: this warning gets shown to editors as well as all other users. Is this meant to be? --}}
-{{#if this.showChangedNotaWarning}}
-  <ChangesAlert
-    data-test-changes-alert
-    @message={{t
-      "nota-changed-message"
-      date=(moment-format this.modifiedNotaTime "D MMMM YYYY")
-      time=(moment-format this.modifiedNotaTime "H:mm")
-    }}
-    @buttonText={{t "close"}}
-    @clearAction={{this.hideChangedNotaWarning}} />
-{{/if}}
-{{#if (not isEditing)}}
-  <div data-test-agenda-news-item-view>
-    <div class="vl-u-spacer">
-      <div class="vl-u-display-flex vlc-u-flex-align-baseline">
-        <h3 class="vl-title vl-title--h3">
-          {{t "newsletter-title"}}
-        </h3>
-        {{#if this.currentSession.isEditor}}
-          <div class="vl-u-spacer-extended-left-s">
-            {{!-- TODO: replace by link-styled button --}}
-            <a href="" data-test-newsletter-edit class="vl-link" {{action "toggleIsEditing"}}>
-              {{t "edit"}}
-            </a>
-          </div>
-        {{/if}}
-      </div>
-    </div>
-    <div class="vl-u-spacer-extended-bottom-s">
-      <h3 class="vl-title vl-title--h6">
-        {{@newsletterInfo.title}}
-      </h3>
-    </div>
-    <div class="vl-u-spacer-extended-bottom-s">
-      <div class="vl-typography">
-        <p class="vl-u-text--italic">
-          {{await @newsletterInfo.newsletterProposal}}
-        </p>
-        <p>
-          {{sanitize-html
-            raw=true
-            value=@newsletterInfo.richtext
-          }}
-        </p>
-      </div>
-    </div>
-    {{#if @newsletterInfo.remark}}
-      <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-        {{t "remark"}}: {{@newsletterInfo.remark}}
+<div class="vlc-padding-bottom--large">
+  <div class="vl-u-spacer-extended-bottom-s">
+    <h3 class="vl-title vl-title--h6">
+      {{@newsletterInfo.title}}
+    </h3>
+  </div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <div class="vl-typography">
+      <p class="vl-u-text--italic">
+        {{await @newsletterInfo.newsletterProposal}}
       </p>
-    {{/if}}
-    <div
-            class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s"
-            data-test-agenda-news-item-themes>
-      {{#if (is-pending @newsletterInfo.themes)}}
-        <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
-      {{else if (gt (await @newsletterInfo.themes.length) 0)}}
-        <ul>
-          {{#each
-            (await @newsletterInfo.themes)
-          as |theme|
-          }}
-            <li class="vl-pill" data-test-agenda-news-item-theme>
-              {{theme.label}}
-            </li>
-          {{/each}}
-        </ul>
-      {{else}}
-        <div class="vl-u-spacer-extended-top-s">
-          <WebComponents::VlAlert @message={{t "no-themes-yet"}} />
-        </div>
-      {{/if}}
-    </div>
-
-    <hr/>
-    <div class="vl-u-spacer vl-u-spacer-extended-top-s">
-      {{#if @newsletterInfo.finished}}
-        <div class="vlc-pill vlc-pill--success">
-          {{t "finished"}}
-        </div>
-      {{else}}
-        <div class="vlc-pill vlc-pill--warning">
-          {{t "not-finished"}}
-        </div>
-      {{/if}}
+      <p>
+        {{sanitize-html
+          raw=true
+          value=@newsletterInfo.richtext
+        }}
+      </p>
     </div>
   </div>
-{{else}}
-  <NewsItem::EditItem
-    @newsletterInfo={{@newsletterInfo}}
-    @agendaitem={{@agendaItem}}
-    @isEditing={{isEditing}} />
-{{/if}}
+  {{#if @newsletterInfo.remark}}
+    <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+      {{t "remark"}}: {{@newsletterInfo.remark}}
+    </p>
+  {{/if}}
+    <div
+      class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s"
+      data-test-agenda-news-item-themes>
+    {{#if (is-pending @newsletterInfo.themes)}}
+      <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
+    {{else if (gt (await @newsletterInfo.themes.length) 0)}}
+      <ul>
+        {{#each
+          (await @newsletterInfo.themes)
+        as |theme|
+        }}
+          <li class="vl-pill" data-test-agenda-news-item-theme>
+            {{theme.label}}
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <div class="vl-u-spacer-extended-top-s">
+        <WebComponents::VlAlert @message={{t "no-themes-yet"}} />
+      </div>
+    {{/if}}
+  </div>
+  <hr/>
+  <div class="vl-u-spacer vl-u-spacer-extended-top-s">
+    {{#if @newsletterInfo.finished}}
+      <div class="vlc-pill vlc-pill--success">
+        {{t "finished"}}
+      </div>
+    {{else}}
+      <div class="vlc-pill vlc-pill--warning">
+        {{t "not-finished"}}
+      </div>
+    {{/if}}
+  </div>
+</div>

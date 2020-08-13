@@ -1,4 +1,57 @@
-<Agenda::Agendaitem::AgendaitemNewsItem
-  @agendaItem={{this.agendaItem}}
-  @newsletterInfo={{this.model}}
-/>
+<div data-test-agenda-news-item-view>
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
+      <h3 class="vl-title vl-title--h3">
+        {{t "newsletter-title"}}
+      </h3>
+      {{#if this.currentSession.isEditor}}
+        <div class="vl-u-spacer-extended-left-s">
+          {{#if this.model}}
+            {{!-- TODO: replace by link-styled button --}}
+            <a data-test-newsletter-edit class="vl-link"
+             {{on "click" this.startEditing}}>
+              {{t "edit"}}
+            </a>
+          {{else}}
+            {{!-- TODO: replace by link-styled button --}}
+            <a data-test-newsletter-edit class="vl-link"
+             {{on "click" this.createAndStartEditing}}>
+              {{t "create"}}
+            </a>
+          {{/if}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  {{#if this.model}}
+    {{#if (and this.notaHasChanged this.currentSession.isEditor)}}
+      {{#unless this.notaModifiedWarningConfirmed}}
+        <ChangesAlert
+          data-test-changes-alert
+          @message={{t
+            "nota-changed-message"
+            date=(moment-format this.notaModifiedTime "D MMMM YYYY")
+            time=(moment-format this.notaModifiedTime "H:mm")
+          }}
+          @buttonText={{t "close"}}
+          @clearAction={{this.confirmNotaModifiedWarning}} />
+      {{/unless}}
+    {{/if}}
+    {{#if this.isEditing}}
+      <NewsItem::EditItem
+        @newsletterInfo={{this.model}}
+        @agendaitem={{this.agendaItem}}
+        @isEditing={{true}}
+      />
+    {{else}}
+      <Agenda::Agendaitem::AgendaitemNewsItem
+        @agendaItem={{this.agendaItem}}
+        @newsletterInfo={{this.model}}
+      />
+    {{/if}}
+  {{else}}
+    <div class="vl-u-spacer-extended-top-s">
+      <WebComponents::VlAlert @message={{t "no-newsletter-info"}} />
+    </div>
+  {{/if}}
+</div>
