@@ -44,10 +44,10 @@
     {{action "toggleConfidential"}}
   >
     {{#if item.confidential}}
-      <span class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
-      ></span>
+      <i class="vl-icon ki-lock-closed vl-u-text--error"
+      ></i>
     {{else}}
-      <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+      <i class="vl-icon ki-lock-open"></i>
     {{/if}}
   </button>
   {{yield}}
