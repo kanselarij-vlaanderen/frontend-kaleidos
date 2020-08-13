@@ -19,8 +19,8 @@
           <label class="vl-form__label u-padding--right--tinier" for="dossierId">
             {{capitalize (t "keyword")}}
           </label>
-          <span
-            class="vl-icon vl-icon--small vl-vi vl-vi-info-filled vlc-u-cursor-pointer"
+          <i
+            class="ki-circle-info vlc-u-cursor-pointer"
             aria-hidden="true"
             {{on "click" this.openPopover}}
           >
@@ -34,7 +34,7 @@
             >
               <Utils::SearchLegend @userClickedClose={{this.closePopover}}/>
             </AttachPopover>
-          </span>
+          </i>
         </div>
         <Input
           class="vl-input-field vl-input-field--block"
