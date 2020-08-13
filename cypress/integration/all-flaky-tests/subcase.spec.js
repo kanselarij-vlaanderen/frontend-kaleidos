@@ -239,7 +239,7 @@ context('Subcase tests', () => {
     cy.wait('@getAgenda');
 
     // Are there Themes in this agenda? Should be none
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(SubcaseTitleShort);
     cy.get(agenda.item.themes).contains('Er zijn nog geen thema\'s toegevoegd.');
 
     // open themes ediging pane.
