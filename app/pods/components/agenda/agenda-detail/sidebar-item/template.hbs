@@ -36,7 +36,7 @@
             <div class="vl-u-display-flex vlc-u-display-flex-align-items-flex-end vlc-agenda-detail-sidebar-item__icon">
               {{#if (await @agendaitem.checkAdded)}}
                 <span class="added-tag vlc-agenda-meta__recently-added">
-                  <i class="vl-vi ki-calendar-plus"></i>
+                  <i class="ki-calendar-plus"></i>
                   {{#attach-tooltip
                     arrow="true"
                     animation="shift"
@@ -51,12 +51,12 @@
               {{/if}}
 
               {{#if (and @agendaitem.showAsRemark (not @agendaitem.showInNewsletter))}}
-                <i class="vl-vi ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
               {{/if}}
 
               {{#if (await subcase.confidential)}}
                 <i
-                   class="vl-icon vl-vi ki-lock-closed vl-vi-no-font-weight vlc-u-opacity-50"
+                   class="vl-icon ki-lock-closed vl-vi-no-font-weight vlc-u-opacity-50"
                    data-test-icon-agenda-confidentiality-locked
                 ></i>
               {{/if}}
