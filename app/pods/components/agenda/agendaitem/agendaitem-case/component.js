@@ -1,22 +1,25 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import { inject } from '@ember/service';
+import { computed, set, action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class AgendaItemCase extends Component {
-  @service('current-session') authentication;
+  authentication = inject('currentSession');
   @tracked isEditing = false;
 
+
   get subcase() {
-    if (this.args.agendaitem) {
-      return this.args.agendaitem.agendaActivity.then((agendaActivitySubcase) => agendaActivitySubcase.subcase);
+    const agendaActivity = this.args.agendaitem.get('agendaActivity');
+    if (agendaActivity) {
+      return agendaActivity.get('subcase');
     }
     return null;
   }
 
   get subcases() {
-    if (this.subcase) {
-      return this.subcase.then((agendaActivity) => agendaActivity.subcasesFromCase);
+    const subcase = this.subcase;
+    if (subcase) {
+      return subcase.get('subcasesFromCase');
     }
     return null;
   }
@@ -26,12 +29,8 @@ export default class AgendaItemCase extends Component {
     this.isEditing = false;
   }
 
-  @action
   toggleIsEditing() {
     this.isEditing = !this.isEditing;
   }
 
-  get shouldShowDetails() {
-    return !!(this.args.agendaitem.showAsRemark || this.args.agendaitem.agendaActivity);
-  }
 }

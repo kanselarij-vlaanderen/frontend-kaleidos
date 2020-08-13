@@ -1,11 +1,9 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
-export default Component.extend({
-  classNames: ['vl-u-spacer-extended-bottom-l'],
-
-  actions: {
-    toggleIsShowingDocuments(subcase) {
-      subcase.toggleProperty('isShowingDocuments');
-    },
-  },
-});
+export default class AllSubcases extends Component {
+  @action
+  toggleIsShowingDocuments(subcase) {
+    subcase.toggleProperty('isShowingDocuments');
+  }
+}
