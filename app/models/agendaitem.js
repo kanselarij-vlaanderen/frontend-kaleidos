@@ -42,7 +42,9 @@ export default ModelWithModifier.extend({
   agendaActivity: belongsTo('agenda-activity', {
     inverse: null,
   }),
-  treatments: hasMany('agenda-item-treatment'),
+  treatments: hasMany('agenda-item-treatment', {
+    inverse: null,
+  }),
   meetingRecord: belongsTo('meeting-record'),
   showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
