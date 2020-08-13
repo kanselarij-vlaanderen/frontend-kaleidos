@@ -41,7 +41,8 @@
       <NewsItem::EditItem
         @newsletterInfo={{this.model}}
         @agendaitem={{this.agendaItem}}
-        @isEditing={{true}}
+        @onCancel={{this.stopEditing}}
+        @onSave={{this.stopEditing}}
       />
     {{else}}
       <Agenda::Agendaitem::AgendaitemNewsItem
