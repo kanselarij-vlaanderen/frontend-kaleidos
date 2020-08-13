@@ -144,8 +144,6 @@ context('Agenda tests', () => {
       .should('be.visible');
     cy.get(agenda.deleteAgendaItemButton).click();
     cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitem');
-    cy.get(modal.verify.save).click();
-    cy.wait('@deleteAgendaitem');
     cy.route('DELETE', '/agenda-activities/*').as('deleteAgendaActivities');
     cy.route('GET', '/subcases').as('getSubcase');
     cy.route('PATCH', '/subcases/*').as('patchSubcase');
@@ -154,6 +152,8 @@ context('Agenda tests', () => {
     cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
     cy.route('GET', '/agendaitems/*/meeting-record').as('getMeetingRecordOfAgendaItems');
     cy.route('GET', '/agendaitems/*').as('getAgendaItemsForAgenda');
+    cy.get(modal.verify.save).click();
+    cy.wait('@deleteAgendaitem');
     cy.wait('@deleteAgendaActivities');
     cy.wait('@patchSubcase');
     cy.wait('@getAgendaActivitiesForSubcase');
