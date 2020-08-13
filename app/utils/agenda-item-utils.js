@@ -4,43 +4,40 @@ import moment from 'moment';
 
 /**
  * Cancel the Edit.
- *
- * @param item
+ * @param agendaitemOrSubcase
  * @param propertiesToSet
  */
-export const cancelEdit = (item, propertiesToSet) => {
-  const isSubcase = item.get('modelName') === 'subcase';
-  if (item.get('hasDirtyAttributes')) {
-    item.rollbackAttributes();
+export const cancelEdit = (agendaitemOrSubcase, propertiesToSet) => {
+  const isSubcase = agendaitemOrSubcase.get('modelName') === 'subcase';
+  if (agendaitemOrSubcase.get('hasDirtyAttributes')) {
+    agendaitemOrSubcase.rollbackAttributes();
   }
   if (isSubcase) {
-    item.belongsTo('type').reload();
-    item.belongsTo('accessLevel').reload();
+    agendaitemOrSubcase.belongsTo('type').reload();
+    agendaitemOrSubcase.belongsTo('accessLevel').reload();
   }
-  item.reload();
+  agendaitemOrSubcase.reload();
   const keys = Object.keys(propertiesToSet);
   keys.forEach(async() => {
-    keys.forEach((prop) => item.notifyPropertyChange(prop));
+    keys.forEach((prop) => agendaitemOrSubcase.notifyPropertyChange(prop));
   });
 };
 
 /**
- * Set an item to not yet formally ok.
- *
- * @param itemToSet
+ * @description Zet een agendaitem of subcase naar nog niet formeel ok
+ * @param subcaseOrAgendaitem De agendaitem of subcae waarvan de formaliteit gereset dient te worden naar nog niet formeel ok
  */
-export const setNotYetFormallyOk = (itemToSet) => {
-  if (itemToSet.get('formallyOk') !== CONFIG.notYetFormallyOk) {
-    itemToSet.set('formallyOk', CONFIG.notYetFormallyOk);
+export const setNotYetFormallyOk = (subcaseOrAgendaitem) => {
+  if (subcaseOrAgendaitem.get('formallyOk') !== CONFIG.notYetFormallyOk) {
+    subcaseOrAgendaitem.set('formallyOk', CONFIG.notYetFormallyOk);
   }
 };
 
 /**
- * Set some properties on a model.
- *
- * @param model
- * @param propertiesToSet
- * @param resetFormallyOk
+ * @description Set some properties on a model.
+ * @param model Kan van het type agendaitem of subcase zijn
+ * @param propertiesToSet de properties die we dienen aan te passen
+ * @param resetFormallyOk Dient de formaliteit aangepast te worden of niet (default true)
  * @returns {Promise<*>}
  */
 export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = true) => {
@@ -64,9 +61,8 @@ export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormal
 };
 
 /**
- * Set modified on Agenda of AgendaItem.
- *
- * @param agendaitem
+ * @description Zet de modified date property van een agenda op basis van de doorgegeven agendaitem
+ * @param agendaitem Het agendaitem om de agenda mee op te vragen.
  * @returns {Promise<void>}
  */
 export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
@@ -81,10 +77,10 @@ export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
 /**
  * Save Changes on agenda item or subcase.
  *
- * @param agendaitemOrSubcase
- * @param propertiesToSetOnAgendaitem
- * @param propertiesToSetOnSubcase
- * @param resetFormallyOk
+ * @param agendaitemOrSubcase De agendaitem of subcase wat we gaan saven
+ * @param propertiesToSetOnAgendaitem De properties die we dienen aan te passen op de agendaitem
+ * @param propertiesToSetOnSubcase De properties die we dienen aan te passen op de subcase
+ * @param resetFormallyOk Property die aangeeft of de formaliteit gereset dient te worden
  * @returns {Promise<void>}
  */
 export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
@@ -130,13 +126,13 @@ export const destroyApprovalsOfAgendaitem = async(agendaitem) => {
  * @param {Array} agendaitems   Agenda items to mutate
  */
 export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
-  agendaitems.map(async(item) => {
-    const mandatees = await item.get('mandatees');
-    if (item.isApproval) {
+  agendaitems.map(async(agendaitem) => {
+    const mandatees = await agendaitem.get('mandatees');
+    if (agendaitem.isApproval) {
       return;
     }
     if (mandatees.length === 0) {
-      item.set('groupPriority', 20000000);
+      agendaitem.set('groupPriority', 20000000);
       return;
     }
     const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
@@ -147,7 +143,7 @@ export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
     mandateePriorities.forEach((value) => {
       calculatedGroupPriority += value / 100;
     });
-    item.set('groupPriority', calculatedGroupPriority);
+    agendaitem.set('groupPriority', calculatedGroupPriority);
   })
 );
 
@@ -161,7 +157,7 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
   const groups = [];
   agendaitems.map((agendaitem) => {
     const groupName = agendaitem.get('ownGroupName');
-    const foundItem = groups.find((item) => item.groupName === groupName);
+    const foundItem = groups.find((group) => group.groupName === groupName);
 
     if (!foundItem) {
       groups.push({
@@ -186,7 +182,7 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
  */
 export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
   // Drafts are items without an approval or remark
-  const draftAgendaitems = agendaitems.filter((item) => !item.showAsRemark && !item.isApproval);
+  const draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
 
   // Calculate the priorities on the drafts
   await setCalculatedGroupPriorities(draftAgendaitems);
@@ -213,12 +209,12 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
     groupsArray = groupsArray.filter((group) => group.groupname !== 'Geen toegekende ministers');
   }
 
-  groupsArray = groupsArray.sortBy('groupPriority').map((item) => {
-    item.agendaitems.map((agendaitem, index) => {
+  groupsArray = groupsArray.sortBy('groupPriority').map((group) => {
+    group.agendaitems.map((agendaitem, index) => {
       prevIndex = index + prevIndex + 1;
       agendaitem.set('itemIndex', prevIndex);
     });
-    return EmberObject.create(item);
+    return EmberObject.create(group);
   });
 
   return groupsArray;
