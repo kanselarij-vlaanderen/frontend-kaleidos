@@ -2,16 +2,14 @@
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
   <div class="grid-container">
-
-      {{#each (await documents) as |document|}}
-        {{item-document
-          item=@item
-          document=document
-          isClickable=@isClickable
-          useNewIcons=useNewIcons
-        }}
-      {{/each}}
-
+    {{#each (await documents) as |document|}}
+      {{item-document
+        item=@item
+        document=document
+        isClickable=@isClickable
+        useNewIcons=useNewIcons
+      }}
+    {{/each}}
   </div>
   {{#if this.moreThan20}}
     <button class="vlc-document-show-more-button" type="button" {{action "toggleShowingAll"}}>

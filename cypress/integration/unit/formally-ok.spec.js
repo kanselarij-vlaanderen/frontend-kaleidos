@@ -14,6 +14,7 @@ context('Formally ok/nok tests', () => {
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
     cy.get('.vlc-agenda-items__status').should('contain', 'Formeel OK');
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
+    cy.get(agenda.agendaHeaderShowAgendaOptions).click();
     cy.get(agenda.approveAgenda).click();
     cy.get(modal.agenda.approveAgenda).should('exist');
     cy.get(modal.verify.cancel).click();

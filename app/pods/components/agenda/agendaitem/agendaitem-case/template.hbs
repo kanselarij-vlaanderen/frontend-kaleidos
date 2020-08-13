@@ -15,6 +15,7 @@
   />
 {{/if}}
 {{#if @agendaitem.showAsRemark}}
+{{!-- TODO refactor mandatees to a glimmer component --}}
   <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
     @agendaitem={{@agendaitem}}
     @subcase={{await this.subcase}}
@@ -24,6 +25,7 @@
   />
 {{else}}
   {{#if @agendaitem.agendaActivity}}
+  {{!-- TODO refactor mandatees to a glimmer component  --}}
     <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
       @agendaitem={{@agendaitem}}
       @subcase={{await this.subcase}}

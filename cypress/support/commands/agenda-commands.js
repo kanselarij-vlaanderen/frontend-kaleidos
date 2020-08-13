@@ -22,10 +22,11 @@ import agendaOverview from '../../selectors/agenda-overview.selectors';
  * @param {*} kind The kind of meeting to select, language and case sensitive
  * @param {*} date The cypress.moment object with the date and time to set
  * @param {string} location The location of the meeting to enter as input
- * @param {number} meetingNumber The location of the meeting to enter as input
+ * @param {number} meetingNumber The number of the meeting to enter as input
+ * @param {string} meetingNumberVisualRepresentation The visual representation of the meetingnumber to enter as input
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, date, location, meetingNumber) {
+function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation) {
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
@@ -88,8 +89,31 @@ function createAgenda(kind, date, location, meetingNumber) {
       }
     });
 
+  // Set the meetingNumber
+  if (meetingNumberVisualRepresentation) {
+    cy.get(form.meeting.meetingEditIdentifierButton).click({
+      force: true,
+    });
+    cy.get(form.formInput).eq(1)
+      .click()
+      .clear()
+      .type(meetingNumberVisualRepresentation);
+    cy.get(utils.saveButton).contains('Opslaan')
+      .click();
+  } else {
+    cy.get(form.meeting.meetingEditIdentifierButton).click({
+      force: true,
+    });
+    cy.get(form.formInput).eq(1)
+      .click({
+        force: true,
+      })
+      .invoke('val')
+      .then((sometext) => meetingNumberVisualRepresentation = sometext);
+  }
+
   // Set the location
-  cy.get('@newAgendaForm').eq(3)
+  cy.get('@newAgendaForm').eq(2)
     .within(() => {
       cy.get('.vl-input-field').click({
         force: true,
@@ -122,7 +146,7 @@ function createAgenda(kind, date, location, meetingNumber) {
   })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
-        meetingId, meetingNumber, agendaId,
+        meetingId, meetingNumber, agendaId, meetingNumberVisualRepresentation,
       });
     }));
 }
@@ -315,6 +339,7 @@ function deleteAgenda(meetingId, lastAgenda) {
  * @function
  */
 function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = 'Formeel OK') {
+  // TODO set only some items to formally ok with list as parameter
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
 
@@ -400,7 +425,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function approveDesignAgenda() {
+const approveDesignAgenda = () => {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
   // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
   cy.route('GET', '/agendas/**').as('getAgendas');
@@ -408,21 +433,51 @@ function approveDesignAgenda() {
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   // TODO use test selector
   cy.get('.vlc-toolbar').within(() => {
-    cy.get('.vl-button')
-      .contains('Ontwerpagenda')
-      .click()
-      .wait('@patchAgenda', {
-        timeout: 12000,
-      })
-      // .wait('@getAgendaitems', { timeout: 12000 })
-      .wait('@getAgendas', {
-        timeout: 12000,
-      });
+    cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
+  cy.get(agenda.approveAgenda).click()
+    .wait('@patchAgenda', {
+      timeout: 12000,
+    })
+    // .wait('@getAgendaitems', { timeout: 12000 })
+    .wait('@getAgendas', {
+      timeout: 12000,
+    });
+
   cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
     verbose: true, timeout: 60000,
   });
-}
+};
+
+/**
+ * @description Approve an open agenda when all formally OK's are set ()
+ * @name approveAndCloseDesignAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+const approveAndCloseDesignAgenda = () => {
+  cy.route('PATCH', '/agendas/**').as('patchAgendaAndCloseAgenda');
+  // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
+  cy.route('GET', '/agendas/**').as('getAgendasInCloseDesignAgenda');
+
+  // TODO add boolean for when not all items are formally ok, click through the confirmation modal
+  // TODO use test selector
+  cy.get('.vlc-toolbar').within(() => {
+    cy.get(agenda.agendaHeaderShowAgendaOptions).click();
+  });
+  cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click()
+    .wait('@patchAgendaAndCloseAgenda', {
+      timeout: 12000,
+    })
+  // .wait('@getAgendaitems', { timeout: 12000 })
+    .wait('@getAgendasInCloseDesignAgenda', {
+      timeout: 12000,
+    });
+
+  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
+    verbose: true, timeout: 60000,
+  });
+};
 
 /**
  * @description Add a new case to the agenda
@@ -719,3 +774,4 @@ Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
+Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);

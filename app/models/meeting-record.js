@@ -6,8 +6,8 @@ const {
 } = DS;
 
 export default Model.extend({
-  created: attr('date'),
-  modified: attr('date'),
+  created: attr('datetime'),
+  modified: attr('datetime'),
   announcements: attr('string'),
   others: attr('string'),
   richtext: attr('string'),
