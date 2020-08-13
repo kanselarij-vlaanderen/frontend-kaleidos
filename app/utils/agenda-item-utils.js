@@ -233,10 +233,10 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
  */
 export const setAgendaItemsPriority = (agendaItems, isEditor, isDesignAgenda) => {
   if (isEditor || isDesignAgenda) {
-    return agendaItems.map((item, index) => {
-      item.set('priority', index + 1);
-      item.save();
-      return item;
+    return agendaItems.map((agendaitem, index) => {
+      agendaitem.set('priority', index + 1);
+      agendaitem.save();
+      return agendaitem;
     });
   }
 };
