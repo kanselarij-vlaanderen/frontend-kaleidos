@@ -6,6 +6,9 @@ import {
   alias, deprecatingAlias
 } from '@ember/object/computed';
 import { A } from '@ember/array';
+import {
+  destroyApprovalsOfAgendaitem, setNotYetFormallyOk
+} from 'fe-redpencil/utils/agenda-item-utils';
 
 import moment from 'moment';
 import config from 'fe-redpencil/utils/config';
@@ -127,10 +130,13 @@ export default Component.extend(
       return model;
     },
 
+    // TODO duplicate code in document-link
     async addDocumentsToAgendaitems(documents, agendaitems) {
       return Promise.all(
         agendaitems.map(async(agendaitem) => {
           await this.attachDocumentsToModel(documents, agendaitem);
+          setNotYetFormallyOk(agendaitem);
+          await destroyApprovalsOfAgendaitem(agendaitem);
           return await agendaitem.save();
         })
       );
@@ -138,7 +144,18 @@ export default Component.extend(
 
     async addDocumentsToSubcase(documents, subcase) {
       await this.attachDocumentsToModel(documents, subcase);
+      setNotYetFormallyOk(subcase);
       return await subcase.save();
+    },
+
+    async addDocumentToAnyModel(documents, item) {
+      const itemType = item.get('constructor.modelName');
+      await item.hasMany('documentVersions').reload();
+      await this.attachDocumentsToModel(documents, item);
+      if (itemType === 'subcase' || itemType === 'agendaitem') {
+        setNotYetFormallyOk(item);
+      }
+      return await item.save();
     },
 
     async linkDocumentsToAgendaitems(documents, agendaitems) {
@@ -266,8 +283,7 @@ export default Component.extend(
                 agendaitemsOnDesignAgenda
               );
             }
-            await this.attachDocumentsToModel(documentsToAttach, item);
-            await item.save();
+            await this.addDocumentToAnyModel(documentsToAttach, item);
           }
         } catch (error) {
           this.deleteAll();
