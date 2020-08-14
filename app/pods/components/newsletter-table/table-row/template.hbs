@@ -29,7 +29,7 @@
       @valueChanged={{this.setInNewsletter}}
     />
   </td>
-  <td class="lt-cell align-left">{{moment-format @newsletterInfo.modified}}</td>
+  <td class="lt-cell align-left">{{moment-format @newsletterInfo.modified "DD.MM.YYYY - HH:mm"}}</td>
   <td class="lt-cell align-left">
     <NewsletterTable::ButtonToolbar
       @agendaItem={{@agendaItem}}
