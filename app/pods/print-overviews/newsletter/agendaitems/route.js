@@ -7,24 +7,17 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
   sort: 'priority',
 
-  model() {
-    return this.store
-      .query('agendaitem', {
-        'filter[agenda][:id:]': this.modelFor('print-overviews.newsletter').get('id'),
-        'filter[show-as-remark]': false,
-        include: 'treatments,treatments.newsletter-info',
-        sort: this.get('sort'),
-        page: {
-          size: 9999,
-          number: 0,
-        },
-      })
-      .then((items) => items.toArray());
-  },
-
-  setupController(controller) {
-    this._super(...arguments);
-    controller.set('sort', this.sort);
+  async model() {
+    const newsletterInfos = await this.store
+      .query('newsletter-info', {
+        'filter[agenda-item-treatment][agendaitem][agenda][:id:]': this.modelFor('print-overviews.newsletter').get('id'),
+        'filter[agenda-item-treatment][agendaitem][show-as-remark]': false,
+        'filter[agenda-item-treatment][agendaitem][is-approval]': false,
+        include: 'agenda-item-treatment,agenda-item-treatment.agendaitem,agenda-item-treatment.agendaitem.mandatees',
+        sort: 'agenda-item-treatment.agendaitem.priority',
+        'page[size]': 300,
+      });
+    return newsletterInfos;
   },
 
   actions: {
