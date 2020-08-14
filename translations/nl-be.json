@@ -596,5 +596,6 @@
   "no-documents-to-download-warning-title": "Download afgebroken",
   "approve-small-and-close": "goedkeuren en afsluiten",
   "agendaApproveActions": "Agenda goedkeuren",
-  "meeting-number-visual-representation": "Nummer van de vergadering"
+  "meeting-number-visual-representation": "Nummer van de vergadering",
+  "title-and-content": "Titel en inhoud"
 }

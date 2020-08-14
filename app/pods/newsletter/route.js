@@ -4,6 +4,11 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class NewsletterRoute extends Route.extend(AuthenticatedRouteMixin) {
+  queryParams = {
+    sort: {
+      refreshModel: true,
+    },
+  };
   @service currentSession;
 
   /* Although counterintuïtive for a route named "newsletter", this model needs to
@@ -19,7 +24,7 @@ export default class NewsletterRoute extends Route.extend(AuthenticatedRouteMixi
         'filter[show-as-remark]': false,
         'filter[is-approval]': false,
         include: 'treatments.newsletter-info',
-        sort: 'priority',
+        sort: params.sort,
         'page[size]': 300,
       });
     return Promise.all(agendaItems.map(async(agendaItem) => ({
@@ -40,6 +45,6 @@ export default class NewsletterRoute extends Route.extend(AuthenticatedRouteMixi
 
   @action
   refresh() {
-    this.refresh();
+    super.refresh();
   }
 }
