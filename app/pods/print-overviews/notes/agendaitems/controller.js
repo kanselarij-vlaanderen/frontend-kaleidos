@@ -17,6 +17,7 @@ export default Controller.extend({
       classNames: ['vl-data-table-col-7 vl-data-table__header-title'],
       cellClassNames: ['vl-data-table-col-7'],
       sortable: false,
+      width: '58.33%',
       breakpoints: ['mobile', 'tablet', 'desktop'],
       cellComponent: 'web-components/vl-agendaitem-content-column',
     },
@@ -25,6 +26,7 @@ export default Controller.extend({
       classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
       cellClassNames: ['vl-data-table-col-2'],
       sortable: false,
+      width: '16.66%',
       breakpoints: ['mobile', 'tablet', 'desktop'],
       valuePath: 'sortedMandatees',
       cellComponent: 'web-components/vl-mandatees-column',
@@ -36,6 +38,7 @@ export default Controller.extend({
       breakpoints: ['mobile', 'tablet', 'desktop'],
       valuePath: 'modified',
       sortable: true,
+      width: '16.66%',
       cellComponent: 'web-components/vl-modified-column',
     },
     {
