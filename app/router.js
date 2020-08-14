@@ -68,7 +68,10 @@ Router.map(function() {
 
   this.route('newsletters', { path: '/kort-bestek', });
 
-  this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', });
+  this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', }, function() {
+    this.route('index', { path: '/', });
+    this.route('print', { path: '/afdrukken', });
+  });
 
   this.route('print-overviews', { path: '/overzicht/:meeting_id', }, function() {
     this.route('notes', { path: '/notulen/:agenda_id', }, function() {

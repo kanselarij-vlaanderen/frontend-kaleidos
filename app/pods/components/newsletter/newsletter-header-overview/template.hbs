@@ -37,8 +37,8 @@
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     <LinkTo
-                      @route="print-overviews.newsletter.overview"
-                      @model={{agenda.id}}
+                      @route="newsletter.print"
+                      @model={{await agenda.createdFor.id}}
                       @query={{hash definite=false}}
                       class="vlc-tabs-reverse__link"
                       @activeClass="vlc-tabs-reverse__link--active" >
@@ -47,8 +47,8 @@
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     <LinkTo
-                      @route="print-overviews.newsletter.overview"
-                      @model={{agenda.id}}
+                      @route="newsletter.print"
+                      @model={{await agenda.createdFor.id}}
                       @query={{hash definite=true}}
                       class="vlc-tabs-reverse__link"
                       @activeClass="vlc-tabs-reverse__link--active" >

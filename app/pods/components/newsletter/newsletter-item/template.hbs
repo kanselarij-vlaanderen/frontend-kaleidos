@@ -10,15 +10,6 @@
         agendaitem=agendaitem
         newsletterInfo=newsletterInfo
       }}
-    {{else if agendaitem.showAsRemark}}
-      {{newsletter/newsletter-item/item-content
-        allowEditing=allowEditing
-        definite=definite
-        itemIndex=itemIndex
-        isEditing=isEditing
-        agendaitem=agendaitem
-        newsletterInfo=newsletterInfo
-      }}
     {{/if}}
   {{else}}
     {{newsletter/newsletter-item/item-content
