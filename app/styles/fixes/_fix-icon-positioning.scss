@@ -1,0 +1,26 @@
+/* ==========================================================================
+	 Icon Positioning Fixes
+
+   For all cases where icon-specific changes need to be made to look right
+	 ========================================================================== */
+
+/* Datepicker calendar off-center fix
+	 ========================================================================== */
+.vl-datepicker {
+  .vl-input-addon {
+    .ki-calendar {
+      height: 100%;
+      line-height: 4rem;
+    }
+  }
+}
+
+/* Search magnifier in a button off-center fix
+	 ========================================================================== */
+
+.vl-button {
+  .ki-search {
+    height: 100%;
+    line-height: 3.7rem;
+  }
+}
