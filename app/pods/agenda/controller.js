@@ -57,11 +57,10 @@ export default Controller.extend({
       );
     },
 
-    navigateToNewsletter(currentSessionId, currentAgendaId) {
+    navigateToNewsletter(currentSessionId) {
       this.transitionToRoute(
-        'print-overviews.newsletter.agendaitems',
-        currentSessionId,
-        currentAgendaId
+        'newsletter',
+        currentSessionId
       );
     },
 

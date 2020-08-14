@@ -1,0 +1,29 @@
+<Newsletter::NewsletterHeaderOverview
+  @agenda={{this.agenda}}
+/>
+<div class="vlc-scroll-wrapper__body">
+  <div class="vl-u-spacer-extended-l">
+    <table class="vl-data-table vl-data-table vl-data-table--hover vl-data-table--zebra">
+      <thead class="lt-head">
+        <tr class="lt-scaffolding-row"></tr>
+        <tr>
+          <th class="lt-column align-left">#</th>
+          <th class="lt-column align-left vl-data-table-col-7">Titel en inhoud</th>
+          <th class="lt-column align-left">Minister</th>
+          <th class="lt-column align-left">In kort bestek</th>
+          <th class="lt-column align-left">Laatst gewijzigd</th>
+          <th class="c-table__header c-table__header--actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each model as |item|}}
+          <NewsletterTable::TableRow
+            @agendaItem={{item.agendaItem}}
+            @newsletterInfo={{item.newsletterInfo}}
+          />
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{outlet}}

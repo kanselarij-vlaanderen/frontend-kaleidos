@@ -27,10 +27,11 @@
                 <ul class="vlc-tabs-reverse" role="tablist">
                   <li class="vlc-tabs-reverse__item">
                     <LinkTo
-                      @route="print-overviews.newsletter.agendaitems"
-                      @model={{agenda}}
                       class="border-left vlc-tabs-reverse__link"
-                      @activeClass="vlc-tabs-reverse__link--active" >
+                      @route="newsletter"
+                      @model={{await agenda.createdFor.id}}
+                      @activeClass="vlc-tabs-reverse__link--active"
+                    >
                       {{t "overview"}}
                     </LinkTo>
                   </li>

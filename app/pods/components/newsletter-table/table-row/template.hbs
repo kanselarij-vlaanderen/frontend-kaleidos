@@ -3,17 +3,22 @@
     {{@agendaItem.priority}}
   </td>
   <td class="lt-cell align-left vl-data-table-col-7">
-    {{#if @newsletterInfo}}
+    {{#if this.hasNewsletterInfo}}
       <div class="vl-u-spacer-extended-bottom-s">
         <p class="vl-u-text--bold">
-          {{@newsletterInfo.title}}
+          {{this.newsletterInfo.title}}
         </p>
       </div>
       <div class="vl-u-spacer-extended-bottom-s">
-        {{{@newsletterInfo.richtext}}}
+        {{{this.newsletterInfo.richtext}}}
       </div>
+      {{#if this.newsletterInfo.remark}}
+        <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+          {{this.newsletterInfo.remark}}
+        </p>
+      {{/if}}
     {{else}}
-      <p class="vl-u-text--muted">
+      <p class="vl-u-text--muted vl-u-text--italic">
         {{t "no-newsletter-info"}}
       </p>
     {{/if}}
@@ -21,15 +26,26 @@
   <td class="lt-cell align-left">
     {{#each (await @agendaItem.mandatees) as |mandatee|}}
       {{await mandatee.person.nameToDisplay}}<br>
+    {{else}}
+      <p class="vl-u-text--muted vl-u-text--italic">
+        Geen ministers
+      </p>
     {{/each}}
   </td>
   <td class="lt-cell align-left">
     <WebComponents::VlToggle
-      @value={{@newsletterInfo.inNewsletter}}
+      @disabled={{not this.hasNewsletterInfo}}
+      @value={{this.newsletterInfo.inNewsletter}}
       @valueChanged={{this.setInNewsletter}}
     />
   </td>
-  <td class="lt-cell align-left">{{moment-format @newsletterInfo.modified "DD.MM.YYYY - HH:mm"}}</td>
+  <td class="lt-cell align-left">
+    {{#if this.hasNewsletterInfo}}
+      {{moment-format this.newsletterInfo.modified "DD.MM.YYYY - HH:mm"}}
+    {{else}}
+      -
+    {{/if}}
+  </td>
   <td class="lt-cell align-left">
     <NewsletterTable::ButtonToolbar
       @agendaItem={{@agendaItem}}
@@ -42,7 +58,7 @@
     <td colspan="5">
       <div class="vlc-container-center">
         <NewsItem::EditItem
-          @newsletterInfo={{@newsletterInfo}}
+          this.newsletterInfo={{this.newsletterInfo}}
           @agendaitem={{@agendaItem}}
           @onCancel={{this.stopEditing}}
           @onSave={{this.stopEditing}}

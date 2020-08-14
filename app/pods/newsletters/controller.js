@@ -8,8 +8,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 
   actions: {
     async navigateToNewsletter(meeting) {
-      const latestAgenda = await meeting.get('latestAgenda');
-      this.transitionToRoute('print-overviews.newsletter.agendaitems', meeting.get('id'), latestAgenda.get('id'));
+      this.transitionToRoute('newsletter', meeting.get('id'));
     },
   },
 });
