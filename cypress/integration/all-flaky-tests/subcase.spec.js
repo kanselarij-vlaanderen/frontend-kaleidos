@@ -342,7 +342,7 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsRequest');
     cy.wait('@getAgendas');
 
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(SubcaseTitleShort);
 
     cy.get(agenda.item.themes).contains('Sport');
     cy.get(agenda.item.themes).contains('Overheid');
