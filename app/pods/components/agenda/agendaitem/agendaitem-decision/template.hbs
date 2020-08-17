@@ -69,7 +69,7 @@
   {{#if this.decision.signedDocument}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
       @document={{await this.decision.signedDocument}}
-      @item={{await this.decision.signedDocument}}
+      @agendaitemOrSubcase={{await this.decision.signedDocument}}
     />
   {{else}}
     <Utils::AddSignedDocuments

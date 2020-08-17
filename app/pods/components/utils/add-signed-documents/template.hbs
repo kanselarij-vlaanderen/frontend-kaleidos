@@ -1,6 +1,7 @@
 {{#if (await meetingRecordOrDecision.signedDocument)}}
   {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
     document=(await meetingRecordOrDecision.signedDocument)
+    agendaitemOrSubcase=(await meetingRecordOrDecision.signedDocument)
   }}
 {{else if (await meetingRecordOrDecision)}}
   {{#if currentSession.isEditor}}

@@ -34,7 +34,7 @@
   {{else}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
       @document={{await agendaitem.meetingRecord.signedDocument}}
-      @item={{await agendaitem.meetingRecord.signedDocument}} />
+      @agendaitemOrSubcase={{await agendaitem.meetingRecord.signedDocument}} />
   {{/if}}
 {{else}}
   <Agenda::Agendaitem::AgendaitemMinutesEdit
