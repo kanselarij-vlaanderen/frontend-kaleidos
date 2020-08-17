@@ -19,9 +19,9 @@
 </div>
 <div class="vlc-input-field-block">
   {{utils/documents-selector-of-agendaitem
-    item=agendaitem
+    agendaitem=agendaitem
     title=(t "documents-attached-to")
-    itemWithDocuments=(await item)
+    decision=(await decision)
     selectDocument=(action "selectDocument")
   }}
 </div>
