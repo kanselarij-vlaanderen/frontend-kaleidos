@@ -1,9 +1,16 @@
 <div class="vl-u-spacer--large">
   <div class="vl-u-spacer">
     <div class="vl-u-display-flex vlc-u-display-flex-align-center">
-      <h4 class="vl-title vl-title--h4">
-        {{t "documents"}}
-      </h4>
+      <div>
+        <h4 class="vl-title vl-title--h4">
+          {{t "documents"}}
+        </h4>
+        {{#if agendaitemOrSubcase.explanation}}
+          <pre data-test-agendaitem-explanation class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+            {{t "remark-title"}}: {{await agendaitemOrSubcase.explanation}}
+          </pre>
+        {{/if}}
+      </div>
       {{#if
         (and currentSession.isEditor (gt (await agendaitemOrSubcase.documentsLength) 0))
       }}
