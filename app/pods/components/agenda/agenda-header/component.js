@@ -99,7 +99,7 @@ export default Component.extend(FileSaverMixin, {
     await session.save();
     const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
-    const approved = await this.store.findRecord('agendastatus', 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1');
+    const approved = await this.store.findRecord('agendastatus', CONFIG.agendaStatusApproved.id);
     lastDefiniteAgenda.set('status', approved);
     await lastDefiniteAgenda.save();
     this.get('agendaService')
@@ -167,7 +167,7 @@ export default Component.extend(FileSaverMixin, {
     meetingOfAgenda.set('agenda', lastAgenda);
     await meetingOfAgenda.save();
 
-    const closed = await this.store.findRecord('agendastatus', 'f06f2b9f-b3e5-4315-8892-501b00650101');
+    const closed = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id);
     lastAgenda.set('status', closed);
     await lastAgenda.save();
     this.set('sessionService.currentSession.agendas', meetingOfAgenda.agendas);
@@ -296,7 +296,7 @@ export default Component.extend(FileSaverMixin, {
       session.set('agenda', lastAgenda);
 
       await session.save();
-      const closed = await this.store.findRecord('agendastatus', 'f06f2b9f-b3e5-4315-8892-501b00650101'); // Async call
+      const closed = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id); // Async call
       lastAgenda.set('status', closed);
       await lastAgenda.save();
 

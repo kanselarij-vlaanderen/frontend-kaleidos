@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import {
   task, timeout
 } from 'ember-concurrency';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Controller.extend({
   queryParams: ['role', 'page'],
@@ -11,7 +12,7 @@ export default Controller.extend({
 
   queryStore: task(function *() {
     const filter = {
-      provider: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
+      provider: CONFIG.mockLoginServiceProvider,
     };
     if (this.role) {
       filter.user = {
