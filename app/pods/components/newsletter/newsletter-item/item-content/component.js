@@ -7,7 +7,6 @@ export default Component.extend({
   classNameBindings: ['isFlandersArt:vl-typography--definite'],
   newsletterService: inject(),
   currentSession: inject(),
-  isShowingVersions: false,
   allowEditing: false,
   definite: false,
   itemIndex: 0,
@@ -30,9 +29,6 @@ export default Component.extend({
   }),
 
   actions: {
-    showDocuments() {
-      this.toggleProperty('isShowingVersions');
-    },
     async toggleIsEditing() {
       if (!this.newsletterInfo) {
         await this.newsletterService.createNewsItemForAgendaItem(this.agendaitem);
