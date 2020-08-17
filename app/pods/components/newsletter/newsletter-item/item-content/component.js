@@ -29,11 +29,10 @@ export default Component.extend({
   }),
 
   actions: {
-    async stopEditing() {
-      this.set('isEditing', false);
-    },
-    async startEditing() {
-      this.set('isEditing', true);
+    startEditing() {
+      if (this.onStartEditing) {
+        this.onStartEditing();
+      }
     },
   },
 });

@@ -14,6 +14,7 @@
   {{else}}
     {{newsletter/newsletter-item/item-content
       allowEditing=allowEditing
+      onStartEditing=(action "startEditing")
       definite=definite
       isEditing=isEditing
       agendaitem=agendaitem
@@ -21,10 +22,10 @@
     }}
   {{/if}}
 {{else}}
-  {{news-item/edit-item
-    agendaitem=agendaitem
-    isLoading=isLoading
-    newsletterInfo=newsletterInfo
-    isEditing=isEditing
+  <NewsItem::EditItem
+    @agendaitem={{this.agendaitem}}
+    @newsletterInfo={{this.newsletterInfo}}
+    @onSave={{action "stopEditing"}}
+    @onCancel={{action "stopEditing"}}
   }}
 {{/if}}
