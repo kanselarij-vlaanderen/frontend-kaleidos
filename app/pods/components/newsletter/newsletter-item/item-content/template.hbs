@@ -9,6 +9,7 @@
           {{newsletterInfo.title}}
         {{/if}}
       </h4>
+      {{!-- No possibility to create a new newsletterInfo when not existent yet --}}
       {{#if
         (and
           currentSession.isEditor
@@ -17,7 +18,7 @@
       }}
         <div class="vl-u-display-flex vlc-u-flex-space-between">
           <div class="vl-u-spacer-extended-left-s">
-            <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+            <a href="" class="vl-link" {{action "startEditing"}}>
               {{t "edit"}}
             </a>
           </div>

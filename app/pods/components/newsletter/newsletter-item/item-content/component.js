@@ -29,12 +29,11 @@ export default Component.extend({
   }),
 
   actions: {
-    async toggleIsEditing() {
-      if (!this.newsletterInfo) {
-        await this.newsletterService.createNewsItemForAgendaItem(this.agendaitem);
-      } else {
-        this.toggleProperty('isEditing');
-      }
+    async stopEditing() {
+      this.set('isEditing', false);
+    },
+    async startEditing() {
+      this.set('isEditing', true);
     },
   },
 });
