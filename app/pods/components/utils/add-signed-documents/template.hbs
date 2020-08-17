@@ -1,9 +1,8 @@
-{{#if (await item.signedDocument)}}
+{{#if (await meetingRecordOrDecision.signedDocument)}}
   {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=(await item.signedDocument)
-    item=(await item.signedDocument)
+    document=(await meetingRecordOrDecision.signedDocument)
   }}
-{{else if (await item)}}
+{{else if (await meetingRecordOrDecision)}}
   {{#if currentSession.isEditor}}
     <button type="button" class="vl-button vl-button--tertiary"
       data-test-upload-decision-file
