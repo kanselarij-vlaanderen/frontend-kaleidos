@@ -32,7 +32,7 @@ export default Component.extend({
   }),
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
-  myDocumentVersions: computed.alias('item.documentVersions'),
+  myDocumentVersions: computed.alias('agendaitemOrSubcase.documentVersions'),
 
   lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');
@@ -141,17 +141,17 @@ export default Component.extend({
 
   async deleteDocumentContainerWithUndo() {
     const {
-      item,
+      agendaitemOrSubcase,
     } = this;
-    const documents = item.get('documentVersions');
-    const itemType = item.get('constructor.modelName');
+    const documents = agendaitemOrSubcase.get('documentVersions');
+    const itemType = agendaitemOrSubcase.get('constructor.modelName');
     if (itemType === 'document') {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
     } else {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete)
         .then(() => {
-          if (!item.aboutToDelete && documents) {
-            item.hasMany('documentVersions').reload();
+          if (!agendaitemOrSubcase.aboutToDelete && documents) {
+            agendaitemOrSubcase.hasMany('documentVersions').reload();
           }
         });
     }
@@ -280,9 +280,9 @@ export default Component.extend({
     },
 
     async openUploadDialog() {
-      const itemType = this.item.get('constructor.modelName');
+      const itemType = this.agendaitemOrSubcase.get('constructor.modelName');
       if (itemType === 'agendaitem' || itemType === 'subcase') {
-        await this.item.preEditOrSaveCheck();
+        await this.agendaitemOrSubcase.preEditOrSaveCheck();
       }
       this.toggleProperty('isUploadingNewVersion');
     },
@@ -311,9 +311,9 @@ export default Component.extend({
       this.set('isLoading', true);
       const document = await this.get('documentContainer.lastDocumentVersion');
       await document.save();
-      const item = await this.get('item');
-      const agendaActivity = await item.get('agendaActivity'); // when item = agendaitem
-      const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
+      const agendaitemOrSubcase = await this.get('agendaitemOrSubcase');
+      const agendaActivity = await agendaitemOrSubcase.get('agendaActivity'); // when item = agendaitem
+      const agendaitemsOnDesignAgenda = await agendaitemOrSubcase.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
       try {
         if (agendaActivity) {
           const subcase = await agendaActivity.get('subcase');
@@ -321,7 +321,7 @@ export default Component.extend({
         } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
           await this.addDocumentToAgendaitems([document], agendaitemsOnDesignAgenda);
         }
-        await this.addDocumentToAnyModel([document], item);
+        await this.addDocumentToAnyModel([document], agendaitemOrSubcase);
       } catch (error) {
         await this.deleteUploadedDocument();
         throw error;
