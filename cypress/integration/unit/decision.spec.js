@@ -101,7 +101,7 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/BIS/);
-        cy.get('.vl-vi-nav-show-more-horizontal').click();
+        cy.get('.ki-more').click();
       });
     cy.get('.vlc-dropdown-menu').within(() => {
       cy.get('.vl-u-text--error').contains('Document verwijderen')
@@ -126,7 +126,7 @@ context('Add files to an agenda', () => {
 
     // TODO, this delete of decision could have a seperate test, but the setup is 99% the same as this test
     cy.get('.vl-typography > .vl-u-display-flex').within(() => {
-      cy.get('.vl-vi-nav-show-more-horizontal').click();
+      cy.get('.ki-more').click();
     });
     cy.get(agenda.deleteDecision).click();
     cy.get('.vl-modal').within(() => {
