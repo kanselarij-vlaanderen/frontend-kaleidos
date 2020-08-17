@@ -96,7 +96,7 @@ export default Component.extend({
     this.set('documentsInCreation', A([]));
     const accessLevels = await this.store.findAll('access-level');
     try {
-      this.set('defaultAccessLevel', accessLevels.find((item) => item.id === config.internRegeringAccessLevelId));
+      this.set('defaultAccessLevel', accessLevels.find((accesslevel) => accesslevel.id === config.internRegeringAccessLevelId));
     } catch (exception) {
       // TODO error during cypress tests:
       console.warn('An exception occurred', exception);
@@ -194,18 +194,18 @@ export default Component.extend({
     return await subcase.save();
   },
 
-  async addDocumentToAnyModel(documents, item) {
-    const itemType = item.get('constructor.modelName');
+  async addDocumentToAnyModel(documents, subcaseAgendaitemMeetingOrDocumentContainer) {
+    const itemType = subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
     if (itemType === 'document') {
       // The document is already saved in this case
       return;
     }
-    await item.hasMany('documentVersions').reload();
-    await this.attachDocumentsToModel(documents, item);
+    await subcaseAgendaitemMeetingOrDocumentContainer.hasMany('documentVersions').reload();
+    await this.attachDocumentsToModel(documents, subcaseAgendaitemMeetingOrDocumentContainer);
     if (itemType === 'subcase' || itemType === 'agendaitem') {
-      setNotYetFormallyOk(item);
+      setNotYetFormallyOk(subcaseAgendaitemMeetingOrDocumentContainer);
     }
-    return await item.save();
+    return await subcaseAgendaitemMeetingOrDocumentContainer.save();
   },
 
   actions: {
@@ -312,8 +312,8 @@ export default Component.extend({
       const document = await this.get('documentContainer.lastDocumentVersion');
       await document.save();
       const agendaitemOrSubcase = await this.get('agendaitemOrSubcase');
-      const agendaActivity = await agendaitemOrSubcase.get('agendaActivity'); // when item = agendaitem
-      const agendaitemsOnDesignAgenda = await agendaitemOrSubcase.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
+      const agendaActivity = await agendaitemOrSubcase.get('agendaActivity'); // when agendaitemOrSubcase = agendaitem
+      const agendaitemsOnDesignAgenda = await agendaitemOrSubcase.get('agendaitemsOnDesignAgendaToEdit'); // when agendaitemOrSubcase = subcase
       try {
         if (agendaActivity) {
           const subcase = await agendaActivity.get('subcase');
