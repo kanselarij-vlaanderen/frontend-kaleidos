@@ -148,14 +148,14 @@ export default Component.extend(
       return await subcase.save();
     },
 
-    async addDocumentToAnyModel(documents, item) {
-      const itemType = item.get('constructor.modelName');
-      await item.hasMany('documentVersions').reload();
-      await this.attachDocumentsToModel(documents, item);
+    async addDocumentToAgendaitemOrSubcaseOrMeeting(documents, agendaitemOrSubcaseOrMeeting) {
+      const itemType = agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
+      await agendaitemOrSubcaseOrMeeting.hasMany('documentVersions').reload();
+      await this.attachDocumentsToModel(documents, agendaitemOrSubcaseOrMeeting);
       if (itemType === 'subcase' || itemType === 'agendaitem') {
-        setNotYetFormallyOk(item);
+        setNotYetFormallyOk(agendaitemOrSubcaseOrMeeting);
       }
-      return await item.save();
+      return await agendaitemOrSubcaseOrMeeting.save();
     },
 
     async linkDocumentsToAgendaitems(documents, agendaitems) {
@@ -283,7 +283,7 @@ export default Component.extend(
                 agendaitemsOnDesignAgenda
               );
             }
-            await this.addDocumentToAnyModel(documentsToAttach, item);
+            await this.addDocumentToAgendaitemOrSubcaseOrMeeting(documentsToAttach, item);
           }
         } catch (error) {
           this.deleteAll();
