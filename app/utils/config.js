@@ -138,5 +138,4 @@ export default EmberObject.create({
     id: 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
     uri: 'http://kanselarij.vo.data.gift/id/agendastatus/ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
   },
->>>>>>> development
 });
