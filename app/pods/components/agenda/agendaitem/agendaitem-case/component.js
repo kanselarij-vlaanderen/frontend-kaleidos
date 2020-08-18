@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject } from '@ember/service';
-import { computed, set, action } from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class AgendaItemCase extends Component {
@@ -32,5 +32,4 @@ export default class AgendaItemCase extends Component {
   toggleIsEditing() {
     this.isEditing = !this.isEditing;
   }
-
 }
