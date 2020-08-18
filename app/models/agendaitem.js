@@ -33,7 +33,7 @@ export default ModelWithModifier.extend({
   shortTitle: attr('string'),
   title: attr('string'),
   formallyOk: attr('string'),
-  isApproval: attr('boolean'),
+  isApproval: attr('boolean'), // isGoedkeuringVanDeNotulen
   explanation: attr('string'),
 
   agenda: belongsTo('agenda', {
