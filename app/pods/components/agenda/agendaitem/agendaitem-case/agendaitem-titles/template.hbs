@@ -1,13 +1,13 @@
 {{#if
-  (and @subcases.case.id currentSession.isEditor)
+  (and @subcase.case.id currentSession.isEditor)
 }}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
         @models={{array
-          subcases.case.id
-          subcases.id
+          @subcase.case.id
+          @subcase.id
         }}
         class="vl-link" >
         {{t "to-subcase"}}
