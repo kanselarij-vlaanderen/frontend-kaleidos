@@ -127,7 +127,7 @@
             {{t "at"}}
             {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
             {{#if (await lastDocumentVersion.publicSince)}}
-              {{t "changed-privileges"}}
+              {{t "public-since"}}
               {{moment-format (await lastDocumentVersion.publicSince)}}
             {{/if}}
           </div>
