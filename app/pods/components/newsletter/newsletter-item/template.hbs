@@ -5,6 +5,7 @@
     {{#if (await newsletterInfo.inNewsletter)}}
       {{newsletter/newsletter-item/item-content
         allowEditing=allowEditing
+        onStartEditing=(action "startEditing")
         itemIndex=itemIndex
         isEditing=isEditing
         agendaitem=agendaitem
@@ -27,5 +28,5 @@
     @newsletterInfo={{this.newsletterInfo}}
     @onSave={{action "stopEditing"}}
     @onCancel={{action "stopEditing"}}
-  }}
+  />
 {{/if}}
