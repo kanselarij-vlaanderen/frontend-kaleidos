@@ -67,13 +67,16 @@ export default Model.extend({
       this.set('publicSince', undefined);
     }
   },
-  async save() {
+
+  save() {
     const parentSave = this._super;
-    const dirtyType = await this.get('dirtyType');
+    const dirtyType = this.get('dirtyType');
     switch (dirtyType) {
       case 'deleted':
         break;
       default:
+        this.set('modified', moment().utc()
+          .toDate());
         this.changePublicSince();
         break;
     }
