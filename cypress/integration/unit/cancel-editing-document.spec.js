@@ -189,7 +189,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         .click();
       cy.get('.vl-input-field--block').click()
         .type(extraName);
-      cy.get('.ki-download').click();
+      cy.get('.ki-check').click();
       // TODO patch happens
     });
     cy.get('.vlc-document-card').within(() => {

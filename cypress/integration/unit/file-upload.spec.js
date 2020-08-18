@@ -149,7 +149,7 @@ context('Add files to an agenda', () => {
         cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
         cy.get('@versions').eq(0)
           .within(() => {
-            cy.get('.ki-trash').click();
+            cy.get('.ki-delete').click();
           });
       });
     cy.route('DELETE', 'files/*').as('deleteFile');
