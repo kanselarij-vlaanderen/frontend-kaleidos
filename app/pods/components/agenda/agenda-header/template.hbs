@@ -52,37 +52,38 @@
                 ></i>
               {{/if}}
               {{t "agendaApproveActions"}}
+              {{#attach-popover
+                class="ember-attacher-popper vlc-hide-on-print"
+                hideOn="clickout click"
+                showOn="click"
+                animation="shift"
+                placement="bottom"
+              as |attacher|
+              }}
+                <ul class="vlc-dropdown-menu">
+                  {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
+                    <li class="vlc-dropdown-menu__item">
+                      <button type="button" data-test-agenda-header-approveAgenda class="vl-link vl-link--block"
+                        {{action attacher.hide}}
+                        {{action "tryToApproveAgenda" currentSession}}
+                      >
+                        {{await currentSession.latestAgendaName}} {{t "approve-small"}}
+                      </button>
+                    </li>
+                    <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                    <li class="vlc-dropdown-menu__item">
+                      <button  type="button" data-test-agenda-header-approve-and-close-agenda class="vl-link vl-link--block"
+                        {{action attacher.hide}}
+                        {{action "approveAndCloseAgenda" currentSession}}
+                      >
+                        {{await currentSession.latestAgendaName}} {{t "approve-small-and-close"}}
+                      </button>
+                    </li>
+                  {{/if}}
+                </ul>
+              {{/attach-popover}}
+
             </button>
-            {{#attach-popover
-              class="ember-attacher-popper vlc-hide-on-print"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom"
-            as |attacher|
-            }}
-              <ul class="vlc-dropdown-menu">
-                {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
-                  <li class="vlc-dropdown-menu__item">
-                    <button type="button" data-test-agenda-header-approveAgenda class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "tryToApproveAgenda" currentSession}}
-                    >
-                      {{await currentSession.latestAgendaName}} {{t "approve-small"}}
-                    </button>
-                  </li>
-                  <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                  <li class="vlc-dropdown-menu__item">
-                    <button  type="button" data-test-agenda-header-approve-and-close-agenda class="vl-link vl-link--block"
-                      {{action attacher.hide}}
-                      {{action "approveAndCloseAgenda" currentSession}}
-                    >
-                      {{await currentSession.latestAgendaName}} {{t "approve-small-and-close"}}
-                    </button>
-                  </li>
-                {{/if}}
-              </ul>
-            {{/attach-popover}}
           {{/if}}
           <button type="button"
                   data-test-agenda-header-showActionOptions

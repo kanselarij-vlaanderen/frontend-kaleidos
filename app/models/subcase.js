@@ -175,7 +175,7 @@ export default ModelWithModifier.extend({
         },
         agenda: {
           status: {
-            id: '2735d084-63d1-499f-86f4-9b69eb33727f',
+            id: CONFIG.agendaStatusDesignAgenda.id,
           },
         },
       },

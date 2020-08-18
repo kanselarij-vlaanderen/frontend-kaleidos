@@ -118,7 +118,26 @@ export default EmberObject.create({
   kabinetId: '7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb',
   usersId: '450915b2-4c64-4b03-9caa-71180400f831',
   internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3',
-
+  internOverheidAccessLevelId: 'abe4c18d-13a9-45f0-8cdd-c493eabbbe29',
+  publiekAccessLevelId: '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e',
+  mockLoginServiceProvider: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
+  developerWhitelistIds: {
+    frederik: 'fa59bba0-52e3-11ea-8bfc-e35431e140ef',
+    ben: '58177460-4e4a-11ea-a1d0-a99143fe0685',
+    rafael: 'cbdd9b60-3b97-11ea-a194-f970e0c7187e',
+  },
+  agendaStatusDesignAgenda: {
+    id: '2735d084-63d1-499f-86f4-9b69eb33727f',
+    uri: 'http://kanselarij.vo.data.gift/id/agendastatus/2735d084-63d1-499f-86f4-9b69eb33727f',
+  },
+  agendaStatusClosed: {
+    id: 'f06f2b9f-b3e5-4315-8892-501b00650101',
+    uri: 'http://kanselarij.vo.data.gift/id/agendastatus/f06f2b9f-b3e5-4315-8892-501b00650101',
+  },
+  agendaStatusApproved: {
+    id: 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
+    uri: 'http://kanselarij.vo.data.gift/id/agendastatus/ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
+  },
   DECISION_RESULT_CODE_URIS: {
     GOEDGEKEURD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd',
     UITGESTELD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
