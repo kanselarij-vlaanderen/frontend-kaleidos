@@ -66,7 +66,7 @@
                     </p>
                   {{/if}}
                 {{else}}
-                  <Components::Utils::FormallyOkSelector
+                  <Utils::FormallyOkSelector
                           @formallyOk={{formallyOk}}
                           @isLoading={{isLoading}}
                           @hideLabel={{hideLabel}}
@@ -81,7 +81,7 @@
                 {{#if renderDetails}}
                   {{#if (await @agendaitem.documents)}}
                     <div class="vlc-hr"></div>
-                    <Components::Utils::DocumentsListForItem
+                    <Utils::DocumentsListForItem
                       @isClickable={{true}}
                       @item={{@agendaitem}}
                       @document={{@agendaitem.document}}
@@ -89,7 +89,7 @@
                   {{else}}
                     {{#if (await @agendaitem.documentNames)}}
                       <div class="vlc-hr"></div>
-                      <Components::Utils::DocumentsListLazyLoaded
+                      <Utils::DocumentsListLazyLoaded
                        @documentNames={{@agendaitem.documentNames}}
                       />
                     {{/if}}
@@ -97,7 +97,7 @@
                 {{else}}
                   {{#if (await @agendaitem.documentNames)}}
                     <div class="vlc-hr"></div>
-                    <Components::Utils::DocumentsListLazyLoaded
+                    <Utils::DocumentsListLazyLoaded
                             @documentNames={{@agendaitem.documentNames}}
                     />
                   {{/if}}
