@@ -71,5 +71,8 @@ const selectors = {
   agendaDetailSidebarSubitem: '[data-test-agenda-detail-sidebar-sub-item]',
   agendaOverviewSubitem: '[data-test-agenda-overview-sub-item]',
   agendaitemTitelsConfidential: '[data-test-agenda-subcase-confidential]',
+  agendaHeaderShowAgendaOptions: '[data-test-agenda-header-showAgendaOptions]',
+  agendaHeaderApproveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda]',
+  agendaitemExplanation: '[data-test-agendaitem-explanation]',
 };
 export default selectors;

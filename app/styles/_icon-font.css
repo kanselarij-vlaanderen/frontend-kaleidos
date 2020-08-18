@@ -1,10 +1,10 @@
 @font-face {
     font-family: "kaleidos-icons";
-    src: url("/fonts/kaleidos-icons.eot?b25a13795b21f28c15d488dd952eaa3b?#iefix") format("embedded-opentype"),
-url("/fonts/kaleidos-icons.woff2?b25a13795b21f28c15d488dd952eaa3b") format("woff2"),
-url("/fonts/kaleidos-icons.woff?b25a13795b21f28c15d488dd952eaa3b") format("woff"),
-url("/fonts/kaleidos-icons.ttf?b25a13795b21f28c15d488dd952eaa3b") format("truetype"),
-url("/fonts/kaleidos-icons.svg?b25a13795b21f28c15d488dd952eaa3b#kaleidos-icons") format("svg");
+    src: url("/fonts/kaleidos-icons.eot?92fe46ede938eda0af64ef784f34203a?#iefix") format("embedded-opentype"),
+url("/fonts/kaleidos-icons.woff2?92fe46ede938eda0af64ef784f34203a") format("woff2"),
+url("/fonts/kaleidos-icons.woff?92fe46ede938eda0af64ef784f34203a") format("woff"),
+url("/fonts/kaleidos-icons.ttf?92fe46ede938eda0af64ef784f34203a") format("truetype"),
+url("/fonts/kaleidos-icons.svg?92fe46ede938eda0af64ef784f34203a#kaleidos-icons") format("svg");
 }
 
 i[class^="ki-"]:before, i[class*=" ki-"]:before {
@@ -132,60 +132,57 @@ i[class^="ki-"]:before, i[class*=" ki-"]:before {
 .ki-lock-open:before {
     content: "\f126";
 }
-.ki-min:before {
+.ki-more:before {
     content: "\f127";
 }
-.ki-more:before {
+.ki-nav-down:before {
     content: "\f128";
 }
-.ki-nav-down:before {
+.ki-nav-left:before {
     content: "\f129";
 }
-.ki-nav-left:before {
+.ki-nav-right:before {
     content: "\f12a";
 }
-.ki-nav-right:before {
+.ki-nav-up:before {
     content: "\f12b";
 }
-.ki-nav-up:before {
+.ki-not-visible:before {
     content: "\f12c";
 }
-.ki-not-visible:before {
+.ki-paperclip:before {
     content: "\f12d";
 }
-.ki-paperclip:before {
+.ki-pencil:before {
     content: "\f12e";
 }
-.ki-pencil:before {
+.ki-plus:before {
     content: "\f12f";
 }
-.ki-plus:before {
+.ki-question-mark:before {
     content: "\f130";
 }
-.ki-question-mark:before {
+.ki-redo:before {
     content: "\f131";
 }
-.ki-redo:before {
+.ki-remove:before {
     content: "\f132";
 }
-.ki-remove:before {
+.ki-search:before {
     content: "\f133";
 }
-.ki-search:before {
+.ki-settings:before {
     content: "\f134";
 }
-.ki-settings:before {
+.ki-sitemap:before {
     content: "\f135";
 }
-.ki-sitemap:before {
+.ki-upload:before {
     content: "\f136";
 }
-.ki-upload:before {
+.ki-user:before {
     content: "\f137";
 }
-.ki-user:before {
-    content: "\f138";
-}
 .ki-visible:before {
-    content: "\f139";
+    content: "\f138";
 }

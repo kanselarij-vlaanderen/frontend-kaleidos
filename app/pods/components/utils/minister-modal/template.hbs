@@ -7,19 +7,19 @@
     <label>{{t "select-minister"}}</label>
     <div class="vl-u-spacer-extended-bottom-l">
       {{#if isAddingMinister}}
-          {{utils/mandatee-selector
-            data-test-mandatee-selector
-            singleSelect=true
-            selectedMandatees=selectedMandatee
-            chooseMandatee=(action "mandateeSelected")
-          }}
-        {{else}}
-          {{utils/mandatee-selector
-            singleSelect=true
-            readOnly=true
-            selectedMandatees=selectedMandatee
-          }}
-        {{/if}}
+        {{utils/mandatee-selector
+          data-test-mandatee-selector
+          singleSelect=true
+          selectedMandatees=selectedMandatee
+          chooseMandatee=(action "mandateeSelected")
+        }}
+      {{else}}
+        {{utils/mandatee-selector
+          singleSelect=true
+          readOnly=true
+          selectedMandatees=selectedMandatee
+        }}
+      {{/if}}
     </div>
     {{#if (and isLoading and isAddingMinister)}}
       {{web-components/vl-loader text=(t "please-be-patient")}}
@@ -51,7 +51,7 @@
         </ul>
       {{/each}}
     {{/if}}
-</div>
+  </div>
   {{web-components/vl-modal-footer
     isLoading=isLoading
     nonBordered=true

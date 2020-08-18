@@ -59,11 +59,11 @@ export default Model.extend({
   }),
 
   changePublicSince() {
-    if (this.get('accessLevel').get('id') === config.publicLevelId && !this.get('confidential') && !this.get('publicSince')) {
+    if (this.get('accessLevel').get('id') === config.publiekAccessLevelId && !this.get('confidential') && !this.get('publicSince')) {
       this.set('publicSince', moment().utc()
         .toDate());
     }
-    if (this.get('accessLevel').get('id') !== config.publicLevelId || this.get('confidential')) {
+    if (this.get('accessLevel').get('id') !== config.publiekAccessLevelId || this.get('confidential')) {
       this.set('publicSince', undefined);
     }
   },

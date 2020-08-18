@@ -39,6 +39,7 @@ export default Component.extend(FileSaverMixin, {
   isApprovingAgenda: false,
   isDeletingAgenda: false,
   isLockingAgenda: false,
+  isShowingAgendaActions: false,
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -98,7 +99,7 @@ export default Component.extend(FileSaverMixin, {
     await session.save();
     const definiteAgendas = await this.get('definiteAgendas');
     const lastDefiniteAgenda = await definiteAgendas.get('firstObject');
-    const approved = await this.store.findRecord('agendastatus', 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1');
+    const approved = await this.store.findRecord('agendastatus', CONFIG.agendaStatusApproved.id);
     lastDefiniteAgenda.set('status', approved);
     await lastDefiniteAgenda.save();
     this.get('agendaService')
@@ -157,7 +158,27 @@ export default Component.extend(FileSaverMixin, {
     }));
   },
 
+  async lockAgenda(lastAgenda) {
+    this.set('isLockingAgenda', true);
+    const meetingOfAgenda = await this.currentAgenda.get('createdFor');
+    // Als je deze reload niet doet dan refreshed de interface niet (Ember).
+    await meetingOfAgenda.hasMany('agendas').reload();
+    meetingOfAgenda.set('isFinal', true);
+    meetingOfAgenda.set('agenda', lastAgenda);
+    await meetingOfAgenda.save();
+
+    const closed = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id);
+    lastAgenda.set('status', closed);
+    await lastAgenda.save();
+    this.set('sessionService.currentSession.agendas', meetingOfAgenda.agendas);
+
+    if (!this.isDestroyed) {
+      this.set('isLockingAgenda', false);
+    }
+  },
+
   actions: {
+
     print() {
       window.print();
     },
@@ -218,7 +239,47 @@ export default Component.extend(FileSaverMixin, {
       await this.approveAgenda(session);
     },
 
-    async lockAgenda() {
+    async approveAndCloseAgenda(session) {
+      const isApprovable = await this.currentAgenda.get('isApprovable');
+      const meetingOfAgenda = await this.currentAgenda.get('createdFor');
+      const agendasOfMeeting = await meetingOfAgenda.get('agendas');
+      if (!isApprovable) {
+        this.set('showWarning', true);
+      } else {
+        if (this.get('isApprovingAgenda')) {
+          return;
+        }
+        this.set('isApprovingAgenda', true);
+        this.changeLoading();
+        const agendaToLock = await agendasOfMeeting.find((agenda) => agenda.get('isDesignAgenda'));
+
+        agendaToLock.set(
+          'modified',
+          moment()
+            .utc()
+            .toDate()
+        );
+        agendaToLock.save().then(async(agendaToApprove) => {
+          await this.agendaService.approveAgenda(session, agendaToApprove);
+          return agendaToApprove;
+        })
+          .then(async(agendaToApprove) => {
+            // We reloaden de agenda hier om de recente changes m.b.t. het approven van de agenda binnen te halen
+            const reloadedAgenda = await this.store.findRecord('agenda', agendaToApprove.get('id'), {
+              reload: true,
+              include: 'status',
+            });
+            await this.lockAgenda(reloadedAgenda);
+          })
+          .finally(() => {
+            this.set('sessionService.selectedAgendaItem', null);
+            this.changeLoading();
+            this.set('isApprovingAgenda', false);
+          });
+      }
+    },
+
+    async lockAgendaAction() {
       this.set('isLockingAgenda', true);
       const agendas = await this.get('agendas');
       const designAgenda = agendas
@@ -235,8 +296,8 @@ export default Component.extend(FileSaverMixin, {
       session.set('agenda', lastAgenda);
 
       await session.save();
-      const closed = this.store.findRecord('agendastatus', 'f06f2b9f-b3e5-4315-8892-501b00650101');
-      lastAgenda.set('agendastatus', closed);
+      const closed = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id); // Async call
+      lastAgenda.set('status', closed);
       await lastAgenda.save();
 
       if (designAgenda) {
@@ -253,6 +314,10 @@ export default Component.extend(FileSaverMixin, {
 
     showMultipleOptions() {
       this.toggleProperty('isShowingOptions');
+    },
+
+    showAgendaActions() {
+      this.toggleProperty('isShowingAgendaActions');
     },
 
     compareAgendas() {

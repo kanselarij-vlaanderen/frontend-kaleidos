@@ -35,6 +35,25 @@ export default Component.extend(
     documentContainer: null, // When adding a new version to an existing document
     defaultAccessLevel: null, // when creating a new document
 
+
+    get overheidCanViewDocuments() {
+      const isAgendaItem = this.item.get('modelName') === 'agendaitem';
+      const isSubcase = this.item.get('modelName') === 'subcase';
+      const isOverheid = this.currentSession.isOverheid;
+
+      if (isAgendaItem) {
+        const documentsAreReleased = this.item.get('agenda.createdFor.releasedDocuments');
+        return !(isOverheid && !documentsAreReleased);
+      }
+
+      if (isSubcase) {
+        const documentsAreReleased = this.item.get('requestedForMeeting.releasedDocuments');
+        return !(isOverheid && !documentsAreReleased);
+      }
+
+      return true;
+    },
+
     init() {
       this._super(...arguments);
       this.set('model', A([]));

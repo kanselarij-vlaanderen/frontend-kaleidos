@@ -77,20 +77,20 @@
             <div class="vl-loader"></div>
           {{else}}
             {{#if (await subcase.onAgendaInfo)}}
-              {{#if  
+              {{#if
                 (await isRetracted)
               }}
                 {{t "postponed-subcase"}}
               {{/if}}
-                {{#link-to
-                  "agenda.agendaitems.agendaitem"
-                  (await latestMeetingId)
-                  (await latestAgendaId)
-                  (await latestAgendaItemId)
-                  class="vl-link"
-                }}
-                  {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
-                {{/link-to}}
+              {{#link-to
+                "agenda.agendaitems.agendaitem"
+                (await latestMeetingId)
+                (await latestAgendaId)
+                (await latestAgendaItemId)
+                class="vl-link"
+              }}
+                {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
+              {{/link-to}}
             {{else}}
               {{t "not-yet-on-agenda"}}
             {{/if}}

@@ -11,6 +11,7 @@ module.exports = {
   },
   plugins: [
     'ember',
+    'hbs'
   ],
   extends: [
     'eslint:recommended',
@@ -38,7 +39,7 @@ module.exports = {
     "no-const-assign": ["error"],
     "no-var": "error",
     "no-new-object": "error",
-    "object-shorthand": "error",
+    "object-shorthand": "off",
     "quote-props": ["error", "as-needed"],
     "no-prototype-builtins": "error",
     "no-array-constructor": "error",
@@ -162,16 +163,6 @@ module.exports = {
       env: {
         browser: false,
         node: true,
-      },
-      rules: {
-        'ember/no-on-calls-in-components': 'off',
-        'attribute-indentation': 'off',
-        'block-indentation': 'off',
-        'no-invalid-interactive': 'off',
-        'no-mixed-spaces-and-tabs': 'off',
-        'ember/use-brace-expansion': 'off',
-        'table-groups': 'off',
-        'no-triple-curlies': 'off',
       },
     },
   ],

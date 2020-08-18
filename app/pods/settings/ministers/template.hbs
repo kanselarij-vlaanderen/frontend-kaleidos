@@ -1,184 +1,184 @@
 <div class="vl-u-spacer-extended-l">
-{{title (t "manage-ministers")}}
-<div class="vl-u-display-flex vlc-u-flex-space-between">
-  <h4 class="vl-title vl-title--h4"></h4>
-  <button data-test-minister-add
-          type="button"
-          class="vl-button vl-button--icon-before"
-    {{action "toggleIsAdding"}}
-  >
-    <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
-    {{t "create-mandatee"}}
-  </button>
-</div>
-{{#if (await model)}}
-{{!-- "tbody" tagname in the "sortable-group"-helper --}}
-{{!-- template-lint-disable table-groups  --}}
-  <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
-    <thead>
-    <tr>
-      <th class="vl-data-table-col-6 vl-data-table__header-title">
-        <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
-           href="#"
-        ></a>
-        <a class="vl-data-table__header-title--sortable" href="#">
-          <div class="vl-u-display-flex vl-u-flex-align-center">
-              <span>
-                {{t "minister"}}
-              </span>
-          </div>
-        </a>
-      </th>
-      <th class="vl-data-table-col-3 vl-data-table__header-title">
-        <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
-           href="#"
-        ></a>
-        <a class="vl-data-table__header-title--sortable" href="#">
-          <div class="vl-u-display-flex vl-u-flex-align-center">
-              <span>
-                {{t "nick-name"}}
-              </span>
-          </div>
-        </a>
-      </th>
-      <th class="vl-data-table-col-1 vl-data-table__header-title">
-        <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
-           href="#"
-        ></a>
-        <a class="vl-data-table__header-title--sortable" href="#">
-          <div class="vl-u-display-flex vl-u-flex-align-center">
-              <span>
-                {{t "priority"}}
-              </span>
-          </div>
-        </a>
-      </th>
-      <th class="vl-data-table-col-2"></th>
-    </tr>
-    </thead>
-    {{#sortable-group
-      data-test-ministers-sortable-group
-      tagName="tbody"
-      onChange=(action "reorderItems" model)
-    as |sortableGroup|
-    }}
-      {{#each
-        model
-      as |mandatee index|
+  {{title (t "manage-ministers")}}
+  <div class="vl-u-display-flex vlc-u-flex-space-between">
+    <h4 class="vl-title vl-title--h4"></h4>
+    <button data-test-minister-add
+            type="button"
+            class="vl-button vl-button--icon-before"
+      {{action "toggleIsAdding"}}
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+      {{t "create-mandatee"}}
+    </button>
+  </div>
+  {{#if (await model)}}
+  {{!-- "tbody" tagname in the "sortable-group"-helper --}}
+  {{!-- template-lint-disable table-groups  --}}
+    <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
+      <thead>
+        <tr>
+          <th class="vl-data-table-col-6 vl-data-table__header-title">
+            <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+               href="#"
+            ></a>
+            <a class="vl-data-table__header-title--sortable" href="#">
+              <div class="vl-u-display-flex vl-u-flex-align-center">
+                <span>
+                  {{t "minister"}}
+                </span>
+              </div>
+            </a>
+          </th>
+          <th class="vl-data-table-col-3 vl-data-table__header-title">
+            <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+               href="#"
+            ></a>
+            <a class="vl-data-table__header-title--sortable" href="#">
+              <div class="vl-u-display-flex vl-u-flex-align-center">
+                <span>
+                  {{t "nick-name"}}
+                </span>
+              </div>
+            </a>
+          </th>
+          <th class="vl-data-table-col-1 vl-data-table__header-title">
+            <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
+               href="#"
+            ></a>
+            <a class="vl-data-table__header-title--sortable" href="#">
+              <div class="vl-u-display-flex vl-u-flex-align-center">
+                <span>
+                  {{t "priority"}}
+                </span>
+              </div>
+            </a>
+          </th>
+          <th class="vl-data-table-col-2"></th>
+        </tr>
+      </thead>
+      {{#sortable-group
+        data-test-ministers-sortable-group
+        tagName="tbody"
+        onChange=(action "reorderItems" model)
+      as |sortableGroup|
       }}
-        {{#sortable-item
-          tagName="tr"
-          model=mandatee
-          data-test-ministers-sortable-group-row=index
-          group=sortableGroup
-          handle=".mandatee-draggable-row"
+        {{#each
+          model
+        as |mandatee index|
         }}
-          <td data-test-mandatee-fullDisplayName={{index}} class="mandatee-draggable-row">
-            {{#if (is-pending mandatee.fullDisplayName)}}
-              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-            {{else}}
-              {{await mandatee.fullDisplayName}}
-            {{/if}}
-          </td>
-          <td data-test-mandatee-nickName={{index}} class="mandatee-draggable-row">
-            {{#if (is-pending mandatee.nickName)}}
-              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-            {{else}}
-              {{await mandatee.nickName}}
-            {{/if}}
-          </td>
-          <td data-test-mandatee-priority={{index}} class="mandatee-draggable-row">
-            {{await mandatee.priority}}
-          </td>
-          <td class="vl-u-align-center">
-            <div class="vl-action-group vl-action-group--align-center">
-              <button data-test-mandatee-edit={{index}}
-                      type="button"
-                      class="vl-button vl-button--link vl-button--icon"
-                {{action "toggleProperty" "isEditingMandatee" mandatee}}
-              >
-                <i class="vl-button__icon vl-vi vl-vi-edit"></i>
-              </button>
-              <button type="button"
-                      data-test-mandatee-resign={{index}}
-                      class="vl-button vl-button--link vl-button--icon"
-                {{action "toggleProperty" "isResigningMandatee" mandatee}}
-              >
-                <i class="vl-button__icon vl-vi vl-vi-cog"></i>
-                {{#attach-tooltip
-                  arrow="true"
-                  animation="shift"
-                  placement="bottom"
-                  class="ember-attacher-tooltip"
-                }}
-                  {{t "resign"}}
-                {{/attach-tooltip}}
-              </button>
-              <button type="button"
-                      data-test-mandatee-delete={{index}}
-                      class="vl-button vl-button--link vl-button--icon vl-u-text--error"
-                {{action "toggleProperty" "isDeletingMandatee" mandatee}}
-              >
-                <i class="vl-button__icon vl-vi vl-vi-trash"></i>
-              </button>
-            </div>
-          </td>
-        {{/sortable-item}}
-      {{/each}}
-    {{/sortable-group}}
-  </table>
-{{!-- template-lint-enable table-groups --}}
-{{/if}}
-{{#if isEditingMandatee}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "manage-ministers")
-    closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
-  }}
-    {{utils/manage-mandatees
-      mandateeToEdit=mandateeToEdit
-      mandateesUpdated=(action "mandateesUpdated")
-      isEditing=isEditingMandatee
+          {{#sortable-item
+            tagName="tr"
+            model=mandatee
+            data-test-ministers-sortable-group-row=index
+            group=sortableGroup
+            handle=".mandatee-draggable-row"
+          }}
+            <td data-test-mandatee-fullDisplayName={{index}} class="mandatee-draggable-row">
+              {{#if (is-pending mandatee.fullDisplayName)}}
+                <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+              {{else}}
+                {{await mandatee.fullDisplayName}}
+              {{/if}}
+            </td>
+            <td data-test-mandatee-nickName={{index}} class="mandatee-draggable-row">
+              {{#if (is-pending mandatee.nickName)}}
+                <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+              {{else}}
+                {{await mandatee.nickName}}
+              {{/if}}
+            </td>
+            <td data-test-mandatee-priority={{index}} class="mandatee-draggable-row">
+              {{await mandatee.priority}}
+            </td>
+            <td class="vl-u-align-center">
+              <div class="vl-action-group vl-action-group--align-center">
+                <button data-test-mandatee-edit={{index}}
+                        type="button"
+                        class="vl-button vl-button--link vl-button--icon"
+                  {{action "toggleProperty" "isEditingMandatee" mandatee}}
+                >
+                  <i class="vl-button__icon vl-vi vl-vi-edit"></i>
+                </button>
+                <button type="button"
+                        data-test-mandatee-resign={{index}}
+                        class="vl-button vl-button--link vl-button--icon"
+                  {{action "toggleProperty" "isResigningMandatee" mandatee}}
+                >
+                  <i class="vl-button__icon vl-vi vl-vi-cog"></i>
+                  {{#attach-tooltip
+                    arrow="true"
+                    animation="shift"
+                    placement="bottom"
+                    class="ember-attacher-tooltip"
+                  }}
+                    {{t "resign"}}
+                  {{/attach-tooltip}}
+                </button>
+                <button type="button"
+                        data-test-mandatee-delete={{index}}
+                        class="vl-button vl-button--link vl-button--icon vl-u-text--error"
+                  {{action "toggleProperty" "isDeletingMandatee" mandatee}}
+                >
+                  <i class="vl-button__icon vl-vi vl-vi-trash"></i>
+                </button>
+              </div>
+            </td>
+          {{/sortable-item}}
+        {{/each}}
+      {{/sortable-group}}
+    </table>
+  {{!-- template-lint-enable table-groups --}}
+  {{/if}}
+  {{#if isEditingMandatee}}
+    {{#web-components/vl-modal
+      isOverlay=true
+      title=(t "manage-ministers")
       closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
     }}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isResigningMandatee}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "manage-ministers")
-    closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
-  }}
-    {{utils/manage-mandatees
-      mandateeToEdit=mandateeToEdit
-      mandateesUpdated=(action "mandateesUpdated")
-      isResigning=isResigningMandatee
+      {{utils/manage-mandatees
+        mandateeToEdit=mandateeToEdit
+        mandateesUpdated=(action "mandateesUpdated")
+        isEditing=isEditingMandatee
+        closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
+      }}
+    {{/web-components/vl-modal}}
+  {{/if}}
+  {{#if isResigningMandatee}}
+    {{#web-components/vl-modal
+      isOverlay=true
+      title=(t "manage-ministers")
       closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
     }}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isAddingMandatee}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "manage-ministers")
-    closeModal=(action "toggleIsAdding")
-  }}
-  {{utils/create-mandatee
-    model=model
-    closeModal=(action "toggleIsAdding")
-    mandateesUpdated=(action "mandateesUpdated")
-  }}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isDeletingMandatee}}
-  {{web-components/vl-modal-verify
-    title=(t "warning-title")
-    verifyButtonText=(t "delete")
-    message=(t "delete-mandatee-message")
-    cancel=(action "cancel")
-    verify=(action "deleteMandatee")
-    mandateesUpdated=(action "mandateesUpdated")
-  }}
-{{/if}}
-{{outlet}}
+      {{utils/manage-mandatees
+        mandateeToEdit=mandateeToEdit
+        mandateesUpdated=(action "mandateesUpdated")
+        isResigning=isResigningMandatee
+        closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
+      }}
+    {{/web-components/vl-modal}}
+  {{/if}}
+  {{#if isAddingMandatee}}
+    {{#web-components/vl-modal
+      isOverlay=true
+      title=(t "manage-ministers")
+      closeModal=(action "toggleIsAdding")
+    }}
+      {{utils/create-mandatee
+        model=model
+        closeModal=(action "toggleIsAdding")
+        mandateesUpdated=(action "mandateesUpdated")
+      }}
+    {{/web-components/vl-modal}}
+  {{/if}}
+  {{#if isDeletingMandatee}}
+    {{web-components/vl-modal-verify
+      title=(t "warning-title")
+      verifyButtonText=(t "delete")
+      message=(t "delete-mandatee-message")
+      cancel=(action "cancel")
+      verify=(action "deleteMandatee")
+      mandateesUpdated=(action "mandateesUpdated")
+    }}
+  {{/if}}
+  {{outlet}}
 </div>

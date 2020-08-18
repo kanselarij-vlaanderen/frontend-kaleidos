@@ -52,6 +52,13 @@ context('Agenda tests', () => {
     cy.addAgendaitemToAgenda(false);
   });
 
+  it('Ontwerpagenda goedkeuren en afsluiten...', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.approveAndCloseDesignAgenda();
+    cy.get(modal.agenda.approveAgenda).should('not.exist');
+  });
+
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(5); // Friday in three weeks
@@ -115,14 +122,20 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEditTitle).clear();
     cy.get(agenda.agendaitemTitlesEditTitle).type('dit is de lange titel\n\n');
 
+    cy.get(agenda.agendaitemTitlesEditExplanation).clear();
+    cy.get(agenda.agendaitemTitlesEditExplanation).type('Dit is de opmerking');
+
     cy.get(agenda.agendaitemTitlesEditSave).should('exist')
       .should('be.visible')
       .click();
     cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
+    cy.contains('Dit is de opmerking');
     cy.get(agenda.agendaitemTitelsConfidential).should('exist')
       .should('be.visible');
+    cy.get(agenda.agendaItemDocumentsTab).click();
+    cy.get(agenda.agendaitemExplanation).contains('Opmerking: Dit is de opmerking');
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {

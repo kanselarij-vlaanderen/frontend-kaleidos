@@ -23,15 +23,15 @@ export default Model.extend(LoadableModel, {
     inverse: null,
     serialize: false,
   }),
-  created: attr('date'),
+  created: attr('datetime'),
   modified: attr('datetime'),
 
   isDesignAgenda: computed('status.isDesignAgenda', function() {
     return this.get('status.isDesignAgenda');
   }),
 
-  isClosed: computed('status.isClosed', function() {
-    return this.get('status.isClosed');
+  isApproved: computed('status.isApproved', function() {
+    return this.get('status.isApproved');
   }),
 
   async asyncCheckIfDesignAgenda() {

@@ -1,8 +1,8 @@
 <button type="button" data-test-delete-user class="vl-button vl-button--link vl-button--icon vlc-link-pointer" {{action "toggleIsVerifying" bubbles=false}}>
-    <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
-    <span class="vl-u-visually-hidden">
-      {{t "delete"}}
-    </span>
+  <i class="vl-vi vl-vi-trash" aria-hidden="true"></i>
+  <span class="vl-u-visually-hidden">
+    {{t "delete"}}
+  </span>
 </button>
 {{#if isVerifying}}
   {{web-components/vl-modal-verify
