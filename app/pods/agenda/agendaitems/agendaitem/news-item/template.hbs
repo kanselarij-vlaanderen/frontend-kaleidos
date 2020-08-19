@@ -8,13 +8,13 @@
         <div class="vl-u-spacer-extended-left-s">
           {{#if this.model}}
             {{!-- TODO: replace by link-styled button --}}
-            <a data-test-newsletter-edit class="vl-link"
+            <a href="javascript://" data-test-newsletter-edit class="vl-link"
              {{on "click" this.startEditing}}>
               {{t "edit"}}
             </a>
           {{else}}
             {{!-- TODO: replace by link-styled button --}}
-            <a data-test-newsletter-edit class="vl-link"
+            <a href="javascript://" data-test-newsletter-edit class="vl-link"
              {{on "click" this.createAndStartEditing}}>
               {{t "create"}}
             </a>

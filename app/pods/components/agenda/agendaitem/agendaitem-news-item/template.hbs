@@ -22,9 +22,9 @@
       {{t "remark"}}: {{@newsletterInfo.remark}}
     </p>
   {{/if}}
-    <div
-      class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s"
-      data-test-agenda-news-item-themes>
+  <div
+    class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s"
+    data-test-agenda-news-item-themes>
     {{#if (is-pending @newsletterInfo.themes)}}
       <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
     {{else if (gt (await @newsletterInfo.themes.length) 0)}}

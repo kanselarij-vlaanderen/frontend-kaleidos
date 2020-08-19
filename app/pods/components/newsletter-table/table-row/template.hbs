@@ -10,7 +10,7 @@
         </p>
       </div>
       <div class="vl-u-spacer-extended-bottom-s">
-        {{{this.newsletterInfo.richtext}}}
+        {{sanitize-html raw=true value=this.newsletterInfo.richtext}}
       </div>
       {{#if this.newsletterInfo.remark}}
         <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
@@ -28,7 +28,7 @@
       {{await mandatee.person.nameToDisplay}}<br>
     {{else}}
       <p class="vl-u-text--muted vl-u-text--italic">
-        Geen ministers
+        {{t "no-mandatees"}}
       </p>
     {{/each}}
   </td>
