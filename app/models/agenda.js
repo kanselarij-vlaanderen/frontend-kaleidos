@@ -99,7 +99,7 @@ export default Model.extend(LoadableModel, {
     );
   },
 
-  firstAgendaItem: computed('agendaitems.@each', function() {
+  firstAgendaitem: computed('agendaitems.@each', function() {
     return DS.PromiseObject.create({
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });
