@@ -4,7 +4,7 @@ import moment from 'moment';
 import { inject as service } from '@ember/service';
 import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/app/utils/agendaitem-utils';
 import config from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 import { deprecatingAlias } from '@ember/object/computed';

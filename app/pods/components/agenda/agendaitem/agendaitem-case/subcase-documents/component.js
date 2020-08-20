@@ -8,7 +8,7 @@ import {
 import { A } from '@ember/array';
 import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/app/utils/agendaitem-utils';
 
 import moment from 'moment';
 import config from 'fe-redpencil/utils/config';
