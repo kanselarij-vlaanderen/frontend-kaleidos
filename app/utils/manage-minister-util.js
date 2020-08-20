@@ -24,7 +24,7 @@ export const selectDomain = async(rowToShowFields, domain, value) => {
 };
 
 export const selectField = async(rowToShowDomains, domain, value) => {
-  const foundDomain = rowToShowDomains.find((item) => item.get('id') === domain.get('id'));
+  const foundDomain = rowToShowDomains.find((domainEntry) => domainEntry.get('id') === domain.get('id'));
   const fields = await domain.get('governmentFields');
   const selectedFields = fields.filter((field) => field.selected);
 

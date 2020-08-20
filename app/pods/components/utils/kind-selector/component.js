@@ -8,16 +8,16 @@ export default Component.extend({
   isLoading: null,
   hideLabel: null,
 
-  options: computed(() => CONFIG.kinds.map((item) => EmberObject.create(item))),
+  options: computed(() => CONFIG.kinds.map((meetingType) => EmberObject.create(meetingType))),
 
   selectedkind: computed('options', 'kind', function() {
     return this.options.find((kind) => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');
   }),
 
   actions: {
-    setAction(item) {
-      this.set('selectedkind', item);
-      this.setAction(item.get('uri'));
+    setAction(meetingType) {
+      this.set('selectedkind', meetingType);
+      this.setAction(meetingType.get('uri'));
     },
   },
 });
