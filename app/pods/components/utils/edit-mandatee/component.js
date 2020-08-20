@@ -79,7 +79,7 @@ export default Component.extend({
     },
 
     async triggerPopUp(mandateeToEdit) {
-      this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(mandateeToEdit.end, mandateeToEdit.id);
+      this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaitem(mandateeToEdit.end, mandateeToEdit.id);
       if (!this.showVerificationPopup) {
         this.saveChanges();
       }
