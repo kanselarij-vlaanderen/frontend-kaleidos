@@ -66,7 +66,7 @@ export default Component.extend({
       this.toggleProperty('showOptions');
     },
 
-    async postponeAgendaItem(agendaitem) {
+    async postponeAgendaitem(agendaitem) {
       this.set('isSavingRetracted', true);
       agendaitem.set('retracted', true);
       // TODO KAS-1420 change property on treatment during model rework
