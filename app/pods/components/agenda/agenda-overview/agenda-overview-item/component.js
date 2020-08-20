@@ -87,7 +87,7 @@ export default class AgendaOverviewItem extends Component {
   }
 
   @action
-  async openAgendaItem() {
+  async openAgendaitem() {
     if (!this.isEditingOverview && !this.isComparing) {
       this.args.selectAgendaitem(this.args.agendaitem);
     }
