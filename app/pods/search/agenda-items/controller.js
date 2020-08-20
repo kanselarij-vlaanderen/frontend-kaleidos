@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 
-export default class AgendaItemsSearchController extends Controller {
+export default class AgendaitemsSearchController extends Controller {
   queryParams = {
     types: {
       type: 'array',
