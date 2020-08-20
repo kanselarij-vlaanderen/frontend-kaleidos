@@ -240,6 +240,9 @@ context('Subcase tests', () => {
 
     // Are there Themes in this agenda? Should be none
     cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.get(agenda.item.news.editLink).click();
+    cy.contains('Annuleren').click();
+
     cy.get(agenda.item.themes).contains('Er zijn nog geen thema\'s toegevoegd.');
 
     // open themes ediging pane.

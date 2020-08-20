@@ -14,36 +14,35 @@ context('NewsletterInfo: Switching the finished switch', () => {
 
   const goToKortBestek = () => {
     cy.log('going to kort bestek');
-    cy.route('GET', '/themes').as('getThemes');
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
-    cy.get('table > tbody').get('.lt-body')
-      .should('contain.text', 'Nog geen kort bestek voor dit agendapunt.')
-      .click();
-    cy.wait('@getThemes');
+    cy.get('table > tbody', {
+      timeout: 20000,
+    });
     cy.log('went to kort bestek');
   };
 
   it('Should switch the switch to the right', () => {
+    cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
     cy.get('.vl-checkbox--switch__label').last()
       .scrollIntoView();
     cy.get('.vl-checkbox--switch__label').last()
-      .click();
+      .click()
+      .wait('@patchNewsletterInfo');
   });
 
   it('Should switch the switch to the right, then to the left', () => {
+    cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
     cy.get('.vl-checkbox--switch__label').last()
       .scrollIntoView();
     cy.get('.vl-checkbox--switch__label').last()
-      .click(); // TODO, clicking the switch triggers a PATCH call, wait for that instead
-    cy.wait(3000);
-    cy.get('table > tbody').get('.lt-body')
-      .should('contain.text', 'Nog geen kort bestek voor dit agendapunt.');
-    // cy.wait('@getThemes');
+      .click()
+      .wait('@patchNewsletterInfo');
     cy.get('.vl-checkbox--switch__label').last()
       .scrollIntoView();
     cy.get('.vl-checkbox--switch__label').last()
-      .click();
+      .click()
+      .wait('@patchNewsletterInfo');
   });
 });

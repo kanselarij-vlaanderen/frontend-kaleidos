@@ -39,7 +39,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
 
   /* eslint-disable id-length,no-unused-vars */
   resetController(controller, _, transition) {
-    if (!transition.data.isRefresh) {
+    if (transition && !transition.data.isRefresh) {
       controller.isEditing = false;
     }
     controller.notaModifiedWarningConfirmed = false;
