@@ -64,7 +64,7 @@ export default Service.extend({
     if (!oldAgenda) {
       return oldAgenda;
     }
-    // Use approveagendaService to duoplicate AgendaItems into new agenda.
+    // Use approveagendaService to duoplicate Agendaitems into new agenda.
     const result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
