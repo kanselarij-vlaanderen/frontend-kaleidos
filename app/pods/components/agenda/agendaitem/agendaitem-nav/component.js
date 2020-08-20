@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 
-export default class AgendaItemNav extends Component {
+export default class AgendaitemNav extends Component {
   @service currentSession;
 
   @tracked subcaseExists = false;
