@@ -134,36 +134,20 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEditTitle).clear();
     cy.get(agenda.agendaitemTitlesEditTitle).type('dit is de lange titel\n\n');
 
+    cy.get(agenda.agendaitemTitlesEditExplanation).clear();
+    cy.get(agenda.agendaitemTitlesEditExplanation).type('Dit is de opmerking');
+
     cy.get(agenda.agendaitemTitlesEditSave).should('exist')
       .should('be.visible')
       .click();
     cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
+    cy.contains('Dit is de opmerking');
     cy.get(agenda.agendaitemTitelsConfidential).should('exist')
       .should('be.visible');
-    cy.get(agenda.deleteAgendaItemButton).click();
-    cy.route('DELETE', '/agendaitems/**').as('deleteAgendaitem');
-    cy.route('DELETE', '/agenda-activities/*').as('deleteAgendaActivities');
-    cy.route('GET', '/subcases').as('getSubcase');
-    cy.route('PATCH', '/subcases/*').as('patchSubcase');
-    cy.route('GET', '/subcases/*/agenda-activities').as('getAgendaActivitiesForSubcase');
-    cy.route('GET', '/agendaitems').as('getAgendaitems');
-    cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
-    cy.route('GET', '/agendaitems/*/meeting-record').as('getMeetingRecordOfAgendaItems');
-    cy.route('GET', '/agendaitems/*').as('getAgendaItemsForAgenda');
-    cy.get(modal.verify.save).click();
-    cy.wait('@deleteAgendaitem');
-    cy.wait('@deleteAgendaActivities');
-    cy.wait('@patchSubcase');
-    cy.wait('@getAgendaActivitiesForSubcase');
-    cy.wait('@getModifiedByOfAgendaitems');
-    cy.wait('@getMeetingRecordOfAgendaItems');
-    cy.wait('@getAgendaItemsForAgenda');
-    cy.get(agenda.agendaDetailSubItemContainer).within(() => {
-      cy.get(agenda.agendaitemNumber).contains('2.');
-      cy.contains(`${testId} korte titel`);
-    });
+    cy.get(agenda.agendaItemDocumentsTab).click();
+    cy.get(agenda.agendaitemExplanation).contains('Opmerking: Dit is de opmerking');
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {

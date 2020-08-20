@@ -76,5 +76,6 @@ const selectors = {
   deleteAgendaItemButton: '[data-test-delete-agendaitem]',
   agendaDetailSubItemContainer: '[data-test-agenda-detail-sidebar-sub-item-container]',
   agendaitemNumber: '[data-test-agendaitem-number]',
+  agendaitemExplanation: '[data-test-agendaitem-explanation]',
 };
 export default selectors;
