@@ -219,7 +219,7 @@ context('Tests for KAS-1076', () => {
 
     // PART 1, adding new version
     cy.visit('/vergadering/5EBA9588751CF70008000012/agenda/5EBA9589751CF70008000013/agendapunten/5EBA95A2751CF70008000016');
-    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+    cy.addNewDocumentVersionToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {

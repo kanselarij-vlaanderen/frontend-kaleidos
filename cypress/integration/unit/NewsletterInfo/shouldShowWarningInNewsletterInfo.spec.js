@@ -49,7 +49,7 @@ context('Show warning in newsletterinfo', () => {
 
     cy.route('/');
     cy.openAgendaForDate(agendaDate);
-    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName, file);
+    cy.addNewDocumentVersionToAgendaitem(subcaseTitle1, file.newFileName, file);
 
     cy.get(agenda.agendaitemKortBestekTab)
       .should('be.visible')

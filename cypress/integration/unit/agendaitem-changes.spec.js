@@ -44,7 +44,7 @@ context('Agendaitem changes tests', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten');
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem with a new document version should show
-    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName, file);
+    cy.addNewDocumentVersionToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
