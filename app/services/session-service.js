@@ -26,7 +26,7 @@ export default Service.extend({
     });
   }),
 
-  currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
+  currentAgendaitems: computed('currentAgenda.agendaitems.@each', function() {
     const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       return this.store.query('agendaitem', {

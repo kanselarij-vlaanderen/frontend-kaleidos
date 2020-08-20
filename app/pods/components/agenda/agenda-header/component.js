@@ -41,7 +41,7 @@ export default Component.extend(FileSaverMixin, {
   isLockingAgenda: false,
   isShowingAgendaActions: false,
 
-  currentAgendaItems: alias('sessionService.currentAgendaItems'),
+  currentAgendaitems: alias('sessionService.currentAgendaitems'),
   currentSession: alias('sessionService.currentSession'),
   currentAgenda: alias('sessionService.currentAgenda'),
   agendas: alias('sessionService.agendas'),

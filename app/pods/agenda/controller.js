@@ -20,7 +20,7 @@ export default Controller.extend({
     return get(this, 'router.currentRouteName') === 'agenda.print';
   }),
 
-  currentAgendaItems: alias('sessionService.currentAgendaItems'),
+  currentAgendaitems: alias('sessionService.currentAgendaitems'),
 
   actions: {
     selectAgenda(agenda) {
