@@ -113,7 +113,7 @@ export default Service.extend({
       });
   },
 
-  async createNewAgendaItem(selectedAgenda, subcase, index) {
+  async createNewAgendaitem(selectedAgenda, subcase, index) {
     await selectedAgenda.hasMany('agendaitems').reload();
     let priorityToAssign = 0;
     const mandatees = await subcase.get('mandatees');
