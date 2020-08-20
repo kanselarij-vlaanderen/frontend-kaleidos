@@ -15,7 +15,7 @@ context('NewsletterInfo: Switching the finished switch', () => {
   const goToKortBestek = () => {
     cy.log('going to kort bestek');
     cy.route('GET', '/themes').as('getThemes');
-    cy.visit('/overzicht/5EBA9588751CF70008000012/kort-bestek/5EBA9589751CF70008000013/agendapunten');
+    cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     cy.get('table > tbody').get('.lt-body')
       .should('contain.text', 'Nog geen kort bestek voor dit agendapunt.')
       .click();

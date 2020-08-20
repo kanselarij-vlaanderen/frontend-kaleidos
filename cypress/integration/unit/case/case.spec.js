@@ -36,7 +36,6 @@ context('Create case as Admin user', () => {
 
   it('Een lege procedurestap kopieëren in een dossier zou geen fouten mogen geven.', () => {
     cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
-    cy.route('POST', '/newsletter-infos').as('addSubcase-createNewsletter');
     cy.visit('/dossiers');
 
     cy.get(cases.casesHeaderAddCase).click();
@@ -50,7 +49,6 @@ context('Create case as Admin user', () => {
     cy.get(cases.createSubcaseButton).click();
     cy.get(cases.clonePreviousSubcaseButton).click();
     cy.wait('@addSubcase-createNewSubcase');
-    cy.wait('@addSubcase-createNewsletter');
     cy.openSubcase(0);
     cy.get(cases.subcaseType).contains('Mededeling');
   });

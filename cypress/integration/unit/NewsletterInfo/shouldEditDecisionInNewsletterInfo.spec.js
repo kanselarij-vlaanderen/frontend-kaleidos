@@ -12,7 +12,7 @@ context('KB: Edit decision in newsletter-info', () => {
 
   it('Should edit decision in newsletter-info', () => {
     const decisionText = 'Dit is een leuke beslissing';
-    cy.visit('/overzicht/5DD7CDA58C70A70008000001/kort-bestek/5DD7CDA58C70A70008000002/agendapunten');
+    cy.visit('/vergadering/5DD7CDA58C70A70008000001/kort-bestek');
     cy.get('table > tbody').get('.lt-body')
       .should('contain.text', 'Nog geen kort bestek voor dit agendapunt.')
       .click();
