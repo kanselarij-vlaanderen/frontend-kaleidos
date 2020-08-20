@@ -40,11 +40,11 @@ export default Component.extend(
 
 
     get overheidCanViewDocuments() {
-      const isAgendaItem = this.item.get('modelName') === 'agendaitem';
+      const isAgendaitem = this.item.get('modelName') === 'agendaitem';
       const isSubcase = this.item.get('modelName') === 'subcase';
       const isOverheid = this.currentSession.isOverheid;
 
-      if (isAgendaItem) {
+      if (isAgendaitem) {
         const documentsAreReleased = this.item.get('agenda.createdFor.releasedDocuments');
         return !(isOverheid && !documentsAreReleased);
       }
