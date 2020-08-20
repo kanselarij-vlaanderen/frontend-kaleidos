@@ -59,7 +59,7 @@ export default Controller.extend({
         this.transitionToRoute(detailRoutePrefix, agendaitem.id);
       }
     },
-    searchAgendaItems(value) {
+    searchAgendaitems(value) {
       this.set('filter', value);
     },
     refresh(id) {
