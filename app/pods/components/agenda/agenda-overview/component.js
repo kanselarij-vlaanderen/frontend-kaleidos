@@ -83,27 +83,27 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  reorderItems(itemModels) {
+  reorderItems(agendaitems) {
     if (this.currentSessionService.isEditor || this.currentAgenda.isDesignAgenda) {
-      itemModels.map((item, index) => {
-        item.set('priority', index + 1);
-        return item;
+      agendaitems.map((agendaitem, index) => {
+        agendaitem.set('priority', index + 1);
+        return agendaitem;
       });
-      this.reAssignPriorities.perform(itemModels);
-      this.agendaService.groupAgendaItemsOnGroupName(itemModels);
+      this.reAssignPriorities.perform(agendaitems);
+      this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
     }
   }
 
   @action
-  reorderAnnouncements(itemModels) {
+  reorderAnnouncements(agendaitems) {
     if (this.currentSessionService.isEditor || this.currentAgenda.isDesignAgenda) {
-      itemModels.map((item, index) => {
-        item.set('priority', index + 1);
-        return item;
+      agendaitems.map((agendaitem, index) => {
+        agendaitem.set('priority', index + 1);
+        return agendaitem;
       });
-      this.reAssignPriorities.perform(itemModels);
+      this.reAssignPriorities.perform(agendaitems);
       // this.refresh();
-      this.set('announcements', itemModels);
+      this.set('announcements', agendaitems);
     }
   }
 }
