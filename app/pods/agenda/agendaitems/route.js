@@ -20,10 +20,10 @@ export default Route.extend({
     const id = await this.get('sessionService.currentAgenda.id');
     if (id) {
       const {
-        agenda, matchingAgendaItems,
+        agenda, matchingAgendaitems,
       } = await hash({
         agenda: this.store.findRecord('agenda', id),
-        matchingAgendaItems: this.matchingAgendaItems(params.filter),
+        matchingAgendaitems: this.matchingAgendaItems(params.filter),
       });
 
       let agendaitems = await this.store.query('agendaitem', {
@@ -35,7 +35,7 @@ export default Route.extend({
         include: 'mandatees',
       });
       if (!isEmpty(params.filter)) {
-        agendaitems = agendaitems.filter((item) => matchingAgendaItems[item.id]);
+        agendaitems = agendaitems.filter((item) => matchingAgendaitems[item.id]);
       }
 
       const announcements = agendaitems.filter((item) => item.showAsRemark);
@@ -50,7 +50,7 @@ export default Route.extend({
     }
   },
 
-  async matchingAgendaItems(filter) {
+  async matchingAgendaitems(filter) {
     if (isEmpty(filter)) {
       return {};
     }

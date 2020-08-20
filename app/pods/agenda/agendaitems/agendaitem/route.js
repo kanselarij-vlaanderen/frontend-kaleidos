@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class AgendaItemAgendaItemsAgendaRoute extends Route {
+export default class AgendaitemAgendaitemsAgendaRoute extends Route {
   @service sessionService;
 
   model(params) {
