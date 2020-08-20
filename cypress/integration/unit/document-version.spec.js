@@ -288,7 +288,7 @@ context('Tests for KAS-1076', () => {
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.agendaitemExists(SubcaseTitleShort).click();
-    cy.openAgendaItemDocumentTab(SubcaseTitleShort, true);
+    cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
         .within(() => {
@@ -314,7 +314,7 @@ context('Tests for KAS-1076', () => {
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.agendaitemExists(SubcaseTitleShort).click();
-    cy.openAgendaItemDocumentTab(SubcaseTitleShort, true);
+    cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
         .within(() => {
