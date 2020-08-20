@@ -247,7 +247,7 @@ context('Tests for KAS-1076', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
       .should('have.length', 0);
-    cy.addDocumentsToAgendaItem(SubcaseTitleShort, [file]);
+    cy.addDocumentsToAgendaitem(SubcaseTitleShort, [file]);
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)

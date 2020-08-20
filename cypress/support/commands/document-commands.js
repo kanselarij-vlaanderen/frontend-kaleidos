@@ -234,7 +234,7 @@ function openAgendaItemDocumentTab(agendaitemTitle, alreadyHasDocs = false) {
  * @param {string} files
  */
 function addDocumentsToAgendaitem(agendaitemTitle, files) {
-  cy.log('addDocumentsToAgendaItem');
+  cy.log('addDocumentsToAgendaitem');
   openAgendaItemDocumentTab(agendaitemTitle, false);
   addDocuments(files); // patch to subcase happens here (1 patchModel is checked)
   cy.wait('@patchModel', { // patch to agendaitems also happens, patch route is defined in addDocuments
