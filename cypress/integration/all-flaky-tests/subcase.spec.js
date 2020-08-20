@@ -243,9 +243,9 @@ context('Subcase tests', () => {
     cy.get(agenda.item.themes).contains('Er zijn nog geen thema\'s toegevoegd.');
 
     // open themes ediging pane.
-    cy.route('GET', '**/themes').as('getAgendaItemThemes');
+    cy.route('GET', '**/themes').as('getAgendaitemThemes');
     cy.get(agenda.item.news.editLink).click();
-    cy.wait('@getAgendaItemThemes');
+    cy.wait('@getAgendaitemThemes');
 
     // Toggle some themes.
     cy.get(agenda.item.news.themesSelector).contains('Wonen')
