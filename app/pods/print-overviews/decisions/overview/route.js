@@ -4,7 +4,7 @@ import { hash } from 'rsvp';
 import {
   parseDraftsAndGroupsFromAgendaitems,
   sortByPriority
-} from 'fe-redpencil/app/utils/agendaitem-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 
 export default Route.extend({
   agendaService: inject(),

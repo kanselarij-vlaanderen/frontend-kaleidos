@@ -7,7 +7,7 @@ import { inject } from '@ember/service';
 import { cached } from 'fe-redpencil/decorators/cached';
 import {
   saveChanges as saveSubcaseDescription, cancelEdit
-} from 'fe-redpencil/app/utils/agendaitem-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 
 export default Component.extend({
   store: inject(),

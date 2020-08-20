@@ -5,7 +5,7 @@ import {
   setCalculatedGroupPriorities,
   groupAgendaitemsByGroupname,
   sortByPriority
-} from 'fe-redpencil/app/utils/agendaitem-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 
 export default Route.extend({
   sessionService: inject(),
