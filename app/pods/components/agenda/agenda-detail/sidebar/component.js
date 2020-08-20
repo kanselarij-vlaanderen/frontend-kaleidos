@@ -39,32 +39,32 @@ export default class AgendaSidebar extends Component {
   }
 
   @action
-  reorderItems(itemModels) {
+  reorderItems(agendaitems) {
     if (!this.currentSessionService.isEditor) {
       return null;
     }
     this.isReAssigningPriorities = true;
-    itemModels.map((item, index) => {
-      item.set('priority', index + 1);
-      return item;
+    agendaitems.map((agendaitem, index) => {
+      agendaitem.set('priority', index + 1);
+      return agendaitem;
     });
-    this.reAssignPriorities.perform(itemModels);
-    this.agendaService.groupAgendaItemsOnGroupName(itemModels);
+    this.reAssignPriorities.perform(agendaitems);
+    this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
     this.isReAssigningPriorities = false;
   }
 
   @action
-  reorderAnnouncements(itemModels) {
+  reorderAnnouncements(agendaitems) {
     if (!this.currentSessionService.isEditor) {
       return null;
     }
     this.isReAssigningPriorities = true;
-    itemModels.map((item, index) => {
-      item.set('priority', index + 1);
-      return item;
+    agendaitems.map((agendaitem, index) => {
+      agendaitem.set('priority', index + 1);
+      return agendaitem;
     });
-    this.reAssignPriorities.perform(itemModels);
-    this.announcements = itemModels;
+    this.reAssignPriorities.perform(agendaitems);
+    this.announcements = agendaitems;
     this.isReAssigningPriorities = false;
   }
 }
