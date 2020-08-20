@@ -64,7 +64,7 @@ export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormal
 };
 
 /**
- * Set modified on Agenda of AgendaItem.
+ * Set modified on Agenda of Agendaitem.
  *
  * @param agendaitem
  * @returns {Promise<void>}
