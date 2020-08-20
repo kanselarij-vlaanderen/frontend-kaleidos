@@ -236,7 +236,10 @@ function openAgendaItemDocumentTab(agendaItemTitle, alreadyHasDocs = false) {
 function addDocumentsToAgendaItem(agendaItemTitle, files) {
   cy.log('addDocumentsToAgendaItem');
   openAgendaItemDocumentTab(agendaItemTitle, false);
-  return addDocuments(files);
+  addDocuments(files); // patch to subcase happens here (1 patchModel is checked)
+  cy.wait('@patchModel', { // patch to agendaitems also happens, patch route is defined in addDocuments
+    timeout: 12000 + (6000 * files.length),
+  });
 }
 
 /**
