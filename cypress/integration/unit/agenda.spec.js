@@ -134,7 +134,7 @@ context('Agenda tests', () => {
     cy.contains('Dit is de opmerking');
     cy.get(agenda.agendaitemTitelsConfidential).should('exist')
       .should('be.visible');
-    cy.get(agenda.agendaItemDocumentsTab).click();
+    cy.get(agenda.agendaitemDocumentsTab).click();
     cy.get(agenda.agendaitemExplanation).contains('Opmerking: Dit is de opmerking');
   });
 
