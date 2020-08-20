@@ -188,7 +188,7 @@ export default ModelWithModifier.extend({
     return await lastMeeting.get('latestAgenda');
   }),
 
-  latestAgendaItem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function() {
+  latestAgendaitem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function() {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
       const latestItem = await latestActivity.get('latestAgendaitem');

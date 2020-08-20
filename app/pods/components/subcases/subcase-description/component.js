@@ -40,12 +40,12 @@ export default Component.extend({
     return this.subcase.get('latestAgenda').then((agenda) => agenda.id);
   }),
 
-  latestAgendaItemId: computed('subcase.latestAgendaItem', function() {
-    return this.subcase.get('latestAgendaItem').then((item) => item.id);
+  latestAgendaitemId: computed('subcase.latestAgendaitem', function() {
+    return this.subcase.get('latestAgendaitem').then((item) => item.id);
   }),
 
-  isRetracted: computed('subcase.latestAgendaItem', function() {
-    return this.subcase.get('latestAgendaItem').then((item) => item.retracted);
+  isRetracted: computed('subcase.latestAgendaitem', function() {
+    return this.subcase.get('latestAgendaitem').then((item) => item.retracted);
   }),
 
   actions: {

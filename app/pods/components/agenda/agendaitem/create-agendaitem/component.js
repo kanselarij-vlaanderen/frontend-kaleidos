@@ -243,7 +243,7 @@ export default Component.extend(DataTableRouteMixin, {
         this.set('isAddingAgendaitems', false);
         this.set('sessionService.selectedAgendaitem', null);
         const anyAddedSubcase = subcasesToAdd.get('firstObject');
-        const newAgendaitem = await anyAddedSubcase.get('latestAgendaItem');
+        const newAgendaitem = await anyAddedSubcase.get('latestAgendaitem');
         this.reloadRouteWithRefreshId(newAgendaitem.id);
       });
     },
