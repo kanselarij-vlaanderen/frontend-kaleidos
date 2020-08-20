@@ -23,7 +23,7 @@ export default Route.extend({
         agenda, matchingAgendaitems,
       } = await hash({
         agenda: this.store.findRecord('agenda', id),
-        matchingAgendaitems: this.matchingAgendaItems(params.filter),
+        matchingAgendaitems: this.getMatchingAgendaitems(params.filter),
       });
 
       let agendaitems = await this.store.query('agendaitem', {
@@ -50,7 +50,7 @@ export default Route.extend({
     }
   },
 
-  async matchingAgendaitems(filter) {
+  async getMatchingAgendaitems(filter) {
     if (isEmpty(filter)) {
       return {};
     }
