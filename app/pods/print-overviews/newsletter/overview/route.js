@@ -36,7 +36,7 @@ export default Route.extend({
 
     const {
       draftAgendaitems, groupedAgendaitems,
-    } = await this.parseAgendaItems(
+    } = await this.parseAgendaitems(
       agendaitems, params
     );
 
@@ -53,7 +53,7 @@ export default Route.extend({
     });
   },
 
-  async parseAgendaItems(agendaitems, params) {
+  async parseAgendaitems(agendaitems, params) {
     let draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
 
     draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
