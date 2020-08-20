@@ -90,10 +90,10 @@ export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) 
     const {
       postProcessDates,
     } = this;
-    return search(searchDocumentType, params.page, params.size, params.sort, filter, (item) => {
-      const entry = item.attributes;
-      entry.id = item.id;
-      postProcessDates(item);
+    return search(searchDocumentType, params.page, params.size, params.sort, filter, (searchData) => {
+      const entry = searchData.attributes;
+      entry.id = searchData.id;
+      postProcessDates(searchData);
       return entry;
     });
   }

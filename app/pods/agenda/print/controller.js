@@ -19,12 +19,12 @@ export default Controller.extend({
       const groups = [];
       groups.pushObject(currentItemArray);
       for (let index = 0; index < agendaItems.length; index++) {
-        const item = agendaItems.objectAt(index);
-        const subm = item.sortedMandatees;
+        const agendaitem = agendaItems.objectAt(index);
+        const subm = agendaitem.sortedMandatees;
         if (equalContentArrays(currentSubmittersArray, subm)) {
-          currentItemArray.pushObject(item);
+          currentItemArray.pushObject(agendaitem);
         } else {
-          currentItemArray = A([item]);
+          currentItemArray = A([agendaitem]);
           groups.pushObject(currentItemArray);
           currentSubmittersArray = subm;
         }
