@@ -56,15 +56,15 @@ export default Model.extend(LoadableModel, {
 
   isApprovable: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaItems = agendaitems.filter((agendaitem) => this.checkFormallyOkStatus(agendaitem));
-      return approvedAgendaItems.get('length') === agendaitems.get('length');
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => this.checkFormallyOkStatus(agendaitem));
+      return approvedAgendaitems.get('length') === agendaitems.get('length');
     });
   }),
 
   isPassable: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaItems = agendaitems.filter((agendaitem) => this.checkPassable(agendaitem));
-      return approvedAgendaItems.get('length') === agendaitems.get('length');
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => this.checkPassable(agendaitem));
+      return approvedAgendaitems.get('length') === agendaitems.get('length');
     });
   }),
 
