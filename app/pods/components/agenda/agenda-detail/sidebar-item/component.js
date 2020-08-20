@@ -8,7 +8,7 @@ export default class SidebarItem extends Component {
   /**
    * INFO arguments from parent.
    * @agendaitem={{agendaitem}}
-   * @selectAgendaItem={{action "selectAgendaItemAction"}}
+   * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
   @service store;
@@ -47,7 +47,7 @@ export default class SidebarItem extends Component {
   async openDetailPage() {
     if (!this.isEditingOverview && !this.isComparing) {
       const agendaitem = await this.store.findRecord('agendaitem', this.args.agendaitem.id);
-      this.args.selectAgendaItem(agendaitem);
+      this.args.selectAgendaitem(agendaitem);
     }
   }
 

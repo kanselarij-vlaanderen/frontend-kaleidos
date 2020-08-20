@@ -54,8 +54,8 @@ export default class AgendaOverview extends Component {
   };
 
   @action
-  selectAgendaItemAction(agendaitem) {
-    this.selectAgendaItem(agendaitem);
+  selectAgendaitemAction(agendaitem) {
+    this.selectAgendaitem(agendaitem);
   }
 
   @action

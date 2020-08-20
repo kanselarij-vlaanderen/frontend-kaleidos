@@ -11,7 +11,7 @@ export default class AgendaOverviewItem extends Component {
    *
    * @agendaitem={{agendaitem}}
    * @isEditingOverview={{isEditingOverview}}
-   * @selectAgendaItem={{action "selectAgendaItemAction"}}
+   * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
   @service sessionService;
@@ -89,7 +89,7 @@ export default class AgendaOverviewItem extends Component {
   @action
   async openAgendaItem() {
     if (!this.isEditingOverview && !this.isComparing) {
-      this.args.selectAgendaItem(this.args.agendaitem);
+      this.args.selectAgendaitem(this.args.agendaitem);
     }
   }
 }

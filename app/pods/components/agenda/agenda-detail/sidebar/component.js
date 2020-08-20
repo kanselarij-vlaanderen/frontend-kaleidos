@@ -29,8 +29,8 @@ export default class AgendaSidebar extends Component {
   }
 
   @action
-  selectAgendaItemAction(agendaitem) {
-    this.args.selectAgendaItem(agendaitem);
+  selectAgendaitemAction(agendaitem) {
+    this.args.selectAgendaitem(agendaitem);
   }
 
   @action

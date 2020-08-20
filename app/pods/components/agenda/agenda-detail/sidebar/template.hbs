@@ -57,7 +57,7 @@
           distance=30
           handle=dragHandleClass
         }}
-          <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaItem={{action "selectAgendaItemAction"}}  />
+          <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaitem={{action "selectAgendaitemAction"}}  />
         {{/sortable-item}}
       {{/each}}
     {{/sortable-group}}
@@ -80,7 +80,7 @@
           (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
         }}
           <li class="vlc-agenda-detail-sidebar__sub-item">
-            <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaItem={{action "selectAgendaItemAction"}} />
+            <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaitem={{action "selectAgendaitemAction"}} />
           </li>
         {{/if}}
       {{/each}}
@@ -121,7 +121,7 @@
             distance=30
             handle=dragHandleClass
           }}
-            <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaItem={{action "selectAgendaItemAction"}}/>
+            <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaitem={{action "selectAgendaitemAction"}}/>
           {{/sortable-item}}
         {{/each}}
       {{/sortable-group}}
@@ -131,7 +131,7 @@
       as |announcement|
       }}
         <div class="vlc-agenda-detail-sidebar__sub-item">
-          <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaItem={{action "selectAgendaItemAction"}}/>
+          <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaitem={{action "selectAgendaitemAction"}}/>
         </div>
       {{/each}}
     {{/if}}

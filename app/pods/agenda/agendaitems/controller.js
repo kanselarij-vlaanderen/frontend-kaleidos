@@ -50,7 +50,7 @@ export default Controller.extend({
   }),
 
   actions: {
-    selectAgendaItem(agendaitem) {
+    selectAgendaitem(agendaitem) {
       const detailRoutePrefix = 'agenda.agendaitems.agendaitem';
       if (this.routing.currentRouteName.startsWith(detailRoutePrefix)) {
         this.set('sessionService.selectedAgendaitem', agendaitem); // TODO: get rid of global state
