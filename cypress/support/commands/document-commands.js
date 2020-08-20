@@ -273,17 +273,17 @@ function addNewDocumentVersionToSubcase(oldFileName, file) {
 
 /**
  * @description Opens agendaitem with agendaitemTitle and clicks the document link.
- * @name openAgendaItemDossierTab
+ * @name openAgendaitemDossierTab
  * @memberOf Cypress.Chainable#.
  * @function
  * @param {string} agendaitemTitle
  */
-function openAgendaItemDossierTab(agendaitemTitle) {
-  cy.log('openAgendaItemDossierTab');
+function openAgendaitemDossierTab(agendaitemTitle) {
+  cy.log('openAgendaitemDossierTab');
   cy.openDetailOfAgendaitem(agendaitemTitle);
   cy.get(agenda.agendaitemDossierTab)
     .click();
-  cy.log('/openAgendaItemDossierTab');
+  cy.log('/openAgendaitemDossierTab');
 }
 
 /**
@@ -433,5 +433,5 @@ Cypress.Commands.add('addNewDocumentVersionToSignedDocument', addNewDocumentVers
 Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
-Cypress.Commands.add('openAgendaItemDossierTab', openAgendaItemDossierTab);
+Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocumentToAgendaitem', addLinkedDocumentToAgendaitem);

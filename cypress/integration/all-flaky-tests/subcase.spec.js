@@ -183,7 +183,7 @@ context('Subcase tests', () => {
     // Aanmaken agendaitem
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(shortSubcaseTitle, false);
-    cy.openAgendaItemDossierTab(shortSubcaseTitle);
+    cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
     cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
