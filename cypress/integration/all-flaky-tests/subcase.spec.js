@@ -281,12 +281,12 @@ context('Subcase tests', () => {
 
     cy.route('GET', '/meetings/**').as('getMeetingsDetail');
     // cy.route('GET', '/agendas**').as('getAgendas');
-    cy.route('GET', '/agendaitems**').as('getAgendaItems');
+    cy.route('GET', '/agendaitems**').as('getAgendaitems');
     cy.get(agenda.dataTableZebra).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
       .click();
     cy.wait('@getMeetingsDetail');
     // cy.wait('@getAgendas');
-    cy.wait('@getAgendaItems');
+    cy.wait('@getAgendaitems');
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
