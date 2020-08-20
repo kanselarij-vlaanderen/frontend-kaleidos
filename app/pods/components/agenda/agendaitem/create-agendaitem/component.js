@@ -233,7 +233,7 @@ export default Component.extend(DataTableRouteMixin, {
               agendaitemCounter++;
               index = agendaitemCounter;
             }
-            return await agendaService.createNewAgendaItem(selectedAgenda, subcase, index);
+            return await agendaService.createNewAgendaitem(selectedAgenda, subcase, index);
           }
         })
       );
