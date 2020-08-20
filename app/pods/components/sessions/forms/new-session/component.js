@@ -46,7 +46,7 @@ export default Component.extend({
   },
 
   async createAgenda(meeting, date) {
-    const status = await this.store.findRecord('agendastatus', '2735d084-63d1-499f-86f4-9b69eb33727f');
+    const status = await this.store.findRecord('agendastatus', CONFIG.agendaStatusDesignAgenda.id);
     const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
       serialnumber: 'A',
