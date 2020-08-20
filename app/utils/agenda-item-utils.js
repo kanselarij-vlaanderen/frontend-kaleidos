@@ -89,10 +89,10 @@ export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
  */
 export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
   const item = agendaitemOrSubcase;
-  const isAgendaItem = item.get('modelName') === 'agendaitem';
+  const isAgendaitem = item.get('modelName') === 'agendaitem';
 
   await item.preEditOrSaveCheck();
-  if (isAgendaItem) {
+  if (isAgendaitem) {
     const agenda = await item.get('agenda');
     const isDesignAgenda = await agenda.asyncCheckIfDesignAgenda();
 
