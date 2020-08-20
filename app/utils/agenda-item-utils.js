@@ -232,7 +232,7 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
  * @param {Boolean} isDesignAgenda  When true, the agenda is a designagenda.
  */
 export const setAgendaItemsPriority = (agendaitems, isEditor, isDesignAgenda) => {
-  if (isEditor || isDesignAgenda) {
+  if (isEditor && isDesignAgenda) {
     return agendaitems.map((agendaitem, index) => {
       agendaitem.set('priority', index + 1);
       agendaitem.save();
