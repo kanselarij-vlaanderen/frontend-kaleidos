@@ -81,7 +81,7 @@ export default Component.extend({
       const resetFormallyOk = true;
       set(this, 'isLoading', true);
 
-      const propertiesToSetOnAgendaItem = {
+      const propertiesToSetOnAgendaitem = {
         showAsRemark: this.get('showAsRemark'),
       };
 
@@ -90,7 +90,7 @@ export default Component.extend({
         type: this.get('type'),
         showAsRemark: this.get('showAsRemark'),
       };
-      await saveSubcaseDescription(this.subcase, propertiesToSetOnAgendaItem, propertiesToSetOnSubCase, resetFormallyOk);
+      await saveSubcaseDescription(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubCase, resetFormallyOk);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
     },
