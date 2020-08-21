@@ -9,7 +9,7 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
   @service store;
 
   @action
-  async addTreatmentFromController() {
+  async addTreatment() {
     if (this.agendaitem) {
       const newTreatment = this.store.createRecord('agenda-item-treatment', {
         created: moment().utc()
