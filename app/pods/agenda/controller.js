@@ -68,16 +68,8 @@ export default Controller.extend({
       this.transitionToRoute('subcases');
     },
 
-    reloadRouteWithNewAgenda(selectedAgendaId) {
+    navigateToAgenda(selectedAgendaId) {
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, selectedAgendaId);
-    },
-
-    reloadRouteWithNewAgendaitem(newAgendaitemId) {
-      this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, this.model.agenda.id, {
-        queryParams: {
-          refresh: newAgendaitemId,
-        },
-      });
     },
 
     compareAgendas() {
@@ -90,6 +82,10 @@ export default Controller.extend({
 
     loadingAgendaitems() {
       this.toggleProperty('isLoading');
+    },
+
+    refresh() {
+      this.send('reloadModel');
     },
   },
 });

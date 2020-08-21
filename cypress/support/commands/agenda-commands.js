@@ -566,7 +566,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     .wait('@patchAgenda', {
       timeout: 20000,
     });
-  cy.url().should('include', '?refresh=');
 }
 
 /**

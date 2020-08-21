@@ -315,7 +315,7 @@
 {{#if isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @isAddingAgendaitems={{isAddingAgendaitems}}
-    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
+    @onCreate={{this.onCreateAgendaitem}} />
 {{/if}}
 {{#if isAssigningSignature}}
   <Session::SelectSignature
