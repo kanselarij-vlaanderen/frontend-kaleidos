@@ -40,6 +40,7 @@ export default Component.extend(FileSaverMixin, {
   isDeletingAgenda: false,
   isLockingAgenda: false,
   isShowingAgendaActions: false,
+  onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -399,10 +400,6 @@ export default Component.extend(FileSaverMixin, {
       this.reloadRoute(id);
     },
 
-    reloadRouteWithRefreshId(id) {
-      this.reloadRouteWithRefreshId(id);
-    },
-
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
     },
@@ -441,10 +438,6 @@ export default Component.extend(FileSaverMixin, {
 
   reloadRoute(id) {
     this.reloadRouteWithNewAgenda(id);
-  },
-
-  reloadRouteWithRefreshId(id) {
-    this.reloadRouteWithNewAgendaitem(id);
   },
 
   async approveAgenda(session) {
