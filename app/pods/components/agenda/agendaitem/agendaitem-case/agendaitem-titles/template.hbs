@@ -76,18 +76,20 @@
 {{else}}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
-      {{#let this.newsletterInfo.inNewsletter as |visible|}}
-        <span
-          class="vlc-pill {{if visible "vlc-pill--success" "vlc-pill--error"}} vl-u-spacer-extended-right-s"
-        >
-          <span>
-            {{if visible (t "visible-in-newsletter") (t "hidden-in-newsletter")}}
-          </span>
-          <i
-            class="vl-button__icon vl-vi vl-vi-{{if visible "view-add" "hide"}} vl-u-spacer-extended-left-s"
-          ></i>
+      <span
+        class="vlc-pill {{if newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} vl-u-spacer-extended-right-s"
+      >
+        <span>
+          {{if 
+            newsletterInfo.inNewsletter 
+            (t "visible-in-newsletter") 
+            (t "hidden-in-newsletter")
+          }}
         </span>
-      {{/let}}
+        <i
+          class="vl-button__icon vl-vi vl-vi-{{if newsletterInfo.inNewsletter "view-add" "hide"}} vl-u-spacer-extended-left-s"
+        ></i>
+      </span>
     </div>
   </div>
 {{/if}}

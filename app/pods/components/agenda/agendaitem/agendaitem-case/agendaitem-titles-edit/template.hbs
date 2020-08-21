@@ -44,12 +44,10 @@
   <div class="vl-u-spacer">
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "show-in-newsletter")}}
-      {{#if this.loadNewsletterInfo.isIdle}}
-        {{web-components/vl-toggle
-          data-test-agendaitem-titles-edit-showInNewsletter
-          value=this.newsletterInfo.inNewsletter
-        }}
-      {{/if}}
+      {{web-components/vl-toggle
+        data-test-agendaitem-titles-edit-showInNewsletter
+        value=newsletterInfo.inNewsletter
+      }}
     </div>
   </div>
 {{/if}}

@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 
 export default class AgendaOverviewItem extends Component {
   /**
@@ -29,6 +28,8 @@ export default class AgendaOverviewItem extends Component {
 
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
+  @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
+
   hideLabel = true;
 
   isShowingChanges = null;
@@ -40,8 +41,6 @@ export default class AgendaOverviewItem extends Component {
   @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
 
   @tracked formallyOk = this.args.agendaitem.formallyOk || null;
-
-  @tracked newsletterInfo;
 
   get classNameBindings() {
     return `
@@ -56,18 +55,6 @@ export default class AgendaOverviewItem extends Component {
 
     return !(isOverheid && !documentsAreReleased);
   }
-
-  @(task(function *() {
-    if (!this.args.agendaitem.id) {
-      return;
-    }
-    const results = yield this.store.query('newsletter-info', {
-      'filter[agenda-item-treatment][agendaitem][:id:]': this.args.agendaitem.id,
-    });
-    if (results.length) {
-      this.newsletterInfo = results.firstObject;
-    }
-  })) loadNewsletterInfo;
 
   @action
   onEnter() {

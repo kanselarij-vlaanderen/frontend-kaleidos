@@ -112,7 +112,7 @@
           {{#if (not @isEditingOverview)}}
             {{#if currentSessionService.isViewer}}
               {{#if
-                (or subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (and @agendaitem.showAsRemark (not @agendaitem.showInNewsletter)))))
+                (or subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (not newsletterInfo.inNewsletter))))
               }}
                 <div class="vlc-hr"></div>
               {{/if}}
@@ -127,12 +127,10 @@
                 <div class="vlc-agenda-items__icons">
                   <div
                     class="vl-u-display-flex vlc-agenda-items__icons"
-                    {{did-insert (perform this.loadNewsletterInfo)}}
-                    {{did-update (perform this.loadNewsletterInfo)}}
                   >
-                    {{#unless this.newsletterInfo.inNewsletter}}
+                    {{#if (not newsletterInfo.inNewsletter)}}
                       <i class="vl-button__icon vl-vi ki-hide vlc-u-opacity-50 vl-u-spacer-extended-left-s opacity-lighter"></i>
-                    {{/unless}}
+                    {{/if}}
                     {{#if (await @agendaitem.checkAdded)}}
                       <i class="vl-link__icon vl-vi ki-calendar-plus vlc-agenda-item__icons--margin">
                         {{#attach-tooltip
