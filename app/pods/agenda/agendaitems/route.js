@@ -3,6 +3,7 @@ import { hash } from 'rsvp';
 import { isEmpty } from '@ember/utils';
 import { ajax } from 'fe-redpencil/utils/ajax';
 import { inject } from '@ember/service';
+import { action } from '@ember/object';
 
 export default Route.extend({
   sessionService: inject(),
@@ -14,38 +15,29 @@ export default Route.extend({
   },
 
   async model(params) {
-    const id = await this.get('sessionService.currentAgenda.id');
-    if (id) {
-      const {
-        agenda, matchingAgendaItems,
-      } = await hash({
-        agenda: this.store.findRecord('agenda', id),
-        matchingAgendaItems: this.matchingAgendaItems(params.filter),
-      });
+    const {
+      agenda,
+    } = this.modelFor('agenda');
+    let agendaitems = await this.store.query('agendaitem', {
+      'filter[agenda][:id:]': agenda.id,
+      include: 'mandatees',
+    });
+    if (!isEmpty(params.filter)) {
+      const matchingAgendaItems = await this.matchingAgendaItems(params.filter);
+      agendaitems = agendaitems.filter((item) => matchingAgendaItems[item.id]);
+    }
 
-      let agendaitems = await this.store.query('agendaitem', {
-        filter: {
-          agenda: {
-            id,
-          },
-        },
-        include: 'mandatees',
-      });
-      if (!isEmpty(params.filter)) {
-        agendaitems = agendaitems.filter((item) => matchingAgendaItems[item.id]);
-      }
+    const announcements = agendaitems.filter((item) => item.showAsRemark);
 
-      const announcements = agendaitems.filter((item) => item.showAsRemark);
+    this.set('sessionService.selectedAgendaItem', null);
 
-      this.set('sessionService.selectedAgendaItem', null);
+    return hash({
+      currentAgenda: agenda,
+      announcements,
+      agendaitems,
+    });
   },
 
-      return hash({
-        currentAgenda: agenda,
-        announcements,
-        agendaitems,
-      });
-    }
   @action
   reloadModel() {
     this.refresh();

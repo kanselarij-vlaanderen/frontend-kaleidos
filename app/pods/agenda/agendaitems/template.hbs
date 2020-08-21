@@ -13,7 +13,6 @@
           currentAgenda=(await model.currentAgenda)
           selectedAgendaItem=selectedAgendaItem
           filteredAgendaItems=filteredAgendaItems
-          overviewEnabled=isOverviewWindow
         }}
       {{else}}
         {{agenda/agenda-detail/sidebar
@@ -21,7 +20,6 @@
           agendaitems=(await sortedAgendaitems)
           currentAgenda=(await model.currentAgenda)
           filteredAgendaItems=filteredAgendaItems
-          overviewEnabled=isOverviewWindow
         }}
       {{/if}}
     </div>

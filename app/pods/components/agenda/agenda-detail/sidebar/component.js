@@ -16,7 +16,6 @@ export default class AgendaSidebar extends Component {
   @tracked isShowingChanges = false;
 
   classNames = ['vlc-agenda-items'];
-  overviewEnabled = null;
   dragHandleClass = '.vlc-agenda-detail-sidebar__sub-item';
 
   @restartableTask
