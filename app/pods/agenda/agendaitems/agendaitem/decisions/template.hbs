@@ -18,9 +18,12 @@
 {{/if}}
 {{#each this.treatments as |treatment|}}
   <div class ="vl-u-spacer">
+    {{!-- As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
+    we need to ensure at least 1 treatment for a relationship path to newsletterInfo --}}
     <Agenda::Agendaitem::AgendaitemDecision
       @treatment={{treatment}}
       @onDeleteTreatment={{this.refresh}}
+      @allowDelete={{gt this.treatments.length 1}}
     />
   </div>
 {{/each}}
