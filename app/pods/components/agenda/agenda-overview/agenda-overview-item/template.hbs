@@ -11,7 +11,11 @@
     </h4>
     <div class="vlc-agenda-items__text">
       <h4 class="vlc-agenda-items__subject">
-        <a href="javascript://" onclick={{action "openAgendaItem"}} data-test-agenda-overview-sub-item>
+        <LinkTo
+          data-test-agenda-overview-sub-item
+          @route="agenda.agendaitems.agendaitem"
+          @model={{@agendaitem.id}}
+        >
           <pre>
             {{#if @agendaitem.shortTitle}}
               {{@agendaitem.shortTitle}}
@@ -19,7 +23,7 @@
               {{@agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
             {{/if}}
           </pre>
-        </a>
+        </LinkTo>
       </h4>
 
       {{#if (not aboutToDelete)}}

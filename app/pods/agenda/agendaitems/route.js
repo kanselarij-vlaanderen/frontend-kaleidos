@@ -11,9 +11,6 @@ export default Route.extend({
     filter: {
       refreshModel: true,
     },
-    refresh: {
-      refreshModel: true,
-    },
   },
 
   async model(params) {
@@ -41,6 +38,7 @@ export default Route.extend({
       const announcements = agendaitems.filter((item) => item.showAsRemark);
 
       this.set('sessionService.selectedAgendaItem', null);
+  },
 
       return hash({
         currentAgenda: agenda,
@@ -48,6 +46,9 @@ export default Route.extend({
         agendaitems,
       });
     }
+  @action
+  reloadModel() {
+    this.refresh();
   },
 
   async matchingAgendaItems(filter) {

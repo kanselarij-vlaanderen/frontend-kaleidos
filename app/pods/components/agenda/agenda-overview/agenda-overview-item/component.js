@@ -102,11 +102,4 @@ export default class AgendaOverviewItem extends Component {
     const uri = item.get('uri');
     this.args.setFormallyOkAction(uri);
   }
-
-  @action
-  async openAgendaItem() {
-    if (!this.isEditingOverview && !this.isComparing) {
-      this.args.selectAgendaItem(this.args.agendaitem);
-    }
-  }
 }
