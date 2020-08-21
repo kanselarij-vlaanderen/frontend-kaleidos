@@ -41,6 +41,7 @@ export default Component.extend(FileSaverMixin, {
   isLockingAgenda: false,
   isShowingAgendaActions: false,
   onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
+  onApproveAgenda: null, // argument. Function to execute after approving an agenda.
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -436,10 +437,6 @@ export default Component.extend(FileSaverMixin, {
     this.loading();
   },
 
-  reloadRoute(id) {
-    this.reloadRouteWithNewAgenda(id);
-  },
-
   async approveAgenda(session) {
     if (this.get('isApprovingAgenda')) {
       return;
@@ -469,7 +466,9 @@ export default Component.extend(FileSaverMixin, {
           return newAgenda;
         })
         .then((newAgenda) => {
-          this.reloadRoute(newAgenda.get('id'));
+          if (this.onApproveAgenda) {
+            this.onApproveAgenda(newAgenda.get('id'));
+          }
         })
         .finally(() => {
           this.set('sessionService.selectedAgendaItem', null);

@@ -68,7 +68,7 @@ export default Controller.extend({
       this.transitionToRoute('subcases');
     },
 
-    reloadRouteWithNewAgenda(selectedAgendaId) {
+    navigateToAgenda(selectedAgendaId) {
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, selectedAgendaId);
     },
 
