@@ -33,7 +33,7 @@ export default class TableRowNewsletterTable extends Component {
 
   @action
   setInNewsletter(value) {
-    this.args.newsletterInfo.inNewsletter = value;
-    this.args.newsletterInfo.save();
+    this.newsletterInfo.inNewsletter = value;
+    this.newsletterInfo.save();
   }
 }
