@@ -25,14 +25,33 @@ export const cancelEdit = (item, propertiesToSet) => {
 };
 
 /**
- * Set an item to not yet formally ok.
- *
+ * @description Set an item to not yet formally ok.
  * @param itemToSet
  */
 export const setNotYetFormallyOk = (itemToSet) => {
   if (itemToSet.get('formallyOk') !== CONFIG.notYetFormallyOk) {
     itemToSet.set('formallyOk', CONFIG.notYetFormallyOk);
   }
+};
+
+/**
+ *@description Zet een agendapunt naar formeel Ok.
+ * @param agendaitem
+ */
+export const setAgendaitemFormallyOk = (agendaitem) => {
+  if (agendaitem.get('formallyOk') !== CONFIG.formallyOk) {
+    agendaitem.set('formallyOk', CONFIG.formallyOk);
+    agendaitem.save();
+  }
+};
+
+/**
+ *@description Return een lijst met agendaitems die nog niet formeel ok zijn.
+ * @param agendaitems
+ */
+export const getListOfAgendaitemsThatAreNotFormallyOk = (agendaitems) => {
+  const agendaitemNotFormallyOk = (agendaitem) => agendaitem.get('formallyOk') !== CONFIG.formallyOk;
+  return agendaitems.filter(agendaitemNotFormallyOk);
 };
 
 /**
