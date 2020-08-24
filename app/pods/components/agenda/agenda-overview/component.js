@@ -4,7 +4,7 @@ import {
 } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import { setAgendaItemsPriority } from 'fe-redpencil/utils/agenda-item-utils';
+import { setAgendaItemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaOverview extends Component {
   @service sessionService;
