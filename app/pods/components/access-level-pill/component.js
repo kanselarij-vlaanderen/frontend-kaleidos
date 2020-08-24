@@ -94,14 +94,16 @@ export default class AccessLevelPill extends Component {
       return;
     }
 
-    this.item.toggleConfidential();
+    this.item.set('confidential', !this.item.get('confidential'));
+    this.item.save();
   }
 
   @action
-  async save() {
+  save() {
     if (this.get('accessLevel')) {
       this.set('loading', true);
-      await this.get('item').storeAccessLevel(this.get('accessLevel'));
+      this.item.set('accessLevel', this.accessLevel);
+      this.item.save();
       this.set('loading', false);
       this.set('editing', false);
     }

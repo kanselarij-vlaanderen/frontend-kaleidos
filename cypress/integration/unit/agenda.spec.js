@@ -100,11 +100,23 @@ context('Agenda tests', () => {
     const subcase1Type = 'In voorbereiding';
     const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
+    const case2TitleShort = `${testId}Cypress test dossier 2`;
+    const type2 = 'Nota';
+    const newSubcase2TitleShort = `${testId} korte titel`;
+    const subcase2TitleLong = `${testId} lange titel`;
+    const subcase2Type = 'In voorbereiding';
+    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
     cy.createCase(false, case1TitleShort);
     cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
     cy.openSubcase(0);
-
     cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
+    cy.createCase(false, case2TitleShort);
+    cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
+    cy.openSubcase(0);
+    cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');

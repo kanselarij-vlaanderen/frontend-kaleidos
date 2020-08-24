@@ -2,8 +2,8 @@
   With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status
   is set rigth from the beginning and the component is rendered only once, scrolling on "did-insert" works just fine --}}
 <a href="#" {{ on "click" this.openDetailPage }} class={{ classNameBindings }}>
-  <div class="vl-u-display-flex" {{in-viewport onEnter=( fn conditionallyScrollIntoView ) }}>
-    <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
+  <div data-test-agenda-detail-sidebar-sub-item-container class="vl-u-display-flex" {{in-viewport onEnter=( fn conditionallyScrollIntoView ) }}>
+    <span data-test-agendaitem-number class="vlc-agenda-detail-sidebar-sub-item__numbering">
       {{#if @agendaitem.number}}
         {{@agendaitem.number}}.
       {{else}}
