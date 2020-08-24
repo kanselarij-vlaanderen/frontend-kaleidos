@@ -167,4 +167,13 @@ context('Agenda tests', () => {
       cy.get('input[type="number"]').should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });
   });
+
+  it('should add an agendaitem to an agenda', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(false);
+    cy.addAgendaitemToAgenda(false);
+    cy.addAgendaitemToAgenda(false);
+    // 4 formeel ok's omdat er 1 nota is en 3 agendaitems
+    cy.setAllItemsFormallyOk(4);
+  });
 });
