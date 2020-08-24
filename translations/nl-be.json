@@ -595,5 +595,7 @@
   "public-since": "Publiek gemaakt op",
   "approve-small-and-close": "goedkeuren en afsluiten",
   "agendaApproveActions": "Agenda goedkeuren",
-  "meeting-number-visual-representation": "Nummer van de vergadering"
+  "meeting-number-visual-representation": "Nummer van de vergadering",
+  "approve-all-agendaitems": "Alles formeel goedkeuren",
+  "approve-all-agendaitems-warning-message": "Bent u zeker dat u {amountOfAgendaitemsNotFormallyOk} agenda items formeel wil goedkeuren"
 }
