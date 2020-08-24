@@ -141,17 +141,17 @@ export default Component.extend({
 
   async deleteDocumentContainerWithUndo() {
     const {
-      agendaitemOrSubcase,
+      subcaseAgendaitemMeetingOrDocumentContainer,
     } = this;
-    const documents = agendaitemOrSubcase.get('documentVersions');
-    const itemType = agendaitemOrSubcase.get('constructor.modelName');
+    const documents = subcaseAgendaitemMeetingOrDocumentContainer.get('documentVersions');
+    const itemType = subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
     if (itemType === 'document') {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
     } else {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete)
         .then(() => {
-          if (!agendaitemOrSubcase.aboutToDelete && documents) {
-            agendaitemOrSubcase.hasMany('documentVersions').reload();
+          if (!subcaseAgendaitemMeetingOrDocumentContainer.aboutToDelete && documents) {
+            subcaseAgendaitemMeetingOrDocumentContainer.hasMany('documentVersions').reload();
           }
         });
     }
