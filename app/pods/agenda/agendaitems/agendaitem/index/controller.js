@@ -26,7 +26,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     }
   }
 
-  async reassignPriorities() {
+  async reassignPrioritiesForAgendaitems() {
     const isEditor = this.currentSession.isEditor;
     const isDesignAgenda = this.agenda.isDesignAgenda;
     const agendaItems = await this.agenda.agendaitems;
@@ -35,7 +35,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @action
   async reassignPrioritiesAndNavigateToNeighbouringAgendaitem(agendaitem) {
-    await this.reassignPriorities();
+    await this.reassignPrioritiesForAgendaitems();
     await this.navigateToNeighbouringItem(agendaitem);
   }
 }
