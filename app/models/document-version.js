@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import { deprecatingAlias } from '@ember/object/computed';
 import moment from 'moment';
-
+import config from '../utils/config';
 const {
   Model, attr, belongsTo,
 } = DS;
@@ -17,6 +17,7 @@ export default Model.extend({
     until: '?',
   }),
   confidential: attr('boolean'),
+  publicSince: attr('datetime'),
   accessLevel: belongsTo('access-level'),
 
   file: belongsTo('file'),
@@ -57,16 +58,30 @@ export default Model.extend({
     });
   }),
 
-  storeAccessLevel(accessLevel) {
-    this.set('modified', moment().toDate());
-    this.set('accessLevel', accessLevel);
-    return this.save();
+  changePublicSince() {
+    if (this.get('accessLevel').get('id') === config.publiekAccessLevelId && !this.get('confidential') && !this.get('publicSince')) {
+      this.set('publicSince', moment().utc()
+        .toDate());
+    }
+    if (this.get('accessLevel').get('id') !== config.publiekAccessLevelId || this.get('confidential')) {
+      this.set('publicSince', undefined);
+    }
   },
 
-  async toggleConfidential() {
-    this.set('modified', moment().toDate());
-    this.toggleProperty('confidential');
-    await this.save();
+  save() {
+    const parentSave = this._super;
+    const dirtyType = this.get('dirtyType');
+    switch (dirtyType) {
+      case 'deleted':
+        break;
+      default:
+        this.set('modified', moment().utc()
+          .toDate());
+        this.changePublicSince();
+        break;
+    }
+
+    return parentSave.call(this, ...arguments);
   },
 
 });

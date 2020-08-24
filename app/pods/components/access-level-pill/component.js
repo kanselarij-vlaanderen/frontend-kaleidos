@@ -95,14 +95,16 @@ export default class AccessLevelPill extends Component {
       return;
     }
 
-    this.lastDocumentVersion.toggleConfidential();
+    this.lastDocumentVersion.set('confidential', !this.lastDocumentVersion.get('confidential'));
+    this.lastDocumentVersion.save();
   }
 
   @action
-  async save() {
+  save() {
     if (this.get('accessLevel')) {
       this.set('loading', true);
-      await this.get('lastDocumentVersion').storeAccessLevel(this.get('accessLevel'));
+      this.lastDocumentVersion.set('accessLevel', this.accessLevel);
+      this.lastDocumentVersion.save();
       this.set('loading', false);
       this.set('editing', false);
     }

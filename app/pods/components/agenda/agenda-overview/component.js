@@ -4,8 +4,7 @@ import {
 } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import { restartableTask } from 'ember-concurrency-decorators';
-import { isPresent } from '@ember/utils';
+import { setAgendaItemsPriority } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default class AgendaOverview extends Component {
   @service sessionService;
@@ -23,6 +22,7 @@ export default class AgendaOverview extends Component {
   dragHandleClass = '.vlc-agenda-items__sub-item';
 
   agendaitems = null;
+  currentAgenda = null;
 
   isEditingOverview = null;
 
@@ -39,19 +39,6 @@ export default class AgendaOverview extends Component {
     }
     return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
   }
-
-  @restartableTask
-  reAssignPriorities = function *(agendaitems) {
-    yield agendaitems.map(async(agendaitem) => {
-      if (isPresent(agendaitem.changedAttributes().priority)) {
-        this.set('showLoader', true);
-        await agendaitem.save();
-        if (!this.isDestroyed) {
-          this.set('showLoader', false);
-        }
-      }
-    });
-  };
 
   @action
   selectAgendaItemAction(agendaitem) {
@@ -83,27 +70,9 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  reorderItems(agendaitems) {
-    if (this.currentSessionService.isEditor || this.currentAgenda.isDesignAgenda) {
-      agendaitems.map((agendaitem, index) => {
-        agendaitem.set('priority', index + 1);
-        return agendaitem;
-      });
-      this.reAssignPriorities.perform(agendaitems);
-      this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
-    }
-  }
-
-  @action
-  reorderAnnouncements(agendaitems) {
-    if (this.currentSessionService.isEditor || this.currentAgenda.isDesignAgenda) {
-      agendaitems.map((agendaitem, index) => {
-        agendaitem.set('priority', index + 1);
-        return agendaitem;
-      });
-      this.reAssignPriorities.perform(agendaitems);
-      // this.refresh();
-      this.set('announcements', agendaitems);
-    }
+  reorderItems(itemModels) {
+    const isEditor = this.currentSessionService.isEditor;
+    const isDesignAgenda = this.currentAgenda.isDesignAgenda;
+    setAgendaItemsPriority(itemModels, isEditor, isDesignAgenda);
   }
 }
