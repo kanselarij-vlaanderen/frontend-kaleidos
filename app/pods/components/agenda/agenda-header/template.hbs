@@ -397,9 +397,9 @@
 
 {{#if isApprovingAllAgendaitems}}
   <WebComponents::VlModalVerify
-    @title={{t "agenda-release-decisions"}}
+    @title={{t "approve-all-agendaitems"}}
     @buttonType="warning"
-    @verifyButtonText={{t "approve-all-agendaitems"}}
+    @verifyButtonText={{t "approve"}}
     @message={{t
       "approve-all-agendaitems-warning-message"
       amountOfAgendaitemsNotFormallyOk=(await amountOfAgendaitemsNotFormallyOk)
