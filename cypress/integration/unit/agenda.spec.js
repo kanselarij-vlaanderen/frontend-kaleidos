@@ -168,12 +168,15 @@ context('Agenda tests', () => {
     });
   });
 
-  it('should add an agendaitem to an agenda', () => {
-    cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(false);
-    cy.addAgendaitemToAgenda(false);
-    cy.addAgendaitemToAgenda(false);
-    // 4 formeel ok's omdat er 1 nota is en 3 agendaitems
-    cy.setAllItemsFormallyOk(4);
+  it('Should add agendaitems to an agenda and set all of them to formally OK', () => {
+    const agendaDateSingleTest = Cypress.moment().add(2, 'weeks')
+      .day(5); // Friday in two weeks
+    cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.addAgendaitemToAgenda(false);
+      cy.addAgendaitemToAgenda(false);
+      // 4 formeel ok's omdat er 1 nota is en 3 agendaitems
+      cy.setAllItemsFormallyOk(3);
+    });
   });
 });
