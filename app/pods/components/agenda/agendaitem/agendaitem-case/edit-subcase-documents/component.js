@@ -5,7 +5,7 @@ export default Component.extend({
 
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   fileService: service(),
-  agendaitemOrSubcase: null,
+  agendaitemOrSubcaseOrMeeting: null,
 
   async deleteDocument(document) {
     await this.fileService.deleteDocument(document);

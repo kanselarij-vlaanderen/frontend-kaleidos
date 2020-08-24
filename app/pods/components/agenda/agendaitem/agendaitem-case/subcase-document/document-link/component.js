@@ -32,7 +32,7 @@ export default Component.extend({
   }),
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
-  myDocumentVersions: computed.alias('agendaitemOrSubcase.documentVersions'),
+  myDocumentVersions: computed.alias('subcaseAgendaitemMeetingOrDocumentContainer.documentVersions'),
 
   lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');
@@ -280,9 +280,9 @@ export default Component.extend({
     },
 
     async openUploadDialog() {
-      const itemType = this.agendaitemOrSubcase.get('constructor.modelName');
+      const itemType = this.subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
       if (itemType === 'agendaitem' || itemType === 'subcase') {
-        await this.agendaitemOrSubcase.preEditOrSaveCheck();
+        await this.subcaseAgendaitemMeetingOrDocumentContainer.preEditOrSaveCheck();
       }
       this.toggleProperty('isUploadingNewVersion');
     },
@@ -311,9 +311,9 @@ export default Component.extend({
       this.set('isLoading', true);
       const document = await this.get('documentContainer.lastDocumentVersion');
       await document.save();
-      const agendaitemOrSubcase = await this.get('agendaitemOrSubcase');
-      const agendaActivity = await agendaitemOrSubcase.get('agendaActivity'); // when agendaitemOrSubcase = agendaitem
-      const agendaitemsOnDesignAgenda = await agendaitemOrSubcase.get('agendaitemsOnDesignAgendaToEdit'); // when agendaitemOrSubcase = subcase
+      const subcaseAgendaitemMeetingOrDocumentContainer = await this.get('subcaseAgendaitemMeetingOrDocumentContainer');
+      const agendaActivity = await subcaseAgendaitemMeetingOrDocumentContainer.get('agendaActivity'); // when agendaitemOrSubcase = agendaitem
+      const agendaitemsOnDesignAgenda = await subcaseAgendaitemMeetingOrDocumentContainer.get('agendaitemsOnDesignAgendaToEdit'); // when agendaitemOrSubcase = subcase
       try {
         if (agendaActivity) {
           const subcase = await agendaActivity.get('subcase');
@@ -321,7 +321,7 @@ export default Component.extend({
         } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
           await this.addDocumentToAgendaitems([document], agendaitemsOnDesignAgenda);
         }
-        await this.addDocumentToAnyModel([document], agendaitemOrSubcase);
+        await this.addDocumentToAnyModel([document], subcaseAgendaitemMeetingOrDocumentContainer);
       } catch (error) {
         await this.deleteUploadedDocument();
         throw error;

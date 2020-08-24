@@ -27,7 +27,7 @@ export default Component.extend(
     isEditing: false,
     isLoading: false,
     shouldShowLinkedDocuments: true,
-    agendaitemOrSubcase: null,
+    agendaitemOrSubcaseOrMeeting: null,
     documentsToLink: A([]),
     model: alias('uploadedFiles'),
 
@@ -40,17 +40,17 @@ export default Component.extend(
 
 
     get overheidCanViewDocuments() {
-      const isAgendaItem = this.agendaitemOrSubcase.get('modelName') === 'agendaitem';
-      const isSubcase = this.agendaitemOrSubcase.get('modelName') === 'subcase';
+      const isAgendaItem = this.agendaitemOrSubcaseOrMeeting.get('modelName') === 'agendaitem';
+      const isSubcase = this.agendaitemOrSubcaseOrMeeting.get('modelName') === 'subcase';
       const isOverheid = this.currentSession.isOverheid;
 
       if (isAgendaItem) {
-        const documentsAreReleased = this.agendaitemOrSubcase.get('agenda.createdFor.releasedDocuments');
+        const documentsAreReleased = this.agendaitemOrSubcaseOrMeeting.get('agenda.createdFor.releasedDocuments');
         return !(isOverheid && !documentsAreReleased);
       }
 
       if (isSubcase) {
-        const documentsAreReleased = this.agendaitemOrSubcase.get('requestedForMeeting.releasedDocuments');
+        const documentsAreReleased = this.agendaitemOrSubcaseOrMeeting.get('requestedForMeeting.releasedDocuments');
         return !(isOverheid && !documentsAreReleased);
       }
 
@@ -221,17 +221,17 @@ export default Component.extend(
       },
 
       async toggleIsAddingNewDocument() {
-        const itemType = this.agendaitemOrSubcase.get('constructor.modelName');
+        const itemType = this.agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
         if (itemType === 'agendaitem' || itemType === 'subcase') {
-          await this.agendaitemOrSubcase.preEditOrSaveCheck();
+          await this.agendaitemOrSubcaseOrMeeting.preEditOrSaveCheck();
         }
         this.toggleProperty('isAddingNewDocument');
       },
 
       async toggleIsEditing() {
-        const itemType = this.agendaitemOrSubcase.get('constructor.modelName');
+        const itemType = this.agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
         if (itemType === 'agendaitem' || itemType === 'subcase') {
-          await this.agendaitemOrSubcase.preEditOrSaveCheck();
+          await this.agendaitemOrSubcaseOrMeeting.preEditOrSaveCheck();
         }
         this.toggleProperty('isEditing');
       },
@@ -259,9 +259,9 @@ export default Component.extend(
         );
 
         this.get('documentsInCreation').clear();
-        const agendaitemOrSubcase = await this.get('agendaitemOrSubcase');
-        const agendaActivity = await agendaitemOrSubcase.get('agendaActivity'); // when item = agendaitem
-        const agendaitemsOnDesignAgenda = await agendaitemOrSubcase.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
+        const agendaitemOrSubcaseOrMeeting = await this.get('agendaitemOrSubcaseOrMeeting');
+        const agendaActivity = await agendaitemOrSubcaseOrMeeting.get('agendaActivity'); // when item = agendaitem
+        const agendaitemsOnDesignAgenda = await agendaitemOrSubcaseOrMeeting.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
 
         try {
           const documentsToAttach = [];
@@ -283,8 +283,8 @@ export default Component.extend(
                 agendaitemsOnDesignAgenda
               );
             }
-            await this.addDocumentToAgendaitemOrSubcaseOrMeeting(documentsToAttach, agendaitemOrSubcase);
-            await agendaitemOrSubcase.save();
+            await this.addDocumentToAgendaitemOrSubcaseOrMeeting(documentsToAttach, agendaitemOrSubcaseOrMeeting);
+            await agendaitemOrSubcaseOrMeeting.save();
           }
         } catch (error) {
           this.deleteAll();
@@ -309,9 +309,9 @@ export default Component.extend(
 
       async linkDocuments() {
         const documents = await this.get('documentsToLink');
-        const agendaitemOrSubcase = await this.get('agendaitemOrSubcase');
-        const agendaActivity = await agendaitemOrSubcase.get('agendaActivity'); // when item = agendaitem
-        const agendaitemsOnDesignAgenda = await agendaitemOrSubcase.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
+        const agendaitemOrSubcaseOrMeeting = await this.get('agendaitemOrSubcaseOrMeeting');
+        const agendaActivity = await agendaitemOrSubcaseOrMeeting.get('agendaActivity'); // when item = agendaitem
+        const agendaitemsOnDesignAgenda = await agendaitemOrSubcaseOrMeeting.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
         try {
           const documentsToAttach = [];
           await Promise.all(
@@ -329,8 +329,8 @@ export default Component.extend(
           } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
             await this.linkDocumentsToAgendaitems(documentsToAttach, agendaitemsOnDesignAgenda);
           }
-          await this.attachDocumentsToModel(documentsToAttach, agendaitemOrSubcase, 'linkedDocumentVersions');
-          await agendaitemOrSubcase.save();
+          await this.attachDocumentsToModel(documentsToAttach, agendaitemOrSubcaseOrMeeting, 'linkedDocumentVersions');
+          await agendaitemOrSubcaseOrMeeting.save();
         } finally {
           this.set('isLinkingOldDocument', false);
           this.set('documentsToLink', A([]));

@@ -5,14 +5,14 @@
         <h4 class="vl-title vl-title--h4">
           {{t "documents"}}
         </h4>
-        {{#if agendaitemOrSubcase.explanation}}
+        {{#if agendaitemOrSubcaseOrMeeting.explanation}}
           <pre data-test-agendaitem-explanation class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
-            {{t "remark-title"}}: {{await agendaitemOrSubcase.explanation}}
+            {{t "remark-title"}}: {{await agendaitemOrSubcaseOrMeeting.explanation}}
           </pre>
         {{/if}}
       </div>
       {{#if
-        (and currentSession.isEditor (gt (await agendaitemOrSubcase.documentsLength) 0))
+        (and currentSession.isEditor (gt (await agendaitemOrSubcaseOrMeeting.documentsLength) 0))
       }}
         <div class="vl-u-spacer-extended-left-s">
           <a data-test-subcase-documents-edit href="" class="vl-link" {{action "toggleIsEditing"}}>
@@ -23,17 +23,17 @@
     </div>
   </div>
   {{#if (not isEditing)}}
-    {{#if (is-pending agendaitemOrSubcase.documents)}}
+    {{#if (is-pending agendaitemOrSubcaseOrMeeting.documents)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
     {{else if (not overheidCanViewDocuments)}}
       <div class="vl-u-spacer-extended-top-s">
         <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
       </div>
-    {{else if (gt (await agendaitemOrSubcase.documentsLength) 0)}}
-      {{#each (await agendaitemOrSubcase.documents) as |document|}}
+    {{else if (gt (await agendaitemOrSubcaseOrMeeting.documentsLength) 0)}}
+      {{#each (await agendaitemOrSubcaseOrMeeting.documents) as |document|}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
                 @document={{document}}
-                @agendaitemOrSubcase={{agendaitemOrSubcase}} />
+                @agendaitemOrSubcaseOrMeeting={{agendaitemOrSubcaseOrMeeting}} />
       {{/each}}
     {{else}}
       <div class="vl-u-spacer-extended-top-s">
@@ -42,11 +42,11 @@
     {{/if}}
   {{else}}
     <Agenda::Agendaitem::AgendaitemCase::EditSubcaseDocuments
-            @documents={{await agendaitemOrSubcase.documents}}
-            @item={{agendaitemOrSubcase}}
+            @documents={{await agendaitemOrSubcaseOrMeeting.documents}}
+            @item={{agendaitemOrSubcaseOrMeeting}}
             @cancelForm={{action "cancelEditing"}} />
   {{/if}}
-  {{#if (is-pending agendaitemOrSubcase.documents)}}
+  {{#if (is-pending agendaitemOrSubcaseOrMeeting.documents)}}
     <button type="button" class="vl-button vl-button--loading" disabled>
       {{t "please-be-patient"}}
     </button>
@@ -67,20 +67,20 @@
         </h4>
       </div>
     </div>
-    {{#if (is-pending agendaitemOrSubcase.linkedDocuments)}}
+    {{#if (is-pending agendaitemOrSubcaseOrMeeting.linkedDocuments)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
-    {{else if (gt (await agendaitemOrSubcase.linkedDocumentsLength) 0)}}
-      {{#each (await agendaitemOrSubcase.linkedDocuments) as |document|}}
+    {{else if (gt (await agendaitemOrSubcaseOrMeeting.linkedDocumentsLength) 0)}}
+      {{#each (await agendaitemOrSubcaseOrMeeting.linkedDocuments) as |document|}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::LinkedDocumentLink
                 @document={{document}}
-                @agendaitemOrSubcase={{agendaitemOrSubcase}} />
+                @agendaitemOrSubcaseOrMeeting={{agendaitemOrSubcaseOrMeeting}} />
       {{/each}}
     {{else}}
       <div class="vl-u-spacer-extended-top-s">
         <WebComponents::VlAlert @message={{t "no-linked-documents-yet"}} />
       </div>
     {{/if}}
-    {{#if (is-pending agendaitemOrSubcase.linkedDocuments)}}
+    {{#if (is-pending agendaitemOrSubcaseOrMeeting.linkedDocuments)}}
       <button type="button" class="vl-button vl-button--loading" disabled>
         {{t "please-be-patient"}}
       </button>
@@ -108,7 +108,7 @@
         <div class="vl-u-align-right vl-u-spacer-extended-s">
           <LinkTo
                   @route="cases.case.subcases.subcase.overview"
-                  @model={{agendaitemOrSubcase.id}}
+                  @model={{agendaitemOrSubcaseOrMeeting.id}}
                   @target="_blank">
             {{t "to-subcase"}}
           </LinkTo>
