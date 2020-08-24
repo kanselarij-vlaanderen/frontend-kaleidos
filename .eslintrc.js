@@ -43,7 +43,7 @@ module.exports = {
     "quote-props": ["error", "as-needed"],
     "no-prototype-builtins": "error",
     "no-array-constructor": "error",
-    "prefer-destructuring": "warn",
+    "prefer-destructuring": "off",
     "quotes": [ "error", "single", { "avoidEscape": true }],
     "prefer-template": "error",
     "template-curly-spacing": ["error", "never"],

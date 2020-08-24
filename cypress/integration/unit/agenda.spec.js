@@ -100,11 +100,23 @@ context('Agenda tests', () => {
     const subcase1Type = 'In voorbereiding';
     const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
+    const case2TitleShort = `${testId}Cypress test dossier 2`;
+    const type2 = 'Nota';
+    const newSubcase2TitleShort = `${testId} korte titel`;
+    const subcase2TitleLong = `${testId} lange titel`;
+    const subcase2Type = 'In voorbereiding';
+    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
     cy.createCase(false, case1TitleShort);
     cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
     cy.openSubcase(0);
-
     cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
+    cy.createCase(false, case2TitleShort);
+    cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
+    cy.openSubcase(0);
+    cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
@@ -122,14 +134,20 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEditTitle).clear();
     cy.get(agenda.agendaitemTitlesEditTitle).type('dit is de lange titel\n\n');
 
+    cy.get(agenda.agendaitemTitlesEditExplanation).clear();
+    cy.get(agenda.agendaitemTitlesEditExplanation).type('Dit is de opmerking');
+
     cy.get(agenda.agendaitemTitlesEditSave).should('exist')
       .should('be.visible')
       .click();
     cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
+    cy.contains('Dit is de opmerking');
     cy.get(agenda.agendaitemTitelsConfidential).should('exist')
       .should('be.visible');
+    cy.get(agenda.agendaItemDocumentsTab).click();
+    cy.get(agenda.agendaitemExplanation).contains('Opmerking: Dit is de opmerking');
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
