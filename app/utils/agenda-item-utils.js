@@ -35,6 +35,7 @@ export const setNotYetFormallyOk = (itemToSet) => {
 };
 
 /**
+ *@name setAgendaitemFormallyOk
  *@description Zet een agendapunt naar formeel Ok.
  * @param agendaitem
  */
