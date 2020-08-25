@@ -19,6 +19,7 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
         modified: moment().utc()
           .toDate(),
         agendaitem: this.agendaitem,
+        subcase: this.subcase,
       });
       await newTreatment.save();
       this.refresh();
