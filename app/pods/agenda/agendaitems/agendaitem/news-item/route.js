@@ -2,15 +2,19 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { warn } from '@ember/debug';
 
 export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   @service agendaService;
 
   async beforeModel() {
+    // Because NewsletterInfo is connected via treatment:
     // Check if a treatment exists, otherwise redirect gracefully. This should only happen with corrupt data.
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    const agendaActivity = await agendaItem.get('agendaActivity');
-    if (!agendaActivity) {
+    const agendaItemTreatments = await agendaItem.get('treatments');
+    const agendaItemTreatment = agendaItemTreatments.firstObject; // TODO: AgendaItem can have many treatments (decisions)
+    if (!agendaItemTreatment) {
+      warn(`Agenda item "${agendaItem.id}" is missing a treatment`);
       this.transitionTo('agenda.agendaitems.agendaitem.index');
     }
   }
