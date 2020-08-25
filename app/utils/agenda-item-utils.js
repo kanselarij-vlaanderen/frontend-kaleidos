@@ -39,10 +39,10 @@ export const setNotYetFormallyOk = (itemToSet) => {
  *@description Zet een agendapunt naar formeel Ok.
  * @param agendaitem
  */
-export const setAgendaitemFormallyOk = (agendaitem) => {
+export const setAgendaitemFormallyOk = async(agendaitem) => {
   if (agendaitem.get('formallyOk') !== CONFIG.formallyOk) {
     agendaitem.set('formallyOk', CONFIG.formallyOk);
-    agendaitem.save();
+    await agendaitem.save();
   }
 };
 
