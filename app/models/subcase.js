@@ -25,7 +25,6 @@ export default ModelWithModifier.extend({
   subcaseIdentifier: attr('string'),
   showAsRemark: attr('boolean'),
   confidential: attr('boolean'),
-  formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
   concluded: attr('boolean'),
   subcaseName: attr('string'),

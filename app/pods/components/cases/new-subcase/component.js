@@ -102,7 +102,6 @@ export default Component.extend({
       created: newDate,
       modified: newDate,
       isArchived: false,
-      formallyOk: false,
       agendaActivities: [],
     });
   },
