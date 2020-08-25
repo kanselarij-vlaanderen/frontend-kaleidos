@@ -1,5 +1,5 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
+
 import { ajax } from 'fe-redpencil/utils/ajax';
 import moment from 'moment';
 
@@ -17,7 +17,9 @@ export default Service.extend({
         url: `/newsletter/createCampaign?agendaId=${agenda.get('id')}`,
       });
 
-      const { body } = result;
+      const {
+        body,
+      } = result;
 
       const mailCampaign = this.store.createRecord('mail-campaign', {
         campaignId: body.campaign_id,
@@ -30,6 +32,7 @@ export default Service.extend({
         return meeting.save();
       });
     } catch (error) {
+      console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-create-newsletter'), this.intl.t('warning-title'));
     }
   },
@@ -41,7 +44,9 @@ export default Service.extend({
         url: `/newsletter/deleteCampaign/${id}`,
       });
     } catch (error) {
+      console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
+      return null;
     }
   },
 
@@ -52,7 +57,9 @@ export default Service.extend({
         url: `/newsletter/sendCampaign/${id}?agendaId=${agendaId}`,
       });
     } catch (error) {
+      console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      return null;
     }
   },
 
@@ -63,7 +70,9 @@ export default Service.extend({
         url: `/newsletter/fetchTestCampaign/${id}`,
       });
     } catch (error) {
+      console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      return null;
     }
   },
 
@@ -75,7 +84,7 @@ export default Service.extend({
         title: agendaitem ? await agendaitem.get('shortTitle') : await subcase.get('shortTitle'),
         subtitle: agendaitem ? await agendaitem.get('title') : await subcase.get('title'),
         finished: false,
-        inNewsletter: inNewsletter
+        inNewsletter,
       });
       return await news.save();
     }
@@ -84,18 +93,23 @@ export default Service.extend({
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {
       const plannedStart = await meeting.get('plannedStart');
-      const pubDate = moment(plannedStart).set({ hour: 14, minute: 0 });
-      const pubDocDate = moment(plannedStart).weekday(7).set({ hour: 14, minute: 0 });
+      const pubDate = moment(plannedStart).set({
+        hour: 14, minute: 0,
+      });
+      const pubDocDate = moment(plannedStart).weekday(7)
+        .set({
+          hour: 14, minute: 0,
+        });
       const newsletter = this.store.createRecord('newsletter-info', {
-        meeting: meeting,
+        meeting,
         finished: false,
         mandateeProposal: null,
         publicationDate: this.formatter.formatDate(pubDate),
-        publicationDocDate: this.formatter.formatDate(pubDocDate)
+        publicationDocDate: this.formatter.formatDate(pubDocDate),
       });
       await newsletter.save();
       meeting.set('newsletter', newsletter);
       return await meeting.save();
     }
-  }
+  },
 });

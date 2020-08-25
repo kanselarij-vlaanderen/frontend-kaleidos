@@ -6,8 +6,7 @@ const selectors = {
   datepickerInput: '[data-test-vl-datepicker-input]',
   meeting: {
     formattedMeetingIdentifier: '[data-test-meeting-formattedMeetingIdentifier]',
-    formattedMeetingIdentifierEditValue: '[data-test-meeting-formattedMeetingIdentifier-edit-value]',
-    meetingEditIdentifierButton: '[data-test-meeting-edit-identifier-button]'
-  }
+    meetingEditIdentifierButton: '[data-test-meeting-edit-identifier-button]',
+  },
 };
 export default selectors;

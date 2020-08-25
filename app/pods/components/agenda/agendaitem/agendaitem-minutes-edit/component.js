@@ -8,13 +8,13 @@ export default Component.extend({
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   store: inject(),
 
-  item: computed('agendaitem.meetingRecord', function () {
+  item: computed('agendaitem.meetingRecord', function() {
     return this.get('agendaitem.meetingRecord');
   }),
   isExpanded: false,
   initValue: cached('item.richtext'), // TODO in class syntax use as a decorator instead
 
-  richtext: computed('editor.currentTextContent', function () {
+  richtext: computed('editor.currentTextContent', function() {
     if (!this.editor) {
       return;
     }
@@ -48,5 +48,5 @@ export default Component.extend({
     async handleRdfaEditorInit(editorInterface) {
       this.set('editor', editorInterface);
     },
-  }
+  },
 });

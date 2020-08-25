@@ -1,4 +1,6 @@
-import { computed, get, set } from '@ember/object';
+import {
+  computed, get, set
+} from '@ember/object';
 
 /**
  * Gets a certain property on a component/class so as to prevent it from making calls
@@ -6,25 +8,24 @@ import { computed, get, set } from '@ember/object';
  * @param  {String} property    Path to the property on the class
  * @return {Any}                The value on the given property path
  */
-export const cached = (property) => {
-  return computed(property, {
-    get() {
-      try {
-        return get(this, property);
-      } catch(e) {
-        console.warn(`Cached property at ${property} was not available, skipping.`);
-      }
-
-      return null;
-    },
-    set(key, value) {
-      try {
-        set(this, property, value);
-      } catch(e) {
-        console.warn(`Could not set cached property at ${property}`);
-      }
-
-      return value;
+export const cached = (property) => computed(property, {
+  get() {
+    try {
+      return get(this, property);
+    } catch (exception) {
+      console.warn(`Cached property at ${property} was not available, skipping.`, exception);
     }
-  });
-}
+
+    return null;
+  },
+  // eslint-disable-next-line no-unused-vars
+  set(key, value) {
+    try {
+      set(this, property, value);
+    } catch (exception) {
+      console.warn(`Could not set cached property at ${property}`, exception);
+    }
+
+    return value;
+  },
+});

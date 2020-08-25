@@ -1,12 +1,8 @@
-/*global cy, Cypress*/
-/// <reference types="Cypress" />
+/* global cy, Cypress */
+// / <reference types="Cypress" />
 
 import modal from '../../selectors/modal.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
-
-Cypress.Commands.add('openActionModal', openActionModal);
-Cypress.Commands.add('openSettingsModal', openSettingsModal);
-Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
 
 /**
  * Validate the content of the dropdown
@@ -45,7 +41,8 @@ function openActionModal() {
   cy.log('openActionModal');
   const BE_VISIBLE = 'be.visible';
 
-  cy.get(actionModal.showActionOptions).should('be.visible').click();
+  cy.get(actionModal.showActionOptions).should('be.visible')
+    .click();
   cy.get(actionModal.navigatetosubcases).should(BE_VISIBLE);
   cy.get(actionModal.navigatetodecisions).should(BE_VISIBLE);
   cy.get(actionModal.navigatetonewsletter).should(BE_VISIBLE);
@@ -57,3 +54,7 @@ function openActionModal() {
   cy.get(actionModal.agendaHeaderDeleteAgenda).should(BE_VISIBLE);
   cy.log('/openActionModal');
 }
+
+Cypress.Commands.add('openActionModal', openActionModal);
+Cypress.Commands.add('openSettingsModal', openSettingsModal);
+Cypress.Commands.add('closeSettingsModal', closeSettingsModal);

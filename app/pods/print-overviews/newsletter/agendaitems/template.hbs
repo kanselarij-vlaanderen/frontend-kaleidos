@@ -17,7 +17,7 @@
           <div class="vlc-container-center">
             {{news-item/edit-item
               agendaitem=agendaitemRow
-              item=(await agendaitemRow.agendaActivity.subcase.newsletterInfo)
+              newsletterInfo=(await agendaitemRow.content.agendaActivity.subcase.newsletterInfo)
               isEditing=agendaitemRow.expanded
             }}
           </div>

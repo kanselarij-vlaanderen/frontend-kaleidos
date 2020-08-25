@@ -1,3 +1,4 @@
+{{!-- template-lint-disable  --}}
 <div class="vl-u-display-flex vlc-u-flex-space-between vl-u-spacer-extended-bottom-s">
   <div class="compare-left-column">
     {{utils/agenda-selector
@@ -46,7 +47,7 @@
       {{/if}}
       <div class="vlc-agenda-items__sub-item grid-item">
         {{#if combinedItem.left}}
-          {{agenda/agenda-list/list-item
+          {{agenda/agenda-overview/agenda-overview-item
             isDocumentClickable=true
             isComparing=true
             agendaitem=combinedItem.left
@@ -55,7 +56,7 @@
       </div>
       <div class="vlc-agenda-items__sub-item grid-item">
         {{#if combinedItem.right}}
-          {{agenda/agenda-list/list-item
+          {{agenda/agenda-overview/agenda-overview-item
             isDocumentClickable=true
             isComparing=true
             agendaitem=combinedItem.right

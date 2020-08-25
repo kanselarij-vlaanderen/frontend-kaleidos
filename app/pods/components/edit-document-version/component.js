@@ -6,12 +6,12 @@ export default Component.extend({
   tagName: 'tr',
   myDocuments: computed.alias('item.documentVersions'),
 
-  myLastDocument: computed('mySortedDocuments.@each', function () {
+  myLastDocument: computed('mySortedDocuments.@each', function() {
     const mySortedDocuments = this.get('mySortedDocuments');
     return mySortedDocuments.lastObject;
   }),
 
-  myLastDocumentName: computed('myLastDocument.name', function () {
+  myLastDocumentName: computed('myLastDocument.name', function() {
     return this.get('myLastDocument.name');
   }),
 
@@ -19,9 +19,9 @@ export default Component.extend({
   // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
   // TODO: DUPLICATE CODE IN edit-document-version/component.js
   // TODO: THIS CODE HAS BEEN REFACTORED TO USE BETTER VARIABLE NAMES
-  mySortedDocuments: computed('myDocuments.@each', 'documentContainer.sortedDocuments.@each', function () {
+  mySortedDocuments: computed('myDocuments.@each', 'documentContainer.sortedDocuments.@each', function() {
     return DS.PromiseArray.create({
-      promise: (async () => {
+      promise: (async() => {
         const documentIds = {};
         const myDocuments = await this.get('myDocuments');
         if (myDocuments) {
@@ -31,14 +31,10 @@ export default Component.extend({
         }
         const documentsFromContainer = await this.get('documentContainer.sortedDocuments');
         if (documentsFromContainer) {
-          const matchingDocuments = await documentsFromContainer.filter((document) => {
-            return documentIds[document.id];
-          });
+          const matchingDocuments = await documentsFromContainer.filter((document) => documentIds[document.id]);
           return matchingDocuments;
         }
-
-        return;
-      })()
+      })(),
     });
   }),
 
@@ -54,5 +50,5 @@ export default Component.extend({
     async chooseAccessLevel(document, accessLevel) {
       document.set('accessLevel', accessLevel);
     },
-  }
+  },
 });

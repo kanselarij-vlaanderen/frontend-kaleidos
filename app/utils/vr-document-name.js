@@ -8,18 +8,19 @@ export default class VRDocumentName {
       docType: '((DOC)|(DEC)|(MED))',
       caseNr: '(\\d{4})',
       index: '(\\d{1,3})',
-      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map(s => s.toUpperCase()).join(')|(')}))`.replace('()|', '') // Hack to get out the value for version '0'
+      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
+        .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for version '0'
     });
   }
 
   static get looseRegex() {
-    const g = VRDocumentName.regexGroups;
-    return new RegExp(`VR ${g.date} ${g.docType}\\.${g.caseNr}([/-]${g.index})?`);
+    const regexGroup = VRDocumentName.regexGroups;
+    return new RegExp(`VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?`);
   }
 
   static get strictRegex() {
-    const g = VRDocumentName.regexGroups;
-    return new RegExp(`^VR ${g.date} ${g.docType}\\.${g.caseNr}(/${g.index})?${g.versionSuffix}?$`);
+    const regexGroup = VRDocumentName.regexGroups;
+    return new RegExp(`^VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.versionSuffix}?$`);
   }
 
   constructor(name, options) {
@@ -46,16 +47,15 @@ export default class VRDocumentName {
     const meta = {
       date: moment(match[1], 'YYYY DDMM').toDate(),
       docType: match[2],
-      caseNr: parseInt(match[6]),
-      index: parseInt(match[8]),
+      caseNr: parseInt(match[6], 10),
+      index: parseInt(match[8], 10),
       // versionSuffix: TODO
       // versionNr: TODO
     };
     if (this.strict) {
       return meta;
-    } else {
-      return meta;
     }
+    return meta;
   }
 
   // Will only be needed by backend renaming service
@@ -75,31 +75,34 @@ export default class VRDocumentName {
   }
 
   get withoutVersionSuffix() {
-    return this.name.replace(new RegExp(VRDocumentName.regexGroups.versionSuffix + '$', 'ui'), '');
+    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.versionSuffix}$`, 'ui'), '');
   }
 
   withOtherVersionSuffix(versionNr) {
-    return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[versionNr].toUpperCase()}`
+    return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[versionNr].toUpperCase()}`;
   }
 }
 
-export const compareFunction = function (a, b) {
+export const compareFunction = function(parameterA, parameterB) {
   try {
-    const metaA = a.parseMeta();
+    const metaA = parameterA.parseMeta();
     try { // Both names parse
-      const metaB = b.parseMeta();
-      return (metaB.caseNr - metaA.caseNr) || // Case number descending (newest first)
-        (metaA.index - metaB.index) || // Index ascending
-        (metaB.date - metaA.date); // Date descending (newest first)
-    } catch (e) { // Only a parses
+      const metaB = parameterB.parseMeta();
+      return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
+        || (metaA.index - metaB.index) // Index ascending
+        || (metaB.date - metaA.date); // Date descending (newest first)
+    } catch (exception) { // Only a parses
+      console.warn('An exception occurred', exception);
       return -1;
     }
-  } catch (e) {
+  } catch (exception) {
+    console.warn('An exception occurred', exception);
     try { // Only b parses
-      b.parseMeta();
+      parameterB.parseMeta();
       return 1;
-    } catch (e) { // Both don't parse
-      return a.name.localeCompare(b.name);
+    } catch (ex) { // Both don't parse
+      console.warn('An exception occurred', ex);
+      return parameterA.name.localeCompare(parameterB.name);
     }
   }
 };

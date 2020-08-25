@@ -2,23 +2,23 @@
   With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status
   is set rigth from the beginning and the component is rendered only once, scrolling on "did-insert" works just fine --}}
 <a href="#" {{ on "click" this.openDetailPage }} class={{ classNameBindings }}>
-  <div class="vl-u-display-flex" {{in-viewport onEnter=( fn conditionallyScrollIntoView ) }}>
-  <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
-    {{#if @agendaitem.number}}
-      {{@agendaitem.number}}.
-    {{else}}
-      {{add index 1}}.
-    {{/if}}
-  </span>
+  <div data-test-agenda-detail-sidebar-sub-item-container class="vl-u-display-flex" {{in-viewport onEnter=( fn conditionallyScrollIntoView ) }}>
+    <span data-test-agendaitem-number class="vlc-agenda-detail-sidebar-sub-item__numbering">
+      {{#if @agendaitem.number}}
+        {{@agendaitem.number}}.
+      {{else}}
+        {{add index 1}}.
+      {{/if}}
+    </span>
     <div class="vlc-agenda-detail-sidebar__text-container">
       <h4 class="vlc-agenda-detail-sidebar__subject">
-    <pre class="vl-u-text-color-agenda-list">
-      {{#if @agendaitem.shortTitle}}
-        {{@agendaitem.shortTitle}}
-      {{else}}
-        {{@agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
-      {{/if}}
-    </pre>
+        <pre class="vl-u-text-color-agenda-list">
+          {{#if @agendaitem.shortTitle}}
+            {{@agendaitem.shortTitle}}
+          {{else}}
+            {{@agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
+          {{/if}}
+        </pre>
       </h4>
       {{#if (not @agendaitem.aboutToDelete)}}
         {{#if (not selectedAgendaItem)}}
@@ -36,7 +36,7 @@
             <div class="vl-u-display-flex vlc-u-display-flex-align-items-flex-end vlc-agenda-detail-sidebar-item__icon">
               {{#if (await @agendaitem.checkAdded)}}
                 <span class="added-tag vlc-agenda-meta__recently-added">
-                   <i class="vl-vi ki-calendar-plus"></i>
+                  <i class="vl-vi ki-calendar-plus"></i>
                   {{#attach-tooltip
                     arrow="true"
                     animation="shift"
@@ -54,13 +54,13 @@
                 <i class="vl-vi ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
               {{/if}}
 
-            {{#if (await subcase.confidential)}}
-             <i
-               class="vl-icon vl-vi ki-lock-closed vl-vi-no-font-weight vlc-u-opacity-50"
-               data-test-icon-agenda-confidentiality-locked
-             ></i>
-            {{/if}}
-          </div>
+              {{#if (await subcase.confidential)}}
+                <i
+                   class="vl-icon vl-vi ki-lock-closed vl-vi-no-font-weight vlc-u-opacity-50"
+                   data-test-icon-agenda-confidentiality-locked
+                ></i>
+              {{/if}}
+            </div>
 
             <div class="vlc-agenda-detail-sidebar__formally-ok-label vlc-u-display-flex-align-items-flex-end">
               {{#if

@@ -19,5 +19,5 @@ export default Controller.extend(DefaultQueryParamsMixin, {
       this.send('refreshRoute');
       this.transitionToRoute('agendas.overview');
     },
-  }
+  },
 });

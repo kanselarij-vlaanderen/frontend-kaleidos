@@ -3,7 +3,12 @@ import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 
-const { Model, attr, belongsTo, hasMany } = DS;
+const {
+  Model,
+  attr,
+  belongsTo,
+  hasMany,
+} = DS;
 
 export default Model.extend(LoadableModel, {
   name: computed.alias('serialnumber'),
@@ -11,26 +16,31 @@ export default Model.extend(LoadableModel, {
   serialnumber: attr('string'),
   issued: attr('datetime'),
   createdFor: belongsTo('meeting'),
-  status: belongsTo('agendastatus', {inverse: null}),
-  agendaitems: hasMany('agendaitem', { inverse: null, serialize: false }),
-  created: attr('date'),
+  status: belongsTo('agendastatus', {
+    inverse: null,
+  }),
+  agendaitems: hasMany('agendaitem', {
+    inverse: null,
+    serialize: false,
+  }),
+  created: attr('datetime'),
   modified: attr('datetime'),
 
-  isDesignAgenda: computed('status.isDesignAgenda', function () {
+  isDesignAgenda: computed('status.isDesignAgenda', function() {
     return this.get('status.isDesignAgenda');
   }),
 
-  isClosed: computed('status.isClosed', function () {
-    return this.get('status.isClosed');
+  isApproved: computed('status.isApproved', function() {
+    return this.get('status.isApproved');
   }),
 
-  async asyncCheckIfDesignAgenda(){
+  async asyncCheckIfDesignAgenda() {
     await this.get('status');
 
     return this.get('isDesignAgenda');
   },
 
-  agendaName: computed('serialnumber', 'status', function () {
+  agendaName: computed('serialnumber', 'status', function() {
     const isDesignAgenda = this.get('status.isDesignAgenda');
     const agendaName = this.serialnumber || '';
     let prefix;
@@ -44,38 +54,34 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  isApprovable: computed('agendaitems.@each.formallyOk', function () {
+  isApprovable: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaItems = agendaitems.filter((agendaitem) =>
-        this.checkFormallyOkStatus(agendaitem)
-      );
+      const approvedAgendaItems = agendaitems.filter((agendaitem) => this.checkFormallyOkStatus(agendaitem));
       return approvedAgendaItems.get('length') === agendaitems.get('length');
     });
   }),
 
-  isPassable: computed('agendaitems.@each', function () {
+  isPassable: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaItems = agendaitems.filter((agendaitem) =>
-        this.checkPassable(agendaitem)
-      );
+      const approvedAgendaItems = agendaitems.filter((agendaitem) => this.checkPassable(agendaitem));
       return approvedAgendaItems.get('length') === agendaitems.get('length');
     });
   }),
 
-  lastAgendaitemPriority: computed('agendaitems.@each', function () {
+  lastAgendaitemPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const filteredAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
-      if (filteredAgendaitems.length == 0) {
+      if (filteredAgendaitems.length === 0) {
         return 0;
       }
       return Math.max(...filteredAgendaitems.map((item) => item.priority || 0));
     });
   }),
 
-  lastAnnouncementPriority: computed('agendaitems.@each', function () {
+  lastAnnouncementPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const announcements = agendaitems.filter((item) => item.showAsRemark);
-      if (announcements.length == 0) {
+      if (announcements.length === 0) {
         return 0;
       }
       return Math.max(...announcements.map((item) => item.priority || 0));
@@ -88,16 +94,14 @@ export default Model.extend(LoadableModel, {
 
   checkPassable(agendaitem) {
     return (
-      agendaitem.get('isAdded') ||
-      [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get('formallyOk'))
+      agendaitem.get('isAdded')
+      || [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get('formallyOk'))
     );
   },
 
-  firstAgendaItem: computed('agendaitems.@each', function () {
+  firstAgendaItem: computed('agendaitems.@each', function() {
     return DS.PromiseObject.create({
-      promise: this.get('agendaitems').then((agendaitems) => {
-        return agendaitems.sortBy('priority').get('firstObject');
-      }),
+      promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });
   }),
 });

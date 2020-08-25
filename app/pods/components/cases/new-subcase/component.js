@@ -12,13 +12,15 @@ export default Component.extend({
   confidentiality: null,
   title: null,
   shortTitle: null,
-  filter: Object.freeze({ type: 'subcase-name' }),
+  filter: Object.freeze({
+    type: 'subcase-name',
+  }),
 
-  confidential: computed('case', function () {
+  confidential: computed('case', function() {
     return this.get('case.confidential');
   }),
 
-  caseTypes: computed('store', async function () {
+  caseTypes: computed('store', async function() {
     return await this.store.query('case-type', {
       sort: '-label',
       filter: {
@@ -66,20 +68,20 @@ export default Component.extend({
       mandateeProposal: null,
       publicationDate: newsletterInfo.get('publicationDate'),
       publicationDocDate: newsletterInfo.get('publicationDocDate'),
-      themes: await newsletterInfo.get('themes')
+      themes: await newsletterInfo.get('themes'),
     });
     return await newsletterInfoToCreate.save();
   },
 
   async copyDecisions(subcase, decisions) {
     return Promise.all(
-      decisions.map(decision => {
+      decisions.map((decision) => {
         const newDecision = this.store.createRecord('decision', {
           title: decision.get('title'),
           shortTitle: decision.get('shortTitle'),
           approved: false,
           description: decision.get('description'),
-          subcase
+          subcase,
         });
         return newDecision.save();
       })
@@ -87,7 +89,9 @@ export default Component.extend({
   },
 
   createSubcaseObject(newCase, newDate) {
-    let { type, title, shortTitle, confidential, showAsRemark } = this;
+    const {
+      type, title, shortTitle, confidential, showAsRemark,
+    } = this;
     return this.store.createRecord('subcase', {
       type,
       shortTitle: trimText(shortTitle),
@@ -99,14 +103,15 @@ export default Component.extend({
       modified: newDate,
       isArchived: false,
       formallyOk: false,
-      agendaActivities: []
+      agendaActivities: [],
     });
   },
 
   async copySubcase(fullCopy = false) {
     const caze = await this.store.findRecord('case', this.case.id);
     const latestSubcase = await caze.get('latestSubcase');
-    const date = moment().utc().toDate();
+    const date = moment().utc()
+      .toDate();
     let subcase = await this.createSubcaseObject(caze, date);
     subcase.set('subcaseName', this.subcaseName);
 
@@ -167,6 +172,6 @@ export default Component.extend({
     selectModel(items) {
       this.set('selectedSubcaseName', items);
       this.set('subcaseName', items.get('label'));
-    }
-  }
+    },
+  },
 });

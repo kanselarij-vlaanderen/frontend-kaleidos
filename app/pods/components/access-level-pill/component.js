@@ -1,15 +1,23 @@
 import Component from '@ember/component';
-import EmberObject from '@ember/object';
-import { action, computed } from '@ember/object';
+import EmberObject, {
+  action, computed
+} from '@ember/object';
+
 import { inject as service } from '@ember/service';
 import DS from 'ember-data';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default class AccessLevelPill extends Component {
   confidential = false;
+
   editing = false;
+
   @service() intl;
+
   @service('current-session') session;
+
   classNameBindings = [':vl-u-display-flex', ':vl-u-flex-align-center'];
+
   loading = false;
 
   @computed('item.accessLevel')
@@ -21,9 +29,7 @@ export default class AccessLevelPill extends Component {
     }
 
     return DS.PromiseObject.create({
-      promise: accessLevel.then((access) => {
-        return access;
-      })
+      promise: accessLevel.then((access) => access),
     });
   }
 
@@ -36,20 +42,18 @@ export default class AccessLevelPill extends Component {
     }
 
     return DS.PromiseObject.create({
-      promise: accessLevel.then((access) => {
-        return access;
-      })
+      promise: accessLevel.then((access) => access),
     });
   }
 
   @computed('accessLevelId')
   get accessLevelClass() {
     switch (this.accessLevelId) {
-      case '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e':
+      case CONFIG.publiekAccessLevelId:
         return 'vlc-pill--success';
-      case 'abe4c18d-13a9-45f0-8cdd-c493eabbbe29':
+      case CONFIG.internOverheidAccessLevelId:
         return 'vlc-pill--warning';
-      case 'd335f7e3-aefd-4f93-81a2-1629c2edafa3':
+      case CONFIG.internRegeringAccessLevelId:
         return 'vlc-pill--error';
       default:
         return '';
@@ -90,14 +94,16 @@ export default class AccessLevelPill extends Component {
       return;
     }
 
-    this.item.toggleConfidential();
+    this.item.set('confidential', !this.item.get('confidential'));
+    this.item.save();
   }
 
   @action
-  async save() {
+  save() {
     if (this.get('accessLevel')) {
       this.set('loading', true);
-      await this.get('item').storeAccessLevel(this.get('accessLevel'));
+      this.item.set('accessLevel', this.accessLevel);
+      this.item.save();
       this.set('loading', false);
       this.set('editing', false);
     }
