@@ -93,6 +93,24 @@ export default Service.extend({
         news.set('title', agendaItem.shortTitle);
         news.set('subtitle', agendaItem.title);
         news.set('finished', false);
+        // Use news item "of previous subcase" as a default
+        try {
+          const activity = await agendaItem.get('agendaActivity');
+          const subcase = await activity.get('subcase');
+          const _case = await subcase.get('case');
+          const previousNewsItem = (await this.store.query('newsletter-info', {
+            'filter[agenda-item-treatment][subcase][case][:id:]': _case.id,
+            sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
+            'page[size]': 1,
+          })).firstObject;
+          if (previousNewsItem) {
+            news.set('richtext', previousNewsItem.richtext);
+            const themes = await previousNewsItem.get('themes');
+            news.set('themes', themes);
+          }
+        } catch (e) {
+          console.log(e);
+        }
       }
       return await news.save();
     }
