@@ -16,7 +16,7 @@ export default Model.extend({
     until: '?',
   }),
   confidential: attr('boolean'),
-  publicSince: attr('datetime'),
+  accessLevelLastModified: attr('datetime'),
   accessLevel: belongsTo('access-level'),
 
   file: belongsTo('file'),
@@ -57,9 +57,9 @@ export default Model.extend({
     });
   }),
 
-  changePublicSince() {
+  changeAccessLevelLastModified() {
     if (!this.get('confidential')) {
-      this.set('publicSince', moment().utc()
+      this.set('accessLevelLastModified', moment().utc()
         .toDate());
     }
   },
@@ -73,7 +73,7 @@ export default Model.extend({
       default:
         this.set('modified', moment().utc()
           .toDate());
-        this.changePublicSince();
+        this.changeAccessLevelLastModified();
         break;
     }
 
