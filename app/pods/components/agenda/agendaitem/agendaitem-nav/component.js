@@ -8,18 +8,15 @@ export default class AgendaItemNav extends Component {
   @service currentSession;
 
   @tracked subcaseExists = false;
-
   @tracked decisionsExist = false;
-
   @tracked meetingMinutesExist = false;
-
   @tracked newsItemExists = false;
-
   @tracked pressAgendaItemExists = false;
 
   get agendaItem() {
     return this.args.agendaItem;
   }
+
   constructor() {
     super(...arguments);
     this.checkExistance();
