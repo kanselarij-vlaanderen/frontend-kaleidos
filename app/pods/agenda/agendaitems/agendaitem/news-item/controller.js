@@ -35,6 +35,9 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   @action
   stopEditing() {
+    if (this.model.isDeleted) {
+      this.model = null;
+    }
     this.isEditing = false;
   }
 

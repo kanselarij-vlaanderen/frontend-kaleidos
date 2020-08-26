@@ -28,6 +28,9 @@ export default class TableRowNewsletterTable extends Component {
 
   @action
   stopEditing() {
+    if (this.newsletterInfo.isDeleted) {
+      this.newsletterInfo = null;
+    }
     this.isEditing = false;
   }
 
