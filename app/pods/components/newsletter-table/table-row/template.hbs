@@ -33,10 +33,11 @@
     {{/each}}
   </td>
   <td class="lt-cell align-left">
-    <WebComponents::VlToggle
-      @disabled={{not this.hasNewsletterInfo}}
+    <WebComponents::VlCheckbox
       @value={{this.newsletterInfo.inNewsletter}}
-      @valueChanged={{this.setInNewsletter}}
+      @toggle={{this.setInNewsletter}}
+      @disabled={{not this.hasNewsletterInfo}}
+      @single={{true}}
     />
   </td>
   <td class="lt-cell align-left">
