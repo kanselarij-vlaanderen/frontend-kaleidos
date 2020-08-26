@@ -18,9 +18,9 @@
           <div class="vlc-toolbar__item">
             {{#if currentSession.isEditor}}
               <button
-                class="vl-button vl-button--link vl-button--icon"
-                data-test-documents-show-more
-                type="button"
+                      class="vl-button vl-button--link vl-button--icon"
+                      data-test-documents-show-more
+                      type="button"
               >
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
                 {{#attach-popover
@@ -94,26 +94,26 @@
                 value=nameBuffer
               }}
               <button
-                class="vl-button vl-button--link vl-button--icon"
-                type="button"
+                      class="vl-button vl-button--link vl-button--icon"
+                      type="button"
                 {{action "saveNameChange" lastDocumentVersion}}
               >
                 <i
-                  class="vl-vi vl-vi-save vl-button__icon"
-                  aria-hidden="true"
+                        class="vl-vi vl-vi-save vl-button__icon"
+                        aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "more-options"}}
                 </span>
               </button>
               <button
-                class="vl-button vl-button--link vl-button--icon"
-                type="button"
+                      class="vl-button vl-button--link vl-button--icon"
+                      type="button"
                 {{action "cancelEditingName"}}
               >
                 <i
-                  class="vl-vi vl-vi-cross vl-button__icon"
-                  aria-hidden="true"
+                        class="vl-vi vl-vi-cross vl-button__icon"
+                        aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "more-options"}}
@@ -126,6 +126,10 @@
             {{moment-format (await lastDocumentVersion.created)}}
             {{t "at"}}
             {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
+            {{#if (await lastDocumentVersion.publicSince)}}
+              {{t "public-since"}}
+              {{moment-format (await lastDocumentVersion.publicSince)}}
+            {{/if}}
           </div>
         </div>
       </div>
@@ -135,8 +139,8 @@
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
         <button
-          class="vl-toggle vl-link vl-link--bold"
-          type="button"
+                class="vl-toggle vl-link vl-link--bold"
+                type="button"
           {{action "showVersions"}}
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
@@ -151,8 +155,8 @@
               as |documentVersion|
               }}
                 <WebComponents::VlDocument
-                  @documentVersion={{documentVersion}}
-                  @item={{item}} />
+                        @documentVersion={{documentVersion}}
+                        @item={{item}} />
               {{/each}}
             </div>
           </div>
@@ -163,44 +167,44 @@
 </div>
 {{#if isUploadingNewVersion}}
   <WebComponents::VlModal
-    @closeModal={{action "cancelUploadVersion"}}
-    @isOverlay={{true}}
-    @title={{t "new-document-version"}}>
+          @closeModal={{action "cancelUploadVersion"}}
+          @isOverlay={{true}}
+          @title={{t "new-document-version"}}>
     <div class="vl-modal-dialog__content">
       {{#if (not uploadedFile)}}
         <FileUploader @multipleFiles={{false}} @uploadedFileAction={{action "add"}}/>
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
-          @value={{documentContainer.lastDocument.name}}
-          @width={{4}} />
+                @value={{documentContainer.lastDocument.name}}
+                @width={{4}} />
         {{ember-kaleidos-webuniversum/vl-uploaded-document
           name=documentContainer.lastDocument.file.filename
           extension=documentContainer.lastDocument.file.extension
           size=documentContainer.lastDocument.file.size
           downloadName=documentContainer.lastDocument.file.filename
           downloadLink=(concat
-            documentContainer.lastDocument.file.downloadLink
-            "?name="
-            documentContainer.lastDocument.file.filename
-          )
+                        documentContainer.lastDocument.file.downloadLink
+                        "?name="
+                        documentContainer.lastDocument.file.filename
+                )
           delete=(action "delete" documentContainer.lastDocument)
         }}
       {{/if}}
     </div>
     <WebComponents::VlModalFooter
-      @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "add"}}
-      @isLoading={{isLoading}}
-      @cancelAction={{action "cancelUploadVersion"}}
-      @saveAction={{action "saveDocument"}}
-      @disableSave={{not uploadedFile}} />
+            @cancelButtonText={{t "cancel"}}
+            @saveButtonText={{t "add"}}
+            @isLoading={{isLoading}}
+            @cancelAction={{action "cancelUploadVersion"}}
+            @saveAction={{action "saveDocument"}}
+            @disableSave={{not uploadedFile}} />
   </WebComponents::VlModal>
 {{/if}}
 {{#if isVerifyingDelete}}
   <WebComponents::VlModalVerify
-    @title={{t "document-delete"}}
-    @message={{t "delete-document-message"}}
-    @cancel={{action "cancel"}}
-    @verify={{action "verify"}} />
+          @title={{t "document-delete"}}
+          @message={{t "delete-document-message"}}
+          @cancel={{action "cancel"}}
+          @verify={{action "verify"}} />
 {{/if}}

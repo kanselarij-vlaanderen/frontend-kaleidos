@@ -22,12 +22,10 @@ export default Controller.extend({
     return actualAgendaitems;
   }),
 
-  sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', async function() {
+  sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', function() {
     const announcements = this.get('announcements');
     if (announcements) {
-      const actualAnnouncementsitems = announcements.filter((item) => !item.isDeleted).sortBy('priority');
-      await this.agendaService.groupAgendaItemsOnGroupName(actualAnnouncementsitems);
-      return actualAnnouncementsitems;
+      return announcements.filter((item) => !item.isDeleted).sortBy('priority');
     }
     return [];
   }),

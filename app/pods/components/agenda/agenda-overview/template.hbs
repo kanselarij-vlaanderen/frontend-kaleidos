@@ -142,7 +142,7 @@
     {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
       {{#sortable-group
         tagName="ul"
-        onChange=(action "reorderAnnouncements")
+        onChange=(action "reorderItems")
       as |sortableAnnouncements|
       }}
         {{#each

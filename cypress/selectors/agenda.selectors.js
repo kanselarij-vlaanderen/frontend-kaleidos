@@ -74,6 +74,9 @@ const selectors = {
   decisionPowerSelectContainer: '[data-test-decision-edit-power-select-container]',
   agendaHeaderShowAgendaOptions: '[data-test-agenda-header-showAgendaOptions]',
   agendaHeaderApproveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda]',
+  deleteAgendaItemButton: '[data-test-delete-agendaitem]',
+  agendaDetailSubItemContainer: '[data-test-agenda-detail-sidebar-sub-item-container]',
+  agendaitemNumber: '[data-test-agendaitem-number]',
   agendaitemExplanation: '[data-test-agendaitem-explanation]',
 };
 export default selectors;

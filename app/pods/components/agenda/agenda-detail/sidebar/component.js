@@ -2,9 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import { isPresent } from '@ember/utils';
-import { restartableTask } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
+import { setAgendaItemsPriority } from 'fe-redpencil/utils/agenda-item-utils';
 
 export default class AgendaSidebar extends Component {
   @service sessionService;
@@ -12,20 +11,11 @@ export default class AgendaSidebar extends Component {
   @service agendaService;
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
 
-  @tracked announcements = this.args.announcements;
   @tracked isShowingChanges = false;
+  @tracked isReAssigningPriorities = false;
 
   classNames = ['vlc-agenda-items'];
   dragHandleClass = '.vlc-agenda-detail-sidebar__sub-item';
-
-  @restartableTask
-  reAssignPriorities = function *(agendaitems) {
-    yield agendaitems.map(async(item) => {
-      if (isPresent(item.changedAttributes().priority)) {
-        return item.save();
-      }
-    });
-  }
 
   @action
   selectAgendaItemAction(agendaitem) {
@@ -39,31 +29,10 @@ export default class AgendaSidebar extends Component {
 
   @action
   reorderItems(itemModels) {
-    if (!this.currentSessionService.isEditor) {
-      return null;
-    }
+    const isEditor = this.currentSessionService.isEditor;
+    const isDesignAgenda = this.args.currentAgenda.isDesignAgenda;
     this.isReAssigningPriorities = true;
-    itemModels.map((item, index) => {
-      item.set('priority', index + 1);
-      return item;
-    });
-    this.reAssignPriorities.perform(itemModels);
-    this.agendaService.groupAgendaItemsOnGroupName(itemModels);
-    this.isReAssigningPriorities = false;
-  }
-
-  @action
-  reorderAnnouncements(itemModels) {
-    if (!this.currentSessionService.isEditor) {
-      return null;
-    }
-    this.isReAssigningPriorities = true;
-    itemModels.map((item, index) => {
-      item.set('priority', index + 1);
-      return item;
-    });
-    this.reAssignPriorities.perform(itemModels);
-    this.announcements = itemModels;
+    setAgendaItemsPriority(itemModels, isEditor, isDesignAgenda);
     this.isReAssigningPriorities = false;
   }
 }

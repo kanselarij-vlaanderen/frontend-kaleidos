@@ -106,7 +106,7 @@
     {{#if currentSessionService.isEditor}}
       {{#sortable-group
         tagName="ul"
-        onChange=(action "reorderAnnouncements")
+        onChange=(action "reorderItems")
       as |sortableAnnouncements|
       }}
         {{#each
