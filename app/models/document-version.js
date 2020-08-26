@@ -3,7 +3,6 @@ import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import { deprecatingAlias } from '@ember/object/computed';
 import moment from 'moment';
-import config from '../utils/config';
 const {
   Model, attr, belongsTo,
 } = DS;
@@ -59,12 +58,9 @@ export default Model.extend({
   }),
 
   changePublicSince() {
-    if (this.get('accessLevel').get('id') === config.publiekAccessLevelId && !this.get('confidential') && !this.get('publicSince')) {
+    if (!this.get('confidential')) {
       this.set('publicSince', moment().utc()
         .toDate());
-    }
-    if (this.get('accessLevel').get('id') !== config.publiekAccessLevelId || this.get('confidential')) {
-      this.set('publicSince', undefined);
     }
   },
 

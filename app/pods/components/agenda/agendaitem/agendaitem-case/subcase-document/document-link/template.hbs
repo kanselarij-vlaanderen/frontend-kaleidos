@@ -127,8 +127,12 @@
             {{t "at"}}
             {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
             {{#if (await lastDocumentVersion.publicSince)}}
-              {{t "public-since"}}
-              {{moment-format (await lastDocumentVersion.publicSince)}}
+              <div>
+                {{t "public-since"}}
+                {{moment-format (await lastDocumentVersion.publicSince)}}
+                {{t "at"}}
+                {{moment-format (await lastDocumentVersion.publicSince) "HH:mm"}}
+              </div>
             {{/if}}
           </div>
         </div>
