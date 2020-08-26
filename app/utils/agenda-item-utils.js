@@ -36,6 +36,15 @@ export const setNotYetFormallyOk = (itemToSet) => {
 };
 
 /**
+ *@description Return een lijst met agendaitems die nog niet formeel ok zijn.
+ * @param agendaitems
+ */
+export const getListOfAgendaitemsThatAreNotFormallyOk = (agendaitems) => {
+  const agendaitemNotFormallyOk = (agendaitem) => agendaitem.get('formallyOk') !== CONFIG.formallyOk;
+  return agendaitems.filter(agendaitemNotFormallyOk);
+};
+
+/**
  * Set some properties on a model.
  *
  * @param model

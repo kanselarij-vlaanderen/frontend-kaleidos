@@ -11,7 +11,7 @@ import {
 } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
-
+import { getListOfAgendaitemsThatAreNotFormallyOk } from 'fe-redpencil/utils/agenda-item-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
@@ -40,6 +40,7 @@ export default Component.extend(FileSaverMixin, {
   isDeletingAgenda: false,
   isLockingAgenda: false,
   isShowingAgendaActions: false,
+  isShowingWarningOnClose: false,
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
   currentSession: alias('sessionService.currentSession'),
@@ -177,6 +178,12 @@ export default Component.extend(FileSaverMixin, {
     }
   },
 
+  async canCloseAgenda() {
+    const agendaitemsFromAgenda = await this.currentAgenda.get('agendaitems');
+    const agendaitemsNotFormallyOk = getListOfAgendaitemsThatAreNotFormallyOk(agendaitemsFromAgenda);
+    return agendaitemsNotFormallyOk && agendaitemsNotFormallyOk.length === 0;
+  },
+
   actions: {
 
     print() {
@@ -240,71 +247,84 @@ export default Component.extend(FileSaverMixin, {
     },
 
     async approveAndCloseAgenda(session) {
-      const isApprovable = await this.currentAgenda.get('isApprovable');
-      const meetingOfAgenda = await this.currentAgenda.get('createdFor');
-      const agendasOfMeeting = await meetingOfAgenda.get('agendas');
-      if (!isApprovable) {
-        this.set('showWarning', true);
-      } else {
-        if (this.get('isApprovingAgenda')) {
-          return;
-        }
-        this.set('isApprovingAgenda', true);
-        this.changeLoading();
-        const agendaToLock = await agendasOfMeeting.find((agenda) => agenda.get('isDesignAgenda'));
+      const canCloseAgenda = await this.canCloseAgenda();
+      if (canCloseAgenda) {
+        const isApprovable = await this.currentAgenda.get('isApprovable');
+        const meetingOfAgenda = await this.currentAgenda.get('createdFor');
+        const agendasOfMeeting = await meetingOfAgenda.get('agendas');
+        if (!isApprovable) {
+          this.set('showWarning', true);
+        } else {
+          if (this.get('isApprovingAgenda')) {
+            return;
+          }
+          this.set('isApprovingAgenda', true);
+          this.changeLoading();
+          const agendaToLock = await agendasOfMeeting.find((agenda) => agenda.get('isDesignAgenda'));
 
-        agendaToLock.set(
-          'modified',
-          moment()
-            .utc()
-            .toDate()
-        );
-        agendaToLock.save().then(async(agendaToApprove) => {
-          await this.agendaService.approveAgenda(session, agendaToApprove);
-          return agendaToApprove;
-        })
-          .then(async(agendaToApprove) => {
-            // We reloaden de agenda hier om de recente changes m.b.t. het approven van de agenda binnen te halen
-            const reloadedAgenda = await this.store.findRecord('agenda', agendaToApprove.get('id'), {
-              reload: true,
-              include: 'status',
-            });
-            await this.lockAgenda(reloadedAgenda);
+          agendaToLock.set(
+            'modified',
+            moment()
+              .utc()
+              .toDate()
+          );
+          agendaToLock.save().then(async(agendaToApprove) => {
+            await this.agendaService.approveAgenda(session, agendaToApprove);
+            return agendaToApprove;
           })
-          .finally(() => {
-            this.set('sessionService.selectedAgendaItem', null);
-            this.changeLoading();
-            this.set('isApprovingAgenda', false);
-          });
+            .then(async(agendaToApprove) => {
+              // We reloaden de agenda hier om de recente changes m.b.t. het approven van de agenda binnen te halen
+              const reloadedAgenda = await this.store.findRecord('agenda', agendaToApprove.get('id'), {
+                reload: true,
+                include: 'status',
+              });
+              await this.lockAgenda(reloadedAgenda);
+            })
+            .finally(() => {
+              this.set('sessionService.selectedAgendaItem', null);
+              this.changeLoading();
+              this.set('isApprovingAgenda', false);
+            });
+        }
+      } else {
+        this.set('isShowingWarningOnClose', true);
       }
     },
 
+    cancelLockAgenda() {
+      this.set('isShowingWarningOnClose', false);
+    },
+
     async lockAgendaAction() {
-      this.set('isLockingAgenda', true);
-      const agendas = await this.get('agendas');
-      const designAgenda = agendas
-        .filter((agenda) => agenda.get('isDesignAgenda'))
-        .sortBy('-serialnumber')
-        .get('firstObject');
-      const lastAgenda = agendas
-        .filter((agenda) => !agenda.get('isDesignAgenda'))
-        .sortBy('-serialnumber')
-        .get('firstObject');
+      if (await this.canCloseAgenda()) {
+        this.set('isLockingAgenda', true);
+        const agendas = await this.get('agendas');
+        const designAgenda = agendas
+          .filter((agenda) => agenda.get('isDesignAgenda'))
+          .sortBy('-serialnumber')
+          .get('firstObject');
+        const lastAgenda = agendas
+          .filter((agenda) => !agenda.get('isDesignAgenda'))
+          .sortBy('-serialnumber')
+          .get('firstObject');
 
-      const session = await lastAgenda.get('createdFor');
-      session.set('isFinal', true);
-      session.set('agenda', lastAgenda);
+        const session = await lastAgenda.get('createdFor');
+        session.set('isFinal', true);
+        session.set('agenda', lastAgenda);
 
-      await session.save();
-      const closed = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id); // Async call
-      lastAgenda.set('status', closed);
-      await lastAgenda.save();
+        await session.save();
+        const closed = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id); // Async call
+        lastAgenda.set('status', closed);
+        await lastAgenda.save();
 
-      if (designAgenda) {
-        await this.deleteAgenda(designAgenda);
-      }
-      if (!this.isDestroyed) {
-        this.set('isLockingAgenda', false);
+        if (designAgenda) {
+          await this.deleteAgenda(designAgenda);
+        }
+        if (!this.isDestroyed) {
+          this.set('isLockingAgenda', false);
+        }
+      } else {
+        this.set('isShowingWarningOnClose', true);
       }
     },
 
