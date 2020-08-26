@@ -188,7 +188,8 @@ export default Service.extend({
 
     // Create default newsletterInfo for announcements
     if (agendaitem.showAsRemark) {
-      this.newsletterService.createNewsItemForAgendaItem(agendaitem);
+      const newsItem = await this.newsletterService.createNewsItemForAgendaItem(agendaitem);
+      newsItem.save();
     }
   },
 

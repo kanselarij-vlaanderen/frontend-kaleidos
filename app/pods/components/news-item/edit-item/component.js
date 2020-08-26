@@ -63,7 +63,9 @@ export default Component.extend({
     async cancelEditing() {
       const newsletterInfo = await this.get('newsletterInfo');
       newsletterInfo.rollbackAttributes();
-      newsletterInfo.hasMany('themes').reload();
+      if (!newsletterInfo.isDeleted) {
+        newsletterInfo.hasMany('themes').reload();
+      }
       if (this.onCancel) {
         this.onCancel();
       }

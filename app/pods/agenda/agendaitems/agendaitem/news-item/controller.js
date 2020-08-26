@@ -40,8 +40,8 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   @action
   async createAndStartEditing() {
-    await this.newsletterService.createNewsItemForAgendaItem(this.agendaItem);
-    this.refresh();
+    const newsItem = await this.newsletterService.createNewsItemForAgendaItem(this.agendaItem);
+    this.model = newsItem;
     this.isEditing = true;
   }
 

@@ -112,7 +112,7 @@ export default Service.extend({
           console.log(e);
         }
       }
-      return await news.save();
+      return news;
     }
   },
 
