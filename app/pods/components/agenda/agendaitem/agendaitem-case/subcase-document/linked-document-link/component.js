@@ -18,7 +18,7 @@ export default Component.extend({
     return null;
   }),
 
-  myDocumentVersions: computed.alias('agendaitemOrSubcase.linkedDocumentVersions'),
+  myDocumentVersions: computed.alias('agendaitemOrSubcaseOrMeeting.linkedDocumentVersions'),
 
   lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');

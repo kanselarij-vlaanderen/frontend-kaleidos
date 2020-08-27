@@ -32,7 +32,7 @@ export default Component.extend({
   }),
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
-  myDocumentVersions: computed.alias('subcaseAgendaitemMeetingOrDocumentContainer.documentVersions'),
+  myDocumentVersions: computed.alias('agendaitemOrSubcaseOrMeeting.documentVersions'),
 
   lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');
