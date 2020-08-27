@@ -16,6 +16,7 @@ export default class DecisionResultSelect extends Component {
   @(task(function *() {
     const codes = yield this.store.findAll('decision-result-code', {
       reload: true,
+      sort: 'priority',
     });
     this.decisionResultCodes = codes;
   })) loadDecisionResultCodes;

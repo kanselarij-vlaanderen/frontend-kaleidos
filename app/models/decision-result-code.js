@@ -9,6 +9,7 @@ const {
 export default Model.extend({
   uri: attr('string'),
   label: attr('string'),
+  priority: attr('number'),
   isPostponed: computed('uri', function() {
     return this.uri === CONFIG.DECISION_RESULT_CODE_URIS.UITGESTELD;
   }),
