@@ -21,27 +21,27 @@ context('NewsletterInfo: Switching the finished switch', () => {
     cy.log('went to kort bestek');
   };
 
-  it('Should switch the switch to the right', () => {
+  it('Should check the box "in kort bestek"', () => {
     cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
-    cy.get('.vl-checkbox--switch__label').last()
+    cy.get('.vl-checkbox__label').last()
       .scrollIntoView();
-    cy.get('.vl-checkbox--switch__label').last()
+    cy.get('.vl-checkbox__label').last()
       .click()
       .wait('@patchNewsletterInfo');
   });
 
-  it('Should switch the switch to the right, then to the left', () => {
+  it('Should check the box "in kort bestek" and uncheck ik afterward', () => {
     cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
-    cy.get('.vl-checkbox--switch__label').last()
+    cy.get('.vl-checkbox__label').last()
       .scrollIntoView();
-    cy.get('.vl-checkbox--switch__label').last()
+    cy.get('.vl-checkbox__label').last()
       .click()
       .wait('@patchNewsletterInfo');
-    cy.get('.vl-checkbox--switch__label').last()
+    cy.get('.vl-checkbox__label').last()
       .scrollIntoView();
-    cy.get('.vl-checkbox--switch__label').last()
+    cy.get('.vl-checkbox__label').last()
       .click()
       .wait('@patchNewsletterInfo');
   });
