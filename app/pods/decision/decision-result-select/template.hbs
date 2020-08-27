@@ -6,10 +6,9 @@
     @selected={{@selected}}
     @onchange={{@onChange}}
   as |resultCode|>
-    <div class="vlc-color-badge-holder">
-      <div class="vlc-color-badge-holder__badge vlc-color-badge vlc-color-badge--success"></div>
-      <div class="vlc-color-badge-holder__label">{{resultCode.label}}</div>
-    </div>
+    <Decision::DecisionResultSelect::SelectItem
+      @decisionResultCode={{resultCode}}
+    />
   </PowerSelect>
 {{else}}
   <WebComponents::VlLoader @text={{t "loading-text-inactive"}} />
