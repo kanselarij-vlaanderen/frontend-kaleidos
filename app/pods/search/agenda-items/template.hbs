@@ -102,15 +102,14 @@
           {{t "agendaitems-page-size"}}
         </label>
         <div class="vlc-vlc-search__sizeoptions">
-          {{#power-select
-            options=sizeOptions
-            selected=size
-            searchEnabled=false
-            onchange=(action "selectSize")
-          as |sizeValue|
-          }}
+          <PowerSelect
+                  @options={{this.sizeOptions}}
+                  @selected={{size}}
+                  @searchEnabled={{false}}
+                  @onchange={{this.selectSize}}
+                  as |sizeValue|>
             {{sizeValue}}
-          {{/power-select}}
+          </PowerSelect>
         </div>
       </div>
     </div>
