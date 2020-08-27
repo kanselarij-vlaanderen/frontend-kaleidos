@@ -4,13 +4,13 @@
 import newsletter from '../../../selectors/newsletter.selector';
 import agenda from '../../../selectors/agenda.selectors';
 
-context('KB: Edit decision in newsletter-info', () => {
+context('KB: Edit content of news-item', () => {
   before(() => {
     cy.server();
     cy.login('Admin');
   });
 
-  it('Should edit decision in newsletter-info', () => {
+  it('Should be unexistent to start with, be created, edited, theme selected and saved', () => {
     const decisionText = 'Dit is een leuke beslissing';
     cy.visit('/vergadering/5DD7CDA58C70A70008000001/kort-bestek');
     cy.get('table > tbody', {
