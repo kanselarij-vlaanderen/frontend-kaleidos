@@ -40,9 +40,7 @@
 
     <div class="vl-u-spacer-extended-top-s">
       {{#if this.treatment.decisionResultCode}}
-        <div class="vlc-pill">
-          {{ this.treatment.decisionResultCode.label }}
-        </div>
+        <Decision::DecisionResultPill @decisionResultCode={{this.treatment.decisionResultCode}}/>
       {{/if}}
     </div>
   </div>
