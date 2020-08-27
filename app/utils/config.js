@@ -142,7 +142,6 @@ export default EmberObject.create({
     GOEDGEKEURD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd',
     UITGESTELD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
     KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
-    GOEDGEKEURD_VOORWAARDEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/e7e44027-fbbb-4285-ba3f-0cdb2264d43c',
-    AFGEKEURD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/e40d885e-a677-4f1e-bce1-ea17d2aadb40',
+    INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
 });
