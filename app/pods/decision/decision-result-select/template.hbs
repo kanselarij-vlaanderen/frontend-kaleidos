@@ -1,0 +1,16 @@
+{{#if this.loadDecisionResultCodes.isIdle}}
+  <PowerSelect
+    @searchEnabled={{false}}
+    @placeholder={{t "select-a-status"}}
+    @options={{this.decisionResultCodes}}
+    @selected={{@selected}}
+    @onchange={{@onChange}}
+  as |resultCode|>
+    <div class="vlc-color-badge-holder">
+      <div class="vlc-color-badge-holder__badge vlc-color-badge vlc-color-badge--success"></div>
+      <div class="vlc-color-badge-holder__label">{{resultCode.label}}</div>
+    </div>
+  </PowerSelect>
+{{else}}
+  <WebComponents::VlLoader @text={{t "loading-text-inactive"}} />
+{{/if}}

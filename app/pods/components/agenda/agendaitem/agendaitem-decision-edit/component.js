@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import {
   computed, action
 } from '@ember/object';
@@ -7,20 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class AgendaItemDecisionEditComponent extends Component {
-  @service store;
   @tracked treatment = this.args.agendaItemTreatment;
-  @tracked decisionResultCodes = [];
-  @tracked decisionResultCodesLoaded = false;
-
-  constructor() {
-    super(...arguments);
-    this.store.findAll('decision-result-code', {
-      reload: true,
-    }).then((codes) => {
-      this.decisionResultCodes = codes;
-      this.decisionResultCodesLoaded = true;
-    });
-  }
 
   async setNewPropertiesToModel(model) {
     const {
@@ -32,11 +18,6 @@ export default class AgendaItemDecisionEditComponent extends Component {
       })
     );
     return model.save().then((model) => model.reload());
-  }
-
-  @action
-  fetchDecisionResultCodes() {
-    this.findDecisionResultCodes.perform(); // Load codelist
   }
 
   @computed('editor.currentTextContent')
