@@ -382,3 +382,15 @@
     <WebComponents::VlLoader @text={{loaderText}} />
   </WebComponents::VlModal>
 {{/if}}
+{{#if isShowingWarningOnClose}}
+  <WebComponents::VlModalVerify
+      @isOverlay={{true}}
+      @message={{t "agenda-has-nok-agendaitems-warning"}}
+      @title={{t "approve-agenda-error"}}
+      @buttonType="warning"
+      @verifyButtonText={{t "continue"}}
+      @cancel={{action "cancelLockAgenda"}}
+      @verify={{action "cancelLockAgenda"}}
+      @closeModal={{action "cancelLockAgenda"}}
+  />
+{{/if}}

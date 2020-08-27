@@ -3,7 +3,6 @@ import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import { deprecatingAlias } from '@ember/object/computed';
 import moment from 'moment';
-
 const {
   Model, attr, belongsTo,
 } = DS;
@@ -17,6 +16,7 @@ export default Model.extend({
     until: '?',
   }),
   confidential: attr('boolean'),
+  accessLevelLastModified: attr('datetime'),
   accessLevel: belongsTo('access-level'),
 
   file: belongsTo('file'),
@@ -57,16 +57,27 @@ export default Model.extend({
     });
   }),
 
-  storeAccessLevel(accessLevel) {
-    this.set('modified', moment().toDate());
-    this.set('accessLevel', accessLevel);
-    return this.save();
+  changeAccessLevelLastModified() {
+    if (!this.get('confidential')) {
+      this.set('accessLevelLastModified', moment().utc()
+        .toDate());
+    }
   },
 
-  async toggleConfidential() {
-    this.set('modified', moment().toDate());
-    this.toggleProperty('confidential');
-    await this.save();
+  save() {
+    const parentSave = this._super;
+    const dirtyType = this.get('dirtyType');
+    switch (dirtyType) {
+      case 'deleted':
+        break;
+      default:
+        this.set('modified', moment().utc()
+          .toDate());
+        this.changeAccessLevelLastModified();
+        break;
+    }
+
+    return parentSave.call(this, ...arguments);
   },
 
 });

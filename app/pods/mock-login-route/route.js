@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default Route.extend({
   queryParams: {
@@ -22,7 +23,7 @@ export default Route.extend({
   },
   model(params) {
     const filter = {
-      provider: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
+      provider: CONFIG.mockLoginServiceProvider,
     };
     if (params.role) {
       filter.user = {
