@@ -11,7 +11,6 @@ import {
 } from '@ember/debug';
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
-import { getListOfAgendaitemsThatAreNotFormallyOk } from 'fe-redpencil/utils/agenda-item-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
@@ -178,12 +177,6 @@ export default Component.extend(FileSaverMixin, {
     }
   },
 
-  async canCloseAgenda() {
-    const agendaitemsFromAgenda = await this.currentAgenda.get('agendaitems');
-    const agendaitemsNotFormallyOk = getListOfAgendaitemsThatAreNotFormallyOk(agendaitemsFromAgenda);
-    return agendaitemsNotFormallyOk && agendaitemsNotFormallyOk.length === 0;
-  },
-
   actions: {
 
     print() {
@@ -247,9 +240,8 @@ export default Component.extend(FileSaverMixin, {
     },
 
     async approveAndCloseAgenda(session) {
-      const canCloseAgenda = await this.canCloseAgenda();
-      if (canCloseAgenda) {
-        const isApprovable = await this.currentAgenda.get('isApprovable');
+      const isApprovable = await this.currentAgenda.get('isApprovable');
+      if (isApprovable) {
         const meetingOfAgenda = await this.currentAgenda.get('createdFor');
         const agendasOfMeeting = await meetingOfAgenda.get('agendas');
         if (!isApprovable) {
@@ -296,7 +288,8 @@ export default Component.extend(FileSaverMixin, {
     },
 
     async lockAgendaAction() {
-      if (await this.canCloseAgenda()) {
+      const isApprovable = await this.currentAgenda.get('isApprovable');
+      if (isApprovable) {
         this.set('isLockingAgenda', true);
         const agendas = await this.get('agendas');
         const designAgenda = agendas
