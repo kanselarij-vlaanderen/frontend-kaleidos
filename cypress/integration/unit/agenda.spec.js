@@ -146,8 +146,6 @@ context('Agenda tests', () => {
     cy.contains('Dit is de opmerking');
     cy.get(agenda.agendaitemTitelsConfidential).should('exist')
       .should('be.visible');
-    cy.get(agenda.agendaItemDocumentsTab).click();
-    cy.get(agenda.agendaitemExplanation).contains('Opmerking: Dit is de opmerking');
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
