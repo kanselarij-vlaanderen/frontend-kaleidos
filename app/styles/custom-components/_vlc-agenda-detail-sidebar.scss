@@ -134,7 +134,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
 // 'No items available' item
 .vlc-agenda-detail-sidebar__no-items-message {
   display: flex;
-  margin: 15px;
+  margin: 1.5rem;
   justify-content: center;
   align-items: center;
 }
@@ -143,7 +143,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   line-height: 3.5rem;
   font-size: 1.5rem;
   color: $blue-gray-dark;
-  margin: 15px;
+  margin: 1.5rem;
 }
 
 /* Agenda items compare view
