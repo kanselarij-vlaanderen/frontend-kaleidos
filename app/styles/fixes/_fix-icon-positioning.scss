@@ -42,3 +42,9 @@
     font-size: 1.4rem;
   }
 }
+
+/* Alert icons in badge not correctly centered
+	 ========================================================================== */
+.vl-alert__icon {
+  line-height: 4.5rem;
+}

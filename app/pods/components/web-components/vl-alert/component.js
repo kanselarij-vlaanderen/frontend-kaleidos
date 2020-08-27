@@ -10,7 +10,7 @@ export default class VlAlertComponent extends Component {
   }
 
   get iconClass() {
-    const classes = ['vl-vi'];
+    const classes = [];
     const currentType = this.args.type;
     if (['warning', 'error'].includes(currentType)) {
       classes.push('ki-alert-triangle');
