@@ -48,7 +48,7 @@ context('Add files to an agenda', () => {
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaItemDecisionTab).click();
-    cy.get(agenda.addDecision).click();
+    // 1 default item treatment exists
     cy.get(agenda.uploadDecisionFile).click();
 
     cy.contains('Documenten opladen').click();
@@ -123,21 +123,5 @@ context('Add files to an agenda', () => {
     });
 
     cy.get('@docCards').should('have.length', 0);
-
-    // TODO, this delete of decision could have a seperate test, but the setup is 99% the same as this test
-    cy.get('.vl-typography > .vl-u-display-flex').within(() => {
-      cy.get('.vl-vi-nav-show-more-horizontal').click();
-    });
-    cy.get(agenda.deleteDecision).click();
-    cy.get('.vl-modal').within(() => {
-      cy.get('button').contains('Verwijderen')
-        .click();
-    });
-
-    cy.get(modal.verify.container).should('not.exist');
-    cy.get('.toasts-container > .vl-alert--error', {
-      timeout: 12000,
-    }).should('not.exist');
-    cy.get(agenda.decisionContainer).should('not.exist');
   });
 });
