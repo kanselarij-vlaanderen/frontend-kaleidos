@@ -89,10 +89,12 @@ export default Service.extend({
         news.set('title', agendaItem.shortTitle || content);
         news.set('richtext', content);
         news.set('finished', true);
+        news.set('inNewsletter', true);
       } else {
         news.set('title', agendaItem.shortTitle);
         news.set('subtitle', agendaItem.title);
         news.set('finished', false);
+        news.set('inNewsletter', false);
         // Use news item "of previous subcase" as a default
         try {
           const activity = await agendaItem.get('agendaActivity');
