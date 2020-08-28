@@ -66,7 +66,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
 
     cy.changeSubcaseAccessLevel(false, SubcaseTitleShort, true, 'Intern Overheid', SubcaseTitleShort, 'Cypress test nieuwere lange titel');
-    cy.addSubcaseMandatee(1, 0, 0, 'Vlaams minister voor onderwijs');
+    cy.addSubcaseMandatee(1, 0, 0, 'Vlaams minister voor onderwijs'); // TODO: awaits @iseCodes that doesn't come
     cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -203,7 +203,6 @@ context('Subcase tests', () => {
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();
     cy.wait('@getMeetingsRequest');
-    cy.wait('@getAgendas');
     cy.get(agenda.confidentialityIcon).should('exist');
 
     // Click the "wijzigen link.
@@ -239,7 +238,7 @@ context('Subcase tests', () => {
     cy.wait('@getAgenda');
 
     // Are there Themes in this agenda? Should be none
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort); // TODO: doesn't find this item it's looking for in the agenda it just openend
     cy.get(agenda.item.news.editLink).click();
     cy.contains('Annuleren').click();
 
