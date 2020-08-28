@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 context('Reset the database', () => {
   before(() => {

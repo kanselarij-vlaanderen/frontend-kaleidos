@@ -1,14 +1,16 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 
-let { Model } = DS;
+const {
+  Model,
+} = DS;
 
 export default Model.extend({
   intl: service(),
   toaster: service(),
 
   checkIfCreatedNotificationShouldBeShown(type) {
-    const modelListToNotShowNotificationFor = ['subcase-phase-codes', 'genders', 'formally-oks', 'confidentialities', 'approvals', 'alert-types', 'subcase-phases', 'meetings', 'postponeds'];
+    const modelListToNotShowNotificationFor = ['genders', 'formally-oks', 'confidentialities', 'approvals', 'alert-types', 'agenda-activities', 'meetings'];
     return !(modelListToNotShowNotificationFor.includes(type));
   },
   checkIfUpdatedNotificationShouldBeShown(type) {
@@ -24,14 +26,18 @@ export default Model.extend({
     switch (dirtyType) {
       case 'created':
         if (this.checkIfCreatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
-          this.toaster.success(this.intl.t('successfully-created', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
-            this.intl.t('successfully-created-title'));
+          this.toaster.success(this.intl.t('successfully-created', {
+            type: this.translateAndParseSuccesType(this.get('constructor.modelName')),
+          }),
+          this.intl.t('successfully-created-title'));
         }
         break;
       case 'updated':
         if (this.checkIfUpdatedNotificationShouldBeShown(this.get('constructor.modelName'))) {
-          this.toaster.success(this.intl.t('successfully-saved-type', { type: this.translateAndParseSuccesType(this.get('constructor.modelName')) }),
-            this.intl.t('successfully-created-title'));
+          this.toaster.success(this.intl.t('successfully-saved-type', {
+            type: this.translateAndParseSuccesType(this.get('constructor.modelName')),
+          }),
+          this.intl.t('successfully-created-title'));
         }
         break;
       case 'deleted':
@@ -39,5 +45,5 @@ export default Model.extend({
         break;
     }
     return this._super(...arguments);
-  }
+  },
 });

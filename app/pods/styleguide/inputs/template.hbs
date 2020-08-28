@@ -1,0 +1,57 @@
+{{! template-lint-disable no-bare-strings }}
+
+<h1 class="vlc-kitchensink-header">{{t "style-guide-inputs"}}</h1>
+
+<Styleguide::KitchensinkSample
+  @title="Message"
+  @snippet="message.hbs"
+>
+  {{!-- BEGIN-SNIPPET message --}}
+  <WebComponents::VlFormMessage @message="message example"/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Label"
+  @snippet="label.hbs"
+>
+  {{!-- BEGIN-SNIPPET label --}}
+  <WebComponents::VlFormLabel @value="label example"/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Input"
+  @snippet="input.hbs"
+>
+  {{!-- BEGIN-SNIPPET input --}}
+  <WebComponents::VlFormInput/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Checkbox"
+  @snippet="checkbox.hbs"
+>
+  {{!-- BEGIN-SNIPPET checkbox --}}
+  <WebComponents::VlCheckbox @label="label"/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Toggle"
+  @snippet="toggle.hbs"
+>
+  {{!-- BEGIN-SNIPPET toggle --}}
+  <WebComponents::VlToggle />
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Datepicker"
+  @snippet="datepicker.hbs"
+>
+  {{!-- BEGIN-SNIPPET datepicker --}}
+  <WebComponents::VlDatepicker/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>

@@ -1,0 +1,98 @@
+{{#if (not this.isEditing)}}
+  <div data-test-decision-container class="vl-u-spacer vl-typography">
+    <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
+      {{#if this.currentSession.isEditor}}
+        <a
+          href="javascript://"
+          class="vl-link"
+          {{on "click" this.toggleIsEditing}}
+        >
+          {{t "edit"}}
+        </a>
+        <button type="button" class="vl-button vl-button--link vl-button--icon">
+          <i class="vl-button__icon vl-vi vl-vi-nav-show-more-horizontal"></i>
+          <AttachPopover
+            @class="ember-attacher-popper"
+            @hideOn="clickout click"
+            @showOn="click"
+            @animation="shift"
+            @placement="bottom"
+          as |attacher|>
+            <ul class="vlc-dropdown-menu">
+              <li class="vlc-dropdown-menu__item">
+                <button
+                  data-test-delete-decision
+                  type="button"
+                  class="vl-link vl-u-text--error"
+                  {{on "click" attacher.hide}}
+                  {{on "click" (fn this.promptDeleteDecision decision)}}
+                >
+                  {{t "delete-decision"}}
+                </button>
+              </li>
+            </ul>
+          </AttachPopover>
+        </button>
+      {{/if}}
+    </div>
+    <p>
+      {{sanitize-html raw=true value=(await decision.richtext)}}
+    </p>
+    <hr/>
+    <div class="vl-u-spacer-extended-top-s">
+      {{#if this.decision.approved}}
+        <div class="vlc-pill vlc-pill--success">
+          {{t "decided"}}
+        </div>
+      {{else}}
+        <div class="vlc-pill vlc-pill--warning">
+          {{t "not-decided"}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  {{#if this.decision.documentVersions.length}}
+    <div class="vl-u-spacer">
+      <h4 class="vl-title vl-title--h6">
+        {{t "documents-attached-to"}}
+      </h4>
+      <div class="vl-u-spacer-extended-top-s">
+        {{!-- TODO KAS-1420 @agendaitem={{@subcase}} ??  --}}
+        <Utils::DocumentsListForItem
+          @item={{this.decision}}
+          @agendaitem={{@subcase}} 
+          @isClickable={{true}}
+        />
+      </div>
+    </div>
+  {{/if}}
+  {{#if this.decision.signedDocument}}
+    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
+      @document={{await this.decision.signedDocument}}
+      @item={{await this.decision.signedDocument}}
+    />
+  {{else}}
+    <Utils::AddSignedDocuments
+      @item={{this.decision}}
+      @defaultType={{this.defaultType}}
+      @modelToAddDocumentVersionTo="signedDecision"
+      @title={{t "signed-decision-add"}}
+    />
+  {{/if}}
+{{else}}
+  <Agenda::Agendaitem::AgendaitemDecisionEdit
+    @isEditing={{this.isEditing}}
+    @item={{this.decision}}
+    @subcase={{@subcase}}
+    @isTableRow={{@isTableRow}}
+    @agendaitem={{@agendaitem}}
+  />
+{{/if}}
+{{#if this.isVerifyingDelete}}
+  <WebComponents::VlModalVerify
+    @title={{t "delete-decision"}}
+    @message={{t "delete-decision-message"}}
+    @cancel={{this.cancel}}
+    @verify={{this.deleteDecision}}
+  />
+{{/if}}

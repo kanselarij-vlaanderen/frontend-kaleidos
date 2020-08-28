@@ -1,0 +1,10 @@
+<div class="grid-container">
+  {{#each (await documentNames) as |documentName|}}
+    <li class="vlc-document-list__item vlc-document-list__item--loading">
+      <span>
+        <i class="vl-badge__icon vl-vi vl-vi-synchronize"></i>
+        {{documentName}}
+      </span>
+    </li>
+  {{/each}}
+</div>

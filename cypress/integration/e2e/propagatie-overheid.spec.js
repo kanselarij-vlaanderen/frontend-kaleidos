@@ -1,27 +1,35 @@
-/*global context, before, it, cy, Cypress*/
-/// <reference types="Cypress" />
+/* global context, before, it, cy, Cypress */
+// / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 
-context('Agenda tests', () => {
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
 
+context('Agenda tests', () => {
   before(() => {
     cy.resetCache();
     cy.server();
   });
+  const agendaDate = Cypress.moment().add(1, 'weeks')
+    .day(6); // Next friday
+  const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
+  const subcaseTitle1 = `${caseTitle} test stap 1`;
+  const file = {
+    folder: 'files', fileName: 'test', fileExtension: 'pdf',
+  };
 
   it('Propagate decisions and documents to overheid graph by releasing them', () => {
-
     cy.login('Admin');
-
-    const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
-    const subcaseTitle1 = caseTitle + ' test stap 1';
-    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf'};
     const files = [
-      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota'},
-      {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet'}
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota',
+      },
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet',
+      }
     ];
     cy.createCase(false, caseTitle);
     cy.addSubcase('Nota',
@@ -33,7 +41,7 @@ context('Agenda tests', () => {
 
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
-    cy.addDocumentsToAgendaItem(subcaseTitle1,files);
+    cy.addDocumentsToAgendaItem(subcaseTitle1, files);
 
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
@@ -54,51 +62,77 @@ context('Agenda tests', () => {
     cy.get(form.formSave).click();
     cy.get(agenda.accessLevelPill).click();
     cy.existsAndVisible('.ember-power-select-trigger').click();
-    cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid').click();
+    cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid')
+      .click();
     cy.get(agenda.accessLevelSave).click();
 
     cy.contains('Wijzigen').click();
     cy.get('.vl-form__group').as('editDecision');
     cy.get('@editDecision').within(() => {
       cy.get('.vl-checkbox--switch__label').click();
-    })
-
+    });
     cy.contains('Opslaan').click();
-
     cy.releaseDecisions();
-
     cy.wait(60000);
-    cy.logout();
+    cy.logoutFlow();
+  });
+
+  it('Test as Overheid', () => {
+    cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaItemDecisionTab).click();
-    cy.get('.vlc-document-card').eq(0).within(() => {
-      cy.get('.vl-title--h6 > span').contains(file.fileName);
-    });
+    cy.get('.vlc-document-card').eq(0)
+      .within(() => {
+        cy.get('.vl-title--h6 > span').contains(file.fileName);
+      });
     cy.get(agenda.agendaItemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 0);
+      cy.get('.vlc-document-card').as('docCards')
+        .should('have.length', 0);
     });
+    cy.logoutFlow();
+  });
 
-    cy.logout();
+  it('Test as Admin', () => {
+    cy.server();
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
     cy.wait(60000);
 
-    cy.logout();
+    cy.logoutFlow();
+  });
+
+  it('Test as Overheid', () => {
+    cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaItemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards').should('have.length', 2);
+      cy.get('.vlc-document-card').as('docCards')
+        .should('have.length', 2);
     });
+
+    cy.logoutFlow();
   });
 
+  // TODO TEST AS MINISTER, we need seperate tests to verify wat/when other profiles can see data
+  it('Test as Minister', () => {
+    cy.server();
+    cy.login('Minister');
+    cy.searchCase(caseTitle);
+    cy.openSubcase(0);
+    cy.url().should('contain', '/deeldossiers/');
+    cy.url().should('contain', '/overzicht');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Acties').should('not.exist');
+    cy.contains('Indienen voor agendering').should('not.exist');
+    cy.clickReverseTab('Documenten');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Documenten toevoegen').should('not.exist');
+    cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
+  });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

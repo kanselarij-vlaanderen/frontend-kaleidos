@@ -17,7 +17,7 @@ export const ajax = ({
   dataType,
 }) => {
   let body = null;
-  let headers = new Headers();
+  const headers = new Headers();
 
   // We use url encoded form data for the API
   if (data) {
@@ -38,12 +38,16 @@ export const ajax = ({
     headers,
   }).then(handleErrors)
     .then((response) => {
-      switch (dataType) {
-        case 'blob':
-          return response.blob();
-        default:
+      if (response.status !== 204) {
+        switch (dataType) {
+          case 'blob':
+            return response.blob();
+          default:
           // Auto-convert all responses to JSON
-          return response.json();
+            return response.json();
+        }
+      } else {
+        return response.body;
       }
     }, (response) => {
       if (error) {

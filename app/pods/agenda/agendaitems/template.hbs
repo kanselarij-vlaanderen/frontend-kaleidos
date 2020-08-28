@@ -1,0 +1,35 @@
+<div class={{agendaitemsClass}}>
+  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    {{agenda/agendaitem-search
+      selectedAgenda=currentAgenda
+      value=(readonly filter)
+      search=(action "searchAgendaItems")
+    }}
+    <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
+      {{#if isOverviewWindow }}
+        {{agenda/agenda-overview
+          announcements=sortedAnnouncements
+          agendaitems=(await sortedAgendaitems)
+          currentAgenda=(await model.currentAgenda)
+          selectedAgendaItem=selectedAgendaItem
+          filteredAgendaItems=filteredAgendaItems
+          selectAgendaItem=(action "selectAgendaItem")
+          refresh=(action "refresh")
+          overviewEnabled=isOverviewWindow
+        }}
+      {{else}}
+        {{agenda/agenda-detail/sidebar
+          announcements=sortedAnnouncements
+          agendaitems=(await sortedAgendaitems)
+          currentAgenda=(await model.currentAgenda)
+          selectedAgendaItem=selectedAgendaItem
+          filteredAgendaItems=filteredAgendaItems
+          selectAgendaItem=(action "selectAgendaItem")
+          refresh=(action "refresh")
+          overviewEnabled=isOverviewWindow
+        }}
+      {{/if}}
+    </div>
+  </div>
+</div>
+{{outlet}}

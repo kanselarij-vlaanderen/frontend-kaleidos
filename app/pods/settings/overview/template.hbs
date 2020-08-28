@@ -1,0 +1,99 @@
+<div class="vl-u-spacer-extended-l vl-u-display-flex vlc-u-flex-wrap">
+  <div class="vl-u-spacer-extended-s">
+    <LinkTo
+      data-test-manage-government-domains
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.government-domains"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-government-domains"}}
+    </LinkTo>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <LinkTo
+      data-test-manage-government-fields
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.government-fields"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-government-fields"}}
+    </LinkTo>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <LinkTo
+      data-test-manage-ise-codes
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.ise-codes"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-ise-codes"}}
+    </LinkTo>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <LinkTo
+      data-test-manage-alerts
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.system-alerts"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-alerts"}}
+    </LinkTo>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <LinkTo
+      data-test-manage-document-types
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.document-types"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-document-types"}}
+    </LinkTo>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <LinkTo
+      data-test-manage-case-types
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.case-types"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-case-types"}}
+    </LinkTo>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <LinkTo
+      data-test-manage-subcase-types
+      @tagName="button"
+      @type="button"
+      class="vl-button vl-button--tertiary vl-button--icon-before"
+      @route="settings.subcase-types"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-subcase-types"}}
+    </LinkTo>
+  </div>
+  <div class="vl-u-spacer-extended-s">
+    <LinkTo
+            data-test-manage-signatures
+            @tagName="button"
+            @type="button"
+            class="vl-button vl-button--tertiary vl-button--icon-before"
+            @route="settings.signature"
+    >
+      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+      {{t "manage-signatures"}}
+    </LinkTo>
+  </div>
+</div>
+{{outlet}}

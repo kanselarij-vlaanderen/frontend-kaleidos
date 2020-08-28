@@ -16,8 +16,12 @@ services:
       - default
     build: ../.
     user: ${HOST_UID_GID}
+  elasticsearch:
+    volumes:
+      - /usr/share/elasticsearch/data
   e2e-electron:
     image: "kanselarij/kaleidos-cypress:latest"
+    ipc: host
     environment:
       NO_COLOR: 1
     links:

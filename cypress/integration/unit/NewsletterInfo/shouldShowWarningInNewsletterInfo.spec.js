@@ -1,16 +1,19 @@
-/*global context, before, it, cy,beforeEach, Cypress*/
-/// <reference types="Cypress" />
+/* global context, before, it, cy,beforeEach, Cypress */
+// / <reference types="Cypress" />
 
 import alert from '../../../selectors/alert.selectors';
 import agenda from '../../../selectors/agenda.selectors';
 
-context('Show warning in newsletterinfo', () => {
+function currentTimestamp() {
+  return Cypress.moment().unix();
+}
 
-  //TODO: Create agenda
-  //TODO: Create procedurestap
-  //TODO: Add procedurestap to agenda
-  //TODO: Switch to kortbestek tab
-  //TODO: Warning should be there
+context('Show warning in newsletterinfo', () => {
+  // TODO: Create agenda
+  // TODO: Create procedurestap
+  // TODO: Add procedurestap to agenda
+  // TODO: Switch to kortbestek tab
+  // TODO: Warning should be there
 
   before(() => {
     cy.server();
@@ -23,11 +26,14 @@ context('Show warning in newsletterinfo', () => {
   });
 
   it('Should show warning in kortbestek view', () => {
-    const caseTitle = 'testId=' + currentTimestamp() + ': ' + 'Cypress test dossier 1';
-    const agendaDate = Cypress.moment().add(1, 'weeks').day(5); // Next friday
-    const subcaseTitle1 = caseTitle + ' test stap 1';
+    const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
+    const agendaDate = Cypress.moment().add(1, 'weeks')
+      .day(2); // Next friday
+    const subcaseTitle1 = `${caseTitle} test stap 1`;
 
-    const file = {folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota'};
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+    };
     const files = [file];
 
     cy.createCase(false, caseTitle);
@@ -43,16 +49,12 @@ context('Show warning in newsletterinfo', () => {
 
     cy.route('/');
     cy.openAgendaForDate(agendaDate);
-    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName , file);
+    cy.addNewDocumentVersionToAgendaItem(subcaseTitle1, file.newFileName, file);
 
     cy.get(agenda.agendaItemKortBestekTab)
       .should('be.visible')
       .click()
-      .wait(2000); //Access-levels GET occured earlier, general wait instead
+      .wait(2000); // Access-levels GET occured earlier, general wait instead
     cy.get(alert.changesAlertComponent).should('be.visible');
-  })
+  });
 });
-
-function currentTimestamp() {
-  return Cypress.moment().unix();
-}

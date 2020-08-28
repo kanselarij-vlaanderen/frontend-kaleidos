@@ -1,0 +1,40 @@
+<div class="vl-modal-dialog__content">
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "new-person")}}
+    {{utils/create-person-selector
+      selectedItems=selectedPerson
+      selectModel=(action "personSelected")
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "name")}}
+    {{web-components/vl-form-input width="4" value=signatureToEdit.name}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "signature-function")}}
+    {{web-components/vl-form-input width="4" value=signatureToEdit.function}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "signature-file")}}
+    {{#if (not uploadedFile)}}
+      {{file-uploader
+        multipleFiles=false
+        uploadedFileAction=(action "getUploadedFile")
+      }}
+    {{else}}
+      <div class="vlc-preview-container">
+        <img src="{{downloadUrl}}" alt="{{t "no-signature-yet"}}"/>
+        <a href="" {{action "removeFile" uploadedFile}}>
+          {{fa-icon "remove"}}
+        </a>
+      </div>
+    {{/if}}
+  </div>
+</div>
+{{web-components/vl-modal-footer
+  isLoading=isLoading
+  cancelButtonText=(t "cancel")
+  saveButtonText=(t "save")
+  cancelAction=(action "closeModal")
+  saveAction=(action "saveChanges")
+}}

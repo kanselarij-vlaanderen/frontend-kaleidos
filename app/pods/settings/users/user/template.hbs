@@ -1,0 +1,38 @@
+{{utils/settings-header
+  showBackButton=true
+  title=(t 'manage-user'
+  firstName=model.firstName
+  lastName=model.lastName)
+}}
+
+<div class="vl-grid">
+  <div class="vl-col--6-12">
+    <div class="vl-u-spacer-extended">
+      <Panel as |pl|>
+        <pl.Header>
+          <h4 class="vlc-panel__title">{{t 'manage-users-general-info'}}</h4>
+        </pl.Header>
+        <pl.Body>
+          <KeyValue @layout="horizontal" @key="{{t 'manage-users-full-name'}}" @value="{{model.firstName}} {{model.lastName}}"/>
+          <KeyValue @layout="horizontal" @key="{{t 'manage-users-email'}}" @value="{{if model.email model.email "-"}}"/>
+          <KeyValue @layout="horizontal" @key="{{t 'manage-users-telephone'}}" @value="{{if model.phone model.phone "-"}}"/>
+          <div class="vlc-key-value-item vlc-key-value-item--horizontal">
+            <div class="vlc-key-value-item__label">{{t 'manage-users-group'}}</div>
+            <div class="vlc-key-value-item__value">{{web-components/light-table/vl-group-column user=model}}</div>
+          </div>
+        </pl.Body>
+      </Panel>
+    </div>
+    <div class="vl-u-spacer-extended">
+      <Panel as |pl|>
+        <pl.Header>
+          <h4 class="vlc-panel__title">{{t 'manage-users-technical-info'}}</h4>
+        </pl.Header>
+        <pl.Body>
+          <KeyValue @layout="horizontal" @key="{{t 'manage-users-void'}}" @value="{{model.account.voId}}"/>
+          <KeyValue @layout="horizontal" @key="{{t 'manage-users-ovo'}}" @value="{{if model.organization.identifier model.organization.identifier "-"}}"/>
+        </pl.Body>
+      </Panel>
+    </div>
+  </div>
+</div>

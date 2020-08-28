@@ -1,0 +1,26 @@
+{{! template-lint-disable no-bare-strings }}
+
+<h1 class="vlc-kitchensink-header">Pills</h1>
+
+<Styleguide::KitchensinkSample
+  @title="Normal pills"
+  @snippet="normal.hbs"
+>
+  {{!-- BEGIN-SNIPPET normal --}}
+  <span class="vl-pill">Option 1</span>
+  <span class="vlc-pill">Option 1</span>
+  <span class="vlc-pill vlc-pill--success">Option 1</span>
+  <span class="vlc-pill vlc-pill--warning">Option 1</span>
+  <span class="vlc-pill vlc-pill--error">Option 1</span>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Acceslevel pill"
+  @snippet="acceslevel.hbs"
+>
+  {{!-- BEGIN-SNIPPET acceslevel --}}
+  <AccessLevelPill/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+

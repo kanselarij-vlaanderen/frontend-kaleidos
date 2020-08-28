@@ -1,8 +1,8 @@
-'use strict';
-
+/* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
-module.exports = function(defaults) {
-  let app = new EmberApp(defaults, {
+
+module.exports = function (defaults) {
+  const app = new EmberApp(defaults, {
     autoprefixer: {
       enabled: true,
       cascade: true,
@@ -13,28 +13,31 @@ module.exports = function(defaults) {
       sourceMapEmbed: process.env.DEPLOY_ENV !== 'production',
     },
     flatpickr: {
-      locales: ['nl']
+      locales: ['nl'],
     },
     moment: {
       outputFormat: 'L',
-      allowEmpty: true
+      allowEmpty: true,
     },
 
     'ember-cli-babel': {
       includePolyfill: true,
       plugins: [
-        'transform-object-rest-spread'
-      ]
+        'transform-object-rest-spread',
+      ],
     },
     'ember-test-selectors': {
       strip: false
-    }
+    },
   });
 
   app.import('node_modules/sanitize-filename/index.js', {
     using: [
-      { transformation: 'cjs', as: 'sanitize-filename' }
-    ]
+      {
+        transformation: 'cjs',
+        as: 'sanitize-filename'
+      },
+    ],
   });
 
   return app.toTree();

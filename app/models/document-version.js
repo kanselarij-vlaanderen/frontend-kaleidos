@@ -3,8 +3,9 @@ import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import { deprecatingAlias } from '@ember/object/computed';
 import moment from 'moment';
-
-const { Model, attr, belongsTo } = DS;
+const {
+  Model, attr, belongsTo,
+} = DS;
 
 export default Model.extend({
   name: attr('string'),
@@ -12,43 +13,71 @@ export default Model.extend({
   modified: attr('datetime'),
   chosenFileName: deprecatingAlias('name', {
     id: 'model-refactor.documents',
-    until: '?'
+    until: '?',
   }),
   confidential: attr('boolean'),
+  accessLevelLastModified: attr('datetime'),
   accessLevel: belongsTo('access-level'),
 
   file: belongsTo('file'),
-  convertedFile: belongsTo('file', { inverse: null }),
+  convertedFile: belongsTo('file', {
+    inverse: null,
+  }),
 
-  documentContainer: belongsTo('document', { inverse: null }),
+  documentContainer: belongsTo('document', {
+    inverse: null,
+  }),
   document: deprecatingAlias('documentContainer', {
     id: 'model-refactor.documents',
-    until: '?'
+    until: '?',
   }),
-  nextVersion: belongsTo('document-version', { inverse: 'previousVersion' }),
-  previousVersion: belongsTo('document-version', { inverse: 'nextVersion' }),
+  nextVersion: belongsTo('document-version', {
+    inverse: 'previousVersion',
+  }),
+  previousVersion: belongsTo('document-version', {
+    inverse: 'nextVersion',
+  }),
 
-  subcase: belongsTo('subcase', { inverse: null }),
-  agendaitem: belongsTo('agendaitem', { inverse: null }),
+  subcase: belongsTo('subcase', {
+    inverse: null,
+  }),
+  agendaitem: belongsTo('agendaitem', {
+    inverse: null,
+  }),
   announcement: belongsTo('announcement'),
   newsletter: belongsTo('newsletter-info'),
-  meeting: belongsTo('meeting', { inverse: null }),
-
-  downloadFilename: computed('name', 'file.extension', async function () {
-    let filename = `${await this.get('name')}.${await this.get('file.extension')}`;
-    return sanitize(filename, { replacement: '_' });
+  meeting: belongsTo('meeting', {
+    inverse: null,
   }),
 
-  storeAccessLevel(accessLevel) {
-    this.set('modified', moment().toDate());
-    this.set('accessLevel', accessLevel);
-    return this.save();
+  downloadFilename: computed('name', 'file.extension', async function() {
+    const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
+    return sanitize(filename, {
+      replacement: '_',
+    });
+  }),
+
+  changeAccessLevelLastModified() {
+    if (!this.get('confidential')) {
+      this.set('accessLevelLastModified', moment().utc()
+        .toDate());
+    }
   },
 
-  toggleConfidential: async function () {
-    this.set('modified', moment().toDate());
-    this.toggleProperty('confidential');
-    await this.save();
-  }
+  save() {
+    const parentSave = this._super;
+    const dirtyType = this.get('dirtyType');
+    switch (dirtyType) {
+      case 'deleted':
+        break;
+      default:
+        this.set('modified', moment().utc()
+          .toDate());
+        this.changeAccessLevelLastModified();
+        break;
+    }
+
+    return parentSave.call(this, ...arguments);
+  },
 
 });

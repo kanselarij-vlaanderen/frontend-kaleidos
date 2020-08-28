@@ -1,0 +1,40 @@
+<div class="vl-modal" data-test-vl-modal-container>
+  <div class={{backdropClass}}>
+    {{#click-outside
+      action=(action "clickOutside")
+      except-selector=".flatpickr-calendar"
+    }}
+      <div class="vl-modal-dialog {{sizeClass}}" tabindex="-2" role="dialog" data-test-vl-modal-dialogwindow>
+        <div class="vlc-navbar vlc-navbar--bordered-bottom">
+          <div class="vlc-toolbar">
+            <div class="vlc-toolbar__left">
+              <div class="vlc-toolbar__item">
+                <h4 class="vlc-toolbar__title">
+                  {{title}}
+                </h4>
+              </div>
+            </div>
+            <div class="vlc-toolbar__right">
+              {{#if showCloseButton}}
+                <div class="vlc-toolbar__item">
+                  <button type="button" data-test-vl-modal-close
+                          class="vl-button vl-button--link-muted vl-button--icon"
+                    {{action "close"}}
+                  >
+                    <i class="vl-button__icon vl-vi vl-vi-close-light"
+                       aria-hidden="true"
+                    ></i>
+                    <span class="vl-u-visually-hidden">
+                      {{t "close"}}
+                    </span>
+                  </button>
+                </div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        {{yield}}
+      </div>
+    {{/click-outside}}
+  </div>
+</div>

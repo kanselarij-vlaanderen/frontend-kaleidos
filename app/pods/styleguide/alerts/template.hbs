@@ -1,0 +1,39 @@
+{{! template-lint-disable no-bare-strings }}
+
+<h1 class="vlc-kitchensink-header">{{t "style-guide-alerts"}}</h1>
+
+<Styleguide::KitchensinkSample
+  @title="Loading"
+  @snippet="loading.hbs"
+>
+  {{!-- BEGIN-SNIPPET loading --}}
+  <WebComponents::VlAlert @type="loading"/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Closeable"
+  @snippet="closeable.hbs"
+>
+  {{!-- BEGIN-SNIPPET closeable --}}
+  <WebComponents::VlAlert @closeable="false"/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Caution"
+  @snippet="caution.hbs"
+>
+  {{!-- BEGIN-SNIPPET caution --}}
+  <WebComponents::VlAlert @title="Caution!"/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+  @title="Changes alert"
+  @snippet="changes.hbs"
+>
+  {{!-- BEGIN-SNIPPET changes --}}
+  <ChangesAlert @message="The document has changed!"></ChangesAlert>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>

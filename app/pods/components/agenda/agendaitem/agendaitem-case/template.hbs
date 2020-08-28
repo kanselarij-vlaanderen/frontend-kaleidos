@@ -1,0 +1,34 @@
+{{#if (not isEditing)}}
+{{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
+  {{agenda/agendaitem/agendaitem-case/agendaitem-titles
+    agendaitem=agendaitem
+    subcase=(await subcase)
+    shouldShowDetails=(or agendaitem.showAsRemark (await agendaitem.agendaActivity))
+    toggleIsEditing=(action "toggleIsEditing")
+  }}
+{{else}}
+  {{agenda/agendaitem/agendaitem-case/agendaitem-titles-edit
+    agendaitem=agendaitem
+    isEditing=isEditing
+    subcase=(await subcase)
+  }}
+{{/if}}
+{{#if agendaitem.showAsRemark}}
+  {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees
+    agendaitem=agendaitem
+    subcase=(await subcase)
+  }}
+  {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
+{{else}}
+  {{#if (await agendaitem.agendaActivity)}}
+    {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees
+      agendaitem=agendaitem
+      subcase=(await subcase)
+    }}
+    {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
+    {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
+    {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=agendaitem}}
+    {{agenda/agendaitem/agendaitem-case/agendaitem-approvals item=agendaitem}}
+    {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
+  {{/if}}
+{{/if}}

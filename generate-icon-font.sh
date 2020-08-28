@@ -7,7 +7,7 @@ FONT_PREFIX=ki
 FONT_NAME=kaleidos-icons
 
 # The location of the overview page for the icons in Ember
-OVERVIEW_PAGE_PATH=app/components/styleguide/script-icons/template.hbs
+OVERVIEW_PAGE_PATH=app/pods/components/styleguide/script-icons/template.hbs
 
 # The folder containing all the SVG icons you intend to convert to the font
 PATH_TO_SVG_FILES=./icon-font-svg-files
@@ -43,7 +43,7 @@ fi
 
 # Make the new overview page - disable linting, add an icons-page class wrapper, and copy the generated contents into this template
 echo '{{!-- template-lint-disable  --}}' > $OVERVIEW_PAGE_PATH \
-		&& echo '<div class="icons-page">' >> $OVERVIEW_PAGE_PATH \
+		&& echo '<div class="c-icons-overview">' >> $OVERVIEW_PAGE_PATH \
 		&& xmllint --xpath "//body/child::*" "tmp/icons-temp.html" >> $OVERVIEW_PAGE_PATH \
 		&& printf "\n</div>" >> $OVERVIEW_PAGE_PATH
 

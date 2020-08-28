@@ -1,0 +1,41 @@
+{{title (t "agenda-title")}}
+<div class="vl-u-bg-alt">
+  <div class="vlc-page-header">
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__item">
+        <h1 class="vlc-page-header__title vlc-page-header__title--bordered vlc-u-padding-bottom-5"
+            data-test-agendas-title>
+          {{t "agenda-title"}}
+        </h1>
+      </div>
+      <div class="vlc-toolbar__right">
+        {{#if currentSession.isEditor}}
+          <div class="vlc-toolbar__item">
+            <button data-test-vlc-agenda-createnewagendabutton
+                    type="button"
+                    class="vl-button vl-button--icon-before"
+              {{action "createNewSession"}}>
+              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+              {{t "new-agenda"}}
+            </button>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+{{outlet}}
+{{#if creatingNewSession}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    data-test-vl-modal='createNewAgendaModal'
+    title=(t "new-agenda")
+    closeModal=(action "cancelNewSessionForm")
+  }}
+    {{sessions/forms/new-session
+      successfullyAdded=(action "successfullyAdded")
+      cancelForm=(action "cancelNewSessionForm")
+      formattedMeetingIdentifier=formattedMeetingIdentifier
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
