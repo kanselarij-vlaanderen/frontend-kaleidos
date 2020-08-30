@@ -1,66 +1,68 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import DS from 'ember-data';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend({
-  currentSession: inject(),
-  classNames: ['vl-u-spacer-extended-bottom-s'],
-  classNameBindings: ['aboutToDelete'],
-  isShowingVersions: false,
-  documentToDelete: null,
-  document: null,
-  openClass: computed('isShowingVersions', function() {
-    if (this.get('isShowingVersions')) {
+export default class linkedDocumentLink extends Component {
+  // Input
+  // this.args.documentContainer
+  // this.args.item
+
+  @service currentSession;
+
+  classNameBindings = ['aboutToDelete'];
+
+  @tracked isShowingVersions = false
+  @tracked documentToDelete = null;
+  @tracked isVerifyingUnlink = false;
+  @tracked lastDocumentVersion = null;
+  @tracked mySortedDocuments;
+
+  document = null
+
+  get openClass() {
+    if (this.isShowingVersions) {
       return 'js-vl-accordion--open';
     }
     return null;
-  }),
+  }
 
-  myDocumentVersions: computed.alias('item.linkedDocumentVersions'),
-
-  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
-    const sortedVersions = this.get('mySortedDocumentVersions');
-    return sortedVersions.lastObject;
-  }),
-
-  lastDocumentVersionName: computed('lastDocumentVersion.name', function() {
-    return this.get('lastDocumentVersion.name');
-  }),
+  get setupDocumentVersions() {
+    this.mySortedDocumentVersions();
+    return true;
+  }
 
   // TODO: DUPLICATE CODE IN agenda/agendaitem/agendaitem-case/subcase-document/document-link/component.js
   // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
   // TODO: DUPLICATE CODE IN edit-document-version/component.js
-  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function() {
-    return DS.PromiseArray.create({
-      promise: (async() => {
-        const itemVersionIds = {};
-        const versions = await this.get('myDocumentVersions');
-        if (versions) {
-          versions.map((item) => {
-            itemVersionIds[item.get('id')] = true;
-            return item;
-          });
-        }
-        const documentVersions = await this.get('document.sortedDocumentVersions');
-        if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
-          return matchingVersions;
-        }
-      })(),
-    });
-  }),
+  mySortedDocumentVersions() {
+    const itemVersionIds = {};
+    const versions = this.args.item.linkedDocumentVersions;
+    if (versions) {
+      versions.map((item) => {
+        itemVersionIds[item.get('id')] = true;
+      });
+    }
+    const documentVersions = this.args.documentContainer.sortedDocumentVersions;
+    if (documentVersions) {
+      this.mySortedDocuments = documentVersions.filter((item) => itemVersionIds[item.id]);
+      if (this.mySortedDocuments) {
+        this.lastDocumentVersion = this.mySortedDocuments.lastObject;
+      }
+    }
+  }
 
-  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function() {
+  async getReverseSortedDocumentVersions() {
     const reversed = [];
-    this.get('mySortedDocumentVersions').map((item) => {
-      reversed.push(item);
-      return item;
-    });
-    reversed.reverse();
-    return reversed;
-  }),
+    if (this.mySortedDocuments) {
+      this.mySortedDocuments.map((item) => {
+        reversed.push(item);
+      });
+      reversed.reverse();
+      this.reverseSortedDocumentVersions = reversed;
+    }
+  }
 
   // TODO: refactor model/code in function of "reeds aangeleverde documenten"
   async unlinkDocumentVersions(documentVersions, model) {
@@ -81,9 +83,10 @@ export default Component.extend({
     const unlinkDocumentVersionsFromModelPromise = await
     this.unlinkDocumentVersionsFromModel(model, documentVersions);
     return unlinkDocumentVersionsFromModelPromise;
-  },
+  }
 
   // TODO: refactor model/code in function of "reeds aangeleverde documenten"
+  // eslint-disable-next-line class-methods-use-this
   async unlinkDocumentVersionsFromModel(model, documentVersions) {
     const modelDocumentVersions = await model.get('linkedDocumentVersions');
     if (modelDocumentVersions) {
@@ -94,29 +97,37 @@ export default Component.extend({
     }
     const savedModalPromise = model.save();
     return savedModalPromise;
-  },
+  }
 
-  actions: {
-    showVersions() {
-      this.toggleProperty('isShowingVersions');
-    },
 
-    cancel() {
-      this.set('documentToDelete', null);
-      this.set('isVerifyingUnlink', false);
-    },
+  @action
+  showVersions() {
+    this.isShowingVersions = !this.isShowingVersions;
+    if (this.isShowingVersions) {
+      this.getReverseSortedDocumentVersions();
+    }
+  }
 
-    async verify() {
-      const documentVersions = await this.get('documentToDelete.documentVersions');
-      await this.unlinkDocumentVersions(documentVersions, this.get('item'));
-      if (!this.isDestroyed) {
-        this.set('isVerifyingUnlink', false);
-      }
-    },
+  @action
+  cancel() {
+    this.documentToDelete = null;
+    this.isVerifyingUnlink = false;
+  }
 
-    unlinkDocument(document) {
-      this.set('documentToDelete', document);
-      this.set('isVerifyingUnlink', true);
-    },
-  },
-});
+  @action
+  async verify() {
+    const {
+      documentVersions,
+    } = this.documentToDelete;
+    await this.unlinkDocumentVersions(documentVersions, this.args.item);
+    if (!this.isDestroyed) {
+      this.isVerifyingUnlink = false;
+    }
+  }
+
+  @action
+  unlinkDocument(document) {
+    this.documentToDelete = document;
+    this.isVerifyingUnlink = true;
+  }
+}

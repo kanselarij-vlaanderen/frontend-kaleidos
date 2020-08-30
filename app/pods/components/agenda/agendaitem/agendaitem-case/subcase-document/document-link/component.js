@@ -149,29 +149,23 @@ export default class DocumentLink extends Component {
   }
 
   mySortedDocumentVersions() {
-    console.log('SD');
     const itemVersionIds = {};
     const versions = this.args.item.documentVersions;
-    console.log('V:', versions);
     if (versions) {
       versions.map((item) => {
         itemVersionIds[item.get('id')] = true;
       });
     }
     const documentVersions = this.args.documentContainer.sortedDocumentVersions;
-    console.log(documentVersions);
     if (documentVersions) {
       this.mySortedDocuments = documentVersions.filter((item) => itemVersionIds[item.id]);
       if (this.mySortedDocuments) {
         this.lastDocumentVersion = this.mySortedDocuments.lastObject;
-        console.log('DV', this.lastDocumentVersion);
       }
-      console.log(this.mySortedDocuments);
     }
   }
 
   async getReverseSortedDocumentVersions() {
-    console.log('RD');
     const reversed = [];
     if (this.mySortedDocuments) {
       this.mySortedDocuments.map((item) => {
@@ -211,7 +205,6 @@ export default class DocumentLink extends Component {
     const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
     newDocument.set('name', newName);
     this.args.documentContainer.notifyPropertyChange('documents');// Why exactly? Ember should handle this?
-    console.log(this.args.documentContainer);
     this.documentInCreation = await newDocument;
   }
 
@@ -245,7 +238,6 @@ export default class DocumentLink extends Component {
 
   @action
   async saveNameChange(doc) {
-    console.log('DOC:', doc);
     doc.set('modified', moment().toDate());
     doc.set('name', this.nameBuffer);
     await doc.save();
@@ -335,7 +327,6 @@ export default class DocumentLink extends Component {
         timeOut: 15000,
       },
     };
-    console.log(this.documentContainerToDelete);
     verificationToast.options.onUndo = () => {
       this.fileService.reverseDelete(this.documentContainerToDelete.get('id'));
       this.toaster.toasts.removeObject(verificationToast);
