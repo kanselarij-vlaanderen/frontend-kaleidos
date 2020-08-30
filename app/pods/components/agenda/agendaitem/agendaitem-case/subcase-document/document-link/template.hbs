@@ -1,18 +1,18 @@
-<div class="vlc-document-card">
+<div class="vlc-document-card vl-u-spacer-extended-bottom-s">
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
       <div class="vlc-toolbar vlc-toolbar--auto">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <p class="vlc-subline vlc-document-card__subline">
-              {{await @document.type.label}}
+              {{await @documentContainer.type.label}}
             </p>
           </div>
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
-            {{#if @document.lastDocumentVersion}}
-              <AccessLevelPill @item={{await @document.lastDocumentVersion}} />
+            {{#if this.setupDocumentVersions}}
+              <AccessLevelPill @item={{this.lastDocumentVersion}} />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -37,7 +37,7 @@
                          href=""
                          data-test-document-upload-new-version
                         {{action attacher.hide}}
-                        {{action this.openUploadDialog @document}}
+                        {{action this.openUploadDialog @documentContainer}}
                       >
                         {{t "new-version"}}
                       </a>
@@ -56,7 +56,7 @@
                       <a class="vl-link vl-link--block vl-u-text--error"
                          href=""
                         {{action attacher.hide}}
-                        {{action this.deleteDocument @document}}
+                        {{action this.deleteDocument @documentContainer}}
                       >
                         {{t "document-delete"}}
                       </a>
@@ -71,7 +71,7 @@
       <div class="vl-u-display-flex">
         <div class="vlc-document-card__badge
           {{if
-            @document.checkAdded
+            @documentContainer.checkAdded
             "vlc-document-list__item vlc-document-list__item--active"
           }}"
         >
@@ -83,7 +83,7 @@
           {{#if (not isEditing)}}
             <h6 class="vl-title vl-title--h6">
               <span {{action this.startEditingName}}>
-                {{@document.lastDocumentVersion.name}}
+                {{this.lastDocumentVersion.name}}
               </span>
             </h6>
           {{else}}
@@ -96,7 +96,7 @@
               <button
                 class="vl-button vl-button--link vl-button--icon"
                 type="button"
-                {{action this.saveNameChange @document.lastDocumentVersion}}
+                {{action this.saveNameChange this.lastDocumentVersion}}
               >
                 <i
                   class="vl-vi vl-vi-save vl-button__icon"
@@ -123,15 +123,15 @@
           {{/if}}
           <div class="vlc-document-card-content__meta">
             {{t "uploaded-at"}}
-            {{moment-format (await @document.lastDocumentVersion.created)}}
+            {{moment-format (await this.lastDocumentVersion.created)}}
             {{t "at"}}
-            {{moment-format (await @document.lastDocumentVersion.created) "HH:mm"}}
+            {{moment-format (await this.lastDocumentVersion.created) "HH:mm"}}
           </div>
         </div>
       </div>
     </div>
   </div>
-  {{#if (gt (await @document.sortedDocumentVersions.length) 0)}}
+  {{#if this.mySortedDocuments}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{openClass}}">
         <button
@@ -172,19 +172,19 @@
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
-          @value={{this.documentsInCreation.name}}
+          @value={{this.documentInCreation.name}}
           @width={{4}} />
         {{ember-kaleidos-webuniversum/vl-uploaded-document
-          name=this.documentsInCreation.file.filename
-          extension=this.documentsInCreation.file.extension
-          size=this.documentsInCreation.file.size
-          downloadName=this.documentsInCreation.file.filename
+          name=this.documentInCreation.file.filename
+          extension=this.documentInCreation.file.extension
+          size=this.documentInCreation.file.size
+          downloadName=this.documentInCreation.file.filename
           downloadLink=(concat
-                  this.documentsInCreation.file.downloadLink
+                  this.documentInCreation.file.downloadLink
             "?name="
-                  this.documentsInCreation.file.filename
+                  this.documentInCreation.file.filename
           )
-          delete=(action this.delete this.documentsInCreation)
+          delete=(action this.delete this.documentInCreation)
         }}
       {{/if}}
     </div>

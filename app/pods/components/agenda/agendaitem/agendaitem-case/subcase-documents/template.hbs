@@ -21,9 +21,9 @@
         <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
       </div>
     {{else if (gt (await @item.documentsLength) 0)}}
-      {{#each (await @item.documents) as |document|}}
+      {{#each (await @item.documents) as |documentContainer|}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-                @document={{document}}
+                @documentContainer={{documentContainer}}
                 @item={{@item}} />
       {{/each}}
     {{else}}
@@ -61,9 +61,9 @@
     {{#if (is-pending @item.linkedDocuments)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
     {{else if (gt (await @item.linkedDocumentsLength) 0)}}
-      {{#each (await @item.linkedDocuments) as |document|}}
+      {{#each (await @item.linkedDocuments) as |documentContainer|}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::LinkedDocumentLink
-                @document={{document}}
+                @documentContainer={{documentContainer}}
                 @item={{@item}} />
       {{/each}}
     {{else}}

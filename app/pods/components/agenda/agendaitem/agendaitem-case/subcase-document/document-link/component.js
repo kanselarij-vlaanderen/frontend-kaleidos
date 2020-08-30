@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { computed, action } from '@ember/object';
+import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import {
@@ -22,16 +22,16 @@ export default class DocumentLink extends Component {
   @tracked isUploadingNewVersion = false;
   @tracked isEditing = false;
   @tracked defaultAccessLevel = null;
-  @tracked documentsInCreation = null;
+  @tracked documentInCreation = null;
   @tracked uploadedFile = null;
   @tracked nameBuffer = '';
   @tracked isVerifyingDelete = false;
+  @tracked lastDocument = null;
+  @tracked mySortedDocuments;
+  @tracked lastDocumentVersion = null
 
-  classNames = ['vl-u-spacer-extended-bottom-s'];
   classNameBindings = ['aboutToDelete'];
   documentContainerToDelete = null;
-  documentContainer = null; // When adding a new version to an existing document
-  myDocumentVersions = computed.alias('item.documentVersions');
 
   constructor() {
     super(...arguments);
@@ -64,7 +64,7 @@ export default class DocumentLink extends Component {
       'confidential'
     ];
     const newDocument = this.store.createRecord('document-version', {});
-    propsFromPrevious.forEach(async (key) => {
+    propsFromPrevious.forEach(async(key) => {
       newDocument.set(key, previousDocument
         ? await previousDocument.getWithDefault(key, defaults[key])
         : defaults[key]);
@@ -90,6 +90,7 @@ export default class DocumentLink extends Component {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
@@ -111,7 +112,7 @@ export default class DocumentLink extends Component {
 
   async addDocumentToAgendaitems(documents, agendaitems) {
     return Promise.all(
-      agendaitems.map(async (agendaitem) => {
+      agendaitems.map(async(agendaitem) => {
         await agendaitem.hasMany('documentVersions').reload();
         await this.attachDocumentsToModel(documents, agendaitem);
         setNotYetFormallyOk(agendaitem);
@@ -142,12 +143,43 @@ export default class DocumentLink extends Component {
     return await item.save();
   }
 
-  async getReverseSortedDocumentVersions() {
-    const documentVersions = await this.args.document.reverseSortedDocumentVersions
-    if (documentVersions) {
-      this.reverseSortedDocumentVersions = documentVersions;
+  get setupDocumentVersions() {
+    this.mySortedDocumentVersions();
+    return true;
+  }
+
+  mySortedDocumentVersions() {
+    console.log('SD');
+    const itemVersionIds = {};
+    const versions = this.args.item.documentVersions;
+    console.log('V:', versions);
+    if (versions) {
+      versions.map((item) => {
+        itemVersionIds[item.get('id')] = true;
+      });
     }
-    return null;
+    const documentVersions = this.args.documentContainer.sortedDocumentVersions;
+    console.log(documentVersions);
+    if (documentVersions) {
+      this.mySortedDocuments = documentVersions.filter((item) => itemVersionIds[item.id]);
+      if (this.mySortedDocuments) {
+        this.lastDocumentVersion = this.mySortedDocuments.lastObject;
+        console.log('DV', this.lastDocumentVersion);
+      }
+      console.log(this.mySortedDocuments);
+    }
+  }
+
+  async getReverseSortedDocumentVersions() {
+    console.log('RD');
+    const reversed = [];
+    if (this.mySortedDocuments) {
+      this.mySortedDocuments.map((item) => {
+        reversed.push(item);
+      });
+      reversed.reverse();
+      this.reverseSortedDocumentVersions = reversed;
+    }
   }
 
   get openClass() {
@@ -161,42 +193,33 @@ export default class DocumentLink extends Component {
   async uploadFile(uploadedFile) {
     const creationDate = moment().utc()
       .toDate();
-    if (this.documentContainer) {
-      await this.documentContainer.reload();
-      await this.documentContainer.hasMany('documents').reload();
-    }
+    await this.args.documentContainer.reload();
+    await this.args.documentContainer.hasMany('documents').reload();
     if (!this.defaultAccessLevel) {
       this.defaultAccessLevel = await this.store.findRecord('access-level', config.internRegeringAccessLevelId);
     }
 
-    const previousVersion = this.documentContainer ? (await this.documentContainer.get('lastDocumentVersion')) : null;
+    const previousVersion = this.args.documentContainer ? (await this.args.documentContainer.get('lastDocumentVersion')) : null;
     const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
       accessLevel: this.defaultAccessLevel,
     });
     newDocument.set('created', creationDate);
     newDocument.set('modified', creationDate);
-    if (this.documentContainer) { // Adding new version to existing container
-      const docs = await this.documentContainer.get('documents');
-      docs.pushObject(newDocument);
-      newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
-      const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
-      newDocument.set('name', newName);
-      this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
-    } else { // Adding new version, new container
-      const newContainer = this.store.createRecord('document', {
-        created: creationDate,
-      });
-      newDocument.set('documentContainer', newContainer);
-      this.documentsInCreation = await newDocument;
-      console.log(this.documentsInCreation);
-    }
+    const docs = await this.args.documentContainer.get('documents');
+    docs.pushObject(newDocument);
+    newDocument.set('documentContainer', this.args.documentContainer); // Explicitly set relation both ways
+    const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
+    newDocument.set('name', newName);
+    this.args.documentContainer.notifyPropertyChange('documents');// Why exactly? Ember should handle this?
+    console.log(this.args.documentContainer);
+    this.documentInCreation = await newDocument;
   }
 
   @action
   showVersions() {
     this.isShowingVersions = !this.isShowingVersions;
     if (this.isShowingVersions) {
-      this.reverseSortedDocumentVersions = this.getReverseSortedDocumentVersions();
+      this.getReverseSortedDocumentVersions();
     }
   }
 
@@ -210,22 +233,22 @@ export default class DocumentLink extends Component {
     if (!this.currentSession.isEditor) {
       return;
     }
-    this.nameBuffer = this.args.document.lastDocumentVersion.get('name');
-    // this.set('nameBuffer', this.get('lastDocumentVersion.name'));
+    this.nameBuffer = this.lastDocumentVersion.name;
     this.isEditing = true;
   }
 
   @action
   cancelEditingName() {
-    this.args.document.rollbackAttributes();
+    this.args.documentContainer.rollbackAttributes();
     this.isEditing = false;
   }
 
   @action
   async saveNameChange(doc) {
+    console.log('DOC:', doc);
     doc.set('modified', moment().toDate());
     doc.set('name', this.nameBuffer);
-    await doc.content.save();
+    await doc.save();
     if (!this.isDestroyed) {
       /*
        * Due to over-eager computed properties, this components gets destroyed after a namechange,
@@ -254,7 +277,7 @@ export default class DocumentLink extends Component {
   @action
   async cancelUploadVersion() {
     if (this.uploadedFile) {
-      const document = await this.args.document.lastDocumentVersion;
+      const document = await this.args.documentContainer.lastDocumentVersion;
       document.rollbackAttributes();
       const versionInCreation = await this.uploadedFile.get('documentVersion');
       if (versionInCreation) {
@@ -263,7 +286,6 @@ export default class DocumentLink extends Component {
         await this.fileService.deleteFile(this.uploadedFile);
       }
       this.uploadedFile = null;
-      // this.set('uploadedFile', null);
     }
     this.isUploadingNewVersion = false;
   }
@@ -273,7 +295,7 @@ export default class DocumentLink extends Component {
     // TODO this component/method is used for agendaitem, subcase, session (AND for decision/meetingRecord but we pass in document model)
     // TODO should we seperate this logic to make the addition of a version more generic ?
     this.isLoading = true;
-    const document = await this.args.document.lastDocumentVersion;
+    const document = await this.args.documentContainer.lastDocument;
     await document.save();
     const agendaActivity = await this.args.item.agendaActivity; // when item = agendaitem
     const agendaitemsOnDesignAgenda = await this.args.item.agendaitemsOnDesignAgendaToEdit; // when item = subcase
@@ -313,6 +335,7 @@ export default class DocumentLink extends Component {
         timeOut: 15000,
       },
     };
+    console.log(this.documentContainerToDelete);
     verificationToast.options.onUndo = () => {
       this.fileService.reverseDelete(this.documentContainerToDelete.get('id'));
       this.toaster.toasts.removeObject(verificationToast);
@@ -320,13 +343,11 @@ export default class DocumentLink extends Component {
     this.toaster.displayToast.perform(verificationToast);
     this.deleteDocumentContainerWithUndo();
     this.isVerifyingDelete = false;
-
   }
 
   @action
   deleteDocument(document) {
     this.documentContainerToDelete = document;
     this.isVerifyingDelete = true;
-
   }
 }
