@@ -1,15 +1,17 @@
 {{#if this.loadDecisionResultCodes.isIdle}}
-  <PowerSelect
-    @searchEnabled={{false}}
-    @placeholder={{t "select-a-status"}}
-    @options={{this.decisionResultCodes}}
-    @selected={{@selected}}
-    @onchange={{@onChange}}
-  as |resultCode|>
-    <Decision::DecisionResultSelect::SelectItem
-      @decisionResultCode={{resultCode}}
-    />
-  </PowerSelect>
+  <div class="decision-result-select">
+    <PowerSelect
+      @searchEnabled={{false}}
+      @placeholder={{t "select-a-status"}}
+      @options={{this.decisionResultCodes}}
+      @selected={{@selected}}
+      @onchange={{@onChange}}
+    as |resultCode|>
+      <Decision::DecisionResultSelect::SelectItem
+        @decisionResultCode={{resultCode}}
+      />
+    </PowerSelect>
+  </div>
 {{else}}
   <WebComponents::VlLoader @text={{t "loading-text-inactive"}} />
 {{/if}}
