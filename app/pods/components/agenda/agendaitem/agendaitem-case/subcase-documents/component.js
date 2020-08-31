@@ -2,6 +2,9 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
+import {
+  destroyApprovalsOfAgendaitem, setNotYetFormallyOk
+} from 'fe-redpencil/utils/agenda-item-utils';
 
 import moment from 'moment';
 import config from 'fe-redpencil/utils/config';
@@ -105,6 +108,8 @@ export default class SubcaseDocuments extends Component {
     return Promise.all(
       agendaitems.map(async(agendaitem) => {
         await this.attachDocumentsToModel(documents, agendaitem);
+        setNotYetFormallyOk(agendaitem);
+        await destroyApprovalsOfAgendaitem(agendaitem);
         return await agendaitem.save();
       })
     );
@@ -112,7 +117,18 @@ export default class SubcaseDocuments extends Component {
 
   async addDocumentsToSubcase(documents, subcase) {
     await this.attachDocumentsToModel(documents, subcase);
+    setNotYetFormallyOk(subcase);
     return await subcase.save();
+  }
+
+  async addDocumentToAgendaitemOrSubcaseOrMeeting(documents, agendaitemOrSubcaseOrMeeting) {
+    const itemType = agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
+    await agendaitemOrSubcaseOrMeeting.hasMany('documentVersions').reload();
+    await this.attachDocumentsToModel(documents, agendaitemOrSubcaseOrMeeting);
+    if (itemType === 'subcase' || itemType === 'agendaitem') {
+      setNotYetFormallyOk(agendaitemOrSubcaseOrMeeting);
+    }
+    return await agendaitemOrSubcaseOrMeeting.save();
   }
 
   async linkDocumentsToAgendaitems(documents, agendaitems) {
@@ -243,7 +259,7 @@ export default class SubcaseDocuments extends Component {
             agendaitemsOnDesignAgenda
           );
         }
-        await this.attachDocumentsToModel(documentsToAttach, this.args.item);
+        await this.addDocumentToAgendaitemOrSubcaseOrMeeting(documentsToAttach, this.args.item);
         await this.args.item.save();
       }
     } catch (error) {

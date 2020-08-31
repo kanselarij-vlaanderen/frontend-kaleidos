@@ -18,9 +18,9 @@
           <div class="vlc-toolbar__item">
             {{#if currentSession.isEditor}}
               <button
-                class="vl-button vl-button--link vl-button--icon"
-                data-test-documents-show-more
-                type="button"
+                      class="vl-button vl-button--link vl-button--icon"
+                      data-test-documents-show-more
+                      type="button"
               >
                 <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
                 {{#attach-popover
@@ -99,8 +99,8 @@
                 {{action this.saveNameChange this.lastDocumentVersion}}
               >
                 <i
-                  class="vl-vi vl-vi-save vl-button__icon"
-                  aria-hidden="true"
+                        class="vl-vi vl-vi-save vl-button__icon"
+                        aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "more-options"}}
@@ -112,8 +112,8 @@
                 {{action this.cancelEditingName}}
               >
                 <i
-                  class="vl-vi vl-vi-cross vl-button__icon"
-                  aria-hidden="true"
+                        class="vl-vi vl-vi-cross vl-button__icon"
+                        aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "more-options"}}
@@ -126,6 +126,18 @@
             {{moment-format (await this.lastDocumentVersion.created)}}
             {{t "at"}}
             {{moment-format (await this.lastDocumentVersion.created) "HH:mm"}}
+            {{moment-format (await this.lastDocumentVersion.created) "HH:mm"}}
+            {{#if (await this.lastDocumentVersion.accessLevelLastModified)}}
+              <div>
+                {{t "access-level-last-modified"}}
+                {{moment-format (await this.lastDocumentVersion.accessLevelLastModified)}}
+                {{t "at"}}
+                {{moment-format
+                  (await this.lastDocumentVersion.accessLevelLastModified)
+                  "HH:mm"
+                }}
+              </div>
+            {{/if}}
           </div>
         </div>
       </div>
