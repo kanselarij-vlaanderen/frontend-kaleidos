@@ -224,6 +224,18 @@
                     {{t "download-documents"}}
                   </a>
                 </li>
+                {{#if currentAgenda.isDesignAgenda}}
+                  <li class="vlc-dropdown-menu__item">
+                    <a href=""
+                       data-test-agenda-header-approve-all-agendaitems
+                       class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "showApproveAllAgendaitemsWarning"}}
+                    >
+                      {{t "approve-all-agendaitems"}}
+                    </a>
+                  </li>
+                {{/if}}
                 {{#if currentSessionService.isEditor}}
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
@@ -382,6 +394,21 @@
     <WebComponents::VlLoader @text={{loaderText}} />
   </WebComponents::VlModal>
 {{/if}}
+
+{{#if isApprovingAllAgendaitems}}
+  <WebComponents::VlModalVerify
+    @title={{t "approve-all-agendaitems"}}
+    @buttonType="warning"
+    @verifyButtonText={{t "approve"}}
+    @message={{t
+      "approve-all-agendaitems-warning-message"
+      amountOfAgendaitemsNotFormallyOk=(await amountOfAgendaitemsNotFormallyOk)
+    }}
+    @cancel={{action "cancel"}}
+    @verify={{action "approveAllAgendaitems"}}
+  />
+{{/if}}
+
 {{#if isShowingWarningOnClose}}
   <WebComponents::VlModalVerify
       @isOverlay={{true}}

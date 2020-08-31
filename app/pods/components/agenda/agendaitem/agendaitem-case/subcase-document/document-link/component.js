@@ -125,7 +125,6 @@ export default class DocumentLink extends Component {
   async addDocumentToSubcase(documents, subcase) {
     await subcase.hasMany('documentVersions').reload();
     await this.attachDocumentsToModel(documents, subcase);
-    setNotYetFormallyOk(subcase);
     return await subcase.save();
   }
 

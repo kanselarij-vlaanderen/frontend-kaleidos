@@ -26,11 +26,11 @@ export default Component.extend({
     return model.save().then((model) => model.reload());
   },
 
-  richtext: computed('editor.currentTextContent', function() {
+  richtext: computed('editor.htmlContent', function() {
     if (!this.editor) {
       return;
     }
-    return this.editor.rootNode.innerHTML.htmlSafe();
+    return this.editor.htmlContent;
   }),
 
   actions: {
@@ -78,7 +78,8 @@ export default Component.extend({
     descriptionUpdated(val) {
       this.set('initValue', this.richtext + val);
     },
-    async handleRdfaEditorInit(editorInterface) {
+    handleRdfaEditorInit(editorInterface) {
+      editorInterface.setHtmlContent(this.get('initValue'));
       this.set('editor', editorInterface);
     },
 
