@@ -126,7 +126,11 @@ export default Component.extend({
             document.set('type', documentType);
           }
           document.set(this.modelToAddDocumentVersionTo, item);
-          item.set('report', document);
+          if (this.modelToAddDocumentVersionTo === 'signedMinutes') {
+            item.set('signedDocument', document);
+          } else if (this.modelToAddDocumentVersionTo === 'agendaItemTreatment') {
+            item.set('report', document);
+          }
         })
       );
       await item.save();
