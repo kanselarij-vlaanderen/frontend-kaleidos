@@ -3,6 +3,11 @@
     document=(await item.signedDocument)
     item=(await item.signedDocument)
   }}
+{{else if (await item.report)}}
+  {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+    document=(await item.report)
+    item=(await item.report)
+  }}
 {{else if (await item)}}
   {{#if currentSession.isEditor}}
     <button type="button" class="vl-button vl-button--tertiary"
