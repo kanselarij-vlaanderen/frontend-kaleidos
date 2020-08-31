@@ -107,6 +107,7 @@ Router.map(function() {
     this.route('panels');
     this.route('pills');
     this.route('typography');
+    this.route('selects');
   });
 
   this.route('search', { path: '/zoeken', }, function() {
