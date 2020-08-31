@@ -29,8 +29,8 @@ context('KB: Edit content of news-item', () => {
     cy.get(agenda.item.news.themesSelector).contains('Sport')
       .click();
     cy.route('POST', '/newsletter-infos').as('newsletterInfosPost');
-    cy.get(newsletter.editSave).click();
-    cy.wait('@newsletterInfosPost');
+    cy.get(newsletter.editSave).click()
+      .wait('@newsletterInfosPost');
 
     cy.contains(decisionText);
   });

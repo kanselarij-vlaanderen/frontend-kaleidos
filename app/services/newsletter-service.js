@@ -110,8 +110,8 @@ export default Service.extend({
             const themes = await previousNewsItem.get('themes');
             news.set('themes', themes);
           }
-        } catch (e) {
-          console.log(e);
+        } catch (error) {
+          console.log(error);
         }
       }
       return news;
