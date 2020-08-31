@@ -23,7 +23,6 @@ export default Model.extend({
     inverse: null,
   }),
   decisions: hasMany('decision'),
-  cases: hasMany('case'),
   meetingsAttended: hasMany('meeting-record'),
   approvals: hasMany('approval'),
   subcases: hasMany('subcase', {
