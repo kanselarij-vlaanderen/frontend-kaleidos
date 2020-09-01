@@ -21,16 +21,15 @@ export default Route.extend({
   },
 
   async model(params) {
-    const session = await this.modelFor('print-overviews');
-    const agenda = await this.modelFor(`print-overviews.${this.type}`);
+    const session = await this.modelFor('newsletter').meeting;
+    const agenda = await this.modelFor('newsletter').agenda;
     const agendaitems = await this.store.query('agendaitem', {
-      filter: {
-        agenda: {
-          id: agenda.get('id'),
-        },
-      },
-      include: 'mandatees',
+      'filter[agenda][:id:]': agenda.id,
+      'filter[show-as-remark]': params.definite ? undefined : false,
+      'filter[is-approval]': false,
+      include: 'mandatees,treatments.newsletter-info',
       sort: 'priority',
+      'page[size]': 300,
     });
     const announcements = this.filterAnnouncements(agendaitems.filter((agendaitem) => agendaitem.showAsRemark), params);
 
@@ -77,9 +76,8 @@ export default Route.extend({
     }
     const newsLetterByIndex = await Promise.all(agendaitems.map(async(agendaitem) => {
       try {
-        const agendaActivity = await agendaitem.get('agendaActivity');
-        const subcase = await agendaActivity.get('subcase');
-        const newsletterInfo = await subcase.get('newsletterInfo');
+        const agendaItemTreatment = await agendaitem.get('treatments').firstObject;
+        const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
         return newsletterInfo.inNewsletter;
       } catch (exception) {
         console.warn('An exception occurred: ', exception);

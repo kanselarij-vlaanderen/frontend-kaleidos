@@ -3,6 +3,11 @@
     document=(await meetingRecordOrDecision.signedDocument)
     subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.signedDocument)
   }}
+{{else if (await meetingRecordOrDecision.report)}}
+  {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
+    document=(await meetingRecordOrDecision.report)
+    item=(await meetingRecordOrDecision.report)
+  }}
 {{else if (await meetingRecordOrDecision)}}
   {{#if currentSession.isEditor}}
     <button type="button" class="vl-button vl-button--tertiary"

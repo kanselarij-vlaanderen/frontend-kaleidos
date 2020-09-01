@@ -32,7 +32,7 @@ export default Component.extend({
     } = this;
     if (modelToAddDocumentVersionTo === 'signedMinutes') {
       return this.store.findRecord('document-type', CONFIG.minuteDocumentTypeId);
-    } if (modelToAddDocumentVersionTo === 'signedDecision') {
+    } else if (modelToAddDocumentVersionTo === 'agendaItemTreatment') {
       return this.store.findRecord('document-type', CONFIG.decisionDocumentTypeId);
     }
     return null;
@@ -127,7 +127,11 @@ export default Component.extend({
             document.set('type', documentType);
           }
           document.set(this.modelToAddDocumentVersionTo, meetingRecordOrDecision);
-          meetingRecordOrDecision.set('signedDocument', document);
+          if (this.modelToAddDocumentVersionTo === 'signedMinutes') {
+            meetingRecordOrDecision.set('signedDocument', document);
+          } else if (this.modelToAddDocumentVersionTo === 'agendaItemTreatment') {
+            meetingRecordOrDecision.set('report', document);
+          }
         })
       );
       await meetingRecordOrDecision.save();

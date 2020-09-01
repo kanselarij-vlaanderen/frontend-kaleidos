@@ -14,4 +14,13 @@ export default Component.extend({
     return this.definite === 'false';
   }),
 
+  actions: {
+    stopEditing() {
+      this.set('isEditing', false);
+    },
+    startEditing() {
+      this.set('isEditing', true);
+    },
+  },
+
 });

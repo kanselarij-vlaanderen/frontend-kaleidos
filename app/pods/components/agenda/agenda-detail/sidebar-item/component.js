@@ -16,11 +16,13 @@ export default class SidebarItem extends Component {
   @service('current-session') currentSessionService;
   @service agendaService;
   @service toaster;
+  @service router;
 
   @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
   @alias('sessionService.currentAgenda') currentAgenda;
   @alias('args.agendaitem.checkAdded') isNew;
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
+  @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
   hideLabel = true;
 

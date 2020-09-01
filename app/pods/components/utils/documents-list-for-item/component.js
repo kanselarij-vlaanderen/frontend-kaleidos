@@ -24,7 +24,7 @@ export default class DocumentListForItem extends Component {
       if (this.isShowingAll) {
         return this.agendaitemOrSubcase.documents;
       }
-      return this.agendaitemOrSubcase.documents.slice(0, 20);
+      return this.agendaitemOrSubcase.documents;
     }
     return null;
   }

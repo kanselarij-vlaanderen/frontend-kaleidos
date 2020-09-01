@@ -3,7 +3,7 @@
 import * as alert from '../../../../selectors/system-wide/alert.selectors';
 import * as systemAlert from '../../../../selectors/settings/system-alert.selectors';
 
-const ALERT_POLL_INTERVAL = 60000;
+const ALERT_POLL_INTERVAL = 70000;
 
 context('Settings: Create a system-alert and verify if it gets shown and closes', () => {
   before(() => {

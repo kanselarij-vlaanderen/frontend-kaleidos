@@ -190,7 +190,6 @@ export default Component.extend({
   async addDocumentToSubcase(documents, subcase) {
     await subcase.hasMany('documentVersions').reload();
     await this.attachDocumentsToModel(documents, subcase);
-    setNotYetFormallyOk(subcase);
     return await subcase.save();
   },
 

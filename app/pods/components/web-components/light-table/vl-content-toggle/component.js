@@ -25,15 +25,6 @@ export default Component.extend({
       if (key === 'forPress') {
         itemToUpdate = row.content;
         itemToUpdate.set(`${this.key}`, (await this.value));
-      } else if (key === 'agendaActivity.subcase.newsletterInfo.inNewsletter') {
-        const agendaActivity = await row.content.get('agendaActivity');
-        const subcase = await agendaActivity.get('subcase');
-        itemToUpdate = await subcase.get('newsletterInfo');
-        if (itemToUpdate) {
-          itemToUpdate.set('inNewsletter', (await this.value));
-        } else {
-          itemToUpdate = await this.newsletterService.createNewsItemForSubcase(subcase, row, this.value);
-        }
       }
       if (itemToUpdate) {
         await itemToUpdate.save();

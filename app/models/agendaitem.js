@@ -33,7 +33,7 @@ export default ModelWithModifier.extend({
   shortTitle: attr('string'),
   title: attr('string'),
   formallyOk: attr('string'),
-  isApproval: attr('boolean'),
+  isApproval: attr('boolean'), // isGoedkeuringVanDeNotulen
   explanation: attr('string'),
   // More information: https://github.com/kanselarij-vlaanderen/kaleidos-frontend/pull/469.
 
@@ -41,6 +41,9 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
   agendaActivity: belongsTo('agenda-activity', {
+    inverse: null,
+  }),
+  treatments: hasMany('agenda-item-treatment', {
     inverse: null,
   }),
   meetingRecord: belongsTo('meeting-record'),
