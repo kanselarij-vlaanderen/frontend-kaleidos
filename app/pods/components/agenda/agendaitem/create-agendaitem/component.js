@@ -47,6 +47,7 @@ export default Component.extend(DataTableRouteMixin, {
     }
     return options;
   }),
+  onCreate: null, // argument. Function that is triggered after agenda-item creation.
 
   get pageParam() {
     return this.page;
@@ -200,14 +201,6 @@ export default Component.extend(DataTableRouteMixin, {
       }
     },
 
-    reloadRoute(id) {
-      this.reloadRoute(id);
-    },
-
-    reloadRouteWithRefreshId(id) {
-      this.reloadRouteWithRefreshId(id);
-    },
-
     async addSubcasesToAgenda() {
       this.set('loading', true);
       const {
@@ -244,7 +237,9 @@ export default Component.extend(DataTableRouteMixin, {
         this.set('sessionService.selectedAgendaItem', null);
         const anyAddedSubcase = subcasesToAdd.get('firstObject');
         const newAgendaitem = await anyAddedSubcase.get('latestAgendaItem');
-        this.reloadRouteWithRefreshId(newAgendaitem.id);
+        if (this.onCreate) {
+          this.onCreate(newAgendaitem.id);
+        }
       });
     },
   },
