@@ -44,9 +44,9 @@
       </div>
     </div>
   </div>
-  {{#if this.mySortedDocuments }}
+  {{#if this.mySortedDocuments}}
     <div class="vlc-document-card__more">
-      <div class="js-vl-accordion {{openClass}}">
+      <div class="js-vl-accordion {{this.openClass}}">
         <button class="vl-toggle vl-link vl-link--bold"
                 type="button"
           {{action this.showVersions}}
@@ -61,7 +61,7 @@
               {{#each this.reverseSortedDocumentVersions as |documentVersion|}}
                 {{web-components/vl-document
                   documentVersion=documentVersion
-                  item=item
+                  item=@item
                 }}
               {{/each}}
             </div>

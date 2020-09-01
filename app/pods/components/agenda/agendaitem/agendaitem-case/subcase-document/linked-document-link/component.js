@@ -38,6 +38,9 @@ export default class linkedDocumentLink extends Component {
   // TODO: DUPLICATE CODE IN edit-document-version/component.js
   mySortedDocumentVersions() {
     const itemVersionIds = {};
+    if (!this.args.item && !this.args.documentContainer) {
+      return false;
+    }
     const versions = this.args.item.linkedDocumentVersions;
     if (versions) {
       versions.map((item) => {
