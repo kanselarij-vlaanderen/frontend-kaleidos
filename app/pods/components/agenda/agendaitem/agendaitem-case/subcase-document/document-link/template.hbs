@@ -91,7 +91,7 @@
               {{input
                 type="text"
                 class="vl-input-field vl-input-field--block"
-                value=nameBuffer
+                value=this.nameBuffer
               }}
               <button
                 class="vl-button vl-button--link vl-button--icon"
@@ -144,7 +144,7 @@
   </div>
   {{#if this.mySortedDocuments}}
     <div class="vlc-document-card__more">
-      <div class="js-vl-accordion {{openClass}}">
+      <div class="js-vl-accordion {{this.openClass}}">
         <button
           class="vl-toggle vl-link vl-link--bold"
           type="button"
@@ -178,7 +178,7 @@
     @isOverlay={{true}}
     @title={{t "new-document-version"}}>
     <div class="vl-modal-dialog__content">
-      {{#if (not uploadedFile)}}
+      {{#if (not this.uploadedFile)}}
         <FileUploader @multipleFiles={{false}} @uploadedFileAction={{action this.add}}/>
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
@@ -208,7 +208,7 @@
       @disableSave={{not (and this.uploadedFile this.documentInCreation.file.filename)}} />
   </WebComponents::VlModal>
 {{/if}}
-{{#if isVerifyingDelete}}
+{{#if this.isVerifyingDelete}}
   <WebComponents::VlModalVerify
     @title={{t "document-delete"}}
     @message={{t "delete-document-message"}}
