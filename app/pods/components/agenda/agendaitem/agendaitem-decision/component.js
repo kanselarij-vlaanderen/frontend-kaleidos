@@ -7,38 +7,41 @@ export default class AgendaItemDecisionComponent extends Component {
   @service currentSession;
 
   @tracked isEditing = false;
-
   @tracked isVerifyingDelete = null;
+  @tracked treatmentToDelete = null;
 
-  @tracked decisionToDelete = null;
-
-  get decision() {
-    return this.args.decision;
+  get treatment() {
+    return this.args.treatment;
   }
 
   @action
-  toggleIsEditing() {
-    this.isEditing = !this.isEditing;
+  openEditingWindow() {
+    this.isEditing = true;
   }
 
   @action
-  promptDeleteDecision(decision) {
-    this.decisionToDelete = decision;
+  closeEditingWindow() {
+    this.isEditing = false;
+  }
+
+  @action
+  promptDeleteTreatment(treatment) {
+    this.treatmentToDelete = treatment;
     this.isVerifyingDelete = true;
   }
 
   @action
-  async deleteDecision() {
-    await this.decisionToDelete.destroyRecord();
-    if (this.args.onDeleteDecision) {
-      await this.args.onDeleteDecision(this.decisionToDelete);
+  async deleteTreatment() {
+    await this.treatmentToDelete.destroyRecord();
+    if (this.args.onDeleteTreatment) {
+      await this.args.onDeleteTreatment(this.treatmentToDelete);
     }
     this.isVerifyingDelete = false;
   }
 
   @action
   cancel() {
-    this.decisionToDelete = null;
+    this.treatmentToDelete = null;
     this.isVerifyingDelete = false;
   }
 }

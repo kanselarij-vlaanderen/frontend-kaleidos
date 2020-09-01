@@ -2,29 +2,35 @@
 // / <reference types="Cypress" />
 
 import newsletter from '../../../selectors/newsletter.selector';
-import utils from '../../../selectors/utils.selectors';
+import agenda from '../../../selectors/agenda.selectors';
 
-context('KB: Edit decision in newsletter-info', () => {
+context('KB: Edit content of news-item', () => {
   before(() => {
     cy.server();
     cy.login('Admin');
   });
 
-  it('Should edit decision in newsletter-info', () => {
+  it('Should be unexistent to start with, be created, edited, theme selected and saved', () => {
     const decisionText = 'Dit is een leuke beslissing';
-    cy.visit('/overzicht/5DD7CDA58C70A70008000001/kort-bestek/5DD7CDA58C70A70008000002/agendapunten');
-    cy.get('table > tbody').get('.lt-body')
-      .should('contain.text', 'Nog geen kort bestek voor dit agendapunt.')
-      .click();
+    cy.visit('/vergadering/5DD7CDA58C70A70008000001/kort-bestek');
+    cy.get('table > tbody', {
+      timeout: 20000,
+    }).children()
+      .as('rows');
+    cy.get('@rows').eq(0)
+      .within(() => {
+        cy.contains('Nog geen kort bestek voor dit agendapunt.');
+        cy.get('.vl-vi-pencil').click();
+      });
 
     // cy.get('.editor__paper').clear(); //TODO triggers error:  "Cannot read property 'nodeType" of null from RDFA editor
     cy.get('.say-editor__inner').type(decisionText);
 
-    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
-    cy.get(utils.checkboxLabel).eq(0)
+    cy.get(agenda.item.news.themesSelector).contains('Sport')
       .click();
-    cy.get(newsletter.editSave).click();
-    cy.wait('@newsletterInfosPatch');
+    cy.route('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.get(newsletter.editSave).click()
+      .wait('@newsletterInfosPost');
 
     cy.contains(decisionText);
   });

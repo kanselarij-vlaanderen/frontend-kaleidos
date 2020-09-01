@@ -2,25 +2,23 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
-  async beforeModel() {
-    const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    const agendaActivity = await agendaitem.get('agendaActivity');
-    if (!agendaActivity) {
-      this.transitionTo('agenda.agendaitems.agendaitem.index');
-    }
-    const subcase = await agendaActivity.subcase;
-    subcase.hasMany('decisions').reload();
+  async model() {
+    const agendaItem = await this.modelFor('agenda.agendaitems.agendaitem');
+    return await this.store.query('agenda-item-treatment', {
+      'filter[agendaitem][:id:]': agendaItem.id,
+      include: 'report',
+    });
   }
 
   async setupController(controller, model) {
     super.setupController(...arguments);
-    const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    const agendaActivity = await agendaitem.get('agendaActivity');
-    const subcase = await agendaActivity.subcase;
-    const decisions = await subcase.get('decisions');
+    const agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
     controller.set('agendaitem', agendaitem);
-    controller.set('subcase', subcase);
-    controller.set('decisions', decisions);
+    const agendaActivity = await agendaitem.get('agendaActivity');
+    if (agendaActivity) { // Some items don't have a subcase nor a "put on agenda"-activity
+      const subcase = await agendaActivity.subcase;
+      controller.set('subcase', subcase);
+    }
     controller.set('model', model);
   }
 

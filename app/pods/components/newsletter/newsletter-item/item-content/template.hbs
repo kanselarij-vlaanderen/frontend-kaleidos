@@ -9,15 +9,16 @@
           {{newsletterInfo.title}}
         {{/if}}
       </h4>
-      {{#if 
-        (and 
-          currentSession.isEditor 
+      {{!-- No possibility to create a new newsletterInfo when not existent yet --}}
+      {{#if
+        (and
+          currentSession.isEditor
           newsletterInfo
         )
       }}
         <div class="vl-u-display-flex vlc-u-flex-space-between">
           <div class="vl-u-spacer-extended-left-s">
-            <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+            <a href="" class="vl-link" {{action "startEditing"}}>
               {{t "edit"}}
             </a>
           </div>
@@ -71,18 +72,20 @@
   </div>
 </div>
 {{#if allowEditing}}
-  <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
-    {{await newsletterInfo.displayRemark}}
-  </p>
+  {{#if (await newsletterInfo.remark)}}
+    <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+      {{t "remark"}}: {{await newsletterInfo.remark}}
+    </p>
+  {{/if}}
 {{/if}}
-{{#if 
+{{#if
   (gt (await newsletterInfo.themes.length) 0)
 }}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-spacer-extended-top-s">
       <ul class="newsletter-themes vlc-u-no-padding vlc-u-no-margin">
-        {{#each 
-          (await newsletterInfo.themes) 
+        {{#each
+          (await newsletterInfo.themes)
         as |theme|
         }}
           <li class="vl-pill">
