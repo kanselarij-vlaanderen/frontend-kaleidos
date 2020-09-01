@@ -10,6 +10,7 @@
   {{agenda/agendaitem/agendaitem-case/agendaitem-titles-edit
     agendaitem=agendaitem
     isEditing=isEditing
+    newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
     subcase=(await subcase)
   }}
 {{/if}}

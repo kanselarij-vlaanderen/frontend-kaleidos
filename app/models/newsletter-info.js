@@ -22,7 +22,7 @@ export default ModelWithModifier.extend({
   publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
-  subcase: belongsTo('subcase'),
+  agendaItemTreatment: belongsTo('agenda-item-treatment'),
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
@@ -33,16 +33,9 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  displayRemark: computed('remark', 'intl', function() {
-    const remark = this.get('remark');
-    if (remark && remark !== '') {
-      return `${this.intl.t('remark')}: ${this.get('remark')}`;
-    }
-    return '';
-  }),
-
-  newsletterProposal: computed('mandateeProposal', async function() {
-    const subcase = await this.get('subcase');
+  newsletterProposal: computed('agendaItemTreatment', async function() {
+    const treatment = await this.get('agendaItemTreatment');
+    const subcase = await treatment.get('subcase');
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');
     let proposalText = this.intl.t('proposal-text');

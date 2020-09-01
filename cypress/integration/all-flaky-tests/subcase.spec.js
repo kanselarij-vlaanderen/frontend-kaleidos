@@ -66,7 +66,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
 
     cy.changeSubcaseAccessLevel(false, SubcaseTitleShort, true, 'Intern Overheid', SubcaseTitleShort, 'Cypress test nieuwere lange titel');
-    cy.addSubcaseMandatee(1, 0, 0, 'Vlaams minister voor onderwijs');
+    cy.addSubcaseMandatee(1, 0, 0, 'Vlaams minister voor onderwijs'); // TODO: awaits @iseCodes that doesn't come
     cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -203,7 +203,6 @@ context('Subcase tests', () => {
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();
     cy.wait('@getMeetingsRequest');
-    cy.wait('@getAgendas');
     cy.get(agenda.confidentialityIcon).should('exist');
 
     // Click the "wijzigen link.
@@ -239,8 +238,11 @@ context('Subcase tests', () => {
     cy.wait('@getAgenda');
 
     // Are there Themes in this agenda? Should be none
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
-    cy.get(agenda.item.themes).contains('Er zijn nog geen thema\'s toegevoegd.');
+    cy.openAgendaItemKortBestekTab(SubcaseTitleShort); // TODO: doesn't find this item it's looking for in the agenda it just openend
+    cy.route('GET', '**/themes').as('getAgendaItemThemes');
+    cy.get(agenda.item.news.editLink).click();
+    cy.wait('@getAgendaItemThemes');
+    cy.contains('Annuleren').click();
 
     // open themes ediging pane.
     cy.route('GET', '**/themes').as('getAgendaItemThemes');
@@ -260,9 +262,9 @@ context('Subcase tests', () => {
       .click();
 
     // Save this stuff.
-    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
+    cy.route('POST', '/newsletter-infos').as('newsletterInfosPost');
     cy.get(agenda.item.news.saveButton).click()
-      .wait('@newsletterInfosPatch');
+      .wait('@newsletterInfosPost');
 
     // Assert the save is done.
     cy.get(agenda.item.themes).contains('Wonen');
@@ -337,10 +339,8 @@ context('Subcase tests', () => {
 
     // "Go to agendaItem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
-    cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();
     cy.wait('@getMeetingsRequest');
-    cy.wait('@getAgendas');
 
     cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
 

@@ -9,20 +9,21 @@
       type="button"
       class="vl-button vl-button--secondary vl-button--icon-before"
       data-test-add-decision
-      {{on "click" this.addDecision}}
+      {{on "click" this.addTreatment}}
     >
       <i class="vl-button__icon vl-button__icon--before ki-add"></i>
       {{t "add-decision"}}
     </button>
   </div>
 {{/if}}
-{{#each this.decisions as |decision|}}
+{{#each this.treatments as |treatment|}}
   <div class ="vl-u-spacer">
+    {{!-- As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
+    we need to ensure at least 1 treatment for a relationship path to newsletterInfo --}}
     <Agenda::Agendaitem::AgendaitemDecision
-      @subcase={{this.subcase}}
-      @decision={{decision}}
-      @agendaitem={{this.agendaitem}}
-      @onDeleteDecision={{this.refresh}}
+      @treatment={{treatment}}
+      @onDeleteTreatment={{this.refresh}}
+      @allowDelete={{gt this.treatments.length 1}}
     />
   </div>
 {{/each}}

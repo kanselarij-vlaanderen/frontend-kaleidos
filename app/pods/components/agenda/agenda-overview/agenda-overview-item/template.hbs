@@ -11,7 +11,11 @@
     </h4>
     <div class="vlc-agenda-items__text">
       <h4 class="vlc-agenda-items__subject">
-        <a href="javascript://" onclick={{action "openAgendaItem"}} data-test-agenda-overview-sub-item>
+        <LinkTo
+          data-test-agenda-overview-sub-item
+          @route="agenda.agendaitems.agendaitem"
+          @model={{@agendaitem.id}}
+        >
           <pre>
             {{#if @agendaitem.shortTitle}}
               {{@agendaitem.shortTitle}}
@@ -19,7 +23,7 @@
               {{@agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
             {{/if}}
           </pre>
-        </a>
+        </LinkTo>
       </h4>
 
       {{#if (not aboutToDelete)}}
@@ -66,7 +70,7 @@
                     </p>
                   {{/if}}
                 {{else}}
-                  <Components::Utils::FormallyOkSelector
+                  <Utils::FormallyOkSelector
                           @formallyOk={{formallyOk}}
                           @isLoading={{isLoading}}
                           @hideLabel={{hideLabel}}
@@ -81,7 +85,7 @@
                 {{#if renderDetails}}
                   {{#if (await @agendaitem.documents)}}
                     <div class="vlc-hr"></div>
-                    <Components::Utils::DocumentsListForItem
+                    <Utils::DocumentsListForItem
                       @isClickable={{true}}
                       @item={{@agendaitem}}
                       @document={{@agendaitem.document}}
@@ -89,7 +93,7 @@
                   {{else}}
                     {{#if (await @agendaitem.documentNames)}}
                       <div class="vlc-hr"></div>
-                      <Components::Utils::DocumentsListLazyLoaded
+                      <Utils::DocumentsListLazyLoaded
                        @documentNames={{@agendaitem.documentNames}}
                       />
                     {{/if}}
@@ -97,7 +101,7 @@
                 {{else}}
                   {{#if (await @agendaitem.documentNames)}}
                     <div class="vlc-hr"></div>
-                    <Components::Utils::DocumentsListLazyLoaded
+                    <Utils::DocumentsListLazyLoaded
                             @documentNames={{@agendaitem.documentNames}}
                     />
                   {{/if}}
@@ -108,7 +112,7 @@
           {{#if (not @isEditingOverview)}}
             {{#if currentSessionService.isViewer}}
               {{#if
-                (or subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (and @agendaitem.showAsRemark (not @agendaitem.showInNewsletter)))))
+                (or subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (not newsletterInfo.inNewsletter))))
               }}
                 <div class="vlc-hr"></div>
               {{/if}}
@@ -122,7 +126,7 @@
                 </div>
                 <div class="vlc-agenda-items__icons">
                   <div class="vl-u-display-flex vlc-agenda-items__icons">
-                    {{#if (and @agendaitem.showAsRemark (not @agendaitem.showInNewsletter))}}
+                    {{#if (not newsletterInfo.inNewsletter)}}
                       <i class="vl-button__icon ki-hide vlc-u-opacity-50 vl-u-spacer-extended-left-s opacity-lighter"></i>
                     {{/if}}
                     {{#if (await @agendaitem.checkAdded)}}

@@ -22,7 +22,7 @@ export default Model.extend({
   iseCodes: hasMany('ise-code', {
     inverse: null,
   }),
-  decisions: hasMany('decision'),
+
   cases: hasMany('case'),
   meetingsAttended: hasMany('meeting-record'),
   approvals: hasMany('approval'),

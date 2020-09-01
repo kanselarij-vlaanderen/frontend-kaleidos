@@ -165,4 +165,37 @@ context('Agenda tests', () => {
       cy.get('input[type="number"]').should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });
   });
+
+  it('Should add agendaitems to an agenda and set all of them to formally OK', () => {
+    const testId = `testId=${currentTimestamp()}: `;
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks');
+
+    const case1TitleShort = `${testId}Cypress test dossier 1`;
+    const type1 = 'Nota';
+    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
+    const subcase1TitleLong = 'dit is de lange titel\n\n';
+    const subcase1Type = 'In voorbereiding';
+    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    const case2TitleShort = `${testId}Cypress test dossier 2`;
+    const type2 = 'Nota';
+    const newSubcase2TitleShort = `${testId} korte titel`;
+    const subcase2TitleLong = `${testId} lange titel`;
+    const subcase2Type = 'In voorbereiding';
+    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Zaal oxford bij Cronos Leuven').then((result) => {
+      cy.createCase(false, case1TitleShort);
+      cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
+      cy.openSubcase(0);
+      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
+      cy.createCase(false, case2TitleShort);
+      cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
+      cy.openSubcase(0);
+      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.setAllItemsFormallyOk(3);
+    });
+  });
 });

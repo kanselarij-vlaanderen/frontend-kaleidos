@@ -12,6 +12,10 @@ import {
 import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
 import {
+  setAgendaitemFormallyOk,
+  getListOfAgendaitemsThatAreNotFormallyOk
+} from 'fe-redpencil/utils/agenda-item-utils';
+import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob
@@ -39,6 +43,9 @@ export default Component.extend(FileSaverMixin, {
   isDeletingAgenda: false,
   isLockingAgenda: false,
   isShowingAgendaActions: false,
+  onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
+  onApproveAgenda: null, // argument. Function to execute after approving an agenda.
+  isApprovingAllAgendaitems: false,
   isShowingWarningOnClose: false,
 
   currentAgendaItems: alias('sessionService.currentAgendaItems'),
@@ -58,6 +65,12 @@ export default Component.extend(FileSaverMixin, {
       return false;
     }
     return true;
+  }),
+
+  amountOfAgendaitemsNotFormallyOk: computed('currentAgendaItems.@each.formallyOk', async function() {
+    const isNotFormallyOk = (agendaitem) => agendaitem.formallyOk !== CONFIG.formallyOk;
+    const agendaitems = await this.currentAgenda.get('agendaitems');
+    return agendaitems.filter(isNotFormallyOk).length;
   }),
 
   currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function() {
@@ -219,6 +232,7 @@ export default Component.extend(FileSaverMixin, {
       this.set('showWarning', false);
       this.set('releasingDecisions', false);
       this.set('releasingDocuments', false);
+      this.set('isApprovingAllAgendaitems', false);
     },
 
     verify() {
@@ -315,6 +329,19 @@ export default Component.extend(FileSaverMixin, {
       }
     },
 
+    showApproveAllAgendaitemsWarning() {
+      this.set('isApprovingAllAgendaitems', true);
+    },
+
+    async approveAllAgendaitems() {
+      const agendaitemsFromAgenda = await this.currentAgenda.get('agendaitems');
+      const listOfNotFormallyOkagendaitems = getListOfAgendaitemsThatAreNotFormallyOk(agendaitemsFromAgenda);
+      listOfNotFormallyOkagendaitems.forEach((agendaitem) => {
+        setAgendaitemFormallyOk(agendaitem);
+      });
+      this.set('isApprovingAllAgendaitems', false);
+    },
+
     async unlockAgenda() {
       await this.createDesignAgenda();
     },
@@ -406,10 +433,6 @@ export default Component.extend(FileSaverMixin, {
       this.reloadRoute(id);
     },
 
-    reloadRouteWithRefreshId(id) {
-      this.reloadRouteWithRefreshId(id);
-    },
-
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
     },
@@ -446,14 +469,6 @@ export default Component.extend(FileSaverMixin, {
     this.loading();
   },
 
-  reloadRoute(id) {
-    this.reloadRouteWithNewAgenda(id);
-  },
-
-  reloadRouteWithRefreshId(id) {
-    this.reloadRouteWithNewAgendaitem(id);
-  },
-
   async approveAgenda(session) {
     if (this.get('isApprovingAgenda')) {
       return;
@@ -483,7 +498,9 @@ export default Component.extend(FileSaverMixin, {
           return newAgenda;
         })
         .then((newAgenda) => {
-          this.reloadRoute(newAgenda.get('id'));
+          if (this.onApproveAgenda) {
+            this.onApproveAgenda(newAgenda.get('id'));
+          }
         })
         .finally(() => {
           this.set('sessionService.selectedAgendaItem', null);
