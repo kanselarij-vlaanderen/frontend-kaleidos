@@ -228,7 +228,7 @@ export default class SubcaseDocuments extends Component {
 
     const documentContainers = await Promise.all(
       docs.map(async(doc) => {
-        doc = await doc.save();
+        await doc.save();
         const container = doc.get('documentContainer.content'); // TODO: cannot use .content
         container.set('documents', A([doc]));
         await container.save();
