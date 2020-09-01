@@ -14,6 +14,8 @@ export default class AgendaOverviewItem extends Component {
    * @selectAgendaItem={{action "selectAgendaItemAction"}}
    */
 
+  @service store;
+
   @service sessionService;
 
   @service('current-session') currentSessionService;
@@ -25,6 +27,8 @@ export default class AgendaOverviewItem extends Component {
   @alias('args.agendaitem.checkAdded') isNew;
 
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
+
+  @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
   hideLabel = true;
 
@@ -84,12 +88,5 @@ export default class AgendaOverviewItem extends Component {
   async setAction(item) {
     const uri = item.get('uri');
     this.args.setFormallyOkAction(uri);
-  }
-
-  @action
-  async openAgendaItem() {
-    if (!this.isEditingOverview && !this.isComparing) {
-      this.args.selectAgendaItem(this.args.agendaitem);
-    }
   }
 }

@@ -1,35 +1,27 @@
-{{utils/text-template
-  label=(t "agendaitem-decision")
-  type="decisions"
-  text=initValue
-  searchField="label"
-  descriptionUpdated=(action "descriptionUpdated")
-}}
-<div class="vlc-input-field vlc-input-field-block">
-  {{web-components/vl-form-label value=label}}
-  {{web-components/vl-rdfa-editor
-    handleRdfaEditorInit=(action "handleRdfaEditorInit")
-  }}
-</div>
-<div class="vlc-input-field vlc-input-field-block">
-  {{web-components/vl-form-label value=(t "decided")}}
-  {{web-components/vl-toggle value=approved}}
-</div>
-<div class="vlc-input-field-block">
-  {{utils/documents-selector-of-agendaitem
-    item=agendaitem
-    title=(t "documents-attached-to")
-    itemWithDocuments=(await item)
-    selectDocument=(action "selectDocument")
-  }}
-</div>
-<div class="vl-action-group vl-action-group--align-right">
-  <a href="" class="vl-link" {{action "cancelEditing"}}>
-    {{t "cancel"}}
-  </a>
-  {{web-components/vl-save-button
-    text=(t "save")
-    isLoading=isLoading
-    saveAction=(action "saveChanges")
-  }}
+<div class="vl-form__group vl-u-bg-porcelain">
+  {{!-- Editor with annotated decision  text will come somwhere around here in the future --}}
+  <div class="vlc-input-field vlc-input-field-block vl-u-spacer-extended-bottom"
+      data-test-decision-edit-power-select-container
+  >
+    <WebComponents::VlFormLabel @value={{t "result-decision"}}/>
+    <Decision::DecisionResultSelect
+      @selected={{this.treatment.decisionResultCode}}
+      @onChange={{this.changeDecisionResultCode}}
+    />
+  </div>
+  <div class="vl-action-group vl-action-group--align-right">
+    {{!-- TODO: replace by link-styled button once css available --}}
+    <a
+      href="javascript://"
+      class="vl-link"
+      {{on "click" this.cancelEdit}}
+    >
+      {{t "cancel"}}
+    </a>
+    <WebComponents::VlSaveButton
+      @text={{t "save"}}
+      @isLoading={{this.saveTreatment.isRunning}}
+      @saveAction={{perform this.saveTreatment}}
+    />
+  </div>
 </div>

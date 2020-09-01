@@ -9,7 +9,7 @@ export default Component.extend({
       this.toggleProperty('value');
       const action = this.get('valueChanged');
       if (action) {
-        return action(...arguments);
+        return action(this.value);
       }
     },
   },

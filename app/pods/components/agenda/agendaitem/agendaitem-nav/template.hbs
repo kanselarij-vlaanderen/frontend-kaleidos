@@ -34,7 +34,7 @@
   {{/if}}
   {{#if
     (or
-      (and this.currentSession.isEditor this.subcaseExists)
+      this.currentSession.isEditor
       (and @meetingIsConcluded this.decisionsExist)
     )
   }}
@@ -48,37 +48,35 @@
       </LinkTo>
     </li>
   {{/if}}
-  {{#if this.subcaseExists}} {{!-- Not the case for "simple" announcements --}}
-    {{#if
-      (or
-      this.currentSession.isEditor
-      (and @meetingIsConcluded this.meetingMinutesExist))
-    }}
-      <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-notes">
-        <LinkTo
-          class="vl-tab__link"
-          @route="agenda.agendaitems.agendaitem.minutes"
-          @activeClass="active"
-        >
-          {{capitalize (t "meeting-minutes")}}
-        </LinkTo>
-      </li>
-    {{/if}}
-    {{#if
-      (or
-      this.currentSession.isEditor
-      (and @meetingIsConcluded this.newsItemExists))
-    }}
-      <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-bestek">
-        <LinkTo
-          class="vl-tab__link"
-          @route="agenda.agendaitems.agendaitem.news-item"
-          @activeClass="active"
-        >
-          {{capitalize (t "newsletter")}}
-        </LinkTo>
-      </li>
-    {{/if}}
+  {{#if
+    (or
+    this.currentSession.isEditor
+    (and @meetingIsConcluded this.meetingMinutesExist))
+  }}
+    <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-notes">
+      <LinkTo
+        class="vl-tab__link"
+        @route="agenda.agendaitems.agendaitem.minutes"
+        @activeClass="active"
+      >
+        {{capitalize (t "meeting-minutes")}}
+      </LinkTo>
+    </li>
+  {{/if}}
+  {{#if
+    (or
+    this.currentSession.isEditor
+    (and @meetingIsConcluded this.newsItemExists))
+  }}
+    <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-bestek">
+      <LinkTo
+        class="vl-tab__link"
+        @route="agenda.agendaitems.agendaitem.news-item"
+        @activeClass="active"
+      >
+        {{capitalize (t "newsletter")}}
+      </LinkTo>
+    </li>
   {{/if}}
   {{#if
     (or

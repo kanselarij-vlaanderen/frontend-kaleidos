@@ -21,7 +21,7 @@ export default class AgendaDecisions extends Component {
   }
 
   @action
-  toggleIsEditing(decision) {
-    decision.toggleProperty('isEditing');
+  toggleIsEditing(treatment) {
+    treatment.toggleProperty('isEditing');
   }
 }
