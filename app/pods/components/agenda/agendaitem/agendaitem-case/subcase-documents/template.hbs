@@ -141,7 +141,7 @@
                   }}
                     <Utils::RadioDropdownComboSelect
                       @options={{this.documentTypes}}
-                      @onSelect={{fn this.chooseDocumentContainerType doc.documentContainer}}
+                      @onSelect={{fn this.chooseDocumentContainerType doc}}
                       @selected={{get
                         doc.documentContainer.type
                         "content"

@@ -216,7 +216,8 @@ export default class SubcaseDocuments extends Component {
 
   @action
   // eslint-disable-next-line class-methods-use-this
-  chooseDocumentContainerType(documentContainer, type) {
+  chooseDocumentContainerType(document, type) {
+    const documentContainer = document.get('documentContainer.content');
     documentContainer.type = type;
   }
 

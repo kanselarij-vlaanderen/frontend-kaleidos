@@ -3,7 +3,7 @@
   <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
     @agendaitem={{@agendaitem}}
     @subcase={{await this.subcase}}
-    @shouldShowDetails= {{or @agendaitem.showAsRemark (await @agendaitem.agendaActivity)}}
+    @shouldShowDetails={{or @agendaitem.showAsRemark (await @agendaitem.agendaActivity)}}
     @toggleIsEditing={{action this.toggleIsEditing}}
   />
 {{else}}

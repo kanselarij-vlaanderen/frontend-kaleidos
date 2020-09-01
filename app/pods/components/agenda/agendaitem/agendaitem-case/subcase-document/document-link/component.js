@@ -28,7 +28,7 @@ export default class DocumentLink extends Component {
   @tracked isVerifyingDelete = false;
   @tracked lastDocument = null;
   @tracked mySortedDocuments;
-  @tracked lastDocumentVersion = null
+  @tracked lastDocumentVersion = null;
 
   classNameBindings = ['aboutToDelete'];
   documentContainerToDelete = null;
