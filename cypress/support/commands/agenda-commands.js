@@ -629,7 +629,7 @@ function toggleShowChanges(refresh) {
 }
 
 /**
- * @description Checks if an agendaitem with a specific name exists on an agenda, 
+ * @description Checks if an agendaitem with a specific name exists on an agenda,
  * if you want to open the agendaitem at the same time, use cy.openDetailOfAgendaitem(agendaItemName)
  * @name agendaItemExists
  * @memberOf Cypress.Chainable#
