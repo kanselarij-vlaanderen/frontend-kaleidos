@@ -33,7 +33,7 @@
       @title={{t "signed-notes-add"}} />
   {{else}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-      @document={{await agendaitem.meetingRecord.signedDocument}}
+      @documentContainer={{await agendaitem.meetingRecord.signedDocument}}
       @item={{await agendaitem.meetingRecord.signedDocument}} />
   {{/if}}
 {{else}}

@@ -1,6 +1,6 @@
 {{#if (await item.signedDocument)}}
   {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=(await item.signedDocument)
+    documentContainer=(await item.signedDocument)
     item=(await item.signedDocument)
   }}
 {{else if (await item)}}

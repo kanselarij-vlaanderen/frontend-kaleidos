@@ -68,7 +68,7 @@
   {{/if}}
   {{#if this.decision.signedDocument}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-      @document={{await this.decision.signedDocument}}
+      @documentContainer={{await this.decision.signedDocument}}
       @item={{await this.decision.signedDocument}}
     />
   {{else}}

@@ -143,12 +143,14 @@ export default class DocumentLink extends Component {
   }
 
   get setupDocumentVersions() {
-    this.mySortedDocumentVersions();
-    return true;
+    return this.mySortedDocumentVersions();
   }
 
   mySortedDocumentVersions() {
     const itemVersionIds = {};
+    if (!this.args.item && !this.args.documentContainer) {
+      return false;
+    }
     const versions = this.args.item.documentVersions;
     if (versions) {
       versions.map((item) => {
@@ -162,6 +164,7 @@ export default class DocumentLink extends Component {
         this.lastDocumentVersion = this.mySortedDocuments.lastObject;
       }
     }
+    return true;
   }
 
   async getReverseSortedDocumentVersions() {
