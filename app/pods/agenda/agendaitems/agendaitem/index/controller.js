@@ -8,7 +8,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @service store;
 
-  @action
   async navigateToNeighbouringItem(agendaItem) {
     // try transitioning to previous or next item
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
@@ -20,14 +19,23 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       'page[size]': 1,
     });
     if (result.length) {
-      const isEditor = this.currentSession.isEditor;
-      const isDesignAgenda = this.agenda.isDesignAgenda;
-      const agendaItems = await this.agenda.agendaitems;
-      setAgendaItemsPriority(agendaItems, isEditor, isDesignAgenda);
       const neighbouringItem = result.firstObject;
       this.transitionToRoute('agenda.agendaitems.agendaitem', neighbouringItem.id);
     } else {
       this.transitionToRoute('agenda.agendaitems');
     }
+  }
+
+  async reassignPrioritiesForAgendaitems() {
+    const isEditor = this.currentSession.isEditor;
+    const isDesignAgenda = this.agenda.isDesignAgenda;
+    const agendaItems = await this.agenda.agendaitems;
+    setAgendaItemsPriority(agendaItems, isEditor, isDesignAgenda);
+  }
+
+  @action
+  async reassignPrioritiesAndNavigateToNeighbouringAgendaitem(agendaitem) {
+    await this.reassignPrioritiesForAgendaitems();
+    await this.navigateToNeighbouringItem(agendaitem);
   }
 }

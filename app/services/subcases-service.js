@@ -48,13 +48,14 @@ export default Service.extend({
     }) => data);
   },
 
-  processSubcasePhases(activities) {
+  async processSubcasePhases(activities) {
     // KAS-1425 sort activities? done in the micro service atm.
     if (typeof activities === 'string') {
       return null;
     }
     const phases = [];
-    activities.map((activityData) => {
+    for (let index = 0; index < activities.length; index++) {
+      const activityData = activities[index];
       if (activityData.startDatum) {
         phases.push({
           label: this.intl.t('activity-phase-proposed-for-agenda'), date: moment.utc(activityData.startDatum).toDate(),
@@ -69,31 +70,22 @@ export default Service.extend({
           phases.push({
             label: this.intl.t('activity-phase-approved-on-agenda'), date: geplandeStart,
           });
-          // TODO: Check triple equals
-          // eslint-disable-next-line eqeqeq
-          if (phaseData.postponed && phaseData.postponed == 'true') {
-            phases.push({
-              label: this.intl.t('activity-phase-postponed-on-agenda'), date: geplandeStart,
-            });
-            // TODO: Check triple equals
-            // eslint-disable-next-line eqeqeq
-            if (phaseData.approved && phaseData.approved == 'true') {
+          if (phaseData.decisionResultId) {
+            const drc = await this.store.findRecord('decision-result-code', phaseData.decisionResultId);
+            if (drc) {
               phases.push({
-                label: this.intl.t('activity-phase-postponed-is-decided'),
+                label: `${drc.label} ${this.intl.t('decision-activity-result')}`, date: geplandeStart,
               });
-            }
-          } else {
-            // TODO: Check triple equals
-            // eslint-disable-next-line eqeqeq
-            if (phaseData.approved && phaseData.approved == 'true') {
-              phases.push({
-                label: this.intl.t('activity-phase-decided-on-agenda'), date: geplandeStart,
-              });
+              if (drc.isPostponed) {
+                phases.push({
+                  label: this.intl.t('decision-activity-result-postponed'),
+                });
+              }
             }
           }
         }
       }
-    });
+    }
     return phases;
   },
 
