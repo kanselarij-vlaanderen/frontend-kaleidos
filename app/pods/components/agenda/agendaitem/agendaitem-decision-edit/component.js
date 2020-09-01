@@ -1,7 +1,5 @@
 import Component from '@glimmer/component';
-import {
-  computed, action
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
@@ -18,14 +16,6 @@ export default class AgendaItemDecisionEditComponent extends Component {
       })
     );
     return model.save().then((model) => model.reload());
-  }
-
-  @computed('editor.currentTextContent')
-  get richtext() {
-    if (!this.editor) {
-      return '';
-    }
-    return this.editor.rootNode.innerHTML.htmlSafe();
   }
 
   @action
@@ -48,15 +38,5 @@ export default class AgendaItemDecisionEditComponent extends Component {
       this.args.onCancel();
     }
     return this.treatment;
-  }
-
-  @action
-  descriptionUpdated(val) {
-    this.set('initValue', this.richtext + val);
-  }
-
-  @action
-  async handleRdfaEditorInit(editorInterface) {
-    this.set('editor', editorInterface);
   }
 }

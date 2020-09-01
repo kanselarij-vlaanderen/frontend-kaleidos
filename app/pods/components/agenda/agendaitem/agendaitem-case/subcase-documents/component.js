@@ -144,7 +144,6 @@ export default Component.extend(
 
     async addDocumentsToSubcase(documents, subcase) {
       await this.attachDocumentsToModel(documents, subcase);
-      setNotYetFormallyOk(subcase);
       return await subcase.save();
     },
 

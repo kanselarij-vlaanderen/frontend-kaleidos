@@ -371,6 +371,25 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
 }
 
 /**
+ * @description Set all agendaitems to formallyOk
+ * @name setAllItemsFormallyOk
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function setAllItemsFormallyOk(amountOfFormallyOks) {
+  cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
+  // TODO set only some items to formally ok with list as parameter
+  cy.get(actionModel.showActionOptions).click();
+  cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
+  cy.get(actionModel.approveAllAgendaitems).click();
+  cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agenda items formeel wil goedkeuren`);
+  cy.get(modal.verify.save).click();
+  cy.wait('@patchAgendaitems');
+  cy.wait('@getModifiedByOfAgendaitems');
+}
+
+
+/**
  * @description Check all approval checkboxes of an agendaitem
  * @name approveCoAgendaitem
  * @memberOf Cypress.Chainable#
@@ -780,3 +799,4 @@ Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab)
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
 Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);
+Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);

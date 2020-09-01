@@ -24,7 +24,7 @@ context('KB: Edit content of news-item', () => {
       });
 
     // cy.get('.editor__paper').clear(); //TODO triggers error:  "Cannot read property 'nodeType" of null from RDFA editor
-    cy.get('.editor__paper').type(decisionText);
+    cy.get('.say-editor__inner').type(decisionText);
 
     cy.get(agenda.item.news.themesSelector).contains('Sport')
       .click();
