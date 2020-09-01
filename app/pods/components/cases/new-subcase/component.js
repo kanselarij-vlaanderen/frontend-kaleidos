@@ -56,38 +56,6 @@ export default Component.extend({
     return await subcase.save();
   },
 
-  async copyNewsletterInfo(subcase, newsletterInfo) {
-    const newsletterInfoToCreate = this.store.createRecord('newsletter-info', {
-      subcase,
-      text: newsletterInfo.get('text'),
-      subtitle: newsletterInfo.get('subtitle'),
-      title: newsletterInfo.get('title'),
-      richtext: newsletterInfo.get('richtext'),
-      finished: false,
-      inNewsletter: false,
-      mandateeProposal: null,
-      publicationDate: newsletterInfo.get('publicationDate'),
-      publicationDocDate: newsletterInfo.get('publicationDocDate'),
-      themes: await newsletterInfo.get('themes'),
-    });
-    return await newsletterInfoToCreate.save();
-  },
-
-  async copyDecisions(subcase, decisions) {
-    return Promise.all(
-      decisions.map((decision) => {
-        const newDecision = this.store.createRecord('decision', {
-          title: decision.get('title'),
-          shortTitle: decision.get('shortTitle'),
-          approved: false,
-          description: decision.get('description'),
-          subcase,
-        });
-        return newDecision.save();
-      })
-    );
-  },
-
   createSubcaseObject(newCase, newDate) {
     const {
       type, title, shortTitle, confidential, showAsRemark,
@@ -102,7 +70,6 @@ export default Component.extend({
       created: newDate,
       modified: newDate,
       isArchived: false,
-      formallyOk: false,
       agendaActivities: [],
     });
   },
@@ -115,15 +82,9 @@ export default Component.extend({
     let subcase = await this.createSubcaseObject(caze, date);
     subcase.set('subcaseName', this.subcaseName);
 
-    if (latestSubcase) {
+    if (latestSubcase) { // Previous "versions" of this subcase exist
       subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
-      await this.copyDecisions(subcase, await latestSubcase.get('decisions'));
-      const newsletterInfo = await latestSubcase.get('newsletterInfo');
-      if (newsletterInfo) {
-        await this.copyNewsletterInfo(subcase, newsletterInfo);
-      }
-    } else {
-      await this.newsletterService.createNewsItemForSubcase(subcase);
+    } else { // This is a plain new subcase
       subcase = await subcase.save();
     }
     await caze.hasMany('subcases').reload();

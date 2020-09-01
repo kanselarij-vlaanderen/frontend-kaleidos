@@ -68,13 +68,17 @@ Router.map(function() {
 
   this.route('newsletters', { path: '/kort-bestek', });
 
+  this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', }, function() {
+    this.route('index', { path: '/', });
+    this.route('print', { path: '/afdrukken', });
+  });
+
   this.route('print-overviews', { path: '/overzicht/:meeting_id', }, function() {
     this.route('notes', { path: '/notulen/:agenda_id', }, function() {
       this.route('overview', { path: '/klad', });
       this.route('agendaitems', { path: '/agendapunten', });
     });
     this.route('decisions', { path: '/beslissingen/:agenda_id', }, function() {
-      this.route('overview', { path: '/klad', });
       this.route('agendaitems', { path: '/agendapunten', });
     });
     this.route('press-agenda', { path: '/persagenda/:agenda_id', }, function() {
@@ -82,7 +86,6 @@ Router.map(function() {
       this.route('agendaitems', { path: '/agendapunten', });
     });
     this.route('newsletter', { path: '/kort-bestek/:agenda_id', }, function() {
-      this.route('agendaitems', { path: '/agendapunten', });
       this.route('overview', { path: '/klad', });
       this.route('loading', { path: '/laden', });
     });
@@ -104,6 +107,7 @@ Router.map(function() {
     this.route('panels');
     this.route('pills');
     this.route('typography');
+    this.route('selects');
   });
 
   this.route('search', { path: '/zoeken', }, function() {
