@@ -3,6 +3,7 @@ import Route from '@ember/routing/route';
 import { isEmpty } from '@ember/utils';
 import moment from 'moment';
 import search from 'fe-redpencil/utils/mu-search';
+import Snapshot from '../../../utils/snapshot';
 
 export default class AgendaitemSearchRoute extends Route {
   queryParams = {
@@ -25,6 +26,11 @@ export default class AgendaitemSearchRoute extends Route {
 
   textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'titlePress', 'textPress']);
 
+  constructor() {
+    super(...arguments);
+    this.lastParams = new Snapshot();
+  }
+
   postProcessDates(_case) {
     const {
       sessionDates,
@@ -42,7 +48,11 @@ export default class AgendaitemSearchRoute extends Route {
   model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = {...searchParams, ...filterParams}; // eslint-disable-line
+    this.lastParams.stageLive(params);
 
+    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
+      params.page = 0;
+    }
 
     const searchModifier = ':sqs:';
     const textSearchKey = this.textSearchFields.join(',');
@@ -80,6 +90,8 @@ export default class AgendaitemSearchRoute extends Route {
       }
     }
 
+    this.lastParams.commit();
+
     if (isEmpty(params.searchText)) {
       return [];
     }
@@ -93,5 +105,9 @@ export default class AgendaitemSearchRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
+
+    if (controller.page !== this.lastParams.committed.page) {
+      controller.page = this.lastParams.committed.page;
+    }
   }
 }
