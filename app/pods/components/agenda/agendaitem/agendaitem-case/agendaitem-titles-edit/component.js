@@ -9,31 +9,25 @@ import {
 import { trimText } from 'fe-redpencil/utils/trim-util';
 import { tracked } from '@glimmer/tracking';
 
-export default class SubcaseTitlesEdit extends Component {
+export default class AgendaitemTitlesEdit extends Component {
   @service store;
   @tracked isLoading= false;
   classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
-  propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation', 'showInNewsletter']);
-
+  propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
 
   @action
   async cancelEditing() {
     cancelEdit(this.args.agendaitem, get(this, 'propertiesToSet'));
+    if (this.args.newsletterInfo && this.args.newsletterInfo.get('hasDirtyAttributes')) {
+      this.args.newsletterInfo.rollbackAttributes();
+    }
     this.args.toggleIsEditing();
   }
 
   @action
   async saveChanges() {
     this.isLoading = true;
-    let shouldResetFormallyOk = false;
-
-    if (this.args.agendaitem.get('hasDirtyAttributes')) {
-      shouldResetFormallyOk = true;
-      // If only the showInNewsletter attribute has changed, the formally ok should not be reset
-      if ((Object.keys(this.args.agendaitem.changedAttributes()).length === 1) && this.args.agendaitem.changedAttributes().showInNewsletter) {
-        shouldResetFormallyOk = false;
-      }
-    }
+    const shouldResetFormallyOk = this.args.agendaitem.get('hasDirtyAttributes');
 
     const propertiesToSetOnAgendaitem = {
       title: trimText(this.args.agendaitem.title),
@@ -50,7 +44,10 @@ export default class SubcaseTitlesEdit extends Component {
     }
 
     try {
-      await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
+      await saveSubcaseTitles(this.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
+      if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
+        await this.newsletterInfo.save();
+      }
       this.isLoading = false;
       this.args.toggleIsEditing();
     } catch (exception) {

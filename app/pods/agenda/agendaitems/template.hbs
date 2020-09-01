@@ -13,20 +13,13 @@
           currentAgenda=(await model.currentAgenda)
           selectedAgendaItem=selectedAgendaItem
           filteredAgendaItems=filteredAgendaItems
-          selectAgendaItem=(action "selectAgendaItem")
-          refresh=(action "refresh")
-          overviewEnabled=isOverviewWindow
         }}
       {{else}}
         {{agenda/agenda-detail/sidebar
           announcements=sortedAnnouncements
           agendaitems=(await sortedAgendaitems)
           currentAgenda=(await model.currentAgenda)
-          selectedAgendaItem=selectedAgendaItem
           filteredAgendaItems=filteredAgendaItems
-          selectAgendaItem=(action "selectAgendaItem")
-          refresh=(action "refresh")
-          overviewEnabled=isOverviewWindow
         }}
       {{/if}}
     </div>

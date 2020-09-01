@@ -49,7 +49,8 @@ context('Table Row Click tests', () => {
     cy.wait('@getAgendaitems', {
       timeout: 12000,
     });
-    cy.url().should('contain', '/kort-bestek/');
+    cy.url().should('contain', '/vergadering/');
+    cy.url().should('contain', '/kort-bestek');
   });
 
   it('should filter the agenda-page and remove the active filter afterwards', () => {

@@ -11,6 +11,7 @@
     @agendaitem={{@agendaitem}}
     @isEditing={{@isEditing}}
     @subcase= {{await this.subcase}}
+    @newsletterInfo={{await @agendaitem.treatments.firstObject.newsletterInfo}}
     @toggleIsEditing={{action this.toggleIsEditing}}
   />
 {{/if}}

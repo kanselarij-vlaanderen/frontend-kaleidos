@@ -126,7 +126,6 @@
             {{moment-format (await this.lastDocumentVersion.created)}}
             {{t "at"}}
             {{moment-format (await this.lastDocumentVersion.created) "HH:mm"}}
-            {{moment-format (await this.lastDocumentVersion.created) "HH:mm"}}
             {{#if (await this.lastDocumentVersion.accessLevelLastModified)}}
               <div>
                 {{t "access-level-last-modified"}}
@@ -180,7 +179,7 @@
     @title={{t "new-document-version"}}>
     <div class="vl-modal-dialog__content">
       {{#if (not uploadedFile)}}
-        <Components::FileUploader @multipleFiles={{false}} @uploadedFileAction={{action this.add}}/>
+        <FileUploader @multipleFiles={{false}} @uploadedFileAction={{action this.add}}/>
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
@@ -206,7 +205,7 @@
       @isLoading={{this.isLoading}}
       @cancelAction={{action this.cancelUploadVersion}}
       @saveAction={{action this.saveDocument}}
-      @disableSave={{not this.uploadedFile}} />
+      @disableSave={{not (and this.uploadedFile this.documentInCreation.file.filename)}} />
   </WebComponents::VlModal>
 {{/if}}
 {{#if isVerifyingDelete}}
