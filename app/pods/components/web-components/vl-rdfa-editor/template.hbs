@@ -1,4 +1,15 @@
-{{rdfa-editor
+{{rdfa/rdfa-editor
+  class="rdfa-editor"
   rdfaEditorInit=(action "handleRdfaEditorInit")
-  value=(rdfa-html richtext)
+  profile="default"
+  editorOptions=(hash
+          showToggleRdfaAnnotations=null
+          showInsertButton=null
+          showRdfa=null
+          showRdfaHighlight=null
+          showRdfaHover=null)
+  toolbarOptions=(hash
+          showTextStyleButtons="true"
+          showListButtons="true"
+          showIndentButtons=null)
 }}

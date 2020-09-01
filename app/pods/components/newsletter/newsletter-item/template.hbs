@@ -5,15 +5,7 @@
     {{#if (await newsletterInfo.inNewsletter)}}
       {{newsletter/newsletter-item/item-content
         allowEditing=allowEditing
-        itemIndex=itemIndex
-        isEditing=isEditing
-        agendaitem=agendaitem
-        newsletterInfo=newsletterInfo
-      }}
-    {{else if agendaitem.showAsRemark}}
-      {{newsletter/newsletter-item/item-content
-        allowEditing=allowEditing
-        definite=definite
+        onStartEditing=(action "startEditing")
         itemIndex=itemIndex
         isEditing=isEditing
         agendaitem=agendaitem
@@ -23,6 +15,7 @@
   {{else}}
     {{newsletter/newsletter-item/item-content
       allowEditing=allowEditing
+      onStartEditing=(action "startEditing")
       definite=definite
       isEditing=isEditing
       agendaitem=agendaitem
@@ -30,10 +23,10 @@
     }}
   {{/if}}
 {{else}}
-  {{news-item/edit-item
-    agendaitem=agendaitem
-    isLoading=isLoading
-    newsletterInfo=newsletterInfo
-    isEditing=isEditing
-  }}
+  <NewsItem::EditItem
+    @agendaitem={{this.agendaitem}}
+    @newsletterInfo={{this.newsletterInfo}}
+    @onSave={{action "stopEditing"}}
+    @onCancel={{action "stopEditing"}}
+  />
 {{/if}}

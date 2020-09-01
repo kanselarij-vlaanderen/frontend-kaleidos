@@ -6,7 +6,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
   authenticationRoute: 'login',
   routeNamePrefix: 'decisions',
   sort: 'priority',
-  include: 'agenda-activity,agenda-activity.subcase,agenda-activity.subcase.decisions',
+  include: 'agenda-activity,agenda-activity.subcase',
   currentSession: service(),
   modelName: 'agendaitem',
   filter: null,

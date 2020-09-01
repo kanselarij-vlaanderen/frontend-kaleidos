@@ -7,7 +7,6 @@ export default Component.extend({
   classNameBindings: ['isFlandersArt:vl-typography--definite'],
   newsletterService: inject(),
   currentSession: inject(),
-  isShowingVersions: false,
   allowEditing: false,
   definite: false,
   itemIndex: 0,
@@ -30,15 +29,9 @@ export default Component.extend({
   }),
 
   actions: {
-    showDocuments() {
-      this.toggleProperty('isShowingVersions');
-    },
-    async toggleIsEditing() {
-      const subcase = await this.newsletterInfo.get('subcase');
-      if (!this.newsletterInfo) {
-        await this.newsletterService.createNewsItemForSubcase(subcase, this.agendaitem);
-      } else {
-        this.toggleProperty('isEditing');
+    startEditing() {
+      if (this.onStartEditing) {
+        this.onStartEditing();
       }
     },
   },
