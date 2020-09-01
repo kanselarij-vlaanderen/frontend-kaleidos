@@ -39,38 +39,36 @@ export default class AgendaitemSearchRoute extends Route {
     }
   }
 
-  model(params) {
+  model(filterParams) {
     const searchParams = this.paramsFor('search');
+    const params = {...searchParams, ...filterParams}; // eslint-disable-line
 
-    if (isEmpty(searchParams.searchText)) {
-      return [];
-    }
 
     const searchModifier = ':sqs:';
     const textSearchKey = this.textSearchFields.join(',');
 
     const filter = {};
 
-    if (!isEmpty(searchParams.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = searchParams.searchText;
+    if (!isEmpty(params.searchText)) {
+      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
-    if (!isEmpty(searchParams.mandatees)) {
-      filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = searchParams.mandatees;
+    if (!isEmpty(params.mandatees)) {
+      filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
-    if (!isEmpty(searchParams.dateFrom) && !isEmpty(searchParams.dateTo)) {
-      const from = moment(searchParams.dateFrom, 'DD-MM-YYYY').startOf('day');
-      const to = moment(searchParams.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
+    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
+      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
+      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte,gte:sessionDates'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
-    } else if (!isEmpty(searchParams.dateFrom)) {
-      const date = moment(searchParams.dateFrom, 'DD-MM-YYYY').startOf('day');
+    } else if (!isEmpty(params.dateFrom)) {
+      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       filter[':gte:sessionDates'] = date.utc().toISOString();
-    } else if (!isEmpty(searchParams.dateTo)) {
-      const date = moment(searchParams.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
+    } else if (!isEmpty(params.dateTo)) {
+      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte:sessionDates'] = date.utc().toISOString();
     }
 
@@ -82,6 +80,9 @@ export default class AgendaitemSearchRoute extends Route {
       }
     }
 
+    if (isEmpty(params.searchText)) {
+      return [];
+    }
     return search('agendaitems', params.page, params.size, params.sort, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
