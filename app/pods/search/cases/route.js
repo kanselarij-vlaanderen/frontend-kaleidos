@@ -3,9 +3,8 @@ import Route from '@ember/routing/route';
 import { isEmpty } from '@ember/utils';
 import moment from 'moment';
 import search from 'fe-redpencil/utils/mu-search';
-import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
-export default class CasesSearchRoute extends Route.extend(DataTableRouteMixin) {
+export default class CasesSearchRoute extends Route {
   queryParams = {
     // isArchived: {
     //   refreshModel: true
