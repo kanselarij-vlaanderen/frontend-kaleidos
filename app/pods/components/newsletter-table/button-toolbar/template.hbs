@@ -40,10 +40,11 @@
     data-test-link-to-subcase-overview
     class="vl-button vl-button--link vl-button--icon"
     target="_blank"
-    @route="cases.case.subcases.subcase.overview"
+    @route="agenda.agendaitems.agendaitem"
     @models={{array
-      (await @agendaItem.agendaActivity.subcase.case.id)
-      (await @agendaItem.agendaActivity.subcase.id)
+      (await latestMeetingId)
+      (await latestAgendaId)
+      (await latestAgendaItemId)
     }}
   >
     <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
