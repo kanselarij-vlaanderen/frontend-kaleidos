@@ -85,12 +85,12 @@
         </label>
         <div class="vlc-search__sizeoptions">
           <PowerSelect
-            @options={{this.sizeOptions}}
-            @selected={{this.size}}
-            @searchField={{false}}
-            @onchange={{this.selectSize}}
-            as |sizeValue|>
-            {{get sizeValue}}
+                  @options={{this.sizeOptions}}
+                  @selected={{size}}
+                  @searchEnabled={{false}}
+                  @onchange={{this.selectSize}}
+                  as |sizeValue|>
+            {{sizeValue}}
           </PowerSelect>
         </div>
       </div>
