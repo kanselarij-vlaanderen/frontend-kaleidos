@@ -84,15 +84,14 @@
           {{t "amount-showed"}}
         </label>
         <div class="vlc-search__sizeoptions">
-          {{#power-select
-            options=sizeOptions
-            selected=size
-            searchEnabled=false
-            onchange=(action "selectSize")
-          as |sizeValue|
-          }}
-            {{sizeValue}}
-          {{/power-select}}
+          <PowerSelect
+            @options={{this.sizeOptions}}
+            @selected={{this.size}}
+            @searchField={{false}}
+            @onchange={{this.selectSize}}
+            as |sizeValue|>
+            {{get sizeValue}}
+          </PowerSelect>
         </div>
       </div>
     </div>
