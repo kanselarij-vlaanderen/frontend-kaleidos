@@ -585,7 +585,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     .wait('@patchAgenda', {
       timeout: 20000,
     });
-  cy.url().should('include', '?refresh=');
 }
 
 /**
@@ -630,13 +629,16 @@ function toggleShowChanges(refresh) {
 }
 
 /**
- * @description Checks if an agendaitem with a specific name exists on an agenda
+ * @description Checks if an agendaitem with a specific name exists on an agenda,
+ * if you want to open the agendaitem at the same time, use cy.openDetailOfAgendaitem(agendaItemName)
  * @name agendaItemExists
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string} agendaItemName - boolean to check if a refresh needs to happen.
  */
 function agendaItemExists(agendaItemName) {
+  cy.log('agendaItemExists');
+  cy.wait(200);
   // Check which reverse tab is active
   cy.get('.vlc-tabs-reverse__link--active').then((element) => {
     const selectedReverseTab = element[0].text;
@@ -657,6 +659,7 @@ function agendaItemExists(agendaItemName) {
         .should('exist');
     }
   });
+  cy.log('/agendaItemExists');
 }
 
 /**
@@ -668,9 +671,11 @@ function agendaItemExists(agendaItemName) {
 *  @param {boolean} isAdmin - optional boolean to indicate that we are admin (some profiles can't see the link to subcase)
  */
 function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
-  cy.agendaItemExists(agendaItemName).click();
-
-  // cy.get(agenda.agendaOverviewSubitem).contains(agendaItemName).click();
+  cy.log('openDetailOfAgendaitem');
+  cy.agendaItemExists(agendaItemName);
+  cy.contains(agendaItemName)
+    .scrollIntoView()
+    .click();
   cy.wait(1000);
   cy.url().should('include', 'agendapunten');
   cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
@@ -688,6 +693,7 @@ function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
       cy.wait(3000); // TODO wait to ensure the page is loaded, find a better way to check this for other profiles
     }
   });
+  cy.log('/openDetailOfAgendaitem');
 }
 
 /**

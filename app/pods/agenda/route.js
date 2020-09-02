@@ -35,7 +35,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
   },
 
   actions: {
-    refresh() {
+    reloadModel() {
       this.refresh();
     },
   },

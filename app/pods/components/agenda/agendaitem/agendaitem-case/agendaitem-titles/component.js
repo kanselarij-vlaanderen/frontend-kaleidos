@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import {
   action, computed
@@ -6,10 +7,13 @@ import {
 
 export default class AgendaitemTitles extends Component {
   classNames = ['vl-u-spacer-extended-bottom-l'];
+  @service store;
   @service currentSession;
   agendaitem = null;
   subcase = null;
   shouldShowDetails = false;
+
+  @alias('agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
   // eslint-disable-next-line ember/use-brace-expansion
   @computed('subcase.subcaseName', 'subcase.approved')

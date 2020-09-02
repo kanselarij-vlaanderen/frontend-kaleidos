@@ -1,0 +1,70 @@
+<tr class="lt-row">
+  <td class="lt-cell align-left">
+    {{@agendaItem.priority}}
+  </td>
+  <td class="lt-cell align-left vl-data-table-col-7">
+    {{#if this.hasNewsletterInfo}}
+      <div class="vl-u-spacer-extended-bottom-s">
+        <p class="vl-u-text--bold">
+          {{this.newsletterInfo.title}}
+        </p>
+      </div>
+      <div class="vl-u-spacer-extended-bottom-s">
+        {{sanitize-html raw=true value=this.newsletterInfo.richtext}}
+      </div>
+      {{#if this.newsletterInfo.remark}}
+        <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+          {{this.newsletterInfo.remark}}
+        </p>
+      {{/if}}
+    {{else}}
+      <p class="vl-u-text--muted vl-u-text--italic">
+        {{t "no-newsletter-info"}}
+      </p>
+    {{/if}}
+  </td>
+  <td class="lt-cell align-left">
+    {{#each (await @agendaItem.mandatees) as |mandatee|}}
+      {{await mandatee.person.nameToDisplay}}<br>
+    {{else}}
+      <p class="vl-u-text--muted vl-u-text--italic">
+        {{t "no-mandatees"}}
+      </p>
+    {{/each}}
+  </td>
+  <td class="lt-cell align-left">
+    <WebComponents::VlCheckbox
+      @value={{this.newsletterInfo.inNewsletter}}
+      @toggle={{this.setInNewsletter}}
+      @disabled={{not this.hasNewsletterInfo}}
+      @single={{true}}
+    />
+  </td>
+  <td class="lt-cell align-left">
+    {{#if this.hasNewsletterInfo}}
+      {{moment-format this.newsletterInfo.modified "DD.MM.YYYY - HH:mm"}}
+    {{else}}
+      -
+    {{/if}}
+  </td>
+  <td class="lt-cell align-left">
+    <NewsletterTable::ButtonToolbar
+      @agendaItem={{@agendaItem}}
+      @onEdit={{this.startEditing}}
+    />
+  </td>
+</tr>
+{{#if this.isEditing}}
+  <tr class="lt-row lt-expanded-row">
+    <td colspan="5">
+      <div class="vlc-container-center">
+        <NewsItem::EditItem
+          @newsletterInfo={{this.newsletterInfo}}
+          @agendaitem={{@agendaItem}}
+          @onCancel={{this.stopEditing}}
+          @onSave={{this.stopEditing}}
+        />
+      </div>
+    </td>
+  </tr>
+{{/if}}

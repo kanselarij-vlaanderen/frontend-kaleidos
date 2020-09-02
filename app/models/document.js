@@ -28,9 +28,7 @@ export default Model.extend({
   }),
 
   type: belongsTo('document-type'),
-  signedDecision: belongsTo('decision', {
-    inverse: null,
-  }),
+  agendaItemTreatment: belongsTo('agenda-item-treatment'),
   signedMinutes: belongsTo('meeting-record', {
     inverse: null,
   }),

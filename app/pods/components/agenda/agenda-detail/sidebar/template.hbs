@@ -24,7 +24,6 @@
 
 {{#if (is-empty @agendaitems)}}
   <div class="vlc-agenda-detail-sidebar__no-items-message">
-    <span class="vlc-agenda-detail-sidebar__info-bubble"><i class="ki-info-circle" /></span>
     <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
   </div>
 {{/if}}
@@ -57,7 +56,7 @@
           distance=30
           handle=dragHandleClass
         }}
-          <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaItem={{action "selectAgendaItemAction"}}  />
+          <Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaItem={{action "selectAgendaItemAction"}}  />
         {{/sortable-item}}
       {{/each}}
     {{/sortable-group}}
@@ -80,7 +79,7 @@
           (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
         }}
           <li class="vlc-agenda-detail-sidebar__sub-item">
-            <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaItem={{action "selectAgendaItemAction"}} />
+            <Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaItem={{action "selectAgendaItemAction"}} />
           </li>
         {{/if}}
       {{/each}}
@@ -121,7 +120,7 @@
             distance=30
             handle=dragHandleClass
           }}
-            <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaItem={{action "selectAgendaItemAction"}}/>
+            <Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaItem={{action "selectAgendaItemAction"}}/>
           {{/sortable-item}}
         {{/each}}
       {{/sortable-group}}
@@ -131,30 +130,29 @@
       as |announcement|
       }}
         <div class="vlc-agenda-detail-sidebar__sub-item">
-          <Components::Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaItem={{action "selectAgendaItemAction"}}/>
+          <Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaItem={{action "selectAgendaItemAction"}}/>
         </div>
       {{/each}}
     {{/if}}
   {{else}}
     <div class="vlc-agenda-detail-sidebar__no-items-message">
-      <span class="vlc-agenda-detail-sidebar__info-bubble"><i class="ki-info-circle" /></span>
       <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-announcements-yet"}}</p>
     </div>
   {{/if}}
 </div>
 
 {{#if (await isReAssigningPriorities)}}
-  <Components::WebComponents::VlModal
+  <WebComponents::VlModal
     @isOverlay={{true}}
     @showCloseButton={{false}}
     @title={{t "saving-agendaitem-title-message"}}
   >
-    <Components::WebComponents::VlLoader
+    <WebComponents::VlLoader
       @text={{concat
         (t "saving-agendaitem-message")
         " "
         (t "please-be-patient")
       }}
     />
-  </Components::WebComponents::VlModal>
+  </WebComponents::VlModal>
 {{/if}}

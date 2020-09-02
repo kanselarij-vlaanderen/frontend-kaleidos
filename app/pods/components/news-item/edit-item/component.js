@@ -5,7 +5,6 @@ import { inject } from '@ember/service';
 export default Component.extend({
   intl: inject(),
   classNames: ['vl-form__group vl-u-bg-porcelain'],
-  isEditing: false,
 
   isTryingToSave: false,
   isExpanded: false,
@@ -39,8 +38,10 @@ export default Component.extend({
     newsletterInfo.set('richtext', this.richtext);
     await newsletterInfo.save().then(async() => {
       this.set('isLoading', false);
-      this.toggleProperty('isEditing');
     });
+    if (this.onSave) {
+      this.onSave();
+    }
   },
 
   richtext: computed('editor.htmlContent', function() {
@@ -62,8 +63,12 @@ export default Component.extend({
     async cancelEditing() {
       const newsletterInfo = await this.get('newsletterInfo');
       newsletterInfo.rollbackAttributes();
-      newsletterInfo.hasMany('themes').reload();
-      this.toggleProperty('isEditing');
+      if (!newsletterInfo.isDeleted) {
+        newsletterInfo.hasMany('themes').reload();
+      }
+      if (this.onCancel) {
+        this.onCancel();
+      }
     },
 
     cancelSaveChanges() {
