@@ -197,7 +197,6 @@ context('Subcase tests', () => {
       .wait('@patchAgendaitem');
 
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
-
     // "Go to agendaItem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
@@ -336,7 +335,8 @@ context('Subcase tests', () => {
     cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]')
       .first()
       .click();
-
+    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
+      .click();
     // "Go to agendaItem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.get(agenda.subcase.agendaLink).click();
