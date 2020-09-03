@@ -1,0 +1,27 @@
+/* ==========================================================================
+   publications-status-pill
+   ========================================================================== */
+
+.publications-status-pill {
+  border: .1rem solid $au-gray-300;
+  border-radius: .5rem;
+  padding: .35rem .6rem;
+  white-space: nowrap;
+}
+
+.publications-status-pill__label {
+  padding-left: .4rem;
+  color: $gray-dark;
+}
+
+.publications-status-pill--in-progress {
+  color: $au-yellow-400;
+}
+
+.publications-status-pill--done {
+  color: $au-green-500;
+}
+
+.publications-status-pill--not-started {
+  color: $au-gray-800;
+}
