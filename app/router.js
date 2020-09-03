@@ -115,7 +115,10 @@ Router.map(function() {
     this.route('agenda-items', { path: '/agendapunten', });
   });
 
-  this.route('publications', { path: '/publicaties', });
+  this.route('publications', { path: '/publicaties', }, function() {
+    this.route('in-progress', { path: '/in-behandeling', });
+    this.route('done', { path: '/behandeld', });
+  });
 });
 
 export default Router;
