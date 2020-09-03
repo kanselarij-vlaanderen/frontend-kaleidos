@@ -5,7 +5,7 @@ export default class PublicationsRoute extends Route {
   mockedPublications = [
     {
       case: 35222,
-      isDone: false,
+      inProgress: true,
       noInternalOVRBReference: '2020/40972',
       noBelgianOfficialGazette: '51/24720002',
       type: 'BVR',

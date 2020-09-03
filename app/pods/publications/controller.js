@@ -3,7 +3,7 @@ import Controller from '@ember/controller';
 export default class PublicationsController extends Controller {
   get amountInProgress() {
     if (this.model) {
-      return this.model.filter((publication) => !publication.isDone).length;
+      return this.model.filter((publication) => publication.inProgress).length;
     }
 
     return 0;
@@ -11,7 +11,7 @@ export default class PublicationsController extends Controller {
 
   get amountDone() {
     if (this.model) {
-      return this.model.filter((publication) => publication.isDone).length;
+      return this.model.filter((publication) => !publication.inProgress).length;
     }
 
     return 0;

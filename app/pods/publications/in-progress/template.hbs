@@ -1,69 +1,71 @@
-<table class="c-table c-table--striped">
-  <thead>
-    <tr>
-      <th>Dossier</th>
-      <th>Nr.</th>
-      <th>Werknummer BS</th>
-      <th>Type</th>
-      <th>Start publicatieflow</th>
-      <th>Uiterste publicatie</th>
-      <th>Vertalingen</th>
-      <th>Handtekeningen</th>
-      <th>Drukproef</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each model as |item|}}
+<div class="vl-u-spacer-extended-l">
+  <table class="vl-data-table vl-data-table--zebra">
+    <thead>
       <tr>
-        <td>
-          {{item.case}}
-        </td>
-        <td>
-          {{#if item.noInternalOVRBReference}}
-            {{item.noInternalOVRBReference}}
-          {{else}}
-            -
-          {{/if}}
-        </td>
-        <td>
-          {{#if item.noBelgianOfficialGazette}}
-            {{item.noBelgianOfficialGazette}}
-          {{else}}
-            -
-          {{/if}}
-        </td>
-        <td>{{item.type}}</td>
-        <td>
-          {{item.dateStartPublication}}<br>
-          <span class="u-muted">{{item.timeStartPublication}}</span>
-        </td>
-        <td>{{item.datePublicationDeadline}}</td>
-        <td>
-          {{#if item.translationStatus.[0].initiated}}
-            <StatusPill @status={{item.translationStatus.[0].status}}>{{item.translationStatus.[0].finished}}/{{item.translationStatus.[0].total}}</StatusPill>
-          {{else}}
-            -
-          {{/if}}
-        </td>
-        <td>
-          {{#if item.signatureStatus.[0].initiated}}
-            <StatusPill @status={{item.signatureStatus.[0].status}}>{{item.signatureStatus.[0].finished}}/{{item.signatureStatus.[0].total}}</StatusPill>
-          {{else}}
-            -
-          {{/if}}
-        </td>
-        <td>
-          {{#if item.printProofStatus.[0].initiated}}
-            <StatusPill @status={{item.printProofStatus.[0].status}}>{{item.printProofStatus.[0].finished}}/{{item.printProofStatus.[0].total}}</StatusPill>
-          {{else}}
-            -
-          {{/if}}
-        </td>
-        <td>
-          Open
-        </td>
+        <th>Dossier</th>
+        <th>Nr.</th>
+        <th>Werknummer BS</th>
+        <th>Type</th>
+        <th>Start publicatieflow</th>
+        <th>Uiterste publicatie</th>
+        <th>Vertalingen</th>
+        <th>Handtekeningen</th>
+        <th>Drukproef</th>
+        <th></th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {{#each publicationsInProgress as |publication|}}
+        <tr>
+          <td>
+            {{publication.case}}
+          </td>
+          <td>
+            {{#if publication.noInternalOVRBReference}}
+              {{publication.noInternalOVRBReference}}
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            {{#if publication.noBelgianOfficialGazette}}
+              {{publication.noBelgianOfficialGazette}}
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>{{publication.type}}</td>
+          <td>
+            {{publication.dateStartPublication}}<br>
+            <span class="u-muted">{{publication.timeStartPublication}}</span>
+          </td>
+          <td>{{publication.datePublicationDeadline}}</td>
+          <td>
+            {{#if publication.translationStatus.[0].initiated}}
+              <StatusPill @status={{publication.translationStatus.[0].status}}>{{publication.translationStatus.[0].finished}}/{{publication.translationStatus.[0].total}}</StatusPill>
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            {{#if publication.signatureStatus.[0].initiated}}
+              <StatusPill @status={{publication.signatureStatus.[0].status}}>{{publication.signatureStatus.[0].finished}}/{{publication.signatureStatus.[0].total}}</StatusPill>
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            {{#if publication.printProofStatus.[0].initiated}}
+              <StatusPill @status={{publication.printProofStatus.[0].status}}>{{publication.printProofStatus.[0].finished}}/{{publication.printProofStatus.[0].total}}</StatusPill>
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            Open
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
