@@ -38,7 +38,7 @@
             class="vl-button vl-button--tertiary vl-button--icon-before"
             @route="settings.system-alerts.new"
           >
-            <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+            <i class="vl-button__icon vl-button__icon--before ki-add"></i>
             {{t "message"}}
             {{t "add"}}
           </LinkTo>
@@ -51,7 +51,7 @@
               @route="settings.system-alerts.edit"
               @model={{this.selectedAlert.id}}
             >
-              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-edit"></i>
+              <i class="vl-button__icon vl-button__icon--before ki-pencil"></i>
               {{t "message"}}
               {{t "edit"}}
             </LinkTo>
@@ -61,7 +61,7 @@
               class="vl-button vl-button--tertiary vl-button--icon-before"
               {{on "click" (perform remove this.selectedAlert)}}
             >
-              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-trash"
+              <i class="vl-button__icon vl-button__icon--before ki-delete"
               ></i>
               {{t "message"}}
               {{t "delete"}}

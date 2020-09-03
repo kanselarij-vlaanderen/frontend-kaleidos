@@ -4,7 +4,7 @@
     class="vl-button vl-button--link vl-button--icon"
     {{on "click" @onEdit}}
   >
-    <i class="vl-button__icon vl-vi vl-vi-pencil"></i>
+    <i class="vl-button__icon ki-pencil"></i>
   </button>
   {{#if (is-pending (await @agendaItem.nota))}}
     <div class="vl-loader" role="alert" aria-busy="true">
@@ -25,7 +25,7 @@
       style={{if (not (await @agendaItem.nota)) "opacity:0.3;"}}
       {{on "click" this.openNota}}
     >
-      <i class="vl-button__icon vl-vi vl-vi-document"></i>
+      <i class="vl-button__icon ki-document"></i>
       {{#attach-tooltip
         arrow="true"
         animation="shift"
@@ -47,6 +47,6 @@
       (await latestAgendaItemId)
     }}
   >
-    <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+    <i class="vl-button__icon ki-nav-right"></i>
   </LinkTo>
 </div>

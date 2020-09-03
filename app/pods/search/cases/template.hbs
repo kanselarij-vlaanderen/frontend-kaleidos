@@ -66,7 +66,7 @@
                   @route="cases.case.subcases"
                   @model={{row.id}}
                 >
-                  <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+                  <i class="vl-button__icon ki-nav-right"></i>
                 </LinkTo>
               </td>
             </c.body>
@@ -85,12 +85,12 @@
         </label>
         <div class="vlc-search__sizeoptions">
           <PowerSelect
-            @options={{this.sizeOptions}}
-            @selected={{this.size}}
-            @searchField={{false}}
-            @onchange={{this.selectSize}}
-            as |sizeValue|>
-            {{get sizeValue}}
+                  @options={{this.sizeOptions}}
+                  @selected={{size}}
+                  @searchEnabled={{false}}
+                  @onchange={{this.selectSize}}
+                  as |sizeValue|>
+            {{sizeValue}}
           </PowerSelect>
         </div>
       </div>

@@ -1,0 +1,50 @@
+/* ==========================================================================
+	 Icon Positioning Fixes
+
+   For all cases where icon-specific changes need to be made to look right
+	 ========================================================================== */
+
+/* Datepicker calendar off-center fix
+	 ========================================================================== */
+.vl-datepicker {
+  .vl-input-addon {
+    .ki-calendar {
+      height: 100%;
+      line-height: 4rem;
+    }
+  }
+}
+
+/* Search magnifier in a button off-center fix
+	 ========================================================================== */
+
+.vl-button {
+  .ki-search {
+    height: 100%;
+    line-height: 3.7rem;
+  }
+}
+
+/* Badge icons are too small (dossiers/procedurestap)
+	 ========================================================================== */
+
+.vl-badge--icon {
+  .vl-badge__icon {
+    font-size: 1.8rem;
+  }
+}
+
+/* Book icon is too large in document versions
+	 ========================================================================== */
+
+.vlc-document-card-item__title {
+  .ki-book {
+    font-size: 1.4rem;
+  }
+}
+
+/* Alert icons in badge not correctly centered
+	 ========================================================================== */
+.vl-alert__icon {
+  line-height: 4.5rem;
+}

@@ -21,7 +21,7 @@ function uploadFileToCancel(file) {
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get('.vl-vi-nav-show-more-horizontal').click();
+    cy.get('.ki-more').click();
   });
   cy.get('.vl-link--block')
     .contains('Nieuwe versie uploaden', {
@@ -183,13 +183,13 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         .click();
       cy.get('.vl-input-field--block').click()
         .type(extraName);
-      cy.get('.vl-vi-cross').click();
+      cy.get('.ki-cross').click();
       // assert old value is back
       cy.get('@documentName').contains(fileName)
         .click();
       cy.get('.vl-input-field--block').click()
         .type(extraName);
-      cy.get('.vl-vi-save').click();
+      cy.get('.ki-check').click();
       // TODO patch happens
     });
     cy.get('.vlc-document-card').within(() => {
@@ -222,7 +222,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         cy.contains('Publiek').click();
       });
     cy.get('@accessLevelToolbar').within(() => {
-      cy.get('.vl-vi-cross').click();
+      cy.get('.ki-cross').click();
       cy.get('.vlc-pill').contains('Intern Overheid')
         .click();
       cy.get('.ember-power-select-trigger').click();
@@ -232,7 +232,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         cy.contains('Publiek').click();
       });
     cy.get('@accessLevelToolbar').within(() => {
-      cy.get('.vl-vi-save').click();
+      cy.get('.ki-check').click();
       // TODO patch happens
       cy.get('.vlc-pill').contains('Publiek')
         .click();
