@@ -15,5 +15,7 @@
       <i class="ki-clock"/>
     {{/if}}
   </div>
-  <span class="publications-status-pill__label">{{yield}}</span>
+  {{#if hasBlock}}
+    <span class="publications-status-pill__label">{{yield}}</span>
+  {{/if}}
 </span>

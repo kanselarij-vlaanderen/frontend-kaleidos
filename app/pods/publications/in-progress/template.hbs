@@ -43,21 +43,25 @@
           <td>{{publication.datePublicationDeadline}}</td>
           <td>
             {{#if publication.translationStatus.initiated}}
-              <Publications::StatusPill @status={{publication.translationStatus.status}}>{{publication.translationStatus.finished}}/{{publication.translationStatus.total}}</Publications::StatusPill>
+              <Publications::StatusPill @status={{publication.translationStatus.status}}>
+                {{publication.translationStatus.finished}}/{{publication.translationStatus.total}}
+              </Publications::StatusPill>
             {{else}}
               -
             {{/if}}
           </td>
           <td>
             {{#if publication.signatureStatus.initiated}}
-              <Publications::StatusPill @status={{publication.signatureStatus.status}}>{{publication.signatureStatus.finished}}/{{publication.signatureStatus.total}}</Publications::StatusPill>
+              <Publications::StatusPill @status={{publication.signatureStatus.status}}>
+                {{publication.signatureStatus.finished}}/{{publication.signatureStatus.total}}
+              </Publications::StatusPill>
             {{else}}
               -
             {{/if}}
           </td>
           <td>
             {{#if publication.printProofStatus.initiated}}
-              <Publications::StatusPill @status={{publication.printProofStatus.status}}>{{publication.printProofStatus.finished}}/{{publication.printProofStatus.total}}</Publications::StatusPill>
+              <Publications::StatusPill @status={{publication.printProofStatus.status}} />
             {{else}}
               -
             {{/if}}
