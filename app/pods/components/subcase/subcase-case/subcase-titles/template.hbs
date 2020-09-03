@@ -53,11 +53,11 @@
     data-test-agenda-subcasehidden-pill
   >
     {{#if (await subcase.confidential)}}
-      <span class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
+      <i class="vlc-pill vl-icon vlc-pill--error ki-lock-closed"></i>
     {{else}}
-      <span
-        class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
-      ></span>
+      <i
+        class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success ki-lock-open"
+      ></i>
     {{/if}}
   </div>
 </div>

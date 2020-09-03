@@ -22,7 +22,7 @@
                       data-test-documents-show-more
                       type="button"
               >
-                <i class="vl-vi vl-vi-nav-show-more-horizontal"></i>
+                <i class="ki-more"></i>
                 {{#attach-popover
                   class="ember-attacher-popper"
                   hideOn="clickout click"
@@ -76,7 +76,7 @@
           }}"
         >
           <div class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
-            <i class="vl-badge__icon vl-vi vl-vi-file" aria-hidden="true"></i>
+            <i class="vl-badge__icon ki-document" aria-hidden="true"></i>
           </div>
         </div>
         <div class="vl-u-display-flex vlc-u-flex-direction-column vlc-u-box-model-maximize-width">
@@ -99,8 +99,8 @@
                 {{action "saveNameChange" lastDocumentVersion}}
               >
                 <i
-                        class="vl-vi vl-vi-save vl-button__icon"
-                        aria-hidden="true"
+                  class="ki-check vl-button__icon"
+                  aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "more-options"}}
@@ -112,8 +112,8 @@
                 {{action "cancelEditingName"}}
               >
                 <i
-                        class="vl-vi vl-vi-cross vl-button__icon"
-                        aria-hidden="true"
+                  class="ki-cross vl-button__icon"
+                  aria-hidden="true"
                 ></i>
                 <span class="vl-u-visually-hidden">
                   {{t "more-options"}}
@@ -147,7 +147,7 @@
                 type="button"
           {{action "showVersions"}}
         >
-          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon vl-vi vl-vi-arrow-right-fat"
+          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
           ></i>
           {{t "show-versions"}}
         </button>
