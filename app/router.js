@@ -114,6 +114,8 @@ Router.map(function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
   });
+
+  this.route('publications', { path: '/publicaties', });
 });
 
 export default Router;

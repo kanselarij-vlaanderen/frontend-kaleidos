@@ -27,6 +27,16 @@
               {{t "newsletter"}}
             {{/link-to}}
           </li>
+          {{#if hasPublicationsEnabled}}
+            <li class="vl-tab" data-test-m-header-publications>
+              {{#link-to
+                "publications"
+                class="vl-tab__link"
+              }}
+                {{t "publications"}}
+              {{/link-to}}
+            </li>
+          {{/if}}
           <li class="vl-tab" data-test-m-header-search>
             {{#link-to
               "search"
