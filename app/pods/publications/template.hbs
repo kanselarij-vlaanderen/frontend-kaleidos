@@ -10,7 +10,7 @@
                 @activeClass="active"
                 class="vl-tab__link"
               >
-                {{capitalize (t "publications.in-progress")}}
+                {{capitalize (t "publications.in-progress")}} ({{amountInProgress}})
               </LinkTo>
             </li>
             <li class="vl-tab" data-test-agenda-agendaitem-tab="documents">
@@ -19,21 +19,13 @@
                 @activeClass="active"
                 class="vl-tab__link"
               >
-                {{capitalize (t "publications.done")}}
+                {{capitalize (t "publications.done")}} ({{amountDone}})
               </LinkTo>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="vlc-scroll-wrapper__body">
-      <div class="vl-u-spacer-extended">
-        <div class="vlc-container">
-          <div class="vl-u-spacer--small">
-            {{outlet}}
-          </div>
-        </div>
-      </div>
-    </div>
+    {{outlet}}
   </div>
 </div>
