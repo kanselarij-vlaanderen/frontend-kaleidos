@@ -1,5 +1,5 @@
 <div class="vl-u-spacer-extended-l">
-  <table class="vl-data-table vl-data-table--zebra">
+  <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
     <thead>
       <tr>
         <th>Dossier</th>
@@ -62,7 +62,12 @@
             {{/if}}
           </td>
           <td>
-            Open
+            <LinkTo
+              @route="publications.in-progress"
+              class="vl-button vl-button--link vl-button--icon"
+            >
+              <i class="vl-button__icon ki-nav-right" />
+            </LinkTo>
           </td>
         </tr>
       {{/each}}
