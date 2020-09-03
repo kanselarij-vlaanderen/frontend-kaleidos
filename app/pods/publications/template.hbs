@@ -1,0 +1,39 @@
+<div class="vlc-panel-layout__main-content">
+  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    <div class="vlc-scroll-wrapper__header">
+      <div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom vlc-navbar--align-with-m-header">
+        <div class="vl-tabs__wrapper">
+          <ul class="vl-tabs vl-u-reset-margin">
+            <li class="vl-tab"  data-test-agenda-agendaitem-tab="agendaitem-case">
+              <LinkTo
+                @route="publications.in-progress"
+                @activeClass="active"
+                class="vl-tab__link"
+              >
+                {{capitalize (t "publications.in-progress")}}
+              </LinkTo>
+            </li>
+            <li class="vl-tab" data-test-agenda-agendaitem-tab="documents">
+              <LinkTo
+                @route="publications.done"
+                @activeClass="active"
+                class="vl-tab__link"
+              >
+                {{capitalize (t "publications.done")}}
+              </LinkTo>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="vlc-scroll-wrapper__body">
+      <div class="vl-u-spacer-extended">
+        <div class="vlc-container">
+          <div class="vl-u-spacer--small">
+            {{outlet}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
