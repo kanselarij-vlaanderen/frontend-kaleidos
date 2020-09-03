@@ -1,0 +1,17 @@
+<span class='publications-status-pill {{this.status}}' ...attributes>
+  {{#if @status}}
+    {{#if (eq @status 'in-progress')}}
+      <i class="ki-clock"/>
+    {{/if}}
+    {{#if (eq @status 'not-started')}}
+      <span class="not-started-symbol" />
+    {{/if}}
+
+    {{#if (eq @status 'done')}}
+      <i class="ki-circle-check"/>
+    {{/if}}
+  {{else}}
+    <i class="clock"/>
+  {{/if}}
+  <span class="publications-status-pill__label">{{yield}}</span>
+</span>

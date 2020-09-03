@@ -41,22 +41,22 @@
           </td>
           <td>{{publication.datePublicationDeadline}}</td>
           <td>
-            {{#if publication.translationStatus.[0].initiated}}
-              <StatusPill @status={{publication.translationStatus.[0].status}}>{{publication.translationStatus.[0].finished}}/{{publication.translationStatus.[0].total}}</StatusPill>
+            {{#if publication.translationStatus.initiated}}
+              <Publications::StatusPill @status={{publication.translationStatus.status}}>{{publication.translationStatus.finished}}/{{publication.translationStatus.total}}</Publications::StatusPill>
             {{else}}
               -
             {{/if}}
           </td>
           <td>
-            {{#if publication.signatureStatus.[0].initiated}}
-              <StatusPill @status={{publication.signatureStatus.[0].status}}>{{publication.signatureStatus.[0].finished}}/{{publication.signatureStatus.[0].total}}</StatusPill>
+            {{#if publication.signatureStatus.initiated}}
+              <Publications::StatusPill @status={{publication.signatureStatus.status}}>{{publication.signatureStatus.finished}}/{{publication.signatureStatus.total}}</Publications::StatusPill>
             {{else}}
               -
             {{/if}}
           </td>
           <td>
-            {{#if publication.printProofStatus.[0].initiated}}
-              <StatusPill @status={{publication.printProofStatus.[0].status}}>{{publication.printProofStatus.[0].finished}}/{{publication.printProofStatus.[0].total}}</StatusPill>
+            {{#if publication.printProofStatus.initiated}}
+              <Publications::StatusPill @status={{publication.printProofStatus.status}}>{{publication.printProofStatus.finished}}/{{publication.printProofStatus.total}}</Publications::StatusPill>
             {{else}}
               -
             {{/if}}
