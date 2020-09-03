@@ -55,6 +55,15 @@
                       {{t "definite"}}
                     </LinkTo>
                   </li>
+                  <li class="vlc-tabs-reverse__item">
+                    <LinkTo
+                      @route="newsletter.updates"
+                      @model={{await agenda.id}}
+                      class="vlc-tabs-reverse__link"
+                      @activeClass="vlc-tabs-reverse__link--active" >
+                      {{t "newsletter-update-notas"}}
+                    </LinkTo>
+                  </li>
                 </ul>
               </div>
             {{/if}}
