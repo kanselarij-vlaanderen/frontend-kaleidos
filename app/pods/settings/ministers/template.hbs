@@ -7,7 +7,7 @@
             class="vl-button vl-button--icon-before"
       {{action "toggleIsAdding"}}
     >
-      <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-add"></i>
+      <i class="vl-button__icon vl-button__icon--before ki-add"></i>
       {{t "create-mandatee"}}
     </button>
   </div>
@@ -97,14 +97,14 @@
                         class="vl-button vl-button--link vl-button--icon"
                   {{action "toggleProperty" "isEditingMandatee" mandatee}}
                 >
-                  <i class="vl-button__icon vl-vi vl-vi-edit"></i>
+                  <i class="vl-button__icon ki-pencil"></i>
                 </button>
                 <button type="button"
                         data-test-mandatee-resign={{index}}
                         class="vl-button vl-button--link vl-button--icon"
                   {{action "toggleProperty" "isResigningMandatee" mandatee}}
                 >
-                  <i class="vl-button__icon vl-vi vl-vi-cog"></i>
+                  <i class="vl-button__icon ki-settings"></i>
                   {{#attach-tooltip
                     arrow="true"
                     animation="shift"
@@ -119,7 +119,7 @@
                         class="vl-button vl-button--link vl-button--icon vl-u-text--error"
                   {{action "toggleProperty" "isDeletingMandatee" mandatee}}
                 >
-                  <i class="vl-button__icon vl-vi vl-vi-trash"></i>
+                  <i class="vl-button__icon ki-delete"></i>
                 </button>
               </div>
             </td>
