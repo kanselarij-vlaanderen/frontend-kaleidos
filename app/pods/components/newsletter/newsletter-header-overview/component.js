@@ -7,6 +7,7 @@ export default Component.extend({
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
 
   intl: service(),
+  store: service(),
   session: service(),
   routing: service('-routing'),
   toaster: service(),
@@ -50,9 +51,12 @@ export default Component.extend({
         await this.newsletterService.deleteCampaign(mailCampaign.campaignId);
       }
       mailCampaign.destroyRecord();
-      meeting.set('mailCampaign', null);
+      const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
+        reload: true,
+      });
+      reloadedMeeting.set('mailCampaign', null);
       this.set('mailCampaign', null);
-      await meeting.save();
+      reloadedMeeting.save();
       this.set('isLoading', false);
     },
 

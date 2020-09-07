@@ -27,9 +27,12 @@ export default Service.extend({
         archiveUrl: body.archive_url,
       });
 
-      mailCampaign.save().then((savedCampaign) => {
-        meeting.set('mailCampaign', savedCampaign);
-        return meeting.save();
+      mailCampaign.save().then(async(savedCampaign) => {
+        const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
+          reload: true,
+        });
+        reloadedMeeting.set('mailCampaign', savedCampaign);
+        return reloadedMeeting.save();
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
