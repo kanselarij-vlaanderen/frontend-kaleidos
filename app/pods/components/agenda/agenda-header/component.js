@@ -14,7 +14,7 @@ import { all } from 'rsvp';
 import {
   setAgendaitemFormallyOk,
   getListOfAgendaitemsThatAreNotFormallyOk
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
