@@ -1,18 +1,12 @@
 import Route from '@ember/routing/route';
-import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 import { hash } from 'rsvp';
 
 export default class NewsletterUpdatesRoute extends Route {
-  @tracked agendaId;
-  @tracked agenda;
-  @tracked meeting;
-
   async model(params) {
     const notas = [];
-    this.agendaId = params.id;
-    this.agenda = await this.store.findRecord('agenda', this.agendaId);
-    this.meeting = await this.agenda.createdFor;
+    const agendaId = params.id;
+    const agenda = await this.store.findRecord('agenda', agendaId);
     const agendaitemsForAgenda = await this.agenda.get('agendaitems');
     const agendaitemsArray = agendaitemsForAgenda.toArray();
     for (const agendaitem of agendaitemsArray) {
@@ -39,7 +33,7 @@ export default class NewsletterUpdatesRoute extends Route {
     }
     return hash({
       notas: notas,
-      agenda: this.agenda,
+      agenda: agenda,
     });
   }
 
