@@ -43,7 +43,7 @@ export default EmberObject.create({
       classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive vl-u-display-flex',
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
-      iconClassNames: 'vl-vi vl-vi-check-thin formally-ok-icon',
+      iconClassNames: 'ki-check formally-ok-icon',
     },
     {
       label: 'Formeel niet OK',
@@ -51,7 +51,7 @@ export default EmberObject.create({
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
       classNames: 'vlc-agenda-items__status vl-u-text--error vlc-u-font-weight-500 vl-u-display-flex',
       pillClassNames: 'vlc-pill vlc-pill--error',
-      iconClassNames: 'vl-vi vl-vi-cross formally-ok-icon',
+      iconClassNames: 'ki-cross formally-ok-icon',
     },
     {
       label: 'Nog niet formeel OK',
@@ -59,7 +59,7 @@ export default EmberObject.create({
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
       classNames: 'vlc-agenda-items__status vlc-u-font-weight-500  vl-u-display-flex',
       pillClassNames: 'vlc-pill',
-      iconClassNames: 'vl-vi vl-vi-question-mark formally-ok-icon',
+      iconClassNames: 'ki-question-mark formally-ok-icon',
     }
   ],
   defaultKindUri:
@@ -137,5 +137,11 @@ export default EmberObject.create({
   agendaStatusApproved: {
     id: 'ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
     uri: 'http://kanselarij.vo.data.gift/id/agendastatus/ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
+  },
+  DECISION_RESULT_CODE_URIS: {
+    GOEDGEKEURD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd',
+    UITGESTELD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
+    KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
+    INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
 });

@@ -27,9 +27,12 @@ export default Service.extend({
         archiveUrl: body.archive_url,
       });
 
-      mailCampaign.save().then((savedCampaign) => {
-        meeting.set('mailCampaign', savedCampaign);
-        return meeting.save();
+      mailCampaign.save().then(async(savedCampaign) => {
+        const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
+          reload: true,
+        });
+        reloadedMeeting.set('mailCampaign', savedCampaign);
+        return reloadedMeeting.save();
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -77,16 +80,44 @@ export default Service.extend({
   },
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
-  async createNewsItemForSubcase(subcase, agendaitem, inNewsletter = false) {
+  async createNewsItemForAgendaItem(agendaItem, inNewsletter = false) {
     if (this.currentSession.isEditor) {
+      const agendaItemTreatment = (await agendaItem.get('treatments')).firstObject;
       const news = this.store.createRecord('newsletter-info', {
-        subcase: await subcase,
-        title: agendaitem ? await agendaitem.get('shortTitle') : await subcase.get('shortTitle'),
-        subtitle: agendaitem ? await agendaitem.get('title') : await subcase.get('title'),
-        finished: false,
+        agendaItemTreatment,
         inNewsletter,
       });
-      return await news.save();
+      if (agendaItem.showAsRemark) {
+        const content = agendaItem.title;
+        news.set('title', agendaItem.shortTitle || content);
+        news.set('richtext', content);
+        news.set('finished', true);
+        news.set('inNewsletter', true);
+      } else {
+        news.set('title', agendaItem.shortTitle);
+        news.set('subtitle', agendaItem.title);
+        news.set('finished', false);
+        news.set('inNewsletter', false);
+        // Use news item "of previous subcase" as a default
+        try {
+          const activity = await agendaItem.get('agendaActivity');
+          const subcase = await activity.get('subcase');
+          const _case = await subcase.get('case');
+          const previousNewsItem = (await this.store.query('newsletter-info', {
+            'filter[agenda-item-treatment][subcase][case][:id:]': _case.id,
+            sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
+            'page[size]': 1,
+          })).firstObject;
+          if (previousNewsItem) {
+            news.set('richtext', previousNewsItem.richtext);
+            const themes = await previousNewsItem.get('themes');
+            news.set('themes', themes);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      return news;
     }
   },
 

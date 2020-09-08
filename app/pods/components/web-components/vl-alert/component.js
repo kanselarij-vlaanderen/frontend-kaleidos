@@ -10,14 +10,14 @@ export default class VlAlertComponent extends Component {
   }
 
   get iconClass() {
-    const classes = ['vl-vi'];
+    const classes = [];
     const currentType = this.args.type;
     if (['warning', 'error'].includes(currentType)) {
-      classes.push('vl-vi-alert-triangle');
+      classes.push('ki-alert-triangle');
     } else if (currentType === 'success') {
-      classes.push('vl-vi-check');
+      classes.push('ki-check');
     } else {
-      classes.push('vl-vi-alert-circle');
+      classes.push('ki-info-circle');
     }
     return classes.join(' ');
   }

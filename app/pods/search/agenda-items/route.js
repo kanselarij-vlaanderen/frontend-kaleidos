@@ -3,9 +3,9 @@ import Route from '@ember/routing/route';
 import { isEmpty } from '@ember/utils';
 import moment from 'moment';
 import search from 'fe-redpencil/utils/mu-search';
-import DataTableRouteMixin from 'ember-data-table/mixins/route';
+import Snapshot from 'fe-redpencil/utils/snapshot';
 
-export default class AgendaitemSearchRoute extends Route.extend(DataTableRouteMixin) {
+export default class AgendaitemSearchRoute extends Route {
   queryParams = {
     types: {
       refreshModel: true,
@@ -26,6 +26,11 @@ export default class AgendaitemSearchRoute extends Route.extend(DataTableRouteMi
 
   textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'titlePress', 'textPress']);
 
+  constructor() {
+    super(...arguments);
+    this.lastParams = new Snapshot();
+  }
+
   postProcessDates(_case) {
     const {
       sessionDates,
@@ -40,11 +45,13 @@ export default class AgendaitemSearchRoute extends Route.extend(DataTableRouteMi
     }
   }
 
-  model(params) {
+  model(filterParams) {
     const searchParams = this.paramsFor('search');
+    const params = {...searchParams, ...filterParams}; // eslint-disable-line
+    this.lastParams.stageLive(params);
 
-    if (isEmpty(searchParams.searchText)) {
-      return [];
+    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
+      params.page = 0;
     }
 
     const searchModifier = ':sqs:';
@@ -52,26 +59,26 @@ export default class AgendaitemSearchRoute extends Route.extend(DataTableRouteMi
 
     const filter = {};
 
-    if (!isEmpty(searchParams.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = searchParams.searchText;
+    if (!isEmpty(params.searchText)) {
+      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
-    if (!isEmpty(searchParams.mandatees)) {
-      filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = searchParams.mandatees;
+    if (!isEmpty(params.mandatees)) {
+      filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
-    if (!isEmpty(searchParams.dateFrom) && !isEmpty(searchParams.dateTo)) {
-      const from = moment(searchParams.dateFrom, 'DD-MM-YYYY').startOf('day');
-      const to = moment(searchParams.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
+    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
+      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
+      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte,gte:sessionDates'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
-    } else if (!isEmpty(searchParams.dateFrom)) {
-      const date = moment(searchParams.dateFrom, 'DD-MM-YYYY').startOf('day');
+    } else if (!isEmpty(params.dateFrom)) {
+      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       filter[':gte:sessionDates'] = date.utc().toISOString();
-    } else if (!isEmpty(searchParams.dateTo)) {
-      const date = moment(searchParams.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
+    } else if (!isEmpty(params.dateTo)) {
+      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte:sessionDates'] = date.utc().toISOString();
     }
 
@@ -83,6 +90,11 @@ export default class AgendaitemSearchRoute extends Route.extend(DataTableRouteMi
       }
     }
 
+    this.lastParams.commit();
+
+    if (isEmpty(params.searchText)) {
+      return [];
+    }
     return search('agendaitems', params.page, params.size, params.sort, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
@@ -93,5 +105,9 @@ export default class AgendaitemSearchRoute extends Route.extend(DataTableRouteMi
   setupController(controller) {
     super.setupController(...arguments);
     controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
+
+    if (controller.page !== this.lastParams.committed.page) {
+      controller.page = this.lastParams.committed.page;
+    }
   }
 }

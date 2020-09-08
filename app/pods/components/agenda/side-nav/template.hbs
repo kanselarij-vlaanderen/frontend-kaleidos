@@ -5,7 +5,6 @@
         <div class="vlc-toolbar">
           <div class="vlc-toolbar__left">
             <h2 class="vl-title vl-title--h6">
-              <i class="vl-icon vl-vi vl-vi-timeline" aria-hidden="true"></i>
               <span>
                 {{t "nav-title"}}
               </span>
@@ -15,7 +14,7 @@
             {{#if agendaMenuOpened}}
               <button type="button" class="vl-button vl-button--link vl-button--icon default"
                 {{action "collapseSideMenu"}}>
-                <i class="vl-vi vl-vi-arrow-right-fat"></i>
+                <i class="ki-chevron-right"></i>
                 <span class="vl-u-visually-hidden">
                   {{t "toggle"}}
                 </span>
@@ -23,7 +22,7 @@
             {{else}}
               <button type="button" class="vl-button vl-button--link vl-button--icon collapsed"
                 {{action "collapseSideMenu"}}>
-                <i class="vl-vi vl-vi-arrow-left-fat"></i>
+                <i class="ki-chevron-left"></i>
                 <span class="vl-u-visually-hidden">
                   {{t "toggle"}}
                 </span>

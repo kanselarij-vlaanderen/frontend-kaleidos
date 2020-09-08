@@ -9,6 +9,7 @@
 }
 
 .vlc-document-list__item {
+  list-style: none;
   margin: 0.4rem 1rem 0.4rem 0;
 
   a, span {
@@ -35,7 +36,6 @@
 
   .vl-badge__icon {
     margin-right: 0.7rem;
-    font-size: 1.7rem;
     line-height: 1rem;
   }
 }

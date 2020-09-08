@@ -43,11 +43,11 @@
               {{action "showAgendaActions"}}
             >
               {{#if (not isShowingAgendaActions)}}
-                <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                <i class="vl-button__icon vl-button__icon--before ki-chevron-down"
                   {{action "showAgendaActions" bubbles=false}}
                 ></i>
               {{else}}
-                <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                <i class="vl-button__icon vl-button__icon--before ki-chevron-up"
                   {{action "showAgendaActions" bubbles=false}}
                 ></i>
               {{/if}}
@@ -91,11 +91,11 @@
             {{action "showMultipleOptions"}}
           >
             {{#if (not isShowingOptions)}}
-              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+              <i class="vl-button__icon vl-button__icon--before ki-chevron-down"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{else}}
-              <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+              <i class="vl-button__icon vl-button__icon--before ki-chevron-up"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{/if}}
@@ -224,6 +224,18 @@
                     {{t "download-documents"}}
                   </a>
                 </li>
+                {{#if currentAgenda.isDesignAgenda}}
+                  <li class="vlc-dropdown-menu__item">
+                    <a href=""
+                       data-test-agenda-header-approve-all-agendaitems
+                       class="vl-link vl-link--block"
+                      {{action attacher.hide}}
+                      {{action "showApproveAllAgendaitemsWarning"}}
+                    >
+                      {{t "approve-all-agendaitems"}}
+                    </a>
+                  </li>
+                {{/if}}
                 {{#if currentSessionService.isEditor}}
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
@@ -315,7 +327,7 @@
 {{#if isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @isAddingAgendaitems={{isAddingAgendaitems}}
-    @reloadRouteWithRefreshId={{action "reloadRouteWithRefreshId"}} />
+    @onCreate={{this.onCreateAgendaitem}} />
 {{/if}}
 {{#if isAssigningSignature}}
   <Session::SelectSignature
@@ -381,4 +393,31 @@
     @title={{loaderTitle}} >
     <WebComponents::VlLoader @text={{loaderText}} />
   </WebComponents::VlModal>
+{{/if}}
+
+{{#if isApprovingAllAgendaitems}}
+  <WebComponents::VlModalVerify
+    @title={{t "approve-all-agendaitems"}}
+    @buttonType="warning"
+    @verifyButtonText={{t "approve"}}
+    @message={{t
+      "approve-all-agendaitems-warning-message"
+      amountOfAgendaitemsNotFormallyOk=(await amountOfAgendaitemsNotFormallyOk)
+    }}
+    @cancel={{action "cancel"}}
+    @verify={{action "approveAllAgendaitems"}}
+  />
+{{/if}}
+
+{{#if isShowingWarningOnClose}}
+  <WebComponents::VlModalVerify
+      @isOverlay={{true}}
+      @message={{t "agenda-has-nok-agendaitems-warning"}}
+      @title={{t "approve-agenda-error"}}
+      @buttonType="warning"
+      @verifyButtonText={{t "continue"}}
+      @cancel={{action "cancelLockAgenda"}}
+      @verify={{action "cancelLockAgenda"}}
+      @closeModal={{action "cancelLockAgenda"}}
+  />
 {{/if}}

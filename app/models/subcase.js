@@ -25,7 +25,6 @@ export default ModelWithModifier.extend({
   subcaseIdentifier: attr('string'),
   showAsRemark: attr('boolean'),
   confidential: attr('boolean'),
-  formallyOk: attr('boolean'),
   isArchived: attr('boolean'),
   concluded: attr('boolean'),
   subcaseName: attr('string'),
@@ -41,7 +40,9 @@ export default ModelWithModifier.extend({
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
   mandatees: hasMany('mandatee'),
-  decisions: hasMany('decision'),
+  treatments: hasMany('agenda-item-treatment', {
+    inverse: null,
+  }),
 
   type: belongsTo('subcase-type'),
   case: belongsTo('case', {
@@ -50,7 +51,6 @@ export default ModelWithModifier.extend({
   requestedForMeeting: belongsTo('meeting', {
     inverse: null,
   }),
-  newsletterInfo: belongsTo('newsletter-info'),
   requestedBy: belongsTo('mandatee', {
     inverse: null,
   }),
@@ -202,15 +202,18 @@ export default ModelWithModifier.extend({
     return latestMeeting.plannedStart;
   }),
 
-  approved: computed('decisions', function() {
+  approved: computed('treatments', function() {
     return PromiseObject.create({
-      promise: this.get('decisions').then((decisions) => {
-        const approvedDecisions = decisions.map((decision) => decision.get('approved'));
-        if (approvedDecisions && approvedDecisions.length === 0) {
+      promise: this.get('treatments').then((treatments) => {
+        const approvedTreatments = treatments.map(async(treatment) => {
+          const drc = await treatment.get('decisionResultCode');
+          const id = await drc.get('id');
+          return id === '56312c4b-9d2a-4735-b0b1-2ff14bb524fd' || id === 'e7e44027-fbbb-4285-ba3f-0cdb2264d43c' ;
+        });
+        if (approvedTreatments && approvedTreatments.length === 0) {
           return false;
         }
-        const foundNonApprovedDecision = approvedDecisions.includes(false);
-        return !foundNonApprovedDecision;
+        return !approvedTreatments.includes(false);
       }),
     });
   }),

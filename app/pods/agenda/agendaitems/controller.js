@@ -48,28 +48,11 @@ export default Controller.extend({
   }),
 
   actions: {
-    selectAgendaitem(agendaitem) {
-      const detailRoutePrefix = 'agenda.agendaitems.agendaitem';
-      if (this.routing.currentRouteName.startsWith(detailRoutePrefix)) {
-        this.set('sessionService.selectedAgendaitem', agendaitem); // TODO: get rid of global state
-        this.transitionToRoute(this.routing.currentRouteName, agendaitem.id);
-      } else {
-        this.transitionToRoute(detailRoutePrefix, agendaitem.id);
-      }
-    },
     searchAgendaitems(value) {
       this.set('filter', value);
     },
-    refresh(id) {
-      const {
-        currentAgenda, currentSession,
-      } = this;
-      this.transitionToRoute('agenda.agendaitems.index', currentSession.id, {
-        queryParams: {
-          selectedAgenda: currentAgenda.id,
-          refresh: id,
-        },
-      });
+    refresh() {
+      this.send('reloadModel');
     },
   },
 });

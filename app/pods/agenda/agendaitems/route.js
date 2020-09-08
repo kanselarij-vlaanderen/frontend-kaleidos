@@ -3,6 +3,7 @@ import { hash } from 'rsvp';
 import { isEmpty } from '@ember/utils';
 import { ajax } from 'fe-redpencil/utils/ajax';
 import { inject } from '@ember/service';
+import { action } from '@ember/object';
 
 export default Route.extend({
   sessionService: inject(),
@@ -11,43 +12,35 @@ export default Route.extend({
     filter: {
       refreshModel: true,
     },
-    refresh: {
-      refreshModel: true,
-    },
   },
 
   async model(params) {
-    const id = await this.get('sessionService.currentAgenda.id');
-    if (id) {
-      const {
-        agenda, matchingAgendaitems,
-      } = await hash({
-        agenda: this.store.findRecord('agenda', id),
-        matchingAgendaitems: this.getMatchingAgendaitems(params.filter),
-      });
-
-      let agendaitems = await this.store.query('agendaitem', {
-        filter: {
-          agenda: {
-            id,
-          },
-        },
-        include: 'mandatees',
-      });
-      if (!isEmpty(params.filter)) {
-        agendaitems = agendaitems.filter((item) => matchingAgendaitems[item.id]);
-      }
-
-      const announcements = agendaitems.filter((item) => item.showAsRemark);
-
-      this.set('sessionService.selectedAgendaitem', null);
-
-      return hash({
-        currentAgenda: agenda,
-        announcements,
-        agendaitems,
-      });
+    const {
+      agenda,
+    } = this.modelFor('agenda');
+    let agendaitems = await this.store.query('agendaitem', {
+      'filter[agenda][:id:]': agenda.id,
+      include: 'mandatees',
+    });
+    if (!isEmpty(params.filter)) {
+      const matchingAgendaitems = await this.getMatchingAgendaitems(params.filter);
+      agendaitems = agendaitems.filter((item) => matchingAgendaitems[item.id]);
     }
+
+    const announcements = agendaitems.filter((item) => item.showAsRemark);
+
+    this.set('sessionService.selectedAgendaitem', null);
+
+    return hash({
+      currentAgenda: agenda,
+      announcements,
+      agendaitems,
+    });
+  },
+
+  @action
+  reloadModel() {
+    this.refresh();
   },
 
   async getMatchingAgendaitems(filter) {

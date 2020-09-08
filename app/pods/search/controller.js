@@ -23,20 +23,14 @@ export default class SearchController extends Controller {
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
   @tracked searchText = '';
-
   @tracked mandatees;
-
   @tracked dateFrom;
-
   @tracked dateTo;
-
   @tracked searchTextBuffer = '';
-
   @tracked mandateesBuffer;
-
   @tracked dateFromBuffer;
-
   @tracked dateToBuffer;
+  @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
 
   deserializeDate(date) {
     return date && moment(date, 'DD-MM-YYYY').toDate();
@@ -47,7 +41,7 @@ export default class SearchController extends Controller {
   }
 
   @action
-  openPopover() { // TODO, this is for a tooltip, this should be handled elsewhere
+  openPopover() {
     this.popoverShown = true;
   }
 

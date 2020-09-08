@@ -1,4 +1,4 @@
-{{title (t "newsletter")}}
+{{page-title (t "newsletter")}}
 {{newsletter/newsletter-header}}
 {{#if (gt model.length 0)}}
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
@@ -13,7 +13,7 @@
           enableSizes=true
           isLoading=isLoadingModel
           noDataMessage=(t "no-results-found")
-          onClickRow=(action "navigateToNewsletter") 
+          onClickRow=(action "navigateToNewsletter")
         as |table|
         }}
           {{#table.content as |c|}}
@@ -85,14 +85,13 @@
                 {{/if}}
               </td>
               <td class="vl-u-align-center">
-                {{#link-to
-                  "print-overviews.newsletter.agendaitems"
-                  meeting.id
-                  meeting.latestAgenda.id
+                <LinkTo
+                  @route="newsletter"
+                  @model={{this.meeting.id}}
                   class="vl-button vl-button--link vl-button--icon"
-                }}
-                  <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
-                {{/link-to}}
+                >
+                  <i class="vl-button__icon  ki-nav-right"></i>
+                </LinkTo>
               </td>
             {{/c.body}}
           {{/table.content}}

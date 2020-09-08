@@ -9,6 +9,7 @@ import {
 export default Route.extend({
   agendaService: inject(),
   type: 'decisions',
+  allowEmptyGroups: true,
 
   queryParams: {
     definite: {
@@ -25,7 +26,7 @@ export default Route.extend({
           id: agenda.get('id'),
         },
       },
-      include: 'mandatees',
+      include: 'mandatees,treatments',
       sort: 'priority',
     });
 
@@ -37,7 +38,7 @@ export default Route.extend({
 
     await this.agendaService.groupAgendaitemsOnGroupName(draftAgendaitems);
 
-    const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
+    const groupsArray = sortByPriority(groupedAgendaitems, true);
 
     return hash({
       currentAgenda: agenda,

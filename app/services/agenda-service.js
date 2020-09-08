@@ -6,12 +6,14 @@ import { ajax } from 'fe-redpencil/utils/ajax';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import { A } from '@ember/array';
 
 export default Service.extend({
   store: service(),
   toaster: service(),
   intl: service(),
   currentSession: service(),
+  newsletterService: service(),
 
   addedDocuments: null,
   addedAgendaitems: null,
@@ -135,20 +137,34 @@ export default Service.extend({
       priorityToAssign += index;
     }
 
+    const creationDate = moment().utc()
+      .toDate();
+
+    // Placement on agenda activity
     const agendaActivity = await this.store.createRecord('agenda-activity', {
-      startDate: moment().utc()
-        .toDate(),
+      startDate: creationDate,
       subcase,
     });
     await agendaActivity.save();
+
+    // Treatment of agenda-item / decision activity
+    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+      created: creationDate,
+      modified: creationDate,
+      subcase,
+    });
+    const defaultDecisionResultCodeUri = isAnnouncement ? CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME : CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    const defaultDecisionResultCode = (await this.store.query('decision-result-code', {
+      'filter[:uri:]': defaultDecisionResultCodeUri,
+    })).firstObject;
+    agendaItemTreatment.decisionResultCode = defaultDecisionResultCode;
+    await agendaItemTreatment.save();
 
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.get('shortTitle'),
       textPress: pressText,
-      created: moment()
-        .utc()
-        .toDate(),
+      created: creationDate,
       priority: priorityToAssign,
       agenda: selectedAgenda,
       title: subcase.get('title'),
@@ -160,6 +176,7 @@ export default Service.extend({
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       agendaActivity,
       showInNewsletter: true,
+      treatments: A([agendaItemTreatment]),
     });
     await agendaitem.save();
     const meeting = await selectedAgenda.get('createdFor');
@@ -168,6 +185,12 @@ export default Service.extend({
     await subcase.hasMany('agendaActivities').reload();
     await subcase.save();
     updateModifiedProperty(selectedAgenda);
+
+    // Create default newsletterInfo for announcements
+    if (agendaitem.showAsRemark) {
+      const newsItem = await this.newsletterService.createNewsItemForAgendaItem(agendaitem);
+      newsItem.save();
+    }
   },
 
   async groupAgendaitemsOnGroupName(agendaitems) {
@@ -231,28 +254,16 @@ export default Service.extend({
     this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
   },
 
-  async retrieveModifiedDateFromNota(agendaitem, subcase) {
-    if (!subcase) {
-      return null;
-    }
-    const nota = await agendaitem.get('nota');
+  async retrieveModifiedDateFromNota(agendaItem) {
+    const nota = await agendaItem.get('nota');
     if (!nota) {
       return null;
     }
-    const newsletterInfoForSubcase = await subcase.get('newsletterInfo');
-    const documentVersion = await nota.get('lastDocumentVersion');
-    const modifiedDateFromMostRecentlyAddedNotaDocumentVersion = documentVersion.created;
-    const notaDocumentVersions = await nota.get('documentVersions');
-    if (notaDocumentVersions.length > 1) {
-      const newsletterInfoOnSubcaseLastModifiedTime = newsletterInfoForSubcase.modified;
-      if (newsletterInfoOnSubcaseLastModifiedTime) {
-        if (moment(newsletterInfoOnSubcaseLastModifiedTime)
-          .isBefore(moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion))) {
-          return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
-        }
-        return null;
-      }
-      return moment(modifiedDateFromMostRecentlyAddedNotaDocumentVersion);
+    const versions = await nota.get('documentVersions');
+    const hasRevision = versions.length > 1;
+    if (hasRevision) {
+      const lastVersion = await nota.get('lastDocumentVersion');
+      return lastVersion.created;
     }
     return null;
   },

@@ -3,7 +3,6 @@ import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import { deprecatingAlias } from '@ember/object/computed';
 import moment from 'moment';
-import config from '../utils/config';
 const {
   Model, attr, belongsTo,
 } = DS;
@@ -17,7 +16,7 @@ export default Model.extend({
     until: '?',
   }),
   confidential: attr('boolean'),
-  publicSince: attr('datetime'),
+  accessLevelLastModified: attr('datetime'),
   accessLevel: belongsTo('access-level'),
 
   file: belongsTo('file'),
@@ -45,7 +44,6 @@ export default Model.extend({
   agendaitem: belongsTo('agendaitem', {
     inverse: null,
   }),
-  announcement: belongsTo('announcement'),
   newsletter: belongsTo('newsletter-info'),
   meeting: belongsTo('meeting', {
     inverse: null,
@@ -58,13 +56,10 @@ export default Model.extend({
     });
   }),
 
-  changePublicSince() {
-    if (this.get('accessLevel').get('id') === config.publiekAccessLevelId && !this.get('confidential') && !this.get('publicSince')) {
-      this.set('publicSince', moment().utc()
+  changeAccessLevelLastModified() {
+    if (!this.get('confidential')) {
+      this.set('accessLevelLastModified', moment().utc()
         .toDate());
-    }
-    if (this.get('accessLevel').get('id') !== config.publiekAccessLevelId || this.get('confidential')) {
-      this.set('publicSince', undefined);
     }
   },
 
@@ -77,7 +72,7 @@ export default Model.extend({
       default:
         this.set('modified', moment().utc()
           .toDate());
-        this.changePublicSince();
+        this.changeAccessLevelLastModified();
         break;
     }
 

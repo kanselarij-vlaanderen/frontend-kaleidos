@@ -12,7 +12,7 @@ context('meeting actions tests', () => {
     cy.deleteAgenda('5EB287CDF359DD0009000008');
 
     // Verify subcase is still ok on agenda A after delete designagenda
-    cy.agendaitemExists('Cypress test: delete agenda - 1588758436').click();
+    cy.openDetailOfAgendaitem('Cypress test: delete agenda - 1588758436');
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
@@ -25,13 +25,13 @@ context('meeting actions tests', () => {
     cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: close agenda - 1588775338';
     cy.visit('/vergadering/5EB2C9CBF5E1260009000005/agenda/74e87383-80a4-4616-8814-5883cafa6da0/agendapunten');
-    cy.agendaitemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
 
     cy.changeSelectedAgenda('Agenda A');
-    cy.agendaitemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
@@ -39,7 +39,7 @@ context('meeting actions tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.closeAgenda();
 
-    cy.agendaitemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
@@ -66,12 +66,12 @@ context('meeting actions tests', () => {
     cy.agendaitemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
     // Verify agendaitem exists and has subcase on design agenda and agenda A
     cy.changeSelectedAgenda('Agenda A');
-    cy.agendaitemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
     cy.changeSelectedAgenda('Ontwerpagenda');
-    cy.agendaitemExists(SubcaseTitleShort).click();
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });

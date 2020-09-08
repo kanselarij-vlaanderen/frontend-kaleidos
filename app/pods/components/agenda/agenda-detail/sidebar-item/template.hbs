@@ -1,9 +1,13 @@
-{{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
-  With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status
-  is set rigth from the beginning and the component is rendered only once, scrolling on "did-insert" works just fine --}}
-<a href="#" {{ on "click" this.openDetailPage }} class={{ classNameBindings }}>
-  <div data-test-agenda-detail-sidebar-sub-item-container class="vl-u-display-flex" {{in-viewport onEnter=( fn conditionallyScrollIntoView ) }}>
-    <span data-test-agendaitem-number class="vlc-agenda-detail-sidebar-sub-item__numbering">
+<LinkTo
+  class={{classNameBindings}}
+  @route={{this.router.currentRouteName}}
+  @model={{@agendaitem.id}}
+>
+  {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
+    With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status
+    is set right from the beginning and the component is rendered only once, scrolling on "did-insert" works just fine --}}
+  <div class="vl-u-display-flex" {{in-viewport onEnter=( fn conditionallyScrollIntoView ) }}>
+    <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
       {{#if @agendaitem.number}}
         {{@agendaitem.number}}.
       {{else}}
@@ -36,7 +40,7 @@
             <div class="vl-u-display-flex vlc-u-display-flex-align-items-flex-end vlc-agenda-detail-sidebar-item__icon">
               {{#if (await @agendaitem.checkAdded)}}
                 <span class="added-tag vlc-agenda-meta__recently-added">
-                  <i class="vl-vi ki-calendar-plus"></i>
+                  <i class="ki-calendar-plus"></i>
                   {{#attach-tooltip
                     arrow="true"
                     animation="shift"
@@ -50,13 +54,13 @@
                 </span>
               {{/if}}
 
-              {{#if (and @agendaitem.showAsRemark (not @agendaitem.showInNewsletter))}}
-                <i class="vl-vi ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+              {{#if (not newsletterInfo.inNewsletter)}}
+                <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
               {{/if}}
 
               {{#if (await subcase.confidential)}}
                 <i
-                   class="vl-icon vl-vi ki-lock-closed vl-vi-no-font-weight vlc-u-opacity-50"
+                   class="vl-icon ki-lock-closed vlc-u-opacity-50"
                    data-test-icon-agenda-confidentiality-locked
                 ></i>
               {{/if}}
@@ -66,7 +70,8 @@
               {{#if
                 (and currentSessionService.isEditor (await currentAgenda.isDesignAgenda))
               }}
-                <p class="{{@agendaitem.formallyOkToShow.classNames}} {{@agendaitem.formallyOkToShow.iconClassNames}}">
+                <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
+                <p class="{{@agendaitem.formallyOkToShow.classNames}}">
                   {{@agendaitem.formallyOkToShow.label}}
                 </p>
               {{/if}}
@@ -76,4 +81,4 @@
       {{/if}}
     </div>
   </div>
-</a>
+</LinkTo>

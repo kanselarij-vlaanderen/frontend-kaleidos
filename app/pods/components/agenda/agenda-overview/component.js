@@ -28,8 +28,6 @@ export default class AgendaOverview extends Component {
 
   isShowingChanges = null;
 
-  overviewEnabled = null;
-
   showLoader = null;
 
   @computed('selectedAgendaitem')

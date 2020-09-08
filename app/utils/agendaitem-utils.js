@@ -25,14 +25,34 @@ export const cancelEdit = (item, propertiesToSet) => {
 };
 
 /**
- * Set an item to not yet formally ok.
- *
+ * @description Set an item to not yet formally ok.
  * @param itemToSet
  */
 export const setNotYetFormallyOk = (itemToSet) => {
   if (itemToSet.get('formallyOk') !== CONFIG.notYetFormallyOk) {
     itemToSet.set('formallyOk', CONFIG.notYetFormallyOk);
   }
+};
+
+/**
+ *@name setAgendaitemFormallyOk
+ *@description Zet een agendapunt naar formeel Ok.
+ * @param agendaitem
+ */
+export const setAgendaitemFormallyOk = async(agendaitem) => {
+  if (agendaitem.get('formallyOk') !== CONFIG.formallyOk) {
+    agendaitem.set('formallyOk', CONFIG.formallyOk);
+    await agendaitem.save();
+  }
+};
+
+/**
+ *@description Return een lijst met agendaitems die nog niet formeel ok zijn.
+ * @param agendaitems
+ */
+export const getListOfAgendaitemsThatAreNotFormallyOk = (agendaitems) => {
+  const agendaitemNotFormallyOk = (agendaitem) => agendaitem.get('formallyOk') !== CONFIG.formallyOk;
+  return agendaitems.filter(agendaitemNotFormallyOk);
 };
 
 /**
@@ -84,7 +104,7 @@ export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
  * @param agendaitemOrSubcase
  * @param propertiesToSetOnAgendaitem
  * @param propertiesToSetOnSubcase
- * @param resetFormallyOk
+ * @param resetFormallyOk  // only used for agendaitem after refactor KAS-1422
  * @returns {Promise<void>}
  */
 export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
@@ -100,12 +120,12 @@ export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaite
     if (isDesignAgenda && agendaActivity) {
       const agendaitemSubcase = await agendaActivity.get('subcase');
       await agendaitemSubcase.preEditOrSaveCheck();
-      await setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, resetFormallyOk);
+      await setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, false);
     }
     await setNewPropertiesToModel(item, propertiesToSetOnAgendaitem, resetFormallyOk);
     await setModifiedOnAgendaOfAgendaitem(item);
   } else {
-    await setNewPropertiesToModel(item, propertiesToSetOnSubcase, resetFormallyOk);
+    await setNewPropertiesToModel(item, propertiesToSetOnSubcase, false);
 
     const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
     if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {

@@ -27,17 +27,18 @@
                 <ul class="vlc-tabs-reverse" role="tablist">
                   <li class="vlc-tabs-reverse__item">
                     <LinkTo
-                      @route="print-overviews.newsletter.agendaitems"
-                      @model={{agenda}}
                       class="border-left vlc-tabs-reverse__link"
-                      @activeClass="vlc-tabs-reverse__link--active" >
+                      @route="newsletter.index"
+                      @model={{await agenda.createdFor.id}}
+                      @activeClass="vlc-tabs-reverse__link--active"
+                    >
                       {{t "overview"}}
                     </LinkTo>
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     <LinkTo
-                      @route="print-overviews.newsletter.overview"
-                      @model={{agenda.id}}
+                      @route="newsletter.print"
+                      @model={{await agenda.createdFor.id}}
                       @query={{hash definite=false}}
                       class="vlc-tabs-reverse__link"
                       @activeClass="vlc-tabs-reverse__link--active" >
@@ -46,8 +47,8 @@
                   </li>
                   <li class="vlc-tabs-reverse__item">
                     <LinkTo
-                      @route="print-overviews.newsletter.overview"
-                      @model={{agenda.id}}
+                      @route="newsletter.print"
+                      @model={{await agenda.createdFor.id}}
                       @query={{hash definite=true}}
                       class="vlc-tabs-reverse__link"
                       @activeClass="vlc-tabs-reverse__link--active" >
@@ -74,12 +75,12 @@
           >
             {{#if (not isShowingOptions)}}
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-down-fat"
+                class="vl-button__icon vl-button__icon--before ki-chevron-down"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{else}}
               <i
-                class="vl-button__icon vl-button__icon--before vl-vi vl-vi-arrow-up-fat"
+                class="vl-button__icon vl-button__icon--before ki-chevron-up"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{/if}}

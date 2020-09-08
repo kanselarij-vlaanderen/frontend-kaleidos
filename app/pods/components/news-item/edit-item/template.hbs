@@ -4,7 +4,7 @@
       {{#if (not (await agendaitem.nota))}}
         <button type="button" class="vl-button vl-button--secondary vl-button--icon-before vl-button--disabled"
         >
-          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
+          <i class="vl-button__icon vl-button__icon--before ki-document"
           ></i>
           {{t "no-nota"}}
         </button>
@@ -12,7 +12,7 @@
         <button type="button" class="vl-button vl-button--secondary vl-button--icon-before"
           {{action "openDocument" agendaitem bubbles=false}}
         >
-          <i class="vl-button__icon vl-button__icon--before vl-vi vl-vi-document"
+          <i class="vl-button__icon vl-button__icon--before ki-document"
           ></i>
           {{t "open-note"}}
         </button>
@@ -61,10 +61,12 @@
       handleRdfaEditorInit=(action "handleRdfaEditorInit")
     }}
   </div>
+
   <div class="vlc-input-field-block vl-u-text--capitalize">
     {{web-components/vl-form-label value=(t "remark")}}
     {{web-components/vl-form-input width="4" value=newsletterInfo.remark}}
   </div>
+
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "finished")}}
     {{web-components/vl-toggle value=newsletterInfo.finished}}

@@ -56,7 +56,14 @@ export default Model.extend(LoadableModel, {
 
   isApprovable: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaitems = agendaitems.filter((agendaitem) => this.checkFormallyOkStatus(agendaitem));
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get('formallyOk')));
+      return approvedAgendaitems.get('length') === agendaitems.get('length');
+    });
+  }),
+
+  isClosable: computed('agendaitems.@each.formallyOk', function() {
+    return this.get('agendaitems').then((agendaitems) => {
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk].includes(agendaitem.get('formallyOk')));
       return approvedAgendaitems.get('length') === agendaitems.get('length');
     });
   }),
@@ -87,10 +94,6 @@ export default Model.extend(LoadableModel, {
       return Math.max(...announcements.map((item) => item.priority || 0));
     });
   }),
-
-  checkFormallyOkStatus(agendaitem) {
-    return [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get('formallyOk'));
-  },
 
   checkPassable(agendaitem) {
     return (
