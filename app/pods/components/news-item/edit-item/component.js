@@ -88,7 +88,8 @@ export default Component.extend({
       window.open(`/document/${documentVersion.get('id')}`);
     },
     async handleRdfaEditorInit(editorInterface) {
-      const newsLetterInfoText = await this.get('agendaitem.agendaActivity.subcase.newsletterInfo.richtext');
+      const newsletterInfo = await this.get('newsletterInfo');
+      const newsLetterInfoText = newsletterInfo.get('richtext');
       editorInterface.setHtmlContent(newsLetterInfoText);
       this.set('editor', editorInterface);
     },
