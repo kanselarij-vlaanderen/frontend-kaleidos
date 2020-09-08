@@ -1,1 +1,92 @@
-{{outlet}}
+<div class="vl-u-spacer-extended-l">
+  <div class="vl-u-spacer--large">
+    <div>
+      {{#if this.model.length}}
+        <DataTable
+                @content={{this.model}}
+                @page={{this.page}}
+                @noDataMessage={{t "no-results-found"}}
+                @size={{this.size}}
+                @sort={{this.sort}}
+                @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+                @isLoading={{this.isLoadingModel}}
+                as |table|
+        >
+          <table.content as |c|>
+            <c.header>
+              <th class="vl-data-table-col-1 vl-data-table__header-title">
+                {{t "newsletter-update-notas-number"}}
+              </th>
+              <th class="vl-data-table-col-2 vl-data-table__header-title">
+                {{t "newsletter-update-notas-agendaitem-short-title"}}
+              </th>
+              <th class="vl-data-table-col-2 vl-data-table__header-title">
+                {{t "newsletter-update-notas-documentname"}}
+              </th>
+              <ThSortable
+                  @class="vl-data-table-col-2 vl-data-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="modified"
+                  @label={{t "newsletter-update-notas-edited-on"}}
+              />
+              <th class="vl-data-table-col-1"></th>
+            </c.header>
+            <c.body class="tr-hover" as |row|>
+              <td>
+                <p>
+                  {{row.agendaitemPriority}}
+                </p>
+              </td>
+              <td>
+                <p>
+                  {{row.agendaitemShortTitle}}
+                </p>
+              </td>
+              <td>
+                <p>
+                  {{row.name}}
+                </p>
+              </td>
+              <td>
+                <p>
+                  {{t "newsletter-update-notas-edited-text" date=row.date time=row.time}}
+                </p>
+              </td>
+              <td class="vl-u-align-right">
+                <LinkTo
+                  class="vl-button vl-button--link vl-button--icon"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array row.meetingId row.agendaId row.id}}
+                >
+                  <i class="vl-button__icon ki-book"></i>
+                </LinkTo>
+                <LinkTo
+                  class="vl-button vl-button--link vl-button--icon"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array row.meetingId row.agendaId row.id}}
+                >
+                  <i class="vl-button__icon ki-nav-right"></i>
+                </LinkTo>
+              </td>
+            </c.body>
+          </table.content>
+        </DataTable>
+        <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center vlc-search__sizeoptions">
+          <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap" for="dossierId">
+            {{t "agendaitems-page-size"}}
+          </label>
+          <div class="vlc-search__sizeoptions">
+            <PowerSelect
+                    @options={{this.sizeOptions}}
+                    @selected={{size}}
+                    @searchEnabled={{false}}
+                    @onchange={{this.selectSize}}
+                    as |sizeValue|>
+              {{sizeValue}}
+            </PowerSelect>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
