@@ -20,4 +20,8 @@ export default class NewsletterUpdatesController extends Controller {
   selectSize(size) {
     this.size = size;
   }
+
+  showDocumentVersionViewer = (documentId) => {
+    window.open(`/document/${documentId}`);
+  };
 }

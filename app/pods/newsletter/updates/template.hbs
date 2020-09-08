@@ -1,16 +1,16 @@
 <div class="vl-u-spacer-extended-l">
   <div class="vl-u-spacer--large">
     <div>
-      {{#if this.model.length}}
+      {{#if this.model.notas.length}}
         <DataTable
-                @content={{this.model}}
-                @page={{this.page}}
-                @noDataMessage={{t "no-results-found"}}
-                @size={{this.size}}
-                @sort={{this.sort}}
-                @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-                @isLoading={{this.isLoadingModel}}
-                as |table|
+          @content={{this.model.notas}}
+          @page={{this.page}}
+          @noDataMessage={{t "no-results-found"}}
+          @size={{this.size}}
+          @sort={{this.sort}}
+          @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+          @isLoading={{this.isLoadingModel}}
+          as |table|
         >
           <table.content as |c|>
             <c.header>
@@ -53,17 +53,19 @@
                 </p>
               </td>
               <td class="vl-u-align-right">
-                <LinkTo
-                  class="vl-button vl-button--link vl-button--icon"
-                  @route="agenda.agendaitems.agendaitem"
-                  @models={{array row.meetingId row.agendaId row.id}}
+                <button type="button" class="vl-button vl-button--link vl-button--icon"
+                  {{on "click" (fn this.showDocumentVersionViewer row.documentId)}}
                 >
-                  <i class="vl-button__icon ki-book"></i>
-                </LinkTo>
+                  <i class="ki-book vl-button__icon" aria-hidden="true"></i>
+                </button>
                 <LinkTo
                   class="vl-button vl-button--link vl-button--icon"
                   @route="agenda.agendaitems.agendaitem"
-                  @models={{array row.meetingId row.agendaId row.id}}
+                  @models={{array
+                    (await latestMeetingId)
+                    (await latestAgendaId)
+                    (await latestAgendaItemId)
+                  }}
                 >
                   <i class="vl-button__icon ki-nav-right"></i>
                 </LinkTo>
