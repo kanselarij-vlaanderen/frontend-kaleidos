@@ -49,7 +49,6 @@ export default class AgendaitemsSearchController extends Controller {
     } else {
       this.types.removeObject('nota');
     }
-    return value;
   }
 
   get includeMededelingen() {
@@ -64,7 +63,6 @@ export default class AgendaitemsSearchController extends Controller {
     } else {
       this.types.removeObject('mededeling');
     }
-    return value;
   }
 
   @action
