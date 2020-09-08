@@ -148,7 +148,7 @@ export default Service.extend({
     await agendaActivity.save();
 
     // Treatment of agenda-item / decision activity
-    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+    const agendaitemTreatment = await this.store.createRecord('agenda-item-treatment', {
       created: creationDate,
       modified: creationDate,
       subcase,
@@ -157,8 +157,8 @@ export default Service.extend({
     const defaultDecisionResultCode = (await this.store.query('decision-result-code', {
       'filter[:uri:]': defaultDecisionResultCodeUri,
     })).firstObject;
-    agendaItemTreatment.decisionResultCode = defaultDecisionResultCode;
-    await agendaItemTreatment.save();
+    agendaitemTreatment.decisionResultCode = defaultDecisionResultCode;
+    await agendaitemTreatment.save();
 
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
@@ -176,7 +176,7 @@ export default Service.extend({
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       agendaActivity,
       showInNewsletter: true,
-      treatments: A([agendaItemTreatment]),
+      treatments: A([agendaitemTreatment]),
     });
     await agendaitem.save();
     const meeting = await selectedAgenda.get('createdFor');
@@ -188,7 +188,7 @@ export default Service.extend({
 
     // Create default newsletterInfo for announcements
     if (agendaitem.showAsRemark) {
-      const newsItem = await this.newsletterService.createNewsItemForAgendaItem(agendaitem);
+      const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem);
       newsItem.save();
     }
   },
@@ -254,8 +254,8 @@ export default Service.extend({
     this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
   },
 
-  async retrieveModifiedDateFromNota(agendaItem) {
-    const nota = await agendaItem.get('nota');
+  async retrieveModifiedDateFromNota(agendaitem) {
+    const nota = await agendaitem.get('nota');
     if (!nota) {
       return null;
     }

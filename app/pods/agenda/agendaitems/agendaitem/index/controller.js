@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { setAgendaItemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
+import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -30,8 +30,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   async reassignPrioritiesForAgendaitems() {
     const isEditor = this.currentSession.isEditor;
     const isDesignAgenda = this.agenda.isDesignAgenda;
-    const agendaItems = await this.agenda.agendaitems;
-    setAgendaItemsPriority(agendaItems, isEditor, isDesignAgenda);
+    const agendaitems = await this.agenda.agendaitems;
+    setAgendaitemsPriority(agendaitems, isEditor, isDesignAgenda);
   }
 
   @action

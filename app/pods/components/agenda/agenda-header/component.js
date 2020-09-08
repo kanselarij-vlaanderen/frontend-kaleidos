@@ -67,7 +67,7 @@ export default Component.extend(FileSaverMixin, {
     return true;
   }),
 
-  amountOfAgendaitemsNotFormallyOk: computed('currentAgendaItems.@each.formallyOk', async function() {
+  amountOfAgendaitemsNotFormallyOk: computed('currentAgendaitems.@each.formallyOk', async function() {
     const isNotFormallyOk = (agendaitem) => agendaitem.formallyOk !== CONFIG.formallyOk;
     const agendaitems = await this.currentAgenda.get('agendaitems');
     return agendaitems.filter(isNotFormallyOk).length;

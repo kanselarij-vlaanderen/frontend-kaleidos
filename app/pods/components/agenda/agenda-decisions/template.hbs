@@ -42,7 +42,7 @@
                     {{#if treatment.isEditing}}
                       <Agenda::Agendaitem::AgendaitemDecisionEdit
                         @isEditing={{treatment.isEditing}}
-                        @agendaItemTreatment={{treatment}}
+                        @agendaitemTreatment={{treatment}}
                         @subcase={{await agendaitem.agendaActivity.subcase}}
                         @isTableRow={{isTableRow}}
                         @agendaitem={{agendaitem}} />

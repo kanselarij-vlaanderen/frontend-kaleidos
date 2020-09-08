@@ -68,13 +68,13 @@
     <Utils::AddSignedDocuments
       @item={{this.treatment}}
       @defaultType={{this.defaultType}}
-      @modelToAddDocumentVersionTo="agendaItemTreatment"
+      @modelToAddDocumentVersionTo="agendaitemTreatment"
       @title={{t "signed-decision-add"}}
     />
   {{/if}}
 {{else}}
   <Agenda::Agendaitem::AgendaitemDecisionEdit
-    @agendaItemTreatment={{this.treatment}}
+    @agendaitemTreatment={{this.treatment}}
     @onSave={{this.closeEditingWindow}}
     @onCancel={{this.closeEditingWindow}}
     @isTableRow={{@isTableRow}}

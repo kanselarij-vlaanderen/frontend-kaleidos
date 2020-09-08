@@ -22,7 +22,7 @@ export default ModelWithModifier.extend({
   publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
-  agendaItemTreatment: belongsTo('agenda-item-treatment'),
+  agendaitemTreatment: belongsTo('agenda-item-treatment'),
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
@@ -33,8 +33,8 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  newsletterProposal: computed('agendaItemTreatment', async function() {
-    const treatment = await this.get('agendaItemTreatment');
+  newsletterProposal: computed('agendaitemTreatment', async function() {
+    const treatment = await this.get('agendaitemTreatment');
     const subcase = await treatment.get('subcase');
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');

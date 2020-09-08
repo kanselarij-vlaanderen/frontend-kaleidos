@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { setAgendaItemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
+import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaSidebar extends Component {
   @service sessionService;
@@ -32,7 +32,7 @@ export default class AgendaSidebar extends Component {
     const isEditor = this.currentSessionService.isEditor;
     const isDesignAgenda = this.args.currentAgenda.isDesignAgenda;
     this.isReAssigningPriorities = true;
-    setAgendaItemsPriority(itemModels, isEditor, isDesignAgenda);
+    setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
     this.isReAssigningPriorities = false;
   }
 }

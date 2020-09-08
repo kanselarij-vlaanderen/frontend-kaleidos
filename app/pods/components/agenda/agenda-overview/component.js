@@ -4,7 +4,7 @@ import {
 } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import { setAgendaItemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
+import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaOverview extends Component {
   @service sessionService;
@@ -71,6 +71,6 @@ export default class AgendaOverview extends Component {
   reorderItems(itemModels) {
     const isEditor = this.currentSessionService.isEditor;
     const isDesignAgenda = this.currentAgenda.isDesignAgenda;
-    setAgendaItemsPriority(itemModels, isEditor, isDesignAgenda);
+    setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
   }
 }
