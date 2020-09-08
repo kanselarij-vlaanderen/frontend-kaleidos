@@ -6,7 +6,7 @@
 {{else if (await meetingRecordOrDecision.report)}}
   {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
     document=(await meetingRecordOrDecision.report)
-    item=(await meetingRecordOrDecision.report)
+    subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.report)
   }}
 {{else if (await meetingRecordOrDecision)}}
   {{#if currentSession.isEditor}}
