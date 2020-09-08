@@ -24,7 +24,7 @@
       <button data-test-access-level-save type="button" class="vl-button vl-button--link vl-button--icon"
         {{action "save"}}
       >
-        <i class="vl-vi vl-vi-save vl-button__icon" aria-hidden="true"></i>
+        <i class="ki-check vl-button__icon" aria-hidden="true"></i>
         <span class="vl-u-visually-hidden">
           {{t "more-options"}}
         </span>
@@ -32,7 +32,7 @@
       <button type="button" class="vl-button vl-button--link vl-button--icon"
         {{action "cancelChanges"}}
       >
-        <i class="vl-vi vl-vi-cross vl-button__icon" aria-hidden="true"></i>
+        <i class="ki-cross vl-button__icon" aria-hidden="true"></i>
         <span class="vl-u-visually-hidden">
           {{t "more-options"}}
         </span>
@@ -44,10 +44,10 @@
     {{action "toggleConfidential"}}
   >
     {{#if lastDocumentVersion.confidential}}
-      <span class="vl-icon vl-vi vl-vi-lock vl-u-text--error"
-      ></span>
+      <i class="vl-icon ki-lock-closed vl-u-text--error"
+      ></i>
     {{else}}
-      <span class="vl-icon vl-vi vl-vi-lock-unlock"></span>
+      <i class="vl-icon ki-lock-open"></i>
     {{/if}}
   </button>
   {{yield}}

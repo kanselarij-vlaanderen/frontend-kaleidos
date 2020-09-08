@@ -44,7 +44,6 @@ export default Model.extend({
   agendaitem: belongsTo('agendaitem', {
     inverse: null,
   }),
-  announcement: belongsTo('announcement'),
   newsletter: belongsTo('newsletter-info'),
   meeting: belongsTo('meeting', {
     inverse: null,
