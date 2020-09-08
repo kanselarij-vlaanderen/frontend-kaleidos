@@ -279,9 +279,9 @@ export default Component.extend({
     },
 
     async openUploadDialog() {
-      const itemType = this.subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
+      const itemType = this.agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
       if (itemType === 'agendaitem' || itemType === 'subcase') {
-        await this.subcaseAgendaitemMeetingOrDocumentContainer.preEditOrSaveCheck();
+        await this.agendaitemOrSubcaseOrMeeting.preEditOrSaveCheck();
       }
       this.toggleProperty('isUploadingNewVersion');
     },
@@ -310,7 +310,7 @@ export default Component.extend({
       this.set('isLoading', true);
       const document = await this.get('documentContainer.lastDocumentVersion');
       await document.save();
-      const subcaseAgendaitemMeetingOrDocumentContainer = await this.get('subcaseAgendaitemMeetingOrDocumentContainer');
+      const subcaseAgendaitemMeetingOrDocumentContainer = await this.get('agendaitemOrSubcaseOrMeeting');
       const agendaActivity = await subcaseAgendaitemMeetingOrDocumentContainer.get('agendaActivity'); // when agendaitemOrSubcase = agendaitem
       const agendaitemsOnDesignAgenda = await subcaseAgendaitemMeetingOrDocumentContainer.get('agendaitemsOnDesignAgendaToEdit'); // when agendaitemOrSubcase = subcase
       try {
