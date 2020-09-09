@@ -60,11 +60,11 @@
                 </button>
                 <LinkTo
                   class="vl-button vl-button--link vl-button--icon"
-                  @route="agenda.agendaitems.agendaitem"
+                  @route="agenda.agendaitems.agendaitem.documents"
                   @models={{array
-                    (await latestMeetingId)
-                    (await latestAgendaId)
-                    (await latestAgendaItemId)
+                    (await row.meetingId)
+                    (await row.agendaId)
+                    (await row.agendaitemId)
                   }}
                 >
                   <i class="vl-button__icon ki-nav-right"></i>

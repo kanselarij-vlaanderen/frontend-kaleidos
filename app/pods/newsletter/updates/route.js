@@ -3,11 +3,21 @@ import moment from 'moment';
 import { hash } from 'rsvp';
 
 export default class NewsletterUpdatesRoute extends Route {
+  queryParams = {
+    sort: {
+      refreshModel: true,
+    },
+  };
   async model(params) {
+    return this.retrieveModelData(params);
+  }
+  async retrieveModelData(params) {
     const notas = [];
     const agendaId = params.id;
     const agenda = await this.store.findRecord('agenda', agendaId);
-    const agendaitemsForAgenda = await this.agenda.get('agendaitems');
+    const meeting = await agenda.get('createdFor');
+    const meetingId = await meeting.get('id');
+    const agendaitemsForAgenda = await agenda.get('agendaitems');
     const agendaitemsArray = agendaitemsForAgenda.toArray();
     for (const agendaitem of agendaitemsArray) {
       const agendaitemPriority = agendaitem.get('priority');
@@ -21,6 +31,8 @@ export default class NewsletterUpdatesRoute extends Route {
           const documentVersionData = await NewsletterUpdatesRoute.getDocumentVersionData(documentVersion);
           if (documentVersionData) {
             const nota =  {
+              meetingId,
+              agendaId,
               agendaitemId,
               agendaitemPriority,
               agendaitemShortTitle,
@@ -33,7 +45,6 @@ export default class NewsletterUpdatesRoute extends Route {
     }
     return hash({
       notas: notas,
-      agenda: agenda,
     });
   }
 
