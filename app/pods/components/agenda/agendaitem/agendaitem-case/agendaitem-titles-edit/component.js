@@ -11,7 +11,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class AgendaitemTitlesEdit extends Component {
   @service store;
-  @tracked isLoading= false;
+  @tracked isLoading = false;
   classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
 
