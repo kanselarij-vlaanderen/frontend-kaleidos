@@ -68,4 +68,8 @@ export default class PublicationsRoute extends Route {
 
     return this.mockedPublications;
   }
+
+  redirect() {
+    return this.transitionTo('publications.in-progress');
+  }
 }
