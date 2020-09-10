@@ -14,7 +14,9 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaItemTreatments = await agendaItem.get('treatments');
     const agendaItemTreatment = agendaItemTreatments.firstObject; // TODO: AgendaItem can have many treatments (decisions)
     if (!agendaItemTreatment) {
-      warn(`Agenda item "${agendaItem.id}" is missing a treatment`);
+      warn(`Agenda item "${agendaItem.id}" is missing a treatment`, {
+        id: 'broken-data.missing-agenda-item-treatment',
+      });
       this.transitionTo('agenda.agendaitems.agendaitem.index');
     }
   }
