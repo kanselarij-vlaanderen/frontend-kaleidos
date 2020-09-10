@@ -26,7 +26,7 @@
       {{#each (await agendaitemOrSubcaseOrMeeting.documents) as |document|}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
                 @document={{document}}
-                @agendaitemOrSubcaseOrMeeting={{agendaitemOrSubcaseOrMeeting}} />
+                @subcaseAgendaitemMeetingOrDocumentContainer={{agendaitemOrSubcaseOrMeeting}} />
       {{/each}}
     {{else}}
       <div class="vl-u-spacer-extended-top-s">
