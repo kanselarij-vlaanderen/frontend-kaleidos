@@ -55,7 +55,7 @@ export default class SidebarItem extends Component {
 
   @action
   conditionallyScrollIntoView(element) {
-    if (!this.isActive) {
+    if (this.isActive) {
       element.scrollIntoView({
         behavior: 'smooth', block: 'center',
       });
