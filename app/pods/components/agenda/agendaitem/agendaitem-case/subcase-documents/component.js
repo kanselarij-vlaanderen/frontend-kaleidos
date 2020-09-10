@@ -283,7 +283,6 @@ export default Component.extend(
               );
             }
             await this.addDocumentToAgendaitemOrSubcaseOrMeeting(documentsToAttach, agendaitemOrSubcaseOrMeeting);
-            await agendaitemOrSubcaseOrMeeting.save();
           }
         } catch (error) {
           this.deleteAll();
