@@ -36,7 +36,7 @@
   {{else}}
     <Agenda::Agendaitem::AgendaitemCase::EditSubcaseDocuments
             @documents={{await agendaitemOrSubcaseOrMeeting.documents}}
-            @item={{agendaitemOrSubcaseOrMeeting}}
+            @agendaitemOrSubcaseOrMeeting={{agendaitemOrSubcaseOrMeeting}}
             @cancelForm={{action "cancelEditing"}} />
   {{/if}}
   {{#if (is-pending agendaitemOrSubcaseOrMeeting.documents)}}
