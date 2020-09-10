@@ -1,6 +1,8 @@
 import Route from '@ember/routing/route';
 import moment from 'moment';
 import { hash } from 'rsvp';
+import { A } from '@ember/array';
+
 
 export default class NewsletterUpdatesRoute extends Route {
   queryParams = {
@@ -12,7 +14,7 @@ export default class NewsletterUpdatesRoute extends Route {
     return this.retrieveModelData(params);
   }
   async retrieveModelData(params) {
-    const notas = [];
+    let notas = A([]);
     const agendaId = params.id;
     const agenda = await this.store.findRecord('agenda', agendaId);
     const meeting = await agenda.get('createdFor');
@@ -38,9 +40,15 @@ export default class NewsletterUpdatesRoute extends Route {
               agendaitemShortTitle,
               ...documentVersionData,
             };
-            notas.push(nota);
+            notas.pushObject(nota);
           }
         }
+      }
+    }
+    if (params.sort.includes('modified')) {
+      notas = notas.sortBy('modified');
+      if (params.sort.startsWith('-')) {
+        notas.reverseObjects();
       }
     }
     return hash({
@@ -49,9 +57,9 @@ export default class NewsletterUpdatesRoute extends Route {
   }
 
   static async getDocumentVersionData(documentVersion) {
-    const name = await documentVersion.get('name');
-    const documentId = await documentVersion.get('id');
-    const modified = await documentVersion.get('modified');
+    const name = documentVersion.get('name');
+    const documentId = documentVersion.get('id');
+    const modified = documentVersion.get('modified');
     const container = await documentVersion.get('documentContainer');
     const type = await container.get('type');
     const label = type.get('label');

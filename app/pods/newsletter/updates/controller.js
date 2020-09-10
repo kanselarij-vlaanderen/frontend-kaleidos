@@ -7,7 +7,7 @@ export default class NewsletterUpdatesController extends Controller {
 
   @tracked page;
   @tracked size;
-  @tracked sort = 'modified';
+  @tracked sort = '-modified';
 
   constructor() {
     super(...arguments);
