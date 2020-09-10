@@ -26,29 +26,27 @@
     title=(t "document-add")
   }}
     <div class="vl-modal-dialog__content">
-      {{#if (eq documentsInCreation.length 0)}}
+      {{#if (eq documentInCreation null)}}
         {{file-uploader
           isLoading=isLoading
           multipleFiles=false
           uploadedFileAction=(action "uploadedFile")
         }}
       {{/if}}
-      {{#if (not isLoading)}}
+      {{#if (and (not isLoading) (not (eq documentInCreation null)))}}
         <div class="upload-container">
-          {{#each documentsInCreation as |doc|}}
-            {{ember-kaleidos-webuniversum/vl-uploaded-document
-              name=doc.file.filename
-              extension=doc.file.extension
-              size=doc.file.size
-              downloadName=doc.file.filename
-              downloadLink=(concat
-                      doc.file.downloadLink
-                      "?name="
-                      doc.file.filename
-              )
-              delete=(action "deleteFile" doc.file)
-            }}
-          {{/each}}
+          {{ember-kaleidos-webuniversum/vl-uploaded-document
+            name=documentInCreation.file.filename
+            extension=documentInCreation.file.extension
+            size=documentInCreation.file.size
+            downloadName=documentInCreation.file.filename
+            downloadLink=(concat
+                    documentInCreation.file.downloadLink
+                    "?name="
+                    documentInCreation.file.filename
+            )
+            delete=(action "deleteFile" doc.file)
+          }}
         </div>
       {{else}}
         {{web-components/vl-loader text=(t "documents-uploading-text")}}
@@ -60,7 +58,7 @@
       saveButtonText=(t "document-add")
       cancelAction=(action "closeModal")
       saveAction=(action "uploadNewDocument")
-      disableSave=(eq documentsInCreation.length 0)
+      disableSave=(eq documentInCreation null)
     }}
   {{/web-components/vl-modal}}
 {{/if}}

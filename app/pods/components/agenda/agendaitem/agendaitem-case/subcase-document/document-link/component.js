@@ -195,6 +195,10 @@ export default Component.extend({
 
   async addDocumentToAnyModel(documents, item) {
     const itemType = item.get('constructor.modelName');
+    if (itemType === 'agenda-item-treatment') {
+      // item.set(report documents[0])
+      // return;
+    }
     if (itemType === 'document') {
       // The document is already saved in this case
       return;
