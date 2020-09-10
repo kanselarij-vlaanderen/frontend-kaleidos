@@ -130,7 +130,7 @@ context('Full test', () => {
     cy.addNewDocumentVersionToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-
+    cy.clickReverseTab('Overzicht');
     cy.addAgendaitemToAgenda();
     cy.setFormalOkOnItemWithIndex(3); // new agendaitem
     cy.approveDesignAgenda();

@@ -20,7 +20,7 @@ context('KB: Edit content of news-item', () => {
     cy.get('@rows').eq(0)
       .within(() => {
         cy.contains('Nog geen kort bestek voor dit agendapunt.');
-        cy.get('.vl-vi-pencil').click();
+        cy.get('.ki-pencil').click();
       });
 
     // cy.get('.editor__paper').clear(); //TODO triggers error:  "Cannot read property 'nodeType" of null from RDFA editor

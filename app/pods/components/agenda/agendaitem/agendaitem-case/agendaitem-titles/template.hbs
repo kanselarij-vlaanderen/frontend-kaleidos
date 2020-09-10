@@ -79,16 +79,17 @@
       <span
         class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} vl-u-spacer-extended-right-s"
       >
-        <span>
-          {{if 
-            @newsletterInfo.inNewsletter 
-            (t "visible-in-newsletter") 
-            (t "hidden-in-newsletter")
-          }}
-        </span>
-        <i
-          class="vl-button__icon vl-vi vl-vi-{{if @newsletterInfo.inNewsletter "view-add" "hide"}} vl-u-spacer-extended-left-s"
-        ></i>
+        {{#if @newsletterInfo.inNewsletter}}
+          <span>
+            {{t "visible-in-newsletter"}}
+          </span>
+          <i class="vl-button__icon ki-visible vl-u-spacer-extended-left-s"></i>
+        {{else}}
+          <span>
+            {{t "hidden-in-newsletter"}}
+          </span>
+          <i class="vl-button__icon ki-hide vl-u-spacer-extended-left-s"></i>
+        {{/if}}
       </span>
     </div>
   </div>
@@ -107,12 +108,12 @@
       </span>
     {{/if}}
     {{#if (await @subcase)}}
-      {{#if @subcase.confidential}}
-        <span data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error vl-vi vl-vi-lock"></span>
+      {{#if (await @subcase.confidential)}}
+        <i data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error ki-lock-closed"></i>
       {{else}}
-        <span
-          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success vl-vi vl-vi-lock-unlock"
-        ></span>
+        <i
+          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success ki-lock-open"
+        ></i>
       {{/if}}
     {{/if}}
   </div>

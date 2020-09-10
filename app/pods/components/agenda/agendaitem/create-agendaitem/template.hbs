@@ -37,7 +37,7 @@
                           class="vl-input-field__submit vl-button"
                           onclick={{perform searchTask}}
                   >
-                    <i class="vl-vi vl-vi-magnifier"></i>
+                    <i class="ki-search"></i>
                   </button>
                 </div>
               </div>
@@ -47,9 +47,9 @@
         <div class="vl-col--3-12 vl-col--1-1--s">
           <div class="vlc-input-field-block">
             {{web-components/vl-form-label value=(t "title-postponed-subcases")}}
-            {{web-components/vl-toggle
+            {{web-components/vl-checkbox
               value=showPostponed
-              valueChanged=(action "checkShowPostponedValue")
+              toggle=(action "checkShowPostponedValue")
             }}
           </div>
         </div>
