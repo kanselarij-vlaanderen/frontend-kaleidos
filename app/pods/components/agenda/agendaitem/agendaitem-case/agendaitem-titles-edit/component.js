@@ -44,7 +44,7 @@ export default class AgendaitemTitlesEdit extends Component {
     }
 
     try {
-      await saveSubcaseTitles(this.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
+      await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
       if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
         await this.newsletterInfo.save();
       }
