@@ -10,7 +10,7 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <p class="vlc-subline" data-test-linkeddocument-type-label>
-              {{await @documentContainer.type.label}}
+              {{await @document.type.label}}
             </p>
           </div>
         </div>
@@ -24,7 +24,7 @@
             {{#if currentSession.isEditor}}
               <button class="vl-button vl-button--link-muted vl-button--icon"
                       type="button"
-                {{action this.unlinkDocument @documentContainer}}
+                {{action this.unlinkDocument @document}}
               >
                 <i class="vl-icon ki-link-broken vl-u-text--error"
                 ></i>

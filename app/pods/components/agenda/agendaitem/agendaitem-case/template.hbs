@@ -4,6 +4,7 @@
     @agendaitem={{@agendaitem}}
     @subcase={{await this.subcase}}
     @shouldShowDetails={{or @agendaitem.showAsRemark (await @agendaitem.agendaActivity)}}
+    @newsletterInfo={{await @agendaitem.treatments.firstObject.newsletterInfo}}
     @toggleIsEditing={{action this.toggleIsEditing}}
   />
 {{else}}

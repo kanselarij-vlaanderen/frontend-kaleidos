@@ -5,7 +5,7 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <p class="vlc-subline vlc-document-card__subline">
-              {{await @documentContainer.type.label}}
+              {{await @document.type.label}}
             </p>
           </div>
         </div>
@@ -37,7 +37,7 @@
                          href=""
                          data-test-document-upload-new-version
                         {{action attacher.hide}}
-                        {{action this.openUploadDialog @documentContainer}}
+                        {{action this.openUploadDialog @document}}
                       >
                         {{t "new-version"}}
                       </a>
@@ -56,7 +56,7 @@
                       <a class="vl-link vl-link--block vl-u-text--error"
                          href=""
                         {{action attacher.hide}}
-                        {{action this.deleteDocument @documentContainer}}
+                        {{action this.deleteDocument @document}}
                       >
                         {{t "document-delete"}}
                       </a>
@@ -71,7 +71,7 @@
       <div class="vl-u-display-flex">
         <div class="vlc-document-card__badge
           {{if
-            @documentContainer.checkAdded
+            @document.checkAdded
             "vlc-document-list__item vlc-document-list__item--active"
           }}"
         >
