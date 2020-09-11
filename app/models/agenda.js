@@ -77,21 +77,21 @@ export default Model.extend(LoadableModel, {
 
   lastAgendaitemPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const filteredAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
+      const filteredAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
       if (filteredAgendaitems.length === 0) {
         return 0;
       }
-      return Math.max(...filteredAgendaitems.map((item) => item.priority || 0));
+      return Math.max(...filteredAgendaitems.map((agendaitem) => agendaitem.priority || 0));
     });
   }),
 
   lastAnnouncementPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const announcements = agendaitems.filter((item) => item.showAsRemark);
+      const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
       if (announcements.length === 0) {
         return 0;
       }
-      return Math.max(...announcements.map((item) => item.priority || 0));
+      return Math.max(...announcements.map((announcement) => announcement.priority || 0));
     });
   }),
 

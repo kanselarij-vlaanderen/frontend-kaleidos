@@ -24,10 +24,10 @@ export default Route.extend({
     });
     if (!isEmpty(params.filter)) {
       const matchingAgendaitems = await this.getMatchingAgendaitems(params.filter);
-      agendaitems = agendaitems.filter((item) => matchingAgendaitems[item.id]);
+      agendaitems = agendaitems.filter((agendaitem) => matchingAgendaitems[agendaitem.id]);
     }
 
-    const announcements = agendaitems.filter((item) => item.showAsRemark);
+    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
     this.set('sessionService.selectedAgendaitem', null);
 
@@ -53,8 +53,8 @@ export default Route.extend({
       url: `/agendaitems/search?filter[meetingId]=${meetingId}&filter[:sqs:title,shortTitle,data,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`,
     });
     const searchMap = {};
-    searchResults.data.map((item) => {
-      searchMap[item.id] = true;
+    searchResults.data.map((searchResult) => {
+      searchMap[searchResult.id] = true;
     });
     return searchMap;
   },

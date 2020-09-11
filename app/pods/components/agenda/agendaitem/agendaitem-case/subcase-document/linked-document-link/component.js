@@ -18,7 +18,7 @@ export default Component.extend({
     return null;
   }),
 
-  myDocumentVersions: computed.alias('item.linkedDocumentVersions'),
+  myDocumentVersions: computed.alias('agendaitemOrSubcaseOrMeeting.linkedDocumentVersions'),
 
   lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');
@@ -38,14 +38,14 @@ export default Component.extend({
         const itemVersionIds = {};
         const versions = await this.get('myDocumentVersions');
         if (versions) {
-          versions.map((item) => {
-            itemVersionIds[item.get('id')] = true;
-            return item;
+          versions.map((version) => {
+            itemVersionIds[version.get('id')] = true;
+            return version;
           });
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
         if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
+          const matchingVersions = await documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
           return matchingVersions;
         }
       })(),
@@ -54,9 +54,9 @@ export default Component.extend({
 
   myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function() {
     const reversed = [];
-    this.get('mySortedDocumentVersions').map((item) => {
-      reversed.push(item);
-      return item;
+    this.get('mySortedDocumentVersions').map((myDocumentVersion) => {
+      reversed.push(myDocumentVersion);
+      return myDocumentVersion;
     });
     reversed.reverse();
     return reversed;
@@ -108,7 +108,7 @@ export default Component.extend({
 
     async verify() {
       const documentVersions = await this.get('documentToDelete.documentVersions');
-      await this.unlinkDocumentVersions(documentVersions, this.get('item'));
+      await this.unlinkDocumentVersions(documentVersions, this.get('agendaitemOrSubcase'));
       if (!this.isDestroyed) {
         this.set('isVerifyingUnlink', false);
       }

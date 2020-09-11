@@ -85,8 +85,8 @@ export default class AgendaOverviewItem extends Component {
   }
 
   @action
-  async setAction(item) {
-    const uri = item.get('uri');
+  async setAction(agendaitem) {
+    const uri = agendaitem.get('uri');
     this.args.setFormallyOkAction(uri);
   }
 }

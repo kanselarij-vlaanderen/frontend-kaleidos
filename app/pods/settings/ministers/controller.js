@@ -24,7 +24,7 @@ export default Controller.extend({
         const firstPrio = 1;
         for (let index = 0; index < reOrderedModel.get('length'); index++) {
           const reOrderedMandatee = reOrderedModel.objectAt(index);
-          const mandatee = model.find((item) => item.id === reOrderedMandatee.get('id'));
+          const mandatee = model.find((mandatee) => mandatee.id === reOrderedMandatee.get('id'));
           const newPrio = (index + firstPrio);
           mandatee.set('priority', newPrio);
         }

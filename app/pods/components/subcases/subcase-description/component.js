@@ -41,11 +41,11 @@ export default Component.extend({
   }),
 
   latestAgendaitemId: computed('subcase.latestAgendaitem', function() {
-    return this.subcase.get('latestAgendaitem').then((item) => item.id);
+    return this.subcase.get('latestAgendaitem').then((agendaitem) => agendaitem.id);
   }),
 
   isRetracted: computed('subcase.latestAgendaitem', function() {
-    return this.subcase.get('latestAgendaitem').then((item) => item.retracted);
+    return this.subcase.get('latestAgendaitem').then((agendaitem) => agendaitem.retracted);
   }),
 
   actions: {

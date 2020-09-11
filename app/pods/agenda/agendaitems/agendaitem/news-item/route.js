@@ -12,9 +12,11 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     // Check if a treatment exists, otherwise redirect gracefully. This should only happen with corrupt data.
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     const agendaitemTreatments = await agendaitem.get('treatments');
-    const agendaitemTreatment = agendaitemTreatments.firstObject; // TODO: Agendaitem can have many treatments (decisions)
+    const agendaitemTreatment = agendaitemTreatments.firstObject; // TODO: AgendaItem can have many treatments (decisions)
     if (!agendaitemTreatment) {
-      warn(`Agenda item "${agendaitem.id}" is missing a treatment`);
+      warn(`Agenda item "${agendaitem.id}" is missing a treatment`, {
+        id: 'broken-data.missing-agenda-item-treatment',
+      });
       this.transitionTo('agenda.agendaitems.agendaitem.index');
     }
   }

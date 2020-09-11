@@ -119,7 +119,7 @@ export default Component.extend(FileSaverMixin, {
       .approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda)
       .then((newAgenda) => {
         this.changeLoading();
-        this.reloadRoute(newAgenda.get('id'));
+        this.onApproveAgenda(newAgenda.get('id'));
       });
   },
 
@@ -428,11 +428,6 @@ export default Component.extend(FileSaverMixin, {
     async createNewDesignAgenda() {
       await this.createDesignAgenda();
     },
-
-    reloadRoute(id) {
-      this.reloadRoute(id);
-    },
-
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
     },

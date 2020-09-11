@@ -16,7 +16,7 @@ export default Controller.extend({
   currentSession: alias('sessionService.currentSession'),
 
   sortedAgendaitems: computed('agendaitems.@each.{priority,isDeleted}', async function() {
-    const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark && !item.isDeleted)
+    const actualAgendaitems = this.get('agendaitems').filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
       .sortBy('priority');
     await this.agendaService.groupAgendaitemsOnGroupName(actualAgendaitems);
     return actualAgendaitems;

@@ -133,7 +133,7 @@ export default ModelWithModifier.extend({
     return PromiseObject.create({
       promise: this.get('documentVersions').then((documentVersions) => {
         if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.map((item) => item.get('id')).join(',');
+          const documentVersionIds = documentVersions.map((documentversion) => documentversion.get('id')).join(',');
 
           return this.store
             .query('document', {

@@ -21,9 +21,7 @@ if $SHOULD_EXIT_JS && $STAGED_TEMPLATE_FILES; then
 fi
 
 PASS=true
-echo "\n#########################################################"
-printf "# \033[32mChecking files for linter issues before committing...\033[0m #\n"
-echo "#########################################################"
+printf "\033[32mChecking files for linter issues before committing...\033[0m\n"
 # Check for eslint
 if [ ! -x "$ESLINT" ]; then
   printf "\033[41mPlease install ESlint\033[0m (npm i --save-dev eslint)"
@@ -40,13 +38,9 @@ do
   "$ESLINT" "$FILE"
   # $? is het resultaat van het laatst uitgevoerde commando
   if [ "$?" -eq 0 ]; then
-  echo "###########################################"
-  printf "# \033[32mESLint Passed: $FILE\033[0m #\n"
-  echo "###########################################"
+  printf "\033[32mESLint Passed: $FILE\033[0m\n"
   else
-  echo "###########################################"
-  printf "# \033[31mESLint Failed:\033[0m $FILE\n"
-  echo "###########################################\n"
+  printf "\033[31mESLint Failed:\033[0m $FILE\n"
   PASS=false
   fi
 done
@@ -57,13 +51,9 @@ do
   "$TEMPLATE_LINT" "$BESTAND"
   # $? is het resultaat van het laatst uitgevoerde commando
   if [ "$?" -eq 0 ]; then
-  echo "###########################################"
-  printf "# \033[32mEmber-Template-Lint Passed: $BESTAND\033[0m #\n"
-  echo "###########################################"
+  printf "\033[32mEmber-Template-Lint Passed: $BESTAND\033[0m\n"
   else
-  echo "###########################################"
-  printf "# \033[31mEmber-Template-Lint Failed:\033[0m $BESTAND\n"
-  echo "###########################################\n"
+  printf "\033[31mEmber-Template-Lint Failed:\033[0m $BESTAND\n"
   PASS=false
   fi
 done

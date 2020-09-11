@@ -22,13 +22,13 @@ export default Component.extend({
         const itemVersionIds = {};
         const versions = await this.get('myDocumentVersions');
         if (versions) {
-          versions.map((item) => {
-            itemVersionIds[item.get('id')] = true;
+          versions.map((version) => {
+            itemVersionIds[version.get('id')] = true;
           });
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
         if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
+          const matchingVersions = await documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
           return matchingVersions;
         }
       })(),

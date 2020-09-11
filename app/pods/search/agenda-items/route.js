@@ -95,9 +95,9 @@ export default class AgendaitemSearchRoute extends Route {
     if (isEmpty(params.searchText)) {
       return [];
     }
-    return search('agendaitems', params.page, params.size, params.sort, filter, (item) => {
-      const entry = item.attributes;
-      entry.id = item.id;
+    return search('agendaitems', params.page, params.size, params.sort, filter, (agendaitem) => {
+      const entry = agendaitem.attributes;
+      entry.id = agendaitem.id;
       return entry;
     });
   }
