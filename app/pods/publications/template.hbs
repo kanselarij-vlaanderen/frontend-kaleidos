@@ -1,31 +1,22 @@
 <div class="vlc-panel-layout__main-content">
+  <Navbar>
+    <Toolbar>
+      <Toolbar::Group>
+        <Toolbar::Item>
+          <Tabs>
+            <Tab>In behandeling (15)</Tab>
+            <Tab>Behandeld (1155)</Tab>
+          </Tabs>
+        </Toolbar::Item>
+      </Toolbar::Group>
+      <Toolbar::Group @position="right">
+        <Toolbar::Item>
+          <button type="button" class="vl-button vl-button--icon-before">Nieuwe publicatie</button>
+        </Toolbar::Item>
+      </Toolbar::Group>
+    </Toolbar>
+  </Navbar>
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-    <div class="vlc-scroll-wrapper__header">
-      <div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom vlc-navbar--align-with-m-header">
-        <div class="vl-tabs__wrapper">
-          <ul class="vl-tabs vl-u-reset-margin">
-            <li class="vl-tab"  data-test-agenda-agendaitem-tab="agendaitem-case">
-              <LinkTo
-                @route="publications.in-progress"
-                @activeClass="active"
-                class="vl-tab__link"
-              >
-                {{capitalize (t "publications.in-progress")}} ({{amountInProgress}})
-              </LinkTo>
-            </li>
-            <li class="vl-tab" data-test-agenda-agendaitem-tab="documents">
-              <LinkTo
-                @route="publications.done"
-                @activeClass="active"
-                class="vl-tab__link"
-              >
-                {{capitalize (t "publications.done")}} ({{amountDone}})
-              </LinkTo>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
     {{outlet}}
   </div>
 </div>

@@ -1,0 +1,92 @@
+/* ==========================================================================
+  c-tabs
+   ========================================================================== */
+
+.c-tabs {
+  display: flex;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+
+.c-tabs--reversed {
+  border-top: .1rem solid $au-gray-300;
+  margin-top: 1.2rem;
+}
+
+.c-tabs a {
+  color: $au-blue-600;
+  font-weight: 500;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-bottom: .3rem solid transparent;
+  white-space: nowrap;
+  &:hover {
+    background: $au-gray-100;
+  }
+  &:focus {
+    outline: 0;
+    border-color: $au-yellow-400;
+    box-shadow: inset 0 0 0 0.1rem $au-yellow-400;
+  }
+}
+
+.c-tabs__tab-inner {
+  border-right: .1rem solid #CCC;
+  padding: 0 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  top: .15rem;
+  .c-tabs__tab:last-child & {
+    border-right: none;
+  }
+}
+
+.c-tabs a.active {
+  color: $au-gray-900;
+  border-bottom: .3rem solid $au-gray-900;
+}
+
+.c-tabs--reversed a {
+  border-top: .3rem solid transparent;
+  border-bottom: none;
+}
+
+.c-tabs--reversed .c-tabs__tab-inner {
+    bottom: .15rem;
+}
+
+.c-tabs--reversed a.active {
+  color: $au-gray-900;
+  border-top: .3rem solid $au-gray-900;
+  border-bottom: none;
+}
+
+.c-tabs__divider {
+  width: .1rem;
+  height: 1.8rem;
+  background-color: $au-gray-300;
+  margin-left: 1rem;
+}
+
+.c-tabs__tab:last-child {
+  .c-tabs__divider {
+    display: none;
+  }
+}
+
+.c-tabs svg path {
+  fill: currentColor;
+}
+
+.c-icon + .c-tabs__label,
+.c-tabs__label + .c-icon {
+  margin: 0 .6rem;
+}
+
+.c-tabs__hierarchical-back a.active{
+  color: $au-blue-600;
+  border: none;
+}
