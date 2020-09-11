@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class AgendaitemDecisionEditComponent extends Component {
-  @tracked treatment = this.args.agendaitemTreatment;
+  @tracked treatment = this.args.agendaItemTreatment;
 
   async setNewPropertiesToModel(model) {
     const {

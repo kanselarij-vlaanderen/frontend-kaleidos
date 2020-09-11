@@ -76,8 +76,8 @@ export default Route.extend({
     }
     const newsLetterByIndex = await Promise.all(agendaitems.map(async(agendaitem) => {
       try {
-        const agendaitemTreatment = await agendaitem.get('treatments').firstObject;
-        const newsletterInfo = await agendaitemTreatment.get('newsletterInfo');
+        const agendaItemTreatment = await agendaitem.get('treatments').firstObject;
+        const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
         return newsletterInfo.inNewsletter;
       } catch (exception) {
         console.warn('An exception occurred: ', exception);

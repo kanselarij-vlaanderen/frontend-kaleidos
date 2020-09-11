@@ -11,9 +11,9 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     // Because NewsletterInfo is connected via treatment:
     // Check if a treatment exists, otherwise redirect gracefully. This should only happen with corrupt data.
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    const agendaitemTreatments = await agendaitem.get('treatments');
-    const agendaitemTreatment = agendaitemTreatments.firstObject; // TODO: Agendaitem can have many treatments (decisions)
-    if (!agendaitemTreatment) {
+    const agendaItemTreatments = await agendaitem.get('treatments');
+    const agendaItemTreatment = agendaItemTreatments.firstObject; // TODO: Agendaitem can have many treatments (decisions)
+    if (!agendaItemTreatment) {
       warn(`Agenda item "${agendaitem.id}" is missing a treatment`, {
         id: 'broken-data.missing-agenda-item-treatment',
       });
@@ -23,9 +23,9 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async model() {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    const agendaitemTreatments = await agendaitem.get('treatments');
-    const agendaitemTreatment = agendaitemTreatments.firstObject; // TODO: Agendaitem can have many treatments (decisions)
-    const newsletterInfo = await agendaitemTreatment.get('newsletterInfo');
+    const agendaItemTreatments = await agendaitem.get('treatments');
+    const agendaItemTreatment = agendaItemTreatments.firstObject; // TODO: Agendaitem can have many treatments (decisions)
+    const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
     return newsletterInfo;
   }
 
@@ -34,8 +34,8 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     controller.set('agendaitem', agendaitem);
 
-    const agendaitemTreatment = await agendaitem.get('agenda-item-treatment');
-    controller.set('agendaitemTreatment', agendaitemTreatment);
+    const agendaItemTreatment = await agendaitem.get('agenda-item-treatment');
+    controller.set('agendaItemTreatment', agendaItemTreatment);
 
     controller.set('notaModifiedTime',
       await this.agendaService.retrieveModifiedDateFromNota(controller.get('agendaitem')));

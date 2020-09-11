@@ -82,9 +82,9 @@ export default Service.extend({
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
     if (this.currentSession.isEditor) {
-      const agendaitemTreatment = (await agendaitem.get('treatments')).firstObject;
+      const agendaItemTreatment = (await agendaitem.get('treatments')).firstObject;
       const news = this.store.createRecord('newsletter-info', {
-        agendaitemTreatment,
+        agendaItemTreatment,
         inNewsletter,
       });
       if (agendaitem.showAsRemark) {

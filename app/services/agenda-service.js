@@ -148,7 +148,7 @@ export default Service.extend({
     await agendaActivity.save();
 
     // Treatment of agenda-item / decision activity
-    const agendaitemTreatment = await this.store.createRecord('agenda-item-treatment', {
+    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
       created: creationDate,
       modified: creationDate,
       subcase,
@@ -157,8 +157,8 @@ export default Service.extend({
     const defaultDecisionResultCode = (await this.store.query('decision-result-code', {
       'filter[:uri:]': defaultDecisionResultCodeUri,
     })).firstObject;
-    agendaitemTreatment.decisionResultCode = defaultDecisionResultCode;
-    await agendaitemTreatment.save();
+    agendaItemTreatment.decisionResultCode = defaultDecisionResultCode;
+    await agendaItemTreatment.save();
 
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
@@ -176,7 +176,7 @@ export default Service.extend({
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       agendaActivity,
       showInNewsletter: true,
-      treatments: A([agendaitemTreatment]),
+      treatments: A([agendaItemTreatment]),
     });
     await agendaitem.save();
     const meeting = await selectedAgenda.get('createdFor');
