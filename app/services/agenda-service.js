@@ -186,9 +186,9 @@ export default Service.extend({
     await subcase.save();
     updateModifiedProperty(selectedAgenda);
 
-    // Create default newsletterInfo for announcements
+    // Create default newsletterInfo for announcements with inNewsLetter = true
     if (agendaitem.showAsRemark) {
-      const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem);
+      const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
     }
   },
