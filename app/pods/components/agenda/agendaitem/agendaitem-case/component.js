@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export default class AgendaItemCase extends Component {
+export default class AgendaitemCase extends Component {
   authentication = inject('currentSession');
   @tracked isEditing = false;
 

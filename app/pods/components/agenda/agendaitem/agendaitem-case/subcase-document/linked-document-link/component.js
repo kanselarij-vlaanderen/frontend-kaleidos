@@ -6,8 +6,8 @@ import { tracked } from '@glimmer/tracking';
 
 export default class linkedDocumentLink extends Component {
   // Input
-  // this.args.documentContainer
-  // this.args.item
+  // this.args.document
+  // this.args.agendaitemOrSubcaseOrMeeting
 
   @service currentSession;
 
@@ -38,18 +38,18 @@ export default class linkedDocumentLink extends Component {
   // TODO: DUPLICATE CODE IN edit-document-version/component.js
   mySortedDocumentVersions() {
     const itemVersionIds = {};
-    if (!this.args.item && !this.args.documentContainer) {
+    if (!this.args.agendaitemOrSubcaseOrMeeting && !this.args.document) {
       return false;
     }
-    const versions = this.args.item.linkedDocumentVersions;
+    const versions = this.args.agendaitemOrSubcaseOrMeeting.linkedDocumentVersions;
     if (versions) {
-      versions.map((item) => {
-        itemVersionIds[item.get('id')] = true;
+      versions.map((version) => {
+        itemVersionIds[version.get('id')] = true;
       });
     }
-    const documentVersions = this.args.documentContainer.sortedDocumentVersions;
+    const documentVersions = this.args.document.sortedDocumentVersions;
     if (documentVersions) {
-      this.mySortedDocuments = documentVersions.filter((item) => itemVersionIds[item.id]);
+      this.mySortedDocuments = documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
       if (this.mySortedDocuments) {
         this.lastDocumentVersion = this.mySortedDocuments.lastObject;
       }
@@ -59,8 +59,8 @@ export default class linkedDocumentLink extends Component {
   async getReverseSortedDocumentVersions() {
     const reversed = [];
     if (this.mySortedDocuments) {
-      this.mySortedDocuments.map((item) => {
-        reversed.push(item);
+      this.mySortedDocuments.map((myDocumentVersion) => {
+        reversed.push(myDocumentVersion);
       });
       reversed.reverse();
       this.reverseSortedDocumentVersions = reversed;
@@ -102,7 +102,6 @@ export default class linkedDocumentLink extends Component {
     return savedModalPromise;
   }
 
-
   @action
   showVersions() {
     this.isShowingVersions = !this.isShowingVersions;
@@ -122,7 +121,7 @@ export default class linkedDocumentLink extends Component {
     const {
       documentVersions,
     } = this.documentToDelete;
-    await this.unlinkDocumentVersions(documentVersions, this.args.item);
+    await this.unlinkDocumentVersions(documentVersions, this.args.agendaitemOrSubcaseOrMeeting);
     if (!this.isDestroyed) {
       this.isVerifyingUnlink = false;
     }

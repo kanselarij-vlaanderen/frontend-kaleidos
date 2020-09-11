@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { A } from '@ember/array';
 import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 
 import moment from 'moment';
 import config from 'fe-redpencil/utils/config';
@@ -22,6 +22,7 @@ export default class SubcaseDocuments extends Component {
   @tracked defaultAccessLevel = null;
   @tracked isLinkingOldDocument = false;
   @tracked documentsToLink = A([]);
+  @tracked documentTypes = null;
 
   documentContainer = null;
 
@@ -35,17 +36,17 @@ export default class SubcaseDocuments extends Component {
   }
 
   get governmentCanViewDocuments() {
-    const isAgendaItem = this.args.item.get('modelName') === 'agendaitem';
-    const isSubcase = this.args.item.get('modelName') === 'subcase';
+    const isAgendaitem = this.args.agendaitemOrSubcaseOrMeeting.get('modelName') === 'agendaitem';
+    const isSubcase = this.args.agendaitemOrSubcaseOrMeeting.get('modelName') === 'subcase';
     const isOverheid = this.currentSession.isOverheid;
 
-    if (isAgendaItem) {
-      const documentsAreReleased = this.args.item.get('agenda.createdFor.releasedDocuments');
+    if (isAgendaitem) {
+      const documentsAreReleased = this.args.agendaitemOrSubcaseOrMeeting.get('agenda.createdFor.releasedDocuments');
       return !(isOverheid && !documentsAreReleased);
     }
 
     if (isSubcase) {
-      const documentsAreReleased = this.args.item.get('requestedForMeeting.releasedDocuments');
+      const documentsAreReleased = this.args.agendaitemOrSubcaseOrMeeting.get('requestedForMeeting.releasedDocuments');
       return !(isOverheid && !documentsAreReleased);
     }
 
@@ -193,18 +194,18 @@ export default class SubcaseDocuments extends Component {
 
   @action
   async toggleIsAddingNewDocument() {
-    const itemType = this.args.item.get('constructor.modelName');
+    const itemType = this.args.agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
     if (itemType === 'agendaitem' || itemType === 'subcase') {
-      await this.args.item.preEditOrSaveCheck();
+      await this.args.agendaitemOrSubcaseOrMeeting.preEditOrSaveCheck();
     }
     this.isAddingNewDocument = !this.isAddingNewDocument;
   }
 
   @action
   async toggleIsEditing() {
-    const itemType = this.args.item.get('constructor.modelName');
+    const itemType = this.args.agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
     if (itemType === 'agendaitem' || itemType === 'subcase') {
-      await this.args.item.preEditOrSaveCheck();
+      await this.args.agendaitemOrSubcaseOrMeeting.preEditOrSaveCheck();
     }
     this.isEditing = !this.isEditing;
   }
@@ -237,8 +238,8 @@ export default class SubcaseDocuments extends Component {
     );
 
     this.documentsInCreation.clear();
-    const agendaActivity = await this.args.item.get('agendaActivity'); // when item = agendaitem
-    const agendaitemsOnDesignAgenda = await this.args.item.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
+    const agendaActivity = await this.args.agendaitemOrSubcaseOrMeeting.get('agendaActivity'); // when item = agendaitem
+    const agendaitemsOnDesignAgenda = await this.args.agendaitemOrSubcaseOrMeeting.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
 
     try {
       const documentsToAttach = [];
@@ -260,8 +261,8 @@ export default class SubcaseDocuments extends Component {
             agendaitemsOnDesignAgenda
           );
         }
-        await this.addDocumentToAgendaitemOrSubcaseOrMeeting(documentsToAttach, this.args.item);
-        await this.args.item.save();
+        await this.addDocumentToAgendaitemOrSubcaseOrMeeting(documentsToAttach, this.args.agendaitemOrSubcaseOrMeeting);
+        await this.args.agendaitemOrSubcaseOrMeeting.save();
       }
     } catch (error) {
       await this.deleteAll();
@@ -290,8 +291,8 @@ export default class SubcaseDocuments extends Component {
   @action
   async linkDocuments() {
     const documents = this.documentsToLink;
-    const agendaActivity = this.args.item.get('agendaActivity'); // when item = agendaitem
-    const agendaitemsOnDesignAgenda = this.args.item.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
+    const agendaActivity = this.args.agendaitemOrSubcaseOrMeeting.get('agendaActivity'); // when item = agendaitem
+    const agendaitemsOnDesignAgenda = this.args.agendaitemOrSubcaseOrMeeting.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
     try {
       const documentsToAttach = [];
       await Promise.all(
@@ -309,8 +310,8 @@ export default class SubcaseDocuments extends Component {
       } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
         await this.linkDocumentsToAgendaitems(documentsToAttach, agendaitemsOnDesignAgenda);
       }
-      await this.attachDocumentsToModel(documentsToAttach, this.args.item, 'linkedDocumentVersions');
-      await this.args.item.save();
+      await this.attachDocumentsToModel(documentsToAttach, this.args.agendaitemOrSubcaseOrMeeting, 'linkedDocumentVersions');
+      await this.args.agendaitemOrSubcaseOrMeeting.save();
     } finally {
       this.isLinkingOldDocument = false;
       this.documentsToLink = A([]);

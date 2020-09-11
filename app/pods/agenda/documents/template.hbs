@@ -3,13 +3,13 @@
     {{#if (not isEditing)}}
       {{agenda/agendaitem/agendaitem-case/subcase-documents
         documents=(await model.meeting.documents)
-        item=(await model.meeting)
+        agendaitemOrSubcaseOrMeeting=(await model.meeting)
         shouldShowLinkedDocuments=false
       }}
     {{else}}
       {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
         documents=(await model.meeting.documents)
-        item=(await model.meeting)
+        agendaitemOrSubcaseOrMeeting=(await model.meeting)
         cancelForm=(action "cancelEditing")
       }}
     {{/if}}

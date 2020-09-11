@@ -12,7 +12,7 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
             {{#if this.setupDocumentVersions}}
-              <AccessLevelPill @item={{this.lastDocumentVersion}} />
+              <AccessLevelPill @lastDocumentVersion={{this.lastDocumentVersion}} />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -162,8 +162,7 @@
               as |documentVersion|
               }}
                 <WebComponents::VlDocument
-                  @documentVersion={{documentVersion}}
-                  @item={{@item}} />
+                  @documentVersion={{documentVersion}}/>
               {{/each}}
             </div>
           </div>

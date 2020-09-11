@@ -11,7 +11,7 @@ export default class AgendaOverviewItem extends Component {
    *
    * @agendaitem={{agendaitem}}
    * @isEditingOverview={{isEditingOverview}}
-   * @selectAgendaItem={{action "selectAgendaItemAction"}}
+   * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
   @service store;
@@ -69,8 +69,8 @@ export default class AgendaOverviewItem extends Component {
   }
 
   get isActive() {
-    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaItem) {
-      return this.args.agendaitem === this.selectedAgendaItem.id;
+    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaitem) {
+      return this.args.agendaitem === this.selectedAgendaitem.id;
     }
     return null;
   }
@@ -85,8 +85,8 @@ export default class AgendaOverviewItem extends Component {
   }
 
   @action
-  async setAction(item) {
-    const uri = item.get('uri');
+  async setAction(agendaitem) {
+    const uri = agendaitem.get('uri');
     this.args.setFormallyOkAction(uri);
   }
 }

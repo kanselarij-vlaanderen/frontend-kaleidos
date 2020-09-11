@@ -47,7 +47,7 @@ context('Add files to an agenda', () => {
     // cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaItemDecisionTab).click();
+    cy.get(agenda.agendaitemDecisionTab).click();
     // 1 default item treatment exists
     cy.get(agenda.uploadDecisionFile).click();
 

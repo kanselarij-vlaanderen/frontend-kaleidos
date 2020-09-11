@@ -24,6 +24,7 @@ export default Component.extend({
   @tracked isAddingNewDocument: null,
   isLoading: null,
   documentsInCreation: A([]), // When creating new documents
+  meetingRecordOrDecision: null,
 
   documentTypeToAssign: computed('modelToAddDocumentVersionTo', function() {
     const {
@@ -48,7 +49,7 @@ export default Component.extend({
     this.set('documentsInCreation', A([]));
     const accessLevels = await this.store.findAll('access-level');
     try {
-      this.set('defaultAccessLevel', accessLevels.find((item) => item.id === CONFIG.internRegeringAccessLevelId));
+      this.set('defaultAccessLevel', accessLevels.find((accesslevel) => accesslevel.id === CONFIG.internRegeringAccessLevelId));
     } catch (exception) {
       console.warn('An exception occurred', exception);
       // TODO error during cypress tests:
@@ -115,7 +116,7 @@ export default Component.extend({
     },
 
     async uploadNewDocument() {
-      const item = await this.get('item');
+      const meetingRecordOrDecision = await this.get('meetingRecordOrDecision');
       const documents = await this.saveDocuments(null);
       const documentType = await this.get('documentTypeToAssign');
       this.send('closeModal');
@@ -125,15 +126,15 @@ export default Component.extend({
           if (documentType) {
             document.set('type', documentType);
           }
-          document.set(this.modelToAddDocumentVersionTo, item);
+          document.set(this.modelToAddDocumentVersionTo, meetingRecordOrDecision);
           if (this.modelToAddDocumentVersionTo === 'signedMinutes') {
-            item.set('signedDocument', document);
+            meetingRecordOrDecision.set('signedDocument', document);
           } else if (this.modelToAddDocumentVersionTo === 'agendaItemTreatment') {
-            item.set('report', document);
+            meetingRecordOrDecision.set('report', document);
           }
         })
       );
-      await item.save();
+      await meetingRecordOrDecision.save();
     },
 
     async deleteFile(file) {

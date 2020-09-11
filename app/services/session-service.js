@@ -12,7 +12,7 @@ export default Service.extend({
   store: inject(),
   router: inject(),
   currentSession: null,
-  selectedAgendaItem: null,
+  selectedAgendaitem: null,
 
   agendas: computed('currentSession.agendas.@each', function() {
     if (!this.get('currentSession')) {
@@ -26,7 +26,7 @@ export default Service.extend({
     });
   }),
 
-  currentAgendaItems: computed('currentAgenda.agendaitems.@each', function() {
+  currentAgendaitems: computed('currentAgenda.agendaitems.@each', function() {
     const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       return this.store.query('agendaitem', {

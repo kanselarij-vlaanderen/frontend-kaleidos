@@ -5,7 +5,7 @@ import {
   setCalculatedGroupPriorities,
   groupAgendaitemsByGroupname,
   sortByPriority
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 
 export default Route.extend({
   sessionService: inject(),
@@ -35,11 +35,11 @@ export default Route.extend({
 
     const {
       draftAgendaitems, groupedAgendaitems,
-    } = await this.parseAgendaItems(
+    } = await this.parseAgendaitems(
       agendaitems, params
     );
 
-    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(draftAgendaitems);
 
     const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
 
@@ -52,7 +52,7 @@ export default Route.extend({
     });
   },
 
-  async parseAgendaItems(agendaitems, params) {
+  async parseAgendaitems(agendaitems, params) {
     let draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
 
     draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);

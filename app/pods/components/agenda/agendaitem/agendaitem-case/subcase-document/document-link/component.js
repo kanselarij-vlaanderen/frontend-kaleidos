@@ -4,7 +4,7 @@ import moment from 'moment';
 import { inject as service } from '@ember/service';
 import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 import config from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
@@ -29,6 +29,7 @@ export default class DocumentLink extends Component {
   @tracked lastDocument = null;
   @tracked mySortedDocuments;
   @tracked lastDocumentVersion = null;
+  @tracked documentTypes = null;
 
   classNameBindings = ['aboutToDelete'];
   documentContainerToDelete = null;
@@ -76,15 +77,15 @@ export default class DocumentLink extends Component {
   }
 
   async deleteDocumentContainerWithUndo() {
-    const documents = this.args.item.documentVersions;
-    const itemType = this.args.item.constructor.modelName;
+    const documents = this.args.subcaseAgendaitemMeetingOrDocumentContainer.documentVersions;
+    const itemType = this.args.subcaseAgendaitemMeetingOrDocumentContainer.constructor.modelName;
     if (itemType === 'document') {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
     } else {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete)
         .then(() => {
-          if (!this.args.item.aboutToDelete && documents) {
-            this.args.item.hasMany('documentVersions').reload();
+          if (!this.args.subcaseAgendaitemMeetingOrDocumentContainer.aboutToDelete && documents) {
+            this.args.subcaseAgendaitemMeetingOrDocumentContainer.hasMany('documentVersions').reload();
           }
         });
     }
@@ -128,18 +129,18 @@ export default class DocumentLink extends Component {
     return await subcase.save();
   }
 
-  async addDocumentToAnyModel(documents, item) {
-    const itemType = item.get('constructor.modelName');
+  async addDocumentToAnyModel(documents, subcaseAgendaitemMeetingOrDocumentContainer) {
+    const itemType = subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
     if (itemType === 'document') {
       // The document is already saved in this case
       return;
     }
-    await item.hasMany('documentVersions').reload();
-    await this.attachDocumentsToModel(documents, item);
+    await subcaseAgendaitemMeetingOrDocumentContainer.hasMany('documentVersions').reload();
+    await this.attachDocumentsToModel(documents, subcaseAgendaitemMeetingOrDocumentContainer);
     if (itemType === 'subcase' || itemType === 'agendaitem') {
-      setNotYetFormallyOk(item);
+      setNotYetFormallyOk(subcaseAgendaitemMeetingOrDocumentContainer);
     }
-    return await item.save();
+    return await subcaseAgendaitemMeetingOrDocumentContainer.save();
   }
 
   get setupDocumentVersions() {
@@ -148,18 +149,18 @@ export default class DocumentLink extends Component {
 
   mySortedDocumentVersions() {
     const itemVersionIds = {};
-    if (!this.args.item && !this.args.documentContainer) {
+    if (!this.args.subcaseAgendaitemMeetingOrDocumentContainer && !this.args.document) {
       return false;
     }
-    const versions = this.args.item.documentVersions;
+    const versions = this.args.subcaseAgendaitemMeetingOrDocumentContainer.documentVersions;
     if (versions) {
-      versions.map((item) => {
-        itemVersionIds[item.get('id')] = true;
+      versions.map((myDocumentVersion) => {
+        itemVersionIds[myDocumentVersion.get('id')] = true;
       });
     }
-    const documentVersions = this.args.documentContainer.sortedDocumentVersions;
+    const documentVersions = this.args.document.sortedDocumentVersions;
     if (documentVersions) {
-      this.mySortedDocuments = documentVersions.filter((item) => itemVersionIds[item.id]);
+      this.mySortedDocuments = documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
       if (this.mySortedDocuments) {
         this.lastDocumentVersion = this.mySortedDocuments.lastObject;
       }
@@ -170,8 +171,8 @@ export default class DocumentLink extends Component {
   async getReverseSortedDocumentVersions() {
     const reversed = [];
     if (this.mySortedDocuments) {
-      this.mySortedDocuments.map((item) => {
-        reversed.push(item);
+      this.mySortedDocuments.map((mySortedDocumentVersion) => {
+        reversed.push(mySortedDocumentVersion);
       });
       reversed.reverse();
       this.reverseSortedDocumentVersions = reversed;
@@ -189,24 +190,24 @@ export default class DocumentLink extends Component {
   async uploadFile(uploadedFile) {
     const creationDate = moment().utc()
       .toDate();
-    await this.args.documentContainer.reload();
-    await this.args.documentContainer.hasMany('documents').reload();
+    await this.args.document.reload();
+    await this.args.document.hasMany('documents').reload();
     if (!this.defaultAccessLevel) {
       this.defaultAccessLevel = await this.store.findRecord('access-level', config.internRegeringAccessLevelId);
     }
 
-    const previousVersion = this.args.documentContainer ? (await this.args.documentContainer.get('lastDocumentVersion')) : null;
+    const previousVersion = this.args.document ? (await this.args.document.get('lastDocumentVersion')) : null;
     const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
       accessLevel: this.defaultAccessLevel,
     });
     newDocument.set('created', creationDate);
     newDocument.set('modified', creationDate);
-    const docs = await this.args.documentContainer.get('documents');
+    const docs = await this.args.document.get('documents');
     docs.pushObject(newDocument);
-    newDocument.set('documentContainer', this.args.documentContainer); // Explicitly set relation both ways
+    newDocument.set('documentContainer', this.args.document); // Explicitly set relation both ways
     const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
     newDocument.set('name', newName);
-    this.args.documentContainer.notifyPropertyChange('documents');// Why exactly? Ember should handle this?
+    this.args.document.notifyPropertyChange('documents');// Why exactly? Ember should handle this?
     this.documentInCreation = await newDocument;
   }
 
@@ -234,7 +235,7 @@ export default class DocumentLink extends Component {
 
   @action
   cancelEditingName() {
-    this.args.documentContainer.rollbackAttributes();
+    this.args.document.rollbackAttributes();
     this.isEditing = false;
   }
 
@@ -261,9 +262,9 @@ export default class DocumentLink extends Component {
 
   @action
   async openUploadDialog() {
-    const itemType = this.args.item.constructor.modelName;
+    const itemType = this.args.subcaseAgendaitemMeetingOrDocumentContainer.constructor.modelName;
     if (itemType === 'agendaitem' || itemType === 'subcase') {
-      await this.args.item.preEditOrSaveCheck();
+      await this.args.subcaseAgendaitemMeetingOrDocumentContainer.preEditOrSaveCheck();
     }
     this.isUploadingNewVersion = true;
   }
@@ -271,7 +272,7 @@ export default class DocumentLink extends Component {
   @action
   async cancelUploadVersion() {
     if (this.uploadedFile) {
-      const document = await this.args.documentContainer.lastDocumentVersion;
+      const document = await this.args.document.lastDocumentVersion;
       document.rollbackAttributes();
       const versionInCreation = await this.uploadedFile.get('documentVersion');
       if (versionInCreation) {
@@ -289,10 +290,10 @@ export default class DocumentLink extends Component {
     // TODO this component/method is used for agendaitem, subcase, session (AND for decision/meetingRecord but we pass in document model)
     // TODO should we seperate this logic to make the addition of a version more generic ?
     this.isLoading = true;
-    const document = await this.args.documentContainer.lastDocument;
+    const document = await this.args.document.lastDocument;
     await document.save();
-    const agendaActivity = await this.args.item.agendaActivity; // when item = agendaitem
-    const agendaitemsOnDesignAgenda = await this.args.item.agendaitemsOnDesignAgendaToEdit; // when item = subcase
+    const agendaActivity = await this.args.subcaseAgendaitemMeetingOrDocumentContainer.agendaActivity; // when item = agendaitem
+    const agendaitemsOnDesignAgenda = await this.args.subcaseAgendaitemMeetingOrDocumentContainer.agendaitemsOnDesignAgendaToEdit; // when item = subcase
     try {
       if (agendaActivity) {
         const subcase = await agendaActivity.get('subcase');
@@ -300,7 +301,7 @@ export default class DocumentLink extends Component {
       } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
         await this.addDocumentToAgendaitems([document], agendaitemsOnDesignAgenda);
       }
-      await this.addDocumentToAnyModel([document], this.args.item);
+      await this.addDocumentToAnyModel([document], this.args.subcaseAgendaitemMeetingOrDocumentContainer);
     } catch (error) {
       await this.deleteUploadedDocument();
       throw error;
