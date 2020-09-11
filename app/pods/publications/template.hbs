@@ -1,17 +1,17 @@
 <div class="vlc-panel-layout__main-content">
-  <Navbar>
-    <Toolbar>
+  <Navbar @auto="true">
+    <Toolbar @auto="true">
       <Toolbar::Group>
         <Toolbar::Item>
           <Tabs>
-            <Tab>In behandeling (15)</Tab>
-            <Tab>Behandeld (1155)</Tab>
+            <Tab @route="publications.in-progress">{{t "publications.in-progress"}} ({{amountInProgress}})</Tab>
+            <Tab @route="publications.done">{{t "publications.done"}} ({{amountDone}})</Tab>
           </Tabs>
         </Toolbar::Item>
       </Toolbar::Group>
       <Toolbar::Group @position="right">
         <Toolbar::Item>
-          <button type="button" class="vl-button vl-button--icon-before">Nieuwe publicatie</button>
+          <button type="button" class="vl-button vl-button--icon-before">{{t "publications.new"}}</button>
         </Toolbar::Item>
       </Toolbar::Group>
     </Toolbar>
