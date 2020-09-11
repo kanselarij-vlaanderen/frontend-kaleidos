@@ -29,8 +29,15 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   async reassignPrioritiesForAgendaitems() {
     const isEditor = this.currentSession.isEditor;
     const isDesignAgenda = this.agenda.isDesignAgenda;
-    const agendaItems = await this.agenda.agendaitems;
-    setAgendaItemsPriority(agendaItems, isEditor, isDesignAgenda);
+    const agendaitems = await this.agenda.agendaitems;
+    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
+    const actualAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
+      .sortBy('priority');
+    if (announcements) {
+      const actualAnnouncements = announcements.filter((announcement) => !announcement.isDeleted).sortBy('priority');
+      await setAgendaItemsPriority(actualAnnouncements, isEditor, isDesignAgenda);
+    }
+    await setAgendaItemsPriority(actualAgendaitems, isEditor, isDesignAgenda);
   }
 
   @action
