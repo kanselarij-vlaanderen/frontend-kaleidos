@@ -26,10 +26,16 @@ export default class IndexNewsletterRoute extends Route.extend(AuthenticatedRout
         sort: params.sort,
         'page[size]': 300,
       });
-    return Promise.all(agendaitems.map(async(agendaitem) => ({
-      agendaitem,
-      newsletterInfo: await agendaitem.get('treatments.firstObject.newsletterInfo'),
-    })));
+
+    return Promise.all(agendaitems.map(async(agendaitem) => {
+      const agendaItemTreatments = await agendaitem.get('treatments');
+      const agendaItemTreatment = agendaItemTreatments.firstObject;
+      const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
+      return {
+        agendaitem,
+        newsletterInfo,
+      };
+    }));
   }
 
   async setupController(controller, model) {

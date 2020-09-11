@@ -68,9 +68,11 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  reorderItems(itemModels) {
+  async reorderItems(itemModels) {
     const isEditor = this.currentSessionService.isEditor;
     const isDesignAgenda = this.currentAgenda.isDesignAgenda;
-    setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
+    this.set('showLoader', true);
+    await setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
+    this.set('showLoader', false);
   }
 }

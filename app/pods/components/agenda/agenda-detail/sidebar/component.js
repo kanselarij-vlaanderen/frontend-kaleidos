@@ -28,11 +28,11 @@ export default class AgendaSidebar extends Component {
   }
 
   @action
-  reorderItems(itemModels) {
+  async reorderItems(itemModels) {
     const isEditor = this.currentSessionService.isEditor;
     const isDesignAgenda = this.args.currentAgenda.isDesignAgenda;
     this.isReAssigningPriorities = true;
-    setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
+    await setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
     this.isReAssigningPriorities = false;
   }
 }
