@@ -17,9 +17,9 @@ export default Route.extend({
       },
       include: 'mandatees',
     });
-    const notas = agendaitems.filter((item) => !item.showAsRemark).sortBy('priority');
+    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark).sortBy('priority');
     await this.ensureDocuments.perform(notas);
-    const announcements = agendaitems.filter((item) => item.showAsRemark).sortBy('priority');
+    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark).sortBy('priority');
     await this.ensureDocuments.perform(announcements);
 
     return hash({
@@ -31,9 +31,9 @@ export default Route.extend({
 
   ensureDocuments: task(function *(agendaItems) {
     const tasks = [];
-    for (const item of agendaItems) {
-      if (!item.hasMany('documentVersions').value()) {
-        tasks.push(this.loadDocuments.perform(item));
+    for (const agendaitem of agendaItems) {
+      if (!agendaitem.hasMany('documentVersions').value()) {
+        tasks.push(this.loadDocuments.perform(agendaitem));
       }
     }
     yield all(tasks);

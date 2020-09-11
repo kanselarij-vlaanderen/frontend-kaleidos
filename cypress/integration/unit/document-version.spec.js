@@ -1,4 +1,4 @@
-/* global context, it, cy,beforeEach */
+/* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import document from '../../selectors/document.selectors';
@@ -7,6 +7,10 @@ context('Tests for KAS-1076', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {

@@ -32,7 +32,7 @@ export default Component.extend({
   }),
   documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
-  myDocumentVersions: computed.alias('item.documentVersions'),
+  myDocumentVersions: computed.alias('subcaseAgendaitemMeetingOrDocumentContainer.documentVersions'),
 
   lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
     const sortedVersions = this.get('mySortedDocumentVersions');
@@ -48,13 +48,13 @@ export default Component.extend({
         const itemVersionIds = {};
         const versions = await this.get('myDocumentVersions');
         if (versions) {
-          versions.map((item) => {
-            itemVersionIds[item.get('id')] = true;
+          versions.map((myDocumentVersion) => {
+            itemVersionIds[myDocumentVersion.get('id')] = true;
           });
         }
         const documentVersions = await this.get('document.sortedDocumentVersions');
         if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
+          const matchingVersions = await documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
           return matchingVersions;
         }
       })(),
@@ -63,8 +63,8 @@ export default Component.extend({
 
   myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function() {
     const reversed = [];
-    this.get('mySortedDocumentVersions').map((item) => {
-      reversed.push(item);
+    this.get('mySortedDocumentVersions').map((mySortedDocumentVersion) => {
+      reversed.push(mySortedDocumentVersion);
     });
     reversed.reverse();
     return reversed;
@@ -96,7 +96,7 @@ export default Component.extend({
     this.set('documentsInCreation', A([]));
     const accessLevels = await this.store.findAll('access-level');
     try {
-      this.set('defaultAccessLevel', accessLevels.find((item) => item.id === config.internRegeringAccessLevelId));
+      this.set('defaultAccessLevel', accessLevels.find((accesslevel) => accesslevel.id === config.internRegeringAccessLevelId));
     } catch (exception) {
       // TODO error during cypress tests:
       console.warn('An exception occurred', exception);
@@ -141,17 +141,17 @@ export default Component.extend({
 
   async deleteDocumentContainerWithUndo() {
     const {
-      item,
+      subcaseAgendaitemMeetingOrDocumentContainer,
     } = this;
-    const documents = item.get('documentVersions');
-    const itemType = item.get('constructor.modelName');
+    const documents = subcaseAgendaitemMeetingOrDocumentContainer.get('documentVersions');
+    const itemType = subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
     if (itemType === 'document') {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
     } else {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete)
         .then(() => {
-          if (!item.aboutToDelete && documents) {
-            item.hasMany('documentVersions').reload();
+          if (!subcaseAgendaitemMeetingOrDocumentContainer.aboutToDelete && documents) {
+            subcaseAgendaitemMeetingOrDocumentContainer.hasMany('documentVersions').reload();
           }
         });
     }
@@ -193,18 +193,18 @@ export default Component.extend({
     return await subcase.save();
   },
 
-  async addDocumentToAnyModel(documents, item) {
-    const itemType = item.get('constructor.modelName');
+  async addDocumentToAnyModel(documents, subcaseAgendaitemMeetingOrDocumentContainer) {
+    const itemType = subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
     if (itemType === 'document') {
       // The document is already saved in this case
       return;
     }
-    await item.hasMany('documentVersions').reload();
-    await this.attachDocumentsToModel(documents, item);
+    await subcaseAgendaitemMeetingOrDocumentContainer.hasMany('documentVersions').reload();
+    await this.attachDocumentsToModel(documents, subcaseAgendaitemMeetingOrDocumentContainer);
     if (itemType === 'subcase' || itemType === 'agendaitem') {
-      setNotYetFormallyOk(item);
+      setNotYetFormallyOk(subcaseAgendaitemMeetingOrDocumentContainer);
     }
-    return await item.save();
+    return await subcaseAgendaitemMeetingOrDocumentContainer.save();
   },
 
   actions: {
@@ -279,9 +279,9 @@ export default Component.extend({
     },
 
     async openUploadDialog() {
-      const itemType = this.item.get('constructor.modelName');
+      const itemType = this.subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
       if (itemType === 'agendaitem' || itemType === 'subcase') {
-        await this.item.preEditOrSaveCheck();
+        await this.subcaseAgendaitemMeetingOrDocumentContainer.preEditOrSaveCheck();
       }
       this.toggleProperty('isUploadingNewVersion');
     },
@@ -310,9 +310,9 @@ export default Component.extend({
       this.set('isLoading', true);
       const document = await this.get('documentContainer.lastDocumentVersion');
       await document.save();
-      const item = await this.get('item');
-      const agendaActivity = await item.get('agendaActivity'); // when item = agendaitem
-      const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
+      const subcaseAgendaitemMeetingOrDocumentContainer = await this.get('subcaseAgendaitemMeetingOrDocumentContainer');
+      const agendaActivity = await subcaseAgendaitemMeetingOrDocumentContainer.get('agendaActivity'); // when agendaitemOrSubcase = agendaitem
+      const agendaitemsOnDesignAgenda = await subcaseAgendaitemMeetingOrDocumentContainer.get('agendaitemsOnDesignAgendaToEdit'); // when agendaitemOrSubcase = subcase
       try {
         if (agendaActivity) {
           const subcase = await agendaActivity.get('subcase');
@@ -320,7 +320,7 @@ export default Component.extend({
         } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
           await this.addDocumentToAgendaitems([document], agendaitemsOnDesignAgenda);
         }
-        await this.addDocumentToAnyModel([document], item);
+        await this.addDocumentToAnyModel([document], subcaseAgendaitemMeetingOrDocumentContainer);
       } catch (error) {
         await this.deleteUploadedDocument();
         throw error;

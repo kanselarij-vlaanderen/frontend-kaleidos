@@ -2,8 +2,10 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
+
   classNames: ['vl-form__group vl-u-bg-porcelain'],
   fileService: service(),
+  agendaitemOrSubcaseOrMeeting: null,
 
   async deleteDocument(document) {
     await this.fileService.deleteDocument(document);

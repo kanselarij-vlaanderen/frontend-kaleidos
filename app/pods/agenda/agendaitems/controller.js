@@ -16,7 +16,7 @@ export default Controller.extend({
   currentSession: alias('sessionService.currentSession'),
 
   sortedAgendaitems: computed('agendaitems.@each.{priority,isDeleted}', async function() {
-    const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark && !item.isDeleted)
+    const actualAgendaitems = this.get('agendaitems').filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
       .sortBy('priority');
     await this.agendaService.groupAgendaItemsOnGroupName(actualAgendaitems);
     return actualAgendaitems;
@@ -25,7 +25,7 @@ export default Controller.extend({
   sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', function() {
     const announcements = this.get('announcements');
     if (announcements) {
-      return announcements.filter((item) => !item.isDeleted).sortBy('priority');
+      return announcements.filter((announcement) => !announcement.isDeleted).sortBy('priority');
     }
     return [];
   }),

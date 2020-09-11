@@ -4,7 +4,7 @@ import DS from 'ember-data';
 
 export default Component.extend({
   tagName: 'tr',
-  myDocuments: computed.alias('item.documentVersions'),
+  myDocuments: computed.alias('agendaitemOrSubcaseOrMeeting.documentVersions'),
 
   myLastDocument: computed('mySortedDocuments.@each', function() {
     const mySortedDocuments = this.get('mySortedDocuments');

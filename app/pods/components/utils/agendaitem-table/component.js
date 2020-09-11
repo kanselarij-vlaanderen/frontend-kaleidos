@@ -83,7 +83,7 @@ export default class AgendaitemTable extends Component {
       enableSync: this.enableSync,
     });
 
-    table.addRows(this.model.filter((item) => !item.isApproval));
+    table.addRows(this.model.filter((agendaitem) => !agendaitem.isApproval));
     const sortColumn = table
       .get('allColumns')
       .findBy('valuePath', this.get('sort'));
@@ -104,7 +104,7 @@ export default class AgendaitemTable extends Component {
    */
   setRowsPostponed(tableRows, model) {
     const rowsCurrentlyInTable = tableRows;
-    const postponedItems = model.filter((item) => item.get('retracted'));
+    const postponedItems = model.filter((agendaitem) => agendaitem.get('retracted'));
     postponedItems.forEach((postponedItem) => {
       const postponedRowInTable = rowsCurrentlyInTable.find(
         (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id')
@@ -140,9 +140,9 @@ export default class AgendaitemTable extends Component {
       queryOptions
     );
 
-    this.get('model').pushObjects(records.toArray().filter((item) => !item.isApproval));
+    this.get('model').pushObjects(records.toArray().filter((agendaitem) => !agendaitem.isApproval));
     this.set('meta', records.get('meta'));
     this.set('canLoadMore', records.get('meta.count') > this.get('model.length'));
-    this.get('table').addRows(this.get('model').filter((item) => !item.isApproval));
+    this.get('table').addRows(this.get('model').filter((agendaitem) => !agendaitem.isApproval));
   };
 }

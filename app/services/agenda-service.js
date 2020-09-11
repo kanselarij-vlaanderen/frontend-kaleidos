@@ -196,15 +196,15 @@ export default Service.extend({
   async groupAgendaItemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
-      agendaitems.map(async(item) => {
-        const mandatees = await item.get('sortedMandatees');
-        if (item.isApproval) {
-          item.set('groupName', null);
-          item.set('ownGroupName', null);
+      agendaitems.map(async(agendaitem) => {
+        const mandatees = await agendaitem.get('sortedMandatees');
+        if (agendaitem.isApproval) {
+          agendaitem.set('groupName', null);
+          agendaitem.set('ownGroupName', null);
           return;
         }
         if (mandatees.length === 0) {
-          item.set('groupName', 'Geen toegekende ministers');
+          agendaitem.set('groupName', 'Geen toegekende ministers');
           return;
         }
         const currentAgendaitemGroupName = mandatees
@@ -213,21 +213,21 @@ export default Service.extend({
 
         if (currentAgendaitemGroupName !== previousAgendaitemGroupName) {
           previousAgendaitemGroupName = currentAgendaitemGroupName;
-          item.set('groupName', currentAgendaitemGroupName);
+          agendaitem.set('groupName', currentAgendaitemGroupName);
         } else {
-          item.set('groupName', null);
+          agendaitem.set('groupName', null);
         }
-        item.set('ownGroupName', currentAgendaitemGroupName);
+        agendaitem.set('ownGroupName', currentAgendaitemGroupName);
       })
     );
   },
 
   async deleteAgendaitem(agendaitem) {
-    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
+    const agendaitemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
       reload: true,
     });
-    itemToDelete.set('aboutToDelete', true);
-    const agendaActivity = await itemToDelete.get('agendaActivity');
+    agendaitemToDelete.set('aboutToDelete', true);
+    const agendaActivity = await agendaitemToDelete.get('agendaActivity');
 
     if (agendaActivity) {
       const subcase = await agendaActivity.get('subcase');
@@ -243,7 +243,7 @@ export default Service.extend({
       await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
     } else {
-      await itemToDelete.destroyRecord();
+      await agendaitemToDelete.destroyRecord();
     }
   },
 

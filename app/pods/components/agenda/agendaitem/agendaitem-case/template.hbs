@@ -29,7 +29,7 @@
     {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
     {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
     {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=agendaitem}}
-    {{agenda/agendaitem/agendaitem-case/agendaitem-approvals item=agendaitem}}
+    {{agenda/agendaitem/agendaitem-case/agendaitem-approvals agendaitem=agendaitem}}
     {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
   {{/if}}
 {{/if}}

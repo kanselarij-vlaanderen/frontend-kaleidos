@@ -30,7 +30,7 @@ export default Route.extend({
       sort: 'priority',
     });
 
-    const announcements = agendaitems.filter((item) => item.showAsRemark);
+    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
     const {
       draftAgendaitems, groupedAgendaitems,
