@@ -12,6 +12,10 @@ export default class NewsletterNotaUpdatesController extends Controller {
     this.page = 0;
   }
 
+  get size() {
+    return this.model.notas.length;
+  }
+
   @action
   // eslint-disable-next-line class-methods-use-this
   showDocumentVersionViewer(documentId) {

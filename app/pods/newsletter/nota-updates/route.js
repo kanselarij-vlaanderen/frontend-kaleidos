@@ -4,6 +4,9 @@ import { hash } from 'rsvp';
 import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import getPaginationMetadata from 'fe-redpencil/utils/get-pagination-metadata';
+import {
+  task, timeout
+} from 'ember-concurrency';
 
 
 export default class NewsletterNotaUpdatesRoute extends Route {
@@ -12,6 +15,19 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       refreshModel: true,
     },
   };
+
+  @(task(function *() {
+    while (true) {
+      yield timeout(0.1 * 60000);
+      this.refresh();
+    }
+  })) pollModel;
+
+  constructor() {
+    super(...arguments);
+    this.pollModel.perform();
+  }
+
   async model(params) {
     let notas = A([]);
     const newsletterModel = this.modelFor('newsletter');
@@ -22,6 +38,9 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     const agendaitemsForAgenda = await agenda.get('agendaitems');
     const agendaitemsArray = agendaitemsForAgenda.toArray();
     for (const agendaitem of agendaitemsArray) {
+      if (agendaitem.showAsRemark) {
+        continue;
+      }
       const agendaitemPriority = agendaitem.get('priority');
       const agendaitemId = agendaitem.get('id');
       const agendaitemShortTitle = agendaitem.get('shortTitle');

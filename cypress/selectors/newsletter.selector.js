@@ -5,5 +5,6 @@ const selectors = {
   editSave: '[data-test-newsletter-edit-save]',
   meetingTitle: '[data-test-newsletter-meeting-header-title]',
   overviewTitle: '[data-test-newsletter-overview-header-title]',
+  notaUpdates: '[data-test-nota-updates]',
 };
 export default selectors;
