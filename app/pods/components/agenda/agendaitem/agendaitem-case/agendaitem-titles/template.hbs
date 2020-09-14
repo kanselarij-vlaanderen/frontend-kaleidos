@@ -1,13 +1,13 @@
 {{#if
-  (and (await subcase.case.id) currentSession.isEditor)
+  (and @subcase.case.id currentSession.isEditor)
 }}
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
         @models={{array
-          (await subcase.case.id)
-          (await subcase.id)
+          @subcase.case.id
+          @subcase.id
         }}
         class="vl-link" >
         {{t "to-subcase"}}
@@ -19,7 +19,7 @@
 <div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-display-flex vlc-u-display-flex-align-center">
     <h2 class="vlc-subline" data-test-subcase-type>
-      {{#if (not agendaitem.showAsRemark)}}
+      {{#if (not @agendaitem.showAsRemark)}}
         {{t "note"}}
       {{else}}
         {{t "text"}}
@@ -31,7 +31,7 @@
           data-test-agendaitem-titles-edit
           href=""
           class="vl-link"
-          {{action "toggleIsEditingAction"}}
+          {{action this.toggleIsEditingAction}}
         >
           {{t "edit"}}
         </a>
@@ -43,28 +43,28 @@
 <div class="vl-u-spacer-extended-bottom-s">
   <h4 class="vl-title vl-title--h4">
     <pre>
-      {{await agendaitem.shortTitle}}
+      {{@agendaitem.shortTitle}}
     </pre>
   </h4>
 </div>
 
 <div class="vl-u-spacer-extended-bottom-s">
-  {{#if (await shouldShowDetails)}}
+  {{#if @shouldShowDetails}}
     <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
-      {{await agendaitem.title}}
+      {{@agendaitem.title}}
     </pre>
   {{/if}}
 </div>
 
-{{#if (not agendaitem.showAsRemark)}}
+{{#if (not @agendaitem.showAsRemark)}}
   <div class="vl-u-spacer-extended-bottom-s">
-    {{#if (await subcase.subcaseName)}}
-      <span class={{await pillClass}}>
-        {{await subcase.subcaseName}}
+    {{#if @subcase.subcaseName}}
+      <span class={{this.pillClass}}>
+        {{@subcase.subcaseName}}
       </span>
     {{/if}}
   </div>
-  {{#if (await agendaitem.retracted)}}
+  {{#if @agendaitem.retracted}}
     <div class="vl-u-spacer-extended-bottom-s">
       <div class="pill-container vl-u-display-flex">
         <span class="vl-pill vl-u-text--capitalize">
@@ -77,9 +77,9 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="pill-container vl-u-display-flex">
       <span
-        class="vlc-pill {{if newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} vl-u-spacer-extended-right-s"
+        class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} vl-u-spacer-extended-right-s"
       >
-        {{#if newsletterInfo.inNewsletter}}
+        {{#if @newsletterInfo.inNewsletter}}
           <span>
             {{t "visible-in-newsletter"}}
           </span>
@@ -99,16 +99,16 @@
     class="pill-container vl-u-display-flex"
     data-test-agenda-subcasehidden-pill
   >
-    {{#if (and currentSession.isEditor (await agendaitem.formallyOkToShow))}}
+    {{#if (and currentSession.isEditor @agendaitem.formallyOkToShow)}}
       <span
-        class="{{agendaitem.formallyOkToShow.pillClassNames}}
+        class="{{@agendaitem.formallyOkToShow.pillClassNames}}
         vl-u-spacer-extended-right-s"
       >
-        {{agendaitem.formallyOkToShow.label}}
+        {{@agendaitem.formallyOkToShow.label}}
       </span>
     {{/if}}
-    {{#if (await subcase)}}
-      {{#if (await subcase.confidential)}}
+    {{#if (await @subcase)}}
+      {{#if (await @subcase.confidential)}}
         <i data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error ki-lock-closed"></i>
       {{else}}
         <i
@@ -119,9 +119,9 @@
   </div>
 </div>
 <div class="vl-u-spacer-extended-bottom-s">
-  {{#if agendaitem.explanation}}
+  {{#if @agendaitem.explanation}}
     <pre class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
-      {{t "remark-title"}}: {{await agendaitem.explanation}}
+      {{t "remark-title"}}: {{@agendaitem.explanation}}
     </pre>
   {{/if}}
 </div>
