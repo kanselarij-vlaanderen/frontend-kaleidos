@@ -4,7 +4,7 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      {{#if 
+      {{#if
         (and currentSession.isEditor (gt (await @agendaitemOrSubcaseOrMeeting.documentsLength) 0))
       }}
         <div class="vl-u-spacer-extended-left-s">
@@ -24,9 +24,9 @@
       </div>
     {{else if (gt (await @agendaitemOrSubcaseOrMeeting.documentsLength) 0)}}
       {{#each (await @agendaitemOrSubcaseOrMeeting.documents) as |document|}}
-        <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-                @document={{document}}
-                @subcaseAgendaitemMeetingOrDocumentContainer={{@agendaitemOrSubcaseOrMeeting}} />
+        <Documents::DocumentLink
+          @documentContainer={{document}}
+          @item={{@agendaitemOrSubcaseOrMeeting}} />
       {{/each}}
     {{else}}
       <div class="vl-u-spacer-extended-top-s">

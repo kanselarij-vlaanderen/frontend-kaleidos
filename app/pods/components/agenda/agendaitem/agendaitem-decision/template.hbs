@@ -60,9 +60,8 @@
     </div>
   {{/if}}
   {{#if this.treatment.report}}
-    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-      @document={{await this.treatment.report}}
-      @subcaseAgendaitemMeetingOrDocumentContainer={{await this.treatment.report}}
+    <Documents::DocumentLink
+      @documentContainer={{this.treatment.report}}
     />
   {{else}}
     <Utils::AddSignedDocuments
