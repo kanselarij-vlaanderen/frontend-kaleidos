@@ -34,7 +34,6 @@ export default ModelWithModifier.extend({
   agendaActivities: hasMany('agenda-activity', {
     inverse: null,
   }),
-  remarks: hasMany('remark'),
   documentVersions: hasMany('document-version'),
   linkedDocumentVersions: hasMany('document-version'),
   mandatees: hasMany('mandatee'),
