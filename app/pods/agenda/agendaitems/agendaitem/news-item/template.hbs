@@ -40,13 +40,13 @@
     {{#if this.isEditing}}
       <NewsItem::EditItem
         @newsletterInfo={{this.model}}
-        @agendaitem={{this.agendaItem}}
+        @agendaitem={{this.agendaitem}}
         @onCancel={{this.stopEditing}}
         @onSave={{this.stopEditing}}
       />
     {{else}}
       <Agenda::Agendaitem::AgendaitemNewsItem
-        @agendaItem={{this.agendaItem}}
+        @agendaitem={{this.agendaitem}}
         @newsletterInfo={{this.model}}
       />
     {{/if}}

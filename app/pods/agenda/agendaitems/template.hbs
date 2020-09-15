@@ -3,7 +3,7 @@
     {{agenda/agendaitem-search
       selectedAgenda=currentAgenda
       value=(readonly filter)
-      search=(action "searchAgendaItems")
+      search=(action "searchAgendaitems")
     }}
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       {{#if isOverviewWindow }}
@@ -11,15 +11,15 @@
           announcements=sortedAnnouncements
           agendaitems=(await sortedAgendaitems)
           currentAgenda=(await model.currentAgenda)
-          selectedAgendaItem=selectedAgendaItem
-          filteredAgendaItems=filteredAgendaItems
+          selectedAgendaitem=selectedAgendaitem
+          filteredAgendaitems=filteredAgendaitems
         }}
       {{else}}
         {{agenda/agenda-detail/sidebar
           announcements=sortedAnnouncements
           agendaitems=(await sortedAgendaitems)
           currentAgenda=(await model.currentAgenda)
-          filteredAgendaItems=filteredAgendaItems
+          filteredAgendaitems=filteredAgendaitems
         }}
       {{/if}}
     </div>

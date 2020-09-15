@@ -31,11 +31,9 @@
 </div>
 
 <div class="vl-u-spacer-extended-bottom-s">
-  {{#if (await shouldShowDetails)}}
-    <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
-      {{await subcase.title}}
-    </pre>
-  {{/if}}
+  <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+    {{await subcase.title}}
+  </pre>
 </div>
 
 {{#if (not subcase.showAsRemark)}}

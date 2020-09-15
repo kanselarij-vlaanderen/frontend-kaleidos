@@ -62,11 +62,11 @@
   {{#if this.treatment.report}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
       @document={{await this.treatment.report}}
-      @item={{await this.treatment}}
+      @subcaseAgendaitemMeetingOrDocumentContainer={{await this.treatment}}
     />
   {{else}}
     <Utils::AddDocuments
-      @item={{this.treatment}}
+      @meetingRecordOrDecision={{this.treatment}}
       @defaultType={{this.defaultType}}
       @modelToAddDocumentVersionTo="agendaItemTreatment"
       @title={{t "signed-decision-add"}}

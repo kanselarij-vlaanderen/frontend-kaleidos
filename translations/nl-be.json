@@ -555,7 +555,7 @@
   "manage-users-technical-info": "Technische informatie",
   "manage-user": "Gebruiker: {firstName} {lastName}",
   "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
-  "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
+  "changes-could-not-be-saved-message": "{modelName} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "nota-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
   "select-minister": "Selecteer een minister",
   "agenda-comment-type-here": "Typ hier jouw opmerking...",

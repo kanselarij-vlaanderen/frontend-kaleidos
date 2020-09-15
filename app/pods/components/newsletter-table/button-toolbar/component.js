@@ -5,24 +5,24 @@ import {
 } from '@ember/object';
 
 export default class ButtonToolbarNewsletterTable extends Component {
-  @computed('this.args.agendaItem')
+  @computed('this.args.agendaitem')
   get latestMeetingId() {
-    return  this.args.agendaItem.get('agenda').then((agenda) => agenda.get('createdFor').then((meeting) => meeting.id));
+    return  this.args.agendaitem.get('agenda').then((agenda) => agenda.get('createdFor').then((meeting) => meeting.id));
   }
 
-  @computed('this.args.agendaItem')
+  @computed('this.args.agendaitem')
   get latestAgendaId() {
-    return this.args.agendaItem.get('agenda').then((agenda) => agenda.id);
+    return this.args.agendaitem.get('agenda').then((agenda) => agenda.id);
   }
 
-  @computed('this.args.agendaItem')
-  get latestAgendaItemId() {
-    return this.args.agendaItem.get('id');
+  @computed('this.args.agendaitem')
+  get latestAgendaitemId() {
+    return this.args.agendaitem.get('id');
   }
 
   @action
   async openNota() {
-    const nota = await this.args.agendaItem.get('nota');
+    const nota = await this.args.agendaitem.get('nota');
     if (nota) {
       const documentVersion = await nota.get('lastDocumentVersion');
       window.open(`/document/${documentVersion.get('id')}`);

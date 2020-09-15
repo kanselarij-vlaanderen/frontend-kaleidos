@@ -4,7 +4,7 @@ import {
 } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import { setAgendaItemsPriority } from 'fe-redpencil/utils/agenda-item-utils';
+import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaOverview extends Component {
   @service sessionService;
@@ -17,7 +17,7 @@ export default class AgendaOverview extends Component {
 
   classNameBindings = ['getClassNames'];
 
-  selectedAgendaItem = alias('sessionService.selectedAgendaItem');
+  selectedAgendaitem = alias('sessionService.selectedAgendaitem');
 
   dragHandleClass = '.vlc-agenda-items__sub-item';
 
@@ -30,24 +30,24 @@ export default class AgendaOverview extends Component {
 
   showLoader = null;
 
-  @computed('selectedAgendaItem')
+  @computed('selectedAgendaitem')
   get getClassNames() {
-    if (this.get('selectedAgendaItem')) {
+    if (this.get('selectedAgendaitem')) {
       return 'vlc-agenda-items--small';
     }
     return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
   }
 
   @action
-  selectAgendaItemAction(agendaitem) {
-    this.selectAgendaItem(agendaitem);
+  selectAgendaitemAction(agendaitem) {
+    this.selectAgendaitem(agendaitem);
   }
 
   @action
-  async setFormallyOkAction(agendaItem, formallyOkUri) {
+  async setFormallyOkAction(agendaitem, formallyOkUri) {
     this.set('showLoader', true);
-    agendaItem.formallyOk = formallyOkUri;
-    await agendaItem
+    agendaitem.formallyOk = formallyOkUri;
+    await agendaitem
       .save()
       .catch(() => {
         this.toaster.error();
@@ -68,9 +68,11 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  reorderItems(itemModels) {
+  async reorderItems(itemModels) {
     const isEditor = this.currentSessionService.isEditor;
     const isDesignAgenda = this.currentAgenda.isDesignAgenda;
-    setAgendaItemsPriority(itemModels, isEditor, isDesignAgenda);
+    this.set('showLoader', true);
+    await setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
+    this.set('showLoader', false);
   }
 }

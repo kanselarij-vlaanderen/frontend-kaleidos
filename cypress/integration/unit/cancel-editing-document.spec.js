@@ -71,7 +71,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
+    cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -80,7 +80,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         });
     });
 
-    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+    cy.addNewDocumentVersionToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -276,7 +276,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.clickAgendaitemTab(agenda.agendaItemDocumentsTab);
+    cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -289,7 +289,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get(form.formCancelButton).click()
       .wait('@deleteFile');
 
-    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+    cy.addNewDocumentVersionToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -301,7 +301,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     uploadFileToCancel(file);
     cy.get(modal.baseModal.close).click()
       .wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
-    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+    cy.addNewDocumentVersionToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)

@@ -11,21 +11,21 @@ export default Controller.extend({
   agendaService: inject(),
   agendaitems: alias('model.agendaitems'),
   announcements: alias('model.announcements'),
-  selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  selectedAgendaitem: alias('sessionService.selectedAgendaitem'),
   currentAgenda: alias('sessionService.currentAgenda'),
   currentSession: alias('sessionService.currentSession'),
 
   sortedAgendaitems: computed('agendaitems.@each.{priority,isDeleted}', async function() {
-    const actualAgendaitems = this.get('agendaitems').filter((item) => !item.showAsRemark && !item.isDeleted)
+    const actualAgendaitems = this.get('agendaitems').filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
       .sortBy('priority');
-    await this.agendaService.groupAgendaItemsOnGroupName(actualAgendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(actualAgendaitems);
     return actualAgendaitems;
   }),
 
   sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', function() {
     const announcements = this.get('announcements');
     if (announcements) {
-      return announcements.filter((item) => !item.isDeleted).sortBy('priority');
+      return announcements.filter((announcement) => !announcement.isDeleted).sortBy('priority');
     }
     return [];
   }),
@@ -48,7 +48,7 @@ export default Controller.extend({
   }),
 
   actions: {
-    searchAgendaItems(value) {
+    searchAgendaitems(value) {
       this.set('filter', value);
     },
     refresh() {

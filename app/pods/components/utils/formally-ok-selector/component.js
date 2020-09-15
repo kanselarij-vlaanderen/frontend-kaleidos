@@ -8,7 +8,7 @@ export default Component.extend({
   isLoading: null,
   hideLabel: null,
 
-  options: computed(() => CONFIG.formallyOkOptions.map((item) => EmberObject.create(item))),
+  options: computed(() => CONFIG.formallyOkOptions.map((formallyOkOption) => EmberObject.create(formallyOkOption))),
 
   selectedFormallyOk: computed('options', 'formallyOk', function() {
     const formallyOk = this.get('formallyOk');
@@ -19,9 +19,9 @@ export default Component.extend({
   }),
 
   actions: {
-    setAction(item) {
-      this.set('selectedFormallyOk', item);
-      this.setAction(item);
+    setAction(formallyOkStatus) {
+      this.set('selectedFormallyOk', formallyOkStatus);
+      this.setAction(formallyOkStatus);
     },
   },
 });
