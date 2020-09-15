@@ -11,14 +11,12 @@
           agendaitems=(await sortedAgendaitems)
           currentAgenda=(await model.currentAgenda)
           selectedAgendaitem=selectedAgendaitem
-          filteredAgendaitems=filteredAgendaitems
         }}
       {{else}}
         {{agenda/agenda-detail/sidebar
           announcements=sortedAnnouncements
           agendaitems=(await sortedAgendaitems)
           currentAgenda=(await model.currentAgenda)
-          filteredAgendaitems=filteredAgendaitems
         }}
       {{/if}}
     </div>
