@@ -22,11 +22,9 @@ export default ModelWithModifier.extend({
   modified: attr('datetime'),
   shortTitle: attr('string'),
   title: attr('string'),
-  subcaseIdentifier: attr('string'),
   showAsRemark: attr('boolean'),
   confidential: attr('boolean'),
   isArchived: attr('boolean'),
-  concluded: attr('boolean'),
   subcaseName: attr('string'),
 
   consulationRequests: hasMany('consulation-request', {
