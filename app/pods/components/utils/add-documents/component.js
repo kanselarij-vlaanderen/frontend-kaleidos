@@ -99,7 +99,7 @@ export default Component.extend({
     },
 
     async uploadNewDocument() {
-      const item = await this.get('item');
+      const meetingRecordOrDecision = await this.get('meetingRecordOrDecision');
       const document = await this.saveDocument();
       await document.belongsTo('documentContainer').reload();
       const documentType = await this.get('documentTypeToAssign');
@@ -111,9 +111,9 @@ export default Component.extend({
         await container.save();
       }
 
-      document.set(this.modelToAddDocumentVersionTo, item);
-      item.set('report', document);
-      await item.save();
+      document.set(this.modelToAddDocumentVersionTo, meetingRecordOrDecision);
+      meetingRecordOrDecision.set('report', document);
+      await meetingRecordOrDecision.save();
     },
 
     async deleteFile(file) {

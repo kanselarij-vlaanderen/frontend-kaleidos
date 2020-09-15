@@ -1,12 +1,12 @@
-{{#if (await item.signedDocument)}}
+{{#if (await meetingRecordOrDecision.signedDocument)}}
   {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=(await item.signedDocument)
-    item=(await item.signedDocument)
+    document=(await meetingRecordOrDecision.signedDocument)
+    subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.signedDocument)
   }}
-{{else if (await item.report)}}
+{{else if (await meetingRecordOrDecision.report)}}
   {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=(await item.report)
-    item=(await item.report)
+    document=(await meetingRecordOrDecision.report)
+    subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.report)
   }}
 {{else if (await item)}}
   {{#if currentSession.isEditor}}

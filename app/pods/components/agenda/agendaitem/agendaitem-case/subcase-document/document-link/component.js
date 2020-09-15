@@ -135,7 +135,7 @@ export default class DocumentLink extends Component {
       // item.set(report documents[0])
       // return;
     }
-   if (itemType === 'document') {
+    if (itemType === 'document') {
       // The document is already saved in this case
       return;
     }
