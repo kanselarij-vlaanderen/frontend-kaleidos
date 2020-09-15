@@ -1,9 +1,8 @@
 <div class={{agendaitemsClass}}>
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
     {{agenda/agendaitem-search
-      selectedAgenda=currentAgenda
-      value=(readonly filter)
-      search=(action "searchAgendaitems")
+      searchText=(readonly filter)
+      onSearch=(action "searchAgendaitems")
     }}
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       {{#if isOverviewWindow }}

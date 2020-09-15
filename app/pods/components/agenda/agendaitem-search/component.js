@@ -1,26 +1,34 @@
-import Component from '@ember/component';
-import { inject } from '@ember/service';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import {
   task, timeout
 } from 'ember-concurrency';
 
-export default Component.extend({
-  classNames: ['vlc-scroll-wrapper__header'],
-  store: inject(),
+export default class AgendaItemSearch extends Component {
+  @tracked searchText;
 
-  searchTask: task(function *() {
+  constructor() {
+    super(...arguments);
+    this.searchText = this.args.searchText || '';
+  }
+
+  @(task(function *() {
     yield timeout(600);
-    this.search(this.get('value'));
-  }).restartable(),
+    this.search(this.searchText);
+  }).restartable()) debouncedSearchTask;
 
-  actions: {
-    search() {
-      this.searchTask.perform();
-    },
-    emptySearchTask(val) {
-      if (val === '') {
-        this.searchTask.perform();
-      }
-    },
-  },
-});
+  @action
+  debouncedSearch(event) {
+    this.searchText = event.target.value;
+    this.debouncedSearchTask.perform();
+  }
+
+  @action
+  search() {
+    const handler = this.args.onSearch;
+    if (handler) {
+      handler(this.searchText);
+    }
+  }
+}
