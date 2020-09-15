@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { isEmpty } from '@ember/utils';
-import { ajax } from 'fe-redpencil/utils/ajax';
 import { inject } from '@ember/service';
 import { action } from '@ember/object';
+import search from 'fe-redpencil/utils/mu-search';
 
 export default Route.extend({
   sessionService: inject(),
@@ -24,7 +24,7 @@ export default Route.extend({
     });
     if (!isEmpty(params.filter)) {
       const matchingAgendaitems = await this.getMatchingAgendaitems(params.filter);
-      agendaitems = agendaitems.filter((agendaitem) => matchingAgendaitems[agendaitem.id]);
+      agendaitems = agendaitems.filter((agendaitem) => matchingAgendaitems.find((matchItem) => matchItem.id === agendaitem.id));
     }
 
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
@@ -43,19 +43,21 @@ export default Route.extend({
     this.refresh();
   },
 
-  async getMatchingAgendaitems(filter) {
-    if (isEmpty(filter)) {
-      return {};
-    }
-    const meetingId = await this.get('sessionService.currentSession.id');
-    const searchResults = await ajax({
-      method: 'GET',
-      url: `/agendaitems/search?filter[meetingId]=${meetingId}&filter[:sqs:title,shortTitle,data,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`,
+  async getMatchingAgendaitems(filterText) {
+    const {
+      agenda,
+      meeting,
+    } = this.modelFor('agenda');
+    const filter = {
+      ':sqs:title,shortTitle': filterText,
+      meetingId: meeting.id,
+      agendaId: agenda.id,
+    };
+    const matchingAgendaitems = await search('agendaitems', 0, 500, null, filter, (agendaitem) => {
+      const entry = agendaitem.attributes;
+      entry.id = agendaitem.id;
+      return entry;
     });
-    const searchMap = {};
-    searchResults.data.map((searchResult) => {
-      searchMap[searchResult.id] = true;
-    });
-    return searchMap;
+    return matchingAgendaitems;
   },
 });
