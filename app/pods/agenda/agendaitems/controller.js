@@ -75,9 +75,9 @@ export default class AgendaItemsAgendaController extends Controller {
   })) filterTask;
 
   @action
-  searchAgendaitems(value) {
+  async searchAgendaitems(value) {
     this.filter = value;
-    this.filterTask.perform();
+    await this.filterTask.perform();
   }
 
   @action
