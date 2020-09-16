@@ -20,7 +20,7 @@
             </button>
           </div>
         </div>
-        {{#if debouncedSearch.isRunning}}
+        {{#if this.debouncedSearchTask.isRunning}}
           <div class="vl-loader" role="alert" aria-busy="true"></div>
         {{/if}}
       </div>
