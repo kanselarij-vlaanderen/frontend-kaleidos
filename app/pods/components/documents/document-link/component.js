@@ -11,6 +11,7 @@ import { A } from '@ember/array';
 import moment from 'moment';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 import config from 'fe-redpencil/utils/config';
+import { addDocumentToAgendaitem } from 'fe-redpencil/utils/documents';
 
 export default class DocumentLink extends Component {
   @service store;
@@ -117,7 +118,7 @@ export default class DocumentLink extends Component {
     this.newDocument.set('name', documentName);
   }
 
-  @task
+  @task // TODO refactor to DDAU pattern and let wrapping component handle this
   *addDocument() {
     try {
       yield this.newDocument.save(); // links the document to the documentContainer
@@ -132,11 +133,9 @@ export default class DocumentLink extends Component {
 
         // Link document to agendaitem
         setNotYetFormallyOk(this.args.item);
-        const currentAgendaitemDocuments = yield this.args.item.hasMany('documentVersions').reload();
-        // Next line triggers a rerender of the wrapping component, hence needs to be executed as late as possible
-        currentAgendaitemDocuments.insertAt(0, this.newDocument);
-        // TODO remove previous version from agendaitem if needed
         yield this.args.item.save();
+        yield addDocumentToAgendaitem(this.args.item, this.newDocument);
+        yield this.args.item.hasMany('documentVersions').reload();
       } else if (this.itemType == 'subcase') {
         // Link document to all agendaitems that are related to the subcase via an agendaActivity
         // and related to an agenda in the design status
@@ -145,9 +144,8 @@ export default class DocumentLink extends Component {
           'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id
         });
         const agendaitemUpdates = agendaitems.map(async (agendaitem) => {
-          const currentAgendaitemDocuments = await agendaitem.hasMany('documentVersions').reload();
-          currentAgendaitemDocuments.insertAt(0, this.newDocument);
-          // TODO remove previous version from agendaitem if needed
+          await addDocumentToAgendaitem(agendaitem, this.newDocument);
+          await agendaitem.hasMany('documentVersions').reload();
           setNotYetFormallyOk(agendaitem);
           await destroyApprovalsOfAgendaitem(agendaitem);
           await agendaitem.save();
@@ -155,7 +153,7 @@ export default class DocumentLink extends Component {
         yield all(agendaitemUpdates);
 
         // Link document to subcase
-        const currentSubcaseDocuments =  yield this.args.item.hasMany('documentVersions').reload();
+        const currentSubcaseDocuments = yield this.args.item.hasMany('documentVersions').reload();
         // Next line triggers a rerender of the wrapping component, hence needs to be executed as late as possible
         currentSubcaseDocuments.insertAt(0, this.newDocument);
         yield this.args.item.save();
