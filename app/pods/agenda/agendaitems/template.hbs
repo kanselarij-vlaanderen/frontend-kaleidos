@@ -1,23 +1,23 @@
-<div class={{agendaitemsClass}}>
+<div class={{this.agendaitemsClass}}>
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-    {{agenda/agendaitem-search
-      searchText=(readonly filter)
-      onSearch=(action "searchAgendaitems")
-    }}
+    <Agenda::AgendaitemSearch
+      @searchText={{readonly this.filter}}
+      @onSearch={{this.searchAgendaitems}}
+    />
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       {{#if isOverviewWindow }}
-        {{agenda/agenda-overview
-          announcements=sortedAnnouncements
-          agendaitems=(await sortedAgendaitems)
-          currentAgenda=(await model.currentAgenda)
-          selectedAgendaitem=selectedAgendaitem
-        }}
+        <Agenda::AgendaOverview
+          @announcements={{this.sortedAnnouncements}}
+          @agendaitems={{await this.sortedAgendaitems}}
+          @currentAgenda={{await this.model.currentAgenda}}
+          @selectedAgendaitem={{this.selectedAgendaitem}}
+        />
       {{else}}
-        {{agenda/agenda-detail/sidebar
-          announcements=sortedAnnouncements
-          agendaitems=(await sortedAgendaitems)
-          currentAgenda=(await model.currentAgenda)
-        }}
+        <Agenda::AgendaDetail::Sidebar
+          @announcements={{this.sortedAnnouncements}}
+          @agendaitems={{await this.sortedAgendaitems}}
+          @currentAgenda={{await this.model.currentAgenda}}
+        />
       {{/if}}
     </div>
   </div>

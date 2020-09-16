@@ -1,18 +1,19 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { isEmpty } from '@ember/utils';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import search from 'fe-redpencil/utils/mu-search';
 
-export default Route.extend({
-  sessionService: inject(),
-  agendaService: inject(),
-  queryParams: {
+export default class AgendaItemsAgendaRoute extends Route {
+  queryParams = {
     filter: {
       refreshModel: true,
     },
-  },
+  };
+
+  @service sessionService;
+  @service agendaService;
 
   async model(params) {
     const {
@@ -36,12 +37,12 @@ export default Route.extend({
       announcements,
       agendaitems,
     });
-  },
+  }
 
   @action
   reloadModel() {
     this.refresh();
-  },
+  }
 
   async getMatchingAgendaitems(filterText) {
     const {
@@ -59,5 +60,5 @@ export default Route.extend({
       return entry;
     });
     return matchingAgendaitems;
-  },
-});
+  }
+}
