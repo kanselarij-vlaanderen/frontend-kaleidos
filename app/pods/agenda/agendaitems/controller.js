@@ -67,10 +67,9 @@ export default class AgendaItemsAgendaController extends Controller {
         meetingId: this.meeting.id,
         agendaId: this.agenda.id,
       };
-      const matchingAgendaitemIds = yield search('agendaitems', 0, 500, null, filter, (agendaItem) => agendaItem.id);
-      console.log("matching ids", matchingAgendaitemIds);
-      this.filteredAgendaitems = this.model.agendaitems.filter((ai) => matchingAgendaitemIds.includes(ai.id));
-      this.filteredAnnouncements = this.model.announcements.filter((ai) => matchingAgendaitemIds.includes(ai.id));
+      const matchingIds = yield search('agendaitems', 0, 500, null, filter, (agendaItem) => agendaItem.id);
+      this.filteredAgendaitems = this.model.agendaitems.filter((ai) => matchingIds.includes(ai.id));
+      this.filteredAnnouncements = this.model.announcements.filter((ai) => matchingIds.includes(ai.id));
     }
   })) filterTask;
 
