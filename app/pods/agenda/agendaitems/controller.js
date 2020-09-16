@@ -6,6 +6,9 @@ import {
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
+import search from 'fe-redpencil/utils/mu-search';
+import { task } from 'ember-concurrency';
+import { isEmpty } from '@ember/utils';
 
 export default class AgendaItemsAgendaController extends Controller {
   queryParams = ['filter'];
@@ -22,16 +25,21 @@ export default class AgendaItemsAgendaController extends Controller {
 
   @tracked filter;
 
-  @computed('agendaitems.@each.{priority,isDeleted}')
+  meeting;
+  agenda;
+  @tracked filteredAgendaitems;
+  @tracked filteredAnnouncements;
+
+  @computed('filteredAgendaitems.@each.{priority,isDeleted}')
   get sortedAgendaitems() {
-    const actualAgendaitems = this.agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
+    const actualAgendaitems = this.filteredAgendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
       .sortBy('priority');
     return this.agendaService.groupAgendaitemsOnGroupName(actualAgendaitems).then(() => actualAgendaitems);
   }
 
-  @computed('announcements.@each.{priority,isDeleted}')
+  @computed('filteredAnnouncements.@each.{priority,isDeleted}')
   get sortedAnnouncements() {
-    const announcements = this.announcements;
+    const announcements = this.filteredAnnouncements;
     if (announcements) {
       return announcements.filter((announcement) => !announcement.isDeleted).sortBy('priority');
     }
@@ -49,9 +57,27 @@ export default class AgendaItemsAgendaController extends Controller {
     return this.routing.currentRouteName === 'agenda.agendaitems.index';
   }
 
+  @(task(function *() {
+    if (isEmpty(this.filter)) {
+      this.filteredAgendaitems = this.model.agendaitems;
+      this.filteredAnnouncements = this.model.announcements;
+    } else {
+      const filter = {
+        ':sqs:title,shortTitle': this.filter,
+        meetingId: this.meeting.id,
+        agendaId: this.agenda.id,
+      };
+      const matchingAgendaitemIds = yield search('agendaitems', 0, 500, null, filter, (agendaItem) => agendaItem.id);
+      console.log("matching ids", matchingAgendaitemIds);
+      this.filteredAgendaitems = this.model.agendaitems.filter((ai) => matchingAgendaitemIds.includes(ai.id));
+      this.filteredAnnouncements = this.model.announcements.filter((ai) => matchingAgendaitemIds.includes(ai.id));
+    }
+  })) filterTask;
+
   @action
   searchAgendaitems(value) {
     this.filter = value;
+    this.filterTask.perform();
   }
 
   @action
