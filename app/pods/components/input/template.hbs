@@ -1,0 +1,17 @@
+{{#if @icon}}
+  <div class="vlc-input-with-icon">
+    <input
+    class="vlc-input {{this.error}} {{this.block}}"
+    type="text"
+    ...attributes
+    />
+    <Icon @name={{@icon}} />
+  </div>
+
+{{else}}
+  <input
+    class="vlc-input {{this.error}} {{this.block}}"
+    type="text"
+    ...attributes
+  />
+{{/if}}

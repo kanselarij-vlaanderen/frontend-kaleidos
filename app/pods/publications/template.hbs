@@ -17,6 +17,18 @@
     </Toolbar>
   </Navbar>
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    <Navbar @size="large" @border="none">
+      <Toolbar>
+        <Toolbar::Group>
+          <Input @icon="search" @block="true" placeholder="Zoeken..."></Input>
+        </Toolbar::Group>
+        <Toolbar::Group @position="right">
+          <Toolbar::Item>
+            <Button @icon="filter">{{t "filter"}}</Button>
+          </Toolbar::Item>
+        </Toolbar::Group>
+      </Toolbar>
+    </Navbar>
     {{outlet}}
   </div>
 </div>

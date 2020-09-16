@@ -31,6 +31,11 @@
   .vlc-button__label + .vlc-icon {
     margin-left: .6rem;
   }
+
+  .vlc-icon {
+    vertical-align: middle;
+    line-height: 6px;
+  }
 }
 
 .vlc-button--icon {
@@ -41,14 +46,6 @@
   width: 100%;
   text-align: center;
   justify-content: center;
-}
-
-.vlc-button--icon img {
-  display: block;
-}
-
-.vlc-button svg path {
-  fill: currentColor;
 }
 
 /* Skins
