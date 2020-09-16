@@ -51,10 +51,10 @@ export default class DocumentLink extends Component {
       this.defaultAccessLevel = accessLevels.firstObject;
     }
 
-    if (this.args.item) {
+    if (this.args.agendaitemOrSubcase) {
       // Construct the intersection of the documents linked to the item (agendaitem/subcase)
       // and all documents of the documentContainer
-      const allDocuments = yield this.args.item.documentVersions;
+      const allDocuments = yield this.args.agendaitemOrSubcase.documentVersions;
       const containerDocuments = yield this.args.documentContainer.sortedDocuments;
       const sortedDocuments = [];
       if (containerDocuments.length) {
@@ -82,13 +82,13 @@ export default class DocumentLink extends Component {
   }
 
   get itemType() {
-    return this.args.item && this.args.item.constructor.modelName;
+    return this.args.agendaitemOrSubcase && this.args.agendaitemOrSubcase.constructor.modelName;
   }
 
   @action
   async openUploadModal() {
     if (this.itemType === 'agendaitem' || this.itemType === 'subcase') {
-      await this.args.item.preEditOrSaveCheck();
+      await this.args.agendaitemOrSubcase.preEditOrSaveCheck();
     }
     this.isOpenUploadModal = true;
   }
@@ -125,22 +125,22 @@ export default class DocumentLink extends Component {
 
       if (this.itemType == 'agendaitem') {
         // Link document to subcase related to the agendaitem
-        const agendaActivity = yield this.args.item.agendaActivity;
+        const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
         const subcase = yield agendaActivity.subcase;
         const currentSubcaseDocuments = yield subcase.hasMany('documentVersions').reload();
         currentSubcaseDocuments.insertAt(0, this.newDocument);
         yield subcase.save();
 
         // Link document to agendaitem
-        setNotYetFormallyOk(this.args.item);
-        yield this.args.item.save();
-        yield addDocumentToAgendaitem(this.args.item, this.newDocument);
-        yield this.args.item.hasMany('documentVersions').reload();
+        setNotYetFormallyOk(this.args.agendaitemOrSubcase);
+        yield this.args.agendaitemOrSubcase.save();
+        yield addDocumentToAgendaitem(this.args.agendaitemOrSubcase, this.newDocument);
+        yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
       } else if (this.itemType == 'subcase') {
         // Link document to all agendaitems that are related to the subcase via an agendaActivity
         // and related to an agenda in the design status
         const agendaitems = yield this.store.query('agendaitem', {
-          'filter[agenda-activity][subcase][:id:]': this.args.item.get('id'),
+          'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
           'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id
         });
         const agendaitemUpdates = agendaitems.map(async (agendaitem) => {
@@ -153,10 +153,10 @@ export default class DocumentLink extends Component {
         yield all(agendaitemUpdates);
 
         // Link document to subcase
-        const currentSubcaseDocuments = yield this.args.item.hasMany('documentVersions').reload();
+        const currentSubcaseDocuments = yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
         // Next line triggers a rerender of the wrapping component, hence needs to be executed as late as possible
         currentSubcaseDocuments.insertAt(0, this.newDocument);
-        yield this.args.item.save();
+        yield this.args.agendaitemOrSubcase.save();
       }
       this.loadData.perform();
       this.uploadedFile = null;
