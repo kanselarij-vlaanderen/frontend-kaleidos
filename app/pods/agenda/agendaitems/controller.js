@@ -63,7 +63,7 @@ export default class AgendaItemsAgendaController extends Controller {
       this.filteredAnnouncements = this.model.announcements;
     } else {
       const filter = {
-        ':sqs:title,shortTitle': this.filter,
+        ':sqs:title,shortTitle': `${this.filter}*`, // sqs combined with asterisk suffixing as hack for accomplishing a multi-field prefix query
         meetingId: this.meeting.id,
         agendaId: this.agenda.id,
       };
