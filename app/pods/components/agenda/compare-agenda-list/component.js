@@ -35,7 +35,7 @@ export default class CompareAgendaList extends Component {
 
   @tracked agendaitemsLeft = null;
   @tracked agendaitemsRight = null;
-  @tracked combinedItems = [] ;
+  @tracked combinedAgendaitems = [] ;
 
 
   async bothAgendasSelected() {
@@ -52,7 +52,7 @@ export default class CompareAgendaList extends Component {
         await this.agendaService.agendaWithChanges(this.agendaTwo.get('id'), this.agendaOne.get('id'));
       }
 
-      this.combinedItems = await this.createComparisonList(this.agendaitemsLeft, this.agendaitemsRight);
+      this.combinedAgendaitems = await this.createComparisonList(this.agendaitemsLeft, this.agendaitemsRight);
       this.isLoadingComparison = false;
     }
   }
@@ -62,7 +62,7 @@ export default class CompareAgendaList extends Component {
   async chooseAgendaOne(agenda) {
     this.isLoadingAgendaOne = true;
     const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
-    await this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(agendaitems);
 
     this.agendaitemsLeft = agendaitems;
     this.agendaOne = agenda;
@@ -74,7 +74,7 @@ export default class CompareAgendaList extends Component {
   async chooseAgendaTwo(agenda) {
     this.isLoadingAgendaTwo = true;
     const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
-    await this.agendaService.groupAgendaItemsOnGroupName(agendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(agendaitems);
 
     this.agendaitemsRight = agendaitems;
     this.agendaTwo = agenda;
@@ -114,7 +114,7 @@ export default class CompareAgendaList extends Component {
     leftAgendaitems = [].concat(leftAgendaitems.toArray());
     rightAgendaitems = [].concat(rightAgendaitems.toArray());
 
-    const combinedItems = [];
+    const combinedAgendaitems = [];
     let currentLeft;
     let currentRight;
 
@@ -127,7 +127,7 @@ export default class CompareAgendaList extends Component {
       }
 
       if (!currentLeft || !currentRight || (await this.compareSubcase(currentLeft, currentRight))) {
-        combinedItems.push(EmberObject.create({
+        combinedAgendaitems.push(EmberObject.create({
           left: currentLeft, right: currentRight,
         }));
         currentLeft = null;
@@ -136,56 +136,56 @@ export default class CompareAgendaList extends Component {
       }
 
       if (this.addedAgendaitems.indexOf(currentRight.id) >= 0) {
-        combinedItems.push(EmberObject.create({
+        combinedAgendaitems.push(EmberObject.create({
           left: null,
           right: currentRight,
         }));
         currentRight = null;
         continue;
       }
-      const foundLeftItem = this.findItemBySubcase(currentLeft, rightAgendaitems);
+      const foundLeftAgendaitem = this.findAgendaitemBySubcase(currentLeft, rightAgendaitems);
 
-      if (!foundLeftItem) {
-        combinedItems.push(EmberObject.create({
+      if (!foundLeftAgendaitem) {
+        combinedAgendaitems.push(EmberObject.create({
           left: currentLeft, right: null,
         }));
         currentLeft = null;
         continue;
       }
 
-      const foundRightItem = this.findItemBySubcase(currentRight, leftAgendaitems);
+      const foundRightAgendaitem = this.findAgendaitemBySubcase(currentRight, leftAgendaitems);
 
-      if (!foundRightItem) {
-        combinedItems.push(EmberObject.create({
+      if (!foundRightAgendaitem) {
+        combinedAgendaitems.push(EmberObject.create({
           left: null, right: currentRight,
         }));
         currentLeft = null;
         continue;
       }
 
-      combinedItems.push(EmberObject.create({
+      combinedAgendaitems.push(EmberObject.create({
         left: currentLeft, right: currentRight,
       }));
       currentLeft = null;
       currentRight = null;
     }
-    return this.setCombinedGroupNames(combinedItems);
+    return this.setCombinedGroupNames(combinedAgendaitems);
   }
 
   setCombinedGroupNames(list) {
-    list.map((combinedItem) => {
-      const leftGroupName = combinedItem.get('left.groupName');
-      const rightGroupName = combinedItem.get('right.groupName');
+    list.map((combinedAgendaitem) => {
+      const leftGroupName = combinedAgendaitem.get('left.groupName');
+      const rightGroupName = combinedAgendaitem.get('right.groupName');
       if (!leftGroupName && !rightGroupName) {
         return;
       }
 
-      combinedItem.set('groupName', leftGroupName || rightGroupName);
+      combinedAgendaitem.set('groupName', leftGroupName || rightGroupName);
     });
     return list;
   }
 
-  findItemBySubcase(item, list) {
-    return list.find((possibleMatch) => possibleMatch.get('agendaActivity.subcase.id') === item.get('agendaActivity.subcase.id'));
+  findAgendaitemBySubcase(agendaitem, list) {
+    return list.find((possibleMatch) => possibleMatch.get('agendaActivity.subcase.id') === agendaitem.get('agendaActivity.subcase.id'));
   }
 }

@@ -21,14 +21,14 @@ export default Component.extend({
   },
 
   checkMandateeRowsForSubmitter(mandateeRows) {
-    const submitters = mandateeRows.filter((item) => item.get('isSubmitter'));
+    const submitters = mandateeRows.filter((mandateeRow) => mandateeRow.get('isSubmitter'));
     return submitters.get('length') > 0;
   },
 
   actions: {
     async saveChanges(mandatee, newRow) {
-      const iseCodes = (await mandatee.get('iseCodes')).filter((item) => item);
-      const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((item) => item);
+      const iseCodes = (await mandatee.get('iseCodes')).filter((iseCode) => iseCode);
+      const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((iseCodeField) => iseCodeField);
       const domains = await Promise.all(fields.map((field) => field.get('domain')));
 
       const rowToShow = EmberObject.create({
@@ -101,23 +101,23 @@ export default Component.extend({
 
       const rowToShow = EmberObject.create({
         mandatee,
-        domains: [...new Set(totalDomains.filter((item) => item))],
-        fields: [...new Set(totalFields.filter((item) => item))],
+        domains: [...new Set(totalDomains.filter((totalDomain) => totalDomain))],
+        fields: [...new Set(totalFields.filter((totalField) => totalField))],
       });
       this.set('isLoading', false);
       this.set('rowToShow', rowToShow);
       this.set('isEditingMandateeRow', true);
     },
 
-    async valueChanged(mandateeRow) {
+    async valueChanged(changedMandateeRow) {
       const mandateeRows = await this.mandateeRows;
-      const newRows = mandateeRows.map((item) => {
-        if (item === mandateeRow) {
-          item.set('isSubmitter', true);
+      const newRows = mandateeRows.map((mandateeRow) => {
+        if (mandateeRow === changedMandateeRow) {
+          mandateeRow.set('isSubmitter', true);
         } else {
-          item.set('isSubmitter', false);
+          mandateeRow.set('isSubmitter', false);
         }
-        return item;
+        return mandateeRow;
       });
       this.set('mandateeRows', newRows);
     },

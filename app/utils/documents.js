@@ -20,15 +20,15 @@ export const sortDocuments = (documentVersions, containers) => {
     let matchingdocA = null;
     let matchingdocB = null;
     for (let index = 0; index < containerA.get('documents.length'); index++) {
-      const doc = containerA.get('documents').objectAt(index);
-      matchingdocA = sortedDocVers.filterBy('id', doc.id).sortBy('created').lastObject;
+      const document = containerA.get('documents').objectAt(index);
+      matchingdocA = sortedDocVers.filterBy('id', document.id).sortBy('created').lastObject;
       if (matchingdocA) {
         break;
       }
     }
     for (let index = 0; index < containerB.get('documents.length'); index++) {
-      const doc = containerB.get('documents').objectAt(index);
-      matchingdocB = sortedDocVers.filterBy('id', doc.id).sortBy('created').lastObject;
+      const document = containerB.get('documents').objectAt(index);
+      matchingdocB = sortedDocVers.filterBy('id', document.id).sortBy('created').lastObject;
       if (matchingdocB) {
         break;
       }

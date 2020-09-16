@@ -1,11 +1,10 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
-export default Component.extend({
-  classNames: ['vl-u-spacer-extended-bottom-l'],
-
-  actions: {
-    toggleIsShowingDocuments(subcase) {
-      subcase.toggleProperty('isShowingDocuments');
-    },
-  },
-});
+export default class AllSubcases extends Component {
+  @action
+  // eslint-disable-next-line class-methods-use-this
+  toggleIsShowingDocuments(subcase) {
+    subcase.toggleProperty('isShowingDocuments');
+  }
+}

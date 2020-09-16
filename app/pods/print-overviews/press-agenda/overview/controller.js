@@ -25,7 +25,7 @@ export default Controller.extend({
   filteredGroups: computed('model', 'definite', async function() {
     return this.model.get('groups').then((agenda) => {
       agenda.groups.map((group) => {
-        group.agendaitems.filter((item) => item.forPress);
+        group.agendaitems.filter((agendaitem) => agendaitem.forPress);
       });
     });
   }),

@@ -3,9 +3,9 @@ import { action } from '@ember/object';
 
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
-    const agendaItem = await this.modelFor('agenda.agendaitems.agendaitem');
+    const agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
     return await this.store.query('agenda-item-treatment', {
-      'filter[agendaitem][:id:]': agendaItem.id,
+      'filter[agendaitem][:id:]': agendaitem.id,
       include: 'report',
     });
   }

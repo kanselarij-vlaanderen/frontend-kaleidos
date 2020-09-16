@@ -21,7 +21,7 @@ export default Component.extend({
     return agenda.id;
   }),
 
-  latestAgendaItemId: computed('row', async function() {
+  latestAgendaitemId: computed('row', async function() {
     return await this.row.get('id');
   }),
 

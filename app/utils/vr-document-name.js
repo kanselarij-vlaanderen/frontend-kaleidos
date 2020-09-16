@@ -58,6 +58,7 @@ export default class VRDocumentName {
     return meta;
   }
 
+  // TODO: Mag misschien weg?
   // Will only be needed by backend renaming service
   // static fromMeta (meta) {
   //   const date = meta.date || Date();

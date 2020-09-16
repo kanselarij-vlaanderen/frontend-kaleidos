@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 
-export default class AgendaItemsSearchController extends Controller {
+export default class AgendaitemsSearchController extends Controller {
   queryParams = {
     types: {
       type: 'array',
@@ -49,7 +49,6 @@ export default class AgendaItemsSearchController extends Controller {
     } else {
       this.types.removeObject('nota');
     }
-    return value;
   }
 
   get includeMededelingen() {
@@ -64,7 +63,6 @@ export default class AgendaItemsSearchController extends Controller {
     } else {
       this.types.removeObject('mededeling');
     }
-    return value;
   }
 
   @action

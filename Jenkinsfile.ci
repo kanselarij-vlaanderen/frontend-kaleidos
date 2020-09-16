@@ -41,7 +41,7 @@ pipeline {
                 sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
 
                 // Wait for elasticsearch to have cerated the indices and stuff.
-                sh "sleep 30"
+                sh "sleep 45"
 
                 // Make the folders deletable.
                 // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"

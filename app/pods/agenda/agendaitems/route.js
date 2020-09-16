@@ -23,13 +23,13 @@ export default Route.extend({
       include: 'mandatees',
     });
     if (!isEmpty(params.filter)) {
-      const matchingAgendaItems = await this.matchingAgendaItems(params.filter);
-      agendaitems = agendaitems.filter((item) => matchingAgendaItems[item.id]);
+      const matchingAgendaitems = await this.getMatchingAgendaitems(params.filter);
+      agendaitems = agendaitems.filter((agendaitem) => matchingAgendaitems[agendaitem.id]);
     }
 
-    const announcements = agendaitems.filter((item) => item.showAsRemark);
+    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
-    this.set('sessionService.selectedAgendaItem', null);
+    this.set('sessionService.selectedAgendaitem', null);
 
     return hash({
       currentAgenda: agenda,
@@ -43,7 +43,7 @@ export default Route.extend({
     this.refresh();
   },
 
-  async matchingAgendaItems(filter) {
+  async getMatchingAgendaitems(filter) {
     if (isEmpty(filter)) {
       return {};
     }
@@ -53,8 +53,8 @@ export default Route.extend({
       url: `/agendaitems/search?filter[meetingId]=${meetingId}&filter[:sqs:title,shortTitle,data,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`,
     });
     const searchMap = {};
-    searchResults.data.map((item) => {
-      searchMap[item.id] = true;
+    searchResults.data.map((searchResult) => {
+      searchMap[searchResult.id] = true;
     });
     return searchMap;
   },
