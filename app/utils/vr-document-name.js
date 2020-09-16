@@ -45,7 +45,7 @@ export default class VRDocumentName {
       throw new Error(`Couldn't parse VR Document Name "${this.name}" (${this.strict ? 'strict' : 'loose'} parsing mode)`);
     }
     const meta = {
-      date: moment(match[1], 'YYYY DDMM').toDate(),
+      date: moment(match[1], 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
       docType: match[2],
       caseNr: parseInt(match[6], 10),
       index: parseInt(match[8], 10),
