@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
 
 export default class TableRowNewsletterTable extends Component {
   @service newsletterService;
@@ -34,9 +35,13 @@ export default class TableRowNewsletterTable extends Component {
     this.isEditing = false;
   }
 
+  @(task(function *() {
+    yield this.newsletterInfo.save();
+  })) saveNewsletterInfoTask;
+
   @action
   setInNewsletter(value) {
     this.newsletterInfo.inNewsletter = value;
-    this.newsletterInfo.save();
+    this.saveNewsletterInfoTask.perform();
   }
 }
