@@ -36,7 +36,7 @@
     <WebComponents::VlCheckbox
       @value={{this.newsletterInfo.inNewsletter}}
       @toggle={{this.setInNewsletter}}
-      @disabled={{not this.hasNewsletterInfo}}
+      @disabled={{or (not this.hasNewsletterInfo) this.saveNewsletterInfoTask.isRunning}}
       @single={{true}}
     />
   </td>
